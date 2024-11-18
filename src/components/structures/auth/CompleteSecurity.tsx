@@ -29,9 +29,13 @@ export default class CompleteSecurity extends React.Component<IProps, IState> {
     public constructor(props: IProps) {
         super(props);
         const store = SetupEncryptionStore.sharedInstance();
-        store.on("update", this.onStoreUpdate);
         store.start();
         this.state = { phase: store.phase, lostKeys: store.lostKeys() };
+    }
+
+    public componentDidMount(): void {
+        const store = SetupEncryptionStore.sharedInstance();
+        store.on("update", this.onStoreUpdate);
     }
 
     private onStoreUpdate = (): void => {

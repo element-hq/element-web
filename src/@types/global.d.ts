@@ -10,7 +10,6 @@ Please see LICENSE files in the repository root for full details.
 import "matrix-js-sdk/src/@types/global"; // load matrix-js-sdk's type extensions first
 import "@types/modernizr";
 
-import type { Renderer } from "react-dom";
 import type { logger } from "matrix-js-sdk/src/logger";
 import ContentMessages from "../ContentMessages";
 import { IMatrixClientPeg } from "../MatrixClientPeg";
@@ -44,6 +43,7 @@ import AutoRageshakeStore from "../stores/AutoRageshakeStore";
 import { IConfigOptions } from "../IConfigOptions";
 import { MatrixDispatcher } from "../dispatcher/dispatcher";
 import { DeepReadonly } from "./common";
+import MatrixChat from "../components/structures/MatrixChat";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -71,7 +71,7 @@ declare global {
     interface Window {
         mxSendRageshake: (text: string, withLogs?: boolean) => void;
         matrixLogger: typeof logger;
-        matrixChat: ReturnType<Renderer>;
+        matrixChat?: MatrixChat;
         mxSendSentryReport: (userText: string, issueUrl: string, error: Error) => Promise<void>;
         mxLoginWithAccessToken: (hsUrl: string, accessToken: string) => Promise<void>;
         mxAutoRageshakeStore?: AutoRageshakeStore;

@@ -49,7 +49,7 @@ jobs:
                   ref: master
                   repo-token: ${{ secrets.GITHUB_TOKEN }}
                   wait-interval: 10
-                  check-name: "Docker Buildx (vanilla)"
+                  check-name: "Docker Buildx"
                   allowed-conclusions: success
 
             - name: Wait for debian package

@@ -7,13 +7,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { ReactNode, RefObject } from "react";
+import React, { ReactNode } from "react";
 
 import { useRovingTabIndex } from "../../../../accessibility/RovingTabIndex";
 import AccessibleButton, { ButtonEvent } from "../../elements/AccessibleButton";
 
 interface OptionProps {
-    inputRef?: RefObject<HTMLLIElement>;
     endAdornment?: ReactNode;
     id?: string;
     className?: string;
@@ -21,8 +20,8 @@ interface OptionProps {
     children?: ReactNode;
 }
 
-export const Option: React.FC<OptionProps> = ({ inputRef, children, endAdornment, className, ...props }) => {
-    const [onFocus, isActive, ref] = useRovingTabIndex<HTMLLIElement>(inputRef);
+export const Option: React.FC<OptionProps> = ({ children, endAdornment, className, ...props }) => {
+    const [onFocus, isActive, ref] = useRovingTabIndex<HTMLLIElement>();
     return (
         <AccessibleButton
             {...props}

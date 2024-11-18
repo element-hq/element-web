@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { mocked } from "jest-mock";
-import { fireEvent, render, screen } from "jest-matrix-react";
+import { fireEvent, render, screen, waitFor } from "jest-matrix-react";
 import { TimestampToEventResponse, ConnectionError, HTTPError, MatrixError } from "matrix-js-sdk/src/matrix";
 
 import dispatcher from "../../../../../src/dispatcher/dispatcher";
@@ -89,6 +89,12 @@ describe("DateSeparator", () => {
 
     it.each(testCases)("formats date correctly when current time is %s", (_d, ts, result) => {
         expect(getComponent({ ts, forExport: false }).container.textContent).toEqual(result);
+    });
+
+    it("renders invalid date separator correctly", () => {
+        const ts = new Date(-8640000000000004).getTime();
+        const { asFragment } = getComponent({ ts });
+        expect(asFragment()).toMatchSnapshot();
     });
 
     describe("when forExport is true", () => {
@@ -291,7 +297,9 @@ describe("DateSeparator", () => {
                 // The submit debug logs option should *NOT* be shown for network errors.
                 //
                 // We have to use `queryBy` so that it can return `null` for something that does not exist.
-                expect(screen.queryByTestId("jump-to-date-error-submit-debug-logs-button")).not.toBeInTheDocument();
+                await waitFor(() =>
+                    expect(screen.queryByTestId("jump-to-date-error-submit-debug-logs-button")).not.toBeInTheDocument(),
+                );
             });
         });
     });

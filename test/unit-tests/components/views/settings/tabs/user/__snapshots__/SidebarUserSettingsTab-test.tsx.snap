@@ -61,7 +61,17 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 
                     <div
                       class="mx_SettingsSubsection_text"
                     >
-                      <div />
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="m12.971 3.54 7 3.889A2 2 0 0 1 21 9.177V19a2 2 0 0 1-2 2h-4v-9H9v9H5a2 2 0 0 1-2-2V9.177a2 2 0 0 1 1.029-1.748l7-3.89a2 2 0 0 1 1.942 0Z"
+                        />
+                      </svg>
                       Home
                     </div>
                     <div
@@ -312,7 +322,17 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings without guest spa u
                     <div
                       class="mx_SettingsSubsection_text"
                     >
-                      <div />
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="m12.971 3.54 7 3.889A2 2 0 0 1 21 9.177V19a2 2 0 0 1-2 2h-4v-9H9v9H5a2 2 0 0 1-2-2V9.177a2 2 0 0 1 1.029-1.748l7-3.89a2 2 0 0 1 1.942 0Z"
+                        />
+                      </svg>
                       Home
                     </div>
                     <div

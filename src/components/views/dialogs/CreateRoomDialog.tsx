@@ -113,14 +113,6 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
             nameIsValid: false,
             canChangeEncryption: false,
         };
-
-        checkUserIsAllowedToChangeEncryption(cli, Preset.PrivateChat).then(({ allowChange, forcedValue }) =>
-            this.setState((state) => ({
-                canChangeEncryption: allowChange,
-                // override with forcedValue if it is set
-                isEncrypted: forcedValue ?? state.isEncrypted,
-            })),
-        );
     }
 
     private roomCreateOptions(): IOpts {
@@ -160,6 +152,15 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
     }
 
     public componentDidMount(): void {
+        const cli = MatrixClientPeg.safeGet();
+        checkUserIsAllowedToChangeEncryption(cli, Preset.PrivateChat).then(({ allowChange, forcedValue }) =>
+            this.setState((state) => ({
+                canChangeEncryption: allowChange,
+                // override with forcedValue if it is set
+                isEncrypted: forcedValue ?? state.isEncrypted,
+            })),
+        );
+
         // move focus to first field when showing dialog
         this.nameField.current?.focus();
     }

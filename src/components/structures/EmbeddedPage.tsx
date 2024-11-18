@@ -38,7 +38,7 @@ export default class EmbeddedPage extends React.PureComponent<IProps, IState> {
     public static contextType = MatrixClientContext;
     public declare context: React.ContextType<typeof MatrixClientContext>;
     private unmounted = false;
-    private dispatcherRef: string | null = null;
+    private dispatcherRef?: string;
 
     public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
@@ -100,7 +100,7 @@ export default class EmbeddedPage extends React.PureComponent<IProps, IState> {
 
     public componentWillUnmount(): void {
         this.unmounted = true;
-        if (this.dispatcherRef !== null) dis.unregister(this.dispatcherRef);
+        dis.unregister(this.dispatcherRef);
     }
 
     private onAction = (payload: ActionPayload): void => {

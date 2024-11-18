@@ -45,8 +45,11 @@ export class MatrixDispatcher {
 
     /**
      * Removes a callback based on its token.
+     * @param id The token that was returned by `register`.
+     * Can be undefined to avoid needing an if around every caller.
      */
-    public unregister(id: DispatchToken): void {
+    public unregister(id: DispatchToken | undefined): void {
+        if (!id) return;
         invariant(this.callbacks.has(id), `Dispatcher.unregister(...): '${id}' does not map to a registered callback.`);
         this.callbacks.delete(id);
     }
@@ -175,7 +178,7 @@ export class MatrixDispatcher {
     }
 }
 
-export const defaultDispatcher = new MatrixDispatcher();
+const defaultDispatcher = new MatrixDispatcher();
 
 if (!window.mxDispatcher) {
     window.mxDispatcher = defaultDispatcher;

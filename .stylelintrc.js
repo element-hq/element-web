@@ -1,6 +1,6 @@
 module.exports = {
     extends: ["stylelint-config-standard"],
-    customSyntax: require("postcss-scss"),
+    customSyntax: "postcss-scss",
     plugins: ["stylelint-scss"],
     rules: {
         "comment-empty-line-before": null,

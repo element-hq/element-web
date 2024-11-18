@@ -248,7 +248,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
     private lastRMSentEventId: string | null | undefined = undefined;
 
     private readonly messagePanel = createRef<MessagePanel>();
-    private readonly dispatcherRef: string;
+    private dispatcherRef?: string;
     private timelineWindow?: TimelineWindow;
     private overlayTimelineWindow?: TimelineWindow;
     private unmounted = false;
@@ -291,6 +291,10 @@ class TimelinePanel extends React.Component<IProps, IState> {
             readMarkerInViewThresholdMs: SettingsStore.getValue("readMarkerInViewThresholdMs"),
             readMarkerOutOfViewThresholdMs: SettingsStore.getValue("readMarkerOutOfViewThresholdMs"),
         };
+    }
+
+    public componentDidMount(): void {
+        this.unmounted = false;
 
         this.dispatcherRef = dis.register(this.onAction);
         const cli = MatrixClientPeg.safeGet();
@@ -312,9 +316,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         cli.on(ClientEvent.Sync, this.onSync);
 
         this.props.timelineSet.room?.on(ThreadEvent.Update, this.onThreadUpdate);
-    }
 
-    public componentDidMount(): void {
         if (this.props.manageReadReceipts) {
             this.updateReadReceiptOnUserActivity();
         }
@@ -1215,7 +1217,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             return;
         }
         const lastDisplayedEvent = this.state.events[lastDisplayedIndex];
-        this.setReadMarker(lastDisplayedEvent.getId()!, lastDisplayedEvent.getTs());
+        await this.setReadMarker(lastDisplayedEvent.getId()!, lastDisplayedEvent.getTs());
 
         // the read-marker should become invisible, so that if the user scrolls
         // down, they don't see it.
@@ -1333,7 +1335,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         }
 
         // Update the read marker to the values we found
-        this.setReadMarker(rmId, rmTs);
+        await this.setReadMarker(rmId, rmTs);
 
         // Send the receipts to the server immediately (don't wait for activity)
         await this.sendReadReceipts();
@@ -1864,7 +1866,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         return receiptStore?.getEventReadUpTo(myUserId, ignoreSynthesized) ?? null;
     }
 
-    private setReadMarker(eventId: string | null, eventTs?: number, inhibitSetState = false): void {
+    private async setReadMarker(eventId: string | null, eventTs?: number, inhibitSetState = false): Promise<void> {
         const roomId = this.props.timelineSet.room?.roomId;
 
         // don't update the state (and cause a re-render) if there is
@@ -1888,12 +1890,17 @@ class TimelinePanel extends React.Component<IProps, IState> {
         // Do the local echo of the RM
         // run the render cycle before calling the callback, so that
         // getReadMarkerPosition() returns the right thing.
-        this.setState(
-            {
-                readMarkerEventId: eventId,
-            },
-            this.props.onReadMarkerUpdated,
-        );
+        await new Promise<void>((resolve) => {
+            this.setState(
+                {
+                    readMarkerEventId: eventId,
+                },
+                () => {
+                    this.props.onReadMarkerUpdated?.();
+                    resolve();
+                },
+            );
+        });
     }
 
     private shouldPaginate(): boolean {

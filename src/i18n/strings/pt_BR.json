@@ -84,7 +84,6 @@
         "report_content": "Denunciar conteúdo",
         "resend": "Reenviar",
         "reset": "Redefinir",
-        "restore": "Restaurar",
         "resume": "Retomar",
         "retry": "Tentar novamente",
         "review": "Revisar",
@@ -170,7 +169,6 @@
         "failed_query_registration_methods": "Não foi possível consultar as opções de registro suportadas.",
         "failed_soft_logout_auth": "Falha em autenticar novamente",
         "failed_soft_logout_homeserver": "Falha em autenticar novamente devido à um problema no servidor local",
-        "footer_powered_by_matrix": "oferecido por Matrix",
         "forgot_password_email_required": "O e-mail vinculado à sua conta precisa ser informado.",
         "forgot_password_prompt": "Esqueceu sua senha?",
         "identifier_label": "Entrar com",
@@ -661,7 +659,6 @@
         },
         "unable_to_setup_keys_error": "Não foi possível configurar as chaves",
         "unsupported": "A sua versão do aplicativo não suporta a criptografia de ponta a ponta.",
-        "upgrade_toast_title": "Atualização de criptografia disponível",
         "verification": {
             "accepting": "Aceitando…",
             "cancelled": "Você cancelou a confirmação.",
@@ -1676,17 +1673,12 @@
                 "pass_phrase_match_failed": "Isto não corresponde.",
                 "pass_phrase_match_success": "Isto corresponde!",
                 "phrase_strong_enough": "Ótimo! Essa frase de segurança parece ser segura o suficiente.",
-                "requires_key_restore": "Restaurar o backup das suas chaves para atualizar a sua criptografia",
-                "requires_password_confirmation": "Digite a senha da sua conta para confirmar a atualização:",
-                "requires_server_authentication": "Você precisará se autenticar no servidor para confirmar a atualização.",
                 "secret_storage_query_failure": "Não foi possível obter o status do armazenamento secreto",
-                "session_upgrade_description": "Atualize esta sessão para permitir que ela confirme outras sessões, dando a elas acesso às mensagens criptografadas e marcando-as como confiáveis para os seus contatos.",
                 "set_phrase_again": "Voltar para configurar novamente.",
                 "settings_reminder": "Você também pode configurar o Backup online & configurar as suas senhas nas Configurações.",
                 "title_confirm_phrase": "Confirme a frase de segurança",
                 "title_save_key": "Salve sua Chave de Segurança",
                 "title_set_phrase": "Defina uma frase de segurança",
-                "title_upgrade_encryption": "Atualizar sua criptografia",
                 "unable_to_setup": "Não foi possível definir o armazenamento secreto",
                 "use_different_passphrase": "Usar uma frase secreta diferente?",
                 "use_phrase_only_you_know": "Use uma frase secreta que apenas você conhece, e opcionalmente salve uma Chave de Segurança para acessar o backup."
@@ -2453,7 +2445,6 @@
     "truncated_list_n_more": {
         "other": "E %(count)s mais..."
     },
-    "unknown_device": "Dispositivo desconhecido",
     "update": {
         "changelog": "Registro de alterações",
         "check_action": "Verificar atualizações",

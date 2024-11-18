@@ -7,10 +7,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ChangeEvent, useMemo } from "react";
-import CameraCircle from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
-import MembersIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-profile-solid";
-import FavoriteIcon from "@vector-im/compound-design-tokens/assets/web/icons/favourite-solid";
-import HomeIcon from "@vector-im/compound-design-tokens/assets/web/icons/home-solid";
+import {
+    VideoCallSolidIcon,
+    HomeSolidIcon,
+    UserProfileSolidIcon,
+    FavouriteSolidIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { Icon as HashCircleIcon } from "../../../../../../res/img/element-icons/roomlist/hash-circle.svg";
 import { _t } from "../../../../../languageHandler";
@@ -22,7 +24,7 @@ import { MetaSpace } from "../../../../../stores/spaces";
 import PosthogTrackers from "../../../../../PosthogTrackers";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
-import SettingsSubsection, { SettingsSubsectionText } from "../../shared/SettingsSubsection";
+import { SettingsSubsection, SettingsSubsectionText } from "../../shared/SettingsSubsection";
 import SdkConfig from "../../../../../SdkConfig";
 
 type InteractionName = "WebSettingsSidebarTabSpacesCheckbox" | "WebQuickSettingsPinToSidebarCheckbox";
@@ -84,7 +86,7 @@ const SidebarUserSettingsTab: React.FC = () => {
                         disabled={homeEnabled}
                     >
                         <SettingsSubsectionText>
-                            <HomeIcon />
+                            <HomeSolidIcon />
                             {_t("common|home")}
                         </SettingsSubsectionText>
                         <SettingsSubsectionText>
@@ -113,7 +115,7 @@ const SidebarUserSettingsTab: React.FC = () => {
                         className="mx_SidebarUserSettingsTab_checkbox"
                     >
                         <SettingsSubsectionText>
-                            <FavoriteIcon />
+                            <FavouriteSolidIcon />
                             {_t("common|favourites")}
                         </SettingsSubsectionText>
                         <SettingsSubsectionText>
@@ -127,7 +129,7 @@ const SidebarUserSettingsTab: React.FC = () => {
                         className="mx_SidebarUserSettingsTab_checkbox"
                     >
                         <SettingsSubsectionText>
-                            <MembersIcon />
+                            <UserProfileSolidIcon />
                             {_t("common|people")}
                         </SettingsSubsectionText>
                         <SettingsSubsectionText>
@@ -158,7 +160,7 @@ const SidebarUserSettingsTab: React.FC = () => {
                             className="mx_SidebarUserSettingsTab_checkbox"
                         >
                             <SettingsSubsectionText>
-                                <CameraCircle />
+                                <VideoCallSolidIcon />
                                 {_t("settings|sidebar|metaspaces_video_rooms")}
                             </SettingsSubsectionText>
                             <SettingsSubsectionText>{conferenceSubsectionText}</SettingsSubsectionText>

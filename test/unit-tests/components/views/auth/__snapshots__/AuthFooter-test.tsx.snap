@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<VectorAuthFooter /> should match snapshot 1`] = `
+exports[`<AuthFooter /> should match snapshot 1`] = `
 <DocumentFragment>
   <footer
     class="mx_AuthFooter"

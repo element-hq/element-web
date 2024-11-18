@@ -9,11 +9,6 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import {
     ClientRendezvousFailureReason,
-    LegacyRendezvousFailureReason,
-    MSC3886SimpleHttpRendezvousTransport,
-    MSC3903ECDHPayload,
-    MSC3903ECDHv2RendezvousChannel,
-    MSC3906Rendezvous,
     MSC4108FailureReason,
     MSC4108RendezvousSession,
     MSC4108SecureChannel,
@@ -23,29 +18,21 @@ import {
     RendezvousIntent,
 } from "matrix-js-sdk/src/rendezvous";
 import { logger } from "matrix-js-sdk/src/logger";
-import { HTTPError, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { Click, Mode, Phase } from "./LoginWithQR-types";
 import LoginWithQRFlow from "./LoginWithQRFlow";
-import { wrapRequestWithDialog } from "../../../utils/UserInteractiveAuth";
-import { _t } from "../../../languageHandler";
 
 interface IProps {
     client: MatrixClient;
     mode: Mode;
-    legacy: boolean;
     onFinished(...args: any): void;
 }
 
 interface IState {
     phase: Phase;
-    rendezvous?: MSC3906Rendezvous | MSC4108SignInWithQR;
+    rendezvous?: MSC4108SignInWithQR;
     mediaPermissionError?: boolean;
-
-    // MSC3906
-    confirmationDigits?: string;
-
-    // MSC4108
     verificationUri?: string;
     userCode?: string;
     checkCode?: string;
@@ -54,25 +41,18 @@ interface IState {
 }
 
 export enum LoginWithQRFailureReason {
-    /**
-     * @deprecated the MSC3906 implementation is deprecated in favour of MSC4108.
-     */
     RateLimited = "rate_limited",
     CheckCodeMismatch = "check_code_mismatch",
 }
 
 export type FailureReason = RendezvousFailureReason | LoginWithQRFailureReason;
 
-// n.b MSC3886/MSC3903/MSC3906 that this is based on are now closed.
-// However, we want to keep this implementation around for some time.
-// TODO: define an end-of-life date for this implementation.
-
 /**
  * A component that allows sign in and E2EE set up with a QR code.
  *
  * It implements `login.reciprocate` capabilities and showing QR codes.
  *
- * This uses the unstable feature of MSC3906: https://github.com/matrix-org/matrix-spec-proposals/pull/3906
+ * This uses the unstable feature of MSC4108: https://github.com/matrix-org/matrix-spec-proposals/pull/4108
  */
 export default class LoginWithQR extends React.Component<IProps, IState> {
     private finished = false;
@@ -104,9 +84,6 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
         if (this.state.rendezvous) {
             const rendezvous = this.state.rendezvous;
             rendezvous.onFailure = undefined;
-            if (rendezvous instanceof MSC3906Rendezvous) {
-                await rendezvous.cancel(LegacyRendezvousFailureReason.UserCancelled);
-            }
             this.setState({ rendezvous: undefined });
         }
         if (mode === Mode.Show) {
@@ -119,60 +96,7 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
             // eslint-disable-next-line react/no-direct-mutation-state
             this.state.rendezvous.onFailure = undefined;
             // calling cancel will call close() as well to clean up the resources
-            if (this.state.rendezvous instanceof MSC3906Rendezvous) {
-                this.state.rendezvous.cancel(LegacyRendezvousFailureReason.UserCancelled);
-            } else {
-                this.state.rendezvous.cancel(MSC4108FailureReason.UserCancelled);
-            }
-        }
-    }
-
-    private async legacyApproveLogin(): Promise<void> {
-        if (!(this.state.rendezvous instanceof MSC3906Rendezvous)) {
-            throw new Error("Rendezvous not found");
-        }
-        if (!this.props.client) {
-            throw new Error("No client to approve login with");
-        }
-        this.setState({ phase: Phase.Loading });
-
-        try {
-            logger.info("Requesting login token");
-
-            const { login_token: loginToken } = await wrapRequestWithDialog(this.props.client.requestLoginToken, {
-                matrixClient: this.props.client,
-                title: _t("auth|qr_code_login|sign_in_new_device"),
-            })();
-
-            this.setState({ phase: Phase.WaitingForDevice });
-
-            const newDeviceId = await this.state.rendezvous.approveLoginOnExistingDevice(loginToken);
-            if (!newDeviceId) {
-                // user denied
-                return;
-            }
-            if (!this.props.client.getCrypto()) {
-                // no E2EE to set up
-                this.onFinished(true);
-                return;
-            }
-            this.setState({ phase: Phase.Verifying });
-            await this.state.rendezvous.verifyNewDeviceOnExistingDevice();
-            // clean up our state:
-            try {
-                await this.state.rendezvous.close();
-            } finally {
-                this.setState({ rendezvous: undefined });
-            }
-            this.onFinished(true);
-        } catch (e) {
-            logger.error("Error whilst approving sign in", e);
-            if (e instanceof HTTPError && e.httpStatus === 429) {
-                // 429: rate limit
-                this.setState({ phase: Phase.Error, failureReason: LoginWithQRFailureReason.RateLimited });
-                return;
-            }
-            this.setState({ phase: Phase.Error, failureReason: ClientRendezvousFailureReason.Unknown });
+            this.state.rendezvous.cancel(MSC4108FailureReason.UserCancelled);
         }
     }
 
@@ -182,28 +106,18 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
     }
 
     private generateAndShowCode = async (): Promise<void> => {
-        let rendezvous: MSC4108SignInWithQR | MSC3906Rendezvous;
+        let rendezvous: MSC4108SignInWithQR;
         try {
             const fallbackRzServer = this.props.client?.getClientWellKnown()?.["io.element.rendezvous"]?.server;
 
-            if (this.props.legacy) {
-                const transport = new MSC3886SimpleHttpRendezvousTransport<MSC3903ECDHPayload>({
-                    onFailure: this.onFailure,
-                    client: this.props.client,
-                    fallbackRzServer,
-                });
-                const channel = new MSC3903ECDHv2RendezvousChannel(transport, undefined, this.onFailure);
-                rendezvous = new MSC3906Rendezvous(channel, this.props.client, this.onFailure);
-            } else {
-                const transport = new MSC4108RendezvousSession({
-                    onFailure: this.onFailure,
-                    client: this.props.client,
-                    fallbackRzServer,
-                });
-                await transport.send("");
-                const channel = new MSC4108SecureChannel(transport, undefined, this.onFailure);
-                rendezvous = new MSC4108SignInWithQR(channel, false, this.props.client, this.onFailure);
-            }
+            const transport = new MSC4108RendezvousSession({
+                onFailure: this.onFailure,
+                client: this.props.client,
+                fallbackRzServer,
+            });
+            await transport.send("");
+            const channel = new MSC4108SecureChannel(transport, undefined, this.onFailure);
+            rendezvous = new MSC4108SignInWithQR(channel, false, this.props.client, this.onFailure);
 
             await rendezvous.generateCode();
             this.setState({
@@ -218,10 +132,7 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
         }
 
         try {
-            if (rendezvous instanceof MSC3906Rendezvous) {
-                const confirmationDigits = await rendezvous.startAfterShowingCode();
-                this.setState({ phase: Phase.LegacyConnected, confirmationDigits });
-            } else if (this.ourIntent === RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE) {
+            if (this.ourIntent === RendezvousIntent.RECIPROCATE_LOGIN_ON_EXISTING_DEVICE) {
                 // MSC4108-Flow: NewScanned
                 await rendezvous.negotiateProtocols();
                 const { verificationUri } = await rendezvous.deviceAuthorizationGrant();
@@ -234,18 +145,9 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
             // we ask the user to confirm that the channel is secure
         } catch (e: RendezvousError | unknown) {
             logger.error("Error whilst approving login", e);
-            if (rendezvous instanceof MSC3906Rendezvous) {
-                // only set to error phase if it hasn't already been set by onFailure or similar
-                if (this.state.phase !== Phase.Error) {
-                    this.setState({ phase: Phase.Error, failureReason: LegacyRendezvousFailureReason.Unknown });
-                }
-            } else {
-                await rendezvous?.cancel(
-                    e instanceof RendezvousError
-                        ? (e.code as MSC4108FailureReason)
-                        : ClientRendezvousFailureReason.Unknown,
-                );
-            }
+            await rendezvous?.cancel(
+                e instanceof RendezvousError ? (e.code as MSC4108FailureReason) : ClientRendezvousFailureReason.Unknown,
+            );
         }
     };
 
@@ -298,7 +200,6 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
     public reset(): void {
         this.setState({
             rendezvous: undefined,
-            confirmationDigits: undefined,
             verificationUri: undefined,
             failureReason: undefined,
             userCode: undefined,
@@ -311,16 +212,12 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
     private onClick = async (type: Click, checkCode?: string): Promise<void> => {
         switch (type) {
             case Click.Cancel:
-                if (this.state.rendezvous instanceof MSC3906Rendezvous) {
-                    await this.state.rendezvous?.cancel(LegacyRendezvousFailureReason.UserCancelled);
-                } else {
-                    await this.state.rendezvous?.cancel(MSC4108FailureReason.UserCancelled);
-                }
+                await this.state.rendezvous?.cancel(MSC4108FailureReason.UserCancelled);
                 this.reset();
                 this.onFinished(false);
                 break;
             case Click.Approve:
-                await (this.props.legacy ? this.legacyApproveLogin() : this.approveLogin(checkCode));
+                await this.approveLogin(checkCode);
                 break;
             case Click.Decline:
                 await this.state.rendezvous?.declineLoginOnExistingDevice();
@@ -328,11 +225,7 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
                 this.onFinished(false);
                 break;
             case Click.Back:
-                if (this.state.rendezvous instanceof MSC3906Rendezvous) {
-                    await this.state.rendezvous?.cancel(LegacyRendezvousFailureReason.UserCancelled);
-                } else {
-                    await this.state.rendezvous?.cancel(MSC4108FailureReason.UserCancelled);
-                }
+                await this.state.rendezvous?.cancel(MSC4108FailureReason.UserCancelled);
                 this.onFinished(false);
                 break;
             case Click.ShowQr:
@@ -342,20 +235,6 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
     };
 
     public render(): React.ReactNode {
-        if (this.state.rendezvous instanceof MSC3906Rendezvous) {
-            return (
-                <LoginWithQRFlow
-                    onClick={this.onClick}
-                    phase={this.state.phase}
-                    code={this.state.phase === Phase.ShowingQR ? this.state.rendezvous?.code : undefined}
-                    confirmationDigits={
-                        this.state.phase === Phase.LegacyConnected ? this.state.confirmationDigits : undefined
-                    }
-                    failureReason={this.state.failureReason}
-                />
-            );
-        }
-
         return (
             <LoginWithQRFlow
                 onClick={this.onClick}

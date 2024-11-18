@@ -117,10 +117,6 @@ module.exports = {
                             "!matrix-js-sdk/src/extensible_events_v1/PollResponseEvent",
                             "!matrix-js-sdk/src/extensible_events_v1/PollEndEvent",
                             "!matrix-js-sdk/src/extensible_events_v1/InvalidEventError",
-                            "!matrix-js-sdk/src/crypto",
-                            "!matrix-js-sdk/src/crypto/keybackup",
-                            "!matrix-js-sdk/src/crypto/deviceinfo",
-                            "!matrix-js-sdk/src/crypto/dehydration",
                             "!matrix-js-sdk/src/oidc",
                             "!matrix-js-sdk/src/oidc/discovery",
                             "!matrix-js-sdk/src/oidc/authorize",
@@ -265,6 +261,63 @@ module.exports = {
             files: ["playwright/**/*.ts"],
             parserOptions: {
                 project: ["./playwright/tsconfig.json"],
+            },
+            rules: {
+                "react-hooks/rules-of-hooks": ["off"],
+            },
+        },
+        {
+            files: ["module_system/**/*.{ts,tsx}"],
+            parserOptions: {
+                project: ["./tsconfig.module_system.json"],
+            },
+            extends: ["plugin:matrix-org/typescript", "plugin:matrix-org/react"],
+            // NOTE: These rules are frozen and new rules should not be added here.
+            // New changes belong in https://github.com/matrix-org/eslint-plugin-matrix-org/
+            rules: {
+                // Things we do that break the ideal style
+                "prefer-promise-reject-errors": "off",
+                "quotes": "off",
+
+                // We disable this while we're transitioning
+                "@typescript-eslint/no-explicit-any": "off",
+                // We're okay with assertion errors when we ask for them
+                "@typescript-eslint/no-non-null-assertion": "off",
+
+                // Ban matrix-js-sdk/src imports in favour of matrix-js-sdk/src/matrix imports to prevent unleashing hell.
+                "no-restricted-imports": [
+                    "error",
+                    {
+                        paths: [
+                            {
+                                name: "matrix-js-sdk",
+                                message: "Please use matrix-js-sdk/src/matrix instead",
+                            },
+                            {
+                                name: "matrix-js-sdk/",
+                                message: "Please use matrix-js-sdk/src/matrix instead",
+                            },
+                            {
+                                name: "matrix-js-sdk/src",
+                                message: "Please use matrix-js-sdk/src/matrix instead",
+                            },
+                            {
+                                name: "matrix-js-sdk/src/",
+                                message: "Please use matrix-js-sdk/src/matrix instead",
+                            },
+                            {
+                                name: "matrix-js-sdk/src/index",
+                                message: "Please use matrix-js-sdk/src/matrix instead",
+                            },
+                        ],
+                        patterns: [
+                            {
+                                group: ["matrix-js-sdk/lib", "matrix-js-sdk/lib/", "matrix-js-sdk/lib/**"],
+                                message: "Please use matrix-js-sdk/src/* instead",
+                            },
+                        ],
+                    },
+                ],
             },
         },
     ],
