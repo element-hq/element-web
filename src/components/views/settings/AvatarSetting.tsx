@@ -109,12 +109,12 @@ export function getFileChanged(e: React.ChangeEvent<HTMLInputElement>): File | n
     if (!e.target.files?.length) return null;
     const file = e.target.files[0];
     if (file.type.startsWith("image/")) return file;
-    
-   	Modal.createDialog(ErrorDialog, {
-   		title: _t("upload_failed_title"),
-   		description: _t("upload_file|not_image"),
+
+    Modal.createDialog(ErrorDialog, {
+        title: _t("upload_failed_title"),
+        description: _t("upload_file|not_image"),
     });
-   	return null;
+    return null;
 }
 
 /**
