@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { mocked } from "jest-mock";
-import { render, RenderResult, screen, waitFor } from "jest-matrix-react";
+import { render, RenderResult, screen, waitFor, cleanup } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { MatrixClient, createClient } from "matrix-js-sdk/src/matrix";
 
@@ -68,13 +68,13 @@ describe("<ForgotPassword>", () => {
     afterEach(async () => {
         // clean up modals
         await clearAllModals();
+        cleanup();
     });
 
     describe("when starting a password reset flow", () => {
         beforeEach(() => {
             renderResult = render(
                 <ForgotPassword serverConfig={serverConfig} onComplete={onComplete} onLoginClick={onLoginClick} />,
-                { legacyRoot: true },
             );
         });
 

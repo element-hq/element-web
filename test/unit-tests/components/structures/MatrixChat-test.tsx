@@ -163,7 +163,7 @@ describe("<MatrixChat />", () => {
     let initPromise: Promise<void> | undefined;
     let defaultProps: ComponentProps<typeof MatrixChat>;
     const getComponent = (props: Partial<ComponentProps<typeof MatrixChat>> = {}) =>
-        render(<MatrixChat {...defaultProps} {...props} />, { legacyRoot: true });
+        render(<MatrixChat {...defaultProps} {...props} />);
 
     // make test results readable
     filterConsole(
@@ -1128,7 +1128,7 @@ describe("<MatrixChat />", () => {
 
                 await getComponentAndLogin();
 
-                act(() => bootstrapDeferred.resolve());
+                bootstrapDeferred.resolve();
 
                 await expect(
                     screen.findByRole("heading", { name: "You're in", level: 1 }),
