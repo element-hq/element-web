@@ -654,8 +654,8 @@ describe("<UserInfo />", () => {
             });
 
             await expect(screen.findByRole("button", { name: "Deactivate user" })).resolves.toBeInTheDocument();
-            if (screen.queryByRole("progressbar")) {
-                await waitForElementToBeRemoved(() => screen.queryByRole("progressbar"));
+            if (screen.queryAllByRole("progressbar").length) {
+                await waitForElementToBeRemoved(() => screen.queryAllByRole("progressbar"));
             }
             expect(container).toMatchSnapshot();
         });
