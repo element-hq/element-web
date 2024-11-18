@@ -6,42 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import {
-    IContent,
-    MatrixEvent,
-    MsgType,
-    M_BEACON_INFO,
-    LocationAssetType,
-    M_ASSET,
-    M_POLL_END,
-    Room,
-} from "matrix-js-sdk/src/matrix";
+import { Room } from "matrix-js-sdk/src/matrix";
 
-import {
-    getNestedReplyText,
-    getParentEventId,
-    shouldDisplayReply,
-    stripHTMLReply,
-    stripPlainReply,
-} from "../../src/utils/Reply";
-import { makePollStartEvent, mkEvent, stubClient } from "../test-utils";
-import { RoomPermalinkCreator } from "../../src/utils/permalinks/Permalinks";
-
-function makeTestEvent(type: string, content: IContent): MatrixEvent {
-    return mkEvent({
-        event: true,
-        type: type,
-        user: "@user1:server",
-        room: "!room1:server",
-        content,
-    });
-}
-
-const mockPermalinkGenerator = {
-    forEvent(eventId: string): string {
-        return "$$permalink$$";
-    },
-} as RoomPermalinkCreator;
+import { getParentEventId, shouldDisplayReply, stripHTMLReply, stripPlainReply } from "../../src/utils/Reply";
+import { mkEvent, stubClient } from "../test-utils";
 
 // don't litter test console with logs
 jest.mock("matrix-js-sdk/src/logger");
@@ -119,50 +87,6 @@ But this is not
                 But this is not
             `).trim(),
             ).toBe("But this is not");
-        });
-    });
-
-    describe("getNestedReplyText", () => {
-        it("Returns valid reply fallback text for m.text msgtypes", () => {
-            const event = makeTestEvent(MsgType.Text, {
-                body: "body",
-                msgtype: "m.text",
-            });
-
-            expect(getNestedReplyText(event, mockPermalinkGenerator)).toMatchSnapshot();
-        });
-
-        (
-            [
-                ["m.room.message", MsgType.Location, LocationAssetType.Pin],
-                ["m.room.message", MsgType.Location, LocationAssetType.Self],
-                [M_BEACON_INFO.name, undefined, LocationAssetType.Pin],
-                [M_BEACON_INFO.name, undefined, LocationAssetType.Self],
-            ] as const
-        ).forEach(([type, msgType, assetType]) => {
-            it(`should create the expected fallback text for ${assetType} ${type}/${msgType}`, () => {
-                const event = makeTestEvent(type, {
-                    body: "body",
-                    msgtype: msgType,
-                    [M_ASSET.name]: { type: assetType },
-                });
-
-                expect(getNestedReplyText(event, mockPermalinkGenerator)).toMatchSnapshot();
-            });
-        });
-
-        it("should create the expected fallback text for poll end events", () => {
-            const event = makeTestEvent(M_POLL_END.name, {
-                body: "body",
-            });
-
-            expect(getNestedReplyText(event, mockPermalinkGenerator)).toMatchSnapshot();
-        });
-
-        it("should create the expected fallback text for poll start events", () => {
-            const event = makePollStartEvent("Will this test pass?", "@user:server.org");
-
-            expect(getNestedReplyText(event, mockPermalinkGenerator)).toMatchSnapshot();
         });
     });
 

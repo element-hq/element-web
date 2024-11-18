@@ -150,7 +150,7 @@ describe("RoomGeneralContextMenu", () => {
 
         await sleep(0);
 
-        expect(mockClient.setRoomAccountData).toHaveBeenCalledWith(ROOM_ID, "com.famedly.marked_unread", {
+        expect(mockClient.setRoomAccountData).toHaveBeenCalledWith(ROOM_ID, "m.marked_unread", {
             unread: true,
         });
         expect(onFinished).toHaveBeenCalled();

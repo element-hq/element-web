@@ -6,11 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { Ref } from "react";
 import classnames from "classnames";
 
 interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
-    inputRef?: React.RefObject<HTMLInputElement>;
+    inputRef?: Ref<HTMLInputElement>;
     outlined?: boolean;
     // If true (default), the children will be contained within a <label> element
     // If false, they'll be in a div. Putting interactive components that have labels

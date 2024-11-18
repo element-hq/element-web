@@ -8,7 +8,14 @@ Please see LICENSE files in the repository root for full details.
 
 import { mocked, MockedObject } from "jest-mock";
 import { last } from "lodash";
-import { MatrixEvent, MatrixClient, ClientEvent, EventTimeline } from "matrix-js-sdk/src/matrix";
+import {
+    MatrixEvent,
+    MatrixClient,
+    ClientEvent,
+    EventTimeline,
+    EventType,
+    MatrixEventEvent,
+} from "matrix-js-sdk/src/matrix";
 import { ClientWidgetApi, WidgetApiFromWidgetAction } from "matrix-widget-api";
 import { waitFor } from "jest-matrix-react";
 
@@ -132,6 +139,46 @@ describe("StopGapWidget", () => {
             client.emit(ClientEvent.Event, event1);
             expect(messaging.feedEvent).toHaveBeenCalledTimes(2);
             expect(messaging.feedEvent).toHaveBeenLastCalledWith(event2.getEffectiveEvent(), "!1:example.org");
+        });
+
+        it("feeds decrypted events asynchronously", async () => {
+            const event1Encrypted = new MatrixEvent({
+                event_id: event1.getId(),
+                type: EventType.RoomMessageEncrypted,
+                sender: event1.sender?.userId,
+                room_id: event1.getRoomId(),
+                content: {},
+            });
+            const decryptingSpy1 = jest.spyOn(event1Encrypted, "isBeingDecrypted").mockReturnValue(true);
+            client.emit(ClientEvent.Event, event1Encrypted);
+            const event2Encrypted = new MatrixEvent({
+                event_id: event2.getId(),
+                type: EventType.RoomMessageEncrypted,
+                sender: event2.sender?.userId,
+                room_id: event2.getRoomId(),
+                content: {},
+            });
+            const decryptingSpy2 = jest.spyOn(event2Encrypted, "isBeingDecrypted").mockReturnValue(true);
+            client.emit(ClientEvent.Event, event2Encrypted);
+            expect(messaging.feedEvent).not.toHaveBeenCalled();
+
+            // "Decrypt" the events, but in reverse order; first event 2…
+            event2Encrypted.event.type = event2.getType();
+            event2Encrypted.event.content = event2.getContent();
+            decryptingSpy2.mockReturnValue(false);
+            client.emit(MatrixEventEvent.Decrypted, event2Encrypted);
+            expect(messaging.feedEvent).toHaveBeenCalledTimes(1);
+            expect(messaging.feedEvent).toHaveBeenLastCalledWith(event2Encrypted.getEffectiveEvent(), "!1:example.org");
+            // …then event 1
+            event1Encrypted.event.type = event1.getType();
+            event1Encrypted.event.content = event1.getContent();
+            decryptingSpy1.mockReturnValue(false);
+            client.emit(MatrixEventEvent.Decrypted, event1Encrypted);
+            // The events should be fed in that same order so that event 2
+            // doesn't have to be blocked on the decryption of event 1 (or
+            // worse, dropped)
+            expect(messaging.feedEvent).toHaveBeenCalledTimes(2);
+            expect(messaging.feedEvent).toHaveBeenLastCalledWith(event1Encrypted.getEffectiveEvent(), "!1:example.org");
         });
 
         it("should not feed incoming event if not in timeline", () => {

@@ -2,6 +2,6 @@
     "*": "prettier --write",
     "src/**/*.(ts|tsx)": ["eslint --fix"],
     "scripts/**/*.(ts|tsx)": ["eslint --fix"],
-    "module_system/**/*.(ts|tsx)": ["eslint --fix --config .eslintrc-module_system.js module_system"],
+    "module_system/**/*.(ts|tsx)": ["eslint --fix"],
     "*.pcss": ["stylelint --fix"]
 }

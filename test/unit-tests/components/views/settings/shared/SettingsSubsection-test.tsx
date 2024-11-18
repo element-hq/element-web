@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { render } from "jest-matrix-react";
 
-import SettingsSubsection from "../../../../../../src/components/views/settings/shared/SettingsSubsection";
+import { SettingsSubsection } from "../../../../../../src/components/views/settings/shared/SettingsSubsection";
 
 describe("<SettingsSubsection />", () => {
     const defaultProps = {

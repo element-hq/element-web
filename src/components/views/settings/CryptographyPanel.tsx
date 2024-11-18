@@ -6,11 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { lazy } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import type ExportE2eKeysDialog from "../../../async-components/views/dialogs/security/ExportE2eKeysDialog";
-import type ImportE2eKeysDialog from "../../../async-components/views/dialogs/security/ImportE2eKeysDialog";
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -18,7 +16,7 @@ import * as FormattingUtils from "../../../utils/FormattingUtils";
 import SettingsStore from "../../../settings/SettingsStore";
 import SettingsFlag from "../elements/SettingsFlag";
 import { SettingLevel } from "../../../settings/SettingLevel";
-import SettingsSubsection, { SettingsSubsectionText } from "./shared/SettingsSubsection";
+import { SettingsSubsection, SettingsSubsectionText } from "./shared/SettingsSubsection";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 interface IProps {}
@@ -129,19 +127,15 @@ export default class CryptographyPanel extends React.Component<IProps, IState> {
     }
 
     private onExportE2eKeysClicked = (): void => {
-        Modal.createDialogAsync(
-            import("../../../async-components/views/dialogs/security/ExportE2eKeysDialog") as unknown as Promise<
-                typeof ExportE2eKeysDialog
-            >,
+        Modal.createDialog(
+            lazy(() => import("../../../async-components/views/dialogs/security/ExportE2eKeysDialog")),
             { matrixClient: this.context },
         );
     };
 
     private onImportE2eKeysClicked = (): void => {
-        Modal.createDialogAsync(
-            import("../../../async-components/views/dialogs/security/ImportE2eKeysDialog") as unknown as Promise<
-                typeof ImportE2eKeysDialog
-            >,
+        Modal.createDialog(
+            lazy(() => import("../../../async-components/views/dialogs/security/ImportE2eKeysDialog")),
             { matrixClient: this.context },
         );
     };

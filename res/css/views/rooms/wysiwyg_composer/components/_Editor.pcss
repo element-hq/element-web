@@ -7,6 +7,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 .mx_WysiwygComposer_Editor_container {
+    /* These are set in Javascript */
+    --avatar-letter: "";
+    --avatar-background: unset;
+    --placeholder: "";
+
     @keyframes visualbell {
         from {
             background-color: $visual-bell-bg-color;
@@ -155,7 +160,7 @@ Please see LICENSE files in the repository root for full details.
         display: inline-block;
         pointer-events: none;
         white-space: nowrap;
-        color: $tertiary-content;
+        color: var(--cpd-color-text-secondary);
     }
 }
 

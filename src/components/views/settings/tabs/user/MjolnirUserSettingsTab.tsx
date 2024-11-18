@@ -22,7 +22,7 @@ import AccessibleButton from "../../../elements/AccessibleButton";
 import Field from "../../../elements/Field";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
-import SettingsSubsection, { SettingsSubsectionText } from "../../shared/SettingsSubsection";
+import { SettingsSubsection, SettingsSubsectionText } from "../../shared/SettingsSubsection";
 
 interface IState {
     busy: boolean;
