@@ -352,6 +352,7 @@ export async function asyncSomeParallel<T>(
 
 /**
  * Async version of Array.filter.
+ * If one of the promises rejects, the whole operation will reject.
  * @param values
  * @param predicate
  */
