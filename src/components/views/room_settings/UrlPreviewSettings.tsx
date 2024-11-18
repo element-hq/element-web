@@ -37,23 +37,26 @@ interface UrlPreviewSettingsProps {
 export function UrlPreviewSettings({ room }: UrlPreviewSettingsProps): JSX.Element {
     const { roomId } = room;
     const matrixClient = useMatrixClientContext();
-    const isEncrypted = Boolean(useIsEncrypted(matrixClient, room));
-    const previewsForRoomAccount = // in an e2ee room we use a special key to enforce per-room opt-in
-        (
-            <SettingsFlag
-                name={isEncrypted ? "urlPreviewsEnabled_e2ee" : "urlPreviewsEnabled"}
-                level={SettingLevel.ROOM_DEVICE}
-                roomId={roomId}
-            />
-        );
+    const isEncrypted = useIsEncrypted(matrixClient, room);
+    const isLoading = isEncrypted === null;
 
     return (
         <SettingsFieldset
             legend={_t("room_settings|general|url_previews_section")}
-            description={<Description isEncrypted={isEncrypted} />}
+            description={!isLoading && <Description isEncrypted={isEncrypted} />}
         >
-            <PreviewsForRoom isEncrypted={isEncrypted} roomId={roomId} />
-            {previewsForRoomAccount}
+            {isLoading ? (
+                _t("common|loading")
+            ) : (
+                <>
+                    <PreviewsForRoom isEncrypted={isEncrypted} roomId={roomId} />
+                    <SettingsFlag
+                        name={isEncrypted ? "urlPreviewsEnabled_e2ee" : "urlPreviewsEnabled"}
+                        level={SettingLevel.ROOM_DEVICE}
+                        roomId={roomId}
+                    />
+                </>
+            )}
         </SettingsFieldset>
     );
 }

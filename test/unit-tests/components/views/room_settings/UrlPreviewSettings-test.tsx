@@ -33,9 +33,17 @@ describe("UrlPreviewSettings", () => {
         return render(<UrlPreviewSettings room={room} />, withClientContextRenderOptions(client));
     }
 
+    it("should display the correct preview when the setting is in a loading state", () => {
+        jest.spyOn(client, "getCrypto").mockReturnValue(undefined);
+        const { asFragment } = renderComponent();
+        expect(screen.getByText("URL Previews")).toBeInTheDocument();
+
+        expect(asFragment()).toMatchSnapshot();
+    });
+
     it("should display the correct preview when the room is encrypted and the url preview is enabled", async () => {
         jest.spyOn(client.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
-        jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
+        jest.spyOn(SettingsStore, "getValueAt").mockReturnValue(true);
 
         const { asFragment } = renderComponent();
         await waitFor(() => {

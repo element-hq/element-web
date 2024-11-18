@@ -201,3 +201,22 @@ exports[`UrlPreviewSettings should display the correct preview when the room is 
   </fieldset>
 </DocumentFragment>
 `;
+
+exports[`UrlPreviewSettings should display the correct preview when the setting is in a loading state 1`] = `
+<DocumentFragment>
+  <fieldset
+    class="mx_SettingsFieldset"
+  >
+    <legend
+      class="mx_SettingsFieldset_legend"
+    >
+      URL Previews
+    </legend>
+    <div
+      class="mx_SettingsFieldset_content"
+    >
+      Loading…
+    </div>
+  </fieldset>
+</DocumentFragment>
+`;
