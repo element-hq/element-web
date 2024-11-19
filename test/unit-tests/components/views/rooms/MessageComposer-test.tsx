@@ -100,19 +100,19 @@ describe("MessageComposer", () => {
     describe("for a Room", () => {
         const room = mkStubRoom("!roomId:server", "Room 1", cli);
 
-        it("Renders a SendMessageComposer and MessageComposerButtons by default", () => {
-            wrapAndRender({ room });
+        it("Renders a SendMessageComposer and MessageComposerButtons by default", async () => {
+            await wrapAndRender({ room });
             expect(screen.getByLabelText("Send a message…")).toBeInTheDocument();
         });
 
-        it("Does not render a SendMessageComposer or MessageComposerButtons when user has no permission", () => {
-            wrapAndRender({ room }, false);
+        it("Does not render a SendMessageComposer or MessageComposerButtons when user has no permission", async () => {
+            await wrapAndRender({ room }, false);
             expect(screen.queryByLabelText("Send a message…")).not.toBeInTheDocument();
             expect(screen.getByText("You do not have permission to post to this room")).toBeInTheDocument();
         });
 
-        it("Does not render a SendMessageComposer or MessageComposerButtons when room is tombstoned", () => {
-            wrapAndRender(
+        it("Does not render a SendMessageComposer or MessageComposerButtons when room is tombstoned", async () => {
+            await wrapAndRender(
                 { room },
                 true,
                 false,
@@ -135,15 +135,17 @@ describe("MessageComposer", () => {
             let roomContext: IRoomState;
             let resizeNotifier: ResizeNotifier;
 
-            beforeEach(() => {
+            beforeEach(async () => {
                 jest.useFakeTimers();
                 resizeNotifier = {
                     notifyTimelineHeightChanged: jest.fn(),
                 } as unknown as ResizeNotifier;
-                roomContext = wrapAndRender({
-                    room,
-                    resizeNotifier,
-                }).roomContext;
+                roomContext = (
+                    await wrapAndRender({
+                        room,
+                        resizeNotifier,
+                    })
+                ).roomContext;
             });
 
             it("should call notifyTimelineHeightChanged() for the same context", () => {
@@ -185,8 +187,8 @@ describe("MessageComposer", () => {
             [true, false].forEach((value: boolean) => {
                 describe(`when ${setting} = ${value}`, () => {
                     beforeEach(async () => {
-                        SettingsStore.setValue(setting, null, SettingLevel.DEVICE, value);
-                        wrapAndRender({ room });
+                        await SettingsStore.setValue(setting, null, SettingLevel.DEVICE, value);
+                        await wrapAndRender({ room });
                         await act(async () => {
                             await userEvent.click(screen.getByLabelText("More options"));
                         });
@@ -230,14 +232,14 @@ describe("MessageComposer", () => {
             });
         });
 
-        it("should not render the send button", () => {
-            wrapAndRender({ room });
+        it("should not render the send button", async () => {
+            await wrapAndRender({ room });
             expect(screen.queryByLabelText("Send message")).not.toBeInTheDocument();
         });
 
         describe("when a message has been entered", () => {
             beforeEach(async () => {
-                const renderResult = wrapAndRender({ room }).renderResult;
+                const renderResult = (await wrapAndRender({ room })).renderResult;
                 await addTextToComposerRTL(renderResult, "Hello");
             });
 
@@ -259,7 +261,7 @@ describe("MessageComposer", () => {
 
             describe("when a non-resize event occurred in UIStore", () => {
                 beforeEach(async () => {
-                    wrapAndRender({ room });
+                    await wrapAndRender({ room });
                     await openStickerPicker();
                     resizeCallback("test", {});
                 });
@@ -271,7 +273,7 @@ describe("MessageComposer", () => {
 
             describe("when a resize to narrow event occurred in UIStore", () => {
                 beforeEach(async () => {
-                    wrapAndRender({ room }, true, true);
+                    await wrapAndRender({ room }, true, true);
                     await openStickerPicker();
                     resizeCallback(UI_EVENTS.Resize, {});
                 });
@@ -293,7 +295,7 @@ describe("MessageComposer", () => {
 
             describe("when a resize to non-narrow event occurred in UIStore", () => {
                 beforeEach(async () => {
-                    wrapAndRender({ room }, true, false);
+                    await wrapAndRender({ room }, true, false);
                     await openStickerPicker();
                     resizeCallback(UI_EVENTS.Resize, {});
                 });
@@ -315,13 +317,13 @@ describe("MessageComposer", () => {
         });
 
         describe("when not replying to an event", () => {
-            it("should pass the expected placeholder to SendMessageComposer", () => {
-                wrapAndRender({ room });
+            it("should pass the expected placeholder to SendMessageComposer", async () => {
+                await wrapAndRender({ room });
                 expect(screen.getByLabelText("Send a message…")).toBeInTheDocument();
             });
 
-            it("and an e2e status it should pass the expected placeholder to SendMessageComposer", () => {
-                wrapAndRender({
+            it("and an e2e status it should pass the expected placeholder to SendMessageComposer", async () => {
+                await wrapAndRender({
                     room,
                     e2eStatus: E2EStatus.Normal,
                 });
@@ -334,8 +336,8 @@ describe("MessageComposer", () => {
             let props: Partial<React.ComponentProps<typeof MessageComposer>>;
 
             const checkPlaceholder = (expected: string) => {
-                it("should pass the expected placeholder to SendMessageComposer", () => {
-                    wrapAndRender(props);
+                it("should pass the expected placeholder to SendMessageComposer", async () => {
+                    await wrapAndRender(props);
                     expect(screen.getByLabelText(expected)).toBeInTheDocument();
                 });
             };
@@ -393,7 +395,7 @@ describe("MessageComposer", () => {
 
         describe("when clicking start a voice message", () => {
             beforeEach(async () => {
-                wrapAndRender({ room });
+                await wrapAndRender({ room });
                 await startVoiceMessage();
                 await flushPromises();
             });
@@ -406,7 +408,7 @@ describe("MessageComposer", () => {
         describe("when recording a voice broadcast and trying to start a voice message", () => {
             beforeEach(async () => {
                 setCurrentBroadcastRecording(room, VoiceBroadcastInfoState.Started);
-                wrapAndRender({ room });
+                await wrapAndRender({ room });
                 await startVoiceMessage();
                 await waitEnoughCyclesForModal();
             });
@@ -420,7 +422,7 @@ describe("MessageComposer", () => {
         describe("when there is a stopped voice broadcast recording and trying to start a voice message", () => {
             beforeEach(async () => {
                 setCurrentBroadcastRecording(room, VoiceBroadcastInfoState.Stopped);
-                wrapAndRender({ room });
+                await wrapAndRender({ room });
                 await startVoiceMessage();
                 await waitEnoughCyclesForModal();
             });
@@ -436,7 +438,7 @@ describe("MessageComposer", () => {
         const localRoom = new LocalRoom("!room:example.com", cli, cli.getUserId()!);
 
         it("should not show the stickers button", async () => {
-            wrapAndRender({ room: localRoom });
+            await wrapAndRender({ room: localRoom });
             await act(async () => {
                 await userEvent.click(screen.getByLabelText("More options"));
             });
@@ -448,7 +450,7 @@ describe("MessageComposer", () => {
         const room = mkStubRoom("!roomId:server", "Room 1", cli);
         const messageText = "Test Text";
         await SettingsStore.setValue("feature_wysiwyg_composer", null, SettingLevel.DEVICE, true);
-        const { renderResult, rawComponent } = wrapAndRender({ room });
+        const { renderResult, rawComponent } = await wrapAndRender({ room }, true, false, undefined, true);
         const { unmount, rerender } = renderResult;
 
         await act(async () => {
@@ -490,11 +492,12 @@ describe("MessageComposer", () => {
     }, 10000);
 });
 
-function wrapAndRender(
+async function wrapAndRender(
     props: Partial<React.ComponentProps<typeof MessageComposer>> = {},
     canSendMessages = true,
     narrow = false,
     tombstone?: MatrixEvent,
+    ignoreWaitForRender = false,
 ) {
     const mockClient = MatrixClientPeg.safeGet();
     const roomId = "myroomid";
@@ -527,9 +530,15 @@ function wrapAndRender(
             </RoomContext.Provider>
         </MatrixClientContext.Provider>
     );
+
+    const renderResult = render(getRawComponent(props, roomContext, mockClient));
+    if (!ignoreWaitForRender && canSendMessages && !tombstone) {
+        await waitFor(() => expect(renderResult.getByRole("textbox")).toBeInTheDocument());
+    }
+
     return {
         rawComponent: getRawComponent(props, roomContext, mockClient),
-        renderResult: render(getRawComponent(props, roomContext, mockClient)),
+        renderResult,
         roomContext,
     };
 }
