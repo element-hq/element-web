@@ -605,7 +605,7 @@ describe("<SendMessageComposer/>", () => {
 
     it("should call prepareToEncrypt when the user is typing", async () => {
         const cli = stubClient();
-        jest.spyOn(cli.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
+        cli.isRoomEncrypted = jest.fn().mockReturnValue(true);
         const room = mkStubRoom("!roomId:server", "Room", cli);
 
         expect(cli.getCrypto()!.prepareToEncrypt).not.toHaveBeenCalled();
