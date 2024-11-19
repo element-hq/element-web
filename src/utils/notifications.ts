@@ -151,10 +151,7 @@ export async function setMarkedUnreadState(room: Room, client: MatrixClient, unr
     const currentState = getMarkedUnreadState(room);
 
     if (Boolean(currentState) !== unread) {
-        // Assuming MSC2867 passes FCP with no changes, we should update to start writing
-        // the flag to the stable prefix (or both) and then ultimately use only the
-        // stable prefix.
-        await client.setRoomAccountData(room.roomId, MARKED_UNREAD_TYPE_UNSTABLE, { unread });
+        await client.setRoomAccountData(room.roomId, MARKED_UNREAD_TYPE_STABLE, { unread });
     }
 }
 

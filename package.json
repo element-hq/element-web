@@ -85,8 +85,8 @@
         "@matrix-org/react-sdk-module-api": "^2.4.0",
         "@matrix-org/spec": "^1.7.0",
         "@sentry/browser": "^8.0.0",
-        "@vector-im/compound-design-tokens": "^1.8.0",
-        "@vector-im/compound-web": "^7.1.0",
+        "@vector-im/compound-design-tokens": "^2.0.1",
+        "@vector-im/compound-web": "^7.3.0",
         "@vector-im/matrix-wysiwyg": "2.37.13",
         "@zxcvbn-ts/core": "^3.0.4",
         "@zxcvbn-ts/language-common": "^3.0.4",
@@ -276,6 +276,7 @@
         "stylelint": "^16.1.0",
         "stylelint-config-standard": "^36.0.0",
         "stylelint-scss": "^6.0.0",
+        "stylelint-value-no-unknown-custom-properties": "^6.0.1",
         "terser-webpack-plugin": "^5.3.9",
         "ts-node": "^10.9.1",
         "ts-prune": "^0.10.3",
@@ -286,6 +287,7 @@
         "webpack-bundle-analyzer": "^4.8.0",
         "webpack-cli": "^5.0.0",
         "webpack-dev-server": "^5.0.0",
+        "webpack-version-file-plugin": "^0.5.0",
         "yaml": "^2.3.3"
     },
     "@casualbot/jest-sonar-reporter": {

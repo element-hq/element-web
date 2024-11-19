@@ -43,6 +43,10 @@ interface IState {
     // If we know it, the nature of the abuse, as specified by MSC3215.
     nature?: ExtendedNature;
     ignoreUserToo: boolean; // if true, user will be ignored/blocked on submit
+    /*
+     * Whether the room is encrypted.
+     */
+    isRoomEncrypted: boolean;
 }
 
 const MODERATED_BY_STATE_EVENT_TYPE = [
@@ -188,8 +192,19 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
             // If specified, the nature of the abuse, as specified by MSC3215.
             nature: undefined,
             ignoreUserToo: false, // default false, for now. Could easily be argued as default true
+            isRoomEncrypted: false, // async, will be set later
         };
     }
+
+    public componentDidMount = async (): Promise<void> => {
+        const crypto = MatrixClientPeg.safeGet().getCrypto();
+        const roomId = this.props.mxEvent.getRoomId();
+        if (!crypto || !roomId) return;
+
+        this.setState({
+            isRoomEncrypted: await crypto.isEncryptionEnabledInRoom(roomId),
+        });
+    };
 
     private onIgnoreUserTooChanged = (newVal: boolean): void => {
         this.setState({ ignoreUserToo: newVal });
@@ -319,7 +334,6 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
         if (this.moderation) {
             // Display report-to-moderator dialog.
             // We let the user pick a nature.
-            const client = MatrixClientPeg.safeGet();
             const homeServerName = SdkConfig.get("validated_server_config")!.hsName;
             let subtitle: string;
             switch (this.state.nature) {
@@ -336,7 +350,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                     subtitle = _t("report_content|nature_spam");
                     break;
                 case NonStandardValue.Admin:
-                    if (client.isRoomEncrypted(this.props.mxEvent.getRoomId()!)) {
+                    if (this.state.isRoomEncrypted) {
                         subtitle = _t("report_content|nature_nonstandard_admin_encrypted", {
                             homeserver: homeServerName,
                         });
