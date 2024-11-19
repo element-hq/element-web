@@ -68,7 +68,7 @@ describe("SecurityManager", () => {
             stubClient();
 
             const func = jest.fn();
-            accessSecretStorage(func, true);
+            accessSecretStorage(func, { forceReset: true });
 
             expect(spy).toHaveBeenCalledTimes(1);
             await expect(spy.mock.lastCall![0]).resolves.toEqual(expect.objectContaining({ __test: true }));
