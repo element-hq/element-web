@@ -328,6 +328,28 @@ export async function asyncSome<T>(values: Iterable<T>, predicate: (value: T) =>
     return false;
 }
 
+/**
+ * Async version of Array.some that runs all promises in parallel.
+ * @param values
+ * @param predicate
+ */
+export async function asyncSomeParallel<T>(
+    values: Array<T>,
+    predicate: (value: T) => Promise<boolean>,
+): Promise<boolean> {
+    try {
+        return await Promise.any<boolean>(
+            values.map((value) =>
+                predicate(value).then((result) => (result ? Promise.resolve(true) : Promise.reject(false))),
+            ),
+        );
+    } catch (e) {
+        // If the array is empty or all the promises are false, Promise.any will reject an AggregateError
+        if (e instanceof AggregateError) return false;
+        throw e;
+    }
+}
+
 export function filterBoolean<T>(values: Array<T | null | undefined>): T[] {
     return values.filter(Boolean) as T[];
 }
