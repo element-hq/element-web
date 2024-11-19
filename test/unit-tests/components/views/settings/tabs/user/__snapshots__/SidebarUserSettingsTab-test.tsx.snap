@@ -61,7 +61,17 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 
                     <div
                       class="mx_SettingsSubsection_text"
                     >
-                      <div />
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="m12.971 3.54 7 3.889A2 2 0 0 1 21 9.177V19a2 2 0 0 1-2 2h-4v-9H9v9H5a2 2 0 0 1-2-2V9.177a2 2 0 0 1 1.029-1.748l7-3.89a2 2 0 0 1 1.942 0Z"
+                        />
+                      </svg>
                       Home
                     </div>
                     <div
@@ -125,7 +135,17 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 
                     <div
                       class="mx_SettingsSubsection_text"
                     >
-                      <div />
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="m12.897 2.817 2.336 4.733 5.223.76a1 1 0 0 1 .555 1.705L17.23 13.7l.892 5.202a1 1 0 0 1-1.45 1.054L12 17.5l-4.672 2.456a1 1 0 0 1-1.451-1.054l.892-5.202-3.78-3.685a1 1 0 0 1 .555-1.706l5.223-.759 2.336-4.733a1 1 0 0 1 1.794 0Z"
+                        />
+                      </svg>
                       Favourites
                     </div>
                     <div
@@ -157,7 +177,20 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 
                     <div
                       class="mx_SettingsSubsection_text"
                     >
-                      <div />
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M12 15c-1.1 0-2.042-.392-2.825-1.175C8.392 13.042 8 12.1 8 11s.392-2.042 1.175-2.825C9.958 7.392 10.9 7 12 7s2.042.392 2.825 1.175C15.608 8.958 16 9.9 16 11s-.392 2.042-1.175 2.825C14.042 14.608 13.1 15 12 15Z"
+                        />
+                        <path
+                          d="M19.528 18.583A9.962 9.962 0 0 0 22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 2.52.933 4.824 2.472 6.583A9.976 9.976 0 0 0 12 22a9.976 9.976 0 0 0 7.528-3.417ZM8.75 16.388c-.915.221-1.818.538-2.709.95a8 8 0 1 1 11.918 0 14.679 14.679 0 0 0-2.709-.95A13.76 13.76 0 0 0 12 16c-1.1 0-2.183.13-3.25.387Z"
+                        />
+                      </svg>
                       People
                     </div>
                     <div
@@ -312,7 +345,17 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings without guest spa u
                     <div
                       class="mx_SettingsSubsection_text"
                     >
-                      <div />
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="m12.971 3.54 7 3.889A2 2 0 0 1 21 9.177V19a2 2 0 0 1-2 2h-4v-9H9v9H5a2 2 0 0 1-2-2V9.177a2 2 0 0 1 1.029-1.748l7-3.89a2 2 0 0 1 1.942 0Z"
+                        />
+                      </svg>
                       Home
                     </div>
                     <div
@@ -376,7 +419,17 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings without guest spa u
                     <div
                       class="mx_SettingsSubsection_text"
                     >
-                      <div />
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="m12.897 2.817 2.336 4.733 5.223.76a1 1 0 0 1 .555 1.705L17.23 13.7l.892 5.202a1 1 0 0 1-1.45 1.054L12 17.5l-4.672 2.456a1 1 0 0 1-1.451-1.054l.892-5.202-3.78-3.685a1 1 0 0 1 .555-1.706l5.223-.759 2.336-4.733a1 1 0 0 1 1.794 0Z"
+                        />
+                      </svg>
                       Favourites
                     </div>
                     <div
@@ -408,7 +461,20 @@ exports[`<SidebarUserSettingsTab /> renders sidebar settings without guest spa u
                     <div
                       class="mx_SettingsSubsection_text"
                     >
-                      <div />
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M12 15c-1.1 0-2.042-.392-2.825-1.175C8.392 13.042 8 12.1 8 11s.392-2.042 1.175-2.825C9.958 7.392 10.9 7 12 7s2.042.392 2.825 1.175C15.608 8.958 16 9.9 16 11s-.392 2.042-1.175 2.825C14.042 14.608 13.1 15 12 15Z"
+                        />
+                        <path
+                          d="M19.528 18.583A9.962 9.962 0 0 0 22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 2.52.933 4.824 2.472 6.583A9.976 9.976 0 0 0 12 22a9.976 9.976 0 0 0 7.528-3.417ZM8.75 16.388c-.915.221-1.818.538-2.709.95a8 8 0 1 1 11.918 0 14.679 14.679 0 0 0-2.709-.95A13.76 13.76 0 0 0 12 16c-1.1 0-2.183.13-3.25.387Z"
+                        />
+                      </svg>
                       People
                     </div>
                     <div

@@ -21,6 +21,7 @@ import {
     SearchResult,
     IEvent,
 } from "matrix-js-sdk/src/matrix";
+import { CryptoApi, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import {
     fireEvent,
@@ -79,6 +80,7 @@ describe("RoomView", () => {
     let rooms: Map<string, Room>;
     let roomCount = 0;
     let stores: SdkContextClass;
+    let crypto: CryptoApi;
 
     // mute some noise
     filterConsole("RVS update", "does not have an m.room.create event", "Current version: 1", "Version capability");
@@ -104,6 +106,7 @@ describe("RoomView", () => {
         stores.rightPanelStore.useUnitTestClient(cli);
 
         jest.spyOn(VoipUserMapper.sharedInstance(), "getVirtualRoomForRoom").mockResolvedValue(undefined);
+        crypto = cli.getCrypto()!;
         jest.spyOn(cli, "getCrypto").mockReturnValue(undefined);
     });
 
@@ -357,7 +360,13 @@ describe("RoomView", () => {
 
             describe("that is encrypted", () => {
                 beforeEach(() => {
+                    // Not all the calls to cli.isRoomEncrypted are migrated, so we need to mock both.
                     mocked(cli.isRoomEncrypted).mockReturnValue(true);
+                    jest.spyOn(cli, "getCrypto").mockReturnValue(crypto);
+                    jest.spyOn(cli.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
+                    jest.spyOn(cli.getCrypto()!, "getUserVerificationStatus").mockResolvedValue(
+                        new UserVerificationStatus(false, true, false),
+                    );
                     localRoom.encrypted = true;
                     localRoom.currentState.setStateEvents([
                         new MatrixEvent({
@@ -376,7 +385,7 @@ describe("RoomView", () => {
 
                 it("should match the snapshot", async () => {
                     const { container } = await renderRoomView();
-                    expect(container).toMatchSnapshot();
+                    await waitFor(() => expect(container).toMatchSnapshot());
                 });
             });
         });

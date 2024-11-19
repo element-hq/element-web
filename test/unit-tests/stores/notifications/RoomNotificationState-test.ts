@@ -91,7 +91,7 @@ describe("RoomNotificationState", () => {
         const listener = jest.fn();
         roomNotifState.addListener(NotificationStateEvents.Update, listener);
         const accountDataEvent = {
-            getType: () => "com.famedly.marked_unread",
+            getType: () => "m.marked_unread",
             getContent: () => {
                 return { unread: true };
             },

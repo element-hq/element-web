@@ -146,7 +146,6 @@ describe("<MatrixChat />", () => {
         matrixRTC: createStubMatrixRTC(),
         getDehydratedDevice: jest.fn(),
         whoami: jest.fn(),
-        isRoomEncrypted: jest.fn(),
         logout: jest.fn(),
         getDeviceId: jest.fn(),
         getKeyBackupVersion: jest.fn().mockResolvedValue(null),
@@ -1013,6 +1012,7 @@ describe("<MatrixChat />", () => {
                     userHasCrossSigningKeys: jest.fn().mockResolvedValue(false),
                     // This needs to not finish immediately because we need to test the screen appears
                     bootstrapCrossSigning: jest.fn().mockImplementation(() => bootstrapDeferred.promise),
+                    isEncryptionEnabledInRoom: jest.fn().mockResolvedValue(false),
                 };
                 loginClient.getCrypto.mockReturnValue(mockCrypto as any);
             });
@@ -1060,9 +1060,11 @@ describe("<MatrixChat />", () => {
                             },
                         });
 
-                        loginClient.isRoomEncrypted.mockImplementation((roomId) => {
-                            return roomId === encryptedRoom.roomId;
-                        });
+                        jest.spyOn(loginClient.getCrypto()!, "isEncryptionEnabledInRoom").mockImplementation(
+                            async (roomId) => {
+                                return roomId === encryptedRoom.roomId;
+                            },
+                        );
                     });
 
                     it("should go straight to logged in view when user is not in any encrypted rooms", async () => {
