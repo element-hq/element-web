@@ -841,7 +841,7 @@ async function readEvents(
     }
 }
 
-const onMessage = async function (event: MessageEvent<any>): Promise<void> {
+const onMessage = function (event: MessageEvent<any>): void {
     if (!event.origin) {
         // @ts-ignore - stupid chrome
         event.origin = event.originalEvent.origin;
@@ -928,7 +928,7 @@ const onMessage = async function (event: MessageEvent<any>): Promise<void> {
         getMembershipCount(event, roomId);
         return;
     } else if (event.data.action === Action.GetRoomEncryptionState) {
-        await getRoomEncState(event, roomId);
+        getRoomEncState(event, roomId);
         return;
     } else if (event.data.action === Action.CanSendEvent) {
         canSendEvent(event, roomId);
