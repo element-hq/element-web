@@ -7,23 +7,10 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import {
-    IContent,
-    IEventRelation,
-    MatrixEvent,
-    MsgType,
-    THREAD_RELATION_TYPE,
-    M_BEACON_INFO,
-    M_POLL_END,
-    M_POLL_START,
-} from "matrix-js-sdk/src/matrix";
+import { IContent, IEventRelation, MatrixEvent, THREAD_RELATION_TYPE } from "matrix-js-sdk/src/matrix";
 import sanitizeHtml from "sanitize-html";
-import escapeHtml from "escape-html";
-import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
 
 import { PERMITTED_URL_SCHEMES } from "./UrlUtils";
-import { makeUserPermalink, RoomPermalinkCreator } from "./permalinks/Permalinks";
-import { isSelfLocation } from "./location";
 
 export function getParentEventId(ev?: MatrixEvent): string | undefined {
     if (!ev || ev.isRedacted()) return;
@@ -62,137 +49,6 @@ export function stripHTMLReply(html: string): string {
     });
 }
 
-// Part of Replies fallback support
-export function getNestedReplyText(
-    ev: MatrixEvent,
-    permalinkCreator?: RoomPermalinkCreator,
-): { body: string; html: string } | null {
-    if (!ev) return null;
-
-    let {
-        body,
-        formatted_body: html,
-        msgtype,
-    } = ev.getContent<{
-        body: string;
-        msgtype?: string;
-        formatted_body?: string;
-    }>();
-    if (getParentEventId(ev)) {
-        if (body) body = stripPlainReply(body);
-    }
-
-    if (!body) body = ""; // Always ensure we have a body, for reasons.
-
-    if (html) {
-        // sanitize the HTML before we put it in an <mx-reply>
-        html = stripHTMLReply(html);
-    } else {
-        // Escape the body to use as HTML below.
-        // We also run a nl2br over the result to fix the fallback representation. We do this
-        // after converting the text to safe HTML to avoid user-provided BR's from being converted.
-        html = escapeHtml(body).replace(/\n/g, "<br/>");
-    }
-
-    // dev note: do not rely on `body` being safe for HTML usage below.
-
-    const evLink = permalinkCreator?.forEvent(ev.getId()!);
-    const userLink = makeUserPermalink(ev.getSender()!);
-    const mxid = ev.getSender();
-
-    if (M_BEACON_INFO.matches(ev.getType())) {
-        const aTheir = isSelfLocation(ev.getContent()) ? "their" : "a";
-        return {
-            html:
-                `<mx-reply><blockquote><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>` +
-                `<br>shared ${aTheir} live location.</blockquote></mx-reply>`,
-            body: `> <${mxid}> shared ${aTheir} live location.\n\n`,
-        };
-    }
-
-    if (M_POLL_START.matches(ev.getType())) {
-        const extensibleEvent = ev.unstableExtensibleEvent as PollStartEvent;
-        const question = extensibleEvent?.question?.text;
-        return {
-            html:
-                `<mx-reply><blockquote><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>` +
-                `<br>Poll: ${question}</blockquote></mx-reply>`,
-            body: `> <${mxid}> started poll: ${question}\n\n`,
-        };
-    }
-    if (M_POLL_END.matches(ev.getType())) {
-        return {
-            html:
-                `<mx-reply><blockquote><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>` +
-                `<br>Ended poll</blockquote></mx-reply>`,
-            body: `> <${mxid}>Ended poll\n\n`,
-        };
-    }
-
-    // This fallback contains text that is explicitly EN.
-    switch (msgtype) {
-        case MsgType.Text:
-        case MsgType.Notice: {
-            html =
-                `<mx-reply><blockquote><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>` +
-                `<br>${html}</blockquote></mx-reply>`;
-            const lines = body.trim().split("\n");
-            if (lines.length > 0) {
-                lines[0] = `<${mxid}> ${lines[0]}`;
-                body = lines.map((line) => `> ${line}`).join("\n") + "\n\n";
-            }
-            break;
-        }
-        case MsgType.Image:
-            html =
-                `<mx-reply><blockquote><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>` +
-                `<br>sent an image.</blockquote></mx-reply>`;
-            body = `> <${mxid}> sent an image.\n\n`;
-            break;
-        case MsgType.Video:
-            html =
-                `<mx-reply><blockquote><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>` +
-                `<br>sent a video.</blockquote></mx-reply>`;
-            body = `> <${mxid}> sent a video.\n\n`;
-            break;
-        case MsgType.Audio:
-            html =
-                `<mx-reply><blockquote><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>` +
-                `<br>sent an audio file.</blockquote></mx-reply>`;
-            body = `> <${mxid}> sent an audio file.\n\n`;
-            break;
-        case MsgType.File:
-            html =
-                `<mx-reply><blockquote><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>` +
-                `<br>sent a file.</blockquote></mx-reply>`;
-            body = `> <${mxid}> sent a file.\n\n`;
-            break;
-        case MsgType.Location: {
-            const aTheir = isSelfLocation(ev.getContent()) ? "their" : "a";
-            html =
-                `<mx-reply><blockquote><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>` +
-                `<br>shared ${aTheir} location.</blockquote></mx-reply>`;
-            body = `> <${mxid}> shared ${aTheir} location.\n\n`;
-            break;
-        }
-        case MsgType.Emote: {
-            html =
-                `<mx-reply><blockquote><a href="${evLink}">In reply to</a> * ` +
-                `<a href="${userLink}">${mxid}</a><br>${html}</blockquote></mx-reply>`;
-            const lines = body.trim().split("\n");
-            if (lines.length > 0) {
-                lines[0] = `* <${mxid}> ${lines[0]}`;
-                body = lines.map((line) => `> ${line}`).join("\n") + "\n\n";
-            }
-            break;
-        }
-        default:
-            return null;
-    }
-
-    return { body, html };
-}
-
 export function makeReplyMixIn(ev?: MatrixEvent): IEventRelation {
     if (!ev) return {};
 
@@ -227,34 +83,9 @@ export function shouldDisplayReply(event: MatrixEvent): boolean {
     return !!inReplyTo.event_id;
 }
 
-interface AddReplyOpts {
-    permalinkCreator?: RoomPermalinkCreator;
-    includeLegacyFallback: false;
-}
-
-interface IncludeLegacyFeedbackOpts {
-    permalinkCreator?: RoomPermalinkCreator;
-    includeLegacyFallback: true;
-}
-
-export function addReplyToMessageContent(
-    content: IContent,
-    replyToEvent: MatrixEvent,
-    opts: AddReplyOpts | IncludeLegacyFeedbackOpts,
-): void {
+export function addReplyToMessageContent(content: IContent, replyToEvent: MatrixEvent): void {
     content["m.relates_to"] = {
         ...(content["m.relates_to"] || {}),
         ...makeReplyMixIn(replyToEvent),
     };
-
-    if (opts.includeLegacyFallback) {
-        // Part of Replies fallback support - prepend the text we're sending with the text we're replying to
-        const nestedReply = getNestedReplyText(replyToEvent, opts.permalinkCreator);
-        if (nestedReply) {
-            if (content.formatted_body) {
-                content.formatted_body = nestedReply.html + content.formatted_body;
-            }
-            content.body = nestedReply.body + content.body;
-        }
-    }
 }

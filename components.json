@@ -1,5 +1,1 @@
-{
-    "src/components/views/auth/AuthFooter.tsx": "src/components/views/auth/VectorAuthFooter.tsx",
-    "src/components/views/auth/AuthHeaderLogo.tsx": "src/components/views/auth/VectorAuthHeaderLogo.tsx",
-    "src/components/views/auth/AuthPage.tsx": "src/components/views/auth/VectorAuthPage.tsx"
-}
+{}

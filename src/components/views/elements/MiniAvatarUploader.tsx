@@ -17,6 +17,7 @@ import { useTimeout } from "../../../hooks/useTimeout";
 import { chromeFileInputFix } from "../../../utils/BrowserWorkarounds";
 import AccessibleButton from "./AccessibleButton";
 import Spinner from "./Spinner";
+import { getFileChanged } from "../settings/AvatarSetting.tsx";
 
 export const AVATAR_SIZE = "52px";
 
@@ -72,11 +73,12 @@ const MiniAvatarUploader: React.FC<IProps> = ({
                     onClick?.(ev);
                 }}
                 onChange={async (ev): Promise<void> => {
-                    if (!ev.target.files?.length) return;
                     setBusy(true);
-                    const file = ev.target.files[0];
-                    const { content_uri: uri } = await cli.uploadContent(file);
-                    await setAvatarUrl(uri);
+                    const file = getFileChanged(ev);
+                    if (file) {
+                        const { content_uri: uri } = await cli.uploadContent(file);
+                        await setAvatarUrl(uri);
+                    }
                     setBusy(false);
                 }}
                 accept="image/*"

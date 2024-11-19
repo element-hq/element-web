@@ -8,9 +8,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, CSSProperties } from "react";
+import React, { createRef, CSSProperties, useRef, useState } from "react";
 import FocusLock from "react-focus-lock";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, parseErrorResponse } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import MemberAvatar from "../avatars/MemberAvatar";
@@ -30,6 +30,9 @@ import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { presentableTextForFile } from "../../../utils/FileUtils";
 import AccessibleButton from "./AccessibleButton";
+import Modal from "../../../Modal";
+import ErrorDialog from "../dialogs/ErrorDialog";
+import { FileDownloader } from "../../../utils/FileDownloader";
 
 // Max scale to keep gaps around the image
 const MAX_SCALE = 0.95;
@@ -309,15 +312,6 @@ export default class ImageView extends React.Component<IProps, IState> {
         this.setZoomAndRotation(cur + 90);
     };
 
-    private onDownloadClick = (): void => {
-        const a = document.createElement("a");
-        a.href = this.props.src;
-        if (this.props.name) a.download = this.props.name;
-        a.target = "_blank";
-        a.rel = "noreferrer noopener";
-        a.click();
-    };
-
     private onOpenContextMenu = (): void => {
         this.setState({
             contextMenuDisplayed: true,
@@ -555,11 +549,7 @@ export default class ImageView extends React.Component<IProps, IState> {
                             title={_t("lightbox|rotate_right")}
                             onClick={this.onRotateClockwiseClick}
                         />
-                        <AccessibleButton
-                            className="mx_ImageView_button mx_ImageView_button_download"
-                            title={_t("action|download")}
-                            onClick={this.onDownloadClick}
-                        />
+                        <DownloadButton url={this.props.src} fileName={this.props.name} />
                         {contextMenuButton}
                         <AccessibleButton
                             className="mx_ImageView_button mx_ImageView_button_close"
@@ -590,4 +580,62 @@ export default class ImageView extends React.Component<IProps, IState> {
             </FocusLock>
         );
     }
+}
+
+function DownloadButton({ url, fileName }: { url: string; fileName?: string }): JSX.Element {
+    const downloader = useRef(new FileDownloader()).current;
+    const [loading, setLoading] = useState(false);
+    const blobRef = useRef<Blob>();
+
+    function showError(e: unknown): void {
+        Modal.createDialog(ErrorDialog, {
+            title: _t("timeline|download_failed"),
+            description: (
+                <>
+                    <div>{_t("timeline|download_failed_description")}</div>
+                    <div>{e instanceof Error ? e.toString() : ""}</div>
+                </>
+            ),
+        });
+        setLoading(false);
+    }
+
+    const onDownloadClick = async (): Promise<void> => {
+        try {
+            if (loading) return;
+            setLoading(true);
+
+            if (blobRef.current) {
+                // Cheat and trigger a download, again.
+                return downloadBlob(blobRef.current);
+            }
+
+            const res = await fetch(url);
+            if (!res.ok) {
+                throw parseErrorResponse(res, await res.text());
+            }
+            const blob = await res.blob();
+            blobRef.current = blob;
+            await downloadBlob(blob);
+        } catch (e) {
+            showError(e);
+        }
+    };
+
+    async function downloadBlob(blob: Blob): Promise<void> {
+        await downloader.download({
+            blob,
+            name: fileName ?? _t("common|image"),
+        });
+        setLoading(false);
+    }
+
+    return (
+        <AccessibleButton
+            className="mx_ImageView_button mx_ImageView_button_download"
+            title={loading ? _t("timeline|download_action_downloading") : _t("action|download")}
+            onClick={onDownloadClick}
+            disabled={loading}
+        />
+    );
 }

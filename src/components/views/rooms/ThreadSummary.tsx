@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useContext, useState } from "react";
-import { Thread, ThreadEvent, IContent, MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
+import React, { useContext } from "react";
+import { Thread, ThreadEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { IndicatorIcon } from "@vector-im/compound-web";
 import ThreadIconSolid from "@vector-im/compound-design-tokens/assets/web/icons/threads-solid";
 
@@ -15,17 +15,15 @@ import { _t } from "../../../languageHandler";
 import { CardContext } from "../right_panel/context";
 import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import PosthogTrackers from "../../../PosthogTrackers";
-import { useTypedEventEmitter, useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
+import { useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
 import RoomContext from "../../../contexts/RoomContext";
-import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
 import MemberAvatar from "../avatars/MemberAvatar";
-import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
-import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { Action } from "../../../dispatcher/actions";
 import { ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { useUnreadNotifications } from "../../../hooks/useUnreadNotifications";
 import { notificationLevelToIndicator } from "../../../utils/notifications";
+import { EventPreviewTile, useEventPreview } from "./EventPreview.tsx";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -75,24 +73,9 @@ interface IPreviewProps {
 }
 
 export const ThreadMessagePreview: React.FC<IPreviewProps> = ({ thread, showDisplayname = false }) => {
-    const cli = useContext(MatrixClientContext);
-
     const lastReply = useTypedEventEmitterState(thread, ThreadEvent.Update, () => thread.replyToEvent) ?? undefined;
-    // track the content as a means to regenerate the thread message preview upon edits & decryption
-    const [content, setContent] = useState<IContent | undefined>(lastReply?.getContent());
-    useTypedEventEmitter(lastReply, MatrixEventEvent.Replaced, () => {
-        setContent(lastReply!.getContent());
-    });
-    const awaitDecryption = lastReply?.shouldAttemptDecryption() || lastReply?.isBeingDecrypted();
-    useTypedEventEmitter(awaitDecryption ? lastReply : undefined, MatrixEventEvent.Decrypted, () => {
-        setContent(lastReply!.getContent());
-    });
+    const preview = useEventPreview(lastReply);
 
-    const preview = useAsyncMemo(async (): Promise<string | undefined> => {
-        if (!lastReply) return;
-        await cli.decryptEventIfNeeded(lastReply);
-        return MessagePreviewStore.instance.generatePreviewForEvent(lastReply);
-    }, [lastReply, content]);
     if (!preview || !lastReply) {
         return null;
     }
@@ -114,14 +97,10 @@ export const ThreadMessagePreview: React.FC<IPreviewProps> = ({ thread, showDisp
                     className="mx_ThreadSummary_content mx_DecryptionFailureBody"
                     title={_t("timeline|decryption_failure|unable_to_decrypt")}
                 >
-                    <span className="mx_ThreadSummary_message-preview">
-                        {_t("timeline|decryption_failure|unable_to_decrypt")}
-                    </span>
+                    {_t("timeline|decryption_failure|unable_to_decrypt")}
                 </div>
             ) : (
-                <div className="mx_ThreadSummary_content" title={preview}>
-                    <span className="mx_ThreadSummary_message-preview">{preview}</span>
-                </div>
+                <EventPreviewTile preview={preview} className="mx_ThreadSummary_content" />
             )}
         </>
     );

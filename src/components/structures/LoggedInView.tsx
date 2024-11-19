@@ -49,11 +49,10 @@ import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../LegacyCallHandl
 import AudioFeedArrayForLegacyCall from "../views/voip/AudioFeedArrayForLegacyCall";
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
-import RoomView from "./RoomView";
-import type { RoomView as RoomViewType } from "./RoomView";
+import { RoomView } from "./RoomView";
 import ToastContainer from "./ToastContainer";
 import UserView from "./UserView";
-import BackdropPanel from "./BackdropPanel";
+import { BackdropPanel } from "./BackdropPanel";
 import { mediaFromMxc } from "../../customisations/Media";
 import { UserTab } from "../views/dialogs/UserTab";
 import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
@@ -125,7 +124,7 @@ class LoggedInView extends React.Component<IProps, IState> {
     public static displayName = "LoggedInView";
 
     protected readonly _matrixClient: MatrixClient;
-    protected readonly _roomView: React.RefObject<RoomViewType>;
+    protected readonly _roomView: React.RefObject<RoomView>;
     protected readonly _resizeContainer: React.RefObject<HTMLDivElement>;
     protected readonly resizeHandler: React.RefObject<HTMLDivElement>;
     protected layoutWatcherRef?: string;
@@ -228,9 +227,9 @@ class LoggedInView extends React.Component<IProps, IState> {
         this._matrixClient.removeListener(ClientEvent.Sync, this.onSync);
         this._matrixClient.removeListener(RoomStateEvent.Events, this.onRoomStateEvents);
         OwnProfileStore.instance.off(UPDATE_EVENT, this.refreshBackgroundImage);
-        if (this.layoutWatcherRef) SettingsStore.unwatchSetting(this.layoutWatcherRef);
-        if (this.compactLayoutWatcherRef) SettingsStore.unwatchSetting(this.compactLayoutWatcherRef);
-        if (this.backgroundImageWatcherRef) SettingsStore.unwatchSetting(this.backgroundImageWatcherRef);
+        SettingsStore.unwatchSetting(this.layoutWatcherRef);
+        SettingsStore.unwatchSetting(this.compactLayoutWatcherRef);
+        SettingsStore.unwatchSetting(this.backgroundImageWatcherRef);
         this.timezoneProfileUpdateRef?.forEach((s) => SettingsStore.unwatchSetting(s));
         this.resizer?.detach();
     }

@@ -21,7 +21,6 @@ exports[`<ImageView /> renders correctly 1`] = `
         class="mx_ImageView_toolbar"
       >
         <div
-          aria-describedby=":r2:"
           aria-label="Zoom out"
           class="mx_AccessibleButton mx_ImageView_button mx_ImageView_button_zoomOut"
           role="button"

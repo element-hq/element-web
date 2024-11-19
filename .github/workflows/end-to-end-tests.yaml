@@ -36,7 +36,7 @@ env:
 jobs:
     build:
         name: "Build Element-Web"
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-24.04
         if: inputs.skip != true
         steps:
             - name: Checkout code
@@ -69,7 +69,6 @@ jobs:
                   VERSION: "${{ steps.layered_build.outputs.VERSION }}"
               run: |
                   yarn build
-                  echo $VERSION > webapp/version
 
             - name: Upload Artifact
               uses: actions/upload-artifact@v4
@@ -144,7 +143,7 @@ jobs:
         name: end-to-end-tests
         needs: playwright
         if: always()
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-24.04
         steps:
             - uses: actions/checkout@v4
               if: inputs.skip != true

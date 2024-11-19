@@ -48,7 +48,7 @@ import {
 } from "../../../utils/pushRules/updatePushRuleActions";
 import { Caption } from "../typography/Caption";
 import { SettingsSubsectionHeading } from "./shared/SettingsSubsectionHeading";
-import SettingsSubsection from "./shared/SettingsSubsection";
+import { SettingsSubsection } from "./shared/SettingsSubsection";
 import { doesRoomHaveUnreadMessages } from "../../../Unread";
 import SettingsFlag from "../elements/SettingsFlag";
 
@@ -206,7 +206,7 @@ const NotificationActivitySettings = (): JSX.Element => {
  * The old, deprecated notifications tab view, only displayed if the user has the labs flag disabled.
  */
 export default class Notifications extends React.PureComponent<IProps, IState> {
-    private settingWatchers: string[];
+    private settingWatchers: string[] = [];
 
     public constructor(props: IProps) {
         super(props);
@@ -220,7 +220,17 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
             clearingNotifications: false,
             ruleIdsWithError: {},
         };
+    }
 
+    private get isInhibited(): boolean {
+        // Caution: The master rule's enabled state is inverted from expectation. When
+        // the master rule is *enabled* it means all other rules are *disabled* (or
+        // inhibited). Conversely, when the master rule is *disabled* then all other rules
+        // are *enabled* (or operate fine).
+        return !!this.state.masterPushRule?.enabled;
+    }
+
+    public componentDidMount(): void {
         this.settingWatchers = [
             SettingsStore.watchSetting("notificationsEnabled", null, (...[, , , , value]) =>
                 this.setState({ desktopNotifications: value as boolean }),
@@ -235,17 +245,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
                 this.setState({ audioNotifications: value as boolean }),
             ),
         ];
-    }
 
-    private get isInhibited(): boolean {
-        // Caution: The master rule's enabled state is inverted from expectation. When
-        // the master rule is *enabled* it means all other rules are *disabled* (or
-        // inhibited). Conversely, when the master rule is *disabled* then all other rules
-        // are *enabled* (or operate fine).
-        return !!this.state.masterPushRule?.enabled;
-    }
-
-    public componentDidMount(): void {
         // noinspection JSIgnoredPromiseFromCall
         this.refreshFromServer();
         this.refreshFromAccountData();

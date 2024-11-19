@@ -16,8 +16,8 @@ import { Action } from "../dispatcher/actions";
 import { MatrixDispatcher } from "../dispatcher/dispatcher";
 
 export abstract class ReadyWatchingStore extends EventEmitter implements IDestroyable {
-    protected matrixClient: MatrixClient | null = null;
-    private dispatcherRef: string | null = null;
+    protected matrixClient?: MatrixClient;
+    private dispatcherRef?: string;
 
     public constructor(protected readonly dispatcher: MatrixDispatcher) {
         super();
@@ -35,7 +35,7 @@ export abstract class ReadyWatchingStore extends EventEmitter implements IDestro
     }
 
     public get mxClient(): MatrixClient | null {
-        return this.matrixClient; // for external readonly access
+        return this.matrixClient ?? null; // for external readonly access
     }
 
     public useUnitTestClient(cli: MatrixClient): void {
@@ -43,7 +43,7 @@ export abstract class ReadyWatchingStore extends EventEmitter implements IDestro
     }
 
     public destroy(): void {
-        if (this.dispatcherRef !== null) this.dispatcher.unregister(this.dispatcherRef);
+        this.dispatcher.unregister(this.dispatcherRef);
     }
 
     protected async onReady(): Promise<void> {
@@ -80,7 +80,7 @@ export abstract class ReadyWatchingStore extends EventEmitter implements IDestro
         } else if (payload.action === "on_client_not_viable" || payload.action === Action.OnLoggedOut) {
             if (this.matrixClient) {
                 await this.onNotReady();
-                this.matrixClient = null;
+                this.matrixClient = undefined;
             }
         }
     };

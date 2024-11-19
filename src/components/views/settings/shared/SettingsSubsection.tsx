@@ -65,5 +65,3 @@ export const SettingsSubsection: React.FC<SettingsSubsectionProps> = ({
         {!legacy && <Separator />}
     </div>
 );
-
-export default SettingsSubsection;

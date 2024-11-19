@@ -134,9 +134,6 @@ export class MessageComposer extends React.Component<IProps, IState> {
         super(props, context);
         this.context = context; // otherwise React will only set it prior to render due to type def above
 
-        VoiceRecordingStore.instance.on(UPDATE_EVENT, this.onVoiceStoreUpdate);
-
-        window.addEventListener("beforeunload", this.saveWysiwygEditorState);
         const isWysiwygLabEnabled = SettingsStore.getValue<boolean>("feature_wysiwyg_composer");
         let isRichTextEnabled = true;
         let initialComposerContent = "";
@@ -145,13 +142,6 @@ export class MessageComposer extends React.Component<IProps, IState> {
             if (wysiwygState) {
                 isRichTextEnabled = wysiwygState.isRichText;
                 initialComposerContent = wysiwygState.content;
-                if (wysiwygState.replyEventId) {
-                    dis.dispatch({
-                        action: "reply_to_event",
-                        event: this.props.room.findEventById(wysiwygState.replyEventId),
-                        context: this.context.timelineRenderingType,
-                    });
-                }
             }
         }
 
@@ -171,11 +161,6 @@ export class MessageComposer extends React.Component<IProps, IState> {
         };
 
         this.instanceId = instanceCount++;
-
-        SettingsStore.monitorSetting("MessageComposerInput.showStickersButton", null);
-        SettingsStore.monitorSetting("MessageComposerInput.showPollsButton", null);
-        SettingsStore.monitorSetting(Features.VoiceBroadcast, null);
-        SettingsStore.monitorSetting("feature_wysiwyg_composer", null);
     }
 
     private get editorStateKey(): string {
@@ -248,6 +233,25 @@ export class MessageComposer extends React.Component<IProps, IState> {
     }
 
     public componentDidMount(): void {
+        VoiceRecordingStore.instance.on(UPDATE_EVENT, this.onVoiceStoreUpdate);
+
+        window.addEventListener("beforeunload", this.saveWysiwygEditorState);
+        if (this.state.isWysiwygLabEnabled) {
+            const wysiwygState = this.restoreWysiwygEditorState();
+            if (wysiwygState?.replyEventId) {
+                dis.dispatch({
+                    action: "reply_to_event",
+                    event: this.props.room.findEventById(wysiwygState.replyEventId),
+                    context: this.context.timelineRenderingType,
+                });
+            }
+        }
+
+        SettingsStore.monitorSetting("MessageComposerInput.showStickersButton", null);
+        SettingsStore.monitorSetting("MessageComposerInput.showPollsButton", null);
+        SettingsStore.monitorSetting(Features.VoiceBroadcast, null);
+        SettingsStore.monitorSetting("feature_wysiwyg_composer", null);
+
         this.dispatcherRef = dis.register(this.onAction);
         this.waitForOwnMember();
         UIStore.instance.trackElementDimensions(`MessageComposer${this.instanceId}`, this.ref.current!);
@@ -331,7 +335,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
 
     public componentWillUnmount(): void {
         VoiceRecordingStore.instance.off(UPDATE_EVENT, this.onVoiceStoreUpdate);
-        if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
+        dis.unregister(this.dispatcherRef);
         UIStore.instance.stopTrackingElementDimensions(`MessageComposer${this.instanceId}`);
         UIStore.instance.removeListener(`MessageComposer${this.instanceId}`, this.onResize);
 
@@ -410,7 +414,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
         this.messageComposerInput.current?.sendMessage();
 
         if (this.state.isWysiwygLabEnabled) {
-            const { permalinkCreator, relation, replyToEvent } = this.props;
+            const { relation, replyToEvent } = this.props;
             const composerContent = this.state.composerContent;
             this.setState({ composerContent: "", initialComposerContent: "" });
             dis.dispatch({
@@ -420,7 +424,6 @@ export class MessageComposer extends React.Component<IProps, IState> {
             await sendMessage(composerContent, this.state.isRichTextEnabled, {
                 mxClient: this.props.mxClient,
                 roomContext: this.context,
-                permalinkCreator,
                 relation,
                 replyToEvent,
             });
@@ -578,7 +581,6 @@ export class MessageComposer extends React.Component<IProps, IState> {
                         key="controls_input"
                         room={this.props.room}
                         placeholder={this.renderPlaceholderText()}
-                        permalinkCreator={this.props.permalinkCreator}
                         relation={this.props.relation}
                         replyToEvent={this.props.replyToEvent}
                         onChange={this.onChange}
@@ -593,7 +595,6 @@ export class MessageComposer extends React.Component<IProps, IState> {
                     key="controls_voice_record"
                     ref={this.voiceRecordingButton}
                     room={this.props.room}
-                    permalinkCreator={this.props.permalinkCreator}
                     relation={this.props.relation}
                     replyToEvent={this.props.replyToEvent}
                 />,
@@ -638,8 +639,6 @@ export class MessageComposer extends React.Component<IProps, IState> {
             );
         }
 
-        let recordingTooltip: JSX.Element | undefined;
-
         const isTooltipOpen = Boolean(this.state.recordingTimeLeftSeconds);
         const secondsLeft = this.state.recordingTimeLeftSeconds ? Math.round(this.state.recordingTimeLeftSeconds) : 0;
 
@@ -669,7 +668,6 @@ export class MessageComposer extends React.Component<IProps, IState> {
         return (
             <Tooltip open={isTooltipOpen} description={formatTimeLeft(secondsLeft)} placement="bottom">
                 <div className={classes} ref={this.ref} role="region" aria-label={_t("a11y|message_composer")}>
-                    {recordingTooltip}
                     <div className="mx_MessageComposer_wrapper">
                         <ReplyPreview
                             replyToEvent={this.props.replyToEvent}

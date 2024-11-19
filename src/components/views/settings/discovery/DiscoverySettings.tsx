@@ -18,7 +18,7 @@ import SettingsStore from "../../../../settings/SettingsStore";
 import { UIFeature } from "../../../../settings/UIFeature";
 import { _t } from "../../../../languageHandler";
 import SetIdServer from "../SetIdServer";
-import SettingsSubsection from "../shared/SettingsSubsection";
+import { SettingsSubsection } from "../shared/SettingsSubsection";
 import InlineTermsAgreement from "../../terms/InlineTermsAgreement";
 import { Service, ServicePolicyPair, startTermsFlow } from "../../../../Terms";
 import IdentityAuthClient from "../../../../IdentityAuthClient";
@@ -51,7 +51,6 @@ export const DiscoverySettings: React.FC = () => {
     const [emails, setEmails] = useState<ThirdPartyIdentifier[]>([]);
     const [phoneNumbers, setPhoneNumbers] = useState<ThirdPartyIdentifier[]>([]);
     const [idServerName, setIdServerName] = useState<string | undefined>(abbreviateUrl(client.getIdentityServerUrl()));
-    const [canMake3pidChanges, setCanMake3pidChanges] = useState<boolean>(false);
 
     const [requiredPolicyInfo, setRequiredPolicyInfo] = useState<RequiredPolicyInfo>({
         // This object is passed along to a component for handling
@@ -87,11 +86,6 @@ export const DiscoverySettings: React.FC = () => {
         (async () => {
             try {
                 await getThreepidState();
-
-                const capabilities = await client.getCapabilities();
-                setCanMake3pidChanges(
-                    !capabilities["m.3pid_changes"] || capabilities["m.3pid_changes"].enabled === true,
-                );
 
                 // By starting the terms flow we get the logic for checking which terms the user has signed
                 // for free. So we might as well use that for our own purposes.
@@ -166,7 +160,7 @@ export const DiscoverySettings: React.FC = () => {
                         medium={ThreepidMedium.Email}
                         threepids={emails}
                         onChange={getThreepidState}
-                        disabled={!canMake3pidChanges}
+                        disabled={!hasTerms}
                         isLoading={isLoadingThreepids}
                     />
                 </SettingsSubsection>
@@ -180,7 +174,7 @@ export const DiscoverySettings: React.FC = () => {
                         medium={ThreepidMedium.Phone}
                         threepids={phoneNumbers}
                         onChange={getThreepidState}
-                        disabled={!canMake3pidChanges}
+                        disabled={!hasTerms}
                         isLoading={isLoadingThreepids}
                     />
                 </SettingsSubsection>
@@ -196,5 +190,3 @@ export const DiscoverySettings: React.FC = () => {
         </SettingsSubsection>
     );
 };
-
-export default DiscoverySettings;

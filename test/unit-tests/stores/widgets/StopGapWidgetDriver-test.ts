@@ -170,6 +170,106 @@ describe("StopGapWidgetDriver", () => {
         expect(listener).toHaveBeenCalledWith(openIdUpdate);
     });
 
+    describe("sendToDevice", () => {
+        const contentMap = {
+            "@alice:example.org": {
+                "*": {
+                    hello: "alice",
+                },
+            },
+            "@bob:example.org": {
+                bobDesktop: {
+                    hello: "bob",
+                },
+            },
+        };
+
+        let driver: WidgetDriver;
+
+        beforeEach(() => {
+            driver = mkDefaultDriver();
+        });
+
+        it("sends unencrypted messages", async () => {
+            await driver.sendToDevice("org.example.foo", false, contentMap);
+            expect(client.queueToDevice).toHaveBeenCalledWith({
+                eventType: "org.example.foo",
+                batch: [
+                    { deviceId: "*", payload: { hello: "alice" }, userId: "@alice:example.org" },
+                    { deviceId: "bobDesktop", payload: { hello: "bob" }, userId: "@bob:example.org" },
+                ],
+            });
+        });
+
+        it("sends encrypted messages", async () => {
+            const encryptToDeviceMessages = jest
+                .fn()
+                .mockImplementation(
+                    (eventType, recipients: { userId: string; deviceId: string }[], content: object) => ({
+                        eventType: "m.room.encrypted",
+                        batch: recipients.map(({ userId, deviceId }) => ({
+                            userId,
+                            deviceId,
+                            payload: {
+                                eventType,
+                                content,
+                            },
+                        })),
+                    }),
+                );
+
+            MatrixClientPeg.safeGet().getCrypto()!.encryptToDeviceMessages = encryptToDeviceMessages;
+
+            await driver.sendToDevice("org.example.foo", true, {
+                "@alice:example.org": {
+                    aliceMobile: {
+                        hello: "alice",
+                    },
+                },
+                "@bob:example.org": {
+                    bobDesktop: {
+                        hello: "bob",
+                    },
+                },
+            });
+
+            expect(encryptToDeviceMessages).toHaveBeenCalledWith(
+                "org.example.foo",
+                [{ deviceId: "aliceMobile", userId: "@alice:example.org" }],
+                {
+                    hello: "alice",
+                },
+            );
+            expect(encryptToDeviceMessages).toHaveBeenCalledWith(
+                "org.example.foo",
+                [{ deviceId: "bobDesktop", userId: "@bob:example.org" }],
+                {
+                    hello: "bob",
+                },
+            );
+            expect(client.queueToDevice).toHaveBeenCalledWith({
+                eventType: "m.room.encrypted",
+                batch: expect.arrayContaining([
+                    {
+                        deviceId: "aliceMobile",
+                        payload: { content: { hello: "alice" }, eventType: "org.example.foo" },
+                        userId: "@alice:example.org",
+                    },
+                ]),
+            });
+            expect(client.queueToDevice).toHaveBeenCalledWith({
+                eventType: "m.room.encrypted",
+                batch: expect.arrayContaining([
+                    {
+                        deviceId: "bobDesktop",
+                        payload: { content: { hello: "bob" }, eventType: "org.example.foo" },
+                        userId: "@bob:example.org",
+                    },
+                ]),
+            });
+        });
+    });
+
     describe("getTurnServers", () => {
         let driver: WidgetDriver;
 

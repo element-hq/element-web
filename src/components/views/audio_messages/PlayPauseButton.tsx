@@ -26,10 +26,6 @@ type Props = Omit<ButtonProps<"div">, "title" | "onClick" | "disabled" | "elemen
  * to be displayed in reference to a recording.
  */
 export default class PlayPauseButton extends React.PureComponent<Props> {
-    public constructor(props: Props) {
-        super(props);
-    }
-
     private onClick = (): void => {
         // noinspection JSIgnoredPromiseFromCall
         this.toggleState();

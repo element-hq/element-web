@@ -73,7 +73,7 @@ export const SpaceButton = <T extends keyof JSX.IntrinsicElements>({
     ...props
 }: ButtonProps<T>): JSX.Element => {
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLElement>(innerRef);
-    const [onFocus, isActive] = useRovingTabIndex(handle);
+    const [onFocus, isActive, ref] = useRovingTabIndex(handle);
     const tabIndex = isActive ? 0 : -1;
 
     const spaceKey = _spaceKey ?? space?.roomId;
@@ -144,7 +144,7 @@ export const SpaceButton = <T extends keyof JSX.IntrinsicElements>({
             title={!isNarrow || menuDisplayed ? undefined : label}
             onClick={onClick}
             onContextMenu={openMenu}
-            ref={handle}
+            ref={ref}
             tabIndex={tabIndex}
             onFocus={onFocus}
         >
@@ -205,7 +205,9 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
             collapsed,
             childSpaces: this.childSpaces,
         };
+    }
 
+    public componentDidMount(): void {
         SpaceStore.instance.on(this.props.space.roomId, this.onSpaceUpdate);
         this.props.space.on(RoomEvent.Name, this.onRoomNameChange);
     }

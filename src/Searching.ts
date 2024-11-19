@@ -596,7 +596,7 @@ async function combinedPagination(
     return result;
 }
 
-function eventIndexSearch(
+async function eventIndexSearch(
     client: MatrixClient,
     term: string,
     roomId?: string,
@@ -605,7 +605,7 @@ function eventIndexSearch(
     let searchPromise: Promise<ISearchResults>;
 
     if (roomId !== undefined) {
-        if (client.isRoomEncrypted(roomId)) {
+        if (await client.getCrypto()?.isEncryptionEnabledInRoom(roomId)) {
             // The search is for a single encrypted room, use our local
             // search method.
             searchPromise = localSearchProcess(client, term, roomId);

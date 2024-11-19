@@ -84,7 +84,7 @@ export const makeThreadEvents = ({
     rootEvent.setUnsigned({
         "m.relations": {
             [RelationType.Thread]: {
-                latest_event: events[events.length - 1],
+                latest_event: events[events.length - 1].event,
                 count: length,
                 current_user_participated: [...participantUserIds, authorId].includes(currentUserId!),
             },

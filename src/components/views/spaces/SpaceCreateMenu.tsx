@@ -43,6 +43,7 @@ import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { Filter } from "../dialogs/spotlight/Filter";
+import { OpenSpotlightPayload } from "../../../dispatcher/payloads/OpenSpotlightPayload.ts";
 
 export const createSpace = async (
     client: MatrixClient,
@@ -265,7 +266,7 @@ const SpaceCreateMenu: React.FC<{
     };
 
     const onSearchClick = (): void => {
-        defaultDispatcher.dispatch({
+        defaultDispatcher.dispatch<OpenSpotlightPayload>({
             action: Action.OpenSpotlight,
             initialFilter: Filter.PublicSpaces,
         });
