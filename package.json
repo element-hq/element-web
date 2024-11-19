@@ -1,6 +1,6 @@
 {
     "name": "element-web",
-    "version": "1.11.85",
+    "version": "1.11.86",
     "description": "A feature-rich client for Matrix.org",
     "author": "New Vector Ltd.",
     "repository": {
@@ -122,7 +122,7 @@
         "maplibre-gl": "^4.0.0",
         "matrix-encrypt-attachment": "^1.0.3",
         "matrix-events-sdk": "0.0.1",
-        "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
+        "matrix-js-sdk": "34.12.0",
         "matrix-widget-api": "^1.10.0",
         "memoize-one": "^6.0.0",
         "mime": "^4.0.4",
