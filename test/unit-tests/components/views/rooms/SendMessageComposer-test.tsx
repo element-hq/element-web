@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render, waitFor, screen } from "jest-matrix-react";
+import { fireEvent, render, waitFor } from "jest-matrix-react";
 import { IContent, MatrixClient, MsgType } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
@@ -369,15 +369,12 @@ describe("<SendMessageComposer/>", () => {
                 </RoomContext.Provider>
             </MatrixClientContext.Provider>
         );
-        const getComponent = async (props = {}, roomContext = defaultRoomContext, client = mockClient) => {
-            const renderResult = render(getRawComponent(props, roomContext, client));
-            // Wait for the composer to be rendered
-            await waitFor(() => expect(screen.getByRole("textbox")).toBeInTheDocument());
-            return renderResult;
+        const getComponent = (props = {}, roomContext = defaultRoomContext, client = mockClient) => {
+            return render(getRawComponent(props, roomContext, client));
         };
 
-        it("renders text and placeholder correctly", async () => {
-            const { container } = await getComponent({ placeholder: "placeholder string" });
+        it("renders text and placeholder correctly", () => {
+            const { container } = getComponent({ placeholder: "placeholder string" });
 
             expect(container.querySelectorAll('[aria-label="placeholder string"]')).toHaveLength(1);
 
@@ -386,9 +383,9 @@ describe("<SendMessageComposer/>", () => {
             expect(container.textContent).toBe("Test Text");
         });
 
-        it("correctly persists state to and from localStorage", async () => {
+        it("correctly persists state to and from localStorage", () => {
             const props = { replyToEvent: mockEvent };
-            const { container, unmount, rerender } = await getComponent(props);
+            const { container, unmount, rerender } = getComponent(props);
 
             addTextToComposer(container, "Test Text");
 
@@ -406,7 +403,7 @@ describe("<SendMessageComposer/>", () => {
 
             // ensure the correct model is re-loaded
             rerender(getRawComponent(props));
-            await waitFor(() => expect(screen.getByRole("textbox")).toHaveTextContent("Test Text"));
+            expect(container.textContent).toBe("Test Text");
             expect(spyDispatcher).toHaveBeenCalledWith({
                 action: "reply_to_event",
                 event: mockEvent,
@@ -420,8 +417,8 @@ describe("<SendMessageComposer/>", () => {
             expect(container.textContent).toBe("");
         });
 
-        it("persists state correctly without replyToEvent onbeforeunload", async () => {
-            const { container } = await getComponent();
+        it("persists state correctly without replyToEvent onbeforeunload", () => {
+            const { container } = getComponent();
 
             addTextToComposer(container, "Hello World");
 
@@ -440,7 +437,7 @@ describe("<SendMessageComposer/>", () => {
         it("persists to session history upon sending", async () => {
             mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(false) });
 
-            const { container } = await getComponent({ replyToEvent: mockEvent });
+            const { container } = getComponent({ replyToEvent: mockEvent });
 
             addTextToComposer(container, "This is a message");
             fireEvent.keyDown(container.querySelector(".mx_SendMessageComposer")!, { key: "Enter" });
@@ -461,7 +458,7 @@ describe("<SendMessageComposer/>", () => {
             });
         });
 
-        it("correctly sends a message", async () => {
+        it("correctly sends a message", () => {
             mocked(doMaybeLocalRoomAction).mockImplementation(
                 <T,>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
                     return fn(roomId);
@@ -469,7 +466,7 @@ describe("<SendMessageComposer/>", () => {
             );
 
             mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(false) });
-            const { container } = await getComponent();
+            const { container } = getComponent();
 
             addTextToComposer(container, "test message");
             fireEvent.keyDown(container.querySelector(".mx_SendMessageComposer")!, { key: "Enter" });
@@ -498,7 +495,7 @@ describe("<SendMessageComposer/>", () => {
             });
 
             mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(false) });
-            const { container } = await getComponent({ replyToEvent });
+            const { container } = getComponent({ replyToEvent });
 
             addTextToComposer(container, "/tableflip");
             fireEvent.keyDown(container.querySelector(".mx_SendMessageComposer")!, { key: "Enter" });
@@ -519,7 +516,7 @@ describe("<SendMessageComposer/>", () => {
             );
         });
 
-        it("shows chat effects on message sending", async () => {
+        it("shows chat effects on message sending", () => {
             mocked(doMaybeLocalRoomAction).mockImplementation(
                 <T,>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
                     return fn(roomId);
@@ -527,7 +524,7 @@ describe("<SendMessageComposer/>", () => {
             );
 
             mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(false) });
-            const { container } = await getComponent();
+            const { container } = getComponent();
 
             addTextToComposer(container, "🎉");
             fireEvent.keyDown(container.querySelector(".mx_SendMessageComposer")!, { key: "Enter" });
@@ -541,7 +538,7 @@ describe("<SendMessageComposer/>", () => {
             expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: `effects.confetti` });
         });
 
-        it("not to send chat effects on message sending for threads", async () => {
+        it("not to send chat effects on message sending for threads", () => {
             mocked(doMaybeLocalRoomAction).mockImplementation(
                 <T,>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
                     return fn(roomId);
@@ -549,7 +546,7 @@ describe("<SendMessageComposer/>", () => {
             );
 
             mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(false) });
-            const { container } = await getComponent({
+            const { container } = getComponent({
                 relation: {
                     rel_type: "m.thread",
                     event_id: "$yolo",
@@ -618,8 +615,7 @@ describe("<SendMessageComposer/>", () => {
                 <SendMessageComposer room={room} toggleStickerPickerOpen={jest.fn()} />
             </MatrixClientContext.Provider>,
         );
-        // Wait for the composer to be rendered
-        await waitFor(() => expect(screen.getByRole("textbox")).toBeInTheDocument());
+
         const composer = container.querySelector<HTMLDivElement>(".mx_BasicMessageComposer_input")!;
 
         // Does not trigger on keydown as that'll cause false negatives for global shortcuts

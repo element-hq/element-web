@@ -239,11 +239,7 @@ interface ISendMessageComposerProps extends MatrixClientProps {
     toggleStickerPickerOpen: () => void;
 }
 
-interface SendMessageComposerState {
-    isReady: boolean;
-}
-
-export class SendMessageComposer extends React.Component<ISendMessageComposerProps, SendMessageComposerState> {
+export class SendMessageComposer extends React.Component<ISendMessageComposerProps> {
     public static contextType = RoomContext;
     public declare context: React.ContextType<typeof RoomContext>;
 
@@ -261,7 +257,6 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         const parts = this.restoreStoredEditorState(partCreator) || [];
         this.model = new EditorModel(parts, partCreator);
         this.sendHistoryManager = new SendHistoryManager(this.props.room.roomId, "mx_cider_history_");
-        this.state = { isReady: false };
     }
 
     public async componentDidMount(): Promise<void> {
@@ -277,7 +272,6 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                 { leading: true, trailing: false },
             );
         }
-        this.setState({ isReady: true });
     }
 
     public componentDidUpdate(prevProps: ISendMessageComposerProps): void {
@@ -752,8 +746,6 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
     };
 
     public render(): React.ReactNode {
-        if (!this.state.isReady) return null;
-
         const threadId =
             this.props.relation?.rel_type === THREAD_RELATION_TYPE.name ? this.props.relation.event_id : undefined;
         return (
