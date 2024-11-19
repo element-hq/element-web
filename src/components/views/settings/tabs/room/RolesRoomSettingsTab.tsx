@@ -129,6 +129,7 @@ interface IProps {
 
 interface RolesRoomSettingsTabState {
     isRoomEncrypted: boolean;
+    isReady: boolean;
 }
 
 export default class RolesRoomSettingsTab extends React.Component<IProps, RolesRoomSettingsTabState> {
@@ -138,6 +139,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
     public constructor(props: IProps) {
         super(props);
         this.state = {
+            isReady: false,
             isRoomEncrypted: false,
         };
     }
@@ -147,6 +149,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
         this.setState({
             isRoomEncrypted:
                 (await this.context.getCrypto()?.isEncryptionEnabledInRoom(this.props.room.roomId)) || false,
+            isReady: true,
         });
     }
 
@@ -473,17 +476,19 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
                     {canChangeLevels && <AddPrivilegedUsers room={room} defaultUserLevel={defaultUserLevel} />}
                     {mutedUsersSection}
                     {bannedUsersSection}
-                    <SettingsFieldset
-                        legend={_t("room_settings|permissions|permissions_section")}
-                        description={
-                            isSpaceRoom
-                                ? _t("room_settings|permissions|permissions_section_description_space")
-                                : _t("room_settings|permissions|permissions_section_description_room")
-                        }
-                    >
-                        {powerSelectors}
-                        {eventPowerSelectors}
-                    </SettingsFieldset>
+                    {this.state.isReady && (
+                        <SettingsFieldset
+                            legend={_t("room_settings|permissions|permissions_section")}
+                            description={
+                                isSpaceRoom
+                                    ? _t("room_settings|permissions|permissions_section_description_space")
+                                    : _t("room_settings|permissions|permissions_section_description_room")
+                            }
+                        >
+                            {powerSelectors}
+                            {eventPowerSelectors}
+                        </SettingsFieldset>
+                    )}
                 </SettingsSection>
             </SettingsTab>
         );
