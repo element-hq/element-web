@@ -11,6 +11,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { ReactNode, JSX } from "react";
 import { Room } from "matrix-js-sdk/src/matrix";
+import { InlineSpinner } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -46,7 +47,7 @@ export function UrlPreviewSettings({ room }: UrlPreviewSettingsProps): JSX.Eleme
             description={!isLoading && <Description isEncrypted={isEncrypted} />}
         >
             {isLoading ? (
-                _t("common|loading")
+                <InlineSpinner />
             ) : (
                 <>
                     <PreviewsForRoom isEncrypted={isEncrypted} roomId={roomId} />
