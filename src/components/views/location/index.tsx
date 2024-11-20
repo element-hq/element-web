@@ -22,16 +22,6 @@ export function Map(props: ComponentProps<typeof MapComponent>): JSX.Element {
     );
 }
 
-const LocationPickerComponent = lazy(() => import("./LocationPicker"));
-
-export function LocationPicker(props: ComponentProps<typeof LocationPickerComponent>): JSX.Element {
-    return (
-        <Suspense fallback={<Spinner />}>
-            <LocationPickerComponent {...props} />
-        </Suspense>
-    );
-}
-
 const SmartMarkerComponent = lazy(() => import("./SmartMarker"));
 
 export function SmartMarker(props: ComponentProps<typeof SmartMarkerComponent>): JSX.Element {

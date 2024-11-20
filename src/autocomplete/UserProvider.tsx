@@ -37,7 +37,7 @@ const USER_REGEX = /\B@\S*/g;
 
 // used when you hit 'tab' - we allow some separator chars at the beginning
 // to allow you to tab-complete /mat into /(matthew)
-const FORCED_USER_REGEX = /[^/,:; \t\n]\S*/g;
+const FORCED_USER_REGEX = /[^/,.():; \t\n]\S*/g;
 
 export default class UserProvider extends AutocompleteProvider {
     public matcher: QueryMatcher<RoomMember>;

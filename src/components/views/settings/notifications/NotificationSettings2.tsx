@@ -31,7 +31,7 @@ import TagComposer from "../../elements/TagComposer";
 import { StatelessNotificationBadge } from "../../rooms/NotificationBadge/StatelessNotificationBadge";
 import { SettingsBanner } from "../shared/SettingsBanner";
 import { SettingsSection } from "../shared/SettingsSection";
-import SettingsSubsection from "../shared/SettingsSubsection";
+import { SettingsSubsection } from "../shared/SettingsSubsection";
 import { NotificationPusherSettings } from "./NotificationPusherSettings";
 import SettingsFlag from "../../elements/SettingsFlag";
 

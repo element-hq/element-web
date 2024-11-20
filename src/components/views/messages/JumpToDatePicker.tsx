@@ -23,7 +23,7 @@ const JumpToDatePicker: React.FC<IProps> = ({ ts, onDatePicked }: IProps) => {
     const dateInputDefaultValue = formatDateForInput(date);
 
     const [dateValue, setDateValue] = useState(dateInputDefaultValue);
-    const [onFocus, isActive, ref] = useRovingTabIndex<HTMLInputElement>();
+    const [onFocus, isActive, refCallback] = useRovingTabIndex<HTMLInputElement>();
 
     const onDateValueInput = (ev: React.ChangeEvent<HTMLInputElement>): void => setDateValue(ev.target.value);
     const onJumpToDateSubmit = (ev: FormEvent): void => {
@@ -45,7 +45,7 @@ const JumpToDatePicker: React.FC<IProps> = ({ ts, onDatePicked }: IProps) => {
                 className="mx_JumpToDatePicker_datePicker"
                 label={_t("room|jump_to_date_prompt")}
                 onFocus={onFocus}
-                inputRef={ref}
+                inputRef={refCallback}
                 tabIndex={isActive ? 0 : -1}
             />
             <RovingAccessibleButton

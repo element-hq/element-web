@@ -17,7 +17,6 @@ import { createTestClient, getRoomContext, mkEvent, mkStubRoom } from "../../../
 import defaultDispatcher from "../../../../../../../src/dispatcher/dispatcher";
 import SettingsStore from "../../../../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../../../../src/settings/SettingLevel";
-import { RoomPermalinkCreator } from "../../../../../../../src/utils/permalinks/Permalinks";
 import EditorStateTransfer from "../../../../../../../src/utils/EditorStateTransfer";
 import * as ConfirmRedactDialog from "../../../../../../../src/components/views/dialogs/ConfirmRedactDialog";
 import * as SlashCommands from "../../../../../../../src/SlashCommands";
@@ -27,11 +26,6 @@ import { MatrixClientPeg } from "../../../../../../../src/MatrixClientPeg";
 import { Action } from "../../../../../../../src/dispatcher/actions";
 
 describe("message", () => {
-    const permalinkCreator = {
-        forEvent(eventId: string): string {
-            return "$$permalink$$";
-        },
-    } as RoomPermalinkCreator;
     const message = "<i><b>hello</b> world</i>";
     const mockEvent = mkEvent({
         type: "m.room.message",
@@ -71,7 +65,7 @@ describe("message", () => {
     describe("sendMessage", () => {
         it("Should not send empty html message", async () => {
             // When
-            await sendMessage("", true, { roomContext: defaultRoomContext, mxClient: mockClient, permalinkCreator });
+            await sendMessage("", true, { roomContext: defaultRoomContext, mxClient: mockClient });
 
             // Then
             expect(mockClient.sendMessage).toHaveBeenCalledTimes(0);
@@ -86,7 +80,6 @@ describe("message", () => {
             await sendMessage(message, true, {
                 roomContext: mockRoomContextWithoutId,
                 mxClient: mockClient,
-                permalinkCreator,
             });
 
             // Then
@@ -100,7 +93,6 @@ describe("message", () => {
                 await sendMessage(message, true, {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
-                    permalinkCreator,
                 });
 
                 // Then
@@ -111,7 +103,6 @@ describe("message", () => {
                 await sendMessage(message, true, {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
-                    permalinkCreator,
                     relation: {},
                 });
 
@@ -123,7 +114,6 @@ describe("message", () => {
                 await sendMessage(message, true, {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
-                    permalinkCreator,
                     relation: {
                         event_id: "valid_id",
                         rel_type: "m.does_not_match",
@@ -139,7 +129,6 @@ describe("message", () => {
                 await sendMessage(message, true, {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
-                    permalinkCreator,
                     relation: {
                         event_id: "valid_id",
                         rel_type: "m.thread",
@@ -156,7 +145,6 @@ describe("message", () => {
             await sendMessage(message, true, {
                 roomContext: defaultRoomContext,
                 mxClient: mockClient,
-                permalinkCreator,
             });
 
             // Then
@@ -183,7 +171,6 @@ describe("message", () => {
             await sendMessage(message, true, {
                 roomContext: defaultRoomContext,
                 mxClient: mockClient,
-                permalinkCreator,
                 replyToEvent: mockReplyEvent,
             });
 
@@ -195,12 +182,9 @@ describe("message", () => {
             });
 
             const expectedContent = {
-                "body": "> <myfakeuser2> My reply\n\n*__hello__ world*",
+                "body": "*__hello__ world*",
                 "format": "org.matrix.custom.html",
-                "formatted_body":
-                    '<mx-reply><blockquote><a href="$$permalink$$">In reply to</a>' +
-                    ' <a href="https://matrix.to/#/myfakeuser2">myfakeuser2</a>' +
-                    "<br>My reply</blockquote></mx-reply><i><b>hello</b> world</i>",
+                "formatted_body": "<i><b>hello</b> world</i>",
                 "msgtype": "m.text",
                 "m.relates_to": {
                     "m.in_reply_to": {
@@ -217,7 +201,6 @@ describe("message", () => {
             await sendMessage(message, true, {
                 roomContext: defaultRoomContext,
                 mxClient: mockClient,
-                permalinkCreator,
             });
 
             // Then
@@ -229,7 +212,7 @@ describe("message", () => {
 
         it("Should handle emojis", async () => {
             // When
-            await sendMessage("🎉", false, { roomContext: defaultRoomContext, mxClient: mockClient, permalinkCreator });
+            await sendMessage("🎉", false, { roomContext: defaultRoomContext, mxClient: mockClient });
 
             // Then
             expect(spyDispatcher).toHaveBeenCalledWith({ action: "effects.confetti" });
@@ -244,7 +227,6 @@ describe("message", () => {
                 await sendMessage(validCommand, true, {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
-                    permalinkCreator,
                 });
 
                 // Then
@@ -257,7 +239,6 @@ describe("message", () => {
                 await sendMessage(invalidPrefixCommand, true, {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
-                    permalinkCreator,
                 });
 
                 // Then
@@ -275,7 +256,6 @@ describe("message", () => {
                 const result = await sendMessage(validCommand, true, {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
-                    permalinkCreator,
                 });
 
                 // Then
@@ -290,7 +270,6 @@ describe("message", () => {
                     await sendMessage(inputText, true, {
                         roomContext: defaultRoomContext,
                         mxClient: mockClient,
-                        permalinkCreator,
                     });
                     expect(mockClient.sendMessage).toHaveBeenCalledWith(
                         "myfakeroom",
@@ -309,7 +288,6 @@ describe("message", () => {
                     await sendMessage(inputText, true, {
                         roomContext: defaultRoomContext,
                         mxClient: mockClient,
-                        permalinkCreator,
                         relation: mockRelation,
                     });
 
@@ -326,7 +304,6 @@ describe("message", () => {
                 await sendMessage("input", true, {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
-                    permalinkCreator,
                     replyToEvent: mockEvent,
                 });
 
@@ -341,7 +318,6 @@ describe("message", () => {
                     const result = await sendMessage(input, true, {
                         roomContext: defaultRoomContext,
                         mxClient: mockClient,
-                        permalinkCreator,
                         replyToEvent: mockEvent,
                     });
 
@@ -357,7 +333,6 @@ describe("message", () => {
                 await sendMessage(invalidCommandInput, true, {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
-                    permalinkCreator,
                 });
 
                 // we expect the message to have been sent
@@ -378,7 +353,6 @@ describe("message", () => {
                 const result = await sendMessage(invalidCommandInput, true, {
                     roomContext: defaultRoomContext,
                     mxClient: mockClient,
-                    permalinkCreator,
                 });
 
                 expect(result).toBeUndefined();

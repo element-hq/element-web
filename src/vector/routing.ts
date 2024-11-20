@@ -11,7 +11,6 @@ Please see LICENSE files in the repository root for full details.
 import { logger } from "matrix-js-sdk/src/logger";
 import { QueryDict } from "matrix-js-sdk/src/utils";
 
-import MatrixChatType from "../components/structures/MatrixChat";
 import { parseQsFromFragment } from "./url_utils";
 
 let lastLocationHashSet: string | null = null;
@@ -31,7 +30,7 @@ function routeUrl(location: Location): void {
 
     logger.log("Routing URL ", location.href);
     const s = getScreenFromLocation(location);
-    (window.matrixChat as MatrixChatType).showScreen(s.screen, s.params);
+    window.matrixChat.showScreen(s.screen, s.params);
 }
 
 function onHashChange(): void {

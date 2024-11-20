@@ -146,9 +146,9 @@ describe("<MatrixChat />", () => {
         matrixRTC: createStubMatrixRTC(),
         getDehydratedDevice: jest.fn(),
         whoami: jest.fn(),
-        isRoomEncrypted: jest.fn(),
         logout: jest.fn(),
         getDeviceId: jest.fn(),
+        getKeyBackupVersion: jest.fn().mockResolvedValue(null),
     });
     let mockClient: Mocked<MatrixClient>;
     const serverConfig = {
@@ -1010,6 +1010,7 @@ describe("<MatrixChat />", () => {
                     userHasCrossSigningKeys: jest.fn().mockResolvedValue(false),
                     // This needs to not finish immediately because we need to test the screen appears
                     bootstrapCrossSigning: jest.fn().mockImplementation(() => bootstrapDeferred.promise),
+                    isEncryptionEnabledInRoom: jest.fn().mockResolvedValue(false),
                 };
                 loginClient.getCrypto.mockReturnValue(mockCrypto as any);
             });
@@ -1057,9 +1058,11 @@ describe("<MatrixChat />", () => {
                             },
                         });
 
-                        loginClient.isRoomEncrypted.mockImplementation((roomId) => {
-                            return roomId === encryptedRoom.roomId;
-                        });
+                        jest.spyOn(loginClient.getCrypto()!, "isEncryptionEnabledInRoom").mockImplementation(
+                            async (roomId) => {
+                                return roomId === encryptedRoom.roomId;
+                            },
+                        );
                     });
 
                     it("should go straight to logged in view when user is not in any encrypted rooms", async () => {
@@ -1515,7 +1518,7 @@ describe("<MatrixChat />", () => {
 
     describe("when key backup failed", () => {
         it("should show the new recovery method dialog", async () => {
-            const spy = jest.spyOn(Modal, "createDialogAsync");
+            const spy = jest.spyOn(Modal, "createDialog");
             jest.mock("../../../../src/async-components/views/dialogs/security/NewRecoveryMethodDialog", () => ({
                 __test: true,
                 __esModule: true,
@@ -1530,7 +1533,25 @@ describe("<MatrixChat />", () => {
             await flushPromises();
             mockClient.emit(CryptoEvent.KeyBackupFailed, "error code");
             await waitFor(() => expect(spy).toHaveBeenCalledTimes(1));
-            expect(await spy.mock.lastCall![0]).toEqual(expect.objectContaining({ __test: true }));
+            expect((spy.mock.lastCall![0] as any)._payload._result).toEqual(expect.objectContaining({ __test: true }));
+        });
+
+        it("should show the recovery method removed dialog", async () => {
+            const spy = jest.spyOn(Modal, "createDialog");
+            jest.mock("../../../../src/async-components/views/dialogs/security/RecoveryMethodRemovedDialog", () => ({
+                __test: true,
+                __esModule: true,
+                default: () => <span>mocked dialog</span>,
+            }));
+
+            getComponent({});
+            defaultDispatcher.dispatch({
+                action: "will_start_client",
+            });
+            await flushPromises();
+            mockClient.emit(CryptoEvent.KeyBackupFailed, "error code");
+            await waitFor(() => expect(spy).toHaveBeenCalledTimes(1));
+            expect((spy.mock.lastCall![0] as any)._payload._result).toEqual(expect.objectContaining({ __test: true }));
         });
     });
 });

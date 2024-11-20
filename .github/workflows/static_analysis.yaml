@@ -50,7 +50,7 @@ jobs:
 
     rethemendex_lint:
         name: "Rethemendex Check"
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-24.04
         steps:
             - uses: actions/checkout@v4
 
@@ -122,6 +122,12 @@ jobs:
               with:
                   cache: "yarn"
                   node-version: "lts/*"
+
+            - name: Install Deps
+              run: "yarn install --frozen-lockfile"
+
+            - name: Run linter
+              run: "yarn run lint:knip"
 
             - name: Install Deps
               run: "scripts/layered.sh"

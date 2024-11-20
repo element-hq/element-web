@@ -351,7 +351,7 @@ describe("Notifier", () => {
                 user: mockClient.getSafeUserId(),
                 room: testRoom.roomId,
             });
-            addReplyToMessageContent(reply.getContent(), event, { includeLegacyFallback: true });
+            addReplyToMessageContent(reply.getContent(), event);
             Notifier.displayPopupNotification(reply, testRoom);
             expect(MockPlatform.displayNotification).toHaveBeenCalledWith(
                 "@bob:example.org (!room1:server)",
