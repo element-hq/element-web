@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, waitFor, waitForElementToBeRemoved } from "jest-matrix-react";
+import { render, waitFor } from "jest-matrix-react";
 import { EventTimeline, MatrixEvent, Room, M_TEXT } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -121,13 +121,13 @@ describe("<MPollEndBody />", () => {
     describe("when poll start event does not exist in current timeline", () => {
         it("fetches the related poll start event and displays a poll tile", async () => {
             await setupRoomWithEventsTimeline(pollEndEvent);
-            const { container, getByTestId, getByRole } = getComponent();
+            const { container, getByTestId, getByRole, queryByRole } = getComponent();
 
             // while fetching event, only icon is shown
             expect(container).toMatchSnapshot();
 
             await waitFor(() => expect(getByRole("progressbar")).toBeInTheDocument());
-            await waitForElementToBeRemoved(() => getByRole("progressbar"));
+            await waitFor(() => expect(queryByRole("progressbar")).not.toBeInTheDocument());
 
             expect(mockClient.fetchRoomEvent).toHaveBeenCalledWith(roomId, pollStartEvent.getId());
 
