@@ -86,7 +86,7 @@
         "@matrix-org/spec": "^1.7.0",
         "@sentry/browser": "^8.0.0",
         "@vector-im/compound-design-tokens": "^2.0.1",
-        "@vector-im/compound-web": "^7.3.0",
+        "@vector-im/compound-web": "^7.4.0",
         "@vector-im/matrix-wysiwyg": "2.37.13",
         "@zxcvbn-ts/core": "^3.0.4",
         "@zxcvbn-ts/language-common": "^3.0.4",
