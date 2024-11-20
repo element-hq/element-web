@@ -13,7 +13,7 @@ import { mocked, MockedObject } from "jest-mock";
 import { MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
 
-import { filterConsole, stubClient } from "../../../../../test-utils";
+import { filterConsole, flushPromises, stubClient } from "../../../../../test-utils";
 import CreateSecretStorageDialog from "../../../../../../src/async-components/views/dialogs/security/CreateSecretStorageDialog";
 
 describe("CreateSecretStorageDialog", () => {
@@ -125,6 +125,7 @@ describe("CreateSecretStorageDialog", () => {
             resetFunctionCallLog.push("resetKeyBackup");
         });
 
+        await flushPromises();
         result.getByRole("button", { name: "Continue" }).click();
 
         await result.findByText("Your keys are now being backed up from this device.");
