@@ -763,7 +763,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                     break;
 
                 case EventShieldReason.VERIFICATION_VIOLATION:
-                    shieldReasonMessage = _t("encryption|event_shield_reason_verification_violation");
+                    shieldReasonMessage = _t("timeline|decryption_failure|sender_identity_previously_verified");
                     break;
             }
 

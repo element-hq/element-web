@@ -330,7 +330,7 @@ test.describe("Cryptography", function () {
             await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
             await lastE2eIcon.focus();
             await expect(await app.getTooltipForElement(lastE2eIcon)).toContainText(
-                "Encrypted by a previously-verified user who is no longer verified.",
+                "Sender's verified identity has changed",
             );
         });
     });
