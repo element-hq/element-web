@@ -206,7 +206,7 @@ export default class EventIndex extends EventEmitter {
         const client = MatrixClientPeg.safeGet();
 
         // We only index encrypted rooms locally.
-        if (!client.isRoomEncrypted(ev.getRoomId()!)) return;
+        if (!(await client.getCrypto()?.isEncryptionEnabledInRoom(ev.getRoomId()!))) return;
 
         if (ev.isRedaction()) {
             return this.redactEvent(ev);
@@ -223,7 +223,8 @@ export default class EventIndex extends EventEmitter {
     };
 
     private onRoomStateEvent = async (ev: MatrixEvent, state: RoomState): Promise<void> => {
-        if (!MatrixClientPeg.safeGet().isRoomEncrypted(state.roomId)) return;
+        const crypto = MatrixClientPeg.safeGet().getCrypto();
+        if (!(await crypto?.isEncryptionEnabledInRoom(state.roomId))) return;
 
         if (ev.getType() === EventType.RoomEncryption && !(await this.isRoomIndexed(state.roomId))) {
             logger.log("EventIndex: Adding a checkpoint for a newly encrypted room", state.roomId);
@@ -257,7 +258,7 @@ export default class EventIndex extends EventEmitter {
      */
     private onTimelineReset = async (room: Room | undefined): Promise<void> => {
         if (!room) return;
-        if (!MatrixClientPeg.safeGet().isRoomEncrypted(room.roomId)) return;
+        if (!(await MatrixClientPeg.safeGet().getCrypto()?.isEncryptionEnabledInRoom(room.roomId))) return;
 
         logger.log("EventIndex: Adding a checkpoint because of a limited timeline", room.roomId);
 
@@ -950,10 +951,10 @@ export default class EventIndex extends EventEmitter {
         }
     }
 
-    public crawlingRooms(): {
+    public async crawlingRooms(): Promise<{
         crawlingRooms: Set<string>;
         totalRooms: Set<string>;
-    } {
+    }> {
         const totalRooms = new Set<string>();
         const crawlingRooms = new Set<string>();
 
@@ -966,13 +967,12 @@ export default class EventIndex extends EventEmitter {
         }
 
         const client = MatrixClientPeg.safeGet();
+        const crypto = client.getCrypto();
         const rooms = client.getRooms();
 
-        const isRoomEncrypted = (room: Room): boolean => {
-            return client.isRoomEncrypted(room.roomId);
-        };
-
-        const encryptedRooms = rooms.filter(isRoomEncrypted);
+        const encryptedRooms = crypto
+            ? await asyncFilter(rooms, (room) => crypto.isEncryptionEnabledInRoom(room.roomId))
+            : [];
         encryptedRooms.forEach((room, index) => {
             totalRooms.add(room.roomId);
         });
