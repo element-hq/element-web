@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { useContext } from "react";
 import { EventType, Room, User, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+import { InlineSpinner } from "@vector-im/compound-web";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import RoomContext from "../../../contexts/RoomContext";
@@ -30,9 +31,9 @@ import { UIComponent } from "../../../settings/UIFeature";
 import { privateShouldBeEncrypted } from "../../../utils/rooms";
 import { LocalRoom } from "../../../models/LocalRoom";
 import { shouldEncryptRoomWithSingle3rdPartyInvite } from "../../../utils/room/shouldEncryptRoomWithSingle3rdPartyInvite";
+import { useIsEncrypted } from "../../../hooks/useIsEncrypted.ts";
 
-function hasExpectedEncryptionSettings(matrixClient: MatrixClient, room: Room): boolean {
-    const isEncrypted: boolean = matrixClient.isRoomEncrypted(room.roomId);
+function hasExpectedEncryptionSettings(matrixClient: MatrixClient, room: Room, isEncrypted: boolean): boolean {
     const isPublic: boolean = room.getJoinRule() === "public";
     return isPublic || !privateShouldBeEncrypted(matrixClient) || isEncrypted;
 }
@@ -52,10 +53,14 @@ const determineIntroMessage = (room: Room, encryptedSingle3rdPartyInvite: boolea
 const NewRoomIntro: React.FC = () => {
     const cli = useContext(MatrixClientContext);
     const { room, roomId } = useContext(RoomContext);
+    const isEncrypted = useIsEncrypted(cli, room);
+    const isEncryptionLoading = isEncrypted === null;
 
     if (!room || !roomId) {
         throw new Error("Unable to create a NewRoomIntro without room and roomId");
     }
+
+    if (isEncryptionLoading) return <InlineSpinner />;
 
     const isLocalRoom = room instanceof LocalRoom;
     const dmPartner = isLocalRoom ? room.targets[0]?.userId : DMRoomMap.shared().getUserIdForRoomId(roomId);
@@ -282,7 +287,7 @@ const NewRoomIntro: React.FC = () => {
 
     return (
         <li className="mx_NewRoomIntro">
-            {!hasExpectedEncryptionSettings(cli, room) && (
+            {!hasExpectedEncryptionSettings(cli, room, isEncrypted) && (
                 <EventTileBubble
                     className="mx_cryptoEvent mx_cryptoEvent_icon_warning"
                     title={_t("room|intro|unencrypted_warning")}
