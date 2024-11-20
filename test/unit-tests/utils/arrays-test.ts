@@ -24,6 +24,7 @@ import {
     asyncEvery,
     asyncSome,
     asyncSomeParallel,
+    asyncFilter,
 } from "../../../src/utils/arrays";
 
 type TestParams = { input: number[]; output: number[] };
@@ -478,6 +479,17 @@ describe("arrays", () => {
         it("when one of the predicate return true", async () => {
             const predicate = jest.fn().mockImplementation((value) => Promise.resolve(value === 2));
             expect(await asyncSomeParallel([1, 2, 3], predicate)).toBe(true);
+        });
+    });
+
+    describe("asyncFilter", () => {
+        it("when called with an empty array, it should return an empty array", async () => {
+            expect(await asyncFilter([], jest.fn().mockResolvedValue(true))).toEqual([]);
+        });
+
+        it("should filter the content", async () => {
+            const predicate = jest.fn().mockImplementation((value) => Promise.resolve(value === 2));
+            expect(await asyncFilter([1, 2, 3], predicate)).toEqual([2]);
         });
     });
 });
