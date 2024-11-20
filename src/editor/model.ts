@@ -250,14 +250,24 @@ export default class EditorModel {
         return Promise.resolve();
     }
 
-    private onAutoComplete = ({ replaceParts, close }: ICallback): void => {
+    private onAutoComplete = ({ replaceParts, close, range }: ICallback): void => {
         let pos: DocumentPosition | undefined;
         if (replaceParts) {
             const autoCompletePartIdx = this.autoCompletePartIdx || 0;
-            this._parts.splice(autoCompletePartIdx, this.autoCompletePartCount, ...replaceParts);
+
+            this.replaceRange(
+                new DocumentPosition(autoCompletePartIdx, range?.start ?? 0),
+                new DocumentPosition(
+                    autoCompletePartIdx + this.autoCompletePartCount - 1,
+                    range?.end ?? this.parts[autoCompletePartIdx + this.autoCompletePartCount - 1].text.length,
+                ),
+                replaceParts,
+            );
+
             this.autoCompletePartCount = replaceParts.length;
             const lastPart = replaceParts[replaceParts.length - 1];
-            const lastPartIndex = autoCompletePartIdx + replaceParts.length - 1;
+            // `replaceRange` merges adjacent parts so we need to find it in the new parts list
+            const lastPartIndex = this.parts.indexOf(lastPart);
             pos = new DocumentPosition(lastPartIndex, lastPart.text.length);
         }
         if (close) {

@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import classNames from "classnames";
+import LocationMarkerIcon from "@vector-im/compound-design-tokens/assets/web/icons/location-pin-solid";
 
-import { Icon as LocationMarkerIcon } from "../../../../res/img/element-icons/location.svg";
 import { Icon as MapFallbackImage } from "../../../../res/img/location/map.svg";
 import Spinner from "../elements/Spinner";
 

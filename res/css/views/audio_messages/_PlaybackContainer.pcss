@@ -28,10 +28,11 @@ Please see LICENSE files in the repository root for full details.
 
     /* Waveforms are present in live recording only */
     .mx_Waveform {
+        /* default, overridden in JS */
+        --barHeight: 1;
         .mx_Waveform_bar {
             background-color: $quaternary-content;
             height: 100%;
-            /* Variable set by a JS component */
             transform: scaleY(max(0.05, var(--barHeight)));
 
             &.mx_Waveform_bar_100pct {

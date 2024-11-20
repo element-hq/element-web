@@ -260,7 +260,7 @@ describe("EventTile", () => {
             } as EventEncryptionInfo);
 
             const { container } = getComponent();
-            await act(flushPromises);
+            await flushPromises();
 
             const eventTiles = container.getElementsByClassName("mx_EventTile");
             expect(eventTiles).toHaveLength(1);
@@ -285,7 +285,7 @@ describe("EventTile", () => {
             } as EventEncryptionInfo);
 
             const { container } = getComponent();
-            await act(flushPromises);
+            await flushPromises();
 
             const eventTiles = container.getElementsByClassName("mx_EventTile");
             expect(eventTiles).toHaveLength(1);
@@ -314,7 +314,7 @@ describe("EventTile", () => {
             } as EventEncryptionInfo);
 
             const { container } = getComponent();
-            await act(flushPromises);
+            await flushPromises();
 
             const e2eIcons = container.getElementsByClassName("mx_EventTile_e2eIcon");
             expect(e2eIcons).toHaveLength(1);
@@ -346,7 +346,7 @@ describe("EventTile", () => {
                 await mxEvent.attemptDecryption(mockCrypto);
 
                 const { container } = getComponent();
-                await act(flushPromises);
+                await flushPromises();
 
                 const eventTiles = container.getElementsByClassName("mx_EventTile");
                 expect(eventTiles).toHaveLength(1);
@@ -400,7 +400,7 @@ describe("EventTile", () => {
             const roomContext = getRoomContext(room, {});
             const { container, rerender } = render(<WrappedEventTile roomContext={roomContext} />);
 
-            await act(flushPromises);
+            await flushPromises();
 
             const eventTiles = container.getElementsByClassName("mx_EventTile");
             expect(eventTiles).toHaveLength(1);
@@ -451,7 +451,7 @@ describe("EventTile", () => {
 
             const roomContext = getRoomContext(room, {});
             const { container, rerender } = render(<WrappedEventTile roomContext={roomContext} />);
-            await act(flushPromises);
+            await flushPromises();
 
             const eventTiles = container.getElementsByClassName("mx_EventTile");
             expect(eventTiles).toHaveLength(1);

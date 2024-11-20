@@ -127,12 +127,30 @@ interface IProps {
     room: Room;
 }
 
-export default class RolesRoomSettingsTab extends React.Component<IProps> {
+interface RolesRoomSettingsTabState {
+    isRoomEncrypted: boolean;
+    isReady: boolean;
+}
+
+export default class RolesRoomSettingsTab extends React.Component<IProps, RolesRoomSettingsTabState> {
     public static contextType = MatrixClientContext;
     public declare context: React.ContextType<typeof MatrixClientContext>;
 
-    public componentDidMount(): void {
+    public constructor(props: IProps) {
+        super(props);
+        this.state = {
+            isReady: false,
+            isRoomEncrypted: false,
+        };
+    }
+
+    public async componentDidMount(): Promise<void> {
         this.context.on(RoomStateEvent.Update, this.onRoomStateUpdate);
+        this.setState({
+            isRoomEncrypted:
+                (await this.context.getCrypto()?.isEncryptionEnabledInRoom(this.props.room.roomId)) || false,
+            isReady: true,
+        });
     }
 
     public componentWillUnmount(): void {
@@ -416,7 +434,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             .filter(Boolean);
 
         // hide the power level selector for enabling E2EE if it the room is already encrypted
-        if (client.isRoomEncrypted(this.props.room.roomId)) {
+        if (this.state.isRoomEncrypted) {
             delete eventsLevels[EventType.RoomEncryption];
         }
 
@@ -458,17 +476,19 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
                     {canChangeLevels && <AddPrivilegedUsers room={room} defaultUserLevel={defaultUserLevel} />}
                     {mutedUsersSection}
                     {bannedUsersSection}
-                    <SettingsFieldset
-                        legend={_t("room_settings|permissions|permissions_section")}
-                        description={
-                            isSpaceRoom
-                                ? _t("room_settings|permissions|permissions_section_description_space")
-                                : _t("room_settings|permissions|permissions_section_description_room")
-                        }
-                    >
-                        {powerSelectors}
-                        {eventPowerSelectors}
-                    </SettingsFieldset>
+                    {this.state.isReady && (
+                        <SettingsFieldset
+                            legend={_t("room_settings|permissions|permissions_section")}
+                            description={
+                                isSpaceRoom
+                                    ? _t("room_settings|permissions|permissions_section_description_space")
+                                    : _t("room_settings|permissions|permissions_section_description_room")
+                            }
+                        >
+                            {powerSelectors}
+                            {eventPowerSelectors}
+                        </SettingsFieldset>
+                    )}
                 </SettingsSection>
             </SettingsTab>
         );

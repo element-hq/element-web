@@ -12,6 +12,9 @@ Please see LICENSE files in the repository root for full details.
 /* * https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css/ */
 
 .mx_SeekBar {
+    /* default, overridden in JS */
+    --fillTo: 1;
+
     /* Dev note: we deliberately do not have the -ms-track (and friends) selectors because we don't */
     /* need to support IE. */
 
