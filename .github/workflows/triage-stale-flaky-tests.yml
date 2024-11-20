@@ -2,6 +2,7 @@ name: Close stale flaky issues
 on:
     schedule:
         - cron: "30 1 * * *"
+permissions: {}
 jobs:
     close:
         runs-on: ubuntu-24.04

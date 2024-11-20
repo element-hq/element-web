@@ -16,6 +16,8 @@ env:
     REPOSITORY: ${{ github.repository }}
     PR_NUMBER: ${{ github.event.pull_request.number }}
 
+permissions: {} # No permissions required
+
 jobs:
     ts_lint:
         name: "Typescript Syntax Check"

@@ -4,6 +4,7 @@ on:
         types: [opened, edited, labeled, unlabeled, synchronize]
     merge_group:
         types: [checks_requested]
+permissions: {} # We use ELEMENT_BOT_TOKEN instead
 jobs:
     action:
         uses: matrix-org/matrix-js-sdk/.github/workflows/pull_request.yaml@develop

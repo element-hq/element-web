@@ -4,6 +4,7 @@ on:
     workflow_dispatch: {}
     schedule:
         - cron: "0 3 * * 0" # 3am every Sunday
+permissions: {} # We use ELEMENT_BOT_TOKEN instead
 jobs:
     update:
         runs-on: ubuntu-24.04
