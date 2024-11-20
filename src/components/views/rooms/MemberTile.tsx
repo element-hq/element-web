@@ -49,12 +49,12 @@ export default class MemberTile extends React.Component<IProps, IState> {
         };
     }
 
-    public componentDidMount(): void {
+    public async componentDidMount(): Promise<void> {
         const cli = MatrixClientPeg.safeGet();
 
         const { roomId } = this.props.member;
         if (roomId) {
-            const isRoomEncrypted = cli.isRoomEncrypted(roomId);
+            const isRoomEncrypted = Boolean(await cli.getCrypto()?.isEncryptionEnabledInRoom(roomId));
             this.setState({
                 isRoomEncrypted,
             });
