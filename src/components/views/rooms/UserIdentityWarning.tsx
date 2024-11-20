@@ -140,7 +140,7 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
 
     // For each user in the list check if their identity needs approval, and if
     // so, add them to the membersNeedingApproval map and update the prompt if
-    // needed. They will only be added if they are a member of the room.
+    // needed.
     const addMembersWhoNeedApproval = useCallback(
         async (members: RoomMember[]): Promise<void> => {
             const verificationStatusSequences = verificationStatusSequencesRef.current;
