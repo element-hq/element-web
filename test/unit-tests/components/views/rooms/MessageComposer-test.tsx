@@ -42,17 +42,13 @@ import { mkVoiceBroadcastInfoStateEvent } from "../../../voice-broadcast/utils/t
 import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
 
 const openStickerPicker = async (): Promise<void> => {
-    await act(async () => {
-        await userEvent.click(screen.getByLabelText("More options"));
-        await userEvent.click(screen.getByLabelText("Sticker"));
-    });
+    await userEvent.click(screen.getByLabelText("More options"));
+    await userEvent.click(screen.getByLabelText("Sticker"));
 };
 
 const startVoiceMessage = async (): Promise<void> => {
-    await act(async () => {
-        await userEvent.click(screen.getByLabelText("More options"));
-        await userEvent.click(screen.getByLabelText("Voice Message"));
-    });
+    await userEvent.click(screen.getByLabelText("More options"));
+    await userEvent.click(screen.getByLabelText("Voice Message"));
 };
 
 const setCurrentBroadcastRecording = (room: Room, state: VoiceBroadcastInfoState): void => {
@@ -61,7 +57,7 @@ const setCurrentBroadcastRecording = (room: Room, state: VoiceBroadcastInfoState
         MatrixClientPeg.safeGet(),
         state,
     );
-    SdkContextClass.instance.voiceBroadcastRecordingsStore.setCurrent(recording);
+    act(() => SdkContextClass.instance.voiceBroadcastRecordingsStore.setCurrent(recording));
 };
 
 const expectVoiceMessageRecordingTriggered = (): void => {
@@ -96,6 +92,45 @@ describe("MessageComposer", () => {
             });
         });
     });
+
+    it("wysiwyg correctly persists state to and from localStorage", async () => {
+        const room = mkStubRoom("!roomId:server", "Room 1", cli);
+        const messageText = "Test Text";
+        await SettingsStore.setValue("feature_wysiwyg_composer", null, SettingLevel.DEVICE, true);
+        const { renderResult, rawComponent } = wrapAndRender({ room });
+        const { unmount } = renderResult;
+
+        await flushPromises();
+
+        const key = `mx_wysiwyg_state_${room.roomId}`;
+
+        await userEvent.click(screen.getByRole("textbox"));
+        fireEvent.input(screen.getByRole("textbox"), {
+            data: messageText,
+            inputType: "insertText",
+        });
+
+        await waitFor(() => expect(screen.getByRole("textbox")).toHaveTextContent(messageText));
+
+        // Wait for event dispatch to happen
+        await flushPromises();
+
+        // assert there is state persisted
+        expect(localStorage.getItem(key)).toBeNull();
+
+        // ensure the right state was persisted to localStorage
+        unmount();
+
+        // assert the persisted state
+        expect(JSON.parse(localStorage.getItem(key)!)).toStrictEqual({
+            content: messageText,
+            isRichText: true,
+        });
+
+        // ensure the correct state is re-loaded
+        render(rawComponent);
+        await waitFor(() => expect(screen.getByRole("textbox")).toHaveTextContent(messageText));
+    }, 10000);
 
     describe("for a Room", () => {
         const room = mkStubRoom("!roomId:server", "Room 1", cli);
@@ -185,14 +220,12 @@ describe("MessageComposer", () => {
             [true, false].forEach((value: boolean) => {
                 describe(`when ${setting} = ${value}`, () => {
                     beforeEach(async () => {
-                        SettingsStore.setValue(setting, null, SettingLevel.DEVICE, value);
+                        await act(() => SettingsStore.setValue(setting, null, SettingLevel.DEVICE, value));
                         wrapAndRender({ room });
-                        await act(async () => {
-                            await userEvent.click(screen.getByLabelText("More options"));
-                        });
+                        await userEvent.click(screen.getByLabelText("More options"));
                     });
 
-                    it(`should${value || "not"} display the button`, () => {
+                    it(`should${value ? "" : " not"} display the button`, () => {
                         if (value) {
                             // eslint-disable-next-line jest/no-conditional-expect
                             expect(screen.getByLabelText(buttonLabel)).toBeInTheDocument();
@@ -205,15 +238,17 @@ describe("MessageComposer", () => {
                     describe(`and setting ${setting} to ${!value}`, () => {
                         beforeEach(async () => {
                             // simulate settings update
-                            await SettingsStore.setValue(setting, null, SettingLevel.DEVICE, !value);
-                            dis.dispatch(
-                                {
-                                    action: Action.SettingUpdated,
-                                    settingName: setting,
-                                    newValue: !value,
-                                },
-                                true,
-                            );
+                            await act(async () => {
+                                await SettingsStore.setValue(setting, null, SettingLevel.DEVICE, !value);
+                                dis.dispatch(
+                                    {
+                                        action: Action.SettingUpdated,
+                                        settingName: setting,
+                                        newValue: !value,
+                                    },
+                                    true,
+                                );
+                            });
                         });
 
                         it(`should${!value || "not"} display the button`, () => {
@@ -273,7 +308,7 @@ describe("MessageComposer", () => {
                 beforeEach(async () => {
                     wrapAndRender({ room }, true, true);
                     await openStickerPicker();
-                    resizeCallback(UI_EVENTS.Resize, {});
+                    act(() => resizeCallback(UI_EVENTS.Resize, {}));
                 });
 
                 it("should close the menu", () => {
@@ -295,7 +330,7 @@ describe("MessageComposer", () => {
                 beforeEach(async () => {
                     wrapAndRender({ room }, true, false);
                     await openStickerPicker();
-                    resizeCallback(UI_EVENTS.Resize, {});
+                    act(() => resizeCallback(UI_EVENTS.Resize, {}));
                 });
 
                 it("should close the menu", () => {
@@ -443,51 +478,6 @@ describe("MessageComposer", () => {
             expect(screen.queryByLabelText("Sticker")).not.toBeInTheDocument();
         });
     });
-
-    it("wysiwyg correctly persists state to and from localStorage", async () => {
-        const room = mkStubRoom("!roomId:server", "Room 1", cli);
-        const messageText = "Test Text";
-        await SettingsStore.setValue("feature_wysiwyg_composer", null, SettingLevel.DEVICE, true);
-        const { renderResult, rawComponent } = wrapAndRender({ room });
-        const { unmount, rerender } = renderResult;
-
-        await act(async () => {
-            await flushPromises();
-        });
-
-        const key = `mx_wysiwyg_state_${room.roomId}`;
-
-        await act(async () => {
-            await userEvent.click(screen.getByRole("textbox"));
-        });
-        fireEvent.input(screen.getByRole("textbox"), {
-            data: messageText,
-            inputType: "insertText",
-        });
-
-        await waitFor(() => expect(screen.getByRole("textbox")).toHaveTextContent(messageText));
-
-        // Wait for event dispatch to happen
-        await act(async () => {
-            await flushPromises();
-        });
-
-        // assert there is state persisted
-        expect(localStorage.getItem(key)).toBeNull();
-
-        // ensure the right state was persisted to localStorage
-        unmount();
-
-        // assert the persisted state
-        expect(JSON.parse(localStorage.getItem(key)!)).toStrictEqual({
-            content: messageText,
-            isRichText: true,
-        });
-
-        // ensure the correct state is re-loaded
-        rerender(rawComponent);
-        await waitFor(() => expect(screen.getByRole("textbox")).toHaveTextContent(messageText));
-    }, 10000);
 });
 
 function wrapAndRender(
@@ -529,7 +519,7 @@ function wrapAndRender(
     );
     return {
         rawComponent: getRawComponent(props, roomContext, mockClient),
-        renderResult: render(getRawComponent(props, roomContext, mockClient)),
+        renderResult: render(getRawComponent(props, roomContext, mockClient), { legacyRoot: true }),
         roomContext,
     };
 }

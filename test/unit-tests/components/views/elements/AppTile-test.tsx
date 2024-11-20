@@ -10,7 +10,7 @@ import React from "react";
 import { Room, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { ClientWidgetApi, IWidget, MatrixWidgetType } from "matrix-widget-api";
 import { Optional } from "matrix-events-sdk";
-import { act, render, RenderResult } from "jest-matrix-react";
+import { act, render, RenderResult, waitForElementToBeRemoved, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import {
     ApprovalOpts,
@@ -29,7 +29,6 @@ import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { RightPanelPhases } from "../../../../../src/stores/right-panel/RightPanelStorePhases";
 import RightPanelStore from "../../../../../src/stores/right-panel/RightPanelStore";
-import { UPDATE_EVENT } from "../../../../../src/stores/AsyncStore";
 import WidgetStore, { IApp } from "../../../../../src/stores/WidgetStore";
 import ActiveWidgetStore from "../../../../../src/stores/ActiveWidgetStore";
 import AppTile from "../../../../../src/components/views/elements/AppTile";
@@ -58,16 +57,6 @@ describe("AppTile", () => {
     const resizeNotifier = new ResizeNotifier();
     let app1: IApp;
     let app2: IApp;
-
-    const waitForRps = (roomId: string) =>
-        new Promise<void>((resolve) => {
-            const update = () => {
-                if (RightPanelStore.instance.currentCardForRoom(roomId).phase !== RightPanelPhases.Widget) return;
-                RightPanelStore.instance.off(UPDATE_EVENT, update);
-                resolve();
-            };
-            RightPanelStore.instance.on(UPDATE_EVENT, update);
-        });
 
     beforeAll(async () => {
         stubClient();
@@ -160,29 +149,28 @@ describe("AppTile", () => {
                 />
             </MatrixClientContext.Provider>,
         );
-        // Wait for RPS room 1 updates to fire
-        const rpsUpdated = waitForRps("r1");
-        dis.dispatch({
-            action: Action.ViewRoom,
-            room_id: "r1",
-        });
-        await rpsUpdated;
+        act(() =>
+            dis.dispatch({
+                action: Action.ViewRoom,
+                room_id: "r1",
+            }),
+        );
 
-        expect(renderResult.getByText("Example 1")).toBeInTheDocument();
+        await expect(renderResult.findByText("Example 1")).resolves.toBeInTheDocument();
         expect(ActiveWidgetStore.instance.isLive("1", "r1")).toBe(true);
 
-        const { container, asFragment } = renderResult;
-        expect(container.getElementsByClassName("mx_Spinner").length).toBeTruthy();
+        const { asFragment } = renderResult;
         expect(asFragment()).toMatchSnapshot();
-
         // We want to verify that as we change to room 2, we should close the
         // right panel and destroy the widget.
 
         // Switch to room 2
-        dis.dispatch({
-            action: Action.ViewRoom,
-            room_id: "r2",
-        });
+        act(() =>
+            dis.dispatch({
+                action: Action.ViewRoom,
+                room_id: "r2",
+            }),
+        );
 
         renderResult.rerender(
             <MatrixClientContext.Provider value={cli}>
@@ -233,16 +221,17 @@ describe("AppTile", () => {
                 />
             </MatrixClientContext.Provider>,
         );
-        // Wait for RPS room 1 updates to fire
-        const rpsUpdated1 = waitForRps("r1");
-        dis.dispatch({
-            action: Action.ViewRoom,
-            room_id: "r1",
-        });
-        await rpsUpdated1;
+        act(() =>
+            dis.dispatch({
+                action: Action.ViewRoom,
+                room_id: "r1",
+            }),
+        );
 
-        expect(ActiveWidgetStore.instance.isLive("1", "r1")).toBe(true);
-        expect(ActiveWidgetStore.instance.isLive("1", "r2")).toBe(false);
+        await waitFor(() => {
+            expect(ActiveWidgetStore.instance.isLive("1", "r1")).toBe(true);
+            expect(ActiveWidgetStore.instance.isLive("1", "r2")).toBe(false);
+        });
 
         jest.spyOn(SettingsStore, "getValue").mockImplementation((name, roomId) => {
             if (name === "RightPanel.phases") {
@@ -263,13 +252,13 @@ describe("AppTile", () => {
             }
             return realGetValue(name, roomId);
         });
-        // Wait for RPS room 2 updates to fire
-        const rpsUpdated2 = waitForRps("r2");
         // Switch to room 2
-        dis.dispatch({
-            action: Action.ViewRoom,
-            room_id: "r2",
-        });
+        act(() =>
+            dis.dispatch({
+                action: Action.ViewRoom,
+                room_id: "r2",
+            }),
+        );
         renderResult.rerender(
             <MatrixClientContext.Provider value={cli}>
                 <RightPanel
@@ -279,10 +268,11 @@ describe("AppTile", () => {
                 />
             </MatrixClientContext.Provider>,
         );
-        await rpsUpdated2;
 
-        expect(ActiveWidgetStore.instance.isLive("1", "r1")).toBe(false);
-        expect(ActiveWidgetStore.instance.isLive("1", "r2")).toBe(true);
+        await waitFor(() => {
+            expect(ActiveWidgetStore.instance.isLive("1", "r1")).toBe(false);
+            expect(ActiveWidgetStore.instance.isLive("1", "r2")).toBe(true);
+        });
     });
 
     it("preserves non-persisted widget on container move", async () => {
@@ -345,7 +335,7 @@ describe("AppTile", () => {
         let renderResult: RenderResult;
         let moveToContainerSpy: jest.SpyInstance<void, [room: Room, widget: IWidget, toContainer: Container]>;
 
-        beforeEach(() => {
+        beforeEach(async () => {
             renderResult = render(
                 <MatrixClientContext.Provider value={cli}>
                     <AppTile key={app1.id} app={app1} room={r1} />
@@ -353,12 +343,12 @@ describe("AppTile", () => {
             );
 
             moveToContainerSpy = jest.spyOn(WidgetLayoutStore.instance, "moveToContainer");
+            await waitForElementToBeRemoved(() => renderResult.queryByRole("progressbar"));
         });
 
         it("should render", () => {
-            const { container, asFragment } = renderResult;
+            const { asFragment } = renderResult;
 
-            expect(container.querySelector(".mx_Spinner")).toBeFalsy(); // Assert that the spinner is gone
             expect(asFragment()).toMatchSnapshot(); // Take a snapshot of the pinned widget
         });
 
@@ -459,18 +449,19 @@ describe("AppTile", () => {
     describe("for a persistent app", () => {
         let renderResult: RenderResult;
 
-        beforeEach(() => {
+        beforeEach(async () => {
             renderResult = render(
                 <MatrixClientContext.Provider value={cli}>
                     <AppTile key={app1.id} app={app1} fullWidth={true} room={r1} miniMode={true} showMenubar={false} />
                 </MatrixClientContext.Provider>,
             );
+
+            await waitForElementToBeRemoved(() => renderResult.queryByRole("progressbar"));
         });
 
-        it("should render", () => {
-            const { container, asFragment } = renderResult;
+        it("should render", async () => {
+            const { asFragment } = renderResult;
 
-            expect(container.querySelector(".mx_Spinner")).toBeFalsy();
             expect(asFragment()).toMatchSnapshot();
         });
     });

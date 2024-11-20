@@ -23,14 +23,22 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { CryptoApi, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { fireEvent, render, screen, RenderResult, waitForElementToBeRemoved, waitFor } from "jest-matrix-react";
+import {
+    fireEvent,
+    render,
+    screen,
+    RenderResult,
+    waitForElementToBeRemoved,
+    waitFor,
+    act,
+    cleanup,
+} from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
 import {
     stubClient,
     mockPlatformPeg,
     unmockPlatformPeg,
-    wrapInMatrixClientContext,
     flushPromises,
     mkEvent,
     setupAsyncStoreWithClient,
@@ -45,7 +53,7 @@ import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { Action } from "../../../../src/dispatcher/actions";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import { ViewRoomPayload } from "../../../../src/dispatcher/payloads/ViewRoomPayload";
-import { RoomView as _RoomView } from "../../../../src/components/structures/RoomView";
+import { RoomView } from "../../../../src/components/structures/RoomView";
 import ResizeNotifier from "../../../../src/utils/ResizeNotifier";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
@@ -64,8 +72,7 @@ import WidgetStore from "../../../../src/stores/WidgetStore";
 import { ViewRoomErrorPayload } from "../../../../src/dispatcher/payloads/ViewRoomErrorPayload";
 import { SearchScope } from "../../../../src/Searching";
 import { MEGOLM_ENCRYPTION_ALGORITHM } from "../../../../src/utils/crypto";
-
-const RoomView = wrapInMatrixClientContext(_RoomView);
+import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 
 describe("RoomView", () => {
     let cli: MockedObject<MatrixClient>;
@@ -106,9 +113,10 @@ describe("RoomView", () => {
     afterEach(() => {
         unmockPlatformPeg();
         jest.clearAllMocks();
+        cleanup();
     });
 
-    const mountRoomView = async (ref?: RefObject<_RoomView>): Promise<RenderResult> => {
+    const mountRoomView = async (ref?: RefObject<RoomView>): Promise<RenderResult> => {
         if (stores.roomViewStore.getRoomId() !== room.roomId) {
             const switchedRoom = new Promise<void>((resolve) => {
                 const subFn = () => {
@@ -120,26 +128,30 @@ describe("RoomView", () => {
                 stores.roomViewStore.on(UPDATE_EVENT, subFn);
             });
 
-            defaultDispatcher.dispatch<ViewRoomPayload>({
-                action: Action.ViewRoom,
-                room_id: room.roomId,
-                metricsTrigger: undefined,
-            });
+            act(() =>
+                defaultDispatcher.dispatch<ViewRoomPayload>({
+                    action: Action.ViewRoom,
+                    room_id: room.roomId,
+                    metricsTrigger: undefined,
+                }),
+            );
 
             await switchedRoom;
         }
 
         const roomView = render(
-            <SDKContext.Provider value={stores}>
-                <RoomView
-                    // threepidInvite should be optional on RoomView props
-                    // it is treated as optional in RoomView
-                    threepidInvite={undefined as any}
-                    resizeNotifier={new ResizeNotifier()}
-                    forceTimeline={false}
-                    wrappedRef={ref as any}
-                />
-            </SDKContext.Provider>,
+            <MatrixClientContext.Provider value={cli}>
+                <SDKContext.Provider value={stores}>
+                    <RoomView
+                        // threepidInvite should be optional on RoomView props
+                        // it is treated as optional in RoomView
+                        threepidInvite={undefined as any}
+                        resizeNotifier={new ResizeNotifier()}
+                        forceTimeline={false}
+                        ref={ref}
+                    />
+                </SDKContext.Provider>
+            </MatrixClientContext.Provider>,
         );
         await flushPromises();
         return roomView;
@@ -167,22 +179,24 @@ describe("RoomView", () => {
         }
 
         const roomView = render(
-            <SDKContext.Provider value={stores}>
-                <RoomView
-                    // threepidInvite should be optional on RoomView props
-                    // it is treated as optional in RoomView
-                    threepidInvite={undefined as any}
-                    resizeNotifier={new ResizeNotifier()}
-                    forceTimeline={false}
-                    onRegistered={jest.fn()}
-                />
-            </SDKContext.Provider>,
+            <MatrixClientContext.Provider value={cli}>
+                <SDKContext.Provider value={stores}>
+                    <RoomView
+                        // threepidInvite should be optional on RoomView props
+                        // it is treated as optional in RoomView
+                        threepidInvite={undefined as any}
+                        resizeNotifier={new ResizeNotifier()}
+                        forceTimeline={false}
+                        onRegistered={jest.fn()}
+                    />
+                </SDKContext.Provider>
+            </MatrixClientContext.Provider>,
         );
         await flushPromises();
         return roomView;
     };
-    const getRoomViewInstance = async (): Promise<_RoomView> => {
-        const ref = createRef<_RoomView>();
+    const getRoomViewInstance = async (): Promise<RoomView> => {
+        const ref = createRef<RoomView>();
         await mountRoomView(ref);
         return ref.current!;
     };
@@ -193,7 +207,7 @@ describe("RoomView", () => {
     });
 
     describe("when there is an old room", () => {
-        let instance: _RoomView;
+        let instance: RoomView;
         let oldRoom: Room;
 
         beforeEach(async () => {
@@ -217,11 +231,11 @@ describe("RoomView", () => {
 
         describe("and feature_dynamic_room_predecessors is enabled", () => {
             beforeEach(() => {
-                instance.setState({ msc3946ProcessDynamicPredecessor: true });
+                act(() => instance.setState({ msc3946ProcessDynamicPredecessor: true }));
             });
 
             afterEach(() => {
-                instance.setState({ msc3946ProcessDynamicPredecessor: false });
+                act(() => instance.setState({ msc3946ProcessDynamicPredecessor: false }));
             });
 
             it("should pass the setting to findPredecessor", async () => {
@@ -252,15 +266,17 @@ describe("RoomView", () => {
         cli.isRoomEncrypted.mockReturnValue(true);
 
         // and fake an encryption event into the room to prompt it to re-check
-        room.addLiveEvents([
-            new MatrixEvent({
-                type: "m.room.encryption",
-                sender: cli.getUserId()!,
-                content: {},
-                event_id: "someid",
-                room_id: room.roomId,
-            }),
-        ]);
+        await act(() =>
+            room.addLiveEvents([
+                new MatrixEvent({
+                    type: "m.room.encryption",
+                    sender: cli.getUserId()!,
+                    content: {},
+                    event_id: "someid",
+                    room_id: room.roomId,
+                }),
+            ]),
+        );
 
         // URL previews should now be disabled
         expect(roomViewInstance.state.showUrlPreview).toBe(false);
@@ -270,7 +286,7 @@ describe("RoomView", () => {
         const roomViewInstance = await getRoomViewInstance();
         const oldTimeline = roomViewInstance.state.liveTimeline;
 
-        room.getUnfilteredTimelineSet().resetLiveTimeline();
+        act(() => room.getUnfilteredTimelineSet().resetLiveTimeline());
         expect(roomViewInstance.state.liveTimeline).not.toEqual(oldTimeline);
     });
 
@@ -287,7 +303,7 @@ describe("RoomView", () => {
             await renderRoomView();
             expect(VoipUserMapper.sharedInstance().getVirtualRoomForRoom).toHaveBeenCalledWith(room.roomId);
 
-            cli.emit(ClientEvent.Room, room);
+            act(() => cli.emit(ClientEvent.Room, room));
 
             // called again after room event
             expect(VoipUserMapper.sharedInstance().getVirtualRoomForRoom).toHaveBeenCalledTimes(2);
@@ -429,6 +445,194 @@ describe("RoomView", () => {
         });
     });
 
+    it("should show error view if failed to look up room alias", async () => {
+        const { asFragment, findByText } = await renderRoomView(false);
+
+        act(() =>
+            defaultDispatcher.dispatch<ViewRoomErrorPayload>({
+                action: Action.ViewRoomError,
+                room_alias: "#addy:server",
+                room_id: null,
+                err: new MatrixError({ errcode: "M_NOT_FOUND" }),
+            }),
+        );
+        await emitPromise(stores.roomViewStore, UPDATE_EVENT);
+
+        await findByText("Are you sure you're at the right place?");
+        expect(asFragment()).toMatchSnapshot();
+    });
+
+    describe("knock rooms", () => {
+        const client = createTestClient();
+
+        beforeEach(() => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => setting === "feature_ask_to_join");
+            jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Knock);
+            jest.spyOn(defaultDispatcher, "dispatch");
+        });
+
+        it("allows to request to join", async () => {
+            jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(client);
+            jest.spyOn(client, "knockRoom").mockResolvedValue({ room_id: room.roomId });
+
+            await mountRoomView();
+            fireEvent.click(screen.getByRole("button", { name: "Request access" }));
+            await untilDispatch(Action.SubmitAskToJoin, defaultDispatcher);
+
+            expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
+                action: "submit_ask_to_join",
+                roomId: room.roomId,
+                opts: { reason: undefined },
+            });
+        });
+
+        it("allows to cancel a join request", async () => {
+            jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(client);
+            jest.spyOn(client, "leave").mockResolvedValue({});
+            jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Knock);
+
+            await mountRoomView();
+            fireEvent.click(screen.getByRole("button", { name: "Cancel request" }));
+            await untilDispatch(Action.CancelAskToJoin, defaultDispatcher);
+
+            expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
+                action: "cancel_ask_to_join",
+                roomId: room.roomId,
+            });
+        });
+    });
+
+    it("should close search results when edit is clicked", async () => {
+        room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+
+        const eventMapper = (obj: Partial<IEvent>) => new MatrixEvent(obj);
+
+        const roomViewRef = createRef<RoomView>();
+        const { container, getByText, findByLabelText } = await mountRoomView(roomViewRef);
+        await waitFor(() => expect(roomViewRef.current).toBeTruthy());
+        // @ts-ignore - triggering a search organically is a lot of work
+        act(() =>
+            roomViewRef.current!.setState({
+                search: {
+                    searchId: 1,
+                    roomId: room.roomId,
+                    term: "search term",
+                    scope: SearchScope.Room,
+                    promise: Promise.resolve({
+                        results: [
+                            SearchResult.fromJson(
+                                {
+                                    rank: 1,
+                                    result: {
+                                        content: {
+                                            body: "search term",
+                                            msgtype: "m.text",
+                                        },
+                                        type: "m.room.message",
+                                        event_id: "$eventId",
+                                        sender: cli.getSafeUserId(),
+                                        origin_server_ts: 123456789,
+                                        room_id: room.roomId,
+                                    },
+                                    context: {
+                                        events_before: [],
+                                        events_after: [],
+                                        profile_info: {},
+                                    },
+                                },
+                                eventMapper,
+                            ),
+                        ],
+                        highlights: [],
+                        count: 1,
+                    }),
+                    inProgress: false,
+                    count: 1,
+                },
+            }),
+        );
+
+        await waitFor(() => {
+            expect(container.querySelector(".mx_RoomView_searchResultsPanel")).toBeVisible();
+        });
+        const prom = waitForElementToBeRemoved(() => container.querySelector(".mx_RoomView_searchResultsPanel"));
+
+        await userEvent.hover(getByText("search term"));
+        await userEvent.click(await findByLabelText("Edit"));
+
+        await prom;
+    });
+
+    it("should switch rooms when edit is clicked on a search result for a different room", async () => {
+        const room2 = new Room(`!${roomCount++}:example.org`, cli, "@alice:example.org");
+        rooms.set(room2.roomId, room2);
+
+        room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+
+        const eventMapper = (obj: Partial<IEvent>) => new MatrixEvent(obj);
+
+        const roomViewRef = createRef<RoomView>();
+        const { container, getByText, findByLabelText } = await mountRoomView(roomViewRef);
+        await waitFor(() => expect(roomViewRef.current).toBeTruthy());
+        // @ts-ignore - triggering a search organically is a lot of work
+        act(() =>
+            roomViewRef.current!.setState({
+                search: {
+                    searchId: 1,
+                    roomId: room.roomId,
+                    term: "search term",
+                    scope: SearchScope.All,
+                    promise: Promise.resolve({
+                        results: [
+                            SearchResult.fromJson(
+                                {
+                                    rank: 1,
+                                    result: {
+                                        content: {
+                                            body: "search term",
+                                            msgtype: "m.text",
+                                        },
+                                        type: "m.room.message",
+                                        event_id: "$eventId",
+                                        sender: cli.getSafeUserId(),
+                                        origin_server_ts: 123456789,
+                                        room_id: room2.roomId,
+                                    },
+                                    context: {
+                                        events_before: [],
+                                        events_after: [],
+                                        profile_info: {},
+                                    },
+                                },
+                                eventMapper,
+                            ),
+                        ],
+                        highlights: [],
+                        count: 1,
+                    }),
+                    inProgress: false,
+                    count: 1,
+                },
+            }),
+        );
+
+        await waitFor(() => {
+            expect(container.querySelector(".mx_RoomView_searchResultsPanel")).toBeVisible();
+        });
+        const prom = untilDispatch(Action.ViewRoom, defaultDispatcher);
+
+        await userEvent.hover(getByText("search term"));
+        await userEvent.click(await findByLabelText("Edit"));
+
+        await expect(prom).resolves.toEqual(expect.objectContaining({ room_id: room2.roomId }));
+    });
+
+    it("fires Action.RoomLoaded", async () => {
+        jest.spyOn(defaultDispatcher, "dispatch");
+        await mountRoomView();
+        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: Action.RoomLoaded });
+    });
+
     describe("when there is a RoomView", () => {
         const widget1Id = "widget1";
         const widget2Id = "widget2";
@@ -513,185 +717,5 @@ describe("RoomView", () => {
                 itShouldNotRemoveTheLastWidget();
             });
         });
-    });
-
-    it("should show error view if failed to look up room alias", async () => {
-        const { asFragment, findByText } = await renderRoomView(false);
-
-        defaultDispatcher.dispatch<ViewRoomErrorPayload>({
-            action: Action.ViewRoomError,
-            room_alias: "#addy:server",
-            room_id: null,
-            err: new MatrixError({ errcode: "M_NOT_FOUND" }),
-        });
-        await emitPromise(stores.roomViewStore, UPDATE_EVENT);
-
-        await findByText("Are you sure you're at the right place?");
-        expect(asFragment()).toMatchSnapshot();
-    });
-
-    describe("knock rooms", () => {
-        const client = createTestClient();
-
-        beforeEach(() => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => setting === "feature_ask_to_join");
-            jest.spyOn(room, "getJoinRule").mockReturnValue(JoinRule.Knock);
-            jest.spyOn(defaultDispatcher, "dispatch");
-        });
-
-        it("allows to request to join", async () => {
-            jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(client);
-            jest.spyOn(client, "knockRoom").mockResolvedValue({ room_id: room.roomId });
-
-            await mountRoomView();
-            fireEvent.click(screen.getByRole("button", { name: "Request access" }));
-            await untilDispatch(Action.SubmitAskToJoin, defaultDispatcher);
-
-            expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
-                action: "submit_ask_to_join",
-                roomId: room.roomId,
-                opts: { reason: undefined },
-            });
-        });
-
-        it("allows to cancel a join request", async () => {
-            jest.spyOn(MatrixClientPeg, "safeGet").mockReturnValue(client);
-            jest.spyOn(client, "leave").mockResolvedValue({});
-            jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Knock);
-
-            await mountRoomView();
-            fireEvent.click(screen.getByRole("button", { name: "Cancel request" }));
-            await untilDispatch(Action.CancelAskToJoin, defaultDispatcher);
-
-            expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
-                action: "cancel_ask_to_join",
-                roomId: room.roomId,
-            });
-        });
-    });
-
-    it("should close search results when edit is clicked", async () => {
-        room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
-
-        const eventMapper = (obj: Partial<IEvent>) => new MatrixEvent(obj);
-
-        const roomViewRef = createRef<_RoomView>();
-        const { container, getByText, findByLabelText } = await mountRoomView(roomViewRef);
-        // @ts-ignore - triggering a search organically is a lot of work
-        roomViewRef.current!.setState({
-            search: {
-                searchId: 1,
-                roomId: room.roomId,
-                term: "search term",
-                scope: SearchScope.Room,
-                promise: Promise.resolve({
-                    results: [
-                        SearchResult.fromJson(
-                            {
-                                rank: 1,
-                                result: {
-                                    content: {
-                                        body: "search term",
-                                        msgtype: "m.text",
-                                    },
-                                    type: "m.room.message",
-                                    event_id: "$eventId",
-                                    sender: cli.getSafeUserId(),
-                                    origin_server_ts: 123456789,
-                                    room_id: room.roomId,
-                                },
-                                context: {
-                                    events_before: [],
-                                    events_after: [],
-                                    profile_info: {},
-                                },
-                            },
-                            eventMapper,
-                        ),
-                    ],
-                    highlights: [],
-                    count: 1,
-                }),
-                inProgress: false,
-                count: 1,
-            },
-        });
-
-        await waitFor(() => {
-            expect(container.querySelector(".mx_RoomView_searchResultsPanel")).toBeVisible();
-        });
-        const prom = waitForElementToBeRemoved(() => container.querySelector(".mx_RoomView_searchResultsPanel"));
-
-        await userEvent.hover(getByText("search term"));
-        await userEvent.click(await findByLabelText("Edit"));
-
-        await prom;
-    });
-
-    it("should switch rooms when edit is clicked on a search result for a different room", async () => {
-        const room2 = new Room(`!${roomCount++}:example.org`, cli, "@alice:example.org");
-        rooms.set(room2.roomId, room2);
-
-        room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
-
-        const eventMapper = (obj: Partial<IEvent>) => new MatrixEvent(obj);
-
-        const roomViewRef = createRef<_RoomView>();
-        const { container, getByText, findByLabelText } = await mountRoomView(roomViewRef);
-        // @ts-ignore - triggering a search organically is a lot of work
-        roomViewRef.current!.setState({
-            search: {
-                searchId: 1,
-                roomId: room.roomId,
-                term: "search term",
-                scope: SearchScope.All,
-                promise: Promise.resolve({
-                    results: [
-                        SearchResult.fromJson(
-                            {
-                                rank: 1,
-                                result: {
-                                    content: {
-                                        body: "search term",
-                                        msgtype: "m.text",
-                                    },
-                                    type: "m.room.message",
-                                    event_id: "$eventId",
-                                    sender: cli.getSafeUserId(),
-                                    origin_server_ts: 123456789,
-                                    room_id: room2.roomId,
-                                },
-                                context: {
-                                    events_before: [],
-                                    events_after: [],
-                                    profile_info: {},
-                                },
-                            },
-                            eventMapper,
-                        ),
-                    ],
-                    highlights: [],
-                    count: 1,
-                }),
-                inProgress: false,
-                count: 1,
-            },
-        });
-
-        await waitFor(() => {
-            expect(container.querySelector(".mx_RoomView_searchResultsPanel")).toBeVisible();
-        });
-        const prom = untilDispatch(Action.ViewRoom, defaultDispatcher);
-
-        await userEvent.hover(getByText("search term"));
-        await userEvent.click(await findByLabelText("Edit"));
-
-        await expect(prom).resolves.toEqual(expect.objectContaining({ room_id: room2.roomId }));
-    });
-
-    it("fires Action.RoomLoaded", async () => {
-        jest.spyOn(defaultDispatcher, "dispatch");
-        await mountRoomView();
-        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: Action.RoomLoaded });
     });
 });

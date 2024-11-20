@@ -103,6 +103,7 @@ exports[`showIncompatibleBrowser should match snapshot 1`] = `
       </p>
       <div
         class="mx_Flex mx_ErrorView_buttons"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x);"
       >
         <button
           class="_button_i91xf_17 _has-icon_i91xf_66"
@@ -152,6 +153,7 @@ exports[`showIncompatibleBrowser should match snapshot 1`] = `
     </h2>
     <div
       class="mx_Flex"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x);"
     >
       <a
         class="_button_i91xf_17 _has-icon_i91xf_66"
@@ -221,6 +223,7 @@ exports[`showIncompatibleBrowser should match snapshot 1`] = `
     </h2>
     <div
       class="mx_Flex"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-6x);"
     >
       <a
         href="https://apps.apple.com/app/vector/id1083446067"
