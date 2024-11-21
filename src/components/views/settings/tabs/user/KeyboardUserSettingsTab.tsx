@@ -18,7 +18,7 @@ import {
 import { KeyboardShortcut } from "../../KeyboardShortcut";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
-import SettingsSubsection from "../../shared/SettingsSubsection";
+import { SettingsSubsection } from "../../shared/SettingsSubsection";
 import { showLabsFlags } from "./LabsUserSettingsTab";
 
 interface IKeyboardShortcutRowProps {

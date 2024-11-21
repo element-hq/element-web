@@ -1,0 +1,264 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`showError should match snapshot 1`] = `
+<div
+  id="matrixchat"
+>
+  <div
+    class="mx_ErrorView cpd-theme-light"
+  >
+    <img
+      alt="Element"
+      class="mx_ErrorView_logo"
+      height="160"
+      src="themes/element/img/logos/element-app-logo.png"
+    />
+    <div
+      class="mx_ErrorView_container"
+    >
+      <h1
+        class="_typography_yh5dq_162 _font-heading-md-semibold_yh5dq_121"
+      >
+        Error title
+      </h1>
+      <p
+        class="_typography_yh5dq_162 _font-body-lg-regular_yh5dq_78"
+      >
+        msg1
+      </p>
+      <p
+        class="_typography_yh5dq_162 _font-body-lg-regular_yh5dq_78"
+      >
+        msg2
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`showIncompatibleBrowser should match snapshot 1`] = `
+<div
+  id="matrixchat"
+>
+  <div
+    class="mx_ErrorView cpd-theme-light"
+  >
+    <img
+      alt="Element"
+      class="mx_ErrorView_logo"
+      height="160"
+      src="themes/element/img/logos/element-app-logo.png"
+    />
+    <div
+      class="mx_ErrorView_container"
+    >
+      <h1
+        class="_typography_yh5dq_162 _font-heading-md-semibold_yh5dq_121"
+      >
+        Element does not support this browser
+      </h1>
+      <p
+        class="_typography_yh5dq_162 _font-body-lg-regular_yh5dq_78"
+      >
+        Element uses some browser features which are not available in your current browser. If you continue, some features may stop working and there is a risk that you may lose data in the future.
+      </p>
+      <p
+        class="_typography_yh5dq_162 _font-body-lg-regular_yh5dq_78"
+      >
+        <span>
+          For the best experience, use 
+          <a
+            href="https://google.com/chrome"
+            rel="noreferrer noopener"
+            target="_blank"
+          >
+            Chrome
+          </a>
+          , 
+          <a
+            href="https://firefox.com"
+            rel="noreferrer noopener"
+            target="_blank"
+          >
+            Firefox
+          </a>
+          , 
+          <a
+            href="https://microsoft.com/edge"
+            rel="noreferrer noopener"
+            target="_blank"
+          >
+            Edge
+          </a>
+          , or 
+          <a
+            href="https://apple.com/safari"
+            rel="noreferrer noopener"
+            target="_blank"
+          >
+            Safari
+          </a>
+          .
+        </span>
+      </p>
+      <div
+        class="mx_Flex mx_ErrorView_buttons"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x);"
+      >
+        <button
+          class="_button_i91xf_17 _has-icon_i91xf_66"
+          data-kind="secondary"
+          data-size="sm"
+          role="button"
+          tabindex="0"
+        >
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            height="20"
+            viewBox="0 0 24 24"
+            width="20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M5 3h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"
+            />
+            <path
+              d="M15 3h5a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V6.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L17.586 5H15a1 1 0 1 1 0-2Z"
+            />
+          </svg>
+          Learn more
+        </button>
+        <button
+          class="_button_i91xf_17"
+          data-kind="primary"
+          data-size="sm"
+          role="button"
+          tabindex="0"
+        >
+          Continue anyway
+        </button>
+      </div>
+    </div>
+    <div
+      class="_separator_144s5_17"
+      data-kind="primary"
+      data-orientation="horizontal"
+      role="separator"
+    />
+    <h2
+      class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+    >
+      Use Element Desktop instead
+    </h2>
+    <div
+      class="mx_Flex"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x);"
+    >
+      <a
+        class="_button_i91xf_17 _has-icon_i91xf_66"
+        data-kind="secondary"
+        data-size="lg"
+        href="https://packages.element.io/desktop/install/macos/Element.dmg"
+        role="link"
+        tabindex="0"
+      >
+        <div
+          aria-hidden="true"
+          height="20"
+          width="20"
+        />
+        Mac
+      </a>
+      <a
+        class="_button_i91xf_17 _has-icon_i91xf_66"
+        data-kind="secondary"
+        data-size="lg"
+        href="https://packages.element.io/desktop/install/win32/x64/Element%20Setup.exe"
+        role="link"
+        tabindex="0"
+      >
+        <div
+          aria-hidden="true"
+          height="20"
+          width="20"
+        />
+        Windows (64-bit)
+      </a>
+      <a
+        class="_button_i91xf_17 _has-icon_i91xf_66"
+        data-kind="secondary"
+        data-size="lg"
+        href="https://packages.element.io/desktop/install/win32/ia32/Element%20Setup.exe"
+        role="link"
+        tabindex="0"
+      >
+        <div
+          aria-hidden="true"
+          height="20"
+          width="20"
+        />
+        Windows (32-bit)
+      </a>
+      <a
+        class="_button_i91xf_17 _has-icon_i91xf_66"
+        data-kind="secondary"
+        data-size="lg"
+        href="https://element.io/download#linux"
+        role="link"
+        tabindex="0"
+      >
+        <div
+          aria-hidden="true"
+          height="20"
+          width="20"
+        />
+        Linux
+      </a>
+    </div>
+    <h2
+      class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+    >
+      Or use our mobile app
+    </h2>
+    <div
+      class="mx_Flex"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-6x);"
+    >
+      <a
+        href="https://apps.apple.com/app/vector/id1083446067"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        <img
+          alt="Apple App Store"
+          height="64"
+          src="themes/element/img/download/apple.svg"
+        />
+      </a>
+      <a
+        href="https://play.google.com/store/apps/details?id=im.vector.app"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        <img
+          alt="Google Play Store"
+          height="64"
+          src="themes/element/img/download/google.svg"
+        />
+      </a>
+      <a
+        href="https://f-droid.org/repository/browse/?fdid=im.vector.app"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        <img
+          alt="F-Droid"
+          height="64"
+          src="themes/element/img/download/fdroid.svg"
+        />
+      </a>
+    </div>
+  </div>
+</div>
+`;

@@ -9,6 +9,7 @@ const TerserPlugin = require("terser-webpack-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const HtmlWebpackInjectPreload = require("@principalstudio/html-webpack-inject-preload");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const VersionFilePlugin = require("webpack-version-file-plugin");
 
 // Environment variables
 // RIOT_OG_IMAGE_URL: specifies the URL to the image which should be used for the opengraph logo.
@@ -18,11 +19,6 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 dotenv.config();
 let ogImageUrl = process.env.RIOT_OG_IMAGE_URL;
 if (!ogImageUrl) ogImageUrl = "https://app.element.io/themes/element/img/logos/opengraph.png";
-
-if (!process.env.VERSION) {
-    console.warn("Unset VERSION variable - this may affect build output");
-    process.env.VERSION = "!!UNSET!!";
-}
 
 const cssThemes = {
     // CSS themes
@@ -97,20 +93,23 @@ module.exports = (env, argv) => {
     const devMode = nodeEnv !== "production";
     const enableMinification = !devMode && !process.env.CI_PACKAGE;
 
+    let VERSION = process.env.VERSION;
+    if (!VERSION) {
+        VERSION = require("./package.json").version;
+        if (devMode) {
+            VERSION += "-dev";
+        }
+    }
+
     const development = {};
     if (devMode) {
         // Embedded source maps for dev builds, can't use eval-source-map due to CSP
         development["devtool"] = "inline-source-map";
     } else {
-        if (process.env.CI_PACKAGE) {
-            // High quality source maps in separate .map files which include the source. This doesn't bulk up the .js
-            // payload file size, which is nice for performance but also necessary to get the bundle to a small enough
-            // size that sentry will accept the upload.
-            development["devtool"] = "source-map";
-        } else {
-            // High quality source maps in separate .map files which don't include the source
-            development["devtool"] = "nosources-source-map";
-        }
+        // High quality source maps in separate .map files which include the source. This doesn't bulk up the .js
+        // payload file size, which is nice for performance but also necessary to get the bundle to a small enough
+        // size that sentry will accept the upload.
+        development["devtool"] = "source-map";
     }
 
     // Resolve the directories for the js-sdk for later use. We resolve these early, so we
@@ -651,8 +650,6 @@ module.exports = (env, argv) => {
                     },
                 }),
 
-            new webpack.EnvironmentPlugin(["VERSION"]),
-
             new CopyWebpackPlugin({
                 patterns: [
                     "res/apple-app-site-association",
@@ -676,6 +673,15 @@ module.exports = (env, argv) => {
             new webpack.ProvidePlugin({
                 Buffer: ["buffer", "Buffer"],
                 process: "process/browser",
+            }),
+
+            // We bake the version in so the app knows its version immediately
+            new webpack.DefinePlugin({ "process.env.VERSION": JSON.stringify(VERSION) }),
+            // But we also write it to a file which gets polled for update detection
+            new VersionFilePlugin({
+                outputFile: "version",
+                templateString: "<%= extras.VERSION %>",
+                extras: { VERSION },
             }),
         ].filter(Boolean),
 

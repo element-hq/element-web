@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { render, screen, waitFor } from "jest-matrix-react";
-import { MatrixClient, ThreepidMedium } from "matrix-js-sdk/src/matrix";
+import { render, screen, waitFor, cleanup } from "jest-matrix-react";
+import { MatrixClient, MatrixError, ThreepidMedium } from "matrix-js-sdk/src/matrix";
 import React from "react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
@@ -16,6 +16,7 @@ import { AddRemoveThreepids } from "../../../../../src/components/views/settings
 import { clearAllModals, stubClient } from "../../../../test-utils";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import Modal from "../../../../../src/Modal";
+import InteractiveAuthDialog from "../../../../../src/components/views/dialogs/InteractiveAuthDialog.tsx";
 
 const MOCK_IDENTITY_ACCESS_TOKEN = "mock_identity_access_token";
 const mockGetAccessToken = jest.fn().mockResolvedValue(MOCK_IDENTITY_ACCESS_TOKEN);
@@ -47,53 +48,12 @@ describe("AddRemoveThreepids", () => {
     afterEach(() => {
         jest.restoreAllMocks();
         clearAllModals();
+        cleanup();
     });
 
     const clientProviderWrapper: React.FC = ({ children }: React.PropsWithChildren) => (
         <MatrixClientContext.Provider value={client}>{children}</MatrixClientContext.Provider>
     );
-
-    it("should render a loader while loading", async () => {
-        render(
-            <AddRemoveThreepids
-                mode="hs"
-                medium={ThreepidMedium.Email}
-                threepids={[]}
-                isLoading={true}
-                onChange={() => {}}
-            />,
-        );
-
-        expect(screen.getByLabelText("Loading…")).toBeInTheDocument();
-    });
-
-    it("should render email addresses", async () => {
-        const { container } = render(
-            <AddRemoveThreepids
-                mode="hs"
-                medium={ThreepidMedium.Email}
-                threepids={[EMAIL1]}
-                isLoading={false}
-                onChange={() => {}}
-            />,
-        );
-
-        expect(container).toMatchSnapshot();
-    });
-
-    it("should render phone numbers", async () => {
-        const { container } = render(
-            <AddRemoveThreepids
-                mode="hs"
-                medium={ThreepidMedium.Phone}
-                threepids={[PHONE1]}
-                isLoading={false}
-                onChange={() => {}}
-            />,
-        );
-
-        expect(container).toMatchSnapshot();
-    });
 
     it("should handle no email addresses", async () => {
         const { container } = render(
@@ -106,6 +66,7 @@ describe("AddRemoveThreepids", () => {
             />,
         );
 
+        await expect(screen.findByText("Email Address")).resolves.toBeVisible();
         expect(container).toMatchSnapshot();
     });
 
@@ -126,7 +87,7 @@ describe("AddRemoveThreepids", () => {
             },
         );
 
-        const input = screen.getByRole("textbox", { name: "Email Address" });
+        const input = await screen.findByRole("textbox", { name: "Email Address" });
         await userEvent.type(input, EMAIL1.address);
         const addButton = screen.getByRole("button", { name: "Add" });
         await userEvent.click(addButton);
@@ -165,7 +126,7 @@ describe("AddRemoveThreepids", () => {
             },
         );
 
-        const input = screen.getByRole("textbox", { name: "Email Address" });
+        const input = await screen.findByRole("textbox", { name: "Email Address" });
         await userEvent.type(input, EMAIL1.address);
         const addButton = screen.getByRole("button", { name: "Add" });
         await userEvent.click(addButton);
@@ -209,7 +170,7 @@ describe("AddRemoveThreepids", () => {
             },
         );
 
-        const countryDropdown = screen.getByRole("button", { name: /Country Dropdown/ });
+        const countryDropdown = await screen.findByRole("button", { name: /Country Dropdown/ });
         await userEvent.click(countryDropdown);
         const gbOption = screen.getByRole("option", { name: "🇬🇧 United Kingdom (+44)" });
         await userEvent.click(gbOption);
@@ -222,13 +183,13 @@ describe("AddRemoveThreepids", () => {
 
         const continueButton = await screen.findByRole("button", { name: /Continue/ });
 
-        await expect(continueButton).toHaveAttribute("aria-disabled", "true");
+        expect(continueButton).toHaveAttribute("aria-disabled", "true");
 
         await expect(
-            await screen.findByText(
+            screen.findByText(
                 `A text message has been sent to +${PHONE1.address}. Please enter the verification code it contains.`,
             ),
-        ).toBeInTheDocument();
+        ).resolves.toBeInTheDocument();
 
         expect(client.requestAdd3pidMsisdnToken).toHaveBeenCalledWith(
             "GB",
@@ -269,7 +230,7 @@ describe("AddRemoveThreepids", () => {
             },
         );
 
-        const removeButton = screen.getByRole("button", { name: /Remove/ });
+        const removeButton = await screen.findByRole("button", { name: /Remove/ });
         await userEvent.click(removeButton);
 
         expect(screen.getByText(`Remove ${EMAIL1.address}?`)).toBeVisible();
@@ -296,7 +257,7 @@ describe("AddRemoveThreepids", () => {
             },
         );
 
-        const removeButton = screen.getByRole("button", { name: /Remove/ });
+        const removeButton = await screen.findByRole("button", { name: /Remove/ });
         await userEvent.click(removeButton);
 
         expect(screen.getByText(`Remove ${EMAIL1.address}?`)).toBeVisible();
@@ -325,7 +286,7 @@ describe("AddRemoveThreepids", () => {
             },
         );
 
-        const removeButton = screen.getByRole("button", { name: /Remove/ });
+        const removeButton = await screen.findByRole("button", { name: /Remove/ });
         await userEvent.click(removeButton);
 
         expect(screen.getByText(`Remove ${PHONE1.address}?`)).toBeVisible();
@@ -356,7 +317,7 @@ describe("AddRemoveThreepids", () => {
             },
         );
 
-        expect(screen.getByText(EMAIL1.address)).toBeVisible();
+        await expect(screen.findByText(EMAIL1.address)).resolves.toBeVisible();
         const shareButton = screen.getByRole("button", { name: /Share/ });
         await userEvent.click(shareButton);
 
@@ -407,7 +368,7 @@ describe("AddRemoveThreepids", () => {
             },
         );
 
-        expect(screen.getByText(PHONE1.address)).toBeVisible();
+        await expect(screen.findByText(PHONE1.address)).resolves.toBeVisible();
         const shareButton = screen.getByRole("button", { name: /Share/ });
         await userEvent.click(shareButton);
 
@@ -451,7 +412,7 @@ describe("AddRemoveThreepids", () => {
             },
         );
 
-        expect(screen.getByText(EMAIL1.address)).toBeVisible();
+        await expect(screen.findByText(EMAIL1.address)).resolves.toBeVisible();
         const revokeButton = screen.getByRole("button", { name: /Revoke/ });
         await userEvent.click(revokeButton);
 
@@ -474,11 +435,169 @@ describe("AddRemoveThreepids", () => {
             },
         );
 
-        expect(screen.getByText(PHONE1.address)).toBeVisible();
+        await expect(screen.findByText(PHONE1.address)).resolves.toBeVisible();
         const revokeButton = screen.getByRole("button", { name: /Revoke/ });
         await userEvent.click(revokeButton);
 
         expect(client.unbindThreePid).toHaveBeenCalledWith(ThreepidMedium.Phone, PHONE1.address);
         expect(onChangeFn).toHaveBeenCalled();
+    });
+
+    it("should show UIA dialog when necessary for adding email", async () => {
+        const onChangeFn = jest.fn();
+        const createDialogFn = jest.spyOn(Modal, "createDialog");
+        mocked(client.requestAdd3pidEmailToken).mockResolvedValue({ sid: "1" });
+
+        render(
+            <AddRemoveThreepids
+                mode="hs"
+                medium={ThreepidMedium.Email}
+                threepids={[]}
+                isLoading={false}
+                onChange={onChangeFn}
+            />,
+            {
+                wrapper: clientProviderWrapper,
+            },
+        );
+
+        const input = screen.getByRole("textbox", { name: "Email Address" });
+        await userEvent.type(input, EMAIL1.address);
+        const addButton = screen.getByRole("button", { name: "Add" });
+        await userEvent.click(addButton);
+
+        const continueButton = screen.getByRole("button", { name: "Continue" });
+
+        expect(continueButton).toBeEnabled();
+
+        mocked(client).addThreePidOnly.mockRejectedValueOnce(
+            new MatrixError({ errcode: "M_UNAUTHORIZED", flows: [{ stages: [] }] }, 401),
+        );
+
+        await userEvent.click(continueButton);
+
+        expect(createDialogFn).toHaveBeenCalledWith(
+            InteractiveAuthDialog,
+            expect.objectContaining({
+                title: "Add Email Address",
+                makeRequest: expect.any(Function),
+            }),
+        );
+    });
+
+    it("should show UIA dialog when necessary for adding msisdn", async () => {
+        const onChangeFn = jest.fn();
+        const createDialogFn = jest.spyOn(Modal, "createDialog");
+        mocked(client.requestAdd3pidMsisdnToken).mockResolvedValue({
+            sid: "1",
+            msisdn: PHONE1.address,
+            intl_fmt: PHONE1.address,
+            success: true,
+            submit_url: "https://some-url",
+        });
+
+        render(
+            <AddRemoveThreepids
+                mode="hs"
+                medium={ThreepidMedium.Phone}
+                threepids={[]}
+                isLoading={false}
+                onChange={onChangeFn}
+            />,
+            {
+                wrapper: clientProviderWrapper,
+            },
+        );
+
+        const countryDropdown = screen.getByRole("button", { name: /Country Dropdown/ });
+        await userEvent.click(countryDropdown);
+        const gbOption = screen.getByRole("option", { name: "🇬🇧 United Kingdom (+44)" });
+        await userEvent.click(gbOption);
+
+        const input = screen.getByRole("textbox", { name: "Phone Number" });
+        await userEvent.type(input, PHONE1_LOCALNUM);
+
+        const addButton = screen.getByRole("button", { name: "Add" });
+        await userEvent.click(addButton);
+
+        const continueButton = screen.getByRole("button", { name: "Continue" });
+
+        expect(continueButton).toHaveAttribute("aria-disabled", "true");
+
+        await expect(
+            screen.findByText(
+                `A text message has been sent to +${PHONE1.address}. Please enter the verification code it contains.`,
+            ),
+        ).resolves.toBeInTheDocument();
+
+        expect(client.requestAdd3pidMsisdnToken).toHaveBeenCalledWith(
+            "GB",
+            PHONE1_LOCALNUM,
+            client.generateClientSecret(),
+            1,
+        );
+
+        const verificationInput = screen.getByRole("textbox", { name: "Verification code" });
+        await userEvent.type(verificationInput, "123456");
+
+        expect(continueButton).not.toHaveAttribute("aria-disabled", "true");
+
+        mocked(client).addThreePidOnly.mockRejectedValueOnce(
+            new MatrixError({ errcode: "M_UNAUTHORIZED", flows: [{ stages: [] }] }, 401),
+        );
+
+        await userEvent.click(continueButton);
+
+        expect(createDialogFn).toHaveBeenCalledWith(
+            InteractiveAuthDialog,
+            expect.objectContaining({
+                title: "Add Phone Number",
+                makeRequest: expect.any(Function),
+            }),
+        );
+    });
+
+    it("should render a loader while loading", async () => {
+        render(
+            <AddRemoveThreepids
+                mode="hs"
+                medium={ThreepidMedium.Email}
+                threepids={[]}
+                isLoading={true}
+                onChange={() => {}}
+            />,
+        );
+
+        expect(screen.getByLabelText("Loading…")).toBeInTheDocument();
+    });
+
+    it("should render email addresses", async () => {
+        const { container } = render(
+            <AddRemoveThreepids
+                mode="hs"
+                medium={ThreepidMedium.Email}
+                threepids={[EMAIL1]}
+                isLoading={false}
+                onChange={() => {}}
+            />,
+        );
+
+        await expect(screen.findByText(EMAIL1.address)).resolves.toBeVisible();
+        expect(container).toMatchSnapshot();
+    });
+
+    it("should render phone numbers", async () => {
+        const { container } = render(
+            <AddRemoveThreepids
+                mode="hs"
+                medium={ThreepidMedium.Phone}
+                threepids={[PHONE1]}
+                isLoading={false}
+                onChange={() => {}}
+            />,
+        );
+
+        await expect(screen.findByText(PHONE1.address)).resolves.toBeVisible();
+        expect(container).toMatchSnapshot();
     });
 });

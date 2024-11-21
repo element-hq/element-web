@@ -14,7 +14,7 @@ import { Layout } from "../../../settings/enums/Layout";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import { _t } from "../../../languageHandler";
-import SettingsSubsection from "./shared/SettingsSubsection";
+import { SettingsSubsection } from "./shared/SettingsSubsection";
 import Field from "../elements/Field";
 import { FontWatcher } from "../../../settings/watchers/FontWatcher";
 

@@ -48,7 +48,7 @@ import {
 } from "../../../utils/pushRules/updatePushRuleActions";
 import { Caption } from "../typography/Caption";
 import { SettingsSubsectionHeading } from "./shared/SettingsSubsectionHeading";
-import SettingsSubsection from "./shared/SettingsSubsection";
+import { SettingsSubsection } from "./shared/SettingsSubsection";
 import { doesRoomHaveUnreadMessages } from "../../../Unread";
 import SettingsFlag from "../elements/SettingsFlag";
 

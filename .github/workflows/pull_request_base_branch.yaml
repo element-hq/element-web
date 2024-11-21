@@ -2,10 +2,11 @@ name: Pull Request Base Branch
 on:
     pull_request:
         types: [opened, edited, synchronize]
+permissions: {} # No permissions required
 jobs:
     check_base_branch:
         name: Check PR base branch
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-24.04
         steps:
             - uses: actions/github-script@v7
               with:

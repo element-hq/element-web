@@ -6,11 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
+import { lazy } from "react";
 import { ICryptoCallbacks, SecretStorage } from "matrix-js-sdk/src/matrix";
 import { deriveRecoveryKeyFromPassphrase, decodeRecoveryKey } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import type CreateSecretStorageDialog from "./async-components/views/dialogs/security/CreateSecretStorageDialog";
 import Modal from "./Modal";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import { _t } from "./languageHandler";
@@ -186,6 +186,15 @@ export async function withSecretStorageKeyCache<T>(func: () => Promise<T>): Prom
     }
 }
 
+export interface AccessSecretStorageOpts {
+    /** Reset secret storage even if it's already set up. */
+    forceReset?: boolean;
+    /** Create new cross-signing keys. Only applicable if `forceReset` is `true`. */
+    resetCrossSigning?: boolean;
+    /** The cached account password, if available. */
+    accountPassword?: string;
+}
+
 /**
  * This helper should be used whenever you need to access secret storage. It
  * ensures that secret storage (and also cross-signing since they each depend on
@@ -205,14 +214,17 @@ export async function withSecretStorageKeyCache<T>(func: () => Promise<T>): Prom
  *
  * @param {Function} [func] An operation to perform once secret storage has been
  * bootstrapped. Optional.
- * @param {bool} [forceReset] Reset secret storage even if it's already set up
+ * @param [opts] The options to use when accessing secret storage.
  */
-export async function accessSecretStorage(func = async (): Promise<void> => {}, forceReset = false): Promise<void> {
-    await withSecretStorageKeyCache(() => doAccessSecretStorage(func, forceReset));
+export async function accessSecretStorage(
+    func = async (): Promise<void> => {},
+    opts: AccessSecretStorageOpts = {},
+): Promise<void> {
+    await withSecretStorageKeyCache(() => doAccessSecretStorage(func, opts));
 }
 
 /** Helper for {@link #accessSecretStorage} */
-async function doAccessSecretStorage(func: () => Promise<void>, forceReset: boolean): Promise<void> {
+async function doAccessSecretStorage(func: () => Promise<void>, opts: AccessSecretStorageOpts): Promise<void> {
     try {
         const cli = MatrixClientPeg.safeGet();
         const crypto = cli.getCrypto();
@@ -221,7 +233,7 @@ async function doAccessSecretStorage(func: () => Promise<void>, forceReset: bool
         }
 
         let createNew = false;
-        if (forceReset) {
+        if (opts.forceReset) {
             logger.debug("accessSecretStorage: resetting 4S");
             createNew = true;
         } else if (!(await cli.secretStorage.hasKey())) {
@@ -232,13 +244,9 @@ async function doAccessSecretStorage(func: () => Promise<void>, forceReset: bool
         if (createNew) {
             // This dialog calls bootstrap itself after guiding the user through
             // passphrase creation.
-            const { finished } = Modal.createDialogAsync(
-                import("./async-components/views/dialogs/security/CreateSecretStorageDialog") as unknown as Promise<
-                    typeof CreateSecretStorageDialog
-                >,
-                {
-                    forceReset,
-                },
+            const { finished } = Modal.createDialog(
+                lazy(() => import("./async-components/views/dialogs/security/CreateSecretStorageDialog")),
+                opts,
                 undefined,
                 /* priority = */ false,
                 /* static = */ true,

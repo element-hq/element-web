@@ -60,29 +60,9 @@ exports[`AppTile destroys non-persisted right panel widget on room change 1`] = 
         id="1"
       >
         <div
-          class="mx_AppTileBody mx_AppTileBody--large"
+          class="mx_AppTile_persistedWrapper"
         >
-          <div
-            class="mx_AppTileBody_fadeInSpinner"
-          >
-            <div
-              class="mx_Spinner"
-            >
-              <div
-                class="mx_Spinner_Msg"
-              >
-                Loading…
-              </div>
-               
-              <div
-                aria-label="Loading…"
-                class="mx_Spinner_icon"
-                data-testid="spinner"
-                role="progressbar"
-                style="width: 32px; height: 32px;"
-              />
-            </div>
-          </div>
+          <div />
         </div>
       </div>
     </div>
@@ -356,8 +336,8 @@ exports[`AppTile for a pinned widget should render permission request 1`] = `
             <span>
               Using this widget may share data 
               <div
-                aria-describedby=":r2n:"
-                aria-labelledby=":r2m:"
+                aria-describedby=":r2j:"
+                aria-labelledby=":r2i:"
                 class="mx_TextWithTooltip_target mx_TextWithTooltip_target--helpIcon"
               >
                 <svg

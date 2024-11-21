@@ -3,9 +3,12 @@ on:
     workflow_dispatch: {}
     schedule:
         - cron: "0 6 * * *" # Every day at 6am UTC
+permissions: {}
 jobs:
     update:
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-24.04
+        permissions:
+            pull-requests: write
         steps:
             - uses: actions/checkout@v4
 

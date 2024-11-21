@@ -1624,7 +1624,7 @@
         "download_f_droid": "Récupérez-le sur F-Droid",
         "download_google_play": "Récupérez-le sur Google Play",
         "enable_notifications": "Activer les notifications",
-        "enable_notifications_action": "Activer les notifications",
+        "enable_notifications_action": "Ouvrir les paramètres",
         "enable_notifications_description": "Ne ratez pas une réponse ou un message important",
         "explore_rooms": "Explorez les salons publics",
         "find_community_members": "Trouvez et invitez les membres de votre communauté",
@@ -1803,7 +1803,7 @@
         "restore_failed_error": "Impossible de restaurer la sauvegarde"
     },
     "right_panel": {
-        "add_integrations": "Ajouter des widgets, passerelles et robots",
+        "add_integrations": "Ajouter des extensions",
         "add_topic": "Ajouter un sujet",
         "files_button": "Fichiers",
         "pinned_messages": {
@@ -1823,7 +1823,7 @@
                 "button": "Désépingler tous les messages"
             }
         },
-        "pinned_messages_button": "Épinglé",
+        "pinned_messages_button": "Messages épinglés",
         "poll": {
             "active_heading": "Sondages en cours",
             "empty_active": "Il n’y a aucun sondage en cours dans ce salon",
@@ -1848,7 +1848,7 @@
             "view_in_timeline": "Consulter la chronologie des sondages",
             "view_poll": "Voir le sondage"
         },
-        "polls_button": "Historique des sondages",
+        "polls_button": "Sondages",
         "room_summary_card": {
             "title": "Information du salon"
         },
@@ -3252,7 +3252,7 @@
         },
         "m.file": {
             "error_decrypting": "Erreur lors du déchiffrement de la pièce jointe",
-            "error_invalid": "Fichier %(extra)s non valide"
+            "error_invalid": "Fichier invalide"
         },
         "m.image": {
             "error": "Impossible d’afficher l’image à cause d’une erreur",
@@ -3988,7 +3988,7 @@
             "title": "Autoriser ce widget à vérifier votre identité"
         },
         "popout": "Détacher le widget",
-        "set_room_layout": "Définir ma disposition de salon pour tout le monde",
+        "set_room_layout": "Définir la mise en page pour tout le monde",
         "shared_data_avatar": "Votre URL d’image de profil",
         "shared_data_device_id": "Votre ID d’appareil",
         "shared_data_lang": "Votre langue",

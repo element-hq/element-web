@@ -12,6 +12,7 @@ import { Room, EventType } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
+import { ErrorIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t, _td, TranslationKey } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
@@ -34,7 +35,6 @@ import LazyRenderList from "../elements/LazyRenderList";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { filterBoolean } from "../../../utils/arrays";
 import { NonEmptyArray } from "../../../@types/common";
-import WarningBadgeSvg from "../../../../res/img/element-icons/warning-badge.svg";
 
 // These values match CSS
 const ROW_HEIGHT = 32 + 12;
@@ -229,7 +229,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
     if (error) {
         footer = (
             <>
-                <img src={WarningBadgeSvg} height="24" width="24" alt="" />
+                <ErrorIcon height="24px" width="24px" />
 
                 <span className="mx_AddExistingToSpaceDialog_error">
                     <div className="mx_AddExistingToSpaceDialog_errorHeading">
