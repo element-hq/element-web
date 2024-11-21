@@ -33,6 +33,8 @@ env:
     # fetchdep.sh needs to know our PR number
     PR_NUMBER: ${{ github.event.pull_request.number }}
 
+permissions: {} # No permissions required
+
 jobs:
     build:
         name: "Build Element-Web"
