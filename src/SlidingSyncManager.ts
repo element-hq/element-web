@@ -199,13 +199,7 @@ export class SlidingSyncManager {
         }
         // by default use the encrypted subscription as that gets everything, which is a safer
         // default than potentially missing member events.
-        this.slidingSync = new SlidingSync(
-            proxyUrl,
-            lists,
-            ENCRYPTED_SUBSCRIPTION,
-            client,
-            SLIDING_SYNC_TIMEOUT_MS,
-        );
+        this.slidingSync = new SlidingSync(proxyUrl, lists, ENCRYPTED_SUBSCRIPTION, client, SLIDING_SYNC_TIMEOUT_MS);
         this.slidingSync.addCustomSubscription(UNENCRYPTED_SUBSCRIPTION_NAME, UNENCRYPTED_SUBSCRIPTION);
         this.configureDefer.resolve();
         return this.slidingSync;
@@ -315,7 +309,11 @@ export class SlidingSyncManager {
      * @param batchSize The number of rooms to return in each request.
      * @param gapBetweenRequestsMs The number of milliseconds to wait between requests.
      */
-    private async startSpidering(slidingSync: SlidingSync, batchSize: number, gapBetweenRequestsMs: number): Promise<void> {
+    private async startSpidering(
+        slidingSync: SlidingSync,
+        batchSize: number,
+        gapBetweenRequestsMs: number,
+    ): Promise<void> {
         // The manager has created several lists (see `sssLists` in this file), all of which will be spidered simultaneously.
         // There are multiple lists to ensure that we can populate invites/favourites/DMs sections immediately, rather than
         // potentially waiting minutes if they are all very old rooms (and hence are returned last by the server). In this
@@ -323,16 +321,22 @@ export class SlidingSyncManager {
         // point, as the RoomListStore will calculate this based on the returned data.
 
         // copy the initial set of list names and ranges, we'll keep this map updated.
-        const listToUpperBound = new Map(Object.keys(sssLists).map((listName) => {
-            return [listName, sssLists[listName].ranges[0][1]];
-        }));
-        console.log("startSpidering:",listToUpperBound);
+        const listToUpperBound = new Map(
+            Object.keys(sssLists).map((listName) => {
+                return [listName, sssLists[listName].ranges[0][1]];
+            }),
+        );
+        console.log("startSpidering:", listToUpperBound);
 
         // listen for a response from the server. ANY 200 OK will do here, as we assume that it is ACKing
         // the request change we have sent out. TODO: this may not be true if you concurrently subscribe to a room :/
         // but in that case, for spidering at least, it isn't the end of the world as request N+1 includes all indexes
         // from request N.
-        const lifecycle = async (state: SlidingSyncState, _: MSC3575SlidingSyncResponse | null, err?: Error): Promise<void> => {
+        const lifecycle = async (
+            state: SlidingSyncState,
+            _: MSC3575SlidingSyncResponse | null,
+            err?: Error,
+        ): Promise<void> => {
             if (state !== SlidingSyncState.Complete) {
                 return;
             }
@@ -341,7 +345,7 @@ export class SlidingSyncManager {
                 return;
             }
 
-            // for all lists with total counts > range => increase the range 
+            // for all lists with total counts > range => increase the range
             let hasSetRanges = false;
             listToUpperBound.forEach((currentUpperBound, listName) => {
                 const totalCount = slidingSync.getListData(listName)?.joinedCount || 0;
@@ -352,11 +356,12 @@ export class SlidingSyncManager {
                     listToUpperBound.set(listName, newUpperBound);
                     // make the next request. This will only send the request when this callback has finished, so if
                     // we set all the list ranges at once we will only send 1 new request.
-                    slidingSync.setListRanges(listName, [[0,newUpperBound]]);
+                    slidingSync.setListRanges(listName, [[0, newUpperBound]]);
                     hasSetRanges = true;
                 }
             });
-            if (!hasSetRanges) { // finish spidering
+            if (!hasSetRanges) {
+                // finish spidering
                 slidingSync.off(SlidingSyncEvent.Lifecycle, lifecycle);
             }
         };
