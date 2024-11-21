@@ -167,9 +167,7 @@ describe("SlidingSyncManager", () => {
                     );
                     return;
                 }
-                expect(slidingSync.setListRanges).toHaveBeenCalledWith(SlidingSyncManager.ListSearch, [
-                    range,
-                ]);
+                expect(slidingSync.setListRanges).toHaveBeenCalledWith(SlidingSyncManager.ListSearch, [range]);
             });
         });
         it("handles accounts with zero rooms", async () => {
@@ -187,9 +185,7 @@ describe("SlidingSyncManager", () => {
             expect(slidingSync.setList).toHaveBeenCalledWith(
                 SlidingSyncManager.ListSearch,
                 expect.objectContaining({
-                    ranges: [
-                        [0, batchSize],
-                    ],
+                    ranges: [[0, batchSize]],
                 }),
             );
         });
