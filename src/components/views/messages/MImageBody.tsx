@@ -298,10 +298,14 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
                 }
 
                 try {
-                    const blob = await this.props.mediaEventHelper!.sourceBlob.value;
+                    // If we didn't receive the MSC4230 is_animated flag
+                    // then we need to check if the image is animated by downloading it.
                     if (
                         content.info?.["org.matrix.msc4230.is_animated"] === false ||
-                        !(await blobIsAnimated(content.info?.mimetype, blob))
+                        !(await blobIsAnimated(
+                            content.info?.mimetype,
+                            await this.props.mediaEventHelper!.sourceBlob.value,
+                        ))
                     ) {
                         isAnimated = false;
                     }
