@@ -180,11 +180,11 @@ exports[`<MatrixChat /> Multi-tab lockout waits for other tab to stop during sta
         Blog
       </a>
       <a
-        href="https://twitter.com/element_hq"
+        href="https://mastodon.matrix.org/@Element"
         rel="noreferrer noopener"
         target="_blank"
       >
-        Twitter
+        Mastodon
       </a>
       <a
         href="https://github.com/element-hq/element-web"
@@ -357,11 +357,11 @@ exports[`<MatrixChat /> with a soft-logged-out session should show the soft-logo
         Blog
       </a>
       <a
-        href="https://twitter.com/element_hq"
+        href="https://mastodon.matrix.org/@Element"
         rel="noreferrer noopener"
         target="_blank"
       >
-        Twitter
+        Mastodon
       </a>
       <a
         href="https://github.com/element-hq/element-web"
