@@ -97,7 +97,7 @@ jobs:
         if: always()
         runs-on: ubuntu-24.04
         permissions:
-            checks: write
+            statuses: write
         steps:
             - if: needs.jest.result != 'skipped' && needs.jest.result != 'success'
               run: exit 1
