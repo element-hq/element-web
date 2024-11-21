@@ -99,6 +99,7 @@ jobs:
         runs-on: ubuntu-24.04
         permissions:
             pages: write
+            id-token: write
         needs: build
         steps:
             - name: Deploy to GitHub Pages
