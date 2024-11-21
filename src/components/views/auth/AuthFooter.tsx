@@ -16,7 +16,7 @@ const AuthFooter = (): ReactElement => {
     const brandingConfig = SdkConfig.getObject("branding");
     const links = brandingConfig?.get("auth_footer_links") ?? [
         { text: "Blog", url: "https://element.io/blog" },
-        { text: "Twitter", url: "https://twitter.com/element_hq" },
+        { text: "Mastodon", url: "https://mastodon.matrix.org/@Element" },
         { text: "GitHub", url: "https://github.com/element-hq/element-web" },
     ];
 
