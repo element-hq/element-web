@@ -24,9 +24,9 @@ declare module "matrix-js-sdk/src/types" {
 
     export interface ImageInfo {
         /**
-         * @see https://github.com/matrix-org/matrix-spec-proposals/pull/XXXX
+         * @see https://github.com/matrix-org/matrix-spec-proposals/pull/4230
          */
-        "org.matrix.mscXXXX.is_animated"?: boolean;
+        "org.matrix.msc4230.is_animated"?: boolean;
     }
 
     export interface StateEvents {
