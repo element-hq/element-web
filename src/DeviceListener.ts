@@ -231,11 +231,12 @@ export default class DeviceListener {
         if (!this.client) return null;
         const now = new Date().getTime();
         const crypto = this.client.getCrypto();
+        if (!crypto) return null;
+
         if (
-            crypto &&
-            (!this.keyBackupInfo ||
-                !this.keyBackupFetchedAt ||
-                this.keyBackupFetchedAt < now - KEY_BACKUP_POLL_INTERVAL)
+            !this.keyBackupInfo ||
+            !this.keyBackupFetchedAt ||
+            this.keyBackupFetchedAt < now - KEY_BACKUP_POLL_INTERVAL
         ) {
             this.keyBackupInfo = await crypto.getKeyBackupInfo();
             this.keyBackupFetchedAt = now;
