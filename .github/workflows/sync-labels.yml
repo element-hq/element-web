@@ -8,6 +8,9 @@ on:
             - develop
         paths:
             - .github/labels.yml
+
+permissions: {} # We use ELEMENT_BOT_TOKEN instead
+
 jobs:
     sync-labels:
         uses: element-hq/element-meta/.github/workflows/sync-labels.yml@develop

@@ -26,6 +26,8 @@ env:
     # fetchdep.sh needs to know our PR number
     PR_NUMBER: ${{ github.event.pull_request.number }}
 
+permissions: {}
+
 jobs:
     jest:
         name: Jest
@@ -94,6 +96,8 @@ jobs:
         needs: jest
         if: always()
         runs-on: ubuntu-24.04
+        permissions:
+            statuses: write
         steps:
             - if: needs.jest.result != 'skipped' && needs.jest.result != 'success'
               run: exit 1

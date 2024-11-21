@@ -3,6 +3,7 @@ on:
     release:
         types: [published]
 concurrency: ${{ github.workflow }}
+permissions: {} # We use ELEMENT_BOT_TOKEN instead
 jobs:
     build:
         name: Build package

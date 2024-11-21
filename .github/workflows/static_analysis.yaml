@@ -16,6 +16,8 @@ env:
     REPOSITORY: ${{ github.repository }}
     PR_NUMBER: ${{ github.event.pull_request.number }}
 
+permissions: {} # No permissions required
+
 jobs:
     ts_lint:
         name: "Typescript Syntax Check"
@@ -37,6 +39,8 @@ jobs:
     i18n_lint:
         name: "i18n Check"
         uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@main
+        permissions:
+            pull-requests: read
         with:
             hardcoded-words: "Element"
             allowed-hardcoded-keys: |
