@@ -386,11 +386,6 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         default: false,
         controller: new SlidingSyncController(),
     },
-    "feature_sliding_sync_proxy_url": {
-        // This is not a distinct feature, it is a legacy setting for feature_sliding_sync above
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        default: "",
-    },
     "feature_element_call_video_rooms": {
         isFeature: true,
         labsGroup: LabGroup.VoiceAndVideo,

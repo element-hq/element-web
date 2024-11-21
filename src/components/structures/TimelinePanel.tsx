@@ -710,7 +710,6 @@ class TimelinePanel extends React.Component<IProps, IState> {
         ) {
             return;
         }
-
         if (!Thread.hasServerSideSupport && this.context.timelineRenderingType === TimelineRenderingType.Thread) {
             if (toStartOfTimeline && !this.state.canBackPaginate) {
                 this.setState({
@@ -1541,7 +1540,6 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
         const onLoaded = (): void => {
             if (this.unmounted) return;
-
             // clear the timeline min-height when (re)loading the timeline
             this.messagePanel.current?.onTimelineReset();
             this.reloadEvents();
@@ -1643,7 +1641,6 @@ class TimelinePanel extends React.Component<IProps, IState> {
             onLoaded();
             return;
         }
-
         const prom = this.timelineWindow.load(eventId, INITIAL_SIZE).then(async (): Promise<void> => {
             if (this.overlayTimelineWindow) {
                 // TODO: use timestampToEvent to load the overlay timeline
