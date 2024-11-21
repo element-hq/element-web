@@ -22,6 +22,13 @@ declare module "matrix-js-sdk/src/types" {
         [BLURHASH_FIELD]?: string;
     }
 
+    export interface ImageInfo {
+        /**
+         * @see https://github.com/matrix-org/matrix-spec-proposals/pull/XXXX
+         */
+        "org.matrix.mscXXXX.is_animated"?: boolean;
+    }
+
     export interface StateEvents {
         // Jitsi-backed video room state events
         [JitsiCallMemberEventType]: JitsiCallMemberContent;
