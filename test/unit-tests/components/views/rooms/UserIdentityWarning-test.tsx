@@ -270,7 +270,9 @@ describe("UserIdentityWarning", () => {
             await waitFor(() =>
                 expect(() => getWarningByText("@alice:example.org's identity appears to have changed.")).toThrow(),
             );
-            expect(getWarningByText("@bob:example.org's identity appears to have changed.")).toBeInTheDocument();
+            await waitFor(() =>
+                expect(getWarningByText("@bob:example.org's identity appears to have changed.")).toBeInTheDocument(),
+            );
         });
 
         it("when invited users cannot see encrypted messages", async () => {
