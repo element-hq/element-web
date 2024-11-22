@@ -29,43 +29,30 @@ export default function PollResultsDialog(props: IProps): JSX.Element {
             onFinished={() => Modal.closeCurrentModal()}
             className="mx_PollResultsDialog"
         >
-            {
-                props.pollEvent.answers.map((answer) => {
-                    const votes = props.votes.get(answer.id) || [];
-                    if (votes.length === 0) return;
+            {props.pollEvent.answers.map((answer) => {
+                const votes = props.votes.get(answer.id) || [];
+                if (votes.length === 0) return;
 
-                    return <AnswerEntry
-                        key={answer.id}
-                        answer={answer}
-                        members={props.members}
-                        votes={votes}
-                    />;
-                })
-            }
+                return <AnswerEntry key={answer.id} answer={answer} members={props.members} votes={votes} />;
+            })}
         </BaseDialog>
     );
 }
 
-function AnswerEntry(props: {
-    answer: PollAnswerSubevent;
-    members: RoomMember[];
-    votes: UserVote[];
-}): JSX.Element {
+function AnswerEntry(props: { answer: PollAnswerSubevent; members: RoomMember[]; votes: UserVote[] }): JSX.Element {
     const { answer, members, votes } = props;
     return (
         <div key={answer.id} className="mx_AnswerEntry">
             <div className="mx_AnswerEntry_Header">
                 <span className="mx_AnswerEntry_Header_answerName">{answer.text}</span>
-                <span className="mx_AnswerEntry_Header_voteCount">{_t("poll|result_dialog|count_of_votes", { count: votes.length })}</span>
+                <span className="mx_AnswerEntry_Header_voteCount">
+                    {_t("poll|result_dialog|count_of_votes", { count: votes.length })}
+                </span>
             </div>
             {votes.length === 0 && <div>No one voted for this.</div>}
             {votes.map((vote) => {
-                const member = members.find(m => m.userId === vote.sender);
-                if (member) return <VoterEntry
-                    key={vote.sender}
-                    vote={vote}
-                    member={member}
-                />;
+                const member = members.find((m) => m.userId === vote.sender);
+                if (member) return <VoterEntry key={vote.sender} vote={vote} member={member} />;
             })}
         </div>
     );
@@ -73,10 +60,12 @@ function AnswerEntry(props: {
 
 function VoterEntry(props: { vote: UserVote; member: RoomMember }): JSX.Element {
     const { vote, member } = props;
-    return <div key={vote.sender} className="mx_VoterEntry">
-        <div className="mx_VoterEntry_AvatarWrapper">
-            <MemberAvatar member={member} size="36px" aria-hidden="true" />
+    return (
+        <div key={vote.sender} className="mx_VoterEntry">
+            <div className="mx_VoterEntry_AvatarWrapper">
+                <MemberAvatar member={member} size="36px" aria-hidden="true" />
+            </div>
+            {member.name}
         </div>
-        {member.name}
-    </div>;
+    );
 }

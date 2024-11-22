@@ -64,9 +64,7 @@ test.describe("Polls", () => {
     };
 
     const getPollResultsDialogOption = (page: Page, optionText: string): Locator => {
-        return getPollResultsDialog(page)
-            .locator(".mx_AnswerEntry")
-            .filter({ hasText: optionText });
+        return getPollResultsDialog(page).locator(".mx_AnswerEntry").filter({ hasText: optionText });
     };
 
     const expectDetailedPollOptionVoteCount = async (
@@ -290,7 +288,10 @@ test.describe("Polls", () => {
         await expectPollOptionVoteCount(page, pollId, pollParams.options[2], 2);
 
         // click the 'vote to see results' message
-        await page.locator(".mx_MPollBody_totalVotes").getByText("Based on 2 votes. Click here to see full results").click();
+        await page
+            .locator(".mx_MPollBody_totalVotes")
+            .getByText("Based on 2 votes. Click here to see full results")
+            .click();
 
         // expect the detailed results to be shown
         await expect(getPollResultsDialog(page)).toBeAttached();
@@ -300,7 +301,7 @@ test.describe("Polls", () => {
         const voterEntries = getPollResultsDialogOption(page, pollParams.options[2]).locator(".mx_VoterEntry");
         expect((await voterEntries.all()).length).toBe(2);
         expect(voterEntries.filter({ hasText: bot.credentials.displayName })).not.toBeNull();
-        expect(voterEntries.filter({hasText: user.displayName})).not.toBeNull();
+        expect(voterEntries.filter({ hasText: user.displayName })).not.toBeNull();
 
         // close the dialog
         await page.locator(".mx_Dialog").getByRole("button", { name: "Close" }).click();

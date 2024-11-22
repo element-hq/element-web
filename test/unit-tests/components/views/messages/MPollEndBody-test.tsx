@@ -132,7 +132,9 @@ describe("<MPollEndBody />", () => {
 
             // quick check for poll tile
             expect(getByTestId("pollQuestion").innerHTML).toEqual("Question?");
-            expect(getByTestId("totalVotes").innerHTML).toEqual("Final result based on 0 votes. Click here to see full results");
+            expect(getByTestId("totalVotes").innerHTML).toEqual(
+                "Final result based on 0 votes. Click here to see full results",
+            );
         });
 
         it("does not render a poll tile when end event is invalid", async () => {

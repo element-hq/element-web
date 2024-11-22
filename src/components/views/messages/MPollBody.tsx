@@ -326,7 +326,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         ) : null;
 
         const showDetailedVotes = (): void => {
-            if(!showResults) return;
+            if (!showResults) return;
 
             Modal.createDialog(PollResultsDialog, {
                 pollEvent,
@@ -368,7 +368,9 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                     })}
                 </div>
                 <div className="mx_MPollBody_totalVotes">
-                    <span data-testid="totalVotes" onClick={() => showDetailedVotes()}>{totalText}</span>
+                    <span data-testid="totalVotes" onClick={() => showDetailedVotes()}>
+                        {totalText}
+                    </span>
                     {isFetchingResponses && <Spinner w={16} h={16} />}
                 </div>
             </div>

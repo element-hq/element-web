@@ -35,7 +35,7 @@ const getWinningAnswers = (poll: Poll, responseRelations: Relations): EndedPollS
     const userVotes = collectUserVotes(allVotes(responseRelations));
     const votes = countVotes(userVotes, poll.pollEvent);
     const totalVoteCount = [...votes.values()].reduce((sum, vote) => sum + vote.length, 0);
-    const winCount = Math.max(...Array.from(votes.values()).map(v => v.length));
+    const winCount = Math.max(...Array.from(votes.values()).map((v) => v.length));
 
     return {
         totalVoteCount,

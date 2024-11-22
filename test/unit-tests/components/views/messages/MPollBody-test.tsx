@@ -16,7 +16,7 @@ import {
     MatrixEvent,
     PollAnswer,
     PollStartEventContent,
-    Relations
+    Relations,
 } from "matrix-js-sdk/src/matrix";
 import React from "react";
 
@@ -101,7 +101,9 @@ describe("MPollBody", () => {
         expect(votesCount(renderResult, "poutine")).toBe("1 vote");
         expect(votesCount(renderResult, "italian")).toBe("0 votes");
         expect(votesCount(renderResult, "wings")).toBe("1 vote");
-        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe("Based on 4 votes. Click here to see full results");
+        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe(
+            "Based on 4 votes. Click here to see full results",
+        );
     });
 
     it("ignores end poll events from unauthorised users", async () => {
@@ -120,7 +122,9 @@ describe("MPollBody", () => {
         expect(votesCount(renderResult, "poutine")).toBe("1 vote");
         expect(votesCount(renderResult, "italian")).toBe("0 votes");
         expect(votesCount(renderResult, "wings")).toBe("1 vote");
-        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe("Based on 4 votes. Click here to see full results");
+        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe(
+            "Based on 4 votes. Click here to see full results",
+        );
     });
 
     it("hides scores if I have not voted", async () => {
@@ -161,7 +165,9 @@ describe("MPollBody", () => {
         expect(votesCount(renderResult, "poutine")).toBe("1 vote");
         expect(votesCount(renderResult, "italian")).toBe("0 votes");
         expect(votesCount(renderResult, "wings")).toBe("1 vote");
-        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe("Based on 2 votes. Click here to see full results");
+        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe(
+            "Based on 2 votes. Click here to see full results",
+        );
     });
 
     it("uses my local vote", async () => {
@@ -182,7 +188,9 @@ describe("MPollBody", () => {
         expect(votesCount(renderResult, "italian")).toBe("1 vote");
         expect(votesCount(renderResult, "wings")).toBe("0 votes");
 
-        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe("Based on 4 votes. Click here to see full results");
+        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe(
+            "Based on 4 votes. Click here to see full results",
+        );
     });
 
     it("overrides my other votes with my local vote", async () => {
@@ -204,7 +212,9 @@ describe("MPollBody", () => {
         expect(votesCount(renderResult, "italian")).toBe("1 vote");
         expect(votesCount(renderResult, "wings")).toBe("1 vote");
 
-        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe("Based on 2 votes. Click here to see full results");
+        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe(
+            "Based on 2 votes. Click here to see full results",
+        );
 
         // And my vote is highlighted
         expect(voteButton(renderResult, "wings").className.includes(CHECKED)).toBe(true);
@@ -236,7 +246,9 @@ describe("MPollBody", () => {
         expect(votesCount(renderResult, "italian")).toBe("0 votes");
         expect(votesCount(renderResult, "wings")).toBe("1 vote");
 
-        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe("Based on 1 vote. Click here to see full results");
+        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe(
+            "Based on 1 vote. Click here to see full results",
+        );
     });
 
     it("doesn't cancel my local vote if someone else votes", async () => {
@@ -268,7 +280,9 @@ describe("MPollBody", () => {
         expect(votesCount(renderResult, "italian")).toBe("0 votes");
         expect(votesCount(renderResult, "wings")).toBe("1 vote");
 
-        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe("Based on 2 votes. Click here to see full results");
+        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe(
+            "Based on 2 votes. Click here to see full results",
+        );
 
         // And my vote is highlighted
         expect(voteButton(renderResult, "pizza").className.includes(CHECKED)).toBe(true);
@@ -295,7 +309,9 @@ describe("MPollBody", () => {
         expect(votesCount(renderResult, "poutine")).toBe("0 votes");
         expect(votesCount(renderResult, "italian")).toBe("0 votes");
         expect(votesCount(renderResult, "wings")).toBe("1 vote");
-        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe("Based on 2 votes. Click here to see full results");
+        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe(
+            "Based on 2 votes. Click here to see full results",
+        );
     });
 
     it("allows un-voting by passing an empty vote", async () => {
@@ -309,7 +325,9 @@ describe("MPollBody", () => {
         expect(votesCount(renderResult, "poutine")).toBe("0 votes");
         expect(votesCount(renderResult, "italian")).toBe("1 vote");
         expect(votesCount(renderResult, "wings")).toBe("0 votes");
-        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe("Based on 1 vote. Click here to see full results");
+        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe(
+            "Based on 1 vote. Click here to see full results",
+        );
     });
 
     it("allows re-voting after un-voting", async () => {
@@ -324,7 +342,9 @@ describe("MPollBody", () => {
         expect(votesCount(renderResult, "poutine")).toBe("0 votes");
         expect(votesCount(renderResult, "italian")).toBe("2 votes");
         expect(votesCount(renderResult, "wings")).toBe("0 votes");
-        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe("Based on 2 votes. Click here to see full results");
+        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe(
+            "Based on 2 votes. Click here to see full results",
+        );
     });
 
     it("treats any invalid answer as a spoiled ballot", async () => {
@@ -342,7 +362,9 @@ describe("MPollBody", () => {
         expect(votesCount(renderResult, "poutine")).toBe("0 votes");
         expect(votesCount(renderResult, "italian")).toBe("0 votes");
         expect(votesCount(renderResult, "wings")).toBe("0 votes");
-        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe("Based on 0 votes. Click here to see full results");
+        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe(
+            "Based on 0 votes. Click here to see full results",
+        );
     });
 
     it("allows re-voting after a spoiled ballot", async () => {
@@ -359,7 +381,9 @@ describe("MPollBody", () => {
         expect(votesCount(renderResult, "poutine")).toBe("1 vote");
         expect(votesCount(renderResult, "italian")).toBe("0 votes");
         expect(votesCount(renderResult, "wings")).toBe("0 votes");
-        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe("Based on 1 vote. Click here to see full results");
+        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe(
+            "Based on 1 vote. Click here to see full results",
+        );
     });
 
     it("renders nothing if poll has no answers", async () => {
@@ -427,7 +451,9 @@ describe("MPollBody", () => {
         expect(endedVotesCount(renderResult, "poutine")).toBe("1 vote");
         expect(endedVotesCount(renderResult, "italian")).toBe("0 votes");
         expect(endedVotesCount(renderResult, "wings")).toBe("1 vote");
-        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe("Final result based on 5 votes. Click here to see full results");
+        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe(
+            "Final result based on 5 votes. Click here to see full results",
+        );
     });
 
     it("sends a vote event when I choose an option", async () => {
@@ -528,7 +554,9 @@ describe("MPollBody", () => {
         expect(endedVotesCount(renderResult, "poutine")).toBe('<div class="mx_PollOption_winnerIcon"></div>1 vote');
         expect(endedVotesCount(renderResult, "italian")).toBe("0 votes");
         expect(endedVotesCount(renderResult, "wings")).toBe('<div class="mx_PollOption_winnerIcon"></div>1 vote');
-        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe("Final result based on 2 votes. Click here to see full results");
+        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe(
+            "Final result based on 2 votes. Click here to see full results",
+        );
     });
 
     it("counts a single vote as normal if the poll is ended", async () => {
@@ -539,7 +567,9 @@ describe("MPollBody", () => {
         expect(endedVotesCount(renderResult, "poutine")).toBe('<div class="mx_PollOption_winnerIcon"></div>1 vote');
         expect(endedVotesCount(renderResult, "italian")).toBe("0 votes");
         expect(endedVotesCount(renderResult, "wings")).toBe("0 votes");
-        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe("Final result based on 1 vote. Click here to see full results");
+        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe(
+            "Final result based on 1 vote. Click here to see full results",
+        );
     });
 
     it("shows ended vote counts of different numbers", async () => {
@@ -559,7 +589,9 @@ describe("MPollBody", () => {
         expect(endedVotesCount(renderResult, "poutine")).toBe("0 votes");
         expect(endedVotesCount(renderResult, "italian")).toBe("0 votes");
         expect(endedVotesCount(renderResult, "wings")).toBe('<div class="mx_PollOption_winnerIcon"></div>3 votes');
-        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe("Final result based on 5 votes. Click here to see full results");
+        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe(
+            "Final result based on 5 votes. Click here to see full results",
+        );
     });
 
     it("ignores votes that arrived after poll ended", async () => {
@@ -579,7 +611,9 @@ describe("MPollBody", () => {
         expect(endedVotesCount(renderResult, "poutine")).toBe("0 votes");
         expect(endedVotesCount(renderResult, "italian")).toBe("0 votes");
         expect(endedVotesCount(renderResult, "wings")).toBe('<div class="mx_PollOption_winnerIcon"></div>3 votes');
-        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe("Final result based on 5 votes. Click here to see full results");
+        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe(
+            "Final result based on 5 votes. Click here to see full results",
+        );
     });
 
     it("counts votes that arrived after an unauthorised poll end event", async () => {
@@ -602,7 +636,9 @@ describe("MPollBody", () => {
         expect(endedVotesCount(renderResult, "poutine")).toBe("0 votes");
         expect(endedVotesCount(renderResult, "italian")).toBe("0 votes");
         expect(endedVotesCount(renderResult, "wings")).toBe('<div class="mx_PollOption_winnerIcon"></div>3 votes');
-        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe("Final result based on 5 votes. Click here to see full results");
+        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe(
+            "Final result based on 5 votes. Click here to see full results",
+        );
     });
 
     it("ignores votes that arrived after the first end poll event", async () => {
@@ -629,7 +665,9 @@ describe("MPollBody", () => {
         expect(endedVotesCount(renderResult, "poutine")).toBe("0 votes");
         expect(endedVotesCount(renderResult, "italian")).toBe("0 votes");
         expect(endedVotesCount(renderResult, "wings")).toBe('<div class="mx_PollOption_winnerIcon"></div>3 votes');
-        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe("Final result based on 5 votes. Click here to see full results");
+        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe(
+            "Final result based on 5 votes. Click here to see full results",
+        );
     });
 
     it("highlights the winning vote in an ended poll", async () => {
@@ -878,10 +916,7 @@ describe("MPollBody", () => {
 
         fireEvent.click(renderResult.getByTestId("totalVotes"));
 
-        expect(createDialogSpy).toHaveBeenCalledWith(
-            PollResultsDialog,
-            expect.anything()
-        );
+        expect(createDialogSpy).toHaveBeenCalledWith(PollResultsDialog, expect.anything());
     });
 });
 
