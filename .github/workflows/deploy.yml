@@ -1,7 +1,7 @@
 # Manual deploy workflow for deploying to app.element.io & staging.element.io
 # Runs automatically for staging.element.io when an RC or Release is published
 # Note: Does *NOT* run automatically for app.element.io so that it gets tested on staging.element.io beforehand
-name: Build and Deploy ${{ inputs.site }}
+name: Build and Deploy ${{ inputs.site || 'staging.element.io' }}
 on:
     release:
         types: [published]
@@ -27,8 +27,13 @@ jobs:
             deployments: write
         env:
             SITE: ${{ inputs.site || 'staging.element.io' }}
-            TARGET_VERSION: ${{ github.ref_name }}
         steps:
+            - name: Check inputs
+              if: ${{ startsWith(github.ref_name, 'v') == false }}
+              run: |
+                  echo "Only tags starting with 'v' are allowed for deployment"
+                  exit 1
+
             - name: Load GPG key
               run: |
                   curl https://packages.element.io/element-release-key.gpg | gpg --import
@@ -45,7 +50,7 @@ jobs:
             # as then we're just doing a re-deploy of the same version with potentially different configs.
             - name: Download current version for its old bundles
               id: current_download
-              if: steps.current_version.outputs.version != env.TARGET_VERSION
+              if: steps.current_version.outputs.version != github.ref_name
               uses: element-hq/element-web/.github/actions/download-verify-element-tarball@${{ github.ref_name }}
               with:
                   tag: steps.current_version.outputs.version
@@ -54,7 +59,7 @@ jobs:
             - name: Download target version
               uses: element-hq/element-web/.github/actions/download-verify-element-tarball@${{ github.ref_name }}
               with:
-                  tag: ${{ github.event.release.tag_name || github.ref_name }}
+                  tag: ${{ github.ref_name }}
                   out-file-path: _deploy
 
             - name: Merge current bundles into target
@@ -74,7 +79,7 @@ jobs:
               uses: t3chguy/wait-on-check-action@18541021811b56544d90e0f073401c2b99e249d6 # fork
               with:
                   ref: ${{ github.sha }}
-                  running-workflow-name: "Build and Deploy ${{ inputs.site }}"
+                  running-workflow-name: "Build and Deploy ${{ env.SITE }}"
                   repo-token: ${{ secrets.GITHUB_TOKEN }}
                   wait-interval: 10
                   check-regexp: ^((?!SonarCloud|SonarQube|issue|board|label|Release|prepare|GitHub Pages).)*$
