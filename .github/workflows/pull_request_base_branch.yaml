@@ -2,6 +2,7 @@ name: Pull Request Base Branch
 on:
     pull_request:
         types: [opened, edited, synchronize]
+permissions: {} # No permissions required
 jobs:
     check_base_branch:
         name: Check PR base branch

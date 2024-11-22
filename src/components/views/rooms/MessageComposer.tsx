@@ -30,6 +30,7 @@ import E2EIcon from "./E2EIcon";
 import SettingsStore from "../../../settings/SettingsStore";
 import { aboveLeftOf, MenuProps } from "../../structures/ContextMenu";
 import ReplyPreview from "./ReplyPreview";
+import { UserIdentityWarning } from "./UserIdentityWarning";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import VoiceRecordComposerTile from "./VoiceRecordComposerTile";
 import { VoiceRecordingStore } from "../../../stores/VoiceRecordingStore";
@@ -669,6 +670,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
             <Tooltip open={isTooltipOpen} description={formatTimeLeft(secondsLeft)} placement="bottom">
                 <div className={classes} ref={this.ref} role="region" aria-label={_t("a11y|message_composer")}>
                     <div className="mx_MessageComposer_wrapper">
+                        <UserIdentityWarning room={this.props.room} key={this.props.room.roomId} />
                         <ReplyPreview
                             replyToEvent={this.props.replyToEvent}
                             permalinkCreator={this.props.permalinkCreator}
