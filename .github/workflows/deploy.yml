@@ -29,7 +29,7 @@ jobs:
             SITE: ${{ inputs.site || 'staging.element.io' }}
         steps:
             - name: Check inputs
-              if: ${{ startsWith(github.ref_name, 'v') == false }}
+              if: startsWith(github.ref_name, 'v') == false
               run: |
                   echo "Only tags starting with 'v' are allowed for deployment"
                   exit 1
