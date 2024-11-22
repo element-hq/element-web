@@ -6,16 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
 import { render, waitFor } from "jest-matrix-react";
-import { EventTimeline, MatrixEvent, Room, M_TEXT } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { EventTimeline, M_TEXT, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import React from "react";
 
 import { IBodyProps } from "../../../../../src/components/views/messages/IBodyProps";
 import { MPollEndBody } from "../../../../../src/components/views/messages/MPollEndBody";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import { MediaEventHelper } from "../../../../../src/utils/MediaEventHelper";
+import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import {
     flushPromises,
     getMockClientWithEventEmitter,
@@ -132,7 +132,7 @@ describe("<MPollEndBody />", () => {
 
             // quick check for poll tile
             expect(getByTestId("pollQuestion").innerHTML).toEqual("Question?");
-            expect(getByTestId("totalVotes").innerHTML).toEqual("Final result based on 0 votes");
+            expect(getByTestId("totalVotes").innerHTML).toEqual("Final result based on 0 votes. Click here to see full results");
         });
 
         it("does not render a poll tile when end event is invalid", async () => {

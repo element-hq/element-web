@@ -46,9 +46,26 @@ exports[`<MPollEndBody /> when poll start event exists in current timeline rende
                 Socks
               </div>
               <div
-                class="mx_PollOption_optionVoteCount"
+                class="mx_PollOption_votesWrapper"
               >
-                0 votes
+                <div
+                  class="mx_PollOption_facePile"
+                >
+                  <div
+                    class="mx_AccessibleButton mx_FacePile"
+                    role="button"
+                    tabindex="0"
+                  >
+                    <div
+                      class="_stacked-avatars_mcap2_111"
+                    />
+                  </div>
+                </div>
+                <span
+                  class="mx_PollOption_optionVoteCount"
+                >
+                  0 votes
+                </span>
               </div>
             </div>
           </div>
@@ -78,9 +95,26 @@ exports[`<MPollEndBody /> when poll start event exists in current timeline rende
                 Shoes
               </div>
               <div
-                class="mx_PollOption_optionVoteCount"
+                class="mx_PollOption_votesWrapper"
               >
-                0 votes
+                <div
+                  class="mx_PollOption_facePile"
+                >
+                  <div
+                    class="mx_AccessibleButton mx_FacePile"
+                    role="button"
+                    tabindex="0"
+                  >
+                    <div
+                      class="_stacked-avatars_mcap2_111"
+                    />
+                  </div>
+                </div>
+                <span
+                  class="mx_PollOption_optionVoteCount"
+                >
+                  0 votes
+                </span>
               </div>
             </div>
           </div>
@@ -96,9 +130,12 @@ exports[`<MPollEndBody /> when poll start event exists in current timeline rende
       </div>
       <div
         class="mx_MPollBody_totalVotes"
-        data-testid="totalVotes"
       >
-        Final result based on 0 votes
+        <span
+          data-testid="totalVotes"
+        >
+          Final result based on 0 votes. Click here to see full results
+        </span>
         <div
           class="mx_Spinner"
         >
