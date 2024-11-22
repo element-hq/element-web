@@ -10,6 +10,7 @@ env:
     # These must be set for fetchdep.sh to get the right branch
     REPOSITORY: ${{ github.repository }}
     PR_NUMBER: ${{ github.event.pull_request.number }}
+permissions: {} # No permissions required
 jobs:
     build:
         name: "Build on ${{ matrix.image }}"

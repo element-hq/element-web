@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { fireEvent, render, RenderResult, waitFor } from "jest-matrix-react";
+import { act, fireEvent, render, RenderResult, waitFor, waitForElementToBeRemoved } from "jest-matrix-react";
 import {
     M_POLL_KIND_DISCLOSED,
     M_POLL_KIND_UNDISCLOSED,
@@ -238,7 +238,7 @@ describe("MPollBody", () => {
         clickOption(renderResult, "pizza");
 
         // When a new vote from me comes in
-        await room.processPollEvents([responseEvent("@me:example.com", "wings", 101)]);
+        await act(() => room.processPollEvents([responseEvent("@me:example.com", "wings", 101)]));
 
         // Then the new vote is counted, not the old one
         expect(votesCount(renderResult, "pizza")).toBe("0 votes");
@@ -269,7 +269,7 @@ describe("MPollBody", () => {
         clickOption(renderResult, "pizza");
 
         // When a new vote from someone else comes in
-        await room.processPollEvents([responseEvent("@xx:example.com", "wings", 101)]);
+        await act(() => room.processPollEvents([responseEvent("@xx:example.com", "wings", 101)]));
 
         // Then my vote is still for pizza
         // NOTE: the new event does not affect the counts for other people -
@@ -632,13 +632,15 @@ describe("MPollBody", () => {
         ];
         const renderResult = await newMPollBody(votes, ends);
 
-        expect(endedVotesCount(renderResult, "pizza")).toBe("2 votes");
-        expect(endedVotesCount(renderResult, "poutine")).toBe("0 votes");
-        expect(endedVotesCount(renderResult, "italian")).toBe("0 votes");
-        expect(endedVotesCount(renderResult, "wings")).toBe('<div class="mx_PollOption_winnerIcon"></div>3 votes');
-        expect(renderResult.getByTestId("totalVotes").innerHTML).toBe(
-            "Final result based on 5 votes. Click here to see full results",
-        );
+        await waitFor(() => {
+            expect(endedVotesCount(renderResult, "pizza")).toBe("2 votes");
+            expect(endedVotesCount(renderResult, "poutine")).toBe("0 votes");
+            expect(endedVotesCount(renderResult, "italian")).toBe("0 votes");
+            expect(endedVotesCount(renderResult, "wings")).toBe('<div class="mx_PollOption_winnerIcon"></div>3 votes');
+            expect(renderResult.getByTestId("totalVotes").innerHTML).toBe(
+                "Final result based on 5 votes. Click here to see full results",
+            );
+        });
     });
 
     it("ignores votes that arrived after the first end poll event", async () => {
@@ -945,12 +947,14 @@ async function newMPollBody(
         room_id: "#myroom:example.com",
         content: newPollStart(answers, undefined, disclosed),
     });
-    const result = newMPollBodyFromEvent(mxEvent, relationEvents, endEvents);
-    // flush promises from loading relations
+    const prom = newMPollBodyFromEvent(mxEvent, relationEvents, endEvents);
     if (waitForResponsesLoad) {
-        await flushPromises();
+        const result = await prom;
+        if (result.queryByTestId("spinner")) {
+            await waitForElementToBeRemoved(() => result.getByTestId("spinner"));
+        }
     }
-    return result;
+    return prom;
 }
 
 function getMPollBodyPropsFromEvent(mxEvent: MatrixEvent): IBodyProps {

@@ -338,7 +338,7 @@ describe("RoomViewStore", function () {
         });
         dis.dispatch({ action: Action.ViewRoom, room_id: roomId });
         await untilDispatch(Action.ActiveRoomChanged, dis);
-        expect(mockClient.setRoomAccountData).toHaveBeenCalledWith(roomId, "com.famedly.marked_unread", {
+        expect(mockClient.setRoomAccountData).toHaveBeenCalledWith(roomId, "m.marked_unread", {
             unread: false,
         });
     });

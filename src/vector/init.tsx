@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import * as ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import React, { StrictMode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -93,7 +93,9 @@ export async function loadApp(fragParams: {}): Promise<void> {
     function setWindowMatrixChat(matrixChat: MatrixChat): void {
         window.matrixChat = matrixChat;
     }
-    ReactDOM.render(await module.loadApp(fragParams, setWindowMatrixChat), document.getElementById("matrixchat"));
+    const app = await module.loadApp(fragParams, setWindowMatrixChat);
+    const root = createRoot(document.getElementById("matrixchat")!);
+    root.render(app);
 }
 
 export async function showError(title: string, messages?: string[]): Promise<void> {
@@ -101,11 +103,11 @@ export async function showError(title: string, messages?: string[]): Promise<voi
         /* webpackChunkName: "error-view" */
         "../async-components/structures/ErrorView"
     );
-    ReactDOM.render(
+    const root = createRoot(document.getElementById("matrixchat")!);
+    root.render(
         <StrictMode>
             <ErrorView title={title} messages={messages} />
         </StrictMode>,
-        document.getElementById("matrixchat"),
     );
 }
 
@@ -114,11 +116,11 @@ export async function showIncompatibleBrowser(onAccept: () => void): Promise<voi
         /* webpackChunkName: "error-view" */
         "../async-components/structures/ErrorView"
     );
-    ReactDOM.render(
+    const root = createRoot(document.getElementById("matrixchat")!);
+    root.render(
         <StrictMode>
             <UnsupportedBrowserView onAccept={onAccept} />
         </StrictMode>,
-        document.getElementById("matrixchat"),
     );
 }
 

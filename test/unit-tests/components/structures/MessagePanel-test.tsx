@@ -23,6 +23,7 @@ import {
     createTestClient,
     getMockClientWithEventEmitter,
     makeBeaconInfoEvent,
+    mockClientMethodsCrypto,
     mockClientMethodsEvents,
     mockClientMethodsUser,
 } from "../../../test-utils";
@@ -42,6 +43,7 @@ describe("MessagePanel", function () {
     const client = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),
         ...mockClientMethodsEvents(),
+        ...mockClientMethodsCrypto(),
         getAccountData: jest.fn(),
         isUserIgnored: jest.fn().mockReturnValue(false),
         isRoomEncrypted: jest.fn().mockReturnValue(false),

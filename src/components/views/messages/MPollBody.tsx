@@ -396,7 +396,10 @@ function userResponseFromPollResponseEvent(event: MatrixEvent): UserVote {
 
 export function allVotes(voteRelations: Relations): Array<UserVote> {
     if (voteRelations) {
-        return voteRelations.getRelations().map(userResponseFromPollResponseEvent);
+        return voteRelations
+            .getRelations()
+            .filter((e) => !e.isRedacted())
+            .map(userResponseFromPollResponseEvent);
     } else {
         return [];
     }
