@@ -19,7 +19,6 @@ jobs:
         environment: develop
         permissions:
             checks: read
-            pages: write
             deployments: write
         env:
             R2_BUCKET: "element-web-develop"
@@ -119,13 +118,9 @@ jobs:
 
             - name: Deploy to Cloudflare Pages
               id: cfp
-              uses: cloudflare/pages-action@f0a1cd58cd66095dee69bfa18fa5efd1dde93bca # v1
+              uses: cloudflare/wrangler-action@b19342b08c7c7f6855c1adfbf6f626acd085896d # v3
               with:
                   apiToken: ${{ secrets.CF_PAGES_TOKEN }}
                   accountId: ${{ secrets.CF_PAGES_ACCOUNT_ID }}
-                  projectName: element-web-develop
-                  directory: _deploy
+                  command: pages deploy _deploy --project-name=element-web-develop
                   gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-
-            - run: |
-                  echo "Deployed to ${{ steps.cfp.outputs.url }}" >> $GITHUB_STEP_SUMMARY
