@@ -35,6 +35,7 @@ import {
     cleanup,
 } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
+import { defer } from "matrix-js-sdk/src/utils";
 
 import {
     stubClient,
@@ -281,6 +282,21 @@ describe("RoomView", () => {
 
         // URL previews should now be disabled
         await waitFor(() => expect(roomViewInstance.state.showUrlPreview).toBe(false));
+    });
+
+    it("should not display the timeline when the room encryption is loading", async () => {
+        jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
+        jest.spyOn(cli, "getCrypto").mockReturnValue(crypto);
+        const deferred = defer<boolean>();
+        jest.spyOn(cli.getCrypto()!, "isEncryptionEnabledInRoom").mockImplementation(() => deferred.promise);
+
+        const { asFragment, container } = await mountRoomView();
+        expect(container.querySelector(".mx_RoomView_messagePanel")).toBeNull();
+        expect(asFragment()).toMatchSnapshot();
+
+        deferred.resolve(true);
+        await waitFor(() => expect(container.querySelector(".mx_RoomView_messagePanel")).not.toBeNull());
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("updates live timeline when a timeline reset happens", async () => {

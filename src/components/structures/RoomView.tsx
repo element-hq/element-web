@@ -38,6 +38,7 @@ import {
     MatrixError,
     ISearchResults,
     THREAD_RELATION_TYPE,
+    MatrixClient,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -431,7 +432,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             canAskToJoin: this.askToJoinEnabled,
             promptAskToJoin: false,
             viewRoomOpts: { buttons: [] },
-            isRoomEncrypted: false,
+            isRoomEncrypted: null,
         };
     }
 
@@ -929,7 +930,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         const callState = call?.state;
         this.setState({
             callState,
-            isRoomEncrypted: await this.getIsRoomEncrypted(),
         });
 
         this.context.legacyCallHandler.on(LegacyCallHandlerEvent.CallState, this.onCallState);
@@ -1358,13 +1358,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         this.context.widgetLayoutStore.on(WidgetLayoutStore.emissionForRoom(room), this.onWidgetLayoutChange);
 
         this.calculatePeekRules(room);
-        this.updatePreviewUrlVisibility(room);
         this.loadMembersIfJoined(room);
         this.calculateRecommendedVersion(room);
-        this.updateE2EStatus(room);
         this.updatePermissions(room);
         this.checkWidgets(room);
         this.loadVirtualRoom(room);
+        this.updateRoomEncrypted(room);
 
         if (
             this.getMainSplitContentType(room) !== MainSplitContentType.Timeline &&
@@ -1432,12 +1431,15 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         });
     }
 
-    private updatePreviewUrlVisibility({ roomId }: Room): void {
-        // URL Previews in E2EE rooms can be a privacy leak so use a different setting which is per-room explicit
-        const key = this.state.isRoomEncrypted ? "urlPreviewsEnabled_e2ee" : "urlPreviewsEnabled";
-        this.setState({
-            showUrlPreview: SettingsStore.getValue(key, roomId),
-        });
+    private updatePreviewUrlVisibility(room: Room): void {
+        this.setState(({ isRoomEncrypted }) => ({
+            showUrlPreview: this.getPreviewUrlVisibility(room, isRoomEncrypted),
+        }));
+    }
+
+    private getPreviewUrlVisibility({ roomId }: Room, isRoomEncrypted: boolean | null): boolean {
+        const key = isRoomEncrypted ? "urlPreviewsEnabled_e2ee" : "urlPreviewsEnabled";
+        return SettingsStore.getValue(key, roomId);
     }
 
     private onRoom = (room: Room): void => {
@@ -1490,11 +1492,16 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         if (this.context.client.getCrypto()) {
             /* At this point, the user has encryption on and cross-signing on */
-            e2eStatus = await shieldStatusForRoom(this.context.client, room);
-            RoomView.e2eStatusCache.set(room.roomId, e2eStatus);
+            e2eStatus = await this.cacheAndGetE2EStatus(room, this.context.client);
             if (this.unmounted) return;
             this.setState({ e2eStatus });
         }
+    }
+
+    private async cacheAndGetE2EStatus(room: Room, client: MatrixClient): Promise<E2EStatus> {
+        const e2eStatus = await shieldStatusForRoom(client, room);
+        RoomView.e2eStatusCache.set(room.roomId, e2eStatus);
+        return e2eStatus;
     }
 
     private onUrlPreviewsEnabledChange = (): void => {
@@ -1505,24 +1512,33 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     private onRoomStateEvents = async (ev: MatrixEvent, state: RoomState): Promise<void> => {
         // ignore if we don't have a room yet
-        if (!this.state.room || this.state.room.roomId !== state.roomId) return;
+        if (!this.state.room || this.state.room.roomId !== state.roomId || !this.context.client) return;
 
         switch (ev.getType()) {
             case EventType.RoomTombstone:
                 this.setState({ tombstone: this.getRoomTombstone() });
                 break;
-            case EventType.RoomEncryption:
-                this.setState({ isRoomEncrypted: await this.getIsRoomEncrypted() }, () => {
-                    if (this.state.room) {
-                        this.updatePreviewUrlVisibility(this.state.room);
-                        this.updateE2EStatus(this.state.room);
-                    }
-                });
+            case EventType.RoomEncryption: {
+                await this.updateRoomEncrypted();
                 break;
+            }
             default:
                 this.updatePermissions(this.state.room);
         }
     };
+
+    private async updateRoomEncrypted(room = this.state.room): Promise<void> {
+        if (!room || !this.context.client) return;
+
+        const isRoomEncrypted = await this.getIsRoomEncrypted(room.roomId);
+        const newE2EStatus = isRoomEncrypted ? await this.cacheAndGetE2EStatus(room, this.context.client) : null;
+
+        this.setState({
+            isRoomEncrypted,
+            showUrlPreview: this.getPreviewUrlVisibility(room, isRoomEncrypted),
+            ...(newE2EStatus && { e2eStatus: newE2EStatus }),
+        });
+    }
 
     private onRoomStateUpdate = (state: RoomState): void => {
         // ignore members in other rooms
