@@ -139,6 +139,7 @@ describe("<MatrixChat />", () => {
             globalBlacklistUnverifiedDevices: false,
             // This needs to not finish immediately because we need to test the screen appears
             bootstrapCrossSigning: jest.fn().mockImplementation(() => bootstrapDeferred.promise),
+            getKeyBackupInfo: jest.fn().mockResolvedValue(null),
         }),
         secretStorage: {
             isStored: jest.fn().mockReturnValue(null),
@@ -148,7 +149,6 @@ describe("<MatrixChat />", () => {
         whoami: jest.fn(),
         logout: jest.fn(),
         getDeviceId: jest.fn(),
-        getKeyBackupVersion: jest.fn().mockResolvedValue(null),
     });
     let mockClient: Mocked<MatrixClient>;
     const serverConfig = {

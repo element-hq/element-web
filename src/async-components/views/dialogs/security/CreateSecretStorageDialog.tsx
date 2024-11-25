@@ -279,7 +279,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         if (!forceReset) {
             try {
                 this.setState({ phase: Phase.Loading });
-                backupInfo = await cli.getKeyBackupVersion();
+                backupInfo = await crypto.getKeyBackupInfo();
             } catch (e) {
                 logger.error("Error fetching backup data from server", e);
                 this.setState({ phase: Phase.LoadError });
