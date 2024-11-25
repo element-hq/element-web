@@ -486,7 +486,6 @@
         "go_to_settings": "Go to Settings",
         "guest": "Guest",
         "help": "Help",
-        "historical": "Historical",
         "home": "Home",
         "homeserver": "Homeserver",
         "identity_server": "Identity server",
@@ -1918,7 +1917,6 @@
         "context_menu": {
             "copy_link": "Copy room link",
             "favourite": "Favourite",
-            "forget": "Forget Room",
             "low_priority": "Low Priority",
             "mark_read": "Mark as read",
             "mark_unread": "Mark as unread",
