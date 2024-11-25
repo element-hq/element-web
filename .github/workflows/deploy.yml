@@ -28,12 +28,6 @@ jobs:
         env:
             SITE: ${{ inputs.site || 'staging.element.io' }}
         steps:
-            - name: Check inputs
-              if: startsWith(github.ref_name, 'v') == false
-              run: |
-                  echo "Only tags starting with 'v' are allowed for deployment"
-                  exit 1
-
             - name: Load GPG key
               run: |
                   curl https://packages.element.io/element-release-key.gpg | gpg --import
