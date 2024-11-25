@@ -83,10 +83,6 @@ export const TAG_ORDER: TagID[] = [
     DefaultTagID.LowPriority,
     DefaultTagID.ServerNotice,
     DefaultTagID.Suggested,
-    // DefaultTagID.Archived isn't here any more: we don't show it at all.
-    // The section still exists in the code as a place for rooms that we know
-    // about but aren't joined. At some point it could be removed entirely
-    // but we'd have to make sure that rooms you weren't in were hidden.
 ];
 const ALWAYS_VISIBLE_TAGS: TagID[] = [DefaultTagID.DM, DefaultTagID.Untagged];
 
@@ -403,13 +399,6 @@ const TAG_AESTHETICS: TagAestheticsMap = {
         sectionLabel: _td("common|system_alerts"),
         isInvite: false,
         defaultHidden: false,
-    },
-
-    // TODO: Replace with archived view: https://github.com/vector-im/element-web/issues/14038
-    [DefaultTagID.Archived]: {
-        sectionLabel: _td("common|historical"),
-        isInvite: false,
-        defaultHidden: true,
     },
 
     [DefaultTagID.Suggested]: {

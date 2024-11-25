@@ -218,40 +218,21 @@ export const RoomGeneralContextMenu: React.FC<RoomGeneralContextMenuProps> = ({
         />
     );
 
-    let leaveOption: JSX.Element;
-    if (roomTags.includes(DefaultTagID.Archived)) {
-        leaveOption = (
-            <IconizedContextMenuOption
-                iconClassName="mx_RoomGeneralContextMenu_iconSignOut"
-                label={_t("room|context_menu|forget")}
-                className="mx_IconizedContextMenu_option_red"
-                onClick={wrapHandler(
-                    () =>
-                        dis.dispatch({
-                            action: "forget_room",
-                            room_id: room.roomId,
-                        }),
-                    onPostForgetClick,
-                )}
-            />
-        );
-    } else {
-        leaveOption = (
-            <IconizedContextMenuOption
-                onClick={wrapHandler(
-                    () =>
-                        dis.dispatch({
-                            action: "leave_room",
-                            room_id: room.roomId,
-                        }),
-                    onPostLeaveClick,
-                )}
-                label={_t("action|leave")}
-                className="mx_IconizedContextMenu_option_red"
-                iconClassName="mx_RoomGeneralContextMenu_iconSignOut"
-            />
-        );
-    }
+    const leaveOption = (
+        <IconizedContextMenuOption
+            onClick={wrapHandler(
+                () =>
+                    dis.dispatch({
+                        action: "leave_room",
+                        room_id: room.roomId,
+                    }),
+                onPostLeaveClick,
+            )}
+            label={_t("action|leave")}
+            className="mx_IconizedContextMenu_option_red"
+            iconClassName="mx_RoomGeneralContextMenu_iconSignOut"
+        />
+    );
 
     const { level } = useUnreadNotifications(room);
     const markAsReadOption: JSX.Element | null = (() => {
@@ -266,7 +247,7 @@ export const RoomGeneralContextMenu: React.FC<RoomGeneralContextMenuProps> = ({
                     iconClassName="mx_RoomGeneralContextMenu_iconMarkAsRead"
                 />
             );
-        } else if (!roomTags.includes(DefaultTagID.Archived)) {
+        } else {
             return (
                 <IconizedContextMenuOption
                     onClick={wrapHandler(() => {
@@ -277,8 +258,6 @@ export const RoomGeneralContextMenu: React.FC<RoomGeneralContextMenuProps> = ({
                     iconClassName="mx_RoomGeneralContextMenu_iconMarkAsUnread"
                 />
             );
-        } else {
-            return null;
         }
     })();
 
@@ -291,15 +270,11 @@ export const RoomGeneralContextMenu: React.FC<RoomGeneralContextMenuProps> = ({
         <IconizedContextMenu {...props} onFinished={onFinished} className="mx_RoomGeneralContextMenu" compact>
             <IconizedContextMenuOptionList>
                 {markAsReadOption}
-                {!roomTags.includes(DefaultTagID.Archived) && (
-                    <>
-                        {favoriteOption}
-                        {lowPriorityOption}
-                        {inviteOption}
-                        {copyLinkOption}
-                        {settingsOption}
-                    </>
-                )}
+                {favoriteOption}
+                {lowPriorityOption}
+                {inviteOption}
+                {copyLinkOption}
+                {settingsOption}
                 {developerToolsOption}
             </IconizedContextMenuOptionList>
             <IconizedContextMenuOptionList red>{leaveOption}</IconizedContextMenuOptionList>

@@ -9,7 +9,6 @@ Please see LICENSE files in the repository root for full details.
 export enum DefaultTagID {
     Invite = "im.vector.fake.invite",
     Untagged = "im.vector.fake.recent", // legacy: used to just be 'recent rooms' but now it's all untagged rooms
-    Archived = "im.vector.fake.archived",
     LowPriority = "m.lowpriority",
     Favourite = "m.favourite",
     DM = "im.vector.fake.direct",
@@ -27,7 +26,6 @@ export const OrderedDefaultTagIDs = [
     DefaultTagID.LowPriority,
     DefaultTagID.ServerNotice,
     DefaultTagID.Suggested,
-    DefaultTagID.Archived,
 ];
 
 export type TagID = string | DefaultTagID;

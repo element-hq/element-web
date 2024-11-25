@@ -86,13 +86,6 @@ describe("RoomGeneralContextMenu", () => {
         await clearAllModals();
     });
 
-    it("renders an empty context menu for archived rooms", async () => {
-        jest.spyOn(RoomListStore.instance, "getTagsForRoom").mockReturnValueOnce([DefaultTagID.Archived]);
-
-        const { container } = getComponent({});
-        expect(container).toMatchSnapshot();
-    });
-
     it("renders the default context menu", async () => {
         const { container } = getComponent({});
         expect(container).toMatchSnapshot();

@@ -61,7 +61,6 @@ const filterConditions: Record<TagID, MSC3575Filter> = {
     // TODO https://github.com/vector-im/element-web/issues/23207
     // DefaultTagID.ServerNotice,
     // DefaultTagID.Suggested,
-    // DefaultTagID.Archived,
 };
 
 export const LISTS_UPDATE_EVENT = RoomListStoreEvent.ListsUpdate;

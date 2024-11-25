@@ -490,11 +490,6 @@ export class Algorithm extends EventEmitter {
         for (const room of memberships[EffectiveMembership.Invite]) {
             newTags[DefaultTagID.Invite].push(room);
         }
-        for (const room of memberships[EffectiveMembership.Leave]) {
-            // We may not have had an archived section previously, so make sure its there.
-            if (newTags[DefaultTagID.Archived] === undefined) newTags[DefaultTagID.Archived] = [];
-            newTags[DefaultTagID.Archived].push(room);
-        }
 
         // Now process all the joined rooms. This is a bit more complicated
         for (const room of memberships[EffectiveMembership.Join]) {
@@ -549,9 +544,7 @@ export class Algorithm extends EventEmitter {
 
         if (membership === EffectiveMembership.Invite) {
             tags.push(DefaultTagID.Invite);
-        } else if (membership === EffectiveMembership.Leave) {
-            tags.push(DefaultTagID.Archived);
-        } else {
+        } else if (membership === EffectiveMembership.Join) {
             tags.push(...this.getTagsOfJoinedRoom(room));
         }
 

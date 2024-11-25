@@ -284,12 +284,7 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
     };
 
     private renderNotificationsMenu(isActive: boolean): React.ReactElement | null {
-        if (
-            MatrixClientPeg.safeGet().isGuest() ||
-            this.props.tag === DefaultTagID.Archived ||
-            !this.showContextMenu ||
-            this.props.isMinimized
-        ) {
+        if (MatrixClientPeg.safeGet().isGuest() || !this.showContextMenu || this.props.isMinimized) {
             // the menu makes no sense in these cases so do not show one
             return null;
         }
