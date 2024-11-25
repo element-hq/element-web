@@ -1739,7 +1739,7 @@ export const UserInfoHeader: React.FC<{
 interface IProps {
     user: Member;
     room?: Room;
-    phase: RightPanelPhases.MemberInfo | RightPanelPhases.MemberInfo | RightPanelPhases.EncryptionPanel;
+    phase: RightPanelPhases.MemberInfo | RightPanelPhases.EncryptionPanel;
     onClose(): void;
     verificationRequest?: VerificationRequest;
     verificationRequestPromise?: Promise<VerificationRequest>;
