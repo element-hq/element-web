@@ -1214,18 +1214,18 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 if (payload.member) {
                     if (payload.push) {
                         RightPanelStore.instance.pushCard({
-                            phase: RightPanelPhases.RoomMemberInfo,
+                            phase: RightPanelPhases.MemberInfo,
                             state: { member: payload.member },
                         });
                     } else {
                         RightPanelStore.instance.setCards([
                             { phase: RightPanelPhases.RoomSummary },
-                            { phase: RightPanelPhases.RoomMemberList },
-                            { phase: RightPanelPhases.RoomMemberInfo, state: { member: payload.member } },
+                            { phase: RightPanelPhases.MemberList },
+                            { phase: RightPanelPhases.MemberInfo, state: { member: payload.member } },
                         ]);
                     }
                 } else {
-                    RightPanelStore.instance.showOrHidePhase(RightPanelPhases.RoomMemberList);
+                    RightPanelStore.instance.showOrHidePhase(RightPanelPhases.MemberList);
                 }
                 break;
             case Action.View3pidInvite:

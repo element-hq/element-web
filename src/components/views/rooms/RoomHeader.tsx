@@ -392,7 +392,7 @@ export default function RoomHeader({
                             viewUserOnClick={false}
                             tooltipLabel={_t("room|header_face_pile_tooltip")}
                             onClick={(e: ButtonEvent) => {
-                                RightPanelStore.instance.showOrHidePhase(RightPanelPhases.RoomMemberList);
+                                RightPanelStore.instance.showOrHidePhase(RightPanelPhases.MemberList);
                                 e.stopPropagation();
                             }}
                             aria-label={_t("common|n_members", { count: memberCount })}

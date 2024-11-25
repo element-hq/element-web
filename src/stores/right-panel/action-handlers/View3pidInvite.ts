@@ -20,10 +20,10 @@ import { RightPanelPhases } from "../RightPanelStorePhases";
 export const onView3pidInvite = (payload: ActionPayload, rightPanelStore: RightPanelStore): void => {
     if (payload.event) {
         rightPanelStore.pushCard({
-            phase: RightPanelPhases.Room3pidMemberInfo,
+            phase: RightPanelPhases.ThreePidMemberInfo,
             state: { memberInfoEvent: payload.event },
         });
     } else {
-        rightPanelStore.showOrHidePhase(RightPanelPhases.RoomMemberList);
+        rightPanelStore.showOrHidePhase(RightPanelPhases.MemberList);
     }
 };

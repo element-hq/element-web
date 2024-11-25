@@ -30,7 +30,7 @@ describe("onView3pidInvite()", () => {
         };
         onView3pidInvite(payload, rightPanelStore);
 
-        expect(rightPanelStore.showOrHidePhase).toHaveBeenCalledWith(RightPanelPhases.RoomMemberList);
+        expect(rightPanelStore.showOrHidePhase).toHaveBeenCalledWith(RightPanelPhases.MemberList);
         expect(rightPanelStore.pushCard).not.toHaveBeenCalled();
     });
 
@@ -43,7 +43,7 @@ describe("onView3pidInvite()", () => {
 
         expect(rightPanelStore.showOrHidePhase).not.toHaveBeenCalled();
         expect(rightPanelStore.pushCard).toHaveBeenCalledWith({
-            phase: RightPanelPhases.Room3pidMemberInfo,
+            phase: RightPanelPhases.ThreePidMemberInfo,
             state: { memberInfoEvent: payload.event },
         });
     });

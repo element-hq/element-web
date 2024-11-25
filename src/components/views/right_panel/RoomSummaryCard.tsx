@@ -86,7 +86,7 @@ interface IProps {
 }
 
 const onRoomMembersClick = (): void => {
-    RightPanelStore.instance.pushCard({ phase: RightPanelPhases.RoomMemberList }, true);
+    RightPanelStore.instance.pushCard({ phase: RightPanelPhases.MemberList }, true);
 };
 
 const onRoomThreadsClick = (): void => {

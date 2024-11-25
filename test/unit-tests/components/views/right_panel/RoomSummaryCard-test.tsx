@@ -254,10 +254,7 @@ describe("<RoomSummaryCard />", () => {
 
         fireEvent.click(getByText("People"));
 
-        expect(RightPanelStore.instance.pushCard).toHaveBeenCalledWith(
-            { phase: RightPanelPhases.RoomMemberList },
-            true,
-        );
+        expect(RightPanelStore.instance.pushCard).toHaveBeenCalledWith({ phase: RightPanelPhases.MemberList }, true);
     });
 
     it("opens room threads list on button click", () => {

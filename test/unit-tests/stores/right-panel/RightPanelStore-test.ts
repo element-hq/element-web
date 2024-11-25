@@ -97,7 +97,7 @@ describe("RightPanelStore", () => {
         it("does nothing if given an invalid state", async () => {
             await viewRoom("!1:example.org");
             // Needs a member specified to be valid
-            store.setCard({ phase: RightPanelPhases.RoomMemberInfo }, true, "!1:example.org");
+            store.setCard({ phase: RightPanelPhases.MemberInfo }, true, "!1:example.org");
             expect(store.roomPhaseHistory).toEqual([]);
         });
         it("only creates a single history entry if given the same card twice", async () => {
@@ -114,15 +114,15 @@ describe("RightPanelStore", () => {
         it("overwrites history if changing the phase", async () => {
             await viewRoom("!1:example.org");
             store.setCard({ phase: RightPanelPhases.RoomSummary }, true, "!1:example.org");
-            store.setCard({ phase: RightPanelPhases.RoomMemberList }, true, "!1:example.org");
-            expect(store.roomPhaseHistory).toEqual([{ phase: RightPanelPhases.RoomMemberList, state: {} }]);
+            store.setCard({ phase: RightPanelPhases.MemberList }, true, "!1:example.org");
+            expect(store.roomPhaseHistory).toEqual([{ phase: RightPanelPhases.MemberList, state: {} }]);
         });
     });
 
     describe("setCards", () => {
         it("overwrites history", async () => {
             await viewRoom("!1:example.org");
-            store.setCard({ phase: RightPanelPhases.RoomMemberList }, true, "!1:example.org");
+            store.setCard({ phase: RightPanelPhases.MemberList }, true, "!1:example.org");
             store.setCards(
                 [{ phase: RightPanelPhases.RoomSummary }, { phase: RightPanelPhases.PinnedMessages }],
                 true,
@@ -200,21 +200,21 @@ describe("RightPanelStore", () => {
         store.setCards(
             [
                 {
-                    phase: RightPanelPhases.RoomMemberList,
+                    phase: RightPanelPhases.MemberList,
                 },
                 {
-                    phase: RightPanelPhases.RoomMemberInfo,
+                    phase: RightPanelPhases.MemberInfo,
                     state: { member: new RoomMember("!1:example.org", "@alice:example.org") },
                 },
             ],
             true,
             "!1:example.org",
         );
-        expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.RoomMemberInfo);
+        expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.MemberInfo);
 
         // Switch away and back
         await viewRoom("!2:example.org");
         await viewRoom("!1:example.org");
-        expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.RoomMemberList);
+        expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.MemberList);
     });
 });

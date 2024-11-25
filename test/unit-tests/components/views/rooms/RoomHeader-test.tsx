@@ -158,7 +158,7 @@ describe("RoomHeader", () => {
 
         fireEvent.click(facePile);
 
-        expect(setCardSpy).toHaveBeenCalledWith({ phase: RightPanelPhases.RoomMemberList });
+        expect(setCardSpy).toHaveBeenCalledWith({ phase: RightPanelPhases.MemberList });
     });
 
     it("has room info icon that opens the room info panel", async () => {
