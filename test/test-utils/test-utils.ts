@@ -99,7 +99,6 @@ export function createTestClient(): MatrixClient {
         getDevices: jest.fn().mockResolvedValue({ devices: [{ device_id: "ABCDEFGHI" }] }),
         getSessionId: jest.fn().mockReturnValue("iaszphgvfku"),
         credentials: { userId: "@userId:matrix.org" },
-        getKeyBackupVersion: jest.fn(),
 
         secretStorage: {
             get: jest.fn(),
@@ -135,6 +134,7 @@ export function createTestClient(): MatrixClient {
             restoreKeyBackupWithPassphrase: jest.fn(),
             loadSessionBackupPrivateKeyFromSecretStorage: jest.fn(),
             storeSessionBackupPrivateKey: jest.fn(),
+            getKeyBackupInfo: jest.fn().mockResolvedValue(null),
         }),
 
         getPushActionsForEvent: jest.fn(),
