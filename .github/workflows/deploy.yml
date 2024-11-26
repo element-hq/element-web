@@ -76,7 +76,7 @@ jobs:
               uses: t3chguy/wait-on-check-action@18541021811b56544d90e0f073401c2b99e249d6 # fork
               with:
                   ref: ${{ github.sha }}
-                  running-workflow-name: "Build and Deploy ${{ env.SITE }}"
+                  running-workflow-name: "Deploy to Cloudflare Pages"
                   repo-token: ${{ secrets.GITHUB_TOKEN }}
                   wait-interval: 10
                   check-regexp: ^((?!SonarCloud|SonarQube|issue|board|label|Release|prepare|GitHub Pages).)*$
