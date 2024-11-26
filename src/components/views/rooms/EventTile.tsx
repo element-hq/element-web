@@ -757,6 +757,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 case EventShieldReason.MISMATCHED_SENDER_KEY:
                     shieldReasonMessage = _t("encryption|event_shield_reason_mismatched_sender_key");
                     break;
+
+                default:
+                    shieldReasonMessage = _t("error|unknown");
             }
 
             if (this.state.shieldColour === EventShieldColour.GREY) {
