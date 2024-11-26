@@ -3415,9 +3415,9 @@
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
 "@vector-im/compound-design-tokens@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-2.0.1.tgz#add14494caab16cdbe98f2bdabe726908739def4"
-  integrity sha512-4nkPcrPII+sejispn+UkWZYFN7LecN39e4WGBupdceiMq0NJrfXrnVtJ9/6BDLgSqHInb6R/IWQkIbPbzfqRMg==
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-2.1.1.tgz#d6175a99fe4b97688464126f255386990f3048d6"
+  integrity sha512-QnUi2K14D9KTXxcLQKUU3V75cforZLMwhaaJDNftT8F5mG86950hAM+qhgDNEpEU+pkTffQj0/g/5859YmqWzQ==
 
 "@vector-im/compound-web@^7.4.0":
   version "7.4.0"
