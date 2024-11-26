@@ -10,7 +10,7 @@ inputs:
 runs:
     using: composite
     steps:
-        - name: Download current version for its old bundles
+        - name: Download release tarball
           id: current_download
           uses: robinraju/release-downloader@a96f54c1b5f5e09e47d9504526e96febd949d4c2 # v1
           with:
@@ -25,7 +25,9 @@ runs:
 
         - name: Extract tarball
           shell: bash
-          run: tar xvzf element-*.tar.gz -C webapp --strip-components=1
+          run: |
+              mkdir webapp
+              tar xvzf element-*.tar.gz -C webapp --strip-components=1
           working-directory: ${{ runner.temp }}/download-verify-element-tarball
 
         - name: Move webapp to out-file-path
