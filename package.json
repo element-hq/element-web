@@ -206,7 +206,6 @@
         "@types/sanitize-html": "2.13.0",
         "@types/semver": "^7.5.8",
         "@types/tar-js": "^0.3.5",
-        "@types/ua-parser-js": "^0.7.36",
         "@types/uuid": "^10.0.0",
         "@typescript-eslint/eslint-plugin": "^8.0.0",
         "@typescript-eslint/parser": "^8.0.0",
