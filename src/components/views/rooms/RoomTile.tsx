@@ -72,7 +72,7 @@ export const contextMenuBelow = (elementRect: PartialDOMRect): MenuProps => {
     return { left, top, chevronFace };
 };
 
-export class RoomTile extends React.PureComponent<Props, State> {
+class RoomTile extends React.PureComponent<Props, State> {
     private dispatcherRef?: string;
     private roomTileRef = createRef<HTMLDivElement>();
     private notificationState: NotificationState;
