@@ -23,6 +23,7 @@ jobs:
             statuses: write
             deployments: write
             actions: read
+            contents: write
         steps:
             - name: Download HTML report
               uses: actions/download-artifact@v4
@@ -44,3 +45,59 @@ jobs:
                   desc: Playwright Report
                   deployment_env: EndToEndTests
                   prefix: "e2e-"
+
+    benchmark:
+        if: github.event.workflow_run.conclusion != 'cancelled'
+        name: Benchmarks
+        runs-on: ubuntu-24.04
+        environment: Netlify
+        permissions:
+            statuses: write
+            deployments: write
+            actions: read
+            contents: write
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: actions/setup-node@v4
+              with:
+                  cache: "yarn"
+                  node-version-file: package.json
+
+            - name: Install Deps
+              run: "yarn install --frozen-lockfile"
+
+            - name: Download webapp
+              uses: actions/download-artifact@v4
+              with:
+                  name: webapp
+                  path: webapp
+
+            - name: Generate benchmark result
+              run: ./scripts/benchmark-bundle.ts > benchmarks.json
+
+            - name: Evaluate benchmark result
+              uses: benchmark-action/github-action-benchmark@d48d326b4ca9ba73ca0cd0d59f108f9e02a381c7 # v1
+              with:
+                  tool: "customSmallerIsBetter"
+                  output-file-path: "benchmarks.json"
+                  gh-pages-branch: benchmarks
+                  auto-push: false
+
+            - name: Push latest develop results
+              if: github.event.workflow_run.head_branch == 'develop' && github.event.workflow_run.head_repository.owner.login == 'element-hq'
+              run: git push origin benchmarks
+
+            - name: 📤 Deploy to Netlify
+              uses: matrix-org/netlify-pr-preview@v3
+              if: github.event.workflow_run.head_branch == 'develop' && github.event.workflow_run.head_repository.owner.login == 'element-hq'
+              with:
+                  path: .
+                  owner: ${{ github.event.workflow_run.head_repository.owner.login }}
+                  branch: ${{ github.event.workflow_run.head_branch }}
+                  revision: ${{ github.event.workflow_run.head_sha }}
+                  token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+                  site_id: ${{ vars.NETLIFY_SITE_ID }}
+                  desc: Bundle Size Benchmark
+                  deployment_env: BundleSize
+                  prefix: "benchmark-"
