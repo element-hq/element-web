@@ -14,7 +14,7 @@ runs:
           id: current_download
           uses: robinraju/release-downloader@a96f54c1b5f5e09e47d9504526e96febd949d4c2 # v1
           with:
-              tag: steps.current_version.outputs.version
+              tag: ${{ inputs.tag }}
               fileName: element-*.tar.gz*
               out-file-path: ${{ runner.temp }}/download-verify-element-tarball
 
