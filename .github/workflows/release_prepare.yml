@@ -17,10 +17,18 @@ on:
                 required: true
                 type: boolean
                 default: true
-permissions: {} # Uses ELEMENT_BOT_TOKEN instead
+permissions: {}
 jobs:
+    checks:
+        name: Sanity checks
+        permissions:
+            issues: read
+            pull-requests: read
+        uses: matrix-org/matrix-js-sdk/.github/workflows/release-make.yml@develop
+
     prepare:
         runs-on: ubuntu-24.04
+        needs: checks
         env:
             # The order is specified bottom-up to avoid any races for allchange
             REPOS: matrix-js-sdk element-web element-desktop
