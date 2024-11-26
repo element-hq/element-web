@@ -44,7 +44,6 @@ import {
 } from "../../../test-utils";
 import * as leaveRoomUtils from "../../../../src/utils/leave-behaviour";
 import { OidcClientError } from "../../../../src/utils/oidc/error";
-import * as voiceBroadcastUtils from "../../../../src/voice-broadcast/utils/cleanUpBroadcasts";
 import LegacyCallHandler from "../../../../src/LegacyCallHandler";
 import { CallStore } from "../../../../src/stores/CallStore";
 import { Call } from "../../../../src/models/Call";
@@ -811,7 +810,6 @@ describe("<MatrixChat />", () => {
                     jest.spyOn(LegacyCallHandler.instance, "hangupAllCalls")
                         .mockClear()
                         .mockImplementation(() => {});
-                    jest.spyOn(voiceBroadcastUtils, "cleanUpBroadcasts").mockImplementation(async () => {});
                     jest.spyOn(PosthogAnalytics.instance, "logout").mockImplementation(() => {});
                     jest.spyOn(EventIndexPeg, "deleteEventIndex").mockImplementation(async () => {});
 
@@ -831,20 +829,10 @@ describe("<MatrixChat />", () => {
                     jest.spyOn(logger, "warn").mockClear();
                 });
 
-                afterAll(() => {
-                    jest.spyOn(voiceBroadcastUtils, "cleanUpBroadcasts").mockRestore();
-                });
-
                 it("should hangup all legacy calls", async () => {
                     await getComponentAndWaitForReady();
                     await dispatchLogoutAndWait();
                     expect(LegacyCallHandler.instance.hangupAllCalls).toHaveBeenCalled();
-                });
-
-                it("should cleanup broadcasts", async () => {
-                    await getComponentAndWaitForReady();
-                    await dispatchLogoutAndWait();
-                    expect(voiceBroadcastUtils.cleanUpBroadcasts).toHaveBeenCalled();
                 });
 
                 it("should disconnect all calls", async () => {

@@ -16,11 +16,6 @@ import { SpaceStoreClass } from "../../src/stores/spaces/SpaceStore";
 import { WidgetLayoutStore } from "../../src/stores/widgets/WidgetLayoutStore";
 import { WidgetPermissionStore } from "../../src/stores/widgets/WidgetPermissionStore";
 import WidgetStore from "../../src/stores/WidgetStore";
-import {
-    VoiceBroadcastPlaybacksStore,
-    VoiceBroadcastPreRecordingStore,
-    VoiceBroadcastRecordingsStore,
-} from "../../src/voice-broadcast";
 
 /**
  * A class which provides the same API as SdkContextClass but adds additional unsafe setters which can
@@ -36,9 +31,6 @@ export class TestSdkContext extends SdkContextClass {
     public declare _PosthogAnalytics?: PosthogAnalytics;
     public declare _SlidingSyncManager?: SlidingSyncManager;
     public declare _SpaceStore?: SpaceStoreClass;
-    public declare _VoiceBroadcastRecordingsStore?: VoiceBroadcastRecordingsStore;
-    public declare _VoiceBroadcastPreRecordingStore?: VoiceBroadcastPreRecordingStore;
-    public declare _VoiceBroadcastPlaybacksStore?: VoiceBroadcastPlaybacksStore;
 
     constructor() {
         super();

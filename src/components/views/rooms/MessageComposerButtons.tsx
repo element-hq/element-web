@@ -43,8 +43,6 @@ interface IProps {
     showPollsButton: boolean;
     showStickersButton: boolean;
     toggleButtonMenu: () => void;
-    showVoiceBroadcastButton: boolean;
-    onStartVoiceBroadcastClick: () => void;
     isRichTextEnabled: boolean;
     onComposerModeClick: () => void;
 }
@@ -80,7 +78,6 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
             uploadButton(), // props passed via UploadButtonContext
             showStickersButton(props),
             voiceRecordingButton(props, narrow),
-            startVoiceBroadcastButton(props),
             props.showPollsButton ? pollButton(room, props.relation) : null,
             showLocationButton(props, room, matrixClient),
         ];
@@ -100,7 +97,6 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
         moreButtons = [
             showStickersButton(props),
             voiceRecordingButton(props, narrow),
-            startVoiceBroadcastButton(props),
             props.showPollsButton ? pollButton(room, props.relation) : null,
             showLocationButton(props, room, matrixClient),
         ];
@@ -253,18 +249,6 @@ function showStickersButton(props: IProps): ReactElement | null {
         />
     ) : null;
 }
-
-const startVoiceBroadcastButton: React.FC<IProps> = (props: IProps): ReactElement | null => {
-    return props.showVoiceBroadcastButton ? (
-        <CollapsibleButton
-            key="start_voice_broadcast"
-            className="mx_MessageComposer_button"
-            iconClassName="mx_MessageComposer_voiceBroadcast"
-            onClick={props.onStartVoiceBroadcastClick}
-            title={_t("voice_broadcast|action")}
-        />
-    ) : null;
-};
 
 function voiceRecordingButton(props: IProps, narrow: boolean): ReactElement | null {
     // XXX: recording UI does not work well in narrow mode, so hide for now

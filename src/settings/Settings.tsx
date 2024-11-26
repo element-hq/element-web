@@ -85,8 +85,6 @@ export enum LabGroup {
 }
 
 export enum Features {
-    VoiceBroadcast = "feature_voice_broadcast",
-    VoiceBroadcastForceSmallChunks = "feature_voice_broadcast_force_small_chunks",
     NotificationSettings2 = "feature_notification_settings2",
     OidcNativeFlow = "feature_oidc_native_flow",
     ReleaseAnnouncement = "feature_release_announcement",
@@ -445,19 +443,6 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         displayName: _td("labs|dynamic_room_predecessors"),
         description: _td("labs|dynamic_room_predecessors_description"),
         shouldWarn: true,
-        default: false,
-    },
-    [Features.VoiceBroadcast]: {
-        isFeature: true,
-        labsGroup: LabGroup.Messaging,
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
-        displayName: _td("labs|voice_broadcast"),
-        default: false,
-    },
-    [Features.VoiceBroadcastForceSmallChunks]: {
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        displayName: _td("labs|voice_broadcast_force_small_chunks"),
         default: false,
     },
     [Features.OidcNativeFlow]: {

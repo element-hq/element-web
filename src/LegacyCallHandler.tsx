@@ -55,8 +55,6 @@ import { OpenInviteDialogPayload } from "./dispatcher/payloads/OpenInviteDialogP
 import { findDMForUser } from "./utils/dm/findDMForUser";
 import { getJoinedNonFunctionalMembers } from "./utils/room/getJoinedNonFunctionalMembers";
 import { localNotificationsAreSilenced } from "./utils/notifications";
-import { SdkContextClass } from "./contexts/SDKContext";
-import { showCantStartACallDialog } from "./voice-broadcast/utils/showCantStartACallDialog";
 import { isNotNull } from "./Typeguards";
 import { BackgroundAudio } from "./audio/BackgroundAudio";
 import { Jitsi } from "./widgets/Jitsi.ts";
@@ -856,15 +854,6 @@ export default class LegacyCallHandler extends EventEmitter {
         const room = cli.getRoom(roomId);
         if (!room) {
             logger.error(`Room ${roomId} does not exist.`);
-            return;
-        }
-
-        // Pause current broadcast, if any
-        SdkContextClass.instance.voiceBroadcastPlaybacksStore.getCurrent()?.pause();
-
-        if (SdkContextClass.instance.voiceBroadcastRecordingsStore.getCurrent()) {
-            // Do not start a call, if recording a broadcast
-            showCantStartACallDialog();
             return;
         }
 

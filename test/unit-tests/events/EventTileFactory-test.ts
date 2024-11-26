@@ -7,19 +7,16 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked } from "jest-mock";
-import { EventType, MatrixClient, MatrixEvent, MsgType, RelationType, Room } from "matrix-js-sdk/src/matrix";
+import { EventType, MatrixClient, MatrixEvent, MsgType, Room } from "matrix-js-sdk/src/matrix";
 
 import {
     JSONEventFactory,
     MessageEventFactory,
     pickFactory,
     RoomCreateEventFactory,
-    TextualEventFactory,
 } from "../../../src/events/EventTileFactory";
 import SettingsStore from "../../../src/settings/SettingsStore";
-import { VoiceBroadcastChunkEventType, VoiceBroadcastInfoState } from "../../../src/voice-broadcast";
 import { createTestClient, mkEvent } from "../../test-utils";
-import { mkVoiceBroadcastInfoStateEvent } from "../voice-broadcast/utils/test-utils";
 
 const roomId = "!room:example.com";
 
@@ -31,11 +28,7 @@ describe("pickFactory", () => {
     let createEventWithoutPredecessor: MatrixEvent;
     let dynamicPredecessorEvent: MatrixEvent;
 
-    let voiceBroadcastStartedEvent: MatrixEvent;
-    let voiceBroadcastStoppedEvent: MatrixEvent;
-    let voiceBroadcastChunkEvent: MatrixEvent;
     let utdEvent: MatrixEvent;
-    let utdBroadcastChunkEvent: MatrixEvent;
     let audioMessageEvent: MatrixEvent;
 
     beforeAll(() => {
@@ -82,29 +75,6 @@ describe("pickFactory", () => {
                 last_known_event_id: null,
             },
         });
-        voiceBroadcastStartedEvent = mkVoiceBroadcastInfoStateEvent(
-            roomId,
-            VoiceBroadcastInfoState.Started,
-            client.getUserId()!,
-            client.deviceId!,
-        );
-        room.addLiveEvents([voiceBroadcastStartedEvent]);
-        voiceBroadcastStoppedEvent = mkVoiceBroadcastInfoStateEvent(
-            roomId,
-            VoiceBroadcastInfoState.Stopped,
-            client.getUserId()!,
-            client.deviceId!,
-        );
-        voiceBroadcastChunkEvent = mkEvent({
-            event: true,
-            type: EventType.RoomMessage,
-            user: client.getUserId()!,
-            room: roomId,
-            content: {
-                msgtype: MsgType.Audio,
-                [VoiceBroadcastChunkEventType]: {},
-            },
-        });
         audioMessageEvent = mkEvent({
             event: true,
             type: EventType.RoomMessage,
@@ -123,20 +93,6 @@ describe("pickFactory", () => {
                 msgtype: "m.bad.encrypted",
             },
         });
-        utdBroadcastChunkEvent = mkEvent({
-            event: true,
-            type: EventType.RoomMessage,
-            user: client.getUserId()!,
-            room: roomId,
-            content: {
-                "msgtype": "m.bad.encrypted",
-                "m.relates_to": {
-                    rel_type: RelationType.Reference,
-                    event_id: voiceBroadcastStartedEvent.getId(),
-                },
-            },
-        });
-        jest.spyOn(utdBroadcastChunkEvent, "isDecryptionFailure").mockReturnValue(true);
     });
 
     it("should return JSONEventFactory for a no-op m.room.power_levels event", () => {
@@ -151,10 +107,6 @@ describe("pickFactory", () => {
     });
 
     describe("when showing hidden events", () => {
-        it("should return a JSONEventFactory for a voice broadcast event", () => {
-            expect(pickFactory(voiceBroadcastChunkEvent, client, true)).toBe(JSONEventFactory);
-        });
-
         it("should return a JSONEventFactory for a room create event without predecessor", () => {
             room.currentState.events.set(
                 EventType.RoomCreate,
@@ -164,16 +116,8 @@ describe("pickFactory", () => {
             expect(pickFactory(createEventWithoutPredecessor, client, true)).toBe(JSONEventFactory);
         });
 
-        it("should return a TextualEventFactory for a voice broadcast stopped event", () => {
-            expect(pickFactory(voiceBroadcastStoppedEvent, client, true)).toBe(TextualEventFactory);
-        });
-
         it("should return a MessageEventFactory for an audio message event", () => {
             expect(pickFactory(audioMessageEvent, client, true)).toBe(MessageEventFactory);
-        });
-
-        it("should return a MessageEventFactory for a UTD broadcast chunk event", () => {
-            expect(pickFactory(utdBroadcastChunkEvent, client, true)).toBe(MessageEventFactory);
         });
     });
 
@@ -252,24 +196,12 @@ describe("pickFactory", () => {
             });
         });
 
-        it("should return undefined for a voice broadcast event", () => {
-            expect(pickFactory(voiceBroadcastChunkEvent, client, false)).toBeUndefined();
-        });
-
-        it("should return a TextualEventFactory for a voice broadcast stopped event", () => {
-            expect(pickFactory(voiceBroadcastStoppedEvent, client, false)).toBe(TextualEventFactory);
-        });
-
         it("should return a MessageEventFactory for an audio message event", () => {
             expect(pickFactory(audioMessageEvent, client, false)).toBe(MessageEventFactory);
         });
 
         it("should return a MessageEventFactory for a UTD event", () => {
             expect(pickFactory(utdEvent, client, false)).toBe(MessageEventFactory);
-        });
-
-        it("should return undefined for a UTD broadcast chunk event", () => {
-            expect(pickFactory(utdBroadcastChunkEvent, client, false)).toBeUndefined();
         });
     });
 });
