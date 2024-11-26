@@ -1002,7 +1002,7 @@
             "unverified_sessions_toast_description": "Review to ensure your account is safe",
             "unverified_sessions_toast_reject": "Later",
             "unverified_sessions_toast_title": "You have unverified sessions",
-            "verification_description": "Verify your identity to access encrypted messages and prove your identity to others.",
+            "verification_description": "Verify your identity to access encrypted messages and prove your identity to others. If you also use a mobile device, please open the app there before you proceed.",
             "verification_dialog_title_device": "Verify other device",
             "verification_dialog_title_user": "Verification Request",
             "verification_skip_warning": "Without verifying, you won't have access to all your messages and may appear as untrusted to others.",
