@@ -8064,10 +8064,10 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.2.4.tgz#eca284f75d2965079309dc0ad9255abb2ebc1632"
   integrity sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==
 
-linkify-element@4.1.3:
-  version "4.1.3"
-  resolved "https://registry.yarnpkg.com/linkify-element/-/linkify-element-4.1.3.tgz#c0de98f2a36683bf3a4bfa28eaa23c4c917bd546"
-  integrity sha512-oUoG7BWaR3Q6kAKdlLi8slsu5rkVRxbiDVVlkpoL7vtidY5THggLzRHIBtmcj+tvMpcAUQomJApDxg0ub0qpdA==
+linkify-element@4.1.4:
+  version "4.1.4"
+  resolved "https://registry.yarnpkg.com/linkify-element/-/linkify-element-4.1.4.tgz#d4050b41fb47c44871e5eed93bc11865e403cc90"
+  integrity sha512-XhSTTF7b7OoX4KIkwVG8MET5DSFEHohT0Gp5pjmsByYp+JCyZq5rSZGsar5dYzeuKUV6TqTSLtsH/NzBBwBxgQ==
 
 linkify-it@^4.0.1:
   version "4.0.1"
@@ -8076,20 +8076,20 @@ linkify-it@^4.0.1:
   dependencies:
     uc.micro "^1.0.1"
 
-linkify-react@4.1.3:
-  version "4.1.3"
-  resolved "https://registry.yarnpkg.com/linkify-react/-/linkify-react-4.1.3.tgz#461d348b4bdab3fcd0452ae1b5bbc22536395b97"
-  integrity sha512-rhI3zM/fxn5BfRPHfi4r9N7zgac4vOIxub1wHIWXLA5ENTMs+BGaIaFO1D1PhmxgwhIKmJz3H7uCP0Dg5JwSlA==
+linkify-react@4.1.4:
+  version "4.1.4"
+  resolved "https://registry.yarnpkg.com/linkify-react/-/linkify-react-4.1.4.tgz#6c709f3f96543914874982f4b0b00f9c9270ce93"
+  integrity sha512-UI9nqHtFzHYRUvVRrYeua5GIXkc0Jy3RpLsJBWEht7HwqjAa2qSaIksGmNSLqclNpO/5AkwaxUJv71I/pQsk9Q==
 
-linkify-string@4.1.3:
-  version "4.1.3"
-  resolved "https://registry.yarnpkg.com/linkify-string/-/linkify-string-4.1.3.tgz#a47dbbf64c9fbd2f6ae5e26cd41ec2e5748a54d1"
-  integrity sha512-6dAgx4MiTcvEX87OS5aNpAioO7cSELUXp61k7azOvMYOLSmREx0w4yM1Uf0+O3JLC08YdkUyZhAX+YkasRt/mw==
+linkify-string@4.1.4:
+  version "4.1.4"
+  resolved "https://registry.yarnpkg.com/linkify-string/-/linkify-string-4.1.4.tgz#89fb814e05c5b22f76d2a2a640bc8b1db4c6694f"
+  integrity sha512-4z2UEzEi4SxnhWMzzZ8Pa8vIOwX/2U0XWxk/0UIA7lI+Dn0ZRKqTE9ildnO6Jl6K5hqVuLKTeMD8p4bdFW6P8g==
 
-linkifyjs@4.1.3:
-  version "4.1.3"
-  resolved "https://registry.yarnpkg.com/linkifyjs/-/linkifyjs-4.1.3.tgz#0edbc346428a7390a23ea2e5939f76112c9ae07f"
-  integrity sha512-auMesunaJ8yfkHvK4gfg1K0SaKX/6Wn9g2Aac/NwX+l5VdmFZzo/hdPGxEOETj+ryRa4/fiOPjeeKURSAJx1sg==
+linkifyjs@4.1.4:
+  version "4.1.4"
+  resolved "https://registry.yarnpkg.com/linkifyjs/-/linkifyjs-4.1.4.tgz#2766605a20078d50c90f35af22275a42dfb7dfc4"
+  integrity sha512-0/NxkHNpiJ0k9VrYCkAn9OtU1eu8xEr1tCCpDtSsVRm/SF0xAak2Gzv3QimSfgUgqLBCDlfhMbu73XvaEHUTPQ==
 
 lint-staged@^15.0.2:
   version "15.2.10"
