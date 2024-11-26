@@ -3419,10 +3419,10 @@
   resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-2.0.1.tgz#add14494caab16cdbe98f2bdabe726908739def4"
   integrity sha512-4nkPcrPII+sejispn+UkWZYFN7LecN39e4WGBupdceiMq0NJrfXrnVtJ9/6BDLgSqHInb6R/IWQkIbPbzfqRMg==
 
-"@vector-im/compound-web@^7.3.0":
-  version "7.3.0"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-7.3.0.tgz#9594113ac50bff4794715104a30a60c52d15517d"
-  integrity sha512-gDppQUtpk5LvNHUg+Zlv9qzo1iBAag0s3g8Ec0qS5q4zGBKG6ruXXrNUKg1aK8rpbo2hYQsGaHM6dD8NqLoq3Q==
+"@vector-im/compound-web@^7.4.0":
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-7.4.0.tgz#a5af8af6346f8ff6c14c70f5d4eb2eab7357a7cc"
+  integrity sha512-ZRBUeEGNmj/fTkIRa8zGnyVN7ytowpfOtHChqNm+m/+OTJN3o/lOMuQHDV8jeSEW2YwPJqGvPuG/dRr89IcQkA==
   dependencies:
     "@floating-ui/react" "^0.26.24"
     "@radix-ui/react-context-menu" "^2.2.1"
@@ -4750,9 +4750,9 @@ cronstrue@^2.41.0:
   integrity sha512-ULYhWIonJzlScCCQrPUG5uMXzXxSixty4djud9SS37DoNxDdkeRocxzHuAo4ImRBUK+mAuU5X9TSwEDccnnuPg==
 
 cross-spawn@^7.0.0, cross-spawn@^7.0.2, cross-spawn@^7.0.3:
-  version "7.0.3"
-  resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-7.0.3.tgz#f73a85b9d5d41d045551c177e2882d4ac85728a6"
-  integrity sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==
+  version "7.0.5"
+  resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-7.0.5.tgz#910aac880ff5243da96b728bc6521a5f6c2f2f82"
+  integrity sha512-ZVJrKKYunU38/76t0RMOulHOnUcbU9GbpWKAOZ0mhjr7CX6FVrH+4FrAapSOekrgFQ3f/8gwMEuIft0aKq6Hug==
   dependencies:
     path-key "^3.1.0"
     shebang-command "^2.0.0"
@@ -8353,8 +8353,8 @@ matrix-events-sdk@0.0.1:
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "34.10.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/6855ace6422082d173438cb23368d2fabc6a1086"
+  version "34.12.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/544ac86d2080da8e55d0b727cae826e42600c490"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-wasm" "^9.0.0"
@@ -8383,7 +8383,7 @@ matrix-web-i18n@^3.2.1:
     minimist "^1.2.8"
     walk "^2.3.15"
 
-matrix-widget-api@^1.10.0, matrix-widget-api@^1.8.2:
+matrix-widget-api@^1.10.0:
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.10.0.tgz#d31ea073a5871a1fb1a511ef900b0c125a37bf55"
   integrity sha512-rkAJ29briYV7TJnfBVLVSKtpeBrBju15JZFSDP6wj8YdbCu1bdmlplJayQ+vYaw1x4fzI49Q+Nz3E85s46sRDw==
@@ -10385,7 +10385,7 @@ resolve.exports@^2.0.0:
   resolved "https://registry.yarnpkg.com/resolve.exports/-/resolve.exports-2.0.2.tgz#f8c934b8e6a13f539e38b7098e2e36134f01e800"
   integrity sha512-X2UW6Nw3n/aMgDVy+0rSqgHlv39WZAlZrXCdnbyEiKm17DSqHX4MmQMaST3FbeWR5FTuRcUwYAziZajji0Y7mg==
 
-resolve@^1.1.7, resolve@^1.10.0, resolve@^1.14.2, resolve@^1.20.0, resolve@^1.22.4:
+resolve@^1.1.7, resolve@^1.10.0, resolve@^1.14.2, resolve@^1.20.0, resolve@^1.22.4, resolve@^1.22.8:
   version "1.22.8"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.22.8.tgz#b6c87a9f2aa06dfab52e3d70ac8cde321fa5a48d"
   integrity sha512-oKWePCxqpd6FlLvGV1VU0x7bkPmmCNolxzjMf4NczoDnQcIWrAF+cPtZn5i6n+RfD2d9i0tzpKnG6Yk168yIyw==
@@ -11126,6 +11126,14 @@ stylelint-scss@^6.0.0:
     postcss-resolve-nested-selector "^0.1.6"
     postcss-selector-parser "^6.1.2"
     postcss-value-parser "^4.2.0"
+
+stylelint-value-no-unknown-custom-properties@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/stylelint-value-no-unknown-custom-properties/-/stylelint-value-no-unknown-custom-properties-6.0.1.tgz#526cc20344f4fc5e33231152767a432b6ed8f957"
+  integrity sha512-N60PTdaTknB35j6D4FhW0GL2LlBRV++bRpXMMldWMQZ240yFQaoltzlLY4lXXs7Z0J5mNUYZQ/gjyVtU2DhCMA==
+  dependencies:
+    postcss-value-parser "^4.2.0"
+    resolve "^1.22.8"
 
 stylelint@^16.1.0:
   version "16.10.0"

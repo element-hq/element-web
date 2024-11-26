@@ -11,7 +11,7 @@ Please see LICENSE files in the repository root for full details.
 import "core-js/stable/structured-clone";
 import "fake-indexeddb/auto";
 import React, { ComponentProps } from "react";
-import { fireEvent, render, RenderResult, screen, waitFor, within } from "jest-matrix-react";
+import { fireEvent, render, RenderResult, screen, waitFor, within, act } from "jest-matrix-react";
 import fetchMock from "fetch-mock-jest";
 import { Mocked, mocked } from "jest-mock";
 import { ClientEvent, MatrixClient, MatrixEvent, Room, SyncState } from "matrix-js-sdk/src/matrix";
@@ -139,6 +139,7 @@ describe("<MatrixChat />", () => {
             globalBlacklistUnverifiedDevices: false,
             // This needs to not finish immediately because we need to test the screen appears
             bootstrapCrossSigning: jest.fn().mockImplementation(() => bootstrapDeferred.promise),
+            getKeyBackupInfo: jest.fn().mockResolvedValue(null),
         }),
         secretStorage: {
             isStored: jest.fn().mockReturnValue(null),
@@ -146,10 +147,8 @@ describe("<MatrixChat />", () => {
         matrixRTC: createStubMatrixRTC(),
         getDehydratedDevice: jest.fn(),
         whoami: jest.fn(),
-        isRoomEncrypted: jest.fn(),
         logout: jest.fn(),
         getDeviceId: jest.fn(),
-        getKeyBackupVersion: jest.fn().mockResolvedValue(null),
     });
     let mockClient: Mocked<MatrixClient>;
     const serverConfig = {
@@ -163,8 +162,11 @@ describe("<MatrixChat />", () => {
     };
     let initPromise: Promise<void> | undefined;
     let defaultProps: ComponentProps<typeof MatrixChat>;
-    const getComponent = (props: Partial<ComponentProps<typeof MatrixChat>> = {}) =>
-        render(<MatrixChat {...defaultProps} {...props} />);
+    const getComponent = (props: Partial<ComponentProps<typeof MatrixChat>> = {}) => {
+        // MatrixChat does many questionable things which bomb tests in modern React mode,
+        // we'll want to refactor and break up MatrixChat before turning off legacyRoot mode
+        return render(<MatrixChat {...defaultProps} {...props} />, { legacyRoot: true });
+    };
 
     // make test results readable
     filterConsole(
@@ -202,7 +204,7 @@ describe("<MatrixChat />", () => {
             // we are logged in, but are still waiting for the /sync to complete
             await screen.findByText("Syncing…");
             // initial sync
-            client.emit(ClientEvent.Sync, SyncState.Prepared, null);
+            await act(() => client.emit(ClientEvent.Sync, SyncState.Prepared, null));
         }
 
         // let things settle
@@ -264,7 +266,7 @@ describe("<MatrixChat />", () => {
 
         // emit a loggedOut event so that all of the Store singletons forget about their references to the mock client
         // (must be sync otherwise the next test will start before it happens)
-        defaultDispatcher.dispatch({ action: Action.OnLoggedOut }, true);
+        act(() => defaultDispatcher.dispatch({ action: Action.OnLoggedOut }, true));
 
         localStorage.clear();
     });
@@ -329,7 +331,7 @@ describe("<MatrixChat />", () => {
 
             expect(within(dialog).getByText(errorMessage)).toBeInTheDocument();
             // just check we're back on welcome page
-            await expect(await screen.findByTestId("mx_welcome_screen")).toBeInTheDocument();
+            await expect(screen.findByTestId("mx_welcome_screen")).resolves.toBeInTheDocument();
         };
 
         beforeEach(() => {
@@ -957,9 +959,11 @@ describe("<MatrixChat />", () => {
             await screen.findByText("Powered by Matrix");
 
             // go to login page
-            defaultDispatcher.dispatch({
-                action: "start_login",
-            });
+            act(() =>
+                defaultDispatcher.dispatch({
+                    action: "start_login",
+                }),
+            );
 
             await flushPromises();
 
@@ -1011,6 +1015,7 @@ describe("<MatrixChat />", () => {
                     userHasCrossSigningKeys: jest.fn().mockResolvedValue(false),
                     // This needs to not finish immediately because we need to test the screen appears
                     bootstrapCrossSigning: jest.fn().mockImplementation(() => bootstrapDeferred.promise),
+                    isEncryptionEnabledInRoom: jest.fn().mockResolvedValue(false),
                 };
                 loginClient.getCrypto.mockReturnValue(mockCrypto as any);
             });
@@ -1058,9 +1063,11 @@ describe("<MatrixChat />", () => {
                             },
                         });
 
-                        loginClient.isRoomEncrypted.mockImplementation((roomId) => {
-                            return roomId === encryptedRoom.roomId;
-                        });
+                        jest.spyOn(loginClient.getCrypto()!, "isEncryptionEnabledInRoom").mockImplementation(
+                            async (roomId) => {
+                                return roomId === encryptedRoom.roomId;
+                            },
+                        );
                     });
 
                     it("should go straight to logged in view when user is not in any encrypted rooms", async () => {
@@ -1126,7 +1133,9 @@ describe("<MatrixChat />", () => {
 
                 bootstrapDeferred.resolve();
 
-                await expect(await screen.findByRole("heading", { name: "You're in", level: 1 })).toBeInTheDocument();
+                await expect(
+                    screen.findByRole("heading", { name: "You're in", level: 1 }),
+                ).resolves.toBeInTheDocument();
             });
         });
     });
@@ -1395,7 +1404,9 @@ describe("<MatrixChat />", () => {
 
             function simulateSessionLockClaim() {
                 localStorage.setItem("react_sdk_session_lock_claimant", "testtest");
-                window.dispatchEvent(new StorageEvent("storage", { key: "react_sdk_session_lock_claimant" }));
+                act(() =>
+                    window.dispatchEvent(new StorageEvent("storage", { key: "react_sdk_session_lock_claimant" })),
+                );
             }
 
             it("after a session is restored", async () => {

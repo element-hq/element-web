@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 //
 
 import React from "react";
-import { act, render, RenderResult, screen } from "jest-matrix-react";
+import { render, RenderResult, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { ClientEvent, MatrixClient, MatrixEvent, SyncState } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
@@ -61,9 +61,7 @@ describe("VoiceBroadcastRecordingPip", () => {
         jest.spyOn(recording, "pause");
         jest.spyOn(recording, "resume");
         renderResult = render(<VoiceBroadcastRecordingPip recording={recording} />);
-        await act(async () => {
-            flushPromises();
-        });
+        await flushPromises();
     };
 
     const itShouldShowTheBroadcastRoom = () => {
@@ -152,8 +150,9 @@ describe("VoiceBroadcastRecordingPip", () => {
         describe("and clicking the stop button", () => {
             beforeEach(async () => {
                 await userEvent.click(screen.getByLabelText("Stop Recording"));
+                await screen.findByText("Stop live broadcasting?");
                 // modal rendering has some weird sleeps
-                await sleep(100);
+                await sleep(200);
             });
 
             it("should display the confirm end dialog", () => {

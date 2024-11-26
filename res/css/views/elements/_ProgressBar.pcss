@@ -16,16 +16,7 @@ progress.mx_ProgressBar {
     @mixin ProgressBarBorderRadius 6px;
     @mixin ProgressBarColour var(--cpd-color-icon-accent-tertiary);
     @mixin ProgressBarBgColour $progressbar-bg-color;
-    ::-webkit-progress-value {
+    &::-webkit-progress-value {
         transition: width 1s;
-    }
-    ::-moz-progress-bar {
-        transition: padding-bottom 1s;
-        padding-bottom: var(--value);
-        transform-origin: 0 0;
-        transform: rotate(-90deg) translateX(-15px);
-        padding-left: 15px;
-
-        height: 0;
     }
 }

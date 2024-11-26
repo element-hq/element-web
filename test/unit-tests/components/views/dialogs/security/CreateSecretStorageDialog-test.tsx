@@ -13,7 +13,7 @@ import { mocked, MockedObject } from "jest-mock";
 import { MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
 
-import { filterConsole, stubClient } from "../../../../../test-utils";
+import { filterConsole, flushPromises, stubClient } from "../../../../../test-utils";
 import CreateSecretStorageDialog from "../../../../../../src/async-components/views/dialogs/security/CreateSecretStorageDialog";
 
 describe("CreateSecretStorageDialog", () => {
@@ -77,7 +77,7 @@ describe("CreateSecretStorageDialog", () => {
         filterConsole("Error fetching backup data from server");
 
         it("shows an error", async () => {
-            mockClient.getKeyBackupVersion.mockImplementation(async () => {
+            jest.spyOn(mockClient.getCrypto()!, "getKeyBackupInfo").mockImplementation(async () => {
                 throw new Error("bleh bleh");
             });
 
@@ -92,9 +92,44 @@ describe("CreateSecretStorageDialog", () => {
             expect(result.container).toMatchSnapshot();
 
             // Now we can get the backup and we retry
-            mockClient.getKeyBackupVersion.mockRestore();
+            jest.spyOn(mockClient.getCrypto()!, "getKeyBackupInfo").mockRestore();
             await userEvent.click(screen.getByRole("button", { name: "Retry" }));
             await screen.findByText("Your keys are now being backed up from this device.");
         });
+    });
+
+    it("resets keys in the right order when resetting secret storage and cross-signing", async () => {
+        const result = renderComponent({ forceReset: true, resetCrossSigning: true });
+
+        await result.findByText(/Set up Secure Backup/);
+        jest.spyOn(mockClient.getCrypto()!, "createRecoveryKeyFromPassphrase").mockResolvedValue({
+            privateKey: new Uint8Array(),
+            encodedPrivateKey: "abcd efgh ijkl",
+        });
+        result.getByRole("button", { name: "Continue" }).click();
+
+        await result.findByText(/Save your Security Key/);
+        result.getByRole("button", { name: "Copy" }).click();
+
+        // Resetting should reset secret storage, cross signing, and key
+        // backup.  We make sure that all three are reset, and done in the
+        // right order.
+        const resetFunctionCallLog: string[] = [];
+        jest.spyOn(mockClient.getCrypto()!, "bootstrapSecretStorage").mockImplementation(async () => {
+            resetFunctionCallLog.push("bootstrapSecretStorage");
+        });
+        jest.spyOn(mockClient.getCrypto()!, "bootstrapCrossSigning").mockImplementation(async () => {
+            resetFunctionCallLog.push("bootstrapCrossSigning");
+        });
+        jest.spyOn(mockClient.getCrypto()!, "resetKeyBackup").mockImplementation(async () => {
+            resetFunctionCallLog.push("resetKeyBackup");
+        });
+
+        await flushPromises();
+        result.getByRole("button", { name: "Continue" }).click();
+
+        await result.findByText("Your keys are now being backed up from this device.");
+
+        expect(resetFunctionCallLog).toEqual(["bootstrapSecretStorage", "bootstrapCrossSigning", "resetKeyBackup"]);
     });
 });

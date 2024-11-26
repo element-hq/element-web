@@ -905,6 +905,8 @@
             "warning": "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings."
         },
         "not_supported": "<not supported>",
+        "pinned_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) identity appears to have changed. <a>Learn more</a>",
+        "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>'s identity appears to have changed. <a>Learn more</a>",
         "recovery_method_removed": {
             "description_1": "This session has detected that your Security Phrase and key for Secure Messages have been removed.",
             "description_2": "If you did this accidentally, you can setup Secure Messages on this session which will re-encrypt this session's message history with a new recovery method.",
@@ -3742,6 +3744,7 @@
         "error_files_too_large": "These files are <b>too large</b> to upload. The file size limit is %(limit)s.",
         "error_some_files_too_large": "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.",
         "error_title": "Upload Error",
+        "not_image": "The file you have chosen is not a valid image file.",
         "title": "Upload files",
         "title_progress": "Upload files (%(current)s of %(total)s)",
         "upload_all_button": "Upload all",

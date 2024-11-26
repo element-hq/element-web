@@ -34,7 +34,6 @@ describe("<SecurityUserSettingsTab />", () => {
         ...mockClientMethodsCrypto(),
         getRooms: jest.fn().mockReturnValue([]),
         getIgnoredUsers: jest.fn(),
-        getKeyBackupVersion: jest.fn(),
     });
 
     const sdkContext = new SdkContextClass();

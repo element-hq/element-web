@@ -143,3 +143,21 @@ $inter-unicode-range: U+0000-20e2, U+20e4-23ce, U+23d0-24c1, U+24c3-259f, U+25c2
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC,
         U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+
+/* Twemoji COLR */
+@font-face {
+    font-family: "Twemoji";
+    font-weight: 400;
+    src: url("$(res)/fonts/Twemoji_Mozilla/TwemojiMozilla-colr.woff2") format("woff2");
+}
+/* For at least Chrome on Windows 10, we have to explictly add extra weights for the emoji to appear in bold messages, etc. */
+@font-face {
+    font-family: "Twemoji";
+    font-weight: 600;
+    src: url("$(res)/fonts/Twemoji_Mozilla/TwemojiMozilla-colr.woff2") format("woff2");
+}
+@font-face {
+    font-family: "Twemoji";
+    font-weight: 700;
+    src: url("$(res)/fonts/Twemoji_Mozilla/TwemojiMozilla-colr.woff2") format("woff2");
+}

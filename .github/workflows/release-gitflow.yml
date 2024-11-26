@@ -4,6 +4,7 @@ on:
     push:
         branches: [master]
 concurrency: ${{ github.repository }}-${{ github.workflow }}
+permissions: {} # We use ELEMENT_BOT_TOKEN instead
 jobs:
     merge:
         uses: matrix-org/matrix-js-sdk/.github/workflows/release-gitflow.yml@develop

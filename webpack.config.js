@@ -106,15 +106,10 @@ module.exports = (env, argv) => {
         // Embedded source maps for dev builds, can't use eval-source-map due to CSP
         development["devtool"] = "inline-source-map";
     } else {
-        if (process.env.CI_PACKAGE) {
-            // High quality source maps in separate .map files which include the source. This doesn't bulk up the .js
-            // payload file size, which is nice for performance but also necessary to get the bundle to a small enough
-            // size that sentry will accept the upload.
-            development["devtool"] = "source-map";
-        } else {
-            // High quality source maps in separate .map files which don't include the source
-            development["devtool"] = "nosources-source-map";
-        }
+        // High quality source maps in separate .map files which include the source. This doesn't bulk up the .js
+        // payload file size, which is nice for performance but also necessary to get the bundle to a small enough
+        // size that sentry will accept the upload.
+        development["devtool"] = "source-map";
     }
 
     // Resolve the directories for the js-sdk for later use. We resolve these early, so we

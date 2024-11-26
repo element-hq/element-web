@@ -70,7 +70,7 @@ export class MemberListStore {
             return [];
         }
 
-        if (!this.isLazyLoadingEnabled(roomId) || this.loadedRooms.has(roomId)) {
+        if (this.loadedRooms.has(roomId) || !(await this.isLazyLoadingEnabled(roomId))) {
             // nice and easy, we must already have all the members so just return them.
             return this.loadMembersInRoom(room);
         }
@@ -121,10 +121,10 @@ export class MemberListStore {
      * @param roomId The room to check if lazy loading is enabled
      * @returns True if enabled
      */
-    private isLazyLoadingEnabled(roomId: string): boolean {
+    private async isLazyLoadingEnabled(roomId: string): Promise<boolean> {
         if (SettingsStore.getValue("feature_sliding_sync")) {
             // only unencrypted rooms use lazy loading
-            return !this.stores.client!.isRoomEncrypted(roomId);
+            return !(await this.stores.client?.getCrypto()?.isEncryptionEnabledInRoom(roomId));
         }
         return this.stores.client!.hasLazyLoadMembersEnabled();
     }

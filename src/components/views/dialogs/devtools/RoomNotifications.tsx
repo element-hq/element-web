@@ -17,6 +17,7 @@ import { determineUnreadState } from "../../../../RoomNotifs";
 import { humanReadableNotificationLevel } from "../../../../stores/notifications/NotificationLevel";
 import { doesRoomOrThreadHaveUnreadMessages } from "../../../../Unread";
 import BaseTool, { DevtoolsContext, IDevtoolsProps } from "./BaseTool";
+import { useIsEncrypted } from "../../../../hooks/useIsEncrypted.ts";
 
 function UserReadUpTo({ target }: { target: ReadReceipt<any, any> }): JSX.Element {
     const cli = useContext(MatrixClientContext);
@@ -59,6 +60,7 @@ function UserReadUpTo({ target }: { target: ReadReceipt<any, any> }): JSX.Elemen
 export default function RoomNotifications({ onBack }: IDevtoolsProps): JSX.Element {
     const { room } = useContext(DevtoolsContext);
     const cli = useContext(MatrixClientContext);
+    const isRoomEncrypted = useIsEncrypted(cli, room);
 
     const { level, count } = determineUnreadState(room, undefined, false);
     const [notificationState] = useNotificationState(room);
@@ -93,9 +95,7 @@ export default function RoomNotifications({ onBack }: IDevtoolsProps): JSX.Eleme
                     </li>
                     <li>
                         {_t(
-                            cli.isRoomEncrypted(room.roomId!)
-                                ? _td("devtools|room_encrypted")
-                                : _td("devtools|room_not_encrypted"),
+                            isRoomEncrypted ? _td("devtools|room_encrypted") : _td("devtools|room_not_encrypted"),
                             {},
                             {
                                 strong: (sub) => <strong>{sub}</strong>,
