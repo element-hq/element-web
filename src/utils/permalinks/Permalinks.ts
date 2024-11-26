@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import isIp from "is-ip";
+import { isIP } from "is-ip";
 import * as utils from "matrix-js-sdk/src/utils";
 import { Room, MatrixClient, RoomStateEvent, EventType } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
@@ -491,7 +491,7 @@ function isHostnameIpAddress(hostname: string): boolean {
         hostname = hostname.substring(1, hostname.length - 1);
     }
 
-    return isIp(hostname);
+    return isIP(hostname);
 }
 
 export const calculateRoomVia = (room: Room): string[] => {
