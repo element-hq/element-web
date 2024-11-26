@@ -22,7 +22,7 @@ import {
     RoomStateEvent,
     SearchResult,
 } from "matrix-js-sdk/src/matrix";
-import { CryptoApi, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
+import { CryptoApi, UserVerificationStatus, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import {
     fireEvent,
@@ -305,6 +305,32 @@ describe("RoomView", () => {
 
         act(() => room.getUnfilteredTimelineSet().resetLiveTimeline());
         expect(roomViewInstance.state.liveTimeline).not.toEqual(oldTimeline);
+    });
+
+    it("should update when the e2e status when the user verification changed", async () => {
+        room.currentState.setStateEvents([
+            mkRoomMemberJoinEvent(cli.getSafeUserId(), room.roomId),
+            mkRoomMemberJoinEvent("user@example.com", room.roomId),
+        ]);
+        room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+        // Not all the calls to cli.isRoomEncrypted are migrated, so we need to mock both.
+        mocked(cli.isRoomEncrypted).mockReturnValue(true);
+        jest.spyOn(cli, "getCrypto").mockReturnValue(crypto);
+        jest.spyOn(cli.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
+        jest.spyOn(cli.getCrypto()!, "getUserVerificationStatus").mockResolvedValue(
+            new UserVerificationStatus(false, false, false),
+        );
+        jest.spyOn(cli.getCrypto()!, "getUserDeviceInfo").mockResolvedValue(
+            new Map([["user@example.com", new Map<string, any>()]]),
+        );
+
+        const { container } = await renderRoomView();
+        await waitFor(() => expect(container.querySelector(".mx_E2EIcon_normal")).toBeInTheDocument());
+
+        const verificationStatus = new UserVerificationStatus(true, true, false);
+        jest.spyOn(cli.getCrypto()!, "getUserVerificationStatus").mockResolvedValue(verificationStatus);
+        cli.emit(CryptoEvent.UserTrustStatusChanged, cli.getSafeUserId(), verificationStatus);
+        await waitFor(() => expect(container.querySelector(".mx_E2EIcon_verified")).toBeInTheDocument());
     });
 
     describe("with virtual rooms", () => {
