@@ -41,7 +41,7 @@ jobs:
             - name: Check current version on deployment
               id: current_version
               run: |
-                  echo "version=$(curl -s https://$SITE/version)" >> $GITHUB_OUTPUT
+                  echo "version=v$(curl -s https://$SITE/version)" >> $GITHUB_OUTPUT
 
             # The current version bundle melding dance is skipped if the version we're deploying is the same
             # as then we're just doing a re-deploy of the same version with potentially different configs.
@@ -50,7 +50,7 @@ jobs:
               if: steps.current_version.outputs.version != github.ref_name
               uses: ./.github/actions/download-verify-element-tarball
               with:
-                  tag: steps.current_version.outputs.version
+                  tag: ${{ steps.current_version.outputs.version }}
                   out-file-path: _current_version
 
             - name: Download target version
