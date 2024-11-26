@@ -36,7 +36,7 @@ jobs:
                   curl https://packages.element.io/element-release-key.gpg | gpg --import
                   gpg -k "$GPG_FINGERPRINT"
               env:
-                  GPG_FINGERPRINT: ${{ secrets.GPG_FINGERPRINT }}
+                  GPG_FINGERPRINT: ${{ vars.GPG_FINGERPRINT }}
 
             - name: Check current version on deployment
               id: current_version
