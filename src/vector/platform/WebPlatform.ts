@@ -222,7 +222,7 @@ export default class WebPlatform extends BasePlatform {
             url.pathname.replace(/\/$/, ""), // Remove trailing slash if present
         ].join("");
 
-        const ua = new UAParser();
+        const ua = new UAParser(window.navigator.userAgent);
         const browserName = ua.getBrowser().name || "unknown browser";
         let osName = ua.getOS().name || "unknown OS";
         // Stylise the value from the parser to match Apple's current branding.

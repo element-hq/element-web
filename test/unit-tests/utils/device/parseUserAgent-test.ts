@@ -43,7 +43,7 @@ const ANDROID_EXPECTED_RESULT = [
     makeDeviceExtendedInfo(DeviceType.Mobile, "Google (Nexus) (5)", "Android 7.0"),
     makeDeviceExtendedInfo(DeviceType.Mobile, "Samsung SM-A510F", "Android 6.0.1"),
     makeDeviceExtendedInfo(DeviceType.Mobile, "Samsung SM-G610M", "Android 7.0"),
-    makeDeviceExtendedInfo(DeviceType.Mobile, "Samsung SM-G973U", "Android 9", "Chrome", "69.0.3497.100"),
+    makeDeviceExtendedInfo(DeviceType.Mobile, "Samsung SM-G973U", "Android 9", "Mobile Chrome", "69.0.3497.100"),
 ];
 
 const IOS_UA = [
@@ -68,7 +68,7 @@ const DESKTOP_UA = [
     "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) ElementNightly/2022091301 Chrome/104.0.5112.102 Electron/20.1.1 Safari/537.36",
 ];
 const DESKTOP_EXPECTED_RESULT = [
-    makeDeviceExtendedInfo(DeviceType.Desktop, "Apple Macintosh", "Mac OS", "Electron", "20.1.1"),
+    makeDeviceExtendedInfo(DeviceType.Desktop, "Apple Macintosh", "macOS", "Electron", "20.1.1"),
     makeDeviceExtendedInfo(DeviceType.Desktop, undefined, "Windows", "Electron", "20.1.1"),
 ];
 
@@ -82,10 +82,10 @@ const WEB_UA = [
 ];
 
 const WEB_EXPECTED_RESULT = [
-    makeDeviceExtendedInfo(DeviceType.Web, "Apple Macintosh", "Mac OS", "Chrome", "104.0.5112.102"),
+    makeDeviceExtendedInfo(DeviceType.Web, "Apple Macintosh", "macOS", "Chrome", "104.0.5112.102"),
     makeDeviceExtendedInfo(DeviceType.Web, undefined, "Windows", "Chrome", "104.0.5112.102"),
-    makeDeviceExtendedInfo(DeviceType.Web, "Apple Macintosh", "Mac OS", "Firefox", "39.0"),
-    makeDeviceExtendedInfo(DeviceType.Web, "Apple Macintosh", "Mac OS", "Safari", "8.0.3"),
+    makeDeviceExtendedInfo(DeviceType.Web, "Apple Macintosh", "macOS", "Firefox", "39.0"),
+    makeDeviceExtendedInfo(DeviceType.Web, "Apple Macintosh", "macOS", "Safari", "8.0.3"),
     makeDeviceExtendedInfo(DeviceType.Web, undefined, "Windows", "Firefox", "40.0"),
     makeDeviceExtendedInfo(DeviceType.Web, undefined, "Windows", "Edge", "12.246"),
 ];
