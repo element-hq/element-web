@@ -1,7 +1,8 @@
 # Manual deploy workflow for deploying to app.element.io & staging.element.io
 # Runs automatically for staging.element.io when an RC or Release is published
 # Note: Does *NOT* run automatically for app.element.io so that it gets tested on staging.element.io beforehand
-name: Build and Deploy ${{ inputs.site || 'staging.element.io' }}
+name: Deploy release
+run-name: Deploy ${{ github.ref_name }} to ${{ inputs.site || 'staging.element.io' }}
 on:
     release:
         types: [published]
@@ -28,6 +29,8 @@ jobs:
         env:
             SITE: ${{ inputs.site || 'staging.element.io' }}
         steps:
+            - uses: actions/checkout@v4
+
             - name: Load GPG key
               run: |
                   curl https://packages.element.io/element-release-key.gpg | gpg --import
@@ -45,20 +48,20 @@ jobs:
             - name: Download current version for its old bundles
               id: current_download
               if: steps.current_version.outputs.version != github.ref_name
-              uses: element-hq/element-web/.github/actions/download-verify-element-tarball@${{ github.ref_name }}
+              uses: ./.github/actions/download-verify-element-tarball
               with:
                   tag: steps.current_version.outputs.version
-                  out-file-path: current_version
+                  out-file-path: _current_version
 
             - name: Download target version
-              uses: element-hq/element-web/.github/actions/download-verify-element-tarball@${{ github.ref_name }}
+              uses: ./.github/actions/download-verify-element-tarball
               with:
                   tag: ${{ github.ref_name }}
                   out-file-path: _deploy
 
             - name: Merge current bundles into target
               if: steps.current_download.outcome == 'success'
-              run: cp -vnpr current_version/bundles/* _deploy/bundles/
+              run: cp -vnpr _current_version/bundles/* _deploy/bundles/
 
             - name: Copy config
               run: cp element.io/app/config.json _deploy/config.json
