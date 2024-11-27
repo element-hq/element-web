@@ -22,7 +22,6 @@ describe("LogoutDialog", () => {
     beforeEach(() => {
         mockClient = getMockClientWithEventEmitter({
             ...mockClientMethodsCrypto(),
-            getKeyBackupVersion: jest.fn(),
         });
 
         mockCrypto = mocked(mockClient.getCrypto()!);
@@ -50,14 +49,14 @@ describe("LogoutDialog", () => {
     });
 
     it("Prompts user to connect backup if there is a backup on the server", async () => {
-        mockClient.getKeyBackupVersion.mockResolvedValue({} as KeyBackupInfo);
+        mockCrypto.getKeyBackupInfo.mockResolvedValue({} as KeyBackupInfo);
         const rendered = renderComponent();
         await rendered.findByText("Connect this session to Key Backup");
         expect(rendered.container).toMatchSnapshot();
     });
 
     it("Prompts user to set up backup if there is no backup on the server", async () => {
-        mockClient.getKeyBackupVersion.mockResolvedValue(null);
+        mockCrypto.getKeyBackupInfo.mockResolvedValue(null);
         const rendered = renderComponent();
         await rendered.findByText("Start using Key Backup");
         expect(rendered.container).toMatchSnapshot();
@@ -69,7 +68,7 @@ describe("LogoutDialog", () => {
     describe("when there is an error fetching backups", () => {
         filterConsole("Unable to fetch key backup status");
         it("prompts user to set up backup", async () => {
-            mockClient.getKeyBackupVersion.mockImplementation(async () => {
+            mockCrypto.getKeyBackupInfo.mockImplementation(async () => {
                 throw new Error("beep");
             });
             const rendered = renderComponent();

@@ -67,6 +67,9 @@ test.describe("Cryptography", function () {
             await page.locator(".mx_AuthPage").getByRole("button", { name: "I'll verify later" }).click();
             await app.viewRoomByName("Test room");
 
+            // In this case, the call to cryptoApi.isEncryptionEnabledInRoom is taking a long time to resolve
+            await page.waitForTimeout(1000);
+
             // There should be two historical events in the timeline
             const tiles = await page.locator(".mx_EventTile").all();
             expect(tiles.length).toBeGreaterThanOrEqual(2);

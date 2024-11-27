@@ -275,7 +275,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         }
 
         const content = this.props.mxEvent.getContent<ImageContent>();
-        let isAnimated = mayBeAnimated(content.info?.mimetype);
+        let isAnimated = content.info?.["org.matrix.msc4230.is_animated"] ?? mayBeAnimated(content.info?.mimetype);
 
         // If there is no included non-animated thumbnail then we will generate our own, we can't depend on the server
         // because 1. encryption and 2. we can't ask the server specifically for a non-animated thumbnail.
@@ -298,8 +298,15 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
                 }
 
                 try {
-                    const blob = await this.props.mediaEventHelper!.sourceBlob.value;
-                    if (!(await blobIsAnimated(content.info?.mimetype, blob))) {
+                    // If we didn't receive the MSC4230 is_animated flag
+                    // then we need to check if the image is animated by downloading it.
+                    if (
+                        content.info?.["org.matrix.msc4230.is_animated"] === false ||
+                        !(await blobIsAnimated(
+                            content.info?.mimetype,
+                            await this.props.mediaEventHelper!.sourceBlob.value,
+                        ))
+                    ) {
                         isAnimated = false;
                     }
 

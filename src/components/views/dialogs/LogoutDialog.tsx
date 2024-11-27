@@ -109,7 +109,7 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
         }
 
         // backup is not active. see if there is a backup version on the server we ought to back up to.
-        const backupInfo = await client.getKeyBackupVersion();
+        const backupInfo = await crypto.getKeyBackupInfo();
         this.setState({ backupStatus: backupInfo ? BackupStatus.SERVER_BACKUP_BUT_DISABLED : BackupStatus.NO_BACKUP });
     }
 

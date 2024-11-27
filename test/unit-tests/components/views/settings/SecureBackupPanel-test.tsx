@@ -28,14 +28,13 @@ describe("<SecureBackupPanel />", () => {
     const client = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),
         ...mockClientMethodsCrypto(),
-        getKeyBackupVersion: jest.fn().mockReturnValue("1"),
         getClientWellKnown: jest.fn(),
     });
 
     const getComponent = () => render(<SecureBackupPanel />);
 
     beforeEach(() => {
-        client.getKeyBackupVersion.mockResolvedValue({
+        jest.spyOn(client.getCrypto()!, "getKeyBackupInfo").mockResolvedValue({
             version: "1",
             algorithm: "test",
             auth_data: {
@@ -52,7 +51,6 @@ describe("<SecureBackupPanel />", () => {
         });
 
         mocked(client.secretStorage.hasKey).mockClear().mockResolvedValue(false);
-        client.getKeyBackupVersion.mockClear();
 
         mocked(accessSecretStorage).mockClear().mockResolvedValue();
     });
@@ -65,8 +63,8 @@ describe("<SecureBackupPanel />", () => {
     });
 
     it("handles error fetching backup", async () => {
-        // getKeyBackupVersion can fail for various reasons
-        client.getKeyBackupVersion.mockImplementation(async () => {
+        // getKeyBackupInfo can fail for various reasons
+        jest.spyOn(client.getCrypto()!, "getKeyBackupInfo").mockImplementation(async () => {
             throw new Error("beep beep");
         });
         const renderResult = getComponent();
@@ -75,9 +73,9 @@ describe("<SecureBackupPanel />", () => {
     });
 
     it("handles absence of backup", async () => {
-        client.getKeyBackupVersion.mockResolvedValue(null);
+        jest.spyOn(client.getCrypto()!, "getKeyBackupInfo").mockResolvedValue(null);
         getComponent();
-        // flush getKeyBackupVersion promise
+        // flush getKeyBackupInfo promise
         await flushPromises();
         expect(screen.getByText("Back up your keys before signing out to avoid losing them.")).toBeInTheDocument();
     });
@@ -120,7 +118,7 @@ describe("<SecureBackupPanel />", () => {
     });
 
     it("deletes backup after confirmation", async () => {
-        client.getKeyBackupVersion
+        jest.spyOn(client.getCrypto()!, "getKeyBackupInfo")
             .mockResolvedValueOnce({
                 version: "1",
                 algorithm: "test",
@@ -157,7 +155,7 @@ describe("<SecureBackupPanel />", () => {
         // flush checkKeyBackup promise
         await flushPromises();
 
-        client.getKeyBackupVersion.mockClear();
+        jest.spyOn(client.getCrypto()!, "getKeyBackupInfo").mockClear();
         mocked(client.getCrypto()!).isKeyBackupTrusted.mockClear();
 
         fireEvent.click(screen.getByText("Reset"));
@@ -167,7 +165,7 @@ describe("<SecureBackupPanel />", () => {
         await flushPromises();
 
         // backup status refreshed
-        expect(client.getKeyBackupVersion).toHaveBeenCalled();
+        expect(client.getCrypto()!.getKeyBackupInfo).toHaveBeenCalled();
         expect(client.getCrypto()!.isKeyBackupTrusted).toHaveBeenCalled();
     });
 });
