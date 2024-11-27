@@ -119,7 +119,7 @@ const setUpClientRoomAndStores = (): {
             skey: stateKey,
             content: content as IContent,
         });
-        room.addLiveEvents([event]);
+        room.addLiveEvents([event], { addToState: true });
         return { event_id: event.getId()! };
     });
 

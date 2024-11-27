@@ -20,7 +20,7 @@ import { randB64Bytes } from "../../utils/rand";
 // Docker tag to use for synapse docker image.
 // We target a specific digest as every now and then a Synapse update will break our CI.
 // This digest is updated by the playwright-image-updates.yaml workflow periodically.
-const DOCKER_TAG = "develop@sha256:e163b15bf4905e4067dece856cca00e6ac8d1d655f4f1307978eee256b3ea775";
+const DOCKER_TAG = "develop@sha256:b261d81d9a3615a7716fc92423ee5689b0b450ed49f87a4887e49ecab7aefe45";
 
 async function cfgDirFromTemplate(opts: StartHomeserverOpts): Promise<Omit<HomeserverConfig, "dockerUrl">> {
     const templateDir = path.join(__dirname, "templates", opts.template);

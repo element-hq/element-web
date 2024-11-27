@@ -86,7 +86,7 @@ describe("<Pill>", () => {
             room: room1Id,
             msg: "Room 1 Message",
         });
-        room1.addLiveEvents([room1Message]);
+        room1.addLiveEvents([room1Message], { addToState: true });
 
         room2 = new Room(room2Id, client, user1Id);
         room2.currentState.setStateEvents([mkRoomMemberJoinEvent(user2Id, room2Id)]);

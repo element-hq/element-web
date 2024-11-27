@@ -67,7 +67,7 @@ describe("retrieveStartedInfoEvent", () => {
     it("when the room contains the event, it should return it", async () => {
         const startEvent = mkStartEvent();
         const stopEvent = mkStopEvent(startEvent);
-        room.addLiveEvents([startEvent]);
+        room.addLiveEvents([startEvent], { addToState: true });
         expect(await retrieveStartedInfoEvent(stopEvent, client)).toBe(startEvent);
     });
 

@@ -697,7 +697,7 @@ describe("RoomView", () => {
                 skey: id,
                 ts,
             });
-            room.addLiveEvents([widgetEvent]);
+            room.addLiveEvents([widgetEvent], { addToState: false });
             room.currentState.setStateEvents([widgetEvent]);
             cli.emit(RoomStateEvent.Events, widgetEvent, room.currentState, null);
             await flushPromises();
