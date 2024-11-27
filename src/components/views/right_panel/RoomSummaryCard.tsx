@@ -51,7 +51,7 @@ import ShareDialog from "../dialogs/ShareDialog";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
-import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
+import { TimelineRenderingType } from "../../../contexts/RoomContext";
 import RoomName from "../elements/RoomName";
 import ExportDialog from "../dialogs/ExportDialog";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
@@ -76,6 +76,7 @@ import { useTransition } from "../../../hooks/useTransition";
 import { isVideoRoom as calcIsVideoRoom } from "../../../utils/video-rooms";
 import { usePinnedEvents } from "../../../hooks/usePinnedEvents";
 import { ReleaseAnnouncement } from "../../structures/ReleaseAnnouncement.tsx";
+import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
 
 interface IProps {
     room: Room;
@@ -232,7 +233,7 @@ const RoomSummaryCard: React.FC<IProps> = ({
     };
 
     const isRoomEncrypted = useIsEncrypted(cli, room);
-    const roomContext = useContext(RoomContext);
+    const roomContext = useScopedRoomContext("e2eStatus", "timelineRenderingType");
     const e2eStatus = roomContext.e2eStatus;
     const isVideoRoom = calcIsVideoRoom(room);
 

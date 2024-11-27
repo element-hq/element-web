@@ -19,12 +19,12 @@ import { Editor } from "./Editor";
 import { useInputEventProcessor } from "../hooks/useInputEventProcessor";
 import { useSetCursorPosition } from "../hooks/useSetCursorPosition";
 import { useIsFocused } from "../hooks/useIsFocused";
-import { useRoomContext } from "../../../../../contexts/RoomContext";
 import defaultDispatcher from "../../../../../dispatcher/dispatcher";
 import { Action } from "../../../../../dispatcher/actions";
 import { parsePermalink } from "../../../../../utils/permalinks/Permalinks";
 import { isNotNull } from "../../../../../Typeguards";
 import { useSettingValue } from "../../../../../hooks/useSettings";
+import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.tsx";
 
 interface WysiwygComposerProps {
     disabled?: boolean;
@@ -56,7 +56,7 @@ export const WysiwygComposer = memo(function WysiwygComposer({
     children,
     eventRelation,
 }: WysiwygComposerProps) {
-    const { room } = useRoomContext();
+    const { room } = useScopedRoomContext("room");
     const autocompleteRef = useRef<Autocomplete | null>(null);
 
     const inputEventProcessor = useInputEventProcessor(onSend, autocompleteRef, initialContent, eventRelation);
