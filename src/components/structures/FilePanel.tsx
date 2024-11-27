@@ -104,7 +104,11 @@ class FilePanel extends React.Component<IProps, IState> {
         }
 
         if (!this.state.timelineSet.eventIdToTimeline(ev.getId()!)) {
-            this.state.timelineSet.addEventToTimeline(ev, timeline, false);
+            this.state.timelineSet.addEventToTimeline(ev, timeline, {
+                fromCache: false,
+                addToState: false,
+                toStartOfTimeline: false,
+            });
         }
     }
 

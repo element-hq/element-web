@@ -593,18 +593,21 @@ describe("HTMLExport", () => {
 
     it("should not make /messages requests when exporting 'Current Timeline'", async () => {
         client.createMessagesRequest.mockRejectedValue(new Error("Should never be called"));
-        room.addLiveEvents([
-            new MatrixEvent({
-                event_id: `$eventId`,
-                type: EventType.RoomMessage,
-                sender: client.getSafeUserId(),
-                origin_server_ts: 123456789,
-                content: {
-                    msgtype: "m.text",
-                    body: `testing testing`,
-                },
-            }),
-        ]);
+        room.addLiveEvents(
+            [
+                new MatrixEvent({
+                    event_id: `$eventId`,
+                    type: EventType.RoomMessage,
+                    sender: client.getSafeUserId(),
+                    origin_server_ts: 123456789,
+                    content: {
+                        msgtype: "m.text",
+                        body: `testing testing`,
+                    },
+                }),
+            ],
+            { addToState: true },
+        );
 
         const exporter = new HTMLExporter(
             room,

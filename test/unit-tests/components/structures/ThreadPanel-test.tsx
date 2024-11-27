@@ -209,11 +209,11 @@ describe("ThreadPanel", () => {
                 return event ? Promise.resolve(event) : Promise.reject();
             });
             const [allThreads, myThreads] = room.threadsTimelineSets;
-            allThreads!.addLiveEvent(otherThread.rootEvent);
-            allThreads!.addLiveEvent(mixedThread.rootEvent);
-            allThreads!.addLiveEvent(ownThread.rootEvent);
-            myThreads!.addLiveEvent(mixedThread.rootEvent);
-            myThreads!.addLiveEvent(ownThread.rootEvent);
+            allThreads!.addLiveEvent(otherThread.rootEvent, { addToState: true });
+            allThreads!.addLiveEvent(mixedThread.rootEvent, { addToState: true });
+            allThreads!.addLiveEvent(ownThread.rootEvent, { addToState: true });
+            myThreads!.addLiveEvent(mixedThread.rootEvent, { addToState: true });
+            myThreads!.addLiveEvent(ownThread.rootEvent, { addToState: true });
 
             const renderResult = render(<TestThreadPanel />);
             await waitFor(() => expect(renderResult.container.querySelector(".mx_AutoHideScrollbar")).toBeFalsy());
@@ -258,7 +258,7 @@ describe("ThreadPanel", () => {
                 return event ? Promise.resolve(event) : Promise.reject();
             });
             const [allThreads] = room.threadsTimelineSets;
-            allThreads!.addLiveEvent(otherThread.rootEvent);
+            allThreads!.addLiveEvent(otherThread.rootEvent, { addToState: true });
 
             const renderResult = render(<TestThreadPanel />);
             await waitFor(() => expect(renderResult.container.querySelector(".mx_AutoHideScrollbar")).toBeFalsy());
