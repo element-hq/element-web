@@ -10,7 +10,6 @@ import * as React from "react";
 import { act, fireEvent, render, screen, waitFor } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 import {
-    EventTimeline,
     EventType,
     IEventDecryptionResult,
     MatrixClient,
@@ -18,7 +17,6 @@ import {
     NotificationCountType,
     PendingEventOrdering,
     Room,
-    RoomStateEvent,
     TweakName,
 } from "matrix-js-sdk/src/matrix";
 import {
@@ -72,9 +70,11 @@ describe("EventTile", () => {
     function getComponent(
         overrides: Partial<EventTileProps> = {},
         renderingType: TimelineRenderingType = TimelineRenderingType.Room,
+        roomContext: Partial<IRoomState> = {},
     ) {
         const context = getRoomContext(room, {
             timelineRenderingType: renderingType,
+            ...roomContext,
         });
         return render(<WrappedEventTile roomContext={context} eventTilePropertyOverrides={overrides} />);
     }
@@ -245,7 +245,6 @@ describe("EventTile", () => {
             const mockCrypto = {
                 // a mocked version of getEncryptionInfoForEvent which will pick its result from `eventToEncryptionInfoMap`
                 getEncryptionInfoForEvent: async (event: MatrixEvent) => eventToEncryptionInfoMap.get(event.getId()!)!,
-                isEncryptionEnabledInRoom: jest.fn().mockResolvedValue(false),
             } as unknown as CryptoApi;
             client.getCrypto = () => mockCrypto;
         });
@@ -439,8 +438,6 @@ describe("EventTile", () => {
         });
 
         it("should update the warning when the event is replaced with an unencrypted one", async () => {
-            jest.spyOn(client.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
-
             // we start out with an event from the trusted device
             mxEvent = await mkEncryptedMatrixEvent({
                 plainContent: { msgtype: "m.text", body: "msg1" },
@@ -454,7 +451,7 @@ describe("EventTile", () => {
                 shieldReason: null,
             } as EventEncryptionInfo);
 
-            const roomContext = getRoomContext(room, {});
+            const roomContext = getRoomContext(room, { isRoomEncrypted: true });
             const { container, rerender } = render(<WrappedEventTile roomContext={roomContext} />);
             await flushPromises();
 
@@ -590,18 +587,19 @@ describe("EventTile", () => {
             shieldReason: null,
         });
 
-        getComponent();
+        const { rerender } = getComponent();
         await flushPromises();
         // The room and the event are unencrypted, the tile should not show the not encrypted status
         expect(screen.queryByText("Not encrypted")).toBeNull();
 
         // The room is now encrypted
-        jest.spyOn(client.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
-        // Emit a state event to trigger a re-render
-        const roomState = room!.getLiveTimeline().getState(EventTimeline.FORWARDS)!;
-        act(() => {
-            roomState.emit(RoomStateEvent.Events, new MatrixEvent({ type: EventType.RoomEncryption }), roomState, null);
-        });
+        rerender(
+            <WrappedEventTile
+                roomContext={getRoomContext(room, {
+                    isRoomEncrypted: true,
+                })}
+            />,
+        );
 
         // The event tile should now show the not encrypted status
         await waitFor(() => expect(screen.getByText("Not encrypted")).toBeInTheDocument());

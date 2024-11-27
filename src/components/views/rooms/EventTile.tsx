@@ -11,7 +11,6 @@ import React, { createRef, forwardRef, JSX, MouseEvent, ReactNode } from "react"
 import classNames from "classnames";
 import {
     EventStatus,
-    EventTimeline,
     EventType,
     MatrixEvent,
     MatrixEventEvent,
@@ -22,7 +21,6 @@ import {
     Room,
     RoomEvent,
     RoomMember,
-    RoomStateEvent,
     Thread,
     ThreadEvent,
 } from "matrix-js-sdk/src/matrix";
@@ -264,10 +262,6 @@ interface IState {
 
     thread: Thread | null;
     threadNotification?: NotificationCountType;
-    /**
-     * Whether the event is encrypted.
-     */
-    isRoomEncrypted: boolean;
 }
 
 /**
@@ -324,7 +318,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             hover: false,
 
             thread,
-            isRoomEncrypted: false,
         };
 
         // don't do RR animations until we are mounted
@@ -393,7 +386,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         return true;
     }
 
-    public async componentDidMount(): Promise<void> {
+    public componentDidMount(): void {
         this.unmounted = false;
         this.suppressReadReceiptAnimation = false;
         const client = MatrixClientPeg.safeGet();
@@ -420,12 +413,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         room?.on(ThreadEvent.New, this.onNewThread);
 
         this.verifyEvent();
-
-        room?.getLiveTimeline().getState(EventTimeline.FORWARDS)?.on(RoomStateEvent.Events, this.onRoomStateEvents);
-
-        const crypto = client.getCrypto();
-        if (!room || !crypto) return;
-        this.setState({ isRoomEncrypted: await crypto.isEncryptionEnabledInRoom(room.roomId) });
     }
 
     private updateThread = (thread: Thread): void => {
@@ -447,10 +434,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             client.removeListener(RoomEvent.Receipt, this.onRoomReceipt);
             const room = client.getRoom(this.props.mxEvent.getRoomId());
             room?.off(ThreadEvent.New, this.onNewThread);
-            room
-                ?.getLiveTimeline()
-                .getState(EventTimeline.FORWARDS)
-                ?.off(RoomStateEvent.Events, this.onRoomStateEvents);
         }
         this.isListeningForReceipts = false;
         this.props.mxEvent.removeListener(MatrixEventEvent.Decrypted, this.onDecrypted);
@@ -484,17 +467,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             this.updateThread(thread);
             const room = MatrixClientPeg.safeGet().getRoom(this.props.mxEvent.getRoomId());
             room?.off(ThreadEvent.New, this.onNewThread);
-        }
-    };
-
-    private onRoomStateEvents = async (evt: MatrixEvent): Promise<void> => {
-        const client = MatrixClientPeg.safeGet();
-        const crypto = client.getCrypto();
-        if (!crypto) return;
-
-        const room = client.getRoom(evt.getRoomId());
-        if (room && evt.getType() === EventType.RoomEncryption) {
-            this.setState({ isRoomEncrypted: await crypto.isEncryptionEnabledInRoom(room.roomId) });
         }
     };
 
@@ -803,7 +775,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             }
         }
 
-        if (this.state.isRoomEncrypted) {
+        if (this.context.isRoomEncrypted) {
             // else if room is encrypted
             // and event is being encrypted or is not_sent (Unknown Devices/Network Error)
             if (ev.status === EventStatus.ENCRYPTING) {

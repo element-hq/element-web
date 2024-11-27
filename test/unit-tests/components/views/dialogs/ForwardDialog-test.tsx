@@ -32,7 +32,6 @@ import {
     mkEvent,
     mkMessage,
     mkStubRoom,
-    mockClientMethodsCrypto,
     mockPlatformPeg,
 } from "../../../../test-utils";
 import { TILE_SERVER_WK_KEY } from "../../../../../src/utils/WellKnownUtils";
@@ -76,7 +75,6 @@ describe("ForwardDialog", () => {
         getClientWellKnown: jest.fn().mockReturnValue({
             [TILE_SERVER_WK_KEY.name]: { map_style_url: "maps.com" },
         }),
-        ...mockClientMethodsCrypto(),
     });
     const defaultRooms = ["a", "A", "b"].map((name) => mkStubRoom(name, name, mockClient));
 
