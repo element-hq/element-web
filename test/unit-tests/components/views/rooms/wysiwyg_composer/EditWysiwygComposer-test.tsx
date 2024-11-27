@@ -64,7 +64,7 @@ describe("EditWysiwygComposer", () => {
 
         rerender(
             <MatrixClientContext.Provider value={mockClient}>
-                <ScopedRoomContextProvider {...{ ...defaultRoomContext }} room={undefined}>
+                <ScopedRoomContextProvider {...defaultRoomContext} room={undefined}>
                     <EditWysiwygComposer disabled={false} editorStateTransfer={editorStateTransfer} />
                 </ScopedRoomContextProvider>
             </MatrixClientContext.Provider>,

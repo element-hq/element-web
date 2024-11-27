@@ -27,7 +27,9 @@ class EfficientContext<C extends Record<string, any>> extends TypedEventEmitter<
     NotificationStateEvents,
     EventHandlerMap<C>
 > {
-    public state?: C;
+    public constructor(public state: C) {
+        super();
+    }
 
     public setState(state: C): void {
         const changedKeys = objectKeyChanges(this.state ?? ({} as C), state);
@@ -41,7 +43,7 @@ const ScopedRoomContext = createContext<EfficientContext<ContextValue> | undefin
 // Uses react memo and leverages splatting the value to ensure that the context is only updated when the state changes (shallow compare)
 export const ScopedRoomContextProvider = memo(
     ({ children, ...state }: { children: ReactNode } & ContextValue): JSX.Element => {
-        const contextRef = useRef(new EfficientContext<ContextValue>());
+        const contextRef = useRef(new EfficientContext<ContextValue>(state));
         useEffect(() => {
             contextRef.current.setState(state);
         }, [state]);
@@ -55,14 +57,14 @@ export const ScopedRoomContextProvider = memo(
     },
 );
 
-export function useScopedRoomContext<K extends Array<keyof ContextValue>>(
-    ...keys: K
-): { [key in K[number]]: ContextValue[key] } {
-    const context = useContext(ScopedRoomContext);
-    const [state, setState] = useState<{ [key in K[number]]: ContextValue[key] }>({} as any);
+type ScopedRoomContext<K extends Array<keyof ContextValue>> = { [key in K[number]]: ContextValue[key] };
 
-    useTypedEventEmitter(context, NotificationStateEvents.Update, (updatedKeys: K[]): void => {
-        if (context?.state && updatedKeys.some((updatedKey) => keys.includes(updatedKey as any))) {
+export function useScopedRoomContext<K extends Array<keyof ContextValue>>(...keys: K): ScopedRoomContext<K> {
+    const context = useContext(ScopedRoomContext);
+    const [state, setState] = useState<ScopedRoomContext<K>>(context?.state ?? ({} as ScopedRoomContext<K>));
+
+    useTypedEventEmitter(context, NotificationStateEvents.Update, (updatedKeys: K): void => {
+        if (context?.state && updatedKeys.some((updatedKey) => keys.includes(updatedKey))) {
             setState(context.state);
         }
     });
