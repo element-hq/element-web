@@ -9,15 +9,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, {
-    ChangeEvent,
-    ComponentProps,
-    createRef,
-    ReactElement,
-    ReactNode,
-    RefObject,
-    JSX,
-} from "react";
+import React, { ChangeEvent, ComponentProps, createRef, ReactElement, ReactNode, RefObject, JSX } from "react";
 import classNames from "classnames";
 import {
     IRecommendedVersion,
