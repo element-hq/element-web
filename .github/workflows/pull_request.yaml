@@ -9,6 +9,6 @@ jobs:
     action:
         uses: matrix-org/matrix-js-sdk/.github/workflows/pull_request.yaml@develop
         permissions:
-            pull-requests: read
+            pull-requests: write
         secrets:
             ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}

@@ -589,7 +589,7 @@ describe("RoomHeader", () => {
                 state_key: "",
                 room_id: room.roomId,
             });
-            room.addLiveEvents([joinRuleEvent]);
+            room.addLiveEvents([joinRuleEvent], { addToState: true });
 
             render(<RoomHeader room={room} />, getWrapper());
 

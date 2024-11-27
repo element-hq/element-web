@@ -85,7 +85,7 @@ describe("VoiceBroadcastBody", () => {
             deviceId,
             infoEvent,
         );
-        room.addEventsToTimeline([infoEvent], true, room.getLiveTimeline());
+        room.addEventsToTimeline([infoEvent], true, true, room.getLiveTimeline());
         testRecording = new VoiceBroadcastRecording(infoEvent, client);
         testPlayback = new VoiceBroadcastPlayback(infoEvent, client, new VoiceBroadcastRecordingsStore());
         mocked(VoiceBroadcastRecordingBody).mockImplementation(({ recording }): ReactElement | null => {
@@ -127,7 +127,7 @@ describe("VoiceBroadcastBody", () => {
 
     describe("when there is a stopped voice broadcast", () => {
         beforeEach(() => {
-            room.addEventsToTimeline([stoppedEvent], true, room.getLiveTimeline());
+            room.addEventsToTimeline([stoppedEvent], true, true, room.getLiveTimeline());
             renderVoiceBroadcast();
         });
 
@@ -148,7 +148,7 @@ describe("VoiceBroadcastBody", () => {
         describe("and the recordings ends", () => {
             beforeEach(() => {
                 act(() => {
-                    room.addEventsToTimeline([stoppedEvent], true, room.getLiveTimeline());
+                    room.addEventsToTimeline([stoppedEvent], true, true, room.getLiveTimeline());
                 });
             });
 

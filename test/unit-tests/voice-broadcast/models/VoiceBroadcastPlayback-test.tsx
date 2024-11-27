@@ -243,7 +243,7 @@ describe("VoiceBroadcastPlayback", () => {
         beforeEach(async () => {
             infoEvent = mkInfoEvent(VoiceBroadcastInfoState.Resumed);
             createChunkEvents();
-            room.addLiveEvents([infoEvent]);
+            room.addLiveEvents([infoEvent], { addToState: true });
             playback = await mkPlayback();
         });
 
@@ -331,7 +331,7 @@ describe("VoiceBroadcastPlayback", () => {
             infoEvent = mkInfoEvent(VoiceBroadcastInfoState.Resumed);
             createChunkEvents();
             setUpChunkEvents([chunk2Event, chunk1Event]);
-            room.addLiveEvents([infoEvent, chunk1Event, chunk2Event]);
+            room.addLiveEvents([infoEvent, chunk1Event, chunk2Event], { addToState: true });
             room.relations.aggregateChildEvent(chunk2Event);
             room.relations.aggregateChildEvent(chunk1Event);
             playback = await mkPlayback();
@@ -372,7 +372,7 @@ describe("VoiceBroadcastPlayback", () => {
 
         describe("and an event with the same transaction Id occurs", () => {
             beforeEach(() => {
-                room.addLiveEvents([chunk2BEvent]);
+                room.addLiveEvents([chunk2BEvent], { addToState: true });
                 room.relations.aggregateChildEvent(chunk2BEvent);
             });
 
@@ -404,7 +404,7 @@ describe("VoiceBroadcastPlayback", () => {
                             infoEvent,
                             2,
                         );
-                        room.addLiveEvents([stoppedEvent]);
+                        room.addLiveEvents([stoppedEvent], { addToState: true });
                         room.relations.aggregateChildEvent(stoppedEvent);
                         chunk2Playback.emit(PlaybackState.Stopped);
                     });
@@ -426,7 +426,7 @@ describe("VoiceBroadcastPlayback", () => {
                             infoEvent,
                             3,
                         );
-                        room.addLiveEvents([stoppedEvent]);
+                        room.addLiveEvents([stoppedEvent], { addToState: true });
                         room.relations.aggregateChildEvent(stoppedEvent);
                         chunk2Playback.emit(PlaybackState.Stopped);
                     });
@@ -435,7 +435,7 @@ describe("VoiceBroadcastPlayback", () => {
 
                     describe("and the next chunk arrives", () => {
                         beforeEach(() => {
-                            room.addLiveEvents([chunk3Event]);
+                            room.addLiveEvents([chunk3Event], { addToState: true });
                             room.relations.aggregateChildEvent(chunk3Event);
                         });
 
@@ -521,7 +521,7 @@ describe("VoiceBroadcastPlayback", () => {
             createChunkEvents();
             // use delayed first chunk here to simulate loading time
             setUpChunkEvents([chunk2Event, deplayedChunk1Event, chunk3Event]);
-            room.addLiveEvents([infoEvent, deplayedChunk1Event, chunk2Event, chunk3Event]);
+            room.addLiveEvents([infoEvent, deplayedChunk1Event, chunk2Event, chunk3Event], { addToState: true });
             playback = await mkPlayback(true);
         });
 
