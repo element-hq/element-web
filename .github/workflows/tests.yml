@@ -26,10 +26,12 @@ env:
     # fetchdep.sh needs to know our PR number
     PR_NUMBER: ${{ github.event.pull_request.number }}
 
+permissions: {}
+
 jobs:
     jest:
         name: Jest
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-24.04
         strategy:
             fail-fast: false
             matrix:
@@ -93,14 +95,16 @@ jobs:
         name: jest-tests
         needs: jest
         if: always()
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-24.04
+        permissions:
+            statuses: write
         steps:
             - if: needs.jest.result != 'skipped' && needs.jest.result != 'success'
               run: exit 1
 
             - name: Skip SonarCloud in merge queue
               if: github.event_name == 'merge_group' || inputs.disable_coverage == 'true'
-              uses: Sibz/github-status-action@faaa4d96fecf273bd762985e0e7f9f933c774918 # v1
+              uses: guibranco/github-status-action-v2@66088c44e212a906c32a047529a213d81809ec1c
               with:
                   authToken: ${{ secrets.GITHUB_TOKEN }}
                   state: success

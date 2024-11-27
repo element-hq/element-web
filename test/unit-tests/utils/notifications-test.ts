@@ -270,7 +270,7 @@ describe("notifications", () => {
         // set true, no existing event
         it("sets unread flag if event doesn't exist", async () => {
             await setMarkedUnreadState(room, client, true);
-            expect(client.setRoomAccountData).toHaveBeenCalledWith(ROOM_ID, "com.famedly.marked_unread", {
+            expect(client.setRoomAccountData).toHaveBeenCalledWith(ROOM_ID, "m.marked_unread", {
                 unread: true,
             });
         });
@@ -287,7 +287,7 @@ describe("notifications", () => {
                 .fn()
                 .mockReturnValue({ getContent: jest.fn().mockReturnValue({ unread: false }) });
             await setMarkedUnreadState(room, client, true);
-            expect(client.setRoomAccountData).toHaveBeenCalledWith(ROOM_ID, "com.famedly.marked_unread", {
+            expect(client.setRoomAccountData).toHaveBeenCalledWith(ROOM_ID, "m.marked_unread", {
                 unread: true,
             });
         });
@@ -316,7 +316,7 @@ describe("notifications", () => {
                 .fn()
                 .mockReturnValue({ getContent: jest.fn().mockReturnValue({ unread: true }) });
             await setMarkedUnreadState(room, client, false);
-            expect(client.setRoomAccountData).toHaveBeenCalledWith(ROOM_ID, "com.famedly.marked_unread", {
+            expect(client.setRoomAccountData).toHaveBeenCalledWith(ROOM_ID, "m.marked_unread", {
                 unread: false,
             });
         });

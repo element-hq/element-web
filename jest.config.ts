@@ -32,13 +32,12 @@ const config: Config = {
         "decoderWorker\\.min\\.wasm": "<rootDir>/__mocks__/empty.js",
         "waveWorker\\.min\\.js": "<rootDir>/__mocks__/empty.js",
         "context-filter-polyfill": "<rootDir>/__mocks__/empty.js",
-        "FontManager.ts": "<rootDir>/__mocks__/FontManager.js",
         "workers/(.+)Factory": "<rootDir>/__mocks__/workerFactoryMock.js",
         "^!!raw-loader!.*": "jest-raw-loader",
         "recorderWorkletFactory": "<rootDir>/__mocks__/empty.js",
         "^fetch-mock$": "<rootDir>/node_modules/fetch-mock",
     },
-    transformIgnorePatterns: ["/node_modules/(?!matrix-js-sdk).+$"],
+    transformIgnorePatterns: ["/node_modules/(?!(mime|matrix-js-sdk)).+$"],
     collectCoverageFrom: [
         "<rootDir>/src/**/*.{js,ts,tsx}",
         // getSessionLock is piped into a different JS context via stringification, and the coverage functionality is

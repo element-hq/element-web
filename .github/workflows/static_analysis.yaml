@@ -16,6 +16,8 @@ env:
     REPOSITORY: ${{ github.repository }}
     PR_NUMBER: ${{ github.event.pull_request.number }}
 
+permissions: {} # No permissions required
+
 jobs:
     ts_lint:
         name: "Typescript Syntax Check"
@@ -37,6 +39,8 @@ jobs:
     i18n_lint:
         name: "i18n Check"
         uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@main
+        permissions:
+            pull-requests: read
         with:
             hardcoded-words: "Element"
             allowed-hardcoded-keys: |
@@ -50,7 +54,7 @@ jobs:
 
     rethemendex_lint:
         name: "Rethemendex Check"
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-24.04
         steps:
             - uses: actions/checkout@v4
 
@@ -122,6 +126,12 @@ jobs:
               with:
                   cache: "yarn"
                   node-version: "lts/*"
+
+            - name: Install Deps
+              run: "yarn install --frozen-lockfile"
+
+            - name: Run linter
+              run: "yarn run lint:knip"
 
             - name: Install Deps
               run: "scripts/layered.sh"

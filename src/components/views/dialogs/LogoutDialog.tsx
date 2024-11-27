@@ -7,12 +7,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { lazy } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import type CreateKeyBackupDialog from "../../../async-components/views/dialogs/security/CreateKeyBackupDialog";
-import type ExportE2eKeysDialog from "../../../async-components/views/dialogs/security/ExportE2eKeysDialog";
 import Modal from "../../../Modal";
 import dis from "../../../dispatcher/dispatcher";
 import { _t } from "../../../languageHandler";
@@ -111,15 +109,13 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
         }
 
         // backup is not active. see if there is a backup version on the server we ought to back up to.
-        const backupInfo = await client.getKeyBackupVersion();
+        const backupInfo = await crypto.getKeyBackupInfo();
         this.setState({ backupStatus: backupInfo ? BackupStatus.SERVER_BACKUP_BUT_DISABLED : BackupStatus.NO_BACKUP });
     }
 
     private onExportE2eKeysClicked = (): void => {
-        Modal.createDialogAsync(
-            import("../../../async-components/views/dialogs/security/ExportE2eKeysDialog") as unknown as Promise<
-                typeof ExportE2eKeysDialog
-            >,
+        Modal.createDialog(
+            lazy(() => import("../../../async-components/views/dialogs/security/ExportE2eKeysDialog")),
             {
                 matrixClient: MatrixClientPeg.safeGet(),
             },
@@ -147,10 +143,8 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
                 /* static = */ true,
             );
         } else {
-            Modal.createDialogAsync(
-                import("../../../async-components/views/dialogs/security/CreateKeyBackupDialog") as unknown as Promise<
-                    typeof CreateKeyBackupDialog
-                >,
+            Modal.createDialog(
+                lazy(() => import("../../../async-components/views/dialogs/security/CreateKeyBackupDialog")),
                 undefined,
                 undefined,
                 /* priority = */ false,

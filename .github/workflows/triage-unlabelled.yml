@@ -3,11 +3,13 @@ name: Move unlabelled from needs info columns to triaged
 on:
     issues:
         types: [unlabeled]
-
+permissions: {}
 jobs:
     Move_Unabeled_Issue_On_Project_Board:
         name: Move no longer X-Needs-Info issues to Triaged
         runs-on: ubuntu-24.04
+        permissions:
+            repository-projects: read
         if: >
             ${{
             !contains(github.event.issue.labels.*.name, 'X-Needs-Info') }}

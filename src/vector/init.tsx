@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import * as ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import React, { StrictMode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -23,9 +23,6 @@ import ElectronPlatform from "./platform/ElectronPlatform";
 import PWAPlatform from "./platform/PWAPlatform";
 import WebPlatform from "./platform/WebPlatform";
 import { initRageshake, initRageshakeStore } from "./rageshakesetup";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore - this path is created at runtime and therefore won't exist at typecheck time
-import { INSTALLED_MODULES } from "../modules";
 
 export const rageshakePromise = initRageshake();
 
@@ -96,7 +93,9 @@ export async function loadApp(fragParams: {}): Promise<void> {
     function setWindowMatrixChat(matrixChat: MatrixChat): void {
         window.matrixChat = matrixChat;
     }
-    ReactDOM.render(await module.loadApp(fragParams, setWindowMatrixChat), document.getElementById("matrixchat"));
+    const app = await module.loadApp(fragParams, setWindowMatrixChat);
+    const root = createRoot(document.getElementById("matrixchat")!);
+    root.render(app);
 }
 
 export async function showError(title: string, messages?: string[]): Promise<void> {
@@ -104,11 +103,11 @@ export async function showError(title: string, messages?: string[]): Promise<voi
         /* webpackChunkName: "error-view" */
         "../async-components/structures/ErrorView"
     );
-    window.matrixChat = ReactDOM.render(
+    const root = createRoot(document.getElementById("matrixchat")!);
+    root.render(
         <StrictMode>
             <ErrorView title={title} messages={messages} />
         </StrictMode>,
-        document.getElementById("matrixchat"),
     );
 }
 
@@ -117,15 +116,18 @@ export async function showIncompatibleBrowser(onAccept: () => void): Promise<voi
         /* webpackChunkName: "error-view" */
         "../async-components/structures/ErrorView"
     );
-    window.matrixChat = ReactDOM.render(
+    const root = createRoot(document.getElementById("matrixchat")!);
+    root.render(
         <StrictMode>
             <UnsupportedBrowserView onAccept={onAccept} />
         </StrictMode>,
-        document.getElementById("matrixchat"),
     );
 }
 
 export async function loadModules(): Promise<void> {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore - this path is created at runtime and therefore won't exist at typecheck time
+    const { INSTALLED_MODULES } = await import("../modules");
     for (const InstalledModule of INSTALLED_MODULES) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore - we know the constructor exists even if TypeScript can't be convinced of that

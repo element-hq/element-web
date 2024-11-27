@@ -6,32 +6,48 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
+import * as fs from "node:fs";
+
 import type { Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
 import { ElementAppPage } from "../../pages/ElementAppPage";
+import { Credentials } from "../../plugins/homeserver";
 
 const STICKER_PICKER_WIDGET_ID = "fake-sticker-picker";
 const STICKER_PICKER_WIDGET_NAME = "Fake Stickers";
 const STICKER_NAME = "Test Sticker";
 const ROOM_NAME_1 = "Sticker Test";
 const ROOM_NAME_2 = "Sticker Test Two";
-const STICKER_MESSAGE = JSON.stringify({
-    action: "m.sticker",
-    api: "fromWidget",
-    data: {
-        name: "teststicker",
-        description: STICKER_NAME,
-        file: "test.png",
-        content: {
-            body: STICKER_NAME,
-            msgtype: "m.sticker",
-            url: "mxc://localhost/somewhere",
+const STICKER_IMAGE = fs.readFileSync("playwright/sample-files/riot.png");
+
+function getStickerMessage(contentUri: string, mimetype: string): string {
+    return JSON.stringify({
+        action: "m.sticker",
+        api: "fromWidget",
+        data: {
+            name: "teststicker",
+            description: STICKER_NAME,
+            file: "test.png",
+            content: {
+                body: STICKER_NAME,
+                info: {
+                    h: 480,
+                    mimetype: mimetype,
+                    size: 13818,
+                    w: 480,
+                },
+                msgtype: "m.sticker",
+                url: contentUri,
+            },
         },
-    },
-    requestId: "1",
-    widgetId: STICKER_PICKER_WIDGET_ID,
-});
-const WIDGET_HTML = `
+        requestId: "1",
+        widgetId: STICKER_PICKER_WIDGET_ID,
+    });
+}
+
+function getWidgetHtml(contentUri: string, mimetype: string) {
+    const stickerMessage = getStickerMessage(contentUri, mimetype);
+    return `
     <html lang="en">
         <head>
             <title>Fake Sticker Picker</title>
@@ -51,13 +67,13 @@ const WIDGET_HTML = `
             <button name="Send" id="sendsticker">Press for sticker</button>
             <script>
                 document.getElementById('sendsticker').onclick = () => {
-                    window.parent.postMessage(${STICKER_MESSAGE}, '*')
+                    window.parent.postMessage(${stickerMessage}, '*')
                 };
             </script>
         </body>
     </html>
 `;
-
+}
 async function openStickerPicker(app: ElementAppPage) {
     const options = await app.openMessageComposerOptions();
     await options.getByRole("menuitem", { name: "Sticker" }).click();
@@ -71,7 +87,8 @@ async function sendStickerFromPicker(page: Page) {
     await expect(page.locator(".mx_AppTileFullWidth#stickers")).not.toBeVisible();
 }
 
-async function expectTimelineSticker(page: Page, roomId: string) {
+async function expectTimelineSticker(page: Page, roomId: string, contentUri: string) {
+    const contentId = contentUri.split("/").slice(-1)[0];
     // Make sure it's in the right room
     await expect(page.locator(".mx_EventTile_sticker > a")).toHaveAttribute("href", new RegExp(`/${roomId}/`));
 
@@ -80,13 +97,43 @@ async function expectTimelineSticker(page: Page, roomId: string) {
     // download URL.
     await expect(page.locator(`img[alt="${STICKER_NAME}"]`)).toHaveAttribute(
         "src",
-        new RegExp("/download/localhost/somewhere"),
+        new RegExp(`/localhost/${contentId}`),
     );
+}
+
+async function expectFileTile(page: Page, roomId: string, contentUri: string) {
+    await expect(page.locator(".mx_MFileBody_info_filename")).toContainText(STICKER_NAME);
+}
+
+async function setWidgetAccountData(
+    app: ElementAppPage,
+    user: Credentials,
+    stickerPickerUrl: string,
+    provideCreatorUserId: boolean = true,
+) {
+    await app.client.setAccountData("m.widgets", {
+        [STICKER_PICKER_WIDGET_ID]: {
+            content: {
+                type: "m.stickerpicker",
+                name: STICKER_PICKER_WIDGET_NAME,
+                url: stickerPickerUrl,
+                creatorUserId: provideCreatorUserId ? user.userId : undefined,
+            },
+            sender: user.userId,
+            state_key: STICKER_PICKER_WIDGET_ID,
+            type: "m.widget",
+            id: STICKER_PICKER_WIDGET_ID,
+        },
+    });
 }
 
 test.describe("Stickers", () => {
     test.use({
         displayName: "Sally",
+        room: async ({ app }, use) => {
+            const roomId = await app.client.createRoom({ name: ROOM_NAME_1 });
+            await use({ roomId });
+        },
     });
 
     // We spin up a web server for the sticker picker so that we're not testing to see if
@@ -96,34 +143,19 @@ test.describe("Stickers", () => {
     //
     // See sendStickerFromPicker() for more detail on iframe comms.
     let stickerPickerUrl: string;
-    test.beforeEach(async ({ webserver }) => {
-        stickerPickerUrl = webserver.start(WIDGET_HTML);
-    });
 
-    test("should send a sticker to multiple rooms", async ({ page, app, user }) => {
-        const roomId1 = await app.client.createRoom({ name: ROOM_NAME_1 });
+    test("should send a sticker to multiple rooms", async ({ webserver, page, app, user, room }) => {
         const roomId2 = await app.client.createRoom({ name: ROOM_NAME_2 });
-
-        await app.client.setAccountData("m.widgets", {
-            [STICKER_PICKER_WIDGET_ID]: {
-                content: {
-                    type: "m.stickerpicker",
-                    name: STICKER_PICKER_WIDGET_NAME,
-                    url: stickerPickerUrl,
-                    creatorUserId: user.userId,
-                },
-                sender: user.userId,
-                state_key: STICKER_PICKER_WIDGET_ID,
-                type: "m.widget",
-                id: STICKER_PICKER_WIDGET_ID,
-            },
-        });
+        const { content_uri: contentUri } = await app.client.uploadContent(STICKER_IMAGE, { type: "image/png" });
+        const widgetHtml = getWidgetHtml(contentUri, "image/png");
+        stickerPickerUrl = webserver.start(widgetHtml);
+        setWidgetAccountData(app, user, stickerPickerUrl);
 
         await app.viewRoomByName(ROOM_NAME_1);
-        await expect(page).toHaveURL(`/#/room/${roomId1}`);
+        await expect(page).toHaveURL(`/#/room/${room.roomId}`);
         await openStickerPicker(app);
         await sendStickerFromPicker(page);
-        await expectTimelineSticker(page, roomId1);
+        await expectTimelineSticker(page, room.roomId, contentUri);
 
         // Ensure that when we switch to a different room that the sticker
         // goes to the right place
@@ -131,31 +163,40 @@ test.describe("Stickers", () => {
         await expect(page).toHaveURL(`/#/room/${roomId2}`);
         await openStickerPicker(app);
         await sendStickerFromPicker(page);
-        await expectTimelineSticker(page, roomId2);
+        await expectTimelineSticker(page, roomId2, contentUri);
     });
 
-    test("should handle a sticker picker widget missing creatorUserId", async ({ page, app, user }) => {
-        const roomId1 = await app.client.createRoom({ name: ROOM_NAME_1 });
-
-        await app.client.setAccountData("m.widgets", {
-            [STICKER_PICKER_WIDGET_ID]: {
-                content: {
-                    type: "m.stickerpicker",
-                    name: STICKER_PICKER_WIDGET_NAME,
-                    url: stickerPickerUrl,
-                    // No creatorUserId
-                },
-                sender: user.userId,
-                state_key: STICKER_PICKER_WIDGET_ID,
-                type: "m.widget",
-                id: STICKER_PICKER_WIDGET_ID,
-            },
-        });
+    test("should handle a sticker picker widget missing creatorUserId", async ({
+        webserver,
+        page,
+        app,
+        user,
+        room,
+    }) => {
+        const { content_uri: contentUri } = await app.client.uploadContent(STICKER_IMAGE, { type: "image/png" });
+        const widgetHtml = getWidgetHtml(contentUri, "image/png");
+        stickerPickerUrl = webserver.start(widgetHtml);
+        setWidgetAccountData(app, user, stickerPickerUrl, false);
 
         await app.viewRoomByName(ROOM_NAME_1);
-        await expect(page).toHaveURL(`/#/room/${roomId1}`);
+        await expect(page).toHaveURL(`/#/room/${room.roomId}`);
         await openStickerPicker(app);
         await sendStickerFromPicker(page);
-        await expectTimelineSticker(page, roomId1);
+        await expectTimelineSticker(page, room.roomId, contentUri);
+    });
+
+    test("should render invalid mimetype as a file", async ({ webserver, page, app, user, room }) => {
+        const { content_uri: contentUri } = await app.client.uploadContent(STICKER_IMAGE, {
+            type: "application/octet-stream",
+        });
+        const widgetHtml = getWidgetHtml(contentUri, "application/octet-stream");
+        stickerPickerUrl = webserver.start(widgetHtml);
+        setWidgetAccountData(app, user, stickerPickerUrl);
+
+        await app.viewRoomByName(ROOM_NAME_1);
+        await expect(page).toHaveURL(`/#/room/${room.roomId}`);
+        await openStickerPicker(app);
+        await sendStickerFromPicker(page);
+        await expectFileTile(page, room.roomId, contentUri);
     });
 });

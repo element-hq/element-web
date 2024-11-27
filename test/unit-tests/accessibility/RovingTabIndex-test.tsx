@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { HTMLAttributes } from "react";
-import { render } from "jest-matrix-react";
+import { act, render } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
 import {
@@ -26,6 +26,12 @@ const Button = (props: HTMLAttributes<HTMLButtonElement>) => {
 
 const checkTabIndexes = (buttons: NodeListOf<HTMLElement>, expectations: number[]) => {
     expect([...buttons].map((b) => b.tabIndex)).toStrictEqual(expectations);
+};
+
+const createButtonElement = (text: string): HTMLButtonElement => {
+    const button = document.createElement("button");
+    button.textContent = text;
+    return button;
 };
 
 // give the buttons keys for the fibre reconciler to not treat them all as the same
@@ -73,15 +79,15 @@ describe("RovingTabIndex", () => {
         checkTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
 
         // focus on 2nd button and test it is the only active one
-        container.querySelectorAll("button")[2].focus();
+        act(() => container.querySelectorAll("button")[2].focus());
         checkTabIndexes(container.querySelectorAll("button"), [-1, -1, 0]);
 
         // focus on 1st button and test it is the only active one
-        container.querySelectorAll("button")[1].focus();
+        act(() => container.querySelectorAll("button")[1].focus());
         checkTabIndexes(container.querySelectorAll("button"), [-1, 0, -1]);
 
         // check that the active button does not change even on an explicit blur event
-        container.querySelectorAll("button")[1].blur();
+        act(() => container.querySelectorAll("button")[1].blur());
         checkTabIndexes(container.querySelectorAll("button"), [-1, 0, -1]);
 
         // update the children, it should remain on the same button
@@ -114,6 +120,25 @@ describe("RovingTabIndex", () => {
         checkTabIndexes(container.querySelectorAll("button"), [-1, -1, 0]);
     });
 
+    it("RovingTabIndexProvider provides a ref to the dom element", () => {
+        const nodeRef = React.createRef<HTMLButtonElement>();
+        const MyButton = (props: HTMLAttributes<HTMLButtonElement>) => {
+            const [onFocus, isActive, ref] = useRovingTabIndex<HTMLButtonElement>(nodeRef);
+            return <button {...props} onFocus={onFocus} tabIndex={isActive ? 0 : -1} ref={ref} />;
+        };
+        const { container } = render(
+            <RovingTabIndexProvider>
+                {() => (
+                    <React.Fragment>
+                        <MyButton />
+                    </React.Fragment>
+                )}
+            </RovingTabIndexProvider>,
+        );
+        // nodeRef should point to button
+        expect(nodeRef.current).toBe(container.querySelector("button"));
+    });
+
     it("RovingTabIndexProvider works as expected with RovingTabIndexWrapper", () => {
         const { container } = render(
             <RovingTabIndexProvider>
@@ -123,11 +148,7 @@ describe("RovingTabIndex", () => {
                         {button2}
                         <RovingTabIndexWrapper>
                             {({ onFocus, isActive, ref }) => (
-                                <button
-                                    onFocus={onFocus}
-                                    tabIndex={isActive ? 0 : -1}
-                                    ref={ref as React.RefObject<HTMLButtonElement>}
-                                >
+                                <button onFocus={onFocus} tabIndex={isActive ? 0 : -1} ref={ref}>
                                     .
                                 </button>
                             )}
@@ -141,81 +162,81 @@ describe("RovingTabIndex", () => {
         checkTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
 
         // focus on 2nd button and test it is the only active one
-        container.querySelectorAll("button")[2].focus();
+        act(() => container.querySelectorAll("button")[2].focus());
         checkTabIndexes(container.querySelectorAll("button"), [-1, -1, 0]);
     });
 
     describe("reducer functions as expected", () => {
         it("SetFocus works as expected", () => {
-            const ref1 = React.createRef<HTMLElement>();
-            const ref2 = React.createRef<HTMLElement>();
+            const node1 = createButtonElement("Button 1");
+            const node2 = createButtonElement("Button 2");
             expect(
                 reducer(
                     {
-                        activeRef: ref1,
-                        refs: [ref1, ref2],
+                        activeNode: node1,
+                        nodes: [node1, node2],
                     },
                     {
                         type: Type.SetFocus,
                         payload: {
-                            ref: ref2,
+                            node: node2,
                         },
                     },
                 ),
             ).toStrictEqual({
-                activeRef: ref2,
-                refs: [ref1, ref2],
+                activeNode: node2,
+                nodes: [node1, node2],
             });
         });
 
         it("Unregister works as expected", () => {
-            const ref1 = React.createRef<HTMLElement>();
-            const ref2 = React.createRef<HTMLElement>();
-            const ref3 = React.createRef<HTMLElement>();
-            const ref4 = React.createRef<HTMLElement>();
+            const button1 = createButtonElement("Button 1");
+            const button2 = createButtonElement("Button 2");
+            const button3 = createButtonElement("Button 3");
+            const button4 = createButtonElement("Button 4");
 
             let state: IState = {
-                refs: [ref1, ref2, ref3, ref4],
+                nodes: [button1, button2, button3, button4],
             };
 
             state = reducer(state, {
                 type: Type.Unregister,
                 payload: {
-                    ref: ref2,
+                    node: button2,
                 },
             });
             expect(state).toStrictEqual({
-                refs: [ref1, ref3, ref4],
+                nodes: [button1, button3, button4],
             });
 
             state = reducer(state, {
                 type: Type.Unregister,
                 payload: {
-                    ref: ref3,
+                    node: button3,
                 },
             });
             expect(state).toStrictEqual({
-                refs: [ref1, ref4],
+                nodes: [button1, button4],
             });
 
             state = reducer(state, {
                 type: Type.Unregister,
                 payload: {
-                    ref: ref4,
+                    node: button4,
                 },
             });
             expect(state).toStrictEqual({
-                refs: [ref1],
+                nodes: [button1],
             });
 
             state = reducer(state, {
                 type: Type.Unregister,
                 payload: {
-                    ref: ref1,
+                    node: button1,
                 },
             });
             expect(state).toStrictEqual({
-                refs: [],
+                nodes: [],
             });
         });
 
@@ -235,122 +256,122 @@ describe("RovingTabIndex", () => {
             );
 
             let state: IState = {
-                refs: [],
+                nodes: [],
             };
 
             state = reducer(state, {
                 type: Type.Register,
                 payload: {
-                    ref: ref1,
+                    node: ref1.current!,
                 },
             });
             expect(state).toStrictEqual({
-                activeRef: ref1,
-                refs: [ref1],
+                activeNode: ref1.current,
+                nodes: [ref1.current],
             });
 
             state = reducer(state, {
                 type: Type.Register,
                 payload: {
-                    ref: ref2,
+                    node: ref2.current!,
                 },
             });
             expect(state).toStrictEqual({
-                activeRef: ref1,
-                refs: [ref1, ref2],
+                activeNode: ref1.current,
+                nodes: [ref1.current, ref2.current],
             });
 
             state = reducer(state, {
                 type: Type.Register,
                 payload: {
-                    ref: ref3,
+                    node: ref3.current!,
                 },
             });
             expect(state).toStrictEqual({
-                activeRef: ref1,
-                refs: [ref1, ref2, ref3],
+                activeNode: ref1.current,
+                nodes: [ref1.current, ref2.current, ref3.current],
             });
 
             state = reducer(state, {
                 type: Type.Register,
                 payload: {
-                    ref: ref4,
+                    node: ref4.current!,
                 },
             });
             expect(state).toStrictEqual({
-                activeRef: ref1,
-                refs: [ref1, ref2, ref3, ref4],
+                activeNode: ref1.current,
+                nodes: [ref1.current, ref2.current, ref3.current, ref4.current],
             });
 
             // test that the automatic focus switch works for unmounting
             state = reducer(state, {
                 type: Type.SetFocus,
                 payload: {
-                    ref: ref2,
+                    node: ref2.current!,
                 },
             });
             expect(state).toStrictEqual({
-                activeRef: ref2,
-                refs: [ref1, ref2, ref3, ref4],
+                activeNode: ref2.current,
+                nodes: [ref1.current, ref2.current, ref3.current, ref4.current],
             });
 
             state = reducer(state, {
                 type: Type.Unregister,
                 payload: {
-                    ref: ref2,
+                    node: ref2.current!,
                 },
             });
             expect(state).toStrictEqual({
-                activeRef: ref3,
-                refs: [ref1, ref3, ref4],
+                activeNode: ref3.current,
+                nodes: [ref1.current, ref3.current, ref4.current],
             });
 
             // test that the insert into the middle works as expected
             state = reducer(state, {
                 type: Type.Register,
                 payload: {
-                    ref: ref2,
+                    node: ref2.current!,
                 },
             });
             expect(state).toStrictEqual({
-                activeRef: ref3,
-                refs: [ref1, ref2, ref3, ref4],
+                activeNode: ref3.current,
+                nodes: [ref1.current, ref2.current, ref3.current, ref4.current],
             });
 
             // test that insertion at the edges works
             state = reducer(state, {
                 type: Type.Unregister,
                 payload: {
-                    ref: ref1,
+                    node: ref1.current!,
                 },
             });
             state = reducer(state, {
                 type: Type.Unregister,
                 payload: {
-                    ref: ref4,
+                    node: ref4.current!,
                 },
             });
             expect(state).toStrictEqual({
-                activeRef: ref3,
-                refs: [ref2, ref3],
+                activeNode: ref3.current,
+                nodes: [ref2.current, ref3.current],
             });
 
             state = reducer(state, {
                 type: Type.Register,
                 payload: {
-                    ref: ref1,
+                    node: ref1.current!,
                 },
             });
 
             state = reducer(state, {
                 type: Type.Register,
                 payload: {
-                    ref: ref4,
+                    node: ref4.current!,
                 },
             });
             expect(state).toStrictEqual({
-                activeRef: ref3,
-                refs: [ref1, ref2, ref3, ref4],
+                activeNode: ref3.current,
+                nodes: [ref1.current, ref2.current, ref3.current, ref4.current],
             });
         });
     });
@@ -369,7 +390,7 @@ describe("RovingTabIndex", () => {
                 </RovingTabIndexProvider>,
             );
 
-            container.querySelectorAll("button")[0].focus();
+            act(() => container.querySelectorAll("button")[0].focus());
             checkTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
 
             await userEvent.keyboard("[ArrowDown]");
@@ -402,7 +423,7 @@ describe("RovingTabIndex", () => {
                 </RovingTabIndexProvider>,
             );
 
-            container.querySelectorAll("button")[0].focus();
+            act(() => container.querySelectorAll("button")[0].focus());
             checkTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
 
             const button = container.querySelectorAll("button")[1];

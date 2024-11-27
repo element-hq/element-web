@@ -9,8 +9,11 @@ on:
 jobs:
     deploy:
         if: github.event.workflow_run.conclusion != 'cancelled' && github.event.workflow_run.event == 'pull_request'
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-24.04
         environment: Netlify
+        permissions:
+            actions: read
+            deployments: write
         steps:
             - name: 📝 Create Deployment
               uses: bobheadxi/deployments@648679e8e4915b27893bd7dbc35cb504dc915bc8 # v1
@@ -27,7 +30,7 @@ jobs:
             - name: 📥 Download artifact
               uses: actions/download-artifact@v4
               with:
-                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
                   run-id: ${{ github.event.workflow_run.id }}
                   name: webapp
                   path: webapp

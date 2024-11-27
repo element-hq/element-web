@@ -36,9 +36,24 @@ Please see LICENSE files in the repository root for full details.
     }
 
     .mx_AnalyticsLearnMore_bullets li {
-        background: url("$(res)/img/tick-circle.svg") no-repeat;
         list-style-type: none;
-        padding: 2px 0px 20px 32px;
+        padding: 2px 0 0 32px;
+        margin-bottom: 20px;
         vertical-align: middle;
+        position: relative;
+
+        &::before {
+            content: "";
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            left: 0;
+            top: 0;
+            background-color: #0dbd8b;
+            mask-image: url("@vector-im/compound-design-tokens/icons/check-circle.svg");
+            mask-repeat: no-repeat;
+            mask-position: center;
+            mask-size: contain;
+        }
     }
 }

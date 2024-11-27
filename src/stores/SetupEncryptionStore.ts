@@ -19,9 +19,6 @@ import { Device, SecretStorage } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { AccessCancelledError, accessSecretStorage } from "../SecurityManager";
-import Modal from "../Modal";
-import InteractiveAuthDialog from "../components/views/dialogs/InteractiveAuthDialog";
-import { _t } from "../languageHandler";
 import { SdkContextClass } from "../contexts/SDKContext";
 import { asyncSome } from "../utils/arrays";
 import { initialiseDehydration } from "../utils/device/dehydration";
@@ -128,7 +125,7 @@ export class SetupEncryptionStore extends EventEmitter {
         this.emit("update");
         try {
             const cli = MatrixClientPeg.safeGet();
-            const backupInfo = await cli.getKeyBackupVersion();
+            const backupInfo = (await cli.getCrypto()?.getKeyBackupInfo()) ?? null;
             this.backupInfo = backupInfo;
             this.emit("update");
 
@@ -151,7 +148,8 @@ export class SetupEncryptionStore extends EventEmitter {
                     await initialiseDehydration();
 
                     if (backupInfo) {
-                        await cli.restoreKeyBackupWithSecretStorage(backupInfo);
+                        await cli.getCrypto()?.loadSessionBackupPrivateKeyFromSecretStorage();
+                        await cli.getCrypto()?.restoreKeyBackup();
                     }
                 }).catch(reject);
             });
@@ -229,42 +227,16 @@ export class SetupEncryptionStore extends EventEmitter {
             // secret storage key if they had one. Start by resetting
             // secret storage and setting up a new recovery key, then
             // create new cross-signing keys once that succeeds.
-            await accessSecretStorage(async (): Promise<void> => {
-                const cli = MatrixClientPeg.safeGet();
-                await cli.getCrypto()?.bootstrapCrossSigning({
-                    authUploadDeviceSigningKeys: async (makeRequest): Promise<void> => {
-                        const cachedPassword = SdkContextClass.instance.accountPasswordStore.getPassword();
-
-                        if (cachedPassword) {
-                            await makeRequest({
-                                type: "m.login.password",
-                                identifier: {
-                                    type: "m.id.user",
-                                    user: cli.getSafeUserId(),
-                                },
-                                user: cli.getSafeUserId(),
-                                password: cachedPassword,
-                            });
-                            return;
-                        }
-
-                        const { finished } = Modal.createDialog(InteractiveAuthDialog, {
-                            title: _t("encryption|bootstrap_title"),
-                            matrixClient: cli,
-                            makeRequest,
-                        });
-                        const [confirmed] = await finished;
-                        if (!confirmed) {
-                            throw new Error("Cross-signing key upload auth canceled");
-                        }
-                    },
-                    setupNewCrossSigning: true,
-                });
-
-                await initialiseDehydration(true);
-
-                this.phase = Phase.Finished;
-            }, true);
+            await accessSecretStorage(
+                async (): Promise<void> => {
+                    this.phase = Phase.Finished;
+                },
+                {
+                    forceReset: true,
+                    resetCrossSigning: true,
+                    accountPassword: SdkContextClass.instance.accountPasswordStore.getPassword(),
+                },
+            );
         } catch (e) {
             logger.error("Error resetting cross-signing", e);
             this.phase = Phase.Intro;

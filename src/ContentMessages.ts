@@ -56,6 +56,7 @@ import { createThumbnail } from "./utils/image-media";
 import { attachMentions, attachRelation } from "./components/views/rooms/SendMessageComposer";
 import { doMaybeLocalRoomAction } from "./utils/local-room";
 import { SdkContextClass } from "./contexts/SDKContext";
+import { blobIsAnimated } from "./utils/Image.ts";
 
 // scraped out of a macOS hidpi (5660ppm) screenshot png
 //                  5669 px (x-axis)      , 5669 px (y-axis)      , per metre
@@ -150,15 +151,20 @@ async function infoForImageFile(matrixClient: MatrixClient, roomId: string, imag
         thumbnailType = "image/jpeg";
     }
 
+    // We don't await this immediately so it can happen in the background
+    const isAnimatedPromise = blobIsAnimated(imageFile.type, imageFile);
+
     const imageElement = await loadImageElement(imageFile);
 
     const result = await createThumbnail(imageElement.img, imageElement.width, imageElement.height, thumbnailType);
     const imageInfo = result.info;
 
+    imageInfo["org.matrix.msc4230.is_animated"] = await isAnimatedPromise;
+
     // For lesser supported image types, always include the thumbnail even if it is larger
     if (!ALWAYS_INCLUDE_THUMBNAIL.includes(imageFile.type)) {
         // we do all sizing checks here because we still rely on thumbnail generation for making a blurhash from.
-        const sizeDifference = imageFile.size - imageInfo.thumbnail_info!.size;
+        const sizeDifference = imageFile.size - imageInfo.thumbnail_info!.size!;
         if (
             // image is small enough already
             imageFile.size <= IMAGE_SIZE_THRESHOLD_THUMBNAIL ||
@@ -536,9 +542,7 @@ export default class ContentMessages {
         attachMentions(matrixClient.getSafeUserId(), content, null, replyToEvent);
         attachRelation(content, relation);
         if (replyToEvent) {
-            addReplyToMessageContent(content, replyToEvent, {
-                includeLegacyFallback: false,
-            });
+            addReplyToMessageContent(content, replyToEvent);
         }
 
         if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {

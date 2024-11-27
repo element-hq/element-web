@@ -47,7 +47,6 @@ import { CHAT_EFFECTS } from "../../../effects";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import SettingsStore from "../../../settings/SettingsStore";
-import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import { decorateStartSendingTime, sendRoundTripMetric } from "../../../sendTimePerformanceMetrics";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
@@ -177,8 +176,6 @@ export function createMessageContent(
     model: EditorModel,
     replyToEvent: MatrixEvent | undefined,
     relation: IEventRelation | undefined,
-    permalinkCreator?: RoomPermalinkCreator,
-    includeReplyLegacyFallback = true,
 ): RoomMessageEventContent {
     const isEmote = containsEmote(model);
     if (isEmote) {
@@ -209,10 +206,7 @@ export function createMessageContent(
 
     attachRelation(content, relation);
     if (replyToEvent) {
-        addReplyToMessageContent(content, replyToEvent, {
-            permalinkCreator,
-            includeLegacyFallback: includeReplyLegacyFallback,
-        });
+        addReplyToMessageContent(content, replyToEvent);
     }
 
     return content;
@@ -238,12 +232,10 @@ export function isQuickReaction(model: EditorModel): boolean {
 interface ISendMessageComposerProps extends MatrixClientProps {
     room: Room;
     placeholder?: string;
-    permalinkCreator?: RoomPermalinkCreator;
     relation?: IEventRelation;
     replyToEvent?: MatrixEvent;
     disabled?: boolean;
     onChange?(model: EditorModel): void;
-    includeReplyLegacyFallback?: boolean;
     toggleStickerPickerOpen: () => void;
 }
 
@@ -257,10 +249,6 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
     private currentlyComposedEditorState: SerializedPart[] | null = null;
     private dispatcherRef?: string;
     private sendHistoryManager: SendHistoryManager;
-
-    public static defaultProps = {
-        includeReplyLegacyFallback: true,
-    };
 
     public constructor(props: ISendMessageComposerProps, context: React.ContextType<typeof RoomContext>) {
         super(props, context);
@@ -500,11 +488,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                     attachMentions(this.props.mxClient.getSafeUserId(), content, model, replyToEvent);
                     attachRelation(content, this.props.relation);
                     if (replyToEvent) {
-                        addReplyToMessageContent(content, replyToEvent, {
-                            permalinkCreator: this.props.permalinkCreator,
-                            // Exclude the legacy fallback for custom event types such as those used by /fireworks
-                            includeLegacyFallback: content.msgtype?.startsWith("m.") ?? true,
-                        });
+                        addReplyToMessageContent(content, replyToEvent);
                     }
                 } else {
                     shouldSend = false;
@@ -534,8 +518,6 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                     model,
                     replyToEvent,
                     this.props.relation,
-                    this.props.permalinkCreator,
-                    this.props.includeReplyLegacyFallback,
                 );
             }
             // don't bother sending an empty message

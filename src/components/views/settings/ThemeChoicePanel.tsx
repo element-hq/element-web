@@ -23,7 +23,7 @@ import classNames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";
-import SettingsSubsection from "./shared/SettingsSubsection";
+import { SettingsSubsection } from "./shared/SettingsSubsection";
 import ThemeWatcher from "../../../settings/watchers/ThemeWatcher";
 import SettingsStore from "../../../settings/SettingsStore";
 import { SettingLevel } from "../../../settings/SettingLevel";

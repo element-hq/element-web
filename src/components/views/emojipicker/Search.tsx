@@ -70,7 +70,7 @@ class Search extends React.PureComponent<IProps> {
                     onChange={(ev) => this.props.onChange(ev.target.value)}
                     onKeyDown={this.onKeyDown}
                     ref={this.inputRef}
-                    aria-activedescendant={this.context.state.activeRef?.current?.id}
+                    aria-activedescendant={this.context.state.activeNode?.id}
                     aria-controls="mx_EmojiPicker_body"
                     aria-haspopup="grid"
                     aria-autocomplete="list"

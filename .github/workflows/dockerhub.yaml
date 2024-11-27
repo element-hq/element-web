@@ -7,27 +7,27 @@ on:
         # This job can take a while, and we have usage limits, so just publish develop only twice a day
         - cron: "0 7/12 * * *"
 concurrency: ${{ github.workflow }}-${{ github.ref_name }}
-
-permissions:
-    id-token: write # needed for signing the images with GitHub OIDC Token
+permissions: {}
 jobs:
     buildx:
         name: Docker Buildx
         runs-on: ubuntu-24.04
         environment: dockerhub
+        permissions:
+            id-token: write # needed for signing the images with GitHub OIDC Token
         steps:
             - uses: actions/checkout@v4
               with:
                   fetch-depth: 0 # needed for docker-package to be able to calculate the version
 
             - name: Install Cosign
-              uses: sigstore/cosign-installer@4959ce089c160fddf62f7b42464195ba1a56d382 # v3
+              uses: sigstore/cosign-installer@dc72c7d5c4d10cd6bcb8cf6e3fd625a9e5e537da # v3
 
             - name: Set up QEMU
               uses: docker/setup-qemu-action@49b3bc8e6bdd4a60e6116a5414239cba5943d3cf # v3
 
             - name: Set up Docker Buildx
-              uses: docker/setup-buildx-action@988b5a0280414f521da01fcc63a27aeeb4b104db # v3
+              uses: docker/setup-buildx-action@c47758b77c9736f4b2ef4073d4d51994fabfe349 # v3
               with:
                   install: true
 
@@ -39,7 +39,7 @@ jobs:
 
             - name: Docker meta
               id: meta
-              uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81 # v5
+              uses: docker/metadata-action@369eb591f429131d6889c46b94e711f089e6ca96 # v5
               with:
                   images: |
                       vectorim/element-web
@@ -51,7 +51,7 @@ jobs:
 
             - name: Build and push
               id: build-and-push
-              uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75 # v6
+              uses: docker/build-push-action@48aba3b46d1b1fec4febb7c5d0c644b249a11355 # v6
               with:
                   context: .
                   push: true

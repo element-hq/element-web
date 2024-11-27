@@ -27,18 +27,19 @@ Please see LICENSE files in the repository root for full details.
     &::before {
         position: absolute;
         content: "";
-        width: 24px;
-        height: 24px;
-        top: 27px;
-        left: 20px;
+        width: 28px;
+        height: 28px;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 22px;
         mask-position: center;
         mask-repeat: no-repeat;
-        mask-size: 24px;
+        mask-size: 28px;
         background-color: $tertiary-content;
     }
 
     &:hover {
-        border-color: var(--cpd-color-bg-interactive-primary-rest);
+        border-color: var(--cpd-color-bg-action-primary-rest);
 
         &::before {
             background-color: var(--cpd-color-icon-primary);
@@ -221,7 +222,7 @@ Please see LICENSE files in the repository root for full details.
                         width: 24px;
                         background: $tertiary-content;
                         mask-size: contain;
-                        mask-image: url("$(res)/img/element-icons/settings.svg");
+                        mask-image: url("@vector-im/compound-design-tokens/icons/settings-solid.svg");
                     }
                 }
             }
@@ -247,7 +248,7 @@ Please see LICENSE files in the repository root for full details.
         }
 
         .mx_SpaceRoomView_privateScope_justMeButton::before {
-            mask-image: url("$(res)/img/element-icons/room/members.svg");
+            mask-image: url("@vector-im/compound-design-tokens/icons/user-profile-solid.svg");
         }
 
         .mx_SpaceRoomView_privateScope_meAndMyTeammatesButton::before {

@@ -17,6 +17,7 @@ on:
                 required: true
                 type: boolean
                 default: true
+permissions: {} # Uses ELEMENT_BOT_TOKEN instead
 jobs:
     prepare:
         runs-on: ubuntu-24.04

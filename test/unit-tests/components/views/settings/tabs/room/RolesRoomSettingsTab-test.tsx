@@ -27,16 +27,19 @@ describe("RolesRoomSettingsTab", () => {
     let cli: MatrixClient;
     let room: Room;
 
-    const renderTab = (propRoom: Room = room): RenderResult => {
-        return render(<RolesRoomSettingsTab room={propRoom} />, withClientContextRenderOptions(cli));
+    const renderTab = async (propRoom: Room = room): Promise<RenderResult> => {
+        const renderResult = render(<RolesRoomSettingsTab room={propRoom} />, withClientContextRenderOptions(cli));
+        // Wait for the tab to be ready
+        await waitFor(() => expect(screen.getByText("Permissions")).toBeInTheDocument());
+        return renderResult;
     };
 
-    const getVoiceBroadcastsSelect = (): HTMLElement => {
-        return renderTab().container.querySelector("select[label='Voice broadcasts']")!;
+    const getVoiceBroadcastsSelect = async (): Promise<Element> => {
+        return (await renderTab()).container.querySelector("select[label='Voice broadcasts']")!;
     };
 
-    const getVoiceBroadcastsSelectedOption = (): HTMLElement => {
-        return renderTab().container.querySelector("select[label='Voice broadcasts'] option:checked")!;
+    const getVoiceBroadcastsSelectedOption = async (): Promise<Element> => {
+        return (await renderTab()).container.querySelector("select[label='Voice broadcasts'] option:checked")!;
     };
 
     beforeEach(() => {
@@ -45,7 +48,7 @@ describe("RolesRoomSettingsTab", () => {
         room = mkStubRoom(roomId, "test room", cli);
     });
 
-    it("should allow an Admin to demote themselves but not others", () => {
+    it("should allow an Admin to demote themselves but not others", async () => {
         mocked(cli.getRoom).mockReturnValue(room);
         // @ts-ignore - mocked doesn't support overloads properly
         mocked(room.currentState.getStateEvents).mockImplementation((type, key) => {
@@ -67,19 +70,19 @@ describe("RolesRoomSettingsTab", () => {
             return null;
         });
         mocked(room.currentState.mayClientSendStateEvent).mockReturnValue(true);
-        const { container } = renderTab();
+        const { container } = await renderTab();
 
         expect(container.querySelector(`[placeholder="${cli.getUserId()}"]`)).not.toBeDisabled();
         expect(container.querySelector(`[placeholder="@admin:server"]`)).toBeDisabled();
     });
 
-    it("should initially show »Moderator« permission for »Voice broadcasts«", () => {
-        expect(getVoiceBroadcastsSelectedOption().textContent).toBe("Moderator");
+    it("should initially show »Moderator« permission for »Voice broadcasts«", async () => {
+        expect((await getVoiceBroadcastsSelectedOption()).textContent).toBe("Moderator");
     });
 
     describe("when setting »Default« permission for »Voice broadcasts«", () => {
-        beforeEach(() => {
-            fireEvent.change(getVoiceBroadcastsSelect(), {
+        beforeEach(async () => {
+            fireEvent.change(await getVoiceBroadcastsSelect(), {
                 target: { value: 0 },
             });
         });
@@ -122,12 +125,12 @@ describe("RolesRoomSettingsTab", () => {
             });
 
             describe("Join Element calls", () => {
-                it("defaults to moderator for joining calls", () => {
-                    expect(getJoinCallSelectedOption(renderTab())?.textContent).toBe("Moderator");
+                it("defaults to moderator for joining calls", async () => {
+                    expect(getJoinCallSelectedOption(await renderTab())?.textContent).toBe("Moderator");
                 });
 
-                it("can change joining calls power level", () => {
-                    const tab = renderTab();
+                it("can change joining calls power level", async () => {
+                    const tab = await renderTab();
 
                     fireEvent.change(getJoinCallSelect(tab), {
                         target: { value: 0 },
@@ -143,12 +146,12 @@ describe("RolesRoomSettingsTab", () => {
             });
 
             describe("Start Element calls", () => {
-                it("defaults to moderator for starting calls", () => {
-                    expect(getStartCallSelectedOption(renderTab())?.textContent).toBe("Moderator");
+                it("defaults to moderator for starting calls", async () => {
+                    expect(getStartCallSelectedOption(await renderTab())?.textContent).toBe("Moderator");
                 });
 
-                it("can change starting calls power level", () => {
-                    const tab = renderTab();
+                it("can change starting calls power level", async () => {
+                    const tab = await renderTab();
 
                     fireEvent.change(getStartCallSelect(tab), {
                         target: { value: 0 },
@@ -164,10 +167,10 @@ describe("RolesRoomSettingsTab", () => {
             });
         });
 
-        it("hides when group calls disabled", () => {
+        it("hides when group calls disabled", async () => {
             setGroupCallsEnabled(false);
 
-            const tab = renderTab();
+            const tab = await renderTab();
 
             expect(getStartCallSelect(tab)).toBeFalsy();
             expect(getStartCallSelectedOption(tab)).toBeFalsy();
@@ -250,7 +253,7 @@ describe("RolesRoomSettingsTab", () => {
             return null;
         });
         mocked(room.currentState.mayClientSendStateEvent).mockReturnValue(true);
-        const { container } = renderTab();
+        const { container } = await renderTab();
 
         const selector = container.querySelector(`[placeholder="${cli.getUserId()}"]`)!;
         fireEvent.change(selector, { target: { value: "50" } });

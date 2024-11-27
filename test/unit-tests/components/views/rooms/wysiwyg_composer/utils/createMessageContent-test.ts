@@ -8,26 +8,13 @@ Please see LICENSE files in the repository root for full details.
 import { MsgType } from "matrix-js-sdk/src/matrix";
 
 import { filterConsole, mkEvent } from "../../../../../../test-utils";
-import { RoomPermalinkCreator } from "../../../../../../../src/utils/permalinks/Permalinks";
 import {
     createMessageContent,
     EMOTE_PREFIX,
 } from "../../../../../../../src/components/views/rooms/wysiwyg_composer/utils/createMessageContent";
 
 describe("createMessageContent", () => {
-    const permalinkCreator = {
-        forEvent(eventId: string): string {
-            return "$$permalink$$";
-        },
-    } as RoomPermalinkCreator;
     const message = "<em><b>hello</b> world</em>";
-    const mockEvent = mkEvent({
-        type: "m.room.message",
-        room: "myfakeroom",
-        user: "myfakeuser",
-        content: { msgtype: "m.text", body: "Replying to this" },
-        event: true,
-    });
 
     afterEach(() => {
         jest.resetAllMocks();
@@ -42,12 +29,12 @@ describe("createMessageContent", () => {
             // Warm up by creating the component once, with a long timeout.
             // This prevents tests timing out because of the time spent loading
             // the WASM component.
-            await createMessageContent(message, true, { permalinkCreator });
+            await createMessageContent(message, true, {});
         }, 10000);
 
         it("Should create html message", async () => {
             // When
-            const content = await createMessageContent(message, true, { permalinkCreator });
+            const content = await createMessageContent(message, true, {});
 
             // Then
             expect(content).toEqual({
@@ -58,34 +45,13 @@ describe("createMessageContent", () => {
             });
         });
 
-        it("Should add reply to message content", async () => {
-            // When
-            const content = await createMessageContent(message, true, { permalinkCreator, replyToEvent: mockEvent });
-
-            // Then
-            expect(content).toEqual({
-                "body": "> <myfakeuser> Replying to this\n\n*__hello__ world*",
-                "format": "org.matrix.custom.html",
-                "formatted_body":
-                    '<mx-reply><blockquote><a href="$$permalink$$">In reply to</a>' +
-                    ' <a href="https://matrix.to/#/myfakeuser">myfakeuser</a>' +
-                    "<br>Replying to this</blockquote></mx-reply><em><b>hello</b> world</em>",
-                "msgtype": "m.text",
-                "m.relates_to": {
-                    "m.in_reply_to": {
-                        event_id: mockEvent.getId(),
-                    },
-                },
-            });
-        });
-
         it("Should add relation to message", async () => {
             // When
             const relation = {
                 rel_type: "m.thread",
                 event_id: "myFakeThreadId",
             };
-            const content = await createMessageContent(message, true, { permalinkCreator, relation });
+            const content = await createMessageContent(message, true, { relation });
 
             // Then
             expect(content).toEqual({
@@ -118,7 +84,7 @@ describe("createMessageContent", () => {
                 },
                 event: true,
             });
-            const content = await createMessageContent(message, true, { permalinkCreator, editedEvent });
+            const content = await createMessageContent(message, true, { editedEvent });
 
             // Then
             expect(content).toEqual({
@@ -141,20 +107,20 @@ describe("createMessageContent", () => {
 
         it("Should strip the /me prefix from a message", async () => {
             const textBody = "some body text";
-            const content = await createMessageContent(EMOTE_PREFIX + textBody, true, { permalinkCreator });
+            const content = await createMessageContent(EMOTE_PREFIX + textBody, true, {});
 
             expect(content).toMatchObject({ body: textBody, formatted_body: textBody });
         });
 
         it("Should strip single / from message prefixed with //", async () => {
-            const content = await createMessageContent("//twoSlashes", true, { permalinkCreator });
+            const content = await createMessageContent("//twoSlashes", true, {});
 
             expect(content).toMatchObject({ body: "/twoSlashes", formatted_body: "/twoSlashes" });
         });
 
         it("Should set the content type to MsgType.Emote when /me prefix is used", async () => {
             const textBody = "some body text";
-            const content = await createMessageContent(EMOTE_PREFIX + textBody, true, { permalinkCreator });
+            const content = await createMessageContent(EMOTE_PREFIX + textBody, true, {});
 
             expect(content).toMatchObject({ msgtype: MsgType.Emote });
         });
@@ -164,14 +130,14 @@ describe("createMessageContent", () => {
         it("Should replace at-room mentions with `@room` in body", async () => {
             const messageComposerState = `<a href="#" contenteditable="false" data-mention-type="at-room" style="some styling">@room</a> `;
 
-            const content = await createMessageContent(messageComposerState, false, { permalinkCreator });
+            const content = await createMessageContent(messageComposerState, false, {});
             expect(content).toMatchObject({ body: "@room " });
         });
 
         it("Should replace user mentions with user name in body", async () => {
             const messageComposerState = `<a href="https://matrix.to/#/@test_user:element.io" contenteditable="false" data-mention-type="user" style="some styling">a test user</a> `;
 
-            const content = await createMessageContent(messageComposerState, false, { permalinkCreator });
+            const content = await createMessageContent(messageComposerState, false, {});
 
             expect(content).toMatchObject({ body: "a test user " });
         });
@@ -179,7 +145,7 @@ describe("createMessageContent", () => {
         it("Should replace room mentions with room mxid in body", async () => {
             const messageComposerState = `<a href="https://matrix.to/#/#test_room:element.io" contenteditable="false" data-mention-type="room" style="some styling">a test room</a> `;
 
-            const content = await createMessageContent(messageComposerState, false, { permalinkCreator });
+            const content = await createMessageContent(messageComposerState, false, {});
 
             expect(content).toMatchObject({
                 body: "#test_room:element.io ",

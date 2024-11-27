@@ -9,6 +9,7 @@ on:
 concurrency:
     group: ${{ github.repository_owner }}-${{ github.workflow }}-${{ github.ref_name }}
     cancel-in-progress: true
+permissions: {}
 jobs:
     build:
         name: "Build & Deploy develop.element.io"
@@ -16,6 +17,10 @@ jobs:
         if: github.repository == 'element-hq/element-web'
         runs-on: ubuntu-24.04
         environment: develop
+        permissions:
+            checks: read
+            pages: write
+            deployments: write
         env:
             R2_BUCKET: "element-web-develop"
             R2_URL: ${{ vars.CF_R2_S3_API }}

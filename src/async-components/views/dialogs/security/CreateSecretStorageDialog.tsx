@@ -58,6 +58,7 @@ interface IProps {
     hasCancel?: boolean;
     accountPassword?: string;
     forceReset?: boolean;
+    resetCrossSigning?: boolean;
     onFinished(ok?: boolean): void;
 }
 
@@ -91,6 +92,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
     public static defaultProps: Partial<IProps> = {
         hasCancel: true,
         forceReset: false,
+        resetCrossSigning: false,
     };
     private recoveryKey?: GeneratedSecretStorageKey;
     private recoveryKeyNode = createRef<HTMLElement>();
@@ -270,14 +272,14 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
     private bootstrapSecretStorage = async (): Promise<void> => {
         const cli = MatrixClientPeg.safeGet();
         const crypto = cli.getCrypto()!;
-        const { forceReset } = this.props;
+        const { forceReset, resetCrossSigning } = this.props;
 
         let backupInfo;
         // First, unless we know we want to do a reset, we see if there is an existing key backup
         if (!forceReset) {
             try {
                 this.setState({ phase: Phase.Loading });
-                backupInfo = await cli.getKeyBackupVersion();
+                backupInfo = await crypto.getKeyBackupInfo();
             } catch (e) {
                 logger.error("Error fetching backup data from server", e);
                 this.setState({ phase: Phase.LoadError });
@@ -292,12 +294,28 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
 
         try {
             if (forceReset) {
+                /* Resetting cross-signing requires secret storage to be reset
+                 * (otherwise it will try to store the cross-signing keys in the
+                 * old secret storage, and may prompt for the old key, which is
+                 * probably not available), and resetting key backup requires
+                 * cross-signing to be reset (so that the new backup can be
+                 * signed by the new cross-signing key).  So we reset secret
+                 * storage first, then cross-signing, then key backup.
+                 */
                 logger.log("Forcing secret storage reset");
                 await crypto.bootstrapSecretStorage({
                     createSecretStorageKey: async () => this.recoveryKey!,
-                    setupNewKeyBackup: true,
                     setupNewSecretStorage: true,
                 });
+                if (resetCrossSigning) {
+                    logger.log("Resetting cross signing");
+                    await crypto.bootstrapCrossSigning({
+                        authUploadDeviceSigningKeys: this.doBootstrapUIAuth,
+                        setupNewCrossSigning: true,
+                    });
+                }
+                logger.log("Resetting key backup");
+                await crypto.resetKeyBackup();
             } else {
                 // For password authentication users after 2020-09, this cross-signing
                 // step will be a no-op since it is now setup during registration or login
