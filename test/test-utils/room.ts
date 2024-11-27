@@ -85,7 +85,7 @@ export function getRoomContext(room: Room, override: Partial<IRoomState>): IRoom
         canAskToJoin: false,
         promptAskToJoin: false,
         viewRoomOpts: { buttons: [] },
-
+        isRoomEncrypted: false,
         ...override,
     };
 }
