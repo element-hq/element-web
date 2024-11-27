@@ -397,7 +397,7 @@ describe("RoomViewStore", function () {
                     mockClient.getSafeUserId(),
                     "ABC123",
                 );
-                room2.addLiveEvents([broadcastEvent]);
+                room2.addLiveEvents([broadcastEvent], { addToState: true });
 
                 stores.voiceBroadcastPlaybacksStore.getByInfoEvent(broadcastEvent, mockClient);
                 dis.dispatch({ action: Action.ViewRoom, room_id: roomId2 });

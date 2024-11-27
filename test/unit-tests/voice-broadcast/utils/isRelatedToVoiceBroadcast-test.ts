@@ -31,7 +31,7 @@ const mkRelatedEvent = (
         },
         user: client.getSafeUserId(),
     });
-    room.addLiveEvents([event]);
+    room.addLiveEvents([event], { addToState: true });
     return event;
 };
 
@@ -65,7 +65,7 @@ describe("isRelatedToVoiceBroadcast", () => {
             user: client.getSafeUserId(),
         });
 
-        room.addLiveEvents([broadcastEvent, nonBroadcastEvent]);
+        room.addLiveEvents([broadcastEvent, nonBroadcastEvent], { addToState: true });
     });
 
     it("should return true if related (reference) to a broadcast event", () => {
