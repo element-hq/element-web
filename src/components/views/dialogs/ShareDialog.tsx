@@ -9,51 +9,20 @@ Please see LICENSE files in the repository root for full details.
 
 import * as React from "react";
 import { Room, RoomMember, MatrixEvent, User } from "matrix-js-sdk/src/matrix";
+import { Button, Text } from "@vector-im/compound-web";
+import LinkIcon from "@vector-im/compound-design-tokens/assets/web/icons/link";
 
 import { _t } from "../../../languageHandler";
 import QRCode from "../elements/QRCode";
 import { RoomPermalinkCreator, makeUserPermalink } from "../../../utils/permalinks/Permalinks";
-import { selectText } from "../../../utils/strings";
+import { copyPlaintext, selectText } from "../../../utils/strings";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import BaseDialog from "./BaseDialog";
-import CopyableText from "../elements/CopyableText";
 import { XOR } from "../../../@types/common";
-
-/* eslint-disable @typescript-eslint/no-require-imports */
-const socials = [
-    {
-        name: "Facebook",
-        img: require("../../../../res/img/social/facebook.png"),
-        url: (url: string) => `https://www.facebook.com/sharer/sharer.php?u=${url}`,
-    },
-    {
-        name: "Twitter",
-        img: require("../../../../res/img/social/twitter-2.png"),
-        url: (url: string) => `https://twitter.com/home?status=${url}`,
-    },
-    /* // icon missing
-        name: 'Google Plus',
-        img: 'img/social/',
-        url: (url) => `https://plus.google.com/share?url=${url}`,
-    },*/ {
-        name: "LinkedIn",
-        img: require("../../../../res/img/social/linkedin.png"),
-        url: (url: string) => `https://www.linkedin.com/shareArticle?mini=true&url=${url}`,
-    },
-    {
-        name: "Reddit",
-        img: require("../../../../res/img/social/reddit.png"),
-        url: (url: string) => `https://www.reddit.com/submit?url=${url}`,
-    },
-    {
-        name: "email",
-        img: require("../../../../res/img/social/email-1.png"),
-        url: (url: string) => `mailto:?body=${url}`,
-    },
-];
-/* eslint-enable @typescript-eslint/no-require-imports */
+import { ButtonEvent } from "../elements/AccessibleButton";
+import CopyableText from "../elements/CopyableText";
 
 interface BaseProps {
     /**
@@ -91,7 +60,168 @@ interface IState {
     permalinkCreator: RoomPermalinkCreator | null;
 }
 
-export default class ShareDialog extends React.PureComponent<XOR<Props, EventProps>, IState> {
+// TODO: make this a Rect.FC
+export class ShareDialog extends React.PureComponent<XOR<Props, EventProps>, IState> {
+    public constructor(props: XOR<Props, EventProps>) {
+        super(props);
+
+        let permalinkCreator: RoomPermalinkCreator | null = null;
+        if (props.target instanceof Room) {
+            permalinkCreator = new RoomPermalinkCreator(props.target);
+            permalinkCreator.load();
+        }
+
+        this.state = {
+            // MatrixEvent defaults to share linkSpecificEvent
+            linkSpecificEvent: this.props.target instanceof MatrixEvent,
+            permalinkCreator,
+        };
+    }
+
+    public static onLinkClick(e: React.MouseEvent): void {
+        e.preventDefault();
+        selectText(e.currentTarget);
+    }
+
+    private onLinkSpecificEventCheckboxClick = (): void => {
+        this.setState({
+            linkSpecificEvent: !this.state.linkSpecificEvent,
+        });
+    };
+
+    private getUrl(): string {
+        if (this.props.target instanceof URL) {
+            return this.props.target.toString();
+        } else if (this.props.target instanceof Room) {
+            if (this.state.linkSpecificEvent) {
+                const events = this.props.target.getLiveTimeline().getEvents();
+                return this.state.permalinkCreator!.forEvent(events[events.length - 1].getId()!);
+            } else {
+                return this.state.permalinkCreator!.forShareableRoom();
+            }
+        } else if (this.props.target instanceof User || this.props.target instanceof RoomMember) {
+            return makeUserPermalink(this.props.target.userId);
+        } else if (this.state.linkSpecificEvent) {
+            return this.props.permalinkCreator!.forEvent(this.props.target.getId()!);
+        } else {
+            return this.props.permalinkCreator!.forShareableRoom();
+        }
+    }
+
+    public render(): React.ReactNode {
+        let title: string | undefined;
+        let checkbox: JSX.Element | undefined;
+
+        if (this.props.target instanceof URL) {
+            title = this.props.customTitle ?? _t("share|title_link");
+        } else if (this.props.target instanceof Room) {
+            title = this.props.customTitle ?? _t("share|title_room");
+
+            const events = this.props.target.getLiveTimeline().getEvents();
+            if (events.length > 0) {
+                checkbox = (
+                    <div className="mx_ShareDialog_checkbox">
+                        <StyledCheckbox
+                            checked={this.state.linkSpecificEvent}
+                            onChange={this.onLinkSpecificEventCheckboxClick}
+                        >
+                            {_t("share|permalink_most_recent")}
+                        </StyledCheckbox>
+                    </div>
+                );
+            }
+        } else if (this.props.target instanceof User || this.props.target instanceof RoomMember) {
+            title = this.props.customTitle ?? _t("share|title_user");
+        } else if (this.props.target instanceof MatrixEvent) {
+            title = this.props.customTitle ?? _t("share|title_message");
+            checkbox = (
+                <div>
+                    <StyledCheckbox
+                        checked={this.state.linkSpecificEvent}
+                        onChange={this.onLinkSpecificEventCheckboxClick}
+                    >
+                        {_t("share|permalink_message")}
+                    </StyledCheckbox>
+                </div>
+            );
+        }
+
+        const matrixToUrl = this.getUrl();
+
+        const showQrCode = SettingsStore.getValue(UIFeature.ShareQRCode);
+        const onButtonClick = async (e: ButtonEvent): Promise<void> => {
+            e.preventDefault();
+
+            await copyPlaintext(matrixToUrl);
+            this.props.onFinished();
+        };
+
+        return (
+            <BaseDialog
+                title={title}
+                fixedWidth={false}
+                className="mx_ShareDialog"
+                contentId="mx_Dialog_content"
+                onFinished={this.props.onFinished}
+            >
+                {this.props.subtitle && <p>{this.props.subtitle}</p>}
+                <div className="mx_ShareDialog_content">
+                    {showQrCode && <QRCode className="mx_ShareDialog_qrCode" data={matrixToUrl} />}
+                    <Text className="mx_ShareDialog_url" size="sm" weight="semibold">
+                        {matrixToUrl}
+                    </Text>
+                    {checkbox}
+                    <Button
+                        className="mx_ShareDialog_button mx_Dialog_nonDialogButton"
+                        Icon={LinkIcon}
+                        onClick={onButtonClick}
+                        data-testid="modal_inviteLink"
+                    >
+                        {_t("action|copy_link")}
+                    </Button>
+                </div>
+            </BaseDialog>
+        );
+    }
+}
+
+// LEGACY SHARE DIALOG
+
+/* eslint-disable @typescript-eslint/no-require-imports */
+const socials = [
+    {
+        name: "Facebook",
+        img: require("../../../../res/img/social/facebook.png"),
+        url: (url: string) => `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+    },
+    {
+        name: "Twitter",
+        img: require("../../../../res/img/social/twitter-2.png"),
+        url: (url: string) => `https://twitter.com/home?status=${url}`,
+    },
+    /* // icon missing
+        name: 'Google Plus',
+        img: 'img/social/',
+        url: (url) => `https://plus.google.com/share?url=${url}`,
+    },*/ {
+        name: "LinkedIn",
+        img: require("../../../../res/img/social/linkedin.png"),
+        url: (url: string) => `https://www.linkedin.com/shareArticle?mini=true&url=${url}`,
+    },
+    {
+        name: "Reddit",
+        img: require("../../../../res/img/social/reddit.png"),
+        url: (url: string) => `https://www.reddit.com/submit?url=${url}`,
+    },
+    {
+        name: "email",
+        img: require("../../../../res/img/social/email-1.png"),
+        url: (url: string) => `mailto:?body=${url}`,
+    },
+];
+/* eslint-enable @typescript-eslint/no-require-imports */
+
+export default class LegacyShareDialog extends React.PureComponent<XOR<Props, EventProps>, IState> {
     public constructor(props: XOR<Props, EventProps>) {
         super(props);
 
@@ -187,14 +317,14 @@ export default class ShareDialog extends React.PureComponent<XOR<Props, EventPro
             qrSocialSection = (
                 <>
                     <hr />
-                    <div className="mx_ShareDialog_split">
+                    <div className="mx_LegacyShareDialog_split">
                         {showQrCode && (
-                            <div className="mx_ShareDialog_qrcode_container">
+                            <div className="mx_LegacyShareDialog_qrcode_container">
                                 <QRCode data={matrixToUrl} width={256} />
                             </div>
                         )}
                         {showSocials && (
-                            <div className="mx_ShareDialog_social_container">
+                            <div className="mx_LegacyShareDialog_social_container">
                                 {socials.map((social) => (
                                     <a
                                         rel="noreferrer noopener"
@@ -202,7 +332,7 @@ export default class ShareDialog extends React.PureComponent<XOR<Props, EventPro
                                         key={social.name}
                                         title={social.name}
                                         href={social.url(encodedUrl)}
-                                        className="mx_ShareDialog_social_icon"
+                                        className="mx_LegacyShareDialog_social_icon"
                                     >
                                         <img src={social.img} alt={social.name} height={64} width={64} />
                                     </a>

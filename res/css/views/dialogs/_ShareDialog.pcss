@@ -13,7 +13,7 @@ Please see LICENSE files in the repository root for full details.
 
 .mx_ShareDialog .mx_ShareDialog_content {
     margin: 10px 0;
-
+    text-align: center;
     .mx_CopyableText {
         width: unset; /* full width */
 
@@ -27,27 +27,51 @@ Please see LICENSE files in the repository root for full details.
     }
 }
 
-.mx_ShareDialog_split {
+.mx_ShareDialog_url {
+    text-align: center;
+    color: var(--cpd-color-text-secondary);
+    overflow-wrap: break-word;
+    max-width: 400px;
+}
+.mx_ShareDialog_checkbox {
+    display: inline-block;
+    margin: var(--cpd-space-4x) 0;
+}
+.mx_ShareDialog_button {
+    width: 100%;
+}
+
+.mx_ShareDialog_qrCode {
+    display: flex;
+    justify-content: center;
+}
+
+.mx_ShareDialog_qrCode img {
+    margin: 0 var(--cpd-space-8x);
+    image-rendering: pixelated;
+}
+
+.mx_LegacyShareDialog_split {
     display: flex;
     flex-wrap: wrap;
 }
 
-.mx_ShareDialog_qrcode_container {
+.mx_LegacyShareDialog_qrcode_container {
     float: left;
     height: 256px;
     width: 256px;
     margin-right: 64px;
 }
 
-.mx_ShareDialog_qrcode_container + .mx_ShareDialog_social_container {
+.mx_LegacyShareDialog_qrcode_container + .mx_LegacyShareDialog_social_container {
     width: 299px;
 }
 
-.mx_ShareDialog_social_container {
+.mx_LegacyShareDialog_social_container {
     display: inline-block;
 }
 
-.mx_ShareDialog_social_icon {
+.mx_LegacyShareDialog_social_icon {
     display: inline-grid;
     margin-right: 10px;
     margin-bottom: 10px;

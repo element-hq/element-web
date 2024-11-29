@@ -75,7 +75,7 @@ describe("ShareDialog", () => {
             return originalGetValue(feature);
         });
         const { container } = render(<ShareDialog target={room} onFinished={jest.fn()} />, getWrapper());
-        const qrCodesVisible = container.getElementsByClassName("mx_ShareDialog_qrcode_container").length > 0;
+        const qrCodesVisible = container.getElementsByClassName("mx_LegacyShareDialog_qrcode_container").length > 0;
         expect(qrCodesVisible).toBe(true);
     });
 
@@ -86,7 +86,7 @@ describe("ShareDialog", () => {
             return originalGetValue(feature);
         });
         const { container } = render(<ShareDialog target={room} onFinished={jest.fn()} />, getWrapper());
-        const qrCodesVisible = container.getElementsByClassName("mx_ShareDialog_social_container").length > 0;
+        const qrCodesVisible = container.getElementsByClassName("mx_LegacyShareDialog_social_container").length > 0;
         expect(qrCodesVisible).toBe(true);
     });
     it("renders custom title and subtitle", () => {
