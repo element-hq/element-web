@@ -15,7 +15,7 @@ import userEvent from "@testing-library/user-event";
 
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import RoomSummaryCard from "../../../../../src/components/views/right_panel/RoomSummaryCard";
-import ShareDialog from "../../../../../src/components/views/dialogs/ShareDialog";
+import { ShareDialog } from "../../../../../src/components/views/dialogs/ShareDialog";
 import ExportDialog from "../../../../../src/components/views/dialogs/ExportDialog";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";

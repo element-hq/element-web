@@ -19,7 +19,7 @@ import {
 } from "../../../../../../src/components/views/rooms/RoomHeader/CallGuestLinkButton";
 import Modal from "../../../../../../src/Modal";
 import SdkConfig from "../../../../../../src/SdkConfig";
-import ShareDialog from "../../../../../../src/components/views/dialogs/ShareDialog";
+import { ShareDialog } from "../../../../../../src/components/views/dialogs/ShareDialog";
 import { _t } from "../../../../../../src/languageHandler";
 import SettingsStore from "../../../../../../src/settings/SettingsStore";
 
