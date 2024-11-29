@@ -14,7 +14,7 @@ import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { _t } from "../../../../../src/languageHandler";
-import ShareDialog from "../../../../../src/components/views/dialogs/ShareDialog";
+import { ShareDialog } from "../../../../../src/components/views/dialogs/ShareDialog";
 import { UIFeature } from "../../../../../src/settings/UIFeature";
 import { stubClient } from "../../../../test-utils";
 jest.mock("../../../../../src/utils/ShieldUtils");
