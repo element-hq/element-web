@@ -922,7 +922,6 @@
         },
         "udd": {
             "interactive_verification_button": "Interactively verify by emoji",
-            "manual_verification_button": "Manually verify by text",
             "other_ask_verify_text": "Ask this user to verify their session, or manually verify it below.",
             "other_new_session_text": "%(name)s (%(userId)s) signed in to a new session without verifying it:",
             "own_ask_verify_text": "Verify your other session using one of the options below.",

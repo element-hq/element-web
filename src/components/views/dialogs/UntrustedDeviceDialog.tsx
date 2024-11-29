@@ -56,9 +56,6 @@ const UntrustedDeviceDialog: React.FC<IProps> = ({ device, user, onFinished }) =
                 <p>{askToVerifyText}</p>
             </div>
             <div className="mx_Dialog_buttons">
-                <AccessibleButton kind="primary_outline" onClick={() => onFinished("legacy")}>
-                    {_t("encryption|udd|manual_verification_button")}
-                </AccessibleButton>
                 <AccessibleButton kind="primary_outline" onClick={() => onFinished("sas")}>
                     {_t("encryption|udd|interactive_verification_button")}
                 </AccessibleButton>
