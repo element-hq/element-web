@@ -27,11 +27,5 @@
         "./test/**/*.ts",
         "./test/**/*.tsx",
         "./scripts/*.ts"
-    ],
-    "ts-node": {
-        "files": true,
-        "moduleTypes": {
-            "*": "cjs"
-        }
-    }
+    ]
 }
