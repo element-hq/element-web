@@ -85,8 +85,8 @@
         "@matrix-org/react-sdk-module-api": "^2.4.0",
         "@matrix-org/spec": "^1.7.0",
         "@sentry/browser": "^8.0.0",
-        "@vector-im/compound-design-tokens": "^2.0.1",
-        "@vector-im/compound-web": "^7.3.0",
+        "@vector-im/compound-design-tokens": "^2.1.0",
+        "@vector-im/compound-web": "^7.4.0",
         "@vector-im/matrix-wysiwyg": "2.37.13",
         "@zxcvbn-ts/core": "^3.0.4",
         "@zxcvbn-ts/language-common": "^3.0.4",
@@ -146,7 +146,9 @@
         "temporal-polyfill": "^0.2.5",
         "ua-parser-js": "^1.0.2",
         "uuid": "^11.0.0",
-        "what-input": "^5.2.10"
+        "what-input": "^5.2.10",
+        "@types/react-virtualized": "^9.21.30",
+        "react-virtualized": "^9.22.5"
     },
     "devDependencies": {
         "@action-validator/cli": "^0.6.0",
@@ -296,5 +298,6 @@
     },
     "engines": {
         "node": ">=20.0.0"
-    }
+    },
+    "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
 }

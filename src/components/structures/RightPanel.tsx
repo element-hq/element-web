@@ -17,7 +17,7 @@ import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import RoomSummaryCard from "../views/right_panel/RoomSummaryCard";
 import WidgetCard from "../views/right_panel/WidgetCard";
-import MemberList from "../views/rooms/MemberList";
+// import MemberList from "../views/rooms/MemberList";
 import UserInfo from "../views/right_panel/UserInfo";
 import ThirdPartyMemberInfo from "../views/rooms/ThirdPartyMemberInfo";
 import FilePanel from "./FilePanel";
@@ -34,6 +34,7 @@ import { IRightPanelCard, IRightPanelCardState } from "../../stores/right-panel/
 import { Action } from "../../dispatcher/actions";
 import { XOR } from "../../@types/common";
 import ExtensionsCard from "../views/right_panel/ExtensionsCard";
+import MemberListView from "../views/rooms/MemberListView";
 
 interface BaseProps {
     overwriteCard?: IRightPanelCard; // used to display a custom card and ignoring the RightPanelStore (used for UserView)
@@ -160,26 +161,28 @@ export default class RightPanel extends React.Component<Props, IState> {
             case RightPanelPhases.RoomMemberList:
                 if (!!roomId) {
                     card = (
-                        <MemberList
-                            roomId={roomId}
-                            key={roomId}
-                            onClose={this.onClose}
-                            searchQuery={this.state.searchQuery}
-                            onSearchQueryChanged={this.onSearchQueryChanged}
-                        />
+                        <MemberListView roomId={roomId} onClose={this.onClose} />
+                        // <MemberList
+                        //     roomId={roomId}
+                        //     key={roomId}
+                        //     onClose={this.onClose}
+                        //     searchQuery={this.state.searchQuery}
+                        //     onSearchQueryChanged={this.onSearchQueryChanged}
+                        // />
                     );
                 }
                 break;
             case RightPanelPhases.SpaceMemberList:
                 if (!!cardState?.spaceId || !!roomId) {
                     card = (
-                        <MemberList
-                            roomId={cardState?.spaceId ?? roomId!}
-                            key={cardState?.spaceId ?? roomId!}
-                            onClose={this.onClose}
-                            searchQuery={this.state.searchQuery}
-                            onSearchQueryChanged={this.onSearchQueryChanged}
-                        />
+                        <MemberListView roomId={cardState?.spaceId ?? roomId!} onClose={this.onClose} />
+                        // <MemberList
+                        //     roomId={cardState?.spaceId ?? roomId!}
+                        //     key={cardState?.spaceId ?? roomId!}
+                        //     onClose={this.onClose}
+                        //     searchQuery={this.state.searchQuery}
+                        //     onSearchQueryChanged={this.onSearchQueryChanged}
+                        // />
                     );
                 }
                 break;
