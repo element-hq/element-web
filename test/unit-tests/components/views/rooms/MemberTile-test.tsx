@@ -22,7 +22,7 @@ describe("MemberTile", () => {
 
     beforeEach(() => {
         matrixClient = TestUtils.stubClient();
-        mocked(matrixClient.isRoomEncrypted).mockReturnValue(true);
+        jest.spyOn(matrixClient.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
         member = new RoomMember("roomId", matrixClient.getUserId()!);
     });
 

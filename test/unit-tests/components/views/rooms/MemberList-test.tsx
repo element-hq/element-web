@@ -31,6 +31,7 @@ import {
     filterConsole,
     flushPromises,
     getMockClientWithEventEmitter,
+    mockClientMethodsCrypto,
     mockClientMethodsRooms,
     mockClientMethodsUser,
 } from "../../../../test-utils";
@@ -361,6 +362,7 @@ describe("MemberList", () => {
                 client = getMockClientWithEventEmitter({
                     ...mockClientMethodsUser(),
                     ...mockClientMethodsRooms(),
+                    ...mockClientMethodsCrypto(),
                     getRoom: jest.fn(),
                     hasLazyLoadMembersEnabled: jest.fn(),
                 });

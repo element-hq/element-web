@@ -13,13 +13,19 @@ import { defer, IDeferred } from "matrix-js-sdk/src/utils";
 import EventIndexPanel from "../../../../../src/components/views/settings/EventIndexPanel";
 import EventIndexPeg from "../../../../../src/indexing/EventIndexPeg";
 import EventIndex from "../../../../../src/indexing/EventIndex";
-import { clearAllModals, flushPromises, getMockClientWithEventEmitter } from "../../../../test-utils";
+import {
+    clearAllModals,
+    flushPromises,
+    getMockClientWithEventEmitter,
+    mockClientMethodsCrypto,
+} from "../../../../test-utils";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 
 describe("<EventIndexPanel />", () => {
     getMockClientWithEventEmitter({
         getRooms: jest.fn().mockReturnValue([]),
+        ...mockClientMethodsCrypto(),
     });
 
     const getComponent = () => render(<EventIndexPanel />);

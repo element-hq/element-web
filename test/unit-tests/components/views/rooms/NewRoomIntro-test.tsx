@@ -10,6 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { render, screen } from "jest-matrix-react";
 import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { waitFor } from "@testing-library/dom";
 
 import { LocalRoom } from "../../../../../src/models/LocalRoom";
 import { filterConsole, mkRoomMemberJoinEvent, mkThirdPartyInviteEvent, stubClient } from "../../../../test-utils";
@@ -50,13 +51,15 @@ describe("NewRoomIntro", () => {
             renderNewRoomIntro(client, room);
         });
 
-        it("should render the expected intro", () => {
+        it("should render the expected intro", async () => {
             const expected = `This is the beginning of your direct message history with test_room.`;
-            screen.getByText((id, element) => element?.tagName === "SPAN" && element?.textContent === expected);
+            await waitFor(() =>
+                screen.getByText((id, element) => element?.tagName === "SPAN" && element?.textContent === expected),
+            );
         });
     });
 
-    it("should render as expected for a DM room with a single third-party invite", () => {
+    it("should render as expected for a DM room with a single third-party invite", async () => {
         const room = new Room(roomId, client, client.getSafeUserId());
         room.currentState.setStateEvents([
             mkRoomMemberJoinEvent(client.getSafeUserId(), room.roomId),
@@ -66,7 +69,9 @@ describe("NewRoomIntro", () => {
         jest.spyOn(DMRoomMap.shared(), "getRoomIds").mockReturnValue(new Set([room.roomId]));
         renderNewRoomIntro(client, room);
 
-        expect(screen.getByText("Once everyone has joined, you’ll be able to chat")).toBeInTheDocument();
+        await waitFor(() =>
+            expect(screen.getByText("Once everyone has joined, you’ll be able to chat")).toBeInTheDocument(),
+        );
         expect(
             screen.queryByText(
                 "Only the two of you are in this conversation, unless either of you invites anyone to join.",
@@ -83,9 +88,11 @@ describe("NewRoomIntro", () => {
             renderNewRoomIntro(client, localRoom);
         });
 
-        it("should render the expected intro", () => {
+        it("should render the expected intro", async () => {
             const expected = `Send your first message to invite test_room to chat`;
-            screen.getByText((id, element) => element?.tagName === "SPAN" && element?.textContent === expected);
+            await waitFor(() =>
+                screen.getByText((id, element) => element?.tagName === "SPAN" && element?.textContent === expected),
+            );
         });
     });
 });

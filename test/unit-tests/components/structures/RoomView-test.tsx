@@ -396,6 +396,13 @@ describe("RoomView", () => {
         });
 
         describe("in state NEW", () => {
+            beforeEach(() => {
+                jest.spyOn(cli, "getCrypto").mockReturnValue(crypto);
+                jest.spyOn(cli.getCrypto()!, "getUserVerificationStatus").mockResolvedValue(
+                    new UserVerificationStatus(false, true, false),
+                );
+            });
+
             it("should match the snapshot", async () => {
                 const { container } = await renderRoomView();
                 expect(container).toMatchSnapshot();
@@ -405,11 +412,7 @@ describe("RoomView", () => {
                 beforeEach(() => {
                     // Not all the calls to cli.isRoomEncrypted are migrated, so we need to mock both.
                     mocked(cli.isRoomEncrypted).mockReturnValue(true);
-                    jest.spyOn(cli, "getCrypto").mockReturnValue(crypto);
                     jest.spyOn(cli.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
-                    jest.spyOn(cli.getCrypto()!, "getUserVerificationStatus").mockResolvedValue(
-                        new UserVerificationStatus(false, true, false),
-                    );
                     localRoom.encrypted = true;
                     localRoom.currentState.setStateEvents([
                         new MatrixEvent({
@@ -442,6 +445,11 @@ describe("RoomView", () => {
         describe("in state ERROR", () => {
             beforeEach(async () => {
                 localRoom.state = LocalRoomState.ERROR;
+
+                jest.spyOn(cli, "getCrypto").mockReturnValue(crypto);
+                jest.spyOn(cli.getCrypto()!, "getUserVerificationStatus").mockResolvedValue(
+                    new UserVerificationStatus(false, true, false),
+                );
             });
 
             it("should match the snapshot", async () => {

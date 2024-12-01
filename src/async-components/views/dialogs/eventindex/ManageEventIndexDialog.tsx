@@ -67,7 +67,7 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
         let currentRoom: string | null = null;
 
         if (room) currentRoom = room.name;
-        const roomStats = eventIndex.crawlingRooms();
+        const roomStats = await eventIndex.crawlingRooms();
         const crawlingRoomsCount = roomStats.crawlingRooms.size;
         const roomCount = roomStats.totalRooms.size;
 
@@ -112,7 +112,7 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
                 // probably succeed.
             }
 
-            const roomStats = eventIndex.crawlingRooms();
+            const roomStats = await eventIndex.crawlingRooms();
             crawlingRoomsCount = roomStats.crawlingRooms.size;
             roomCount = roomStats.totalRooms.size;
 
