@@ -128,15 +128,10 @@ jobs:
 
             - name: Install Playwright browsers
               if: steps.playwright-cache.outputs.cache-hit != 'true'
-              run: yarn playwright install --with-deps
+              run: yarn playwright install --with-deps --no-shell chromium
 
             - name: Run Playwright tests
-              uses: coactions/setup-xvfb@6b00cf1889f4e1d5a48635647013c0508128ee1a
-              timeout-minutes: 30
-              with:
-                  run: "yarn playwright test --shard ${{ matrix.runner }}/${{ strategy.job-total }}"
-              env:
-                  HEADED: 1
+              run: yarn playwright test --shard ${{ matrix.runner }}/${{ strategy.job-total }}
 
             - name: Upload blob report to GitHub Actions Artifacts
               if: always()
