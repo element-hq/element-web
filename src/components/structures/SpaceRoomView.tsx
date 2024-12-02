@@ -208,7 +208,7 @@ const SpaceLanding: React.FC<{ space: Room }> = ({ space }) => {
     const storeIsShowingSpaceMembers = useCallback(
         () =>
             RightPanelStore.instance.isOpenForRoom(space.roomId) &&
-            RightPanelStore.instance.currentCardForRoom(space.roomId)?.phase === RightPanelPhases.SpaceMemberList,
+            RightPanelStore.instance.currentCardForRoom(space.roomId)?.phase === RightPanelPhases.MemberList,
         [space.roomId],
     );
     const isShowingMembers = useEventEmitterState(RightPanelStore.instance, UPDATE_EVENT, storeIsShowingSpaceMembers);
@@ -251,7 +251,7 @@ const SpaceLanding: React.FC<{ space: Room }> = ({ space }) => {
     }
 
     const onMembersClick = (): void => {
-        RightPanelStore.instance.setCard({ phase: RightPanelPhases.SpaceMemberList });
+        RightPanelStore.instance.setCard({ phase: RightPanelPhases.MemberList });
     };
 
     return (

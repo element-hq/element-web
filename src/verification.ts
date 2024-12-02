@@ -81,7 +81,7 @@ function setRightPanel(state: IRightPanelCardState): void {
     } else {
         RightPanelStore.instance.setCards([
             { phase: RightPanelPhases.RoomSummary },
-            { phase: RightPanelPhases.RoomMemberInfo, state: { member: state.member } },
+            { phase: RightPanelPhases.MemberInfo, state: { member: state.member } },
             { phase: RightPanelPhases.EncryptionPanel, state },
         ]);
     }
