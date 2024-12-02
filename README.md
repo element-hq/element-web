@@ -16,28 +16,28 @@ JS SDK](https://github.com/matrix-org/matrix-js-sdk).
 
 Element has several tiers of support for different environments:
 
--   Supported
-    -   Definition:
-        -   Issues **actively triaged**, regressions **block** the release
-    -   Last 2 major versions of Chrome, Firefox, and Edge on desktop OSes
-    -   Last 2 versions of Safari
-    -   Latest release of official Element Desktop app on desktop OSes
-    -   Desktop OSes means macOS, Windows, and Linux versions for desktop devices
-        that are actively supported by the OS vendor and receive security updates
--   Best effort
-    -   Definition:
-        -   Issues **accepted**, regressions **do not block** the release
-        -   The wider Element Products(including Element Call and the Enterprise Server Suite) do still not officially support these browsers.
-        -   The element web project and its contributors should keep the client functioning and gracefully degrade where other sibling features (E.g. Element Call) may not function.
-    -   Last major release of Firefox ESR and Chrome/Edge Extended Stable
--   Community Supported
-    -   Definition:
-        -   Issues **accepted**, regressions **do not block** the release
-        -   Community contributions are welcome to support these issues
-    -   Mobile web for current stable version of Chrome, Firefox, and Safari on Android, iOS, and iPadOS
--   Not supported
-    -   Definition: Issues only affecting unsupported environments are **closed**
-    -   Everything else
+- Supported
+    - Definition:
+        - Issues **actively triaged**, regressions **block** the release
+    - Last 2 major versions of Chrome, Firefox, and Edge on desktop OSes
+    - Last 2 versions of Safari
+    - Latest release of official Element Desktop app on desktop OSes
+    - Desktop OSes means macOS, Windows, and Linux versions for desktop devices
+      that are actively supported by the OS vendor and receive security updates
+- Best effort
+    - Definition:
+        - Issues **accepted**, regressions **do not block** the release
+        - The wider Element Products(including Element Call and the Enterprise Server Suite) do still not officially support these browsers.
+        - The element web project and its contributors should keep the client functioning and gracefully degrade where other sibling features (E.g. Element Call) may not function.
+    - Last major release of Firefox ESR and Chrome/Edge Extended Stable
+- Community Supported
+    - Definition:
+        - Issues **accepted**, regressions **do not block** the release
+        - Community contributions are welcome to support these issues
+    - Mobile web for current stable version of Chrome, Firefox, and Safari on Android, iOS, and iPadOS
+- Not supported
+    - Definition: Issues only affecting unsupported environments are **closed**
+    - Everything else
 
 The period of support for these tiers should last until the releases specified above, plus 1 app release cycle(2 weeks). In the case of Firefox ESR this is extended further to allow it land in Debian Stable.
 
@@ -74,16 +74,16 @@ situation, but it's still not good practice to do it in the first place. See
 Unless you have special requirements, you will want to add the following to
 your web server configuration when hosting Element Web:
 
--   The `X-Frame-Options: SAMEORIGIN` header, to prevent Element Web from being
-    framed and protect from [clickjacking][owasp-clickjacking].
--   The `frame-ancestors 'self'` directive to your `Content-Security-Policy`
-    header, as the modern replacement for `X-Frame-Options` (though both should be
-    included since not all browsers support it yet, see
-    [this][owasp-clickjacking-csp]).
--   The `X-Content-Type-Options: nosniff` header, to [disable MIME
-    sniffing][mime-sniffing].
--   The `X-XSS-Protection: 1; mode=block;` header, for basic XSS protection in
-    legacy browsers.
+- The `X-Frame-Options: SAMEORIGIN` header, to prevent Element Web from being
+  framed and protect from [clickjacking][owasp-clickjacking].
+- The `frame-ancestors 'self'` directive to your `Content-Security-Policy`
+  header, as the modern replacement for `X-Frame-Options` (though both should be
+  included since not all browsers support it yet, see
+  [this][owasp-clickjacking-csp]).
+- The `X-Content-Type-Options: nosniff` header, to [disable MIME
+  sniffing][mime-sniffing].
+- The `X-XSS-Protection: 1; mode=block;` header, for basic XSS protection in
+  legacy browsers.
 
 [mime-sniffing]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types#mime_sniffing
 [owasp-clickjacking-csp]: https://cheatsheetseries.owasp.org/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html#content-security-policy-frame-ancestors-examples

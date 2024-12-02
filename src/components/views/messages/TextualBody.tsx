@@ -55,7 +55,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
     private ref = createRef<HTMLDivElement>();
 
     public static contextType = RoomContext;
-    public declare context: React.ContextType<typeof RoomContext>;
+    declare public context: React.ContextType<typeof RoomContext>;
 
     public state = {
         links: [],

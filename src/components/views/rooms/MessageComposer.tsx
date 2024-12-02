@@ -123,7 +123,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
     private _voiceRecording: Optional<VoiceMessageRecording>;
 
     public static contextType = RoomContext;
-    public declare context: React.ContextType<typeof RoomContext>;
+    declare public context: React.ContextType<typeof RoomContext>;
 
     public static defaultProps = {
         compact: false,
