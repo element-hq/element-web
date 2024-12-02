@@ -671,6 +671,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         // the RoomView instance
         if (initial) {
             newState.room = this.context.client!.getRoom(newState.roomId) || undefined;
+            newState.isRoomEncrypted = null;
             if (newState.room) {
                 newState.showApps = this.shouldShowApps(newState.room);
                 this.onRoomLoaded(newState.room);
@@ -713,6 +714,14 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         if (initial) {
             this.setupRoom(newState.room, newState.roomId, !!newState.joining, !!newState.shouldPeek);
         }
+
+        // We don't block the initial setup but we want to make it early to not block the timeline rendering
+        const isRoomEncrypted = await this.getIsRoomEncrypted(newState.roomId);
+        this.setState({
+            isRoomEncrypted,
+            ...(isRoomEncrypted &&
+                newState.roomId && { e2eStatus: RoomView.e2eStatusCache.get(newState.roomId) ?? E2EStatus.Warning }),
+        });
     };
 
     private onConnectedCalls = (): void => {
@@ -863,7 +872,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         return isManuallyShown && widgets.length > 0;
     }
 
-    public async componentDidMount(): Promise<void> {
+    public componentDidMount(): void {
         this.unmounted = false;
 
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
@@ -1482,24 +1491,17 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     private async updateE2EStatus(room: Room): Promise<void> {
         if (!this.context.client || !this.state.isRoomEncrypted) return;
-
-        // If crypto is not currently enabled, we aren't tracking devices at all,
-        // so we don't know what the answer is. Let's error on the safe side and show
-        // a warning for this case.
-        let e2eStatus = RoomView.e2eStatusCache.get(room.roomId) ?? E2EStatus.Warning;
-        // set the state immediately then update, so we don't scare the user into thinking the room is unencrypted
+        const e2eStatus = await this.cacheAndGetE2EStatus(room, this.context.client);
+        if (this.unmounted) return;
         this.setState({ e2eStatus });
-
-        if (this.context.client.getCrypto()) {
-            /* At this point, the user has encryption on and cross-signing on */
-            e2eStatus = await this.cacheAndGetE2EStatus(room, this.context.client);
-            if (this.unmounted) return;
-            this.setState({ e2eStatus });
-        }
     }
 
     private async cacheAndGetE2EStatus(room: Room, client: MatrixClient): Promise<E2EStatus> {
-        const e2eStatus = await shieldStatusForRoom(client, room);
+        let e2eStatus = RoomView.e2eStatusCache.get(room.roomId);
+        // set the state immediately then update, so we don't scare the user into thinking the room is unencrypted
+        if (e2eStatus) this.setState({ e2eStatus });
+
+        e2eStatus = await shieldStatusForRoom(client, room);
         RoomView.e2eStatusCache.set(room.roomId, e2eStatus);
         return e2eStatus;
     }
