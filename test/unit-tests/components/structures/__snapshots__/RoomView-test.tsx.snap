@@ -1302,7 +1302,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             aria-label="Open room settings"
             aria-live="off"
             class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
-            data-color="1"
+            data-color="2"
             data-testid="avatar-img"
             data-type="round"
             role="button"
@@ -1329,7 +1329,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
                 <span
                   class="mx_RoomHeader_truncated mx_lineClamp"
                 >
-                  !5:example.org
+                  !6:example.org
                 </span>
               </div>
             </div>
@@ -1513,7 +1513,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
             aria-label="Open room settings"
             aria-live="off"
             class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
-            data-color="1"
+            data-color="2"
             data-testid="avatar-img"
             data-type="round"
             role="button"
@@ -1540,7 +1540,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
                 <span
                   class="mx_RoomHeader_truncated mx_lineClamp"
                 >
-                  !5:example.org
+                  !6:example.org
                 </span>
               </div>
             </div>
@@ -1897,7 +1897,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
             aria-label="Open room settings"
             aria-live="off"
             class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
-            data-color="5"
+            data-color="6"
             data-testid="avatar-img"
             data-type="round"
             role="button"
@@ -1924,7 +1924,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
                 <span
                   class="mx_RoomHeader_truncated mx_lineClamp"
                 >
-                  !12:example.org
+                  !13:example.org
                 </span>
               </div>
             </div>

@@ -75,6 +75,7 @@ import { ViewRoomErrorPayload } from "../../../../src/dispatcher/payloads/ViewRo
 import { SearchScope } from "../../../../src/Searching";
 import { MEGOLM_ENCRYPTION_ALGORITHM } from "../../../../src/utils/crypto";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
+import { ViewUserPayload } from "../../../../src/dispatcher/payloads/ViewUserPayload.ts";
 
 describe("RoomView", () => {
     let cli: MockedObject<MatrixClient>;
@@ -201,6 +202,21 @@ describe("RoomView", () => {
         await mountRoomView(ref);
         return ref.current!;
     };
+
+    it("should show member list right panel phase on Action.ViewUser without `payload.member`", async () => {
+        const spy = jest.spyOn(stores.rightPanelStore, "showOrHidePhase");
+        await renderRoomView(false);
+
+        defaultDispatcher.dispatch<ViewUserPayload>(
+            {
+                action: Action.ViewUser,
+                member: undefined,
+            },
+            true,
+        );
+
+        expect(spy).toHaveBeenCalledWith(RightPanelPhases.MemberList);
+    });
 
     it("when there is no room predecessor, getHiddenHighlightCount should return 0", async () => {
         const instance = await getRoomViewInstance();
