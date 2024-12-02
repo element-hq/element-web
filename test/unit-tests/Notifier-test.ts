@@ -583,8 +583,7 @@ describe("Notifier", () => {
                     content: { body: "this is a thread root" },
                 }),
                 testRoom.threadsTimelineSets[0]!.getLiveTimeline(),
-                false,
-                false,
+                { toStartOfTimeline: false, fromCache: false, addToState: true },
             );
 
             expect(fn).not.toHaveBeenCalled();

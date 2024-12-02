@@ -819,7 +819,11 @@ export default class EventIndex extends EventEmitter {
         // Add the events to the timeline of the file panel.
         matrixEvents.forEach((e) => {
             if (!timelineSet.eventIdToTimeline(e.getId()!)) {
-                timelineSet.addEventToTimeline(e, timeline, direction == EventTimeline.BACKWARDS);
+                timelineSet.addEventToTimeline(e, timeline, {
+                    toStartOfTimeline: direction == EventTimeline.BACKWARDS,
+                    fromCache: false,
+                    addToState: false,
+                });
             }
         });
 

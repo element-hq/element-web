@@ -141,16 +141,19 @@ describe("InviteDialog", () => {
         jest.clearAllMocks();
 
         room = new Room(roomId, mockClient, mockClient.getSafeUserId());
-        room.addLiveEvents([
-            mkMessage({
-                msg: "Hello",
-                relatesTo: undefined,
-                event: true,
-                room: roomId,
-                user: mockClient.getSafeUserId(),
-                ts: Date.now(),
-            }),
-        ]);
+        room.addLiveEvents(
+            [
+                mkMessage({
+                    msg: "Hello",
+                    relatesTo: undefined,
+                    event: true,
+                    room: roomId,
+                    user: mockClient.getSafeUserId(),
+                    ts: Date.now(),
+                }),
+            ],
+            { addToState: true },
+        );
         room.currentState.setStateEvents([
             mkRoomCreateEvent(bobId, roomId),
             mkMembership({

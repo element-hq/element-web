@@ -66,7 +66,7 @@ const mkTimeline = (room: Room, events: MatrixEvent[]): [EventTimeline, EventTim
         getPendingEvents: () => [] as MatrixEvent[],
     } as unknown as EventTimelineSet;
     const timeline = new EventTimeline(timelineSet);
-    events.forEach((event) => timeline.addEvent(event, { toStartOfTimeline: false }));
+    events.forEach((event) => timeline.addEvent(event, { toStartOfTimeline: false, addToState: true }));
 
     return [timeline, timelineSet];
 };
@@ -150,9 +150,11 @@ const setupPagination = (
     mocked(client).paginateEventTimeline.mockImplementation(async (tl, { backwards }) => {
         if (tl === timeline) {
             if (backwards) {
-                forEachRight(previousPage ?? [], (event) => tl.addEvent(event, { toStartOfTimeline: true }));
+                forEachRight(previousPage ?? [], (event) =>
+                    tl.addEvent(event, { toStartOfTimeline: true, addToState: true }),
+                );
             } else {
-                (nextPage ?? []).forEach((event) => tl.addEvent(event, { toStartOfTimeline: false }));
+                (nextPage ?? []).forEach((event) => tl.addEvent(event, { toStartOfTimeline: false, addToState: true }));
             }
             // Prevent any further pagination attempts in this direction
             tl.setPaginationToken(null, backwards ? EventTimeline.BACKWARDS : EventTimeline.FORWARDS);
@@ -256,7 +258,7 @@ describe("TimelinePanel", () => {
             describe("and reading the timeline", () => {
                 beforeEach(async () => {
                     await renderTimelinePanel();
-                    timelineSet.addLiveEvent(ev1, {});
+                    timelineSet.addLiveEvent(ev1, { addToState: true });
                     await flushPromises();
                     // @ts-ignore
                     await timelinePanel.sendReadReceipts();
@@ -284,11 +286,11 @@ describe("TimelinePanel", () => {
                     });
 
                     it("and forgetting the read markers, should send the stored marker again", async () => {
-                        timelineSet.addLiveEvent(ev2, {});
+                        timelineSet.addLiveEvent(ev2, { addToState: true });
                         // Add the event to the room as well as the timeline, so we can find it when we
                         // call findEventById in getEventReadUpTo. This is odd because in our test
                         // setup, timelineSet is not actually the timelineSet of the room.
-                        await room.addLiveEvents([ev2], {});
+                        await room.addLiveEvents([ev2], { addToState: true });
                         room.addEphemeralEvents([newReceipt(ev2.getId()!, userId, 222, 200)]);
                         await timelinePanel!.forgetReadMarker();
                         expect(client.setRoomReadMarkers).toHaveBeenCalledWith(roomId, ev2.getId());
@@ -314,7 +316,7 @@ describe("TimelinePanel", () => {
 
                 it("should send a fully read marker and a private receipt", async () => {
                     await renderTimelinePanel();
-                    act(() => timelineSet.addLiveEvent(ev1, {}));
+                    act(() => timelineSet.addLiveEvent(ev1, { addToState: true }));
                     await flushPromises();
 
                     // @ts-ignore
@@ -361,7 +363,7 @@ describe("TimelinePanel", () => {
 
             it("should send receipts but no fully_read when reading the thread timeline", async () => {
                 await renderTimelinePanel();
-                act(() => timelineSet.addLiveEvent(threadEv1, {}));
+                act(() => timelineSet.addLiveEvent(threadEv1, { addToState: true }));
                 await flushPromises();
 
                 // @ts-ignore
@@ -871,7 +873,9 @@ describe("TimelinePanel", () => {
             // @ts-ignore
             thread.fetchEditsWhereNeeded = () => Promise.resolve();
             await thread.addEvent(reply1, false, true);
-            await allThreads.getLiveTimeline().addEvent(thread.rootEvent!, { toStartOfTimeline: true });
+            await allThreads
+                .getLiveTimeline()
+                .addEvent(thread.rootEvent!, { toStartOfTimeline: true, addToState: true });
             const replyToEvent = jest.spyOn(thread, "replyToEvent", "get");
 
             const dom = render(
@@ -907,7 +911,9 @@ describe("TimelinePanel", () => {
             // @ts-ignore
             realThread.fetchEditsWhereNeeded = () => Promise.resolve();
             await realThread.addEvent(reply1, true);
-            await allThreads.getLiveTimeline().addEvent(realThread.rootEvent!, { toStartOfTimeline: true });
+            await allThreads
+                .getLiveTimeline()
+                .addEvent(realThread.rootEvent!, { toStartOfTimeline: true, addToState: true });
             const replyToEvent = jest.spyOn(realThread, "replyToEvent", "get");
 
             // @ts-ignore
@@ -968,7 +974,9 @@ describe("TimelinePanel", () => {
 
         events.push(rootEvent);
 
-        events.forEach((event) => timelineSet.getLiveTimeline().addEvent(event, { toStartOfTimeline: true }));
+        events.forEach((event) =>
+            timelineSet.getLiveTimeline().addEvent(event, { toStartOfTimeline: true, addToState: true }),
+        );
 
         const roomMembership = mkMembership({
             mship: KnownMembership.Join,
@@ -988,7 +996,10 @@ describe("TimelinePanel", () => {
         jest.spyOn(roomState, "getMember").mockReturnValue(member);
 
         jest.spyOn(timelineSet.getLiveTimeline(), "getState").mockReturnValue(roomState);
-        timelineSet.addEventToTimeline(roomMembership, timelineSet.getLiveTimeline(), { toStartOfTimeline: false });
+        timelineSet.addEventToTimeline(roomMembership, timelineSet.getLiveTimeline(), {
+            toStartOfTimeline: false,
+            addToState: true,
+        });
 
         for (const event of events) {
             jest.spyOn(event, "isDecryptionFailure").mockReturnValue(true);

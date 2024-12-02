@@ -157,6 +157,6 @@ export const populateThread = async ({
     // that it is already loaded, and send the events again to the room
     // so they are added to the thread timeline.
     ret.thread.initialEventsFetched = true;
-    await room.addLiveEvents(ret.events);
+    await room.addLiveEvents(ret.events, { addToState: false });
     return ret;
 };

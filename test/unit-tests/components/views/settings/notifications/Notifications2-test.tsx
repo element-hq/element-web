@@ -716,7 +716,7 @@ describe("<Notifications />", () => {
                 user: "@alice:example.org",
                 ts: 1,
             });
-            room.addLiveEvents([message]);
+            room.addLiveEvents([message], { addToState: true });
             room.setUnreadNotificationCount(NotificationCountType.Total, 1);
 
             const user = userEvent.setup();
