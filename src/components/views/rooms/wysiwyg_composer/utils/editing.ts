@@ -13,7 +13,7 @@ import dis from "../../../../../dispatcher/dispatcher";
 import { Action } from "../../../../../dispatcher/actions";
 import EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
 
-export function endEditing(roomContext: IRoomState): void {
+export function endEditing(roomContext: Pick<IRoomState, "timelineRenderingType">): void {
     // todo local storage
     // localStorage.removeItem(this.editorRoomKey);
     // localStorage.removeItem(this.editorStateKey);

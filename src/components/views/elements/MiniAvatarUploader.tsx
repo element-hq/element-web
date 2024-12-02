@@ -12,12 +12,12 @@ import React, { useContext, useRef, useState, MouseEvent, ReactNode } from "reac
 import { Tooltip } from "@vector-im/compound-web";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import RoomContext from "../../../contexts/RoomContext";
 import { useTimeout } from "../../../hooks/useTimeout";
 import { chromeFileInputFix } from "../../../utils/BrowserWorkarounds";
 import AccessibleButton from "./AccessibleButton";
 import Spinner from "./Spinner";
 import { getFileChanged } from "../settings/AvatarSetting.tsx";
+import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
 
 export const AVATAR_SIZE = "52px";
 
@@ -56,7 +56,7 @@ const MiniAvatarUploader: React.FC<IProps> = ({
 
     const label = hasAvatar || busy ? hasAvatarLabel : noAvatarLabel;
 
-    const { room } = useContext(RoomContext);
+    const { room } = useScopedRoomContext("room");
     const canSetAvatar =
         isUserAvatar || room?.currentState?.maySendStateEvent(EventType.RoomAvatar, cli.getSafeUserId());
     if (!canSetAvatar) return <React.Fragment>{children}</React.Fragment>;

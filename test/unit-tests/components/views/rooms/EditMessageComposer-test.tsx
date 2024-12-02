@@ -27,12 +27,12 @@ import {
 import DocumentOffset from "../../../../../src/editor/offset";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import EditorStateTransfer from "../../../../../src/utils/EditorStateTransfer";
-import RoomContext from "../../../../../src/contexts/RoomContext";
 import { IRoomState } from "../../../../../src/components/structures/RoomView";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import Autocompleter, { IProviderCompletions } from "../../../../../src/autocomplete/Autocompleter";
 import NotifProvider from "../../../../../src/autocomplete/NotifProvider";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
+import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 
 describe("<EditMessageComposer/>", () => {
     const userId = "@alice:server.org";
@@ -79,7 +79,7 @@ describe("<EditMessageComposer/>", () => {
         render(<EditMessageComposerWithMatrixClient editState={editState} />, {
             wrapper: ({ children }) => (
                 <MatrixClientContext.Provider value={mockClient}>
-                    <RoomContext.Provider value={roomContext}>{children}</RoomContext.Provider>
+                    <ScopedRoomContextProvider {...roomContext}>{children}</ScopedRoomContextProvider>
                 </MatrixClientContext.Provider>
             ),
         });

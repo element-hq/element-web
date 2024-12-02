@@ -27,7 +27,7 @@ import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
-import RoomContext, { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
+import { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
 import { IRoomState } from "../../../../../src/components/structures/RoomView";
 import { canEditContent } from "../../../../../src/utils/EventUtils";
 import { copyPlaintext, getSelectedText } from "../../../../../src/utils/strings";
@@ -40,6 +40,7 @@ import { Action } from "../../../../../src/dispatcher/actions";
 import { mkVoiceBroadcastInfoStateEvent } from "../../../voice-broadcast/utils/test-utils";
 import { VoiceBroadcastInfoState } from "../../../../../src/voice-broadcast";
 import { createMessageEventContent } from "../../../../test-utils/events";
+import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 
 jest.mock("../../../../../src/utils/strings", () => ({
     copyPlaintext: jest.fn(),
@@ -546,8 +547,8 @@ function createMenu(
     client.getRoom = jest.fn().mockReturnValue(room);
 
     return render(
-        <RoomContext.Provider value={context as IRoomState}>
+        <ScopedRoomContextProvider {...(context as IRoomState)}>
             <MessageContextMenu mxEvent={mxEvent} onFinished={jest.fn()} {...props} />
-        </RoomContext.Provider>,
+        </ScopedRoomContextProvider>,
     );
 }

@@ -21,7 +21,6 @@ import PollCreateDialog from "../elements/PollCreateDialog";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import ContentMessages from "../../../ContentMessages";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import RoomContext from "../../../contexts/RoomContext";
 import { useDispatcher } from "../../../hooks/useDispatcher";
 import { chromeFileInputFix } from "../../../utils/BrowserWorkarounds";
 import IconizedContextMenu, { IconizedContextMenuOptionList } from "../context_menus/IconizedContextMenu";
@@ -29,6 +28,7 @@ import { EmojiButton } from "./EmojiButton";
 import { filterBoolean } from "../../../utils/arrays";
 import { useSettingValue } from "../../../hooks/useSettings";
 import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
+import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
 
 interface IProps {
     addEmoji: (emoji: string) => boolean;
@@ -54,7 +54,7 @@ export const OverflowMenuContext = createContext<OverflowMenuCloser | null>(null
 
 const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
     const matrixClient = useContext(MatrixClientContext);
-    const { room, narrow } = useContext(RoomContext);
+    const { room, narrow } = useScopedRoomContext("room", "narrow");
 
     const isWysiwygLabEnabled = useSettingValue<boolean>("feature_wysiwyg_composer");
 
@@ -168,7 +168,7 @@ interface IUploadButtonProps {
 // We put the file input outside the UploadButton component so that it doesn't get killed when the context menu closes.
 const UploadButtonContextProvider: React.FC<IUploadButtonProps> = ({ roomId, relation, children }) => {
     const cli = useContext(MatrixClientContext);
-    const roomContext = useContext(RoomContext);
+    const roomContext = useScopedRoomContext("timelineRenderingType");
     const uploadInput = useRef<HTMLInputElement>(null);
 
     const onUploadClick = (): void => {
