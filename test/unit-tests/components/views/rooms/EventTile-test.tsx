@@ -71,9 +71,11 @@ describe("EventTile", () => {
     function getComponent(
         overrides: Partial<EventTileProps> = {},
         renderingType: TimelineRenderingType = TimelineRenderingType.Room,
+        roomContext: Partial<IRoomState> = {},
     ) {
         const context = getRoomContext(room, {
             timelineRenderingType: renderingType,
+            ...roomContext,
         });
         return render(<WrappedEventTile roomContext={context} eventTilePropertyOverrides={overrides} />);
     }
@@ -437,8 +439,6 @@ describe("EventTile", () => {
         });
 
         it("should update the warning when the event is replaced with an unencrypted one", async () => {
-            jest.spyOn(client, "isRoomEncrypted").mockReturnValue(true);
-
             // we start out with an event from the trusted device
             mxEvent = await mkEncryptedMatrixEvent({
                 plainContent: { msgtype: "m.text", body: "msg1" },
@@ -452,7 +452,7 @@ describe("EventTile", () => {
                 shieldReason: null,
             } as EventEncryptionInfo);
 
-            const roomContext = getRoomContext(room, {});
+            const roomContext = getRoomContext(room, { isRoomEncrypted: true });
             const { container, rerender } = render(<WrappedEventTile roomContext={roomContext} />);
             await flushPromises();
 
@@ -580,5 +580,29 @@ describe("EventTile", () => {
                 expect(isHighlighted(container)).toBeTruthy();
             });
         });
+    });
+
+    it("should display the not encrypted status for an unencrypted event when the room becomes encrypted", async () => {
+        jest.spyOn(client.getCrypto()!, "getEncryptionInfoForEvent").mockResolvedValue({
+            shieldColour: EventShieldColour.NONE,
+            shieldReason: null,
+        });
+
+        const { rerender } = getComponent();
+        await flushPromises();
+        // The room and the event are unencrypted, the tile should not show the not encrypted status
+        expect(screen.queryByText("Not encrypted")).toBeNull();
+
+        // The room is now encrypted
+        rerender(
+            <WrappedEventTile
+                roomContext={getRoomContext(room, {
+                    isRoomEncrypted: true,
+                })}
+            />,
+        );
+
+        // The event tile should now show the not encrypted status
+        await waitFor(() => expect(screen.getByText("Not encrypted")).toBeInTheDocument());
     });
 });

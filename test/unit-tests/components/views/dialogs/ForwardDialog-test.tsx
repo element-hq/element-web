@@ -67,7 +67,6 @@ describe("ForwardDialog", () => {
         getAccountData: jest.fn().mockReturnValue(accountDataEvent),
         getPushActionsForEvent: jest.fn(),
         mxcUrlToHttp: jest.fn().mockReturnValue(""),
-        isRoomEncrypted: jest.fn().mockReturnValue(false),
         getProfileInfo: jest.fn().mockResolvedValue({
             displayname: "Alice",
         }),
