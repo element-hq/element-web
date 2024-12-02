@@ -168,27 +168,4 @@ describe("MessageComposerButtons", () => {
             ]);
         });
     });
-
-    describe("with showVoiceBroadcastButton = true", () => {
-        it("should render the »Voice broadcast« button", () => {
-            wrapAndRender(
-                <MessageComposerButtons
-                    {...mockProps}
-                    isMenuOpen={true}
-                    showLocationButton={true}
-                    showPollsButton={true}
-                    showStickersButton={true}
-                    showVoiceBroadcastButton={true}
-                />,
-                false,
-            );
-
-            expect(getButtonLabels()).toEqual([
-                "Emoji",
-                "Attachment",
-                "More options",
-                ["Sticker", "Voice Message", "Voice broadcast", "Poll", "Location"],
-            ]);
-        });
-    });
 });

@@ -58,7 +58,6 @@ import { ALTERNATE_KEY_NAME } from "../../../accessibility/KeyboardShortcuts";
 import { Action } from "../../../dispatcher/actions";
 import { ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import { GetRelationsForEvent, IEventTileType } from "../rooms/EventTile";
-import { VoiceBroadcastInfoEventType } from "../../../voice-broadcast/types";
 import { ButtonEvent } from "../elements/AccessibleButton";
 import PinningUtils from "../../../utils/PinningUtils";
 import PosthogTrackers from "../../../PosthogTrackers.ts";
@@ -354,8 +353,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
              * until cross-platform support
              * (PSF-1041)
              */
-            !M_BEACON_INFO.matches(this.props.mxEvent.getType()) &&
-            !(this.props.mxEvent.getType() === VoiceBroadcastInfoEventType);
+            !M_BEACON_INFO.matches(this.props.mxEvent.getType());
 
         return inNotThreadTimeline && isAllowedMessageType;
     }

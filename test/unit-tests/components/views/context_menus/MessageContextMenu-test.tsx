@@ -37,8 +37,6 @@ import dispatcher from "../../../../../src/dispatcher/dispatcher";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { ReadPinsEventId } from "../../../../../src/components/views/right_panel/types";
 import { Action } from "../../../../../src/dispatcher/actions";
-import { mkVoiceBroadcastInfoStateEvent } from "../../../voice-broadcast/utils/test-utils";
-import { VoiceBroadcastInfoState } from "../../../../../src/voice-broadcast";
 import { createMessageEventContent } from "../../../../test-utils/events";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 
@@ -231,17 +229,6 @@ describe("MessageContextMenu", () => {
         it("does not allow forwarding a poll", () => {
             const eventContent = PollStartEvent.from("why?", ["42"], M_POLL_KIND_DISCLOSED);
             createMenuWithContent(eventContent);
-            expect(document.querySelector('li[aria-label="Forward"]')).toBeFalsy();
-        });
-
-        it("should not allow forwarding a voice broadcast", () => {
-            const broadcastStartEvent = mkVoiceBroadcastInfoStateEvent(
-                roomId,
-                VoiceBroadcastInfoState.Started,
-                "@user:example.com",
-                "ABC123",
-            );
-            createMenu(broadcastStartEvent);
             expect(document.querySelector('li[aria-label="Forward"]')).toBeFalsy();
         });
 
