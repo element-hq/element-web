@@ -63,7 +63,7 @@ import PowerSelector from "../elements/PowerSelector";
 import MemberAvatar from "../avatars/MemberAvatar";
 import PresenceLabel from "../rooms/PresenceLabel";
 import BulkRedactDialog from "../dialogs/BulkRedactDialog";
-import ShareDialog from "../dialogs/ShareDialog";
+import { ShareDialog } from "../dialogs/ShareDialog";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import ConfirmUserActionDialog from "../dialogs/ConfirmUserActionDialog";

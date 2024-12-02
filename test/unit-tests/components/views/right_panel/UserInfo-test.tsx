@@ -49,7 +49,7 @@ import ErrorDialog from "../../../../../src/components/views/dialogs/ErrorDialog
 import { shouldShowComponent } from "../../../../../src/customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../../src/settings/UIFeature";
 import { Action } from "../../../../../src/dispatcher/actions";
-import ShareDialog from "../../../../../src/components/views/dialogs/ShareDialog";
+import { ShareDialog } from "../../../../../src/components/views/dialogs/ShareDialog";
 import BulkRedactDialog from "../../../../../src/components/views/dialogs/BulkRedactDialog";
 
 jest.mock("../../../../../src/utils/direct-messages", () => ({
