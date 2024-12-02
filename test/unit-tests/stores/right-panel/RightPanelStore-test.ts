@@ -18,6 +18,9 @@ import { ActiveRoomChangedPayload } from "../../../../src/dispatcher/payloads/Ac
 import RightPanelStore from "../../../../src/stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../../src/stores/right-panel/RightPanelStorePhases";
 import SettingsStore from "../../../../src/settings/SettingsStore";
+import { pendingVerificationRequestForUser } from "../../../../src/verification.ts";
+
+jest.mock("../../../../src/verification");
 
 describe("RightPanelStore", () => {
     // Mock out the settings store so the right panel store can't persist values between tests
@@ -216,5 +219,24 @@ describe("RightPanelStore", () => {
         await viewRoom("!2:example.org");
         await viewRoom("!1:example.org");
         expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.MemberList);
+    });
+
+    it("should redirect to verification if set to phase MemberInfo for a user with a pending verification", async () => {
+        const member = new RoomMember("!1:example.org", "@alice:example.org");
+        const verificationRequest = { mockVerificationRequest: true } as any;
+        mocked(pendingVerificationRequestForUser).mockReturnValue(verificationRequest);
+        await viewRoom("!1:example.org");
+        store.setCard(
+            {
+                phase: RightPanelPhases.MemberInfo,
+                state: { member },
+            },
+            true,
+            "!1:example.org",
+        );
+        expect(store.currentCard).toEqual({
+            phase: RightPanelPhases.EncryptionPanel,
+            state: { member, verificationRequest },
+        });
     });
 });
