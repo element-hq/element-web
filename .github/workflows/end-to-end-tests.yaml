@@ -124,9 +124,9 @@ jobs:
               with:
                   path: |
                       ~/.cache/ms-playwright
-                  key: ${{ runner.os }}-playwright-${{ steps.playwright.outputs.version }}
+                  key: ${{ runner.os }}-playwright-${{ steps.playwright.outputs.version }}-chromium
 
-            - name: Install Playwright browsers
+            - name: Install Playwright browser
               if: steps.playwright-cache.outputs.cache-hit != 'true'
               run: yarn playwright install --with-deps --no-shell chromium
 
