@@ -912,6 +912,9 @@
             "warning": "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings."
         },
         "reset_all_button": "Forgotten or lost all recovery methods? <a>Reset all</a>",
+        "set_up_recovery": "Set up recovery",
+        "set_up_recovery_later": "Not now",
+        "set_up_recovery_toast_title": "Set up recovery to protect your account",
         "set_up_toast_description": "Safeguard against losing access to encrypted messages & data",
         "set_up_toast_title": "Set up Secure Backup",
         "setup_secure_backup": {
