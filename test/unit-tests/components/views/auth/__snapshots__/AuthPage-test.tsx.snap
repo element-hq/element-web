@@ -30,11 +30,11 @@ exports[`<AuthPage /> should match snapshot 1`] = `
         Blog
       </a>
       <a
-        href="https://twitter.com/element_hq"
+        href="https://mastodon.matrix.org/@Element"
         rel="noreferrer noopener"
         target="_blank"
       >
-        Twitter
+        Mastodon
       </a>
       <a
         href="https://github.com/element-hq/element-web"

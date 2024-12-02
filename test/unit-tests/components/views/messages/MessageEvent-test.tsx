@@ -14,7 +14,6 @@ import fs from "fs";
 import path from "path";
 
 import SettingsStore from "../../../../../src/settings/SettingsStore";
-import { VoiceBroadcastInfoEventType, VoiceBroadcastInfoState } from "../../../../../src/voice-broadcast";
 import { mkEvent, mkRoom, stubClient } from "../../../../test-utils";
 import MessageEvent from "../../../../../src/components/views/messages/MessageEvent";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
@@ -22,10 +21,6 @@ import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permal
 jest.mock("../../../../../src/components/views/messages/UnknownBody", () => ({
     __esModule: true,
     default: () => <div data-testid="unknown-body" />,
-}));
-
-jest.mock("../../../../../src/voice-broadcast/components/VoiceBroadcastBody", () => ({
-    VoiceBroadcastBody: () => <div data-testid="voice-broadcast-body" />,
 }));
 
 jest.mock("../../../../../src/components/views/messages/MImageBody", () => ({
@@ -79,27 +74,6 @@ describe("MessageEvent", () => {
         jest.spyOn(SettingsStore, "getValue");
         jest.spyOn(SettingsStore, "watchSetting");
         jest.spyOn(SettingsStore, "unwatchSetting").mockImplementation(jest.fn());
-    });
-
-    describe("when a voice broadcast start event occurs", () => {
-        let result: RenderResult;
-
-        beforeEach(() => {
-            event = mkEvent({
-                event: true,
-                type: VoiceBroadcastInfoEventType,
-                user: client.getUserId()!,
-                room: room.roomId,
-                content: {
-                    state: VoiceBroadcastInfoState.Started,
-                },
-            });
-            result = renderMessageEvent();
-        });
-
-        it("should render a VoiceBroadcast component", () => {
-            result.getByTestId("voice-broadcast-body");
-        });
     });
 
     describe("when an image with a caption is sent", () => {

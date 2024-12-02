@@ -16,12 +16,12 @@ import dis from "../../../../../dispatcher/dispatcher";
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { UIFeature } from "../../../../../settings/UIFeature";
-import UrlPreviewSettings from "../../../room_settings/UrlPreviewSettings";
 import AliasSettings from "../../../room_settings/AliasSettings";
 import PosthogTrackers from "../../../../../PosthogTrackers";
 import { SettingsSubsection } from "../../shared/SettingsSubsection";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
+import { UrlPreviewSettings } from "../../../room_settings/UrlPreviewSettings";
 
 interface IProps {
     room: Room;
@@ -33,7 +33,7 @@ interface IState {
 
 export default class GeneralRoomSettingsTab extends React.Component<IProps, IState> {
     public static contextType = MatrixClientContext;
-    public declare context: ContextType<typeof MatrixClientContext>;
+    declare public context: ContextType<typeof MatrixClientContext>;
 
     public constructor(props: IProps, context: ContextType<typeof MatrixClientContext>) {
         super(props, context);

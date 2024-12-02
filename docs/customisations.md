@@ -50,9 +50,9 @@ that properties/state machines won't change.
 
 UI for some actions can be hidden via the ComponentVisibility customisation:
 
--   inviting users to rooms and spaces,
--   creating rooms,
--   creating spaces,
+- inviting users to rooms and spaces,
+- creating rooms,
+- creating spaces,
 
 To customise visibility create a customisation module from [ComponentVisibility](https://github.com/element-hq/element-web/blob/master/src/customisations/ComponentVisibility.ts) following the instructions above.
 

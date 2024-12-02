@@ -56,7 +56,6 @@ describe("<LoginWithQRSection />", () => {
             const defaultProps = {
                 onShowQr: () => {},
                 versions: makeVersions({ "org.matrix.msc4108": true }),
-                wellKnown: {},
             };
 
             const getComponent = (props = {}) => <LoginWithQRSection {...defaultProps} {...props} />;

@@ -106,15 +106,10 @@ module.exports = (env, argv) => {
         // Embedded source maps for dev builds, can't use eval-source-map due to CSP
         development["devtool"] = "inline-source-map";
     } else {
-        if (process.env.CI_PACKAGE) {
-            // High quality source maps in separate .map files which include the source. This doesn't bulk up the .js
-            // payload file size, which is nice for performance but also necessary to get the bundle to a small enough
-            // size that sentry will accept the upload.
-            development["devtool"] = "source-map";
-        } else {
-            // High quality source maps in separate .map files which don't include the source
-            development["devtool"] = "nosources-source-map";
-        }
+        // High quality source maps in separate .map files which include the source. This doesn't bulk up the .js
+        // payload file size, which is nice for performance but also necessary to get the bundle to a small enough
+        // size that sentry will accept the upload.
+        development["devtool"] = "source-map";
     }
 
     // Resolve the directories for the js-sdk for later use. We resolve these early, so we
@@ -243,6 +238,9 @@ module.exports = (env, argv) => {
             },
         },
 
+        // Some of our deps have broken source maps, so we have to ignore warnings or exclude them one-by-one
+        ignoreWarnings: [/Failed to parse source map/],
+
         module: {
             noParse: [
                 // for cross platform compatibility use [\\\/] as the path separator
@@ -255,6 +253,11 @@ module.exports = (env, argv) => {
                 /highlight\.js[\\/]lib[\\/]languages/,
             ],
             rules: [
+                {
+                    test: /\.js$/,
+                    enforce: "pre",
+                    use: ["source-map-loader"],
+                },
                 {
                     test: /\.(ts|js)x?$/,
                     include: (f) => {

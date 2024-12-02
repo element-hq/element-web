@@ -37,6 +37,7 @@ describe("SetupEncryptionStore", () => {
             getDeviceVerificationStatus: jest.fn(),
             isDehydrationSupported: jest.fn().mockResolvedValue(false),
             startDehydration: jest.fn(),
+            getKeyBackupInfo: jest.fn().mockResolvedValue(null),
         } as unknown as Mocked<CryptoApi>;
         client.getCrypto.mockReturnValue(mockCrypto);
 

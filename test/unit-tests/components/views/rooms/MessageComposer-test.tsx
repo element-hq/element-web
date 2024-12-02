@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import * as React from "react";
-import { EventType, MatrixEvent, Room, RoomMember, THREAD_RELATION_TYPE } from "matrix-js-sdk/src/matrix";
+import { EventType, MatrixEvent, RoomMember, THREAD_RELATION_TYPE } from "matrix-js-sdk/src/matrix";
 import { act, fireEvent, render, screen, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
@@ -19,17 +19,14 @@ import {
     mkStubRoom,
     mockPlatformPeg,
     stubClient,
-    waitEnoughCyclesForModal,
 } from "../../../../test-utils";
 import MessageComposer from "../../../../../src/components/views/rooms/MessageComposer";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
-import RoomContext from "../../../../../src/contexts/RoomContext";
 import { IRoomState } from "../../../../../src/components/structures/RoomView";
 import ResizeNotifier from "../../../../../src/utils/ResizeNotifier";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import { LocalRoom } from "../../../../../src/models/LocalRoom";
-import { Features } from "../../../../../src/settings/Settings";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 import dis from "../../../../../src/dispatcher/dispatcher";
@@ -37,31 +34,16 @@ import { E2EStatus } from "../../../../../src/utils/ShieldUtils";
 import { addTextToComposerRTL } from "../../../../test-utils/composer";
 import UIStore, { UI_EVENTS } from "../../../../../src/stores/UIStore";
 import { Action } from "../../../../../src/dispatcher/actions";
-import { VoiceBroadcastInfoState, VoiceBroadcastRecording } from "../../../../../src/voice-broadcast";
-import { mkVoiceBroadcastInfoStateEvent } from "../../../voice-broadcast/utils/test-utils";
-import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
+import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 
 const openStickerPicker = async (): Promise<void> => {
-    await act(async () => {
-        await userEvent.click(screen.getByLabelText("More options"));
-        await userEvent.click(screen.getByLabelText("Sticker"));
-    });
+    await userEvent.click(screen.getByLabelText("More options"));
+    await userEvent.click(screen.getByLabelText("Sticker"));
 };
 
 const startVoiceMessage = async (): Promise<void> => {
-    await act(async () => {
-        await userEvent.click(screen.getByLabelText("More options"));
-        await userEvent.click(screen.getByLabelText("Voice Message"));
-    });
-};
-
-const setCurrentBroadcastRecording = (room: Room, state: VoiceBroadcastInfoState): void => {
-    const recording = new VoiceBroadcastRecording(
-        mkVoiceBroadcastInfoStateEvent(room.roomId, state, "@user:example.com", "ABC123"),
-        MatrixClientPeg.safeGet(),
-        state,
-    );
-    SdkContextClass.instance.voiceBroadcastRecordingsStore.setCurrent(recording);
+    await userEvent.click(screen.getByLabelText("More options"));
+    await userEvent.click(screen.getByLabelText("Voice Message"));
 };
 
 const expectVoiceMessageRecordingTriggered = (): void => {
@@ -82,20 +64,56 @@ describe("MessageComposer", () => {
         await clearAllModals();
         jest.useRealTimers();
 
-        SdkContextClass.instance.voiceBroadcastRecordingsStore.clearCurrent();
-
         // restore settings
         act(() => {
             [
                 "MessageComposerInput.showStickersButton",
                 "MessageComposerInput.showPollsButton",
-                Features.VoiceBroadcast,
                 "feature_wysiwyg_composer",
             ].forEach((setting: string): void => {
                 SettingsStore.setValue(setting, null, SettingLevel.DEVICE, SettingsStore.getDefaultValue(setting));
             });
         });
     });
+
+    it("wysiwyg correctly persists state to and from localStorage", async () => {
+        const room = mkStubRoom("!roomId:server", "Room 1", cli);
+        const messageText = "Test Text";
+        await SettingsStore.setValue("feature_wysiwyg_composer", null, SettingLevel.DEVICE, true);
+        const { renderResult, rawComponent } = wrapAndRender({ room });
+        const { unmount } = renderResult;
+
+        await flushPromises();
+
+        const key = `mx_wysiwyg_state_${room.roomId}`;
+
+        await userEvent.click(screen.getByRole("textbox"));
+        fireEvent.input(screen.getByRole("textbox"), {
+            data: messageText,
+            inputType: "insertText",
+        });
+
+        await waitFor(() => expect(screen.getByRole("textbox")).toHaveTextContent(messageText));
+
+        // Wait for event dispatch to happen
+        await flushPromises();
+
+        // assert there is state persisted
+        expect(localStorage.getItem(key)).toBeNull();
+
+        // ensure the right state was persisted to localStorage
+        unmount();
+
+        // assert the persisted state
+        expect(JSON.parse(localStorage.getItem(key)!)).toStrictEqual({
+            content: messageText,
+            isRichText: true,
+        });
+
+        // ensure the correct state is re-loaded
+        render(rawComponent);
+        await waitFor(() => expect(screen.getByRole("textbox")).toHaveTextContent(messageText));
+    }, 10000);
 
     describe("for a Room", () => {
         const room = mkStubRoom("!roomId:server", "Room 1", cli);
@@ -177,22 +195,16 @@ describe("MessageComposer", () => {
                 setting: "MessageComposerInput.showPollsButton",
                 buttonLabel: "Poll",
             },
-            {
-                setting: Features.VoiceBroadcast,
-                buttonLabel: "Voice broadcast",
-            },
         ].forEach(({ setting, buttonLabel }) => {
             [true, false].forEach((value: boolean) => {
                 describe(`when ${setting} = ${value}`, () => {
                     beforeEach(async () => {
-                        SettingsStore.setValue(setting, null, SettingLevel.DEVICE, value);
+                        await act(() => SettingsStore.setValue(setting, null, SettingLevel.DEVICE, value));
                         wrapAndRender({ room });
-                        await act(async () => {
-                            await userEvent.click(screen.getByLabelText("More options"));
-                        });
+                        await userEvent.click(screen.getByLabelText("More options"));
                     });
 
-                    it(`should${value || "not"} display the button`, () => {
+                    it(`should${value ? "" : " not"} display the button`, () => {
                         if (value) {
                             // eslint-disable-next-line jest/no-conditional-expect
                             expect(screen.getByLabelText(buttonLabel)).toBeInTheDocument();
@@ -205,15 +217,17 @@ describe("MessageComposer", () => {
                     describe(`and setting ${setting} to ${!value}`, () => {
                         beforeEach(async () => {
                             // simulate settings update
-                            await SettingsStore.setValue(setting, null, SettingLevel.DEVICE, !value);
-                            dis.dispatch(
-                                {
-                                    action: Action.SettingUpdated,
-                                    settingName: setting,
-                                    newValue: !value,
-                                },
-                                true,
-                            );
+                            await act(async () => {
+                                await SettingsStore.setValue(setting, null, SettingLevel.DEVICE, !value);
+                                dis.dispatch(
+                                    {
+                                        action: Action.SettingUpdated,
+                                        settingName: setting,
+                                        newValue: !value,
+                                    },
+                                    true,
+                                );
+                            });
                         });
 
                         it(`should${!value || "not"} display the button`, () => {
@@ -273,7 +287,7 @@ describe("MessageComposer", () => {
                 beforeEach(async () => {
                     wrapAndRender({ room }, true, true);
                     await openStickerPicker();
-                    resizeCallback(UI_EVENTS.Resize, {});
+                    act(() => resizeCallback(UI_EVENTS.Resize, {}));
                 });
 
                 it("should close the menu", () => {
@@ -295,7 +309,7 @@ describe("MessageComposer", () => {
                 beforeEach(async () => {
                     wrapAndRender({ room }, true, false);
                     await openStickerPicker();
-                    resizeCallback(UI_EVENTS.Resize, {});
+                    act(() => resizeCallback(UI_EVENTS.Resize, {}));
                 });
 
                 it("should close the menu", () => {
@@ -402,34 +416,6 @@ describe("MessageComposer", () => {
                 expectVoiceMessageRecordingTriggered();
             });
         });
-
-        describe("when recording a voice broadcast and trying to start a voice message", () => {
-            beforeEach(async () => {
-                setCurrentBroadcastRecording(room, VoiceBroadcastInfoState.Started);
-                wrapAndRender({ room });
-                await startVoiceMessage();
-                await waitEnoughCyclesForModal();
-            });
-
-            it("should not start a voice message and display the info dialog", async () => {
-                expect(screen.queryByLabelText("Stop recording")).not.toBeInTheDocument();
-                expect(screen.getByText("Can't start voice message")).toBeInTheDocument();
-            });
-        });
-
-        describe("when there is a stopped voice broadcast recording and trying to start a voice message", () => {
-            beforeEach(async () => {
-                setCurrentBroadcastRecording(room, VoiceBroadcastInfoState.Stopped);
-                wrapAndRender({ room });
-                await startVoiceMessage();
-                await waitEnoughCyclesForModal();
-            });
-
-            it("should try to start a voice message and should not display the info dialog", async () => {
-                expect(screen.queryByText("Can't start voice message")).not.toBeInTheDocument();
-                expectVoiceMessageRecordingTriggered();
-            });
-        });
     });
 
     describe("for a LocalRoom", () => {
@@ -443,51 +429,6 @@ describe("MessageComposer", () => {
             expect(screen.queryByLabelText("Sticker")).not.toBeInTheDocument();
         });
     });
-
-    it("wysiwyg correctly persists state to and from localStorage", async () => {
-        const room = mkStubRoom("!roomId:server", "Room 1", cli);
-        const messageText = "Test Text";
-        await SettingsStore.setValue("feature_wysiwyg_composer", null, SettingLevel.DEVICE, true);
-        const { renderResult, rawComponent } = wrapAndRender({ room });
-        const { unmount, rerender } = renderResult;
-
-        await act(async () => {
-            await flushPromises();
-        });
-
-        const key = `mx_wysiwyg_state_${room.roomId}`;
-
-        await act(async () => {
-            await userEvent.click(screen.getByRole("textbox"));
-        });
-        fireEvent.input(screen.getByRole("textbox"), {
-            data: messageText,
-            inputType: "insertText",
-        });
-
-        await waitFor(() => expect(screen.getByRole("textbox")).toHaveTextContent(messageText));
-
-        // Wait for event dispatch to happen
-        await act(async () => {
-            await flushPromises();
-        });
-
-        // assert there is state persisted
-        expect(localStorage.getItem(key)).toBeNull();
-
-        // ensure the right state was persisted to localStorage
-        unmount();
-
-        // assert the persisted state
-        expect(JSON.parse(localStorage.getItem(key)!)).toStrictEqual({
-            content: messageText,
-            isRichText: true,
-        });
-
-        // ensure the correct state is re-loaded
-        rerender(rawComponent);
-        await waitFor(() => expect(screen.getByRole("textbox")).toHaveTextContent(messageText));
-    }, 10000);
 });
 
 function wrapAndRender(
@@ -522,9 +463,9 @@ function wrapAndRender(
 
     const getRawComponent = (props = {}, context = roomContext, client = mockClient) => (
         <MatrixClientContext.Provider value={client}>
-            <RoomContext.Provider value={context}>
+            <ScopedRoomContextProvider {...context}>
                 <MessageComposer {...defaultProps} {...props} />
-            </RoomContext.Provider>
+            </ScopedRoomContextProvider>
         </MatrixClientContext.Provider>
     );
     return {

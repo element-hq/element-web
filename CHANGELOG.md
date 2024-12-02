@@ -1,3 +1,23 @@
+Changes in [1.11.86](https://github.com/element-hq/element-web/releases/tag/v1.11.86) (2024-11-19)
+==================================================================================================
+## ✨ Features
+
+* Deduplicate icons using Compound Design Tokens ([#28419](https://github.com/element-hq/element-web/pull/28419)). Contributed by @t3chguy.
+* Let widget driver send error details ([#28357](https://github.com/element-hq/element-web/pull/28357)). Contributed by @AndrewFerr.
+* Deduplicate icons using Compound Design Tokens ([#28381](https://github.com/element-hq/element-web/pull/28381)). Contributed by @t3chguy.
+* Auto approvoce `io.element.call.reaction` capability for element call widgets ([#28401](https://github.com/element-hq/element-web/pull/28401)). Contributed by @toger5.
+* Show message type prefix in thread root \& reply previews ([#28361](https://github.com/element-hq/element-web/pull/28361)). Contributed by @t3chguy.
+* Support sending encrypted to device messages from widgets ([#28315](https://github.com/element-hq/element-web/pull/28315)). Contributed by @hughns.
+
+## 🐛 Bug Fixes
+
+* Feed events to widgets as they are decrypted (even if out of order) ([#28376](https://github.com/element-hq/element-web/pull/28376)). Contributed by @robintown.
+* Handle authenticated media when downloading from ImageView ([#28379](https://github.com/element-hq/element-web/pull/28379)). Contributed by @t3chguy.
+* Ignore `m.3pid_changes` for Identity service 3PID changes ([#28375](https://github.com/element-hq/element-web/pull/28375)). Contributed by @t3chguy.
+* Fix markdown escaping wrongly passing html through ([#28363](https://github.com/element-hq/element-web/pull/28363)). Contributed by @t3chguy.
+* Remove "Upgrade your encryption" flow in `CreateSecretStorageDialog` ([#28290](https://github.com/element-hq/element-web/pull/28290)). Contributed by @florianduros.
+
+
 Changes in [1.11.85](https://github.com/element-hq/element-web/releases/tag/v1.11.85) (2024-11-12)
 ==================================================================================================
 # Security

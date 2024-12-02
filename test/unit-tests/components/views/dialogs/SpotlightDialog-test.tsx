@@ -239,7 +239,7 @@ describe("Spotlight Dialog", () => {
         });
 
         it("should call getVisibleRooms with MSC3946 dynamic room predecessors", async () => {
-            render(<SpotlightDialog onFinished={() => null} />, { legacyRoot: false });
+            render(<SpotlightDialog onFinished={() => null} />);
             jest.advanceTimersByTime(200);
             await flushPromisesWithFakeTimers();
             expect(mockedClient.getVisibleRooms).toHaveBeenCalledWith(true);

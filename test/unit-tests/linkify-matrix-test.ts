@@ -332,7 +332,7 @@ describe("linkify-matrix", () => {
 
             const event = new MouseEvent("mousedown");
             event.preventDefault = jest.fn();
-            handlers.click(event);
+            handlers!.click(event);
             expect(event.preventDefault).toHaveBeenCalled();
             expect(dispatchSpy).toHaveBeenCalledWith(
                 expect.objectContaining({
@@ -372,7 +372,7 @@ describe("linkify-matrix", () => {
 
             const event = new MouseEvent("mousedown");
             event.preventDefault = jest.fn();
-            handlers.click(event);
+            handlers!.click(event);
             expect(event.preventDefault).toHaveBeenCalled();
             expect(dispatchSpy).toHaveBeenCalledWith(
                 expect.objectContaining({

@@ -304,15 +304,13 @@ export default class RightPanelStore extends ReadyWatchingStore {
                     logger.warn("removed card from right panel because of missing threadHeadEvent in card state");
                 }
                 return !!card.state?.threadHeadEvent;
-            case RightPanelPhases.RoomMemberInfo:
-            case RightPanelPhases.SpaceMemberInfo:
+            case RightPanelPhases.MemberInfo:
             case RightPanelPhases.EncryptionPanel:
                 if (!card.state?.member) {
                     logger.warn("removed card from right panel because of missing member in card state");
                 }
                 return !!card.state?.member;
-            case RightPanelPhases.Room3pidMemberInfo:
-            case RightPanelPhases.Space3pidMemberInfo:
+            case RightPanelPhases.ThreePidMemberInfo:
                 if (!card.state?.memberInfoEvent) {
                     logger.warn("removed card from right panel because of missing memberInfoEvent in card state");
                 }
@@ -327,7 +325,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
     }
 
     private getVerificationRedirect(card: IRightPanelCard): IRightPanelCard | null {
-        if (card.phase === RightPanelPhases.RoomMemberInfo && card.state) {
+        if (card.phase === RightPanelPhases.MemberInfo && card.state) {
             // RightPanelPhases.RoomMemberInfo -> needs to be changed to RightPanelPhases.EncryptionPanel if there is a pending verification request
             const { member } = card.state;
             const pendingRequest = member
@@ -385,8 +383,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
             if (panel?.history) {
                 panel.history = panel.history.filter(
                     (card: IRightPanelCard) =>
-                        card.phase != RightPanelPhases.RoomMemberInfo &&
-                        card.phase != RightPanelPhases.Room3pidMemberInfo,
+                        card.phase != RightPanelPhases.MemberInfo && card.phase != RightPanelPhases.ThreePidMemberInfo,
                 );
             }
         }

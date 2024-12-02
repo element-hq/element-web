@@ -108,12 +108,9 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
     private generateAndShowCode = async (): Promise<void> => {
         let rendezvous: MSC4108SignInWithQR;
         try {
-            const fallbackRzServer = this.props.client?.getClientWellKnown()?.["io.element.rendezvous"]?.server;
-
             const transport = new MSC4108RendezvousSession({
                 onFailure: this.onFailure,
                 client: this.props.client,
-                fallbackRzServer,
             });
             await transport.send("");
             const channel = new MSC4108SecureChannel(transport, undefined, this.onFailure);

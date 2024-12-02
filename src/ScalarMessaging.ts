@@ -514,7 +514,7 @@ function getWidgets(event: MessageEvent<any>, roomId: string | null): void {
     sendResponse(event, widgetStateEvents);
 }
 
-function getRoomEncState(event: MessageEvent<any>, roomId: string): void {
+async function getRoomEncState(event: MessageEvent<any>, roomId: string): Promise<void> {
     const client = MatrixClientPeg.get();
     if (!client) {
         sendError(event, _t("widget|error_need_to_be_logged_in"));
@@ -525,7 +525,7 @@ function getRoomEncState(event: MessageEvent<any>, roomId: string): void {
         sendError(event, _t("scalar|error_room_unknown"));
         return;
     }
-    const roomIsEncrypted = MatrixClientPeg.safeGet().isRoomEncrypted(roomId);
+    const roomIsEncrypted = Boolean(await client.getCrypto()?.isEncryptionEnabledInRoom(roomId));
 
     sendResponse(event, roomIsEncrypted);
 }

@@ -10,7 +10,7 @@ import React from "react";
 import { mocked, Mocked } from "jest-mock";
 import { screen, render, act, cleanup } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { MatrixClient, PendingEventOrdering, Room, MatrixEvent, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, PendingEventOrdering, Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { Widget, ClientWidgetApi } from "matrix-widget-api";
 import { UserEvent } from "@testing-library/user-event/dist/types/setup/setup";
 
@@ -26,7 +26,6 @@ import {
     wrapInSdkContext,
     mkRoomCreateEvent,
     mockPlatformPeg,
-    flushPromises,
     useMockMediaDevices,
 } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
@@ -39,17 +38,7 @@ import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../src/dispatcher/actions";
 import { ViewRoomPayload } from "../../../../src/dispatcher/payloads/ViewRoomPayload";
 import { TestSdkContext } from "../../TestSdkContext";
-import {
-    VoiceBroadcastInfoState,
-    VoiceBroadcastPlaybacksStore,
-    VoiceBroadcastPreRecording,
-    VoiceBroadcastPreRecordingStore,
-    VoiceBroadcastRecording,
-    VoiceBroadcastRecordingsStore,
-} from "../../../../src/voice-broadcast";
-import { mkVoiceBroadcastInfoStateEvent } from "../../voice-broadcast/utils/test-utils";
 import { RoomViewStore } from "../../../../src/stores/RoomViewStore";
-import { IRoomStateEventsActionPayload } from "../../../../src/actions/MatrixActionCreators";
 import { Container, WidgetLayoutStore } from "../../../../src/stores/widgets/WidgetLayoutStore";
 import WidgetStore from "../../../../src/stores/WidgetStore";
 import { WidgetType } from "../../../../src/widgets/WidgetType";
@@ -76,15 +65,6 @@ describe("PipContainer", () => {
     let room: Room;
     let room2: Room;
     let alice: RoomMember;
-    let voiceBroadcastRecordingsStore: VoiceBroadcastRecordingsStore;
-    let voiceBroadcastPreRecordingStore: VoiceBroadcastPreRecordingStore;
-    let voiceBroadcastPlaybacksStore: VoiceBroadcastPlaybacksStore;
-
-    const actFlushPromises = async () => {
-        await act(async () => {
-            await flushPromises();
-        });
-    };
 
     beforeEach(async () => {
         useMockMediaDevices();
@@ -127,13 +107,7 @@ describe("PipContainer", () => {
         sdkContext = new TestSdkContext();
         // @ts-ignore PipContainer uses SDKContext in the constructor
         SdkContextClass.instance = sdkContext;
-        voiceBroadcastRecordingsStore = new VoiceBroadcastRecordingsStore();
-        voiceBroadcastPreRecordingStore = new VoiceBroadcastPreRecordingStore();
-        voiceBroadcastPlaybacksStore = new VoiceBroadcastPlaybacksStore(voiceBroadcastRecordingsStore);
         sdkContext.client = client;
-        sdkContext._VoiceBroadcastRecordingsStore = voiceBroadcastRecordingsStore;
-        sdkContext._VoiceBroadcastPreRecordingStore = voiceBroadcastPreRecordingStore;
-        sdkContext._VoiceBroadcastPlaybacksStore = voiceBroadcastPlaybacksStore;
     });
 
     afterEach(async () => {
@@ -165,12 +139,12 @@ describe("PipContainer", () => {
         if (!(call instanceof MockedCall)) throw new Error("Failed to create call");
 
         const widget = new Widget(call.widget);
-        WidgetStore.instance.addVirtualWidget(call.widget, room.roomId);
-        WidgetMessagingStore.instance.storeMessaging(widget, room.roomId, {
-            stop: () => {},
-        } as unknown as ClientWidgetApi);
-
         await act(async () => {
+            WidgetStore.instance.addVirtualWidget(call.widget, room.roomId);
+            WidgetMessagingStore.instance.storeMessaging(widget, room.roomId, {
+                stop: () => {},
+            } as unknown as ClientWidgetApi);
+
             await call.start();
             ActiveWidgetStore.instance.setWidgetPersistence(widget.id, room.roomId, true);
         });
@@ -178,9 +152,11 @@ describe("PipContainer", () => {
         await fn(call);
 
         cleanup();
-        call.destroy();
-        ActiveWidgetStore.instance.destroyPersistentWidget(widget.id, room.roomId);
-        WidgetStore.instance.removeVirtualWidget(widget.id, room.roomId);
+        act(() => {
+            call.destroy();
+            ActiveWidgetStore.instance.destroyPersistentWidget(widget.id, room.roomId);
+            WidgetStore.instance.removeVirtualWidget(widget.id, room.roomId);
+        });
     };
 
     const withWidget = async (fn: () => Promise<void>): Promise<void> => {
@@ -190,49 +166,8 @@ describe("PipContainer", () => {
         ActiveWidgetStore.instance.destroyPersistentWidget("1", room.roomId);
     };
 
-    const makeVoiceBroadcastInfoStateEvent = (): MatrixEvent => {
-        return mkVoiceBroadcastInfoStateEvent(
-            room.roomId,
-            VoiceBroadcastInfoState.Started,
-            alice.userId,
-            client.getDeviceId() || "",
-        );
-    };
-
-    const setUpVoiceBroadcastRecording = () => {
-        const infoEvent = makeVoiceBroadcastInfoStateEvent();
-        const voiceBroadcastRecording = new VoiceBroadcastRecording(infoEvent, client);
-        voiceBroadcastRecordingsStore.setCurrent(voiceBroadcastRecording);
-    };
-
-    const setUpVoiceBroadcastPreRecording = () => {
-        const voiceBroadcastPreRecording = new VoiceBroadcastPreRecording(
-            room,
-            alice,
-            client,
-            voiceBroadcastPlaybacksStore,
-            voiceBroadcastRecordingsStore,
-        );
-        voiceBroadcastPreRecordingStore.setCurrent(voiceBroadcastPreRecording);
-    };
-
     const setUpRoomViewStore = () => {
         sdkContext._RoomViewStore = new RoomViewStore(defaultDispatcher, sdkContext);
-    };
-
-    const mkVoiceBroadcast = (room: Room): MatrixEvent => {
-        const infoEvent = makeVoiceBroadcastInfoStateEvent();
-        room.currentState.setStateEvents([infoEvent]);
-        defaultDispatcher.dispatch<IRoomStateEventsActionPayload>(
-            {
-                action: "MatrixActions.RoomState.events",
-                event: infoEvent,
-                state: room.currentState,
-                lastStateEvent: null,
-            },
-            true,
-        );
-        return infoEvent;
     };
 
     it("hides if there's no content", () => {
@@ -338,139 +273,5 @@ describe("PipContainer", () => {
         });
 
         WidgetStore.instance.removeVirtualWidget("1", room.roomId);
-    });
-
-    describe("when there is a voice broadcast recording and pre-recording", () => {
-        beforeEach(async () => {
-            setUpVoiceBroadcastPreRecording();
-            setUpVoiceBroadcastRecording();
-            renderPip();
-            await actFlushPromises();
-        });
-
-        it("should render the voice broadcast recording PiP", () => {
-            // check for the „Live“ badge to be present
-            expect(screen.queryByText("Live")).toBeInTheDocument();
-        });
-
-        it("and a call it should show both, the call and the recording", async () => {
-            await withCall(async () => {
-                // Broadcast: Check for the „Live“ badge to be present
-                expect(screen.queryByText("Live")).toBeInTheDocument();
-                // Call: Check for the „Leave“ button to be present
-                screen.getByRole("button", { name: "Leave" });
-            });
-        });
-    });
-
-    describe("when there is a voice broadcast playback and pre-recording", () => {
-        beforeEach(async () => {
-            mkVoiceBroadcast(room);
-            setUpVoiceBroadcastPreRecording();
-            renderPip();
-            await actFlushPromises();
-        });
-
-        it("should render the voice broadcast pre-recording PiP", () => {
-            // check for the „Go live“ button
-            expect(screen.queryByText("Go live")).toBeInTheDocument();
-        });
-    });
-
-    describe("when there is a voice broadcast pre-recording", () => {
-        beforeEach(async () => {
-            setUpVoiceBroadcastPreRecording();
-            renderPip();
-            await actFlushPromises();
-        });
-
-        it("should render the voice broadcast pre-recording PiP", () => {
-            // check for the „Go live“ button
-            expect(screen.queryByText("Go live")).toBeInTheDocument();
-        });
-    });
-
-    describe("when listening to a voice broadcast in a room and then switching to another room", () => {
-        beforeEach(async () => {
-            setUpRoomViewStore();
-            viewRoom(room.roomId);
-            mkVoiceBroadcast(room);
-            await actFlushPromises();
-
-            expect(voiceBroadcastPlaybacksStore.getCurrent()).toBeTruthy();
-
-            await voiceBroadcastPlaybacksStore.getCurrent()?.start();
-            viewRoom(room2.roomId);
-            renderPip();
-        });
-
-        it("should render the small voice broadcast playback PiP", () => {
-            // check for the „pause voice broadcast“ button
-            expect(screen.getByLabelText("pause voice broadcast")).toBeInTheDocument();
-            // check for the absence of the „30s forward“ button
-            expect(screen.queryByLabelText("30s forward")).not.toBeInTheDocument();
-        });
-    });
-
-    describe("when viewing a room with a live voice broadcast", () => {
-        let startEvent!: MatrixEvent;
-
-        beforeEach(async () => {
-            setUpRoomViewStore();
-            viewRoom(room.roomId);
-            startEvent = mkVoiceBroadcast(room);
-            renderPip();
-            await actFlushPromises();
-        });
-
-        it("should render the voice broadcast playback pip", () => {
-            // check for the „resume voice broadcast“ button
-            expect(screen.queryByLabelText("play voice broadcast")).toBeInTheDocument();
-        });
-
-        describe("and the broadcast stops", () => {
-            beforeEach(async () => {
-                const stopEvent = mkVoiceBroadcastInfoStateEvent(
-                    room.roomId,
-                    VoiceBroadcastInfoState.Stopped,
-                    alice.userId,
-                    client.getDeviceId() || "",
-                    startEvent,
-                );
-
-                await act(async () => {
-                    room.currentState.setStateEvents([stopEvent]);
-                    defaultDispatcher.dispatch<IRoomStateEventsActionPayload>(
-                        {
-                            action: "MatrixActions.RoomState.events",
-                            event: stopEvent,
-                            state: room.currentState,
-                            lastStateEvent: stopEvent,
-                        },
-                        true,
-                    );
-                    await flushPromises();
-                });
-            });
-
-            it("should not render the voice broadcast playback pip", () => {
-                // check for the „resume voice broadcast“ button
-                expect(screen.queryByLabelText("play voice broadcast")).not.toBeInTheDocument();
-            });
-        });
-
-        describe("and leaving the room", () => {
-            beforeEach(async () => {
-                await act(async () => {
-                    viewRoom(room2.roomId);
-                    await flushPromises();
-                });
-            });
-
-            it("should not render the voice broadcast playback pip", () => {
-                // check for the „resume voice broadcast“ button
-                expect(screen.queryByLabelText("play voice broadcast")).not.toBeInTheDocument();
-            });
-        });
     });
 });

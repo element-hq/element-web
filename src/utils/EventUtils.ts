@@ -30,7 +30,6 @@ import { TimelineRenderingType } from "../contexts/RoomContext";
 import { launchPollEditor } from "../components/views/messages/MPollBody";
 import { Action } from "../dispatcher/actions";
 import { ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
-import { VoiceBroadcastInfoEventType, VoiceBroadcastInfoState } from "../voice-broadcast/types";
 
 /**
  * Returns whether an event should allow actions like reply, reactions, edit, etc.
@@ -56,9 +55,7 @@ export function isContentActionable(mxEvent: MatrixEvent): boolean {
             mxEvent.getType() === "m.sticker" ||
             M_POLL_START.matches(mxEvent.getType()) ||
             M_POLL_END.matches(mxEvent.getType()) ||
-            M_BEACON_INFO.matches(mxEvent.getType()) ||
-            (mxEvent.getType() === VoiceBroadcastInfoEventType &&
-                mxEvent.getContent()?.state === VoiceBroadcastInfoState.Started)
+            M_BEACON_INFO.matches(mxEvent.getType())
         ) {
             return true;
         }

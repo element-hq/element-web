@@ -27,9 +27,9 @@ const renderEncryptionEvent = (client: MatrixClient, event: MatrixEvent) => {
     );
 };
 
-const checkTexts = (title: string, subTitle: string) => {
-    screen.getByText(title);
-    screen.getByText(subTitle);
+const checkTexts = async (title: string, subTitle: string) => {
+    await screen.findByText(title);
+    await screen.findByText(subTitle);
 };
 
 describe("EncryptionEvent", () => {
@@ -120,9 +120,9 @@ describe("EncryptionEvent", () => {
             renderEncryptionEvent(client, event);
         });
 
-        it("should show the expected texts", () => {
+        it("should show the expected texts", async () => {
             expect(client.getCrypto()!.isEncryptionEnabledInRoom).toHaveBeenCalledWith(roomId);
-            checkTexts("Encryption enabled", "Messages in this chat will be end-to-end encrypted.");
+            await checkTexts("Encryption enabled", "Messages in this chat will be end-to-end encrypted.");
         });
     });
 });

@@ -10,11 +10,11 @@ import React from "react";
 import { render, screen, waitFor } from "jest-matrix-react";
 
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import RoomContext from "../../../../../src/contexts/RoomContext";
 import { createTestClient, getRoomContext, mkStubRoom } from "../../../../test-utils";
 import { IRoomState } from "../../../../../src/components/structures/RoomView";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import MessageComposerButtons from "../../../../../src/components/views/rooms/MessageComposerButtons";
+import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 
 describe("MessageComposerButtons", () => {
     // @ts-ignore - we're deliberately not implementing the whole interface here, but
@@ -54,7 +54,7 @@ describe("MessageComposerButtons", () => {
 
         return render(
             <MatrixClientContext.Provider value={mockClient}>
-                <RoomContext.Provider value={defaultRoomContext}>{component}</RoomContext.Provider>
+                <ScopedRoomContextProvider {...defaultRoomContext}>{component}</ScopedRoomContextProvider>
             </MatrixClientContext.Provider>,
         );
     }
@@ -165,29 +165,6 @@ describe("MessageComposerButtons", () => {
                     // "Poll", // should be hidden
                     "Location",
                 ],
-            ]);
-        });
-    });
-
-    describe("with showVoiceBroadcastButton = true", () => {
-        it("should render the »Voice broadcast« button", () => {
-            wrapAndRender(
-                <MessageComposerButtons
-                    {...mockProps}
-                    isMenuOpen={true}
-                    showLocationButton={true}
-                    showPollsButton={true}
-                    showStickersButton={true}
-                    showVoiceBroadcastButton={true}
-                />,
-                false,
-            );
-
-            expect(getButtonLabels()).toEqual([
-                "Emoji",
-                "Attachment",
-                "More options",
-                ["Sticker", "Voice Message", "Voice broadcast", "Poll", "Location"],
             ]);
         });
     });

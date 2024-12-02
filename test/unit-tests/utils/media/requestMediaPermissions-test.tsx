@@ -21,7 +21,7 @@ describe("requestMediaPermissions", () => {
     const itShouldLogTheErrorAndShowTheNoMediaPermissionsModal = () => {
         it("should log the error and show the »No media permissions« modal", async () => {
             expect(logger.log).toHaveBeenCalledWith("Failed to list userMedia devices", error);
-            await screen.findByText("No media permissions");
+            await expect(screen.findByText("No media permissions")).resolves.toBeInTheDocument();
         });
     };
 

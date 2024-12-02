@@ -20,7 +20,6 @@ import {
 
 import ThreadPanel, { ThreadFilterType, ThreadPanelHeader } from "../../../../src/components/structures/ThreadPanel";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
-import RoomContext from "../../../../src/contexts/RoomContext";
 import { _t } from "../../../../src/languageHandler";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
@@ -28,6 +27,7 @@ import ResizeNotifier from "../../../../src/utils/ResizeNotifier";
 import { createTestClient, getRoomContext, mkRoom, mockPlatformPeg, stubClient } from "../../../test-utils";
 import { mkThread } from "../../../test-utils/threads";
 import { IRoomState } from "../../../../src/components/structures/RoomView";
+import { ScopedRoomContextProvider } from "../../../../src/contexts/ScopedRoomContext.tsx";
 
 jest.mock("../../../../src/utils/Feedback");
 
@@ -81,11 +81,11 @@ describe("ThreadPanel", () => {
                 room: mockRoom,
             } as unknown as IRoomState;
             const { container } = render(
-                <RoomContext.Provider value={roomContextObject}>
+                <ScopedRoomContextProvider {...roomContextObject}>
                     <MatrixClientContext.Provider value={mockClient}>
                         <ThreadPanelHeader filterOption={ThreadFilterType.All} setFilterOption={() => undefined} />
                     </MatrixClientContext.Provider>
-                </RoomContext.Provider>,
+                </ScopedRoomContextProvider>,
             );
             fireEvent.click(getByRole(container, "button", { name: "Mark all as read" }));
             await waitFor(() =>
@@ -114,8 +114,8 @@ describe("ThreadPanel", () => {
 
         const TestThreadPanel = () => (
             <MatrixClientContext.Provider value={mockClient}>
-                <RoomContext.Provider
-                    value={getRoomContext(room, {
+                <ScopedRoomContextProvider
+                    {...getRoomContext(room, {
                         canSendMessages: true,
                     })}
                 >
@@ -125,7 +125,7 @@ describe("ThreadPanel", () => {
                         resizeNotifier={new ResizeNotifier()}
                         permalinkCreator={new RoomPermalinkCreator(room)}
                     />
-                </RoomContext.Provider>
+                </ScopedRoomContextProvider>
             </MatrixClientContext.Provider>
         );
 
@@ -209,40 +209,39 @@ describe("ThreadPanel", () => {
                 return event ? Promise.resolve(event) : Promise.reject();
             });
             const [allThreads, myThreads] = room.threadsTimelineSets;
-            allThreads!.addLiveEvent(otherThread.rootEvent);
-            allThreads!.addLiveEvent(mixedThread.rootEvent);
-            allThreads!.addLiveEvent(ownThread.rootEvent);
-            myThreads!.addLiveEvent(mixedThread.rootEvent);
-            myThreads!.addLiveEvent(ownThread.rootEvent);
+            allThreads!.addLiveEvent(otherThread.rootEvent, { addToState: true });
+            allThreads!.addLiveEvent(mixedThread.rootEvent, { addToState: true });
+            allThreads!.addLiveEvent(ownThread.rootEvent, { addToState: true });
+            myThreads!.addLiveEvent(mixedThread.rootEvent, { addToState: true });
+            myThreads!.addLiveEvent(ownThread.rootEvent, { addToState: true });
 
-            let events: EventData[] = [];
             const renderResult = render(<TestThreadPanel />);
             await waitFor(() => expect(renderResult.container.querySelector(".mx_AutoHideScrollbar")).toBeFalsy());
             await waitFor(() => {
-                events = findEvents(renderResult.container);
-                expect(findEvents(renderResult.container)).toHaveLength(3);
+                const events = findEvents(renderResult.container);
+                expect(events).toHaveLength(3);
+                expect(events[0]).toEqual(toEventData(otherThread.rootEvent));
+                expect(events[1]).toEqual(toEventData(mixedThread.rootEvent));
+                expect(events[2]).toEqual(toEventData(ownThread.rootEvent));
             });
-            expect(events[0]).toEqual(toEventData(otherThread.rootEvent));
-            expect(events[1]).toEqual(toEventData(mixedThread.rootEvent));
-            expect(events[2]).toEqual(toEventData(ownThread.rootEvent));
             await waitFor(() => expect(renderResult.container.querySelector(".mx_ThreadPanel_dropdown")).toBeTruthy());
             toggleThreadFilter(renderResult.container, ThreadFilterType.My);
             await waitFor(() => expect(renderResult.container.querySelector(".mx_AutoHideScrollbar")).toBeFalsy());
             await waitFor(() => {
-                events = findEvents(renderResult.container);
-                expect(findEvents(renderResult.container)).toHaveLength(2);
+                const events = findEvents(renderResult.container);
+                expect(events).toHaveLength(2);
+                expect(events[0]).toEqual(toEventData(mixedThread.rootEvent));
+                expect(events[1]).toEqual(toEventData(ownThread.rootEvent));
             });
-            expect(events[0]).toEqual(toEventData(mixedThread.rootEvent));
-            expect(events[1]).toEqual(toEventData(ownThread.rootEvent));
             toggleThreadFilter(renderResult.container, ThreadFilterType.All);
             await waitFor(() => expect(renderResult.container.querySelector(".mx_AutoHideScrollbar")).toBeFalsy());
             await waitFor(() => {
-                events = findEvents(renderResult.container);
-                expect(findEvents(renderResult.container)).toHaveLength(3);
+                const events = findEvents(renderResult.container);
+                expect(events).toHaveLength(3);
+                expect(events[0]).toEqual(toEventData(otherThread.rootEvent));
+                expect(events[1]).toEqual(toEventData(mixedThread.rootEvent));
+                expect(events[2]).toEqual(toEventData(ownThread.rootEvent));
             });
-            expect(events[0]).toEqual(toEventData(otherThread.rootEvent));
-            expect(events[1]).toEqual(toEventData(mixedThread.rootEvent));
-            expect(events[2]).toEqual(toEventData(ownThread.rootEvent));
         });
 
         it("correctly filters Thread List with a single, unparticipated thread", async () => {
@@ -259,30 +258,29 @@ describe("ThreadPanel", () => {
                 return event ? Promise.resolve(event) : Promise.reject();
             });
             const [allThreads] = room.threadsTimelineSets;
-            allThreads!.addLiveEvent(otherThread.rootEvent);
+            allThreads!.addLiveEvent(otherThread.rootEvent, { addToState: true });
 
-            let events: EventData[] = [];
             const renderResult = render(<TestThreadPanel />);
             await waitFor(() => expect(renderResult.container.querySelector(".mx_AutoHideScrollbar")).toBeFalsy());
             await waitFor(() => {
-                events = findEvents(renderResult.container);
-                expect(findEvents(renderResult.container)).toHaveLength(1);
+                const events = findEvents(renderResult.container);
+                expect(events).toHaveLength(1);
+                expect(events[0]).toEqual(toEventData(otherThread.rootEvent));
             });
-            expect(events[0]).toEqual(toEventData(otherThread.rootEvent));
             await waitFor(() => expect(renderResult.container.querySelector(".mx_ThreadPanel_dropdown")).toBeTruthy());
             toggleThreadFilter(renderResult.container, ThreadFilterType.My);
             await waitFor(() => expect(renderResult.container.querySelector(".mx_AutoHideScrollbar")).toBeFalsy());
             await waitFor(() => {
-                events = findEvents(renderResult.container);
-                expect(findEvents(renderResult.container)).toHaveLength(0);
+                const events = findEvents(renderResult.container);
+                expect(events).toHaveLength(0);
             });
             toggleThreadFilter(renderResult.container, ThreadFilterType.All);
             await waitFor(() => expect(renderResult.container.querySelector(".mx_AutoHideScrollbar")).toBeFalsy());
             await waitFor(() => {
-                events = findEvents(renderResult.container);
-                expect(findEvents(renderResult.container)).toHaveLength(1);
+                const events = findEvents(renderResult.container);
+                expect(events).toHaveLength(1);
+                expect(events[0]).toEqual(toEventData(otherThread.rootEvent));
             });
-            expect(events[0]).toEqual(toEventData(otherThread.rootEvent));
         });
     });
 });

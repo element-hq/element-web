@@ -230,12 +230,15 @@ export default class DeviceListener {
     private async getKeyBackupInfo(): Promise<KeyBackupInfo | null> {
         if (!this.client) return null;
         const now = new Date().getTime();
+        const crypto = this.client.getCrypto();
+        if (!crypto) return null;
+
         if (
             !this.keyBackupInfo ||
             !this.keyBackupFetchedAt ||
             this.keyBackupFetchedAt < now - KEY_BACKUP_POLL_INTERVAL
         ) {
-            this.keyBackupInfo = await this.client.getKeyBackupVersion();
+            this.keyBackupInfo = await crypto.getKeyBackupInfo();
             this.keyBackupFetchedAt = now;
         }
         return this.keyBackupInfo;

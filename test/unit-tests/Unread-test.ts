@@ -138,7 +138,7 @@ describe("Unread", () => {
                     room: roomId,
                     content: {},
                 });
-                room.addLiveEvents([event]);
+                room.addLiveEvents([event], { addToState: true });
 
                 // Don't care about the code path of hidden events.
                 mocked(haveRendererForEvent).mockClear().mockReturnValue(true);
@@ -157,7 +157,7 @@ describe("Unread", () => {
                     content: {},
                 });
                 // Only for timeline events.
-                room.addLiveEvents([event]);
+                room.addLiveEvents([event], { addToState: true });
 
                 expect(doesRoomHaveUnreadMessages(room, false)).toBe(false);
             });
@@ -201,7 +201,7 @@ describe("Unread", () => {
                     content: {},
                 });
                 // Only for timeline events.
-                room.addLiveEvents([event2]);
+                room.addLiveEvents([event2], { addToState: true });
 
                 expect(doesRoomHaveUnreadMessages(room, false)).toBe(true);
             });
@@ -403,7 +403,7 @@ describe("Unread", () => {
             redactedEvent.makeRedacted(redactedEvent, room);
             console.log("Event Id", redactedEvent.getId());
             // Only for timeline events.
-            room.addLiveEvents([redactedEvent]);
+            room.addLiveEvents([redactedEvent], { addToState: true });
 
             expect(doesRoomHaveUnreadMessages(room, true)).toBe(true);
             expect(logger.warn).toHaveBeenCalledWith(
@@ -448,7 +448,7 @@ describe("Unread", () => {
                     room: roomId,
                     content: {},
                 });
-                room.addLiveEvents([event]);
+                room.addLiveEvents([event], { addToState: true });
             });
 
             it("an unthreaded receipt for the event makes the room read", () => {
@@ -502,7 +502,7 @@ describe("Unread", () => {
                     ts: 100,
                     currentUserId: myId,
                 });
-                room.addLiveEvents(events);
+                room.addLiveEvents(events, { addToState: true });
                 threadEvent = events[1];
             });
 
@@ -555,7 +555,7 @@ describe("Unread", () => {
                 room: roomId,
                 content: {},
             });
-            room.addLiveEvents([event]);
+            room.addLiveEvents([event], { addToState: true });
 
             // It still returns false
             expect(doesRoomHaveUnreadThreads(room)).toBe(false);

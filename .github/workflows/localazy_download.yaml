@@ -3,6 +3,7 @@ on:
     workflow_dispatch: {}
     schedule:
         - cron: "0 6 * * 1,3,5" # Every Monday, Wednesday and Friday at 6am UTC
+permissions: {} # We use ELEMENT_BOT_TOKEN instead
 jobs:
     download:
         uses: matrix-org/matrix-web-i18n/.github/workflows/localazy_download.yaml@main

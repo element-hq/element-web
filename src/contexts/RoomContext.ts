@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { createContext, useContext } from "react";
+import { createContext } from "react";
 
 import { IRoomState } from "../components/structures/RoomView";
 import { Layout } from "../settings/enums/Layout";
@@ -75,9 +75,7 @@ const RoomContext = createContext<
     canAskToJoin: false,
     promptAskToJoin: false,
     viewRoomOpts: { buttons: [] },
+    isRoomEncrypted: null,
 });
 RoomContext.displayName = "RoomContext";
 export default RoomContext;
-export function useRoomContext(): IRoomState {
-    return useContext(RoomContext);
-}

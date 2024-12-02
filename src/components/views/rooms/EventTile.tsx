@@ -296,7 +296,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     };
 
     public static contextType = RoomContext;
-    public declare context: React.ContextType<typeof RoomContext>;
+    declare public context: React.ContextType<typeof RoomContext>;
 
     private unmounted = false;
 
@@ -757,6 +757,14 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 case EventShieldReason.MISMATCHED_SENDER_KEY:
                     shieldReasonMessage = _t("encryption|event_shield_reason_mismatched_sender_key");
                     break;
+
+                case EventShieldReason.SENT_IN_CLEAR:
+                    shieldReasonMessage = _t("common|unencrypted");
+                    break;
+
+                case EventShieldReason.VERIFICATION_VIOLATION:
+                    shieldReasonMessage = _t("timeline|decryption_failure|sender_identity_previously_verified");
+                    break;
             }
 
             if (this.state.shieldColour === EventShieldColour.GREY) {
@@ -767,7 +775,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             }
         }
 
-        if (MatrixClientPeg.safeGet().isRoomEncrypted(ev.getRoomId()!)) {
+        if (this.context.isRoomEncrypted) {
             // else if room is encrypted
             // and event is being encrypted or is not_sent (Unknown Devices/Network Error)
             if (ev.status === EventStatus.ENCRYPTING) {

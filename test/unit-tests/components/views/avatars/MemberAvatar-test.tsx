@@ -12,11 +12,11 @@ import { MatrixClient, PendingEventOrdering, Room, RoomMember } from "matrix-js-
 import React, { ComponentProps } from "react";
 
 import MemberAvatar from "../../../../../src/components/views/avatars/MemberAvatar";
-import RoomContext from "../../../../../src/contexts/RoomContext";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { getRoomContext } from "../../../../test-utils/room";
 import { stubClient } from "../../../../test-utils/test-utils";
+import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 
 describe("MemberAvatar", () => {
     const ROOM_ID = "roomId";
@@ -27,9 +27,9 @@ describe("MemberAvatar", () => {
 
     function getComponent(props: Partial<ComponentProps<typeof MemberAvatar>>) {
         return (
-            <RoomContext.Provider value={getRoomContext(room, {})}>
+            <ScopedRoomContextProvider {...getRoomContext(room, {})}>
                 <MemberAvatar member={null} size="35px" {...props} />
-            </RoomContext.Provider>
+            </ScopedRoomContextProvider>
         );
     }
 

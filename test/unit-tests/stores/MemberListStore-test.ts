@@ -189,8 +189,7 @@ describe("MemberListStore", () => {
         });
 
         it("does not use lazy loading on encrypted rooms", async () => {
-            client.isRoomEncrypted = jest.fn();
-            mocked(client.isRoomEncrypted).mockReturnValue(true);
+            jest.spyOn(client.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
 
             const { joined } = await store.loadMemberList(roomId);
             expect(joined).toEqual([room.getMember(alice)]);
@@ -202,6 +201,7 @@ describe("MemberListStore", () => {
 function addEventToRoom(room: Room, ev: MatrixEvent) {
     room.getLiveTimeline().addEvent(ev, {
         toStartOfTimeline: false,
+        addToState: true,
     });
 }
 

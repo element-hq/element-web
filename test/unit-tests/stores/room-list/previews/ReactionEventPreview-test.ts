@@ -70,7 +70,7 @@ describe("ReactionEventPreview", () => {
                 room: roomId,
             });
 
-            room.getUnfilteredTimelineSet().addLiveEvent(message, {});
+            room.getUnfilteredTimelineSet().addLiveEvent(message, { addToState: true });
 
             const event = mkEvent({
                 event: true,
@@ -107,7 +107,7 @@ describe("ReactionEventPreview", () => {
                 room: roomId,
             });
 
-            room.getUnfilteredTimelineSet().addLiveEvent(message, {});
+            room.getUnfilteredTimelineSet().addLiveEvent(message, { addToState: true });
 
             const event = mkEvent({
                 event: true,

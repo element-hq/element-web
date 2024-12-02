@@ -12,7 +12,6 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { BaseGrouper } from "./BaseGrouper";
 import MessagePanel, { WrappedEvent } from "../MessagePanel";
-import { VoiceBroadcastInfoEventType } from "../../../voice-broadcast";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { _t } from "../../../languageHandler";
 import DateSeparator from "../../views/messages/DateSeparator";
@@ -50,11 +49,6 @@ export class CreationGrouper extends BaseGrouper {
         // beacons are not part of room creation configuration
         // should be shown in timeline
         if (M_BEACON_INFO.matches(eventType)) {
-            return false;
-        }
-
-        if (VoiceBroadcastInfoEventType === eventType) {
-            // always show voice broadcast info events in timeline
             return false;
         }
 

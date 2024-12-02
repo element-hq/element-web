@@ -11,9 +11,14 @@ on:
                     - rc
                     - final
 concurrency: ${{ github.workflow }}
+permissions: {}
 jobs:
     release:
         uses: matrix-org/matrix-js-sdk/.github/workflows/release-make.yml@develop
+        permissions:
+            contents: write
+            issues: write
+            pull-requests: read
         secrets:
             ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
             GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
@@ -42,6 +47,8 @@ jobs:
         name: Post release checks
         needs: release
         runs-on: ubuntu-24.04
+        permissions:
+            checks: read
         steps:
             - name: Wait for dockerhub
               uses: t3chguy/wait-on-check-action@18541021811b56544d90e0f073401c2b99e249d6 # fork

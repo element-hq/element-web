@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { render, waitFor, screen } from "jest-matrix-react";
+import { render, waitFor, screen, act, cleanup } from "jest-matrix-react";
 import {
     ReceiptType,
     EventTimelineSet,
@@ -28,7 +28,7 @@ import {
     ThreadFilterType,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import React, { createRef } from "react";
+import React from "react";
 import { Mocked, mocked } from "jest-mock";
 import { forEachRight } from "lodash";
 
@@ -66,7 +66,7 @@ const mkTimeline = (room: Room, events: MatrixEvent[]): [EventTimeline, EventTim
         getPendingEvents: () => [] as MatrixEvent[],
     } as unknown as EventTimelineSet;
     const timeline = new EventTimeline(timelineSet);
-    events.forEach((event) => timeline.addEvent(event, { toStartOfTimeline: false }));
+    events.forEach((event) => timeline.addEvent(event, { toStartOfTimeline: false, addToState: true }));
 
     return [timeline, timelineSet];
 };
@@ -150,9 +150,11 @@ const setupPagination = (
     mocked(client).paginateEventTimeline.mockImplementation(async (tl, { backwards }) => {
         if (tl === timeline) {
             if (backwards) {
-                forEachRight(previousPage ?? [], (event) => tl.addEvent(event, { toStartOfTimeline: true }));
+                forEachRight(previousPage ?? [], (event) =>
+                    tl.addEvent(event, { toStartOfTimeline: true, addToState: true }),
+                );
             } else {
-                (nextPage ?? []).forEach((event) => tl.addEvent(event, { toStartOfTimeline: false }));
+                (nextPage ?? []).forEach((event) => tl.addEvent(event, { toStartOfTimeline: false, addToState: true }));
             }
             // Prevent any further pagination attempts in this direction
             tl.setPaginationToken(null, backwards ? EventTimeline.BACKWARDS : EventTimeline.FORWARDS);
@@ -178,7 +180,7 @@ describe("TimelinePanel", () => {
         const roomId = "#room:example.com";
         let room: Room;
         let timelineSet: EventTimelineSet;
-        let timelinePanel: TimelinePanel;
+        let timelinePanel: TimelinePanel | null = null;
 
         const ev1 = new MatrixEvent({
             event_id: "ev1",
@@ -197,17 +199,16 @@ describe("TimelinePanel", () => {
         });
 
         const renderTimelinePanel = async (): Promise<void> => {
-            const ref = createRef<TimelinePanel>();
             render(
                 <TimelinePanel
                     timelineSet={timelineSet}
                     manageReadMarkers={true}
                     manageReadReceipts={true}
-                    ref={ref}
+                    ref={(ref) => (timelinePanel = ref)}
                 />,
             );
             await flushPromises();
-            timelinePanel = ref.current!;
+            await waitFor(() => expect(timelinePanel).toBeTruthy());
         };
 
         const setUpTimelineSet = (threadRoot?: MatrixEvent) => {
@@ -232,8 +233,9 @@ describe("TimelinePanel", () => {
             room = new Room(roomId, client, userId, { pendingEventOrdering: PendingEventOrdering.Detached });
         });
 
-        afterEach(() => {
+        afterEach(async () => {
             TimelinePanel.roomReadMarkerTsMap = {};
+            cleanup();
         });
 
         it("when there is no event, it should not send any receipt", async () => {
@@ -256,9 +258,8 @@ describe("TimelinePanel", () => {
             describe("and reading the timeline", () => {
                 beforeEach(async () => {
                     await renderTimelinePanel();
-                    timelineSet.addLiveEvent(ev1, {});
+                    timelineSet.addLiveEvent(ev1, { addToState: true });
                     await flushPromises();
-
                     // @ts-ignore
                     await timelinePanel.sendReadReceipts();
                     // @ts-ignore Simulate user activity by calling updateReadMarker on the TimelinePanel.
@@ -276,7 +277,7 @@ describe("TimelinePanel", () => {
                         client.setRoomReadMarkers.mockClear();
 
                         // @ts-ignore Simulate user activity by calling updateReadMarker on the TimelinePanel.
-                        await timelinePanel.updateReadMarker();
+                        await act(() => timelinePanel.updateReadMarker());
                     });
 
                     it("should not send receipts again", () => {
@@ -285,13 +286,13 @@ describe("TimelinePanel", () => {
                     });
 
                     it("and forgetting the read markers, should send the stored marker again", async () => {
-                        timelineSet.addLiveEvent(ev2, {});
+                        timelineSet.addLiveEvent(ev2, { addToState: true });
                         // Add the event to the room as well as the timeline, so we can find it when we
                         // call findEventById in getEventReadUpTo. This is odd because in our test
                         // setup, timelineSet is not actually the timelineSet of the room.
-                        await room.addLiveEvents([ev2], {});
+                        await room.addLiveEvents([ev2], { addToState: true });
                         room.addEphemeralEvents([newReceipt(ev2.getId()!, userId, 222, 200)]);
-                        await timelinePanel.forgetReadMarker();
+                        await timelinePanel!.forgetReadMarker();
                         expect(client.setRoomReadMarkers).toHaveBeenCalledWith(roomId, ev2.getId());
                     });
                 });
@@ -315,7 +316,7 @@ describe("TimelinePanel", () => {
 
                 it("should send a fully read marker and a private receipt", async () => {
                     await renderTimelinePanel();
-                    timelineSet.addLiveEvent(ev1, {});
+                    act(() => timelineSet.addLiveEvent(ev1, { addToState: true }));
                     await flushPromises();
 
                     // @ts-ignore
@@ -326,6 +327,7 @@ describe("TimelinePanel", () => {
                     // Expect the fully_read marker not to be send yet
                     expect(client.setRoomReadMarkers).not.toHaveBeenCalled();
 
+                    await flushPromises();
                     client.sendReadReceipt.mockClear();
 
                     // @ts-ignore simulate user activity
@@ -334,7 +336,7 @@ describe("TimelinePanel", () => {
                     // It should not send the receipt again.
                     expect(client.sendReadReceipt).not.toHaveBeenCalledWith(ev1, ReceiptType.ReadPrivate);
                     // Expect the fully_read marker to be sent after user activity.
-                    expect(client.setRoomReadMarkers).toHaveBeenCalledWith(roomId, ev1.getId());
+                    await waitFor(() => expect(client.setRoomReadMarkers).toHaveBeenCalledWith(roomId, ev1.getId()));
                 });
             });
         });
@@ -361,11 +363,11 @@ describe("TimelinePanel", () => {
 
             it("should send receipts but no fully_read when reading the thread timeline", async () => {
                 await renderTimelinePanel();
-                timelineSet.addLiveEvent(threadEv1, {});
+                act(() => timelineSet.addLiveEvent(threadEv1, { addToState: true }));
                 await flushPromises();
 
                 // @ts-ignore
-                await timelinePanel.sendReadReceipts();
+                await act(() => timelinePanel.sendReadReceipts());
 
                 // fully_read is not supported for threads per spec
                 expect(client.setRoomReadMarkers).not.toHaveBeenCalled();
@@ -871,7 +873,9 @@ describe("TimelinePanel", () => {
             // @ts-ignore
             thread.fetchEditsWhereNeeded = () => Promise.resolve();
             await thread.addEvent(reply1, false, true);
-            await allThreads.getLiveTimeline().addEvent(thread.rootEvent!, { toStartOfTimeline: true });
+            await allThreads
+                .getLiveTimeline()
+                .addEvent(thread.rootEvent!, { toStartOfTimeline: true, addToState: true });
             const replyToEvent = jest.spyOn(thread, "replyToEvent", "get");
 
             const dom = render(
@@ -907,7 +911,9 @@ describe("TimelinePanel", () => {
             // @ts-ignore
             realThread.fetchEditsWhereNeeded = () => Promise.resolve();
             await realThread.addEvent(reply1, true);
-            await allThreads.getLiveTimeline().addEvent(realThread.rootEvent!, { toStartOfTimeline: true });
+            await allThreads
+                .getLiveTimeline()
+                .addEvent(realThread.rootEvent!, { toStartOfTimeline: true, addToState: true });
             const replyToEvent = jest.spyOn(realThread, "replyToEvent", "get");
 
             // @ts-ignore
@@ -968,7 +974,9 @@ describe("TimelinePanel", () => {
 
         events.push(rootEvent);
 
-        events.forEach((event) => timelineSet.getLiveTimeline().addEvent(event, { toStartOfTimeline: true }));
+        events.forEach((event) =>
+            timelineSet.getLiveTimeline().addEvent(event, { toStartOfTimeline: true, addToState: true }),
+        );
 
         const roomMembership = mkMembership({
             mship: KnownMembership.Join,
@@ -988,7 +996,10 @@ describe("TimelinePanel", () => {
         jest.spyOn(roomState, "getMember").mockReturnValue(member);
 
         jest.spyOn(timelineSet.getLiveTimeline(), "getState").mockReturnValue(roomState);
-        timelineSet.addEventToTimeline(roomMembership, timelineSet.getLiveTimeline(), { toStartOfTimeline: false });
+        timelineSet.addEventToTimeline(roomMembership, timelineSet.getLiveTimeline(), {
+            toStartOfTimeline: false,
+            addToState: true,
+        });
 
         for (const event of events) {
             jest.spyOn(event, "isDecryptionFailure").mockReturnValue(true);
@@ -1021,7 +1032,7 @@ describe("TimelinePanel", () => {
             await waitFor(() => expectEvents(container, [events[1]]));
         });
 
-        defaultDispatcher.fire(Action.DumpDebugLogs);
+        act(() => defaultDispatcher.fire(Action.DumpDebugLogs));
 
         await waitFor(() =>
             expect(spy).toHaveBeenCalledWith(expect.stringContaining("TimelinePanel(Room): Debugging info for roomId")),

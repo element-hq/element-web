@@ -11,7 +11,7 @@ Please see LICENSE files in the repository root for full details.
 import "core-js/stable/structured-clone";
 import "fake-indexeddb/auto";
 import React, { ComponentProps } from "react";
-import { fireEvent, render, RenderResult, screen, waitFor, within } from "jest-matrix-react";
+import { fireEvent, render, RenderResult, screen, waitFor, within, act } from "jest-matrix-react";
 import fetchMock from "fetch-mock-jest";
 import { Mocked, mocked } from "jest-mock";
 import { ClientEvent, MatrixClient, MatrixEvent, Room, SyncState } from "matrix-js-sdk/src/matrix";
@@ -44,7 +44,6 @@ import {
 } from "../../../test-utils";
 import * as leaveRoomUtils from "../../../../src/utils/leave-behaviour";
 import { OidcClientError } from "../../../../src/utils/oidc/error";
-import * as voiceBroadcastUtils from "../../../../src/voice-broadcast/utils/cleanUpBroadcasts";
 import LegacyCallHandler from "../../../../src/LegacyCallHandler";
 import { CallStore } from "../../../../src/stores/CallStore";
 import { Call } from "../../../../src/models/Call";
@@ -139,6 +138,7 @@ describe("<MatrixChat />", () => {
             globalBlacklistUnverifiedDevices: false,
             // This needs to not finish immediately because we need to test the screen appears
             bootstrapCrossSigning: jest.fn().mockImplementation(() => bootstrapDeferred.promise),
+            getKeyBackupInfo: jest.fn().mockResolvedValue(null),
         }),
         secretStorage: {
             isStored: jest.fn().mockReturnValue(null),
@@ -148,7 +148,6 @@ describe("<MatrixChat />", () => {
         whoami: jest.fn(),
         logout: jest.fn(),
         getDeviceId: jest.fn(),
-        getKeyBackupVersion: jest.fn().mockResolvedValue(null),
     });
     let mockClient: Mocked<MatrixClient>;
     const serverConfig = {
@@ -162,8 +161,11 @@ describe("<MatrixChat />", () => {
     };
     let initPromise: Promise<void> | undefined;
     let defaultProps: ComponentProps<typeof MatrixChat>;
-    const getComponent = (props: Partial<ComponentProps<typeof MatrixChat>> = {}) =>
-        render(<MatrixChat {...defaultProps} {...props} />);
+    const getComponent = (props: Partial<ComponentProps<typeof MatrixChat>> = {}) => {
+        // MatrixChat does many questionable things which bomb tests in modern React mode,
+        // we'll want to refactor and break up MatrixChat before turning off legacyRoot mode
+        return render(<MatrixChat {...defaultProps} {...props} />, { legacyRoot: true });
+    };
 
     // make test results readable
     filterConsole(
@@ -201,7 +203,7 @@ describe("<MatrixChat />", () => {
             // we are logged in, but are still waiting for the /sync to complete
             await screen.findByText("Syncing…");
             // initial sync
-            client.emit(ClientEvent.Sync, SyncState.Prepared, null);
+            await act(() => client.emit(ClientEvent.Sync, SyncState.Prepared, null));
         }
 
         // let things settle
@@ -263,7 +265,7 @@ describe("<MatrixChat />", () => {
 
         // emit a loggedOut event so that all of the Store singletons forget about their references to the mock client
         // (must be sync otherwise the next test will start before it happens)
-        defaultDispatcher.dispatch({ action: Action.OnLoggedOut }, true);
+        act(() => defaultDispatcher.dispatch({ action: Action.OnLoggedOut }, true));
 
         localStorage.clear();
     });
@@ -328,7 +330,7 @@ describe("<MatrixChat />", () => {
 
             expect(within(dialog).getByText(errorMessage)).toBeInTheDocument();
             // just check we're back on welcome page
-            await expect(await screen.findByTestId("mx_welcome_screen")).toBeInTheDocument();
+            await expect(screen.findByTestId("mx_welcome_screen")).resolves.toBeInTheDocument();
         };
 
         beforeEach(() => {
@@ -808,7 +810,6 @@ describe("<MatrixChat />", () => {
                     jest.spyOn(LegacyCallHandler.instance, "hangupAllCalls")
                         .mockClear()
                         .mockImplementation(() => {});
-                    jest.spyOn(voiceBroadcastUtils, "cleanUpBroadcasts").mockImplementation(async () => {});
                     jest.spyOn(PosthogAnalytics.instance, "logout").mockImplementation(() => {});
                     jest.spyOn(EventIndexPeg, "deleteEventIndex").mockImplementation(async () => {});
 
@@ -828,20 +829,10 @@ describe("<MatrixChat />", () => {
                     jest.spyOn(logger, "warn").mockClear();
                 });
 
-                afterAll(() => {
-                    jest.spyOn(voiceBroadcastUtils, "cleanUpBroadcasts").mockRestore();
-                });
-
                 it("should hangup all legacy calls", async () => {
                     await getComponentAndWaitForReady();
                     await dispatchLogoutAndWait();
                     expect(LegacyCallHandler.instance.hangupAllCalls).toHaveBeenCalled();
-                });
-
-                it("should cleanup broadcasts", async () => {
-                    await getComponentAndWaitForReady();
-                    await dispatchLogoutAndWait();
-                    expect(voiceBroadcastUtils.cleanUpBroadcasts).toHaveBeenCalled();
                 });
 
                 it("should disconnect all calls", async () => {
@@ -956,9 +947,11 @@ describe("<MatrixChat />", () => {
             await screen.findByText("Powered by Matrix");
 
             // go to login page
-            defaultDispatcher.dispatch({
-                action: "start_login",
-            });
+            act(() =>
+                defaultDispatcher.dispatch({
+                    action: "start_login",
+                }),
+            );
 
             await flushPromises();
 
@@ -1129,7 +1122,9 @@ describe("<MatrixChat />", () => {
 
                 bootstrapDeferred.resolve();
 
-                await expect(await screen.findByRole("heading", { name: "You're in", level: 1 })).toBeInTheDocument();
+                await expect(
+                    screen.findByRole("heading", { name: "You're in", level: 1 }),
+                ).resolves.toBeInTheDocument();
             });
         });
     });
@@ -1398,7 +1393,9 @@ describe("<MatrixChat />", () => {
 
             function simulateSessionLockClaim() {
                 localStorage.setItem("react_sdk_session_lock_claimant", "testtest");
-                window.dispatchEvent(new StorageEvent("storage", { key: "react_sdk_session_lock_claimant" }));
+                act(() =>
+                    window.dispatchEvent(new StorageEvent("storage", { key: "react_sdk_session_lock_claimant" })),
+                );
             }
 
             it("after a session is restored", async () => {

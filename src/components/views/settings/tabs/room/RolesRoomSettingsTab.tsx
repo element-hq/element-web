@@ -19,7 +19,6 @@ import ErrorDialog from "../../../dialogs/ErrorDialog";
 import PowerSelector from "../../../elements/PowerSelector";
 import SettingsFieldset from "../../SettingsFieldset";
 import SettingsStore from "../../../../../settings/SettingsStore";
-import { VoiceBroadcastInfoEventType } from "../../../../../voice-broadcast";
 import { ElementCall } from "../../../../../models/Call";
 import SdkConfig, { DEFAULTS } from "../../../../../SdkConfig";
 import { AddPrivilegedUsers } from "../../AddPrivilegedUsers";
@@ -62,7 +61,6 @@ const plEventsToShow: Record<string, IEventShowOpts> = {
 
     // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
     "im.vector.modular.widgets": { isState: true, hideForSpace: true },
-    [VoiceBroadcastInfoEventType]: { isState: true, hideForSpace: true },
 };
 
 // parse a string as an integer; if the input is undefined, or cannot be parsed
@@ -81,7 +79,7 @@ interface IBannedUserProps {
 
 export class BannedUser extends React.Component<IBannedUserProps> {
     public static contextType = MatrixClientContext;
-    public declare context: React.ContextType<typeof MatrixClientContext>;
+    declare public context: React.ContextType<typeof MatrixClientContext>;
 
     private onUnbanClick = (): void => {
         this.context.unban(this.props.member.roomId, this.props.member.userId).catch((err) => {
@@ -127,12 +125,30 @@ interface IProps {
     room: Room;
 }
 
-export default class RolesRoomSettingsTab extends React.Component<IProps> {
-    public static contextType = MatrixClientContext;
-    public declare context: React.ContextType<typeof MatrixClientContext>;
+interface RolesRoomSettingsTabState {
+    isRoomEncrypted: boolean;
+    isReady: boolean;
+}
 
-    public componentDidMount(): void {
+export default class RolesRoomSettingsTab extends React.Component<IProps, RolesRoomSettingsTabState> {
+    public static contextType = MatrixClientContext;
+    declare public context: React.ContextType<typeof MatrixClientContext>;
+
+    public constructor(props: IProps) {
+        super(props);
+        this.state = {
+            isReady: false,
+            isRoomEncrypted: false,
+        };
+    }
+
+    public async componentDidMount(): Promise<void> {
         this.context.on(RoomStateEvent.Update, this.onRoomStateUpdate);
+        this.setState({
+            isRoomEncrypted:
+                (await this.context.getCrypto()?.isEncryptionEnabledInRoom(this.props.room.roomId)) || false,
+            isReady: true,
+        });
     }
 
     public componentWillUnmount(): void {
@@ -271,7 +287,6 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
 
             // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
             "im.vector.modular.widgets": isSpaceRoom ? null : _td("room_settings|permissions|m.widget"),
-            [VoiceBroadcastInfoEventType]: _td("room_settings|permissions|io.element.voice_broadcast_info"),
         };
 
         // MSC3401: Native Group VoIP signaling
@@ -416,7 +431,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             .filter(Boolean);
 
         // hide the power level selector for enabling E2EE if it the room is already encrypted
-        if (client.isRoomEncrypted(this.props.room.roomId)) {
+        if (this.state.isRoomEncrypted) {
             delete eventsLevels[EventType.RoomEncryption];
         }
 
@@ -458,17 +473,19 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
                     {canChangeLevels && <AddPrivilegedUsers room={room} defaultUserLevel={defaultUserLevel} />}
                     {mutedUsersSection}
                     {bannedUsersSection}
-                    <SettingsFieldset
-                        legend={_t("room_settings|permissions|permissions_section")}
-                        description={
-                            isSpaceRoom
-                                ? _t("room_settings|permissions|permissions_section_description_space")
-                                : _t("room_settings|permissions|permissions_section_description_room")
-                        }
-                    >
-                        {powerSelectors}
-                        {eventPowerSelectors}
-                    </SettingsFieldset>
+                    {this.state.isReady && (
+                        <SettingsFieldset
+                            legend={_t("room_settings|permissions|permissions_section")}
+                            description={
+                                isSpaceRoom
+                                    ? _t("room_settings|permissions|permissions_section_description_space")
+                                    : _t("room_settings|permissions|permissions_section_description_room")
+                            }
+                        >
+                            {powerSelectors}
+                            {eventPowerSelectors}
+                        </SettingsFieldset>
+                    )}
                 </SettingsSection>
             </SettingsTab>
         );

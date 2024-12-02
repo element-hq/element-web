@@ -7,20 +7,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { act, render, RenderResult, screen, waitFor } from "jest-matrix-react";
-import { DEVICE_CODE_SCOPE, MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { render, screen, waitFor } from "jest-matrix-react";
+import { DEVICE_CODE_SCOPE, MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import { CryptoApi } from "matrix-js-sdk/src/crypto-api";
 import { mocked } from "jest-mock";
 import fetchMock from "fetch-mock-jest";
 
 import UnwrappedUserMenu from "../../../../src/components/structures/UserMenu";
 import { stubClient, wrapInSdkContext } from "../../../test-utils";
-import {
-    VoiceBroadcastInfoState,
-    VoiceBroadcastRecording,
-    VoiceBroadcastRecordingsStore,
-} from "../../../../src/voice-broadcast";
-import { mkVoiceBroadcastInfoStateEvent } from "../../voice-broadcast/utils/test-utils";
 import { TestSdkContext } from "../../TestSdkContext";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import LogoutDialog from "../../../../src/components/views/dialogs/LogoutDialog";
@@ -34,69 +28,10 @@ import { UserTab } from "../../../../src/components/views/dialogs/UserTab";
 
 describe("<UserMenu>", () => {
     let client: MatrixClient;
-    let renderResult: RenderResult;
     let sdkContext: TestSdkContext;
 
     beforeEach(() => {
         sdkContext = new TestSdkContext();
-    });
-
-    describe("<UserMenu> when video broadcast", () => {
-        let voiceBroadcastInfoEvent: MatrixEvent;
-        let voiceBroadcastRecording: VoiceBroadcastRecording;
-        let voiceBroadcastRecordingsStore: VoiceBroadcastRecordingsStore;
-
-        beforeAll(() => {
-            client = stubClient();
-            voiceBroadcastInfoEvent = mkVoiceBroadcastInfoStateEvent(
-                "!room:example.com",
-                VoiceBroadcastInfoState.Started,
-                client.getUserId() || "",
-                client.getDeviceId() || "",
-            );
-        });
-
-        beforeEach(() => {
-            voiceBroadcastRecordingsStore = new VoiceBroadcastRecordingsStore();
-            sdkContext._VoiceBroadcastRecordingsStore = voiceBroadcastRecordingsStore;
-
-            voiceBroadcastRecording = new VoiceBroadcastRecording(voiceBroadcastInfoEvent, client);
-        });
-
-        describe("when rendered", () => {
-            beforeEach(() => {
-                const UserMenu = wrapInSdkContext(UnwrappedUserMenu, sdkContext);
-                renderResult = render(<UserMenu isPanelCollapsed={true} />);
-            });
-
-            it("should render as expected", () => {
-                expect(renderResult.container).toMatchSnapshot();
-            });
-
-            describe("and a live voice broadcast starts", () => {
-                beforeEach(() => {
-                    act(() => {
-                        voiceBroadcastRecordingsStore.setCurrent(voiceBroadcastRecording);
-                    });
-                });
-
-                it("should render the live voice broadcast avatar addon", () => {
-                    expect(renderResult.queryByTestId("user-menu-live-vb")).toBeInTheDocument();
-                });
-
-                describe("and the broadcast ends", () => {
-                    beforeEach(() => {
-                        act(() => {
-                            voiceBroadcastRecordingsStore.clearCurrent();
-                        });
-                    });
-
-                    it("should not render the live voice broadcast avatar addon", () => {
-                        expect(renderResult.queryByTestId("user-menu-live-vb")).not.toBeInTheDocument();
-                    });
-                });
-            });
-        });
     });
 
     describe("<UserMenu> logout", () => {
@@ -106,7 +41,7 @@ describe("<UserMenu>", () => {
 
         it("should logout directly if no crypto", async () => {
             const UserMenu = wrapInSdkContext(UnwrappedUserMenu, sdkContext);
-            renderResult = render(<UserMenu isPanelCollapsed={true} />);
+            render(<UserMenu isPanelCollapsed={true} />);
 
             mocked(client.getRooms).mockReturnValue([
                 {
@@ -128,7 +63,7 @@ describe("<UserMenu>", () => {
 
         it("should logout directly if no encrypted rooms", async () => {
             const UserMenu = wrapInSdkContext(UnwrappedUserMenu, sdkContext);
-            renderResult = render(<UserMenu isPanelCollapsed={true} />);
+            render(<UserMenu isPanelCollapsed={true} />);
 
             mocked(client.getRooms).mockReturnValue([
                 {
@@ -152,7 +87,7 @@ describe("<UserMenu>", () => {
 
         it("should show dialog if some encrypted rooms", async () => {
             const UserMenu = wrapInSdkContext(UnwrappedUserMenu, sdkContext);
-            renderResult = render(<UserMenu isPanelCollapsed={true} />);
+            render(<UserMenu isPanelCollapsed={true} />);
 
             mocked(client.getRooms).mockReturnValue([
                 {

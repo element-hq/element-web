@@ -97,6 +97,7 @@ export class ConsoleLogger {
         // run.
         // Example line:
         // 2017-01-18T11:23:53.214Z W Failed to set badge count
+        // eslint-disable-next-line @typescript-eslint/no-base-to-string
         let line = `${ts} ${level} ${args.join(" ")}\n`;
         // Do some cleanup
         line = line.replace(/token=[a-zA-Z0-9-]+/gm, "token=xxxxx");
