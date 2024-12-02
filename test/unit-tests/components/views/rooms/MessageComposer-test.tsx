@@ -23,7 +23,6 @@ import {
 import MessageComposer from "../../../../../src/components/views/rooms/MessageComposer";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
-import RoomContext from "../../../../../src/contexts/RoomContext";
 import { IRoomState } from "../../../../../src/components/structures/RoomView";
 import ResizeNotifier from "../../../../../src/utils/ResizeNotifier";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
@@ -35,6 +34,7 @@ import { E2EStatus } from "../../../../../src/utils/ShieldUtils";
 import { addTextToComposerRTL } from "../../../../test-utils/composer";
 import UIStore, { UI_EVENTS } from "../../../../../src/stores/UIStore";
 import { Action } from "../../../../../src/dispatcher/actions";
+import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 
 const openStickerPicker = async (): Promise<void> => {
     await userEvent.click(screen.getByLabelText("More options"));
@@ -463,9 +463,9 @@ function wrapAndRender(
 
     const getRawComponent = (props = {}, context = roomContext, client = mockClient) => (
         <MatrixClientContext.Provider value={client}>
-            <RoomContext.Provider value={context}>
+            <ScopedRoomContextProvider {...context}>
                 <MessageComposer {...defaultProps} {...props} />
-            </RoomContext.Provider>
+            </ScopedRoomContextProvider>
         </MatrixClientContext.Provider>
     );
     return {

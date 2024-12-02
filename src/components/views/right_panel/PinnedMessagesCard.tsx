@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useCallback, useEffect, JSX } from "react";
+import React, { useCallback, useEffect, JSX, useContext } from "react";
 import { Room, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { Button, Separator } from "@vector-im/compound-web";
 import classNames from "classnames";
@@ -18,7 +18,7 @@ import Spinner from "../elements/Spinner";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { PinnedEventTile } from "../rooms/PinnedEventTile";
 import { useRoomState } from "../../../hooks/useRoomState";
-import RoomContext, { TimelineRenderingType, useRoomContext } from "../../../contexts/RoomContext";
+import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { ReadPinsEventId } from "./types";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { filterBoolean } from "../../../utils/arrays";
@@ -27,6 +27,7 @@ import { UnpinAllDialog } from "../dialogs/UnpinAllDialog";
 import EmptyState from "./EmptyState";
 import { usePinnedEvents, useReadPinnedEvents, useSortedFetchedPinnedEvents } from "../../../hooks/usePinnedEvents";
 import PinningUtils from "../../../utils/PinningUtils.ts";
+import { ScopedRoomContextProvider } from "../../../contexts/ScopedRoomContext.tsx";
 
 /**
  * List the pinned messages in a room inside a Card.
@@ -48,7 +49,7 @@ interface PinnedMessagesCardProps {
 
 export function PinnedMessagesCard({ room, onClose, permalinkCreator }: PinnedMessagesCardProps): JSX.Element {
     const cli = useMatrixClientContext();
-    const roomContext = useRoomContext();
+    const roomContext = useContext(RoomContext);
     const pinnedEventIds = usePinnedEvents(room);
     const readPinnedEvents = useReadPinnedEvents(room);
     const pinnedEvents = useSortedFetchedPinnedEvents(room, pinnedEventIds);
@@ -89,14 +90,9 @@ export function PinnedMessagesCard({ room, onClose, permalinkCreator }: PinnedMe
             className="mx_PinnedMessagesCard"
             onClose={onClose}
         >
-            <RoomContext.Provider
-                value={{
-                    ...roomContext,
-                    timelineRenderingType: TimelineRenderingType.Pinned,
-                }}
-            >
+            <ScopedRoomContextProvider {...roomContext} timelineRenderingType={TimelineRenderingType.Pinned}>
                 {content}
-            </RoomContext.Provider>
+            </ScopedRoomContextProvider>
         </BaseCard>
     );
 }

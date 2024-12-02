@@ -9,16 +9,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, {
-    ChangeEvent,
-    ComponentProps,
-    createRef,
-    ReactElement,
-    ReactNode,
-    RefObject,
-    useContext,
-    JSX,
-} from "react";
+import React, { ChangeEvent, ComponentProps, createRef, ReactElement, ReactNode, RefObject, JSX } from "react";
 import classNames from "classnames";
 import {
     IRecommendedVersion,
@@ -64,7 +55,7 @@ import WidgetEchoStore from "../../stores/WidgetEchoStore";
 import SettingsStore from "../../settings/SettingsStore";
 import { Layout } from "../../settings/enums/Layout";
 import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
-import RoomContext, { TimelineRenderingType, MainSplitContentType } from "../../contexts/RoomContext";
+import { TimelineRenderingType, MainSplitContentType } from "../../contexts/RoomContext";
 import { E2EStatus, shieldStatusForRoom } from "../../utils/ShieldUtils";
 import { Action } from "../../dispatcher/actions";
 import { IMatrixClientCreds } from "../../MatrixClientPeg";
@@ -136,6 +127,7 @@ import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { onView3pidInvite } from "../../stores/right-panel/action-handlers";
 import RoomSearchAuxPanel from "../views/rooms/RoomSearchAuxPanel";
 import { PinnedMessageBanner } from "../views/rooms/PinnedMessageBanner";
+import { ScopedRoomContextProvider, useScopedRoomContext } from "../../contexts/ScopedRoomContext";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -261,6 +253,7 @@ interface LocalRoomViewProps {
     permalinkCreator: RoomPermalinkCreator;
     roomView: RefObject<HTMLElement>;
     onFileDrop: (dataTransfer: DataTransfer) => Promise<void>;
+    mainSplitContentType: MainSplitContentType;
 }
 
 /**
@@ -270,7 +263,7 @@ interface LocalRoomViewProps {
  * @returns {ReactElement}
  */
 function LocalRoomView(props: LocalRoomViewProps): ReactElement {
-    const context = useContext(RoomContext);
+    const context = useScopedRoomContext("room");
     const room = context.room as LocalRoom;
     const encryptionEvent = props.localRoom.currentState.getStateEvents(EventType.RoomEncryption)[0];
     let encryptionTile: ReactNode;
@@ -338,6 +331,7 @@ interface ILocalRoomCreateLoaderProps {
     localRoom: LocalRoom;
     names: string;
     resizeNotifier: ResizeNotifier;
+    mainSplitContentType: MainSplitContentType;
 }
 
 /**
@@ -378,7 +372,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     private roomViewBody = createRef<HTMLDivElement>();
 
     public static contextType = SDKContext;
-    public declare context: React.ContextType<typeof SDKContext>;
+    declare public context: React.ContextType<typeof SDKContext>;
 
     public constructor(props: IRoomProps, context: React.ContextType<typeof SDKContext>) {
         super(props, context);
@@ -2007,35 +2001,41 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         if (!this.state.room || !this.context?.client) return null;
         const names = this.state.room.getDefaultRoomName(this.context.client.getSafeUserId());
         return (
-            <RoomContext.Provider value={this.state}>
-                <LocalRoomCreateLoader localRoom={localRoom} names={names} resizeNotifier={this.props.resizeNotifier} />
-            </RoomContext.Provider>
+            <ScopedRoomContextProvider {...this.state}>
+                <LocalRoomCreateLoader
+                    localRoom={localRoom}
+                    names={names}
+                    resizeNotifier={this.props.resizeNotifier}
+                    mainSplitContentType={this.state.mainSplitContentType}
+                />
+            </ScopedRoomContextProvider>
         );
     }
 
     private renderLocalRoomView(localRoom: LocalRoom): ReactNode {
         return (
-            <RoomContext.Provider value={this.state}>
+            <ScopedRoomContextProvider {...this.state}>
                 <LocalRoomView
                     localRoom={localRoom}
                     resizeNotifier={this.props.resizeNotifier}
                     permalinkCreator={this.permalinkCreator}
                     roomView={this.roomView}
                     onFileDrop={this.onFileDrop}
+                    mainSplitContentType={this.state.mainSplitContentType}
                 />
-            </RoomContext.Provider>
+            </ScopedRoomContextProvider>
         );
     }
 
     private renderWaitingForThirdPartyRoomView(inviteEvent: MatrixEvent): ReactNode {
         return (
-            <RoomContext.Provider value={this.state}>
+            <ScopedRoomContextProvider {...this.state}>
                 <WaitingForThirdPartyRoomView
                     resizeNotifier={this.props.resizeNotifier}
                     roomView={this.roomView}
                     inviteEvent={inviteEvent}
                 />
-            </RoomContext.Provider>
+            </ScopedRoomContextProvider>
         );
     }
 
@@ -2573,7 +2573,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
 
         return (
-            <RoomContext.Provider value={this.state}>
+            <ScopedRoomContextProvider {...this.state}>
                 <div className={mainClasses} ref={this.roomView} onKeyDown={this.onReactKeyDown}>
                     {showChatEffects && this.roomView.current && (
                         <EffectsOverlay roomWidth={this.roomView.current.offsetWidth} />
@@ -2600,7 +2600,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         </MainSplit>
                     </ErrorBoundary>
                 </div>
-            </RoomContext.Provider>
+            </ScopedRoomContextProvider>
         );
     }
 }

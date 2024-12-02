@@ -30,7 +30,7 @@ import { mkEncryptedMatrixEvent } from "matrix-js-sdk/src/testing";
 
 import EventTile, { EventTileProps } from "../../../../../src/components/views/rooms/EventTile";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import RoomContext, { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
+import { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import { filterConsole, flushPromises, getRoomContext, mkEvent, mkMessage, stubClient } from "../../../../test-utils";
 import { mkThread } from "../../../../test-utils/threads";
@@ -40,6 +40,7 @@ import { Action } from "../../../../../src/dispatcher/actions";
 import { IRoomState } from "../../../../../src/components/structures/RoomView";
 import PinningUtils from "../../../../../src/utils/PinningUtils";
 import { Layout } from "../../../../../src/settings/enums/Layout";
+import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 
 describe("EventTile", () => {
     const ROOM_ID = "!roomId:example.org";
@@ -56,13 +57,13 @@ describe("EventTile", () => {
     }) {
         return (
             <MatrixClientContext.Provider value={client}>
-                <RoomContext.Provider value={props.roomContext}>
+                <ScopedRoomContextProvider {...props.roomContext}>
                     <EventTile
                         mxEvent={mxEvent}
                         replacingEventId={mxEvent.replacingEventId()}
                         {...(props.eventTilePropertyOverrides ?? {})}
                     />
-                </RoomContext.Provider>
+                </ScopedRoomContextProvider>
             </MatrixClientContext.Provider>
         );
     }

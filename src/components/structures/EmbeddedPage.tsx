@@ -36,7 +36,7 @@ interface IState {
 
 export default class EmbeddedPage extends React.PureComponent<IProps, IState> {
     public static contextType = MatrixClientContext;
-    public declare context: React.ContextType<typeof MatrixClientContext>;
+    declare public context: React.ContextType<typeof MatrixClientContext>;
     private unmounted = false;
     private dispatcherRef?: string;
 

@@ -63,7 +63,7 @@ interface IState {
 
 export default class RightPanel extends React.Component<Props, IState> {
     public static contextType = MatrixClientContext;
-    public declare context: React.ContextType<typeof MatrixClientContext>;
+    declare public context: React.ContextType<typeof MatrixClientContext>;
 
     public constructor(props: Props, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
