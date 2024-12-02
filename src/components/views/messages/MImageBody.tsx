@@ -51,6 +51,7 @@ interface IState {
         naturalHeight: number;
     };
     hover: boolean;
+    focus: boolean;
     showImage: boolean;
     placeholder: Placeholder;
 }
@@ -71,6 +72,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         imgError: false,
         imgLoaded: false,
         hover: false,
+        focus: false,
         showImage: SettingsStore.getValue("showImages"),
         placeholder: Placeholder.NoImage,
     };
@@ -120,30 +122,29 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         }
     };
 
-    protected onImageEnter = (e: React.MouseEvent<HTMLImageElement>): void => {
-        this.setState({ hover: true });
-
-        if (
+    private get shouldAutoplay(): boolean {
+        return !(
             !this.state.contentUrl ||
             !this.state.showImage ||
             !this.state.isAnimated ||
             SettingsStore.getValue("autoplayGifs")
-        ) {
-            return;
-        }
-        const imgElement = e.currentTarget;
-        imgElement.src = this.state.contentUrl;
+        );
+    }
+
+    protected onImageEnter = (): void => {
+        this.setState({ hover: true });
     };
 
-    protected onImageLeave = (e: React.MouseEvent<HTMLImageElement>): void => {
+    protected onImageLeave = (): void => {
         this.setState({ hover: false });
+    };
 
-        const url = this.state.thumbUrl ?? this.state.contentUrl;
-        if (!url || !this.state.showImage || !this.state.isAnimated || SettingsStore.getValue("autoplayGifs")) {
-            return;
-        }
-        const imgElement = e.currentTarget;
-        imgElement.src = url;
+    private onFocus = (): void => {
+        this.setState({ focus: true });
+    };
+
+    private onBlur = (): void => {
+        this.setState({ focus: false });
     };
 
     private reconnectedListener = createReconnectedListener((): void => {
@@ -470,14 +471,20 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
 
         let showPlaceholder = Boolean(placeholder);
 
+        const hoverOrFocus = this.state.hover || this.state.focus;
         if (thumbUrl && !this.state.imgError) {
+            let url = thumbUrl;
+            if (hoverOrFocus && this.shouldAutoplay) {
+                url = this.state.contentUrl!;
+            }
+
             // Restrict the width of the thumbnail here, otherwise it will fill the container
             // which has the same width as the timeline
             // mx_MImageBody_thumbnail resizes img to exactly container size
             img = (
                 <img
                     className="mx_MImageBody_thumbnail"
-                    src={thumbUrl}
+                    src={url}
                     ref={this.image}
                     alt={content.body}
                     onError={this.onImageError}
@@ -493,13 +500,13 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
             showPlaceholder = false; // because we're hiding the image, so don't show the placeholder.
         }
 
-        if (this.state.isAnimated && !SettingsStore.getValue("autoplayGifs") && !this.state.hover) {
+        if (this.state.isAnimated && !SettingsStore.getValue("autoplayGifs") && !hoverOrFocus) {
             // XXX: Arguably we may want a different label when the animated image is WEBP and not GIF
             gifLabel = <p className="mx_MImageBody_gifLabel">GIF</p>;
         }
 
         let banner: ReactNode | undefined;
-        if (this.state.showImage && this.state.hover) {
+        if (this.state.showImage && hoverOrFocus) {
             banner = this.getBanner(content);
         }
 
@@ -568,7 +575,13 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     protected wrapImage(contentUrl: string | null | undefined, children: JSX.Element): ReactNode {
         if (contentUrl) {
             return (
-                <a href={contentUrl} target={this.props.forExport ? "_blank" : undefined} onClick={this.onClick}>
+                <a
+                    href={contentUrl}
+                    target={this.props.forExport ? "_blank" : undefined}
+                    onClick={this.onClick}
+                    onFocus={this.onFocus}
+                    onBlur={this.onBlur}
+                >
                     {children}
                 </a>
             );
