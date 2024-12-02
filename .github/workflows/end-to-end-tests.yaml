@@ -83,7 +83,7 @@ jobs:
         name: "Run Tests ${{ matrix.runner }}/${{ strategy.job-total }}"
         needs: build
         if: inputs.skip != true
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-24.04
         permissions:
             actions: read
             issues: read
@@ -131,7 +131,12 @@ jobs:
               run: yarn playwright install --with-deps
 
             - name: Run Playwright tests
-              run: yarn playwright test --shard ${{ matrix.runner }}/${{ strategy.job-total }}
+              uses: coactions/setup-xvfb@6b00cf1889f4e1d5a48635647013c0508128ee1a
+              timeout-minutes: 30
+              with:
+                  run: "yarn playwright test --shard ${{ matrix.runner }}/${{ strategy.job-total }}"
+              env:
+                  HEADED: 1
 
             - name: Upload blob report to GitHub Actions Artifacts
               if: always()

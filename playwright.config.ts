@@ -21,6 +21,7 @@ export default defineConfig({
             args: ["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream", "--mute-audio"],
         },
         trace: "on-first-retry",
+        headless: !!process.env.HEADED,
     },
     webServer: {
         command: process.env.CI ? "npx serve -p 8080 -L ./webapp" : "yarn start",
