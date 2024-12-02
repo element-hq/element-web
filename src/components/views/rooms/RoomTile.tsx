@@ -39,7 +39,6 @@ import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { RoomGeneralContextMenu } from "../context_menus/RoomGeneralContextMenu";
 import { CallStore, CallStoreEvent } from "../../../stores/CallStore";
 import { SdkContextClass } from "../../../contexts/SDKContext";
-import { useHasRoomLiveVoiceBroadcast } from "../../../voice-broadcast";
 import { RoomTileSubtitle } from "./RoomTileSubtitle";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
@@ -51,10 +50,6 @@ interface Props {
     showMessagePreview: boolean;
     isMinimized: boolean;
     tag: TagID;
-}
-
-interface ClassProps extends Props {
-    hasLiveVoiceBroadcast: boolean;
 }
 
 type PartialDOMRect = Pick<DOMRect, "left" | "bottom">;
@@ -77,13 +72,13 @@ export const contextMenuBelow = (elementRect: PartialDOMRect): MenuProps => {
     return { left, top, chevronFace };
 };
 
-export class RoomTile extends React.PureComponent<ClassProps, State> {
+class RoomTile extends React.PureComponent<Props, State> {
     private dispatcherRef?: string;
     private roomTileRef = createRef<HTMLDivElement>();
     private notificationState: NotificationState;
     private roomProps: RoomEchoChamber;
 
-    public constructor(props: ClassProps) {
+    public constructor(props: Props) {
         super(props);
 
         this.state = {
@@ -370,15 +365,10 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
     /**
      * RoomTile has a subtile if one of the following applies:
      * - there is a call
-     * - there is a live voice broadcast
      * - message previews are enabled and there is a previewable message
      */
     private get shouldRenderSubtitle(): boolean {
-        return (
-            !!this.state.call ||
-            this.props.hasLiveVoiceBroadcast ||
-            (this.props.showMessagePreview && !!this.state.messagePreview)
-        );
+        return !!this.state.call || (this.props.showMessagePreview && !!this.state.messagePreview);
     }
 
     public render(): React.ReactElement {
@@ -409,7 +399,6 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
         const subtitle = this.shouldRenderSubtitle ? (
             <RoomTileSubtitle
                 call={this.state.call}
-                hasLiveVoiceBroadcast={this.props.hasLiveVoiceBroadcast}
                 messagePreview={this.state.messagePreview}
                 roomId={this.props.room.roomId}
                 showMessagePreview={this.props.showMessagePreview}
@@ -491,9 +480,4 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
     }
 }
 
-const RoomTileHOC: React.FC<Props> = (props: Props) => {
-    const hasLiveVoiceBroadcast = useHasRoomLiveVoiceBroadcast(props.room);
-    return <RoomTile {...props} hasLiveVoiceBroadcast={hasLiveVoiceBroadcast} />;
-};
-
-export default RoomTileHOC;
+export default RoomTile;

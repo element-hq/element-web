@@ -88,9 +88,9 @@ describe("createMessageContent", () => {
 
             // Then
             expect(content).toEqual({
-                "body": " * *__hello__ world*",
+                "body": "* *__hello__ world*",
                 "format": "org.matrix.custom.html",
-                "formatted_body": ` * ${message}`,
+                "formatted_body": `* ${message}`,
                 "msgtype": "m.text",
                 "m.new_content": {
                     body: "*__hello__ world*",

@@ -11,8 +11,6 @@ import fetchMockJest from "fetch-mock-jest";
 
 import { advanceDateAndTime, stubClient } from "../test-utils";
 import { IMatrixClientPeg, MatrixClientPeg as peg } from "../../src/MatrixClientPeg";
-import SettingsStore from "../../src/settings/SettingsStore";
-import { SettingLevel } from "../../src/settings/SettingLevel";
 
 jest.useFakeTimers();
 
@@ -81,27 +79,18 @@ describe("MatrixClientPeg", () => {
         });
 
         it("should initialise the rust crypto library by default", async () => {
-            const mockSetValue = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
-
             const mockInitRustCrypto = jest.spyOn(testPeg.safeGet(), "initRustCrypto").mockResolvedValue(undefined);
 
             const cryptoStoreKey = new Uint8Array([1, 2, 3, 4]);
             await testPeg.start({ rustCryptoStoreKey: cryptoStoreKey });
             expect(mockInitRustCrypto).toHaveBeenCalledWith({ storageKey: cryptoStoreKey });
-
-            // we should have stashed the setting in the settings store
-            expect(mockSetValue).toHaveBeenCalledWith("feature_rust_crypto", null, SettingLevel.DEVICE, true);
         });
 
         it("Should migrate existing login", async () => {
-            const mockSetValue = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
             const mockInitRustCrypto = jest.spyOn(testPeg.safeGet(), "initRustCrypto").mockResolvedValue(undefined);
 
             await testPeg.start();
             expect(mockInitRustCrypto).toHaveBeenCalledTimes(1);
-
-            // we should have stashed the setting in the settings store
-            expect(mockSetValue).toHaveBeenCalledWith("feature_rust_crypto", null, SettingLevel.DEVICE, true);
         });
     });
 });

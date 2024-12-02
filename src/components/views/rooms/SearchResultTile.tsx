@@ -36,7 +36,7 @@ interface IProps {
 
 export default class SearchResultTile extends React.Component<IProps> {
     public static contextType = RoomContext;
-    public declare context: React.ContextType<typeof RoomContext>;
+    declare public context: React.ContextType<typeof RoomContext>;
 
     // A map of <callId, LegacyCallEventGrouper>
     private callEventGroupers = new Map<string, LegacyCallEventGrouper>();

@@ -9,16 +9,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, {
-    ChangeEvent,
-    ComponentProps,
-    createRef,
-    ReactElement,
-    ReactNode,
-    RefObject,
-    useContext,
-    JSX,
-} from "react";
+import React, { ChangeEvent, ComponentProps, createRef, ReactElement, ReactNode, RefObject, JSX } from "react";
 import classNames from "classnames";
 import {
     IRecommendedVersion,
@@ -64,7 +55,7 @@ import WidgetEchoStore from "../../stores/WidgetEchoStore";
 import SettingsStore from "../../settings/SettingsStore";
 import { Layout } from "../../settings/enums/Layout";
 import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
-import RoomContext, { TimelineRenderingType, MainSplitContentType } from "../../contexts/RoomContext";
+import { TimelineRenderingType, MainSplitContentType } from "../../contexts/RoomContext";
 import { E2EStatus, shieldStatusForRoom } from "../../utils/ShieldUtils";
 import { Action } from "../../dispatcher/actions";
 import { IMatrixClientCreds } from "../../MatrixClientPeg";
@@ -136,6 +127,7 @@ import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { onView3pidInvite } from "../../stores/right-panel/action-handlers";
 import RoomSearchAuxPanel from "../views/rooms/RoomSearchAuxPanel";
 import { PinnedMessageBanner } from "../views/rooms/PinnedMessageBanner";
+import { ScopedRoomContextProvider, useScopedRoomContext } from "../../contexts/ScopedRoomContext";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -261,6 +253,7 @@ interface LocalRoomViewProps {
     permalinkCreator: RoomPermalinkCreator;
     roomView: RefObject<HTMLElement>;
     onFileDrop: (dataTransfer: DataTransfer) => Promise<void>;
+    mainSplitContentType: MainSplitContentType;
 }
 
 /**
@@ -270,7 +263,7 @@ interface LocalRoomViewProps {
  * @returns {ReactElement}
  */
 function LocalRoomView(props: LocalRoomViewProps): ReactElement {
-    const context = useContext(RoomContext);
+    const context = useScopedRoomContext("room");
     const room = context.room as LocalRoom;
     const encryptionEvent = props.localRoom.currentState.getStateEvents(EventType.RoomEncryption)[0];
     let encryptionTile: ReactNode;
@@ -338,6 +331,7 @@ interface ILocalRoomCreateLoaderProps {
     localRoom: LocalRoom;
     names: string;
     resizeNotifier: ResizeNotifier;
+    mainSplitContentType: MainSplitContentType;
 }
 
 /**
@@ -378,7 +372,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     private roomViewBody = createRef<HTMLDivElement>();
 
     public static contextType = SDKContext;
-    public declare context: React.ContextType<typeof SDKContext>;
+    declare public context: React.ContextType<typeof SDKContext>;
 
     public constructor(props: IRoomProps, context: React.ContextType<typeof SDKContext>) {
         super(props, context);
@@ -671,6 +665,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         // the RoomView instance
         if (initial) {
             newState.room = this.context.client!.getRoom(newState.roomId) || undefined;
+            newState.isRoomEncrypted = null;
             if (newState.room) {
                 newState.showApps = this.shouldShowApps(newState.room);
                 this.onRoomLoaded(newState.room);
@@ -713,6 +708,14 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         if (initial) {
             this.setupRoom(newState.room, newState.roomId, !!newState.joining, !!newState.shouldPeek);
         }
+
+        // We don't block the initial setup but we want to make it early to not block the timeline rendering
+        const isRoomEncrypted = await this.getIsRoomEncrypted(newState.roomId);
+        this.setState({
+            isRoomEncrypted,
+            ...(isRoomEncrypted &&
+                newState.roomId && { e2eStatus: RoomView.e2eStatusCache.get(newState.roomId) ?? E2EStatus.Warning }),
+        });
     };
 
     private onConnectedCalls = (): void => {
@@ -863,7 +866,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         return isManuallyShown && widgets.length > 0;
     }
 
-    public async componentDidMount(): Promise<void> {
+    public componentDidMount(): void {
         this.unmounted = false;
 
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
@@ -1230,18 +1233,18 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 if (payload.member) {
                     if (payload.push) {
                         RightPanelStore.instance.pushCard({
-                            phase: RightPanelPhases.RoomMemberInfo,
+                            phase: RightPanelPhases.MemberInfo,
                             state: { member: payload.member },
                         });
                     } else {
                         RightPanelStore.instance.setCards([
                             { phase: RightPanelPhases.RoomSummary },
-                            { phase: RightPanelPhases.RoomMemberList },
-                            { phase: RightPanelPhases.RoomMemberInfo, state: { member: payload.member } },
+                            { phase: RightPanelPhases.MemberList },
+                            { phase: RightPanelPhases.MemberInfo, state: { member: payload.member } },
                         ]);
                     }
                 } else {
-                    RightPanelStore.instance.showOrHidePhase(RightPanelPhases.RoomMemberList);
+                    RightPanelStore.instance.showOrHidePhase(RightPanelPhases.MemberList);
                 }
                 break;
             case Action.View3pidInvite:
@@ -1482,24 +1485,17 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     private async updateE2EStatus(room: Room): Promise<void> {
         if (!this.context.client || !this.state.isRoomEncrypted) return;
-
-        // If crypto is not currently enabled, we aren't tracking devices at all,
-        // so we don't know what the answer is. Let's error on the safe side and show
-        // a warning for this case.
-        let e2eStatus = RoomView.e2eStatusCache.get(room.roomId) ?? E2EStatus.Warning;
-        // set the state immediately then update, so we don't scare the user into thinking the room is unencrypted
+        const e2eStatus = await this.cacheAndGetE2EStatus(room, this.context.client);
+        if (this.unmounted) return;
         this.setState({ e2eStatus });
-
-        if (this.context.client.getCrypto()) {
-            /* At this point, the user has encryption on and cross-signing on */
-            e2eStatus = await this.cacheAndGetE2EStatus(room, this.context.client);
-            if (this.unmounted) return;
-            this.setState({ e2eStatus });
-        }
     }
 
     private async cacheAndGetE2EStatus(room: Room, client: MatrixClient): Promise<E2EStatus> {
-        const e2eStatus = await shieldStatusForRoom(client, room);
+        let e2eStatus = RoomView.e2eStatusCache.get(room.roomId);
+        // set the state immediately then update, so we don't scare the user into thinking the room is unencrypted
+        if (e2eStatus) this.setState({ e2eStatus });
+
+        e2eStatus = await shieldStatusForRoom(client, room);
         RoomView.e2eStatusCache.set(room.roomId, e2eStatus);
         return e2eStatus;
     }
@@ -2005,35 +2001,41 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         if (!this.state.room || !this.context?.client) return null;
         const names = this.state.room.getDefaultRoomName(this.context.client.getSafeUserId());
         return (
-            <RoomContext.Provider value={this.state}>
-                <LocalRoomCreateLoader localRoom={localRoom} names={names} resizeNotifier={this.props.resizeNotifier} />
-            </RoomContext.Provider>
+            <ScopedRoomContextProvider {...this.state}>
+                <LocalRoomCreateLoader
+                    localRoom={localRoom}
+                    names={names}
+                    resizeNotifier={this.props.resizeNotifier}
+                    mainSplitContentType={this.state.mainSplitContentType}
+                />
+            </ScopedRoomContextProvider>
         );
     }
 
     private renderLocalRoomView(localRoom: LocalRoom): ReactNode {
         return (
-            <RoomContext.Provider value={this.state}>
+            <ScopedRoomContextProvider {...this.state}>
                 <LocalRoomView
                     localRoom={localRoom}
                     resizeNotifier={this.props.resizeNotifier}
                     permalinkCreator={this.permalinkCreator}
                     roomView={this.roomView}
                     onFileDrop={this.onFileDrop}
+                    mainSplitContentType={this.state.mainSplitContentType}
                 />
-            </RoomContext.Provider>
+            </ScopedRoomContextProvider>
         );
     }
 
     private renderWaitingForThirdPartyRoomView(inviteEvent: MatrixEvent): ReactNode {
         return (
-            <RoomContext.Provider value={this.state}>
+            <ScopedRoomContextProvider {...this.state}>
                 <WaitingForThirdPartyRoomView
                     resizeNotifier={this.props.resizeNotifier}
                     roomView={this.roomView}
                     inviteEvent={inviteEvent}
                 />
-            </RoomContext.Provider>
+            </ScopedRoomContextProvider>
         );
     }
 
@@ -2571,7 +2573,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
 
         return (
-            <RoomContext.Provider value={this.state}>
+            <ScopedRoomContextProvider {...this.state}>
                 <div className={mainClasses} ref={this.roomView} onKeyDown={this.onReactKeyDown}>
                     {showChatEffects && this.roomView.current && (
                         <EffectsOverlay roomWidth={this.roomView.current.offsetWidth} />
@@ -2598,7 +2600,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         </MainSplit>
                     </ErrorBoundary>
                 </div>
-            </RoomContext.Provider>
+            </ScopedRoomContextProvider>
         );
     }
 }

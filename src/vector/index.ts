@@ -67,6 +67,10 @@ function checkBrowserFeatures(): boolean {
     // although this would start to make (more) assumptions about how rust-crypto loads its wasm.
     window.Modernizr.addTest("wasm", () => typeof WebAssembly === "object" && typeof WebAssembly.Module === "function");
 
+    // Check that the session is in a secure context otherwise most Crypto & WebRTC APIs will be unavailable
+    // https://developer.mozilla.org/en-US/docs/Web/API/Window/isSecureContext
+    window.Modernizr.addTest("securecontext", () => window.isSecureContext);
+
     const featureList = Object.keys(window.Modernizr) as Array<keyof ModernizrStatic>;
 
     let featureComplete = true;

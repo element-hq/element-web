@@ -29,7 +29,7 @@ interface IState {
 
 class ReactionPicker extends React.Component<IProps, IState> {
     public static contextType = RoomContext;
-    public declare context: React.ContextType<typeof RoomContext>;
+    declare public context: React.ContextType<typeof RoomContext>;
 
     public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
         super(props, context);

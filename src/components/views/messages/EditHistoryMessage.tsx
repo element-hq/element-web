@@ -45,7 +45,7 @@ interface IState {
 
 export default class EditHistoryMessage extends React.PureComponent<IProps, IState> {
     public static contextType = MatrixClientContext;
-    public declare context: React.ContextType<typeof MatrixClientContext>;
+    declare public context: React.ContextType<typeof MatrixClientContext>;
 
     private content = createRef<HTMLDivElement>();
     private pills = new ReactRootManager();

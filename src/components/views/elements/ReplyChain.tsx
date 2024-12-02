@@ -65,7 +65,7 @@ interface IState {
 // be low as each event being loaded (after the first) is triggered by an explicit user action.
 export default class ReplyChain extends React.Component<IProps, IState> {
     public static contextType = RoomContext;
-    public declare context: React.ContextType<typeof RoomContext>;
+    declare public context: React.ContextType<typeof RoomContext>;
 
     private unmounted = false;
     private room: Room;

@@ -19,7 +19,7 @@ interface IProps {
 
 export default class TextualEvent extends React.Component<IProps> {
     public static contextType = RoomContext;
-    public declare context: React.ContextType<typeof RoomContext>;
+    declare public context: React.ContextType<typeof RoomContext>;
 
     public render(): React.ReactNode {
         const text = TextForEvent.textForEvent(

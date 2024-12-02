@@ -296,7 +296,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     };
 
     public static contextType = RoomContext;
-    public declare context: React.ContextType<typeof RoomContext>;
+    declare public context: React.ContextType<typeof RoomContext>;
 
     private unmounted = false;
 
@@ -775,7 +775,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             }
         }
 
-        if (MatrixClientPeg.safeGet().isRoomEncrypted(ev.getRoomId()!)) {
+        if (this.context.isRoomEncrypted) {
             // else if room is encrypted
             // and event is being encrypted or is not_sent (Unknown Devices/Network Error)
             if (ev.status === EventStatus.ENCRYPTING) {

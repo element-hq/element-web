@@ -193,7 +193,6 @@ export function createMessageContent(
         body: body,
     };
     const formattedBody = htmlSerializeIfNeeded(model, {
-        forceHTML: !!replyToEvent,
         useMarkdown: SettingsStore.getValue("MessageComposerInput.useMarkdown"),
     });
     if (formattedBody) {
@@ -241,7 +240,7 @@ interface ISendMessageComposerProps extends MatrixClientProps {
 
 export class SendMessageComposer extends React.Component<ISendMessageComposerProps> {
     public static contextType = RoomContext;
-    public declare context: React.ContextType<typeof RoomContext>;
+    declare public context: React.ContextType<typeof RoomContext>;
 
     private readonly prepareToEncrypt?: DebouncedFunc<() => void>;
     private readonly editorRef = createRef<BasicMessageComposer>();

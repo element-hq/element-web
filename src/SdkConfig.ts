@@ -46,10 +46,6 @@ export const DEFAULTS: DeepReadonly<IConfigOptions> = {
         logo: require("../res/img/element-desktop-logo.svg").default,
         url: "https://element.io/get-started",
     },
-    voice_broadcast: {
-        chunk_length: 2 * 60, // two minutes
-        max_length: 4 * 60 * 60, // four hours
-    },
 
     feedback: {
         existing_issues_url:
