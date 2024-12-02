@@ -542,6 +542,7 @@
         "qr_code": "QR Code",
         "random": "Random",
         "reactions": "Reactions",
+        "recommended": "Recommended",
         "report_a_bug": "Report a bug",
         "room": "Room",
         "room_name": "Room name",
@@ -3730,10 +3731,11 @@
         "unavailable": "Unavailable"
     },
     "update_room_access_modal": {
-        "description": "To create a share link, you need to allow guests to join this room. This may make the room less secure. When you're done with the call, you can make the room private again.",
-        "dont_change_description": "Alternatively, you can hold the call in a separate room.",
+        "description": "To create a share link, make this room <b>public</b> or enable the option for users to <b>ask to join</b>. This allows guests to join without being invited.",
+        "dont_change_description": "If you don't want to change the access of this room, you can create a new room for the call link.",
         "no_change": "I don't want to change the access level.",
-        "title": "Change the room access level"
+        "revert_access_description": "(This can be reverted to the previous value in the Room Settings: <b>Security & Privacy</b> / <b>Access</b>)",
+        "title": "Allow guest users to join this room"
     },
     "upload_failed_generic": "The file '%(fileName)s' failed to upload.",
     "upload_failed_size": "The file '%(fileName)s' exceeds this homeserver's size limit for uploads",
