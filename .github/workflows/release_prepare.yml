@@ -29,7 +29,7 @@ jobs:
                     - element-hq/element-desktop
         uses: matrix-org/matrix-js-sdk/.github/workflows/release-checks.yml@develop
         secrets:
-            GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+            ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
         with:
             repository: ${{ matrix.repo }}
 
