@@ -128,7 +128,7 @@ describe("<EditMessageComposer/>", () => {
 
         const expectedBody = {
             ...editedEvent.getContent(),
-            "body": " * original message + edit",
+            "body": "* original message + edit",
             "m.new_content": {
                 "body": "original message + edit",
                 "msgtype": "m.text",
@@ -160,7 +160,7 @@ describe("<EditMessageComposer/>", () => {
             const content = createEditContent(model, editedEvent);
 
             expect(content).toEqual({
-                "body": " * hello world",
+                "body": "* hello world",
                 "msgtype": "m.text",
                 "m.new_content": {
                     "body": "hello world",
@@ -183,10 +183,10 @@ describe("<EditMessageComposer/>", () => {
             const content = createEditContent(model, editedEvent);
 
             expect(content).toEqual({
-                "body": " * hello *world*",
+                "body": "* hello *world*",
                 "msgtype": "m.text",
                 "format": "org.matrix.custom.html",
-                "formatted_body": " * hello <em>world</em>",
+                "formatted_body": "* hello <em>world</em>",
                 "m.new_content": {
                     "body": "hello *world*",
                     "msgtype": "m.text",
@@ -210,10 +210,10 @@ describe("<EditMessageComposer/>", () => {
             const content = createEditContent(model, editedEvent);
 
             expect(content).toEqual({
-                "body": " * blinks __quickly__",
+                "body": "* blinks __quickly__",
                 "msgtype": "m.emote",
                 "format": "org.matrix.custom.html",
-                "formatted_body": " * blinks <strong>quickly</strong>",
+                "formatted_body": "* blinks <strong>quickly</strong>",
                 "m.new_content": {
                     "body": "blinks __quickly__",
                     "msgtype": "m.emote",
@@ -238,7 +238,7 @@ describe("<EditMessageComposer/>", () => {
             const content = createEditContent(model, editedEvent);
 
             expect(content).toEqual({
-                "body": " * ✨sparkles✨",
+                "body": "* ✨sparkles✨",
                 "msgtype": "m.emote",
                 "m.new_content": {
                     "body": "✨sparkles✨",
@@ -264,7 +264,7 @@ describe("<EditMessageComposer/>", () => {
             // TODO Edits do not properly strip the double slash used to skip
             // command processing.
             expect(content).toEqual({
-                "body": " * //dev/null is my favourite place",
+                "body": "* //dev/null is my favourite place",
                 "msgtype": "m.text",
                 "m.new_content": {
                     "body": "//dev/null is my favourite place",

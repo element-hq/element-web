@@ -193,7 +193,6 @@ export function createMessageContent(
         body: body,
     };
     const formattedBody = htmlSerializeIfNeeded(model, {
-        forceHTML: !!replyToEvent,
         useMarkdown: SettingsStore.getValue("MessageComposerInput.useMarkdown"),
     });
     if (formattedBody) {
