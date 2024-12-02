@@ -13,6 +13,11 @@ import { objectKeyChanges } from "../utils/objects.ts";
 import { useTypedEventEmitter } from "../hooks/useEventEmitter.ts";
 import RoomContext from "./RoomContext.ts";
 
+// React Contexts with frequently changing values (like State where the object reference is changed on every update)
+// cause performance issues by triggering a re-render on every component subscribed to that context.
+// With ScopedRoomContext we're effectively setting up virtual contexts which are a subset of the overall context object
+// and subscribers specify which fields they care about, and they will only be awoken on updates to those specific fields.
+
 type ContextValue = ContextType<typeof RoomContext>;
 
 export enum NotificationStateEvents {
