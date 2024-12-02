@@ -148,6 +148,7 @@ describe("<MatrixChat />", () => {
         whoami: jest.fn(),
         logout: jest.fn(),
         getDeviceId: jest.fn(),
+        getKeyBackupVersion: jest.fn(),
     });
     let mockClient: Mocked<MatrixClient>;
     const serverConfig = {
