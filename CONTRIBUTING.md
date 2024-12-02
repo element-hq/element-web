@@ -20,26 +20,26 @@ Definitely don't use the GitHub default of "Update file.ts".
 
 As for your PR description, it should include these things:
 
--   References to any bugs fixed by the change (in GitHub's `Fixes` notation)
--   Describe the why and what is changing in the PR description so it's easy for
-    onlookers and reviewers to onboard and context switch. This information is
-    also helpful when we come back to look at this in 6 months and ask "why did
-    we do it like that?" we have a chance of finding out.
-    -   Why didn't it work before? Why does it work now? What use cases does it
-        unlock?
-    -   If you find yourself adding information on how the code works or why you
-        chose to do it the way you did, make sure this information is instead
-        written as comments in the code itself.
-    -   Sometimes a PR can change considerably as it is developed. In this case,
-        the description should be updated to reflect the most recent state of
-        the PR. (It can be helpful to retain the old content under a suitable
-        heading, for additional context.)
--   Include both **before** and **after** screenshots to easily compare and discuss
-    what's changing.
--   Include a step-by-step testing strategy so that a reviewer can check out the
-    code locally and easily get to the point of testing your change.
--   Add comments to the diff for the reviewer that might help them to understand
-    why the change is necessary or how they might better understand and review it.
+- References to any bugs fixed by the change (in GitHub's `Fixes` notation)
+- Describe the why and what is changing in the PR description so it's easy for
+  onlookers and reviewers to onboard and context switch. This information is
+  also helpful when we come back to look at this in 6 months and ask "why did
+  we do it like that?" we have a chance of finding out.
+    - Why didn't it work before? Why does it work now? What use cases does it
+      unlock?
+    - If you find yourself adding information on how the code works or why you
+      chose to do it the way you did, make sure this information is instead
+      written as comments in the code itself.
+    - Sometimes a PR can change considerably as it is developed. In this case,
+      the description should be updated to reflect the most recent state of
+      the PR. (It can be helpful to retain the old content under a suitable
+      heading, for additional context.)
+- Include both **before** and **after** screenshots to easily compare and discuss
+  what's changing.
+- Include a step-by-step testing strategy so that a reviewer can check out the
+  code locally and easily get to the point of testing your change.
+- Add comments to the diff for the reviewer that might help them to understand
+  why the change is necessary or how they might better understand and review it.
 
 ### Changelogs
 
@@ -79,8 +79,8 @@ element-web notes: Fix a bug where the 'Herd' button only worked on Tuesdays
 
 This example is for Element Web. You can specify:
 
--   element-web
--   element-desktop
+- element-web
+- element-desktop
 
 If your PR introduces a breaking change, use the `Notes` section in the same
 way, additionally adding the `X-Breaking-Change` label (see below). There's no need
@@ -96,10 +96,10 @@ Notes: Remove legacy `Camelopard` class. `Giraffe` should be used instead.
 
 Other metadata can be added using labels.
 
--   `X-Breaking-Change`: A breaking change - adding this label will mean the change causes a _major_ version bump.
--   `T-Enhancement`: A new feature - adding this label will mean the change causes a _minor_ version bump.
--   `T-Defect`: A bug fix (in either code or docs).
--   `T-Task`: No user-facing changes, eg. code comments, CI fixes, refactors or tests. Won't have a changelog entry unless you specify one.
+- `X-Breaking-Change`: A breaking change - adding this label will mean the change causes a _major_ version bump.
+- `T-Enhancement`: A new feature - adding this label will mean the change causes a _minor_ version bump.
+- `T-Defect`: A bug fix (in either code or docs).
+- `T-Task`: No user-facing changes, eg. code comments, CI fixes, refactors or tests. Won't have a changelog entry unless you specify one.
 
 If you don't have permission to add labels, your PR reviewer(s) can work with you
 to add them: ask in the PR description or comments.

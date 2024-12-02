@@ -27,18 +27,18 @@ import {
  * replace individual stores. This is useful for tests which need to mock out stores.
  */
 export class TestSdkContext extends SdkContextClass {
-    public declare _RightPanelStore?: RightPanelStore;
-    public declare _RoomNotificationStateStore?: RoomNotificationStateStore;
-    public declare _RoomViewStore?: RoomViewStore;
-    public declare _WidgetPermissionStore?: WidgetPermissionStore;
-    public declare _WidgetLayoutStore?: WidgetLayoutStore;
-    public declare _WidgetStore?: WidgetStore;
-    public declare _PosthogAnalytics?: PosthogAnalytics;
-    public declare _SlidingSyncManager?: SlidingSyncManager;
-    public declare _SpaceStore?: SpaceStoreClass;
-    public declare _VoiceBroadcastRecordingsStore?: VoiceBroadcastRecordingsStore;
-    public declare _VoiceBroadcastPreRecordingStore?: VoiceBroadcastPreRecordingStore;
-    public declare _VoiceBroadcastPlaybacksStore?: VoiceBroadcastPlaybacksStore;
+    declare public _RightPanelStore?: RightPanelStore;
+    declare public _RoomNotificationStateStore?: RoomNotificationStateStore;
+    declare public _RoomViewStore?: RoomViewStore;
+    declare public _WidgetPermissionStore?: WidgetPermissionStore;
+    declare public _WidgetLayoutStore?: WidgetLayoutStore;
+    declare public _WidgetStore?: WidgetStore;
+    declare public _PosthogAnalytics?: PosthogAnalytics;
+    declare public _SlidingSyncManager?: SlidingSyncManager;
+    declare public _SpaceStore?: SpaceStoreClass;
+    declare public _VoiceBroadcastRecordingsStore?: VoiceBroadcastRecordingsStore;
+    declare public _VoiceBroadcastPreRecordingStore?: VoiceBroadcastPreRecordingStore;
+    declare public _VoiceBroadcastPlaybacksStore?: VoiceBroadcastPlaybacksStore;
 
     constructor() {
         super();

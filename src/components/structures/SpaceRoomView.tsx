@@ -597,7 +597,7 @@ const SpaceSetupPrivateInvite: React.FC<{
 
 export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
     public static contextType = MatrixClientContext;
-    public declare context: React.ContextType<typeof MatrixClientContext>;
+    declare public context: React.ContextType<typeof MatrixClientContext>;
 
     private dispatcherRef?: string;
 

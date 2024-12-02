@@ -378,7 +378,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     private roomViewBody = createRef<HTMLDivElement>();
 
     public static contextType = SDKContext;
-    public declare context: React.ContextType<typeof SDKContext>;
+    declare public context: React.ContextType<typeof SDKContext>;
 
     public constructor(props: IRoomProps, context: React.ContextType<typeof SDKContext>) {
         super(props, context);

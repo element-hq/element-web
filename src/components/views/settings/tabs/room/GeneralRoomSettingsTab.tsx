@@ -33,7 +33,7 @@ interface IState {
 
 export default class GeneralRoomSettingsTab extends React.Component<IProps, IState> {
     public static contextType = MatrixClientContext;
-    public declare context: ContextType<typeof MatrixClientContext>;
+    declare public context: ContextType<typeof MatrixClientContext>;
 
     public constructor(props: IProps, context: ContextType<typeof MatrixClientContext>) {
         super(props, context);

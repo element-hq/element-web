@@ -121,7 +121,7 @@ interface IState {
 
 class EditMessageComposer extends React.Component<IEditMessageComposerProps, IState> {
     public static contextType = RoomContext;
-    public declare context: React.ContextType<typeof RoomContext>;
+    declare public context: React.ContextType<typeof RoomContext>;
 
     private readonly editorRef = createRef<BasicMessageComposer>();
     private dispatcherRef?: string;

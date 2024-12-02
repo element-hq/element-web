@@ -81,7 +81,7 @@ interface IBannedUserProps {
 
 export class BannedUser extends React.Component<IBannedUserProps> {
     public static contextType = MatrixClientContext;
-    public declare context: React.ContextType<typeof MatrixClientContext>;
+    declare public context: React.ContextType<typeof MatrixClientContext>;
 
     private onUnbanClick = (): void => {
         this.context.unban(this.props.member.roomId, this.props.member.userId).catch((err) => {
@@ -134,7 +134,7 @@ interface RolesRoomSettingsTabState {
 
 export default class RolesRoomSettingsTab extends React.Component<IProps, RolesRoomSettingsTabState> {
     public static contextType = MatrixClientContext;
-    public declare context: React.ContextType<typeof MatrixClientContext>;
+    declare public context: React.ContextType<typeof MatrixClientContext>;
 
     public constructor(props: IProps) {
         super(props);
