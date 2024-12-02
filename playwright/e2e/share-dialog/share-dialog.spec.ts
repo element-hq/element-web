@@ -5,10 +5,17 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { test } from "./index.ts";
-import { expect } from "../../element-web-test";
+import { test, expect } from "../../element-web-test";
 
 test.describe("Share dialog", () => {
+    test.use({
+        displayName: "Alice",
+        room: async ({ app, user, bot }, use) => {
+            const roomId = await app.client.createRoom({ name: "Alice room" });
+            await use({ roomId });
+        },
+    });
+
     test("should share a room", async ({ page, app, room }) => {
         await app.viewRoomById(room.roomId);
         await app.toggleRoomInfoPanel();
@@ -18,7 +25,7 @@ test.describe("Share dialog", () => {
         await expect(dialog.getByText(`https://matrix.to/#/${room.roomId}`)).toBeVisible();
         expect(dialog).toMatchScreenshot("share-dialog-room.png", {
             // QRCode and url changes at every run
-            mask: [page.locator(".mx_ShareDialog_top")],
+            mask: [page.locator(".mx_QRCode"), page.locator(".mx_ShareDialog_top > span")],
         });
     });
 
@@ -52,7 +59,7 @@ test.describe("Share dialog", () => {
         await expect(dialog.getByRole("checkbox", { name: "Link to selected message" })).toBeChecked();
         expect(dialog).toMatchScreenshot("share-dialog-event.png", {
             // QRCode and url changes at every run
-            mask: [page.locator(".mx_ShareDialog_top")],
+            mask: [page.locator(".mx_QRCode"), page.locator(".mx_ShareDialog_top > span")],
         });
         await dialog.getByRole("checkbox", { name: "Link to selected message" }).click();
         await expect(dialog.getByRole("checkbox", { name: "Link to selected message" })).not.toBeChecked();
