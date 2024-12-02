@@ -670,17 +670,14 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
 }
 
 interface PlaceholderIProps {
-    hover?: boolean;
     maxWidth?: number;
 }
 
 export class HiddenImagePlaceholder extends React.PureComponent<PlaceholderIProps> {
     public render(): React.ReactNode {
         const maxWidth = this.props.maxWidth ? this.props.maxWidth + "px" : null;
-        let className = "mx_HiddenImagePlaceholder";
-        if (this.props.hover) className += " mx_HiddenImagePlaceholder_hover";
         return (
-            <div className={className} style={{ maxWidth: `min(100%, ${maxWidth}px)` }}>
+            <div className="mx_HiddenImagePlaceholder" style={{ maxWidth: `min(100%, ${maxWidth}px)` }}>
                 <div className="mx_HiddenImagePlaceholder_button">
                     <span className="mx_HiddenImagePlaceholder_eye" />
                     <span>{_t("timeline|m.image|show_image")}</span>
