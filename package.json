@@ -214,7 +214,6 @@
         "babel-loader": "^9.0.0",
         "babel-plugin-jsx-remove-data-test-id": "^3.0.0",
         "blob-polyfill": "^9.0.0",
-        "buffer": "^6.0.3",
         "chokidar": "^4.0.0",
         "concurrently": "^9.0.0",
         "copy-webpack-plugin": "^12.0.0",
