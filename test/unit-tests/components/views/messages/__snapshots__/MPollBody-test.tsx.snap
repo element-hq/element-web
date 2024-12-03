@@ -30,9 +30,26 @@ exports[`MPollBody renders a finished poll 1`] = `
               Pizza
             </div>
             <div
-              class="mx_PollOption_optionVoteCount"
+              class="mx_PollOption_votesWrapper"
             >
-              0 votes
+              <div
+                class="mx_PollOption_facePile"
+              >
+                <div
+                  class="mx_AccessibleButton mx_FacePile"
+                  role="button"
+                  tabindex="0"
+                >
+                  <div
+                    class="_stacked-avatars_mcap2_111"
+                  />
+                </div>
+              </div>
+              <span
+                class="mx_PollOption_optionVoteCount"
+              >
+                0 votes
+              </span>
             </div>
           </div>
         </div>
@@ -62,9 +79,26 @@ exports[`MPollBody renders a finished poll 1`] = `
               Poutine
             </div>
             <div
-              class="mx_PollOption_optionVoteCount"
+              class="mx_PollOption_votesWrapper"
             >
-              0 votes
+              <div
+                class="mx_PollOption_facePile"
+              >
+                <div
+                  class="mx_AccessibleButton mx_FacePile"
+                  role="button"
+                  tabindex="0"
+                >
+                  <div
+                    class="_stacked-avatars_mcap2_111"
+                  />
+                </div>
+              </div>
+              <span
+                class="mx_PollOption_optionVoteCount"
+              >
+                0 votes
+              </span>
             </div>
           </div>
         </div>
@@ -94,12 +128,29 @@ exports[`MPollBody renders a finished poll 1`] = `
               Italian
             </div>
             <div
-              class="mx_PollOption_optionVoteCount"
+              class="mx_PollOption_votesWrapper"
             >
               <div
-                class="mx_PollOption_winnerIcon"
-              />
-              2 votes
+                class="mx_PollOption_facePile"
+              >
+                <div
+                  class="mx_AccessibleButton mx_FacePile"
+                  role="button"
+                  tabindex="0"
+                >
+                  <div
+                    class="_stacked-avatars_mcap2_111"
+                  />
+                </div>
+              </div>
+              <span
+                class="mx_PollOption_optionVoteCount"
+              >
+                <div
+                  class="mx_PollOption_winnerIcon"
+                />
+                2 votes
+              </span>
             </div>
           </div>
         </div>
@@ -129,9 +180,26 @@ exports[`MPollBody renders a finished poll 1`] = `
               Wings
             </div>
             <div
-              class="mx_PollOption_optionVoteCount"
+              class="mx_PollOption_votesWrapper"
             >
-              1 vote
+              <div
+                class="mx_PollOption_facePile"
+              >
+                <div
+                  class="mx_AccessibleButton mx_FacePile"
+                  role="button"
+                  tabindex="0"
+                >
+                  <div
+                    class="_stacked-avatars_mcap2_111"
+                  />
+                </div>
+              </div>
+              <span
+                class="mx_PollOption_optionVoteCount"
+              >
+                1 vote
+              </span>
             </div>
           </div>
         </div>
@@ -147,9 +215,12 @@ exports[`MPollBody renders a finished poll 1`] = `
     </div>
     <div
       class="mx_MPollBody_totalVotes"
-      data-testid="totalVotes"
     >
-      Final result based on 3 votes
+      <span
+        data-testid="totalVotes"
+      >
+        Final result based on 3 votes. Click here to see full results
+      </span>
     </div>
   </div>
 </div>
@@ -185,12 +256,29 @@ exports[`MPollBody renders a finished poll with multiple winners 1`] = `
               Pizza
             </div>
             <div
-              class="mx_PollOption_optionVoteCount"
+              class="mx_PollOption_votesWrapper"
             >
               <div
-                class="mx_PollOption_winnerIcon"
-              />
-              2 votes
+                class="mx_PollOption_facePile"
+              >
+                <div
+                  class="mx_AccessibleButton mx_FacePile"
+                  role="button"
+                  tabindex="0"
+                >
+                  <div
+                    class="_stacked-avatars_mcap2_111"
+                  />
+                </div>
+              </div>
+              <span
+                class="mx_PollOption_optionVoteCount"
+              >
+                <div
+                  class="mx_PollOption_winnerIcon"
+                />
+                2 votes
+              </span>
             </div>
           </div>
         </div>
@@ -220,9 +308,26 @@ exports[`MPollBody renders a finished poll with multiple winners 1`] = `
               Poutine
             </div>
             <div
-              class="mx_PollOption_optionVoteCount"
+              class="mx_PollOption_votesWrapper"
             >
-              0 votes
+              <div
+                class="mx_PollOption_facePile"
+              >
+                <div
+                  class="mx_AccessibleButton mx_FacePile"
+                  role="button"
+                  tabindex="0"
+                >
+                  <div
+                    class="_stacked-avatars_mcap2_111"
+                  />
+                </div>
+              </div>
+              <span
+                class="mx_PollOption_optionVoteCount"
+              >
+                0 votes
+              </span>
             </div>
           </div>
         </div>
@@ -252,9 +357,26 @@ exports[`MPollBody renders a finished poll with multiple winners 1`] = `
               Italian
             </div>
             <div
-              class="mx_PollOption_optionVoteCount"
+              class="mx_PollOption_votesWrapper"
             >
-              0 votes
+              <div
+                class="mx_PollOption_facePile"
+              >
+                <div
+                  class="mx_AccessibleButton mx_FacePile"
+                  role="button"
+                  tabindex="0"
+                >
+                  <div
+                    class="_stacked-avatars_mcap2_111"
+                  />
+                </div>
+              </div>
+              <span
+                class="mx_PollOption_optionVoteCount"
+              >
+                0 votes
+              </span>
             </div>
           </div>
         </div>
@@ -284,12 +406,29 @@ exports[`MPollBody renders a finished poll with multiple winners 1`] = `
               Wings
             </div>
             <div
-              class="mx_PollOption_optionVoteCount"
+              class="mx_PollOption_votesWrapper"
             >
               <div
-                class="mx_PollOption_winnerIcon"
-              />
-              2 votes
+                class="mx_PollOption_facePile"
+              >
+                <div
+                  class="mx_AccessibleButton mx_FacePile"
+                  role="button"
+                  tabindex="0"
+                >
+                  <div
+                    class="_stacked-avatars_mcap2_111"
+                  />
+                </div>
+              </div>
+              <span
+                class="mx_PollOption_optionVoteCount"
+              >
+                <div
+                  class="mx_PollOption_winnerIcon"
+                />
+                2 votes
+              </span>
             </div>
           </div>
         </div>
@@ -305,9 +444,12 @@ exports[`MPollBody renders a finished poll with multiple winners 1`] = `
     </div>
     <div
       class="mx_MPollBody_totalVotes"
-      data-testid="totalVotes"
     >
-      Final result based on 4 votes
+      <span
+        data-testid="totalVotes"
+      >
+        Final result based on 4 votes. Click here to see full results
+      </span>
     </div>
   </div>
 </div>
@@ -343,9 +485,26 @@ exports[`MPollBody renders a finished poll with no votes 1`] = `
               Pizza
             </div>
             <div
-              class="mx_PollOption_optionVoteCount"
+              class="mx_PollOption_votesWrapper"
             >
-              0 votes
+              <div
+                class="mx_PollOption_facePile"
+              >
+                <div
+                  class="mx_AccessibleButton mx_FacePile"
+                  role="button"
+                  tabindex="0"
+                >
+                  <div
+                    class="_stacked-avatars_mcap2_111"
+                  />
+                </div>
+              </div>
+              <span
+                class="mx_PollOption_optionVoteCount"
+              >
+                0 votes
+              </span>
             </div>
           </div>
         </div>
@@ -375,9 +534,26 @@ exports[`MPollBody renders a finished poll with no votes 1`] = `
               Poutine
             </div>
             <div
-              class="mx_PollOption_optionVoteCount"
+              class="mx_PollOption_votesWrapper"
             >
-              0 votes
+              <div
+                class="mx_PollOption_facePile"
+              >
+                <div
+                  class="mx_AccessibleButton mx_FacePile"
+                  role="button"
+                  tabindex="0"
+                >
+                  <div
+                    class="_stacked-avatars_mcap2_111"
+                  />
+                </div>
+              </div>
+              <span
+                class="mx_PollOption_optionVoteCount"
+              >
+                0 votes
+              </span>
             </div>
           </div>
         </div>
@@ -407,9 +583,26 @@ exports[`MPollBody renders a finished poll with no votes 1`] = `
               Italian
             </div>
             <div
-              class="mx_PollOption_optionVoteCount"
+              class="mx_PollOption_votesWrapper"
             >
-              0 votes
+              <div
+                class="mx_PollOption_facePile"
+              >
+                <div
+                  class="mx_AccessibleButton mx_FacePile"
+                  role="button"
+                  tabindex="0"
+                >
+                  <div
+                    class="_stacked-avatars_mcap2_111"
+                  />
+                </div>
+              </div>
+              <span
+                class="mx_PollOption_optionVoteCount"
+              >
+                0 votes
+              </span>
             </div>
           </div>
         </div>
@@ -439,9 +632,26 @@ exports[`MPollBody renders a finished poll with no votes 1`] = `
               Wings
             </div>
             <div
-              class="mx_PollOption_optionVoteCount"
+              class="mx_PollOption_votesWrapper"
             >
-              0 votes
+              <div
+                class="mx_PollOption_facePile"
+              >
+                <div
+                  class="mx_AccessibleButton mx_FacePile"
+                  role="button"
+                  tabindex="0"
+                >
+                  <div
+                    class="_stacked-avatars_mcap2_111"
+                  />
+                </div>
+              </div>
+              <span
+                class="mx_PollOption_optionVoteCount"
+              >
+                0 votes
+              </span>
             </div>
           </div>
         </div>
@@ -457,9 +667,12 @@ exports[`MPollBody renders a finished poll with no votes 1`] = `
     </div>
     <div
       class="mx_MPollBody_totalVotes"
-      data-testid="totalVotes"
     >
-      Final result based on 0 votes
+      <span
+        data-testid="totalVotes"
+      >
+        Final result based on 0 votes. Click here to see full results
+      </span>
     </div>
   </div>
 </div>
@@ -505,8 +718,12 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
                 Pizza
               </div>
               <div
-                class="mx_PollOption_optionVoteCount"
-              />
+                class="mx_PollOption_votesWrapper"
+              >
+                <span
+                  class="mx_PollOption_optionVoteCount"
+                />
+              </div>
             </div>
           </div>
           <div
@@ -549,8 +766,12 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
                 Poutine
               </div>
               <div
-                class="mx_PollOption_optionVoteCount"
-              />
+                class="mx_PollOption_votesWrapper"
+              >
+                <span
+                  class="mx_PollOption_optionVoteCount"
+                />
+              </div>
             </div>
           </div>
           <div
@@ -593,8 +814,12 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
                 Italian
               </div>
               <div
-                class="mx_PollOption_optionVoteCount"
-              />
+                class="mx_PollOption_votesWrapper"
+              >
+                <span
+                  class="mx_PollOption_optionVoteCount"
+                />
+              </div>
             </div>
           </div>
           <div
@@ -606,7 +831,7 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
         >
           <div
             class="mx_PollOption_popularityAmount"
-            style="width: 0%;"
+            style="width: 67%;"
           />
         </div>
       </div>
@@ -637,8 +862,12 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
                 Wings
               </div>
               <div
-                class="mx_PollOption_optionVoteCount"
-              />
+                class="mx_PollOption_votesWrapper"
+              >
+                <span
+                  class="mx_PollOption_optionVoteCount"
+                />
+              </div>
             </div>
           </div>
           <div
@@ -650,16 +879,19 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
         >
           <div
             class="mx_PollOption_popularityAmount"
-            style="width: 0%;"
+            style="width: 33%;"
           />
         </div>
       </div>
     </div>
     <div
       class="mx_MPollBody_totalVotes"
-      data-testid="totalVotes"
     >
-      3 votes cast. Vote to see the results
+      <span
+        data-testid="totalVotes"
+      >
+        3 votes cast. Vote to see the results
+      </span>
     </div>
   </div>
 </div>
@@ -705,9 +937,26 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
                 Pizza
               </div>
               <div
-                class="mx_PollOption_optionVoteCount"
+                class="mx_PollOption_votesWrapper"
               >
-                1 vote
+                <div
+                  class="mx_PollOption_facePile"
+                >
+                  <div
+                    class="mx_AccessibleButton mx_FacePile"
+                    role="button"
+                    tabindex="0"
+                  >
+                    <div
+                      class="_stacked-avatars_mcap2_111"
+                    />
+                  </div>
+                </div>
+                <span
+                  class="mx_PollOption_optionVoteCount"
+                >
+                  1 vote
+                </span>
               </div>
             </div>
           </div>
@@ -751,9 +1000,26 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
                 Poutine
               </div>
               <div
-                class="mx_PollOption_optionVoteCount"
+                class="mx_PollOption_votesWrapper"
               >
-                0 votes
+                <div
+                  class="mx_PollOption_facePile"
+                >
+                  <div
+                    class="mx_AccessibleButton mx_FacePile"
+                    role="button"
+                    tabindex="0"
+                  >
+                    <div
+                      class="_stacked-avatars_mcap2_111"
+                    />
+                  </div>
+                </div>
+                <span
+                  class="mx_PollOption_optionVoteCount"
+                >
+                  0 votes
+                </span>
               </div>
             </div>
           </div>
@@ -797,9 +1063,26 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
                 Italian
               </div>
               <div
-                class="mx_PollOption_optionVoteCount"
+                class="mx_PollOption_votesWrapper"
               >
-                3 votes
+                <div
+                  class="mx_PollOption_facePile"
+                >
+                  <div
+                    class="mx_AccessibleButton mx_FacePile"
+                    role="button"
+                    tabindex="0"
+                  >
+                    <div
+                      class="_stacked-avatars_mcap2_111"
+                    />
+                  </div>
+                </div>
+                <span
+                  class="mx_PollOption_optionVoteCount"
+                >
+                  3 votes
+                </span>
               </div>
             </div>
           </div>
@@ -843,9 +1126,26 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
                 Wings
               </div>
               <div
-                class="mx_PollOption_optionVoteCount"
+                class="mx_PollOption_votesWrapper"
               >
-                1 vote
+                <div
+                  class="mx_PollOption_facePile"
+                >
+                  <div
+                    class="mx_AccessibleButton mx_FacePile"
+                    role="button"
+                    tabindex="0"
+                  >
+                    <div
+                      class="_stacked-avatars_mcap2_111"
+                    />
+                  </div>
+                </div>
+                <span
+                  class="mx_PollOption_optionVoteCount"
+                >
+                  1 vote
+                </span>
               </div>
             </div>
           </div>
@@ -865,9 +1165,12 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
     </div>
     <div
       class="mx_MPollBody_totalVotes"
-      data-testid="totalVotes"
     >
-      Based on 5 votes
+      <span
+        data-testid="totalVotes"
+      >
+        Based on 5 votes. Click here to see full results
+      </span>
     </div>
   </div>
 </div>
@@ -913,8 +1216,12 @@ exports[`MPollBody renders a poll with no votes 1`] = `
                 Pizza
               </div>
               <div
-                class="mx_PollOption_optionVoteCount"
-              />
+                class="mx_PollOption_votesWrapper"
+              >
+                <span
+                  class="mx_PollOption_optionVoteCount"
+                />
+              </div>
             </div>
           </div>
           <div
@@ -957,8 +1264,12 @@ exports[`MPollBody renders a poll with no votes 1`] = `
                 Poutine
               </div>
               <div
-                class="mx_PollOption_optionVoteCount"
-              />
+                class="mx_PollOption_votesWrapper"
+              >
+                <span
+                  class="mx_PollOption_optionVoteCount"
+                />
+              </div>
             </div>
           </div>
           <div
@@ -1001,8 +1312,12 @@ exports[`MPollBody renders a poll with no votes 1`] = `
                 Italian
               </div>
               <div
-                class="mx_PollOption_optionVoteCount"
-              />
+                class="mx_PollOption_votesWrapper"
+              >
+                <span
+                  class="mx_PollOption_optionVoteCount"
+                />
+              </div>
             </div>
           </div>
           <div
@@ -1045,8 +1360,12 @@ exports[`MPollBody renders a poll with no votes 1`] = `
                 Wings
               </div>
               <div
-                class="mx_PollOption_optionVoteCount"
-              />
+                class="mx_PollOption_votesWrapper"
+              >
+                <span
+                  class="mx_PollOption_optionVoteCount"
+                />
+              </div>
             </div>
           </div>
           <div
@@ -1065,9 +1384,12 @@ exports[`MPollBody renders a poll with no votes 1`] = `
     </div>
     <div
       class="mx_MPollBody_totalVotes"
-      data-testid="totalVotes"
     >
-      No votes cast
+      <span
+        data-testid="totalVotes"
+      >
+        No votes cast
+      </span>
     </div>
   </div>
 </div>
@@ -1113,9 +1435,26 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
                 Pizza
               </div>
               <div
-                class="mx_PollOption_optionVoteCount"
+                class="mx_PollOption_votesWrapper"
               >
-                0 votes
+                <div
+                  class="mx_PollOption_facePile"
+                >
+                  <div
+                    class="mx_AccessibleButton mx_FacePile"
+                    role="button"
+                    tabindex="0"
+                  >
+                    <div
+                      class="_stacked-avatars_mcap2_111"
+                    />
+                  </div>
+                </div>
+                <span
+                  class="mx_PollOption_optionVoteCount"
+                >
+                  0 votes
+                </span>
               </div>
             </div>
           </div>
@@ -1159,9 +1498,26 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
                 Poutine
               </div>
               <div
-                class="mx_PollOption_optionVoteCount"
+                class="mx_PollOption_votesWrapper"
               >
-                0 votes
+                <div
+                  class="mx_PollOption_facePile"
+                >
+                  <div
+                    class="mx_AccessibleButton mx_FacePile"
+                    role="button"
+                    tabindex="0"
+                  >
+                    <div
+                      class="_stacked-avatars_mcap2_111"
+                    />
+                  </div>
+                </div>
+                <span
+                  class="mx_PollOption_optionVoteCount"
+                >
+                  0 votes
+                </span>
               </div>
             </div>
           </div>
@@ -1205,9 +1561,26 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
                 Italian
               </div>
               <div
-                class="mx_PollOption_optionVoteCount"
+                class="mx_PollOption_votesWrapper"
               >
-                2 votes
+                <div
+                  class="mx_PollOption_facePile"
+                >
+                  <div
+                    class="mx_AccessibleButton mx_FacePile"
+                    role="button"
+                    tabindex="0"
+                  >
+                    <div
+                      class="_stacked-avatars_mcap2_111"
+                    />
+                  </div>
+                </div>
+                <span
+                  class="mx_PollOption_optionVoteCount"
+                >
+                  2 votes
+                </span>
               </div>
             </div>
           </div>
@@ -1251,9 +1624,26 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
                 Wings
               </div>
               <div
-                class="mx_PollOption_optionVoteCount"
+                class="mx_PollOption_votesWrapper"
               >
-                1 vote
+                <div
+                  class="mx_PollOption_facePile"
+                >
+                  <div
+                    class="mx_AccessibleButton mx_FacePile"
+                    role="button"
+                    tabindex="0"
+                  >
+                    <div
+                      class="_stacked-avatars_mcap2_111"
+                    />
+                  </div>
+                </div>
+                <span
+                  class="mx_PollOption_optionVoteCount"
+                >
+                  1 vote
+                </span>
               </div>
             </div>
           </div>
@@ -1273,9 +1663,12 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
     </div>
     <div
       class="mx_MPollBody_totalVotes"
-      data-testid="totalVotes"
     >
-      Based on 3 votes
+      <span
+        data-testid="totalVotes"
+      >
+        Based on 3 votes. Click here to see full results
+      </span>
     </div>
   </div>
 </div>
@@ -1311,12 +1704,29 @@ exports[`MPollBody renders an undisclosed, finished poll 1`] = `
               Pizza
             </div>
             <div
-              class="mx_PollOption_optionVoteCount"
+              class="mx_PollOption_votesWrapper"
             >
               <div
-                class="mx_PollOption_winnerIcon"
-              />
-              2 votes
+                class="mx_PollOption_facePile"
+              >
+                <div
+                  class="mx_AccessibleButton mx_FacePile"
+                  role="button"
+                  tabindex="0"
+                >
+                  <div
+                    class="_stacked-avatars_mcap2_111"
+                  />
+                </div>
+              </div>
+              <span
+                class="mx_PollOption_optionVoteCount"
+              >
+                <div
+                  class="mx_PollOption_winnerIcon"
+                />
+                2 votes
+              </span>
             </div>
           </div>
         </div>
@@ -1346,9 +1756,26 @@ exports[`MPollBody renders an undisclosed, finished poll 1`] = `
               Poutine
             </div>
             <div
-              class="mx_PollOption_optionVoteCount"
+              class="mx_PollOption_votesWrapper"
             >
-              0 votes
+              <div
+                class="mx_PollOption_facePile"
+              >
+                <div
+                  class="mx_AccessibleButton mx_FacePile"
+                  role="button"
+                  tabindex="0"
+                >
+                  <div
+                    class="_stacked-avatars_mcap2_111"
+                  />
+                </div>
+              </div>
+              <span
+                class="mx_PollOption_optionVoteCount"
+              >
+                0 votes
+              </span>
             </div>
           </div>
         </div>
@@ -1378,9 +1805,26 @@ exports[`MPollBody renders an undisclosed, finished poll 1`] = `
               Italian
             </div>
             <div
-              class="mx_PollOption_optionVoteCount"
+              class="mx_PollOption_votesWrapper"
             >
-              0 votes
+              <div
+                class="mx_PollOption_facePile"
+              >
+                <div
+                  class="mx_AccessibleButton mx_FacePile"
+                  role="button"
+                  tabindex="0"
+                >
+                  <div
+                    class="_stacked-avatars_mcap2_111"
+                  />
+                </div>
+              </div>
+              <span
+                class="mx_PollOption_optionVoteCount"
+              >
+                0 votes
+              </span>
             </div>
           </div>
         </div>
@@ -1410,12 +1854,29 @@ exports[`MPollBody renders an undisclosed, finished poll 1`] = `
               Wings
             </div>
             <div
-              class="mx_PollOption_optionVoteCount"
+              class="mx_PollOption_votesWrapper"
             >
               <div
-                class="mx_PollOption_winnerIcon"
-              />
-              2 votes
+                class="mx_PollOption_facePile"
+              >
+                <div
+                  class="mx_AccessibleButton mx_FacePile"
+                  role="button"
+                  tabindex="0"
+                >
+                  <div
+                    class="_stacked-avatars_mcap2_111"
+                  />
+                </div>
+              </div>
+              <span
+                class="mx_PollOption_optionVoteCount"
+              >
+                <div
+                  class="mx_PollOption_winnerIcon"
+                />
+                2 votes
+              </span>
             </div>
           </div>
         </div>
@@ -1431,9 +1892,12 @@ exports[`MPollBody renders an undisclosed, finished poll 1`] = `
     </div>
     <div
       class="mx_MPollBody_totalVotes"
-      data-testid="totalVotes"
     >
-      Final result based on 4 votes
+      <span
+        data-testid="totalVotes"
+      >
+        Final result based on 4 votes. Click here to see full results
+      </span>
     </div>
   </div>
 </div>
@@ -1479,8 +1943,12 @@ exports[`MPollBody renders an undisclosed, unfinished poll 1`] = `
                 Pizza
               </div>
               <div
-                class="mx_PollOption_optionVoteCount"
-              />
+                class="mx_PollOption_votesWrapper"
+              >
+                <span
+                  class="mx_PollOption_optionVoteCount"
+                />
+              </div>
             </div>
           </div>
           <div
@@ -1492,7 +1960,7 @@ exports[`MPollBody renders an undisclosed, unfinished poll 1`] = `
         >
           <div
             class="mx_PollOption_popularityAmount"
-            style="width: 0%;"
+            style="width: 50%;"
           />
         </div>
       </div>
@@ -1523,8 +1991,12 @@ exports[`MPollBody renders an undisclosed, unfinished poll 1`] = `
                 Poutine
               </div>
               <div
-                class="mx_PollOption_optionVoteCount"
-              />
+                class="mx_PollOption_votesWrapper"
+              >
+                <span
+                  class="mx_PollOption_optionVoteCount"
+                />
+              </div>
             </div>
           </div>
           <div
@@ -1567,8 +2039,12 @@ exports[`MPollBody renders an undisclosed, unfinished poll 1`] = `
                 Italian
               </div>
               <div
-                class="mx_PollOption_optionVoteCount"
-              />
+                class="mx_PollOption_votesWrapper"
+              >
+                <span
+                  class="mx_PollOption_optionVoteCount"
+                />
+              </div>
             </div>
           </div>
           <div
@@ -1611,8 +2087,12 @@ exports[`MPollBody renders an undisclosed, unfinished poll 1`] = `
                 Wings
               </div>
               <div
-                class="mx_PollOption_optionVoteCount"
-              />
+                class="mx_PollOption_votesWrapper"
+              >
+                <span
+                  class="mx_PollOption_optionVoteCount"
+                />
+              </div>
             </div>
           </div>
           <div
@@ -1624,16 +2104,19 @@ exports[`MPollBody renders an undisclosed, unfinished poll 1`] = `
         >
           <div
             class="mx_PollOption_popularityAmount"
-            style="width: 0%;"
+            style="width: 50%;"
           />
         </div>
       </div>
     </div>
     <div
       class="mx_MPollBody_totalVotes"
-      data-testid="totalVotes"
     >
-      Results will be visible when the poll is ended
+      <span
+        data-testid="totalVotes"
+      >
+        Results will be visible when the poll is ended
+      </span>
     </div>
   </div>
 </div>
