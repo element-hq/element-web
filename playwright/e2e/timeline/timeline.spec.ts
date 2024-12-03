@@ -832,7 +832,7 @@ test.describe("Timeline", () => {
                 },
             );
 
-            test("should render a fully opaque textual event", async ({ page, app, room }) => {
+            test("should render a fully opaque textual event", { tag: "@screenshot" }, async ({ page, app, room }) => {
                 const stringToSearch = "Message"; // Same with string sent with sendEvent()
 
                 await sendEvent(app.client, room.roomId);
@@ -1213,7 +1213,7 @@ test.describe("Timeline", () => {
             );
         }
 
-        test("should render images in the timeline", async ({ page, app, room, context }) => {
+        test("should render images in the timeline", { tag: "@screenshot" }, async ({ page, app, room, context }) => {
             await testImageRendering(page, app, room);
         });
 
@@ -1225,50 +1225,54 @@ test.describe("Timeline", () => {
         // In practice, this means this test will *always* succeed because it ends up relying on fallback behaviour tested
         // above (unless of course the above tests are also broken).
         test.describe("MSC3916 - Authenticated Media", () => {
-            test("should render authenticated images in the timeline", async ({ page, app, room, context }) => {
-                // Note: we have to use `context` instead of `page` for routing, otherwise we'll miss Service Worker events.
-                // See https://playwright.dev/docs/service-workers-experimental#network-events-and-routing
+            test(
+                "should render authenticated images in the timeline",
+                { tag: "@screenshot" },
+                async ({ page, app, room, context }) => {
+                    // Note: we have to use `context` instead of `page` for routing, otherwise we'll miss Service Worker events.
+                    // See https://playwright.dev/docs/service-workers-experimental#network-events-and-routing
 
-                // Install our mocks and preventative measures
-                await context.route("**/_matrix/client/versions", async (route) => {
-                    // Force enable MSC3916/Matrix 1.11, which may require the service worker's internal cache to be cleared later.
-                    const json = await (await route.fetch()).json();
-                    if (!json["versions"]) json["versions"] = [];
-                    json["versions"].push("v1.11");
-                    await route.fulfill({ json });
-                });
-                await context.route("**/_matrix/media/*/download/**", async (route) => {
-                    // should not be called. We don't use `abort` so that it's clearer in the logs what happened.
-                    await route.fulfill({
-                        status: 500,
-                        json: { errcode: "M_UNKNOWN", error: "Unexpected route called." },
+                    // Install our mocks and preventative measures
+                    await context.route("**/_matrix/client/versions", async (route) => {
+                        // Force enable MSC3916/Matrix 1.11, which may require the service worker's internal cache to be cleared later.
+                        const json = await (await route.fetch()).json();
+                        if (!json["versions"]) json["versions"] = [];
+                        json["versions"].push("v1.11");
+                        await route.fulfill({ json });
                     });
-                });
-                await context.route("**/_matrix/media/*/thumbnail/**", async (route) => {
-                    // should not be called. We don't use `abort` so that it's clearer in the logs what happened.
-                    await route.fulfill({
-                        status: 500,
-                        json: { errcode: "M_UNKNOWN", error: "Unexpected route called." },
+                    await context.route("**/_matrix/media/*/download/**", async (route) => {
+                        // should not be called. We don't use `abort` so that it's clearer in the logs what happened.
+                        await route.fulfill({
+                            status: 500,
+                            json: { errcode: "M_UNKNOWN", error: "Unexpected route called." },
+                        });
                     });
-                });
-                await context.route("**/_matrix/client/v1/download/**", async (route) => {
-                    expect(route.request().headers()["Authorization"]).toBeDefined();
-                    // we can't use route.continue() because no configured homeserver supports MSC3916 yet
-                    await route.fulfill({
-                        body: NEW_AVATAR,
+                    await context.route("**/_matrix/media/*/thumbnail/**", async (route) => {
+                        // should not be called. We don't use `abort` so that it's clearer in the logs what happened.
+                        await route.fulfill({
+                            status: 500,
+                            json: { errcode: "M_UNKNOWN", error: "Unexpected route called." },
+                        });
                     });
-                });
-                await context.route("**/_matrix/client/v1/thumbnail/**", async (route) => {
-                    expect(route.request().headers()["Authorization"]).toBeDefined();
-                    // we can't use route.continue() because no configured homeserver supports MSC3916 yet
-                    await route.fulfill({
-                        body: NEW_AVATAR,
+                    await context.route("**/_matrix/client/v1/download/**", async (route) => {
+                        expect(route.request().headers()["Authorization"]).toBeDefined();
+                        // we can't use route.continue() because no configured homeserver supports MSC3916 yet
+                        await route.fulfill({
+                            body: NEW_AVATAR,
+                        });
                     });
-                });
+                    await context.route("**/_matrix/client/v1/thumbnail/**", async (route) => {
+                        expect(route.request().headers()["Authorization"]).toBeDefined();
+                        // we can't use route.continue() because no configured homeserver supports MSC3916 yet
+                        await route.fulfill({
+                            body: NEW_AVATAR,
+                        });
+                    });
 
-                // We check the same screenshot because there should be no user-visible impact to using authentication.
-                await testImageRendering(page, app, room);
-            });
+                    // We check the same screenshot because there should be no user-visible impact to using authentication.
+                    await testImageRendering(page, app, room);
+                },
+            );
         });
     });
 });
