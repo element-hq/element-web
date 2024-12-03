@@ -20,7 +20,7 @@ describe("PowerLevelSelector", () => {
     const currentUser = matrixClient.getUserId()!;
     const userLevels = {
         [currentUser]: 100,
-        "@alice:server.org": 50,
+        "@<alice>:server.org": 50,
         "@bob:server.org": 0,
     };
 
@@ -51,7 +51,7 @@ describe("PowerLevelSelector", () => {
         // Display only the current user
         renderPLS({ filter: (user) => user === currentUser });
 
-        // Only alice should be displayed
+        // Only <alice> should be displayed
         const userSelects = screen.getAllByRole("combobox");
         expect(userSelects).toHaveLength(1);
         expect(userSelects[0]).toHaveAccessibleName(currentUser);
@@ -93,12 +93,12 @@ describe("PowerLevelSelector", () => {
     it("should be able to change only the level of someone with a lower level", async () => {
         const userLevels = {
             [currentUser]: 50,
-            "@alice:server.org": 100,
+            "@<alice>:server.org": 100,
         };
         renderPLS({ userLevels });
 
         expect(screen.getByRole("combobox", { name: currentUser })).toBeEnabled();
-        expect(screen.getByRole("combobox", { name: "@alice:server.org" })).toBeDisabled();
+        expect(screen.getByRole("combobox", { name: "@<alice>:server.org" })).toBeDisabled();
     });
 
     it("should display the children if there is no user to display", async () => {

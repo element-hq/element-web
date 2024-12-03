@@ -36,7 +36,7 @@ import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoo
 jest.mock("../../../../../src/utils/room/tagRoom");
 
 describe("<RoomSummaryCard />", () => {
-    const userId = "@alice:domain.org";
+    const userId = "@<alice>:domain.org";
 
     const roomId = "!room:domain.org";
     let mockClient!: MockedObject<MatrixClient>;

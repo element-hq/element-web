@@ -13,21 +13,21 @@ import CurrentDeviceSection from "../../../../../../src/components/views/setting
 import { DeviceType } from "../../../../../../src/utils/device/parseUserAgent";
 
 describe("<CurrentDeviceSection />", () => {
-    const deviceId = "alices_device";
+    const deviceId = "<alice>s_device";
 
-    const alicesVerifiedDevice = {
+    const <alice>sVerifiedDevice = {
         device_id: deviceId,
         isVerified: false,
         deviceType: DeviceType.Unknown,
     };
-    const alicesUnverifiedDevice = {
+    const <alice>sUnverifiedDevice = {
         device_id: deviceId,
         isVerified: false,
         deviceType: DeviceType.Unknown,
     };
 
     const defaultProps = {
-        device: alicesVerifiedDevice,
+        device: <alice>sVerifiedDevice,
         onVerifyCurrentDevice: jest.fn(),
         onSignOutCurrentDevice: jest.fn(),
         saveDeviceName: jest.fn(),
@@ -55,21 +55,21 @@ describe("<CurrentDeviceSection />", () => {
     });
 
     it("renders device and correct security card when device is unverified", () => {
-        const { container } = render(getComponent({ device: alicesUnverifiedDevice }));
+        const { container } = render(getComponent({ device: <alice>sUnverifiedDevice }));
         expect(container).toMatchSnapshot();
     });
 
     it("displays device details on main tile click", () => {
-        const { getByTestId, container } = render(getComponent({ device: alicesUnverifiedDevice }));
+        const { getByTestId, container } = render(getComponent({ device: <alice>sUnverifiedDevice }));
 
         act(() => {
-            fireEvent.click(getByTestId(`device-tile-${alicesUnverifiedDevice.device_id}`));
+            fireEvent.click(getByTestId(`device-tile-${<alice>sUnverifiedDevice.device_id}`));
         });
 
         expect(container.getElementsByClassName("mx_DeviceDetails").length).toBeTruthy();
 
         act(() => {
-            fireEvent.click(getByTestId(`device-tile-${alicesUnverifiedDevice.device_id}`));
+            fireEvent.click(getByTestId(`device-tile-${<alice>sUnverifiedDevice.device_id}`));
         });
 
         // device details are hidden
@@ -77,7 +77,7 @@ describe("<CurrentDeviceSection />", () => {
     });
 
     it("displays device details on toggle click", () => {
-        const { container, getByTestId } = render(getComponent({ device: alicesUnverifiedDevice }));
+        const { container, getByTestId } = render(getComponent({ device: <alice>sUnverifiedDevice }));
 
         act(() => {
             fireEvent.click(getByTestId("current-session-toggle-details"));

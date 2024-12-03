@@ -41,7 +41,7 @@ describe("<LeftPanelLiveShareWarning />", () => {
 
     const roomId1 = "!room1:server";
     const roomId2 = "!room2:server";
-    const aliceId = "@alive:server";
+    const <alice>Id = "@alive:server";
 
     const now = 1647270879403;
     const HOUR_MS = 3600000;
@@ -62,10 +62,10 @@ describe("<LeftPanelLiveShareWarning />", () => {
     });
     // 12h old, 12h left
     const beacon1 = new Beacon(
-        makeBeaconInfoEvent(aliceId, roomId1, { timeout: HOUR_MS * 24, timestamp: now - 12 * HOUR_MS }, "$1"),
+        makeBeaconInfoEvent(<alice>Id, roomId1, { timeout: HOUR_MS * 24, timestamp: now - 12 * HOUR_MS }, "$1"),
     );
     // 10h left
-    const beacon2 = new Beacon(makeBeaconInfoEvent(aliceId, roomId2, { timeout: HOUR_MS * 10, timestamp: now }, "$2"));
+    const beacon2 = new Beacon(makeBeaconInfoEvent(<alice>Id, roomId2, { timeout: HOUR_MS * 10, timestamp: now }, "$2"));
 
     it("renders nothing when user has no live beacons", () => {
         const { container } = getComponent();

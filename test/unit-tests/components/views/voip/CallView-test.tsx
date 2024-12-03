@@ -38,7 +38,7 @@ describe("CallView", () => {
 
     let client: Mocked<MatrixClient>;
     let room: Room;
-    let alice: RoomMember;
+    let <alice>: RoomMember;
 
     beforeEach(() => {
         useMockMediaDevices();
@@ -46,11 +46,11 @@ describe("CallView", () => {
         stubClient();
         client = mocked(MatrixClientPeg.safeGet());
 
-        room = new Room("!1:example.org", client, "@alice:example.org", {
+        room = new Room("!1:example.org", client, "@<alice>:example.org", {
             pendingEventOrdering: PendingEventOrdering.Detached,
         });
-        alice = mkRoomMember(room.roomId, "@alice:example.org");
-        jest.spyOn(room, "getMember").mockImplementation((userId) => (userId === alice.userId ? alice : null));
+        <alice> = mkRoomMember(room.roomId, "@<alice>:example.org");
+        jest.spyOn(room, "getMember").mockImplementation((userId) => (userId === <alice>.userId ? <alice> : null));
 
         client.getRoom.mockImplementation((roomId) => (roomId === room.roomId ? room : null));
         client.getRooms.mockReturnValue([room]);
@@ -119,20 +119,20 @@ describe("CallView", () => {
             expectAvatars([]);
 
             act(() => {
-                call.participants = new Map([[alice, new Set(["a"])]]);
+                call.participants = new Map([[<alice>, new Set(["a"])]]);
             });
             screen.getByText("1 person joined");
-            expectAvatars([alice.userId]);
+            expectAvatars([<alice>.userId]);
 
             act(() => {
                 call.participants = new Map([
-                    [alice, new Set(["a"])],
+                    [<alice>, new Set(["a"])],
                     [bob, new Set(["b1", "b2"])],
                     [carol, new Set(["c"])],
                 ]);
             });
             screen.getByText("4 people joined");
-            expectAvatars([alice.userId, bob.userId, bob.userId, carol.userId]);
+            expectAvatars([<alice>.userId, bob.userId, bob.userId, carol.userId]);
 
             act(() => {
                 call.participants = new Map();

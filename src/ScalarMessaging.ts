@@ -199,7 +199,7 @@ Response:
             data: {key: "val"}
         }
         room_id: "!foo:bar",
-        sender: "@alice:localhost"
+        sender: "@<alice>:localhost"
     }
 ]
 Example:
@@ -218,7 +218,7 @@ Example:
                 data: {key: "val"}
             }
             room_id: "!foo:bar",
-            sender: "@alice:localhost"
+            sender: "@<alice>:localhost"
         }
     ]
 }

@@ -30,7 +30,7 @@ describe("<EmailIdentityAuthEntry/>", () => {
                 fail={jest.fn()}
                 clientSecret="my secret"
                 showContinue={true}
-                inputs={{ emailAddress: "alice@example.xyz" }}
+                inputs={{ emailAddress: "<alice>@example.xyz" }}
             />,
         );
     };

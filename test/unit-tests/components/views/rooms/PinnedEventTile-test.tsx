@@ -25,7 +25,7 @@ jest.mock("../../../../../src/components/views/dialogs/ConfirmRedactDialog", () 
 }));
 
 describe("<PinnedEventTile />", () => {
-    const userId = "@alice:server.org";
+    const userId = "@<alice>:server.org";
     const roomId = "!room:server.org";
 
     let mockClient: MatrixClient;

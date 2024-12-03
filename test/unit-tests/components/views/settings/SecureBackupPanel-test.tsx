@@ -24,7 +24,7 @@ jest.mock("../../../../../src/SecurityManager", () => ({
 }));
 
 describe("<SecureBackupPanel />", () => {
-    const userId = "@alice:server.org";
+    const userId = "@<alice>:server.org";
     const client = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),
         ...mockClientMethodsCrypto(),

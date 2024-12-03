@@ -14,7 +14,7 @@ test.describe("Roles & Permissions room settings tab", () => {
     const roomName = "Test room";
 
     test.use({
-        displayName: "Alice",
+        displayName: "<alice>",
     });
 
     let settings: Locator;
@@ -29,17 +29,17 @@ test.describe("Roles & Permissions room settings tab", () => {
         const privilegedUserSection = settings.locator(".mx_SettingsFieldset").first();
         const applyButton = privilegedUserSection.getByRole("button", { name: "Apply" });
 
-        // Alice is admin (100) and the Apply button should be disabled
+        // <alice> is admin (100) and the Apply button should be disabled
         await expect(applyButton).toBeDisabled();
         let combobox = privilegedUserSection.getByRole("combobox", { name: user.userId });
         await expect(combobox).toHaveValue("100");
 
-        // Change the role of Alice to Moderator (50)
+        // Change the role of <alice> to Moderator (50)
         await combobox.selectOption("Moderator");
         await expect(combobox).toHaveValue("50");
         await applyButton.click();
 
-        // Reload and check Alice is still Moderator (50)
+        // Reload and check <alice> is still Moderator (50)
         await page.reload();
         settings = await app.settings.openRoomSettings("Roles & Permissions");
         combobox = privilegedUserSection.getByRole("combobox", { name: user.userId });

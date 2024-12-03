@@ -23,7 +23,7 @@ jest.mock("../../../../src/settings/SettingsStore");
 describe("WidgetPermissionStore", () => {
     let widgetPermissionStore: WidgetPermissionStore;
     let mockClient: MatrixClient;
-    const userId = "@alice:localhost";
+    const userId = "@<alice>:localhost";
     const roomId = "!room:localhost";
     const w = new Widget({
         id: "wid",
@@ -33,7 +33,7 @@ describe("WidgetPermissionStore", () => {
     });
     const elementCallWidget = new Widget({
         id: "group_call",
-        creatorUserId: "@alice:example.org",
+        creatorUserId: "@<alice>:example.org",
         type: MatrixWidgetType.Custom,
         url: "https://call.element.io",
     });

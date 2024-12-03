@@ -26,11 +26,11 @@ test.describe("OIDC Native", () => {
 
         await page.goto("/#/login");
         await page.getByRole("button", { name: "Continue" }).click();
-        await registerAccountMas(page, mailhog.api, "alice", "alice@email.com", "Pa$sW0rD!");
+        await registerAccountMas(page, mailhog.api, "<alice>", "<alice>@email.com", "Pa$sW0rD!");
 
         // Eventually, we should end up at the home screen.
         await expect(page).toHaveURL(/\/#\/home$/, { timeout: 10000 });
-        await expect(page.getByRole("heading", { name: "Welcome alice", exact: true })).toBeVisible();
+        await expect(page.getByRole("heading", { name: "Welcome <alice>", exact: true })).toBeVisible();
 
         const tokenApiRequest = await tokenApiPromise;
         expect(tokenApiRequest.postDataJSON()["grant_type"]).toBe("authorization_code");

@@ -78,41 +78,41 @@ function deviceToDeviceObj(userId: string, device: IMyDevice, opts: Partial<Devi
 }
 
 describe("<SessionManagerTab />", () => {
-    const aliceId = "@alice:server.org";
-    const deviceId = "alices_device";
+    const <alice>Id = "@<alice>:server.org";
+    const deviceId = "<alice>s_device";
 
-    const alicesDevice = {
+    const <alice>sDevice = {
         device_id: deviceId,
-        display_name: "Alices device",
+        display_name: "<alice>s device",
     };
-    const alicesDeviceObj = deviceToDeviceObj(aliceId, alicesDevice);
-    const alicesMobileDevice = {
-        device_id: "alices_mobile_device",
+    const <alice>sDeviceObj = deviceToDeviceObj(<alice>Id, <alice>sDevice);
+    const <alice>sMobileDevice = {
+        device_id: "<alice>s_mobile_device",
         last_seen_ts: Date.now(),
     };
-    const alicesMobileDeviceObj = deviceToDeviceObj(aliceId, alicesMobileDevice);
+    const <alice>sMobileDeviceObj = deviceToDeviceObj(<alice>Id, <alice>sMobileDevice);
 
-    const alicesOlderMobileDevice = {
-        device_id: "alices_older_mobile_device",
+    const <alice>sOlderMobileDevice = {
+        device_id: "<alice>s_older_mobile_device",
         last_seen_ts: Date.now() - 600000,
     };
 
-    const alicesInactiveDevice = {
-        device_id: "alices_older_inactive_mobile_device",
+    const <alice>sInactiveDevice = {
+        device_id: "<alice>s_older_inactive_mobile_device",
         last_seen_ts: Date.now() - (INACTIVE_DEVICE_AGE_MS + 1000),
     };
 
-    const alicesDehydratedDevice = {
-        device_id: "alices_dehydrated_device",
+    const <alice>sDehydratedDevice = {
+        device_id: "<alice>s_dehydrated_device",
         last_seen_ts: Date.now(),
     };
-    const alicesDehydratedDeviceObj = deviceToDeviceObj(aliceId, alicesDehydratedDevice, { dehydrated: true });
+    const <alice>sDehydratedDeviceObj = deviceToDeviceObj(<alice>Id, <alice>sDehydratedDevice, { dehydrated: true });
 
-    const alicesOtherDehydratedDevice = {
-        device_id: "alices_other_dehydrated_device",
+    const <alice>sOtherDehydratedDevice = {
+        device_id: "<alice>s_other_dehydrated_device",
         last_seen_ts: Date.now(),
     };
-    const alicesOtherDehydratedDeviceObj = deviceToDeviceObj(aliceId, alicesOtherDehydratedDevice, {
+    const <alice>sOtherDehydratedDeviceObj = deviceToDeviceObj(<alice>Id, <alice>sOtherDehydratedDevice, {
         dehydrated: true,
     });
 
@@ -201,7 +201,7 @@ describe("<SessionManagerTab />", () => {
 
     beforeEach(async () => {
         mockClient = getMockClientWithEventEmitter({
-            ...mockClientMethodsUser(aliceId),
+            ...mockClientMethodsUser(<alice>Id),
             ...mockClientMethodsServer(),
             getCrypto: jest.fn().mockReturnValue(mockCrypto),
             getDevices: jest.fn(),
@@ -221,12 +221,12 @@ describe("<SessionManagerTab />", () => {
         jest.spyOn(logger, "error").mockRestore();
         mockCrypto.getDeviceVerificationStatus.mockReset().mockResolvedValue(new DeviceVerificationStatus({}));
 
-        mockClient.getDevices.mockReset().mockResolvedValue({ devices: [alicesDevice, alicesMobileDevice] });
+        mockClient.getDevices.mockReset().mockResolvedValue({ devices: [<alice>sDevice, <alice>sMobileDevice] });
 
         mockClient.getPushers.mockReset().mockResolvedValue({
             pushers: [
                 mkPusher({
-                    [PUSHER_DEVICE_ID.name]: alicesMobileDevice.device_id,
+                    [PUSHER_DEVICE_ID.name]: <alice>sMobileDevice.device_id,
                     [PUSHER_ENABLED.name]: true,
                 }),
             ],
@@ -283,18 +283,18 @@ describe("<SessionManagerTab />", () => {
 
     it("sets device verification status correctly", async () => {
         mockClient.getDevices.mockResolvedValue({
-            devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
+            devices: [<alice>sDevice, <alice>sMobileDevice, <alice>sOlderMobileDevice],
         });
         mockCrypto.getDeviceVerificationStatus.mockImplementation(async (_userId, deviceId) => {
-            // alices device is trusted
-            if (deviceId === alicesDevice.device_id) {
+            // <alice>s device is trusted
+            if (deviceId === <alice>sDevice.device_id) {
                 return new DeviceVerificationStatus({ crossSigningVerified: true, localVerified: true });
             }
-            // alices mobile device is not
-            if (deviceId === alicesMobileDevice.device_id) {
+            // <alice>s mobile device is not
+            if (deviceId === <alice>sMobileDevice.device_id) {
                 return new DeviceVerificationStatus({});
             }
-            // alicesOlderMobileDevice does not support encryption
+            // <alice>sOlderMobileDevice does not support encryption
             return null;
         });
 
@@ -304,20 +304,20 @@ describe("<SessionManagerTab />", () => {
 
         expect(mockCrypto.getDeviceVerificationStatus).toHaveBeenCalledTimes(3);
         expect(
-            getByTestId(`device-tile-${alicesDevice.device_id}`).querySelector('[aria-label="Verified"]'),
+            getByTestId(`device-tile-${<alice>sDevice.device_id}`).querySelector('[aria-label="Verified"]'),
         ).toBeTruthy();
         expect(
-            getByTestId(`device-tile-${alicesMobileDevice.device_id}`).querySelector('[aria-label="Unverified"]'),
+            getByTestId(`device-tile-${<alice>sMobileDevice.device_id}`).querySelector('[aria-label="Unverified"]'),
         ).toBeTruthy();
         // sessions that dont support encryption use unverified badge
         expect(
-            getByTestId(`device-tile-${alicesOlderMobileDevice.device_id}`).querySelector('[aria-label="Unverified"]'),
+            getByTestId(`device-tile-${<alice>sOlderMobileDevice.device_id}`).querySelector('[aria-label="Unverified"]'),
         ).toBeTruthy();
     });
 
     it("extends device with client information when available", async () => {
         mockClient.getDevices.mockResolvedValue({
-            devices: [alicesDevice, alicesMobileDevice],
+            devices: [<alice>sDevice, <alice>sMobileDevice],
         });
         mockClient.getAccountData.mockImplementation((eventType: string) => {
             const content = {
@@ -338,27 +338,27 @@ describe("<SessionManagerTab />", () => {
         // twice for each device
         expect(mockClient.getAccountData).toHaveBeenCalledTimes(4);
 
-        toggleDeviceDetails(getByTestId, alicesDevice.device_id);
+        toggleDeviceDetails(getByTestId, <alice>sDevice.device_id);
         // application metadata section rendered
         expect(getByTestId("device-detail-metadata-application")).toBeTruthy();
     });
 
     it("renders devices without available client information without error", async () => {
         mockClient.getDevices.mockResolvedValue({
-            devices: [alicesDevice, alicesMobileDevice],
+            devices: [<alice>sDevice, <alice>sMobileDevice],
         });
 
         const { getByTestId, queryByTestId } = render(getComponent());
 
         await flushPromises();
 
-        toggleDeviceDetails(getByTestId, alicesDevice.device_id);
+        toggleDeviceDetails(getByTestId, <alice>sDevice.device_id);
         // application metadata section not rendered
         expect(queryByTestId("device-detail-metadata-application")).toBeFalsy();
     });
 
     it("does not render other sessions section when user has only one device", async () => {
-        mockClient.getDevices.mockResolvedValue({ devices: [alicesDevice] });
+        mockClient.getDevices.mockResolvedValue({ devices: [<alice>sDevice] });
         const { queryByTestId } = render(getComponent());
 
         await flushPromises();
@@ -368,7 +368,7 @@ describe("<SessionManagerTab />", () => {
 
     it("renders other sessions section when user has more than one device", async () => {
         mockClient.getDevices.mockResolvedValue({
-            devices: [alicesDevice, alicesOlderMobileDevice, alicesMobileDevice],
+            devices: [<alice>sDevice, <alice>sOlderMobileDevice, <alice>sMobileDevice],
         });
         const { getByTestId } = render(getComponent());
 
@@ -379,7 +379,7 @@ describe("<SessionManagerTab />", () => {
 
     it("goes to filtered list from security recommendations", async () => {
         mockClient.getDevices.mockResolvedValue({
-            devices: [alicesDevice, alicesMobileDevice],
+            devices: [<alice>sDevice, <alice>sMobileDevice],
         });
         const { getByTestId, container } = render(getComponent());
 
@@ -412,7 +412,7 @@ describe("<SessionManagerTab />", () => {
 
         it("renders current session section with an unverified session", async () => {
             mockClient.getDevices.mockResolvedValue({
-                devices: [alicesDevice, alicesMobileDevice],
+                devices: [<alice>sDevice, <alice>sMobileDevice],
             });
             const { getByTestId } = render(getComponent());
 
@@ -425,7 +425,7 @@ describe("<SessionManagerTab />", () => {
 
         it("opens encryption setup dialog when verifiying current session", async () => {
             mockClient.getDevices.mockResolvedValue({
-                devices: [alicesDevice, alicesMobileDevice],
+                devices: [<alice>sDevice, <alice>sMobileDevice],
             });
             const { getByTestId } = render(getComponent());
             const modalSpy = jest.spyOn(Modal, "createDialog");
@@ -435,14 +435,14 @@ describe("<SessionManagerTab />", () => {
             });
 
             // click verify button from current session section
-            fireEvent.click(getByTestId(`verification-status-button-${alicesDevice.device_id}`));
+            fireEvent.click(getByTestId(`verification-status-button-${<alice>sDevice.device_id}`));
 
             expect(modalSpy).toHaveBeenCalled();
         });
 
         it("renders current session section with a verified session", async () => {
             mockClient.getDevices.mockResolvedValue({
-                devices: [alicesDevice, alicesMobileDevice],
+                devices: [<alice>sDevice, <alice>sMobileDevice],
             });
             mockCrypto.getDeviceVerificationStatus.mockResolvedValue(
                 new DeviceVerificationStatus({ crossSigningVerified: true, localVerified: true }),
@@ -459,7 +459,7 @@ describe("<SessionManagerTab />", () => {
 
         it("expands current session details", async () => {
             mockClient.getDevices.mockResolvedValue({
-                devices: [alicesDevice, alicesMobileDevice],
+                devices: [<alice>sDevice, <alice>sMobileDevice],
             });
             const { getByTestId } = render(getComponent());
 
@@ -469,7 +469,7 @@ describe("<SessionManagerTab />", () => {
 
             fireEvent.click(getByTestId("current-session-toggle-details"));
 
-            expect(getByTestId(`device-detail-${alicesDevice.device_id}`)).toBeTruthy();
+            expect(getByTestId(`device-detail-${<alice>sDevice.device_id}`)).toBeTruthy();
             // only one security card rendered
             expect(getByTestId("current-session-section").querySelectorAll(".mx_DeviceSecurityCard").length).toEqual(1);
         });
@@ -478,7 +478,7 @@ describe("<SessionManagerTab />", () => {
     describe("device detail expansion", () => {
         it("renders no devices expanded by default", async () => {
             mockClient.getDevices.mockResolvedValue({
-                devices: [alicesDevice, alicesOlderMobileDevice, alicesMobileDevice],
+                devices: [<alice>sDevice, <alice>sOlderMobileDevice, <alice>sMobileDevice],
             });
             const { getByTestId } = render(getComponent());
 
@@ -494,7 +494,7 @@ describe("<SessionManagerTab />", () => {
 
         it("toggles device expansion on click", async () => {
             mockClient.getDevices.mockResolvedValue({
-                devices: [alicesDevice, alicesOlderMobileDevice, alicesMobileDevice],
+                devices: [<alice>sDevice, <alice>sOlderMobileDevice, <alice>sMobileDevice],
             });
             const { getByTestId, queryByTestId } = render(getComponent());
 
@@ -502,31 +502,31 @@ describe("<SessionManagerTab />", () => {
                 await flushPromises();
             });
 
-            toggleDeviceDetails(getByTestId, alicesOlderMobileDevice.device_id);
+            toggleDeviceDetails(getByTestId, <alice>sOlderMobileDevice.device_id);
 
             // device details are expanded
-            expect(getByTestId(`device-detail-${alicesOlderMobileDevice.device_id}`)).toBeTruthy();
+            expect(getByTestId(`device-detail-${<alice>sOlderMobileDevice.device_id}`)).toBeTruthy();
 
-            toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
+            toggleDeviceDetails(getByTestId, <alice>sMobileDevice.device_id);
 
             // both device details are expanded
-            expect(getByTestId(`device-detail-${alicesOlderMobileDevice.device_id}`)).toBeTruthy();
-            expect(getByTestId(`device-detail-${alicesMobileDevice.device_id}`)).toBeTruthy();
+            expect(getByTestId(`device-detail-${<alice>sOlderMobileDevice.device_id}`)).toBeTruthy();
+            expect(getByTestId(`device-detail-${<alice>sMobileDevice.device_id}`)).toBeTruthy();
 
             // toggle closed
-            toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id, true);
+            toggleDeviceDetails(getByTestId, <alice>sMobileDevice.device_id, true);
 
-            // alicesMobileDevice was toggled off
-            expect(queryByTestId(`device-detail-${alicesMobileDevice.device_id}`)).toBeFalsy();
-            // alicesOlderMobileDevice stayed open
-            expect(getByTestId(`device-detail-${alicesOlderMobileDevice.device_id}`)).toBeTruthy();
+            // <alice>sMobileDevice was toggled off
+            expect(queryByTestId(`device-detail-${<alice>sMobileDevice.device_id}`)).toBeFalsy();
+            // <alice>sOlderMobileDevice stayed open
+            expect(getByTestId(`device-detail-${<alice>sOlderMobileDevice.device_id}`)).toBeTruthy();
         });
     });
 
     describe("Device verification", () => {
         it("does not render device verification cta when current session is not verified", async () => {
             mockClient.getDevices.mockResolvedValue({
-                devices: [alicesDevice, alicesOlderMobileDevice, alicesMobileDevice],
+                devices: [<alice>sDevice, <alice>sOlderMobileDevice, <alice>sMobileDevice],
             });
             const { getByTestId, queryByTestId } = render(getComponent());
 
@@ -534,10 +534,10 @@ describe("<SessionManagerTab />", () => {
                 await flushPromises();
             });
 
-            toggleDeviceDetails(getByTestId, alicesOlderMobileDevice.device_id);
+            toggleDeviceDetails(getByTestId, <alice>sOlderMobileDevice.device_id);
 
             // verify device button is not rendered
-            expect(queryByTestId(`verification-status-button-${alicesOlderMobileDevice.device_id}`)).toBeFalsy();
+            expect(queryByTestId(`verification-status-button-${<alice>sOlderMobileDevice.device_id}`)).toBeFalsy();
         });
 
         it("renders device verification cta on other sessions when current session is verified", async () => {
@@ -545,10 +545,10 @@ describe("<SessionManagerTab />", () => {
 
             // make the current device verified
             mockClient.getDevices.mockResolvedValue({
-                devices: [alicesDevice, alicesMobileDevice],
+                devices: [<alice>sDevice, <alice>sMobileDevice],
             });
             mockCrypto.getDeviceVerificationStatus.mockImplementation(async (_userId, deviceId) => {
-                if (deviceId === alicesDevice.device_id) {
+                if (deviceId === <alice>sDevice.device_id) {
                     return new DeviceVerificationStatus({ crossSigningVerified: true, localVerified: true });
                 }
                 return new DeviceVerificationStatus({});
@@ -560,25 +560,25 @@ describe("<SessionManagerTab />", () => {
                 await flushPromises();
             });
 
-            toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
+            toggleDeviceDetails(getByTestId, <alice>sMobileDevice.device_id);
 
             // click verify button from current session section
-            fireEvent.click(getByTestId(`verification-status-button-${alicesMobileDevice.device_id}`));
+            fireEvent.click(getByTestId(`verification-status-button-${<alice>sMobileDevice.device_id}`));
 
-            expect(mockCrypto.requestDeviceVerification).toHaveBeenCalledWith(aliceId, alicesMobileDevice.device_id);
+            expect(mockCrypto.requestDeviceVerification).toHaveBeenCalledWith(<alice>Id, <alice>sMobileDevice.device_id);
             expect(modalSpy).toHaveBeenCalled();
         });
 
         it("does not allow device verification on session that do not support encryption", async () => {
             mockClient.getDevices.mockResolvedValue({
-                devices: [alicesDevice, alicesMobileDevice],
+                devices: [<alice>sDevice, <alice>sMobileDevice],
             });
             mockCrypto.getDeviceVerificationStatus.mockImplementation(async (_userId, deviceId) => {
                 // current session verified = able to verify other sessions
-                if (deviceId === alicesDevice.device_id) {
+                if (deviceId === <alice>sDevice.device_id) {
                     return new DeviceVerificationStatus({ crossSigningVerified: true, localVerified: true });
                 }
-                // but alicesMobileDevice doesn't support encryption
+                // but <alice>sMobileDevice doesn't support encryption
                 return null;
             });
 
@@ -588,12 +588,12 @@ describe("<SessionManagerTab />", () => {
                 await flushPromises();
             });
 
-            toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
+            toggleDeviceDetails(getByTestId, <alice>sMobileDevice.device_id);
 
             // no verify button
-            expect(queryByTestId(`verification-status-button-${alicesMobileDevice.device_id}`)).toBeFalsy();
+            expect(queryByTestId(`verification-status-button-${<alice>sMobileDevice.device_id}`)).toBeFalsy();
             expect(
-                getByTestId(`device-detail-${alicesMobileDevice.device_id}`).getElementsByClassName(
+                getByTestId(`device-detail-${<alice>sMobileDevice.device_id}`).getElementsByClassName(
                     "mx_DeviceSecurityCard",
                 ),
             ).toMatchSnapshot();
@@ -604,10 +604,10 @@ describe("<SessionManagerTab />", () => {
 
             // make the current device verified
             mockClient.getDevices.mockResolvedValue({
-                devices: [alicesDevice, alicesMobileDevice],
+                devices: [<alice>sDevice, <alice>sMobileDevice],
             });
             mockCrypto.getDeviceVerificationStatus.mockImplementation(async (_userId, deviceId) => {
-                if (deviceId === alicesDevice.device_id) {
+                if (deviceId === <alice>sDevice.device_id) {
                     return new DeviceVerificationStatus({ crossSigningVerified: true, localVerified: true });
                 }
                 return new DeviceVerificationStatus({});
@@ -619,13 +619,13 @@ describe("<SessionManagerTab />", () => {
                 await flushPromises();
             });
 
-            toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
+            toggleDeviceDetails(getByTestId, <alice>sMobileDevice.device_id);
 
             // reset mock counter before triggering verification
             mockClient.getDevices.mockClear();
 
             // click verify button from current session section
-            fireEvent.click(getByTestId(`verification-status-button-${alicesMobileDevice.device_id}`));
+            fireEvent.click(getByTestId(`verification-status-button-${<alice>sMobileDevice.device_id}`));
 
             const { onFinished: modalOnFinished } = modalSpy.mock.calls[0][1] as any;
             // simulate modal completing process
@@ -641,27 +641,27 @@ describe("<SessionManagerTab />", () => {
     describe("device dehydration", () => {
         it("Hides a verified dehydrated device", async () => {
             mockClient.getDevices.mockResolvedValue({
-                devices: [alicesDevice, alicesMobileDevice, alicesDehydratedDevice],
+                devices: [<alice>sDevice, <alice>sMobileDevice, <alice>sDehydratedDevice],
             });
 
             const devicesMap = new Map<string, Device>([
-                [alicesDeviceObj.deviceId, alicesDeviceObj],
-                [alicesMobileDeviceObj.deviceId, alicesMobileDeviceObj],
-                [alicesDehydratedDeviceObj.deviceId, alicesDehydratedDeviceObj],
+                [<alice>sDeviceObj.deviceId, <alice>sDeviceObj],
+                [<alice>sMobileDeviceObj.deviceId, <alice>sMobileDeviceObj],
+                [<alice>sDehydratedDeviceObj.deviceId, <alice>sDehydratedDeviceObj],
             ]);
-            const userDeviceMap = new Map<string, Map<string, Device>>([[aliceId, devicesMap]]);
+            const userDeviceMap = new Map<string, Map<string, Device>>([[<alice>Id, devicesMap]]);
             mockCrypto.getUserDeviceInfo.mockResolvedValue(userDeviceMap);
             mockCrypto.getDeviceVerificationStatus.mockImplementation(async (_userId, deviceId) => {
-                // alices device is trusted
-                if (deviceId === alicesDevice.device_id) {
+                // <alice>s device is trusted
+                if (deviceId === <alice>sDevice.device_id) {
                     return new DeviceVerificationStatus({ crossSigningVerified: true, localVerified: true });
                 }
                 // the dehydrated device is trusted
-                if (deviceId === alicesDehydratedDevice.device_id) {
+                if (deviceId === <alice>sDehydratedDevice.device_id) {
                     return new DeviceVerificationStatus({ crossSigningVerified: true, localVerified: true });
                 }
-                // alices mobile device is not
-                if (deviceId === alicesMobileDevice.device_id) {
+                // <alice>s mobile device is not
+                if (deviceId === <alice>sMobileDevice.device_id) {
                     return new DeviceVerificationStatus({});
                 }
                 return null;
@@ -673,35 +673,35 @@ describe("<SessionManagerTab />", () => {
                 await flushPromises();
             });
 
-            expect(queryByTestId(`device-tile-${alicesDevice.device_id}`)).toBeTruthy();
-            expect(queryByTestId(`device-tile-${alicesMobileDevice.device_id}`)).toBeTruthy();
+            expect(queryByTestId(`device-tile-${<alice>sDevice.device_id}`)).toBeTruthy();
+            expect(queryByTestId(`device-tile-${<alice>sMobileDevice.device_id}`)).toBeTruthy();
             // the dehydrated device should be hidden
-            expect(queryByTestId(`device-tile-${alicesDehydratedDevice.device_id}`)).toBeFalsy();
+            expect(queryByTestId(`device-tile-${<alice>sDehydratedDevice.device_id}`)).toBeFalsy();
         });
 
         it("Shows an unverified dehydrated device", async () => {
             mockClient.getDevices.mockResolvedValue({
-                devices: [alicesDevice, alicesMobileDevice, alicesDehydratedDevice],
+                devices: [<alice>sDevice, <alice>sMobileDevice, <alice>sDehydratedDevice],
             });
 
             const devicesMap = new Map<string, Device>([
-                [alicesDeviceObj.deviceId, alicesDeviceObj],
-                [alicesMobileDeviceObj.deviceId, alicesMobileDeviceObj],
-                [alicesDehydratedDeviceObj.deviceId, alicesDehydratedDeviceObj],
+                [<alice>sDeviceObj.deviceId, <alice>sDeviceObj],
+                [<alice>sMobileDeviceObj.deviceId, <alice>sMobileDeviceObj],
+                [<alice>sDehydratedDeviceObj.deviceId, <alice>sDehydratedDeviceObj],
             ]);
-            const userDeviceMap = new Map<string, Map<string, Device>>([[aliceId, devicesMap]]);
+            const userDeviceMap = new Map<string, Map<string, Device>>([[<alice>Id, devicesMap]]);
             mockCrypto.getUserDeviceInfo.mockResolvedValue(userDeviceMap);
             mockCrypto.getDeviceVerificationStatus.mockImplementation(async (_userId, deviceId) => {
-                // alices device is trusted
-                if (deviceId === alicesDevice.device_id) {
+                // <alice>s device is trusted
+                if (deviceId === <alice>sDevice.device_id) {
                     return new DeviceVerificationStatus({ crossSigningVerified: true, localVerified: true });
                 }
                 // the dehydrated device is not
-                if (deviceId === alicesDehydratedDevice.device_id) {
+                if (deviceId === <alice>sDehydratedDevice.device_id) {
                     return new DeviceVerificationStatus({ crossSigningVerified: false, localVerified: false });
                 }
-                // alices mobile device is not
-                if (deviceId === alicesMobileDevice.device_id) {
+                // <alice>s mobile device is not
+                if (deviceId === <alice>sMobileDevice.device_id) {
                     return new DeviceVerificationStatus({});
                 }
                 return null;
@@ -713,40 +713,40 @@ describe("<SessionManagerTab />", () => {
                 await flushPromises();
             });
 
-            expect(queryByTestId(`device-tile-${alicesDevice.device_id}`)).toBeTruthy();
-            expect(queryByTestId(`device-tile-${alicesMobileDevice.device_id}`)).toBeTruthy();
+            expect(queryByTestId(`device-tile-${<alice>sDevice.device_id}`)).toBeTruthy();
+            expect(queryByTestId(`device-tile-${<alice>sMobileDevice.device_id}`)).toBeTruthy();
             // the dehydrated device should be shown since it is unverified
-            expect(queryByTestId(`device-tile-${alicesDehydratedDevice.device_id}`)).toBeTruthy();
+            expect(queryByTestId(`device-tile-${<alice>sDehydratedDevice.device_id}`)).toBeTruthy();
         });
 
         it("Shows the dehydrated devices if there are multiple", async () => {
             mockClient.getDevices.mockResolvedValue({
-                devices: [alicesDevice, alicesMobileDevice, alicesDehydratedDevice, alicesOtherDehydratedDevice],
+                devices: [<alice>sDevice, <alice>sMobileDevice, <alice>sDehydratedDevice, <alice>sOtherDehydratedDevice],
             });
 
             const devicesMap = new Map<string, Device>([
-                [alicesDeviceObj.deviceId, alicesDeviceObj],
-                [alicesMobileDeviceObj.deviceId, alicesMobileDeviceObj],
-                [alicesDehydratedDeviceObj.deviceId, alicesDehydratedDeviceObj],
-                [alicesOtherDehydratedDeviceObj.deviceId, alicesOtherDehydratedDeviceObj],
+                [<alice>sDeviceObj.deviceId, <alice>sDeviceObj],
+                [<alice>sMobileDeviceObj.deviceId, <alice>sMobileDeviceObj],
+                [<alice>sDehydratedDeviceObj.deviceId, <alice>sDehydratedDeviceObj],
+                [<alice>sOtherDehydratedDeviceObj.deviceId, <alice>sOtherDehydratedDeviceObj],
             ]);
-            const userDeviceMap = new Map<string, Map<string, Device>>([[aliceId, devicesMap]]);
+            const userDeviceMap = new Map<string, Map<string, Device>>([[<alice>Id, devicesMap]]);
             mockCrypto.getUserDeviceInfo.mockResolvedValue(userDeviceMap);
             mockCrypto.getDeviceVerificationStatus.mockImplementation(async (_userId, deviceId) => {
-                // alices device is trusted
-                if (deviceId === alicesDevice.device_id) {
+                // <alice>s device is trusted
+                if (deviceId === <alice>sDevice.device_id) {
                     return new DeviceVerificationStatus({ crossSigningVerified: true, localVerified: true });
                 }
                 // one dehydrated device is trusted
-                if (deviceId === alicesDehydratedDevice.device_id) {
+                if (deviceId === <alice>sDehydratedDevice.device_id) {
                     return new DeviceVerificationStatus({ crossSigningVerified: true, localVerified: true });
                 }
                 // the other is not
-                if (deviceId === alicesOtherDehydratedDevice.device_id) {
+                if (deviceId === <alice>sOtherDehydratedDevice.device_id) {
                     return new DeviceVerificationStatus({ crossSigningVerified: false, localVerified: false });
                 }
-                // alices mobile device is not
-                if (deviceId === alicesMobileDevice.device_id) {
+                // <alice>s mobile device is not
+                if (deviceId === <alice>sMobileDevice.device_id) {
                     return new DeviceVerificationStatus({});
                 }
                 return null;
@@ -758,11 +758,11 @@ describe("<SessionManagerTab />", () => {
                 await flushPromises();
             });
 
-            expect(queryByTestId(`device-tile-${alicesDevice.device_id}`)).toBeTruthy();
-            expect(queryByTestId(`device-tile-${alicesMobileDevice.device_id}`)).toBeTruthy();
+            expect(queryByTestId(`device-tile-${<alice>sDevice.device_id}`)).toBeTruthy();
+            expect(queryByTestId(`device-tile-${<alice>sMobileDevice.device_id}`)).toBeTruthy();
             // both the dehydrated devices should be shown, since there are multiple
-            expect(queryByTestId(`device-tile-${alicesDehydratedDevice.device_id}`)).toBeTruthy();
-            expect(queryByTestId(`device-tile-${alicesOtherDehydratedDevice.device_id}`)).toBeTruthy();
+            expect(queryByTestId(`device-tile-${<alice>sDehydratedDevice.device_id}`)).toBeTruthy();
+            expect(queryByTestId(`device-tile-${<alice>sOtherDehydratedDevice.device_id}`)).toBeTruthy();
         });
     });
 
@@ -771,7 +771,7 @@ describe("<SessionManagerTab />", () => {
             const modalSpy = jest.spyOn(Modal, "createDialog");
 
             mockClient.getDevices.mockResolvedValue({
-                devices: [alicesDevice],
+                devices: [<alice>sDevice],
             });
             const { getByTestId } = render(getComponent());
 
@@ -779,7 +779,7 @@ describe("<SessionManagerTab />", () => {
                 await flushPromises();
             });
 
-            toggleDeviceDetails(getByTestId, alicesDevice.device_id);
+            toggleDeviceDetails(getByTestId, <alice>sDevice.device_id);
 
             const signOutButton = getByTestId("device-detail-sign-out-cta");
             expect(signOutButton).toMatchSnapshot();
@@ -792,7 +792,7 @@ describe("<SessionManagerTab />", () => {
         it("Signs out of current device from kebab menu", async () => {
             const modalSpy = jest.spyOn(Modal, "createDialog");
             mockClient.getDevices.mockResolvedValue({
-                devices: [alicesDevice],
+                devices: [<alice>sDevice],
             });
             const { getByTestId, getByLabelText } = render(getComponent());
 
@@ -809,7 +809,7 @@ describe("<SessionManagerTab />", () => {
 
         it("does not render sign out other devices option when only one device", async () => {
             mockClient.getDevices.mockResolvedValue({
-                devices: [alicesDevice],
+                devices: [<alice>sDevice],
             });
             const { getByTestId, queryByLabelText } = render(getComponent());
 
@@ -823,7 +823,7 @@ describe("<SessionManagerTab />", () => {
 
         it("signs out of all other devices from current session context menu", async () => {
             mockClient.getDevices.mockResolvedValue({
-                devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
+                devices: [<alice>sDevice, <alice>sMobileDevice, <alice>sOlderMobileDevice],
             });
             const { getByTestId, getByLabelText } = render(getComponent());
 
@@ -837,14 +837,14 @@ describe("<SessionManagerTab />", () => {
 
             // other devices deleted, excluding current device
             expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith(
-                [alicesMobileDevice.device_id, alicesOlderMobileDevice.device_id],
+                [<alice>sMobileDevice.device_id, <alice>sOlderMobileDevice.device_id],
                 undefined,
             );
         });
 
         it("removes account data events for devices after sign out", async () => {
             const mobileDeviceClientInfo = new MatrixEvent({
-                type: getClientInformationEventType(alicesMobileDevice.device_id),
+                type: getClientInformationEventType(<alice>sMobileDevice.device_id),
                 content: {
                     name: "test",
                 },
@@ -857,11 +857,11 @@ describe("<SessionManagerTab />", () => {
 
             mockClient.getDevices
                 .mockResolvedValueOnce({
-                    devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
+                    devices: [<alice>sDevice, <alice>sMobileDevice, <alice>sOlderMobileDevice],
                 })
                 .mockResolvedValueOnce({
                     // refreshed devices after sign out
-                    devices: [alicesDevice],
+                    devices: [<alice>sDevice],
                 });
 
             const { getByTestId, getByLabelText } = render(getComponent());
@@ -897,21 +897,21 @@ describe("<SessionManagerTab />", () => {
                 const deferredDeleteMultipleDevices = defer<{}>();
                 mockClient.deleteMultipleDevices.mockReturnValue(deferredDeleteMultipleDevices.promise);
                 mockClient.getDevices.mockResolvedValue({
-                    devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
+                    devices: [<alice>sDevice, <alice>sMobileDevice, <alice>sOlderMobileDevice],
                 });
 
                 const { getByTestId, findByTestId } = render(getComponent());
 
                 await waitForElementToBeRemoved(() => screen.queryAllByRole("progressbar"));
-                toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
+                toggleDeviceDetails(getByTestId, <alice>sMobileDevice.device_id);
 
                 const signOutButton = await within(
-                    await findByTestId(`device-detail-${alicesMobileDevice.device_id}`),
+                    await findByTestId(`device-detail-${<alice>sMobileDevice.device_id}`),
                 ).findByTestId("device-detail-sign-out-cta");
 
                 // pretend it was really deleted on refresh
                 mockClient.getDevices.mockResolvedValueOnce({
-                    devices: [alicesDevice, alicesOlderMobileDevice],
+                    devices: [<alice>sDevice, <alice>sOlderMobileDevice],
                 });
 
                 // sign out button is disabled with spinner
@@ -924,7 +924,7 @@ describe("<SessionManagerTab />", () => {
 
                 // delete called
                 expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith(
-                    [alicesMobileDevice.device_id],
+                    [<alice>sMobileDevice.device_id],
                     undefined,
                 );
 
@@ -941,9 +941,9 @@ describe("<SessionManagerTab />", () => {
                     await flushPromises();
                 });
 
-                toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
+                toggleDeviceDetails(getByTestId, <alice>sMobileDevice.device_id);
 
-                const deviceDetails = getByTestId(`device-detail-${alicesMobileDevice.device_id}`);
+                const deviceDetails = getByTestId(`device-detail-${<alice>sMobileDevice.device_id}`);
                 const signOutButton = deviceDetails.querySelector(
                     '[data-testid="device-detail-sign-out-cta"]',
                 ) as Element;
@@ -970,11 +970,11 @@ describe("<SessionManagerTab />", () => {
 
                 mockClient.getDevices
                     .mockResolvedValueOnce({
-                        devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
+                        devices: [<alice>sDevice, <alice>sMobileDevice, <alice>sOlderMobileDevice],
                     })
                     // pretend it was really deleted on refresh
                     .mockResolvedValueOnce({
-                        devices: [alicesDevice, alicesOlderMobileDevice],
+                        devices: [<alice>sDevice, <alice>sOlderMobileDevice],
                     });
 
                 const { getByTestId, getByLabelText } = render(getComponent());
@@ -984,9 +984,9 @@ describe("<SessionManagerTab />", () => {
                 // reset mock count after initial load
                 mockClient.getDevices.mockClear();
 
-                toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
+                toggleDeviceDetails(getByTestId, <alice>sMobileDevice.device_id);
 
-                const deviceDetails = getByTestId(`device-detail-${alicesMobileDevice.device_id}`);
+                const deviceDetails = getByTestId(`device-detail-${<alice>sMobileDevice.device_id}`);
                 const signOutButton = deviceDetails.querySelector(
                     '[data-testid="device-detail-sign-out-cta"]',
                 ) as Element;
@@ -998,7 +998,7 @@ describe("<SessionManagerTab />", () => {
                 await screen.findByRole("dialog");
 
                 expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith(
-                    [alicesMobileDevice.device_id],
+                    [<alice>sMobileDevice.device_id],
                     undefined,
                 );
 
@@ -1016,10 +1016,10 @@ describe("<SessionManagerTab />", () => {
                 await flushPromises();
 
                 // called again with auth
-                expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith([alicesMobileDevice.device_id], {
+                expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith([<alice>sMobileDevice.device_id], {
                     identifier: {
                         type: "m.id.user",
-                        user: aliceId,
+                        user: <alice>Id,
                     },
                     password: "topsecret",
                     type: "m.login.password",
@@ -1036,7 +1036,7 @@ describe("<SessionManagerTab />", () => {
                     .mockResolvedValueOnce({});
 
                 mockClient.getDevices.mockResolvedValue({
-                    devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
+                    devices: [<alice>sDevice, <alice>sMobileDevice, <alice>sOlderMobileDevice],
                 });
 
                 const { getByTestId, getByLabelText } = render(getComponent());
@@ -1045,9 +1045,9 @@ describe("<SessionManagerTab />", () => {
                     await flushPromises();
                 });
 
-                toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
+                toggleDeviceDetails(getByTestId, <alice>sMobileDevice.device_id);
 
-                const deviceDetails = getByTestId(`device-detail-${alicesMobileDevice.device_id}`);
+                const deviceDetails = getByTestId(`device-detail-${<alice>sMobileDevice.device_id}`);
                 const signOutButton = deviceDetails.querySelector(
                     '[data-testid="device-detail-sign-out-cta"]',
                 ) as Element;
@@ -1069,7 +1069,7 @@ describe("<SessionManagerTab />", () => {
                 await sleep(0);
 
                 expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith(
-                    [alicesMobileDevice.device_id],
+                    [<alice>sMobileDevice.device_id],
                     undefined,
                 );
 
@@ -1098,7 +1098,7 @@ describe("<SessionManagerTab />", () => {
 
             it("deletes multiple devices", async () => {
                 mockClient.getDevices.mockResolvedValue({
-                    devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice, alicesInactiveDevice],
+                    devices: [<alice>sDevice, <alice>sMobileDevice, <alice>sOlderMobileDevice, <alice>sInactiveDevice],
                 });
                 // get a handle for resolving the delete call
                 // because promise flushing after the confirm modal is resolving this too
@@ -1114,8 +1114,8 @@ describe("<SessionManagerTab />", () => {
                     await flushPromises();
                 });
 
-                toggleDeviceSelection(getByTestId, alicesMobileDevice.device_id);
-                toggleDeviceSelection(getByTestId, alicesOlderMobileDevice.device_id);
+                toggleDeviceSelection(getByTestId, <alice>sMobileDevice.device_id);
+                toggleDeviceSelection(getByTestId, <alice>sOlderMobileDevice.device_id);
 
                 fireEvent.click(getByTestId("sign-out-selection-cta"));
 
@@ -1129,19 +1129,19 @@ describe("<SessionManagerTab />", () => {
 
                 // spinners on signing out devices
                 expect(
-                    getDeviceTile(getByTestId, alicesMobileDevice.device_id).querySelector(".mx_Spinner"),
+                    getDeviceTile(getByTestId, <alice>sMobileDevice.device_id).querySelector(".mx_Spinner"),
                 ).toBeTruthy();
                 expect(
-                    getDeviceTile(getByTestId, alicesOlderMobileDevice.device_id).querySelector(".mx_Spinner"),
+                    getDeviceTile(getByTestId, <alice>sOlderMobileDevice.device_id).querySelector(".mx_Spinner"),
                 ).toBeTruthy();
                 // no spinner for device that is not signing out
                 expect(
-                    getDeviceTile(getByTestId, alicesInactiveDevice.device_id).querySelector(".mx_Spinner"),
+                    getDeviceTile(getByTestId, <alice>sInactiveDevice.device_id).querySelector(".mx_Spinner"),
                 ).toBeFalsy();
 
                 // delete called with both ids
                 expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith(
-                    [alicesMobileDevice.device_id, alicesOlderMobileDevice.device_id],
+                    [<alice>sMobileDevice.device_id, <alice>sOlderMobileDevice.device_id],
                     undefined,
                 );
 
@@ -1150,7 +1150,7 @@ describe("<SessionManagerTab />", () => {
 
             it("signs out of all other devices from other sessions context menu", async () => {
                 mockClient.getDevices.mockResolvedValue({
-                    devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
+                    devices: [<alice>sDevice, <alice>sMobileDevice, <alice>sOlderMobileDevice],
                 });
                 const { getByTestId, getByLabelText } = render(getComponent());
 
@@ -1164,7 +1164,7 @@ describe("<SessionManagerTab />", () => {
 
                 // other devices deleted, excluding current device
                 expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith(
-                    [alicesMobileDevice.device_id, alicesOlderMobileDevice.device_id],
+                    [<alice>sMobileDevice.device_id, <alice>sOlderMobileDevice.device_id],
                     undefined,
                 );
             });
@@ -1184,7 +1184,7 @@ describe("<SessionManagerTab />", () => {
                 const modalSpy = jest.spyOn(Modal, "createDialog");
 
                 mockClient.getDevices.mockResolvedValue({
-                    devices: [alicesDevice],
+                    devices: [<alice>sDevice],
                 });
                 const { getByTestId } = render(getComponent());
 
@@ -1192,7 +1192,7 @@ describe("<SessionManagerTab />", () => {
                     await flushPromises();
                 });
 
-                toggleDeviceDetails(getByTestId, alicesDevice.device_id);
+                toggleDeviceDetails(getByTestId, <alice>sDevice.device_id);
 
                 const signOutButton = getByTestId("device-detail-sign-out-cta");
                 expect(signOutButton).toMatchSnapshot();
@@ -1204,7 +1204,7 @@ describe("<SessionManagerTab />", () => {
 
             it("does not allow signing out of all other devices from current session context menu", async () => {
                 mockClient.getDevices.mockResolvedValue({
-                    devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
+                    devices: [<alice>sDevice, <alice>sMobileDevice, <alice>sOlderMobileDevice],
                 });
                 const { getByTestId } = render(getComponent());
 
@@ -1219,7 +1219,7 @@ describe("<SessionManagerTab />", () => {
             describe("other devices", () => {
                 it("opens delegated auth provider to sign out a single device", async () => {
                     mockClient.getDevices.mockResolvedValue({
-                        devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
+                        devices: [<alice>sDevice, <alice>sMobileDevice, <alice>sOlderMobileDevice],
                     });
 
                     const { getByTestId } = render(getComponent());
@@ -1231,9 +1231,9 @@ describe("<SessionManagerTab />", () => {
                     // reset call count
                     mockClient.getDevices.mockClear();
 
-                    toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
+                    toggleDeviceDetails(getByTestId, <alice>sMobileDevice.device_id);
 
-                    const deviceDetails = getByTestId(`device-detail-${alicesMobileDevice.device_id}`);
+                    const deviceDetails = getByTestId(`device-detail-${<alice>sMobileDevice.device_id}`);
                     const signOutButton = deviceDetails.querySelector(
                         '[data-testid="device-detail-sign-out-cta"]',
                     ) as Element;
@@ -1248,7 +1248,7 @@ describe("<SessionManagerTab />", () => {
                     // correct link to auth provider
                     expect(screen.getByText("Continue")).toHaveAttribute(
                         "href",
-                        `https://issuer.org/account?action=session_end&device_id=${alicesMobileDevice.device_id}`,
+                        `https://issuer.org/account?action=session_end&device_id=${<alice>sMobileDevice.device_id}`,
                     );
 
                     // go to the link
@@ -1266,7 +1266,7 @@ describe("<SessionManagerTab />", () => {
 
                 it("does not allow removing multiple devices at once", async () => {
                     mockClient.getDevices.mockResolvedValue({
-                        devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice, alicesInactiveDevice],
+                        devices: [<alice>sDevice, <alice>sMobileDevice, <alice>sOlderMobileDevice, <alice>sInactiveDevice],
                     });
 
                     render(getComponent());
@@ -1277,7 +1277,7 @@ describe("<SessionManagerTab />", () => {
 
                     // sessions don't have checkboxes
                     expect(
-                        screen.queryByTestId(`device-tile-checkbox-${alicesMobileDevice.device_id}`),
+                        screen.queryByTestId(`device-tile-checkbox-${<alice>sMobileDevice.device_id}`),
                     ).not.toBeInTheDocument();
                     // no select all
                     expect(screen.queryByLabelText("Select all")).not.toBeInTheDocument();
@@ -1285,7 +1285,7 @@ describe("<SessionManagerTab />", () => {
 
                 it("does not allow signing out of all other devices from other sessions context menu", async () => {
                     mockClient.getDevices.mockResolvedValue({
-                        devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
+                        devices: [<alice>sDevice, <alice>sMobileDevice, <alice>sOlderMobileDevice],
                     });
                     render(getComponent());
 
@@ -1328,9 +1328,9 @@ describe("<SessionManagerTab />", () => {
             });
 
             const newDeviceName = "new device name";
-            await updateDeviceName(getByTestId, alicesDevice, newDeviceName);
+            await updateDeviceName(getByTestId, <alice>sDevice, newDeviceName);
 
-            expect(mockClient.setDeviceDetails).toHaveBeenCalledWith(alicesDevice.device_id, {
+            expect(mockClient.setDeviceDetails).toHaveBeenCalledWith(<alice>sDevice.device_id, {
                 display_name: newDeviceName,
             });
 
@@ -1346,9 +1346,9 @@ describe("<SessionManagerTab />", () => {
             });
 
             const newDeviceName = "new device name";
-            await updateDeviceName(getByTestId, alicesMobileDevice, newDeviceName);
+            await updateDeviceName(getByTestId, <alice>sMobileDevice, newDeviceName);
 
-            expect(mockClient.setDeviceDetails).toHaveBeenCalledWith(alicesMobileDevice.device_id, {
+            expect(mockClient.setDeviceDetails).toHaveBeenCalledWith(<alice>sMobileDevice.device_id, {
                 display_name: newDeviceName,
             });
 
@@ -1363,7 +1363,7 @@ describe("<SessionManagerTab />", () => {
                 await flushPromises();
             });
 
-            await updateDeviceName(getByTestId, alicesDevice, alicesDevice.display_name);
+            await updateDeviceName(getByTestId, <alice>sDevice, <alice>sDevice.display_name);
 
             expect(mockClient.setDeviceDetails).not.toHaveBeenCalled();
             // only called once on initial load
@@ -1377,9 +1377,9 @@ describe("<SessionManagerTab />", () => {
                 await flushPromises();
             });
 
-            await updateDeviceName(getByTestId, alicesDevice, "");
+            await updateDeviceName(getByTestId, <alice>sDevice, "");
 
-            expect(mockClient.setDeviceDetails).toHaveBeenCalledWith(alicesDevice.device_id, {
+            expect(mockClient.setDeviceDetails).toHaveBeenCalledWith(<alice>sDevice.device_id, {
                 display_name: "",
             });
         });
@@ -1395,7 +1395,7 @@ describe("<SessionManagerTab />", () => {
             });
 
             const newDeviceName = "new device name";
-            await updateDeviceName(getByTestId, alicesDevice, newDeviceName);
+            await updateDeviceName(getByTestId, <alice>sDevice, newDeviceName);
 
             await flushPromises();
 
@@ -1409,7 +1409,7 @@ describe("<SessionManagerTab />", () => {
     describe("Multiple selection", () => {
         beforeEach(() => {
             mockClient.getDevices.mockResolvedValue({
-                devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
+                devices: [<alice>sDevice, <alice>sMobileDevice, <alice>sOlderMobileDevice],
             });
         });
 
@@ -1420,21 +1420,21 @@ describe("<SessionManagerTab />", () => {
                 await flushPromises();
             });
 
-            toggleDeviceSelection(getByTestId, alicesMobileDevice.device_id);
-            toggleDeviceSelection(getByTestId, alicesOlderMobileDevice.device_id);
+            toggleDeviceSelection(getByTestId, <alice>sMobileDevice.device_id);
+            toggleDeviceSelection(getByTestId, <alice>sOlderMobileDevice.device_id);
 
             // header displayed correctly
             expect(getByText("2 sessions selected")).toBeTruthy();
 
-            expect(isDeviceSelected(getByTestId, alicesMobileDevice.device_id)).toBeTruthy();
-            expect(isDeviceSelected(getByTestId, alicesOlderMobileDevice.device_id)).toBeTruthy();
+            expect(isDeviceSelected(getByTestId, <alice>sMobileDevice.device_id)).toBeTruthy();
+            expect(isDeviceSelected(getByTestId, <alice>sOlderMobileDevice.device_id)).toBeTruthy();
 
-            toggleDeviceSelection(getByTestId, alicesMobileDevice.device_id);
+            toggleDeviceSelection(getByTestId, <alice>sMobileDevice.device_id);
 
             // unselected
-            expect(isDeviceSelected(getByTestId, alicesMobileDevice.device_id)).toBeFalsy();
+            expect(isDeviceSelected(getByTestId, <alice>sMobileDevice.device_id)).toBeFalsy();
             // still selected
-            expect(isDeviceSelected(getByTestId, alicesOlderMobileDevice.device_id)).toBeTruthy();
+            expect(isDeviceSelected(getByTestId, <alice>sOlderMobileDevice.device_id)).toBeTruthy();
         });
 
         it("cancel button clears selection", async () => {
@@ -1444,8 +1444,8 @@ describe("<SessionManagerTab />", () => {
                 await flushPromises();
             });
 
-            toggleDeviceSelection(getByTestId, alicesMobileDevice.device_id);
-            toggleDeviceSelection(getByTestId, alicesOlderMobileDevice.device_id);
+            toggleDeviceSelection(getByTestId, <alice>sMobileDevice.device_id);
+            toggleDeviceSelection(getByTestId, <alice>sOlderMobileDevice.device_id);
 
             // header displayed correctly
             expect(getByText("2 sessions selected")).toBeTruthy();
@@ -1453,8 +1453,8 @@ describe("<SessionManagerTab />", () => {
             fireEvent.click(getByTestId("cancel-selection-cta"));
 
             // unselected
-            expect(isDeviceSelected(getByTestId, alicesMobileDevice.device_id)).toBeFalsy();
-            expect(isDeviceSelected(getByTestId, alicesOlderMobileDevice.device_id)).toBeFalsy();
+            expect(isDeviceSelected(getByTestId, <alice>sMobileDevice.device_id)).toBeFalsy();
+            expect(isDeviceSelected(getByTestId, <alice>sOlderMobileDevice.device_id)).toBeFalsy();
         });
 
         it("changing the filter clears selection", async () => {
@@ -1464,8 +1464,8 @@ describe("<SessionManagerTab />", () => {
                 await flushPromises();
             });
 
-            toggleDeviceSelection(getByTestId, alicesMobileDevice.device_id);
-            expect(isDeviceSelected(getByTestId, alicesMobileDevice.device_id)).toBeTruthy();
+            toggleDeviceSelection(getByTestId, <alice>sMobileDevice.device_id);
+            expect(isDeviceSelected(getByTestId, <alice>sMobileDevice.device_id)).toBeTruthy();
 
             fireEvent.click(getByTestId("unverified-devices-cta"));
 
@@ -1473,7 +1473,7 @@ describe("<SessionManagerTab />", () => {
             await flushPromises();
 
             // unselected
-            expect(isDeviceSelected(getByTestId, alicesOlderMobileDevice.device_id)).toBeFalsy();
+            expect(isDeviceSelected(getByTestId, <alice>sOlderMobileDevice.device_id)).toBeFalsy();
         });
 
         describe("toggling select all", () => {
@@ -1491,8 +1491,8 @@ describe("<SessionManagerTab />", () => {
                 expect(isSelectAllChecked(getByTestId)).toBeTruthy();
 
                 // devices selected
-                expect(isDeviceSelected(getByTestId, alicesMobileDevice.device_id)).toBeTruthy();
-                expect(isDeviceSelected(getByTestId, alicesOlderMobileDevice.device_id)).toBeTruthy();
+                expect(isDeviceSelected(getByTestId, <alice>sMobileDevice.device_id)).toBeTruthy();
+                expect(isDeviceSelected(getByTestId, <alice>sOlderMobileDevice.device_id)).toBeTruthy();
             });
 
             it("selects all sessions when some sessions are already selected", async () => {
@@ -1502,7 +1502,7 @@ describe("<SessionManagerTab />", () => {
                     await flushPromises();
                 });
 
-                toggleDeviceSelection(getByTestId, alicesMobileDevice.device_id);
+                toggleDeviceSelection(getByTestId, <alice>sMobileDevice.device_id);
 
                 fireEvent.click(getByTestId("device-select-all-checkbox"));
 
@@ -1511,8 +1511,8 @@ describe("<SessionManagerTab />", () => {
                 expect(isSelectAllChecked(getByTestId)).toBeTruthy();
 
                 // devices selected
-                expect(isDeviceSelected(getByTestId, alicesMobileDevice.device_id)).toBeTruthy();
-                expect(isDeviceSelected(getByTestId, alicesOlderMobileDevice.device_id)).toBeTruthy();
+                expect(isDeviceSelected(getByTestId, <alice>sMobileDevice.device_id)).toBeTruthy();
+                expect(isDeviceSelected(getByTestId, <alice>sOlderMobileDevice.device_id)).toBeTruthy();
             });
 
             it("deselects all sessions when all sessions are selected", async () => {
@@ -1529,13 +1529,13 @@ describe("<SessionManagerTab />", () => {
                 expect(isSelectAllChecked(getByTestId)).toBeTruthy();
 
                 // devices selected
-                expect(isDeviceSelected(getByTestId, alicesMobileDevice.device_id)).toBeTruthy();
-                expect(isDeviceSelected(getByTestId, alicesOlderMobileDevice.device_id)).toBeTruthy();
+                expect(isDeviceSelected(getByTestId, <alice>sMobileDevice.device_id)).toBeTruthy();
+                expect(isDeviceSelected(getByTestId, <alice>sOlderMobileDevice.device_id)).toBeTruthy();
             });
 
             it("selects only sessions that are part of the active filter", async () => {
                 mockClient.getDevices.mockResolvedValue({
-                    devices: [alicesDevice, alicesMobileDevice, alicesInactiveDevice],
+                    devices: [<alice>sDevice, <alice>sMobileDevice, <alice>sInactiveDevice],
                 });
                 const { getByTestId, container } = render(getComponent());
 
@@ -1555,7 +1555,7 @@ describe("<SessionManagerTab />", () => {
 
                 // only called with session from active filter
                 expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith(
-                    [alicesInactiveDevice.device_id],
+                    [<alice>sInactiveDevice.device_id],
                     undefined,
                 );
             });
@@ -1567,10 +1567,10 @@ describe("<SessionManagerTab />", () => {
 
         await flushPromises();
 
-        toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
+        toggleDeviceDetails(getByTestId, <alice>sMobileDevice.device_id);
 
         // device details are expanded
-        expect(getByTestId(`device-detail-${alicesMobileDevice.device_id}`)).toBeTruthy();
+        expect(getByTestId(`device-detail-${<alice>sMobileDevice.device_id}`)).toBeTruthy();
         expect(getByTestId("device-detail-push-notification")).toBeTruthy();
 
         const checkbox = getByTestId("device-detail-push-notification-checkbox");
@@ -1586,10 +1586,10 @@ describe("<SessionManagerTab />", () => {
 
         await flushPromises();
 
-        toggleDeviceDetails(getByTestId, alicesDevice.device_id);
+        toggleDeviceDetails(getByTestId, <alice>sDevice.device_id);
 
         // device details are expanded
-        expect(getByTestId(`device-detail-${alicesDevice.device_id}`)).toBeTruthy();
+        expect(getByTestId(`device-detail-${<alice>sDevice.device_id}`)).toBeTruthy();
         expect(getByTestId("device-detail-push-notification")).toBeTruthy();
 
         const checkbox = getByTestId("device-detail-push-notification-checkbox");
@@ -1597,7 +1597,7 @@ describe("<SessionManagerTab />", () => {
         expect(checkbox).toBeTruthy();
         fireEvent.click(checkbox);
 
-        expect(mockClient.setLocalNotificationSettings).toHaveBeenCalledWith(alicesDevice.device_id, {
+        expect(mockClient.setLocalNotificationSettings).toHaveBeenCalledWith(<alice>sDevice.device_id, {
             is_silenced: true,
         });
     });
@@ -1607,10 +1607,10 @@ describe("<SessionManagerTab />", () => {
 
         await flushPromises();
 
-        toggleDeviceDetails(getByTestId, alicesDevice.device_id);
+        toggleDeviceDetails(getByTestId, <alice>sDevice.device_id);
 
         // device details are expanded
-        expect(getByTestId(`device-detail-${alicesDevice.device_id}`)).toBeTruthy();
+        expect(getByTestId(`device-detail-${<alice>sDevice.device_id}`)).toBeTruthy();
         expect(getByTestId("device-detail-push-notification")).toBeTruthy();
 
         const checkbox = getByTestId("device-detail-push-notification-checkbox");
@@ -1620,7 +1620,7 @@ describe("<SessionManagerTab />", () => {
         expect(checkbox.getAttribute("aria-checked")).toEqual("true");
 
         const evt = new MatrixEvent({
-            type: LOCAL_NOTIFICATION_SETTINGS_PREFIX.name + "." + alicesDevice.device_id,
+            type: LOCAL_NOTIFICATION_SETTINGS_PREFIX.name + "." + <alice>sDevice.device_id,
             content: {
                 is_silenced: true,
             },

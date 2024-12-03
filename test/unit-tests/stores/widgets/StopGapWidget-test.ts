@@ -39,14 +39,14 @@ describe("StopGapWidget", () => {
         widget = new StopGapWidget({
             app: {
                 id: "test",
-                creatorUserId: "@alice:example.org",
+                creatorUserId: "@<alice>:example.org",
                 type: "example",
                 url: "https://example.org?user-id=$matrix_user_id&device-id=$org.matrix.msc3819.matrix_device_id&base-url=$org.matrix.msc4039.matrix_base_url&theme=$org.matrix.msc2873.client_theme",
                 roomId: "!1:example.org",
             },
             room: mkRoom(client, "!1:example.org"),
-            userId: "@alice:example.org",
-            creatorUserId: "@alice:example.org",
+            userId: "@<alice>:example.org",
+            creatorUserId: "@<alice>:example.org",
             waitForIframeLoad: true,
             userWidget: false,
         });
@@ -75,7 +75,7 @@ describe("StopGapWidget", () => {
         const event = mkEvent({
             event: true,
             type: "org.example.foo",
-            user: "@alice:example.org",
+            user: "@<alice>:example.org",
             content: { hello: "world" },
         });
 
@@ -93,7 +93,7 @@ describe("StopGapWidget", () => {
                 event: true,
                 id: "$event-id1",
                 type: "org.example.foo",
-                user: "@alice:example.org",
+                user: "@<alice>:example.org",
                 content: { hello: "world" },
                 room: "!1:example.org",
             });
@@ -102,7 +102,7 @@ describe("StopGapWidget", () => {
                 event: true,
                 id: "$event-id2",
                 type: "org.example.foo",
-                user: "@alice:example.org",
+                user: "@<alice>:example.org",
                 content: { hello: "world" },
                 room: "!1:example.org",
             });
@@ -183,7 +183,7 @@ describe("StopGapWidget", () => {
                 event: true,
                 id: "$event-id",
                 type: "org.example.foo",
-                user: "@alice:example.org",
+                user: "@<alice>:example.org",
                 content: {
                     hello: "world",
                 },
@@ -199,7 +199,7 @@ describe("StopGapWidget", () => {
                 event: true,
                 id: "$event-idRelation",
                 type: "org.example.foo",
-                user: "@alice:example.org",
+                user: "@<alice>:example.org",
                 content: {
                     "hello": "world",
                     "m.relates_to": {
@@ -248,14 +248,14 @@ describe("StopGapWidget with stickyPromise", () => {
         widget = new StopGapWidget({
             app: {
                 id: "test",
-                creatorUserId: "@alice:example.org",
+                creatorUserId: "@<alice>:example.org",
                 type: "example",
                 url: "https://example.org?user-id=$matrix_user_id&device-id=$org.matrix.msc3819.matrix_device_id&base-url=$org.matrix.msc4039.matrix_base_url",
                 roomId: "!1:example.org",
             },
             room: mkRoom(client, "!1:example.org"),
-            userId: "@alice:example.org",
-            creatorUserId: "@alice:example.org",
+            userId: "@<alice>:example.org",
+            creatorUserId: "@<alice>:example.org",
             waitForIframeLoad: true,
             userWidget: false,
             stickyPromise: getStickyPromise,

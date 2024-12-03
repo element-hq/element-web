@@ -194,7 +194,7 @@ export const DEFAULT_PUSH_RULES: IPushRules = Object.freeze({
                 actions: ["notify", { set_tweak: "highlight" }, { set_tweak: "sound", value: "default" }],
                 rule_id: ".m.rule.contains_user_name",
                 default: true,
-                pattern: "alice",
+                pattern: "<alice>",
                 enabled: true,
             },
         ],
@@ -211,7 +211,7 @@ export const DEFAULT_PUSH_RULES: IPushRules = Object.freeze({
                 conditions: [
                     { kind: "event_match", key: "type", pattern: "m.room.member" },
                     { kind: "event_match", key: "content.membership", pattern: "invite" },
-                    { kind: "event_match", key: "state_key", pattern: "@alice:example.org" },
+                    { kind: "event_match", key: "state_key", pattern: "@<alice>:example.org" },
                 ],
                 actions: ["notify", { set_tweak: "highlight", value: false }, { set_tweak: "sound", value: "default" }],
                 rule_id: ".m.rule.invite_for_me",

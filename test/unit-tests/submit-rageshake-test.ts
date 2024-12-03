@@ -29,7 +29,7 @@ describe("Rageshakes", () => {
     const mockHttpAPI: MatrixHttpApi<IHttpOpts & { onlyData: true }> = new MatrixHttpApi(
         new TypedEventEmitter<HttpApiEvent, HttpApiEventHandlerMap>(),
         {
-            baseUrl: "https://alice-server.com",
+            baseUrl: "https://<alice>-server.com",
             prefix: "/_matrix/client/v3",
             onlyData: true,
         },
@@ -39,9 +39,9 @@ describe("Rageshakes", () => {
         mockClient = getMockClientWithEventEmitter({
             credentials: { userId: "@test:example.com" },
             deviceId: "AAAAAAAAAA",
-            baseUrl: "https://alice-server.com",
-            getHomeserverUrl: jest.fn().mockReturnValue("https://alice-server.com"),
-            getDomain: jest.fn().mockReturnValue("alice-server.com"),
+            baseUrl: "https://<alice>-server.com",
+            getHomeserverUrl: jest.fn().mockReturnValue("https://<alice>-server.com"),
+            getDomain: jest.fn().mockReturnValue("<alice>-server.com"),
             ...mockClientMethodsCrypto(),
             http: mockHttpAPI,
         });

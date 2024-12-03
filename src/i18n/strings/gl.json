@@ -3074,7 +3074,7 @@
                 "one": "Vas eliminar %(count)s mensaxe de %(user)s. Esto eliminaraa de xeito permanente para todas na conversa. Tes a certeza de querer eliminala?",
                 "other": "Vas a eliminar %(count)s mensaxes de %(user)s. Así eliminaralos de xeito permanente para todas na conversa. Tes a certeza de facelo?"
             },
-            "confirm_description_2": "Podería demorar un tempo se é un número grande de mensaxes. Non actualices o cliente mentras tanto.",
+            "confirm_description_2": "Podería demorar un tempo se é un número grande de mensaxes. Non actu<alice>s o cliente mentras tanto.",
             "confirm_keep_state_explainer": "Desmarcar se tamén queres eliminar as mensaxes do sistema acerca da usuaria (ex. cambios na membresía, cambios no perfil...)",
             "confirm_keep_state_label": "Conservar mensaxes do sistema",
             "confirm_title": "Eliminar mensaxes recentes de %(user)s",

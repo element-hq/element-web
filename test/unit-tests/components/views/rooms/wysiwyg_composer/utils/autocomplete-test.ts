@@ -50,8 +50,8 @@ describe("buildQuery", () => {
     });
 
     it("combines the keyChar and text of the suggestion in the query", () => {
-        const handledSuggestion = { keyChar: "@" as const, text: "alice", type: "mention" as const };
-        expect(buildQuery(handledSuggestion)).toBe("@alice");
+        const handledSuggestion = { keyChar: "@" as const, text: "<alice>", type: "mention" as const };
+        expect(buildQuery(handledSuggestion)).toBe("@<alice>");
 
         const handledCommand = { keyChar: "/" as const, text: "spoiler", type: "mention" as const };
         expect(buildQuery(handledCommand)).toBe("/spoiler");

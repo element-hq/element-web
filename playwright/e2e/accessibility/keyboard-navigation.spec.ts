@@ -11,7 +11,7 @@ import { Bot } from "../../pages/bot";
 
 test.describe("Landmark navigation tests", () => {
     test.use({
-        displayName: "Alice",
+        displayName: "<alice>",
     });
 
     test("without any rooms", async ({ page, homeserver, app, user }) => {

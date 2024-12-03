@@ -16,7 +16,7 @@ import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 
 describe("<ManageRestrictedJoinRuleDialog />", () => {
-    const userId = "@alice:server.org";
+    const userId = "@<alice>:server.org";
     const mockClient = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),
         getRoom: jest.fn(),

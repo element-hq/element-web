@@ -147,7 +147,7 @@ describe("Lifecycle", () => {
 
     const homeserverUrl = "https://server.org";
     const identityServerUrl = "https://is.org";
-    const userId = "@alice:server.org";
+    const userId = "@<alice>:server.org";
     const deviceId = "abc123";
     const accessToken = "test-access-token";
     const localStorageSession = {

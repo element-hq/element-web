@@ -19,7 +19,7 @@ import { clearAllModals, flushPromises, stubClient } from "../../../../../../tes
 import { filterBoolean } from "../../../../../../../src/utils/arrays";
 
 describe("<SecurityRoomSettingsTab />", () => {
-    const userId = "@alice:server.org";
+    const userId = "@<alice>:server.org";
     const client = mocked(stubClient());
     const roomId = "!room:server.org";
 

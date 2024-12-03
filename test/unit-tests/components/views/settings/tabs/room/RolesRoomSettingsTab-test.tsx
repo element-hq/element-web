@@ -21,7 +21,7 @@ import SettingsStore from "../../../../../../../src/settings/SettingsStore";
 import { ElementCall } from "../../../../../../../src/models/Call";
 
 describe("RolesRoomSettingsTab", () => {
-    const userId = "@alice:server.org";
+    const userId = "@<alice>:server.org";
     const roomId = "!room:example.com";
     let cli: MatrixClient;
     let room: Room;
@@ -180,8 +180,8 @@ describe("RolesRoomSettingsTab", () => {
 
         it("uses banners display name when available", () => {
             const bannedMember = new RoomMember(roomId, "@bob:server.org");
-            const senderMember = new RoomMember(roomId, "@alice:server.org");
-            senderMember.name = "Alice";
+            const senderMember = new RoomMember(roomId, "@<alice>:server.org");
+            senderMember.name = "<alice>";
             bannedMember.setMembershipEvent(
                 new MatrixEvent({
                     type: EventType.RoomMember,
@@ -197,7 +197,7 @@ describe("RolesRoomSettingsTab", () => {
             jest.spyOn(room, "getMember").mockReturnValue(senderMember);
             renderTab(room);
 
-            expect(screen.getByTitle("Banned by Alice")).toBeInTheDocument();
+            expect(screen.getByTitle("Banned by <alice>")).toBeInTheDocument();
         });
     });
 

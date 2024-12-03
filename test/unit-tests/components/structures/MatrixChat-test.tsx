@@ -75,7 +75,7 @@ jest.mock("../../../../src/settings/watchers/ThemeWatcher");
 const SERVER_SUPPORTED_MATRIX_VERSIONS = ["v1.1", "v1.5", "v1.6", "v1.8", "v1.9"];
 
 describe("<MatrixChat />", () => {
-    const userId = "@alice:server.org";
+    const userId = "@<alice>:server.org";
     const deviceId = "qwertyui";
     const accessToken = "abc123";
     const refreshToken = "def456";
@@ -307,7 +307,7 @@ describe("<MatrixChat />", () => {
             state: state,
         };
 
-        const userId = "@alice:server.org";
+        const userId = "@<alice>:server.org";
         const deviceId = "test-device-id";
         const accessToken = "test-access-token-from-oidc";
 
@@ -1135,7 +1135,7 @@ describe("<MatrixChat />", () => {
         };
 
         let loginClient!: ReturnType<typeof getMockClientWithEventEmitter>;
-        const userId = "@alice:server.org";
+        const userId = "@<alice>:server.org";
         const deviceId = "test-device-id";
         const accessToken = "test-access-token";
         const clientLoginResponse = {

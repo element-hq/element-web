@@ -33,7 +33,7 @@ describe("PeopleRoomSettingsTab", () => {
         mxcUrlToHttp: (mxcUrl: string) => mxcUrl,
     });
     const roomId = "#ask-to-join:example.org";
-    const userId = "@alice:example.org";
+    const userId = "@<alice>:example.org";
     const member = new RoomMember(roomId, userId);
     const room = new Room(roomId, client, userId);
     const state = room.getLiveTimeline().getState(EventTimeline.FORWARDS)!;

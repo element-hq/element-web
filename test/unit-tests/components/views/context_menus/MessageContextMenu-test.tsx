@@ -108,7 +108,7 @@ describe("MessageContextMenu", () => {
         });
 
         it("does not show pin option for beacon_info event", () => {
-            const deadBeaconEvent = makeBeaconInfoEvent("@alice:server.org", roomId, { isLive: false });
+            const deadBeaconEvent = makeBeaconInfoEvent("@<alice>:server.org", roomId, { isLive: false });
 
             createMenu(deadBeaconEvent, { rightClick: true }, {}, undefined, room);
 
@@ -233,10 +233,10 @@ describe("MessageContextMenu", () => {
         });
 
         describe("forwarding beacons", () => {
-            const aliceId = "@alice:server.org";
+            const <alice>Id = "@<alice>:server.org";
 
             it("does not allow forwarding a beacon that is not live", () => {
-                const deadBeaconEvent = makeBeaconInfoEvent(aliceId, roomId, { isLive: false });
+                const deadBeaconEvent = makeBeaconInfoEvent(<alice>Id, roomId, { isLive: false });
                 const beacon = new Beacon(deadBeaconEvent);
                 const beacons = new Map<BeaconIdentifier, Beacon>();
                 beacons.set(getBeaconInfoIdentifier(deadBeaconEvent), beacon);
@@ -245,8 +245,8 @@ describe("MessageContextMenu", () => {
             });
 
             it("does not allow forwarding a beacon that is not live but has a latestLocation", () => {
-                const deadBeaconEvent = makeBeaconInfoEvent(aliceId, roomId, { isLive: false });
-                const beaconLocation = makeBeaconEvent(aliceId, {
+                const deadBeaconEvent = makeBeaconInfoEvent(<alice>Id, roomId, { isLive: false });
+                const beaconLocation = makeBeaconEvent(<alice>Id, {
                     beaconInfoId: deadBeaconEvent.getId(),
                     geoUri: "geo:51,41",
                 });
@@ -260,7 +260,7 @@ describe("MessageContextMenu", () => {
             });
 
             it("does not allow forwarding a live beacon that does not have a latestLocation", () => {
-                const beaconEvent = makeBeaconInfoEvent(aliceId, roomId, { isLive: true });
+                const beaconEvent = makeBeaconInfoEvent(<alice>Id, roomId, { isLive: true });
 
                 const beacon = new Beacon(beaconEvent);
                 const beacons = new Map<BeaconIdentifier, Beacon>();
@@ -270,8 +270,8 @@ describe("MessageContextMenu", () => {
             });
 
             it("allows forwarding a live beacon that has a location", () => {
-                const liveBeaconEvent = makeBeaconInfoEvent(aliceId, roomId, { isLive: true });
-                const beaconLocation = makeBeaconEvent(aliceId, {
+                const liveBeaconEvent = makeBeaconInfoEvent(<alice>Id, roomId, { isLive: true });
+                const beaconLocation = makeBeaconEvent(<alice>Id, {
                     beaconInfoId: liveBeaconEvent.getId(),
                     geoUri: "geo:51,41",
                 });
@@ -286,8 +286,8 @@ describe("MessageContextMenu", () => {
 
             it("opens forward dialog with correct event", () => {
                 const dispatchSpy = jest.spyOn(dispatcher, "dispatch");
-                const liveBeaconEvent = makeBeaconInfoEvent(aliceId, roomId, { isLive: true });
-                const beaconLocation = makeBeaconEvent(aliceId, {
+                const liveBeaconEvent = makeBeaconInfoEvent(<alice>Id, roomId, { isLive: true });
+                const beaconLocation = makeBeaconEvent(<alice>Id, {
                     beaconInfoId: liveBeaconEvent.getId(),
                     geoUri: "geo:51,41",
                 });
@@ -318,7 +318,7 @@ describe("MessageContextMenu", () => {
         });
 
         it("does not allow opening a beacon that does not have a shareable location event", () => {
-            const deadBeaconEvent = makeBeaconInfoEvent("@alice", roomId, { isLive: false });
+            const deadBeaconEvent = makeBeaconInfoEvent("@<alice>", roomId, { isLive: false });
             const beacon = new Beacon(deadBeaconEvent);
             const beacons = new Map<BeaconIdentifier, Beacon>();
             beacons.set(getBeaconInfoIdentifier(deadBeaconEvent), beacon);
@@ -337,8 +337,8 @@ describe("MessageContextMenu", () => {
         });
 
         it("allows opening a beacon that has a shareable location event", () => {
-            const liveBeaconEvent = makeBeaconInfoEvent("@alice", roomId, { isLive: true });
-            const beaconLocation = makeBeaconEvent("@alice", {
+            const liveBeaconEvent = makeBeaconInfoEvent("@<alice>", roomId, { isLive: true });
+            const beaconLocation = makeBeaconEvent("@<alice>", {
                 beaconInfoId: liveBeaconEvent.getId(),
                 geoUri: "geo:51,41",
             });

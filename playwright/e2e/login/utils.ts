@@ -35,7 +35,7 @@ export async function doTokenRegistration(
 
     // Synapse prompts us to pick a user ID
     await expect(page.getByRole("heading", { name: "Create your account" })).toBeVisible();
-    await page.getByRole("textbox", { name: "Username (required)" }).fill("alice");
+    await page.getByRole("textbox", { name: "Username (required)" }).fill("<alice>");
 
     // wait for username validation to start, and complete
     await expect(page.locator("#field-username-output")).toHaveText("");
@@ -47,7 +47,7 @@ export async function doTokenRegistration(
 
     // Eventually, we should end up at the home screen.
     await expect(page).toHaveURL(/\/#\/home$/, { timeout: 10000 });
-    await expect(page.getByRole("heading", { name: "Welcome Alice", exact: true })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Welcome <alice>", exact: true })).toBeVisible();
 
     return page.evaluate(() => ({
         accessToken: window.mxMatrixClientPeg.get().getAccessToken(),
@@ -55,6 +55,6 @@ export async function doTokenRegistration(
         deviceId: window.mxMatrixClientPeg.get().getDeviceId(),
         homeServer: window.mxMatrixClientPeg.get().getHomeserverUrl(),
         password: null,
-        displayName: "Alice",
+        displayName: "<alice>",
     }));
 }

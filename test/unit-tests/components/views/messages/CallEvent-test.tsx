@@ -36,7 +36,7 @@ const CallEvent = wrapInMatrixClientContext(UnwrappedCallEvent);
 describe("CallEvent", () => {
     let client: Mocked<MatrixClient>;
     let room: Room;
-    let alice: RoomMember;
+    let <alice>: RoomMember;
     let bob: RoomMember;
     let call: MockedCall;
     let widget: Widget;
@@ -51,16 +51,16 @@ describe("CallEvent", () => {
 
         stubClient();
         client = mocked(MatrixClientPeg.safeGet());
-        client.getUserId.mockReturnValue("@alice:example.org");
+        client.getUserId.mockReturnValue("@<alice>:example.org");
 
-        room = new Room("!1:example.org", client, "@alice:example.org", {
+        room = new Room("!1:example.org", client, "@<alice>:example.org", {
             pendingEventOrdering: PendingEventOrdering.Detached,
         });
 
-        alice = mkRoomMember(room.roomId, "@alice:example.org");
+        <alice> = mkRoomMember(room.roomId, "@<alice>:example.org");
         bob = mkRoomMember(room.roomId, "@bob:example.org");
         jest.spyOn(room, "getMember").mockImplementation(
-            (userId) => [alice, bob].find((member) => member.userId === userId) ?? null,
+            (userId) => [<alice>, bob].find((member) => member.userId === userId) ?? null,
         );
 
         client.getRoom.mockImplementation((roomId) => (roomId === room.roomId ? room : null));
@@ -119,19 +119,19 @@ describe("CallEvent", () => {
         jest.advanceTimersByTime(90000);
         renderEvent();
 
-        screen.getByText("@alice:example.org started a video call");
+        screen.getByText("@<alice>:example.org started a video call");
         expect(screen.getByRole("button", { name: "Join" })).toHaveAttribute("aria-disabled", "true");
     });
 
     it("shows call details and connection controls if the call is loaded", async () => {
         jest.advanceTimersByTime(90000);
         call.participants = new Map([
-            [alice, new Set(["a"])],
+            [<alice>, new Set(["a"])],
             [bob, new Set(["b"])],
         ]);
         renderEvent();
 
-        screen.getByText("@alice:example.org started a video call");
+        screen.getByText("@<alice>:example.org started a video call");
         screen.getByLabelText("2 people joined");
 
         // Test that the join button works

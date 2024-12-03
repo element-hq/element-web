@@ -159,7 +159,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
                 aria-labelledby=":rq:"
                 class="mx_PinnedEventTile_sender mx_Username_color3"
               >
-                @alice:example.org
+                @<alice>:example.org
               </span>
               <button
                 aria-disabled="false"
@@ -236,7 +236,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
                 aria-labelledby=":r11:"
                 class="mx_PinnedEventTile_sender mx_Username_color3"
               >
-                @alice:example.org
+                @<alice>:example.org
               </span>
               <button
                 aria-disabled="false"
@@ -378,7 +378,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
                 aria-labelledby=":rt8:"
                 class="mx_PinnedEventTile_sender mx_Username_color3"
               >
-                @alice:example.org
+                @<alice>:example.org
               </span>
               <button
                 aria-disabled="false"
@@ -455,7 +455,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
                 aria-labelledby=":rtf:"
                 class="mx_PinnedEventTile_sender mx_Username_color3"
               >
-                @alice:example.org
+                @<alice>:example.org
               </span>
               <button
                 aria-disabled="false"

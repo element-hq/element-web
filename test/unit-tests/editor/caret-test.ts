@@ -91,7 +91,7 @@ describe("editor/caret: DOM position for caret", function () {
         it("at start of non-editable part (with plain text around)", function () {
             const pc = createPartCreator();
             const model = new EditorModel(
-                [pc.plain("hello"), pc.userPill("Alice", "@alice:hs.tld"), pc.plain("!")],
+                [pc.plain("hello"), pc.userPill("<alice>", "@<alice>:hs.tld"), pc.plain("!")],
                 pc,
             );
             const { offset, lineIndex, nodeIndex } = getLineAndNodePosition(model, { index: 1, offset: 0 });
@@ -102,7 +102,7 @@ describe("editor/caret: DOM position for caret", function () {
         it("in middle of non-editable part (with plain text around)", function () {
             const pc = createPartCreator();
             const model = new EditorModel(
-                [pc.plain("hello"), pc.userPill("Alice", "@alice:hs.tld"), pc.plain("!")],
+                [pc.plain("hello"), pc.userPill("<alice>", "@<alice>:hs.tld"), pc.plain("!")],
                 pc,
             );
             const { offset, lineIndex, nodeIndex } = getLineAndNodePosition(model, { index: 1, offset: 2 });
@@ -112,7 +112,7 @@ describe("editor/caret: DOM position for caret", function () {
         });
         it("at start of non-editable part (without plain text around)", function () {
             const pc = createPartCreator();
-            const model = new EditorModel([pc.userPill("Alice", "@alice:hs.tld")], pc);
+            const model = new EditorModel([pc.userPill("<alice>", "@<alice>:hs.tld")], pc);
             const { offset, lineIndex, nodeIndex } = getLineAndNodePosition(model, { index: 0, offset: 0 });
             expect(lineIndex).toBe(0);
             //presumed nodes on line are (caret, pill, caret)
@@ -121,7 +121,7 @@ describe("editor/caret: DOM position for caret", function () {
         });
         it("in middle of non-editable part (without plain text around)", function () {
             const pc = createPartCreator();
-            const model = new EditorModel([pc.userPill("Alice", "@alice:hs.tld")], pc);
+            const model = new EditorModel([pc.userPill("<alice>", "@<alice>:hs.tld")], pc);
             const { offset, lineIndex, nodeIndex } = getLineAndNodePosition(model, { index: 0, offset: 1 });
             expect(lineIndex).toBe(0);
             //presumed nodes on line are (caret, pill, caret)
@@ -131,7 +131,7 @@ describe("editor/caret: DOM position for caret", function () {
         it("in middle of a first non-editable part, with another one following", function () {
             const pc = createPartCreator();
             const model = new EditorModel(
-                [pc.userPill("Alice", "@alice:hs.tld"), pc.userPill("Bob", "@bob:hs.tld")],
+                [pc.userPill("<alice>", "@<alice>:hs.tld"), pc.userPill("Bob", "@bob:hs.tld")],
                 pc,
             );
             const { offset, lineIndex, nodeIndex } = getLineAndNodePosition(model, { index: 0, offset: 1 });
@@ -143,7 +143,7 @@ describe("editor/caret: DOM position for caret", function () {
         it("in start of a second non-editable part, with another one before it", function () {
             const pc = createPartCreator();
             const model = new EditorModel(
-                [pc.userPill("Alice", "@alice:hs.tld"), pc.userPill("Bob", "@bob:hs.tld")],
+                [pc.userPill("<alice>", "@<alice>:hs.tld"), pc.userPill("Bob", "@bob:hs.tld")],
                 pc,
             );
             const { offset, lineIndex, nodeIndex } = getLineAndNodePosition(model, { index: 1, offset: 0 });
@@ -155,7 +155,7 @@ describe("editor/caret: DOM position for caret", function () {
         it("in middle of a second non-editable part, with another one before it", function () {
             const pc = createPartCreator();
             const model = new EditorModel(
-                [pc.userPill("Alice", "@alice:hs.tld"), pc.userPill("Bob", "@bob:hs.tld")],
+                [pc.userPill("<alice>", "@<alice>:hs.tld"), pc.userPill("Bob", "@bob:hs.tld")],
                 pc,
             );
             const { offset, lineIndex, nodeIndex } = getLineAndNodePosition(model, { index: 1, offset: 1 });

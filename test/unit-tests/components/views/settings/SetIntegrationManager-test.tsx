@@ -24,7 +24,7 @@ import SetIntegrationManager from "../../../../../src/components/views/settings/
 import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 
 describe("SetIntegrationManager", () => {
-    const userId = "@alice:server.org";
+    const userId = "@<alice>:server.org";
 
     const mockClient = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),

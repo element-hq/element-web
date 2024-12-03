@@ -44,24 +44,24 @@ describe("beacon utils", () => {
 
     describe("sortBeaconsByLatestExpiry()", () => {
         const roomId = "!room:server";
-        const aliceId = "@alive:server";
+        const <alice>Id = "@alive:server";
 
         // 12h old, 12h left
         const beacon1 = new Beacon(
-            makeBeaconInfoEvent(aliceId, roomId, { timeout: HOUR_MS * 24, timestamp: now - 12 * HOUR_MS }, "$1"),
+            makeBeaconInfoEvent(<alice>Id, roomId, { timeout: HOUR_MS * 24, timestamp: now - 12 * HOUR_MS }, "$1"),
         );
         // 10h left
         const beacon2 = new Beacon(
-            makeBeaconInfoEvent(aliceId, roomId, { timeout: HOUR_MS * 10, timestamp: now }, "$2"),
+            makeBeaconInfoEvent(<alice>Id, roomId, { timeout: HOUR_MS * 10, timestamp: now }, "$2"),
         );
 
         // 1ms left
         const beacon3 = new Beacon(
-            makeBeaconInfoEvent(aliceId, roomId, { timeout: HOUR_MS + 1, timestamp: now - HOUR_MS }, "$3"),
+            makeBeaconInfoEvent(<alice>Id, roomId, { timeout: HOUR_MS + 1, timestamp: now - HOUR_MS }, "$3"),
         );
 
         const noTimestampEvent = makeBeaconInfoEvent(
-            aliceId,
+            <alice>Id,
             roomId,
             { timeout: HOUR_MS + 1, timestamp: undefined },
             "$3",
@@ -83,20 +83,20 @@ describe("beacon utils", () => {
 
     describe("sortBeaconsByLatestCreation()", () => {
         const roomId = "!room:server";
-        const aliceId = "@alive:server";
+        const <alice>Id = "@alive:server";
 
         // 12h old, 12h left
         const beacon1 = new Beacon(
-            makeBeaconInfoEvent(aliceId, roomId, { timeout: HOUR_MS * 24, timestamp: now - 12 * HOUR_MS }, "$1"),
+            makeBeaconInfoEvent(<alice>Id, roomId, { timeout: HOUR_MS * 24, timestamp: now - 12 * HOUR_MS }, "$1"),
         );
         // 10h left
         const beacon2 = new Beacon(
-            makeBeaconInfoEvent(aliceId, roomId, { timeout: HOUR_MS * 10, timestamp: now }, "$2"),
+            makeBeaconInfoEvent(<alice>Id, roomId, { timeout: HOUR_MS * 10, timestamp: now }, "$2"),
         );
 
         // 1ms left
         const beacon3 = new Beacon(
-            makeBeaconInfoEvent(aliceId, roomId, { timeout: HOUR_MS + 1, timestamp: now - HOUR_MS }, "$3"),
+            makeBeaconInfoEvent(<alice>Id, roomId, { timeout: HOUR_MS + 1, timestamp: now - HOUR_MS }, "$3"),
         );
 
         it("sorts beacons by descending creation time", () => {

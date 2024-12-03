@@ -11,7 +11,7 @@ import { CommandOrControl } from "../../utils";
 
 test.describe("Threads Activity Centre", () => {
     test.use({
-        displayName: "Alice",
+        displayName: "<alice>",
         botCreateOpts: { displayName: "Other User" },
         labsFlags: ["threadsActivityCentre"],
     });

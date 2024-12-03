@@ -33,7 +33,7 @@ test.describe("Registration", () => {
         await expect(page).toMatchScreenshot("registration.png", screenshotOptions);
         await checkA11y();
 
-        await page.getByRole("textbox", { name: "Username", exact: true }).fill("alice");
+        await page.getByRole("textbox", { name: "Username", exact: true }).fill("<alice>");
         await page.getByPlaceholder("Password", { exact: true }).fill("totally a great password");
         await page.getByPlaceholder("Confirm password", { exact: true }).fill("totally a great password");
         await page.getByRole("button", { name: "Register", exact: true }).click();
@@ -86,7 +86,7 @@ test.describe("Registration", () => {
 
         await expect(page.getByRole("textbox", { name: "Username", exact: true })).toBeVisible();
 
-        await page.route("**/_matrix/client/*/register/available?username=_alice", async (route) => {
+        await page.route("**/_matrix/client/*/register/available?username=_<alice>", async (route) => {
             await route.fulfill({
                 status: 400,
                 json: {
@@ -95,7 +95,7 @@ test.describe("Registration", () => {
                 },
             });
         });
-        await page.getByRole("textbox", { name: "Username", exact: true }).fill("_alice");
+        await page.getByRole("textbox", { name: "Username", exact: true }).fill("_<alice>");
         await expect(page.getByRole("tooltip").filter({ hasText: "Some characters not allowed" })).toBeVisible();
 
         await page.route("**/_matrix/client/*/register/available?username=bob", async (route) => {

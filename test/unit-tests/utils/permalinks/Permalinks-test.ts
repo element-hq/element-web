@@ -116,8 +116,8 @@ describe("Permalinks", function () {
 
     it("should gracefully handle invalid MXIDs", () => {
         const roomId = "!fake:example.org";
-        const alice50 = makeMemberWithPL(roomId, "@alice:pl_50:org", 50);
-        const room = mockRoom(roomId, [alice50]);
+        const <alice>50 = makeMemberWithPL(roomId, "@<alice>:pl_50:org", 50);
+        const room = mockRoom(roomId, [<alice>50]);
         const creator = new RoomPermalinkCreator(room);
         creator.load();
         expect(creator.serverCandidates).toBeTruthy();
@@ -125,10 +125,10 @@ describe("Permalinks", function () {
 
     it("should pick a candidate server for the highest power level user in the room", function () {
         const roomId = "!fake:example.org";
-        const alice50 = makeMemberWithPL(roomId, "@alice:pl_50", 50);
-        const alice75 = makeMemberWithPL(roomId, "@alice:pl_75", 75);
-        const alice95 = makeMemberWithPL(roomId, "@alice:pl_95", 95);
-        const room = mockRoom("!fake:example.org", [alice50, alice75, alice95]);
+        const <alice>50 = makeMemberWithPL(roomId, "@<alice>:pl_50", 50);
+        const <alice>75 = makeMemberWithPL(roomId, "@<alice>:pl_75", 75);
+        const <alice>95 = makeMemberWithPL(roomId, "@<alice>:pl_95", 95);
+        const room = mockRoom("!fake:example.org", [<alice>50, <alice>75, <alice>95]);
         const creator = new RoomPermalinkCreator(room);
         creator.load();
         expect(creator.serverCandidates).toBeTruthy();
@@ -139,11 +139,11 @@ describe("Permalinks", function () {
 
     it("should change candidate server when highest power level user leaves the room", function () {
         const roomId = "!fake:example.org";
-        const member95 = makeMemberWithPL(roomId, "@alice:pl_95", 95);
+        const member95 = makeMemberWithPL(roomId, "@<alice>:pl_95", 95);
 
         const room = mockRoom(roomId, [
-            makeMemberWithPL(roomId, "@alice:pl_50", 50),
-            makeMemberWithPL(roomId, "@alice:pl_75", 75),
+            makeMemberWithPL(roomId, "@<alice>:pl_50", 50),
+            makeMemberWithPL(roomId, "@<alice>:pl_75", 75),
             member95,
         ]);
         const creator = new RoomPermalinkCreator(room, null);
@@ -162,10 +162,10 @@ describe("Permalinks", function () {
     it("should pick candidate servers based on user population", function () {
         const roomId = "!fake:example.org";
         const room = mockRoom(roomId, [
-            makeMemberWithPL(roomId, "@alice:first", 0),
+            makeMemberWithPL(roomId, "@<alice>:first", 0),
             makeMemberWithPL(roomId, "@bob:first", 0),
             makeMemberWithPL(roomId, "@charlie:first", 0),
-            makeMemberWithPL(roomId, "@alice:second", 0),
+            makeMemberWithPL(roomId, "@<alice>:second", 0),
             makeMemberWithPL(roomId, "@bob:second", 0),
             makeMemberWithPL(roomId, "@charlie:third", 0),
         ]);
@@ -181,8 +181,8 @@ describe("Permalinks", function () {
     it("should pick prefer candidate servers with higher power levels", function () {
         const roomId = "!fake:example.org";
         const room = mockRoom(roomId, [
-            makeMemberWithPL(roomId, "@alice:first", 100),
-            makeMemberWithPL(roomId, "@alice:second", 0),
+            makeMemberWithPL(roomId, "@<alice>:first", 100),
+            makeMemberWithPL(roomId, "@<alice>:second", 0),
             makeMemberWithPL(roomId, "@bob:second", 0),
             makeMemberWithPL(roomId, "@charlie:third", 0),
         ]);
@@ -197,11 +197,11 @@ describe("Permalinks", function () {
     it("should pick a maximum of 3 candidate servers", function () {
         const roomId = "!fake:example.org";
         const room = mockRoom(roomId, [
-            makeMemberWithPL(roomId, "@alice:alpha", 100),
-            makeMemberWithPL(roomId, "@alice:bravo", 0),
-            makeMemberWithPL(roomId, "@alice:charlie", 0),
-            makeMemberWithPL(roomId, "@alice:delta", 0),
-            makeMemberWithPL(roomId, "@alice:echo", 0),
+            makeMemberWithPL(roomId, "@<alice>:alpha", 100),
+            makeMemberWithPL(roomId, "@<alice>:bravo", 0),
+            makeMemberWithPL(roomId, "@<alice>:charlie", 0),
+            makeMemberWithPL(roomId, "@<alice>:delta", 0),
+            makeMemberWithPL(roomId, "@<alice>:echo", 0),
         ]);
         const creator = new RoomPermalinkCreator(room);
         creator.load();
@@ -211,7 +211,7 @@ describe("Permalinks", function () {
 
     it("should not consider IPv4 hosts", function () {
         const roomId = "!fake:example.org";
-        const room = mockRoom(roomId, [makeMemberWithPL(roomId, "@alice:127.0.0.1", 100)]);
+        const room = mockRoom(roomId, [makeMemberWithPL(roomId, "@<alice>:127.0.0.1", 100)]);
         const creator = new RoomPermalinkCreator(room);
         creator.load();
         expect(creator.serverCandidates).toBeTruthy();
@@ -220,7 +220,7 @@ describe("Permalinks", function () {
 
     it("should not consider IPv6 hosts", function () {
         const roomId = "!fake:example.org";
-        const room = mockRoom(roomId, [makeMemberWithPL(roomId, "@alice:[::1]", 100)]);
+        const room = mockRoom(roomId, [makeMemberWithPL(roomId, "@<alice>:[::1]", 100)]);
         const creator = new RoomPermalinkCreator(room);
         creator.load();
         expect(creator.serverCandidates).toBeTruthy();
@@ -229,7 +229,7 @@ describe("Permalinks", function () {
 
     it("should not consider IPv4 hostnames with ports", function () {
         const roomId = "!fake:example.org";
-        const room = mockRoom(roomId, [makeMemberWithPL(roomId, "@alice:127.0.0.1:8448", 100)]);
+        const room = mockRoom(roomId, [makeMemberWithPL(roomId, "@<alice>:127.0.0.1:8448", 100)]);
         const creator = new RoomPermalinkCreator(room);
         creator.load();
         expect(creator.serverCandidates).toBeTruthy();
@@ -238,7 +238,7 @@ describe("Permalinks", function () {
 
     it("should not consider IPv6 hostnames with ports", function () {
         const roomId = "!fake:example.org";
-        const room = mockRoom(roomId, [makeMemberWithPL(roomId, "@alice:[::1]:8448", 100)]);
+        const room = mockRoom(roomId, [makeMemberWithPL(roomId, "@<alice>:[::1]:8448", 100)]);
         const creator = new RoomPermalinkCreator(room);
         creator.load();
         expect(creator.serverCandidates).toBeTruthy();
@@ -247,7 +247,7 @@ describe("Permalinks", function () {
 
     it("should work with hostnames with ports", function () {
         const roomId = "!fake:example.org";
-        const room = mockRoom(roomId, [makeMemberWithPL(roomId, "@alice:example.org:8448", 100)]);
+        const room = mockRoom(roomId, [makeMemberWithPL(roomId, "@<alice>:example.org:8448", 100)]);
 
         const creator = new RoomPermalinkCreator(room);
         creator.load();
@@ -261,7 +261,7 @@ describe("Permalinks", function () {
         const room = mockRoom(
             roomId,
             [
-                makeMemberWithPL(roomId, "@alice:evilcorp.com", 100),
+                makeMemberWithPL(roomId, "@<alice>:evilcorp.com", 100),
                 makeMemberWithPL(roomId, "@bob:chat.evilcorp.com", 0),
             ],
             {
@@ -280,7 +280,7 @@ describe("Permalinks", function () {
         const room = mockRoom(
             roomId,
             [
-                makeMemberWithPL(roomId, "@alice:evilcorp.com", 100),
+                makeMemberWithPL(roomId, "@<alice>:evilcorp.com", 100),
                 makeMemberWithPL(roomId, "@bob:chat.evilcorp.com", 0),
             ],
             {
@@ -299,7 +299,7 @@ describe("Permalinks", function () {
         const room = mockRoom(
             roomId,
             [
-                makeMemberWithPL(roomId, "@alice:evilcorp.com", 100),
+                makeMemberWithPL(roomId, "@<alice>:evilcorp.com", 100),
                 makeMemberWithPL(roomId, "@bob:chat.evilcorp.com", 0),
             ],
             {
@@ -319,7 +319,7 @@ describe("Permalinks", function () {
         const room = mockRoom(
             "!fake:example.org",
             [
-                makeMemberWithPL(roomId, "@alice:evilcorp.com", 100),
+                makeMemberWithPL(roomId, "@<alice>:evilcorp.com", 100),
                 makeMemberWithPL(roomId, "@bob:chat.evilcorp.com", 0),
             ],
             {
@@ -345,7 +345,7 @@ describe("Permalinks", function () {
     it("should generate an event permalink for room IDs with some candidate servers", function () {
         const roomId = "!somewhere:example.org";
         const room = mockRoom(roomId, [
-            makeMemberWithPL(roomId, "@alice:first", 100),
+            makeMemberWithPL(roomId, "@<alice>:first", 100),
             makeMemberWithPL(roomId, "@bob:second", 0),
         ]);
         const creator = new RoomPermalinkCreator(room);
@@ -357,7 +357,7 @@ describe("Permalinks", function () {
     it("should generate a room permalink for room IDs with some candidate servers", function () {
         mockClient.getRoom.mockImplementation((roomId: Room["roomId"]) => {
             return mockRoom(roomId, [
-                makeMemberWithPL(roomId, "@alice:first", 100),
+                makeMemberWithPL(roomId, "@<alice>:first", 100),
                 makeMemberWithPL(roomId, "@bob:second", 0),
             ]);
         });
@@ -374,7 +374,7 @@ describe("Permalinks", function () {
     it("should generate a room permalink for room aliases without candidate servers", function () {
         mockClient.getRoom.mockImplementation((roomId: Room["roomId"]) => {
             return mockRoom(roomId, [
-                makeMemberWithPL(roomId, "@alice:first", 100),
+                makeMemberWithPL(roomId, "@<alice>:first", 100),
                 makeMemberWithPL(roomId, "@bob:second", 0),
             ]);
         });

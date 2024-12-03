@@ -54,10 +54,10 @@ describe("TextForEvent", () => {
 
     describe("getSenderName()", () => {
         it("Prefers sender.name", () => {
-            expect(getSenderName({ sender: { name: "Alice" } } as MatrixEvent)).toBe("Alice");
+            expect(getSenderName({ sender: { name: "<alice>" } } as MatrixEvent)).toBe("<alice>");
         });
         it("Handles missing sender", () => {
-            expect(getSenderName({ getSender: () => "Alice" } as MatrixEvent)).toBe("Alice");
+            expect(getSenderName({ getSender: () => "<alice>" } as MatrixEvent)).toBe("<alice>");
         });
         it("Handles missing sender and get sender", () => {
             expect(getSenderName({ getSender: () => undefined } as MatrixEvent)).toBe("Someone");
@@ -144,8 +144,8 @@ describe("TextForEvent", () => {
 
         const userA = {
             userId: "@a",
-            name: "Alice",
-            rawDisplayName: "Alice",
+            name: "<alice>",
+            rawDisplayName: "<alice>",
         } as RoomMember;
         const userB = {
             userId: "@b",
@@ -235,7 +235,7 @@ describe("TextForEvent", () => {
                     [userB.userId]: 50,
                 },
             });
-            const expectedText = "Alice changed the power level of Bob (@b) from Moderator to Admin.";
+            const expectedText = "<alice> changed the power level of Bob (@b) from Moderator to Admin.";
             expect(textForEvent(event, mockClient)).toEqual(expectedText);
         });
 
@@ -250,7 +250,7 @@ describe("TextForEvent", () => {
                     [userB.userId]: 50,
                 },
             });
-            const expectedText = "Alice changed the power level of Bob (@b) from Moderator to Default.";
+            const expectedText = "<alice> changed the power level of Bob (@b) from Moderator to Default.";
             expect(textForEvent(event, mockClient)).toEqual(expectedText);
         });
 
@@ -263,7 +263,7 @@ describe("TextForEvent", () => {
                     [userB.userId]: 50,
                 },
             });
-            const expectedText = "Alice changed the power level of Bob (@b) from Moderator to Custom (-1).";
+            const expectedText = "<alice> changed the power level of Bob (@b) from Moderator to Custom (-1).";
             expect(textForEvent(event, mockClient)).toEqual(expectedText);
         });
 
@@ -279,7 +279,7 @@ describe("TextForEvent", () => {
                 },
             });
             const expectedText =
-                "Alice changed the power level of Bob (@b) from Moderator to Admin," +
+                "<alice> changed the power level of Bob (@b) from Moderator to Admin," +
                 " Bob (@c) from Custom (101) to Moderator.";
             expect(textForEvent(event, mockClient)).toEqual(expectedText);
         });
@@ -288,7 +288,7 @@ describe("TextForEvent", () => {
     describe("textForCanonicalAliasEvent()", () => {
         const userA = {
             userId: "@a",
-            name: "Alice",
+            name: "<alice>",
         };
 
         interface AliasEventProps {

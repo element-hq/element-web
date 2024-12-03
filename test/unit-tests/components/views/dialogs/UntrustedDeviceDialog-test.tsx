@@ -20,8 +20,8 @@ describe("<UntrustedDeviceDialog />", () => {
 
     beforeEach(() => {
         client = stubClient();
-        user = User.createUser("@alice:example.org", client);
-        user.setDisplayName("Alice");
+        user = User.createUser("@<alice>:example.org", client);
+        user.setDisplayName("<alice>");
         device = new Device({ deviceId: "device_id", userId: user.userId, algorithms: [], keys: new Map() });
     });
 

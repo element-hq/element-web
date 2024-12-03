@@ -25,7 +25,7 @@ describe("FallbackIceServerController", () => {
     it("should update MatrixClient's state when the setting is updated", async () => {
         const client = new MatrixClient({
             baseUrl: "https://matrix.org",
-            userId: "@alice:matrix.org",
+            userId: "@<alice>:matrix.org",
             accessToken: "token",
         });
         MatrixClientBackedController.matrixClient = client;
@@ -39,7 +39,7 @@ describe("FallbackIceServerController", () => {
         const controller = new FallbackIceServerController();
         const client = new MatrixClient({
             baseUrl: "https://matrix.org",
-            userId: "@alice:matrix.org",
+            userId: "@<alice>:matrix.org",
             accessToken: "token",
         });
         MatrixClientBackedController.matrixClient = client;

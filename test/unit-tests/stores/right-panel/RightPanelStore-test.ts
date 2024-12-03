@@ -207,7 +207,7 @@ describe("RightPanelStore", () => {
                 },
                 {
                     phase: RightPanelPhases.MemberInfo,
-                    state: { member: new RoomMember("!1:example.org", "@alice:example.org") },
+                    state: { member: new RoomMember("!1:example.org", "@<alice>:example.org") },
                 },
             ],
             true,
@@ -222,7 +222,7 @@ describe("RightPanelStore", () => {
     });
 
     it("should redirect to verification if set to phase MemberInfo for a user with a pending verification", async () => {
-        const member = new RoomMember("!1:example.org", "@alice:example.org");
+        const member = new RoomMember("!1:example.org", "@<alice>:example.org");
         const verificationRequest = { mockVerificationRequest: true } as any;
         mocked(pendingVerificationRequestForUser).mockReturnValue(verificationRequest);
         await viewRoom("!1:example.org");

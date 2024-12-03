@@ -393,7 +393,7 @@ describe("linkify-matrix", () => {
             "matrix:r/somewhere:example.org",
             "matrix:r/somewhere:example.org/e/event",
             "matrix:roomid/somewhere:example.org/e/event?via=elsewhere.ca",
-            "matrix:u/alice:example.org?action=chat",
+            "matrix:u/<alice>:example.org?action=chat",
         ];
         for (const matrixUri of acceptedMatrixUris) {
             it("accepts " + matrixUri, () => {

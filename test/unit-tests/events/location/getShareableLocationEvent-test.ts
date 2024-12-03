@@ -18,14 +18,14 @@ import {
 } from "../../../test-utils";
 
 describe("getShareableLocationEvent()", () => {
-    const userId = "@alice:server.org";
+    const userId = "@<alice>:server.org";
     const roomId = "!room:server.org";
     const client = getMockClientWithEventEmitter({
         getRoom: jest.fn(),
     });
 
     it("returns null for a non-location event", () => {
-        const alicesMessageEvent = new MatrixEvent({
+        const <alice>sMessageEvent = new MatrixEvent({
             type: EventType.RoomMessage,
             sender: userId,
             room_id: roomId,
@@ -35,7 +35,7 @@ describe("getShareableLocationEvent()", () => {
             },
         });
 
-        expect(getShareableLocationEvent(alicesMessageEvent, client)).toBe(null);
+        expect(getShareableLocationEvent(<alice>sMessageEvent, client)).toBe(null);
     });
 
     it("returns the event for a location event", () => {

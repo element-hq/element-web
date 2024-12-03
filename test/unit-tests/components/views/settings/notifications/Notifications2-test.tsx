@@ -690,7 +690,7 @@ describe("<Notifications />", () => {
 
     describe("clear all notifications", () => {
         it("is hidden when no notifications exist", async () => {
-            const room = new Room("room123", cli, "@alice:example.org");
+            const room = new Room("room123", cli, "@<alice>:example.org");
             cli.getRooms = jest.fn(cli.getRooms).mockReturnValue([room]);
 
             const { container } = render(
@@ -707,13 +707,13 @@ describe("<Notifications />", () => {
         });
 
         it("clears all notifications", async () => {
-            const room = new Room("room123", cli, "@alice:example.org");
+            const room = new Room("room123", cli, "@<alice>:example.org");
             cli.getRooms = jest.fn(cli.getRooms).mockReturnValue([room]);
 
             const message = mkMessage({
                 event: true,
                 room: "room123",
-                user: "@alice:example.org",
+                user: "@<alice>:example.org",
                 ts: 1,
             });
             room.addLiveEvents([message], { addToState: true });

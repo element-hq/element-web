@@ -21,7 +21,7 @@ import { DEFAULT_PUSH_RULES, makePushRule } from "../../../../../test-utils/push
 import { NotificationLevel } from "../../../../../../src/stores/notifications/NotificationLevel";
 
 describe("NaturalAlgorithm", () => {
-    const userId = "@alice:server.org";
+    const userId = "@<alice>:server.org";
     const tagId = DefaultTagID.Favourite;
 
     const makeRoom = (id: string, name: string): Room => {

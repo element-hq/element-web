@@ -140,7 +140,7 @@ describe("Spotlight Dialog", () => {
     };
 
     const testDMRoomId = "!testDM:example.com";
-    const testDMUserId = "@alice:matrix.org";
+    const testDMUserId = "@<alice>:matrix.org";
 
     let testRoom: Room;
     let testDM: Room;
@@ -164,7 +164,7 @@ describe("Spotlight Dialog", () => {
         } as unknown as DMRoomMap);
 
         testDM = mkRoom(mockedClient, testDMRoomId);
-        testDM.name = "Chat with Alice";
+        testDM.name = "Chat with <alice>";
         mocked(testDM.getMyMembership).mockReturnValue(KnownMembership.Join);
 
         mocked(DMRoomMap.shared().getUserIdForRoomId).mockImplementation((roomId: string) => {
@@ -416,7 +416,7 @@ describe("Spotlight Dialog", () => {
     it("show non-matching query members with DMs if they are present in the server search results", async () => {
         mocked(mockedClient.searchUserDirectory).mockResolvedValue({
             results: [
-                { user_id: testDMUserId, display_name: "Alice Wonder", avatar_url: "mxc://1/avatar" },
+                { user_id: testDMUserId, display_name: "<alice> Wonder", avatar_url: "mxc://1/avatar" },
                 { user_id: "@bob:matrix.org", display_name: "Bob Wonder", avatar_url: "mxc://2/avatar" },
             ],
             limited: false,

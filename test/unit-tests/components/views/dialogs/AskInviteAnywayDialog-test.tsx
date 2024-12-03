@@ -28,7 +28,7 @@ describe("AskInviteaAnywayDialog", () => {
                 onInviteAnyways={onInviteAnyways}
                 unknownProfileUsers={[
                     {
-                        userId: "@alice:localhost",
+                        userId: "@<alice>:localhost",
                         errorText: "🤷‍♂️",
                     },
                 ]}

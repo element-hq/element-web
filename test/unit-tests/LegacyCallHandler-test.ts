@@ -69,8 +69,8 @@ jest.mock("../../src/audio/compat", () => ({
     createAudioContext: jest.fn(),
 }));
 
-// The Matrix IDs that the user sees when talking to Alice & Bob
-const NATIVE_ALICE = "@alice:example.org";
+// The Matrix IDs that the user sees when talking to <alice> & Bob
+const NATIVE_<alice> = "@<alice>:example.org";
 const NATIVE_BOB = "@bob:example.org";
 const NATIVE_CHARLIE = "@charlie:example.org";
 
@@ -79,14 +79,14 @@ const VIRTUAL_BOB = "@virtual_bob:example.org";
 
 //const REAL_ROOM_ID = "$room1:example.org";
 // The rooms the user sees when they're communicating with these users
-const NATIVE_ROOM_ALICE = "$alice_room:example.org";
+const NATIVE_ROOM_<alice> = "$<alice>_room:example.org";
 const NATIVE_ROOM_BOB = "$bob_room:example.org";
 const NATIVE_ROOM_CHARLIE = "$charlie_room:example.org";
 
 const FUNCTIONAL_USER = "@bot:example.com";
 
 // The room we use to talk to virtual Bob (but that the user does not see)
-// Bob has a virtual room, but Alice doesn't
+// Bob has a virtual room, but <alice> doesn't
 const VIRTUAL_ROOM_BOB = "$virtual_bob_room:example.org";
 
 // Bob's phone number
@@ -189,15 +189,15 @@ describe("LegacyCallHandler", () => {
 
         mocked(getFunctionalMembers).mockReturnValue([FUNCTIONAL_USER]);
 
-        const nativeRoomAlice = mkStubDM(NATIVE_ROOM_ALICE, NATIVE_ALICE);
+        const nativeRoom<alice> = mkStubDM(NATIVE_ROOM_<alice>, NATIVE_<alice>);
         const nativeRoomBob = mkStubDM(NATIVE_ROOM_BOB, NATIVE_BOB);
         const nativeRoomCharie = mkStubDM(NATIVE_ROOM_CHARLIE, NATIVE_CHARLIE);
         const virtualBobRoom = mkStubDM(VIRTUAL_ROOM_BOB, VIRTUAL_BOB);
 
         MatrixClientPeg.safeGet().getRoom = (roomId: string): Room | null => {
             switch (roomId) {
-                case NATIVE_ROOM_ALICE:
-                    return nativeRoomAlice;
+                case NATIVE_ROOM_<alice>:
+                    return nativeRoom<alice>;
                 case NATIVE_ROOM_BOB:
                     return nativeRoomBob;
                 case NATIVE_ROOM_CHARLIE:
@@ -211,8 +211,8 @@ describe("LegacyCallHandler", () => {
 
         dmRoomMap = {
             getUserIdForRoomId: (roomId: string) => {
-                if (roomId === NATIVE_ROOM_ALICE) {
-                    return NATIVE_ALICE;
+                if (roomId === NATIVE_ROOM_<alice>) {
+                    return NATIVE_<alice>;
                 } else if (roomId === NATIVE_ROOM_BOB) {
                     return NATIVE_BOB;
                 } else if (roomId === NATIVE_ROOM_CHARLIE) {
@@ -224,8 +224,8 @@ describe("LegacyCallHandler", () => {
                 }
             },
             getDMRoomsForUserId: (userId: string) => {
-                if (userId === NATIVE_ALICE) {
-                    return [NATIVE_ROOM_ALICE];
+                if (userId === NATIVE_<alice>) {
+                    return [NATIVE_ROOM_<alice>];
                 } else if (userId === NATIVE_BOB) {
                     return [NATIVE_ROOM_BOB];
                 } else if (userId === NATIVE_CHARLIE) {
@@ -343,12 +343,12 @@ describe("LegacyCallHandler", () => {
     });
 
     it("should move calls between rooms when remote asserted identity changes", async () => {
-        callHandler.placeCall(NATIVE_ROOM_ALICE, CallType.Voice);
+        callHandler.placeCall(NATIVE_ROOM_<alice>, CallType.Voice);
 
         await untilCallHandlerEvent(callHandler, LegacyCallHandlerEvent.CallState);
 
-        // We placed the call in Alice's room so it should start off there
-        expect(callHandler.getCallForRoom(NATIVE_ROOM_ALICE)).toBe(fakeCall);
+        // We placed the call in <alice>'s room so it should start off there
+        expect(callHandler.getCallForRoom(NATIVE_ROOM_<alice>)).toBe(fakeCall);
 
         let callRoomChangeEventCount = 0;
         const roomChangePromise = new Promise<void>((resolve) => {
@@ -384,7 +384,7 @@ describe("LegacyCallHandler", () => {
 
         // If everything's gone well, we should have seen only one room change
         // event and the call should now be in Charlie's room.
-        // If it's not obeying any, the call will still be in NATIVE_ROOM_ALICE.
+        // If it's not obeying any, the call will still be in NATIVE_ROOM_<alice>.
         // If it incorrectly obeyed both asserted identity changes, either it will
         // have just processed one and the call will be in the wrong room, or we'll
         // have seen two room change dispatches.
@@ -396,8 +396,8 @@ describe("LegacyCallHandler", () => {
     it("should place calls using managed hybrid widget if enabled", async () => {
         const spy = jest.spyOn(ManagedHybrid, "addManagedHybridWidget");
         jest.spyOn(ManagedHybrid, "isManagedHybridWidgetEnabled").mockReturnValue(true);
-        await callHandler.placeCall(NATIVE_ROOM_ALICE, CallType.Voice);
-        expect(spy).toHaveBeenCalledWith(MatrixClientPeg.safeGet().getRoom(NATIVE_ROOM_ALICE));
+        await callHandler.placeCall(NATIVE_ROOM_<alice>, CallType.Voice);
+        expect(spy).toHaveBeenCalledWith(MatrixClientPeg.safeGet().getRoom(NATIVE_ROOM_<alice>));
     });
 });
 
@@ -440,12 +440,12 @@ describe("LegacyCallHandler without third party protocols", () => {
         callHandler = new LegacyCallHandler();
         callHandler.start();
 
-        const nativeRoomAlice = mkStubDM(NATIVE_ROOM_ALICE, NATIVE_ALICE);
+        const nativeRoom<alice> = mkStubDM(NATIVE_ROOM_<alice>, NATIVE_<alice>);
 
         MatrixClientPeg.safeGet().getRoom = (roomId: string): Room | null => {
             switch (roomId) {
-                case NATIVE_ROOM_ALICE:
-                    return nativeRoomAlice;
+                case NATIVE_ROOM_<alice>:
+                    return nativeRoom<alice>;
             }
 
             return null;
@@ -453,15 +453,15 @@ describe("LegacyCallHandler without third party protocols", () => {
 
         dmRoomMap = {
             getUserIdForRoomId: (roomId: string) => {
-                if (roomId === NATIVE_ROOM_ALICE) {
-                    return NATIVE_ALICE;
+                if (roomId === NATIVE_ROOM_<alice>) {
+                    return NATIVE_<alice>;
                 } else {
                     return null;
                 }
             },
             getDMRoomsForUserId: (userId: string) => {
-                if (userId === NATIVE_ALICE) {
-                    return [NATIVE_ROOM_ALICE];
+                if (userId === NATIVE_<alice>) {
+                    return [NATIVE_ROOM_<alice>];
                 } else {
                     return [];
                 }
@@ -511,17 +511,17 @@ describe("LegacyCallHandler without third party protocols", () => {
     });
 
     it("should still start a native call", async () => {
-        callHandler.placeCall(NATIVE_ROOM_ALICE, CallType.Voice);
+        callHandler.placeCall(NATIVE_ROOM_<alice>, CallType.Voice);
 
         await untilCallHandlerEvent(callHandler, LegacyCallHandlerEvent.CallState);
 
         // Check that a call was started: its room on the protocol level
         // should be the virtual room
         expect(fakeCall).not.toBeNull();
-        expect(fakeCall!.roomId).toEqual(NATIVE_ROOM_ALICE);
+        expect(fakeCall!.roomId).toEqual(NATIVE_ROOM_<alice>);
 
         // but it should appear to the user to be in thw native room for Bob
-        expect(callHandler.roomIdForCall(fakeCall!)).toEqual(NATIVE_ROOM_ALICE);
+        expect(callHandler.roomIdForCall(fakeCall!)).toEqual(NATIVE_ROOM_<alice>);
     });
 
     describe("incoming calls", () => {

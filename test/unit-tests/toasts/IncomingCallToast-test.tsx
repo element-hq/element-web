@@ -38,7 +38,7 @@ describe("IncomingCallToast", () => {
     let client: Mocked<MatrixClient>;
     let room: Room;
     let notifyContent: ICallNotifyContent;
-    let alice: RoomMember;
+    let <alice>: RoomMember;
     let bob: RoomMember;
     let call: MockedCall;
     let widget: Widget;
@@ -57,12 +57,12 @@ describe("IncomingCallToast", () => {
         audio.id = AudioID.Ring;
         document.body.appendChild(audio);
 
-        room = new Room("!1:example.org", client, "@alice:example.org");
+        room = new Room("!1:example.org", client, "@<alice>:example.org");
         notifyContent = {
             call_id: "",
             getRoomId: () => room.roomId,
         } as unknown as ICallNotifyContent;
-        alice = mkRoomMember(room.roomId, "@alice:example.org");
+        <alice> = mkRoomMember(room.roomId, "@<alice>:example.org");
         bob = mkRoomMember(room.roomId, "@bob:example.org");
 
         client.getRoom.mockImplementation((roomId) => (roomId === room.roomId ? room : null));
@@ -104,7 +104,7 @@ describe("IncomingCallToast", () => {
 
     it("correctly shows all the information", () => {
         call.participants = new Map([
-            [alice, new Set("a")],
+            [<alice>, new Set("a")],
             [bob, new Set(["b1", "b2"])],
         ]);
         renderToast();

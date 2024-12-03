@@ -12,7 +12,7 @@ import { Bot } from "../../pages/bot";
 
 test.describe("Room Directory", () => {
     test.use({
-        displayName: "Alice",
+        displayName: "<alice>",
     });
 
     test("should switch between existing dm rooms without a loader", async ({ page, homeserver, app, user }) => {

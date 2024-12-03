@@ -30,7 +30,7 @@ describe("SpaceHierarchy", () => {
         beforeEach(() => {
             stubClient();
             client = MatrixClientPeg.safeGet();
-            room = new Room("room-id", client, "@alice:example.com");
+            room = new Room("room-id", client, "@<alice>:example.com");
             hierarchy = new RoomHierarchy(room);
 
             jest.spyOn(client, "isGuest").mockReturnValue(false);

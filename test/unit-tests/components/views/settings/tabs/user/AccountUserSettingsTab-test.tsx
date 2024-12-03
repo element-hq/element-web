@@ -46,7 +46,7 @@ describe("<AccountUserSettingsTab />", () => {
         closeSettingsFn: jest.fn(),
     };
 
-    const userId = "@alice:server.org";
+    const userId = "@<alice>:server.org";
     let mockClient: MockedObject<MatrixClient>;
 
     let stores: SdkContextClass;

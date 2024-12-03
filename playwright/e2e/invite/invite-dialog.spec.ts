@@ -13,11 +13,11 @@ test.describe("Invite dialog", function () {
     test.use({
         displayName: "Hanako",
         botCreateOpts: {
-            displayName: "BotAlice",
+            displayName: "Bot<alice>",
         },
     });
 
-    const botName = "BotAlice";
+    const botName = "Bot<alice>";
 
     test("should support inviting a user to a room", async ({ page, app, user, bot }) => {
         // Create and view a room

@@ -35,7 +35,7 @@ import {
 import * as languageHandler from "../../../../../src/languageHandler";
 
 describe("RoomKnocksBar", () => {
-    const userId = "@alice:example.org";
+    const userId = "@<alice>:example.org";
     const client = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),
         invite: jest.fn(),

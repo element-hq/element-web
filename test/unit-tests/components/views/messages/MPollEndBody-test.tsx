@@ -27,7 +27,7 @@ import {
 } from "../../../../test-utils";
 
 describe("<MPollEndBody />", () => {
-    const userId = "@alice:domain.org";
+    const userId = "@<alice>:domain.org";
     const roomId = "!room:domain.org";
     const mockClient = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),
@@ -188,7 +188,7 @@ describe("<MPollEndBody />", () => {
             await flushPromises();
 
             // default fallback text used
-            expect(getByText("@alice:domain.org has ended a poll")).toBeTruthy();
+            expect(getByText("@<alice>:domain.org has ended a poll")).toBeTruthy();
         });
     });
 });

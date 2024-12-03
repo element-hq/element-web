@@ -65,7 +65,7 @@ exports[`<ThirdPartyMemberInfo /> should render invite 1`] = `
           <span
             class="_typography_yh5dq_162 _font-body-md-regular_yh5dq_59"
           >
-            Invited by Alice DisplayName
+            Invited by <alice> DisplayName
           </span>
         </section>
       </div>
@@ -139,7 +139,7 @@ exports[`<ThirdPartyMemberInfo /> should render invite when room in not availabl
           <span
             class="_typography_yh5dq_162 _font-body-md-regular_yh5dq_59"
           >
-            Invited by Alice DisplayName
+            Invited by <alice> DisplayName
           </span>
         </section>
       </div>

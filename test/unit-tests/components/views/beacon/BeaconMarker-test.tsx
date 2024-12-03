@@ -27,9 +27,9 @@ describe("<BeaconMarker />", () => {
     // stable date for snapshots
     jest.spyOn(global.Date, "now").mockReturnValue(now);
     const roomId = "!room:server";
-    const aliceId = "@alice:server";
+    const <alice>Id = "@<alice>:server";
 
-    const aliceMember = new RoomMember(roomId, aliceId);
+    const <alice>Member = new RoomMember(roomId, <alice>Id);
 
     const mapOptions = { container: {} as unknown as HTMLElement, style: "" };
     const mockMap = new maplibregl.Map(mapOptions);
@@ -39,7 +39,7 @@ describe("<BeaconMarker />", () => {
         getClientWellKnown: jest.fn().mockReturnValue({
             [TILE_SERVER_WK_KEY.name]: { map_style_url: "maps.com" },
         }),
-        getUserId: jest.fn().mockReturnValue(aliceId),
+        getUserId: jest.fn().mockReturnValue(<alice>Id),
         getRoom: jest.fn(),
         isGuest: jest.fn().mockReturnValue(false),
     });
@@ -48,21 +48,21 @@ describe("<BeaconMarker />", () => {
     // as we update room state
     const setupRoom = (stateEvents: MatrixEvent[] = []): Room => {
         const room1 = makeRoomWithStateEvents(stateEvents, { roomId, mockClient });
-        jest.spyOn(room1, "getMember").mockReturnValue(aliceMember);
+        jest.spyOn(room1, "getMember").mockReturnValue(<alice>Member);
         return room1;
     };
 
-    const defaultEvent = makeBeaconInfoEvent(aliceId, roomId, { isLive: true }, "$alice-room1-1");
-    const notLiveEvent = makeBeaconInfoEvent(aliceId, roomId, { isLive: false }, "$alice-room1-2");
+    const defaultEvent = makeBeaconInfoEvent(<alice>Id, roomId, { isLive: true }, "$<alice>-room1-1");
+    const notLiveEvent = makeBeaconInfoEvent(<alice>Id, roomId, { isLive: false }, "$<alice>-room1-2");
 
     const geoUri1 = "geo:51,41";
-    const location1 = makeBeaconEvent(aliceId, {
+    const location1 = makeBeaconEvent(<alice>Id, {
         beaconInfoId: defaultEvent.getId(),
         geoUri: geoUri1,
         timestamp: now + 1,
     });
     const geoUri2 = "geo:52,42";
-    const location2 = makeBeaconEvent(aliceId, {
+    const location2 = makeBeaconEvent(<alice>Id, {
         beaconInfoId: defaultEvent.getId(),
         geoUri: geoUri2,
         timestamp: now + 10000,

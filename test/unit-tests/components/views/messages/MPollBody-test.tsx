@@ -123,7 +123,7 @@ describe("MPollBody", () => {
 
     it("hides scores if I have not voted", async () => {
         const votes = [
-            responseEvent("@alice:example.com", "pizza"),
+            responseEvent("@<alice>:example.com", "pizza"),
             responseEvent("@bellc:example.com", "pizza"),
             responseEvent("@catrd:example.com", "poutine"),
             responseEvent("@dune2:example.com", "wings"),
@@ -137,7 +137,7 @@ describe("MPollBody", () => {
     });
 
     it("hides a single vote if I have not voted", async () => {
-        const votes = [responseEvent("@alice:example.com", "pizza")];
+        const votes = [responseEvent("@<alice>:example.com", "pizza")];
         const renderResult = await newMPollBody(votes);
         expect(votesCount(renderResult, "pizza")).toBe("");
         expect(votesCount(renderResult, "poutine")).toBe("");
@@ -381,7 +381,7 @@ describe("MPollBody", () => {
     it("hides scores if I voted but the poll is undisclosed", async () => {
         const votes = [
             responseEvent("@me:example.com", "pizza"),
-            responseEvent("@alice:example.com", "pizza"),
+            responseEvent("@<alice>:example.com", "pizza"),
             responseEvent("@bellc:example.com", "pizza"),
             responseEvent("@catrd:example.com", "poutine"),
             responseEvent("@dune2:example.com", "wings"),
@@ -397,7 +397,7 @@ describe("MPollBody", () => {
     it("highlights my vote if the poll is undisclosed", async () => {
         const votes = [
             responseEvent("@me:example.com", "pizza"),
-            responseEvent("@alice:example.com", "poutine"),
+            responseEvent("@<alice>:example.com", "poutine"),
             responseEvent("@bellc:example.com", "poutine"),
             responseEvent("@catrd:example.com", "poutine"),
             responseEvent("@dune2:example.com", "wings"),
@@ -414,7 +414,7 @@ describe("MPollBody", () => {
     it("shows scores if the poll is undisclosed but ended", async () => {
         const votes = [
             responseEvent("@me:example.com", "pizza"),
-            responseEvent("@alice:example.com", "pizza"),
+            responseEvent("@<alice>:example.com", "pizza"),
             responseEvent("@bellc:example.com", "pizza"),
             responseEvent("@catrd:example.com", "poutine"),
             responseEvent("@dune2:example.com", "wings"),
@@ -990,7 +990,7 @@ function newPollStart(answers?: PollAnswer[], question?: string, disclosed = tru
 }
 
 function responseEvent(
-    sender = "@alice:example.com",
+    sender = "@<alice>:example.com",
     answers: string | Array<string> = "italian",
     ts = 0,
 ): MatrixEvent {

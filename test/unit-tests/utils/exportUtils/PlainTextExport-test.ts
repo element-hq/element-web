@@ -41,8 +41,8 @@ describe("PlainTextExport", () => {
     });
 
     it.each([
-        [24, false, "Fri, Apr 16, 2021, 17:20:00 - @alice:example.com: Hello, world!\n"],
-        [12, true, "Fri, Apr 16, 2021, 5:20:00 PM - @alice:example.com: Hello, world!\n"],
+        [24, false, "Fri, Apr 16, 2021, 17:20:00 - @<alice>:example.com: Hello, world!\n"],
+        [12, true, "Fri, Apr 16, 2021, 5:20:00 PM - @<alice>:example.com: Hello, world!\n"],
     ])("should return text with %i hr time format", async (hour: number, setting: boolean, expectedMessage: string) => {
         jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) =>
             settingName === "showTwelveHourTimestamps" ? setting : undefined,
@@ -53,7 +53,7 @@ describe("PlainTextExport", () => {
                 content: {
                     body: "Hello, world!",
                 },
-                sender: "@alice:example.com",
+                sender: "@<alice>:example.com",
                 origin_server_ts: 1618593600000,
             }),
         ];

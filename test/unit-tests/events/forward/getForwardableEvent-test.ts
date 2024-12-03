@@ -18,14 +18,14 @@ import {
 } from "../../../test-utils";
 
 describe("getForwardableEvent()", () => {
-    const userId = "@alice:server.org";
+    const userId = "@<alice>:server.org";
     const roomId = "!room:server.org";
     const client = getMockClientWithEventEmitter({
         getRoom: jest.fn(),
     });
 
     it("returns the event for a room message", () => {
-        const alicesMessageEvent = new MatrixEvent({
+        const <alice>sMessageEvent = new MatrixEvent({
             type: EventType.RoomMessage,
             sender: userId,
             room_id: roomId,
@@ -35,7 +35,7 @@ describe("getForwardableEvent()", () => {
             },
         });
 
-        expect(getForwardableEvent(alicesMessageEvent, client)).toBe(alicesMessageEvent);
+        expect(getForwardableEvent(<alice>sMessageEvent, client)).toBe(<alice>sMessageEvent);
     });
 
     it("returns null for a poll start event", () => {

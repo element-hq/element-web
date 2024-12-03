@@ -13,7 +13,7 @@ import { waitForRoom } from "../utils";
 
 test.describe("Manage Knocks", () => {
     test.use({
-        displayName: "Alice",
+        displayName: "<alice>",
         labsFlags: ["feature_ask_to_join"],
         botCreateOpts: {
             displayName: "Bob",
@@ -46,7 +46,7 @@ test.describe("Manage Knocks", () => {
 
         await expect(roomKnocksBar).not.toBeVisible();
 
-        await expect(page.getByText("Alice invited Bob")).toBeVisible();
+        await expect(page.getByText("<alice> invited Bob")).toBeVisible();
     });
 
     test("should deny knock using bar", async ({ page, app, bot, room }) => {
@@ -82,7 +82,7 @@ test.describe("Manage Knocks", () => {
         await settingsGroup.getByRole("button", { name: "Approve" }).click();
         await expect(settingsGroup.getByText(/^Bob/)).not.toBeVisible();
 
-        await expect(page.getByText("Alice invited Bob")).toBeVisible();
+        await expect(page.getByText("<alice> invited Bob")).toBeVisible();
     });
 
     test("should deny knock using people tab", async ({ page, app, bot, room }) => {

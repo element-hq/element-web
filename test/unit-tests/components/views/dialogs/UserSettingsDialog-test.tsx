@@ -50,7 +50,7 @@ jest.mock("../../../../../src/settings/SettingsStore", () => ({
 }));
 
 describe("<UserSettingsDialog />", () => {
-    const userId = "@alice:server.org";
+    const userId = "@<alice>:server.org";
     const mockSettingsStore = mocked(SettingsStore);
     let mockClient!: MockedObject<MatrixClient>;
 

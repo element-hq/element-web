@@ -24,32 +24,32 @@ import { Action } from "../../../../../src/dispatcher/actions";
 describe("ReadReceiptGroup", () => {
     describe("TooltipText", () => {
         it("returns '...and more' with hasMore", () => {
-            expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan", "Eve", "Fox"], 5)).toEqual(
-                "Alice, Bob, Charlie, Dan, Eve and one other",
+            expect(readReceiptTooltip(["<alice>", "Bob", "Charlie", "Dan", "Eve", "Fox"], 5)).toEqual(
+                "<alice>, Bob, Charlie, Dan, Eve and one other",
             );
-            expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan", "Eve", "Fox"], 4)).toEqual(
-                "Alice, Bob, Charlie, Dan and 2 others",
+            expect(readReceiptTooltip(["<alice>", "Bob", "Charlie", "Dan", "Eve", "Fox"], 4)).toEqual(
+                "<alice>, Bob, Charlie, Dan and 2 others",
             );
-            expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan"], 3)).toEqual(
-                "Alice, Bob, Charlie and one other",
+            expect(readReceiptTooltip(["<alice>", "Bob", "Charlie", "Dan"], 3)).toEqual(
+                "<alice>, Bob, Charlie and one other",
             );
-            expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan", "Eve", "Fox"], 2)).toEqual(
-                "Alice, Bob and 4 others",
+            expect(readReceiptTooltip(["<alice>", "Bob", "Charlie", "Dan", "Eve", "Fox"], 2)).toEqual(
+                "<alice>, Bob and 4 others",
             );
-            expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan", "Eve", "Fox"], 1)).toEqual(
-                "Alice and 5 others",
+            expect(readReceiptTooltip(["<alice>", "Bob", "Charlie", "Dan", "Eve", "Fox"], 1)).toEqual(
+                "<alice> and 5 others",
             );
             expect(readReceiptTooltip([], 1)).toBe("");
         });
         it("returns a pretty list without hasMore", () => {
             jest.spyOn(languageHandler, "getUserLanguage").mockReturnValue("en-GB");
-            expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan", "Eve"], 5)).toEqual(
-                "Alice, Bob, Charlie, Dan and Eve",
+            expect(readReceiptTooltip(["<alice>", "Bob", "Charlie", "Dan", "Eve"], 5)).toEqual(
+                "<alice>, Bob, Charlie, Dan and Eve",
             );
-            expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan"], 4)).toEqual("Alice, Bob, Charlie and Dan");
-            expect(readReceiptTooltip(["Alice", "Bob", "Charlie"], 5)).toEqual("Alice, Bob and Charlie");
-            expect(readReceiptTooltip(["Alice", "Bob"], 5)).toEqual("Alice and Bob");
-            expect(readReceiptTooltip(["Alice"], 5)).toEqual("Alice");
+            expect(readReceiptTooltip(["<alice>", "Bob", "Charlie", "Dan"], 4)).toEqual("<alice>, Bob, Charlie and Dan");
+            expect(readReceiptTooltip(["<alice>", "Bob", "Charlie"], 5)).toEqual("<alice>, Bob and Charlie");
+            expect(readReceiptTooltip(["<alice>", "Bob"], 5)).toEqual("<alice> and Bob");
+            expect(readReceiptTooltip(["<alice>"], 5)).toEqual("<alice>");
             expect(readReceiptTooltip([], 5)).toBe("");
         });
     });
@@ -88,10 +88,10 @@ describe("ReadReceiptGroup", () => {
         stubClient();
 
         const ROOM_ID = "roomId";
-        const USER_ID = "@alice:example.org";
+        const USER_ID = "@<alice>:example.org";
 
         const member = new RoomMember(ROOM_ID, USER_ID);
-        member.rawDisplayName = "Alice";
+        member.rawDisplayName = "<alice>";
         member.getMxcAvatarUrl = () => "http://placekitten.com/400/400";
 
         const renderReadReceipt = (props?: Partial<ComponentProps<typeof ReadReceiptPerson>>) => {

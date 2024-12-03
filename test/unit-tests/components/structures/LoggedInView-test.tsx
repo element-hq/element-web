@@ -27,7 +27,7 @@ import Modal from "../../../../src/Modal";
 import { SETTINGS } from "../../../../src/settings/Settings";
 
 describe("<LoggedInView />", () => {
-    const userId = "@alice:domain.org";
+    const userId = "@<alice>:domain.org";
     const mockClient = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),
         getAccountData: jest.fn(),

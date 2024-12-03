@@ -172,7 +172,7 @@ exports[`<ThemeChoicePanel /> custom theme should display custom theme 1`] = `
                 name="themeSelector"
                 title=""
                 type="radio"
-                value="custom-Alice theme"
+                value="custom-<alice> theme"
               />
               <div
                 class="_ui_1vw5h_27"
@@ -186,7 +186,7 @@ exports[`<ThemeChoicePanel /> custom theme should display custom theme 1`] = `
               class="_label_dgy0u_67 mx_ThemeChoicePanel_themeSelector_Label"
               for="radix-:r2c:"
             >
-              Alice theme
+              <alice> theme
             </label>
           </div>
         </div>
@@ -230,13 +230,13 @@ exports[`<ThemeChoicePanel /> custom theme should display custom theme 1`] = `
           class="mx_ThemeChoicePanel_CustomThemeList"
         >
           <li
-            aria-label="Alice theme"
+            aria-label="<alice> theme"
             class="mx_ThemeChoicePanel_CustomThemeList_theme"
           >
             <span
               class="mx_ThemeChoicePanel_CustomThemeList_name"
             >
-              Alice theme
+              <alice> theme
             </span>
             <button
               aria-label="Delete"
@@ -449,7 +449,7 @@ exports[`<ThemeChoicePanel /> custom theme should render the custom theme sectio
                 name="themeSelector"
                 title=""
                 type="radio"
-                value="custom-Alice theme"
+                value="custom-<alice> theme"
               />
               <div
                 class="_ui_1vw5h_27"
@@ -463,7 +463,7 @@ exports[`<ThemeChoicePanel /> custom theme should render the custom theme sectio
               class="_label_dgy0u_67 mx_ThemeChoicePanel_themeSelector_Label"
               for="radix-:r14:"
             >
-              Alice theme
+              <alice> theme
             </label>
           </div>
         </div>
@@ -507,13 +507,13 @@ exports[`<ThemeChoicePanel /> custom theme should render the custom theme sectio
           class="mx_ThemeChoicePanel_CustomThemeList"
         >
           <li
-            aria-label="Alice theme"
+            aria-label="<alice> theme"
             class="mx_ThemeChoicePanel_CustomThemeList_theme"
           >
             <span
               class="mx_ThemeChoicePanel_CustomThemeList_name"
             >
-              Alice theme
+              <alice> theme
             </span>
             <button
               aria-label="Delete"

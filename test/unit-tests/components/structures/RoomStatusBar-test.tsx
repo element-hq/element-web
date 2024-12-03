@@ -75,8 +75,8 @@ describe("RoomStatusBar", () => {
             const { rootEvent, events } = mkThread({
                 room,
                 client,
-                authorId: "@alice:example.org",
-                participantUserIds: ["@alice:example.org"],
+                authorId: "@<alice>:example.org",
+                participantUserIds: ["@<alice>:example.org"],
                 length: 2,
             });
             rootEvent.status = EventStatus.NOT_SENT;

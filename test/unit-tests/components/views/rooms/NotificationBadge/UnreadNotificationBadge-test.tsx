@@ -119,7 +119,7 @@ describe("UnreadNotificationBadge", () => {
     it("adds a warning for unsent messages", () => {
         const evt = mkMessage({
             room: room.roomId,
-            user: "@alice:example.org",
+            user: "@<alice>:example.org",
             msg: "Hello world!",
             event: true,
         });
@@ -153,7 +153,7 @@ describe("UnreadNotificationBadge", () => {
         const event = mkEvent({
             event: true,
             type: "m.room.message",
-            user: "@alice:server.org",
+            user: "@<alice>:server.org",
             room: room.roomId,
             content: {
                 "msgtype": MsgType.Text,

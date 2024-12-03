@@ -19,9 +19,9 @@ describe("editor/serialize", function () {
     describe("with markdown", function () {
         it("user pill turns message into html", function () {
             const pc = createPartCreator();
-            const model = new EditorModel([pc.userPill("Alice", "@alice:hs.tld")], pc);
+            const model = new EditorModel([pc.userPill("<alice>", "@<alice>:hs.tld")], pc);
             const html = htmlSerializeIfNeeded(model, {});
-            expect(html).toBe('<a href="https://matrix.to/#/@alice:hs.tld">Alice</a>');
+            expect(html).toBe('<a href="https://matrix.to/#/@<alice>:hs.tld"><alice></a>');
         });
         it("room pill turns message into html", function () {
             const pc = createPartCreator();
@@ -118,9 +118,9 @@ describe("editor/serialize", function () {
 
             it("user pill uses matrix.to", function () {
                 const pc = createPartCreator();
-                const model = new EditorModel([pc.userPill("Alice", "@alice:hs.tld")], pc);
+                const model = new EditorModel([pc.userPill("<alice>", "@<alice>:hs.tld")], pc);
                 const html = htmlSerializeIfNeeded(model, {});
-                expect(html).toBe('<a href="https://matrix.to/#/@alice:hs.tld">Alice</a>');
+                expect(html).toBe('<a href="https://matrix.to/#/@<alice>:hs.tld"><alice></a>');
             });
             it("room pill uses matrix.to", function () {
                 const pc = createPartCreator();

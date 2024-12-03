@@ -20,7 +20,7 @@ import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 test.describe("Cryptography", function () {
     test.use({
-        displayName: "Alice",
+        displayName: "<alice>",
         botCreateOpts: {
             displayName: "Bob",
             autoAcceptInvites: false,
@@ -99,13 +99,13 @@ test.describe("Cryptography", function () {
                 homeserver,
                 page,
                 app,
-                credentials: aliceCredentials,
-                user: alice,
+                credentials: <alice>Credentials,
+                user: <alice>,
                 bot: bob,
             }) => {
-                // Bob creates an encrypted room and sends a message to it. He then invites Alice
+                // Bob creates an encrypted room and sends a message to it. He then invites <alice>
                 const roomId = await bob.evaluate(
-                    async (client, { alice }) => {
+                    async (client, { <alice> }) => {
                         const encryptionStatePromise = new Promise<void>((resolve) => {
                             client.on("RoomState.events" as EmittedEvents, (event, _state, _lastStateEvent) => {
                                 if (event.getType() === "m.room.encryption") {
@@ -133,14 +133,14 @@ test.describe("Cryptography", function () {
 
                         await client.sendTextMessage(roomId, "This should be undecryptable");
 
-                        await client.invite(roomId, alice.userId);
+                        await client.invite(roomId, <alice>.userId);
 
                         return roomId;
                     },
-                    { alice },
+                    { <alice> },
                 );
 
-                // Alice accepts the invite
+                // <alice> accepts the invite
                 await expect(
                     page.getByRole("group", { name: "Invites" }).locator(".mx_RoomSublist_tiles").getByRole("treeitem"),
                 ).toHaveCount(1);
@@ -175,16 +175,16 @@ test.describe("Cryptography", function () {
                 await expect(page.locator(`.mx_EventTile`).getByText("Unable to decrypt message")).toBeVisible();
 
                 // And then we ensure that they are where we expect them to be
-                // Alice should see these event tiles:
+                // <alice> should see these event tiles:
                 // - first message sent by Bob (undecryptable)
-                // - Bob invited Alice
-                // - Alice joined the room
+                // - Bob invited <alice>
+                // - <alice> joined the room
                 // - second message sent by Bob (decryptable)
                 // - third message sent by Bob (undecryptable)
                 const tiles = await page.locator(".mx_EventTile").all();
                 expect(tiles.length).toBeGreaterThanOrEqual(5);
 
-                // The first message from Bob was sent before Alice was in the room, so should
+                // The first message from Bob was sent before <alice> was in the room, so should
                 // be different from the standard UTD message
                 await expect(tiles[tiles.length - 5]).toContainText("You don't have access to this message");
                 await expect(tiles[tiles.length - 5].locator(".mx_EventTile_e2eIcon_decryption_failure")).toBeVisible();
@@ -193,7 +193,7 @@ test.describe("Cryptography", function () {
                 await expect(tiles[tiles.length - 2]).toContainText("This should be decryptable");
                 // this tile won't have an e2e icon since we got the key from the sender
 
-                // The third message from Bob is undecryptable, but was sent while Alice was
+                // The third message from Bob is undecryptable, but was sent while <alice> was
                 // in the room and is expected to be decryptable, so this should have the
                 // standard UTD message
                 await expect(tiles[tiles.length - 1]).toContainText("Unable to decrypt message");
@@ -204,24 +204,24 @@ test.describe("Cryptography", function () {
                 homeserver,
                 page,
                 app,
-                credentials: aliceCredentials,
-                user: alice,
+                credentials: <alice>Credentials,
+                user: <alice>,
                 bot: bob,
             }) => {
                 // Bob:
                 // - creates an encrypted room,
-                // - invites Alice,
+                // - invites <alice>,
                 // - sends a message to it,
-                // - kicks Alice,
+                // - kicks <alice>,
                 // - sends a bunch more events
-                // - invites Alice again
-                // In this way, there will be an event that Alice can decrypt,
-                // followed by a bunch of undecryptable events which Alice shouldn't
+                // - invites <alice> again
+                // In this way, there will be an event that <alice> can decrypt,
+                // followed by a bunch of undecryptable events which <alice> shouldn't
                 // expect to be able to decrypt.  The old code would have hidden all
                 // the events, even the decryptable event (which it wouldn't have
                 // even tried to fetch, if it was far enough back).
                 const { roomId, eventId } = await bob.evaluate(
-                    async (client, { alice }) => {
+                    async (client, { <alice> }) => {
                         const { room_id: roomId } = await client.createRoom({
                             initial_state: [
                                 {
@@ -235,49 +235,49 @@ test.describe("Cryptography", function () {
                             preset: "private_chat" as Preset,
                         });
 
-                        // invite Alice
-                        const inviteAlicePromise = new Promise<void>((resolve) => {
+                        // invite <alice>
+                        const invite<alice>Promise = new Promise<void>((resolve) => {
                             client.on("RoomMember.membership" as EmittedEvents, (_event, member, _oldMembership?) => {
-                                if (member.userId === alice.userId && member.membership === "invite") {
+                                if (member.userId === <alice>.userId && member.membership === "invite") {
                                     resolve();
                                 }
                             });
                         });
-                        await client.invite(roomId, alice.userId);
-                        // wait for the invite to come back so that we encrypt to Alice
-                        await inviteAlicePromise;
+                        await client.invite(roomId, <alice>.userId);
+                        // wait for the invite to come back so that we encrypt to <alice>
+                        await invite<alice>Promise;
 
-                        // send a message that Alice should be able to decrypt
+                        // send a message that <alice> should be able to decrypt
                         const { event_id: eventId } = await client.sendTextMessage(
                             roomId,
                             "This should be decryptable",
                         );
 
-                        // kick Alice
-                        const kickAlicePromise = new Promise<void>((resolve) => {
+                        // kick <alice>
+                        const kick<alice>Promise = new Promise<void>((resolve) => {
                             client.on("RoomMember.membership" as EmittedEvents, (_event, member, _oldMembership?) => {
-                                if (member.userId === alice.userId && member.membership === "leave") {
+                                if (member.userId === <alice>.userId && member.membership === "leave") {
                                     resolve();
                                 }
                             });
                         });
-                        await client.kick(roomId, alice.userId);
-                        await kickAlicePromise;
+                        await client.kick(roomId, <alice>.userId);
+                        await kick<alice>Promise;
 
-                        // send a bunch of messages that Alice won't be able to decrypt
+                        // send a bunch of messages that <alice> won't be able to decrypt
                         for (let i = 0; i < 20; i++) {
                             await client.sendTextMessage(roomId, `${i}`);
                         }
 
-                        // invite Alice again
-                        await client.invite(roomId, alice.userId);
+                        // invite <alice> again
+                        await client.invite(roomId, <alice>.userId);
 
                         return { roomId, eventId };
                     },
-                    { alice },
+                    { <alice> },
                 );
 
-                // Alice accepts the invite
+                // <alice> accepts the invite
                 await expect(
                     page.getByRole("group", { name: "Invites" }).locator(".mx_RoomSublist_tiles").getByRole("treeitem"),
                 ).toHaveCount(1);
@@ -285,7 +285,7 @@ test.describe("Cryptography", function () {
                 await page.locator(".mx_RoomView").getByRole("button", { name: "Accept" }).click();
 
                 // wait until we're joined and see the timeline
-                await expect(page.locator(`.mx_EventTile`).getByText("Alice joined the room")).toBeVisible();
+                await expect(page.locator(`.mx_EventTile`).getByText("<alice> joined the room")).toBeVisible();
 
                 // we should be able to jump to the decryptable message that Bob sent
                 await page.goto(`#/room/${roomId}/${eventId}`);

@@ -47,7 +47,7 @@ exports[`<BeaconViewDialog /> renders own beacon status when user is live sharin
     data-type="round"
     role="presentation"
     style="--cpd-avatar-size: 32px;"
-    title="@alice:server"
+    title="@<alice>:server"
   >
     a
   </span>

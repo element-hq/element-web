@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { test, expect } from "../../element-web-test";
 
 const USER_NAME = "Bob";
-const USER_NAME_NEW = "Alice";
+const USER_NAME_NEW = "<alice>";
 
 test.describe("Account user settings tab", () => {
     test.use({
@@ -137,8 +137,8 @@ test.describe("Account user settings tab", () => {
         await app.closeDialog();
 
         // Assert the avatar's initial characters are set
-        await expect(page.locator(".mx_UserMenu .mx_BaseAvatar").getByText("A")).toBeVisible(); // Alice
-        await expect(page.locator(".mx_RoomView_wrapper .mx_BaseAvatar").getByText("A")).toBeVisible(); // Alice
+        await expect(page.locator(".mx_UserMenu .mx_BaseAvatar").getByText("A")).toBeVisible(); // <alice>
+        await expect(page.locator(".mx_RoomView_wrapper .mx_BaseAvatar").getByText("A")).toBeVisible(); // <alice>
     });
 
     // ported to a playwright test because the jest test was very flakey for no obvious reason

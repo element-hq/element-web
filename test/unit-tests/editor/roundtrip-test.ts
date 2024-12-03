@@ -53,7 +53,7 @@ describe("editor/roundtrip", function () {
         test.each([
             ["newlines", "hello\nworld"],
             ["pills", "text message for @room"],
-            ["pills with interesting characters in mxid", "text message for @alice\\\\\\_\\]#>&:hs.example.com"],
+            ["pills with interesting characters in mxid", "text message for @<alice>\\\\\\_\\]#>&:hs.example.com"],
             ["styling", "**bold** and _emphasised_"],
             ["bold within a word", "abso**fragging**lutely"],
             ["escaped html", "a\\<foo>b"],
@@ -142,7 +142,7 @@ describe("editor/roundtrip", function () {
 
         test.skip.each([
             // Strips out the pill - maybe needs some user lookup to work?
-            ["user pills", '<a href="https://matrix.to/#/@alice:hs.tld">Alice</a>'],
+            ["user pills", '<a href="https://matrix.to/#/@<alice>:hs.tld"><alice></a>'],
             // Appends a slash to the URL
             // https://github.com/vector-im/element-web/issues/22342
             ["links without trailing slashes", 'Go <a href="http://more.example.com">here</a> to see more'],

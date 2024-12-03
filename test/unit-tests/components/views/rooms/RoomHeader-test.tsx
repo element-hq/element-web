@@ -80,7 +80,7 @@ describe("RoomHeader", () => {
 
     beforeEach(async () => {
         stubClient();
-        room = new Room(ROOM_ID, MatrixClientPeg.get()!, "@alice:example.org", {
+        room = new Room(ROOM_ID, MatrixClientPeg.get()!, "@<alice>:example.org", {
             pendingEventOrdering: PendingEventOrdering.Detached,
         });
         DMRoomMap.setShared({
@@ -657,15 +657,15 @@ describe("RoomHeader", () => {
                     new MatrixEvent({
                         event_id: "$event_id",
                         type: EventType.RoomMember,
-                        state_key: "@alice:example.org",
+                        state_key: "@<alice>:example.org",
                         content: {
                             membership: "join",
                         },
                         room_id: ROOM_ID,
-                        sender: "@alice:example.org",
+                        sender: "@<alice>:example.org",
                     }),
                     room.currentState,
-                    new RoomMember(room.roomId, "@alice:example.org"),
+                    new RoomMember(room.roomId, "@<alice>:example.org"),
                 );
             });
             await waitFor(() => expect(getByLabelText(document.body, "Untrusted")).toBeInTheDocument());
@@ -675,7 +675,7 @@ describe("RoomHeader", () => {
             act(() => {
                 MatrixClientPeg.get()!.emit(
                     CryptoEvent.UserTrustStatusChanged,
-                    "@alice:example.org",
+                    "@<alice>:example.org",
                     new UserVerificationStatus(true, true, true, false),
                 );
             });
@@ -684,7 +684,7 @@ describe("RoomHeader", () => {
             // An unverified device is added
             jest.spyOn(ShieldUtils, "shieldStatusForRoom").mockResolvedValue(ShieldUtils.E2EStatus.Warning);
             act(() => {
-                MatrixClientPeg.get()!.emit(CryptoEvent.DevicesUpdated, ["@alice:example.org"], false);
+                MatrixClientPeg.get()!.emit(CryptoEvent.DevicesUpdated, ["@<alice>:example.org"], false);
             });
             await waitFor(() => expect(getByLabelText(document.body, "Untrusted")).toBeInTheDocument());
         });

@@ -46,7 +46,7 @@ exports[`<PinnedMessageBanner /> should display display a poll event 1`] = `
             >
               Poll:
             </span>
-             Alice?
+             <alice>?
           </span>
         </span>
       </div>

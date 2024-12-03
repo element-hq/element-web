@@ -33,7 +33,7 @@ describe("RecentAlgorithm", () => {
             const event1 = mkMessage({
                 room: room.roomId,
                 msg: "Hello world!",
-                user: "@alice:matrix.org",
+                user: "@<alice>:matrix.org",
                 ts: 5,
                 event: true,
             });
@@ -82,14 +82,14 @@ describe("RecentAlgorithm", () => {
             const evt = mkMessage({
                 room: room1.roomId,
                 msg: "Hello world!",
-                user: "@alice:matrix.org",
+                user: "@<alice>:matrix.org",
                 ts: 5,
                 event: true,
             });
             const evt2 = mkMessage({
                 room: room2.roomId,
                 msg: "Hello world!",
-                user: "@alice:matrix.org",
+                user: "@<alice>:matrix.org",
                 ts: 2,
                 event: true,
             });
@@ -110,7 +110,7 @@ describe("RecentAlgorithm", () => {
             const evt = mkMessage({
                 room: room1.roomId,
                 msg: "Hello world!",
-                user: "@alice:matrix.org",
+                user: "@<alice>:matrix.org",
                 ts: 5,
                 event: true,
             });

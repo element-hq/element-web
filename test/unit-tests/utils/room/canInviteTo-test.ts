@@ -24,7 +24,7 @@ describe("canInviteTo()", () => {
         jest.restoreAllMocks();
     });
 
-    const userId = "@alice:server.org";
+    const userId = "@<alice>:server.org";
     const roomId = "!room:server.org";
 
     const makeRoom = (): Room => {

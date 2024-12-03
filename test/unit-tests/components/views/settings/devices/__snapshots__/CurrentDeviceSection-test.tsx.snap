@@ -4,7 +4,7 @@ exports[`<CurrentDeviceSection /> displays device details on toggle click 1`] = 
 HTMLCollection [
   <div
     class="mx_DeviceDetails mx_CurrentDeviceSection_deviceDetails"
-    data-testid="device-detail-alices_device"
+    data-testid="device-detail-<alice>s_device"
   >
     <section
       class="mx_DeviceDetails_section"
@@ -16,7 +16,7 @@ HTMLCollection [
         <h4
           class="mx_Heading_h4"
         >
-          alices_device
+          <alice>s_device
         </h4>
         <div
           class="mx_AccessibleButton mx_DeviceDetailHeading_renameCta mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
@@ -63,7 +63,7 @@ HTMLCollection [
           >
             <div
               class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
-              data-testid="verification-status-button-alices_device"
+              data-testid="verification-status-button-<alice>s_device"
               role="button"
               tabindex="0"
             >
@@ -95,7 +95,7 @@ HTMLCollection [
             <td
               class="mxDeviceDetails_metadataValue"
             >
-              alices_device
+              <alice>s_device
             </td>
           </tr>
         </tbody>
@@ -209,7 +209,7 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
     >
       <div
         class="mx_DeviceTile mx_DeviceTile_interactive"
-        data-testid="device-tile-alices_device"
+        data-testid="device-tile-<alice>s_device"
       >
         <div
           class="mx_DeviceTypeIcon"
@@ -235,7 +235,7 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
           <h4
             class="mx_Heading_h4"
           >
-            alices_device
+            <alice>s_device
           </h4>
           <div
             class="mx_DeviceTile_metadata"
@@ -249,7 +249,7 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
             <span
               data-testid="device-metadata-deviceId"
             >
-              alices_device
+              <alice>s_device
             </span>
           </div>
         </div>
@@ -315,7 +315,7 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
           >
             <div
               class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
-              data-testid="verification-status-button-alices_device"
+              data-testid="verification-status-button-<alice>s_device"
               role="button"
               tabindex="0"
             >
@@ -371,7 +371,7 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
     >
       <div
         class="mx_DeviceTile mx_DeviceTile_interactive"
-        data-testid="device-tile-alices_device"
+        data-testid="device-tile-<alice>s_device"
       >
         <div
           class="mx_DeviceTypeIcon"
@@ -397,7 +397,7 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
           <h4
             class="mx_Heading_h4"
           >
-            alices_device
+            <alice>s_device
           </h4>
           <div
             class="mx_DeviceTile_metadata"
@@ -411,7 +411,7 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
             <span
               data-testid="device-metadata-deviceId"
             >
-              alices_device
+              <alice>s_device
             </span>
           </div>
         </div>
@@ -477,7 +477,7 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
           >
             <div
               class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
-              data-testid="verification-status-button-alices_device"
+              data-testid="verification-status-button-<alice>s_device"
               role="button"
               tabindex="0"
             >

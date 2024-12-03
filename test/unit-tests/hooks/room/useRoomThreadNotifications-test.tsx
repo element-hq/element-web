@@ -62,7 +62,7 @@ describe("useRoomThreadNotifications", () => {
             room,
             client: cli,
             authorId: cli.getSafeUserId(),
-            participantUserIds: ["@alice:server.org"],
+            participantUserIds: ["@<alice>:server.org"],
         });
 
         const { result } = render(room);

@@ -36,7 +36,7 @@ describe("RoomResultContextMenus", () => {
 
     beforeEach(() => {
         client = stubClient();
-        room = new Room("!1:example.org", client, "@alice:example.org", {
+        room = new Room("!1:example.org", client, "@<alice>:example.org", {
             pendingEventOrdering: PendingEventOrdering.Detached,
         });
     });

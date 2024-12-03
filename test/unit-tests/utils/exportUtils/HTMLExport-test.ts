@@ -48,7 +48,7 @@ const EVENT_MESSAGE: IRoomEvent = {
 const EVENT_ATTACHMENT: IRoomEvent = {
     event_id: "$2",
     type: EventType.RoomMessage,
-    sender: "@alice:example.com",
+    sender: "@<alice>:example.com",
     origin_server_ts: 1,
     content: {
         msgtype: MsgType.File,
@@ -61,7 +61,7 @@ const EVENT_ATTACHMENT: IRoomEvent = {
 const EVENT_ATTACHMENT_MALFORMED: IRoomEvent = {
     event_id: "$2",
     type: EventType.RoomMessage,
-    sender: "@alice:example.com",
+    sender: "@<alice>:example.com",
     origin_server_ts: 1,
     content: {
         msgtype: MsgType.File,
@@ -285,7 +285,7 @@ describe("HTMLExport", () => {
                 type: EventType.RoomTopic,
                 event_id: "$00001",
                 room_id: room.roomId,
-                sender: "@alice:example.com",
+                sender: "@<alice>:example.com",
                 origin_server_ts: 0,
                 content: { topic },
                 state_key: "",
@@ -554,7 +554,7 @@ describe("HTMLExport", () => {
                 type: EventType.RoomName,
                 event_id: "$00001",
                 room_id: room.roomId,
-                sender: "@alice:example.com",
+                sender: "@<alice>:example.com",
                 origin_server_ts: 0,
                 content: { name },
                 state_key: "",
@@ -563,7 +563,7 @@ describe("HTMLExport", () => {
                 type: EventType.RoomTopic,
                 event_id: "$00002",
                 room_id: room.roomId,
-                sender: "@alice:example.com",
+                sender: "@<alice>:example.com",
                 origin_server_ts: 1,
                 content: { topic },
                 state_key: "",

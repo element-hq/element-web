@@ -42,7 +42,7 @@ exports[`AddRemoveThreepids should render email addresses 1`] = `
     <span
       class="mx_AddRemoveThreepids_existing_address"
     >
-      alice@nowhere.dummy
+      <alice>@nowhere.dummy
     </span>
     <div
       class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger_sm"

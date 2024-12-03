@@ -42,7 +42,7 @@ describe("<MBeaconBody />", () => {
     // stable date for snapshots
     jest.spyOn(global.Date, "now").mockReturnValue(now);
     const roomId = "!room:server";
-    const aliceId = "@alice:server";
+    const <alice>Id = "@<alice>:server";
 
     const mapOptions = { container: {} as unknown as HTMLElement, style: "" };
     const mockMap = new maplibregl.Map(mapOptions);
@@ -52,12 +52,12 @@ describe("<MBeaconBody />", () => {
         getClientWellKnown: jest.fn().mockReturnValue({
             [TILE_SERVER_WK_KEY.name]: { map_style_url: "maps.com" },
         }),
-        getUserId: jest.fn().mockReturnValue(aliceId),
+        getUserId: jest.fn().mockReturnValue(<alice>Id),
         getRoom: jest.fn(),
         redactEvent: jest.fn(),
     });
 
-    const defaultEvent = makeBeaconInfoEvent(aliceId, roomId, { isLive: true }, "$alice-room1-1");
+    const defaultEvent = makeBeaconInfoEvent(<alice>Id, roomId, { isLive: true }, "$<alice>-room1-1");
 
     const defaultProps: ComponentProps<typeof MBeaconBody> = {
         mxEvent: defaultEvent,
@@ -88,7 +88,7 @@ describe("<MBeaconBody />", () => {
 
     const testBeaconStatuses = () => {
         it("renders stopped beacon UI for an explicitly stopped beacon", () => {
-            const beaconInfoEvent = makeBeaconInfoEvent(aliceId, roomId, { isLive: false }, "$alice-room1-1");
+            const beaconInfoEvent = makeBeaconInfoEvent(<alice>Id, roomId, { isLive: false }, "$<alice>-room1-1");
             makeRoomWithStateEvents([beaconInfoEvent], { roomId, mockClient });
             const component = getComponent({ mxEvent: beaconInfoEvent });
             expect(component.container).toHaveTextContent("Live location ended");
@@ -96,11 +96,11 @@ describe("<MBeaconBody />", () => {
 
         it("renders stopped beacon UI for an expired beacon", () => {
             const beaconInfoEvent = makeBeaconInfoEvent(
-                aliceId,
+                <alice>Id,
                 roomId,
                 // puts this beacons live period in the past
                 { isLive: true, timestamp: now - 600000, timeout: 500 },
-                "$alice-room1-1",
+                "$<alice>-room1-1",
             );
             makeRoomWithStateEvents([beaconInfoEvent], { roomId, mockClient });
             const component = getComponent({ mxEvent: beaconInfoEvent });
@@ -109,11 +109,11 @@ describe("<MBeaconBody />", () => {
 
         it("renders loading beacon UI for a beacon that has not started yet", () => {
             const beaconInfoEvent = makeBeaconInfoEvent(
-                aliceId,
+                <alice>Id,
                 roomId,
                 // puts this beacons start timestamp in the future
                 { isLive: true, timestamp: now + 60000, timeout: 500 },
-                "$alice-room1-1",
+                "$<alice>-room1-1",
             );
             makeRoomWithStateEvents([beaconInfoEvent], { roomId, mockClient });
             const component = getComponent({ mxEvent: beaconInfoEvent });
@@ -122,11 +122,11 @@ describe("<MBeaconBody />", () => {
 
         it("does not open maximised map when on click when beacon is stopped", () => {
             const beaconInfoEvent = makeBeaconInfoEvent(
-                aliceId,
+                <alice>Id,
                 roomId,
                 // puts this beacons live period in the past
                 { isLive: true, timestamp: now - 600000, timeout: 500 },
-                "$alice-room1-1",
+                "$<alice>-room1-1",
             );
             makeRoomWithStateEvents([beaconInfoEvent], { roomId, mockClient });
             const component = getComponent({ mxEvent: beaconInfoEvent });
@@ -136,42 +136,42 @@ describe("<MBeaconBody />", () => {
         });
 
         it("renders stopped UI when a beacon event is not the latest beacon for a user", () => {
-            const aliceBeaconInfo1 = makeBeaconInfoEvent(
-                aliceId,
+            const <alice>BeaconInfo1 = makeBeaconInfoEvent(
+                <alice>Id,
                 roomId,
                 // this one is a little older
                 { isLive: true, timestamp: now - 500 },
-                "$alice-room1-1",
+                "$<alice>-room1-1",
             );
-            aliceBeaconInfo1.event.origin_server_ts = now - 500;
-            const aliceBeaconInfo2 = makeBeaconInfoEvent(aliceId, roomId, { isLive: true }, "$alice-room1-2");
+            <alice>BeaconInfo1.event.origin_server_ts = now - 500;
+            const <alice>BeaconInfo2 = makeBeaconInfoEvent(<alice>Id, roomId, { isLive: true }, "$<alice>-room1-2");
 
-            makeRoomWithStateEvents([aliceBeaconInfo1, aliceBeaconInfo2], { roomId, mockClient });
+            makeRoomWithStateEvents([<alice>BeaconInfo1, <alice>BeaconInfo2], { roomId, mockClient });
 
-            const component = getComponent({ mxEvent: aliceBeaconInfo1 });
+            const component = getComponent({ mxEvent: <alice>BeaconInfo1 });
             // beacon1 has been superceded by beacon2
             expect(component.container).toHaveTextContent("Live location ended");
         });
 
         it("renders stopped UI when a beacon event is replaced", () => {
-            const aliceBeaconInfo1 = makeBeaconInfoEvent(
-                aliceId,
+            const <alice>BeaconInfo1 = makeBeaconInfoEvent(
+                <alice>Id,
                 roomId,
                 // this one is a little older
                 { isLive: true, timestamp: now - 500 },
-                "$alice-room1-1",
+                "$<alice>-room1-1",
             );
-            aliceBeaconInfo1.event.origin_server_ts = now - 500;
-            const aliceBeaconInfo2 = makeBeaconInfoEvent(aliceId, roomId, { isLive: true }, "$alice-room1-2");
+            <alice>BeaconInfo1.event.origin_server_ts = now - 500;
+            const <alice>BeaconInfo2 = makeBeaconInfoEvent(<alice>Id, roomId, { isLive: true }, "$<alice>-room1-2");
 
-            const room = makeRoomWithStateEvents([aliceBeaconInfo1], { roomId, mockClient });
-            const component = getComponent({ mxEvent: aliceBeaconInfo1 });
+            const room = makeRoomWithStateEvents([<alice>BeaconInfo1], { roomId, mockClient });
+            const component = getComponent({ mxEvent: <alice>BeaconInfo1 });
 
-            const beaconInstance = room.currentState.beacons.get(getBeaconInfoIdentifier(aliceBeaconInfo1))!;
-            // update alice's beacon with a new edition
+            const beaconInstance = room.currentState.beacons.get(getBeaconInfoIdentifier(<alice>BeaconInfo1))!;
+            // update <alice>'s beacon with a new edition
             // beacon instance emits
             act(() => {
-                beaconInstance.update(aliceBeaconInfo2);
+                beaconInstance.update(<alice>BeaconInfo2);
             });
 
             // beacon1 has been superceded by beacon2
@@ -183,11 +183,11 @@ describe("<MBeaconBody />", () => {
 
     describe("on liveness change", () => {
         it("renders stopped UI when a beacon stops being live", () => {
-            const aliceBeaconInfo = makeBeaconInfoEvent(aliceId, roomId, { isLive: true }, "$alice-room1-1");
+            const <alice>BeaconInfo = makeBeaconInfoEvent(<alice>Id, roomId, { isLive: true }, "$<alice>-room1-1");
 
-            const room = makeRoomWithStateEvents([aliceBeaconInfo], { roomId, mockClient });
-            const beaconInstance = room.currentState.beacons.get(getBeaconInfoIdentifier(aliceBeaconInfo))!;
-            const component = getComponent({ mxEvent: aliceBeaconInfo });
+            const room = makeRoomWithStateEvents([<alice>BeaconInfo], { roomId, mockClient });
+            const beaconInstance = room.currentState.beacons.get(getBeaconInfoIdentifier(<alice>BeaconInfo))!;
+            const component = getComponent({ mxEvent: <alice>BeaconInfo });
 
             act(() => {
                 // @ts-ignore cheat to force beacon to not live
@@ -201,29 +201,29 @@ describe("<MBeaconBody />", () => {
     });
 
     describe("latestLocationState", () => {
-        const aliceBeaconInfo = makeBeaconInfoEvent(aliceId, roomId, { isLive: true }, "$alice-room1-1");
+        const <alice>BeaconInfo = makeBeaconInfoEvent(<alice>Id, roomId, { isLive: true }, "$<alice>-room1-1");
 
-        const location1 = makeBeaconEvent(aliceId, {
-            beaconInfoId: aliceBeaconInfo.getId(),
+        const location1 = makeBeaconEvent(<alice>Id, {
+            beaconInfoId: <alice>BeaconInfo.getId(),
             geoUri: "geo:51,41",
             timestamp: now + 1,
         });
-        const location2 = makeBeaconEvent(aliceId, {
-            beaconInfoId: aliceBeaconInfo.getId(),
+        const location2 = makeBeaconEvent(<alice>Id, {
+            beaconInfoId: <alice>BeaconInfo.getId(),
             geoUri: "geo:52,42",
             timestamp: now + 10000,
         });
 
         it("renders a live beacon without a location correctly", () => {
-            makeRoomWithStateEvents([aliceBeaconInfo], { roomId, mockClient });
-            const component = getComponent({ mxEvent: aliceBeaconInfo });
+            makeRoomWithStateEvents([<alice>BeaconInfo], { roomId, mockClient });
+            const component = getComponent({ mxEvent: <alice>BeaconInfo });
 
             expect(component.container).toHaveTextContent("Loading live location…");
         });
 
         it("does nothing on click when a beacon has no location", () => {
-            makeRoomWithStateEvents([aliceBeaconInfo], { roomId, mockClient });
-            const component = getComponent({ mxEvent: aliceBeaconInfo });
+            makeRoomWithStateEvents([<alice>BeaconInfo], { roomId, mockClient });
+            const component = getComponent({ mxEvent: <alice>BeaconInfo });
 
             fireEvent.click(component.container.querySelector(".mx_MBeaconBody_map")!);
 
@@ -231,19 +231,19 @@ describe("<MBeaconBody />", () => {
         });
 
         it("renders a live beacon with a location correctly", () => {
-            const room = makeRoomWithStateEvents([aliceBeaconInfo], { roomId, mockClient });
-            const beaconInstance = room.currentState.beacons.get(getBeaconInfoIdentifier(aliceBeaconInfo))!;
+            const room = makeRoomWithStateEvents([<alice>BeaconInfo], { roomId, mockClient });
+            const beaconInstance = room.currentState.beacons.get(getBeaconInfoIdentifier(<alice>BeaconInfo))!;
             beaconInstance.addLocations([location1]);
-            const component = getComponent({ mxEvent: aliceBeaconInfo });
+            const component = getComponent({ mxEvent: <alice>BeaconInfo });
 
             expect(component.container.querySelector(".maplibregl-canvas-container")).toBeDefined();
         });
 
         it("opens maximised map view on click when beacon has a live location", () => {
-            const room = makeRoomWithStateEvents([aliceBeaconInfo], { roomId, mockClient });
-            const beaconInstance = room.currentState.beacons.get(getBeaconInfoIdentifier(aliceBeaconInfo))!;
+            const room = makeRoomWithStateEvents([<alice>BeaconInfo], { roomId, mockClient });
+            const beaconInstance = room.currentState.beacons.get(getBeaconInfoIdentifier(<alice>BeaconInfo))!;
             beaconInstance.addLocations([location1]);
-            const component = getComponent({ mxEvent: aliceBeaconInfo });
+            const component = getComponent({ mxEvent: <alice>BeaconInfo });
 
             fireEvent.click(component.container.querySelector(".mx_Map")!);
 
@@ -252,10 +252,10 @@ describe("<MBeaconBody />", () => {
         });
 
         it("updates latest location", () => {
-            const room = makeRoomWithStateEvents([aliceBeaconInfo], { roomId, mockClient });
-            getComponent({ mxEvent: aliceBeaconInfo });
+            const room = makeRoomWithStateEvents([<alice>BeaconInfo], { roomId, mockClient });
+            getComponent({ mxEvent: <alice>BeaconInfo });
 
-            const beaconInstance = room.currentState.beacons.get(getBeaconInfoIdentifier(aliceBeaconInfo))!;
+            const beaconInstance = room.currentState.beacons.get(getBeaconInfoIdentifier(<alice>BeaconInfo))!;
             act(() => {
                 beaconInstance.addLocations([location1]);
             });
@@ -278,16 +278,16 @@ describe("<MBeaconBody />", () => {
             location1: MatrixEvent;
             location2: MatrixEvent;
         } => {
-            const beaconInfoEvent = makeBeaconInfoEvent(aliceId, roomId, { isLive: true }, "$alice-room1-1");
+            const beaconInfoEvent = makeBeaconInfoEvent(<alice>Id, roomId, { isLive: true }, "$<alice>-room1-1");
 
             const location1 = makeBeaconEvent(
-                aliceId,
+                <alice>Id,
                 { beaconInfoId: beaconInfoEvent.getId(), geoUri: "geo:51,41", timestamp: now + 1 },
                 roomId,
             );
             location1.event.event_id = "1";
             const location2 = makeBeaconEvent(
-                aliceId,
+                <alice>Id,
                 { beaconInfoId: beaconInfoEvent.getId(), geoUri: "geo:52,42", timestamp: now + 10000 },
                 roomId,
             );
@@ -397,8 +397,8 @@ describe("<MBeaconBody />", () => {
         });
 
         it("renders maps unavailable error for a live beacon with location", () => {
-            const beaconInfoEvent = makeBeaconInfoEvent(aliceId, roomId, { isLive: true }, "$alice-room1-1");
-            const location1 = makeBeaconEvent(aliceId, {
+            const beaconInfoEvent = makeBeaconInfoEvent(<alice>Id, roomId, { isLive: true }, "$<alice>-room1-1");
+            const location1 = makeBeaconEvent(<alice>Id, {
                 beaconInfoId: beaconInfoEvent.getId(),
                 geoUri: "geo:51,41",
                 timestamp: now + 1,

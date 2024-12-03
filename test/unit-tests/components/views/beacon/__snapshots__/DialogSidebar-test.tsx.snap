@@ -60,7 +60,7 @@ exports[`<DialogSidebar /> renders sidebar correctly with beacons 1`] = `
               <span
                 class="mx_BeaconStatus_label"
               >
-                @alice:server.org
+                @<alice>:server.org
               </span>
               <span
                 class="mx_BeaconStatus_expiryTime"

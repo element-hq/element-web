@@ -32,11 +32,11 @@ describe("<RoomTopic/>", () => {
      */
     function createRoom(topic: string) {
         stubClient();
-        const room = new Room("!pMBteVpcoJRdCJxDmn:matrix.org", MatrixClientPeg.safeGet(), "@alice:example.org");
+        const room = new Room("!pMBteVpcoJRdCJxDmn:matrix.org", MatrixClientPeg.safeGet(), "@<alice>:example.org");
         const topicEvent = mkEvent({
             type: "m.room.topic",
             room: "!pMBteVpcoJRdCJxDmn:matrix.org",
-            user: "@alice:example.org",
+            user: "@<alice>:example.org",
             content: { topic },
             ts: 123,
             event: true,
