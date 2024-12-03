@@ -573,7 +573,7 @@ module.exports = (env, argv) => {
             // This exports our CSS using the splitChunks and loaders above.
             new MiniCssExtractPlugin({
                 filename: "bundles/[fullhash]/[name].css",
-                chunkFilename: "bundles/[fullhash]/[name].css",
+                chunkFilename: "bundles/[fullhash]/[name].chunk.css",
                 ignoreOrder: false, // Enable to remove warnings about conflicting order
             }),
 
@@ -688,16 +688,30 @@ module.exports = (env, argv) => {
         output: {
             path: path.join(__dirname, "webapp"),
 
-            // The generated JS (and CSS, from the extraction plugin) are put in a
-            // unique subdirectory for the build. There will only be one such
-            // 'bundle' directory in the generated tarball; however, hosting
-            // servers can collect 'bundles' from multiple versions into one
-            // directory and symlink it into place - this allows users who loaded
-            // an older version of the application to continue to access webpack
-            // chunks even after the app is redeployed.
+            // There are a lot of assets that need to be kept in sync with each other
+            // (once a user loads one version of the app, they need to keep being served
+            // assets for that version).
+            //
+            // To deal with this, we try to put as many as possible of the referenced assets
+            // into a build-specific subdirectory. This includes generated javascript, as well
+            // as CSS extracted by the MiniCssExtractPlugin (see config above).
+            //
+            // Hosting servers can then collect 'bundles' from multiple versions
+            // into one directory, and continue to serve them even after a new version is deployed.
+            // This allows users who loaded an older version of the application to continue to
+            // access assets even after the app is redeployed.
+            //
+            // See `scripts/deploy.py` for a script which manages the deployment in this way.
             filename: "bundles/[fullhash]/[name].js",
             chunkFilename: "bundles/[fullhash]/[name].js",
             webassemblyModuleFilename: "bundles/[fullhash]/[modulehash].wasm",
+
+            // Asset modules include things like the WASM for matrix-rust-sdk-crypto. Again
+            // these need keeping in sync with the rest of the application. Unfortunately
+            // `fullhash` (ie, a build-specific hash) is not available for these, so the best
+            // we can do is put them in their own directory. On the other hand, that does mean
+            // that such assets can be cached across Element versions.
+            assetModuleFilename: "bundles/[contenthash]/[name][ext]",
         },
 
         // configuration for the webpack-dev-server
