@@ -47,10 +47,12 @@ export async function verifyDevice(matrixClient: MatrixClient, user: User, devic
         user,
         device,
         onFinished: async (action): Promise<void> => {
-            const verificationRequestPromise = matrixClient
-                .getCrypto()
-                ?.requestDeviceVerification(user.userId, device.deviceId);
-            setRightPanel({ member: user, verificationRequestPromise });
+            if (action === "sas") {
+                const verificationRequestPromise = matrixClient
+                    .getCrypto()
+                    ?.requestDeviceVerification(user.userId, device.deviceId);
+                setRightPanel({ member: user, verificationRequestPromise });
+            }
         },
     });
 }
