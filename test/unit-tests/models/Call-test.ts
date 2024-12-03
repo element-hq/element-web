@@ -69,24 +69,24 @@ jest.spyOn(SettingsStore, "getValue").mockImplementation(
 const setUpClientRoomAndStores = (): {
     client: Mocked<MatrixClient>;
     room: Room;
-    alice: RoomMember;
+    <alice>: RoomMember;
     bob: RoomMember;
     carol: RoomMember;
 } => {
     stubClient();
     const client = mocked<MatrixClient>(MatrixClientPeg.safeGet());
 
-    const room = new Room("!1:example.org", client, "@alice:example.org", {
+    const room = new Room("!1:example.org", client, "@<alice>:example.org", {
         pendingEventOrdering: PendingEventOrdering.Detached,
     });
 
-    const alice = mkRoomMember(room.roomId, "@alice:example.org");
+    const <alice> = mkRoomMember(room.roomId, "@<alice>:example.org");
     const bob = mkRoomMember(room.roomId, "@bob:example.org");
     const carol = mkRoomMember(room.roomId, "@carol:example.org");
     jest.spyOn(room, "getMember").mockImplementation((userId) => {
         switch (userId) {
-            case alice.userId:
-                return alice;
+            case <alice>.userId:
+                return <alice>;
             case bob.userId:
                 return bob;
             case carol.userId:
@@ -106,8 +106,8 @@ const setUpClientRoomAndStores = (): {
         return session;
     });
     client.getRooms.mockReturnValue([room]);
-    client.getUserId.mockReturnValue(alice.userId);
-    client.getDeviceId.mockReturnValue("alices_device");
+    client.getUserId.mockReturnValue(<alice>.userId);
+    client.getDeviceId.mockReturnValue("<alice>s_device");
     client.reEmitter.reEmit(room, [RoomStateEvent.Events]);
     client.sendStateEvent.mockImplementation(async (roomId, eventType, content, stateKey = "") => {
         if (roomId !== room.roomId) throw new Error("Unknown room");
@@ -115,7 +115,7 @@ const setUpClientRoomAndStores = (): {
             event: true,
             type: eventType,
             room: roomId,
-            user: alice.userId,
+            user: <alice>.userId,
             skey: stateKey,
             content: content as IContent,
         });
@@ -126,7 +126,7 @@ const setUpClientRoomAndStores = (): {
     setupAsyncStoreWithClient(WidgetStore.instance, client);
     setupAsyncStoreWithClient(WidgetMessagingStore.instance, client);
 
-    return { client, room, alice, bob, carol };
+    return { client, room, <alice>, bob, carol };
 };
 
 const cleanUpClientRoomAndStores = (client: MatrixClient, room: Room) => {
@@ -182,12 +182,12 @@ describe("JitsiCall", () => {
 
     let client: Mocked<MatrixClient>;
     let room: Room;
-    let alice: RoomMember;
+    let <alice>: RoomMember;
     let bob: RoomMember;
     let carol: RoomMember;
 
     beforeEach(() => {
-        ({ client, room, alice, bob, carol } = setUpClientRoomAndStores());
+        ({ client, room, <alice>, bob, carol } = setUpClientRoomAndStores());
         jest.spyOn(room, "getType").mockReturnValue(RoomType.ElementVideo);
     });
 
@@ -423,7 +423,7 @@ describe("JitsiCall", () => {
             await call.start();
             expect(call.participants).toEqual(
                 new Map([
-                    [alice, new Set(["alices_device"])],
+                    [<alice>, new Set(["<alice>s_device"])],
                     [bob, new Set(["bobweb", "bobdesktop"])],
                 ]),
             );
@@ -438,7 +438,7 @@ describe("JitsiCall", () => {
             await waitFor(
                 () =>
                     expect(
-                        room.currentState.getStateEvents(JitsiCall.MEMBER_EVENT_TYPE, alice.userId)?.getContent(),
+                        room.currentState.getStateEvents(JitsiCall.MEMBER_EVENT_TYPE, <alice>.userId)?.getContent(),
                     ).toEqual({
                         devices: [client.getDeviceId()],
                         expires_ts: now1 + call.STUCK_DEVICE_TIMEOUT_MS,
@@ -451,7 +451,7 @@ describe("JitsiCall", () => {
             await waitFor(
                 () =>
                     expect(
-                        room.currentState.getStateEvents(JitsiCall.MEMBER_EVENT_TYPE, alice.userId)?.getContent(),
+                        room.currentState.getStateEvents(JitsiCall.MEMBER_EVENT_TYPE, <alice>.userId)?.getContent(),
                     ).toEqual({
                         devices: [],
                         expires_ts: now2 + call.STUCK_DEVICE_TIMEOUT_MS,
@@ -468,7 +468,7 @@ describe("JitsiCall", () => {
                         room.roomId,
                         JitsiCall.MEMBER_EVENT_TYPE,
                         { devices: [client.getDeviceId()], expires_ts: expect.any(Number) },
-                        alice.userId,
+                        <alice>.userId,
                     ),
                 { interval: 5 },
             );
@@ -481,7 +481,7 @@ describe("JitsiCall", () => {
                         room.roomId,
                         JitsiCall.MEMBER_EVENT_TYPE,
                         { devices: [client.getDeviceId()], expires_ts: expect.any(Number) },
-                        alice.userId,
+                        <alice>.userId,
                     ),
                 { interval: 5 },
             );
@@ -512,9 +512,9 @@ describe("JitsiCall", () => {
             await call.start();
             await call.disconnect();
             expect(onParticipants.mock.calls).toEqual([
-                [new Map([[alice, new Set(["alices_device"])]]), new Map()],
-                [new Map([[alice, new Set(["alices_device"])]]), new Map([[alice, new Set(["alices_device"])]])],
-                [new Map(), new Map([[alice, new Set(["alices_device"])]])],
+                [new Map([[<alice>, new Set(["<alice>s_device"])]]), new Map()],
+                [new Map([[<alice>, new Set(["<alice>s_device"])]]), new Map([[<alice>, new Set(["<alice>s_device"])]])],
+                [new Map(), new Map([[<alice>, new Set(["<alice>s_device"])]])],
                 [new Map(), new Map()],
             ]);
 
@@ -530,20 +530,20 @@ describe("JitsiCall", () => {
         });
 
         describe("clean", () => {
-            const aliceWeb: IMyDevice = {
-                device_id: "aliceweb",
+            const <alice>Web: IMyDevice = {
+                device_id: "<alice>web",
                 last_seen_ts: 0,
             };
-            const aliceDesktop: IMyDevice = {
-                device_id: "alicedesktop",
+            const <alice>Desktop: IMyDevice = {
+                device_id: "<alice>desktop",
                 last_seen_ts: 0,
             };
-            const aliceDesktopOffline: IMyDevice = {
-                device_id: "alicedesktopoffline",
+            const <alice>DesktopOffline: IMyDevice = {
+                device_id: "<alice>desktopoffline",
                 last_seen_ts: 1000 * 60 * 60 * -2, // 2 hours ago
             };
-            const aliceDesktopNeverOnline: IMyDevice = {
-                device_id: "alicedesktopneveronline",
+            const <alice>DesktopNeverOnline: IMyDevice = {
+                device_id: "<alice>desktopneveronline",
             };
 
             const mkContent = (devices: IMyDevice[]): JitsiCallMemberContent => ({
@@ -552,16 +552,16 @@ describe("JitsiCall", () => {
             });
             const expectDevices = (devices: IMyDevice[]) =>
                 expect(
-                    room.currentState.getStateEvents(JitsiCall.MEMBER_EVENT_TYPE, alice.userId)?.getContent(),
+                    room.currentState.getStateEvents(JitsiCall.MEMBER_EVENT_TYPE, <alice>.userId)?.getContent(),
                 ).toEqual({
                     expires_ts: expect.any(Number),
                     devices: devices.map((d) => d.device_id),
                 });
 
             beforeEach(() => {
-                client.getDeviceId.mockReturnValue(aliceWeb.device_id);
+                client.getDeviceId.mockReturnValue(<alice>Web.device_id);
                 client.getDevices.mockResolvedValue({
-                    devices: [aliceWeb, aliceDesktop, aliceDesktopOffline, aliceDesktopNeverOnline],
+                    devices: [<alice>Web, <alice>Desktop, <alice>DesktopOffline, <alice>DesktopNeverOnline],
                 });
             });
 
@@ -570,53 +570,53 @@ describe("JitsiCall", () => {
                 await client.sendStateEvent(
                     room.roomId,
                     JitsiCall.MEMBER_EVENT_TYPE,
-                    mkContent([aliceWeb, aliceDesktop]),
-                    alice.userId,
+                    mkContent([<alice>Web, <alice>Desktop]),
+                    <alice>.userId,
                 );
 
                 await call.clean();
-                expectDevices([aliceWeb, aliceDesktop]);
+                expectDevices([<alice>Web, <alice>Desktop]);
             });
 
             it("cleans up our own device if we're disconnected", async () => {
                 await client.sendStateEvent(
                     room.roomId,
                     JitsiCall.MEMBER_EVENT_TYPE,
-                    mkContent([aliceWeb, aliceDesktop]),
-                    alice.userId,
+                    mkContent([<alice>Web, <alice>Desktop]),
+                    <alice>.userId,
                 );
 
                 await call.clean();
-                expectDevices([aliceDesktop]);
+                expectDevices([<alice>Desktop]);
             });
 
             it("cleans up devices that have been offline for too long", async () => {
                 await client.sendStateEvent(
                     room.roomId,
                     JitsiCall.MEMBER_EVENT_TYPE,
-                    mkContent([aliceDesktop, aliceDesktopOffline]),
-                    alice.userId,
+                    mkContent([<alice>Desktop, <alice>DesktopOffline]),
+                    <alice>.userId,
                 );
 
                 await call.clean();
-                expectDevices([aliceDesktop]);
+                expectDevices([<alice>Desktop]);
             });
 
             it("cleans up devices that have never been online", async () => {
                 await client.sendStateEvent(
                     room.roomId,
                     JitsiCall.MEMBER_EVENT_TYPE,
-                    mkContent([aliceDesktop, aliceDesktopNeverOnline]),
-                    alice.userId,
+                    mkContent([<alice>Desktop, <alice>DesktopNeverOnline]),
+                    <alice>.userId,
                 );
 
                 await call.clean();
-                expectDevices([aliceDesktop]);
+                expectDevices([<alice>Desktop]);
             });
 
             it("no-ops if there are no state events", async () => {
                 await call.clean();
-                expect(room.currentState.getStateEvents(JitsiCall.MEMBER_EVENT_TYPE, alice.userId)).toBe(null);
+                expect(room.currentState.getStateEvents(JitsiCall.MEMBER_EVENT_TYPE, <alice>.userId)).toBe(null);
             });
         });
     });
@@ -625,7 +625,7 @@ describe("JitsiCall", () => {
 describe("ElementCall", () => {
     let client: Mocked<MatrixClient>;
     let room: Room;
-    let alice: RoomMember;
+    let <alice>: RoomMember;
 
     function setRoomMembers(memberIds: string[]) {
         jest.spyOn(room, "getJoinedMembers").mockReturnValue(memberIds.map((id) => ({ userId: id }) as RoomMember));
@@ -676,7 +676,7 @@ describe("ElementCall", () => {
 
     beforeEach(() => {
         jest.useFakeTimers();
-        ({ client, room, alice } = setUpClientRoomAndStores());
+        ({ client, room, <alice> } = setUpClientRoomAndStores());
     });
 
     afterEach(() => {
@@ -989,11 +989,11 @@ describe("ElementCall", () => {
 
         it("emits events when participants change", async () => {
             const onParticipants = jest.fn();
-            call.session.memberships = [{ sender: alice.userId, deviceId: "alices_device" } as CallMembership];
+            call.session.memberships = [{ sender: <alice>.userId, deviceId: "<alice>s_device" } as CallMembership];
             call.on(CallEvent.Participants, onParticipants);
             call.session.emit(MatrixRTCSessionEvent.MembershipsChanged, [], []);
 
-            expect(onParticipants.mock.calls).toEqual([[new Map([[alice, new Set(["alices_device"])]]), new Map()]]);
+            expect(onParticipants.mock.calls).toEqual([[new Map([[<alice>, new Set(["<alice>s_device"])]]), new Map()]]);
 
             call.off(CallEvent.Participants, onParticipants);
         });
@@ -1143,7 +1143,7 @@ describe("ElementCall", () => {
             expect(roomSessionEmitSpy).toHaveBeenCalledWith(
                 "memberships_changed",
                 [],
-                [{ sender: "@alice:example.org" }],
+                [{ sender: "@<alice>:example.org" }],
             );
             expect(call.connectionState).toBe(ConnectionState.Connected);
             call.destroy();

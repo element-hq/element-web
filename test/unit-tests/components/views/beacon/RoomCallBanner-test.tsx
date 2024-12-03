@@ -29,7 +29,7 @@ import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
 describe("<RoomCallBanner />", () => {
     let client: Mocked<MatrixClient>;
     let room: Room;
-    let alice: RoomMember;
+    let <alice>: RoomMember;
     useMockedCalls();
 
     const defaultProps = {
@@ -41,11 +41,11 @@ describe("<RoomCallBanner />", () => {
 
         client = mocked(MatrixClientPeg.safeGet());
 
-        room = new Room("!1:example.org", client, "@alice:example.org", {
+        room = new Room("!1:example.org", client, "@<alice>:example.org", {
             pendingEventOrdering: PendingEventOrdering.Detached,
         });
-        alice = mkRoomMember(room.roomId, "@alice:example.org");
-        jest.spyOn(room, "getMember").mockImplementation((userId) => (userId === alice.userId ? alice : null));
+        <alice> = mkRoomMember(room.roomId, "@<alice>:example.org");
+        jest.spyOn(room, "getMember").mockImplementation((userId) => (userId === <alice>.userId ? <alice> : null));
 
         client.getRoom.mockImplementation((roomId) => (roomId === room.roomId ? room : null));
         client.getRooms.mockReturnValue([room]);

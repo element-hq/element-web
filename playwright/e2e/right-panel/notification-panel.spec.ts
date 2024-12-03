@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { test, expect } from "../../element-web-test";
 
 const ROOM_NAME = "Test room";
-const NAME = "Alice";
+const NAME = "<alice>";
 
 test.describe("NotificationPanel", () => {
     test.use({

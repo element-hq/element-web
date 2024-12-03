@@ -155,11 +155,11 @@ describe("ProfileSettings", () => {
     });
 
     it("changes display name", async () => {
-        jest.spyOn(OwnProfileStore.instance, "displayName", "get").mockReturnValue("Alice");
+        jest.spyOn(OwnProfileStore.instance, "displayName", "get").mockReturnValue("<alice>");
 
         renderProfileSettings(toastRack, client);
 
-        expect(await screen.findByText("Mocked EditInPlace: Alice")).toBeInTheDocument();
+        expect(await screen.findByText("Mocked EditInPlace: <alice>")).toBeInTheDocument();
         expect(editInPlaceOnSave).toBeDefined();
 
         act(() => {
@@ -176,7 +176,7 @@ describe("ProfileSettings", () => {
     });
 
     it("displays error if changing display name fails", async () => {
-        jest.spyOn(OwnProfileStore.instance, "displayName", "get").mockReturnValue("Alice");
+        jest.spyOn(OwnProfileStore.instance, "displayName", "get").mockReturnValue("<alice>");
         mocked(client).setDisplayName.mockRejectedValue(new Error("Failed to set display name"));
 
         renderProfileSettings(toastRack, client);
@@ -185,7 +185,7 @@ describe("ProfileSettings", () => {
 
         act(() => {
             editInPlaceOnChange({
-                target: { value: "Not Alice any more" } as HTMLInputElement,
+                target: { value: "Not <alice> any more" } as HTMLInputElement,
             } as ChangeEvent<HTMLInputElement>);
         });
 
@@ -195,11 +195,11 @@ describe("ProfileSettings", () => {
     });
 
     it("resets on cancel", async () => {
-        jest.spyOn(OwnProfileStore.instance, "displayName", "get").mockReturnValue("Alice");
+        jest.spyOn(OwnProfileStore.instance, "displayName", "get").mockReturnValue("<alice>");
 
         renderProfileSettings(toastRack, client);
 
-        expect(await screen.findByText("Mocked EditInPlace: Alice")).toBeInTheDocument();
+        expect(await screen.findByText("Mocked EditInPlace: <alice>")).toBeInTheDocument();
         expect(editInPlaceOnChange).toBeDefined();
         expect(editInPlaceOnCancel).toBeDefined();
 
@@ -215,7 +215,7 @@ describe("ProfileSettings", () => {
             editInPlaceOnCancel();
         });
 
-        expect(await screen.findByText("Mocked EditInPlace: Alice")).toBeInTheDocument();
+        expect(await screen.findByText("Mocked EditInPlace: <alice>")).toBeInTheDocument();
     });
 
     it("signs out directly if no rooms are encrypted", async () => {

@@ -40,7 +40,7 @@ describe("<PinnedMessagesCard />", () => {
     beforeEach(() => {
         stubClient();
         cli = mocked(MatrixClientPeg.safeGet());
-        cli.getUserId.mockReturnValue("@alice:example.org");
+        cli.getUserId.mockReturnValue("@<alice>:example.org");
         cli.setRoomAccountData.mockResolvedValue({});
         cli.relations.mockResolvedValue({ originalEvent: {} as unknown as MatrixEvent, events: [] });
     });
@@ -155,14 +155,14 @@ describe("<PinnedMessagesCard />", () => {
     const pin1 = mkMessage({
         event: true,
         room: "!room:example.org",
-        user: "@alice:example.org",
+        user: "@<alice>:example.org",
         msg: "First pinned message",
         ts: 2,
     });
     const pin2 = mkMessage({
         event: true,
         room: "!room:example.org",
-        user: "@alice:example.org",
+        user: "@<alice>:example.org",
         msg: "The second one",
         ts: 1,
     });
@@ -201,7 +201,7 @@ describe("<PinnedMessagesCard />", () => {
             mkMessage({
                 event: true,
                 room: "!room:example.org",
-                user: "@alice:example.org",
+                user: "@<alice>:example.org",
                 msg: `The message ${i}`,
                 ts: i,
             }),
@@ -245,7 +245,7 @@ describe("<PinnedMessagesCard />", () => {
             event: true,
             type: EventType.RoomMessage,
             room: "!room:example.org",
-            user: "@alice:example.org",
+            user: "@<alice>:example.org",
             content: {
                 "msgtype": MsgType.Text,
                 "body": " * First pinned message, edited",
@@ -276,7 +276,7 @@ describe("<PinnedMessagesCard />", () => {
                 type: EventType.RoomCreate,
                 content: {},
                 room: "!room:example.org",
-                user: "@alice:example.org",
+                user: "@<alice>:example.org",
             });
             await initPinnedMessagesCard([pin], []);
             expect(screen.queryAllByRole("listitem")).toHaveLength(0);
@@ -289,7 +289,7 @@ describe("<PinnedMessagesCard />", () => {
                 type: EventType.RoomCreate,
                 content: {},
                 room: "!room:example.org",
-                user: "@alice:example.org",
+                user: "@<alice>:example.org",
             });
             await initPinnedMessagesCard([], [pin]);
             expect(screen.queryAllByRole("listitem")).toHaveLength(0);
@@ -338,12 +338,12 @@ describe("<PinnedMessagesCard />", () => {
             ...PollStartEvent.from("A poll", ["Option 1", "Option 2"], M_POLL_KIND_DISCLOSED).serialize(),
             event: true,
             room: "!room:example.org",
-            user: "@alice:example.org",
+            user: "@<alice>:example.org",
         });
 
         const answers = (poll.unstableExtensibleEvent as PollStartEvent).answers;
         const responses = [
-            ["@alice:example.org", 0] as [string, number],
+            ["@<alice>:example.org", 0] as [string, number],
             ["@bob:example.org", 0] as [string, number],
             ["@eve:example.org", 1] as [string, number],
         ].map(([user, option], i) =>
@@ -359,7 +359,7 @@ describe("<PinnedMessagesCard />", () => {
             ...PollEndEvent.from(poll.getId()!, "Closing the poll").serialize(),
             event: true,
             room: "!room:example.org",
-            user: "@alice:example.org",
+            user: "@<alice>:example.org",
         });
 
         // Make the responses available

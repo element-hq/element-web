@@ -22,7 +22,7 @@ import {
 } from "../../../../../test-utils";
 
 describe("<PollListItemEnded />", () => {
-    const userId = "@alice:domain.org";
+    const userId = "@<alice>:domain.org";
     const roomId = "!room:domain.org";
     const mockClient = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),

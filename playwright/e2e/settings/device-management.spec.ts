@@ -10,7 +10,7 @@ import { test, expect } from "../../element-web-test";
 
 test.describe("Device manager", () => {
     test.use({
-        displayName: "Alice",
+        displayName: "<alice>",
     });
 
     test.beforeEach(async ({ homeserver, user }) => {
@@ -64,7 +64,7 @@ test.describe("Device manager", () => {
         // security recommendation count updated
         await expect(tab.getByRole("button", { name: "View all (1)" })).toBeVisible();
 
-        const sessionName = `Alice's device`;
+        const sessionName = `<alice>'s device`;
         // open the first session
         const firstSession = filteredDeviceListItems.first();
         await firstSession.getByRole("button", { name: "Show details" }).click();

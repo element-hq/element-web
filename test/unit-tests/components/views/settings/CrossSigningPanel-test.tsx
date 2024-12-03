@@ -22,7 +22,7 @@ import Modal from "../../../../../src/Modal";
 import ConfirmDestroyCrossSigningDialog from "../../../../../src/components/views/dialogs/security/ConfirmDestroyCrossSigningDialog";
 
 describe("<CrossSigningPanel />", () => {
-    const userId = "@alice:server.org";
+    const userId = "@<alice>:server.org";
     let mockClient: Mocked<MatrixClient>;
     const getComponent = () => render(<CrossSigningPanel />);
 

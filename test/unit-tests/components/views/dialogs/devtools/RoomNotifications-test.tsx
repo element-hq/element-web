@@ -27,7 +27,7 @@ describe("<RoomNotifications />", () => {
             <MatrixClientContext.Provider value={cli}>
                 <DevtoolsContext.Provider
                     value={{
-                        room: new Room("!roomId", cli, "@alice:example.com", {
+                        room: new Room("!roomId", cli, "@<alice>:example.com", {
                             pendingEventOrdering: PendingEventOrdering.Detached,
                         }),
                     }}

@@ -29,10 +29,10 @@ describe("<BeaconViewDialog />", () => {
     // stable date for snapshots
     jest.spyOn(global.Date, "now").mockReturnValue(now);
     const roomId = "!room:server";
-    const aliceId = "@alice:server";
+    const <alice>Id = "@<alice>:server";
     const bobId = "@bob:server";
 
-    const aliceMember = new RoomMember(roomId, aliceId);
+    const <alice>Member = new RoomMember(roomId, <alice>Id);
 
     const mockClient = getMockClientWithEventEmitter({
         getClientWellKnown: jest.fn().mockReturnValue({
@@ -52,14 +52,14 @@ describe("<BeaconViewDialog />", () => {
     // as we update room state
     const setupRoom = (stateEvents: MatrixEvent[] = []): Room => {
         const room1 = makeRoomWithStateEvents(stateEvents, { roomId, mockClient });
-        jest.spyOn(room1, "getMember").mockReturnValue(aliceMember);
+        jest.spyOn(room1, "getMember").mockReturnValue(<alice>Member);
 
         return room1;
     };
 
-    const defaultEvent = makeBeaconInfoEvent(aliceId, roomId, { isLive: true }, "$alice-room1-1");
+    const defaultEvent = makeBeaconInfoEvent(<alice>Id, roomId, { isLive: true }, "$<alice>-room1-1");
 
-    const location1 = makeBeaconEvent(aliceId, {
+    const location1 = makeBeaconEvent(<alice>Id, {
         beaconInfoId: defaultEvent.getId(),
         geoUri: "geo:51,41",
         timestamp: now + 1,
@@ -101,7 +101,7 @@ describe("<BeaconViewDialog />", () => {
     });
 
     it("does not render any own beacon status when user is not live sharing", () => {
-        // default event belongs to alice, we are bob
+        // default event belongs to <alice>, we are bob
         const room = setupRoom([defaultEvent]);
         const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent))!;
         beacon.addLocations([location1]);
@@ -110,11 +110,11 @@ describe("<BeaconViewDialog />", () => {
     });
 
     it("renders own beacon status when user is live sharing", () => {
-        // default event belongs to alice
+        // default event belongs to <alice>
         const room = setupRoom([defaultEvent]);
         const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent))!;
         beacon.addLocations([location1]);
-        // mock own beacon store to show default event as alice's live beacon
+        // mock own beacon store to show default event as <alice>'s live beacon
         jest.spyOn(OwnBeaconStore.instance, "getLiveBeaconIds").mockReturnValue([beacon.identifier]);
         jest.spyOn(OwnBeaconStore.instance, "getBeaconById").mockReturnValue(beacon);
         const { container } = getComponent();
@@ -187,7 +187,7 @@ describe("<BeaconViewDialog />", () => {
 
         // this will replace the defaultEvent
         // leading to no more live beacons
-        const anotherBeaconEvent = makeBeaconInfoEvent(aliceId, roomId, { isLive: false }, "$alice-room1-2");
+        const anotherBeaconEvent = makeBeaconInfoEvent(<alice>Id, roomId, { isLive: false }, "$<alice>-room1-2");
 
         expect(mockMap.setCenter).toHaveBeenCalledWith({ lat: 51, lon: 41 });
         // reset call counts

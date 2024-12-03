@@ -24,7 +24,7 @@ describe("TokenRefresher", () => {
     const issuer = "https://auth.com/";
     const redirectUri = "https://test.com";
     const deviceId = "test-device-id";
-    const userId = "@alice:server.org";
+    const userId = "@<alice>:server.org";
     const accessToken = "test-access-token";
     const refreshToken = "test-refresh-token";
 

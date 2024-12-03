@@ -21,7 +21,7 @@ import { RecentAlgorithm } from "../../../../../../src/stores/room-list/algorith
 import { DEFAULT_PUSH_RULES, makePushRule } from "../../../../../test-utils/pushRules";
 
 describe("ImportanceAlgorithm", () => {
-    const userId = "@alice:server.org";
+    const userId = "@<alice>:server.org";
     const tagId = DefaultTagID.Favourite;
 
     const makeRoom = (id: string, name: string, order?: number): Room => {

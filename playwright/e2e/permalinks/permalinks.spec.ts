@@ -21,7 +21,7 @@ const getPill = (locator: Locator, label: string) => {
 
 test.describe("permalinks", () => {
     test.use({
-        displayName: "Alice",
+        displayName: "<alice>",
     });
 
     test("shoud render permalinks as expected", async ({ page, app, user, homeserver }) => {
@@ -73,7 +73,7 @@ test.describe("permalinks", () => {
         );
         await app.client.sendMessage(
             room1Id,
-            `Permalink to a user with whom alice doesn't share a room: ${permalinkPrefix}${danielleId}`,
+            `Permalink to a user with whom <alice> doesn't share a room: ${permalinkPrefix}${danielleId}`,
         );
 
         const timeline = page.locator(".mx_RoomView_timeline");

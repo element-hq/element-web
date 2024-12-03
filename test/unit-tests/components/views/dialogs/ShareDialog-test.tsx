@@ -26,7 +26,7 @@ describe("ShareDialog", () => {
 
     beforeEach(async () => {
         client = stubClient();
-        room = new Room("!1:example.org", client, "@alice:example.org");
+        room = new Room("!1:example.org", client, "@<alice>:example.org");
         jest.spyOn(StringsModule, "copyPlaintext").mockImplementation(copyTextFunc);
     });
 
@@ -40,14 +40,14 @@ describe("ShareDialog", () => {
     }
 
     const getUrl = () => new URL("https://matrix.org/");
-    const getRoomMember = () => new RoomMember(room.roomId, "@alice:example.org");
+    const getRoomMember = () => new RoomMember(room.roomId, "@<alice>:example.org");
 
     test.each([
         { name: "an URL", title: "Share Link", url: "https://matrix.org/", getTarget: getUrl },
         {
             name: "a room member",
             title: "Share User",
-            url: "https://matrix.to/#/@alice:example.org",
+            url: "https://matrix.to/#/@<alice>:example.org",
             getTarget: getRoomMember,
         },
     ])("should render a share dialog for $name", async ({ title, url, getTarget }) => {

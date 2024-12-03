@@ -54,10 +54,10 @@ describe("Algorithm", () => {
     });
 
     it("sticks rooms with calls to the top when they're connected", async () => {
-        const room = new Room("!1:example.org", client, "@alice:example.org", {
+        const room = new Room("!1:example.org", client, "@<alice>:example.org", {
             pendingEventOrdering: PendingEventOrdering.Detached,
         });
-        const roomWithCall = new Room("!2:example.org", client, "@alice:example.org", {
+        const roomWithCall = new Room("!2:example.org", client, "@<alice>:example.org", {
             pendingEventOrdering: PendingEventOrdering.Detached,
         });
 

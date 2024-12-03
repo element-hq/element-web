@@ -42,7 +42,7 @@ describe("<VoiceRecordComposerTile/>", () => {
 
     beforeEach(() => {
         mockClient = {
-            getSafeUserId: jest.fn().mockReturnValue("@alice:example.com"),
+            getSafeUserId: jest.fn().mockReturnValue("@<alice>:example.com"),
             sendMessage: jest.fn(),
         } as unknown as MatrixClient;
         MatrixClientPeg.get = () => mockClient;

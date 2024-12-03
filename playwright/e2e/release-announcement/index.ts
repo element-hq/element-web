@@ -16,7 +16,7 @@ import { test as base, expect } from "../../element-web-test";
 export const test = base.extend<{
     util: Helpers;
 }>({
-    displayName: "Alice",
+    displayName: "<alice>",
     botCreateOpts: { displayName: "Other User" },
 
     util: async ({ page, app, bot }, use) => {

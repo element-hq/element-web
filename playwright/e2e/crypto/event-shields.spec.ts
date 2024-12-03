@@ -20,7 +20,7 @@ import { bootstrapCrossSigningForClient } from "../../pages/client.ts";
 
 test.describe("Cryptography", function () {
     test.use({
-        displayName: "Alice",
+        displayName: "<alice>",
         botCreateOpts: {
             displayName: "Bob",
             autoAcceptInvites: false,
@@ -30,8 +30,8 @@ test.describe("Cryptography", function () {
     test.describe("event shields", () => {
         let testRoomId: string;
 
-        test.beforeEach(async ({ page, bot: bob, user: aliceCredentials, app }) => {
-            await app.client.bootstrapCrossSigning(aliceCredentials);
+        test.beforeEach(async ({ page, bot: bob, user: <alice>Credentials, app }) => {
+            await app.client.bootstrapCrossSigning(<alice>Credentials);
             await autoJoin(bob);
 
             // create an encrypted room, and wait for Bob to join it.
@@ -48,7 +48,7 @@ test.describe("Cryptography", function () {
                 ],
             });
 
-            // Even though Alice has seen Bob's join event, Bob may not have done so yet. Wait for the sync to arrive.
+            // Even though <alice> has seen Bob's join event, Bob may not have done so yet. Wait for the sync to arrive.
             await bob.awaitRoomMembership(testRoomId);
         });
 
@@ -176,7 +176,7 @@ test.describe("Cryptography", function () {
             app,
             bot: bob,
             homeserver,
-            user: aliceCredentials,
+            user: <alice>Credentials,
         }) => {
             test.slow();
             const securityKey = await enableKeyBackup(app);
@@ -205,7 +205,7 @@ test.describe("Cryptography", function () {
                 window.localStorage.clear();
             });
             await page.reload();
-            await logIntoElement(page, homeserver, aliceCredentials, securityKey);
+            await logIntoElement(page, homeserver, <alice>Credentials, securityKey);
 
             /* go back to the test room and find Bob's message again */
             await app.viewRoomById(testRoomId);

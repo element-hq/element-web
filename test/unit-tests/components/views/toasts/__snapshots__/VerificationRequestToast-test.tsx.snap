@@ -6,7 +6,7 @@ exports[`VerificationRequestToast should render a cross-user verification 1`] = 
     <div
       class="mx_Toast_description"
     >
-      @alice:domain (@other:user)
+      @<alice>:domain (@other:user)
     </div>
     <div
       aria-live="off"

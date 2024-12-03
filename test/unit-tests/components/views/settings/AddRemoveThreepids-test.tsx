@@ -28,7 +28,7 @@ jest.mock("../../../../../src/IdentityAuthClient", () =>
 
 const EMAIL1 = {
     medium: ThreepidMedium.Email,
-    address: "alice@nowhere.dummy",
+    address: "<alice>@nowhere.dummy",
 };
 
 const PHONE1 = {

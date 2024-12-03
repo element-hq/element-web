@@ -27,18 +27,18 @@ jest.mock("../../src/events/EventTileFactory", () => ({
 
 describe("Unread", () => {
     // A different user.
-    const aliceId = "@alice:server.org";
+    const <alice>Id = "@<alice>:server.org";
     stubClient();
     const client = MatrixClientPeg.safeGet();
 
     describe("eventTriggersUnreadCount()", () => {
         // setup events
-        const alicesMessage = new MatrixEvent({
+        const <alice>sMessage = new MatrixEvent({
             type: EventType.RoomMessage,
-            sender: aliceId,
+            sender: <alice>Id,
             content: {
                 msgtype: MsgType.Text,
-                body: "Hello from Alice",
+                body: "Hello from <alice>",
             },
         });
 
@@ -53,9 +53,9 @@ describe("Unread", () => {
 
         const redactedEvent = new MatrixEvent({
             type: EventType.RoomMessage,
-            sender: aliceId,
+            sender: <alice>Id,
         });
-        redactedEvent.makeRedacted(redactedEvent, new Room(redactedEvent.getRoomId()!, client, aliceId));
+        redactedEvent.makeRedacted(redactedEvent, new Room(redactedEvent.getRoomId()!, client, <alice>Id));
 
         beforeEach(() => {
             jest.clearAllMocks();
@@ -76,18 +76,18 @@ describe("Unread", () => {
 
         it("returns false for an event without a renderer", () => {
             mocked(haveRendererForEvent).mockReturnValue(false);
-            expect(eventTriggersUnreadCount(client, alicesMessage)).toBe(false);
-            expect(haveRendererForEvent).toHaveBeenCalledWith(alicesMessage, client, false);
+            expect(eventTriggersUnreadCount(client, <alice>sMessage)).toBe(false);
+            expect(haveRendererForEvent).toHaveBeenCalledWith(<alice>sMessage, client, false);
         });
 
         it("returns true for an event with a renderer", () => {
             mocked(haveRendererForEvent).mockReturnValue(true);
-            expect(eventTriggersUnreadCount(client, alicesMessage)).toBe(true);
-            expect(haveRendererForEvent).toHaveBeenCalledWith(alicesMessage, client, false);
+            expect(eventTriggersUnreadCount(client, <alice>sMessage)).toBe(true);
+            expect(haveRendererForEvent).toHaveBeenCalledWith(<alice>sMessage, client, false);
         });
 
         it("returns false for beacon locations", () => {
-            const beaconLocationEvent = makeBeaconEvent(aliceId);
+            const beaconLocationEvent = makeBeaconEvent(<alice>Id);
             expect(eventTriggersUnreadCount(client, beaconLocationEvent)).toBe(false);
             expect(haveRendererForEvent).not.toHaveBeenCalled();
         });
@@ -106,7 +106,7 @@ describe("Unread", () => {
             (eventType) => {
                 const event = new MatrixEvent({
                     type: eventType,
-                    sender: aliceId,
+                    sender: <alice>Id,
                 });
                 expect(eventTriggersUnreadCount(client, event)).toBe(false);
                 expect(haveRendererForEvent).not.toHaveBeenCalled();
@@ -134,7 +134,7 @@ describe("Unread", () => {
                 event = mkEvent({
                     event: true,
                     type: "m.room.message",
-                    user: aliceId,
+                    user: <alice>Id,
                     room: roomId,
                     content: {},
                 });
@@ -196,7 +196,7 @@ describe("Unread", () => {
                 const event2 = mkEvent({
                     event: true,
                     type: "m.room.message",
-                    user: aliceId,
+                    user: <alice>Id,
                     room: roomId,
                     content: {},
                 });
@@ -223,7 +223,7 @@ describe("Unread", () => {
 
                 // Create a read thread, so we don't consider all threads read
                 // because there are no threaded read receipts.
-                const { rootEvent, events } = mkThread({ room, client, authorId: myId, participantUserIds: [aliceId] });
+                const { rootEvent, events } = mkThread({ room, client, authorId: myId, participantUserIds: [<alice>Id] });
                 const receipt2 = new MatrixEvent({
                     type: "m.receipt",
                     room_id: "!foo:bar",
@@ -238,7 +238,7 @@ describe("Unread", () => {
                 room.addReceipt(receipt2);
 
                 // Create a thread as a different user.
-                await populateThread({ room, client, authorId: myId, participantUserIds: [aliceId] });
+                await populateThread({ room, client, authorId: myId, participantUserIds: [<alice>Id] });
 
                 expect(doesRoomHaveUnreadMessages(room, true)).toBe(true);
             });
@@ -284,7 +284,7 @@ describe("Unread", () => {
                     room,
                     client,
                     authorId: myId,
-                    participantUserIds: [aliceId],
+                    participantUserIds: [<alice>Id],
                 });
 
                 // Mark the thread as read.
@@ -324,7 +324,7 @@ describe("Unread", () => {
                     room,
                     client,
                     authorId: myId,
-                    participantUserIds: [aliceId],
+                    participantUserIds: [<alice>Id],
                 });
 
                 // Mark the thread as read.
@@ -364,7 +364,7 @@ describe("Unread", () => {
                     room,
                     client,
                     authorId: myId,
-                    participantUserIds: [aliceId],
+                    participantUserIds: [<alice>Id],
                 });
 
                 // When we provide a receipt that points at an unknown event,
@@ -395,7 +395,7 @@ describe("Unread", () => {
             const redactedEvent = mkEvent({
                 event: true,
                 type: "m.room.message",
-                user: aliceId,
+                user: <alice>Id,
                 room: roomId,
                 content: {},
             });
@@ -444,7 +444,7 @@ describe("Unread", () => {
                 event = mkEvent({
                     event: true,
                     type: "m.room.message",
-                    user: aliceId,
+                    user: <alice>Id,
                     room: roomId,
                     content: {},
                 });
@@ -496,7 +496,7 @@ describe("Unread", () => {
             beforeEach(() => {
                 const { events } = makeThreadEvents({
                     roomId: roomId,
-                    authorId: aliceId,
+                    authorId: <alice>Id,
                     participantUserIds: ["@x:s.co"],
                     length: 2,
                     ts: 100,
@@ -551,7 +551,7 @@ describe("Unread", () => {
             const event = mkEvent({
                 event: true,
                 type: "m.room.message",
-                user: aliceId,
+                user: <alice>Id,
                 room: roomId,
                 content: {},
             });
@@ -566,7 +566,7 @@ describe("Unread", () => {
                 room,
                 client,
                 authorId: myId,
-                participantUserIds: [aliceId],
+                participantUserIds: [<alice>Id],
             });
 
             // There is no receipt for the thread, it should be unread
@@ -578,7 +578,7 @@ describe("Unread", () => {
                 room,
                 client,
                 authorId: myId,
-                participantUserIds: [aliceId],
+                participantUserIds: [<alice>Id],
             });
 
             // Mark the thread as read.
@@ -605,7 +605,7 @@ describe("Unread", () => {
                 room,
                 client,
                 authorId: myId,
-                participantUserIds: [aliceId],
+                participantUserIds: [<alice>Id],
             });
 
             // Create a second thread
@@ -613,7 +613,7 @@ describe("Unread", () => {
                 room,
                 client,
                 authorId: myId,
-                participantUserIds: [aliceId],
+                participantUserIds: [<alice>Id],
             });
 
             // Mark the thread as read.

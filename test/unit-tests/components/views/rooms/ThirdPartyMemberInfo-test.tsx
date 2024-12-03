@@ -14,7 +14,7 @@ import ThirdPartyMemberInfo from "../../../../../src/components/views/rooms/Thir
 import { getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../../test-utils";
 
 describe("<ThirdPartyMemberInfo />", () => {
-    const userId = "@alice:server.org";
+    const userId = "@<alice>:server.org";
     const roomId = "!room:server.org";
     const mockClient = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),
@@ -39,11 +39,11 @@ describe("<ThirdPartyMemberInfo />", () => {
 
     const getComponent = (event: MatrixEvent = defaultEvent) => render(<ThirdPartyMemberInfo event={event} />);
     const room = new Room(roomId, mockClient, userId);
-    const aliceMember = new RoomMember(roomId, userId);
-    aliceMember.name = "Alice DisplayName";
+    const <alice>Member = new RoomMember(roomId, userId);
+    <alice>Member.name = "<alice> DisplayName";
 
     beforeEach(() => {
-        jest.spyOn(room, "getMember").mockImplementation((id) => (id === userId ? aliceMember : null));
+        jest.spyOn(room, "getMember").mockImplementation((id) => (id === userId ? <alice>Member : null));
         mockClient.getRoom.mockClear().mockReturnValue(room);
     });
 

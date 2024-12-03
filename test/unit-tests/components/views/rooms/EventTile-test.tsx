@@ -96,7 +96,7 @@ describe("EventTile", () => {
 
         mxEvent = mkMessage({
             room: room.roomId,
-            user: "@alice:example.org",
+            user: "@<alice>:example.org",
             msg: "Hello world!",
             event: true,
         });
@@ -118,8 +118,8 @@ describe("EventTile", () => {
             } = mkThread({
                 room,
                 client,
-                authorId: "@alice:example.org",
-                participantUserIds: ["@alice:example.org"],
+                authorId: "@<alice>:example.org",
+                participantUserIds: ["@<alice>:example.org"],
                 length: 2, // root + 1 answer
             });
             getComponent(
@@ -134,7 +134,7 @@ describe("EventTile", () => {
             const redaction = mkEvent({
                 event: true,
                 type: EventType.RoomRedaction,
-                user: "@alice:example.org",
+                user: "@<alice>:example.org",
                 room: room.roomId,
                 redacts: reply.getId(),
                 content: {},
@@ -210,13 +210,13 @@ describe("EventTile", () => {
         it("renders the room name for notifications", () => {
             const { container } = getComponent({}, TimelineRenderingType.Notification);
             expect(container.getElementsByClassName("mx_EventTile_details")[0]).toHaveTextContent(
-                "@alice:example.org in !roomId:example.org",
+                "@<alice>:example.org in !roomId:example.org",
             );
         });
 
         it("renders the sender for the thread list", () => {
             const { container } = getComponent({}, TimelineRenderingType.ThreadsList);
-            expect(container.getElementsByClassName("mx_EventTile_details")[0]).toHaveTextContent("@alice:example.org");
+            expect(container.getElementsByClassName("mx_EventTile_details")[0]).toHaveTextContent("@<alice>:example.org");
         });
 
         it.each([
@@ -254,7 +254,7 @@ describe("EventTile", () => {
             mxEvent = await mkEncryptedMatrixEvent({
                 plainContent: { msgtype: "m.text", body: "msg1" },
                 plainType: "m.room.message",
-                sender: "@alice:example.org",
+                sender: "@<alice>:example.org",
                 roomId: room.roomId,
             });
             eventToEncryptionInfoMap.set(mxEvent.getId()!, {
@@ -279,7 +279,7 @@ describe("EventTile", () => {
             mxEvent = await mkEncryptedMatrixEvent({
                 plainContent: { msgtype: "m.text", body: "msg1" },
                 plainType: "m.room.message",
-                sender: "@alice:example.org",
+                sender: "@<alice>:example.org",
                 roomId: room.roomId,
             });
             eventToEncryptionInfoMap.set(mxEvent.getId()!, {
@@ -310,7 +310,7 @@ describe("EventTile", () => {
             mxEvent = await mkEncryptedMatrixEvent({
                 plainContent: { msgtype: "m.text", body: "msg1" },
                 plainType: "m.room.message",
-                sender: "@alice:example.org",
+                sender: "@<alice>:example.org",
                 roomId: room.roomId,
             });
             eventToEncryptionInfoMap.set(mxEvent.getId()!, {
@@ -338,7 +338,7 @@ describe("EventTile", () => {
                 mxEvent = mkEvent({
                     type: "m.room.encrypted",
                     room: room.roomId,
-                    user: "@alice:example.org",
+                    user: "@<alice>:example.org",
                     event: true,
                     content: {},
                 });
@@ -366,7 +366,7 @@ describe("EventTile", () => {
                 mxEvent = mkEvent({
                     type: "m.room.encrypted",
                     room: room.roomId,
-                    user: "@alice:example.org",
+                    user: "@<alice>:example.org",
                     event: true,
                     content: {},
                 });
@@ -394,7 +394,7 @@ describe("EventTile", () => {
             mxEvent = await mkEncryptedMatrixEvent({
                 plainContent: { msgtype: "m.text", body: "msg1" },
                 plainType: "m.room.message",
-                sender: "@alice:example.org",
+                sender: "@<alice>:example.org",
                 roomId: room.roomId,
             });
             eventToEncryptionInfoMap.set(mxEvent.getId()!, {
@@ -417,7 +417,7 @@ describe("EventTile", () => {
             const replacementEvent = await mkEncryptedMatrixEvent({
                 plainContent: { msgtype: "m.text", body: "msg1" },
                 plainType: "m.room.message",
-                sender: "@alice:example.org",
+                sender: "@<alice>:example.org",
                 roomId: room.roomId,
             });
             eventToEncryptionInfoMap.set(replacementEvent.getId()!, {
@@ -443,7 +443,7 @@ describe("EventTile", () => {
             mxEvent = await mkEncryptedMatrixEvent({
                 plainContent: { msgtype: "m.text", body: "msg1" },
                 plainType: "m.room.message",
-                sender: "@alice:example.org",
+                sender: "@<alice>:example.org",
                 roomId: room.roomId,
             });
 
@@ -465,7 +465,7 @@ describe("EventTile", () => {
             // then we replace the event with an unencrypted one
             const replacementEvent = await mkMessage({
                 msg: "msg2",
-                user: "@alice:example.org",
+                user: "@<alice>:example.org",
                 room: room.roomId,
                 event: true,
             });
@@ -523,7 +523,7 @@ describe("EventTile", () => {
                 editingEvent = new MatrixEvent({
                     type: "m.room.message",
                     room_id: ROOM_ID,
-                    sender: "@alice:example.org",
+                    sender: "@<alice>:example.org",
                     content: {
                         "msgtype": "m.text",
                         "body": "* edited body",

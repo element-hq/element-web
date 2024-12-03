@@ -607,7 +607,7 @@ exports[`ShareDialog should render a share dialog for a room member 1`] = `
           </div>
         </div>
         <span>
-          https://matrix.to/#/@alice:example.org
+          https://matrix.to/#/@<alice>:example.org
         </span>
       </div>
       <button
@@ -635,7 +635,7 @@ exports[`ShareDialog should render a share dialog for a room member 1`] = `
         class="mx_ShareDialog_social"
       >
         <a
-          href="https://www.facebook.com/sharer/sharer.php?u=https://matrix.to/#/@alice:example.org"
+          href="https://www.facebook.com/sharer/sharer.php?u=https://matrix.to/#/@<alice>:example.org"
           rel="noreferrer noopener"
           target="_blank"
           title="Facebook"
@@ -646,7 +646,7 @@ exports[`ShareDialog should render a share dialog for a room member 1`] = `
           />
         </a>
         <a
-          href="https://twitter.com/home?status=https://matrix.to/#/@alice:example.org"
+          href="https://twitter.com/home?status=https://matrix.to/#/@<alice>:example.org"
           rel="noreferrer noopener"
           target="_blank"
           title="Twitter"
@@ -657,7 +657,7 @@ exports[`ShareDialog should render a share dialog for a room member 1`] = `
           />
         </a>
         <a
-          href="https://www.linkedin.com/shareArticle?mini=true&url=https://matrix.to/#/@alice:example.org"
+          href="https://www.linkedin.com/shareArticle?mini=true&url=https://matrix.to/#/@<alice>:example.org"
           rel="noreferrer noopener"
           target="_blank"
           title="LinkedIn"
@@ -668,7 +668,7 @@ exports[`ShareDialog should render a share dialog for a room member 1`] = `
           />
         </a>
         <a
-          href="https://www.reddit.com/submit?url=https://matrix.to/#/@alice:example.org"
+          href="https://www.reddit.com/submit?url=https://matrix.to/#/@<alice>:example.org"
           rel="noreferrer noopener"
           target="_blank"
           title="Reddit"
@@ -679,7 +679,7 @@ exports[`ShareDialog should render a share dialog for a room member 1`] = `
           />
         </a>
         <a
-          href="mailto:?body=https://matrix.to/#/@alice:example.org"
+          href="mailto:?body=https://matrix.to/#/@<alice>:example.org"
           rel="noreferrer noopener"
           target="_blank"
           title="email"

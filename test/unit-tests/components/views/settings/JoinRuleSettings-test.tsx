@@ -36,7 +36,7 @@ import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 
 describe("<JoinRuleSettings />", () => {
-    const userId = "@alice:server.org";
+    const userId = "@<alice>:server.org";
     const client = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),
         getRoom: jest.fn(),
@@ -166,11 +166,11 @@ describe("<JoinRuleSettings />", () => {
                 const parentSpace = new Room("!parentSpace:server.org", client, userId);
                 jest.spyOn(SpaceStore.instance, "getKnownParents").mockReturnValue(new Set([parentSpace.roomId]));
                 setRoomStateEvents(room, unsupportedRoomVersion);
-                const memberAlice = new RoomMember(roomId, "@alice:server.org");
+                const member<alice> = new RoomMember(roomId, "@<alice>:server.org");
                 const memberBob = new RoomMember(roomId, "@bob:server.org");
                 const memberCharlie = new RoomMember(roomId, "@charlie:server.org");
                 jest.spyOn(room, "getMembersWithMembership").mockImplementation((membership) =>
-                    membership === KnownMembership.Join ? [memberAlice, memberBob] : [memberCharlie],
+                    membership === KnownMembership.Join ? [member<alice>, memberBob] : [memberCharlie],
                 );
                 const upgradedRoom = new Room(newRoomId, client, userId);
                 setRoomStateEvents(upgradedRoom, preferredRoomVersion);

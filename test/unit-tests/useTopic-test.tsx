@@ -17,11 +17,11 @@ import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 describe("useTopic", () => {
     it("should display the room topic", () => {
         stubClient();
-        const room = new Room("!TESTROOM", MatrixClientPeg.safeGet(), "@alice:example.org");
+        const room = new Room("!TESTROOM", MatrixClientPeg.safeGet(), "@<alice>:example.org");
         const topic = mkEvent({
             type: "m.room.topic",
             room: "!TESTROOM",
-            user: "@alice:example.org",
+            user: "@<alice>:example.org",
             content: {
                 topic: "Test topic",
             },
@@ -43,7 +43,7 @@ describe("useTopic", () => {
         const updatedTopic = mkEvent({
             type: "m.room.topic",
             room: "!TESTROOM",
-            user: "@alice:example.org",
+            user: "@<alice>:example.org",
             content: {
                 topic: "New topic",
             },

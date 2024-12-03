@@ -906,13 +906,13 @@ describe("<Notifications />", () => {
 
     describe("clear all notifications", () => {
         it("clears all notifications", async () => {
-            const room = new Room("room123", mockClient, "@alice:example.org");
+            const room = new Room("room123", mockClient, "@<alice>:example.org");
             mockClient.getRooms.mockReset().mockReturnValue([room]);
 
             const message = mkMessage({
                 event: true,
                 room: "room123",
-                user: "@alice:example.org",
+                user: "@<alice>:example.org",
                 ts: 1,
             });
             await room.addLiveEvents([message], { addToState: true });

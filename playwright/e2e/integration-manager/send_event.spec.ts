@@ -76,7 +76,7 @@ async function sendActionFromIntegrationManager(
 
 test.describe("Integration Manager: Send Event", () => {
     test.use({
-        displayName: "Alice",
+        displayName: "<alice>",
         room: async ({ user, app }, use) => {
             const roomId = await app.client.createRoom({
                 name: ROOM_NAME,

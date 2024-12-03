@@ -12,7 +12,7 @@ import { Filter } from "../../pages/Spotlight";
 
 test.describe("Create Knock Room", () => {
     test.use({
-        displayName: "Alice",
+        displayName: "<alice>",
         labsFlags: ["feature_ask_to_join"],
     });
 

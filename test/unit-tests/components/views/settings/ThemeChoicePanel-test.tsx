@@ -136,12 +136,12 @@ describe("<ThemeChoicePanel />", () => {
     });
 
     describe("custom theme", () => {
-        const aliceTheme = { name: "Alice theme", is_dark: true, colors: {} };
+        const <alice>Theme = { name: "<alice> theme", is_dark: true, colors: {} };
         const bobTheme = { name: "Bob theme", is_dark: false, colors: {} };
 
         beforeEach(async () => {
             await SettingsStore.setValue("feature_custom_themes", null, SettingLevel.DEVICE, true);
-            await SettingsStore.setValue("custom_themes", null, SettingLevel.DEVICE, [aliceTheme]);
+            await SettingsStore.setValue("custom_themes", null, SettingLevel.DEVICE, [<alice>Theme]);
         });
 
         it("should render the custom theme section", () => {
@@ -166,7 +166,7 @@ describe("<ThemeChoicePanel />", () => {
             // The new custom theme is added to the user's themes
             await waitFor(() =>
                 expect(SettingsStore.setValue).toHaveBeenCalledWith("custom_themes", null, "account", [
-                    aliceTheme,
+                    <alice>Theme,
                     bobTheme,
                 ]),
             );
@@ -175,8 +175,8 @@ describe("<ThemeChoicePanel />", () => {
         it("should display custom theme", () => {
             const { asFragment } = render(<ThemeChoicePanel />);
 
-            expect(screen.getByRole("radio", { name: aliceTheme.name })).toBeInTheDocument();
-            expect(screen.getByRole("listitem", { name: aliceTheme.name })).toBeInTheDocument();
+            expect(screen.getByRole("radio", { name: <alice>Theme.name })).toBeInTheDocument();
+            expect(screen.getByRole("listitem", { name: <alice>Theme.name })).toBeInTheDocument();
             expect(asFragment()).toMatchSnapshot();
         });
     });

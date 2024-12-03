@@ -35,7 +35,7 @@ import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 
 describe("<EditMessageComposer/>", () => {
-    const userId = "@alice:server.org";
+    const userId = "@<alice>:server.org";
     const roomId = "!room:server.org";
     const mockClient = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),
@@ -46,7 +46,7 @@ describe("<EditMessageComposer/>", () => {
 
     const editedEvent = mkEvent({
         type: "m.room.message",
-        user: "@alice:test",
+        user: "@<alice>:test",
         room: "!abc:test",
         content: { body: "original message", msgtype: "m.text" },
         event: true,

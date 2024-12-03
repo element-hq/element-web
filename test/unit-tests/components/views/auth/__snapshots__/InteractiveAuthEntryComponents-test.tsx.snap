@@ -9,7 +9,7 @@ exports[`<EmailIdentityAuthEntry/> should render 1`] = `
       <span>
         To create your account, open the link in the email we just sent to 
         <strong>
-          alice@example.xyz
+          <alice>@example.xyz
         </strong>
         .
       </span>

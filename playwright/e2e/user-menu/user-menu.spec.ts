@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { test, expect } from "../../element-web-test";
 
 test.describe("User Menu", () => {
-    test.use({ displayName: "Jeff" });
+    test.use({ displayName: "<jeff>" });
 
     test("should contain our name & userId", async ({ page, user }) => {
         await page.getByRole("button", { name: "User menu", exact: true }).click();

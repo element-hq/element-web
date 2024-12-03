@@ -16,7 +16,7 @@ import { tagRoom } from "../../../../src/utils/room/tagRoom";
 import { getMockClientWithEventEmitter } from "../../../test-utils";
 
 describe("tagRoom()", () => {
-    const userId = "@alice:server.org";
+    const userId = "@<alice>:server.org";
     const roomId = "!room:server.org";
 
     const makeRoom = (tags: TagID[] = []): Room => {

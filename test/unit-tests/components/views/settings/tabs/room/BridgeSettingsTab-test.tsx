@@ -14,7 +14,7 @@ import BridgeSettingsTab from "../../../../../../../src/components/views/setting
 import { getMockClientWithEventEmitter, withClientContextRenderOptions } from "../../../../../../test-utils";
 
 describe("<BridgeSettingsTab />", () => {
-    const userId = "@alice:server.org";
+    const userId = "@<alice>:server.org";
     const client = getMockClientWithEventEmitter({
         getRoom: jest.fn(),
     });

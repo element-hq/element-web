@@ -29,14 +29,14 @@ describe("<DialogSidebar />", () => {
     const now = 1647270879403;
 
     const roomId = "!room:server.org";
-    const aliceId = "@alice:server.org";
+    const <alice>Id = "@<alice>:server.org";
     const client = getMockClientWithEventEmitter({
-        ...mockClientMethodsUser(aliceId),
+        ...mockClientMethodsUser(<alice>Id),
         getRoom: jest.fn(),
     });
 
-    const beaconEvent = makeBeaconInfoEvent(aliceId, roomId, { isLive: true, timestamp: now }, "$alice-room1-1");
-    const location1 = makeBeaconEvent(aliceId, {
+    const beaconEvent = makeBeaconInfoEvent(<alice>Id, roomId, { isLive: true, timestamp: now }, "$<alice>-room1-1");
+    const location1 = makeBeaconEvent(<alice>Id, {
         beaconInfoId: beaconEvent.getId(),
         geoUri: "geo:51,41",
         timestamp: now,

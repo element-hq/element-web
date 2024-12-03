@@ -138,8 +138,8 @@ exports[`PowerLevelSelector should render 1`] = `
         <select
           data-testid="power-level-select-element"
           id="mx_Field_2"
-          label="@alice:server.org"
-          placeholder="@alice:server.org"
+          label="@<alice>:server.org"
+          placeholder="@<alice>:server.org"
           type="text"
         >
           <option
@@ -170,7 +170,7 @@ exports[`PowerLevelSelector should render 1`] = `
         <label
           for="mx_Field_2"
         >
-          @alice:server.org
+          @<alice>:server.org
         </label>
       </div>
     </div>

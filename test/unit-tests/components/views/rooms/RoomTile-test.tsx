@@ -114,7 +114,7 @@ describe("RoomTile", () => {
         sdkContext.client = client;
         DMRoomMap.makeShared(client);
 
-        room = new Room("!1:example.org", client, "@alice:example.org", {
+        room = new Room("!1:example.org", client, "@<alice>:example.org", {
             pendingEventOrdering: PendingEventOrdering.Detached,
         });
 
@@ -249,8 +249,8 @@ describe("RoomTile", () => {
 
             it("tracks participants", () => {
                 renderRoomTile();
-                const alice: [RoomMember, Set<string>] = [
-                    mkRoomMember(room.roomId, "@alice:example.org"),
+                const <alice>: [RoomMember, Set<string>] = [
+                    mkRoomMember(room.roomId, "@<alice>:example.org"),
                     new Set(["a"]),
                 ];
                 const bob: [RoomMember, Set<string>] = [
@@ -265,12 +265,12 @@ describe("RoomTile", () => {
                 expect(screen.queryByLabelText(/participant/)).toBe(null);
 
                 act(() => {
-                    call.participants = new Map([alice]);
+                    call.participants = new Map([<alice>]);
                 });
                 expect(screen.getByLabelText("1 person joined").textContent).toBe("1");
 
                 act(() => {
-                    call.participants = new Map([alice, bob, carol]);
+                    call.participants = new Map([<alice>, bob, carol]);
                 });
                 expect(screen.getByLabelText("4 people joined").textContent).toBe("4");
 

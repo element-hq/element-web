@@ -11,7 +11,7 @@ import { logIntoElement } from "./utils";
 
 test.describe("Complete security", () => {
     test.use({
-        displayName: "Jeff",
+        displayName: "<jeff>",
     });
 
     test("should go straight to the welcome screen if we have no signed device", async ({
@@ -20,7 +20,7 @@ test.describe("Complete security", () => {
         credentials,
     }) => {
         await logIntoElement(page, homeserver, credentials);
-        await expect(page.getByText("Welcome Jeff", { exact: true })).toBeVisible();
+        await expect(page.getByText("Welcome <jeff>", { exact: true })).toBeVisible();
     });
 
     // see also "Verify device during login with SAS" in `verifiction.spec.ts`.

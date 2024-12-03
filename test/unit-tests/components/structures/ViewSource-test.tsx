@@ -16,7 +16,7 @@ import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 
 describe("ViewSource", () => {
     const ROOM_ID = "!roomId:example.org";
-    const SENDER = "@alice:example.org";
+    const SENDER = "@<alice>:example.org";
 
     let redactedMessageEvent: MatrixEvent;
 

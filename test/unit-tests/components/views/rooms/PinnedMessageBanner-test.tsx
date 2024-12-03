@@ -22,7 +22,7 @@ import { UPDATE_EVENT } from "../../../../../src/stores/AsyncStore";
 import { Action } from "../../../../../src/dispatcher/actions";
 
 describe("<PinnedMessageBanner />", () => {
-    const userId = "@alice:server.org";
+    const userId = "@<alice>:server.org";
     const roomId = "!room:server.org";
 
     let mockClient: MatrixClient;
@@ -197,12 +197,12 @@ describe("<PinnedMessageBanner />", () => {
     });
 
     it("should display display a poll event", async () => {
-        const event = makePollStartEvent("Alice?", userId);
+        const event = makePollStartEvent("<alice>?", userId);
         jest.spyOn(pinnedEventHooks, "usePinnedEvents").mockReturnValue([event.getId()!]);
         jest.spyOn(pinnedEventHooks, "useSortedFetchedPinnedEvents").mockReturnValue([event]);
 
         const { asFragment } = renderBanner();
-        await expect(screen.findByTestId("banner-message")).resolves.toHaveTextContent("Poll: Alice?");
+        await expect(screen.findByTestId("banner-message")).resolves.toHaveTextContent("Poll: <alice>?");
         expect(asFragment()).toMatchSnapshot();
     });
 

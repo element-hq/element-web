@@ -48,10 +48,10 @@ test.describe("Email Registration", async () => {
         // Hide the server text as it contains the randomly allocated Homeserver port
         const screenshotOptions = { mask: [page.locator(".mx_ServerPicker_server")] };
 
-        await page.getByRole("textbox", { name: "Username" }).fill("alice");
+        await page.getByRole("textbox", { name: "Username" }).fill("<alice>");
         await page.getByPlaceholder("Password", { exact: true }).fill("totally a great password");
         await page.getByPlaceholder("Confirm password").fill("totally a great password");
-        await page.getByPlaceholder("Email").fill("alice@email.com");
+        await page.getByPlaceholder("Email").fill("<alice>@email.com");
         await page.getByRole("button", { name: "Register" }).click();
 
         await expect(page.getByText("Check your email to continue")).toBeVisible();
@@ -62,7 +62,7 @@ test.describe("Email Registration", async () => {
 
         const messages = await mailhog.api.messages();
         expect(messages.items).toHaveLength(1);
-        expect(messages.items[0].to).toEqual("alice@email.com");
+        expect(messages.items[0].to).toEqual("<alice>@email.com");
         const [emailLink] = messages.items[0].text.match(/http.+/);
         await request.get(emailLink); // "Click" the link in the email
 

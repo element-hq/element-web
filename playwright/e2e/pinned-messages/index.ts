@@ -21,7 +21,7 @@ export const test = base.extend<{
     room1: { name: string; roomId: string };
     util: Helpers;
 }>({
-    displayName: "Alice",
+    displayName: "<alice>",
     botCreateOpts: { displayName: "Other User" },
 
     room1Name: "Room 1",

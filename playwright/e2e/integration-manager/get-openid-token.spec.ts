@@ -55,7 +55,7 @@ async function sendActionFromIntegrationManager(page: Page, integrationManagerUr
 
 test.describe("Integration Manager: Get OpenID Token", () => {
     test.use({
-        displayName: "Alice",
+        displayName: "<alice>",
         room: async ({ user, app }, use) => {
             const roomId = await app.client.createRoom({
                 name: ROOM_NAME,

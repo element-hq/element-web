@@ -30,7 +30,7 @@ import MatrixClientContext from "../../../../../../src/contexts/MatrixClientCont
 describe("<PollHistory />", () => {
     // 14.03.2022 16:15
     const now = 1647270879403;
-    const userId = "@alice:domain.org";
+    const userId = "@<alice>:domain.org";
     const roomId = "!room:domain.org";
     const mockClient = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),

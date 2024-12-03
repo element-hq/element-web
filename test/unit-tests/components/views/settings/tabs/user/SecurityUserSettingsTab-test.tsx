@@ -25,8 +25,8 @@ describe("<SecurityUserSettingsTab />", () => {
         closeSettingsFn: jest.fn(),
     };
 
-    const userId = "@alice:server.org";
-    const deviceId = "alices-device";
+    const userId = "@<alice>:server.org";
+    const deviceId = "<alice>s-device";
     const mockClient = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),
         ...mockClientMethodsServer(),

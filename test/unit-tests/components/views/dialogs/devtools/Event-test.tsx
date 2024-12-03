@@ -27,7 +27,7 @@ describe("<EventEditor />", () => {
             <MatrixClientContext.Provider value={cli}>
                 <DevtoolsContext.Provider
                     value={{
-                        room: new Room("!roomId", cli, "@alice:example.com", {
+                        room: new Room("!roomId", cli, "@<alice>:example.com", {
                             pendingEventOrdering: PendingEventOrdering.Detached,
                         }),
                     }}
@@ -46,7 +46,7 @@ describe("<EventEditor />", () => {
                 <MatrixClientContext.Provider value={cli}>
                     <DevtoolsContext.Provider
                         value={{
-                            room: new Room("!roomId", cli, "@alice:example.com", {
+                            room: new Room("!roomId", cli, "@<alice>:example.com", {
                                 pendingEventOrdering: PendingEventOrdering.Detached,
                             }),
                             threadRootId: "$this_is_a_thread_id",

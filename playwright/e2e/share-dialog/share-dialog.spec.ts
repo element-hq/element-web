@@ -9,9 +9,9 @@ import { test, expect } from "../../element-web-test";
 
 test.describe("Share dialog", () => {
     test.use({
-        displayName: "Alice",
+        displayName: "<alice>",
         room: async ({ app, user, bot }, use) => {
-            const roomId = await app.client.createRoom({ name: "Alice room" });
+            const roomId = await app.client.createRoom({ name: "<alice> room" });
             await use({ roomId });
         },
     });

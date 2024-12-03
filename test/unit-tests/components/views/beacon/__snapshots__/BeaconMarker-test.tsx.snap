@@ -5,7 +5,7 @@ exports[`<BeaconMarker /> renders marker when beacon has location 1`] = `
   <span>
     <div
       class="mx_Marker mx_Username_color6"
-      id="!room:server_@alice:server"
+      id="!room:server_@<alice>:server"
     >
       <div
         class="mx_Marker_border"
@@ -17,7 +17,7 @@ exports[`<BeaconMarker /> renders marker when beacon has location 1`] = `
           data-type="round"
           role="presentation"
           style="--cpd-avatar-size: 36px;"
-          title="@alice:server"
+          title="@<alice>:server"
         >
           a
         </span>

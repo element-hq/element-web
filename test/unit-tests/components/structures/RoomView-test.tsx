@@ -92,7 +92,7 @@ describe("RoomView", () => {
         mockPlatformPeg({ reload: () => {} });
         cli = mocked(stubClient());
 
-        room = new Room(`!${roomCount++}:example.org`, cli, "@alice:example.org");
+        room = new Room(`!${roomCount++}:example.org`, cli, "@<alice>:example.org");
         jest.spyOn(room, "findPredecessor");
         room.getPendingEvents = () => [];
         rooms = new Map();
@@ -624,7 +624,7 @@ describe("RoomView", () => {
     });
 
     it("should switch rooms when edit is clicked on a search result for a different room", async () => {
-        const room2 = new Room(`!${roomCount++}:example.org`, cli, "@alice:example.org");
+        const room2 = new Room(`!${roomCount++}:example.org`, cli, "@<alice>:example.org");
         rooms.set(room2.roomId, room2);
 
         room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);

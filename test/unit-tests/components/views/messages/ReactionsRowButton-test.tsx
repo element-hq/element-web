@@ -15,7 +15,7 @@ import { getMockClientWithEventEmitter } from "../../../../test-utils";
 import ReactionsRowButton, { IProps } from "../../../../../src/components/views/messages/ReactionsRowButton";
 
 describe("ReactionsRowButton", () => {
-    const userId = "@alice:server";
+    const userId = "@<alice>:server";
     const roomId = "!randomcharacters:aser.ver";
     const mockClient = getMockClientWithEventEmitter({
         mxcUrlToHttp: jest.fn().mockReturnValue("https://not.a.real.url"),

@@ -73,16 +73,16 @@ const expectNoPill = (value: string) => {
 };
 
 const roomId = "!111111111111111111:example.org";
-const aliceId = "@alice:example.org";
-const aliceEmail = "foobar@email.com";
+const <alice>Id = "@<alice>:example.org";
+const <alice>Email = "foobar@email.com";
 const bobId = "@bob:example.org";
 const bobEmail = "bobbob@example.com"; // bob@example.com is already used as an example in the invite dialog
 const carolId = "@carol:example.com";
 const bobbob = "bobbob";
 
-const aliceProfileInfo: IProfileInfo = {
-    user_id: aliceId,
-    display_name: "Alice",
+const <alice>ProfileInfo: IProfileInfo = {
+    user_id: <alice>Id,
+    display_name: "<alice>",
 };
 
 const bobProfileInfo: IProfileInfo = {
@@ -98,7 +98,7 @@ describe("InviteDialog", () => {
         "Error retrieving profile for userId @carol:example.com",
         "Error retrieving profile for userId @localpart:server.tld",
         "Error retrieving profile for userId @localpart:server:tld",
-        "[Invite:Recents] Excluding @alice:example.org from recents",
+        "[Invite:Recents] Excluding @<alice>:example.org from recents",
     );
 
     beforeEach(() => {
@@ -114,7 +114,7 @@ describe("InviteDialog", () => {
             mxcUrlToHttp: jest.fn().mockReturnValue(""),
             isRoomEncrypted: jest.fn().mockReturnValue(false),
             getProfileInfo: jest.fn().mockImplementation(async (userId: string) => {
-                if (userId === aliceId) return aliceProfileInfo;
+                if (userId === <alice>Id) return <alice>ProfileInfo;
                 if (userId === bobId) return bobProfileInfo;
 
                 throw new MatrixError({
@@ -160,12 +160,12 @@ describe("InviteDialog", () => {
                 event: true,
                 room: roomId,
                 mship: KnownMembership.Join,
-                user: aliceId,
-                skey: aliceId,
+                user: <alice>Id,
+                skey: <alice>Id,
             }),
         ]);
         jest.spyOn(DMRoomMap.shared(), "getUniqueRoomsWithIndividuals").mockReturnValue({
-            [aliceId]: room,
+            [<alice>Id]: room,
         });
         mockClient.getRooms.mockReturnValue([room]);
         mockClient.getRoom.mockReturnValue(room);
@@ -228,12 +228,12 @@ describe("InviteDialog", () => {
         async (kind: typeof InviteKind.Dm | typeof InviteKind.Invite) => {
             mockClient.getIdentityServerUrl.mockReturnValue("https://identity-server");
             mockClient.lookupThreePid.mockResolvedValue({
-                address: aliceEmail,
+                address: <alice>Email,
                 medium: "email",
-                mxid: aliceId,
+                mxid: <alice>Id,
             });
             mockClient.getProfileInfo.mockResolvedValue({
-                displayname: "Mrs Alice",
+                displayname: "Mrs <alice>",
                 avatar_url: "mxc://foo/bar",
             });
 
@@ -242,16 +242,16 @@ describe("InviteDialog", () => {
                     kind={kind}
                     roomId={kind === InviteKind.Invite ? roomId : ""}
                     onFinished={jest.fn()}
-                    initialText={aliceEmail}
+                    initialText={<alice>Email}
                 />,
             );
 
-            await screen.findByText("Mrs Alice");
+            await screen.findByText("Mrs <alice>");
             // expect the email and MXID to be visible
-            await screen.findByText(aliceId);
-            await screen.findByText(aliceEmail);
-            expect(mockClient.lookupThreePid).toHaveBeenCalledWith("email", aliceEmail, expect.anything());
-            expect(mockClient.getProfileInfo).toHaveBeenCalledWith(aliceId);
+            await screen.findByText(<alice>Id);
+            await screen.findByText(<alice>Email);
+            expect(mockClient.lookupThreePid).toHaveBeenCalledWith("email", <alice>Email, expect.anything());
+            expect(mockClient.getProfileInfo).toHaveBeenCalledWith(<alice>Id);
         },
     );
 
@@ -280,10 +280,10 @@ describe("InviteDialog", () => {
 
         const input = screen.getByTestId("invite-dialog-input");
         input.focus();
-        await userEvent.paste(`${bobId} ${aliceEmail}`);
+        await userEvent.paste(`${bobId} ${<alice>Email}`);
 
         await screen.findAllByText(bobId);
-        await screen.findByText(aliceEmail);
+        await screen.findByText(<alice>Email);
         expect(input).toHaveValue("");
     });
     it("should support pasting one username that is not a mx id or email", async () => {
@@ -303,8 +303,8 @@ describe("InviteDialog", () => {
     it("should allow to invite multiple emails to a room", async () => {
         render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={jest.fn()} />);
 
-        await enterIntoSearchField(aliceEmail);
-        expectPill(aliceEmail);
+        await enterIntoSearchField(<alice>Email);
+        expectPill(<alice>Email);
 
         await enterIntoSearchField(bobEmail);
         expectPill(bobEmail);
@@ -322,8 +322,8 @@ describe("InviteDialog", () => {
         it("should allow to invite more than one email to a DM", async () => {
             render(<InviteDialog kind={InviteKind.Dm} onFinished={jest.fn()} />);
 
-            await enterIntoSearchField(aliceEmail);
-            expectPill(aliceEmail);
+            await enterIntoSearchField(<alice>Email);
+            expectPill(<alice>Email);
 
             await enterIntoSearchField(bobEmail);
             expectPill(bobEmail);
@@ -334,17 +334,17 @@ describe("InviteDialog", () => {
         render(<InviteDialog kind={InviteKind.Dm} onFinished={jest.fn()} />);
 
         // Start with an email → should convert to a pill
-        await enterIntoSearchField(aliceEmail);
+        await enterIntoSearchField(<alice>Email);
         expect(screen.getByText("Invites by email can only be sent one at a time")).toBeInTheDocument();
-        expectPill(aliceEmail);
+        expectPill(<alice>Email);
 
         // Everything else from now on should not convert to a pill
 
         await enterIntoSearchField(bobEmail);
         expectNoPill(bobEmail);
 
-        await enterIntoSearchField(aliceId);
-        expectNoPill(aliceId);
+        await enterIntoSearchField(<alice>Id);
+        expectNoPill(<alice>Id);
 
         await pasteIntoSearchField(bobEmail);
         expectNoPill(bobEmail);
@@ -366,11 +366,11 @@ describe("InviteDialog", () => {
 
     it("should start a DM if the profile is available", async () => {
         render(<InviteDialog kind={InviteKind.Dm} onFinished={jest.fn()} />);
-        await enterIntoSearchField(aliceId);
+        await enterIntoSearchField(<alice>Id);
         await userEvent.click(screen.getByRole("button", { name: "Go" }));
         expect(startDmOnFirstMessage).toHaveBeenCalledWith(mockClient, [
             new DirectoryMember({
-                user_id: aliceId,
+                user_id: <alice>Id,
             }),
         ]);
     });
@@ -393,14 +393,14 @@ describe("InviteDialog", () => {
 
         const input = screen.getByTestId("invite-dialog-input");
         input.focus();
-        await userEvent.keyboard(`${aliceId}`);
+        await userEvent.keyboard(`${<alice>Id}`);
 
-        const btn = await screen.findByText(aliceId, {
+        const btn = await screen.findByText(<alice>Id, {
             selector: ".mx_InviteDialog_tile_nameStack_userId .mx_InviteDialog_tile--room_highlight",
         });
         fireEvent.click(btn);
 
-        const tile = await screen.findByText(aliceId, { selector: ".mx_InviteDialog_userTile_name" });
+        const tile = await screen.findByText(<alice>Id, { selector: ".mx_InviteDialog_userTile_name" });
         expect(tile).toBeInTheDocument();
     });
 

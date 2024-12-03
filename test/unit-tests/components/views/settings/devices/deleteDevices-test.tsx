@@ -13,7 +13,7 @@ import Modal from "../../../../../../src/Modal";
 import { getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../../../test-utils";
 
 describe("deleteDevices()", () => {
-    const userId = "@alice:server.org";
+    const userId = "@<alice>:server.org";
     const deviceIds = ["device_1", "device_2"];
     const mockClient = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),

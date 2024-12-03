@@ -11,7 +11,7 @@ import { test, expect } from "../../element-web-test";
 import { openIntegrationManager } from "./utils";
 
 const ROOM_NAME = "Integration Manager Test";
-const USER_DISPLAY_NAME = "Alice";
+const USER_DISPLAY_NAME = "<alice>";
 const BOT_DISPLAY_NAME = "Bob";
 const KICK_REASON = "Goodbye";
 
@@ -95,7 +95,7 @@ async function expectKickedMessage(page: Page, shouldExist: boolean) {
 
 test.describe("Integration Manager: Kick", () => {
     test.use({
-        displayName: "Alice",
+        displayName: "<alice>",
         room: async ({ user, app }, use) => {
             const roomId = await app.client.createRoom({
                 name: ROOM_NAME,

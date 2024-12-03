@@ -18,7 +18,7 @@ import * as Lifecycle from "../../src/Lifecycle";
 async function createFailedDecryptionEvent(opts: { sender?: string; code?: DecryptionFailureCode } = {}) {
     return await mkDecryptionFailureMatrixEvent({
         roomId: "!room:id",
-        sender: opts.sender ?? "@alice:example.com",
+        sender: opts.sender ?? "@<alice>:example.com",
         code: opts.code ?? DecryptionFailureCode.UNKNOWN_ERROR,
         msg: ":(",
     });
@@ -636,7 +636,7 @@ describe("DecryptionFailureTracker", function () {
         const error2 = DecryptionFailureCode.MEGOLM_BAD_ROOM;
         const error3 = DecryptionFailureCode.MEGOLM_MISSING_FIELDS;
 
-        // event from a federated user (@alice:example.com)
+        // event from a federated user (@<alice>:example.com)
         const federatedDecryption = await createFailedDecryptionEvent({
             code: error1,
         });

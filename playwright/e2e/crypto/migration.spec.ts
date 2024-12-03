@@ -26,7 +26,7 @@ const test = base.extend({
 });
 
 test.describe("migration", function () {
-    test.use({ displayName: "Alice" });
+    test.use({ displayName: "<alice>" });
 
     test("Should support migration from legacy crypto", async ({ context, user, page }, workerInfo) => {
         test.skip(workerInfo.project.name === "Legacy Crypto", "This test only works with Rust crypto.");

@@ -36,7 +36,7 @@ const test = base.extend({
 });
 
 const ROOM_NAME = "Test room";
-const NAME = "Alice";
+const NAME = "<alice>";
 
 function getMemberTileByName(page: Page, name: string): Locator {
     return page.locator(`.mx_EntityTile, [title="${name}"]`);

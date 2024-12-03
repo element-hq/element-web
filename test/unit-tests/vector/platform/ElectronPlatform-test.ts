@@ -37,7 +37,7 @@ describe("ElectronPlatform", () => {
     const dispatchFireSpy = jest.spyOn(dispatcher, "fire");
     const logSpy = jest.spyOn(logger, "log").mockImplementation(() => {});
 
-    const userId = "@alice:server.org";
+    const userId = "@<alice>:server.org";
     const deviceId = "device-id";
 
     beforeEach(() => {

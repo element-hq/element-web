@@ -26,7 +26,7 @@ import { UIFeature } from "../../../../../src/settings/UIFeature";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 
 describe("<RoomSettingsDialog />", () => {
-    const userId = "@alice:server.org";
+    const userId = "@<alice>:server.org";
     const mockClient = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),
         isRoomEncrypted: jest.fn().mockReturnValue(false),

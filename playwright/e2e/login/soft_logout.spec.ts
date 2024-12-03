@@ -15,7 +15,7 @@ import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 test.describe("Soft logout", () => {
     test.use({
-        displayName: "Alice",
+        displayName: "<alice>",
         startHomeserverOpts: ({ oAuthServer }, use) =>
             use({
                 template: "default",
@@ -55,14 +55,14 @@ test.describe("Soft logout", () => {
 
                 // Eventually, we should end up at the home screen.
                 await expect(page).toHaveURL(/\/#\/home$/);
-                await expect(page.getByRole("heading", { name: "Welcome Alice", exact: true })).toBeVisible();
+                await expect(page.getByRole("heading", { name: "Welcome <alice>", exact: true })).toBeVisible();
 
                 await use(user);
             },
         });
 
         test("shows the soft-logout page when a request fails, and allows a re-login", async ({ page, user }) => {
-            await expect(page.getByRole("heading", { name: "Welcome Alice", exact: true })).toBeVisible();
+            await expect(page.getByRole("heading", { name: "Welcome <alice>", exact: true })).toBeVisible();
 
             await interceptRequestsWithSoftLogout(page, user);
 
@@ -78,7 +78,7 @@ test.describe("Soft logout", () => {
 
             // back to the welcome page
             await expect(page).toHaveURL(/\/#\/home$/);
-            await expect(page.getByRole("heading", { name: "Welcome Alice", exact: true })).toBeVisible();
+            await expect(page.getByRole("heading", { name: "Welcome <alice>", exact: true })).toBeVisible();
         });
     });
 });

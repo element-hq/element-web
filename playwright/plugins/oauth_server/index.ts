@@ -43,8 +43,8 @@ export class OAuthServer {
 
             // return an OAuth2 user info object
             res.send({
-                sub: "alice",
-                name: "Alice",
+                sub: "<alice>",
+                name: "<alice>",
             });
         });
 

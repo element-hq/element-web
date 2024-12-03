@@ -81,7 +81,7 @@ async function extractZipFileToPath(file: string, outputPath: string): Promise<J
 
 test.describe("HTML Export", () => {
     test.use({
-        displayName: "Alice",
+        displayName: "<alice>",
         room: async ({ app, user }, use) => {
             const roomId = await app.client.createRoom({ name: "Important Room" });
             await app.viewRoomByName("Important Room");

@@ -52,7 +52,7 @@ describe("StopGapWidgetDriver", () => {
             [],
             new Widget({
                 id: "test",
-                creatorUserId: "@alice:example.org",
+                creatorUserId: "@<alice>:example.org",
                 type: "example",
                 url: "https://example.org",
             }),
@@ -68,8 +68,8 @@ describe("StopGapWidgetDriver", () => {
     beforeEach(() => {
         stubClient();
         client = mocked(MatrixClientPeg.safeGet());
-        client.getUserId.mockReturnValue("@alice:example.org");
-        client.getSafeUserId.mockReturnValue("@alice:example.org");
+        client.getUserId.mockReturnValue("@<alice>:example.org");
+        client.getSafeUserId.mockReturnValue("@<alice>:example.org");
     });
 
     it("auto-approves capabilities of virtual Element Call widgets", async () => {
@@ -77,7 +77,7 @@ describe("StopGapWidgetDriver", () => {
             [],
             new Widget({
                 id: "group_call",
-                creatorUserId: "@alice:example.org",
+                creatorUserId: "@<alice>:example.org",
                 type: MatrixWidgetType.Custom,
                 url: "https://call.element.io",
             }),
@@ -100,10 +100,10 @@ describe("StopGapWidgetDriver", () => {
             "org.matrix.msc2762.receive.state_event:m.room.create",
             "org.matrix.msc2762.receive.state_event:m.room.member",
             "org.matrix.msc2762.receive.state_event:org.matrix.msc3401.call",
-            "org.matrix.msc2762.send.state_event:org.matrix.msc3401.call.member#@alice:example.org",
+            "org.matrix.msc2762.send.state_event:org.matrix.msc3401.call.member#@<alice>:example.org",
             "org.matrix.msc2762.receive.state_event:org.matrix.msc3401.call.member",
-            `org.matrix.msc2762.send.state_event:org.matrix.msc3401.call.member#_@alice:example.org_${client.deviceId}`,
-            `org.matrix.msc2762.send.state_event:org.matrix.msc3401.call.member#@alice:example.org_${client.deviceId}`,
+            `org.matrix.msc2762.send.state_event:org.matrix.msc3401.call.member#_@<alice>:example.org_${client.deviceId}`,
+            `org.matrix.msc2762.send.state_event:org.matrix.msc3401.call.member#@<alice>:example.org_${client.deviceId}`,
             "org.matrix.msc3819.send.to_device:m.call.invite",
             "org.matrix.msc3819.receive.to_device:m.call.invite",
             "org.matrix.msc3819.send.to_device:m.call.candidates",
@@ -172,9 +172,9 @@ describe("StopGapWidgetDriver", () => {
 
     describe("sendToDevice", () => {
         const contentMap = {
-            "@alice:example.org": {
+            "@<alice>:example.org": {
                 "*": {
-                    hello: "alice",
+                    hello: "<alice>",
                 },
             },
             "@bob:example.org": {
@@ -195,7 +195,7 @@ describe("StopGapWidgetDriver", () => {
             expect(client.queueToDevice).toHaveBeenCalledWith({
                 eventType: "org.example.foo",
                 batch: [
-                    { deviceId: "*", payload: { hello: "alice" }, userId: "@alice:example.org" },
+                    { deviceId: "*", payload: { hello: "<alice>" }, userId: "@<alice>:example.org" },
                     { deviceId: "bobDesktop", payload: { hello: "bob" }, userId: "@bob:example.org" },
                 ],
             });
@@ -221,9 +221,9 @@ describe("StopGapWidgetDriver", () => {
             MatrixClientPeg.safeGet().getCrypto()!.encryptToDeviceMessages = encryptToDeviceMessages;
 
             await driver.sendToDevice("org.example.foo", true, {
-                "@alice:example.org": {
-                    aliceMobile: {
-                        hello: "alice",
+                "@<alice>:example.org": {
+                    <alice>Mobile: {
+                        hello: "<alice>",
                     },
                 },
                 "@bob:example.org": {
@@ -235,9 +235,9 @@ describe("StopGapWidgetDriver", () => {
 
             expect(encryptToDeviceMessages).toHaveBeenCalledWith(
                 "org.example.foo",
-                [{ deviceId: "aliceMobile", userId: "@alice:example.org" }],
+                [{ deviceId: "<alice>Mobile", userId: "@<alice>:example.org" }],
                 {
-                    hello: "alice",
+                    hello: "<alice>",
                 },
             );
             expect(encryptToDeviceMessages).toHaveBeenCalledWith(
@@ -251,9 +251,9 @@ describe("StopGapWidgetDriver", () => {
                 eventType: "m.room.encrypted",
                 batch: expect.arrayContaining([
                     {
-                        deviceId: "aliceMobile",
-                        payload: { content: { hello: "alice" }, eventType: "org.example.foo" },
-                        userId: "@alice:example.org",
+                        deviceId: "<alice>Mobile",
+                        payload: { content: { hello: "<alice>" }, eventType: "org.example.foo" },
+                        userId: "@<alice>:example.org",
                     },
                 ]),
             });
@@ -686,7 +686,7 @@ describe("StopGapWidgetDriver", () => {
 
             const result = await driver.downloadFile("mxc://example.com/test_file");
             // A type test is impossible here because of
-            // https://github.com/jefflau/jest-fetch-mock/issues/209
+            // https://github.com/<jeff>lau/jest-fetch-mock/issues/209
             // Tell TypeScript that file is a blob.
             const file = result.file as Blob;
             await expect(file.text()).resolves.toEqual("test contents");

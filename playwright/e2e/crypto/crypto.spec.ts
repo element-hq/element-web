@@ -14,8 +14,8 @@ import { ElementAppPage } from "../../pages/ElementAppPage";
 
 const checkDMRoom = async (page: Page) => {
     const body = page.locator(".mx_RoomView_body");
-    await expect(body.getByText("Alice created this DM.")).toBeVisible();
-    await expect(body.getByText("Alice invited Bob")).toBeVisible({ timeout: 1000 });
+    await expect(body.getByText("<alice> created this DM.")).toBeVisible();
+    await expect(body.getByText("<alice> invited Bob")).toBeVisible({ timeout: 1000 });
     await expect(body.locator(".mx_cryptoEvent").getByText("Encryption enabled")).toBeVisible();
 };
 
@@ -57,10 +57,10 @@ const bobJoin = async (page: Page, bob: Bot) => {
         }
     });
 
-    const roomId = await bob.joinRoomByName("Alice");
+    const roomId = await bob.joinRoomByName("<alice>");
     await expect(page.getByText("Bob joined the room")).toBeVisible();
 
-    // Even though Alice has seen Bob's join event, Bob may not have done so yet. Wait for the sync to arrive.
+    // Even though <alice> has seen Bob's join event, Bob may not have done so yet. Wait for the sync to arrive.
     await bob.awaitRoomMembership(roomId);
 
     return roomId;
@@ -68,7 +68,7 @@ const bobJoin = async (page: Page, bob: Bot) => {
 
 test.describe("Cryptography", function () {
     test.use({
-        displayName: "Alice",
+        displayName: "<alice>",
         botCreateOpts: {
             displayName: "Bob",
             autoAcceptInvites: false,
@@ -94,10 +94,10 @@ test.describe("Cryptography", function () {
                 expect(key.mac).toBeDefined();
             }
 
-            test("by recovery code", async ({ page, app, user: aliceCredentials }) => {
+            test("by recovery code", async ({ page, app, user: <alice>Credentials }) => {
                 // Verified the device
                 if (isDeviceVerified) {
-                    await app.client.bootstrapCrossSigning(aliceCredentials);
+                    await app.client.bootstrapCrossSigning(<alice>Credentials);
                 }
 
                 await page.route("**/_matrix/client/v3/keys/signatures/upload", async (route) => {
@@ -128,10 +128,10 @@ test.describe("Cryptography", function () {
                 await verifyKey(app, "user_signing");
             });
 
-            test("by passphrase", async ({ page, app, user: aliceCredentials }) => {
+            test("by passphrase", async ({ page, app, user: <alice>Credentials }) => {
                 // Verified the device
                 if (isDeviceVerified) {
-                    await app.client.bootstrapCrossSigning(aliceCredentials);
+                    await app.client.bootstrapCrossSigning(<alice>Credentials);
                 }
 
                 await app.settings.openUserSettings("Security & Privacy");
@@ -163,7 +163,7 @@ test.describe("Cryptography", function () {
         });
     }
 
-    test("Can reset cross-signing keys", async ({ page, app, user: aliceCredentials }) => {
+    test("Can reset cross-signing keys", async ({ page, app, user: <alice>Credentials }) => {
         const secretStorageKey = await enableKeyBackup(app);
 
         // Fetch the current cross-signing keys
@@ -192,7 +192,7 @@ test.describe("Cryptography", function () {
         await page.getByRole("button", { name: "Continue" }).click();
 
         // Enter the password
-        await page.getByPlaceholder("Password").fill(aliceCredentials.password);
+        await page.getByPlaceholder("Password").fill(<alice>Credentials.password);
         await page.getByRole("button", { name: "Continue" }).click();
 
         await expect(async () => {
@@ -208,9 +208,9 @@ test.describe("Cryptography", function () {
         page,
         app,
         bot: bob,
-        user: aliceCredentials,
+        user: <alice>Credentials,
     }) => {
-        await app.client.bootstrapCrossSigning(aliceCredentials);
+        await app.client.bootstrapCrossSigning(<alice>Credentials);
         await startDMWithBob(page, bob);
         // send first message
         await page.getByRole("textbox", { name: "Send a message…" }).fill("Hey!");
@@ -233,9 +233,9 @@ test.describe("Cryptography", function () {
         page,
         app,
         bot: bob,
-        user: aliceCredentials,
+        user: <alice>Credentials,
     }) => {
-        await app.client.bootstrapCrossSigning(aliceCredentials);
+        await app.client.bootstrapCrossSigning(<alice>Credentials);
         await autoJoin(bob);
 
         // we need to have a room with the other user present, so we can open the verification panel

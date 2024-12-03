@@ -20,7 +20,7 @@ exports[`<BeaconListItem /> when a beacon is live and has locations renders beac
           <span
             class="mx_BeaconStatus_label"
           >
-            Alice's car
+            <alice>'s car
           </span>
           <span
             class="mx_BeaconStatus_expiryTime"

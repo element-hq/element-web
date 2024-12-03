@@ -46,21 +46,21 @@ Object.defineProperty(HTMLElement.prototype, "offsetParent", {
 
 describe("ForwardDialog", () => {
     const sourceRoom = "!111111111111111111:example.org";
-    const aliceId = "@alice:example.org";
+    const <alice>Id = "@<alice>:example.org";
     const defaultMessage = mkMessage({
         room: sourceRoom,
-        user: aliceId,
+        user: <alice>Id,
         msg: "Hello world!",
         event: true,
     });
     const accountDataEvent = new MatrixEvent({
         type: EventType.Direct,
-        sender: aliceId,
+        sender: <alice>Id,
         content: {},
     });
     const mockClient = getMockClientWithEventEmitter({
-        getUserId: jest.fn().mockReturnValue(aliceId),
-        getSafeUserId: jest.fn().mockReturnValue(aliceId),
+        getUserId: jest.fn().mockReturnValue(<alice>Id),
+        getSafeUserId: jest.fn().mockReturnValue(<alice>Id),
         isGuest: jest.fn().mockReturnValue(false),
         getVisibleRooms: jest.fn().mockReturnValue([]),
         getRoom: jest.fn(),
@@ -68,7 +68,7 @@ describe("ForwardDialog", () => {
         getPushActionsForEvent: jest.fn(),
         mxcUrlToHttp: jest.fn().mockReturnValue(""),
         getProfileInfo: jest.fn().mockResolvedValue({
-            displayname: "Alice",
+            displayname: "<alice>",
         }),
         decryptEventIfNeeded: jest.fn(),
         sendEvent: jest.fn(),
@@ -217,10 +217,10 @@ describe("ForwardDialog", () => {
         const replyMessage = mkEvent({
             type: "m.room.message",
             room: "!111111111111111111:example.org",
-            user: "@alice:example.org",
+            user: "@<alice>:example.org",
             content: {
                 "msgtype": "m.text",
-                "body": "> <@bob:example.org> Hi Alice!\n\nHi Bob!",
+                "body": "> <@bob:example.org> Hi <alice>!\n\nHi Bob!",
                 "m.relates_to": {
                     "m.in_reply_to": {
                         event_id: "$2222222222222222222222222222222222222222222",
@@ -232,7 +232,7 @@ describe("ForwardDialog", () => {
 
         mountForwardDialog(replyMessage);
 
-        expect(screen.queryByText("Hi Alice!", { exact: false })).toBeInTheDocument();
+        expect(screen.queryByText("Hi <alice>!", { exact: false })).toBeInTheDocument();
     });
 
     it("disables buttons for rooms without send permissions", async () => {
@@ -328,7 +328,7 @@ describe("ForwardDialog", () => {
 
         it("forwards beacon location as a pin drop event", async () => {
             const timestamp = 123456;
-            const beaconEvent = makeBeaconEvent("@alice:server.org", { geoUri, timestamp });
+            const beaconEvent = makeBeaconEvent("@<alice>:server.org", { geoUri, timestamp });
             const text = `Location ${geoUri} at ${new Date(timestamp).toISOString()}`;
             const expectedContent = {
                 msgtype: "m.location",

@@ -16,13 +16,13 @@ test.describe("User verification", () => {
     // note that there are other tests that check user verification works in `crypto.spec.ts`.
 
     test.use({
-        displayName: "Alice",
+        displayName: "<alice>",
         botCreateOpts: { displayName: "Bob", autoAcceptInvites: true, userIdPrefix: "bob_" },
-        room: async ({ page, app, bot: bob, user: aliceCredentials }, use) => {
-            await app.client.bootstrapCrossSigning(aliceCredentials);
+        room: async ({ page, app, bot: bob, user: <alice>Credentials }, use) => {
+            await app.client.bootstrapCrossSigning(<alice>Credentials);
 
             // the other user creates a DM
-            const dmRoomId = await createDMRoom(bob, aliceCredentials.userId);
+            const dmRoomId = await createDMRoom(bob, <alice>Credentials.userId);
 
             // accept the DM
             await app.viewRoomByName("Bob");
@@ -34,23 +34,23 @@ test.describe("User verification", () => {
     test("can receive a verification request when there is no existing DM", async ({
         page,
         bot: bob,
-        user: aliceCredentials,
+        user: <alice>Credentials,
         toasts,
         room: { roomId: dmRoomId },
     }) => {
-        // once Alice has joined, Bob starts the verification
+        // once <alice> has joined, Bob starts the verification
         const bobVerificationRequest = await bob.evaluateHandle(
-            async (client, { dmRoomId, aliceCredentials }) => {
+            async (client, { dmRoomId, <alice>Credentials }) => {
                 const room = client.getRoom(dmRoomId);
-                while (room.getMember(aliceCredentials.userId)?.membership !== "join") {
+                while (room.getMember(<alice>Credentials.userId)?.membership !== "join") {
                     await new Promise((resolve) => {
                         room.once(window.matrixcs.RoomStateEvent.Members, resolve);
                     });
                 }
 
-                return client.getCrypto().requestVerificationDM(aliceCredentials.userId, dmRoomId);
+                return client.getCrypto().requestVerificationDM(<alice>Credentials.userId, dmRoomId);
             },
-            { dmRoomId, aliceCredentials },
+            { dmRoomId, <alice>Credentials },
         );
 
         // there should also be a toast
@@ -83,23 +83,23 @@ test.describe("User verification", () => {
     test("can abort emoji verification when emoji mismatch", async ({
         page,
         bot: bob,
-        user: aliceCredentials,
+        user: <alice>Credentials,
         toasts,
         room: { roomId: dmRoomId },
     }) => {
-        // once Alice has joined, Bob starts the verification
+        // once <alice> has joined, Bob starts the verification
         const bobVerificationRequest = await bob.evaluateHandle(
-            async (client, { dmRoomId, aliceCredentials }) => {
+            async (client, { dmRoomId, <alice>Credentials }) => {
                 const room = client.getRoom(dmRoomId);
-                while (room.getMember(aliceCredentials.userId)?.membership !== "join") {
+                while (room.getMember(<alice>Credentials.userId)?.membership !== "join") {
                     await new Promise((resolve) => {
                         room.once(window.matrixcs.RoomStateEvent.Members, resolve);
                     });
                 }
 
-                return client.getCrypto().requestVerificationDM(aliceCredentials.userId, dmRoomId);
+                return client.getCrypto().requestVerificationDM(<alice>Credentials.userId, dmRoomId);
             },
-            { dmRoomId, aliceCredentials },
+            { dmRoomId, <alice>Credentials },
         );
 
         // Accept verification via toast

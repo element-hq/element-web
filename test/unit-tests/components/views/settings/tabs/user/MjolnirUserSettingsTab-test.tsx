@@ -15,7 +15,7 @@ import MatrixClientContext from "../../../../../../../src/contexts/MatrixClientC
 import SettingsStore from "../../../../../../../src/settings/SettingsStore";
 
 describe("<MjolnirUserSettingsTab />", () => {
-    const userId = "@alice:server.org";
+    const userId = "@<alice>:server.org";
     const mockClient = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),
         getRoom: jest.fn(),

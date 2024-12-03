@@ -11,13 +11,13 @@ import { looksValid } from "../../src/email";
 describe("looksValid", () => {
     it.each([
         ["", false],
-        ["alice", false],
+        ["<alice>", false],
         ["@", false],
-        ["@alice:example.com", false],
+        ["@<alice>:example.com", false],
         ["@b.org", false],
-        ["alice@example", false],
+        ["<alice>@example", false],
         ["a@b.org", true],
-        ["alice@example.com", true],
+        ["<alice>@example.com", true],
     ])("for »%s« should return %s", (value: string, expected: boolean) => {
         expect(looksValid(value)).toBe(expected);
     });

@@ -22,7 +22,7 @@ import {
 import { Bot } from "../../pages/bot";
 
 test.describe("Device verification", () => {
-    let aliceBotClient: Bot;
+    let <alice>BotClient: Bot;
 
     /** The backup version that was set up by the bot client. */
     let expectedBackupVersion: string;
@@ -34,15 +34,15 @@ test.describe("Device verification", () => {
         // wait for the page to load
         await page.waitForSelector(".mx_AuthPage", { timeout: 30000 });
 
-        // Create a new device for alice
-        aliceBotClient = new Bot(page, homeserver, {
+        // Create a new device for <alice>
+        <alice>BotClient = new Bot(page, homeserver, {
             bootstrapCrossSigning: true,
             bootstrapSecretStorage: true,
         });
-        aliceBotClient.setCredentials(credentials);
+        <alice>BotClient.setCredentials(credentials);
 
         // Backup is prepared in the background. Poll until it is ready.
-        const botClientHandle = await aliceBotClient.prepareClient();
+        const botClientHandle = await <alice>BotClient.prepareClient();
         await expect
             .poll(async () => {
                 expectedBackupVersion = await botClientHandle.evaluate((cli) =>
@@ -54,22 +54,22 @@ test.describe("Device verification", () => {
     });
 
     // Click the "Verify with another device" button, and have the bot client auto-accept it.
-    async function initiateAliceVerificationRequest(page: Page): Promise<JSHandle<VerificationRequest>> {
-        // alice bot waits for verification request
-        const promiseVerificationRequest = waitForVerificationRequest(aliceBotClient);
+    async function initiate<alice>VerificationRequest(page: Page): Promise<JSHandle<VerificationRequest>> {
+        // <alice> bot waits for verification request
+        const promiseVerificationRequest = waitForVerificationRequest(<alice>BotClient);
 
         // Click on "Verify with another device"
         await page.locator(".mx_AuthPage").getByRole("button", { name: "Verify with another device" }).click();
 
-        // alice bot responds yes to verification request from alice
+        // <alice> bot responds yes to verification request from <alice>
         return promiseVerificationRequest;
     }
 
     test("Verify device with SAS during login", async ({ page, app, credentials, homeserver }) => {
         await logIntoElement(page, homeserver, credentials);
 
-        // Launch the verification request between alice and the bot
-        const verificationRequest = await initiateAliceVerificationRequest(page);
+        // Launch the verification request between <alice> and the bot
+        const verificationRequest = await initiate<alice>VerificationRequest(page);
 
         // Handle emoji SAS verification
         const infoDialog = page.locator(".mx_InfoDialog");
@@ -95,8 +95,8 @@ test.describe("Device verification", () => {
         // A mode 0x02 verification: "self-verifying in which the current device does not yet trust the master key"
         await logIntoElement(page, homeserver, credentials);
 
-        // Launch the verification request between alice and the bot
-        const verificationRequest = await initiateAliceVerificationRequest(page);
+        // Launch the verification request between <alice> and the bot
+        const verificationRequest = await initiate<alice>VerificationRequest(page);
 
         const infoDialog = page.locator(".mx_InfoDialog");
         // feed the QR code into the verification request.
@@ -118,14 +118,14 @@ test.describe("Device verification", () => {
         await page.waitForTimeout(1000);
 
         // our device should trust the bot device
-        await app.client.evaluate(async (cli, aliceBotCredentials) => {
+        await app.client.evaluate(async (cli, <alice>BotCredentials) => {
             const deviceStatus = await cli
                 .getCrypto()!
-                .getDeviceVerificationStatus(aliceBotCredentials.userId, aliceBotCredentials.deviceId);
+                .getDeviceVerificationStatus(<alice>BotCredentials.userId, <alice>BotCredentials.deviceId);
             if (!deviceStatus.isVerified()) {
                 throw new Error("Bot device was not verified after QR code verification");
             }
-        }, aliceBotClient.credentials);
+        }, <alice>BotClient.credentials);
 
         // Check that our device is now cross-signed
         await checkDeviceIsCrossSigned(app);
@@ -166,8 +166,8 @@ test.describe("Device verification", () => {
         // Fill the security key
         const dialog = page.locator(".mx_Dialog");
         await dialog.getByRole("button", { name: "use your Security Key" }).click();
-        const aliceRecoveryKey = await aliceBotClient.getRecoveryKey();
-        await dialog.locator("#mx_securityKey").fill(aliceRecoveryKey.encodedPrivateKey);
+        const <alice>RecoveryKey = await <alice>BotClient.getRecoveryKey();
+        await dialog.locator("#mx_securityKey").fill(<alice>RecoveryKey.encodedPrivateKey);
         await dialog.locator(".mx_Dialog_primary:not([disabled])", { hasText: "Continue" }).click();
 
         await page.locator(".mx_AuthPage").getByRole("button", { name: "Done" }).click();
@@ -192,7 +192,7 @@ test.describe("Device verification", () => {
         const elementDeviceId = await page.evaluate(() => window.mxMatrixClientPeg.get().getDeviceId());
 
         /* Now initiate a verification request from the *bot* device. */
-        const botVerificationRequest = await aliceBotClient.evaluateHandle(
+        const botVerificationRequest = await <alice>BotClient.evaluateHandle(
             async (client, { userId, deviceId }) => {
                 return client.getCrypto()!.requestDeviceVerification(userId, deviceId);
             },
@@ -202,7 +202,7 @@ test.describe("Device verification", () => {
         /* Check the toast for the incoming request */
         const toast = await toasts.getToast("Verification requested");
         // it should contain the device ID of the requesting device
-        await expect(toast.getByText(`${aliceBotClient.credentials.deviceId} from `)).toBeVisible();
+        await expect(toast.getByText(`${<alice>BotClient.credentials.deviceId} from `)).toBeVisible();
         // Accept
         await toast.getByRole("button", { name: "Verify Session" }).click();
 
@@ -220,7 +220,7 @@ test.describe("Device verification", () => {
         const infoDialog = page.locator(".mx_InfoDialog");
         await infoDialog.getByRole("button", { name: "They match" }).click();
         await expect(
-            infoDialog.getByText(`You've successfully verified (${aliceBotClient.credentials.deviceId})!`),
+            infoDialog.getByText(`You've successfully verified (${<alice>BotClient.credentials.deviceId})!`),
         ).toBeVisible();
         await infoDialog.getByRole("button", { name: "Got it" }).click();
     });

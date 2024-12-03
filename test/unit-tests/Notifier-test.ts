@@ -164,7 +164,7 @@ describe("Notifier", () => {
         let hasStartedNotiferBefore = false;
 
         const event = new MatrixEvent({
-            sender: "@alice:server.org",
+            sender: "@<alice>:server.org",
             type: "m.room.message",
             room_id: "!room:server.org",
             content: {
@@ -386,7 +386,7 @@ describe("Notifier", () => {
         const emitCallNotifyEvent = (type?: string, roomMention = true) => {
             const callEvent = mkEvent({
                 type: type ?? EventType.CallNotify,
-                user: "@alice:foo",
+                user: "@<alice>:foo",
                 room: roomId,
                 content: {
                     "application": "m.call",

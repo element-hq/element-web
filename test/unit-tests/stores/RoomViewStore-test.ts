@@ -73,7 +73,7 @@ jest.mock("../../../src/stores/WidgetStore");
 jest.mock("../../../src/stores/widgets/WidgetLayoutStore");
 
 describe("RoomViewStore", function () {
-    const userId = "@alice:server";
+    const userId = "@<alice>:server";
     const roomId = "!randomcharacters:aser.ver";
     const roomId2 = "!room2:example.com";
     // we need to change the alias to ensure cache misses as the cache exists

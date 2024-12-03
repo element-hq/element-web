@@ -64,7 +64,7 @@ describe("PipContainer", () => {
     let client: Mocked<MatrixClient>;
     let room: Room;
     let room2: Room;
-    let alice: RoomMember;
+    let <alice>: RoomMember;
 
     beforeEach(async () => {
         useMockMediaDevices();
@@ -73,16 +73,16 @@ describe("PipContainer", () => {
 
         stubClient();
         client = mocked(MatrixClientPeg.safeGet());
-        client.getUserId.mockReturnValue("@alice:example.org");
-        client.getSafeUserId.mockReturnValue("@alice:example.org");
+        client.getUserId.mockReturnValue("@<alice>:example.org");
+        client.getSafeUserId.mockReturnValue("@<alice>:example.org");
         DMRoomMap.makeShared(client);
 
-        room = new Room("!1:example.org", client, "@alice:example.org", {
+        room = new Room("!1:example.org", client, "@<alice>:example.org", {
             pendingEventOrdering: PendingEventOrdering.Detached,
         });
-        alice = mkRoomMember(room.roomId, "@alice:example.org");
+        <alice> = mkRoomMember(room.roomId, "@<alice>:example.org");
 
-        room2 = new Room("!2:example.com", client, "@alice:example.org", {
+        room2 = new Room("!2:example.com", client, "@<alice>:example.org", {
             pendingEventOrdering: PendingEventOrdering.Detached,
         });
         client.getRoom.mockImplementation((roomId: string) => {
@@ -93,10 +93,10 @@ describe("PipContainer", () => {
         client.getRooms.mockReturnValue([room, room2]);
         client.reEmitter.reEmit(room, [RoomStateEvent.Events]);
 
-        room.currentState.setStateEvents([mkRoomCreateEvent(alice.userId, room.roomId)]);
-        jest.spyOn(room, "getMember").mockImplementation((userId) => (userId === alice.userId ? alice : null));
+        room.currentState.setStateEvents([mkRoomCreateEvent(<alice>.userId, room.roomId)]);
+        jest.spyOn(room, "getMember").mockImplementation((userId) => (userId === <alice>.userId ? <alice> : null));
 
-        room2.currentState.setStateEvents([mkRoomCreateEvent(alice.userId, room2.roomId)]);
+        room2.currentState.setStateEvents([mkRoomCreateEvent(<alice>.userId, room2.roomId)]);
 
         await Promise.all(
             [CallStore.instance, WidgetMessagingStore.instance].map((store) =>
@@ -206,7 +206,7 @@ describe("PipContainer", () => {
         const widget = WidgetStore.instance.addVirtualWidget(
             {
                 id: "1",
-                creatorUserId: "@alice:example.org",
+                creatorUserId: "@<alice>:example.org",
                 type: WidgetType.CUSTOM.preferred,
                 url: "https://example.org",
                 name: "Example widget",
@@ -236,7 +236,7 @@ describe("PipContainer", () => {
         const widget = WidgetStore.instance.addVirtualWidget(
             {
                 id: "1",
-                creatorUserId: "@alice:example.org",
+                creatorUserId: "@<alice>:example.org",
                 type: WidgetType.JITSI.preferred,
                 url: "https://meet.example.org",
                 name: "Jitsi example",

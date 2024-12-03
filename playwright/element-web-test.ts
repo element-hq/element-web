@@ -183,7 +183,7 @@ export const test = base.extend<{
 
     displayName: undefined,
     credentials: async ({ homeserver, displayName: testDisplayName }, use) => {
-        const names = ["Alice", "Bob", "Charlie", "Daniel", "Eve", "Frank", "Grace", "Hannah", "Isaac", "Judy"];
+        const names = ["<alice>", "Bob", "Charlie", "Daniel", "Eve", "Frank", "Grace", "Hannah", "Isaac", "Judy"];
         const password = _.uniqueId("password_");
         const displayName = testDisplayName ?? _.sample(names)!;
 

@@ -53,7 +53,7 @@ export class MockClientWithEventEmitter extends EventEmitter {
  * eg
  * ```
  * const mockClient = getMockClientWithEventEmitter({
-        getUserId: jest.fn().mockReturnValue(aliceId),
+        getUserId: jest.fn().mockReturnValue(<alice>Id),
     });
  * ```
  *
@@ -88,7 +88,7 @@ export const unmockClientPeg = () => {
     });
  * ```
  */
-export const mockClientMethodsUser = (userId = "@alice:domain") => ({
+export const mockClientMethodsUser = (userId = "@<alice>:domain") => ({
     getUserId: jest.fn().mockReturnValue(userId),
     getDomain: jest.fn().mockReturnValue(userId.split(":")[1]),
     getSafeUserId: jest.fn().mockReturnValue(userId),

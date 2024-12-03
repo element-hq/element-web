@@ -15,7 +15,7 @@ test.describe("Lazy Loading", () => {
     const charlies: Bot[] = [];
 
     test.use({
-        displayName: "Alice",
+        displayName: "<alice>",
         botCreateOpts: { displayName: "Bob" },
     });
 
@@ -39,7 +39,7 @@ test.describe("Lazy Loading", () => {
     const charlyMsg2 = "how's it going??";
     let roomId: string;
 
-    async function setupRoomWithBobAliceAndCharlies(page: Page, app: ElementAppPage, bob: Bot, charlies: Bot[]) {
+    async function setupRoomWithBob<alice>AndCharlies(page: Page, app: ElementAppPage, bob: Bot, charlies: Bot[]) {
         const visibility = await page.evaluate(() => (window as any).matrixcs.Visibility.Public);
         roomId = await bob.createRoom({
             name,
@@ -81,7 +81,7 @@ test.describe("Lazy Loading", () => {
     }
 
     async function checkMemberList(page: Page, charlies: Bot[]) {
-        await expect(getMemberInMemberlist(page, "Alice")).toBeAttached();
+        await expect(getMemberInMemberlist(page, "<alice>")).toBeAttached();
         await expect(getMemberInMemberlist(page, "Bob")).toBeAttached();
         for (const charly of charlies) {
             await expect(getMemberInMemberlist(page, charly.credentials.displayName)).toBeAttached();
@@ -94,7 +94,7 @@ test.describe("Lazy Loading", () => {
         }
     }
 
-    async function joinCharliesWhileAliceIsOffline(page: Page, app: ElementAppPage, charlies: Bot[]) {
+    async function joinCharliesWhile<alice>IsOffline(page: Page, app: ElementAppPage, charlies: Bot[]) {
         await app.client.network.goOffline();
         for (const charly of charlies) {
             await charly.joinRoom(alias);
@@ -111,14 +111,14 @@ test.describe("Lazy Loading", () => {
         const charly1to5 = charlies.slice(0, 5);
         const charly6to10 = charlies.slice(5);
 
-        // Set up room with alice, bob & charlies 1-5
-        await setupRoomWithBobAliceAndCharlies(page, app, bot, charly1to5);
-        // Alice should see 2 messages from every charly with the correct display name
+        // Set up room with <alice>, bob & charlies 1-5
+        await setupRoomWithBob<alice>AndCharlies(page, app, bot, charly1to5);
+        // <alice> should see 2 messages from every charly with the correct display name
         await checkPaginatedDisplayNames(app, charly1to5);
 
         await openMemberlist(app);
         await checkMemberList(page, charly1to5);
-        await joinCharliesWhileAliceIsOffline(page, app, charly6to10);
+        await joinCharliesWhile<alice>IsOffline(page, app, charly6to10);
         await checkMemberList(page, charly6to10);
 
         for (const charly of charlies) {

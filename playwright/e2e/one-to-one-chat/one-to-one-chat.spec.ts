@@ -16,7 +16,7 @@ const test = base.extend<{
 
 test.describe("1:1 chat room", () => {
     test.use({
-        displayName: "Jeff",
+        displayName: "<jeff>",
         user2: async ({ homeserver }, use) => {
             const credentials = await homeserver.registerUser("user1234", "p4s5W0rD", "Timmy");
             await use(credentials);

@@ -15,7 +15,7 @@ import { flushPromises, getMockClientWithEventEmitter, mockClientMethodsUser } f
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 
 describe("<CreateRoomDialog />", () => {
-    const userId = "@alice:server.org";
+    const userId = "@<alice>:server.org";
     const mockClient = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),
         getDomain: jest.fn().mockReturnValue("server.org"),

@@ -16,7 +16,7 @@ import DMRoomMap from "../../../src/utils/DMRoomMap";
 import { getMockClientWithEventEmitter, mockClientMethodsServer, mockClientMethodsUser } from "../../test-utils";
 
 describe("<IncomingLegacyCallToast />", () => {
-    const userId = "@alice:server.org";
+    const userId = "@<alice>:server.org";
     const deviceId = "my-device";
 
     jest.spyOn(DMRoomMap, "shared").mockReturnValue({

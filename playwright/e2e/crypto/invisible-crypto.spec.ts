@@ -12,7 +12,7 @@ import { bootstrapCrossSigningForClient } from "../../pages/client.ts";
 /** Tests for the "invisible crypto" behaviour -- i.e., when the "exclude insecure devices" setting is enabled */
 test.describe("Invisible cryptography", () => {
     test.use({
-        displayName: "Alice",
+        displayName: "<alice>",
         botCreateOpts: { displayName: "Bob" },
         labsFlags: ["feature_exclude_insecure_devices"],
     });
@@ -20,11 +20,11 @@ test.describe("Invisible cryptography", () => {
     test("Messages fail to decrypt when sender is previously verified", async ({
         page,
         bot: bob,
-        user: aliceCredentials,
+        user: <alice>Credentials,
         app,
         homeserver,
     }) => {
-        await app.client.bootstrapCrossSigning(aliceCredentials);
+        await app.client.bootstrapCrossSigning(<alice>Credentials);
         await autoJoin(bob);
 
         // create an encrypted room

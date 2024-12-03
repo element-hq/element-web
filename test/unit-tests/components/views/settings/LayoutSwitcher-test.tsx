@@ -20,7 +20,7 @@ import { Layout } from "../../../../../src/settings/enums/Layout";
 describe("<LayoutSwitcher />", () => {
     const matrixClient = stubClient();
     const profileInfo = {
-        displayname: "Alice",
+        displayname: "<alice>",
     };
 
     async function renderLayoutSwitcher() {

@@ -28,7 +28,7 @@ exports[`<PinnedEventTile /> should render pinned event 1`] = `
           aria-labelledby=":r0:"
           class="mx_PinnedEventTile_sender mx_Username_color2"
         >
-          @alice:server.org
+          @<alice>:server.org
         </span>
         <button
           aria-disabled="false"
@@ -104,7 +104,7 @@ exports[`<PinnedEventTile /> should render pinned event with thread info 1`] = `
           aria-labelledby=":r8:"
           class="mx_PinnedEventTile_sender mx_Username_color2"
         >
-          @alice:server.org
+          @<alice>:server.org
         </span>
         <button
           aria-disabled="false"

@@ -12,7 +12,7 @@ import { test, expect } from "../../element-web-test";
 import { viewRoomSummaryByName } from "./utils";
 
 const ROOM_NAME = "Test room";
-const NAME = "Alice";
+const NAME = "<alice>";
 
 async function uploadFile(page: Page, file: string) {
     // Upload a file from the message composer

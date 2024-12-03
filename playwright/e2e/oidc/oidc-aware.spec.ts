@@ -16,11 +16,11 @@ test.describe("OIDC Aware", () => {
     test("can register an account and manage it", async ({ context, page, homeserver, mailhog, app }) => {
         await page.goto("/#/login");
         await page.getByRole("button", { name: "Continue" }).click();
-        await registerAccountMas(page, mailhog.api, "alice", "alice@email.com", "Pa$sW0rD!");
+        await registerAccountMas(page, mailhog.api, "<alice>", "<alice>@email.com", "Pa$sW0rD!");
 
         // Eventually, we should end up at the home screen.
         await expect(page).toHaveURL(/\/#\/home$/, { timeout: 10000 });
-        await expect(page.getByRole("heading", { name: "Welcome alice", exact: true })).toBeVisible();
+        await expect(page.getByRole("heading", { name: "Welcome <alice>", exact: true })).toBeVisible();
 
         // Open settings and navigate to account management
         await app.settings.openUserSettings("Account");

@@ -24,7 +24,7 @@ jest.mock("../../../src/utils/EventUtils", () => {
 
 describe("PinningUtils", () => {
     const roomId = "!room:example.org";
-    const userId = "@alice:example.org";
+    const userId = "@<alice>:example.org";
 
     const mockedIsContentActionable = mocked(isContentActionable);
 

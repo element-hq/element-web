@@ -37,7 +37,7 @@ import { ScopedRoomContextProvider } from "../../../../src/contexts/ScopedRoomCo
 
 describe("ThreadView", () => {
     const ROOM_ID = "!roomId:example.org";
-    const SENDER = "@alice:example.org";
+    const SENDER = "@<alice>:example.org";
 
     let mockClient: MatrixClient;
     let room: Room;

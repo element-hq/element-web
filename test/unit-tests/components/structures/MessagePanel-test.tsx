@@ -61,11 +61,11 @@ describe("MessagePanel", function () {
     jest.spyOn(bobMember, "getAvatarUrl").mockReturnValue("avatar.jpeg");
     jest.spyOn(bobMember, "getMxcAvatarUrl").mockReturnValue("mxc://avatar.url/image.png");
 
-    const alice = "@alice:example.org";
-    const aliceMember = new RoomMember(roomId, alice);
-    aliceMember.name = "Alice";
-    jest.spyOn(aliceMember, "getAvatarUrl").mockReturnValue("avatar.jpeg");
-    jest.spyOn(aliceMember, "getMxcAvatarUrl").mockReturnValue("mxc://avatar.url/image.png");
+    const <alice> = "@<alice>:example.org";
+    const <alice>Member = new RoomMember(roomId, <alice>);
+    <alice>Member.name = "<alice>";
+    jest.spyOn(<alice>Member, "getAvatarUrl").mockReturnValue("avatar.jpeg");
+    jest.spyOn(<alice>Member, "getMxcAvatarUrl").mockReturnValue("mxc://avatar.url/image.png");
 
     const defaultProps = {
         resizeNotifier: new EventEmitter() as unknown as ResizeNotifier,
@@ -221,9 +221,9 @@ describe("MessagePanel", function () {
                 event: true,
                 type: "m.room.create",
                 room: roomId,
-                user: alice,
+                user: <alice>,
                 content: {
-                    creator: alice,
+                    creator: <alice>,
                     room_version: "5",
                     predecessor: {
                         room_id: "!prevroom",
@@ -235,17 +235,17 @@ describe("MessagePanel", function () {
             mkMembership({
                 event: true,
                 room: roomId,
-                user: alice,
-                target: aliceMember,
+                user: <alice>,
+                target: <alice>Member,
                 ts: ts0 + 1,
                 mship: KnownMembership.Join,
-                name: "Alice",
+                name: "<alice>",
             }),
             mkEvent({
                 event: true,
                 type: "m.room.join_rules",
                 room: roomId,
-                user: alice,
+                user: <alice>,
                 content: {
                     join_rule: "invite",
                 },
@@ -255,7 +255,7 @@ describe("MessagePanel", function () {
                 event: true,
                 type: "m.room.history_visibility",
                 room: roomId,
-                user: alice,
+                user: <alice>,
                 content: {
                     history_visibility: "invited",
                 },
@@ -265,7 +265,7 @@ describe("MessagePanel", function () {
                 event: true,
                 type: "m.room.encryption",
                 room: roomId,
-                user: alice,
+                user: <alice>,
                 content: {
                     algorithm: "m.megolm.v1.aes-sha2",
                 },
@@ -274,7 +274,7 @@ describe("MessagePanel", function () {
             mkMembership({
                 event: true,
                 room: roomId,
-                user: alice,
+                user: <alice>,
                 skey: "@bob:example.org",
                 target: bobMember,
                 ts: ts0 + 5,
@@ -286,7 +286,7 @@ describe("MessagePanel", function () {
 
     function mkMixedHiddenAndShownEvents() {
         const roomId = "!room:id";
-        const userId = "@alice:example.org";
+        const userId = "@<alice>:example.org";
         const ts0 = Date.now();
 
         return [
@@ -449,7 +449,7 @@ describe("MessagePanel", function () {
         const { container } = render(getComponent({ events }));
 
         // we expect that
-        // - the room creation event, the room encryption event, and Alice inviting Bob,
+        // - the room creation event, the room encryption event, and <alice> inviting Bob,
         //   should be outside of the room creation summary
         // - all other events should be inside the room creation summary
 

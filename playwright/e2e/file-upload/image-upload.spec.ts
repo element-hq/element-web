@@ -10,7 +10,7 @@ import { test, expect } from "../../element-web-test";
 
 test.describe("Image Upload", () => {
     test.use({
-        displayName: "Alice",
+        displayName: "<alice>",
     });
 
     test.beforeEach(async ({ page, app, user }) => {

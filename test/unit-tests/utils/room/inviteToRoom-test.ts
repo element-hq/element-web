@@ -13,7 +13,7 @@ import { inviteToRoom } from "../../../../src/utils/room/inviteToRoom";
 import { getMockClientWithEventEmitter } from "../../../test-utils";
 
 describe("inviteToRoom()", () => {
-    const userId = "@alice:server.org";
+    const userId = "@<alice>:server.org";
     const roomId = "!room:server.org";
 
     const makeRoom = (): Room => {

@@ -24,20 +24,20 @@ const RoomPreviewCard = wrapInMatrixClientContext(_RoomPreviewCard);
 describe("RoomPreviewCard", () => {
     let client: Mocked<MatrixClient>;
     let room: Room;
-    let alice: RoomMember;
+    let <alice>: RoomMember;
     let enabledFeatures: string[];
 
     beforeEach(() => {
         stubClient();
         client = mocked(MatrixClientPeg.safeGet());
-        client.getUserId.mockReturnValue("@alice:example.org");
+        client.getUserId.mockReturnValue("@<alice>:example.org");
         DMRoomMap.makeShared(client);
 
-        room = new Room("!1:example.org", client, "@alice:example.org", {
+        room = new Room("!1:example.org", client, "@<alice>:example.org", {
             pendingEventOrdering: PendingEventOrdering.Detached,
         });
-        alice = mkRoomMember(room.roomId, "@alice:example.org");
-        jest.spyOn(room, "getMember").mockImplementation((userId) => (userId === alice.userId ? alice : null));
+        <alice> = mkRoomMember(room.roomId, "@<alice>:example.org");
+        jest.spyOn(room, "getMember").mockImplementation((userId) => (userId === <alice>.userId ? <alice> : null));
 
         client.getRoom.mockImplementation((roomId) => (roomId === room.roomId ? room : null));
         client.getRooms.mockReturnValue([room]);

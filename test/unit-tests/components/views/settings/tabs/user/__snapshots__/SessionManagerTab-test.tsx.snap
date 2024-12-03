@@ -109,7 +109,7 @@ exports[`<SessionManagerTab /> current session section renders current session s
   >
     <div
       class="mx_DeviceTile mx_DeviceTile_interactive"
-      data-testid="device-tile-alices_device"
+      data-testid="device-tile-<alice>s_device"
     >
       <div
         class="mx_DeviceTypeIcon"
@@ -135,7 +135,7 @@ exports[`<SessionManagerTab /> current session section renders current session s
         <h4
           class="mx_Heading_h4"
         >
-          Alices device
+          <alice>s device
         </h4>
         <div
           class="mx_DeviceTile_metadata"
@@ -149,7 +149,7 @@ exports[`<SessionManagerTab /> current session section renders current session s
           <span
             data-testid="device-metadata-deviceId"
           >
-            alices_device
+            <alice>s_device
           </span>
         </div>
       </div>
@@ -257,7 +257,7 @@ exports[`<SessionManagerTab /> current session section renders current session s
   >
     <div
       class="mx_DeviceTile mx_DeviceTile_interactive"
-      data-testid="device-tile-alices_device"
+      data-testid="device-tile-<alice>s_device"
     >
       <div
         class="mx_DeviceTypeIcon"
@@ -283,7 +283,7 @@ exports[`<SessionManagerTab /> current session section renders current session s
         <h4
           class="mx_Heading_h4"
         >
-          Alices device
+          <alice>s device
         </h4>
         <div
           class="mx_DeviceTile_metadata"
@@ -297,7 +297,7 @@ exports[`<SessionManagerTab /> current session section renders current session s
           <span
             data-testid="device-metadata-deviceId"
           >
-            alices_device
+            <alice>s_device
           </span>
         </div>
       </div>
@@ -363,7 +363,7 @@ exports[`<SessionManagerTab /> current session section renders current session s
         >
           <div
             class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
-            data-testid="verification-status-button-alices_device"
+            data-testid="verification-status-button-<alice>s_device"
             role="button"
             tabindex="0"
           >

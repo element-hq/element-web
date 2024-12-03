@@ -27,7 +27,7 @@ import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoo
 jest.mock("../../../../../src/dispatcher/dispatcher");
 
 describe("<RoomPredecessorTile />", () => {
-    const userId = "@alice:server.org";
+    const userId = "@<alice>:server.org";
     const roomId = "!room:server.org";
     stubClient();
     const client = mocked(MatrixClientPeg.safeGet());

@@ -163,7 +163,7 @@ describe("editor/model", function () {
     describe("auto-complete", function () {
         it("insert user pill", function () {
             const renderer = createRenderer();
-            const pc = createPartCreator([{ resourceId: "@alice", text: "Alice" } as PillPart]);
+            const pc = createPartCreator([{ resourceId: "@<alice>", text: "<alice>" } as PillPart]);
             const model = new EditorModel([pc.plain("hello ")], pc, renderer);
 
             model.update("hello @a", "insertText", new DocumentOffset(8, true));
@@ -187,7 +187,7 @@ describe("editor/model", function () {
             expect(model.parts[0].type).toBe("plain");
             expect(model.parts[0].text).toBe("hello ");
             expect(model.parts[1].type).toBe("user-pill");
-            expect(model.parts[1].text).toBe("Alice");
+            expect(model.parts[1].text).toBe("<alice>");
         });
 
         it("insert room pill", function () {
@@ -293,7 +293,7 @@ describe("editor/model", function () {
 
         it("allow typing e-mail addresses without splitting at the @", () => {
             const renderer = createRenderer();
-            const pc = createPartCreator([{ resourceId: "@alice", text: "Alice" } as PillPart]);
+            const pc = createPartCreator([{ resourceId: "@<alice>", text: "<alice>" } as PillPart]);
             const model = new EditorModel([], pc, renderer);
 
             model.update("foo@a", "insertText", new DocumentOffset(5, true));
