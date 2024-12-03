@@ -3693,8 +3693,11 @@
         "unavailable": "Nicht verfügbar"
     },
     "update_room_access_modal": {
-        "no_change": "Ich möchte die Zugriffsebene nicht ändern.",
-        "title": "Ändern Sie die Zugriffsebene des Raums"
+        "description": "Um einen Konferenzlink zu erstellen, mache diesen Raum <b>öffentlich</b> oder aktiviere die Option, dass Benutzer eine <b>Beitrittsanfrage</b> stellen können. So können Gäste ohne direkte Einladung beitreten.",
+        "dont_change_description": "Wenn die Zugriffsrechte dieses Raums unverändert bleiben sollen, erstelle einen neuen Raum für die Element-Call Videokonferenz.",
+        "revert_access_description": "(In den Raum Einstellungen kann die Zutrittseinstellung zurückgesetzt werden: <b>Sicherheit</b> / <b>Zutritt</b>)",
+        "no_change": "Ich möchte die Raum Zutrittseinstellung nicht ändern.",
+        "title": "Erlaube Gastbenutzern, diesen Raum beizutreten"
     },
     "upload_failed_generic": "Die Datei „%(fileName)s“ konnte nicht hochgeladen werden.",
     "upload_failed_size": "Die Datei „%(fileName)s“ überschreitet das Hochladelimit deines Heim-Servers",
