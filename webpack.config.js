@@ -677,7 +677,6 @@ module.exports = (env, argv) => {
             // Automatically load buffer & process modules as we use them without explicitly
             // importing them
             new webpack.ProvidePlugin({
-                Buffer: ["buffer", "Buffer"],
                 process: "process/browser",
             }),
 
