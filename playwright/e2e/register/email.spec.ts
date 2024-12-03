@@ -38,34 +38,33 @@ test.describe("Email Registration", async () => {
         await page.goto("/#/register");
     });
 
-    test("registers an account and lands on the use case selection screen", async ({
-        page,
-        mailhog,
-        request,
-        checkA11y,
-    }) => {
-        await expect(page.getByRole("textbox", { name: "Username" })).toBeVisible();
-        // Hide the server text as it contains the randomly allocated Homeserver port
-        const screenshotOptions = { mask: [page.locator(".mx_ServerPicker_server")] };
+    test(
+        "registers an account and lands on the use case selection screen",
+        { tag: "@screenshot" },
+        async ({ page, mailhog, request, checkA11y }) => {
+            await expect(page.getByRole("textbox", { name: "Username" })).toBeVisible();
+            // Hide the server text as it contains the randomly allocated Homeserver port
+            const screenshotOptions = { mask: [page.locator(".mx_ServerPicker_server")] };
 
-        await page.getByRole("textbox", { name: "Username" }).fill("alice");
-        await page.getByPlaceholder("Password", { exact: true }).fill("totally a great password");
-        await page.getByPlaceholder("Confirm password").fill("totally a great password");
-        await page.getByPlaceholder("Email").fill("alice@email.com");
-        await page.getByRole("button", { name: "Register" }).click();
+            await page.getByRole("textbox", { name: "Username" }).fill("alice");
+            await page.getByPlaceholder("Password", { exact: true }).fill("totally a great password");
+            await page.getByPlaceholder("Confirm password").fill("totally a great password");
+            await page.getByPlaceholder("Email").fill("alice@email.com");
+            await page.getByRole("button", { name: "Register" }).click();
 
-        await expect(page.getByText("Check your email to continue")).toBeVisible();
-        await expect(page).toMatchScreenshot("registration_check_your_email.png", screenshotOptions);
-        await checkA11y();
+            await expect(page.getByText("Check your email to continue")).toBeVisible();
+            await expect(page).toMatchScreenshot("registration_check_your_email.png", screenshotOptions);
+            await checkA11y();
 
-        await expect(page.getByText("An error was encountered when sending the email")).not.toBeVisible();
+            await expect(page.getByText("An error was encountered when sending the email")).not.toBeVisible();
 
-        const messages = await mailhog.api.messages();
-        expect(messages.items).toHaveLength(1);
-        expect(messages.items[0].to).toEqual("alice@email.com");
-        const [emailLink] = messages.items[0].text.match(/http.+/);
-        await request.get(emailLink); // "Click" the link in the email
+            const messages = await mailhog.api.messages();
+            expect(messages.items).toHaveLength(1);
+            expect(messages.items[0].to).toEqual("alice@email.com");
+            const [emailLink] = messages.items[0].text.match(/http.+/);
+            await request.get(emailLink); // "Click" the link in the email
 
-        await expect(page.locator(".mx_UseCaseSelection_skip")).toBeVisible();
-    });
+            await expect(page.locator(".mx_UseCaseSelection_skip")).toBeVisible();
+        },
+    );
 });

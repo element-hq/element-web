@@ -204,30 +204,29 @@ test.describe("Cryptography", function () {
         await expect(page.locator(".mx_Dialog")).toHaveCount(1);
     });
 
-    test("creating a DM should work, being e2e-encrypted / user verification", async ({
-        page,
-        app,
-        bot: bob,
-        user: aliceCredentials,
-    }) => {
-        await app.client.bootstrapCrossSigning(aliceCredentials);
-        await startDMWithBob(page, bob);
-        // send first message
-        await page.getByRole("textbox", { name: "Send a message…" }).fill("Hey!");
-        await page.getByRole("textbox", { name: "Send a message…" }).press("Enter");
-        await checkDMRoom(page);
-        const bobRoomId = await bobJoin(page, bob);
-        await testMessages(page, bob, bobRoomId);
-        await verify(app, bob);
+    test(
+        "creating a DM should work, being e2e-encrypted / user verification",
+        { tag: "@screenshot" },
+        async ({ page, app, bot: bob, user: aliceCredentials }) => {
+            await app.client.bootstrapCrossSigning(aliceCredentials);
+            await startDMWithBob(page, bob);
+            // send first message
+            await page.getByRole("textbox", { name: "Send a message…" }).fill("Hey!");
+            await page.getByRole("textbox", { name: "Send a message…" }).press("Enter");
+            await checkDMRoom(page);
+            const bobRoomId = await bobJoin(page, bob);
+            await testMessages(page, bob, bobRoomId);
+            await verify(app, bob);
 
-        // Assert that verified icon is rendered
-        await page.getByTestId("base-card-back-button").click();
-        await page.getByLabel("Room info").nth(1).click();
-        await expect(page.locator('.mx_RoomSummaryCard_badges [data-kind="green"]')).toContainText("Encrypted");
+            // Assert that verified icon is rendered
+            await page.getByTestId("base-card-back-button").click();
+            await page.getByLabel("Room info").nth(1).click();
+            await expect(page.locator('.mx_RoomSummaryCard_badges [data-kind="green"]')).toContainText("Encrypted");
 
-        // Take a snapshot of RoomSummaryCard with a verified E2EE icon
-        await expect(page.locator(".mx_RightPanel")).toMatchScreenshot("RoomSummaryCard-with-verified-e2ee.png");
-    });
+            // Take a snapshot of RoomSummaryCard with a verified E2EE icon
+            await expect(page.locator(".mx_RightPanel")).toMatchScreenshot("RoomSummaryCard-with-verified-e2ee.png");
+        },
+    );
 
     test("should allow verification when there is no existing DM", async ({
         page,

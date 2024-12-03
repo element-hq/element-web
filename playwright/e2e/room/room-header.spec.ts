@@ -20,7 +20,7 @@ test.describe("Room Header", () => {
         test.use({
             labsFlags: ["feature_notifications"],
         });
-        test("should render default buttons properly", async ({ page, app, user }) => {
+        test("should render default buttons properly", { tag: "@screenshot" }, async ({ page, app, user }) => {
             await app.client.createRoom({ name: "Test Room" });
             await app.viewRoomByName("Test Room");
 
@@ -51,34 +51,38 @@ test.describe("Room Header", () => {
             await expect(header).toMatchScreenshot("room-header.png");
         });
 
-        test("should render a very long room name without collapsing the buttons", async ({ page, app, user }) => {
-            const LONG_ROOM_NAME =
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore " +
-                "et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut " +
-                "aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum " +
-                "dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui " +
-                "officia deserunt mollit anim id est laborum.";
+        test(
+            "should render a very long room name without collapsing the buttons",
+            { tag: "@screenshot" },
+            async ({ page, app, user }) => {
+                const LONG_ROOM_NAME =
+                    "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore " +
+                    "et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut " +
+                    "aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum " +
+                    "dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui " +
+                    "officia deserunt mollit anim id est laborum.";
 
-            await app.client.createRoom({ name: LONG_ROOM_NAME });
-            await app.viewRoomByName(LONG_ROOM_NAME);
+                await app.client.createRoom({ name: LONG_ROOM_NAME });
+                await app.viewRoomByName(LONG_ROOM_NAME);
 
-            const header = page.locator(".mx_RoomHeader");
-            // Wait until the room name is set
-            await expect(page.locator(".mx_RoomHeader_heading").getByText(LONG_ROOM_NAME)).toBeVisible();
+                const header = page.locator(".mx_RoomHeader");
+                // Wait until the room name is set
+                await expect(page.locator(".mx_RoomHeader_heading").getByText(LONG_ROOM_NAME)).toBeVisible();
 
-            // Assert the size of buttons on RoomHeader are specified and the buttons are not compressed
-            // Note these assertions do not check the size of mx_LegacyRoomHeader_name button
-            const buttons = header.locator(".mx_Flex").getByRole("button");
-            await expect(buttons).toHaveCount(5);
+                // Assert the size of buttons on RoomHeader are specified and the buttons are not compressed
+                // Note these assertions do not check the size of mx_LegacyRoomHeader_name button
+                const buttons = header.locator(".mx_Flex").getByRole("button");
+                await expect(buttons).toHaveCount(5);
 
-            for (const button of await buttons.all()) {
-                await expect(button).toBeVisible();
-                await expect(button).toHaveCSS("height", "32px");
-                await expect(button).toHaveCSS("width", "32px");
-            }
+                for (const button of await buttons.all()) {
+                    await expect(button).toBeVisible();
+                    await expect(button).toHaveCSS("height", "32px");
+                    await expect(button).toHaveCSS("width", "32px");
+                }
 
-            await expect(header).toMatchScreenshot("room-header-long-name.png");
-        });
+                await expect(header).toMatchScreenshot("room-header-long-name.png");
+            },
+        );
     });
 
     test.describe("with a video room", () => {
@@ -99,30 +103,34 @@ test.describe("Room Header", () => {
         test.describe("and with feature_notifications enabled", () => {
             test.use({ labsFlags: ["feature_video_rooms", "feature_notifications"] });
 
-            test("should render buttons for chat, room info, threads and facepile", async ({ page, app, user }) => {
-                await createVideoRoom(page, app);
+            test(
+                "should render buttons for chat, room info, threads and facepile",
+                { tag: "@screenshot" },
+                async ({ page, app, user }) => {
+                    await createVideoRoom(page, app);
 
-                const header = page.locator(".mx_RoomHeader");
+                    const header = page.locator(".mx_RoomHeader");
 
-                // There's two room info button - the header itself and the i button
-                const infoButtons = header.getByRole("button", { name: "Room info" });
-                await expect(infoButtons).toHaveCount(2);
-                await expect(infoButtons.first()).toBeVisible();
-                await expect(infoButtons.last()).toBeVisible();
+                    // There's two room info button - the header itself and the i button
+                    const infoButtons = header.getByRole("button", { name: "Room info" });
+                    await expect(infoButtons).toHaveCount(2);
+                    await expect(infoButtons.first()).toBeVisible();
+                    await expect(infoButtons.last()).toBeVisible();
 
-                // Facepile
-                await expect(header.locator(".mx_FacePile")).toBeVisible();
+                    // Facepile
+                    await expect(header.locator(".mx_FacePile")).toBeVisible();
 
-                // Chat, Threads and Notification buttons
-                await expect(header.getByRole("button", { name: "Chat" })).toBeVisible();
-                await expect(header.getByRole("button", { name: "Threads" })).toBeVisible();
-                await expect(header.getByRole("button", { name: "Notifications" })).toBeVisible();
+                    // Chat, Threads and Notification buttons
+                    await expect(header.getByRole("button", { name: "Chat" })).toBeVisible();
+                    await expect(header.getByRole("button", { name: "Threads" })).toBeVisible();
+                    await expect(header.getByRole("button", { name: "Notifications" })).toBeVisible();
 
-                // Assert that there is not a button except those buttons
-                await expect(header.getByRole("button")).toHaveCount(7);
+                    // Assert that there is not a button except those buttons
+                    await expect(header.getByRole("button")).toHaveCount(7);
 
-                await expect(header).toMatchScreenshot("room-header-video-room.png");
-            });
+                    await expect(header).toMatchScreenshot("room-header-video-room.png");
+                },
+            );
         });
 
         test("should render a working chat button which opens the timeline on a right panel", async ({

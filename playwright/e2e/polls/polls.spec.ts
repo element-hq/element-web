@@ -93,7 +93,7 @@ test.describe("Polls", () => {
         });
     });
 
-    test("should be creatable and votable", async ({ page, app, bot, user }) => {
+    test("should be creatable and votable", { tag: "@screenshot" }, async ({ page, app, bot, user }) => {
         const roomId: string = await app.client.createRoom({});
         await app.client.inviteUser(roomId, bot.credentials.userId);
         await page.goto("/#/room/" + roomId);
@@ -219,107 +219,121 @@ test.describe("Polls", () => {
         await expect(page.locator(".mx_ErrorDialog")).toBeAttached();
     });
 
-    test("should be displayed correctly in thread panel", async ({ page, app, user, bot, homeserver }) => {
-        const botCharlie = new Bot(page, homeserver, { displayName: "BotCharlie" });
-        await botCharlie.prepareClient();
+    test(
+        "should be displayed correctly in thread panel",
+        { tag: "@screenshot" },
+        async ({ page, app, user, bot, homeserver }) => {
+            const botCharlie = new Bot(page, homeserver, { displayName: "BotCharlie" });
+            await botCharlie.prepareClient();
 
-        const roomId: string = await app.client.createRoom({});
-        await app.client.inviteUser(roomId, bot.credentials.userId);
-        await app.client.inviteUser(roomId, botCharlie.credentials.userId);
-        await page.goto("/#/room/" + roomId);
+            const roomId: string = await app.client.createRoom({});
+            await app.client.inviteUser(roomId, bot.credentials.userId);
+            await app.client.inviteUser(roomId, botCharlie.credentials.userId);
+            await page.goto("/#/room/" + roomId);
 
-        // wait until the bots joined
-        await expect(page.getByText("BotBob and one other were invited and joined")).toBeAttached({ timeout: 10000 });
+            // wait until the bots joined
+            await expect(page.getByText("BotBob and one other were invited and joined")).toBeAttached({
+                timeout: 10000,
+            });
 
-        const locator = await app.openMessageComposerOptions();
-        await locator.getByRole("menuitem", { name: "Poll" }).click();
+            const locator = await app.openMessageComposerOptions();
+            await locator.getByRole("menuitem", { name: "Poll" }).click();
 
-        const pollParams = {
-            title: "Does the polls feature work?",
-            options: ["Yes", "No", "Maybe"],
-        };
-        await createPoll(page, pollParams);
+            const pollParams = {
+                title: "Does the polls feature work?",
+                options: ["Yes", "No", "Maybe"],
+            };
+            await createPoll(page, pollParams);
 
-        // Wait for message to send, get its ID and save as @pollId
-        const pollId = await page
-            .locator(".mx_RoomView_body .mx_EventTile[data-scroll-tokens]")
-            .filter({ hasText: pollParams.title })
-            .getAttribute("data-scroll-tokens");
+            // Wait for message to send, get its ID and save as @pollId
+            const pollId = await page
+                .locator(".mx_RoomView_body .mx_EventTile[data-scroll-tokens]")
+                .filter({ hasText: pollParams.title })
+                .getAttribute("data-scroll-tokens");
 
-        // Bob starts thread on the poll
-        await bot.sendMessage(
-            roomId,
-            {
-                body: "Hello there",
-                msgtype: "m.text",
-            },
-            pollId,
-        );
+            // Bob starts thread on the poll
+            await bot.sendMessage(
+                roomId,
+                {
+                    body: "Hello there",
+                    msgtype: "m.text",
+                },
+                pollId,
+            );
 
-        // open the thread summary
-        await page.getByRole("button", { name: "Open thread" }).click();
+            // open the thread summary
+            await page.getByRole("button", { name: "Open thread" }).click();
 
-        // Bob votes 'Maybe' in the poll
-        await botVoteForOption(page, bot, roomId, pollId, pollParams.options[2]);
+            // Bob votes 'Maybe' in the poll
+            await botVoteForOption(page, bot, roomId, pollId, pollParams.options[2]);
 
-        // Charlie votes 'No'
-        await botVoteForOption(page, botCharlie, roomId, pollId, pollParams.options[1]);
+            // Charlie votes 'No'
+            await botVoteForOption(page, botCharlie, roomId, pollId, pollParams.options[1]);
 
-        // no votes shown until I vote, check votes have arrived in main tl
-        await expect(
-            page
-                .locator(".mx_RoomView_body .mx_MPollBody_totalVotes")
-                .getByText("2 votes cast. Vote to see the results"),
-        ).toBeAttached();
+            // no votes shown until I vote, check votes have arrived in main tl
+            await expect(
+                page
+                    .locator(".mx_RoomView_body .mx_MPollBody_totalVotes")
+                    .getByText("2 votes cast. Vote to see the results"),
+            ).toBeAttached();
 
-        // and thread view
-        await expect(
-            page.locator(".mx_ThreadView .mx_MPollBody_totalVotes").getByText("2 votes cast. Vote to see the results"),
-        ).toBeAttached();
+            // and thread view
+            await expect(
+                page
+                    .locator(".mx_ThreadView .mx_MPollBody_totalVotes")
+                    .getByText("2 votes cast. Vote to see the results"),
+            ).toBeAttached();
 
-        // Take snapshots of poll on ThreadView
-        await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
-        await expect(page.locator(".mx_ThreadView .mx_EventTile[data-layout='bubble']").first()).toBeVisible();
-        await expect(page.locator(".mx_ThreadView")).toMatchScreenshot("ThreadView_with_a_poll_on_bubble_layout.png", {
-            mask: [page.locator(".mx_MessageTimestamp")],
-        });
+            // Take snapshots of poll on ThreadView
+            await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
+            await expect(page.locator(".mx_ThreadView .mx_EventTile[data-layout='bubble']").first()).toBeVisible();
+            await expect(page.locator(".mx_ThreadView")).toMatchScreenshot(
+                "ThreadView_with_a_poll_on_bubble_layout.png",
+                {
+                    mask: [page.locator(".mx_MessageTimestamp")],
+                },
+            );
 
-        await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
-        await expect(page.locator(".mx_ThreadView .mx_EventTile[data-layout='group']").first()).toBeVisible();
+            await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
+            await expect(page.locator(".mx_ThreadView .mx_EventTile[data-layout='group']").first()).toBeVisible();
 
-        await expect(page.locator(".mx_ThreadView")).toMatchScreenshot("ThreadView_with_a_poll_on_group_layout.png", {
-            mask: [page.locator(".mx_MessageTimestamp")],
-        });
+            await expect(page.locator(".mx_ThreadView")).toMatchScreenshot(
+                "ThreadView_with_a_poll_on_group_layout.png",
+                {
+                    mask: [page.locator(".mx_MessageTimestamp")],
+                },
+            );
 
-        const roomViewLocator = page.locator(".mx_RoomView_body");
-        // vote 'Maybe' in the main timeline poll
-        await getPollOption(page, pollId, pollParams.options[2], roomViewLocator).click();
-        // both me and bob have voted Maybe
-        await expectPollOptionVoteCount(page, pollId, pollParams.options[2], 2, roomViewLocator);
+            const roomViewLocator = page.locator(".mx_RoomView_body");
+            // vote 'Maybe' in the main timeline poll
+            await getPollOption(page, pollId, pollParams.options[2], roomViewLocator).click();
+            // both me and bob have voted Maybe
+            await expectPollOptionVoteCount(page, pollId, pollParams.options[2], 2, roomViewLocator);
 
-        const threadViewLocator = page.locator(".mx_ThreadView");
-        // votes updated in thread view too
-        await expectPollOptionVoteCount(page, pollId, pollParams.options[2], 2, threadViewLocator);
-        // change my vote to 'Yes'
-        await getPollOption(page, pollId, pollParams.options[0], threadViewLocator).click();
+            const threadViewLocator = page.locator(".mx_ThreadView");
+            // votes updated in thread view too
+            await expectPollOptionVoteCount(page, pollId, pollParams.options[2], 2, threadViewLocator);
+            // change my vote to 'Yes'
+            await getPollOption(page, pollId, pollParams.options[0], threadViewLocator).click();
 
-        // Bob updates vote to 'No'
-        await botVoteForOption(page, bot, roomId, pollId, pollParams.options[1]);
+            // Bob updates vote to 'No'
+            await botVoteForOption(page, bot, roomId, pollId, pollParams.options[1]);
 
-        // me: yes, bob: no, charlie: no
-        const expectVoteCounts = async (optLocator: Locator) => {
-            // I voted yes
-            await expectPollOptionVoteCount(page, pollId, pollParams.options[0], 1, optLocator);
-            // Bob and Charlie voted no
-            await expectPollOptionVoteCount(page, pollId, pollParams.options[1], 2, optLocator);
-            // 0 for maybe
-            await expectPollOptionVoteCount(page, pollId, pollParams.options[2], 0, optLocator);
-        };
+            // me: yes, bob: no, charlie: no
+            const expectVoteCounts = async (optLocator: Locator) => {
+                // I voted yes
+                await expectPollOptionVoteCount(page, pollId, pollParams.options[0], 1, optLocator);
+                // Bob and Charlie voted no
+                await expectPollOptionVoteCount(page, pollId, pollParams.options[1], 2, optLocator);
+                // 0 for maybe
+                await expectPollOptionVoteCount(page, pollId, pollParams.options[2], 0, optLocator);
+            };
 
-        // check counts are correct in main timeline tile
-        await expectVoteCounts(page.locator(".mx_RoomView_body"));
+            // check counts are correct in main timeline tile
+            await expectVoteCounts(page.locator(".mx_RoomView_body"));
 
-        // and in thread view tile
-        await expectVoteCounts(page.locator(".mx_ThreadView"));
-    });
+            // and in thread view tile
+            await expectVoteCounts(page.locator(".mx_ThreadView"));
+        },
+    );
 });
