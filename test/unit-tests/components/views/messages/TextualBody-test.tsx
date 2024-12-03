@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixEvent, PushRuleKind } from "matrix-js-sdk/src/matrix";
 import { mocked, MockedObject } from "jest-mock";
 import { render, waitFor } from "jest-matrix-react";
 
@@ -227,6 +227,23 @@ describe("<TextualBody />", () => {
             const { container } = getComponent({ mxEvent: ev });
             const content = container.querySelector(".mx_EventTile_body");
             expect(content.innerHTML.replace(defaultEvent.getId(), "%event_id%")).toMatchSnapshot();
+        });
+
+        it("should pillify a keyword responsible for triggering a notification", () => {
+            const ev = mkRoomTextMessage("foo bar baz");
+            ev.setPushDetails(undefined, {
+                actions: [],
+                pattern: "bar",
+                rule_id: "bar",
+                default: false,
+                enabled: true,
+                kind: PushRuleKind.ContentSpecific,
+            });
+            const { container } = getComponent({ mxEvent: ev });
+            const content = container.querySelector(".mx_EventTile_body");
+            expect(content.innerHTML).toMatchInlineSnapshot(
+                `"<span>foo <bdi><span tabindex="0"><span class="mx_Pill mx_KeywordPill"><span class="mx_Pill_text">bar</span></span></span></bdi> baz</span>"`,
+            );
         });
     });
 
