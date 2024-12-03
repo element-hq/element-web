@@ -27,7 +27,7 @@ interface IProps {
     device: IDevice;
     /**
      * Callback for when the dialog is dismissed.
-     * If mode is "sas", the user wants to verify the device with SAS. Otherwise, the dialog was dismissed.
+     * If mode is "sas", the user wants to verify the device with SAS. Otherwise, the dialog was dismissed normally.
      * @param mode The mode of dismissal.
      */
     onFinished(mode?: "sas"): void;
