@@ -7,111 +7,139 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { EventTimeline, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
-import { render, RenderOptions } from "jest-matrix-react";
+import { MatrixClient, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { render, screen, act } from "jest-matrix-react";
+import userEvent from "@testing-library/user-event";
+import { waitFor } from "@testing-library/dom";
 
-import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
-import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import { _t } from "../../../../../src/languageHandler";
-import ShareDialog from "../../../../../src/components/views/dialogs/ShareDialog";
+import { ShareDialog } from "../../../../../src/components/views/dialogs/ShareDialog";
 import { UIFeature } from "../../../../../src/settings/UIFeature";
-import { stubClient } from "../../../../test-utils";
-jest.mock("../../../../../src/utils/ShieldUtils");
-
-function getWrapper(): RenderOptions {
-    return {
-        wrapper: ({ children }) => (
-            <MatrixClientContext.Provider value={MatrixClientPeg.safeGet()}>{children}</MatrixClientContext.Provider>
-        ),
-    };
-}
+import { stubClient, withClientContextRenderOptions } from "../../../../test-utils";
+import * as StringsModule from "../../../../../src/utils/strings";
+import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks.ts";
 
 describe("ShareDialog", () => {
+    let client: MatrixClient;
     let room: Room;
-
-    const ROOM_ID = "!1:example.org";
+    const copyTextFunc = jest.fn();
 
     beforeEach(async () => {
-        stubClient();
-        room = new Room(ROOM_ID, MatrixClientPeg.get()!, "@alice:example.org");
+        client = stubClient();
+        room = new Room("!1:example.org", client, "@alice:example.org");
+        jest.spyOn(StringsModule, "copyPlaintext").mockImplementation(copyTextFunc);
     });
 
     afterEach(() => {
         jest.restoreAllMocks();
+        copyTextFunc.mockClear();
     });
 
-    it("renders room share dialog", () => {
-        const { container: withoutEvents } = render(<ShareDialog target={room} onFinished={jest.fn()} />, getWrapper());
-        expect(withoutEvents).toHaveTextContent(_t("share|title_room"));
+    function renderComponent(target: Room | RoomMember | URL) {
+        return render(<ShareDialog target={target} onFinished={jest.fn()} />, withClientContextRenderOptions(client));
+    }
 
-        jest.spyOn(room, "getLiveTimeline").mockReturnValue({ getEvents: () => [{} as MatrixEvent] } as EventTimeline);
-        const { container: withEvents } = render(<ShareDialog target={room} onFinished={jest.fn()} />, getWrapper());
-        expect(withEvents).toHaveTextContent(_t("share|permalink_most_recent"));
+    const getUrl = () => new URL("https://matrix.org/");
+    const getRoomMember = () => new RoomMember(room.roomId, "@alice:example.org");
+
+    test.each([
+        { name: "an URL", title: "Share Link", url: "https://matrix.org/", getTarget: getUrl },
+        {
+            name: "a room member",
+            title: "Share User",
+            url: "https://matrix.to/#/@alice:example.org",
+            getTarget: getRoomMember,
+        },
+    ])("should render a share dialog for $name", async ({ title, url, getTarget }) => {
+        const { asFragment } = renderComponent(getTarget());
+
+        expect(screen.getByRole("heading", { name: title })).toBeInTheDocument();
+        expect(screen.getByText(url)).toBeInTheDocument();
+        expect(asFragment()).toMatchSnapshot();
+
+        await userEvent.click(screen.getByRole("button", { name: "Copy link" }));
+        expect(copyTextFunc).toHaveBeenCalledWith(url);
     });
 
-    it("renders user share dialog", () => {
-        mockRoomMembers(room, 1);
-        const { container } = render(
-            <ShareDialog target={room.getJoinedMembers()[0]} onFinished={jest.fn()} />,
-            getWrapper(),
+    it("should render a share dialog for a room", async () => {
+        const expectedURL = "https://matrix.to/#/!1:example.org";
+        jest.spyOn(room.getLiveTimeline(), "getEvents").mockReturnValue([new MatrixEvent({ event_id: "!eventId" })]);
+
+        const { asFragment } = renderComponent(room);
+        expect(screen.getByRole("heading", { name: "Share Room" })).toBeInTheDocument();
+        expect(screen.getByText(expectedURL)).toBeInTheDocument();
+        expect(screen.getByRole("checkbox", { name: "Link to most recent message" })).toBeInTheDocument();
+        expect(asFragment()).toMatchSnapshot();
+
+        await userEvent.click(screen.getByRole("button", { name: "Copy link" }));
+        expect(copyTextFunc).toHaveBeenCalledWith(expectedURL);
+
+        // Click on the checkbox to link to the most recent message
+        await userEvent.click(screen.getByRole("checkbox", { name: "Link to most recent message" }));
+        const newExpectedURL = "https://matrix.to/#/!1:example.org/!eventId";
+        expect(screen.getByText(newExpectedURL)).toBeInTheDocument();
+    });
+
+    it("should render a share dialog for a matrix event", async () => {
+        const matrixEvent = new MatrixEvent({ event_id: "!eventId" });
+        const permalinkCreator = new RoomPermalinkCreator(room);
+        const expectedURL = "https://matrix.to/#/!1:example.org/!eventId";
+
+        const { asFragment } = render(
+            <ShareDialog target={matrixEvent} permalinkCreator={permalinkCreator} onFinished={jest.fn()} />,
+            withClientContextRenderOptions(client),
         );
-        expect(container).toHaveTextContent(_t("share|title_user"));
+        expect(screen.getByRole("heading", { name: "Share Room Message" })).toBeInTheDocument();
+        expect(screen.getByText(expectedURL)).toBeInTheDocument();
+        expect(screen.getByRole("checkbox", { name: "Link to selected message" })).toBeChecked();
+        expect(asFragment()).toMatchSnapshot();
+
+        await userEvent.click(screen.getByRole("button", { name: "Copy link" }));
+        expect(copyTextFunc).toHaveBeenCalledWith(expectedURL);
+
+        // Click on the checkbox to link to the room
+        await userEvent.click(screen.getByRole("checkbox", { name: "Link to selected message" }));
+        expect(screen.getByText("https://matrix.to/#/!1:example.org")).toBeInTheDocument();
     });
 
-    it("renders link share dialog", () => {
-        mockRoomMembers(room, 1);
-        const { container } = render(
-            <ShareDialog target={new URL("https://matrix.org")} onFinished={jest.fn()} />,
-            getWrapper(),
-        );
-        expect(container).toHaveTextContent(_t("share|title_link"));
+    it("should change the copy button text when clicked", async () => {
+        jest.useFakeTimers();
+        const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
+        // To not be bother with rtl warnings about QR code state update
+        jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+
+        renderComponent(room);
+        await user.click(screen.getByRole("button", { name: "Copy link" }));
+        // Move after `copyPlaintext`
+        await jest.advanceTimersToNextTimerAsync();
+        expect(screen.getByRole("button", { name: "Link copied" })).toBeInTheDocument();
+
+        // 2 sec after the button should be back to normal
+        act(() => jest.advanceTimersByTime(2000));
+        await waitFor(() => expect(screen.getByRole("button", { name: "Copy link" })).toBeInTheDocument());
     });
 
-    it("renders the QR code if configured", () => {
+    it("should not render the QR code if disabled", () => {
         const originalGetValue = SettingsStore.getValue;
         jest.spyOn(SettingsStore, "getValue").mockImplementation((feature) => {
-            if (feature === UIFeature.ShareQRCode) return true;
+            if (feature === UIFeature.ShareQRCode) return false;
             return originalGetValue(feature);
         });
-        const { container } = render(<ShareDialog target={room} onFinished={jest.fn()} />, getWrapper());
-        const qrCodesVisible = container.getElementsByClassName("mx_ShareDialog_qrcode_container").length > 0;
-        expect(qrCodesVisible).toBe(true);
+
+        const { asFragment } = renderComponent(room);
+        expect(screen.queryByRole("img", { name: "QR code" })).toBeNull();
+        expect(asFragment()).toMatchSnapshot();
     });
 
-    it("renders the social button if configured", () => {
+    it("should not render the socials if disabled", () => {
         const originalGetValue = SettingsStore.getValue;
         jest.spyOn(SettingsStore, "getValue").mockImplementation((feature) => {
-            if (feature === UIFeature.ShareSocial) return true;
+            if (feature === UIFeature.ShareSocial) return false;
             return originalGetValue(feature);
         });
-        const { container } = render(<ShareDialog target={room} onFinished={jest.fn()} />, getWrapper());
-        const qrCodesVisible = container.getElementsByClassName("mx_ShareDialog_social_container").length > 0;
-        expect(qrCodesVisible).toBe(true);
-    });
-    it("renders custom title and subtitle", () => {
-        const { container } = render(
-            <ShareDialog
-                target={room}
-                customTitle="test_title_123"
-                subtitle="custom_subtitle_1234"
-                onFinished={jest.fn()}
-            />,
-            getWrapper(),
-        );
-        expect(container).toHaveTextContent("test_title_123");
-        expect(container).toHaveTextContent("custom_subtitle_1234");
+
+        const { asFragment } = renderComponent(room);
+        expect(screen.queryByRole("link", { name: "Reddit" })).toBeNull();
+        expect(asFragment()).toMatchSnapshot();
     });
 });
-/**
- *
- * @param count the number of users to create
- */
-function mockRoomMembers(room: Room, count: number) {
-    const members = Array(count)
-        .fill(0)
-        .map((_, index) => new RoomMember(room.roomId, "@alice:example.org"));
-
-    room.currentState.setJoinedMemberCount(members.length);
-    room.getJoinedMembers = jest.fn().mockReturnValue(members);
-}
