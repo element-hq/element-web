@@ -6,14 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Feature, ServerSupport } from "matrix-js-sdk/src/feature";
-import { IRedactOpts, MatrixEvent, RelationType } from "matrix-js-sdk/src/matrix";
+import { IRedactOpts, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import React from "react";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Modal from "../../../Modal";
-import { isVoiceBroadcastStartedEvent } from "../../../voice-broadcast/utils/isVoiceBroadcastStartedEvent";
 import ErrorDialog from "./ErrorDialog";
 import TextInputDialog from "./TextInputDialog";
 
@@ -69,18 +67,6 @@ export function createRedactEventDialog({
 
                 const cli = MatrixClientPeg.safeGet();
                 const withRelTypes: Pick<IRedactOpts, "with_rel_types"> = {};
-
-                // redact related events if this is a voice broadcast started event and
-                // server has support for relation based redactions
-                if (isVoiceBroadcastStartedEvent(mxEvent)) {
-                    const relationBasedRedactionsSupport = cli.canSupport.get(Feature.RelationBasedRedactions);
-                    if (
-                        relationBasedRedactionsSupport &&
-                        relationBasedRedactionsSupport !== ServerSupport.Unsupported
-                    ) {
-                        withRelTypes.with_rel_types = [RelationType.Reference];
-                    }
-                }
 
                 try {
                     onCloseDialog?.();

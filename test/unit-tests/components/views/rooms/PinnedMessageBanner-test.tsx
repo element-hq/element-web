@@ -224,7 +224,7 @@ describe("<PinnedMessageBanner />", () => {
             // The Right panel is opened on another card
             jest.spyOn(RightPanelStore.instance, "isOpenForRoom").mockReturnValue(true);
             jest.spyOn(RightPanelStore.instance, "currentCard", "get").mockReturnValue({
-                phase: RightPanelPhases.RoomMemberList,
+                phase: RightPanelPhases.MemberList,
             });
 
             renderBanner();

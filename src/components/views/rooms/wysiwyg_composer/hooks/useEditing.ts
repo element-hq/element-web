@@ -10,10 +10,10 @@ import { ISendEventResponse } from "matrix-js-sdk/src/matrix";
 import { useCallback, useState } from "react";
 
 import { useMatrixClientContext } from "../../../../../contexts/MatrixClientContext";
-import { useRoomContext } from "../../../../../contexts/RoomContext";
 import EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
 import { endEditing } from "../utils/editing";
 import { editMessage } from "../utils/message";
+import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.tsx";
 
 export function useEditing(
     editorStateTransfer: EditorStateTransfer,
@@ -24,7 +24,7 @@ export function useEditing(
     editMessage(): Promise<ISendEventResponse | undefined>;
     endEditing(): void;
 } {
-    const roomContext = useRoomContext();
+    const roomContext = useScopedRoomContext("timelineRenderingType");
     const mxClient = useMatrixClientContext();
 
     const [isSaveDisabled, setIsSaveDisabled] = useState(true);

@@ -11,20 +11,21 @@ import { RefObject, useCallback, useRef } from "react";
 import defaultDispatcher from "../../../../../dispatcher/dispatcher";
 import { Action } from "../../../../../dispatcher/actions";
 import { ActionPayload } from "../../../../../dispatcher/payloads";
-import { TimelineRenderingType, useRoomContext } from "../../../../../contexts/RoomContext";
+import { TimelineRenderingType } from "../../../../../contexts/RoomContext";
 import { useDispatcher } from "../../../../../hooks/useDispatcher";
 import { focusComposer } from "./utils";
 import { ComposerType } from "../../../../../dispatcher/payloads/ComposerInsertPayload";
 import { ComposerFunctions } from "../types";
 import { setSelection } from "../utils/selection";
 import { useComposerContext } from "../ComposerContext";
+import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.tsx";
 
 export function useWysiwygEditActionHandler(
     disabled: boolean,
     composerElement: RefObject<HTMLElement>,
     composerFunctions: ComposerFunctions,
 ): void {
-    const roomContext = useRoomContext();
+    const roomContext = useScopedRoomContext("timelineRenderingType");
     const composerContext = useComposerContext();
     const timeoutId = useRef<number | null>(null);
 

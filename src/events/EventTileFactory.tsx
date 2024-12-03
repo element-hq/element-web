@@ -41,13 +41,7 @@ import { getMessageModerationState, MessageModerationState } from "../utils/Even
 import HiddenBody from "../components/views/messages/HiddenBody";
 import ViewSourceEvent from "../components/views/messages/ViewSourceEvent";
 import { shouldDisplayAsBeaconTile } from "../utils/beacon/timeline";
-import { shouldDisplayAsVoiceBroadcastTile } from "../voice-broadcast/utils/shouldDisplayAsVoiceBroadcastTile";
 import { ElementCall } from "../models/Call";
-import {
-    isRelatedToVoiceBroadcast,
-    shouldDisplayAsVoiceBroadcastStoppedText,
-    VoiceBroadcastChunkEventType,
-} from "../voice-broadcast";
 
 // Subset of EventTile's IProps plus some mixins
 export interface EventTileTypeProps
@@ -223,12 +217,6 @@ export function pickFactory(
             return MessageEventFactory;
         }
 
-        if (shouldDisplayAsVoiceBroadcastTile(mxEvent)) {
-            return MessageEventFactory;
-        } else if (shouldDisplayAsVoiceBroadcastStoppedText(mxEvent)) {
-            return TextualEventFactory;
-        }
-
         if (SINGULAR_STATE_EVENTS.has(evType) && mxEvent.getStateKey() !== "") {
             return noEventFactoryFactory(); // improper event type to render
         }
@@ -246,16 +234,6 @@ export function pickFactory(
     }
 
     if (mxEvent.isRelation(RelationType.Replace)) {
-        return noEventFactoryFactory();
-    }
-
-    if (mxEvent.getContent()[VoiceBroadcastChunkEventType]) {
-        // hide voice broadcast chunks
-        return noEventFactoryFactory();
-    }
-
-    if (!showHiddenEvents && mxEvent.isDecryptionFailure() && isRelatedToVoiceBroadcast(mxEvent, cli)) {
-        // hide utd events related to a broadcast
         return noEventFactoryFactory();
     }
 

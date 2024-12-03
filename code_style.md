@@ -3,9 +3,9 @@
 This code style applies to projects which the element-web team directly maintains or is reasonably
 adjacent to. As of writing, these are:
 
--   element-desktop
--   element-web
--   matrix-js-sdk
+- element-desktop
+- element-web
+- matrix-js-sdk
 
 Other projects might extend this code style for increased strictness. For example, matrix-events-sdk
 has stricter code organization to reduce the maintenance burden. These projects will declare their code

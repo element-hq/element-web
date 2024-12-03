@@ -23,7 +23,7 @@ interface IProps {
 
 class Search extends React.PureComponent<IProps> {
     public static contextType = RovingTabIndexContext;
-    public declare context: React.ContextType<typeof RovingTabIndexContext>;
+    declare public context: React.ContextType<typeof RovingTabIndexContext>;
 
     private inputRef = React.createRef<HTMLInputElement>();
 

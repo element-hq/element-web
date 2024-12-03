@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import * as React from "react";
-import { EventType, MatrixEvent, Room, RoomMember, THREAD_RELATION_TYPE } from "matrix-js-sdk/src/matrix";
+import { EventType, MatrixEvent, RoomMember, THREAD_RELATION_TYPE } from "matrix-js-sdk/src/matrix";
 import { act, fireEvent, render, screen, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
@@ -19,17 +19,14 @@ import {
     mkStubRoom,
     mockPlatformPeg,
     stubClient,
-    waitEnoughCyclesForModal,
 } from "../../../../test-utils";
 import MessageComposer from "../../../../../src/components/views/rooms/MessageComposer";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
-import RoomContext from "../../../../../src/contexts/RoomContext";
 import { IRoomState } from "../../../../../src/components/structures/RoomView";
 import ResizeNotifier from "../../../../../src/utils/ResizeNotifier";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import { LocalRoom } from "../../../../../src/models/LocalRoom";
-import { Features } from "../../../../../src/settings/Settings";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 import dis from "../../../../../src/dispatcher/dispatcher";
@@ -37,9 +34,7 @@ import { E2EStatus } from "../../../../../src/utils/ShieldUtils";
 import { addTextToComposerRTL } from "../../../../test-utils/composer";
 import UIStore, { UI_EVENTS } from "../../../../../src/stores/UIStore";
 import { Action } from "../../../../../src/dispatcher/actions";
-import { VoiceBroadcastInfoState, VoiceBroadcastRecording } from "../../../../../src/voice-broadcast";
-import { mkVoiceBroadcastInfoStateEvent } from "../../../voice-broadcast/utils/test-utils";
-import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
+import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 
 const openStickerPicker = async (): Promise<void> => {
     await userEvent.click(screen.getByLabelText("More options"));
@@ -49,15 +44,6 @@ const openStickerPicker = async (): Promise<void> => {
 const startVoiceMessage = async (): Promise<void> => {
     await userEvent.click(screen.getByLabelText("More options"));
     await userEvent.click(screen.getByLabelText("Voice Message"));
-};
-
-const setCurrentBroadcastRecording = (room: Room, state: VoiceBroadcastInfoState): void => {
-    const recording = new VoiceBroadcastRecording(
-        mkVoiceBroadcastInfoStateEvent(room.roomId, state, "@user:example.com", "ABC123"),
-        MatrixClientPeg.safeGet(),
-        state,
-    );
-    act(() => SdkContextClass.instance.voiceBroadcastRecordingsStore.setCurrent(recording));
 };
 
 const expectVoiceMessageRecordingTriggered = (): void => {
@@ -78,14 +64,11 @@ describe("MessageComposer", () => {
         await clearAllModals();
         jest.useRealTimers();
 
-        SdkContextClass.instance.voiceBroadcastRecordingsStore.clearCurrent();
-
         // restore settings
         act(() => {
             [
                 "MessageComposerInput.showStickersButton",
                 "MessageComposerInput.showPollsButton",
-                Features.VoiceBroadcast,
                 "feature_wysiwyg_composer",
             ].forEach((setting: string): void => {
                 SettingsStore.setValue(setting, null, SettingLevel.DEVICE, SettingsStore.getDefaultValue(setting));
@@ -211,10 +194,6 @@ describe("MessageComposer", () => {
             {
                 setting: "MessageComposerInput.showPollsButton",
                 buttonLabel: "Poll",
-            },
-            {
-                setting: Features.VoiceBroadcast,
-                buttonLabel: "Voice broadcast",
             },
         ].forEach(({ setting, buttonLabel }) => {
             [true, false].forEach((value: boolean) => {
@@ -437,34 +416,6 @@ describe("MessageComposer", () => {
                 expectVoiceMessageRecordingTriggered();
             });
         });
-
-        describe("when recording a voice broadcast and trying to start a voice message", () => {
-            beforeEach(async () => {
-                setCurrentBroadcastRecording(room, VoiceBroadcastInfoState.Started);
-                wrapAndRender({ room });
-                await startVoiceMessage();
-                await waitEnoughCyclesForModal();
-            });
-
-            it("should not start a voice message and display the info dialog", async () => {
-                expect(screen.queryByLabelText("Stop recording")).not.toBeInTheDocument();
-                expect(screen.getByText("Can't start voice message")).toBeInTheDocument();
-            });
-        });
-
-        describe("when there is a stopped voice broadcast recording and trying to start a voice message", () => {
-            beforeEach(async () => {
-                setCurrentBroadcastRecording(room, VoiceBroadcastInfoState.Stopped);
-                wrapAndRender({ room });
-                await startVoiceMessage();
-                await waitEnoughCyclesForModal();
-            });
-
-            it("should try to start a voice message and should not display the info dialog", async () => {
-                expect(screen.queryByText("Can't start voice message")).not.toBeInTheDocument();
-                expectVoiceMessageRecordingTriggered();
-            });
-        });
     });
 
     describe("for a LocalRoom", () => {
@@ -512,9 +463,9 @@ function wrapAndRender(
 
     const getRawComponent = (props = {}, context = roomContext, client = mockClient) => (
         <MatrixClientContext.Provider value={client}>
-            <RoomContext.Provider value={context}>
+            <ScopedRoomContextProvider {...context}>
                 <MessageComposer {...defaultProps} {...props} />
-            </RoomContext.Provider>
+            </ScopedRoomContextProvider>
         </MatrixClientContext.Provider>
     );
     return {
