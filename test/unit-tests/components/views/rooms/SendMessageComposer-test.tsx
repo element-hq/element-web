@@ -18,7 +18,7 @@ import SendMessageComposer, {
     isQuickReaction,
 } from "../../../../../src/components/views/rooms/SendMessageComposer";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import RoomContext, { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
+import { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
 import EditorModel from "../../../../../src/editor/model";
 import { createPartCreator } from "../../../editor/mock";
 import { createTestClient, mkEvent, mkStubRoom, stubClient } from "../../../../test-utils";
@@ -30,6 +30,7 @@ import { IRoomState, MainSplitContentType } from "../../../../../src/components/
 import { mockPlatformPeg } from "../../../../test-utils/platform";
 import { doMaybeLocalRoomAction } from "../../../../../src/utils/local-room";
 import { addTextToComposer } from "../../../../test-utils/composer";
+import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 
 jest.mock("../../../../../src/utils/local-room", () => ({
     doMaybeLocalRoomAction: jest.fn(),
@@ -77,6 +78,7 @@ describe("<SendMessageComposer/>", () => {
         canAskToJoin: false,
         promptAskToJoin: false,
         viewRoomOpts: { buttons: [] },
+        isRoomEncrypted: false,
     };
     describe("createMessageContent", () => {
         it("sends plaintext messages correctly", () => {
@@ -364,9 +366,9 @@ describe("<SendMessageComposer/>", () => {
         };
         const getRawComponent = (props = {}, roomContext = defaultRoomContext, client = mockClient) => (
             <MatrixClientContext.Provider value={client}>
-                <RoomContext.Provider value={roomContext}>
+                <ScopedRoomContextProvider {...roomContext}>
                     <SendMessageComposer {...defaultProps} {...props} />
-                </RoomContext.Provider>
+                </ScopedRoomContextProvider>
             </MatrixClientContext.Provider>
         );
         const getComponent = (props = {}, roomContext = defaultRoomContext, client = mockClient) => {

@@ -12,7 +12,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { EventType, JoinRule, Room } from "matrix-js-sdk/src/matrix";
 
 import Modal from "../../../../Modal";
-import ShareDialog from "../../dialogs/ShareDialog";
+import { ShareDialog } from "../../dialogs/ShareDialog";
 import { _t } from "../../../../languageHandler";
 import SettingsStore from "../../../../settings/SettingsStore";
 import { calculateRoomVia } from "../../../../utils/permalinks/Permalinks";

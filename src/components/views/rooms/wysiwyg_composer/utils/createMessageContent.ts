@@ -27,28 +27,6 @@ function attachRelation(content: IContent, relation?: IEventRelation): void {
     }
 }
 
-function getHtmlReplyFallback(mxEvent: MatrixEvent): string {
-    const html = mxEvent.getContent().formatted_body;
-    if (!html) {
-        return "";
-    }
-    const rootNode = new DOMParser().parseFromString(html, "text/html").body;
-    const mxReply = rootNode.querySelector("mx-reply");
-    return (mxReply && mxReply.outerHTML) || "";
-}
-
-function getTextReplyFallback(mxEvent: MatrixEvent): string {
-    const body = mxEvent.getContent().body;
-    if (typeof body !== "string") {
-        return "";
-    }
-    const lines = body.split("\n").map((l) => l.trim());
-    if (lines.length > 2 && lines[0].startsWith("> ") && lines[1].length === 0) {
-        return `${lines[0]}\n\n`;
-    }
-    return "";
-}
-
 interface CreateMessageContentParams {
     relation?: IEventRelation;
     replyToEvent?: MatrixEvent;
@@ -63,8 +41,6 @@ export async function createMessageContent(
     { relation, replyToEvent, editedEvent }: CreateMessageContentParams,
 ): Promise<RoomMessageEventContent> {
     const isEditing = isMatrixEvent(editedEvent);
-    const isReply = isEditing ? Boolean(editedEvent.replyEventId) : isMatrixEvent(replyToEvent);
-    const isReplyAndEditing = isEditing && isReply;
 
     const isEmote = message.startsWith(EMOTE_PREFIX);
     if (isEmote) {
@@ -82,12 +58,10 @@ export async function createMessageContent(
     // if we're editing rich text, the message content is pure html
     // BUT if we're not, the message content will be plain text where we need to convert the mentions
     const body = isHTML ? await richToPlain(message, false) : convertPlainTextToBody(message);
-    const bodyPrefix = (isReplyAndEditing && getTextReplyFallback(editedEvent)) || "";
-    const formattedBodyPrefix = (isReplyAndEditing && getHtmlReplyFallback(editedEvent)) || "";
 
     const content = {
         msgtype: isEmote ? MsgType.Emote : MsgType.Text,
-        body: isEditing ? `${bodyPrefix} * ${body}` : body,
+        body: isEditing ? `* ${body}` : body,
     } as RoomMessageTextEventContent & ReplacementEvent<RoomMessageTextEventContent>;
 
     // TODO markdown support
@@ -97,7 +71,7 @@ export async function createMessageContent(
 
     if (formattedBody) {
         content.format = "org.matrix.custom.html";
-        content.formatted_body = isEditing ? `${formattedBodyPrefix} * ${formattedBody}` : formattedBody;
+        content.formatted_body = isEditing ? `* ${formattedBody}` : formattedBody;
     }
 
     if (isEditing) {

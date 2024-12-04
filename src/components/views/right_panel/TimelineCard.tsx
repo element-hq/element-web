@@ -38,6 +38,7 @@ import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import Measured from "../elements/Measured";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { SdkContextClass } from "../../../contexts/SDKContext";
+import { ScopedRoomContextProvider } from "../../../contexts/ScopedRoomContext.tsx";
 
 interface IProps {
     room: Room;
@@ -68,7 +69,7 @@ interface IState {
 
 export default class TimelineCard extends React.Component<IProps, IState> {
     public static contextType = RoomContext;
-    public declare context: React.ContextType<typeof RoomContext>;
+    declare public context: React.ContextType<typeof RoomContext>;
 
     private dispatcherRef?: string;
     private layoutWatcherRef?: string;
@@ -199,13 +200,11 @@ export default class TimelineCard extends React.Component<IProps, IState> {
         const showComposer = myMembership === KnownMembership.Join;
 
         return (
-            <RoomContext.Provider
-                value={{
-                    ...this.context,
-                    timelineRenderingType: this.props.timelineRenderingType ?? this.context.timelineRenderingType,
-                    liveTimeline: this.props.timelineSet?.getLiveTimeline(),
-                    narrow: this.state.narrow,
-                }}
+            <ScopedRoomContextProvider
+                {...this.context}
+                timelineRenderingType={this.props.timelineRenderingType ?? this.context.timelineRenderingType}
+                liveTimeline={this.props.timelineSet?.getLiveTimeline()}
+                narrow={this.state.narrow}
             >
                 <BaseCard
                     className={this.props.classNames}
@@ -255,7 +254,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
                         />
                     )}
                 </BaseCard>
-            </RoomContext.Provider>
+            </ScopedRoomContextProvider>
         );
     }
 }

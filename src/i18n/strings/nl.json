@@ -774,7 +774,6 @@
         },
         "udd": {
             "interactive_verification_button": "Interactief verifiëren door emoji",
-            "manual_verification_button": "Handmatig verifiëren via tekst",
             "other_ask_verify_text": "Vraag deze persoon de sessie te verifiëren, of verifieer het handmatig hieronder.",
             "other_new_session_text": "%(name)s%(userId)s heeft zich aangemeld bij een nieuwe sessie zonder deze te verifiëren:",
             "own_ask_verify_text": "Verifieer je andere sessie op een van onderstaande wijzen.",
@@ -806,12 +805,6 @@
             "incoming_sas_dialog_title": "Inkomend verificatieverzoek",
             "incoming_sas_user_dialog_text_1": "Verifieer deze persoon om als vertrouwd te markeren. Personen vertrouwen geeft je extra zekerheid bij het gebruik van eind-tot-eind-versleutelde berichten.",
             "incoming_sas_user_dialog_text_2": "Deze persoon verifiëren zal de sessie als vertrouwd markeren voor jullie beide.",
-            "manual_device_verification_device_id_label": "Sessie-ID",
-            "manual_device_verification_device_key_label": "Sessiesleutel",
-            "manual_device_verification_device_name_label": "Sessienaam",
-            "manual_device_verification_footer": "Als deze niet overeenkomen, dan wordt deze sessie mogelijk door iemand anders onderschept.",
-            "manual_device_verification_self_text": "Bevestig door het volgende te vergelijken met de persoonsinstellingen in je andere sessie:",
-            "manual_device_verification_user_text": "Bevestig de sessie van deze persoon door het volgende te vergelijken met zijn persoonsinstellingen:",
             "no_key_or_device": "Het lijkt erop dat je geen veiligheidssleutel hebt of andere apparaten waarmee je kunt verifiëren.  Dit apparaat heeft geen toegang tot oude versleutelde berichten. Om je identiteit op dit apparaat te verifiëren, moet je jouw verificatiesleutels opnieuw instellen.",
             "no_support_qr_emoji": "Het apparaat dat je probeert te verifiëren ondersteund niet de door %(brand)s ondersteunde methodes: scannen van een QR-code of emoji verificatie. Probeer het met een andere app.",
             "other_party_cancelled": "De tegenpartij heeft de verificatie geannuleerd.",
@@ -1214,8 +1207,7 @@
         "video_rooms_faq1_answer": "Gebruik de knop \"+\" in het kamergedeelte van het linkerpaneel.",
         "video_rooms_faq1_question": "Hoe kan ik een videokamer maken?",
         "video_rooms_faq2_answer": "Ja, de gesprekstijdslijn wordt naast de video weergegeven.",
-        "video_rooms_faq2_question": "Kan ik tekstberichten gebruiken naast het videogesprek?",
-        "voice_broadcast": "Spraakuitzending"
+        "video_rooms_faq2_question": "Kan ik tekstberichten gebruiken naast het videogesprek?"
     },
     "labs_mjolnir": {
         "advanced_warning": "⚠ Deze instellingen zijn bedoeld voor gevorderde personen.",
@@ -1824,7 +1816,6 @@
             "error_unbanning": "Ontbannen mislukt",
             "events_default": "Berichten versturen",
             "invite": "Personen uitnodigen",
-            "io.element.voice_broadcast_info": "Spraakuitzendingen",
             "kick": "Personen verwijderen",
             "m.call": "%(brand)s oproepen starten",
             "m.call.member": "Deelnemen aan %(brand)s gesprekken",
@@ -2363,7 +2354,6 @@
         "warn_quit": "Waarschuwen voordat je afsluit"
     },
     "share": {
-        "link_title": "Link naar kamer",
         "permalink_message": "Koppeling naar geselecteerd bericht",
         "permalink_most_recent": "Koppeling naar meest recente bericht",
         "title_message": "Bericht uit kamer delen",
@@ -2445,12 +2435,6 @@
         "upgraderoom": "Upgrade deze kamer naar een nieuwere versie",
         "upgraderoom_permission_error": "Je beschikt niet over de vereiste machtigingen om deze opdracht uit te voeren.",
         "usage": "Gebruik",
-        "verify": "Verifieert de combinatie van persoon, sessie en publieke sleutel",
-        "verify_mismatch": "PAS OP: sleutelverificatie MISLUKT! De combinatie %(userId)s + sessie %(deviceId)s is ondertekend met ‘%(fprint)s’ - maar de opgegeven sleutel is ‘%(fingerprint)s’.  Wellicht worden jouw berichten onderschept!",
-        "verify_nop": "Sessie al geverifieerd!",
-        "verify_success_description": "De door jou verschafte sleutel en de van %(userId)ss sessie %(deviceId)s verkregen sleutels komen overeen. De sessie is daarmee geverifieerd.",
-        "verify_success_title": "Geverifieerde sleutel",
-        "verify_unknown_pair": "Onbekend paar (persoon, sessie): (%(userId)s, %(deviceId)s)",
         "whois": "Geeft informatie weer over een persoon"
     },
     "space": {
@@ -3154,20 +3138,6 @@
         "settings": "Instellingen",
         "switch_theme_dark": "Naar donkere modus wisselen",
         "switch_theme_light": "Naar lichte modus wisselen"
-    },
-    "voice_broadcast": {
-        "action": "Spraakuitzending",
-        "confirm_stop_affirm": "Ja, stop uitzending",
-        "confirm_stop_title": "Live uitzending stoppen?",
-        "failed_already_recording_description": "U neemt al een spraakuitzending op. Beëindig uw huidige spraakuitzending om een nieuwe te starten.",
-        "failed_already_recording_title": "Kan geen nieuwe spraakuitzending starten",
-        "failed_insufficient_permission_description": "U heeft niet de vereiste rechten om een spraakuitzending in deze kamer te starten. Neem contact op met een kamer beheerder om uw machtiging aan te passen.",
-        "failed_insufficient_permission_title": "Kan geen nieuwe spraakuitzending starten",
-        "failed_others_already_recording_description": "Iemand anders neemt al een spraakuitzending op. Wacht tot de spraakuitzending is afgelopen om een nieuwe te starten.",
-        "failed_others_already_recording_title": "Kan geen nieuwe spraakuitzending starten",
-        "pause": "spraakuitzending pauzeren",
-        "play": "spraakuitzending afspelen",
-        "resume": "hervat spraakuitzending"
     },
     "voip": {
         "already_in_call": "Al in de oproep",

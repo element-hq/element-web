@@ -1,0 +1,852 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ShareDialog should not render the QR code if disabled 1`] = `
+<DocumentFragment>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-describedby="mx_Dialog_content"
+    aria-labelledby="mx_BaseDialog_title"
+    class="mx_ShareDialog"
+    data-focus-lock-disabled="false"
+    role="dialog"
+  >
+    <div
+      class="mx_Dialog_header"
+    >
+      <h1
+        class="mx_Heading_h3 mx_Dialog_title"
+        id="mx_BaseDialog_title"
+      >
+        Share Room
+      </h1>
+    </div>
+    <div
+      class="mx_ShareDialog_content"
+    >
+      <div
+        class="mx_ShareDialog_top"
+      >
+        <span>
+          https://matrix.to/#/!1:example.org
+        </span>
+      </div>
+      <button
+        class="_button_i91xf_17 _has-icon_i91xf_66"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 19.071c-.978.978-2.157 1.467-3.536 1.467-1.378 0-2.557-.489-3.535-1.467-.978-.978-1.467-2.157-1.467-3.536 0-1.378.489-2.557 1.467-3.535L7.05 9.879c.2-.2.436-.3.707-.3.271 0 .507.1.707.3.2.2.301.436.301.707 0 .27-.1.506-.3.707l-2.122 2.121a2.893 2.893 0 0 0-.884 2.122c0 .824.295 1.532.884 2.12.59.59 1.296.885 2.121.885s1.533-.295 2.122-.884l2.121-2.121c.2-.2.436-.301.707-.301.271 0 .507.1.707.3.2.2.3.437.3.708 0 .27-.1.506-.3.707L12 19.07Zm-1.414-4.243c-.2.2-.436.3-.707.3a.967.967 0 0 1-.707-.3.969.969 0 0 1-.301-.707c0-.27.1-.507.3-.707l4.243-4.242c.2-.2.436-.301.707-.301.271 0 .507.1.707.3.2.2.3.437.3.708 0 .27-.1.506-.3.707l-4.242 4.242Zm6.364-.707c-.2.2-.436.3-.707.3a.968.968 0 0 1-.707-.3.969.969 0 0 1-.301-.707c0-.27.1-.507.3-.707l2.122-2.121c.59-.59.884-1.297.884-2.122s-.295-1.532-.884-2.12a2.893 2.893 0 0 0-2.121-.885c-.825 0-1.532.295-2.122.884l-2.121 2.121c-.2.2-.436.301-.707.301a.968.968 0 0 1-.707-.3.97.97 0 0 1-.3-.708c0-.27.1-.506.3-.707L12 4.93c.978-.978 2.157-1.467 3.536-1.467 1.378 0 2.557.489 3.535 1.467.978.978 1.467 2.157 1.467 3.535 0 1.38-.489 2.558-1.467 3.536l-2.121 2.121Z"
+          />
+        </svg>
+        Copy link
+      </button>
+      <div
+        class="mx_ShareDialog_social"
+      >
+        <a
+          href="https://www.facebook.com/sharer/sharer.php?u=https://matrix.to/#/!1:example.org"
+          rel="noreferrer noopener"
+          target="_blank"
+          title="Facebook"
+        >
+          <img
+            alt="Facebook"
+            src="image-file-stub"
+          />
+        </a>
+        <a
+          href="https://twitter.com/home?status=https://matrix.to/#/!1:example.org"
+          rel="noreferrer noopener"
+          target="_blank"
+          title="Twitter"
+        >
+          <img
+            alt="Twitter"
+            src="image-file-stub"
+          />
+        </a>
+        <a
+          href="https://www.linkedin.com/shareArticle?mini=true&url=https://matrix.to/#/!1:example.org"
+          rel="noreferrer noopener"
+          target="_blank"
+          title="LinkedIn"
+        >
+          <img
+            alt="LinkedIn"
+            src="image-file-stub"
+          />
+        </a>
+        <a
+          href="https://www.reddit.com/submit?url=https://matrix.to/#/!1:example.org"
+          rel="noreferrer noopener"
+          target="_blank"
+          title="Reddit"
+        >
+          <img
+            alt="Reddit"
+            src="image-file-stub"
+          />
+        </a>
+        <a
+          href="mailto:?body=https://matrix.to/#/!1:example.org"
+          rel="noreferrer noopener"
+          target="_blank"
+          title="email"
+        >
+          <img
+            alt="email"
+            src="image-file-stub"
+          />
+        </a>
+      </div>
+    </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</DocumentFragment>
+`;
+
+exports[`ShareDialog should not render the socials if disabled 1`] = `
+<DocumentFragment>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-describedby="mx_Dialog_content"
+    aria-labelledby="mx_BaseDialog_title"
+    class="mx_ShareDialog"
+    data-focus-lock-disabled="false"
+    role="dialog"
+  >
+    <div
+      class="mx_Dialog_header"
+    >
+      <h1
+        class="mx_Heading_h3 mx_Dialog_title"
+        id="mx_BaseDialog_title"
+      >
+        Share Room
+      </h1>
+    </div>
+    <div
+      class="mx_ShareDialog_content"
+    >
+      <div
+        class="mx_ShareDialog_top"
+      >
+        <div
+          class="mx_QRCode"
+        >
+          <div
+            class="mx_Spinner"
+          >
+            <div
+              aria-label="Loading…"
+              class="mx_Spinner_icon"
+              data-testid="spinner"
+              role="progressbar"
+              style="width: 32px; height: 32px;"
+            />
+          </div>
+        </div>
+        <span>
+          https://matrix.to/#/!1:example.org
+        </span>
+      </div>
+      <button
+        class="_button_i91xf_17 _has-icon_i91xf_66"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 19.071c-.978.978-2.157 1.467-3.536 1.467-1.378 0-2.557-.489-3.535-1.467-.978-.978-1.467-2.157-1.467-3.536 0-1.378.489-2.557 1.467-3.535L7.05 9.879c.2-.2.436-.3.707-.3.271 0 .507.1.707.3.2.2.301.436.301.707 0 .27-.1.506-.3.707l-2.122 2.121a2.893 2.893 0 0 0-.884 2.122c0 .824.295 1.532.884 2.12.59.59 1.296.885 2.121.885s1.533-.295 2.122-.884l2.121-2.121c.2-.2.436-.301.707-.301.271 0 .507.1.707.3.2.2.3.437.3.708 0 .27-.1.506-.3.707L12 19.07Zm-1.414-4.243c-.2.2-.436.3-.707.3a.967.967 0 0 1-.707-.3.969.969 0 0 1-.301-.707c0-.27.1-.507.3-.707l4.243-4.242c.2-.2.436-.301.707-.301.271 0 .507.1.707.3.2.2.3.437.3.708 0 .27-.1.506-.3.707l-4.242 4.242Zm6.364-.707c-.2.2-.436.3-.707.3a.968.968 0 0 1-.707-.3.969.969 0 0 1-.301-.707c0-.27.1-.507.3-.707l2.122-2.121c.59-.59.884-1.297.884-2.122s-.295-1.532-.884-2.12a2.893 2.893 0 0 0-2.121-.885c-.825 0-1.532.295-2.122.884l-2.121 2.121c-.2.2-.436.301-.707.301a.968.968 0 0 1-.707-.3.97.97 0 0 1-.3-.708c0-.27.1-.506.3-.707L12 4.93c.978-.978 2.157-1.467 3.536-1.467 1.378 0 2.557.489 3.535 1.467.978.978 1.467 2.157 1.467 3.535 0 1.38-.489 2.558-1.467 3.536l-2.121 2.121Z"
+          />
+        </svg>
+        Copy link
+      </button>
+    </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</DocumentFragment>
+`;
+
+exports[`ShareDialog should render a share dialog for a matrix event 1`] = `
+<DocumentFragment>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-describedby="mx_Dialog_content"
+    aria-labelledby="mx_BaseDialog_title"
+    class="mx_ShareDialog"
+    data-focus-lock-disabled="false"
+    role="dialog"
+  >
+    <div
+      class="mx_Dialog_header"
+    >
+      <h1
+        class="mx_Heading_h3 mx_Dialog_title"
+        id="mx_BaseDialog_title"
+      >
+        Share Room Message
+      </h1>
+    </div>
+    <div
+      class="mx_ShareDialog_content"
+    >
+      <div
+        class="mx_ShareDialog_top"
+      >
+        <div
+          class="mx_QRCode"
+        >
+          <div
+            class="mx_Spinner"
+          >
+            <div
+              aria-label="Loading…"
+              class="mx_Spinner_icon"
+              data-testid="spinner"
+              role="progressbar"
+              style="width: 32px; height: 32px;"
+            />
+          </div>
+        </div>
+        <span>
+          https://matrix.to/#/!1:example.org/!eventId
+        </span>
+      </div>
+      <label>
+        <div
+          class="_container_1wloq_18"
+        >
+          <input
+            checked=""
+            class="_input_1wloq_26"
+            type="checkbox"
+          />
+          <div
+            class="_ui_1wloq_27"
+          >
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M9.55 17.575c-.133 0-.258-.02-.375-.063a.876.876 0 0 1-.325-.212L4.55 13c-.183-.183-.27-.42-.263-.713.009-.291.105-.529.288-.712a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275L9.55 15.15l8.475-8.475c.183-.183.42-.275.713-.275.291 0 .529.092.712.275.183.183.275.42.275.713 0 .291-.092.529-.275.712l-9.2 9.2c-.1.1-.208.17-.325.212a1.106 1.106 0 0 1-.375.063Z"
+              />
+            </svg>
+          </div>
+        </div>
+        Link to selected message
+      </label>
+      <button
+        class="_button_i91xf_17 _has-icon_i91xf_66"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 19.071c-.978.978-2.157 1.467-3.536 1.467-1.378 0-2.557-.489-3.535-1.467-.978-.978-1.467-2.157-1.467-3.536 0-1.378.489-2.557 1.467-3.535L7.05 9.879c.2-.2.436-.3.707-.3.271 0 .507.1.707.3.2.2.301.436.301.707 0 .27-.1.506-.3.707l-2.122 2.121a2.893 2.893 0 0 0-.884 2.122c0 .824.295 1.532.884 2.12.59.59 1.296.885 2.121.885s1.533-.295 2.122-.884l2.121-2.121c.2-.2.436-.301.707-.301.271 0 .507.1.707.3.2.2.3.437.3.708 0 .27-.1.506-.3.707L12 19.07Zm-1.414-4.243c-.2.2-.436.3-.707.3a.967.967 0 0 1-.707-.3.969.969 0 0 1-.301-.707c0-.27.1-.507.3-.707l4.243-4.242c.2-.2.436-.301.707-.301.271 0 .507.1.707.3.2.2.3.437.3.708 0 .27-.1.506-.3.707l-4.242 4.242Zm6.364-.707c-.2.2-.436.3-.707.3a.968.968 0 0 1-.707-.3.969.969 0 0 1-.301-.707c0-.27.1-.507.3-.707l2.122-2.121c.59-.59.884-1.297.884-2.122s-.295-1.532-.884-2.12a2.893 2.893 0 0 0-2.121-.885c-.825 0-1.532.295-2.122.884l-2.121 2.121c-.2.2-.436.301-.707.301a.968.968 0 0 1-.707-.3.97.97 0 0 1-.3-.708c0-.27.1-.506.3-.707L12 4.93c.978-.978 2.157-1.467 3.536-1.467 1.378 0 2.557.489 3.535 1.467.978.978 1.467 2.157 1.467 3.535 0 1.38-.489 2.558-1.467 3.536l-2.121 2.121Z"
+          />
+        </svg>
+        Copy link
+      </button>
+      <div
+        class="mx_ShareDialog_social"
+      >
+        <a
+          href="https://www.facebook.com/sharer/sharer.php?u=https://matrix.to/#/!1:example.org/!eventId"
+          rel="noreferrer noopener"
+          target="_blank"
+          title="Facebook"
+        >
+          <img
+            alt="Facebook"
+            src="image-file-stub"
+          />
+        </a>
+        <a
+          href="https://twitter.com/home?status=https://matrix.to/#/!1:example.org/!eventId"
+          rel="noreferrer noopener"
+          target="_blank"
+          title="Twitter"
+        >
+          <img
+            alt="Twitter"
+            src="image-file-stub"
+          />
+        </a>
+        <a
+          href="https://www.linkedin.com/shareArticle?mini=true&url=https://matrix.to/#/!1:example.org/!eventId"
+          rel="noreferrer noopener"
+          target="_blank"
+          title="LinkedIn"
+        >
+          <img
+            alt="LinkedIn"
+            src="image-file-stub"
+          />
+        </a>
+        <a
+          href="https://www.reddit.com/submit?url=https://matrix.to/#/!1:example.org/!eventId"
+          rel="noreferrer noopener"
+          target="_blank"
+          title="Reddit"
+        >
+          <img
+            alt="Reddit"
+            src="image-file-stub"
+          />
+        </a>
+        <a
+          href="mailto:?body=https://matrix.to/#/!1:example.org/!eventId"
+          rel="noreferrer noopener"
+          target="_blank"
+          title="email"
+        >
+          <img
+            alt="email"
+            src="image-file-stub"
+          />
+        </a>
+      </div>
+    </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</DocumentFragment>
+`;
+
+exports[`ShareDialog should render a share dialog for a room 1`] = `
+<DocumentFragment>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-describedby="mx_Dialog_content"
+    aria-labelledby="mx_BaseDialog_title"
+    class="mx_ShareDialog"
+    data-focus-lock-disabled="false"
+    role="dialog"
+  >
+    <div
+      class="mx_Dialog_header"
+    >
+      <h1
+        class="mx_Heading_h3 mx_Dialog_title"
+        id="mx_BaseDialog_title"
+      >
+        Share Room
+      </h1>
+    </div>
+    <div
+      class="mx_ShareDialog_content"
+    >
+      <div
+        class="mx_ShareDialog_top"
+      >
+        <div
+          class="mx_QRCode"
+        >
+          <div
+            class="mx_Spinner"
+          >
+            <div
+              aria-label="Loading…"
+              class="mx_Spinner_icon"
+              data-testid="spinner"
+              role="progressbar"
+              style="width: 32px; height: 32px;"
+            />
+          </div>
+        </div>
+        <span>
+          https://matrix.to/#/!1:example.org
+        </span>
+      </div>
+      <label>
+        <div
+          class="_container_1wloq_18"
+        >
+          <input
+            class="_input_1wloq_26"
+            type="checkbox"
+          />
+          <div
+            class="_ui_1wloq_27"
+          >
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M9.55 17.575c-.133 0-.258-.02-.375-.063a.876.876 0 0 1-.325-.212L4.55 13c-.183-.183-.27-.42-.263-.713.009-.291.105-.529.288-.712a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275L9.55 15.15l8.475-8.475c.183-.183.42-.275.713-.275.291 0 .529.092.712.275.183.183.275.42.275.713 0 .291-.092.529-.275.712l-9.2 9.2c-.1.1-.208.17-.325.212a1.106 1.106 0 0 1-.375.063Z"
+              />
+            </svg>
+          </div>
+        </div>
+        Link to most recent message
+      </label>
+      <button
+        class="_button_i91xf_17 _has-icon_i91xf_66"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 19.071c-.978.978-2.157 1.467-3.536 1.467-1.378 0-2.557-.489-3.535-1.467-.978-.978-1.467-2.157-1.467-3.536 0-1.378.489-2.557 1.467-3.535L7.05 9.879c.2-.2.436-.3.707-.3.271 0 .507.1.707.3.2.2.301.436.301.707 0 .27-.1.506-.3.707l-2.122 2.121a2.893 2.893 0 0 0-.884 2.122c0 .824.295 1.532.884 2.12.59.59 1.296.885 2.121.885s1.533-.295 2.122-.884l2.121-2.121c.2-.2.436-.301.707-.301.271 0 .507.1.707.3.2.2.3.437.3.708 0 .27-.1.506-.3.707L12 19.07Zm-1.414-4.243c-.2.2-.436.3-.707.3a.967.967 0 0 1-.707-.3.969.969 0 0 1-.301-.707c0-.27.1-.507.3-.707l4.243-4.242c.2-.2.436-.301.707-.301.271 0 .507.1.707.3.2.2.3.437.3.708 0 .27-.1.506-.3.707l-4.242 4.242Zm6.364-.707c-.2.2-.436.3-.707.3a.968.968 0 0 1-.707-.3.969.969 0 0 1-.301-.707c0-.27.1-.507.3-.707l2.122-2.121c.59-.59.884-1.297.884-2.122s-.295-1.532-.884-2.12a2.893 2.893 0 0 0-2.121-.885c-.825 0-1.532.295-2.122.884l-2.121 2.121c-.2.2-.436.301-.707.301a.968.968 0 0 1-.707-.3.97.97 0 0 1-.3-.708c0-.27.1-.506.3-.707L12 4.93c.978-.978 2.157-1.467 3.536-1.467 1.378 0 2.557.489 3.535 1.467.978.978 1.467 2.157 1.467 3.535 0 1.38-.489 2.558-1.467 3.536l-2.121 2.121Z"
+          />
+        </svg>
+        Copy link
+      </button>
+      <div
+        class="mx_ShareDialog_social"
+      >
+        <a
+          href="https://www.facebook.com/sharer/sharer.php?u=https://matrix.to/#/!1:example.org"
+          rel="noreferrer noopener"
+          target="_blank"
+          title="Facebook"
+        >
+          <img
+            alt="Facebook"
+            src="image-file-stub"
+          />
+        </a>
+        <a
+          href="https://twitter.com/home?status=https://matrix.to/#/!1:example.org"
+          rel="noreferrer noopener"
+          target="_blank"
+          title="Twitter"
+        >
+          <img
+            alt="Twitter"
+            src="image-file-stub"
+          />
+        </a>
+        <a
+          href="https://www.linkedin.com/shareArticle?mini=true&url=https://matrix.to/#/!1:example.org"
+          rel="noreferrer noopener"
+          target="_blank"
+          title="LinkedIn"
+        >
+          <img
+            alt="LinkedIn"
+            src="image-file-stub"
+          />
+        </a>
+        <a
+          href="https://www.reddit.com/submit?url=https://matrix.to/#/!1:example.org"
+          rel="noreferrer noopener"
+          target="_blank"
+          title="Reddit"
+        >
+          <img
+            alt="Reddit"
+            src="image-file-stub"
+          />
+        </a>
+        <a
+          href="mailto:?body=https://matrix.to/#/!1:example.org"
+          rel="noreferrer noopener"
+          target="_blank"
+          title="email"
+        >
+          <img
+            alt="email"
+            src="image-file-stub"
+          />
+        </a>
+      </div>
+    </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</DocumentFragment>
+`;
+
+exports[`ShareDialog should render a share dialog for a room member 1`] = `
+<DocumentFragment>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-describedby="mx_Dialog_content"
+    aria-labelledby="mx_BaseDialog_title"
+    class="mx_ShareDialog"
+    data-focus-lock-disabled="false"
+    role="dialog"
+  >
+    <div
+      class="mx_Dialog_header"
+    >
+      <h1
+        class="mx_Heading_h3 mx_Dialog_title"
+        id="mx_BaseDialog_title"
+      >
+        Share User
+      </h1>
+    </div>
+    <div
+      class="mx_ShareDialog_content"
+    >
+      <div
+        class="mx_ShareDialog_top"
+      >
+        <div
+          class="mx_QRCode"
+        >
+          <div
+            class="mx_Spinner"
+          >
+            <div
+              aria-label="Loading…"
+              class="mx_Spinner_icon"
+              data-testid="spinner"
+              role="progressbar"
+              style="width: 32px; height: 32px;"
+            />
+          </div>
+        </div>
+        <span>
+          https://matrix.to/#/@alice:example.org
+        </span>
+      </div>
+      <button
+        class="_button_i91xf_17 _has-icon_i91xf_66"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 19.071c-.978.978-2.157 1.467-3.536 1.467-1.378 0-2.557-.489-3.535-1.467-.978-.978-1.467-2.157-1.467-3.536 0-1.378.489-2.557 1.467-3.535L7.05 9.879c.2-.2.436-.3.707-.3.271 0 .507.1.707.3.2.2.301.436.301.707 0 .27-.1.506-.3.707l-2.122 2.121a2.893 2.893 0 0 0-.884 2.122c0 .824.295 1.532.884 2.12.59.59 1.296.885 2.121.885s1.533-.295 2.122-.884l2.121-2.121c.2-.2.436-.301.707-.301.271 0 .507.1.707.3.2.2.3.437.3.708 0 .27-.1.506-.3.707L12 19.07Zm-1.414-4.243c-.2.2-.436.3-.707.3a.967.967 0 0 1-.707-.3.969.969 0 0 1-.301-.707c0-.27.1-.507.3-.707l4.243-4.242c.2-.2.436-.301.707-.301.271 0 .507.1.707.3.2.2.3.437.3.708 0 .27-.1.506-.3.707l-4.242 4.242Zm6.364-.707c-.2.2-.436.3-.707.3a.968.968 0 0 1-.707-.3.969.969 0 0 1-.301-.707c0-.27.1-.507.3-.707l2.122-2.121c.59-.59.884-1.297.884-2.122s-.295-1.532-.884-2.12a2.893 2.893 0 0 0-2.121-.885c-.825 0-1.532.295-2.122.884l-2.121 2.121c-.2.2-.436.301-.707.301a.968.968 0 0 1-.707-.3.97.97 0 0 1-.3-.708c0-.27.1-.506.3-.707L12 4.93c.978-.978 2.157-1.467 3.536-1.467 1.378 0 2.557.489 3.535 1.467.978.978 1.467 2.157 1.467 3.535 0 1.38-.489 2.558-1.467 3.536l-2.121 2.121Z"
+          />
+        </svg>
+        Copy link
+      </button>
+      <div
+        class="mx_ShareDialog_social"
+      >
+        <a
+          href="https://www.facebook.com/sharer/sharer.php?u=https://matrix.to/#/@alice:example.org"
+          rel="noreferrer noopener"
+          target="_blank"
+          title="Facebook"
+        >
+          <img
+            alt="Facebook"
+            src="image-file-stub"
+          />
+        </a>
+        <a
+          href="https://twitter.com/home?status=https://matrix.to/#/@alice:example.org"
+          rel="noreferrer noopener"
+          target="_blank"
+          title="Twitter"
+        >
+          <img
+            alt="Twitter"
+            src="image-file-stub"
+          />
+        </a>
+        <a
+          href="https://www.linkedin.com/shareArticle?mini=true&url=https://matrix.to/#/@alice:example.org"
+          rel="noreferrer noopener"
+          target="_blank"
+          title="LinkedIn"
+        >
+          <img
+            alt="LinkedIn"
+            src="image-file-stub"
+          />
+        </a>
+        <a
+          href="https://www.reddit.com/submit?url=https://matrix.to/#/@alice:example.org"
+          rel="noreferrer noopener"
+          target="_blank"
+          title="Reddit"
+        >
+          <img
+            alt="Reddit"
+            src="image-file-stub"
+          />
+        </a>
+        <a
+          href="mailto:?body=https://matrix.to/#/@alice:example.org"
+          rel="noreferrer noopener"
+          target="_blank"
+          title="email"
+        >
+          <img
+            alt="email"
+            src="image-file-stub"
+          />
+        </a>
+      </div>
+    </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</DocumentFragment>
+`;
+
+exports[`ShareDialog should render a share dialog for an URL 1`] = `
+<DocumentFragment>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+  <div
+    aria-describedby="mx_Dialog_content"
+    aria-labelledby="mx_BaseDialog_title"
+    class="mx_ShareDialog"
+    data-focus-lock-disabled="false"
+    role="dialog"
+  >
+    <div
+      class="mx_Dialog_header"
+    >
+      <h1
+        class="mx_Heading_h3 mx_Dialog_title"
+        id="mx_BaseDialog_title"
+      >
+        Share Link
+      </h1>
+    </div>
+    <div
+      class="mx_ShareDialog_content"
+    >
+      <div
+        class="mx_ShareDialog_top"
+      >
+        <div
+          class="mx_QRCode"
+        >
+          <div
+            class="mx_Spinner"
+          >
+            <div
+              aria-label="Loading…"
+              class="mx_Spinner_icon"
+              data-testid="spinner"
+              role="progressbar"
+              style="width: 32px; height: 32px;"
+            />
+          </div>
+        </div>
+        <span>
+          https://matrix.org/
+        </span>
+      </div>
+      <button
+        class="_button_i91xf_17 _has-icon_i91xf_66"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          aria-hidden="true"
+          fill="currentColor"
+          height="20"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 19.071c-.978.978-2.157 1.467-3.536 1.467-1.378 0-2.557-.489-3.535-1.467-.978-.978-1.467-2.157-1.467-3.536 0-1.378.489-2.557 1.467-3.535L7.05 9.879c.2-.2.436-.3.707-.3.271 0 .507.1.707.3.2.2.301.436.301.707 0 .27-.1.506-.3.707l-2.122 2.121a2.893 2.893 0 0 0-.884 2.122c0 .824.295 1.532.884 2.12.59.59 1.296.885 2.121.885s1.533-.295 2.122-.884l2.121-2.121c.2-.2.436-.301.707-.301.271 0 .507.1.707.3.2.2.3.437.3.708 0 .27-.1.506-.3.707L12 19.07Zm-1.414-4.243c-.2.2-.436.3-.707.3a.967.967 0 0 1-.707-.3.969.969 0 0 1-.301-.707c0-.27.1-.507.3-.707l4.243-4.242c.2-.2.436-.301.707-.301.271 0 .507.1.707.3.2.2.3.437.3.708 0 .27-.1.506-.3.707l-4.242 4.242Zm6.364-.707c-.2.2-.436.3-.707.3a.968.968 0 0 1-.707-.3.969.969 0 0 1-.301-.707c0-.27.1-.507.3-.707l2.122-2.121c.59-.59.884-1.297.884-2.122s-.295-1.532-.884-2.12a2.893 2.893 0 0 0-2.121-.885c-.825 0-1.532.295-2.122.884l-2.121 2.121c-.2.2-.436.301-.707.301a.968.968 0 0 1-.707-.3.97.97 0 0 1-.3-.708c0-.27.1-.506.3-.707L12 4.93c.978-.978 2.157-1.467 3.536-1.467 1.378 0 2.557.489 3.535 1.467.978.978 1.467 2.157 1.467 3.535 0 1.38-.489 2.558-1.467 3.536l-2.121 2.121Z"
+          />
+        </svg>
+        Copy link
+      </button>
+      <div
+        class="mx_ShareDialog_social"
+      >
+        <a
+          href="https://www.facebook.com/sharer/sharer.php?u=https://matrix.org/"
+          rel="noreferrer noopener"
+          target="_blank"
+          title="Facebook"
+        >
+          <img
+            alt="Facebook"
+            src="image-file-stub"
+          />
+        </a>
+        <a
+          href="https://twitter.com/home?status=https://matrix.org/"
+          rel="noreferrer noopener"
+          target="_blank"
+          title="Twitter"
+        >
+          <img
+            alt="Twitter"
+            src="image-file-stub"
+          />
+        </a>
+        <a
+          href="https://www.linkedin.com/shareArticle?mini=true&url=https://matrix.org/"
+          rel="noreferrer noopener"
+          target="_blank"
+          title="LinkedIn"
+        >
+          <img
+            alt="LinkedIn"
+            src="image-file-stub"
+          />
+        </a>
+        <a
+          href="https://www.reddit.com/submit?url=https://matrix.org/"
+          rel="noreferrer noopener"
+          target="_blank"
+          title="Reddit"
+        >
+          <img
+            alt="Reddit"
+            src="image-file-stub"
+          />
+        </a>
+        <a
+          href="mailto:?body=https://matrix.org/"
+          rel="noreferrer noopener"
+          target="_blank"
+          title="email"
+        >
+          <img
+            alt="email"
+            src="image-file-stub"
+          />
+        </a>
+      </div>
+    </div>
+    <div
+      aria-label="Close dialog"
+      class="mx_AccessibleButton mx_Dialog_cancelButton"
+      role="button"
+      tabindex="0"
+    />
+  </div>
+  <div
+    data-focus-guard="true"
+    style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+    tabindex="0"
+  />
+</DocumentFragment>
+`;

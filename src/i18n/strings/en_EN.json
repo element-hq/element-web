@@ -921,7 +921,6 @@
         },
         "udd": {
             "interactive_verification_button": "Interactively verify by emoji",
-            "manual_verification_button": "Manually verify by text",
             "other_ask_verify_text": "Ask this user to verify their session, or manually verify it below.",
             "other_new_session_text": "%(name)s (%(userId)s) signed in to a new session without verifying it:",
             "own_ask_verify_text": "Verify your other session using one of the options below.",
@@ -956,12 +955,6 @@
             "incoming_sas_dialog_waiting": "Waiting for partner to confirm…",
             "incoming_sas_user_dialog_text_1": "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.",
             "incoming_sas_user_dialog_text_2": "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.",
-            "manual_device_verification_device_id_label": "Session ID",
-            "manual_device_verification_device_key_label": "Session key",
-            "manual_device_verification_device_name_label": "Session name",
-            "manual_device_verification_footer": "If they don't match, the security of your communication may be compromised.",
-            "manual_device_verification_self_text": "Confirm by comparing the following with the User Settings in your other session:",
-            "manual_device_verification_user_text": "Confirm this user's session by comparing the following with their User Settings:",
             "no_key_or_device": "It looks like you don't have a Security Key or any other devices you can verify against.  This device will not be able to access old encrypted messages. In order to verify your identity on this device, you'll need to reset your verification keys.",
             "no_support_qr_emoji": "The device you are trying to verify doesn't support scanning a QR code or emoji verification, which is what %(brand)s supports. Try with a different client.",
             "other_party_cancelled": "The other party cancelled the verification.",
@@ -1001,7 +994,7 @@
             "unverified_sessions_toast_description": "Review to ensure your account is safe",
             "unverified_sessions_toast_reject": "Later",
             "unverified_sessions_toast_title": "You have unverified sessions",
-            "verification_description": "Verify your identity to access encrypted messages and prove your identity to others.",
+            "verification_description": "Verify your identity to access encrypted messages and prove your identity to others. If you also use a mobile device, please open the app there before you proceed.",
             "verification_dialog_title_device": "Verify other device",
             "verification_dialog_title_user": "Verification Request",
             "verification_skip_warning": "Without verifying, you won't have access to all your messages and may appear as untrusted to others.",
@@ -1086,10 +1079,6 @@
     },
     "error_user_not_logged_in": "User is not logged in",
     "event_preview": {
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s ended a voice broadcast",
-            "you": "You ended a voice broadcast"
-        },
         "m.call.answer": {
             "dm": "Call in progress",
             "user": "%(senderName)s joined the call",
@@ -1490,8 +1479,6 @@
         "video_rooms_faq2_answer": "Yes, the chat timeline is displayed alongside the video.",
         "video_rooms_faq2_question": "Can I use text chat alongside the video call?",
         "video_rooms_feedbackSubheading": "Thank you for trying the beta, please go into as much detail as you can so we can improve it.",
-        "voice_broadcast": "Voice broadcast",
-        "voice_broadcast_force_small_chunks": "Force 15s voice broadcast chunk length",
         "wysiwyg_composer": "Rich text editor"
     },
     "labs_mjolnir": {
@@ -1637,7 +1624,6 @@
         "mute_description": "You won't get any notifications"
     },
     "notifier": {
-        "io.element.voice_broadcast_chunk": "%(senderName)s started a voice broadcast",
         "m.key.verification.request": "%(name)s is requesting verification"
     },
     "onboarding": {
@@ -2251,7 +2237,6 @@
             "error_unbanning": "Failed to unban",
             "events_default": "Send messages",
             "invite": "Invite users",
-            "io.element.voice_broadcast_info": "Voice broadcasts",
             "kick": "Remove users",
             "m.call": "Start %(brand)s calls",
             "m.call.member": "Join %(brand)s calls",
@@ -2950,7 +2935,7 @@
         "warning": "<w>WARNING:</w> <description/>"
     },
     "share": {
-        "link_title": "Link to room",
+        "link_copied": "Link copied",
         "permalink_message": "Link to selected message",
         "permalink_most_recent": "Link to most recent message",
         "share_call": "Conference invite link",
@@ -3042,13 +3027,6 @@
         "upgraderoom": "Upgrades a room to a new version",
         "upgraderoom_permission_error": "You do not have the required permissions to use this command.",
         "usage": "Usage",
-        "verify": "Verifies a user, session, and pubkey tuple",
-        "verify_mismatch": "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!",
-        "verify_nop": "Session already verified!",
-        "verify_nop_warning_mismatch": "WARNING: session already verified, but keys do NOT MATCH!",
-        "verify_success_description": "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.",
-        "verify_success_title": "Verified key",
-        "verify_unknown_pair": "Unknown (user, session) pair: (%(userId)s, %(deviceId)s)",
         "view": "Views room with given address",
         "whois": "Displays information about a user"
     },
@@ -3285,10 +3263,6 @@
         "error_rendering_message": "Can't load this message",
         "historical_messages_unavailable": "You can't see earlier messages",
         "in_room_name": " in <strong>%(room)s</strong>",
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s ended a <a>voice broadcast</a>",
-            "you": "You ended a <a>voice broadcast</a>"
-        },
         "io.element.widgets.layout": "%(senderName)s has updated the room layout",
         "late_event_separator": "Originally sent %(dateTime)s",
         "load_error": {
@@ -3838,38 +3812,6 @@
         "switch_theme_dark": "Switch to dark mode",
         "switch_theme_light": "Switch to light mode"
     },
-    "voice_broadcast": {
-        "30s_backward": "30s backward",
-        "30s_forward": "30s forward",
-        "action": "Voice broadcast",
-        "buffering": "Buffering…",
-        "confirm_listen_affirm": "Yes, end my recording",
-        "confirm_listen_description": "If you start listening to this live broadcast, your current live broadcast recording will be ended.",
-        "confirm_listen_title": "Listen to live broadcast?",
-        "confirm_stop_affirm": "Yes, stop broadcast",
-        "confirm_stop_description": "Are you sure you want to stop your live broadcast? This will end the broadcast and the full recording will be available in the room.",
-        "confirm_stop_title": "Stop live broadcasting?",
-        "connection_error": "Connection error - Recording paused",
-        "failed_already_recording_description": "You are already recording a voice broadcast. Please end your current voice broadcast to start a new one.",
-        "failed_already_recording_title": "Can't start a new voice broadcast",
-        "failed_decrypt": "Unable to decrypt voice broadcast",
-        "failed_generic": "Unable to play this voice broadcast",
-        "failed_insufficient_permission_description": "You don't have the required permissions to start a voice broadcast in this room. Contact a room administrator to upgrade your permissions.",
-        "failed_insufficient_permission_title": "Can't start a new voice broadcast",
-        "failed_no_connection_description": "Unfortunately we're unable to start a recording right now. Please try again later.",
-        "failed_no_connection_title": "Connection error",
-        "failed_others_already_recording_description": "Someone else is already recording a voice broadcast. Wait for their voice broadcast to end to start a new one.",
-        "failed_others_already_recording_title": "Can't start a new voice broadcast",
-        "go_live": "Go live",
-        "live": "Live",
-        "pause": "pause voice broadcast",
-        "play": "play voice broadcast",
-        "resume": "resume voice broadcast"
-    },
-    "voice_message": {
-        "cant_start_broadcast_description": "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.",
-        "cant_start_broadcast_title": "Can't start voice message"
-    },
     "voip": {
         "already_in_call": "Already in call",
         "already_in_call_person": "You're already in a call with this person.",
@@ -3889,7 +3831,6 @@
         "camera_disabled": "Your camera is turned off",
         "camera_enabled": "Your camera is still enabled",
         "cannot_call_yourself_description": "You cannot place a call with yourself.",
-        "change_input_device": "Change input device",
         "close_lobby": "Close lobby",
         "connecting": "Connecting",
         "connection_lost": "Connectivity to the server has been lost",
@@ -3908,8 +3849,6 @@
         "enable_camera": "Turn on camera",
         "enable_microphone": "Unmute microphone",
         "expand": "Return to call",
-        "failed_call_live_broadcast_description": "You can’t start a call as you are currently recording a live broadcast. Please end your live broadcast in order to start a call.",
-        "failed_call_live_broadcast_title": "Can’t start a call",
         "get_call_link": "Share call link",
         "hangup": "Hangup",
         "hide_sidebar_button": "Hide sidebar",

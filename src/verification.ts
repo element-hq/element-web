@@ -15,7 +15,6 @@ import { RightPanelPhases } from "./stores/right-panel/RightPanelStorePhases";
 import { accessSecretStorage } from "./SecurityManager";
 import UntrustedDeviceDialog from "./components/views/dialogs/UntrustedDeviceDialog";
 import { IDevice } from "./components/views/right_panel/UserInfo";
-import { ManualDeviceKeyVerificationDialog } from "./components/views/dialogs/ManualDeviceKeyVerificationDialog";
 import RightPanelStore from "./stores/right-panel/RightPanelStore";
 import { IRightPanelCardState } from "./stores/right-panel/RightPanelStoreIPanelState";
 import { findDMForUser } from "./utils/dm/findDMForUser";
@@ -53,11 +52,6 @@ export async function verifyDevice(matrixClient: MatrixClient, user: User, devic
                     .getCrypto()
                     ?.requestDeviceVerification(user.userId, device.deviceId);
                 setRightPanel({ member: user, verificationRequestPromise });
-            } else if (action === "legacy") {
-                Modal.createDialog(ManualDeviceKeyVerificationDialog, {
-                    userId: user.userId,
-                    device,
-                });
             }
         },
     });
@@ -81,7 +75,7 @@ function setRightPanel(state: IRightPanelCardState): void {
     } else {
         RightPanelStore.instance.setCards([
             { phase: RightPanelPhases.RoomSummary },
-            { phase: RightPanelPhases.RoomMemberInfo, state: { member: state.member } },
+            { phase: RightPanelPhases.MemberInfo, state: { member: state.member } },
             { phase: RightPanelPhases.EncryptionPanel, state },
         ]);
     }

@@ -11,12 +11,12 @@ import React, { createRef } from "react";
 import { render, screen, waitFor } from "jest-matrix-react";
 
 import MatrixClientContext from "../../../../../../../src/contexts/MatrixClientContext";
-import RoomContext from "../../../../../../../src/contexts/RoomContext";
 import { WysiwygAutocomplete } from "../../../../../../../src/components/views/rooms/wysiwyg_composer/components/WysiwygAutocomplete";
 import { getRoomContext, mkStubRoom, stubClient } from "../../../../../../test-utils";
 import Autocomplete from "../../../../../../../src/components/views/rooms/Autocomplete";
 import Autocompleter, { ICompletion } from "../../../../../../../src/autocomplete/Autocompleter";
 import AutocompleteProvider from "../../../../../../../src/autocomplete/AutocompleteProvider";
+import { ScopedRoomContextProvider } from "../../../../../../../src/contexts/ScopedRoomContext.tsx";
 
 const mockCompletion: ICompletion[] = [
     {
@@ -71,7 +71,7 @@ describe("WysiwygAutocomplete", () => {
 
         return render(
             <MatrixClientContext.Provider value={mockClient}>
-                <RoomContext.Provider value={mockRoomContext}>
+                <ScopedRoomContextProvider {...mockRoomContext}>
                     <WysiwygAutocomplete
                         ref={autocompleteRef}
                         suggestion={null}
@@ -80,7 +80,7 @@ describe("WysiwygAutocomplete", () => {
                         handleAtRoomMention={mockHandleAtRoomMention}
                         {...props}
                     />
-                </RoomContext.Provider>
+                </ScopedRoomContextProvider>
             </MatrixClientContext.Provider>,
         );
     };

@@ -49,7 +49,7 @@ import ErrorDialog from "../../../../../src/components/views/dialogs/ErrorDialog
 import { shouldShowComponent } from "../../../../../src/customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../../src/settings/UIFeature";
 import { Action } from "../../../../../src/dispatcher/actions";
-import ShareDialog from "../../../../../src/components/views/dialogs/ShareDialog";
+import { ShareDialog } from "../../../../../src/components/views/dialogs/ShareDialog";
 import BulkRedactDialog from "../../../../../src/components/views/dialogs/BulkRedactDialog";
 
 jest.mock("../../../../../src/utils/direct-messages", () => ({
@@ -188,7 +188,7 @@ describe("<UserInfo />", () => {
     const defaultProps = {
         user: defaultUser,
         // idk what is wrong with this type
-        phase: RightPanelPhases.RoomMemberInfo as RightPanelPhases.RoomMemberInfo,
+        phase: RightPanelPhases.MemberInfo as RightPanelPhases.MemberInfo,
         onClose: jest.fn(),
     };
 
@@ -455,7 +455,7 @@ describe("<UserInfo />", () => {
             mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(false, false, false));
 
             const { container } = renderComponent({
-                phase: RightPanelPhases.SpaceMemberInfo,
+                phase: RightPanelPhases.MemberInfo,
                 verificationRequest,
                 room: mockRoom,
             });
@@ -649,7 +649,7 @@ describe("<UserInfo />", () => {
             mockClient.getDomain.mockReturnValue("example.com");
 
             const { container } = renderComponent({
-                phase: RightPanelPhases.RoomMemberInfo,
+                phase: RightPanelPhases.MemberInfo,
                 room: mockRoom,
             });
 

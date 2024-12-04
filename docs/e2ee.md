@@ -31,9 +31,9 @@ Set the following on your homeserver's
 
 When `force_disable` is true:
 
--   all rooms will be created with encryption disabled, and it will not be possible to enable
-    encryption from room settings.
--   any `io.element.e2ee.default` value will be disregarded.
+- all rooms will be created with encryption disabled, and it will not be possible to enable
+  encryption from room settings.
+- any `io.element.e2ee.default` value will be disregarded.
 
 Note: If the server is configured to forcibly enable encryption for some or all rooms,
 this behaviour will be overridden.

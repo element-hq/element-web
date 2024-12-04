@@ -16,16 +16,18 @@ test.describe("Threads Activity Centre", () => {
         labsFlags: ["threadsActivityCentre"],
     });
 
-    test("should have the button correctly aligned and displayed in the space panel when expanded", async ({
-        util,
-    }) => {
-        // Open the space panel
-        await util.expandSpacePanel();
-        // The buttons in the space panel should be aligned when expanded
-        await expect(util.getSpacePanel()).toMatchScreenshot("tac-button-expanded.png");
-    });
+    test(
+        "should have the button correctly aligned and displayed in the space panel when expanded",
+        { tag: "@screenshot" },
+        async ({ util }) => {
+            // Open the space panel
+            await util.expandSpacePanel();
+            // The buttons in the space panel should be aligned when expanded
+            await expect(util.getSpacePanel()).toMatchScreenshot("tac-button-expanded.png");
+        },
+    );
 
-    test("should not show indicator when there is no thread", async ({ room1, util }) => {
+    test("should not show indicator when there is no thread", { tag: "@screenshot" }, async ({ room1, util }) => {
         // No indicator should be shown
         await util.assertNoTacIndicator();
 
@@ -62,7 +64,7 @@ test.describe("Threads Activity Centre", () => {
         await util.assertHighlightIndicator();
     });
 
-    test("should show the rooms with unread threads", async ({ room1, room2, util, msg }) => {
+    test("should show the rooms with unread threads", { tag: "@screenshot" }, async ({ room1, room2, util, msg }) => {
         await util.goTo(room2);
         await util.populateThreads(room1, room2, msg);
         // The indicator should be shown
@@ -79,7 +81,7 @@ test.describe("Threads Activity Centre", () => {
         await expect(util.getTacPanel()).toMatchScreenshot("tac-panel-mix-unread.png");
     });
 
-    test("should update with a thread is read", async ({ room1, room2, util, msg }) => {
+    test("should update with a thread is read", { tag: "@screenshot" }, async ({ room1, room2, util, msg }) => {
         await util.goTo(room2);
         await util.populateThreads(room1, room2, msg);
 
@@ -128,7 +130,7 @@ test.describe("Threads Activity Centre", () => {
         await expect(page.locator(".mx_SpotlightDialog")).not.toBeVisible();
     });
 
-    test("should have the correct hover state", async ({ util, page }) => {
+    test("should have the correct hover state", { tag: "@screenshot" }, async ({ util, page }) => {
         await util.hoverTacButton();
         await expect(util.getSpacePanel()).toMatchScreenshot("tac-hovered.png");
 
@@ -138,7 +140,7 @@ test.describe("Threads Activity Centre", () => {
         await expect(util.getSpacePanel()).toMatchScreenshot("tac-hovered-expanded.png");
     });
 
-    test("should mark all threads as read", async ({ room1, room2, util, msg, page }) => {
+    test("should mark all threads as read", { tag: "@screenshot" }, async ({ room1, room2, util, msg, page }) => {
         await util.receiveMessages(room1, ["Msg1", msg.threadedOff("Msg1", "Resp1")]);
 
         await util.assertNotificationTac();
@@ -146,7 +148,7 @@ test.describe("Threads Activity Centre", () => {
         await util.openTac();
         await util.clickRoomInTac(room1.name);
 
-        util.clickMarkAllThreadsRead();
+        await util.clickMarkAllThreadsRead();
 
         await util.assertNoTacIndicator();
     });

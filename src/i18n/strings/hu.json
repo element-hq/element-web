@@ -872,7 +872,6 @@
         },
         "udd": {
             "interactive_verification_button": "Interaktív ellenőrzés emodzsikkal",
-            "manual_verification_button": "Kézi szöveges ellenőrzés",
             "other_ask_verify_text": "Kérje meg a felhasználót, hogy hitelesítse a munkamenetét, vagy ellenőrizze kézzel lentebb.",
             "other_new_session_text": "%(name)s (%(userId)s) új munkamenetbe lépett be, anélkül, hogy ellenőrizte volna:",
             "own_ask_verify_text": "Ellenőrizze a másik munkamenetét a lenti lehetőségek egyikével.",
@@ -907,12 +906,6 @@
             "incoming_sas_dialog_waiting": "Várakozás a partner megerősítésére…",
             "incoming_sas_user_dialog_text_1": "Ellenőrizd ezt a felhasználót, hogy megbízhatónak lehessen tekinteni. Megbízható felhasználók további nyugalmat jelenthetnek ha végpontól végpontig titkosítást használsz.",
             "incoming_sas_user_dialog_text_2": "A felhasználó ellenőrzése által az ő munkamenete megbízhatónak lesz jelölve, és a te munkameneted is megbízhatónak lesz jelölve nála.",
-            "manual_device_verification_device_id_label": "Kapcsolat azonosító",
-            "manual_device_verification_device_key_label": "Munkamenetkulcs",
-            "manual_device_verification_device_name_label": "Munkamenet neve",
-            "manual_device_verification_footer": "Ha nem egyeznek akkor a kommunikációtok biztonsága veszélyben lehet.",
-            "manual_device_verification_self_text": "Erősítsd meg a felhasználói beállítások összehasonlításával a többi munkamenetedben:",
-            "manual_device_verification_user_text": "Ezt a munkamenetet hitelesítsd az ő felhasználói beállításának az összehasonlításával:",
             "no_key_or_device": "Úgy tűnik, hogy nem rendelkezik biztonsági kulccsal, vagy másik eszközzel, amelyikkel ellenőrizhetné. Ezzel az eszközzel nem fér majd hozzá a régi titkosított üzenetekhez. Ahhoz, hogy a személyazonosságát ezen az eszközön ellenőrizni lehessen, az ellenőrzédi kulcsokat alaphelyzetbe kell állítani.",
             "no_support_qr_emoji": "Az ellenőrizni kívánt eszköz nem támogatja se a QR kód beolvasást se az emodzsi ellenőrzést, amit a %(brand)s támogat. Próbálja meg egy másik klienssel.",
             "other_party_cancelled": "A másik fél megszakította az ellenőrzést.",
@@ -1029,10 +1022,6 @@
     },
     "error_user_not_logged_in": "A felhasználó nincs bejelentkezve",
     "event_preview": {
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s befejezte a hangközvetítést",
-            "you": "A hangközvetítés befejeződött"
-        },
         "m.call.answer": {
             "dm": "Folyamatban lévő hívás",
             "user": "%(senderName)s csatlakozott a hívásba",
@@ -1392,8 +1381,6 @@
         "video_rooms_faq1_question": "Hogy lehet videószobát készíteni?",
         "video_rooms_faq2_answer": "Igen, a szöveges idővonal a videóval együtt megjelenik.",
         "video_rooms_faq2_question": "Lehet a videóhívás közben szövegesen is csevegni?",
-        "voice_broadcast": "Hangközvetítés",
-        "voice_broadcast_force_small_chunks": "Hangközvetítések 15 másodperces darabolásának kényszerítése",
         "wysiwyg_composer": "Szövegszerkesztő használata"
     },
     "labs_mjolnir": {
@@ -1528,7 +1515,6 @@
         "mute_description": "Nem kap semmilyen értesítést"
     },
     "notifier": {
-        "io.element.voice_broadcast_chunk": "%(senderName)s hangos közvetítést indított",
         "m.key.verification.request": "%(name)s ellenőrzést kér"
     },
     "onboarding": {
@@ -2077,7 +2063,6 @@
             "error_unbanning": "A kitiltás visszavonása sikertelen",
             "events_default": "Üzenetek küldése",
             "invite": "Felhasználók meghívása",
-            "io.element.voice_broadcast_info": "Hangközvetítés",
             "kick": "Felhasználók eltávolítása",
             "m.call": "%(brand)s hívás indítása",
             "m.call.member": "Csatlakozás ebbe a hívásba: %(brand)s",
@@ -2711,7 +2696,6 @@
         "warning": "<w>FIGYELEM:</w> <description/>"
     },
     "share": {
-        "link_title": "Hivatkozás a szobához",
         "permalink_message": "Hivatkozás a kijelölt üzenethez",
         "permalink_most_recent": "Hivatkozás a legfrissebb üzenethez",
         "title_message": "Szoba üzenetének megosztása",
@@ -2800,13 +2784,6 @@
         "upgraderoom": "Új verzióra fejleszti a szobát",
         "upgraderoom_permission_error": "A parancs használatához nincs meg a megfelelő jogosultsága.",
         "usage": "Használat",
-        "verify": "Felhasználó, munkamenet és nyilvános kulcs hármas ellenőrzése",
-        "verify_mismatch": "FIGYELEM: A KULCSELLENŐRZÉS SIKERTELEN! %(userId)s aláírási kulcsa és a(z) %(deviceId)s munkamenet ujjlenyomata „%(fprint)s”, amely nem egyezik meg a megadott ujjlenyomattal: „%(fingerprint)s”. Ez azt is jelentheti, hogy a kommunikációt lehallgatják.",
-        "verify_nop": "A munkamenet már ellenőrzött.",
-        "verify_nop_warning_mismatch": "FIGYELEM: a munkamenet már ellenőrizve van, de a kulcsok NEM EGYEZNEK.",
-        "verify_success_description": "A megadott aláírási kulcs megegyezik %(userId)s felhasználótól kapott aláírási kulccsal ebben a munkamenetben: %(deviceId)s. A munkamenet ellenőrzöttnek lett jelölve.",
-        "verify_success_title": "Ellenőrzött kulcs",
-        "verify_unknown_pair": "Ismeretlen (felhasználó, munkamenet) páros: (%(userId)s, %(deviceId)s)",
         "view": "Megadott címmel rendelkező szobák megjelenítése",
         "whois": "Információt jelenít meg a felhasználóról"
     },
@@ -3018,10 +2995,6 @@
         "error_rendering_message": "Ezt az üzenetet nem sikerült betölteni",
         "historical_messages_unavailable": "Nem tekintheted meg a régebbi üzeneteket",
         "in_room_name": " itt: <strong>%(room)s</strong>",
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s befejezte a <a>hangközvetítést</a>",
-            "you": "Befejezte a <a>hangközvetítést</a>"
-        },
         "io.element.widgets.layout": "%(senderName)s frissítette a szoba kinézetét",
         "load_error": {
             "no_permission": "Megpróbálta betölteni a szoba megadott időpontjának megfelelő adatait, de nincs joga a kérdéses üzenetek megjelenítéséhez.",
@@ -3551,38 +3524,6 @@
         "switch_theme_dark": "Sötét módra váltás",
         "switch_theme_light": "Világos módra váltás"
     },
-    "voice_broadcast": {
-        "30s_backward": "vissza 30 másodperccel",
-        "30s_forward": "előre 30 másodperccel",
-        "action": "Hangközvetítés",
-        "buffering": "Pufferelés…",
-        "confirm_listen_affirm": "Igen, a felvétel befejezése",
-        "confirm_listen_description": "Ha hallgatja ezt az élő közvetítést, akkor a jelenlegi élő közvetítésének a felvétele befejeződik.",
-        "confirm_listen_title": "Élő közvetítés hallgatása?",
-        "confirm_stop_affirm": "Igen, közvetítés megállítása",
-        "confirm_stop_description": "Biztos, hogy befejezi az élő közvetítést? Ez megállítja a közvetítést és a felvétel az egész szoba számára elérhető lesz.",
-        "confirm_stop_title": "Megszakítja az élő közvetítést?",
-        "connection_error": "Kapcsolódási hiba – Felvétel szüneteltetve",
-        "failed_already_recording_description": "Egy hangközvetítés már folyamatban van. Először fejezze be a jelenlegi közvetítést egy új indításához.",
-        "failed_already_recording_title": "Az új hangközvetítés nem indítható el",
-        "failed_decrypt": "A hangközvetítést nem lehet visszafejteni",
-        "failed_generic": "A hangközvetítés nem játszható le",
-        "failed_insufficient_permission_description": "Nincs jogosultsága hangközvetítést indítani ebben a szobában. Vegye fel a kapcsolatot a szoba adminisztrátorával a szükséges jogosultság megszerzéséhez.",
-        "failed_insufficient_permission_title": "Az új hangközvetítés nem indítható el",
-        "failed_no_connection_description": "Sajnos most nem lehet elindítani a felvételt. Próbálja meg később.",
-        "failed_no_connection_title": "Kapcsolati hiba",
-        "failed_others_already_recording_description": "Valaki már elindított egy hangközvetítést. Várja meg a közvetítés végét az új indításához.",
-        "failed_others_already_recording_title": "Az új hangközvetítés nem indítható el",
-        "go_live": "Élő közvetítés indítása",
-        "live": "Élő közvetítés",
-        "pause": "hangközvetítés szüneteltetése",
-        "play": "hangközvetítés lejátszása",
-        "resume": "hangközvetítés folytatása"
-    },
-    "voice_message": {
-        "cant_start_broadcast_description": "Nem lehet hang üzenetet indítani élő közvetítés felvétele közben. Az élő közvetítés bejezése szükséges a hang üzenet indításához.",
-        "cant_start_broadcast_title": "Hang üzenetet nem lehet elindítani"
-    },
     "voip": {
         "already_in_call": "A hívás már folyamatban van",
         "already_in_call_person": "Már hívásban van ezzel a személlyel.",
@@ -3602,7 +3543,6 @@
         "camera_disabled": "A kamerája ki van kapcsolva",
         "camera_enabled": "A kamerája még mindig be van kapcsolva",
         "cannot_call_yourself_description": "Nem hívhatja fel saját magát.",
-        "change_input_device": "Bemeneti eszköz megváltoztatása",
         "connecting": "Kapcsolódás",
         "connection_lost": "Megszakadt a kapcsolat a kiszolgálóval",
         "connection_lost_description": "Nem kezdeményezhet hívást a kiszolgálóval való kapcsolat nélkül.",
@@ -3619,8 +3559,6 @@
         "enable_camera": "Kamera bekapcsolása",
         "enable_microphone": "Mikrofon némításának feloldása",
         "expand": "Visszatérés a híváshoz",
-        "failed_call_live_broadcast_description": "Nem lehet hívást kezdeményezni élő közvetítés felvétele közben. Az élő közvetítés bejezése szükséges a hívás indításához.",
-        "failed_call_live_broadcast_title": "Nem sikerült hívást indítani",
         "hangup": "Bontás",
         "hide_sidebar_button": "Oldalsáv elrejtése",
         "input_devices": "Beviteli eszközök",

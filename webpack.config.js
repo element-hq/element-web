@@ -238,6 +238,9 @@ module.exports = (env, argv) => {
             },
         },
 
+        // Some of our deps have broken source maps, so we have to ignore warnings or exclude them one-by-one
+        ignoreWarnings: [/Failed to parse source map/],
+
         module: {
             noParse: [
                 // for cross platform compatibility use [\\\/] as the path separator
@@ -250,6 +253,11 @@ module.exports = (env, argv) => {
                 /highlight\.js[\\/]lib[\\/]languages/,
             ],
             rules: [
+                {
+                    test: /\.js$/,
+                    enforce: "pre",
+                    use: ["source-map-loader"],
+                },
                 {
                     test: /\.(ts|js)x?$/,
                     include: (f) => {
