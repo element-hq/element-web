@@ -498,7 +498,8 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
         const thisUserHasConnectedDevice =
             room && MatrixRTCSession.callMembershipsForRoom(room).some((m) => m.sender === cli.getUserId());
 
-        if (EventType.CallNotify === ev.getType() && (ev.getAge() ?? 0) < 90000 && !thisUserHasConnectedDevice) {
+        // Check maximum age (<= 15 seconds) of a call notify event that will trigger a ringing notification
+        if (EventType.CallNotify === ev.getType() && (ev.getAge() ?? 0) < 15000 && !thisUserHasConnectedDevice) {
             const content = ev.getContent();
             const roomId = ev.getRoomId();
             if (typeof content.call_id !== "string") {
