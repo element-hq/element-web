@@ -865,7 +865,6 @@
         },
         "udd": {
             "interactive_verification_button": "透過表情符號互動來驗證",
-            "manual_verification_button": "透過文字手動驗證",
             "other_ask_verify_text": "要求此使用者驗證他們的工作階段，或在下方手動驗證。",
             "other_new_session_text": "%(name)s （%(userId)s）登入到未驗證的新工作階段：",
             "own_ask_verify_text": "使用下方的其中一個選項來驗證您其他工作階段。",
@@ -900,12 +899,6 @@
             "incoming_sas_dialog_waiting": "正在等待夥伴確認…",
             "incoming_sas_user_dialog_text_1": "驗證此工作階段，並標記為可受信任。由您將工作階段標記為可受信任後，可讓聊天夥伴傳送端到端加密訊息時能更加放心。",
             "incoming_sas_user_dialog_text_2": "驗證此使用者將會把他們的工作階段標記為受信任，並同時為他們標記您的工作階段為可信任。",
-            "manual_device_verification_device_id_label": "工作階段 ID",
-            "manual_device_verification_device_key_label": "工作階段金鑰",
-            "manual_device_verification_device_name_label": "工作階段名稱",
-            "manual_device_verification_footer": "如果它們不相符，則可能會威脅到您的通訊安全。",
-            "manual_device_verification_self_text": "透過將下列內容與您其他工作階段中的「使用者設定」所顯示的內容來確認：",
-            "manual_device_verification_user_text": "將以下內容與對方的「使用者設定」當中顯示的內容進行比對，來確認對方的工作階段：",
             "no_key_or_device": "您似乎沒有安全金鑰或其他可以驗證的裝置。此裝置將無法存取舊的加密訊息。為了在此裝置上驗證您的身分，您必須重設您的驗證金鑰。",
             "no_support_qr_emoji": "您正在嘗試驗證的裝置不支援掃描 QR Code 或表情符號驗證，這是 %(brand)s 所支援的。請嘗試使用其他客戶端。",
             "other_party_cancelled": "另一方取消了驗證。",
@@ -1022,10 +1015,6 @@
     },
     "error_user_not_logged_in": "使用者未登入",
     "event_preview": {
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s 已結束語音廣播",
-            "you": "您結束了語音廣播"
-        },
         "m.call.answer": {
             "dm": "通話進行中",
             "user": "%(senderName)s 已加入通話",
@@ -1379,8 +1368,6 @@
         "video_rooms_faq1_question": "我要如何建立視訊聊天室？",
         "video_rooms_faq2_answer": "可以，會在視訊畫面旁顯示聊天時間軸。",
         "video_rooms_faq2_question": "我可以在視訊通話的同時使用文字聊天嗎？",
-        "voice_broadcast": "語音廣播",
-        "voice_broadcast_force_small_chunks": "強制 15 秒語音廣播區塊長度",
         "wysiwyg_composer": "格式化文字編輯器"
     },
     "labs_mjolnir": {
@@ -1519,7 +1506,6 @@
         "mute_description": "不會收到任何通知"
     },
     "notifier": {
-        "io.element.voice_broadcast_chunk": "%(senderName)s 開始了語音廣播",
         "m.key.verification.request": "%(name)s 正在要求驗證"
     },
     "onboarding": {
@@ -2074,7 +2060,6 @@
             "error_unbanning": "無法解除封鎖",
             "events_default": "傳送訊息",
             "invite": "邀請使用者",
-            "io.element.voice_broadcast_info": "語音廣播",
             "kick": "移除使用者",
             "m.call": "開始 %(brand)s 通話",
             "m.call.member": "加入 %(brand)s 通話",
@@ -2704,7 +2689,6 @@
         "warning": "<w>警告：</w> <description/>"
     },
     "share": {
-        "link_title": "連結到聊天室",
         "permalink_message": "連結到選定的訊息",
         "permalink_most_recent": "連結到最近的訊息",
         "title_message": "分享聊天室訊息",
@@ -2791,13 +2775,6 @@
         "upgraderoom": "升級聊天室到新版本",
         "upgraderoom_permission_error": "您沒有使用此指令的必要權限。",
         "usage": "使用方法",
-        "verify": "驗證使用者、工作階段與公開金鑰組合",
-        "verify_mismatch": "警告：無法驗證金鑰！%(userId)s 與工作階段 %(deviceId)s 簽署的金鑰是「%(fprint)s」，並不符合提供的金鑰「%(fingerprint)s」。這可能代表您的通訊已被攔截！",
-        "verify_nop": "工作階段已驗證！",
-        "verify_nop_warning_mismatch": "警告：工作階段已驗證，但金鑰不相符！",
-        "verify_success_description": "您提供的簽署金鑰符合您從 %(userId)s 的工作階段收到的簽署金鑰 %(deviceId)s。工作階段標記為已驗證。",
-        "verify_success_title": "已驗證的金鑰",
-        "verify_unknown_pair": "未知（使用者，工作階段）配對：(%(userId)s, %(deviceId)s)",
         "view": "檢視指定聊天室的地址",
         "whois": "顯示關於使用者的資訊"
     },
@@ -3005,10 +2982,6 @@
         "error_rendering_message": "無法載入此訊息",
         "historical_messages_unavailable": "您看不到更早的訊息",
         "in_room_name": " 在 <strong>%(room)s</strong>",
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s 結束了<a>語音廣播</a>",
-            "you": "您結束了<a>語音廣播</a>"
-        },
         "io.element.widgets.layout": "%(senderName)s 已更新聊天室佈局",
         "load_error": {
             "no_permission": "嘗試載入此聊天室時間軸上的特定時間點，但您沒有權限檢視相關的訊息。",
@@ -3536,38 +3509,6 @@
         "switch_theme_dark": "切換至深色模式",
         "switch_theme_light": "切換至淺色模式"
     },
-    "voice_broadcast": {
-        "30s_backward": "快退30秒",
-        "30s_forward": "快轉30秒",
-        "action": "語音廣播",
-        "buffering": "正在緩衝…",
-        "confirm_listen_affirm": "是的，結束我的錄製",
-        "confirm_listen_description": "若您開始收聽本次直播，您目前的直播錄製將會結束。",
-        "confirm_listen_title": "聆聽直播？",
-        "confirm_stop_affirm": "是的，停止廣播",
-        "confirm_stop_description": "您真的要停止即時廣播嗎？將會結束廣播，完整錄音存檔稍後將在聊天室中提供。",
-        "confirm_stop_title": "停止即時廣播？",
-        "connection_error": "連線錯誤 - 已暫停錄音",
-        "failed_already_recording_description": "您已經開始錄製語音廣播。請結束您目前的語音廣播以開始新的語音廣播。",
-        "failed_already_recording_title": "無法啟動新的語音廣播",
-        "failed_decrypt": "無法解密語音廣播",
-        "failed_generic": "無法播放此語音廣播",
-        "failed_insufficient_permission_description": "您沒有權限在此聊天室內開始語音廣播。請聯絡聊天室管理員升級您的權限。",
-        "failed_insufficient_permission_title": "無法啟動新的語音廣播",
-        "failed_no_connection_description": "很抱歉，現在無法錄音。請稍後再試。",
-        "failed_no_connection_title": "連線錯誤",
-        "failed_others_already_recording_description": "其他人已在錄製語音廣播。等待他們的語音廣播結束以開始新的。",
-        "failed_others_already_recording_title": "無法啟動新的語音廣播",
-        "go_live": "開始直播",
-        "live": "直播",
-        "pause": "暫停語音廣播",
-        "play": "播放語音廣播",
-        "resume": "恢復語音廣播"
-    },
-    "voice_message": {
-        "cant_start_broadcast_description": "您無法開始語音訊息，因為您目前正在錄製直播。請結束您的直播以開始錄製語音訊息。",
-        "cant_start_broadcast_title": "無法開始語音訊息"
-    },
     "voip": {
         "already_in_call": "已在通話中",
         "already_in_call_person": "您正在與此人通話。",
@@ -3587,7 +3528,6 @@
         "camera_disabled": "您的相機已關閉",
         "camera_enabled": "您的相機開啟中",
         "cannot_call_yourself_description": "您不能打電話給自己。",
-        "change_input_device": "變更輸入裝置",
         "connecting": "連線中",
         "connection_lost": "與伺服器的連線已遺失",
         "connection_lost_description": "您無法在未連線至伺服器的情況下通話。",
@@ -3604,8 +3544,6 @@
         "enable_camera": "開啟相機",
         "enable_microphone": "取消麥克風靜音",
         "expand": "回到通話",
-        "failed_call_live_broadcast_description": "您無法開始通話，因為您正在錄製直播。請結束您的直播以便開始通話。",
-        "failed_call_live_broadcast_title": "無法開始通話",
         "hangup": "掛斷",
         "hide_sidebar_button": "隱藏側邊欄",
         "input_devices": "輸入裝置",

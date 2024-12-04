@@ -877,7 +877,6 @@
         },
         "udd": {
             "interactive_verification_button": "Interaktívne overte pomocou emotikonov",
-            "manual_verification_button": "Manuálne overte pomocou textu",
             "other_ask_verify_text": "Poproste tohto používateľa, aby si overil svoju reláciu alebo ju nižšie manuálne overte.",
             "other_new_session_text": "%(name)s (%(userId)s) sa prihlásil do novej relácie bez jej overenia:",
             "own_ask_verify_text": "Overte svoje ostatné relácie pomocou jednej z nižšie uvedených možností.",
@@ -912,12 +911,6 @@
             "incoming_sas_dialog_waiting": "Čakanie na potvrdenie od partnera…",
             "incoming_sas_user_dialog_text_1": "Overte tohto používateľa a označte ho ako dôveryhodného. Dôveryhodní používatelia vám poskytujú dodatočný pokoj na duši pri používaní end-to-end šifrovaných správ.",
             "incoming_sas_user_dialog_text_2": "Overenie tohto používateľa označí jeho reláciu ako dôveryhodnú a zároveň označí vašu reláciu ako dôveryhodnú pre neho.",
-            "manual_device_verification_device_id_label": "ID relácie",
-            "manual_device_verification_device_key_label": "Kľúč relácie",
-            "manual_device_verification_device_name_label": "Názov relácie",
-            "manual_device_verification_footer": "Ak sa nezhodujú, môže byť ohrozená bezpečnosť vašej komunikácie.",
-            "manual_device_verification_self_text": "Potvrďte to porovnaním nasledujúcich údajov s nastaveniami používateľa v inej vašej relácii:",
-            "manual_device_verification_user_text": "Potvrďte reláciu tohto používateľa porovnaním nasledujúcich údajov s jeho nastaveniami používateľa:",
             "no_key_or_device": "Vyzerá to, že nemáte bezpečnostný kľúč ani žiadne iné zariadenie, pomocou ktorého by ste to mohli overiť.  Toto zariadenie nebude mať prístup k starým zašifrovaným správam. Ak chcete overiť svoju totožnosť na tomto zariadení, budete musieť obnoviť svoje overovacie kľúče.",
             "no_support_qr_emoji": "Zariadenie, ktoré sa snažíte overiť, nepodporuje overenie skenovaním QR kódu ani overenie pomocou emotikonov, ktoré podporuje aplikácia %(brand)s. Skúste použiť iného klienta.",
             "other_party_cancelled": "Proti strana zrušila overovanie.",
@@ -1037,10 +1030,6 @@
     },
     "error_user_not_logged_in": "Používateľ nie je prihlásený",
     "event_preview": {
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s ukončil/a hlasové vysielanie",
-            "you": "Ukončili ste hlasové vysielanie"
-        },
         "m.call.answer": {
             "dm": "Práve prebieha hovor",
             "user": "%(senderName)s sa pridal/a do hovoru",
@@ -1417,8 +1406,6 @@
         "video_rooms_faq2_answer": "Áno, časová os konverzácie sa zobrazuje spolu s videom.",
         "video_rooms_faq2_question": "Môžem popri videohovore používať aj textovú konverzáciu?",
         "video_rooms_feedbackSubheading": "Ďakujeme, že ste vyskúšali beta verziu, prosím, uveďte čo najviac podrobností, aby sme ju mohli vylepšiť.",
-        "voice_broadcast": "Hlasové vysielanie",
-        "voice_broadcast_force_small_chunks": "Vynútiť 15s dĺžku sekcie hlasového vysielania",
         "wysiwyg_composer": "Rozšírený textový editor"
     },
     "labs_mjolnir": {
@@ -1555,7 +1542,6 @@
         "mute_description": "Nebudete dostávať žiadne oznámenia"
     },
     "notifier": {
-        "io.element.voice_broadcast_chunk": "%(senderName)s začal/a hlasové vysielanie",
         "m.key.verification.request": "%(name)s žiada o overenie"
     },
     "onboarding": {
@@ -2130,7 +2116,6 @@
             "error_unbanning": "Nepodarilo sa povoliť vstup",
             "events_default": "Odoslať správy",
             "invite": "Pozvať používateľov",
-            "io.element.voice_broadcast_info": "Hlasové vysielania",
             "kick": "Odstrániť používateľov",
             "m.call": "Spustiť %(brand)s hovory",
             "m.call.member": "Pripojiť sa k %(brand)s hovorom",
@@ -2772,7 +2757,6 @@
         "warning": "<w>UPOZORNENIE:</w> <description/>"
     },
     "share": {
-        "link_title": "Odkaz na miestnosť",
         "permalink_message": "Odkaz na vybratú správu",
         "permalink_most_recent": "Odkaz na najnovšiu správu",
         "title_message": "Zdieľať správu z miestnosti",
@@ -2861,13 +2845,6 @@
         "upgraderoom": "Aktualizuje miestnosť na novšiu verziu",
         "upgraderoom_permission_error": "Na použitie tohoto príkazu nemáte dostatočné povolenia.",
         "usage": "Použitie",
-        "verify": "Overí používateľa, reláciu a verejné kľúče",
-        "verify_mismatch": "VAROVANIE: OVERENIE KĽÚČOV ZLYHALO! Podpisový kľúč používateľa %(userId)s a relácia %(deviceId)s je \"%(fprint)s\" čo nezodpovedá zadanému kľúču \"%(fingerprint)s\". Môže to znamenať, že vaša komunikácia je odpočúvaná!",
-        "verify_nop": "Relácia je už overená!",
-        "verify_nop_warning_mismatch": "VAROVANIE: Relácia je už overená, ale kľúče sa NEZHODUJÚ!",
-        "verify_success_description": "Zadaný podpisový kľúč sa zhoduje s podpisovým kľúčom, ktorý ste dostali z relácie používateľa %(userId)s %(deviceId)s. Relácia označená ako overená.",
-        "verify_success_title": "Kľúč overený",
-        "verify_unknown_pair": "Neznámy pár (používateľ, relácia): (%(userId)s, %(deviceId)s)",
         "view": "Zobrazí miestnosti s danou adresou",
         "whois": "Zobrazuje informácie o používateľovi"
     },
@@ -3082,10 +3059,6 @@
         "error_rendering_message": "Nemožno načítať túto správu",
         "historical_messages_unavailable": "Nemôžete vidieť predchádzajúce správy",
         "in_room_name": " v <strong>%(room)s</strong>",
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s ukončil/a <a>hlasové vysielanie</a>",
-            "you": "Ukončili ste <a>hlasové vysielanie</a>"
-        },
         "io.element.widgets.layout": "%(senderName)s aktualizoval usporiadanie miestnosti",
         "late_event_separator": "Pôvodne odoslané %(dateTime)s",
         "load_error": {
@@ -3647,38 +3620,6 @@
         "switch_theme_dark": "Prepnúť na tmavý režim",
         "switch_theme_light": "Prepnúť na svetlý režim"
     },
-    "voice_broadcast": {
-        "30s_backward": "30s späť",
-        "30s_forward": "30s dopredu",
-        "action": "Hlasové vysielanie",
-        "buffering": "Načítavanie do vyrovnávacej pamäte…",
-        "confirm_listen_affirm": "Áno, ukončiť moje nahrávanie",
-        "confirm_listen_description": "Ak začnete počúvať toto živé vysielanie, váš aktuálny záznam živého vysielania sa ukončí.",
-        "confirm_listen_title": "Počúvať živé vysielanie?",
-        "confirm_stop_affirm": "Áno, zastaviť vysielanie",
-        "confirm_stop_description": "Určite chcete zastaviť vysielanie naživo? Tým sa vysielanie ukončí a v miestnosti bude k dispozícii celý záznam.",
-        "confirm_stop_title": "Zastaviť vysielanie naživo?",
-        "connection_error": "Chyba pripojenia - nahrávanie pozastavené",
-        "failed_already_recording_description": "Už nahrávate hlasové vysielanie. Ukončite aktuálne hlasové vysielanie a spustite nové.",
-        "failed_already_recording_title": "Nemôžete spustiť nové hlasové vysielanie",
-        "failed_decrypt": "Hlasové vysielanie sa nedá dešifrovať",
-        "failed_generic": "Toto hlasové vysielanie nie je možné prehrať",
-        "failed_insufficient_permission_description": "Nemáte požadované oprávnenia na spustenie hlasového vysielania v tejto miestnosti. Obráťte sa na správcu miestnosti, aby vám rozšíril oprávnenia.",
-        "failed_insufficient_permission_title": "Nemôžete spustiť nové hlasové vysielanie",
-        "failed_no_connection_description": "Bohužiaľ teraz nemôžeme spustiť nahrávanie. Skúste to prosím neskôr.",
-        "failed_no_connection_title": "Chyba pripojenia",
-        "failed_others_already_recording_description": "Niekto iný už nahráva hlasové vysielanie. Počkajte, kým sa skončí jeho hlasové vysielanie, a potom spustite nové.",
-        "failed_others_already_recording_title": "Nemôžete spustiť nové hlasové vysielanie",
-        "go_live": "Prejsť naživo",
-        "live": "Naživo",
-        "pause": "pozastaviť hlasové vysielanie",
-        "play": "spustiť hlasové vysielanie",
-        "resume": "obnoviť hlasové vysielanie"
-    },
-    "voice_message": {
-        "cant_start_broadcast_description": "Nemôžete spustiť hlasovú správu, pretože práve nahrávate živé vysielanie. Ukončite prosím živé vysielanie, aby ste mohli začať nahrávať hlasovú správu.",
-        "cant_start_broadcast_title": "Nemožno spustiť hlasovú správu"
-    },
     "voip": {
         "already_in_call": "Hovor už prebieha",
         "already_in_call_person": "S touto osobou už hovor prebieha.",
@@ -3698,7 +3639,6 @@
         "camera_disabled": "Váš fotoaparát je vypnutý",
         "camera_enabled": "Fotoaparát je stále zapnutý",
         "cannot_call_yourself_description": "Nemôžete zavolať samému sebe.",
-        "change_input_device": "Zmeniť vstupné zariadenie",
         "connecting": "Pripájanie",
         "connection_lost": "Spojenie so serverom bolo prerušené",
         "connection_lost_description": "Bez pripojenia k serveru nie je možné uskutočňovať hovory.",
@@ -3715,8 +3655,6 @@
         "enable_camera": "Zapnúť kameru",
         "enable_microphone": "Zrušiť stlmenie mikrofónu",
         "expand": "Návrat k hovoru",
-        "failed_call_live_broadcast_description": "Nemôžete spustiť hovor, pretože práve nahrávate živé vysielanie. Ukončite živé vysielanie, aby ste mohli začať hovor.",
-        "failed_call_live_broadcast_title": "Nie je možné začať hovor",
         "hangup": "Zavesiť",
         "hide_sidebar_button": "Skryť bočný panel",
         "input_devices": "Vstupné zariadenia",
