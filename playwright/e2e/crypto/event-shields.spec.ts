@@ -280,6 +280,15 @@ test.describe("Cryptography", function () {
             bot: bob,
             homeserver,
         }) => {
+            // Workaround for https://github.com/element-hq/element-web/issues/28640:
+            // make sure that Alice has seen Bob's identity before she goes offline. We do this by opening
+            // his user info.
+            await app.toggleRoomInfoPanel();
+            const rightPanel = page.locator(".mx_RightPanel");
+            await rightPanel.getByRole("menuitem", { name: "People" }).click();
+            await rightPanel.getByRole("button", { name: bob.credentials!.userId }).click();
+            await expect(rightPanel.locator(".mx_UserInfo_devices")).toContainText("1 session");
+
             // Our app is blocked from syncing while Bob sends his messages.
             await app.client.network.goOffline();
 
