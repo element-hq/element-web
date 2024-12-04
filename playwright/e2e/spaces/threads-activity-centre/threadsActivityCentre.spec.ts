@@ -146,7 +146,7 @@ test.describe("Threads Activity Centre", () => {
         await util.openTac();
         await util.clickRoomInTac(room1.name);
 
-        util.clickMarkAllThreadsRead();
+        await util.clickMarkAllThreadsRead();
 
         await util.assertNoTacIndicator();
     });
