@@ -813,7 +813,6 @@
         },
         "udd": {
             "interactive_verification_button": "Verificar interactivamente usando emojis",
-            "manual_verification_button": "Verificar manualmente usando un texto",
             "other_ask_verify_text": "Pídele al usuario que verifique su sesión, o verifícala manualmente a continuación.",
             "other_new_session_text": "%(name)s (%(userId)s) inició una nueva sesión sin verificarla:",
             "own_ask_verify_text": "Verifica la otra sesión utilizando una de las siguientes opciones.",
@@ -848,12 +847,6 @@
             "incoming_sas_dialog_waiting": "Esperando a que la otra persona confirme…",
             "incoming_sas_user_dialog_text_1": "Verifica a este usuario para marcarlo como de confianza. Confiar en usuarios aporta tranquilidad en los mensajes cifrados de extremo a extremo.",
             "incoming_sas_user_dialog_text_2": "Verificar este usuario marcará su sesión como de confianza, y también marcará tu sesión como de confianza para él.",
-            "manual_device_verification_device_id_label": "ID de Sesión",
-            "manual_device_verification_device_key_label": "Código de sesión",
-            "manual_device_verification_device_name_label": "Nombre de sesión",
-            "manual_device_verification_footer": "Si no coinciden, la seguridad de su comunicación puede estar comprometida.",
-            "manual_device_verification_self_text": "Confirme comparando lo siguiente con los ajustes de usuario de su otra sesión:",
-            "manual_device_verification_user_text": "Confirma la sesión de este usuario comparando lo siguiente con su configuración:",
             "no_key_or_device": "Parece que no tienes una clave de seguridad u otros dispositivos para la verificación.  Este dispositivo no podrá acceder los mensajes cifrados antiguos. Para verificar tu identidad en este dispositivo, tendrás que restablecer tus claves de verificación.",
             "no_support_qr_emoji": "El dispositivo que estás intentando verificar no es compatible con el escaneo de códigos QR o la verificación con emojis, que son las opciones que %(brand)s ofrece. Prueba con otra aplicación distinta.",
             "other_party_cancelled": "El otro lado canceló la verificación.",
@@ -1304,7 +1297,6 @@
         "video_rooms_faq1_question": "Cómo crear una sala de vídeo",
         "video_rooms_faq2_answer": "Sí, el historial de la sala aparece al lado del vídeo.",
         "video_rooms_faq2_question": "¿Puedo mandar mensajes de texto en la videollamada?",
-        "voice_broadcast": "Retransmisión de voz",
         "wysiwyg_composer": "Editor de texto enriquecido"
     },
     "labs_mjolnir": {
@@ -1955,7 +1947,6 @@
             "error_unbanning": "No se pudo quitar veto",
             "events_default": "Enviar mensajes",
             "invite": "Invitar usuarios",
-            "io.element.voice_broadcast_info": "Retransmisiones de voz",
             "kick": "Sacar usuarios",
             "m.call": "Empezar llamadas de %(brand)s",
             "m.call.member": "Unirte a llamadas de %(brand)s",
@@ -2529,7 +2520,6 @@
         "warning": "<w>ADVERTENCIA :</w> <description/>"
     },
     "share": {
-        "link_title": "Enlace a la sala",
         "permalink_message": "Enlazar al mensaje seleccionado",
         "permalink_most_recent": "Enlazar al mensaje más reciente",
         "title_message": "Compartir un mensaje de esta sala",
@@ -2612,13 +2602,6 @@
         "upgraderoom": "Actualiza una sala a una nueva versión",
         "upgraderoom_permission_error": "No tienes los permisos requeridos para usar este comando.",
         "usage": "Uso",
-        "verify": "Verifica a un usuario, sesión y tupla de clave pública",
-        "verify_mismatch": "¡ATENCIÓN: LA VERIFICACIÓN DE LA CLAVE HA FALLADO! La clave de firma para %(userId)s y sesión %(deviceId)s es \"%(fprint)s\", la cual no coincide con la clave proporcionada \"%(fingerprint)s\". ¡Esto podría significar que tus comunicaciones están siendo interceptadas!",
-        "verify_nop": "¡La sesión ya ha sido verificada!",
-        "verify_nop_warning_mismatch": "ADVERTENCIA: la sesión ya está verificada, pero las claves NO COINCIDEN",
-        "verify_success_description": "La clave de firma que proporcionaste coincide con la clave de firma que recibiste de la sesión %(deviceId)s de %(userId)s. Sesión marcada como verificada.",
-        "verify_success_title": "Clave verificada",
-        "verify_unknown_pair": "Pareja (usuario, sesión) desconocida: (%(userId)s, %(deviceId)s)",
         "whois": "Muestra información sobre un usuario"
     },
     "space": {
@@ -3336,29 +3319,6 @@
         "switch_theme_dark": "Cambiar al tema oscuro",
         "switch_theme_light": "Cambiar al tema claro"
     },
-    "voice_broadcast": {
-        "30s_backward": "retroceder 30s",
-        "30s_forward": "avanzar 30s",
-        "action": "Retransmisión de voz",
-        "buffering": "Cargando…",
-        "confirm_listen_affirm": "Sí, terminar grabación",
-        "confirm_stop_affirm": "Sí, detener retransmisión",
-        "confirm_stop_title": "¿Dejar de retransmitir?",
-        "connection_error": "Error de conexión, grabación detenida",
-        "failed_already_recording_title": "No se ha podido iniciar una nueva difusión de voz",
-        "failed_insufficient_permission_title": "No se ha podido iniciar una nueva difusión de voz",
-        "failed_no_connection_description": "Lamentablemente, no hemos podido empezar a grabar ahora mismo. Inténtalo de nuevo más tarde.",
-        "failed_no_connection_title": "Error de conexión",
-        "failed_others_already_recording_title": "No se ha podido iniciar una nueva difusión de voz",
-        "go_live": "Empezar directo",
-        "live": "En directo",
-        "pause": "pausar retransmisión de voz",
-        "play": "reproducir difusión de voz",
-        "resume": "reanudar retransmisión de voz"
-    },
-    "voice_message": {
-        "cant_start_broadcast_title": "No se ha podido empezar el mensaje de voz"
-    },
     "voip": {
         "already_in_call": "Ya en una llamada",
         "already_in_call_person": "Ya estás en una llamada con esta persona.",
@@ -3378,7 +3338,6 @@
         "camera_disabled": "Tu cámara está apagada",
         "camera_enabled": "Tu cámara todavía está encendida",
         "cannot_call_yourself_description": "No puedes llamarte a ti mismo.",
-        "change_input_device": "Cambiar dispositivo de entrada",
         "connecting": "Conectando",
         "connection_lost": "Se ha perdido la conexión con el servidor",
         "connection_lost_description": "No puedes llamar porque no hay conexión con el servidor.",
@@ -3395,8 +3354,6 @@
         "enable_camera": "Encender cámara",
         "enable_microphone": "Activar micrófono",
         "expand": "Volver a la llamada",
-        "failed_call_live_broadcast_description": "No puedes empezar una llamada, porque estás grabando una retransmisión en directo. Por favor, finaliza tu retransmisión en directo para empezar la llamada.",
-        "failed_call_live_broadcast_title": "No se ha podido empezar la llamada",
         "hangup": "Colgar",
         "hide_sidebar_button": "Ocultar menú lateral",
         "input_devices": "Dispositivos de entrada",

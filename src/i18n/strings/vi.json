@@ -792,7 +792,6 @@
         },
         "udd": {
             "interactive_verification_button": "Xác thực có tương tác bằng biểu tượng cảm xúc",
-            "manual_verification_button": "Xác thực thủ công bằng văn bản",
             "other_ask_verify_text": "Yêu cầu người dùng này xác thực phiên của họ hoặc xác minh theo cách thủ công bên dưới.",
             "other_new_session_text": "%(name)s (%(userId)s) đã đăng nhập vào một phiên mới mà không xác thực:",
             "own_ask_verify_text": "Xác minh phiên khác của bạn bằng một trong các tùy chọn bên dưới.",
@@ -827,12 +826,6 @@
             "incoming_sas_dialog_waiting": "Đang đợi bên kia xác nhận…",
             "incoming_sas_user_dialog_text_1": "Xác thực người dùng này để đánh dấu họ là đáng tin cậy. Người dùng đáng tin cậy giúp bạn yên tâm hơn khi sử dụng các tin nhắn được mã hóa end-to-end.",
             "incoming_sas_user_dialog_text_2": "Việc xác thực người dùng này sẽ đánh dấu phiên của họ là đáng tin cậy và cũng đánh dấu phiên của bạn là đáng tin cậy đối với họ.",
-            "manual_device_verification_device_id_label": "Định danh (ID) phiên",
-            "manual_device_verification_device_key_label": "Khóa phiên",
-            "manual_device_verification_device_name_label": "Tên phiên",
-            "manual_device_verification_footer": "Nếu chúng không khớp, sự bảo mật của việc giao tiếp của bạn có thể bị can thiệp.",
-            "manual_device_verification_self_text": "Xác nhận bằng cách so sánh những điều sau đây với Cài đặt người dùng trong phiên làm việc kia của bạn:",
-            "manual_device_verification_user_text": "Xác nhận phiên của người dùng này bằng cách so sánh phần sau với Cài đặt người dùng của họ:",
             "no_key_or_device": "Có vẻ như bạn không có Khóa Bảo mật hoặc bất kỳ thiết bị nào bạn có thể xác thực. Thiết bị này sẽ không thể truy cập vào các tin nhắn mã hóa cũ. Để  xác minh danh tính của bạn trên thiết bị này, bạn sẽ cần đặt lại các khóa xác thực của mình.",
             "no_support_qr_emoji": "Thiết bị bạn đang cố xác thực không hỗ trợ quét mã QR hoặc xác minh biểu tượng cảm xúc, đó là những gì %(brand)s hỗ trợ. Hãy thử với một thiết bị đầu cuối khác.",
             "other_party_cancelled": "Người kia đã hủy xác thực.",
@@ -949,10 +942,6 @@
     },
     "error_user_not_logged_in": "Người dùng đang không đăng nhập",
     "event_preview": {
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s đã kết thúc một cuộc phát thanh",
-            "you": "Bạn đã kết thúc một cuộc phát thanh"
-        },
         "m.call.answer": {
             "dm": "Cuộc gọi đang diễn ra",
             "user": "%(senderName)s đã tham gia cuộc gọi",
@@ -1288,7 +1277,6 @@
         "video_rooms_faq1_question": "Tôi có thể tạo một phòng video bằng cách nào?",
         "video_rooms_faq2_answer": "Vâng, dòng thời gian trò chuyện được hiển thị cùng với video.",
         "video_rooms_faq2_question": "Tôi có thể sử dụng nhắn tin cùng lúc với gọi video không?",
-        "voice_broadcast": "Phát thanh",
         "wysiwyg_composer": "Trình soạn thảo văn bản giàu tính chất"
     },
     "labs_mjolnir": {
@@ -1400,7 +1388,6 @@
         "mute_description": "Bạn sẽ không nhận bất kỳ thông báo nào"
     },
     "notifier": {
-        "io.element.voice_broadcast_chunk": "%(senderName)s đã bắt đầu phát thanh",
         "m.key.verification.request": "%(name)s đang yêu cầu xác thực"
     },
     "onboarding": {
@@ -1895,7 +1882,6 @@
             "error_unbanning": "Không thể bỏ cấm",
             "events_default": "Gửi tin nhắn",
             "invite": "Mời người dùng",
-            "io.element.voice_broadcast_info": "Phát thanh",
             "kick": "Loại bỏ người dùng",
             "m.call": "Bắt đầu %(brand)s cuộc gọi",
             "m.call.member": "Tham gia %(brand)s cuộc gọi",
@@ -2496,7 +2482,6 @@
         "warn_quit": "Cảnh báo trước khi bỏ thuốc lá"
     },
     "share": {
-        "link_title": "Liên kết đến phòng",
         "permalink_message": "Liên kết đến tin nhắn đã chọn",
         "permalink_most_recent": "Liên kết đến tin nhắn gần đây nhất",
         "title_message": "Chia sẻ tin nhắn trong phòng",
@@ -2583,13 +2568,6 @@
         "upgraderoom": "Nâng cấp phòng lên phiên bản mới",
         "upgraderoom_permission_error": "Bạn không có quyền để dùng lệnh này.",
         "usage": "Cách sử dụng",
-        "verify": "Xác thực người dùng, thiết bị và tuple pubkey",
-        "verify_mismatch": "CẢNH BÁO: XÁC THỰC KHÓA THẤT BẠI! Khóa đăng nhập cho %(userId)s và thiết bị %(deviceId)s là \"%(fprint)s\" không khớp với khóa được cung cấp \"%(fingerprint)s\". Điều này có nghĩa là các thông tin liên lạc của bạn đang bị chặn!",
-        "verify_nop": "Thiết bị đã được xác thực rồi!",
-        "verify_nop_warning_mismatch": "CẢNH BÁO: phiên đã được xác thực, nhưng các khóa KHÔNG KHỚP!",
-        "verify_success_description": "Khóa đăng nhập bạn cung cấp khớp với khóa đăng nhập bạn nhận từ thiết bị %(deviceId)s của %(userId)s. Thiết bị được đánh dấu là đã được xác minh.",
-        "verify_success_title": "Khóa được xác thực",
-        "verify_unknown_pair": "Cặp (người dùng, phiên) không xác định: (%(userId)s, %(deviceId)s)",
         "view": "Phòng truyền hình với địa chỉ đã cho",
         "whois": "Hiển thị thông tin về người dùng"
     },
@@ -2786,10 +2764,6 @@
         "error_rendering_message": "Không thể tải tin nhắn này",
         "historical_messages_unavailable": "Bạn khồng thể thấy các tin nhắn trước",
         "in_room_name": " ở <strong>%(room)s</strong>",
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s đã kết thúc một <a>cuộc phát thanh</a>",
-            "you": "Bạn đã kết thúc một <a>cuộc phát thanh</a>"
-        },
         "io.element.widgets.layout": "%(senderName)s đã cập nhật bố trí của phòng",
         "load_error": {
             "no_permission": "Đã cố gắng tải một điểm cụ thể trong dòng thời gian của phòng này, nhưng bạn không có quyền xem tin nhắn được đề cập.",
@@ -3280,34 +3254,6 @@
         "switch_theme_dark": "Chuyển sang chế độ tối",
         "switch_theme_light": "Chuyển sang chế độ ánh sáng"
     },
-    "voice_broadcast": {
-        "30s_backward": "30 giây trước",
-        "30s_forward": "30 giây kế tiếp",
-        "action": "Phát thanh",
-        "buffering": "Đang khởi tạo bộ đệm…",
-        "confirm_listen_affirm": "Vâng, ngừng ghi âm tôi",
-        "confirm_listen_description": "Nếu bạn bắt đầu nghe chương trình phát thanh trực tiếp này, quá trình ghi chương trình phát thanh trực tiếp hiện tại của bạn sẽ kết thúc.",
-        "confirm_listen_title": "Nghe phát thanh trực tiếp không?",
-        "confirm_stop_affirm": "Đúng rồi, dừng phát thanh",
-        "confirm_stop_description": "Bạn có chắc chắn muốn dừng phát sóng trực tiếp của mình không? Điều này sẽ kết thúc chương trình phát sóng và bản ghi đầy đủ sẽ có sẵn trong phòng.",
-        "confirm_stop_title": "Ngừng phát thanh trực tiếp?",
-        "connection_error": "Lỗi kết nối - Đã tạm dừng ghi âm",
-        "failed_already_recording_description": "Bạn hiện đang ghi một cuộc phát thanh. Kết thúc phát thanh để thực hiện một cái mới.",
-        "failed_already_recording_title": "Không thể bắt đầu cuộc phát thanh mới",
-        "failed_decrypt": "Không thể giải mã cuộc phát thanh",
-        "failed_generic": "Không thể nghe phát thanh",
-        "failed_insufficient_permission_description": "Bạn không có quyền để phát thanh trong phòng này. Hỏi một quản trị viên của phòng để nâng quyền của bạn.",
-        "failed_insufficient_permission_title": "Không thể bắt đầu cuộc phát thanh mới",
-        "failed_no_connection_description": "Thật không may là chúng tôi không thể bắt đầu ghi âm. Vui lòng thử lại.",
-        "failed_no_connection_title": "Lỗi kết nối",
-        "failed_others_already_recording_description": "Một người khác đang phát thanh. Hãy chờ cho đến khi họ ngừng rồi bạn mới bắt đầu phát thanh.",
-        "failed_others_already_recording_title": "Không thể bắt đầu cuộc phát thanh mới",
-        "go_live": "Phát trực tiếp",
-        "live": "Trực tiếp",
-        "pause": "Tạm dừng phát thanh",
-        "play": "nghe phát thanh",
-        "resume": "Tiếp tục phát thanh"
-    },
     "voip": {
         "already_in_call": "Đang trong cuộc gọi",
         "already_in_call_person": "Bạn đang trong cuộc gọi với người này rồi.",
@@ -3327,7 +3273,6 @@
         "camera_disabled": "Camera của bạn đã tắt",
         "camera_enabled": "Camera của bạn vẫn đang được bật",
         "cannot_call_yourself_description": "Bạn không thể tự gọi chính mình.",
-        "change_input_device": "Đổi thiết bị đầu vào",
         "connecting": "Đang kết nối",
         "connection_lost": "Mất kết nối đến máy chủ",
         "connection_lost_description": "Bạn không thể gọi khi không có kết nối tới máy chủ.",
@@ -3344,8 +3289,6 @@
         "enable_camera": "Bật máy ghi hình",
         "enable_microphone": "Mở âm micrô",
         "expand": "Quay về cuộc gọi",
-        "failed_call_live_broadcast_description": "Bạn không thể bắt đầu gọi vì bạn đang ghi âm để cuộc phát thanh trực tiếp. Hãy ngừng phát thanh để bắt đầu gọi.",
-        "failed_call_live_broadcast_title": "Không thể bắt đầu cuộc gọi",
         "hangup": "Dập máy",
         "hide_sidebar_button": "Ẩn thanh bên",
         "input_devices": "Thiết bị đầu vào",
