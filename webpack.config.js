@@ -750,9 +750,11 @@ module.exports = (env, argv) => {
  */
 function getAssetOutputPath(url, resourcePath) {
     const isKaTeX = resourcePath.includes("KaTeX");
+    const isFontSource = resourcePath.includes("@fontsource");
     // `res` is the parent dir for our own assets in various layers
     // `dist` is the parent dir for KaTeX assets
-    const prefix = /^.*[/\\](dist|res)[/\\]/;
+    // `files` is the parent dir for @fontsource assets
+    const prefix = /^.*[/\\](dist|res|files)[/\\]/;
 
     /**
      * Only needed for https://github.com/element-hq/element-web/pull/15939
@@ -776,6 +778,10 @@ function getAssetOutputPath(url, resourcePath) {
     const compoundMatch = outputDir.match(compoundImportsPrefix);
     if (compoundMatch) {
         outputDir = outputDir.substring(compoundMatch.index + compoundMatch[0].length);
+    }
+
+    if (isFontSource) {
+        outputDir = "fonts";
     }
 
     if (isKaTeX) {

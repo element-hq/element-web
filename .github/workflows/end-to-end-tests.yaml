@@ -83,7 +83,7 @@ jobs:
         name: "Run Tests ${{ matrix.runner }}/${{ strategy.job-total }}"
         needs: build
         if: inputs.skip != true
-        runs-on: ubuntu-22.04
+        runs-on: ubuntu-24.04
         permissions:
             actions: read
             issues: read
@@ -124,11 +124,11 @@ jobs:
               with:
                   path: |
                       ~/.cache/ms-playwright
-                  key: ${{ runner.os }}-playwright-${{ steps.playwright.outputs.version }}
+                  key: ${{ runner.os }}-playwright-${{ steps.playwright.outputs.version }}-chromium
 
-            - name: Install Playwright browsers
+            - name: Install Playwright browser
               if: steps.playwright-cache.outputs.cache-hit != 'true'
-              run: yarn playwright install --with-deps
+              run: yarn playwright install --with-deps --no-shell chromium
 
             - name: Run Playwright tests
               run: yarn playwright test --shard ${{ matrix.runner }}/${{ strategy.job-total }}
