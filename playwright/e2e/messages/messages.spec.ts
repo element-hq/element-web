@@ -63,7 +63,7 @@ test.describe("Message rendering", () => {
         { direction: "ltr", displayName: "Quentin" },
         { direction: "rtl", displayName: "كوينتين" },
     ].forEach(({ direction, displayName }) => {
-        test.describe(`with ${direction} display name`, () => {
+        test.describe(`with ${direction} display name`, { tag: "@screenshot" }, () => {
             test.use({
                 displayName,
                 room: async ({ user, app }, use) => {
@@ -72,14 +72,18 @@ test.describe("Message rendering", () => {
                 },
             });
 
-            test("should render a basic LTR text message", async ({ page, user, app, room }) => {
-                await page.goto(`#/room/${room.roomId}`);
+            test(
+                "should render a basic LTR text message",
+                { tag: "@screenshot" },
+                async ({ page, user, app, room }) => {
+                    await page.goto(`#/room/${room.roomId}`);
 
-                const msgTile = await sendMessage(page, "Hello, world!");
-                await expect(msgTile).toMatchScreenshot(`basic-message-ltr-${direction}displayname.png`, {
-                    mask: [page.locator(".mx_MessageTimestamp")],
-                });
-            });
+                    const msgTile = await sendMessage(page, "Hello, world!");
+                    await expect(msgTile).toMatchScreenshot(`basic-message-ltr-${direction}displayname.png`, {
+                        mask: [page.locator(".mx_MessageTimestamp")],
+                    });
+                },
+            );
 
             test("should render an LTR emote", async ({ page, user, app, room }) => {
                 await page.goto(`#/room/${room.roomId}`);

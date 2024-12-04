@@ -870,7 +870,6 @@
         },
         "udd": {
             "interactive_verification_button": "Verifikasi secara interaktif sengan emoji",
-            "manual_verification_button": "Verifikasi secara manual dengan teks",
             "other_ask_verify_text": "Tanyakan pengguna ini untuk memverifikasi sesinya, atau verifikasi secara manual di bawah.",
             "other_new_session_text": "%(name)s (%(userId)s) masuk ke sesi yang baru tanpa memverifikasinya:",
             "own_ask_verify_text": "Verifikasi sesi Anda lainnya dengan menggunakan salah satu pilihan di bawah.",
@@ -905,12 +904,6 @@
             "incoming_sas_dialog_waiting": "Menunggu pengguna untuk konfirmasi…",
             "incoming_sas_user_dialog_text_1": "Verifikasi pengguna ini untuk menandainya sebagai terpercaya. Mempercayai pengguna memberikan Anda ketenangan saat menggunakan pesan terenkripsi secara ujung ke ujung.",
             "incoming_sas_user_dialog_text_2": "Memverifikasi pengguna ini akan menandai sesinya sebagai terpercaya, dan juga menandai sesi Anda sebagai terpercaya kepadanya.",
-            "manual_device_verification_device_id_label": "ID Sesi",
-            "manual_device_verification_device_key_label": "Kunci sesi",
-            "manual_device_verification_device_name_label": "Nama sesi",
-            "manual_device_verification_footer": "Jika mereka tidak cocok, keamanan komunikasi Anda mungkin dikompromikan.",
-            "manual_device_verification_self_text": "Konfirmasi dengan membandingkan berikut ini dengan Pengaturan Pengguna di sesi Anda yang lain:",
-            "manual_device_verification_user_text": "Konfirmasi sesi pengguna ini dengan membandingkan berikut ini dengan Pengaturan Pengguna:",
             "no_key_or_device": "Sepertinya Anda tidak memiliki Kunci Keamanan atau perangkat lainnya yang Anda dapat gunakan untuk memverifikasi.  Perangkat ini tidak dapat mengakses ke pesan terenkripsi lama. Untuk membuktikan identitas Anda, kunci verifikasi harus diatur ulang.",
             "no_support_qr_emoji": "Perangkat yang Anda sedang verifikasi tidak mendukung pemindaian kode QR atau verifikasi emoji, yang didukung oleh %(brand)s. Coba menggunakan klien yang lain.",
             "other_party_cancelled": "Pengguna yang lain membatalkan proses verifikasi ini.",
@@ -1027,10 +1020,6 @@
     },
     "error_user_not_logged_in": "Pengguna belum masuk",
     "event_preview": {
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s mdngakhiri sebuah siaran suara",
-            "you": "Anda mengakhiri sebuah siaran suara"
-        },
         "m.call.answer": {
             "dm": "Panggilan sedang berjalan",
             "user": "%(senderName)s bergabung dengan panggilan saat ini",
@@ -1399,8 +1388,6 @@
         "video_rooms_faq2_answer": "Ya, lini masa obrolan akan ditampilkan di sebelah videonya.",
         "video_rooms_faq2_question": "Bisakah saya mengobrol dengan teks saat ada panggilan video?",
         "video_rooms_feedbackSubheading": "Terima kasih telah mencoba fitur beta, mohon berikan masukan sedetail mungkin supaya kami dapat menyempurnakannya.",
-        "voice_broadcast": "Siaran suara",
-        "voice_broadcast_force_small_chunks": "Paksakan panjang bagian siaran suara 15d",
         "wysiwyg_composer": "Editor teks kaya"
     },
     "labs_mjolnir": {
@@ -1537,7 +1524,6 @@
         "mute_description": "Anda tidak akan mendapatkan notifikasi apa pun"
     },
     "notifier": {
-        "io.element.voice_broadcast_chunk": "%(senderName)s memulai sebuah siaran suara",
         "m.key.verification.request": "%(name)s meminta verifikasi"
     },
     "onboarding": {
@@ -2104,7 +2090,6 @@
             "error_unbanning": "Gagal untuk menghapus cekalan",
             "events_default": "Kirim pesan",
             "invite": "Undang pengguna",
-            "io.element.voice_broadcast_info": "Siaran suara",
             "kick": "Keluarkan pengguna",
             "m.call": "Mulai panggilan %(brand)s",
             "m.call.member": "Bergabung panggilan %(brand)s",
@@ -2743,7 +2728,6 @@
         "warning": "<w>PERINGATAN:</w> <description/>"
     },
     "share": {
-        "link_title": "Tautan ke ruangan",
         "permalink_message": "Tautan ke pesan yang dipilih",
         "permalink_most_recent": "Tautan ke pesan terkini",
         "title_message": "Bagikan Pesan Ruangan",
@@ -2832,13 +2816,6 @@
         "upgraderoom": "Meningkatkan ruangan ke versi yang baru",
         "upgraderoom_permission_error": "Anda tidak memiliki izin yang dibutuhkan untuk menggunakan perintah ini.",
         "usage": "Penggunaan",
-        "verify": "Memverifikasi sebuah pengguna, sesi, dan tupel pubkey",
-        "verify_mismatch": "PERINGATAN: VERIFIKASI KUNCI GAGAL! Kunci penandatanganan untuk %(userId)s dan sesi %(deviceId)s adalah \"%(fprint)s\" yang tidak cocok dengan kunci \"%(fingerprint)s\" yang disediakan. Ini bisa saja berarti komunikasi Anda sedang disadap!",
-        "verify_nop": "Sesi telah diverifikasi!",
-        "verify_nop_warning_mismatch": "PERINGATAN: sesi telah diverifikasi, tetapi kuncinya TIDAK COCOK!",
-        "verify_success_description": "Kunci penandatanganan yang Anda sediakan cocok dengan kunci penandatanganan yang Anda terima dari sesi %(userId)s %(deviceId)s. Sesi ditandai sebagai terverifikasi.",
-        "verify_success_title": "Kunci terverifikasi",
-        "verify_unknown_pair": "Pasangan tidak diketahui (pengguna, sesi): (%(userId)s, %(deviceId)s)",
         "view": "Menampilkan ruangan dengan alamat yang ditentukan",
         "whois": "Menampilkan informasi tentang sebuah pengguna"
     },
@@ -3051,10 +3028,6 @@
         "error_rendering_message": "Tidak dapat memuat pesan ini",
         "historical_messages_unavailable": "Anda tidak dapat melihat pesan-pesan awal",
         "in_room_name": " di <strong>%(room)s</strong>",
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s mengakhiri sebuah <a>siaran suara</a>",
-            "you": "Anda mengakhiri sebuah <a>siaran suara</a>"
-        },
         "io.element.widgets.layout": "%(senderName)s telah memperbarui tata letak ruangan",
         "load_error": {
             "no_permission": "Mencoba memuat titik spesifik di lini masa ruangan ini, tetapi Anda tidak memiliki izin untuk menampilkan pesannya.",
@@ -3584,38 +3557,6 @@
         "switch_theme_dark": "Ubah ke mode gelap",
         "switch_theme_light": "Ubah ke mode terang"
     },
-    "voice_broadcast": {
-        "30s_backward": "30d sebelumnya",
-        "30s_forward": "30d selanjutnya",
-        "action": "Siaran suara",
-        "buffering": "Memuat…",
-        "confirm_listen_affirm": "Ya, hentikan rekaman saya",
-        "confirm_listen_description": "Jika Anda mendengarkan siaran langsung ini, rekaman siaran langsung Anda saat ini akan dihentikan.",
-        "confirm_listen_title": "Dengarkan siaran langsung?",
-        "confirm_stop_affirm": "Iya, hentikan siaran",
-        "confirm_stop_description": "Apakah Anda ingin menghentikan siaran langsung Anda? Ini akan mengakhiri siarannya, dan rekamanan lengkap akan tersedia dalam ruangan.",
-        "confirm_stop_title": "Hentikan siaran langsung?",
-        "connection_error": "Kesalahan koneksi - Perekaman dijeda",
-        "failed_already_recording_description": "Anda saat ini merekam sebuah siaran suara. Mohon akhiri siaran suara Anda saat ini untuk memulai yang baru.",
-        "failed_already_recording_title": "Tidak dapat memulai sebuah siaran suara baru",
-        "failed_decrypt": "Tidak dapat mendekripsi siaran suara",
-        "failed_generic": "Tidak dapat memutar siaran suara ini",
-        "failed_insufficient_permission_description": "Anda tidak memiliki izin untuk memulai sebuah siaran suara di ruangan ini. Hubungi sebuah administrator ruangan untuk meningkatkan izin Anda.",
-        "failed_insufficient_permission_title": "Tidak dapat memulai sebuah siaran suara baru",
-        "failed_no_connection_description": "Sayangnya kami saat ini tidak dapat memulai sebuah rekaman. Silakan mencoba lagi nanti.",
-        "failed_no_connection_title": "Terjadi kesalahan koneksi",
-        "failed_others_already_recording_description": "Ada orang lain yang saat ini merekam sebuah siaran suara. Tunggu siaran suaranya berakhir untuk memulai yang baru.",
-        "failed_others_already_recording_title": "Tidak dapat memulai sebuah siaran suara baru",
-        "go_live": "Mulai siaran langsung",
-        "live": "Langsung",
-        "pause": "jeda siaran suara",
-        "play": "mainkan siaran suara",
-        "resume": "lanjutkan siaran suara"
-    },
-    "voice_message": {
-        "cant_start_broadcast_description": "Anda tidak dapat memulai sebuah pesan suara karena Anda saat ini merekam sebuah siaran langsung. Silakan mengakhiri siaran langsung Anda untuk memulai merekam sebuah pesan suara.",
-        "cant_start_broadcast_title": "Tidak dapat memulai pesan suara"
-    },
     "voip": {
         "already_in_call": "Sudah ada di panggilan",
         "already_in_call_person": "Anda sudah ada di panggilan dengan orang itu.",
@@ -3635,7 +3576,6 @@
         "camera_disabled": "Kamera Anda dimatikan",
         "camera_enabled": "Kamera Anda masih nyala",
         "cannot_call_yourself_description": "Anda tidak dapat melakukan panggilan dengan diri sendiri.",
-        "change_input_device": "Ubah perangkat masukan",
         "connecting": "Menghubungkan",
         "connection_lost": "Koneksi ke server telah hilang",
         "connection_lost_description": "Anda tidak dapat membuat panggilan tanpa terhubung ke server.",
@@ -3652,8 +3592,6 @@
         "enable_camera": "Nyalakan kamera",
         "enable_microphone": "Suarakan mikrofon",
         "expand": "Kembali ke panggilan",
-        "failed_call_live_broadcast_description": "Anda tidak dapat memulai sebuah panggilan karena Anda saat ini merekam sebuah siaran langsung. Mohon akhiri siaran langsung Anda untuk memulai sebuah panggilan.",
-        "failed_call_live_broadcast_title": "Tidak dapat memulai panggilan",
         "hangup": "Akhiri",
         "hide_sidebar_button": "Sembunyikan sisi bilah",
         "input_devices": "Perangkat masukan",

@@ -19,7 +19,7 @@ test.describe("Invite dialog", function () {
 
     const botName = "BotAlice";
 
-    test("should support inviting a user to a room", async ({ page, app, user, bot }) => {
+    test("should support inviting a user to a room", { tag: "@screenshot" }, async ({ page, app, user, bot }) => {
         // Create and view a room
         await app.client.createRoom({ name: "Test Room" });
         await app.viewRoomByName("Test Room");
@@ -73,52 +73,63 @@ test.describe("Invite dialog", function () {
         await expect(page.getByText(`${botName} joined the room`)).toBeVisible();
     });
 
-    test("should support inviting a user to Direct Messages", async ({ page, app, user, bot }) => {
-        await page.locator(".mx_RoomList").getByRole("button", { name: "Start chat" }).click();
+    test(
+        "should support inviting a user to Direct Messages",
+        { tag: "@screenshot" },
+        async ({ page, app, user, bot }) => {
+            await page.locator(".mx_RoomList").getByRole("button", { name: "Start chat" }).click();
 
-        const other = page.locator(".mx_InviteDialog_other");
-        // Assert that the header is rendered
-        await expect(other.locator(".mx_Dialog_header .mx_Dialog_title").getByText("Direct Messages")).toBeVisible();
+            const other = page.locator(".mx_InviteDialog_other");
+            // Assert that the header is rendered
+            await expect(
+                other.locator(".mx_Dialog_header .mx_Dialog_title").getByText("Direct Messages"),
+            ).toBeVisible();
 
-        // Assert that the bar is rendered
-        await expect(other.locator(".mx_InviteDialog_addressBar")).toBeVisible();
+            // Assert that the bar is rendered
+            await expect(other.locator(".mx_InviteDialog_addressBar")).toBeVisible();
 
-        // Take a snapshot of the invite dialog
-        await expect(page.locator(".mx_Dialog")).toMatchScreenshot("invite-dialog-dm-without-user.png");
+            // Take a snapshot of the invite dialog
+            await expect(page.locator(".mx_Dialog")).toMatchScreenshot("invite-dialog-dm-without-user.png");
 
-        await other.getByTestId("invite-dialog-input").fill(bot.credentials.userId);
+            await other.getByTestId("invite-dialog-input").fill(bot.credentials.userId);
 
-        await expect(other.locator(".mx_InviteDialog_tile_nameStack").getByText(bot.credentials.userId)).toBeVisible();
-        await other.locator(".mx_InviteDialog_tile_nameStack").getByText(botName).click();
+            await expect(
+                other.locator(".mx_InviteDialog_tile_nameStack").getByText(bot.credentials.userId),
+            ).toBeVisible();
+            await other.locator(".mx_InviteDialog_tile_nameStack").getByText(botName).click();
 
-        await expect(
-            other.locator(".mx_InviteDialog_userTile_pill .mx_InviteDialog_userTile_name").getByText(botName),
-        ).toBeVisible();
+            await expect(
+                other.locator(".mx_InviteDialog_userTile_pill .mx_InviteDialog_userTile_name").getByText(botName),
+            ).toBeVisible();
 
-        // Take a snapshot of the invite dialog with a user pill
-        await expect(page.locator(".mx_Dialog")).toMatchScreenshot("invite-dialog-dm-with-user-pill.png");
+            // Take a snapshot of the invite dialog with a user pill
+            await expect(page.locator(".mx_Dialog")).toMatchScreenshot("invite-dialog-dm-with-user-pill.png");
 
-        // Open a direct message UI
-        await other.getByRole("button", { name: "Go" }).click();
+            // Open a direct message UI
+            await other.getByRole("button", { name: "Go" }).click();
 
-        // Assert that the invite dialog disappears
-        await expect(page.locator(".mx_InviteDialog_other")).not.toBeVisible();
+            // Assert that the invite dialog disappears
+            await expect(page.locator(".mx_InviteDialog_other")).not.toBeVisible();
 
-        // Assert that the hovered user name on invitation UI does not have background color
-        // TODO: implement the test on room-header.spec.ts
-        const roomHeader = page.locator(".mx_RoomHeader");
-        await roomHeader.locator(".mx_RoomHeader_heading").hover();
-        await expect(roomHeader.locator(".mx_RoomHeader_heading")).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+            // Assert that the hovered user name on invitation UI does not have background color
+            // TODO: implement the test on room-header.spec.ts
+            const roomHeader = page.locator(".mx_RoomHeader");
+            await roomHeader.locator(".mx_RoomHeader_heading").hover();
+            await expect(roomHeader.locator(".mx_RoomHeader_heading")).toHaveCSS(
+                "background-color",
+                "rgba(0, 0, 0, 0)",
+            );
 
-        // Send a message to invite the bots
-        const composer = app.getComposer().locator("[contenteditable]");
-        await composer.fill("Hello}");
-        await composer.press("Enter");
+            // Send a message to invite the bots
+            const composer = app.getComposer().locator("[contenteditable]");
+            await composer.fill("Hello}");
+            await composer.press("Enter");
 
-        // Assert that they were invited and joined
-        await expect(page.getByText(`${botName} joined the room`)).toBeVisible();
+            // Assert that they were invited and joined
+            await expect(page.getByText(`${botName} joined the room`)).toBeVisible();
 
-        // Assert that the message is displayed at the bottom
-        await expect(page.locator(".mx_EventTile_last").getByText("Hello")).toBeVisible();
-    });
+            // Assert that the message is displayed at the bottom
+            await expect(page.locator(".mx_EventTile_last").getByText("Hello")).toBeVisible();
+        },
+    );
 });

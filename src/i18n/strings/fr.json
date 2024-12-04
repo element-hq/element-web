@@ -504,6 +504,7 @@
         "matrix": "Matrix",
         "message": "Message",
         "message_layout": "Mise en page des messages",
+        "message_timestamp_invalid": "Horodatage non valide",
         "microphone": "Micro",
         "model": "Modèle",
         "modern": "Moderne",
@@ -904,6 +905,8 @@
             "warning": "Si vous n’avez pas activé de nouvelle méthode de récupération, un attaquant essaye peut-être d’accéder à votre compte. Changez immédiatement le mot de passe de votre compte et configurez une nouvelle méthode de récupération dans les paramètres."
         },
         "not_supported": "<non pris en charge>",
+        "pinned_identity_changed": "%(displayName)sL'identité de (<b>%(userId)s</b>) semble avoir changé. <a>En savoir plus </a>",
+        "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>semble avoir changé d'identité. <a>En savoir plus</a>",
         "recovery_method_removed": {
             "description_1": "Cette session a détecté que votre phrase secrète et clé de sécurité pour les messages sécurisés ont été supprimées.",
             "description_2": "Si vous l’avez fait accidentellement, vous pouvez configurer les messages sécurisés sur cette session ce qui re-chiffrera l’historique des messages de cette session avec une nouvelle méthode de récupération.",
@@ -919,7 +922,6 @@
         },
         "udd": {
             "interactive_verification_button": "Vérifier de façon interactive avec des émojis",
-            "manual_verification_button": "Vérifier manuellement avec un texte",
             "other_ask_verify_text": "Demandez à cet utilisateur de vérifier sa session, ou vérifiez-la manuellement ci-dessous.",
             "other_new_session_text": "%(name)s (%(userId)s) s’est connecté à une nouvelle session sans la vérifier :",
             "own_ask_verify_text": "Vérifiez votre autre session en utilisant une des options ci-dessous.",
@@ -954,12 +956,6 @@
             "incoming_sas_dialog_waiting": "Attente de la confirmation du partenaire…",
             "incoming_sas_user_dialog_text_1": "Vérifier cet utilisateur pour le marquer comme fiable. Faire confiance aux utilisateurs vous permet d’être tranquille lorsque vous utilisez des messages chiffrés de bout en bout.",
             "incoming_sas_user_dialog_text_2": "Vérifier cet utilisateur marquera sa session comme fiable, et marquera aussi votre session comme fiable pour lui.",
-            "manual_device_verification_device_id_label": "Identifiant de session",
-            "manual_device_verification_device_key_label": "Clé de la session",
-            "manual_device_verification_device_name_label": "Nom de la session",
-            "manual_device_verification_footer": "S’ils ne correspondent pas, la sécurité de vos communications est peut-être compromise.",
-            "manual_device_verification_self_text": "Confirmez en comparant ceci avec les paramètres utilisateurs de votre autre session :",
-            "manual_device_verification_user_text": "Confirmez la session de cet utilisateur en comparant ceci avec ses paramètres utilisateur :",
             "no_key_or_device": "Il semblerait que vous n’avez pas de clé de sécurité ou d’autres appareils pour faire la vérification. Cet appareil ne pourra pas accéder aux anciens messages chiffrés. Afin de vérifier votre identité sur cet appareil, vous devrez réinitialiser vos clés de vérifications.",
             "no_support_qr_emoji": "L’appareil que vous essayez de vérifier ne prend pas en charge les QR codes ou la vérification d’émojis, qui sont les méthodes prises en charge par %(brand)s. Essayez avec un autre client.",
             "other_party_cancelled": "L’autre personne a annulé la vérification.",
@@ -999,7 +995,7 @@
             "unverified_sessions_toast_description": "Vérifiez pour assurer la sécurité de votre compte",
             "unverified_sessions_toast_reject": "Plus tard",
             "unverified_sessions_toast_title": "Vous avez des sessions non vérifiées",
-            "verification_description": "Vérifiez votre identité pour accéder aux messages chiffrés et prouver votre identité aux autres.",
+            "verification_description": "Vérifiez votre identité pour accéder aux messages chiffrés et prouver votre identité aux autres. Si vous utilisez également un appareil mobile, veuillez ouvrir l’application avant de continuer.",
             "verification_dialog_title_device": "Vérifier un autre appareil",
             "verification_dialog_title_user": "Demande de vérification",
             "verification_skip_warning": "Sans vérification, vous n’aurez pas accès à tous vos messages et vous n’apparaîtrez pas comme de confiance aux autres.",
@@ -1084,10 +1080,6 @@
     },
     "error_user_not_logged_in": "L’utilisateur n’est pas identifié",
     "event_preview": {
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s a terminé une diffusion audio",
-            "you": "Vous avez terminé une diffusion audio"
-        },
         "m.call.answer": {
             "dm": "Appel en cours",
             "user": "%(senderName)s a rejoint l’appel",
@@ -1109,7 +1101,15 @@
             "you": "Vous avez réagi avec %(reaction)s à %(message)s"
         },
         "m.sticker": "%(senderName)s : %(stickerName)s",
-        "m.text": "%(senderName)s : %(message)s"
+        "m.text": "%(senderName)s : %(message)s",
+        "prefix": {
+            "audio": "Audio",
+            "file": "Fichier",
+            "image": "Image",
+            "poll": "Sondage",
+            "video": "Vidéo"
+        },
+        "preview": "<bold>%(prefix)s: </bold> %(preview)s"
     },
     "export_chat": {
         "cancelled": "Export annulé",
@@ -1240,7 +1240,11 @@
         "linux": "Linux",
         "macos": "MAC",
         "supported_browsers": "Pour une expérience optimale, utilisez <Chrome>Chrome</Chrome>, <Firefox>Firefox</Firefox>, <Edge>Edge</Edge>, ou <Safari>Safari</Safari>.",
-        "title": "Navigateur non pris en charge"
+        "title": "Navigateur non pris en charge",
+        "use_desktop_heading": "Utilisez plutôt %(brand)s Desktop",
+        "use_mobile_heading": "Utilisez plutôt %(brand)s sur votre appareil mobile",
+        "use_mobile_heading_after_desktop": "Ou utilisez notre application mobile",
+        "windows": "Windows (%(bits)s-bit)"
     },
     "info_tooltip_title": "Informations",
     "integration_manager": {
@@ -1476,8 +1480,6 @@
         "video_rooms_faq2_answer": "Oui, l’historique de conversation est affiché à côté de la vidéo.",
         "video_rooms_faq2_question": "Est-il possible d’utiliser les messages textuels en même temps que l’appel vidéo ?",
         "video_rooms_feedbackSubheading": "Merci d’essayer la version bêta. Veuillez l’utiliser au maximum pour que nous puissions l’améliorer.",
-        "voice_broadcast": "Diffusion audio",
-        "voice_broadcast_force_small_chunks": "Forcer la diffusion audio à utiliser des morceaux de 15s",
         "wysiwyg_composer": "Éditeur de texte formaté"
     },
     "labs_mjolnir": {
@@ -1623,7 +1625,6 @@
         "mute_description": "Vous n’aurez aucune notification"
     },
     "notifier": {
-        "io.element.voice_broadcast_chunk": "%(senderName)s a démarré une diffusion audio",
         "m.key.verification.request": "%(name)s demande une vérification"
     },
     "onboarding": {
@@ -2237,7 +2238,6 @@
             "error_unbanning": "Échec de la révocation du bannissement",
             "events_default": "Envoyer des messages",
             "invite": "Inviter des utilisateurs",
-            "io.element.voice_broadcast_info": "Diffusions audio",
             "kick": "Expulser des utilisateurs",
             "m.call": "Démarrer des appels %(brand)s",
             "m.call.member": "Rejoindre des appels %(brand)s",
@@ -2936,7 +2936,7 @@
         "warning": "<w>ATTENTION :</w> <description/>"
     },
     "share": {
-        "link_title": "Lien vers le salon",
+        "link_copied": "Lien copié",
         "permalink_message": "Lien vers le message sélectionné",
         "permalink_most_recent": "Lien vers le message le plus récent",
         "share_call": "Lien d'invitation à la conférence",
@@ -3028,13 +3028,6 @@
         "upgraderoom": "Met à niveau un salon vers une nouvelle version",
         "upgraderoom_permission_error": "Vous n’avez pas les autorisations nécessaires pour utiliser cette commande.",
         "usage": "Utilisation",
-        "verify": "Vérifie un utilisateur, une session et une collection de clés publiques",
-        "verify_mismatch": "ATTENTION : ÉCHEC DE LA VÉRIFICATION DE CLÉ ! La clé de signature pour %(userId)s et la session %(deviceId)s est « %(fprint)s  ce qui ne correspond pas à la clé fournie « %(fingerprint)s ». Cela pourrait signifier que vos communications sont interceptées !",
-        "verify_nop": "Session déjà vérifiée !",
-        "verify_nop_warning_mismatch": "ATTENTION : session déjà vérifiée, mais les clés ne CORRESPONDENT PAS !",
-        "verify_success_description": "La clé de signature que vous avez fournie correspond à celle que vous avez reçue de la session %(deviceId)s de %(userId)s. Session marquée comme vérifiée.",
-        "verify_success_title": "Clé vérifiée",
-        "verify_unknown_pair": "Paire (utilisateur, session) inconnue : (%(userId)s, %(deviceId)s)",
         "view": "Affiche le salon avec cette adresse",
         "whois": "Affiche des informations à propos de l’utilisateur"
     },
@@ -3271,10 +3264,6 @@
         "error_rendering_message": "Impossible de charger ce message",
         "historical_messages_unavailable": "Vous ne pouvez pas voir les messages plus anciens",
         "in_room_name": " dans <strong>%(room)s</strong>",
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s a terminé une <a>diffusion audio</a>",
-            "you": "Vous avez terminé une <a>diffusion audio</a>"
-        },
         "io.element.widgets.layout": "%(senderName)s a mis à jour la mise en page du salon",
         "late_event_separator": "Initialement envoyé%(dateTime)s",
         "load_error": {
@@ -3728,6 +3717,7 @@
         "error_files_too_large": "Ces fichiers sont <b>trop lourds</b> pour être envoyés. La taille limite des fichiers est de %(limit)s.",
         "error_some_files_too_large": "Certains fichiers sont <b>trop lourds</b> pour être envoyés. La taille limite des fichiers est de %(limit)s.",
         "error_title": "Erreur d’envoi",
+        "not_image": "Le fichier que vous avez choisi n'est pas un fichier image valide.",
         "title": "Envoyer les fichiers",
         "title_progress": "Envoi des fichiers (%(current)s sur %(total)s)",
         "upload_all_button": "Tout envoyer",
@@ -3823,38 +3813,6 @@
         "switch_theme_dark": "Passer au mode sombre",
         "switch_theme_light": "Passer au mode clair"
     },
-    "voice_broadcast": {
-        "30s_backward": "30s en arrière",
-        "30s_forward": "30s en avant",
-        "action": "Diffusion audio",
-        "buffering": "Mise en mémoire tampon…",
-        "confirm_listen_affirm": "Oui, terminer mon enregistrement",
-        "confirm_listen_description": "En commençant à écouter cette diffusion en direct, votre enregistrement de diffusion en direct actuel sera interrompu.",
-        "confirm_listen_title": "Écouter la diffusion en direct ?",
-        "confirm_stop_affirm": "Oui, arrêter la diffusion",
-        "confirm_stop_description": "Êtes-vous sûr de vouloir arrêter votre diffusion en direct ? Cela terminera la diffusion et l’enregistrement complet sera disponible dans le salon.",
-        "confirm_stop_title": "Arrêter la diffusion en direct ?",
-        "connection_error": "Erreur de connexion – Enregistrement en pause",
-        "failed_already_recording_description": "Vous êtes déjà en train de réaliser une diffusion audio. Veuillez terminer votre diffusion audio actuelle pour en démarrer une nouvelle.",
-        "failed_already_recording_title": "Impossible de commencer une nouvelle diffusion audio",
-        "failed_decrypt": "Impossible de décrypter la diffusion audio",
-        "failed_generic": "Impossible de lire cette diffusion audio",
-        "failed_insufficient_permission_description": "Vous n’avez pas les permissions requises pour démarrer une nouvelle diffusion audio dans ce salon. Contactez un administrateur du salon pour mettre-à-jour vos permissions.",
-        "failed_insufficient_permission_title": "Impossible de commencer une nouvelle diffusion audio",
-        "failed_no_connection_description": "Malheureusement, nous ne pouvons pas démarrer l’enregistrement pour le moment. Veuillez réessayer plus tard.",
-        "failed_no_connection_title": "Erreur de connexion",
-        "failed_others_already_recording_description": "Une autre personne est déjà en train de réaliser une diffusion audio. Attendez que sa diffusion audio soit terminée pour en démarrer une nouvelle.",
-        "failed_others_already_recording_title": "Impossible de commencer une nouvelle diffusion audio",
-        "go_live": "Passer en direct",
-        "live": "Direct",
-        "pause": "mettre en pause la diffusion audio",
-        "play": "lire la diffusion audio",
-        "resume": "continuer la diffusion audio"
-    },
-    "voice_message": {
-        "cant_start_broadcast_description": "Vous ne pouvez pas commencer un message vocal car vous êtes en train d’enregistrer une diffusion en direct. Veuillez terminer cette diffusion pour commencer un message vocal.",
-        "cant_start_broadcast_title": "Impossible de commencer un message vocal"
-    },
     "voip": {
         "already_in_call": "Déjà en cours d’appel",
         "already_in_call_person": "Vous êtes déjà en cours d’appel avec cette personne.",
@@ -3874,7 +3832,6 @@
         "camera_disabled": "Votre caméra est éteinte",
         "camera_enabled": "Votre caméra est toujours allumée",
         "cannot_call_yourself_description": "Vous ne pouvez pas passer d’appel avec vous-même.",
-        "change_input_device": "Change de périphérique d’entrée",
         "close_lobby": "Fermer la salle d'attente",
         "connecting": "Connexion",
         "connection_lost": "La connexion au serveur a été perdue",
@@ -3893,8 +3850,6 @@
         "enable_camera": "Activer la caméra",
         "enable_microphone": "Activer le microphone",
         "expand": "Revenir à l’appel",
-        "failed_call_live_broadcast_description": "Vous ne pouvez pas démarrer un appel car vous êtes en train d’enregistrer une diffusion en direct. Veuillez terminer cette diffusion pour démarrer un appel.",
-        "failed_call_live_broadcast_title": "Impossible de démarrer un appel",
         "get_call_link": "Partager le lien de l'appel",
         "hangup": "Raccrocher",
         "hide_sidebar_button": "Masquer la barre latérale",
