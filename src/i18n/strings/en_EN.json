@@ -808,7 +808,7 @@
         "user_read_up_to": "User read up to: ",
         "user_read_up_to_ignore_synthetic": "User read up to (ignoreSynthetic): ",
         "user_read_up_to_private": "User read up to (m.read.private): ",
-        "user_read_up_to_private_ignore_synthetic": "User read up to (m.read.private;ignoreSynthetic):",
+        "user_read_up_to_private_ignore_synthetic": "User read up to (m.read.private;ignoreSynthetic): ",
         "value": "Value",
         "value_colon": "Value:",
         "value_in_this_room": "Value in this room",
