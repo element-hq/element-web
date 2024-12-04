@@ -6,6 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
+import { Locator } from "@playwright/test";
+
 import { expect, test } from "../../element-web-test";
 import {
     autoJoin,
@@ -17,6 +19,7 @@ import {
     verify,
 } from "./utils";
 import { bootstrapCrossSigningForClient } from "../../pages/client.ts";
+import { ElementAppPage } from "../../pages/ElementAppPage.ts";
 
 test.describe("Cryptography", function () {
     test.use({
@@ -306,7 +309,7 @@ test.describe("Cryptography", function () {
             );
 
             const penultimate = page.locator(".mx_EventTile").filter({ hasText: "test encrypted from verified" });
-            await expect(penultimate.locator(".mx_EventTile_e2eIcon")).not.toBeVisible();
+            await assertNoE2EIcon(penultimate, app);
         });
 
         test("should show correct shields on events sent by users with changed identity", async ({
@@ -335,3 +338,21 @@ test.describe("Cryptography", function () {
         });
     });
 });
+
+/**
+ * Check that the given message doesn't have an E2E warning icon.
+ *
+ * If it does, throw an error.
+ */
+async function assertNoE2EIcon(messageLocator: Locator, app: ElementAppPage) {
+    // Make sure the message itself exists, before we check if it has any icons
+    await messageLocator.waitFor();
+
+    const e2eIcon = messageLocator.locator(".mx_EventTile_e2eIcon");
+    if ((await e2eIcon.count()) > 0) {
+        // uh-oh, there is an e2e icon. Let's find out what it's about so that we can throw a helpful error.
+        await e2eIcon.focus();
+        const tooltip = await app.getTooltipForElement(e2eIcon);
+        throw new Error(`Found an unexpected e2eIcon with tooltip '${await tooltip.textContent()}'`);
+    }
+}
