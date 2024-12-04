@@ -12,7 +12,7 @@ import QRCode from "../QRCode";
 
 interface IProps {
     /** The data for the QR code. If `undefined`, a spinner is shown. */
-    qrCodeBytes: undefined | Buffer;
+    qrCodeBytes: undefined | Uint8ClampedArray;
 }
 
 export default class VerificationQRCode extends React.PureComponent<IProps> {

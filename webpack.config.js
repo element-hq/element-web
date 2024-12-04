@@ -231,8 +231,6 @@ module.exports = (env, argv) => {
 
                 // Polyfill needed by counterpart
                 "util": require.resolve("util/"),
-                // Polyfill needed by matrix-js-sdk/src/crypto
-                "buffer": require.resolve("buffer/"),
                 // Polyfill needed by sentry
                 "process/browser": require.resolve("process/browser"),
             },
@@ -679,7 +677,6 @@ module.exports = (env, argv) => {
             // Automatically load buffer & process modules as we use them without explicitly
             // importing them
             new webpack.ProvidePlugin({
-                Buffer: ["buffer", "Buffer"],
                 process: "process/browser",
             }),
 
