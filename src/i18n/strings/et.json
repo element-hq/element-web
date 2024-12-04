@@ -880,7 +880,6 @@
         },
         "udd": {
             "interactive_verification_button": "Verifitseeri interaktiivselt emoji abil",
-            "manual_verification_button": "Verifitseeri käsitsi etteantud teksti abil",
             "other_ask_verify_text": "Palu nimetatud kasutajal verifitseerida see sessioon või tee seda alljärgnevaga käsitsi.",
             "other_new_session_text": "%(name)s (%(userId)s) logis sisse uude sessiooni ilma seda verifitseerimata:",
             "own_ask_verify_text": "Verifitseeri oma teine sessioon kasutades üht alljärgnevatest võimalustest.",
@@ -915,12 +914,6 @@
             "incoming_sas_dialog_waiting": "Ootan teise osapoole kinnitust…",
             "incoming_sas_user_dialog_text_1": "Selle kasutaja usaldamiseks peaksid ta verifitseerima. Kui sa pruugid läbivalt krüptitud sõnumeid, siis kasutajate verifitseerimine tagab sulle täiendava meelerahu.",
             "incoming_sas_user_dialog_text_2": "Selle kasutaja verifitseerimisel märgitakse tema sessioon usaldusväärseks ning samuti märgitakse sinu sessioon tema jaoks usaldusväärseks.",
-            "manual_device_verification_device_id_label": "Sessiooni tunnus",
-            "manual_device_verification_device_key_label": "Sessiooni võti",
-            "manual_device_verification_device_name_label": "Sessiooni nimi",
-            "manual_device_verification_footer": "Kui nad omavahel ei klapi, siis teie suhtluse turvalisus võib olla ohus.",
-            "manual_device_verification_self_text": "Kinnita seda võrreldes järgnevaid andmeid oma teise sessiooni kasutajaseadetes:",
-            "manual_device_verification_user_text": "Kinnita selle kasutaja sessioon võrreldes järgnevaid andmeid tema kasutajaseadetes:",
             "no_key_or_device": "Tundub, et sul ei ole ei turvavõtit ega muid seadmeid, mida saaksid verifitseerimiseks kasutada. Siin seadmes ei saa lugeda vanu krüptitud sõnumeid. Enda tuvastamiseks selles seadmed pead oma vanad verifitseerimisvõtmed kustutama.",
             "no_support_qr_emoji": "See seade, mida sa tahad verifitseerida ei toeta QR-koodi ega emoji-põhist verifitseerimist, aga just neid %(brand)s oskab kasutada. Proovi mõne muu Matrix'i kliendiga.",
             "other_party_cancelled": "Teine osapool tühistas verifitseerimise.",
@@ -1043,10 +1036,6 @@
     },
     "error_user_not_logged_in": "Kasutaja pole võrku loginud",
     "event_preview": {
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s lõpetas ringhäälingukõne",
-            "you": "Sa lõpetasid ringhäälingukõne"
-        },
         "m.call.answer": {
             "dm": "Kõne on pooleli",
             "user": "%(senderName)s liitus kõnega",
@@ -1415,8 +1404,6 @@
         "video_rooms_faq1_question": "Kuidas ma saan luua videotoa?",
         "video_rooms_faq2_answer": "Jah, tekstivestluse ajajoon on kuvatud videovaate kõrval.",
         "video_rooms_faq2_question": "Kas ma saan videokõne ajal ka tekstisõnumeid saata?",
-        "voice_broadcast": "Ringhäälingukõne",
-        "voice_broadcast_force_small_chunks": "Kasuta ringhäälingusõnumi puhul 15-sekundilist blokipikkust",
         "wysiwyg_composer": "Kujundatud teksti toimeti"
     },
     "labs_mjolnir": {
@@ -1556,7 +1543,6 @@
         "mute_description": "Sa ei saa üldse teavitusi"
     },
     "notifier": {
-        "io.element.voice_broadcast_chunk": "%(senderName)s alustas ringhäälingukõnet",
         "m.key.verification.request": "%(name)s soovib verifitseerimist"
     },
     "onboarding": {
@@ -2112,7 +2098,6 @@
             "error_unbanning": "Ligipääsu taastamine ei õnnestunud",
             "events_default": "Saada sõnumeid",
             "invite": "Kutsu kasutajaid",
-            "io.element.voice_broadcast_info": "Ringhäälingukõned",
             "kick": "Eemalda kasutajaid",
             "m.call": "Alusta helistamist %(brand)s abil",
             "m.call.member": "Liitu %(brand)s kõnedega",
@@ -2744,7 +2729,6 @@
         "warning": "<w>HOIATUS:</w> <description/>"
     },
     "share": {
-        "link_title": "Link jututoale",
         "permalink_message": "Viide valitud sõnumile",
         "permalink_most_recent": "Viide kõige viimasele sõnumile",
         "title_message": "Jaga jututoa sõnumit",
@@ -2831,13 +2815,6 @@
         "upgraderoom": "Uuendab jututoa uue versioonini",
         "upgraderoom_permission_error": "Sul ei ole piisavalt õigusi selle käsu käivitamiseks.",
         "usage": "Kasutus",
-        "verify": "Verifitseerib kasutaja, sessiooni ja avalikud võtmed",
-        "verify_mismatch": "HOIATUS: VÕTMETE VERIFITSEERIMINE EI ÕNNESTUNUD! Kasutaja %(userId)s ja sessiooni %(deviceId)s allkirjastamise võti on „%(fprint)s“, aga see ei vasta antud sõrmejäljele „%(fingerprint)s“. See võib tähendada, et sinu kasutatavad ühendused võivad olla kolmanda osapoole poolt vahelt lõigatud!",
-        "verify_nop": "Sessioon on juba verifitseeritud!",
-        "verify_nop_warning_mismatch": "HOIATUS: Sessioon on juba verifitseeritud, aga võtmed ei klapi!",
-        "verify_success_description": "Sinu antud allkirjavõti vastab allkirjavõtmele, mille sa said kasutaja %(userId)s sessioonist %(deviceId)s. Sessioon on märgitud verifitseerituks.",
-        "verify_success_title": "Verifitseeritud võti",
-        "verify_unknown_pair": "Tundmatu kasutaja ja sessiooni kombinatsioon: (%(userId)s, %(deviceId)s)",
         "view": "Vaata sellise aadressiga jututuba",
         "whois": "Näitab teavet kasutaja kohta"
     },
@@ -3049,10 +3026,6 @@
         "error_rendering_message": "Selle sõnumi laadimine ei õnnestu",
         "historical_messages_unavailable": "Sa ei saa näha varasemaid sõnumeid",
         "in_room_name": " <strong>%(room)s</strong> jututoas",
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s lõpetas <a>ringhäälingukõne</a>",
-            "you": "Sa lõpetasid <a>ringhäälingukõne</a>"
-        },
         "io.element.widgets.layout": "%(senderName)s on uuendanud jututoa välimust",
         "load_error": {
             "no_permission": "Üritasin laadida teatud hetke selle jututoa ajajoonelt, kuid sul ei ole õigusi selle sõnumi nägemiseks.",
@@ -3580,38 +3553,6 @@
         "switch_theme_dark": "Kasuta tumedat teemat",
         "switch_theme_light": "Kasuta heledat teemat"
     },
-    "voice_broadcast": {
-        "30s_backward": "30s tagasi",
-        "30s_forward": "30s edasi",
-        "action": "Ringhäälingukõne",
-        "buffering": "Andmed on puhverdamisel…",
-        "confirm_listen_affirm": "Jah, lõpeta salvestamine",
-        "confirm_listen_description": "Kui hakkad kuulama seda ringhäälingukõnet, siis hetkel toimuv ringhäälingukõne salvestamine lõppeb.",
-        "confirm_listen_title": "Kas soovid kuulata ringhäälingukõnet?",
-        "confirm_stop_affirm": "Jah, lõpeta",
-        "confirm_stop_description": "Kas sa oled kindel, et soovid otseeetri lõpetada? Sellega ringhäälingukõne salvestamine lõppeb ja salvestis on kättesaadav kõigile jututoas.",
-        "confirm_stop_title": "Kas lõpetame otseeetri?",
-        "connection_error": "Viga võrguühenduses - salvestamine on peatatud",
-        "failed_already_recording_description": "Sa juba salvestad ringhäälingukõnet. Uue alustamiseks palun lõpeta eelmine salvestus.",
-        "failed_already_recording_title": "Uue ringhäälingukõne alustamine pole võimalik",
-        "failed_decrypt": "Ringhäälingukõne dekrüptimine ei õnnestu",
-        "failed_generic": "Selle ringhäälingukõne esitamine ei õnnestu",
-        "failed_insufficient_permission_description": "Sul pole piisavalt õigusi selles jututoas ringhäälingukõne algatamiseks. Õiguste lisamiseks palun võta ühendust jututoa haldajaga.",
-        "failed_insufficient_permission_title": "Uue ringhäälingukõne alustamine pole võimalik",
-        "failed_no_connection_description": "Kahjuks me ei saa hetkel salvestamist alustada. Palun proovi hiljem uuesti.",
-        "failed_no_connection_title": "Ühenduse viga",
-        "failed_others_already_recording_description": "Keegi juba salvestab ringhäälingukõnet. Uue ringhäälingukõne salvestamiseks palun oota, kuni see teine ringhäälingukõne on lõppenud.",
-        "failed_others_already_recording_title": "Uue ringhäälingukõne alustamine pole võimalik",
-        "go_live": "Alusta otseeetrit",
-        "live": "Otseeeter",
-        "pause": "peata ringhäälingukõne",
-        "play": "esita ringhäälingukõnet",
-        "resume": "jätka ringhäälingukõnet"
-    },
-    "voice_message": {
-        "cant_start_broadcast_description": "Kuna sa hetkel salvestad ringhäälingukõnet, siis häälsõnumi salvestamine või esitamine ei õnnestu. Selleks palun lõpeta ringhäälingukõne.",
-        "cant_start_broadcast_title": "Häälsõnumi salvestamine või esitamine ei õnnestu"
-    },
     "voip": {
         "already_in_call": "Kõne on juba pooleli",
         "already_in_call_person": "Sinul juba kõne käsil selle osapoolega.",
@@ -3631,7 +3572,6 @@
         "camera_disabled": "Sinu seadme kaamera on välja lülitatud",
         "camera_enabled": "Sinu seadme kaamera on jätkuvalt kasutusel",
         "cannot_call_yourself_description": "Sa ei saa iseendale helistada.",
-        "change_input_device": "Vaheta sisendseadet",
         "connecting": "Kõne on ühendamisel",
         "connection_lost": "Ühendus sinu serveriga on katkenud",
         "connection_lost_description": "Kui ühendus sinu serveriga on katkenud, siis sa ei saa helistada.",
@@ -3648,8 +3588,6 @@
         "enable_camera": "Lülita kaamera sisse",
         "enable_microphone": "Eemalda mikrofoni summutamine",
         "expand": "Pöördu tagasi kõne juurde",
-        "failed_call_live_broadcast_description": "Kuna sa hetkel salvestad ringhäälingukõnet, siis tavakõne algatamine ei õnnestu. Kõne alustamiseks palun lõpeta ringhäälingukõne.",
-        "failed_call_live_broadcast_title": "Kõne algatamine ei õnnestu",
         "hangup": "Katkesta kõne",
         "hide_sidebar_button": "Peida külgpaan",
         "input_devices": "Sisendseadmed",

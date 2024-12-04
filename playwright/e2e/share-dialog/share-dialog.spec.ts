@@ -16,7 +16,7 @@ test.describe("Share dialog", () => {
         },
     });
 
-    test("should share a room", async ({ page, app, room }) => {
+    test("should share a room", { tag: "@screenshot" }, async ({ page, app, room }) => {
         await app.viewRoomById(room.roomId);
         await app.toggleRoomInfoPanel();
         await page.getByRole("menuitem", { name: "Copy link" }).click();
@@ -29,7 +29,7 @@ test.describe("Share dialog", () => {
         });
     });
 
-    test("should share a room member", async ({ page, app, room, user }) => {
+    test("should share a room member", { tag: "@screenshot" }, async ({ page, app, room, user }) => {
         await app.viewRoomById(room.roomId);
         await app.client.sendMessage(room.roomId, { body: "hello", msgtype: "m.text" });
 
@@ -46,7 +46,7 @@ test.describe("Share dialog", () => {
         });
     });
 
-    test("should share an event", async ({ page, app, room }) => {
+    test("should share an event", { tag: "@screenshot" }, async ({ page, app, room }) => {
         await app.viewRoomById(room.roomId);
         await app.client.sendMessage(room.roomId, { body: "hello", msgtype: "m.text" });
 

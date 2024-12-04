@@ -70,7 +70,7 @@ test.describe("Widget Layout", () => {
         await app.viewRoomByName(ROOM_NAME);
     });
 
-    test("should be set properly", async ({ page }) => {
+    test("should be set properly", { tag: "@screenshot" }, async ({ page }) => {
         await expect(page.locator(".mx_AppsDrawer")).toMatchScreenshot("apps-drawer.png");
     });
 

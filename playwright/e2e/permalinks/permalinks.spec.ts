@@ -24,7 +24,7 @@ test.describe("permalinks", () => {
         displayName: "Alice",
     });
 
-    test("shoud render permalinks as expected", async ({ page, app, user, homeserver }) => {
+    test("shoud render permalinks as expected", { tag: "@screenshot" }, async ({ page, app, user, homeserver }) => {
         const bob = new Bot(page, homeserver, { displayName: "Bob" });
         const charlotte = new Bot(page, homeserver, { displayName: "Charlotte" });
         await bob.prepareClient();

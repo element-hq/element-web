@@ -835,7 +835,6 @@
         },
         "udd": {
             "interactive_verification_button": "Verifikojeni në mënyrë ndërvepruese përmes emoji-sh",
-            "manual_verification_button": "Verifikojeni dorazi përmes teksti",
             "other_ask_verify_text": "Kërkojini këtij përdoruesi të verifikojë sesionin e vet, ose ta verifikojë më poshtë dorazi.",
             "other_new_session_text": "%(name)s (%(userId)s) bëri hyrjen në një sesion të ri pa e verifikuar:",
             "own_ask_verify_text": "Verifikoni sesionit tuaj tjetër duke përdorur një nga mundësitë më poshtë.",
@@ -870,12 +869,6 @@
             "incoming_sas_dialog_waiting": "Po pritet ripohimi nga partneri…",
             "incoming_sas_user_dialog_text_1": "Verifikojeni këtë përdorues që t’i vihet shenjë si i besuar. Përdoruesit e besuar ju më tepër siguri kur përdorni mesazhe të fshehtëzuar skaj-më-skaj.",
             "incoming_sas_user_dialog_text_2": "Verifikimi i këtij përdoruesi do t’i vërë shenjë sesionit të tij si të besuar dhe sesionit tuaj si të besuar për ta.",
-            "manual_device_verification_device_id_label": "ID sesioni",
-            "manual_device_verification_device_key_label": "Kyç sesioni",
-            "manual_device_verification_device_name_label": "Emër sesioni",
-            "manual_device_verification_footer": "Nëse s’përputhen, siguria e komunikimeve tuaja mund të jetë komprometuar.",
-            "manual_device_verification_self_text": "Ripohojeni duke krahasuar sa vijon me Rregullimet e Përdoruesit te sesioni juaj tjetër:",
-            "manual_device_verification_user_text": "Ripohojeni këtë sesion përdoruesi duke krahasuar sa vijon me Rregullimet e tij të Përdoruesit:",
             "no_key_or_device": "Duket sikur s’keni Kyç Sigurie ose ndonjë pajisje tjetër nga e cila mund të bëni verifikimin. Kjo pajisje s’do të jetë në gjendje të hyjë te mesazhe të dikurshëm të fshehtëzuar. Që të mund të verifikohet identiteti juaj në këtë pajisje, ju duhet të riujdisni kyçet tuaj të verifikimit.",
             "no_support_qr_emoji": "Pajisja që po provoni të verifikoni nuk mbulon skanim të një kodi QR, apo verifikim me emoji, çka janë ato që mbulohen prej %(brand)s. Provoni me një klient tjetër.",
             "other_party_cancelled": "Pala tjetër e anuloi verifikimin.",
@@ -991,10 +984,6 @@
         }
     },
     "event_preview": {
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s përfundoi një transmetim zanor",
-            "you": "Përfunduat një transmetim zanor"
-        },
         "m.call.answer": {
             "dm": "Thirrje në ecuri e sipër",
             "user": "%(senderName)s u bë pjesë e thirrjes",
@@ -1329,8 +1318,6 @@
         "video_rooms_faq1_question": "Si mund të krijoj një dhomë me video?",
         "video_rooms_faq2_answer": "Po, rrjedha kohore e fjalosjes shfaqet tok me videon.",
         "video_rooms_faq2_question": "A mund të përdor fjalosje me tekst në krah të thirrjes video?",
-        "voice_broadcast": "Transmetim zanor",
-        "voice_broadcast_force_small_chunks": "Detyro gjatësi copëzash transmetimi zanor prej 15s",
         "wysiwyg_composer": "Përpunues teksti të pasur"
     },
     "labs_mjolnir": {
@@ -1465,7 +1452,6 @@
         "mute_description": "S’do të merrni ndonjë njoftim"
     },
     "notifier": {
-        "io.element.voice_broadcast_chunk": "%(senderName)s nisi një transmetim zanor",
         "m.key.verification.request": "%(name)s po kërkon verifikim"
     },
     "onboarding": {
@@ -2005,7 +1991,6 @@
             "error_unbanning": "S’u arrit t’i hiqej dëbimi",
             "events_default": "Dërgoni mesazhe",
             "invite": "Ftoni përdorues",
-            "io.element.voice_broadcast_info": "Transmetime zanore",
             "kick": "Hiqni përdorues",
             "m.call": "Nisni thirrje %(brand)s",
             "m.call.member": "Merrni pjesë në thirrje %(brand)s",
@@ -2599,7 +2584,6 @@
         "warning": "<w>KUJDES:</w> <description/>"
     },
     "share": {
-        "link_title": "Lidhje për te dhoma",
         "permalink_message": "Lidhje për te mesazhi i përzgjedhur",
         "permalink_most_recent": "Lidhje për te mesazhet më të freskët",
         "title_message": "Ndani Me të Tjerë Mesazh Dhome",
@@ -2684,13 +2668,6 @@
         "upgraderoom": "E kalon një dhomë te një version i ri i përmirësuar",
         "upgraderoom_permission_error": "S’keni lejet e domosdoshme për përdorimin e këtij urdhri.",
         "usage": "Përdorim",
-        "verify": "Verifikon një përdorues, sesion dhe një set kyçesh publikë",
-        "verify_mismatch": "KUJDES: VERIFIKIMI I KYÇIT DËSHTOI! Kyçi i nënshkrimit për %(userId)s dhe sesionin %(deviceId)s është \"%(fprint)s\", që nuk përputhet me kyçin e dhënë \"%(fingerprint)s\". Kjo mund të jetë shenjë se komunikimet tuaja po përgjohen!",
-        "verify_nop": "Sesion i tashmë i verifikuar!",
-        "verify_nop_warning_mismatch": "KUJDES: sesion tashmë i verifikuar, por kyçet NUK PËRPUTHEN!",
-        "verify_success_description": "Kyçi i nënshkrimit që dhatë përputhet me kyçin e nënshkrimit që morët nga sesioni i %(userId)s %(deviceId)s. Sesionit iu vu shenjë si i verifikuar.",
-        "verify_success_title": "Kyç i verifikuar",
-        "verify_unknown_pair": "Çift (përdorues, sesion) i pavlefshëm: (%(userId)s, %(deviceId)s)",
         "whois": "Shfaq të dhëna rreth një përdoruesi"
     },
     "space": {
@@ -2893,10 +2870,6 @@
         "error_rendering_message": "S’ngarkohet dot ky mesazh",
         "historical_messages_unavailable": "S’mund të shihni mesazhe më të hershëm",
         "in_room_name": " në <strong>%(room)s</strong>",
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s përfundoi një <a>transmetim zanor</a>",
-            "you": "Përfunduat një <a>transmetim zanor</a>"
-        },
         "io.element.widgets.layout": "%(senderName)s ka përditësuar skemën e dhomës",
         "load_error": {
             "no_permission": "U provua të ngarkohej një pikë e caktuar në kronologjinë e kësaj dhome, por nuk keni leje për ta parë mesazhin në fjalë.",
@@ -3411,36 +3384,6 @@
         "switch_theme_dark": "Kalo nën mënyrën e errët",
         "switch_theme_light": "Kalo nën mënyrën e çelët"
     },
-    "voice_broadcast": {
-        "30s_backward": "30s mbrapsht",
-        "30s_forward": "30s përpara",
-        "action": "Transmetim zanor",
-        "confirm_listen_affirm": "Po, përfundoje regjistrimin tim",
-        "confirm_listen_description": "Nëse filloni të dëgjoni te ky transmetim i drejtpërdrejtë, regjistrimi juaj i tanishëm i një transmetimi të drejtpërdrejtë do të përfundojë.",
-        "confirm_listen_title": "Të dëgjohet te transmetimi i drejtpërdrejtë?",
-        "confirm_stop_affirm": "Po, ndale transmetimin zanor",
-        "confirm_stop_description": "Jeni i sigurt se doni të ndalet transmetimi juaj i drejtpërdrejtë? Kjo do të përfundojë transmetimin dhe regjistrimi i plotë do të jetë i passhëm te dhoma.",
-        "confirm_stop_title": "Të ndalet transmetimi i drejtpërdrejtë?",
-        "connection_error": "Gabim lidhjeje - Regjistrimi u ndal",
-        "failed_already_recording_description": "Po incizoni tashmë një transmetim zanor. Ju lutemi, që të nisni një të ri, përfundoni transmetimin tuaj zanor të tanishëm.",
-        "failed_already_recording_title": "S’niset dot një transmetim zanor i ri",
-        "failed_decrypt": "S’arrihet të shfshehtëzohet transmetim zanor",
-        "failed_generic": "S’arrihet të luhet ky transmetim zanor",
-        "failed_insufficient_permission_description": "S’keni lejet e domosdoshme që të nisni një transmetim zanor në këtë dhomë. Lidhuni me një përgjegjës dhome që të përmirësoni lejet tuaja.",
-        "failed_insufficient_permission_title": "S’niset dot një transmetim zanor i ri",
-        "failed_no_connection_description": "Mjerisht, s’qemë në gjendje të nisnim tani një regjistrim. Ju lutemi, riprovoni më vonë.",
-        "failed_no_connection_title": "Gabim lidhjeje",
-        "failed_others_already_recording_description": "Dikush tjetër është duke incizuar një transmetim zanor. Që të nisni një të ri, prisni të përfundojë incizimi zanor i tij.",
-        "failed_others_already_recording_title": "S’niset dot një transmetim zanor i ri",
-        "live": "Drejtpërdrejt",
-        "pause": "ndal transmetim zanor",
-        "play": "luaj transmetim zanor",
-        "resume": "vazhdo transmetim zanor"
-    },
-    "voice_message": {
-        "cant_start_broadcast_description": "S’mund të niset mesazh zanor, ngaqë aktualisht po incizoni një transmetim të drejtpërdrejtë. Ju lutemi, përfundoni transmetimin e drejtpërdrejtë, që të mund të nisni incizimin e një mesazhi zanor.",
-        "cant_start_broadcast_title": "S’niset dot mesazh zanor"
-    },
     "voip": {
         "already_in_call": "Tashmë në thirrje",
         "already_in_call_person": "Gjendeni tashmë në thirrje me këtë person.",
@@ -3460,7 +3403,6 @@
         "camera_disabled": "Kamera juaj është e fikur",
         "camera_enabled": "Kamera juaj është ende e aktivizuar",
         "cannot_call_yourself_description": "S’mund të bëni thirrje me vetveten.",
-        "change_input_device": "Ndryshoni pajisje dhëniesh",
         "connecting": "Po lidhet",
         "connection_lost": "Humbi lidhja me shërbyesin",
         "connection_lost_description": "S’mund të bëni thirrje pa një lidhje te shërbyesi.",
@@ -3476,8 +3418,6 @@
         "enable_camera": "Aktivizo kamerën",
         "enable_microphone": "Çheshto mikrofonin",
         "expand": "Kthehu te thirrja",
-        "failed_call_live_broadcast_description": "S’mund të nisni një thirrje, ngaqë aktualisht jeni duke regjistruar një transmetim të drejtpërdrejtë. Që të mund të nisni një thirrje, ju lutemi, përfundoni transmetimin tuaj të drejtpërdrejtë.",
-        "failed_call_live_broadcast_title": "S’fillohet dot thirrje",
         "hangup": "Mbylle Thirrjen",
         "hide_sidebar_button": "Fshihe anështyllën",
         "input_devices": "Pajisje input-i",
