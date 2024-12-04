@@ -169,6 +169,7 @@ async function fetchPinnedEvent(room: Room, pinnedEventId: string, cli: MatrixCl
 
 /**
  * Fetch the pinned events
+ * Returns null if the pinned events are not fetched yet
  * @param room
  * @param pinnedEventIds
  */
@@ -189,13 +190,14 @@ export function useFetchedPinnedEvents(room: Room, pinnedEventIds: string[]): Ar
 /**
  * Fetch the pinned events and sort them by from the oldest to the newest
  * The order is determined by the event timestamp
+ * Returns null if the pinned events are not fetched yet
  * @param room
  * @param pinnedEventIds
  */
-export function useSortedFetchedPinnedEvents(room: Room, pinnedEventIds: string[]): Array<MatrixEvent | null> {
+export function useSortedFetchedPinnedEvents(room: Room, pinnedEventIds: string[]): Array<MatrixEvent | null> | null {
     const pinnedEvents = useFetchedPinnedEvents(room, pinnedEventIds);
     return useMemo(() => {
-        if (!pinnedEvents) return [];
+        if (!pinnedEvents) return null;
 
         return pinnedEvents.sort((a, b) => {
             if (!a) return -1;

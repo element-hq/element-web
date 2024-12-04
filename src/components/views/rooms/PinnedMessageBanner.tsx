@@ -46,7 +46,7 @@ interface PinnedMessageBannerProps {
 export function PinnedMessageBanner({ room, permalinkCreator }: PinnedMessageBannerProps): JSX.Element | null {
     const pinnedEventIds = usePinnedEvents(room);
     const pinnedEvents = useSortedFetchedPinnedEvents(room, pinnedEventIds);
-    const eventCount = pinnedEvents.length;
+    const eventCount = pinnedEvents?.length || 0;
     const isSinglePinnedEvent = eventCount === 1;
 
     const [currentEventIndex, setCurrentEventIndex] = useState(eventCount - 1);
@@ -55,8 +55,19 @@ export function PinnedMessageBanner({ room, permalinkCreator }: PinnedMessageBan
         setCurrentEventIndex(() => eventCount - 1);
     }, [eventCount]);
 
-    const pinnedEvent = pinnedEvents[currentEventIndex];
-    if (!pinnedEvent) return null;
+    const pinnedEvent = pinnedEvents?.[currentEventIndex];
+
+    // We are fetching the pinned messages
+    if (!pinnedEvents)
+        return (
+            <div
+                className="mx_PinnedMessageBanner"
+                aria-label={_t("room|pinned_message_banner|description")}
+                data-testid="pinned-message-banner"
+            />
+        );
+    // No pinned messages, we don't display the banner
+    else if (!pinnedEvent) return null;
 
     const shouldUseMessageEvent = pinnedEvent.isRedacted() || pinnedEvent.isDecryptionFailure();
 
