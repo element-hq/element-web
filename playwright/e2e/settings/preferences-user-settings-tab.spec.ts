@@ -23,7 +23,7 @@ test.describe("Preferences user settings tab", () => {
         },
     });
 
-    test("should be rendered properly", async ({ app, page, user }) => {
+    test("should be rendered properly", { tag: "@screenshot" }, async ({ app, page, user }) => {
         page.setViewportSize({ width: 1024, height: 3300 });
         const tab = await app.settings.openUserSettings("Preferences");
         // Assert that the top heading is rendered

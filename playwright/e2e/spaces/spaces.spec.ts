@@ -55,7 +55,7 @@ test.describe("Spaces", () => {
         botCreateOpts: { displayName: "BotBob" },
     });
 
-    test("should allow user to create public space", async ({ page, app, user }) => {
+    test("should allow user to create public space", { tag: "@screenshot" }, async ({ page, app, user }) => {
         const contextMenu = await openSpaceCreateMenu(page);
         await expect(contextMenu).toMatchScreenshot("space-create-menu.png");
 
@@ -88,7 +88,7 @@ test.describe("Spaces", () => {
         await expect(page.getByRole("treeitem", { name: "Jokes" })).toBeVisible();
     });
 
-    test("should allow user to create private space", async ({ page, app, user }) => {
+    test("should allow user to create private space", { tag: "@screenshot" }, async ({ page, app, user }) => {
         const menu = await openSpaceCreateMenu(page);
         await menu.getByRole("button", { name: "Private" }).click();
 
@@ -216,49 +216,47 @@ test.describe("Spaces", () => {
         await expect(hierarchyList.getByRole("treeitem", { name: "Gaming" }).getByRole("button")).toBeVisible();
     });
 
-    test("should render subspaces in the space panel only when expanded", async ({
-        page,
-        app,
-        user,
-        axe,
-        checkA11y,
-    }) => {
-        axe.disableRules([
-            // Disable this check as it triggers on nested roving tab index elements which are in practice fine
-            "nested-interactive",
-            // XXX: We have some known contrast issues here
-            "color-contrast",
-        ]);
+    test(
+        "should render subspaces in the space panel only when expanded",
+        { tag: "@screenshot" },
+        async ({ page, app, user, axe, checkA11y }) => {
+            axe.disableRules([
+                // Disable this check as it triggers on nested roving tab index elements which are in practice fine
+                "nested-interactive",
+                // XXX: We have some known contrast issues here
+                "color-contrast",
+            ]);
 
-        const childSpaceId = await app.client.createSpace({
-            name: "Child Space",
-            initial_state: [],
-        });
-        await app.client.createSpace({
-            name: "Root Space",
-            initial_state: [spaceChildInitialState(childSpaceId)],
-        });
+            const childSpaceId = await app.client.createSpace({
+                name: "Child Space",
+                initial_state: [],
+            });
+            await app.client.createSpace({
+                name: "Root Space",
+                initial_state: [spaceChildInitialState(childSpaceId)],
+            });
 
-        // Find collapsed Space panel
-        const spaceTree = page.getByRole("tree", { name: "Spaces" });
-        await expect(spaceTree.getByRole("button", { name: "Root Space" })).toBeVisible();
-        await expect(spaceTree.getByRole("button", { name: "Child Space" })).not.toBeVisible();
+            // Find collapsed Space panel
+            const spaceTree = page.getByRole("tree", { name: "Spaces" });
+            await expect(spaceTree.getByRole("button", { name: "Root Space" })).toBeVisible();
+            await expect(spaceTree.getByRole("button", { name: "Child Space" })).not.toBeVisible();
 
-        await checkA11y();
-        await expect(page.locator(".mx_SpacePanel")).toMatchScreenshot("space-panel-collapsed.png");
+            await checkA11y();
+            await expect(page.locator(".mx_SpacePanel")).toMatchScreenshot("space-panel-collapsed.png");
 
-        // This finds the expand button with the class name "mx_SpaceButton_toggleCollapse". Note there is another
-        // button with the same name with different class name "mx_SpacePanel_toggleCollapse".
-        await spaceTree.getByRole("button", { name: "Expand" }).click();
-        await expect(page.locator(".mx_SpacePanel:not(.collapsed)")).toBeVisible(); // TODO: replace :not() selector
+            // This finds the expand button with the class name "mx_SpaceButton_toggleCollapse". Note there is another
+            // button with the same name with different class name "mx_SpacePanel_toggleCollapse".
+            await spaceTree.getByRole("button", { name: "Expand" }).click();
+            await expect(page.locator(".mx_SpacePanel:not(.collapsed)")).toBeVisible(); // TODO: replace :not() selector
 
-        const item = page.locator(".mx_SpaceItem", { hasText: "Root Space" });
-        await expect(item).toBeVisible();
-        await expect(item.locator(".mx_SpaceItem", { hasText: "Child Space" })).toBeVisible();
+            const item = page.locator(".mx_SpaceItem", { hasText: "Root Space" });
+            await expect(item).toBeVisible();
+            await expect(item.locator(".mx_SpaceItem", { hasText: "Child Space" })).toBeVisible();
 
-        await checkA11y();
-        await expect(page.locator(".mx_SpacePanel")).toMatchScreenshot("space-panel-expanded.png");
-    });
+            await checkA11y();
+            await expect(page.locator(".mx_SpacePanel")).toMatchScreenshot("space-panel-expanded.png");
+        },
+    );
 
     test("should not soft crash when joining a room from space hierarchy which has a link in its topic", async ({
         page,
