@@ -881,7 +881,6 @@
         },
         "udd": {
             "interactive_verification_button": "Verifica interattivamente con emoji",
-            "manual_verification_button": "Verifica manualmente con testo",
             "other_ask_verify_text": "Chiedi a questo utente di verificare la sua sessione o verificala manualmente sotto.",
             "other_new_session_text": "%(name)s (%(userId)s) ha fatto l'accesso con una nuova sessione senza verificarla:",
             "own_ask_verify_text": "Verifica la tua altra sessione usando una delle opzioni sotto.",
@@ -916,12 +915,6 @@
             "incoming_sas_dialog_waiting": "In attesa che il partner confermi…",
             "incoming_sas_user_dialog_text_1": "Verifica questo utente per contrassegnarlo come affidabile. La fiducia degli utenti offre una maggiore tranquillità quando si utilizzano messaggi cifrati end-to-end.",
             "incoming_sas_user_dialog_text_2": "La verifica di questo utente contrassegnerà come fidata la sua sessione a te e viceversa.",
-            "manual_device_verification_device_id_label": "ID sessione",
-            "manual_device_verification_device_key_label": "Chiave sessione",
-            "manual_device_verification_device_name_label": "Nome sessione",
-            "manual_device_verification_footer": "Se non corrispondono, la sicurezza delle tue comunicazioni potrebbe essere compromessa.",
-            "manual_device_verification_self_text": "Conferma confrontando il seguente con le impostazioni utente nell'altra sessione:",
-            "manual_device_verification_user_text": "Conferma questa sessione confrontando il seguente con le sue impostazioni utente:",
             "no_key_or_device": "Pare che tu non abbia una chiave di sicurezza o altri dispositivi con cui poterti verificare.  Questo dispositivo non potrà accedere ai vecchi messaggi cifrati. Per potere verificare la tua ideintità su questo dispositivo, dovrai reimpostare le chiavi di verifica.",
             "no_support_qr_emoji": "Il dispositivo che stai cercando di verificare non supporta la scansione di un codice QR o la verifica emoji, che sono supportate da %(brand)s. Prova con un client diverso.",
             "other_party_cancelled": "L'altra parte ha annullato la verifica.",
@@ -1045,10 +1038,6 @@
     },
     "error_user_not_logged_in": "Utente non connesso",
     "event_preview": {
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s ha terminato una trasmissione vocale",
-            "you": "Hai terminato una trasmissione vocale"
-        },
         "m.call.answer": {
             "dm": "Chiamata in corso",
             "user": "%(senderName)s si è unito alla chiamata",
@@ -1422,8 +1411,6 @@
         "video_rooms_faq2_answer": "Sì, la cronologia della chat viene mostrata assieme al video.",
         "video_rooms_faq2_question": "Posso usare la chat testuale assieme alla chiamata video?",
         "video_rooms_feedbackSubheading": "Grazie per aver provato la beta, ti preghiamo di fornire tutti i dettagli possibili in modo da poterla migliorare.",
-        "voice_broadcast": "Trasmissione vocale",
-        "voice_broadcast_force_small_chunks": "Forza lunghezza pezzo trasmissione vocale a 15s",
         "wysiwyg_composer": "Editor in rich text"
     },
     "labs_mjolnir": {
@@ -1567,7 +1554,6 @@
         "mute_description": "Non riceverai alcuna notifica"
     },
     "notifier": {
-        "io.element.voice_broadcast_chunk": "%(senderName)s ha iniziato una trasmissione vocale",
         "m.key.verification.request": "%(name)s sta richiedendo la verifica"
     },
     "onboarding": {
@@ -2141,7 +2127,6 @@
             "error_unbanning": "Rimozione ban fallita",
             "events_default": "Invia messaggi",
             "invite": "Invita utenti",
-            "io.element.voice_broadcast_info": "Trasmissioni vocali",
             "kick": "Rimuovi utenti",
             "m.call": "Inizia chiamate di %(brand)s",
             "m.call.member": "Entra in chiamate di %(brand)s",
@@ -2784,7 +2769,6 @@
         "warning": "<w>ATTENZIONE:</w> <description/>"
     },
     "share": {
-        "link_title": "Collegamento alla stanza",
         "permalink_message": "Link al messaggio selezionato",
         "permalink_most_recent": "Link al messaggio più recente",
         "title_message": "Condividi messaggio stanza",
@@ -2873,13 +2857,6 @@
         "upgraderoom": "Aggiorna una stanza ad una nuova versione",
         "upgraderoom_permission_error": "Non hai l'autorizzazione necessaria per usare questo comando.",
         "usage": "Utilizzo",
-        "verify": "Verifica un utente, una sessione e una tupla pubblica",
-        "verify_mismatch": "ATTENZIONE: VERIFICA CHIAVI FALLITA! La chiave per %(userId)s e per la sessione %(deviceId)s è \"%(fprint)s\" la quale non corriponde con la chiave \"%(fingerprint)s\" fornita. Ciò può significare che le comunicazioni vengono intercettate!",
-        "verify_nop": "Sessione già verificata!",
-        "verify_nop_warning_mismatch": "ATTENZIONE: sessione già verificata, ma le chiavi NON CORRISPONDONO!",
-        "verify_success_description": "La chiave che hai fornito corrisponde alla chiave che hai ricevuto dalla sessione di %(userId)s %(deviceId)s. Sessione contrassegnata come verificata.",
-        "verify_success_title": "Chiave verificata",
-        "verify_unknown_pair": "Coppia (utente, sessione) sconosciuta: (%(userId)s, %(deviceId)s)",
         "view": "Visualizza la stanza con l'indirizzo dato",
         "whois": "Mostra le informazioni di un utente"
     },
@@ -3097,10 +3074,6 @@
         "error_rendering_message": "Impossibile caricare questo messaggio",
         "historical_messages_unavailable": "Non puoi vedere i messaggi precedenti",
         "in_room_name": " in <strong>%(room)s</strong>",
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s ha terminato una <a>trasmissione vocale</a>",
-            "you": "Hai terminato una <a>trasmissione vocale</a>"
-        },
         "io.element.widgets.layout": "%(senderName)s ha aggiornato la disposizione della stanza",
         "late_event_separator": "Inviato originariamente il %(dateTime)s",
         "load_error": {
@@ -3633,38 +3606,6 @@
         "switch_theme_dark": "Passa alla modalità scura",
         "switch_theme_light": "Passa alla modalità chiara"
     },
-    "voice_broadcast": {
-        "30s_backward": "30s indietro",
-        "30s_forward": "30s avanti",
-        "action": "Trasmissione vocale",
-        "buffering": "Buffer…",
-        "confirm_listen_affirm": "Sì, termina la mia registrazione",
-        "confirm_listen_description": "Se inizi ad ascoltare questa trasmissione in diretta, l'attuale registrazione della tua trasmissione in diretta finirà.",
-        "confirm_listen_title": "Ascoltare la trasmissione in diretta?",
-        "confirm_stop_affirm": "Sì, ferma la trasmissione",
-        "confirm_stop_description": "Vuoi davvero fermare la tua trasmissione in diretta? Verrà terminata la trasmissione e la registrazione completa sarà disponibile nella stanza.",
-        "confirm_stop_title": "Fermare la trasmissione in diretta?",
-        "connection_error": "Errore di connessione - Registrazione in pausa",
-        "failed_already_recording_description": "Stai già registrando una trasmissione vocale. Termina quella in corso per iniziarne una nuova.",
-        "failed_already_recording_title": "Impossibile iniziare una nuova trasmissione vocale",
-        "failed_decrypt": "Impossibile decifrare la trasmissione vocale",
-        "failed_generic": "Impossibile avviare questa trasmissione vocale",
-        "failed_insufficient_permission_description": "Non hai l'autorizzazione necessaria per iniziare una trasmissione vocale in questa stanza. Contatta un amministratore della stanza per aggiornare le tue autorizzazioni.",
-        "failed_insufficient_permission_title": "Impossibile iniziare una nuova trasmissione vocale",
-        "failed_no_connection_description": "Sfortunatamente non riusciamo ad iniziare una registrazione al momento. Riprova più tardi.",
-        "failed_no_connection_title": "Errore di connessione",
-        "failed_others_already_recording_description": "Qualcun altro sta già registrando una trasmissione vocale. Aspetta che finisca prima di iniziarne una nuova.",
-        "failed_others_already_recording_title": "Impossibile iniziare una nuova trasmissione vocale",
-        "go_live": "Vai in diretta",
-        "live": "In diretta",
-        "pause": "sospendi trasmissione vocale",
-        "play": "avvia trasmissione vocale",
-        "resume": "riprendi trasmissione vocale"
-    },
-    "voice_message": {
-        "cant_start_broadcast_description": "Non puoi iniziare un messaggio vocale perché stai registrando una trasmissione in diretta. Termina la trasmissione per potere iniziare un messaggio vocale.",
-        "cant_start_broadcast_title": "Impossibile iniziare il messaggio vocale"
-    },
     "voip": {
         "already_in_call": "Già in una chiamata",
         "already_in_call_person": "Sei già in una chiamata con questa persona.",
@@ -3684,7 +3625,6 @@
         "camera_disabled": "La tua fotocamera è spenta",
         "camera_enabled": "La tua fotocamera è ancora attiva",
         "cannot_call_yourself_description": "Non puoi chiamare te stesso.",
-        "change_input_device": "Cambia dispositivo di input",
         "close_lobby": "Chiudi sala d'attesa",
         "connecting": "In connessione",
         "connection_lost": "La connessione al server è stata persa",
@@ -3703,8 +3643,6 @@
         "enable_camera": "Accendi la fotocamera",
         "enable_microphone": "Riaccendi il microfono",
         "expand": "Torna alla chiamata",
-        "failed_call_live_broadcast_description": "Non puoi avviare una chiamata perché stai registrando una trasmissione in diretta. Termina la trasmissione per potere iniziare una chiamata.",
-        "failed_call_live_broadcast_title": "Impossibile avviare una chiamata",
         "hangup": "Riaggancia",
         "hide_sidebar_button": "Nascondi barra laterale",
         "input_devices": "Dispositivi di input",

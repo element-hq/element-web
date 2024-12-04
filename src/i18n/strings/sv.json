@@ -882,7 +882,6 @@
         },
         "udd": {
             "interactive_verification_button": "Verifiera interaktivt med emoji",
-            "manual_verification_button": "Verifiera manuellt med text",
             "other_ask_verify_text": "Be den här användaren att verifiera sin session, eller verifiera den manuellt nedan.",
             "other_new_session_text": "%(name)s (%(userId)s) loggade in i en ny session utan att verifiera den:",
             "own_ask_verify_text": "Verifiera din andra session med ett av alternativen nedan.",
@@ -917,12 +916,6 @@
             "incoming_sas_dialog_waiting": "Väntar på att andra parten ska bekräfta …",
             "incoming_sas_user_dialog_text_1": "Verifiera denna användare för att markera den som betrodd. Att lita på användare ger en extra sinnesfrid när man använder totalsträckskrypterade meddelanden.",
             "incoming_sas_user_dialog_text_2": "Att verifiera den här användaren kommer att markera dess session som betrodd, och markera din session som betrodd för denne.",
-            "manual_device_verification_device_id_label": "Sessions-ID",
-            "manual_device_verification_device_key_label": "Sessionsnyckel",
-            "manual_device_verification_device_name_label": "Sessionsnamn",
-            "manual_device_verification_footer": "Om de inte matchar så kan din kommunikations säkerhet vara äventyrad.",
-            "manual_device_verification_self_text": "Bekräfta genom att jämföra följande med användarinställningarna i din andra session:",
-            "manual_device_verification_user_text": "Bekräfta den här användarens session genom att jämföra följande med deras användarinställningar:",
             "no_key_or_device": "Det ser ut som att du inte har någon säkerhetsnyckel eller några andra enheter du kan verifiera mot. Den här enheten kommer inte kunna komma åt gamla krypterad meddelanden. För att verifiera din identitet på den här enheten så behöver du återställa dina verifieringsnycklar.",
             "no_support_qr_emoji": "Enheten du försöker verifiera stöder inte att skanna en QR-kod eller verifiera med emoji, vilket är var %(brand)s stöder. Pröva en annan klient.",
             "other_party_cancelled": "Den andra parten avbröt verifieringen.",
@@ -1046,10 +1039,6 @@
     },
     "error_user_not_logged_in": "Användaren är inte inloggad",
     "event_preview": {
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s avslutade en röstsändning",
-            "you": "Du avslutade en röstsändning"
-        },
         "m.call.answer": {
             "dm": "Samtal pågår",
             "user": "%(senderName)s gick med i samtalet",
@@ -1423,8 +1412,6 @@
         "video_rooms_faq2_answer": "Ja, chattidslinjen visas tillsammans med videon.",
         "video_rooms_faq2_question": "Kan jag använda textchatt tillsammans med videosamtalet?",
         "video_rooms_feedbackSubheading": "Tack för att du prövar betan, vänligen ge så många detaljer du kan så att vi kan förbättra den.",
-        "voice_broadcast": "Röstsändning",
-        "voice_broadcast_force_small_chunks": "Tvinga dellängd på 15s för röstsändning",
         "wysiwyg_composer": "Riktextredigerare"
     },
     "labs_mjolnir": {
@@ -1568,7 +1555,6 @@
         "mute_description": "Du får inga aviseringar"
     },
     "notifier": {
-        "io.element.voice_broadcast_chunk": "%(senderName)s startade en röstsändning",
         "m.key.verification.request": "%(name)s begär verifiering"
     },
     "onboarding": {
@@ -2142,7 +2128,6 @@
             "error_unbanning": "Misslyckades att avbanna",
             "events_default": "Skicka meddelanden",
             "invite": "Bjuda in användare",
-            "io.element.voice_broadcast_info": "Röstsändning",
             "kick": "Ta bort användare",
             "m.call": "Starta %(brand)s samtal",
             "m.call.member": "Gå med i %(brand)s samtal",
@@ -2784,7 +2769,6 @@
         "warning": "<w>VARNING:</w> <description/>"
     },
     "share": {
-        "link_title": "Länk till rum",
         "permalink_message": "Länk till valt meddelande",
         "permalink_most_recent": "Länk till senaste meddelandet",
         "title_message": "Dela rumsmeddelande",
@@ -2873,13 +2857,6 @@
         "upgraderoom": "Uppgraderar ett rum till en ny version",
         "upgraderoom_permission_error": "Du har inte de behörigheter som krävs för att använda det här kommandot.",
         "usage": "Användande",
-        "verify": "Verifierar en användar-, sessions- och pubkey-tupel",
-        "verify_mismatch": "VARNING: NYCKELVERIFIERING MISSLYCKADES! Den signerade nyckeln för %(userId)s och sessionen %(deviceId)s är \"%(fprint)s\" vilket inte matchar den givna nyckeln \"%(fingerprint)s\". Detta kan betyda att kommunikationen är övervakad!",
-        "verify_nop": "Sessionen är redan verifierad!",
-        "verify_nop_warning_mismatch": "VARNING: sessionen är redan verifierad, men nycklarna MATCHAR INTE!",
-        "verify_success_description": "Signeringsnyckeln du gav matchar signeringsnyckeln du fick av %(userId)ss session %(deviceId)s. Sessionen markerades som verifierad.",
-        "verify_success_title": "Verifierade nyckeln",
-        "verify_unknown_pair": "Okänt (användare, session)-par: (%(userId)s, %(deviceId)s)",
         "view": "Visar rum med den angivna adressen",
         "whois": "Visar information om en användare"
     },
@@ -3097,10 +3074,6 @@
         "error_rendering_message": "Kan inte ladda det här meddelandet",
         "historical_messages_unavailable": "Du kan inte se tidigare meddelanden",
         "in_room_name": " i <strong>%(room)s</strong>",
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s avslutade en <a>röstsändning</a>",
-            "you": "Du avslutade en <a>röstsändning</a>"
-        },
         "io.element.widgets.layout": "%(senderName)s har uppdaterat rummets arrangemang",
         "late_event_separator": "Ursprungligen skickad %(dateTime)s",
         "load_error": {
@@ -3633,38 +3606,6 @@
         "switch_theme_dark": "Byt till mörkt läge",
         "switch_theme_light": "Byt till ljust läge"
     },
-    "voice_broadcast": {
-        "30s_backward": "30s bakåt",
-        "30s_forward": "30s framåt",
-        "action": "Röstsändning",
-        "buffering": "Buffrar…",
-        "confirm_listen_affirm": "Ja, avsluta min inspelning",
-        "confirm_listen_description": "Om du börjar lyssna på den här direktsändningen så kommer din nuvarande direktsändningsinspelning att avslutas.",
-        "confirm_listen_title": "Lyssna på direktsändning?",
-        "confirm_stop_affirm": "Ja, avsluta sändning",
-        "confirm_stop_description": "Är du säker på att du vill avsluta din direktsändning? Det här kommer att avsluta sändningen och den fulla inspelningen kommer att bli tillgänglig i rummet.",
-        "confirm_stop_title": "Avsluta livesändning?",
-        "connection_error": "Anslutningsfel - Inspelning pausad",
-        "failed_already_recording_description": "Du spelar redan in en röstsändning. Avsluta din nuvarande röstsändning för att påbörja en ny.",
-        "failed_already_recording_title": "Kan inte starta en ny röstsändning",
-        "failed_decrypt": "Kunde inte kryptera röstsändning",
-        "failed_generic": "Kan inte spela den här röstsändningen",
-        "failed_insufficient_permission_description": "Du är inte behörig att starta en röstsändning i det här rummet. Kontakta en rumsadministratör för att uppgradera dina behörigheter.",
-        "failed_insufficient_permission_title": "Kan inte starta en ny röstsändning",
-        "failed_no_connection_description": "Tyvärr kunde vi inte starta en inspelning just nu. Vänligen pröva igen senare.",
-        "failed_no_connection_title": "Anslutningsfel",
-        "failed_others_already_recording_description": "Någon annan spelar redan in en röstsändning. Vänta på att deras röstsändning tar slut för att starta en ny.",
-        "failed_others_already_recording_title": "Kan inte starta en ny röstsändning",
-        "go_live": "Börja sända",
-        "live": "Sänder",
-        "pause": "pausa röstsändning",
-        "play": "spela röstsändning",
-        "resume": "återuppta röstsändning"
-    },
-    "voice_message": {
-        "cant_start_broadcast_description": "Du kan inte starta ett röstmeddelande eftersom du spelar in en direktsändning. Vänligen avsluta din direktsändning för att starta inspelning av ett röstmeddelande.",
-        "cant_start_broadcast_title": "Kan inte starta röstmeddelanden"
-    },
     "voip": {
         "already_in_call": "Redan i samtal",
         "already_in_call_person": "Du är redan i ett samtal med den här personen.",
@@ -3684,7 +3625,6 @@
         "camera_disabled": "Din kamera är av",
         "camera_enabled": "Din kamera är fortfarande på",
         "cannot_call_yourself_description": "Du kan inte ringa till dig själv.",
-        "change_input_device": "Byt ingångsenhet",
         "close_lobby": "Stäng lobbyn",
         "connecting": "Ansluter",
         "connection_lost": "Anslutningen till servern har förlorats",
@@ -3703,8 +3643,6 @@
         "enable_camera": "Sätt på kamera",
         "enable_microphone": "Slå på mikrofonen",
         "expand": "Återgå till samtal",
-        "failed_call_live_broadcast_description": "Du kan inte starta ett samtal eftersom att du spelar in en direktsändning. Vänligen avsluta din direktsändning för att starta ett samtal.",
-        "failed_call_live_broadcast_title": "Kunde inte starta ett samtal",
         "hangup": "Lägg på",
         "hide_sidebar_button": "Göm sidopanel",
         "input_devices": "Ingångsenheter",
