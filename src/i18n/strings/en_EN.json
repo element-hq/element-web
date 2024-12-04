@@ -2462,6 +2462,10 @@
         "emoji_autocomplete": "Enable Emoji suggestions while typing",
         "enable_markdown": "Enable Markdown",
         "enable_markdown_description": "Start messages with <code>/plain</code> to send without markdown.",
+        "encryption": {
+            "dialog_title": "<strong>Settings:</strong> Encryption",
+            "title": "Encryption"
+        },
         "general": {
             "account_management_section": "Account management",
             "account_section": "Account",
