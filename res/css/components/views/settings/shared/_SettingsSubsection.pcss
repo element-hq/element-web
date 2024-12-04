@@ -13,7 +13,16 @@ Please see LICENSE files in the repository root for full details.
     &.mx_SettingsSubsection_newUi {
         display: flex;
         flex-direction: column;
-        gap: var(--cpd-space-8x);
+        gap: var(--cpd-space-6x);
+    }
+
+    *[role="separator"] {
+        /**
+         * The gap between subsections is 32px and inside the subsection is 24px.
+         * The separator separates the subsections, so it should have the same gap as the subsections.
+         * We add 12px and the separator spacing to the top margin to make the separator visually centered between the subsections.
+         */
+        margin-top: calc(var(--cpd-space-3x) + var(--cpd-separator-spacing));
     }
 }
 

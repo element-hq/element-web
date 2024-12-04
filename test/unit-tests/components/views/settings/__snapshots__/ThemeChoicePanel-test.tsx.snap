@@ -10,7 +10,7 @@ exports[`<ThemeChoicePanel /> custom theme should display custom theme 1`] = `
       class="mx_SettingsSubsectionHeading"
     >
       <h3
-        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Theme
       </h3>
@@ -287,7 +287,7 @@ exports[`<ThemeChoicePanel /> custom theme should render the custom theme sectio
       class="mx_SettingsSubsectionHeading"
     >
       <h3
-        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Theme
       </h3>
@@ -564,7 +564,7 @@ exports[`<ThemeChoicePanel /> renders the theme choice UI 1`] = `
       class="mx_SettingsSubsectionHeading"
     >
       <h3
-        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
       >
         Theme
       </h3>

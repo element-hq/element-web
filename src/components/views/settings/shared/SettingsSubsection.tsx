@@ -45,7 +45,7 @@ export const SettingsSubsection: React.FC<SettingsSubsectionProps> = ({
             mx_SettingsSubsection_newUi: !legacy,
         })}
     >
-        {typeof heading === "string" ? <SettingsSubsectionHeading heading={heading} legacy={legacy} /> : <>{heading}</>}
+        {typeof heading === "string" ? <SettingsSubsectionHeading heading={heading} /> : <>{heading}</>}
         {!!description && (
             <div className="mx_SettingsSubsection_description">
                 <SettingsSubsectionText>{description}</SettingsSubsectionText>
