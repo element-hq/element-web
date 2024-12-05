@@ -25,8 +25,8 @@ interface Props {
 }
 
 /*
- * Walks the user through the process of creating a cross-signing keys and setting
- * up message key backup. In most cases, only a spinner is shown, but for more
+ * Walks the user through the process of creating a cross-signing keys.
+ * In most cases, only a spinner is shown, but for more
  * complex auth like SSO, the user may need to complete some steps to proceed.
  */
 const InitialCryptoSetupDialog: React.FC<Props> = ({ matrixClient, accountPassword, tokenLogin, onFinished }) => {
