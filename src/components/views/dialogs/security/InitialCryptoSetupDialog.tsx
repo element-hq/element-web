@@ -41,11 +41,6 @@ const InitialCryptoSetupDialog: React.FC<Props> = ({ matrixClient, accountPasswo
         try {
             await createCrossSigning(matrixClient, tokenLogin, accountPassword);
 
-            const backupInfo = await matrixClient.getKeyBackupVersion();
-            if (backupInfo === null) {
-                await cryptoApi.resetKeyBackup();
-            }
-
             onFinished(true);
         } catch (e) {
             if (tokenLogin) {
