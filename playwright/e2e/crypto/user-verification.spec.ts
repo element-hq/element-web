@@ -48,6 +48,10 @@ test.describe("User verification", () => {
                     });
                 }
 
+                // Wait a bit so that Alice can retrieve our device keys.
+                await new Promise((resolve) => {
+                    setTimeout(resolve, 500);
+                });
                 return client.getCrypto().requestVerificationDM(aliceCredentials.userId, dmRoomId);
             },
             { dmRoomId, aliceCredentials },
@@ -97,6 +101,10 @@ test.describe("User verification", () => {
                     });
                 }
 
+                // Wait a bit so that Alice can retrieve our device keys.
+                await new Promise((resolve) => {
+                    setTimeout(resolve, 500);
+                });
                 return client.getCrypto().requestVerificationDM(aliceCredentials.userId, dmRoomId);
             },
             { dmRoomId, aliceCredentials },
