@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { test } from ".";
 
-test.describe("Read receipts", () => {
+test.describe("Read receipts", { tag: "@mergequeue" }, () => {
     test.describe("redactions", () => {
         test.describe("thread roots", () => {
             test("Redacting a thread root after it was read leaves the room read", async ({

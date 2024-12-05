@@ -217,3 +217,10 @@ instead of the native `toHaveScreenshot`.
 
 If you are running Linux and are unfortunate that the screenshots are not rendering identically,
 you may wish to specify `--ignore-snapshots` and rely on Docker to render them for you.
+
+## Test Tags
+
+We use test tags to categorise tests for running subsets more efficiently.
+
+- `@mergequeue`: Tests that are slow or flaky and cover areas of the app we update seldom, should not be run on every PR commit but will be run in the Merge Queue.
+- `@screenshot`: Tests that use `toMatchScreenshot` to speed up a run of `test:playwright:screenshots`. A test with this tag must not also have the `@mergequeue` tag as this would cause false positives in the stale screenshot detection.
