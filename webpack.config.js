@@ -187,18 +187,6 @@ module.exports = (env, argv) => {
         },
 
         resolve: {
-            // We define an alternative import path so we can safely use src/ across the react-sdk
-            // and js-sdk. We already import from src/ where possible to ensure our source maps are
-            // extremely accurate (and because we're capable of compiling the layers manually rather
-            // than relying on partially-mangled output from babel), though we do need to fix the
-            // package level import (stuff like `import {Thing} from "matrix-js-sdk"` for example).
-            // We can't use the aliasing down below to point at src/ because that'll fail to resolve
-            // the package.json for the dependency. Instead, we rely on the package.json of each
-            // layer to have our custom alternate fields to load things in the right order. These are
-            // the defaults of webpack prepended with `matrix_src_`.
-            mainFields: ["matrix_src_browser", "matrix_src_main", "browser", "main"],
-            aliasFields: ["matrix_src_browser", "browser"],
-
             // We need to specify that TS can be resolved without an extension
             extensions: [".js", ".json", ".ts", ".tsx"],
             alias: {
