@@ -29,7 +29,12 @@ interface Props {
  * In most cases, only a spinner is shown, but for more
  * complex auth like SSO, the user may need to complete some steps to proceed.
  */
-const InitialCryptoSetupDialog: React.FC<Props> = ({ matrixClient, accountPassword, tokenLogin, onFinished }) => {
+export const InitialCryptoSetupDialog: React.FC<Props> = ({
+    matrixClient,
+    accountPassword,
+    tokenLogin,
+    onFinished,
+}) => {
     const [error, setError] = useState(false);
 
     const doSetup = useCallback(async () => {
@@ -96,5 +101,3 @@ const InitialCryptoSetupDialog: React.FC<Props> = ({ matrixClient, accountPasswo
         </BaseDialog>
     );
 };
-
-export default InitialCryptoSetupDialog;

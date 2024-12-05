@@ -12,7 +12,7 @@ import { mocked } from "jest-mock";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { createCrossSigning } from "../../../../../src/CreateCrossSigning";
-import InitialCryptoSetupDialog from "../../../../../src/components/views/dialogs/security/InitialCryptoSetupDialog";
+import { InitialCryptoSetupDialog } from "../../../../../src/components/views/dialogs/security/InitialCryptoSetupDialog";
 import { createTestClient } from "../../../../test-utils";
 
 jest.mock("../../../../../src/CreateCrossSigning", () => ({
