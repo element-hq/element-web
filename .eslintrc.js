@@ -264,6 +264,7 @@ module.exports = {
 
                 // These are fine in tests
                 "no-restricted-globals": "off",
+                "react-compiler/react-compiler": "off",
             },
         },
         {
