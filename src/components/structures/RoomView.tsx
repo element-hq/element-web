@@ -2372,7 +2372,11 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         );
 
         const pinnedMessageBanner = (
-            <PinnedMessageBanner room={this.state.room} permalinkCreator={this.permalinkCreator} />
+            <PinnedMessageBanner
+                room={this.state.room}
+                permalinkCreator={this.permalinkCreator}
+                resizeNotifier={this.props.resizeNotifier}
+            />
         );
 
         let messageComposer;
