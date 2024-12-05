@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { useCallback, useMemo, useState } from "react";
 import { JoinRule, EventType, RoomState, Room } from "matrix-js-sdk/src/matrix";
+import { RoomPowerLevelsEventContent } from "matrix-js-sdk/src/types";
 
 import { _t } from "../../../../../languageHandler";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
@@ -24,23 +25,24 @@ interface ElementCallSwitchProps {
 
 const ElementCallSwitch: React.FC<ElementCallSwitchProps> = ({ room }) => {
     const isPublic = useMemo(() => room.getJoinRule() === JoinRule.Public, [room]);
-    const [content, events, maySend] = useRoomState(
+    const [content, maySend] = useRoomState(
         room,
         useCallback(
             (state: RoomState) => {
-                const content = state?.getStateEvents(EventType.RoomPowerLevels, "")?.getContent();
+                const content = state
+                    ?.getStateEvents(EventType.RoomPowerLevels, "")
+                    ?.getContent<RoomPowerLevelsEventContent>();
                 return [
                     content ?? {},
-                    content?.["events"] ?? {},
                     state?.maySendStateEvent(EventType.RoomPowerLevels, room.client.getSafeUserId()),
-                ];
+                ] as const;
             },
             [room.client],
         ),
     );
 
     const [elementCallEnabled, setElementCallEnabled] = useState<boolean>(() => {
-        return events[ElementCall.MEMBER_EVENT_TYPE.name] === 0;
+        return content.events?.[ElementCall.MEMBER_EVENT_TYPE.name] === 0;
     });
 
     const onChange = useCallback(
@@ -48,27 +50,24 @@ const ElementCallSwitch: React.FC<ElementCallSwitchProps> = ({ room }) => {
             setElementCallEnabled(enabled);
 
             // Take a copy to avoid mutating the original
-            const newEvents = { ...events };
+            const newContent = { events: {}, ...content };
 
             if (enabled) {
-                const userLevel = newEvents[EventType.RoomMessage] ?? content.users_default ?? 0;
+                const userLevel = newContent.events[EventType.RoomMessage] ?? content.users_default ?? 0;
                 const moderatorLevel = content.kick ?? 50;
 
-                newEvents[ElementCall.CALL_EVENT_TYPE.name] = isPublic ? moderatorLevel : userLevel;
-                newEvents[ElementCall.MEMBER_EVENT_TYPE.name] = userLevel;
+                newContent.events[ElementCall.CALL_EVENT_TYPE.name] = isPublic ? moderatorLevel : userLevel;
+                newContent.events[ElementCall.MEMBER_EVENT_TYPE.name] = userLevel;
             } else {
-                const adminLevel = newEvents[EventType.RoomPowerLevels] ?? content.state_default ?? 100;
+                const adminLevel = newContent.events[EventType.RoomPowerLevels] ?? content.state_default ?? 100;
 
-                newEvents[ElementCall.CALL_EVENT_TYPE.name] = adminLevel;
-                newEvents[ElementCall.MEMBER_EVENT_TYPE.name] = adminLevel;
+                newContent.events[ElementCall.CALL_EVENT_TYPE.name] = adminLevel;
+                newContent.events[ElementCall.MEMBER_EVENT_TYPE.name] = adminLevel;
             }
 
-            room.client.sendStateEvent(room.roomId, EventType.RoomPowerLevels, {
-                events: newEvents,
-                ...content,
-            });
+            room.client.sendStateEvent(room.roomId, EventType.RoomPowerLevels, newContent);
         },
-        [room.client, room.roomId, content, events, isPublic],
+        [room.client, room.roomId, content, isPublic],
     );
 
     const brand = SdkConfig.get("element_call").brand ?? DEFAULTS.element_call.brand;
