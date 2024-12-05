@@ -47,21 +47,24 @@ const ElementCallSwitch: React.FC<ElementCallSwitchProps> = ({ room }) => {
         (enabled: boolean): void => {
             setElementCallEnabled(enabled);
 
+            // Take a copy to avoid mutating the original
+            const newEvents = { ...events };
+
             if (enabled) {
-                const userLevel = events[EventType.RoomMessage] ?? content.users_default ?? 0;
+                const userLevel = newEvents[EventType.RoomMessage] ?? content.users_default ?? 0;
                 const moderatorLevel = content.kick ?? 50;
 
-                events[ElementCall.CALL_EVENT_TYPE.name] = isPublic ? moderatorLevel : userLevel;
-                events[ElementCall.MEMBER_EVENT_TYPE.name] = userLevel;
+                newEvents[ElementCall.CALL_EVENT_TYPE.name] = isPublic ? moderatorLevel : userLevel;
+                newEvents[ElementCall.MEMBER_EVENT_TYPE.name] = userLevel;
             } else {
-                const adminLevel = events[EventType.RoomPowerLevels] ?? content.state_default ?? 100;
+                const adminLevel = newEvents[EventType.RoomPowerLevels] ?? content.state_default ?? 100;
 
-                events[ElementCall.CALL_EVENT_TYPE.name] = adminLevel;
-                events[ElementCall.MEMBER_EVENT_TYPE.name] = adminLevel;
+                newEvents[ElementCall.CALL_EVENT_TYPE.name] = adminLevel;
+                newEvents[ElementCall.MEMBER_EVENT_TYPE.name] = adminLevel;
             }
 
             room.client.sendStateEvent(room.roomId, EventType.RoomPowerLevels, {
-                events: events,
+                events: newEvents,
                 ...content,
             });
         },
