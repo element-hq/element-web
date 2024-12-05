@@ -214,7 +214,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
                     <SettingsSubsectionText>
                         {this.state.enabling ? <InlineSpinner /> : _t("settings|security|message_search_failed")}
                     </SettingsSubsectionText>
-                    {EventIndexPeg.error && (
+                    {EventIndexPeg.error ? (
                         <SettingsSubsectionText>
                             <details>
                                 <summary>{_t("common|advanced")}</summary>
@@ -230,7 +230,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
                                 </p>
                             </details>
                         </SettingsSubsectionText>
-                    )}
+                    ) : undefined}
                 </>
             );
         }
