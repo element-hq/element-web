@@ -13,7 +13,7 @@ import { ElementAppPage } from "../../pages/ElementAppPage";
 import { Bot } from "../../pages/bot";
 import { test } from ".";
 
-test.describe("Read receipts", () => {
+test.describe("Read receipts", { tag: "@mergequeue" }, () => {
     test.use({
         displayName: "Mae",
         botCreateOpts: { displayName: "Other User" },
