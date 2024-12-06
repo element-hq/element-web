@@ -53,8 +53,8 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
     public static contextType = MatrixClientContext;
     declare public context: React.ContextType<typeof MatrixClientContext>;
 
-    public constructor(props: {}, context: React.ContextType<typeof MatrixClientContext>) {
-        super(props, context);
+    public constructor(props: {}) {
+        super(props);
 
         this.state = {
             mediaDevices: null,

@@ -34,10 +34,10 @@ export default class CryptographyPanel extends React.Component<IProps, IState> {
     public static contextType = MatrixClientContext;
     declare public context: React.ContextType<typeof MatrixClientContext>;
 
-    public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
+    public constructor(props: IProps) {
         super(props);
 
-        if (!context.getCrypto()) {
+        if (!this.context.getCrypto()) {
             this.state = { deviceIdentityKey: null };
         } else {
             this.state = { deviceIdentityKey: undefined };

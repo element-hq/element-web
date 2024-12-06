@@ -28,9 +28,9 @@ export default class PersistentApp extends React.Component<IProps> {
     declare public context: ContextType<typeof MatrixClientContext>;
     private room: Room;
 
-    public constructor(props: IProps, context: ContextType<typeof MatrixClientContext>) {
-        super(props, context);
-        this.room = context.getRoom(this.props.persistentRoomId)!;
+    public constructor(props: IProps) {
+        super(props);
+        this.room = this.context.getRoom(this.props.persistentRoomId)!;
     }
 
     public render(): JSX.Element | null {

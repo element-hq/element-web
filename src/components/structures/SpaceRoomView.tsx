@@ -601,13 +601,13 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
 
     private dispatcherRef?: string;
 
-    public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         let phase = Phase.Landing;
 
         const creator = this.props.space.currentState.getStateEvents(EventType.RoomCreate, "")?.getSender();
-        const showSetup = this.props.justCreatedOpts && context.getSafeUserId() === creator;
+        const showSetup = this.props.justCreatedOpts && this.context.getSafeUserId() === creator;
 
         if (showSetup) {
             phase =

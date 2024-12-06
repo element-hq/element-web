@@ -101,8 +101,8 @@ export default class AliasSettings extends React.Component<IProps, IState> {
         canSetCanonicalAlias: false,
     };
 
-    public constructor(props: IProps, context: ContextType<typeof MatrixClientContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         const state: IState = {
             altAliases: [],

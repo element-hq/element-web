@@ -51,8 +51,8 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
     private pills = new ReactRootManager();
     private tooltips = new ReactRootManager();
 
-    public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         const cli = this.context;
         const userId = cli.getSafeUserId();

@@ -259,8 +259,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
     private callEventGroupers = new Map<string, LegacyCallEventGrouper>();
     private initialReadMarkerId: string | null = null;
 
-    public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         debuglog("mounting");
 

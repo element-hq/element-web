@@ -78,10 +78,10 @@ export default class MemberList extends React.Component<IProps, IState> {
     declare public context: React.ContextType<typeof SDKContext>;
     private tiles: Map<string, MemberTile> = new Map();
 
-    public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
         this.state = this.getMembersState([], []);
-        this.showPresence = context?.memberListStore.isPresenceEnabled() ?? true;
+        this.showPresence = this.context?.memberListStore.isPresenceEnabled() ?? true;
     }
 
     private listenForMembersChanges(): void {

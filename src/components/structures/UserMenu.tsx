@@ -83,8 +83,8 @@ export default class UserMenu extends React.Component<IProps, IState> {
     private readonly dndWatcherRef?: string;
     private buttonRef: React.RefObject<HTMLButtonElement | null> = createRef();
 
-    public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         this.state = {
             contextMenuPosition: null,

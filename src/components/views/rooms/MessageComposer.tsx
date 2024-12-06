@@ -124,9 +124,8 @@ export class MessageComposer extends React.Component<IProps, IState> {
         isRichTextEnabled: true,
     };
 
-    public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
-        super(props, context);
-        this.context = context; // otherwise React will only set it prior to render due to type def above
+    public constructor(props: IProps) {
+        super(props);
 
         const isWysiwygLabEnabled = SettingsStore.getValue<boolean>("feature_wysiwyg_composer");
         let isRichTextEnabled = true;

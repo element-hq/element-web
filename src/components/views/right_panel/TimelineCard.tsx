@@ -77,8 +77,8 @@ export default class TimelineCard extends React.Component<IProps, IState> {
     private card = React.createRef<HTMLDivElement>();
     private readReceiptsSettingWatcher: string | undefined;
 
-    public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
         this.state = {
             showReadReceipts: SettingsStore.getValue("showReadReceipts", props.room.roomId),
             layout: SettingsStore.getValue("layout"),

@@ -62,8 +62,8 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
     public static contextType = MatrixClientContext;
     declare public context: React.ContextType<typeof MatrixClientContext>;
 
-    public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         const state = this.props.room.currentState;
 
