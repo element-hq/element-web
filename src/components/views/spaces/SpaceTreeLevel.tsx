@@ -12,8 +12,9 @@ import React, {
     ComponentType,
     createRef,
     InputHTMLAttributes,
-    LegacyRef,
+    Ref,
     RefObject,
+    type JSX,
 } from "react";
 import classNames from "classnames";
 import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
@@ -52,7 +53,7 @@ type ButtonProps<T extends keyof JSX.IntrinsicElements> = Omit<
     notificationState?: NotificationState;
     isNarrow?: boolean;
     size: string;
-    innerRef?: RefObject<HTMLElement>;
+    innerRef?: RefObject<HTMLElement | null>;
     ContextMenuComponent?: ComponentType<ComponentProps<typeof SpaceContextMenu>>;
     onClick?(ev?: ButtonEvent): void;
 };
@@ -178,7 +179,7 @@ interface IItemProps extends InputHTMLAttributes<HTMLLIElement> {
     isPanelCollapsed?: boolean;
     onExpand?: () => void;
     parents?: Set<string>;
-    innerRef?: LegacyRef<HTMLLIElement>;
+    innerRef?: Ref<HTMLLIElement>;
     dragHandleProps?: DraggableProvidedDragHandleProps | null;
 }
 

@@ -50,7 +50,7 @@ export const FilterDropdown = <FilterKeysType extends string = string>({
     ...restProps
 }: FilterDropdownProps<FilterKeysType>): React.ReactElement<FilterDropdownProps<FilterKeysType>> => {
     return (
-        <Dropdown
+        (<Dropdown
             {...restProps}
             value={value}
             className={classNames("mx_FilterDropdown", className)}
@@ -63,8 +63,8 @@ export const FilterDropdown = <FilterKeysType extends string = string>({
                         <span className="mx_FilterDropdown_optionLabel">{label}</span>
                         {!!description && <span className="mx_FilterDropdown_optionDescription">{description}</span>}
                     </div>
-                )) as NonEmptyArray<ReactElement & { key: string }>
+                )) as NonEmptyArray<ReactElement<any> & { key: string }>
             }
-        </Dropdown>
+        </Dropdown>)
     );
 };

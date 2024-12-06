@@ -14,7 +14,7 @@ import { _t, _td, TranslationKey } from "../../../languageHandler";
 
 interface IProps extends Omit<IInputProps, "onValidate" | "label" | "element"> {
     id?: string;
-    fieldRef?: RefCallback<Field> | RefObject<Field>;
+    fieldRef?: RefCallback<Field> | RefObject<Field | null>;
     autoComplete?: string;
     value: string;
     password: string; // The password we're confirming

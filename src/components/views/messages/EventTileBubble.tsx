@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { forwardRef, ReactNode, ReactChild } from "react";
+import React, { forwardRef, ReactNode, ReactElement, type JSX } from "react";
 import classNames from "classnames";
 
 interface IProps {
@@ -14,7 +14,7 @@ interface IProps {
     title: string;
     timestamp?: JSX.Element;
     subtitle?: ReactNode;
-    children?: ReactChild;
+    children?: ReactElement<any> | number | string;
 }
 
 const EventTileBubble = forwardRef<HTMLDivElement, IProps>(

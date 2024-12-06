@@ -23,7 +23,7 @@ interface IState {
 }
 
 export default class DialpadModal extends React.PureComponent<IProps, IState> {
-    private numberEntryFieldRef: React.RefObject<Field> = createRef();
+    private numberEntryFieldRef: React.RefObject<Field | null> = createRef();
 
     public constructor(props: IProps) {
         super(props);

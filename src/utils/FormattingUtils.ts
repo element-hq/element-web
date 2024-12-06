@@ -85,7 +85,7 @@ export function getUserNameColorClass(userId: string): string {
  * between each item, but with the last item appended as " and [lastItem]".
  */
 export function formatList(items: string[], itemLimit?: number, includeCount?: boolean): string;
-export function formatList(items: ReactElement[], itemLimit?: number, includeCount?: boolean): ReactElement;
+export function formatList(items: ReactElement<any>[], itemLimit?: number, includeCount?: boolean): ReactElement<any>;
 export function formatList(items: ReactNode[], itemLimit?: number, includeCount?: boolean): ReactNode;
 export function formatList(items: ReactNode[], itemLimit = items.length, includeCount = false): ReactNode {
     let remaining = Math.max(items.length - itemLimit, 0);

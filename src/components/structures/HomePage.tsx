@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import * as React from "react";
-import { useContext, useState } from "react";
+import { useContext, useState, type JSX } from "react";
 
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import { getHomePageUrl } from "../../utils/pages";

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { EventType, RoomType, Room } from "matrix-js-sdk/src/matrix";
-import React, { ComponentType, createRef, ReactComponentElement, SyntheticEvent } from "react";
+import React, { ComponentType, createRef, ReactComponentElement, SyntheticEvent, type JSX } from "react";
 
 import { IState as IRovingTabIndexState, RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -575,7 +575,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         });
     }
 
-    private renderSublists(): React.ReactElement[] {
+    private renderSublists(): React.ReactElement<any>[] {
         // show a skeleton UI if the user is in no rooms and they are not filtering and have no suggested rooms
         const showSkeleton =
             !this.state.suggestedRooms?.length &&

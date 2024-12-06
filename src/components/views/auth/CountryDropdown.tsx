@@ -149,7 +149,7 @@ export default class CountryDropdown extends React.Component<IProps, IState> {
                     {country.name} (+{country.prefix})
                 </div>
             );
-        }) as NonEmptyArray<ReactElement & { key: string }>;
+        }) as NonEmptyArray<ReactElement<any> & { key: string }>;
 
         // default value here too, otherwise we need to handle null / undefined
         // values between mounting and the initial value propagating

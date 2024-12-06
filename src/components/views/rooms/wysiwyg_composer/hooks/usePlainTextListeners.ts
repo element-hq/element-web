@@ -49,8 +49,8 @@ export function usePlainTextListeners(
     eventRelation?: IEventRelation,
     isAutoReplaceEmojiEnabled?: boolean,
 ): {
-    ref: RefObject<HTMLDivElement>;
-    autocompleteRef: React.RefObject<Autocomplete>;
+    ref: RefObject<HTMLDivElement | null>;
+    autocompleteRef: React.RefObject<Autocomplete | null>;
     content?: string;
     onBeforeInput(event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>): void;
     onInput(event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>): void;

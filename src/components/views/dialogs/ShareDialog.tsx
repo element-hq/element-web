@@ -103,7 +103,7 @@ export function ShareDialog({ target, customTitle, onFinished, permalinkCreator 
     const showQrCode = useSettingValue<boolean>(UIFeature.ShareQRCode);
     const showSocials = useSettingValue<boolean>(UIFeature.ShareSocial);
 
-    const timeoutIdRef = useRef<number>();
+    const timeoutIdRef = useRef<number>(undefined);
     const [isCopied, setIsCopied] = useState(false);
 
     const [linkToSpecificEvent, setLinkToSpecificEvent] = useState(target instanceof MatrixEvent);

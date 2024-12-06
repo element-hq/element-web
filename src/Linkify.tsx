@@ -205,7 +205,7 @@ export const sanitizeHtmlParams: IExtendedSanitizeOptions = {
 };
 
 /* Wrapper around linkify-react merging in our default linkify options */
-export function Linkify({ as, options, children }: React.ComponentProps<typeof _Linkify>): ReactElement {
+export function Linkify({ as, options, children }: React.ComponentProps<typeof _Linkify>): ReactElement<any> {
     return (
         <_Linkify as={as} options={merge({}, linkifyMatrixOptions, options)}>
             {children}

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { EventType, RoomType, Room, RoomEvent, ClientEvent } from "matrix-js-sdk/src/matrix";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, type JSX } from "react";
 import { Tooltip } from "@vector-im/compound-web";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";

@@ -11,7 +11,7 @@ import React from "react";
 import SdkConfig from "../../../SdkConfig";
 
 export default class AuthHeaderLogo extends React.PureComponent {
-    public render(): React.ReactElement {
+    public render(): React.ReactElement<any> {
         const brandingConfig = SdkConfig.getObject("branding");
         const logoUrl = brandingConfig?.get("auth_header_logo_url") ?? "themes/element/img/logos/element-logo.svg";
 

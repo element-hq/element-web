@@ -15,6 +15,7 @@ import React, {
     MutableRefObject,
     RefCallback,
     Ref,
+    type JSX,
 } from "react";
 import classNames from "classnames";
 import { debounce } from "lodash";
@@ -242,13 +243,13 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         return valid;
     }
 
-    private get inputRef(): RefObject<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> {
+    private get inputRef(): RefObject<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | null> {
         const inputRef = this.props.inputRef;
         if (typeof inputRef === "function") {
             // This is a callback ref, so return _inputRef which will point to the actual DOM element.
             return this._inputRef;
         }
-        return (inputRef ?? this._inputRef) as RefObject<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>;
+        return (inputRef ?? this._inputRef) as RefObject<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | null>;
     }
 
     private onTooltipOpenChange = (open: boolean): void => {

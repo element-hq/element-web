@@ -103,7 +103,7 @@ export default class SpellCheckLanguagesDropdown extends React.Component<
 
         const options = displayedLanguages.map((language) => {
             return <div key={language.value}>{language.label}</div>;
-        }) as NonEmptyArray<ReactElement & { key: string }>;
+        }) as NonEmptyArray<ReactElement<any> & { key: string }>;
 
         // default value here too, otherwise we need to handle null / undefined;
         // values between mounting and the initial value propagating

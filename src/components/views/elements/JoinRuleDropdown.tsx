@@ -41,7 +41,7 @@ const JoinRuleDropdown: React.FC<IProps> = ({
         <div key={JoinRule.Public} className="mx_JoinRuleDropdown_public">
             {labelPublic}
         </div>,
-    ] as NonEmptyArray<ReactElement & { key: string }>;
+    ] as NonEmptyArray<ReactElement<any> & { key: string }>;
 
     if (labelKnock) {
         options.unshift(
@@ -50,7 +50,7 @@ const JoinRuleDropdown: React.FC<IProps> = ({
                     <AskToJoinIcon className="mx_Icon mx_Icon_16 mx_JoinRuleDropdown_icon" />
                     {labelKnock}
                 </div>
-            ) as ReactElement & { key: string },
+            ) as ReactElement<any> & { key: string },
         );
     }
 
@@ -60,7 +60,7 @@ const JoinRuleDropdown: React.FC<IProps> = ({
                 <div key={JoinRule.Restricted} className="mx_JoinRuleDropdown_restricted">
                     {labelRestricted}
                 </div>
-            ) as ReactElement & { key: string },
+            ) as ReactElement<any> & { key: string },
         );
     }
 

@@ -31,8 +31,8 @@ interface IState {
 }
 
 export default abstract class AudioPlayerBase<T extends IProps = IProps> extends React.PureComponent<T, IState> {
-    protected seekRef: RefObject<SeekBar> = createRef();
-    protected playPauseRef: RefObject<PlayPauseButton> = createRef();
+    protected seekRef: RefObject<SeekBar | null> = createRef();
+    protected playPauseRef: RefObject<PlayPauseButton | null> = createRef();
 
     public constructor(props: T) {
         super(props);

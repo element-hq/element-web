@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { Room } from "matrix-js-sdk/src/matrix";
-import React, { HTMLAttributes, ReactHTML } from "react";
+import React, { HTMLAttributes, ReactHTML, type JSX } from "react";
 
 import { roomContextDetails } from "../../../utils/i18n-helpers";
 

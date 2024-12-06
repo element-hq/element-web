@@ -53,7 +53,7 @@ const LiveDurationDropdown: React.FC<Props> = ({ timeout, onChange }) => {
     };
 
     return (
-        <Dropdown
+        (<Dropdown
             id="live-duration"
             data-testid="live-duration-dropdown"
             label={getLabel(timeout)}
@@ -66,9 +66,9 @@ const LiveDurationDropdown: React.FC<Props> = ({ timeout, onChange }) => {
                     <div data-testid={`live-duration-option-${key}`} key={key}>
                         {label}
                     </div>
-                )) as NonEmptyArray<ReactElement & { key: string }>
+                )) as NonEmptyArray<ReactElement<any> & { key: string }>
             }
-        </Dropdown>
+        </Dropdown>)
     );
 };
 

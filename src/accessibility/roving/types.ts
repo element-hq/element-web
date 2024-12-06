@@ -8,6 +8,6 @@ Please see LICENSE files in the repository root for full details.
 
 import { RefObject } from "react";
 
-export type Ref = RefObject<HTMLElement>;
+export type Ref = RefObject<HTMLElement | null>;
 
 export type FocusHandler = () => void;

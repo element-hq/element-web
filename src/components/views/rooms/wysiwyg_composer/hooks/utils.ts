@@ -62,7 +62,7 @@ export function setCursorPositionAtTheEnd(element: HTMLElement): void {
  * @returns boolean - whether or not the autocomplete has handled the event
  */
 export function handleEventWithAutocomplete(
-    autocompleteRef: RefObject<Autocomplete>,
+    autocompleteRef: RefObject<Autocomplete | null>,
     // we get a React Keyboard event from plain text composer, a Keyboard Event from the rich text composer
     event: KeyboardEvent | React.KeyboardEvent<HTMLDivElement>,
 ): boolean {

@@ -98,7 +98,7 @@ export const Pill: React.FC<PillProps> = ({ type: propType, url, inMessage, room
         mx_EventPill: type === PillType.EventInOtherRoom || type === PillType.EventInSameRoom,
     });
 
-    let avatar: ReactElement | null = null;
+    let avatar: ReactElement<any> | null = null;
     let pillText: string | null = text;
 
     switch (type) {

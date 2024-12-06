@@ -24,7 +24,7 @@ interface IState {
 }
 
 export default class DialpadContextMenu extends React.Component<IProps, IState> {
-    private numberEntryFieldRef: React.RefObject<Field> = createRef();
+    private numberEntryFieldRef: React.RefObject<Field | null> = createRef();
 
     public constructor(props: IProps) {
         super(props);

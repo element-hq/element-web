@@ -19,6 +19,7 @@ import React, {
     useMemo,
     useRef,
     useState,
+    type JSX,
 } from "react";
 import {
     Room,
@@ -134,7 +135,7 @@ const Tile: React.FC<ITileProps> = ({
         }
     };
 
-    let button: ReactElement;
+    let button: ReactElement<any>;
     if (busy) {
         button = (
             <AccessibleButton
@@ -169,7 +170,7 @@ const Tile: React.FC<ITileProps> = ({
         );
     }
 
-    let checkbox: ReactElement | undefined;
+    let checkbox: ReactElement<any> | undefined;
     if (onToggleClick) {
         if (hasPermissions) {
             checkbox = <StyledCheckbox checked={!!selected} onChange={onToggleClick} tabIndex={isActive ? 0 : -1} />;
@@ -187,7 +188,7 @@ const Tile: React.FC<ITileProps> = ({
         }
     }
 
-    let avatar: ReactElement;
+    let avatar: ReactElement<any>;
     if (joinedRoom) {
         avatar = <RoomAvatar room={joinedRoom} size="20px" />;
     } else {
@@ -233,12 +234,12 @@ const Tile: React.FC<ITileProps> = ({
         );
     }
 
-    let joinedSection: ReactElement | undefined;
+    let joinedSection: ReactElement<any> | undefined;
     if (joinedRoom) {
         joinedSection = <div className="mx_SpaceHierarchy_roomTile_joined">{_t("common|joined")}</div>;
     }
 
-    let suggestedSection: ReactElement | undefined;
+    let suggestedSection: ReactElement<any> | undefined;
     if (suggested && (!joinedRoom || hasPermissions)) {
         suggestedSection = <InfoTooltip tooltip={_t("space|suggested_tooltip")}>{_t("space|suggested")}</InfoTooltip>;
     }
@@ -619,7 +620,7 @@ const useIntersectionObserver = (callback: () => void): ((element: HTMLDivElemen
         }
     };
 
-    const observerRef = useRef<IntersectionObserver>();
+    const observerRef = useRef<IntersectionObserver>(undefined);
     return (element: HTMLDivElement) => {
         if (observerRef.current) {
             observerRef.current.disconnect();

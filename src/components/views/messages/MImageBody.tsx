@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ComponentProps, createRef, ReactNode } from "react";
+import React, { ComponentProps, createRef, ReactNode, type JSX } from "react";
 import { Blurhash } from "react-blurhash";
 import classNames from "classnames";
 import { CSSTransition, SwitchTransition } from "react-transition-group";

@@ -54,7 +54,7 @@ function onTokenLoginCompleted(): void {
     window.history.replaceState(null, "", url.href);
 }
 
-export async function loadApp(fragParams: {}, matrixChatRef: React.Ref<MatrixChat>): Promise<ReactElement> {
+export async function loadApp(fragParams: {}, matrixChatRef: React.Ref<MatrixChat>): Promise<ReactElement<any>> {
     initRouting();
     const platform = PlatformPeg.get();
 

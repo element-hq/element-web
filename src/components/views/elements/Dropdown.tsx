@@ -7,7 +7,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent, createRef, CSSProperties, ReactElement, ReactNode, Ref } from "react";
+import React, {
+    ChangeEvent,
+    createRef,
+    CSSProperties,
+    ReactElement,
+    ReactNode,
+    Ref,
+    type JSX,
+} from "react";
 import classnames from "classnames";
 
 import AccessibleButton, { ButtonEvent } from "./AccessibleButton";
@@ -18,7 +26,7 @@ import { objectHasDiff } from "../../../utils/objects";
 import { NonEmptyArray } from "../../../@types/common";
 
 interface IMenuOptionProps {
-    children: ReactElement;
+    children: ReactElement<any>;
     highlighted?: boolean;
     dropdownKey: string;
     id?: string;
@@ -71,7 +79,7 @@ export interface DropdownProps {
     value?: string;
     className?: string;
     autoComplete?: string;
-    children: NonEmptyArray<ReactElement & { key: string }>;
+    children: NonEmptyArray<ReactElement<any> & { key: string }>;
     // negative for consistency with HTML
     disabled?: boolean;
     // The width that the dropdown should be. If specified,
@@ -149,7 +157,7 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
         document.removeEventListener("click", this.onDocumentClick, false);
     }
 
-    private reindexChildren(children: ReactElement[]): void {
+    private reindexChildren(children: ReactElement<any>[]): void {
         this.childrenByKey = {};
         React.Children.forEach(children, (child) => {
             this.childrenByKey[(child as DropdownProps["children"][number]).key] = child;
@@ -295,7 +303,7 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
     }
 
     private getMenuOptions(): JSX.Element[] {
-        const options = React.Children.map(this.props.children, (child: ReactElement) => {
+        const options = React.Children.map(this.props.children, (child: ReactElement<any>) => {
             const highlighted = this.state.highlightedOption === child.key;
             return (
                 <MenuOption

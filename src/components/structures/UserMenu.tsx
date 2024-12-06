@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, ReactNode } from "react";
+import React, { createRef, ReactNode, type JSX } from "react";
 import { Room } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
@@ -81,7 +81,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
     private dispatcherRef?: string;
     private themeWatcherRef?: string;
     private readonly dndWatcherRef?: string;
-    private buttonRef: React.RefObject<HTMLButtonElement> = createRef();
+    private buttonRef: React.RefObject<HTMLButtonElement | null> = createRef();
 
     public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
         super(props, context);

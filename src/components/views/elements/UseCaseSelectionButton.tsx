@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React from "react";
+import React, { type JSX } from "react";
 
 import { _t } from "../../../languageHandler";
 import { UseCase } from "../../../settings/enums/UseCase";

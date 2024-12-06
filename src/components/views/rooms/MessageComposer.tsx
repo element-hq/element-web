@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, ReactNode } from "react";
+import React, { createRef, ReactNode, type JSX } from "react";
 import classNames from "classnames";
 import {
     IEventRelation,
@@ -111,7 +111,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
     private dispatcherRef?: string;
     private messageComposerInput = createRef<SendMessageComposerClass>();
     private voiceRecordingButton = createRef<VoiceRecordComposerTile>();
-    private ref: React.RefObject<HTMLDivElement> = createRef();
+    private ref: React.RefObject<HTMLDivElement | null> = createRef();
     private instanceId: number;
 
     private _voiceRecording: Optional<VoiceMessageRecording>;

@@ -9,7 +9,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { LegacyRef, ReactNode } from "react";
+import React, { Ref, ReactNode, type JSX } from "react";
 import sanitizeHtml from "sanitize-html";
 import classNames from "classnames";
 import katex from "katex";
@@ -503,7 +503,7 @@ export function bodyToHtml(content: IContent, highlights: Optional<string[]>, op
 export function topicToHtml(
     topic?: string,
     htmlTopic?: string,
-    ref?: LegacyRef<HTMLSpanElement>,
+    ref?: Ref<HTMLSpanElement>,
     allowExtendedHtml = false,
 ): ReactNode {
     if (!SettingsStore.getValue("feature_html_topic")) {

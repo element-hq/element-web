@@ -15,7 +15,7 @@ import * as Email from "../../../email";
 
 interface IProps extends Omit<IInputProps, "onValidate" | "element"> {
     id?: string;
-    fieldRef?: RefCallback<Field> | RefObject<Field>;
+    fieldRef?: RefCallback<Field> | RefObject<Field | null>;
     value: string;
     autoFocus?: boolean;
 

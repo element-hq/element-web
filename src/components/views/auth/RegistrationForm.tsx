@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { BaseSyntheticEvent, ComponentProps, ReactNode } from "react";
+import React, { BaseSyntheticEvent, ComponentProps, ReactNode, type JSX } from "react";
 import { MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -513,23 +513,27 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
             />
         );
         return (
-            <Field
-                ref={(field) => (this[RegistrationField.PhoneNumber] = field)}
+            (<Field
+                ref={field => {
+                    (this[RegistrationField.PhoneNumber] = field);
+                }}
                 type="text"
                 label={phoneLabel}
                 value={this.state.phoneNumber}
                 prefixComponent={phoneCountry}
                 onChange={this.onPhoneNumberChange}
                 onValidate={this.onPhoneNumberValidate}
-            />
+            />)
         );
     }
 
     public renderUsername(): ReactNode {
         return (
-            <Field
+            (<Field
                 id="mx_RegistrationForm_username"
-                ref={(field) => (this[RegistrationField.Username] = field)}
+                ref={field => {
+                    (this[RegistrationField.Username] = field);
+                }}
                 type="text"
                 autoFocus={true}
                 label={_t("common|username")}
@@ -540,7 +544,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
                 tooltipAlignment={this.tooltipAlignment()}
                 autoCorrect="off"
                 autoCapitalize="none"
-            />
+            />)
         );
     }
 

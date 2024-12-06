@@ -23,7 +23,7 @@ interface IProps {
     innerRef?: MutableRefObject<any>;
 }
 
-function isReactElement(c: ReturnType<(typeof React.Children)["toArray"]>[number]): c is ReactElement {
+function isReactElement(c: ReturnType<(typeof React.Children)["toArray"]>[number]): c is ReactElement<any> {
     return typeof c === "object" && "type" in c;
 }
 
@@ -36,7 +36,7 @@ function isReactElement(c: ReturnType<(typeof React.Children)["toArray"]>[number
  */
 export default class NodeAnimator extends React.Component<IProps> {
     private nodes: Record<string, HTMLElement> = {};
-    private children: { [key: string]: ReactElement } = {};
+    private children: { [key: string]: ReactElement<any> } = {};
     public static defaultProps: Partial<IProps> = {
         startStyles: [],
     };

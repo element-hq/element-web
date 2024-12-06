@@ -22,7 +22,7 @@ import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.
 
 export function useWysiwygEditActionHandler(
     disabled: boolean,
-    composerElement: RefObject<HTMLElement>,
+    composerElement: RefObject<HTMLElement | null>,
     composerFunctions: ComposerFunctions,
 ): void {
     const roomContext = useScopedRoomContext("timelineRenderingType");

@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent, ReactNode } from "react";
+import React, { ChangeEvent, ReactNode, type JSX } from "react";
 import { Room, RoomMember, EventType, RoomType, JoinRule, MatrixError } from "matrix-js-sdk/src/matrix";
 import { KnownMembership, RoomJoinRulesEventContent } from "matrix-js-sdk/src/types";
 import classNames from "classnames";

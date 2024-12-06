@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactElement, useCallback, useContext, useEffect } from "react";
+import React, { ReactElement, useCallback, useContext, useEffect, type JSX } from "react";
 import {
     EventStatus,
     MatrixEvent,
@@ -99,7 +99,7 @@ const OptionsButton: React.FC<IOptionsButtonProps> = ({
         [openMenu, onFocus],
     );
 
-    let contextMenu: ReactElement | undefined;
+    let contextMenu: ReactElement<any> | undefined;
     if (menuDisplayed && button.current) {
         const tile = getTile?.();
         const replyChain = getReplyChain();

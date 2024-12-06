@@ -11,8 +11,8 @@ import React, { PropsWithChildren } from "react";
 declare module "react" {
     // Fix forwardRef types for Generic components - https://stackoverflow.com/a/58473012
     function forwardRef<T, P = {}>(
-        render: (props: PropsWithChildren<P>, ref: React.ForwardedRef<T>) => React.ReactElement | null,
-    ): (props: P & React.RefAttributes<T>) => React.ReactElement | null;
+        render: (props: PropsWithChildren<P>, ref: React.ForwardedRef<T>) => React.ReactElement<any> | null,
+    ): (props: P & React.RefAttributes<T>) => React.ReactElement<any> | null;
 
     // Fix lazy types - https://stackoverflow.com/a/71017028
     function lazy<T extends ComponentType<any>>(factory: () => Promise<{ default: T }>): T;

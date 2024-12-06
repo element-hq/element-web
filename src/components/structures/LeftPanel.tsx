@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import * as React from "react";
-import { createRef } from "react";
+import { createRef, type JSX } from "react";
 import classNames from "classnames";
 
 import dis from "../../dispatcher/dispatcher";

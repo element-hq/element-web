@@ -30,7 +30,7 @@ export interface ICompletion {
     type?: "at-room" | "command" | "community" | "room" | "user";
     completion: string;
     completionId?: string;
-    component: ReactElement;
+    component: ReactElement<any>;
     range: ISelectionRange;
     command?: string;
     suffix?: string;

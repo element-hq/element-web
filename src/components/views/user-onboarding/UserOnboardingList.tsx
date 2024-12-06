@@ -15,6 +15,8 @@ import ProgressBar from "../../views/elements/ProgressBar";
 import Heading from "../../views/typography/Heading";
 import { UserOnboardingTask } from "./UserOnboardingTask";
 
+import type { JSX } from "react";
+
 export const getUserOnboardingCounters = (
     tasks: UserOnboardingTaskWithResolvedCompletion[],
 ): {

@@ -15,10 +15,10 @@ interface RoomStatusBarUnsentMessagesProps {
     title: ReactNode;
     description?: string;
     notificationState: StaticNotificationState;
-    buttons: ReactElement;
+    buttons: ReactElement<any>;
 }
 
-export const RoomStatusBarUnsentMessages = (props: RoomStatusBarUnsentMessagesProps): ReactElement => {
+export const RoomStatusBarUnsentMessages = (props: RoomStatusBarUnsentMessagesProps): ReactElement<any> => {
     return (
         <div className="mx_RoomStatusBar mx_RoomStatusBar_unsentMessages">
             <div role="alert">
