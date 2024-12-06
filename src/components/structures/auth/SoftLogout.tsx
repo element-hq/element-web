@@ -237,6 +237,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
                 />
                 <AccessibleButton
                     onClick={this.onPasswordLogin}
+                    element="button"
                     kind="primary"
                     type="submit"
                     disabled={this.state.busy}

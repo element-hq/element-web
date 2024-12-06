@@ -407,6 +407,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                         forceValidity={this.state.error ? false : undefined}
                     />
                     <AccessibleButton
+                        element="button"
                         type="submit"
                         kind="primary_sm"
                         onClick={this.checkIdServer}

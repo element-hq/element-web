@@ -268,6 +268,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
                                 onChange={this.onPersonalRuleChanged}
                             />
                             <AccessibleButton
+                                element="button"
                                 type="submit"
                                 kind="primary"
                                 onClick={this.onAddPersonalRule}
@@ -296,6 +297,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
                                 onChange={this.onNewListChanged}
                             />
                             <AccessibleButton
+                                element="button"
                                 type="submit"
                                 kind="primary"
                                 onClick={this.onSubscribeList}
