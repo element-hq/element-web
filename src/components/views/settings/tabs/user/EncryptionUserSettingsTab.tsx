@@ -8,7 +8,12 @@
 import React, { JSX } from "react";
 
 import SettingsTab from "../SettingsTab";
+import { RecoveryPanel } from "../../encryption/RecoveryPanel";
 
 export function EncryptionUserSettingsTab(): JSX.Element {
-    return <SettingsTab />;
+    return (
+        <SettingsTab className="mx_EncryptionUserSettingsTab">
+            <RecoveryPanel />
+        </SettingsTab>
+    );
 }
