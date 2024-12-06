@@ -71,9 +71,13 @@
         "update:jitsi": "curl -s https://meet.element.io/libs/external_api.min.js > ./res/jitsi_external_api.min.js"
     },
     "resolutions": {
+        "@types/react": "19.0.0",
+        "@types/react-dom": "19.0.0",
         "oidc-client-ts": "3.1.0",
         "jwt-decode": "4.0.0",
         "caniuse-lite": "1.0.30001684",
+        "react": "19.0.0",
+        "react-dom": "19.0.0",
         "wrap-ansi-cjs": "npm:wrap-ansi@^7.0.0",
         "wrap-ansi": "npm:wrap-ansi@^7.0.0"
     },
@@ -179,7 +183,7 @@
         "@svgr/webpack": "^8.0.0",
         "@testing-library/dom": "^10.4.0",
         "@testing-library/jest-dom": "^6.4.8",
-        "@testing-library/react": "^16.0.0",
+        "@testing-library/react": "^16.1.0",
         "@testing-library/user-event": "^14.5.2",
         "@types/commonmark": "^0.27.4",
         "@types/counterpart": "^0.18.1",

@@ -58,7 +58,7 @@ export interface IOperableEventTile {
     getEventTileOps(): IEventTileOps | null;
 }
 
-const baseBodyTypes = new Map<string, typeof React.Component>([
+const baseBodyTypes = new Map<string, React.ComponentType<IBodyProps>>([
     [MsgType.Text, TextualBody],
     [MsgType.Notice, TextualBody],
     [MsgType.Emote, TextualBody],
@@ -80,14 +80,14 @@ const baseEvTypes = new Map<string, React.ComponentType<IBodyProps>>([
 export default class MessageEvent extends React.Component<IProps> implements IMediaBody, IOperableEventTile {
     private body: React.RefObject<React.Component | IOperableEventTile | null> = createRef();
     private mediaHelper?: MediaEventHelper;
-    private bodyTypes = new Map<string, typeof React.Component>(baseBodyTypes.entries());
-    private evTypes = new Map<string, React.ComponentType<IBodyProps>>(baseEvTypes.entries());
+    private bodyTypes = new Map(baseBodyTypes.entries());
+    private evTypes = new Map(baseEvTypes.entries());
 
     public static contextType = MatrixClientContext;
     declare public context: React.ContextType<typeof MatrixClientContext>;
 
-    public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         if (MediaEventHelper.isEligible(this.props.mxEvent)) {
             this.mediaHelper = new MediaEventHelper(this.props.mxEvent);
@@ -115,12 +115,12 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
     }
 
     private updateComponentMaps(): void {
-        this.bodyTypes = new Map<string, typeof React.Component>(baseBodyTypes.entries());
+        this.bodyTypes = new Map(baseBodyTypes.entries());
         for (const [bodyType, bodyComponent] of Object.entries(this.props.overrideBodyTypes ?? {})) {
             this.bodyTypes.set(bodyType, bodyComponent);
         }
 
-        this.evTypes = new Map<string, React.ComponentType<IBodyProps>>(baseEvTypes.entries());
+        this.evTypes = new Map(baseEvTypes.entries());
         for (const [evType, evComponent] of Object.entries(this.props.overrideEventTypes ?? {})) {
             this.evTypes.set(evType, evComponent);
         }

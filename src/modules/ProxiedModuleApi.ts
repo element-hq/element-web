@@ -10,7 +10,7 @@ import { ModuleApi } from "@matrix-org/react-sdk-module-api/lib/ModuleApi";
 import { TranslationStringsObject, PlainSubstitution } from "@matrix-org/react-sdk-module-api/lib/types/translations";
 import { Optional } from "matrix-events-sdk";
 import { DialogContent, DialogProps } from "@matrix-org/react-sdk-module-api/lib/components/DialogContent";
-import React from "react";
+import React, { type JSX } from "react";
 import { AccountAuthInfo } from "@matrix-org/react-sdk-module-api/lib/types/AccountAuthInfo";
 import * as Matrix from "matrix-js-sdk/src/matrix";
 import { IRegisterRequestParams } from "matrix-js-sdk/src/matrix";
@@ -78,7 +78,7 @@ export class ProxiedModuleApi implements ModuleApi {
      */
     public openDialog<M extends object, P extends DialogProps, C extends DialogContent<P>>(
         initialTitleOrOptions: string | ModuleUiDialogOptions,
-        body: (props: P, ref: React.RefObject<C | null>) => React.ReactNode,
+        body: (props: P, ref: React.RefObject<C | null>) => JSX.Element,
         props?: Omit<P, keyof DialogProps>,
     ): Promise<{ didOkOrSubmit: boolean; model: M }> {
         const initialOptions: ModuleUiDialogOptions =

@@ -15,5 +15,10 @@ declare module "react" {
     ): (props: P & React.RefAttributes<T>) => React.ReactElement<any> | null;
 
     // Fix lazy types - https://stackoverflow.com/a/71017028
-    function lazy<T extends ComponentType<any>>(factory: () => Promise<{ default: T }>): T;
+    // function lazy<T extends ComponentType<any>>(factory: () => Promise<{ default: T }>): T;
+
+    // Workaround for generics in React 19
+    interface FunctionComponent {
+        defaultProps?: {};
+    }
 }

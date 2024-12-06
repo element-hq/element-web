@@ -17,6 +17,7 @@ import ContextMenu, {
     MenuItemRadio,
 } from "../../structures/ContextMenu";
 import { _t } from "../../../languageHandler";
+import AccessibleButton from "../elements/AccessibleButton.tsx";
 
 interface IProps extends IContextMenuProps {
     className?: string;
@@ -31,10 +32,10 @@ interface IOptionListProps {
     children: ReactNode;
 }
 
-interface IOptionProps extends React.ComponentProps<typeof MenuItem> {
+type IOptionProps<T extends React.ElementType> = React.ComponentProps<typeof AccessibleButton<T>> & {
     iconClassName?: string;
     isDestructive?: boolean;
-}
+};
 
 interface ICheckboxProps extends React.ComponentProps<typeof MenuItemCheckbox> {
     iconClassName: string;
@@ -110,18 +111,19 @@ export const IconizedContextMenuCheckbox: React.FC<ICheckboxProps> = ({
     );
 };
 
-export const IconizedContextMenuOption: React.FC<IOptionProps> = ({
+export const IconizedContextMenuOption = <T extends React.ElementType>({
+    element,
     label,
     className,
     iconClassName,
     children,
     isDestructive,
     ...props
-}) => {
+}: IOptionProps<T>): JSX.Element => {
     return (
         <MenuItem
-            element="li"
             {...props}
+            element={element ?? "li"}
             className={classNames(className, {
                 mx_IconizedContextMenu_item: true,
                 mx_IconizedContextMenu_itemDestructive: isDestructive,

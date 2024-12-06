@@ -5,13 +5,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, type JSX } from "react";
+import React, { ComponentProps, createRef } from "react";
 
-import AutoHideScrollbar, { IProps as AutoHideScrollbarProps } from "./AutoHideScrollbar";
+import AutoHideScrollbar from "./AutoHideScrollbar";
 import UIStore, { UI_EVENTS } from "../../stores/UIStore";
 
-export type IProps<T extends keyof JSX.IntrinsicElements> = Omit<AutoHideScrollbarProps<T>, "onWheel" | "element"> & {
-    element?: T;
+export type IProps<T extends React.ElementType> = Omit<ComponentProps<typeof AutoHideScrollbar<T>>, "onWheel"> & {
     // If true, the scrollbar will append mx_IndicatorScrollbar_leftOverflowIndicator
     // and mx_IndicatorScrollbar_rightOverflowIndicator elements to the list for positioning
     // by the parent element.
@@ -30,10 +29,7 @@ interface IState {
     rightIndicatorOffset: string;
 }
 
-export default class IndicatorScrollbar<T extends keyof JSX.IntrinsicElements> extends React.Component<
-    IProps<T>,
-    IState
-> {
+export default class IndicatorScrollbar<T extends React.ElementType> extends React.Component<IProps<T>, IState> {
     private autoHideScrollbar = createRef<AutoHideScrollbar<any>>();
     private scrollElement?: HTMLDivElement;
     private likelyTrackpadUser: boolean | null = null;

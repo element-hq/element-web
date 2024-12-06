@@ -118,7 +118,7 @@ describe("RoomView", () => {
         cleanup();
     });
 
-    const mountRoomView = async (ref?: RefObject<RoomView>): Promise<RenderResult> => {
+    const mountRoomView = async (ref?: RefObject<RoomView | null>): Promise<RenderResult> => {
         if (stores.roomViewStore.getRoomId() !== room.roomId) {
             const switchedRoom = new Promise<void>((resolve) => {
                 const subFn = () => {

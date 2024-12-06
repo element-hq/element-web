@@ -80,19 +80,19 @@ export function handleEventWithAutocomplete(
         switch (autocompleteAction) {
             case KeyBindingAction.ForceCompleteAutocomplete:
             case KeyBindingAction.CompleteAutocomplete:
-                autocompleteRef.current.onConfirmCompletion();
+                component.onConfirmCompletion();
                 handled = true;
                 break;
             case KeyBindingAction.PrevSelectionInAutocomplete:
-                autocompleteRef.current.moveSelection(-1);
+                component.moveSelection(-1);
                 handled = true;
                 break;
             case KeyBindingAction.NextSelectionInAutocomplete:
-                autocompleteRef.current.moveSelection(1);
+                component.moveSelection(1);
                 handled = true;
                 break;
             case KeyBindingAction.CancelAutocomplete:
-                autocompleteRef.current.onEscape(event as {} as React.KeyboardEvent);
+                component.onEscape(event as {} as React.KeyboardEvent);
                 handled = true;
                 break;
             default:

@@ -18,7 +18,7 @@ describe("SeekBar", () => {
     let playback: Playback;
     let renderResult: RenderResult;
     let frameRequestCallback: FrameRequestCallback;
-    let seekBarRef: RefObject<SeekBar>;
+    let seekBarRef: RefObject<SeekBar | null>;
 
     beforeEach(() => {
         seekBarRef = createRef();

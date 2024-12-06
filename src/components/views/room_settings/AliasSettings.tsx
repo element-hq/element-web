@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent, ContextType, createRef, SyntheticEvent, type JSX } from "react";
+import React, { ChangeEvent, ToggleEvent, ContextType, createRef, SyntheticEvent, type JSX } from "react";
 import { MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { RoomCanonicalAliasEventContent } from "matrix-js-sdk/src/types";
@@ -278,9 +278,9 @@ export default class AliasSettings extends React.Component<IProps, IState> {
             });
     };
 
-    private onLocalAliasesToggled = (event: ChangeEvent<HTMLDetailsElement>): void => {
+    private onLocalAliasesToggled = (event: ToggleEvent<HTMLDetailsElement>): void => {
         // expanded
-        if (event.target.open) {
+        if (event.currentTarget.open) {
             // if local aliases haven't been preloaded yet at component mount
             if (!this.props.canSetCanonicalAlias && this.state.localAliases.length === 0) {
                 this.loadLocalAliases();

@@ -396,7 +396,6 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             openInMapSiteButton = (
                 <IconizedContextMenuOption
                     iconClassName="mx_MessageContextMenu_iconOpenInMapSite"
-                    onClick={null}
                     label={_t("timeline|context_menu|open_in_osm")}
                     element="a"
                     {...{

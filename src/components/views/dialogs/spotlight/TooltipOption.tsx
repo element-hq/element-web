@@ -13,12 +13,12 @@ import { useRovingTabIndex } from "../../../../accessibility/RovingTabIndex";
 import AccessibleButton, { ButtonProps } from "../../elements/AccessibleButton";
 import { Ref } from "../../../../accessibility/roving/types";
 
-type TooltipOptionProps<T extends keyof JSX.IntrinsicElements> = ButtonProps<T> & {
+type TooltipOptionProps<T extends React.ElementType> = ButtonProps<T> & {
     endAdornment?: ReactNode;
     inputRef?: Ref;
 };
 
-export const TooltipOption = <T extends keyof JSX.IntrinsicElements>({
+export const TooltipOption = <T extends React.ElementType>({
     inputRef,
     className,
     element,
@@ -34,7 +34,7 @@ export const TooltipOption = <T extends keyof JSX.IntrinsicElements>({
             tabIndex={-1}
             aria-selected={isActive}
             role="option"
-            element={element as keyof JSX.IntrinsicElements}
+            element={element as React.ElementType}
         />
     );
 };

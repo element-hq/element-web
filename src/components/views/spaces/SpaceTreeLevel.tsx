@@ -40,7 +40,7 @@ import SpaceContextMenu from "../context_menus/SpaceContextMenu";
 import { useRovingTabIndex } from "../../../accessibility/RovingTabIndex";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 
-type ButtonProps<T extends keyof JSX.IntrinsicElements> = Omit<
+type ButtonProps<T extends React.ElementType> = Omit<
     ComponentProps<typeof AccessibleButton<T>>,
     "title" | "onClick" | "size" | "element"
 > & {
@@ -58,7 +58,7 @@ type ButtonProps<T extends keyof JSX.IntrinsicElements> = Omit<
     onClick?(ev?: ButtonEvent): void;
 };
 
-export const SpaceButton = <T extends keyof JSX.IntrinsicElements>({
+export const SpaceButton = <T extends React.ElementType>({
     space,
     spaceKey: _spaceKey,
     className,

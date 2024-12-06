@@ -8,16 +8,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { HTMLAttributes, ReactHTML, ReactNode, WheelEvent, type JSX } from "react";
+import React, { ReactNode, WheelEvent } from "react";
 
-type DynamicHtmlElementProps<T extends keyof JSX.IntrinsicElements> =
-    JSX.IntrinsicElements[T] extends HTMLAttributes<{}> ? DynamicElementProps<T> : DynamicElementProps<"div">;
-type DynamicElementProps<T extends keyof JSX.IntrinsicElements> = Partial<Omit<JSX.IntrinsicElements[T], "ref">>;
-
-export type IProps<T extends keyof JSX.IntrinsicElements> = Omit<DynamicHtmlElementProps<T>, "onScroll"> & {
-    element: T;
+export type IProps<T extends React.ElementType> = React.ComponentPropsWithoutRef<T> & {
+    element?: T;
     className?: string;
-    onScroll?: (event: Event) => void;
     onWheel?: (event: WheelEvent) => void;
     style?: React.CSSProperties;
     tabIndex?: number;
@@ -25,11 +20,7 @@ export type IProps<T extends keyof JSX.IntrinsicElements> = Omit<DynamicHtmlElem
     children: ReactNode;
 };
 
-export default class AutoHideScrollbar<T extends keyof JSX.IntrinsicElements> extends React.Component<IProps<T>> {
-    public static defaultProps = {
-        element: "div" as keyof ReactHTML,
-    };
-
+export default class AutoHideScrollbar<T extends React.ElementType> extends React.Component<IProps<T>> {
     public readonly containerRef: React.RefObject<HTMLDivElement | null> = React.createRef();
 
     public componentDidMount(): void {
@@ -55,7 +46,7 @@ export default class AutoHideScrollbar<T extends keyof JSX.IntrinsicElements> ex
         const { element, className, onScroll, tabIndex, wrappedRef, children, ...otherProps } = this.props;
 
         return React.createElement(
-            element,
+            element ?? "div",
             {
                 ...otherProps,
                 ref: this.containerRef,

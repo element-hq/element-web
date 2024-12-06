@@ -13,7 +13,7 @@ import { ChevronDownIcon } from "@vector-im/compound-design-tokens/assets/web/ic
 import { _t } from "../../../../languageHandler";
 import AccessibleButton from "../../elements/AccessibleButton";
 
-type Props<T extends keyof JSX.IntrinsicElements> = Omit<
+type Props<T extends React.ElementType> = Omit<
     ComponentProps<typeof AccessibleButton<T>>,
     "aria-label" | "title" | "kind" | "className" | "onClick" | "element"
 > & {
@@ -21,7 +21,7 @@ type Props<T extends keyof JSX.IntrinsicElements> = Omit<
     onClick: () => void;
 };
 
-export const DeviceExpandDetailsButton = <T extends keyof JSX.IntrinsicElements>({
+export const DeviceExpandDetailsButton = <T extends React.ElementType>({
     isExpanded,
     onClick,
     ...rest

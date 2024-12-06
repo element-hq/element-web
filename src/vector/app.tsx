@@ -12,7 +12,7 @@ Please see LICENSE files in the repository root for full details.
 
 // To ensure we load the browser-matrix version first
 import "matrix-js-sdk/src/browser-index";
-import React, { ReactElement, StrictMode } from "react";
+import React, { type JSX, StrictMode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { createClient, AutoDiscovery, ClientConfig } from "matrix-js-sdk/src/matrix";
 import { WrapperLifecycle, WrapperOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WrapperLifecycle";
@@ -54,7 +54,7 @@ function onTokenLoginCompleted(): void {
     window.history.replaceState(null, "", url.href);
 }
 
-export async function loadApp(fragParams: {}, matrixChatRef: React.Ref<MatrixChat>): Promise<ReactElement<any>> {
+export async function loadApp(fragParams: {}, matrixChatRef: React.Ref<MatrixChat>): Promise<JSX.Element> {
     initRouting();
     const platform = PlatformPeg.get();
 

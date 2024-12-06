@@ -42,6 +42,7 @@ import HiddenBody from "../components/views/messages/HiddenBody";
 import ViewSourceEvent from "../components/views/messages/ViewSourceEvent";
 import { shouldDisplayAsBeaconTile } from "../utils/beacon/timeline";
 import { ElementCall } from "../models/Call";
+import { IBodyProps } from "../components/views/messages/IBodyProps.ts";
 
 // Subset of EventTile's IProps plus some mixins
 export interface EventTileTypeProps
@@ -64,8 +65,8 @@ export interface EventTileTypeProps
     ref?: React.RefObject<any>; // `any` because it's effectively impossible to convince TS of a reasonable type
     timestamp?: JSX.Element;
     maxImageHeight?: number; // pixels
-    overrideBodyTypes?: Record<string, typeof React.Component>;
-    overrideEventTypes?: Record<string, typeof React.Component>;
+    overrideBodyTypes?: Record<string, React.ComponentType<IBodyProps>>;
+    overrideEventTypes?: Record<string, React.ComponentType<IBodyProps>>;
 }
 
 type FactoryProps = Omit<EventTileTypeProps, "ref">;

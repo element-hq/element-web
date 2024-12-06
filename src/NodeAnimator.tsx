@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { Key, MutableRefObject, ReactElement, RefCallback } from "react";
+import React, { HTMLAttributes, Key, MutableRefObject, ReactElement, RefCallback } from "react";
 
 interface IChildProps {
     style: React.CSSProperties;
@@ -68,21 +68,22 @@ export default class NodeAnimator extends React.Component<IProps> {
         this.children = {};
         React.Children.toArray(newChildren).forEach((c) => {
             if (!isReactElement(c)) return;
+            const props = c.props as HTMLAttributes<HTMLElement>;
             if (oldChildren[c.key!]) {
                 const old = oldChildren[c.key!];
                 const oldNode = this.nodes[old.key!];
 
-                if (oldNode && oldNode.style.left !== c.props.style.left) {
-                    this.applyStyles(oldNode, { left: c.props.style.left });
+                if (oldNode && oldNode.style.left !== props.style!.left) {
+                    this.applyStyles(oldNode, { left: props.style!.left });
                 }
                 // clone the old element with the props (and children) of the new element
                 // so prop updates are still received by the children.
-                this.children[c.key!] = React.cloneElement(old, c.props, c.props.children);
+                this.children[c.key!] = React.cloneElement(old, props, props.children);
             } else {
                 // new element. If we have a startStyle, use that as the style and go through
                 // the enter animations
                 const newProps: Partial<IChildProps> = {};
-                const restingStyle = c.props.style;
+                const restingStyle = props.style!;
 
                 const startStyles = this.props.startStyles;
                 if (startStyles.length > 0) {

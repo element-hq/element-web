@@ -212,7 +212,7 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({
     scrollIntoView,
     onKeyDown,
 }) => {
-    const [state, dispatch] = useReducer<Reducer<IState, Action>>(reducer, {
+    const [state, dispatch] = useReducer(reducer, {
         nodes: [],
     });
 

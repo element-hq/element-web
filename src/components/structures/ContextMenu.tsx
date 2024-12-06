@@ -440,7 +440,7 @@ export default class ContextMenu extends React.PureComponent<React.PropsWithChil
         );
     }
 
-    public render(): React.ReactElement<any> | number | string {
+    public render(): JSX.Element {
         if (this.props.mountAsChild) {
             // Render as a child of the current parent
             return this.renderMenu();
