@@ -19,9 +19,6 @@ import { TestSdkContext } from "../../TestSdkContext";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import LogoutDialog from "../../../../src/components/views/dialogs/LogoutDialog";
 import Modal from "../../../../src/Modal";
-import SettingsStore from "../../../../src/settings/SettingsStore";
-import { Features } from "../../../../src/settings/Settings";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import { mockOpenIdConfiguration } from "../../../test-utils/oidc";
 import { Action } from "../../../../src/dispatcher/actions";
 import { UserTab } from "../../../../src/components/views/dialogs/UserTab";
@@ -137,7 +134,6 @@ describe("<UserMenu>", () => {
             isCrossSigningReady: jest.fn().mockResolvedValue(true),
             exportSecretsBundle: jest.fn().mockResolvedValue({}),
         } as unknown as CryptoApi);
-        await SettingsStore.setValue(Features.OidcNativeFlow, null, SettingLevel.DEVICE, true);
         const spy = jest.spyOn(defaultDispatcher, "dispatch");
 
         const UserMenu = wrapInSdkContext(UnwrappedUserMenu, sdkContext);
