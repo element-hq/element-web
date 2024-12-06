@@ -542,6 +542,7 @@
         "qr_code": "QR Code",
         "random": "Random",
         "reactions": "Reactions",
+        "recommended": "Recommended",
         "report_a_bug": "Report a bug",
         "room": "Room",
         "room_name": "Room name",
@@ -2461,6 +2462,15 @@
         "emoji_autocomplete": "Enable Emoji suggestions while typing",
         "enable_markdown": "Enable Markdown",
         "enable_markdown_description": "Start messages with <code>/plain</code> to send without markdown.",
+        "encryption": {
+            "dialog_title": "<strong>Settings:</strong> Encryption",
+            "recovery_change_recovery_key": "Change recovery key",
+            "recovery_description": "Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.",
+            "recovery_key_active": "Recovery key active",
+            "recovery_set_up_recovery": "Set up recovery",
+            "recovery_title": "Recovery",
+            "title": "Encryption"
+        },
         "general": {
             "account_management_section": "Account management",
             "account_section": "Account",
