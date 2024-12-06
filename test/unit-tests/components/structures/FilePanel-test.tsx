@@ -65,7 +65,9 @@ describe("FilePanel", () => {
                     roomId={room.roomId}
                     onClose={jest.fn()}
                     resizeNotifier={new ResizeNotifier()}
-                    ref={(ref) => (filePanel = ref)}
+                    ref={(ref) => {
+                        filePanel = ref;
+                    }}
                 />,
             );
             await screen.findByText("No files visible in this room");

@@ -456,7 +456,9 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
             : _td("auth|registration|continue_without_email_field_label");
         return (
             <EmailField
-                fieldRef={(field) => (this[RegistrationField.Email] = field)}
+                fieldRef={(field) => {
+                    this[RegistrationField.Email] = field;
+                }}
                 label={emailLabel}
                 value={this.state.email}
                 validationRules={this.validateEmailRules.bind(this)}
@@ -471,7 +473,9 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         return (
             <PassphraseField
                 id="mx_RegistrationForm_password"
-                fieldRef={(field) => (this[RegistrationField.Password] = field)}
+                fieldRef={(field) => {
+                    this[RegistrationField.Password] = field;
+                }}
                 minScore={PASSWORD_MIN_SCORE}
                 value={this.state.password}
                 onChange={this.onPasswordChange}
@@ -486,7 +490,9 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         return (
             <PassphraseConfirmField
                 id="mx_RegistrationForm_passwordConfirm"
-                fieldRef={(field) => (this[RegistrationField.PasswordConfirm] = field)}
+                fieldRef={(field) => {
+                    this[RegistrationField.PasswordConfirm] = field;
+                }}
                 autoComplete="new-password"
                 value={this.state.passwordConfirm}
                 password={this.state.password}
@@ -513,9 +519,9 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
             />
         );
         return (
-            (<Field
-                ref={field => {
-                    (this[RegistrationField.PhoneNumber] = field);
+            <Field
+                ref={(field) => {
+                    this[RegistrationField.PhoneNumber] = field;
                 }}
                 type="text"
                 label={phoneLabel}
@@ -523,16 +529,16 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
                 prefixComponent={phoneCountry}
                 onChange={this.onPhoneNumberChange}
                 onValidate={this.onPhoneNumberValidate}
-            />)
+            />
         );
     }
 
     public renderUsername(): ReactNode {
         return (
-            (<Field
+            <Field
                 id="mx_RegistrationForm_username"
-                ref={field => {
-                    (this[RegistrationField.Username] = field);
+                ref={(field) => {
+                    this[RegistrationField.Username] = field;
                 }}
                 type="text"
                 autoFocus={true}
@@ -544,7 +550,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
                 tooltipAlignment={this.tooltipAlignment()}
                 autoCorrect="off"
                 autoCapitalize="none"
-            />)
+            />
         );
     }
 

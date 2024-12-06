@@ -327,11 +327,11 @@ export default class ChangePassword extends React.Component<IProps, IState> {
         switch (this.state.phase) {
             case Phase.Edit:
                 return (
-                    (<form className={this.props.className} onSubmit={this.onClickChange}>
+                    <form className={this.props.className} onSubmit={this.onClickChange}>
                         <div className={rowClassName}>
                             <Field
-                                ref={field => {
-                                    (this[FIELD_OLD_PASSWORD] = field);
+                                ref={(field) => {
+                                    this[FIELD_OLD_PASSWORD] = field;
                                 }}
                                 type="password"
                                 label={_t("auth|change_password_current_label")}
@@ -342,7 +342,9 @@ export default class ChangePassword extends React.Component<IProps, IState> {
                         </div>
                         <div className={rowClassName}>
                             <PassphraseField
-                                fieldRef={(field) => (this[FIELD_NEW_PASSWORD] = field)}
+                                fieldRef={(field) => {
+                                    this[FIELD_NEW_PASSWORD] = field;
+                                }}
                                 type="password"
                                 label={_td("auth|change_password_new_label")}
                                 minScore={PASSWORD_MIN_SCORE}
@@ -355,8 +357,8 @@ export default class ChangePassword extends React.Component<IProps, IState> {
                         </div>
                         <div className={rowClassName}>
                             <Field
-                                ref={field => {
-                                    (this[FIELD_NEW_PASSWORD_CONFIRM] = field);
+                                ref={(field) => {
+                                    this[FIELD_NEW_PASSWORD_CONFIRM] = field;
                                 }}
                                 type="password"
                                 label={_t("auth|change_password_confirm_label")}
@@ -373,7 +375,7 @@ export default class ChangePassword extends React.Component<IProps, IState> {
                         >
                             {this.props.buttonLabel || _t("auth|change_password_action")}
                         </AccessibleButton>
-                    </form>)
+                    </form>
                 );
             case Phase.Uploading:
                 return (

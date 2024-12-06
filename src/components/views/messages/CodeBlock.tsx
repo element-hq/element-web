@@ -119,7 +119,9 @@ const CodeBlock: React.FC<Props> = ({ children, onHeightChanged }) => {
                 <div
                     style={{ display: "contents" }}
                     dangerouslySetInnerHTML={{ __html: children.innerHTML }}
-                    ref={highlightCode}
+                    ref={(div) => {
+                        highlightCode(div);
+                    }}
                 />
             </pre>
             {expandCollapseButton}
