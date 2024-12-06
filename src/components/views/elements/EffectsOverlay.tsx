@@ -58,11 +58,10 @@ const EffectsOverlay: FunctionComponent<IProps> = ({ roomWidth }) => {
         if (canvas) canvas.height = UIStore.instance.windowHeight;
         UIStore.instance.on(UI_EVENTS.Resize, resize);
 
+        const currentEffects = effectsRef.current; // this is not a react node ref, warning can be safely ignored
         return () => {
             dis.unregister(dispatcherRef);
             UIStore.instance.off(UI_EVENTS.Resize, resize);
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-            const currentEffects = effectsRef.current; // this is not a react node ref, warning can be safely ignored
             for (const effect in currentEffects) {
                 const effectModule: ICanvasEffect = currentEffects.get(effect)!;
                 if (effectModule && effectModule.isRunning) {
