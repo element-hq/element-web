@@ -69,7 +69,7 @@ interface IDropdownButtonProps extends ButtonProps {
 }
 
 const LegacyCallViewDropdownButton: React.FC<IDropdownButtonProps> = ({ state, deviceKinds, ...props }) => {
-    const [menuDisplayed, buttonRef, openMenu, closeMenu] = useContextMenu();
+    const [menuDisplayed, buttonRef, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
     const [hoveringDropdown, setHoveringDropdown] = useState(false);
 
     const classes = classNames("mx_LegacyCallViewButtons_button", "mx_LegacyCallViewButtons_dropdownButton", {
