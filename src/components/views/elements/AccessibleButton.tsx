@@ -51,7 +51,10 @@ type DynamicHtmlElementProps<T extends keyof JSX.IntrinsicElements> =
 type DynamicElementProps<T extends keyof JSX.IntrinsicElements> = Partial<
     Omit<JSX.IntrinsicElements[T], "ref" | "onClick" | "onMouseDown" | "onKeyUp" | "onKeyDown">
 > &
-    Omit<InputHTMLAttributes<Element>, "onClick">;
+    Pick<
+        InputHTMLAttributes<Element>,
+        "onKeyDown" | "onKeyUp" | "onMouseOver" | "onFocus" | "alt" | "type" | "autoFocus" | "children"
+    >;
 
 type TooltipProps = ComponentProps<typeof Tooltip>;
 
