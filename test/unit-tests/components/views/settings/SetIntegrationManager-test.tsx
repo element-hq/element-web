@@ -35,7 +35,7 @@ describe("SetIntegrationManager", () => {
         deleteThreePid: jest.fn(),
     });
 
-    let stores: SdkContextClass;
+    let stores!: SdkContextClass;
 
     const getComponent = () => (
         <MatrixClientContext.Provider value={mockClient}>

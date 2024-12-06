@@ -30,7 +30,7 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { ContextMenuTooltipButton } from "../../../accessibility/context_menu/ContextMenuTooltipButton";
 import { toRightOf, useContextMenu } from "../../structures/ContextMenu";
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent, ButtonProps as AccessibleButtonProps } from "../elements/AccessibleButton";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
 import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
@@ -39,8 +39,8 @@ import SpaceContextMenu from "../context_menus/SpaceContextMenu";
 import { useRovingTabIndex } from "../../../accessibility/RovingTabIndex";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 
-type ButtonProps<T extends keyof JSX.IntrinsicElements> = Omit<
-    ComponentProps<typeof AccessibleButton<T>>,
+type ButtonProps<T extends keyof HTMLElementTagNameMap> = Omit<
+    AccessibleButtonProps<T>,
     "title" | "onClick" | "size" | "element"
 > & {
     space?: Room;
@@ -52,12 +52,12 @@ type ButtonProps<T extends keyof JSX.IntrinsicElements> = Omit<
     notificationState?: NotificationState;
     isNarrow?: boolean;
     size: string;
-    innerRef?: RefObject<HTMLElement>;
+    innerRef?: RefObject<HTMLDivElement>;
     ContextMenuComponent?: ComponentType<ComponentProps<typeof SpaceContextMenu>>;
     onClick?(ev?: ButtonEvent): void;
 };
 
-export const SpaceButton = <T extends keyof JSX.IntrinsicElements>({
+export const SpaceButton = <T extends keyof HTMLElementTagNameMap>({
     space,
     spaceKey: _spaceKey,
     className,
@@ -72,8 +72,8 @@ export const SpaceButton = <T extends keyof JSX.IntrinsicElements>({
     ContextMenuComponent,
     ...props
 }: ButtonProps<T>): JSX.Element => {
-    const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLElement>(innerRef);
-    const [onFocus, isActive, ref] = useRovingTabIndex(handle);
+    const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>(innerRef);
+    const [onFocus, isActive, ref] = useRovingTabIndex<HTMLDivElement>(handle);
     const tabIndex = isActive ? 0 : -1;
 
     const spaceKey = _spaceKey ?? space?.roomId;

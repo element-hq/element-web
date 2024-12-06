@@ -435,7 +435,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                 <RovingAccessibleButton
                     className="mx_MessageActionBar_iconButton"
                     title={isPinned ? _t("action|unpin") : _t("action|pin")}
-                    onClick={(e) => this.onPinClick(e, isPinned)}
+                    onClick={(e: ButtonEvent) => this.onPinClick(e, isPinned)}
                     onContextMenu={(e: ButtonEvent) => this.onPinClick(e, isPinned)}
                     key="pin"
                     placement="left"
