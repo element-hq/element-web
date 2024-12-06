@@ -2464,6 +2464,26 @@
         "enable_markdown_description": "Start messages with <code>/plain</code> to send without markdown.",
         "encryption": {
             "dialog_title": "<strong>Settings:</strong> Encryption",
+            "recovery": {
+                "change_recovery_key": "Change recovery key",
+                "change_recovery_key_description": "Get a new recovery key if you've lost your existing one. After changing your recovery key, your old one will no longer work.",
+                "change_recovery_key_title": "Change recovery key?",
+                "confirm_description": "Enter the recovery key shown on the previous screen to finish setting up recovery.",
+                "confirm_finish": "Finish set up",
+                "confirm_title": "Enter your recovery key to confirm",
+                "description": "Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.",
+                "enter_key_error": "The recovery key you entered is not correct.",
+                "enter_recovery_key": "Enter recovery key",
+                "key_storage_warning": "Your key storage is out of sync. Click the button below to fix the problem.",
+                "save_key_description": "Do not share this with anyone!",
+                "save_key_title": "Recovery key",
+                "set_up_recovery": "Set up recovery",
+                "set_up_recovery_description": "Your key storage is protected by a recovery key. If you need a new recovery key after setup, you can recreate it by selecting ‘%(changeRecoveryKeyButton)s’.",
+                "set_up_recovery_save_key_description": "Write down this recovery key somewhere safe, like a password manager, encrypted note, or a physical safe.",
+                "set_up_recovery_save_key_title": "Save your recovery key somewhere safe",
+                "set_up_recovery_secondary_description": "After clicking continue, we’ll generate a recovery key for you.",
+                "title": "Recovery"
+            },
             "title": "Encryption"
         },
         "general": {
