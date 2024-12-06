@@ -12,14 +12,14 @@ import { mocked } from "jest-mock";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { createCrossSigning } from "../../../../../src/CreateCrossSigning";
-import CreateCrossSigningDialog from "../../../../../src/components/views/dialogs/security/CreateCrossSigningDialog";
+import { InitialCryptoSetupDialog } from "../../../../../src/components/views/dialogs/security/InitialCryptoSetupDialog";
 import { createTestClient } from "../../../../test-utils";
 
 jest.mock("../../../../../src/CreateCrossSigning", () => ({
     createCrossSigning: jest.fn(),
 }));
 
-describe("CreateCrossSigningDialog", () => {
+describe("InitialCryptoSetupDialog", () => {
     let client: MatrixClient;
     let createCrossSigningResolve: () => void;
     let createCrossSigningReject: (e: Error) => void;
@@ -43,7 +43,7 @@ describe("CreateCrossSigningDialog", () => {
         const onFinished = jest.fn();
 
         render(
-            <CreateCrossSigningDialog
+            <InitialCryptoSetupDialog
                 matrixClient={client}
                 accountPassword="hunter2"
                 tokenLogin={false}
@@ -61,7 +61,7 @@ describe("CreateCrossSigningDialog", () => {
 
     it("should display an error if createCrossSigning fails", async () => {
         render(
-            <CreateCrossSigningDialog
+            <InitialCryptoSetupDialog
                 matrixClient={client}
                 accountPassword="hunter2"
                 tokenLogin={false}
@@ -78,7 +78,7 @@ describe("CreateCrossSigningDialog", () => {
         const onFinished = jest.fn();
 
         render(
-            <CreateCrossSigningDialog
+            <InitialCryptoSetupDialog
                 matrixClient={client}
                 accountPassword="hunter2"
                 tokenLogin={true}
@@ -95,7 +95,7 @@ describe("CreateCrossSigningDialog", () => {
         const onFinished = jest.fn();
 
         render(
-            <CreateCrossSigningDialog
+            <InitialCryptoSetupDialog
                 matrixClient={client}
                 accountPassword="hunter2"
                 tokenLogin={false}
@@ -113,7 +113,7 @@ describe("CreateCrossSigningDialog", () => {
 
     it("should retry when the retry button is clicked", async () => {
         render(
-            <CreateCrossSigningDialog
+            <InitialCryptoSetupDialog
                 matrixClient={client}
                 accountPassword="hunter2"
                 tokenLogin={false}
