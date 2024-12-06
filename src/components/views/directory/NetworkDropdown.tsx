@@ -168,7 +168,7 @@ export const NetworkDropdown: React.FC<IProps> = ({ protocols, config, setConfig
                   adornment: (
                       <AccessibleButton
                           className="mx_NetworkDropdown_removeServer"
-                          alt={_t("spotlight|public_rooms|network_dropdown_remove_server_adornment", { roomServer })}
+                          title={_t("spotlight|public_rooms|network_dropdown_remove_server_adornment", { roomServer })}
                           onClick={() => setUserDefinedServers(without(userDefinedServers, roomServer))}
                       />
                   ),

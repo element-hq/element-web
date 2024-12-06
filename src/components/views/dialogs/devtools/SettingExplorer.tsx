@@ -298,7 +298,7 @@ const SettingsList: React.FC<ISettingsListProps> = ({ onBack, onView, onEdit }) 
                                     <code>{i}</code>
                                 </AccessibleButton>
                                 <AccessibleButton
-                                    alt={_t("devtools|edit_setting")}
+                                    title={_t("devtools|edit_setting")}
                                     onClick={() => onEdit(i)}
                                     className="mx_DevTools_SettingsExplorer_edit"
                                 >
