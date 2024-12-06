@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { EventType, RoomType, JoinRule, Preset, Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
-import React, { useCallback, useContext, useRef, useState } from "react";
+import React, { useCallback, useContext, useRef, useState, type JSX } from "react";
 
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import createRoom, { IOpts } from "../../createRoom";
@@ -601,13 +601,13 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
 
     private dispatcherRef?: string;
 
-    public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         let phase = Phase.Landing;
 
         const creator = this.props.space.currentState.getStateEvents(EventType.RoomCreate, "")?.getSender();
-        const showSetup = this.props.justCreatedOpts && context.getSafeUserId() === creator;
+        const showSetup = this.props.justCreatedOpts && this.context.getSafeUserId() === creator;
 
         if (showSetup) {
             phase =

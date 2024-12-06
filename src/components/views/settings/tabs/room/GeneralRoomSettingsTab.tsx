@@ -35,8 +35,8 @@ export default class GeneralRoomSettingsTab extends React.Component<IProps, ISta
     public static contextType = MatrixClientContext;
     declare public context: ContextType<typeof MatrixClientContext>;
 
-    public constructor(props: IProps, context: ContextType<typeof MatrixClientContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         this.state = {
             isRoomPublished: false, // loaded async

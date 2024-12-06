@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ReactNode } from "react";
+import { type JSX } from "react";
 import { createRoot, Root } from "react-dom/client";
 
 /**
@@ -27,7 +27,7 @@ export class ReactRootManager {
      * @param rootElement the root element to render the component into
      * @param revertElement the element to replace the root element with when unmounting
      */
-    public render(children: ReactNode, rootElement: Element, revertElement?: Element): void {
+    public render(children: JSX.Element, rootElement: Element, revertElement?: Element): void {
         const root = createRoot(rootElement);
         this.roots.push(root);
         this.rootElements.push(rootElement);

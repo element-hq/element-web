@@ -105,7 +105,7 @@ export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState>
         });
     };
 
-    public render(): React.ReactElement {
+    public render(): React.ReactElement<any> {
         const tiles = BreadcrumbsStore.instance.rooms.map((r, i) => (
             <RoomBreadcrumbTile
                 key={r.roomId}

@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { MouseEventHandler, ReactNode } from "react";
+import React, { MouseEventHandler, ReactNode, type JSX } from "react";
 import { FormattingFunctions, AllActionStates, ActionState } from "@vector-im/matrix-wysiwyg";
 import classNames from "classnames";
 import BoldIcon from "@vector-im/compound-design-tokens/assets/web/icons/bold";

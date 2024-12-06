@@ -300,8 +300,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
     private unmounted = false;
 
-    public constructor(props: EventTileProps, context: React.ContextType<typeof RoomContext>) {
-        super(props, context);
+    public constructor(props: EventTileProps) {
+        super(props);
 
         const thread = this.thread;
 

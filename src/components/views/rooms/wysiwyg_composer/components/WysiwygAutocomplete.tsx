@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ForwardedRef, forwardRef, FunctionComponent } from "react";
+import React, { ForwardedRef, forwardRef, FunctionComponent, type JSX } from "react";
 import { FormattingFunctions, MappedSuggestion } from "@vector-im/matrix-wysiwyg";
 import { logger } from "matrix-js-sdk/src/logger";
 

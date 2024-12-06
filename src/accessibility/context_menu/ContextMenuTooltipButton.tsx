@@ -12,20 +12,20 @@ import React, { ComponentProps, forwardRef, Ref } from "react";
 
 import AccessibleButton from "../../components/views/elements/AccessibleButton";
 
-type Props<T extends keyof JSX.IntrinsicElements> = ComponentProps<typeof AccessibleButton<T>> & {
+type Props<T extends React.ElementType> = ComponentProps<typeof AccessibleButton<T>> & {
     // whether the context menu is currently open
     isExpanded: boolean;
 };
 
 // Semantic component for representing the AccessibleButton which launches a <ContextMenu />
-export const ContextMenuTooltipButton = forwardRef(function <T extends keyof JSX.IntrinsicElements>(
+export const ContextMenuTooltipButton = forwardRef(function <T extends React.ElementType>(
     { isExpanded, children, onClick, onContextMenu, element, ...props }: Props<T>,
     ref: Ref<HTMLElement>,
 ) {
     return (
         <AccessibleButton
             {...props}
-            element={element as keyof JSX.IntrinsicElements}
+            element={element as React.ElementType}
             onClick={onClick}
             onContextMenu={onContextMenu ?? onClick ?? undefined}
             aria-haspopup={true}

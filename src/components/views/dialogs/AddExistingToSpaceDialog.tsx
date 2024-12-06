@@ -423,7 +423,7 @@ export const SubspaceSelector: React.FC<ISubspaceSelectorProps> = ({ title, spac
                                 {space.name || getDisplayAliasForRoom(space) || space.roomId}
                             </div>
                         );
-                    }) as NonEmptyArray<ReactElement & { key: string }>
+                    }) as NonEmptyArray<ReactElement<any> & { key: string }>
                 }
             </Dropdown>
         );

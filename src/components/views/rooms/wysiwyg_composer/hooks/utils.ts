@@ -62,7 +62,7 @@ export function setCursorPositionAtTheEnd(element: HTMLElement): void {
  * @returns boolean - whether or not the autocomplete has handled the event
  */
 export function handleEventWithAutocomplete(
-    autocompleteRef: RefObject<Autocomplete>,
+    autocompleteRef: RefObject<Autocomplete | null>,
     // we get a React Keyboard event from plain text composer, a Keyboard Event from the rich text composer
     event: KeyboardEvent | React.KeyboardEvent<HTMLDivElement>,
 ): boolean {
@@ -80,19 +80,19 @@ export function handleEventWithAutocomplete(
         switch (autocompleteAction) {
             case KeyBindingAction.ForceCompleteAutocomplete:
             case KeyBindingAction.CompleteAutocomplete:
-                autocompleteRef.current.onConfirmCompletion();
+                component.onConfirmCompletion();
                 handled = true;
                 break;
             case KeyBindingAction.PrevSelectionInAutocomplete:
-                autocompleteRef.current.moveSelection(-1);
+                component.moveSelection(-1);
                 handled = true;
                 break;
             case KeyBindingAction.NextSelectionInAutocomplete:
-                autocompleteRef.current.moveSelection(1);
+                component.moveSelection(1);
                 handled = true;
                 break;
             case KeyBindingAction.CancelAutocomplete:
-                autocompleteRef.current.onEscape(event as {} as React.KeyboardEvent);
+                component.onEscape(event as {} as React.KeyboardEvent);
                 handled = true;
                 break;
             default:

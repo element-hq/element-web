@@ -9,7 +9,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type JSX } from "react";
 
 import SdkConfig from "../../../SdkConfig";
 import Modal from "../../../Modal";
@@ -46,7 +46,7 @@ interface IState {
 
 export default class BugReportDialog extends React.Component<IProps, IState> {
     private unmounted: boolean;
-    private issueRef: React.RefObject<Field>;
+    private issueRef: React.RefObject<Field | null>;
 
     public constructor(props: IProps) {
         super(props);

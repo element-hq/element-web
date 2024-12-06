@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { FunctionComponent, Key, PropsWithChildren, ReactNode } from "react";
+import React, { FunctionComponent, Key, PropsWithChildren, ReactNode, type JSX } from "react";
 
 import { MenuItemRadio } from "../../accessibility/context_menu/MenuItemRadio";
 import { ButtonEvent } from "../views/elements/AccessibleButton";

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { useContext } from "react";
+import React, { useContext, type JSX } from "react";
 
 import { _t } from "../../../languageHandler";
 import ContextMenu, { aboveLeftOf, MenuProps, useContextMenu } from "../../structures/ContextMenu";
@@ -25,7 +25,7 @@ export function EmojiButton({ addEmoji, menuPosition, className }: IEmojiButtonP
     const overflowMenuCloser = useContext(OverflowMenuContext);
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
 
-    let contextMenu: React.ReactElement | null = null;
+    let contextMenu: React.ReactElement<any> | null = null;
     if (menuDisplayed && button.current) {
         const position = menuPosition ?? aboveLeftOf(button.current.getBoundingClientRect());
         const onFinished = (): void => {

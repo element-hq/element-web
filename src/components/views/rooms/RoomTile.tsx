@@ -278,7 +278,7 @@ class RoomTile extends React.PureComponent<Props, State> {
         this.setState({ generalMenuPosition: null });
     };
 
-    private renderNotificationsMenu(isActive: boolean): React.ReactElement | null {
+    private renderNotificationsMenu(isActive: boolean): React.ReactElement<any> | null {
         if (
             MatrixClientPeg.safeGet().isGuest() ||
             this.props.tag === DefaultTagID.Archived ||
@@ -323,7 +323,7 @@ class RoomTile extends React.PureComponent<Props, State> {
         );
     }
 
-    private renderGeneralMenu(): React.ReactElement | null {
+    private renderGeneralMenu(): React.ReactElement<any> | null {
         if (!this.showContextMenu) return null; // no menu to show
         return (
             <React.Fragment>
@@ -371,7 +371,7 @@ class RoomTile extends React.PureComponent<Props, State> {
         return !!this.state.call || (this.props.showMessagePreview && !!this.state.messagePreview);
     }
 
-    public render(): React.ReactElement {
+    public render(): React.ReactElement<any> {
         const classes = classNames({
             mx_RoomTile: true,
             mx_RoomTile_sticky:

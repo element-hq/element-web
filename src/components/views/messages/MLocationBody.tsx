@@ -36,8 +36,8 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
     private mapId: string;
     private reconnectedListener: ClientEventHandlerMap[ClientEvent.Sync];
 
-    public constructor(props: IBodyProps, context: React.ContextType<typeof MatrixClientContext>) {
-        super(props, context);
+    public constructor(props: IBodyProps) {
+        super(props);
 
         // multiple instances of same map might be in document
         // eg thread and main timeline, reply

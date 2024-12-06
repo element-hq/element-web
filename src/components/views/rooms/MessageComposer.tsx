@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, ReactNode } from "react";
+import React, { createRef, ReactNode, type JSX } from "react";
 import classNames from "classnames";
 import {
     IEventRelation,
@@ -111,7 +111,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
     private dispatcherRef?: string;
     private messageComposerInput = createRef<SendMessageComposerClass>();
     private voiceRecordingButton = createRef<VoiceRecordComposerTile>();
-    private ref: React.RefObject<HTMLDivElement> = createRef();
+    private ref: React.RefObject<HTMLDivElement | null> = createRef();
     private instanceId: number;
 
     private _voiceRecording: Optional<VoiceMessageRecording>;
@@ -124,9 +124,8 @@ export class MessageComposer extends React.Component<IProps, IState> {
         isRichTextEnabled: true,
     };
 
-    public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
-        super(props, context);
-        this.context = context; // otherwise React will only set it prior to render due to type def above
+    public constructor(props: IProps) {
+        super(props);
 
         const isWysiwygLabEnabled = SettingsStore.getValue<boolean>("feature_wysiwyg_composer");
         let isRichTextEnabled = true;

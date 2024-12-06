@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef } from "react";
+import React, { createRef, type JSX } from "react";
 import { EventStatus, IContent, MatrixEvent, MatrixEventEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
@@ -51,8 +51,8 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
     private pills = new ReactRootManager();
     private tooltips = new ReactRootManager();
 
-    public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         const cli = this.context;
         const userId = cli.getSafeUserId();

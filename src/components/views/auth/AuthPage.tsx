@@ -35,7 +35,7 @@ export default class AuthPage extends React.PureComponent<React.PropsWithChildre
         return AuthPage.welcomeBackgroundUrl;
     }
 
-    public render(): React.ReactElement {
+    public render(): React.ReactElement<any> {
         const pageStyle = {
             background: `center/cover fixed url(${AuthPage.getWelcomeBackgroundUrl()})`,
         };

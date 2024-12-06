@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useState } from "react";
+import React, { useState, type JSX } from "react";
 import classNames from "classnames";
 import { TooltipProvider } from "@vector-im/compound-web";
 
@@ -119,7 +119,9 @@ const CodeBlock: React.FC<Props> = ({ children, onHeightChanged }) => {
                 <div
                     style={{ display: "contents" }}
                     dangerouslySetInnerHTML={{ __html: children.innerHTML }}
-                    ref={highlightCode}
+                    ref={(div) => {
+                        highlightCode(div);
+                    }}
                 />
             </pre>
             {expandCollapseButton}

@@ -17,6 +17,7 @@ import React, {
     useLayoutEffect,
     useRef,
     useState,
+    type JSX,
 } from "react";
 import { DragDropContext, Draggable, Droppable, DroppableProvidedProps } from "react-beautiful-dnd";
 import classNames from "classnames";

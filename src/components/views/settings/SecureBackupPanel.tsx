@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { lazy, ReactNode } from "react";
+import React, { lazy, ReactNode, type JSX } from "react";
 import { CryptoEvent, BackupTrustInfo, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
 

@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState, type JSX } from "react";
 
 import { _t } from "../../../../languageHandler";
 import Field from "../../elements/Field";
@@ -17,14 +17,14 @@ const INITIAL_LOAD_TILES = 20;
 const LOAD_TILES_STEP_SIZE = 50;
 
 interface IProps {
-    children: React.ReactElement[];
+    children: React.ReactElement<any>[];
     query: string;
     onChange(value: string): void;
 }
 
 const FilteredList: React.FC<IProps> = ({ children, query, onChange }) => {
     const [truncateAt, setTruncateAt] = useState<number>(INITIAL_LOAD_TILES);
-    const [filteredChildren, setFilteredChildren] = useState<React.ReactElement[]>(children);
+    const [filteredChildren, setFilteredChildren] = useState<React.ReactElement<any>[]>(children);
 
     useEffect(() => {
         let filteredChildren = children;
@@ -36,7 +36,7 @@ const FilteredList: React.FC<IProps> = ({ children, query, onChange }) => {
         setTruncateAt(INITIAL_LOAD_TILES);
     }, [children, query]);
 
-    const getChildren = (start: number, end: number): React.ReactElement[] => {
+    const getChildren = (start: number, end: number): React.ReactElement<any>[] => {
         return filteredChildren.slice(start, end);
     };
 

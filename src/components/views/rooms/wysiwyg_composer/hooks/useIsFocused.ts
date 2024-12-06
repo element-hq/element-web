@@ -13,7 +13,7 @@ export function useIsFocused(): {
     onFocus(event: FocusEvent<HTMLElement>): void;
 } {
     const [isFocused, setIsFocused] = useState(false);
-    const timeoutIDRef = useRef<number>();
+    const timeoutIDRef = useRef<number>(undefined);
 
     useEffect(() => () => clearTimeout(timeoutIDRef.current), [timeoutIDRef]);
     const onFocus = useCallback(

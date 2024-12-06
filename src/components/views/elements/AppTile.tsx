@@ -9,7 +9,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ContextType, createRef, CSSProperties, MutableRefObject, ReactNode } from "react";
+import React, { ContextType, createRef, CSSProperties, MutableRefObject, ReactNode, type JSX } from "react";
 import classNames from "classnames";
 import { IWidget, MatrixCapabilities } from "matrix-widget-api";
 import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
@@ -138,8 +138,8 @@ export default class AppTile extends React.Component<IProps, IState> {
     private dispatcherRef?: string;
     private unmounted = false;
 
-    public constructor(props: IProps, context: ContextType<typeof MatrixClientContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         // The key used for PersistedElement
         this.persistKey = getPersistKey(WidgetUtils.getWidgetUid(this.props.app));

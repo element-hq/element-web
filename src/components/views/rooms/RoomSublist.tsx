@@ -13,7 +13,7 @@ import classNames from "classnames";
 import { Enable, Resizable } from "re-resizable";
 import { Direction } from "re-resizable/lib/resizer";
 import * as React from "react";
-import { ComponentType, createRef, ReactComponentElement, ReactNode } from "react";
+import { ComponentType, createRef, ReactComponentElement, ReactNode, type JSX } from "react";
 
 import { polyfillTouchEvent } from "../../../@types/polyfill";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
@@ -506,13 +506,13 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         }
     };
 
-    private renderVisibleTiles(): React.ReactElement[] {
+    private renderVisibleTiles(): React.ReactElement<any>[] {
         if (!this.state.isExpanded && !this.props.forceExpanded) {
             // don't waste time on rendering
             return [];
         }
 
-        const tiles: React.ReactElement[] = [];
+        const tiles: React.ReactElement<any>[] = [];
 
         if (this.state.rooms) {
             let visibleRooms = this.state.rooms;
@@ -635,7 +635,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         );
     }
 
-    private renderHeader(): React.ReactElement {
+    private renderHeader(): React.ReactElement<any> {
         return (
             <RovingTabIndexWrapper inputRef={this.headerButton}>
                 {({ onFocus, isActive, ref }) => {
@@ -726,7 +726,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         (e.target as HTMLDivElement).scrollTop = 0;
     }
 
-    public render(): React.ReactElement {
+    public render(): React.ReactElement<any> {
         const visibleTiles = this.renderVisibleTiles();
         const hidden = !this.state.rooms.length && !this.props.extraTiles?.length && this.props.alwaysVisible !== true;
         const classes = classNames({

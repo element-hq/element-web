@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import classNames from "classnames";
 import { Room } from "matrix-js-sdk/src/matrix";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, type JSX } from "react";
 
 import { ContextMenuTooltipButton } from "../../../../accessibility/context_menu/ContextMenuTooltipButton";
 import { useNotificationState } from "../../../../hooks/useRoomNotificationState";

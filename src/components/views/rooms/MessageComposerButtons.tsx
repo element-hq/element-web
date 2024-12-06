@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import classNames from "classnames";
 import { IEventRelation, Room, MatrixClient, THREAD_RELATION_TYPE, M_POLL_START } from "matrix-js-sdk/src/matrix";
-import React, { createContext, ReactElement, ReactNode, useContext, useRef } from "react";
+import React, { createContext, ReactElement, ReactNode, useContext, useRef, type JSX } from "react";
 
 import { _t } from "../../../languageHandler";
 import { CollapsibleButton } from "./CollapsibleButton";
@@ -137,7 +137,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
     );
 };
 
-function emojiButton(props: IProps): ReactElement {
+function emojiButton(props: IProps): ReactElement<any> {
     return (
         <EmojiButton
             key="emoji_button"
@@ -148,7 +148,7 @@ function emojiButton(props: IProps): ReactElement {
     );
 }
 
-function uploadButton(): ReactElement {
+function uploadButton(): ReactElement<any> {
     return <UploadButton key="controls_upload" />;
 }
 
@@ -237,7 +237,7 @@ const UploadButton: React.FC = () => {
     );
 };
 
-function showStickersButton(props: IProps): ReactElement | null {
+function showStickersButton(props: IProps): ReactElement<any> | null {
     return props.showStickersButton ? (
         <CollapsibleButton
             id="stickersButton"
@@ -250,7 +250,7 @@ function showStickersButton(props: IProps): ReactElement | null {
     ) : null;
 }
 
-function voiceRecordingButton(props: IProps, narrow: boolean): ReactElement | null {
+function voiceRecordingButton(props: IProps, narrow: boolean): ReactElement<any> | null {
     // XXX: recording UI does not work well in narrow mode, so hide for now
     return narrow ? null : (
         <CollapsibleButton
@@ -263,7 +263,7 @@ function voiceRecordingButton(props: IProps, narrow: boolean): ReactElement | nu
     );
 }
 
-function pollButton(room: Room, relation?: IEventRelation): ReactElement {
+function pollButton(room: Room, relation?: IEventRelation): ReactElement<any> {
     return <PollButton key="polls" room={room} relation={relation} />;
 }
 
@@ -319,7 +319,7 @@ class PollButton extends React.PureComponent<IPollButtonProps> {
     }
 }
 
-function showLocationButton(props: IProps, room: Room, matrixClient: MatrixClient): ReactElement | null {
+function showLocationButton(props: IProps, room: Room, matrixClient: MatrixClient): ReactElement<any> | null {
     const sender = room.getMember(matrixClient.getSafeUserId());
 
     return props.showLocationButton && sender ? (

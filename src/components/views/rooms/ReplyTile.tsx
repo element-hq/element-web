@@ -26,6 +26,7 @@ import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { renderReplyTile } from "../../../events/EventTileFactory";
 import { GetRelationsForEvent } from "../rooms/EventTile";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { IBodyProps } from "../messages/IBodyProps.ts";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -139,13 +140,13 @@ export default class ReplyTile extends React.PureComponent<IProps> {
             );
         }
 
-        const msgtypeOverrides: Record<string, typeof React.Component> = {
+        const msgtypeOverrides: Record<string, React.ComponentType<IBodyProps>> = {
             [MsgType.Image]: MImageReplyBody,
             // Override audio and video body with file body. We also hide the download/decrypt button using CSS
             [MsgType.Audio]: isVoiceMessage(mxEvent) ? MVoiceMessageBody : MFileBody,
             [MsgType.Video]: MFileBody,
         };
-        const evOverrides: Record<string, typeof React.Component> = {
+        const evOverrides: Record<string, React.ComponentType<IBodyProps>> = {
             // Use MImageReplyBody so that the sticker isn't taking up a lot of space
             [EventType.Sticker]: MImageReplyBody,
         };

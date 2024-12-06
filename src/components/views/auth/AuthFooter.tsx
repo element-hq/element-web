@@ -7,12 +7,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactElement } from "react";
+import React, { ReactElement, type JSX } from "react";
 
 import SdkConfig from "../../../SdkConfig";
 import { _t } from "../../../languageHandler";
 
-const AuthFooter = (): ReactElement => {
+const AuthFooter = (): ReactElement<any> => {
     const brandingConfig = SdkConfig.getObject("branding");
     const links = brandingConfig?.get("auth_footer_links") ?? [
         { text: "Blog", url: "https://element.io/blog" },

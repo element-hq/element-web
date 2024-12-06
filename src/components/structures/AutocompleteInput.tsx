@@ -22,8 +22,8 @@ interface AutocompleteInputProps {
     selection: ICompletion[];
     onSelectionChange: (selection: ICompletion[]) => void;
     maxSuggestions?: number;
-    renderSuggestion?: (s: ICompletion) => ReactElement;
-    renderSelection?: (m: ICompletion) => ReactElement;
+    renderSuggestion?: (s: ICompletion) => ReactElement<any>;
+    renderSelection?: (m: ICompletion) => ReactElement<any>;
     additionalFilter?: (suggestion: ICompletion) => boolean;
 }
 
@@ -163,11 +163,11 @@ export const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
 type SelectionItemProps = {
     item: ICompletion;
     onClick: (completion: ICompletion) => void;
-    render?: (completion: ICompletion) => ReactElement;
+    render?: (completion: ICompletion) => ReactElement<any>;
 };
 
 const SelectionItem: React.FC<SelectionItemProps> = ({ item, onClick, render }) => {
-    const withContainer = (children: ReactNode): ReactElement => (
+    const withContainer = (children: ReactNode): ReactElement<any> => (
         <span
             className="mx_AutocompleteInput_editor_selection"
             data-testid={`autocomplete-selection-item-${item.completionId}`}
@@ -194,7 +194,7 @@ type SuggestionItemProps = {
     item: ICompletion;
     selection: ICompletion[];
     onClick: (completion: ICompletion) => void;
-    render?: (completion: ICompletion) => ReactElement;
+    render?: (completion: ICompletion) => ReactElement<any>;
 };
 
 const SuggestionItem: React.FC<SuggestionItemProps> = ({ item, selection, onClick, render }) => {
@@ -204,7 +204,7 @@ const SuggestionItem: React.FC<SuggestionItemProps> = ({ item, selection, onClic
         "mx_AutocompleteInput_suggestion--selected": isSelected,
     });
 
-    const withContainer = (children: ReactNode): ReactElement => (
+    const withContainer = (children: ReactNode): ReactElement<any> => (
         <div
             className={classes}
             // `onClick` cannot be used here as it would lead to focus loss and closing the suggestion list.

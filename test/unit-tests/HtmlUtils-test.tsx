@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactElement } from "react";
+import React, { DOMAttributes, ReactElement } from "react";
 import { mocked } from "jest-mock";
 import { render, screen } from "jest-matrix-react";
 import { IContent } from "matrix-js-sdk/src/matrix";
@@ -57,8 +57,9 @@ describe("topicToHtml", () => {
 });
 
 describe("bodyToHtml", () => {
-    function getHtml(content: IContent, highlights?: string[]): string {
-        return (bodyToSpan(content, highlights, {}) as ReactElement).props.dangerouslySetInnerHTML.__html;
+    function getHtml(content: IContent, highlights?: string[]): string | TrustedHTML | undefined {
+        return ((bodyToSpan(content, highlights, {}) as ReactElement).props as DOMAttributes<any>)
+            .dangerouslySetInnerHTML?.__html;
     }
 
     it("should apply highlights to HTML messages", () => {

@@ -91,16 +91,11 @@ export function computedStyle(element: HTMLElement | null): string {
     return cssText;
 }
 
-interface IProps extends IBodyProps {
-    /* whether or not to show the default placeholder for the file. Defaults to true. */
-    showGenericPlaceholder: boolean;
-}
-
 interface IState {
     decryptedBlob?: Blob;
 }
 
-export default class MFileBody extends React.Component<IProps, IState> {
+export default class MFileBody extends React.Component<IBodyProps, IState> {
     public static contextType = RoomContext;
     declare public context: React.ContextType<typeof RoomContext>;
 
@@ -110,8 +105,8 @@ export default class MFileBody extends React.Component<IProps, IState> {
         showGenericPlaceholder: true,
     };
 
-    private iframe: React.RefObject<HTMLIFrameElement> = createRef();
-    private dummyLink: React.RefObject<HTMLAnchorElement> = createRef();
+    private iframe: React.RefObject<HTMLIFrameElement | null> = createRef();
+    private dummyLink: React.RefObject<HTMLAnchorElement | null> = createRef();
     private userDidClick = false;
     private fileDownloader: FileDownloader = new FileDownloader(() => this.iframe.current);
 
@@ -147,7 +142,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
         });
     }
 
-    public componentDidUpdate(prevProps: IProps, prevState: IState): void {
+    public componentDidUpdate(prevProps: IBodyProps, prevState: IState): void {
         if (this.props.onHeightChanged && !prevState.decryptedBlob && this.state.decryptedBlob) {
             this.props.onHeightChanged();
         }

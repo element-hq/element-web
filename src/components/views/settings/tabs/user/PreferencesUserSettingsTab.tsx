@@ -220,7 +220,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         SettingsStore.setValue("readMarkerOutOfViewThresholdMs", null, SettingLevel.DEVICE, e.target.value);
     };
 
-    private renderGroup(settingIds: string[], level = SettingLevel.ACCOUNT): React.ReactNodeArray {
+    private renderGroup(settingIds: string[], level = SettingLevel.ACCOUNT): ReadonlyArray<React.ReactNode> {
         return settingIds.map((i) => <SettingsFlag key={i} name={i} level={level} />);
     }
 
@@ -248,7 +248,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         timezones.unshift(<div key="">{browserTimezoneLabel}</div>);
 
         return (
-            <SettingsTab data-testid="mx_PreferencesUserSettingsTab">
+            (<SettingsTab data-testid="mx_PreferencesUserSettingsTab">
                 <SettingsSection>
                     {/* The heading string is still 'general' from where it was moved, but this section should become 'general' */}
                     <SettingsSubsection heading={_t("settings|general|language_section")}>
@@ -297,7 +297,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                                 onOptionChange={this.onTimezoneChange}
                                 onSearchChange={this.onTimezoneSearchChange}
                             >
-                                {timezones as NonEmptyArray<ReactElement & { key: string }>}
+                                {timezones as NonEmptyArray<ReactElement<any> & { key: string }>}
                             </Dropdown>
                         </div>
 
@@ -368,7 +368,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                         />
                     </SettingsSubsection>
                 </SettingsSection>
-            </SettingsTab>
+            </SettingsTab>)
         );
     }
 }

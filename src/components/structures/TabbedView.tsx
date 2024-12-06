@@ -18,6 +18,8 @@ import { NonEmptyArray } from "../../@types/common";
 import { RovingAccessibleButton, RovingTabIndexProvider } from "../../accessibility/RovingTabIndex";
 import { useWindowWidth } from "../../hooks/useWindowWidth";
 
+import type { JSX } from "react";
+
 /**
  * Represents a tab for the TabbedView.
  */

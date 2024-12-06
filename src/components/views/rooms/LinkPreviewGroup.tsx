@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, type JSX } from "react";
 import { MatrixEvent, MatrixError, IPreviewUrlResponse, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";

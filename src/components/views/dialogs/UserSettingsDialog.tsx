@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { Toast } from "@vector-im/compound-web";
-import React, { useState } from "react";
+import React, { useState, type JSX } from "react";
 import UserProfileIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-profile";
 import DevicesIcon from "@vector-im/compound-design-tokens/assets/web/icons/devices";
 import VisibilityOnIcon from "@vector-im/compound-design-tokens/assets/web/icons/visibility-on";
@@ -221,7 +221,7 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
         // XXX: SDKContext is provided within the LoggedInView subtree.
         // Modals function outside the MatrixChat React tree, so sdkContext is reprovided here to simulate that.
         // The longer term solution is to move our ModalManager into the React tree to inherit contexts properly.
-        <SDKContext.Provider value={props.sdkContext}>
+        (<SDKContext.Provider value={props.sdkContext}>
             <ToastContext.Provider value={toastRack}>
                 <BaseDialog
                     className="mx_UserSettingsDialog"
@@ -244,6 +244,6 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
                     </div>
                 </BaseDialog>
             </ToastContext.Provider>
-        </SDKContext.Provider>
+        </SDKContext.Provider>)
     );
 }

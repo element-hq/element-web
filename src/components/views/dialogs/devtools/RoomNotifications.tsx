@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { NotificationCountType, Room, Thread, ReceiptType } from "matrix-js-sdk/src/matrix";
-import React, { useContext } from "react";
+import React, { useContext, type JSX } from "react";
 import { ReadReceipt } from "matrix-js-sdk/src/models/read-receipt";
 
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";

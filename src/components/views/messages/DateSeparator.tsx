@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type JSX } from "react";
 import { Direction, ConnectionError, MatrixError, HTTPError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { capitalize } from "lodash";
@@ -265,7 +265,7 @@ export default class DateSeparator extends React.Component<IProps, IState> {
         this.closeMenu();
     };
 
-    private renderJumpToDateMenu(): React.ReactElement {
+    private renderJumpToDateMenu(): React.ReactElement<any> {
         let contextMenu: JSX.Element | undefined;
         if (this.state.contextMenuPosition) {
             const relativeTimeFormat = this.relativeTimeFormat;

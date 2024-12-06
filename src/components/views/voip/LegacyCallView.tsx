@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef } from "react";
+import React, { createRef, type JSX } from "react";
 import { CallEvent, CallState, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import classNames from "classnames";
 import { CallFeed } from "matrix-js-sdk/src/webrtc/callFeed";

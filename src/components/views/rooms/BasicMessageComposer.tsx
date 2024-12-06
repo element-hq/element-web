@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { createRef, ClipboardEvent, SyntheticEvent } from "react";
+import React, { createRef, ClipboardEvent, SyntheticEvent, type JSX } from "react";
 import { Room, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import EMOTICON_REGEX from "emojibase-regex/emoticon";
 import { logger } from "matrix-js-sdk/src/logger";

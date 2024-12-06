@@ -251,7 +251,7 @@ interface LocalRoomViewProps {
     localRoom: LocalRoom;
     resizeNotifier: ResizeNotifier;
     permalinkCreator: RoomPermalinkCreator;
-    roomView: RefObject<HTMLElement>;
+    roomView: RefObject<HTMLElement | null>;
     onFileDrop: (dataTransfer: DataTransfer) => Promise<void>;
     mainSplitContentType: MainSplitContentType;
 }
@@ -262,7 +262,7 @@ interface LocalRoomViewProps {
  * @param {LocalRoomViewProps} props Room view props
  * @returns {ReactElement}
  */
-function LocalRoomView(props: LocalRoomViewProps): ReactElement {
+function LocalRoomView(props: LocalRoomViewProps): ReactElement<any> {
     const context = useScopedRoomContext("room");
     const room = context.room as LocalRoom;
     const encryptionEvent = props.localRoom.currentState.getStateEvents(EventType.RoomEncryption)[0];
@@ -280,8 +280,8 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
         });
     };
 
-    let statusBar: ReactElement | null = null;
-    let composer: ReactElement | null = null;
+    let statusBar: ReactElement<any> | null = null;
+    let composer: ReactElement<any> | null = null;
 
     if (room.isError) {
         const buttons = (
@@ -340,7 +340,7 @@ interface ILocalRoomCreateLoaderProps {
  * @param {ILocalRoomCreateLoaderProps} props Room view props
  * @return {ReactElement}
  */
-function LocalRoomCreateLoader(props: ILocalRoomCreateLoaderProps): ReactElement {
+function LocalRoomCreateLoader(props: ILocalRoomCreateLoaderProps): ReactElement<any> {
     const text = _t("room|creating_room_text", { names: props.names });
     return (
         <div className="mx_RoomView mx_RoomView--local">
@@ -374,16 +374,16 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     public static contextType = SDKContext;
     declare public context: React.ContextType<typeof SDKContext>;
 
-    public constructor(props: IRoomProps, context: React.ContextType<typeof SDKContext>) {
-        super(props, context);
+    public constructor(props: IRoomProps) {
+        super(props);
 
         this.askToJoinEnabled = SettingsStore.getValue("feature_ask_to_join");
 
-        if (!context.client) {
+        if (!this.context.client) {
             throw new Error("Unable to create RoomView without MatrixClient");
         }
 
-        const llMembers = context.client.hasLazyLoadMembersEnabled();
+        const llMembers = this.context.client.hasLazyLoadMembersEnabled();
         this.state = {
             roomId: undefined,
             roomLoading: true,
@@ -417,7 +417,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             showJoinLeaves: true,
             showAvatarChanges: true,
             showDisplaynameChanges: true,
-            matrixClientIsReady: context.client?.isInitialSyncComplete(),
+            matrixClientIsReady: this.context.client?.isInitialSyncComplete(),
             mainSplitContentType: MainSplitContentType.Timeline,
             timelineRenderingType: TimelineRenderingType.Room,
             liveTimeline: undefined,

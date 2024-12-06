@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { Fragment, PropsWithChildren, ReactNode, useContext } from "react";
+import React, { Fragment, PropsWithChildren, ReactNode, useContext, type JSX } from "react";
 
 import { AuthHeaderContext } from "./AuthHeaderContext";
 

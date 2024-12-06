@@ -21,7 +21,7 @@ export const useTimeoutToggle = (
     value: boolean;
     toggle(): void;
 } => {
-    const timeoutId = useRef<number | undefined>();
+    const timeoutId = useRef<number | undefined>(undefined);
     const [value, setValue] = useState<boolean>(defaultValue);
 
     const toggle = (): void => {

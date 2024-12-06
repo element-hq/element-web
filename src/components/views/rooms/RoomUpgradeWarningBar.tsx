@@ -27,8 +27,8 @@ export default class RoomUpgradeWarningBar extends React.PureComponent<IProps, I
     public static contextType = MatrixClientContext;
     declare public context: React.ContextType<typeof MatrixClientContext>;
 
-    public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         const tombstone = this.props.room.currentState.getStateEvents("m.room.tombstone", "");
         this.state = {

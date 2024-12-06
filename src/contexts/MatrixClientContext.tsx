@@ -28,7 +28,7 @@ const matrixHOC = <ComposedComponentProps extends {}>(
     ComposedComponent: ComponentClass<ComposedComponentProps>,
 ): ((
     props: Omit<ComposedComponentProps, "mxClient"> & React.RefAttributes<InstanceType<typeof ComposedComponent>>,
-) => React.ReactElement | null) => {
+) => React.ReactElement<any> | null) => {
     type ComposedComponentInstance = InstanceType<typeof ComposedComponent>;
 
     // eslint-disable-next-line react-hooks/rules-of-hooks

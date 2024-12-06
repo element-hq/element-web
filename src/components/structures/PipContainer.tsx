@@ -280,7 +280,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
 }
 
 export const PipContainer: React.FC = () => {
-    const movePersistedElement = useRef<() => void>();
+    const movePersistedElement = useRef<() => void>(undefined);
 
     return <PipContainerInner movePersistedElement={movePersistedElement} />;
 };

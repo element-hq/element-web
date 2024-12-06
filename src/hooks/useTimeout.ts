@@ -13,7 +13,7 @@ type Handler = () => void;
 // Hook to simplify timeouts in functional components
 export const useTimeout = (handler: Handler, timeoutMs: number): void => {
     // Create a ref that stores handler
-    const savedHandler = useRef<Handler>();
+    const savedHandler = useRef<Handler>(undefined);
 
     // Update ref.current value if handler changes.
     useEffect(() => {
@@ -32,7 +32,7 @@ export const useTimeout = (handler: Handler, timeoutMs: number): void => {
 // Hook to simplify intervals in functional components
 export const useInterval = (handler: Handler, intervalMs: number): void => {
     // Create a ref that stores handler
-    const savedHandler = useRef<Handler>();
+    const savedHandler = useRef<Handler>(undefined);
 
     // Update ref.current value if handler changes.
     useEffect(() => {

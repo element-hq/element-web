@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type JSX } from "react";
 import { TranslationStringsObject } from "@matrix-org/react-sdk-module-api/lib/types/translations";
 import { AccountAuthInfo } from "@matrix-org/react-sdk-module-api/lib/types/AccountAuthInfo";
 import { DialogContent, DialogProps } from "@matrix-org/react-sdk-module-api/lib/components/DialogContent";
@@ -236,7 +236,7 @@ describe("ProxiedApiModule", () => {
                     super(props);
                 }
                 trySubmit = async () => ({ result: true });
-                render = () => (
+                render = (): JSX.Element => (
                     <button type="button" onClick={this.props.cancel}>
                         No need for action
                     </button>

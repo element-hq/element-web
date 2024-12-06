@@ -59,7 +59,6 @@ interface ManageAccountButtonProps {
 
 const ManageAccountButton: React.FC<ManageAccountButtonProps> = ({ externalAccountManagementUrl }) => (
     <AccessibleButton
-        onClick={null}
         element="a"
         kind="primary"
         target="_blank"

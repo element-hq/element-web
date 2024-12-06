@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { SyntheticEvent } from "react";
+import React, { SyntheticEvent, type JSX } from "react";
 import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
@@ -411,7 +411,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
         }
 
         return (
-            <div>
+            (<div>
                 <form onSubmit={this.onSubmitForm}>
                     {loginType}
                     {loginField}
@@ -427,7 +427,9 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                         disabled={this.props.busy}
                         autoFocus={autoFocusPassword}
                         onValidate={this.onPasswordValidate}
-                        ref={(field) => (this[LoginField.Password] = field)}
+                        ref={field => {
+                            (this[LoginField.Password] = field);
+                        }}
                     />
                     {forgotPasswordJsx}
                     {!this.props.busy && (
@@ -439,7 +441,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                         />
                     )}
                 </form>
-            </div>
+            </div>)
         );
     }
 }

@@ -9,7 +9,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type JSX } from "react";
 import {
     MatrixEvent,
     Room,
@@ -78,10 +78,10 @@ export default class MemberList extends React.Component<IProps, IState> {
     declare public context: React.ContextType<typeof SDKContext>;
     private tiles: Map<string, MemberTile> = new Map();
 
-    public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
         this.state = this.getMembersState([], []);
-        this.showPresence = context?.memberListStore.isPresenceEnabled() ?? true;
+        this.showPresence = this.context?.memberListStore.isPresenceEnabled() ?? true;
     }
 
     private listenForMembersChanges(): void {

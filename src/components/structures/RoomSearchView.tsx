@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { forwardRef, useCallback, useContext, useEffect, useRef, useState } from "react";
+import React, { forwardRef, useCallback, useContext, useEffect, useRef, useState, type JSX } from "react";
 import {
     ISearchResults,
     IThreadBundledRelationship,
@@ -59,7 +59,7 @@ export const RoomSearchView = forwardRef<ScrollPanel, Props>(
         const aborted = useRef(false);
         // A map from room ID to permalink creator
         const permalinkCreators = useRef(new Map<string, RoomPermalinkCreator>()).current;
-        const innerRef = useRef<ScrollPanel | null>();
+        const innerRef = useRef<ScrollPanel | null>(undefined);
 
         useEffect(() => {
             return () => {

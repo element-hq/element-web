@@ -12,8 +12,9 @@ import React, {
     ComponentType,
     createRef,
     InputHTMLAttributes,
-    LegacyRef,
+    Ref,
     RefObject,
+    type JSX,
 } from "react";
 import classNames from "classnames";
 import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
@@ -39,7 +40,7 @@ import SpaceContextMenu from "../context_menus/SpaceContextMenu";
 import { useRovingTabIndex } from "../../../accessibility/RovingTabIndex";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 
-type ButtonProps<T extends keyof JSX.IntrinsicElements> = Omit<
+type ButtonProps<T extends React.ElementType> = Omit<
     ComponentProps<typeof AccessibleButton<T>>,
     "title" | "onClick" | "size" | "element"
 > & {
@@ -52,12 +53,12 @@ type ButtonProps<T extends keyof JSX.IntrinsicElements> = Omit<
     notificationState?: NotificationState;
     isNarrow?: boolean;
     size: string;
-    innerRef?: RefObject<HTMLElement>;
+    innerRef?: RefObject<HTMLElement | null>;
     ContextMenuComponent?: ComponentType<ComponentProps<typeof SpaceContextMenu>>;
     onClick?(ev?: ButtonEvent): void;
 };
 
-export const SpaceButton = <T extends keyof JSX.IntrinsicElements>({
+export const SpaceButton = <T extends React.ElementType>({
     space,
     spaceKey: _spaceKey,
     className,
@@ -178,7 +179,7 @@ interface IItemProps extends InputHTMLAttributes<HTMLLIElement> {
     isPanelCollapsed?: boolean;
     onExpand?: () => void;
     parents?: Set<string>;
-    innerRef?: LegacyRef<HTMLLIElement>;
+    innerRef?: Ref<HTMLLIElement>;
     dragHandleProps?: DraggableProvidedDragHandleProps | null;
 }
 

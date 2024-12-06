@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef } from "react";
+import React, { createRef, type JSX } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../../../languageHandler";
@@ -44,10 +44,10 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
     public static contextType = MatrixClientContext;
     declare public context: React.ContextType<typeof MatrixClientContext>;
 
-    public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
-        this.roomProps = EchoChamber.forRoom(context.getRoom(this.props.roomId)!);
+        this.roomProps = EchoChamber.forRoom(this.context.getRoom(this.props.roomId)!);
 
         let currentSound = "default";
         const soundData = Notifier.getSoundForRoom(this.props.roomId);

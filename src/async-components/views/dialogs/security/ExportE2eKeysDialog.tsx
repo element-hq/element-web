@@ -178,7 +178,9 @@ export default class ExportE2eKeysDialog extends React.Component<IProps, IState>
                                     type="password"
                                     disabled={disableForm}
                                     autoComplete="new-password"
-                                    fieldRef={(field) => (this.fieldPassword = field)}
+                                    fieldRef={(field) => {
+                                        this.fieldPassword = field;
+                                    }}
                                 />
                             </div>
                             <div className="mx_E2eKeysDialog_inputRow">
@@ -195,7 +197,9 @@ export default class ExportE2eKeysDialog extends React.Component<IProps, IState>
                                     type="password"
                                     disabled={disableForm}
                                     autoComplete="new-password"
-                                    fieldRef={(field) => (this.fieldPasswordConfirm = field)}
+                                    fieldRef={(field) => {
+                                        this.fieldPasswordConfirm = field;
+                                    }}
                                 />
                             </div>
                         </div>

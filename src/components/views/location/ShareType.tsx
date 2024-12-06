@@ -45,7 +45,7 @@ type ShareTypeOptionProps = HTMLAttributes<Element> & {
     onClick?: ((e: ButtonEvent) => void | Promise<void>) | null;
 };
 const ShareTypeOption: React.FC<ShareTypeOptionProps> = ({ onClick, label, shareType, ...rest }) => (
-    <AccessibleButton element="button" className="mx_ShareType_option" onClick={onClick ?? null} {...rest}>
+    <AccessibleButton element="button" className="mx_ShareType_option" onClick={onClick} {...rest}>
         {shareType === LocationShareType.Own && <UserAvatar />}
         {shareType === LocationShareType.Pin && (
             <LocationIcon className={`mx_ShareType_option-icon ${LocationShareType.Pin}`} />

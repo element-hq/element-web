@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { lazy } from "react";
+import React, { lazy, type JSX } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";
@@ -34,10 +34,10 @@ export default class CryptographyPanel extends React.Component<IProps, IState> {
     public static contextType = MatrixClientContext;
     declare public context: React.ContextType<typeof MatrixClientContext>;
 
-    public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
+    public constructor(props: IProps) {
         super(props);
 
-        if (!context.getCrypto()) {
+        if (!this.context.getCrypto()) {
             this.state = { deviceIdentityKey: null };
         } else {
             this.state = { deviceIdentityKey: undefined };

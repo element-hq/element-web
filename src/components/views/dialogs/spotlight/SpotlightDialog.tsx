@@ -20,7 +20,16 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { normalize } from "matrix-js-sdk/src/utils";
-import React, { ChangeEvent, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+    ChangeEvent,
+    useCallback,
+    useContext,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+    type JSX,
+} from "react";
 import sanitizeHtml from "sanitize-html";
 
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";

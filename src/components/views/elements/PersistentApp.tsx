@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ContextType, CSSProperties, MutableRefObject, ReactNode } from "react";
+import React, { ContextType, CSSProperties, MutableRefObject, ReactNode, type JSX } from "react";
 import { Room } from "matrix-js-sdk/src/matrix";
 
 import WidgetUtils from "../../../utils/WidgetUtils";
@@ -28,9 +28,9 @@ export default class PersistentApp extends React.Component<IProps> {
     declare public context: ContextType<typeof MatrixClientContext>;
     private room: Room;
 
-    public constructor(props: IProps, context: ContextType<typeof MatrixClientContext>) {
-        super(props, context);
-        this.room = context.getRoom(this.props.persistentRoomId)!;
+    public constructor(props: IProps) {
+        super(props);
+        this.room = this.context.getRoom(this.props.persistentRoomId)!;
     }
 
     public render(): JSX.Element | null {

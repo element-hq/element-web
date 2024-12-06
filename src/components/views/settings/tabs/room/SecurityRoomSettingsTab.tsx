@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode } from "react";
+import React, { ReactNode, type JSX } from "react";
 import {
     GuestAccess,
     HistoryVisibility,
@@ -62,8 +62,8 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
     public static contextType = MatrixClientContext;
     declare public context: React.ContextType<typeof MatrixClientContext>;
 
-    public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         const state = this.props.room.currentState;
 

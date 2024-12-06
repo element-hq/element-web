@@ -16,6 +16,8 @@ import { UseCase } from "../../../settings/enums/UseCase";
 import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleButton";
 import Heading from "../../views/typography/Heading";
 
+import type { JSX } from "react";
+
 const onClickSendDm = (ev: ButtonEvent): void => {
     PosthogTrackers.trackInteraction("WebUserOnboardingHeaderSendDm", ev);
     defaultDispatcher.dispatch({ action: "view_create_chat" });

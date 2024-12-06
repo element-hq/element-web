@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import classNames from "classnames";
 import { IEventRelation } from "matrix-js-sdk/src/matrix";
-import React, { MutableRefObject, ReactNode } from "react";
+import React, { MutableRefObject, ReactNode, type JSX } from "react";
 
 import { useComposerFunctions } from "../hooks/useComposerFunctions";
 import { useIsFocused } from "../hooks/useIsFocused";

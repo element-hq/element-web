@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, type JSX } from "react";
 
 type FlexProps = {
     /**
@@ -64,7 +64,7 @@ export function Flex({
     children,
     ...props
 }: React.PropsWithChildren<FlexProps>): JSX.Element {
-    const ref = useRef<HTMLElement>();
+    const ref = useRef<HTMLElement>(undefined);
 
     useEffect(() => {
         ref.current!.style.setProperty(`--mx-flex-display`, display);

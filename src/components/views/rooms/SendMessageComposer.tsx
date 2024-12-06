@@ -249,8 +249,8 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
     private dispatcherRef?: string;
     private sendHistoryManager: SendHistoryManager;
 
-    public constructor(props: ISendMessageComposerProps, context: React.ContextType<typeof RoomContext>) {
-        super(props, context);
+    public constructor(props: ISendMessageComposerProps) {
+        super(props);
 
         if (this.props.mxClient.getCrypto() && this.props.mxClient.isRoomEncrypted(this.props.room.roomId)) {
             this.prepareToEncrypt = throttle(

@@ -13,6 +13,8 @@ import { UserOnboardingTaskWithResolvedCompletion } from "../../../hooks/useUser
 import AccessibleButton from "../../views/elements/AccessibleButton";
 import Heading from "../../views/typography/Heading";
 
+import type { JSX } from "react";
+
 interface Props {
     task: UserOnboardingTaskWithResolvedCompletion;
     completed?: boolean;
