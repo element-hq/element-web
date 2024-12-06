@@ -2936,6 +2936,7 @@
         "warning": "<w>WARNUNG:</w> <description/>"
     },
     "share": {
+        "link_copied": "Link kopiert",
         "permalink_message": "Link zur ausgewählten Nachricht",
         "permalink_most_recent": "Link zur aktuellsten Nachricht",
         "share_call": "Konferenzeinladungslink",
