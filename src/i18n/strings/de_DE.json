@@ -18,6 +18,7 @@
         "unread_messages": "Ungelesene Nachrichten.",
         "user_menu": "Benutzermenü"
     },
+    "a11y_jump_first_unread_room": "Springen Sie zum ersten ungelesenen Chatroom.",
     "action": {
         "accept": "Annehmen",
         "add": "Hinzufügen",
@@ -258,17 +259,21 @@
             "error_insecure_channel_detected": "Eine sichere Verbindung zum neuen Gerät konnte nicht hergestellt werden. Ihre vorhandenen Geräte sind weiterhin sicher und Sie müssen sich keine Sorgen um sie machen.",
             "error_insecure_channel_detected_instructions": "Was jetzt?",
             "error_insecure_channel_detected_instructions_1": "Versuchen Sie erneut, sich mit einem QR-Code auf dem anderen Gerät anzumelden, falls dies ein Netzwerkproblem war",
-            "error_insecure_channel_detected_instructions_2": "Falls das gleiche Problem auftritt, probiere es mit einem anderen WLAN-Netzwerk oder verwende deine Mobilen Daten.",
-            "error_insecure_channel_detected_instructions_3": "Falls das nicht funktioniert melde dich manuell an.",
-            "error_insecure_channel_detected_title": "Verbindung ist nicht sicher",
+            "error_insecure_channel_detected_instructions_2": "Falls das gleiche Problem auftritt, probiere Sie es bitte mit einem anderen WLAN-Netzwerk oder verwenden Sie Ihre mobilen Daten anstelle von WLAN",
+            "error_insecure_channel_detected_instructions_3": "Falls das nicht funktioniert, melden Sie sich bitte manuell an.",
+            "error_insecure_channel_detected_title": "Die Verbindung ist nicht sicher",
             "error_other_device_already_signed_in": "Sie brauchen nichts weiter zu tun.",
             "error_other_device_already_signed_in_title": "Ihr anderes Gerät ist bereits angemeldet",
             "error_rate_limited": "Zu viele Versuche in zu kurzer Zeit. Warte ein wenig, bevor du es erneut versuchst.",
+            "error_unexpected": "Es ist ein unerwarteter Fehler aufgetreten. Ihre Anfrage zum Verbinden des anderen Geräts wurde abgebrochen.",
             "error_unsupported_protocol": "Dieses Gerät unterstützt die Anmeldung auf einem anderen Gerät mit einem QR-Code nicht.",
+            "error_unsupported_protocol_title": "Anderes Gerät nicht kompatibel",
             "error_user_cancelled": "Der Anmeldevorgang wurde am anderen Gerät abgebrochen.",
             "error_user_cancelled_title": "Anmeldungsanfrage abgebrochen",
-            "error_user_declined": "Du oder der Kontoanbieter haben die Anmeldeanfrage abgelehnt.",
+            "error_user_declined": "Sie oder der Kontoanbieter haben die Anmeldeanfrage abgelehnt.",
             "error_user_declined_title": "Anmeldung abgelehnt",
+            "follow_remaining_instructions": "Folgen Sie den restlichen Anweisungen.",
+            "open_element_other_device": "Öffnen Sie %(brand)s auf Ihren anderen Gerät",
             "point_the_camera": "Scanne den hier angezeigten QR-Code",
             "scan_code_instruction": "Scanne den QR-Code mit einem weiteren Gerät.",
             "scan_qr_code": "Anmeldung mit QR-Code",
@@ -288,6 +293,8 @@
         "registration_disabled": "Registrierungen wurden auf diesem Heim-Server deaktiviert.",
         "registration_msisdn_field_required_invalid": "Telefonnummer eingeben (auf diesem Heim-Server erforderlich)",
         "registration_successful": "Registrierung erfolgreich",
+        "registration_username_in_use": "Dieser Benutzername wird bereits verwendet. Wählen Sie einen anderen Benutzernamen oder melden Sie sich unten an.",
+        "registration_username_unable_check": "Es kann nicht überprüft werden, ob der Benutzername bereits vergeben ist. Bitte versuchen Sie es später erneut.",
         "registration_username_validation": "Verwende nur Kleinbuchstaben, Zahlen, Bindestriche und Unterstriche",
         "reset_password": {
             "confirm_new_password": "Neues Passwort bestätigen",
@@ -363,8 +370,8 @@
             "email_resend_prompt": "Nicht angekommen? <a>Erneut senden</a>",
             "email_resent": "Verschickt!",
             "fallback_button": "Authentifizierung beginnen",
-            "mas_cross_signing_reset_cta": "Gehe zu deinem Konto",
-            "mas_cross_signing_reset_description": "Lasse deine Identität durch deinen Kontoanbieter zurücksetzen. Kehre dann zurück und klicke auf \"Erneut versuchen\".",
+            "mas_cross_signing_reset_cta": "Gehen Sie zu Ihren Konto",
+            "mas_cross_signing_reset_description": "Setzen Sie Ihre Identität über Ihren Kontoanbieter zurück. Kommen Sie dann zurück und klicken Sie auf „Wiederholen“.",
             "msisdn": "Eine Textnachricht wurde an %(msisdn)s gesendet",
             "msisdn_token_incorrect": "Token fehlerhaft",
             "msisdn_token_prompt": "Bitte gib den darin enthaltenen Code ein:",
@@ -385,6 +392,7 @@
         "unsupported_auth_email": "Dieser Heim-Server unterstützt die Anmeldung per E-Mail-Adresse nicht.",
         "unsupported_auth_msisdn": "Dieser Server unterstützt keine Authentifizierung per Telefonnummer.",
         "username_field_required_invalid": "Benutzername eingeben",
+        "username_in_use": "Dieser Benutzername wird bereits verwendet. Bitte wählen Sie einen anderen Benutzernamen.",
         "verify_email_explainer": "Wir müssen wissen, dass du es auch wirklich bist, bevor wir dein Passwort zurücksetzen. Klicke auf den Link in der E-Mail, die wir gerade an <b>%(email)s</b> gesendet haben",
         "verify_email_heading": "Verifiziere deine E-Mail, um fortzufahren"
     },
@@ -399,7 +407,7 @@
         "downloading_logs": "Lade Protokolle herunter",
         "error_empty": "Bitte teile uns mit, was schief lief - oder besser, beschreibe das Problem auf GitHub in einem \"Issue\".",
         "failed_send_logs": "Senden von Protokolldateien fehlgeschlagen: ",
-        "github_issue": "\"Issue\" auf Github",
+        "github_issue": "GitHub-Problem",
         "introduction": "Wenn du uns einen Bug auf GitHub gemeldet hast, können uns Debug-Logs helfen, das Problem zu finden. ",
         "log_request": "Um uns zu helfen, dies in Zukunft zu vermeiden, <a>sende uns bitte die Protokolldateien</a>.",
         "logs_sent": "Protokolldateien gesendet",
@@ -914,7 +922,6 @@
         },
         "udd": {
             "interactive_verification_button": "Interaktiv per Emoji verifizieren",
-            "manual_verification_button": "Manuell per Text verifizieren",
             "other_ask_verify_text": "Bitte diesen Nutzer, seine Sitzung zu verifizieren, oder verifiziere diese unten manuell.",
             "other_new_session_text": "%(name)s (%(userId)s) hat sich zu einer neuen Sitzung angemeldet, ohne sie zu verifizieren:",
             "own_ask_verify_text": "Verifiziere deine andere Sitzung mit einer der folgenden Optionen.",
@@ -949,12 +956,6 @@
             "incoming_sas_dialog_waiting": "Warte auf Bestätigung des Gesprächspartners …",
             "incoming_sas_user_dialog_text_1": "Überprüfe diesen Benutzer, um ihn als vertrauenswürdig zu kennzeichnen. Benutzern zu vertrauen gibt dir zusätzliche Sicherheit bei der Verwendung von Ende-zu-Ende-verschlüsselten Nachrichten.",
             "incoming_sas_user_dialog_text_2": "Wenn du diesen Benutzer verifizierst werden seine Sitzungen für dich und deine Sitzungen für ihn als vertrauenswürdig markiert.",
-            "manual_device_verification_device_id_label": "Sitzungs-ID",
-            "manual_device_verification_device_key_label": "Sitzungsschlüssel",
-            "manual_device_verification_device_name_label": "Sitzungsname",
-            "manual_device_verification_footer": "Wenn sie nicht übereinstimmen kann die Sicherheit eurer Kommunikation kompromittiert sein.",
-            "manual_device_verification_self_text": "Bestätige indem du das folgende mit deinen Benutzereinstellungen in deiner anderen Sitzung vergleichst:",
-            "manual_device_verification_user_text": "Bestätige die Sitzung dieses Benutzers indem du das folgende mit seinen Benutzereinstellungen vergleichst:",
             "no_key_or_device": "Es sieht so aus, als hättest du keinen Sicherheitsschlüssel oder andere Geräte, mit denen du dich verifizieren könntest. Dieses Gerät wird keine alten verschlüsselten Nachrichten lesen können. Um deine Identität auf diesem Gerät zu verifizieren musst du deine Verifizierungsschlüssel zurücksetzen.",
             "no_support_qr_emoji": "Das Gerät unterstützt weder Verifizieren mittels QR-Code noch Emoji-Verifizierung. %(brand)s benötigt dies jedoch. Bitte verwende eine andere Anwendung.",
             "other_party_cancelled": "Die Gegenstelle hat die Überprüfung abgebrochen.",
@@ -994,6 +995,7 @@
             "unverified_sessions_toast_description": "Überprüfe sie, um ein sicheres Konto gewährleisten zu können",
             "unverified_sessions_toast_reject": "Später",
             "unverified_sessions_toast_title": "Du hast nicht verifizierte Sitzungen",
+            "verification_description": "Verifizieren Sie Ihre Identität, um auf verschlüsselte Nachrichten zuzugreifen und sich gegenüber anderen Benutzern zu verifizieren. Falls Sie einen Handy oder ein anderes mobiles Gerät verwenden, öffnen Sie die App dort and fahren sie mit Ihrer Identifikation fort.",
             "verification_dialog_title_device": "Anderes Gerät verifizieren",
             "verification_dialog_title_user": "Verifizierungsanfrage",
             "verification_skip_warning": "Ohne dich zu verifizieren wirst du keinen Zugriff auf alle deine Nachrichten haben und könntest für andere als nicht vertrauenswürdig erscheinen.",
@@ -1078,10 +1080,6 @@
     },
     "error_user_not_logged_in": "Benutzer ist nicht angemeldet",
     "event_preview": {
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s beendete eine Sprachübertragung",
-            "you": "Du hast eine Sprachübertragung beendet"
-        },
         "m.call.answer": {
             "dm": "Laufendes Gespräch",
             "user": "%(senderName)s ist dem Anruf beigetreten",
@@ -1236,6 +1234,8 @@
     "incompatible_browser": {
         "continue": "Trotzdem fortfahren",
         "description": "%(brand)s verwendet einige Browser-Funktionen, die von deinem aktuellen Browser nicht unterstützt werden. %(detail)s",
+        "detail_can_continue": "Wenn Sie fortfahren, funktionieren einige Funktionen möglicherweise nicht mehr und es besteht das Risiko, dass Sie in Zukunft Daten verlieren.",
+        "detail_no_continue": "Versuchen Sie, diesen Browser zu aktualisieren, wenn Sie nicht die neueste Version verwenden, und versuchen Sie es erneut.",
         "learn_more": "Mehr erfahren",
         "linux": "Linux",
         "macos": "Mac",
@@ -1259,7 +1259,7 @@
     "integrations": {
         "disabled_dialog_description": "Aktiviere „%(manageIntegrations)s“ in den Einstellungen, um dies zu tun.",
         "disabled_dialog_title": "Integrationen sind deaktiviert",
-        "impossible_dialog_description": "%(brand)s erlaubt dir nicht, eine Integrationsverwaltung zu verwenden, um dies zu tun. Bitte kontaktiere einen Administrator.",
+        "impossible_dialog_description": "%(brand)s erlaubt es Ihnen nicht, eine Integrationsverwaltung zu verwenden. Bitte kontaktieren Sie einen Administrator.",
         "impossible_dialog_title": "Integrationen sind nicht erlaubt"
     },
     "invite": {
@@ -1421,7 +1421,7 @@
         "dynamic_room_predecessors_description": "MSC3946 aktivieren (zur Verknüpfung von Raumarchiven nach der Raumerstellung)",
         "element_call_video_rooms": "Element Call-Videoräume",
         "exclude_insecure_devices": "Unsichere Geräte ausschließen beim senden/empfangen von Nachrichten",
-        "exclude_insecure_devices_description": "Bei Aktivierung dieses Modus werden verschlüsselte Nachrichten nicht mehr mit unverifizierten Geräten geteilt und Nachrichten von unverifizierten Geräten werden als Fehler angezeigt. Beachte, dass wenn du den Modus aktivierst, eine Kommunikation mit Benutzern, die keine verifizierten Geräte haben, nicht möglich ist.",
+        "exclude_insecure_devices_description": "Bei Aktivierung dieses Modus werden verschlüsselte Nachrichten nicht mehr mit unverifizierten Geräten geteilt und Nachrichten von unverifizierten Geräten werden als Fehler angezeigt. Beachten Sie, dass bei Aktivierung dieses Modus es nicht möglich ist, mit Benutzern, die keine verifizierten Geräte haben, zu kommunizieren.",
         "experimental_description": "Experimentierfreudig? Probiere unsere neuesten, sich in Entwicklung befindlichen Ideen aus. Diese Funktionen sind nicht final; Sie könnten instabil sein, sich verändern oder sogar ganz entfernt werden. <a>Erfahre mehr</a>.",
         "experimental_section": "Frühe Vorschauen",
         "extended_profiles_msc_support": "Erfordert die Unterstützung von MSC4133 durch den Server",
@@ -1460,6 +1460,7 @@
         "notifications": "Benachrichtigungen in der Kopfleiste des Raums anschalten",
         "oidc_native_flow": "Native OIDC Authentifizierung",
         "oidc_native_flow_description": "⚠ Warnung: Experimentell. Nutze OIDC native Authentifizierung wenn dies vom Server unterstützt wird.",
+        "release_announcement": "Release Ankündigung",
         "render_reaction_images": "Benutzerdefinierte Bilder in Reaktionen anzeigen",
         "render_reaction_images_description": "Werden manchmal auch als „benutzerdefinierte Emojis“ bezeichnet.",
         "report_to_moderators": "An Raummoderation melden",
@@ -1467,6 +1468,7 @@
         "sliding_sync": "Sliding-Sync-Modus",
         "sliding_sync_description": "In aktiver Entwicklung, kann nicht deaktiviert werden.",
         "sliding_sync_disabled_notice": "Zum Deaktivieren, melde dich ab und erneut an",
+        "sliding_sync_server_no_support": "Dein Server wird hier nicht unterstützt.",
         "under_active_development": "In aktiver Entwicklung.",
         "unrealiable_e2e": "Nicht zuverlässig in verschlüsselten Räumen",
         "video_rooms": "Videoräume",
@@ -1478,8 +1480,6 @@
         "video_rooms_faq2_answer": "Ja, der Verlauf wird neben dem Videoanruf angezeigt.",
         "video_rooms_faq2_question": "Kann ich während Videoanrufen auch Textnachrichten verschicken?",
         "video_rooms_feedbackSubheading": "Danke, dass Du die Beta ausprobierst. Bitte gehe soweit wie Du kannst ins Detail damit wird genau überprüfen können.",
-        "voice_broadcast": "Sprachübertragung",
-        "voice_broadcast_force_small_chunks": "Die Chunk-Länge der Sprachübertragungen auf 15 Sekunden erzwingen",
         "wysiwyg_composer": "Textverarbeitungs-Editor"
     },
     "labs_mjolnir": {
@@ -1520,6 +1520,8 @@
         "last_person_warning": "Du bist die einzige Person im Raum. Sobald du ihn verlässt, wird niemand mehr hineingelangen, auch du nicht.",
         "leave_room_question": "Bist du sicher, dass du den Raum „%(roomName)s“ verlassen möchtest?",
         "leave_space_question": "Bist du sicher, dass du den Space „%(spaceName)s“ verlassen möchtest?",
+        "room_leave_admin_warning": "Sie sind der einzige Administrator in diesem Chatroom. Wenn Sie den Chatroom verlassen, wird niemand in der Lage sein, die Chatroommeinstellungen zu ändern oder andere wichtige Maßnahmen zu ergreifen.",
+        "room_leave_mod_warning": "Sie sind der einzige Moderator in diesem Chatroom. Wenn Sie den Chatroom verlassen, kann niemand die Raumeinstellungen ändern oder andere wichtige Maßnahmen ergreifen.",
         "room_rejoin_warning": "Dieser Raum ist nicht öffentlich. Du wirst ihn nicht ohne erneute Einladung betreten können.",
         "space_rejoin_warning": "Du wirst diesen privaten Space nur mit einer Einladung wieder betreten können."
     },
@@ -1623,7 +1625,6 @@
         "mute_description": "Du wirst keine Benachrichtigungen erhalten"
     },
     "notifier": {
-        "io.element.voice_broadcast_chunk": "%(senderName)s begann eine Sprachübertragung",
         "m.key.verification.request": "%(name)s fordert eine Verifizierung an"
     },
     "onboarding": {
@@ -1824,9 +1825,11 @@
         "add_integrations": "Erweiterungen hinzufügen",
         "add_topic": "Thema hinzufügen",
         "extensions_button": "Erweiterungen",
-        "extensions_empty_description": "Wählen Sie \"%(addIntegrations)s\" um Erweiterungen zu suchen und diesem Raum hinzuzufügen",
+        "extensions_empty_description": "Wählen Sie \"%(addIntegrations)s\" um Erweiterungen zu suchen und diesem Chatroom hinzuzufügen",
+        "extensions_empty_title": "Steigern Sie die Produktivität mit mehr Tools, Widgets und Bots",
         "files_button": "Dateien",
         "pinned_messages": {
+            "empty_description": "Wählen Sie eine Nachricht aus und wählen Sie „%(pinAction)s “, um sie hier einzuschließen.",
             "empty_title": "Hefte wichtige Nachrichten an, damit sie leicht gefunden werden können.",
             "header": {
                 "one": "1 angeheftete Nachricht",
@@ -1838,15 +1841,18 @@
             "menu": "Menü öffnen",
             "release_announcement": {
                 "close": "Ok",
-                "description": "Alle angehefteten Nachrichten findest du hier. Bewege den Mauszeiger über eine beliebige Nachricht und wählen anheften, um sie hinzuzufügen."
+                "description": "Alle angepinnten Nachrichten finden Sie hier. Bewegen Sie den Mauszeiger über eine beliebige Nachricht und wählen Sie „Pin“, um die Nachricht hinzuzufügen.",
+                "title": "Alle neuen angehefteten Nachrichten"
             },
             "reply_thread": "Auf <link>Nachricht im Thread</link> antworten",
             "unpin_all": {
                 "button": "Alle Nachrichten lösen",
+                "content": "Stellen Sie sicher, dass Sie wirklich alle angehefteten Nachrichten entfernen möchten. Diese Aktion kann nicht rückgängig gemacht werden.",
                 "title": "Alle Nachrichten lösen?"
             },
             "view": "Im Nachrichtenverlauf ansehen"
         },
+        "pinned_messages_button": "Angeheftete Nachrichten",
         "poll": {
             "active_heading": "Aktive Umfragen",
             "empty_active": "In diesem Raum gibt es keine aktiven Umfragen",
@@ -1949,7 +1955,7 @@
             },
             "room_is_public": "Dieser Raum ist öffentlich"
         },
-        "header_avatar_open_settings_label": "Raumeinstellungen öffnen",
+        "header_avatar_open_settings_label": "Chatroomeinstellungen öffnen",
         "header_face_pile_tooltip": "Personen",
         "header_untrusted_label": "Nicht vertrauenswürdig",
         "inaccessible": "Dieser Raum oder Space ist im Moment nicht zugänglich.",
@@ -2024,7 +2030,7 @@
         "pinned_message_banner": {
             "button_close_list": "Liste schließen",
             "button_view_all": "Alle anzeigen",
-            "description": "Dieser Raum hat fixierte Nachrichten. Klicke zum Anzeigen.",
+            "description": "In diesem Raum sind Nachrichten angeheftet. Klicken Sie hier, um sie anzusehen.",
             "go_to_message": "Fixierte Nachrichten im Nachrichtenverlauf anzeigen.",
             "title": "<bold>%(index)s of %(length)s</bold> Angeheftete Nachrichten"
         },
@@ -2173,8 +2179,8 @@
             "error_deleting_alias_description": "Beim Entfernen dieser Adresse ist ein Fehler aufgetreten. Vielleicht existiert sie nicht mehr oder es kam zu einem temporären Fehler.",
             "error_deleting_alias_description_forbidden": "Du hast nicht die Berechtigung, die Adresse zu löschen.",
             "error_deleting_alias_title": "Fehler beim Löschen der Adresse",
-            "error_publishing": "Raum konnte nicht auf öffentlich gestellt werden",
-            "error_publishing_detail": "Bei der Freigabe des Raumes hat es einen Fehler gegeben",
+            "error_publishing": "Chatroom konnte nicht auf öffentlich gestellt werden",
+            "error_publishing_detail": "Beim Veröffentlichen dieses Chatrooms ist ein Fehler aufgetreten",
             "error_save_space_settings": "Spaceeinstellungen konnten nicht gespeichert werden.",
             "error_updating_alias_description": "Es gab einen Fehler beim Ändern des Raumalias. Entweder erlaubt es der Server nicht oder es gab ein temporäres Problem.",
             "error_updating_canonical_alias_description": "Es gab ein Problem beim Aktualisieren der Raum-Hauptadresse. Es kann sein, dass der Server dies verbietet oder ein temporäres Problem aufgetreten ist.",
@@ -2232,7 +2238,6 @@
             "error_unbanning": "Aufheben der Verbannung fehlgeschlagen",
             "events_default": "Nachrichten senden",
             "invite": "Person einladen",
-            "io.element.voice_broadcast_info": "Sprachübertragungen",
             "kick": "Benutzer entfernen",
             "m.call": "Beginne %(brand)s-Anrufe",
             "m.call.member": "Trete %(brand)s-Anrufen bei",
@@ -2419,6 +2424,7 @@
         "all_rooms_home_description": "Alle Räume, denen du beigetreten bist, werden auf der Startseite erscheinen.",
         "always_show_message_timestamps": "Nachrichtenzeitstempel immer anzeigen",
         "appearance": {
+            "bundled_emoji_font": "Verwenden Sie den mitgelieferten Emoji Font.",
             "compact_layout": "Kompakten Text und Nachrichten anzeigen",
             "compact_layout_description": "Um diese Funktion nutzen zu können, muss das moderne Nachrichtenlayout ausgewählt sein.",
             "custom_font": "Systemschriftart verwenden",
@@ -2427,7 +2433,8 @@
             "custom_font_size": "Andere Schriftgröße verwenden",
             "custom_theme_add": "Benutzerdefiniertes Design hinzufügen",
             "custom_theme_downloading": "Benutzerdefiniertes Design wird heruntergeladen...",
-            "custom_theme_help": "Gib die URL des einzustellenden benutzerdefinierten Designs ein.",
+            "custom_theme_error_downloading": "Fehler beim Herunterladen des Designs.",
+            "custom_theme_help": "Geben Sie die URL eines benutzerdefinierten Designs ein, das Sie anwenden möchten.",
             "custom_theme_invalid": "Ungültiges Designschema.",
             "dialog_title": "<strong>Einstellungen:</strong> Erscheinungsbild",
             "font_size": "Schriftgröße",
@@ -2466,6 +2473,7 @@
             "add_msisdn_instructions": "Gib den per SMS an +%(msisdn)s gesendeten Bestätigungscode ein.",
             "add_msisdn_misconfigured": "Das MSISDN-Verknüpfungsverfahren ist falsch konfiguriert",
             "allow_spellcheck": "Rechtschreibprüfung zulassen",
+            "application_language": "Anwendungssprache",
             "application_language_reload_hint": "Nach Änderung der Sprache wird die App neu gestartet",
             "avatar_remove_progress": "Bild wird entfernt...",
             "avatar_save_progress": "Bild wird hochgeladen...",
@@ -2479,6 +2487,7 @@
             "deactivate_confirm_content": "Bestätige, dass du dein Konto deaktivieren möchtest. Wenn du fortfährst, tritt folgendes ein:",
             "deactivate_confirm_content_1": "Du wirst dein Konto nicht reaktivieren können",
             "deactivate_confirm_content_2": "Du wirst dich nicht mehr anmelden können",
+            "deactivate_confirm_content_3": "Niemand wird in der Lage sein, Ihren Benutzernamen (MXID) wiederzuverwenden, Sie eingeschlossen: Der Benutzername wird insgesamt nur einmal vergeben.",
             "deactivate_confirm_content_4": "Du wirst alle Unterhaltungen verlassen, in denen du dich befindest",
             "deactivate_confirm_content_5": "Du wirst vom Identitäts-Server entfernt: Deine Freunde werden nicht mehr in der Lage sein, dich über deine E-Mail-Adresse oder Telefonnummer zu finden",
             "deactivate_confirm_content_6": "Deine alten Nachrichten werden weiterhin für Personen sichtbar bleiben, die sie erhalten haben, so wie es bei E-Mails der Fall ist. Möchtest du deine Nachrichten vor Personen verbergen, die Räume in der Zukunft betreten?",
@@ -2490,6 +2499,7 @@
             "discovery_email_verification_instructions": "Verifiziere den Link in deinem Posteingang",
             "discovery_msisdn_empty": "Optionen zum Entdecken anderer Benutzer werden angezeigt, sobald Sie Ihre Telefonnummer zu Ihrem Konto hinzugefügt haben",
             "discovery_needs_terms": "Stimme den Nutzungsbedingungen des Identitäts-Servers %(serverName)s zu, um per E-Mail-Adresse oder Telefonnummer auffindbar zu werden.",
+            "discovery_needs_terms_title": "Lassen Sie sich von anderen finden",
             "display_name": "Anzeigename",
             "display_name_error": "Anzeigename konnte nicht gesetzt werden",
             "email_address_in_use": "Diese E-Mail-Adresse wird bereits verwendet",
@@ -2526,12 +2536,13 @@
             "password_change_section": "Passwort des Nutzerkontos ändern...",
             "password_change_success": "Dein Passwort wurde erfolgreich geändert.",
             "personal_info": "Persönliche Daten",
-            "profile_subtitle": "So sehen dich andere in der App.",
-            "profile_subtitle_oidc": "Dein Konto wird separat durch einen Identitätsanbieter verwaltet. Einige persönliche Daten können hier nicht geändert werden.",
+            "profile_subtitle": "So werden Sie von anderen in der App gesehen",
+            "profile_subtitle_oidc": "Ihr Konto wird separat durch einen Identitätsanbieter verwaltet. Einige persönliche Daten können deswegen hier nicht geändert werden.",
             "remove_email_prompt": "%(email)s entfernen?",
             "remove_msisdn_prompt": "%(phone)s entfernen?",
             "spell_check_locale_placeholder": "Wähle ein Gebietsschema",
             "unable_to_load_emails": "E-Mail Adresse konnte nicht geladen werden",
+            "unable_to_load_msisdns": "Telefonnummern können nicht geladen werden",
             "username": "Benutzername"
         },
         "image_thumbnails": "Vorschauen für Bilder",
@@ -2590,6 +2601,9 @@
         "keyboard": {
             "dialog_title": "<strong>Einstellungen:</strong> Tastatur",
             "title": "Tastatur"
+        },
+        "labs": {
+            "dialog_title": "<strong>Einstellungen:</strong> Labore"
         },
         "labs_mjolnir": {
             "dialog_title": "<strong>Einstellungen:</strong> Blockierte Benutzer"
@@ -2716,6 +2730,7 @@
             "encryption_section": "Verschlüsselung",
             "error_loading_key_backup_status": "Konnte Status der Schlüsselsicherung nicht laden",
             "export_megolm_keys": "E2E-Raumschlüssel exportieren",
+            "ignore_users_empty": "Sie haben keinen Benutzer blockiert.",
             "ignore_users_section": "Blockierte Benutzer",
             "import_megolm_keys": "E2E-Raumschlüssel importieren",
             "key_backup_active": "Diese Sitzung sichert deine Schlüssel.",
@@ -2787,6 +2802,7 @@
             "device_unverified_description_current": "Verifiziere deine aktuelle Sitzung für besonders sichere Kommunikation.",
             "device_verified_description": "Diese Sitzung ist für sichere Kommunikation bereit.",
             "device_verified_description_current": "Deine aktuelle Sitzung ist für sichere Kommunikation bereit.",
+            "dialog_title": "<strong>Einstellungen:</strong> Sitzungen",
             "error_pusher_state": "Konfigurieren des Push-Dienstes fehlgeschlagen",
             "error_set_name": "Es konnte kein Sitzungsname gesetzt werden",
             "filter_all": "Alle",
@@ -2828,7 +2844,8 @@
             "show_details": "Details anzeigen",
             "sign_in_with_qr": "Neues Gerät verknüpfen",
             "sign_in_with_qr_button": "QR-Code anzeigen",
-            "sign_in_with_qr_unsupported": "Nicht unterstützt von deinem Kontoanbieter",
+            "sign_in_with_qr_description": "Sie können dieses Gerät dazu verwenden, um ein neues Gerät per QR-Code anzumelden und verschlüsselte Nachrichtenübermittlung einzurichten.",
+            "sign_in_with_qr_unsupported": "Wird von Ihrem Kontoanbieter nicht unterstützt",
             "sign_out": "Von dieser Sitzung abmelden",
             "sign_out_all_other_sessions": "Von allen anderen Sitzungen abmelden (%(otherSessionsCount)s)",
             "sign_out_confirm_description": {
@@ -2868,7 +2885,7 @@
         "show_redaction_placeholder": "Platzhalter für gelöschte Nachrichten",
         "show_stickers_button": "Sticker-Schaltfläche",
         "show_typing_notifications": "Tippbenachrichtigungen anzeigen",
-        "showbold": "Alle Aktivitäten in Raumliste anzeigen (Punkt oder Anzahl ungelesener Nachrichten)",
+        "showbold": "Alle Aktivitäten in der Chatroommliste anzeigen (Ausführungspunkte oder Anzahl ungelesener Nachrichten)",
         "sidebar": {
             "dialog_title": "<strong>Einstellungen:</strong> Seitenleiste",
             "metaspaces_favourites_description": "Gruppiere all deine favorisierten Unterhaltungen an einem Ort.",
@@ -2881,6 +2898,8 @@
             "metaspaces_subsection": "Anzuzeigende Spaces",
             "metaspaces_video_rooms": "Videoräume und -konferenzen",
             "metaspaces_video_rooms_description": "Gruppiere alle privaten Videoräume und -konferenzen.",
+            "metaspaces_video_rooms_description_invite_extension": "Sie können Personen außerhalb von Matrix zu Konferenzen einladen.",
+            "spaces_explainer": "Räume sind eine Möglichkeit, Chatrooms und Personen zu gruppieren. Abgesehen von den Räumen, in denen Sie sich gerade befinden, können Sie auch einige vorgefertigte Räume verwenden.",
             "title": "Seitenleiste"
         },
         "start_automatically": "Nach Systemstart automatisch starten",
@@ -2898,7 +2917,7 @@
             "audio_output_empty": "Keine Audioausgabe erkannt",
             "auto_gain_control": "Automatische Lautstärkeregelung",
             "connection_section": "Verbindung",
-            "dialog_title": "<strong>Einstellungen:</strong> Anrufe",
+            "dialog_title": "<strong>Einstellungen:</strong> Sprache und Video",
             "echo_cancellation": "Echounterdrückung",
             "enable_fallback_ice_server": "Ersatz-Anrufassistenz-Server erlauben (%(server)s)",
             "enable_fallback_ice_server_description": "Dieser wird nur verwendet, sollte dein Heim-Server keinen bieten. Deine IP-Adresse würde während eines Anrufs geteilt werden.",
@@ -2917,7 +2936,7 @@
         "warning": "<w>WARNUNG:</w> <description/>"
     },
     "share": {
-        "link_title": "Link zum Raum",
+        "link_copied": "Link kopiert",
         "permalink_message": "Link zur ausgewählten Nachricht",
         "permalink_most_recent": "Link zur aktuellsten Nachricht",
         "share_call": "Konferenzeinladungslink",
@@ -3009,13 +3028,6 @@
         "upgraderoom": "Aktualisiert den Raum auf eine neue Version",
         "upgraderoom_permission_error": "Du hast nicht die erforderlichen Berechtigungen, diesen Befehl zu verwenden.",
         "usage": "Verwendung",
-        "verify": "Verifiziert Benutzer, Sitzung und öffentlichen Schlüsselpaare",
-        "verify_mismatch": "ACHTUNG: SCHLÜSSELVERIFIZIERUNG FEHLGESCHLAGEN! Der Signierschlüssel für %(userId)s und Sitzung %(deviceId)s ist \"%(fprint)s\", was nicht mit dem bereitgestellten Schlüssel \"%(fingerprint)s\" übereinstimmt. Das könnte bedeuten, dass deine Kommunikation abgehört wird!",
-        "verify_nop": "Sitzung bereits verifiziert!",
-        "verify_nop_warning_mismatch": "ACHTUNG: Sitzung bereits verifiziert, aber die Schlüssel PASSEN NICHT!",
-        "verify_success_description": "Dein bereitgestellter Signaturschlüssel passt zum von der Sitzung %(deviceId)s von %(userId)s empfangendem Schlüssel. Sitzung wurde als verifiziert markiert.",
-        "verify_success_title": "Verifizierter Schlüssel",
-        "verify_unknown_pair": "Unbekanntes Paar (Nutzer, Sitzung): (%(userId)s, %(deviceId)s)",
         "view": "Raum mit angegebener Adresse betrachten",
         "whois": "Zeigt Informationen über Benutzer"
     },
@@ -3172,7 +3184,7 @@
             "other": "%(count)s Antworten"
         },
         "empty_description": "Verwende \"%(replyInThread)s\" beim Hovern über eine Nachricht.",
-        "empty_title": "Threads helfen dir, deine Unterhaltungen zu einem Thema leichter zu verfolgen.",
+        "empty_title": "Threads helfen Ihnen, Ihre Unterhaltungen beim Thema zu halten, and sie sind auch leichter zu verfolgen.",
         "error_start_thread_existing_relation": "Du kannst keinen Thread in einem Thread starten",
         "mark_all_read": "Alle als gelesen markieren",
         "my_threads": "Meine Threads",
@@ -3182,8 +3194,8 @@
     },
     "threads_activity_centre": {
         "header": "Thread-Aktivität",
-        "no_rooms_with_threads_notifs": "Sie haben noch keine Räume mit Thread-Benachrichtigungen.",
-        "no_rooms_with_unread_threads": "Sie haben noch keine Räume mit ungelesenen Threads.",
+        "no_rooms_with_threads_notifs": "Sie haben noch keine Chatrooms mit Thread-Benachrichtigungen.",
+        "no_rooms_with_unread_threads": "Sie haben noch keine Chatrooms mit ungelesenen Threads.",
         "release_announcement_description": "Die Thread-Benachrichtigungen wurden verschoben. Sie finden sie ab sofort hier.",
         "release_announcement_header": "Thread Aktivitätszentrum"
     },
@@ -3229,9 +3241,10 @@
         "creation_summary_dm": "%(creator)s hat diese Direktnachricht erstellt.",
         "creation_summary_room": "%(creator)s hat den Raum erstellt und konfiguriert.",
         "decryption_failure": {
+            "blocked": "Der Absender hat den Empfang dieser Nachricht blockiert, da Ihr Gerät nicht verifiziert ist.",
             "historical_event_no_key_backup": "Der historische Nachrichtenverlauf ist auf diesem Gerät nicht verfügbar.",
-            "historical_event_unverified_device": "Du musst dieses Gerät verifizieren, um auf den Nachrichtenverlauf zugreifen zu können",
-            "historical_event_user_not_joined": "Du hast keinen Zugriff auf diese Nachricht",
+            "historical_event_unverified_device": "Sie müssen dieses Gerät verifizieren, um auf den Nachrichtenverlauf zugreifen zu können",
+            "historical_event_user_not_joined": "Sie haben keinen Zugriff auf diese Nachricht",
             "sender_identity_previously_verified": "Die verifizierte Identität des Absenders hat sich geändert",
             "sender_unsigned_device": "Von einem unsicheren Gerät verschickt.",
             "unable_to_decrypt": "Entschlüsselung der Nachricht nicht möglich"
@@ -3251,10 +3264,6 @@
         "error_rendering_message": "Diese Nachricht kann nicht geladen werden",
         "historical_messages_unavailable": "Du kannst keine älteren Nachrichten lesen",
         "in_room_name": " in <strong>%(room)s</strong>",
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s beendete eine <a>Sprachübertragung</a>",
-            "you": "Du hast eine <a>Sprachübertragung</a> beendet"
-        },
         "io.element.widgets.layout": "%(senderName)s hat das Raumlayout geändert",
         "late_event_separator": "Ursprünglich gesendet %(dateTime)s",
         "load_error": {
@@ -3673,7 +3682,8 @@
         "other": "Und %(count)s weitere …"
     },
     "unsupported_browser": {
-        "description": "Wenn Sie fortfahren, funktionieren einige Funktionen möglicherweise nicht mehr und es besteht das Risiko, dass Sie in Zukunft Daten verlieren. Aktualisieren Sie Ihren Browser, um die Nutzung von %(brand)s fortzusetzen."
+        "description": "Wenn Sie fortfahren, funktionieren einige Funktionen möglicherweise nicht mehr und es besteht das Risiko, dass Sie in Zukunft Daten verlieren. Aktualisieren Sie Ihren Browser, um die Nutzung von %(brand)s fortzusetzen.",
+        "title": "%(brand)s unterstützt diesen Browser nicht"
     },
     "unsupported_server_description": "Dieser Server nutzt eine ältere Matrix-Version. Aktualisiere auf Matrix %(version)s, um %(brand)s fehlerfrei nutzen zu können.",
     "unsupported_server_title": "Dein Server wird nicht unterstützt",
@@ -3693,8 +3703,10 @@
         "unavailable": "Nicht verfügbar"
     },
     "update_room_access_modal": {
+        "description": "Um einen Link zum Teilen zu erstellen, müssen Sie Gästen erlauben, diesem Chatroom beizutreten. Dadurch kann der Chatroom weniger sicher werden. Wenn Sie mit dem Anruf fertig sind, können Sie den Raum wieder privat machen.",
+        "dont_change_description": "Sie können den Anruf auch in einem separaten Chatroom führen.",
         "no_change": "Ich möchte die Zugriffsebene nicht ändern.",
-        "title": "Ändern Sie die Zugriffsebene des Raums"
+        "title": "Ändern Sie die Zugriffsebene des Chatrooms."
     },
     "upload_failed_generic": "Die Datei „%(fileName)s“ konnte nicht hochgeladen werden.",
     "upload_failed_size": "Die Datei „%(fileName)s“ überschreitet das Hochladelimit deines Heim-Servers",
@@ -3705,7 +3717,7 @@
         "error_files_too_large": "Die Datei ist <b>zu groß</b>, um hochgeladen zu werden. Die maximale Dateigröße ist %(limit)s.",
         "error_some_files_too_large": "Einige Dateien sind <b>zu groß</b>, um hochgeladen zu werden. Die maximale Dateigröße ist %(limit)s.",
         "error_title": "Fehler beim Hochladen",
-        "not_image": "Die von dir ausgewählte Datei ist keine gültige Bilddatei.",
+        "not_image": "Die von Ihnen ausgewählte Datei ist keine gültige Bilddatei.",
         "title": "Dateien hochladen",
         "title_progress": "Dateien hochladen (%(current)s von %(total)s)",
         "upload_all_button": "Alle hochladen",
@@ -3801,38 +3813,6 @@
         "switch_theme_dark": "Zum dunklen Thema wechseln",
         "switch_theme_light": "Zum hellen Thema wechseln"
     },
-    "voice_broadcast": {
-        "30s_backward": "30s zurückspulen",
-        "30s_forward": "30s vorspulen",
-        "action": "Sprachübertragung",
-        "buffering": "Puffere …",
-        "confirm_listen_affirm": "Ja, beende meine Aufzeichnung",
-        "confirm_listen_description": "Wenn du beginnst, diese Echtzeitübertragung anzuhören, wird deine aktuelle Echtzeitübertragungsaufzeichnung beendet.",
-        "confirm_listen_title": "Echtzeitübertragung anhören?",
-        "confirm_stop_affirm": "Ja, Übertragung beenden",
-        "confirm_stop_description": "Möchtest du deine Übertragung wirklich beenden? Dies wird die Übertragung abschließen und die vollständige Aufnahme im Raum bereitstellen.",
-        "confirm_stop_title": "Live-Übertragung beenden?",
-        "connection_error": "Verbindungsfehler − Aufnahme pausiert",
-        "failed_already_recording_description": "Du zeichnest bereits eine Sprachübertragung auf. Bitte beende die laufende Übertragung, um eine neue zu beginnen.",
-        "failed_already_recording_title": "Sprachübertragung kann nicht gestartet werden",
-        "failed_decrypt": "Entschlüsseln der Sprachübertragung nicht möglich",
-        "failed_generic": "Wiedergabe der Sprachübertragung nicht möglich",
-        "failed_insufficient_permission_description": "Du hast nicht die nötigen Berechtigungen, um eine Sprachübertragung in diesem Raum zu starten. Kontaktiere einen Raumadministrator, um deine Berechtigungen anzupassen.",
-        "failed_insufficient_permission_title": "Sprachübertragung kann nicht gestartet werden",
-        "failed_no_connection_description": "Leider ist es aktuell nicht möglich, eine Aufnahme zu beginnen. Bitte versuche es später erneut.",
-        "failed_no_connection_title": "Verbindungsfehler",
-        "failed_others_already_recording_description": "Jemand anderes nimmt bereits eine Sprachübertragung auf. Warte auf das Ende der Übertragung, bevor du eine neue startest.",
-        "failed_others_already_recording_title": "Sprachübertragung kann nicht gestartet werden",
-        "go_live": "Live schalten",
-        "live": "Live",
-        "pause": "Sprachübertragung pausieren",
-        "play": "Sprachübertragung wiedergeben",
-        "resume": "Sprachübertragung fortsetzen"
-    },
-    "voice_message": {
-        "cant_start_broadcast_description": "Du kannst keine Sprachnachricht beginnen, da du im Moment eine Echtzeitübertragung aufzeichnest. Bitte beende deine Sprachübertragung, um ein Gespräch zu beginnen.",
-        "cant_start_broadcast_title": "Kann Sprachnachricht nicht beginnen"
-    },
     "voip": {
         "already_in_call": "Schon im Anruf",
         "already_in_call_person": "Du bist schon in einem Anruf mit dieser Person.",
@@ -3852,10 +3832,10 @@
         "camera_disabled": "Deine Kamera ist ausgeschaltet",
         "camera_enabled": "Deine Kamera ist noch aktiv",
         "cannot_call_yourself_description": "Du kannst keinen Anruf mit dir selbst starten.",
-        "change_input_device": "Eingabegerät wechseln",
         "close_lobby": "Lobby schließen",
         "connecting": "Verbinden",
         "connection_lost": "Verbindung zum Server unterbrochen",
+        "connection_lost_description": "Ohne Verbindung zum Server können Sie keine Anrufe tätigen.",
         "consulting": "%(transferTarget)s wird angefragt. <a>Übertragung zu %(transferee)s</a>",
         "default_device": "Standardgerät",
         "dial": "Wählen",
@@ -3870,8 +3850,6 @@
         "enable_camera": "Kamera aktivieren",
         "enable_microphone": "Mikrofon aktivieren",
         "expand": "Zurück zum Anruf",
-        "failed_call_live_broadcast_description": "Du kannst keinen Anruf beginnen, da du im Moment eine Sprachübertragung aufzeichnest. Bitte beende deine Sprachübertragung, um ein Gespräch zu beginnen.",
-        "failed_call_live_broadcast_title": "Kann keinen Anruf beginnen",
         "get_call_link": "Anruflink teilen",
         "hangup": "Auflegen",
         "hide_sidebar_button": "Seitenleiste verbergen",
@@ -4068,6 +4046,7 @@
             "l33t": "Vorhersagbare Ersetzungen wie „@“ anstelle von „a“ helfen nicht besonders",
             "longerKeyboardPattern": "Nutze ein längeres Tastaturmuster mit mehr Abwechslung",
             "noNeed": "Kein Bedarf an Symbolen, Zahlen oder Großbuchstaben",
+            "pwned": "Falls Sie dieses Passwort anderweitig verwenden, sollten Sie es ändern.",
             "recentYears": "Vermeide die letzten Jahre",
             "repeated": "Vermeide wiederholte Worte und Zeichen",
             "reverseWords": "Umgedrehte Worte sind nicht schwerer zu erraten",
@@ -4089,6 +4068,7 @@
             "straightRow": "Gerade Reihen von Tasten sind einfach zu erraten",
             "topHundred": "Dies ist unter den Top 100 der häufigsten Passwörter",
             "topTen": "Dies ist unter den Top 10 der häufigsten Passwörter",
+            "userInputs": "Personenbezogene oder seitenbezogene Daten sollten hier nicht vorhanden sein.",
             "wordByItself": "Ein einzelnes Wort ist einfach zu erraten"
         }
     }

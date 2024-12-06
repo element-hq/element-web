@@ -89,43 +89,47 @@ test.describe("HTML Export", () => {
         },
     });
 
-    test("should export html successfully and match screenshot", async ({ page, app, room }) => {
-        // Set a fixed time rather than masking off the line with the time in it: we don't need to worry
-        // about the width changing and we can actually test this line looks correct.
-        page.clock.setSystemTime(new Date("2024-01-01T00:00:00Z"));
+    test(
+        "should export html successfully and match screenshot",
+        { tag: "@screenshot" },
+        async ({ page, app, room }) => {
+            // Set a fixed time rather than masking off the line with the time in it: we don't need to worry
+            // about the width changing and we can actually test this line looks correct.
+            page.clock.setSystemTime(new Date("2024-01-01T00:00:00Z"));
 
-        // Send a bunch of messages to populate the room
-        for (let i = 1; i < 10; i++) {
-            const respone = await app.client.sendMessage(room.roomId, { body: `Testing ${i}`, msgtype: "m.text" });
-            if (i == 1) {
-                await app.client.reactToMessage(room.roomId, null, respone.event_id, "🙃");
+            // Send a bunch of messages to populate the room
+            for (let i = 1; i < 10; i++) {
+                const respone = await app.client.sendMessage(room.roomId, { body: `Testing ${i}`, msgtype: "m.text" });
+                if (i == 1) {
+                    await app.client.reactToMessage(room.roomId, null, respone.event_id, "🙃");
+                }
             }
-        }
 
-        // Wait for all the messages to be displayed
-        await expect(
-            page.locator(".mx_EventTile_last .mx_MTextBody .mx_EventTile_body").getByText("Testing 9"),
-        ).toBeVisible();
+            // Wait for all the messages to be displayed
+            await expect(
+                page.locator(".mx_EventTile_last .mx_MTextBody .mx_EventTile_body").getByText("Testing 9"),
+            ).toBeVisible();
 
-        await app.toggleRoomInfoPanel();
-        await page.getByRole("menuitem", { name: "Export Chat" }).click();
+            await app.toggleRoomInfoPanel();
+            await page.getByRole("menuitem", { name: "Export Chat" }).click();
 
-        const downloadPromise = page.waitForEvent("download");
-        await page.getByRole("button", { name: "Export", exact: true }).click();
-        const download = await downloadPromise;
+            const downloadPromise = page.waitForEvent("download");
+            await page.getByRole("button", { name: "Export", exact: true }).click();
+            const download = await downloadPromise;
 
-        const dirPath = path.join(os.tmpdir(), "html-export-test");
-        const zipPath = `${dirPath}.zip`;
-        await download.saveAs(zipPath);
+            const dirPath = path.join(os.tmpdir(), "html-export-test");
+            const zipPath = `${dirPath}.zip`;
+            await download.saveAs(zipPath);
 
-        const zip = await extractZipFileToPath(zipPath, dirPath);
-        await page.goto(`file://${dirPath}/${Object.keys(zip.files)[0]}/messages.html`);
-        await expect(page).toMatchScreenshot("html-export.png", {
-            mask: [
-                // We need to mask the whole thing because the width of the time part changes
-                page.locator(".mx_TimelineSeparator"),
-                page.locator(".mx_MessageTimestamp"),
-            ],
-        });
-    });
+            const zip = await extractZipFileToPath(zipPath, dirPath);
+            await page.goto(`file://${dirPath}/${Object.keys(zip.files)[0]}/messages.html`);
+            await expect(page).toMatchScreenshot("html-export.png", {
+                mask: [
+                    // We need to mask the whole thing because the width of the time part changes
+                    page.locator(".mx_TimelineSeparator"),
+                    page.locator(".mx_MessageTimestamp"),
+                ],
+            });
+        },
+    );
 });

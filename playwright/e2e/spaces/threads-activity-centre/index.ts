@@ -276,7 +276,7 @@ export class Helpers {
      * Assert that the threads activity centre button has no indicator
      */
     async assertNoTacIndicator() {
-        // Assert by checkng neither of the known indicators are visible first. This will wait
+        // Assert by checking neither of the known indicators are visible first. This will wait
         // if it takes a little time to disappear, but the screenshot comparison won't.
         await expect(this.getTacButton().locator("[data-indicator='success']")).not.toBeVisible();
         await expect(this.getTacButton().locator("[data-indicator='critical']")).not.toBeVisible();
@@ -376,7 +376,7 @@ export class Helpers {
      * Clicks the button to mark all threads as read in the current room
      */
     clickMarkAllThreadsRead() {
-        return this.page.getByLabel("Mark all as read").click();
+        return this.page.locator("#thread-panel").getByRole("button", { name: "Mark all as read" }).click();
     }
 }
 

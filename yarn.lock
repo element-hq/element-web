@@ -1585,6 +1585,16 @@
   resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.2.8.tgz#21a907684723bbbaa5f0974cf7730bd797eb8e62"
   integrity sha512-kym7SodPp8/wloecOpcmSnWJsK7M0E5Wg8UcFA+uO4B9s5d0ywXOEro/8HM9x0rW+TljRzul/14UYz3TleT3ig==
 
+"@fontsource/inconsolata@^5":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@fontsource/inconsolata/-/inconsolata-5.1.0.tgz#f6a76680173336d02d2ce4009699821a6be239ce"
+  integrity sha512-vYPdG3R46MhK+99De8e8MMyNad5BAb1oTnHMpojlctZyWJIcin8bKHFPUpQSNRhZ4HQL/+DCW+RTiG2RbnweTw==
+
+"@fontsource/inter@^5":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@fontsource/inter/-/inter-5.1.0.tgz#ab629b2c662457022d2d6a29854b8dc8ba538c47"
+  integrity sha512-zKZR3kf1G0noIes1frLfOHP5EXVVm0M7sV/l9f/AaYf+M/DId35FO4LkigWjqWYjTJZGgplhdv4cB+ssvCqr5A==
+
 "@formatjs/ecma402-abstract@2.2.4":
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/@formatjs/ecma402-abstract/-/ecma402-abstract-2.2.4.tgz#355e42d375678229d46dc8ad7a7139520dd03e7b"
@@ -4044,11 +4054,6 @@ base64-arraybuffer@^1.0.2:
   resolved "https://registry.yarnpkg.com/base64-arraybuffer/-/base64-arraybuffer-1.0.2.tgz#1c37589a7c4b0746e34bd1feb951da2df01c1bdc"
   integrity sha512-I3yl4r9QB5ZRY3XuJVEPfc2XhZO6YweFPI+UovAzn+8/hb3oJ6lnysaFcjVpkCPfVWFUDvoZ8kmVDP7WyRtYtQ==
 
-base64-js@^1.3.1:
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/base64-js/-/base64-js-1.5.1.tgz#1b1b440160a5bf7ad40b650f095963481903930a"
-  integrity sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==
-
 batch@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/batch/-/batch-0.6.1.tgz#dc34314f4e679318093fc760272525f94bf25c16"
@@ -4169,14 +4174,6 @@ buffer-from@^1.0.0:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/buffer-from/-/buffer-from-1.1.2.tgz#2b146a6fd72e80b4f55d255f35ed59a3a9a41bd5"
   integrity sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==
-
-buffer@^6.0.3:
-  version "6.0.3"
-  resolved "https://registry.yarnpkg.com/buffer/-/buffer-6.0.3.tgz#2ace578459cc8fbe2a70aaa8f52ee63b6a74c6c6"
-  integrity sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==
-  dependencies:
-    base64-js "^1.3.1"
-    ieee754 "^1.2.1"
 
 builtin-modules@^3.3.0:
   version "3.3.0"
@@ -6777,7 +6774,7 @@ icss-utils@^5.0.0, icss-utils@^5.1.0:
   resolved "https://registry.yarnpkg.com/icss-utils/-/icss-utils-5.1.0.tgz#c6be6858abd013d768e98366ae47e25d5887b1ae"
   integrity sha512-soFhflCVWLfRNOPU3iv5Z9VUdT44xFRbzjLsEzSr5AQmgqPMTHdU3PMT1Cf1ssx8fLNJDA1juftYl+PUcv3MqA==
 
-ieee754@^1.1.12, ieee754@^1.2.1:
+ieee754@^1.1.12:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.2.1.tgz#8eb7a10a63fff25d15a57b001586d177d1b0d352"
   integrity sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==
@@ -7962,10 +7959,10 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.2.4.tgz#eca284f75d2965079309dc0ad9255abb2ebc1632"
   integrity sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==
 
-linkify-element@4.1.4:
-  version "4.1.4"
-  resolved "https://registry.yarnpkg.com/linkify-element/-/linkify-element-4.1.4.tgz#d4050b41fb47c44871e5eed93bc11865e403cc90"
-  integrity sha512-XhSTTF7b7OoX4KIkwVG8MET5DSFEHohT0Gp5pjmsByYp+JCyZq5rSZGsar5dYzeuKUV6TqTSLtsH/NzBBwBxgQ==
+linkify-element@4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/linkify-element/-/linkify-element-4.2.0.tgz#fb5c6d47576487a463fd22a0cc889e15833aa943"
+  integrity sha512-LahyRMhXAgWTP9TOid7pTv8UUZFDz+saLkIVAoGNmOvISt+uSeBzdGhk3dsvkdzAh1QMhkO+fVJjmkMEITre5g==
 
 linkify-it@^4.0.1:
   version "4.0.1"
@@ -7974,20 +7971,20 @@ linkify-it@^4.0.1:
   dependencies:
     uc.micro "^1.0.1"
 
-linkify-react@4.1.4:
-  version "4.1.4"
-  resolved "https://registry.yarnpkg.com/linkify-react/-/linkify-react-4.1.4.tgz#6c709f3f96543914874982f4b0b00f9c9270ce93"
-  integrity sha512-UI9nqHtFzHYRUvVRrYeua5GIXkc0Jy3RpLsJBWEht7HwqjAa2qSaIksGmNSLqclNpO/5AkwaxUJv71I/pQsk9Q==
+linkify-react@4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/linkify-react/-/linkify-react-4.2.0.tgz#d143b2af8efa5e3b09517b66ed442624c3e06bcf"
+  integrity sha512-dIcDGo+n4FP2FPIHDcqB7cUE+omkcEgQJpc7sNNP4+XZ9FUhFAkKjGnHMzsZM+B4yF93sK166z9K5cKTe/JpzA==
 
-linkify-string@4.1.4:
-  version "4.1.4"
-  resolved "https://registry.yarnpkg.com/linkify-string/-/linkify-string-4.1.4.tgz#89fb814e05c5b22f76d2a2a640bc8b1db4c6694f"
-  integrity sha512-4z2UEzEi4SxnhWMzzZ8Pa8vIOwX/2U0XWxk/0UIA7lI+Dn0ZRKqTE9ildnO6Jl6K5hqVuLKTeMD8p4bdFW6P8g==
+linkify-string@4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/linkify-string/-/linkify-string-4.2.0.tgz#e8c5a9d57698e81e7cce7f4915ddbcbde17134c0"
+  integrity sha512-LqOKk0+RlqibFkxjPAGOL7Mfssqj6/SdG9QWGvzeVDpoWXhaw9OXxseCtFanjIl7C6UyTTZizhyGr4IWLfijiw==
 
-linkifyjs@4.1.4:
-  version "4.1.4"
-  resolved "https://registry.yarnpkg.com/linkifyjs/-/linkifyjs-4.1.4.tgz#2766605a20078d50c90f35af22275a42dfb7dfc4"
-  integrity sha512-0/NxkHNpiJ0k9VrYCkAn9OtU1eu8xEr1tCCpDtSsVRm/SF0xAak2Gzv3QimSfgUgqLBCDlfhMbu73XvaEHUTPQ==
+linkifyjs@4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/linkifyjs/-/linkifyjs-4.2.0.tgz#9dd30222b9cbabec9c950e725ec00031c7fa3f08"
+  integrity sha512-pCj3PrQyATaoTYKHrgWRF3SJwsm61udVh+vuls/Rl6SptiDhgE7ziUIudAedRY9QEfynmM7/RmLEfPUyw1HPCw==
 
 lint-staged@^15.0.2:
   version "15.2.10"
@@ -8241,8 +8238,8 @@ matrix-events-sdk@0.0.1:
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "34.12.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/544ac86d2080da8e55d0b727cae826e42600c490"
+  version "34.13.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/c4ea57d42dcf8bd04c40feaa2c686487dbcab338"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-wasm" "^9.0.0"

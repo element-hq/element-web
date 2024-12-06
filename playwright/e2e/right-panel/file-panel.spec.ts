@@ -40,7 +40,7 @@ test.describe("FilePanel", () => {
     });
 
     test.describe("render", () => {
-        test("should render empty state", async ({ page }) => {
+        test("should render empty state", { tag: "@screenshot" }, async ({ page }) => {
             // Wait until the information about the empty state is rendered
             await expect(page.locator(".mx_EmptyState")).toBeVisible();
 
@@ -48,7 +48,7 @@ test.describe("FilePanel", () => {
             await expect(page.locator(".mx_RightPanel")).toMatchScreenshot("empty.png");
         });
 
-        test("should list tiles on the panel", async ({ page }) => {
+        test("should list tiles on the panel", { tag: "@screenshot" }, async ({ page }) => {
             // Upload multiple files
             await uploadFile(page, "playwright/sample-files/riot.png"); // Image
             await uploadFile(page, "playwright/sample-files/1sec.ogg"); // Audio

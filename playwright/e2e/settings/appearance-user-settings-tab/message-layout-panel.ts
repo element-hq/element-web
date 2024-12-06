@@ -20,20 +20,24 @@ test.describe("Appearance user settings tab", () => {
             await util.openAppearanceTab();
         });
 
-        test("should change the message layout from modern to bubble", async ({ page, app, user, util }) => {
-            await util.assertScreenshot(util.getMessageLayoutPanel(), "message-layout-panel-modern.png");
+        test(
+            "should change the message layout from modern to bubble",
+            { tag: "@screenshot" },
+            async ({ page, app, user, util }) => {
+                await util.assertScreenshot(util.getMessageLayoutPanel(), "message-layout-panel-modern.png");
 
-            await util.getBubbleLayout().click();
+                await util.getBubbleLayout().click();
 
-            // Assert that modern are irc layout are not selected
-            await expect(util.getBubbleLayout()).toBeChecked();
-            await expect(util.getModernLayout()).not.toBeChecked();
-            await expect(util.getIRCLayout()).not.toBeChecked();
+                // Assert that modern are irc layout are not selected
+                await expect(util.getBubbleLayout()).toBeChecked();
+                await expect(util.getModernLayout()).not.toBeChecked();
+                await expect(util.getIRCLayout()).not.toBeChecked();
 
-            // Assert that the room layout is set to bubble layout
-            await util.assertBubbleLayout();
-            await util.assertScreenshot(util.getMessageLayoutPanel(), "message-layout-panel-bubble.png");
-        });
+                // Assert that the room layout is set to bubble layout
+                await util.assertBubbleLayout();
+                await util.assertScreenshot(util.getMessageLayoutPanel(), "message-layout-panel-bubble.png");
+            },
+        );
 
         test("should enable compact layout when the modern layout is selected", async ({ page, app, user, util }) => {
             await expect(util.getCompactLayoutCheckbox()).not.toBeChecked();

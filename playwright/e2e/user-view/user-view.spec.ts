@@ -14,7 +14,7 @@ test.describe("UserView", () => {
         botCreateOpts: { displayName: "Usman" },
     });
 
-    test("should render the user view as expected", async ({ page, homeserver, user, bot }) => {
+    test("should render the user view as expected", { tag: "@screenshot" }, async ({ page, homeserver, user, bot }) => {
         await page.goto(`/#/user/${bot.credentials.userId}`);
 
         const rightPanel = page.locator("#mx_RightPanel");

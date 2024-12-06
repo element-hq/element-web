@@ -13,7 +13,7 @@ test.describe("Appearance user settings tab", () => {
         displayName: "Hanako",
     });
 
-    test("should be rendered properly", async ({ page, user, app }) => {
+    test("should be rendered properly", { tag: "@screenshot" }, async ({ page, user, app }) => {
         const tab = await app.settings.openUserSettings("Appearance");
 
         // Click "Show advanced" link button
@@ -25,19 +25,23 @@ test.describe("Appearance user settings tab", () => {
         await expect(tab).toMatchScreenshot("appearance-tab.png");
     });
 
-    test("should support changing font size by using the font size dropdown", async ({ page, app, user }) => {
-        await app.settings.openUserSettings("Appearance");
+    test(
+        "should support changing font size by using the font size dropdown",
+        { tag: "@screenshot" },
+        async ({ page, app, user }) => {
+            await app.settings.openUserSettings("Appearance");
 
-        const tab = page.getByTestId("mx_AppearanceUserSettingsTab");
-        const fontDropdown = tab.locator(".mx_FontScalingPanel_Dropdown");
-        await expect(fontDropdown.getByLabel("Font size")).toBeVisible();
+            const tab = page.getByTestId("mx_AppearanceUserSettingsTab");
+            const fontDropdown = tab.locator(".mx_FontScalingPanel_Dropdown");
+            await expect(fontDropdown.getByLabel("Font size")).toBeVisible();
 
-        // Default browser font size is 16px and the select value is 0
-        // -4 value is 12px
-        await fontDropdown.getByLabel("Font size").selectOption({ value: "-4" });
+            // Default browser font size is 16px and the select value is 0
+            // -4 value is 12px
+            await fontDropdown.getByLabel("Font size").selectOption({ value: "-4" });
 
-        await expect(page).toMatchScreenshot("window-12px.png", { includeDialogBackground: true });
-    });
+            await expect(page).toMatchScreenshot("window-12px.png", { includeDialogBackground: true });
+        },
+    );
 
     test("should support enabling system font", async ({ page, app, user }) => {
         await app.settings.openUserSettings("Appearance");

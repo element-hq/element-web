@@ -17,9 +17,20 @@ import BaseDialog from "./BaseDialog";
 import { IDevice } from "../right_panel/UserInfo";
 
 interface IProps {
+    /**
+     * The user whose device is untrusted.
+     */
     user: User;
+    /**
+     * The device that is untrusted.
+     */
     device: IDevice;
-    onFinished(mode?: "legacy" | "sas" | false): void;
+    /**
+     * Callback for when the dialog is dismissed.
+     * If mode is "sas", the user wants to verify the device with SAS. Otherwise, the dialog was dismissed normally.
+     * @param mode The mode of dismissal.
+     */
+    onFinished(mode?: "sas"): void;
 }
 
 const UntrustedDeviceDialog: React.FC<IProps> = ({ device, user, onFinished }) => {
@@ -56,13 +67,10 @@ const UntrustedDeviceDialog: React.FC<IProps> = ({ device, user, onFinished }) =
                 <p>{askToVerifyText}</p>
             </div>
             <div className="mx_Dialog_buttons">
-                <AccessibleButton kind="primary_outline" onClick={() => onFinished("legacy")}>
-                    {_t("encryption|udd|manual_verification_button")}
-                </AccessibleButton>
                 <AccessibleButton kind="primary_outline" onClick={() => onFinished("sas")}>
                     {_t("encryption|udd|interactive_verification_button")}
                 </AccessibleButton>
-                <AccessibleButton kind="primary" onClick={() => onFinished(false)}>
+                <AccessibleButton kind="primary" onClick={() => onFinished()}>
                     {_t("action|done")}
                 </AccessibleButton>
             </div>

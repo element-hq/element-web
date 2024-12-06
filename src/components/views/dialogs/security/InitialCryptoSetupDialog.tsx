@@ -25,14 +25,19 @@ interface Props {
 }
 
 /*
- * Walks the user through the process of creating a cross-signing keys. In most
- * cases, only a spinner is shown, but for more complex auth like SSO, the user
- * may need to complete some steps to proceed.
+ * Walks the user through the process of creating a cross-signing keys.
+ * In most cases, only a spinner is shown, but for more
+ * complex auth like SSO, the user may need to complete some steps to proceed.
  */
-const CreateCrossSigningDialog: React.FC<Props> = ({ matrixClient, accountPassword, tokenLogin, onFinished }) => {
+export const InitialCryptoSetupDialog: React.FC<Props> = ({
+    matrixClient,
+    accountPassword,
+    tokenLogin,
+    onFinished,
+}) => {
     const [error, setError] = useState(false);
 
-    const bootstrapCrossSigning = useCallback(async () => {
+    const doSetup = useCallback(async () => {
         const cryptoApi = matrixClient.getCrypto();
         if (!cryptoApi) return;
 
@@ -40,6 +45,7 @@ const CreateCrossSigningDialog: React.FC<Props> = ({ matrixClient, accountPasswo
 
         try {
             await createCrossSigning(matrixClient, tokenLogin, accountPassword);
+
             onFinished(true);
         } catch (e) {
             if (tokenLogin) {
@@ -58,8 +64,8 @@ const CreateCrossSigningDialog: React.FC<Props> = ({ matrixClient, accountPasswo
     }, [onFinished]);
 
     useEffect(() => {
-        bootstrapCrossSigning();
-    }, [bootstrapCrossSigning]);
+        doSetup();
+    }, [doSetup]);
 
     let content;
     if (error) {
@@ -69,7 +75,7 @@ const CreateCrossSigningDialog: React.FC<Props> = ({ matrixClient, accountPasswo
                 <div className="mx_Dialog_buttons">
                     <DialogButtons
                         primaryButton={_t("action|retry")}
-                        onPrimaryButtonClick={bootstrapCrossSigning}
+                        onPrimaryButtonClick={doSetup}
                         onCancel={onCancel}
                     />
                 </div>
@@ -95,5 +101,3 @@ const CreateCrossSigningDialog: React.FC<Props> = ({ matrixClient, accountPasswo
         </BaseDialog>
     );
 };
-
-export default CreateCrossSigningDialog;

@@ -809,7 +809,6 @@
         },
         "udd": {
             "interactive_verification_button": "用表情符号交互式验证",
-            "manual_verification_button": "用文本手动验证",
             "other_ask_verify_text": "要求此用户验证其会话，或在下面手动进行验证。",
             "other_new_session_text": "%(name)s(%(userId)s)登录到未验证的新会话：",
             "own_ask_verify_text": "使用以下选项之一验证你的其他会话。",
@@ -841,12 +840,6 @@
             "incoming_sas_dialog_title": "收到验证请求",
             "incoming_sas_user_dialog_text_1": "验证此用户并将其标记为已信任。在收发端到端加密消息时，信任用户可让你更加放心。",
             "incoming_sas_user_dialog_text_2": "验证此用户会将其会话标记为已信任，与此同时，你的会话也会被此用户标记为已信任。",
-            "manual_device_verification_device_id_label": "会话 ID",
-            "manual_device_verification_device_key_label": "会话密钥",
-            "manual_device_verification_device_name_label": "会话名称",
-            "manual_device_verification_footer": "如果它们不匹配，你通讯的安全性可能已受损。",
-            "manual_device_verification_self_text": "通过比较下方内容和你别的会话中的用户设置来确认：",
-            "manual_device_verification_user_text": "通过比较下方内容和对方用户设置来确认此用户会话：",
             "no_key_or_device": "看起来你没有安全密钥或者任何其他可以验证的设备。 此设备将无法访问旧的加密消息。为了在这个设备上验证你的身份，你需要重置你的验证密钥。",
             "no_support_qr_emoji": "你正在尝试验证的设备不支持扫码QR码或表情符号验证，这是%(brand)s所支持的。用不同的客户端试试。",
             "other_party_cancelled": "另一方取消了验证。",
@@ -1296,7 +1289,6 @@
         "video_rooms_faq1_question": "我如何创建视频房间？",
         "video_rooms_faq2_answer": "是的，聊天时间线显示在视频旁。",
         "video_rooms_faq2_question": "我能在视频通话的同时使用文字聊天吗？",
-        "voice_broadcast": "语音广播",
         "wysiwyg_composer": "富文本编辑器"
     },
     "labs_mjolnir": {
@@ -1426,7 +1418,6 @@
         "mute_description": "你不会收到任何通知"
     },
     "notifier": {
-        "io.element.voice_broadcast_chunk": "%(senderName)s开始了语音广播",
         "m.key.verification.request": "%(name)s 正在请求验证"
     },
     "onboarding": {
@@ -1917,7 +1908,6 @@
             "error_unbanning": "解除封禁失败",
             "events_default": "发送消息",
             "invite": "邀请用户",
-            "io.element.voice_broadcast_info": "语音广播",
             "kick": "移除用户",
             "m.call": "开始%(brand)s呼叫",
             "m.call.member": "加入%(brand)s呼叫",
@@ -2457,7 +2447,6 @@
         "warning": "<w>警告：</w><description/>"
     },
     "share": {
-        "link_title": "房间链接",
         "permalink_message": "选中消息的链接",
         "permalink_most_recent": "最新消息的链接",
         "title_message": "分享房间消息",
@@ -2544,13 +2533,6 @@
         "upgraderoom": "将房间升级到新版本",
         "upgraderoom_permission_error": "你没有权限使用此命令。",
         "usage": "用法",
-        "verify": "验证用户、会话和公钥元组",
-        "verify_mismatch": "警告：密钥验证失败！%(userId)s 的会话 %(deviceId)s 的签名密钥为 %(fprint)s，与提供的密钥 %(fingerprint)s 不符。这可能表示你的通讯已被截获！",
-        "verify_nop": "会话已验证！",
-        "verify_nop_warning_mismatch": "警告：会话已验证，然而密钥不匹配！",
-        "verify_success_description": "你提供的签名密钥与你从 %(userId)s 的会话 %(deviceId)s 获取的一致。此会话被标为已验证。",
-        "verify_success_title": "已验证的密钥",
-        "verify_unknown_pair": "未知用户会话配对：（%(userId)s：%(deviceId)s）",
         "whois": "显示关于用户的信息"
     },
     "space": {
@@ -3256,27 +3238,6 @@
         "switch_theme_dark": "切换到深色模式",
         "switch_theme_light": "切换到浅色模式"
     },
-    "voice_broadcast": {
-        "30s_backward": "后退30秒",
-        "30s_forward": "前进30秒",
-        "action": "语音广播",
-        "buffering": "正在缓冲……",
-        "confirm_stop_affirm": "是的，停止广播",
-        "confirm_stop_title": "停止直播吗？",
-        "failed_already_recording_description": "你已经在录制一个语音广播。请结束你当前的语音广播以开始新的语音广播。",
-        "failed_already_recording_title": "无法开始新的语音广播",
-        "failed_insufficient_permission_description": "你没有必要的权限在这个房间开始语音广播。请联系房间管理员以提升你的权限。",
-        "failed_insufficient_permission_title": "无法开始新的语音广播",
-        "failed_no_connection_description": "很遗憾，我们现在无法开始录音。请稍后再试。",
-        "failed_no_connection_title": "连接错误",
-        "failed_others_already_recording_description": "别人已经在录制语音广播了。等到他们的语音广播结束后再开始新的广播。",
-        "failed_others_already_recording_title": "无法开始新的语音广播",
-        "go_live": "开始直播",
-        "live": "实时",
-        "pause": "暂停语音广播",
-        "play": "播放语音广播",
-        "resume": "恢复语音广播"
-    },
     "voip": {
         "already_in_call": "正在通话中",
         "already_in_call_person": "你正在与其通话。",
@@ -3296,7 +3257,6 @@
         "camera_disabled": "你的摄像头已关闭",
         "camera_enabled": "你的摄像头仍然处于启用状态",
         "cannot_call_yourself_description": "你不能打给自己。",
-        "change_input_device": "变更输入设备",
         "connecting": "连接中",
         "connection_lost": "已丢失与服务器的连接",
         "connection_lost_description": "你不能在未连接到服务器时进行呼叫。",
@@ -3313,7 +3273,6 @@
         "enable_camera": "启动相机",
         "enable_microphone": "取消静音麦克风",
         "expand": "返回通话",
-        "failed_call_live_broadcast_title": "无法开始通话",
         "hangup": "挂断",
         "hide_sidebar_button": "隐藏侧边栏",
         "input_devices": "输入设备",

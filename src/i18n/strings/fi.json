@@ -778,7 +778,6 @@
         },
         "udd": {
             "interactive_verification_button": "Vahvista vuorovaikutteisesti emojilla",
-            "manual_verification_button": "Vahvista manuaalisesti tekstillä",
             "other_ask_verify_text": "Pyydä tätä käyttäjää vahvistamaan istuntonsa, tai vahvista se manuaalisesti alla.",
             "other_new_session_text": "%(name)s (%(userId)s) kirjautui uudella istunnolla varmentamatta sitä:",
             "own_ask_verify_text": "Varmenna toinen istuntosi käyttämällä yhtä seuraavista tavoista.",
@@ -807,10 +806,6 @@
             "incoming_sas_dialog_title": "Saapuva varmennuspyyntö",
             "incoming_sas_user_dialog_text_1": "Varmenna tämä käyttäjä merkitäksesi hänet luotetuksi. Käyttäjiin luottaminen antaa sinulle ylimääräistä mielenrauhaa käyttäessäsi päästä päähän -salausta.",
             "incoming_sas_user_dialog_text_2": "Tämän käyttäjän varmentaminen merkitsee hänen istuntonsa luotetuksi, ja myös merkkaa sinun istuntosi luotetuksi hänen laitteissaan.",
-            "manual_device_verification_device_id_label": "Istuntotunniste",
-            "manual_device_verification_device_key_label": "Istunnon tunnus",
-            "manual_device_verification_device_name_label": "Istunnon nimi",
-            "manual_device_verification_footer": "Jos ne eivät täsmää, viestinnän turvallisuus saattaa olla vaarantunut.",
             "other_party_cancelled": "Toinen osapuoli perui varmennuksen.",
             "prompt_encrypted": "Varmenna kaikki huoneen käyttäjät varmistaaksesi, että se on turvallinen.",
             "prompt_self": "Aloita varmennus uudelleen ilmoituksesta.",
@@ -917,10 +912,6 @@
     },
     "error_user_not_logged_in": "Käyttäjä ei ole sisäänkirjautunut",
     "event_preview": {
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s lopetti äänen yleislähetyksen",
-            "you": "Lopetit äänen yleislähetyksen"
-        },
         "m.call.answer": {
             "dm": "Puhelu käynnissä",
             "user": "%(senderName)s liittyi puheluun",
@@ -1239,8 +1230,7 @@
         "video_rooms_faq1_answer": "Käytä ”+”-painiketta vasemman paneelin huoneosiossa.",
         "video_rooms_faq1_question": "Miten voin luoda videohuoneen?",
         "video_rooms_faq2_answer": "Kyllä, keskustelun aikajana esitetään videon yhteydessä.",
-        "video_rooms_faq2_question": "Voinko käyttää tekstikeskustelua videopuhelussa?",
-        "voice_broadcast": "Äänen yleislähetys"
+        "video_rooms_faq2_question": "Voinko käyttää tekstikeskustelua videopuhelussa?"
     },
     "labs_mjolnir": {
         "advanced_warning": "⚠ Nämä asetukset on tarkoitettu edistyneille käyttäjille.",
@@ -1356,7 +1346,6 @@
         "mute_description": "Et saa ilmoituksia"
     },
     "notifier": {
-        "io.element.voice_broadcast_chunk": "%(senderName)s aloitti äänen yleislähetyksen",
         "m.key.verification.request": "%(name)s pyytää varmennusta"
     },
     "onboarding": {
@@ -1856,7 +1845,6 @@
             "error_unbanning": "Porttikiellon poistaminen epäonnistui",
             "events_default": "Lähetä viestejä",
             "invite": "Kutsu käyttäjiä",
-            "io.element.voice_broadcast_info": "Äänen yleislähetykset",
             "kick": "Poista käyttäjiä",
             "m.call": "Aloita %(brand)s-puheluja",
             "m.call.member": "Liity %(brand)s-puheluihin",
@@ -2415,7 +2403,6 @@
         "warning": "<w>VAROITUS:</w> <description/>"
     },
     "share": {
-        "link_title": "Linkitä huoneeseen",
         "permalink_message": "Linkitä valittuun viestiin",
         "permalink_most_recent": "Linkitä viimeisimpään viestiin",
         "title_message": "Jaa huoneviesti",
@@ -2499,13 +2486,6 @@
         "upgraderoom": "Päivittää huoneen uuteen versioon",
         "upgraderoom_permission_error": "Sinulla ei ole vaadittavia oikeuksia tämän komennon käyttämiseksi.",
         "usage": "Käyttö",
-        "verify": "Varmentaa käyttäjän, istunnon ja julkiset avaimet",
-        "verify_mismatch": "VAROITUS: AVAIMEN VARMENTAMINEN EPÄONNISTUI! Käyttäjän %(userId)s ja laitteen %(deviceId)s istunnon allekirjoitusavain on ”%(fprint)s”, mikä ei täsmää annettuun avaimeen ”%(fingerprint)s”. Tämä voi tarkoittaa, että viestintäänne siepataan!",
-        "verify_nop": "Istunto on jo vahvistettu!",
-        "verify_nop_warning_mismatch": "VAROITUS: istunto on jo vahvistettu, mutta avaimet EIVÄT TÄSMÄÄ!",
-        "verify_success_description": "Antamasi allekirjoitusavain täsmää käyttäjältä %(userId)s saamaasi istunnon %(deviceId)s allekirjoitusavaimeen. Istunto on varmennettu.",
-        "verify_success_title": "Varmennettu avain",
-        "verify_unknown_pair": "Tuntematon (käyttäjä, laite) (%(userId)s, %(deviceId)s)",
         "whois": "Näyttää tietoa käyttäjästä"
     },
     "space": {
@@ -2710,10 +2690,6 @@
         "error_rendering_message": "Tätä viestiä ei voi ladata",
         "historical_messages_unavailable": "Et voi nähdä aiempia viestejä",
         "in_room_name": " huoneessa <strong>%(room)s</strong>",
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s lopetti <a>äänen yleislähetyksen</a>",
-            "you": "Lopetit <a>äänen yleislähetyksen</a>"
-        },
         "io.element.widgets.layout": "%(senderName)s on päivittänyt huoneen asettelun",
         "load_error": {
             "no_permission": "Aikajanan tietty hetki yritettiin ladata, mutta sinulla ei ole oikeutta nähdä kyseistä viestiä.",
@@ -3202,23 +3178,6 @@
         "switch_theme_dark": "Vaihda tummaan teemaan",
         "switch_theme_light": "Vaihda vaaleaan teemaan"
     },
-    "voice_broadcast": {
-        "30s_backward": "30 s taaksepäin",
-        "30s_forward": "30 s eteenpäin",
-        "action": "Äänen yleislähetys",
-        "buffering": "Puskuroidaan…",
-        "confirm_stop_affirm": "Kyllä, pysäytä yleislähetys",
-        "confirm_stop_title": "Pysäytetäänkö liveyleislähetys?",
-        "failed_already_recording_description": "Tallennat jo äänen yleislähetystä. Lopeta nykyinen äänen yleislähetys aloittaaksesi uuden.",
-        "failed_already_recording_title": "Uutta äänen yleislähetystä ei voi käynnistää",
-        "failed_insufficient_permission_title": "Uutta äänen yleislähetystä ei voi käynnistää",
-        "failed_no_connection_title": "Yhteysvirhe",
-        "failed_others_already_recording_description": "Joku toinen tallentaa jo äänen yleislähetystä. Odota äänen yleislähetyksen päättymistä, jotta voit aloittaa uuden.",
-        "failed_others_already_recording_title": "Uutta äänen yleislähetystä ei voi käynnistää",
-        "pause": "keskeytä äänen yleislähetys",
-        "play": "toista äänen yleislähetys",
-        "resume": "palaa äänen yleislähetykseen"
-    },
     "voip": {
         "already_in_call": "Olet jo puhelussa",
         "already_in_call_person": "Olet jo puhelussa tämän henkilön kanssa.",
@@ -3238,7 +3197,6 @@
         "camera_disabled": "Kamerasi on pois päältä",
         "camera_enabled": "Kamerasi on edelleen päällä",
         "cannot_call_yourself_description": "Et voi soittaa itsellesi.",
-        "change_input_device": "Vaihda sisääntulolaitetta",
         "connecting": "Yhdistetään",
         "connection_lost": "Yhteys palvelimeen on katkennut",
         "connection_lost_description": "Et voi soittaa puheluja ilman yhteyttä palvelimeen.",
@@ -3254,7 +3212,6 @@
         "enable_camera": "Laita kamera päälle",
         "enable_microphone": "Poista mikrofonin mykistys",
         "expand": "Palaa puheluun",
-        "failed_call_live_broadcast_title": "Puhelua ei voi aloittaa",
         "hangup": "Lopeta",
         "hide_sidebar_button": "Piilota sivupalkki",
         "input_devices": "Sisääntulolaitteet",
