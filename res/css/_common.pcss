@@ -596,7 +596,9 @@ legend {
 .mx_Dialog
     button:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]):not(.mx_AccessibleButton):not(
         .mx_UserProfileSettings button
-    ):not(.mx_ThemeChoicePanel_CustomTheme button):not(.mx_UnpinAllDialog button):not(.mx_ShareDialog button),
+    ):not(.mx_ThemeChoicePanel_CustomTheme button):not(.mx_UnpinAllDialog button):not(.mx_ShareDialog button):not(
+        .mx_EncryptionUserSettingsTab button
+    ),
 .mx_Dialog input[type="submit"],
 .mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton),
 .mx_Dialog_buttons input[type="submit"] {
@@ -616,8 +618,8 @@ legend {
 .mx_Dialog
     button:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]):not(.mx_AccessibleButton):not(
         .mx_UserProfileSettings button
-    ):not(.mx_ThemeChoicePanel_CustomTheme button):not(.mx_UnpinAllDialog button):not(
-        .mx_ShareDialog button
+    ):not(.mx_ThemeChoicePanel_CustomTheme button):not(.mx_UnpinAllDialog button):not(.mx_ShareDialog button):not(
+        .mx_EncryptionUserSettingsTab button
     ):last-child {
     margin-right: 0px;
 }
@@ -625,7 +627,9 @@ legend {
 .mx_Dialog
     button:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]):not(.mx_AccessibleButton):not(
         .mx_UserProfileSettings button
-    ):not(.mx_ThemeChoicePanel_CustomTheme button):not(.mx_UnpinAllDialog button):not(.mx_ShareDialog button):focus,
+    ):not(.mx_ThemeChoicePanel_CustomTheme button):not(.mx_UnpinAllDialog button):not(.mx_ShareDialog button):not(
+        .mx_EncryptionUserSettingsTab button
+    ):focus,
 .mx_Dialog input[type="submit"]:focus,
 .mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):focus,
 .mx_Dialog_buttons input[type="submit"]:focus {
@@ -637,7 +641,9 @@ legend {
 .mx_Dialog_buttons
     button.mx_Dialog_primary:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):not(
         .mx_UserProfileSettings button
-    ):not(.mx_ThemeChoicePanel_CustomTheme button):not(.mx_UnpinAllDialog button):not(.mx_ShareDialog button),
+    ):not(.mx_ThemeChoicePanel_CustomTheme button):not(.mx_UnpinAllDialog button):not(.mx_ShareDialog button):not(
+        .mx_EncryptionUserSettingsTab button
+    ),
 .mx_Dialog_buttons input[type="submit"].mx_Dialog_primary {
     color: var(--cpd-color-text-on-solid-primary);
     background-color: var(--cpd-color-bg-action-primary-rest);
@@ -650,7 +656,7 @@ legend {
 .mx_Dialog_buttons
     button.danger:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):not(.mx_UserProfileSettings button):not(
         .mx_ThemeChoicePanel_CustomTheme button
-    ):not(.mx_UnpinAllDialog button):not(.mx_ShareDialog button),
+    ):not(.mx_UnpinAllDialog button):not(.mx_ShareDialog button):not(.mx_EncryptionUserSettingsTab button),
 .mx_Dialog_buttons input[type="submit"].danger {
     background-color: var(--cpd-color-bg-critical-primary);
     border: solid 1px var(--cpd-color-bg-critical-primary);
@@ -666,7 +672,9 @@ legend {
 .mx_Dialog
     button:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]):not(.mx_AccessibleButton):not(
         .mx_UserProfileSettings button
-    ):not(.mx_ThemeChoicePanel_CustomTheme button):not(.mx_UnpinAllDialog button):not(.mx_ShareDialog button):disabled,
+    ):not(.mx_ThemeChoicePanel_CustomTheme button):not(.mx_UnpinAllDialog button):not(.mx_ShareDialog button):not(
+        .mx_EncryptionUserSettingsTab button
+    ):disabled,
 .mx_Dialog input[type="submit"]:disabled,
 .mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):disabled,
 .mx_Dialog_buttons input[type="submit"]:disabled {
