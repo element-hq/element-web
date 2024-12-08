@@ -79,13 +79,31 @@ export default class DesktopCapturerSourcePicker extends React.Component<PickerI
     public constructor(props: PickerIProps) {
         super(props);
 
+        if(this.isWayland()){
+            console.log("Running under Wayland");
+        }else {
+            console.log("Not running under Wayland");
+        }
+
         this.state = {
             selectedTab: Tabs.Screens,
             sources: [],
         };
     }
 
+    private isWayland(): boolean {
+        return true;
+        // return process.env.XDG_SESSION_TYPE === 'wayland';
+    }
+
     public async componentDidMount(): Promise<void> {
+        if (this.isWayland()) {
+            const sources = await getDesktopCapturerSources();
+            this.props.onFinished(sources[0]); // Automatically select the first source or handle accordingly
+            return;
+        }
+
+
         // window.setInterval() first waits and then executes, therefore
         // we call getDesktopCapturerSources() here without any delay.
         // Otherwise the dialog would be left empty for some time.
@@ -102,7 +120,9 @@ export default class DesktopCapturerSourcePicker extends React.Component<PickerI
     }
 
     public componentWillUnmount(): void {
-        clearInterval(this.interval);
+        if (!this.isWayland()) {
+            clearInterval(this.interval);
+        }
     }
 
     private onSelect = (source: DesktopCapturerSource): void => {
@@ -139,6 +159,11 @@ export default class DesktopCapturerSourcePicker extends React.Component<PickerI
     }
 
     public render(): React.ReactNode {
+        if (this.isWayland()) {
+            return null; // Render nothing if running under Wayland
+        }
+
+
         const tabs: NonEmptyArray<Tab<Tabs>> = [
             this.getTab(Tabs.Screens, _td("voip|screenshare_monitor")),
             this.getTab(Tabs.Windows, _td("voip|screenshare_window")),
