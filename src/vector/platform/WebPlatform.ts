@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import UAParser from "ua-parser-js";
+import { UAParser } from "ua-parser-js";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
@@ -222,7 +222,7 @@ export default class WebPlatform extends BasePlatform {
             url.pathname.replace(/\/$/, ""), // Remove trailing slash if present
         ].join("");
 
-        const ua = new UAParser();
+        const ua = new UAParser(window.navigator.userAgent);
         const browserName = ua.getBrowser().name || "unknown browser";
         let osName = ua.getOS().name || "unknown OS";
         // Stylise the value from the parser to match Apple's current branding.
