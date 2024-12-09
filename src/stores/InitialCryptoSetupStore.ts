@@ -76,6 +76,8 @@ export class InitialCryptoSetupStore extends EventEmitter {
         this.stores = stores;
         this.onFinished = onFinished;
 
+        // We just start this process: it's progress is tracked by the events rather
+        // than returning a promise, so we don't bother.
         this.doSetup().catch(() => logger.error("Initial crypto setup failed"));
     }
 
