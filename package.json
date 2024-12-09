@@ -146,7 +146,7 @@
         "sanitize-html": "2.13.1",
         "tar-js": "^0.3.0",
         "temporal-polyfill": "^0.2.5",
-        "ua-parser-js": "^1.0.2",
+        "ua-parser-js": "^2.0.0",
         "uuid": "^11.0.0",
         "what-input": "^5.2.10"
     },
@@ -208,7 +208,6 @@
         "@types/sanitize-html": "2.13.0",
         "@types/semver": "^7.5.8",
         "@types/tar-js": "^0.3.5",
-        "@types/ua-parser-js": "^0.7.36",
         "@types/uuid": "^10.0.0",
         "@typescript-eslint/eslint-plugin": "^8.0.0",
         "@typescript-eslint/parser": "^8.0.0",
