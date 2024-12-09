@@ -38,6 +38,9 @@ enum BackupStatus {
     /** there is a backup on the server but we are not backing up to it */
     SERVER_BACKUP_BUT_DISABLED,
 
+    /** Key backup is set up but recovery (4s) is not */
+    BACKUP_NO_RECOVERY,
+
     /** backup is not set up locally and there is no backup on the server */
     NO_BACKUP,
 
@@ -104,7 +107,11 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
         }
 
         if ((await crypto.getActiveSessionBackupVersion()) !== null) {
-            this.setState({ backupStatus: BackupStatus.BACKUP_ACTIVE });
+            if (await crypto.isSecretStorageReady()) {
+                this.setState({ backupStatus: BackupStatus.BACKUP_ACTIVE });
+            } else {
+                this.setState({ backupStatus: BackupStatus.BACKUP_NO_RECOVERY });
+            }
             return;
         }
 
@@ -254,6 +261,7 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
             case BackupStatus.NO_BACKUP:
             case BackupStatus.SERVER_BACKUP_BUT_DISABLED:
             case BackupStatus.ERROR:
+            case BackupStatus.BACKUP_NO_RECOVERY:
                 return this.renderSetupBackupDialog();
         }
     }
