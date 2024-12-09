@@ -155,7 +155,7 @@ async function createDMRoom(client: Client, userId: string): Promise<string> {
     });
 }
 
-/** 
+/**
  * Wait until we get the other user's device keys.
  * In newer rust-crypto versions, the verification request will be ignored if we
  * don't have the sender's device keys.
