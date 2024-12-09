@@ -132,6 +132,7 @@ import { SessionLockStolenView } from "./auth/SessionLockStolenView";
 import { ConfirmSessionLockTheftView } from "./auth/ConfirmSessionLockTheftView";
 import { LoginSplashView } from "./auth/LoginSplashView";
 import { cleanUpDraftsIfRequired } from "../../DraftCleaner";
+import { InitialCryptoSetupStore } from "../../stores/InitialCryptoSetupStore";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -428,6 +429,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             !(await shouldSkipSetupEncryption(cli))
         ) {
             // if cross-signing is not yet set up, do so now if possible.
+            InitialCryptoSetupStore.sharedInstance().startInitialCryptoSetup(
+                cli,
+                Boolean(this.tokenLogin),
+                this.stores,
+                this.onCompleteSecurityE2eSetupFinished,
+            );
             this.setStateForNewView({ view: Views.E2E_SETUP });
         } else {
             this.onLoggedIn();
@@ -2073,14 +2080,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         } else if (this.state.view === Views.COMPLETE_SECURITY) {
             view = <CompleteSecurity onFinished={this.onCompleteSecurityE2eSetupFinished} />;
         } else if (this.state.view === Views.E2E_SETUP) {
-            view = (
-                <E2eSetup
-                    matrixClient={MatrixClientPeg.safeGet()}
-                    onFinished={this.onCompleteSecurityE2eSetupFinished}
-                    accountPassword={this.stores.accountPasswordStore.getPassword()}
-                    tokenLogin={!!this.tokenLogin}
-                />
-            );
+            view = <E2eSetup onFinished={this.onCompleteSecurityE2eSetupFinished} />;
         } else if (this.state.view === Views.LOGGED_IN) {
             // `ready` and `view==LOGGED_IN` may be set before `page_type` (because the
             // latter is set via the dispatcher). If we don't yet have a `page_type`,
