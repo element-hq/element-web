@@ -23,15 +23,19 @@ const getTitle = (kind: Kind): string => {
     switch (kind) {
         case Kind.SET_UP_ENCRYPTION:
             return _t("encryption|set_up_toast_title");
+        case Kind.SET_UP_RECOVERY:
+            return _t("encryption|set_up_recovery");
         case Kind.VERIFY_THIS_SESSION:
             return _t("encryption|verify_toast_title");
     }
 };
 
-const getIcon = (kind: Kind): string => {
+const getIcon = (kind: Kind): string | undefined => {
     switch (kind) {
         case Kind.SET_UP_ENCRYPTION:
             return "secure_backup";
+        case Kind.SET_UP_RECOVERY:
+            return undefined;
         case Kind.VERIFY_THIS_SESSION:
             return "verification_warning";
     }
@@ -41,8 +45,20 @@ const getSetupCaption = (kind: Kind): string => {
     switch (kind) {
         case Kind.SET_UP_ENCRYPTION:
             return _t("action|continue");
+        case Kind.SET_UP_RECOVERY:
+            return _t("action|continue");
         case Kind.VERIFY_THIS_SESSION:
             return _t("action|verify");
+    }
+};
+
+const getSecondaryButtonLabel = (kind: Kind): string => {
+    switch (kind) {
+        case Kind.SET_UP_RECOVERY:
+            return _t("encryption|set_up_recovery_later");
+        case Kind.SET_UP_ENCRYPTION:
+        case Kind.VERIFY_THIS_SESSION:
+            return _t("encryption|verification|unverified_sessions_toast_reject");
     }
 };
 
@@ -50,6 +66,8 @@ const getDescription = (kind: Kind): string => {
     switch (kind) {
         case Kind.SET_UP_ENCRYPTION:
             return _t("encryption|set_up_toast_description");
+        case Kind.SET_UP_RECOVERY:
+            return _t("encryption|set_up_recovery_toast_description");
         case Kind.VERIFY_THIS_SESSION:
             return _t("encryption|verify_toast_description");
     }
@@ -57,6 +75,7 @@ const getDescription = (kind: Kind): string => {
 
 export enum Kind {
     SET_UP_ENCRYPTION = "set_up_encryption",
+    SET_UP_RECOVERY = "set_up_recovery",
     VERIFY_THIS_SESSION = "verify_this_session",
 }
 
@@ -101,9 +120,8 @@ export const showToast = (kind: Kind): void => {
             description: getDescription(kind),
             primaryLabel: getSetupCaption(kind),
             onPrimaryClick: onAccept,
-            secondaryLabel: _t("encryption|verification|unverified_sessions_toast_reject"),
+            secondaryLabel: getSecondaryButtonLabel(kind),
             onSecondaryClick: onReject,
-            destructive: "secondary",
         },
         component: GenericToast,
         priority: kind === Kind.VERIFY_THIS_SESSION ? 95 : 40,
