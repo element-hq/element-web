@@ -116,6 +116,11 @@ export class InitialCryptoSetupStore extends EventEmitter {
         try {
             await createCrossSigning(this.client, this.isTokenLogin, this.stores.accountPasswordStore.getPassword());
 
+            const backupInfo = await cryptoApi.getKeyBackupInfo();
+            if (backupInfo === null) {
+                await cryptoApi.resetKeyBackup();
+            }
+
             this.reset();
 
             this.status = "complete";
