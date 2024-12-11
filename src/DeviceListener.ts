@@ -295,21 +295,29 @@ export default class DeviceListener {
             await crypto.getUserDeviceInfo([cli.getSafeUserId()]);
 
             // cross signing isn't enabled - nag to enable it
-            // There are 2 different toasts for:
+            // There are 3 different toasts for:
             if (!(await crypto.getCrossSigningKeyId()) && (await crypto.userHasCrossSigningKeys())) {
-                // Cross-signing on account but this device doesn't trust the master key (verify this session)
+                // Toast 1. Cross-signing on account but this device doesn't trust the master key (verify this session)
                 showSetupEncryptionToast(SetupKind.VERIFY_THIS_SESSION);
                 this.checkKeyBackupStatus();
             } else {
-                // No cross-signing or key backup on account (set up encryption)
-                await cli.waitForClientWellKnown();
-                if (isSecureBackupRequired(cli) && isLoggedIn()) {
-                    // If we're meant to set up, and Secure Backup is required,
-                    // trigger the flow directly without a toast once logged in.
-                    hideSetupEncryptionToast();
-                    accessSecretStorage();
+                const backupInfo = await this.getKeyBackupInfo();
+                if (backupInfo) {
+                    // Toast 2: Key backup is enabled but recovery (4S) is not set up: prompt user to set up recovery.
+                    // Since we now enable key backup at registration time, this will be the common case for
+                    // new users.
+                    showSetupEncryptionToast(SetupKind.SET_UP_RECOVERY);
                 } else {
-                    showSetupEncryptionToast(SetupKind.SET_UP_ENCRYPTION);
+                    // Toast 3: No cross-signing or key backup on account (set up encryption)
+                    await cli.waitForClientWellKnown();
+                    if (isSecureBackupRequired(cli) && isLoggedIn()) {
+                        // If we're meant to set up, and Secure Backup is required,
+                        // trigger the flow directly without a toast once logged in.
+                        hideSetupEncryptionToast();
+                        accessSecretStorage();
+                    } else {
+                        showSetupEncryptionToast(SetupKind.SET_UP_ENCRYPTION);
+                    }
                 }
             }
         }
