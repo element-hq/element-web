@@ -181,7 +181,7 @@ describe("formatDate", () => {
         // We use en-US for these tests because there was a change in Node 22.12 which removed
         // the comma after the weekday for en-GB which makes the test output different things
         // on different node versions. I'm not sure what a better fix would be, so let's just use
-        // a local that happens to have a more stable formatting right now.
+        // a locale that happens to have a more stable formatting right now.
         expect(formatDate(date, false, "en-US")).toMatchInlineSnapshot(`"19:10"`);
     });
 
