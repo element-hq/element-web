@@ -8,6 +8,7 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
   >
     <div
       class="mx_UserMenu"
+      data-floating-ui-inert=""
     >
       <div
         aria-expanded="false"
@@ -42,6 +43,7 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
     <ul
       aria-label="Spaces"
       class="mx_AutoHideScrollbar mx_SpaceTreeLevel"
+      data-floating-ui-inert=""
       data-rbd-droppable-context-id="0"
       data-rbd-droppable-id="top-level-spaces"
       role="tree"
@@ -236,6 +238,7 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
         aria-label="Threads"
         aria-labelledby=":r14:"
         class="_icon-button_bh2qc_17 mx_ThreadsActivityCentreButton"
+        data-floating-ui-inert=""
         role="button"
         style="--cpd-icon-button-size: 32px;"
         tabindex="0"
@@ -260,6 +263,7 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
       </button>
       <span
         aria-hidden="true"
+        data-floating-ui-inert=""
         style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
         tabindex="-1"
       />
@@ -272,6 +276,7 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
       />
       <span
         aria-owns=":r19:"
+        data-floating-ui-inert=""
         style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
       />
       <span
@@ -286,6 +291,7 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
       aria-expanded="false"
       aria-label="Quick settings"
       class="mx_AccessibleButton mx_QuickSettingsButton"
+      data-floating-ui-inert=""
       role="button"
       tabindex="0"
     />
