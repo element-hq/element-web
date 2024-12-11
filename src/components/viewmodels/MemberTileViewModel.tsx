@@ -30,17 +30,22 @@ import { RoomMember } from "../../models/rooms/RoomMember";
 import { E2EState } from "../views/rooms/E2EIcon";
 import { _t, _td, TranslationKey } from "../../languageHandler";
 import UserIdentifierCustomisations from "../../customisations/UserIdentifier";
+import { ThreePIDInvite } from "../../models/rooms/ThreePIDInvite";
 
-interface IProps {
+interface MemberTileViewModelProps {
     member: RoomMember;
     showPresence?: boolean;
 }
 
-export interface MemberTileViewState extends IProps {
+interface ThreePidTileViewModelProps {
+    threePidInvite: ThreePIDInvite;
+}
+
+export interface MemberTileViewState extends MemberTileViewModelProps {
     e2eStatus?: E2EState;
     name: string;
     onClick: () => void;
-    title: string;
+    title?: string;
     userLabel?: string;
 }
 
@@ -54,7 +59,28 @@ const PowerLabel: Record<PowerStatus, TranslationKey> = {
     [PowerStatus.Moderator]: _td("power_level|mod"),
 };
 
-export default function useMemberTileViewModel(props: IProps): MemberTileViewState {
+export interface ThreePidTileViewState {
+    name: string;
+    onClick: () => void;
+}
+
+export function useThreePidTileViewModel(props: ThreePidTileViewModelProps): ThreePidTileViewState {
+    const invite = props.threePidInvite;
+    const name = invite.displayName;
+    const onClick = (): void => {
+        dis.dispatch({
+            action: Action.View3pidInvite,
+            event: invite.event,
+        });
+    };
+
+    return {
+        name,
+        onClick,
+    };
+}
+
+export function useMemberTileViewModel(props: MemberTileViewModelProps): MemberTileViewState {
     const [e2eStatus, setE2eStatus] = useState<E2EState | undefined>();
 
     useEffect(() => {

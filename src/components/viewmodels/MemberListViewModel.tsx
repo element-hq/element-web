@@ -43,8 +43,39 @@ import PosthogTrackers from "../../PosthogTrackers";
 import { ButtonEvent } from "../views/elements/AccessibleButton";
 import { inviteToRoom } from "../../utils/room/inviteToRoom";
 import { canInviteTo } from "../../utils/room/canInviteTo";
+import { isValid3pidInvite } from "../../RoomInvite";
+import { ThreePIDInvite } from "../../models/rooms/ThreePIDInvite";
+import { XOR } from "../../@types/common";
 
-function sdkRoomMemberToRoomMember(member: SDKRoomMember): RoomMember {
+type Member = XOR<{ member: RoomMember }, { threePidInvite: ThreePIDInvite }>;
+
+function getPending3PidInvites(room: Room, searchQuery?: string): Member[] {
+    // include 3pid invites (m.room.third_party_invite) state events.
+    // The HS may have already converted these into m.room.member invites so
+    // we shouldn't add them if the 3pid invite state key (token) is in the
+    // member invite (content.third_party_invite.signed.token)
+    const inviteEvents = room.currentState.getStateEvents("m.room.third_party_invite").filter(function (e) {
+        if (!isValid3pidInvite(e)) return false;
+        if (searchQuery && !(e.getContent().display_name as string)?.includes(searchQuery)) return false;
+
+        // discard all invites which have a m.room.member event since we've
+        // already added them.
+        const memberEvent = room.currentState.getInviteForThreePidToken(e.getStateKey()!);
+        if (memberEvent) return false;
+        return true;
+    });
+    const invites: Member[] = inviteEvents.map((e) => {
+        return {
+            threePidInvite: {
+                displayName: e.getContent().display_name,
+                event: e,
+            },
+        };
+    });
+    return invites;
+}
+
+function sdkRoomMemberToRoomMember(member: SDKRoomMember): Member {
     const displayUserId =
         UserIdentifierCustomisations.getDisplayUserIdentifier(member.userId, {
             roomId: member.roomId,
@@ -61,22 +92,24 @@ function sdkRoomMemberToRoomMember(member: SDKRoomMember): RoomMember {
     }
 
     return {
-        roomId: member.roomId,
-        userId: member.userId,
-        displayUserId: displayUserId,
-        name: member.name,
-        rawDisplayName: member.rawDisplayName,
-        disambiguate: member.disambiguate,
-        avatarThumbnailUrl: avatarThumbnailUrl,
-        powerLevel: member.powerLevel,
-        lastModifiedTime: member.getLastModifiedTime(),
-        presenceState,
-        isInvite: member.membership === KnownMembership.Invite,
+        member: {
+            roomId: member.roomId,
+            userId: member.userId,
+            displayUserId: displayUserId,
+            name: member.name,
+            rawDisplayName: member.rawDisplayName,
+            disambiguate: member.disambiguate,
+            avatarThumbnailUrl: avatarThumbnailUrl,
+            powerLevel: member.powerLevel,
+            lastModifiedTime: member.getLastModifiedTime(),
+            presenceState,
+            isInvite: member.membership === KnownMembership.Invite,
+        },
     };
 }
 
 export interface MemberListViewState {
-    members: RoomMember[];
+    members: Member[];
     memberCount: number;
     search: (searchQuery: string) => void;
     isPresenceEnabled: boolean;
@@ -85,7 +118,6 @@ export interface MemberListViewState {
     canInvite: boolean;
     onInviteButtonClick: (ev: ButtonEvent) => void;
 }
-
 export function useMemberListViewModel(roomId: string): MemberListViewState {
     const cli = useMatrixClientContext();
     const room = useMemo(() => cli.getRoom(roomId), [roomId, cli]);
@@ -93,7 +125,7 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
         throw new Error(`Room with id ${roomId} does not exist!`);
     }
     const sdkContext = useContext(SDKContext);
-    const [members, setMembers] = useState<RoomMember[]>([]);
+    const [members, setMembers] = useState<Member[]>([]);
     const [memberCount, setMemberCount] = useState<number>(0);
     const searchQuery = useRef("");
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -108,13 +140,16 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
                     );
                     const joined = joinedSdk.map(sdkRoomMemberToRoomMember);
                     const invited = invitedSdk.map(sdkRoomMemberToRoomMember);
-                    setMembers([...invited, ...joined]);
-                    if (!searchQuery.current) setMemberCount(joined.length);
+                    const threePidInvited = getPending3PidInvites(room, searchQuery.current);
+                    const newMembers = [...invited, ...threePidInvited, ...joined];
+                    setMembers(newMembers);
+                    if (!searchQuery.current) setMemberCount(newMembers.length);
                 },
                 500,
                 { leading: true, trailing: true },
             ),
-        [roomId, sdkContext.memberListStore],
+        //todo: can we remove room here?
+        [roomId, sdkContext.memberListStore, room],
     );
 
     const search = useCallback(

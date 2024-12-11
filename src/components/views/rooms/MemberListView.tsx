@@ -21,7 +21,7 @@ import { AutoSizer } from "react-virtualized";
 
 import { Flex } from "../../utils/Flex";
 import { useMemberListViewModel } from "../../viewmodels/MemberListViewModel";
-import MemberTileNext from "./MemberTileView";
+import { RoomMemberTileView, ThreePidInviteTileView } from "./MemberTileView";
 import MemberListHeaderView from "./MemberListHeaderView";
 import BaseCard from "../right_panel/BaseCard";
 import { _t } from "../../../languageHandler";
@@ -35,10 +35,14 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
     const vm = useMemberListViewModel(props.roomId);
 
     const rowRenderer = ({ key, index, style }: ListRowProps): React.JSX.Element => {
-        const member = vm.members[index];
+        const item = vm.members[index];
         return (
             <div key={key} style={style}>
-                <MemberTileNext member={member} showPresence={false} />
+                {item.member ? (
+                    <RoomMemberTileView member={item.member} showPresence={vm.isPresenceEnabled} />
+                ) : (
+                    <ThreePidInviteTileView threePidInvite={item.threePidInvite} />
+                )}
             </div>
         );
     };
