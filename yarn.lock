@@ -1584,10 +1584,10 @@
   dependencies:
     "@floating-ui/dom" "^1.0.0"
 
-"@floating-ui/react@^0.26.24":
-  version "0.26.25"
-  resolved "https://registry.yarnpkg.com/@floating-ui/react/-/react-0.26.25.tgz#cf4c8a2b89fab1a71712d15e6551df3bfbd2ea1d"
-  integrity sha512-hZOmgN0NTOzOuZxI1oIrDu3Gcl8WViIkvPMpB4xdd4QD6xAMtwgwr3VPoiyH/bLtRcS1cDnhxLSD1NsMJmwh/A==
+"@floating-ui/react@^0.27.0":
+  version "0.27.0"
+  resolved "https://registry.yarnpkg.com/@floating-ui/react/-/react-0.27.0.tgz#e0931fd09374ab4b8ce1a1af5cb44d1ccd1bb95a"
+  integrity sha512-WLEksq7fJapXSJbmfiyq9pAW0a7ZFMEJToFE4oTDESxGjoa+nZu3YMjmZE2KvoUtQhqOK2yMMfWQFZyeWD0wGQ==
   dependencies:
     "@floating-ui/react-dom" "^2.1.2"
     "@floating-ui/utils" "^0.2.8"
@@ -3401,12 +3401,12 @@
   resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-2.1.1.tgz#d6175a99fe4b97688464126f255386990f3048d6"
   integrity sha512-QnUi2K14D9KTXxcLQKUU3V75cforZLMwhaaJDNftT8F5mG86950hAM+qhgDNEpEU+pkTffQj0/g/5859YmqWzQ==
 
-"@vector-im/compound-web@^7.4.0":
-  version "7.4.0"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-7.4.0.tgz#a5af8af6346f8ff6c14c70f5d4eb2eab7357a7cc"
-  integrity sha512-ZRBUeEGNmj/fTkIRa8zGnyVN7ytowpfOtHChqNm+m/+OTJN3o/lOMuQHDV8jeSEW2YwPJqGvPuG/dRr89IcQkA==
+"@vector-im/compound-web@^7.5.0":
+  version "7.5.0"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-7.5.0.tgz#1547af5f0ee27b94f79ab11eee006059f3d09707"
+  integrity sha512-Xhef8H5WrRmPuanzRBs8rnl+hwbcQnC7nKSCupUczAQ5hjlieBx4vcQYQ/nMkrs4rMGjgfFtR3E18wT5LlML/A==
   dependencies:
-    "@floating-ui/react" "^0.26.24"
+    "@floating-ui/react" "^0.27.0"
     "@radix-ui/react-context-menu" "^2.2.1"
     "@radix-ui/react-dropdown-menu" "^2.1.1"
     "@radix-ui/react-form" "^0.1.0"
