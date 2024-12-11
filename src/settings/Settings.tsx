@@ -86,7 +86,6 @@ export enum LabGroup {
 
 export enum Features {
     NotificationSettings2 = "feature_notification_settings2",
-    OidcNativeFlow = "feature_oidc_native_flow",
     ReleaseAnnouncement = "feature_release_announcement",
 }
 
@@ -436,15 +435,6 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         displayName: _td("labs|dynamic_room_predecessors"),
         description: _td("labs|dynamic_room_predecessors_description"),
         shouldWarn: true,
-        default: false,
-    },
-    [Features.OidcNativeFlow]: {
-        isFeature: true,
-        labsGroup: LabGroup.Developer,
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
-        displayName: _td("labs|oidc_native_flow"),
-        description: _td("labs|oidc_native_flow_description"),
         default: false,
     },
     /**
