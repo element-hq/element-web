@@ -44,6 +44,7 @@ import { IConfigOptions } from "../IConfigOptions";
 import { MatrixDispatcher } from "../dispatcher/dispatcher";
 import { DeepReadonly } from "./common";
 import MatrixChat from "../components/structures/MatrixChat";
+import { InitialCryptoSetupStore } from "../stores/InitialCryptoSetupStore";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -117,6 +118,7 @@ declare global {
         mxPerformanceEntryNames: any;
         mxUIStore: UIStore;
         mxSetupEncryptionStore?: SetupEncryptionStore;
+        mxInitialCryptoStore?: InitialCryptoSetupStore;
         mxRoomScrollStateStore?: RoomScrollStateStore;
         mxActiveWidgetStore?: ActiveWidgetStore;
         mxOnRecaptchaLoaded?: () => void;
