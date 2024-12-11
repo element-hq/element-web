@@ -19,13 +19,13 @@ exports[`<ThemeChoicePanel /> custom theme should display custom theme 1`] = `
       class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
     >
       <form
-        class="_root_dgy0u_24"
+        class="_root_ssths_24"
       >
         <div
-          class="_inline-field_dgy0u_40"
+          class="_inline-field_ssths_40"
         >
           <div
-            class="_inline-field-control_dgy0u_52"
+            class="_inline-field-control_ssths_52"
           >
             <div
               class="_container_qnvru_18"
@@ -43,10 +43,10 @@ exports[`<ThemeChoicePanel /> custom theme should display custom theme 1`] = `
             </div>
           </div>
           <div
-            class="_inline-field-body_dgy0u_46"
+            class="_inline-field-body_ssths_46"
           >
             <label
-              class="_label_dgy0u_67"
+              class="_label_ssths_67"
               for="radix-:r28:"
             >
               Match system theme
@@ -55,13 +55,13 @@ exports[`<ThemeChoicePanel /> custom theme should display custom theme 1`] = `
         </div>
       </form>
       <form
-        class="_root_dgy0u_24 mx_ThemeChoicePanel_ThemeSelectors"
+        class="_root_ssths_24 mx_ThemeChoicePanel_ThemeSelectors"
       >
         <div
-          class="_inline-field_dgy0u_40 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_enabled cpd-theme-light"
+          class="_inline-field_ssths_40 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_enabled cpd-theme-light"
         >
           <div
-            class="_inline-field-control_dgy0u_52"
+            class="_inline-field-control_ssths_52"
           >
             <div
               class="_container_1vw5h_18"
@@ -81,10 +81,10 @@ exports[`<ThemeChoicePanel /> custom theme should display custom theme 1`] = `
             </div>
           </div>
           <div
-            class="_inline-field-body_dgy0u_46"
+            class="_inline-field-body_ssths_46"
           >
             <label
-              class="_label_dgy0u_67 mx_ThemeChoicePanel_themeSelector_Label"
+              class="_label_ssths_67 mx_ThemeChoicePanel_themeSelector_Label"
               for="radix-:r29:"
             >
               Light
@@ -92,10 +92,10 @@ exports[`<ThemeChoicePanel /> custom theme should display custom theme 1`] = `
           </div>
         </div>
         <div
-          class="_inline-field_dgy0u_40 mx_ThemeChoicePanel_themeSelector cpd-theme-dark"
+          class="_inline-field_ssths_40 mx_ThemeChoicePanel_themeSelector cpd-theme-dark"
         >
           <div
-            class="_inline-field-control_dgy0u_52"
+            class="_inline-field-control_ssths_52"
           >
             <div
               class="_container_1vw5h_18"
@@ -114,10 +114,10 @@ exports[`<ThemeChoicePanel /> custom theme should display custom theme 1`] = `
             </div>
           </div>
           <div
-            class="_inline-field-body_dgy0u_46"
+            class="_inline-field-body_ssths_46"
           >
             <label
-              class="_label_dgy0u_67 mx_ThemeChoicePanel_themeSelector_Label"
+              class="_label_ssths_67 mx_ThemeChoicePanel_themeSelector_Label"
               for="radix-:r2a:"
             >
               Dark
@@ -125,10 +125,10 @@ exports[`<ThemeChoicePanel /> custom theme should display custom theme 1`] = `
           </div>
         </div>
         <div
-          class="_inline-field_dgy0u_40 mx_ThemeChoicePanel_themeSelector cpd-theme-light"
+          class="_inline-field_ssths_40 mx_ThemeChoicePanel_themeSelector cpd-theme-light"
         >
           <div
-            class="_inline-field-control_dgy0u_52"
+            class="_inline-field-control_ssths_52"
           >
             <div
               class="_container_1vw5h_18"
@@ -147,10 +147,10 @@ exports[`<ThemeChoicePanel /> custom theme should display custom theme 1`] = `
             </div>
           </div>
           <div
-            class="_inline-field-body_dgy0u_46"
+            class="_inline-field-body_ssths_46"
           >
             <label
-              class="_label_dgy0u_67 mx_ThemeChoicePanel_themeSelector_Label"
+              class="_label_ssths_67 mx_ThemeChoicePanel_themeSelector_Label"
               for="radix-:r2b:"
             >
               High contrast
@@ -158,10 +158,10 @@ exports[`<ThemeChoicePanel /> custom theme should display custom theme 1`] = `
           </div>
         </div>
         <div
-          class="_inline-field_dgy0u_40 mx_ThemeChoicePanel_themeSelector cpd-theme-dark"
+          class="_inline-field_ssths_40 mx_ThemeChoicePanel_themeSelector cpd-theme-dark"
         >
           <div
-            class="_inline-field-control_dgy0u_52"
+            class="_inline-field-control_ssths_52"
           >
             <div
               class="_container_1vw5h_18"
@@ -180,10 +180,10 @@ exports[`<ThemeChoicePanel /> custom theme should display custom theme 1`] = `
             </div>
           </div>
           <div
-            class="_inline-field-body_dgy0u_46"
+            class="_inline-field-body_ssths_46"
           >
             <label
-              class="_label_dgy0u_67 mx_ThemeChoicePanel_themeSelector_Label"
+              class="_label_ssths_67 mx_ThemeChoicePanel_themeSelector_Label"
               for="radix-:r2c:"
             >
               Alice theme
@@ -195,13 +195,13 @@ exports[`<ThemeChoicePanel /> custom theme should display custom theme 1`] = `
         class="mx_ThemeChoicePanel_CustomTheme"
       >
         <form
-          class="_root_dgy0u_24 mx_ThemeChoicePanel_CustomTheme_EditInPlace"
+          class="_root_ssths_24 mx_ThemeChoicePanel_CustomTheme_EditInPlace"
         >
           <div
-            class="_field_dgy0u_34"
+            class="_field_ssths_34"
           >
             <label
-              class="_label_dgy0u_67"
+              class="_label_ssths_67"
               for="radix-:r2d:"
             >
               Add custom theme
@@ -219,7 +219,7 @@ exports[`<ThemeChoicePanel /> custom theme should display custom theme 1`] = `
               />
             </div>
             <span
-              class="_message_dgy0u_98 _help-message_dgy0u_104"
+              class="_message_ssths_93 _help-message_ssths_99"
               id="radix-:r2e:"
             >
               Enter the URL of a custom theme you want to apply.
@@ -296,13 +296,13 @@ exports[`<ThemeChoicePanel /> custom theme should render the custom theme sectio
       class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
     >
       <form
-        class="_root_dgy0u_24"
+        class="_root_ssths_24"
       >
         <div
-          class="_inline-field_dgy0u_40"
+          class="_inline-field_ssths_40"
         >
           <div
-            class="_inline-field-control_dgy0u_52"
+            class="_inline-field-control_ssths_52"
           >
             <div
               class="_container_qnvru_18"
@@ -320,10 +320,10 @@ exports[`<ThemeChoicePanel /> custom theme should render the custom theme sectio
             </div>
           </div>
           <div
-            class="_inline-field-body_dgy0u_46"
+            class="_inline-field-body_ssths_46"
           >
             <label
-              class="_label_dgy0u_67"
+              class="_label_ssths_67"
               for="radix-:r10:"
             >
               Match system theme
@@ -332,13 +332,13 @@ exports[`<ThemeChoicePanel /> custom theme should render the custom theme sectio
         </div>
       </form>
       <form
-        class="_root_dgy0u_24 mx_ThemeChoicePanel_ThemeSelectors"
+        class="_root_ssths_24 mx_ThemeChoicePanel_ThemeSelectors"
       >
         <div
-          class="_inline-field_dgy0u_40 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_enabled cpd-theme-light"
+          class="_inline-field_ssths_40 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_enabled cpd-theme-light"
         >
           <div
-            class="_inline-field-control_dgy0u_52"
+            class="_inline-field-control_ssths_52"
           >
             <div
               class="_container_1vw5h_18"
@@ -358,10 +358,10 @@ exports[`<ThemeChoicePanel /> custom theme should render the custom theme sectio
             </div>
           </div>
           <div
-            class="_inline-field-body_dgy0u_46"
+            class="_inline-field-body_ssths_46"
           >
             <label
-              class="_label_dgy0u_67 mx_ThemeChoicePanel_themeSelector_Label"
+              class="_label_ssths_67 mx_ThemeChoicePanel_themeSelector_Label"
               for="radix-:r11:"
             >
               Light
@@ -369,10 +369,10 @@ exports[`<ThemeChoicePanel /> custom theme should render the custom theme sectio
           </div>
         </div>
         <div
-          class="_inline-field_dgy0u_40 mx_ThemeChoicePanel_themeSelector cpd-theme-dark"
+          class="_inline-field_ssths_40 mx_ThemeChoicePanel_themeSelector cpd-theme-dark"
         >
           <div
-            class="_inline-field-control_dgy0u_52"
+            class="_inline-field-control_ssths_52"
           >
             <div
               class="_container_1vw5h_18"
@@ -391,10 +391,10 @@ exports[`<ThemeChoicePanel /> custom theme should render the custom theme sectio
             </div>
           </div>
           <div
-            class="_inline-field-body_dgy0u_46"
+            class="_inline-field-body_ssths_46"
           >
             <label
-              class="_label_dgy0u_67 mx_ThemeChoicePanel_themeSelector_Label"
+              class="_label_ssths_67 mx_ThemeChoicePanel_themeSelector_Label"
               for="radix-:r12:"
             >
               Dark
@@ -402,10 +402,10 @@ exports[`<ThemeChoicePanel /> custom theme should render the custom theme sectio
           </div>
         </div>
         <div
-          class="_inline-field_dgy0u_40 mx_ThemeChoicePanel_themeSelector cpd-theme-light"
+          class="_inline-field_ssths_40 mx_ThemeChoicePanel_themeSelector cpd-theme-light"
         >
           <div
-            class="_inline-field-control_dgy0u_52"
+            class="_inline-field-control_ssths_52"
           >
             <div
               class="_container_1vw5h_18"
@@ -424,10 +424,10 @@ exports[`<ThemeChoicePanel /> custom theme should render the custom theme sectio
             </div>
           </div>
           <div
-            class="_inline-field-body_dgy0u_46"
+            class="_inline-field-body_ssths_46"
           >
             <label
-              class="_label_dgy0u_67 mx_ThemeChoicePanel_themeSelector_Label"
+              class="_label_ssths_67 mx_ThemeChoicePanel_themeSelector_Label"
               for="radix-:r13:"
             >
               High contrast
@@ -435,10 +435,10 @@ exports[`<ThemeChoicePanel /> custom theme should render the custom theme sectio
           </div>
         </div>
         <div
-          class="_inline-field_dgy0u_40 mx_ThemeChoicePanel_themeSelector cpd-theme-dark"
+          class="_inline-field_ssths_40 mx_ThemeChoicePanel_themeSelector cpd-theme-dark"
         >
           <div
-            class="_inline-field-control_dgy0u_52"
+            class="_inline-field-control_ssths_52"
           >
             <div
               class="_container_1vw5h_18"
@@ -457,10 +457,10 @@ exports[`<ThemeChoicePanel /> custom theme should render the custom theme sectio
             </div>
           </div>
           <div
-            class="_inline-field-body_dgy0u_46"
+            class="_inline-field-body_ssths_46"
           >
             <label
-              class="_label_dgy0u_67 mx_ThemeChoicePanel_themeSelector_Label"
+              class="_label_ssths_67 mx_ThemeChoicePanel_themeSelector_Label"
               for="radix-:r14:"
             >
               Alice theme
@@ -472,13 +472,13 @@ exports[`<ThemeChoicePanel /> custom theme should render the custom theme sectio
         class="mx_ThemeChoicePanel_CustomTheme"
       >
         <form
-          class="_root_dgy0u_24 mx_ThemeChoicePanel_CustomTheme_EditInPlace"
+          class="_root_ssths_24 mx_ThemeChoicePanel_CustomTheme_EditInPlace"
         >
           <div
-            class="_field_dgy0u_34"
+            class="_field_ssths_34"
           >
             <label
-              class="_label_dgy0u_67"
+              class="_label_ssths_67"
               for="radix-:r15:"
             >
               Add custom theme
@@ -496,7 +496,7 @@ exports[`<ThemeChoicePanel /> custom theme should render the custom theme sectio
               />
             </div>
             <span
-              class="_message_dgy0u_98 _help-message_dgy0u_104"
+              class="_message_ssths_93 _help-message_ssths_99"
               id="radix-:r16:"
             >
               Enter the URL of a custom theme you want to apply.
@@ -573,13 +573,13 @@ exports[`<ThemeChoicePanel /> renders the theme choice UI 1`] = `
       class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
     >
       <form
-        class="_root_dgy0u_24"
+        class="_root_ssths_24"
       >
         <div
-          class="_inline-field_dgy0u_40"
+          class="_inline-field_ssths_40"
         >
           <div
-            class="_inline-field-control_dgy0u_52"
+            class="_inline-field-control_ssths_52"
           >
             <div
               class="_container_qnvru_18"
@@ -597,10 +597,10 @@ exports[`<ThemeChoicePanel /> renders the theme choice UI 1`] = `
             </div>
           </div>
           <div
-            class="_inline-field-body_dgy0u_46"
+            class="_inline-field-body_ssths_46"
           >
             <label
-              class="_label_dgy0u_67"
+              class="_label_ssths_67"
               for="radix-:r0:"
             >
               Match system theme
@@ -609,13 +609,13 @@ exports[`<ThemeChoicePanel /> renders the theme choice UI 1`] = `
         </div>
       </form>
       <form
-        class="_root_dgy0u_24 mx_ThemeChoicePanel_ThemeSelectors"
+        class="_root_ssths_24 mx_ThemeChoicePanel_ThemeSelectors"
       >
         <div
-          class="_inline-field_dgy0u_40 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_enabled cpd-theme-light"
+          class="_inline-field_ssths_40 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_enabled cpd-theme-light"
         >
           <div
-            class="_inline-field-control_dgy0u_52"
+            class="_inline-field-control_ssths_52"
           >
             <div
               class="_container_1vw5h_18"
@@ -635,10 +635,10 @@ exports[`<ThemeChoicePanel /> renders the theme choice UI 1`] = `
             </div>
           </div>
           <div
-            class="_inline-field-body_dgy0u_46"
+            class="_inline-field-body_ssths_46"
           >
             <label
-              class="_label_dgy0u_67 mx_ThemeChoicePanel_themeSelector_Label"
+              class="_label_ssths_67 mx_ThemeChoicePanel_themeSelector_Label"
               for="radix-:r1:"
             >
               Light
@@ -646,10 +646,10 @@ exports[`<ThemeChoicePanel /> renders the theme choice UI 1`] = `
           </div>
         </div>
         <div
-          class="_inline-field_dgy0u_40 mx_ThemeChoicePanel_themeSelector cpd-theme-dark"
+          class="_inline-field_ssths_40 mx_ThemeChoicePanel_themeSelector cpd-theme-dark"
         >
           <div
-            class="_inline-field-control_dgy0u_52"
+            class="_inline-field-control_ssths_52"
           >
             <div
               class="_container_1vw5h_18"
@@ -668,10 +668,10 @@ exports[`<ThemeChoicePanel /> renders the theme choice UI 1`] = `
             </div>
           </div>
           <div
-            class="_inline-field-body_dgy0u_46"
+            class="_inline-field-body_ssths_46"
           >
             <label
-              class="_label_dgy0u_67 mx_ThemeChoicePanel_themeSelector_Label"
+              class="_label_ssths_67 mx_ThemeChoicePanel_themeSelector_Label"
               for="radix-:r2:"
             >
               Dark
@@ -679,10 +679,10 @@ exports[`<ThemeChoicePanel /> renders the theme choice UI 1`] = `
           </div>
         </div>
         <div
-          class="_inline-field_dgy0u_40 mx_ThemeChoicePanel_themeSelector cpd-theme-light"
+          class="_inline-field_ssths_40 mx_ThemeChoicePanel_themeSelector cpd-theme-light"
         >
           <div
-            class="_inline-field-control_dgy0u_52"
+            class="_inline-field-control_ssths_52"
           >
             <div
               class="_container_1vw5h_18"
@@ -701,10 +701,10 @@ exports[`<ThemeChoicePanel /> renders the theme choice UI 1`] = `
             </div>
           </div>
           <div
-            class="_inline-field-body_dgy0u_46"
+            class="_inline-field-body_ssths_46"
           >
             <label
-              class="_label_dgy0u_67 mx_ThemeChoicePanel_themeSelector_Label"
+              class="_label_ssths_67 mx_ThemeChoicePanel_themeSelector_Label"
               for="radix-:r3:"
             >
               High contrast

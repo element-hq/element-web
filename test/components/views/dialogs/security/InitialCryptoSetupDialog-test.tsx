@@ -7,31 +7,22 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, screen, waitFor } from "jest-matrix-react";
-import { mocked } from "jest-mock";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { render, screen } from "jest-matrix-react";
+import userEvent from "@testing-library/user-event";
 
-import { createCrossSigning } from "../../../../../src/CreateCrossSigning";
 import { InitialCryptoSetupDialog } from "../../../../../src/components/views/dialogs/security/InitialCryptoSetupDialog";
-import { createTestClient } from "../../../../test-utils";
-
-jest.mock("../../../../../src/CreateCrossSigning", () => ({
-    createCrossSigning: jest.fn(),
-}));
+import { InitialCryptoSetupStore } from "../../../../../src/stores/InitialCryptoSetupStore";
 
 describe("InitialCryptoSetupDialog", () => {
-    let client: MatrixClient;
-    let createCrossSigningResolve: () => void;
-    let createCrossSigningReject: (e: Error) => void;
+    const storeMock = {
+        getStatus: jest.fn(),
+        retry: jest.fn(),
+        on: jest.fn(),
+        off: jest.fn(),
+    };
 
     beforeEach(() => {
-        client = createTestClient();
-        mocked(createCrossSigning).mockImplementation(() => {
-            return new Promise((resolve, reject) => {
-                createCrossSigningResolve = resolve;
-                createCrossSigningReject = reject;
-            });
-        });
+        jest.spyOn(InitialCryptoSetupStore, "sharedInstance").mockReturnValue(storeMock as any);
     });
 
     afterEach(() => {
@@ -39,93 +30,32 @@ describe("InitialCryptoSetupDialog", () => {
         jest.restoreAllMocks();
     });
 
-    it("should call createCrossSigning and show a spinner while it runs", async () => {
+    it("should show a spinner while the setup is in progress", async () => {
         const onFinished = jest.fn();
 
-        render(
-            <InitialCryptoSetupDialog
-                matrixClient={client}
-                accountPassword="hunter2"
-                tokenLogin={false}
-                onFinished={onFinished}
-            />,
-        );
+        storeMock.getStatus.mockReturnValue("in_progress");
 
-        expect(createCrossSigning).toHaveBeenCalledWith(client, false, "hunter2");
+        render(<InitialCryptoSetupDialog onFinished={onFinished} />);
+
         expect(screen.getByTestId("spinner")).toBeInTheDocument();
-
-        createCrossSigningResolve!();
-
-        await waitFor(() => expect(onFinished).toHaveBeenCalledWith(true));
     });
 
-    it("should display an error if createCrossSigning fails", async () => {
-        render(
-            <InitialCryptoSetupDialog
-                matrixClient={client}
-                accountPassword="hunter2"
-                tokenLogin={false}
-                onFinished={jest.fn()}
-            />,
-        );
+    it("should display an error if setup has failed", async () => {
+        storeMock.getStatus.mockReturnValue("error");
 
-        createCrossSigningReject!(new Error("generic error message"));
+        render(<InitialCryptoSetupDialog onFinished={jest.fn()} />);
 
         await expect(await screen.findByRole("button", { name: "Retry" })).toBeInTheDocument();
     });
 
-    it("ignores failures when tokenLogin is true", async () => {
+    it("calls retry when retry button pressed", async () => {
         const onFinished = jest.fn();
+        storeMock.getStatus.mockReturnValue("error");
 
-        render(
-            <InitialCryptoSetupDialog
-                matrixClient={client}
-                accountPassword="hunter2"
-                tokenLogin={true}
-                onFinished={onFinished}
-            />,
-        );
+        render(<InitialCryptoSetupDialog onFinished={onFinished} />);
 
-        createCrossSigningReject!(new Error("generic error message"));
+        await userEvent.click(await screen.findByRole("button", { name: "Retry" }));
 
-        await waitFor(() => expect(onFinished).toHaveBeenCalledWith(false));
-    });
-
-    it("cancels the dialog when the cancel button is clicked", async () => {
-        const onFinished = jest.fn();
-
-        render(
-            <InitialCryptoSetupDialog
-                matrixClient={client}
-                accountPassword="hunter2"
-                tokenLogin={false}
-                onFinished={onFinished}
-            />,
-        );
-
-        createCrossSigningReject!(new Error("generic error message"));
-
-        const cancelButton = await screen.findByRole("button", { name: "Cancel" });
-        cancelButton.click();
-
-        expect(onFinished).toHaveBeenCalledWith(false);
-    });
-
-    it("should retry when the retry button is clicked", async () => {
-        render(
-            <InitialCryptoSetupDialog
-                matrixClient={client}
-                accountPassword="hunter2"
-                tokenLogin={false}
-                onFinished={jest.fn()}
-            />,
-        );
-
-        createCrossSigningReject!(new Error("generic error message"));
-
-        const retryButton = await screen.findByRole("button", { name: "Retry" });
-        retryButton.click();
-
-        expect(createCrossSigning).toHaveBeenCalledTimes(2);
+        expect(storeMock.retry).toHaveBeenCalled();
     });
 });

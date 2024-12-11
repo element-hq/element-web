@@ -7,20 +7,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useCallback, useEffect, useState } from "react";
-import { logger } from "matrix-js-sdk/src/logger";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import React, { useCallback } from "react";
 
 import { _t } from "../../../../languageHandler";
 import DialogButtons from "../../elements/DialogButtons";
 import BaseDialog from "../BaseDialog";
 import Spinner from "../../elements/Spinner";
-import { createCrossSigning } from "../../../../CreateCrossSigning";
+import { InitialCryptoSetupStore, useInitialCryptoSetupStatus } from "../../../../stores/InitialCryptoSetupStore";
 
 interface Props {
-    matrixClient: MatrixClient;
-    accountPassword?: string;
-    tokenLogin: boolean;
     onFinished: (success?: boolean) => void;
 }
 
@@ -29,54 +24,27 @@ interface Props {
  * In most cases, only a spinner is shown, but for more
  * complex auth like SSO, the user may need to complete some steps to proceed.
  */
-export const InitialCryptoSetupDialog: React.FC<Props> = ({
-    matrixClient,
-    accountPassword,
-    tokenLogin,
-    onFinished,
-}) => {
-    const [error, setError] = useState(false);
+export const InitialCryptoSetupDialog: React.FC<Props> = ({ onFinished }) => {
+    const onRetryClick = useCallback(() => {
+        InitialCryptoSetupStore.sharedInstance().retry();
+    }, []);
 
-    const doSetup = useCallback(async () => {
-        const cryptoApi = matrixClient.getCrypto();
-        if (!cryptoApi) return;
-
-        setError(false);
-
-        try {
-            await createCrossSigning(matrixClient, tokenLogin, accountPassword);
-
-            onFinished(true);
-        } catch (e) {
-            if (tokenLogin) {
-                // ignore any failures, we are relying on grace period here
-                onFinished(false);
-                return;
-            }
-
-            setError(true);
-            logger.error("Error bootstrapping cross-signing", e);
-        }
-    }, [matrixClient, tokenLogin, accountPassword, onFinished]);
-
-    const onCancel = useCallback(() => {
+    const onCancelClick = useCallback(() => {
         onFinished(false);
     }, [onFinished]);
 
-    useEffect(() => {
-        doSetup();
-    }, [doSetup]);
+    const status = useInitialCryptoSetupStatus(InitialCryptoSetupStore.sharedInstance());
 
     let content;
-    if (error) {
+    if (status === "error") {
         content = (
             <div>
                 <p>{_t("encryption|unable_to_setup_keys_error")}</p>
                 <div className="mx_Dialog_buttons">
                     <DialogButtons
                         primaryButton={_t("action|retry")}
-                        onPrimaryButtonClick={doSetup}
-                        onCancel={onCancel}
+                        onPrimaryButtonClick={onRetryClick}
+                        onCancel={onCancelClick}
                     />
                 </div>
             </div>
