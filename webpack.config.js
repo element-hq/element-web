@@ -120,6 +120,10 @@ module.exports = (env, argv) => {
     return {
         ...development,
 
+        experiments: {
+            asyncWebAssembly: true,
+        },
+
         bail: true,
 
         entry: {
@@ -222,6 +226,16 @@ module.exports = (env, argv) => {
                 // Polyfill needed by sentry
                 "process/browser": require.resolve("process/browser"),
             },
+
+            // Enable the custom "wasm-esm" export condition [1] to indicate to
+            // matrix-sdk-crypto-wasm that we support the ES Module Integration
+            // Proposal for WebAssembly [2].  The "..." magic value means "the
+            // default conditions" [3].
+            //
+            // [1]: https://nodejs.org/api/packages.html#conditional-exports
+            // [2]: https://github.com/webassembly/esm-integration
+            // [3]: https://github.com/webpack/webpack/issues/17692#issuecomment-1866272674.
+            conditionNames: ["matrix-org:wasm-esm", "..."],
         },
 
         // Some of our deps have broken source maps, so we have to ignore warnings or exclude them one-by-one
@@ -681,13 +695,21 @@ module.exports = (env, argv) => {
         output: {
             path: path.join(__dirname, "webapp"),
 
-            // The generated JS (and CSS, from the extraction plugin) are put in a
-            // unique subdirectory for the build. There will only be one such
-            // 'bundle' directory in the generated tarball; however, hosting
-            // servers can collect 'bundles' from multiple versions into one
-            // directory and symlink it into place - this allows users who loaded
-            // an older version of the application to continue to access webpack
-            // chunks even after the app is redeployed.
+            // There are a lot of assets that need to be kept in sync with each other
+            // (once a user loads one version of the app, they need to keep being served
+            // assets for that version).
+            //
+            // To deal with this, we try to put as many as possible of the referenced assets
+            // into a build-specific subdirectory. This includes generated javascript, as well
+            // as CSS extracted by the MiniCssExtractPlugin (see config above) and WASM modules
+            // referenced via `import` statements.
+            //
+            // Hosting servers can then collect 'bundles' from multiple versions
+            // into one directory, and continue to serve them even after a new version is deployed.
+            // This allows users who loaded an older version of the application to continue to
+            // access assets even after the app is redeployed.
+            //
+            // See `scripts/deploy.py` for a script which manages the deployment in this way.
             filename: "bundles/[fullhash]/[name].js",
             chunkFilename: "bundles/[fullhash]/[name].js",
             webassemblyModuleFilename: "bundles/[fullhash]/[modulehash].wasm",
