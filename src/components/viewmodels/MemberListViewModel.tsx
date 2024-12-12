@@ -46,6 +46,7 @@ import { canInviteTo } from "../../utils/room/canInviteTo";
 import { isValid3pidInvite } from "../../RoomInvite";
 import { ThreePIDInvite } from "../../models/rooms/ThreePIDInvite";
 import { XOR } from "../../@types/common";
+import { useTypedEventEmitter } from "../../hooks/useEventEmitter";
 
 type Member = XOR<{ member: RoomMember }, { threePidInvite: ThreePIDInvite }>;
 
@@ -125,7 +126,7 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
         throw new Error(`Room with id ${roomId} does not exist!`);
     }
     const sdkContext = useContext(SDKContext);
-    const [members, setMembers] = useState<Member[]>([]);
+    const [memberMap, setMemberMap] = useState<Map<string, Member>>(new Map());
     const [memberCount, setMemberCount] = useState<number>(0);
     const searchQuery = useRef("");
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -138,12 +139,24 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
                         roomId,
                         searchQuery.current,
                     );
-                    const joined = joinedSdk.map(sdkRoomMemberToRoomMember);
-                    const invited = invitedSdk.map(sdkRoomMemberToRoomMember);
+                    const newMemberMap = new Map<string, Member>();
+                    // First add the invited room members
+                    for (const member of invitedSdk) {
+                        const roomMember = sdkRoomMemberToRoomMember(member);
+                        newMemberMap.set(member.userId, roomMember);
+                    }
+                    // Then add the third party invites
                     const threePidInvited = getPending3PidInvites(room, searchQuery.current);
-                    const newMembers = [...invited, ...threePidInvited, ...joined];
-                    setMembers(newMembers);
-                    if (!searchQuery.current) setMemberCount(newMembers.length);
+                    for (const invited of threePidInvited) {
+                        newMemberMap.set(invited.threePidInvite!.displayName, invited);
+                    }
+                    // Finally add the joined room members
+                    for (const member of joinedSdk) {
+                        const roomMember = sdkRoomMemberToRoomMember(member);
+                        newMemberMap.set(member.userId, roomMember);
+                    }
+                    setMemberMap(newMemberMap);
+                    if (!searchQuery.current) setMemberCount(newMemberMap.size);
                 },
                 500,
                 { leading: true, trailing: true },
@@ -179,51 +192,37 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
         inviteToRoom(room);
     };
 
-    useEffect(() => {
-        const onRoomStateUpdate = (state: RoomState): void => {
-            if (state.roomId === roomId) loadMembers();
-        };
+    useTypedEventEmitter(cli, RoomStateEvent.Update, (event: MatrixEvent) => {
+        if (event.getRoomId() === roomId && event.getType() === EventType.RoomThirdPartyInvite) loadMembers();
+        const newCanInvite = getCanUserInviteToThisRoom();
+        setCanInvite(newCanInvite);
+    });
 
-        const onRoomMemberName = (ev: MatrixEvent, member: SDKRoomMember): void => {
-            if (member.roomId === roomId) loadMembers();
-        };
+    useTypedEventEmitter(cli, RoomStateEvent.Update, (state: RoomState) => {
+        if (state.roomId === roomId) loadMembers();
+    });
 
-        const onRoomStateEvent = (event: MatrixEvent): void => {
-            if (event.getRoomId() === roomId && event.getType() === EventType.RoomThirdPartyInvite) loadMembers();
-            const newCanInvite = getCanUserInviteToThisRoom();
-            setCanInvite(newCanInvite);
-        };
+    useTypedEventEmitter(cli, RoomMemberEvent.Name, (_: MatrixEvent, member: SDKRoomMember) => {
+        if (member.roomId === roomId) loadMembers();
+    });
 
-        const onRoom = (room: Room): void => {
-            if (room.roomId === roomId) loadMembers();
-            // We listen for room events because when we accept an invite
-            // we need to wait till the room is fully populated with state
-            // before refreshing the member list else we get a stale list.
-            // this.onMemberListUpdated?.(true);
-        };
+    useTypedEventEmitter(cli, ClientEvent.Room, (room: Room) => {
+        if (room.roomId === roomId) loadMembers();
+        // We listen for room events because when we accept an invite
+        // we need to wait till the room is fully populated with state
+        // before refreshing the member list else we get a stale list.
+        // this.onMemberListUpdated?.(true);
+    });
 
-        const onMyMembership = (room: Room, membership: string, oldMembership?: string): void => {
-            if (room.roomId !== roomId) return;
-
-            if (membership === KnownMembership.Join && oldMembership !== KnownMembership.Join) {
-                // we just joined the room, load the member list
-                loadMembers();
-            }
-        };
-
-        const onUserPresenceChange = (event: MatrixEvent | undefined, user: User): void => {
+    useTypedEventEmitter(cli, RoomEvent.MyMembership, (room: Room, membership: string, oldMembership?: string) => {
+        if (room.roomId !== roomId) return;
+        if (membership === KnownMembership.Join && oldMembership !== KnownMembership.Join) {
+            // we just joined the room, load the member list
             loadMembers();
-        };
+        }
+    });
 
-        cli.on(RoomStateEvent.Update, onRoomStateUpdate);
-        cli.on(RoomMemberEvent.Name, onRoomMemberName);
-        cli.on(RoomStateEvent.Events, onRoomStateEvent);
-        cli.on(ClientEvent.Room, onRoom); // invites & joining after peek
-        cli.on(RoomEvent.MyMembership, onMyMembership);
-        cli.on(UserEvent.LastPresenceTs, onUserPresenceChange);
-        cli.on(UserEvent.Presence, onUserPresenceChange);
-        cli.on(UserEvent.CurrentlyActive, onUserPresenceChange);
-
+    useEffect(() => {
         // Initial load of the memberlist
         (async () => {
             await loadMembers();
@@ -234,21 +233,18 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
              */
             setIsLoading(false);
         })();
+    }, [loadMembers]);
 
-        return () => {
-            cli.off(RoomStateEvent.Update, onRoomStateUpdate);
-            cli.off(RoomMemberEvent.Name, onRoomMemberName);
-            cli.off(RoomStateEvent.Events, onRoomStateEvent);
-            cli.off(ClientEvent.Room, onRoom); // invites & joining after peek
-            cli.off(RoomEvent.MyMembership, onMyMembership);
-            cli.off(UserEvent.LastPresenceTs, onUserPresenceChange);
-            cli.off(UserEvent.Presence, onUserPresenceChange);
-            cli.off(UserEvent.CurrentlyActive, onUserPresenceChange);
-        };
-    }, [cli, loadMembers, roomId, getCanUserInviteToThisRoom]);
+    useTypedEventEmitter(cli, UserEvent.Presence, (_: MatrixEvent | undefined, user: User) => {
+        if (memberMap.has(user.userId)) loadMembers();
+    });
+
+    useTypedEventEmitter(cli, UserEvent.CurrentlyActive, (_: MatrixEvent | undefined, user: User) => {
+        if (memberMap.has(user.userId)) loadMembers();
+    });
 
     return {
-        members,
+        members: Array.from(memberMap.values()),
         memberCount,
         search,
         shouldShowInvite,
