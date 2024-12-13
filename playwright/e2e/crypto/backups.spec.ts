@@ -9,6 +9,9 @@ Please see LICENSE files in the repository root for full details.
 import { type Page } from "@playwright/test";
 
 import { test, expect } from "../../element-web-test";
+import { test as masTest } from "../oidc";
+import { registerAccountMas } from "../oidc";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 async function expectBackupVersionToBe(page: Page, version: string) {
     await expect(page.locator(".mx_SecureBackupPanel_statusList tr:nth-child(5) td")).toHaveText(
@@ -17,6 +20,19 @@ async function expectBackupVersionToBe(page: Page, version: string) {
 
     await expect(page.locator(".mx_SecureBackupPanel_statusList tr:nth-child(6) td")).toHaveText(version);
 }
+
+masTest.describe("Key backup is enabled by default after registration", () => {
+    masTest.skip(isDendrite, "does not yet support MAS");
+
+    masTest("Key backup is enabled by default after registration", async ({ page, mailhog, app }) => {
+        await page.goto("/#/login");
+        await page.getByRole("button", { name: "Continue" }).click();
+        await registerAccountMas(page, mailhog.api, "alice", "alice@email.com", "Pa$sW0rD!");
+
+        await app.settings.openUserSettings("Security & Privacy");
+        expect(page.getByText("This session is backing up your keys.")).toBeVisible();
+    });
+});
 
 test.describe("Backups", () => {
     test.use({
