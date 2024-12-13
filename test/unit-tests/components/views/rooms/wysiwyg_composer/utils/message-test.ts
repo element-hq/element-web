@@ -418,8 +418,8 @@ describe("message", () => {
             // Then
             const { msgtype, format } = mockEvent.getContent();
             const expectedContent = {
-                "body": ` * ${newMessage}`,
-                "formatted_body": ` * ${newMessage}`,
+                "body": `* ${newMessage}`,
+                "formatted_body": `* ${newMessage}`,
                 "m.new_content": {
                     body: "Replying to this new content",
                     format: "org.matrix.custom.html",

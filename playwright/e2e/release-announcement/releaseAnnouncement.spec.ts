@@ -18,7 +18,7 @@ test.describe("Release announcement", () => {
         labsFlags: ["threadsActivityCentre"],
     });
 
-    test("should display the release announcement process", async ({ page, app, util }) => {
+    test("should display the release announcement process", { tag: "@screenshot" }, async ({ page, app, util }) => {
         // The TAC release announcement should be displayed
         await util.assertReleaseAnnouncementIsVisible("Threads Activity Centre");
         // Hide the release announcement

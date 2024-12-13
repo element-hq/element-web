@@ -75,7 +75,7 @@ export default class MemberList extends React.Component<IProps, IState> {
     private unmounted = false;
 
     public static contextType = SDKContext;
-    public declare context: React.ContextType<typeof SDKContext>;
+    declare public context: React.ContextType<typeof SDKContext>;
     private tiles: Map<string, MemberTile> = new Map();
 
     public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {

@@ -44,17 +44,20 @@ export class MockedCall extends Call {
     }
 
     public static create(room: Room, id: string) {
-        room.addLiveEvents([
-            mkEvent({
-                event: true,
-                type: this.EVENT_TYPE,
-                room: room.roomId,
-                user: "@alice:example.org",
-                content: { "m.type": "m.video", "m.intent": "m.prompt" },
-                skey: id,
-                ts: Date.now(),
-            }),
-        ]);
+        room.addLiveEvents(
+            [
+                mkEvent({
+                    event: true,
+                    type: this.EVENT_TYPE,
+                    room: room.roomId,
+                    user: "@alice:example.org",
+                    content: { "m.type": "m.video", "m.intent": "m.prompt" },
+                    skey: id,
+                    ts: Date.now(),
+                }),
+            ],
+            { addToState: true },
+        );
         // @ts-ignore deliberately calling a private method
         // Let CallStore know that a call might now exist
         CallStore.instance.updateRoom(room);
@@ -81,17 +84,20 @@ export class MockedCall extends Call {
 
     public destroy() {
         // Terminate the call for good measure
-        this.room.addLiveEvents([
-            mkEvent({
-                event: true,
-                type: MockedCall.EVENT_TYPE,
-                room: this.room.roomId,
-                user: "@alice:example.org",
-                content: { ...this.event.getContent(), "m.terminated": "Call ended" },
-                skey: this.widget.id,
-                ts: Date.now(),
-            }),
-        ]);
+        this.room.addLiveEvents(
+            [
+                mkEvent({
+                    event: true,
+                    type: MockedCall.EVENT_TYPE,
+                    room: this.room.roomId,
+                    user: "@alice:example.org",
+                    content: { ...this.event.getContent(), "m.terminated": "Call ended" },
+                    skey: this.widget.id,
+                    ts: Date.now(),
+                }),
+            ],
+            { addToState: true },
+        );
 
         super.destroy();
     }

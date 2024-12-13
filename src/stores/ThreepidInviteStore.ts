@@ -99,7 +99,7 @@ export default class ThreepidInviteStore extends EventEmitter {
 
     private generateIdOf(persisted: IPersistedThreepidInvite): string {
         // Use a consistent "hash" to form an ID.
-        return base32.stringify(Buffer.from(JSON.stringify(persisted)));
+        return base32.stringify(new TextEncoder().encode(JSON.stringify(persisted)));
     }
 
     private translateInvite(persisted: IPersistedThreepidInvite): IThreepidInvite {

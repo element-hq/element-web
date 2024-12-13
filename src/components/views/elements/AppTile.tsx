@@ -116,7 +116,7 @@ interface IState {
 
 export default class AppTile extends React.Component<IProps, IState> {
     public static contextType = MatrixClientContext;
-    public declare context: ContextType<typeof MatrixClientContext>;
+    declare public context: ContextType<typeof MatrixClientContext>;
 
     public static defaultProps: Partial<IProps> = {
         waitForIframeLoad: true,

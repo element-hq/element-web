@@ -33,6 +33,11 @@ export enum Phase {
     ConfirmReset = 6,
 }
 
+/**
+ * Logic for setting up 4S and/or verifying the user's device: a process requiring
+ * ongoing interaction with the user, as distinct from InitialCryptoSetupStore which
+ * a (usually) non-interactive process that happens immediately after registration.
+ */
 export class SetupEncryptionStore extends EventEmitter {
     private started?: boolean;
     public phase?: Phase;
@@ -125,7 +130,7 @@ export class SetupEncryptionStore extends EventEmitter {
         this.emit("update");
         try {
             const cli = MatrixClientPeg.safeGet();
-            const backupInfo = await cli.getKeyBackupVersion();
+            const backupInfo = (await cli.getCrypto()?.getKeyBackupInfo()) ?? null;
             this.backupInfo = backupInfo;
             this.emit("update");
 

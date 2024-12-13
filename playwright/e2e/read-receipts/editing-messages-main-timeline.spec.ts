@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { test } from ".";
 
-test.describe("Read receipts", () => {
+test.describe("Read receipts", { tag: "@mergequeue" }, () => {
     test.describe("editing messages", () => {
         test.describe("in the main timeline", () => {
             test("Editing a message leaves a room read", async ({ roomAlpha: room1, roomBeta: room2, util, msg }) => {

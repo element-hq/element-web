@@ -20,6 +20,7 @@ jobs:
         permissions:
             checks: read
             pages: write
+            deployments: write
         env:
             R2_BUCKET: "element-web-develop"
             R2_URL: ${{ vars.CF_R2_S3_API }}

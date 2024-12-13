@@ -32,7 +32,7 @@ interface IState {
 
 export default class UserView extends React.Component<IProps, IState> {
     public static contextType = MatrixClientContext;
-    public declare context: React.ContextType<typeof MatrixClientContext>;
+    declare public context: React.ContextType<typeof MatrixClientContext>;
 
     public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
@@ -82,7 +82,7 @@ export default class UserView extends React.Component<IProps, IState> {
         } else if (this.state.member) {
             const panel = (
                 <RightPanel
-                    overwriteCard={{ phase: RightPanelPhases.RoomMemberInfo, state: { member: this.state.member } }}
+                    overwriteCard={{ phase: RightPanelPhases.MemberInfo, state: { member: this.state.member } }}
                     resizeNotifier={this.props.resizeNotifier}
                 />
             );

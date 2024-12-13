@@ -833,7 +833,6 @@
         },
         "udd": {
             "interactive_verification_button": "絵文字で認証",
-            "manual_verification_button": "テキストを使って手動で認証",
             "other_ask_verify_text": "このユーザーにセッションを認証するよう依頼するか、以下から手動で認証してください。",
             "other_new_session_text": "%(name)s（%(userId)s）は未認証のセッションにサインインしました：",
             "own_ask_verify_text": "以下のどれか一つを使って他のセッションを認証します。",
@@ -868,12 +867,6 @@
             "incoming_sas_dialog_waiting": "相手の承認を待機しています…",
             "incoming_sas_user_dialog_text_1": "このユーザーを認証すると、信頼済として表示します。ユーザーを信頼すると、より一層安心してエンドツーエンド暗号化を使用することができます。",
             "incoming_sas_user_dialog_text_2": "このユーザーを認証すると、相手のセッションと自分のセッションを信頼済として表示します。",
-            "manual_device_verification_device_id_label": "セッションID",
-            "manual_device_verification_device_key_label": "セッションキー",
-            "manual_device_verification_device_name_label": "セッション名",
-            "manual_device_verification_footer": "一致していない場合は、コミュニケーションのセキュリティーが損なわれている可能性があります。",
-            "manual_device_verification_self_text": "他のセッションのユーザー設定で、以下を比較して承認してください：",
-            "manual_device_verification_user_text": "ユーザー設定画面で以下を比較し、このユーザーのセッションを承認してください：",
             "no_key_or_device": "セキュリティーキーもしくは認証可能な端末が設定されていません。この端末では、以前暗号化されたメッセージにアクセスすることができません。この端末で本人確認を行うには、認証用の鍵を再設定する必要があります。",
             "no_support_qr_emoji": "認証しようとしている端末は、QRコードのスキャンや絵文字による認証をサポートしていませんが、%(brand)sではサポートされています。異なるクライアントで試してください。",
             "other_party_cancelled": "相手が認証をキャンセルしました。",
@@ -983,10 +976,6 @@
         }
     },
     "event_preview": {
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)sが音声配信を終了しました",
-            "you": "音声配信を終了しました"
-        },
         "m.call.answer": {
             "dm": "通話しています",
             "user": "%(senderName)sが通話に参加しました",
@@ -1318,8 +1307,6 @@
         "video_rooms_faq1_question": "ビデオ通話ルームの作成方法",
         "video_rooms_faq2_answer": "はい、会話のタイムラインが動画と並んで表示されます。",
         "video_rooms_faq2_question": "テキストによる会話も行えますか？",
-        "voice_broadcast": "音声配信",
-        "voice_broadcast_force_small_chunks": "音声配信のチャンク長を15秒に強制",
         "wysiwyg_composer": "リッチテキストエディター"
     },
     "labs_mjolnir": {
@@ -1455,7 +1442,6 @@
         "mute_description": "通知を送信しません"
     },
     "notifier": {
-        "io.element.voice_broadcast_chunk": "%(senderName)sが音声配信を開始しました",
         "m.key.verification.request": "%(name)sは認証を要求しています"
     },
     "onboarding": {
@@ -1953,7 +1939,6 @@
             "error_unbanning": "ブロック解除に失敗しました",
             "events_default": "メッセージの送信",
             "invite": "ユーザーの招待",
-            "io.element.voice_broadcast_info": "音声配信",
             "kick": "ユーザーの追放",
             "m.call": "%(brand)s通話を開始",
             "m.call.member": "%(brand)s通話に参加",
@@ -2532,7 +2517,6 @@
         "warning": "<w>警告：</w><description/>"
     },
     "share": {
-        "link_title": "ルームへのリンク",
         "permalink_message": "選択したメッセージにリンク",
         "permalink_most_recent": "最新のメッセージにリンク",
         "title_message": "ルームのメッセージを共有",
@@ -2614,13 +2598,6 @@
         "upgraderoom": "ルームを新しいバージョンにアップグレード",
         "upgraderoom_permission_error": "このコマンドを実行するのに必要な権限がありません。",
         "usage": "用法",
-        "verify": "ユーザー、セッション、およびpubkeyタプルを認証",
-        "verify_mismatch": "警告：鍵の認証に失敗しました！提供された鍵「%(fingerprint)s」は、%(userId)sおよびセッション %(deviceId)s の署名鍵「%(fprint)s」と一致しません。通信が傍受されているおそれがあります！",
-        "verify_nop": "このセッションは認証済です！",
-        "verify_nop_warning_mismatch": "警告：このセッションは認証済ですが、鍵が一致しません！",
-        "verify_success_description": "指定された署名鍵は%(userId)sのセッション %(deviceId)s から受け取った鍵と一致します。セッションは認証済です。",
-        "verify_success_title": "認証済の鍵",
-        "verify_unknown_pair": "不明な（ユーザー、セッション）ペア：（%(userId)s、%(deviceId)s）",
         "whois": "ユーザーの情報を表示"
     },
     "space": {
@@ -2831,10 +2808,6 @@
         "error_rendering_message": "このメッセージを読み込めません",
         "historical_messages_unavailable": "以前のメッセージは表示できません",
         "in_room_name": " <strong>%(room)s</strong>内で",
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)sが<a>音声配信</a>を終了しました",
-            "you": "<a>音声配信</a>を終了しました"
-        },
         "io.element.widgets.layout": "%(senderName)sがルームのレイアウトを更新しました",
         "load_error": {
             "no_permission": "このルームのタイムラインの特定の地点を読み込もうとしましたが、問題のメッセージを閲覧する権限がありません。",
@@ -3345,38 +3318,6 @@
         "switch_theme_dark": "ダークテーマに切り替える",
         "switch_theme_light": "ライトテーマに切り替える"
     },
-    "voice_broadcast": {
-        "30s_backward": "30秒戻す",
-        "30s_forward": "30秒進める",
-        "action": "音声配信",
-        "buffering": "バッファリングしています…",
-        "confirm_listen_affirm": "はい、録音を終了してください",
-        "confirm_listen_description": "このライブ配信の視聴を開始すると、現在のライブ配信の録音は終了します。",
-        "confirm_listen_title": "ライブ配信を視聴しますか？",
-        "confirm_stop_affirm": "はい、配信を停止します",
-        "confirm_stop_description": "ライブ配信を終了してよろしいですか？配信を終了し、録音をこのルームで利用できるよう設定します。",
-        "confirm_stop_title": "ライブ配信を停止しますか？",
-        "connection_error": "接続エラー - 録音を停止しました",
-        "failed_already_recording_description": "既に音声配信を録音しています。新しく始めるには現在の音声配信を終了してください。",
-        "failed_already_recording_title": "新しい音声配信を開始できません",
-        "failed_decrypt": "音声配信を復号化できません",
-        "failed_generic": "この音声配信を再生できません",
-        "failed_insufficient_permission_description": "このルームで音声配信を開始する権限がありません。ルームの管理者に連絡して権限の付与を依頼してください。",
-        "failed_insufficient_permission_title": "新しい音声配信を開始できません",
-        "failed_no_connection_description": "録音を開始できません。後でもう一度やり直してください。",
-        "failed_no_connection_title": "接続エラー",
-        "failed_others_already_recording_description": "他の人が既に音声配信を録音しています。新しく始めるには音声配信が終わるまで待機してください。",
-        "failed_others_already_recording_title": "新しい音声配信を開始できません",
-        "go_live": "ライブ配信",
-        "live": "ライブ",
-        "pause": "音声配信を一時停止",
-        "play": "音声配信を再生",
-        "resume": "音声配信を再開"
-    },
-    "voice_message": {
-        "cant_start_broadcast_description": "ライブ配信を録音しているため、音声メッセージを開始できません。音声メッセージの録音を開始するには、ライブ配信を終了してください。",
-        "cant_start_broadcast_title": "音声メッセージを開始できません"
-    },
     "voip": {
         "already_in_call": "既に通話中です",
         "already_in_call_person": "既にこの人と通話中です。",
@@ -3396,7 +3337,6 @@
         "camera_disabled": "カメラが無効です",
         "camera_enabled": "カメラがまだ有効です",
         "cannot_call_yourself_description": "自分自身に通話を発信することはできません。",
-        "change_input_device": "入力端末を変更",
         "connecting": "接続しています",
         "connection_lost": "サーバーとの接続が失われました",
         "connection_lost_description": "サーバーに接続していないため、通話を発信できません。",
@@ -3413,8 +3353,6 @@
         "enable_camera": "カメラを有効にする",
         "enable_microphone": "マイクのミュートを解除",
         "expand": "通話に戻る",
-        "failed_call_live_broadcast_description": "ライブ配信を録音しているため、通話を開始できません。通話を開始するには、ライブ配信を終了してください。",
-        "failed_call_live_broadcast_title": "通話を開始できません",
         "hangup": "電話を切る",
         "hide_sidebar_button": "サイドバーを表示しない",
         "input_devices": "入力装置",

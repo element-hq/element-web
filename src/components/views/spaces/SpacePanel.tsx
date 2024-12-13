@@ -221,7 +221,7 @@ const CreateSpaceButton: React.FC<Pick<IInnerSpacePanelProps, "isPanelCollapsed"
     isPanelCollapsed,
     setPanelCollapsed,
 }) => {
-    const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLElement>();
+    const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
 
     useEffect(() => {
         if (!isPanelCollapsed && menuDisplayed) {

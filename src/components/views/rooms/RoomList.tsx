@@ -424,7 +424,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
     private treeRef = createRef<HTMLDivElement>();
 
     public static contextType = MatrixClientContext;
-    public declare context: React.ContextType<typeof MatrixClientContext>;
+    declare public context: React.ContextType<typeof MatrixClientContext>;
 
     public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);

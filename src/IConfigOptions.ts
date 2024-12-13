@@ -175,13 +175,6 @@ export interface IConfigOptions {
     sync_timeline_limit?: number;
     dangerously_allow_unsafe_and_insecure_passwords?: boolean; // developer option
 
-    voice_broadcast?: {
-        // length per voice chunk in seconds
-        chunk_length?: number;
-        // max voice broadcast length in seconds
-        max_length?: number;
-    };
-
     user_notice?: {
         title: string;
         description: string;

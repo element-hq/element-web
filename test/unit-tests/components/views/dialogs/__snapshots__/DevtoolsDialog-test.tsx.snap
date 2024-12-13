@@ -185,33 +185,6 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
             />
           </div>
         </div>
-        <div
-          class="mx_SettingsFlag"
-        >
-          <label
-            class="mx_SettingsFlag_label"
-            for="mx_SettingsFlag_4yVCeEefiPqp"
-          >
-            <span
-              class="mx_SettingsFlag_labelText"
-            >
-              Force 15s voice broadcast chunk length
-            </span>
-          </label>
-          <div
-            aria-checked="false"
-            aria-disabled="false"
-            aria-label="Force 15s voice broadcast chunk length"
-            class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
-            id="mx_SettingsFlag_4yVCeEefiPqp"
-            role="switch"
-            tabindex="0"
-          >
-            <div
-              class="mx_ToggleSwitch_ball"
-            />
-          </div>
-        </div>
       </div>
     </div>
     <div

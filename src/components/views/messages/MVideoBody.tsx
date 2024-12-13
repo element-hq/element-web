@@ -34,7 +34,7 @@ interface IState {
 
 export default class MVideoBody extends React.PureComponent<IBodyProps, IState> {
     public static contextType = RoomContext;
-    public declare context: React.ContextType<typeof RoomContext>;
+    declare public context: React.ContextType<typeof RoomContext>;
 
     private videoRef = React.createRef<HTMLVideoElement>();
     private sizeWatcher?: string;

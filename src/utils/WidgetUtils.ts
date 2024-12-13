@@ -445,7 +445,7 @@ export default class WidgetUtils {
             // For compatibility with Jitsi, use base32 without padding.
             // More details here:
             // https://github.com/matrix-org/prosody-mod-auth-matrix-user-verification
-            confId = base32.stringify(Buffer.from(roomId), { pad: false });
+            confId = base32.stringify(new TextEncoder().encode(roomId), { pad: false });
         } else {
             // Create a random conference ID
             confId = `Jitsi${randomUppercaseString(1)}${randomLowercaseString(23)}`;

@@ -71,18 +71,5 @@ describe("MessageEventPreview", () => {
             });
             expect(preview.getTextFor(event)).toBe(`${userId}: test new content body`);
         });
-
-        it("when called with a broadcast chunk event it should return null", () => {
-            const event = mkEvent({
-                event: true,
-                content: {
-                    body: "test body",
-                    ["io.element.voice_broadcast_chunk"]: {},
-                },
-                user: userId,
-                type: "m.room.message",
-            });
-            expect(preview.getTextFor(event)).toBeNull();
-        });
     });
 });

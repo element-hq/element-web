@@ -49,8 +49,6 @@ import { SdkContextClass } from "./contexts/SDKContext";
 import { localNotificationsAreSilenced, createLocalNotificationSettingsIfNeeded } from "./utils/notifications";
 import { getIncomingCallToastKey, IncomingCallToast } from "./toasts/IncomingCallToast";
 import ToastStore from "./stores/ToastStore";
-import { VoiceBroadcastChunkEventType, VoiceBroadcastInfoEventType } from "./voice-broadcast";
-import { getSenderName } from "./utils/event/getSenderName";
 import { stripPlainReply } from "./utils/Reply";
 import { BackgroundAudio } from "./audio/BackgroundAudio";
 
@@ -81,17 +79,6 @@ const msgTypeHandlers: Record<string, (event: MatrixEvent) => string | null> = {
         return TextForEvent.textForLocationEvent(event)();
     },
     [MsgType.Audio]: (event: MatrixEvent): string | null => {
-        if (event.getContent()?.[VoiceBroadcastChunkEventType]) {
-            if (event.getContent()?.[VoiceBroadcastChunkEventType]?.sequence === 1) {
-                // Show a notification for the first broadcast chunk.
-                // At this point a user received something to listen to.
-                return _t("notifier|io.element.voice_broadcast_chunk", { senderName: getSenderName(event) });
-            }
-
-            // Mute other broadcast chunks
-            return null;
-        }
-
         return TextForEvent.textForEvent(event, MatrixClientPeg.safeGet());
     },
 };
@@ -460,8 +447,6 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
 
     // XXX: exported for tests
     public evaluateEvent(ev: MatrixEvent): void {
-        // Mute notifications for broadcast info events
-        if (ev.getType() === VoiceBroadcastInfoEventType) return;
         let roomId = ev.getRoomId()!;
         if (LegacyCallHandler.instance.getSupportsVirtualRooms()) {
             // Attempt to translate a virtual room to a native one
@@ -513,7 +498,8 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
         const thisUserHasConnectedDevice =
             room && MatrixRTCSession.callMembershipsForRoom(room).some((m) => m.sender === cli.getUserId());
 
-        if (EventType.CallNotify === ev.getType() && (ev.getAge() ?? 0) < 10000 && !thisUserHasConnectedDevice) {
+        // Check maximum age (<= 15 seconds) of a call notify event that will trigger a ringing notification
+        if (EventType.CallNotify === ev.getType() && (ev.getAge() ?? 0) < 15000 && !thisUserHasConnectedDevice) {
             const content = ev.getContent();
             const roomId = ev.getRoomId();
             if (typeof content.call_id !== "string") {

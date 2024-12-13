@@ -16,8 +16,8 @@ import Autocomplete from "../../Autocomplete";
 import { handleClipboardEvent, handleEventWithAutocomplete, isEventToHandleAsClipboardEvent } from "./utils";
 import { useSuggestion } from "./useSuggestion";
 import { isNotNull, isNotUndefined } from "../../../../../Typeguards";
-import { useRoomContext } from "../../../../../contexts/RoomContext";
 import { useMatrixClientContext } from "../../../../../contexts/MatrixClientContext";
+import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.tsx";
 
 function isDivElement(target: EventTarget): target is HTMLDivElement {
     return target instanceof HTMLDivElement;
@@ -63,7 +63,7 @@ export function usePlainTextListeners(
     onSelect: (event: SyntheticEvent<HTMLDivElement>) => void;
     suggestion: MappedSuggestion | null;
 } {
-    const roomContext = useRoomContext();
+    const roomContext = useScopedRoomContext("room", "timelineRenderingType", "replyToEvent");
     const mxClient = useMatrixClientContext();
 
     const ref = useRef<HTMLDivElement | null>(null);

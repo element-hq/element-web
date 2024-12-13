@@ -674,12 +674,6 @@
             "incoming_sas_dialog_title": "Recebendo solicitação de confirmação",
             "incoming_sas_user_dialog_text_1": "Confirme este usuário para torná-lo confiável. Confiar nos usuários fornece segurança adicional ao trocar mensagens criptografadas de ponta a ponta.",
             "incoming_sas_user_dialog_text_2": "Se você confirmar esse usuário, a sessão será marcada como confiável para você e para ele.",
-            "manual_device_verification_device_id_label": "Identificador de sessão",
-            "manual_device_verification_device_key_label": "Chave da sessão",
-            "manual_device_verification_device_name_label": "Nome da sessão",
-            "manual_device_verification_footer": "Se eles não corresponderem, a segurança da sua comunicação pode estar comprometida.",
-            "manual_device_verification_self_text": "Para confirmar, compare a seguinte informação com aquela apresentada em sua outra sessão:",
-            "manual_device_verification_user_text": "Confirme a sessão deste usuário comparando o seguinte com as configurações deste usuário:",
             "other_party_cancelled": "Seu contato cancelou a confirmação.",
             "prompt_encrypted": "Verifique todos os usuários em uma sala para se certificar de que ela está segura.",
             "prompt_self": "Iniciar a confirmação novamente, após a notificação.",
@@ -765,10 +759,6 @@
         }
     },
     "event_preview": {
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s encerrou uma transmissão de voz",
-            "you": "Você encerrou uma transmissão de voz"
-        },
         "m.call.answer": {
             "dm": "Chamada em andamento",
             "user": "%(senderName)s entrou na chamada",
@@ -1082,7 +1072,6 @@
         "mute_description": "Você não receberá nenhuma notificação"
     },
     "notifier": {
-        "io.element.voice_broadcast_chunk": "%(senderName)s iniciou uma transmissão de voz",
         "m.key.verification.request": "%(name)s está solicitando confirmação"
     },
     "onboarding": {
@@ -1970,12 +1959,6 @@
         "upgraderoom": "Atualiza a sala para uma nova versão",
         "upgraderoom_permission_error": "Você não tem as permissões necessárias para usar este comando.",
         "usage": "Uso",
-        "verify": "Confirma um usuário, sessão, e chave criptografada pública",
-        "verify_mismatch": "ATENÇÃO: A CONFIRMAÇÃO DA CHAVE FALHOU! A chave de assinatura para %(userId)s e sessão %(deviceId)s é \"%(fprint)s\", o que não corresponde à chave fornecida \"%(fingerprint)s\". Isso pode significar que suas comunicações estejam sendo interceptadas por terceiros!",
-        "verify_nop": "Sessão já confirmada!",
-        "verify_success_description": "A chave de assinatura que você forneceu corresponde à chave de assinatura que você recebeu da sessão %(deviceId)s do usuário %(userId)s. Esta sessão foi marcada como confirmada.",
-        "verify_success_title": "Chave confirmada",
-        "verify_unknown_pair": "Par desconhecido (usuário, sessão): (%(userId)s, %(deviceId)s)",
         "whois": "Exibe informação sobre um usuário"
     },
     "space": {
@@ -2101,10 +2084,6 @@
         "error_no_renderer": "Este evento não pôde ser exibido",
         "error_rendering_message": "Não foi possível carregar esta mensagem",
         "historical_messages_unavailable": "Você não pode ver as mensagens anteriores",
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s encerrou uma <a>transmissão de voz</a>",
-            "you": "Você encerrou uma <a>transmissão de voz</a>"
-        },
         "io.element.widgets.layout": "%(senderName)s atualizou o layout da sala",
         "load_error": {
             "no_permission": "Não foi possível carregar um trecho específico da conversa desta sala, porque parece que você não tem permissão para ler a mensagem em questão.",
@@ -2537,21 +2516,6 @@
         "switch_theme_dark": "Alternar para o modo escuro",
         "switch_theme_light": "Alternar para o modo claro"
     },
-    "voice_broadcast": {
-        "confirm_listen_description": "Se você começar a ouvir esta tramissão ao vivo, a gravação desta transmissão, será encerrada.",
-        "confirm_listen_title": "Ouvir transmissão ao vivo?",
-        "confirm_stop_affirm": "Sim, interromper a transmissão",
-        "confirm_stop_title": "Parar a transmissão ao vivo?",
-        "failed_already_recording_description": "Você já está gravando uma transmissão de voz. Encerre sua transmissão de voz atual para iniciar uma nova.",
-        "failed_already_recording_title": "Não é possível iniciar uma nova transmissão de voz",
-        "failed_insufficient_permission_description": "Você não tem as permissões necessárias para iniciar uma transmissão de voz nesta sala. Entre em contato com um administrador de sala para atualizar suas permissões.",
-        "failed_insufficient_permission_title": "Não é possível iniciar uma nova transmissão de voz",
-        "failed_no_connection_description": "Infelizmente, não podemos iniciar uma gravação agora. Por favor, tente novamente mais tarde.",
-        "failed_no_connection_title": "Erro de conexão",
-        "failed_others_already_recording_description": "Outra pessoa já está gravando uma transmissão de voz. Aguarde o término da transmissão de voz para iniciar uma nova.",
-        "failed_others_already_recording_title": "Não é possível iniciar uma nova transmissão de voz",
-        "live": "Ao vivo"
-    },
     "voip": {
         "already_in_call": "Já em um chamada",
         "already_in_call_person": "Você já está em uma chamada com essa pessoa.",
@@ -2582,8 +2546,6 @@
         "enable_camera": "Ligar câmera",
         "enable_microphone": "Habilitar microfone",
         "expand": "Retornar para a chamada",
-        "failed_call_live_broadcast_description": "Você não pode iniciar uma chamada porque está gravando uma transmissão ao vivo. Termine sua transmissão ao vivo para iniciar uma chamada.",
-        "failed_call_live_broadcast_title": "Não é possível iniciar uma chamada",
         "hangup": "Desligar",
         "hide_sidebar_button": "Esconder a barra lateral",
         "join_button_tooltip_connecting": "Conectando",

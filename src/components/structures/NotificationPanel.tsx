@@ -19,6 +19,7 @@ import { Layout } from "../../settings/enums/Layout";
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 import Measured from "../views/elements/Measured";
 import EmptyState from "../views/right_panel/EmptyState";
+import { ScopedRoomContextProvider } from "../../contexts/ScopedRoomContext.tsx";
 
 interface IProps {
     onClose(): void;
@@ -33,7 +34,7 @@ interface IState {
  */
 export default class NotificationPanel extends React.PureComponent<IProps, IState> {
     public static contextType = RoomContext;
-    public declare context: React.ContextType<typeof RoomContext>;
+    declare public context: React.ContextType<typeof RoomContext>;
 
     private card = React.createRef<HTMLDivElement>();
 
@@ -79,12 +80,10 @@ export default class NotificationPanel extends React.PureComponent<IProps, IStat
         }
 
         return (
-            <RoomContext.Provider
-                value={{
-                    ...this.context,
-                    timelineRenderingType: TimelineRenderingType.Notification,
-                    narrow: this.state.narrow,
-                }}
+            <ScopedRoomContextProvider
+                {...this.context}
+                timelineRenderingType={TimelineRenderingType.Notification}
+                narrow={this.state.narrow}
             >
                 <BaseCard
                     header={_t("notifications|enable_prompt_toast_title")}
@@ -99,7 +98,7 @@ export default class NotificationPanel extends React.PureComponent<IProps, IStat
                     {this.card.current && <Measured sensor={this.card.current} onMeasurement={this.onMeasurement} />}
                     {content}
                 </BaseCard>
-            </RoomContext.Provider>
+            </ScopedRoomContextProvider>
         );
     }
 }

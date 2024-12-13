@@ -340,7 +340,7 @@
         "set_email_prompt": "Czy chcesz ustawić adres e-mail?",
         "sign_in_description": "Użyj swojego konta, aby kontynuować.",
         "sign_in_instead": "Zamiast tego zaloguj się",
-        "sign_in_instead_prompt": "Zamiast tego zaloguj się",
+        "sign_in_instead_prompt": "Masz już konto? <a>Zaloguj się tutaj</a>",
         "sign_in_or_register": "Zaloguj się lub utwórz konto",
         "sign_in_or_register_description": "Użyj konta lub utwórz nowe, aby kontynuować.",
         "sign_in_prompt": "Posiadasz już konto? <a>Zaloguj się</a>",
@@ -505,6 +505,7 @@
         "matrix": "Matrix",
         "message": "Wiadomość",
         "message_layout": "Wygląd wiadomości",
+        "message_timestamp_invalid": "Nieprawidłowy znacznik czasu",
         "microphone": "Mikrofon",
         "model": "Model",
         "modern": "Współczesny",
@@ -908,6 +909,8 @@
             "warning": "Jeżeli nie ustawiłeś nowej metody odzyskiwania, atakujący może uzyskać dostęp do Twojego konta. Zmień hasło konta i natychmiast ustaw nową metodę odzyskiwania w Ustawieniach."
         },
         "not_supported": "<niewspierany>",
+        "pinned_identity_changed": "Tożsamość użytkownika %(displayName)s (<b>%(userId)s</b>) uległa zmianie. <a>Dowiedz się więcej</a>",
+        "pinned_identity_changed_no_displayname": "Tożsamość użytkownika <b>%(userId)s</b> uległa zmianie <a>Dowiedz się więcej</a>",
         "recovery_method_removed": {
             "description_1": "Ta sesja wykryła, że Twoja fraza bezpieczeństwa i klucz dla bezpiecznych wiadomości zostały usunięte.",
             "description_2": "Jeśli zrobiłeś to przez pomyłkę, możesz ustawić bezpieczne wiadomości w tej sesji, co zaszyfruje ponownie historię wiadomości za pomocą nowej metody odzyskiwania.",
@@ -923,7 +926,6 @@
         },
         "udd": {
             "interactive_verification_button": "Zweryfikuj interaktywnie za pomocą emoji",
-            "manual_verification_button": "Zweryfikuj ręcznie za pomocą tekstu",
             "other_ask_verify_text": "Poproś go/ją o zweryfikowanie tej sesji bądź zweryfikuj ją osobiście poniżej.",
             "other_new_session_text": "%(name)s%(userId)s zalogował się do nowej sesji bez zweryfikowania jej:",
             "own_ask_verify_text": "Zweryfikuj swoje pozostałe sesje używając jednej z opcji poniżej.",
@@ -958,12 +960,6 @@
             "incoming_sas_dialog_waiting": "Oczekiwanie na potwierdzenie partnera…",
             "incoming_sas_user_dialog_text_1": "Zweryfikuj tego użytkownika, aby oznaczyć go jako zaufanego. Użytkownicy zaufani dodają większej pewności, gdy korzystasz z wiadomości szyfrowanych end-to-end.",
             "incoming_sas_user_dialog_text_2": "Weryfikacja tego użytkownika oznaczy Twoją i jego sesję jako zaufaną.",
-            "manual_device_verification_device_id_label": "Identyfikator sesji",
-            "manual_device_verification_device_key_label": "Klucz sesji",
-            "manual_device_verification_device_name_label": "Nazwa sesji",
-            "manual_device_verification_footer": "Jeśli nie pasują, bezpieczeństwo twojego konta mogło zostać zdradzone.",
-            "manual_device_verification_self_text": "Potwierdź porównując następujące elementy w ustawieniach użytkownika w drugiej sesji:",
-            "manual_device_verification_user_text": "Potwierdź sesję tego użytkownika, porównując następujące elementy w jego ustawieniach użytkownika:",
             "no_key_or_device": "Wygląda na to, że nie masz klucza bezpieczeństwa ani żadnych innych urządzeń, które mogą weryfikować Twoją tożsamość.  To urządzenie nie będzie mogło uzyskać dostępu do wcześniejszych zaszyfrowanych wiadomości. Aby zweryfikować swoją tożsamość na tym urządzeniu, należy zresetować klucze weryfikacyjne.",
             "no_support_qr_emoji": "Urządzenie, które próbujesz zweryfikować nie wspiera skanowania kodu QR lub weryfikacji emoji, czyli tego co obsługuje %(brand)s. Spróbuj użyć innego klienta.",
             "other_party_cancelled": "Druga strona anulowała weryfikację.",
@@ -1003,7 +999,7 @@
             "unverified_sessions_toast_description": "Sprawdź, by upewnić się że Twoje konto jest bezpieczne",
             "unverified_sessions_toast_reject": "Później",
             "unverified_sessions_toast_title": "Masz niezweryfikowane sesje",
-            "verification_description": "Zweryfikuj swoją tożsamość, aby uzyskać dostęp do wiadomości szyfrowanych i potwierdzić swoją tożsamość innym.",
+            "verification_description": "Zweryfikuj swoją tożsamość, aby uzyskać dostęp do wiadomości szyfrowanych i potwierdzić swoją tożsamość innym. Jeśli korzystasz z urządzenia mobilnego, otwórz na niej aplikację.",
             "verification_dialog_title_device": "Zweryfikuj drugie urządzenie",
             "verification_dialog_title_user": "Żądanie weryfikacji",
             "verification_skip_warning": "Bez weryfikacji, nie będziesz posiadać dostępu do wszystkich swoich wiadomości, a inni będą Cię widzieć jako niezaufanego.",
@@ -1088,10 +1084,6 @@
     },
     "error_user_not_logged_in": "Użytkownik nie jest zalogowany",
     "event_preview": {
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s zakończył transmisję głosową",
-            "you": "Zakończyłeś transmisje na żywo"
-        },
         "m.call.answer": {
             "dm": "Połączenie w trakcie",
             "user": "%(senderName)s dołączył do połączenia",
@@ -1113,7 +1105,15 @@
             "you": "Dodano reakcję %(reaction)s do %(message)s"
         },
         "m.sticker": "%(senderName)s: %(stickerName)s",
-        "m.text": "%(senderName)s: %(message)s"
+        "m.text": "%(senderName)s: %(message)s",
+        "prefix": {
+            "audio": "Audio",
+            "file": "Plik",
+            "image": "Obraz",
+            "poll": "Ankieta",
+            "video": "Wideo"
+        },
+        "preview": "<bold>%(prefix)s:</bold> %(preview)s"
     },
     "export_chat": {
         "cancelled": "Eksport został anulowany",
@@ -1490,8 +1490,6 @@
         "video_rooms_faq2_answer": "Tak, oś czasu czatu jest wyświetlana wraz z wideo.",
         "video_rooms_faq2_question": "Czy mogę używać kanału tekstowego jednocześnie rozmawiając na kanale wideo?",
         "video_rooms_feedbackSubheading": "Dziękujemy za wypróbowanie wersji beta, opisz wnikliwie swoje doświadczenia i pomóż nam ulepszyć nasz produkt.",
-        "voice_broadcast": "Transmisja głosowa",
-        "voice_broadcast_force_small_chunks": "Wymuś 15s długość kawałków dla transmisji głosowej",
         "wysiwyg_composer": "Bogaty edytor tekstu"
     },
     "labs_mjolnir": {
@@ -1637,7 +1635,6 @@
         "mute_description": "Nie otrzymasz żadnych powiadomień"
     },
     "notifier": {
-        "io.element.voice_broadcast_chunk": "%(senderName)s rozpoczął transmisję głosową",
         "m.key.verification.request": "%(name)s prosi o weryfikację"
     },
     "onboarding": {
@@ -2255,7 +2252,6 @@
             "error_unbanning": "Nie udało się odbanować",
             "events_default": "Wysyłanie wiadomości",
             "invite": "Zapraszanie użytkowników",
-            "io.element.voice_broadcast_info": "Transmisje głosowe",
             "kick": "Usuń użytkowników",
             "m.call": "Rozpocznij połączenie %(brand)s",
             "m.call.member": "Dołącz do połączeń %(brand)s",
@@ -2954,7 +2950,7 @@
         "warning": "<w>OSTRZEŻENIE:</w> <description/>"
     },
     "share": {
-        "link_title": "Link do pokoju",
+        "link_copied": "Skopiowano link",
         "permalink_message": "Link do zaznaczonej wiadomości",
         "permalink_most_recent": "Link do najnowszej wiadomości",
         "share_call": "Link zaproszenia do konferencji",
@@ -3046,13 +3042,6 @@
         "upgraderoom": "Ulepsza pokój do nowej wersji",
         "upgraderoom_permission_error": "Nie posiadasz wymaganych uprawnień do użycia tego polecenia.",
         "usage": "Użycie",
-        "verify": "Weryfikuje użytkownika, sesję oraz klucz publiczny",
-        "verify_mismatch": "OSTRZEŻENIE: WERYFIKACJA KLUCZY NIE POWIODŁA SIĘ! Klucz podpisujący dla %(userId)s oraz sesji %(deviceId)s to \"%(fprint)s\", nie pasuje on do podanego klucza \"%(fingerprint)s\". To może oznaczać że Twoja komunikacja jest przechwytywana!",
-        "verify_nop": "Sesja już zweryfikowana!",
-        "verify_nop_warning_mismatch": "OSTRZEŻENIE: sesja została już zweryfikowana, ale klucze NIE PASUJĄ!",
-        "verify_success_description": "Klucz podpisujący, który podano jest taki sam jak klucz podpisujący otrzymany od %(userId)s oraz sesji %(deviceId)s. Sesja została oznaczona jako zweryfikowana.",
-        "verify_success_title": "Zweryfikowany klucz",
-        "verify_unknown_pair": "Nieznana para (użytkownik, sesja): (%(userId)s, %(deviceId)s)",
         "view": "Przegląda pokój z podanym adresem",
         "whois": "Pokazuje informacje na temat użytkownika"
     },
@@ -3270,8 +3259,8 @@
             "historical_event_no_key_backup": "Historia wiadomości nie jest dostępna na tym urządzeniu",
             "historical_event_unverified_device": "Musisz zweryfikować to urządzenie, aby wyświetlić historię wiadomości",
             "historical_event_user_not_joined": "Nie masz dostępu do tej wiadomości",
-            "sender_identity_previously_verified": "Zweryfikowana tożsamość uległa zmianie",
-            "sender_unsigned_device": "Zaszyfrowano przez urządzenie niezweryfikowane przez właściciela.",
+            "sender_identity_previously_verified": "Zweryfikowana tożsamość nadawcy uległa zmianie",
+            "sender_unsigned_device": "Wysłano z niezabezpieczonego urządzenia.",
             "unable_to_decrypt": "Nie można rozszyfrować wiadomości"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
@@ -3289,10 +3278,6 @@
         "error_rendering_message": "Nie można wczytać tej wiadomości",
         "historical_messages_unavailable": "Nie możesz widzieć poprzednich wiadomości",
         "in_room_name": " w <strong>%(room)s</strong>",
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s zakończył <a>transmisję głosową</a>",
-            "you": "Zakończyłeś <a>transmisje głosową</a>"
-        },
         "io.element.widgets.layout": "%(senderName)s zmienił układ pokoju",
         "late_event_separator": "Pierwotnie wysłano %(dateTime)s",
         "load_error": {
@@ -3747,6 +3732,7 @@
         "error_files_too_large": "Te pliki są <b>zbyt duże</b> do wysłania. Ograniczenie wielkości plików to %(limit)s.",
         "error_some_files_too_large": "Niektóre pliki są <b>zbyt duże</b> do wysłania. Ograniczenie wielkości plików to %(limit)s.",
         "error_title": "Błąd wysyłania",
+        "not_image": "Wybrany plik nie jest prawidłowym plikiem obrazu.",
         "title": "Prześlij pliki",
         "title_progress": "Prześlij pliki (%(current)s z %(total)s)",
         "upload_all_button": "Prześlij wszystko",
@@ -3842,38 +3828,6 @@
         "switch_theme_dark": "Przełącz na tryb ciemny",
         "switch_theme_light": "Przełącz na tryb jasny"
     },
-    "voice_broadcast": {
-        "30s_backward": "30s do tyłu",
-        "30s_forward": "30s do przodu",
-        "action": "Transmisja głosowa",
-        "buffering": "Buforowanie…",
-        "confirm_listen_affirm": "Tak, zakończ moje nagranie",
-        "confirm_listen_description": "Jeśli zaczniesz słuchać tej transmisji na żywo, twoja bieżąca transmisja na żywo zostanie zakończona.",
-        "confirm_listen_title": "Zacząć słuchać transmisji na żywo?",
-        "confirm_stop_affirm": "Tak, zakończ transmisję",
-        "confirm_stop_description": "Czy na pewno chcesz zakończyć transmisję na żywo? Transmisja zostanie zakończona, a całe nagranie będzie dostępne w pokoju.",
-        "confirm_stop_title": "Zakończyć transmisję na żywo?",
-        "connection_error": "Błąd połączenia - Nagrywanie wstrzymane",
-        "failed_already_recording_description": "Już nagrywasz transmisję głosową. Zakończ bieżącą transmisję głosową, aby rozpocząć nową.",
-        "failed_already_recording_title": "Nie można rozpocząć nowej transmisji głosowej",
-        "failed_decrypt": "Nie można rozszyfrować transmisji głosowej",
-        "failed_generic": "Nie można odtworzyć tej transmisji głosowej",
-        "failed_insufficient_permission_description": "Nie posiadasz wymaganych uprawnień, aby rozpocząć transmisję głosową w tym pokoju. Skontaktuj się z administratorem pokoju, aby zwiększyć swoje uprawnienia.",
-        "failed_insufficient_permission_title": "Nie można rozpocząć nowej transmisji głosowej",
-        "failed_no_connection_description": "Niestety, nie jesteśmy w stanie rozpocząć nowego nagrania. Spróbuj ponownie później.",
-        "failed_no_connection_title": "Błąd połączenia",
-        "failed_others_already_recording_description": "Ktoś już nagrywa transmisję głosową. Aby rozpocząć nową, poczekaj aż bieżąca się skończy.",
-        "failed_others_already_recording_title": "Nie można rozpocząć nowej transmisji głosowej",
-        "go_live": "Rozpocznij transmisję",
-        "live": "Na żywo",
-        "pause": "wstrzymaj transmisję głosową",
-        "play": "odtwórz transmisję głosową",
-        "resume": "wznów transmisję głosową"
-    },
-    "voice_message": {
-        "cant_start_broadcast_description": "Nie możesz rozpocząć wiadomości głosowej, ponieważ już nagrywasz transmisję na żywo. Zakończ transmisję na żywo, aby rozpocząć nagrywanie wiadomości głosowej.",
-        "cant_start_broadcast_title": "Nie można rozpocząć wiadomości głosowej"
-    },
     "voip": {
         "already_in_call": "Już dzwoni",
         "already_in_call_person": "Prowadzisz już rozmowę z tą osobą.",
@@ -3893,7 +3847,6 @@
         "camera_disabled": "Twoja kamera jest wyłączona",
         "camera_enabled": "Twoja kamera jest nadal włączona",
         "cannot_call_yourself_description": "Nie możesz wykonać połączenia do siebie.",
-        "change_input_device": "Zmień urządzenie wejściowe",
         "close_lobby": "Zamknij poczekalnię",
         "connecting": "Łączenie",
         "connection_lost": "Połączenie z serwerem zostało przerwane",
@@ -3912,8 +3865,6 @@
         "enable_camera": "Włącz kamerę",
         "enable_microphone": "Wyłącz wyciszenie mikrofonu",
         "expand": "Wróć do połączenia",
-        "failed_call_live_broadcast_description": "Nie możesz rozpocząć połączenia, ponieważ już nagrywasz transmisję na żywo. Zakończ transmisję na żywo, aby rozpocząć połączenie.",
-        "failed_call_live_broadcast_title": "Nie można rozpocząć połączenia",
         "get_call_link": "Udostępnij link do połączenia",
         "hangup": "Rozłącz",
         "hide_sidebar_button": "Ukryj pasek boczny",

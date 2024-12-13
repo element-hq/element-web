@@ -10,18 +10,19 @@ import React, { createRef, RefObject } from "react";
 import { mocked, MockedObject } from "jest-mock";
 import {
     ClientEvent,
+    EventTimeline,
+    EventType,
+    IEvent,
+    JoinRule,
     MatrixClient,
+    MatrixError,
+    MatrixEvent,
     Room,
     RoomEvent,
-    EventType,
-    JoinRule,
-    MatrixError,
     RoomStateEvent,
-    MatrixEvent,
     SearchResult,
-    IEvent,
 } from "matrix-js-sdk/src/matrix";
-import { CryptoApi, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
+import { CryptoApi, UserVerificationStatus, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import {
     fireEvent,
@@ -34,6 +35,7 @@ import {
     cleanup,
 } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
+import { defer } from "matrix-js-sdk/src/utils";
 
 import {
     stubClient,
@@ -73,6 +75,7 @@ import { ViewRoomErrorPayload } from "../../../../src/dispatcher/payloads/ViewRo
 import { SearchScope } from "../../../../src/Searching";
 import { MEGOLM_ENCRYPTION_ALGORITHM } from "../../../../src/utils/crypto";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
+import { ViewUserPayload } from "../../../../src/dispatcher/payloads/ViewUserPayload.ts";
 
 describe("RoomView", () => {
     let cli: MockedObject<MatrixClient>;
@@ -87,8 +90,7 @@ describe("RoomView", () => {
 
     beforeEach(() => {
         mockPlatformPeg({ reload: () => {} });
-        stubClient();
-        cli = mocked(MatrixClientPeg.safeGet());
+        cli = mocked(stubClient());
 
         room = new Room(`!${roomCount++}:example.org`, cli, "@alice:example.org");
         jest.spyOn(room, "findPredecessor");
@@ -201,6 +203,21 @@ describe("RoomView", () => {
         return ref.current!;
     };
 
+    it("should show member list right panel phase on Action.ViewUser without `payload.member`", async () => {
+        const spy = jest.spyOn(stores.rightPanelStore, "showOrHidePhase");
+        await renderRoomView(false);
+
+        defaultDispatcher.dispatch<ViewUserPayload>(
+            {
+                action: Action.ViewUser,
+                member: undefined,
+            },
+            true,
+        );
+
+        expect(spy).toHaveBeenCalledWith(RightPanelPhases.MemberList);
+    });
+
     it("when there is no room predecessor, getHiddenHighlightCount should return 0", async () => {
         const instance = await getRoomViewInstance();
         expect(instance.getHiddenHighlightCount()).toBe(0);
@@ -247,8 +264,9 @@ describe("RoomView", () => {
 
     it("updates url preview visibility on encryption state change", async () => {
         room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+        jest.spyOn(cli, "getCrypto").mockReturnValue(crypto);
         // we should be starting unencrypted
-        expect(cli.isRoomEncrypted(room.roomId)).toEqual(false);
+        expect(await cli.getCrypto()?.isEncryptionEnabledInRoom(room.roomId)).toEqual(false);
 
         const roomViewInstance = await getRoomViewInstance();
 
@@ -263,23 +281,38 @@ describe("RoomView", () => {
         expect(roomViewInstance.state.showUrlPreview).toBe(true);
 
         // now enable encryption
-        cli.isRoomEncrypted.mockReturnValue(true);
+        jest.spyOn(cli.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
 
         // and fake an encryption event into the room to prompt it to re-check
-        await act(() =>
-            room.addLiveEvents([
-                new MatrixEvent({
-                    type: "m.room.encryption",
-                    sender: cli.getUserId()!,
-                    content: {},
-                    event_id: "someid",
-                    room_id: room.roomId,
-                }),
-            ]),
-        );
+        act(() => {
+            const encryptionEvent = new MatrixEvent({
+                type: EventType.RoomEncryption,
+                sender: cli.getUserId()!,
+                content: {},
+                event_id: "someid",
+                room_id: room.roomId,
+            });
+            const roomState = room.getLiveTimeline().getState(EventTimeline.FORWARDS)!;
+            cli.emit(RoomStateEvent.Events, encryptionEvent, roomState, null);
+        });
 
         // URL previews should now be disabled
-        expect(roomViewInstance.state.showUrlPreview).toBe(false);
+        await waitFor(() => expect(roomViewInstance.state.showUrlPreview).toBe(false));
+    });
+
+    it("should not display the timeline when the room encryption is loading", async () => {
+        jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
+        jest.spyOn(cli, "getCrypto").mockReturnValue(crypto);
+        const deferred = defer<boolean>();
+        jest.spyOn(cli.getCrypto()!, "isEncryptionEnabledInRoom").mockImplementation(() => deferred.promise);
+
+        const { asFragment, container } = await mountRoomView();
+        expect(container.querySelector(".mx_RoomView_messagePanel")).toBeNull();
+        expect(asFragment()).toMatchSnapshot();
+
+        deferred.resolve(true);
+        await waitFor(() => expect(container.querySelector(".mx_RoomView_messagePanel")).not.toBeNull());
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("updates live timeline when a timeline reset happens", async () => {
@@ -288,6 +321,32 @@ describe("RoomView", () => {
 
         act(() => room.getUnfilteredTimelineSet().resetLiveTimeline());
         expect(roomViewInstance.state.liveTimeline).not.toEqual(oldTimeline);
+    });
+
+    it("should update when the e2e status when the user verification changed", async () => {
+        room.currentState.setStateEvents([
+            mkRoomMemberJoinEvent(cli.getSafeUserId(), room.roomId),
+            mkRoomMemberJoinEvent("user@example.com", room.roomId),
+        ]);
+        room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Join);
+        // Not all the calls to cli.isRoomEncrypted are migrated, so we need to mock both.
+        mocked(cli.isRoomEncrypted).mockReturnValue(true);
+        jest.spyOn(cli, "getCrypto").mockReturnValue(crypto);
+        jest.spyOn(cli.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
+        jest.spyOn(cli.getCrypto()!, "getUserVerificationStatus").mockResolvedValue(
+            new UserVerificationStatus(false, false, false),
+        );
+        jest.spyOn(cli.getCrypto()!, "getUserDeviceInfo").mockResolvedValue(
+            new Map([["user@example.com", new Map<string, any>()]]),
+        );
+
+        const { container } = await renderRoomView();
+        await waitFor(() => expect(container.querySelector(".mx_E2EIcon_normal")).toBeInTheDocument());
+
+        const verificationStatus = new UserVerificationStatus(true, true, false);
+        jest.spyOn(cli.getCrypto()!, "getUserVerificationStatus").mockResolvedValue(verificationStatus);
+        cli.emit(CryptoEvent.UserTrustStatusChanged, cli.getSafeUserId(), verificationStatus);
+        await waitFor(() => expect(container.querySelector(".mx_E2EIcon_verified")).toBeInTheDocument());
     });
 
     describe("with virtual rooms", () => {
@@ -427,7 +486,8 @@ describe("RoomView", () => {
             ]);
             jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(cli.getSafeUserId());
             jest.spyOn(DMRoomMap.shared(), "getRoomIds").mockReturnValue(new Set([room.roomId]));
-            mocked(cli).isRoomEncrypted.mockReturnValue(true);
+            jest.spyOn(cli, "getCrypto").mockReturnValue(crypto);
+            jest.spyOn(cli.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
             await renderRoomView();
         });
 
@@ -653,7 +713,7 @@ describe("RoomView", () => {
                 skey: id,
                 ts,
             });
-            room.addLiveEvents([widgetEvent]);
+            room.addLiveEvents([widgetEvent], { addToState: false });
             room.currentState.setStateEvents([widgetEvent]);
             cli.emit(RoomStateEvent.Events, widgetEvent, room.currentState, null);
             await flushPromises();

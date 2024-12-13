@@ -13,11 +13,9 @@ import { ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons"
 import { MessagePreview } from "../../../stores/room-list/MessagePreviewStore";
 import { Call } from "../../../models/Call";
 import { RoomTileCallSummary } from "./RoomTileCallSummary";
-import { VoiceBroadcastRoomSubtitle } from "../../../voice-broadcast";
 
 interface Props {
     call: Call | null;
-    hasLiveVoiceBroadcast: boolean;
     messagePreview: MessagePreview | null;
     roomId: string;
     showMessagePreview: boolean;
@@ -25,23 +23,13 @@ interface Props {
 
 const messagePreviewId = (roomId: string): string => `mx_RoomTile_messagePreview_${roomId}`;
 
-export const RoomTileSubtitle: React.FC<Props> = ({
-    call,
-    hasLiveVoiceBroadcast,
-    messagePreview,
-    roomId,
-    showMessagePreview,
-}) => {
+export const RoomTileSubtitle: React.FC<Props> = ({ call, messagePreview, roomId, showMessagePreview }) => {
     if (call) {
         return (
             <div className="mx_RoomTile_subtitle">
                 <RoomTileCallSummary call={call} />
             </div>
         );
-    }
-
-    if (hasLiveVoiceBroadcast) {
-        return <VoiceBroadcastRoomSubtitle />;
     }
 
     if (showMessagePreview && messagePreview) {

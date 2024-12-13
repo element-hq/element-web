@@ -102,7 +102,7 @@ test.describe("Device verification", () => {
         // feed the QR code into the verification request.
         const qrData = await readQrCode(infoDialog);
         const verifier = await verificationRequest.evaluateHandle(
-            (request, qrData) => request.scanQRCode(new Uint8Array(qrData)),
+            (request, qrData) => request.scanQRCode(new Uint8ClampedArray(qrData)),
             [...qrData],
         );
 

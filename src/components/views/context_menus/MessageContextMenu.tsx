@@ -38,7 +38,7 @@ import ContextMenu, { toRightOf, MenuProps } from "../../structures/ContextMenu"
 import ReactionPicker from "../emojipicker/ReactionPicker";
 import ViewSource from "../../structures/ViewSource";
 import { createRedactEventDialog } from "../dialogs/ConfirmRedactDialog";
-import ShareDialog from "../dialogs/ShareDialog";
+import { ShareDialog } from "../dialogs/ShareDialog";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import EndPollDialog from "../dialogs/EndPollDialog";
 import { isPollEnded } from "../messages/MPollBody";
@@ -126,7 +126,7 @@ interface IState {
 
 export default class MessageContextMenu extends React.Component<IProps, IState> {
     public static contextType = RoomContext;
-    public declare context: React.ContextType<typeof RoomContext>;
+    declare public context: React.ContextType<typeof RoomContext>;
 
     private reactButtonRef = createRef<any>(); // XXX Ref to a functional component
 

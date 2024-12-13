@@ -597,12 +597,6 @@
             "incoming_sas_dialog_title": "Įeinantis Patikrinimo Prašymas",
             "incoming_sas_user_dialog_text_1": "Patvirtinkite šį vartotoją, kad pažymėtumėte jį kaip patikimą. Vartotojų pažymėjimas patikimais suteikia jums papildomos ramybės naudojant visapusiškai užšifruotas žinutes.",
             "incoming_sas_user_dialog_text_2": "Patvirtinant šį vartotoją, jo seansas bus pažymėtas kaip patikimas, taip pat jūsų seansas bus pažymėtas kaip patikimas jam.",
-            "manual_device_verification_device_id_label": "Seanso ID",
-            "manual_device_verification_device_key_label": "Seanso raktas",
-            "manual_device_verification_device_name_label": "Seanso pavadinimas",
-            "manual_device_verification_footer": "Jei jie nesutampa, gali būti pažeistas jūsų komunikacijos saugumas.",
-            "manual_device_verification_self_text": "Patvirtinkite, palygindami tai, kas nurodyta toliau, su Vartotojo Nustatymais kitame jūsų seanse:",
-            "manual_device_verification_user_text": "Patvirtinkite šio vartotojo seansą, palygindami tai, kas nurodyta toliau, su jo Vartotojo Nustatymais:",
             "no_support_qr_emoji": "Įrenginys, kurį bandote patvirtinti, nepalaiko QR kodo nuskaitymo arba jaustukų patikrinimo, kurį palaiko %(brand)s. Pabandykite naudoti kitą klientą.",
             "other_party_cancelled": "Kita šalis atšaukė patvirtinimą.",
             "prompt_encrypted": "Patvirtinkite visus vartotojus kambaryje, kad užtikrintumėte jo saugumą.",
@@ -886,8 +880,7 @@
         "video_rooms_faq1_answer": "Kairiajame skydelyje esančioje kambarių skiltyje naudokite mygtuką “+”.",
         "video_rooms_faq1_question": "Kaip galiu sukurti vaizdo kambarį?",
         "video_rooms_faq2_answer": "Taip, pokalbių laiko juosta rodoma kartu su vaizdu.",
-        "video_rooms_faq2_question": "Ar galiu naudoti teksto pokalbius kartu su vaizdo skambučiu?",
-        "voice_broadcast": "Balso transliacija"
+        "video_rooms_faq2_question": "Ar galiu naudoti teksto pokalbius kartu su vaizdo skambučiu?"
     },
     "labs_mjolnir": {
         "advanced_warning": "⚠ Šie nustatymai yra skirti pažengusiems vartotojams.",
@@ -1859,11 +1852,6 @@
         "upgraderoom": "Atnaujina kambarį į naują versiją",
         "upgraderoom_permission_error": "Jūs neturite reikalingų leidimų naudoti šią komandą.",
         "usage": "Naudojimas",
-        "verify": "Patvirtina vartotojo, seanso ir pubkey daugiadalę duomenų struktūrą",
-        "verify_mismatch": "ĮSPĖJIMAS: RAKTŲ PATIKRINIMAS NEPAVYKO! Pasirašymo raktas vartotojui %(userId)s ir seansui %(deviceId)s yra \"%(fprint)s\", kuris nesutampa su pateiktu raktu \"%(fingerprint)s\". Tai gali reikšti, kad jūsų komunikacijos yra perimamos!",
-        "verify_nop": "Seansas jau patvirtintas!",
-        "verify_success_description": "Jūsų pateiktas pasirašymo raktas sutampa su pasirašymo raktu, gautu iš vartotojo %(userId)s seanso %(deviceId)s. Seansas pažymėtas kaip patikrintas.",
-        "verify_success_title": "Patvirtintas raktas",
         "whois": "Parodo informaciją apie vartotoją"
     },
     "space": {
@@ -2384,15 +2372,6 @@
     },
     "user_menu": {
         "settings": "Visi nustatymai"
-    },
-    "voice_broadcast": {
-        "action": "Balso transliacija",
-        "confirm_stop_affirm": "Taip, sustabdyti transliaciją",
-        "confirm_stop_title": "Sustabdyti transliaciją gyvai?",
-        "live": "Gyvai",
-        "pause": "pristabdyti balso transliaciją",
-        "play": "paleisti balso transliaciją",
-        "resume": "tęsti balso transliaciją"
     },
     "voip": {
         "already_in_call": "Jau pokalbyje",

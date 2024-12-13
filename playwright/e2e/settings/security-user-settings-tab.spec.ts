@@ -36,7 +36,7 @@ test.describe("Security user settings tab", () => {
         });
 
         test.describe("AnalyticsLearnMoreDialog", () => {
-            test("should be rendered properly", async ({ app, page }) => {
+            test("should be rendered properly", { tag: "@screenshot" }, async ({ app, page }) => {
                 const tab = await app.settings.openUserSettings("Security");
                 await tab.getByRole("button", { name: "Learn more" }).click();
                 await expect(page.locator(".mx_AnalyticsLearnMoreDialog_wrapper .mx_Dialog")).toMatchScreenshot(

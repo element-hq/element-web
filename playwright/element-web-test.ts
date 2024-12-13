@@ -314,6 +314,10 @@ export const expect = baseExpect.extend({
         const testInfo = test.info();
         if (!testInfo) throw new Error(`toMatchScreenshot() must be called during the test`);
 
+        if (!testInfo.tags.includes("@screenshot")) {
+            throw new Error("toMatchScreenshot() must be used in a test tagged with @screenshot");
+        }
+
         const page = "page" in receiver ? receiver.page() : receiver;
 
         let css = `

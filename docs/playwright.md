@@ -2,10 +2,10 @@
 
 ## Contents
 
--   How to run the tests
--   How the tests work
--   How to write great Playwright tests
--   Visual testing
+- How to run the tests
+- How the tests work
+- How to write great Playwright tests
+- Visual testing
 
 ## Running the Tests
 
@@ -123,15 +123,15 @@ When a Synapse instance is started, it's given a config generated from one of th
 templates in `playwright/plugins/homeserver/synapse/templates`. There are a couple of special files
 in these templates:
 
--   `homeserver.yaml`:
-    Template substitution happens in this file. Template variables are:
-    -   `REGISTRATION_SECRET`: The secret used to register users via the REST API.
-    -   `MACAROON_SECRET_KEY`: Generated each time for security
-    -   `FORM_SECRET`: Generated each time for security
-    -   `PUBLIC_BASEURL`: The localhost url + port combination the synapse is accessible at
--   `localhost.signing.key`: A signing key is auto-generated and saved to this file.
-    Config templates should not contain a signing key and instead assume that one will exist
-    in this file.
+- `homeserver.yaml`:
+  Template substitution happens in this file. Template variables are:
+    - `REGISTRATION_SECRET`: The secret used to register users via the REST API.
+    - `MACAROON_SECRET_KEY`: Generated each time for security
+    - `FORM_SECRET`: Generated each time for security
+    - `PUBLIC_BASEURL`: The localhost url + port combination the synapse is accessible at
+- `localhost.signing.key`: A signing key is auto-generated and saved to this file.
+  Config templates should not contain a signing key and instead assume that one will exist
+  in this file.
 
 All other files in the template are copied recursively to `/data/`, so the file `foo.html`
 in a template can be referenced in the config as `/data/foo.html`.
@@ -217,3 +217,10 @@ instead of the native `toHaveScreenshot`.
 
 If you are running Linux and are unfortunate that the screenshots are not rendering identically,
 you may wish to specify `--ignore-snapshots` and rely on Docker to render them for you.
+
+## Test Tags
+
+We use test tags to categorise tests for running subsets more efficiently.
+
+- `@mergequeue`: Tests that are slow or flaky and cover areas of the app we update seldom, should not be run on every PR commit but will be run in the Merge Queue.
+- `@screenshot`: Tests that use `toMatchScreenshot` to speed up a run of `test:playwright:screenshots`. A test with this tag must not also have the `@mergequeue` tag as this would cause false positives in the stale screenshot detection.

@@ -19,7 +19,6 @@ import ErrorDialog from "../../../dialogs/ErrorDialog";
 import PowerSelector from "../../../elements/PowerSelector";
 import SettingsFieldset from "../../SettingsFieldset";
 import SettingsStore from "../../../../../settings/SettingsStore";
-import { VoiceBroadcastInfoEventType } from "../../../../../voice-broadcast";
 import { ElementCall } from "../../../../../models/Call";
 import SdkConfig, { DEFAULTS } from "../../../../../SdkConfig";
 import { AddPrivilegedUsers } from "../../AddPrivilegedUsers";
@@ -62,7 +61,6 @@ const plEventsToShow: Record<string, IEventShowOpts> = {
 
     // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
     "im.vector.modular.widgets": { isState: true, hideForSpace: true },
-    [VoiceBroadcastInfoEventType]: { isState: true, hideForSpace: true },
 };
 
 // parse a string as an integer; if the input is undefined, or cannot be parsed
@@ -81,7 +79,7 @@ interface IBannedUserProps {
 
 export class BannedUser extends React.Component<IBannedUserProps> {
     public static contextType = MatrixClientContext;
-    public declare context: React.ContextType<typeof MatrixClientContext>;
+    declare public context: React.ContextType<typeof MatrixClientContext>;
 
     private onUnbanClick = (): void => {
         this.context.unban(this.props.member.roomId, this.props.member.userId).catch((err) => {
@@ -134,7 +132,7 @@ interface RolesRoomSettingsTabState {
 
 export default class RolesRoomSettingsTab extends React.Component<IProps, RolesRoomSettingsTabState> {
     public static contextType = MatrixClientContext;
-    public declare context: React.ContextType<typeof MatrixClientContext>;
+    declare public context: React.ContextType<typeof MatrixClientContext>;
 
     public constructor(props: IProps) {
         super(props);
@@ -289,7 +287,6 @@ export default class RolesRoomSettingsTab extends React.Component<IProps, RolesR
 
             // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
             "im.vector.modular.widgets": isSpaceRoom ? null : _td("room_settings|permissions|m.widget"),
-            [VoiceBroadcastInfoEventType]: _td("room_settings|permissions|io.element.voice_broadcast_info"),
         };
 
         // MSC3401: Native Group VoIP signaling

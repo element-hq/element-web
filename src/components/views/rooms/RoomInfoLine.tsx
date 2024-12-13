@@ -64,7 +64,7 @@ const RoomInfoLine: FC<IProps> = ({ room }) => {
         // summary is not still loading
         const viewMembers = (): void =>
             RightPanelStore.instance.setCard({
-                phase: room.isSpaceRoom() ? RightPanelPhases.SpaceMemberList : RightPanelPhases.RoomMemberList,
+                phase: RightPanelPhases.MemberList,
             });
 
         members = (

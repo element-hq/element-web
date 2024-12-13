@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { test, expect } from "../../element-web-test";
 
-test(`shows error page if browser lacks Intl support`, async ({ page }) => {
+test(`shows error page if browser lacks Intl support`, { tag: "@screenshot" }, async ({ page }) => {
     await page.addInitScript({ content: `delete window.Intl;` });
     await page.goto("/");
 
@@ -21,7 +21,7 @@ test(`shows error page if browser lacks Intl support`, async ({ page }) => {
     await expect(page).toMatchScreenshot("unsupported-browser.png");
 });
 
-test(`shows error page if browser lacks WebAssembly support`, async ({ page }) => {
+test(`shows error page if browser lacks WebAssembly support`, { tag: "@screenshot" }, async ({ page }) => {
     await page.addInitScript({ content: `delete window.WebAssembly;` });
     await page.goto("/");
 
