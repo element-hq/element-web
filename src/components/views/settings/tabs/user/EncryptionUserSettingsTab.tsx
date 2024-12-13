@@ -20,21 +20,21 @@ import { SettingsSection } from "../../shared/SettingsSection";
 import { SettingsSubheader } from "../../SettingsSubheader";
 
 /**
- * The panel to show in the encryption settings tab.
+ * The state in the encryption settings tab.
  *  - "loading": We are checking if the device is verified.
  *  - "main": The main panel with all the sections (Key storage, recovery, advanced).
  *  - "verification_required": The panel to show when the user needs to verify their session.
  *  - "change_recovery_key": The panel to show when the user is changing their recovery key.
  *  - "set_recovery_key": The panel to show when the user is setting up their recovery key.
  */
-type Panel = "loading" | "main" | "verification_required" | "change_recovery_key" | "set_recovery_key";
+type State = "loading" | "main" | "verification_required" | "change_recovery_key" | "set_recovery_key";
 
 export function EncryptionUserSettingsTab(): JSX.Element {
-    const [panel, setPanel] = useState<Panel>("loading");
-    const checkVerificationRequired = useVerificationRequired(setPanel);
+    const [state, setState] = useState<State>("loading");
+    const checkVerificationRequired = useVerificationRequired(setState);
 
     let content: JSX.Element;
-    switch (panel) {
+    switch (state) {
         case "loading":
             content = <InlineSpinner />;
             break;
@@ -44,41 +44,37 @@ export function EncryptionUserSettingsTab(): JSX.Element {
         case "main":
             content = (
                 <RecoveryPanel
-                    onChangingRecoveryKeyClick={() => setPanel("change_recovery_key")}
-                    onSetUpRecoveryClick={() => setPanel("set_recovery_key")}
-                />
-            );
-            break;
-        case "set_recovery_key":
-            content = (
-                <ChangeRecoveryKey
-                    isSetupFlow={true}
-                    onCancelClick={() => setPanel("main")}
-                    onFinish={() => setPanel("main")}
+                    onChangingRecoveryKeyClick={() => setState("change_recovery_key")}
+                    onSetUpRecoveryClick={() => setState("set_recovery_key")}
                 />
             );
             break;
         case "change_recovery_key":
+        case "set_recovery_key":
             content = (
                 <ChangeRecoveryKey
-                    isSetupFlow={false}
-                    onCancelClick={() => setPanel("main")}
-                    onFinish={() => setPanel("main")}
+                    isSetupFlow={state === "set_recovery_key"}
+                    onCancelClick={() => setState("main")}
+                    onFinish={() => setState("main")}
                 />
             );
             break;
     }
 
-    return <SettingsTab className="mx_EncryptionUserSettingsTab">{content}</SettingsTab>;
+    return (
+        <SettingsTab className="mx_EncryptionUserSettingsTab" data-testid="encryptionTab">
+            {content}
+        </SettingsTab>
+    );
 }
 
 /**
  * Hook to check if the user needs to verify their session.
- * If the user needs to verify their session, the panel will be set to "verification_required".
- * If the user doesn't need to verify their session, the panel will be set to "main".
- * @param setPanel
+ * If the user needs to verify their session, the state will be set to "verification_required".
+ * If the user doesn't need to verify their session, the state will be set to "main".
+ * @param setState
  */
-function useVerificationRequired(setPanel: (panel: Panel) => void): () => Promise<void> {
+function useVerificationRequired(setState: (state: State) => void): () => Promise<void> {
     const matrixClient = useMatrixClientContext();
 
     const checkVerificationRequired = useCallback(async () => {
@@ -86,9 +82,9 @@ function useVerificationRequired(setPanel: (panel: Panel) => void): () => Promis
         if (!crypto) return;
 
         const isCrossSigningReady = await crypto.isCrossSigningReady();
-        if (isCrossSigningReady) setPanel("main");
-        else setPanel("verification_required");
-    }, [matrixClient, setPanel]);
+        if (isCrossSigningReady) setState("main");
+        else setState("verification_required");
+    }, [matrixClient, setState]);
 
     useEffect(() => {
         checkVerificationRequired();
