@@ -9,8 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { type Page } from "@playwright/test";
 
 import { test, expect } from "../../element-web-test";
-import { test as masTest } from "../oidc";
-import { registerAccountMas } from "../oidc";
+import { test as masTest, registerAccountMas } from "../oidc";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 async function expectBackupVersionToBe(page: Page, version: string) {
