@@ -47,16 +47,16 @@ function getHeaderLabelJSX(vm: MemberListViewState): React.ReactNode {
     if (vm.isLoading) {
         return (
             <Flex align="center" gap="8px">
-                <InlineSpinner /> Loading...
+                <InlineSpinner /> {_t("common|loading")}
             </Flex>
         );
     }
 
     const filteredMemberCount = vm.members.length;
     if (filteredMemberCount === 0) {
-        return "No matches";
+        return _t("member_list|no_matches");
     }
-    return `${filteredMemberCount} Members`;
+    return _t("member_list|count", { count: filteredMemberCount });
 }
 
 /**
@@ -79,7 +79,7 @@ const MemberListHeaderView: React.FC<Props> = (props: Props) => {
                     disabled={!vm.canInvite}
                     onClick={vm.onInviteButtonClick}
                 >
-                    Invite
+                    {_t("action|invite")}
                 </Button>
             </OptionalTooltip>
         ) : (
@@ -87,7 +87,7 @@ const MemberListHeaderView: React.FC<Props> = (props: Props) => {
                 <Search
                     className="mx_MemberListHeaderView_search mx_no_textinput"
                     name="searchMembers"
-                    placeholder="Filter People..."
+                    placeholder={_t("member_list|filter_placeholder")}
                     onChange={(e) => vm.search((e as React.ChangeEvent<HTMLInputElement>).target.value)}
                 />
                 <OptionalTooltip canInvite={vm.canInvite}>

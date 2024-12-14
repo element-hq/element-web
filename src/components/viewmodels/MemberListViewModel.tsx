@@ -50,7 +50,7 @@ import { useTypedEventEmitter } from "../../hooks/useEventEmitter";
 
 type Member = XOR<{ member: RoomMember }, { threePidInvite: ThreePIDInvite }>;
 
-function getPending3PidInvites(room: Room, searchQuery?: string): Member[] {
+export function getPending3PidInvites(room: Room, searchQuery?: string): Member[] {
     // include 3pid invites (m.room.third_party_invite) state events.
     // The HS may have already converted these into m.room.member invites so
     // we shouldn't add them if the 3pid invite state key (token) is in the
@@ -76,7 +76,7 @@ function getPending3PidInvites(room: Room, searchQuery?: string): Member[] {
     return invites;
 }
 
-function sdkRoomMemberToRoomMember(member: SDKRoomMember): Member {
+export function sdkRoomMemberToRoomMember(member: SDKRoomMember): Member {
     const displayUserId =
         UserIdentifierCustomisations.getDisplayUserIdentifier(member.userId, {
             roomId: member.roomId,

@@ -56,7 +56,7 @@ export enum PowerStatus {
 
 const PowerLabel: Record<PowerStatus, TranslationKey> = {
     [PowerStatus.Admin]: _td("power_level|admin"),
-    [PowerStatus.Moderator]: _td("power_level|mod"),
+    [PowerStatus.Moderator]: _td("power_level|moderator"),
 };
 
 export interface ThreePidTileViewState {
@@ -190,7 +190,7 @@ export function useMemberTileViewModel(props: MemberTileViewModelProps): MemberT
         userLabel = _t(PowerLabel[powerStatus]);
     }
     if (props.member.isInvite) {
-        userLabel = "(Invited)";
+        userLabel = `(${_t("member_list|invited_label")})`;
     }
 
     return {
