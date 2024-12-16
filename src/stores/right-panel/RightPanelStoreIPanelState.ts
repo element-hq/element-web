@@ -16,7 +16,6 @@ export interface IRightPanelCardState {
     verificationRequest?: VerificationRequest;
     verificationRequestPromise?: Promise<VerificationRequest>;
     widgetId?: string;
-    spaceId?: string;
     // Room3pidMemberInfo, Space3pidMemberInfo,
     memberInfoEvent?: MatrixEvent;
     // threads
@@ -32,7 +31,6 @@ export interface IRightPanelCardStateStored {
     memberId?: string;
     // we do not store the things associated with verification
     widgetId?: string;
-    spaceId?: string;
     // 3pidMemberInfo
     memberInfoEventId?: string;
     // threads
@@ -80,7 +78,6 @@ export function convertCardToStore(panelState: IRightPanelCard): IRightPanelCard
     const state = panelState.state ?? {};
     const stateStored: IRightPanelCardStateStored = {
         widgetId: state.widgetId,
-        spaceId: state.spaceId,
         isInitialEventHighlighted: state.isInitialEventHighlighted,
         initialEventScrollIntoView: state.initialEventScrollIntoView,
         threadHeadEventId: !!state?.threadHeadEvent?.getId() ? state.threadHeadEvent.getId() : undefined,
@@ -97,7 +94,6 @@ function convertStoreToCard(panelStateStore: IRightPanelCardStored, room: Room):
     const stateStored = panelStateStore.state ?? {};
     const state: IRightPanelCardState = {
         widgetId: stateStored.widgetId,
-        spaceId: stateStored.spaceId,
         isInitialEventHighlighted: stateStored.isInitialEventHighlighted,
         initialEventScrollIntoView: stateStored.initialEventScrollIntoView,
         threadHeadEvent: !!stateStored?.threadHeadEventId

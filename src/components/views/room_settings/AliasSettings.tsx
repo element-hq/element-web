@@ -94,7 +94,7 @@ interface IState {
 
 export default class AliasSettings extends React.Component<IProps, IState> {
     public static contextType = MatrixClientContext;
-    public declare context: ContextType<typeof MatrixClientContext>;
+    declare public context: ContextType<typeof MatrixClientContext>;
 
     public static defaultProps = {
         canSetAliases: false,

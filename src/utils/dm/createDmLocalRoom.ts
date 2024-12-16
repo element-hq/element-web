@@ -109,7 +109,7 @@ export async function createDmLocalRoom(client: MatrixClient, targets: Member[])
 
     localRoom.targets = targets;
     localRoom.updateMyMembership(KnownMembership.Join);
-    localRoom.addLiveEvents(events);
+    localRoom.addLiveEvents(events, { addToState: true });
     localRoom.currentState.setStateEvents(events);
     localRoom.name = localRoom.getDefaultRoomName(client.getUserId()!);
     client.store.storeRoom(localRoom);

@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { MutableRefObject, ReactNode, useContext, useRef } from "react";
+import React, { MutableRefObject, ReactNode, useRef } from "react";
 import { CallEvent, CallState, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
 import { Optional } from "matrix-events-sdk";
@@ -21,19 +21,7 @@ import { WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
 import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../../stores/ActiveWidgetStore";
 import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
-import { SDKContext, SdkContextClass } from "../../contexts/SDKContext";
-import {
-    useCurrentVoiceBroadcastPreRecording,
-    useCurrentVoiceBroadcastRecording,
-    VoiceBroadcastPlayback,
-    VoiceBroadcastPlaybackBody,
-    VoiceBroadcastPreRecording,
-    VoiceBroadcastPreRecordingPip,
-    VoiceBroadcastRecording,
-    VoiceBroadcastRecordingPip,
-    VoiceBroadcastSmallPlaybackBody,
-} from "../../voice-broadcast";
-import { useCurrentVoiceBroadcastPlayback } from "../../voice-broadcast/hooks/useCurrentVoiceBroadcastPlayback";
+import { SdkContextClass } from "../../contexts/SDKContext";
 import { WidgetPip } from "../views/pips/WidgetPip";
 
 const SHOW_CALL_IN_STATES = [
@@ -46,9 +34,6 @@ const SHOW_CALL_IN_STATES = [
 ];
 
 interface IProps {
-    voiceBroadcastRecording: Optional<VoiceBroadcastRecording>;
-    voiceBroadcastPreRecording: Optional<VoiceBroadcastPreRecording>;
-    voiceBroadcastPlayback: Optional<VoiceBroadcastPlayback>;
     movePersistedElement: MutableRefObject<(() => void) | undefined>;
 }
 
@@ -245,52 +230,9 @@ class PipContainerInner extends React.Component<IProps, IState> {
         this.setState({ showWidgetInPip, persistentWidgetId, persistentRoomId });
     }
 
-    private createVoiceBroadcastPlaybackPipContent(voiceBroadcastPlayback: VoiceBroadcastPlayback): CreatePipChildren {
-        const content =
-            this.state.viewedRoomId === voiceBroadcastPlayback.infoEvent.getRoomId() ? (
-                <VoiceBroadcastPlaybackBody playback={voiceBroadcastPlayback} pip={true} />
-            ) : (
-                <VoiceBroadcastSmallPlaybackBody playback={voiceBroadcastPlayback} />
-            );
-
-        return ({ onStartMoving }) => (
-            <div key={`vb-playback-${voiceBroadcastPlayback.infoEvent.getId()}`} onMouseDown={onStartMoving}>
-                {content}
-            </div>
-        );
-    }
-
-    private createVoiceBroadcastPreRecordingPipContent(
-        voiceBroadcastPreRecording: VoiceBroadcastPreRecording,
-    ): CreatePipChildren {
-        return ({ onStartMoving }) => (
-            <div key="vb-pre-recording" onMouseDown={onStartMoving}>
-                <VoiceBroadcastPreRecordingPip voiceBroadcastPreRecording={voiceBroadcastPreRecording} />
-            </div>
-        );
-    }
-
-    private createVoiceBroadcastRecordingPipContent(
-        voiceBroadcastRecording: VoiceBroadcastRecording,
-    ): CreatePipChildren {
-        return ({ onStartMoving }) => (
-            <div key={`vb-recording-${voiceBroadcastRecording.infoEvent.getId()}`} onMouseDown={onStartMoving}>
-                <VoiceBroadcastRecordingPip recording={voiceBroadcastRecording} />
-            </div>
-        );
-    }
-
     public render(): ReactNode {
         const pipMode = true;
-        let pipContent: Array<CreatePipChildren> = [];
-
-        if (this.props.voiceBroadcastRecording) {
-            pipContent = [this.createVoiceBroadcastRecordingPipContent(this.props.voiceBroadcastRecording)];
-        } else if (this.props.voiceBroadcastPreRecording) {
-            pipContent = [this.createVoiceBroadcastPreRecordingPipContent(this.props.voiceBroadcastPreRecording)];
-        } else if (this.props.voiceBroadcastPlayback) {
-            pipContent = [this.createVoiceBroadcastPlaybackPipContent(this.props.voiceBroadcastPlayback)];
-        }
+        const pipContent: Array<CreatePipChildren> = [];
 
         if (this.state.primaryCall) {
             // get a ref to call inside the current scope
@@ -338,24 +280,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
 }
 
 export const PipContainer: React.FC = () => {
-    const sdkContext = useContext(SDKContext);
-    const voiceBroadcastPreRecordingStore = sdkContext.voiceBroadcastPreRecordingStore;
-    const { currentVoiceBroadcastPreRecording } = useCurrentVoiceBroadcastPreRecording(voiceBroadcastPreRecordingStore);
-
-    const voiceBroadcastRecordingsStore = sdkContext.voiceBroadcastRecordingsStore;
-    const { currentVoiceBroadcastRecording } = useCurrentVoiceBroadcastRecording(voiceBroadcastRecordingsStore);
-
-    const voiceBroadcastPlaybacksStore = sdkContext.voiceBroadcastPlaybacksStore;
-    const { currentVoiceBroadcastPlayback } = useCurrentVoiceBroadcastPlayback(voiceBroadcastPlaybacksStore);
-
     const movePersistedElement = useRef<() => void>();
 
-    return (
-        <PipContainerInner
-            voiceBroadcastPlayback={currentVoiceBroadcastPlayback}
-            voiceBroadcastPreRecording={currentVoiceBroadcastPreRecording}
-            voiceBroadcastRecording={currentVoiceBroadcastRecording}
-            movePersistedElement={movePersistedElement}
-        />
-    );
+    return <PipContainerInner movePersistedElement={movePersistedElement} />;
 };

@@ -1,6 +1,6 @@
 {
     "name": "element-web",
-    "version": "1.11.85",
+    "version": "1.11.87",
     "description": "A feature-rich client for Matrix.org",
     "author": "New Vector Ltd.",
     "repository": {
@@ -64,7 +64,7 @@
         "test:playwright:open": "yarn test:playwright --ui",
         "test:playwright:screenshots": "yarn test:playwright:screenshots:build && yarn test:playwright:screenshots:run",
         "test:playwright:screenshots:build": "docker build playwright -t element-web-playwright",
-        "test:playwright:screenshots:run": "docker run --rm --network host -e BASE_URL -e CI -v $(pwd):/work/ -v $(node -e 'console.log(require(`path`).dirname(require.resolve(`matrix-js-sdk/package.json`)))'):/work/node_modules/matrix-js-sdk -v /var/run/docker.sock:/var/run/docker.sock -v /tmp/:/tmp/ -it element-web-playwright",
+        "test:playwright:screenshots:run": "docker run --rm --network host -e BASE_URL -e CI -v $(pwd):/work/ -v $(node -e 'console.log(require(`path`).dirname(require.resolve(`matrix-js-sdk/package.json`)))'):/work/node_modules/matrix-js-sdk -v /var/run/docker.sock:/var/run/docker.sock -v /tmp/:/tmp/ -it element-web-playwright --grep @screenshot",
         "coverage": "yarn test --coverage",
         "analyse:unused-exports": "ts-node ./scripts/analyse_unused_exports.ts",
         "analyse:webpack-bundles": "webpack-bundle-analyzer webpack-stats.json webapp",
@@ -73,12 +73,14 @@
     "resolutions": {
         "oidc-client-ts": "3.1.0",
         "jwt-decode": "4.0.0",
-        "caniuse-lite": "1.0.30001679",
+        "caniuse-lite": "1.0.30001684",
         "wrap-ansi-cjs": "npm:wrap-ansi@^7.0.0",
         "wrap-ansi": "npm:wrap-ansi@^7.0.0"
     },
     "dependencies": {
         "@babel/runtime": "^7.12.5",
+        "@fontsource/inconsolata": "^5",
+        "@fontsource/inter": "^5",
         "@formatjs/intl-segmenter": "^11.5.7",
         "@matrix-org/analytics-events": "^0.29.0",
         "@matrix-org/emojibase-bindings": "^1.3.3",
@@ -86,7 +88,7 @@
         "@matrix-org/spec": "^1.7.0",
         "@sentry/browser": "^8.0.0",
         "@vector-im/compound-design-tokens": "^2.1.0",
-        "@vector-im/compound-web": "^7.4.0",
+        "@vector-im/compound-web": "^7.5.0",
         "@vector-im/matrix-wysiwyg": "2.37.13",
         "@zxcvbn-ts/core": "^3.0.4",
         "@zxcvbn-ts/language-common": "^3.0.4",
@@ -114,10 +116,10 @@
         "jsrsasign": "^11.0.0",
         "jszip": "^3.7.0",
         "katex": "^0.16.0",
-        "linkify-element": "4.1.3",
-        "linkify-react": "4.1.3",
-        "linkify-string": "4.1.3",
-        "linkifyjs": "4.1.3",
+        "linkify-element": "4.2.0",
+        "linkify-react": "4.2.0",
+        "linkify-string": "4.2.0",
+        "linkifyjs": "4.2.0",
         "lodash": "^4.17.21",
         "maplibre-gl": "^4.0.0",
         "matrix-encrypt-attachment": "^1.0.3",
@@ -216,7 +218,6 @@
         "babel-loader": "^9.0.0",
         "babel-plugin-jsx-remove-data-test-id": "^3.0.0",
         "blob-polyfill": "^9.0.0",
-        "buffer": "^6.0.3",
         "chokidar": "^4.0.0",
         "concurrently": "^9.0.0",
         "copy-webpack-plugin": "^12.0.0",
@@ -270,14 +271,16 @@
         "postcss-preset-env": "^10.0.0",
         "postcss-scss": "^4.0.4",
         "postcss-simple-vars": "^7.0.1",
-        "prettier": "3.3.3",
+        "prettier": "3.4.2",
         "process": "^0.11.10",
         "raw-loader": "^4.0.2",
         "rimraf": "^6.0.0",
         "semver": "^7.5.2",
+        "source-map-loader": "^5.0.0",
         "stylelint": "^16.1.0",
         "stylelint-config-standard": "^36.0.0",
         "stylelint-scss": "^6.0.0",
+        "stylelint-value-no-unknown-custom-properties": "^6.0.1",
         "terser-webpack-plugin": "^5.3.9",
         "ts-node": "^10.9.1",
         "ts-prune": "^0.10.3",
@@ -298,6 +301,5 @@
     },
     "engines": {
         "node": ">=20.0.0"
-    },
-    "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
+    }
 }

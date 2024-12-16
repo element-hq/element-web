@@ -110,10 +110,10 @@ export default class RightPanel extends React.Component<Props, IState> {
         }
 
         // redraw the badge on the membership list
-        if (this.state.phase === RightPanelPhases.RoomMemberList) {
+        if (this.state.phase === RightPanelPhases.MemberList) {
             this.delayedUpdate();
         } else if (
-            this.state.phase === RightPanelPhases.RoomMemberInfo &&
+            this.state.phase === RightPanelPhases.MemberInfo &&
             member.userId === this.state.cardState?.member?.userId
         ) {
             // refresh the member info (e.g. new power level)
@@ -158,7 +158,7 @@ export default class RightPanel extends React.Component<Props, IState> {
         const phase = this.props.overwriteCard?.phase ?? this.state.phase;
         const cardState = this.props.overwriteCard?.state ?? this.state.cardState;
         switch (phase) {
-            case RightPanelPhases.RoomMemberList:
+            case RightPanelPhases.MemberList:
                 if (!!roomId) {
                     card = (
                         <MemberListView roomId={roomId} onClose={this.onClose} />
@@ -172,23 +172,8 @@ export default class RightPanel extends React.Component<Props, IState> {
                     );
                 }
                 break;
-            case RightPanelPhases.SpaceMemberList:
-                if (!!cardState?.spaceId || !!roomId) {
-                    card = (
-                        <MemberListView roomId={cardState?.spaceId ?? roomId!} onClose={this.onClose} />
-                        // <MemberList
-                        //     roomId={cardState?.spaceId ?? roomId!}
-                        //     key={cardState?.spaceId ?? roomId!}
-                        //     onClose={this.onClose}
-                        //     searchQuery={this.state.searchQuery}
-                        //     onSearchQueryChanged={this.onSearchQueryChanged}
-                        // />
-                    );
-                }
-                break;
 
-            case RightPanelPhases.RoomMemberInfo:
-            case RightPanelPhases.SpaceMemberInfo:
+            case RightPanelPhases.MemberInfo:
             case RightPanelPhases.EncryptionPanel: {
                 if (!!cardState?.member) {
                     const roomMember = cardState.member instanceof RoomMember ? cardState.member : undefined;
@@ -206,8 +191,7 @@ export default class RightPanel extends React.Component<Props, IState> {
                 }
                 break;
             }
-            case RightPanelPhases.Room3pidMemberInfo:
-            case RightPanelPhases.Space3pidMemberInfo:
+            case RightPanelPhases.ThreePidMemberInfo:
                 if (!!cardState?.memberInfoEvent) {
                     card = (
                         <ThirdPartyMemberInfo event={cardState.memberInfoEvent} key={roomId} onClose={this.onClose} />

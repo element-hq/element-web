@@ -6,6 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
+import { Locator } from "@playwright/test";
+
 import { expect, test } from "../../element-web-test";
 import {
     autoJoin,
@@ -16,6 +18,8 @@ import {
     logOutOfElement,
     verify,
 } from "./utils";
+import { bootstrapCrossSigningForClient } from "../../pages/client.ts";
+import { ElementAppPage } from "../../pages/ElementAppPage.ts";
 
 test.describe("Cryptography", function () {
     test.use({
@@ -276,6 +280,15 @@ test.describe("Cryptography", function () {
             bot: bob,
             homeserver,
         }) => {
+            // Workaround for https://github.com/element-hq/element-web/issues/28640:
+            // make sure that Alice has seen Bob's identity before she goes offline. We do this by opening
+            // his user info.
+            await app.toggleRoomInfoPanel();
+            const rightPanel = page.locator(".mx_RightPanel");
+            await rightPanel.getByRole("menuitem", { name: "People" }).click();
+            await rightPanel.getByRole("button", { name: bob.credentials!.userId }).click();
+            await expect(rightPanel.locator(".mx_UserInfo_devices")).toContainText("1 session");
+
             // Our app is blocked from syncing while Bob sends his messages.
             await app.client.network.goOffline();
 
@@ -305,7 +318,50 @@ test.describe("Cryptography", function () {
             );
 
             const penultimate = page.locator(".mx_EventTile").filter({ hasText: "test encrypted from verified" });
-            await expect(penultimate.locator(".mx_EventTile_e2eIcon")).not.toBeVisible();
+            await assertNoE2EIcon(penultimate, app);
+        });
+
+        test("should show correct shields on events sent by users with changed identity", async ({
+            page,
+            app,
+            bot: bob,
+            homeserver,
+        }) => {
+            // Verify Bob
+            await verify(app, bob);
+
+            // Bob logs in a new device and resets cross-signing
+            const bobSecondDevice = await createSecondBotDevice(page, homeserver, bob);
+            await bootstrapCrossSigningForClient(await bobSecondDevice.prepareClient(), bob.credentials, true);
+
+            /* should show an error for a message from a previously verified device */
+            await bobSecondDevice.sendMessage(testRoomId, "test encrypted from user that was previously verified");
+            const last = page.locator(".mx_EventTile_last");
+            await expect(last).toContainText("test encrypted from user that was previously verified");
+            const lastE2eIcon = last.locator(".mx_EventTile_e2eIcon");
+            await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
+            await lastE2eIcon.focus();
+            await expect(await app.getTooltipForElement(lastE2eIcon)).toContainText(
+                "Sender's verified identity has changed",
+            );
         });
     });
 });
+
+/**
+ * Check that the given message doesn't have an E2E warning icon.
+ *
+ * If it does, throw an error.
+ */
+async function assertNoE2EIcon(messageLocator: Locator, app: ElementAppPage) {
+    // Make sure the message itself exists, before we check if it has any icons
+    await messageLocator.waitFor();
+
+    const e2eIcon = messageLocator.locator(".mx_EventTile_e2eIcon");
+    if ((await e2eIcon.count()) > 0) {
+        // uh-oh, there is an e2e icon. Let's find out what it's about so that we can throw a helpful error.
+        await e2eIcon.focus();
+        const tooltip = await app.getTooltipForElement(e2eIcon);
+        throw new Error(`Found an unexpected e2eIcon with tooltip '${await tooltip.textContent()}'`);
+    }
+}

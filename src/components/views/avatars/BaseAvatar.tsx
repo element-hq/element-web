@@ -16,10 +16,10 @@ import { Avatar } from "@vector-im/compound-web";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import { ButtonEvent } from "../elements/AccessibleButton";
-import RoomContext from "../../../contexts/RoomContext";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import { _t } from "../../../languageHandler";
+import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
 
 interface IProps {
     name?: React.ComponentProps<typeof Avatar>["name"]; // The name (first initial used as default)
@@ -57,8 +57,8 @@ const calculateUrls = (url?: string | null, urls?: string[], lowBandwidth = fals
 const useImageUrl = ({ url, urls }: { url?: string | null; urls?: string[] }): [string, () => void] => {
     // Since this is a hot code path and the settings store can be slow, we
     // use the cached lowBandwidth value from the room context if it exists
-    const roomContext = useContext(RoomContext);
-    const lowBandwidth = roomContext ? roomContext.lowBandwidth : SettingsStore.getValue("lowBandwidth");
+    const roomContext = useScopedRoomContext("lowBandwidth");
+    const lowBandwidth = roomContext?.lowBandwidth ?? SettingsStore.getValue("lowBandwidth");
 
     const [imageUrls, setUrls] = useState<string[]>(calculateUrls(url, urls, lowBandwidth));
     const [urlsIndex, setIndex] = useState<number>(0);

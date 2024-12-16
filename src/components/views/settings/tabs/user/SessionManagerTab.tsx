@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { lazy, Suspense, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import React, { lazy, Suspense, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { discoverAndValidateOIDCIssuerWellKnown, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { defer } from "matrix-js-sdk/src/utils";
@@ -184,7 +184,6 @@ const SessionManagerTab: React.FC<{
     const userId = matrixClient?.getUserId();
     const currentUserMember = (userId && matrixClient?.getUser(userId)) || undefined;
     const clientVersions = useAsyncMemo(() => matrixClient.getVersions(), [matrixClient]);
-    const wellKnown = useMemo(() => matrixClient?.getClientWellKnown(), [matrixClient]);
     const oidcClientConfig = useAsyncMemo(async () => {
         try {
             const authIssuer = await matrixClient?.getAuthIssuer();
@@ -305,7 +304,6 @@ const SessionManagerTab: React.FC<{
                 <LoginWithQRSection
                     onShowQr={onShowQrClicked}
                     versions={clientVersions}
-                    wellKnown={wellKnown}
                     oidcClientConfig={oidcClientConfig}
                     isCrossSigningReady={isCrossSigningReady}
                 />

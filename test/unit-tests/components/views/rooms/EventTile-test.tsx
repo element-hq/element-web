@@ -30,7 +30,7 @@ import { mkEncryptedMatrixEvent } from "matrix-js-sdk/src/testing";
 
 import EventTile, { EventTileProps } from "../../../../../src/components/views/rooms/EventTile";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import RoomContext, { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
+import { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import { filterConsole, flushPromises, getRoomContext, mkEvent, mkMessage, stubClient } from "../../../../test-utils";
 import { mkThread } from "../../../../test-utils/threads";
@@ -40,6 +40,7 @@ import { Action } from "../../../../../src/dispatcher/actions";
 import { IRoomState } from "../../../../../src/components/structures/RoomView";
 import PinningUtils from "../../../../../src/utils/PinningUtils";
 import { Layout } from "../../../../../src/settings/enums/Layout";
+import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 
 describe("EventTile", () => {
     const ROOM_ID = "!roomId:example.org";
@@ -56,13 +57,13 @@ describe("EventTile", () => {
     }) {
         return (
             <MatrixClientContext.Provider value={client}>
-                <RoomContext.Provider value={props.roomContext}>
+                <ScopedRoomContextProvider {...props.roomContext}>
                     <EventTile
                         mxEvent={mxEvent}
                         replacingEventId={mxEvent.replacingEventId()}
                         {...(props.eventTilePropertyOverrides ?? {})}
                     />
-                </RoomContext.Provider>
+                </ScopedRoomContextProvider>
             </MatrixClientContext.Provider>
         );
     }
@@ -70,9 +71,11 @@ describe("EventTile", () => {
     function getComponent(
         overrides: Partial<EventTileProps> = {},
         renderingType: TimelineRenderingType = TimelineRenderingType.Room,
+        roomContext: Partial<IRoomState> = {},
     ) {
         const context = getRoomContext(room, {
             timelineRenderingType: renderingType,
+            ...roomContext,
         });
         return render(<WrappedEventTile roomContext={context} eventTilePropertyOverrides={overrides} />);
     }
@@ -260,7 +263,7 @@ describe("EventTile", () => {
             } as EventEncryptionInfo);
 
             const { container } = getComponent();
-            await act(flushPromises);
+            await flushPromises();
 
             const eventTiles = container.getElementsByClassName("mx_EventTile");
             expect(eventTiles).toHaveLength(1);
@@ -285,7 +288,7 @@ describe("EventTile", () => {
             } as EventEncryptionInfo);
 
             const { container } = getComponent();
-            await act(flushPromises);
+            await flushPromises();
 
             const eventTiles = container.getElementsByClassName("mx_EventTile");
             expect(eventTiles).toHaveLength(1);
@@ -301,6 +304,8 @@ describe("EventTile", () => {
             [EventShieldReason.UNKNOWN_DEVICE, "unknown or deleted device"],
             [EventShieldReason.AUTHENTICITY_NOT_GUARANTEED, "can't be guaranteed"],
             [EventShieldReason.MISMATCHED_SENDER_KEY, "Encrypted by an unverified session"],
+            [EventShieldReason.SENT_IN_CLEAR, "Not encrypted"],
+            [EventShieldReason.VERIFICATION_VIOLATION, "Sender's verified identity has changed"],
         ])("shows the correct reason code for %i (%s)", async (reasonCode: EventShieldReason, expectedText: string) => {
             mxEvent = await mkEncryptedMatrixEvent({
                 plainContent: { msgtype: "m.text", body: "msg1" },
@@ -314,7 +319,7 @@ describe("EventTile", () => {
             } as EventEncryptionInfo);
 
             const { container } = getComponent();
-            await act(flushPromises);
+            await flushPromises();
 
             const e2eIcons = container.getElementsByClassName("mx_EventTile_e2eIcon");
             expect(e2eIcons).toHaveLength(1);
@@ -346,7 +351,7 @@ describe("EventTile", () => {
                 await mxEvent.attemptDecryption(mockCrypto);
 
                 const { container } = getComponent();
-                await act(flushPromises);
+                await flushPromises();
 
                 const eventTiles = container.getElementsByClassName("mx_EventTile");
                 expect(eventTiles).toHaveLength(1);
@@ -400,7 +405,7 @@ describe("EventTile", () => {
             const roomContext = getRoomContext(room, {});
             const { container, rerender } = render(<WrappedEventTile roomContext={roomContext} />);
 
-            await act(flushPromises);
+            await flushPromises();
 
             const eventTiles = container.getElementsByClassName("mx_EventTile");
             expect(eventTiles).toHaveLength(1);
@@ -434,8 +439,6 @@ describe("EventTile", () => {
         });
 
         it("should update the warning when the event is replaced with an unencrypted one", async () => {
-            jest.spyOn(client, "isRoomEncrypted").mockReturnValue(true);
-
             // we start out with an event from the trusted device
             mxEvent = await mkEncryptedMatrixEvent({
                 plainContent: { msgtype: "m.text", body: "msg1" },
@@ -449,9 +452,9 @@ describe("EventTile", () => {
                 shieldReason: null,
             } as EventEncryptionInfo);
 
-            const roomContext = getRoomContext(room, {});
+            const roomContext = getRoomContext(room, { isRoomEncrypted: true });
             const { container, rerender } = render(<WrappedEventTile roomContext={roomContext} />);
-            await act(flushPromises);
+            await flushPromises();
 
             const eventTiles = container.getElementsByClassName("mx_EventTile");
             expect(eventTiles).toHaveLength(1);
@@ -577,5 +580,29 @@ describe("EventTile", () => {
                 expect(isHighlighted(container)).toBeTruthy();
             });
         });
+    });
+
+    it("should display the not encrypted status for an unencrypted event when the room becomes encrypted", async () => {
+        jest.spyOn(client.getCrypto()!, "getEncryptionInfoForEvent").mockResolvedValue({
+            shieldColour: EventShieldColour.NONE,
+            shieldReason: null,
+        });
+
+        const { rerender } = getComponent();
+        await flushPromises();
+        // The room and the event are unencrypted, the tile should not show the not encrypted status
+        expect(screen.queryByText("Not encrypted")).toBeNull();
+
+        // The room is now encrypted
+        rerender(
+            <WrappedEventTile
+                roomContext={getRoomContext(room, {
+                    isRoomEncrypted: true,
+                })}
+            />,
+        );
+
+        // The event tile should now show the not encrypted status
+        await waitFor(() => expect(screen.getByText("Not encrypted")).toBeInTheDocument());
     });
 });

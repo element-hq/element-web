@@ -64,7 +64,7 @@ interface IState {
 
 export default class SoftLogout extends React.Component<IProps, IState> {
     public static contextType = SDKContext;
-    public declare context: React.ContextType<typeof SDKContext>;
+    declare public context: React.ContextType<typeof SDKContext>;
 
     public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
         super(props, context);
@@ -235,12 +235,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
                     value={this.state.password}
                     disabled={this.state.busy}
                 />
-                <AccessibleButton
-                    onClick={this.onPasswordLogin}
-                    kind="primary"
-                    type="submit"
-                    disabled={this.state.busy}
-                >
+                <AccessibleButton onClick={this.onPasswordLogin} kind="primary" disabled={this.state.busy}>
                     {_t("action|sign_in")}
                 </AccessibleButton>
                 <AccessibleButton onClick={this.onForgotPassword} kind="link">

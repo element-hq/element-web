@@ -42,15 +42,6 @@ import { UPDATE_EVENT } from "./AsyncStore";
 import { SdkContextClass } from "../contexts/SDKContext";
 import { CallStore } from "./CallStore";
 import { ThreadPayload } from "../dispatcher/payloads/ThreadPayload";
-import {
-    doClearCurrentVoiceBroadcastPlaybackIfStopped,
-    doMaybeSetCurrentVoiceBroadcastPlayback,
-    VoiceBroadcastRecording,
-    VoiceBroadcastRecordingsStoreEvent,
-} from "../voice-broadcast";
-import { IRoomStateEventsActionPayload } from "../actions/MatrixActionCreators";
-import { showCantStartACallDialog } from "../voice-broadcast/utils/showCantStartACallDialog";
-import { pauseNonLiveBroadcastFromOtherRoom } from "../voice-broadcast/utils/pauseNonLiveBroadcastFromOtherRoom";
 import { ActionPayload } from "../dispatcher/payloads";
 import { CancelAskToJoinPayload } from "../dispatcher/payloads/CancelAskToJoinPayload";
 import { SubmitAskToJoinPayload } from "../dispatcher/payloads/SubmitAskToJoinPayload";
@@ -164,10 +155,6 @@ export class RoomViewStore extends EventEmitter {
     ) {
         super();
         this.resetDispatcher(dis);
-        this.stores.voiceBroadcastRecordingsStore.addListener(
-            VoiceBroadcastRecordingsStoreEvent.CurrentChanged,
-            this.onCurrentBroadcastRecordingChanged,
-        );
     }
 
     public addRoomListener(roomId: string, fn: Listener): void {
@@ -182,16 +169,6 @@ export class RoomViewStore extends EventEmitter {
         this.emit(roomId, isActive);
     }
 
-    private onCurrentBroadcastRecordingChanged = (recording: VoiceBroadcastRecording | null): void => {
-        if (recording === null) {
-            const room = this.stores.client?.getRoom(this.state.roomId || undefined);
-
-            if (room) {
-                this.doMaybeSetCurrentVoiceBroadcastPlayback(room);
-            }
-        }
-    };
-
     private setState(newState: Partial<State>): void {
         // If values haven't changed, there's nothing to do.
         // This only tries a shallow comparison, so unchanged objects will slip
@@ -205,16 +182,6 @@ export class RoomViewStore extends EventEmitter {
         }
         if (!stateChanged) {
             return;
-        }
-
-        if (newState.viewingCall) {
-            // Pause current broadcast, if any
-            this.stores.voiceBroadcastPlaybacksStore.getCurrent()?.pause();
-
-            if (this.stores.voiceBroadcastRecordingsStore.getCurrent()) {
-                showCantStartACallDialog();
-                newState.viewingCall = false;
-            }
         }
 
         const lastRoomId = this.state.roomId;
@@ -233,29 +200,6 @@ export class RoomViewStore extends EventEmitter {
         }
 
         this.emit(UPDATE_EVENT);
-    }
-
-    private doMaybeSetCurrentVoiceBroadcastPlayback(room: Room): void {
-        if (!this.stores.client) return;
-        doMaybeSetCurrentVoiceBroadcastPlayback(
-            room,
-            this.stores.client,
-            this.stores.voiceBroadcastPlaybacksStore,
-            this.stores.voiceBroadcastRecordingsStore,
-        );
-    }
-
-    private onRoomStateEvents(event: MatrixEvent): void {
-        const roomId = event.getRoomId?.();
-
-        // no room or not current room
-        if (!roomId || roomId !== this.state.roomId) return;
-
-        const room = this.stores.client?.getRoom(roomId);
-
-        if (room) {
-            this.doMaybeSetCurrentVoiceBroadcastPlayback(room);
-        }
     }
 
     private onDispatch(payload: ActionPayload): void {
@@ -283,10 +227,6 @@ export class RoomViewStore extends EventEmitter {
                     wasContextSwitch: false,
                     viewingCall: false,
                 });
-                doClearCurrentVoiceBroadcastPlaybackIfStopped(this.stores.voiceBroadcastPlaybacksStore);
-                break;
-            case "MatrixActions.RoomState.events":
-                this.onRoomStateEvents((payload as IRoomStateEventsActionPayload).event);
                 break;
             case Action.ViewRoomError:
                 this.viewRoomError(payload as ViewRoomErrorPayload);
@@ -489,9 +429,6 @@ export class RoomViewStore extends EventEmitter {
             }
 
             if (room) {
-                pauseNonLiveBroadcastFromOtherRoom(room, this.stores.voiceBroadcastPlaybacksStore);
-                this.doMaybeSetCurrentVoiceBroadcastPlayback(room);
-
                 await setMarkedUnreadState(room, MatrixClientPeg.safeGet(), false);
             }
         } else if (payload.room_alias) {

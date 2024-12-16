@@ -23,12 +23,14 @@ import {
     createTestClient,
     getMockClientWithEventEmitter,
     makeBeaconInfoEvent,
+    mockClientMethodsCrypto,
     mockClientMethodsEvents,
     mockClientMethodsUser,
 } from "../../../test-utils";
 import ResizeNotifier from "../../../../src/utils/ResizeNotifier";
 import { IRoomState } from "../../../../src/components/structures/RoomView";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
+import { ScopedRoomContextProvider } from "../../../../src/contexts/ScopedRoomContext.tsx";
 
 jest.mock("../../../../src/utils/beacon", () => ({
     useBeacon: jest.fn(),
@@ -42,6 +44,7 @@ describe("MessagePanel", function () {
     const client = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),
         ...mockClientMethodsEvents(),
+        ...mockClientMethodsCrypto(),
         getAccountData: jest.fn(),
         isUserIgnored: jest.fn().mockReturnValue(false),
         isRoomEncrypted: jest.fn().mockReturnValue(false),
@@ -89,9 +92,9 @@ describe("MessagePanel", function () {
 
     const getComponent = (props = {}, roomContext: Partial<IRoomState> = {}) => (
         <MatrixClientContext.Provider value={client}>
-            <RoomContext.Provider value={{ ...defaultRoomContext, ...roomContext }}>
+            <ScopedRoomContextProvider {...defaultRoomContext} {...roomContext}>
                 <MessagePanel {...defaultProps} {...props} />
-            </RoomContext.Provider>
+            </ScopedRoomContextProvider>
         </MatrixClientContext.Provider>
     );
 

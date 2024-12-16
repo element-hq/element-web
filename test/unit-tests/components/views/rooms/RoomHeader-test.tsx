@@ -8,9 +8,19 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { CallType, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
-import { EventType, JoinRule, MatrixEvent, PendingEventOrdering, Room, RoomMember } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
 import {
+    EventType,
+    JoinRule,
+    MatrixEvent,
+    PendingEventOrdering,
+    Room,
+    RoomStateEvent,
+    RoomMember,
+} from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
+import { CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
+import {
+    act,
     createEvent,
     fireEvent,
     getAllByLabelText,
@@ -148,7 +158,7 @@ describe("RoomHeader", () => {
 
         fireEvent.click(facePile);
 
-        expect(setCardSpy).toHaveBeenCalledWith({ phase: RightPanelPhases.RoomMemberList });
+        expect(setCardSpy).toHaveBeenCalledWith({ phase: RightPanelPhases.MemberList });
     });
 
     it("has room info icon that opens the room info panel", async () => {
@@ -579,7 +589,7 @@ describe("RoomHeader", () => {
                 state_key: "",
                 room_id: room.roomId,
             });
-            room.addLiveEvents([joinRuleEvent]);
+            room.addLiveEvents([joinRuleEvent], { addToState: true });
 
             render(<RoomHeader room={room} />, getWrapper());
 
@@ -631,6 +641,52 @@ describe("RoomHeader", () => {
             const { asFragment } = render(<RoomHeader room={room} />, getWrapper());
 
             expect(asFragment()).toMatchSnapshot();
+        });
+
+        it("updates the icon when the encryption status changes", async () => {
+            // The room starts verified
+            jest.spyOn(ShieldUtils, "shieldStatusForRoom").mockResolvedValue(ShieldUtils.E2EStatus.Verified);
+            render(<RoomHeader room={room} />, getWrapper());
+            await waitFor(() => expect(getByLabelText(document.body, "Verified")).toBeInTheDocument());
+
+            // A new member joins, and the room becomes unverified
+            jest.spyOn(ShieldUtils, "shieldStatusForRoom").mockResolvedValue(ShieldUtils.E2EStatus.Warning);
+            act(() => {
+                room.emit(
+                    RoomStateEvent.Members,
+                    new MatrixEvent({
+                        event_id: "$event_id",
+                        type: EventType.RoomMember,
+                        state_key: "@alice:example.org",
+                        content: {
+                            membership: "join",
+                        },
+                        room_id: ROOM_ID,
+                        sender: "@alice:example.org",
+                    }),
+                    room.currentState,
+                    new RoomMember(room.roomId, "@alice:example.org"),
+                );
+            });
+            await waitFor(() => expect(getByLabelText(document.body, "Untrusted")).toBeInTheDocument());
+
+            // The user becomes verified
+            jest.spyOn(ShieldUtils, "shieldStatusForRoom").mockResolvedValue(ShieldUtils.E2EStatus.Verified);
+            act(() => {
+                MatrixClientPeg.get()!.emit(
+                    CryptoEvent.UserTrustStatusChanged,
+                    "@alice:example.org",
+                    new UserVerificationStatus(true, true, true, false),
+                );
+            });
+            await waitFor(() => expect(getByLabelText(document.body, "Verified")).toBeInTheDocument());
+
+            // An unverified device is added
+            jest.spyOn(ShieldUtils, "shieldStatusForRoom").mockResolvedValue(ShieldUtils.E2EStatus.Warning);
+            act(() => {
+                MatrixClientPeg.get()!.emit(CryptoEvent.DevicesUpdated, ["@alice:example.org"], false);
+            });
+            await waitFor(() => expect(getByLabelText(document.body, "Untrusted")).toBeInTheDocument());
         });
     });
 

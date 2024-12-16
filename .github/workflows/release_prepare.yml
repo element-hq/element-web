@@ -17,9 +17,25 @@ on:
                 required: true
                 type: boolean
                 default: true
+permissions: {} # Uses ELEMENT_BOT_TOKEN instead
 jobs:
+    checks:
+        name: Sanity checks
+        strategy:
+            matrix:
+                repo:
+                    - matrix-org/matrix-js-sdk
+                    - element-hq/element-web
+                    - element-hq/element-desktop
+        uses: matrix-org/matrix-js-sdk/.github/workflows/release-checks.yml@develop
+        secrets:
+            ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+        with:
+            repository: ${{ matrix.repo }}
+
     prepare:
         runs-on: ubuntu-24.04
+        needs: checks
         env:
             # The order is specified bottom-up to avoid any races for allchange
             REPOS: matrix-js-sdk element-web element-desktop

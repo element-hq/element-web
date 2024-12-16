@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { act, render, RenderResult, screen } from "jest-matrix-react";
+import { render, RenderResult, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { mocked, Mocked } from "jest-mock";
 import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
@@ -86,7 +86,7 @@ describe("<Pill>", () => {
             room: room1Id,
             msg: "Room 1 Message",
         });
-        room1.addLiveEvents([room1Message]);
+        room1.addLiveEvents([room1Message], { addToState: true });
 
         room2 = new Room(room2Id, client, user1Id);
         room2.currentState.setStateEvents([mkRoomMemberJoinEvent(user2Id, room2Id)]);
@@ -214,9 +214,7 @@ describe("<Pill>", () => {
         });
 
         // wait for profile query via API
-        await act(async () => {
-            await flushPromises();
-        });
+        await flushPromises();
 
         expect(renderResult.asFragment()).toMatchSnapshot();
     });
@@ -228,9 +226,7 @@ describe("<Pill>", () => {
         });
 
         // wait for profile query via API
-        await act(async () => {
-            await flushPromises();
-        });
+        await flushPromises();
 
         expect(renderResult.asFragment()).toMatchSnapshot();
     });

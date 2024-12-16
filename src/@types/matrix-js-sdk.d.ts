@@ -10,7 +10,6 @@ import type { IWidget } from "matrix-widget-api";
 import type { BLURHASH_FIELD } from "../utils/image-media";
 import type { JitsiCallMemberEventType, JitsiCallMemberContent } from "../call-types";
 import type { ILayoutStateEvent, WIDGET_LAYOUT_EVENT_TYPE } from "../stores/widgets/types";
-import type { VoiceBroadcastInfoEventContent, VoiceBroadcastInfoEventType } from "../voice-broadcast/types";
 import type { EncryptedFile } from "matrix-js-sdk/src/types";
 
 // Extend Matrix JS SDK types via Typescript declaration merging to support unspecced event fields and types
@@ -22,6 +21,13 @@ declare module "matrix-js-sdk/src/types" {
         [BLURHASH_FIELD]?: string;
     }
 
+    export interface ImageInfo {
+        /**
+         * @see https://github.com/matrix-org/matrix-spec-proposals/pull/4230
+         */
+        "org.matrix.msc4230.is_animated"?: boolean;
+    }
+
     export interface StateEvents {
         // Jitsi-backed video room state events
         [JitsiCallMemberEventType]: JitsiCallMemberContent;
@@ -29,9 +35,6 @@ declare module "matrix-js-sdk/src/types" {
         // Unstable widgets state events
         "im.vector.modular.widgets": IWidget | {};
         [WIDGET_LAYOUT_EVENT_TYPE]: ILayoutStateEvent;
-
-        // Unstable voice broadcast state events
-        [VoiceBroadcastInfoEventType]: VoiceBroadcastInfoEventContent;
 
         // Element custom state events
         "im.vector.web.settings": Record<string, any>;
@@ -71,7 +74,5 @@ declare module "matrix-js-sdk/src/types" {
             waveform?: number[];
         };
         "org.matrix.msc3245.voice"?: {};
-
-        "io.element.voice_broadcast_chunk"?: { sequence: number };
     }
 }

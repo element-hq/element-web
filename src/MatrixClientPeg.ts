@@ -35,13 +35,11 @@ import IdentityAuthClient from "./IdentityAuthClient";
 import { crossSigningCallbacks } from "./SecurityManager";
 import { SlidingSyncManager } from "./SlidingSyncManager";
 import { _t, UserFriendlyError } from "./languageHandler";
-import { SettingLevel } from "./settings/SettingLevel";
 import MatrixClientBackedController from "./settings/controllers/MatrixClientBackedController";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import PlatformPeg from "./PlatformPeg";
 import { formatList } from "./utils/FormattingUtils";
 import SdkConfig from "./SdkConfig";
-import { Features } from "./settings/Settings";
 import { setDeviceIsolationMode } from "./settings/controllers/DeviceIsolationModeController.ts";
 
 export interface IMatrixClientCreds {
@@ -332,11 +330,6 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         if (!rustCryptoStoreKey && !rustCryptoStorePassword) {
             logger.error("Warning! Not using an encryption key for rust crypto store.");
         }
-
-        // Record the fact that we used the Rust crypto stack with this client. This just guards against people
-        // rolling back to versions of EW that did not default to Rust crypto (which would lead to an error, since
-        // we cannot migrate from Rust to Legacy crypto).
-        await SettingsStore.setValue(Features.RustCrypto, null, SettingLevel.DEVICE, true);
 
         await this.matrixClient.initRustCrypto({
             storageKey: rustCryptoStoreKey,

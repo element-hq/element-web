@@ -118,7 +118,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
         this.getUpdatedDiagnostics();
         try {
             const cli = MatrixClientPeg.safeGet();
-            const backupInfo = await cli.getKeyBackupVersion();
+            const backupInfo = (await cli.getCrypto()?.getKeyBackupInfo()) ?? null;
             const backupTrustInfo = backupInfo ? await cli.getCrypto()?.isKeyBackupTrusted(backupInfo) : undefined;
 
             const activeBackupVersion = (await cli.getCrypto()?.getActiveSessionBackupVersion()) ?? null;
@@ -192,12 +192,9 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
                 if (!proceed) return;
                 this.setState({ loading: true });
                 const versionToDelete = this.state.backupInfo!.version!;
-                MatrixClientPeg.safeGet()
-                    .getCrypto()
-                    ?.deleteKeyBackupVersion(versionToDelete)
-                    .then(() => {
-                        this.loadBackupStatus();
-                    });
+                // deleteKeyBackupVersion fires a key backup status event
+                // which will update the UI
+                MatrixClientPeg.safeGet().getCrypto()?.deleteKeyBackupVersion(versionToDelete);
             },
         });
     };
@@ -209,7 +206,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
     private resetSecretStorage = async (): Promise<void> => {
         this.setState({ error: false });
         try {
-            await accessSecretStorage(async (): Promise<void> => {}, /* forceReset = */ true);
+            await accessSecretStorage(async (): Promise<void> => {}, { forceReset: true });
         } catch (e) {
             logger.error("Error resetting secret storage", e);
             if (this.unmounted) return;

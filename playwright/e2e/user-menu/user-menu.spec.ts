@@ -11,7 +11,7 @@ import { test, expect } from "../../element-web-test";
 test.describe("User Menu", () => {
     test.use({ displayName: "Jeff" });
 
-    test("should contain our name & userId", async ({ page, user }) => {
+    test("should contain our name & userId", { tag: "@screenshot" }, async ({ page, user }) => {
         await page.getByRole("button", { name: "User menu", exact: true }).click();
         const menu = page.getByRole("menu");
 

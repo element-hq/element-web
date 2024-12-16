@@ -20,7 +20,8 @@ import {
 import { MediaEventHelper } from "../../../../../src/utils/MediaEventHelper";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import MFileBody from "../../../../../src/components/views/messages/MFileBody.tsx";
-import RoomContext, { TimelineRenderingType } from "../../../../../src/contexts/RoomContext.ts";
+import { TimelineRenderingType } from "../../../../../src/contexts/RoomContext.ts";
+import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 
 jest.mock("matrix-encrypt-attachment", () => ({
     decryptAttachment: jest.fn(),
@@ -72,14 +73,14 @@ describe("<MFileBody/>", () => {
 
     it("should show a download button in file rendering type", async () => {
         const { container, getByRole } = render(
-            <RoomContext.Provider value={{ timelineRenderingType: TimelineRenderingType.File } as any}>
+            <ScopedRoomContextProvider {...({ timelineRenderingType: TimelineRenderingType.File } as any)}>
                 <MFileBody
                     {...props}
                     mxEvent={mediaEvent}
                     mediaEventHelper={new MediaEventHelper(mediaEvent)}
                     showGenericPlaceholder={false}
                 />
-            </RoomContext.Provider>,
+            </ScopedRoomContextProvider>,
         );
 
         expect(getByRole("link", { name: "Download" })).toBeInTheDocument();

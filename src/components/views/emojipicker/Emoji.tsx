@@ -31,7 +31,7 @@ class Emoji extends React.PureComponent<IProps> {
         return (
             <RovingAccessibleButton
                 id={this.props.id}
-                onClick={(ev) => onClick(ev, emoji)}
+                onClick={(ev: ButtonEvent) => onClick(ev, emoji)}
                 onMouseEnter={() => onMouseEnter(emoji)}
                 onMouseLeave={() => onMouseLeave(emoji)}
                 className="mx_EmojiPicker_item_wrapper"

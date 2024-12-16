@@ -109,7 +109,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
 
     private onResetRecoveryClick = (): void => {
         this.props.onFinished(false);
-        accessSecretStorage(async (): Promise<void> => {}, /* forceReset = */ true);
+        accessSecretStorage(async (): Promise<void> => {}, { forceReset: true });
     };
 
     /**
@@ -258,7 +258,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
         });
         try {
             const cli = MatrixClientPeg.safeGet();
-            const backupInfo = await cli.getKeyBackupVersion();
+            const backupInfo = (await cli.getCrypto()?.getKeyBackupInfo()) ?? null;
             const has4S = await cli.secretStorage.hasKey();
             const backupKeyStored = has4S ? await cli.isKeyBackupKeyStored() : null;
             this.setState({

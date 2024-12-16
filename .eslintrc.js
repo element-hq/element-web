@@ -42,6 +42,10 @@ module.exports = {
                 name: "setImmediate",
                 message: "Use setTimeout instead.",
             },
+            {
+                name: "Buffer",
+                message: "Buffer is not available in the web.",
+            },
         ],
 
         "import/no-duplicates": ["error"],
@@ -117,10 +121,6 @@ module.exports = {
                             "!matrix-js-sdk/src/extensible_events_v1/PollResponseEvent",
                             "!matrix-js-sdk/src/extensible_events_v1/PollEndEvent",
                             "!matrix-js-sdk/src/extensible_events_v1/InvalidEventError",
-                            "!matrix-js-sdk/src/crypto",
-                            "!matrix-js-sdk/src/crypto/keybackup",
-                            "!matrix-js-sdk/src/crypto/deviceinfo",
-                            "!matrix-js-sdk/src/crypto/dehydration",
                             "!matrix-js-sdk/src/oidc",
                             "!matrix-js-sdk/src/oidc/discovery",
                             "!matrix-js-sdk/src/oidc/authorize",
@@ -259,6 +259,9 @@ module.exports = {
                         additionalTestBlockFunctions: ["beforeAll", "beforeEach", "oldBackendOnly"],
                     },
                 ],
+
+                // These are fine in tests
+                "no-restricted-globals": "off",
             },
         },
         {

@@ -20,9 +20,9 @@ import {
 } from "../../../../../src/components/views/messages/RoomPredecessorTile";
 import { stubClient, upsertRoomStateEvents } from "../../../../test-utils/test-utils";
 import { Action } from "../../../../../src/dispatcher/actions";
-import RoomContext from "../../../../../src/contexts/RoomContext";
 import { filterConsole, getRoomContext } from "../../../../test-utils";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
+import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 
 jest.mock("../../../../../src/dispatcher/dispatcher");
 
@@ -99,9 +99,9 @@ describe("<RoomPredecessorTile />", () => {
         expect(createEvent).toBeTruthy();
 
         return render(
-            <RoomContext.Provider value={getRoomContext(room, {})}>
+            <ScopedRoomContextProvider {...getRoomContext(room, {})}>
                 <RoomPredecessorTile mxEvent={createEvent} />
-            </RoomContext.Provider>,
+            </ScopedRoomContextProvider>,
         );
     }
 

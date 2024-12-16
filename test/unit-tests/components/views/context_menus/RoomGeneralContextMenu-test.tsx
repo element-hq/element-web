@@ -127,7 +127,7 @@ describe("RoomGeneralContextMenu", () => {
             user: "@user:id",
             ts: 1000,
         });
-        room.addLiveEvents([event], {});
+        room.addLiveEvents([event], { addToState: true });
 
         const { container } = getComponent({});
 
@@ -150,7 +150,7 @@ describe("RoomGeneralContextMenu", () => {
 
         await sleep(0);
 
-        expect(mockClient.setRoomAccountData).toHaveBeenCalledWith(ROOM_ID, "com.famedly.marked_unread", {
+        expect(mockClient.setRoomAccountData).toHaveBeenCalledWith(ROOM_ID, "m.marked_unread", {
             unread: true,
         });
         expect(onFinished).toHaveBeenCalled();

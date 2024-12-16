@@ -28,7 +28,7 @@ describe("<RestoreKeyBackupDialog />", () => {
     beforeEach(() => {
         matrixClient = stubClient();
         jest.spyOn(recoveryKeyModule, "decodeRecoveryKey").mockReturnValue(new Uint8Array(32));
-        jest.spyOn(matrixClient, "getKeyBackupVersion").mockResolvedValue({ version: "1" } as KeyBackupInfo);
+        jest.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue({ version: "1" } as KeyBackupInfo);
     });
 
     it("should render", async () => {
@@ -99,7 +99,7 @@ describe("<RestoreKeyBackupDialog />", () => {
 
     test("should restore key backup when passphrase is filled", async () => {
         // Determine that the passphrase is required
-        jest.spyOn(matrixClient, "getKeyBackupVersion").mockResolvedValue({
+        jest.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue({
             version: "1",
             auth_data: {
                 private_key_salt: "salt",

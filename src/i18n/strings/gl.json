@@ -749,7 +749,6 @@
         },
         "udd": {
             "interactive_verification_button": "Verificar interactivamente usando emoji",
-            "manual_verification_button": "Verificar manualmente con texto",
             "other_ask_verify_text": "Pídelle a usuaria que verifique a súa sesión, ou verificaa manualmente aquí.",
             "other_new_session_text": "%(name)s (%(userId)s) conectouse a unha nova sesión sen verificala:",
             "own_ask_verify_text": "Verifica a túa outra sesión usando unha das opcións inferiores.",
@@ -781,12 +780,6 @@
             "incoming_sas_dialog_title": "Solicitude entrante de verificación",
             "incoming_sas_user_dialog_text_1": "Verifica esta usuaria para marcala como confiable. Ao confiar nas usuarias proporcionache tranquilidade extra cando usas cifrado de extremo-a-extremo.",
             "incoming_sas_user_dialog_text_2": "Ao verificar esta usuaria marcarás a súa sesión como confiable, e tamén marcará a túa sesión como confiable para elas.",
-            "manual_device_verification_device_id_label": "ID de sesión",
-            "manual_device_verification_device_key_label": "Chave da sesión",
-            "manual_device_verification_device_name_label": "Nome da sesión",
-            "manual_device_verification_footer": "Se non concordan, a seguridade da comunicación podería estar comprometida.",
-            "manual_device_verification_self_text": "Corfirma comparando o seguinte cos Axustes de Usuaria na outra sesión:",
-            "manual_device_verification_user_text": "Confirma a sesión desta usuaria comparando o seguinte cos seus Axustes de Usuaria:",
             "no_key_or_device": "Semella que non tes unha Chave de Seguridade ou outros dispositivos cos que verificar. Este dispositivo non poderá acceder a mensaxes antigas cifradas. Para poder verificar a túa identidade neste dispositivo tes que restablecer as chaves de verificación.",
             "no_support_qr_emoji": "Este dispositivo que intentas verificar non ten soporte para código QR nin verificación por emoji, que é o que %(brand)s soporta. Inténtao cun cliente diferente.",
             "other_party_cancelled": "A outra parte cancelou a verificación.",
@@ -1200,8 +1193,7 @@
         "video_rooms_faq1_answer": "Usa o botón \"+\" na sección da sala do panel esquerdo.",
         "video_rooms_faq1_question": "Como creo unha sala de vídeo?",
         "video_rooms_faq2_answer": "Si, a cronoloxía de texto móstrase xunto co vídeo.",
-        "video_rooms_faq2_question": "Podo usar chat de texto xunto á chamada de vídeo?",
-        "voice_broadcast": "Emisión de voz"
+        "video_rooms_faq2_question": "Podo usar chat de texto xunto á chamada de vídeo?"
     },
     "labs_mjolnir": {
         "advanced_warning": "⚠ Estos axustes van dirixidos a usuarias avanzadas.",
@@ -1811,7 +1803,6 @@
             "error_unbanning": "Fallou eliminar a prohibición",
             "events_default": "Enviar mensaxes",
             "invite": "Convidar usuarias",
-            "io.element.voice_broadcast_info": "Emisións de voz",
             "kick": "Eliminar usuarias",
             "m.reaction": "Enviar reaccións",
             "m.room.avatar": "Cambiar avatar da sala",
@@ -2315,7 +2306,6 @@
         "warn_quit": "Aviso antes de saír"
     },
     "share": {
-        "link_title": "Ligazón á sala",
         "permalink_message": "Ligazón á mensaxe escollida",
         "permalink_most_recent": "Ligazón ás mensaxes máis recentes",
         "title_message": "Compartir unha mensaxe da sala",
@@ -2397,12 +2387,6 @@
         "upgraderoom": "Subir a sala de versión",
         "upgraderoom_permission_error": "Non tes os permisos suficientes para usar este comando.",
         "usage": "Uso",
-        "verify": "Verifica unha usuaria, sesión e chave pública",
-        "verify_mismatch": "AVISO: FALLOU A VERIFICACIÓN DAS CHAVES! A chave de firma para %(userId)s na sesión %(deviceId)s é \"%(fprint)s\" que non concordan coa chave proporcionada \"%(fingerprint)s\". Esto podería significar que as túas comunicacións foron interceptadas!",
-        "verify_nop": "A sesión xa está verificada!",
-        "verify_success_description": "A chave de firma proporcionada concorda coa chave de firma recibida desde a sesión %(deviceId)s de %(userId)s. Sesión marcada como verificada.",
-        "verify_success_title": "Chave verificada",
-        "verify_unknown_pair": "Parella (usuaria, sesión) descoñecida: (%(userId)s, %(deviceId)s)",
         "whois": "Mostra información acerca da usuaria"
     },
     "space": {
@@ -3101,9 +3085,6 @@
         "settings": "Todos os axustes",
         "switch_theme_dark": "Cambiar a decorado escuro",
         "switch_theme_light": "Cambiar a decorado claro"
-    },
-    "voice_broadcast": {
-        "action": "Emisión de voz"
     },
     "voip": {
         "already_in_call": "Xa estás nunha chamada",

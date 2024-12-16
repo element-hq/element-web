@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode, createRef, useCallback, useEffect, useState } from "react";
+import React, { ReactNode, createRef, useCallback, useEffect, useState, useId } from "react";
 import EditIcon from "@vector-im/compound-design-tokens/assets/web/icons/edit";
 import UploadIcon from "@vector-im/compound-design-tokens/assets/web/icons/share";
 import DeleteIcon from "@vector-im/compound-design-tokens/assets/web/icons/delete";
@@ -16,9 +16,10 @@ import classNames from "classnames";
 import { _t } from "../../../languageHandler";
 import { mediaFromMxc } from "../../../customisations/Media";
 import { chromeFileInputFix } from "../../../utils/BrowserWorkarounds";
-import { useId } from "../../../utils/useId";
 import AccessibleButton from "../elements/AccessibleButton";
 import BaseAvatar from "../avatars/BaseAvatar";
+import Modal from "../../../Modal.tsx";
+import ErrorDialog from "../dialogs/ErrorDialog.tsx";
 
 interface MenuProps {
     trigger: ReactNode;
@@ -103,6 +104,18 @@ interface IProps {
     placeholderName: string;
 }
 
+export function getFileChanged(e: React.ChangeEvent<HTMLInputElement>): File | null {
+    if (!e.target.files?.length) return null;
+    const file = e.target.files[0];
+    if (file.type.startsWith("image/")) return file;
+
+    Modal.createDialog(ErrorDialog, {
+        title: _t("upload_failed_title"),
+        description: _t("upload_file|not_image"),
+    });
+    return null;
+}
+
 /**
  * Component for setting or removing an avatar on something (eg. a user or a room)
  */
@@ -139,7 +152,10 @@ const AvatarSetting: React.FC<IProps> = ({
 
     const onFileChanged = useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
-            if (e.target.files) onChange?.(e.target.files[0]);
+            const file = getFileChanged(e);
+            if (file) {
+                onChange?.(file);
+            }
         },
         [onChange],
     );

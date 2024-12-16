@@ -37,6 +37,7 @@ describe("SetupEncryptionStore", () => {
             getDeviceVerificationStatus: jest.fn(),
             isDehydrationSupported: jest.fn().mockResolvedValue(false),
             startDehydration: jest.fn(),
+            getKeyBackupInfo: jest.fn().mockResolvedValue(null),
         } as unknown as Mocked<CryptoApi>;
         client.getCrypto.mockReturnValue(mockCrypto);
 
@@ -170,15 +171,10 @@ describe("SetupEncryptionStore", () => {
 
         await setupEncryptionStore.resetConfirm();
 
-        expect(mocked(accessSecretStorage)).toHaveBeenCalledWith(expect.any(Function), true);
-        expect(makeRequest).toHaveBeenCalledWith({
-            identifier: {
-                type: "m.id.user",
-                user: "@userId:matrix.org",
-            },
-            password: cachedPassword,
-            type: "m.login.password",
-            user: "@userId:matrix.org",
+        expect(mocked(accessSecretStorage)).toHaveBeenCalledWith(expect.any(Function), {
+            accountPassword: cachedPassword,
+            forceReset: true,
+            resetCrossSigning: true,
         });
     });
 });

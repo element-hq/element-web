@@ -85,18 +85,9 @@ export enum LabGroup {
 }
 
 export enum Features {
-    VoiceBroadcast = "feature_voice_broadcast",
-    VoiceBroadcastForceSmallChunks = "feature_voice_broadcast_force_small_chunks",
     NotificationSettings2 = "feature_notification_settings2",
     OidcNativeFlow = "feature_oidc_native_flow",
     ReleaseAnnouncement = "feature_release_announcement",
-
-    /** If true, use the Rust crypto implementation.
-     *
-     * This is no longer read, but we continue to populate it on all devices, to guard against people rolling back to
-     * old versions of EW that do not use rust crypto by default.
-     */
-    RustCrypto = "feature_rust_crypto",
 }
 
 export const labGroupNames: Record<LabGroup, TranslationKey> = {
@@ -447,19 +438,6 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         shouldWarn: true,
         default: false,
     },
-    [Features.VoiceBroadcast]: {
-        isFeature: true,
-        labsGroup: LabGroup.Messaging,
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
-        supportedLevelsAreOrdered: true,
-        displayName: _td("labs|voice_broadcast"),
-        default: false,
-    },
-    [Features.VoiceBroadcastForceSmallChunks]: {
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        displayName: _td("labs|voice_broadcast_force_small_chunks"),
-        default: false,
-    },
     [Features.OidcNativeFlow]: {
         isFeature: true,
         labsGroup: LabGroup.Developer,
@@ -468,10 +446,6 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         displayName: _td("labs|oidc_native_flow"),
         description: _td("labs|oidc_native_flow_description"),
         default: false,
-    },
-    [Features.RustCrypto]: {
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        default: true,
     },
     /**
      * @deprecated in favor of {@link fontSizeDelta}

@@ -90,7 +90,7 @@ export const MPollEndBody = React.forwardRef<any, IBodyProps>(({ mxEvent, ...pro
     const { pollStartEvent, isLoadingPollStartEvent } = usePollStartEvent(mxEvent);
 
     if (!pollStartEvent) {
-        const pollEndFallbackMessage = M_TEXT.findIn(mxEvent.getContent()) || textForEvent(mxEvent, cli);
+        const pollEndFallbackMessage = M_TEXT.findIn<string>(mxEvent.getContent()) || textForEvent(mxEvent, cli);
         return (
             <>
                 <PollIcon className="mx_MPollEndBody_icon" />

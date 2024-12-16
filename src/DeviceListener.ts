@@ -46,6 +46,7 @@ import SettingsStore, { CallbackFn } from "./settings/SettingsStore";
 import { UIFeature } from "./settings/UIFeature";
 import { isBulkUnverifiedDeviceReminderSnoozed } from "./utils/device/snoozeBulkUnverifiedDeviceReminder";
 import { getUserDeviceIds } from "./utils/crypto/deviceInfo";
+import { asyncSomeParallel } from "./utils/arrays.ts";
 
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
 
@@ -229,24 +230,30 @@ export default class DeviceListener {
     private async getKeyBackupInfo(): Promise<KeyBackupInfo | null> {
         if (!this.client) return null;
         const now = new Date().getTime();
+        const crypto = this.client.getCrypto();
+        if (!crypto) return null;
+
         if (
             !this.keyBackupInfo ||
             !this.keyBackupFetchedAt ||
             this.keyBackupFetchedAt < now - KEY_BACKUP_POLL_INTERVAL
         ) {
-            this.keyBackupInfo = await this.client.getKeyBackupVersion();
+            this.keyBackupInfo = await crypto.getKeyBackupInfo();
             this.keyBackupFetchedAt = now;
         }
         return this.keyBackupInfo;
     }
 
-    private shouldShowSetupEncryptionToast(): boolean {
+    private async shouldShowSetupEncryptionToast(): Promise<boolean> {
         // If we're in the middle of a secret storage operation, we're likely
         // modifying the state involved here, so don't add new toasts to setup.
         if (isSecretStorageBeingAccessed()) return false;
         // Show setup toasts once the user is in at least one encrypted room.
         const cli = this.client;
-        return cli?.getRooms().some((r) => cli.isRoomEncrypted(r.roomId)) ?? false;
+        const cryptoApi = cli?.getCrypto();
+        if (!cli || !cryptoApi) return false;
+
+        return await asyncSomeParallel(cli.getRooms(), ({ roomId }) => cryptoApi.isEncryptionEnabledInRoom(roomId));
     }
 
     private recheck(): void {
@@ -283,7 +290,7 @@ export default class DeviceListener {
             hideSetupEncryptionToast();
 
             this.checkKeyBackupStatus();
-        } else if (this.shouldShowSetupEncryptionToast()) {
+        } else if (await this.shouldShowSetupEncryptionToast()) {
             // make sure our keys are finished downloading
             await crypto.getUserDeviceInfo([cli.getSafeUserId()]);
 
