@@ -16,9 +16,11 @@ import { _t } from "./languageHandler";
 import InteractiveAuthDialog from "./components/views/dialogs/InteractiveAuthDialog";
 
 /**
- * Determine if the homeserver allows uploading device keys with only password auth.
+ * Determine if the homeserver allows uploading device keys with only password auth, or with no auth at
+ * all (ie. if the homeserver supports MSC3967).
  * @param cli The Matrix Client to use
- * @returns True if the homeserver allows uploading device keys with only password auth, otherwise false
+ * @returns True if the homeserver allows uploading device keys with only password auth or with no auth
+ * at all, otherwise false
  */
 async function canUploadKeysWithPasswordOnly(cli: MatrixClient): Promise<boolean> {
     try {
