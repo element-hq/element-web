@@ -36,7 +36,7 @@ export function EncryptionUserSettingsTab(): JSX.Element {
     let content: JSX.Element;
     switch (state) {
         case "loading":
-            content = <InlineSpinner />;
+            content = <InlineSpinner aria-label={_t("common|loading")} />;
             break;
         case "verification_required":
             content = <VerifySessionPanel onFinish={checkVerificationRequired} />;
