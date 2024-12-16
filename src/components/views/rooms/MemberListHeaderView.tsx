@@ -34,7 +34,7 @@ interface TooltipProps {
 const OptionalTooltip: React.FC<TooltipProps> = ({ canInvite, children }) => {
     if (canInvite) return children;
     // If the user isn't allowed to invite others to this room, wrap with a relevant tooltip.
-    return <Tooltip label={_t("member_list|invite_button_no_perms_tooltip")}>{children}</Tooltip>;
+    return <Tooltip description={_t("member_list|invite_button_no_perms_tooltip")}>{children}</Tooltip>;
 };
 
 /**
