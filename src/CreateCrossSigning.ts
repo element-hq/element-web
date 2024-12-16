@@ -26,7 +26,6 @@ async function canUploadKeysWithPasswordOnly(cli: MatrixClient): Promise<boolean
         // If we get here, it's because the server is allowing us to upload keys without
         // auth the first time due to MSC3967. Therefore, yes, we can upload keys
         // (with or without password, technically, but that's fine).
-        logger.log("uploadDeviceSigningKeys unexpectedly succeeded without UI auth!");
         return true;
     } catch (error) {
         if (!(error instanceof MatrixError) || !error.data || !error.data.flows) {
