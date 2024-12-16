@@ -162,7 +162,7 @@ describe("MemberListView and MemberlistHeaderView", () => {
         }
     }
 
-    function renderMemberList(enablePresence: boolean, usersPerLevel: number = 2): void {
+    async function renderMemberList(enablePresence: boolean, usersPerLevel: number = 2): Promise<void> {
         TestUtils.stubClient();
         client = MatrixClientPeg.safeGet();
         client.hasLazyLoadMembersEnabled = () => false;
@@ -231,6 +231,9 @@ describe("MemberListView and MemberlistHeaderView", () => {
                 </SDKContext.Provider>
             </MatrixClientContext.Provider>,
         );
+        await waitFor(async () => {
+            expect(root.container.querySelectorAll(".mx_MemberTileView")).toHaveLength(usersPerLevel * 3);
+        });
     }
 
     async function reRenderMemberList(): Promise<void> {
@@ -246,13 +249,8 @@ describe("MemberListView and MemberlistHeaderView", () => {
     }
 
     describe("MemberListView", () => {
-        beforeEach(function () {
-            renderMemberList(true);
-        });
-
-        it("Renders correctly", async () => {
-            // Should have rendered 6 members
-            expect(root.container.querySelectorAll(".mx_MemberTileView")).toHaveLength(6);
+        beforeEach(async function () {
+            await renderMemberList(true);
         });
 
         it("Memberlist is re-rendered on unreachable presence event", async () => {
@@ -275,8 +273,8 @@ describe("MemberListView and MemberlistHeaderView", () => {
     });
 
     describe.each([true, false])("does order members correctly (presence %s)", (enablePresence) => {
-        beforeEach(function () {
-            renderMemberList(enablePresence);
+        beforeEach(async function () {
+            await renderMemberList(enablePresence);
         });
 
         describe("does order members correctly", () => {
@@ -368,8 +366,8 @@ describe("MemberListView and MemberlistHeaderView", () => {
     });
 
     describe("MemberListHeaderView", () => {
-        beforeEach(function () {
-            renderMemberList(true);
+        beforeEach(async function () {
+            await renderMemberList(true);
         });
 
         it("Shows the correct member count", async () => {
@@ -404,35 +402,35 @@ describe("MemberListView and MemberlistHeaderView", () => {
 
             it("Does not render invite button when user is not a member", async () => {});
 
-            it("does not render invite button UI customisation hides invites", async () => {
-                it("Renders disabled invite button when current user is a member but does not have rights to invite", async () => {
-                    jest.spyOn(memberListRoom, "getMyMembership").mockReturnValue(KnownMembership.Join);
-                    jest.spyOn(memberListRoom, "canInvite").mockReturnValue(false);
-                    mocked(shouldShowComponent).mockReturnValue(true);
-                    await reRenderMemberList();
-                    expect(screen.getByRole("button", { name: "Invite" })).toHaveAttribute("aria-disabled", "true");
-                });
+            it("does not render invite button UI customisation hides invites", async () => {});
 
-                it("Renders enabled invite button when current user is a member and has rights to invite", async () => {
-                    jest.spyOn(memberListRoom, "getMyMembership").mockReturnValue(KnownMembership.Join);
-                    jest.spyOn(memberListRoom, "canInvite").mockReturnValue(true);
-                    mocked(shouldShowComponent).mockReturnValue(true);
-                    await reRenderMemberList();
-                    expect(screen.getByRole("button", { name: "Invite" })).not.toHaveAttribute("aria-disabled", "true");
-                });
+            it("Renders disabled invite button when current user is a member but does not have rights to invite", async () => {
+                jest.spyOn(memberListRoom, "getMyMembership").mockReturnValue(KnownMembership.Join);
+                jest.spyOn(memberListRoom, "canInvite").mockReturnValue(false);
+                mocked(shouldShowComponent).mockReturnValue(true);
+                await reRenderMemberList();
+                expect(screen.getByRole("button", { name: "Invite" })).toHaveAttribute("aria-disabled", "true");
+            });
 
-                it("Opens room inviter on button click", async () => {
-                    jest.spyOn(defaultDispatcher, "dispatch");
-                    jest.spyOn(memberListRoom, "getMyMembership").mockReturnValue(KnownMembership.Join);
-                    jest.spyOn(memberListRoom, "canInvite").mockReturnValue(true);
-                    mocked(shouldShowComponent).mockReturnValue(true);
-                    await reRenderMemberList();
+            it("Renders enabled invite button when current user is a member and has rights to invite", async () => {
+                jest.spyOn(memberListRoom, "getMyMembership").mockReturnValue(KnownMembership.Join);
+                jest.spyOn(memberListRoom, "canInvite").mockReturnValue(true);
+                mocked(shouldShowComponent).mockReturnValue(true);
+                await reRenderMemberList();
+                expect(screen.getByRole("button", { name: "Invite" })).not.toHaveAttribute("aria-disabled", "true");
+            });
 
-                    fireEvent.click(screen.getByRole("button", { name: "Invite" }));
-                    expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
-                        action: "view_invite",
-                        roomId: memberListRoom.roomId,
-                    });
+            it("Opens room inviter on button click", async () => {
+                jest.spyOn(defaultDispatcher, "dispatch");
+                jest.spyOn(memberListRoom, "getMyMembership").mockReturnValue(KnownMembership.Join);
+                jest.spyOn(memberListRoom, "canInvite").mockReturnValue(true);
+                mocked(shouldShowComponent).mockReturnValue(true);
+                await reRenderMemberList();
+
+                fireEvent.click(screen.getByRole("button", { name: "Invite" }));
+                expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
+                    action: "view_invite",
+                    roomId: memberListRoom.roomId,
                 });
             });
         });

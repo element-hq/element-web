@@ -2029,7 +2029,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
       </div>
       <div
         class="mx_RightPanel_ResizeWrapper"
-        style="position: relative; user-select: auto; width: 420px; height: 100%; max-width: 50%; min-width: 264px; box-sizing: border-box; flex-shrink: 0;"
+        style="position: relative; user-select: auto; width: 420px; height: 100%; max-width: 50%; min-width: 320px; box-sizing: border-box; flex-shrink: 0;"
       >
         <aside
           class="mx_RightPanel"
