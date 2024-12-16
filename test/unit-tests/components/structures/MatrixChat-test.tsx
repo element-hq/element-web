@@ -1005,7 +1005,7 @@ describe("<MatrixChat />", () => {
                     bootstrapCrossSigning: jest.fn().mockImplementation(() => bootstrapDeferred.promise),
                     resetKeyBackup: jest.fn(),
                     isEncryptionEnabledInRoom: jest.fn().mockResolvedValue(false),
-                    getKeyBackupInfo: jest.fn().mockResolvedValue(null),
+                    checkKeyBackupAndEnable: jest.fn().mockResolvedValue(null),
                 };
                 loginClient.getCrypto.mockReturnValue(mockCrypto as any);
             });
