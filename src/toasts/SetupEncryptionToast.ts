@@ -73,9 +73,15 @@ const getDescription = (kind: Kind): string => {
     }
 };
 
+/**
+ * The kind of toast to show.
+ */
 export enum Kind {
+    // Prompt the user to set up encryption
     SET_UP_ENCRYPTION = "set_up_encryption",
+    // Prompt the user to set up a recovery key
     SET_UP_RECOVERY = "set_up_recovery",
+    // Prompt the user to verify this session
     VERIFY_THIS_SESSION = "verify_this_session",
 }
 
@@ -83,6 +89,11 @@ const onReject = (): void => {
     DeviceListener.sharedInstance().dismissEncryptionSetup();
 };
 
+/**
+ * Show a toast prompting the user for some action related to setting up their encryption.
+ *
+ * @param kind The kind of toast to show
+ */
 export const showToast = (kind: Kind): void => {
     if (
         ModuleRunner.instance.extensions.cryptoSetup.setupEncryptionNeeded({
@@ -128,6 +139,9 @@ export const showToast = (kind: Kind): void => {
     });
 };
 
+/**
+ * Hide the encryption setup toast if it is currently being shown.
+ */
 export const hideToast = (): void => {
     ToastStore.sharedInstance().dismissToast(TOAST_KEY);
 };
