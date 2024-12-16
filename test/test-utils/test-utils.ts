@@ -134,7 +134,7 @@ export function createTestClient(): MatrixClient {
             restoreKeyBackupWithPassphrase: jest.fn(),
             loadSessionBackupPrivateKeyFromSecretStorage: jest.fn(),
             storeSessionBackupPrivateKey: jest.fn(),
-            getKeyBackupInfo: jest.fn().mockResolvedValue(null),
+            checkKeyBackupAndEnable: jest.fn().mockResolvedValue(null),
             getEncryptionInfoForEvent: jest.fn().mockResolvedValue(null),
         }),
 
