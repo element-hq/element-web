@@ -171,13 +171,17 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
     };
 
     /**
-     * Show a dialog prompting the user to set up key backup.
+     * Show a dialog prompting the user to set up their recovery method.
      *
-     * Either there is no backup at all ({@link BackupStatus.NO_BACKUP}), there is a backup on the server but
-     * we are not connected to it ({@link BackupStatus.SERVER_BACKUP_BUT_DISABLED}), or we were unable to pull the
-     * backup data ({@link BackupStatus.ERROR}). In all three cases, we should prompt the user to set up key backup.
+     * Either:
+     *  * There is no backup at all ({@link BackupStatus.NO_BACKUP})
+     *  * There is a backup set up but recovery (4s) is not ({@link BackupStatus.BACKUP_NO_RECOVERY})
+     *  * There is a backup on the server but we are not connected to it ({@link BackupStatus.SERVER_BACKUP_BUT_DISABLED})
+     *  * We were unable to pull the backup data ({@link BackupStatus.ERROR}).
+     *
+     * In all three cases, we should prompt the user to set up a method of recovery.
      */
-    private renderSetupBackupDialog(): React.ReactNode {
+    private renderSetupRecoveryMethod(): React.ReactNode {
         const description = (
             <div>
                 <p>{_t("auth|logout_dialog|setup_secure_backup_description_1")}</p>
@@ -262,7 +266,7 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
             case BackupStatus.SERVER_BACKUP_BUT_DISABLED:
             case BackupStatus.ERROR:
             case BackupStatus.BACKUP_NO_RECOVERY:
-                return this.renderSetupBackupDialog();
+                return this.renderSetupRecoveryMethod();
         }
     }
 }
