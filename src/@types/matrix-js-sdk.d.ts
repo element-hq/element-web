@@ -12,7 +12,6 @@ import type { JitsiCallMemberEventType, JitsiCallMemberContent } from "../call-t
 import type { ILayoutStateEvent, WIDGET_LAYOUT_EVENT_TYPE } from "../stores/widgets/types";
 import type { EncryptedFile } from "matrix-js-sdk/src/types";
 import { PosthogAnalytics } from "../PosthogAnalytics.ts";
-import { string } from "css-tree";
 import { DeviceClientInformation } from "../utils/device/clientInformation.ts";
 import { UserWidget } from "../utils/WidgetUtils.ts";
 
