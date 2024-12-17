@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
+import { HTTPError, MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 
 import { createCrossSigning } from "../src/CreateCrossSigning";
@@ -80,5 +80,16 @@ describe("CreateCrossSigning", () => {
         await authUploadDeviceSigningKeys!(makeRequest);
         expect(makeRequest).not.toHaveBeenCalledWith();
         expect(createDialog).toHaveBeenCalled();
+    });
+
+    it("should throw error if server fails with something other than UIA", async () => {
+        await createCrossSigning(client);
+
+        const { authUploadDeviceSigningKeys } = mocked(client.getCrypto()!).bootstrapCrossSigning.mock.calls[0][0];
+
+        const error = new HTTPError("Internal Server Error", 500);
+        const makeRequest = jest.fn().mockRejectedValue(error);
+        await expect(authUploadDeviceSigningKeys!(makeRequest)).rejects.toThrow(error);
+        expect(makeRequest).not.toHaveBeenCalledWith();
     });
 });

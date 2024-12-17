@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { mocked } from "jest-mock";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "jest-matrix-react";
+import { sleep } from "matrix-js-sdk/src/utils";
 
 import { createCrossSigning } from "../../../src/CreateCrossSigning";
 import { InitialCryptoSetupStore } from "../../../src/stores/InitialCryptoSetupStore";
@@ -62,5 +63,23 @@ describe("InitialCryptoSetupStore", () => {
 
         await waitFor(() => expect(updateSpy).toHaveBeenCalled());
         expect(testStore.getStatus()).toBe("error");
+    });
+
+    it("should fail to retry once complete", async () => {
+        testStore.startInitialCryptoSetup(client, jest.fn());
+
+        await waitFor(() => expect(createCrossSigning).toHaveBeenCalled());
+        createCrossSigningResolve();
+        await sleep(0); // await the next tick
+        expect(testStore.retry()).toBeFalsy();
+    });
+
+    it("should retry if initial attempt failed", async () => {
+        testStore.startInitialCryptoSetup(client, jest.fn());
+
+        await waitFor(() => expect(createCrossSigning).toHaveBeenCalled());
+        createCrossSigningReject(new Error("Test error"));
+        await sleep(0); // await the next tick
+        expect(testStore.retry()).toBeTruthy();
     });
 });
