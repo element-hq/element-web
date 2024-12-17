@@ -124,11 +124,11 @@ jobs:
               with:
                   path: |
                       ~/.cache/ms-playwright
-                  key: ${{ runner.os }}-playwright-${{ steps.playwright.outputs.version }}-chromium
+                  key: ${{ runner.os }}-playwright-${{ steps.playwright.outputs.version }}
 
-            - name: Install Playwright browser
+            - name: Install Playwright browsers
               if: steps.playwright-cache.outputs.cache-hit != 'true'
-              run: yarn playwright install --with-deps --no-shell chromium
+              run: yarn playwright install --with-deps --no-shell
 
             # We skip tests tagged with @mergequeue when running on PRs, but run them in MQ and everywhere else
             - name: Run Playwright tests

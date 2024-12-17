@@ -11,16 +11,29 @@ import { defineConfig, devices } from "@playwright/test";
 const baseURL = process.env["BASE_URL"] ?? "http://localhost:8080";
 
 export default defineConfig({
-    projects: [{ name: "Chrome", use: { ...devices["Desktop Chrome"], channel: "chromium" } }],
+    projects: [
+        {
+            name: "Chrome",
+            use: {
+                ...devices["Desktop Chrome"],
+                channel: "chromium",
+                launchOptions: {
+                    args: ["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream", "--mute-audio"],
+                },
+            },
+        },
+        {
+            name: "Firefox",
+            use: { ...devices["Desktop Firefox"], channel: "firefox", screenshot: "off" },
+            // grep: /@firefox/,
+        },
+    ],
     use: {
         viewport: { width: 1280, height: 720 },
         ignoreHTTPSErrors: true,
         video: "retain-on-failure",
         baseURL,
         permissions: ["clipboard-write", "clipboard-read", "microphone"],
-        launchOptions: {
-            args: ["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream", "--mute-audio"],
-        },
         trace: "on-first-retry",
     },
     webServer: {
