@@ -31,7 +31,7 @@ test.describe("Preferences user settings tab", () => {
         await expect(tab).toMatchScreenshot("Preferences-user-settings-tab-should-be-rendered-properly-1.png");
     });
 
-    test("should be able to change the app language", async ({ uut, user }) => {
+    test("should be able to change the app language", { tag: "@no-firefox" }, async ({ uut, user }) => {
         // Check language and region setting dropdown
         const languageInput = uut.getByRole("button", { name: "Language Dropdown" });
         await languageInput.scrollIntoViewIfNeeded();

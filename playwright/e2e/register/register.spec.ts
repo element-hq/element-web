@@ -9,7 +9,12 @@ Please see LICENSE files in the repository root for full details.
 import { test, expect } from "../../element-web-test";
 
 test.describe("Registration", () => {
-    test.use({ startHomeserverOpts: "consent" });
+    test.use({
+        startHomeserverOpts: "consent",
+        // This is needed to work around an issue between Playwright, Firefox, and Service workers
+        // https://github.com/microsoft/playwright/issues/33561#issuecomment-2471642120
+        serviceWorkers: "block",
+    });
 
     test.beforeEach(async ({ page }) => {
         await page.goto("/#/register");

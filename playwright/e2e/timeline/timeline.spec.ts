@@ -914,7 +914,6 @@ test.describe("Timeline", () => {
         });
 
         test("can reply with a voice message", async ({ page, app, room, context }) => {
-            await context.grantPermissions(["microphone"]);
             await viewRoomSendMessageAndSetupReply(page, app, room.roomId);
 
             const composerOptions = await app.openMessageComposerOptions();
