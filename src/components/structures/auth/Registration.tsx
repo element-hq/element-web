@@ -428,16 +428,13 @@ export default class Registration extends React.Component<IProps, IState> {
                 newState.busy = false;
                 newState.completedNoSignin = true;
             } else {
-                await this.props.onLoggedIn(
-                    {
-                        userId,
-                        deviceId: (response as RegisterResponse).device_id!,
-                        homeserverUrl: this.state.matrixClient.getHomeserverUrl(),
-                        identityServerUrl: this.state.matrixClient.getIdentityServerUrl(),
-                        accessToken,
-                    },
-                    this.state.formVals.password!,
-                );
+                await this.props.onLoggedIn({
+                    userId,
+                    deviceId: (response as RegisterResponse).device_id!,
+                    homeserverUrl: this.state.matrixClient.getHomeserverUrl(),
+                    identityServerUrl: this.state.matrixClient.getIdentityServerUrl(),
+                    accessToken,
+                });
 
                 this.setupPushers();
             }

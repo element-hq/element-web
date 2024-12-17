@@ -11,7 +11,6 @@ import { MatrixClient, Device } from "matrix-js-sdk/src/matrix";
 import { SecretStorageKeyDescriptionAesV1, ServerSideSecretStorage } from "matrix-js-sdk/src/secret-storage";
 import { BootstrapCrossSigningOpts, CryptoApi, DeviceVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
-import { SdkContextClass } from "../../../src/contexts/SDKContext";
 import { accessSecretStorage } from "../../../src/SecurityManager";
 import { SetupEncryptionStore } from "../../../src/stores/SetupEncryptionStore";
 import { emitPromise, stubClient } from "../../test-utils";
@@ -47,11 +46,6 @@ describe("SetupEncryptionStore", () => {
         Object.defineProperty(client, "secretStorage", { value: mockSecretStorage });
 
         setupEncryptionStore = new SetupEncryptionStore();
-        SdkContextClass.instance.accountPasswordStore.setPassword(cachedPassword);
-    });
-
-    afterEach(() => {
-        SdkContextClass.instance.accountPasswordStore.clearPassword();
     });
 
     describe("start", () => {
