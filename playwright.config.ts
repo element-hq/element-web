@@ -17,6 +17,7 @@ export default defineConfig({
             use: {
                 ...devices["Desktop Chrome"],
                 channel: "chromium",
+                permissions: ["clipboard-write", "clipboard-read", "microphone"],
                 launchOptions: {
                     args: ["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream", "--mute-audio"],
                 },
@@ -24,8 +25,17 @@ export default defineConfig({
         },
         {
             name: "Firefox",
-            use: { ...devices["Desktop Firefox"], channel: "firefox", screenshot: "off" },
-            // grep: /@firefox/,
+            use: {
+                ...devices["Desktop Firefox"],
+                channel: "firefox",
+                screenshot: "off",
+                launchOptions: {
+                    firefoxUserPrefs: {
+                        "permissions.default.microphone": 1,
+                    },
+                },
+            },
+            // grepInvert: /@no-firefox/,
         },
     ],
     use: {
@@ -33,7 +43,6 @@ export default defineConfig({
         ignoreHTTPSErrors: true,
         video: "retain-on-failure",
         baseURL,
-        permissions: ["clipboard-write", "clipboard-read", "microphone"],
         trace: "on-first-retry",
     },
     webServer: {
