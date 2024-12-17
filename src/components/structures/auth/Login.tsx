@@ -48,10 +48,7 @@ interface IProps {
 
     // Called when the user has logged in. Params:
     // - The object returned by the login API
-    // - The user's password, if applicable, (may be cached in memory for a
-    //   short time so the user is not required to re-enter their password
-    //   for operations like uploading cross-signing keys).
-    onLoggedIn(data: IMatrixClientCreds, password: string): void;
+    onLoggedIn(data: IMatrixClientCreds): void;
 
     // login shouldn't know or care how registration, password recovery, etc is done.
     onRegisterClick(): void;

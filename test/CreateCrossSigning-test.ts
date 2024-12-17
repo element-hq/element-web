@@ -21,14 +21,14 @@ describe("CreateCrossSigning", () => {
     });
 
     it("should call bootstrapCrossSigning with an authUploadDeviceSigningKeys function", async () => {
-        await createCrossSigning(client, false, "password");
+        await createCrossSigning(client);
 
         expect(client.getCrypto()?.bootstrapCrossSigning).toHaveBeenCalledWith({
             authUploadDeviceSigningKeys: expect.any(Function),
         });
     });
 
-    it("should upload with password auth if possible", async () => {
+    it("should upload", async () => {
         client.uploadDeviceSigningKeys = jest.fn().mockRejectedValueOnce(
             new MatrixError({
                 flows: [
@@ -39,24 +39,7 @@ describe("CreateCrossSigning", () => {
             }),
         );
 
-        await createCrossSigning(client, false, "password");
-
-        const { authUploadDeviceSigningKeys } = mocked(client.getCrypto()!).bootstrapCrossSigning.mock.calls[0][0];
-
-        const makeRequest = jest.fn();
-        await authUploadDeviceSigningKeys!(makeRequest);
-        expect(makeRequest).toHaveBeenCalledWith({
-            type: "m.login.password",
-            identifier: {
-                type: "m.id.user",
-                user: client.getUserId(),
-            },
-            password: "password",
-        });
-    });
-
-    it("should attempt to upload keys without auth if using token login", async () => {
-        await createCrossSigning(client, true, undefined);
+        await createCrossSigning(client);
 
         const { authUploadDeviceSigningKeys } = mocked(client.getCrypto()!).bootstrapCrossSigning.mock.calls[0][0];
 
@@ -65,7 +48,7 @@ describe("CreateCrossSigning", () => {
         expect(makeRequest).toHaveBeenCalledWith({});
     });
 
-    it("should prompt user if password upload not possible", async () => {
+    it("should prompt user if upload failed with UIA", async () => {
         const createDialog = jest.spyOn(Modal, "createDialog").mockReturnValue({
             finished: Promise.resolve([true]),
             close: jest.fn(),
@@ -81,11 +64,19 @@ describe("CreateCrossSigning", () => {
             }),
         );
 
-        await createCrossSigning(client, false, "password");
+        await createCrossSigning(client);
 
         const { authUploadDeviceSigningKeys } = mocked(client.getCrypto()!).bootstrapCrossSigning.mock.calls[0][0];
 
-        const makeRequest = jest.fn();
+        const makeRequest = jest.fn().mockRejectedValue(
+            new MatrixError({
+                flows: [
+                    {
+                        stages: ["dummy.mystery_flow_nobody_knows"],
+                    },
+                ],
+            }),
+        );
         await authUploadDeviceSigningKeys!(makeRequest);
         expect(makeRequest).not.toHaveBeenCalledWith();
         expect(createDialog).toHaveBeenCalled();

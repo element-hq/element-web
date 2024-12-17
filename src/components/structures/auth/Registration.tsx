@@ -72,10 +72,7 @@ interface IProps {
     mobileRegister?: boolean;
     // Called when the user has logged in. Params:
     // - object with userId, deviceId, homeserverUrl, identityServerUrl, accessToken
-    // - The user's password, if available and applicable (may be cached in memory
-    //   for a short time so the user is not required to re-enter their password
-    //   for operations like uploading cross-signing keys).
-    onLoggedIn(params: IMatrixClientCreds, password: string): Promise<void>;
+    onLoggedIn(params: IMatrixClientCreds): Promise<void>;
     // registration shouldn't know or care how login is done.
     onLoginClick(): void;
     onServerConfigChange(config: ValidatedServerConfig): void;

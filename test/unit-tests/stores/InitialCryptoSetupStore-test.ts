@@ -11,9 +11,7 @@ import { waitFor } from "jest-matrix-react";
 
 import { createCrossSigning } from "../../../src/CreateCrossSigning";
 import { InitialCryptoSetupStore } from "../../../src/stores/InitialCryptoSetupStore";
-import { SdkContextClass } from "../../../src/contexts/SDKContext";
 import { createTestClient } from "../../test-utils";
-import { AccountPasswordStore } from "../../../src/stores/AccountPasswordStore";
 
 jest.mock("../../../src/CreateCrossSigning", () => ({
     createCrossSigning: jest.fn(),
@@ -22,7 +20,6 @@ jest.mock("../../../src/CreateCrossSigning", () => ({
 describe("InitialCryptoSetupStore", () => {
     let testStore: InitialCryptoSetupStore;
     let client: MatrixClient;
-    let stores: SdkContextClass;
 
     let createCrossSigningResolve: () => void;
     let createCrossSigningReject: (e: Error) => void;
@@ -30,11 +27,6 @@ describe("InitialCryptoSetupStore", () => {
     beforeEach(() => {
         testStore = new InitialCryptoSetupStore();
         client = createTestClient();
-        stores = {
-            accountPasswordStore: {
-                getPassword: jest.fn(),
-            } as unknown as AccountPasswordStore,
-        } as unknown as SdkContextClass;
 
         mocked(createCrossSigning).mockImplementation(() => {
             return new Promise<void>((resolve, reject) => {
@@ -45,7 +37,7 @@ describe("InitialCryptoSetupStore", () => {
     });
 
     it("should call createCrossSigning when startInitialCryptoSetup is called", async () => {
-        testStore.startInitialCryptoSetup(client, false, stores, jest.fn());
+        testStore.startInitialCryptoSetup(client, jest.fn());
 
         await waitFor(() => expect(createCrossSigning).toHaveBeenCalled());
     });
@@ -54,7 +46,7 @@ describe("InitialCryptoSetupStore", () => {
         const updateSpy = jest.fn();
         testStore.on("update", updateSpy);
 
-        testStore.startInitialCryptoSetup(client, false, stores, jest.fn());
+        testStore.startInitialCryptoSetup(client, jest.fn());
         createCrossSigningResolve();
 
         await waitFor(() => expect(updateSpy).toHaveBeenCalled());
@@ -65,21 +57,10 @@ describe("InitialCryptoSetupStore", () => {
         const updateSpy = jest.fn();
         testStore.on("update", updateSpy);
 
-        testStore.startInitialCryptoSetup(client, false, stores, jest.fn());
+        testStore.startInitialCryptoSetup(client, jest.fn());
         createCrossSigningReject(new Error("Test error"));
 
         await waitFor(() => expect(updateSpy).toHaveBeenCalled());
         expect(testStore.getStatus()).toBe("error");
-    });
-
-    it("should ignore failures if tokenLogin is true", async () => {
-        const updateSpy = jest.fn();
-        testStore.on("update", updateSpy);
-
-        testStore.startInitialCryptoSetup(client, true, stores, jest.fn());
-        createCrossSigningReject(new Error("Test error"));
-
-        await waitFor(() => expect(updateSpy).toHaveBeenCalled());
-        expect(testStore.getStatus()).toBe("complete");
     });
 });

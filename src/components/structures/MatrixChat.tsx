@@ -431,8 +431,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // if cross-signing is not yet set up, do so now if possible.
             InitialCryptoSetupStore.sharedInstance().startInitialCryptoSetup(
                 cli,
-                Boolean(this.tokenLogin),
-                this.stores,
                 this.onCompleteSecurityE2eSetupFinished,
             );
             this.setStateForNewView({ view: Views.E2E_SETUP });
@@ -1935,8 +1933,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.showScreen("forgot_password");
     };
 
-    private onRegisterFlowComplete = (credentials: IMatrixClientCreds, password: string): Promise<void> => {
-        return this.onUserCompletedLoginFlow(credentials, password);
+    private onRegisterFlowComplete = (credentials: IMatrixClientCreds): Promise<void> => {
+        return this.onUserCompletedLoginFlow(credentials);
     };
 
     // returns a promise which resolves to the new MatrixClient
@@ -2003,9 +2001,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      * Note: SSO users (and any others using token login) currently do not pass through
      * this, as they instead jump straight into the app after `attemptTokenLogin`.
      */
-    private onUserCompletedLoginFlow = async (credentials: IMatrixClientCreds, password: string): Promise<void> => {
-        this.stores.accountPasswordStore.setPassword(password);
-
+    private onUserCompletedLoginFlow = async (credentials: IMatrixClientCreds): Promise<void> => {
         // Create and start the client
         await Lifecycle.setLoggedIn(credentials);
         await this.postLoginSetup();
