@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { AccountDataEvents, MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import BasePlatform from "../../BasePlatform";
 import { IConfigOptions } from "../../IConfigOptions";
@@ -34,7 +34,8 @@ const formatUrl = (): string | undefined => {
 };
 
 const clientInformationEventPrefix = "io.element.matrix_client_information.";
-export const getClientInformationEventType = (deviceId: string): string => `${clientInformationEventPrefix}${deviceId}`;
+export const getClientInformationEventType = (deviceId: string): `${typeof clientInformationEventPrefix}${string}` =>
+    `${clientInformationEventPrefix}${deviceId}`;
 
 /**
  * Record extra client information for the current device
@@ -70,7 +71,7 @@ export const pruneClientInformation = (validDeviceIds: string[], matrixClient: M
         }
         const [, deviceId] = event.getType().split(clientInformationEventPrefix);
         if (deviceId && !validDeviceIds.includes(deviceId)) {
-            matrixClient.deleteAccountData(event.getType());
+            matrixClient.deleteAccountData(event.getType() as keyof AccountDataEvents);
         }
     });
 };

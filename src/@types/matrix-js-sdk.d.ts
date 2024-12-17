@@ -11,6 +11,10 @@ import type { BLURHASH_FIELD } from "../utils/image-media";
 import type { JitsiCallMemberEventType, JitsiCallMemberContent } from "../call-types";
 import type { ILayoutStateEvent, WIDGET_LAYOUT_EVENT_TYPE } from "../stores/widgets/types";
 import type { EncryptedFile } from "matrix-js-sdk/src/types";
+import { PosthogAnalytics } from "../PosthogAnalytics.ts";
+import { string } from "css-tree";
+import { DeviceClientInformation } from "../utils/device/clientInformation.ts";
+import { UserWidget } from "../utils/WidgetUtils.ts";
 
 // Extend Matrix JS SDK types via Typescript declaration merging to support unspecced event fields and types
 declare module "matrix-js-sdk/src/types" {
@@ -54,6 +58,30 @@ declare module "matrix-js-sdk/src/types" {
                 responseTs: number;
                 kind: "send_time";
             };
+        };
+    }
+
+    export interface AccountDataEvents {
+        [PosthogAnalytics.ANALYTICS_EVENT_TYPE]: {
+            id: string;
+            pseudonymousAnalyticsOptIn?: boolean;
+        };
+        [key: `io.element.matrix_client_information.${string}`]: DeviceClientInformation;
+        "im.vector.setting.breadcrumbs": { recent_rooms: string[] };
+        "io.element.recent_emoji": { recent_emoji: string[] };
+        "im.vector.setting.integration_provisioning": { enabled: boolean };
+        "im.vector.web.settings": Record<string, any>;
+
+        "org.matrix.preview_urls": { disable: boolean };
+
+        // This is not yet in the Matrix spec yet is being used as if it was
+        "m.widgets": {
+            [widgetId: string]: UserWidget;
+        };
+
+        // This is not in the Matrix spec yet seems to use an `m.` prefix
+        "m.accepted_terms": {
+            accepted: string[];
         };
     }
 
