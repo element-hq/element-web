@@ -28,13 +28,13 @@ export default defineConfig({
             use: {
                 ...devices["Desktop Firefox"],
                 channel: "firefox",
-                screenshot: "off",
                 launchOptions: {
                     firefoxUserPrefs: {
                         "permissions.default.microphone": 1,
                     },
                 },
             },
+            ignoreSnapshots: true,
             grepInvert: /@no-firefox/,
         },
     ],

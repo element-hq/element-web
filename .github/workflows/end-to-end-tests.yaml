@@ -135,7 +135,7 @@ jobs:
               run: |
                   yarn playwright test \
                       --shard "${{ matrix.runner }}/${{ strategy.job-total }}" \
-                      ${{ github.event_name == 'pull_request' && '--grep-invert @mergequeue' || '--project Chrome' }}
+                      ${{ github.event_name == 'pull_request' && '--grep-invert @mergequeue' || '' }}
 
             - name: Upload blob report to GitHub Actions Artifacts
               if: always()
