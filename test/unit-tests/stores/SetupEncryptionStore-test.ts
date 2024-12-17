@@ -20,7 +20,6 @@ jest.mock("../../../src/SecurityManager", () => ({
 }));
 
 describe("SetupEncryptionStore", () => {
-    const cachedPassword = "p4assword";
     let client: Mocked<MatrixClient>;
     let mockCrypto: Mocked<CryptoApi>;
     let mockSecretStorage: Mocked<ServerSideSecretStorage>;
@@ -166,7 +165,6 @@ describe("SetupEncryptionStore", () => {
         await setupEncryptionStore.resetConfirm();
 
         expect(mocked(accessSecretStorage)).toHaveBeenCalledWith(expect.any(Function), {
-            accountPassword: cachedPassword,
             forceReset: true,
             resetCrossSigning: true,
         });
