@@ -10,7 +10,6 @@ import * as os from "os";
 import * as crypto from "crypto";
 import * as childProcess from "child_process";
 import * as fse from "fs-extra";
-import { runtime } from "webpack";
 
 /**
  * @param cmd - command to execute

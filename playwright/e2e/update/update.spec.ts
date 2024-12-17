@@ -13,9 +13,6 @@ test.describe("Update", () => {
 
     test.use({
         displayName: "Ursa",
-        // This is needed to work around an issue between Playwright, Firefox, and Service workers
-        // https://github.com/microsoft/playwright/issues/33561#issuecomment-2471642120
-        serviceWorkers: "block",
     });
 
     test.beforeEach(async ({ context }) => {
