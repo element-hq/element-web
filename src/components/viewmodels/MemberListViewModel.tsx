@@ -192,7 +192,7 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
         inviteToRoom(room);
     };
 
-    useTypedEventEmitter(cli, RoomStateEvent.Update, (event: MatrixEvent) => {
+    useTypedEventEmitter(cli, RoomStateEvent.Events, (event: MatrixEvent) => {
         if (event.getRoomId() === roomId && event.getType() === EventType.RoomThirdPartyInvite) loadMembers();
         const newCanInvite = getCanUserInviteToThisRoom();
         setCanInvite(newCanInvite);

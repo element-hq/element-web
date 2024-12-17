@@ -238,7 +238,8 @@ describe("MemberListView and MemberlistHeaderView", () => {
 
     async function reRenderMemberList(): Promise<void> {
         await act(async () => {
-            client.emit(RoomStateEvent.Update, {
+            //@ts-ignore
+            client.emit(RoomStateEvent.Events, {
                 //@ts-ignore
                 getType: () => EventType.RoomThirdPartyInvite,
                 getRoomId: () => memberListRoom.roomId,
