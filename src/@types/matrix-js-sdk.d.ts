@@ -11,9 +11,8 @@ import type { BLURHASH_FIELD } from "../utils/image-media";
 import type { JitsiCallMemberEventType, JitsiCallMemberContent } from "../call-types";
 import type { ILayoutStateEvent, WIDGET_LAYOUT_EVENT_TYPE } from "../stores/widgets/types";
 import type { EncryptedFile } from "matrix-js-sdk/src/types";
-import { PosthogAnalytics } from "../PosthogAnalytics.ts";
-import { DeviceClientInformation } from "../utils/device/clientInformation.ts";
-import { UserWidget } from "../utils/WidgetUtils.ts";
+import type { DeviceClientInformation } from "../utils/device/types.ts";
+import type { UserWidget } from "../utils/WidgetUtils-types.ts";
 
 // Extend Matrix JS SDK types via Typescript declaration merging to support unspecced event fields and types
 declare module "matrix-js-sdk/src/types" {
@@ -61,16 +60,20 @@ declare module "matrix-js-sdk/src/types" {
     }
 
     export interface AccountDataEvents {
-        [PosthogAnalytics.ANALYTICS_EVENT_TYPE]: {
+        // Analytics account data event
+        "im.vector.analytics": {
             id: string;
             pseudonymousAnalyticsOptIn?: boolean;
         };
+        // Device client information account data event
         [key: `io.element.matrix_client_information.${string}`]: DeviceClientInformation;
+        // Element settings account data events
         "im.vector.setting.breadcrumbs": { recent_rooms: string[] };
         "io.element.recent_emoji": { recent_emoji: string[] };
         "im.vector.setting.integration_provisioning": { enabled: boolean };
         "im.vector.web.settings": Record<string, any>;
 
+        // URL preview account data event
         "org.matrix.preview_urls": { disable: boolean };
 
         // This is not yet in the Matrix spec yet is being used as if it was

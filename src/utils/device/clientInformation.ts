@@ -11,12 +11,9 @@ import { AccountDataEvents, MatrixClient } from "matrix-js-sdk/src/matrix";
 import BasePlatform from "../../BasePlatform";
 import { IConfigOptions } from "../../IConfigOptions";
 import { DeepReadonly } from "../../@types/common";
+import { DeviceClientInformation } from "./types";
 
-export type DeviceClientInformation = {
-    name?: string;
-    version?: string;
-    url?: string;
-};
+export type { DeviceClientInformation };
 
 const formatUrl = (): string | undefined => {
     // don't record url for electron clients
