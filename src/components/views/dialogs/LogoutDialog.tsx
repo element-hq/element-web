@@ -179,7 +179,7 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
      *  * There is a backup on the server but we are not connected to it ({@link BackupStatus.SERVER_BACKUP_BUT_DISABLED})
      *  * We were unable to pull the backup data ({@link BackupStatus.ERROR}).
      *
-     * In all three cases, we should prompt the user to set up a method of recovery.
+     * In all four cases, we should prompt the user to set up a method of recovery.
      */
     private renderSetupRecoveryMethod(): React.ReactNode {
         const description = (

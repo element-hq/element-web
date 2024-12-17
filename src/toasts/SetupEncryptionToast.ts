@@ -77,11 +77,17 @@ const getDescription = (kind: Kind): string => {
  * The kind of toast to show.
  */
 export enum Kind {
-    // Prompt the user to set up encryption
+    /**
+     *  Prompt the user to set up encryption
+     */
     SET_UP_ENCRYPTION = "set_up_encryption",
-    // Prompt the user to set up a recovery key
+    /**
+     * Prompt the user to set up a recovery key
+     */
     SET_UP_RECOVERY = "set_up_recovery",
-    // Prompt the user to verify this session
+    /**
+     * Prompt the user to verify this session
+     */
     VERIFY_THIS_SESSION = "verify_this_session",
 }
 
