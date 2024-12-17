@@ -100,7 +100,14 @@ export class InitialCryptoSetupStore extends EventEmitter {
         this.emit("update");
 
         try {
+            // Create the user's cross-signing keys
             await createCrossSigning(this.client);
+
+            // Check for any existing backup and enable key backup if there isn't one
+            const currentKeyBackup = await cryptoApi.checkKeyBackupAndEnable();
+            if (currentKeyBackup === null) {
+                await cryptoApi.resetKeyBackup();
+            }
 
             this.reset();
 
