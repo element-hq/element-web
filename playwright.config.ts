@@ -35,7 +35,7 @@ export default defineConfig({
                     },
                 },
             },
-            // grepInvert: /@no-firefox/,
+            grepInvert: /@no-firefox/,
         },
     ],
     use: {
