@@ -9,7 +9,7 @@
 import { expect, test } from ".";
 import { CommandOrControl } from "../../utils";
 
-test.describe("Threads Activity Centre", () => {
+test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
     test.use({
         displayName: "Alice",
         botCreateOpts: { displayName: "Other User" },
@@ -64,26 +64,22 @@ test.describe("Threads Activity Centre", () => {
         await util.assertHighlightIndicator();
     });
 
-    test(
-        "should show the rooms with unread threads",
-        { tag: ["@screenshot", "@no-firefox"] },
-        async ({ room1, room2, util, msg }) => {
-            await util.goTo(room2);
-            await util.populateThreads(room1, room2, msg);
-            // The indicator should be shown
-            await util.assertHighlightIndicator();
+    test("should show the rooms with unread threads", { tag: "@screenshot" }, async ({ room1, room2, util, msg }) => {
+        await util.goTo(room2);
+        await util.populateThreads(room1, room2, msg);
+        // The indicator should be shown
+        await util.assertHighlightIndicator();
 
-            // Verify that we have the expected rooms in the TAC
-            await util.openTac();
-            await util.assertRoomsInTac([
-                { room: room2.name, notificationLevel: "highlight" },
-                { room: room1.name, notificationLevel: "notification" },
-            ]);
+        // Verify that we have the expected rooms in the TAC
+        await util.openTac();
+        await util.assertRoomsInTac([
+            { room: room2.name, notificationLevel: "highlight" },
+            { room: room1.name, notificationLevel: "notification" },
+        ]);
 
-            // Verify that we don't have a visual regression
-            await expect(util.getTacPanel()).toMatchScreenshot("tac-panel-mix-unread.png");
-        },
-    );
+        // Verify that we don't have a visual regression
+        await expect(util.getTacPanel()).toMatchScreenshot("tac-panel-mix-unread.png");
+    });
 
     test("should update with a thread is read", { tag: "@screenshot" }, async ({ room1, room2, util, msg }) => {
         await util.goTo(room2);

@@ -27,18 +27,28 @@ export default defineConfig({
             name: "Firefox",
             use: {
                 ...devices["Desktop Firefox"],
-                channel: "firefox",
                 launchOptions: {
                     firefoxUserPrefs: {
                         "permissions.default.microphone": 1,
                     },
                 },
-                // This is needed to work around an issue between Playwright, Firefox, and Service workers
+                // This is needed to work around an issue between Playwright routes, Firefox, and Service workers
                 // https://github.com/microsoft/playwright/issues/33561#issuecomment-2471642120
                 serviceWorkers: "block",
             },
             ignoreSnapshots: true,
             grepInvert: /@no-firefox/,
+        },
+        {
+            name: "Safari",
+            use: {
+                ...devices["Desktop Safari"],
+                // Seemingly Safari has the same issue as Firefox in Playwright routes not working
+                // https://playwright.dev/docs/network#missing-network-events-and-service-workers
+                serviceWorkers: "block",
+            },
+            ignoreSnapshots: true,
+            grepInvert: /@no-webkit/,
         },
     ],
     use: {
