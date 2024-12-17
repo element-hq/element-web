@@ -69,7 +69,8 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                             rowRenderer={rowRenderer}
                             rowHeight={56}
                             rowCount={memberCount}
-                            height={height}
+                            // Subtract the height of MemberlistHeaderView so that the parent div does not overflow
+                            height={height - 113}
                             width={width}
                         />
                     )}
