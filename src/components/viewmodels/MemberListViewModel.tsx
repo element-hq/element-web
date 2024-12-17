@@ -84,7 +84,7 @@ export function sdkRoomMemberToRoomMember(member: SDKRoomMember): Member {
 
     const mxcAvatarURL = member.getMxcAvatarUrl();
     const avatarThumbnailUrl =
-        (mxcAvatarURL && mediaFromMxc(mxcAvatarURL).getThumbnailOfSourceHttp(10, 10)) ?? undefined;
+        (mxcAvatarURL && mediaFromMxc(mxcAvatarURL).getThumbnailOfSourceHttp(96, 96, "crop")) ?? undefined;
 
     const user = member.user;
     let presenceState: PresenceState | undefined = undefined;

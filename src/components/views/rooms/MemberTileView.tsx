@@ -19,13 +19,13 @@ import React from "react";
 
 import DisambiguatedProfile from "../messages/DisambiguatedProfile";
 import { RoomMember } from "../../../models/rooms/RoomMember";
-import MemberAvatarNext from "../avatars/MemberAvatarView";
 import { useThreePidTileViewModel, useMemberTileViewModel } from "../../viewmodels/MemberTileViewModel";
 import E2EIcon from "./E2EIconView";
 import AvatarPresenceIconView from "./PresenceIconView";
 import AccessibleButton from "../elements/AccessibleButton";
 import { ThreePIDInvite } from "../../../models/rooms/ThreePIDInvite";
 import BaseAvatar from "../avatars/BaseAvatar";
+import { _t } from "../../../languageHandler";
 
 interface IProps {
     member: RoomMember;
@@ -68,15 +68,23 @@ function MemberTile(props: TileProps): JSX.Element {
 
 export function ThreePidInviteTileView(props: ThreePidProps): JSX.Element {
     const vm = useThreePidTileViewModel(props);
-    const av = <BaseAvatar name={vm.name} size="36px" aria-hidden="true" />;
+    const av = <BaseAvatar name={vm.name} size="32px" aria-hidden="true" />;
     return <MemberTile nameJsx={vm.name} avatarJsx={av} onClick={vm.onClick} />;
 }
 
 export function RoomMemberTileView(props: IProps): JSX.Element {
     const vm = useMemberTileViewModel(props);
     const member = vm.member;
-    const av = <MemberAvatarNext member={member} size="32px" aria-hidden="true" />;
-
+    const av = (
+        <BaseAvatar
+            size="32px"
+            name={member.name}
+            idName={member.userId}
+            title={member.displayUserId}
+            url={member.avatarThumbnailUrl}
+            altText={_t("common|user_avatar")}
+        />
+    );
     const name = vm.name;
     const nameJSX = <DisambiguatedProfile member={member} fallbackName={name || ""} />;
 
