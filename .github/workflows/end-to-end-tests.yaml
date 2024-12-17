@@ -130,6 +130,11 @@ jobs:
               if: steps.playwright-cache.outputs.cache-hit != 'true'
               run: yarn playwright install --with-deps --no-shell
 
+            - name: Install system dependencies for WebKit
+              # Some WebKit dependencies seem to lay outside the cache and will need to be installed separately
+              if: github.event_name != 'pull_request' && steps.playwright-cache.outputs.cache-hit == 'true'
+              run: yarn playwright install-deps webkit
+
             # We skip tests tagged with @mergequeue when running on PRs, but run them in MQ and everywhere else
             - name: Run Playwright tests
               run: |

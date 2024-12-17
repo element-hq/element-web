@@ -10,7 +10,7 @@ import { test, expect, registerAccountMas } from ".";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 import { ElementAppPage } from "../../pages/ElementAppPage.ts";
 
-test.describe("OIDC Native", () => {
+test.describe("OIDC Native", { tag: "@no-firefox" }, () => {
     test.skip(isDendrite, "does not yet support MAS");
     test.slow(); // trace recording takes a while here
 
