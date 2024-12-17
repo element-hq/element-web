@@ -340,18 +340,6 @@ export default function RoomHeader({
                         </>
                     )}
 
-                    <Tooltip label={_t("right_panel|room_summary_card|title")}>
-                        <IconButton
-                            onClick={(evt) => {
-                                evt.stopPropagation();
-                                RightPanelStore.instance.showOrHidePhase(RightPanelPhases.RoomSummary);
-                            }}
-                            aria-label={_t("right_panel|room_summary_card|title")}
-                        >
-                            <RoomInfoIcon />
-                        </IconButton>
-                    </Tooltip>
-
                     {showChatButton && <VideoRoomChatButton room={room} />}
 
                     <Tooltip label={_t("common|threads")}>
@@ -401,6 +389,18 @@ export default function RoomHeader({
                         </FacePile>
                     </BodyText>
                 )}
+
+                <Tooltip label={_t("right_panel|room_summary_card|title")}>
+                    <IconButton
+                        onClick={(evt) => {
+                            evt.stopPropagation();
+                            RightPanelStore.instance.showOrHidePhase(RightPanelPhases.RoomSummary);
+                        }}
+                        aria-label={_t("right_panel|room_summary_card|title")}
+                    >
+                        <RoomInfoIcon />
+                    </IconButton>
+                </Tooltip>
             </Flex>
             {askToJoinEnabled && <RoomKnocksBar room={room} />}
         </>
