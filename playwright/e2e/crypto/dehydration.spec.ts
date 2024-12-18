@@ -8,11 +8,11 @@ Please see LICENSE files in the repository root for full details.
 
 import { Locator, type Page } from "@playwright/test";
 
-import { test as base, expect } from "../../element-web-test";
+import { test as base, expect, Fixtures } from "../../element-web-test";
 import { viewRoomSummaryByName } from "../right-panel/utils";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 
-const test = base.extend({
+const test = base.extend<Fixtures>({
     // eslint-disable-next-line no-empty-pattern
     startHomeserverOpts: async ({}, use) => {
         await use("dehydration");
