@@ -39,10 +39,10 @@ export default defineConfig({
             ignoreSnapshots: true,
         },
         {
-            name: "Safari",
+            name: "WebKit",
             use: {
                 ...devices["Desktop Safari"],
-                // Seemingly Safari has the same issue as Firefox in Playwright routes not working
+                // Seemingly WebKit has the same issue as Firefox in Playwright routes not working
                 // https://playwright.dev/docs/network#missing-network-events-and-service-workers
                 serviceWorkers: "block",
             },
