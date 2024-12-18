@@ -134,18 +134,22 @@ test.describe("Audio player", () => {
         ).toBeVisible();
     });
 
-    test("should be correctly rendered - light theme", async ({ page, app }) => {
+    test("should be correctly rendered - light theme", { tag: "@screenshot" }, async ({ page, app }) => {
         await uploadFile(page, "playwright/sample-files/1sec-long-name-audio-file.ogg");
         await takeSnapshots(page, app, "Selected EventTile of audio player (light theme)");
     });
 
-    test("should be correctly rendered - light theme with monospace font", async ({ page, app }) => {
-        await uploadFile(page, "playwright/sample-files/1sec-long-name-audio-file.ogg");
+    test(
+        "should be correctly rendered - light theme with monospace font",
+        { tag: "@screenshot" },
+        async ({ page, app }) => {
+            await uploadFile(page, "playwright/sample-files/1sec-long-name-audio-file.ogg");
 
-        await takeSnapshots(page, app, "Selected EventTile of audio player (light theme, monospace font)", true); // Enable monospace
-    });
+            await takeSnapshots(page, app, "Selected EventTile of audio player (light theme, monospace font)", true); // Enable monospace
+        },
+    );
 
-    test("should be correctly rendered - high contrast theme", async ({ page, app }) => {
+    test("should be correctly rendered - high contrast theme", { tag: "@screenshot" }, async ({ page, app }) => {
         // Disable system theme in case ThemeWatcher enables the theme automatically,
         // so that the high contrast theme can be enabled
         await app.settings.setValue("use_system_theme", null, SettingLevel.DEVICE, false);
@@ -161,7 +165,7 @@ test.describe("Audio player", () => {
         await takeSnapshots(page, app, "Selected EventTile of audio player (high contrast)");
     });
 
-    test("should be correctly rendered - dark theme", async ({ page, app }) => {
+    test("should be correctly rendered - dark theme", { tag: "@screenshot" }, async ({ page, app }) => {
         // Enable dark theme
         await app.settings.setValue("theme", null, SettingLevel.ACCOUNT, "dark");
 
@@ -207,93 +211,101 @@ test.describe("Audio player", () => {
         expect(download.suggestedFilename()).toBe("1sec.ogg");
     });
 
-    test("should support replying to audio file with another audio file", async ({ page, app }) => {
-        await uploadFile(page, "playwright/sample-files/1sec.ogg");
+    test(
+        "should support replying to audio file with another audio file",
+        { tag: "@screenshot" },
+        async ({ page, app }) => {
+            await uploadFile(page, "playwright/sample-files/1sec.ogg");
 
-        // Assert the audio player is rendered
-        await expect(page.locator(".mx_EventTile_last .mx_AudioPlayer_container")).toBeVisible();
+            // Assert the audio player is rendered
+            await expect(page.locator(".mx_EventTile_last .mx_AudioPlayer_container")).toBeVisible();
 
-        // Find and click "Reply" button on MessageActionBar
-        const tile = page.locator(".mx_EventTile_last");
-        await tile.hover();
-        await tile.getByRole("button", { name: "Reply", exact: true }).click();
-
-        // Reply to the player with another audio file
-        await uploadFile(page, "playwright/sample-files/1sec.ogg");
-
-        // Assert that the audio player is rendered
-        await expect(tile.locator(".mx_AudioPlayer_container")).toBeVisible();
-
-        // Assert that replied audio file is rendered as file button inside ReplyChain
-        const button = tile.locator(".mx_ReplyChain_wrapper .mx_MFileBody_info[role='button']");
-        // Assert that the file button has file name
-        await expect(button.locator(".mx_MFileBody_info_filename")).toBeVisible();
-
-        await takeSnapshots(page, app, "Selected EventTile of audio player with a reply");
-    });
-
-    test("should support creating a reply chain with multiple audio files", async ({ page, app, user }) => {
-        // Note: "mx_ReplyChain" element is used not only for replies which
-        // create a reply chain, but also for a single reply without a replied
-        // message. This test checks whether a reply chain which consists of
-        // multiple audio file replies is rendered properly.
-
-        const tile = page.locator(".mx_EventTile_last");
-
-        // Find and click "Reply" button
-        const clickButtonReply = async () => {
-            await tile.scrollIntoViewIfNeeded();
+            // Find and click "Reply" button on MessageActionBar
+            const tile = page.locator(".mx_EventTile_last");
             await tile.hover();
             await tile.getByRole("button", { name: "Reply", exact: true }).click();
-        };
 
-        await uploadFile(page, "playwright/sample-files/upload-first.ogg");
+            // Reply to the player with another audio file
+            await uploadFile(page, "playwright/sample-files/1sec.ogg");
 
-        // Assert that the audio player is rendered
-        await expect(page.locator(".mx_EventTile_last .mx_AudioPlayer_container")).toBeVisible();
+            // Assert that the audio player is rendered
+            await expect(tile.locator(".mx_AudioPlayer_container")).toBeVisible();
 
-        await clickButtonReply();
+            // Assert that replied audio file is rendered as file button inside ReplyChain
+            const button = tile.locator(".mx_ReplyChain_wrapper .mx_MFileBody_info[role='button']");
+            // Assert that the file button has file name
+            await expect(button.locator(".mx_MFileBody_info_filename")).toBeVisible();
 
-        // Reply to the player with another audio file
-        await uploadFile(page, "playwright/sample-files/upload-second.ogg");
+            await takeSnapshots(page, app, "Selected EventTile of audio player with a reply");
+        },
+    );
 
-        // Assert that the audio player is rendered
-        await expect(page.locator(".mx_EventTile_last .mx_AudioPlayer_container")).toBeVisible();
+    test(
+        "should support creating a reply chain with multiple audio files",
+        { tag: "@screenshot" },
+        async ({ page, app, user }) => {
+            // Note: "mx_ReplyChain" element is used not only for replies which
+            // create a reply chain, but also for a single reply without a replied
+            // message. This test checks whether a reply chain which consists of
+            // multiple audio file replies is rendered properly.
 
-        await clickButtonReply();
+            const tile = page.locator(".mx_EventTile_last");
 
-        // Reply to the player with yet another audio file to create a reply chain
-        await uploadFile(page, "playwright/sample-files/upload-third.ogg");
+            // Find and click "Reply" button
+            const clickButtonReply = async () => {
+                await tile.scrollIntoViewIfNeeded();
+                await tile.hover();
+                await tile.getByRole("button", { name: "Reply", exact: true }).click();
+            };
 
-        // Assert that the audio player is rendered
-        await expect(tile.locator(".mx_AudioPlayer_container")).toBeVisible();
+            await uploadFile(page, "playwright/sample-files/upload-first.ogg");
 
-        // Assert that there are two "mx_ReplyChain" elements
-        await expect(tile.locator(".mx_ReplyChain")).toHaveCount(2);
+            // Assert that the audio player is rendered
+            await expect(page.locator(".mx_EventTile_last .mx_AudioPlayer_container")).toBeVisible();
 
-        // Assert that one line contains the user name
-        await expect(tile.locator(".mx_ReplyChain .mx_ReplyTile_sender").getByText(user.displayName)).toBeVisible();
+            await clickButtonReply();
 
-        // Assert that the other line contains the file button
-        await expect(tile.locator(".mx_ReplyChain .mx_MFileBody")).toBeVisible();
+            // Reply to the player with another audio file
+            await uploadFile(page, "playwright/sample-files/upload-second.ogg");
 
-        // Click "In reply to"
-        await tile.locator(".mx_ReplyChain .mx_ReplyChain_show", { hasText: "In reply to" }).click();
+            // Assert that the audio player is rendered
+            await expect(page.locator(".mx_EventTile_last .mx_AudioPlayer_container")).toBeVisible();
 
-        const replyChain = tile.locator(".mx_ReplyChain:first-of-type");
-        // Assert that "In reply to" has disappeared
-        await expect(replyChain.getByText("In reply to")).not.toBeVisible();
+            await clickButtonReply();
 
-        // Assert that the file button contains the name of the file sent at first
-        await expect(
-            replyChain
-                .locator(".mx_MFileBody_info[role='button']")
-                .locator(".mx_MFileBody_info_filename", { hasText: "upload-first.ogg" }),
-        ).toBeVisible();
+            // Reply to the player with yet another audio file to create a reply chain
+            await uploadFile(page, "playwright/sample-files/upload-third.ogg");
 
-        // Take snapshots
-        await takeSnapshots(page, app, "Selected EventTile of audio player with a reply chain");
-    });
+            // Assert that the audio player is rendered
+            await expect(tile.locator(".mx_AudioPlayer_container")).toBeVisible();
+
+            // Assert that there are two "mx_ReplyChain" elements
+            await expect(tile.locator(".mx_ReplyChain")).toHaveCount(2);
+
+            // Assert that one line contains the user name
+            await expect(tile.locator(".mx_ReplyChain .mx_ReplyTile_sender").getByText(user.displayName)).toBeVisible();
+
+            // Assert that the other line contains the file button
+            await expect(tile.locator(".mx_ReplyChain .mx_MFileBody")).toBeVisible();
+
+            // Click "In reply to"
+            await tile.locator(".mx_ReplyChain .mx_ReplyChain_show", { hasText: "In reply to" }).click();
+
+            const replyChain = tile.locator(".mx_ReplyChain:first-of-type");
+            // Assert that "In reply to" has disappeared
+            await expect(replyChain.getByText("In reply to")).not.toBeVisible();
+
+            // Assert that the file button contains the name of the file sent at first
+            await expect(
+                replyChain
+                    .locator(".mx_MFileBody_info[role='button']")
+                    .locator(".mx_MFileBody_info_filename", { hasText: "upload-first.ogg" }),
+            ).toBeVisible();
+
+            // Take snapshots
+            await takeSnapshots(page, app, "Selected EventTile of audio player with a reply chain");
+        },
+    );
 
     test("should be rendered, play, and support replying on a thread", async ({ page, app }) => {
         await uploadFile(page, "playwright/sample-files/1sec-long-name-audio-file.ogg");

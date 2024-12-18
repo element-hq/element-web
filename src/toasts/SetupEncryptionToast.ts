@@ -23,15 +23,19 @@ const getTitle = (kind: Kind): string => {
     switch (kind) {
         case Kind.SET_UP_ENCRYPTION:
             return _t("encryption|set_up_toast_title");
+        case Kind.SET_UP_RECOVERY:
+            return _t("encryption|set_up_recovery");
         case Kind.VERIFY_THIS_SESSION:
             return _t("encryption|verify_toast_title");
     }
 };
 
-const getIcon = (kind: Kind): string => {
+const getIcon = (kind: Kind): string | undefined => {
     switch (kind) {
         case Kind.SET_UP_ENCRYPTION:
             return "secure_backup";
+        case Kind.SET_UP_RECOVERY:
+            return undefined;
         case Kind.VERIFY_THIS_SESSION:
             return "verification_warning";
     }
@@ -41,8 +45,20 @@ const getSetupCaption = (kind: Kind): string => {
     switch (kind) {
         case Kind.SET_UP_ENCRYPTION:
             return _t("action|continue");
+        case Kind.SET_UP_RECOVERY:
+            return _t("action|continue");
         case Kind.VERIFY_THIS_SESSION:
             return _t("action|verify");
+    }
+};
+
+const getSecondaryButtonLabel = (kind: Kind): string => {
+    switch (kind) {
+        case Kind.SET_UP_RECOVERY:
+            return _t("encryption|set_up_recovery_later");
+        case Kind.SET_UP_ENCRYPTION:
+        case Kind.VERIFY_THIS_SESSION:
+            return _t("encryption|verification|unverified_sessions_toast_reject");
     }
 };
 
@@ -50,13 +66,28 @@ const getDescription = (kind: Kind): string => {
     switch (kind) {
         case Kind.SET_UP_ENCRYPTION:
             return _t("encryption|set_up_toast_description");
+        case Kind.SET_UP_RECOVERY:
+            return _t("encryption|set_up_recovery_toast_description");
         case Kind.VERIFY_THIS_SESSION:
             return _t("encryption|verify_toast_description");
     }
 };
 
+/**
+ * The kind of toast to show.
+ */
 export enum Kind {
+    /**
+     *  Prompt the user to set up encryption
+     */
     SET_UP_ENCRYPTION = "set_up_encryption",
+    /**
+     * Prompt the user to set up a recovery key
+     */
+    SET_UP_RECOVERY = "set_up_recovery",
+    /**
+     * Prompt the user to verify this session
+     */
     VERIFY_THIS_SESSION = "verify_this_session",
 }
 
@@ -64,6 +95,11 @@ const onReject = (): void => {
     DeviceListener.sharedInstance().dismissEncryptionSetup();
 };
 
+/**
+ * Show a toast prompting the user for some action related to setting up their encryption.
+ *
+ * @param kind The kind of toast to show
+ */
 export const showToast = (kind: Kind): void => {
     if (
         ModuleRunner.instance.extensions.cryptoSetup.setupEncryptionNeeded({
@@ -101,15 +137,17 @@ export const showToast = (kind: Kind): void => {
             description: getDescription(kind),
             primaryLabel: getSetupCaption(kind),
             onPrimaryClick: onAccept,
-            secondaryLabel: _t("encryption|verification|unverified_sessions_toast_reject"),
+            secondaryLabel: getSecondaryButtonLabel(kind),
             onSecondaryClick: onReject,
-            destructive: "secondary",
         },
         component: GenericToast,
         priority: kind === Kind.VERIFY_THIS_SESSION ? 95 : 40,
     });
 };
 
+/**
+ * Hide the encryption setup toast if it is currently being shown.
+ */
 export const hideToast = (): void => {
     ToastStore.sharedInstance().dismissToast(TOAST_KEY);
 };

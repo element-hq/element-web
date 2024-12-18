@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ScalableBloomFilter } from "bloom-filters";
+import ScalableBloomFilter from "bloom-filters/dist/bloom/scalable-bloom-filter";
 import { HttpApiEvent, MatrixClient, MatrixEventEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { Error as ErrorEvent } from "@matrix-org/analytics-events/types/typescript/Error";
 import { DecryptionFailureCode, CryptoEvent } from "matrix-js-sdk/src/crypto-api";

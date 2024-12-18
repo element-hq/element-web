@@ -23,7 +23,7 @@ test.describe("Account user settings tab", () => {
         },
     });
 
-    test("should be rendered properly", async ({ uut, user }) => {
+    test("should be rendered properly", { tag: "@screenshot" }, async ({ uut, user }) => {
         await expect(uut).toMatchScreenshot("account.png");
 
         // Assert that the top heading is rendered
@@ -71,7 +71,7 @@ test.describe("Account user settings tab", () => {
         );
     });
 
-    test("should respond to small screen sizes", async ({ page, uut }) => {
+    test("should respond to small screen sizes", { tag: "@screenshot" }, async ({ page, uut }) => {
         await page.setViewportSize({ width: 700, height: 600 });
         await expect(uut).toMatchScreenshot("account-smallscreen.png");
     });

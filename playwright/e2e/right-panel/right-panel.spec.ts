@@ -38,7 +38,7 @@ test.describe("RightPanel", () => {
     });
 
     test.describe("in rooms", () => {
-        test("should handle long room address and long room name", async ({ page, app }) => {
+        test("should handle long room address and long room name", { tag: "@screenshot" }, async ({ page, app }) => {
             await app.client.createRoom({ name: ROOM_NAME_LONG });
             await viewRoomSummaryByName(page, app, ROOM_NAME_LONG);
 

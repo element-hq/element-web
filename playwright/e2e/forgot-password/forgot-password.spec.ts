@@ -26,7 +26,7 @@ test.describe("Forgot Password", () => {
             }),
     });
 
-    test("renders properly", async ({ page, homeserver }) => {
+    test("renders properly", { tag: "@screenshot" }, async ({ page, homeserver }) => {
         await page.goto("/");
 
         await page.getByRole("link", { name: "Sign in" }).click();
@@ -39,7 +39,7 @@ test.describe("Forgot Password", () => {
         await expect(page.getByRole("main")).toMatchScreenshot("forgot-password.png");
     });
 
-    test("renders email verification dialog properly", async ({ page, homeserver }) => {
+    test("renders email verification dialog properly", { tag: "@screenshot" }, async ({ page, homeserver }) => {
         const user = await homeserver.registerUser(username, password);
 
         await homeserver.setThreepid(user.userId, "email", email);

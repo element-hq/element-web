@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { customEvent, many, test } from ".";
 
-test.describe("Read receipts", () => {
+test.describe("Read receipts", { tag: "@mergequeue" }, () => {
     test.describe("Ignored events", () => {
         test("If all events after receipt are unimportant, the room is read", async ({
             roomAlpha: room1,

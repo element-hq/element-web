@@ -21,7 +21,7 @@ test.describe("NotificationPanel", () => {
         await app.client.createRoom({ name: ROOM_NAME });
     });
 
-    test("should render empty state", async ({ page, app }) => {
+    test("should render empty state", { tag: "@screenshot" }, async ({ page, app }) => {
         await app.viewRoomByName(ROOM_NAME);
 
         await page.getByRole("button", { name: "Notifications" }).click();

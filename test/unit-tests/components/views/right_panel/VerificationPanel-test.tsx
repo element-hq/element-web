@@ -46,7 +46,7 @@ describe("<VerificationPanel />", () => {
             const request = makeMockVerificationRequest({
                 phase: Phase.Ready,
             });
-            request.generateQRCode.mockResolvedValue(Buffer.from("test", "utf-8"));
+            request.generateQRCode.mockResolvedValue(new Uint8ClampedArray(Buffer.from("test", "utf-8")));
             const container = renderComponent({
                 request: request,
                 layout: "dialog",
@@ -71,7 +71,7 @@ describe("<VerificationPanel />", () => {
             const request = makeMockVerificationRequest({
                 phase: Phase.Ready,
             });
-            request.generateQRCode.mockResolvedValue(Buffer.from("test", "utf-8"));
+            request.generateQRCode.mockResolvedValue(new Uint8ClampedArray(Buffer.from("test", "utf-8")));
             const container = renderComponent({
                 request: request,
                 member: new User("@other:user"),

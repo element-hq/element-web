@@ -103,12 +103,17 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
             if (currentPrompt && membersNeedingApproval.has(currentPrompt.userId)) return currentPrompt;
 
             if (membersNeedingApproval.size === 0) {
+                if (currentPrompt) {
+                    // If we were previously showing a warning, log that we've stopped doing so.
+                    logger.debug("UserIdentityWarning: no users left that need approval");
+                }
                 return undefined;
             }
 
             // We pick the user with the smallest user ID.
             const keys = Array.from(membersNeedingApproval.keys()).sort((a, b) => a.localeCompare(b));
             const selection = membersNeedingApproval.get(keys[0]!);
+            logger.debug(`UserIdentityWarning: now warning about user ${selection?.userId}`);
             return selection;
         });
     }, []);
@@ -132,6 +137,9 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
             // initialising, and we want to start by displaying a warning
             // for the user with the smallest ID.
             if (initialisedRef.current === InitialisationStatus.Completed) {
+                logger.debug(
+                    `UserIdentityWarning: user ${userId} now needs approval; approval-pending list now [${Array.from(membersNeedingApprovalRef.current.keys())}]`,
+                );
                 updateCurrentPrompt();
             }
         },
@@ -173,6 +181,9 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
     const removeMemberNeedingApproval = useCallback(
         (userId: string): void => {
             membersNeedingApprovalRef.current.delete(userId);
+            logger.debug(
+                `UserIdentityWarning: user ${userId} no longer needs approval; approval-pending list now [${Array.from(membersNeedingApprovalRef.current.keys())}]`,
+            );
             updateCurrentPrompt();
         },
         [updateCurrentPrompt],
@@ -195,6 +206,9 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
         const members = await room.getEncryptionTargetMembers();
         await addMembersWhoNeedApproval(members);
 
+        logger.info(
+            `Initialised UserIdentityWarning component for room ${room.roomId} with approval-pending list [${Array.from(membersNeedingApprovalRef.current.keys())}]`,
+        );
         updateCurrentPrompt();
         initialisedRef.current = InitialisationStatus.Completed;
     }, [crypto, room, addMembersWhoNeedApproval, updateCurrentPrompt]);

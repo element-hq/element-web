@@ -66,126 +66,130 @@ test.describe("Editing", () => {
         botCreateOpts: { displayName: "Bob" },
     });
 
-    test("should render and interact with the message edit history dialog", async ({ page, user, app, room }) => {
-        // Click the "Remove" button on the message edit history dialog
-        const clickButtonRemove = async (locator: Locator) => {
-            const eventTileLine = locator.locator(".mx_EventTile_line");
-            await eventTileLine.hover();
-            await eventTileLine.getByRole("button", { name: "Remove" }).click();
-        };
+    test(
+        "should render and interact with the message edit history dialog",
+        { tag: "@screenshot" },
+        async ({ page, user, app, room }) => {
+            // Click the "Remove" button on the message edit history dialog
+            const clickButtonRemove = async (locator: Locator) => {
+                const eventTileLine = locator.locator(".mx_EventTile_line");
+                await eventTileLine.hover();
+                await eventTileLine.getByRole("button", { name: "Remove" }).click();
+            };
 
-        await page.goto(`#/room/${room.roomId}`);
+            await page.goto(`#/room/${room.roomId}`);
 
-        // Send "Message"
-        await sendEvent(app, room.roomId);
+            // Send "Message"
+            await sendEvent(app, room.roomId);
 
-        // Edit "Message" to "Massage"
-        await editLastMessage(page, "Massage");
+            // Edit "Message" to "Massage"
+            await editLastMessage(page, "Massage");
 
-        // Assert that the edit label is visible
-        await expect(page.locator(".mx_EventTile_edited")).toBeVisible();
+            // Assert that the edit label is visible
+            await expect(page.locator(".mx_EventTile_edited")).toBeVisible();
 
-        await clickEditedMessage(page, "Massage");
+            await clickEditedMessage(page, "Massage");
 
-        // Assert that the message edit history dialog is rendered
-        const dialog = page.getByRole("dialog");
-        const li = dialog.getByRole("listitem").last();
-        // Assert CSS styles which are difficult or cannot be detected with snapshots are applied as expected
-        await expect(li).toHaveCSS("clear", "both");
+            // Assert that the message edit history dialog is rendered
+            const dialog = page.getByRole("dialog");
+            const li = dialog.getByRole("listitem").last();
+            // Assert CSS styles which are difficult or cannot be detected with snapshots are applied as expected
+            await expect(li).toHaveCSS("clear", "both");
 
-        const timestamp = li.locator(".mx_EventTile .mx_MessageTimestamp");
-        await expect(timestamp).toHaveCSS("position", "absolute");
-        await expect(timestamp).toHaveCSS("inset-inline-start", "0px");
-        await expect(timestamp).toHaveCSS("text-align", "center");
+            const timestamp = li.locator(".mx_EventTile .mx_MessageTimestamp");
+            await expect(timestamp).toHaveCSS("position", "absolute");
+            await expect(timestamp).toHaveCSS("inset-inline-start", "0px");
+            await expect(timestamp).toHaveCSS("text-align", "center");
 
-        // Assert that monospace characters can fill the content line as expected
-        await expect(li.locator(".mx_EventTile .mx_EventTile_content")).toHaveCSS("margin-inline-end", "0px");
+            // Assert that monospace characters can fill the content line as expected
+            await expect(li.locator(".mx_EventTile .mx_EventTile_content")).toHaveCSS("margin-inline-end", "0px");
 
-        // Assert that zero block start padding is applied to mx_EventTile as expected
-        // See: .mx_EventTile on _EventTile.pcss
-        await expect(li.locator(".mx_EventTile")).toHaveCSS("padding-block-start", "0px");
+            // Assert that zero block start padding is applied to mx_EventTile as expected
+            // See: .mx_EventTile on _EventTile.pcss
+            await expect(li.locator(".mx_EventTile")).toHaveCSS("padding-block-start", "0px");
 
-        // Assert that the date separator is rendered at the top
-        await expect(dialog.getByRole("listitem").first().locator("h2", { hasText: "today" })).toHaveCSS(
-            "text-transform",
-            "capitalize",
-        );
+            // Assert that the date separator is rendered at the top
+            await expect(dialog.getByRole("listitem").first().locator("h2", { hasText: "today" })).toHaveCSS(
+                "text-transform",
+                "capitalize",
+            );
 
-        {
-            // Assert that the edited message is rendered under the date separator
-            const tile = dialog.locator("li:nth-child(2) .mx_EventTile");
-            // Assert that the edited message body consists of both deleted character and inserted character
-            // Above the first "e" of "Message" was replaced with "a"
-            await expect(tile.locator(".mx_EventTile_body")).toHaveText("Meassage");
+            {
+                // Assert that the edited message is rendered under the date separator
+                const tile = dialog.locator("li:nth-child(2) .mx_EventTile");
+                // Assert that the edited message body consists of both deleted character and inserted character
+                // Above the first "e" of "Message" was replaced with "a"
+                await expect(tile.locator(".mx_EventTile_body")).toHaveText("Meassage");
 
-            const body = tile.locator(".mx_EventTile_content .mx_EventTile_body");
-            await expect(body.locator(".mx_EditHistoryMessage_deletion").getByText("e")).toBeVisible();
-            await expect(body.locator(".mx_EditHistoryMessage_insertion").getByText("a")).toBeVisible();
-        }
+                const body = tile.locator(".mx_EventTile_content .mx_EventTile_body");
+                await expect(body.locator(".mx_EditHistoryMessage_deletion").getByText("e")).toBeVisible();
+                await expect(body.locator(".mx_EditHistoryMessage_insertion").getByText("a")).toBeVisible();
+            }
 
-        // Assert that the original message is rendered at the bottom
-        await expect(
-            dialog
-                .locator("li:nth-child(3) .mx_EventTile")
-                .locator(".mx_EventTile_content .mx_EventTile_body", { hasText: "Message" }),
-        ).toBeVisible();
+            // Assert that the original message is rendered at the bottom
+            await expect(
+                dialog
+                    .locator("li:nth-child(3) .mx_EventTile")
+                    .locator(".mx_EventTile_content .mx_EventTile_body", { hasText: "Message" }),
+            ).toBeVisible();
 
-        // Take a snapshot of the dialog
-        await expect(dialog).toMatchScreenshot("message-edit-history-dialog.png", {
-            mask: [page.locator(".mx_MessageTimestamp")],
-        });
+            // Take a snapshot of the dialog
+            await expect(dialog).toMatchScreenshot("message-edit-history-dialog.png", {
+                mask: [page.locator(".mx_MessageTimestamp")],
+            });
 
-        {
-            const tile = dialog.locator("li:nth-child(2) .mx_EventTile");
-            await expect(tile.locator(".mx_EventTile_body")).toHaveText("Meassage");
-            // Click the "Remove" button again
-            await clickButtonRemove(tile);
-        }
+            {
+                const tile = dialog.locator("li:nth-child(2) .mx_EventTile");
+                await expect(tile.locator(".mx_EventTile_body")).toHaveText("Meassage");
+                // Click the "Remove" button again
+                await clickButtonRemove(tile);
+            }
 
-        // Do nothing and close the dialog to confirm that the message edit history dialog is rendered
-        await app.closeDialog();
+            // Do nothing and close the dialog to confirm that the message edit history dialog is rendered
+            await app.closeDialog();
 
-        {
-            // Assert that the message edit history dialog is rendered again after it was closed
-            const tile = dialog.locator("li:nth-child(2) .mx_EventTile");
-            await expect(tile.locator(".mx_EventTile_body")).toHaveText("Meassage");
-            // Click the "Remove" button again
-            await clickButtonRemove(tile);
-        }
+            {
+                // Assert that the message edit history dialog is rendered again after it was closed
+                const tile = dialog.locator("li:nth-child(2) .mx_EventTile");
+                await expect(tile.locator(".mx_EventTile_body")).toHaveText("Meassage");
+                // Click the "Remove" button again
+                await clickButtonRemove(tile);
+            }
 
-        // This time remove the message really
-        const textInputDialog = page.locator(".mx_TextInputDialog");
-        await textInputDialog.getByRole("textbox", { name: "Reason (optional)" }).fill("This is a test."); // Reason
-        await textInputDialog.getByRole("button", { name: "Remove" }).click();
+            // This time remove the message really
+            const textInputDialog = page.locator(".mx_TextInputDialog");
+            await textInputDialog.getByRole("textbox", { name: "Reason (optional)" }).fill("This is a test."); // Reason
+            await textInputDialog.getByRole("button", { name: "Remove" }).click();
 
-        // Assert that the message edit history dialog is rendered again
-        const messageEditHistoryDialog = page.locator(".mx_MessageEditHistoryDialog");
-        // Assert that the date is rendered
-        await expect(
-            messageEditHistoryDialog.getByRole("listitem").first().locator("h2", { hasText: "today" }),
-        ).toHaveCSS("text-transform", "capitalize");
+            // Assert that the message edit history dialog is rendered again
+            const messageEditHistoryDialog = page.locator(".mx_MessageEditHistoryDialog");
+            // Assert that the date is rendered
+            await expect(
+                messageEditHistoryDialog.getByRole("listitem").first().locator("h2", { hasText: "today" }),
+            ).toHaveCSS("text-transform", "capitalize");
 
-        // Assert that the original message is rendered under the date on the dialog
-        await expect(
-            messageEditHistoryDialog
-                .locator("li:nth-child(2) .mx_EventTile")
-                .locator(".mx_EventTile_content .mx_EventTile_body", { hasText: "Message" }),
-        ).toBeVisible();
+            // Assert that the original message is rendered under the date on the dialog
+            await expect(
+                messageEditHistoryDialog
+                    .locator("li:nth-child(2) .mx_EventTile")
+                    .locator(".mx_EventTile_content .mx_EventTile_body", { hasText: "Message" }),
+            ).toBeVisible();
 
-        // Assert that the edited message is gone
-        await expect(
-            messageEditHistoryDialog.locator(".mx_EventTile_content .mx_EventTile_body", { hasText: "Meassage" }),
-        ).not.toBeVisible();
+            // Assert that the edited message is gone
+            await expect(
+                messageEditHistoryDialog.locator(".mx_EventTile_content .mx_EventTile_body", { hasText: "Meassage" }),
+            ).not.toBeVisible();
 
-        await app.closeDialog();
+            await app.closeDialog();
 
-        // Assert that the redaction placeholder is rendered
-        await expect(
-            page
-                .locator(".mx_RoomView_MessageList")
-                .locator(".mx_EventTile_last .mx_RedactedBody", { hasText: "Message deleted" }),
-        ).toBeVisible();
-    });
+            // Assert that the redaction placeholder is rendered
+            await expect(
+                page
+                    .locator(".mx_RoomView_MessageList")
+                    .locator(".mx_EventTile_last .mx_RedactedBody", { hasText: "Message deleted" }),
+            ).toBeVisible();
+        },
+    );
 
     test("should render 'View Source' button in developer mode on the message edit history dialog", async ({
         page,

@@ -20,7 +20,7 @@ test.describe("General room settings tab", () => {
         await app.viewRoomByName(roomName);
     });
 
-    test("should be rendered properly", async ({ page, app }) => {
+    test("should be rendered properly", { tag: "@screenshot" }, async ({ page, app }) => {
         const settings = await app.settings.openRoomSettings("General");
 
         // Assert that "Show less" details element is rendered

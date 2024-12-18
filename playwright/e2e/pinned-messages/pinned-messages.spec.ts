@@ -10,35 +10,38 @@ import { test } from "./index";
 import { expect } from "../../element-web-test";
 
 test.describe("Pinned messages", () => {
-    test("should show the empty state when there are no pinned messages", async ({ page, app, room1, util }) => {
-        await util.goTo(room1);
-        await util.openRoomInfo();
-        await util.assertPinnedCountInRoomInfo(0);
-        await util.openPinnedMessagesList();
-        await util.assertEmptyPinnedMessagesList();
-    });
+    test(
+        "should show the empty state when there are no pinned messages",
+        { tag: "@screenshot" },
+        async ({ page, app, room1, util }) => {
+            await util.goTo(room1);
+            await util.openRoomInfo();
+            await util.assertPinnedCountInRoomInfo(0);
+            await util.openPinnedMessagesList();
+            await util.assertEmptyPinnedMessagesList();
+        },
+    );
 
-    test("should pin one message and to have the pinned message badge in the timeline", async ({
-        page,
-        app,
-        room1,
-        util,
-    }) => {
-        await util.goTo(room1);
-        await util.receiveMessages(room1, ["Msg1"]);
-        await util.pinMessages(["Msg1"]);
+    test(
+        "should pin one message and to have the pinned message badge in the timeline",
+        { tag: "@screenshot" },
+        async ({ page, app, room1, util }) => {
+            await util.goTo(room1);
+            await util.receiveMessages(room1, ["Msg1"]);
+            await util.pinMessages(["Msg1"]);
 
-        const tile = util.getEventTile("Msg1");
-        await expect(tile).toMatchScreenshot("pinned-message-Msg1.png", {
-            mask: [tile.locator(".mx_MessageTimestamp")],
-            // Hide the jump to bottom button in the timeline to avoid flakiness
-            css: `
+            const tile = util.getEventTile("Msg1");
+            await expect(tile).toMatchScreenshot("pinned-message-Msg1.png", {
+                mask: [tile.locator(".mx_MessageTimestamp")],
+                // Hide the jump to bottom button in the timeline to avoid flakiness
+                css: `
                 .mx_JumpToBottomButton {
                     display: none !important;
                 }
             `,
-        });
-    });
+            });
+        },
+    );
 
     test("should pin messages and show them in the room info panel", async ({ page, app, room1, util }) => {
         await util.goTo(room1);
@@ -73,7 +76,7 @@ test.describe("Pinned messages", () => {
         await util.assertPinnedCountInRoomInfo(2);
     });
 
-    test("should unpin all messages", async ({ page, app, room1, util }) => {
+    test("should unpin all messages", { tag: "@screenshot" }, async ({ page, app, room1, util }) => {
         await util.goTo(room1);
         await util.receiveMessages(room1, ["Msg1", "Msg2", "Msg3", "Msg4"]);
         await util.pinMessages(["Msg1", "Msg2", "Msg4"]);
@@ -98,7 +101,7 @@ test.describe("Pinned messages", () => {
         await util.assertPinnedCountInRoomInfo(0);
     });
 
-    test("should display one message in the banner", async ({ page, app, room1, util }) => {
+    test("should display one message in the banner", { tag: "@screenshot" }, async ({ page, app, room1, util }) => {
         await util.goTo(room1);
         await util.receiveMessages(room1, ["Msg1"]);
         await util.pinMessages(["Msg1"]);
@@ -106,7 +109,7 @@ test.describe("Pinned messages", () => {
         await expect(util.getBanner()).toMatchScreenshot("pinned-message-banner-1-Msg1.png");
     });
 
-    test("should display 2 messages in the banner", async ({ page, app, room1, util }) => {
+    test("should display 2 messages in the banner", { tag: "@screenshot" }, async ({ page, app, room1, util }) => {
         await util.goTo(room1);
         await util.receiveMessages(room1, ["Msg1", "Msg2"]);
         await util.pinMessages(["Msg1", "Msg2"]);
@@ -123,7 +126,7 @@ test.describe("Pinned messages", () => {
         await expect(util.getBanner()).toMatchScreenshot("pinned-message-banner-2-Msg2.png");
     });
 
-    test("should display 4 messages in the banner", async ({ page, app, room1, util }) => {
+    test("should display 4 messages in the banner", { tag: "@screenshot" }, async ({ page, app, room1, util }) => {
         await util.goTo(room1);
         await util.receiveMessages(room1, ["Msg1", "Msg2", "Msg3", "Msg4"]);
         await util.pinMessages(["Msg1", "Msg2", "Msg3", "Msg4"]);

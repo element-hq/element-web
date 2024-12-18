@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode, createRef, useCallback, useEffect, useState } from "react";
+import React, { ReactNode, createRef, useCallback, useEffect, useState, useId } from "react";
 import EditIcon from "@vector-im/compound-design-tokens/assets/web/icons/edit";
 import UploadIcon from "@vector-im/compound-design-tokens/assets/web/icons/share";
 import DeleteIcon from "@vector-im/compound-design-tokens/assets/web/icons/delete";
@@ -16,7 +16,6 @@ import classNames from "classnames";
 import { _t } from "../../../languageHandler";
 import { mediaFromMxc } from "../../../customisations/Media";
 import { chromeFileInputFix } from "../../../utils/BrowserWorkarounds";
-import { useId } from "../../../utils/useId";
 import AccessibleButton from "../elements/AccessibleButton";
 import BaseAvatar from "../avatars/BaseAvatar";
 import Modal from "../../../Modal.tsx";

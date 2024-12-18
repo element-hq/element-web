@@ -13,6 +13,7 @@
 
 # Ignore translations as those will be updated by GHA for Localazy download
 /src/i18n/strings
+/src/i18n/strings/en_EN.json  @element-hq/element-web-reviewers
 # Ignore the synapse plugin as this is updated by GHA for docker image updating
 /playwright/plugins/homeserver/synapse/index.ts
 

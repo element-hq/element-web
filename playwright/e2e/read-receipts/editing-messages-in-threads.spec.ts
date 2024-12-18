@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { test } from ".";
 
-test.describe("Read receipts", () => {
+test.describe("Read receipts", { tag: "@mergequeue" }, () => {
     test.describe("editing messages", () => {
         test.describe("in threads", () => {
             test("An edit of a threaded message makes the room unread", async ({

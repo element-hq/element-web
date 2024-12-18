@@ -1253,7 +1253,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                             <span>{filterToLabel(filter)}</span>
                             <AccessibleButton
                                 tabIndex={-1}
-                                alt={_t("spotlight_dialog|remove_filter", {
+                                title={_t("spotlight_dialog|remove_filter", {
                                     filter: filterToLabel(filter),
                                 })}
                                 className="mx_SpotlightDialog_filter--close"

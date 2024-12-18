@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { test } from ".";
 
-test.describe("Read receipts", () => {
+test.describe("Read receipts", { tag: "@mergequeue" }, () => {
     test.describe("Room list order", () => {
         test("Rooms with unread messages appear at the top of room list if 'unread first' is selected", async ({
             roomAlpha: room1,

@@ -71,7 +71,6 @@ export const SpaceAvatar: React.FC<Pick<IProps, "avatarUrl" | "avatarDisabled" |
                     <AccessibleButton
                         className="mx_SpaceBasicSettings_avatar"
                         onClick={() => avatarUploadRef.current?.click()}
-                        alt=""
                     />
                     <AccessibleButton
                         onClick={() => avatarUploadRef.current?.click()}

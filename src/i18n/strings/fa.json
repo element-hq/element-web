@@ -654,12 +654,6 @@
             "incoming_sas_dialog_title": "درخواست تأیید دریافتی",
             "incoming_sas_user_dialog_text_1": "این کاربر را تأیید کنید تا به عنوان کاربر مورد اعتماد علامت‌گذاری شود. اعتماد به کاربران آرامش و اطمینان بیشتری به شما در استفاده از رمزنگاری سرتاسر می‌دهد.",
             "incoming_sas_user_dialog_text_2": "با تأیید این کاربر ، نشست وی به عنوان مورد اعتماد علامت‌گذاری شده و همچنین نشست شما به عنوان مورد اعتماد برای وی علامت‌گذاری خواهد شد.",
-            "manual_device_verification_device_id_label": "شناسه‌ی نشست",
-            "manual_device_verification_device_key_label": "کلید نشست",
-            "manual_device_verification_device_name_label": "نام نشست",
-            "manual_device_verification_footer": "اگر آنها مطابقت نداشته‌باشند ، ممکن است امنیت ارتباطات شما به خطر افتاده باشد.",
-            "manual_device_verification_self_text": "از طریق مقایسه‌ی این با تنظیمات کاربری در نشست‌های دیگرتان، تائيد کنید:",
-            "manual_device_verification_user_text": "این نشست کاربر را از طریق مقایسه‌ی این با تنظیمات کاربری تائيد کنید:",
             "other_party_cancelled": "طرف مقابل فرآیند تائید را لغو کرد.",
             "prompt_encrypted": "برای اطمینان از امنیت اتاق، هویت همه‌ی کاربران حاضر در اتاق را تأیید کنید.",
             "prompt_self": "از اعلان دوباره تأیید را شروع کنید.",
@@ -981,8 +975,7 @@
         "latex_maths": "نمایش لاتکس ریاضیات در پیام‌ها",
         "leave_beta": "ترک نسخه‌ی بتا",
         "video_rooms": "اتاق های تصویری",
-        "video_rooms_a_new_way_to_chat": "راهکار جدیدی برای گفتگوی صوتی و تصویری در%(brand)sوجود دارد.",
-        "voice_broadcast": "صدای جمعی"
+        "video_rooms_a_new_way_to_chat": "راهکار جدیدی برای گفتگوی صوتی و تصویری در%(brand)sوجود دارد."
     },
     "labs_mjolnir": {
         "advanced_warning": "⚠ این تنظیمات برای کاربران حرفه‌ای قرار داده شده‌است.",
@@ -1073,7 +1066,6 @@
         "mentions_keywords": "منشن ها و کلمات کلیدی"
     },
     "notifier": {
-        "io.element.voice_broadcast_chunk": "%(senderName)s یک پخش صوتی را شروع کرد",
         "m.key.verification.request": "%(name)s درخواست تائید دارد"
     },
     "onboarding": {
@@ -1806,12 +1798,6 @@
         "upgraderoom": "یک اتاق را به نسخه جدید ارتقا دهید",
         "upgraderoom_permission_error": "شما مجوزهای لازم را برای استفاده از این دستور ندارید.",
         "usage": "استفاده",
-        "verify": "یک کاربر، نشست و عبارت کلید عمومی را تائید می‌کند",
-        "verify_mismatch": "هشدار: تایید کلید ناموفق بود! کلید امضا کننده %(userId)s در نشست %(deviceId)s برابر %(fprint)s است که با کلید %(fingerprint)s تطابق ندارد. این می تواند به معنی رهگیری ارتباطات شما باشد!",
-        "verify_nop": "نشست پیش از این تائید شده‌است!",
-        "verify_success_description": "کلید امضای ارائه شده با کلید امضای دریافت شده از جلسه %(deviceId)s کاربر %(userId)s مطابقت دارد. نشست به عنوان تأیید شده علامت گذاری شد.",
-        "verify_success_title": "کلید تأیید شده",
-        "verify_unknown_pair": "دوتایی (کاربر و نشست) ناشناخته : ( %(userId)sو%(deviceId)s )",
         "whois": "اطلاعات مربوط به کاربر را نمایش می دهد"
     },
     "space": {
@@ -2311,22 +2297,6 @@
         "settings": "همه تنظیمات",
         "switch_theme_dark": "انتخاب حالت تاریک",
         "switch_theme_light": "انتخاب حالت روشن"
-    },
-    "voice_broadcast": {
-        "action": "صدای جمعی",
-        "confirm_stop_affirm": "بله، توقف ارسال جمعی",
-        "confirm_stop_title": "آیا ارسال جمعی زنده متوقف شود؟",
-        "failed_already_recording_description": "شما در حال ضبط یک صدا برای ارسال جمعی هستید. برای تولید یک صدای جمعی دیگر ضبط فعلی را متوقف نمایید.",
-        "failed_already_recording_title": "امکان ارسال یک صدای جدید به صورت جمعی نیست",
-        "failed_insufficient_permission_description": "شما دسترسی لازم برای ارسال صدای جمعی در این اتاق را ندارید. لطفا با مدیر اتاق تماس بگیرید.",
-        "failed_insufficient_permission_title": "امکان ارسال یک صدای جدید به صورت جمعی نیست",
-        "failed_others_already_recording_description": "شخص دیگری در حال ضبط صدا برای ارسال جمعی است. برای ارسال صدای جمعی باید منتظر بمانید تا کار ایشان به پایان برسد.",
-        "failed_others_already_recording_title": "امکان ارسال یک صدای جدید به صورت جمعی نیست",
-        "go_live": "برو به زنده",
-        "live": "زنده",
-        "pause": "توقف صدای جمعی",
-        "play": "پخش صدای جمعی",
-        "resume": "بازگشت به صدای جمعی"
     },
     "voip": {
         "already_in_call": "هم‌اکنون در تماس هستید",

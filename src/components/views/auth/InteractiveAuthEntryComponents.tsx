@@ -910,7 +910,7 @@ export class SSOAuthEntry extends React.Component<ISSOAuthEntryProps, ISSOAuthEn
 
 export class FallbackAuthEntry<T = {}> extends React.Component<IAuthEntryProps & T> {
     protected popupWindow: Window | null;
-    protected fallbackButton = createRef<HTMLButtonElement>();
+    protected fallbackButton = createRef<HTMLDivElement>();
 
     public constructor(props: IAuthEntryProps & T) {
         super(props);
