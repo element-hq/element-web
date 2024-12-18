@@ -68,7 +68,7 @@ export function RecoveryPanel({ onSetUpRecoveryClick, onChangingRecoveryKeyClick
     let content: JSX.Element;
     switch (state) {
         case "loading":
-            content = <InlineSpinner />;
+            content = <InlineSpinner aria-label={_t("common|loading")} />;
             break;
         case "missing_backup":
             content = (
