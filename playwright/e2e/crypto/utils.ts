@@ -221,10 +221,7 @@ export async function doTwoWaySasVerification(page: Page, verifier: JSHandle<Ver
         const emoji = emojis[i];
         const emojiBlock = emojiBlocks.nth(i);
         const textContent = await emojiBlock.textContent();
-        // VerificationShowSas munges the case of the emoji descriptions returned by the js-sdk before
-        // displaying them. Once we drop support for legacy crypto, that code can go away, and so can the
-        // case-munging here.
-        expect(textContent.toLowerCase()).toEqual(emoji[0] + emoji[1].toLowerCase());
+        expect(textContent).toEqual(emoji[0] + emoji[1]);
     }
 }
 

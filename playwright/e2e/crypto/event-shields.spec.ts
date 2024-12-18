@@ -133,8 +133,7 @@ test.describe("Cryptography", function () {
                 "Encrypted by a device not verified by its owner.",
             );
 
-            /* In legacy crypto: should show a grey padlock for a message from a deleted device.
-             * In rust crypto: should show a red padlock for a message from an unverified device.
+            /* Should show a red padlock for a message from an unverified device.
              * Rust crypto remembers the verification state of the sending device, so it will know that the device was
              * unverified, even if it gets deleted. */
             // bob deletes his second device
@@ -168,9 +167,7 @@ test.describe("Cryptography", function () {
             await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
             await lastE2eIcon.focus();
             await expect(await app.getTooltipForElement(lastE2eIcon)).toContainText(
-                workerInfo.project.name === "Legacy Crypto"
-                    ? "Encrypted by an unknown or deleted device."
-                    : "Encrypted by a device not verified by its owner.",
+                "Encrypted by a device not verified by its owner.",
             );
         });
 

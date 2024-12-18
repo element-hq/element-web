@@ -50,8 +50,6 @@ test.describe("Dehydration", () => {
     });
 
     test("Create dehydrated device", async ({ page, user, app }, workerInfo) => {
-        test.skip(workerInfo.project.name === "Legacy Crypto", "This test only works with Rust crypto.");
-
         // Create a backup (which will create SSSS, and dehydrated device)
 
         const securityTab = await app.settings.openUserSettings("Security & Privacy");
