@@ -37,7 +37,6 @@ export default defineConfig({
                 serviceWorkers: "block",
             },
             ignoreSnapshots: true,
-            grepInvert: /@no-firefox/,
         },
         {
             name: "Safari",
@@ -48,7 +47,6 @@ export default defineConfig({
                 serviceWorkers: "block",
             },
             ignoreSnapshots: true,
-            grepInvert: /@no-webkit/,
         },
     ],
     use: {

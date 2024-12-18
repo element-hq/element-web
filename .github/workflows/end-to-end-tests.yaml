@@ -35,6 +35,8 @@ concurrency:
 env:
     # fetchdep.sh needs to know our PR number
     PR_NUMBER: ${{ github.event.pull_request.number }}
+    # Use 6 runners in the default case, but 4 when running on a schedule where we run all 5 projects (20 runners total)
+    NUM_RUNNERS: ${{ github.event_name == 'schedule' && 4 || 6 }}
 
 permissions: {} # No permissions required
 
@@ -43,6 +45,9 @@ jobs:
         name: "Build Element-Web"
         runs-on: ubuntu-24.04
         if: inputs.skip != true
+        outputs:
+            num-runners: ${{ env.NUM_RUNNERS }}
+            runners-matrix: ${{ steps.runner-vars.outputs.matrix }}
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
@@ -82,8 +87,17 @@ jobs:
                   path: webapp
                   retention-days: 1
 
+            - name: Calculate runner variables
+              id: runner-vars
+              uses: actions/github-script@v7
+              with:
+                  script: |
+                      const numRunners = parseInt(process.env.NUM_RUNNERS, 10);
+                      const matrix = Array.from({ length: numRunners }, (_, i) => i + 1);
+                      core.setOutput("matrix", JSON.stringify(matrix));
+
     playwright:
-        name: "Run Tests ${{ matrix.runner }}/${{ strategy.job-total }}"
+        name: "Run Tests [${{ matrix.project }}] ${{ matrix.runner }}/${{ needs.build.outputs.num-runners }}"
         needs: build
         if: inputs.skip != true
         runs-on: ubuntu-24.04
@@ -95,7 +109,7 @@ jobs:
             fail-fast: false
             matrix:
                 # Run multiple instances in parallel to speed up the tests
-                runner: [1, 2, 3, 4, 5, 6]
+                runner: ${{ fromJSON(needs.build.outputs.runners-matrix) }}
                 project:
                     - Chrome
                     - Firefox
@@ -154,9 +168,9 @@ jobs:
             - name: Run Playwright tests
               run: |
                   yarn playwright test \
-                      --shard "${{ matrix.runner }}/${{ strategy.job-total }}" \
+                      --shard "${{ matrix.runner }}/${{ needs.build.outputs.num-runners }}" \
                       --project="${{ matrix.project }}" \
-                      ${{ '--grep-invert @mergequeue' || '' }}
+                      ${{ github.event_name == 'pull_request' && '--grep-invert @mergequeue' || '' }}
 
             - name: Upload blob report to GitHub Actions Artifacts
               if: always()
