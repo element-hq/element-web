@@ -128,7 +128,8 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         if (!this.props.editState) {
             const stoppedEditing = prevProps.editState && !this.props.editState;
             const messageWasEdited = prevProps.replacingEventId !== this.props.replacingEventId;
-            if (messageWasEdited || stoppedEditing) {
+            const urlPreviewChanged = prevProps.showUrlPreview !== this.props.showUrlPreview;
+            if (messageWasEdited || stoppedEditing || urlPreviewChanged) {
                 this.applyFormatting();
             }
         }
