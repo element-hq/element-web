@@ -16,6 +16,11 @@ on:
                 options:
                     - staging.element.io
                     - app.element.io
+            skip-checks:
+                description: Skip CI on the tagged commit
+                required: true
+                default: false
+                type: boolean
 concurrency: ${{ inputs.site || 'staging.element.io' }}
 permissions: {}
 jobs:
@@ -75,6 +80,7 @@ jobs:
 
             - name: Wait for other steps to succeed
               uses: t3chguy/wait-on-check-action@18541021811b56544d90e0f073401c2b99e249d6 # fork
+              if: inputs.skip-checks == false
               with:
                   ref: ${{ github.sha }}
                   running-workflow-name: "Deploy to Cloudflare Pages"
