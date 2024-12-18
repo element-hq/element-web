@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { test, expect, registerAccountMas } from ".";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 
-test.describe("OIDC Aware", { tag: "@no-firefox" }, () => {
+test.describe("OIDC Aware", { tag: ["@no-firefox", "@no-webkit"] }, () => {
     test.skip(isDendrite, "does not yet support MAS");
     test.slow(); // trace recording takes a while here
 

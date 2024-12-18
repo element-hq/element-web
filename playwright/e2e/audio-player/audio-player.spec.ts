@@ -13,7 +13,7 @@ import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { Layout } from "../../../src/settings/enums/Layout";
 import { ElementAppPage } from "../../pages/ElementAppPage";
 
-test.describe("Audio player", { tag: "@no-firefox" }, () => {
+test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
     test.use({
         displayName: "Hanako",
     });

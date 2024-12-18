@@ -324,7 +324,7 @@ test.describe("Threads", () => {
             });
         });
 
-        test("can send voice messages", { tag: "@no-firefox" }, async ({ page, app, user }) => {
+        test("can send voice messages", { tag: ["@no-firefox", "@no-webkit"] }, async ({ page, app, user }) => {
             // Increase right-panel size, so that voice messages fit
             await page.evaluate(() => {
                 window.localStorage.setItem("mx_rhs_size", "600");
