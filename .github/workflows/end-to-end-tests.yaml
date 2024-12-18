@@ -115,7 +115,7 @@ jobs:
                     - Firefox
                     - WebKit
                 isCron:
-                    - ${{ github.event_name == 'pull_request' }}
+                    - ${{ github.event_name == 'schedule' }}
                 # Skip the Firefox & Safari runs unless this was a cron trigger
                 exclude:
                     - isCron: false
