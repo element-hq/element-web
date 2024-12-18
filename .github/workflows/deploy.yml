@@ -80,7 +80,7 @@ jobs:
 
             - name: Wait for other steps to succeed
               uses: t3chguy/wait-on-check-action@18541021811b56544d90e0f073401c2b99e249d6 # fork
-              if: inputs.skip-checks == false
+              if: inputs.skip-checks != true
               with:
                   ref: ${{ github.sha }}
                   running-workflow-name: "Deploy to Cloudflare Pages"
