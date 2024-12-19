@@ -1,3 +1,38 @@
+Changes in [1.11.89](https://github.com/element-hq/element-web/releases/tag/v1.11.89) (2024-12-18)
+==================================================================================================
+This is a patch release to fix a bug which could prevent loading stored crypto state from storage, and also to fix URL previews when switching back to a room.
+
+## 🐛 Bug Fixes
+
+* Upgrade matrix-sdk-crypto-wasm to 1.11.0 (https://github.com/matrix-org/matrix-js-sdk/pull/4593)
+* Fix url preview display ([#28766](https://github.com/element-hq/element-web/pull/28766)).
+
+
+Changes in [1.11.88](https://github.com/element-hq/element-web/releases/tag/v1.11.88) (2024-12-17)
+==================================================================================================
+## ✨ Features
+
+* Allow trusted Element Call widget to send and receive media encryption key to-device messages ([#28316](https://github.com/element-hq/element-web/pull/28316)). Contributed by @hughns.
+* increase ringing timeout from 10 seconds to 90 seconds ([#28630](https://github.com/element-hq/element-web/pull/28630)). Contributed by @fkwp.
+* Add `Close` tooltip to dialog ([#28617](https://github.com/element-hq/element-web/pull/28617)). Contributed by @florianduros.
+* New UX for Share dialog ([#28598](https://github.com/element-hq/element-web/pull/28598)). Contributed by @florianduros.
+* Improve performance of RoomContext in RoomHeader ([#28574](https://github.com/element-hq/element-web/pull/28574)). Contributed by @t3chguy.
+* Remove `Features.RustCrypto` flag ([#28582](https://github.com/element-hq/element-web/pull/28582)). Contributed by @florianduros.
+* Add Modernizr warning when running in non-secure context ([#28581](https://github.com/element-hq/element-web/pull/28581)). Contributed by @t3chguy.
+
+## 🐛 Bug Fixes
+
+* Fix jumpy timeline when the pinned message banner is displayed ([#28654](https://github.com/element-hq/element-web/pull/28654)). Contributed by @florianduros.
+* Fix font \& spaces in settings subsection ([#28631](https://github.com/element-hq/element-web/pull/28631)). Contributed by @florianduros.
+* Remove manual device verification which is not supported by the new cryptography stack ([#28588](https://github.com/element-hq/element-web/pull/28588)). Contributed by @florianduros.
+* Fix code block highlighting not working reliably with many code blocks ([#28613](https://github.com/element-hq/element-web/pull/28613)). Contributed by @t3chguy.
+* Remove remaining reply fallbacks code ([#28610](https://github.com/element-hq/element-web/pull/28610)). Contributed by @t3chguy.
+* Provide a way to activate GIFs via the keyboard for a11y ([#28611](https://github.com/element-hq/element-web/pull/28611)). Contributed by @t3chguy.
+* Fix format bar position ([#28591](https://github.com/element-hq/element-web/pull/28591)). Contributed by @florianduros.
+* Fix room taking long time to load ([#28579](https://github.com/element-hq/element-web/pull/28579)). Contributed by @florianduros.
+* Show the correct shield status in tooltip for more conditions ([#28476](https://github.com/element-hq/element-web/pull/28476)). Contributed by @uhoreg.
+
+
 Changes in [1.11.87](https://github.com/element-hq/element-web/releases/tag/v1.11.87) (2024-12-03)
 ==================================================================================================
 ## ✨ Features

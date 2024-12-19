@@ -48,10 +48,7 @@ interface IProps {
 
     // Called when the user has logged in. Params:
     // - The object returned by the login API
-    // - The user's password, if applicable, (may be cached in memory for a
-    //   short time so the user is not required to re-enter their password
-    //   for operations like uploading cross-signing keys).
-    onLoggedIn(data: IMatrixClientCreds, password: string): void;
+    onLoggedIn(data: IMatrixClientCreds): void;
 
     // login shouldn't know or care how registration, password recovery, etc is done.
     onRegisterClick(): void;
@@ -199,7 +196,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         this.loginLogic.loginViaPassword(username, phoneCountry, phoneNumber, password).then(
             (data) => {
                 this.setState({ serverIsAlive: true }); // it must be, we logged in.
-                this.props.onLoggedIn(data, password);
+                this.props.onLoggedIn(data);
             },
             (error) => {
                 if (this.unmounted) return;
