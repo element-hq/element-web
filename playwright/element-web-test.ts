@@ -60,7 +60,7 @@ interface CredentialsWithDisplayName extends Credentials {
     displayName: string;
 }
 
-export const test = base.extend<{
+export interface Fixtures {
     axe: AxeBuilder;
     checkA11y: () => Promise<void>;
 
@@ -124,7 +124,9 @@ export const test = base.extend<{
     slidingSyncProxy: ProxyInstance;
     labsFlags: string[];
     webserver: Webserver;
-}>({
+}
+
+export const test = base.extend<Fixtures>({
     context: async ({ context }, use, testInfo) => {
         // We skip tests instead of using grep-invert to still surface the counts in the html report
         test.skip(
@@ -133,7 +135,6 @@ export const test = base.extend<{
         );
         await use(context);
     },
-
     config: CONFIG_JSON,
     page: async ({ context, page, config, labsFlags }, use) => {
         await context.route(`http://localhost:8080/config.json*`, async (route) => {
