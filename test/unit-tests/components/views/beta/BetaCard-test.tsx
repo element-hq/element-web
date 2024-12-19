@@ -14,13 +14,14 @@ import { shouldShowFeedback } from "../../../../../src/utils/Feedback";
 import BetaCard from "../../../../../src/components/views/beta/BetaCard";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { TranslationKey } from "../../../../../src/languageHandler";
+import { FeatureSettingKey } from "../../../../../src/settings/Settings.tsx";
 
 jest.mock("../../../../../src/utils/Feedback");
 jest.mock("../../../../../src/settings/SettingsStore");
 
 describe("<BetaCard />", () => {
     describe("Feedback prompt", () => {
-        const featureId = "featureId";
+        const featureId = "featureId" as FeatureSettingKey;
 
         beforeEach(() => {
             mocked(SettingsStore).getBetaInfo.mockReturnValue({

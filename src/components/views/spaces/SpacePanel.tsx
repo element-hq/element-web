@@ -88,7 +88,7 @@ export const HomeButtonContextMenu: React.FC<ComponentProps<typeof SpaceContextM
     hideHeader,
     ...props
 }) => {
-    const allRoomsInHome = useSettingValue<boolean>("Spaces.allRoomsInHome");
+    const allRoomsInHome = useSettingValue("Spaces.allRoomsInHome");
 
     return (
         <IconizedContextMenu {...props} onFinished={onFinished} className="mx_SpacePanel_contextMenu" compact>

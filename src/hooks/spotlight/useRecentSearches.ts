@@ -17,7 +17,7 @@ import { filterBoolean } from "../../utils/arrays";
 export const useRecentSearches = (): [Room[], () => void] => {
     const [rooms, setRooms] = useState(() => {
         const cli = MatrixClientPeg.safeGet();
-        const recents = SettingsStore.getValue<string[]>("SpotlightSearch.recentSearches", null);
+        const recents = SettingsStore.getValue("SpotlightSearch.recentSearches", null);
         return filterBoolean(recents.map((r) => cli.getRoom(r)));
     });
 

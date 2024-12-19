@@ -70,7 +70,7 @@ interface LayoutRadioProps {
  * @param label
  */
 function LayoutRadio({ layout, label }: LayoutRadioProps): JSX.Element {
-    const currentLayout = useSettingValue<Layout>("layout");
+    const currentLayout = useSettingValue("layout");
     const eventTileInfo = useEventTileInfo();
 
     return (
@@ -134,8 +134,8 @@ function useEventTileInfo(): EventTileInfo {
  * A toggleable setting to enable or disable the compact layout.
  */
 function ToggleCompactLayout(): JSX.Element {
-    const compactLayoutEnabled = useSettingValue<boolean>("useCompactLayout");
-    const layout = useSettingValue<Layout>("layout");
+    const compactLayoutEnabled = useSettingValue("useCompactLayout");
+    const layout = useSettingValue("layout");
 
     return (
         <Root

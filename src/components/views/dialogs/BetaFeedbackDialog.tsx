@@ -15,11 +15,12 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { UserTab } from "./UserTab";
 import GenericFeatureFeedbackDialog from "./GenericFeatureFeedbackDialog";
+import { SettingKey } from "../../../settings/Settings.tsx";
 
 // XXX: Keep this around for re-use in future Betas
 
 interface IProps {
-    featureId: string;
+    featureId: SettingKey;
     onFinished(sendFeedback?: boolean): void;
 }
 
@@ -35,7 +36,7 @@ const BetaFeedbackDialog: React.FC<IProps> = ({ featureId, onFinished }) => {
             rageshakeLabel={info.feedbackLabel}
             rageshakeData={Object.fromEntries(
                 (SettingsStore.getBetaInfo(featureId)?.extraSettings || []).map((k) => {
-                    return SettingsStore.getValue(k);
+                    return [k, SettingsStore.getValue(k)];
                 }),
             )}
         >

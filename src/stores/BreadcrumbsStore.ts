@@ -127,7 +127,7 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
     };
 
     private async updateRooms(): Promise<void> {
-        let roomIds = SettingsStore.getValue<string[]>("breadcrumb_rooms");
+        let roomIds = SettingsStore.getValue("breadcrumb_rooms");
         if (!roomIds || roomIds.length === 0) roomIds = [];
 
         const rooms = filterBoolean(roomIds.map((r) => this.matrixClient?.getRoom(r)));

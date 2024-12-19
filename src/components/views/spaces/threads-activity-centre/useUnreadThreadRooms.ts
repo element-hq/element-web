@@ -32,8 +32,8 @@ type Result = {
  * @returns {Result}
  */
 export function useUnreadThreadRooms(forceComputation: boolean): Result {
-    const msc3946ProcessDynamicPredecessor = useSettingValue<boolean>("feature_dynamic_room_predecessors");
-    const settingTACOnlyNotifs = useSettingValue<boolean>("Notifications.tac_only_notifications");
+    const msc3946ProcessDynamicPredecessor = useSettingValue("feature_dynamic_room_predecessors");
+    const settingTACOnlyNotifs = useSettingValue("Notifications.tac_only_notifications");
     const mxClient = useMatrixClientContext();
 
     const [result, setResult] = useState<Result>({ greatestNotificationLevel: NotificationLevel.None, rooms: [] });

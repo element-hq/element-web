@@ -263,9 +263,9 @@ export function getCustomTheme(themeName: string): CustomTheme {
     if (!customThemes) {
         throw new Error(`No custom themes set, can't set custom theme "${themeName}"`);
     }
-    const customTheme = customThemes.find((t: ITheme) => t.name === themeName);
+    const customTheme = customThemes.find((t: CustomTheme) => t.name === themeName);
     if (!customTheme) {
-        const knownNames = customThemes.map((t: ITheme) => t.name).join(", ");
+        const knownNames = customThemes.map((t: CustomTheme) => t.name).join(", ");
         throw new Error(`Can't find custom theme "${themeName}", only know ${knownNames}`);
     }
     return customTheme;

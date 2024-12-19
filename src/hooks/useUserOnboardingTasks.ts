@@ -145,7 +145,7 @@ const tasks: UserOnboardingTask[] = [
 ];
 
 export function useUserOnboardingTasks(context: UserOnboardingContext): UserOnboardingTaskWithResolvedCompletion[] {
-    const useCase = useSettingValue<UseCase | null>("FTUE.useCaseSelection") ?? UseCase.Skip;
+    const useCase = useSettingValue("FTUE.useCaseSelection") ?? UseCase.Skip;
 
     return useMemo<UserOnboardingTaskWithResolvedCompletion[]>(() => {
         return tasks

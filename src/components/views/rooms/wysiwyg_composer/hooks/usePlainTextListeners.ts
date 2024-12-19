@@ -128,7 +128,7 @@ export function usePlainTextListeners(
         [eventRelation, mxClient, onInput, roomContext],
     );
 
-    const enterShouldSend = !useSettingValue<boolean>("MessageComposerInput.ctrlEnterToSend");
+    const enterShouldSend = !useSettingValue("MessageComposerInput.ctrlEnterToSend");
     const onKeyDown = useCallback(
         (event: KeyboardEvent<HTMLDivElement>) => {
             // we need autocomplete to take priority when it is open for using enter to select

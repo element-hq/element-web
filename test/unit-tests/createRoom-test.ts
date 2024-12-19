@@ -105,7 +105,7 @@ describe("createRoom", () => {
     });
 
     it("correctly sets up MSC3401 power levels", async () => {
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string): any => {
             if (name === "feature_group_calls") return true;
         });
 

@@ -253,8 +253,8 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
     const [query, setQuery] = useState("");
     const lcQuery = query.toLowerCase();
 
-    const previewLayout = useSettingValue<Layout>("layout");
-    const msc3946DynamicRoomPredecessors = useSettingValue<boolean>("feature_dynamic_room_predecessors");
+    const previewLayout = useSettingValue("layout");
+    const msc3946DynamicRoomPredecessors = useSettingValue("feature_dynamic_room_predecessors");
 
     let rooms = useMemo(
         () =>

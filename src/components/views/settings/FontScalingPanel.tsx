@@ -47,7 +47,7 @@ export default class FontScalingPanel extends React.Component<IProps, IState> {
         super(props);
 
         this.state = {
-            fontSizeDelta: SettingsStore.getValue<number>("fontSizeDelta", null),
+            fontSizeDelta: SettingsStore.getValue("fontSizeDelta", null),
             browserFontSize: FontWatcher.getBrowserDefaultFontSize(),
             useCustomFontSize: SettingsStore.getValue("useCustomFontSize"),
             layout: SettingsStore.getValue("layout"),

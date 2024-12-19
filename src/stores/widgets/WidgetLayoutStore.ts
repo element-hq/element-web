@@ -25,9 +25,9 @@ import { Container, IStoredLayout, ILayoutStateEvent, WIDGET_LAYOUT_EVENT_TYPE, 
 export type { IStoredLayout, ILayoutStateEvent };
 export { Container, WIDGET_LAYOUT_EVENT_TYPE };
 
-interface ILayoutSettings extends ILayoutStateEvent {
+export type ILayoutSettings = Partial<ILayoutStateEvent> & {
     overrides?: string; // event ID for layout state event, if present
-}
+};
 
 // Dev note: "Pinned" widgets are ones in the top container.
 export const MAX_PINNED = 3;
@@ -149,7 +149,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
 
         const layoutEv = room.currentState.getStateEvents(WIDGET_LAYOUT_EVENT_TYPE, "");
         const legacyPinned = SettingsStore.getValue("Widgets.pinned", room.roomId);
-        let userLayout = SettingsStore.getValue<ILayoutSettings | null>("Widgets.layout", room.roomId);
+        let userLayout = SettingsStore.getValue("Widgets.layout", room.roomId);
 
         if (layoutEv && userLayout && userLayout.overrides !== layoutEv.getId()) {
             // For some other layout that we don't really care about. The user can reset this

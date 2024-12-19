@@ -246,7 +246,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         } else {
             backgroundImage = OwnProfileStore.instance.getHttpAvatarUrl();
         }
-        this.setState({ backgroundImage });
+        this.setState({ backgroundImage: backgroundImage ?? undefined });
     };
 
     public canResetTimelineInRoom = (roomId: string): boolean => {

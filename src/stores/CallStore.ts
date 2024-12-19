@@ -61,7 +61,7 @@ export class CallStore extends AsyncStoreWithClient<{}> {
         // If the room ID of a previously connected call is still in settings at
         // this time, that's a sign that we failed to disconnect from it
         // properly, and need to clean up after ourselves
-        const uncleanlyDisconnectedRoomIds = SettingsStore.getValue<string[]>("activeCallRoomIds");
+        const uncleanlyDisconnectedRoomIds = SettingsStore.getValue("activeCallRoomIds");
         if (uncleanlyDisconnectedRoomIds.length) {
             await Promise.all([
                 ...uncleanlyDisconnectedRoomIds.map(async (uncleanlyDisconnectedRoomId): Promise<void> => {

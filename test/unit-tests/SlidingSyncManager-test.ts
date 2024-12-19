@@ -309,7 +309,7 @@ describe("SlidingSyncManager", () => {
         });
         it("uses the legacy `feature_sliding_sync_proxy_url` if it was set", async () => {
             jest.spyOn(manager, "getProxyFromWellKnown").mockResolvedValue("https://proxy/");
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string): any => {
                 if (name === "feature_sliding_sync_proxy_url") return "legacy-proxy";
             });
             await manager.setup(client);

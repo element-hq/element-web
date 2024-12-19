@@ -17,7 +17,7 @@ describe("SystemFontController", () => {
     it("dispatches a system font update action on change", () => {
         const controller = new SystemFontController();
 
-        const getValueSpy = jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) => {
+        const getValueSpy = jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName): any => {
             if (settingName === "useBundledEmojiFont") return false;
             if (settingName === "useSystemFont") return true;
             if (settingName === "systemFont") return "Comic Sans MS";

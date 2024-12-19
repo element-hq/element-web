@@ -131,7 +131,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
     onFinished,
 }) => {
     const cli = useContext(MatrixClientContext);
-    const msc3946ProcessDynamicPredecessor = useSettingValue<boolean>("feature_dynamic_room_predecessors");
+    const msc3946ProcessDynamicPredecessor = useSettingValue("feature_dynamic_room_predecessors");
     const visibleRooms = useMemo(
         () =>
             cli
