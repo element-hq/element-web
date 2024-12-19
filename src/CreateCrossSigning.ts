@@ -17,9 +17,7 @@ import InteractiveAuthDialog from "./components/views/dialogs/InteractiveAuthDia
 /**
  * Ensures that cross signing keys are created and uploaded for the user.
  * The homeserver may require user-interactive auth to upload the keys, in
- * which case the user will be prompted to authenticate. If the homeserver
- * allows uploading keys with just an account password and one is provided,
- * the keys will be uploaded without user interaction.
+ * which case the user will be prompted to authenticate.
  *
  * This function does not set up backups of the created cross-signing keys
  * (or message keys): the cross-signing keys are stored locally and will be
