@@ -23,8 +23,6 @@ import {
     TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-// eslint-disable-next-line no-restricted-imports
-import OverflowHorizontalSvg from "@vector-im/compound-design-tokens/icons/overflow-horizontal.svg";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
@@ -42,8 +40,6 @@ import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { sortRooms } from "../../../stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
 import QueryMatcher from "../../../autocomplete/QueryMatcher";
 import TruncatedList from "../elements/TruncatedList";
-import EntityTile from "../rooms/EntityTile";
-import BaseAvatar from "../avatars/BaseAvatar";
 import { Action } from "../../../dispatcher/actions";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
@@ -60,6 +56,7 @@ import {
 } from "../../../accessibility/RovingTabIndex";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
+import OverflowTileView from "../rooms/OverflowTileView";
 
 const AVATAR_SIZE = 30;
 
@@ -275,17 +272,9 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
     }
 
     const [truncateAt, setTruncateAt] = useState(20);
+
     function overflowTile(overflowCount: number, totalCount: number): JSX.Element {
-        const text = _t("common|and_n_others", { count: overflowCount });
-        return (
-            <EntityTile
-                className="mx_EntityTile_ellipsis"
-                avatarJsx={<BaseAvatar url={OverflowHorizontalSvg} name="..." size="36px" />}
-                name={text}
-                showPresence={false}
-                onClick={() => setTruncateAt(totalCount)}
-            />
-        );
+        return <OverflowTileView remaining={overflowCount} onClick={() => setTruncateAt(totalCount)} />;
     }
 
     const onKeyDown = (ev: React.KeyboardEvent, state: IState): void => {
