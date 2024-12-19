@@ -121,7 +121,7 @@ jobs:
                     - isCron: false
                       project: Firefox
                     - isCron: false
-                      project: Safari
+                      project: WebKit
         steps:
             - uses: actions/checkout@v4
               with:
