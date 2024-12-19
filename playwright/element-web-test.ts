@@ -60,7 +60,7 @@ interface CredentialsWithDisplayName extends Credentials {
     displayName: string;
 }
 
-export const test = base.extend<{
+export interface Fixtures {
     axe: AxeBuilder;
     checkA11y: () => Promise<void>;
 
@@ -124,7 +124,9 @@ export const test = base.extend<{
     slidingSyncProxy: ProxyInstance;
     labsFlags: string[];
     webserver: Webserver;
-}>({
+}
+
+export const test = base.extend<Fixtures>({
     config: CONFIG_JSON,
     page: async ({ context, page, config, labsFlags }, use) => {
         await context.route(`http://localhost:8080/config.json*`, async (route) => {
