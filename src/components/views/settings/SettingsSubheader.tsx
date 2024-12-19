@@ -39,9 +39,9 @@ export function SettingsSubheader({ label, state, stateMessage }: SettingsSubhea
                 })}
             >
                 {state === "success" ? (
-                    <CheckCircleIcon width="20" height="20" />
+                    <CheckCircleIcon width="20px" height="20px" />
                 ) : (
-                    <ErrorIcon width="20" height="20" />
+                    <ErrorIcon width="20px" height="20px" />
                 )}
                 {stateMessage}
             </span>
