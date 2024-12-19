@@ -130,8 +130,12 @@ jobs:
               if: steps.playwright-cache.outputs.cache-hit != 'true'
               run: yarn playwright install --with-deps --no-shell chromium
 
+            # We skip tests tagged with @mergequeue when running on PRs, but run them in MQ and everywhere else
             - name: Run Playwright tests
-              run: yarn playwright test --shard ${{ matrix.runner }}/${{ strategy.job-total }}
+              run: |
+                  yarn playwright test \
+                      --shard "${{ matrix.runner }}/${{ strategy.job-total }}" \
+                      ${{ github.event_name == 'pull_request' && '--grep-invert @mergequeue' || '' }}
 
             - name: Upload blob report to GitHub Actions Artifacts
               if: always()

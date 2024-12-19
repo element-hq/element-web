@@ -32,13 +32,13 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
               class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
             >
               <form
-                class="_root_dgy0u_24 mx_ThemeChoicePanel_ThemeSelectors"
+                class="_root_ssths_24 mx_ThemeChoicePanel_ThemeSelectors"
               >
                 <div
-                  class="_inline-field_dgy0u_40 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_disabled cpd-theme-light"
+                  class="_inline-field_ssths_40 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_disabled cpd-theme-light"
                 >
                   <div
-                    class="_inline-field-control_dgy0u_52"
+                    class="_inline-field-control_ssths_52"
                   >
                     <div
                       class="_container_1vw5h_18"
@@ -58,10 +58,10 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_dgy0u_46"
+                    class="_inline-field-body_ssths_46"
                   >
                     <label
-                      class="_label_dgy0u_67 mx_ThemeChoicePanel_themeSelector_Label"
+                      class="_label_ssths_67 mx_ThemeChoicePanel_themeSelector_Label"
                       for="radix-:r0:"
                     >
                       Light
@@ -69,10 +69,10 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field_dgy0u_40 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_disabled cpd-theme-dark"
+                  class="_inline-field_ssths_40 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_disabled cpd-theme-dark"
                 >
                   <div
-                    class="_inline-field-control_dgy0u_52"
+                    class="_inline-field-control_ssths_52"
                   >
                     <div
                       class="_container_1vw5h_18"
@@ -92,10 +92,10 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_dgy0u_46"
+                    class="_inline-field-body_ssths_46"
                   >
                     <label
-                      class="_label_dgy0u_67 mx_ThemeChoicePanel_themeSelector_Label"
+                      class="_label_ssths_67 mx_ThemeChoicePanel_themeSelector_Label"
                       for="radix-:r1:"
                     >
                       Dark
@@ -103,10 +103,10 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field_dgy0u_40 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_disabled cpd-theme-light"
+                  class="_inline-field_ssths_40 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_disabled cpd-theme-light"
                 >
                   <div
-                    class="_inline-field-control_dgy0u_52"
+                    class="_inline-field-control_ssths_52"
                   >
                     <div
                       class="_container_1vw5h_18"
@@ -126,10 +126,10 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_dgy0u_46"
+                    class="_inline-field-body_ssths_46"
                   >
                     <label
-                      class="_label_dgy0u_67 mx_ThemeChoicePanel_themeSelector_Label"
+                      class="_label_ssths_67 mx_ThemeChoicePanel_themeSelector_Label"
                       for="radix-:r2:"
                     >
                       High contrast
@@ -162,14 +162,14 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
               class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
             >
               <form
-                class="_root_dgy0u_24 mx_LayoutSwitcher_LayoutSelector"
+                class="_root_ssths_24 mx_LayoutSwitcher_LayoutSelector"
               >
                 <div
-                  class="_field_dgy0u_34 mxLayoutSwitcher_LayoutSelector_LayoutRadio"
+                  class="_field_ssths_34 mxLayoutSwitcher_LayoutSelector_LayoutRadio"
                 >
                   <label
                     aria-label="Modern"
-                    class="_label_dgy0u_67"
+                    class="_label_ssths_67"
                     for="radix-:r3:"
                   >
                     <div
@@ -292,11 +292,11 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   </label>
                 </div>
                 <div
-                  class="_field_dgy0u_34 mxLayoutSwitcher_LayoutSelector_LayoutRadio"
+                  class="_field_ssths_34 mxLayoutSwitcher_LayoutSelector_LayoutRadio"
                 >
                   <label
                     aria-label="Message bubbles"
-                    class="_label_dgy0u_67"
+                    class="_label_ssths_67"
                     for="radix-:rc:"
                   >
                     <div
@@ -418,11 +418,11 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   </label>
                 </div>
                 <div
-                  class="_field_dgy0u_34 mxLayoutSwitcher_LayoutSelector_LayoutRadio"
+                  class="_field_ssths_34 mxLayoutSwitcher_LayoutSelector_LayoutRadio"
                 >
                   <label
                     aria-label="IRC (experimental)"
-                    class="_label_dgy0u_67"
+                    class="_label_ssths_67"
                     for="radix-:rl:"
                   >
                     <div
@@ -545,13 +545,13 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                 </div>
               </form>
               <form
-                class="_root_dgy0u_24"
+                class="_root_ssths_24"
               >
                 <div
-                  class="_inline-field_dgy0u_40"
+                  class="_inline-field_ssths_40"
                 >
                   <div
-                    class="_inline-field-control_dgy0u_52"
+                    class="_inline-field-control_ssths_52"
                   >
                     <div
                       class="_container_qnvru_18"
@@ -570,16 +570,16 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_dgy0u_46"
+                    class="_inline-field-body_ssths_46"
                   >
                     <label
-                      class="_label_dgy0u_67"
+                      class="_label_ssths_67"
                       for="radix-:ru:"
                     >
                       Show compact text and messages
                     </label>
                     <span
-                      class="_message_dgy0u_98 _help-message_dgy0u_104"
+                      class="_message_ssths_93 _help-message_ssths_99"
                       id="radix-:rv:"
                     >
                       Modern layout must be selected to use this feature.

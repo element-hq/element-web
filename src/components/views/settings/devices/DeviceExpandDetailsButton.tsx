@@ -7,23 +7,21 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { ComponentProps } from "react";
+import React from "react";
 import { ChevronDownIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../../languageHandler";
-import AccessibleButton from "../../elements/AccessibleButton";
+import AccessibleButton, { ButtonProps } from "../../elements/AccessibleButton";
 
-type Props<T extends keyof JSX.IntrinsicElements> = Omit<
-    ComponentProps<typeof AccessibleButton<T>>,
-    "aria-label" | "title" | "kind" | "className" | "onClick" | "element"
+type Props<T extends keyof HTMLElementTagNameMap> = Omit<
+    ButtonProps<T>,
+    "aria-label" | "title" | "kind" | "className" | "element"
 > & {
     isExpanded: boolean;
-    onClick: () => void;
 };
 
-export const DeviceExpandDetailsButton = <T extends keyof JSX.IntrinsicElements>({
+export const DeviceExpandDetailsButton = <T extends keyof HTMLElementTagNameMap>({
     isExpanded,
-    onClick,
     ...rest
 }: Props<T>): JSX.Element => {
     const label = isExpanded ? _t("settings|sessions|hide_details") : _t("settings|sessions|show_details");
@@ -36,7 +34,6 @@ export const DeviceExpandDetailsButton = <T extends keyof JSX.IntrinsicElements>
             className={classNames("mx_DeviceExpandDetailsButton", {
                 mx_DeviceExpandDetailsButton_expanded: isExpanded,
             })}
-            onClick={onClick}
         >
             <ChevronDownIcon className="mx_DeviceExpandDetailsButton_icon" />
         </AccessibleButton>

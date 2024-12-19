@@ -340,7 +340,7 @@
         "set_email_prompt": "Czy chcesz ustawić adres e-mail?",
         "sign_in_description": "Użyj swojego konta, aby kontynuować.",
         "sign_in_instead": "Zamiast tego zaloguj się",
-        "sign_in_instead_prompt": "Zamiast tego zaloguj się",
+        "sign_in_instead_prompt": "Masz już konto? <a>Zaloguj się tutaj</a>",
         "sign_in_or_register": "Zaloguj się lub utwórz konto",
         "sign_in_or_register_description": "Użyj konta lub utwórz nowe, aby kontynuować.",
         "sign_in_prompt": "Posiadasz już konto? <a>Zaloguj się</a>",
@@ -505,6 +505,7 @@
         "matrix": "Matrix",
         "message": "Wiadomość",
         "message_layout": "Wygląd wiadomości",
+        "message_timestamp_invalid": "Nieprawidłowy znacznik czasu",
         "microphone": "Mikrofon",
         "model": "Model",
         "modern": "Współczesny",
@@ -908,6 +909,8 @@
             "warning": "Jeżeli nie ustawiłeś nowej metody odzyskiwania, atakujący może uzyskać dostęp do Twojego konta. Zmień hasło konta i natychmiast ustaw nową metodę odzyskiwania w Ustawieniach."
         },
         "not_supported": "<niewspierany>",
+        "pinned_identity_changed": "Tożsamość użytkownika %(displayName)s (<b>%(userId)s</b>) uległa zmianie. <a>Dowiedz się więcej</a>",
+        "pinned_identity_changed_no_displayname": "Tożsamość użytkownika <b>%(userId)s</b> uległa zmianie <a>Dowiedz się więcej</a>",
         "recovery_method_removed": {
             "description_1": "Ta sesja wykryła, że Twoja fraza bezpieczeństwa i klucz dla bezpiecznych wiadomości zostały usunięte.",
             "description_2": "Jeśli zrobiłeś to przez pomyłkę, możesz ustawić bezpieczne wiadomości w tej sesji, co zaszyfruje ponownie historię wiadomości za pomocą nowej metody odzyskiwania.",
@@ -996,7 +999,7 @@
             "unverified_sessions_toast_description": "Sprawdź, by upewnić się że Twoje konto jest bezpieczne",
             "unverified_sessions_toast_reject": "Później",
             "unverified_sessions_toast_title": "Masz niezweryfikowane sesje",
-            "verification_description": "Zweryfikuj swoją tożsamość, aby uzyskać dostęp do wiadomości szyfrowanych i potwierdzić swoją tożsamość innym.",
+            "verification_description": "Zweryfikuj swoją tożsamość, aby uzyskać dostęp do wiadomości szyfrowanych i potwierdzić swoją tożsamość innym. Jeśli korzystasz z urządzenia mobilnego, otwórz na niej aplikację.",
             "verification_dialog_title_device": "Zweryfikuj drugie urządzenie",
             "verification_dialog_title_user": "Żądanie weryfikacji",
             "verification_skip_warning": "Bez weryfikacji, nie będziesz posiadać dostępu do wszystkich swoich wiadomości, a inni będą Cię widzieć jako niezaufanego.",
@@ -1102,7 +1105,15 @@
             "you": "Dodano reakcję %(reaction)s do %(message)s"
         },
         "m.sticker": "%(senderName)s: %(stickerName)s",
-        "m.text": "%(senderName)s: %(message)s"
+        "m.text": "%(senderName)s: %(message)s",
+        "prefix": {
+            "audio": "Audio",
+            "file": "Plik",
+            "image": "Obraz",
+            "poll": "Ankieta",
+            "video": "Wideo"
+        },
+        "preview": "<bold>%(prefix)s:</bold> %(preview)s"
     },
     "export_chat": {
         "cancelled": "Eksport został anulowany",
@@ -2104,7 +2115,8 @@
         "show_less": "Pokaż mniej",
         "show_n_more": {
             "one": "Pokaż %(count)s więcej",
-            "other": "Pokaż %(count)s więcej"
+            "few": "Pokaż %(count)s więcej",
+            "many": "Pokaż %(count)s więcej"
         },
         "show_previews": "Pokazuj podgląd wiadomości",
         "sort_by": "Sortuj według",
@@ -2939,6 +2951,7 @@
         "warning": "<w>OSTRZEŻENIE:</w> <description/>"
     },
     "share": {
+        "link_copied": "Skopiowano link",
         "permalink_message": "Link do zaznaczonej wiadomości",
         "permalink_most_recent": "Link do najnowszej wiadomości",
         "share_call": "Link zaproszenia do konferencji",
@@ -3247,8 +3260,8 @@
             "historical_event_no_key_backup": "Historia wiadomości nie jest dostępna na tym urządzeniu",
             "historical_event_unverified_device": "Musisz zweryfikować to urządzenie, aby wyświetlić historię wiadomości",
             "historical_event_user_not_joined": "Nie masz dostępu do tej wiadomości",
-            "sender_identity_previously_verified": "Zweryfikowana tożsamość uległa zmianie",
-            "sender_unsigned_device": "Zaszyfrowano przez urządzenie niezweryfikowane przez właściciela.",
+            "sender_identity_previously_verified": "Zweryfikowana tożsamość nadawcy uległa zmianie",
+            "sender_unsigned_device": "Wysłano z niezabezpieczonego urządzenia.",
             "unable_to_decrypt": "Nie można rozszyfrować wiadomości"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
@@ -3677,7 +3690,8 @@
             "close": "Zamknij podgląd",
             "show_n_more": {
                 "one": "Pokaż %(count)s inny podgląd",
-                "other": "Pokaż %(count)s innych podglądów"
+                "few": "Pokaż %(count)s inne podglądy",
+                "many": "Pokaż %(count)s innych podglądów"
             }
         }
     },
@@ -3720,6 +3734,7 @@
         "error_files_too_large": "Te pliki są <b>zbyt duże</b> do wysłania. Ograniczenie wielkości plików to %(limit)s.",
         "error_some_files_too_large": "Niektóre pliki są <b>zbyt duże</b> do wysłania. Ograniczenie wielkości plików to %(limit)s.",
         "error_title": "Błąd wysyłania",
+        "not_image": "Wybrany plik nie jest prawidłowym plikiem obrazu.",
         "title": "Prześlij pliki",
         "title_progress": "Prześlij pliki (%(current)s z %(total)s)",
         "upload_all_button": "Prześlij wszystko",

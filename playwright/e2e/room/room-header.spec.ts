@@ -71,7 +71,9 @@ test.describe("Room Header", () => {
 
                 // Assert the size of buttons on RoomHeader are specified and the buttons are not compressed
                 // Note these assertions do not check the size of mx_LegacyRoomHeader_name button
-                const buttons = header.locator(".mx_Flex").getByRole("button");
+                const buttons = header.getByRole("button").filter({
+                    has: page.locator("svg"),
+                });
                 await expect(buttons).toHaveCount(5);
 
                 for (const button of await buttons.all()) {

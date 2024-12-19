@@ -6,39 +6,33 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ComponentProps } from "react";
+import React, { RefObject } from "react";
 
-import AccessibleButton from "../../components/views/elements/AccessibleButton";
+import AccessibleButton, { ButtonProps } from "../../components/views/elements/AccessibleButton";
 import { useRovingTabIndex } from "../RovingTabIndex";
-import { Ref } from "./types";
 
-type Props<T extends keyof JSX.IntrinsicElements> = Omit<
-    ComponentProps<typeof AccessibleButton<T>>,
-    "inputRef" | "tabIndex"
-> & {
-    inputRef?: Ref;
+type Props<T extends keyof HTMLElementTagNameMap> = Omit<ButtonProps<T>, "tabIndex"> & {
+    inputRef?: RefObject<HTMLElementTagNameMap[T]>;
     focusOnMouseOver?: boolean;
 };
 
 // Wrapper to allow use of useRovingTabIndex for simple AccessibleButtons outside of React Functional Components.
-export const RovingAccessibleButton = <T extends keyof JSX.IntrinsicElements>({
+export const RovingAccessibleButton = <T extends keyof HTMLElementTagNameMap>({
     inputRef,
     onFocus,
     onMouseOver,
     focusOnMouseOver,
-    element,
     ...props
 }: Props<T>): JSX.Element => {
-    const [onFocusInternal, isActive, ref] = useRovingTabIndex(inputRef);
+    const [onFocusInternal, isActive, ref] = useRovingTabIndex<HTMLElementTagNameMap[T]>(inputRef);
     return (
         <AccessibleButton
             {...props}
-            element={element as keyof JSX.IntrinsicElements}
-            onFocus={(event: React.FocusEvent) => {
+            onFocus={(event: React.FocusEvent<never, never>) => {
                 onFocusInternal();
                 onFocus?.(event);
             }}
-            onMouseOver={(event: React.MouseEvent) => {
+            onMouseOver={(event: React.MouseEvent<never, never>) => {
                 if (focusOnMouseOver) onFocusInternal();
                 onMouseOver?.(event);
             }}

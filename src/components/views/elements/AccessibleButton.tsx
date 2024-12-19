@@ -6,7 +6,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
  */
 
-import React, { ComponentProps, forwardRef, FunctionComponent, HTMLAttributes, InputHTMLAttributes, Ref } from "react";
+import React, {
+    ComponentProps,
+    ComponentPropsWithoutRef,
+    forwardRef,
+    FunctionComponent,
+    ReactElement,
+    KeyboardEvent,
+    Ref,
+} from "react";
 import classnames from "classnames";
 import { Tooltip } from "@vector-im/compound-web";
 
@@ -38,20 +46,8 @@ export type AccessibleButtonKind =
     | "icon_primary"
     | "icon_primary_outline";
 
-/**
- * This type construct allows us to specifically pass those props down to the element we’re creating that the element
- * actually supports.
- *
- * e.g., if element is set to "a", we’ll support href and target, if it’s set to "input", we support type.
- *
- * To remain compatible with existing code, we’ll continue to support InputHTMLAttributes<Element>
- */
-type DynamicHtmlElementProps<T extends keyof JSX.IntrinsicElements> =
-    JSX.IntrinsicElements[T] extends HTMLAttributes<{}> ? DynamicElementProps<T> : DynamicElementProps<"div">;
-type DynamicElementProps<T extends keyof JSX.IntrinsicElements> = Partial<
-    Omit<JSX.IntrinsicElements[T], "ref" | "onClick" | "onMouseDown" | "onKeyUp" | "onKeyDown">
-> &
-    Omit<InputHTMLAttributes<Element>, "onClick">;
+type ElementType = keyof HTMLElementTagNameMap;
+const defaultElement = "div";
 
 type TooltipProps = ComponentProps<typeof Tooltip>;
 
@@ -60,7 +56,7 @@ type TooltipProps = ComponentProps<typeof Tooltip>;
  *
  * Extends props accepted by the underlying element specified using the `element` prop.
  */
-type Props<T extends keyof JSX.IntrinsicElements> = DynamicHtmlElementProps<T> & {
+type Props<T extends ElementType = "div"> = {
     /**
      * The base element type. "div" by default.
      */
@@ -105,14 +101,12 @@ type Props<T extends keyof JSX.IntrinsicElements> = DynamicHtmlElementProps<T> &
     disableTooltip?: TooltipProps["disabled"];
 };
 
-export type ButtonProps<T extends keyof JSX.IntrinsicElements> = Props<T>;
+export type ButtonProps<T extends ElementType> = Props<T> & Omit<ComponentPropsWithoutRef<T>, keyof Props<T>>;
 
 /**
  * Type of the props passed to the element that is rendered by AccessibleButton.
  */
-interface RenderedElementProps extends React.InputHTMLAttributes<Element> {
-    ref?: React.Ref<Element>;
-}
+type RenderedElementProps<T extends ElementType> = React.InputHTMLAttributes<Element> & RefProp<T>;
 
 /**
  * AccessibleButton is a generic wrapper for any element that should be treated
@@ -124,9 +118,9 @@ interface RenderedElementProps extends React.InputHTMLAttributes<Element> {
  * @param {Object} props  react element properties
  * @returns {Object} rendered react
  */
-const AccessibleButton = forwardRef(function <T extends keyof JSX.IntrinsicElements>(
+const AccessibleButton = forwardRef(function <T extends ElementType = typeof defaultElement>(
     {
-        element = "div" as T,
+        element,
         onClick,
         children,
         kind,
@@ -141,10 +135,10 @@ const AccessibleButton = forwardRef(function <T extends keyof JSX.IntrinsicEleme
         onTooltipOpenChange,
         disableTooltip,
         ...restProps
-    }: Props<T>,
-    ref: Ref<HTMLElement>,
+    }: ButtonProps<T>,
+    ref: Ref<HTMLElementTagNameMap[T]>,
 ): JSX.Element {
-    const newProps: RenderedElementProps = restProps;
+    const newProps = restProps as RenderedElementProps<T>;
     newProps["aria-label"] = newProps["aria-label"] ?? title;
     if (disabled) {
         newProps["aria-disabled"] = true;
@@ -162,7 +156,7 @@ const AccessibleButton = forwardRef(function <T extends keyof JSX.IntrinsicEleme
         // And divs which we report as role button to assistive technologies.
         // Browsers handle space and enter key presses differently and we are only adjusting to the
         // inconsistencies here
-        newProps.onKeyDown = (e) => {
+        newProps.onKeyDown = (e: KeyboardEvent<never>) => {
             const action = getKeyBindingsManager().getAccessibilityAction(e);
 
             switch (action) {
@@ -178,7 +172,7 @@ const AccessibleButton = forwardRef(function <T extends keyof JSX.IntrinsicEleme
                     onKeyDown?.(e);
             }
         };
-        newProps.onKeyUp = (e) => {
+        newProps.onKeyUp = (e: KeyboardEvent<never>) => {
             const action = getKeyBindingsManager().getAccessibilityAction(e);
 
             switch (action) {
@@ -207,7 +201,7 @@ const AccessibleButton = forwardRef(function <T extends keyof JSX.IntrinsicEleme
     });
 
     // React.createElement expects InputHTMLAttributes
-    const button = React.createElement(element, newProps, children);
+    const button = React.createElement(element ?? defaultElement, newProps, children);
 
     if (title) {
         return (
@@ -233,4 +227,15 @@ const AccessibleButton = forwardRef(function <T extends keyof JSX.IntrinsicEleme
 };
 (AccessibleButton as FunctionComponent).displayName = "AccessibleButton";
 
-export default AccessibleButton;
+interface RefProp<T extends ElementType> {
+    ref?: Ref<HTMLElementTagNameMap[T]>;
+}
+
+interface ButtonComponent {
+    // With the explicit `element` prop
+    <C extends ElementType>(props: { element?: C } & ButtonProps<C> & RefProp<C>): ReactElement;
+    // Without the explicit `element` prop
+    (props: ButtonProps<"div"> & RefProp<"div">): ReactElement;
+}
+
+export default AccessibleButton as ButtonComponent;
