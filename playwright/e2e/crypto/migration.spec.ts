@@ -25,7 +25,7 @@ const test = base.extend<Fixtures>({
     },
 });
 
-test.describe("migration", function () {
+test.describe("migration", { tag: "@no-webkit" }, function () {
     test.use({ displayName: "Alice" });
 
     test("Should support migration from legacy crypto", async ({ context, user, page }, workerInfo) => {

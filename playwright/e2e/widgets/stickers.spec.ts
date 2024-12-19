@@ -128,7 +128,7 @@ async function setWidgetAccountData(
     });
 }
 
-test.describe("Stickers", () => {
+test.describe("Stickers", { tag: ["@no-firefox", "@no-webkit"] }, () => {
     test.use({
         displayName: "Sally",
         room: async ({ app }, use) => {

@@ -3,6 +3,9 @@
 # as an artifact and run end-to-end tests.
 name: End to End Tests
 on:
+    # CRON to run all Projects at 6am UTC
+    schedule:
+        - cron: "0 6 * * *"
     pull_request: {}
     merge_group:
         types: [checks_requested]
@@ -32,6 +35,8 @@ concurrency:
 env:
     # fetchdep.sh needs to know our PR number
     PR_NUMBER: ${{ github.event.pull_request.number }}
+    # Use 6 runners in the default case, but 4 when running on a schedule where we run all 5 projects (20 runners total)
+    NUM_RUNNERS: ${{ github.event_name == 'schedule' && 4 || 6 }}
 
 permissions: {} # No permissions required
 
@@ -40,6 +45,9 @@ jobs:
         name: "Build Element-Web"
         runs-on: ubuntu-24.04
         if: inputs.skip != true
+        outputs:
+            num-runners: ${{ env.NUM_RUNNERS }}
+            runners-matrix: ${{ steps.runner-vars.outputs.matrix }}
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
@@ -79,8 +87,17 @@ jobs:
                   path: webapp
                   retention-days: 1
 
+            - name: Calculate runner variables
+              id: runner-vars
+              uses: actions/github-script@v7
+              with:
+                  script: |
+                      const numRunners = parseInt(process.env.NUM_RUNNERS, 10);
+                      const matrix = Array.from({ length: numRunners }, (_, i) => i + 1);
+                      core.setOutput("matrix", JSON.stringify(matrix));
+
     playwright:
-        name: "Run Tests ${{ matrix.runner }}/${{ strategy.job-total }}"
+        name: "Run Tests [${{ matrix.project }}] ${{ matrix.runner }}/${{ needs.build.outputs.num-runners }}"
         needs: build
         if: inputs.skip != true
         runs-on: ubuntu-24.04
@@ -92,7 +109,19 @@ jobs:
             fail-fast: false
             matrix:
                 # Run multiple instances in parallel to speed up the tests
-                runner: [1, 2, 3, 4, 5, 6]
+                runner: ${{ fromJSON(needs.build.outputs.runners-matrix) }}
+                project:
+                    - Chrome
+                    - Firefox
+                    - WebKit
+                isCron:
+                    - ${{ github.event_name == 'schedule' }}
+                # Skip the Firefox & Safari runs unless this was a cron trigger
+                exclude:
+                    - isCron: false
+                      project: Firefox
+                    - isCron: false
+                      project: WebKit
         steps:
             - uses: actions/checkout@v4
               with:
@@ -124,24 +153,30 @@ jobs:
               with:
                   path: |
                       ~/.cache/ms-playwright
-                  key: ${{ runner.os }}-playwright-${{ steps.playwright.outputs.version }}-chromium
+                  key: ${{ runner.os }}-playwright-${{ steps.playwright.outputs.version }}
 
-            - name: Install Playwright browser
+            - name: Install Playwright browsers
               if: steps.playwright-cache.outputs.cache-hit != 'true'
-              run: yarn playwright install --with-deps --no-shell chromium
+              run: yarn playwright install --with-deps --no-shell
+
+            - name: Install system dependencies for WebKit
+              # Some WebKit dependencies seem to lay outside the cache and will need to be installed separately
+              if: matrix.project == 'WebKit' && steps.playwright-cache.outputs.cache-hit == 'true'
+              run: yarn playwright install-deps webkit
 
             # We skip tests tagged with @mergequeue when running on PRs, but run them in MQ and everywhere else
             - name: Run Playwright tests
               run: |
                   yarn playwright test \
-                      --shard "${{ matrix.runner }}/${{ strategy.job-total }}" \
+                      --shard "${{ matrix.runner }}/${{ needs.build.outputs.num-runners }}" \
+                      --project="${{ matrix.project }}" \
                       ${{ github.event_name == 'pull_request' && '--grep-invert @mergequeue' || '' }}
 
             - name: Upload blob report to GitHub Actions Artifacts
               if: always()
               uses: actions/upload-artifact@v4
               with:
-                  name: all-blob-reports-${{ matrix.runner }}
+                  name: all-blob-reports-${{ matrix.project }}-${{ matrix.runner }}
                   path: blob-report
                   retention-days: 1
 

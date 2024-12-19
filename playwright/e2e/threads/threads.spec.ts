@@ -324,7 +324,7 @@ test.describe("Threads", () => {
             });
         });
 
-        test("can send voice messages", async ({ page, app, user }) => {
+        test("can send voice messages", { tag: ["@no-firefox", "@no-webkit"] }, async ({ page, app, user }) => {
             // Increase right-panel size, so that voice messages fit
             await page.evaluate(() => {
                 window.localStorage.setItem("mx_rhs_size", "600");
@@ -353,7 +353,7 @@ test.describe("Threads", () => {
 
     test(
         "should send location and reply to the location on ThreadView",
-        { tag: "@screenshot" },
+        { tag: ["@screenshot", "@no-firefox"] },
         async ({ page, app, bot }) => {
             const roomId = await app.client.createRoom({});
             await app.client.inviteUser(roomId, bot.credentials.userId);
