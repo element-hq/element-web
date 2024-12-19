@@ -204,7 +204,7 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
                 ref={card}
                 closeButtonRef={closeButonRef}
             >
-                {card.current && <Measured sensor={card.current} onMeasurement={setNarrow} />}
+                <Measured sensor={card} onMeasurement={setNarrow} />
                 {timelineSet ? (
                     <TimelinePanel
                         key={filterOption + ":" + (timelineSet.getFilter()?.filterId ?? roomId)}
