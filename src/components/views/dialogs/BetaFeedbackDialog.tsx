@@ -36,7 +36,7 @@ const BetaFeedbackDialog: React.FC<IProps> = ({ featureId, onFinished }) => {
             rageshakeLabel={info.feedbackLabel}
             rageshakeData={Object.fromEntries(
                 (SettingsStore.getBetaInfo(featureId)?.extraSettings || []).map((k) => {
-                    return SettingsStore.getValue(k);
+                    return [k, SettingsStore.getValue(k)];
                 }),
             )}
         >

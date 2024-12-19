@@ -176,7 +176,7 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
         url: string;
         name: string;
         type: string;
-        size: string;
+        size: number;
     } | null {
         // We do no caching here because the SDK caches setting
         // and the browser will cache the sound.
