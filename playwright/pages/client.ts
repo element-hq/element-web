@@ -25,6 +25,7 @@ import type {
     Upload,
     StateEvents,
     TimelineEvents,
+    AccountDataEvents,
 } from "matrix-js-sdk/src/matrix";
 import type { RoomMessageEventContent } from "matrix-js-sdk/src/types";
 import { Credentials } from "../plugins/homeserver";
@@ -439,7 +440,10 @@ export class Client {
      * @param type The type of account data to set
      * @param content The content to set
      */
-    public async setAccountData(type: string, content: IContent): Promise<void> {
+    public async setAccountData<T extends keyof AccountDataEvents>(
+        type: T,
+        content: AccountDataEvents[T],
+    ): Promise<void> {
         const client = await this.prepareClient();
         return client.evaluate(
             async (client, { type, content }) => {
