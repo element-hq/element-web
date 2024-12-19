@@ -127,7 +127,10 @@ export function createTestClient(): MatrixClient {
             bootstrapCrossSigning: jest.fn(),
             getActiveSessionBackupVersion: jest.fn().mockResolvedValue(null),
             isKeyBackupTrusted: jest.fn().mockResolvedValue({}),
-            createRecoveryKeyFromPassphrase: jest.fn().mockResolvedValue({}),
+            createRecoveryKeyFromPassphrase: jest.fn().mockResolvedValue({
+                privateKey: new Uint8Array(32),
+                encodedPrivateKey: "encoded private key",
+            }),
             bootstrapSecretStorage: jest.fn(),
             isDehydrationSupported: jest.fn().mockResolvedValue(false),
             restoreKeyBackup: jest.fn(),
@@ -137,6 +140,16 @@ export function createTestClient(): MatrixClient {
             checkKeyBackupAndEnable: jest.fn().mockResolvedValue(null),
             getKeyBackupInfo: jest.fn().mockResolvedValue(null),
             getEncryptionInfoForEvent: jest.fn().mockResolvedValue(null),
+            getCrossSigningStatus: jest.fn().mockResolvedValue({
+                publicKeysOnDevice: false,
+                privateKeysInSecretStorage: false,
+                privateKeysCachedLocally: {
+                    masterKey: false,
+                    selfSigningKey: false,
+                    userSigningKey: false,
+                },
+            }),
+            isCrossSigningReady: jest.fn().mockResolvedValue(false),
         }),
 
         getPushActionsForEvent: jest.fn(),

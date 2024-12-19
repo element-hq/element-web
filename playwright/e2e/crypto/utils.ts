@@ -12,6 +12,7 @@ import type { ICreateRoomOpts, MatrixClient } from "matrix-js-sdk/src/matrix";
 import type {
     CryptoEvent,
     EmojiMapping,
+    GeneratedSecretStorageKey,
     ShowSasCallbacks,
     VerificationRequest,
     Verifier,
@@ -21,6 +22,47 @@ import { Credentials, HomeserverInstance } from "../../plugins/homeserver";
 import { Client } from "../../pages/client";
 import { ElementAppPage } from "../../pages/ElementAppPage";
 import { Bot } from "../../pages/bot";
+
+/**
+ * Create a bot and wait for it to be ready to use.
+ * @param page - the page to use
+ * @param homeserver - the homeserver to use
+ * @param credentials - the credentials to use for the bot client
+ * @param ignoreSecretStorage - whether to ignore secret storage setup
+ */
+export async function createBot(
+    page: Page,
+    homeserver: HomeserverInstance,
+    credentials: Credentials,
+): Promise<{ aliceBotClient: Bot; recoveryKey: GeneratedSecretStorageKey; expectedBackupVersion: string }> {
+    // Visit the login page of the app, to load the matrix sdk
+    await page.goto("/#/login");
+
+    // wait for the page to load
+    await page.waitForSelector(".mx_AuthPage", { timeout: 30000 });
+
+    // Create a new device for alice
+    const aliceBotClient = new Bot(page, homeserver, {
+        bootstrapCrossSigning: true,
+        bootstrapSecretStorage: true,
+    });
+    aliceBotClient.setCredentials(credentials);
+    // Backup is prepared in the background. Poll until it is ready.
+    const botClientHandle = await aliceBotClient.prepareClient();
+    let expectedBackupVersion: string;
+    await expect
+        .poll(async () => {
+            expectedBackupVersion = await botClientHandle.evaluate((cli) =>
+                cli.getCrypto()!.getActiveSessionBackupVersion(),
+            );
+            return expectedBackupVersion;
+        })
+        .not.toBe(null);
+
+    const recoveryKey = await aliceBotClient.getRecoveryKey();
+
+    return { aliceBotClient, recoveryKey, expectedBackupVersion };
+}
 
 /**
  * wait for the given client to receive an incoming verification request, and automatically accept it
