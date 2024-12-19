@@ -36,7 +36,7 @@ test.describe("General room settings tab", () => {
         await expect(settings.getByText("Show more")).toBeVisible();
     });
 
-    test("long address should not cause dialog to overflow", async ({ page, app }) => {
+    test("long address should not cause dialog to overflow", { tag: "@no-webkit" }, async ({ page, app }) => {
         const settings = await app.settings.openRoomSettings("General");
         // 1. Set the room-address to be a really long string
         const longString = "abcasdhjasjhdaj1jh1asdhasjdhajsdhjavhjksd".repeat(4);

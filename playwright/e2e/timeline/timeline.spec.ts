@@ -90,7 +90,7 @@ test.describe("Timeline", () => {
     let oldAvatarUrl: string;
     let newAvatarUrl: string;
 
-    test.describe("useOnlyCurrentProfiles", () => {
+    test.describe("useOnlyCurrentProfiles", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         test.beforeEach(async ({ app, user }) => {
             ({ content_uri: oldAvatarUrl } = await app.client.uploadContent(OLD_AVATAR, { type: "image/png" }));
             await app.client.setAvatarUrl(oldAvatarUrl);
@@ -876,7 +876,7 @@ test.describe("Timeline", () => {
         });
     });
 
-    test.describe("message sending", () => {
+    test.describe("message sending", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         const MESSAGE = "Hello world";
         const reply = "Reply";
         const viewRoomSendMessageAndSetupReply = async (page: Page, app: ElementAppPage, roomId: string) => {
@@ -914,7 +914,6 @@ test.describe("Timeline", () => {
         });
 
         test("can reply with a voice message", async ({ page, app, room, context }) => {
-            await context.grantPermissions(["microphone"]);
             await viewRoomSendMessageAndSetupReply(page, app, room.roomId);
 
             const composerOptions = await app.openMessageComposerOptions();

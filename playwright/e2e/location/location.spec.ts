@@ -10,7 +10,8 @@ import { Locator, Page } from "@playwright/test";
 
 import { test, expect } from "../../element-web-test";
 
-test.describe("Location sharing", () => {
+// Firefox headless lacks WebGL support https://bugzilla.mozilla.org/show_bug.cgi?id=1375585
+test.describe("Location sharing", { tag: "@no-firefox" }, () => {
     const selectLocationShareTypeOption = (page: Page, shareType: string): Locator => {
         return page.getByTestId(`share-location-option-${shareType}`);
     };
