@@ -144,7 +144,7 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         eventType: K,
         field: F,
         value: AccountDataEvents[K][F],
-        legacyEventType?: string,
+        legacyEventType?: keyof AccountDataEvents,
     ): Promise<void> {
         let content = this.getSettings(eventType);
         if (legacyEventType && !content?.[field]) {
@@ -213,7 +213,7 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         return this.client && !this.client.isGuest();
     }
 
-    private getSettings(eventType = "im.vector.web.settings"): any {
+    private getSettings(eventType: keyof AccountDataEvents = "im.vector.web.settings"): any {
         // TODO: [TS] Types on return
         if (!this.client) return null;
 

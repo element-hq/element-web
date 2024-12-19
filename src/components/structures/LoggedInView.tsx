@@ -16,6 +16,7 @@ import {
     IUsageLimit,
     SyncStateData,
     SyncState,
+    EventType,
 } from "matrix-js-sdk/src/matrix";
 import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import classNames from "classnames";
@@ -161,7 +162,7 @@ class LoggedInView extends React.Component<IProps, IState> {
 
         this._matrixClient.on(ClientEvent.AccountData, this.onAccountData);
         // check push rules on start up as well
-        monitorSyncedPushRules(this._matrixClient.getAccountData("m.push_rules"), this._matrixClient);
+        monitorSyncedPushRules(this._matrixClient.getAccountData(EventType.PushRules), this._matrixClient);
         this._matrixClient.on(ClientEvent.Sync, this.onSync);
         // Call `onSync` with the current state as well
         this.onSync(this._matrixClient.getSyncState(), null, this._matrixClient.getSyncStateData() ?? undefined);
