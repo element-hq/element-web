@@ -116,7 +116,7 @@ export const useOwnDevices = (): DevicesState => {
 
             const notificationSettings = new Map<string, LocalNotificationSettings>();
             Object.keys(devices).forEach((deviceId) => {
-                const eventType = `${LOCAL_NOTIFICATION_SETTINGS_PREFIX.name}.${deviceId}`;
+                const eventType = `${LOCAL_NOTIFICATION_SETTINGS_PREFIX.name}.${deviceId}` as const;
                 const event = matrixClient.getAccountData(eventType);
                 if (event) {
                     notificationSettings.set(deviceId, event.getContent());

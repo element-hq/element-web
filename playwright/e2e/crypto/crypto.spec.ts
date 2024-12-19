@@ -81,7 +81,7 @@ test.describe("Cryptography", function () {
              * Verify that the `m.cross_signing.${keyType}` key is available on the account data on the server
              * @param keyType
              */
-            async function verifyKey(app: ElementAppPage, keyType: string) {
+            async function verifyKey(app: ElementAppPage, keyType: "master" | "self_signing" | "user_signing") {
                 const accountData: { encrypted: Record<string, Record<string, string>> } = await app.client.evaluate(
                     (cli, keyType) => cli.getAccountDataFromServer(`m.cross_signing.${keyType}`),
                     keyType,
