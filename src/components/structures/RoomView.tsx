@@ -273,6 +273,7 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
     }
 
     const onRetryClicked = (): void => {
+        // eslint-disable-next-line react-compiler/react-compiler
         room.state = LocalRoomState.NEW;
         defaultDispatcher.dispatch({
             action: "local_room_event",
@@ -2514,9 +2515,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 mainSplitContentClassName = "mx_MainSplit_timeline";
                 mainSplitBody = (
                     <>
-                        {this.roomViewBody.current && (
-                            <Measured sensor={this.roomViewBody.current} onMeasurement={this.onMeasurement} />
-                        )}
+                        <Measured sensor={this.roomViewBody} onMeasurement={this.onMeasurement} />
                         {auxPanel}
                         {pinnedMessageBanner}
                         <main className={timelineClasses}>

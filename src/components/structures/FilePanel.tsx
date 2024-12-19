@@ -286,9 +286,7 @@ class FilePanel extends React.Component<IProps, IState> {
                         ref={this.card}
                         header={_t("right_panel|files_button")}
                     >
-                        {this.card.current && (
-                            <Measured sensor={this.card.current} onMeasurement={this.onMeasurement} />
-                        )}
+                        <Measured sensor={this.card} onMeasurement={this.onMeasurement} />
                         <SearchWarning isRoomEncrypted={isRoomEncrypted} kind={WarningKind.Files} />
                         <TimelinePanel
                             manageReadReceipts={false}

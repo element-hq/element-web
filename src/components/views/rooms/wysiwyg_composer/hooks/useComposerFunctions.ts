@@ -21,6 +21,7 @@ export function useComposerFunctions(
         () => ({
             clear: () => {
                 if (ref.current) {
+                    // eslint-disable-next-line react-compiler/react-compiler
                     ref.current.innerHTML = "";
                 }
             },
