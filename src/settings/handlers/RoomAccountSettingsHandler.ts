@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixClient, MatrixEvent, Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixEvent, Room, RoomAccountDataEvents, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { defer } from "matrix-js-sdk/src/utils";
 
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
@@ -79,11 +79,14 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
     }
 
     // helper function to send room account data then await it being echoed back
-    private async setRoomAccountData(
+    private async setRoomAccountData<
+        K extends keyof RoomAccountDataEvents,
+        F extends null | keyof RoomAccountDataEvents[K],
+    >(
         roomId: string,
-        eventType: string,
-        field: string | null,
-        value: any,
+        eventType: K,
+        field: F,
+        value: F extends keyof RoomAccountDataEvents[K] ? RoomAccountDataEvents[K][F] : RoomAccountDataEvents[K],
     ): Promise<void> {
         let content: ReturnType<RoomAccountSettingsHandler["getSettings"]>;
 
@@ -99,7 +102,7 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
         const deferred = defer<void>();
         const handler = (event: MatrixEvent, room: Room): void => {
             if (room.roomId !== roomId || event.getType() !== eventType) return;
-            if (field !== null && event.getContent()[field] !== value) return;
+            if (field !== null && event.getContent<RoomAccountDataEvents[K]>()[field] !== value) return;
             this.client.off(RoomEvent.AccountData, handler);
             deferred.resolve();
         };
@@ -132,7 +135,7 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
         return this.client && !this.client.isGuest();
     }
 
-    private getSettings(roomId: string, eventType = DEFAULT_SETTINGS_EVENT_TYPE): any {
+    private getSettings(roomId: string, eventType: keyof RoomAccountDataEvents = DEFAULT_SETTINGS_EVENT_TYPE): any {
         // TODO: [TS] Type return
         const event = this.client.getRoom(roomId)?.getAccountData(eventType);
         if (!event || !event.getContent()) return null;

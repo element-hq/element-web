@@ -267,7 +267,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         // XXX: we could track RM per TimelineSet rather than per Room.
         // but for now we just do it per room for simplicity.
         if (this.props.manageReadMarkers) {
-            const readmarker = this.props.timelineSet.room?.getAccountData("m.fully_read");
+            const readmarker = this.props.timelineSet.room?.getAccountData(EventType.FullyRead);
             if (readmarker) {
                 this.initialReadMarkerId = readmarker.getContent().event_id;
             } else {

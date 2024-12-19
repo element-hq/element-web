@@ -88,6 +88,23 @@ declare module "matrix-js-sdk/src/types" {
         };
     }
 
+    export interface RoomAccountDataEvents {
+        // Room account data event for pinned events
+        "im.vector.room.read_pins": { event_ids: string[] };
+
+        // Room account data event for voip virtual rooms
+        "im.vector.is_virtual_room": { native_room: string };
+
+        // Room account data event for MSC2867 mark unread
+        "m.marked_unread": { unread: boolean };
+        "com.famedly.marked_unread": { unread: boolean };
+
+        // Element settings account data events
+        "org.matrix.room.preview_urls": { disable: boolean };
+        "im.vector.setting.allowed_widgets": { [eventId: string]: boolean };
+        "im.vector.web.settings": Record<string, any>;
+    }
+
     export interface AudioContent {
         // MSC1767 + Ideals of MSC2516 as MSC3245
         // https://github.com/matrix-org/matrix-doc/pull/3245

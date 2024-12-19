@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useContext, useMemo, useState } from "react";
-import { AccountDataEvents, IContent, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { AccountDataEvents, IContent, MatrixEvent, RoomAccountDataEvents } from "matrix-js-sdk/src/matrix";
 
 import BaseTool, { DevtoolsContext, IDevtoolsProps } from "./BaseTool";
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
@@ -35,7 +35,7 @@ export const RoomAccountDataEventEditor: React.FC<IEditorProps> = ({ mxEvent, on
 
     const fields = useMemo(() => [eventTypeField(mxEvent?.getType())], [mxEvent]);
 
-    const onSend = async ([eventType]: string[], content?: IContent): Promise<void> => {
+    const onSend = async ([eventType]: Array<keyof RoomAccountDataEvents>, content?: IContent): Promise<void> => {
         await cli.setRoomAccountData(context.room.roomId, eventType, content || {});
     };
 

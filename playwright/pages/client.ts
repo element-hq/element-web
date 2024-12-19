@@ -447,7 +447,7 @@ export class Client {
         const client = await this.prepareClient();
         return client.evaluate(
             async (client, { type, content }) => {
-                await client.setAccountData(type, content);
+                await client.setAccountData(type as T, content as AccountDataEvents[T]);
             },
             { type, content },
         );
