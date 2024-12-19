@@ -239,7 +239,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         if (!isMetaSpace(space)) {
             cliSpace = this.matrixClient.getRoom(space);
             if (!cliSpace?.isSpaceRoom()) return;
-        } else if (!this.enabledMetaSpaces.includes(space as MetaSpace)) {
+        } else if (!this.enabledMetaSpaces.includes(space)) {
             return;
         }
 
