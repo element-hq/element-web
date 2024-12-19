@@ -16,18 +16,19 @@ import { _t } from "./languageHandler";
 import InteractiveAuthDialog from "./components/views/dialogs/InteractiveAuthDialog";
 
 /**
- * Determine if the homeserver allows uploading device keys with only password auth.
+ * Determine if the homeserver allows uploading device keys with only password auth, or with no auth at
+ * all (ie. if the homeserver supports MSC3967).
  * @param cli The Matrix Client to use
- * @returns True if the homeserver allows uploading device keys with only password auth, otherwise false
+ * @returns True if the homeserver allows uploading device keys with only password auth or with no auth
+ * at all, otherwise false
  */
 async function canUploadKeysWithPasswordOnly(cli: MatrixClient): Promise<boolean> {
     try {
         await cli.uploadDeviceSigningKeys(undefined, {} as CrossSigningKeys);
-        // We should never get here: the server should always require
-        // UI auth to upload device signing keys. If we do, we upload
-        // no keys which would be a no-op.
-        logger.log("uploadDeviceSigningKeys unexpectedly succeeded without UI auth!");
-        return false;
+        // If we get here, it's because the server is allowing us to upload keys without
+        // auth the first time due to MSC3967. Therefore, yes, we can upload keys
+        // (with or without password, technically, but that's fine).
+        return true;
     } catch (error) {
         if (!(error instanceof MatrixError) || !error.data || !error.data.flows) {
             logger.log("uploadDeviceSigningKeys advertised no flows!");

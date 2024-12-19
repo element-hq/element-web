@@ -1,6 +1,6 @@
 {
     "name": "element-web",
-    "version": "1.11.88",
+    "version": "1.11.89",
     "description": "A feature-rich client for Matrix.org",
     "author": "New Vector Ltd.",
     "repository": {
@@ -282,7 +282,7 @@
         "terser-webpack-plugin": "^5.3.9",
         "ts-node": "^10.9.1",
         "ts-prune": "^0.10.3",
-        "typescript": "5.6.3",
+        "typescript": "5.7.2",
         "util": "^0.12.5",
         "web-streams-polyfill": "^4.0.0",
         "webpack": "^5.89.0",
