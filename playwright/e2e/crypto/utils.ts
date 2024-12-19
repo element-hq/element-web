@@ -220,8 +220,7 @@ export async function doTwoWaySasVerification(page: Page, verifier: JSHandle<Ver
     for (let i = 0; i < emojis.length; i++) {
         const emoji = emojis[i];
         const emojiBlock = emojiBlocks.nth(i);
-        const textContent = await emojiBlock.textContent();
-        expect(textContent).toEqual(emoji[0] + emoji[1]);
+        await expect(emojiBlock).toHaveText(emoji[0] + emoji[1]);
     }
 }
 
