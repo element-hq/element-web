@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<EncryptionCard /> should render 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_EncryptionCard"
+  >
+    <div
+      class="mx_EncryptionCard_header"
+    >
+      <div
+        class="_content_md016_17"
+        data-size="large"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M10.475 16.9A5.863 5.863 0 0 1 7 18c-1.667 0-3.083-.583-4.25-1.75C1.583 15.083 1 13.667 1 12c0-1.667.583-3.083 1.75-4.25C3.917 6.583 5.333 6 7 6c1.35 0 2.53.383 3.537 1.15 1.009.767 1.713 1.717 2.113 2.85h7.95a1.033 1.033 0 0 1 .725.3l1.025 1.025a.99.99 0 0 1 .2.288c.05.108.075.229.075.362a1.066 1.066 0 0 1-.25.7l-2.25 2.575a.973.973 0 0 1-1.038.313 1.033 1.033 0 0 1-.337-.188L17 14l-1.3 1.3c-.1.1-.208.17-.325.212a1.106 1.106 0 0 1-.375.063c-.133 0-.258-.02-.375-.063a.877.877 0 0 1-.325-.212L13 14h-.35a5.81 5.81 0 0 1-2.175 2.9Zm-4.887-3.487c.391.39.862.587 1.412.587.55 0 1.02-.196 1.412-.588C8.804 13.021 9 12.55 9 12c0-.55-.196-1.02-.588-1.412A1.926 1.926 0 0 0 7 10c-.55 0-1.02.196-1.412.588A1.926 1.926 0 0 0 5 12c0 .55.196 1.02.588 1.412Z"
+          />
+        </svg>
+      </div>
+      <h2
+        class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+      >
+        My title
+      </h2>
+      <span>
+        My description
+      </span>
+    </div>
+    Encryption card children
+  </div>
+</DocumentFragment>
+`;
