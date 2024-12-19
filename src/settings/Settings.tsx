@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ReactNode } from "react";
-import { Assignable, UNSTABLE_MSC4133_EXTENDED_PROFILES } from "matrix-js-sdk/src/matrix";
+import { UNSTABLE_MSC4133_EXTENDED_PROFILES } from "matrix-js-sdk/src/matrix";
 
 import { _t, _td, TranslationKey } from "../languageHandler";
 import DeviceIsolationModeController from "./controllers/DeviceIsolationModeController.ts";
@@ -44,6 +44,7 @@ import { ILayoutSettings } from "../stores/widgets/WidgetLayoutStore.ts";
 import { ReleaseAnnouncementData } from "../stores/ReleaseAnnouncementStore.ts";
 import { Json, JsonValue } from "../@types/json.ts";
 import { RecentEmojiData } from "../emojipicker/recent.ts";
+import { Assignable } from "../@types/common.ts";
 
 export const defaultWatchManager = new WatchManager();
 
