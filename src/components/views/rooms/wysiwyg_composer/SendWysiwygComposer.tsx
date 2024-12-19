@@ -52,7 +52,10 @@ export default function SendWysiwygComposer({
     ...props
 }: SendWysiwygComposerProps): JSX.Element {
     const Composer = isRichTextEnabled ? WysiwygComposer : PlainTextComposer;
-    const defaultContextValue = useMemo(() => getDefaultContextValue({ eventRelation: props.eventRelation }), []);
+    const defaultContextValue = useMemo(
+        () => getDefaultContextValue({ eventRelation: props.eventRelation }),
+        [props.eventRelation],
+    );
 
     return (
         <ComposerContext.Provider value={defaultContextValue}>

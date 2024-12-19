@@ -142,6 +142,7 @@ export const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
             {isFocused && suggestions.length ? (
                 <div
                     className="mx_AutocompleteInput_matches"
+                    // eslint-disable-next-line react-compiler/react-compiler
                     style={{ top: editorContainerRef.current?.clientHeight }}
                     data-testid="autocomplete-matches"
                 >

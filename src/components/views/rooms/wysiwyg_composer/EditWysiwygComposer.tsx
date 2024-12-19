@@ -44,7 +44,7 @@ export default function EditWysiwygComposer({
     className,
     ...props
 }: EditWysiwygComposerProps): JSX.Element {
-    const defaultContextValue = useMemo(() => getDefaultContextValue({ editorStateTransfer }), []);
+    const defaultContextValue = useMemo(() => getDefaultContextValue({ editorStateTransfer }), [editorStateTransfer]);
     const initialContent = useInitialContent(editorStateTransfer);
     const isReady = !editorStateTransfer || initialContent !== undefined;
 
