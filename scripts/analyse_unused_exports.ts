@@ -22,6 +22,7 @@ ignore.push("DeviceIsolationModeController.ts");
 ignore.push("/json.ts");
 ignore.push("/ReleaseAnnouncementStore.ts");
 ignore.push("/WidgetLayoutStore.ts");
+ignore.push("/common.ts");
 
 // We ignore js-sdk by default as it may export for other non element-web projects
 if (!includeJSSDK) ignore.push("matrix-js-sdk");
