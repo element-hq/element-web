@@ -15,11 +15,12 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { UserTab } from "./UserTab";
 import GenericFeatureFeedbackDialog from "./GenericFeatureFeedbackDialog";
+import { SettingKey } from "../../../settings/Settings.tsx";
 
 // XXX: Keep this around for re-use in future Betas
 
 interface IProps {
-    featureId: string;
+    featureId: SettingKey;
     onFinished(sendFeedback?: boolean): void;
 }
 

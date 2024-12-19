@@ -342,7 +342,7 @@ describe("Notifier", () => {
 
     describe("getSoundForRoom", () => {
         it("should not explode if given invalid url", () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string): any => {
                 return { url: { content_uri: "foobar" } };
             });
             expect(Notifier.getSoundForRoom("!roomId:server")).toBeNull();

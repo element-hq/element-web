@@ -36,7 +36,7 @@ export function useInputEventProcessor(
     const roomContext = useScopedRoomContext("liveTimeline", "room", "replyToEvent", "timelineRenderingType");
     const composerContext = useComposerContext();
     const mxClient = useMatrixClientContext();
-    const isCtrlEnterToSend = useSettingValue<boolean>("MessageComposerInput.ctrlEnterToSend");
+    const isCtrlEnterToSend = useSettingValue("MessageComposerInput.ctrlEnterToSend");
 
     return useCallback(
         (event: WysiwygEvent, composer: Wysiwyg, editor: HTMLElement) => {

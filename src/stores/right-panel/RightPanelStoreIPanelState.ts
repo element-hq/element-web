@@ -57,10 +57,10 @@ export interface IRightPanelForRoom {
     history: Array<IRightPanelCard>;
 }
 
-interface IRightPanelForRoomStored {
+export type IRightPanelForRoomStored = {
     isOpen: boolean;
     history: Array<IRightPanelCardStored>;
-}
+};
 
 export function convertToStorePanel(cacheRoom?: IRightPanelForRoom): IRightPanelForRoomStored | undefined {
     if (!cacheRoom) return undefined;

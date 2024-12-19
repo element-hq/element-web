@@ -20,6 +20,7 @@ import { IndicatorIcon } from "@vector-im/compound-web";
 import SettingsStore from "../settings/SettingsStore";
 import { NotificationLevel } from "../stores/notifications/NotificationLevel";
 import { doesRoomHaveUnreadMessages } from "../Unread";
+import { SettingKey } from "../settings/Settings.tsx";
 
 // MSC2867 is not yet spec at time of writing. We read from both stable
 // and unstable prefixes and accept the risk that the format may change,
@@ -34,7 +35,7 @@ export const MARKED_UNREAD_TYPE_UNSTABLE = "com.famedly.marked_unread";
  */
 export const MARKED_UNREAD_TYPE_STABLE = "m.marked_unread";
 
-export const deviceNotificationSettingsKeys = [
+export const deviceNotificationSettingsKeys: SettingKey[] = [
     "notificationsEnabled",
     "notificationBodyEnabled",
     "audioNotificationsEnabled",

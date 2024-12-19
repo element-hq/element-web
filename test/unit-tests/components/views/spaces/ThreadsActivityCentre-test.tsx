@@ -19,6 +19,7 @@ import { populateThread } from "../../../../test-utils/threads";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../../src/settings/SettingLevel";
+import { Features } from "../../../../../src/settings/Settings.tsx";
 
 describe("ThreadsActivityCentre", () => {
     const getTACButton = () => {
@@ -92,7 +93,7 @@ describe("ThreadsActivityCentre", () => {
     });
 
     beforeEach(async () => {
-        await SettingsStore.setValue("feature_release_announcement", null, SettingLevel.DEVICE, false);
+        await SettingsStore.setValue(Features.ReleaseAnnouncement, null, SettingLevel.DEVICE, false);
     });
 
     it("should render the threads activity centre button", async () => {
@@ -102,7 +103,7 @@ describe("ThreadsActivityCentre", () => {
 
     it("should render the release announcement", async () => {
         // Enable release announcement
-        await SettingsStore.setValue("feature_release_announcement", null, SettingLevel.DEVICE, true);
+        await SettingsStore.setValue(Features.ReleaseAnnouncement, null, SettingLevel.DEVICE, true);
 
         renderTAC();
         expect(document.body).toMatchSnapshot();
@@ -110,7 +111,7 @@ describe("ThreadsActivityCentre", () => {
 
     it("should render not display the tooltip when the release announcement is displayed", async () => {
         // Enable release announcement
-        await SettingsStore.setValue("feature_release_announcement", null, SettingLevel.DEVICE, true);
+        await SettingsStore.setValue(Features.ReleaseAnnouncement, null, SettingLevel.DEVICE, true);
 
         renderTAC();
 
@@ -121,7 +122,7 @@ describe("ThreadsActivityCentre", () => {
 
     it("should close the release announcement when the TAC button is clicked", async () => {
         // Enable release announcement
-        await SettingsStore.setValue("feature_release_announcement", null, SettingLevel.DEVICE, true);
+        await SettingsStore.setValue(Features.ReleaseAnnouncement, null, SettingLevel.DEVICE, true);
 
         renderTAC();
         await userEvent.click(getTACButton());

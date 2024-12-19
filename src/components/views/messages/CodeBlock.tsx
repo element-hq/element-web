@@ -36,9 +36,9 @@ const ExpandCollapseButton: React.FC<{
 };
 
 const CodeBlock: React.FC<Props> = ({ children, onHeightChanged }) => {
-    const enableSyntaxHighlightLanguageDetection = useSettingValue<boolean>("enableSyntaxHighlightLanguageDetection");
-    const showCodeLineNumbers = useSettingValue<boolean>("showCodeLineNumbers");
-    const expandCodeByDefault = useSettingValue<boolean>("expandCodeByDefault");
+    const enableSyntaxHighlightLanguageDetection = useSettingValue("enableSyntaxHighlightLanguageDetection");
+    const showCodeLineNumbers = useSettingValue("showCodeLineNumbers");
+    const expandCodeByDefault = useSettingValue("expandCodeByDefault");
     const [expanded, setExpanded] = useState(expandCodeByDefault);
 
     let expandCollapseButton: JSX.Element | undefined;
