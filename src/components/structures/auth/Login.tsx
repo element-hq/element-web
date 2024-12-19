@@ -30,7 +30,6 @@ import AuthHeader from "../../views/auth/AuthHeader";
 import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleButton";
 import { ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
 import { filterBoolean } from "../../../utils/arrays";
-import { Features } from "../../../settings/Settings";
 import { startOidcLogin } from "../../../utils/oidc/authorize";
 
 interface IProps {
@@ -93,16 +92,12 @@ type OnPasswordLogin = {
  */
 export default class LoginComponent extends React.PureComponent<IProps, IState> {
     private unmounted = false;
-    private oidcNativeFlowEnabled = false;
     private loginLogic!: Login;
 
     private readonly stepRendererMap: Record<string, () => ReactNode>;
 
     public constructor(props: IProps) {
         super(props);
-
-        // only set on a config level, so we don't need to watch
-        this.oidcNativeFlowEnabled = SettingsStore.getValue(Features.OidcNativeFlow);
 
         this.state = {
             busy: false,
@@ -361,10 +356,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
 
         const loginLogic = new Login(hsUrl, isUrl, fallbackHsUrl, {
             defaultDeviceDisplayName: this.props.defaultDeviceDisplayName,
-            // if native OIDC is enabled in the client pass the server's delegated auth settings
-            delegatedAuthentication: this.oidcNativeFlowEnabled
-                ? this.props.serverConfig.delegatedAuthentication
-                : undefined,
+            delegatedAuthentication: this.props.serverConfig.delegatedAuthentication,
         });
         this.loginLogic = loginLogic;
 
