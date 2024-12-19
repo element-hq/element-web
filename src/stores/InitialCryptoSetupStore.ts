@@ -11,7 +11,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { useEffect, useState } from "react";
 
 import { createCrossSigning } from "../CreateCrossSigning";
-import { SdkContextClass } from "../contexts/SDKContext";
 
 type Status = "in_progress" | "complete" | "error" | undefined;
 
@@ -45,8 +44,6 @@ export class InitialCryptoSetupStore extends EventEmitter {
     private status: Status = undefined;
 
     private client?: MatrixClient;
-    private isTokenLogin?: boolean;
-    private stores?: SdkContextClass;
     private onFinished?: (success: boolean) => void;
 
     public static sharedInstance(): InitialCryptoSetupStore {
@@ -62,18 +59,9 @@ export class InitialCryptoSetupStore extends EventEmitter {
      * Start the initial crypto setup process.
      *
      * @param {MatrixClient} client The client to use for the setup
-     * @param {boolean} isTokenLogin True if the user logged in via a token login, otherwise false
-     * @param {SdkContextClass} stores The stores to use for the setup
      */
-    public startInitialCryptoSetup(
-        client: MatrixClient,
-        isTokenLogin: boolean,
-        stores: SdkContextClass,
-        onFinished: (success: boolean) => void,
-    ): void {
+    public startInitialCryptoSetup(client: MatrixClient, onFinished: (success: boolean) => void): void {
         this.client = client;
-        this.isTokenLogin = isTokenLogin;
-        this.stores = stores;
         this.onFinished = onFinished;
 
         // We just start this process: it's progress is tracked by the events rather
@@ -89,7 +77,7 @@ export class InitialCryptoSetupStore extends EventEmitter {
      * @returns {boolean} True if a retry was initiated, otherwise false
      */
     public retry(): boolean {
-        if (this.client === undefined || this.isTokenLogin === undefined || this.stores == undefined) return false;
+        if (this.client === undefined) return false;
 
         this.doSetup().catch(() => logger.error("Initial crypto setup failed"));
 
@@ -98,12 +86,10 @@ export class InitialCryptoSetupStore extends EventEmitter {
 
     private reset(): void {
         this.client = undefined;
-        this.isTokenLogin = undefined;
-        this.stores = undefined;
     }
 
     private async doSetup(): Promise<void> {
-        if (this.client === undefined || this.isTokenLogin === undefined || this.stores == undefined) {
+        if (this.client === undefined) {
             throw new Error("No setup is in progress");
         }
 
@@ -115,7 +101,7 @@ export class InitialCryptoSetupStore extends EventEmitter {
 
         try {
             // Create the user's cross-signing keys
-            await createCrossSigning(this.client, this.isTokenLogin, this.stores.accountPasswordStore.getPassword());
+            await createCrossSigning(this.client);
 
             // Check for any existing backup and enable key backup if there isn't one
             const currentKeyBackup = await cryptoApi.checkKeyBackupAndEnable();
@@ -129,16 +115,6 @@ export class InitialCryptoSetupStore extends EventEmitter {
             this.emit("update");
             this.onFinished?.(true);
         } catch (e) {
-            if (this.isTokenLogin) {
-                // ignore any failures, we are relying on grace period here
-                this.reset();
-
-                this.status = "complete";
-                this.emit("update");
-                this.onFinished?.(true);
-
-                return;
-            }
             logger.error("Error bootstrapping cross-signing", e);
             this.status = "error";
             this.emit("update");
