@@ -6,6 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
+import type { AccountDataEvents } from "matrix-js-sdk/src/matrix";
 import { test, expect } from "../../element-web-test";
 import { Filter } from "../../pages/Spotlight";
 import { Bot } from "../../pages/bot";
@@ -255,7 +256,9 @@ test.describe("Spotlight", () => {
 
         // Invite BotBob into existing DM with ByteBot
         const dmRooms = await app.client.evaluate((client, userId) => {
-            const map = client.getAccountData("m.direct")?.getContent<Record<string, string[]>>();
+            const map = client
+                .getAccountData("m.direct" as keyof AccountDataEvents)
+                ?.getContent<Record<string, string[]>>();
             return map[userId] ?? [];
         }, bot2UserId);
         expect(dmRooms).toHaveLength(1);

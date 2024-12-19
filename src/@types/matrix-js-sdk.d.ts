@@ -71,6 +71,7 @@ declare module "matrix-js-sdk/src/types" {
         "im.vector.setting.breadcrumbs": { recent_rooms: string[] };
         "io.element.recent_emoji": { recent_emoji: string[] };
         "im.vector.setting.integration_provisioning": { enabled: boolean };
+        "im.vector.riot.breadcrumb_rooms": { recent_rooms: string[] };
         "im.vector.web.settings": Record<string, any>;
 
         // URL preview account data event
