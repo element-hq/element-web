@@ -40,6 +40,7 @@ export async function createCrossSigning(cli: MatrixClient): Promise<void> {
             await makeRequest({});
         } catch (error) {
             if (!(error instanceof MatrixError) || !error.data || !error.data.flows) {
+                // Not a UIA response
                 throw error;
             }
 
