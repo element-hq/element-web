@@ -20,7 +20,7 @@ export function setToDefaultIdentityServer(matrixClient: MatrixClient): void {
     const url = getDefaultIdentityServerUrl();
     // Account data change will update localstorage, client, etc through dispatcher
     matrixClient.setAccountData("m.identity_server", {
-        base_url: url,
+        base_url: url ?? null,
     });
 }
 

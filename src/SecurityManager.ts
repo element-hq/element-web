@@ -191,8 +191,6 @@ export interface AccessSecretStorageOpts {
     forceReset?: boolean;
     /** Create new cross-signing keys. Only applicable if `forceReset` is `true`. */
     resetCrossSigning?: boolean;
-    /** The cached account password, if available. */
-    accountPassword?: string;
 }
 
 /**

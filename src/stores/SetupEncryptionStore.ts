@@ -19,7 +19,6 @@ import { Device, SecretStorage } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { AccessCancelledError, accessSecretStorage } from "../SecurityManager";
-import { SdkContextClass } from "../contexts/SDKContext";
 import { asyncSome } from "../utils/arrays";
 import { initialiseDehydration } from "../utils/device/dehydration";
 
@@ -239,7 +238,6 @@ export class SetupEncryptionStore extends EventEmitter {
                 {
                     forceReset: true,
                     resetCrossSigning: true,
-                    accountPassword: SdkContextClass.instance.accountPasswordStore.getPassword(),
                 },
             );
         } catch (e) {

@@ -16,6 +16,7 @@ import {
     IContent,
     MatrixEvent,
     SyncState,
+    AccountDataEvents,
 } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "jest-matrix-react";
 import { CallMembership, MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
@@ -69,7 +70,7 @@ describe("Notifier", () => {
     let MockPlatform: MockedObject<BasePlatform>;
     let mockClient: MockedObject<MatrixClient>;
     let testRoom: Room;
-    let accountDataEventKey: string;
+    let accountDataEventKey: keyof AccountDataEvents;
     let accountDataStore: Record<string, MatrixEvent | undefined> = {};
 
     let mockSettings: Record<string, boolean> = {};
