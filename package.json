@@ -73,7 +73,7 @@
     "resolutions": {
         "oidc-client-ts": "3.1.0",
         "jwt-decode": "4.0.0",
-        "caniuse-lite": "1.0.30001684",
+        "caniuse-lite": "1.0.30001689",
         "wrap-ansi-cjs": "npm:wrap-ansi@^7.0.0",
         "wrap-ansi": "npm:wrap-ansi@^7.0.0"
     },
