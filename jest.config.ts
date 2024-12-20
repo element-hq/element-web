@@ -14,6 +14,8 @@ const config: Config = {
     testEnvironment: "jsdom",
     testEnvironmentOptions: {
         url: "http://localhost/",
+        // This is needed to be able to load dual CJS/ESM WASM packages e.g. rust crypto & matrix-wywiwyg
+        customExportConditions: ["browser", "node"],
     },
     testMatch: ["<rootDir>/test/**/*-test.[tj]s?(x)"],
     globalSetup: "<rootDir>/test/globalSetup.ts",
