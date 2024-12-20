@@ -84,7 +84,7 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should render 1`] = `
         <p
           class="mx_ReadReceiptGroup_secondary"
         >
-          Wed, 15 May, 0:00
+          ==MOCK FORMATTED DATE==
         </p>
       </div>
     </div>

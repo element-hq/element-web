@@ -21,7 +21,7 @@ import {
 } from "./utils";
 import { Bot } from "../../pages/bot";
 
-test.describe("Device verification", () => {
+test.describe("Device verification", { tag: "@no-webkit" }, () => {
     let aliceBotClient: Bot;
 
     /** The backup version that was set up by the bot client. */
@@ -102,7 +102,7 @@ test.describe("Device verification", () => {
         // feed the QR code into the verification request.
         const qrData = await readQrCode(infoDialog);
         const verifier = await verificationRequest.evaluateHandle(
-            (request, qrData) => request.scanQRCode(new Uint8Array(qrData)),
+            (request, qrData) => request.scanQRCode(new Uint8ClampedArray(qrData)),
             [...qrData],
         );
 

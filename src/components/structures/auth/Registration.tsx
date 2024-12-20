@@ -71,10 +71,7 @@ interface IProps {
     mobileRegister?: boolean;
     // Called when the user has logged in. Params:
     // - object with userId, deviceId, homeserverUrl, identityServerUrl, accessToken
-    // - The user's password, if available and applicable (may be cached in memory
-    //   for a short time so the user is not required to re-enter their password
-    //   for operations like uploading cross-signing keys).
-    onLoggedIn(params: IMatrixClientCreds, password: string): Promise<void>;
+    onLoggedIn(params: IMatrixClientCreds): Promise<void>;
     // registration shouldn't know or care how login is done.
     onLoginClick(): void;
     onServerConfigChange(config: ValidatedServerConfig): void;
@@ -421,16 +418,13 @@ export default class Registration extends React.Component<IProps, IState> {
                 newState.busy = false;
                 newState.completedNoSignin = true;
             } else {
-                await this.props.onLoggedIn(
-                    {
-                        userId,
-                        deviceId: (response as RegisterResponse).device_id!,
-                        homeserverUrl: this.state.matrixClient.getHomeserverUrl(),
-                        identityServerUrl: this.state.matrixClient.getIdentityServerUrl(),
-                        accessToken,
-                    },
-                    this.state.formVals.password!,
-                );
+                await this.props.onLoggedIn({
+                    userId,
+                    deviceId: (response as RegisterResponse).device_id!,
+                    homeserverUrl: this.state.matrixClient.getHomeserverUrl(),
+                    identityServerUrl: this.state.matrixClient.getIdentityServerUrl(),
+                    accessToken,
+                });
 
                 this.setupPushers();
             }

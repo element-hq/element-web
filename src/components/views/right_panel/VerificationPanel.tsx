@@ -46,7 +46,7 @@ interface IState {
      * We attempt to calculate this once the verification request transitions into the "Ready" phase. If the other
      * side cannot scan QR codes, it will remain `undefined`.
      */
-    qrCodeBytes: Buffer | undefined;
+    qrCodeBytes: Uint8ClampedArray | undefined;
 
     sasEvent: ShowSasCallbacks | null;
     emojiButtonClicked?: boolean;

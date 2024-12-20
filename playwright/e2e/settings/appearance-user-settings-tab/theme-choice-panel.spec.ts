@@ -20,31 +20,39 @@ test.describe("Appearance user settings tab", () => {
             await util.openAppearanceTab();
         });
 
-        test("should be rendered with the light theme selected", async ({ page, app, util }) => {
-            // Assert that 'Match system theme' is not checked
-            await expect(util.getMatchSystemThemeCheckbox()).not.toBeChecked();
+        test(
+            "should be rendered with the light theme selected",
+            { tag: "@screenshot" },
+            async ({ page, app, util }) => {
+                // Assert that 'Match system theme' is not checked
+                await expect(util.getMatchSystemThemeCheckbox()).not.toBeChecked();
 
-            // Assert that the light theme is selected
-            await expect(util.getLightTheme()).toBeChecked();
-            // Assert that the dark and high contrast themes are not selected
-            await expect(util.getDarkTheme()).not.toBeChecked();
-            await expect(util.getHighContrastTheme()).not.toBeChecked();
+                // Assert that the light theme is selected
+                await expect(util.getLightTheme()).toBeChecked();
+                // Assert that the dark and high contrast themes are not selected
+                await expect(util.getDarkTheme()).not.toBeChecked();
+                await expect(util.getHighContrastTheme()).not.toBeChecked();
 
-            await expect(util.getThemePanel()).toMatchScreenshot("theme-panel-light.png");
-        });
+                await expect(util.getThemePanel()).toMatchScreenshot("theme-panel-light.png");
+            },
+        );
 
-        test("should disable the themes when the system theme is clicked", async ({ page, app, util }) => {
-            await util.getMatchSystemThemeCheckbox().click();
+        test(
+            "should disable the themes when the system theme is clicked",
+            { tag: "@screenshot" },
+            async ({ page, app, util }) => {
+                await util.getMatchSystemThemeCheckbox().click();
 
-            // Assert that the themes are disabled
-            await expect(util.getLightTheme()).toBeDisabled();
-            await expect(util.getDarkTheme()).toBeDisabled();
-            await expect(util.getHighContrastTheme()).toBeDisabled();
+                // Assert that the themes are disabled
+                await expect(util.getLightTheme()).toBeDisabled();
+                await expect(util.getDarkTheme()).toBeDisabled();
+                await expect(util.getHighContrastTheme()).toBeDisabled();
 
-            await expect(util.getThemePanel()).toMatchScreenshot("theme-panel-match-system-enabled.png");
-        });
+                await expect(util.getThemePanel()).toMatchScreenshot("theme-panel-match-system-enabled.png");
+            },
+        );
 
-        test("should change the theme to dark", async ({ page, app, util }) => {
+        test("should change the theme to dark", { tag: "@screenshot" }, async ({ page, app, util }) => {
             // Assert that the light theme is selected
             await expect(util.getLightTheme()).toBeChecked();
 
@@ -63,19 +71,23 @@ test.describe("Appearance user settings tab", () => {
                 labsFlags: ["feature_custom_themes"],
             });
 
-            test("should render the custom theme section", async ({ page, app, util }) => {
+            test("should render the custom theme section", { tag: "@screenshot" }, async ({ page, app, util }) => {
                 await expect(util.getThemePanel()).toMatchScreenshot("theme-panel-custom-theme.png");
             });
 
-            test("should be able to add and remove a custom theme", async ({ page, app, util }) => {
-                await util.addCustomTheme();
+            test(
+                "should be able to add and remove a custom theme",
+                { tag: "@screenshot" },
+                async ({ page, app, util }) => {
+                    await util.addCustomTheme();
 
-                await expect(util.getCustomTheme()).not.toBeChecked();
-                await expect(util.getThemePanel()).toMatchScreenshot("theme-panel-custom-theme-added.png");
+                    await expect(util.getCustomTheme()).not.toBeChecked();
+                    await expect(util.getThemePanel()).toMatchScreenshot("theme-panel-custom-theme-added.png");
 
-                await util.removeCustomTheme();
-                await expect(util.getThemePanel()).toMatchScreenshot("theme-panel-custom-theme-removed.png");
-            });
+                    await util.removeCustomTheme();
+                    await expect(util.getThemePanel()).toMatchScreenshot("theme-panel-custom-theme-removed.png");
+                },
+            );
         });
     });
 });

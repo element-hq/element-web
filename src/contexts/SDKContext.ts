@@ -13,7 +13,6 @@ import defaultDispatcher from "../dispatcher/dispatcher";
 import LegacyCallHandler from "../LegacyCallHandler";
 import { PosthogAnalytics } from "../PosthogAnalytics";
 import { SlidingSyncManager } from "../SlidingSyncManager";
-import { AccountPasswordStore } from "../stores/AccountPasswordStore";
 import { MemberListStore } from "../stores/MemberListStore";
 import { RoomNotificationStateStore } from "../stores/notifications/RoomNotificationStateStore";
 import RightPanelStore from "../stores/right-panel/RightPanelStore";
@@ -63,7 +62,6 @@ export class SdkContextClass {
     protected _SpaceStore?: SpaceStoreClass;
     protected _LegacyCallHandler?: LegacyCallHandler;
     protected _TypingStore?: TypingStore;
-    protected _AccountPasswordStore?: AccountPasswordStore;
     protected _UserProfilesStore?: UserProfilesStore;
     protected _OidcClientStore?: OidcClientStore;
 
@@ -147,13 +145,6 @@ export class SdkContextClass {
             window.mxTypingStore = this._TypingStore;
         }
         return this._TypingStore;
-    }
-
-    public get accountPasswordStore(): AccountPasswordStore {
-        if (!this._AccountPasswordStore) {
-            this._AccountPasswordStore = new AccountPasswordStore();
-        }
-        return this._AccountPasswordStore;
     }
 
     public get userProfilesStore(): UserProfilesStore {

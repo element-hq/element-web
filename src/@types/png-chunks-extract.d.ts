@@ -12,7 +12,7 @@ declare module "png-chunks-extract" {
         data: Uint8Array;
     }
 
-    function extractPngChunks(data: Uint8Array | Buffer): IChunk[];
+    function extractPngChunks(data: Uint8Array): IChunk[];
 
     export default extractPngChunks;
 }

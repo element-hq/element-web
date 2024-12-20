@@ -37,7 +37,6 @@ interface IState {
     userCode?: string;
     checkCode?: string;
     failureReason?: FailureReason;
-    lastScannedCode?: Buffer;
 }
 
 export enum LoginWithQRFailureReason {
@@ -154,7 +153,7 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
             throw new Error("Rendezvous not found");
         }
 
-        if (!this.state.lastScannedCode && this.state.rendezvous?.checkCode !== checkCode) {
+        if (this.state.rendezvous?.checkCode !== checkCode) {
             this.setState({ failureReason: LoginWithQRFailureReason.CheckCodeMismatch });
             return;
         }
@@ -201,7 +200,6 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
             failureReason: undefined,
             userCode: undefined,
             checkCode: undefined,
-            lastScannedCode: undefined,
             mediaPermissionError: false,
         });
     }

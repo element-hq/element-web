@@ -52,8 +52,6 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
     private tooltips = new ReactRootManager();
     private reactRoots = new ReactRootManager();
 
-    private ref = createRef<HTMLDivElement>();
-
     public static contextType = RoomContext;
     declare public context: React.ContextType<typeof RoomContext>;
 
@@ -86,7 +84,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
         if (this.props.mxEvent.getContent().format === "org.matrix.custom.html") {
             // Handle expansion and add buttons
-            const pres = this.ref.current?.getElementsByTagName("pre");
+            const pres = [...content.getElementsByTagName("pre")];
             if (pres && pres.length > 0) {
                 for (let i = 0; i < pres.length; i++) {
                     // If there already is a div wrapping the codeblock we want to skip this.
@@ -115,13 +113,14 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         root.className = "mx_EventTile_pre_container";
 
         // Insert containing div in place of <pre> block
-        pre.parentNode?.replaceChild(root, pre);
+        pre.replaceWith(root);
 
         this.reactRoots.render(
             <StrictMode>
                 <CodeBlock onHeightChanged={this.props.onHeightChanged}>{pre}</CodeBlock>
             </StrictMode>,
             root,
+            pre,
         );
     }
 
@@ -129,7 +128,8 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         if (!this.props.editState) {
             const stoppedEditing = prevProps.editState && !this.props.editState;
             const messageWasEdited = prevProps.replacingEventId !== this.props.replacingEventId;
-            if (messageWasEdited || stoppedEditing) {
+            const urlPreviewChanged = prevProps.showUrlPreview !== this.props.showUrlPreview;
+            if (messageWasEdited || stoppedEditing || urlPreviewChanged) {
                 this.applyFormatting();
             }
         }
@@ -196,10 +196,9 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                     </StrictMode>
                 );
 
-                this.reactRoots.render(spoiler, spoilerContainer);
+                this.reactRoots.render(spoiler, spoilerContainer, node);
 
-                node.parentNode?.replaceChild(spoilerContainer, node);
-
+                node.replaceWith(spoilerContainer);
                 node = spoilerContainer;
             }
 
@@ -479,12 +478,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
         if (isEmote) {
             return (
-                <div
-                    className="mx_MEmoteBody mx_EventTile_content"
-                    onClick={this.onBodyLinkClick}
-                    dir="auto"
-                    ref={this.ref}
-                >
+                <div className="mx_MEmoteBody mx_EventTile_content" onClick={this.onBodyLinkClick} dir="auto">
                     *&nbsp;
                     <span className="mx_MEmoteBody_sender" onClick={this.onEmoteSenderClick}>
                         {mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender()}
@@ -497,7 +491,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         }
         if (isNotice) {
             return (
-                <div className="mx_MNoticeBody mx_EventTile_content" onClick={this.onBodyLinkClick} ref={this.ref}>
+                <div className="mx_MNoticeBody mx_EventTile_content" onClick={this.onBodyLinkClick}>
                     {body}
                     {widgets}
                 </div>
@@ -505,14 +499,14 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         }
         if (isCaption) {
             return (
-                <div className="mx_MTextBody mx_EventTile_caption" onClick={this.onBodyLinkClick} ref={this.ref}>
+                <div className="mx_MTextBody mx_EventTile_caption" onClick={this.onBodyLinkClick}>
                     {body}
                     {widgets}
                 </div>
             );
         }
         return (
-            <div className="mx_MTextBody mx_EventTile_content" onClick={this.onBodyLinkClick} ref={this.ref}>
+            <div className="mx_MTextBody mx_EventTile_content" onClick={this.onBodyLinkClick}>
                 {body}
                 {widgets}
             </div>

@@ -26,7 +26,7 @@ test.describe("User Onboarding (new user)", () => {
         await expect(page.locator(".mx_UserOnboardingList")).toBeVisible();
     });
 
-    test("page is shown and preference exists", async ({ page, app }) => {
+    test("page is shown and preference exists", { tag: "@screenshot" }, async ({ page, app }) => {
         await expect(page.locator(".mx_UserOnboardingPage")).toMatchScreenshot(
             "User-Onboarding-new-user-page-is-shown-and-preference-exists-1.png",
         );
@@ -34,7 +34,7 @@ test.describe("User Onboarding (new user)", () => {
         await expect(page.getByText("Show shortcut to welcome checklist above the room list")).toBeVisible();
     });
 
-    test("app download dialog", async ({ page }) => {
+    test("app download dialog", { tag: "@screenshot" }, async ({ page }) => {
         await page.getByRole("button", { name: "Download apps" }).click();
         await expect(
             page.getByRole("dialog").getByRole("heading", { level: 1, name: "Download Element" }),

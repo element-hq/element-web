@@ -49,7 +49,6 @@ import VoipUserMapper from "./VoipUserMapper";
 import { htmlSerializeFromMdIfNeeded } from "./editor/serialize";
 import { leaveRoomBehaviour } from "./utils/leave-behaviour";
 import { MatrixClientPeg } from "./MatrixClientPeg";
-import { getDeviceCryptoInfo } from "./utils/crypto/deviceInfo";
 import { isCurrentLocalRoom, reject, singleMxcUpload, success, successSync } from "./slash-commands/utils";
 import { deop, op } from "./slash-commands/op";
 import { CommandCategories } from "./slash-commands/interface";
@@ -656,69 +655,6 @@ export const Commands = [
             }
         },
         category: CommandCategories.admin,
-        renderingTypes: [TimelineRenderingType.Room],
-    }),
-    new Command({
-        command: "verify",
-        args: "<user-id> <device-id> <device-signing-key>",
-        description: _td("slash_command|verify"),
-        runFn: function (cli, roomId, threadId, args) {
-            if (args) {
-                const matches = args.match(/^(\S+) +(\S+) +(\S+)$/);
-                if (matches) {
-                    const userId = matches[1];
-                    const deviceId = matches[2];
-                    const fingerprint = matches[3];
-
-                    return success(
-                        (async (): Promise<void> => {
-                            const device = await getDeviceCryptoInfo(cli, userId, deviceId);
-                            if (!device) {
-                                throw new UserFriendlyError("slash_command|verify_unknown_pair", {
-                                    userId,
-                                    deviceId,
-                                    cause: undefined,
-                                });
-                            }
-                            const deviceTrust = await cli.getCrypto()?.getDeviceVerificationStatus(userId, deviceId);
-
-                            if (deviceTrust?.isVerified()) {
-                                if (device.getFingerprint() === fingerprint) {
-                                    throw new UserFriendlyError("slash_command|verify_nop");
-                                } else {
-                                    throw new UserFriendlyError("slash_command|verify_nop_warning_mismatch");
-                                }
-                            }
-
-                            if (device.getFingerprint() !== fingerprint) {
-                                const fprint = device.getFingerprint();
-                                throw new UserFriendlyError("slash_command|verify_mismatch", {
-                                    fprint,
-                                    userId,
-                                    deviceId,
-                                    fingerprint,
-                                    cause: undefined,
-                                });
-                            }
-
-                            await cli.setDeviceVerified(userId, deviceId, true);
-
-                            // Tell the user we verified everything
-                            Modal.createDialog(InfoDialog, {
-                                title: _t("slash_command|verify_success_title"),
-                                description: (
-                                    <div>
-                                        <p>{_t("slash_command|verify_success_description", { userId, deviceId })}</p>
-                                    </div>
-                                ),
-                            });
-                        })(),
-                    );
-                }
-            }
-            return reject(this.getUsage());
-        },
-        category: CommandCategories.advanced,
         renderingTypes: [TimelineRenderingType.Room],
     }),
     new Command({

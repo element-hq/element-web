@@ -196,9 +196,9 @@ describe("EditWysiwygComposer", () => {
             // Then
             screen.getByText("Save").click();
             const expectedContent = {
-                "body": ` * foo bar`,
+                "body": `* foo bar`,
                 "format": "org.matrix.custom.html",
-                "formatted_body": ` * foo bar`,
+                "formatted_body": `* foo bar`,
                 "m.new_content": {
                     body: "foo bar",
                     format: "org.matrix.custom.html",
