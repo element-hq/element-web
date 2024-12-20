@@ -914,6 +914,9 @@
             "warning": "Wenn du die Wiederherstellungsmethode nicht gelöscht hast, kann ein Angreifer versuchen, Zugang zu deinem Konto zu bekommen. Ändere dein Passwort und richte sofort eine neue Wiederherstellungsmethode in den Einstellungen ein."
         },
         "reset_all_button": "Hast du alle Wiederherstellungsmethoden vergessen? <a>Setze sie hier zurück</a>",
+        "set_up_recovery": "Wiederherstellung einrichten",
+        "set_up_recovery_later": "Nicht jetzt",
+        "set_up_recovery_toast_description": "Generieren Sie einen Wiederherstellungsschlüssel, damit Sie Ihren verschlüsselten Nachrichtenverlauf wiederherstellen können, falls Sie den Zugriff auf Ihre Geräte verlieren.",
         "set_up_toast_description": "Schütze dich vor dem Verlust verschlüsselter Nachrichten und Daten",
         "set_up_toast_title": "Schlüsselsicherung einrichten",
         "setup_secure_backup": {
