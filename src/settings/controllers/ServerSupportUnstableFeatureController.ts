@@ -10,6 +10,7 @@ import { SettingLevel } from "../SettingLevel";
 import MatrixClientBackedController from "./MatrixClientBackedController";
 import { WatchManager } from "../WatchManager";
 import SettingsStore from "../SettingsStore";
+import { SettingKey } from "../Settings.tsx";
 
 /**
  * Disables a given setting if the server unstable feature it requires is not supported
@@ -28,7 +29,7 @@ export default class ServerSupportUnstableFeatureController extends MatrixClient
      * the features in the group are supported (all features in a group are required).
      */
     public constructor(
-        private readonly settingName: string,
+        private readonly settingName: SettingKey,
         private readonly watchers: WatchManager,
         private readonly unstableFeatureGroups: string[][],
         private readonly stableVersion?: string,

@@ -54,7 +54,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
     const matrixClient = useContext(MatrixClientContext);
     const { room, narrow } = useScopedRoomContext("room", "narrow");
 
-    const isWysiwygLabEnabled = useSettingValue<boolean>("feature_wysiwyg_composer");
+    const isWysiwygLabEnabled = useSettingValue("feature_wysiwyg_composer");
 
     if (!matrixClient || !room || props.haveRecording) {
         return null;

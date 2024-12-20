@@ -239,7 +239,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         if (!isMetaSpace(space)) {
             cliSpace = this.matrixClient.getRoom(space);
             if (!cliSpace?.isSpaceRoom()) return;
-        } else if (!this.enabledMetaSpaces.includes(space as MetaSpace)) {
+        } else if (!this.enabledMetaSpaces.includes(space)) {
             return;
         }
 
@@ -1178,7 +1178,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         }
 
         // restore selected state from last session if any and still valid
-        const lastSpaceId = window.localStorage.getItem(ACTIVE_SPACE_LS_KEY);
+        const lastSpaceId = window.localStorage.getItem(ACTIVE_SPACE_LS_KEY) as MetaSpace;
         const valid =
             lastSpaceId &&
             (!isMetaSpace(lastSpaceId) ? this.matrixClient.getRoom(lastSpaceId) : enabledMetaSpaces[lastSpaceId]);

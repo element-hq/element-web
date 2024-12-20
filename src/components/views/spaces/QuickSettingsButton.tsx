@@ -36,10 +36,10 @@ const QuickSettingsButton: React.FC<{
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
 
     const { [MetaSpace.Favourites]: favouritesEnabled, [MetaSpace.People]: peopleEnabled } =
-        useSettingValue<Record<MetaSpace, boolean>>("Spaces.enabledMetaSpaces");
+        useSettingValue("Spaces.enabledMetaSpaces");
 
     const currentRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
-    const developerModeEnabled = useSettingValue<boolean>("developerMode");
+    const developerModeEnabled = useSettingValue("developerMode");
 
     let contextMenu: JSX.Element | undefined;
     if (menuDisplayed && handle.current) {

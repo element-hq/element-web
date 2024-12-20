@@ -15,11 +15,11 @@ import { _t } from "../../../languageHandler";
 import ToggleSwitch from "./ToggleSwitch";
 import StyledCheckbox from "./StyledCheckbox";
 import { SettingLevel } from "../../../settings/SettingLevel";
-import { defaultWatchManager } from "../../../settings/Settings";
+import { BooleanSettingKey, defaultWatchManager } from "../../../settings/Settings";
 
 interface IProps {
     // The setting must be a boolean
-    name: string;
+    name: BooleanSettingKey;
     level: SettingLevel;
     roomId?: string; // for per-room settings
     label?: string;

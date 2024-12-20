@@ -13,10 +13,11 @@ import SdkConfig from "../../../src/SdkConfig";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { mkStubRoom, mockPlatformPeg, stubClient } from "../../test-utils";
+import { SettingKey } from "../../../src/settings/Settings.tsx";
 
 const TEST_DATA = [
     {
-        name: "Electron.showTrayIcon",
+        name: "Electron.showTrayIcon" as SettingKey,
         level: SettingLevel.PLATFORM,
         value: true,
     },

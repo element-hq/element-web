@@ -128,7 +128,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
         super(props, context);
         this.context = context; // otherwise React will only set it prior to render due to type def above
 
-        const isWysiwygLabEnabled = SettingsStore.getValue<boolean>("feature_wysiwyg_composer");
+        const isWysiwygLabEnabled = SettingsStore.getValue("feature_wysiwyg_composer");
         let isRichTextEnabled = true;
         let initialComposerContent = "";
         if (isWysiwygLabEnabled) {

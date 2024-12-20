@@ -41,7 +41,7 @@ export function UserOnboardingPage({ justRegistered = false }: Props): JSX.Eleme
     const config = SdkConfig.get();
     const pageUrl = getHomePageUrl(config, cli);
 
-    const useCase = useSettingValue<UseCase | null>("FTUE.useCaseSelection");
+    const useCase = useSettingValue("FTUE.useCaseSelection");
     const context = useUserOnboardingContext();
     const tasks = useUserOnboardingTasks(context);
 

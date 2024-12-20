@@ -27,6 +27,7 @@ import {
 import { UIFeature } from "../../../../../src/settings/UIFeature";
 import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
+import { FeatureSettingKey } from "../../../../../src/settings/Settings.tsx";
 
 mockPlatformPeg({
     supportsSpellCheckSettings: jest.fn().mockReturnValue(false),
@@ -111,13 +112,13 @@ describe("<UserSettingsDialog />", () => {
     });
 
     it("renders ignored users tab when feature_mjolnir is enabled", () => {
-        mockSettingsStore.getValue.mockImplementation((settingName): any => settingName === "feature_mjolnir");
+        mockSettingsStore.getValue.mockImplementation((settingName) => settingName === "feature_mjolnir");
         const { getByTestId } = render(getComponent());
         expect(getByTestId(`settings-tab-${UserTab.Mjolnir}`)).toBeTruthy();
     });
 
     it("renders voip tab when voip is enabled", () => {
-        mockSettingsStore.getValue.mockImplementation((settingName): any => settingName === UIFeature.Voip);
+        mockSettingsStore.getValue.mockImplementation((settingName: any): any => settingName === UIFeature.Voip);
         const { getByTestId } = render(getComponent());
         expect(getByTestId(`settings-tab-${UserTab.Voice}`)).toBeTruthy();
     });
@@ -165,7 +166,7 @@ describe("<UserSettingsDialog />", () => {
 
     it("renders with voip tab selected", () => {
         useMockMediaDevices();
-        mockSettingsStore.getValue.mockImplementation((settingName): any => settingName === UIFeature.Voip);
+        mockSettingsStore.getValue.mockImplementation((settingName: any): any => settingName === UIFeature.Voip);
         const { container } = render(getComponent({ initialTabId: UserTab.Voice }));
 
         expect(getActiveTabLabel(container)).toEqual("Voice & Video");
@@ -212,8 +213,11 @@ describe("<UserSettingsDialog />", () => {
     });
 
     it("renders labs tab when some feature is in beta", () => {
-        mockSettingsStore.getFeatureSettingNames.mockReturnValue(["feature_beta_setting", "feature_just_normal_labs"]);
-        mockSettingsStore.getBetaInfo.mockImplementation((settingName) =>
+        mockSettingsStore.getFeatureSettingNames.mockReturnValue([
+            "feature_beta_setting",
+            "feature_just_normal_labs",
+        ] as unknown[] as FeatureSettingKey[]);
+        mockSettingsStore.getBetaInfo.mockImplementation((settingName: any) =>
             settingName === "feature_beta_setting" ? ({} as any) : undefined,
         );
         const { getByTestId } = render(getComponent());

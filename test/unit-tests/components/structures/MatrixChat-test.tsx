@@ -1493,7 +1493,7 @@ describe("<MatrixChat />", () => {
         };
 
         const enabledMobileRegistration = (): void => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName): any => {
                 if (settingName === "Registration.mobileRegistrationHelper") return true;
                 if (settingName === UIFeature.Registration) return true;
             });

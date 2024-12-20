@@ -45,7 +45,7 @@ export function PlainTextComposer({
     rightComponent,
     eventRelation,
 }: PlainTextComposerProps): JSX.Element {
-    const isAutoReplaceEmojiEnabled = useSettingValue<boolean>("MessageComposerInput.autoReplaceEmoji");
+    const isAutoReplaceEmojiEnabled = useSettingValue("MessageComposerInput.autoReplaceEmoji");
     const {
         ref: editorRef,
         autocompleteRef,
