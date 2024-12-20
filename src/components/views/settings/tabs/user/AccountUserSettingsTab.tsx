@@ -186,7 +186,9 @@ const AccountUserSettingsTab: React.FC<IProps> = ({ closeSettingsFn }) => {
                     canSetDisplayName={canSetDisplayName}
                     canSetAvatar={canSetAvatar}
                 />
-                <UserPersonalInfoSettings canMake3pidChanges={canMake3pidChanges} />
+                {!isAccountManagedExternally && !canMake3pidChanges && (
+                    <UserPersonalInfoSettings canMake3pidChanges={canMake3pidChanges} />
+                )}
                 <AccountSection
                     canChangePassword={canChangePassword}
                     onPasswordChanged={onPasswordChanged}
