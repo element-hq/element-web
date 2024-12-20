@@ -49,7 +49,7 @@ HTMLCollection [
           <p
             class="mx_DeviceSecurityCard_description"
           >
-            Verify or sign out from this session for best security and reliability.
+            Verify your current session for enhanced secure messaging.
             <div
               class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
               role="button"
