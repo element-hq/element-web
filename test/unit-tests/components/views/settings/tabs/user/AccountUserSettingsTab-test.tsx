@@ -114,7 +114,7 @@ describe("<AccountUserSettingsTab />", () => {
         expect(manageAccountLink.getAttribute("href")).toMatch(accountManagementLink);
     });
 
-    describe("deactive account", () => {
+    describe("deactivate account", () => {
         it("should not render section when account deactivation feature is disabled", () => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation(
                 (settingName) => settingName !== UIFeature.Deactivate,
@@ -198,6 +198,11 @@ describe("<AccountUserSettingsTab />", () => {
 
     describe("3pids", () => {
         beforeEach(() => {
+            const mockOidcClientStore = {
+                accountManagementEndpoint: undefined,
+            } as unknown as OidcClientStore;
+            jest.spyOn(stores, "oidcClientStore", "get").mockReturnValue(mockOidcClientStore);
+
             mockClient.getCapabilities.mockResolvedValue({
                 "m.3pid_changes": {
                     enabled: true,
