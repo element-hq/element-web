@@ -10,17 +10,19 @@ Please see LICENSE files in the repository root for full details.
 import React, { ComponentProps, CSSProperties } from "react";
 import classNames from "classnames";
 import { Tooltip } from "@vector-im/compound-web";
+import VerifiedIcon from "@vector-im/compound-design-tokens/assets/web/icons/verified";
+import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
 
 import { _t, _td, TranslationKey } from "../../../languageHandler";
-import AccessibleButton from "../elements/AccessibleButton";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 import { XOR } from "../../../@types/common";
+import { E2EState } from "./E2EIcon";
 
-export enum E2EState {
-    Verified = "verified",
-    Warning = "warning",
-    Normal = "normal",
-}
+// export enum E2EState {
+//     Verified = "verified",
+//     Warning = "warning",
+//     Normal = "normal",
+// }
 
 const crossSigningUserTitles: { [key in E2EState]?: TranslationKey } = {
     [E2EState.Warning]: _td("encryption|cross_signing_user_warning"),
@@ -33,42 +35,48 @@ const crossSigningRoomTitles: { [key in E2EState]?: TranslationKey } = {
     [E2EState.Verified]: _td("encryption|cross_signing_room_verified"),
 };
 
+function getIconFromStatus(status: E2EState | E2EStatus): React.JSX.Element | undefined {
+    switch (status) {
+        case E2EState.Normal:
+        case E2EStatus.Normal:
+            return undefined;
+        case E2EState.Verified:
+        case E2EStatus.Verified:
+            return <VerifiedIcon height="16px" width="16px" className="mx_E2EIconView_verified" />;
+        case E2EState.Warning:
+        case E2EStatus.Warning:
+            return <ErrorIcon height="16px" width="16px" className="mx_E2EIconView_warning" />;
+    }
+}
+
 interface Props {
     className?: string;
     size?: number;
     onClick?: () => void;
-    hideTooltip?: boolean;
     tooltipPlacement?: ComponentProps<typeof Tooltip>["placement"];
-    bordered?: boolean;
 }
 
-interface UserProps extends Props {
+interface UserPropsF extends Props {
     isUser: true;
     status: E2EState | E2EStatus;
 }
 
-interface RoomProps extends Props {
+interface RoomPropsF extends Props {
     isUser?: false;
     status: E2EStatus;
 }
 
-const E2EIcon: React.FC<XOR<UserProps, RoomProps>> = ({
+const E2EIcon: React.FC<XOR<UserPropsF, RoomPropsF>> = ({
     isUser,
     status,
     className,
     size,
     onClick,
-    hideTooltip,
     tooltipPlacement,
-    bordered,
 }) => {
     const classes = classNames(
         {
-            mx_E2EIcon: true,
-            mx_E2EIcon_bordered: bordered,
-            mx_E2EIcon_warning: status === E2EState.Warning,
-            mx_E2EIcon_normal: status === E2EState.Normal,
-            mx_E2EIcon_verified: status === E2EState.Verified,
+            mx_E2EIconView: true,
         },
         className,
     );
@@ -86,20 +94,14 @@ const E2EIcon: React.FC<XOR<UserProps, RoomProps>> = ({
     }
     const label = e2eTitle ? _t(e2eTitle) : "";
 
-    let content: JSX.Element;
-    if (onClick) {
-        content = <AccessibleButton onClick={onClick} className={classes} style={style} />;
-    } else {
-        content = <div className={classes} style={style} />;
-    }
-
-    if (!e2eTitle || hideTooltip) {
-        return content;
-    }
+    const icon = getIconFromStatus(status);
+    if (!icon) return null;
 
     return (
         <Tooltip label={label} placement={tooltipPlacement} isTriggerInteractive={!!onClick}>
-            {content}
+            <div className={classes} style={style}>
+                {icon}
+            </div>
         </Tooltip>
     );
 };
