@@ -19,7 +19,6 @@ import {
     MatrixCapabilities,
     OpenIDRequestState,
     SimpleObservable,
-    Symbols,
     Widget,
     WidgetDriver,
     WidgetEventCapability,
@@ -36,7 +35,6 @@ import {
     IContent,
     MatrixError,
     MatrixEvent,
-    Room,
     Direction,
     THREAD_RELATION_TYPE,
     SendDelayedEventResponse,
@@ -469,70 +467,44 @@ export class StopGapWidgetDriver extends WidgetDriver {
         }
     }
 
-    private pickRooms(roomIds?: (string | Symbols.AnyRoom)[]): Room[] {
-        const client = MatrixClientPeg.get();
-        if (!client) throw new Error("Not attached to a client");
-
-        const targetRooms = roomIds
-            ? roomIds.includes(Symbols.AnyRoom)
-                ? client.getVisibleRooms(SettingsStore.getValue("feature_dynamic_room_predecessors"))
-                : roomIds.map((r) => client.getRoom(r))
-            : [client.getRoom(SdkContextClass.instance.roomViewStore.getRoomId()!)];
-        return targetRooms.filter((r) => !!r) as Room[];
-    }
-
-    public async readRoomEvents(
+    public async readRoomTimeline(
+        roomId: string,
         eventType: string,
         msgtype: string | undefined,
-        limitPerRoom: number,
-        roomIds?: (string | Symbols.AnyRoom)[],
+        stateKey: string | undefined,
+        limit: number,
+        since: string | undefined,
     ): Promise<IRoomEvent[]> {
-        limitPerRoom = limitPerRoom > 0 ? Math.min(limitPerRoom, Number.MAX_SAFE_INTEGER) : Number.MAX_SAFE_INTEGER; // relatively arbitrary
+        limit = limit > 0 ? Math.min(limit, Number.MAX_SAFE_INTEGER) : Number.MAX_SAFE_INTEGER; // relatively arbitrary
 
-        const rooms = this.pickRooms(roomIds);
-        const allResults: IRoomEvent[] = [];
-        for (const room of rooms) {
-            const results: MatrixEvent[] = [];
-            const events = room.getLiveTimeline().getEvents(); // timelines are most recent last
-            for (let i = events.length - 1; i > 0; i--) {
-                if (results.length >= limitPerRoom) break;
+        const room = MatrixClientPeg.safeGet().getRoom(roomId);
+        if (room === null) return [];
+        const results: MatrixEvent[] = [];
+        const events = room.getLiveTimeline().getEvents(); // timelines are most recent last
+        for (let i = events.length - 1; i > 0; i--) {
+            const ev = events[i];
+            if (results.length >= limit) break;
+            if (since !== undefined && ev.getId() === since) break;
 
-                const ev = events[i];
-                if (ev.getType() !== eventType || ev.isState()) continue;
-                if (eventType === EventType.RoomMessage && msgtype && msgtype !== ev.getContent()["msgtype"]) continue;
-                results.push(ev);
-            }
-
-            results.forEach((e) => allResults.push(e.getEffectiveEvent() as IRoomEvent));
+            if (ev.getType() !== eventType || ev.isState()) continue;
+            if (eventType === EventType.RoomMessage && msgtype && msgtype !== ev.getContent()["msgtype"]) continue;
+            if (ev.getStateKey() !== undefined && stateKey !== undefined && ev.getStateKey() !== stateKey) continue;
+            results.push(ev);
         }
-        return allResults;
+
+        return results.map((e) => e.getEffectiveEvent() as IRoomEvent);
     }
 
-    public async readStateEvents(
-        eventType: string,
-        stateKey: string | undefined,
-        limitPerRoom: number,
-        roomIds?: (string | Symbols.AnyRoom)[],
-    ): Promise<IRoomEvent[]> {
-        limitPerRoom = limitPerRoom > 0 ? Math.min(limitPerRoom, Number.MAX_SAFE_INTEGER) : Number.MAX_SAFE_INTEGER; // relatively arbitrary
+    public async readRoomState(roomId: string, eventType: string, stateKey: string | undefined): Promise<IRoomEvent[]> {
+        const room = MatrixClientPeg.safeGet().getRoom(roomId);
+        if (room === null) return [];
+        const state = room.getLiveTimeline().getState(Direction.Forward);
+        if (state === undefined) return [];
 
-        const rooms = this.pickRooms(roomIds);
-        const allResults: IRoomEvent[] = [];
-        for (const room of rooms) {
-            const results: MatrixEvent[] = [];
-            const state = room.currentState.events.get(eventType);
-            if (state) {
-                if (stateKey === "" || !!stateKey) {
-                    const forKey = state.get(stateKey);
-                    if (forKey) results.push(forKey);
-                } else {
-                    results.push(...Array.from(state.values()));
-                }
-            }
-
-            results.slice(0, limitPerRoom).forEach((e) => allResults.push(e.getEffectiveEvent() as IRoomEvent));
-        }
-        return allResults;
+        if (stateKey === undefined)
+            return state.getStateEvents(eventType).map((e) => e.getEffectiveEvent() as IRoomEvent);
+        const event = state.getStateEvents(eventType, stateKey);
+        return event === null ? [] : [event.getEffectiveEvent() as IRoomEvent];
     }
 
     public async askOpenID(observer: SimpleObservable<IOpenIDUpdate>): Promise<void> {
@@ -691,6 +663,12 @@ export class StopGapWidgetDriver extends WidgetDriver {
         const response = await media.downloadSource();
         const blob = await response.blob();
         return { file: blob };
+    }
+
+    public getKnownRooms(): string[] {
+        return MatrixClientPeg.safeGet()
+            .getVisibleRooms(SettingsStore.getValue("feature_dynamic_room_predecessors"))
+            .map((r) => r.roomId);
     }
 
     /**
