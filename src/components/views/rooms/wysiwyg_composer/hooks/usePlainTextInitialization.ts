@@ -12,6 +12,7 @@ export function usePlainTextInitialization(initialContent = "", ref: RefObject<H
     useEffect(() => {
         // always read and write the ref.current using .innerHTML for consistency in linebreak and HTML entity handling
         if (ref.current) {
+            // eslint-disable-next-line react-compiler/react-compiler
             ref.current.innerHTML = initialContent;
         }
     }, [ref, initialContent]);

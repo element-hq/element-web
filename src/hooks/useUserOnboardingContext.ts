@@ -35,6 +35,7 @@ const USER_ONBOARDING_CONTEXT_INTERVAL = 5000;
  */
 function useRefOf<T extends any[], R>(value: (...values: T) => R): (...values: T) => R {
     const ref = useRef(value);
+    // eslint-disable-next-line react-compiler/react-compiler
     ref.current = value;
     return useCallback((...values: T) => ref.current(...values), []);
 }

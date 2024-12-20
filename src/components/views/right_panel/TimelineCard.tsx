@@ -213,7 +213,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
                     header={_t("right_panel|video_room_chat|title")}
                     ref={this.card}
                 >
-                    {this.card.current && <Measured sensor={this.card.current} onMeasurement={this.onMeasurement} />}
+                    <Measured sensor={this.card} onMeasurement={this.onMeasurement} />
                     <div className="mx_TimelineCard_timeline">
                         {jumpToBottom}
                         <TimelinePanel
