@@ -41,6 +41,22 @@ interface MetadataTable {
     values: { label: string; value?: string | React.ReactNode }[];
 }
 
+function isPushNotificationsEnabled(pusher?: IPusher, notificationSettings?: LocalNotificationSettings): boolean {
+    if (pusher) return !!pusher[PUSHER_ENABLED.name];
+    if (notificationSettings) return !notificationSettings.is_silenced;
+    return true;
+}
+
+function isCheckboxDisabled(
+    pusher?: IPusher,
+    notificationSettings?: LocalNotificationSettings,
+    supportsMSC3881?: boolean,
+): boolean {
+    if (notificationSettings) return false;
+    if (pusher && !supportsMSC3881) return true;
+    return false;
+}
+
 const DeviceDetails: React.FC<Props> = ({
     device,
     pusher,
@@ -98,18 +114,6 @@ const DeviceDetails: React.FC<Props> = ({
 
     const showPushNotificationSection = !!pusher || !!localNotificationSettings;
 
-    function isPushNotificationsEnabled(pusher?: IPusher, notificationSettings?: LocalNotificationSettings): boolean {
-        if (pusher) return !!pusher[PUSHER_ENABLED.name];
-        if (localNotificationSettings) return !localNotificationSettings.is_silenced;
-        return true;
-    }
-
-    function isCheckboxDisabled(pusher?: IPusher, notificationSettings?: LocalNotificationSettings): boolean {
-        if (localNotificationSettings) return false;
-        if (pusher && !supportsMSC3881) return true;
-        return false;
-    }
-
     return (
         <div className={classNames("mx_DeviceDetails", className)} data-testid={`device-detail-${device.device_id}`}>
             <section className="mx_DeviceDetails_section">
@@ -157,7 +161,7 @@ const DeviceDetails: React.FC<Props> = ({
                         // For backwards compatibility, if `enabled` is missing
                         // default to `true`
                         checked={isPushNotificationsEnabled(pusher, localNotificationSettings)}
-                        disabled={isCheckboxDisabled(pusher, localNotificationSettings)}
+                        disabled={isCheckboxDisabled(pusher, localNotificationSettings, supportsMSC3881)}
                         onChange={(checked) => setPushNotifications?.(device.device_id, checked)}
                         title={_t("settings|sessions|push_toggle")}
                         data-testid="device-detail-push-notification-checkbox"
