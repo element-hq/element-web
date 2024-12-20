@@ -171,8 +171,9 @@ export class ThreepidMember extends Member {
 }
 
 export interface IDMUserTileProps {
-    member: Member;
-    onRemove?(member: Member): void;
+    member: Member; // VERJI
+    email?: string; // VERJI
+    onRemove?(member: Member | string): void; // VERJI
 }
 
 /**

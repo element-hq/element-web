@@ -20,7 +20,7 @@ import { useEventEmitterState, useTypedEventEmitter, useTypedEventEmitterState }
 import { useFeatureEnabled } from "../../../hooks/useSettings";
 import { _t } from "../../../languageHandler";
 import PosthogTrackers from "../../../PosthogTrackers";
-import { UIComponent } from "../../../settings/UIFeature";
+import { UIComponent, UIFeature } from "../../../settings/UIFeature";
 import {
     getMetaSpaceName,
     MetaSpace,
@@ -51,6 +51,7 @@ import IconizedContextMenu, {
 import SpaceContextMenu from "../context_menus/SpaceContextMenu";
 import InlineSpinner from "../elements/InlineSpinner";
 import { HomeButtonContextMenu } from "../spaces/SpacePanel";
+import SettingsStore from "../../../settings/SettingsStore";
 
 const contextMenuBelow = (elementRect: DOMRect): MenuProps => {
     // align the context menu's icons with the icon which opened the context menu
@@ -249,19 +250,21 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                             PosthogTrackers.trackInteraction("WebRoomListHeaderPlusMenuExploreRoomsItem", e);
                         }}
                     />
-                    <IconizedContextMenuOption
-                        label={_t("action|add_existing_room")}
-                        iconClassName="mx_RoomListHeader_iconPlus"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            showAddExistingRooms(activeSpace);
-                            closePlusMenu();
-                        }}
-                        disabled={!canAddSubRooms}
-                        title={!canAddSubRooms ? _t("spaces|error_no_permission_add_room") : undefined}
-                    />
-                    {canCreateSpaces && (
+                    {SettingsStore.getValue(UIFeature.AddExistingRoomToSpace) && (
+                        <IconizedContextMenuOption
+                            label={_t("action|add_existing_room")}
+                            iconClassName="mx_RoomListHeader_iconPlus"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                showAddExistingRooms(activeSpace);
+                                closePlusMenu();
+                            }}
+                            disabled={!canAddSubRooms}
+                            title={!canAddSubRooms ? _t("spaces|error_no_permission_add_room") : undefined}
+                        />
+                    )}
+                    {SettingsStore.getValue(UIFeature.AddSpace) && canCreateSpaces && (
                         <IconizedContextMenuOption
                             label={_t("room_list|add_space_label")}
                             iconClassName="mx_RoomListHeader_iconPlus"
@@ -400,6 +403,21 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
         }
     }
 
+    let showPlusMenuForMetaSpace = true;
+    if (!SettingsStore.getValue(UIFeature.ShowPlusMenuForMetaSpace)) {
+        switch (spaceKey) {
+            case MetaSpace.Home:
+            case MetaSpace.Favourites:
+            case MetaSpace.People:
+            case MetaSpace.Orphans:
+                showPlusMenuForMetaSpace = false;
+                break;
+
+            default:
+                break;
+        }
+    }
+
     return (
         <aside className="mx_RoomListHeader" aria-label={_t("room|context_menu|title")}>
             {contextMenuButton}
@@ -408,7 +426,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                     <InlineSpinner />
                 </Tooltip>
             ) : null}
-            {canShowPlusMenu && (
+            {showPlusMenuForMetaSpace && canShowPlusMenu && (
                 <ContextMenuTooltipButton
                     ref={plusMenuHandle}
                     onClick={openPlusMenu}

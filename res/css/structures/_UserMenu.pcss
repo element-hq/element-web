@@ -185,8 +185,91 @@ Please see LICENSE files in the repository root for full details.
     .mx_UserMenu_iconSignOut::before {
         mask-image: url("@vector-im/compound-design-tokens/icons/leave.svg");
     }
-
     .mx_UserMenu_iconQr::before {
         mask-image: url("@vector-im/compound-design-tokens/icons/qr-code.svg");
+    }
+    /* Verji start */
+    .mx_UserMenu_iconMembers::before {
+        mask-image: url("$(res)/img/element-icons/room/members.svg");
+    }
+
+    .mx_UserMenu_iconInvite::before {
+        mask-image: url("$(res)/img/element-icons/room/invite.svg");
+    }
+
+    .mx_UserMenu_oidcmanage::before {
+        mask-image: url("$(res)/img/verji/address-card.svg");
+    }
+
+    .mx_UserMenu_portal::before {
+        mask-image: url("$(res)/img/verji/house-user.svg");
+    }
+
+    .mx_UserMenu_signing::before {
+        mask-image: url("$(res)/img/verji/signing.svg");
+    }
+    /* Verji end */
+}
+
+.mx_UserMenu_CustomStatusSection {
+    margin: 0 12px 8px;
+
+    .mx_UserMenu_CustomStatusSection_field {
+        position: relative;
+        display: flex;
+
+        &.mx_UserMenu_CustomStatusSection_field_hasQuery {
+            .mx_UserMenu_CustomStatusSection_clear {
+                display: block;
+            }
+        }
+
+        > .mx_UserMenu_CustomStatusSection_input {
+            border: 1px solid $accent;
+            border-radius: 8px;
+            width: 100%;
+
+            &:focus + .mx_UserMenu_CustomStatusSection_clear {
+                display: block;
+            }
+        }
+
+        > .mx_UserMenu_CustomStatusSection_clear {
+            display: none;
+
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            background-color: $quinary-content;
+            border-radius: 50%;
+
+            &::before {
+                content: "";
+                position: absolute;
+                width: inherit;
+                height: inherit;
+                mask-image: url("$(res)/img/feather-customised/x.svg");
+                mask-position: center;
+                mask-size: 12px;
+                mask-repeat: no-repeat;
+                background-color: $secondary-content;
+            }
+        }
+    }
+
+    > p {
+        font-size: $font-12px;
+        line-height: $font-15px;
+        color: $secondary-content;
+        margin: 4px 0;
+    }
+
+    .mx_AccessibleButton_kind_primary_outline {
+        display: block;
     }
 }

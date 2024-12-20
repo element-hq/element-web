@@ -154,6 +154,32 @@ Please see LICENSE files in the repository root for full details.
     margin-bottom: 80px; /* visually center the content (intentional offset) */
 }
 
+// Verji start
+@keyframes fade1 {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+.mx_RoomView_News1 {
+    animation: 0.2s ease-out 0s 0.2 fade1;
+}
+
+@keyframes fade2 {
+    0% {
+        transform: translateX(70px);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+.mx_RoomView_News2 {
+    animation: 0.2s ease 0s 0.2 fade2;
+}
+// Verji end
+
 .mx_RoomView_MessageList {
     list-style-type: none;
     padding: var(--RoomView_MessageList-padding); /* mx_ProfileResizer depends on this value */

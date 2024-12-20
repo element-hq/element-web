@@ -1,5 +1,7 @@
+## VERJI WE MUST REVISIT THIS FILE MANUALLY IN PIPELINE / UNSURE WHAT IS NECESSARY TO KEEP
 name: Static Analysis
 on:
+    workflow_dispatch:
     pull_request: {}
     push:
         branches: [develop, master]
@@ -24,7 +26,6 @@ jobs:
         runs-on: ubuntu-24.04
         steps:
             - uses: actions/checkout@v4
-
             - uses: actions/setup-node@v4
               with:
                   cache: "yarn"
@@ -38,6 +39,8 @@ jobs:
 
     i18n_lint:
         name: "i18n Check"
+        # VERJI skip i18n by setting false
+        if: ${{false}}
         uses: matrix-org/matrix-web-i18n/.github/workflows/i18n_check.yml@main
         permissions:
             pull-requests: read
@@ -53,6 +56,8 @@ jobs:
                 welcome_to_element
 
     rethemendex_lint:
+        # VERJI skip Rethemendex check by setting false
+        if: ${{false}}
         name: "Rethemendex Check"
         runs-on: ubuntu-24.04
         steps:

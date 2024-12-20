@@ -18,6 +18,8 @@ import DateSeparator from "../../views/messages/DateSeparator";
 import NewRoomIntro from "../../views/rooms/NewRoomIntro";
 import GenericEventListSummary from "../../views/elements/GenericEventListSummary";
 import { SeparatorKind } from "../../views/messages/TimelineSeparator";
+import SettingsStore from "../../../settings/SettingsStore";
+import { UIFeature } from "../../../settings/UIFeature";
 
 // Wrap initial room creation events into a GenericEventListSummary
 // Grouping only events sent by the same user that sent the `m.room.create` and only until
@@ -127,7 +129,9 @@ export class CreationGrouper extends BaseGrouper {
             summaryText = _t("timeline|creation_summary_room", { creator });
         }
 
-        ret.push(<NewRoomIntro key="newroomintro" />);
+        {
+            SettingsStore.getValue(UIFeature.EnableNewRoomIntro) && ret.push(<NewRoomIntro key="newroomintro" />);
+        }
 
         ret.push(
             <GenericEventListSummary

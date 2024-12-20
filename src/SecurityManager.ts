@@ -29,6 +29,10 @@ let secretStorageKeys: Record<string, Uint8Array> = {};
 let secretStorageKeyInfo: Record<string, SecretStorage.SecretStorageKeyDescription> = {};
 let secretStorageBeingAccessed = false;
 
+let dehydrationCache: {
+    key?: Uint8Array;
+    keyInfo?: SecretStorage.SecretStorageKeyDescription;
+} = {};
 /**
  * This can be used by other components to check if secret storage access is in
  * progress, so that we can e.g. avoid intermittently showing toasts during
@@ -104,7 +108,15 @@ async function getSecretStorageKey({
         return [keyId, secretStorageKeys[keyId]];
     }
 
-    const keyFromCustomisations = ModuleRunner.instance.extensions.cryptoSetup.getSecretStorageKey();
+    if (dehydrationCache.key) {
+        if (await MatrixClientPeg.safeGet().checkSecretStorageKey(dehydrationCache.key, keyInfo)) {
+            cacheSecretStorageKey(keyId, keyInfo, dehydrationCache.key);
+            return [keyId, dehydrationCache.key];
+        }
+    }
+
+    // const keyFromCustomisations = SecurityCustomisations.getSecretStorageKey?.();
+    const keyFromCustomisations = ModuleRunner.instance.extensions.cryptoSetup?.getSecretStorageKey();
     if (keyFromCustomisations) {
         logger.log("getSecretStorageKey: Using secret storage key from CryptoSetupExtension");
         cacheSecretStorageKey(keyId, keyInfo, keyFromCustomisations);
@@ -146,6 +158,57 @@ async function getSecretStorageKey({
     cacheSecretStorageKey(keyId, keyInfo, key);
 
     return [keyId, key];
+}
+
+export async function getDehydrationKey(
+    keyInfo: SecretStorage.SecretStorageKeyDescription,
+    checkFunc: (data: Uint8Array) => void,
+): Promise<Uint8Array> {
+    // const keyFromCustomisations = SecurityCustomisations.getSecretStorageKey?.();
+    const keyFromCustomisations = ModuleRunner.instance.extensions.cryptoSetup?.getSecretStorageKey();
+    if (keyFromCustomisations) {
+        logger.log("CryptoSetupExtension: Using key from extension (dehydration)");
+        return keyFromCustomisations;
+    }
+
+    const inputToKey = makeInputToKey(keyInfo);
+    const { finished } = Modal.createDialog(
+        AccessSecretStorageDialog,
+        /* props= */
+        {
+            keyInfo,
+            checkPrivateKey: async (input: KeyParams): Promise<boolean> => {
+                const key = await inputToKey(input);
+                try {
+                    checkFunc(key);
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            },
+        },
+        /* className= */ undefined,
+        /* isPriorityModal= */ false,
+        /* isStaticModal= */ false,
+        /* options= */ {
+            onBeforeClose: async (reason): Promise<boolean> => {
+                if (reason === "backgroundClick") {
+                    return confirmToDismiss();
+                }
+                return true;
+            },
+        },
+    );
+    const [input] = await finished;
+    if (!input) {
+        throw new AccessCancelledError();
+    }
+    const key = await inputToKey(input);
+
+    // need to copy the key because rehydration (unpickling) will clobber it
+    dehydrationCache = { key: new Uint8Array(key), keyInfo };
+
+    return key;
 }
 
 function cacheSecretStorageKey(
@@ -291,8 +354,9 @@ async function doAccessSecretStorage(func: () => Promise<void>, opts: AccessSecr
         await func();
         logger.debug("accessSecretStorage: operation complete");
     } catch (e) {
-        ModuleRunner.instance.extensions.cryptoSetup.catchAccessSecretStorageError(e as Error);
-        logger.error("accessSecretStorage: error during operation", e);
+        // SecurityCustomisations.catchAccessSecretStorageError?.(e as Error);
+        ModuleRunner.instance.extensions.cryptoSetup?.catchAccessSecretStorageError(e as Error);
+        logger.error(e);
         // Re-throw so that higher level logic can abort as needed
         throw e;
     }

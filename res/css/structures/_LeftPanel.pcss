@@ -140,6 +140,39 @@ Please see LICENSE files in the repository root for full details.
                 }
             }
 
+            .mx_LeftPanel_omButton,
+            .mx_LeftPanel_newsButton {
+                width: 32px;
+                height: 32px;
+                border-radius: 8px;
+                background-color: $panel-actions;
+                position: relative;
+                margin-left: 8px;
+                margin-top: 2px;
+                margin-bottom: 2px;
+
+                &::before {
+                    content: "";
+                    position: absolute;
+                    top: 8px;
+                    left: 8px;
+                    width: 16px;
+                    height: 16px;
+                    mask-position: center;
+                    mask-size: contain;
+                    mask-repeat: no-repeat;
+                    background-color: $secondary-content;
+                }
+
+                &:hover {
+                    background-color: $tertiary-content;
+
+                    &::before {
+                        background-color: $background;
+                    }
+                }
+            }
+
             .mx_LeftPanel_exploreButton,
             .mx_LeftPanel_recentsButton {
                 width: 32px;
@@ -170,6 +203,15 @@ Please see LICENSE files in the repository root for full details.
                     }
                 }
             }
+
+            //Verji start
+            .mx_LeftPanel_newsButton::before {
+                mask-image: url("$(res)/img/verji/news.svg");
+            }
+            .mx_LeftPanel_omButton::before {
+                mask-image: url("$(res)/img/verji/shield.svg");
+            }
+            //Verji end
 
             .mx_LeftPanel_exploreButton::before {
                 mask-image: url("$(res)/img/element-icons/roomlist/explore.svg");

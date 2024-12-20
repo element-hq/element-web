@@ -9,17 +9,22 @@ Please see LICENSE files in the repository root for full details.
 import React, { createRef, ReactNode, SyntheticEvent } from "react";
 import classNames from "classnames";
 import { RoomMember, Room, MatrixError, EventType } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
 import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
 import { uniqBy } from "lodash";
 import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import {
+    CustomComponentLifecycle,
+    CustomComponentOpts,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
+import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { Icon as EmailPillAvatarIcon } from "../../../../res/img/icon-email-pill-avatar.svg";
 import { _t, _td } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { makeRoomPermalink, makeUserPermalink } from "../../../utils/permalinks/Permalinks";
 import DMRoomMap from "../../../utils/DMRoomMap";
+// import SdkConfig from "../../../SdkConfig";
 import * as Email from "../../../email";
 import { getDefaultIdentityServerUrl, setToDefaultIdentityServer } from "../../../utils/IdentityServerUtils";
 import { buildActivityScores, buildMemberScores, compareMembers } from "../../../utils/SortMembers";
@@ -66,6 +71,7 @@ import { UNKNOWN_PROFILE_ERRORS } from "../../../utils/MultiInviter";
 import AskInviteAnywayDialog, { UnknownProfiles } from "./AskInviteAnywayDialog";
 import { SdkContextClass } from "../../../contexts/SDKContext";
 import { UserProfilesStore } from "../../../stores/UserProfilesStore";
+import { ModuleRunner } from "../../../modules/ModuleRunner";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -360,6 +366,9 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         this.profilesStore = SdkContextClass.instance.userProfilesStore;
 
         const excludedIds = new Set([MatrixClientPeg.safeGet().getUserId()!]);
+        // const welcomeUserId = SdkConfig.get("welcome_user_id");
+        // if (welcomeUserId) excludedIds.add(welcomeUserId);
+
         if (isRoomInvite(props)) {
             const room = MatrixClientPeg.safeGet().getRoom(props.roomId);
             const isFederated = room?.currentState.getStateEvents(EventType.RoomCreate, "")?.getContent()["m.federate"];
@@ -1511,7 +1520,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             );
             dialogContent = (
                 <React.Fragment>
-                    <TabbedView<TabId>
+                    <TabbedView
                         tabs={tabs}
                         activeTabId={this.state.currentTabId}
                         tabLocation={TabLocation.TOP}
@@ -1528,21 +1537,27 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 </React.Fragment>
             );
         }
-
+        const customInviteDialog = { CustomComponent: React.Fragment };
+        const Props = (props: any): React.JSX.Element => <></>;
+        ModuleRunner.instance.invoke(CustomComponentLifecycle.InviteDialog, customInviteDialog as CustomComponentOpts);
         return (
-            <BaseDialog
-                className={classNames({
-                    mx_InviteDialog_transfer: this.props.kind === InviteKind.CallTransfer,
-                    mx_InviteDialog_other: this.props.kind !== InviteKind.CallTransfer,
-                    mx_InviteDialog_hasFooter: !!footer,
-                })}
-                hasCancel={true}
-                onFinished={this.props.onFinished}
-                title={title}
-                screenName={this.screenName}
-            >
-                <div className="mx_InviteDialog_content">{dialogContent}</div>
-            </BaseDialog>
+            <customInviteDialog.CustomComponent>
+                {/* VERJI: Workaround, pass needed props in a child element of the customComponent wrapper, so we can extract in module implementation. */}
+                <Props props={this.props} />
+                <BaseDialog
+                    className={classNames({
+                        mx_InviteDialog_transfer: this.props.kind === InviteKind.CallTransfer,
+                        mx_InviteDialog_other: this.props.kind !== InviteKind.CallTransfer,
+                        mx_InviteDialog_hasFooter: !!footer,
+                    })}
+                    hasCancel={true}
+                    onFinished={this.props.onFinished}
+                    title={title}
+                    screenName={this.screenName}
+                >
+                    <div className="mx_InviteDialog_content">{dialogContent}</div>
+                </BaseDialog>
+            </customInviteDialog.CustomComponent>
         );
     }
 }

@@ -21,6 +21,8 @@ import QuestionDialog from "../dialogs/QuestionDialog";
 import RestoreKeyBackupDialog from "../dialogs/security/RestoreKeyBackupDialog";
 import { accessSecretStorage } from "../../../SecurityManager";
 import { SettingsSubsectionText } from "./shared/SettingsSubsection";
+import { UIFeature } from "../../../settings/UIFeature";
+import SettingsStore from "../../../../src/settings/SettingsStore";
 
 interface IState {
     loading: boolean;
@@ -319,7 +321,10 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
                 </AccessibleButton>,
             );
 
-            if (!isSecureBackupRequired(MatrixClientPeg.safeGet())) {
+            if (
+                SettingsStore.getValue(UIFeature.UserSettingsDeleteBackup) &&
+                !isSecureBackupRequired(MatrixClientPeg.safeGet())
+            ) {
                 actions.push(
                     <AccessibleButton key="delete" kind="danger_outline" onClick={this.deleteBackup}>
                         {_t("settings|security|delete_backup")}
@@ -345,8 +350,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
                 </AccessibleButton>,
             );
         }
-
-        if (secretStorageKeyInAccount) {
+        if (SettingsStore.getValue(UIFeature.UserSettingsResetBackup) && secretStorageKeyInAccount) {
             actions.push(
                 <AccessibleButton key="reset" kind="danger_outline" onClick={this.resetSecretStorage}>
                     {_t("action|reset")}

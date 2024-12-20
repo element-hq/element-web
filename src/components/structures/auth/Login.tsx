@@ -540,24 +540,31 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         }
 
         return (
-            <AuthPage>
-                <AuthHeader disableLanguageSelector={this.props.isSyncing || this.state.busyLoggingIn} />
-                <AuthBody>
-                    <h1>
-                        {_t("action|sign_in")}
-                        {loader}
-                    </h1>
-                    {errorTextSection}
-                    {serverDeadSection}
-                    <ServerPicker
-                        serverConfig={this.props.serverConfig}
-                        onServerConfigChange={this.props.onServerConfigChange}
-                        disabled={this.isBusy()}
+            <div>
+                {SettingsStore.getValue(UIFeature.EnableLoginPage) && (
+                    <>
+                        <AuthPage>
+                            <AuthHeader disableLanguageSelector={this.props.isSyncing || this.state.busyLoggingIn} />
+                            <AuthBody>
+                                <h1>
+                                    {_t("action|sign_in")}
+                                    {loader}
+                                </h1>
+                                {errorTextSection}
+                                {serverDeadSection}
+                                <ServerPicker
+                                    serverConfig={this.props.serverConfig}
+                                    onServerConfigChange={this.props.onServerConfigChange}
+                                    disabled={this.isBusy()}
                     />
-                    {this.renderLoginComponentForFlows()}
-                    {footer}
-                </AuthBody>
-            </AuthPage>
+                                {this.renderLoginComponentForFlows()}
+                                {footer}
+                            </AuthBody>
+                        </AuthPage>
+                    </>
+                )}
+                ;
+            </div>
         );
     }
 }

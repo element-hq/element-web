@@ -9,6 +9,10 @@ Please see LICENSE files in the repository root for full details.
 import * as React from "react";
 import { createRef } from "react";
 import classNames from "classnames";
+import {
+    CustomComponentLifecycle,
+    CustomComponentOpts,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 import dis from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
@@ -31,12 +35,14 @@ import IndicatorScrollbar from "./IndicatorScrollbar";
 import RoomBreadcrumbs from "../views/rooms/RoomBreadcrumbs";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
-import { UIComponent } from "../../settings/UIFeature";
+import { UIComponent, UIFeature } from "../../settings/UIFeature";
 import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
 import PosthogTrackers from "../../PosthogTrackers";
 import PageType from "../../PageTypes";
 import { UserOnboardingButton } from "../views/user-onboarding/UserOnboardingButton";
 import { Landmark, LandmarkNavigation } from "../../accessibility/LandmarkNavigation";
+import SettingsStore from "../../settings/SettingsStore";
+import { ModuleRunner } from "../../modules/ModuleRunner";
 
 interface IProps {
     isMinimized: boolean;
@@ -344,7 +350,11 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         }
 
         let rightButton: JSX.Element | undefined;
-        if (this.state.activeSpace === MetaSpace.Home && shouldShowComponent(UIComponent.ExploreRooms)) {
+        if (
+            SettingsStore.getValue(UIFeature.ShowExploreRoomsButton) &&
+            this.state.activeSpace === MetaSpace.Home &&
+            shouldShowComponent(UIComponent.ExploreRooms)
+        ) {
             rightButton = (
                 <AccessibleButton
                     className="mx_LeftPanel_exploreButton"
@@ -354,6 +364,11 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             );
         }
 
+        const customNewsOpts = { CustomComponent: React.Fragment };
+        ModuleRunner.instance.invoke(
+            CustomComponentLifecycle.NewsAndOperatingMessages,
+            customNewsOpts as CustomComponentOpts,
+        );
         return (
             <div
                 className="mx_LeftPanel_filterContainer"
@@ -365,6 +380,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                 <RoomSearch isMinimized={this.props.isMinimized} />
 
                 {dialPadButton}
+                <customNewsOpts.CustomComponent />
                 {rightButton}
             </div>
         );

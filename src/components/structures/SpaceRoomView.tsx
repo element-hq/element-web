@@ -26,7 +26,7 @@ import { useStateArray } from "../../hooks/useStateArray";
 import { _t } from "../../languageHandler";
 import PosthogTrackers from "../../PosthogTrackers";
 import { inviteMultipleToRoom, showRoomInviteDialog } from "../../RoomInvite";
-import { UIComponent } from "../../settings/UIFeature";
+import { UIComponent, UIFeature } from "../../settings/UIFeature";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
@@ -66,6 +66,7 @@ import MainSplit from "./MainSplit";
 import RightPanel from "./RightPanel";
 import SpaceHierarchy, { showRoom } from "./SpaceHierarchy";
 import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
+import SettingsStore from "../../settings/SettingsStore";
 
 interface IProps {
     space: Room;
@@ -165,7 +166,7 @@ const SpaceLandingAddButton: React.FC<{ space: Room }> = ({ space }) => {
                             showAddExistingRooms(space);
                         }}
                     />
-                    {canCreateSpace && (
+                    {canCreateSpace && SettingsStore.getValue(UIFeature.ShowCreateSpaceButton) && (
                         <IconizedContextMenuOption
                             label={_t("room_list|add_space_label")}
                             iconClassName="mx_RoomList_iconPlus"
@@ -270,19 +271,25 @@ const SpaceLanding: React.FC<{ space: Room }> = ({ space }) => {
             <div className="mx_SpaceRoomView_landing_infoBar">
                 <RoomInfoLine room={space} />
                 <div className="mx_SpaceRoomView_landing_infoBar_interactive">
-                    <RoomFacePile
-                        room={space}
-                        onlyKnownUsers={false}
-                        numShown={7}
-                        onClick={isShowingMembers ? undefined : onMembersClick}
-                    />
-                    {inviteButton}
+                    {SettingsStore.getValue(UIFeature.ShowMembersListForSpaces) && (
+                        <RoomFacePile
+                            room={space}
+                            onlyKnownUsers={false}
+                            numShown={7}
+                            onClick={isShowingMembers ? undefined : onMembersClick}
+                        />
+                    )}
+                    {SettingsStore.getValue(UIFeature.ShowAddMoreButtonForSpaces) && inviteButton}
                     {settingsButton}
                 </div>
             </div>
             <RoomTopic room={space} className="mx_SpaceRoomView_landing_topic" />
 
-            <SpaceHierarchy space={space} showRoom={showRoom} additionalButtons={addRoomButton} />
+            {SettingsStore.getValue(UIFeature.ShowSpaceLandingPageDetails) && (
+                <>
+                    <SpaceHierarchy space={space} showRoom={showRoom} additionalButtons={addRoomButton} />
+                </>
+            )}
         </div>
     );
 };

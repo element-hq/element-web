@@ -55,6 +55,7 @@ export const StatelessNotificationBadge = forwardRef<HTMLDivElement, XOR<Props, 
         }
 
         const hasUnreadCount = level >= NotificationLevel.Notification && (!!count || !!symbol);
+        const hasGreen = level == NotificationLevel.Notification; // Verji
 
         const isEmptyBadge = symbol === null && count === 0;
 
@@ -75,6 +76,7 @@ export const StatelessNotificationBadge = forwardRef<HTMLDivElement, XOR<Props, 
         const classes = classNames({
             "mx_NotificationBadge": true,
             "mx_NotificationBadge_visible": isEmptyBadge || knocked ? true : hasUnreadCount,
+            "mx_NotificationBadge_green": hasGreen, //Verji
             "mx_NotificationBadge_level_notification": level == NotificationLevel.Notification,
             "mx_NotificationBadge_level_highlight": level >= NotificationLevel.Highlight,
             "mx_NotificationBadge_knocked": knocked,

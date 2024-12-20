@@ -77,6 +77,8 @@ import { isVideoRoom as calcIsVideoRoom } from "../../../utils/video-rooms";
 import { usePinnedEvents } from "../../../hooks/usePinnedEvents";
 import { ReleaseAnnouncement } from "../../structures/ReleaseAnnouncement.tsx";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
+import SettingsStore from "../../../settings/SettingsStore.ts";
+import { UIFeature } from "../../../settings/UIFeature.ts";
 
 interface IProps {
     room: Room;
@@ -376,12 +378,14 @@ const RoomSummaryCard: React.FC<IProps> = ({
                     checked={isFavorite}
                     onSelect={() => tagRoom(room, DefaultTagID.Favourite)}
                 />
-                <MenuItem
-                    Icon={UserAddIcon}
-                    label={_t("action|invite")}
-                    disabled={!canInviteToState}
-                    onSelect={() => inviteToRoom(room)}
-                />
+                {SettingsStore.getValue(UIFeature.RoomSummaryCopyLink) && (
+                    <MenuItem
+                        Icon={UserAddIcon}
+                        label={_t("action|invite")}
+                        disabled={!canInviteToState}
+                        onSelect={() => inviteToRoom(room)}
+                    />
+                )}
 
                 <Separator />
 
@@ -408,7 +412,9 @@ const RoomSummaryCard: React.FC<IProps> = ({
                                 </MenuItem>
                             </div>
                         </ReleaseAnnouncement>
-                        <MenuItem Icon={FilesIcon} label={_t("right_panel|files_button")} onSelect={onRoomFilesClick} />
+                        {SettingsStore.getValue(UIFeature.RoomSummaryFilesOption) && (
+                            <MenuItem Icon={FilesIcon} label={_t("right_panel|files_button")} onSelect={onRoomFilesClick} />
+                        )}
                         <MenuItem
                             Icon={ExtensionsIcon}
                             label={_t("right_panel|extensions_button")}

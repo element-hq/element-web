@@ -21,6 +21,10 @@ import LockIcon from "@vector-im/compound-design-tokens/assets/web/icons/lock";
 import LabsIcon from "@vector-im/compound-design-tokens/assets/web/icons/labs";
 import BlockIcon from "@vector-im/compound-design-tokens/assets/web/icons/block";
 import HelpIcon from "@vector-im/compound-design-tokens/assets/web/icons/help";
+import {
+    CustomComponentOpts,
+    CustomComponentLifecycle,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 import TabbedView, { Tab, useActiveTabWithDefault } from "../../structures/TabbedView";
 import { _t, _td } from "../../../languageHandler";
@@ -44,7 +48,7 @@ import { NonEmptyArray } from "../../../@types/common";
 import { SDKContext, SdkContextClass } from "../../../contexts/SDKContext";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { ToastContext, useActiveToast } from "../../../contexts/ToastContext";
-
+import { ModuleRunner } from "../../../modules/ModuleRunner";
 interface IProps {
     initialTabId?: UserTab;
     showMsc4108QrCode?: boolean;
@@ -92,7 +96,11 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
 
     const getTabs = (): NonEmptyArray<Tab<UserTab>> => {
         const tabs: Tab<UserTab>[] = [];
-
+        const customSessionManagerTabOpts = { CustomComponent: React.Fragment };
+        ModuleRunner.instance.invoke(
+            CustomComponentLifecycle.SessionManagerTab,
+            customSessionManagerTabOpts as CustomComponentOpts,
+        );
         tabs.push(
             new Tab(
                 UserTab.Account,
@@ -107,7 +115,12 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
                 UserTab.SessionManager,
                 _td("settings|sessions|title"),
                 <DevicesIcon />,
-                <SessionManagerTab showMsc4108QrCode={showMsc4108QrCode} />,
+                (
+                    <customSessionManagerTabOpts.CustomComponent>
+                        <SessionManagerTab showMsc4108QrCode={showMsc4108QrCode} />
+                    </customSessionManagerTabOpts.CustomComponent>
+                )
+                ,
                 undefined,
             ),
         );

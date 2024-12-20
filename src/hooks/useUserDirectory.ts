@@ -11,6 +11,8 @@ import { useCallback, useState } from "react";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { DirectoryMember } from "../utils/direct-messages";
 import { useLatestResult } from "./useLatestResult";
+import { ModuleRunner } from "../modules/ModuleRunner";
+import { SdkContextClass } from "../contexts/SDKContext";
 
 export interface IUserDirectoryOpts {
     limit: number;
@@ -41,7 +43,17 @@ export const useUserDirectory = (): {
 
             try {
                 setLoading(true);
-                const { results } = await MatrixClientPeg.safeGet().searchUserDirectory(opts);
+                const client = MatrixClientPeg.safeGet();
+                const searchContext = await ModuleRunner.instance.extensions.userSearch.getSearchContext(
+                    client,
+                    SdkContextClass.instance,
+                );
+                const { results } = await client.searchUserDirectory(
+                    opts,
+                    searchContext.extraBodyArgs,
+                    searchContext.extraRequestOptions,
+                );
+
                 updateResult(
                     opts,
                     results.map((user) => new DirectoryMember(user)),

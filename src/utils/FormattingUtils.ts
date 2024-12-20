@@ -123,3 +123,46 @@ export function formatList(items: ReactNode[], itemLimit = items.length, include
         }),
     );
 }
+/**
+ * Constructs a written English string representing `items`, with an optional
+ * limit on the number of items included in the result. If specified and if the
+ * length of `items` is greater than the limit, the string "and n others" will
+ * be appended onto the result. If `items` is empty, returns the empty string.
+ * If there is only one item, return it.
+ * @param {string[]} items the items to construct a string from.
+ * @param {number?} itemLimit the number by which to limit the list.
+ * @returns {string} a string constructed by joining `items` with a comma
+ * between each item, but with the last item appended as " and [lastItem]".
+ */
+// Verji additions
+export function formatCommaSeparatedList(items: string[], itemLimit?: number): string;
+export function formatCommaSeparatedList(items: ReactElement[], itemLimit?: number): ReactElement;
+export function formatCommaSeparatedList(items: ReactNode[], itemLimit?: number): ReactNode;
+export function formatCommaSeparatedList(items: ReactNode[], itemLimit?: number): ReactNode {
+    const remaining = itemLimit === undefined ? 0 : Math.max(items.length - itemLimit, 0);
+    if (items.length === 0) {
+        return "";
+    } else if (items.length === 1) {
+        return items[0];
+    } else {
+        let lastItem;
+        if (remaining > 0) {
+            items = items.slice(0, itemLimit);
+        } else {
+            lastItem = items.pop();
+        }
+
+        let joinedItems;
+        if (items.every((e) => typeof e === "string")) {
+            joinedItems = items.join(", ");
+        } else {
+            joinedItems = jsxJoin(items, ", ");
+        }
+
+        if (remaining > 0) {
+            return _t("common|formattingresult", { items: joinedItems, count: remaining });
+        } else {
+            return _t("common|formattingresult2", { items: joinedItems, lastItem });
+        }
+    }
+}

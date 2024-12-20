@@ -26,6 +26,7 @@ import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { privateShouldBeEncrypted } from "../../../utils/rooms";
 import SettingsStore from "../../../settings/SettingsStore";
 import LabelledCheckbox from "../elements/LabelledCheckbox";
+import { UIFeature } from "../../../settings/UIFeature";
 
 interface IProps {
     type?: RoomType;
@@ -409,37 +410,51 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                             className="mx_CreateRoomDialog_topic"
                         />
 
-                        <JoinRuleDropdown
-                            label={_t("create_room|room_visibility_label")}
-                            labelInvite={_t("create_room|join_rule_invite")}
-                            labelKnock={
-                                this.askToJoinEnabled ? _t("room_settings|security|join_rule_knock") : undefined
-                            }
-                            labelPublic={_t("common|public_room")}
-                            labelRestricted={
-                                this.supportsRestricted ? _t("create_room|join_rule_restricted") : undefined
-                            }
-                            value={this.state.joinRule}
-                            onChange={this.onJoinRuleChange}
-                        />
+                        {/* For those who only want to create private room, set the CreateRoomShowJoinRuleDropdown to false in settings.tsx,
+                        for public rooms and knock rooms, set the flag to true */}
+                        {SettingsStore.getValue(UIFeature.CreateRoomShowJoinRuleDropdown) && (
+                            <>
+                                <JoinRuleDropdown
+                                    label={_t("create_room|room_visibility_label")}
+                                    labelInvite={_t("create_room|join_rule_invite")}
+                                    labelKnock={
+                                        this.askToJoinEnabled ? _t("room_settings|security|join_rule_knock") : undefined
+                                    }
+                                    labelPublic={_t("common|public_room")}
+                                    labelRestricted={
+                                        this.supportsRestricted ? _t("create_room|join_rule_restricted") : undefined
+                                    }
+                                    value={this.state.joinRule}
+                                    onChange={this.onJoinRuleChange}
+                                />
+                            </>
+                        )}
 
                         {publicPrivateLabel}
                         {visibilitySection}
-                        {e2eeSection}
+                        {/* To create only encrypted room, the options can be hidden by setting the flag to false in in settings.tsx, */}
+                        {SettingsStore.getValue(UIFeature.CreateRoomE2eeSection) && e2eeSection}
                         {aliasField}
-                        <details onToggle={this.onDetailsToggled} className="mx_CreateRoomDialog_details">
-                            <summary className="mx_CreateRoomDialog_details_summary">
-                                {this.state.detailsOpen ? _t("action|hide_advanced") : _t("action|show_advanced")}
-                            </summary>
-                            <LabelledToggleSwitch
-                                label={_t("create_room|unfederated", {
-                                    serverName: MatrixClientPeg.safeGet().getDomain(),
-                                })}
-                                onChange={this.onNoFederateChange}
-                                value={this.state.noFederate}
-                            />
-                            <p>{federateLabel}</p>
-                        </details>
+                        {/* To limit the usage to only your server, set flag to false in in settings.tsx, */}
+                        {SettingsStore.getValue(UIFeature.CreateRoomShowAdvancedSettings) && (
+                            <>
+                                <details onToggle={this.onDetailsToggled} className="mx_CreateRoomDialog_details">
+                                    <summary className="mx_CreateRoomDialog_details_summary">
+                                        {this.state.detailsOpen
+                                            ? _t("action|hide_advanced")
+                                            : _t("action|show_advanced")}
+                                    </summary>
+                                    <LabelledToggleSwitch
+                                        label={_t("create_room|unfederated", {
+                                            serverName: MatrixClientPeg.safeGet().getDomain(),
+                                        })}
+                                        onChange={this.onNoFederateChange}
+                                        value={this.state.noFederate}
+                                    />
+                                    <p>{federateLabel}</p>
+                                </details>
+                            </>
+                        )}
                     </div>
                 </form>
                 <DialogButtons

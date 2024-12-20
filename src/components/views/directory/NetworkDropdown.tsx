@@ -26,6 +26,7 @@ import {
 import TextInputDialog from "../dialogs/TextInputDialog";
 import AccessibleButton from "../elements/AccessibleButton";
 import withValidation from "../elements/Validation";
+import { UIFeature } from "../../../settings/UIFeature";
 
 const SETTING_NAME = "room_directory_servers";
 
@@ -177,7 +178,8 @@ export const NetworkDropdown: React.FC<IProps> = ({ protocols, config, setConfig
     }));
 
     const addNewServer = useCallback(
-        ({ closeMenu }: AdditionalOptionsProps) => (
+        ({ closeMenu }: AdditionalOptionsProps) => 
+            SettingsStore.getValue(UIFeature.NetworkOptions) && (
             <>
                 <span className="mx_GenericDropdownMenu_divider" />
                 <MenuItemRadio
@@ -199,25 +201,25 @@ export const NetworkDropdown: React.FC<IProps> = ({ protocols, config, setConfig
                             "mx_NetworkDropdown_dialog",
                         );
 
-                        const [ok, newServer] = await finished;
-                        if (!ok) return;
+                            const [ok, newServer] = await finished;
+                            if (!ok) return;
 
-                        if (!allServers.includes(newServer)) {
-                            setUserDefinedServers([...userDefinedServers, newServer]);
-                            setConfig({
-                                roomServer: newServer,
-                            });
-                        }
-                    }}
-                >
-                    <div className="mx_GenericDropdownMenu_Option--label">
-                        <span className="mx_NetworkDropdown_addServer">
-                            {_t("spotlight|public_rooms|network_dropdown_add_server_option")}
-                        </span>
-                    </div>
-                </MenuItemRadio>
-            </>
-        ),
+                            if (!allServers.includes(newServer)) {
+                                setUserDefinedServers([...userDefinedServers, newServer]);
+                                setConfig({
+                                    roomServer: newServer,
+                                });
+                            }
+                        }}
+                    >
+                        <div className="mx_GenericDropdownMenu_Option--label">
+                            <span className="mx_NetworkDropdown_addServer">
+                                {_t("spotlight|public_rooms|network_dropdown_add_server_option")}
+                            </span>
+                        </div>
+                    </MenuItemRadio>
+                </>
+            ),
         [allServers, setConfig, setUserDefinedServers, userDefinedServers],
     );
 
@@ -228,7 +230,7 @@ export const NetworkDropdown: React.FC<IProps> = ({ protocols, config, setConfig
             toKey={(config: IPublicRoomDirectoryConfig | null) =>
                 config ? `${config.roomServer}-${config.instanceId}` : "null"
             }
-            options={options}
+            options={SettingsStore.getValue(UIFeature.NetworkOptions) ? options : []}
             onChange={(option) => setConfig(option)}
             selectedLabel={(option) =>
                 option?.key

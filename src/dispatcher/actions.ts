@@ -379,4 +379,17 @@ export enum Action {
      * Opens right panel room summary and focuses the search input
      */
     FocusMessageSearch = "focus_search",
+
+    // Verji start
+    /**
+     * View Verji news
+     */
+    ViewNews = "view_news",
+
+    /**
+     * View Verji status messages
+     */
+    ViewOperatingMessages = "view_operatingmessages",
+
+    // Verji end
 }

@@ -9,99 +9,12 @@ Please see LICENSE files in the repository root for full details.
 import { safeSet } from "matrix-js-sdk/src/utils";
 import { TranslationStringsObject } from "@matrix-org/react-sdk-module-api/lib/types/translations";
 import { AnyLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/types";
-import {
-    DefaultCryptoSetupExtensions,
-    ProvideCryptoSetupExtensions,
-} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CryptoSetupExtensions";
-import {
-    DefaultExperimentalExtensions,
-    ProvideExperimentalExtensions,
-} from "@matrix-org/react-sdk-module-api/lib/lifecycles/ExperimentalExtensions";
+import { ExtensionsManager } from "@matrix-org/react-sdk-module-api/lib/extensions/ExtensionsManager";
 
 import { AppModule } from "./AppModule";
 import { ModuleFactory } from "./ModuleFactory";
 
 import "./ModuleComponents";
-
-/**
- * Handles and manages extensions provided by modules.
- */
-class ExtensionsManager {
-    // Private backing fields for extensions
-    private cryptoSetupExtension: ProvideCryptoSetupExtensions;
-    private experimentalExtension: ProvideExperimentalExtensions;
-
-    /** `true` if `cryptoSetupExtension` is the default implementation; `false` if it is implemented by a module. */
-    private hasDefaultCryptoSetupExtension = true;
-
-    /** `true` if `experimentalExtension` is the default implementation; `false` if it is implemented by a module. */
-    private hasDefaultExperimentalExtension = true;
-
-    /**
-     * Create a new instance.
-     */
-    public constructor() {
-        // Set up defaults
-        this.cryptoSetupExtension = new DefaultCryptoSetupExtensions();
-        this.experimentalExtension = new DefaultExperimentalExtensions();
-    }
-
-    /**
-     * Provides a crypto setup extension.
-     *
-     * @returns The registered extension. If no module provides this extension, a default implementation is returned.
-     */
-    public get cryptoSetup(): ProvideCryptoSetupExtensions {
-        return this.cryptoSetupExtension;
-    }
-
-    /**
-     * Provides an experimental extension.
-     *
-     * @remarks
-     * This method extension is provided to simplify experimentation and development, and is not intended for production code.
-     *
-     * @returns The registered extension. If no module provides this extension, a default implementation is returned.
-     */
-    public get experimental(): ProvideExperimentalExtensions {
-        return this.experimentalExtension;
-    }
-
-    /**
-     * Add any extensions provided by the module.
-     *
-     * @param module - The appModule to check for extensions.
-     *
-     * @throws if an extension is provided by more than one module.
-     */
-    public addExtensions(module: AppModule): void {
-        const runtimeModule = module.module;
-
-        /* Add the cryptoSetup extension if any */
-        if (runtimeModule.extensions?.cryptoSetup) {
-            if (this.hasDefaultCryptoSetupExtension) {
-                this.cryptoSetupExtension = runtimeModule.extensions?.cryptoSetup;
-                this.hasDefaultCryptoSetupExtension = false;
-            } else {
-                throw new Error(
-                    `adding cryptoSetup extension implementation from module ${runtimeModule.moduleName} but an implementation was already provided.`,
-                );
-            }
-        }
-
-        /* Add the experimental extension if any */
-        if (runtimeModule.extensions?.experimental) {
-            if (this.hasDefaultExperimentalExtension) {
-                this.experimentalExtension = runtimeModule.extensions?.experimental;
-                this.hasDefaultExperimentalExtension = false;
-            } else {
-                throw new Error(
-                    `adding experimental extension implementation from module ${runtimeModule.moduleName} but an implementation was already provided.`,
-                );
-            }
-        }
-    }
-}
 
 /**
  * Handles and coordinates the operation of modules.
@@ -169,7 +82,7 @@ export class ModuleRunner {
         this.modules.push(appModule);
 
         // Check if the new module provides any extensions, and also ensure a given extension is only provided by a single runtime module.
-        this.extensionsManager.addExtensions(appModule);
+        this.extensionsManager.addExtensions(appModule.module);
     }
 
     /**

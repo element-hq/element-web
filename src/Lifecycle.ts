@@ -846,7 +846,8 @@ async function persistCredentials(credentials: IMatrixClientCreds): Promise<void
         localStorage.setItem("mx_device_id", credentials.deviceId);
     }
 
-    ModuleRunner.instance.extensions.cryptoSetup?.persistCredentials(credentials);
+    //SecurityCustomisations.persistCredentials?.(credentials);
+    ModuleRunner.instance.extensions?.cryptoSetup?.persistCredentials(credentials);
 
     logger.log(`Session persisted for ${credentials.userId}`);
 }

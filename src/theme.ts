@@ -96,7 +96,7 @@ export function enumerateThemes(): { [key: string]: string } {
 
     try {
         for (const { name } of customThemes) {
-            customThemeNames[`custom-${name}`] = name;
+            customThemeNames[`custom-${name}`] = name.includes("Verji") ? _t(name) : name; // Verji
         }
     } catch (err) {
         logger.warn("Error loading custom themes", {
@@ -123,6 +123,12 @@ export function getOrderedThemes(): ITheme[] {
         .filter((p) => !builtInThemes.includes(p))
         .sort((a, b) => collator.compare(a.name, b.name));
     return [...builtInThemes, ...customThemes];
+    // //verji start
+    // if (!customThemes) {
+    //     return [...builtInThemes];
+    // }
+    // return [...customThemes];
+    // //verji end
 }
 
 function clearCustomTheme(): void {

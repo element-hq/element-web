@@ -549,7 +549,10 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                 secondaryActionLabel = _t("action|reject");
                 secondaryActionHandler = this.props.onRejectClick;
 
-                if (this.props.onRejectAndIgnoreClick) {
+                if (
+                    this.props.onRejectAndIgnoreClick &&
+                    SettingsStore.getValue(UIFeature.RoomPreviewRejectIgnoreButton)
+                ) {
                     extraComponents.push(
                         <AccessibleButton kind="secondary" onClick={this.props.onRejectAndIgnoreClick} key="ignore">
                             {_t("room|invite_reject_ignore")}

@@ -24,6 +24,8 @@ import { SettingLevel } from "../../../settings/SettingLevel";
 import ServerInfo from "./devtools/ServerInfo";
 import CopyableText from "../elements/CopyableText";
 import RoomNotifications from "./devtools/RoomNotifications";
+import SettingsStore from "../../../../src/settings/SettingsStore";
+import { UIFeature } from "../../../../src/settings/UIFeature";
 
 enum Category {
     Room,
@@ -83,14 +85,20 @@ const DevtoolsDialog: React.FC<IProps> = ({ roomId, threadRootId, onFinished }) 
                     <div key={category}>
                         <h3>{_t(categoryLabels[category as unknown as Category])}</h3>
                         {tools.map(([label, tool]) => {
-                            const onClick = (): void => {
-                                setTool([label, tool]);
-                            };
-                            return (
-                                <button className="mx_DevTools_button" key={label} onClick={onClick}>
-                                    {_t(label)}
-                                </button>
-                            );
+                            if (
+                                (tool != VerificationExplorer && tool != TimelineEventEditor) ||
+                                ((tool === VerificationExplorer || tool === TimelineEventEditor) &&
+                                    SettingsStore.getValue(UIFeature.EnableRoomDevTools))
+                            ) {
+                                const onClick = (): void => {
+                                    setTool([label, tool]);
+                                };
+                                return (
+                                    <button className="mx_DevTools_button" key={label} onClick={onClick}>
+                                        {_t(label)}
+                                    </button>
+                                );
+                            }
                         })}
                     </div>
                 ))}

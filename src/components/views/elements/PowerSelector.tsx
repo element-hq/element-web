@@ -14,6 +14,8 @@ import Field from "./Field";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { objectHasDiff } from "../../../utils/objects";
+import SettingsStore from "../../../settings/SettingsStore";
+import { UIFeature } from "../../../settings/UIFeature";
 
 const CUSTOM_VALUE = "SELECT_VALUE_CUSTOM";
 
@@ -183,7 +185,8 @@ export default class PowerSelector<K extends undefined | string> extends React.C
                     text: Roles.textualPowerLevel(level, this.props.usersDefault),
                 };
             });
-            options.push({ value: CUSTOM_VALUE, text: _t("power_level|custom_level") });
+            SettingsStore.getValue(UIFeature.PowerSelectorCustomValue) &&
+                options.push({ value: CUSTOM_VALUE, text: _t("power_level|custom_level") });
             const optionsElements = options.map((op) => {
                 return (
                     <option value={op.value} key={op.value} data-testid={`power-level-option-${op.value}`}>

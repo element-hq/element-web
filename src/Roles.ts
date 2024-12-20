@@ -14,6 +14,7 @@ export function levelRoleMap(usersDefault: number): Record<number | "undefined",
         0: _t("power_level|restricted"),
         [usersDefault]: _t("power_level|default"),
         50: _t("power_level|moderator"),
+        95: "VerjiAdmin", //Verji
         100: _t("power_level|admin"),
     };
 }

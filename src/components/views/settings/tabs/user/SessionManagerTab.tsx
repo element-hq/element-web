@@ -21,7 +21,7 @@ import { useOwnDevices } from "../../devices/useOwnDevices";
 import { FilteredDeviceList } from "../../devices/FilteredDeviceList";
 import CurrentDeviceSection from "../../devices/CurrentDeviceSection";
 import SecurityRecommendations from "../../devices/SecurityRecommendations";
-import { ExtendedDevice } from "../../devices/types";
+import { DevicesDictionary, ExtendedDevice } from "../../devices/types";
 import { deleteDevicesWithInteractiveAuth } from "../../devices/deleteDevices";
 import SettingsTab from "../SettingsTab";
 import LoginWithQRSection from "../../devices/LoginWithQRSection";
@@ -199,6 +199,13 @@ const SessionManagerTab: React.FC<{
         [matrixClient],
     );
 
+    // Verji start
+    // Removes device with "Backup device" from the list of devices
+    const filteredDevices: DevicesDictionary = Object.fromEntries(
+        Object.entries(devices).filter(([deviceId, device]) => device.display_name !== "Backup device"),
+    );
+    // Verji end
+
     const onDeviceExpandToggle = (deviceId: ExtendedDevice["device_id"]): void => {
         if (expandedDeviceIds.includes(deviceId)) {
             setExpandedDeviceIds(expandedDeviceIds.filter((id) => id !== deviceId));
@@ -221,7 +228,7 @@ const SessionManagerTab: React.FC<{
         );
     };
 
-    const { [currentDeviceId]: currentDevice, ...otherDevices } = devices;
+    const { [currentDeviceId]: currentDevice, ...otherDevices } = filteredDevices; //Verji
     if (dehydratedDeviceId && otherDevices[dehydratedDeviceId]?.isVerified) {
         delete otherDevices[dehydratedDeviceId];
     }

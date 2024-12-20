@@ -1,3 +1,4 @@
+## VERJI NEEDS TO MANUALLY CHECK THIS ALONG WITH RUNNING ACTION
 name: Tests
 on:
     pull_request: {}

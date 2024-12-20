@@ -79,6 +79,7 @@ import { useFeatureEnabled } from "../../../../hooks/useSettings";
 import { filterBoolean } from "../../../../utils/arrays";
 import { transformSearchTerm } from "../../../../utils/SearchInput";
 import { Filter } from "./Filter";
+import { UIFeature } from "../../../../settings/UIFeature";
 
 const MAX_RECENT_SEARCHES = 10;
 const SECTION_LIMIT = 50; // only show 50 results per section for performance reasons
@@ -377,7 +378,9 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                 userResults.push(result);
             }
         }
-        addUserResults(findVisibleRoomMembers(visibleRooms, cli), false);
+        if (SettingsStore.getValue(UIFeature.ShowRoomMembersInSuggestions)) {
+            addUserResults(findVisibleRoomMembers(visibleRooms, cli), false);
+        }
         addUserResults(userDirectorySearchResults, true);
         if (profile) {
             addUserResults([new DirectoryMember(profile)], true);
@@ -419,7 +422,6 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         if (trimmedQuery) {
             const lcQuery = trimmedQuery.toLowerCase();
             const normalizedQuery = normalize(trimmedQuery);
-
             possibleResults.forEach((entry) => {
                 if (isRoomResult(entry)) {
                     // If the room is a DM with a user that is part of the user directory search results,
@@ -559,7 +561,10 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
     };
 
     let otherSearchesSection: JSX.Element | undefined;
-    if (trimmedQuery || (filter !== Filter.PublicRooms && filter !== Filter.PublicSpaces)) {
+    if (
+        SettingsStore.getValue(UIFeature.SpotlightDialogShowOtherSearches) &&
+        (trimmedQuery || (filter !== Filter.PublicRooms && filter !== Filter.PublicSpaces))
+    ) {
         otherSearchesSection = (
             <div
                 className="mx_SpotlightDialog_section mx_SpotlightDialog_otherSearches"

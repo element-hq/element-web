@@ -19,6 +19,7 @@ const config: Config = {
     globalSetup: "<rootDir>/test/globalSetup.ts",
     setupFiles: ["jest-canvas-mock", "web-streams-polyfill/polyfill"],
     setupFilesAfterEnv: ["<rootDir>/test/setupTests.ts"],
+    moduleFileExtensions: ["js", "jsx", "json", "ts", "tsx"],
     moduleNameMapper: {
         "\\.(css|scss|pcss)$": "<rootDir>/__mocks__/cssMock.js",
         "\\.(gif|png|ttf|woff2)$": "<rootDir>/__mocks__/imageMock.js",

@@ -12,6 +12,8 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { Member } from "./direct-messages";
 import DMRoomMap from "./DMRoomMap";
+import SettingsStore from "../settings/SettingsStore";
+import { UIFeature } from "../settings/UIFeature";
 
 export const compareMembers =
     (
@@ -92,12 +94,29 @@ interface IMemberScore {
 }
 
 export function buildMemberScores(cli: MatrixClient): { [userId: string]: IMemberScore } {
+    // VERJI - if feature flag is false, we don't need to calculate and build memberscores, and just return an empty map instead. Suggestions will be populated by searchResults instead
+    if (!SettingsStore.getValue(UIFeature.ShowRoomMembersInSuggestions)) {
+        return {} as { [userId: string]: IMemberScore };
+    }
     const maxConsideredMembers = 200;
     const consideredRooms = joinedRooms(cli).filter((room) => room.getJoinedMemberCount() < maxConsideredMembers);
-    const memberPeerEntries = consideredRooms.flatMap((room) =>
-        room.getJoinedMembers().map((member) => ({ member, roomSize: room.getJoinedMemberCount() })),
-    );
+
+    const memberPeerEntries = consideredRooms.flatMap((room) => {
+        // VERJI Log the roomId here
+        console.log("[SortMembers.ts] - Processing room:", room.roomId);
+        console.log("[SortMembers.ts] - is this a space room?:", room.isSpaceRoom());
+        // VERJI - A filter to exclude members from Space Rooms, not really necessary if featureflag showRoomMembersInSuggestions is false, but keeping it in case we want to "fine-tune" suggestions later
+        if (room.isSpaceRoom()) {
+            console.log("[SortMembers.ts] - skipping the room", room.roomId);
+            console.log("[SortMembers.ts] - number of members excluded: ", room.getJoinedMemberCount());
+            return [];
+        }
+
+        return room.getJoinedMembers().map((member) => ({ member, roomSize: room.getJoinedMemberCount() }));
+    });
+
     const userMeta = groupBy(memberPeerEntries, ({ member }) => member.userId);
+
     // If the iteratee in mapValues returns undefined that key will be removed from the resultant object
     return mapValues(userMeta, (roomMemberships) => {
         if (!roomMemberships.length) return;

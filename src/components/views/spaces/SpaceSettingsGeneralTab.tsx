@@ -20,6 +20,8 @@ import { getTopic } from "../../../hooks/room/useTopic";
 import SettingsTab from "../settings/tabs/SettingsTab";
 import { SettingsSection } from "../settings/shared/SettingsSection";
 import { SettingsSubsection } from "../settings/shared/SettingsSubsection";
+import SettingsStore from "../../../settings/SettingsStore";
+import { UIFeature } from "../../../settings/UIFeature";
 
 interface IProps {
     matrixClient: MatrixClient;
@@ -117,17 +119,18 @@ const SpaceSettingsGeneralTab: React.FC<IProps> = ({ matrixClient: cli, space })
                         {busy ? _t("common|saving") : _t("room_settings|general|save")}
                     </AccessibleButton>
                 </div>
-
-                <SettingsSubsection heading={_t("room_settings|general|leave_space")}>
-                    <AccessibleButton
-                        kind="danger"
-                        onClick={() => {
-                            leaveSpace(space);
-                        }}
-                    >
-                        {_t("room_settings|general|leave_space")}
-                    </AccessibleButton>
-                </SettingsSubsection>
+                {SettingsStore.getValue(UIFeature.LeaveSpaceButton) && (
+                    <SettingsSubsection heading={_t("room_settings|general|leave_space")}>
+                        <AccessibleButton
+                            kind="danger"
+                            onClick={() => {
+                                leaveSpace(space);
+                            }}
+                        >
+                            {_t("room_settings|general|leave_space")}
+                        </AccessibleButton>
+                    </SettingsSubsection>
+                )}
             </SettingsSection>
         </SettingsTab>
     );

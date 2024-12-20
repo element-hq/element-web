@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ReactionsRowButtonTooltip should render 1`] = `
+<DocumentFragment>
+  <div>
+    Test tooltip
+  </div>
+</DocumentFragment>
+`;

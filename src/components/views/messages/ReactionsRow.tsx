@@ -11,6 +11,10 @@ import classNames from "classnames";
 import { MatrixEvent, MatrixEventEvent, Relations, RelationsEvent } from "matrix-js-sdk/src/matrix";
 import { uniqBy } from "lodash";
 import { UnstableValue } from "matrix-js-sdk/src/NamespacedValue";
+import {
+    CustomComponentLifecycle,
+    CustomComponentOpts,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 import { _t } from "../../../languageHandler";
 import { isContentActionable } from "../../../utils/EventUtils";
@@ -21,6 +25,7 @@ import ReactionsRowButton from "./ReactionsRowButton";
 import RoomContext from "../../../contexts/RoomContext";
 import AccessibleButton from "../elements/AccessibleButton";
 import SettingsStore from "../../../settings/SettingsStore";
+import { ModuleRunner } from "../../../modules/ModuleRunner";
 
 // The maximum number of reactions to initially show on a message.
 const MAX_ITEMS_WHEN_LIMITED = 8;
@@ -164,6 +169,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         if (!reactions || !isContentActionable(mxEvent)) {
             return null;
         }
+
         const customReactionImagesEnabled = SettingsStore.getValue("feature_render_reaction_images");
 
         let items = reactions
@@ -201,7 +207,9 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
             })
             .filter((item) => !!item);
 
-        if (!items?.length) return null;
+        if (!items?.length) {
+            return null;
+        }
 
         // Show the first MAX_ITEMS if there are MAX_ITEMS + 1 or more items.
         // The "+ 1" ensure that the "show all" reveals something that takes up
@@ -221,12 +229,17 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
             addReactionButton = <ReactButton mxEvent={mxEvent} reactions={reactions} />;
         }
 
+        const CustomReactionsRow = { CustomComponent: React.Fragment };
+        ModuleRunner.instance.invoke(CustomComponentLifecycle.ReactionsRow, CustomReactionsRow as CustomComponentOpts);
+
         return (
-            <div className="mx_ReactionsRow" role="toolbar" aria-label={_t("common|reactions")}>
-                {items}
-                {showAllButton}
-                {addReactionButton}
-            </div>
+            <CustomReactionsRow.CustomComponent>
+                <div className="mx_ReactionsRow" role="toolbar" aria-label={_t("common|reactions")}>
+                    {items}
+                    {showAllButton}
+                    {addReactionButton}
+                </div>
+            </CustomReactionsRow.CustomComponent>
         );
     }
 }

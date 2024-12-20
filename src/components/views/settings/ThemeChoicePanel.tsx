@@ -34,6 +34,8 @@ import { useTheme } from "../../../hooks/useTheme";
 import { findHighContrastTheme, getOrderedThemes, CustomTheme as CustomThemeType, ITheme } from "../../../theme";
 import { useSettingValue } from "../../../hooks/useSettings";
 
+// VERJI MERGE - Heavily altered file, we must likely revisit and reimplement the SettingsStore.getValue(UIFeature.CustomThemePanel) Feature flag
+
 /**
  * Panel to choose the theme
  */

@@ -177,8 +177,12 @@ export default class MemberTile extends React.Component<IProps, IState> {
         this.memberLastModifiedTime = member.getLastModifiedTime();
 
         const powerStatusMap = new Map([
-            [100, PowerStatus.Admin],
+            [100, PowerStatus.SystemAdmin],
+            [95, PowerStatus.RosbergAdmin],
+            [90, PowerStatus.CustomerAdmin],
+            [80, PowerStatus.Admin],
             [50, PowerStatus.Moderator],
+            [0, PowerStatus.Standard],
         ]);
 
         // Find the nearest power level with a badge

@@ -72,7 +72,7 @@ import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInse
 import ConfirmSpaceUserActionDialog from "../dialogs/ConfirmSpaceUserActionDialog";
 import { bulkSpaceBehaviour } from "../../../utils/space";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
-import { UIComponent } from "../../../settings/UIFeature";
+import { UIComponent, UIFeature } from "../../../settings/UIFeature";
 import { TimelineRenderingType } from "../../../contexts/RoomContext";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { IRightPanelCardState } from "../../../stores/right-panel/RightPanelStoreIPanelState";
@@ -85,6 +85,7 @@ import { asyncSome } from "../../../utils/arrays";
 import { Flex } from "../../utils/Flex";
 import CopyableText from "../elements/CopyableText";
 import { useUserTimezone } from "../../../hooks/useUserTimezone";
+import SettingsStore from "../../../settings/SettingsStore";
 export interface IDevice extends Device {
     ambiguous?: boolean;
 }
@@ -210,7 +211,7 @@ export function DeviceItem({
 
     const onDeviceClick = (): void => {
         const user = cli.getUser(userId);
-        if (user) {
+        if (user && SettingsStore.getValue(UIFeature.UserInfoVerifyDevice)) {
             verifyDevice(cli, user, device);
         }
     };
@@ -550,14 +551,16 @@ export const UserOptionsSection: React.FC<{
         isMe || !shouldShowComponent(UIComponent.CreateRooms) ? null : <MessageButton member={member} />;
 
     return (
-        <Container>
-            {children}
-            {directMessageButton}
-            {inviteUserButton}
-            {readReceiptButton}
-            {shareUserButton}
-            {insertPillButton}
-        </Container>
+        <div className="mx_UserInfo_container">
+            <h3>{_t("common|options")}</h3>
+            <div>
+                {SettingsStore.getValue(UIFeature.ShowSendMessageToUserLink) && directMessageButton}
+                {readReceiptButton}
+                {SettingsStore.getValue(UIFeature.ShowSendMessageToUserLink) && directMessageButton}
+                {insertPillButton}
+                {inviteUserButton}
+            </div>
+        </div>
     );
 };
 
@@ -1138,6 +1141,8 @@ export const RoomAdminToolsContainer: React.FC<IBaseRoomProps> = ({
                 {redactButton}
                 {kickButton}
                 {banButton}
+                {/* If you dont want users to be able to delete messages, set the flag to false in settings.tsx */}
+                {SettingsStore.getValue(UIFeature.UserInfoRedactButton) && redactButton}
                 {children}
             </Container>
         );

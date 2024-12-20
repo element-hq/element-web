@@ -23,6 +23,8 @@ import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { SettingsSubsection } from "../../shared/SettingsSubsection";
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
+import SettingsStore from "../../../../../../src/settings/SettingsStore";
+import { UIFeature } from "../../../../../../src/settings/UIFeature";
 
 interface IState {
     mediaDevices: IMediaDevices | null;
@@ -185,7 +187,11 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
                     </SettingsSubsection>
                     <SettingsSubsection heading={_t("settings|voip|video_section")} stretchContent>
                         {webcamDropdown}
-                        <SettingsFlag name="VideoView.flipVideoHorizontally" level={SettingLevel.ACCOUNT} />
+                        {SettingsStore.getValue(UIFeature.VideoMirrorLocalVideo) && (
+                            <>
+                                <SettingsFlag name="VideoView.flipVideoHorizontally" level={SettingLevel.ACCOUNT} />{" "}
+                            </>
+                        )}
                     </SettingsSubsection>
                 </SettingsSection>
 
@@ -210,21 +216,25 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
                             data-testid="voice-echo-cancellation"
                         />
                     </SettingsSubsection>
-                    <SettingsSubsection heading={_t("settings|voip|connection_section")}>
-                        <SettingsFlag
-                            name="webRtcAllowPeerToPeer"
-                            level={SettingLevel.DEVICE}
-                            onChange={this.changeWebRtcMethod}
-                        />
-                        <SettingsFlag
-                            name="fallbackICEServerAllowed"
-                            label={_t("settings|voip|enable_fallback_ice_server", {
-                                server: new URL(FALLBACK_ICE_SERVER).pathname,
-                            })}
-                            level={SettingLevel.DEVICE}
-                            hideIfCannotSet
-                        />
-                    </SettingsSubsection>
+                    {SettingsStore.getValue(UIFeature.VideoConnectionSettings) && (
+                        <>
+                            <SettingsSubsection heading={_t("settings|voip|connection_section")}>
+                                <SettingsFlag
+                                    name="webRtcAllowPeerToPeer"
+                                    level={SettingLevel.DEVICE}
+                                    onChange={this.changeWebRtcMethod}
+                                />
+                                <SettingsFlag
+                                    name="fallbackICEServerAllowed"
+                                    label={_t("settings|voip|enable_fallback_ice_server", {
+                                        server: new URL(FALLBACK_ICE_SERVER).pathname,
+                                    })}
+                                    level={SettingLevel.DEVICE}
+                                    hideIfCannotSet
+                                />
+                            </SettingsSubsection>
+                        </>
+                    )}
                 </SettingsSection>
             </SettingsTab>
         );

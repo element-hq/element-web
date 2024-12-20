@@ -19,6 +19,10 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import classNames from "classnames";
+import {
+    CustomComponentLifecycle,
+    CustomComponentOpts,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/CustomComponentLifecycle";
 
 import { isOnlyCtrlOrCmdKeyEvent, Key } from "../../Keyboard";
 import PageTypes from "../../PageTypes";
@@ -66,6 +70,7 @@ import { monitorSyncedPushRules } from "../../utils/pushRules/monitorSyncedPushR
 import { ConfigOptions } from "../../SdkConfig";
 import { MatrixClientContextProvider } from "./MatrixClientContextProvider";
 import { Landmark, LandmarkNavigation } from "../../accessibility/LandmarkNavigation";
+import { ModuleRunner } from "../../modules/ModuleRunner";
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -190,6 +195,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         OwnProfileStore.instance.on(UPDATE_EVENT, this.refreshBackgroundImage);
         this.loadResizerPreferences();
         this.refreshBackgroundImage();
+        this.attachFreshworksWidget(); //Verji
     }
 
     private onTimezoneUpdate = async (): Promise<void> => {
@@ -230,6 +236,20 @@ class LoggedInView extends React.Component<IProps, IState> {
         this.timezoneProfileUpdateRef?.forEach((s) => SettingsStore.unwatchSetting(s));
         this.resizer?.detach();
     }
+
+    // Verji start
+    private attachFreshworksWidget(): void {
+        const head = document.querySelector("head");
+        const script = document.createElement("script");
+        const scriptExt = document.createElement("script");
+        script.setAttribute("src", "./scripts/freshworks.js");
+        scriptExt.setAttribute("src", "https://euc-widget.freshworks.com/widgets/80000004505.js");
+        scriptExt.async = true;
+        scriptExt.defer = true;
+        head?.appendChild(script);
+        head?.appendChild(scriptExt);
+    }
+    // Verji end
 
     private onCallState = (): void => {
         const activeCalls = LegacyCallHandler.instance.getAllActiveCalls();
@@ -702,43 +722,58 @@ class LoggedInView extends React.Component<IProps, IState> {
             return <AudioFeedArrayForLegacyCall call={call} key={call.callId} />;
         });
 
+        const customLoggedInViewOpts = { CustomComponent: React.Fragment };
+        ModuleRunner.instance.invoke(
+            CustomComponentLifecycle.LoggedInView,
+            customLoggedInViewOpts as CustomComponentOpts,
+        );
+        const customSpacePanelOpts = { CustomComponent: React.Fragment };
+        ModuleRunner.instance.invoke(CustomComponentLifecycle.SpacePanel, customSpacePanelOpts as CustomComponentOpts);
+        const customLeftPanelOpts = { CustomComponent: React.Fragment };
+        ModuleRunner.instance.invoke(CustomComponentLifecycle.LeftPanel, customLeftPanelOpts as CustomComponentOpts);
         return (
-            <MatrixClientContextProvider client={this._matrixClient}>
-                <div
-                    onPaste={this.onPaste}
-                    onKeyDown={this.onReactKeyDown}
-                    className={wrapperClasses}
-                    aria-hidden={this.props.hideToSRUsers}
-                >
-                    <ToastContainer />
-                    <div className={bodyClasses}>
-                        <div className="mx_LeftPanel_outerWrapper">
-                            <LeftPanelLiveShareWarning isMinimized={this.props.collapseLhs || false} />
-                            <div className="mx_LeftPanel_wrapper">
-                                <BackdropPanel blurMultiplier={0.5} backgroundImage={this.state.backgroundImage} />
-                                <SpacePanel />
-                                <BackdropPanel backgroundImage={this.state.backgroundImage} />
-                                <div
-                                    className="mx_LeftPanel_wrapper--user"
-                                    ref={this._resizeContainer}
-                                    data-collapsed={this.props.collapseLhs ? true : undefined}
-                                >
-                                    <LeftPanel
-                                        pageType={this.props.page_type as PageTypes}
-                                        isMinimized={this.props.collapseLhs || false}
-                                        resizeNotifier={this.props.resizeNotifier}
-                                    />
+            <customLoggedInViewOpts.CustomComponent>
+                <MatrixClientContextProvider client={this._matrixClient}>
+                    <div
+                        onPaste={this.onPaste}
+                        onKeyDown={this.onReactKeyDown}
+                        className={wrapperClasses}
+                        aria-hidden={this.props.hideToSRUsers}
+                    >
+                        <ToastContainer />
+                        <div className={bodyClasses}>
+                            <div className="mx_LeftPanel_outerWrapper">
+                                <LeftPanelLiveShareWarning isMinimized={this.props.collapseLhs || false} />
+                                <div className="mx_LeftPanel_wrapper">
+                                    <BackdropPanel blurMultiplier={0.5} backgroundImage={this.state.backgroundImage} />
+                                    <customSpacePanelOpts.CustomComponent>
+                                        <SpacePanel />
+                                    </customSpacePanelOpts.CustomComponent>
+                                    <BackdropPanel backgroundImage={this.state.backgroundImage} />
+                                    <div
+                                        className="mx_LeftPanel_wrapper--user"
+                                        ref={this._resizeContainer}
+                                        data-collapsed={this.props.collapseLhs ? true : undefined}
+                                    >
+                                        <customLeftPanelOpts.CustomComponent>
+                                            <LeftPanel
+                                                pageType={this.props.page_type as PageTypes}
+                                                isMinimized={this.props.collapseLhs || false}
+                                                resizeNotifier={this.props.resizeNotifier}
+                                            />
+                                        </customLeftPanelOpts.CustomComponent>
+                                    </div>
                                 </div>
                             </div>
+                            <ResizeHandle passRef={this.resizeHandler} id="lp-resizer" />
+                            <div className="mx_RoomView_wrapper">{pageElement}</div>
                         </div>
-                        <ResizeHandle passRef={this.resizeHandler} id="lp-resizer" />
-                        <div className="mx_RoomView_wrapper">{pageElement}</div>
                     </div>
-                </div>
-                <PipContainer />
-                <NonUrgentToastContainer />
-                {audioFeedArraysForCalls}
-            </MatrixClientContextProvider>
+                    <PipContainer />
+                    <NonUrgentToastContainer />
+                    {audioFeedArraysForCalls}
+                </MatrixClientContextProvider>
+            </customLoggedInViewOpts.CustomComponent>
         );
     }
 }

@@ -283,7 +283,8 @@ export async function sendLoginRequest(
         accessToken: data.access_token,
     };
 
-    ModuleRunner.instance.extensions.cryptoSetup.examineLoginResponse(data, creds);
+    // SecurityCustomisations.examineLoginResponse?.(data, creds);
+    ModuleRunner.instance.extensions.cryptoSetup?.examineLoginResponse(data, creds);
 
     return creds;
 }

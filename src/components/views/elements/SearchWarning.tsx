@@ -16,6 +16,8 @@ import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { UserTab } from "../dialogs/UserTab";
 import AccessibleButton, { ButtonEvent } from "./AccessibleButton";
+import SettingsStore from "../../../settings/SettingsStore";
+import { UIFeature } from "../../../settings/UIFeature";
 
 export enum WarningKind {
     Files,
@@ -82,23 +84,27 @@ export default function SearchWarning({ isRoomEncrypted, kind, showLogo = true }
                 );
                 break;
             case WarningKind.Search:
-                text = _t(
-                    "seshat|warning_kind_search_app",
-                    {},
-                    {
-                        a: (sub) => (
-                            <a href={buildUrl} target="_blank" rel="noreferrer noopener">
-                                {sub}
-                            </a>
-                        ),
-                    },
-                );
+                SettingsStore.getValue(UIFeature.SearchWarnings) == false
+                    ? (text = "")
+                    : (text = _t(
+                          "seshat|warning_kind_search_app",
+                          {},
+                          {
+                              a: (sub) => (
+                                  <a href={buildUrl} target="_blank" rel="noreferrer noopener">
+                                      {sub}
+                                  </a>
+                              ),
+                          },
+                      ));
                 break;
         }
     } else {
         switch (kind) {
             case WarningKind.Files:
-                text = _t("seshat|warning_kind_files", { brand });
+                SettingsStore.getValue(UIFeature.SearchWarnings) == false
+                    ? (text = "")
+                    : (text = _t("seshat|warning_kind_files", { brand }));
                 break;
             case WarningKind.Search:
                 text = _t("seshat|warning_kind_search", { brand });

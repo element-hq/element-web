@@ -418,8 +418,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // if the user has previously set up cross-signing, verify this device so we can fetch the
             // private keys.
 
+            // if (SecurityCustomisations.SHOW_ENCRYPTION_SETUP_UI === false) {
             const cryptoExtension = ModuleRunner.instance.extensions.cryptoSetup;
-            if (cryptoExtension.SHOW_ENCRYPTION_SETUP_UI == false) {
+            if (cryptoExtension !== undefined && cryptoExtension.SHOW_ENCRYPTION_SETUP_UI == false) {
                 this.onLoggedIn();
             } else {
                 this.setStateForNewView({ view: Views.COMPLETE_SECURITY });

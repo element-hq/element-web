@@ -151,6 +151,10 @@ export interface IMatrixClientPeg {
      *          see {@link ICreateClientOpts.tokenRefreshFunction}
      */
     replaceUsingCreds(creds: IMatrixClientCreds, tokenRefreshFunction?: TokenRefreshFunction): void;
+
+    /*VERJI Custom Functions */
+    getCredentials(): IMatrixClientCreds | undefined;
+    /*END VERJI Custom Functions*/
 }
 
 /**
@@ -440,6 +444,17 @@ class MatrixClientPegClass implements IMatrixClientPeg {
             },
         };
 
+        // if (SecurityCustomisations.getDehydrationKey) {
+        //     opts.cryptoCallbacks!.getDehydrationKey = SecurityCustomisations.getDehydrationKey;
+        // }
+
+        console.log("CryptoSetupExtensions: Executing getDehydrationKeyCallback...");
+        const dehydrationKeyCallback = ModuleRunner.instance.extensions.cryptoSetup?.getDehydrationKeyCallback();
+        console.log("CryptoSetupExtensions: Executing getDehydrationKeyCallback...Done");
+        if (dehydrationKeyCallback) {
+            opts.cryptoCallbacks!.getDehydrationKey = dehydrationKeyCallback;
+        }
+
         this.matrixClient = createMatrixClient(opts);
         this.matrixClient.setGuest(Boolean(creds.guest));
 
@@ -451,6 +466,20 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         notifTimelineSet.getLiveTimeline().setPaginationToken("", EventTimeline.BACKWARDS);
         this.matrixClient.setNotifTimelineSet(notifTimelineSet);
     }
+    /* VERJI Custom Functions */
+    public getCredentials(): IMatrixClientCreds | undefined {
+        if (!this.matrixClient) return;
+
+        return {
+            homeserverUrl: this.matrixClient.baseUrl,
+            identityServerUrl: this.matrixClient.idBaseUrl,
+            userId: this.matrixClient.credentials.userId ?? "",
+            deviceId: this.matrixClient.getDeviceId() ?? "",
+            accessToken: this.matrixClient.getAccessToken() ?? "",
+            guest: this.matrixClient.isGuest(),
+        };
+    }
+    /* END VERJI Custom Functions*/
 }
 
 /**

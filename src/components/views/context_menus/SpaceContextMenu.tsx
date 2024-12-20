@@ -29,7 +29,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { useFeatureEnabled } from "../../../hooks/useSettings";
 import { Action } from "../../../dispatcher/actions";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
-import { UIComponent } from "../../../settings/UIFeature";
+import { UIComponent, UIFeature } from "../../../settings/UIFeature";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 
@@ -185,7 +185,7 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
                         <BetaPill />
                     </IconizedContextMenuOption>
                 )}
-                {canAddSubSpaces && (
+                {SettingsStore.getValue(UIFeature.AddSubSpace) && canAddSubSpaces && (
                     <IconizedContextMenuOption
                         data-testid="new-subspace-option"
                         iconClassName="mx_SpacePanel_iconPlus"
@@ -239,11 +239,15 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
                     onClick={onHomeClick}
                 />
                 {inviteOption}
-                <IconizedContextMenuOption
-                    iconClassName="mx_SpacePanel_iconExplore"
-                    label={canAddRooms ? _t("space|context_menu|manage_and_explore") : _t("space|context_menu|explore")}
-                    onClick={onExploreRoomsClick}
-                />
+                {SettingsStore.getValue(UIFeature.ShowSpaceLandingPageDetails) && (
+                    <IconizedContextMenuOption
+                        iconClassName="mx_SpacePanel_iconExplore"
+                        label={
+                            canAddRooms ? _t("space|context_menu|manage_and_explore") : _t("space|context_menu|explore")
+                        }
+                        onClick={onExploreRoomsClick}
+                    />
+                )}
                 <IconizedContextMenuOption
                     iconClassName="mx_SpacePanel_iconPreferences"
                     label={_t("common|preferences")}
@@ -251,7 +255,7 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
                 />
                 {devtoolsOption}
                 {settingsOption}
-                {leaveOption}
+                {SettingsStore.getValue(UIFeature.ShowLeaveSpaceInContextMenu) && leaveOption}
                 {newRoomSection}
             </IconizedContextMenuOptionList>
         </IconizedContextMenu>
