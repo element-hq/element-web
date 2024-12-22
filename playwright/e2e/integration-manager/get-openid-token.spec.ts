@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import type { Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
 import { openIntegrationManager } from "./utils";
+import type { UserWidget } from "../../../src/utils/WidgetUtils-types.ts";
 
 const ROOM_NAME = "Integration Manager Test";
 
@@ -92,7 +93,7 @@ test.describe("Integration Manager: Get OpenID Token", () => {
                     },
                 },
                 id: "integration-manager",
-            },
+            } as unknown as UserWidget,
         });
 
         // Succeed when checking the token is valid

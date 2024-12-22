@@ -2115,7 +2115,8 @@
         "show_less": "Pokaż mniej",
         "show_n_more": {
             "one": "Pokaż %(count)s więcej",
-            "other": "Pokaż %(count)s więcej"
+            "few": "Pokaż %(count)s więcej",
+            "many": "Pokaż %(count)s więcej"
         },
         "show_previews": "Pokazuj podgląd wiadomości",
         "sort_by": "Sortuj według",
@@ -3689,7 +3690,8 @@
             "close": "Zamknij podgląd",
             "show_n_more": {
                 "one": "Pokaż %(count)s inny podgląd",
-                "other": "Pokaż %(count)s innych podglądów"
+                "few": "Pokaż %(count)s inne podglądy",
+                "many": "Pokaż %(count)s innych podglądów"
             }
         }
     },

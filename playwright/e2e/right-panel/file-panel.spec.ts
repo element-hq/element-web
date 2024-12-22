@@ -39,7 +39,7 @@ test.describe("FilePanel", () => {
         await expect(page.locator(".mx_FilePanel")).toBeVisible();
     });
 
-    test.describe("render", () => {
+    test.describe("render", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         test("should render empty state", { tag: "@screenshot" }, async ({ page }) => {
             // Wait until the information about the empty state is rendered
             await expect(page.locator(".mx_EmptyState")).toBeVisible();

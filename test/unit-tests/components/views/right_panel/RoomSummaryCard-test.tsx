@@ -338,19 +338,18 @@ describe("<RoomSummaryCard />", () => {
         });
 
         it("does not show public room label for a DM", async () => {
-            mockClient.getAccountData.mockImplementation(
-                (eventType) =>
-                    ({
-                        [EventType.Direct]: new MatrixEvent({
-                            type: EventType.Direct,
-                            content: {
-                                "@bob:sesame.st": ["some-room-id"],
-                                // this room is a DM with ernie
-                                "@ernie:sesame.st": ["some-other-room-id", room.roomId],
-                            },
-                        }),
-                    })[eventType],
-            );
+            mockClient.getAccountData.mockImplementation((eventType) => {
+                if (eventType === EventType.Direct) {
+                    return new MatrixEvent({
+                        type: EventType.Direct,
+                        content: {
+                            "@bob:sesame.st": ["some-room-id"],
+                            // this room is a DM with ernie
+                            "@ernie:sesame.st": ["some-other-room-id", room.roomId],
+                        },
+                    });
+                }
+            });
             getComponent();
 
             await flushPromises();
