@@ -17,9 +17,7 @@ limitations under the License.
 
 import { useEffect, useMemo, useState } from "react";
 import { RoomStateEvent, MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
-import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
-import { CryptoEvent } from "matrix-js-sdk/src/crypto";
-import { UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
+import { UserVerificationStatus, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 
 import dis from "../../dispatcher/dispatcher";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
@@ -123,17 +121,11 @@ export function useMemberTileViewModel(props: MemberTileViewModelProps): MemberT
             updateE2EStatus();
         };
 
-        const onDeviceVerificationChanged = (userId: string, deviceId: string, deviceInfo: DeviceInfo): void => {
-            if (userId !== props.member.userId) return;
-            updateE2EStatus();
-        };
-
         const { roomId } = props.member;
         if (roomId) {
             const isRoomEncrypted = cli.isRoomEncrypted(roomId);
             if (isRoomEncrypted) {
                 cli.on(CryptoEvent.UserTrustStatusChanged, onUserTrustStatusChanged);
-                cli.on(CryptoEvent.DeviceVerificationChanged, onDeviceVerificationChanged);
                 updateE2EStatus();
             } else {
                 // Listen for room to become encrypted
@@ -145,7 +137,6 @@ export function useMemberTileViewModel(props: MemberTileViewModelProps): MemberT
             if (cli) {
                 cli.removeListener(RoomStateEvent.Events, onRoomStateEvents);
                 cli.removeListener(CryptoEvent.UserTrustStatusChanged, onUserTrustStatusChanged);
-                cli.removeListener(CryptoEvent.DeviceVerificationChanged, onDeviceVerificationChanged);
             }
         };
     }, [props.member]);
