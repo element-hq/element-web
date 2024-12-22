@@ -33,12 +33,12 @@ jest.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockReturnValue(1500);
 jest.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockReturnValue(1500);
 
 describe("Does not render invite button in memberlist header", () => {
-    it("Does not render invite button when user is not a member", async () => {
+    it("when user is not a member", async () => {
         await renderMemberList(true, (room) => room.updateMyMembership(KnownMembership.Leave));
         expect(screen.queryByRole("button", { name: "Invite" })).toBeNull();
     });
 
-    it("does not render invite button UI customisation hides invites", async () => {
+    it("when UI customisation hides invites", async () => {
         mocked(shouldShowComponent).mockReturnValue(false);
         const { client, memberListRoom } = await renderMemberList(true);
         // Needs this specific event...
