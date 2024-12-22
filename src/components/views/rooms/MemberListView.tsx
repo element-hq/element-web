@@ -56,7 +56,6 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
             ariaLabelledBy="memberlist-panel-tab"
             role="tabpanel"
             header={_t("common|people")}
-            // footer={footer}
             onClose={props.onClose}
         >
             <Flex align="stretch" direction="column" className="mx_MemberListView_container">

@@ -37,6 +37,51 @@ const OptionalTooltip: React.FC<TooltipProps> = ({ canInvite, children }) => {
     return <Tooltip description={_t("member_list|invite_button_no_perms_tooltip")}>{children}</Tooltip>;
 };
 
+const InviteButton: React.FC<Props> = ({ vm }) => {
+    const shouldShowInvite = vm.shouldShowInvite;
+    const shouldShowSearch = vm.shouldShowSearch;
+    const disabled = !vm.canInvite;
+
+    if (!shouldShowInvite) {
+        // In this case, invite button should not be rendered.
+        return null;
+    }
+
+    if (shouldShowSearch) {
+        /// When rendered alongside a search box, the invite button is just an icon.
+        return (
+            <OptionalTooltip canInvite={vm.canInvite}>
+                <Button
+                    className="mx_MemberListHeaderView_invite_small"
+                    kind="primary"
+                    onClick={vm.onInviteButtonClick}
+                    size="sm"
+                    iconOnly={true}
+                    Icon={InviteIcon}
+                    disabled={disabled}
+                    aria-label={_t("action|invite")}
+                />
+            </OptionalTooltip>
+        );
+    }
+
+    // Without a search box, invite button is a full size button.
+    return (
+        <OptionalTooltip canInvite={vm.canInvite}>
+            <Button
+                kind="secondary"
+                size="sm"
+                Icon={UserAddIcon}
+                className="mx_MemberListHeaderView_invite_large"
+                disabled={!vm.canInvite}
+                onClick={vm.onInviteButtonClick}
+            >
+                {_t("action|invite")}
+            </Button>
+        </OptionalTooltip>
+    );
+};
+
 /**
  * This should be:
  * A loading text with spinner while the memberlist loads.
@@ -67,49 +112,37 @@ function getHeaderLabelJSX(vm: MemberListViewState): React.ReactNode {
  */
 const MemberListHeaderView: React.FC<Props> = (props: Props) => {
     const vm = props.vm;
-    const memberCount = vm.memberCount;
-    const contentJSX =
-        memberCount < 20 ? (
-            <OptionalTooltip canInvite={vm.canInvite}>
-                <Button
-                    kind="secondary"
-                    size="sm"
-                    Icon={UserAddIcon}
-                    className="mx_MemberListHeaderView_invite_large"
-                    disabled={!vm.canInvite}
-                    onClick={vm.onInviteButtonClick}
-                >
-                    {_t("action|invite")}
-                </Button>
-            </OptionalTooltip>
-        ) : (
-            <>
+
+    let contentJSX: React.ReactNode;
+
+    if (vm.shouldShowSearch) {
+        // When we need to show the search box
+        contentJSX = (
+            <Flex justify="center" className="mx_MemberListHeaderView_container">
                 <Search
                     className="mx_MemberListHeaderView_search mx_no_textinput"
                     name="searchMembers"
                     placeholder={_t("member_list|filter_placeholder")}
                     onChange={(e) => vm.search((e as React.ChangeEvent<HTMLInputElement>).target.value)}
                 />
-                <OptionalTooltip canInvite={vm.canInvite}>
-                    <Button
-                        className="mx_MemberListHeaderView_invite_small"
-                        kind="primary"
-                        onClick={vm.onInviteButtonClick}
-                        size="sm"
-                        iconOnly={true}
-                        Icon={InviteIcon}
-                        disabled={!vm.canInvite}
-                    />
-                </OptionalTooltip>
-            </>
+                <InviteButton vm={vm} />
+            </Flex>
         );
+    } else if (!vm.shouldShowSearch && vm.shouldShowInvite) {
+        // When we don't need to show the search box but still need an invite button
+        contentJSX = (
+            <Flex justify="center" className="mx_MemberListHeaderView_container">
+                <InviteButton vm={vm} />
+            </Flex>
+        );
+    } else {
+        // No search box and no invite icon, so nothing to render!
+        contentJSX = null;
+    }
+
     return (
         <Flex className="mx_MemberListHeaderView" as="header" align="center" justify="space-between" direction="column">
-            {!vm.isLoading && (
-                <Flex justify="center" className="mx_MemberListHeaderView_container">
-                    {contentJSX}
-                </Flex>
-            )}
+            {!vm.isLoading && contentJSX}
             <Text as="div" size="sm" weight="semibold" className="mx_MemberListHeaderView_label">
                 {getHeaderLabelJSX(vm)}
             </Text>

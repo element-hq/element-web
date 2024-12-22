@@ -115,6 +115,7 @@ export interface MemberListViewState {
     search: (searchQuery: string) => void;
     isPresenceEnabled: boolean;
     shouldShowInvite: boolean;
+    shouldShowSearch: boolean;
     isLoading: boolean;
     canInvite: boolean;
     onInviteButtonClick: (ev: ButtonEvent) => void;
@@ -178,13 +179,16 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
         [sdkContext.memberListStore],
     );
 
+    // Determines whether the rendered invite button is enabled or disabled
     const getCanUserInviteToThisRoom = useCallback((): boolean => !!room && canInviteTo(room), [room]);
-
     const [canInvite, setCanInvite] = useState<boolean>(getCanUserInviteToThisRoom());
 
-    const shouldShowInvite = useMemo(() => {
-        return room?.getMyMembership() == KnownMembership.Join && shouldShowComponent(UIComponent.InviteUsers);
-    }, [room]);
+    // Determines whether the invite button should be shown or not.
+    const getShouldShowInvite = useCallback(
+        (): boolean => room?.getMyMembership() === KnownMembership.Join && shouldShowComponent(UIComponent.InviteUsers),
+        [room],
+    );
+    const [shouldShowInvite, setShouldShowInvite] = useState<boolean>(getShouldShowInvite());
 
     const onInviteButtonClick = (ev: ButtonEvent): void => {
         PosthogTrackers.trackInteraction("WebRightPanelMemberListInviteButton", ev);
@@ -219,6 +223,8 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
         if (membership === KnownMembership.Join && oldMembership !== KnownMembership.Join) {
             // we just joined the room, load the member list
             loadMembers();
+            const newShouldShowInvite = getShouldShowInvite();
+            setShouldShowInvite(newShouldShowInvite);
         }
     });
 
@@ -251,6 +257,7 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
         isPresenceEnabled,
         isLoading,
         onInviteButtonClick,
+        shouldShowSearch: memberCount >= 20,
         canInvite,
     };
 }

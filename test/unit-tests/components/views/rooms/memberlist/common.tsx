@@ -22,6 +22,7 @@ import MatrixClientContext from "../../../../../../src/contexts/MatrixClientCont
 export function createRoom(client: MatrixClient, opts = {}) {
     const roomId = "!" + Math.random().toString().slice(2, 10) + ":domain";
     const room = new Room(roomId, client, client.getUserId()!);
+    room.updateMyMembership(KnownMembership.Join);
     if (opts) {
         Object.assign(room, opts);
     }
@@ -38,7 +39,11 @@ export type Rendered = {
     reRender: () => Promise<void>;
 };
 
-export async function renderMemberList(enablePresence: boolean, usersPerLevel: number = 2): Promise<Rendered> {
+export async function renderMemberList(
+    enablePresence: boolean,
+    roomSetup?: (room: Room) => void,
+    usersPerLevel: number = 2,
+): Promise<Rendered> {
     TestUtils.stubClient();
     const client = MatrixClientPeg.safeGet();
     client.hasLazyLoadMembersEnabled = () => false;
@@ -46,6 +51,9 @@ export async function renderMemberList(enablePresence: boolean, usersPerLevel: n
     // Make room
     const memberListRoom = createRoom(client);
     expect(memberListRoom.roomId).toBeTruthy();
+
+    // Give the test an opportunity to make changes to room before first render
+    roomSetup?.(memberListRoom);
 
     // Make users
     const adminUsers = [];

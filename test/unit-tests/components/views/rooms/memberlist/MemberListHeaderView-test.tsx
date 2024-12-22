@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, screen } from "jest-matrix-react";
-import { RoomMember, User } from "matrix-js-sdk/src/matrix";
+import { act, fireEvent, screen } from "jest-matrix-react";
+import { RoomMember, User, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { mocked } from "jest-mock";
 
@@ -32,10 +32,29 @@ jest.mock("react-virtualized", () => {
 jest.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockReturnValue(1500);
 jest.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockReturnValue(1500);
 
+describe("Does not render invite button in memberlist header", () => {
+    it("Does not render invite button when user is not a member", async () => {
+        await renderMemberList(true, (room) => room.updateMyMembership(KnownMembership.Leave));
+        expect(screen.queryByRole("button", { name: "Invite" })).toBeNull();
+    });
+
+    it("does not render invite button UI customisation hides invites", async () => {
+        mocked(shouldShowComponent).mockReturnValue(false);
+        const { client, memberListRoom } = await renderMemberList(true);
+        // Needs this specific event...
+        act(() => {
+            client.emit(RoomEvent.MyMembership, memberListRoom, KnownMembership.Join, KnownMembership.Invite);
+        });
+        await new Promise((r) => setTimeout(r, 1000));
+        expect(screen.queryByRole("button", { name: "Invite" })).toBeNull();
+    });
+});
+
 describe("MemberListHeaderView", () => {
     let rendered: Rendered;
 
     beforeEach(async function () {
+        mocked(shouldShowComponent).mockReturnValue(true);
         rendered = await renderMemberList(true);
     });
 
@@ -70,15 +89,10 @@ describe("MemberListHeaderView", () => {
             jest.restoreAllMocks();
         });
 
-        it("Does not render invite button when user is not a member", async () => {});
-
-        it("does not render invite button UI customisation hides invites", async () => {});
-
         it("Renders disabled invite button when current user is a member but does not have rights to invite", async () => {
             const { memberListRoom, reRender } = rendered;
             jest.spyOn(memberListRoom, "getMyMembership").mockReturnValue(KnownMembership.Join);
             jest.spyOn(memberListRoom, "canInvite").mockReturnValue(false);
-            mocked(shouldShowComponent).mockReturnValue(true);
             await reRender();
             expect(screen.getByRole("button", { name: "Invite" })).toHaveAttribute("aria-disabled", "true");
         });
@@ -87,7 +101,6 @@ describe("MemberListHeaderView", () => {
             const { memberListRoom, reRender } = rendered;
             jest.spyOn(memberListRoom, "getMyMembership").mockReturnValue(KnownMembership.Join);
             jest.spyOn(memberListRoom, "canInvite").mockReturnValue(true);
-            mocked(shouldShowComponent).mockReturnValue(true);
             await reRender();
             expect(screen.getByRole("button", { name: "Invite" })).not.toHaveAttribute("aria-disabled", "true");
         });
@@ -95,9 +108,7 @@ describe("MemberListHeaderView", () => {
         it("Opens room inviter on button click", async () => {
             const { memberListRoom, reRender } = rendered;
             jest.spyOn(defaultDispatcher, "dispatch");
-            jest.spyOn(memberListRoom, "getMyMembership").mockReturnValue(KnownMembership.Join);
             jest.spyOn(memberListRoom, "canInvite").mockReturnValue(true);
-            mocked(shouldShowComponent).mockReturnValue(true);
             await reRender();
 
             fireEvent.click(screen.getByRole("button", { name: "Invite" }));
