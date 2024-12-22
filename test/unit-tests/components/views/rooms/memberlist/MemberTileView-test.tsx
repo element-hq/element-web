@@ -13,13 +13,16 @@ import { UserVerificationStatus, DeviceVerificationStatus } from "matrix-js-sdk/
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 
-import * as TestUtils from "../../../../test-utils";
-import { RoomMember } from "../../../../../src/models/rooms/RoomMember";
+import * as TestUtils from "../../../../../test-utils";
+import { RoomMember } from "../../../../../../src/models/rooms/RoomMember";
 import {
     getPending3PidInvites,
     sdkRoomMemberToRoomMember,
-} from "../../../../../src/components/viewmodels/MemberListViewModel";
-import { RoomMemberTileView, ThreePidInviteTileView } from "../../../../../src/components/views/rooms/MemberTileView";
+} from "../../../../../../src/components/viewmodels/MemberListViewModel";
+import {
+    RoomMemberTileView,
+    ThreePidInviteTileView,
+} from "../../../../../../src/components/views/rooms/MemberTileView";
 
 describe("MemberTileView", () => {
     describe("RoomMemberTileView", () => {
@@ -102,6 +105,7 @@ describe("MemberTileView", () => {
             room = new Room("!mytestroom:foo.org", cli, cli.getSafeUserId());
             room.getLiveTimeline().addEvent(
                 TestUtils.mkThirdPartyInviteEvent(cli.getSafeUserId(), "Foobar", room.roomId),
+                { toStartOfTimeline: false, addToState: true },
             );
         });
 

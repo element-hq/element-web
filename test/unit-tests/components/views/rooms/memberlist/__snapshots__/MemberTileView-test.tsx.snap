@@ -218,7 +218,7 @@ exports[`MemberTileView ThreePidInviteTileView renders ThreePidInvite correctly 
             data-testid="avatar-img"
             data-type="round"
             role="presentation"
-            style="--cpd-avatar-size: 36px;"
+            style="--cpd-avatar-size: 32px;"
           >
             F
           </span>
