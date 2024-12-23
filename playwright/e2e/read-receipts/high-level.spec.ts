@@ -120,7 +120,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
             await util.assertUnread(room2, 40);
 
             // When I jump to a message in the middle and page up
-            await msg.jumpTo(room2.name, "x\ny\nz\nMsg0020");
+            await msg.jumpTo(room2, "x\ny\nz\nMsg0020");
             await util.pageUp();
 
             // Then the room is still unread

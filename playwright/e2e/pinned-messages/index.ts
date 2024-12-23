@@ -13,6 +13,8 @@ import { Client } from "../../pages/client";
 import { ElementAppPage } from "../../pages/ElementAppPage";
 import { Bot } from "../../pages/bot";
 
+type RoomRef = { name: string; roomId: string };
+
 /**
  * Set up for pinned message tests.
  */
@@ -47,7 +49,7 @@ export class Helpers {
      * @param room - the name of the room to send messages into
      * @param messages - the list of messages to send, these can be strings or implementations of MessageSpec like `editOf`
      */
-    async receiveMessages(room: string | { name: string }, messages: string[]) {
+    async receiveMessages(room: RoomRef, messages: string[]) {
         await this.sendMessageAsClient(this.bot, room, messages);
     }
 
@@ -55,9 +57,8 @@ export class Helpers {
      * Use the supplied client to send messages or perform actions as specified by
      * the supplied {@link Message} items.
      */
-    private async sendMessageAsClient(cli: Client, roomName: string | { name: string }, messages: string[]) {
-        const room = await this.findRoomByName(typeof roomName === "string" ? roomName : roomName.name);
-        const roomId = await room.evaluate((room) => room.roomId);
+    private async sendMessageAsClient(cli: Client, room: RoomRef, messages: string[]) {
+        const roomId = room.roomId;
 
         for (const message of messages) {
             await cli.sendMessage(roomId, { body: message, msgtype: "m.text" });
@@ -74,21 +75,10 @@ export class Helpers {
     }
 
     /**
-     * Find a room by its name
-     * @param roomName
-     * @private
-     */
-    private async findRoomByName(roomName: string) {
-        return this.app.client.evaluateHandle((cli, roomName) => {
-            return cli.getRooms().find((r) => r.name === roomName);
-        }, roomName);
-    }
-
-    /**
      * Open the room with the supplied name.
      */
-    async goTo(room: string | { name: string }) {
-        await this.app.viewRoomByName(typeof room === "string" ? room : room.name);
+    async goTo(room: RoomRef) {
+        await this.app.viewRoomByName(room.name);
     }
 
     /**

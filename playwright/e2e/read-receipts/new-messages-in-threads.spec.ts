@@ -101,7 +101,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
                 await util.goTo(room1);
 
                 // When I read an older message in the thread
-                await msg.jumpTo(room2.name, "InThread0000", true);
+                await msg.jumpTo(room2, "InThread0000", true);
 
                 // Then the thread is still marked as unread
                 await util.backToThreadsList();
