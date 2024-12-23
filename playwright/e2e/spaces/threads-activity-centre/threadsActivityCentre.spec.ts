@@ -9,7 +9,7 @@
 import { expect, test } from ".";
 import { CommandOrControl } from "../../utils";
 
-test.describe("Threads Activity Centre", () => {
+test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
     test.use({
         displayName: "Alice",
         botCreateOpts: { displayName: "Other User" },

@@ -8,11 +8,11 @@ Please see LICENSE files in the repository root for full details.
 
 import { Locator, type Page } from "@playwright/test";
 
-import { test as base, expect } from "../../element-web-test";
+import { test as base, expect, Fixtures } from "../../element-web-test";
 import { viewRoomSummaryByName } from "../right-panel/utils";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 
-const test = base.extend({
+const test = base.extend<Fixtures>({
     // eslint-disable-next-line no-empty-pattern
     startHomeserverOpts: async ({}, use) => {
         await use("dehydration");
@@ -50,8 +50,6 @@ test.describe("Dehydration", () => {
     });
 
     test("Create dehydrated device", async ({ page, user, app }, workerInfo) => {
-        test.skip(workerInfo.project.name === "Legacy Crypto", "This test only works with Rust crypto.");
-
         // Create a backup (which will create SSSS, and dehydrated device)
 
         const securityTab = await app.settings.openUserSettings("Security & Privacy");
