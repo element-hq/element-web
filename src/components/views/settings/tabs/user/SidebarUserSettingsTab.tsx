@@ -58,8 +58,8 @@ const SidebarUserSettingsTab: React.FC = () => {
         [MetaSpace.People]: peopleEnabled,
         [MetaSpace.Orphans]: orphansEnabled,
         [MetaSpace.VideoRooms]: videoRoomsEnabled,
-    } = useSettingValue<Record<MetaSpace, boolean>>("Spaces.enabledMetaSpaces");
-    const allRoomsInHome = useSettingValue<boolean>("Spaces.allRoomsInHome");
+    } = useSettingValue("Spaces.enabledMetaSpaces");
+    const allRoomsInHome = useSettingValue("Spaces.allRoomsInHome");
     const guestSpaUrl = useMemo(() => {
         return SdkConfig.get("element_call").guest_spa_url;
     }, []);

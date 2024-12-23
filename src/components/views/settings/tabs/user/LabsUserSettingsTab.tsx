@@ -14,7 +14,7 @@ import { SettingLevel } from "../../../../../settings/SettingLevel";
 import SdkConfig from "../../../../../SdkConfig";
 import BetaCard from "../../../beta/BetaCard";
 import SettingsFlag from "../../../elements/SettingsFlag";
-import { LabGroup, labGroupNames } from "../../../../../settings/Settings";
+import { FeatureSettingKey, LabGroup, labGroupNames } from "../../../../../settings/Settings";
 import { EnhancedMap } from "../../../../../utils/maps";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { SettingsSubsection, SettingsSubsectionText } from "../../shared/SettingsSubsection";
@@ -25,8 +25,8 @@ export const showLabsFlags = (): boolean => {
 };
 
 export default class LabsUserSettingsTab extends React.Component<{}> {
-    private readonly labs: string[];
-    private readonly betas: string[];
+    private readonly labs: FeatureSettingKey[];
+    private readonly betas: FeatureSettingKey[];
 
     public constructor(props: {}) {
         super(props);
@@ -34,10 +34,10 @@ export default class LabsUserSettingsTab extends React.Component<{}> {
         const features = SettingsStore.getFeatureSettingNames();
         const [labs, betas] = features.reduce(
             (arr, f) => {
-                arr[SettingsStore.getBetaInfo(f) ? 1 : 0].push(f);
+                arr[SettingsStore.getBetaInfo(f) ? 1 : 0].push(f as FeatureSettingKey);
                 return arr;
             },
-            [[], []] as [string[], string[]],
+            [[], []] as [FeatureSettingKey[], FeatureSettingKey[]],
         );
 
         this.labs = labs;

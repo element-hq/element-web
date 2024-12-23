@@ -48,7 +48,7 @@ export interface ISuggestedRoom extends HierarchyRoom {
     viaServers: string[];
 }
 
-export function isMetaSpace(spaceKey?: SpaceKey): boolean {
+export function isMetaSpace(spaceKey?: SpaceKey): spaceKey is MetaSpace {
     return (
         spaceKey === MetaSpace.Home ||
         spaceKey === MetaSpace.Favourites ||
