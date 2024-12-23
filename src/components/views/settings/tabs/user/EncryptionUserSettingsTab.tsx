@@ -6,7 +6,7 @@
  */
 
 import React, { JSX, useCallback, useEffect, useState } from "react";
-import { Button, InlineSpinner } from "@vector-im/compound-web";
+import { Button, InlineSpinner, Separator } from "@vector-im/compound-web";
 import ComputerIcon from "@vector-im/compound-design-tokens/assets/web/icons/computer";
 
 import SettingsTab from "../SettingsTab";
@@ -18,6 +18,8 @@ import Modal from "../../../../../Modal";
 import SetupEncryptionDialog from "../../../dialogs/security/SetupEncryptionDialog";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { SettingsSubheader } from "../../SettingsSubheader";
+import { AdvancedPanel } from "../../encryption/AdvancedPanel";
+import { ResetIdentityPanel } from "../../encryption/ResetIdentityPanel";
 
 /**
  * The state in the encryption settings tab.
@@ -29,8 +31,9 @@ import { SettingsSubheader } from "../../SettingsSubheader";
  *                           This happens when the user has a recovery key and the user clicks on "Change recovery key" button of the RecoveryPanel.
  *  - "set_recovery_key": The panel to show when the user is setting up their recovery key.
  *                        This happens when the user doesn't have a key a recovery key and the user clicks on "Set up recovery key" button of the RecoveryPanel.
+ *  - "reset_identity": The panel to show when the user is resetting their identity.
  */
-type State = "loading" | "main" | "set_up_encryption" | "change_recovery_key" | "set_recovery_key";
+type State = "loading" | "main" | "set_up_encryption" | "change_recovery_key" | "set_recovery_key" | "reset_identity";
 
 export function EncryptionUserSettingsTab(): JSX.Element {
     const [state, setState] = useState<State>("loading");
@@ -46,11 +49,15 @@ export function EncryptionUserSettingsTab(): JSX.Element {
             break;
         case "main":
             content = (
-                <RecoveryPanel
-                    onChangeRecoveryKeyClick={(setupNewKey) =>
-                        setupNewKey ? setState("set_recovery_key") : setState("change_recovery_key")
-                    }
-                />
+                <>
+                    <RecoveryPanel
+                        onChangeRecoveryKeyClick={(setupNewKey) =>
+                            setupNewKey ? setState("set_recovery_key") : setState("change_recovery_key")
+                        }
+                    />
+                    <Separator kind="section" />
+                    <AdvancedPanel onResetIdentityClick={() => setState("reset_identity")} />
+                </>
             );
             break;
         case "change_recovery_key":
@@ -62,6 +69,9 @@ export function EncryptionUserSettingsTab(): JSX.Element {
                     onFinish={() => setState("main")}
                 />
             );
+            break;
+        case "reset_identity":
+            content = <ResetIdentityPanel onCancelClick={() => setState("main")} onFinish={() => setState("main")} />;
             break;
     }
 
