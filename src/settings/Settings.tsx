@@ -187,7 +187,6 @@ export interface Settings {
     // [settingName: `feature_${string}`]: IFeature;
     "feature_video_rooms": IFeature;
     [Features.NotificationSettings2]: IFeature;
-    [Features.OidcNativeFlow]: IFeature;
     [Features.ReleaseAnnouncement]: IFeature;
     "feature_msc3531_hide_messages_pending_moderation": IFeature;
     "feature_report_to_moderators": IFeature;
