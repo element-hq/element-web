@@ -419,7 +419,7 @@ describe("WysiwygComposer", () => {
         const onChange = jest.fn();
         const onSend = jest.fn();
         beforeEach(async () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string): any => {
                 if (name === "MessageComposerInput.autoReplaceEmoji") return true;
             });
             customRender(onChange, onSend);
@@ -455,7 +455,7 @@ describe("WysiwygComposer", () => {
         const onChange = jest.fn();
         const onSend = jest.fn();
         beforeEach(async () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name): any => {
                 if (name === "MessageComposerInput.ctrlEnterToSend") return true;
             });
             customRender(onChange, onSend);

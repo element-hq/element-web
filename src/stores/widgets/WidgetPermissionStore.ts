@@ -53,10 +53,7 @@ export class WidgetPermissionStore {
     public setOIDCState(widget: Widget, kind: WidgetKind, roomId: string | undefined, newState: OIDCState): void {
         const settingsKey = this.packSettingKey(widget, kind, roomId);
 
-        let currentValues = SettingsStore.getValue<{
-            allow?: string[];
-            deny?: string[];
-        }>("widgetOpenIDPermissions");
+        let currentValues = SettingsStore.getValue("widgetOpenIDPermissions");
         if (!currentValues) {
             currentValues = {};
         }

@@ -61,7 +61,7 @@ export const WysiwygComposer = memo(function WysiwygComposer({
 
     const inputEventProcessor = useInputEventProcessor(onSend, autocompleteRef, initialContent, eventRelation);
 
-    const isAutoReplaceEmojiEnabled = useSettingValue<boolean>("MessageComposerInput.autoReplaceEmoji");
+    const isAutoReplaceEmojiEnabled = useSettingValue("MessageComposerInput.autoReplaceEmoji");
     const emojiSuggestions = useMemo(() => getEmojiSuggestions(isAutoReplaceEmojiEnabled), [isAutoReplaceEmojiEnabled]);
 
     const { ref, isWysiwygReady, content, actionStates, wysiwyg, suggestion, messageContent } = useWysiwyg({

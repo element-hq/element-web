@@ -20,12 +20,13 @@ import SettingsFlag from "../elements/SettingsFlag";
 import { useFeatureEnabled } from "../../../hooks/useSettings";
 import InlineSpinner from "../elements/InlineSpinner";
 import { shouldShowFeedback } from "../../../utils/Feedback";
+import { FeatureSettingKey } from "../../../settings/Settings.tsx";
 
 // XXX: Keep this around for re-use in future Betas
 
 interface IProps {
     title?: string;
-    featureId: string;
+    featureId: FeatureSettingKey;
 }
 
 interface IBetaPillProps {

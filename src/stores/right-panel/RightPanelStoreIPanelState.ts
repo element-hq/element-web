@@ -57,10 +57,10 @@ export interface IRightPanelForRoom {
     history: Array<IRightPanelCard>;
 }
 
-interface IRightPanelForRoomStored {
+export type IRightPanelForRoomStored = {
     isOpen: boolean;
     history: Array<IRightPanelCardStored>;
-}
+};
 
 export function convertToStorePanel(cacheRoom?: IRightPanelForRoom): IRightPanelForRoomStored | undefined {
     if (!cacheRoom) return undefined;
@@ -68,7 +68,7 @@ export function convertToStorePanel(cacheRoom?: IRightPanelForRoom): IRightPanel
     return { isOpen: cacheRoom.isOpen, history: storeHistory };
 }
 
-export function convertToStatePanel(storeRoom: IRightPanelForRoomStored, room: Room): IRightPanelForRoom {
+export function convertToStatePanel(storeRoom: IRightPanelForRoomStored | null, room: Room): IRightPanelForRoom | null {
     if (!storeRoom) return storeRoom;
     const stateHistory = [...storeRoom.history].map((panelStateStore) => convertStoreToCard(panelStateStore, room));
     return { history: stateHistory, isOpen: storeRoom.isOpen };
