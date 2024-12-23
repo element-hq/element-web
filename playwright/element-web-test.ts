@@ -23,7 +23,6 @@ import { OAuthServer } from "./plugins/oauth_server";
 import { Crypto } from "./pages/crypto";
 import { Toasts } from "./pages/toasts";
 import { Bot, CreateBotOpts } from "./pages/bot";
-import { ProxyInstance, SlidingSyncProxy } from "./plugins/sliding-sync-proxy";
 import { Webserver } from "./plugins/webserver";
 
 // Enable experimental service worker support

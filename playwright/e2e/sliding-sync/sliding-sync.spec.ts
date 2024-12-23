@@ -15,6 +15,8 @@ import { ProxyInstance, SlidingSyncProxy } from "../../plugins/sliding-sync-prox
 
 const test = base.extend<{
     slidingSyncProxy: ProxyInstance;
+    testRoom: { roomId: string; name: string };
+    joinedBot: Bot;
 }>({
     slidingSyncProxy: async ({ context, page, homeserver }, use) => {
         const proxy = new SlidingSyncProxy(homeserver.config.dockerUrl, context);
@@ -36,15 +38,27 @@ const test = base.extend<{
     credentials: async ({ slidingSyncProxy, credentials }, use) => {
         await use(credentials);
     },
+    testRoom: async ({ user, app }, use) => {
+        const name = "Test Room";
+        const roomId = await app.client.createRoom({ name });
+        await use({ roomId, name });
+    },
+    joinedBot: async ({ app, bot, testRoom }, use) => {
+        const roomId = testRoom.roomId;
+        await bot.prepareClient();
+        const bobUserId = await bot.evaluate((client) => client.getUserId());
+        await app.client.evaluate(
+            async (client, { bobUserId, roomId }) => {
+                await client.invite(roomId, bobUserId);
+            },
+            { bobUserId, roomId },
+        );
+        await bot.joinRoom(roomId);
+        await use(bot);
+    },
 });
 
 test.describe("Sliding Sync", () => {
-    let roomId: string;
-
-    test.beforeEach(async ({ page, user, app }) => {
-        roomId = await app.client.createRoom({ name: "Test Room" });
-    });
-
     const checkOrder = async (wantOrder: string[], page: Page) => {
         await expect(page.getByRole("group", { name: "Rooms" }).locator(".mx_RoomTile_title")).toHaveText(wantOrder);
     };
@@ -58,18 +72,8 @@ test.describe("Sliding Sync", () => {
         });
     };
 
-    const createAndJoinBot = async (app: ElementAppPage, bot: Bot): Promise<Bot> => {
-        await bot.prepareClient();
-        const bobUserId = await bot.evaluate((client) => client.getUserId());
-        await app.client.evaluate(
-            async (client, { bobUserId, roomId }) => {
-                await client.invite(roomId, bobUserId);
-            },
-            { bobUserId, roomId },
-        );
-        await bot.joinRoom(roomId);
-        return bot;
-    };
+    // Load the user fixture for all tests
+    test.beforeEach(({ user }) => {});
 
     test("should render the Rooms list in reverse chronological order by default and allowing sorting A-Z", async ({
         page,
@@ -148,11 +152,9 @@ test.describe("Sliding Sync", () => {
         await checkOrder(["Apple", "Orange", "Pineapple", "Test Room"], page);
     });
 
-    test("should show the right unread notifications", async ({ page, app, user, bot }) => {
-        const bob = await createAndJoinBot(app, bot);
-
+    test("should show the right unread notifications", async ({ page, app, user, joinedBot: bob, testRoom }) => {
         // send a message in the test room: unread notification count should increment
-        await bob.sendMessage(roomId, "Hello World");
+        await bob.sendMessage(testRoom.roomId, "Hello World");
 
         const treeItemLocator1 = page.getByRole("treeitem", { name: "Test Room 1 unread message." });
         await expect(treeItemLocator1.locator(".mx_NotificationBadge_count")).toHaveText("1");
@@ -162,7 +164,7 @@ test.describe("Sliding Sync", () => {
         );
 
         // send an @mention: highlight count (red) should be 2.
-        await bob.sendMessage(roomId, `Hello ${user.displayName}`);
+        await bob.sendMessage(testRoom.roomId, `Hello ${user.displayName}`);
         const treeItemLocator2 = page.getByRole("treeitem", {
             name: "Test Room 2 unread messages including mentions.",
         });
@@ -176,9 +178,8 @@ test.describe("Sliding Sync", () => {
         ).not.toBeAttached();
     });
 
-    test("should not show unread indicators", async ({ page, app, bot }) => {
+    test("should not show unread indicators", async ({ page, app, joinedBot: bot, testRoom }) => {
         // TODO: for now. Later we should.
-        await createAndJoinBot(app, bot);
 
         // disable notifs in this room (TODO: CS API call?)
         const locator = page.getByRole("treeitem", { name: "Test Room" });
@@ -191,7 +192,7 @@ test.describe("Sliding Sync", () => {
 
         await checkOrder(["Dummy", "Test Room"], page);
 
-        await bot.sendMessage(roomId, "Do you read me?");
+        await bot.sendMessage(testRoom.roomId, "Do you read me?");
 
         // wait for this message to arrive, tell by the room list resorting
         await checkOrder(["Test Room", "Dummy"], page);
@@ -210,9 +211,12 @@ test.describe("Sliding Sync", () => {
         expect(locator.locator(".mx_ToggleSwitch_on")).toBeAttached();
     });
 
-    test("should show and be able to accept/reject/rescind invites", async ({ page, app, bot }) => {
-        await createAndJoinBot(app, bot);
-
+    test("should show and be able to accept/reject/rescind invites", async ({
+        page,
+        app,
+        joinedBot: bot,
+        testRoom,
+    }) => {
         const clientUserId = await app.client.evaluate((client) => client.getUserId());
 
         // invite bot into 3 rooms:
@@ -288,10 +292,10 @@ test.describe("Sliding Sync", () => {
 
     // Regression test for a bug in SS mode, but would be useful to have in non-SS mode too.
     // This ensures we are setting RoomViewStore state correctly.
-    test("should clear the reply to field when swapping rooms", async ({ page, app }) => {
+    test("should clear the reply to field when swapping rooms", async ({ page, app, testRoom }) => {
         await app.client.createRoom({ name: "Other Room" });
         await expect(page.getByRole("treeitem", { name: "Other Room" })).toBeVisible();
-        await app.client.sendMessage(roomId, "Hello world");
+        await app.client.sendMessage(testRoom.roomId, "Hello world");
 
         // select the room
         await page.getByRole("treeitem", { name: "Test Room" }).click();
@@ -320,11 +324,11 @@ test.describe("Sliding Sync", () => {
     });
 
     // Regression test for https://github.com/vector-im/element-web/issues/21462
-    test("should not cancel replies when permalinks are clicked", async ({ page, app }) => {
+    test("should not cancel replies when permalinks are clicked", async ({ page, app, testRoom }) => {
         // we require a first message as you cannot click the permalink text with the avatar in the way
-        await app.client.sendMessage(roomId, "First message");
-        await app.client.sendMessage(roomId, "Permalink me");
-        await app.client.sendMessage(roomId, "Reply to me");
+        await app.client.sendMessage(testRoom.roomId, "First message");
+        await app.client.sendMessage(testRoom.roomId, "Permalink me");
+        await app.client.sendMessage(testRoom.roomId, "Reply to me");
 
         // select the room
         await page.getByRole("treeitem", { name: "Test Room" }).click();
