@@ -25,11 +25,10 @@ const test = base.extend<Fixtures>({
     },
 });
 
-test.describe("migration", function () {
+test.describe("migration", { tag: "@no-webkit" }, function () {
     test.use({ displayName: "Alice" });
 
     test("Should support migration from legacy crypto", async ({ context, user, page }, workerInfo) => {
-        test.skip(workerInfo.project.name === "Legacy Crypto", "This test only works with Rust crypto.");
         test.slow();
 
         // We should see a migration progress bar

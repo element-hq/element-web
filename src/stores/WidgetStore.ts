@@ -17,17 +17,11 @@ import WidgetEchoStore from "../stores/WidgetEchoStore";
 import ActiveWidgetStore from "../stores/ActiveWidgetStore";
 import WidgetUtils from "../utils/WidgetUtils";
 import { UPDATE_EVENT } from "./AsyncStore";
+import { IApp } from "../utils/WidgetUtils-types";
 
 interface IState {}
 
-export interface IApp extends IWidget {
-    "roomId": string;
-    "eventId"?: string; // not present on virtual widgets
-    // eslint-disable-next-line camelcase
-    "avatar_url"?: string; // MSC2765 https://github.com/matrix-org/matrix-doc/pull/2765
-    // Whether the widget was created from `widget_build_url` and thus is a call widget of some kind
-    "io.element.managed_hybrid"?: boolean;
-}
+export type { IApp };
 
 export function isAppWidget(widget: IWidget | IApp): widget is IApp {
     return "roomId" in widget && typeof widget.roomId === "string";

@@ -22,7 +22,7 @@ import {
 } from "./utils";
 import { Bot } from "../../pages/bot";
 
-test.describe("Device verification", () => {
+test.describe("Device verification", { tag: "@no-webkit" }, () => {
     let aliceBotClient: Bot;
 
     /** The backup version that was set up by the bot client. */

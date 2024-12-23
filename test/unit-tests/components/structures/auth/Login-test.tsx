@@ -19,7 +19,6 @@ import { mkServerConfig, mockPlatformPeg, unmockPlatformPeg } from "../../../../
 import Login from "../../../../../src/components/structures/auth/Login";
 import BasePlatform from "../../../../../src/BasePlatform";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
-import { Features } from "../../../../../src/settings/Settings";
 import * as registerClientUtils from "../../../../../src/utils/oidc/registerClient";
 import { makeDelegatedAuthConfig } from "../../../../test-utils/oidc";
 
@@ -371,9 +370,6 @@ describe("Login", function () {
         const delegatedAuth = makeDelegatedAuthConfig(issuer);
         beforeEach(() => {
             jest.spyOn(logger, "error");
-            jest.spyOn(SettingsStore, "getValue").mockImplementation(
-                (settingName) => settingName === Features.OidcNativeFlow,
-            );
         });
 
         afterEach(() => {

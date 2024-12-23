@@ -140,8 +140,12 @@ export class Docker {
      * Detects whether the docker command is actually podman.
      * To do this, it looks for "podman" in the output of "docker --help".
      */
+    static _isPodman?: boolean;
     static async isPodman(): Promise<boolean> {
-        const { stdout } = await exec("docker", ["--help"], true);
-        return stdout.toLowerCase().includes("podman");
+        if (Docker._isPodman === undefined) {
+            const { stdout } = await exec("docker", ["--help"], true);
+            Docker._isPodman = stdout.toLowerCase().includes("podman");
+        }
+        return Docker._isPodman;
     }
 }

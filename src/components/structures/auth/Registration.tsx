@@ -44,7 +44,6 @@ import { AuthHeaderDisplay } from "./header/AuthHeaderDisplay";
 import { AuthHeaderProvider } from "./header/AuthHeaderProvider";
 import SettingsStore from "../../../settings/SettingsStore";
 import { ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
-import { Features } from "../../../settings/Settings";
 import { startOidcLogin } from "../../../utils/oidc/authorize";
 
 const debuglog = (...args: any[]): void => {
@@ -72,10 +71,7 @@ interface IProps {
     mobileRegister?: boolean;
     // Called when the user has logged in. Params:
     // - object with userId, deviceId, homeserverUrl, identityServerUrl, accessToken
-    // - The user's password, if available and applicable (may be cached in memory
-    //   for a short time so the user is not required to re-enter their password
-    //   for operations like uploading cross-signing keys).
-    onLoggedIn(params: IMatrixClientCreds, password: string): Promise<void>;
+    onLoggedIn(params: IMatrixClientCreds): Promise<void>;
     // registration shouldn't know or care how login is done.
     onLoginClick(): void;
     onServerConfigChange(config: ValidatedServerConfig): void;
@@ -133,8 +129,6 @@ export default class Registration extends React.Component<IProps, IState> {
     private readonly loginLogic: Login;
     // `replaceClient` tracks latest serverConfig to spot when it changes under the async method which fetches flows
     private latestServerConfig?: ValidatedServerConfig;
-    // cache value from settings store
-    private oidcNativeFlowEnabled = false;
 
     public constructor(props: IProps) {
         super(props);
@@ -153,14 +147,10 @@ export default class Registration extends React.Component<IProps, IState> {
             serverDeadError: "",
         };
 
-        // only set on a config level, so we don't need to watch
-        this.oidcNativeFlowEnabled = SettingsStore.getValue(Features.OidcNativeFlow);
-
         const { hsUrl, isUrl, delegatedAuthentication } = this.props.serverConfig;
         this.loginLogic = new Login(hsUrl, isUrl, null, {
             defaultDeviceDisplayName: "Element login check", // We shouldn't ever be used
-            // if native OIDC is enabled in the client pass the server's delegated auth settings
-            delegatedAuthentication: this.oidcNativeFlowEnabled ? delegatedAuthentication : undefined,
+            delegatedAuthentication,
         });
     }
 
@@ -230,10 +220,7 @@ export default class Registration extends React.Component<IProps, IState> {
 
         this.loginLogic.setHomeserverUrl(hsUrl);
         this.loginLogic.setIdentityServerUrl(isUrl);
-        // if native OIDC is enabled in the client pass the server's delegated auth settings
-        const delegatedAuthentication = this.oidcNativeFlowEnabled ? serverConfig.delegatedAuthentication : undefined;
-
-        this.loginLogic.setDelegatedAuthentication(delegatedAuthentication);
+        this.loginLogic.setDelegatedAuthentication(serverConfig.delegatedAuthentication);
 
         let ssoFlow: SSOFlow | undefined;
         let oidcNativeFlow: OidcNativeFlow | undefined;
@@ -431,16 +418,13 @@ export default class Registration extends React.Component<IProps, IState> {
                 newState.busy = false;
                 newState.completedNoSignin = true;
             } else {
-                await this.props.onLoggedIn(
-                    {
-                        userId,
-                        deviceId: (response as RegisterResponse).device_id!,
-                        homeserverUrl: this.state.matrixClient.getHomeserverUrl(),
-                        identityServerUrl: this.state.matrixClient.getIdentityServerUrl(),
-                        accessToken,
-                    },
-                    this.state.formVals.password!,
-                );
+                await this.props.onLoggedIn({
+                    userId,
+                    deviceId: (response as RegisterResponse).device_id!,
+                    homeserverUrl: this.state.matrixClient.getHomeserverUrl(),
+                    identityServerUrl: this.state.matrixClient.getIdentityServerUrl(),
+                    accessToken,
+                });
 
                 this.setupPushers();
             }
