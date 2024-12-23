@@ -6,6 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
+import type { BrowserContext } from "@playwright/test";
 import { getFreePort } from "../utils/port";
 import { Docker } from "../docker";
 import { PG_PASSWORD, PostgresDocker } from "../postgres";
@@ -24,7 +25,10 @@ export class SlidingSyncProxy {
     private readonly postgresDocker = new PostgresDocker("sliding-sync");
     private instance: ProxyInstance;
 
-    constructor(private synapseIp: string) {}
+    constructor(
+        private synapseIp: string,
+        private context: BrowserContext,
+    ) {}
 
     async start(): Promise<ProxyInstance> {
         console.log(new Date(), "Starting sliding sync proxy...");
@@ -48,6 +52,13 @@ export class SlidingSyncProxy {
             ],
         });
         console.log(new Date(), "started!");
+
+        const baseUrl = `http://localhost:${port}`;
+        await this.context.route("**/_matrix/client/unstable/org.matrix.msc3575/sync**", async (route) => {
+            await route.continue({
+                url: new URL(route.request().url().split("/").slice(3).join("/"), baseUrl).href,
+            });
+        });
 
         this.instance = { containerId, postgresId, port };
         return this.instance;

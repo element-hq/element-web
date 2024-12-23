@@ -8,14 +8,40 @@ Please see LICENSE files in the repository root for full details.
 
 import { Page, Request } from "@playwright/test";
 
-import { test, expect } from "../../element-web-test";
+import { test as base, expect } from "../../element-web-test";
 import type { ElementAppPage } from "../../pages/ElementAppPage";
 import type { Bot } from "../../pages/bot";
+import { ProxyInstance, SlidingSyncProxy } from "../../plugins/sliding-sync-proxy";
+
+const test = base.extend<{
+    slidingSyncProxy: ProxyInstance;
+}>({
+    slidingSyncProxy: async ({ context, page, homeserver }, use) => {
+        const proxy = new SlidingSyncProxy(homeserver.config.dockerUrl, context);
+        const proxyInstance = await proxy.start();
+        const proxyAddress = `http://localhost:${proxyInstance.port}`;
+        await page.addInitScript((proxyAddress) => {
+            window.localStorage.setItem(
+                "mx_local_settings",
+                JSON.stringify({
+                    feature_sliding_sync_proxy_url: proxyAddress,
+                }),
+            );
+            window.localStorage.setItem("mx_labs_feature_feature_sliding_sync", "true");
+        }, proxyAddress);
+        await use(proxyInstance);
+        await proxy.stop();
+    },
+    // Ensure slidingSyncProxy is set up before the user fixture as it relies on an init script
+    credentials: async ({ slidingSyncProxy, credentials }, use) => {
+        await use(credentials);
+    },
+});
 
 test.describe("Sliding Sync", () => {
     let roomId: string;
 
-    test.beforeEach(async ({ slidingSyncProxy, page, user, app }) => {
+    test.beforeEach(async ({ page, user, app }) => {
         roomId = await app.client.createRoom({ name: "Test Room" });
     });
 
@@ -45,7 +71,7 @@ test.describe("Sliding Sync", () => {
         return bot;
     };
 
-    test.skip("should render the Rooms list in reverse chronological order by default and allowing sorting A-Z", async ({
+    test("should render the Rooms list in reverse chronological order by default and allowing sorting A-Z", async ({
         page,
         app,
     }) => {
@@ -71,7 +97,7 @@ test.describe("Sliding Sync", () => {
         await checkOrder(["Apple", "Orange", "Pineapple", "Test Room"], page);
     });
 
-    test.skip("should move rooms around as new events arrive", async ({ page, app }) => {
+    test("should move rooms around as new events arrive", async ({ page, app }) => {
         // create rooms and check room names are correct
         const roomIds: string[] = [];
         for (const fruit of ["Apple", "Pineapple", "Orange"]) {
@@ -94,7 +120,7 @@ test.describe("Sliding Sync", () => {
         await checkOrder(["Pineapple", "Orange", "Apple", "Test Room"], page);
     });
 
-    test.skip("should not move the selected room: it should be sticky", async ({ page, app }) => {
+    test("should not move the selected room: it should be sticky", async ({ page, app }) => {
         // create rooms and check room names are correct
         const roomIds: string[] = [];
         for (const fruit of ["Apple", "Pineapple", "Orange"]) {
@@ -122,7 +148,7 @@ test.describe("Sliding Sync", () => {
         await checkOrder(["Apple", "Orange", "Pineapple", "Test Room"], page);
     });
 
-    test.skip("should show the right unread notifications", async ({ page, app, user, bot }) => {
+    test("should show the right unread notifications", async ({ page, app, user, bot }) => {
         const bob = await createAndJoinBot(app, bot);
 
         // send a message in the test room: unread notification count should increment
@@ -150,7 +176,7 @@ test.describe("Sliding Sync", () => {
         ).not.toBeAttached();
     });
 
-    test.skip("should not show unread indicators", async ({ page, app, bot }) => {
+    test("should not show unread indicators", async ({ page, app, bot }) => {
         // TODO: for now. Later we should.
         await createAndJoinBot(app, bot);
 
@@ -184,7 +210,7 @@ test.describe("Sliding Sync", () => {
         expect(locator.locator(".mx_ToggleSwitch_on")).toBeAttached();
     });
 
-    test.skip("should show and be able to accept/reject/rescind invites", async ({ page, app, bot }) => {
+    test("should show and be able to accept/reject/rescind invites", async ({ page, app, bot }) => {
         await createAndJoinBot(app, bot);
 
         const clientUserId = await app.client.evaluate((client) => client.getUserId());
@@ -262,7 +288,7 @@ test.describe("Sliding Sync", () => {
 
     // Regression test for a bug in SS mode, but would be useful to have in non-SS mode too.
     // This ensures we are setting RoomViewStore state correctly.
-    test.skip("should clear the reply to field when swapping rooms", async ({ page, app }) => {
+    test("should clear the reply to field when swapping rooms", async ({ page, app }) => {
         await app.client.createRoom({ name: "Other Room" });
         await expect(page.getByRole("treeitem", { name: "Other Room" })).toBeVisible();
         await app.client.sendMessage(roomId, "Hello world");
@@ -294,7 +320,7 @@ test.describe("Sliding Sync", () => {
     });
 
     // Regression test for https://github.com/vector-im/element-web/issues/21462
-    test.skip("should not cancel replies when permalinks are clicked", async ({ page, app }) => {
+    test("should not cancel replies when permalinks are clicked", async ({ page, app }) => {
         // we require a first message as you cannot click the permalink text with the avatar in the way
         await app.client.sendMessage(roomId, "First message");
         await app.client.sendMessage(roomId, "Permalink me");
@@ -322,7 +348,7 @@ test.describe("Sliding Sync", () => {
         await expect(page.locator(".mx_ReplyPreview")).toBeVisible();
     });
 
-    test.skip("should send unsubscribe_rooms for every room switch", async ({ page, app }) => {
+    test("should send unsubscribe_rooms for every room switch", async ({ page, app }) => {
         // create rooms and check room names are correct
         const roomIds: string[] = [];
         for (const fruit of ["Apple", "Pineapple", "Orange"]) {

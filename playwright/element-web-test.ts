@@ -121,7 +121,6 @@ export interface Fixtures {
     uut?: Locator; // Unit Under Test, useful place to refer a prepared locator
     botCreateOpts: CreateBotOpts;
     bot: Bot;
-    slidingSyncProxy: ProxyInstance;
     labsFlags: string[];
     webserver: Webserver;
 }
@@ -272,25 +271,6 @@ export const test = base.extend<Fixtures>({
         const instance = await mailhog.start();
         await use(instance);
         await mailhog.stop();
-    },
-
-    slidingSyncProxy: async ({ page, user, homeserver }, use) => {
-        const proxy = new SlidingSyncProxy(homeserver.config.dockerUrl);
-        const proxyInstance = await proxy.start();
-        const proxyAddress = `http://localhost:${proxyInstance.port}`;
-        await page.addInitScript((proxyAddress) => {
-            window.localStorage.setItem(
-                "mx_local_settings",
-                JSON.stringify({
-                    feature_sliding_sync_proxy_url: proxyAddress,
-                }),
-            );
-            window.localStorage.setItem("mx_labs_feature_feature_sliding_sync", "true");
-        }, proxyAddress);
-        await page.goto("/");
-        await page.waitForSelector(".mx_MatrixChat", { timeout: 30000 });
-        await use(proxyInstance);
-        await proxy.stop();
     },
 
     // eslint-disable-next-line no-empty-pattern
