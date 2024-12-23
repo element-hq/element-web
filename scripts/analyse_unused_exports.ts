@@ -19,6 +19,7 @@ ignore.push("/OpenSpotlightPayload.ts");
 ignore.push("/PinnedMessageBadge.tsx");
 ignore.push("/editor/mock.ts");
 ignore.push("DeviceIsolationModeController.ts");
+ignore.push("urls.ts");
 ignore.push("/json.ts");
 ignore.push("/ReleaseAnnouncementStore.ts");
 ignore.push("/WidgetLayoutStore.ts");

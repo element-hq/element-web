@@ -1234,34 +1234,13 @@ describe("<SessionManagerTab />", () => {
                     toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
 
                     const deviceDetails = getByTestId(`device-detail-${alicesMobileDevice.device_id}`);
-                    const signOutButton = deviceDetails.querySelector(
+                    const manageDeviceButton = deviceDetails.querySelector(
                         '[data-testid="device-detail-sign-out-cta"]',
                     ) as Element;
-                    fireEvent.click(signOutButton);
-
-                    await screen.findByRole("dialog");
-                    expect(
-                        screen.getByText(
-                            "You will be redirected to your server's authentication provider to complete sign out.",
-                        ),
-                    ).toBeInTheDocument();
-                    // correct link to auth provider
-                    expect(screen.getByText("Continue")).toHaveAttribute(
+                    expect(manageDeviceButton).toHaveAttribute(
                         "href",
-                        `https://issuer.org/account?action=session_end&device_id=${alicesMobileDevice.device_id}`,
+                        `https://issuer.org/account?action=org.matrix.session_view&device_id=${alicesMobileDevice.device_id}`,
                     );
-
-                    // go to the link
-                    fireEvent.click(screen.getByText("Continue"));
-                    await flushPromises();
-
-                    // come back from the link and close the modal
-                    fireEvent.click(screen.getByText("Close"));
-
-                    await flushPromises();
-
-                    // devices were refreshed
-                    expect(mockClient.getDevices).toHaveBeenCalled();
                 });
 
                 it("does not allow removing multiple devices at once", async () => {
