@@ -24,11 +24,11 @@ import { ElementAppPage } from "../../pages/ElementAppPage";
 import { Bot } from "../../pages/bot";
 
 /**
- * Create a bot and wait for it to be ready to use.
+ * Create a new device for the Alice user.
+ * This function will wait for the key backup to be ready.
  * @param page - the page to use
  * @param homeserver - the homeserver to use
  * @param credentials - the credentials to use for the bot client
- * @param ignoreSecretStorage - whether to ignore secret storage setup
  */
 export async function createBot(
     page: Page,

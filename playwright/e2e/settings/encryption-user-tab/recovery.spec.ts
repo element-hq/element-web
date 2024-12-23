@@ -5,7 +5,6 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-// import { test, expect } from ".";
 import { GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
 
 import { test, expect } from ".";
@@ -33,7 +32,7 @@ test.describe("Recovery section in Encryption tab", () => {
     test("should verify the device", { tag: "@screenshot" }, async ({ page, app, util }) => {
         const dialog = await util.openEncryptionTab();
 
-        // The user can only verify the device
+        // The user's device is in an unverified state, therefore the only option available to them here is to verify it
         const verifyButton = dialog.getByRole("button", { name: "Verify this device" });
         await expect(verifyButton).toBeVisible();
         await expect(util.getEncryptionTabContent()).toMatchScreenshot("verify-device-encryption-tab.png");
