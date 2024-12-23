@@ -5,24 +5,29 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-.mx_AdvancedPanel_Details {
+.mx_AdvancedPanel_Details,
+.mx_OtherSettings {
     display: flex;
     flex-direction: column;
     gap: var(--cpd-space-6x);
     width: 100%;
     align-items: start;
 
+    .mx_AdvancedPanel_Details_title,
+    .mx_OtherSettings_title {
+        font: var(--cpd-font-body-lg-semibold);
+        padding-bottom: var(--cpd-space-2x);
+        border-bottom: 1px solid var(--cpd-color-gray-400);
+        width: 100%;
+    }
+}
+
+.mx_AdvancedPanel_Details {
     .mx_AdvancedPanel_Details_content {
         display: flex;
         flex-direction: column;
         gap: var(--cpd-space-4x);
         width: 100%;
-
-        > span {
-            font: var(--cpd-font-body-lg-semibold);
-            padding-bottom: var(--cpd-space-2x);
-            border-bottom: 1px solid var(--cpd-color-gray-400);
-        }
 
         > div {
             display: flex;

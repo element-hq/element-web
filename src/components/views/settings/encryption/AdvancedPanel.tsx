@@ -6,7 +6,7 @@
  */
 
 import React, { JSX, lazy, MouseEventHandler } from "react";
-import { Button, InlineSpinner } from "@vector-im/compound-web";
+import { Button, HelpMessage, InlineField, InlineSpinner, Label, Root, ToggleControl } from "@vector-im/compound-web";
 import DownloadIcon from "@vector-im/compound-design-tokens/assets/web/icons/download";
 import ShareIcon from "@vector-im/compound-design-tokens/assets/web/icons/share";
 
@@ -15,6 +15,9 @@ import { SettingsSection } from "../shared/SettingsSection";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import { useAsyncMemo } from "../../../../hooks/useAsyncMemo";
 import Modal from "../../../../Modal";
+import { SettingLevel } from "../../../../settings/SettingLevel";
+import { useSettingValueAt } from "../../../../hooks/useSettings";
+import SettingsStore from "../../../../settings/SettingsStore";
 
 interface AdvancedPanelProps {
     /**
@@ -30,6 +33,7 @@ export function AdvancedPanel({ onResetIdentityClick }: AdvancedPanelProps): JSX
     return (
         <SettingsSection heading={_t("settings|encryption|advanced|title")} legacy={false}>
             <EncryptionDetails onResetIdentityClick={onResetIdentityClick} />
+            <OtherSettings />
         </SettingsSection>
     );
 }
@@ -52,7 +56,9 @@ function EncryptionDetails({ onResetIdentityClick }: EncryptionDetails): JSX.Ele
     return (
         <div className="mx_AdvancedPanel_Details">
             <div className="mx_AdvancedPanel_Details_content">
-                <span>{_t("settings|encryption|advanced|details_title")}</span>
+                <span className="mx_AdvancedPanel_Details_title">
+                    {_t("settings|encryption|advanced|details_title")}
+                </span>
                 <div>
                     <span>{_t("settings|encryption|advanced|session_id")}</span>
                     <span>{matrixClient.deviceId}</span>
@@ -98,5 +104,36 @@ function EncryptionDetails({ onResetIdentityClick }: EncryptionDetails): JSX.Ele
                 {_t("settings|encryption|advanced|reset_identity")}
             </Button>
         </div>
+    );
+}
+
+/**
+ * Display the never send encrypted message to unverified devices setting.
+ */
+function OtherSettings(): JSX.Element | null {
+    const blacklistUnverifiedDevices = useSettingValueAt<boolean>(SettingLevel.DEVICE, "blacklistUnverifiedDevices");
+    const canSetValue = SettingsStore.canSetValue("blacklistUnverifiedDevices", null, SettingLevel.DEVICE);
+    if (!canSetValue) return null;
+
+    return (
+        <Root
+            data-testid="other-settings"
+            className="mx_OtherSettings"
+            onChange={async (evt) => {
+                const checked = new FormData(evt.currentTarget).get("neverSendEncrypted") === "on";
+                await SettingsStore.setValue("blacklistUnverifiedDevices", null, SettingLevel.DEVICE, checked);
+            }}
+        >
+            <span className="mx_OtherSettings_title">
+                {_t("settings|encryption|advanced|other_people_device_title")}
+            </span>
+            <InlineField
+                name="neverSendEncrypted"
+                control={<ToggleControl name="neverSendEncrypted" defaultChecked={blacklistUnverifiedDevices} />}
+            >
+                <Label>{_t("settings|encryption|advanced|other_people_device_label")}</Label>
+                <HelpMessage>{_t("settings|encryption|advanced|other_people_device_description")}</HelpMessage>
+            </InlineField>
+        </Root>
     );
 }
