@@ -34,7 +34,14 @@ interface IProps {
 const MemberListView: React.FC<IProps> = (props: IProps) => {
     const vm = useMemberListViewModel(props.roomId);
 
+    const memberCount = vm.members.length;
+
     const rowRenderer = ({ key, index, style }: ListRowProps): React.JSX.Element => {
+        if (index === memberCount) {
+            // We've rendered all the members,
+            // now we render an empty div to add some space to the end of the list.
+            return <div key={key} style={style} />;
+        }
         const item = vm.members[index];
         return (
             <div key={key} style={style}>
@@ -46,8 +53,6 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
             </div>
         );
     };
-
-    const memberCount = vm.members.length;
 
     return (
         <BaseCard
@@ -66,9 +71,12 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                     {({ height, width }) => (
                         <List
                             rowRenderer={rowRenderer}
-                            rowHeight={56}
-                            rowCount={memberCount}
-                            // Subtract the height of MemberlistHeaderView so that the parent div does not overflow
+                            // All the member tiles will have a height of 56px.
+                            // The additional empty div at the end of the list should have a height of 32px.
+                            rowHeight={({ index }) => (index === memberCount ? 32 : 56)}
+                            // The +1 refers to the additional empty div that we render at the end of the list.
+                            rowCount={memberCount + 1}
+                            // Subtract the height of MemberlistHeaderView so that the parent div does not overflow.
                             height={height - 113}
                             width={width}
                         />
