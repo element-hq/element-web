@@ -66,11 +66,13 @@ describe("MessageComposer", () => {
 
         // restore settings
         act(() => {
-            [
-                "MessageComposerInput.showStickersButton",
-                "MessageComposerInput.showPollsButton",
-                "feature_wysiwyg_composer",
-            ].forEach((setting: string): void => {
+            (
+                [
+                    "MessageComposerInput.showStickersButton",
+                    "MessageComposerInput.showPollsButton",
+                    "feature_wysiwyg_composer",
+                ] as const
+            ).forEach((setting): void => {
                 SettingsStore.setValue(setting, null, SettingLevel.DEVICE, SettingsStore.getDefaultValue(setting));
             });
         });
@@ -188,11 +190,11 @@ describe("MessageComposer", () => {
         // test button display depending on settings
         [
             {
-                setting: "MessageComposerInput.showStickersButton",
+                setting: "MessageComposerInput.showStickersButton" as const,
                 buttonLabel: "Sticker",
             },
             {
-                setting: "MessageComposerInput.showPollsButton",
+                setting: "MessageComposerInput.showPollsButton" as const,
                 buttonLabel: "Poll",
             },
         ].forEach(({ setting, buttonLabel }) => {

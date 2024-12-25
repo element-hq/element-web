@@ -282,7 +282,7 @@ export const RoomGeneralContextMenu: React.FC<RoomGeneralContextMenuProps> = ({
         }
     })();
 
-    const developerModeEnabled = useSettingValue<boolean>("developerMode");
+    const developerModeEnabled = useSettingValue("developerMode");
     const developerToolsOption = developerModeEnabled ? (
         <DeveloperToolsOption onFinished={onFinished} roomId={room.roomId} />
     ) : null;

@@ -87,6 +87,7 @@
         "@matrix-org/react-sdk-module-api": "^2.4.0",
         "@matrix-org/spec": "^1.7.0",
         "@sentry/browser": "^8.0.0",
+        "@types/png-chunks-extract": "^1.0.2",
         "@vector-im/compound-design-tokens": "^2.1.0",
         "@vector-im/compound-web": "^7.5.0",
         "@vector-im/matrix-wysiwyg": "2.37.13",

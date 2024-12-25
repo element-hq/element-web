@@ -71,7 +71,7 @@ const showDeleteButton = (canModify: boolean, onDeleteClick: undefined | (() => 
 
 const showSnapshotButton = (widgetMessaging: ClientWidgetApi | undefined): boolean => {
     return (
-        SettingsStore.getValue<boolean>("enableWidgetScreenshots") &&
+        SettingsStore.getValue("enableWidgetScreenshots") &&
         !!widgetMessaging?.hasCapability(MatrixCapabilities.Screenshots)
     );
 };

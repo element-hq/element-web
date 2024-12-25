@@ -303,8 +303,8 @@ describe("TimelinePanel", () => {
                     client.isVersionSupported.mockResolvedValue(true);
                     client.doesServerSupportUnstableFeature.mockResolvedValue(true);
 
-                    jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
-                        if (setting === "sendReadReceipt") return false;
+                    jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string): any => {
+                        if (setting === "sendReadReceipts") return false;
 
                         return undefined;
                     });

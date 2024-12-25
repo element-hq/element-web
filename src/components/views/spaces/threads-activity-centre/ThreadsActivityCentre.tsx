@@ -44,7 +44,7 @@ export function ThreadsActivityCentre({ displayButtonLabel }: ThreadsActivityCen
     const [open, setOpen] = useState(false);
     const roomsAndNotifications = useUnreadThreadRooms(open);
     const isReleaseAnnouncementOpen = useIsReleaseAnnouncementOpen("threadsActivityCentre");
-    const settingTACOnlyNotifs = useSettingValue<boolean>("Notifications.tac_only_notifications");
+    const settingTACOnlyNotifs = useSettingValue("Notifications.tac_only_notifications");
 
     const emptyCaption = settingTACOnlyNotifs
         ? _t("threads_activity_centre|no_rooms_with_threads_notifs")

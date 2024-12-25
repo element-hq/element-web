@@ -70,9 +70,9 @@ function useHasUnreadNotifications(): boolean {
 export default function NotificationSettings2(): JSX.Element {
     const cli = useMatrixClientContext();
 
-    const desktopNotifications = useSettingValue<boolean>("notificationsEnabled");
-    const desktopShowBody = useSettingValue<boolean>("notificationBodyEnabled");
-    const audioNotifications = useSettingValue<boolean>("audioNotificationsEnabled");
+    const desktopNotifications = useSettingValue("notificationsEnabled");
+    const desktopShowBody = useSettingValue("notificationBodyEnabled");
+    const audioNotifications = useSettingValue("audioNotificationsEnabled");
 
     const { model, hasPendingChanges, reconcile } = useNotificationSettings(cli);
 

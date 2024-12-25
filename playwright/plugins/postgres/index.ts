@@ -21,13 +21,15 @@ export class PostgresDocker extends Docker {
         super();
     }
 
-    private async waitForPostgresReady(): Promise<void> {
+    private async waitForPostgresReady(ipAddress: string): Promise<void> {
         const waitTimeMillis = 30000;
         const startTime = new Date().getTime();
         let lastErr: Error | null = null;
         while (new Date().getTime() - startTime < waitTimeMillis) {
             try {
-                await this.exec(["pg_isready", "-U", "postgres"], true);
+                // Note that we specify the IP address rather than letting it connect to the local
+                // socket: that's the listener we care about and empirically it matters.
+                await this.exec(["pg_isready", "-h", ipAddress, "-U", "postgres"], true);
                 lastErr = null;
                 break;
             } catch (err) {
@@ -57,7 +59,7 @@ export class PostgresDocker extends Docker {
         const ipAddress = await this.getContainerIp();
         console.log(new Date(), "postgres container up");
 
-        await this.waitForPostgresReady();
+        await this.waitForPostgresReady(ipAddress);
         console.log(new Date(), "postgres container ready");
         return { ipAddress, containerId };
     }

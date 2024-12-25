@@ -21,6 +21,7 @@ import { getMockClientWithEventEmitter, mockClientMethodsCrypto, mockPlatformPeg
 import { collectBugReport } from "../../src/rageshake/submit-rageshake";
 import SettingsStore from "../../src/settings/SettingsStore";
 import { ConsoleLogger } from "../../src/rageshake/rageshake";
+import { FeatureSettingKey, SettingKey } from "../../src/settings/Settings.tsx";
 
 describe("Rageshakes", () => {
     const RUST_CRYPTO_VERSION = "Rust SDK 0.7.0 (691ec63), Vodozemac 0.5.0";
@@ -376,8 +377,11 @@ describe("Rageshakes", () => {
         const mockSettingsStore = mocked(SettingsStore);
 
         it("should collect labs from settings store", async () => {
-            const someFeatures: string[] = ["feature_video_rooms", "feature_notification_settings2"];
-            const enabledFeatures: string[] = ["feature_video_rooms"];
+            const someFeatures = [
+                "feature_video_rooms",
+                "feature_notification_settings2",
+            ] as unknown[] as FeatureSettingKey[];
+            const enabledFeatures: SettingKey[] = ["feature_video_rooms"];
             jest.spyOn(mockSettingsStore, "getFeatureSettingNames").mockReturnValue(someFeatures);
             jest.spyOn(mockSettingsStore, "getValue").mockImplementation((settingName): any => {
                 return enabledFeatures.includes(settingName);

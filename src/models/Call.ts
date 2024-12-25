@@ -688,7 +688,7 @@ export class ElementCall extends Call {
 
         // Set custom fonts
         if (SettingsStore.getValue("useSystemFont")) {
-            SettingsStore.getValue<string>("systemFont")
+            SettingsStore.getValue("systemFont")
                 .split(",")
                 .map((font) => {
                     // Strip whitespace and quotes

@@ -14,10 +14,6 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
     test.skip(isDendrite, "does not yet support MAS");
     test.slow(); // trace recording takes a while here
 
-    test.use({
-        labsFlags: ["feature_oidc_native_flow"],
-    });
-
     test("can register the oauth2 client and an account", async ({ context, page, homeserver, mailhog, mas }) => {
         const tokenUri = `http://localhost:${mas.port}/oauth2/token`;
         const tokenApiPromise = page.waitForRequest(
