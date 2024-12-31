@@ -56,7 +56,7 @@ import {
 } from "../../../accessibility/RovingTabIndex";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
-import OverflowTileView from "../rooms/OverflowTileView";
+import { OverflowTileView } from "../rooms/OverflowTileView";
 
 const AVATAR_SIZE = 30;
 

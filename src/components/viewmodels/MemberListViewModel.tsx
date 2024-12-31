@@ -1,17 +1,8 @@
 /*
-Copyright 2024 The Matrix.org Foundation C.I.C.
+Copyright 2024 New Vector Ltd.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 import {
@@ -23,7 +14,7 @@ import {
     RoomMemberEvent,
     RoomState,
     RoomStateEvent,
-    RoomMember as SDKRoomMember,
+    RoomMember as SdkRoomMember,
     User,
     UserEvent,
 } from "matrix-js-sdk/src/matrix";
@@ -68,7 +59,6 @@ export function getPending3PidInvites(room: Room, searchQuery?: string): Member[
     const invites: Member[] = inviteEvents.map((e) => {
         return {
             threePidInvite: {
-                displayName: e.getContent().display_name,
                 event: e,
             },
         };
@@ -76,7 +66,7 @@ export function getPending3PidInvites(room: Room, searchQuery?: string): Member[
     return invites;
 }
 
-export function sdkRoomMemberToRoomMember(member: SDKRoomMember): Member {
+export function sdkRoomMemberToRoomMember(member: SdkRoomMember): Member {
     const displayUserId =
         UserIdentifierCustomisations.getDisplayUserIdentifier(member.userId, {
             roomId: member.roomId,
@@ -87,7 +77,7 @@ export function sdkRoomMemberToRoomMember(member: SDKRoomMember): Member {
         (mxcAvatarURL && mediaFromMxc(mxcAvatarURL).getThumbnailOfSourceHttp(96, 96, "crop")) ?? undefined;
 
     const user = member.user;
-    let presenceState: PresenceState | undefined = undefined;
+    let presenceState: PresenceState | undefined;
     if (user) {
         presenceState = (user.presence as PresenceState) || undefined;
     }
@@ -111,7 +101,6 @@ export function sdkRoomMemberToRoomMember(member: SDKRoomMember): Member {
 
 export interface MemberListViewState {
     members: Member[];
-    memberCount: number;
     search: (searchQuery: string) => void;
     isPresenceEnabled: boolean;
     shouldShowInvite: boolean;
@@ -122,15 +111,20 @@ export interface MemberListViewState {
 }
 export function useMemberListViewModel(roomId: string): MemberListViewState {
     const cli = useMatrixClientContext();
+
     const room = useMemo(() => cli.getRoom(roomId), [roomId, cli]);
     if (!room) {
         throw new Error(`Room with id ${roomId} does not exist!`);
     }
+
     const sdkContext = useContext(SDKContext);
     const [memberMap, setMemberMap] = useState<Map<string, Member>>(new Map());
-    const [memberCount, setMemberCount] = useState<number>(0);
-    const searchQuery = useRef("");
     const [isLoading, setIsLoading] = useState<boolean>(true);
+
+    // This is the last known total number of members in this room.
+    const totalMemberCount = useRef<number>(0);
+
+    const searchQuery = useRef("");
 
     const loadMembers = useMemo(
         () =>
@@ -149,7 +143,8 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
                     // Then add the third party invites
                     const threePidInvited = getPending3PidInvites(room, searchQuery.current);
                     for (const invited of threePidInvited) {
-                        newMemberMap.set(invited.threePidInvite!.displayName, invited);
+                        const key = invited.threePidInvite!.event.getContent().display_name;
+                        newMemberMap.set(key, invited);
                     }
                     // Finally add the joined room members
                     for (const member of joinedSdk) {
@@ -157,12 +152,17 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
                         newMemberMap.set(member.userId, roomMember);
                     }
                     setMemberMap(newMemberMap);
-                    if (!searchQuery.current) setMemberCount(newMemberMap.size);
+                    if (!searchQuery.current) {
+                        /**
+                         * Since searching for members only gives you the relevant
+                         * members matching the query, do not update the totalMemberCount!
+                         **/
+                        totalMemberCount.current = newMemberMap.size;
+                    }
                 },
                 500,
                 { leading: true, trailing: true },
             ),
-        //todo: can we remove room here?
         [roomId, sdkContext.memberListStore, room],
     );
 
@@ -197,25 +197,26 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
     };
 
     useTypedEventEmitter(cli, RoomStateEvent.Events, (event: MatrixEvent) => {
-        if (event.getRoomId() === roomId && event.getType() === EventType.RoomThirdPartyInvite) loadMembers();
-        const newCanInvite = getCanUserInviteToThisRoom();
-        setCanInvite(newCanInvite);
+        if (event.getRoomId() === roomId && event.getType() === EventType.RoomThirdPartyInvite) {
+            loadMembers();
+            const newCanInvite = getCanUserInviteToThisRoom();
+            setCanInvite(newCanInvite);
+        }
     });
 
     useTypedEventEmitter(cli, RoomStateEvent.Update, (state: RoomState) => {
         if (state.roomId === roomId) loadMembers();
     });
 
-    useTypedEventEmitter(cli, RoomMemberEvent.Name, (_: MatrixEvent, member: SDKRoomMember) => {
+    useTypedEventEmitter(cli, RoomMemberEvent.Name, (_: MatrixEvent, member: SdkRoomMember) => {
         if (member.roomId === roomId) loadMembers();
     });
 
     useTypedEventEmitter(cli, ClientEvent.Room, (room: Room) => {
-        if (room.roomId === roomId) loadMembers();
         // We listen for room events because when we accept an invite
         // we need to wait till the room is fully populated with state
         // before refreshing the member list else we get a stale list.
-        // this.onMemberListUpdated?.(true);
+        if (room.roomId === roomId) loadMembers();
     });
 
     useTypedEventEmitter(cli, RoomEvent.MyMembership, (room: Room, membership: string, oldMembership?: string) => {
@@ -228,8 +229,16 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
         }
     });
 
+    useTypedEventEmitter(cli, UserEvent.Presence, (_: MatrixEvent | undefined, user: User) => {
+        if (memberMap.has(user.userId)) loadMembers();
+    });
+
+    useTypedEventEmitter(cli, UserEvent.CurrentlyActive, (_: MatrixEvent | undefined, user: User) => {
+        if (memberMap.has(user.userId)) loadMembers();
+    });
+
+    // Initial load of the memberlist
     useEffect(() => {
-        // Initial load of the memberlist
         (async () => {
             await loadMembers();
             /**
@@ -241,23 +250,14 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
         })();
     }, [loadMembers]);
 
-    useTypedEventEmitter(cli, UserEvent.Presence, (_: MatrixEvent | undefined, user: User) => {
-        if (memberMap.has(user.userId)) loadMembers();
-    });
-
-    useTypedEventEmitter(cli, UserEvent.CurrentlyActive, (_: MatrixEvent | undefined, user: User) => {
-        if (memberMap.has(user.userId)) loadMembers();
-    });
-
     return {
         members: Array.from(memberMap.values()),
-        memberCount,
         search,
         shouldShowInvite,
         isPresenceEnabled,
         isLoading,
         onInviteButtonClick,
-        shouldShowSearch: memberCount >= 20,
+        shouldShowSearch: totalMemberCount.current >= 20,
         canInvite,
     };
 }

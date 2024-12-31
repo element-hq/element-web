@@ -1,18 +1,10 @@
 /*
-Copyright 2024 The Matrix.org Foundation C.I.C.
+Copyright 2024 New Vector Ltd.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
+
 import { Search, Text, Button, Tooltip, InlineSpinner } from "@vector-im/compound-web";
 import React from "react";
 import InviteIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-add-solid";
@@ -21,10 +13,6 @@ import { UserAddIcon } from "@vector-im/compound-design-tokens/assets/web/icons"
 import { Flex } from "../../utils/Flex";
 import { MemberListViewState } from "../../viewmodels/MemberListViewModel";
 import { _t } from "../../../languageHandler";
-
-interface Props {
-    vm: MemberListViewState;
-}
 
 interface TooltipProps {
     canInvite: boolean;
@@ -36,6 +24,10 @@ const OptionalTooltip: React.FC<TooltipProps> = ({ canInvite, children }) => {
     // If the user isn't allowed to invite others to this room, wrap with a relevant tooltip.
     return <Tooltip description={_t("member_list|invite_button_no_perms_tooltip")}>{children}</Tooltip>;
 };
+
+interface Props {
+    vm: MemberListViewState;
+}
 
 const InviteButton: React.FC<Props> = ({ vm }) => {
     const shouldShowInvite = vm.shouldShowInvite;
@@ -104,12 +96,6 @@ function getHeaderLabelJSX(vm: MemberListViewState): React.ReactNode {
     return _t("member_list|count", { count: filteredMemberCount });
 }
 
-/**
- * The top section of the memberlist contains:
- * - Just an invite button if the number of members < 20
- * - Search bar + invite button if number of members > 20
- * - A header label, see function above.
- */
 const MemberListHeaderView: React.FC<Props> = (props: Props) => {
     const vm = props.vm;
 

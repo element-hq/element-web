@@ -22,7 +22,7 @@ export enum E2EState {
     Normal = "normal",
 }
 
-const crossSigningUserTitles: { [key in E2EState]?: TranslationKey } = {
+export const crossSigningUserTitles: { [key in E2EState]?: TranslationKey } = {
     [E2EState.Warning]: _td("encryption|cross_signing_user_warning"),
     [E2EState.Normal]: _td("encryption|cross_signing_user_normal"),
     [E2EState.Verified]: _td("encryption|cross_signing_user_verified"),
@@ -73,17 +73,18 @@ const E2EIcon: React.FC<XOR<UserProps, RoomProps>> = ({
         className,
     );
 
-    let style: CSSProperties | undefined;
-    if (size) {
-        style = { width: `${size}px`, height: `${size}px` };
-    }
-
     let e2eTitle: TranslationKey | undefined;
     if (isUser) {
         e2eTitle = crossSigningUserTitles[status];
     } else {
         e2eTitle = crossSigningRoomTitles[status];
     }
+
+    let style: CSSProperties | undefined;
+    if (size) {
+        style = { width: `${size}px`, height: `${size}px` };
+    }
+
     const label = e2eTitle ? _t(e2eTitle) : "";
 
     let content: JSX.Element;

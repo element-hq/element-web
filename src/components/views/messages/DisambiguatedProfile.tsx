@@ -14,7 +14,7 @@ import { _t } from "../../../languageHandler";
 import { getUserNameColorClass } from "../../../utils/FormattingUtils";
 import UserIdentifier from "../../../customisations/UserIdentifier";
 
-interface DisambiguatedMemberInfo {
+interface MemberInfo {
     userId: string;
     roomId: string;
     rawDisplayName?: string;
@@ -22,7 +22,7 @@ interface DisambiguatedMemberInfo {
 }
 
 interface IProps {
-    member?: DisambiguatedMemberInfo | null;
+    member?: MemberInfo | null;
     fallbackName: string;
     onClick?(): void;
     colored?: boolean;
