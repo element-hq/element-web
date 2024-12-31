@@ -10,12 +10,13 @@ import React from "react";
 import { List, ListRowProps } from "react-virtualized/dist/commonjs/List";
 import { AutoSizer } from "react-virtualized";
 
-import { Flex } from "../../utils/Flex";
-import { useMemberListViewModel } from "../../viewmodels/MemberListViewModel";
-import { RoomMemberTileView, ThreePidInviteTileView } from "./MemberTileView";
-import MemberListHeaderView from "./MemberListHeaderView";
-import BaseCard from "../right_panel/BaseCard";
-import { _t } from "../../../languageHandler";
+import { Flex } from "../../../utils/Flex";
+import { useMemberListViewModel } from "../../../viewmodels/memberlist/MemberListViewModel";
+import { RoomMemberTileView } from "./tiles/RoomMemberTileView";
+import { ThreePidInviteTileView } from "./tiles/ThreePidInviteTileView";
+import { MemberListHeaderView } from "./MemberListHeaderView";
+import BaseCard from "../../right_panel/BaseCard";
+import { _t } from "../../../../languageHandler";
 
 interface IProps {
     roomId: string;

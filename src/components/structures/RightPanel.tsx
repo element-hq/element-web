@@ -33,7 +33,7 @@ import { IRightPanelCard, IRightPanelCardState } from "../../stores/right-panel/
 import { Action } from "../../dispatcher/actions";
 import { XOR } from "../../@types/common";
 import ExtensionsCard from "../views/right_panel/ExtensionsCard";
-import MemberListView from "../views/rooms/MemberListView";
+import MemberListView from "../views/rooms/MemberList/MemberListView";
 
 interface BaseProps {
     overwriteCard?: IRightPanelCard; // used to display a custom card and ignoring the RightPanelStore (used for UserView)

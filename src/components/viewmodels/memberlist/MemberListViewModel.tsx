@@ -22,22 +22,22 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { throttle } from "lodash";
 
-import { RoomMember } from "../../models/rooms/RoomMember";
-import { mediaFromMxc } from "../../customisations/Media";
-import UserIdentifierCustomisations from "../../customisations/UserIdentifier";
-import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
-import { UIComponent } from "../../settings/UIFeature";
-import { PresenceState } from "../../models/rooms/PresenceState";
-import { useMatrixClientContext } from "../../contexts/MatrixClientContext";
-import { SDKContext } from "../../contexts/SDKContext";
-import PosthogTrackers from "../../PosthogTrackers";
-import { ButtonEvent } from "../views/elements/AccessibleButton";
-import { inviteToRoom } from "../../utils/room/inviteToRoom";
-import { canInviteTo } from "../../utils/room/canInviteTo";
-import { isValid3pidInvite } from "../../RoomInvite";
-import { ThreePIDInvite } from "../../models/rooms/ThreePIDInvite";
-import { XOR } from "../../@types/common";
-import { useTypedEventEmitter } from "../../hooks/useEventEmitter";
+import { RoomMember } from "../../../models/rooms/RoomMember";
+import { mediaFromMxc } from "../../../customisations/Media";
+import UserIdentifierCustomisations from "../../../customisations/UserIdentifier";
+import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../../settings/UIFeature";
+import { PresenceState } from "../../../models/rooms/PresenceState";
+import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
+import { SDKContext } from "../../../contexts/SDKContext";
+import PosthogTrackers from "../../../PosthogTrackers";
+import { ButtonEvent } from "../../views/elements/AccessibleButton";
+import { inviteToRoom } from "../../../utils/room/inviteToRoom";
+import { canInviteTo } from "../../../utils/room/canInviteTo";
+import { isValid3pidInvite } from "../../../RoomInvite";
+import { ThreePIDInvite } from "../../../models/rooms/ThreePIDInvite";
+import { XOR } from "../../../@types/common";
+import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 
 type Member = XOR<{ member: RoomMember }, { threePidInvite: ThreePIDInvite }>;
 

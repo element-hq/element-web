@@ -9,24 +9,19 @@ import { useEffect, useMemo, useState } from "react";
 import { RoomStateEvent, MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
 import { UserVerificationStatus, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 
-import dis from "../../dispatcher/dispatcher";
-import { MatrixClientPeg } from "../../MatrixClientPeg";
-import { Action } from "../../dispatcher/actions";
-import { asyncSome } from "../../utils/arrays";
-import { getUserDeviceIds } from "../../utils/crypto/deviceInfo";
-import { RoomMember } from "../../models/rooms/RoomMember";
-import { E2EState } from "../views/rooms/E2EIcon";
-import { _t, _td, TranslationKey } from "../../languageHandler";
-import UserIdentifierCustomisations from "../../customisations/UserIdentifier";
-import { ThreePIDInvite } from "../../models/rooms/ThreePIDInvite";
+import dis from "../../../../dispatcher/dispatcher";
+import { MatrixClientPeg } from "../../../../MatrixClientPeg";
+import { Action } from "../../../../dispatcher/actions";
+import { asyncSome } from "../../../../utils/arrays";
+import { getUserDeviceIds } from "../../../../utils/crypto/deviceInfo";
+import { RoomMember } from "../../../../models/rooms/RoomMember";
+import { E2EState } from "../../../views/rooms/E2EIcon";
+import { _t, _td, TranslationKey } from "../../../../languageHandler";
+import UserIdentifierCustomisations from "../../../../customisations/UserIdentifier";
 
 interface MemberTileViewModelProps {
     member: RoomMember;
     showPresence?: boolean;
-}
-
-interface ThreePidTileViewModelProps {
-    threePidInvite: ThreePIDInvite;
 }
 
 export interface MemberTileViewState extends MemberTileViewModelProps {
@@ -46,27 +41,6 @@ const PowerLabel: Record<PowerStatus, TranslationKey> = {
     [PowerStatus.Admin]: _td("power_level|admin"),
     [PowerStatus.Moderator]: _td("power_level|moderator"),
 };
-
-export interface ThreePidTileViewState {
-    name: string;
-    onClick: () => void;
-}
-
-export function useThreePidTileViewModel(props: ThreePidTileViewModelProps): ThreePidTileViewState {
-    const invite = props.threePidInvite;
-    const name = invite.event.getContent().display_name;
-    const onClick = (): void => {
-        dis.dispatch({
-            action: Action.View3pidInvite,
-            event: invite.event,
-        });
-    };
-
-    return {
-        name,
-        onClick,
-    };
-}
 
 export function useMemberTileViewModel(props: MemberTileViewModelProps): MemberTileViewState {
     const [e2eStatus, setE2eStatus] = useState<E2EState | undefined>();

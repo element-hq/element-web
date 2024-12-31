@@ -10,9 +10,9 @@ import React from "react";
 import InviteIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-add-solid";
 import { UserAddIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { Flex } from "../../utils/Flex";
-import { MemberListViewState } from "../../viewmodels/MemberListViewModel";
-import { _t } from "../../../languageHandler";
+import { Flex } from "../../../utils/Flex";
+import { MemberListViewState } from "../../../viewmodels/memberlist/MemberListViewModel";
+import { _t } from "../../../../languageHandler";
 
 interface TooltipProps {
     canInvite: boolean;
@@ -96,7 +96,7 @@ function getHeaderLabelJSX(vm: MemberListViewState): React.ReactNode {
     return _t("member_list|count", { count: filteredMemberCount });
 }
 
-const MemberListHeaderView: React.FC<Props> = (props: Props) => {
+export const MemberListHeaderView: React.FC<Props> = (props: Props) => {
     const vm = props.vm;
 
     let contentJSX: React.ReactNode;
@@ -135,5 +135,3 @@ const MemberListHeaderView: React.FC<Props> = (props: Props) => {
         </Flex>
     );
 };
-
-export default MemberListHeaderView;

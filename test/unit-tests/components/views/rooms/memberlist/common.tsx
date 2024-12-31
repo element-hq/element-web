@@ -16,7 +16,7 @@ import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
 import * as TestUtils from "../../../../../test-utils";
 import { SDKContext } from "../../../../../../src/contexts/SDKContext";
 import { TestSdkContext } from "../../../../TestSdkContext";
-import MemberListView from "../../../../../../src/components/views/rooms/MemberListView";
+import MemberListView from "../../../../../../src/components/views/rooms/MemberList/MemberListView";
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 
 export function createRoom(client: MatrixClient, opts = {}) {

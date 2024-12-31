@@ -10,9 +10,9 @@ import { Tooltip } from "@vector-im/compound-web";
 import VerifiedIcon from "@vector-im/compound-design-tokens/assets/web/icons/verified";
 import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
 
-import { _t } from "../../../languageHandler";
-import { E2EStatus } from "../../../utils/ShieldUtils";
-import { E2EState, crossSigningUserTitles } from "./E2EIcon";
+import { _t } from "../../../../../../languageHandler";
+import { E2EStatus } from "../../../../../../utils/ShieldUtils";
+import { E2EState, crossSigningUserTitles } from "../../../E2EIcon";
 
 function getIconFromStatus(status: E2EState | E2EStatus): React.JSX.Element | undefined {
     switch (status) {

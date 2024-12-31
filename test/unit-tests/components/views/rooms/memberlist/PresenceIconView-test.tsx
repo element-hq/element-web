@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { render } from "jest-matrix-react";
 
-import AvatarPresenceIconView from "../../../../../../src/components/views/rooms/PresenceIconView";
+import AvatarPresenceIconView from "../../../../../../src/components/views/rooms/MemberList/tiles/common/PresenceIconView";
 
 describe("<PresenceIconView/>", () => {
     it("renders correctly for presence=online", () => {

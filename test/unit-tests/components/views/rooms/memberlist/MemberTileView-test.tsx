@@ -18,11 +18,9 @@ import { RoomMember } from "../../../../../../src/models/rooms/RoomMember";
 import {
     getPending3PidInvites,
     sdkRoomMemberToRoomMember,
-} from "../../../../../../src/components/viewmodels/MemberListViewModel";
-import {
-    RoomMemberTileView,
-    ThreePidInviteTileView,
-} from "../../../../../../src/components/views/rooms/MemberTileView";
+} from "../../../../../../src/components/viewmodels/memberlist/MemberListViewModel";
+import { RoomMemberTileView } from "../../../../../../src/components/views/rooms/MemberList/tiles/RoomMemberTileView";
+import { ThreePidInviteTileView } from "../../../../../../src/components/views/rooms/MemberList/tiles/ThreePidInviteTileView";
 
 describe("MemberTileView", () => {
     describe("RoomMemberTileView", () => {
