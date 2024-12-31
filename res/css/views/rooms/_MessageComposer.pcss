@@ -277,6 +277,19 @@ Please see LICENSE files in the repository root for full details.
     mask-size: 24px;
 }
 
+.mx_MessageComposer_nextcloudPickerButtonIcon {
+    color: var(--cpd-color-icon-tertiary);
+    padding: 0;
+
+    &:hover {
+        color: var(--cpd-color-icon-primary);
+    }
+
+    &::before, &::after {
+        display: none;
+    }
+}
+
 .mx_MessageComposer_sendMessage {
     cursor: pointer;
     position: relative;
