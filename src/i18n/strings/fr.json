@@ -238,7 +238,6 @@
         "oidc": {
             "error_title": "Nous n’avons pas pu vous connecter",
             "generic_auth_error": "Une erreur s’est produite lors de l’authentification. Allez à la page de connexion et réessayez.",
-            "logout_redirect_warning": "Vous allez être redirigé vers le fournisseur d’authentification de votre serveur pour terminer la déconnexion.",
             "missing_or_invalid_stored_state": "Nous avons demandé à votre navigateur de mémoriser votre serveur d’accueil, mais il semble l’avoir oublié. Rendez-vous à la page de connexion et réessayez."
         },
         "password_field_keep_going_prompt": "En cours…",
@@ -1458,8 +1457,6 @@
         "notification_settings_beta_caption": "Introduit une manière plus simple de changer vos préférences de notifications. Customisez %(brand)s, comme ça vous convient.",
         "notification_settings_beta_title": "Paramètres de notification",
         "notifications": "Active le panneau de notifications dans l’en-tête du salon",
-        "oidc_native_flow": "Authentification native OIDC",
-        "oidc_native_flow_description": "⚠ ATTENTION : Expérimental. Utilise l’authentification OIDC native lorsqu’elle est prise en charge par le serveur.",
         "release_announcement": "Annonce de sortie",
         "render_reaction_images": "Afficher les images personnalisées des réactions",
         "render_reaction_images_description": "Parfois appelés « émojis personnalisés ».",
