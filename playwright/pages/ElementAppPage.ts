@@ -174,6 +174,18 @@ export class ElementAppPage {
     }
 
     /**
+     * Opens/closes the memberlist panel
+     * @returns locator to the memberlist panel
+     */
+    public async toggleMemberlistPanel(): Promise<Locator> {
+        const locator = this.page.locator(".mx_FacePile");
+        await locator.click();
+        const memberlist = this.page.locator(".mx_MemberListView");
+        await memberlist.waitFor();
+        return memberlist;
+    }
+
+    /**
      * Get a locator for the tooltip associated with an element
      * @param e The element with the tooltip
      * @returns Locator to the tooltip
