@@ -6,6 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
+import type { APIRequestContext } from "@playwright/test";
+import { Synapse } from "./synapse";
+import { Dendrite, Pinecone } from "./dendrite";
+
 export interface HomeserverConfig {
     readonly configDir: string;
     readonly baseUrl: string;
@@ -16,6 +20,17 @@ export interface HomeserverConfig {
 
 export interface HomeserverInstance {
     readonly config: HomeserverConfig;
+
+    /**
+     * Update the request context for this homeserver instance.
+     * @param request
+     */
+    setRequest(request: APIRequestContext): void;
+
+    /**
+     * @returns A list of paths relative to the cwd for logfiles generated during this test run.
+     */
+    getLogs(): Promise<string[]>;
 
     /**
      * Register a user on the given Homeserver using the shared registration secret.
@@ -57,10 +72,8 @@ export interface Homeserver {
     start(opts: StartHomeserverOpts): Promise<HomeserverInstance>;
     /**
      * Stop this test homeserver instance.
-     *
-     * @returns A list of paths relative to the cwd for logfiles generated during this test run.
      */
-    stop(): Promise<string[]>;
+    stop(): Promise<void>;
 }
 
 export interface Credentials {
@@ -70,4 +83,21 @@ export interface Credentials {
     homeServer: string;
     password: string | null; // null for password-less users
     displayName?: string;
+}
+
+export function getHomeserver(request?: APIRequestContext): Homeserver {
+    let server: Homeserver;
+    const homeserverName = process.env["PLAYWRIGHT_HOMESERVER"];
+    switch (homeserverName) {
+        case "dendrite":
+            server = new Dendrite(request);
+            break;
+        case "pinecone":
+            server = new Pinecone(request);
+            break;
+        default:
+            server = new Synapse(request);
+    }
+
+    return server;
 }

@@ -88,7 +88,11 @@ export class Synapse implements Homeserver, HomeserverInstance {
 
     private adminToken?: string;
 
-    public constructor(private readonly request: APIRequestContext) {}
+    public constructor(private request?: APIRequestContext) {}
+
+    public setRequest(request: APIRequestContext) {
+        this.request = request;
+    }
 
     /**
      * Start a synapse instance: the template must be the name of
@@ -130,8 +134,8 @@ export class Synapse implements Homeserver, HomeserverInstance {
         return this;
     }
 
-    public async stop(): Promise<string[]> {
-        if (!this.config) throw new Error("Missing existing synapse instance, did you call stop() before start()?");
+    public async getLogs(): Promise<string[]> {
+        if (!this.config) throw new Error("Missing existing synapse instance, did you call getLogs() before start()?");
         const id = this.config.serverId;
         const synapseLogsPath = path.join("playwright", "logs", "synapse", id);
         await fse.ensureDir(synapseLogsPath);
@@ -139,11 +143,15 @@ export class Synapse implements Homeserver, HomeserverInstance {
             stdoutFile: path.join(synapseLogsPath, "stdout.log"),
             stderrFile: path.join(synapseLogsPath, "stderr.log"),
         });
+        return [path.join(synapseLogsPath, "stdout.log"), path.join(synapseLogsPath, "stderr.log")];
+    }
+
+    public async stop(): Promise<void> {
+        if (!this.config) throw new Error("Missing existing synapse instance, did you call stop() before start()?");
+        const id = this.config.serverId;
         await this.docker.stop();
         await fse.remove(this.config.configDir);
         console.log(`Stopped synapse id ${id}.`);
-
-        return [path.join(synapseLogsPath, "stdout.log"), path.join(synapseLogsPath, "stderr.log")];
     }
 
     private async registerUserInternal(

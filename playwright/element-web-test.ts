@@ -14,9 +14,7 @@ import { basename, extname } from "node:path";
 
 import type mailhog from "mailhog";
 import type { IConfigOptions } from "../src/IConfigOptions";
-import { Credentials, Homeserver, HomeserverInstance, StartHomeserverOpts } from "./plugins/homeserver";
-import { Synapse } from "./plugins/homeserver/synapse";
-import { Dendrite, Pinecone } from "./plugins/homeserver/dendrite";
+import { Credentials, getHomeserver, Homeserver, HomeserverInstance, StartHomeserverOpts } from "./plugins/homeserver";
 import { Instance, MailHogServer } from "./plugins/mailhog";
 import { ElementAppPage } from "./pages/ElementAppPage";
 import { OAuthServer } from "./plugins/oauth_server";
@@ -73,7 +71,7 @@ export interface Fixtures {
      * The options with which to run the {@link #homeserver} fixture.
      */
     startHomeserverOpts: StartHomeserverOpts | string;
-
+    usePerTestHomeserver: boolean;
     homeserver: HomeserverInstance;
     oAuthServer: { port: number };
 
@@ -126,7 +124,15 @@ export interface Fixtures {
     webserver: Webserver;
 }
 
-export const test = base.extend<Fixtures>({
+interface WorkerFixtures {
+    /**
+     * The options with which to run the {@link #homeserver} fixture.
+     */
+    startWorkerHomeserverOpts: StartHomeserverOpts | string;
+    workerHomeserver: HomeserverInstance;
+}
+
+export const test = base.extend<Fixtures, WorkerFixtures>({
     context: async ({ context }, use, testInfo) => {
         // We skip tests instead of using grep-invert to still surface the counts in the html report
         test.skip(
@@ -153,28 +159,44 @@ export const test = base.extend<Fixtures>({
     },
 
     startHomeserverOpts: "default",
-    homeserver: async ({ request, startHomeserverOpts: opts }, use, testInfo) => {
-        if (typeof opts === "string") {
-            opts = { template: opts };
-        }
+    startWorkerHomeserverOpts: ["default", { scope: "worker" }],
+    usePerTestHomeserver: [false, { option: true }],
+    workerHomeserver: [
+        async ({ startWorkerHomeserverOpts: opts }, use) => {
+            if (typeof opts === "string") {
+                opts = { template: opts };
+            }
 
+            const server = getHomeserver();
+
+            await use(await server.start(opts));
+            await server.stop();
+        },
+        { scope: "worker" },
+    ],
+    homeserver: async (
+        { request, startHomeserverOpts: opts, usePerTestHomeserver, workerHomeserver },
+        use,
+        testInfo,
+    ) => {
+        let instance: HomeserverInstance;
         let server: Homeserver;
-        const homeserverName = process.env["PLAYWRIGHT_HOMESERVER"];
-        switch (homeserverName) {
-            case "dendrite":
-                server = new Dendrite(request);
-                break;
-            case "pinecone":
-                server = new Pinecone(request);
-                break;
-            default:
-                server = new Synapse(request);
+        if (usePerTestHomeserver) {
+            if (typeof opts === "string") {
+                opts = { template: opts };
+            }
+
+            server = getHomeserver(request);
+            instance = await server.start(opts);
+        } else {
+            instance = workerHomeserver;
+            instance.setRequest(request);
         }
 
-        await use(await server.start(opts));
-        const logs = await server.stop();
+        await use(instance);
 
         if (testInfo.status !== "passed") {
+            const logs = await instance.getLogs();
             for (const path of logs) {
                 await testInfo.attach(`homeserver-${basename(path)}`, {
                     path,
@@ -182,6 +204,7 @@ export const test = base.extend<Fixtures>({
                 });
             }
         }
+        await server?.stop();
     },
     // eslint-disable-next-line no-empty-pattern
     oAuthServer: async ({}, use) => {
@@ -192,12 +215,12 @@ export const test = base.extend<Fixtures>({
     },
 
     displayName: undefined,
-    credentials: async ({ homeserver, displayName: testDisplayName }, use) => {
+    credentials: async ({ homeserver, displayName: testDisplayName }, use, testInfo) => {
         const names = ["Alice", "Bob", "Charlie", "Daniel", "Eve", "Frank", "Grace", "Hannah", "Isaac", "Judy"];
         const password = _.uniqueId("password_");
         const displayName = testDisplayName ?? _.sample(names)!;
 
-        const credentials = await homeserver.registerUser("user", password, displayName);
+        const credentials = await homeserver.registerUser(`user_${testInfo.testId}`, password, displayName);
         console.log(`Registered test user @user:localhost with displayname ${displayName}`);
 
         await use({
