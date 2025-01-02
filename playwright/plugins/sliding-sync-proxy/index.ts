@@ -54,10 +54,17 @@ export class SlidingSyncProxy {
         console.log(new Date(), "started!");
 
         const baseUrl = `http://localhost:${port}`;
-        await this.context.route("**/_matrix/client/unstable/org.matrix.msc3575/sync**", async (route) => {
-            await route.continue({
+        await this.context.route("**/_matrix/client/unstable/org.matrix.msc3575/sync*", async (route) => {
+            console.log("Sliding sync proxy intercepting request to", route.request().url());
+            console.log("Continuing to", new URL(route.request().url().split("/").slice(3).join("/"), baseUrl).href);
+            const response = await route.fetch({
                 url: new URL(route.request().url().split("/").slice(3).join("/"), baseUrl).href,
             });
+            console.log("Sliding sync proxy got response", response.status(), await response.json());
+            await route.fulfill({ response });
+            // await route.continue({
+            //     url: new URL(route.request().url().split("/").slice(3).join("/"), baseUrl).href,
+            // });
         });
 
         this.instance = { containerId, postgresId, port };
