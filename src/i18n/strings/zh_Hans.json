@@ -230,7 +230,6 @@
         "oidc": {
             "error_title": "我们无法使你登入",
             "generic_auth_error": "验证时出了问题。前往登录页面并重试。",
-            "logout_redirect_warning": "你将被重定向到服务器的验证提供者以完成登出。",
             "missing_or_invalid_stored_state": "我们已要求浏览器记住你使用的家服务器，但不幸的是你的浏览器已忘记。请前往登录页面重试。"
         },
         "password_field_keep_going_prompt": "继续前进……",

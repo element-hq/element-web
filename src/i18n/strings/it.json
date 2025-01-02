@@ -235,7 +235,6 @@
         "oidc": {
             "error_title": "Non abbiamo potuto farti accedere",
             "generic_auth_error": "Qualcosa è andato storto durante l'autenticazione. Vai alla pagina di accesso e riprova.",
-            "logout_redirect_warning": "Verrai reindirizzato al fornitore di autenticazione del tuo server per completare la disconnessione.",
             "missing_or_invalid_stored_state": "Abbiamo chiesto al browser di ricordare quale homeserver usi per farti accedere, ma sfortunatamente l'ha dimenticato. Vai alla pagina di accesso e riprova."
         },
         "password_field_keep_going_prompt": "Continua…",
@@ -1390,8 +1389,6 @@
         "notification_settings_beta_caption": "Ti presentiamo un modo più semplice per modificare le impostazioni delle notifiche. Personalizza il tuo %(brand)s, proprio come piace a te.",
         "notification_settings_beta_title": "Impostazioni di notifica",
         "notifications": "Attiva il pannello delle notifiche nell'intestazione della stanza",
-        "oidc_native_flow": "Autenticazione nativa OIDC",
-        "oidc_native_flow_description": "⚠ ATTENZIONE: sperimentale. Usa l'autenticazione nativa OIDC se supportata dal server.",
         "render_reaction_images": "Mostra immagini personalizzate nelle reazioni",
         "render_reaction_images_description": "A volte chiamati \"emoji personalizzati\".",
         "report_to_moderators": "Segnala ai moderatori",
