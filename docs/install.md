@@ -60,7 +60,7 @@ would be:
 docker run --rm -p 127.0.0.1:80:80 -v /etc/element-web/config.json:/app/config.json vectorim/element-web
 ```
 
-The behaviour of the dockker image can be customised via the following
+The behaviour of the docker image can be customised via the following
 environment variables:
 
  * `ELEMENT_WEB_PORT`
