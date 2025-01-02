@@ -37,6 +37,10 @@ export class ElementAppPage {
         return this._timeline;
     }
 
+    public async cleanup() {
+        await this._client?.cleanup();
+    }
+
     /**
      * Open the top left user menu, returning a Locator to the resulting context menu.
      */
