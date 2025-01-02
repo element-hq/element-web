@@ -235,7 +235,6 @@
         "oidc": {
             "error_title": "Nemohli jsme vás přihlásit",
             "generic_auth_error": "Během autentizace se něco pokazilo. Přejděte na přihlašovací stránku a zkuste to znovu.",
-            "logout_redirect_warning": "Budete přesměrováni na poskytovatele ověřování vašeho serveru, kde dokončíte odhlášení.",
             "missing_or_invalid_stored_state": "Požádali jsme prohlížeč, aby si zapamatoval, který domovský server používáte k přihlášení, ale váš prohlížeč to bohužel zapomněl. Přejděte na přihlašovací stránku a zkuste to znovu."
         },
         "password_field_keep_going_prompt": "Pokračujte…",
@@ -1391,8 +1390,6 @@
         "notification_settings_beta_caption": "Představujeme jednodušší způsob, jak změnit nastavení oznámení. Přizpůsobte svůj %(brand)s přesně tak, jak se vám líbí.",
         "notification_settings_beta_title": "Nastavení oznámení",
         "notifications": "Zapnout panel oznámení v záhlaví místnosti",
-        "oidc_native_flow": "Nativní autentizace OIDC",
-        "oidc_native_flow_description": "⚠ VAROVÁNÍ: Experimentální. Použijte nativní ověřování OIDC, pokud je serverem podporováno.",
         "render_reaction_images": "Vykreslování vlastních obrázků v reakcích",
         "render_reaction_images_description": "Někdy se označují jako \"vlastní emoji\".",
         "report_to_moderators": "Nahlásit moderátorům",

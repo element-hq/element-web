@@ -44,3 +44,11 @@ type DeepReadonlyObject<T> = {
 };
 
 export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U[keyof U];
+
+/**
+ * Returns a union type of the keys of the input Object type whose values are assignable to the given Item type.
+ * Based on https://stackoverflow.com/a/57862073
+ */
+export type Assignable<Object, Item> = {
+    [Key in keyof Object]: Object[Key] extends Item ? Key : never;
+}[keyof Object];

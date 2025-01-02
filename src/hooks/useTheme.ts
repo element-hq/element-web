@@ -16,10 +16,10 @@ export function useTheme(): { theme: string; systemThemeActivated: boolean } {
     // We have to mirror the logic from ThemeWatcher.getEffectiveTheme so we
     // show the right values for things.
 
-    const themeChoice = useSettingValue<string>("theme");
-    const systemThemeExplicit = useSettingValueAt<string>(SettingLevel.DEVICE, "use_system_theme", null, false, true);
-    const themeExplicit = useSettingValueAt<string>(SettingLevel.DEVICE, "theme", null, false, true);
-    const systemThemeActivated = useSettingValue<boolean>("use_system_theme");
+    const themeChoice = useSettingValue("theme");
+    const systemThemeExplicit = useSettingValueAt(SettingLevel.DEVICE, "use_system_theme", null, false, true);
+    const themeExplicit = useSettingValueAt(SettingLevel.DEVICE, "theme", null, false, true);
+    const systemThemeActivated = useSettingValue("use_system_theme");
 
     // If the user has enabled system theme matching, use that.
     if (systemThemeExplicit) {
