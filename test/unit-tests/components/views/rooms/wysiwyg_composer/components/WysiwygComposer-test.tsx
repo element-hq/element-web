@@ -10,6 +10,7 @@ import "@testing-library/jest-dom";
 import React from "react";
 import { act, fireEvent, render, screen, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
+import { initOnce } from "@vector-im/matrix-wysiwyg";
 
 import { WysiwygComposer } from "../../../../../../../src/components/views/rooms/wysiwyg_composer/components/WysiwygComposer";
 import SettingsStore from "../../../../../../../src/settings/SettingsStore";
@@ -32,6 +33,8 @@ import AutocompleteProvider from "../../../../../../../src/autocomplete/Autocomp
 import * as Permalinks from "../../../../../../../src/utils/permalinks/Permalinks";
 import { PermalinkParts } from "../../../../../../../src/utils/permalinks/PermalinkConstructor";
 import { ScopedRoomContextProvider } from "../../../../../../../src/contexts/ScopedRoomContext.tsx";
+
+beforeAll(initOnce, 10000);
 
 describe("WysiwygComposer", () => {
     const customRender = (onChange = jest.fn(), onSend = jest.fn(), disabled = false, initialContent?: string) => {
