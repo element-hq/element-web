@@ -75,9 +75,10 @@ test.describe("Sliding Sync", () => {
     // Load the user fixture for all tests
     test.beforeEach(({ user }) => {});
 
-    test.skip("should render the Rooms list in reverse chronological order by default and allowing sorting A-Z", async ({
+    test("should render the Rooms list in reverse chronological order by default and allowing sorting A-Z", async ({
         page,
         app,
+        testRoom,
     }) => {
         // create rooms and check room names are correct
         for (const fruit of ["Apple", "Pineapple", "Orange"]) {
@@ -85,7 +86,7 @@ test.describe("Sliding Sync", () => {
             await expect(page.getByRole("treeitem", { name: fruit })).toBeVisible();
         }
 
-        // Check count, 3 fruits + 1 room created in beforeEach = 4
+        // Check count, 3 fruits + 1 testRoom = 4
         await expect(page.locator(".mx_RoomSublist_tiles").getByRole("treeitem")).toHaveCount(4);
         await checkOrder(["Orange", "Pineapple", "Apple", "Test Room"], page);
 
@@ -101,7 +102,7 @@ test.describe("Sliding Sync", () => {
         await checkOrder(["Apple", "Orange", "Pineapple", "Test Room"], page);
     });
 
-    test.skip("should move rooms around as new events arrive", async ({ page, app }) => {
+    test("should move rooms around as new events arrive", async ({ page, app, testRoom }) => {
         // create rooms and check room names are correct
         const roomIds: string[] = [];
         for (const fruit of ["Apple", "Pineapple", "Orange"]) {
@@ -124,7 +125,7 @@ test.describe("Sliding Sync", () => {
         await checkOrder(["Pineapple", "Orange", "Apple", "Test Room"], page);
     });
 
-    test.skip("should not move the selected room: it should be sticky", async ({ page, app }) => {
+    test("should not move the selected room: it should be sticky", async ({ page, app, testRoom }) => {
         // create rooms and check room names are correct
         const roomIds: string[] = [];
         for (const fruit of ["Apple", "Pineapple", "Orange"]) {
@@ -152,7 +153,7 @@ test.describe("Sliding Sync", () => {
         await checkOrder(["Apple", "Orange", "Pineapple", "Test Room"], page);
     });
 
-    test.skip("should show the right unread notifications", async ({ page, app, user, joinedBot: bob, testRoom }) => {
+    test.skip("should show the right unread notifications", async ({ page, user, joinedBot: bob, testRoom }) => {
         // send a message in the test room: unread notification count should increment
         await bob.sendMessage(testRoom.roomId, "Hello World");
 
@@ -178,7 +179,7 @@ test.describe("Sliding Sync", () => {
         ).not.toBeAttached();
     });
 
-    test.skip("should not show unread indicators", async ({ page, app, joinedBot: bot, testRoom }) => {
+    test("should not show unread indicators", async ({ page, app, joinedBot: bot, testRoom }) => {
         // TODO: for now. Later we should.
 
         // disable notifs in this room (TODO: CS API call?)
@@ -211,7 +212,7 @@ test.describe("Sliding Sync", () => {
         await expect(locator.locator(".mx_ToggleSwitch_on")).toBeAttached();
     });
 
-    test.skip("should show and be able to accept/reject/rescind invites", async ({
+    test("should show and be able to accept/reject/rescind invites", async ({
         page,
         app,
         joinedBot: bot,
@@ -292,7 +293,7 @@ test.describe("Sliding Sync", () => {
 
     // Regression test for a bug in SS mode, but would be useful to have in non-SS mode too.
     // This ensures we are setting RoomViewStore state correctly.
-    test.skip("should clear the reply to field when swapping rooms", async ({ page, app, testRoom }) => {
+    test("should clear the reply to field when swapping rooms", async ({ page, app, testRoom }) => {
         await app.client.createRoom({ name: "Other Room" });
         await expect(page.getByRole("treeitem", { name: "Other Room" })).toBeVisible();
         await app.client.sendMessage(testRoom.roomId, "Hello world");
@@ -324,7 +325,7 @@ test.describe("Sliding Sync", () => {
     });
 
     // Regression test for https://github.com/vector-im/element-web/issues/21462
-    test.skip("should not cancel replies when permalinks are clicked", async ({ page, app, testRoom }) => {
+    test("should not cancel replies when permalinks are clicked", async ({ page, app, testRoom }) => {
         // we require a first message as you cannot click the permalink text with the avatar in the way
         await app.client.sendMessage(testRoom.roomId, "First message");
         await app.client.sendMessage(testRoom.roomId, "Permalink me");
@@ -352,7 +353,7 @@ test.describe("Sliding Sync", () => {
         await expect(page.locator(".mx_ReplyPreview")).toBeVisible();
     });
 
-    test.skip("should send unsubscribe_rooms for every room switch", async ({ page, app }) => {
+    test("should send unsubscribe_rooms for every room switch", async ({ page, app }) => {
         // create rooms and check room names are correct
         const roomIds: string[] = [];
         for (const fruit of ["Apple", "Pineapple", "Orange"]) {
