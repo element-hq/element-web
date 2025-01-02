@@ -9,12 +9,15 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { act, render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
+import { initOnce } from "@vector-im/matrix-wysiwyg";
 
 import { PlainTextComposer } from "../../../../../../../src/components/views/rooms/wysiwyg_composer/components/PlainTextComposer";
 import * as mockUseSettingsHook from "../../../../../../../src/hooks/useSettings";
 import * as mockKeyboard from "../../../../../../../src/Keyboard";
 import { createMocks } from "../utils";
 import { ScopedRoomContextProvider } from "../../../../../../../src/contexts/ScopedRoomContext.tsx";
+
+beforeAll(initOnce, 10000);
 
 describe("PlainTextComposer", () => {
     const customRender = (
