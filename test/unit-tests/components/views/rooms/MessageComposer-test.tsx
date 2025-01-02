@@ -10,6 +10,7 @@ import * as React from "react";
 import { EventType, MatrixEvent, RoomMember, THREAD_RELATION_TYPE } from "matrix-js-sdk/src/matrix";
 import { act, fireEvent, render, screen, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
+import { initOnce } from "@vector-im/matrix-wysiwyg";
 
 import {
     clearAllModals,
@@ -51,6 +52,8 @@ const expectVoiceMessageRecordingTriggered = (): void => {
     // By this we know at least that starting a voice message was triggered.
     expect(screen.getByText("No microphone found")).toBeInTheDocument();
 };
+
+beforeAll(initOnce, 10000);
 
 describe("MessageComposer", () => {
     stubClient();
