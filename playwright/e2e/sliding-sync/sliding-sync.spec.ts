@@ -205,10 +205,10 @@ test.describe("Sliding Sync", () => {
     test("should update user settings promptly", async ({ page, app }) => {
         await app.settings.openUserSettings("Preferences");
         const locator = page.locator(".mx_SettingsFlag").filter({ hasText: "Show timestamps in 12 hour format" });
-        expect(locator).toBeVisible();
-        expect(locator.locator(".mx_ToggleSwitch_on")).not.toBeAttached();
+        await expect(locator).toBeVisible();
+        await expect(locator.locator(".mx_ToggleSwitch_on")).not.toBeAttached();
         await locator.locator(".mx_ToggleSwitch_ball").click();
-        expect(locator.locator(".mx_ToggleSwitch_on")).toBeAttached();
+        await expect(locator.locator(".mx_ToggleSwitch_on")).toBeAttached();
     });
 
     test.skip("should show and be able to accept/reject/rescind invites", async ({
