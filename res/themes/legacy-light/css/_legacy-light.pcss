@@ -1,0 +1,339 @@
+:root {
+    /* This is set to Twemoji when the user opts into the bundled emoji font */
+    --emoji-font-family: "";
+}
+
+/* Nunito lacks combining diacritics, so these will fall through
+   to the next font.  Helevetica's diacritics sometimes do not combine
+   nicely (on OSX, at least) and result in a huge horizontal mess.
+   Arial empirically gets it right, hence prioritising Arial here. */
+/* Noto Color Emoji contains digits, in fixed-width, therefore causing
+   digits in flowed text to stand out.
+   TODO: Consider putting all emoji fonts to the end rather than the front. */
+$font-family: "Nunito", var(--emoji-font-family), "Apple Color Emoji", "Segoe UI Emoji", "Arial", "Helvetica",
+    sans-serif, "Noto Color Emoji";
+
+$monospace-font-family: "Inconsolata", var(--emoji-font-family), "Apple Color Emoji", "Segoe UI Emoji", "Courier",
+    monospace, "Noto Color Emoji";
+
+/* unified palette */
+/* try to use these colors when possible */
+$header-panel-bg-color: #f3f8fd;
+$header-panel-bg-hover: var(--cpd-color-gray-200);
+
+/* typical text (dark-on-white in light skin) */
+$primary-fg-color: #2e2f32;
+$secondary-fg-color: $primary-fg-color;
+$tertiary-fg-color: $primary-fg-color;
+$primary-bg-color: #ffffff;
+$muted-fg-color: #61708b; /* Commonly used in headings and relevant alt text */
+
+/* used for dialog box text */
+$light-fg-color: #747474;
+
+/* used for focusing form controls */
+$focus-bg-color: #dddddd;
+
+/* button UI (white-on-green in light skin) */
+$accent-fg-color: #ffffff;
+$accent-alt: #238cf5;
+
+$selection-fg-color: $primary-bg-color;
+
+$focus-brightness: 105%;
+
+/* informational plinth */
+$info-plinth-bg-color: #f7f7f7;
+$info-plinth-fg-color: #888;
+
+/* left-panel style muted accent color */
+$secondary-accent-color: #f2f5f8;
+
+$spacePanel-bg-color: #27303a;
+$inverted-bg-color: $spacePanel-bg-color;
+
+/* used by RoomDropTarget */
+$droptarget-bg-color: rgba(255, 255, 255, 0.5);
+
+/* used by Autocomplete */
+$selected-color: $secondary-accent-color;
+
+/* selected for hoverover & selected event tiles */
+$event-selected-color: $header-panel-bg-color;
+
+/* used for the hairline dividers in RoomView */
+$primary-hairline-color: #e5e5e5;
+$secondary-hairline-color: var(--cpd-color-gray-300);
+
+/* used for the border of input text fields */
+$input-border-color: #e7e7e7;
+$input-darker-bg-color: #e3e8f0;
+$input-darker-fg-color: #9fa9ba;
+$input-lighter-bg-color: #f2f5f8;
+
+$resend-button-divider-color: $input-darker-bg-color;
+
+$button-fg-color: white;
+
+/* apart from login forms, which have stronger border */
+$strong-input-border-color: #c7c7c7;
+
+/* used for UserSettings EditableText */
+$input-underline-color: rgba(151, 151, 151, 0.5);
+$input-fg-color: rgba(74, 74, 74, 0.9);
+$input-placeholder: var(--cpd-color-text-secondary);
+/* scrollbars */
+$scrollbar-thumb-color: rgba(0, 0, 0, 0.2);
+/* context menus */
+$menu-border-color: #e7e7e7;
+$menu-bg-color: #fff;
+$menu-box-shadow-color: rgba(118, 131, 156, 0.6);
+$menu-selected-color: #f5f8fa;
+
+$avatar-initial-color: #ffffff;
+
+$h3-color: #3d3b39;
+$icon-button-color: var(--cpd-color-icon-tertiary);
+
+$dialog-title-fg-color: #45474a;
+$dialog-backdrop-color: rgba(46, 48, 51, 0.38);
+$dialog-close-fg-color: $icon-button-color;
+$dialog-close-external-color: $primary-bg-color;
+
+$lightbox-background-bg-color: #000;
+$lightbox-background-bg-opacity: 0.95;
+
+$imagebody-giflabel: rgba(0, 0, 0, 0.7);
+$imagebody-giflabel-border: rgba(0, 0, 0, 0.2);
+$imagebody-giflabel-color: rgba(255, 255, 255, 1);
+
+$info-plinth-fg-color: #888;
+
+$neutral-badge-color: #dbdbdb;
+
+$preview-widget-bar-color: #ddd;
+
+$blockquote-bar-color: var(--cpd-color-border-interactive-primary);
+
+$settings-grey-fg-color: #a2a2a2;
+$settings-subsection-fg-color: #61708b;
+
+$rte-bg-color: #e9e9e9;
+$rte-code-bg-color: rgba(0, 0, 0, 0.04);
+
+$header-panel-text-primary-color: #91a1c0;
+
+$pill-bg-color: var(--cpd-color-bg-action-primary-rest);
+$pill-hover-bg-color: var(--cpd-color-bg-action-primary-hovered);
+$pill-press-bg-color: var(--cpd-color-bg-action-primary-pressed);
+
+$topleftmenu-color: #212121;
+$roomheader-bg-color: $primary-bg-color;
+$roomheader-addroom-bg-color: #91a1c0;
+$roomheader-addroom-fg-color: $accent-fg-color;
+$roomtopic-color: #9e9e9e;
+$room-icon-unread-color: var(--cpd-color-icon-tertiary);
+
+/* ******************** */
+
+$theme-button-bg-color: #e3e8f0;
+
+$roomtile-default-badge-bg-color: #61708b;
+$roomtile-selected-bg-color: #fff;
+
+$presence-away: #d9b072;
+$presence-offline: #e3e8f0;
+$presence-busy: #ff5b55;
+
+/* Legacy theme backports */
+$accent: #0dbd8b;
+$alert: #ff5b55;
+$links: #0086e6;
+$link-external: #0467dd;
+$primary-content: $primary-fg-color;
+$secondary-content: $secondary-fg-color;
+$tertiary-content: $tertiary-fg-color;
+$quaternary-content: #6f7882;
+$quinary-content: $quaternary-content;
+$system: #f4f6fa;
+$system-transparent: #e1e6ec00;
+$background: $primary-bg-color;
+$overlay-background: rgba($background, 0.85);
+
+$panels: rgba($system, 0.9);
+$panel-actions: $roomtile-selected-bg-color;
+
+$separator: var(--cpd-color-gray-400);
+
+/* Legacy theme backports */
+
+/* ******************** */
+
+$roomlist-filter-active-bg-color: $panel-actions;
+$roomlist-bg-color: rgba(245, 245, 245, 0.9);
+$roomlist-header-color: $primary-fg-color;
+$roomsublist-skeleton-ui-bg: linear-gradient(180deg, #ffffff 0%, #ffffff00 100%);
+
+$voipcall-plinth-color: $system;
+
+$call-view-button-on-foreground: $secondary-content;
+$call-view-button-on-background: $background;
+$call-view-button-off-foreground: $background;
+$call-view-button-off-background: $secondary-content;
+$call-view-content-background: #21262c;
+
+$video-feed-secondary-background: #394049; /* XXX: Color from dark theme */
+
+/* All of these are from dark theme */
+$call-system: #21262c;
+$call-background: #15191e;
+$call-primary-content: #ffffff;
+$call-light-quaternary-content: #c1c6cd;
+
+$username-variant1-color: var(--cpd-color-text-decorative-1);
+$username-variant2-color: var(--cpd-color-text-decorative-2);
+$username-variant3-color: var(--cpd-color-text-decorative-3);
+$username-variant4-color: var(--cpd-color-text-decorative-4);
+$username-variant5-color: var(--cpd-color-text-decorative-5);
+$username-variant6-color: var(--cpd-color-text-decorative-6);
+
+/**
+ * Creating a `semantic` color scale. This will not be needed with the new
+ * visual language, but necessary during the transition period
+ * This abstract the `green` away from where accent shades are used
+ * Take: `background: rgba($accent, 0.1);`
+ * would be transformed to: `background: $accent-300;`
+ *
+ * To use under very rare circumstances, always prefer the semantics defined
+ * in https://compound.element.io/?path=/docs/tokens-semantic-colors--docs
+ */
+$accent-100: var(--cpd-color-green-100);
+$accent-200: var(--cpd-color-green-200);
+$accent-300: var(--cpd-color-green-300);
+$accent-400: var(--cpd-color-green-400);
+$accent-500: var(--cpd-color-green-500);
+$accent-600: var(--cpd-color-green-600);
+$accent-700: var(--cpd-color-green-700);
+$accent-800: var(--cpd-color-green-800);
+$accent-900: var(--cpd-color-green-900);
+$accent-1000: var(--cpd-color-green-1000);
+$accent-1100: var(--cpd-color-green-1100);
+$accent-1200: var(--cpd-color-green-1200);
+$accent-1300: var(--cpd-color-green-1300);
+$accent-1400: var(--cpd-color-green-1400);
+
+/* ******************** */
+
+$widget-menu-bar-bg-color: $secondary-accent-color;
+$widget-body-bg-color: #fff;
+
+/* ******************** */
+
+/* $event-highlight-bg-color shares this value, */
+/* so to not make their order dependent on who depends on who, have a shared value */
+/* defined before both */
+$yellow-background: #fff8e3;
+
+$event-highlight-bg-color: $yellow-background;
+
+/* event timestamp */
+$event-timestamp-color: #acacac;
+
+$copy-button-url: "@vector-im/compound-design-tokens/icons/copy.svg";
+
+/* e2e */
+$e2e-verified-color: #0dbd8b;
+$e2e-warning-color: #ff5b55;
+$e2e-verified-color-light: var(--cpd-color-green-300);
+$e2e-warning-color-light: var(--cpd-color-red-300);
+
+/*** ImageView ***/
+$lightbox-bg-color: #454545;
+$lightbox-fg-color: #ffffff;
+$lightbox-border-color: #ffffff;
+
+/* Tabbed views */
+$tab-label-fg-color: #45474a;
+$tab-label-active-fg-color: #ffffff;
+
+/* Buttons */
+$button-primary-fg-color: #ffffff;
+$button-secondary-bg-color: $accent-fg-color;
+$button-danger-fg-color: #ffffff;
+$button-danger-disabled-fg-color: #ffffff;
+$button-danger-disabled-bg-color: #f5b6bb; /* TODO: Verify color */
+
+$visual-bell-bg-color: #faa;
+
+/* Toggle switch */
+$togglesw-off-color: #c1c9d6;
+$togglesw-ball-color: var(--cpd-color-bg-action-primary-rest);
+
+$progressbar-bg-color: rgba(141, 151, 165, 0.2);
+
+$authpage-bg-color: #2e3649;
+$authpage-modal-bg-color: rgba(255, 255, 255, 0.59);
+$authpage-focus-bg-color: #dddddd;
+$authpage-lang-color: $secondary-content;
+$authpage-primary-color: $primary-content;
+$authpage-secondary-color: $secondary-content;
+
+$dark-panel-bg-color: var(--cpd-color-bg-subtle-secondary);
+$panel-gradient: rgba(242, 245, 248, 0), rgba(242, 245, 248, 1);
+
+$message-action-bar-bg-color: $primary-bg-color;
+$message-action-bar-fg-color: $primary-fg-color;
+$message-action-bar-border-color: #e9edf1;
+$message-action-bar-hover-border-color: $focus-bg-color;
+
+$reaction-row-button-hover-border-color: $focus-bg-color;
+$reaction-row-button-selected-bg-color: #e9fff9;
+
+$kbd-border-color: $strong-input-border-color;
+
+$tooltip-timeline-bg-color: $spacePanel-bg-color;
+$tooltip-timeline-fg-color: #ffffff;
+
+$breadcrumb-placeholder-bg-color: #e8eef5;
+
+/* See non-legacy _light for variable information */
+$voice-record-stop-symbol-color: #ff4b55;
+$voice-record-live-circle-color: #ff4b55;
+$voice-record-stop-border-color: #e3e8f0;
+$voice-record-icon-color: $tertiary-fg-color;
+
+$composer-shadow-color: tranparent;
+
+$codeblock-background-color: $header-panel-bg-color;
+$inlinecode-border-color: $header-panel-bg-color;
+$inlinecode-background-color: $header-panel-bg-color;
+
+/* Bubble tiles */
+$eventbubble-self-bg: #f0fbf8;
+$eventbubble-others-bg: $system;
+$eventbubble-bg-hover: #fafbfd;
+
+/* pinned events indicator */
+$pinned-color: $tertiary-content;
+
+$spacePanel-divider-color: $tertiary-content;
+
+/* Location sharing */
+/* ******************** */
+$location-marker-color: #ffffff;
+$location-live-color: #5c56f5;
+$location-live-secondary-color: #deddfd;
+/* ******************** */
+
+body {
+    color-scheme: light;
+}
+
+/* diff highlight colors */
+.hljs-addition {
+    background: #dfd;
+}
+
+.hljs-deletion {
+    background: #fdd;
+}

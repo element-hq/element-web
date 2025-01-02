@@ -1,0 +1,300 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SpacePanel /> should show all activated MetaSpaces in the correct order 1`] = `
+<DocumentFragment>
+  <nav
+    aria-label="Spaces"
+    class="mx_SpacePanel collapsed"
+  >
+    <div
+      class="mx_UserMenu"
+      data-floating-ui-inert=""
+    >
+      <div
+        aria-expanded="false"
+        aria-haspopup="true"
+        aria-label="User menu"
+        class="mx_AccessibleButton mx_UserMenu_contextMenuButton"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          class="mx_UserMenu_userAvatar"
+        >
+          <span
+            class="_avatar_mcap2_17 mx_BaseAvatar mx_UserMenu_userAvatar_BaseAvatar _avatar-imageless_mcap2_61"
+            data-color="5"
+            data-testid="avatar-img"
+            data-type="round"
+            role="presentation"
+            style="--cpd-avatar-size: 32px;"
+          >
+            t
+          </span>
+        </div>
+      </div>
+      <div
+        aria-label="Expand"
+        class="mx_AccessibleButton mx_SpacePanel_toggleCollapse"
+        role="button"
+        tabindex="0"
+      />
+    </div>
+    <ul
+      aria-label="Spaces"
+      class="mx_AutoHideScrollbar mx_SpaceTreeLevel"
+      data-floating-ui-inert=""
+      data-rbd-droppable-context-id="0"
+      data-rbd-droppable-id="top-level-spaces"
+      role="tree"
+      tabindex="-1"
+    >
+      <li
+        aria-selected="false"
+        class="mx_SpaceItem collapsed"
+        role="treeitem"
+      >
+        <div
+          aria-label="Home"
+          class="mx_AccessibleButton mx_SpaceButton mx_SpaceButton_home mx_SpaceButton_narrow"
+          role="button"
+          tabindex="0"
+        >
+          <div
+            class="mx_SpaceButton_selectionWrapper"
+          >
+            <div
+              class="mx_SpaceButton_avatarWrapper"
+            >
+              <div
+                class="mx_SpaceButton_avatarPlaceholder"
+              >
+                <div
+                  class="mx_SpaceButton_icon"
+                />
+              </div>
+            </div>
+            <div
+              aria-expanded="false"
+              aria-haspopup="true"
+              aria-label="Options"
+              class="mx_AccessibleButton mx_SpaceButton_menuButton"
+              role="button"
+              tabindex="0"
+            />
+          </div>
+        </div>
+      </li>
+      <li
+        aria-selected="false"
+        class="mx_SpaceItem collapsed"
+        role="treeitem"
+      >
+        <div
+          aria-label="Favourites"
+          class="mx_AccessibleButton mx_SpaceButton mx_SpaceButton_favourites mx_SpaceButton_narrow"
+          role="button"
+          tabindex="-1"
+        >
+          <div
+            class="mx_SpaceButton_selectionWrapper"
+          >
+            <div
+              class="mx_SpaceButton_avatarWrapper"
+            >
+              <div
+                class="mx_SpaceButton_avatarPlaceholder"
+              >
+                <div
+                  class="mx_SpaceButton_icon"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li
+        aria-selected="false"
+        class="mx_SpaceItem collapsed"
+        role="treeitem"
+      >
+        <div
+          aria-label="People"
+          class="mx_AccessibleButton mx_SpaceButton mx_SpaceButton_people mx_SpaceButton_narrow"
+          role="button"
+          tabindex="-1"
+        >
+          <div
+            class="mx_SpaceButton_selectionWrapper"
+          >
+            <div
+              class="mx_SpaceButton_avatarWrapper"
+            >
+              <div
+                class="mx_SpaceButton_avatarPlaceholder"
+              >
+                <div
+                  class="mx_SpaceButton_icon"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li
+        aria-selected="false"
+        class="mx_SpaceItem collapsed"
+        role="treeitem"
+      >
+        <div
+          aria-label="Other rooms"
+          class="mx_AccessibleButton mx_SpaceButton mx_SpaceButton_orphans mx_SpaceButton_narrow"
+          role="button"
+          tabindex="-1"
+        >
+          <div
+            class="mx_SpaceButton_selectionWrapper"
+          >
+            <div
+              class="mx_SpaceButton_avatarWrapper"
+            >
+              <div
+                class="mx_SpaceButton_avatarPlaceholder"
+              >
+                <div
+                  class="mx_SpaceButton_icon"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li
+        aria-selected="false"
+        class="mx_SpaceItem collapsed"
+        role="treeitem"
+      >
+        <div
+          aria-label="Conferences"
+          class="mx_AccessibleButton mx_SpaceButton mx_SpaceButton_videoRooms mx_SpaceButton_narrow"
+          role="button"
+          tabindex="-1"
+        >
+          <div
+            class="mx_SpaceButton_selectionWrapper"
+          >
+            <div
+              class="mx_SpaceButton_avatarWrapper"
+            >
+              <div
+                class="mx_SpaceButton_avatarPlaceholder"
+              >
+                <div
+                  class="mx_SpaceButton_icon"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li
+        aria-selected="false"
+        class="mx_SpaceItem mx_SpaceItem_new collapsed"
+        role="treeitem"
+      >
+        <div
+          aria-label="Create a space"
+          class="mx_AccessibleButton mx_SpaceButton mx_SpaceButton_new mx_SpaceButton_narrow"
+          data-testid="create-space-button"
+          role="button"
+          tabindex="-1"
+        >
+          <div
+            class="mx_SpaceButton_selectionWrapper"
+          >
+            <div
+              class="mx_SpaceButton_avatarWrapper"
+            >
+              <div
+                class="mx_SpaceButton_avatarPlaceholder"
+              >
+                <div
+                  class="mx_SpaceButton_icon"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <div
+      class="mx_ThreadsActivityCentre_container"
+    >
+      <button
+        aria-controls=":r12:"
+        aria-describedby=":r12:"
+        aria-expanded="true"
+        aria-haspopup="dialog"
+        aria-label="Threads"
+        aria-labelledby=":r14:"
+        class="_icon-button_bh2qc_17 mx_ThreadsActivityCentreButton"
+        data-floating-ui-inert=""
+        role="button"
+        style="--cpd-icon-button-size: 32px;"
+        tabindex="0"
+      >
+        <div
+          class="_indicator-icon_133tf_26"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <svg
+            class="mx_ThreadsActivityCentreButton_Icon"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 3h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2Zm3 7h10a.97.97 0 0 0 .712-.287A.967.967 0 0 0 18 9a.967.967 0 0 0-.288-.713A.968.968 0 0 0 17 8H7a.968.968 0 0 0-.713.287A.968.968 0 0 0 6 9c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 4h6c.283 0 .52-.096.713-.287A.968.968 0 0 0 14 13a.968.968 0 0 0-.287-.713A.968.968 0 0 0 13 12H7a.967.967 0 0 0-.713.287A.968.968 0 0 0 6 13c0 .283.096.52.287.713.192.191.43.287.713.287Z"
+            />
+          </svg>
+        </div>
+      </button>
+      <span
+        aria-hidden="true"
+        data-floating-ui-inert=""
+        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+        tabindex="-1"
+      />
+      <span
+        data-floating-ui-focus-guard=""
+        data-type="outside"
+        role="button"
+        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+        tabindex="0"
+      />
+      <span
+        aria-owns=":r19:"
+        data-floating-ui-inert=""
+        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+      />
+      <span
+        data-floating-ui-focus-guard=""
+        data-type="outside"
+        role="button"
+        style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
+        tabindex="0"
+      />
+    </div>
+    <div
+      aria-expanded="false"
+      aria-label="Quick settings"
+      class="mx_AccessibleButton mx_QuickSettingsButton"
+      data-floating-ui-inert=""
+      role="button"
+      tabindex="0"
+    />
+  </nav>
+</DocumentFragment>
+`;

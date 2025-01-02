@@ -1,0 +1,1205 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<LoginWithQRFlow /> errors renders authorization_expired 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR mx_LoginWithQR_error"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <div
+        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+      >
+        <svg
+          fill="currentColor"
+          height="32px"
+          viewBox="0 0 24 24"
+          width="32px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 17a.97.97 0 0 0 .713-.288A.968.968 0 0 0 13 16a.968.968 0 0 0-.287-.713A.968.968 0 0 0 12 15a.968.968 0 0 0-.713.287A.968.968 0 0 0 11 16c0 .283.096.52.287.712.192.192.43.288.713.288Zm0-4c.283 0 .52-.096.713-.287A.968.968 0 0 0 13 12V8a.967.967 0 0 0-.287-.713A.968.968 0 0 0 12 7a.968.968 0 0 0-.713.287A.967.967 0 0 0 11 8v4c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 9a9.738 9.738 0 0 1-3.9-.788 10.099 10.099 0 0 1-3.175-2.137c-.9-.9-1.612-1.958-2.137-3.175A9.738 9.738 0 0 1 2 12a9.74 9.74 0 0 1 .788-3.9 10.099 10.099 0 0 1 2.137-3.175c.9-.9 1.958-1.612 3.175-2.137A9.738 9.738 0 0 1 12 2a9.74 9.74 0 0 1 3.9.788 10.098 10.098 0 0 1 3.175 2.137c.9.9 1.613 1.958 2.137 3.175A9.738 9.738 0 0 1 22 12a9.738 9.738 0 0 1-.788 3.9 10.098 10.098 0 0 1-2.137 3.175c-.9.9-1.958 1.613-3.175 2.137A9.738 9.738 0 0 1 12 22Z"
+          />
+        </svg>
+      </div>
+      <h1
+        class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+      >
+        The sign in was not completed in time
+      </h1>
+      <p
+        data-testid="cancellation-message"
+      >
+        Sign in expired. Please try again.
+      </p>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    />
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> errors renders check_code_mismatch 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR mx_LoginWithQR_error"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <div
+        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+      >
+        <svg
+          fill="currentColor"
+          height="32px"
+          viewBox="0 0 24 24"
+          width="32px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 17a.97.97 0 0 0 .713-.288A.968.968 0 0 0 13 16a.968.968 0 0 0-.287-.713A.968.968 0 0 0 12 15a.968.968 0 0 0-.713.287A.968.968 0 0 0 11 16c0 .283.096.52.287.712.192.192.43.288.713.288Zm0-4c.283 0 .52-.096.713-.287A.968.968 0 0 0 13 12V8a.967.967 0 0 0-.287-.713A.968.968 0 0 0 12 7a.968.968 0 0 0-.713.287A.967.967 0 0 0 11 8v4c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 9a9.738 9.738 0 0 1-3.9-.788 10.099 10.099 0 0 1-3.175-2.137c-.9-.9-1.612-1.958-2.137-3.175A9.738 9.738 0 0 1 2 12a9.74 9.74 0 0 1 .788-3.9 10.099 10.099 0 0 1 2.137-3.175c.9-.9 1.958-1.612 3.175-2.137A9.738 9.738 0 0 1 12 2a9.74 9.74 0 0 1 3.9.788 10.098 10.098 0 0 1 3.175 2.137c.9.9 1.613 1.958 2.137 3.175A9.738 9.738 0 0 1 22 12a9.738 9.738 0 0 1-.788 3.9 10.098 10.098 0 0 1-2.137 3.175c-.9.9-1.958 1.613-3.175 2.137A9.738 9.738 0 0 1 12 22Z"
+          />
+        </svg>
+      </div>
+      <h1
+        class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+      >
+        Something went wrong!
+      </h1>
+      <p
+        data-testid="cancellation-message"
+      >
+        An unexpected error occurred. The request to connect your other device has been cancelled.
+      </p>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    />
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> errors renders device_already_exists 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR mx_LoginWithQR_error"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <div
+        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+      >
+        <svg
+          fill="currentColor"
+          height="32px"
+          viewBox="0 0 24 24"
+          width="32px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 17a.97.97 0 0 0 .713-.288A.968.968 0 0 0 13 16a.968.968 0 0 0-.287-.713A.968.968 0 0 0 12 15a.968.968 0 0 0-.713.287A.968.968 0 0 0 11 16c0 .283.096.52.287.712.192.192.43.288.713.288Zm0-4c.283 0 .52-.096.713-.287A.968.968 0 0 0 13 12V8a.967.967 0 0 0-.287-.713A.968.968 0 0 0 12 7a.968.968 0 0 0-.713.287A.967.967 0 0 0 11 8v4c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 9a9.738 9.738 0 0 1-3.9-.788 10.099 10.099 0 0 1-3.175-2.137c-.9-.9-1.612-1.958-2.137-3.175A9.738 9.738 0 0 1 2 12a9.74 9.74 0 0 1 .788-3.9 10.099 10.099 0 0 1 2.137-3.175c.9-.9 1.958-1.612 3.175-2.137A9.738 9.738 0 0 1 12 2a9.74 9.74 0 0 1 3.9.788 10.098 10.098 0 0 1 3.175 2.137c.9.9 1.613 1.958 2.137 3.175A9.738 9.738 0 0 1 22 12a9.738 9.738 0 0 1-.788 3.9 10.098 10.098 0 0 1-2.137 3.175c-.9.9-1.958 1.613-3.175 2.137A9.738 9.738 0 0 1 12 22Z"
+          />
+        </svg>
+      </div>
+      <h1
+        class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+      >
+        Something went wrong!
+      </h1>
+      <p
+        data-testid="cancellation-message"
+      >
+        An unexpected error occurred. The request to connect your other device has been cancelled.
+      </p>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    />
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> errors renders device_not_found 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR mx_LoginWithQR_error"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <div
+        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+      >
+        <svg
+          fill="currentColor"
+          height="32px"
+          viewBox="0 0 24 24"
+          width="32px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 17a.97.97 0 0 0 .713-.288A.968.968 0 0 0 13 16a.968.968 0 0 0-.287-.713A.968.968 0 0 0 12 15a.968.968 0 0 0-.713.287A.968.968 0 0 0 11 16c0 .283.096.52.287.712.192.192.43.288.713.288Zm0-4c.283 0 .52-.096.713-.287A.968.968 0 0 0 13 12V8a.967.967 0 0 0-.287-.713A.968.968 0 0 0 12 7a.968.968 0 0 0-.713.287A.967.967 0 0 0 11 8v4c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 9a9.738 9.738 0 0 1-3.9-.788 10.099 10.099 0 0 1-3.175-2.137c-.9-.9-1.612-1.958-2.137-3.175A9.738 9.738 0 0 1 2 12a9.74 9.74 0 0 1 .788-3.9 10.099 10.099 0 0 1 2.137-3.175c.9-.9 1.958-1.612 3.175-2.137A9.738 9.738 0 0 1 12 2a9.74 9.74 0 0 1 3.9.788 10.098 10.098 0 0 1 3.175 2.137c.9.9 1.613 1.958 2.137 3.175A9.738 9.738 0 0 1 22 12a9.738 9.738 0 0 1-.788 3.9 10.098 10.098 0 0 1-2.137 3.175c-.9.9-1.958 1.613-3.175 2.137A9.738 9.738 0 0 1 12 22Z"
+          />
+        </svg>
+      </div>
+      <h1
+        class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+      >
+        Something went wrong!
+      </h1>
+      <p
+        data-testid="cancellation-message"
+      >
+        An unexpected error occurred. The request to connect your other device has been cancelled.
+      </p>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    />
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> errors renders etag_missing 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR mx_LoginWithQR_error"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <div
+        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+      >
+        <svg
+          fill="currentColor"
+          height="32px"
+          viewBox="0 0 24 24"
+          width="32px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 17a.97.97 0 0 0 .713-.288A.968.968 0 0 0 13 16a.968.968 0 0 0-.287-.713A.968.968 0 0 0 12 15a.968.968 0 0 0-.713.287A.968.968 0 0 0 11 16c0 .283.096.52.287.712.192.192.43.288.713.288Zm0-4c.283 0 .52-.096.713-.287A.968.968 0 0 0 13 12V8a.967.967 0 0 0-.287-.713A.968.968 0 0 0 12 7a.968.968 0 0 0-.713.287A.967.967 0 0 0 11 8v4c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 9a9.738 9.738 0 0 1-3.9-.788 10.099 10.099 0 0 1-3.175-2.137c-.9-.9-1.612-1.958-2.137-3.175A9.738 9.738 0 0 1 2 12a9.74 9.74 0 0 1 .788-3.9 10.099 10.099 0 0 1 2.137-3.175c.9-.9 1.958-1.612 3.175-2.137A9.738 9.738 0 0 1 12 2a9.74 9.74 0 0 1 3.9.788 10.098 10.098 0 0 1 3.175 2.137c.9.9 1.613 1.958 2.137 3.175A9.738 9.738 0 0 1 22 12a9.738 9.738 0 0 1-.788 3.9 10.098 10.098 0 0 1-2.137 3.175c-.9.9-1.958 1.613-3.175 2.137A9.738 9.738 0 0 1 12 22Z"
+          />
+        </svg>
+      </div>
+      <h1
+        class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+      >
+        Something went wrong!
+      </h1>
+      <p
+        data-testid="cancellation-message"
+      >
+        An unexpected error occurred. This may be due to a browser extension, proxy server, or server misconfiguration.
+      </p>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    />
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> errors renders expired 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR mx_LoginWithQR_error"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <div
+        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+      >
+        <svg
+          fill="currentColor"
+          height="32px"
+          viewBox="0 0 24 24"
+          width="32px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 17a.97.97 0 0 0 .713-.288A.968.968 0 0 0 13 16a.968.968 0 0 0-.287-.713A.968.968 0 0 0 12 15a.968.968 0 0 0-.713.287A.968.968 0 0 0 11 16c0 .283.096.52.287.712.192.192.43.288.713.288Zm0-4c.283 0 .52-.096.713-.287A.968.968 0 0 0 13 12V8a.967.967 0 0 0-.287-.713A.968.968 0 0 0 12 7a.968.968 0 0 0-.713.287A.967.967 0 0 0 11 8v4c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 9a9.738 9.738 0 0 1-3.9-.788 10.099 10.099 0 0 1-3.175-2.137c-.9-.9-1.612-1.958-2.137-3.175A9.738 9.738 0 0 1 2 12a9.74 9.74 0 0 1 .788-3.9 10.099 10.099 0 0 1 2.137-3.175c.9-.9 1.958-1.612 3.175-2.137A9.738 9.738 0 0 1 12 2a9.74 9.74 0 0 1 3.9.788 10.098 10.098 0 0 1 3.175 2.137c.9.9 1.613 1.958 2.137 3.175A9.738 9.738 0 0 1 22 12a9.738 9.738 0 0 1-.788 3.9 10.098 10.098 0 0 1-2.137 3.175c-.9.9-1.958 1.613-3.175 2.137A9.738 9.738 0 0 1 12 22Z"
+          />
+        </svg>
+      </div>
+      <h1
+        class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+      >
+        The sign in was not completed in time
+      </h1>
+      <p
+        data-testid="cancellation-message"
+      >
+        Sign in expired. Please try again.
+      </p>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    />
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> errors renders homeserver_lacks_support 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR mx_LoginWithQR_error"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_heading"
+    >
+      <div
+        aria-label="Back"
+        class="mx_AccessibleButton mx_LoginWithQR_BackButton"
+        data-testid="back-button"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m13.3 17.3-4.6-4.6a.877.877 0 0 1-.213-.325A1.106 1.106 0 0 1 8.425 12c0-.133.02-.258.062-.375A.878.878 0 0 1 8.7 11.3l4.6-4.6a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275.948.948 0 0 1 .275.7.948.948 0 0 1-.275.7L10.8 12l3.9 3.9a.949.949 0 0 1 .275.7.948.948 0 0 1-.275.7.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+          />
+        </svg>
+      </div>
+      <div
+        class="mx_LoginWithQR_breadcrumbs"
+      >
+        Sessions
+         / 
+        Link new device
+      </div>
+    </div>
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <div
+        class="mx_LoginWithQR_icon"
+      >
+        <svg
+          fill="currentColor"
+          height="32px"
+          viewBox="0 0 24 24"
+          width="32px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M3 4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4Zm2 5V5h4v4H5Zm-2 5a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-6Zm2 5v-4h4v4H5Zm9-16a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-6Zm1 2v4h4V5h-4Z"
+            fill-rule="evenodd"
+          />
+          <path
+            d="M15 16v-3h-2v3h2Z"
+          />
+          <path
+            d="M17 16h-2v2h-2v3h2v-3h2v2h4v-2h-2v-5h-2v3Z"
+          />
+        </svg>
+      </div>
+      <h1
+        class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+      >
+        QR code not supported
+      </h1>
+      <p
+        data-testid="cancellation-message"
+      >
+        Your account provider doesn't support signing into a new device with a QR code.
+      </p>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    />
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> errors renders insecure_channel_detected 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR mx_LoginWithQR_error"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <div
+        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+      >
+        <svg
+          fill="currentColor"
+          height="32px"
+          viewBox="0 0 24 24"
+          width="32px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 17a.97.97 0 0 0 .713-.288A.968.968 0 0 0 13 16a.968.968 0 0 0-.287-.713A.968.968 0 0 0 12 15a.968.968 0 0 0-.713.287A.968.968 0 0 0 11 16c0 .283.096.52.287.712.192.192.43.288.713.288Zm0-4c.283 0 .52-.096.713-.287A.968.968 0 0 0 13 12V8a.967.967 0 0 0-.287-.713A.968.968 0 0 0 12 7a.968.968 0 0 0-.713.287A.967.967 0 0 0 11 8v4c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 9a9.738 9.738 0 0 1-3.9-.788 10.099 10.099 0 0 1-3.175-2.137c-.9-.9-1.612-1.958-2.137-3.175A9.738 9.738 0 0 1 2 12a9.74 9.74 0 0 1 .788-3.9 10.099 10.099 0 0 1 2.137-3.175c.9-.9 1.958-1.612 3.175-2.137A9.738 9.738 0 0 1 12 2a9.74 9.74 0 0 1 3.9.788 10.098 10.098 0 0 1 3.175 2.137c.9.9 1.613 1.958 2.137 3.175A9.738 9.738 0 0 1 22 12a9.738 9.738 0 0 1-.788 3.9 10.098 10.098 0 0 1-2.137 3.175c-.9.9-1.958 1.613-3.175 2.137A9.738 9.738 0 0 1 12 22Z"
+          />
+        </svg>
+      </div>
+      <h1
+        class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+      >
+        Connection not secure
+      </h1>
+      A secure connection could not be made to the new device. Your existing devices are still safe and you don't need to worry about them.
+      <h2
+        class="_typography_yh5dq_162 _font-body-lg-semibold_yh5dq_83"
+        data-testid="cancellation-message"
+      >
+        Now what?
+      </h2>
+      <ol>
+        <li>
+          Try signing in to the other device again with a QR code in case this was a network problem
+        </li>
+        <li>
+          If you encounter the same problem, try a different wifi network or use your mobile data instead of wifi
+        </li>
+        <li>
+          If that doesn't work, sign in manually
+        </li>
+      </ol>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    />
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> errors renders invalid_code 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR mx_LoginWithQR_error"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <div
+        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+      >
+        <svg
+          fill="currentColor"
+          height="32px"
+          viewBox="0 0 24 24"
+          width="32px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 17a.97.97 0 0 0 .713-.288A.968.968 0 0 0 13 16a.968.968 0 0 0-.287-.713A.968.968 0 0 0 12 15a.968.968 0 0 0-.713.287A.968.968 0 0 0 11 16c0 .283.096.52.287.712.192.192.43.288.713.288Zm0-4c.283 0 .52-.096.713-.287A.968.968 0 0 0 13 12V8a.967.967 0 0 0-.287-.713A.968.968 0 0 0 12 7a.968.968 0 0 0-.713.287A.967.967 0 0 0 11 8v4c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 9a9.738 9.738 0 0 1-3.9-.788 10.099 10.099 0 0 1-3.175-2.137c-.9-.9-1.612-1.958-2.137-3.175A9.738 9.738 0 0 1 2 12a9.74 9.74 0 0 1 .788-3.9 10.099 10.099 0 0 1 2.137-3.175c.9-.9 1.958-1.612 3.175-2.137A9.738 9.738 0 0 1 12 2a9.74 9.74 0 0 1 3.9.788 10.098 10.098 0 0 1 3.175 2.137c.9.9 1.613 1.958 2.137 3.175A9.738 9.738 0 0 1 22 12a9.738 9.738 0 0 1-.788 3.9 10.098 10.098 0 0 1-2.137 3.175c-.9.9-1.958 1.613-3.175 2.137A9.738 9.738 0 0 1 12 22Z"
+          />
+        </svg>
+      </div>
+      <h1
+        class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+      >
+        Something went wrong!
+      </h1>
+      <p
+        data-testid="cancellation-message"
+      >
+        An unexpected error occurred. The request to connect your other device has been cancelled.
+      </p>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    />
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> errors renders other_device_already_signed_in 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR mx_LoginWithQR_error"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <div
+        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--success"
+      >
+        <svg
+          fill="currentColor"
+          height="32px"
+          viewBox="0 0 24 24"
+          width="32px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m10.6 13.8-2.15-2.15a.948.948 0 0 0-.7-.275.948.948 0 0 0-.7.275.948.948 0 0 0-.275.7.95.95 0 0 0 .275.7L9.9 15.9c.2.2.433.3.7.3.267 0 .5-.1.7-.3l5.65-5.65a.948.948 0 0 0 .275-.7.948.948 0 0 0-.275-.7.948.948 0 0 0-.7-.275.948.948 0 0 0-.7.275L10.6 13.8ZM12 22a9.738 9.738 0 0 1-3.9-.788 10.099 10.099 0 0 1-3.175-2.137c-.9-.9-1.612-1.958-2.137-3.175A9.738 9.738 0 0 1 2 12a9.74 9.74 0 0 1 .788-3.9 10.099 10.099 0 0 1 2.137-3.175c.9-.9 1.958-1.612 3.175-2.137A9.738 9.738 0 0 1 12 2a9.74 9.74 0 0 1 3.9.788 10.098 10.098 0 0 1 3.175 2.137c.9.9 1.613 1.958 2.137 3.175A9.738 9.738 0 0 1 22 12a9.738 9.738 0 0 1-.788 3.9 10.098 10.098 0 0 1-2.137 3.175c-.9.9-1.958 1.613-3.175 2.137A9.738 9.738 0 0 1 12 22Z"
+          />
+        </svg>
+      </div>
+      <h1
+        class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+      >
+        Your other device is already signed in
+      </h1>
+      <p
+        data-testid="cancellation-message"
+      >
+        You don’t need to do anything else.
+      </p>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    />
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> errors renders other_device_not_signed_in 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR mx_LoginWithQR_error"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <div
+        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+      >
+        <svg
+          fill="currentColor"
+          height="32px"
+          viewBox="0 0 24 24"
+          width="32px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 17a.97.97 0 0 0 .713-.288A.968.968 0 0 0 13 16a.968.968 0 0 0-.287-.713A.968.968 0 0 0 12 15a.968.968 0 0 0-.713.287A.968.968 0 0 0 11 16c0 .283.096.52.287.712.192.192.43.288.713.288Zm0-4c.283 0 .52-.096.713-.287A.968.968 0 0 0 13 12V8a.967.967 0 0 0-.287-.713A.968.968 0 0 0 12 7a.968.968 0 0 0-.713.287A.967.967 0 0 0 11 8v4c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 9a9.738 9.738 0 0 1-3.9-.788 10.099 10.099 0 0 1-3.175-2.137c-.9-.9-1.612-1.958-2.137-3.175A9.738 9.738 0 0 1 2 12a9.74 9.74 0 0 1 .788-3.9 10.099 10.099 0 0 1 2.137-3.175c.9-.9 1.958-1.612 3.175-2.137A9.738 9.738 0 0 1 12 2a9.74 9.74 0 0 1 3.9.788 10.098 10.098 0 0 1 3.175 2.137c.9.9 1.613 1.958 2.137 3.175A9.738 9.738 0 0 1 22 12a9.738 9.738 0 0 1-.788 3.9 10.098 10.098 0 0 1-2.137 3.175c-.9.9-1.958 1.613-3.175 2.137A9.738 9.738 0 0 1 12 22Z"
+          />
+        </svg>
+      </div>
+      <h1
+        class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+      >
+        Something went wrong!
+      </h1>
+      <p
+        data-testid="cancellation-message"
+      >
+        An unexpected error occurred. The request to connect your other device has been cancelled.
+      </p>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    />
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> errors renders rate_limited 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR mx_LoginWithQR_error"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <div
+        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+      >
+        <svg
+          fill="currentColor"
+          height="32px"
+          viewBox="0 0 24 24"
+          width="32px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 17a.97.97 0 0 0 .713-.288A.968.968 0 0 0 13 16a.968.968 0 0 0-.287-.713A.968.968 0 0 0 12 15a.968.968 0 0 0-.713.287A.968.968 0 0 0 11 16c0 .283.096.52.287.712.192.192.43.288.713.288Zm0-4c.283 0 .52-.096.713-.287A.968.968 0 0 0 13 12V8a.967.967 0 0 0-.287-.713A.968.968 0 0 0 12 7a.968.968 0 0 0-.713.287A.967.967 0 0 0 11 8v4c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 9a9.738 9.738 0 0 1-3.9-.788 10.099 10.099 0 0 1-3.175-2.137c-.9-.9-1.612-1.958-2.137-3.175A9.738 9.738 0 0 1 2 12a9.74 9.74 0 0 1 .788-3.9 10.099 10.099 0 0 1 2.137-3.175c.9-.9 1.958-1.612 3.175-2.137A9.738 9.738 0 0 1 12 2a9.74 9.74 0 0 1 3.9.788 10.098 10.098 0 0 1 3.175 2.137c.9.9 1.613 1.958 2.137 3.175A9.738 9.738 0 0 1 22 12a9.738 9.738 0 0 1-.788 3.9 10.098 10.098 0 0 1-2.137 3.175c-.9.9-1.958 1.613-3.175 2.137A9.738 9.738 0 0 1 12 22Z"
+          />
+        </svg>
+      </div>
+      <h1
+        class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+      >
+        Something went wrong!
+      </h1>
+      <p
+        data-testid="cancellation-message"
+      >
+        Too many attempts in a short time. Wait some time before trying again.
+      </p>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    />
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> errors renders unexpected_message_received 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR mx_LoginWithQR_error"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <div
+        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+      >
+        <svg
+          fill="currentColor"
+          height="32px"
+          viewBox="0 0 24 24"
+          width="32px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 17a.97.97 0 0 0 .713-.288A.968.968 0 0 0 13 16a.968.968 0 0 0-.287-.713A.968.968 0 0 0 12 15a.968.968 0 0 0-.713.287A.968.968 0 0 0 11 16c0 .283.096.52.287.712.192.192.43.288.713.288Zm0-4c.283 0 .52-.096.713-.287A.968.968 0 0 0 13 12V8a.967.967 0 0 0-.287-.713A.968.968 0 0 0 12 7a.968.968 0 0 0-.713.287A.967.967 0 0 0 11 8v4c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 9a9.738 9.738 0 0 1-3.9-.788 10.099 10.099 0 0 1-3.175-2.137c-.9-.9-1.612-1.958-2.137-3.175A9.738 9.738 0 0 1 2 12a9.74 9.74 0 0 1 .788-3.9 10.099 10.099 0 0 1 2.137-3.175c.9-.9 1.958-1.612 3.175-2.137A9.738 9.738 0 0 1 12 2a9.74 9.74 0 0 1 3.9.788 10.098 10.098 0 0 1 3.175 2.137c.9.9 1.613 1.958 2.137 3.175A9.738 9.738 0 0 1 22 12a9.738 9.738 0 0 1-.788 3.9 10.098 10.098 0 0 1-2.137 3.175c-.9.9-1.958 1.613-3.175 2.137A9.738 9.738 0 0 1 12 22Z"
+          />
+        </svg>
+      </div>
+      <h1
+        class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+      >
+        Something went wrong!
+      </h1>
+      <p
+        data-testid="cancellation-message"
+      >
+        An unexpected error occurred. The request to connect your other device has been cancelled.
+      </p>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    />
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> errors renders unknown 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR mx_LoginWithQR_error"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <div
+        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+      >
+        <svg
+          fill="currentColor"
+          height="32px"
+          viewBox="0 0 24 24"
+          width="32px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 17a.97.97 0 0 0 .713-.288A.968.968 0 0 0 13 16a.968.968 0 0 0-.287-.713A.968.968 0 0 0 12 15a.968.968 0 0 0-.713.287A.968.968 0 0 0 11 16c0 .283.096.52.287.712.192.192.43.288.713.288Zm0-4c.283 0 .52-.096.713-.287A.968.968 0 0 0 13 12V8a.967.967 0 0 0-.287-.713A.968.968 0 0 0 12 7a.968.968 0 0 0-.713.287A.967.967 0 0 0 11 8v4c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 9a9.738 9.738 0 0 1-3.9-.788 10.099 10.099 0 0 1-3.175-2.137c-.9-.9-1.612-1.958-2.137-3.175A9.738 9.738 0 0 1 2 12a9.74 9.74 0 0 1 .788-3.9 10.099 10.099 0 0 1 2.137-3.175c.9-.9 1.958-1.612 3.175-2.137A9.738 9.738 0 0 1 12 2a9.74 9.74 0 0 1 3.9.788 10.098 10.098 0 0 1 3.175 2.137c.9.9 1.613 1.958 2.137 3.175A9.738 9.738 0 0 1 22 12a9.738 9.738 0 0 1-.788 3.9 10.098 10.098 0 0 1-2.137 3.175c-.9.9-1.958 1.613-3.175 2.137A9.738 9.738 0 0 1 12 22Z"
+          />
+        </svg>
+      </div>
+      <h1
+        class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+      >
+        Something went wrong!
+      </h1>
+      <p
+        data-testid="cancellation-message"
+      >
+        An unexpected error occurred. The request to connect your other device has been cancelled.
+      </p>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    />
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> errors renders unsupported_protocol 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR mx_LoginWithQR_error"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <div
+        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+      >
+        <svg
+          fill="currentColor"
+          height="32px"
+          viewBox="0 0 24 24"
+          width="32px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 17a.97.97 0 0 0 .713-.288A.968.968 0 0 0 13 16a.968.968 0 0 0-.287-.713A.968.968 0 0 0 12 15a.968.968 0 0 0-.713.287A.968.968 0 0 0 11 16c0 .283.096.52.287.712.192.192.43.288.713.288Zm0-4c.283 0 .52-.096.713-.287A.968.968 0 0 0 13 12V8a.967.967 0 0 0-.287-.713A.968.968 0 0 0 12 7a.968.968 0 0 0-.713.287A.967.967 0 0 0 11 8v4c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 9a9.738 9.738 0 0 1-3.9-.788 10.099 10.099 0 0 1-3.175-2.137c-.9-.9-1.612-1.958-2.137-3.175A9.738 9.738 0 0 1 2 12a9.74 9.74 0 0 1 .788-3.9 10.099 10.099 0 0 1 2.137-3.175c.9-.9 1.958-1.612 3.175-2.137A9.738 9.738 0 0 1 12 2a9.74 9.74 0 0 1 3.9.788 10.098 10.098 0 0 1 3.175 2.137c.9.9 1.613 1.958 2.137 3.175A9.738 9.738 0 0 1 22 12a9.738 9.738 0 0 1-.788 3.9 10.098 10.098 0 0 1-2.137 3.175c-.9.9-1.958 1.613-3.175 2.137A9.738 9.738 0 0 1 12 22Z"
+          />
+        </svg>
+      </div>
+      <h1
+        class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+      >
+        Other device not compatible
+      </h1>
+      <p
+        data-testid="cancellation-message"
+      >
+        This device does not support signing in to the other device with a QR code.
+      </p>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    />
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> errors renders user_cancelled 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR mx_LoginWithQR_error"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <div
+        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+      >
+        <svg
+          fill="currentColor"
+          height="32px"
+          viewBox="0 0 24 24"
+          width="32px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 17a.97.97 0 0 0 .713-.288A.968.968 0 0 0 13 16a.968.968 0 0 0-.287-.713A.968.968 0 0 0 12 15a.968.968 0 0 0-.713.287A.968.968 0 0 0 11 16c0 .283.096.52.287.712.192.192.43.288.713.288Zm0-4c.283 0 .52-.096.713-.287A.968.968 0 0 0 13 12V8a.967.967 0 0 0-.287-.713A.968.968 0 0 0 12 7a.968.968 0 0 0-.713.287A.967.967 0 0 0 11 8v4c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 9a9.738 9.738 0 0 1-3.9-.788 10.099 10.099 0 0 1-3.175-2.137c-.9-.9-1.612-1.958-2.137-3.175A9.738 9.738 0 0 1 2 12a9.74 9.74 0 0 1 .788-3.9 10.099 10.099 0 0 1 2.137-3.175c.9-.9 1.958-1.612 3.175-2.137A9.738 9.738 0 0 1 12 2a9.74 9.74 0 0 1 3.9.788 10.098 10.098 0 0 1 3.175 2.137c.9.9 1.613 1.958 2.137 3.175A9.738 9.738 0 0 1 22 12a9.738 9.738 0 0 1-.788 3.9 10.098 10.098 0 0 1-2.137 3.175c-.9.9-1.958 1.613-3.175 2.137A9.738 9.738 0 0 1 12 22Z"
+          />
+        </svg>
+      </div>
+      <h1
+        class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+      >
+        Sign in request cancelled
+      </h1>
+      <p
+        data-testid="cancellation-message"
+      >
+        The sign in was cancelled on the other device.
+      </p>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    />
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> errors renders user_declined 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR mx_LoginWithQR_error"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <div
+        class="mx_LoginWithQR_icon mx_LoginWithQR_icon--critical"
+      >
+        <svg
+          fill="currentColor"
+          height="32px"
+          viewBox="0 0 24 24"
+          width="32px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 17a.97.97 0 0 0 .713-.288A.968.968 0 0 0 13 16a.968.968 0 0 0-.287-.713A.968.968 0 0 0 12 15a.968.968 0 0 0-.713.287A.968.968 0 0 0 11 16c0 .283.096.52.287.712.192.192.43.288.713.288Zm0-4c.283 0 .52-.096.713-.287A.968.968 0 0 0 13 12V8a.967.967 0 0 0-.287-.713A.968.968 0 0 0 12 7a.968.968 0 0 0-.713.287A.967.967 0 0 0 11 8v4c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 9a9.738 9.738 0 0 1-3.9-.788 10.099 10.099 0 0 1-3.175-2.137c-.9-.9-1.612-1.958-2.137-3.175A9.738 9.738 0 0 1 2 12a9.74 9.74 0 0 1 .788-3.9 10.099 10.099 0 0 1 2.137-3.175c.9-.9 1.958-1.612 3.175-2.137A9.738 9.738 0 0 1 12 2a9.74 9.74 0 0 1 3.9.788 10.098 10.098 0 0 1 3.175 2.137c.9.9 1.613 1.958 2.137 3.175A9.738 9.738 0 0 1 22 12a9.738 9.738 0 0 1-.788 3.9 10.098 10.098 0 0 1-2.137 3.175c-.9.9-1.958 1.613-3.175 2.137A9.738 9.738 0 0 1 12 22Z"
+          />
+        </svg>
+      </div>
+      <h1
+        class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+      >
+        Sign in declined
+      </h1>
+      <p
+        data-testid="cancellation-message"
+      >
+        You or the account provider declined the sign in request.
+      </p>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    />
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> renders QR code 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_heading"
+    >
+      <div
+        aria-label="Back"
+        class="mx_AccessibleButton mx_LoginWithQR_BackButton"
+        data-testid="back-button"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m13.3 17.3-4.6-4.6a.877.877 0 0 1-.213-.325A1.106 1.106 0 0 1 8.425 12c0-.133.02-.258.062-.375A.878.878 0 0 1 8.7 11.3l4.6-4.6a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275.948.948 0 0 1 .275.7.948.948 0 0 1-.275.7L10.8 12l3.9 3.9a.949.949 0 0 1 .275.7.948.948 0 0 1-.275.7.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+          />
+        </svg>
+      </div>
+      <div
+        class="mx_LoginWithQR_breadcrumbs"
+      >
+        Sessions
+         / 
+        Link new device
+      </div>
+    </div>
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <h1
+        class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+      >
+        Scan the QR code with another device
+      </h1>
+      <div
+        class="mx_LoginWithQR_qrWrapper"
+      >
+        <div
+          class="mx_QRCode mx_QRCode"
+        >
+          <img
+            alt="QR Code"
+            class="mx_VerificationQRCode"
+            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHQAAAB0CAYAAABUmhYnAAAAAklEQVR4AewaftIAAAKxSURBVO3BQW7kQAwEwSxC//9yro88NSBI4/UQjIg/WGMUa5RijVKsUYo1SrFGKdYoxRqlWKMUa5RijVKsUYo1SrFGKdYoxRrl4qEk/CaVkyR0Kl0STlS6JPwmlSeKNUqxRinWKBcvU3lTEp5IwonKHSpvSsKbijVKsUYp1igXH5aEO1TuSMKJSpeELgmdyh1JuEPlk4o1SrFGKdYoF19OpUvCHSqTFGuUYo1SrFEuhlHpktCpdEnoVL5ZsUYp1ijFGuXiw1T+J5VPUvlLijVKsUYp1igXL0vCb0pCp9IloVN5Igl/WbFGKdYoxRrl4iGVvyQJnUqXhDtUvkmxRinWKMUa5eKhJNyh0iXhk5JwotIl4UTljiR0Kp9UrFGKNUqxRok/eFESOpUuCZ3KN0nCiUqXhDtUnijWKMUapVijxB88kIQ3qXRJeELlJAmdSpeEJ1S6JJyoPFGsUYo1SrFGuXiZSpeETqVLwonKSRKeUDlROUlCp3Ki8knFGqVYoxRrlPiDB5LwhMpJEjqVO5LQqXRJ6FROktCp3JGETuVNxRqlWKMUa5T4gy+WhE7lJAmdyh1JuEOlS8KJyhPFGqVYoxRrlIuHkvCbVO5Iwh1J+GbFGqVYoxRrlIuXqbwpCXckoVPpktAl4UTlJAmdyonKJxVrlGKNUqxRLj4sCXeovCkJJyonSehU/rJijVKsUYo1ysWXUzlJQqfyRBJOknCHypuKNUqxRinWKBdfLgmdSqdykoROpVPpknCHykkSOpUnijVKsUYp1igXH6byPyWhU+lUTpLQqZwk4SQJncqbijVKsUYp1igXL0vC/5SEO5LQqZwkoVPpVO5IQqfyRLFGKdYoxRol/mCNUaxRijVKsUYp1ijFGqVYoxRrlGKNUqxRijVKsUYp1ijFGqVYoxRrlH+MbAvtLaAtKAAAAABJRU5ErkJggg=="
+          />
+        </div>
+      </div>
+      <ol>
+        <li>
+          Open Element on your other device
+        </li>
+        <li>
+          <span>
+            Select "
+            <strong>
+              Sign in with QR code
+            </strong>
+            "
+          </span>
+        </li>
+        <li>
+          Scan the QR code shown here
+        </li>
+        <li>
+          Follow the remaining instructions
+        </li>
+      </ol>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    />
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> renders check code confirmation 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <h1
+        class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+      >
+        Enter the number shown on your other device
+      </h1>
+      <p
+        class="_typography_yh5dq_162 _font-body-md-regular_yh5dq_59"
+      >
+        This will verify that the connection to your other device is secure.
+      </p>
+      <label
+        for="mx_LoginWithQR_checkCode"
+      >
+        2-digit code
+      </label>
+      <div
+        class="_container_9zyti_18 mx_LoginWithQR_checkCode_input mx_no_textinput"
+      >
+        <input
+          autocomplete="one-time-code"
+          class="_control_9zyti_33"
+          id="mx_LoginWithQR_checkCode"
+          inputmode="numeric"
+          maxlength="2"
+          minlength="0"
+          pattern="\\d{2}"
+          type="text"
+        />
+        <div
+          aria-hidden="true"
+          class="_digit_9zyti_57"
+        />
+        <div
+          aria-hidden="true"
+          class="_digit_9zyti_57"
+        />
+      </div>
+      <div
+        class="mx_ErrorMessage"
+      />
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    >
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+        data-testid="approve-login-button"
+        role="button"
+        tabindex="0"
+      >
+        Continue
+      </div>
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+        data-testid="decline-login-button"
+        role="button"
+        tabindex="0"
+      >
+        Cancel
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> renders spinner while loading 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_heading"
+    >
+      <div
+        aria-label="Back"
+        class="mx_AccessibleButton mx_LoginWithQR_BackButton"
+        data-testid="back-button"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m13.3 17.3-4.6-4.6a.877.877 0 0 1-.213-.325A1.106 1.106 0 0 1 8.425 12c0-.133.02-.258.062-.375A.878.878 0 0 1 8.7 11.3l4.6-4.6a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275.948.948 0 0 1 .275.7.948.948 0 0 1-.275.7L10.8 12l3.9 3.9a.949.949 0 0 1 .275.7.948.948 0 0 1-.275.7.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+          />
+        </svg>
+      </div>
+      <div
+        class="mx_LoginWithQR_breadcrumbs"
+      >
+        Sessions
+         / 
+        Link new device
+      </div>
+    </div>
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <div
+        class="mx_LoginWithQR_spinner"
+      >
+        <div>
+          <div
+            class="mx_Spinner"
+          >
+            <div
+              aria-label="Loading…"
+              class="mx_Spinner_icon"
+              data-testid="spinner"
+              role="progressbar"
+              style="width: 32px; height: 32px;"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    />
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> renders spinner while signing in 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_heading"
+    >
+      <div
+        aria-label="Back"
+        class="mx_AccessibleButton mx_LoginWithQR_BackButton"
+        data-testid="back-button"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m13.3 17.3-4.6-4.6a.877.877 0 0 1-.213-.325A1.106 1.106 0 0 1 8.425 12c0-.133.02-.258.062-.375A.878.878 0 0 1 8.7 11.3l4.6-4.6a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275.948.948 0 0 1 .275.7.948.948 0 0 1-.275.7L10.8 12l3.9 3.9a.949.949 0 0 1 .275.7.948.948 0 0 1-.275.7.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+          />
+        </svg>
+      </div>
+      <div
+        class="mx_LoginWithQR_breadcrumbs"
+      >
+        Sessions
+         / 
+        Link new device
+      </div>
+    </div>
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <div
+        class="mx_LoginWithQR_spinner"
+      >
+        <div>
+          <div
+            class="mx_Spinner"
+          >
+            <div
+              aria-label="Loading…"
+              class="mx_Spinner_icon"
+              data-testid="spinner"
+              role="progressbar"
+              style="width: 32px; height: 32px;"
+            />
+          </div>
+          <p>
+            Waiting for device to sign in
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    >
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+        data-testid="cancel-button"
+        role="button"
+        tabindex="0"
+      >
+        Cancel
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> renders spinner while verifying 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_heading"
+    >
+      <div
+        aria-label="Back"
+        class="mx_AccessibleButton mx_LoginWithQR_BackButton"
+        data-testid="back-button"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m13.3 17.3-4.6-4.6a.877.877 0 0 1-.213-.325A1.106 1.106 0 0 1 8.425 12c0-.133.02-.258.062-.375A.878.878 0 0 1 8.7 11.3l4.6-4.6a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275.948.948 0 0 1 .275.7.948.948 0 0 1-.275.7L10.8 12l3.9 3.9a.949.949 0 0 1 .275.7.948.948 0 0 1-.275.7.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+          />
+        </svg>
+      </div>
+      <div
+        class="mx_LoginWithQR_breadcrumbs"
+      >
+        Sessions
+         / 
+        Link new device
+      </div>
+    </div>
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <div
+        class="mx_LoginWithQR_spinner"
+      >
+        <div>
+          <div
+            class="mx_Spinner"
+          >
+            <div
+              aria-label="Loading…"
+              class="mx_Spinner_icon"
+              data-testid="spinner"
+              role="progressbar"
+              style="width: 32px; height: 32px;"
+            />
+          </div>
+          <p>
+            Completing set up of your new device
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    />
+  </div>
+</div>
+`;
+
+exports[`<LoginWithQRFlow /> renders spinner whilst QR generating 1`] = `
+<div>
+  <div
+    class="mx_LoginWithQR"
+    data-testid="login-with-qr"
+  >
+    <div
+      class="mx_LoginWithQR_heading"
+    >
+      <div
+        aria-label="Back"
+        class="mx_AccessibleButton mx_LoginWithQR_BackButton"
+        data-testid="back-button"
+        role="button"
+        tabindex="0"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m13.3 17.3-4.6-4.6a.877.877 0 0 1-.213-.325A1.106 1.106 0 0 1 8.425 12c0-.133.02-.258.062-.375A.878.878 0 0 1 8.7 11.3l4.6-4.6a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275.948.948 0 0 1 .275.7.948.948 0 0 1-.275.7L10.8 12l3.9 3.9a.949.949 0 0 1 .275.7.948.948 0 0 1-.275.7.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+          />
+        </svg>
+      </div>
+      <div
+        class="mx_LoginWithQR_breadcrumbs"
+      >
+        Sessions
+         / 
+        Link new device
+      </div>
+    </div>
+    <div
+      class="mx_LoginWithQR_main"
+    >
+      <div
+        class="mx_LoginWithQR_spinner"
+      >
+        <div>
+          <div
+            class="mx_Spinner"
+          >
+            <div
+              aria-label="Loading…"
+              class="mx_Spinner_icon"
+              data-testid="spinner"
+              role="progressbar"
+              style="width: 32px; height: 32px;"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="mx_LoginWithQR_buttons"
+    >
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+        data-testid="cancel-button"
+        role="button"
+        tabindex="0"
+      >
+        Cancel
+      </div>
+    </div>
+  </div>
+</div>
+`;

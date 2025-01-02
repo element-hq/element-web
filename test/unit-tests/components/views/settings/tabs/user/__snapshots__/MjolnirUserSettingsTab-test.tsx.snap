@@ -1,0 +1,163 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MjolnirUserSettingsTab /> renders correctly when user has no ignored users 1`] = `
+<div>
+  <div
+    class="mx_SettingsTab"
+  >
+    <div
+      class="mx_SettingsTab_sections"
+    >
+      <div
+        class="mx_SettingsSection"
+      >
+        <div
+          class="mx_SettingsSection_subSections"
+        >
+          <div
+            class="mx_SettingsSubsection_text"
+          >
+            <strong
+              class="warning"
+            >
+              ⚠ These settings are meant for advanced users.
+            </strong>
+            <p>
+              <span>
+                Add users and servers you want to ignore here. Use asterisks to have Element match any characters. For example, 
+                <code>
+                  @bot:*
+                </code>
+                 would ignore all users that have the name 'bot' on any server.
+              </span>
+            </p>
+            <p>
+              Ignoring people is done through ban lists which contain rules for who to ban. Subscribing to a ban list means the users/servers blocked by that list will be hidden from you.
+            </p>
+          </div>
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+              >
+                Personal ban list
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_description"
+            >
+              <div
+                class="mx_SettingsSubsection_text"
+              >
+                Your personal ban list holds all the users/servers you personally don't want to see messages from. After ignoring your first user/server, a new room will show up in your room list named 'My Ban List' - stay in this room to keep the ban list in effect.
+              </div>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <i>
+                You have not ignored anyone.
+              </i>
+              <form
+                autocomplete="off"
+              >
+                <div
+                  class="mx_Field mx_Field_input"
+                >
+                  <input
+                    id="mx_Field_1"
+                    label="Server or user ID to ignore"
+                    placeholder="eg: @bot:* or example.org"
+                    type="text"
+                    value=""
+                  />
+                  <label
+                    for="mx_Field_1"
+                  >
+                    Server or user ID to ignore
+                  </label>
+                </div>
+                <div
+                  class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+                  role="button"
+                  tabindex="0"
+                >
+                  Ignore
+                </div>
+              </form>
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+              >
+                Subscribed lists
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_description"
+            >
+              <div
+                class="mx_SettingsSubsection_text"
+              >
+                <strong
+                  class="warning"
+                >
+                  Subscribing to a ban list will cause you to join it!
+                </strong>
+                 
+                <span>
+                  If this isn't what you want, please use a different tool to ignore users.
+                </span>
+              </div>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <i>
+                You are not subscribed to any lists
+              </i>
+              <form
+                autocomplete="off"
+              >
+                <div
+                  class="mx_Field mx_Field_input"
+                >
+                  <input
+                    id="mx_Field_2"
+                    label="Room ID or address of ban list"
+                    placeholder="Room ID or address of ban list"
+                    type="text"
+                    value=""
+                  />
+                  <label
+                    for="mx_Field_2"
+                  >
+                    Room ID or address of ban list
+                  </label>
+                </div>
+                <div
+                  class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+                  role="button"
+                  tabindex="0"
+                >
+                  Subscribe
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

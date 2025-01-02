@@ -1,0 +1,92 @@
+name: Pending reviews automation
+on:
+    # The bot exceeded its API rate limit. Disabling for now (adding workflow dispatch so the workflow file stays valid & we can test to see if it starts working again)
+    workflow_dispatch: {}
+    # We run it on a schedule instead of on pull_request_* events to not create confusing messaging in the PR
+    #schedule:
+    #    - cron: "*/10 * * * *"
+concurrency: ${{ github.workflow }}
+permissions: {} # We use ELEMENT_BOT_TOKEN instead
+jobs:
+    bot:
+        name: Pending reviews bot
+        runs-on: ubuntu-24.04
+        environment: Matrix
+        env:
+            URL: "https://github.com/pulls?q=is%3Apr+is%3Aopen+repo%3Amatrix-org%2Fmatrix-js-sdk+repo%3Amatrix-org%2Fmatrix-react-sdk+repo%3Aelement-hq%2Felement-web+repo%3Aelement-hq%2Felement-desktop+review-requested%3A%40me+sort%3Aupdated-desc+"
+            RELEASE_BLOCKERS_URL: "https://github.com/pulls?q=is%3Aopen+repo%3Amatrix-org%2Fmatrix-js-sdk+repo%3Amatrix-org%2Fmatrix-react-sdk+repo%3Aelement-hq%2Felement-web+repo%3Aelement-hq%2Felement-desktop+sort%3Aupdated-desc+label%3AX-Release-Blocker+"
+        steps:
+            - uses: actions/github-script@v7
+              env:
+                  HS_URL: ${{ secrets.BETABOT_HS_URL }}
+                  ROOM_ID: ${{ secrets.ROOM_ID }}
+                  TOKEN: ${{ secrets.BETABOT_ACCESS_TOKEN }}
+              with:
+                  # PAT needed as the GITHUB_TOKEN won't be able to see cross-references from other orgs (matrix-org)
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  script: |
+                      const { HS_URL, ROOM_ID, TOKEN, URL, RELEASE_BLOCKERS_URL } = process.env;
+
+                      async function updateCounter(counter, link, severity, title, value, clearOnZero) {
+                          const apiUrl = `${HS_URL}/_matrix/client/v3/rooms/${ROOM_ID}/state/re.jki.counter/${counter}`;
+                          const headers = {
+                              "Content-Type": "application/json",
+                              "Authorization": `Bearer ${TOKEN}`,
+                          };
+                          const res = await fetch(apiUrl, {
+                              method: "GET",
+                              headers,
+                          });
+
+                          const data = await res.json();
+
+                          if (data.value === issueCount) {
+                              console.log("Pending review count already correct");
+                              return;
+                          }
+
+                          let body = {};
+                          if (issueCount || !clearOnZero) {
+                              body = JSON.stringify({
+                                  link,
+                                  severity,
+                                  title,
+                                  value,
+                              });
+                          }
+
+                          await fetch(apiUrl, {
+                              method: "PUT",
+                              body,
+                              headers,
+                          });
+                      }
+
+                      const repos = [
+                          "element-hq/element-desktop",
+                          "element-hq/element-web",
+                          "matrix-org/matrix-js-sdk",
+                      ];
+                      const teams = [
+                          "matrix-org/element-web-team",
+                          "matrix-org/element-web-reviewers",
+                          "element-hq/element-web-team",
+                          "element-hq/element-web-reviewers",
+                      ];
+
+                      let issueCount = 0;
+                      for (const team of teams) {
+                          const org = team.split("/", 2)[0];
+                          const reposInOrg = repos.filter(repo => repo.startsWith(org + "/"));
+                          const { data } = await github.rest.search.issuesAndPullRequests({
+                              q: `is:pr is:open review:required ${reposInOrg.map(r => `repo:${r}`).join(" ")} team-review-requested:${team}`,
+                          });
+                          issueCount += data.total_count;
+                      }
+                      await updateCounter("gh_reviews", URL, "warning", "Pending reviews", issueCount);
+
+                      const { data } = await github.rest.search.issuesAndPullRequests({
+                          q: `is:open ${repos.map(repo => `repo:${repo}`).join(" ")} label:X-Release-Blocker`,
+                      });
+                      const blockerCount = data.total_count;
+                      await updateCounter("release_blockers", RELEASE_BLOCKERS_URL, "alert", "Release Blockers", blockerCount, true);

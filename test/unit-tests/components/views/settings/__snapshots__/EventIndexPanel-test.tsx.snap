@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<EventIndexPanel /> when event index is initialised renders event index information 1`] = `
+<div>
+  <div
+    class="mx_SettingsSubsection_text"
+  >
+    Securely cache encrypted messages locally for them to appear in search results, using 0 Bytes to store messages from 0 rooms.
+  </div>
+  <div
+    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+    role="button"
+    tabindex="0"
+  >
+    Manage
+  </div>
+</div>
+`;
+
+exports[`<EventIndexPanel /> when event indexing is not supported renders link to download a desktop client 1`] = `
+<div>
+  <div
+    class="mx_SettingsSubsection_text"
+  >
+    <span>
+      Element can't securely cache encrypted messages locally while running in a web browser. Use 
+      <a
+        class="mx_ExternalLink"
+        href="https://element.io/get-started"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        Element Desktop
+        <i
+          class="mx_ExternalLink_icon"
+        />
+      </a>
+       for encrypted messages to appear in search results.
+    </span>
+  </div>
+</div>
+`;
+
+exports[`<EventIndexPanel /> when event indexing is supported but not installed renders link to install seshat 1`] = `
+<div>
+  <div
+    class="mx_SettingsSubsection_text"
+  >
+    <span>
+      Element is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom Element Desktop with 
+      <a
+        class="mx_ExternalLink"
+        href="https://github.com/vector-im/element-desktop/blob/develop/docs/native-node-modules.md#adding-seshat-for-search-in-e2e-encrypted-rooms"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        search components added
+        <i
+          class="mx_ExternalLink_icon"
+        />
+      </a>
+      .
+    </span>
+  </div>
+</div>
+`;

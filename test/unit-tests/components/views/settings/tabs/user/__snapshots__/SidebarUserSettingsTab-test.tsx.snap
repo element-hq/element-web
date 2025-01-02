@@ -1,0 +1,569 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SidebarUserSettingsTab /> renders sidebar settings with guest spa url 1`] = `
+<div>
+  <div
+    class="mx_SettingsTab"
+  >
+    <div
+      class="mx_SettingsTab_sections"
+    >
+      <div
+        class="mx_SettingsSection"
+      >
+        <div
+          class="mx_SettingsSection_subSections"
+        >
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+              >
+                Spaces to show
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_description"
+            >
+              <div
+                class="mx_SettingsSubsection_text"
+              >
+                Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.
+              </div>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <span
+                class="mx_Checkbox mx_SidebarUserSettingsTab_checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  checked=""
+                  disabled=""
+                  id="checkbox_vY7Q4uEh9K"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_vY7Q4uEh9K"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                  <div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="m12.971 3.54 7 3.889A2 2 0 0 1 21 9.177V19a2 2 0 0 1-2 2h-4v-9H9v9H5a2 2 0 0 1-2-2V9.177a2 2 0 0 1 1.029-1.748l7-3.89a2 2 0 0 1 1.942 0Z"
+                        />
+                      </svg>
+                      Home
+                    </div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      Home is useful for getting an overview of everything.
+                    </div>
+                  </div>
+                </label>
+              </span>
+              <span
+                class="mx_Checkbox mx_SidebarUserSettingsTab_checkbox mx_SidebarUserSettingsTab_homeAllRoomsCheckbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  data-testid="mx_SidebarUserSettingsTab_homeAllRoomsCheckbox"
+                  id="checkbox_38QgU2Pomx"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_38QgU2Pomx"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                  <div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      Show all rooms
+                    </div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      Show all your rooms in Home, even if they're in a space.
+                    </div>
+                  </div>
+                </label>
+              </span>
+              <span
+                class="mx_Checkbox mx_SidebarUserSettingsTab_checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  id="checkbox_wKpa6hpi3Y"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_wKpa6hpi3Y"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                  <div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="m12.897 2.817 2.336 4.733 5.223.76a1 1 0 0 1 .555 1.705L17.23 13.7l.892 5.202a1 1 0 0 1-1.45 1.054L12 17.5l-4.672 2.456a1 1 0 0 1-1.451-1.054l.892-5.202-3.78-3.685a1 1 0 0 1 .555-1.706l5.223-.759 2.336-4.733a1 1 0 0 1 1.794 0Z"
+                        />
+                      </svg>
+                      Favourites
+                    </div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      Group all your favourite rooms and people in one place.
+                    </div>
+                  </div>
+                </label>
+              </span>
+              <span
+                class="mx_Checkbox mx_SidebarUserSettingsTab_checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  id="checkbox_EetmBG4yVC"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_EetmBG4yVC"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                  <div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M12 15c-1.1 0-2.042-.392-2.825-1.175C8.392 13.042 8 12.1 8 11s.392-2.042 1.175-2.825C9.958 7.392 10.9 7 12 7s2.042.392 2.825 1.175C15.608 8.958 16 9.9 16 11s-.392 2.042-1.175 2.825C14.042 14.608 13.1 15 12 15Z"
+                        />
+                        <path
+                          d="M19.528 18.583A9.962 9.962 0 0 0 22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 2.52.933 4.824 2.472 6.583A9.976 9.976 0 0 0 12 22a9.976 9.976 0 0 0 7.528-3.417ZM8.75 16.388c-.915.221-1.818.538-2.709.95a8 8 0 1 1 11.918 0 14.679 14.679 0 0 0-2.709-.95A13.76 13.76 0 0 0 12 16c-1.1 0-2.183.13-3.25.387Z"
+                        />
+                      </svg>
+                      People
+                    </div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      Group all your people in one place.
+                    </div>
+                  </div>
+                </label>
+              </span>
+              <span
+                class="mx_Checkbox mx_SidebarUserSettingsTab_checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  id="checkbox_eEefiPqpMR"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_eEefiPqpMR"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                  <div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      <div />
+                      Rooms outside of a space
+                    </div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      Group all your rooms that aren't part of a space in one place.
+                    </div>
+                  </div>
+                </label>
+              </span>
+              <span
+                class="mx_Checkbox mx_SidebarUserSettingsTab_checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  id="checkbox_MwbPDmfGtm"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_MwbPDmfGtm"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                  <div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4Z"
+                        />
+                      </svg>
+                      Video rooms and conferences
+                    </div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      Group all private video rooms and conferences. In conferences you can invite people outside of matrix.
+                    </div>
+                  </div>
+                </label>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<SidebarUserSettingsTab /> renders sidebar settings without guest spa url 1`] = `
+<div>
+  <div
+    class="mx_SettingsTab"
+  >
+    <div
+      class="mx_SettingsTab_sections"
+    >
+      <div
+        class="mx_SettingsSection"
+      >
+        <div
+          class="mx_SettingsSection_subSections"
+        >
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+              >
+                Spaces to show
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_description"
+            >
+              <div
+                class="mx_SettingsSubsection_text"
+              >
+                Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.
+              </div>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <span
+                class="mx_Checkbox mx_SidebarUserSettingsTab_checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  checked=""
+                  disabled=""
+                  id="checkbox_vY7Q4uEh9K"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_vY7Q4uEh9K"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                  <div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="m12.971 3.54 7 3.889A2 2 0 0 1 21 9.177V19a2 2 0 0 1-2 2h-4v-9H9v9H5a2 2 0 0 1-2-2V9.177a2 2 0 0 1 1.029-1.748l7-3.89a2 2 0 0 1 1.942 0Z"
+                        />
+                      </svg>
+                      Home
+                    </div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      Home is useful for getting an overview of everything.
+                    </div>
+                  </div>
+                </label>
+              </span>
+              <span
+                class="mx_Checkbox mx_SidebarUserSettingsTab_checkbox mx_SidebarUserSettingsTab_homeAllRoomsCheckbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  data-testid="mx_SidebarUserSettingsTab_homeAllRoomsCheckbox"
+                  id="checkbox_38QgU2Pomx"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_38QgU2Pomx"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                  <div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      Show all rooms
+                    </div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      Show all your rooms in Home, even if they're in a space.
+                    </div>
+                  </div>
+                </label>
+              </span>
+              <span
+                class="mx_Checkbox mx_SidebarUserSettingsTab_checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  id="checkbox_wKpa6hpi3Y"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_wKpa6hpi3Y"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                  <div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="m12.897 2.817 2.336 4.733 5.223.76a1 1 0 0 1 .555 1.705L17.23 13.7l.892 5.202a1 1 0 0 1-1.45 1.054L12 17.5l-4.672 2.456a1 1 0 0 1-1.451-1.054l.892-5.202-3.78-3.685a1 1 0 0 1 .555-1.706l5.223-.759 2.336-4.733a1 1 0 0 1 1.794 0Z"
+                        />
+                      </svg>
+                      Favourites
+                    </div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      Group all your favourite rooms and people in one place.
+                    </div>
+                  </div>
+                </label>
+              </span>
+              <span
+                class="mx_Checkbox mx_SidebarUserSettingsTab_checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  id="checkbox_EetmBG4yVC"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_EetmBG4yVC"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                  <div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M12 15c-1.1 0-2.042-.392-2.825-1.175C8.392 13.042 8 12.1 8 11s.392-2.042 1.175-2.825C9.958 7.392 10.9 7 12 7s2.042.392 2.825 1.175C15.608 8.958 16 9.9 16 11s-.392 2.042-1.175 2.825C14.042 14.608 13.1 15 12 15Z"
+                        />
+                        <path
+                          d="M19.528 18.583A9.962 9.962 0 0 0 22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 2.52.933 4.824 2.472 6.583A9.976 9.976 0 0 0 12 22a9.976 9.976 0 0 0 7.528-3.417ZM8.75 16.388c-.915.221-1.818.538-2.709.95a8 8 0 1 1 11.918 0 14.679 14.679 0 0 0-2.709-.95A13.76 13.76 0 0 0 12 16c-1.1 0-2.183.13-3.25.387Z"
+                        />
+                      </svg>
+                      People
+                    </div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      Group all your people in one place.
+                    </div>
+                  </div>
+                </label>
+              </span>
+              <span
+                class="mx_Checkbox mx_SidebarUserSettingsTab_checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  id="checkbox_eEefiPqpMR"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_eEefiPqpMR"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                  <div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      <div />
+                      Rooms outside of a space
+                    </div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      Group all your rooms that aren't part of a space in one place.
+                    </div>
+                  </div>
+                </label>
+              </span>
+              <span
+                class="mx_Checkbox mx_SidebarUserSettingsTab_checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  id="checkbox_MwbPDmfGtm"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_MwbPDmfGtm"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                  <div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4Z"
+                        />
+                      </svg>
+                      Video rooms and conferences
+                    </div>
+                    <div
+                      class="mx_SettingsSubsection_text"
+                    >
+                      Group all private video rooms and conferences.
+                    </div>
+                  </div>
+                </label>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -1,0 +1,12 @@
+name: Release Drafter
+on:
+    push:
+        branches: [staging]
+    workflow_dispatch: {}
+concurrency: ${{ github.workflow }}
+permissions: {}
+jobs:
+    draft:
+        permissions:
+            contents: write
+        uses: matrix-org/matrix-js-sdk/.github/workflows/release-drafter-workflow.yml@develop

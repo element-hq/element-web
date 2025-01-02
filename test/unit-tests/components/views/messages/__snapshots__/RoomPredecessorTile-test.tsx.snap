@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<RoomPredecessorTile /> Renders as expected 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_EventTileBubble mx_CreateEvent"
+  >
+    <div
+      class="mx_EventTileBubble_title"
+    >
+      This room is a continuation of another conversation.
+    </div>
+    <div
+      class="mx_EventTileBubble_subtitle"
+    >
+      <a
+        href="https://matrix.to/#/old_room_id/$tombstone_event_id"
+      >
+        Click here to see older messages.
+      </a>
+    </div>
+  </div>
+</DocumentFragment>
+`;

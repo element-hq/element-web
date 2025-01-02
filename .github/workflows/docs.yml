@@ -1,0 +1,107 @@
+name: Deploy documentation
+
+on:
+    push:
+        branches: [develop]
+    workflow_dispatch: {}
+
+permissions: {}
+
+concurrency:
+    group: "pages"
+    cancel-in-progress: false
+
+jobs:
+    build:
+        name: GitHub Pages
+        runs-on: ubuntu-24.04
+        steps:
+            - name: Fetch element-desktop
+              uses: actions/checkout@v4
+              with:
+                  repository: element-hq/element-desktop
+                  path: element-desktop
+
+            - name: Fetch element-web
+              uses: actions/checkout@v4
+              with:
+                  path: element-web
+
+            - name: Fetch matrix-js-sdk
+              uses: actions/checkout@v4
+              with:
+                  repository: matrix-org/matrix-js-sdk
+                  path: matrix-js-sdk
+
+            - uses: actions/setup-node@v4
+              with:
+                  cache: "yarn"
+                  cache-dependency-path: element-web/yarn.lock
+                  node-version: "lts/*"
+
+            - name: Generate automations docs
+              working-directory: element-web
+              run: |
+                  yarn install --frozen-lockfile
+                  yarn ts-node ./scripts/gen-workflow-mermaid.ts ../element-desktop ../element-web ../matrix-js-sdk > docs/automations.md
+                  echo "-   [Automations](automations.md)" >> docs/SUMMARY.md
+
+            - name: Setup mdBook
+              uses: peaceiris/actions-mdbook@v2
+              with:
+                  mdbook-version: "0.4.10"
+
+            - name: Install mdbook extensions
+              run: cargo install mdbook-combiner mdbook-mermaid
+
+            - name: Prepare docs
+              run: |
+                  mkdir docs
+
+                  mv element-desktop/README.md element-desktop/docs/
+                  mv element-desktop/docs "docs/Element Desktop"
+
+                  mv element-web/README.md element-web/docs/
+                  mv element-web/docs/lib docs/
+                  mv element-web/docs "docs/Element Web"
+
+                  mv matrix-js-sdk/README.md matrix-js-sdk/docs/
+                  mv matrix-js-sdk/docs "docs/Matrix JS SDK"
+
+                  sed -i -e 's/\.\.\/README.md/README.md/' docs/**/SUMMARY.md
+
+                  mdbook-combiner -m docs
+                  sed -i -E 's/^\t# (.+)$/- [\1]()/gm;t' SUMMARY.md
+                  sed -i -E 's/^- \[(.+)]\(<>\)$/---\n# \1/gm;t' SUMMARY.md
+                  sed -i -E 's/\t- \[Introduction]/- [Introduction]/gm;t' SUMMARY.md
+
+                  cat <<EOF > docs/SUMMARY.md
+                  # Summary
+                  - [Introduction](<Element Web/README.md>)
+
+                  EOF
+                  cat SUMMARY.md >> docs/SUMMARY.md
+
+                  mv element-web/book.toml .
+
+            - name: Build docs
+              run: mdbook build
+
+            - name: Upload artifact
+              uses: actions/upload-pages-artifact@v3
+              with:
+                  path: ./book
+
+    deploy:
+        environment:
+            name: github-pages
+            url: ${{ steps.deployment.outputs.page_url }}
+        runs-on: ubuntu-24.04
+        permissions:
+            pages: write
+            id-token: write
+        needs: build
+        steps:
+            - name: Deploy to GitHub Pages
+              id: deployment
+              uses: actions/deploy-pages@v4

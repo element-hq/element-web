@@ -1,0 +1,25 @@
+# A sample build_config.yaml to supply to Element Web's build pipeline,
+# enabling custom functionality at compile time. Copy this file to
+# `build_config.yaml` in the same directory to use, as you would with
+# `config.json`.
+#
+# Note: The vast majority of users DO NOT need this. If you are looking
+# to build your own Element Web as seen on app.element.io or similar then
+# this is not required.
+#
+# This config file does become required if you are looking to add runtime
+# functionality to Element Web, such as customisation endpoints and modules.
+#
+# Over time we might expand this config to better support some use cases.
+# Watch the release notes for features which might impact this config.
+
+# The modules to install. See ./docs/modules.md for more information on
+# what modules are.
+#
+# The values of this are provided to `yarn add` for inclusion.
+modules:
+    # An example of pulling a module from NPM
+    - "@vector-im/element-web-ilag-module@^0.0.1"
+
+    # An example of pulling a module from local filesystem during development
+    - "file:/home/user/development/element-web-ilag-module"

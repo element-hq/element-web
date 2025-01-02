@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RoomViewStore should display an error message when the room is unreachable via the roomId 1`] = `
+{
+  "description": <div>
+    You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.
+    <br />
+    <br />
+    If you know a room address, try joining through that instead.
+  </div>,
+  "title": "Failed to join",
+}
+`;
+
+exports[`RoomViewStore should display the generic error message when the roomId doesnt match 1`] = `
+{
+  "description": "MatrixError: [404] my 404 error",
+  "title": "Failed to join",
+}
+`;

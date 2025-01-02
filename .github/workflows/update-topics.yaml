@@ -1,0 +1,103 @@
+name: Update release topics
+on:
+    workflow_dispatch:
+        inputs:
+            expected_status:
+                description: What type of release is the next expected release
+                required: true
+                default: RC
+                type: choice
+                options:
+                    - RC
+                    - Release
+            expected_date:
+                description: Expected release date e.g. July 11th
+                required: true
+                type: string
+concurrency: ${{ github.workflow }}
+permissions: {} # No permissions required
+jobs:
+    bot:
+        name: Release topic update
+        runs-on: ubuntu-24.04
+        environment: Matrix
+        steps:
+            - uses: actions/github-script@v7
+              env:
+                  HS_URL: ${{ secrets.BETABOT_HS_URL }}
+                  LOBBY_ROOM_ID: ${{ secrets.ROOM_ID }}
+                  PUBLIC_ROOM_ID: "!YTvKGNlinIzlkMTVRl:matrix.org"
+                  ANNOUNCEMENT_ROOM_ID: "!bijaLdadorKgNGtHdA:matrix.org"
+                  TOKEN: ${{ secrets.BETABOT_ACCESS_TOKEN }}
+                  RELEASE_STATUS: "Release status: ${{ inputs.expected_status }} expected ${{ inputs.expected_date }}"
+              with:
+                  script: |
+                      const { HS_URL, TOKEN, RELEASE_STATUS, LOBBY_ROOM_ID, PUBLIC_ROOM_ID, ANNOUNCEMENT_ROOM_ID } = process.env;
+
+                      const repo = context.repo;
+                      const { data } = await github.rest.repos.getLatestRelease({
+                          owner: repo.owner,
+                          repo: repo.repo,
+                      });
+                      console.log("Found latest version: " + data.tag_name);
+
+                      const releaseTopic = `Stable: ${data.tag_name} | ${RELEASE_STATUS}`;
+                      console.log("Release topic: " + releaseTopic);
+
+                      const regex = /Stable: v(.+) \| Release status: (\w+) expected (\w+ \d+\w\w)/gm;
+
+                      async function updateReleaseInTopic(roomId) {
+                          const apiUrl = `${HS_URL}/_matrix/client/v3/rooms/${roomId}/state/m.room.topic/`;
+                          const headers = {
+                              "Content-Type": "application/json",
+                              "Authorization": `Bearer ${TOKEN}`,
+                          };
+                          await fetch(`${HS_URL}/_matrix/client/v3/rooms/${roomId}/join`, {
+                              method: "POST",
+                              headers,
+                              body: "{}",
+                          });
+
+                          let res = await fetch(apiUrl, {
+                              method: "GET",
+                              headers,
+                          });
+
+                          if (!res.ok) {
+                              console.log(roomId, "failed to fetch", await res.text());
+                              return;
+                          }
+
+                          const data = await res.json();
+                          console.log(roomId, "got event", data);
+
+                          const topic = data.topic.replace(regex, releaseTopic);
+                          if (topic === data.topic) {
+                              console.log(roomId, "nothing to do");
+                              return;
+                          }
+                          if (data["org.matrix.msc3765.topic"]) {
+                              data["org.matrix.msc3765.topic"].forEach(d => {
+                                  d.body = d.body.replace(regex, releaseTopic);
+                              });
+                          }
+
+                          res = await fetch(apiUrl, {
+                              method: "PUT",
+                              body: JSON.stringify({
+                                  ...data,
+                                  topic,
+                              }),
+                              headers,
+                          });
+
+                          if (res.ok) {
+                              console.log(roomId, "topic updated:", topic);
+                          } else {
+                              console.log(roomId, await res.text());
+                          }
+                      }
+
+                      await updateReleaseInTopic(LOBBY_ROOM_ID);
+                      await updateReleaseInTopic(PUBLIC_ROOM_ID);
+                      await updateReleaseInTopic(ANNOUNCEMENT_ROOM_ID);

@@ -10,11 +10,33 @@ Set the following on your homeserver's
 
 ```json
 {
-  "io.element.e2ee": {
-    "default": false
-  }
+    "io.element.e2ee": {
+        "default": false
+    }
 }
 ```
+
+## Disabling encryption
+
+Set the following on your homeserver's
+`/.well-known/matrix/client` config:
+
+```json
+{
+    "io.element.e2ee": {
+        "force_disable": true
+    }
+}
+```
+
+When `force_disable` is true:
+
+- all rooms will be created with encryption disabled, and it will not be possible to enable
+  encryption from room settings.
+- any `io.element.e2ee.default` value will be disregarded.
+
+Note: If the server is configured to forcibly enable encryption for some or all rooms,
+this behaviour will be overridden.
 
 # Secure backup
 
@@ -29,9 +51,9 @@ following on your homeserver's `/.well-known/matrix/client` config:
 
 ```json
 {
-  "io.element.e2ee": {
-    "secure_backup_required": true
-  }
+    "io.element.e2ee": {
+        "secure_backup_required": true
+    }
 }
 ```
 
@@ -44,9 +66,9 @@ only offer one of these, you can signal this via the
 
 ```json
 {
-  "io.element.e2ee": {
-    "secure_backup_setup_methods": ["passphrase"]
-  }
+    "io.element.e2ee": {
+        "secure_backup_setup_methods": ["passphrase"]
+    }
 }
 ```
 

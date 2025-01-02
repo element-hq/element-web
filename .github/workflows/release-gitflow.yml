@@ -1,0 +1,15 @@
+# Gitflow merge-back master->develop
+name: Merge master -> develop
+on:
+    push:
+        branches: [master]
+concurrency: ${{ github.repository }}-${{ github.workflow }}
+permissions: {} # We use ELEMENT_BOT_TOKEN instead
+jobs:
+    merge:
+        uses: matrix-org/matrix-js-sdk/.github/workflows/release-gitflow.yml@develop
+        secrets:
+            ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+        with:
+            dependencies: |
+                matrix-js-sdk

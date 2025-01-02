@@ -1,0 +1,112 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MLocationBody <MLocationBody> with error displays correct fallback content when map_style_url is misconfigured 1`] = `
+<div
+  class="mx_EventTile_body mx_MLocationBody"
+>
+  <span
+    class="mx_EventTile_tileError"
+  >
+    Unable to load map: This homeserver is not configured correctly to display maps, or the configured map server may be unreachable.
+  </span>
+  <br />
+  Shared a location: Found at geo:51.5076,-0.1276 at 2021-12-21T12:22+0000
+</div>
+`;
+
+exports[`MLocationBody <MLocationBody> with error displays correct fallback content without error style when map_style_url is not configured 1`] = `
+<div
+  class="mx_EventTile_body mx_MLocationBody"
+>
+  <span
+    class=""
+  >
+    Unable to load map: This homeserver is not configured to display maps.
+  </span>
+  <br />
+  Shared a location: Found at geo:51.5076,-0.1276 at 2021-12-21T12:22+0000
+</div>
+`;
+
+exports[`MLocationBody <MLocationBody> without error renders map correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_MLocationBody"
+  >
+    <div
+      aria-labelledby=":ri:"
+      class="mx_MLocationBody_map"
+    >
+      <div
+        class="mx_Map mx_MLocationBody_map"
+        id="mx_Map_mx_MLocationBody_$2_vY7Q4uEh"
+      >
+        <span>
+          <div
+            class="mx_Marker mx_Marker_defaultColor"
+            id="mx_MLocationBody_$2_vY7Q4uEh-marker"
+          >
+            <div
+              class="mx_Marker_border"
+            >
+              <svg
+                class="mx_Marker_icon"
+                fill="currentColor"
+                height="1em"
+                viewBox="0 0 24 24"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 21.325a2.07 2.07 0 0 1-.7-.125 1.84 1.84 0 0 1-.625-.375A39.112 39.112 0 0 1 7.8 17.9c-.833-.95-1.53-1.87-2.087-2.762-.559-.892-.984-1.75-1.276-2.575C4.146 11.738 4 10.95 4 10.2c0-2.5.804-4.492 2.412-5.975C8.021 2.742 9.883 2 12 2s3.98.742 5.587 2.225C19.197 5.708 20 7.7 20 10.2c0 .75-.146 1.538-.438 2.363-.291.824-.716 1.683-1.274 2.574A21.678 21.678 0 0 1 16.2 17.9a39.112 39.112 0 0 1-2.875 2.925 1.84 1.84 0 0 1-.625.375 2.07 2.07 0 0 1-.7.125ZM12 12c.55 0 1.02-.196 1.412-.588.392-.391.588-.862.588-1.412 0-.55-.196-1.02-.588-1.412A1.926 1.926 0 0 0 12 8c-.55 0-1.02.196-1.412.588A1.926 1.926 0 0 0 10 10c0 .55.196 1.02.588 1.412.391.392.862.588 1.412.588Z"
+                />
+              </svg>
+            </div>
+          </div>
+        </span>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`MLocationBody <MLocationBody> without error renders marker correctly for a self share 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_MLocationBody"
+  >
+    <div
+      aria-labelledby=":ru:"
+      class="mx_MLocationBody_map"
+    >
+      <div
+        class="mx_Map mx_MLocationBody_map"
+        id="mx_Map_mx_MLocationBody_$3_vY7Q4uEh"
+      >
+        <span>
+          <div
+            class="mx_Marker mx_Marker_defaultColor"
+            id="mx_MLocationBody_$3_vY7Q4uEh-marker"
+          >
+            <div
+              class="mx_Marker_border"
+            >
+              <span
+                class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+                data-color="3"
+                data-testid="avatar-img"
+                data-type="round"
+                role="presentation"
+                style="--cpd-avatar-size: 36px;"
+                title="@user:server"
+              >
+                u
+              </span>
+            </div>
+          </div>
+        </span>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

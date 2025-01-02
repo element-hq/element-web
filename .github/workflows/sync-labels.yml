@@ -1,0 +1,24 @@
+name: Sync labels
+on:
+    workflow_dispatch: {}
+    schedule:
+        - cron: "0 1 * * *" # 1am every day
+    push:
+        branches:
+            - develop
+        paths:
+            - .github/labels.yml
+
+permissions: {} # We use ELEMENT_BOT_TOKEN instead
+
+jobs:
+    sync-labels:
+        uses: element-hq/element-meta/.github/workflows/sync-labels.yml@develop
+        with:
+            LABELS: |
+                element-hq/element-meta
+                .github/labels.yml
+            DELETE: true
+            WET: true
+        secrets:
+            ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}

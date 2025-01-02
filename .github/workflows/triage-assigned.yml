@@ -1,0 +1,20 @@
+name: Move issued assigned to specific team members to their boards
+
+on:
+    issues:
+        types: [assigned]
+
+permissions: {} # We use ELEMENT_BOT_TOKEN instead
+
+jobs:
+    web-app-team:
+        runs-on: ubuntu-24.04
+        if: |
+            contains(github.event.issue.assignees.*.login, 't3chguy') ||
+            contains(github.event.issue.assignees.*.login, 'andybalaam') ||
+            contains(github.event.issue.assignees.*.login, 'MidhunSureshR')
+        steps:
+            - uses: actions/add-to-project@main
+              with:
+                  project-url: https://github.com/orgs/element-hq/projects/67
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}

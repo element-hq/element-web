@@ -1,4 +1,0 @@
-signing_id: releases@riot.im
-subprojects:
-    matrix-react-sdk:
-        includeByDefault: true

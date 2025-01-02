@@ -1,0 +1,157 @@
+# For duplicate issues, ensure the close type is right (not planned), update it if not
+# For all closed (completed) issues, cascade the closure onto any referenced rageshakes
+# For all closed (not planned) issues, comment on rageshakes to move them into the canonical issue if one exists
+on:
+    issues:
+        types: [closed]
+permissions: {} # We use ELEMENT_BOT_TOKEN instead
+jobs:
+    tidy:
+        name: Tidy closed issues
+        runs-on: ubuntu-24.04
+        steps:
+            - uses: actions/github-script@v7
+              id: main
+              with:
+                  # PAT needed as the GITHUB_TOKEN won't be able to see cross-references from other orgs (matrix-org)
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  script: |
+                      const variables = {
+                        owner: context.repo.owner,
+                        name: context.repo.repo,
+                        number: context.issue.number,
+                      };
+
+                      const query = `query($owner:String!, $name:String!, $number:Int!) {
+                        repository(owner: $owner, name: $name) {
+                          issue(number: $number) {
+                            stateReason,
+                            timelineItems(first: 100, itemTypes: [MARKED_AS_DUPLICATE_EVENT, UNMARKED_AS_DUPLICATE_EVENT, CROSS_REFERENCED_EVENT]) {
+                              edges {
+                                node {
+                                  __typename
+                                  ... on MarkedAsDuplicateEvent {
+                                    canonical {
+                                      ... on Issue {
+                                        repository {
+                                          nameWithOwner
+                                        }
+                                        number
+                                      }
+                                      ... on PullRequest {
+                                        repository {
+                                          nameWithOwner
+                                        }
+                                        number
+                                      }
+                                    }
+                                  }
+                                  ... on UnmarkedAsDuplicateEvent {
+                                    canonical {
+                                      ... on Issue {
+                                        repository {
+                                          nameWithOwner
+                                        }
+                                        number
+                                      }
+                                      ... on PullRequest {
+                                        repository {
+                                          nameWithOwner
+                                        }
+                                        number
+                                      }
+                                    }
+                                  }
+                                  ... on CrossReferencedEvent {
+                                    source {
+                                      ... on Issue {
+                                        repository {
+                                          nameWithOwner
+                                        }
+                                        number
+                                      }
+                                      ... on PullRequest {
+                                        repository {
+                                          nameWithOwner
+                                        }
+                                        number
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }`;
+
+                      const result = await github.graphql(query, variables);
+                      const { stateReason, timelineItems: { edges } } = result.repository.issue;
+
+                      const RAGESHAKE_OWNER = "matrix-org";
+                      const RAGESHAKE_REPO = "element-web-rageshakes";
+                      const rageshakes = new Set();
+                      const duplicateOf = new Set();
+
+                      console.log("Edges: ", JSON.stringify(edges));
+
+                      for (const { node } of edges) {
+                        switch(node.__typename) {
+                          case "MarkedAsDuplicateEvent":
+                            duplicateOf.add(node.canonical.repository.nameWithOwner + "#" + node.canonical.number);
+                            break;
+                          case "UnmarkedAsDuplicateEvent":
+                            duplicateOf.remove(node.canonical.repository.nameWithOwner + "#" + node.canonical.number);
+                            break;
+                          case "CrossReferencedEvent":
+                            if (node.source.repository.nameWithOwner === (RAGESHAKE_OWNER + "/" + RAGESHAKE_REPO)) {
+                              rageshakes.add(node.source.number);
+                            }
+                            break;
+                        }
+                      }
+
+                      console.log("Duplicate of: ", duplicateOf);
+                      console.log("Found rageshakes: ", rageshakes);
+
+                      if (duplicateOf.size) {
+                        const body = Array.from(duplicateOf).join("\n");
+
+                        // Comment on all rageshakes to create relationship to the issue this was closed as duplicate of
+                        for (const rageshake of rageshakes) {
+                          github.rest.issues.createComment({
+                            owner: RAGESHAKE_OWNER,
+                            repo: RAGESHAKE_REPO,
+                            issue_number: rageshake,
+                            body,
+                          });
+                        }
+
+                        // Duplicate was closed with wrong reason, fix it
+                        if (stateReason === "COMPLETED") {
+                          core.setOutput("closeAsNotPlanned", "true");
+                        }
+                      } else {
+                        // This issue was closed, close all related rageshakes
+                        for (const rageshake of rageshakes) {
+                          github.rest.issues.update({
+                            owner: RAGESHAKE_OWNER,
+                            repo: RAGESHAKE_REPO,
+                            issue_number: rageshake,
+                            state: "closed",
+                          });
+                        }
+                      }
+            - uses: actions/github-script@v7
+              name: Close duplicate as Not Planned
+              if: steps.main.outputs.closeAsNotPlanned
+              with:
+                  # We do this step separately, and with the default token so as to not re-trigger this workflow when re-closing
+                  script: |
+                      await github.graphql(`mutation($id:ID!) {
+                        closeIssue(input: { issueId:$id, stateReason:NOT_PLANNED }) {
+                          clientMutationId
+                        }
+                      }`, {
+                        id: context.payload.issue.node_id,
+                      });

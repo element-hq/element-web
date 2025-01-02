@@ -1,0 +1,172 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AddRemoveThreepids should handle no email addresses 1`] = `
+<div>
+  <form
+    autocomplete="off"
+    novalidate=""
+  >
+    <div
+      class="mx_Field mx_Field_input"
+    >
+      <input
+        autocomplete="email"
+        id="mx_Field_1"
+        label="Email Address"
+        placeholder="Email Address"
+        type="text"
+        value=""
+      />
+      <label
+        for="mx_Field_1"
+      >
+        Email Address
+      </label>
+    </div>
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+      role="button"
+      tabindex="0"
+    >
+      Add
+    </div>
+  </form>
+</div>
+`;
+
+exports[`AddRemoveThreepids should render email addresses 1`] = `
+<div>
+  <div
+    class="mx_AddRemoveThreepids_existing"
+  >
+    <span
+      class="mx_AddRemoveThreepids_existing_address"
+    >
+      alice@nowhere.dummy
+    </span>
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger_sm"
+      role="button"
+      tabindex="0"
+    >
+      Remove
+    </div>
+  </div>
+  <form
+    autocomplete="off"
+    novalidate=""
+  >
+    <div
+      class="mx_Field mx_Field_input"
+    >
+      <input
+        autocomplete="email"
+        id="mx_Field_14"
+        label="Email Address"
+        placeholder="Email Address"
+        type="text"
+        value=""
+      />
+      <label
+        for="mx_Field_14"
+      >
+        Email Address
+      </label>
+    </div>
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+      role="button"
+      tabindex="0"
+    >
+      Add
+    </div>
+  </form>
+</div>
+`;
+
+exports[`AddRemoveThreepids should render phone numbers 1`] = `
+<div>
+  <div
+    class="mx_AddRemoveThreepids_existing"
+  >
+    <span
+      class="mx_AddRemoveThreepids_existing_address"
+    >
+      447700900000
+    </span>
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger_sm"
+      role="button"
+      tabindex="0"
+    >
+      Remove
+    </div>
+  </div>
+  <form
+    autocomplete="off"
+    novalidate=""
+  >
+    <div
+      class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft"
+    >
+      <span
+        class="mx_Field_prefix"
+      >
+        <div
+          class="mx_Dropdown mx_PhoneNumbers_country mx_CountryDropdown"
+        >
+          <div
+            aria-describedby="mx_CountryDropdown_value"
+            aria-expanded="false"
+            aria-haspopup="listbox"
+            aria-label="Country Dropdown"
+            aria-owns="mx_CountryDropdown_input"
+            class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput"
+            role="button"
+            tabindex="0"
+          >
+            <div
+              class="mx_Dropdown_option"
+              id="mx_CountryDropdown_value"
+            >
+              <span
+                class="mx_CountryDropdown_shortOption"
+              >
+                <div
+                  class="mx_Dropdown_option_emoji"
+                >
+                  🇺🇸
+                </div>
+                +1
+              </span>
+            </div>
+            <span
+              class="mx_Dropdown_arrow"
+            />
+          </div>
+        </div>
+      </span>
+      <input
+        autocomplete="tel-national"
+        id="mx_Field_15"
+        label="Phone Number"
+        placeholder="Phone Number"
+        type="text"
+        value=""
+      />
+      <label
+        for="mx_Field_15"
+      >
+        Phone Number
+      </label>
+    </div>
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+      role="button"
+      tabindex="0"
+    >
+      Add
+    </div>
+  </form>
+</div>
+`;

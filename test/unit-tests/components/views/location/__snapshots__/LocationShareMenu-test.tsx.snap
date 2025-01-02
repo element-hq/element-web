@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<LocationShareMenu /> with live location disabled goes to labs flag screen after live options is clicked 1`] = `
+<div
+  class="mx_EnableLiveShare"
+  data-testid="location-picker-enable-live-share"
+>
+  <div
+    class="mx_StyledLiveBeaconIcon mx_EnableLiveShare_icon"
+  />
+  <h3
+    class="mx_Heading_h3 mx_EnableLiveShare_heading"
+  >
+    Live location sharing
+  </h3>
+  <p
+    class="mx_EnableLiveShare_description"
+  >
+    Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this room.
+  </p>
+  <div
+    class="mx_SettingsFlag"
+    data-testid="enable-live-share-toggle"
+  >
+    <span
+      class="mx_SettingsFlag_label"
+    >
+      <div
+        id="mx_LabelledToggleSwitch_vY7Q4uEh9K38"
+      >
+        Enable live location sharing
+      </div>
+    </span>
+    <div
+      aria-checked="false"
+      aria-disabled="false"
+      aria-labelledby="mx_LabelledToggleSwitch_vY7Q4uEh9K38"
+      class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
+      role="switch"
+      tabindex="0"
+    >
+      <div
+        class="mx_ToggleSwitch_ball"
+      />
+    </div>
+  </div>
+  <button
+    aria-disabled="true"
+    class="mx_AccessibleButton mx_EnableLiveShare_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary mx_AccessibleButton_disabled"
+    data-testid="enable-live-share-submit"
+    disabled=""
+    role="button"
+    tabindex="0"
+  >
+    OK
+  </button>
+</div>
+`;

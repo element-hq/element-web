@@ -1,0 +1,1792 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Notifications /> correctly handles the loading/disabled state 1`] = `
+<div>
+  <div
+    class="mx_NotificationSettings2"
+  >
+    <div
+      class="mx_SettingsSection"
+    >
+      <div
+        class="mx_SettingsSection_subSections"
+      >
+        <div
+          class="mx_SettingsSubsection_content mx_NotificationSettings2_flags"
+        >
+          <div
+            class="mx_SettingsFlag"
+          >
+            <span
+              class="mx_SettingsFlag_label"
+            >
+              <div
+                id="mx_LabelledToggleSwitch_vY7Q4uEh9K38"
+              >
+                Enable notifications for this account
+              </div>
+            </span>
+            <div
+              aria-checked="true"
+              aria-disabled="true"
+              aria-labelledby="mx_LabelledToggleSwitch_vY7Q4uEh9K38"
+              class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
+              role="switch"
+              tabindex="0"
+            >
+              <div
+                class="mx_ToggleSwitch_ball"
+              />
+            </div>
+          </div>
+          <div
+            class="mx_SettingsFlag"
+          >
+            <span
+              class="mx_SettingsFlag_label"
+            >
+              <div
+                id="mx_LabelledToggleSwitch_QgU2PomxwKpa"
+              >
+                Enable desktop notifications for this session
+              </div>
+            </span>
+            <div
+              aria-checked="false"
+              aria-disabled="false"
+              aria-labelledby="mx_LabelledToggleSwitch_QgU2PomxwKpa"
+              class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
+              role="switch"
+              tabindex="0"
+            >
+              <div
+                class="mx_ToggleSwitch_ball"
+              />
+            </div>
+          </div>
+          <div
+            class="mx_SettingsFlag"
+          >
+            <span
+              class="mx_SettingsFlag_label"
+            >
+              <div
+                id="mx_LabelledToggleSwitch_6hpi3YEetmBG"
+              >
+                Show message preview in desktop notification
+              </div>
+            </span>
+            <div
+              aria-checked="false"
+              aria-disabled="false"
+              aria-labelledby="mx_LabelledToggleSwitch_6hpi3YEetmBG"
+              class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
+              role="switch"
+              tabindex="0"
+            >
+              <div
+                class="mx_ToggleSwitch_ball"
+              />
+            </div>
+          </div>
+          <div
+            class="mx_SettingsFlag"
+          >
+            <span
+              class="mx_SettingsFlag_label"
+            >
+              <div
+                id="mx_LabelledToggleSwitch_4yVCeEefiPqp"
+              >
+                Enable audible notifications for this session
+              </div>
+            </span>
+            <div
+              aria-checked="true"
+              aria-disabled="false"
+              aria-labelledby="mx_LabelledToggleSwitch_4yVCeEefiPqp"
+              class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
+              role="switch"
+              tabindex="0"
+            >
+              <div
+                class="mx_ToggleSwitch_ball"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          class="mx_SettingsSubsection"
+        >
+          <div
+            class="mx_SettingsSubsectionHeading"
+          >
+            <h3
+              class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+            >
+              I want to be notified for (Default Setting)
+            </h3>
+          </div>
+          <div
+            class="mx_SettingsSubsection_description"
+          >
+            <div
+              class="mx_SettingsSubsection_text"
+            >
+              This setting will be applied by default to all your rooms.
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection_content"
+          >
+            <label
+              class="mx_StyledRadioButton mx_StyledRadioButton_disabled mx_StyledRadioButton_checked"
+            >
+              <input
+                checked=""
+                disabled=""
+                id="defaultNotificationLevel-all_messages"
+                name="defaultNotificationLevel"
+                type="radio"
+                value="all_messages"
+              />
+              <div>
+                <div />
+              </div>
+              <div
+                class="mx_StyledRadioButton_content"
+              >
+                All messages
+              </div>
+              <div
+                class="mx_StyledRadioButton_spacer"
+              />
+            </label>
+            <label
+              class="mx_StyledRadioButton mx_StyledRadioButton_disabled"
+            >
+              <input
+                disabled=""
+                id="defaultNotificationLevel-people_mentions_keywords"
+                name="defaultNotificationLevel"
+                type="radio"
+                value="people_mentions_keywords"
+              />
+              <div>
+                <div />
+              </div>
+              <div
+                class="mx_StyledRadioButton_content"
+              >
+                People, Mentions and Keywords
+              </div>
+              <div
+                class="mx_StyledRadioButton_spacer"
+              />
+            </label>
+            <label
+              class="mx_StyledRadioButton mx_StyledRadioButton_disabled"
+            >
+              <input
+                disabled=""
+                id="defaultNotificationLevel-mentions_keywords"
+                name="defaultNotificationLevel"
+                type="radio"
+                value="mentions_keywords"
+              />
+              <div>
+                <div />
+              </div>
+              <div
+                class="mx_StyledRadioButton_content"
+              >
+                Mentions and Keywords only
+              </div>
+              <div
+                class="mx_StyledRadioButton_spacer"
+              />
+            </label>
+          </div>
+        </div>
+        <div
+          class="mx_SettingsSubsection"
+        >
+          <div
+            class="mx_SettingsSubsectionHeading"
+          >
+            <h3
+              class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+            >
+              Play a sound for
+            </h3>
+          </div>
+          <div
+            class="mx_SettingsSubsection_description"
+          >
+            <div
+              class="mx_SettingsSubsection_text"
+            >
+              Applied by default to all rooms on all devices.
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection_content"
+          >
+            <label
+              class="mx_LabelledCheckbox"
+            >
+              <span
+                class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  checked=""
+                  disabled=""
+                  id="checkbox_MRMwbPDmfG"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_MRMwbPDmfG"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                </label>
+              </span>
+              <div
+                class="mx_LabelledCheckbox_labels"
+              >
+                <span
+                  class="mx_LabelledCheckbox_label"
+                >
+                  People
+                </span>
+              </div>
+            </label>
+            <label
+              class="mx_LabelledCheckbox"
+            >
+              <span
+                class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  checked=""
+                  disabled=""
+                  id="checkbox_tmGQvdMWe9"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_tmGQvdMWe9"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                </label>
+              </span>
+              <div
+                class="mx_LabelledCheckbox_labels"
+              >
+                <span
+                  class="mx_LabelledCheckbox_label"
+                >
+                  Mentions and Keywords
+                </span>
+              </div>
+            </label>
+            <label
+              class="mx_LabelledCheckbox"
+            >
+              <span
+                class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  checked=""
+                  disabled=""
+                  id="checkbox_54DVIAu5Cs"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_54DVIAu5Cs"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                </label>
+              </span>
+              <div
+                class="mx_LabelledCheckbox_labels"
+              >
+                <span
+                  class="mx_LabelledCheckbox_label"
+                >
+                  Audio and Video calls
+                </span>
+              </div>
+            </label>
+          </div>
+        </div>
+        <div
+          class="mx_SettingsSubsection"
+        >
+          <div
+            class="mx_SettingsSubsectionHeading"
+          >
+            <h3
+              class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+            >
+              Other things we think you might be interested in:
+            </h3>
+          </div>
+          <div
+            class="mx_SettingsSubsection_content"
+          >
+            <label
+              class="mx_LabelledCheckbox"
+            >
+              <span
+                class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  checked=""
+                  disabled=""
+                  id="checkbox_iHRD7nyrA2"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_iHRD7nyrA2"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                </label>
+              </span>
+              <div
+                class="mx_LabelledCheckbox_labels"
+              >
+                <span
+                  class="mx_LabelledCheckbox_label"
+                >
+                  Invited to a room
+                </span>
+              </div>
+            </label>
+            <label
+              class="mx_LabelledCheckbox"
+            >
+              <span
+                class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  disabled=""
+                  id="checkbox_ohjWVJIPau"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_ohjWVJIPau"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                </label>
+              </span>
+              <div
+                class="mx_LabelledCheckbox_labels"
+              >
+                <span
+                  class="mx_LabelledCheckbox_label"
+                >
+                  New room activity, upgrades and status messages occur
+                </span>
+              </div>
+            </label>
+            <label
+              class="mx_LabelledCheckbox"
+            >
+              <span
+                class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  checked=""
+                  disabled=""
+                  id="checkbox_y1OmnTidX4"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_y1OmnTidX4"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                </label>
+              </span>
+              <div
+                class="mx_LabelledCheckbox_labels"
+              >
+                <span
+                  class="mx_LabelledCheckbox_label"
+                >
+                  Messages sent by bots
+                </span>
+              </div>
+            </label>
+          </div>
+        </div>
+        <div
+          class="mx_SettingsSubsection"
+        >
+          <div
+            class="mx_SettingsSubsectionHeading"
+          >
+            <h3
+              class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+            >
+              Mentions and Keywords
+            </h3>
+          </div>
+          <div
+            class="mx_SettingsSubsection_description"
+          >
+            <div
+              class="mx_SettingsSubsection_text"
+            >
+              <span>
+                Show a badge 
+                <div
+                  class="mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_level_notification mx_NotificationBadge_2char cpd-theme-light"
+                >
+                  <span
+                    class="mx_NotificationBadge_count"
+                  >
+                    1
+                  </span>
+                </div>
+                 when keywords are used in a room.
+              </span>
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection_content"
+          >
+            <label
+              class="mx_LabelledCheckbox"
+            >
+              <span
+                class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  checked=""
+                  disabled=""
+                  id="checkbox_ePDS0OpWwA"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_ePDS0OpWwA"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                </label>
+              </span>
+              <div
+                class="mx_LabelledCheckbox_labels"
+              >
+                <span
+                  class="mx_LabelledCheckbox_label"
+                >
+                  Notify when someone mentions using @room
+                </span>
+              </div>
+            </label>
+            <label
+              class="mx_LabelledCheckbox"
+            >
+              <span
+                class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  checked=""
+                  disabled=""
+                  id="checkbox_HG75JNTNkN"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_HG75JNTNkN"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                </label>
+              </span>
+              <div
+                class="mx_LabelledCheckbox_labels"
+              >
+                <span
+                  class="mx_LabelledCheckbox_label"
+                >
+                  Notify when someone mentions using @displayname or @userId:matrix.org
+                </span>
+              </div>
+            </label>
+            <label
+              class="mx_LabelledCheckbox"
+            >
+              <span
+                class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  checked=""
+                  disabled=""
+                  id="checkbox_U64raTLcRs"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_U64raTLcRs"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                </label>
+              </span>
+              <div
+                class="mx_LabelledCheckbox_labels"
+              >
+                <span
+                  class="mx_LabelledCheckbox_label"
+                >
+                  Notify when someone uses a keyword
+                </span>
+                <span
+                  class="mx_LabelledCheckbox_byline"
+                >
+                  Enter keywords here, or use for spelling variations or nicknames
+                </span>
+              </div>
+            </label>
+            <div
+              class="mx_TagComposer mx_TagComposer_disabled"
+            >
+              <form
+                class="mx_TagComposer_input"
+              >
+                <div
+                  class="mx_Field mx_Field_input"
+                >
+                  <input
+                    autocomplete="off"
+                    disabled=""
+                    id="mx_NotificationSettings2_Keywords_field"
+                    label="Keyword"
+                    placeholder="New keyword"
+                    type="text"
+                    value=""
+                  />
+                  <label
+                    for="mx_NotificationSettings2_Keywords_field"
+                  >
+                    Keyword
+                  </label>
+                </div>
+                <div
+                  aria-disabled="true"
+                  class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary mx_AccessibleButton_disabled"
+                  disabled=""
+                  role="button"
+                  tabindex="0"
+                >
+                  Add
+                </div>
+              </form>
+              <div
+                class="mx_TagComposer_tags"
+                role="list"
+              />
+            </div>
+            <div
+              class="mx_SettingsFlag"
+            >
+              <label
+                class="mx_SettingsFlag_label"
+                for="mx_SettingsFlag_QRlYy75nfv5b"
+              >
+                <span
+                  class="mx_SettingsFlag_labelText"
+                >
+                  Show all activity in the room list (dots or number of unread messages)
+                </span>
+              </label>
+              <div
+                aria-checked="true"
+                aria-disabled="false"
+                aria-label="Show all activity in the room list (dots or number of unread messages)"
+                class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
+                id="mx_SettingsFlag_QRlYy75nfv5b"
+                role="switch"
+                tabindex="0"
+              >
+                <div
+                  class="mx_ToggleSwitch_ball"
+                />
+              </div>
+            </div>
+            <div
+              class="mx_SettingsFlag"
+            >
+              <label
+                class="mx_SettingsFlag_label"
+                for="mx_SettingsFlag_OEPN1su1JYVt"
+              >
+                <span
+                  class="mx_SettingsFlag_labelText"
+                >
+                  Only show notifications in the thread activity centre
+                </span>
+              </label>
+              <div
+                aria-checked="true"
+                aria-disabled="false"
+                aria-label="Only show notifications in the thread activity centre"
+                class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
+                id="mx_SettingsFlag_OEPN1su1JYVt"
+                role="switch"
+                tabindex="0"
+              >
+                <div
+                  class="mx_ToggleSwitch_ball"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="mx_SettingsSubsection"
+        >
+          <div
+            class="mx_SettingsSubsectionHeading"
+          >
+            <h3
+              class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+            >
+              Email summary
+            </h3>
+          </div>
+          <div
+            class="mx_SettingsSubsection_content"
+          >
+            <div
+              class="mx_SettingsSubsection_text"
+            >
+              Receive an email summary of missed notifications
+            </div>
+            <div
+              class="mx_SettingsSubsection_description mx_NotificationPusherSettings_detail"
+            >
+              <div
+                class="mx_SettingsSubsection_text"
+              >
+                <span>
+                  Select which emails you want to send summaries to. Manage your emails in 
+                  <div
+                    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+                    role="button"
+                    tabindex="0"
+                  >
+                    General
+                  </div>
+                  .
+                </span>
+              </div>
+            </div>
+            <div
+              class="mx_SettingsIndent"
+            />
+          </div>
+        </div>
+        <div
+          class="mx_SettingsSubsection"
+        >
+          <div
+            class="mx_SettingsSubsectionHeading"
+          >
+            <h3
+              class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+            >
+              Quick Actions
+            </h3>
+          </div>
+          <div
+            class="mx_SettingsSubsection_content"
+          >
+            <div
+              aria-disabled="true"
+              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger_outline mx_AccessibleButton_disabled"
+              disabled=""
+              role="button"
+              tabindex="0"
+            >
+              Reset to default settings
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<Notifications /> matches the snapshot 1`] = `
+<div>
+  <div
+    class="mx_NotificationSettings2"
+  >
+    <div
+      class="mx_SettingsSection"
+    >
+      <div
+        class="mx_SettingsSection_subSections"
+      >
+        <div
+          class="mx_SettingsSubsection_content mx_NotificationSettings2_flags"
+        >
+          <div
+            class="mx_SettingsFlag"
+          >
+            <span
+              class="mx_SettingsFlag_label"
+            >
+              <div
+                id="mx_LabelledToggleSwitch_vY7Q4uEh9K38"
+              >
+                Enable notifications for this account
+              </div>
+            </span>
+            <div
+              aria-checked="true"
+              aria-disabled="false"
+              aria-labelledby="mx_LabelledToggleSwitch_vY7Q4uEh9K38"
+              class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
+              role="switch"
+              tabindex="0"
+            >
+              <div
+                class="mx_ToggleSwitch_ball"
+              />
+            </div>
+          </div>
+          <div
+            class="mx_SettingsFlag"
+          >
+            <span
+              class="mx_SettingsFlag_label"
+            >
+              <div
+                id="mx_LabelledToggleSwitch_QgU2PomxwKpa"
+              >
+                Enable desktop notifications for this session
+              </div>
+            </span>
+            <div
+              aria-checked="false"
+              aria-disabled="false"
+              aria-labelledby="mx_LabelledToggleSwitch_QgU2PomxwKpa"
+              class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
+              role="switch"
+              tabindex="0"
+            >
+              <div
+                class="mx_ToggleSwitch_ball"
+              />
+            </div>
+          </div>
+          <div
+            class="mx_SettingsFlag"
+          >
+            <span
+              class="mx_SettingsFlag_label"
+            >
+              <div
+                id="mx_LabelledToggleSwitch_6hpi3YEetmBG"
+              >
+                Show message preview in desktop notification
+              </div>
+            </span>
+            <div
+              aria-checked="false"
+              aria-disabled="false"
+              aria-labelledby="mx_LabelledToggleSwitch_6hpi3YEetmBG"
+              class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
+              role="switch"
+              tabindex="0"
+            >
+              <div
+                class="mx_ToggleSwitch_ball"
+              />
+            </div>
+          </div>
+          <div
+            class="mx_SettingsFlag"
+          >
+            <span
+              class="mx_SettingsFlag_label"
+            >
+              <div
+                id="mx_LabelledToggleSwitch_4yVCeEefiPqp"
+              >
+                Enable audible notifications for this session
+              </div>
+            </span>
+            <div
+              aria-checked="true"
+              aria-disabled="false"
+              aria-labelledby="mx_LabelledToggleSwitch_4yVCeEefiPqp"
+              class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
+              role="switch"
+              tabindex="0"
+            >
+              <div
+                class="mx_ToggleSwitch_ball"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          class="mx_SettingsSubsection"
+        >
+          <div
+            class="mx_SettingsSubsectionHeading"
+          >
+            <h3
+              class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+            >
+              I want to be notified for (Default Setting)
+            </h3>
+          </div>
+          <div
+            class="mx_SettingsSubsection_description"
+          >
+            <div
+              class="mx_SettingsSubsection_text"
+            >
+              This setting will be applied by default to all your rooms.
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection_content"
+          >
+            <label
+              class="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+            >
+              <input
+                checked=""
+                id="defaultNotificationLevel-all_messages"
+                name="defaultNotificationLevel"
+                type="radio"
+                value="all_messages"
+              />
+              <div>
+                <div />
+              </div>
+              <div
+                class="mx_StyledRadioButton_content"
+              >
+                All messages
+              </div>
+              <div
+                class="mx_StyledRadioButton_spacer"
+              />
+            </label>
+            <label
+              class="mx_StyledRadioButton mx_StyledRadioButton_enabled mx_StyledRadioButton_checked"
+            >
+              <input
+                id="defaultNotificationLevel-people_mentions_keywords"
+                name="defaultNotificationLevel"
+                type="radio"
+                value="people_mentions_keywords"
+              />
+              <div>
+                <div />
+              </div>
+              <div
+                class="mx_StyledRadioButton_content"
+              >
+                People, Mentions and Keywords
+              </div>
+              <div
+                class="mx_StyledRadioButton_spacer"
+              />
+            </label>
+            <label
+              class="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+            >
+              <input
+                id="defaultNotificationLevel-mentions_keywords"
+                name="defaultNotificationLevel"
+                type="radio"
+                value="mentions_keywords"
+              />
+              <div>
+                <div />
+              </div>
+              <div
+                class="mx_StyledRadioButton_content"
+              >
+                Mentions and Keywords only
+              </div>
+              <div
+                class="mx_StyledRadioButton_spacer"
+              />
+            </label>
+          </div>
+        </div>
+        <div
+          class="mx_SettingsSubsection"
+        >
+          <div
+            class="mx_SettingsSubsectionHeading"
+          >
+            <h3
+              class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+            >
+              Play a sound for
+            </h3>
+          </div>
+          <div
+            class="mx_SettingsSubsection_description"
+          >
+            <div
+              class="mx_SettingsSubsection_text"
+            >
+              Applied by default to all rooms on all devices.
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection_content"
+          >
+            <label
+              class="mx_LabelledCheckbox"
+            >
+              <span
+                class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  checked=""
+                  id="checkbox_MRMwbPDmfG"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_MRMwbPDmfG"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                </label>
+              </span>
+              <div
+                class="mx_LabelledCheckbox_labels"
+              >
+                <span
+                  class="mx_LabelledCheckbox_label"
+                >
+                  People
+                </span>
+              </div>
+            </label>
+            <label
+              class="mx_LabelledCheckbox"
+            >
+              <span
+                class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  checked=""
+                  id="checkbox_tmGQvdMWe9"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_tmGQvdMWe9"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                </label>
+              </span>
+              <div
+                class="mx_LabelledCheckbox_labels"
+              >
+                <span
+                  class="mx_LabelledCheckbox_label"
+                >
+                  Mentions and Keywords
+                </span>
+              </div>
+            </label>
+            <label
+              class="mx_LabelledCheckbox"
+            >
+              <span
+                class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  checked=""
+                  id="checkbox_54DVIAu5Cs"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_54DVIAu5Cs"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                </label>
+              </span>
+              <div
+                class="mx_LabelledCheckbox_labels"
+              >
+                <span
+                  class="mx_LabelledCheckbox_label"
+                >
+                  Audio and Video calls
+                </span>
+              </div>
+            </label>
+          </div>
+        </div>
+        <div
+          class="mx_SettingsSubsection"
+        >
+          <div
+            class="mx_SettingsSubsectionHeading"
+          >
+            <h3
+              class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+            >
+              Other things we think you might be interested in:
+            </h3>
+          </div>
+          <div
+            class="mx_SettingsSubsection_content"
+          >
+            <label
+              class="mx_LabelledCheckbox"
+            >
+              <span
+                class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  checked=""
+                  id="checkbox_iHRD7nyrA2"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_iHRD7nyrA2"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                </label>
+              </span>
+              <div
+                class="mx_LabelledCheckbox_labels"
+              >
+                <span
+                  class="mx_LabelledCheckbox_label"
+                >
+                  Invited to a room
+                </span>
+              </div>
+            </label>
+            <label
+              class="mx_LabelledCheckbox"
+            >
+              <span
+                class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  id="checkbox_ohjWVJIPau"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_ohjWVJIPau"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                </label>
+              </span>
+              <div
+                class="mx_LabelledCheckbox_labels"
+              >
+                <span
+                  class="mx_LabelledCheckbox_label"
+                >
+                  New room activity, upgrades and status messages occur
+                </span>
+              </div>
+            </label>
+            <label
+              class="mx_LabelledCheckbox"
+            >
+              <span
+                class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  checked=""
+                  id="checkbox_y1OmnTidX4"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_y1OmnTidX4"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                </label>
+              </span>
+              <div
+                class="mx_LabelledCheckbox_labels"
+              >
+                <span
+                  class="mx_LabelledCheckbox_label"
+                >
+                  Messages sent by bots
+                </span>
+              </div>
+            </label>
+          </div>
+        </div>
+        <div
+          class="mx_SettingsSubsection"
+        >
+          <div
+            class="mx_SettingsSubsectionHeading"
+          >
+            <h3
+              class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+            >
+              Mentions and Keywords
+            </h3>
+          </div>
+          <div
+            class="mx_SettingsSubsection_description"
+          >
+            <div
+              class="mx_SettingsSubsection_text"
+            >
+              <span>
+                Show a badge 
+                <div
+                  class="mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_level_notification mx_NotificationBadge_2char cpd-theme-light"
+                >
+                  <span
+                    class="mx_NotificationBadge_count"
+                  >
+                    1
+                  </span>
+                </div>
+                 when keywords are used in a room.
+              </span>
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection_content"
+          >
+            <label
+              class="mx_LabelledCheckbox"
+            >
+              <span
+                class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  checked=""
+                  id="checkbox_ePDS0OpWwA"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_ePDS0OpWwA"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                </label>
+              </span>
+              <div
+                class="mx_LabelledCheckbox_labels"
+              >
+                <span
+                  class="mx_LabelledCheckbox_label"
+                >
+                  Notify when someone mentions using @room
+                </span>
+              </div>
+            </label>
+            <label
+              class="mx_LabelledCheckbox"
+            >
+              <span
+                class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  checked=""
+                  id="checkbox_HG75JNTNkN"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_HG75JNTNkN"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                </label>
+              </span>
+              <div
+                class="mx_LabelledCheckbox_labels"
+              >
+                <span
+                  class="mx_LabelledCheckbox_label"
+                >
+                  Notify when someone mentions using @displayname or @userId:matrix.org
+                </span>
+              </div>
+            </label>
+            <label
+              class="mx_LabelledCheckbox"
+            >
+              <span
+                class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+              >
+                <input
+                  checked=""
+                  id="checkbox_U64raTLcRs"
+                  type="checkbox"
+                />
+                <label
+                  for="checkbox_U64raTLcRs"
+                >
+                  <div
+                    class="mx_Checkbox_background"
+                  >
+                    <div
+                      class="mx_Checkbox_checkmark"
+                    />
+                  </div>
+                </label>
+              </span>
+              <div
+                class="mx_LabelledCheckbox_labels"
+              >
+                <span
+                  class="mx_LabelledCheckbox_label"
+                >
+                  Notify when someone uses a keyword
+                </span>
+                <span
+                  class="mx_LabelledCheckbox_byline"
+                >
+                  Enter keywords here, or use for spelling variations or nicknames
+                </span>
+              </div>
+            </label>
+            <div
+              class="mx_TagComposer"
+            >
+              <form
+                class="mx_TagComposer_input"
+              >
+                <div
+                  class="mx_Field mx_Field_input"
+                >
+                  <input
+                    autocomplete="off"
+                    id="mx_NotificationSettings2_Keywords_field"
+                    label="Keyword"
+                    placeholder="New keyword"
+                    type="text"
+                    value=""
+                  />
+                  <label
+                    for="mx_NotificationSettings2_Keywords_field"
+                  >
+                    Keyword
+                  </label>
+                </div>
+                <div
+                  class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+                  role="button"
+                  tabindex="0"
+                >
+                  Add
+                </div>
+              </form>
+              <div
+                class="mx_TagComposer_tags"
+                role="list"
+              >
+                <div
+                  class="mx_Tag"
+                  role="listitem"
+                >
+                  justjann3
+                  <div
+                    aria-label="Remove"
+                    class="mx_AccessibleButton mx_Tag_delete"
+                    role="button"
+                    tabindex="0"
+                  >
+                    <svg
+                      fill="currentColor"
+                      height="1em"
+                      viewBox="0 0 24 24"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <div
+                  class="mx_Tag"
+                  role="listitem"
+                >
+                  justj4nn3
+                  <div
+                    aria-label="Remove"
+                    class="mx_AccessibleButton mx_Tag_delete"
+                    role="button"
+                    tabindex="0"
+                  >
+                    <svg
+                      fill="currentColor"
+                      height="1em"
+                      viewBox="0 0 24 24"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <div
+                  class="mx_Tag"
+                  role="listitem"
+                >
+                  justj4nne
+                  <div
+                    aria-label="Remove"
+                    class="mx_AccessibleButton mx_Tag_delete"
+                    role="button"
+                    tabindex="0"
+                  >
+                    <svg
+                      fill="currentColor"
+                      height="1em"
+                      viewBox="0 0 24 24"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <div
+                  class="mx_Tag"
+                  role="listitem"
+                >
+                  Janne
+                  <div
+                    aria-label="Remove"
+                    class="mx_AccessibleButton mx_Tag_delete"
+                    role="button"
+                    tabindex="0"
+                  >
+                    <svg
+                      fill="currentColor"
+                      height="1em"
+                      viewBox="0 0 24 24"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <div
+                  class="mx_Tag"
+                  role="listitem"
+                >
+                  J4nne
+                  <div
+                    aria-label="Remove"
+                    class="mx_AccessibleButton mx_Tag_delete"
+                    role="button"
+                    tabindex="0"
+                  >
+                    <svg
+                      fill="currentColor"
+                      height="1em"
+                      viewBox="0 0 24 24"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <div
+                  class="mx_Tag"
+                  role="listitem"
+                >
+                  Jann3
+                  <div
+                    aria-label="Remove"
+                    class="mx_AccessibleButton mx_Tag_delete"
+                    role="button"
+                    tabindex="0"
+                  >
+                    <svg
+                      fill="currentColor"
+                      height="1em"
+                      viewBox="0 0 24 24"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <div
+                  class="mx_Tag"
+                  role="listitem"
+                >
+                  jann3
+                  <div
+                    aria-label="Remove"
+                    class="mx_AccessibleButton mx_Tag_delete"
+                    role="button"
+                    tabindex="0"
+                  >
+                    <svg
+                      fill="currentColor"
+                      height="1em"
+                      viewBox="0 0 24 24"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <div
+                  class="mx_Tag"
+                  role="listitem"
+                >
+                  j4nne
+                  <div
+                    aria-label="Remove"
+                    class="mx_AccessibleButton mx_Tag_delete"
+                    role="button"
+                    tabindex="0"
+                  >
+                    <svg
+                      fill="currentColor"
+                      height="1em"
+                      viewBox="0 0 24 24"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <div
+                  class="mx_Tag"
+                  role="listitem"
+                >
+                  janne
+                  <div
+                    aria-label="Remove"
+                    class="mx_AccessibleButton mx_Tag_delete"
+                    role="button"
+                    tabindex="0"
+                  >
+                    <svg
+                      fill="currentColor"
+                      height="1em"
+                      viewBox="0 0 24 24"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="mx_SettingsFlag"
+            >
+              <label
+                class="mx_SettingsFlag_label"
+                for="mx_SettingsFlag_QRlYy75nfv5b"
+              >
+                <span
+                  class="mx_SettingsFlag_labelText"
+                >
+                  Show all activity in the room list (dots or number of unread messages)
+                </span>
+              </label>
+              <div
+                aria-checked="true"
+                aria-disabled="false"
+                aria-label="Show all activity in the room list (dots or number of unread messages)"
+                class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
+                id="mx_SettingsFlag_QRlYy75nfv5b"
+                role="switch"
+                tabindex="0"
+              >
+                <div
+                  class="mx_ToggleSwitch_ball"
+                />
+              </div>
+            </div>
+            <div
+              class="mx_SettingsFlag"
+            >
+              <label
+                class="mx_SettingsFlag_label"
+                for="mx_SettingsFlag_OEPN1su1JYVt"
+              >
+                <span
+                  class="mx_SettingsFlag_labelText"
+                >
+                  Only show notifications in the thread activity centre
+                </span>
+              </label>
+              <div
+                aria-checked="true"
+                aria-disabled="false"
+                aria-label="Only show notifications in the thread activity centre"
+                class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
+                id="mx_SettingsFlag_OEPN1su1JYVt"
+                role="switch"
+                tabindex="0"
+              >
+                <div
+                  class="mx_ToggleSwitch_ball"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="mx_SettingsSubsection"
+        >
+          <div
+            class="mx_SettingsSubsectionHeading"
+          >
+            <h3
+              class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+            >
+              Email summary
+            </h3>
+          </div>
+          <div
+            class="mx_SettingsSubsection_content"
+          >
+            <div
+              class="mx_SettingsSubsection_text"
+            >
+              Receive an email summary of missed notifications
+            </div>
+            <div
+              class="mx_SettingsSubsection_description mx_NotificationPusherSettings_detail"
+            >
+              <div
+                class="mx_SettingsSubsection_text"
+              >
+                <span>
+                  Select which emails you want to send summaries to. Manage your emails in 
+                  <div
+                    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+                    role="button"
+                    tabindex="0"
+                  >
+                    General
+                  </div>
+                  .
+                </span>
+              </div>
+            </div>
+            <div
+              class="mx_SettingsIndent"
+            >
+              <label
+                class="mx_LabelledCheckbox"
+              >
+                <span
+                  class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+                >
+                  <input
+                    id="checkbox_OyR5kbu3pE"
+                    type="checkbox"
+                  />
+                  <label
+                    for="checkbox_OyR5kbu3pE"
+                  >
+                    <div
+                      class="mx_Checkbox_background"
+                    >
+                      <div
+                        class="mx_Checkbox_checkmark"
+                      />
+                    </div>
+                  </label>
+                </span>
+                <div
+                  class="mx_LabelledCheckbox_labels"
+                >
+                  <span
+                    class="mx_LabelledCheckbox_label"
+                  >
+                    test@example.tld
+                  </span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div
+          class="mx_SettingsSubsection"
+        >
+          <div
+            class="mx_SettingsSubsectionHeading"
+          >
+            <h3
+              class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+            >
+              Notification targets
+            </h3>
+          </div>
+          <div
+            class="mx_SettingsSubsection_content"
+          >
+            <ul>
+              <li>
+                My EyeFon
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div
+          class="mx_SettingsSubsection"
+        >
+          <div
+            class="mx_SettingsSubsectionHeading"
+          >
+            <h3
+              class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+            >
+              Quick Actions
+            </h3>
+          </div>
+          <div
+            class="mx_SettingsSubsection_content"
+          >
+            <div
+              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger_outline"
+              role="button"
+              tabindex="0"
+            >
+              Reset to default settings
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

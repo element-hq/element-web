@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<AuthPage /> should match snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_AuthPage"
+  >
+    <div
+      class="mx_AuthPage_modal"
+      style="position: relative;"
+    >
+      <div
+        class="mx_AuthPage_modalBlur"
+        style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; filter: blur(40px);"
+      />
+      <div
+        class="mx_AuthPage_modalContent"
+        style="display: flex; z-index: 1; background: rgba(255, 255, 255, 0.59); border-radius: 8px;"
+      />
+    </div>
+    <footer
+      class="mx_AuthFooter"
+      role="contentinfo"
+    >
+      <a
+        href="https://element.io/blog"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        Blog
+      </a>
+      <a
+        href="https://mastodon.matrix.org/@Element"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        Mastodon
+      </a>
+      <a
+        href="https://github.com/element-hq/element-web"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        GitHub
+      </a>
+      <a
+        href="https://matrix.org"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        Powered by Matrix
+      </a>
+    </footer>
+  </div>
+</DocumentFragment>
+`;

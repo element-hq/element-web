@@ -1,5 +1,0 @@
-{
-    "Your Element is misconfigured": "আপনার এলিমেন্ট টি ভুল ভাবে কনফিগার করা হয়েছে",
-    "Invalid configuration: no default server specified.": "ভুল কনফিগারেশনঃ কোনো মূল সার্ভার উল্লেখ করা হয়নি।",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "ভুল কনফিগারেশনঃ এদের মধ্যে কেবলমাত্র একটাই উল্লেখ করা যেতে পারেঃ default_server_config, default_server_name অথবা default_hs_url."
-}

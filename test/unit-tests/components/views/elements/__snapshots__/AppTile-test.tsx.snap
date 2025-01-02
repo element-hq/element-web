@@ -1,0 +1,532 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AppTile destroys non-persisted right panel widget on room change 1`] = `
+<DocumentFragment>
+  <aside
+    class="mx_RightPanel"
+    id="mx_RightPanel"
+  >
+    <div
+      class="mx_BaseCard mx_WidgetCard"
+    >
+      <div
+        class="mx_BaseCard_header"
+      >
+        <div
+          class="mx_BaseCard_header_title"
+        >
+          <h4
+            class="mx_Heading_h4 mx_BaseCard_header_title_heading"
+          >
+            Example 1
+          </h4>
+          <div
+            aria-expanded="false"
+            aria-haspopup="true"
+            aria-label="Options"
+            class="mx_AccessibleButton mx_BaseCard_header_title_button--option"
+            role="button"
+            tabindex="0"
+          />
+        </div>
+        <button
+          aria-labelledby=":r0:"
+          class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
+          data-testid="base-card-close-button"
+          role="button"
+          style="--cpd-icon-button-size: 28px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <svg
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+              />
+            </svg>
+          </div>
+        </button>
+      </div>
+      <div
+        class="mx_AppTileFullWidth"
+        id="1"
+      >
+        <div
+          class="mx_AppTile_persistedWrapper"
+        >
+          <div />
+        </div>
+      </div>
+    </div>
+  </aside>
+</DocumentFragment>
+`;
+
+exports[`AppTile for a persistent app should render 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_AppTile_mini"
+    id="1"
+  >
+    <div
+      class="mx_AppTile_persistedWrapper"
+    >
+      <div />
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`AppTile for a pinned widget should render 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_AppTile"
+    id="1"
+  >
+    <div
+      class="mx_AppTileMenuBar"
+    >
+      <span
+        class="mx_AppTileMenuBar_title"
+        style="pointer-events: none;"
+      >
+        <span>
+          <span
+            aria-label="Avatar"
+            class="_avatar_mcap2_17 mx_BaseAvatar mx_WidgetAvatar"
+            data-color="1"
+            data-testid="avatar-img"
+            data-type="round"
+            style="--cpd-avatar-size: 20px;"
+          >
+            <img
+              alt=""
+              class="_image_mcap2_50"
+              data-type="round"
+              height="20px"
+              loading="lazy"
+              referrerpolicy="no-referrer"
+              src="image-file-stub"
+              width="20px"
+            />
+          </span>
+          <h3>
+            Example 1
+          </h3>
+          <span />
+        </span>
+      </span>
+      <span
+        class="mx_AppTileMenuBar_widgets"
+      >
+        <div
+          aria-label="Un-maximise"
+          class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+          role="button"
+          tabindex="0"
+        >
+          <svg
+            class="mx_Icon mx_Icon_12"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 11.034a.996.996 0 0 0 .29.702l.005.005c.18.18.43.29.705.29h8a1 1 0 1 0 0-2h-5.586L22 3.446a1 1 0 0 0-1.414-1.415L14 8.617V3.031a1 1 0 1 0-2 0v8.003Zm0 1.963a.997.997 0 0 0-.29-.702l-.005-.004A.997.997 0 0 0 11 12H3a1 1 0 0 0 0 2h5.586L2 20.586A1 1 0 1 0 3.414 22L10 15.414V21a1 1 0 1 0 2 0v-8.003Z"
+            />
+          </svg>
+        </div>
+        <div
+          aria-label="Minimise"
+          class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+          role="button"
+          tabindex="0"
+        >
+          <svg
+            class="mx_Icon mx_Icon_16"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6 13a.967.967 0 0 1-.713-.287A.968.968 0 0 1 5 12c0-.283.096-.52.287-.713A.967.967 0 0 1 6 11h12a.97.97 0 0 1 .712.287c.192.192.288.43.288.713s-.096.52-.288.713A.968.968 0 0 1 18 13H6Z"
+            />
+          </svg>
+        </div>
+        <div
+          aria-expanded="false"
+          aria-haspopup="true"
+          aria-label="Options"
+          class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+          role="button"
+          tabindex="0"
+        >
+          <svg
+            class="mx_Icon mx_Icon_12"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6 14c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 4 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 6 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 6 14Zm6 0c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 10 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 12 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 12 14Zm6 0c-.55 0-1.02-.196-1.413-.588A1.926 1.926 0 0 1 16 12c0-.55.196-1.02.587-1.412A1.926 1.926 0 0 1 18 10c.55 0 1.02.196 1.413.588.391.391.587.862.587 1.412 0 .55-.196 1.02-.587 1.412A1.926 1.926 0 0 1 18 14Z"
+            />
+          </svg>
+        </div>
+      </span>
+    </div>
+    <div
+      class="mx_AppTile_persistedWrapper"
+    >
+      <div />
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`AppTile for a pinned widget should render permission request 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_AppTile"
+    id="1"
+  >
+    <div
+      class="mx_AppTileMenuBar"
+    >
+      <span
+        class="mx_AppTileMenuBar_title"
+        style="pointer-events: none;"
+      >
+        <span>
+          <span
+            aria-label="Avatar"
+            class="_avatar_mcap2_17 mx_BaseAvatar mx_WidgetAvatar"
+            data-color="1"
+            data-testid="avatar-img"
+            data-type="round"
+            style="--cpd-avatar-size: 20px;"
+          >
+            <img
+              alt=""
+              class="_image_mcap2_50"
+              data-type="round"
+              height="20px"
+              loading="lazy"
+              referrerpolicy="no-referrer"
+              src="image-file-stub"
+              width="20px"
+            />
+          </span>
+          <h3>
+            Example 1
+          </h3>
+          <span />
+        </span>
+      </span>
+      <span
+        class="mx_AppTileMenuBar_widgets"
+      >
+        <div
+          aria-label="Un-maximise"
+          class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+          role="button"
+          tabindex="0"
+        >
+          <svg
+            class="mx_Icon mx_Icon_12"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 11.034a.996.996 0 0 0 .29.702l.005.005c.18.18.43.29.705.29h8a1 1 0 1 0 0-2h-5.586L22 3.446a1 1 0 0 0-1.414-1.415L14 8.617V3.031a1 1 0 1 0-2 0v8.003Zm0 1.963a.997.997 0 0 0-.29-.702l-.005-.004A.997.997 0 0 0 11 12H3a1 1 0 0 0 0 2h5.586L2 20.586A1 1 0 1 0 3.414 22L10 15.414V21a1 1 0 1 0 2 0v-8.003Z"
+            />
+          </svg>
+        </div>
+        <div
+          aria-label="Minimise"
+          class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+          role="button"
+          tabindex="0"
+        >
+          <svg
+            class="mx_Icon mx_Icon_16"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6 13a.967.967 0 0 1-.713-.287A.968.968 0 0 1 5 12c0-.283.096-.52.287-.713A.967.967 0 0 1 6 11h12a.97.97 0 0 1 .712.287c.192.192.288.43.288.713s-.096.52-.288.713A.968.968 0 0 1 18 13H6Z"
+            />
+          </svg>
+        </div>
+        <div
+          aria-expanded="false"
+          aria-haspopup="true"
+          aria-label="Options"
+          class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+          role="button"
+          tabindex="0"
+        >
+          <svg
+            class="mx_Icon mx_Icon_12"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6 14c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 4 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 6 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 6 14Zm6 0c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 10 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 12 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 12 14Zm6 0c-.55 0-1.02-.196-1.413-.588A1.926 1.926 0 0 1 16 12c0-.55.196-1.02.587-1.412A1.926 1.926 0 0 1 18 10c.55 0 1.02.196 1.413.588.391.391.587.862.587 1.412 0 .55-.196 1.02-.587 1.412A1.926 1.926 0 0 1 18 14Z"
+            />
+          </svg>
+        </div>
+      </span>
+    </div>
+    <div
+      class="mx_AppTileBody mx_AppTileBody--large"
+    >
+      <div
+        class="mx_AppPermission"
+      >
+        <div
+          class="mx_AppPermission_content"
+        >
+          <div
+            class="mx_AppPermission_content_bolder"
+          >
+            Widget added by
+          </div>
+          <div>
+            <span
+              class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+              data-color="1"
+              data-testid="avatar-img"
+              data-type="round"
+              role="presentation"
+              style="--cpd-avatar-size: 38px;"
+            >
+              u
+            </span>
+            <h4
+              class="mx_Heading_h4"
+            >
+              @userAnother
+            </h4>
+            <div />
+          </div>
+          <div>
+            <span>
+              Using this widget may share data 
+              <div
+                aria-describedby=":r2j:"
+                aria-labelledby=":r2i:"
+                class="mx_TextWithTooltip_target mx_TextWithTooltip_target--helpIcon"
+              >
+                <svg
+                  class="mx_Icon mx_Icon_12"
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 8a1.5 1.5 0 0 0-1.5 1.5 1 1 0 1 1-2 0 3.5 3.5 0 1 1 6.01 2.439c-.122.126-.24.243-.352.355-.287.288-.54.54-.76.824-.293.375-.398.651-.398.882a1 1 0 1 1-2 0c0-.874.407-1.58.819-2.11.305-.392.688-.775 1-1.085l.257-.26A1.5 1.5 0 0 0 12 8Zm1 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"
+                  />
+                  <path
+                    d="M8.1 21.212A9.738 9.738 0 0 0 12 22a9.738 9.738 0 0 0 3.9-.788 10.098 10.098 0 0 0 3.175-2.137c.9-.9 1.613-1.958 2.137-3.175A9.738 9.738 0 0 0 22 12a9.738 9.738 0 0 0-.788-3.9 10.099 10.099 0 0 0-2.137-3.175c-.9-.9-1.958-1.612-3.175-2.137A9.738 9.738 0 0 0 12 2a9.738 9.738 0 0 0-3.9.788 10.099 10.099 0 0 0-3.175 2.137c-.9.9-1.612 1.958-2.137 3.175A9.738 9.738 0 0 0 2 12a9.74 9.74 0 0 0 .788 3.9 10.098 10.098 0 0 0 2.137 3.175c.9.9 1.958 1.613 3.175 2.137Zm9.575-3.537C16.125 19.225 14.233 20 12 20c-2.233 0-4.125-.775-5.675-2.325C4.775 16.125 4 14.233 4 12c0-2.233.775-4.125 2.325-5.675C7.875 4.775 9.767 4 12 4c2.233 0 4.125.775 5.675 2.325C19.225 7.875 20 9.767 20 12c0 2.233-.775 4.125-2.325 5.675Z"
+                  />
+                </svg>
+              </div>
+               with example.com.
+            </span>
+          </div>
+          <div>
+            This widget may use cookies. 
+          </div>
+          <div>
+            <div
+              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_sm"
+              role="button"
+              tabindex="0"
+            >
+              Continue
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`AppTile preserves non-persisted widget on container move 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_AppsDrawer"
+  >
+    <div
+      class="mx_AppsDrawer_resizer"
+      style="position: relative; user-select: auto; width: auto; height: 280px; max-height: 576px; min-height: 100px; box-sizing: border-box; flex-shrink: 0;"
+    >
+      <div
+        class="mx_AppsContainer"
+      >
+        <div
+          class="mx_AppTileFullWidth"
+          id="1"
+        >
+          <div
+            class="mx_AppTileMenuBar"
+          >
+            <span
+              class="mx_AppTileMenuBar_title"
+              style="pointer-events: none;"
+            >
+              <span>
+                <span
+                  aria-label="Avatar"
+                  class="_avatar_mcap2_17 mx_BaseAvatar mx_WidgetAvatar"
+                  data-color="1"
+                  data-testid="avatar-img"
+                  data-type="round"
+                  style="--cpd-avatar-size: 20px;"
+                >
+                  <img
+                    alt=""
+                    class="_image_mcap2_50"
+                    data-type="round"
+                    height="20px"
+                    loading="lazy"
+                    referrerpolicy="no-referrer"
+                    src="image-file-stub"
+                    width="20px"
+                  />
+                </span>
+                <h3>
+                  Example 1
+                </h3>
+                <span />
+              </span>
+            </span>
+            <span
+              class="mx_AppTileMenuBar_widgets"
+            >
+              <div
+                aria-label="Maximise"
+                class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+                role="button"
+                tabindex="0"
+              >
+                <svg
+                  class="mx_Icon mx_Icon_12"
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M21 3.997a.996.996 0 0 0-.29-.702l-.005-.004A.997.997 0 0 0 20 3h-8a1 1 0 1 0 0 2h5.586L5 17.586V12a1 1 0 1 0-2 0v8.003a.997.997 0 0 0 .29.702l.005.004c.18.18.43.291.705.291h8a1 1 0 1 0 0-2H6.414L19 6.414V12a1 1 0 1 0 2 0V3.997Z"
+                  />
+                </svg>
+              </div>
+              <div
+                aria-label="Minimise"
+                class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+                role="button"
+                tabindex="0"
+              >
+                <svg
+                  class="mx_Icon mx_Icon_16"
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 13a.967.967 0 0 1-.713-.287A.968.968 0 0 1 5 12c0-.283.096-.52.287-.713A.967.967 0 0 1 6 11h12a.97.97 0 0 1 .712.287c.192.192.288.43.288.713s-.096.52-.288.713A.968.968 0 0 1 18 13H6Z"
+                  />
+                </svg>
+              </div>
+              <div
+                aria-expanded="false"
+                aria-haspopup="true"
+                aria-label="Options"
+                class="mx_AccessibleButton mx_AppTileMenuBar_widgets_button"
+                role="button"
+                tabindex="0"
+              >
+                <svg
+                  class="mx_Icon mx_Icon_12"
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 14c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 4 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 6 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 6 14Zm6 0c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 10 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 12 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 12 14Zm6 0c-.55 0-1.02-.196-1.413-.588A1.926 1.926 0 0 1 16 12c0-.55.196-1.02.587-1.412A1.926 1.926 0 0 1 18 10c.55 0 1.02.196 1.413.588.391.391.587.862.587 1.412 0 .55-.196 1.02-.587 1.412A1.926 1.926 0 0 1 18 14Z"
+                  />
+                </svg>
+              </div>
+            </span>
+          </div>
+          <div
+            class="mx_AppTileBody mx_AppTileBody--large"
+          >
+            <div
+              class="mx_AppTileBody_fadeInSpinner"
+            >
+              <div
+                class="mx_Spinner"
+              >
+                <div
+                  class="mx_Spinner_Msg"
+                >
+                  Loading…
+                </div>
+                 
+                <div
+                  aria-label="Loading…"
+                  class="mx_Spinner_icon"
+                  data-testid="spinner"
+                  role="progressbar"
+                  style="width: 32px; height: 32px;"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_AppsDrawer_resizer_container"
+      >
+        <div
+          class="mx_AppsDrawer_resizer_container_handle"
+          style="position: absolute; user-select: none; width: 100%; height: 10px; left: 0px; cursor: row-resize; bottom: -5px;"
+        />
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

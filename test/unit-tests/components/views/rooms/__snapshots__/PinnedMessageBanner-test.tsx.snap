@@ -1,0 +1,558 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PinnedMessageBanner /> should display display a poll event 1`] = `
+<DocumentFragment>
+  <div
+    aria-label="This room has pinned messages. Click to view them."
+    class="mx_PinnedMessageBanner"
+    data-single-message="true"
+    data-testid="pinned-message-banner"
+  >
+    <button
+      aria-label="View the pinned message in the timeline."
+      class="mx_PinnedMessageBanner_main"
+      type="button"
+    >
+      <div
+        class="mx_PinnedMessageBanner_content"
+      >
+        <div
+          class="mx_PinnedMessageBanner_Indicators"
+        >
+          <div
+            class="mx_PinnedMessageBanner_Indicator mx_PinnedMessageBanner_Indicator--active"
+            data-testid="banner-indicator"
+          />
+        </div>
+        <svg
+          class="mx_PinnedMessageBanner_PinIcon"
+          fill="currentColor"
+          height="20px"
+          viewBox="0 0 24 24"
+          width="20px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357L5.77 2.857Z"
+          />
+        </svg>
+        <span
+          class="mx_EventPreview mx_PinnedMessageBanner_message"
+          data-testid="banner-message"
+        >
+          <span>
+            <span
+              class="mx_EventPreview_prefix"
+            >
+              Poll:
+            </span>
+             Alice?
+          </span>
+        </span>
+      </div>
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<PinnedMessageBanner /> should display the last message when the pinned event array changed 1`] = `
+<DocumentFragment>
+  <div
+    aria-label="This room has pinned messages. Click to view them."
+    class="mx_PinnedMessageBanner"
+    data-single-message="false"
+    data-testid="pinned-message-banner"
+  >
+    <button
+      aria-label="View the pinned message in the timeline."
+      class="mx_PinnedMessageBanner_main"
+      type="button"
+    >
+      <div
+        class="mx_PinnedMessageBanner_content"
+      >
+        <div
+          class="mx_PinnedMessageBanner_Indicators"
+        >
+          <div
+            class="mx_PinnedMessageBanner_Indicator"
+            data-testid="banner-indicator"
+          />
+          <div
+            class="mx_PinnedMessageBanner_Indicator"
+            data-testid="banner-indicator"
+          />
+          <div
+            class="mx_PinnedMessageBanner_Indicator mx_PinnedMessageBanner_Indicator--active"
+            data-testid="banner-indicator"
+          />
+        </div>
+        <svg
+          class="mx_PinnedMessageBanner_PinIcon"
+          fill="currentColor"
+          height="20px"
+          viewBox="0 0 24 24"
+          width="20px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357L5.77 2.857Z"
+          />
+        </svg>
+        <div
+          class="mx_PinnedMessageBanner_title"
+          data-testid="banner-counter"
+        >
+          <span>
+            <span
+              class="mx_PinnedMessageBanner_title_counter"
+            >
+              3 of 3
+            </span>
+             Pinned messages
+          </span>
+        </div>
+        <span
+          class="mx_EventPreview mx_PinnedMessageBanner_message"
+          data-testid="banner-message"
+          title="Third pinned message"
+        >
+          Third pinned message
+        </span>
+      </div>
+    </button>
+    <button
+      class="_button_i91xf_17 mx_PinnedMessageBanner_actions"
+      data-kind="tertiary"
+      data-size="lg"
+      role="button"
+      tabindex="0"
+    >
+      View all
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<PinnedMessageBanner /> should display the m.audio event type 1`] = `
+<DocumentFragment>
+  <div
+    aria-label="This room has pinned messages. Click to view them."
+    class="mx_PinnedMessageBanner"
+    data-single-message="true"
+    data-testid="pinned-message-banner"
+  >
+    <button
+      aria-label="View the pinned message in the timeline."
+      class="mx_PinnedMessageBanner_main"
+      type="button"
+    >
+      <div
+        class="mx_PinnedMessageBanner_content"
+      >
+        <div
+          class="mx_PinnedMessageBanner_Indicators"
+        >
+          <div
+            class="mx_PinnedMessageBanner_Indicator mx_PinnedMessageBanner_Indicator--active"
+            data-testid="banner-indicator"
+          />
+        </div>
+        <svg
+          class="mx_PinnedMessageBanner_PinIcon"
+          fill="currentColor"
+          height="20px"
+          viewBox="0 0 24 24"
+          width="20px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357L5.77 2.857Z"
+          />
+        </svg>
+        <span
+          class="mx_EventPreview mx_PinnedMessageBanner_message"
+          data-testid="banner-message"
+        >
+          <span>
+            <span
+              class="mx_EventPreview_prefix"
+            >
+              Audio:
+            </span>
+             Message with m.audio type
+          </span>
+        </span>
+      </div>
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<PinnedMessageBanner /> should display the m.file event type 1`] = `
+<DocumentFragment>
+  <div
+    aria-label="This room has pinned messages. Click to view them."
+    class="mx_PinnedMessageBanner"
+    data-single-message="true"
+    data-testid="pinned-message-banner"
+  >
+    <button
+      aria-label="View the pinned message in the timeline."
+      class="mx_PinnedMessageBanner_main"
+      type="button"
+    >
+      <div
+        class="mx_PinnedMessageBanner_content"
+      >
+        <div
+          class="mx_PinnedMessageBanner_Indicators"
+        >
+          <div
+            class="mx_PinnedMessageBanner_Indicator mx_PinnedMessageBanner_Indicator--active"
+            data-testid="banner-indicator"
+          />
+        </div>
+        <svg
+          class="mx_PinnedMessageBanner_PinIcon"
+          fill="currentColor"
+          height="20px"
+          viewBox="0 0 24 24"
+          width="20px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357L5.77 2.857Z"
+          />
+        </svg>
+        <span
+          class="mx_EventPreview mx_PinnedMessageBanner_message"
+          data-testid="banner-message"
+        >
+          <span>
+            <span
+              class="mx_EventPreview_prefix"
+            >
+              File:
+            </span>
+             Message with m.file type
+          </span>
+        </span>
+      </div>
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<PinnedMessageBanner /> should display the m.image event type 1`] = `
+<DocumentFragment>
+  <div
+    aria-label="This room has pinned messages. Click to view them."
+    class="mx_PinnedMessageBanner"
+    data-single-message="true"
+    data-testid="pinned-message-banner"
+  >
+    <button
+      aria-label="View the pinned message in the timeline."
+      class="mx_PinnedMessageBanner_main"
+      type="button"
+    >
+      <div
+        class="mx_PinnedMessageBanner_content"
+      >
+        <div
+          class="mx_PinnedMessageBanner_Indicators"
+        >
+          <div
+            class="mx_PinnedMessageBanner_Indicator mx_PinnedMessageBanner_Indicator--active"
+            data-testid="banner-indicator"
+          />
+        </div>
+        <svg
+          class="mx_PinnedMessageBanner_PinIcon"
+          fill="currentColor"
+          height="20px"
+          viewBox="0 0 24 24"
+          width="20px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357L5.77 2.857Z"
+          />
+        </svg>
+        <span
+          class="mx_EventPreview mx_PinnedMessageBanner_message"
+          data-testid="banner-message"
+        >
+          <span>
+            <span
+              class="mx_EventPreview_prefix"
+            >
+              Image:
+            </span>
+             Message with m.image type
+          </span>
+        </span>
+      </div>
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<PinnedMessageBanner /> should display the m.video event type 1`] = `
+<DocumentFragment>
+  <div
+    aria-label="This room has pinned messages. Click to view them."
+    class="mx_PinnedMessageBanner"
+    data-single-message="true"
+    data-testid="pinned-message-banner"
+  >
+    <button
+      aria-label="View the pinned message in the timeline."
+      class="mx_PinnedMessageBanner_main"
+      type="button"
+    >
+      <div
+        class="mx_PinnedMessageBanner_content"
+      >
+        <div
+          class="mx_PinnedMessageBanner_Indicators"
+        >
+          <div
+            class="mx_PinnedMessageBanner_Indicator mx_PinnedMessageBanner_Indicator--active"
+            data-testid="banner-indicator"
+          />
+        </div>
+        <svg
+          class="mx_PinnedMessageBanner_PinIcon"
+          fill="currentColor"
+          height="20px"
+          viewBox="0 0 24 24"
+          width="20px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357L5.77 2.857Z"
+          />
+        </svg>
+        <span
+          class="mx_EventPreview mx_PinnedMessageBanner_message"
+          data-testid="banner-message"
+        >
+          <span>
+            <span
+              class="mx_EventPreview_prefix"
+            >
+              Video:
+            </span>
+             Message with m.video type
+          </span>
+        </span>
+      </div>
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<PinnedMessageBanner /> should render 2 pinned event 1`] = `
+<DocumentFragment>
+  <div
+    aria-label="This room has pinned messages. Click to view them."
+    class="mx_PinnedMessageBanner"
+    data-single-message="false"
+    data-testid="pinned-message-banner"
+  >
+    <button
+      aria-label="View the pinned message in the timeline."
+      class="mx_PinnedMessageBanner_main"
+      type="button"
+    >
+      <div
+        class="mx_PinnedMessageBanner_content"
+      >
+        <div
+          class="mx_PinnedMessageBanner_Indicators"
+        >
+          <div
+            class="mx_PinnedMessageBanner_Indicator"
+            data-testid="banner-indicator"
+          />
+          <div
+            class="mx_PinnedMessageBanner_Indicator mx_PinnedMessageBanner_Indicator--active"
+            data-testid="banner-indicator"
+          />
+        </div>
+        <svg
+          class="mx_PinnedMessageBanner_PinIcon"
+          fill="currentColor"
+          height="20px"
+          viewBox="0 0 24 24"
+          width="20px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357L5.77 2.857Z"
+          />
+        </svg>
+        <div
+          class="mx_PinnedMessageBanner_title"
+          data-testid="banner-counter"
+        >
+          <span>
+            <span
+              class="mx_PinnedMessageBanner_title_counter"
+            >
+              2 of 2
+            </span>
+             Pinned messages
+          </span>
+        </div>
+        <span
+          class="mx_EventPreview mx_PinnedMessageBanner_message"
+          data-testid="banner-message"
+          title="Second pinned message"
+        >
+          Second pinned message
+        </span>
+      </div>
+    </button>
+    <button
+      class="_button_i91xf_17 mx_PinnedMessageBanner_actions"
+      data-kind="tertiary"
+      data-size="lg"
+      role="button"
+      tabindex="0"
+    >
+      View all
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<PinnedMessageBanner /> should render 4 pinned event 1`] = `
+<DocumentFragment>
+  <div
+    aria-label="This room has pinned messages. Click to view them."
+    class="mx_PinnedMessageBanner"
+    data-single-message="false"
+    data-testid="pinned-message-banner"
+  >
+    <button
+      aria-label="View the pinned message in the timeline."
+      class="mx_PinnedMessageBanner_main"
+      type="button"
+    >
+      <div
+        class="mx_PinnedMessageBanner_content"
+      >
+        <div
+          class="mx_PinnedMessageBanner_Indicators"
+        >
+          <div
+            class="mx_PinnedMessageBanner_Indicator mx_PinnedMessageBanner_Indicator--active"
+            data-testid="banner-indicator"
+          />
+          <div
+            class="mx_PinnedMessageBanner_Indicator mx_PinnedMessageBanner_Indicator--hidden"
+            data-testid="banner-indicator"
+          />
+          <div
+            class="mx_PinnedMessageBanner_Indicator mx_PinnedMessageBanner_Indicator--hidden"
+            data-testid="banner-indicator"
+          />
+        </div>
+        <svg
+          class="mx_PinnedMessageBanner_PinIcon"
+          fill="currentColor"
+          height="20px"
+          viewBox="0 0 24 24"
+          width="20px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357L5.77 2.857Z"
+          />
+        </svg>
+        <div
+          class="mx_PinnedMessageBanner_title"
+          data-testid="banner-counter"
+        >
+          <span>
+            <span
+              class="mx_PinnedMessageBanner_title_counter"
+            >
+              4 of 4
+            </span>
+             Pinned messages
+          </span>
+        </div>
+        <span
+          class="mx_EventPreview mx_PinnedMessageBanner_message"
+          data-testid="banner-message"
+          title="Fourth pinned message"
+        >
+          Fourth pinned message
+        </span>
+      </div>
+    </button>
+    <button
+      class="_button_i91xf_17 mx_PinnedMessageBanner_actions"
+      data-kind="tertiary"
+      data-size="lg"
+      role="button"
+      tabindex="0"
+    >
+      View all
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<PinnedMessageBanner /> should render a single pinned event 1`] = `
+<DocumentFragment>
+  <div
+    aria-label="This room has pinned messages. Click to view them."
+    class="mx_PinnedMessageBanner"
+    data-single-message="true"
+    data-testid="pinned-message-banner"
+  >
+    <button
+      aria-label="View the pinned message in the timeline."
+      class="mx_PinnedMessageBanner_main"
+      type="button"
+    >
+      <div
+        class="mx_PinnedMessageBanner_content"
+      >
+        <div
+          class="mx_PinnedMessageBanner_Indicators"
+        >
+          <div
+            class="mx_PinnedMessageBanner_Indicator mx_PinnedMessageBanner_Indicator--active"
+            data-testid="banner-indicator"
+          />
+        </div>
+        <svg
+          class="mx_PinnedMessageBanner_PinIcon"
+          fill="currentColor"
+          height="20px"
+          viewBox="0 0 24 24"
+          width="20px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357L5.77 2.857Z"
+          />
+        </svg>
+        <span
+          class="mx_EventPreview mx_PinnedMessageBanner_message"
+          data-testid="banner-message"
+          title="First pinned message"
+        >
+          First pinned message
+        </span>
+      </div>
+    </button>
+  </div>
+</DocumentFragment>
+`;

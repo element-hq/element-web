@@ -1,0 +1,33 @@
+# Re-fetches the Jitsi SDK and opens a PR to update it if it's different from what's in the repository
+name: Update Jitsi
+on:
+    workflow_dispatch: {}
+    schedule:
+        - cron: "0 3 * * 0" # 3am every Sunday
+permissions: {} # We use ELEMENT_BOT_TOKEN instead
+jobs:
+    update:
+        runs-on: ubuntu-24.04
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: actions/setup-node@v4
+              with:
+                  cache: "yarn"
+                  node-version: "lts/*"
+
+            - name: Install Deps
+              run: "yarn install --frozen-lockfile"
+
+            - name: Fetch Jitsi
+              run: "yarn update:jitsi"
+
+            - name: Create Pull Request
+              uses: peter-evans/create-pull-request@5e914681df9dc83aa4e4905692ca88beb2f9e91f # v7
+              with:
+                  token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  branch: actions/jitsi-update
+                  delete-branch: true
+                  title: Jitsi Update
+                  labels: |
+                      T-Task

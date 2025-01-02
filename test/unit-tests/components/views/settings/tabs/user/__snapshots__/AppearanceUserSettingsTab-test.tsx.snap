@@ -1,0 +1,835 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AppearanceUserSettingsTab should render 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsTab"
+    data-testid="mx_AppearanceUserSettingsTab"
+  >
+    <div
+      class="mx_SettingsTab_sections"
+    >
+      <div
+        class="mx_SettingsSection"
+      >
+        <div
+          class="mx_SettingsSection_subSections"
+        >
+          <div
+            class="mx_SettingsSubsection mx_SettingsSubsection_newUi"
+            data-testid="themePanel"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+              >
+                Theme
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
+            >
+              <form
+                class="_root_ssths_24 mx_ThemeChoicePanel_ThemeSelectors"
+              >
+                <div
+                  class="_inline-field_ssths_40 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_disabled cpd-theme-light"
+                >
+                  <div
+                    class="_inline-field-control_ssths_52"
+                  >
+                    <div
+                      class="_container_1vw5h_18"
+                    >
+                      <input
+                        class="_input_1vw5h_26"
+                        disabled=""
+                        id="radix-:r0:"
+                        name="themeSelector"
+                        title=""
+                        type="radio"
+                        value="light"
+                      />
+                      <div
+                        class="_ui_1vw5h_27"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="_inline-field-body_ssths_46"
+                  >
+                    <label
+                      class="_label_ssths_67 mx_ThemeChoicePanel_themeSelector_Label"
+                      for="radix-:r0:"
+                    >
+                      Light
+                    </label>
+                  </div>
+                </div>
+                <div
+                  class="_inline-field_ssths_40 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_disabled cpd-theme-dark"
+                >
+                  <div
+                    class="_inline-field-control_ssths_52"
+                  >
+                    <div
+                      class="_container_1vw5h_18"
+                    >
+                      <input
+                        class="_input_1vw5h_26"
+                        disabled=""
+                        id="radix-:r1:"
+                        name="themeSelector"
+                        title=""
+                        type="radio"
+                        value="dark"
+                      />
+                      <div
+                        class="_ui_1vw5h_27"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="_inline-field-body_ssths_46"
+                  >
+                    <label
+                      class="_label_ssths_67 mx_ThemeChoicePanel_themeSelector_Label"
+                      for="radix-:r1:"
+                    >
+                      Dark
+                    </label>
+                  </div>
+                </div>
+                <div
+                  class="_inline-field_ssths_40 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_disabled cpd-theme-light"
+                >
+                  <div
+                    class="_inline-field-control_ssths_52"
+                  >
+                    <div
+                      class="_container_1vw5h_18"
+                    >
+                      <input
+                        class="_input_1vw5h_26"
+                        disabled=""
+                        id="radix-:r2:"
+                        name="themeSelector"
+                        title=""
+                        type="radio"
+                        value="light-high-contrast"
+                      />
+                      <div
+                        class="_ui_1vw5h_27"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="_inline-field-body_ssths_46"
+                  >
+                    <label
+                      class="_label_ssths_67 mx_ThemeChoicePanel_themeSelector_Label"
+                      for="radix-:r2:"
+                    >
+                      High contrast
+                    </label>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div
+              class="_separator_144s5_17"
+              data-kind="primary"
+              data-orientation="horizontal"
+              role="separator"
+            />
+          </div>
+          <div
+            class="mx_SettingsSubsection mx_SettingsSubsection_newUi"
+            data-testid="layoutPanel"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+              >
+                Message layout
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
+            >
+              <form
+                class="_root_ssths_24 mx_LayoutSwitcher_LayoutSelector"
+              >
+                <div
+                  class="_field_ssths_34 mxLayoutSwitcher_LayoutSelector_LayoutRadio"
+                >
+                  <label
+                    aria-label="Modern"
+                    class="_label_ssths_67"
+                    for="radix-:r3:"
+                  >
+                    <div
+                      class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
+                    >
+                      <div
+                        class="_container_1vw5h_18"
+                      >
+                        <input
+                          checked=""
+                          class="_input_1vw5h_26"
+                          id="radix-:r3:"
+                          name="layout"
+                          title=""
+                          type="radio"
+                          value="group"
+                        />
+                        <div
+                          class="_ui_1vw5h_27"
+                        />
+                      </div>
+                      <span>
+                        Modern
+                      </span>
+                    </div>
+                    <hr
+                      class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_separator"
+                    />
+                    <div
+                      class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_EventTilePreview"
+                      role="presentation"
+                    >
+                      <div
+                        aria-atomic="true"
+                        aria-live="off"
+                        class="mx_EventTile"
+                        data-event-id="$9999999999999999999999999999999999999999999"
+                        data-has-reply="false"
+                        data-layout="group"
+                        data-scroll-tokens="$9999999999999999999999999999999999999999999"
+                        data-self="true"
+                        tabindex="-1"
+                      >
+                        <div
+                          class="mx_DisambiguatedProfile"
+                        >
+                          <span
+                            class="mx_Username_color2 mx_DisambiguatedProfile_displayName"
+                            dir="auto"
+                          >
+                            @userId:matrix.org
+                          </span>
+                        </div>
+                        <div
+                          class="mx_EventTile_avatar"
+                        >
+                          <span
+                            class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+                            data-color="2"
+                            data-testid="avatar-img"
+                            data-type="round"
+                            role="presentation"
+                            style="--cpd-avatar-size: 30px;"
+                            title="@userId:matrix.org"
+                          >
+                            u
+                          </span>
+                        </div>
+                        <div
+                          class="mx_EventTile_line"
+                        >
+                          <div
+                            class="mx_MTextBody mx_EventTile_content"
+                          >
+                            <div
+                              class="mx_EventTile_body translate"
+                              dir="auto"
+                            >
+                              Hey you. You're the best!
+                            </div>
+                          </div>
+                          <div
+                            aria-label="Message Actions"
+                            aria-live="off"
+                            class="mx_MessageActionBar"
+                            role="toolbar"
+                          >
+                            <div
+                              aria-label="Edit"
+                              class="mx_AccessibleButton mx_MessageActionBar_iconButton"
+                              role="button"
+                              tabindex="0"
+                            >
+                              <div />
+                            </div>
+                            <div
+                              aria-expanded="false"
+                              aria-haspopup="true"
+                              aria-label="Options"
+                              class="mx_AccessibleButton mx_MessageActionBar_iconButton mx_MessageActionBar_optionsButton"
+                              role="button"
+                              tabindex="-1"
+                            >
+                              <svg
+                                fill="currentColor"
+                                height="1em"
+                                viewBox="0 0 24 24"
+                                width="1em"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M6 14c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 4 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 6 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 6 14Zm6 0c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 10 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 12 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 12 14Zm6 0c-.55 0-1.02-.196-1.413-.588A1.926 1.926 0 0 1 16 12c0-.55.196-1.02.587-1.412A1.926 1.926 0 0 1 18 10c.55 0 1.02.196 1.413.588.391.391.587.862.587 1.412 0 .55-.196 1.02-.587 1.412A1.926 1.926 0 0 1 18 14Z"
+                                />
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+                <div
+                  class="_field_ssths_34 mxLayoutSwitcher_LayoutSelector_LayoutRadio"
+                >
+                  <label
+                    aria-label="Message bubbles"
+                    class="_label_ssths_67"
+                    for="radix-:rc:"
+                  >
+                    <div
+                      class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
+                    >
+                      <div
+                        class="_container_1vw5h_18"
+                      >
+                        <input
+                          class="_input_1vw5h_26"
+                          id="radix-:rc:"
+                          name="layout"
+                          title=""
+                          type="radio"
+                          value="bubble"
+                        />
+                        <div
+                          class="_ui_1vw5h_27"
+                        />
+                      </div>
+                      <span>
+                        Message bubbles
+                      </span>
+                    </div>
+                    <hr
+                      class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_separator"
+                    />
+                    <div
+                      class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_EventTilePreview"
+                      role="presentation"
+                    >
+                      <div
+                        aria-atomic="true"
+                        aria-live="off"
+                        class="mx_EventTile"
+                        data-event-id="$9999999999999999999999999999999999999999999"
+                        data-has-reply="false"
+                        data-layout="bubble"
+                        data-scroll-tokens="$9999999999999999999999999999999999999999999"
+                        data-self="true"
+                        tabindex="-1"
+                      >
+                        <div
+                          class="mx_DisambiguatedProfile"
+                        >
+                          <span
+                            class="mx_Username_color2 mx_DisambiguatedProfile_displayName"
+                            dir="auto"
+                          >
+                            @userId:matrix.org
+                          </span>
+                        </div>
+                        <div
+                          class="mx_EventTile_avatar"
+                        >
+                          <span
+                            class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+                            data-color="2"
+                            data-testid="avatar-img"
+                            data-type="round"
+                            role="presentation"
+                            style="--cpd-avatar-size: 30px;"
+                            title="@userId:matrix.org"
+                          >
+                            u
+                          </span>
+                        </div>
+                        <div
+                          class="mx_EventTile_line"
+                        >
+                          <div
+                            class="mx_MTextBody mx_EventTile_content"
+                          >
+                            <div
+                              class="mx_EventTile_body translate"
+                              dir="auto"
+                            >
+                              Hey you. You're the best!
+                            </div>
+                          </div>
+                          <div
+                            aria-label="Message Actions"
+                            aria-live="off"
+                            class="mx_MessageActionBar"
+                            role="toolbar"
+                          >
+                            <div
+                              aria-label="Edit"
+                              class="mx_AccessibleButton mx_MessageActionBar_iconButton"
+                              role="button"
+                              tabindex="0"
+                            >
+                              <div />
+                            </div>
+                            <div
+                              aria-expanded="false"
+                              aria-haspopup="true"
+                              aria-label="Options"
+                              class="mx_AccessibleButton mx_MessageActionBar_iconButton mx_MessageActionBar_optionsButton"
+                              role="button"
+                              tabindex="-1"
+                            >
+                              <svg
+                                fill="currentColor"
+                                height="1em"
+                                viewBox="0 0 24 24"
+                                width="1em"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M6 14c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 4 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 6 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 6 14Zm6 0c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 10 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 12 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 12 14Zm6 0c-.55 0-1.02-.196-1.413-.588A1.926 1.926 0 0 1 16 12c0-.55.196-1.02.587-1.412A1.926 1.926 0 0 1 18 10c.55 0 1.02.196 1.413.588.391.391.587.862.587 1.412 0 .55-.196 1.02-.587 1.412A1.926 1.926 0 0 1 18 14Z"
+                                />
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+                <div
+                  class="_field_ssths_34 mxLayoutSwitcher_LayoutSelector_LayoutRadio"
+                >
+                  <label
+                    aria-label="IRC (experimental)"
+                    class="_label_ssths_67"
+                    for="radix-:rl:"
+                  >
+                    <div
+                      class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
+                    >
+                      <div
+                        class="_container_1vw5h_18"
+                      >
+                        <input
+                          class="_input_1vw5h_26"
+                          id="radix-:rl:"
+                          name="layout"
+                          title=""
+                          type="radio"
+                          value="irc"
+                        />
+                        <div
+                          class="_ui_1vw5h_27"
+                        />
+                      </div>
+                      <span>
+                        IRC (experimental)
+                      </span>
+                    </div>
+                    <hr
+                      class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_separator"
+                    />
+                    <div
+                      class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_EventTilePreview mx_IRCLayout"
+                      role="presentation"
+                    >
+                      <div
+                        aria-atomic="true"
+                        aria-live="off"
+                        class="mx_EventTile"
+                        data-event-id="$9999999999999999999999999999999999999999999"
+                        data-has-reply="false"
+                        data-layout="irc"
+                        data-scroll-tokens="$9999999999999999999999999999999999999999999"
+                        data-self="true"
+                        tabindex="-1"
+                      >
+                        <div
+                          class="mx_DisambiguatedProfile"
+                        >
+                          <span
+                            class="mx_Username_color2 mx_DisambiguatedProfile_displayName"
+                            dir="auto"
+                          >
+                            @userId:matrix.org
+                          </span>
+                        </div>
+                        <div
+                          class="mx_EventTile_avatar"
+                        >
+                          <span
+                            class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+                            data-color="2"
+                            data-testid="avatar-img"
+                            data-type="round"
+                            role="presentation"
+                            style="--cpd-avatar-size: 14px;"
+                            title="@userId:matrix.org"
+                          >
+                            u
+                          </span>
+                        </div>
+                        <div
+                          class="mx_EventTile_line"
+                        >
+                          <div
+                            class="mx_MTextBody mx_EventTile_content"
+                          >
+                            <div
+                              class="mx_EventTile_body translate"
+                              dir="auto"
+                            >
+                              Hey you. You're the best!
+                            </div>
+                          </div>
+                          <div
+                            aria-label="Message Actions"
+                            aria-live="off"
+                            class="mx_MessageActionBar"
+                            role="toolbar"
+                          >
+                            <div
+                              aria-label="Edit"
+                              class="mx_AccessibleButton mx_MessageActionBar_iconButton"
+                              role="button"
+                              tabindex="0"
+                            >
+                              <div />
+                            </div>
+                            <div
+                              aria-expanded="false"
+                              aria-haspopup="true"
+                              aria-label="Options"
+                              class="mx_AccessibleButton mx_MessageActionBar_iconButton mx_MessageActionBar_optionsButton"
+                              role="button"
+                              tabindex="-1"
+                            >
+                              <svg
+                                fill="currentColor"
+                                height="1em"
+                                viewBox="0 0 24 24"
+                                width="1em"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M6 14c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 4 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 6 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 6 14Zm6 0c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 10 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 12 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 12 14Zm6 0c-.55 0-1.02-.196-1.413-.588A1.926 1.926 0 0 1 16 12c0-.55.196-1.02.587-1.412A1.926 1.926 0 0 1 18 10c.55 0 1.02.196 1.413.588.391.391.587.862.587 1.412 0 .55-.196 1.02-.587 1.412A1.926 1.926 0 0 1 18 14Z"
+                                />
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+              </form>
+              <form
+                class="_root_ssths_24"
+              >
+                <div
+                  class="_inline-field_ssths_40"
+                >
+                  <div
+                    class="_inline-field-control_ssths_52"
+                  >
+                    <div
+                      class="_container_qnvru_18"
+                    >
+                      <input
+                        aria-describedby="radix-:rv:"
+                        class="_input_qnvru_32"
+                        id="radix-:ru:"
+                        name="compactLayout"
+                        title=""
+                        type="checkbox"
+                      />
+                      <div
+                        class="_ui_qnvru_42"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="_inline-field-body_ssths_46"
+                  >
+                    <label
+                      class="_label_ssths_67"
+                      for="radix-:ru:"
+                    >
+                      Show compact text and messages
+                    </label>
+                    <span
+                      class="_message_ssths_93 _help-message_ssths_99"
+                      id="radix-:rv:"
+                    >
+                      Modern layout must be selected to use this feature.
+                    </span>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div
+              class="_separator_144s5_17"
+              data-kind="primary"
+              data-orientation="horizontal"
+              role="separator"
+            />
+          </div>
+          <div
+            class="mx_SettingsSubsection"
+            data-testid="mx_FontScalingPanel"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+              >
+                Font size
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content mx_SettingsSubsection_contentStretch"
+            >
+              <div
+                class="mx_Field mx_Field_select mx_FontScalingPanel_Dropdown"
+              >
+                <select
+                  id="mx_Field_1"
+                  label="Font size"
+                  placeholder="Font size"
+                  type="text"
+                >
+                  <option
+                    value="-7"
+                  >
+                    9
+                  </option>
+                  <option
+                    value="-6"
+                  >
+                    10
+                  </option>
+                  <option
+                    value="-5"
+                  >
+                    11
+                  </option>
+                  <option
+                    value="-4"
+                  >
+                    12
+                  </option>
+                  <option
+                    value="-3"
+                  >
+                    13
+                  </option>
+                  <option
+                    value="-2"
+                  >
+                    14
+                  </option>
+                  <option
+                    value="-1"
+                  >
+                    15
+                  </option>
+                  <option
+                    value="0"
+                  >
+                    16 (default)
+                  </option>
+                  <option
+                    value="1"
+                  >
+                    17
+                  </option>
+                  <option
+                    value="2"
+                  >
+                    18
+                  </option>
+                  <option
+                    value="4"
+                  >
+                    20
+                  </option>
+                  <option
+                    value="6"
+                  >
+                    22
+                  </option>
+                  <option
+                    value="8"
+                  >
+                    24
+                  </option>
+                  <option
+                    value="10"
+                  >
+                    26
+                  </option>
+                  <option
+                    value="12"
+                  >
+                    28
+                  </option>
+                  <option
+                    value="14"
+                  >
+                    30
+                  </option>
+                  <option
+                    value="16"
+                  >
+                    32
+                  </option>
+                  <option
+                    value="18"
+                  >
+                    34
+                  </option>
+                  <option
+                    value="20"
+                  >
+                    36
+                  </option>
+                </select>
+                <label
+                  for="mx_Field_1"
+                >
+                  Font size
+                </label>
+              </div>
+              <div
+                class="mx_FontScalingPanel_preview mx_EventTilePreview_loader"
+              >
+                <div
+                  class="mx_Spinner"
+                >
+                  <div
+                    aria-label="Loading…"
+                    class="mx_Spinner_icon"
+                    data-testid="spinner"
+                    role="progressbar"
+                    style="width: 32px; height: 32px;"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsection_content mx_SettingsSubsection_noHeading"
+            >
+              <div
+                aria-expanded="false"
+                class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
+                role="button"
+                tabindex="0"
+              >
+                Show advanced
+              </div>
+            </div>
+          </div>
+          <div
+            class="mx_SettingsSubsection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+              >
+                Image size in the timeline
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content"
+            >
+              <div
+                class="mx_ImageSizePanel_radios"
+              >
+                <label>
+                  <div
+                    class="mx_ImageSizePanel_size mx_ImageSizePanel_sizeDefault"
+                  />
+                  <label
+                    class="mx_StyledRadioButton mx_StyledRadioButton_enabled mx_StyledRadioButton_checked"
+                  >
+                    <input
+                      checked=""
+                      name="image_size"
+                      type="radio"
+                      value="normal"
+                    />
+                    <div>
+                      <div />
+                    </div>
+                    <div
+                      class="mx_StyledRadioButton_content"
+                    >
+                      Default
+                    </div>
+                    <div
+                      class="mx_StyledRadioButton_spacer"
+                    />
+                  </label>
+                </label>
+                <label>
+                  <div
+                    class="mx_ImageSizePanel_size mx_ImageSizePanel_sizeLarge"
+                  />
+                  <label
+                    class="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+                  >
+                    <input
+                      name="image_size"
+                      type="radio"
+                      value="large"
+                    />
+                    <div>
+                      <div />
+                    </div>
+                    <div
+                      class="mx_StyledRadioButton_content"
+                    >
+                      Large
+                    </div>
+                    <div
+                      class="mx_StyledRadioButton_spacer"
+                    />
+                  </label>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

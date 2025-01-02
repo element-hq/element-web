@@ -1,11 +1,8 @@
-<!-- Please read https://github.com/matrix-org/matrix-js-sdk/blob/develop/CONTRIBUTING.md before submitting your pull request -->
+<!-- Thanks for submitting a PR! Please ensure the following requirements are met in order for us to review your PR -->
 
-<!-- Include a Sign-Off as described in https://github.com/matrix-org/matrix-js-sdk/blob/develop/CONTRIBUTING.md#sign-off -->
+## Checklist
 
-<!-- To specify text for the changelog entry (otherwise the PR title will be used):
-Notes:
-
-Changelog entries will also appear in element-desktop. For PRs that *only* affect the desktop version:
-Notes: none
-element-desktop notes: <notes>
--->
+- [ ] Tests written for new code (and old code if feasible).
+- [ ] New or updated `public`/`exported` symbols have accurate [TSDoc](https://tsdoc.org/) documentation.
+- [ ] Linter and other CI checks pass.
+- [ ] I have licensed the changes to Element by completing the [Contributor License Agreement (CLA)](https://cla-assistant.io/element-hq/element-web)

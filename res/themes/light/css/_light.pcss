@@ -1,0 +1,374 @@
+:root {
+    /* This is set to Twemoji when the user opts into the bundled emoji font */
+    --emoji-font-family: "";
+}
+
+/* Nunito and Inter lacks combining diacritics, so these will fall through
+   to the next font. Helevetica's diacritics sometimes do not combine
+   nicely (on OSX, at least) and result in a huge horizontal mess.
+   Arial empirically gets it right, hence prioritising Arial here. */
+/* Noto Color Emoji contains digits, in fixed-width, therefore causing
+   digits in flowed text to stand out.
+   TODO: Consider putting all emoji fonts to the end rather than the front. */
+$font-family: "Inter", var(--emoji-font-family), "Apple Color Emoji", "Segoe UI Emoji", "Arial", "Helvetica",
+    sans-serif, "Noto Color Emoji";
+
+$monospace-font-family: "Inconsolata", var(--emoji-font-family), "Apple Color Emoji", "Segoe UI Emoji", "Courier",
+    monospace, "Noto Color Emoji";
+
+/* Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=559%3A120 */
+/* ******************** */
+$primary-content: var(--cpd-color-text-primary);
+$secondary-content: var(--cpd-color-text-secondary);
+$tertiary-content: var(--cpd-color-gray-800);
+$quaternary-content: var(--cpd-color-gray-600);
+$quinary-content: var(--cpd-color-gray-400);
+
+$system: var(--cpd-color-bg-subtle-primary);
+$system-transparent: #e1e6ec00;
+$background: var(--cpd-color-bg-canvas-default);
+$overlay-background: var(--cpd-color-alpha-gray-1300);
+
+$panels: var(--cpd-color-bg-subtle-secondary);
+$panel-actions: var(--cpd-color-alpha-gray-300);
+
+$separator: var(--cpd-color-gray-400);
+
+$accent: var(--cpd-color-text-action-accent);
+$alert: var(--cpd-color-text-critical-primary);
+$links: var(--cpd-color-text-link-external);
+$link-external: var(--cpd-color-text-link-external);
+
+$username-variant1-color: var(--cpd-color-text-decorative-1);
+$username-variant2-color: var(--cpd-color-text-decorative-2);
+$username-variant3-color: var(--cpd-color-text-decorative-3);
+$username-variant4-color: var(--cpd-color-text-decorative-4);
+$username-variant5-color: var(--cpd-color-text-decorative-5);
+$username-variant6-color: var(--cpd-color-text-decorative-6);
+/* ******************** */
+
+/**
+ * Creating a `semantic` color scale. This will not be needed with the new
+ * visual language, but necessary during the transition period
+ * This abstract the `green` away from where accent shades are used
+ * Take: `background: rgba($accent, 0.1);`
+ * would be transformed to: `background: $accent-300;`
+ *
+ * To use under very rare circumstances, always prefer the semantics defined
+ * in https://compound.element.io/?path=/docs/tokens-semantic-colors--docs
+ */
+$accent-100: var(--cpd-color-green-100);
+$accent-200: var(--cpd-color-green-200);
+$accent-300: var(--cpd-color-green-300);
+$accent-400: var(--cpd-color-green-400);
+$accent-500: var(--cpd-color-green-500);
+$accent-600: var(--cpd-color-green-600);
+$accent-700: var(--cpd-color-green-700);
+$accent-800: var(--cpd-color-green-800);
+$accent-900: var(--cpd-color-green-900);
+$accent-1000: var(--cpd-color-green-1000);
+$accent-1100: var(--cpd-color-green-1100);
+$accent-1200: var(--cpd-color-green-1200);
+$accent-1300: var(--cpd-color-green-1300);
+$accent-1400: var(--cpd-color-green-1400);
+
+/* Reused Figma non-compound colors */
+/* ******************** */
+$inverted-bg-color: var(--cpd-color-bg-action-primary-rest);
+$header-panel-bg-color: var(--cpd-color-bg-subtle-primary);
+$header-panel-bg-hover: var(--cpd-color-gray-200);
+/* ******************** */
+
+/* Theme specific colors */
+/* ******************** */
+$icon-button-color: var(--cpd-color-icon-tertiary);
+/* ******************** */
+
+/* Colors that aren't in Figma and are theme specific - we need to get rid of these */
+/* ******************** */
+$selection-fg-color: $background;
+$yellow-background: var(--cpd-color-yellow-200);
+$secondary-accent-color: #f2f5f8;
+$button-fg-color: $background;
+$neutral-badge-color: #dbdbdb;
+$strong-input-border-color: var(--cpd-color-border-interactive-primary);
+$preview-widget-bar-color: var(--cpd-color-bg-subtle-primary);
+$accent-fg-color: #f4f6fa;
+$accent-alt: var(--cpd-color-text-link-external);
+$info-plinth-fg-color: var(--cpd-color-gray-900);
+/* ******************** */
+
+/* Colors that aren't in Figma - we need to get rid of these */
+/* ******************** */
+$dark-panel-bg-color: var(--cpd-color-bg-subtle-secondary);
+$muted-fg-color: #61708b;
+$light-fg-color: #747474;
+$focus-bg-color: $preview-widget-bar-color;
+$info-plinth-bg-color: #f7f7f7;
+$event-selected-color: var(--cpd-color-bg-subtle-secondary);
+$topleftmenu-color: #212121;
+$roomtopic-color: #9e9e9e;
+$spacePanel-bg-color: rgba(232, 232, 232, 0.77);
+$panel-gradient: rgba(242, 245, 248, 0), rgba(242, 245, 248, 1);
+$h3-color: #3d3b39;
+$event-highlight-bg-color: $yellow-background;
+$header-panel-text-primary-color: #91a1c0;
+/* ******************** */
+
+/* Blockquote */
+/* ******************** */
+$blockquote-bar-color: var(--cpd-color-border-interactive-primary);
+/* ******************** */
+
+/* Tooltip */
+/* ******************** */
+$tooltip-timeline-bg-color: $inverted-bg-color;
+$tooltip-timeline-fg-color: $background;
+/* ******************** */
+
+/* Widget */
+/* ******************** */
+$widget-menu-bar-bg-color: $secondary-accent-color;
+$widget-body-bg-color: $background;
+/* ******************** */
+
+/* Menu */
+/* ******************** */
+$menu-border-color: #e7e7e7;
+$menu-bg-color: $background;
+$menu-box-shadow-color: rgba(118, 131, 156, 0.6);
+$menu-selected-color: #f5f8fa;
+/* ******************** */
+
+/* Settings */
+/* ******************** */
+$settings-grey-fg-color: #a2a2a2;
+$settings-subsection-fg-color: $muted-fg-color;
+/* ******************** */
+
+/* Room */
+/* ******************** */
+$room-icon-unread-color: var(--cpd-color-icon-tertiary);
+/* ******************** */
+
+/* RoomHeader */
+/* ******************** */
+$roomheader-addroom-bg-color: rgba(92, 100, 112, 0.2);
+$roomheader-addroom-fg-color: #5c6470;
+/* ******************** */
+
+/* Rich-text-editor */
+/* ******************** */
+$pill-bg-color: var(--cpd-color-bg-action-primary-rest);
+$pill-hover-bg-color: var(--cpd-color-bg-action-primary-hovered);
+$pill-press-bg-color: var(--cpd-color-bg-action-primary-pressed);
+$rte-bg-color: #e9e9e9;
+$rte-code-bg-color: rgba(0, 0, 0, 0.04);
+/* ******************** */
+
+/* Presence */
+/* ******************** */
+$presence-away: #d9b072;
+/* not using a compound color here for now as we want to have the same color in
+   light and dark theme. Until we have a non-symetrical token for it, let's keep
+   it hardcoded to the following value */
+$presence-offline: #e3e8f0;
+$presence-busy: $alert;
+/* ******************** */
+
+/* Inputs */
+/* ******************** */
+$input-border-color: $menu-border-color;
+$input-darker-bg-color: $quinary-content;
+$input-darker-fg-color: #9fa9ba;
+$input-lighter-bg-color: $secondary-accent-color;
+$input-underline-color: rgba(151, 151, 151, 0.5);
+$input-fg-color: rgba(74, 74, 74, 0.9);
+$input-placeholder: var(--cpd-color-text-secondary);
+/* ******************** */
+
+/* Dialog */
+/* ******************** */
+$dialog-title-fg-color: var(--cpd-color-text-primary);
+$dialog-backdrop-color: #030c1b4d;
+$dialog-close-fg-color: $icon-button-color;
+$dialog-close-external-color: $background;
+/* ******************** */
+
+/* ImageBody */
+/* ******************** */
+$imagebody-giflabel: rgba(0, 0, 0, 0.7);
+$imagebody-giflabel-border: rgba(0, 0, 0, 0.2);
+$imagebody-giflabel-color: $accent-fg-color;
+/* ******************** */
+
+/* RoomList */
+/* ******************** */
+$roomlist-bg-color: rgba(245, 245, 245, 0.9);
+$roomsublist-skeleton-ui-bg: linear-gradient(180deg, $background 0%, #ffffff00 100%);
+$roomtile-default-badge-bg-color: var(--cpd-color-icon-secondary);
+/* ******************** */
+
+/* e2e */
+/* ******************** */
+$e2e-verified-color: var(--cpd-color-icon-success-primary);
+$e2e-warning-color: var(--cpd-color-icon-critical-primary);
+$e2e-verified-color-light: var(--cpd-color-green-300);
+$e2e-warning-color-light: var(--cpd-color-red-300);
+/* ******************** */
+
+/* Tabbed views */
+/* ******************** */
+$tab-label-fg-color: $secondary-content;
+$tab-label-active-fg-color: $primary-content;
+/* ******************** */
+
+/* Buttons */
+/* ******************** */
+$button-primary-fg-color: $background;
+$button-secondary-bg-color: $accent-fg-color;
+$button-danger-fg-color: $background;
+$button-danger-disabled-fg-color: $background;
+$button-danger-disabled-bg-color: #f5b6bb; /* TODO: Verify color */
+/* ******************** */
+
+/* Toggle switch */
+/* ******************** */
+$togglesw-off-color: #c1c9d6;
+$togglesw-ball-color: var(--cpd-color-bg-action-primary-rest);
+/* ******************** */
+
+/* Authpage */
+/* ******************** */
+$authpage-primary-color: #232f32;
+$authpage-bg-color: #2e3649;
+$authpage-modal-bg-color: $roomlist-bg-color;
+$authpage-focus-bg-color: $focus-bg-color;
+$authpage-lang-color: $secondary-content;
+$authpage-primary-color: $primary-content;
+$authpage-secondary-color: $secondary-content;
+/* ******************** */
+
+/* Message action bar */
+/* ******************** */
+$message-action-bar-bg-color: $background;
+$message-action-bar-fg-color: $primary-content;
+$message-action-bar-border-color: #e9edf1;
+$message-action-bar-hover-border-color: $focus-bg-color;
+/* ******************** */
+
+/* Reaction row */
+/* ******************** */
+$reaction-row-button-hover-border-color: $focus-bg-color;
+$reaction-row-button-selected-bg-color: #e9fff9;
+/* ******************** */
+
+/* Voice messages */
+/* ******************** */
+/* These two don't change between themes. They are the $alert, but we don't want */
+/* custom themes to affect them by accident. */
+$voice-record-stop-symbol-color: #ff5b55;
+$voice-record-live-circle-color: #ff5b55;
+$voice-record-stop-border-color: $quinary-content;
+$voice-record-icon-color: $tertiary-content;
+/* ******************** */
+
+/* Bubble tiles */
+/* ******************** */
+$eventbubble-self-bg: var(--cpd-color-green-300);
+$eventbubble-others-bg: var(--cpd-color-gray-300);
+$eventbubble-bg-hover: var(--cpd-color-bg-subtle-secondary);
+/* ******************** */
+
+/* Lightbox */
+/* ******************** */
+/* not using a compound color here for now as we want to have the same color in
+   light and dark theme. Until we have a non-symetrical token for it, let's keep
+   it hardcoded to the following value */
+$lightbox-fg-color: #fff;
+$lightbox-background-bg-color: #000;
+$lightbox-background-bg-opacity: 0.95;
+/* ******************** */
+
+/* VoIP */
+/* ******************** */
+$call-view-button-on-foreground: $secondary-content;
+$call-view-button-on-background: $background;
+$call-view-button-off-foreground: $background;
+$call-view-button-off-background: $secondary-content;
+$call-view-content-background: #21262c;
+
+$video-feed-secondary-background: #394049; /* XXX: Color from dark theme */
+$voipcall-plinth-color: $system;
+
+/* All of these are from dark theme */
+$call-system: #21262c;
+$call-background: #15191e;
+$call-primary-content: #ffffff;
+/* This one is from light theme */
+$call-light-quaternary-content: #c1c6cd;
+/* ******************** */
+
+/* One-off colors */
+/* ******************** */
+$progressbar-bg-color: var(--cpd-color-gray-200);
+$kbd-border-color: $strong-input-border-color;
+$visual-bell-bg-color: #faa;
+$event-timestamp-color: var(--cpd-color-text-secondary);
+$composer-shadow-color: rgba(0, 0, 0, 0.04);
+$breadcrumb-placeholder-bg-color: #e8eef5;
+$theme-button-bg-color: $quinary-content;
+$resend-button-divider-color: $input-darker-bg-color;
+$inlinecode-border-color: $quinary-content;
+$inlinecode-background-color: $system;
+$codeblock-background-color: $header-panel-bg-color;
+$scrollbar-thumb-color: rgba(0, 0, 0, 0.2);
+$selected-color: $secondary-accent-color;
+/* ******************** */
+
+/* One-off global colors - these apply to both themes */
+/* ******************** */
+$pinned-color: $tertiary-content;
+$avatar-initial-color: $background;
+$primary-hairline-color: transparent;
+$secondary-hairline-color: var(--cpd-color-gray-300);
+$focus-brightness: 105%;
+/* ******************** */
+
+/* blur amounts for left left panel (only for element theme) */
+/* ******************** */
+:root {
+    --lp-background-blur: 40px;
+}
+
+/* ******************** */
+
+/* Icon URLs */
+/* ******************** */
+$copy-button-url: "@vector-im/compound-design-tokens/icons/copy.svg";
+/* ******************** */
+
+/* Location sharing */
+/* ******************** */
+$location-marker-color: var(--cpd-color-icon-on-solid-primary);
+$location-live-color: var(--cpd-color-purple-900);
+$location-live-secondary-color: var(--cpd-color-purple-600);
+/* ******************** */
+
+body {
+    color-scheme: light;
+}
+
+/* ******************** */
+
+/* diff highlight colors */
+/* ******************** */
+.hljs-addition {
+    background: var(--cpd-color-green-500);
+}
+
+.hljs-deletion {
+    background: var(--cpd-color-red-500);
+}
+
+/* ******************** */

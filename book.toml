@@ -1,0 +1,33 @@
+# Documentation for possible options in this file is at
+# https://rust-lang.github.io/mdBook/format/config.html
+[book]
+title = "Element Web & Desktop"
+authors = ["New Vector Ltd.", "The Matrix.org Foundation C.I.C."]
+language = "en"
+multilingual = false
+
+# The directory that documentation files are stored in
+src = "docs"
+
+[build]
+# Prevent markdown pages from being automatically generated when they're
+# linked to in SUMMARY.md
+create-missing = false
+
+[output.html]
+# Remove the numbers that appear before each item in the sidebar, as they can
+# get quite messy as we nest deeper
+no-section-label = true
+additional-css = ["docs/lib/custom.css"]
+
+# The source code URL of the repository
+git-repository-url = "https://github.com/element-hq/element-web"
+
+# The path that the docs are hosted on
+site-url = "/element-web/"
+additional-js = ["docs/lib/mermaid.min.js", "docs/lib/mermaid-init.js"]
+
+[preprocessor]
+
+[preprocessor.mermaid]
+command = "mdbook-mermaid"

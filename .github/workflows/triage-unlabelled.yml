@@ -1,0 +1,73 @@
+name: Move unlabelled from needs info columns to triaged
+
+on:
+    issues:
+        types: [unlabeled]
+permissions: {}
+jobs:
+    Move_Unabeled_Issue_On_Project_Board:
+        name: Move no longer X-Needs-Info issues to Triaged
+        runs-on: ubuntu-24.04
+        permissions:
+            repository-projects: read
+        if: >
+            ${{
+            !contains(github.event.issue.labels.*.name, 'X-Needs-Info') }}
+        env:
+            BOARD_NAME: "Issue triage"
+            OWNER: ${{ github.repository_owner }}
+            REPO: ${{ github.event.repository.name }}
+            ISSUE: ${{ github.event.issue.number }}
+        steps:
+            - name: Check if issue is already in "${{ env.BOARD_NAME }}"
+              run: |
+                  json=$(curl -s -H 'Content-Type: application/json' -H "Authorization: bearer ${{ secrets.GITHUB_TOKEN }}" -X POST -d '{"query": "query($issue: Int!, $owner: String!, $repo: String!) { repository(owner: $owner, name: $repo) { issue(number: $issue) { projectCards { nodes { project { name } isArchived } } } } } ", "variables" : "{ \"issue\": '${ISSUE}', \"owner\": \"'${OWNER}'\", \"repo\": \"'${REPO}'\" }" }' https://api.github.com/graphql)
+                  if echo $json | jq '.data.repository.issue.projectCards.nodes | length'; then
+                    if [[ $(echo $json | jq '.data.repository.issue.projectCards.nodes[0].project.name') =~ "${BOARD_NAME}" ]]; then
+                      if [[ $(echo $json | jq '.data.repository.issue.projectCards.nodes[0].isArchived') == 'true' ]]; then
+                        echo "Issue is already in Project '$BOARD_NAME', but is archived - skipping workflow";
+                        echo "SKIP_ACTION=true" >> $GITHUB_ENV
+                      else
+                        echo "Issue is already in Project '$BOARD_NAME', proceeding";
+                        echo "ALREADY_IN_BOARD=true" >> $GITHUB_ENV
+                      fi
+                    else
+                      echo "Issue is not in project '$BOARD_NAME', cancelling this workflow"
+                      echo "ALREADY_IN_BOARD=false" >> $GITHUB_ENV
+                    fi
+                  fi
+            - name: Move issue
+              uses: alex-page/github-project-automation-plus@303f24a24c67ce7adf565a07e96720faf126fe36
+              if: ${{ env.ALREADY_IN_BOARD == 'true' && env.SKIP_ACTION != 'true' }}
+              with:
+                  project: Issue triage
+                  column: Triaged
+                  repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+    remove_Z-Labs_label:
+        name: Remove Z-Labs label when features behind labs flags are removed
+        runs-on: ubuntu-24.04
+        if: >
+            !(contains(github.event.issue.labels.*.name, 'A-Maths') ||
+            contains(github.event.issue.labels.*.name, 'A-Message-Pinning') ||
+            contains(github.event.issue.labels.*.name, 'A-Location-Sharing') ||
+            contains(github.event.issue.labels.*.name, 'Z-IA') ||
+            contains(github.event.issue.labels.*.name, 'A-Jump-To-Date') ||
+            contains(github.event.issue.labels.*.name, 'A-Themes-Custom') ||
+            contains(github.event.issue.labels.*.name, 'A-E2EE-Dehydration') ||
+            contains(github.event.issue.labels.*.name, 'A-Tags') ||
+            contains(github.event.issue.labels.*.name, 'A-Video-Rooms') ||
+            contains(github.event.issue.labels.*.name, 'A-Message-Starring') ||
+            contains(github.event.issue.labels.*.name, 'A-Rich-Text-Editor') ||
+            contains(github.event.issue.labels.*.name, 'A-Element-Call')) &&
+            contains(github.event.issue.labels.*.name, 'Z-Labs')
+        steps:
+            - uses: actions/github-script@v7
+              with:
+                  script: |
+                      github.rest.issues.removeLabel({
+                        issue_number: context.issue.number,
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        name: ['Z-Labs']
+                      })

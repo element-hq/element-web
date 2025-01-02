@@ -1,18 +1,10 @@
 /*
-Copyright 2018 New Vector Ltd
+Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2018 New Vector Ltd
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 /*
@@ -26,37 +18,43 @@ limitations under the License.
  * from the rageshake.)
  */
 
-import * as rageshake from "matrix-react-sdk/src/rageshake/rageshake";
-import SdkConfig from "matrix-react-sdk/src/SdkConfig";
-import sendBugReport from "matrix-react-sdk/src/rageshake/submit-rageshake";
 import { logger } from "matrix-js-sdk/src/logger";
 
-export function initRageshake() {
+import * as rageshake from "../rageshake/rageshake";
+import SdkConfig from "../SdkConfig";
+import sendBugReport from "../rageshake/submit-rageshake";
+
+export function initRageshake(): Promise<void> {
     // we manually check persistence for rageshakes ourselves
-    const prom = rageshake.init(/*setUpPersistence=*/false);
-    prom.then(() => {
-        logger.log("Initialised rageshake.");
-        logger.log("To fix line numbers in Chrome: " +
-            "Meatball menu → Settings → Ignore list → Add /rageshake\\.js$");
+    const prom = rageshake.init(/*setUpPersistence=*/ false);
+    prom.then(
+        async () => {
+            logger.log("Initialised rageshake.");
+            logger.log(
+                "To fix line numbers in Chrome: " +
+                    "Meatball menu → Settings → Ignore list → Add /rageshake\\.ts & /logger\\.ts$",
+            );
 
-        window.addEventListener('beforeunload', (e) => {
-            logger.log('element-web closing');
-            // try to flush the logs to indexeddb
-            rageshake.flush();
-        });
+            window.addEventListener("beforeunload", () => {
+                logger.log("element-web closing");
+                // try to flush the logs to indexeddb
+                rageshake.flush();
+            });
 
-        rageshake.cleanup();
-    }, (err) => {
-        logger.error("Failed to initialise rageshake: " + err);
-    });
+            await rageshake.cleanup();
+        },
+        (err) => {
+            logger.error("Failed to initialise rageshake: " + err);
+        },
+    );
     return prom;
 }
 
-export function initRageshakeStore() {
+export function initRageshakeStore(): Promise<void> {
     return rageshake.tryInitStorage();
 }
 
-window.mxSendRageshake = function(text: string, withLogs?: boolean) {
+window.mxSendRageshake = function (text: string, withLogs?: boolean): void {
     const url = SdkConfig.get().bug_report_endpoint_url;
     if (!url) {
         logger.error("Cannot send a rageshake - no bug_report_endpoint_url configured");
@@ -72,9 +70,12 @@ window.mxSendRageshake = function(text: string, withLogs?: boolean) {
         userText: text,
         sendLogs: withLogs,
         progressCallback: logger.log.bind(console),
-    }).then(() => {
-        logger.log("Bug report sent!");
-    }, (err) => {
-        logger.error(err);
-    });
+    }).then(
+        () => {
+            logger.log("Bug report sent!");
+        },
+        (err) => {
+            logger.error(err);
+        },
+    );
 };

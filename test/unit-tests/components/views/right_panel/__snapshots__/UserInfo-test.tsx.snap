@@ -1,0 +1,739 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DeviceItem /> ambiguous display name 1`] = `
+<div>
+  <div
+    aria-label="my display name (deviceId)"
+    class="mx_AccessibleButton mx_UserInfo_device mx_UserInfo_device_unverified"
+    role="button"
+    tabindex="0"
+  >
+    <div
+      class="mx_E2EIcon mx_E2EIcon_normal"
+    />
+    <div
+      class="mx_UserInfo_device_name"
+    >
+      my display name (deviceId)
+    </div>
+    <div
+      class="mx_UserInfo_device_trusted"
+    />
+  </div>
+</div>
+`;
+
+exports[`<DeviceItem /> with display name 1`] = `
+<div>
+  <div
+    aria-label="deviceName"
+    class="mx_AccessibleButton mx_UserInfo_device mx_UserInfo_device_unverified"
+    role="button"
+    tabindex="0"
+  >
+    <div
+      class="mx_E2EIcon mx_E2EIcon_normal"
+    />
+    <div
+      class="mx_UserInfo_device_name"
+    >
+      deviceName
+    </div>
+    <div
+      class="mx_UserInfo_device_trusted"
+    />
+  </div>
+</div>
+`;
+
+exports[`<DeviceItem /> without display name 1`] = `
+<div>
+  <div
+    aria-label="deviceId"
+    class="mx_AccessibleButton mx_UserInfo_device mx_UserInfo_device_unverified"
+    role="button"
+    tabindex="0"
+  >
+    <div
+      class="mx_E2EIcon mx_E2EIcon_normal"
+    />
+    <div
+      class="mx_UserInfo_device_name"
+    >
+      deviceId
+    </div>
+    <div
+      class="mx_UserInfo_device_trusted"
+    />
+  </div>
+</div>
+`;
+
+exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
+<div>
+  <div
+    class="mx_BaseCard mx_UserInfo"
+  >
+    <div
+      class="mx_BaseCard_header"
+    >
+      <div
+        class="mx_BaseCard_header_title"
+      >
+        <p
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_BaseCard_header_title_heading"
+          role="heading"
+        >
+          Profile
+        </p>
+      </div>
+      <button
+        aria-labelledby=":r74:"
+        class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
+        data-testid="base-card-close-button"
+        role="button"
+        style="--cpd-icon-button-size: 28px;"
+        tabindex="0"
+      >
+        <div
+          class="_indicator-icon_133tf_26"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+            />
+          </svg>
+        </div>
+      </button>
+    </div>
+    <div
+      class="mx_AutoHideScrollbar"
+      tabindex="-1"
+    >
+      <div
+        class="mx_UserInfo_avatar"
+      >
+        <div
+          class="mx_UserInfo_avatar_transition"
+        >
+          <div
+            class="mx_UserInfo_avatar_transition_child"
+          >
+            <button
+              aria-label="Profile picture"
+              aria-live="off"
+              class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+              data-color="3"
+              data-testid="avatar-img"
+              data-type="round"
+              role="button"
+              style="--cpd-avatar-size: 120px;"
+            >
+              u
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_UserInfo_container"
+      >
+        <div
+          class="mx_Flex mx_UserInfo_profile"
+          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
+        >
+          <h1
+            class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+            dir="auto"
+          >
+            <div
+              class="mx_Flex"
+              style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
+            >
+              @user:example.com
+            </div>
+          </h1>
+          <div
+            class="mx_PresenceLabel mx_UserInfo_profileStatus"
+          >
+            Unknown
+          </div>
+          <p
+            class="_typography_yh5dq_162 _font-body-sm-semibold_yh5dq_45 mx_UserInfo_profile_mxid"
+          >
+            <div
+              class="mx_CopyableText"
+            >
+              customUserIdentifier
+              <div
+                aria-label="Copy"
+                class="mx_AccessibleButton mx_CopyableText_copyButton"
+                role="button"
+                tabindex="0"
+              />
+            </div>
+          </p>
+        </div>
+      </div>
+      <div
+        class="mx_UserInfo_container"
+      >
+        <h2>
+          Security
+        </h2>
+        <p>
+          Messages in this room are not end-to-end encrypted.
+        </p>
+        <div
+          class="mx_UserInfo_container_verifyButton"
+        >
+          <div
+            class="mx_AccessibleButton mx_UserInfo_field mx_UserInfo_verifyButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
+            role="button"
+            tabindex="0"
+          >
+            Verify
+          </div>
+        </div>
+        <div
+          class="mx_UserInfo_devices"
+        >
+          <div />
+          <div>
+            <div
+              class="mx_AccessibleButton mx_UserInfo_expand mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
+              role="button"
+              tabindex="0"
+            >
+              <div
+                class="mx_E2EIcon mx_E2EIcon_normal"
+              />
+              <div>
+                1 session
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_UserInfo_container"
+      >
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m1.5 21.25 1.45-4.95a10.232 10.232 0 0 1-.712-2.1A10.167 10.167 0 0 1 2 12a9.74 9.74 0 0 1 .788-3.9 10.099 10.099 0 0 1 2.137-3.175c.9-.9 1.958-1.612 3.175-2.137A9.737 9.737 0 0 1 12 2a9.74 9.74 0 0 1 3.9.788 10.098 10.098 0 0 1 3.175 2.137c.9.9 1.613 1.958 2.137 3.175A9.738 9.738 0 0 1 22 12a9.738 9.738 0 0 1-.788 3.9 10.098 10.098 0 0 1-2.137 3.175c-.9.9-1.958 1.613-3.175 2.137A9.737 9.737 0 0 1 12 22c-.75 0-1.483-.08-2.2-.238a10.23 10.23 0 0 1-2.1-.712L2.75 22.5a.936.936 0 0 1-1-.25.936.936 0 0 1-.25-1Zm2.45-1.2 3.2-.95a.949.949 0 0 1 .275-.063c.1-.008.192-.012.275-.012.15 0 .296.013.438.038.141.024.279.07.412.137a7.435 7.435 0 0 0 1.675.6c.583.133 1.175.2 1.775.2 2.233 0 4.125-.775 5.675-2.325C19.225 16.125 20 14.233 20 12c0-2.233-.775-4.125-2.325-5.675C16.125 4.775 14.233 4 12 4c-2.233 0-4.125.775-5.675 2.325C4.775 7.875 4 9.767 4 12c0 .6.067 1.192.2 1.775s.333 1.142.6 1.675c.117.217.18.446.188.688a2.29 2.29 0 0 1-.088.712l-.95 3.2Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Send message
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35 _disabled_8j2l6_118"
+          data-kind="primary"
+          disabled=""
+          role="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9.55 17.575c-.133 0-.258-.02-.375-.063a.876.876 0 0 1-.325-.212L4.55 13c-.183-.183-.27-.42-.263-.713.009-.291.105-.529.288-.712a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275L9.55 15.15l8.475-8.475c.183-.183.42-.275.713-.275.291 0 .529.092.712.275.183.183.275.42.275.713 0 .291-.092.529-.275.712l-9.2 9.2c-.1.1-.208.17-.325.212a1.106 1.106 0 0 1-.375.063Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Jump to read receipt
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 16a.968.968 0 0 1-.713-.287A.967.967 0 0 1 11 15V7.85L9.125 9.725c-.2.2-.433.3-.7.3-.267 0-.508-.108-.725-.325a.93.93 0 0 1-.288-.712A.977.977 0 0 1 7.7 8.3l3.6-3.6c.1-.1.208-.17.325-.212.117-.042.242-.063.375-.063s.258.02.375.063a.877.877 0 0 1 .325.212l3.6 3.6c.2.2.296.438.287.713a.977.977 0 0 1-.287.687c-.2.2-.438.304-.713.313a.93.93 0 0 1-.712-.288L13 7.85V15c0 .283-.096.52-.287.713A.968.968 0 0 1 12 16Zm-6 4c-.55 0-1.02-.196-1.412-.587A1.926 1.926 0 0 1 4 18v-2c0-.283.096-.52.287-.713A.968.968 0 0 1 5 15c.283 0 .52.096.713.287.191.192.287.43.287.713v2h12v-2a.97.97 0 0 1 .288-.713A.968.968 0 0 1 19 15a.97.97 0 0 1 .712.287c.192.192.288.43.288.713v2c0 .55-.196 1.02-.587 1.413A1.926 1.926 0 0 1 18 20H6Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Share profile
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+      </div>
+      <div
+        class="mx_UserInfo_container"
+      >
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="critical"
+          role="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 22a9.738 9.738 0 0 1-3.9-.788 10.099 10.099 0 0 1-3.175-2.137c-.9-.9-1.612-1.958-2.137-3.175A9.738 9.738 0 0 1 2 12a9.74 9.74 0 0 1 .788-3.9 10.099 10.099 0 0 1 2.137-3.175c.9-.9 1.958-1.612 3.175-2.137A9.738 9.738 0 0 1 12 2a9.74 9.74 0 0 1 3.9.788 10.098 10.098 0 0 1 3.175 2.137c.9.9 1.613 1.958 2.137 3.175A9.738 9.738 0 0 1 22 12a9.738 9.738 0 0 1-.788 3.9 10.098 10.098 0 0 1-2.137 3.175c-.9.9-1.958 1.613-3.175 2.137A9.738 9.738 0 0 1 12 22Zm0-2c2.233 0 4.125-.775 5.675-2.325C19.225 16.125 20 14.233 20 12c0-.9-.146-1.767-.438-2.6A7.951 7.951 0 0 0 18.3 7.1L7.1 18.3c.7.55 1.467.97 2.3 1.262.833.292 1.7.438 2.6.438Zm-6.3-3.1L16.9 5.7a7.95 7.95 0 0 0-2.3-1.263A7.813 7.813 0 0 0 12 4c-2.233 0-4.125.775-5.675 2.325C4.775 7.875 4 9.767 4 12c0 .9.146 1.767.438 2.6A7.95 7.95 0 0 0 5.7 16.9Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Ignore
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<UserInfo /> with crypto enabled should render a deactivate button for users of the same server if we are a server admin 1`] = `
+<div>
+  <div
+    class="mx_BaseCard mx_UserInfo"
+  >
+    <div
+      class="mx_BaseCard_header"
+    >
+      <div
+        class="mx_BaseCard_header_title"
+      >
+        <p
+          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_BaseCard_header_title_heading"
+          role="heading"
+        >
+          Profile
+        </p>
+      </div>
+      <button
+        aria-labelledby=":r9a:"
+        class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
+        data-testid="base-card-close-button"
+        role="button"
+        style="--cpd-icon-button-size: 28px;"
+        tabindex="0"
+      >
+        <div
+          class="_indicator-icon_133tf_26"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+            />
+          </svg>
+        </div>
+      </button>
+    </div>
+    <div
+      class="mx_AutoHideScrollbar"
+      tabindex="-1"
+    >
+      <div
+        class="mx_UserInfo_avatar"
+      >
+        <div
+          class="mx_UserInfo_avatar_transition"
+        >
+          <div
+            class="mx_UserInfo_avatar_transition_child"
+          >
+            <button
+              aria-label="Profile picture"
+              aria-live="off"
+              class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+              data-color="3"
+              data-testid="avatar-img"
+              data-type="round"
+              role="button"
+              style="--cpd-avatar-size: 120px;"
+            >
+              u
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_UserInfo_container"
+      >
+        <div
+          class="mx_Flex mx_UserInfo_profile"
+          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
+        >
+          <h1
+            class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+            dir="auto"
+          >
+            <div
+              class="mx_Flex"
+              style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
+            >
+              @user:example.com
+            </div>
+          </h1>
+          <div
+            class="mx_PresenceLabel mx_UserInfo_profileStatus"
+          >
+            Unknown
+          </div>
+          <p
+            class="_typography_yh5dq_162 _font-body-sm-semibold_yh5dq_45 mx_UserInfo_profile_mxid"
+          >
+            <div
+              class="mx_CopyableText"
+            >
+              customUserIdentifier
+              <div
+                aria-label="Copy"
+                class="mx_AccessibleButton mx_CopyableText_copyButton"
+                role="button"
+                tabindex="0"
+              />
+            </div>
+          </p>
+        </div>
+      </div>
+      <div
+        class="mx_UserInfo_container"
+      >
+        <h2>
+          Security
+        </h2>
+        <p>
+          Messages in this room are not end-to-end encrypted.
+        </p>
+        <div
+          class="mx_UserInfo_container_verifyButton"
+        >
+          <div
+            class="mx_AccessibleButton mx_UserInfo_field mx_UserInfo_verifyButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
+            role="button"
+            tabindex="0"
+          >
+            Verify
+          </div>
+        </div>
+        <div
+          class="mx_UserInfo_devices"
+        >
+          <div />
+          <div>
+            <div
+              class="mx_AccessibleButton mx_UserInfo_expand mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
+              role="button"
+              tabindex="0"
+            >
+              <div
+                class="mx_E2EIcon mx_E2EIcon_normal"
+              />
+              <div>
+                1 session
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_UserInfo_container"
+      >
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m1.5 21.25 1.45-4.95a10.232 10.232 0 0 1-.712-2.1A10.167 10.167 0 0 1 2 12a9.74 9.74 0 0 1 .788-3.9 10.099 10.099 0 0 1 2.137-3.175c.9-.9 1.958-1.612 3.175-2.137A9.737 9.737 0 0 1 12 2a9.74 9.74 0 0 1 3.9.788 10.098 10.098 0 0 1 3.175 2.137c.9.9 1.613 1.958 2.137 3.175A9.738 9.738 0 0 1 22 12a9.738 9.738 0 0 1-.788 3.9 10.098 10.098 0 0 1-2.137 3.175c-.9.9-1.958 1.613-3.175 2.137A9.737 9.737 0 0 1 12 22c-.75 0-1.483-.08-2.2-.238a10.23 10.23 0 0 1-2.1-.712L2.75 22.5a.936.936 0 0 1-1-.25.936.936 0 0 1-.25-1Zm2.45-1.2 3.2-.95a.949.949 0 0 1 .275-.063c.1-.008.192-.012.275-.012.15 0 .296.013.438.038.141.024.279.07.412.137a7.435 7.435 0 0 0 1.675.6c.583.133 1.175.2 1.775.2 2.233 0 4.125-.775 5.675-2.325C19.225 16.125 20 14.233 20 12c0-2.233-.775-4.125-2.325-5.675C16.125 4.775 14.233 4 12 4c-2.233 0-4.125.775-5.675 2.325C4.775 7.875 4 9.767 4 12c0 .6.067 1.192.2 1.775s.333 1.142.6 1.675c.117.217.18.446.188.688a2.29 2.29 0 0 1-.088.712l-.95 3.2Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Send message
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35 _disabled_8j2l6_118"
+          data-kind="primary"
+          disabled=""
+          role="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9.55 17.575c-.133 0-.258-.02-.375-.063a.876.876 0 0 1-.325-.212L4.55 13c-.183-.183-.27-.42-.263-.713.009-.291.105-.529.288-.712a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275L9.55 15.15l8.475-8.475c.183-.183.42-.275.713-.275.291 0 .529.092.712.275.183.183.275.42.275.713 0 .291-.092.529-.275.712l-9.2 9.2c-.1.1-.208.17-.325.212a1.106 1.106 0 0 1-.375.063Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Jump to read receipt
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 16a.968.968 0 0 1-.713-.287A.967.967 0 0 1 11 15V7.85L9.125 9.725c-.2.2-.433.3-.7.3-.267 0-.508-.108-.725-.325a.93.93 0 0 1-.288-.712A.977.977 0 0 1 7.7 8.3l3.6-3.6c.1-.1.208-.17.325-.212.117-.042.242-.063.375-.063s.258.02.375.063a.877.877 0 0 1 .325.212l3.6 3.6c.2.2.296.438.287.713a.977.977 0 0 1-.287.687c-.2.2-.438.304-.713.313a.93.93 0 0 1-.712-.288L13 7.85V15c0 .283-.096.52-.287.713A.968.968 0 0 1 12 16Zm-6 4c-.55 0-1.02-.196-1.412-.587A1.926 1.926 0 0 1 4 18v-2c0-.283.096-.52.287-.713A.968.968 0 0 1 5 15c.283 0 .52.096.713.287.191.192.287.43.287.713v2h12v-2a.97.97 0 0 1 .288-.713A.968.968 0 0 1 19 15a.97.97 0 0 1 .712.287c.192.192.288.43.288.713v2c0 .55-.196 1.02-.587 1.413A1.926 1.926 0 0 1 18 20H6Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Share profile
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+      </div>
+      <div
+        class="mx_UserInfo_container"
+      >
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="critical"
+          role="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M7 21c-.55 0-1.02-.196-1.412-.587A1.926 1.926 0 0 1 5 19V6a.968.968 0 0 1-.713-.287A.968.968 0 0 1 4 5c0-.283.096-.52.287-.713A.968.968 0 0 1 5 4h4a.97.97 0 0 1 .287-.712A.968.968 0 0 1 10 3h4a.97.97 0 0 1 .713.288A.968.968 0 0 1 15 4h4a.97.97 0 0 1 .712.287c.192.192.288.43.288.713s-.096.52-.288.713A.968.968 0 0 1 19 6v13c0 .55-.196 1.02-.587 1.413A1.926 1.926 0 0 1 17 21H7ZM7 6v13h10V6H7Zm2 10c0 .283.096.52.287.712.192.192.43.288.713.288s.52-.096.713-.288A.968.968 0 0 0 11 16V9a.967.967 0 0 0-.287-.713A.968.968 0 0 0 10 8a.968.968 0 0 0-.713.287A.968.968 0 0 0 9 9v7Zm4 0c0 .283.096.52.287.712.192.192.43.288.713.288s.52-.096.713-.288A.968.968 0 0 0 15 16V9a.967.967 0 0 0-.287-.713A.968.968 0 0 0 14 8a.968.968 0 0 0-.713.287A.967.967 0 0 0 13 9v7Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Deactivate user
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+      </div>
+      <div
+        class="mx_UserInfo_container"
+      >
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="critical"
+          role="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 22a9.738 9.738 0 0 1-3.9-.788 10.099 10.099 0 0 1-3.175-2.137c-.9-.9-1.612-1.958-2.137-3.175A9.738 9.738 0 0 1 2 12a9.74 9.74 0 0 1 .788-3.9 10.099 10.099 0 0 1 2.137-3.175c.9-.9 1.958-1.612 3.175-2.137A9.738 9.738 0 0 1 12 2a9.74 9.74 0 0 1 3.9.788 10.098 10.098 0 0 1 3.175 2.137c.9.9 1.613 1.958 2.137 3.175A9.738 9.738 0 0 1 22 12a9.738 9.738 0 0 1-.788 3.9 10.098 10.098 0 0 1-2.137 3.175c-.9.9-1.958 1.613-3.175 2.137A9.738 9.738 0 0 1 12 22Zm0-2c2.233 0 4.125-.775 5.675-2.325C19.225 16.125 20 14.233 20 12c0-.9-.146-1.767-.438-2.6A7.951 7.951 0 0 0 18.3 7.1L7.1 18.3c.7.55 1.467.97 2.3 1.262.833.292 1.7.438 2.6.438Zm-6.3-3.1L16.9 5.7a7.95 7.95 0 0 0-2.3-1.263A7.813 7.813 0 0 0 12 4c-2.233 0-4.125.775-5.675 2.325C4.775 7.875 4 9.767 4 12c0 .9.146 1.767.438 2.6A7.95 7.95 0 0 0 5.7 16.9Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Ignore
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -1,0 +1,169 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PollHistory /> Poll detail displays poll detail on active poll list item click 1`] = `
+<h2
+  data-testid="pollQuestion"
+>
+  Question?
+</h2>
+`;
+
+exports[`<PollHistory /> Poll detail displays poll detail on past poll list item click 1`] = `
+<h2
+  data-testid="pollQuestion"
+>
+  What?
+</h2>
+`;
+
+exports[`<PollHistory /> Poll detail navigates back to poll list from detail view on header click 1`] = `
+<div
+  class="mx_AccessibleButton mx_PollDetailHeader mx_AccessibleButton_hasKind mx_AccessibleButton_kind_content_inline"
+  role="button"
+  tabindex="0"
+>
+  <svg
+    class="mx_PollDetailHeader_icon"
+    fill="currentColor"
+    height="1em"
+    viewBox="0 0 24 24"
+    width="1em"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="m13.3 17.3-4.6-4.6a.877.877 0 0 1-.213-.325A1.106 1.106 0 0 1 8.425 12c0-.133.02-.258.062-.375A.878.878 0 0 1 8.7 11.3l4.6-4.6a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275.948.948 0 0 1 .275.7.948.948 0 0 1-.275.7L10.8 12l3.9 3.9a.949.949 0 0 1 .275.7.948.948 0 0 1-.275.7.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+    />
+  </svg>
+  Active polls
+</div>
+`;
+
+exports[`<PollHistory /> renders a list of active polls when there are polls in the room 1`] = `
+<div>
+  <div
+    class="mx_PollHistory_content"
+  >
+    <h2
+      class="mx_Heading_h2 mx_PollHistory_header"
+    >
+      Polls
+    </h2>
+    <div
+      class="mx_PollHistoryList"
+    >
+      <fieldset
+        class="mx_FilterTabGroup"
+      >
+        <label
+          data-testid="filter-tab-PollHistory_filter-ACTIVE"
+        >
+          <input
+            checked=""
+            name="PollHistory_filter"
+            type="radio"
+            value="ACTIVE"
+          />
+          <span>
+            Active polls
+          </span>
+        </label>
+        <label
+          data-testid="filter-tab-PollHistory_filter-ENDED"
+        >
+          <input
+            name="PollHistory_filter"
+            type="radio"
+            value="ENDED"
+          />
+          <span>
+            Past polls
+          </span>
+        </label>
+      </fieldset>
+      <ol
+        class="mx_PollHistoryList_list mx_PollHistoryList_list_ACTIVE"
+      >
+        <li
+          class="mx_PollListItem"
+          data-testid="pollListItem-$2"
+        >
+          <span
+            tabindex="0"
+          >
+            <div
+              aria-labelledby=":rc:"
+              class="mx_PollListItem_content"
+            >
+              <span>
+                02/02/23
+              </span>
+              <div
+                class="mx_PollListItem_icon"
+              />
+              <span
+                class="mx_PollListItem_question"
+              >
+                Where?
+              </span>
+            </div>
+          </span>
+        </li>
+        <li
+          class="mx_PollListItem"
+          data-testid="pollListItem-$1"
+        >
+          <span
+            tabindex="0"
+          >
+            <div
+              aria-labelledby=":rh:"
+              class="mx_PollListItem_content"
+            >
+              <span>
+                02/02/23
+              </span>
+              <div
+                class="mx_PollListItem_icon"
+              />
+              <span
+                class="mx_PollListItem_question"
+              >
+                Question?
+              </span>
+            </div>
+          </span>
+        </li>
+      </ol>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<PollHistory /> renders a no polls message and a load more button when not at end of timeline 1`] = `
+<div
+  class="mx_AccessibleButton mx_PollHistoryList_loadMorePolls mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+  role="button"
+  tabindex="0"
+>
+  Load more polls
+  <div
+    class="mx_InlineSpinner"
+  >
+    <div
+      aria-label="Loading…"
+      class="mx_InlineSpinner_icon mx_Spinner_icon"
+      style="width: 16px; height: 16px;"
+    />
+  </div>
+</div>
+`;
+
+exports[`<PollHistory /> renders a no polls message and a load more button when not at end of timeline 2`] = `
+<div
+  class="mx_AccessibleButton mx_PollHistoryList_loadMorePolls mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+  role="button"
+  tabindex="0"
+>
+  Load more polls
+</div>
+`;

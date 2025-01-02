@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<LocationViewDialog /> renders map correctly 1`] = `
+<div
+  class="mx_Map mx_LocationViewDialog_map"
+  id="mx_Map_mx_LocationViewDialog_$2"
+>
+  <span>
+    <div
+      class="mx_Marker mx_Marker_defaultColor"
+      id="mx_LocationViewDialog_$2-marker"
+    >
+      <div
+        class="mx_Marker_border"
+      >
+        <svg
+          class="mx_Marker_icon"
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 21.325a2.07 2.07 0 0 1-.7-.125 1.84 1.84 0 0 1-.625-.375A39.112 39.112 0 0 1 7.8 17.9c-.833-.95-1.53-1.87-2.087-2.762-.559-.892-.984-1.75-1.276-2.575C4.146 11.738 4 10.95 4 10.2c0-2.5.804-4.492 2.412-5.975C8.021 2.742 9.883 2 12 2s3.98.742 5.587 2.225C19.197 5.708 20 7.7 20 10.2c0 .75-.146 1.538-.438 2.363-.291.824-.716 1.683-1.274 2.574A21.678 21.678 0 0 1 16.2 17.9a39.112 39.112 0 0 1-2.875 2.925 1.84 1.84 0 0 1-.625.375 2.07 2.07 0 0 1-.7.125ZM12 12c.55 0 1.02-.196 1.412-.588.392-.391.588-.862.588-1.412 0-.55-.196-1.02-.588-1.412A1.926 1.926 0 0 0 12 8c-.55 0-1.02.196-1.412.588A1.926 1.926 0 0 0 10 10c0 .55.196 1.02.588 1.412.391.392.862.588 1.412.588Z"
+          />
+        </svg>
+      </div>
+    </div>
+  </span>
+  <div
+    class="mx_ZoomButtons"
+  >
+    <div
+      aria-label="Zoom in"
+      class="mx_AccessibleButton mx_ZoomButtons_button"
+      data-testid="map-zoom-in-button"
+      role="button"
+      tabindex="0"
+    >
+      <svg
+        class="mx_ZoomButtons_icon"
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M11 13H6a.967.967 0 0 1-.713-.287A.968.968 0 0 1 5 12c0-.283.096-.52.287-.713A.967.967 0 0 1 6 11h5V6c0-.283.096-.52.287-.713A.968.968 0 0 1 12 5c.283 0 .52.096.713.287.191.192.287.43.287.713v5h5a.97.97 0 0 1 .712.287c.192.192.288.43.288.713s-.096.52-.288.713A.968.968 0 0 1 18 13h-5v5a.97.97 0 0 1-.287.712A.968.968 0 0 1 12 19a.968.968 0 0 1-.713-.288A.968.968 0 0 1 11 18v-5Z"
+        />
+      </svg>
+    </div>
+    <div
+      aria-label="Zoom out"
+      class="mx_AccessibleButton mx_ZoomButtons_button"
+      data-testid="map-zoom-out-button"
+      role="button"
+      tabindex="0"
+    >
+      <svg
+        class="mx_ZoomButtons_icon"
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M6 13a.967.967 0 0 1-.713-.287A.968.968 0 0 1 5 12c0-.283.096-.52.287-.713A.967.967 0 0 1 6 11h12a.97.97 0 0 1 .712.287c.192.192.288.43.288.713s-.096.52-.288.713A.968.968 0 0 1 18 13H6Z"
+        />
+      </svg>
+    </div>
+  </div>
+</div>
+`;

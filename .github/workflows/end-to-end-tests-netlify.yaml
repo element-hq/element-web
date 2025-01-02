@@ -1,0 +1,46 @@
+# Triggers after the playwright tests have finished,
+# taking the artifact and uploading it to Netlify for easier viewing
+name: Upload End to End Test report to Netlify
+on:
+    workflow_run:
+        workflows: ["End to End Tests"]
+        types:
+            - completed
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event.workflow_run.head_branch || github.run_id }}
+    cancel-in-progress: ${{ github.event.workflow_run.event == 'pull_request' }}
+
+permissions: {}
+
+jobs:
+    report:
+        if: github.event.workflow_run.conclusion != 'cancelled'
+        name: Report results
+        runs-on: ubuntu-24.04
+        environment: Netlify
+        permissions:
+            statuses: write
+            deployments: write
+            actions: read
+        steps:
+            - name: Download HTML report
+              uses: actions/download-artifact@v4
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  run-id: ${{ github.event.workflow_run.id }}
+                  name: html-report
+                  path: playwright-report
+
+            - name: 📤 Deploy to Netlify
+              uses: matrix-org/netlify-pr-preview@v3
+              with:
+                  path: playwright-report
+                  owner: ${{ github.event.workflow_run.head_repository.owner.login }}
+                  branch: ${{ github.event.workflow_run.head_branch }}
+                  revision: ${{ github.event.workflow_run.head_sha }}
+                  token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+                  site_id: ${{ vars.NETLIFY_SITE_ID }}
+                  desc: Playwright Report
+                  deployment_env: EndToEndTests
+                  prefix: "e2e-"

@@ -1,0 +1,1929 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
+<div>
+  <div
+    aria-labelledby="room-summary-panel-tab"
+    class="mx_BaseCard mx_RoomSummaryCard"
+    id="room-summary-panel"
+    role="tabpanel"
+  >
+    <div
+      class="mx_BaseCard_header"
+    >
+      <div
+        class="mx_BaseCard_header_spacer"
+      />
+      <button
+        aria-labelledby=":rm:"
+        class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
+        data-testid="base-card-close-button"
+        role="button"
+        style="--cpd-icon-button-size: 28px;"
+        tabindex="0"
+      >
+        <div
+          class="_indicator-icon_133tf_26"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+            />
+          </svg>
+        </div>
+      </button>
+    </div>
+    <div
+      class="mx_AutoHideScrollbar"
+      tabindex="-1"
+    >
+      <header
+        class="mx_RoomSummaryCard_container"
+      >
+        <span
+          class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+          data-color="1"
+          data-testid="avatar-img"
+          data-type="round"
+          role="presentation"
+          style="--cpd-avatar-size: 80px;"
+        >
+          !
+        </span>
+        <h1
+          class="_typography_yh5dq_162 _font-heading-md-semibold_yh5dq_121 mx_RoomSummaryCard_roomName text-primary"
+          title="!room:domain.org"
+        >
+          !room:domain.org
+        </h1>
+        <div
+          class="_typography_yh5dq_162 _font-body-sm-semibold_yh5dq_45 mx_RoomSummaryCard_alias text-secondary"
+          title=""
+        />
+        <section
+          class="mx_Flex mx_RoomSummaryCard_badges"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x);"
+        >
+          <span
+            class="_typography_yh5dq_162 _font-body-sm-medium_yh5dq_50 _badge_1171v_17"
+            data-kind="grey"
+          >
+            <svg
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6 22c-.55 0-1.02-.196-1.413-.587A1.926 1.926 0 0 1 4 20V10c0-.55.196-1.02.587-1.412.212-.212.446-.366.703-.463L1.333 4.167a1 1 0 0 1 1.414-1.414L7 7.006v-.012l13 13v.012l1.247 1.247a1 1 0 0 1-1.414 1.414l-.896-.896A1.935 1.935 0 0 1 18 22H6Zm14-4.834V10c0-.55-.196-1.02-.587-1.412A1.926 1.926 0 0 0 18 8h-1V6c0-1.383-.488-2.563-1.463-3.538C14.563 1.487 13.383 1 12 1s-2.563.488-3.538 1.462A4.876 4.876 0 0 0 7.243 4.41L9 6.166V6c0-.833.292-1.542.875-2.125A2.893 2.893 0 0 1 12 3c.833 0 1.542.292 2.125.875S15 5.167 15 6v2h-4.166L20 17.166Z"
+              />
+            </svg>
+            Not encrypted
+          </span>
+        </section>
+        <section
+          class="mx_Flex mx_RoomSummaryCard_topic"
+          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x);"
+        >
+          <div
+            class="mx_Box mx_RoomSummaryCard_topic_container mx_Box--flex"
+            style="--mx-box-flex: 1;"
+          >
+            <p
+              class="_typography_yh5dq_162 _font-body-sm-regular_yh5dq_40"
+            >
+              <span
+                dir="auto"
+              >
+                This is the room's topic.
+              </span>
+            </p>
+            <button
+              class="_icon-button_bh2qc_17 mx_RoomSummaryCard_topic_chevron"
+              role="button"
+              style="--cpd-icon-button-size: 24px;"
+              tabindex="0"
+            >
+              <div
+                class="_indicator-icon_133tf_26"
+                style="--cpd-icon-button-size: 100%;"
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 14.95c-.133 0-.258-.02-.375-.063a.876.876 0 0 1-.325-.212l-4.6-4.6a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l3.9 3.9 3.9-3.9a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275.948.948 0 0 1 .275.7.948.948 0 0 1-.275.7l-4.6 4.6c-.1.1-.208.17-.325.212a1.106 1.106 0 0 1-.375.063Z"
+                  />
+                </svg>
+              </div>
+            </button>
+          </div>
+          <div
+            class="mx_Box mx_RoomSummaryCard_topic_edit mx_Box--flex"
+            style="--mx-box-flex: 1;"
+          >
+            <a
+              class="_link_ue21z_17"
+              data-kind="primary"
+              data-size="medium"
+              rel="noreferrer noopener"
+            >
+              <p
+                class="_typography_yh5dq_162 _font-body-sm-regular_yh5dq_40"
+              >
+                Edit
+              </p>
+            </a>
+          </div>
+        </section>
+      </header>
+      <div
+        class="_separator_144s5_17"
+        data-kind="primary"
+        data-orientation="horizontal"
+        role="separator"
+      />
+      <div
+        aria-orientation="vertical"
+        role="menubar"
+      >
+        <div
+          aria-checked="false"
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="menuitemcheckbox"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M13.905 9.378 12 5.52l-1.905 3.86-4.259.618 3.082 3.004-.727 4.242L12 15.24l3.81 2.003-.728-4.242 3.082-3.004-4.26-.619ZM8.767 7.55l2.336-4.733a1 1 0 0 1 1.794 0l2.336 4.733 5.223.76a1 1 0 0 1 .555 1.705L17.23 13.7l.892 5.202a1 1 0 0 1-1.45 1.054L12 17.5l-4.672 2.456a1 1 0 0 1-1.451-1.054l.892-5.202-3.78-3.685a1 1 0 0 1 .555-1.706l5.223-.759Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Favourite
+          </span>
+          <div
+            class="_container_qnvru_18"
+          >
+            <input
+              aria-hidden="true"
+              class="_input_qnvru_32"
+              id=":rr:"
+              type="checkbox"
+            />
+            <div
+              class="_ui_qnvru_42"
+            />
+          </div>
+        </div>
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M10 12c-1.1 0-2.042-.392-2.825-1.175C6.392 10.042 6 9.1 6 8s.392-2.042 1.175-2.825C7.958 4.392 8.9 4 10 4s2.042.392 2.825 1.175C13.608 5.958 14 6.9 14 8s-.392 2.042-1.175 2.825C12.042 11.608 11.1 12 10 12Zm-8 6v-.8c0-.567.146-1.087.438-1.563A2.911 2.911 0 0 1 3.6 14.55a14.843 14.843 0 0 1 3.15-1.163A13.76 13.76 0 0 1 10 13c1.1 0 2.183.13 3.25.387 1.067.259 2.117.646 3.15 1.163.483.25.87.612 1.163 1.087.291.476.437.996.437 1.563v.8c0 .55-.196 1.02-.587 1.413A1.926 1.926 0 0 1 16 20H4c-.55 0-1.02-.196-1.413-.587A1.926 1.926 0 0 1 2 18Zm2 0h12v-.8a.973.973 0 0 0-.5-.85c-.9-.45-1.808-.787-2.725-1.012a11.6 11.6 0 0 0-5.55 0c-.917.225-1.825.562-2.725 1.012a.973.973 0 0 0-.5.85v.8Zm6-8c.55 0 1.02-.196 1.412-.588C11.804 9.021 12 8.55 12 8c0-.55-.196-1.02-.588-1.412A1.926 1.926 0 0 0 10 6c-.55 0-1.02.196-1.412.588A1.926 1.926 0 0 0 8 8c0 .55.196 1.02.588 1.412.391.392.862.588 1.412.588Zm7 1h2v2c0 .283.096.52.288.713.191.191.429.287.712.287s.52-.096.712-.287A.968.968 0 0 0 21 13v-2h2a.97.97 0 0 0 .712-.287A.968.968 0 0 0 24 10a.967.967 0 0 0-.288-.713A.968.968 0 0 0 23 9h-2V7a.967.967 0 0 0-.288-.713A.968.968 0 0 0 20 6a.968.968 0 0 0-.712.287A.967.967 0 0 0 19 7v2h-2a.968.968 0 0 0-.712.287A.967.967 0 0 0 16 10c0 .283.096.52.288.713A.968.968 0 0 0 17 11Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Invite
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <div
+          class="_separator_144s5_17"
+          data-kind="primary"
+          data-orientation="horizontal"
+          role="separator"
+        />
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9.175 13.825C9.958 14.608 10.9 15 12 15s2.042-.392 2.825-1.175C15.608 13.042 16 12.1 16 11s-.392-2.042-1.175-2.825C14.042 7.392 13.1 7 12 7s-2.042.392-2.825 1.175C8.392 8.958 8 9.9 8 11s.392 2.042 1.175 2.825Zm4.237-1.412A1.926 1.926 0 0 1 12 13c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 10 11c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 12 9c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412Z"
+            />
+            <path
+              d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10Zm-2 0a8 8 0 1 0-16 0 8 8 0 0 0 16 0Z"
+            />
+            <path
+              d="M16.23 18.792a12.47 12.47 0 0 0-1.455-.455 11.6 11.6 0 0 0-5.55 0c-.487.12-.972.271-1.455.455a8.04 8.04 0 0 1-1.729-1.454c.89-.412 1.794-.729 2.709-.95A13.76 13.76 0 0 1 12 16c1.1 0 2.183.13 3.25.387a14.78 14.78 0 0 1 2.709.95 8.042 8.042 0 0 1-1.73 1.455Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            People
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M7 10a.968.968 0 0 1-.713-.287A.968.968 0 0 1 6 9c0-.283.096-.52.287-.713A.968.968 0 0 1 7 8h10a.97.97 0 0 1 .712.287c.192.192.288.43.288.713s-.096.52-.288.713A.968.968 0 0 1 17 10H7Zm0 4a.967.967 0 0 1-.713-.287A.968.968 0 0 1 6 13c0-.283.096-.52.287-.713A.967.967 0 0 1 7 12h6c.283 0 .52.096.713.287.191.192.287.43.287.713s-.096.52-.287.713A.968.968 0 0 1 13 14H7Z"
+            />
+            <path
+              d="M3.707 21.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293ZM6 17h14V5H4v13.172l.586-.586A2 2 0 0 1 6 17Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Threads
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <div
+          aria-expanded="false"
+          aria-haspopup="dialog"
+        >
+          <button
+            class="_item_8j2l6_17 _interactive_8j2l6_35"
+            data-kind="primary"
+            role="menuitem"
+          >
+            <svg
+              aria-hidden="true"
+              class="_icon_8j2l6_43"
+              fill="currentColor"
+              height="24"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M6.119 2a.5.5 0 0 0-.35.857L7.85 4.9a.5.5 0 0 1 .15.357v4.487a.5.5 0 0 1-.15.356l-3.7 3.644A.5.5 0 0 0 4 14.1v1.4a.5.5 0 0 0 .5.5H11v6a1 1 0 1 0 2 0v-6h6.5a.5.5 0 0 0 .5-.5v-1.4a.5.5 0 0 0-.15-.356l-3.7-3.644a.5.5 0 0 1-.15-.356V5.257a.5.5 0 0 1 .15-.357l2.081-2.043a.5.5 0 0 0-.35-.857H6.119ZM10 4h4v5.744a2.5 2.5 0 0 0 .746 1.781L17.26 14H6.74l2.514-2.475A2.5 2.5 0 0 0 10 9.744V4Z"
+                fill-rule="evenodd"
+              />
+            </svg>
+            <span
+              class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+            >
+              Pinned messages
+            </span>
+            <svg
+              aria-hidden="true"
+              class="_nav-hint_8j2l6_59"
+              fill="currentColor"
+              height="24"
+              viewBox="8 0 8 24"
+              width="8"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+              />
+            </svg>
+            <span
+              class="_typography_yh5dq_162 _font-body-sm-regular_yh5dq_40"
+            >
+              0
+            </span>
+          </button>
+        </div>
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6 22c-.55 0-1.02-.196-1.412-.587A1.926 1.926 0 0 1 4 20V4c0-.55.196-1.02.588-1.413A1.926 1.926 0 0 1 6 2h7.175a1.975 1.975 0 0 1 1.4.575l4.85 4.85a1.975 1.975 0 0 1 .575 1.4V20c0 .55-.196 1.02-.587 1.413A1.926 1.926 0 0 1 18 22H6Zm7-14V4H6v16h12V9h-4a.968.968 0 0 1-.713-.287A.967.967 0 0 1 13 8Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Files
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M17.25 11.672a.907.907 0 0 1-.663-.282L12.61 7.413a.907.907 0 0 1-.282-.663c0-.254.094-.475.282-.663l3.977-3.977a.907.907 0 0 1 .663-.282c.254 0 .475.094.663.282l3.977 3.977a.907.907 0 0 1 .282.663.907.907 0 0 1-.282.663l-3.977 3.977a.907.907 0 0 1-.663.282Zm2.475-4.922L17.25 4.275 14.775 6.75l2.475 2.475 2.475-2.475ZM4 11a.967.967 0 0 1-.712-.287A.968.968 0 0 1 3 10V4c0-.283.096-.52.288-.712A.968.968 0 0 1 4 3h6a.97.97 0 0 1 .713.288A.968.968 0 0 1 11 4v6c0 .283-.096.52-.287.713A.968.968 0 0 1 10 11H4Zm5-2V5H5v4h4Zm5 12a.968.968 0 0 1-.713-.288A.968.968 0 0 1 13 20v-6c0-.283.096-.52.287-.713A.968.968 0 0 1 14 13h6a.97.97 0 0 1 .712.287c.192.192.288.43.288.713v6c0 .283-.096.52-.288.712A.968.968 0 0 1 20 21h-6Zm5-2v-4h-4v4h4ZM4 21a.967.967 0 0 1-.712-.288A.968.968 0 0 1 3 20v-6a.97.97 0 0 1 .288-.713A.967.967 0 0 1 4 13h6c.283 0 .52.096.713.287.191.192.287.43.287.713v6a.97.97 0 0 1-.287.712A.968.968 0 0 1 10 21H4Zm5-2v-4H5v4h4Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Extensions
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <div
+          class="_separator_144s5_17"
+          data-kind="primary"
+          data-orientation="horizontal"
+          role="separator"
+        />
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 19.071c-.978.978-2.157 1.467-3.536 1.467-1.378 0-2.557-.489-3.535-1.467-.978-.978-1.467-2.157-1.467-3.536 0-1.378.489-2.557 1.467-3.535L7.05 9.879c.2-.2.436-.3.707-.3.271 0 .507.1.707.3.2.2.301.436.301.707 0 .27-.1.506-.3.707l-2.122 2.121a2.893 2.893 0 0 0-.884 2.122c0 .824.295 1.532.884 2.12.59.59 1.296.885 2.121.885s1.533-.295 2.122-.884l2.121-2.121c.2-.2.436-.301.707-.301.271 0 .507.1.707.3.2.2.3.437.3.708 0 .27-.1.506-.3.707L12 19.07Zm-1.414-4.243c-.2.2-.436.3-.707.3a.967.967 0 0 1-.707-.3.969.969 0 0 1-.301-.707c0-.27.1-.507.3-.707l4.243-4.242c.2-.2.436-.301.707-.301.271 0 .507.1.707.3.2.2.3.437.3.708 0 .27-.1.506-.3.707l-4.242 4.242Zm6.364-.707c-.2.2-.436.3-.707.3a.968.968 0 0 1-.707-.3.969.969 0 0 1-.301-.707c0-.27.1-.507.3-.707l2.122-2.121c.59-.59.884-1.297.884-2.122s-.295-1.532-.884-2.12a2.893 2.893 0 0 0-2.121-.885c-.825 0-1.532.295-2.122.884l-2.121 2.121c-.2.2-.436.301-.707.301a.968.968 0 0 1-.707-.3.97.97 0 0 1-.3-.708c0-.27.1-.506.3-.707L12 4.93c.978-.978 2.157-1.467 3.536-1.467 1.378 0 2.557.489 3.535 1.467.978.978 1.467 2.157 1.467 3.535 0 1.38-.489 2.558-1.467 3.536l-2.121 2.121Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Copy link
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M16 10a.97.97 0 0 0 .712-.287A.967.967 0 0 0 17 9a.967.967 0 0 0-.288-.713A.968.968 0 0 0 16 8h-3a.968.968 0 0 0-.713.287A.967.967 0 0 0 12 9c0 .283.096.52.287.713.192.191.43.287.713.287h3Zm0 6a.97.97 0 0 0 .712-.287A.968.968 0 0 0 17 15a.968.968 0 0 0-.288-.713A.968.968 0 0 0 16 14h-3a.968.968 0 0 0-.713.287A.968.968 0 0 0 12 15c0 .283.096.52.287.713.192.191.43.287.713.287h3Zm-7-5c.55 0 1.02-.196 1.412-.588C10.804 10.021 11 9.55 11 9c0-.55-.196-1.02-.588-1.412A1.926 1.926 0 0 0 9 7c-.55 0-1.02.196-1.412.588A1.926 1.926 0 0 0 7 9c0 .55.196 1.02.588 1.412.391.392.862.588 1.412.588Zm0 6c.55 0 1.02-.196 1.412-.587.392-.392.588-.863.588-1.413s-.196-1.02-.588-1.412A1.926 1.926 0 0 0 9 13c-.55 0-1.02.196-1.412.588A1.926 1.926 0 0 0 7 15c0 .55.196 1.02.588 1.413.391.391.862.587 1.412.587Zm-4 4c-.55 0-1.02-.196-1.413-.587A1.926 1.926 0 0 1 3 19V5c0-.55.196-1.02.587-1.413A1.926 1.926 0 0 1 5 3h14c.55 0 1.02.196 1.413.587.39.393.587.863.587 1.413v14c0 .55-.196 1.02-.587 1.413A1.926 1.926 0 0 1 19 21H5Zm0-2h14V5H5v14Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Polls
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M5 21c-.55 0-1.02-.196-1.413-.587A1.926 1.926 0 0 1 3 19V6.5c0-.25.042-.475.125-.675.083-.2.192-.392.325-.575l1.4-1.7c.133-.183.3-.32.5-.412C5.55 3.046 5.767 3 6 3h12c.233 0 .45.046.65.138.2.091.367.229.5.412l1.4 1.7c.133.183.242.375.325.575.083.2.125.425.125.675V19c0 .55-.196 1.02-.587 1.413A1.926 1.926 0 0 1 19 21H5Zm.4-15h13.2l-.85-1H6.25L5.4 6ZM5 19h14V8H5v11Zm7-1.425c.133 0 .258-.02.375-.063a.877.877 0 0 0 .325-.212l2.6-2.6a.948.948 0 0 0 .275-.7.948.948 0 0 0-.275-.7.948.948 0 0 0-.7-.275.948.948 0 0 0-.7.275l-.9.9V11a.968.968 0 0 0-.287-.713A.968.968 0 0 0 12 10a.968.968 0 0 0-.713.287A.968.968 0 0 0 11 11v3.2l-.9-.9a.948.948 0 0 0-.7-.275.948.948 0 0 0-.7.275.948.948 0 0 0-.275.7.95.95 0 0 0 .275.7l2.6 2.6c.1.1.208.17.325.212.117.042.242.063.375.063Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Export Chat
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0Zm-2 0a2 2 0 1 0-4 0 2 2 0 0 0 4 0Z"
+            />
+            <path
+              d="M11.312 2h1.376A2.312 2.312 0 0 1 15 4.312v.247l.002.003c.01.014.031.033.064.047.03.013.056.013.07.01h.002l.177-.177a2.312 2.312 0 0 1 3.27 0l.973.974a2.312 2.312 0 0 1 0 3.269l-.177.177v.003a.134.134 0 0 0 .01.07.153.153 0 0 0 .047.063l.003.002h.247A2.312 2.312 0 0 1 22 11.312v1.376A2.312 2.312 0 0 1 19.688 15h-.247l-.003.002a.152.152 0 0 0-.047.064.134.134 0 0 0-.01.07v.002l.177.177a2.312 2.312 0 0 1 0 3.27l-.974.973a2.312 2.312 0 0 1-3.269 0l-.177-.177h-.003a.134.134 0 0 0-.07.01.152.152 0 0 0-.063.047l-.002.003v.247A2.312 2.312 0 0 1 12.688 22h-1.376A2.312 2.312 0 0 1 9 19.688v-.247l-.002-.003a.153.153 0 0 0-.064-.047.134.134 0 0 0-.07-.01h-.002l-.177.177a2.312 2.312 0 0 1-3.27 0l-.973-.974a2.312 2.312 0 0 1 0-3.269l.177-.177v-.003a.135.135 0 0 0-.01-.07.152.152 0 0 0-.047-.063L4.559 15h-.247A2.312 2.312 0 0 1 2 12.688v-1.376A2.312 2.312 0 0 1 4.312 9h.247l.003-.002a.153.153 0 0 0 .047-.064.135.135 0 0 0 .01-.07v-.002l-.177-.177a2.312 2.312 0 0 1 0-3.27l.974-.973a2.312 2.312 0 0 1 3.269 0l.177.177h.003a.135.135 0 0 0 .07-.01.153.153 0 0 0 .063-.047L9 4.559v-.247A2.312 2.312 0 0 1 11.312 2ZM11 4.312v.257c0 .893-.59 1.593-1.299 1.887-.716.297-1.622.21-2.248-.418l-.182-.182a.312.312 0 0 0-.441 0l-.974.974a.312.312 0 0 0 0 .44l.182.183c.627.626.715 1.531.418 2.248C6.162 10.41 5.462 11 4.569 11h-.257a.312.312 0 0 0-.312.312v1.376c0 .172.14.312.312.312h.257c.893 0 1.593.59 1.887 1.299.297.716.21 1.622-.418 2.248l-.182.182a.312.312 0 0 0 0 .441l.974.973a.31.31 0 0 0 .44 0l.183-.181c.626-.627 1.532-.715 2.248-.418.709.294 1.299.994 1.299 1.887v.257c0 .172.14.312.312.312h1.376c.172 0 .312-.14.312-.312v-.257c0-.893.59-1.593 1.299-1.887.716-.297 1.622-.21 2.248.418l.182.181c.122.122.32.122.441 0l.973-.973a.312.312 0 0 0 0-.44l-.181-.183c-.627-.627-.715-1.532-.418-2.248.294-.709.994-1.299 1.887-1.299h.257c.172 0 .312-.14.312-.312v-1.376a.312.312 0 0 0-.312-.312h-.257c-.893 0-1.593-.59-1.887-1.299-.297-.717-.21-1.622.418-2.248l.181-.182a.312.312 0 0 0 0-.441l-.973-.974a.312.312 0 0 0-.44 0l-.183.182c-.627.627-1.532.715-2.248.418C13.59 6.162 13 5.462 13 4.569v-.257A.312.312 0 0 0 12.688 4h-1.376a.312.312 0 0 0-.312.312Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Settings
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <div
+          class="_separator_144s5_17"
+          data-kind="primary"
+          data-orientation="horizontal"
+          role="separator"
+        />
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="critical"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M14 13c.283 0 .52-.096.713-.287A.968.968 0 0 0 15 12a.968.968 0 0 0-.287-.713A.968.968 0 0 0 14 11a.968.968 0 0 0-.713.287A.968.968 0 0 0 13 12c0 .283.096.52.287.713.192.191.43.287.713.287Z"
+            />
+            <path
+              d="M10.385 21.788A.998.998 0 0 1 10 21V3a1.003 1.003 0 0 1 1.242-.97l8 2A1 1 0 0 1 20 5v14a1 1 0 0 1-.758.97l-8 2a.998.998 0 0 1-.857-.182ZM18 5.781l-6-1.5v15.438l6-1.5V5.781ZM9 6H7v12h2v2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2v2Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Leave room
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<RoomSummaryCard /> renders the room summary 1`] = `
+<div>
+  <div
+    aria-labelledby="room-summary-panel-tab"
+    class="mx_BaseCard mx_RoomSummaryCard"
+    id="room-summary-panel"
+    role="tabpanel"
+  >
+    <div
+      class="mx_BaseCard_header"
+    >
+      <div
+        class="mx_BaseCard_header_spacer"
+      />
+      <button
+        aria-labelledby=":r0:"
+        class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
+        data-testid="base-card-close-button"
+        role="button"
+        style="--cpd-icon-button-size: 28px;"
+        tabindex="0"
+      >
+        <div
+          class="_indicator-icon_133tf_26"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+            />
+          </svg>
+        </div>
+      </button>
+    </div>
+    <div
+      class="mx_AutoHideScrollbar"
+      tabindex="-1"
+    >
+      <header
+        class="mx_RoomSummaryCard_container"
+      >
+        <span
+          class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+          data-color="1"
+          data-testid="avatar-img"
+          data-type="round"
+          role="presentation"
+          style="--cpd-avatar-size: 80px;"
+        >
+          !
+        </span>
+        <h1
+          class="_typography_yh5dq_162 _font-heading-md-semibold_yh5dq_121 mx_RoomSummaryCard_roomName text-primary"
+          title="!room:domain.org"
+        >
+          !room:domain.org
+        </h1>
+        <div
+          class="_typography_yh5dq_162 _font-body-sm-semibold_yh5dq_45 mx_RoomSummaryCard_alias text-secondary"
+          title=""
+        />
+        <section
+          class="mx_Flex mx_RoomSummaryCard_badges"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x);"
+        >
+          <span
+            class="_typography_yh5dq_162 _font-body-sm-medium_yh5dq_50 _badge_1171v_17"
+            data-kind="grey"
+          >
+            <svg
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6 22c-.55 0-1.02-.196-1.413-.587A1.926 1.926 0 0 1 4 20V10c0-.55.196-1.02.587-1.412.212-.212.446-.366.703-.463L1.333 4.167a1 1 0 0 1 1.414-1.414L7 7.006v-.012l13 13v.012l1.247 1.247a1 1 0 0 1-1.414 1.414l-.896-.896A1.935 1.935 0 0 1 18 22H6Zm14-4.834V10c0-.55-.196-1.02-.587-1.412A1.926 1.926 0 0 0 18 8h-1V6c0-1.383-.488-2.563-1.463-3.538C14.563 1.487 13.383 1 12 1s-2.563.488-3.538 1.462A4.876 4.876 0 0 0 7.243 4.41L9 6.166V6c0-.833.292-1.542.875-2.125A2.893 2.893 0 0 1 12 3c.833 0 1.542.292 2.125.875S15 5.167 15 6v2h-4.166L20 17.166Z"
+              />
+            </svg>
+            Not encrypted
+          </span>
+        </section>
+        <section
+          class="mx_Flex mx_RoomSummaryCard_topic"
+          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x);"
+        >
+          <div
+            class="mx_Box mx_Box--flex"
+            style="--mx-box-flex: 1;"
+          >
+            <a
+              class="_link_ue21z_17"
+              data-kind="primary"
+              data-size="medium"
+              rel="noreferrer noopener"
+            >
+              <p
+                class="_typography_yh5dq_162 _font-body-sm-regular_yh5dq_40"
+              >
+                Add topic
+              </p>
+            </a>
+          </div>
+        </section>
+      </header>
+      <div
+        class="_separator_144s5_17"
+        data-kind="primary"
+        data-orientation="horizontal"
+        role="separator"
+      />
+      <div
+        aria-orientation="vertical"
+        role="menubar"
+      >
+        <div
+          aria-checked="false"
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="menuitemcheckbox"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M13.905 9.378 12 5.52l-1.905 3.86-4.259.618 3.082 3.004-.727 4.242L12 15.24l3.81 2.003-.728-4.242 3.082-3.004-4.26-.619ZM8.767 7.55l2.336-4.733a1 1 0 0 1 1.794 0l2.336 4.733 5.223.76a1 1 0 0 1 .555 1.705L17.23 13.7l.892 5.202a1 1 0 0 1-1.45 1.054L12 17.5l-4.672 2.456a1 1 0 0 1-1.451-1.054l.892-5.202-3.78-3.685a1 1 0 0 1 .555-1.706l5.223-.759Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Favourite
+          </span>
+          <div
+            class="_container_qnvru_18"
+          >
+            <input
+              aria-hidden="true"
+              class="_input_qnvru_32"
+              id=":r5:"
+              type="checkbox"
+            />
+            <div
+              class="_ui_qnvru_42"
+            />
+          </div>
+        </div>
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M10 12c-1.1 0-2.042-.392-2.825-1.175C6.392 10.042 6 9.1 6 8s.392-2.042 1.175-2.825C7.958 4.392 8.9 4 10 4s2.042.392 2.825 1.175C13.608 5.958 14 6.9 14 8s-.392 2.042-1.175 2.825C12.042 11.608 11.1 12 10 12Zm-8 6v-.8c0-.567.146-1.087.438-1.563A2.911 2.911 0 0 1 3.6 14.55a14.843 14.843 0 0 1 3.15-1.163A13.76 13.76 0 0 1 10 13c1.1 0 2.183.13 3.25.387 1.067.259 2.117.646 3.15 1.163.483.25.87.612 1.163 1.087.291.476.437.996.437 1.563v.8c0 .55-.196 1.02-.587 1.413A1.926 1.926 0 0 1 16 20H4c-.55 0-1.02-.196-1.413-.587A1.926 1.926 0 0 1 2 18Zm2 0h12v-.8a.973.973 0 0 0-.5-.85c-.9-.45-1.808-.787-2.725-1.012a11.6 11.6 0 0 0-5.55 0c-.917.225-1.825.562-2.725 1.012a.973.973 0 0 0-.5.85v.8Zm6-8c.55 0 1.02-.196 1.412-.588C11.804 9.021 12 8.55 12 8c0-.55-.196-1.02-.588-1.412A1.926 1.926 0 0 0 10 6c-.55 0-1.02.196-1.412.588A1.926 1.926 0 0 0 8 8c0 .55.196 1.02.588 1.412.391.392.862.588 1.412.588Zm7 1h2v2c0 .283.096.52.288.713.191.191.429.287.712.287s.52-.096.712-.287A.968.968 0 0 0 21 13v-2h2a.97.97 0 0 0 .712-.287A.968.968 0 0 0 24 10a.967.967 0 0 0-.288-.713A.968.968 0 0 0 23 9h-2V7a.967.967 0 0 0-.288-.713A.968.968 0 0 0 20 6a.968.968 0 0 0-.712.287A.967.967 0 0 0 19 7v2h-2a.968.968 0 0 0-.712.287A.967.967 0 0 0 16 10c0 .283.096.52.288.713A.968.968 0 0 0 17 11Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Invite
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <div
+          class="_separator_144s5_17"
+          data-kind="primary"
+          data-orientation="horizontal"
+          role="separator"
+        />
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9.175 13.825C9.958 14.608 10.9 15 12 15s2.042-.392 2.825-1.175C15.608 13.042 16 12.1 16 11s-.392-2.042-1.175-2.825C14.042 7.392 13.1 7 12 7s-2.042.392-2.825 1.175C8.392 8.958 8 9.9 8 11s.392 2.042 1.175 2.825Zm4.237-1.412A1.926 1.926 0 0 1 12 13c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 10 11c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 12 9c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412Z"
+            />
+            <path
+              d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10Zm-2 0a8 8 0 1 0-16 0 8 8 0 0 0 16 0Z"
+            />
+            <path
+              d="M16.23 18.792a12.47 12.47 0 0 0-1.455-.455 11.6 11.6 0 0 0-5.55 0c-.487.12-.972.271-1.455.455a8.04 8.04 0 0 1-1.729-1.454c.89-.412 1.794-.729 2.709-.95A13.76 13.76 0 0 1 12 16c1.1 0 2.183.13 3.25.387a14.78 14.78 0 0 1 2.709.95 8.042 8.042 0 0 1-1.73 1.455Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            People
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M7 10a.968.968 0 0 1-.713-.287A.968.968 0 0 1 6 9c0-.283.096-.52.287-.713A.968.968 0 0 1 7 8h10a.97.97 0 0 1 .712.287c.192.192.288.43.288.713s-.096.52-.288.713A.968.968 0 0 1 17 10H7Zm0 4a.967.967 0 0 1-.713-.287A.968.968 0 0 1 6 13c0-.283.096-.52.287-.713A.967.967 0 0 1 7 12h6c.283 0 .52.096.713.287.191.192.287.43.287.713s-.096.52-.287.713A.968.968 0 0 1 13 14H7Z"
+            />
+            <path
+              d="M3.707 21.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293ZM6 17h14V5H4v13.172l.586-.586A2 2 0 0 1 6 17Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Threads
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <div
+          aria-expanded="false"
+          aria-haspopup="dialog"
+        >
+          <button
+            class="_item_8j2l6_17 _interactive_8j2l6_35"
+            data-kind="primary"
+            role="menuitem"
+          >
+            <svg
+              aria-hidden="true"
+              class="_icon_8j2l6_43"
+              fill="currentColor"
+              height="24"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M6.119 2a.5.5 0 0 0-.35.857L7.85 4.9a.5.5 0 0 1 .15.357v4.487a.5.5 0 0 1-.15.356l-3.7 3.644A.5.5 0 0 0 4 14.1v1.4a.5.5 0 0 0 .5.5H11v6a1 1 0 1 0 2 0v-6h6.5a.5.5 0 0 0 .5-.5v-1.4a.5.5 0 0 0-.15-.356l-3.7-3.644a.5.5 0 0 1-.15-.356V5.257a.5.5 0 0 1 .15-.357l2.081-2.043a.5.5 0 0 0-.35-.857H6.119ZM10 4h4v5.744a2.5 2.5 0 0 0 .746 1.781L17.26 14H6.74l2.514-2.475A2.5 2.5 0 0 0 10 9.744V4Z"
+                fill-rule="evenodd"
+              />
+            </svg>
+            <span
+              class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+            >
+              Pinned messages
+            </span>
+            <svg
+              aria-hidden="true"
+              class="_nav-hint_8j2l6_59"
+              fill="currentColor"
+              height="24"
+              viewBox="8 0 8 24"
+              width="8"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+              />
+            </svg>
+            <span
+              class="_typography_yh5dq_162 _font-body-sm-regular_yh5dq_40"
+            >
+              0
+            </span>
+          </button>
+        </div>
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6 22c-.55 0-1.02-.196-1.412-.587A1.926 1.926 0 0 1 4 20V4c0-.55.196-1.02.588-1.413A1.926 1.926 0 0 1 6 2h7.175a1.975 1.975 0 0 1 1.4.575l4.85 4.85a1.975 1.975 0 0 1 .575 1.4V20c0 .55-.196 1.02-.587 1.413A1.926 1.926 0 0 1 18 22H6Zm7-14V4H6v16h12V9h-4a.968.968 0 0 1-.713-.287A.967.967 0 0 1 13 8Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Files
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M17.25 11.672a.907.907 0 0 1-.663-.282L12.61 7.413a.907.907 0 0 1-.282-.663c0-.254.094-.475.282-.663l3.977-3.977a.907.907 0 0 1 .663-.282c.254 0 .475.094.663.282l3.977 3.977a.907.907 0 0 1 .282.663.907.907 0 0 1-.282.663l-3.977 3.977a.907.907 0 0 1-.663.282Zm2.475-4.922L17.25 4.275 14.775 6.75l2.475 2.475 2.475-2.475ZM4 11a.967.967 0 0 1-.712-.287A.968.968 0 0 1 3 10V4c0-.283.096-.52.288-.712A.968.968 0 0 1 4 3h6a.97.97 0 0 1 .713.288A.968.968 0 0 1 11 4v6c0 .283-.096.52-.287.713A.968.968 0 0 1 10 11H4Zm5-2V5H5v4h4Zm5 12a.968.968 0 0 1-.713-.288A.968.968 0 0 1 13 20v-6c0-.283.096-.52.287-.713A.968.968 0 0 1 14 13h6a.97.97 0 0 1 .712.287c.192.192.288.43.288.713v6c0 .283-.096.52-.288.712A.968.968 0 0 1 20 21h-6Zm5-2v-4h-4v4h4ZM4 21a.967.967 0 0 1-.712-.288A.968.968 0 0 1 3 20v-6a.97.97 0 0 1 .288-.713A.967.967 0 0 1 4 13h6c.283 0 .52.096.713.287.191.192.287.43.287.713v6a.97.97 0 0 1-.287.712A.968.968 0 0 1 10 21H4Zm5-2v-4H5v4h4Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Extensions
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <div
+          class="_separator_144s5_17"
+          data-kind="primary"
+          data-orientation="horizontal"
+          role="separator"
+        />
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 19.071c-.978.978-2.157 1.467-3.536 1.467-1.378 0-2.557-.489-3.535-1.467-.978-.978-1.467-2.157-1.467-3.536 0-1.378.489-2.557 1.467-3.535L7.05 9.879c.2-.2.436-.3.707-.3.271 0 .507.1.707.3.2.2.301.436.301.707 0 .27-.1.506-.3.707l-2.122 2.121a2.893 2.893 0 0 0-.884 2.122c0 .824.295 1.532.884 2.12.59.59 1.296.885 2.121.885s1.533-.295 2.122-.884l2.121-2.121c.2-.2.436-.301.707-.301.271 0 .507.1.707.3.2.2.3.437.3.708 0 .27-.1.506-.3.707L12 19.07Zm-1.414-4.243c-.2.2-.436.3-.707.3a.967.967 0 0 1-.707-.3.969.969 0 0 1-.301-.707c0-.27.1-.507.3-.707l4.243-4.242c.2-.2.436-.301.707-.301.271 0 .507.1.707.3.2.2.3.437.3.708 0 .27-.1.506-.3.707l-4.242 4.242Zm6.364-.707c-.2.2-.436.3-.707.3a.968.968 0 0 1-.707-.3.969.969 0 0 1-.301-.707c0-.27.1-.507.3-.707l2.122-2.121c.59-.59.884-1.297.884-2.122s-.295-1.532-.884-2.12a2.893 2.893 0 0 0-2.121-.885c-.825 0-1.532.295-2.122.884l-2.121 2.121c-.2.2-.436.301-.707.301a.968.968 0 0 1-.707-.3.97.97 0 0 1-.3-.708c0-.27.1-.506.3-.707L12 4.93c.978-.978 2.157-1.467 3.536-1.467 1.378 0 2.557.489 3.535 1.467.978.978 1.467 2.157 1.467 3.535 0 1.38-.489 2.558-1.467 3.536l-2.121 2.121Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Copy link
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M16 10a.97.97 0 0 0 .712-.287A.967.967 0 0 0 17 9a.967.967 0 0 0-.288-.713A.968.968 0 0 0 16 8h-3a.968.968 0 0 0-.713.287A.967.967 0 0 0 12 9c0 .283.096.52.287.713.192.191.43.287.713.287h3Zm0 6a.97.97 0 0 0 .712-.287A.968.968 0 0 0 17 15a.968.968 0 0 0-.288-.713A.968.968 0 0 0 16 14h-3a.968.968 0 0 0-.713.287A.968.968 0 0 0 12 15c0 .283.096.52.287.713.192.191.43.287.713.287h3Zm-7-5c.55 0 1.02-.196 1.412-.588C10.804 10.021 11 9.55 11 9c0-.55-.196-1.02-.588-1.412A1.926 1.926 0 0 0 9 7c-.55 0-1.02.196-1.412.588A1.926 1.926 0 0 0 7 9c0 .55.196 1.02.588 1.412.391.392.862.588 1.412.588Zm0 6c.55 0 1.02-.196 1.412-.587.392-.392.588-.863.588-1.413s-.196-1.02-.588-1.412A1.926 1.926 0 0 0 9 13c-.55 0-1.02.196-1.412.588A1.926 1.926 0 0 0 7 15c0 .55.196 1.02.588 1.413.391.391.862.587 1.412.587Zm-4 4c-.55 0-1.02-.196-1.413-.587A1.926 1.926 0 0 1 3 19V5c0-.55.196-1.02.587-1.413A1.926 1.926 0 0 1 5 3h14c.55 0 1.02.196 1.413.587.39.393.587.863.587 1.413v14c0 .55-.196 1.02-.587 1.413A1.926 1.926 0 0 1 19 21H5Zm0-2h14V5H5v14Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Polls
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M5 21c-.55 0-1.02-.196-1.413-.587A1.926 1.926 0 0 1 3 19V6.5c0-.25.042-.475.125-.675.083-.2.192-.392.325-.575l1.4-1.7c.133-.183.3-.32.5-.412C5.55 3.046 5.767 3 6 3h12c.233 0 .45.046.65.138.2.091.367.229.5.412l1.4 1.7c.133.183.242.375.325.575.083.2.125.425.125.675V19c0 .55-.196 1.02-.587 1.413A1.926 1.926 0 0 1 19 21H5Zm.4-15h13.2l-.85-1H6.25L5.4 6ZM5 19h14V8H5v11Zm7-1.425c.133 0 .258-.02.375-.063a.877.877 0 0 0 .325-.212l2.6-2.6a.948.948 0 0 0 .275-.7.948.948 0 0 0-.275-.7.948.948 0 0 0-.7-.275.948.948 0 0 0-.7.275l-.9.9V11a.968.968 0 0 0-.287-.713A.968.968 0 0 0 12 10a.968.968 0 0 0-.713.287A.968.968 0 0 0 11 11v3.2l-.9-.9a.948.948 0 0 0-.7-.275.948.948 0 0 0-.7.275.948.948 0 0 0-.275.7.95.95 0 0 0 .275.7l2.6 2.6c.1.1.208.17.325.212.117.042.242.063.375.063Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Export Chat
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0Zm-2 0a2 2 0 1 0-4 0 2 2 0 0 0 4 0Z"
+            />
+            <path
+              d="M11.312 2h1.376A2.312 2.312 0 0 1 15 4.312v.247l.002.003c.01.014.031.033.064.047.03.013.056.013.07.01h.002l.177-.177a2.312 2.312 0 0 1 3.27 0l.973.974a2.312 2.312 0 0 1 0 3.269l-.177.177v.003a.134.134 0 0 0 .01.07.153.153 0 0 0 .047.063l.003.002h.247A2.312 2.312 0 0 1 22 11.312v1.376A2.312 2.312 0 0 1 19.688 15h-.247l-.003.002a.152.152 0 0 0-.047.064.134.134 0 0 0-.01.07v.002l.177.177a2.312 2.312 0 0 1 0 3.27l-.974.973a2.312 2.312 0 0 1-3.269 0l-.177-.177h-.003a.134.134 0 0 0-.07.01.152.152 0 0 0-.063.047l-.002.003v.247A2.312 2.312 0 0 1 12.688 22h-1.376A2.312 2.312 0 0 1 9 19.688v-.247l-.002-.003a.153.153 0 0 0-.064-.047.134.134 0 0 0-.07-.01h-.002l-.177.177a2.312 2.312 0 0 1-3.27 0l-.973-.974a2.312 2.312 0 0 1 0-3.269l.177-.177v-.003a.135.135 0 0 0-.01-.07.152.152 0 0 0-.047-.063L4.559 15h-.247A2.312 2.312 0 0 1 2 12.688v-1.376A2.312 2.312 0 0 1 4.312 9h.247l.003-.002a.153.153 0 0 0 .047-.064.135.135 0 0 0 .01-.07v-.002l-.177-.177a2.312 2.312 0 0 1 0-3.27l.974-.973a2.312 2.312 0 0 1 3.269 0l.177.177h.003a.135.135 0 0 0 .07-.01.153.153 0 0 0 .063-.047L9 4.559v-.247A2.312 2.312 0 0 1 11.312 2ZM11 4.312v.257c0 .893-.59 1.593-1.299 1.887-.716.297-1.622.21-2.248-.418l-.182-.182a.312.312 0 0 0-.441 0l-.974.974a.312.312 0 0 0 0 .44l.182.183c.627.626.715 1.531.418 2.248C6.162 10.41 5.462 11 4.569 11h-.257a.312.312 0 0 0-.312.312v1.376c0 .172.14.312.312.312h.257c.893 0 1.593.59 1.887 1.299.297.716.21 1.622-.418 2.248l-.182.182a.312.312 0 0 0 0 .441l.974.973a.31.31 0 0 0 .44 0l.183-.181c.626-.627 1.532-.715 2.248-.418.709.294 1.299.994 1.299 1.887v.257c0 .172.14.312.312.312h1.376c.172 0 .312-.14.312-.312v-.257c0-.893.59-1.593 1.299-1.887.716-.297 1.622-.21 2.248.418l.182.181c.122.122.32.122.441 0l.973-.973a.312.312 0 0 0 0-.44l-.181-.183c-.627-.627-.715-1.532-.418-2.248.294-.709.994-1.299 1.887-1.299h.257c.172 0 .312-.14.312-.312v-1.376a.312.312 0 0 0-.312-.312h-.257c-.893 0-1.593-.59-1.887-1.299-.297-.717-.21-1.622.418-2.248l.181-.182a.312.312 0 0 0 0-.441l-.973-.974a.312.312 0 0 0-.44 0l-.183.182c-.627.627-1.532.715-2.248.418C13.59 6.162 13 5.462 13 4.569v-.257A.312.312 0 0 0 12.688 4h-1.376a.312.312 0 0 0-.312.312Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Settings
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <div
+          class="_separator_144s5_17"
+          data-kind="primary"
+          data-orientation="horizontal"
+          role="separator"
+        />
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="critical"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M14 13c.283 0 .52-.096.713-.287A.968.968 0 0 0 15 12a.968.968 0 0 0-.287-.713A.968.968 0 0 0 14 11a.968.968 0 0 0-.713.287A.968.968 0 0 0 13 12c0 .283.096.52.287.713.192.191.43.287.713.287Z"
+            />
+            <path
+              d="M10.385 21.788A.998.998 0 0 1 10 21V3a1.003 1.003 0 0 1 1.242-.97l8 2A1 1 0 0 1 20 5v14a1 1 0 0 1-.758.97l-8 2a.998.998 0 0 1-.857-.182ZM18 5.781l-6-1.5v15.438l6-1.5V5.781ZM9 6H7v12h2v2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2v2Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Leave room
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
+<div>
+  <div
+    aria-labelledby="room-summary-panel-tab"
+    class="mx_BaseCard mx_RoomSummaryCard"
+    id="room-summary-panel"
+    role="tabpanel"
+  >
+    <div
+      class="mx_BaseCard_header"
+    >
+      <div
+        class="mx_BaseCard_header_spacer"
+      />
+      <button
+        aria-labelledby=":rb:"
+        class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
+        data-testid="base-card-close-button"
+        role="button"
+        style="--cpd-icon-button-size: 28px;"
+        tabindex="0"
+      >
+        <div
+          class="_indicator-icon_133tf_26"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+            />
+          </svg>
+        </div>
+      </button>
+    </div>
+    <div
+      class="mx_AutoHideScrollbar"
+      tabindex="-1"
+    >
+      <header
+        class="mx_RoomSummaryCard_container"
+      >
+        <span
+          class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+          data-color="1"
+          data-testid="avatar-img"
+          data-type="round"
+          role="presentation"
+          style="--cpd-avatar-size: 80px;"
+        >
+          !
+        </span>
+        <h1
+          class="_typography_yh5dq_162 _font-heading-md-semibold_yh5dq_121 mx_RoomSummaryCard_roomName text-primary"
+          title="!room:domain.org"
+        >
+          !room:domain.org
+        </h1>
+        <div
+          class="_typography_yh5dq_162 _font-body-sm-semibold_yh5dq_45 mx_RoomSummaryCard_alias text-secondary"
+          title=""
+        />
+        <section
+          class="mx_Flex mx_RoomSummaryCard_badges"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x);"
+        >
+          <span
+            class="_typography_yh5dq_162 _font-body-sm-medium_yh5dq_50 _badge_1171v_17"
+            data-kind="grey"
+          >
+            <svg
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6 22c-.55 0-1.02-.196-1.413-.587A1.926 1.926 0 0 1 4 20V10c0-.55.196-1.02.587-1.412.212-.212.446-.366.703-.463L1.333 4.167a1 1 0 0 1 1.414-1.414L7 7.006v-.012l13 13v.012l1.247 1.247a1 1 0 0 1-1.414 1.414l-.896-.896A1.935 1.935 0 0 1 18 22H6Zm14-4.834V10c0-.55-.196-1.02-.587-1.412A1.926 1.926 0 0 0 18 8h-1V6c0-1.383-.488-2.563-1.463-3.538C14.563 1.487 13.383 1 12 1s-2.563.488-3.538 1.462A4.876 4.876 0 0 0 7.243 4.41L9 6.166V6c0-.833.292-1.542.875-2.125A2.893 2.893 0 0 1 12 3c.833 0 1.542.292 2.125.875S15 5.167 15 6v2h-4.166L20 17.166Z"
+              />
+            </svg>
+            Not encrypted
+          </span>
+        </section>
+        <section
+          class="mx_Flex mx_RoomSummaryCard_topic"
+          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x);"
+        >
+          <div
+            class="mx_Box mx_RoomSummaryCard_topic_container mx_Box--flex"
+            style="--mx-box-flex: 1;"
+          >
+            <p
+              class="_typography_yh5dq_162 _font-body-sm-regular_yh5dq_40"
+            >
+              <span
+                dir="auto"
+              >
+                This is the room's topic.
+              </span>
+            </p>
+            <button
+              class="_icon-button_bh2qc_17 mx_RoomSummaryCard_topic_chevron"
+              role="button"
+              style="--cpd-icon-button-size: 24px;"
+              tabindex="0"
+            >
+              <div
+                class="_indicator-icon_133tf_26"
+                style="--cpd-icon-button-size: 100%;"
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 14.95c-.133 0-.258-.02-.375-.063a.876.876 0 0 1-.325-.212l-4.6-4.6a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l3.9 3.9 3.9-3.9a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275.948.948 0 0 1 .275.7.948.948 0 0 1-.275.7l-4.6 4.6c-.1.1-.208.17-.325.212a1.106 1.106 0 0 1-.375.063Z"
+                  />
+                </svg>
+              </div>
+            </button>
+          </div>
+          <div
+            class="mx_Box mx_RoomSummaryCard_topic_edit mx_Box--flex"
+            style="--mx-box-flex: 1;"
+          >
+            <a
+              class="_link_ue21z_17"
+              data-kind="primary"
+              data-size="medium"
+              rel="noreferrer noopener"
+            >
+              <p
+                class="_typography_yh5dq_162 _font-body-sm-regular_yh5dq_40"
+              >
+                Edit
+              </p>
+            </a>
+          </div>
+        </section>
+      </header>
+      <div
+        class="_separator_144s5_17"
+        data-kind="primary"
+        data-orientation="horizontal"
+        role="separator"
+      />
+      <div
+        aria-orientation="vertical"
+        role="menubar"
+      >
+        <div
+          aria-checked="false"
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="menuitemcheckbox"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M13.905 9.378 12 5.52l-1.905 3.86-4.259.618 3.082 3.004-.727 4.242L12 15.24l3.81 2.003-.728-4.242 3.082-3.004-4.26-.619ZM8.767 7.55l2.336-4.733a1 1 0 0 1 1.794 0l2.336 4.733 5.223.76a1 1 0 0 1 .555 1.705L17.23 13.7l.892 5.202a1 1 0 0 1-1.45 1.054L12 17.5l-4.672 2.456a1 1 0 0 1-1.451-1.054l.892-5.202-3.78-3.685a1 1 0 0 1 .555-1.706l5.223-.759Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Favourite
+          </span>
+          <div
+            class="_container_qnvru_18"
+          >
+            <input
+              aria-hidden="true"
+              class="_input_qnvru_32"
+              id=":rg:"
+              type="checkbox"
+            />
+            <div
+              class="_ui_qnvru_42"
+            />
+          </div>
+        </div>
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M10 12c-1.1 0-2.042-.392-2.825-1.175C6.392 10.042 6 9.1 6 8s.392-2.042 1.175-2.825C7.958 4.392 8.9 4 10 4s2.042.392 2.825 1.175C13.608 5.958 14 6.9 14 8s-.392 2.042-1.175 2.825C12.042 11.608 11.1 12 10 12Zm-8 6v-.8c0-.567.146-1.087.438-1.563A2.911 2.911 0 0 1 3.6 14.55a14.843 14.843 0 0 1 3.15-1.163A13.76 13.76 0 0 1 10 13c1.1 0 2.183.13 3.25.387 1.067.259 2.117.646 3.15 1.163.483.25.87.612 1.163 1.087.291.476.437.996.437 1.563v.8c0 .55-.196 1.02-.587 1.413A1.926 1.926 0 0 1 16 20H4c-.55 0-1.02-.196-1.413-.587A1.926 1.926 0 0 1 2 18Zm2 0h12v-.8a.973.973 0 0 0-.5-.85c-.9-.45-1.808-.787-2.725-1.012a11.6 11.6 0 0 0-5.55 0c-.917.225-1.825.562-2.725 1.012a.973.973 0 0 0-.5.85v.8Zm6-8c.55 0 1.02-.196 1.412-.588C11.804 9.021 12 8.55 12 8c0-.55-.196-1.02-.588-1.412A1.926 1.926 0 0 0 10 6c-.55 0-1.02.196-1.412.588A1.926 1.926 0 0 0 8 8c0 .55.196 1.02.588 1.412.391.392.862.588 1.412.588Zm7 1h2v2c0 .283.096.52.288.713.191.191.429.287.712.287s.52-.096.712-.287A.968.968 0 0 0 21 13v-2h2a.97.97 0 0 0 .712-.287A.968.968 0 0 0 24 10a.967.967 0 0 0-.288-.713A.968.968 0 0 0 23 9h-2V7a.967.967 0 0 0-.288-.713A.968.968 0 0 0 20 6a.968.968 0 0 0-.712.287A.967.967 0 0 0 19 7v2h-2a.968.968 0 0 0-.712.287A.967.967 0 0 0 16 10c0 .283.096.52.288.713A.968.968 0 0 0 17 11Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Invite
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <div
+          class="_separator_144s5_17"
+          data-kind="primary"
+          data-orientation="horizontal"
+          role="separator"
+        />
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9.175 13.825C9.958 14.608 10.9 15 12 15s2.042-.392 2.825-1.175C15.608 13.042 16 12.1 16 11s-.392-2.042-1.175-2.825C14.042 7.392 13.1 7 12 7s-2.042.392-2.825 1.175C8.392 8.958 8 9.9 8 11s.392 2.042 1.175 2.825Zm4.237-1.412A1.926 1.926 0 0 1 12 13c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 10 11c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 12 9c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412Z"
+            />
+            <path
+              d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10Zm-2 0a8 8 0 1 0-16 0 8 8 0 0 0 16 0Z"
+            />
+            <path
+              d="M16.23 18.792a12.47 12.47 0 0 0-1.455-.455 11.6 11.6 0 0 0-5.55 0c-.487.12-.972.271-1.455.455a8.04 8.04 0 0 1-1.729-1.454c.89-.412 1.794-.729 2.709-.95A13.76 13.76 0 0 1 12 16c1.1 0 2.183.13 3.25.387a14.78 14.78 0 0 1 2.709.95 8.042 8.042 0 0 1-1.73 1.455Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            People
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M7 10a.968.968 0 0 1-.713-.287A.968.968 0 0 1 6 9c0-.283.096-.52.287-.713A.968.968 0 0 1 7 8h10a.97.97 0 0 1 .712.287c.192.192.288.43.288.713s-.096.52-.288.713A.968.968 0 0 1 17 10H7Zm0 4a.967.967 0 0 1-.713-.287A.968.968 0 0 1 6 13c0-.283.096-.52.287-.713A.967.967 0 0 1 7 12h6c.283 0 .52.096.713.287.191.192.287.43.287.713s-.096.52-.287.713A.968.968 0 0 1 13 14H7Z"
+            />
+            <path
+              d="M3.707 21.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293ZM6 17h14V5H4v13.172l.586-.586A2 2 0 0 1 6 17Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Threads
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <div
+          aria-expanded="false"
+          aria-haspopup="dialog"
+        >
+          <button
+            class="_item_8j2l6_17 _interactive_8j2l6_35"
+            data-kind="primary"
+            role="menuitem"
+          >
+            <svg
+              aria-hidden="true"
+              class="_icon_8j2l6_43"
+              fill="currentColor"
+              height="24"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M6.119 2a.5.5 0 0 0-.35.857L7.85 4.9a.5.5 0 0 1 .15.357v4.487a.5.5 0 0 1-.15.356l-3.7 3.644A.5.5 0 0 0 4 14.1v1.4a.5.5 0 0 0 .5.5H11v6a1 1 0 1 0 2 0v-6h6.5a.5.5 0 0 0 .5-.5v-1.4a.5.5 0 0 0-.15-.356l-3.7-3.644a.5.5 0 0 1-.15-.356V5.257a.5.5 0 0 1 .15-.357l2.081-2.043a.5.5 0 0 0-.35-.857H6.119ZM10 4h4v5.744a2.5 2.5 0 0 0 .746 1.781L17.26 14H6.74l2.514-2.475A2.5 2.5 0 0 0 10 9.744V4Z"
+                fill-rule="evenodd"
+              />
+            </svg>
+            <span
+              class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+            >
+              Pinned messages
+            </span>
+            <svg
+              aria-hidden="true"
+              class="_nav-hint_8j2l6_59"
+              fill="currentColor"
+              height="24"
+              viewBox="8 0 8 24"
+              width="8"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+              />
+            </svg>
+            <span
+              class="_typography_yh5dq_162 _font-body-sm-regular_yh5dq_40"
+            >
+              0
+            </span>
+          </button>
+        </div>
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6 22c-.55 0-1.02-.196-1.412-.587A1.926 1.926 0 0 1 4 20V4c0-.55.196-1.02.588-1.413A1.926 1.926 0 0 1 6 2h7.175a1.975 1.975 0 0 1 1.4.575l4.85 4.85a1.975 1.975 0 0 1 .575 1.4V20c0 .55-.196 1.02-.587 1.413A1.926 1.926 0 0 1 18 22H6Zm7-14V4H6v16h12V9h-4a.968.968 0 0 1-.713-.287A.967.967 0 0 1 13 8Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Files
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M17.25 11.672a.907.907 0 0 1-.663-.282L12.61 7.413a.907.907 0 0 1-.282-.663c0-.254.094-.475.282-.663l3.977-3.977a.907.907 0 0 1 .663-.282c.254 0 .475.094.663.282l3.977 3.977a.907.907 0 0 1 .282.663.907.907 0 0 1-.282.663l-3.977 3.977a.907.907 0 0 1-.663.282Zm2.475-4.922L17.25 4.275 14.775 6.75l2.475 2.475 2.475-2.475ZM4 11a.967.967 0 0 1-.712-.287A.968.968 0 0 1 3 10V4c0-.283.096-.52.288-.712A.968.968 0 0 1 4 3h6a.97.97 0 0 1 .713.288A.968.968 0 0 1 11 4v6c0 .283-.096.52-.287.713A.968.968 0 0 1 10 11H4Zm5-2V5H5v4h4Zm5 12a.968.968 0 0 1-.713-.288A.968.968 0 0 1 13 20v-6c0-.283.096-.52.287-.713A.968.968 0 0 1 14 13h6a.97.97 0 0 1 .712.287c.192.192.288.43.288.713v6c0 .283-.096.52-.288.712A.968.968 0 0 1 20 21h-6Zm5-2v-4h-4v4h4ZM4 21a.967.967 0 0 1-.712-.288A.968.968 0 0 1 3 20v-6a.97.97 0 0 1 .288-.713A.967.967 0 0 1 4 13h6c.283 0 .52.096.713.287.191.192.287.43.287.713v6a.97.97 0 0 1-.287.712A.968.968 0 0 1 10 21H4Zm5-2v-4H5v4h4Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Extensions
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <div
+          class="_separator_144s5_17"
+          data-kind="primary"
+          data-orientation="horizontal"
+          role="separator"
+        />
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 19.071c-.978.978-2.157 1.467-3.536 1.467-1.378 0-2.557-.489-3.535-1.467-.978-.978-1.467-2.157-1.467-3.536 0-1.378.489-2.557 1.467-3.535L7.05 9.879c.2-.2.436-.3.707-.3.271 0 .507.1.707.3.2.2.301.436.301.707 0 .27-.1.506-.3.707l-2.122 2.121a2.893 2.893 0 0 0-.884 2.122c0 .824.295 1.532.884 2.12.59.59 1.296.885 2.121.885s1.533-.295 2.122-.884l2.121-2.121c.2-.2.436-.301.707-.301.271 0 .507.1.707.3.2.2.3.437.3.708 0 .27-.1.506-.3.707L12 19.07Zm-1.414-4.243c-.2.2-.436.3-.707.3a.967.967 0 0 1-.707-.3.969.969 0 0 1-.301-.707c0-.27.1-.507.3-.707l4.243-4.242c.2-.2.436-.301.707-.301.271 0 .507.1.707.3.2.2.3.437.3.708 0 .27-.1.506-.3.707l-4.242 4.242Zm6.364-.707c-.2.2-.436.3-.707.3a.968.968 0 0 1-.707-.3.969.969 0 0 1-.301-.707c0-.27.1-.507.3-.707l2.122-2.121c.59-.59.884-1.297.884-2.122s-.295-1.532-.884-2.12a2.893 2.893 0 0 0-2.121-.885c-.825 0-1.532.295-2.122.884l-2.121 2.121c-.2.2-.436.301-.707.301a.968.968 0 0 1-.707-.3.97.97 0 0 1-.3-.708c0-.27.1-.506.3-.707L12 4.93c.978-.978 2.157-1.467 3.536-1.467 1.378 0 2.557.489 3.535 1.467.978.978 1.467 2.157 1.467 3.535 0 1.38-.489 2.558-1.467 3.536l-2.121 2.121Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Copy link
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M16 10a.97.97 0 0 0 .712-.287A.967.967 0 0 0 17 9a.967.967 0 0 0-.288-.713A.968.968 0 0 0 16 8h-3a.968.968 0 0 0-.713.287A.967.967 0 0 0 12 9c0 .283.096.52.287.713.192.191.43.287.713.287h3Zm0 6a.97.97 0 0 0 .712-.287A.968.968 0 0 0 17 15a.968.968 0 0 0-.288-.713A.968.968 0 0 0 16 14h-3a.968.968 0 0 0-.713.287A.968.968 0 0 0 12 15c0 .283.096.52.287.713.192.191.43.287.713.287h3Zm-7-5c.55 0 1.02-.196 1.412-.588C10.804 10.021 11 9.55 11 9c0-.55-.196-1.02-.588-1.412A1.926 1.926 0 0 0 9 7c-.55 0-1.02.196-1.412.588A1.926 1.926 0 0 0 7 9c0 .55.196 1.02.588 1.412.391.392.862.588 1.412.588Zm0 6c.55 0 1.02-.196 1.412-.587.392-.392.588-.863.588-1.413s-.196-1.02-.588-1.412A1.926 1.926 0 0 0 9 13c-.55 0-1.02.196-1.412.588A1.926 1.926 0 0 0 7 15c0 .55.196 1.02.588 1.413.391.391.862.587 1.412.587Zm-4 4c-.55 0-1.02-.196-1.413-.587A1.926 1.926 0 0 1 3 19V5c0-.55.196-1.02.587-1.413A1.926 1.926 0 0 1 5 3h14c.55 0 1.02.196 1.413.587.39.393.587.863.587 1.413v14c0 .55-.196 1.02-.587 1.413A1.926 1.926 0 0 1 19 21H5Zm0-2h14V5H5v14Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Polls
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M5 21c-.55 0-1.02-.196-1.413-.587A1.926 1.926 0 0 1 3 19V6.5c0-.25.042-.475.125-.675.083-.2.192-.392.325-.575l1.4-1.7c.133-.183.3-.32.5-.412C5.55 3.046 5.767 3 6 3h12c.233 0 .45.046.65.138.2.091.367.229.5.412l1.4 1.7c.133.183.242.375.325.575.083.2.125.425.125.675V19c0 .55-.196 1.02-.587 1.413A1.926 1.926 0 0 1 19 21H5Zm.4-15h13.2l-.85-1H6.25L5.4 6ZM5 19h14V8H5v11Zm7-1.425c.133 0 .258-.02.375-.063a.877.877 0 0 0 .325-.212l2.6-2.6a.948.948 0 0 0 .275-.7.948.948 0 0 0-.275-.7.948.948 0 0 0-.7-.275.948.948 0 0 0-.7.275l-.9.9V11a.968.968 0 0 0-.287-.713A.968.968 0 0 0 12 10a.968.968 0 0 0-.713.287A.968.968 0 0 0 11 11v3.2l-.9-.9a.948.948 0 0 0-.7-.275.948.948 0 0 0-.7.275.948.948 0 0 0-.275.7.95.95 0 0 0 .275.7l2.6 2.6c.1.1.208.17.325.212.117.042.242.063.375.063Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Export Chat
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="primary"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0Zm-2 0a2 2 0 1 0-4 0 2 2 0 0 0 4 0Z"
+            />
+            <path
+              d="M11.312 2h1.376A2.312 2.312 0 0 1 15 4.312v.247l.002.003c.01.014.031.033.064.047.03.013.056.013.07.01h.002l.177-.177a2.312 2.312 0 0 1 3.27 0l.973.974a2.312 2.312 0 0 1 0 3.269l-.177.177v.003a.134.134 0 0 0 .01.07.153.153 0 0 0 .047.063l.003.002h.247A2.312 2.312 0 0 1 22 11.312v1.376A2.312 2.312 0 0 1 19.688 15h-.247l-.003.002a.152.152 0 0 0-.047.064.134.134 0 0 0-.01.07v.002l.177.177a2.312 2.312 0 0 1 0 3.27l-.974.973a2.312 2.312 0 0 1-3.269 0l-.177-.177h-.003a.134.134 0 0 0-.07.01.152.152 0 0 0-.063.047l-.002.003v.247A2.312 2.312 0 0 1 12.688 22h-1.376A2.312 2.312 0 0 1 9 19.688v-.247l-.002-.003a.153.153 0 0 0-.064-.047.134.134 0 0 0-.07-.01h-.002l-.177.177a2.312 2.312 0 0 1-3.27 0l-.973-.974a2.312 2.312 0 0 1 0-3.269l.177-.177v-.003a.135.135 0 0 0-.01-.07.152.152 0 0 0-.047-.063L4.559 15h-.247A2.312 2.312 0 0 1 2 12.688v-1.376A2.312 2.312 0 0 1 4.312 9h.247l.003-.002a.153.153 0 0 0 .047-.064.135.135 0 0 0 .01-.07v-.002l-.177-.177a2.312 2.312 0 0 1 0-3.27l.974-.973a2.312 2.312 0 0 1 3.269 0l.177.177h.003a.135.135 0 0 0 .07-.01.153.153 0 0 0 .063-.047L9 4.559v-.247A2.312 2.312 0 0 1 11.312 2ZM11 4.312v.257c0 .893-.59 1.593-1.299 1.887-.716.297-1.622.21-2.248-.418l-.182-.182a.312.312 0 0 0-.441 0l-.974.974a.312.312 0 0 0 0 .44l.182.183c.627.626.715 1.531.418 2.248C6.162 10.41 5.462 11 4.569 11h-.257a.312.312 0 0 0-.312.312v1.376c0 .172.14.312.312.312h.257c.893 0 1.593.59 1.887 1.299.297.716.21 1.622-.418 2.248l-.182.182a.312.312 0 0 0 0 .441l.974.973a.31.31 0 0 0 .44 0l.183-.181c.626-.627 1.532-.715 2.248-.418.709.294 1.299.994 1.299 1.887v.257c0 .172.14.312.312.312h1.376c.172 0 .312-.14.312-.312v-.257c0-.893.59-1.593 1.299-1.887.716-.297 1.622-.21 2.248.418l.182.181c.122.122.32.122.441 0l.973-.973a.312.312 0 0 0 0-.44l-.181-.183c-.627-.627-.715-1.532-.418-2.248.294-.709.994-1.299 1.887-1.299h.257c.172 0 .312-.14.312-.312v-1.376a.312.312 0 0 0-.312-.312h-.257c-.893 0-1.593-.59-1.887-1.299-.297-.717-.21-1.622.418-2.248l.181-.182a.312.312 0 0 0 0-.441l-.973-.974a.312.312 0 0 0-.44 0l-.183.182c-.627.627-1.532.715-2.248.418C13.59 6.162 13 5.462 13 4.569v-.257A.312.312 0 0 0 12.688 4h-1.376a.312.312 0 0 0-.312.312Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Settings
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+        <div
+          class="_separator_144s5_17"
+          data-kind="primary"
+          data-orientation="horizontal"
+          role="separator"
+        />
+        <button
+          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          data-kind="critical"
+          role="menuitem"
+        >
+          <svg
+            aria-hidden="true"
+            class="_icon_8j2l6_43"
+            fill="currentColor"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M14 13c.283 0 .52-.096.713-.287A.968.968 0 0 0 15 12a.968.968 0 0 0-.287-.713A.968.968 0 0 0 14 11a.968.968 0 0 0-.713.287A.968.968 0 0 0 13 12c0 .283.096.52.287.713.192.191.43.287.713.287Z"
+            />
+            <path
+              d="M10.385 21.788A.998.998 0 0 1 10 21V3a1.003 1.003 0 0 1 1.242-.97l8 2A1 1 0 0 1 20 5v14a1 1 0 0 1-.758.97l-8 2a.998.998 0 0 1-.857-.182ZM18 5.781l-6-1.5v15.438l6-1.5V5.781ZM9 6H7v12h2v2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2v2Z"
+            />
+          </svg>
+          <span
+            class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+          >
+            Leave room
+          </span>
+          <svg
+            aria-hidden="true"
+            class="_nav-hint_8j2l6_59"
+            fill="currentColor"
+            height="24"
+            viewBox="8 0 8 24"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;

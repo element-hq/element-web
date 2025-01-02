@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<BeaconViewDialog /> renders a fallback when there are no locations 1`] = `
+<div
+  class="mx_MapFallback mx_BeaconViewDialog_map"
+  data-testid="beacon-view-dialog-map-fallback"
+>
+  <div
+    class="mx_MapFallback_bg"
+  />
+  <svg
+    class="mx_MapFallback_icon"
+    fill="currentColor"
+    height="1em"
+    viewBox="0 0 24 24"
+    width="1em"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M12 21.325a2.07 2.07 0 0 1-.7-.125 1.84 1.84 0 0 1-.625-.375A39.112 39.112 0 0 1 7.8 17.9c-.833-.95-1.53-1.87-2.087-2.762-.559-.892-.984-1.75-1.276-2.575C4.146 11.738 4 10.95 4 10.2c0-2.5.804-4.492 2.412-5.975C8.021 2.742 9.883 2 12 2s3.98.742 5.587 2.225C19.197 5.708 20 7.7 20 10.2c0 .75-.146 1.538-.438 2.363-.291.824-.716 1.683-1.274 2.574A21.678 21.678 0 0 1 16.2 17.9a39.112 39.112 0 0 1-2.875 2.925 1.84 1.84 0 0 1-.625.375 2.07 2.07 0 0 1-.7.125ZM12 12c.55 0 1.02-.196 1.412-.588.392-.391.588-.862.588-1.412 0-.55-.196-1.02-.588-1.412A1.926 1.926 0 0 0 12 8c-.55 0-1.02.196-1.412.588A1.926 1.926 0 0 0 10 10c0 .55.196 1.02.588 1.412.391.392.862.588 1.412.588Z"
+    />
+  </svg>
+  <span
+    class="mx_BeaconViewDialog_mapFallbackMessage"
+  >
+    No live locations
+  </span>
+  <div
+    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+    data-testid="beacon-view-dialog-fallback-close"
+    role="button"
+    tabindex="0"
+  >
+    Close
+  </div>
+</div>
+`;
+
+exports[`<BeaconViewDialog /> renders own beacon status when user is live sharing 1`] = `
+<div
+  class="mx_DialogOwnBeaconStatus"
+>
+  <span
+    class="_avatar_mcap2_17 mx_BaseAvatar mx_DialogOwnBeaconStatus_avatar _avatar-imageless_mcap2_61"
+    data-color="6"
+    data-testid="avatar-img"
+    data-type="round"
+    role="presentation"
+    style="--cpd-avatar-size: 32px;"
+    title="@alice:server"
+  >
+    a
+  </span>
+  <div
+    class="mx_BeaconStatus mx_BeaconStatus_Active mx_DialogOwnBeaconStatus_status"
+  >
+    <div
+      class="mx_BeaconStatus_description"
+    >
+      <span
+        class="mx_BeaconStatus_label"
+      >
+        Live location enabled
+      </span>
+      <span
+        class="mx_LiveTimeRemaining"
+        data-testid="room-live-share-expiry"
+      >
+        1h left
+      </span>
+    </div>
+    <div
+      class="mx_AccessibleButton mx_OwnBeaconStatus_button mx_OwnBeaconStatus_destructiveButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
+      data-testid="beacon-status-stop-beacon"
+      role="button"
+      tabindex="0"
+    >
+      Stop
+    </div>
+  </div>
+</div>
+`;

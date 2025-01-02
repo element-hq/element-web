@@ -1,17 +1,8 @@
 /*
-Copyright 2020 New Vector Ltd
+Copyright 2020-2024 New Vector Ltd.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
 */
 
 interface IParams {
@@ -49,14 +40,14 @@ export default class Favicon {
     private readonly params: IParams;
     private readonly canvas: HTMLCanvasElement;
     private readonly baseImage: HTMLImageElement;
-    private context: CanvasRenderingContext2D;
+    private context!: CanvasRenderingContext2D;
     private icons: HTMLLinkElement[];
 
     private isReady = false;
     // callback to run once isReady is asserted, allows for a badge to be queued for when it can be shown
-    private readyCb = () => {};
+    private readyCb?: () => void;
 
-    constructor(params: Partial<IParams> = {}) {
+    public constructor(params: Partial<IParams> = {}) {
         this.params = { ...defaults, ...params };
 
         this.icons = Favicon.getIcons();
@@ -68,30 +59,40 @@ export default class Favicon {
         const lastIcon = this.icons[this.icons.length - 1];
         if (lastIcon.hasAttribute("href")) {
             this.baseImage.setAttribute("crossOrigin", "anonymous");
-            this.baseImage.onload = () => {
+            this.baseImage.onload = (): void => {
                 // get height and width of the favicon
-                this.canvas.height = (this.baseImage.height > 0) ? this.baseImage.height : 32;
-                this.canvas.width = (this.baseImage.width > 0) ? this.baseImage.width : 32;
-                this.context = this.canvas.getContext("2d");
+                this.canvas.height = this.baseImage.height > 0 ? this.baseImage.height : 32;
+                this.canvas.width = this.baseImage.width > 0 ? this.baseImage.width : 32;
+                this.context = this.canvas.getContext("2d")!;
                 this.ready();
             };
-            this.baseImage.setAttribute("src", lastIcon.getAttribute("href"));
+            this.baseImage.setAttribute("src", lastIcon.getAttribute("href")!);
         } else {
             this.canvas.height = this.baseImage.height = 32;
             this.canvas.width = this.baseImage.width = 32;
-            this.context = this.canvas.getContext("2d");
+            this.context = this.canvas.getContext("2d")!;
             this.ready();
         }
     }
 
-    private reset() {
+    private reset(): void {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.context.drawImage(this.baseImage, 0, 0, this.canvas.width, this.canvas.height);
     }
 
-    private options(n: number | string, params: IParams) {
+    private options(
+        n: number | string,
+        params: IParams,
+    ): {
+        n: string | number;
+        len: number;
+        x: number;
+        y: number;
+        w: number;
+        h: number;
+    } {
         const opt = {
-            n: ((typeof n) === "number") ? Math.abs(n as number | 0) : n,
+            n: typeof n === "number" ? Math.abs(n | 0) : n,
             len: ("" + n).length,
             // badge positioning constants as percentages
             x: 0.4,
@@ -124,7 +125,7 @@ export default class Favicon {
         return opt;
     }
 
-    private circle(n: number | string, opts?: Partial<IParams>) {
+    private circle(n: number | string, opts?: Partial<IParams>): void {
         const params = { ...this.params, ...opts };
         const opt = this.options(n, params);
 
@@ -142,7 +143,7 @@ export default class Favicon {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.context.drawImage(this.baseImage, 0, 0, this.canvas.width, this.canvas.height);
         this.context.beginPath();
-        const fontSize = Math.floor(opt.h * (opt.n > 99 ? 0.85 : 1)) + "px";
+        const fontSize = Math.floor(opt.h * (typeof opt.n === "number" && opt.n > 99 ? 0.85 : 1)) + "px";
         this.context.font = `${params.fontWeight} ${fontSize} ${params.fontFamily}`;
         this.context.textAlign = "center";
 
@@ -167,8 +168,8 @@ export default class Favicon {
         this.context.stroke();
         this.context.fillStyle = params.textColor;
 
-        if ((typeof opt.n) === "number" && opt.n > 999) {
-            const count = ((opt.n > 9999) ? 9 : Math.floor(opt.n as number / 1000)) + "k+";
+        if (typeof opt.n === "number" && opt.n > 999) {
+            const count = (opt.n > 9999 ? 9 : Math.floor(opt.n / 1000)) + "k+";
             this.context.fillText(count, Math.floor(opt.x + opt.w / 2), Math.floor(opt.y + opt.h - opt.h * 0.2));
         } else {
             this.context.fillText("" + opt.n, Math.floor(opt.x + opt.w / 2), Math.floor(opt.y + opt.h - opt.h * 0.15));
@@ -177,19 +178,19 @@ export default class Favicon {
         this.context.closePath();
     }
 
-    private ready() {
+    private ready(): void {
         if (this.isReady) return;
         this.isReady = true;
-        this.readyCb();
+        this.readyCb?.();
     }
 
-    private setIcon(canvas) {
-        setImmediate(() => {
+    private setIcon(canvas: HTMLCanvasElement): void {
+        setTimeout(() => {
             this.setIconSrc(canvas.toDataURL("image/png"));
-        });
+        }, 0);
     }
 
-    private setIconSrc(url) {
+    private setIconSrc(url: string): void {
         // if is attached to fav icon
         if (this.browser.ff || this.browser.opera) {
             // for FF we need to "recreate" element, attach to dom and remove old <link>
@@ -200,19 +201,17 @@ export default class Favicon {
             newIcon.setAttribute("type", "image/png");
             window.document.getElementsByTagName("head")[0].appendChild(newIcon);
             newIcon.setAttribute("href", url);
-            if (old.parentNode) {
-                old.parentNode.removeChild(old);
-            }
+            old.parentNode?.removeChild(old);
         } else {
-            this.icons.forEach(icon => {
+            this.icons.forEach((icon) => {
                 icon.setAttribute("href", url);
             });
         }
     }
 
-    public badge(content: number | string, opts?: Partial<IParams>) {
+    public badge(content: number | string, opts?: Partial<IParams>): void {
         if (!this.isReady) {
-            this.readyCb = () => {
+            this.readyCb = (): void => {
                 this.badge(content, opts);
             };
             return;
@@ -227,18 +226,18 @@ export default class Favicon {
         this.setIcon(this.canvas);
     }
 
-    private static getLinks() {
+    private static getLinks(): HTMLLinkElement[] {
         const icons: HTMLLinkElement[] = [];
         const links = window.document.getElementsByTagName("head")[0].getElementsByTagName("link");
-        for (let i = 0; i < links.length; i++) {
-            if ((/(^|\s)icon(\s|$)/i).test(links[i].getAttribute("rel"))) {
-                icons.push(links[i]);
+        for (const link of links) {
+            if (link.hasAttribute("rel") && /(^|\s)icon(\s|$)/i.test(link.getAttribute("rel")!)) {
+                icons.push(link);
             }
         }
         return icons;
     }
 
-    private static getIcons() {
+    private static getIcons(): HTMLLinkElement[] {
         // get favicon link elements
         let elms = Favicon.getLinks();
         if (elms.length === 0) {
@@ -247,7 +246,7 @@ export default class Favicon {
             window.document.getElementsByTagName("head")[0].appendChild(elms[0]);
         }
 
-        elms.forEach(item => {
+        elms.forEach((item) => {
             item.setAttribute("type", "image/png");
         });
         return elms;

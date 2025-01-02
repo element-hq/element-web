@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<AuthFooter /> should match snapshot 1`] = `
+<DocumentFragment>
+  <footer
+    class="mx_AuthFooter"
+    role="contentinfo"
+  >
+    <a
+      href="https://element.io/blog"
+      rel="noreferrer noopener"
+      target="_blank"
+    >
+      Blog
+    </a>
+    <a
+      href="https://mastodon.matrix.org/@Element"
+      rel="noreferrer noopener"
+      target="_blank"
+    >
+      Mastodon
+    </a>
+    <a
+      href="https://github.com/element-hq/element-web"
+      rel="noreferrer noopener"
+      target="_blank"
+    >
+      GitHub
+    </a>
+    <a
+      href="https://matrix.org"
+      rel="noreferrer noopener"
+      target="_blank"
+    >
+      Powered by Matrix
+    </a>
+  </footer>
+</DocumentFragment>
+`;

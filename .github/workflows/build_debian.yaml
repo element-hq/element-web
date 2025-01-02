@@ -1,0 +1,79 @@
+name: Build Debian package
+on:
+    release:
+        types: [published]
+concurrency: ${{ github.workflow }}
+permissions: {} # We use ELEMENT_BOT_TOKEN instead
+jobs:
+    build:
+        name: Build package
+        environment: packages.element.io
+        runs-on: ubuntu-24.04
+        env:
+            R2_INCOMING_BUCKET: ${{ vars.R2_INCOMING_BUCKET }}
+            R2_URL: ${{ vars.CF_R2_S3_API }}
+            VERSION: ${{ github.ref_name }}
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Download package
+              run: |
+                  wget "https://github.com/element-hq/element-web/releases/download/$VERSION/element-$VERSION.tar.gz"
+                  wget "https://github.com/element-hq/element-web/releases/download/$VERSION/element-$VERSION.tar.gz.asc"
+
+            - name: Check GPG signature
+              run: |
+                  wget "https://packages.element.io/element-release-key.gpg"
+                  gpg --import element-release-key.gpg
+                  gpg --fingerprint "$FINGERPRINT"
+                  gpg --verify "element-$VERSION.tar.gz.asc" "element-$VERSION.tar.gz"
+              env:
+                  FINGERPRINT: ${{ vars.GPG_FINGERPRINT }}
+
+            - name: Prepare
+              run: |
+                  mkdir -p debian/tmp/DEBIAN
+                  find debian -maxdepth 1 -type f -exec cp "{}" debian/tmp/DEBIAN/ \;
+                  mkdir -p debian/tmp/usr/share/element-web/ debian/tmp/etc/element-web/
+
+                  tar -xf "element-$VERSION.tar.gz" -C debian/tmp/usr/share/element-web --strip-components=1 --no-same-owner --no-same-permissions
+                  mv debian/tmp/usr/share/element-web/config.sample.json debian/tmp/etc/element-web/config.json
+                  ln -s /etc/element-web/config.json debian/tmp/usr/share/element-web/config.json
+
+            - name: Write changelog
+              run: |
+                  VERSION=$(cat package.json | jq -r .version)
+                  TIME=$(date -d "$PUBLISHED_AT" -R)
+                  {
+                      echo "element-web ($VERSION) default; urgency=medium"
+                      echo "$BODY" | sed 's/^##/\n  */g;s/^\*/  */g' | perl -pe 's/\[.+?]\((.+?)\)/\1/g'
+                      echo ""
+                      echo " -- $ACTOR <support@element.io>  $TIME"
+                  } > debian/tmp/DEBIAN/changelog
+              env:
+                  ACTOR: ${{ github.actor }}
+                  VERSION: ${{ github.event.release.tag_name }}
+                  BODY: ${{ github.event.release.body }}
+                  PUBLISHED_AT: ${{ github.event.release.published_at }}
+
+            - name: Build deb package
+              run: |
+                  VERSION=$(cat package.json | jq -r .version)
+                  dpkg-gencontrol -v"$VERSION" -ldebian/tmp/DEBIAN/changelog
+                  dpkg-deb -Zxz --root-owner-group --build debian/tmp element-web.deb
+
+            - uses: actions/upload-artifact@v4
+              with:
+                  name: element-web.deb
+                  path: element-web.deb
+                  retention-days: 14
+
+            - name: Publish to packages.element.io
+              if: github.event.release.prerelease == false
+              uses: element-hq/packages.element.io@master
+              with:
+                  file: element-web.deb
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  bucket-api: ${{ vars.CF_R2_S3_API }}
+                  bucket-key-id: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
+                  bucket-access-key: ${{ secrets.CF_R2_TOKEN }}

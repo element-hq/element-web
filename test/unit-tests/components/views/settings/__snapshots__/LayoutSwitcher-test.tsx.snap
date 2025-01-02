@@ -1,0 +1,456 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<LayoutSwitcher /> should render 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsSubsection mx_SettingsSubsection_newUi"
+    data-testid="layoutPanel"
+  >
+    <div
+      class="mx_SettingsSubsectionHeading"
+    >
+      <h3
+        class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+      >
+        Message layout
+      </h3>
+    </div>
+    <div
+      class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
+    >
+      <form
+        class="_root_ssths_24 mx_LayoutSwitcher_LayoutSelector"
+      >
+        <div
+          class="_field_ssths_34 mxLayoutSwitcher_LayoutSelector_LayoutRadio"
+        >
+          <label
+            aria-label="Modern"
+            class="_label_ssths_67"
+            for="radix-:r0:"
+          >
+            <div
+              class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
+            >
+              <div
+                class="_container_1vw5h_18"
+              >
+                <input
+                  checked=""
+                  class="_input_1vw5h_26"
+                  id="radix-:r0:"
+                  name="layout"
+                  title=""
+                  type="radio"
+                  value="group"
+                />
+                <div
+                  class="_ui_1vw5h_27"
+                />
+              </div>
+              <span>
+                Modern
+              </span>
+            </div>
+            <hr
+              class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_separator"
+            />
+            <div
+              class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_EventTilePreview"
+              role="presentation"
+            >
+              <div
+                aria-atomic="true"
+                aria-live="off"
+                class="mx_EventTile"
+                data-event-id="$9999999999999999999999999999999999999999999"
+                data-has-reply="false"
+                data-layout="group"
+                data-scroll-tokens="$9999999999999999999999999999999999999999999"
+                data-self="true"
+                tabindex="-1"
+              >
+                <div
+                  class="mx_DisambiguatedProfile"
+                >
+                  <span
+                    class="mx_Username_color2 mx_DisambiguatedProfile_displayName"
+                    dir="auto"
+                  >
+                    Alice
+                  </span>
+                </div>
+                <div
+                  class="mx_EventTile_avatar"
+                >
+                  <span
+                    class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+                    data-color="2"
+                    data-testid="avatar-img"
+                    data-type="round"
+                    role="presentation"
+                    style="--cpd-avatar-size: 30px;"
+                    title="@userId:matrix.org"
+                  >
+                    A
+                  </span>
+                </div>
+                <div
+                  class="mx_EventTile_line"
+                >
+                  <div
+                    class="mx_MTextBody mx_EventTile_content"
+                  >
+                    <div
+                      class="mx_EventTile_body translate"
+                      dir="auto"
+                    >
+                      Hey you. You're the best!
+                    </div>
+                  </div>
+                  <div
+                    aria-label="Message Actions"
+                    aria-live="off"
+                    class="mx_MessageActionBar"
+                    role="toolbar"
+                  >
+                    <div
+                      aria-label="Edit"
+                      class="mx_AccessibleButton mx_MessageActionBar_iconButton"
+                      role="button"
+                      tabindex="0"
+                    >
+                      <div />
+                    </div>
+                    <div
+                      aria-expanded="false"
+                      aria-haspopup="true"
+                      aria-label="Options"
+                      class="mx_AccessibleButton mx_MessageActionBar_iconButton mx_MessageActionBar_optionsButton"
+                      role="button"
+                      tabindex="-1"
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M6 14c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 4 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 6 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 6 14Zm6 0c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 10 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 12 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 12 14Zm6 0c-.55 0-1.02-.196-1.413-.588A1.926 1.926 0 0 1 16 12c0-.55.196-1.02.587-1.412A1.926 1.926 0 0 1 18 10c.55 0 1.02.196 1.413.588.391.391.587.862.587 1.412 0 .55-.196 1.02-.587 1.412A1.926 1.926 0 0 1 18 14Z"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </label>
+        </div>
+        <div
+          class="_field_ssths_34 mxLayoutSwitcher_LayoutSelector_LayoutRadio"
+        >
+          <label
+            aria-label="Message bubbles"
+            class="_label_ssths_67"
+            for="radix-:r9:"
+          >
+            <div
+              class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
+            >
+              <div
+                class="_container_1vw5h_18"
+              >
+                <input
+                  class="_input_1vw5h_26"
+                  id="radix-:r9:"
+                  name="layout"
+                  title=""
+                  type="radio"
+                  value="bubble"
+                />
+                <div
+                  class="_ui_1vw5h_27"
+                />
+              </div>
+              <span>
+                Message bubbles
+              </span>
+            </div>
+            <hr
+              class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_separator"
+            />
+            <div
+              class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_EventTilePreview"
+              role="presentation"
+            >
+              <div
+                aria-atomic="true"
+                aria-live="off"
+                class="mx_EventTile"
+                data-event-id="$9999999999999999999999999999999999999999999"
+                data-has-reply="false"
+                data-layout="bubble"
+                data-scroll-tokens="$9999999999999999999999999999999999999999999"
+                data-self="true"
+                tabindex="-1"
+              >
+                <div
+                  class="mx_DisambiguatedProfile"
+                >
+                  <span
+                    class="mx_Username_color2 mx_DisambiguatedProfile_displayName"
+                    dir="auto"
+                  >
+                    Alice
+                  </span>
+                </div>
+                <div
+                  class="mx_EventTile_avatar"
+                >
+                  <span
+                    class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+                    data-color="2"
+                    data-testid="avatar-img"
+                    data-type="round"
+                    role="presentation"
+                    style="--cpd-avatar-size: 30px;"
+                    title="@userId:matrix.org"
+                  >
+                    A
+                  </span>
+                </div>
+                <div
+                  class="mx_EventTile_line"
+                >
+                  <div
+                    class="mx_MTextBody mx_EventTile_content"
+                  >
+                    <div
+                      class="mx_EventTile_body translate"
+                      dir="auto"
+                    >
+                      Hey you. You're the best!
+                    </div>
+                  </div>
+                  <div
+                    aria-label="Message Actions"
+                    aria-live="off"
+                    class="mx_MessageActionBar"
+                    role="toolbar"
+                  >
+                    <div
+                      aria-label="Edit"
+                      class="mx_AccessibleButton mx_MessageActionBar_iconButton"
+                      role="button"
+                      tabindex="0"
+                    >
+                      <div />
+                    </div>
+                    <div
+                      aria-expanded="false"
+                      aria-haspopup="true"
+                      aria-label="Options"
+                      class="mx_AccessibleButton mx_MessageActionBar_iconButton mx_MessageActionBar_optionsButton"
+                      role="button"
+                      tabindex="-1"
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M6 14c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 4 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 6 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 6 14Zm6 0c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 10 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 12 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 12 14Zm6 0c-.55 0-1.02-.196-1.413-.588A1.926 1.926 0 0 1 16 12c0-.55.196-1.02.587-1.412A1.926 1.926 0 0 1 18 10c.55 0 1.02.196 1.413.588.391.391.587.862.587 1.412 0 .55-.196 1.02-.587 1.412A1.926 1.926 0 0 1 18 14Z"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </label>
+        </div>
+        <div
+          class="_field_ssths_34 mxLayoutSwitcher_LayoutSelector_LayoutRadio"
+        >
+          <label
+            aria-label="IRC (experimental)"
+            class="_label_ssths_67"
+            for="radix-:ri:"
+          >
+            <div
+              class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
+            >
+              <div
+                class="_container_1vw5h_18"
+              >
+                <input
+                  class="_input_1vw5h_26"
+                  id="radix-:ri:"
+                  name="layout"
+                  title=""
+                  type="radio"
+                  value="irc"
+                />
+                <div
+                  class="_ui_1vw5h_27"
+                />
+              </div>
+              <span>
+                IRC (experimental)
+              </span>
+            </div>
+            <hr
+              class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_separator"
+            />
+            <div
+              class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_EventTilePreview mx_IRCLayout"
+              role="presentation"
+            >
+              <div
+                aria-atomic="true"
+                aria-live="off"
+                class="mx_EventTile"
+                data-event-id="$9999999999999999999999999999999999999999999"
+                data-has-reply="false"
+                data-layout="irc"
+                data-scroll-tokens="$9999999999999999999999999999999999999999999"
+                data-self="true"
+                tabindex="-1"
+              >
+                <div
+                  class="mx_DisambiguatedProfile"
+                >
+                  <span
+                    class="mx_Username_color2 mx_DisambiguatedProfile_displayName"
+                    dir="auto"
+                  >
+                    Alice
+                  </span>
+                </div>
+                <div
+                  class="mx_EventTile_avatar"
+                >
+                  <span
+                    class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+                    data-color="2"
+                    data-testid="avatar-img"
+                    data-type="round"
+                    role="presentation"
+                    style="--cpd-avatar-size: 14px;"
+                    title="@userId:matrix.org"
+                  >
+                    A
+                  </span>
+                </div>
+                <div
+                  class="mx_EventTile_line"
+                >
+                  <div
+                    class="mx_MTextBody mx_EventTile_content"
+                  >
+                    <div
+                      class="mx_EventTile_body translate"
+                      dir="auto"
+                    >
+                      Hey you. You're the best!
+                    </div>
+                  </div>
+                  <div
+                    aria-label="Message Actions"
+                    aria-live="off"
+                    class="mx_MessageActionBar"
+                    role="toolbar"
+                  >
+                    <div
+                      aria-label="Edit"
+                      class="mx_AccessibleButton mx_MessageActionBar_iconButton"
+                      role="button"
+                      tabindex="0"
+                    >
+                      <div />
+                    </div>
+                    <div
+                      aria-expanded="false"
+                      aria-haspopup="true"
+                      aria-label="Options"
+                      class="mx_AccessibleButton mx_MessageActionBar_iconButton mx_MessageActionBar_optionsButton"
+                      role="button"
+                      tabindex="-1"
+                    >
+                      <svg
+                        fill="currentColor"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        width="1em"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M6 14c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 4 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 6 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 6 14Zm6 0c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 10 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 12 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 12 14Zm6 0c-.55 0-1.02-.196-1.413-.588A1.926 1.926 0 0 1 16 12c0-.55.196-1.02.587-1.412A1.926 1.926 0 0 1 18 10c.55 0 1.02.196 1.413.588.391.391.587.862.587 1.412 0 .55-.196 1.02-.587 1.412A1.926 1.926 0 0 1 18 14Z"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </label>
+        </div>
+      </form>
+      <form
+        class="_root_ssths_24"
+      >
+        <div
+          class="_inline-field_ssths_40"
+        >
+          <div
+            class="_inline-field-control_ssths_52"
+          >
+            <div
+              class="_container_qnvru_18"
+            >
+              <input
+                aria-describedby="radix-:rs:"
+                class="_input_qnvru_32"
+                id="radix-:rr:"
+                name="compactLayout"
+                title=""
+                type="checkbox"
+              />
+              <div
+                class="_ui_qnvru_42"
+              />
+            </div>
+          </div>
+          <div
+            class="_inline-field-body_ssths_46"
+          >
+            <label
+              class="_label_ssths_67"
+              for="radix-:rr:"
+            >
+              Show compact text and messages
+            </label>
+            <span
+              class="_message_ssths_93 _help-message_ssths_99"
+              id="radix-:rs:"
+            >
+              Modern layout must be selected to use this feature.
+            </span>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div
+      class="_separator_144s5_17"
+      data-kind="primary"
+      data-orientation="horizontal"
+      role="separator"
+    />
+  </div>
+</DocumentFragment>
+`;

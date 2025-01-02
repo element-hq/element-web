@@ -1,0 +1,178 @@
+name: Move labelled issues to correct projects
+
+on:
+    issues:
+        types: [labeled]
+    workflow_call:
+        secrets:
+            ELEMENT_BOT_TOKEN:
+                required: true
+
+permissions: {} # We use ELEMENT_BOT_TOKEN instead
+
+jobs:
+    apply_Z-Labs_label:
+        name: Add Z-Labs label for features behind labs flags
+        runs-on: ubuntu-24.04
+        if: >
+            contains(github.event.issue.labels.*.name, 'A-Maths') ||
+            contains(github.event.issue.labels.*.name, 'A-Location-Sharing') ||
+            contains(github.event.issue.labels.*.name, 'Z-IA') ||
+            contains(github.event.issue.labels.*.name, 'A-Jump-To-Date ') ||
+            contains(github.event.issue.labels.*.name, 'A-Themes-Custom') ||
+            contains(github.event.issue.labels.*.name, 'A-E2EE-Dehydration') ||
+            contains(github.event.issue.labels.*.name, 'A-Tags') ||
+            contains(github.event.issue.labels.*.name, 'A-Video-Rooms') ||
+            contains(github.event.issue.labels.*.name, 'A-Message-Starring') ||
+            contains(github.event.issue.labels.*.name, 'A-Rich-Text-Editor') ||
+            contains(github.event.issue.labels.*.name, 'A-Element-Call')
+        steps:
+            - uses: actions/github-script@v7
+              with:
+                  script: |
+                      github.rest.issues.addLabels({
+                        issue_number: context.issue.number,
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        labels: ['Z-Labs']
+                      })
+
+    apply_Help-Wanted_label:
+        name: Add "Help Wanted" label to all "good first issue" and Hacktoberfest
+        runs-on: ubuntu-24.04
+        if: >
+            contains(github.event.issue.labels.*.name, 'good first issue') ||
+            contains(github.event.issue.labels.*.name, 'Hacktoberfest')
+        steps:
+            - uses: actions/github-script@v7
+              with:
+                  script: |
+                      github.rest.issues.addLabels({
+                        issue_number: context.issue.number,
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        labels: ['Help Wanted']
+                      })
+
+    move_needs_info_issues:
+        name: X-Needs-Info issues to Need info column on triage board
+        runs-on: ubuntu-24.04
+        if: >
+            contains(github.event.issue.labels.*.name, 'X-Needs-Info')
+        steps:
+            - id: add_to_project
+              uses: actions/add-to-project@v1.0.2
+              with:
+                  project-url: ${{ env.PROJECT_URL }}
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+            - id: set_fields
+              uses: titoportas/update-project-fields@421a54430b3cdc9eefd8f14f9ce0142ab7678751 # v0.1.0
+              with:
+                  project-url: ${{ env.PROJECT_URL }}
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  item-id: ${{ steps.add_to_project.outputs.itemId }} # Use the item-id output of the previous step
+                  field-keys: Status
+                  field-values: "Needs info"
+        env:
+            PROJECT_URL: https://github.com/orgs/element-hq/projects/120
+
+    move_flakey_test_issues:
+        name: Z-Flaky-Test issues to Sized for maintainer column on triage board
+        runs-on: ubuntu-24.04
+        if: >
+            contains(github.event.issue.labels.*.name, 'Z-Flaky-Test')
+        steps:
+            - id: add_to_project
+              uses: actions/add-to-project@v1.0.2
+              with:
+                  project-url: ${{ env.PROJECT_URL }}
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+            - id: set_fields
+              uses: titoportas/update-project-fields@421a54430b3cdc9eefd8f14f9ce0142ab7678751 # v0.1.0
+              with:
+                  project-url: ${{ env.PROJECT_URL }}
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  item-id: ${{ steps.add_to_project.outputs.itemId }} # Use the item-id output of the previous step
+                  field-keys: Status
+                  field-values: "Sized for maintainer"
+        env:
+            PROJECT_URL: https://github.com/orgs/element-hq/projects/120
+
+    add_priority_design_issues_to_project:
+        name: P1 X-Needs-Design to Design project board
+        runs-on: ubuntu-24.04
+        if: >
+            contains(github.event.issue.labels.*.name, 'X-Needs-Design') &&
+            (contains(github.event.issue.labels.*.name, 'S-Critical') &&
+             (contains(github.event.issue.labels.*.name, 'O-Frequent') ||
+              contains(github.event.issue.labels.*.name, 'O-Occasional')) ||
+             contains(github.event.issue.labels.*.name, 'S-Major') &&
+             contains(github.event.issue.labels.*.name, 'O-Frequent') ||
+             contains(github.event.issue.labels.*.name, 'A11y'))
+        steps:
+            - uses: actions/add-to-project@main
+              with:
+                  project-url: https://github.com/orgs/element-hq/projects/18
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+    add_product_issues:
+        name: X-Needs-Product to product project board
+        runs-on: ubuntu-24.04
+        if: >
+            contains(github.event.issue.labels.*.name, 'X-Needs-Product')
+        steps:
+            - uses: actions/add-to-project@main
+              with:
+                  project-url: https://github.com/orgs/element-hq/projects/28
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+    Search_issues_to_board:
+        name: Search issues to project board
+        runs-on: ubuntu-24.04
+        if: >
+            contains(github.event.issue.labels.*.name, 'A-New-Search-Experience')
+        steps:
+            - uses: actions/add-to-project@main
+              with:
+                  project-url: https://github.com/orgs/element-hq/projects/48
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+    voip:
+        name: Add labelled issues to VoIP project board
+        runs-on: ubuntu-24.04
+        if: >
+            contains(github.event.issue.labels.*.name, 'Team: VoIP')
+        steps:
+            - uses: actions/add-to-project@main
+              with:
+                  project-url: https://github.com/orgs/element-hq/projects/41
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+    verticals_feature:
+        name: Add labelled issues to Verticals Feature project
+        runs-on: ubuntu-24.04
+        if: >
+            contains(github.event.issue.labels.*.name, 'Team: Verticals Feature')
+        steps:
+            - uses: actions/add-to-project@main
+              with:
+                  project-url: https://github.com/orgs/element-hq/projects/57
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+    tech_debt:
+        name: Add labelled issues to tech debt project
+        runs-on: ubuntu-24.04
+        if: >
+            contains(github.event.issue.labels.*.name, 'A-Developer-Experience') ||
+            contains(github.event.issue.labels.*.name, 'A-Documentation') ||
+            contains(github.event.issue.labels.*.name, 'A-Packaging') ||
+            contains(github.event.issue.labels.*.name, 'A-Technical-Debt') ||
+            contains(github.event.issue.labels.*.name, 'A-Testing') ||
+            contains(github.event.issue.labels.*.name, 'Z-Flaky-Test')
+        steps:
+            - uses: actions/add-to-project@main
+              with:
+                  project-url: https://github.com/orgs/element-hq/projects/101
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}

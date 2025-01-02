@@ -1,0 +1,126 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RoomStatusBar <RoomStatusBar /> unsent messages should render warning when messages are unsent due to consent 1`] = `
+<div>
+  <div
+    class="mx_RoomStatusBar mx_RoomStatusBar_unsentMessages"
+  >
+    <div
+      role="alert"
+    >
+      <div
+        class="mx_RoomStatusBar_unsentBadge"
+      >
+        <div
+          class="mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_level_highlight mx_NotificationBadge_2char cpd-theme-light"
+        >
+          <span
+            class="mx_NotificationBadge_count"
+          >
+            !
+          </span>
+        </div>
+      </div>
+      <div>
+        <div
+          class="mx_RoomStatusBar_unsentTitle"
+        >
+          <span>
+            You can't send any messages until you review and agree to 
+            <a
+              class="mx_ExternalLink"
+              rel="noreferrer noopener"
+              target="_blank"
+            >
+              our terms and conditions
+              <i
+                class="mx_ExternalLink_icon"
+              />
+            </a>
+            .
+          </span>
+        </div>
+        <div
+          class="mx_RoomStatusBar_unsentDescription"
+        >
+          You can select all or individual messages to retry or delete
+        </div>
+      </div>
+      <div
+        class="mx_RoomStatusBar_unsentButtonBar"
+      >
+        <div
+          class="mx_AccessibleButton mx_RoomStatusBar_unsentCancelAllBtn"
+          role="button"
+          tabindex="0"
+        >
+          Delete all
+        </div>
+        <div
+          class="mx_AccessibleButton mx_RoomStatusBar_unsentRetry"
+          role="button"
+          tabindex="0"
+        >
+          Retry all
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`RoomStatusBar <RoomStatusBar /> unsent messages should render warning when messages are unsent due to resource limit 1`] = `
+<div>
+  <div
+    class="mx_RoomStatusBar mx_RoomStatusBar_unsentMessages"
+  >
+    <div
+      role="alert"
+    >
+      <div
+        class="mx_RoomStatusBar_unsentBadge"
+      >
+        <div
+          class="mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_level_highlight mx_NotificationBadge_2char cpd-theme-light"
+        >
+          <span
+            class="mx_NotificationBadge_count"
+          >
+            !
+          </span>
+        </div>
+      </div>
+      <div>
+        <div
+          class="mx_RoomStatusBar_unsentTitle"
+        >
+          Your message wasn't sent because this homeserver has exceeded a resource limit. Please contact your service administrator to continue using the service.
+        </div>
+        <div
+          class="mx_RoomStatusBar_unsentDescription"
+        >
+          You can select all or individual messages to retry or delete
+        </div>
+      </div>
+      <div
+        class="mx_RoomStatusBar_unsentButtonBar"
+      >
+        <div
+          class="mx_AccessibleButton mx_RoomStatusBar_unsentCancelAllBtn"
+          role="button"
+          tabindex="0"
+        >
+          Delete all
+        </div>
+        <div
+          class="mx_AccessibleButton mx_RoomStatusBar_unsentRetry"
+          role="button"
+          tabindex="0"
+        >
+          Retry all
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

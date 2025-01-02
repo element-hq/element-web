@@ -1,0 +1,69 @@
+name: Release Process
+on:
+    workflow_dispatch:
+        inputs:
+            mode:
+                description: What type of release
+                required: true
+                default: rc
+                type: choice
+                options:
+                    - rc
+                    - final
+concurrency: ${{ github.workflow }}
+permissions: {}
+jobs:
+    release:
+        uses: matrix-org/matrix-js-sdk/.github/workflows/release-make.yml@develop
+        permissions:
+            contents: write
+            issues: write
+            pull-requests: read
+        secrets:
+            ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+            GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+            GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        with:
+            final: ${{ inputs.mode == 'final' }}
+            gpg-fingerprint: ${{ vars.GPG_FINGERPRINT }}
+            asset-path: dist/*.tar.gz
+            expected-asset-count: 3
+
+    notify-downstream:
+        name: Trigger release drafter downstream
+        needs: release
+        runs-on: ubuntu-24.04
+        steps:
+            - name: Notify element-desktop repo that element-web release has completed to re-trigger release-drafter
+              uses: benc-uk/workflow-dispatch@e2e5e9a103e331dad343f381a29e654aea3cf8fc # v1
+              with:
+                  workflow: release-drafter.yml
+                  repo: element-hq/element-desktop
+                  ref: staging
+                  # Required when using the `repo` option. Either a PAT or a token generated from the GitHub app or CLI
+                  token: "${{ secrets.ELEMENT_BOT_TOKEN }}"
+
+    check:
+        name: Post release checks
+        needs: release
+        runs-on: ubuntu-24.04
+        permissions:
+            checks: read
+        steps:
+            - name: Wait for dockerhub
+              uses: t3chguy/wait-on-check-action@18541021811b56544d90e0f073401c2b99e249d6 # fork
+              with:
+                  ref: master
+                  repo-token: ${{ secrets.GITHUB_TOKEN }}
+                  wait-interval: 10
+                  check-name: "Docker Buildx"
+                  allowed-conclusions: success
+
+            - name: Wait for debian package
+              uses: t3chguy/wait-on-check-action@18541021811b56544d90e0f073401c2b99e249d6 # fork
+              with:
+                  ref: master
+                  repo-token: ${{ secrets.GITHUB_TOKEN }}
+                  wait-interval: 10
+                  check-name: Build package
+                  allowed-conclusions: success

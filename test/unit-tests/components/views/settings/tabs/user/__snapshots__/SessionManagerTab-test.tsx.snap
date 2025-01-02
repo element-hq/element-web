@@ -1,0 +1,439 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SessionManagerTab /> Device verification does not allow device verification on session that do not support encryption 1`] = `
+HTMLCollection [
+  <div
+    class="mx_DeviceSecurityCard"
+  >
+    <div
+      class="mx_DeviceSecurityCard_icon Unverified"
+    >
+      <div
+        height="16"
+        width="16"
+      />
+    </div>
+    <div
+      class="mx_DeviceSecurityCard_content"
+    >
+      <p
+        class="mx_DeviceSecurityCard_heading"
+      >
+        Unverified session
+      </p>
+      <p
+        class="mx_DeviceSecurityCard_description"
+      >
+        This session doesn't support encryption and thus can't be verified.
+        <div
+          class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+          role="button"
+          tabindex="0"
+        >
+          Learn more
+        </div>
+      </p>
+    </div>
+  </div>,
+]
+`;
+
+exports[`<SessionManagerTab /> Sign out Signs out of current device 1`] = `
+<div
+  class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger_inline"
+  data-testid="device-detail-sign-out-cta"
+  role="button"
+  tabindex="0"
+>
+  <span
+    class="mx_DeviceDetails_signOutButtonContent"
+  >
+    Sign out of this session
+  </span>
+</div>
+`;
+
+exports[`<SessionManagerTab /> Sign out for an OIDC-aware server Signs out of current device 1`] = `
+<div
+  class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger_inline"
+  data-testid="device-detail-sign-out-cta"
+  role="button"
+  tabindex="0"
+>
+  <span
+    class="mx_DeviceDetails_signOutButtonContent"
+  >
+    Sign out of this session
+  </span>
+</div>
+`;
+
+exports[`<SessionManagerTab /> current session section renders current session section with a verified session 1`] = `
+<div
+  class="mx_SettingsSubsection"
+  data-testid="current-session-section"
+>
+  <div
+    class="mx_SettingsSubsectionHeading"
+  >
+    <h3
+      class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+    >
+      Current session
+    </h3>
+    <div
+      aria-expanded="false"
+      aria-haspopup="true"
+      aria-label="Options"
+      class="mx_AccessibleButton"
+      data-testid="current-session-menu"
+      role="button"
+      tabindex="0"
+    >
+      <svg
+        class="mx_KebabContextMenu_icon"
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M6 14c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 4 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 6 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 6 14Zm6 0c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 10 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 12 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 12 14Zm6 0c-.55 0-1.02-.196-1.413-.588A1.926 1.926 0 0 1 16 12c0-.55.196-1.02.587-1.412A1.926 1.926 0 0 1 18 10c.55 0 1.02.196 1.413.588.391.391.587.862.587 1.412 0 .55-.196 1.02-.587 1.412A1.926 1.926 0 0 1 18 14Z"
+        />
+      </svg>
+    </div>
+  </div>
+  <div
+    class="mx_SettingsSubsection_content"
+  >
+    <div
+      class="mx_DeviceTile mx_DeviceTile_interactive"
+      data-testid="device-tile-alices_device"
+    >
+      <div
+        class="mx_DeviceTypeIcon"
+      >
+        <div
+          class="mx_DeviceTypeIcon_deviceIconWrapper"
+        >
+          <div
+            aria-label="Unknown session type"
+            class="mx_DeviceTypeIcon_deviceIcon"
+            role="img"
+          />
+        </div>
+        <div
+          aria-label="Verified"
+          class="mx_DeviceTypeIcon_verificationIcon verified"
+          role="img"
+        />
+      </div>
+      <div
+        class="mx_DeviceTile_info"
+      >
+        <h4
+          class="mx_Heading_h4"
+        >
+          Alices device
+        </h4>
+        <div
+          class="mx_DeviceTile_metadata"
+        >
+          <span
+            data-testid="device-metadata-isVerified"
+          >
+            Verified
+          </span>
+           · 
+          <span
+            data-testid="device-metadata-deviceId"
+          >
+            alices_device
+          </span>
+        </div>
+      </div>
+      <div
+        class="mx_DeviceTile_actions"
+      >
+        <div
+          aria-label="Show details"
+          class="mx_AccessibleButton mx_DeviceExpandDetailsButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon"
+          data-testid="current-session-toggle-details"
+          role="button"
+          tabindex="0"
+        >
+          <svg
+            class="mx_DeviceExpandDetailsButton_icon"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 14.95c-.133 0-.258-.02-.375-.063a.876.876 0 0 1-.325-.212l-4.6-4.6a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l3.9 3.9 3.9-3.9a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275.948.948 0 0 1 .275.7.948.948 0 0 1-.275.7l-4.6 4.6c-.1.1-.208.17-.325.212a1.106 1.106 0 0 1-.375.063Z"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+    <br />
+    <div
+      class="mx_DeviceSecurityCard"
+    >
+      <div
+        class="mx_DeviceSecurityCard_icon Verified"
+      >
+        <div
+          height="16"
+          width="16"
+        />
+      </div>
+      <div
+        class="mx_DeviceSecurityCard_content"
+      >
+        <p
+          class="mx_DeviceSecurityCard_heading"
+        >
+          Verified session
+        </p>
+        <p
+          class="mx_DeviceSecurityCard_description"
+        >
+          Your current session is ready for secure messaging.
+          <div
+            class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+            role="button"
+            tabindex="0"
+          >
+            Learn more
+          </div>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<SessionManagerTab /> current session section renders current session section with an unverified session 1`] = `
+<div
+  class="mx_SettingsSubsection"
+  data-testid="current-session-section"
+>
+  <div
+    class="mx_SettingsSubsectionHeading"
+  >
+    <h3
+      class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+    >
+      Current session
+    </h3>
+    <div
+      aria-expanded="false"
+      aria-haspopup="true"
+      aria-label="Options"
+      class="mx_AccessibleButton"
+      data-testid="current-session-menu"
+      role="button"
+      tabindex="0"
+    >
+      <svg
+        class="mx_KebabContextMenu_icon"
+        fill="currentColor"
+        height="1em"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M6 14c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 4 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 6 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 6 14Zm6 0c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 10 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 12 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 12 14Zm6 0c-.55 0-1.02-.196-1.413-.588A1.926 1.926 0 0 1 16 12c0-.55.196-1.02.587-1.412A1.926 1.926 0 0 1 18 10c.55 0 1.02.196 1.413.588.391.391.587.862.587 1.412 0 .55-.196 1.02-.587 1.412A1.926 1.926 0 0 1 18 14Z"
+        />
+      </svg>
+    </div>
+  </div>
+  <div
+    class="mx_SettingsSubsection_content"
+  >
+    <div
+      class="mx_DeviceTile mx_DeviceTile_interactive"
+      data-testid="device-tile-alices_device"
+    >
+      <div
+        class="mx_DeviceTypeIcon"
+      >
+        <div
+          class="mx_DeviceTypeIcon_deviceIconWrapper"
+        >
+          <div
+            aria-label="Unknown session type"
+            class="mx_DeviceTypeIcon_deviceIcon"
+            role="img"
+          />
+        </div>
+        <div
+          aria-label="Unverified"
+          class="mx_DeviceTypeIcon_verificationIcon unverified"
+          role="img"
+        />
+      </div>
+      <div
+        class="mx_DeviceTile_info"
+      >
+        <h4
+          class="mx_Heading_h4"
+        >
+          Alices device
+        </h4>
+        <div
+          class="mx_DeviceTile_metadata"
+        >
+          <span
+            data-testid="device-metadata-isVerified"
+          >
+            Unverified
+          </span>
+           · 
+          <span
+            data-testid="device-metadata-deviceId"
+          >
+            alices_device
+          </span>
+        </div>
+      </div>
+      <div
+        class="mx_DeviceTile_actions"
+      >
+        <div
+          aria-label="Show details"
+          class="mx_AccessibleButton mx_DeviceExpandDetailsButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon"
+          data-testid="current-session-toggle-details"
+          role="button"
+          tabindex="0"
+        >
+          <svg
+            class="mx_DeviceExpandDetailsButton_icon"
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 14.95c-.133 0-.258-.02-.375-.063a.876.876 0 0 1-.325-.212l-4.6-4.6a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l3.9 3.9 3.9-3.9a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275.948.948 0 0 1 .275.7.948.948 0 0 1-.275.7l-4.6 4.6c-.1.1-.208.17-.325.212a1.106 1.106 0 0 1-.375.063Z"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+    <br />
+    <div
+      class="mx_DeviceSecurityCard"
+    >
+      <div
+        class="mx_DeviceSecurityCard_icon Unverified"
+      >
+        <div
+          height="16"
+          width="16"
+        />
+      </div>
+      <div
+        class="mx_DeviceSecurityCard_content"
+      >
+        <p
+          class="mx_DeviceSecurityCard_heading"
+        >
+          Unverified session
+        </p>
+        <p
+          class="mx_DeviceSecurityCard_description"
+        >
+          Verify your current session for enhanced secure messaging.
+          <div
+            class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+            role="button"
+            tabindex="0"
+          >
+            Learn more
+          </div>
+        </p>
+        <div
+          class="mx_DeviceSecurityCard_actions"
+        >
+          <div
+            class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+            data-testid="verification-status-button-alices_device"
+            role="button"
+            tabindex="0"
+          >
+            Verify session
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<SessionManagerTab /> goes to filtered list from security recommendations 1`] = `
+<div
+  class="mx_FilteredDeviceListHeader"
+>
+  <span
+    tabindex="0"
+  >
+    <span
+      class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+    >
+      <input
+        aria-label="Select all"
+        aria-labelledby=":r3s:"
+        data-testid="device-select-all-checkbox"
+        id="device-select-all-checkbox"
+        type="checkbox"
+      />
+      <label
+        for="device-select-all-checkbox"
+      >
+        <div
+          class="mx_Checkbox_background"
+        >
+          <div
+            class="mx_Checkbox_checkmark"
+          />
+        </div>
+      </label>
+    </span>
+  </span>
+  <span
+    class="mx_FilteredDeviceListHeader_label"
+  >
+    Sessions
+  </span>
+  <div
+    class="mx_Dropdown mx_FilterDropdown"
+  >
+    <div
+      aria-describedby="device-list-filter_value"
+      aria-expanded="false"
+      aria-haspopup="listbox"
+      aria-label="Filter devices"
+      aria-owns="device-list-filter_input"
+      class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="mx_Dropdown_option"
+        id="device-list-filter_value"
+      >
+        Show: Unverified
+      </div>
+      <span
+        class="mx_Dropdown_arrow"
+      />
+    </div>
+  </div>
+</div>
+`;

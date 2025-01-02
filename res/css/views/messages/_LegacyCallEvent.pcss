@@ -1,0 +1,232 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_LegacyCallEvent_wrapper {
+    display: flex;
+    width: 100%;
+
+    .mx_LegacyCallEvent {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: $spacing-4 0;
+
+        position: relative;
+        margin: $spacing-4 0;
+        padding: $spacing-12 $spacing-24;
+        box-sizing: border-box;
+        background-color: $dark-panel-bg-color;
+        border-radius: 8px;
+        width: 65%;
+        height: fit-content;
+
+        .mx_LegacyCallEvent_iconButton {
+            display: inline-flex;
+
+            &::before {
+                content: "";
+
+                height: 16px;
+                width: 16px;
+                background-color: $secondary-content;
+                mask-repeat: no-repeat;
+                mask-size: contain;
+                mask-position: center;
+            }
+        }
+
+        .mx_LegacyCallEvent_silence::before {
+            mask-image: url("$(res)/img/voip/silence.svg");
+        }
+
+        .mx_LegacyCallEvent_unSilence::before {
+            mask-image: url("$(res)/img/voip/un-silence.svg");
+        }
+
+        &.mx_LegacyCallEvent_voice {
+            .mx_LegacyCallEvent_type_icon::before,
+            .mx_LegacyCallEvent_content_button_callBack span::before,
+            .mx_LegacyCallEvent_content_button_answer span::before {
+                mask-image: url("$(res)/img/element-icons/call/voice-call.svg");
+            }
+
+            &.mx_LegacyCallEvent_rejected,
+            &.mx_LegacyCallEvent_noAnswer {
+                .mx_LegacyCallEvent_type_icon::before {
+                    mask-image: url("$(res)/img/element-icons/call/hangup.svg");
+                }
+            }
+        }
+
+        &.mx_LegacyCallEvent_video {
+            .mx_LegacyCallEvent_type_icon::before,
+            .mx_LegacyCallEvent_content_button_callBack span::before,
+            .mx_LegacyCallEvent_content_button_answer span::before {
+                mask-image: url("$(res)/img/element-icons/call/video-call.svg");
+            }
+
+            &.mx_LegacyCallEvent_rejected,
+            &.mx_LegacyCallEvent_noAnswer {
+                .mx_LegacyCallEvent_type_icon::before {
+                    mask-image: url("@vector-im/compound-design-tokens/icons/video-call-declined-solid.svg");
+                }
+            }
+        }
+
+        &.mx_LegacyCallEvent_missed {
+            &.mx_LegacyCallEvent_voice {
+                .mx_LegacyCallEvent_type_icon::before {
+                    mask-image: url("$(res)/img/voip/missed-voice.svg");
+                }
+            }
+
+            &.mx_LegacyCallEvent_video {
+                .mx_LegacyCallEvent_type_icon::before {
+                    mask-image: url("@vector-im/compound-design-tokens/icons/video-call-missed-solid.svg");
+                }
+            }
+        }
+
+        .mx_LegacyCallEvent_info {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            width: fit-content;
+            max-width: 100%;
+
+            .mx_LegacyCallEvent_info_basic {
+                display: flex;
+                flex-direction: column;
+                gap: $spacing-4;
+                margin-left: 10px; /* To match mx_LegacyCallEvent */
+                margin-right: 10px;
+                min-width: 0;
+
+                .mx_LegacyCallEvent_sender {
+                    font-weight: var(--cpd-font-weight-semibold);
+                    margin-bottom: $spacing-4;
+
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                }
+
+                .mx_LegacyCallEvent_type {
+                    display: flex;
+                    align-items: center;
+                    font-weight: 400;
+                    color: $secondary-content;
+
+                    .mx_LegacyCallEvent_type_icon {
+                        height: 13px;
+                        width: 13px;
+                        margin-right: 5px;
+
+                        &::before {
+                            content: "";
+                            position: absolute;
+                            height: 13px;
+                            width: 13px;
+                            background-color: $secondary-content;
+                            mask-repeat: no-repeat;
+                            mask-size: contain;
+                        }
+                    }
+                }
+            }
+        }
+
+        .mx_LegacyCallEvent_content {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            color: $secondary-content;
+            font-size: $font-12px;
+            gap: $spacing-12; /* See mx_IncomingLegacyCallToast_buttons */
+            margin-inline-start: 42px; /* avatar (32px) + mx_LegacyCallEvent_info_basic margin (10px) */
+            word-break: break-word;
+            max-width: fit-content;
+
+            .mx_LegacyCallEvent_content_button {
+                @mixin LegacyCallButton;
+                padding: 0 $spacing-12;
+                font-size: inherit;
+
+                span::before {
+                    mask-size: 16px;
+                    width: 16px;
+                    height: 16px;
+                    flex-shrink: 0;
+                }
+            }
+
+            .mx_LegacyCallEvent_content_button_reject {
+                span::before {
+                    mask-image: url("$(res)/img/element-icons/call/hangup.svg");
+                }
+            }
+
+            .mx_LegacyCallEvent_content_tooltip {
+                margin-right: 5px;
+            }
+        }
+
+        &.mx_LegacyCallEvent_narrow {
+            flex-direction: column;
+            align-items: unset;
+            gap: $spacing-4 $spacing-16;
+            height: unset;
+            min-width: 290px;
+
+            .mx_LegacyCallEvent_iconButton {
+                position: absolute;
+                margin-right: 0;
+                top: 12px;
+                right: 12px;
+                height: 16px;
+                width: 16px;
+                display: flex;
+            }
+
+            .mx_LegacyCallEvent_info {
+                align-items: center;
+            }
+        }
+    }
+}
+
+.mx_EventTile[data-layout="bubble"] {
+    .mx_EventTile_e2eIcon + .mx_LegacyCallEvent_wrapper {
+        .mx_LegacyCallEvent {
+            position: relative;
+
+            /* 5px (gap) + 14px (e2e icon size * mask-size) + 9px (margin-left of e2e icon) */
+            right: calc(5px + 14px + 9px);
+        }
+    }
+}
+
+.mx_EventTile_leftAlignedBubble {
+    .mx_LegacyCallEvent_wrapper {
+        .mx_LegacyCallEvent {
+            &.mx_LegacyCallEvent_narrow {
+                gap: $spacing-8 $spacing-4;
+            }
+        }
+    }
+}
+
+.mx_IRCLayout {
+    .mx_LegacyCallEvent_wrapper {
+        .mx_LegacyCallEvent {
+            margin-inline-start: $spacing-4; /* display green line */
+        }
+    }
+}
