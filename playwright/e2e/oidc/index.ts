@@ -13,30 +13,45 @@ import { test as base, expect } from "../../element-web-test";
 import { MatrixAuthenticationService } from "../../plugins/matrix-authentication-service";
 import { StartHomeserverOpts } from "../../plugins/homeserver";
 
-export const test = base.extend<{
-    masPrepare: MatrixAuthenticationService;
-    mas: MatrixAuthenticationService;
-}>({
+export const test = base.extend<
+    {
+        masPrepare: MatrixAuthenticationService;
+    },
+    {
+        _masPrepare: MatrixAuthenticationService;
+        mas: MatrixAuthenticationService;
+    }
+>({
     // There's a bit of a chicken and egg problem between MAS & Synapse where they each need to know how to reach each other
     // so spinning up a MAS is split into the prepare & start stage: prepare mas -> homeserver -> start mas to disentangle this.
-    masPrepare: async ({ context }, use) => {
-        const mas = new MatrixAuthenticationService(context);
-        await mas.prepare();
-        await use(mas);
-    },
+    _masPrepare: [
+        // eslint-disable-next-line no-empty-pattern
+        async ({}, use) => {
+            const mas = new MatrixAuthenticationService();
+            await mas.prepare();
+            await use(mas);
+        },
+        { scope: "worker" },
+    ],
     mas: [
-        async ({ masPrepare: mas, homeserver, mailhog }, use, testInfo) => {
+        async ({ _masPrepare: mas, _workerHomeserver: homeserver, _mailhog: mailhog }, use, testInfo) => {
             await mas.start(homeserver, mailhog.instance);
             await use(mas);
-            await mas.stop(testInfo);
+            await mas.stop();
         },
-        { auto: true },
+        { auto: true, scope: "worker" },
     ],
-    startHomeserverOpts: async ({ masPrepare }, use) => {
+    masPrepare: async ({ context, _masPrepare: mas }, use, testInfo) => {
+        mas.setContext(context);
+        await use(mas);
+        await mas.afterEach(testInfo);
+    },
+
+    startHomeserverOpts: async ({ _masPrepare: mas }, use) => {
         await use({
             template: "mas-oidc",
             variables: {
-                MAS_PORT: masPrepare.port,
+                MAS_PORT: mas.port,
             },
         });
     },

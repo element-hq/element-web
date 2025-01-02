@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import path, { basename } from "node:path";
 import os from "node:os";
 import * as fse from "fs-extra";
-import { BrowserContext, TestInfo } from "@playwright/test";
+import { BrowserContext, Route, TestInfo } from "@playwright/test";
 
 import { getFreePort } from "../utils/port";
 import { Docker } from "../docker";
@@ -59,13 +59,43 @@ async function cfgDirFromTemplate(opts: {
     };
 }
 
+const ROUTES = [
+    "**/_matrix/client/*/login",
+    "**/_matrix/client/*/login/**",
+    "**/_matrix/client/*/logout",
+    "**/_matrix/client/*/refresh",
+];
+
 export class MatrixAuthenticationService {
     private readonly masDocker = new Docker();
     private readonly postgresDocker = new PostgresDocker("mas");
+    private context: BrowserContext;
     private instance: ProxyInstance;
     public port: number;
 
-    constructor(private context: BrowserContext) {}
+    constructor() {}
+
+    routeHandler = async (route: Route) => {
+        const baseUrl = `http://localhost:${this.port}`;
+        await route.continue({
+            url: new URL(route.request().url().split("/").slice(3).join("/"), baseUrl).href,
+        });
+    };
+
+    async setContext(context: BrowserContext) {
+        if (this.context) {
+            for (const path of ROUTES) {
+                await this.context.unroute(path, this.routeHandler);
+            }
+        }
+
+        this.context = context;
+
+        // Set up redirects
+        for (const path of ROUTES) {
+            await this.context.route(path, this.routeHandler);
+        }
+    }
 
     async prepare(): Promise<{ port: number }> {
         this.port = await getFreePort();
@@ -99,40 +129,19 @@ export class MatrixAuthenticationService {
         });
         console.log(new Date(), "started!");
 
-        // Set up redirects
-        const baseUrl = `http://localhost:${port}`;
-        for (const path of [
-            "**/_matrix/client/*/login",
-            "**/_matrix/client/*/login/**",
-            "**/_matrix/client/*/logout",
-            "**/_matrix/client/*/refresh",
-        ]) {
-            await this.context.route(path, async (route) => {
-                await route.continue({
-                    url: new URL(route.request().url().split("/").slice(3).join("/"), baseUrl).href,
-                });
-            });
-        }
-
         this.instance = { containerId, postgresId, port, configDir };
         return this.instance;
     }
 
-    async stop(testInfo: TestInfo): Promise<void> {
-        if (!this.instance) return; // nothing to stop
-        const id = this.instance.containerId;
-        const logPath = path.join("playwright", "logs", "matrix-authentication-service", id);
-        await fse.ensureDir(logPath);
-        await this.masDocker.persistLogsToFile({
-            stdoutFile: path.join(logPath, "stdout.log"),
-            stderrFile: path.join(logPath, "stderr.log"),
-        });
-
-        await this.masDocker.stop();
-        await this.postgresDocker.stop();
+    async afterEach(testInfo: TestInfo): Promise<void> {
+        if (!this.instance) return;
+        const { stdoutFile, stderrFile } = await this.masDocker.persistLogsToFile(
+            "matrix-authentication-service",
+            this.instance.containerId,
+        );
 
         if (testInfo.status !== "passed") {
-            const logs = [path.join(logPath, "stdout.log"), path.join(logPath, "stderr.log")];
+            const logs = [stdoutFile, stderrFile];
             for (const path of logs) {
                 await testInfo.attach(`mas-${basename(path)}`, {
                     path,
@@ -144,6 +153,13 @@ export class MatrixAuthenticationService {
                 contentType: "text/plain",
             });
         }
+    }
+
+    async stop(): Promise<void> {
+        if (!this.instance) return; // nothing to stop
+
+        await this.masDocker.stop();
+        await this.postgresDocker.stop();
 
         await fse.remove(this.instance.configDir);
         console.log(new Date(), "Stopped mas.");

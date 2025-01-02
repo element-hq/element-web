@@ -75,14 +75,13 @@ export class Dendrite extends Synapse implements Homeserver, HomeserverInstance 
 
     public async getLogs(): Promise<string[]> {
         if (!this.config) throw new Error("Missing existing dendrite instance, did you call getLogs() before start()?");
-        const id = this.config.serverId;
-        const dendriteLogsPath = path.join("playwright", "logs", "dendrite", id);
-        await fse.ensureDir(dendriteLogsPath);
-        await this.docker.persistLogsToFile({
-            stdoutFile: path.join(dendriteLogsPath, "stdout.log"),
-            stderrFile: path.join(dendriteLogsPath, "stderr.log"),
-        });
-        return [path.join(dendriteLogsPath, "stdout.log"), path.join(dendriteLogsPath, "stderr.log")];
+        const { stdoutFile, stderrFile } = await this.docker.persistLogsToFile(
+            "dendrite",
+            this.config.serverId,
+            this.logsSinceTime,
+        );
+        this.logsSinceTime = new Date().toISOString();
+        return [stdoutFile, stderrFile];
     }
 
     public async stop(): Promise<void> {

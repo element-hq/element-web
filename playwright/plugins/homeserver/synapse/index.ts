@@ -134,16 +134,16 @@ export class Synapse implements Homeserver, HomeserverInstance {
         return this;
     }
 
+    protected logsSinceTime?: string;
     public async getLogs(): Promise<string[]> {
         if (!this.config) throw new Error("Missing existing synapse instance, did you call getLogs() before start()?");
-        const id = this.config.serverId;
-        const synapseLogsPath = path.join("playwright", "logs", "synapse", id);
-        await fse.ensureDir(synapseLogsPath);
-        await this.docker.persistLogsToFile({
-            stdoutFile: path.join(synapseLogsPath, "stdout.log"),
-            stderrFile: path.join(synapseLogsPath, "stderr.log"),
-        });
-        return [path.join(synapseLogsPath, "stdout.log"), path.join(synapseLogsPath, "stderr.log")];
+        const { stdoutFile, stderrFile } = await this.docker.persistLogsToFile(
+            "synapse",
+            this.config.serverId,
+            this.logsSinceTime,
+        );
+        this.logsSinceTime = new Date().toISOString();
+        return [stdoutFile, stderrFile];
     }
 
     public async stop(): Promise<void> {

@@ -14,7 +14,7 @@ import { basename, extname } from "node:path";
 
 import type mailhog from "mailhog";
 import type { IConfigOptions } from "../src/IConfigOptions";
-import { Credentials, getHomeserver, Homeserver, HomeserverInstance, StartHomeserverOpts } from "./plugins/homeserver";
+import { Credentials, getHomeserver, HomeserverInstance, StartHomeserverOpts } from "./plugins/homeserver";
 import { Instance, MailHogServer } from "./plugins/mailhog";
 import { ElementAppPage } from "./pages/ElementAppPage";
 import { OAuthServer } from "./plugins/oauth_server";
@@ -68,12 +68,9 @@ export interface Fixtures {
     config: typeof CONFIG_JSON;
 
     /**
-     * The options with which to run the {@link #homeserver} fixture.
+     * Wraps the worker-scoped _homeserver fixture to hook into testInfo.
      */
-    startHomeserverOpts: StartHomeserverOpts | string;
-    usePerTestHomeserver: boolean;
     homeserver: HomeserverInstance;
-    oAuthServer: { port: number };
 
     /**
      * The displayname to use for the user registered in {@link #credentials}.
@@ -125,11 +122,16 @@ export interface Fixtures {
 }
 
 interface WorkerFixtures {
+    _mailhog: { api: mailhog.API; instance: Instance };
+    oAuthServer: { port: number };
     /**
      * The options with which to run the {@link #homeserver} fixture.
      */
-    startWorkerHomeserverOpts: StartHomeserverOpts | string;
-    workerHomeserver: HomeserverInstance;
+    startHomeserverOpts: StartHomeserverOpts | string;
+    /**
+     * Internal fixture to scope the homeserver instance to the worker.
+     */
+    _workerHomeserver: HomeserverInstance;
 }
 
 export const test = base.extend<Fixtures, WorkerFixtures>({
@@ -158,11 +160,9 @@ export const test = base.extend<Fixtures, WorkerFixtures>({
         await use(page);
     },
 
-    startHomeserverOpts: "default",
-    startWorkerHomeserverOpts: ["default", { scope: "worker" }],
-    usePerTestHomeserver: [false, { option: true }],
-    workerHomeserver: [
-        async ({ startWorkerHomeserverOpts: opts }, use) => {
+    startHomeserverOpts: ["default", { scope: "worker" }],
+    _workerHomeserver: [
+        async ({ startHomeserverOpts: opts }, use) => {
             if (typeof opts === "string") {
                 opts = { template: opts };
             }
@@ -174,24 +174,8 @@ export const test = base.extend<Fixtures, WorkerFixtures>({
         },
         { scope: "worker" },
     ],
-    homeserver: async (
-        { request, startHomeserverOpts: opts, usePerTestHomeserver, workerHomeserver },
-        use,
-        testInfo,
-    ) => {
-        let instance: HomeserverInstance;
-        let server: Homeserver;
-        if (usePerTestHomeserver) {
-            if (typeof opts === "string") {
-                opts = { template: opts };
-            }
-
-            server = getHomeserver(request);
-            instance = await server.start(opts);
-        } else {
-            instance = workerHomeserver;
-            instance.setRequest(request);
-        }
+    homeserver: async ({ request, _workerHomeserver: instance }, use, testInfo) => {
+        instance.setRequest(request);
 
         await use(instance);
 
@@ -204,15 +188,17 @@ export const test = base.extend<Fixtures, WorkerFixtures>({
                 });
             }
         }
-        await server?.stop();
     },
-    // eslint-disable-next-line no-empty-pattern
-    oAuthServer: async ({}, use) => {
-        const server = new OAuthServer();
-        const port = server.start();
-        await use({ port });
-        server.stop();
-    },
+    oAuthServer: [
+        // eslint-disable-next-line no-empty-pattern
+        async ({}, use) => {
+            const server = new OAuthServer();
+            const port = server.start();
+            await use({ port });
+            server.stop();
+        },
+        { scope: "worker" },
+    ],
 
     displayName: undefined,
     credentials: async ({ homeserver, displayName: testDisplayName }, use, testInfo) => {
@@ -289,12 +275,20 @@ export const test = base.extend<Fixtures, WorkerFixtures>({
         await use(bot);
     },
 
+    _mailhog: [
+        // eslint-disable-next-line no-empty-pattern
+        async ({}, use) => {
+            const mailhog = new MailHogServer();
+            const instance = await mailhog.start();
+            await use(instance);
+            await mailhog.stop();
+        },
+        { scope: "worker" },
+    ],
     // eslint-disable-next-line no-empty-pattern
-    mailhog: async ({}, use) => {
-        const mailhog = new MailHogServer();
-        const instance = await mailhog.start();
-        await use(instance);
-        await mailhog.stop();
+    mailhog: async ({ _mailhog: mailhog }, use) => {
+        await use(mailhog);
+        await mailhog.api.deleteAll();
     },
 
     slidingSyncProxy: async ({ page, user, homeserver }, use) => {

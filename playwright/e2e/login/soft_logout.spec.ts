@@ -13,16 +13,16 @@ import { doTokenRegistration } from "./utils";
 import { Credentials } from "../../plugins/homeserver";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 
-test.describe("Soft logout", () => {
-    test.use({
-        displayName: "Alice",
-        startHomeserverOpts: ({ oAuthServer }, use) =>
-            use({
-                template: "default",
-                oAuthServerPort: oAuthServer.port,
-            }),
-    });
+test.use({
+    displayName: "Alice",
+    startHomeserverOpts: ({ oAuthServer }, use) =>
+        use({
+            template: "default",
+            oAuthServerPort: oAuthServer.port,
+        }),
+});
 
+test.describe("Soft logout", () => {
     test.describe("with password user", () => {
         test("shows the soft-logout page when a request fails, and allows a re-login", async ({ page, user }) => {
             await interceptRequestsWithSoftLogout(page, user);

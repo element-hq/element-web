@@ -9,30 +9,30 @@ Please see LICENSE files in the repository root for full details.
 import { test, expect } from "../../element-web-test";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 
+test.use({
+    startHomeserverOpts: ({ _mailhog: mailhog }, use) =>
+        use({
+            template: "email",
+            variables: {
+                SMTP_HOST: "host.containers.internal",
+                SMTP_PORT: mailhog.instance.smtpPort,
+            },
+        }),
+    config: ({ homeserver }, use) =>
+        use({
+            default_server_config: {
+                "m.homeserver": {
+                    base_url: homeserver.config.baseUrl,
+                },
+                "m.identity_server": {
+                    base_url: "https://server.invalid",
+                },
+            },
+        }),
+});
+
 test.describe("Email Registration", async () => {
     test.skip(isDendrite, "not yet wired up");
-
-    test.use({
-        startHomeserverOpts: ({ mailhog }, use) =>
-            use({
-                template: "email",
-                variables: {
-                    SMTP_HOST: "host.containers.internal",
-                    SMTP_PORT: mailhog.instance.smtpPort,
-                },
-            }),
-        config: ({ homeserver }, use) =>
-            use({
-                default_server_config: {
-                    "m.homeserver": {
-                        base_url: homeserver.config.baseUrl,
-                    },
-                    "m.identity_server": {
-                        base_url: "https://server.invalid",
-                    },
-                },
-            }),
-    });
 
     test.beforeEach(async ({ page }) => {
         await page.goto("/#/register");

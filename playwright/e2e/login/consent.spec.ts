@@ -8,12 +8,12 @@ Please see LICENSE files in the repository root for full details.
 
 import { test, expect } from "../../element-web-test";
 
-test.describe("Consent", () => {
-    test.use({
-        startHomeserverOpts: "consent",
-        displayName: "Bob",
-    });
+test.use({
+    startHomeserverOpts: "consent",
+    displayName: "Bob",
+});
 
+test.describe("Consent", () => {
     test("should prompt the user to consent to terms when server deems it necessary", async ({
         context,
         page,

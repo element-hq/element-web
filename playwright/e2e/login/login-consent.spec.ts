@@ -9,8 +9,6 @@ Please see LICENSE files in the repository root for full details.
 import { Page } from "playwright-core";
 
 import { expect, test } from "../../element-web-test";
-import { doTokenRegistration } from "./utils";
-import { isDendrite } from "../../plugins/homeserver/dendrite";
 import { selectHomeserver } from "../utils";
 import { Credentials, HomeserverInstance } from "../../plugins/homeserver";
 
@@ -77,10 +75,10 @@ async function login(page: Page, homeserver: HomeserverInstance) {
     await page.getByRole("button", { name: "Sign in" }).click();
 }
 
+test.use({ startHomeserverOpts: "consent" });
+
 test.describe("Login", () => {
     test.describe("Password login", () => {
-        test.use({ startHomeserverOpts: "consent" });
-
         let creds: Credentials;
 
         test.beforeEach(async ({ homeserver }) => {
@@ -223,32 +221,7 @@ test.describe("Login", () => {
         });
     });
 
-    // tests for old-style SSO login, in which we exchange tokens with Synapse, and Synapse talks to an auth server
-    test.describe("SSO login", () => {
-        test.skip(isDendrite, "does not yet support SSO");
-
-        test.use({
-            startHomeserverOpts: ({ oAuthServer }, use) =>
-                use({
-                    template: "default",
-                    oAuthServerPort: oAuthServer.port,
-                }),
-        });
-
-        test("logs in with SSO and lands on the home screen", async ({ page, homeserver }) => {
-            // If this test fails with a screen showing "Timeout connecting to remote server", it is most likely due to
-            // your firewall settings: Synapse is unable to reach the OIDC server.
-            //
-            // If you are using ufw, try something like:
-            //    sudo ufw allow in on docker0
-            //
-            await doTokenRegistration(page, homeserver);
-        });
-    });
-
     test.describe("logout", () => {
-        test.use({ startHomeserverOpts: "consent" });
-
         test("should go to login page on logout", async ({ page, user }) => {
             await page.getByRole("button", { name: "User menu" }).click();
             await expect(page.getByText(user.displayName, { exact: true })).toBeVisible();
@@ -258,31 +231,6 @@ test.describe("Login", () => {
 
             await page.locator(".mx_UserMenu_contextMenu").getByRole("menuitem", { name: "Sign out" }).click();
             await expect(page).toHaveURL(/\/#\/login$/);
-        });
-    });
-
-    test.describe("logout with logout_redirect_url", () => {
-        test.use({
-            startHomeserverOpts: "consent",
-            config: {
-                // We redirect to decoder-ring because it's a predictable page that isn't Element itself.
-                // We could use example.org, matrix.org, or something else, however this puts dependency of external
-                // infrastructure on our tests. In the same vein, we don't really want to figure out how to ship a
-                // `test-landing.html` page when running with an uncontrolled Element (via `yarn start`).
-                // Using the decoder-ring is just as fine, and we can search for strategic names.
-                logout_redirect_url: "/decoder-ring/",
-            },
-        });
-
-        test("should respect logout_redirect_url", async ({ page, user }) => {
-            await page.getByRole("button", { name: "User menu" }).click();
-            await expect(page.getByText(user.displayName, { exact: true })).toBeVisible();
-
-            // give a change for the outstanding requests queue to settle before logging out
-            await page.waitForTimeout(2000);
-
-            await page.locator(".mx_UserMenu_contextMenu").getByRole("menuitem", { name: "Sign out" }).click();
-            await expect(page).toHaveURL(/\/decoder-ring\/$/);
         });
     });
 });

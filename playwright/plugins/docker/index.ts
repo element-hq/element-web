@@ -9,7 +9,9 @@ Please see LICENSE files in the repository root for full details.
 import * as os from "os";
 import * as crypto from "crypto";
 import * as childProcess from "child_process";
-import * as fse from "fs-extra";
+import { ensureDir } from "fs-extra";
+import { createWriteStream } from "node:fs";
+import path from "node:path";
 
 /**
  * @param cmd - command to execute
@@ -122,18 +124,33 @@ export class Docker {
         return stdout.trim();
     }
 
-    async persistLogsToFile(args: { stdoutFile?: string; stderrFile?: string }): Promise<void> {
-        const stdoutFile = args.stdoutFile ? await fse.open(args.stdoutFile, "w") : "ignore";
-        const stderrFile = args.stderrFile ? await fse.open(args.stderrFile, "w") : "ignore";
+    async persistLogsToFile(
+        name: string,
+        id: string,
+        since?: string,
+    ): Promise<{ stdoutFile: string; stderrFile: string }> {
+        const logPath = path.join("playwright", "logs", name, id);
+        await ensureDir(logPath);
+
+        const [stdoutFile, stderrFile] = [path.join(logPath, "stdout.log"), path.join(logPath, "stderr.log")];
+        const [stdoutStream, stderrStream] = [createWriteStream(stdoutFile), createWriteStream(stderrFile)];
+
+        const args = ["logs", this.id];
+        if (since) {
+            args.push("--since", since);
+        }
+
         await new Promise<void>((resolve) => {
             childProcess
-                .spawn("docker", ["logs", this.id], {
-                    stdio: ["ignore", stdoutFile, stderrFile],
+                .spawn("docker", args, {
+                    stdio: ["ignore", stdoutStream, stderrStream],
                 })
                 .once("close", resolve);
         });
-        if (args.stdoutFile) await fse.close(<number>stdoutFile);
-        if (args.stderrFile) await fse.close(<number>stderrFile);
+        stdoutStream.close();
+        stderrStream.close();
+
+        return { stdoutFile, stderrFile };
     }
 
     /**

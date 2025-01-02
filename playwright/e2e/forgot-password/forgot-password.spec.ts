@@ -14,18 +14,18 @@ const username = "user1234";
 const password = "oETo7MPf0o";
 const email = "user@nowhere.dummy";
 
-test.describe("Forgot Password", () => {
-    test.use({
-        startHomeserverOpts: ({ mailhog }, use) =>
-            use({
-                template: "email",
-                variables: {
-                    SMTP_HOST: "host.containers.internal",
-                    SMTP_PORT: mailhog.instance.smtpPort,
-                },
-            }),
-    });
+test.use({
+    startHomeserverOpts: ({ _mailhog: mailhog }, use) =>
+        use({
+            template: "email",
+            variables: {
+                SMTP_HOST: "host.containers.internal",
+                SMTP_PORT: mailhog.instance.smtpPort,
+            },
+        }),
+});
 
+test.describe("Forgot Password", () => {
     test("renders properly", { tag: "@screenshot" }, async ({ page, homeserver }) => {
         await page.goto("/");
 

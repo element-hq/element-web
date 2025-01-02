@@ -8,11 +8,11 @@ Please see LICENSE files in the repository root for full details.
 
 import { test, expect } from "../../element-web-test";
 
-test.describe("Registration", () => {
-    test.use({
-        startHomeserverOpts: "consent",
-    });
+test.use({
+    startHomeserverOpts: "consent",
+});
 
+test.describe("Registration", () => {
     test.beforeEach(async ({ page }) => {
         await page.goto("/#/register");
     });
