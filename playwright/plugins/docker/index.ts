@@ -141,11 +141,13 @@ export class Docker {
         }
 
         await new Promise<void>((resolve) => {
-            childProcess
+            const { stdout, stderr } = childProcess
                 .spawn("docker", args, {
-                    stdio: ["ignore", stdoutStream, stderrStream],
+                    stdio: ["ignore", "pipe", "pipe"],
                 })
                 .once("close", resolve);
+            stdout.pipe(stdoutStream);
+            stderr.pipe(stderrStream);
         });
         stdoutStream.close();
         stderrStream.close();
