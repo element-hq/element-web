@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import type { BrowserContext } from "@playwright/test";
+import type { BrowserContext, Route } from "@playwright/test";
 import { getFreePort } from "../utils/port";
 import { Docker } from "../docker";
 import { PG_PASSWORD, PostgresDocker } from "../postgres";
@@ -29,6 +29,15 @@ export class SlidingSyncProxy {
         private synapseIp: string,
         private context: BrowserContext,
     ) {}
+
+    private syncHandler = async (route: Route) => {
+        if (!this.instance) return route.abort("blockedbyclient");
+
+        const baseUrl = `http://localhost:${this.instance.port}`;
+        await route.continue({
+            url: new URL(route.request().url().split("/").slice(3).join("/"), baseUrl).href,
+        });
+    };
 
     async start(): Promise<ProxyInstance> {
         console.log(new Date(), "Starting sliding sync proxy...");
@@ -53,25 +62,14 @@ export class SlidingSyncProxy {
         });
         console.log(new Date(), "started!");
 
-        const baseUrl = `http://localhost:${port}`;
-        await this.context.route("**/_matrix/client/unstable/org.matrix.msc3575/sync*", async (route) => {
-            console.log("Sliding sync proxy intercepting request to", route.request().url());
-            console.log("Continuing to", new URL(route.request().url().split("/").slice(3).join("/"), baseUrl).href);
-            const response = await route.fetch({
-                url: new URL(route.request().url().split("/").slice(3).join("/"), baseUrl).href,
-            });
-            console.log("Sliding sync proxy got response", response.status(), await response.json());
-            await route.fulfill({ response });
-            // await route.continue({
-            //     url: new URL(route.request().url().split("/").slice(3).join("/"), baseUrl).href,
-            // });
-        });
-
         this.instance = { containerId, postgresId, port };
+        await this.context.route("**/_matrix/client/unstable/org.matrix.msc3575/sync*", this.syncHandler);
         return this.instance;
     }
 
     async stop(): Promise<void> {
+        await this.context.unroute("**/_matrix/client/unstable/org.matrix.msc3575/sync*", this.syncHandler);
+
         await this.postgresDocker.stop();
         await this.proxyDocker.stop();
         console.log(new Date(), "Stopped sliding sync proxy.");

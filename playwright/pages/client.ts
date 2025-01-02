@@ -52,6 +52,10 @@ export class Client {
         this.network = new Network(page, this);
     }
 
+    public async cleanup() {
+        await this.network.destroyRoute();
+    }
+
     public evaluate<R, Arg, O extends MatrixClient = MatrixClient>(
         pageFunction: PageFunctionOn<O, Arg, R>,
         arg: Arg,

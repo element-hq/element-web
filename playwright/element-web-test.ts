@@ -249,6 +249,7 @@ export const test = base.extend<Fixtures>({
     app: async ({ page }, use) => {
         const app = new ElementAppPage(page);
         await use(app);
+        await app.cleanup();
     },
     crypto: async ({ page, homeserver, request }, use) => {
         await use(new Crypto(page, homeserver, request));
