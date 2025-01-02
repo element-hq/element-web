@@ -34,6 +34,7 @@ interface Props {
     onSignOutCurrentDevice: () => void;
     signOutAllOtherSessions?: () => void;
     saveDeviceName: (deviceName: string) => Promise<void>;
+    delegatedAuthAccountUrl?: string;
 }
 
 type CurrentDeviceSectionHeadingProps = Pick<
@@ -90,6 +91,7 @@ const CurrentDeviceSection: React.FC<Props> = ({
     onSignOutCurrentDevice,
     signOutAllOtherSessions,
     saveDeviceName,
+    delegatedAuthAccountUrl,
 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
@@ -126,6 +128,8 @@ const CurrentDeviceSection: React.FC<Props> = ({
                             onSignOutDevice={onSignOutCurrentDevice}
                             saveDeviceName={saveDeviceName}
                             className="mx_CurrentDeviceSection_deviceDetails"
+                            delegatedAuthAccountUrl={delegatedAuthAccountUrl}
+                            isCurrentDevice
                         />
                     ) : (
                         <>

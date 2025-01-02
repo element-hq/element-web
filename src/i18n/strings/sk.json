@@ -230,7 +230,6 @@
         "oidc": {
             "error_title": "Nemohli sme vás prihlásiť",
             "generic_auth_error": "Počas overenia sa niečo pokazilo. Prejdite na stránku prihlásenia a skúste to znova.",
-            "logout_redirect_warning": "Na dokončenie odhlásenia budete presmerovaní na vášho poskytovateľa autentifikácie servera.",
             "missing_or_invalid_stored_state": "Požiadali sme prehliadač, aby si zapamätal, ktorý domovský server používate na prihlásenie, ale bohužiaľ váš prehliadač to zabudol. Prejdite na stránku prihlásenia a skúste to znova."
         },
         "password_field_keep_going_prompt": "Pokračujte…",
@@ -1385,8 +1384,6 @@
         "notification_settings_beta_caption": "Predstavujeme jednoduchší spôsob zmeny nastavení oznámení. Prispôsobte si svoju aplikáciu %(brand)s, presne podľa svojich predstáv.",
         "notification_settings_beta_title": "Nastavenia oznámení",
         "notifications": "Povolenie panelu oznámení v záhlaví miestnosti",
-        "oidc_native_flow": "Povoliť nové natívne toky OIDC (v štádiu aktívneho vývoja)",
-        "oidc_native_flow_description": "⚠ VAROVANIE: Experimentálne. Použite natívne overenie OIDC, ak je podporované serverom.",
         "render_reaction_images": "Vykresľovať vlastné obrázky v reakciách",
         "render_reaction_images_description": "Niekedy sa označujú ako „vlastné emotikony“.",
         "report_to_moderators": "Nahlásiť moderátorom",

@@ -176,7 +176,7 @@ describe("RoomHeader", () => {
     });
 
     it("opens the notifications panel", async () => {
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string): any => {
             if (name === "feature_notifications") return true;
         });
 

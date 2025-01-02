@@ -17,7 +17,7 @@ interface ILegacyFormat {
 }
 
 // New format tries to be more space efficient for synchronization. Ordered by Date descending.
-type Format = [string, number][]; // [emoji, count]
+export type RecentEmojiData = [emoji: string, count: number][];
 
 const SETTING_NAME = "recent_emoji";
 
@@ -33,7 +33,7 @@ function migrate(): void {
     SettingsStore.setValue(SETTING_NAME, null, SettingLevel.ACCOUNT, newFormat.slice(0, STORAGE_LIMIT));
 }
 
-function getRecentEmoji(): Format {
+function getRecentEmoji(): RecentEmojiData {
     return SettingsStore.getValue(SETTING_NAME) || [];
 }
 

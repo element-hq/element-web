@@ -40,7 +40,7 @@ describe("DiscoverySettings", () => {
     const DiscoveryWrapper = (props = {}) => <MatrixClientContext.Provider value={client} {...props} />;
 
     it("is empty if 3pid features are disabled", async () => {
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((key) => {
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((key: any): any => {
             if (key === UIFeature.ThirdPartyID) return false;
         });
 

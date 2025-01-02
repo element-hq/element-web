@@ -235,7 +235,6 @@
         "oidc": {
             "error_title": "Meil ei õnnestunud sind sisse logida",
             "generic_auth_error": "Autentimisel läks midagi valesti. Mine sisselogimise lehele ja proovi uuesti.",
-            "logout_redirect_warning": "Sind suunatakse välja logimise lõpuleviimiseks ümber oma serveri autentimise teenusepakkujale.",
             "missing_or_invalid_stored_state": "Me sättisime nii, et sinu veebibrauser jätaks järgmiseks sisselogimiseks meelde sinu koduserveri, kuid kahjuks on ta selle unustanud. Palun mine sisselogimise lehele ja proovi uuesti."
         },
         "password_field_keep_going_prompt": "Jätka…",
@@ -1387,8 +1386,6 @@
         "notification_settings": "Uued teavituste seadistused",
         "notification_settings_beta_title": "Teavituste seadistused",
         "notifications": "Kasuta jututoa päises teavituste riba",
-        "oidc_native_flow": "OIDC-põhine autentimine",
-        "oidc_native_flow_description": "⚠ HOIATUS: Kasuta OIDC liidestust, kui server seda võimaldab (aktiivselt arendamisel).",
         "report_to_moderators": "Teata moderaatoritele",
         "report_to_moderators_description": "Kui jututoas on modereerimine kasutusel, siis nupust „Teata sisust“ avaneva vormi abil saad jututoa reegleid rikkuvast sisust teatada moderaatoritele.",
         "sliding_sync": "Järkjärgulise sünkroniseerimise režiim",

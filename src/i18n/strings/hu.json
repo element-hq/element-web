@@ -229,7 +229,6 @@
         "no_hs_url_provided": "Nincs megadva a Matrix-kiszolgáló webcíme",
         "oidc": {
             "error_title": "Sajnos nem tudtuk bejelentkeztetni",
-            "logout_redirect_warning": "Át lesz irányítva a kiszolgáló hitelesítésszolgáltatójához a kijelentkezés befejezéséhez.",
             "missing_or_invalid_stored_state": "A böngészőt arra kértük, hogy jegyezze meg, melyik Matrix-kiszolgálót használta a bejelentkezéshez, de sajnos a böngészője elfelejtette. Navigáljon a bejelentkezési oldalra, és próbálja újra."
         },
         "password_field_keep_going_prompt": "Így tovább…",
