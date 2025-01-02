@@ -175,18 +175,18 @@ export class Client {
     public async createRoom(options: ICreateRoomOpts): Promise<string> {
         const client = await this.prepareClient();
         return await client.evaluate(async (cli, options) => {
-            const resp = await cli.createRoom(options);
-            const roomId = resp.room_id;
+            const roomPromise = new Promise<void>((resolve) => {
+                const onRoom = (room: Room) => {
+                    if (room.roomId === roomId) {
+                        cli.off(window.matrixcs.ClientEvent.Room, onRoom);
+                        resolve();
+                    }
+                };
+                cli.on(window.matrixcs.ClientEvent.Room, onRoom);
+            });
+            const { room_id: roomId } = await cli.createRoom(options);
             if (!cli.getRoom(roomId)) {
-                await new Promise<void>((resolve) => {
-                    const onRoom = (room: Room) => {
-                        if (room.roomId === roomId) {
-                            cli.off(window.matrixcs.ClientEvent.Room, onRoom);
-                            resolve();
-                        }
-                    };
-                    cli.on(window.matrixcs.ClientEvent.Room, onRoom);
-                });
+                await roomPromise;
             }
             return roomId;
         }, options);
