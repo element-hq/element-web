@@ -66,7 +66,7 @@ export function tooltipifyLinks(
                 </StrictMode>
             );
 
-            tooltips.render(tooltip, node);
+            tooltips.render(tooltip, node, null);
         } else if (node.childNodes?.length) {
             tooltipifyLinks(node.childNodes as NodeListOf<Element>, ignoredNodes, tooltips);
         }
