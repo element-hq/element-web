@@ -9,12 +9,12 @@ import { AbstractStartedContainer, GenericContainer, StartedTestContainer, Wait 
 import { APIRequestContext } from "@playwright/test";
 import crypto from "node:crypto";
 import * as YAML from "yaml";
-import { deepCopy } from "matrix-js-sdk/src/utils";
 import { set } from "lodash";
 
 import { getFreePort } from "../plugins/utils/port.ts";
 import { randB64Bytes } from "../plugins/utils/rand.ts";
 import { Credentials, HomeserverInstance } from "../plugins/homeserver";
+import { deepCopy } from "../plugins/utils/object.ts";
 
 const TAG = "develop@sha256:17cc0a301447430624afb860276e5c13270ddeb99a3f6d1c6d519a20b1a8f650";
 

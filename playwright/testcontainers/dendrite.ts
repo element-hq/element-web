@@ -8,12 +8,12 @@ Please see LICENSE files in the repository root for full details.
 import { GenericContainer, Wait } from "testcontainers";
 import { APIRequestContext } from "@playwright/test";
 import * as YAML from "yaml";
-import { deepCopy } from "matrix-js-sdk/src/utils";
 import { set } from "lodash";
 
 import { getFreePort } from "../plugins/utils/port.ts";
 import { randB64Bytes } from "../plugins/utils/rand.ts";
 import { StartedSynapseContainer } from "./synapse.ts";
+import { deepCopy } from "../plugins/utils/object.ts";
 
 const DEFAULT_CONFIG = {
     version: 2,

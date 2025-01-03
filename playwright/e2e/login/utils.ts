@@ -6,10 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Page, expect, Fixtures } from "@playwright/test";
+import { Page, expect } from "@playwright/test";
 
 import { Credentials, HomeserverInstance } from "../../plugins/homeserver";
-import { Services } from "../../services.ts";
 
 /** Visit the login page, choose to log in with "OAuth test", register a new account, and redirect back to Element
  */

@@ -5,13 +5,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { AbstractStartedContainer, GenericContainer, StartedTestContainer, Wait } from "testcontainers";
-import crypto from "node:crypto";
+import { GenericContainer, StartedTestContainer, Wait } from "testcontainers";
 import * as YAML from "yaml";
 
 import { getFreePort } from "../plugins/utils/port.ts";
-import { Credentials } from "../plugins/homeserver";
-import { deepCopy } from "matrix-js-sdk/src/utils.ts";
+import { deepCopy } from "../plugins/utils/object.ts";
 
 const DEFAULT_CONFIG = {
     http: {
