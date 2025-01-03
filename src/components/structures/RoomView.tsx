@@ -972,8 +972,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         // (We could use isMounted, but facebook have deprecated that.)
         this.unmounted = true;
 
-        this.context.legacyCallHandler.removeListener(LegacyCallHandlerEvent.CallState, this.onCallState);
-
         // update the scroll map before we get unmounted
         if (this.state.roomId) {
             RoomScrollStateStore.setScrollState(this.state.roomId, this.getScrollState());
@@ -1306,6 +1304,14 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
     };
 
+    protected setState<K extends keyof IRoomState>(
+        state: ((prevState: Readonly<IRoomState>, props: Readonly<IRoomProps>) => Pick<IRoomState, K> | IRoomState | null) | (Pick<IRoomState, K> | IRoomState | null),
+        callback?: () => void,
+    ): void {
+        if (this.unmounted) return;
+        super.setState(state, callback);
+    }
+
     private onEventDecrypted = (ev: MatrixEvent): void => {
         if (!this.state.room || !this.state.matrixClientIsReady) return; // not ready at all
         if (ev.getRoomId() !== this.state.room.roomId) return; // not for us
@@ -1350,6 +1356,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     private loadVirtualRoom = async (room?: Room): Promise<void> => {
         const virtualRoom = room?.roomId && (await VoipUserMapper.sharedInstance().getVirtualRoomForRoom(room?.roomId));
 
+        if (this.unmounted) return;
         this.setState({ virtualRoom: virtualRoom || undefined });
     };
 
@@ -1376,6 +1383,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             this.context.rightPanelStore.setCard({ phase: RightPanelPhases.Timeline }, true, room.roomId);
         }
 
+        if (this.unmounted) return; // things may have changed by the time we started the function call
         this.setState({
             tombstone: this.getRoomTombstone(room),
             liveTimeline: room.getLiveTimeline(),
@@ -1493,7 +1501,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     private async cacheAndGetE2EStatus(room: Room, client: MatrixClient): Promise<E2EStatus> {
         let e2eStatus = RoomView.e2eStatusCache.get(room.roomId);
         // set the state immediately then update, so we don't scare the user into thinking the room is unencrypted
-        if (e2eStatus) this.setState({ e2eStatus });
+        if (e2eStatus && !this.unmounted) this.setState({ e2eStatus });
 
         e2eStatus = await shieldStatusForRoom(client, room);
         RoomView.e2eStatusCache.set(room.roomId, e2eStatus);
@@ -1529,6 +1537,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         const isRoomEncrypted = await this.getIsRoomEncrypted(room.roomId);
         const newE2EStatus = isRoomEncrypted ? await this.cacheAndGetE2EStatus(room, this.context.client) : null;
 
+        if (this.unmounted) return;
         this.setState({
             isRoomEncrypted,
             showUrlPreview: this.getPreviewUrlVisibility(room, isRoomEncrypted),
