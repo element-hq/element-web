@@ -96,8 +96,7 @@ export function attachMentions(
     const userMentions = new Set<string>();
     let roomMention = false;
 
-    // If there's a reply, initialize the mentioned users as the sender of that
-    // event + any mentioned users in that event.
+    // If there's a reply, initialize the mentioned users as the sender of that event.
     if (replyToEvent) {
         userMentions.add(replyToEvent.sender!.userId);
     }
