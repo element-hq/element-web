@@ -7,25 +7,18 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { test, expect } from "../../element-web-test";
+import { emailHomeserver } from "../../plugins/homeserver/synapse/emailHomeserver.ts";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 test.describe("Email Registration", async () => {
     test.skip(isDendrite, "not yet wired up");
-
+    test.use(emailHomeserver);
     test.use({
-        startHomeserverOpts: ({ mailhog }, use) =>
-            use({
-                template: "email",
-                variables: {
-                    SMTP_HOST: "host.containers.internal",
-                    SMTP_PORT: mailhog.instance.smtpPort,
-                },
-            }),
         config: ({ homeserver }, use) =>
             use({
                 default_server_config: {
                     "m.homeserver": {
-                        base_url: homeserver.config.baseUrl,
+                        base_url: homeserver.baseUrl,
                     },
                     "m.identity_server": {
                         base_url: "https://server.invalid",
@@ -41,7 +34,7 @@ test.describe("Email Registration", async () => {
     test(
         "registers an account and lands on the use case selection screen",
         { tag: "@screenshot" },
-        async ({ page, mailhog, request, checkA11y }) => {
+        async ({ page, mailhogClient, request, checkA11y }) => {
             await expect(page.getByRole("textbox", { name: "Username" })).toBeVisible();
             // Hide the server text as it contains the randomly allocated Homeserver port
             const screenshotOptions = { mask: [page.locator(".mx_ServerPicker_server")] };
@@ -58,7 +51,7 @@ test.describe("Email Registration", async () => {
 
             await expect(page.getByText("An error was encountered when sending the email")).not.toBeVisible();
 
-            const messages = await mailhog.api.messages();
+            const messages = await mailhogClient.messages();
             expect(messages.items).toHaveLength(1);
             expect(messages.items[0].to).toEqual("alice@email.com");
             const [emailLink] = messages.items[0].text.match(/http.+/);

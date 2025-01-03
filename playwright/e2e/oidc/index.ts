@@ -10,41 +10,163 @@ import { API, Messages } from "mailhog";
 import { Page } from "@playwright/test";
 
 import { test as base, expect } from "../../element-web-test";
-import { MatrixAuthenticationService } from "../../plugins/matrix-authentication-service";
-import { StartHomeserverOpts } from "../../plugins/homeserver";
 
-export const test = base.extend<{
-    masPrepare: MatrixAuthenticationService;
-    mas: MatrixAuthenticationService;
-}>({
-    // There's a bit of a chicken and egg problem between MAS & Synapse where they each need to know how to reach each other
-    // so spinning up a MAS is split into the prepare & start stage: prepare mas -> homeserver -> start mas to disentangle this.
-    masPrepare: async ({ context }, use) => {
-        const mas = new MatrixAuthenticationService(context);
-        await mas.prepare();
-        await use(mas);
-    },
-    mas: [
-        async ({ masPrepare: mas, homeserver, mailhog }, use, testInfo) => {
-            await mas.start(homeserver, mailhog.instance);
-            await use(mas);
-            await mas.stop(testInfo);
-        },
-        { auto: true },
-    ],
-    startHomeserverOpts: async ({ masPrepare }, use) => {
+export const test = base.extend<{}>({
+    synapseConfigOptions: async ({ mas }, use) => {
         await use({
-            template: "mas-oidc",
-            variables: {
-                MAS_PORT: masPrepare.port,
+            enable_registration: undefined,
+            enable_registration_without_verification: undefined,
+            disable_msisdn_registration: undefined,
+            experimental_features: {
+                msc3861: {
+                    enabled: true,
+                    issuer: "http://mas:8080/",
+                    issuer_metadata: {
+                        "issuer": `http://localhost:${mas.getMappedPort(8080)}/`,
+                        "authorization_endpoint": "http://mas:8080/authorize",
+                        "token_endpoint": "http://mas:8080/oauth2/token",
+                        "jwks_uri": "http://mas:8080/oauth2/keys.json",
+                        "registration_endpoint": "http://mas:8080/oauth2/registration",
+                        "scopes_supported": ["openid", "email"],
+                        "response_types_supported": ["code", "id_token", "code id_token"],
+                        "response_modes_supported": ["form_post", "query", "fragment"],
+                        "grant_types_supported": [
+                            "authorization_code",
+                            "refresh_token",
+                            "client_credentials",
+                            "urn:ietf:params:oauth:grant-type:device_code",
+                        ],
+                        "token_endpoint_auth_methods_supported": [
+                            "client_secret_basic",
+                            "client_secret_post",
+                            "client_secret_jwt",
+                            "private_key_jwt",
+                            "none",
+                        ],
+                        "token_endpoint_auth_signing_alg_values_supported": [
+                            "HS256",
+                            "HS384",
+                            "HS512",
+                            "RS256",
+                            "RS384",
+                            "RS512",
+                            "PS256",
+                            "PS384",
+                            "PS512",
+                            "ES256",
+                            "ES384",
+                            "ES256K",
+                        ],
+                        "revocation_endpoint": "http://mas:8080/oauth2/revoke",
+                        "revocation_endpoint_auth_methods_supported": [
+                            "client_secret_basic",
+                            "client_secret_post",
+                            "client_secret_jwt",
+                            "private_key_jwt",
+                            "none",
+                        ],
+                        "revocation_endpoint_auth_signing_alg_values_supported": [
+                            "HS256",
+                            "HS384",
+                            "HS512",
+                            "RS256",
+                            "RS384",
+                            "RS512",
+                            "PS256",
+                            "PS384",
+                            "PS512",
+                            "ES256",
+                            "ES384",
+                            "ES256K",
+                        ],
+                        "introspection_endpoint": "http://mas:8080/oauth2/introspect",
+                        "introspection_endpoint_auth_methods_supported": [
+                            "client_secret_basic",
+                            "client_secret_post",
+                            "client_secret_jwt",
+                            "private_key_jwt",
+                            "none",
+                        ],
+                        "introspection_endpoint_auth_signing_alg_values_supported": [
+                            "HS256",
+                            "HS384",
+                            "HS512",
+                            "RS256",
+                            "RS384",
+                            "RS512",
+                            "PS256",
+                            "PS384",
+                            "PS512",
+                            "ES256",
+                            "ES384",
+                            "ES256K",
+                        ],
+                        "code_challenge_methods_supported": ["plain", "S256"],
+                        "userinfo_endpoint": "http://mas:8080/oauth2/userinfo",
+                        "subject_types_supported": ["public"],
+                        "id_token_signing_alg_values_supported": [
+                            "RS256",
+                            "RS384",
+                            "RS512",
+                            "ES256",
+                            "ES384",
+                            "PS256",
+                            "PS384",
+                            "PS512",
+                            "ES256K",
+                        ],
+                        "userinfo_signing_alg_values_supported": [
+                            "RS256",
+                            "RS384",
+                            "RS512",
+                            "ES256",
+                            "ES384",
+                            "PS256",
+                            "PS384",
+                            "PS512",
+                            "ES256K",
+                        ],
+                        "display_values_supported": ["page"],
+                        "claim_types_supported": ["normal"],
+                        "claims_supported": [
+                            "iss",
+                            "sub",
+                            "aud",
+                            "iat",
+                            "exp",
+                            "nonce",
+                            "auth_time",
+                            "at_hash",
+                            "c_hash",
+                        ],
+                        "claims_parameter_supported": false,
+                        "request_parameter_supported": false,
+                        "request_uri_parameter_supported": false,
+                        "prompt_values_supported": ["none", "login", "create"],
+                        "device_authorization_endpoint": "http://mas:8080/oauth2/device",
+                        "org.matrix.matrix-authentication-service.graphql_endpoint": "http://mas:8080/graphql",
+                        "account_management_uri": "http://mas:8080/account/",
+                        "account_management_actions_supported": [
+                            "org.matrix.profile",
+                            "org.matrix.sessions_list",
+                            "org.matrix.session_view",
+                            "org.matrix.session_end",
+                        ],
+                    },
+                    client_id: "0000000000000000000SYNAPSE",
+                    client_auth_method: "client_secret_basic",
+                    client_secret: "SomeRandomSecret",
+                    admin_token: "AnotherRandomSecret",
+                    account_management_url: `http://localhost:${mas.getMappedPort(8080)}/account`,
+                },
             },
         });
     },
-    config: async ({ homeserver, startHomeserverOpts, context }, use) => {
-        const issuer = `http://localhost:${(startHomeserverOpts as StartHomeserverOpts).variables["MAS_PORT"]}/`;
+    config: async ({ homeserver, mas, context }, use) => {
+        const issuer = `http://localhost:${mas.getMappedPort(8080)}/`;
         const wellKnown = {
             "m.homeserver": {
-                base_url: homeserver.config.baseUrl,
+                base_url: homeserver.baseUrl,
             },
             "org.matrix.msc2965.authentication": {
                 issuer,

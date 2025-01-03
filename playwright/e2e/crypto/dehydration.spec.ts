@@ -13,14 +13,16 @@ import { viewRoomSummaryByName } from "../right-panel/utils";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 const test = base.extend<Fixtures>({
-    // eslint-disable-next-line no-empty-pattern
-    startHomeserverOpts: async ({}, use) => {
-        await use("dehydration");
+    synapseConfigOptions: {
+        experimental_features: {
+            msc2697_enabled: false,
+            msc3814_enabled: true,
+        },
     },
     config: async ({ homeserver, context }, use) => {
         const wellKnown = {
             "m.homeserver": {
-                base_url: homeserver.config.baseUrl,
+                base_url: homeserver.baseUrl,
             },
             "org.matrix.msc3814": true,
         };

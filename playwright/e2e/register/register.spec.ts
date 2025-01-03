@@ -7,11 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { test, expect } from "../../element-web-test";
+import { consentHomeserver } from "../../plugins/homeserver/synapse/consentHomeserver.ts";
 
 test.describe("Registration", () => {
-    test.use({
-        startHomeserverOpts: "consent",
-    });
+    test.use(consentHomeserver);
 
     test.beforeEach(async ({ page }) => {
         await page.goto("/#/register");
@@ -27,7 +26,7 @@ test.describe("Registration", () => {
             await expect(page.locator(".mx_Dialog")).toMatchScreenshot("server-picker.png");
             await checkA11y();
 
-            await page.getByRole("textbox", { name: "Other homeserver" }).fill(homeserver.config.baseUrl);
+            await page.getByRole("textbox", { name: "Other homeserver" }).fill(homeserver.baseUrl);
             await page.getByRole("button", { name: "Continue", exact: true }).click();
             // wait for the dialog to go away
             await expect(page.getByRole("dialog")).not.toBeVisible();
@@ -88,7 +87,7 @@ test.describe("Registration", () => {
     test("should require username to fulfil requirements and be available", async ({ homeserver, page }) => {
         await page.getByRole("button", { name: "Edit", exact: true }).click();
         await expect(page.getByRole("button", { name: "Continue", exact: true })).toBeVisible();
-        await page.getByRole("textbox", { name: "Other homeserver" }).fill(homeserver.config.baseUrl);
+        await page.getByRole("textbox", { name: "Other homeserver" }).fill(homeserver.baseUrl);
         await page.getByRole("button", { name: "Continue", exact: true }).click();
         // wait for the dialog to go away
         await expect(page.getByRole("dialog")).not.toBeVisible();

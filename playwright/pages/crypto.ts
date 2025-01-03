@@ -27,7 +27,7 @@ export class Crypto {
             accessToken: window.mxMatrixClientPeg.get().getAccessToken(),
         }));
 
-        const res = await this.request.post(`${this.homeserver.config.baseUrl}/_matrix/client/v3/keys/query`, {
+        const res = await this.request.post(`${this.homeserver.baseUrl}/_matrix/client/v3/keys/query`, {
             headers: { Authorization: `Bearer ${accessToken}` },
             data: { device_keys: { [userId]: [] } },
         });

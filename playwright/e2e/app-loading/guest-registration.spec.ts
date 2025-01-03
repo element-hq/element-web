@@ -13,11 +13,13 @@ Please see LICENSE files in the repository root for full details.
 import { expect, test } from "../../element-web-test";
 
 test.use({
-    startHomeserverOpts: "guest-enabled",
+    synapseConfigOptions: {
+        allow_guest_access: true,
+    },
     config: async ({ homeserver }, use) => {
         await use({
             default_server_config: {
-                "m.homeserver": { base_url: homeserver.config.baseUrl },
+                "m.homeserver": { base_url: homeserver.baseUrl },
             },
         });
     },

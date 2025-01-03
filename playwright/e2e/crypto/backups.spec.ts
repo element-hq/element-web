@@ -23,19 +23,19 @@ async function expectBackupVersionToBe(page: Page, version: string) {
 masTest.describe("Encryption state after registration", () => {
     masTest.skip(isDendrite, "does not yet support MAS");
 
-    masTest("Key backup is enabled by default", async ({ page, mailhog, app }) => {
+    masTest("Key backup is enabled by default", async ({ page, mailhogClient, app }) => {
         await page.goto("/#/login");
         await page.getByRole("button", { name: "Continue" }).click();
-        await registerAccountMas(page, mailhog.api, "alice", "alice@email.com", "Pa$sW0rD!");
+        await registerAccountMas(page, mailhogClient, "alice", "alice@email.com", "Pa$sW0rD!");
 
         await app.settings.openUserSettings("Security & Privacy");
         expect(page.getByText("This session is backing up your keys.")).toBeVisible();
     });
 
-    masTest("user is prompted to set up recovery", async ({ page, mailhog, app }) => {
+    masTest("user is prompted to set up recovery", async ({ page, mailhogClient, app }) => {
         await page.goto("/#/login");
         await page.getByRole("button", { name: "Continue" }).click();
-        await registerAccountMas(page, mailhog.api, "alice", "alice@email.com", "Pa$sW0rD!");
+        await registerAccountMas(page, mailhogClient, "alice", "alice@email.com", "Pa$sW0rD!");
 
         await page.getByRole("button", { name: "Add room" }).click();
         await page.getByRole("menuitem", { name: "New room" }).click();

@@ -7,21 +7,29 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { Page, Request } from "@playwright/test";
+import { GenericContainer, StartedTestContainer } from "testcontainers";
 
 import { test as base, expect } from "../../element-web-test";
 import type { ElementAppPage } from "../../pages/ElementAppPage";
 import type { Bot } from "../../pages/bot";
-import { ProxyInstance, SlidingSyncProxy } from "../../plugins/sliding-sync-proxy";
 
 const test = base.extend<{
-    slidingSyncProxy: ProxyInstance;
+    slidingSyncProxy: StartedTestContainer;
     testRoom: { roomId: string; name: string };
     joinedBot: Bot;
 }>({
-    slidingSyncProxy: async ({ context, page, homeserver }, use) => {
-        const proxy = new SlidingSyncProxy(homeserver.config.dockerUrl, context);
-        const proxyInstance = await proxy.start();
-        const proxyAddress = `http://localhost:${proxyInstance.port}`;
+    slidingSyncProxy: async ({ network, postgres, page, homeserver }, use, testInfo) => {
+        const container = await new GenericContainer("ghcr.io/matrix-org/sliding-sync:v0.99.3")
+            .withNetwork(network)
+            .withExposedPorts(8008)
+            .withEnvironment({
+                SYNCV3_SECRET: "bwahahaha",
+                SYNCV3_DB: `user=postgres dbname=postgres password=${postgres.getPassword()} host=${postgres.getHost()} sslmode=disable`,
+                SYNCV3_SERVER: `http://${homeserver.getNetworkNames()[0]}:8008`,
+            })
+            .start();
+
+        const proxyAddress = `http://localhost:${container.getMappedPort(8008)}`;
         await page.addInitScript((proxyAddress) => {
             window.localStorage.setItem(
                 "mx_local_settings",
@@ -31,8 +39,8 @@ const test = base.extend<{
             );
             window.localStorage.setItem("mx_labs_feature_feature_sliding_sync", "true");
         }, proxyAddress);
-        await use(proxyInstance);
-        await proxy.stop();
+        await use(container);
+        await container.stop();
     },
     // Ensure slidingSyncProxy is set up before the user fixture as it relies on an init script
     credentials: async ({ slidingSyncProxy, credentials }, use) => {

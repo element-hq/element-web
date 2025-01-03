@@ -24,7 +24,7 @@ test.describe("Overwrite login action", () => {
         expect(credentials.userId).not.toBe(bobRegister.userId);
 
         const clientCredentials /* IMatrixClientCreds */ = {
-            homeserverUrl: homeserver.config.baseUrl,
+            homeserverUrl: homeserver.baseUrl,
             ...bobRegister,
         };
 

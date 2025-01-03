@@ -6,24 +6,20 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { test as base, expect as baseExpect, Locator, Page, ExpectMatcherState, ElementHandle } from "@playwright/test";
+import { expect as baseExpect, Locator, Page, ExpectMatcherState, ElementHandle } from "@playwright/test";
 import { sanitizeForFilePath } from "playwright-core/lib/utils";
 import AxeBuilder from "@axe-core/playwright";
 import _ from "lodash";
-import { basename, extname } from "node:path";
+import { extname } from "node:path";
 
-import type mailhog from "mailhog";
 import type { IConfigOptions } from "../src/IConfigOptions";
-import { Credentials, Homeserver, HomeserverInstance, StartHomeserverOpts } from "./plugins/homeserver";
-import { Synapse } from "./plugins/homeserver/synapse";
-import { Dendrite, Pinecone } from "./plugins/homeserver/dendrite";
-import { Instance, MailHogServer } from "./plugins/mailhog";
+import { Credentials } from "./plugins/homeserver";
 import { ElementAppPage } from "./pages/ElementAppPage";
-import { OAuthServer } from "./plugins/oauth_server";
 import { Crypto } from "./pages/crypto";
 import { Toasts } from "./pages/toasts";
 import { Bot, CreateBotOpts } from "./pages/bot";
 import { Webserver } from "./plugins/webserver";
+import { test as base } from "./services.ts";
 
 // Enable experimental service worker support
 // See https://playwright.dev/docs/service-workers-experimental#how-to-enable
@@ -69,14 +65,6 @@ export interface Fixtures {
     config: typeof CONFIG_JSON;
 
     /**
-     * The options with which to run the {@link #homeserver} fixture.
-     */
-    startHomeserverOpts: StartHomeserverOpts | string;
-
-    homeserver: HomeserverInstance;
-    oAuthServer: { port: number };
-
-    /**
      * The displayname to use for the user registered in {@link #credentials}.
      *
      * To set it, call `test.use({ displayName: "myDisplayName" })` in the test file or `describe` block.
@@ -113,7 +101,6 @@ export interface Fixtures {
      */
     app: ElementAppPage;
 
-    mailhog: { api: mailhog.API; instance: Instance };
     crypto: Crypto;
     room?: { roomId: string };
     toasts: Toasts;
@@ -150,45 +137,6 @@ export const test = base.extend<Fixtures>({
         await use(page);
     },
 
-    startHomeserverOpts: "default",
-    homeserver: async ({ request, startHomeserverOpts: opts }, use, testInfo) => {
-        if (typeof opts === "string") {
-            opts = { template: opts };
-        }
-
-        let server: Homeserver;
-        const homeserverName = process.env["PLAYWRIGHT_HOMESERVER"];
-        switch (homeserverName) {
-            case "dendrite":
-                server = new Dendrite(request);
-                break;
-            case "pinecone":
-                server = new Pinecone(request);
-                break;
-            default:
-                server = new Synapse(request);
-        }
-
-        await use(await server.start(opts));
-        const logs = await server.stop();
-
-        if (testInfo.status !== "passed") {
-            for (const path of logs) {
-                await testInfo.attach(`homeserver-${basename(path)}`, {
-                    path,
-                    contentType: "text/plain",
-                });
-            }
-        }
-    },
-    // eslint-disable-next-line no-empty-pattern
-    oAuthServer: async ({}, use) => {
-        const server = new OAuthServer();
-        const port = server.start();
-        await use({ port });
-        server.stop();
-    },
-
     displayName: undefined,
     credentials: async ({ homeserver, displayName: testDisplayName }, use) => {
         const names = ["Alice", "Bob", "Charlie", "Daniel", "Eve", "Frank", "Grace", "Hannah", "Isaac", "Judy"];
@@ -220,7 +168,7 @@ export const test = base.extend<Fixtures>({
                 // Ensure the language is set to a consistent value
                 window.localStorage.setItem("mx_local_settings", '{"language":"en"}');
             },
-            { baseUrl: homeserver.config.baseUrl, credentials },
+            { baseUrl: homeserver.baseUrl, credentials },
         );
         await use(page);
     },
@@ -263,14 +211,6 @@ export const test = base.extend<Fixtures>({
         const bot = new Bot(page, homeserver, botCreateOpts);
         await bot.prepareClient(); // eagerly register the bot
         await use(bot);
-    },
-
-    // eslint-disable-next-line no-empty-pattern
-    mailhog: async ({}, use) => {
-        const mailhog = new MailHogServer();
-        const instance = await mailhog.start();
-        await use(instance);
-        await mailhog.stop();
     },
 
     // eslint-disable-next-line no-empty-pattern
