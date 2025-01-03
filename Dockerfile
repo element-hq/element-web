@@ -28,12 +28,8 @@ COPY --from=builder /src/webapp /app
 # through `envsubst` by the nginx docker image entry point.
 COPY /docker/nginx-templates/* /etc/nginx/templates/
 
-# Override main nginx config, to make it suitable for use with non-root user
-RUN sed -i \
-      -e '/user *nginx;/d' \
-      -e  's,/var/run/nginx.pid,/tmp/nginx.pid,' \
-      -e "/^http {/a \    proxy_temp_path /tmp/proxy_temp;\n    client_body_temp_path /tmp/client_temp;\n    fastcgi_temp_path /tmp/fastcgi_temp;\n    uwsgi_temp_path /tmp/uwsgi_temp;\n    scgi_temp_path /tmp/scgi_temp;\n" \
-      /etc/nginx/nginx.conf
+# Tell nginx to put its pidfile elsewhere, so it can run as non-root
+RUN sed -i -e 's,/var/run/nginx.pid,/tmp/nginx.pid,' /etc/nginx/nginx.conf
 
 # nginx user must own the cache and etc directory to write cache and tweak the nginx config
 RUN chown -R nginx:0 /var/cache/nginx /etc/nginx
