@@ -253,7 +253,6 @@ test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
 
             // Find and click "Reply" button
             const clickButtonReply = async () => {
-                await tile.scrollIntoViewIfNeeded();
                 await tile.hover();
                 await tile.getByRole("button", { name: "Reply", exact: true }).click();
             };

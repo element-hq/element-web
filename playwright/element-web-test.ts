@@ -378,4 +378,51 @@ export const expect = baseExpect.extend({
 
         return { pass: true, message: () => "", name: "toMatchScreenshot" };
     },
+
+    /**
+     * Check if the URL of the page contains the expected string.
+     * Will wait for the URL to contain the expected string if it doesn't.
+     * @param receiver The page to check the URL of
+     * @param expected The expected substring to expect in the URL
+     */
+    async toContainUrl(this: ExpectMatcherState, receiver: Page, expected: string) {
+        let pass = true;
+
+        if (!receiver.url().includes(expected)) {
+            try {
+                await receiver.waitForURL(`**${expected}**`);
+            } catch {
+                pass = false;
+            }
+        }
+
+        if (pass) {
+            try {
+                expect(receiver.url()).toContain(expected);
+            } catch {
+                pass = false;
+            }
+        }
+
+        const actual = receiver.url();
+        const message = pass
+            ? () =>
+                  this.utils.matcherHint("toContainUrl", undefined, undefined, { isNot: this.isNot }) +
+                  "\n\n" +
+                  `Expected URL to contain: ${this.utils.printExpected(expected)}\n` +
+                  `URL is: ${actual}`
+            : () =>
+                  this.utils.matcherHint("toContainUrl", undefined, undefined, { isNot: this.isNot }) +
+                  "\n\n" +
+                  `Expected URL to contain: ${this.utils.printExpected(expected)}\n` +
+                  `URL is: ${actual}`;
+
+        return {
+            message,
+            pass,
+            name: "toContainUrl",
+            expected,
+            actual,
+        };
+    },
 });
