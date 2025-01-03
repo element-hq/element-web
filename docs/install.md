@@ -60,6 +60,16 @@ would be:
 docker run --rm -p 127.0.0.1:80:80 -v /etc/element-web/config.json:/app/config.json vectorim/element-web
 ```
 
+The behaviour of the docker image can be customised via the following
+environment variables:
+
+- `ELEMENT_WEB_PORT`
+
+    The port to listen on (within the docker container) for HTTP
+    traffic. Defaults to `80`.
+
+### Building the docker image
+
 To build the image yourself:
 
 ```bash

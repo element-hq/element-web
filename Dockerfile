@@ -21,8 +21,12 @@ FROM nginx:alpine-slim
 
 COPY --from=builder /src/webapp /app
 
-# Override default nginx config
-COPY /nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
+# Override default nginx config. Templates in `/etc/nginx/templates` are passed
+# through `envsubst` by the nginx docker image entry point.
+COPY /docker/nginx-templates/* /etc/nginx/templates/
 
 RUN rm -rf /usr/share/nginx/html \
   && ln -s /app /usr/share/nginx/html
+
+# HTTP listen port
+ENV ELEMENT_WEB_PORT=80
