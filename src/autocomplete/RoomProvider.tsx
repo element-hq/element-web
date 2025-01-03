@@ -1,10 +1,10 @@
 /*
-Copyright 2024, 2025 New Vector Ltd.
+Copyright 2024 New Vector Ltd.
 Copyright 2017-2023 The Matrix.org Foundation C.I.C.
 Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
 Copyright 2016 Aviral Dasgupta
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
