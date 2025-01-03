@@ -25,12 +25,13 @@ test.describe("Lazy Loading", () => {
         });
     });
 
-    test.beforeEach(async ({ page, homeserver, user, bot }) => {
+    test.beforeEach(async ({ page, homeserver, user, bot, app }) => {
         for (let i = 1; i <= 10; i++) {
             const displayName = `Charly #${i}`;
             const bot = new Bot(page, homeserver, { displayName, startClient: false, autoAcceptInvites: false });
             charlies.push(bot);
         }
+        await app.client.network.setupRoute();
     });
 
     const name = "Lazy Loading Test";
