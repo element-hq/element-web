@@ -21,8 +21,29 @@ Please see LICENSE files in the repository root for full details.
     }
 
     .mx_DisambiguatedProfile_mxid {
-        margin-inline-start: 5px;
         color: $secondary-content;
         font-size: var(--cpd-font-size-body-sm);
+        margin-inline-start: 5px;
+    }
+}
+
+/** Disambiguated profile needs to have a different layout in the member tile */
+.mx_MemberTileView .mx_DisambiguatedProfile {
+    display: flex;
+    flex-direction: column;
+
+    .mx_DisambiguatedProfile_mxid {
+        margin-inline-start: 0;
+        font: var(--cpd-font-body-sm-regular);
+    }
+
+    span:not(.mx_DisambiguatedProfile_mxid) {
+        /**
+        In a member tile, this span element is a flex child and so
+        we need the following for text overflow to work.
+        **/
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 }
