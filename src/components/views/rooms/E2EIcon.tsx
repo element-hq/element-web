@@ -22,7 +22,7 @@ export enum E2EState {
     Normal = "normal",
 }
 
-const crossSigningUserTitles: { [key in E2EState]?: TranslationKey } = {
+export const crossSigningUserTitles: { [key in E2EState]?: TranslationKey } = {
     [E2EState.Warning]: _td("encryption|cross_signing_user_warning"),
     [E2EState.Normal]: _td("encryption|cross_signing_user_normal"),
     [E2EState.Verified]: _td("encryption|cross_signing_user_verified"),
