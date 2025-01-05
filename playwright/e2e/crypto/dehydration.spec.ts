@@ -39,7 +39,7 @@ const ROOM_NAME = "Test room";
 const NAME = "Alice";
 
 function getMemberTileByName(page: Page, name: string): Locator {
-    return page.locator(`.mx_EntityTile, [title="${name}"]`);
+    return page.locator(`.mx_MemberTileView, [title="${name}"]`);
 }
 
 test.describe("Dehydration", () => {
@@ -93,7 +93,7 @@ test.describe("Dehydration", () => {
         await viewRoomSummaryByName(page, app, ROOM_NAME);
 
         await page.locator(".mx_RightPanel").getByRole("menuitem", { name: "People" }).click();
-        await expect(page.locator(".mx_MemberList")).toBeVisible();
+        await expect(page.locator(".mx_MemberListView")).toBeVisible();
 
         await getMemberTileByName(page, NAME).click();
         await page.locator(".mx_UserInfo_devices .mx_UserInfo_expand").click();
