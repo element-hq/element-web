@@ -17,7 +17,6 @@ import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import RoomSummaryCard from "../views/right_panel/RoomSummaryCard";
 import WidgetCard from "../views/right_panel/WidgetCard";
-import MemberList from "../views/rooms/MemberList";
 import UserInfo from "../views/right_panel/UserInfo";
 import ThirdPartyMemberInfo from "../views/rooms/ThirdPartyMemberInfo";
 import FilePanel from "./FilePanel";
@@ -34,6 +33,7 @@ import { IRightPanelCard, IRightPanelCardState } from "../../stores/right-panel/
 import { Action } from "../../dispatcher/actions";
 import { XOR } from "../../@types/common";
 import ExtensionsCard from "../views/right_panel/ExtensionsCard";
+import MemberListView from "../views/rooms/MemberList/MemberListView";
 
 interface BaseProps {
     overwriteCard?: IRightPanelCard; // used to display a custom card and ignoring the RightPanelStore (used for UserView)
@@ -57,7 +57,6 @@ type Props = XOR<RoomlessProps, RoomProps>;
 
 interface IState {
     phase?: RightPanelPhases;
-    searchQuery: string;
     cardState?: IRightPanelCardState;
 }
 
@@ -67,10 +66,6 @@ export default class RightPanel extends React.Component<Props, IState> {
 
     public constructor(props: Props, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
-
-        this.state = {
-            searchQuery: "",
-        };
     }
 
     private readonly delayedUpdate = throttle(
@@ -147,10 +142,6 @@ export default class RightPanel extends React.Component<Props, IState> {
         }
     };
 
-    private onSearchQueryChanged = (searchQuery: string): void => {
-        this.setState({ searchQuery });
-    };
-
     public render(): React.ReactNode {
         let card = <div />;
         const roomId = this.props.room?.roomId;
@@ -159,15 +150,7 @@ export default class RightPanel extends React.Component<Props, IState> {
         switch (phase) {
             case RightPanelPhases.MemberList:
                 if (!!roomId) {
-                    card = (
-                        <MemberList
-                            roomId={roomId}
-                            key={roomId}
-                            onClose={this.onClose}
-                            searchQuery={this.state.searchQuery}
-                            onSearchQueryChanged={this.onSearchQueryChanged}
-                        />
-                    );
+                    card = <MemberListView roomId={roomId} onClose={this.onClose} />;
                 }
                 break;
 
