@@ -1352,7 +1352,6 @@
         "msc3531_hide_messages_pending_moderation": "讓版主能夠隱藏待審核的訊息。",
         "notification_settings": "新通知設定",
         "notification_settings_beta_title": "通知設定",
-        "oidc_native_flow": "啟用新的原生 OIDC 流程（正在積極開發中）",
         "report_to_moderators": "回報給版主",
         "report_to_moderators_description": "在支援審核的聊天室中，「回報」按鈕讓您可以回報濫用行為給聊天室管理員。",
         "sliding_sync": "滑動同步模式",

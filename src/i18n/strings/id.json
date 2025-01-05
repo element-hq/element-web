@@ -229,7 +229,6 @@
         "no_hs_url_provided": "Tidak ada URL homeserver yang disediakan",
         "oidc": {
             "error_title": "Kami tidak dapat memasukkan Anda",
-            "logout_redirect_warning": "Anda akan diarahkan ke penyedia autentikasi server Anda untuk menyelesaikan proses keluar.",
             "missing_or_invalid_stored_state": "Kami menanyakan browser ini untuk mengingat homeserver apa yang Anda gunakan untuk membantu Anda masuk, tetapi sayangnya browser ini melupakannya. Pergi ke halaman masuk dan coba lagi."
         },
         "password_field_keep_going_prompt": "Lanjutkan…",
@@ -1368,7 +1367,6 @@
         "notification_settings_beta_caption": "Perkenalkan cara yang lebih sederhana untuk mengubah pengaturan notifikasi Anda. Sesuaikan %(brand)s Anda, sesuai keinginan Anda.",
         "notification_settings_beta_title": "Pengaturan Notifikasi",
         "notifications": "Aktifkan panel notifikasi di tajuk ruangan",
-        "oidc_native_flow": "Autentikasi asli OIDC",
         "render_reaction_images": "Render gambar khusus dalam reaksi",
         "render_reaction_images_description": "Terkadang disebut sebagai \"emoji khusus\".",
         "report_to_moderators": "Laporkan ke moderator",

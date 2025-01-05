@@ -1,6 +1,6 @@
 server {
-    listen       80;
-    listen  [::]:80;
+    listen       ${ELEMENT_WEB_PORT};
+    listen  [::]:${ELEMENT_WEB_PORT};
     server_name  localhost;
 
     root   /usr/share/nginx/html;

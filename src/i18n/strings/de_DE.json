@@ -129,7 +129,7 @@
         "try_again": "Erneut versuchen",
         "unban": "Verbannung aufheben",
         "unignore": "Freigeben",
-        "unpin": "Nicht mehr anheften",
+        "unpin": "Loslösen",
         "unsubscribe": "Deabonnieren",
         "update": "Aktualisieren",
         "upgrade": "Aktualisieren",
@@ -238,7 +238,6 @@
         "oidc": {
             "error_title": "Wir konnten dich nicht anmelden",
             "generic_auth_error": "Etwas ist während der Authentifizierung schiefgelaufen. Geh zurück zur Anmeldeseite und probiere es erneut.",
-            "logout_redirect_warning": "Sie werden zum Server Authentifizierungsanbieter weitergeleitet, um die Abmeldung abzuschließen.",
             "missing_or_invalid_stored_state": "Wir haben deinen Browser gebeten, sich zu merken, bei welchem Heim-Server du dich anmeldest, aber dein Browser hat dies leider vergessen. Gehe zur Anmeldeseite und versuche es erneut."
         },
         "password_field_keep_going_prompt": "Fortfahren …",
@@ -567,7 +566,7 @@
         "system_alerts": "Systembenachrichtigung",
         "theme": "Design",
         "thread": "Thema",
-        "threads": "Themen",
+        "threads": "Threads",
         "timeline": "Verlauf",
         "trusted": "Vertrauenswürdig",
         "unavailable": "Nicht verfügbar",
@@ -914,6 +913,9 @@
             "warning": "Wenn du die Wiederherstellungsmethode nicht gelöscht hast, kann ein Angreifer versuchen, Zugang zu deinem Konto zu bekommen. Ändere dein Passwort und richte sofort eine neue Wiederherstellungsmethode in den Einstellungen ein."
         },
         "reset_all_button": "Hast du alle Wiederherstellungsmethoden vergessen? <a>Setze sie hier zurück</a>",
+        "set_up_recovery": "Wiederherstellung einrichten",
+        "set_up_recovery_later": "Nicht jetzt",
+        "set_up_recovery_toast_description": "Generieren Sie einen Wiederherstellungsschlüssel, damit Sie Ihren verschlüsselten Nachrichtenverlauf wiederherstellen können, falls Sie den Zugriff auf Ihre Geräte verlieren.",
         "set_up_toast_description": "Schütze dich vor dem Verlust verschlüsselter Nachrichten und Daten",
         "set_up_toast_title": "Schlüsselsicherung einrichten",
         "setup_secure_backup": {
@@ -1391,7 +1393,7 @@
         "space": "Leertaste",
         "switch_to_space": "Mit Nummer zu Leerzeichen springen",
         "toggle_hidden_events": "Sichtbarkeit versteckter Ereignisse umschalten",
-        "toggle_microphone_mute": "Mikrofon an-/ausschalten",
+        "toggle_microphone_mute": "Mikrofon ein-/ausschalten",
         "toggle_right_panel": "Rechtes Panel ein-/ausblenden",
         "toggle_space_panel": "Space-Panel ein/aus",
         "toggle_top_left_menu": "Menü oben links ein-/ausblenden",
@@ -1458,8 +1460,6 @@
         "notification_settings_beta_caption": "Einen einfacheren Weg um die Einstellungen für Benachrichtigungen zu ändern vorstellen. Passe Deine %(brand)s so an wie Du willst.",
         "notification_settings_beta_title": "Benachrichtigungseinstellungen",
         "notifications": "Benachrichtigungen in der Kopfleiste des Raums anschalten",
-        "oidc_native_flow": "Native OIDC Authentifizierung",
-        "oidc_native_flow_description": "⚠ Warnung: Experimentell. Nutze OIDC native Authentifizierung wenn dies vom Server unterstützt wird.",
         "release_announcement": "Release Ankündigung",
         "render_reaction_images": "Benutzerdefinierte Bilder in Reaktionen anzeigen",
         "render_reaction_images_description": "Werden manchmal auch als „benutzerdefinierte Emojis“ bezeichnet.",
@@ -1846,9 +1846,9 @@
             },
             "reply_thread": "Auf <link>Nachricht im Thread</link> antworten",
             "unpin_all": {
-                "button": "Alle Nachrichten lösen",
+                "button": "Alle Nachrichten loslösen",
                 "content": "Stellen Sie sicher, dass Sie wirklich alle angehefteten Nachrichten entfernen möchten. Diese Aktion kann nicht rückgängig gemacht werden.",
-                "title": "Alle Nachrichten lösen?"
+                "title": "Alle Nachrichten loslösen?"
             },
             "view": "Im Nachrichtenverlauf ansehen"
         },
@@ -2032,7 +2032,7 @@
             "button_view_all": "Alle anzeigen",
             "description": "In diesem Raum sind Nachrichten angeheftet. Klicken Sie hier, um sie anzusehen.",
             "go_to_message": "Fixierte Nachrichten im Nachrichtenverlauf anzeigen.",
-            "title": "<bold>%(index)s of %(length)s</bold> Angeheftete Nachrichten"
+            "title": "<bold>%(index)s of %(length)s</bold> Fixierte Nachrichten"
         },
         "read_topic": "Klicke, um das Thema zu lesen",
         "rejecting": "Lehne Einladung ab …",
@@ -2417,7 +2417,7 @@
     },
     "settings": {
         "account": {
-            "dialog_title": "<strong>Einstellunge:</strong> Konto",
+            "dialog_title": "<strong>Einstellungen:</strong> Konto",
             "title": "Konto"
         },
         "all_rooms_home": "Alle Räume auf Startseite anzeigen",
@@ -2603,7 +2603,7 @@
             "title": "Tastatur"
         },
         "labs": {
-            "dialog_title": "<strong>Einstellungen:</strong> Labore"
+            "dialog_title": "<strong>Einstellungen:</strong> Labor"
         },
         "labs_mjolnir": {
             "dialog_title": "<strong>Einstellungen:</strong> Blockierte Benutzer"
@@ -2819,6 +2819,7 @@
             "inactive_sessions_list_description": "Erwäge, dich aus alten (%(inactiveAgeDays)s Tage oder mehr), nicht mehr verwendeten Sitzungen abzumelden.",
             "ip": "IP-Adresse",
             "last_activity": "Neueste Aktivität",
+            "manage": "Diese Sitzung verwalten",
             "mobile_session": "Mobil-Sitzung",
             "n_sessions_selected": {
                 "one": "%(count)s Sitzung ausgewählt",
@@ -3014,7 +3015,7 @@
         "topic_room_error": "Thema des Raums konnte nicht ermittelt werden: Raum kann nicht gefunden werden (%(roomId)s",
         "tovirtual": "Zum virtuellen Raum dieses Raums wechseln, sofern vorhanden",
         "tovirtual_not_found": "Kein virtueller Raum für diesen Raum",
-        "unban": "Entbannt den Benutzer mit der angegebenen ID",
+        "unban": "Entsperrt den Benutzer mit der angegebenen ID",
         "unflip": "Stellt ┬──┬ ノ( ゜-゜ノ) einer Klartextnachricht voran",
         "unholdcall": "Beendet das Halten des Anrufs",
         "unignore": "Benutzer freigeben und ihre neuen Nachrichten wieder anzeigen",
@@ -3413,7 +3414,7 @@
             "remove_name": "%(senderName)s hat den alten Anzeigenamen %(oldDisplayName)s entfernt",
             "set_avatar": "%(senderName)s hat das Profilbild gesetzt",
             "set_name": "%(senderName)s hat den Anzeigenamen zu %(displayName)s geändert",
-            "unban": "%(senderName)s hat %(targetName)s entbannt",
+            "unban": "%(senderName)s hat die Verbannung von %(targetName)s aufgehoben",
             "withdrew_invite": "%(senderName)s hat die Einladung für %(targetName)s zurückgezogen",
             "withdrew_invite_reason": "%(senderName)s hat die Einladung für %(targetName)s zurückgezogen: %(reason)s"
         },

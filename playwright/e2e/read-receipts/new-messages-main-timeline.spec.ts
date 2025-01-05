@@ -59,7 +59,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
                 await util.assertUnread(room2, 30);
 
                 // When I jump to one of the older messages
-                await msg.jumpTo(room2.name, "Msg0001");
+                await msg.jumpTo(room2, "Msg0001");
 
                 // Then the room is still unread, but some messages were read
                 await util.assertUnreadLessThan(room2, 30);

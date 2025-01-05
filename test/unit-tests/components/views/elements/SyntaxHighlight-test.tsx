@@ -1,4 +1,3 @@
-/* eslint @typescript-eslint/no-unused-vars: ["error", { "varsIgnorePattern": "^_" }] */
 // Copyright 2024 New Vector Ltd.
 // Copyright 2023 The Matrix.org Foundation C.I.C.
 //
@@ -24,7 +23,7 @@ describe("<SyntaxHighlight />", () => {
         const { container } = render(<SyntaxHighlight language={lang}>// Hello, World</SyntaxHighlight>);
         await waitFor(() => expect(container.querySelector(`.language-${lang}`)).toBeTruthy());
 
-        const [_lang, opts] = mock.mock.lastCall!;
+        const [, opts] = mock.mock.lastCall!;
         expect((opts as unknown as HighlightOptions)["language"]).toBe(lang);
     });
 });
