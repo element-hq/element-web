@@ -122,6 +122,7 @@ export interface Fixtures {
     bot: Bot;
     labsFlags: string[];
     webserver: Webserver;
+    disablePresence: boolean;
 }
 
 export const test = base.extend<Fixtures>({
@@ -133,8 +134,9 @@ export const test = base.extend<Fixtures>({
         );
         await use(context);
     },
+    disablePresence: false,
     config: CONFIG_JSON,
-    page: async ({ context, page, config, labsFlags }, use) => {
+    page: async ({ context, page, config, labsFlags, disablePresence, homeserver }, use) => {
         await context.route(`http://localhost:8080/config.json*`, async (route) => {
             const json = { ...CONFIG_JSON, ...config };
             json["features"] = {
@@ -145,6 +147,11 @@ export const test = base.extend<Fixtures>({
                     return obj;
                 }, {}),
             };
+            if (disablePresence) {
+                json["enable_presence_by_hs_url"] = {
+                    [homeserver.config.baseUrl]: false,
+                };
+            }
             await route.fulfill({ json });
         });
         await use(page);
