@@ -9,8 +9,9 @@ Please see LICENSE files in the repository root for full details.
 import { type Page } from "@playwright/test";
 
 import { test, expect } from "../../element-web-test";
-import { test as masTest, registerAccountMas } from "../oidc";
+import { registerAccountMas } from "../oidc";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
+import { masHomeserver } from "../../plugins/homeserver/synapse/masHomeserver.ts";
 
 async function expectBackupVersionToBe(page: Page, version: string) {
     await expect(page.locator(".mx_SecureBackupPanel_statusList tr:nth-child(5) td")).toHaveText(
@@ -20,10 +21,11 @@ async function expectBackupVersionToBe(page: Page, version: string) {
     await expect(page.locator(".mx_SecureBackupPanel_statusList tr:nth-child(6) td")).toHaveText(version);
 }
 
-masTest.describe("Encryption state after registration", () => {
-    masTest.skip(isDendrite, "does not yet support MAS");
+test.describe("Encryption state after registration", () => {
+    test.use(masHomeserver);
+    test.skip(isDendrite, "does not yet support MAS");
 
-    masTest("Key backup is enabled by default", async ({ page, mailhogClient, app }) => {
+    test("Key backup is enabled by default", async ({ page, mailhogClient, app }) => {
         await page.goto("/#/login");
         await page.getByRole("button", { name: "Continue" }).click();
         await registerAccountMas(page, mailhogClient, "alice", "alice@email.com", "Pa$sW0rD!");
@@ -32,7 +34,7 @@ masTest.describe("Encryption state after registration", () => {
         expect(page.getByText("This session is backing up your keys.")).toBeVisible();
     });
 
-    masTest("user is prompted to set up recovery", async ({ page, mailhogClient, app }) => {
+    test("user is prompted to set up recovery", async ({ page, mailhogClient, app }) => {
         await page.goto("/#/login");
         await page.getByRole("button", { name: "Continue" }).click();
         await registerAccountMas(page, mailhogClient, "alice", "alice@email.com", "Pa$sW0rD!");

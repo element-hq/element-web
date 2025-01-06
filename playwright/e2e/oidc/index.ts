@@ -9,33 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { API, Messages } from "mailhog";
 import { Page } from "@playwright/test";
 
-import { test as base, expect } from "../../element-web-test";
-
-export const test = base.extend<{}>({
-    config: async ({ homeserver, mas, context }, use) => {
-        const issuer = `http://localhost:${mas.getMappedPort(8080)}/`;
-        const wellKnown = {
-            "m.homeserver": {
-                base_url: homeserver.baseUrl,
-            },
-            "org.matrix.msc2965.authentication": {
-                issuer,
-                account: `${issuer}account`,
-            },
-        };
-
-        // Ensure org.matrix.msc2965.authentication is in well-known
-        await context.route("https://localhost/.well-known/matrix/client", async (route) => {
-            await route.fulfill({ json: wellKnown });
-        });
-
-        await use({
-            default_server_config: wellKnown,
-        });
-    },
-});
-
-export { expect };
+import { expect } from "../../element-web-test";
 
 export async function registerAccountMas(
     page: Page,

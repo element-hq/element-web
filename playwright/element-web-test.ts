@@ -165,8 +165,14 @@ export const test = base.extend<Fixtures>({
                 window.localStorage.setItem("mx_has_pickle_key", "false");
                 window.localStorage.setItem("mx_has_access_token", "true");
 
-                // Ensure the language is set to a consistent value
-                window.localStorage.setItem("mx_local_settings", '{"language":"en"}');
+                window.localStorage.setItem(
+                    "mx_local_settings",
+                    JSON.stringify({
+                        ...JSON.parse(window.localStorage.getItem("mx_local_settings") || "{}"),
+                        // Ensure the language is set to a consistent value
+                        language: "en",
+                    }),
+                );
             },
             { baseUrl: homeserver.baseUrl, credentials },
         );

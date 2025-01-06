@@ -31,7 +31,7 @@ const test = base.extend<{
             })
             .start();
 
-        const proxyAddress = `http://localhost:${container.getMappedPort(8008)}`;
+        const proxyAddress = `http://${container.getHost()}:${container.getMappedPort(8008)}`;
         await page.addInitScript((proxyAddress) => {
             window.localStorage.setItem(
                 "mx_local_settings",
