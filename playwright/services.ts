@@ -78,7 +78,7 @@ export const test = base.extend<Services>({
         const container = new SynapseContainer(request);
         await use(container);
     },
-    homeserver: async ({ mas, network, _homeserver: homeserver, synapseConfigOptions }, use) => {
+    homeserver: async ({ network, _homeserver: homeserver, synapseConfigOptions }, use) => {
         const container = await homeserver
             .withNetwork(network)
             .withNetworkAliases("homeserver")
