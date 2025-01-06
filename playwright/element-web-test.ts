@@ -128,12 +128,13 @@ export const test = base.extend<Fixtures>({
         await context.route(`http://localhost:8080/config.json*`, async (route) => {
             const json = {
                 ...CONFIG_JSON,
+                ...config,
                 default_server_config: {
+                    ...config.default_server_config,
                     "m.homeserver": {
                         base_url: homeserver.baseUrl,
                     },
                 },
-                ...config,
             };
             json["features"] = {
                 ...json["features"],
