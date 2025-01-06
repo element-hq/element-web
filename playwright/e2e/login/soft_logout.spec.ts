@@ -32,7 +32,9 @@ test.describe("Soft logout", () => {
 
             // back to the welcome page
             await expect(page).toHaveURL(/\/#\/home/);
-            await expect(page.getByRole("heading", { name: "Welcome Alice", exact: true })).toBeVisible();
+            await expect(
+                page.getByRole("heading", { name: "Now, let's help you get started", exact: true }),
+            ).toBeVisible();
         });
 
         test("still shows the soft-logout page when the page is reloaded after a soft-logout", async ({
