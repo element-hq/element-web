@@ -211,30 +211,19 @@ export class DendriteContainer extends GenericContainer {
     constructor(
         private request: APIRequestContext,
         image = "matrixdotorg/dendrite-monolith:main",
-        entrypoint = "/usr/bin/dendrite",
+        binary = "/usr/bin/dendrite",
     ) {
         super(image);
 
         this.config = deepCopy(DEFAULT_CONFIG);
         this.config.client_api.registration_shared_secret = randB64Bytes(16);
 
-        this.withEntrypoint([entrypoint])
+        this.withEntrypoint(["/bin/sh"])
             .withCommand([
-                "--config",
-                "/etc/dendrite/dendrite.yaml",
-                "--really-enable-open-registration",
-                "true",
-                "run",
+                "-c",
+                `/usr/bin/generate-keys -private-key /etc/dendrite/matrix_key.pem && ${binary} --config /etc/dendrite/dendrite.yaml --really-enable-open-registration true run`,
             ])
             .withWaitStrategy(Wait.forHttp("/_matrix/client/versions", 8008));
-
-        // const docker = new Docker();
-        // await docker.run({
-        //     image: dendriteImage,
-        //     params: ["--entrypoint=", "-v", `${tempDir}:/mnt`],
-        //     containerName: `react-sdk-playwright-dendrite-keygen`,
-        //     cmd: ["/usr/bin/generate-keys", "-private-key", "/mnt/matrix_key.pem"],
-        // });
     }
 
     public withConfigField(key: string, value: any): this {

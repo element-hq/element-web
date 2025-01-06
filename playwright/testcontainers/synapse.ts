@@ -144,6 +144,8 @@ export class SynapseContainer extends GenericContainer {
 
         const signingKey = randB64Bytes(32);
         this.withWaitStrategy(Wait.forHttp("/health", 8008)).withCopyContentToContainer([
+            // Create an empty file with permissive permissions to allow the container to write to it
+            { target: "/data/media_store/.gitkeep", content: "", mode: 0o777 },
             { target: "/data/localhost.signing.key", content: `ed25519 x ${signingKey}` },
             {
                 target: "/data/log.config",
