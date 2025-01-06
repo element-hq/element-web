@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { act, fireEvent, screen } from "jest-matrix-react";
+import { act, fireEvent, screen, waitFor } from "jest-matrix-react";
 import { RoomMember, User, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { mocked } from "jest-mock";
@@ -45,8 +45,7 @@ describe("Does not render invite button in memberlist header", () => {
         act(() => {
             client.emit(RoomEvent.MyMembership, memberListRoom, KnownMembership.Join, KnownMembership.Invite);
         });
-        await new Promise((r) => setTimeout(r, 1000));
-        expect(screen.queryByRole("button", { name: "Invite" })).toBeNull();
+        await waitFor(() => expect(screen.queryByRole("button", { name: "Invite" })).toBeNull());
     });
 });
 
