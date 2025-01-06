@@ -25,8 +25,8 @@ const test = base.extend<{
             .withLogConsumer(logger.getConsumer("sliding-sync-proxy"))
             .withEnvironment({
                 SYNCV3_SECRET: "bwahahaha",
-                SYNCV3_DB: `user=postgres dbname=postgres password=${postgres.getPassword()} host=${postgres.getHost()} sslmode=disable`,
-                SYNCV3_SERVER: `http://${homeserver.getNetworkNames()[0]}:8008`,
+                SYNCV3_DB: `user=postgres dbname=postgres password=${postgres.getPassword()} host=postgres sslmode=disable`,
+                SYNCV3_SERVER: `http://homeserver:8008`,
             })
             .start();
 
