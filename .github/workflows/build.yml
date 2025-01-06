@@ -69,6 +69,6 @@ jobs:
             - name: Upload Artifact
               uses: actions/upload-artifact@v4
               with:
-                  name: webapp
+                  name: webapp-${{ matrix.image }}
                   path: webapp
                   retention-days: 1
