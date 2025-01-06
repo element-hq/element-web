@@ -208,7 +208,6 @@ describe("MemberListView and MemberlistHeaderView", () => {
             it("by last active timestamp", async () => {
                 const { adminUsers, defaultUsers, moderatorUsers, reRender, root, memberListRoom } = rendered;
                 // Intentionally pick users that will confuse the power level sorting
-                // lastActiveAgoTs == lastPresenceTs - lastActiveAgo
                 const activeUsers = [defaultUsers[0]];
                 const semiActiveUsers = [adminUsers[0]];
                 const inactiveUsers = [...moderatorUsers, ...adminUsers.slice(1), ...defaultUsers.slice(1)];
