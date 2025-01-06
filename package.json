@@ -7,7 +7,7 @@
         "type": "git",
         "url": "https://github.com/element-hq/element-web"
     },
-    "license": "AGPL-3.0-only OR GPL-3.0-only",
+    "license": "SEE LICENSE IN README.md",
     "files": [
         "lib",
         "res",
