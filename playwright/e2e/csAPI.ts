@@ -26,9 +26,7 @@ export class TestClientServerAPI {
             headers: { Authorization: `Bearer ${this.accessToken}` },
         });
 
-        const body = await res.json();
-
-        return body;
+        return await res.json();
     }
 
     /**
