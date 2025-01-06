@@ -31,7 +31,7 @@ import { withSecretStorageKeyCache } from "../../../../SecurityManager";
  * The possible states of the component.
  * - `inform_user`: The user is informed about the recovery key.
  * - `save_key_setup_flow`: The user is asked to save the new recovery key during the setup flow.
- * - `save_key_change_flow`: The user is asked to save the new recovery key during the chang key flow.
+ * - `save_key_change_flow`: The user is asked to save the new recovery key during the change key flow.
  * - `confirm`: The user is asked to confirm the new recovery key.
  */
 type State = "inform_user" | "save_key_setup_flow" | "save_key_change_flow" | "confirm";

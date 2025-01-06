@@ -80,7 +80,7 @@ test.describe("Recovery section in Encryption tab", () => {
         await verifySession(app, "new passphrase");
         await util.deleteKeyBackup(expectedBackupVersion);
 
-        // The key backup is deleted and the user needs to set up it
+        // The key backup is deleted and the user needs to set it up
         const dialog = await util.openEncryptionTab();
         const setupButton = dialog.getByRole("button", { name: "Set up recovery" });
         await expect(setupButton).toBeVisible();
