@@ -130,10 +130,10 @@ export const test = base.extend<Fixtures>({
                 ...CONFIG_JSON,
                 ...config,
                 default_server_config: {
-                    ...config.default_server_config,
                     "m.homeserver": {
                         base_url: homeserver.baseUrl,
                     },
+                    ...config.default_server_config,
                 },
             };
             json["features"] = {
