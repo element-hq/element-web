@@ -207,7 +207,7 @@ test.describe("Cryptography", function () {
                 window.localStorage.clear();
             });
             await page.reload();
-            await logIntoElement(page, homeserver, aliceCredentials, securityKey);
+            await logIntoElement(page, aliceCredentials, securityKey);
 
             /* go back to the test room and find Bob's message again */
             await app.viewRoomById(testRoomId);

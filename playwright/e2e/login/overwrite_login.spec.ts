@@ -13,7 +13,7 @@ test.describe("Overwrite login action", () => {
     // This seems terminally flakey: https://github.com/element-hq/element-web/issues/27363
     // I tried verious things to try & deflake it, to no avail: https://github.com/matrix-org/matrix-react-sdk/pull/12506
     test.skip("Try replace existing login with new one", async ({ page, app, credentials, homeserver }) => {
-        await logIntoElement(page, homeserver, credentials);
+        await logIntoElement(page, credentials);
 
         const userMenu = await app.openUserMenu();
         await expect(userMenu.getByText(credentials.userId)).toBeVisible();

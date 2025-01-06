@@ -17,11 +17,9 @@ const test = base.extend<Fixtures>({
     startHomeserverOpts: async ({}, use) => {
         await use("dehydration");
     },
-    config: async ({ homeserver, context }, use) => {
+    context: async ({ config, context }, use) => {
         const wellKnown = {
-            "m.homeserver": {
-                base_url: homeserver.baseUrl,
-            },
+            ...config.default_server_config,
             "org.matrix.msc3814": true,
         };
 
@@ -29,9 +27,7 @@ const test = base.extend<Fixtures>({
             await route.fulfill({ json: wellKnown });
         });
 
-        await use({
-            default_server_config: wellKnown,
-        });
+        await use(context);
     },
 });
 

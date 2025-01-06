@@ -21,12 +21,11 @@ test.describe("Email Registration", async () => {
                     SMTP_PORT: mailhog.instance.smtpPort,
                 },
             }),
-        config: ({ homeserver }, use) =>
+        config: ({ config }, use) =>
             use({
+                ...config,
                 default_server_config: {
-                    "m.homeserver": {
-                        base_url: homeserver.baseUrl,
-                    },
+                    ...config.default_server_config,
                     "m.identity_server": {
                         base_url: "https://server.invalid",
                     },

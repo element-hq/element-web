@@ -16,6 +16,15 @@ const email = "user@nowhere.dummy";
 
 test.describe("Forgot Password", () => {
     test.use({
+        config: {
+            // The only thing that we really *need* (otherwise Element refuses to load) is a default homeserver.
+            // We point that to a guaranteed-invalid domain.
+            default_server_config: {
+                "m.homeserver": {
+                    base_url: "https://server.invalid",
+                },
+            },
+        },
         startHomeserverOpts: ({ mailhog }, use) =>
             use({
                 template: "email",

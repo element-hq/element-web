@@ -40,12 +40,10 @@ export const test = base.extend<{
             },
         });
     },
-    config: async ({ homeserver, startHomeserverOpts, context }, use) => {
+    context: async ({ config, startHomeserverOpts, context }, use) => {
         const issuer = `http://localhost:${(startHomeserverOpts as StartHomeserverOpts).variables["MAS_PORT"]}/`;
         const wellKnown = {
-            "m.homeserver": {
-                base_url: homeserver.baseUrl,
-            },
+            ...config.default_server_config,
             "org.matrix.msc2965.authentication": {
                 issuer,
                 account: `${issuer}account`,
@@ -57,9 +55,7 @@ export const test = base.extend<{
             await route.fulfill({ json: wellKnown });
         });
 
-        await use({
-            default_server_config: wellKnown,
-        });
+        await use(context);
     },
 });
 
