@@ -37,7 +37,9 @@ test.describe("Roles & Permissions room settings tab", () => {
         // Change the role of Alice to Moderator (50)
         await combobox.selectOption("Moderator");
         await expect(combobox).toHaveValue("50");
+        const respPromise = page.waitForRequest("**/state/**");
         await applyButton.click();
+        await respPromise;
 
         // Reload and check Alice is still Moderator (50)
         await page.reload();
