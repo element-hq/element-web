@@ -53,7 +53,7 @@ export function EncryptionUserSettingsTab(): JSX.Element {
         case "set_recovery_key":
             content = (
                 <ChangeRecoveryKey
-                    isSetupFlow={state === "set_recovery_key"}
+                    userHasKeyBackup={state === "change_recovery_key"}
                     onCancelClick={() => setState("main")}
                     onFinish={() => setState("main")}
                 />

@@ -38,10 +38,10 @@ type State = "inform_user" | "save_key_setup_flow" | "save_key_change_flow" | "c
 
 interface ChangeRecoveryKeyProps {
     /**
-     * If true, the component will display the flow to set up a new recovery key.
-     * If false, the component will display the flow to change the recovery key.
+     * If true, the component will display the flow to change the recovery key.
+     * If false,the component will display the flow to set up a new recovery key.
      */
-    isSetupFlow: boolean;
+    userHasKeyBackup: boolean;
     /**
      * Called when the recovery key is successfully changed.
      */
@@ -56,13 +56,13 @@ interface ChangeRecoveryKeyProps {
  * A component to set up or change the recovery key.
  */
 export function ChangeRecoveryKey({
-    isSetupFlow,
+    userHasKeyBackup,
     onFinish,
     onCancelClick,
 }: ChangeRecoveryKeyProps): JSX.Element | null {
     const matrixClient = useMatrixClientContext();
 
-    const [state, setState] = useState<State>(isSetupFlow ? "inform_user" : "save_key_change_flow");
+    const [state, setState] = useState<State>(userHasKeyBackup ? "save_key_change_flow" : "inform_user");
 
     // We create a new recovery key, the recovery key will be displayed to the user
     const recoveryKey = useAsyncMemo(() => matrixClient.getCrypto()!.createRecoveryKeyFromPassphrase(), []);
@@ -102,7 +102,7 @@ export function ChangeRecoveryKey({
                             // when we will try to access the secret storage during the bootstrap
                             await withSecretStorageKeyCache(() =>
                                 crypto.bootstrapSecretStorage({
-                                    setupNewKeyBackup: isSetupFlow,
+                                    setupNewKeyBackup: !userHasKeyBackup,
                                     setupNewSecretStorage: true,
                                     createSecretStorageKey: async () => recoveryKey,
                                 }),
@@ -118,9 +118,9 @@ export function ChangeRecoveryKey({
 
     const pages = [
         _t("settings|encryption|title"),
-        isSetupFlow
-            ? _t("settings|encryption|recovery|set_up_recovery")
-            : _t("settings|encryption|recovery|change_recovery_key"),
+        userHasKeyBackup
+            ? _t("settings|encryption|recovery|change_recovery_key")
+            : _t("settings|encryption|recovery|set_up_recovery"),
     ];
     const labels = getLabels(state);
 

@@ -25,9 +25,9 @@ describe("<ChangeRecoveryKey />", () => {
         matrixClient = createTestClient();
     });
 
-    function renderComponent(isSetupFlow = false, onFinish = jest.fn(), onCancelClick = jest.fn()) {
+    function renderComponent(userHasKeyBackup = true, onFinish = jest.fn(), onCancelClick = jest.fn()) {
         return render(
-            <ChangeRecoveryKey isSetupFlow={isSetupFlow} onFinish={onFinish} onCancelClick={onCancelClick} />,
+            <ChangeRecoveryKey userHasKeyBackup={userHasKeyBackup} onFinish={onFinish} onCancelClick={onCancelClick} />,
             withClientContextRenderOptions(matrixClient),
         );
     }
@@ -37,7 +37,7 @@ describe("<ChangeRecoveryKey />", () => {
             const user = userEvent.setup();
 
             const onCancelClick = jest.fn();
-            const { asFragment } = renderComponent(true, jest.fn(), onCancelClick);
+            const { asFragment } = renderComponent(false, jest.fn(), onCancelClick);
             await waitFor(() =>
                 expect(
                     screen.getByText(
@@ -55,7 +55,7 @@ describe("<ChangeRecoveryKey />", () => {
             const user = userEvent.setup();
 
             const onCancelClick = jest.fn();
-            const { asFragment } = renderComponent(true, jest.fn(), onCancelClick);
+            const { asFragment } = renderComponent(false, jest.fn(), onCancelClick);
             await waitFor(() => user.click(screen.getByRole("button", { name: "Continue" })));
 
             expect(screen.getByText("Save your recovery key somewhere safe")).toBeInTheDocument();
@@ -74,7 +74,7 @@ describe("<ChangeRecoveryKey />", () => {
             const user = userEvent.setup();
 
             const onFinish = jest.fn();
-            const { asFragment } = renderComponent(true, onFinish);
+            const { asFragment } = renderComponent(false, onFinish);
             // Display the recovery key to save
             await waitFor(() => user.click(screen.getByRole("button", { name: "Continue" })));
             // Display the form to confirm the recovery key
