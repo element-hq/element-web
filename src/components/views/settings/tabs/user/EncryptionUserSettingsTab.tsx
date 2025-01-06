@@ -78,9 +78,7 @@ function useVerificationRequired(setState: (state: State) => void): () => Promis
     const matrixClient = useMatrixClientContext();
 
     const checkVerificationRequired = useCallback(async () => {
-        const crypto = matrixClient.getCrypto();
-        if (!crypto) return;
-
+        const crypto = matrixClient.getCrypto()!;
         const isCrossSigningReady = await crypto.isCrossSigningReady();
         if (isCrossSigningReady) setState("main");
         else setState("verification_required");

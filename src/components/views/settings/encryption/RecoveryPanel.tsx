@@ -46,8 +46,7 @@ export function RecoveryPanel({ onSetUpRecoveryClick, onChangingRecoveryKeyClick
     const matrixClient = useMatrixClientContext();
 
     const checkEncryption = useCallback(async () => {
-        const crypto = matrixClient.getCrypto();
-        if (!crypto) return;
+        const crypto = matrixClient.getCrypto()!;
 
         // Check if the user has a backup
         const hasBackup = Boolean(await crypto.checkKeyBackupAndEnable());

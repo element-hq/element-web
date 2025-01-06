@@ -65,13 +65,7 @@ export function ChangeRecoveryKey({
     const [state, setState] = useState<State>(isSetupFlow ? "inform_user" : "save_key_change_flow");
 
     // We create a new recovery key, the recovery key will be displayed to the user
-    const recoveryKey = useAsyncMemo(() => {
-        const crypto = matrixClient.getCrypto();
-        if (!crypto) return Promise.resolve(undefined);
-
-        return crypto.createRecoveryKeyFromPassphrase();
-    }, []);
-
+    const recoveryKey = useAsyncMemo(() => matrixClient.getCrypto()!.createRecoveryKeyFromPassphrase(), []);
     if (!recoveryKey?.encodedPrivateKey) return null;
 
     let content: JSX.Element;
