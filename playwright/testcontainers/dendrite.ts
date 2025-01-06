@@ -10,7 +10,6 @@ import { APIRequestContext } from "@playwright/test";
 import * as YAML from "yaml";
 import { set } from "lodash";
 
-import { getFreePort } from "../plugins/utils/port.ts";
 import { randB64Bytes } from "../plugins/utils/rand.ts";
 import { StartedSynapseContainer } from "./synapse.ts";
 import { deepCopy } from "../plugins/utils/object.ts";
@@ -223,6 +222,7 @@ export class DendriteContainer extends GenericContainer {
                 "-c",
                 `/usr/bin/generate-keys -private-key /etc/dendrite/matrix_key.pem && ${binary} --config /etc/dendrite/dendrite.yaml --really-enable-open-registration true run`,
             ])
+            .withExposedPorts(8008)
             .withWaitStrategy(Wait.forHttp("/_matrix/client/versions", 8008));
     }
 
@@ -240,22 +240,18 @@ export class DendriteContainer extends GenericContainer {
     }
 
     public override async start(): Promise<StartedSynapseContainer> {
-        const port = await getFreePort();
-
-        this.withExposedPorts({
-            container: 8008,
-            host: port,
-        }).withCopyContentToContainer([
+        this.withCopyContentToContainer([
             {
                 target: "/etc/dendrite/dendrite.yaml",
                 content: YAML.stringify(this.config),
             },
         ]);
 
+        const container = await super.start();
         // Surprisingly, Dendrite implements the same register user Admin API Synapse, so we can just extend it
         return new StartedSynapseContainer(
-            await super.start(),
-            `http://localhost:${port}`,
+            container,
+            `http://${container.getHost()}:${container.getMappedPort(8008)}`,
             this.config.client_api.registration_shared_secret,
             this.request,
         );

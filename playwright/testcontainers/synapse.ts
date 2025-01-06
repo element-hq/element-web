@@ -199,6 +199,7 @@ export class SynapseContainer extends GenericContainer {
     }
 
     public override async start(): Promise<StartedSynapseContainer> {
+        // Synapse config public_baseurl needs to know what URL it'll be accessed from, so we have to map the port manually
         const port = await getFreePort();
 
         this.withExposedPorts({

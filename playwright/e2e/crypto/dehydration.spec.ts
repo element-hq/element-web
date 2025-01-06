@@ -8,34 +8,9 @@ Please see LICENSE files in the repository root for full details.
 
 import { Locator, type Page } from "@playwright/test";
 
-import { test as base, expect, Fixtures } from "../../element-web-test";
+import { test, expect } from "../../element-web-test";
 import { viewRoomSummaryByName } from "../right-panel/utils";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
-
-const test = base.extend<Fixtures>({
-    synapseConfigOptions: {
-        experimental_features: {
-            msc2697_enabled: false,
-            msc3814_enabled: true,
-        },
-    },
-    config: async ({ homeserver, context }, use) => {
-        const wellKnown = {
-            "m.homeserver": {
-                base_url: homeserver.baseUrl,
-            },
-            "org.matrix.msc3814": true,
-        };
-
-        await context.route("https://localhost/.well-known/matrix/client", async (route) => {
-            await route.fulfill({ json: wellKnown });
-        });
-
-        await use({
-            default_server_config: wellKnown,
-        });
-    },
-});
 
 const ROOM_NAME = "Test room";
 const NAME = "Alice";
@@ -49,6 +24,28 @@ test.describe("Dehydration", () => {
 
     test.use({
         displayName: NAME,
+        synapseConfigOptions: {
+            experimental_features: {
+                msc2697_enabled: false,
+                msc3814_enabled: true,
+            },
+        },
+        config: async ({ homeserver, context }, use) => {
+            const wellKnown = {
+                "m.homeserver": {
+                    base_url: homeserver.baseUrl,
+                },
+                "org.matrix.msc3814": true,
+            };
+
+            await context.route("https://localhost/.well-known/matrix/client", async (route) => {
+                await route.fulfill({ json: wellKnown });
+            });
+
+            await use({
+                default_server_config: wellKnown,
+            });
+        },
     });
 
     test("Create dehydrated device", async ({ page, user, app }, workerInfo) => {

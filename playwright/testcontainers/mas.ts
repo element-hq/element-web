@@ -194,6 +194,7 @@ export class MatrixAuthenticationServiceContainer extends GenericContainer {
     }
 
     public override async start(): Promise<StartedMatrixAuthenticationServiceContainer> {
+        // MAS config issuer needs to know what URL it'll be accessed from, so we have to map the port manually
         const port = await getFreePort();
 
         this.config.http.public_base = `http://localhost:${port}/`;
