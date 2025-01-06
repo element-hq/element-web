@@ -13,8 +13,9 @@ import { set } from "lodash";
 
 import { getFreePort } from "../plugins/utils/port.ts";
 import { randB64Bytes } from "../plugins/utils/rand.ts";
-import { Credentials, HomeserverInstance } from "../plugins/homeserver";
+import { Credentials } from "../plugins/homeserver";
 import { deepCopy } from "../plugins/utils/object.ts";
+import { HomeserverContainer, StartedHomeserverContainer } from "./HomeserverContainer.ts";
 
 const TAG = "develop@sha256:17cc0a301447430624afb860276e5c13270ddeb99a3f6d1c6d519a20b1a8f650";
 
@@ -137,7 +138,7 @@ const DEFAULT_CONFIG = {
 
 export type SynapseConfigOptions = Partial<typeof DEFAULT_CONFIG>;
 
-export class SynapseContainer extends GenericContainer {
+export class SynapseContainer extends GenericContainer implements HomeserverContainer<typeof DEFAULT_CONFIG> {
     private config: typeof DEFAULT_CONFIG;
 
     constructor(private readonly request: APIRequestContext) {
@@ -225,7 +226,7 @@ export class SynapseContainer extends GenericContainer {
     }
 }
 
-export class StartedSynapseContainer extends AbstractStartedContainer implements HomeserverInstance {
+export class StartedSynapseContainer extends AbstractStartedContainer implements StartedHomeserverContainer {
     private adminToken?: string;
 
     constructor(

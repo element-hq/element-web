@@ -10,9 +10,10 @@ import mailhog from "mailhog";
 import { GenericContainer, Network, StartedNetwork, StartedTestContainer, Wait } from "testcontainers";
 import { PostgreSqlContainer, StartedPostgreSqlContainer } from "@testcontainers/postgresql";
 
-import { StartedSynapseContainer, SynapseConfigOptions, SynapseContainer } from "./testcontainers/synapse.ts";
+import { SynapseConfigOptions, SynapseContainer } from "./testcontainers/synapse.ts";
 import { ContainerLogger } from "./testcontainers/utils.ts";
 import { StartedMatrixAuthenticationServiceContainer } from "./testcontainers/mas.ts";
+import { HomeserverContainer, StartedHomeserverContainer } from "./testcontainers/HomeserverContainer.ts";
 
 export interface Services {
     logger: ContainerLogger;
@@ -24,8 +25,8 @@ export interface Services {
     mailhogClient: mailhog.API;
 
     synapseConfigOptions: SynapseConfigOptions;
-    _homeserver: SynapseContainer;
-    homeserver: StartedSynapseContainer;
+    _homeserver: HomeserverContainer<any>;
+    homeserver: StartedHomeserverContainer;
     mas?: StartedMatrixAuthenticationServiceContainer;
 }
 

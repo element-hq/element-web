@@ -13,6 +13,7 @@ import { set } from "lodash";
 import { randB64Bytes } from "../plugins/utils/rand.ts";
 import { StartedSynapseContainer } from "./synapse.ts";
 import { deepCopy } from "../plugins/utils/object.ts";
+import { HomeserverContainer } from "./HomeserverContainer.ts";
 
 const DEFAULT_CONFIG = {
     version: 2,
@@ -204,7 +205,7 @@ const DEFAULT_CONFIG = {
     ],
 };
 
-export class DendriteContainer extends GenericContainer {
+export class DendriteContainer extends GenericContainer implements HomeserverContainer<typeof DEFAULT_CONFIG> {
     private config: typeof DEFAULT_CONFIG;
 
     constructor(
