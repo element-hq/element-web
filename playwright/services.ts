@@ -12,8 +12,11 @@ import { PostgreSqlContainer, StartedPostgreSqlContainer } from "@testcontainers
 
 import { StartedSynapseContainer, SynapseConfigOptions, SynapseContainer } from "./testcontainers/synapse.ts";
 import { MatrixAuthenticationServiceContainer } from "./testcontainers/mas.ts";
+import { ContainerLogger } from "./testcontainers/utils.ts";
 
 export interface Services {
+    logger: ContainerLogger;
+
     network: StartedNetwork;
     postgres: StartedPostgreSqlContainer;
 
@@ -26,18 +29,24 @@ export interface Services {
     mas: StartedTestContainer;
 }
 
-// TODO logs
 export const test = base.extend<Services>({
+    // eslint-disable-next-line no-empty-pattern
+    logger: async ({}, use, testInfo) => {
+        const logger = new ContainerLogger();
+        await use(logger);
+        await logger.testFinished(testInfo);
+    },
     // eslint-disable-next-line no-empty-pattern
     network: async ({}, use) => {
         const network = await new Network().start();
         await use(network);
         await network.stop();
     },
-    postgres: async ({ network }, use) => {
+    postgres: async ({ logger, network }, use) => {
         const container = await new PostgreSqlContainer()
             .withNetwork(network)
             .withNetworkAliases("postgres")
+            .withLogConsumer(logger.getConsumer("postgres"))
             .withTmpFs({
                 "/dev/shm/pgdata/data": "",
             })
@@ -59,11 +68,12 @@ export const test = base.extend<Services>({
         await container.stop();
     },
 
-    mailhog: async ({ network }, use) => {
+    mailhog: async ({ logger, network }, use) => {
         const container = await new GenericContainer("mailhog/mailhog:latest")
             .withNetwork(network)
             .withNetworkAliases("mailhog")
             .withExposedPorts(8025)
+            .withLogConsumer(logger.getConsumer("mailhog"))
             .withWaitStrategy(Wait.forListeningPorts())
             .start();
         await use(container);
@@ -78,20 +88,22 @@ export const test = base.extend<Services>({
         const container = new SynapseContainer(request);
         await use(container);
     },
-    homeserver: async ({ network, _homeserver: homeserver, synapseConfigOptions }, use) => {
+    homeserver: async ({ logger, network, _homeserver: homeserver, synapseConfigOptions }, use) => {
         const container = await homeserver
             .withNetwork(network)
             .withNetworkAliases("homeserver")
+            .withLogConsumer(logger.getConsumer("synapse"))
             .withConfig(synapseConfigOptions)
             .start();
 
         await use(container);
         await container.stop();
     },
-    mas: async ({ network }, use) => {
+    mas: async ({ logger, network }, use) => {
         const container = await new MatrixAuthenticationServiceContainer()
             .withNetwork(network)
             .withNetworkAliases("mas")
+            .withLogConsumer(logger.getConsumer("mas"))
             .withConfig({
                 clients: [
                     {

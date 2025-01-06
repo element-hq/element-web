@@ -94,7 +94,7 @@ const DEFAULT_CONFIG = {
             burst_count: 10000,
         },
     },
-    media_store_path: "/media",
+    media_store_path: "/data/media_store",
     max_upload_size: "50M",
     max_image_pixels: "32M",
     dynamic_thumbnails: false,

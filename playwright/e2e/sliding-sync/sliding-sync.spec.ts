@@ -18,10 +18,11 @@ const test = base.extend<{
     testRoom: { roomId: string; name: string };
     joinedBot: Bot;
 }>({
-    slidingSyncProxy: async ({ network, postgres, page, homeserver }, use, testInfo) => {
+    slidingSyncProxy: async ({ logger, network, postgres, page, homeserver }, use, testInfo) => {
         const container = await new GenericContainer("ghcr.io/matrix-org/sliding-sync:v0.99.3")
             .withNetwork(network)
             .withExposedPorts(8008)
+            .withLogConsumer(logger.getConsumer("sliding-sync-proxy"))
             .withEnvironment({
                 SYNCV3_SECRET: "bwahahaha",
                 SYNCV3_DB: `user=postgres dbname=postgres password=${postgres.getPassword()} host=${postgres.getHost()} sslmode=disable`,
