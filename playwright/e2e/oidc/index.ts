@@ -40,7 +40,7 @@ export const test = base.extend<{
             },
         });
     },
-    context: async ({ config, startHomeserverOpts, context }, use) => {
+    config: async ({ config, startHomeserverOpts, context }, use) => {
         const issuer = `http://localhost:${(startHomeserverOpts as StartHomeserverOpts).variables["MAS_PORT"]}/`;
         const wellKnown = {
             ...config.default_server_config,
@@ -55,7 +55,7 @@ export const test = base.extend<{
             await route.fulfill({ json: wellKnown });
         });
 
-        await use(context);
+        await use(config);
     },
 });
 
