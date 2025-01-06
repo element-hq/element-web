@@ -30,10 +30,8 @@ export class TestClientServerAPI {
     }
 
     /**
-     * Calls the API directly to create a new backup version.
-     * @param algorithm The backup algorithm to use.
-     * @param authData The backup auth data
-     * @returns The version number of the new backup
+     * Calls the API directly to delete the given backup version
+     * @param version The version to delete
      */
     public async deleteBackupVersion(version: string): Promise<void> {
         const res = await this.request.delete(
