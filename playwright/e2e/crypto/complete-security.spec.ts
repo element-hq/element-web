@@ -12,6 +12,15 @@ import { logIntoElement } from "./utils";
 test.describe("Complete security", () => {
     test.use({
         displayName: "Jeff",
+        config: {
+            // The only thing that we really *need* (otherwise Element refuses to load) is a default homeserver.
+            // We point that to a guaranteed-invalid domain.
+            default_server_config: {
+                "m.homeserver": {
+                    base_url: "https://server.invalid",
+                },
+            },
+        },
     });
 
     test("should go straight to the welcome screen if we have no signed device", async ({
@@ -19,7 +28,7 @@ test.describe("Complete security", () => {
         homeserver,
         credentials,
     }) => {
-        await logIntoElement(page, homeserver, credentials);
+        await logIntoElement(page, credentials);
         await expect(page.getByText("Welcome Jeff", { exact: true })).toBeVisible();
     });
 

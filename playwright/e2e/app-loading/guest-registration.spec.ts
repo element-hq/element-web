@@ -16,13 +16,6 @@ test.use({
     synapseConfigOptions: {
         allow_guest_access: true,
     },
-    config: async ({ homeserver }, use) => {
-        await use({
-            default_server_config: {
-                "m.homeserver": { base_url: homeserver.baseUrl },
-            },
-        });
-    },
 });
 
 test("Shows the welcome page by default", async ({ page }) => {

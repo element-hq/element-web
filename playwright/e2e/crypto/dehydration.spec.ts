@@ -30,11 +30,9 @@ test.describe("Dehydration", () => {
                 msc3814_enabled: true,
             },
         },
-        config: async ({ homeserver, context }, use) => {
+        config: async ({ config, context }, use) => {
             const wellKnown = {
-                "m.homeserver": {
-                    base_url: homeserver.baseUrl,
-                },
+                ...config.default_server_config,
                 "org.matrix.msc3814": true,
             };
 
@@ -42,9 +40,7 @@ test.describe("Dehydration", () => {
                 await route.fulfill({ json: wellKnown });
             });
 
-            await use({
-                default_server_config: wellKnown,
-            });
+            await use(config);
         },
     });
 

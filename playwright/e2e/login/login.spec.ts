@@ -80,6 +80,18 @@ async function login(page: Page, homeserver: HomeserverInstance) {
 }
 
 test.describe("Login", () => {
+    test.use({
+        config: {
+            // The only thing that we really *need* (otherwise Element refuses to load) is a default homeserver.
+            // We point that to a guaranteed-invalid domain.
+            default_server_config: {
+                "m.homeserver": {
+                    base_url: "https://server.invalid",
+                },
+            },
+        },
+    });
+
     test.describe("Password login", () => {
         test.use(consentHomeserver);
 
