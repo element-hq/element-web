@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -18,10 +18,9 @@ import { HomeserverInstance } from "../homeserver";
 import { Instance as MailhogInstance } from "../mailhog";
 
 // Docker tag to use for `ghcr.io/matrix-org/matrix-authentication-service` image.
-// We use a debug tag so that we have a shell and can run all 3 necessary commands in one run.
-const TAG = "0.8.0-debug";
+const TAG = "0.12.0";
 
-export interface ProxyInstance {
+interface Instance {
     containerId: string;
     postgresId: string;
     configDir: string;
@@ -62,7 +61,7 @@ async function cfgDirFromTemplate(opts: {
 export class MatrixAuthenticationService {
     private readonly masDocker = new Docker();
     private readonly postgresDocker = new PostgresDocker("mas");
-    private instance: ProxyInstance;
+    private instance: Instance;
     public port: number;
 
     constructor(private context: BrowserContext) {}
@@ -72,7 +71,7 @@ export class MatrixAuthenticationService {
         return { port: this.port };
     }
 
-    async start(homeserver: HomeserverInstance, mailhog: MailhogInstance): Promise<ProxyInstance> {
+    async start(homeserver: HomeserverInstance, mailhog: MailhogInstance): Promise<Instance> {
         console.log(new Date(), "Starting mas...");
 
         if (!this.port) await this.prepare();
@@ -87,15 +86,10 @@ export class MatrixAuthenticationService {
 
         console.log(new Date(), "starting mas container...", TAG);
         const containerId = await this.masDocker.run({
-            image: "ghcr.io/matrix-org/matrix-authentication-service:" + TAG,
+            image: "ghcr.io/element-hq/matrix-authentication-service:" + TAG,
             containerName: "react-sdk-playwright-mas",
-            params: ["-p", `${port}:8080/tcp`, "-v", `${configDir}:/config`, "--entrypoint", "sh"],
-            cmd: [
-                "-c",
-                "mas-cli database migrate --config /config/config.yaml && " +
-                    "mas-cli config sync --config /config/config.yaml && " +
-                    "mas-cli server --config /config/config.yaml",
-            ],
+            params: ["-p", `${port}:8080/tcp`, "-v", `${configDir}:/config`],
+            cmd: ["server", "--config", "/config/config.yaml"],
         });
         console.log(new Date(), "started!");
 

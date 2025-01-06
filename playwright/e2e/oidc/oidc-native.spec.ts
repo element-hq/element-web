@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -41,11 +41,11 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
 
         // Assert MAS sees the session as OIDC Native
         const newPage = await newPagePromise;
-        await newPage.getByText("Sessions").click();
+        await newPage.getByText("Devices").click();
         await newPage.getByText(deviceId).click();
         await expect(newPage.getByText("Element")).toBeVisible();
-        await expect(newPage.getByText("oauth2_session:")).toBeVisible();
         await expect(newPage.getByText("http://localhost:8080/")).toBeVisible();
+        await expect(newPage).toHaveURL(/\/oauth2_session/);
         await newPage.close();
 
         // Assert logging out revokes both tokens

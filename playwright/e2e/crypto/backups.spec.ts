@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -11,6 +11,7 @@ import { type Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
 import { test as masTest, registerAccountMas } from "../oidc";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
+import { TestClientServerAPI } from "../csAPI";
 
 async function expectBackupVersionToBe(page: Page, version: string) {
     await expect(page.locator(".mx_SecureBackupPanel_statusList tr:nth-child(5) td")).toHaveText(
@@ -20,6 +21,9 @@ async function expectBackupVersionToBe(page: Page, version: string) {
     await expect(page.locator(".mx_SecureBackupPanel_statusList tr:nth-child(6) td")).toHaveText(version);
 }
 
+// These tests register an account with MAS because then we go through the "normal" registration flow
+// and crypto gets set up. Using the 'user' fixture create a a user an synthesizes an existing login,
+// which is faster but leaves us without crypto set up.
 masTest.describe("Encryption state after registration", () => {
     masTest.skip(isDendrite, "does not yet support MAS");
 
@@ -29,7 +33,7 @@ masTest.describe("Encryption state after registration", () => {
         await registerAccountMas(page, mailhog.api, "alice", "alice@email.com", "Pa$sW0rD!");
 
         await app.settings.openUserSettings("Security & Privacy");
-        expect(page.getByText("This session is backing up your keys.")).toBeVisible();
+        await expect(page.getByText("This session is backing up your keys.")).toBeVisible();
     });
 
     masTest("user is prompted to set up recovery", async ({ page, mailhog, app }) => {
@@ -44,6 +48,59 @@ masTest.describe("Encryption state after registration", () => {
 
         await expect(page.getByRole("heading", { name: "Set up recovery" })).toBeVisible();
     });
+});
+
+masTest.describe("Key backup reset from elsewhere", () => {
+    masTest.skip(isDendrite, "does not yet support MAS");
+
+    masTest(
+        "Key backup is disabled when reset from elsewhere",
+        async ({ page, mailhog, request, masPrepare, homeserver }) => {
+            const testUsername = "alice";
+            const testPassword = "Pa$sW0rD!";
+
+            // there's a delay before keys are uploaded so the error doesn't appear immediately: use a fake
+            // clock so we can skip the delay
+            await page.clock.install();
+
+            await page.goto("/#/login");
+            await page.getByRole("button", { name: "Continue" }).click();
+            await registerAccountMas(page, mailhog.api, testUsername, "alice@email.com", testPassword);
+
+            await page.getByRole("button", { name: "Add room" }).click();
+            await page.getByRole("menuitem", { name: "New room" }).click();
+            await page.getByRole("textbox", { name: "Name" }).fill("test room");
+            await page.getByRole("button", { name: "Create room" }).click();
+
+            // @ts-ignore - this runs in the browser scope where mxMatrixClientPeg is a thing. Here, it is not.
+            const accessToken = await page.evaluate(() => mxMatrixClientPeg.get().getAccessToken());
+
+            const csAPI = new TestClientServerAPI(request, homeserver, accessToken);
+
+            const backupInfo = await csAPI.getCurrentBackupInfo();
+
+            await csAPI.deleteBackupVersion(backupInfo.version);
+
+            await page.getByRole("textbox", { name: "Send an encrypted message…" }).fill("/discardsession");
+            await page.getByRole("button", { name: "Send message" }).click();
+
+            await page
+                .getByRole("textbox", { name: "Send an encrypted message…" })
+                .fill("Message with broken key backup");
+            await page.getByRole("button", { name: "Send message" }).click();
+
+            // Should be the message we sent plus the room creation event
+            await expect(page.locator(".mx_EventTile")).toHaveCount(2);
+            await expect(
+                page.locator(".mx_RoomView_MessageList > .mx_EventTile_last .mx_EventTile_receiptSent"),
+            ).toBeVisible();
+
+            // Wait for it to try uploading the key
+            await page.clock.fastForward(20000);
+
+            await expect(page.getByRole("heading", { level: 1, name: "New Recovery Method" })).toBeVisible();
+        },
+    );
 });
 
 test.describe("Backups", () => {

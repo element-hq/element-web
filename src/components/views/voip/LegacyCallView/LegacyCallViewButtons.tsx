@@ -4,7 +4,7 @@ Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
 Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 Copyright 2015, 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
