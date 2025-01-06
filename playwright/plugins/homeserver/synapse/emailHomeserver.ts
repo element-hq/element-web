@@ -18,7 +18,7 @@ export const emailHomeserver: Fixtures<Services, {}, Services> = {
             registrations_require_3pid: ["email"],
             email: {
                 smtp_host: "mailhog",
-                smtp_port: 25,
+                smtp_port: 1025,
                 notif_from: "Your Friendly %(app)s homeserver <noreply@example.com>",
                 app_name: "my_branded_matrix_server",
             },
