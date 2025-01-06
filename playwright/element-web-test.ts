@@ -220,7 +220,7 @@ export const test = base.extend<Fixtures>({
                 // Ensure the language is set to a consistent value
                 window.localStorage.setItem("mx_local_settings", '{"language":"en"}');
             },
-            { baseUrl: homeserver.config.baseUrl, credentials },
+            { baseUrl: homeserver.baseUrl, credentials },
         );
         await use(page);
     },

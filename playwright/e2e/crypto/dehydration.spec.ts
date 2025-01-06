@@ -20,7 +20,7 @@ const test = base.extend<Fixtures>({
     config: async ({ homeserver, context }, use) => {
         const wellKnown = {
             "m.homeserver": {
-                base_url: homeserver.config.baseUrl,
+                base_url: homeserver.baseUrl,
             },
             "org.matrix.msc3814": true,
         };

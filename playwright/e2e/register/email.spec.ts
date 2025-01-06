@@ -25,7 +25,7 @@ test.describe("Email Registration", async () => {
             use({
                 default_server_config: {
                     "m.homeserver": {
-                        base_url: homeserver.config.baseUrl,
+                        base_url: homeserver.baseUrl,
                     },
                     "m.identity_server": {
                         base_url: "https://server.invalid",

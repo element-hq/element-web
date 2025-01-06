@@ -17,7 +17,7 @@ test.use({
     config: async ({ homeserver }, use) => {
         await use({
             default_server_config: {
-                "m.homeserver": { base_url: homeserver.config.baseUrl },
+                "m.homeserver": { base_url: homeserver.baseUrl },
             },
         });
     },

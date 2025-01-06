@@ -44,7 +44,7 @@ export const test = base.extend<{
         const issuer = `http://localhost:${(startHomeserverOpts as StartHomeserverOpts).variables["MAS_PORT"]}/`;
         const wellKnown = {
             "m.homeserver": {
-                base_url: homeserver.config.baseUrl,
+                base_url: homeserver.baseUrl,
             },
             "org.matrix.msc2965.authentication": {
                 issuer,

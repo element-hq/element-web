@@ -146,6 +146,10 @@ export class Synapse implements Homeserver, HomeserverInstance {
         return [path.join(synapseLogsPath, "stdout.log"), path.join(synapseLogsPath, "stderr.log")];
     }
 
+    public get baseUrl(): string {
+        return this.config.baseUrl;
+    }
+
     private async registerUserInternal(
         username: string,
         password: string,

@@ -16,6 +16,7 @@ export interface HomeserverConfig {
 
 export interface HomeserverInstance {
     readonly config: HomeserverConfig;
+    readonly baseUrl: string;
 
     /**
      * Register a user on the given Homeserver using the shared registration secret.
