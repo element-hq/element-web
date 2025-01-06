@@ -23,5 +23,5 @@ test.describe("Complete security", () => {
         await expect(page.getByText("Welcome Jeff", { exact: true })).toBeVisible();
     });
 
-    // see also "Verify device during login with SAS" in `verifiction.spec.ts`.
+    // see also "Verify device during login with SAS" in `verification.spec.ts`.
 });
