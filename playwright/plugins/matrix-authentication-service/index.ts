@@ -18,8 +18,7 @@ import { HomeserverInstance } from "../homeserver";
 import { Instance as MailhogInstance } from "../mailhog";
 
 // Docker tag to use for `ghcr.io/matrix-org/matrix-authentication-service` image.
-// We use a debug tag so that we have a shell and can run all 3 necessary commands in one run.
-const TAG = "0.8.0-debug";
+const TAG = "0.12.0";
 
 export interface ProxyInstance {
     containerId: string;
@@ -87,15 +86,10 @@ export class MatrixAuthenticationService {
 
         console.log(new Date(), "starting mas container...", TAG);
         const containerId = await this.masDocker.run({
-            image: "ghcr.io/matrix-org/matrix-authentication-service:" + TAG,
+            image: "ghcr.io/element-hq/matrix-authentication-service:" + TAG,
             containerName: "react-sdk-playwright-mas",
-            params: ["-p", `${port}:8080/tcp`, "-v", `${configDir}:/config`, "--entrypoint", "sh"],
-            cmd: [
-                "-c",
-                "mas-cli database migrate --config /config/config.yaml && " +
-                    "mas-cli config sync --config /config/config.yaml && " +
-                    "mas-cli server --config /config/config.yaml",
-            ],
+            params: ["-p", `${port}:8080/tcp`, "-v", `${configDir}:/config`],
+            cmd: ["mas-cli", "server", "--config", "/config/config.yaml"],
         });
         console.log(new Date(), "started!");
 
