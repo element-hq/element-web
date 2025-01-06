@@ -11,6 +11,15 @@ import { test, expect } from "../../element-web-test";
 test.describe("Registration", () => {
     test.use({
         startHomeserverOpts: "consent",
+        config: {
+            // The only thing that we really *need* (otherwise Element refuses to load) is a default homeserver.
+            // We point that to a guaranteed-invalid domain.
+            default_server_config: {
+                "m.homeserver": {
+                    base_url: "https://server.invalid",
+                },
+            },
+        },
     });
 
     test.beforeEach(async ({ page }) => {
