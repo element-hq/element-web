@@ -14,7 +14,7 @@ test.describe("Email Registration", async () => {
     test.skip(isDendrite, "not yet wired up");
     test.use(emailHomeserver);
     test.use({
-        config: ({ homeserver }, use) =>
+        config: ({ config }, use) =>
             use({
                 ...config,
                 default_server_config: {
