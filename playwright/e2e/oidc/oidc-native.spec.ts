@@ -18,7 +18,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
     test.slow(); // trace recording takes a while here
 
     test("can register the oauth2 client and an account", async ({ context, page, homeserver, mailhogClient, mas }) => {
-        const tokenUri = `http://${mas.getHost()}:${mas.getMappedPort(8080)}/oauth2/token`;
+        const tokenUri = `${mas.baseUrl}/oauth2/token`;
         const tokenApiPromise = page.waitForRequest(
             (request) => request.url() === tokenUri && request.postDataJSON()["grant_type"] === "authorization_code",
         );
@@ -44,15 +44,15 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
 
         // Assert MAS sees the session as OIDC Native
         const newPage = await newPagePromise;
-        await newPage.getByText("Sessions").click();
+        await newPage.getByText("Devices").click();
         await newPage.getByText(deviceId).click();
         await expect(newPage.getByText("Element")).toBeVisible();
-        await expect(newPage.getByText("oauth2_session:")).toBeVisible();
         await expect(newPage.getByText("http://localhost:8080/")).toBeVisible();
+        await expect(newPage).toHaveURL(/\/oauth2_session/);
         await newPage.close();
 
         // Assert logging out revokes both tokens
-        const revokeUri = `http://${mas.getHost()}:${mas.getMappedPort(8080)}/oauth2/revoke`;
+        const revokeUri = `${mas.baseUrl}/oauth2/revoke`;
         const revokeAccessTokenPromise = page.waitForRequest(
             (request) => request.url() === revokeUri && request.postDataJSON()["token_type_hint"] === "access_token",
         );

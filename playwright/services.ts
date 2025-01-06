@@ -12,6 +12,7 @@ import { PostgreSqlContainer, StartedPostgreSqlContainer } from "@testcontainers
 
 import { StartedSynapseContainer, SynapseConfigOptions, SynapseContainer } from "./testcontainers/synapse.ts";
 import { ContainerLogger } from "./testcontainers/utils.ts";
+import { StartedMatrixAuthenticationServiceContainer } from "./testcontainers/mas.ts";
 
 export interface Services {
     logger: ContainerLogger;
@@ -25,7 +26,7 @@ export interface Services {
     synapseConfigOptions: SynapseConfigOptions;
     _homeserver: SynapseContainer;
     homeserver: StartedSynapseContainer;
-    mas?: StartedTestContainer;
+    mas?: StartedMatrixAuthenticationServiceContainer;
 }
 
 export const test = base.extend<Services>({

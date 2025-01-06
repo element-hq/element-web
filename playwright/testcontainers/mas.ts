@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { GenericContainer, StartedTestContainer, Wait } from "testcontainers";
+import { AbstractStartedContainer, GenericContainer, StartedTestContainer, Wait } from "testcontainers";
 import { StartedPostgreSqlContainer } from "@testcontainers/postgresql";
 import * as YAML from "yaml";
 
@@ -133,6 +133,7 @@ const DEFAULT_CONFIG = {
                 algorithm: "argon2id",
             },
         ],
+        minimum_complexity: 0,
     },
     policy: {
         wasm_module: "/usr/local/share/mas-cli/policy.wasm",
@@ -158,6 +159,9 @@ const DEFAULT_CONFIG = {
         imprint: null,
         logo_uri: null,
     },
+    account: {
+        password_registration_enabled: true,
+    },
     experimental: {
         access_token_ttl: 300,
         compat_token_ttl: 300,
@@ -168,7 +172,7 @@ export class MatrixAuthenticationServiceContainer extends GenericContainer {
     private config: typeof DEFAULT_CONFIG;
 
     constructor(db: StartedPostgreSqlContainer) {
-        super("ghcr.io/matrix-org/matrix-authentication-service:0.8.0");
+        super("ghcr.io/element-hq/matrix-authentication-service:0.12.0");
 
         this.config = deepCopy(DEFAULT_CONFIG);
         this.config.database.username = db.getUsername();
@@ -187,7 +191,7 @@ export class MatrixAuthenticationServiceContainer extends GenericContainer {
         return this;
     }
 
-    public override async start(): Promise<StartedTestContainer> {
+    public override async start(): Promise<StartedMatrixAuthenticationServiceContainer> {
         const port = await getFreePort();
 
         this.config.http.public_base = `http://localhost:${port}/`;
@@ -203,6 +207,15 @@ export class MatrixAuthenticationServiceContainer extends GenericContainer {
             },
         ]);
 
-        return super.start();
+        return new StartedMatrixAuthenticationServiceContainer(await super.start(), `http://localhost:${port}`);
+    }
+}
+
+export class StartedMatrixAuthenticationServiceContainer extends AbstractStartedContainer {
+    constructor(
+        container: StartedTestContainer,
+        public readonly baseUrl: string,
+    ) {
+        super(container);
     }
 }

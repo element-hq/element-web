@@ -31,7 +31,7 @@ test.describe("Encryption state after registration", () => {
         await registerAccountMas(page, mailhogClient, "alice", "alice@email.com", "Pa$sW0rD!");
 
         await app.settings.openUserSettings("Security & Privacy");
-        expect(page.getByText("This session is backing up your keys.")).toBeVisible();
+        await expect(page.getByText("This session is backing up your keys.")).toBeVisible();
     });
 
     test("user is prompted to set up recovery", async ({ page, mailhogClient, app }) => {
