@@ -88,7 +88,7 @@ export function RecoveryPanel({ onSetUpRecoveryClick, onChangingRecoveryKeyClick
                 </Button>
             );
             break;
-        default:
+        case "good":
             content = (
                 <Button size="sm" kind="secondary" Icon={KeyIcon} onClick={onChangingRecoveryKeyClick}>
                     {_t("settings|encryption|recovery|change_recovery_key")}
