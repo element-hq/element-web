@@ -26,7 +26,7 @@ test.describe("Email Registration", async () => {
             }),
     });
 
-    test.beforeEach(async ({ page }) => {
+    test.beforeEach(async ({ homeserver, page }) => {
         await page.goto("/#/register");
     });
 
