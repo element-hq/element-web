@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { Page, Request } from "@playwright/test";
-import { GenericContainer, StartedTestContainer } from "testcontainers";
+import { GenericContainer, StartedTestContainer, Wait } from "testcontainers";
 
 import { test as base, expect } from "../../element-web-test";
 import type { ElementAppPage } from "../../pages/ElementAppPage";
@@ -23,9 +23,10 @@ const test = base.extend<{
             .withNetwork(network)
             .withExposedPorts(8008)
             .withLogConsumer(logger.getConsumer("sliding-sync-proxy"))
+            .withWaitStrategy(Wait.forHttp("/client/server.json", 8008))
             .withEnvironment({
                 SYNCV3_SECRET: "bwahahaha",
-                SYNCV3_DB: `user=postgres dbname=postgres password=${postgres.getPassword()} host=postgres sslmode=disable`,
+                SYNCV3_DB: `user=${postgres.getUsername()} dbname=postgres password=${postgres.getPassword()} host=postgres sslmode=disable`,
                 SYNCV3_SERVER: `http://homeserver:8008`,
             })
             .start();

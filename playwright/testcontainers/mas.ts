@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { GenericContainer, StartedTestContainer, Wait } from "testcontainers";
+import { StartedPostgreSqlContainer } from "@testcontainers/postgresql";
 import * as YAML from "yaml";
 
 import { getFreePort } from "../plugins/utils/port.ts";
@@ -54,8 +55,7 @@ const DEFAULT_CONFIG = {
                 ],
                 binds: [
                     {
-                        host: "localhost",
-                        port: 8081,
+                        address: "[::]:8081",
                     },
                 ],
                 proxy_protocol: false,
@@ -167,12 +167,16 @@ const DEFAULT_CONFIG = {
 export class MatrixAuthenticationServiceContainer extends GenericContainer {
     private config: typeof DEFAULT_CONFIG;
 
-    constructor() {
+    constructor(db: StartedPostgreSqlContainer) {
         super("ghcr.io/matrix-org/matrix-authentication-service:0.8.0");
 
         this.config = deepCopy(DEFAULT_CONFIG);
+        this.config.database.username = db.getUsername();
+        this.config.database.password = db.getPassword();
 
-        this.withWaitStrategy(Wait.forHttp("/health", 8081)).withCommand(["server", "--config", "/config/config.yaml"]);
+        this.withExposedPorts(8080, 8081)
+            .withWaitStrategy(Wait.forHttp("/health", 8081))
+            .withCommand(["server", "--config", "/config/config.yaml"]);
     }
 
     public withConfig(config: object): this {
