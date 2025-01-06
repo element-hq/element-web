@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { TestInfo } from "@playwright/test";
 import { Readable } from "stream";
+import stripAnsi from "strip-ansi";
 
 export class ContainerLogger {
     private logs: Record<string, string> = {};
@@ -27,7 +28,7 @@ export class ContainerLogger {
         if (testInfo.status !== "passed") {
             for (const container in this.logs) {
                 await testInfo.attach(container, {
-                    body: this.logs[container],
+                    body: stripAnsi(this.logs[container]),
                     contentType: "text/plain",
                 });
             }
