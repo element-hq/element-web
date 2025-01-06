@@ -44,8 +44,9 @@ export function EncryptionUserSettingsTab(): JSX.Element {
         case "main":
             content = (
                 <RecoveryPanel
-                    onChangingRecoveryKeyClick={() => setState("change_recovery_key")}
-                    onSetUpRecoveryClick={() => setState("set_recovery_key")}
+                    onChangeRecoveryKeyClick={(setupNewKey) =>
+                        setupNewKey ? setState("set_recovery_key") : setState("change_recovery_key")
+                    }
                 />
             );
             break;

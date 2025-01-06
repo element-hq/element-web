@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { JSX, MouseEventHandler, useCallback, useEffect, useState } from "react";
+import React, { JSX, useCallback, useEffect, useState } from "react";
 import { Button, InlineSpinner } from "@vector-im/compound-web";
 import KeyIcon from "@vector-im/compound-design-tokens/assets/web/icons/key";
 
@@ -27,19 +27,15 @@ type State = "loading" | "missing_backup" | "secrets_not_cached" | "good";
 
 interface RecoveryPanelProps {
     /**
-     * Callback for when the user clicks the button to set up their recovery key.
+     * Callback for when the user wants to set up or change their recovery key.
      */
-    onSetUpRecoveryClick: MouseEventHandler<HTMLButtonElement>;
-    /**
-     * Callback for when the user clicks the button to change their recovery key.
-     */
-    onChangingRecoveryKeyClick: MouseEventHandler<HTMLButtonElement>;
+    onChangeRecoveryKeyClick: (setupNewKey: boolean) => void;
 }
 
 /**
  * This component allows the user to set up or change their recovery key.
  */
-export function RecoveryPanel({ onSetUpRecoveryClick, onChangingRecoveryKeyClick }: RecoveryPanelProps): JSX.Element {
+export function RecoveryPanel({ onChangeRecoveryKeyClick }: RecoveryPanelProps): JSX.Element {
     const [state, setState] = useState<State>("loading");
     const isMissingBackup = state === "missing_backup";
 
@@ -71,7 +67,7 @@ export function RecoveryPanel({ onSetUpRecoveryClick, onChangingRecoveryKeyClick
             break;
         case "missing_backup":
             content = (
-                <Button size="sm" kind="primary" Icon={KeyIcon} onClick={onSetUpRecoveryClick}>
+                <Button size="sm" kind="primary" Icon={KeyIcon} onClick={() => onChangeRecoveryKeyClick(true)}>
                     {_t("settings|encryption|recovery|set_up_recovery")}
                 </Button>
             );
@@ -90,7 +86,7 @@ export function RecoveryPanel({ onSetUpRecoveryClick, onChangingRecoveryKeyClick
             break;
         case "good":
             content = (
-                <Button size="sm" kind="secondary" Icon={KeyIcon} onClick={onChangingRecoveryKeyClick}>
+                <Button size="sm" kind="secondary" Icon={KeyIcon} onClick={() => onChangeRecoveryKeyClick(false)}>
                     {_t("settings|encryption|recovery|change_recovery_key")}
                 </Button>
             );

@@ -29,13 +29,11 @@ describe("<RecoveryPanel />", () => {
         mocked(accessSecretStorage).mockClear().mockResolvedValue();
     });
 
-    function renderRecoverPanel(
-        props = {
-            onSetUpRecoveryClick: jest.fn(),
-            onChangingRecoveryKeyClick: jest.fn(),
-        },
-    ) {
-        return render(<RecoveryPanel {...props} />, withClientContextRenderOptions(matrixClient));
+    function renderRecoverPanel(onChangeRecoveryKeyClick = jest.fn()) {
+        return render(
+            <RecoveryPanel onChangeRecoveryKeyClick={onChangeRecoveryKeyClick} />,
+            withClientContextRenderOptions(matrixClient),
+        );
     }
 
     it("should be in loading state when checking backup and the cached keys", () => {
@@ -51,14 +49,14 @@ describe("<RecoveryPanel />", () => {
     it("should ask to set up a recovery key when there is no key backup", async () => {
         const user = userEvent.setup();
 
-        const onSetUpRecoveryClick = jest.fn();
-        const { asFragment } = renderRecoverPanel({ onSetUpRecoveryClick, onChangingRecoveryKeyClick: jest.fn() });
+        const onChangeRecoveryKeyClick = jest.fn();
+        const { asFragment } = renderRecoverPanel(onChangeRecoveryKeyClick);
 
         await waitFor(() => screen.getByRole("button", { name: "Set up recovery" }));
         expect(asFragment()).toMatchSnapshot();
 
         await user.click(screen.getByRole("button", { name: "Set up recovery" }));
-        expect(onSetUpRecoveryClick).toHaveBeenCalled();
+        expect(onChangeRecoveryKeyClick).toHaveBeenCalledWith(true);
     });
 
     it("should ask to enter the recovery key when secrets are not cached", async () => {
@@ -86,12 +84,12 @@ describe("<RecoveryPanel />", () => {
         });
         const user = userEvent.setup();
 
-        const onChangingRecoveryKeyClick = jest.fn();
-        const { asFragment } = renderRecoverPanel({ onSetUpRecoveryClick: jest.fn(), onChangingRecoveryKeyClick });
+        const onChangeRecoveryKeyClick = jest.fn();
+        const { asFragment } = renderRecoverPanel(onChangeRecoveryKeyClick);
         await waitFor(() => screen.getByRole("button", { name: "Change recovery key" }));
         expect(asFragment()).toMatchSnapshot();
 
         await user.click(screen.getByRole("button", { name: "Change recovery key" }));
-        expect(onChangingRecoveryKeyClick).toHaveBeenCalled();
+        expect(onChangeRecoveryKeyClick).toHaveBeenCalledWith(false);
     });
 });
