@@ -125,6 +125,7 @@ passwords:
     schemes:
         - version: 1
           algorithm: argon2id
+    minimum_complexity: 0
 matrix:
     homeserver: localhost
     secret: AnotherRandomSecret
@@ -148,6 +149,8 @@ branding:
     tos_uri: null
     imprint: null
     logo_uri: null
+account:
+    password_registration_enabled: true
 experimental:
     access_token_ttl: 300
     compat_token_ttl: 300

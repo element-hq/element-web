@@ -41,11 +41,11 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
 
         // Assert MAS sees the session as OIDC Native
         const newPage = await newPagePromise;
-        await newPage.getByText("Sessions").click();
+        await newPage.getByText("Devices").click();
         await newPage.getByText(deviceId).click();
         await expect(newPage.getByText("Element")).toBeVisible();
-        await expect(newPage.getByText("oauth2_session:")).toBeVisible();
         await expect(newPage.getByText("http://localhost:8080/")).toBeVisible();
+        await expect(newPage).toHaveURL(/\/oauth2_session/);
         await newPage.close();
 
         // Assert logging out revokes both tokens
