@@ -20,7 +20,7 @@ import { Instance as MailhogInstance } from "../mailhog";
 // Docker tag to use for `ghcr.io/matrix-org/matrix-authentication-service` image.
 const TAG = "0.12.0";
 
-export interface ProxyInstance {
+interface Instance {
     containerId: string;
     postgresId: string;
     configDir: string;
@@ -61,7 +61,7 @@ async function cfgDirFromTemplate(opts: {
 export class MatrixAuthenticationService {
     private readonly masDocker = new Docker();
     private readonly postgresDocker = new PostgresDocker("mas");
-    private instance: ProxyInstance;
+    private instance: Instance;
     public port: number;
 
     constructor(private context: BrowserContext) {}
@@ -71,7 +71,7 @@ export class MatrixAuthenticationService {
         return { port: this.port };
     }
 
-    async start(homeserver: HomeserverInstance, mailhog: MailhogInstance): Promise<ProxyInstance> {
+    async start(homeserver: HomeserverInstance, mailhog: MailhogInstance): Promise<Instance> {
         console.log(new Date(), "Starting mas...");
 
         if (!this.port) await this.prepare();
@@ -89,7 +89,7 @@ export class MatrixAuthenticationService {
             image: "ghcr.io/element-hq/matrix-authentication-service:" + TAG,
             containerName: "react-sdk-playwright-mas",
             params: ["-p", `${port}:8080/tcp`, "-v", `${configDir}:/config`],
-            cmd: ["mas-cli", "server", "--config", "/config/config.yaml"],
+            cmd: ["server", "--config", "/config/config.yaml"],
         });
         console.log(new Date(), "started!");
 
