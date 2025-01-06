@@ -7,14 +7,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { useEffect, useRef } from "react";
+import React, { ComponentProps, JSXElementConstructor, useEffect, useRef } from "react";
 
-type FlexProps = {
+type FlexProps<T extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>> = {
     /**
      * The type of the HTML element
      * @default div
      */
-    as?: string;
+    as?: T;
     /**
      * The CSS class name.
      */
@@ -30,7 +30,7 @@ type FlexProps = {
      */
     direction?: "row" | "column" | "row-reverse" | "column-reverse";
     /**
-     * The alingment of the flex children
+     * The alignment of the flex children
      * @default start
      */
     align?: "start" | "center" | "end" | "baseline" | "stretch";
@@ -48,12 +48,12 @@ type FlexProps = {
      * the on click event callback
      */
     onClick?: (e: React.MouseEvent) => void;
-};
+} & ComponentProps<T>;
 
 /**
  * A flexbox container helper
  */
-export function Flex({
+export function Flex<T extends keyof JSX.IntrinsicElements | JSXElementConstructor<any> = "div">({
     as = "div",
     display = "flex",
     direction = "row",
@@ -63,7 +63,7 @@ export function Flex({
     className,
     children,
     ...props
-}: React.PropsWithChildren<FlexProps>): JSX.Element {
+}: React.PropsWithChildren<FlexProps<T>>): JSX.Element {
     const ref = useRef<HTMLElement>();
 
     useEffect(() => {
