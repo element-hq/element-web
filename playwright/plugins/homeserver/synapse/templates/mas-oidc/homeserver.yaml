@@ -82,8 +82,8 @@ experimental_features:
     msc3861:
         enabled: true
 
-        issuer: http://localhost:%MAS_PORT%/
-        introspection_endpoint: "http://localhost:%MAS_PORT%/oauth2/introspect"
+        issuer: http://host.containers.internal:%MAS_PORT%/
+        introspection_endpoint: http://host.containers.internal:%MAS_PORT%/oauth2/introspect
 
         # Matches the `client_id` in the auth service config
         client_id: 0000000000000000000SYNAPSE
