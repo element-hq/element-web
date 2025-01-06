@@ -20,13 +20,15 @@ const TAG = "develop@sha256:17cc0a301447430624afb860276e5c13270ddeb99a3f6d1c6d51
 
 const DEFAULT_CONFIG = {
     server_name: "localhost",
-    public_baseurl: "",
+    public_baseurl: "", // set by start method
     pid_file: "/homeserver.pid",
     web_client: false,
     soft_file_limit: 0,
+    // Needs to be configured to log to the console like a good docker process
     log_config: "/data/log.config",
     listeners: [
         {
+            // Listener is always port 8008 (configured in the container)
             port: 8008,
             tls: false,
             bind_addresses: ["::"],
@@ -41,6 +43,7 @@ const DEFAULT_CONFIG = {
         },
     ],
     database: {
+        // An sqlite in-memory database is fast & automatically wipes each time
         name: "sqlite3",
         args: {
             database: ":memory:",
@@ -102,11 +105,13 @@ const DEFAULT_CONFIG = {
     enable_registration_without_verification: true,
     disable_msisdn_registration: false,
     registrations_require_3pid: [],
-    registration_shared_secret: "secret",
     enable_metrics: false,
     report_stats: false,
+    // These placeholders will be replaced with values generated at start
+    registration_shared_secret: "secret",
     macaroon_secret_key: "secret",
     form_secret: "secret",
+    // Signing key must be here: it will be generated to this file
     signing_key_path: "/data/localhost.signing.key",
     trusted_key_servers: [],
     password_config: {
@@ -116,6 +121,7 @@ const DEFAULT_CONFIG = {
         session_timeout: "300s",
     },
     background_updates: {
+        // Inhibit background updates as this Synapse isn't long-lived
         min_batch_size: 100000,
         sleep_duration_ms: 100000,
     },
@@ -144,9 +150,9 @@ export class SynapseContainer extends GenericContainer {
 
         const signingKey = randB64Bytes(32);
         this.withWaitStrategy(Wait.forHttp("/health", 8008)).withCopyContentToContainer([
-            { target: "/data/localhost.signing.key", content: `ed25519 x ${signingKey}` },
+            { target: this.config.signing_key_path, content: `ed25519 x ${signingKey}` },
             {
-                target: "/data/log.config",
+                target: this.config.log_config,
                 content: YAML.stringify({
                     version: 1,
                     formatters: {

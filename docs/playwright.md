@@ -227,7 +227,11 @@ has to be disabled in Playwright on Firefox & Webkit to retain routing functiona
 Anything testing VoIP/microphone will need to have `@no-webkit` as fake microphone functionality is not available
 there at this time.
 
-## Colima
+## Supporter container runtimes
+
+We use testcontainers to spin up various instances of Synapse, Matrix Authentication Service, and more.
+It supports Docker out of the box but also has support for Podman, Colima, Rancher, you just need to follow some instructions to achieve it:
+https://node.testcontainers.org/supported-container-runtimes/
 
 If you are running under Colima, you may need to set the environment variable `TMPDIR` to `/tmp/colima` or a path
 within `$HOME` to allow bind mounting temporary directories into the Docker containers.

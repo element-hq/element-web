@@ -144,7 +144,9 @@ const DEFAULT_CONFIG = {
         email_entrypoint: "email/violation",
         data: {
             client_registration: {
+                // allow non-SSL and localhost URIs
                 allow_insecure_uris: true,
+                // EW doesn't have contacts at this time
                 allow_missing_contacts: true,
             },
         },
