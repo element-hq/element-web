@@ -6,6 +6,7 @@
  */
 
 import { GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
+import { Page } from "@playwright/test";
 
 import { test, expect } from ".";
 import {
@@ -114,7 +115,7 @@ test.describe("Recovery section in Encryption tab", () => {
         async ({ page, app, util }) => {
             await verifySession(app, "new passphrase");
             // We need to delete the cached secrets
-            await util.deleteCachedSecrets();
+            await deleteCachedSecrets(page);
 
             await util.openEncryptionTab();
             // We ask the user to enter the recovery key
@@ -138,3 +139,25 @@ test.describe("Recovery section in Encryption tab", () => {
         },
     );
 });
+
+/**
+ * Remove the cached secrets from the indexedDB
+ * This is a workaround to simulate the case where the secrets are not cached.
+ */
+async function deleteCachedSecrets(page: Page) {
+    await page.evaluate(async () => {
+        const removeCachedSecrets = new Promise((resolve) => {
+            const request = window.indexedDB.open("matrix-js-sdk::matrix-sdk-crypto");
+            request.onsuccess = async (event: Event & { target: { result: IDBDatabase } }) => {
+                const db = event.target.result;
+                const request = db.transaction("core", "readwrite").objectStore("core").delete("private_identity");
+                request.onsuccess = () => {
+                    db.close();
+                    resolve(undefined);
+                };
+            };
+        });
+        await removeCachedSecrets;
+    });
+    await page.reload();
+}

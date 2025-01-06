@@ -94,25 +94,4 @@ class Helpers {
         await dialog.getByRole("button", { name: "Finish set up" }).click();
         await expect(dialog).toMatchScreenshot("default-recovery.png");
     }
-
-    /**
-     * Remove the cached secrets from the indexedDB
-     */
-    async deleteCachedSecrets() {
-        await this.page.evaluate(async () => {
-            const removeCachedSecrets = new Promise((resolve) => {
-                const request = window.indexedDB.open("matrix-js-sdk::matrix-sdk-crypto");
-                request.onsuccess = async (event: Event & { target: { result: IDBDatabase } }) => {
-                    const db = event.target.result;
-                    const request = db.transaction("core", "readwrite").objectStore("core").delete("private_identity");
-                    request.onsuccess = () => {
-                        db.close();
-                        resolve(undefined);
-                    };
-                };
-            });
-            await removeCachedSecrets;
-        });
-        await this.page.reload();
-    }
 }
