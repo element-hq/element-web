@@ -1579,14 +1579,14 @@
   integrity sha512-kym7SodPp8/wloecOpcmSnWJsK7M0E5Wg8UcFA+uO4B9s5d0ywXOEro/8HM9x0rW+TljRzul/14UYz3TleT3ig==
 
 "@fontsource/inconsolata@^5":
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/@fontsource/inconsolata/-/inconsolata-5.1.0.tgz#f6a76680173336d02d2ce4009699821a6be239ce"
-  integrity sha512-vYPdG3R46MhK+99De8e8MMyNad5BAb1oTnHMpojlctZyWJIcin8bKHFPUpQSNRhZ4HQL/+DCW+RTiG2RbnweTw==
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/@fontsource/inconsolata/-/inconsolata-5.1.1.tgz#bc5cc74d04dee8b2cb4e706cc33ac3dc50100191"
+  integrity sha512-jLLMagEJURTae5J30gehIsXRv96vjQ0XlALGxZC7DERWPqsJTa0oSsZR8k6IJfizU4ZeRl/aKWpZca2Lo3TvSg==
 
 "@fontsource/inter@^5":
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/@fontsource/inter/-/inter-5.1.0.tgz#ab629b2c662457022d2d6a29854b8dc8ba538c47"
-  integrity sha512-zKZR3kf1G0noIes1frLfOHP5EXVVm0M7sV/l9f/AaYf+M/DId35FO4LkigWjqWYjTJZGgplhdv4cB+ssvCqr5A==
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/@fontsource/inter/-/inter-5.1.1.tgz#401803b6ac4c877f5be94088aa89147ed5a2bd85"
+  integrity sha512-weN3E+rq0Xb3Z93VHJ+Rc7WOQX9ETJPTAJ+gDcaMHtjft67L58sfS65rAjC5tZUXQ2FdZ/V1/sSzCwZ6v05kJw==
 
 "@formatjs/ecma402-abstract@2.3.2":
   version "2.3.2"
