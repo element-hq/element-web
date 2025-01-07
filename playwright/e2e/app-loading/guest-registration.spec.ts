@@ -14,13 +14,6 @@ import { expect, test } from "../../element-web-test";
 
 test.use({
     startHomeserverOpts: "guest-enabled",
-    config: async ({ homeserver }, use) => {
-        await use({
-            default_server_config: {
-                "m.homeserver": { base_url: homeserver.config.baseUrl },
-            },
-        });
-    },
 });
 
 test("Shows the welcome page by default", async ({ page }) => {

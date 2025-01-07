@@ -22,7 +22,7 @@ export class TestClientServerAPI {
     ) {}
 
     public async getCurrentBackupInfo(): Promise<KeyBackupInfo | null> {
-        const res = await this.request.get(`${this.homeserver.config.baseUrl}/_matrix/client/v3/room_keys/version`, {
+        const res = await this.request.get(`${this.homeserver.baseUrl}/_matrix/client/v3/room_keys/version`, {
             headers: { Authorization: `Bearer ${this.accessToken}` },
         });
 
@@ -35,7 +35,7 @@ export class TestClientServerAPI {
      */
     public async deleteBackupVersion(version: string): Promise<void> {
         const res = await this.request.delete(
-            `${this.homeserver.config.baseUrl}/_matrix/client/v3/room_keys/version/${version}`,
+            `${this.homeserver.baseUrl}/_matrix/client/v3/room_keys/version/${version}`,
             {
                 headers: { Authorization: `Bearer ${this.accessToken}` },
             },

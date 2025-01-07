@@ -29,18 +29,8 @@ import { Webserver } from "./plugins/webserver";
 // See https://playwright.dev/docs/service-workers-experimental#how-to-enable
 process.env["PW_EXPERIMENTAL_SERVICE_WORKER_NETWORK_EVENTS"] = "1";
 
+// This is deliberately quite a minimal config.json, so that we can test that the default settings actually work.
 const CONFIG_JSON: Partial<IConfigOptions> = {
-    // This is deliberately quite a minimal config.json, so that we can test that the default settings
-    // actually work.
-    //
-    // The only thing that we really *need* (otherwise Element refuses to load) is a default homeserver.
-    // We point that to a guaranteed-invalid domain.
-    default_server_config: {
-        "m.homeserver": {
-            base_url: "https://server.invalid",
-        },
-    },
-
     // The default language is set here for test consistency
     setting_defaults: {
         language: "en-GB",
@@ -133,10 +123,19 @@ export const test = base.extend<Fixtures>({
         );
         await use(context);
     },
-    config: CONFIG_JSON,
-    page: async ({ context, page, config, labsFlags }, use) => {
+    config: {}, // We merge this atop the default CONFIG_JSON in the page fixture to make extending it easier
+    page: async ({ homeserver, context, page, config, labsFlags }, use) => {
         await context.route(`http://localhost:8080/config.json*`, async (route) => {
-            const json = { ...CONFIG_JSON, ...config };
+            const json = {
+                ...CONFIG_JSON,
+                ...config,
+                default_server_config: {
+                    "m.homeserver": {
+                        base_url: homeserver.baseUrl,
+                    },
+                    ...config.default_server_config,
+                },
+            };
             json["features"] = {
                 ...json["features"],
                 // Enable the lab features
@@ -220,7 +219,7 @@ export const test = base.extend<Fixtures>({
                 // Ensure the language is set to a consistent value
                 window.localStorage.setItem("mx_local_settings", '{"language":"en"}');
             },
-            { baseUrl: homeserver.config.baseUrl, credentials },
+            { baseUrl: homeserver.baseUrl, credentials },
         );
         await use(page);
     },

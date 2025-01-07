@@ -16,6 +16,15 @@ const email = "user@nowhere.dummy";
 
 test.describe("Forgot Password", () => {
     test.use({
+        config: {
+            // The only thing that we really *need* (otherwise Element refuses to load) is a default homeserver.
+            // We point that to a guaranteed-invalid domain.
+            default_server_config: {
+                "m.homeserver": {
+                    base_url: "https://server.invalid",
+                },
+            },
+        },
         startHomeserverOpts: ({ mailhog }, use) =>
             use({
                 template: "email",
@@ -32,7 +41,7 @@ test.describe("Forgot Password", () => {
         await page.getByRole("link", { name: "Sign in" }).click();
 
         // need to select a homeserver at this stage, before entering the forgot password flow
-        await selectHomeserver(page, homeserver.config.baseUrl);
+        await selectHomeserver(page, homeserver.baseUrl);
 
         await page.getByRole("button", { name: "Forgot password?" }).click();
 
@@ -47,7 +56,7 @@ test.describe("Forgot Password", () => {
         await page.goto("/");
 
         await page.getByRole("link", { name: "Sign in" }).click();
-        await selectHomeserver(page, homeserver.config.baseUrl);
+        await selectHomeserver(page, homeserver.baseUrl);
 
         await page.getByRole("button", { name: "Forgot password?" }).click();
 
