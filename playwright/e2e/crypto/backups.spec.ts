@@ -27,7 +27,6 @@ async function expectBackupVersionToBe(page: Page, version: string) {
 // which is faster but leaves us without crypto set up.
 test.describe("Encryption state after registration", () => {
     test.use(masHomeserver);
-    test.skip(isDendrite, "does not yet support MAS");
 
     test("Key backup is enabled by default", async ({ page, mailhogClient, app }) => {
         await page.goto("/#/login");
@@ -54,7 +53,6 @@ test.describe("Encryption state after registration", () => {
 
 test.describe("Key backup reset from elsewhere", () => {
     test.use(masHomeserver);
-    test.skip(isDendrite, "does not yet support MAS");
 
     test("Key backup is disabled when reset from elsewhere", async ({ page, mailhogClient, request, homeserver }) => {
         const testUsername = "alice";

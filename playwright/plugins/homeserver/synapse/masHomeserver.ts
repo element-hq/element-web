@@ -8,13 +8,15 @@ Please see LICENSE files in the repository root for full details.
 
 import { Fixtures, PlaywrightTestArgs } from "@playwright/test";
 
-import { Services } from "../../../services.ts";
+import { Options, Services } from "../../../services.ts";
 import { Fixtures as BaseFixtures } from "../../../element-web-test.ts";
 import { MatrixAuthenticationServiceContainer } from "../../../testcontainers/mas.ts";
 
-type Fixture = PlaywrightTestArgs & Services & BaseFixtures;
+type Fixture = PlaywrightTestArgs & Services & BaseFixtures & Options;
 export const masHomeserver: Fixtures<Fixture, {}, Fixture> = {
-    mas: async ({ _homeserver: homeserver, logger, network, postgres, mailhog }, use) => {
+    mas: async ({ homeserverType, _homeserver: homeserver, logger, network, postgres, mailhog }, use, testInfo) => {
+        testInfo.skip(homeserverType !== "synapse", "does not yet support MAS");
+
         const config = {
             clients: [
                 {

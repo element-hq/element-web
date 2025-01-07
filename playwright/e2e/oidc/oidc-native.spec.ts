@@ -9,12 +9,10 @@ Please see LICENSE files in the repository root for full details.
 import { test, expect } from "../../element-web-test.ts";
 import { registerAccountMas } from ".";
 import { ElementAppPage } from "../../pages/ElementAppPage.ts";
-import { isDendrite } from "../../plugins/homeserver/dendrite";
 import { masHomeserver } from "../../plugins/homeserver/synapse/masHomeserver.ts";
 
 test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
     test.use(masHomeserver);
-    test.skip(isDendrite, "does not yet support MAS");
     test.slow(); // trace recording takes a while here
 
     test("can register the oauth2 client and an account", async ({ context, page, homeserver, mailhogClient, mas }) => {

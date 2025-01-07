@@ -8,10 +8,11 @@ Please see LICENSE files in the repository root for full details.
 
 import { Fixtures } from "@playwright/test";
 
-import { Services } from "../../../services.ts";
+import { Options, Services } from "../../../services.ts";
 
-export const emailHomeserver: Fixtures<Services, {}, Services> = {
-    _homeserver: async ({ _homeserver: container, mailhog }, use) => {
+export const emailHomeserver: Fixtures<Services & Options, {}, Services & Options> = {
+    _homeserver: async ({ homeserverType, _homeserver: container, mailhog }, use, testInfo) => {
+        testInfo.skip(homeserverType !== "synapse", "does not yet support MAS");
         container.withConfig({
             enable_registration_without_verification: undefined,
             disable_msisdn_registration: undefined,

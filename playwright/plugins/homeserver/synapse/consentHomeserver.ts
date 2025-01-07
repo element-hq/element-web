@@ -8,10 +8,12 @@ Please see LICENSE files in the repository root for full details.
 
 import { Fixtures } from "@playwright/test";
 
-import { Services } from "../../../services.ts";
+import { Options, Services } from "../../../services.ts";
 
-export const consentHomeserver: Fixtures<Services, {}, Services> = {
-    _homeserver: async ({ _homeserver: container, mailhog }, use) => {
+export const consentHomeserver: Fixtures<Services & Options, {}, Services & Options> = {
+    _homeserver: async ({ homeserverType, _homeserver: container, mailhog }, use, testInfo) => {
+        testInfo.skip(homeserverType !== "synapse", "does not yet support MAS");
+
         container
             .withCopyDirectoriesToContainer([
                 { source: "playwright/plugins/homeserver/synapse/res", target: "/data/res" },

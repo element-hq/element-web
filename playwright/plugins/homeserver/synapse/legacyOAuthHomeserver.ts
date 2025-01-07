@@ -9,11 +9,12 @@ Please see LICENSE files in the repository root for full details.
 import { Fixtures } from "@playwright/test";
 import { TestContainers } from "testcontainers";
 
-import { Services } from "../../../services.ts";
+import { Options, Services } from "../../../services.ts";
 import { OAuthServer } from "../../oauth_server";
 
-export const legacyOAuthHomeserver: Fixtures<Services, {}, Services> = {
-    _homeserver: async ({ _homeserver: container }, use) => {
+export const legacyOAuthHomeserver: Fixtures<Services & Options, {}, Services & Options> = {
+    _homeserver: async ({ homeserverType, _homeserver: container }, use, testInfo) => {
+        testInfo.skip(homeserverType !== "synapse", "does not yet support MAS");
         const server = new OAuthServer();
         const port = server.start();
 
