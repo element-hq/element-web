@@ -102,6 +102,7 @@ test.describe("Key backup reset from elsewhere", () => {
 });
 
 test.describe("Backups", () => {
+    test.skip(isDendrite, "Dendrite lacks support for MSC3967 so requires additional auth here");
     test.use({
         displayName: "Hanako",
     });

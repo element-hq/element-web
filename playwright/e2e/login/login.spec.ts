@@ -93,6 +93,7 @@ test.describe("Login", () => {
     });
 
     test.describe("Password login", () => {
+        test.skip(isDendrite, "Dendrite lacks support for MSC3967 so requires additional auth here");
         test.use(consentHomeserver);
 
         let creds: Credentials;

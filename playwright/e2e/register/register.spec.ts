@@ -11,6 +11,7 @@ import { consentHomeserver } from "../../plugins/homeserver/synapse/consentHomes
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 test.describe("Registration", () => {
+    test.skip(isDendrite, "Dendrite lacks support for MSC3967 so requires additional auth here");
     test.use(consentHomeserver);
     test.use({
         config: {
@@ -32,8 +33,6 @@ test.describe("Registration", () => {
         "registers an account and lands on the home screen",
         { tag: "@screenshot" },
         async ({ homeserver, page, checkA11y, crypto }) => {
-            test.skip(isDendrite, "Dendrite lacks support for MSC3967 so requires additional auth here");
-
             await page.getByRole("button", { name: "Edit", exact: true }).click();
             await expect(page.getByRole("button", { name: "Continue", exact: true })).toBeVisible();
 
