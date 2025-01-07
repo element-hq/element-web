@@ -13,58 +13,60 @@ import { selectHomeserver } from "../utils";
 import { Credentials, HomeserverInstance } from "../../plugins/homeserver";
 import { consentHomeserver } from "../../plugins/homeserver/synapse/consentHomeserver.ts";
 
+// This test requires fixed credentials for the device signing keys below to work
+const username = "user1234";
+const password = "p4s5W0rD";
+
 // Pre-generated dummy signing keys to create an account that has signing keys set.
 // Note the signatures are specific to the username and must be valid or the HS will reject the keys.
-function getDeviceSigningKeysBody(credentials: Credentials) {
-    return {
-        master_key: {
-            keys: {
-                "ed25519:6qCouJsi2j7DzOmpxPTBALpvDTqa8p2mjrQR2P8wEbg": "6qCouJsi2j7DzOmpxPTBALpvDTqa8p2mjrQR2P8wEbg",
-            },
-            signatures: {
-                [credentials.userId]: {
-                    "ed25519:6qCouJsi2j7DzOmpxPTBALpvDTqa8p2mjrQR2P8wEbg":
-                        "mvwqsYiGa2gPH6ueJsiJnceHMrZhf1pqIMGxkvKisN3ucz8sU7LwyzndbYaLkUKEDx1JuOKFfZ9Mb3mqc7PMBQ",
-                    "ed25519:SRHVWTNVBH":
-                        "HVGmVIzsJe3d+Un/6S9tXPsU7YA8HjZPdxogVzdjEFIU8OjLyElccvjupow0rVWgkEqU8sO21LIHw9cWRZEmDw",
-                },
-            },
-            usage: ["master"],
-            user_id: credentials.userId,
+const DEVICE_SIGNING_KEYS_BODY = {
+    master_key: {
+        keys: {
+            "ed25519:6qCouJsi2j7DzOmpxPTBALpvDTqa8p2mjrQR2P8wEbg": "6qCouJsi2j7DzOmpxPTBALpvDTqa8p2mjrQR2P8wEbg",
         },
-        self_signing_key: {
-            keys: {
-                "ed25519:eqzRly4S1GvTA36v48hOKokHMtYBLm02zXRgPHue5/8": "eqzRly4S1GvTA36v48hOKokHMtYBLm02zXRgPHue5/8",
+        signatures: {
+            "@user1234:localhost": {
+                "ed25519:6qCouJsi2j7DzOmpxPTBALpvDTqa8p2mjrQR2P8wEbg":
+                    "mvwqsYiGa2gPH6ueJsiJnceHMrZhf1pqIMGxkvKisN3ucz8sU7LwyzndbYaLkUKEDx1JuOKFfZ9Mb3mqc7PMBQ",
+                "ed25519:SRHVWTNVBH":
+                    "HVGmVIzsJe3d+Un/6S9tXPsU7YA8HjZPdxogVzdjEFIU8OjLyElccvjupow0rVWgkEqU8sO21LIHw9cWRZEmDw",
             },
-            signatures: {
-                [credentials.userId]: {
-                    "ed25519:6qCouJsi2j7DzOmpxPTBALpvDTqa8p2mjrQR2P8wEbg":
-                        "M2rt5xs+23egbVUwUcZuU7pMpn0chBNC5rpdyZGayfU3FDlx1DbopbakIcl5v4uOSGMbqUotyzkE6CchB+dgDw",
-                },
-            },
-            usage: ["self_signing"],
-            user_id: credentials.userId,
         },
-        user_signing_key: {
-            keys: {
-                "ed25519:h6C7sonjKSSa/VMvmpmFnwMA02H2rKIMSYZ2ddwgJn4": "h6C7sonjKSSa/VMvmpmFnwMA02H2rKIMSYZ2ddwgJn4",
-            },
-            signatures: {
-                [credentials.userId]: {
-                    "ed25519:6qCouJsi2j7DzOmpxPTBALpvDTqa8p2mjrQR2P8wEbg":
-                        "5ZMJ7SG2qr76vU2nITKap88AxLZ/RZQmF/mBcAcVZ9Bknvos3WQp8qN9jKuiqOHCq/XpPORA6XBmiDIyPqTFAA",
-                },
-            },
-            usage: ["user_signing"],
-            user_id: credentials.userId,
+        usage: ["master"],
+        user_id: "@user1234:localhost",
+    },
+    self_signing_key: {
+        keys: {
+            "ed25519:eqzRly4S1GvTA36v48hOKokHMtYBLm02zXRgPHue5/8": "eqzRly4S1GvTA36v48hOKokHMtYBLm02zXRgPHue5/8",
         },
-        auth: {
-            type: "m.login.password",
-            identifier: { type: "m.id.user", user: credentials.userId },
-            password: credentials.password,
+        signatures: {
+            "@user1234:localhost": {
+                "ed25519:6qCouJsi2j7DzOmpxPTBALpvDTqa8p2mjrQR2P8wEbg":
+                    "M2rt5xs+23egbVUwUcZuU7pMpn0chBNC5rpdyZGayfU3FDlx1DbopbakIcl5v4uOSGMbqUotyzkE6CchB+dgDw",
+            },
         },
-    };
-}
+        usage: ["self_signing"],
+        user_id: "@user1234:localhost",
+    },
+    user_signing_key: {
+        keys: {
+            "ed25519:h6C7sonjKSSa/VMvmpmFnwMA02H2rKIMSYZ2ddwgJn4": "h6C7sonjKSSa/VMvmpmFnwMA02H2rKIMSYZ2ddwgJn4",
+        },
+        signatures: {
+            "@user1234:localhost": {
+                "ed25519:6qCouJsi2j7DzOmpxPTBALpvDTqa8p2mjrQR2P8wEbg":
+                    "5ZMJ7SG2qr76vU2nITKap88AxLZ/RZQmF/mBcAcVZ9Bknvos3WQp8qN9jKuiqOHCq/XpPORA6XBmiDIyPqTFAA",
+            },
+        },
+        usage: ["user_signing"],
+        user_id: "@user1234:localhost",
+    },
+    auth: {
+        type: "m.login.password",
+        identifier: { type: "m.id.user", user: "@user1234:localhost" },
+        password: password,
+    },
+};
 
 async function login(page: Page, homeserver: HomeserverInstance, credentials: Credentials) {
     await page.getByRole("link", { name: "Sign in" }).click();
@@ -85,6 +87,16 @@ test.use({
                 base_url: "https://server.invalid",
             },
         },
+    },
+    credentials: async ({ context, homeserver }, use) => {
+        const displayName = "Dave";
+        const credentials = await homeserver.registerUser(username, password, displayName);
+        console.log(`Registered test user @user:localhost with displayname ${displayName}`);
+
+        await use({
+            ...credentials,
+            displayName,
+        });
     },
 });
 
@@ -149,7 +161,7 @@ test.describe("Login", () => {
             }) => {
                 const res = await request.post(`${homeserver.baseUrl}/_matrix/client/v3/keys/device_signing/upload`, {
                     headers: { Authorization: `Bearer ${credentials.accessToken}` },
-                    data: getDeviceSigningKeysBody(credentials),
+                    data: DEVICE_SIGNING_KEYS_BODY,
                 });
                 if (res.status() / 100 !== 2) {
                     console.log("Uploading dummy keys failed", await res.json());
@@ -181,7 +193,7 @@ test.describe("Login", () => {
                         `${homeserver.baseUrl}/_matrix/client/v3/keys/device_signing/upload`,
                         {
                             headers: { Authorization: `Bearer ${credentials.accessToken}` },
-                            data: getDeviceSigningKeysBody(credentials),
+                            data: DEVICE_SIGNING_KEYS_BODY,
                         },
                     );
                     if (res.status() / 100 !== 2) {
@@ -211,12 +223,12 @@ test.describe("Login", () => {
                     request,
                     credentials,
                 }) => {
-                    console.log(`uid ${credentials.userId} body`, getDeviceSigningKeysBody(credentials));
+                    console.log(`uid ${credentials.userId} body`, DEVICE_SIGNING_KEYS_BODY);
                     const res = await request.post(
                         `${homeserver.baseUrl}/_matrix/client/v3/keys/device_signing/upload`,
                         {
                             headers: { Authorization: `Bearer ${credentials.accessToken}` },
-                            data: getDeviceSigningKeysBody(credentials),
+                            data: DEVICE_SIGNING_KEYS_BODY,
                         },
                     );
                     if (res.status() / 100 !== 2) {
@@ -227,7 +239,7 @@ test.describe("Login", () => {
                     await page.goto("/");
                     await login(page, homeserver, credentials);
 
-                    const h1 = await page.getByRole("heading", { name: "Verify this device", level: 1 });
+                    const h1 = page.getByRole("heading", { name: "Verify this device", level: 1 });
                     await expect(h1).toBeVisible();
 
                     await expect(h1.locator(".mx_CompleteSecurity_skip")).toHaveCount(0);

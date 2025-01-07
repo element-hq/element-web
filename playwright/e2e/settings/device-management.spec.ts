@@ -20,6 +20,7 @@ test.describe("Device manager", () => {
         }
     });
 
+    // How does this test not require auth on Synapse?
     test("should display sessions", async ({ page, app }) => {
         await app.settings.openUserSettings("Sessions");
         const tab = page.locator(".mx_SettingsTab");
