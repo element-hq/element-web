@@ -114,14 +114,20 @@ jobs:
                     - Chrome
                     - Firefox
                     - WebKit
+                    - Dendrite
+                    - Pinecone
                 isCron:
                     - ${{ github.event_name == 'schedule' }}
-                # Skip the Firefox & Safari runs unless this was a cron trigger
-                exclude:
-                    - isCron: false
-                      project: Firefox
-                    - isCron: false
-                      project: WebKit
+                # Skip the non-Chrome runs unless this was a cron trigger
+        #                exclude:
+        #                    - isCron: false
+        #                      project: Firefox
+        #                    - isCron: false
+        #                      project: WebKit
+        #                    - isCron: false
+        #                      project: Dendrite
+        #                    - isCron: false
+        #                      project: Pinecone
         steps:
             - uses: actions/checkout@v4
               with:

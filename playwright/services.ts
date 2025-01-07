@@ -14,6 +14,8 @@ import { SynapseConfigOptions, SynapseContainer } from "./testcontainers/synapse
 import { ContainerLogger } from "./testcontainers/utils.ts";
 import { StartedMatrixAuthenticationServiceContainer } from "./testcontainers/mas.ts";
 import { HomeserverContainer, StartedHomeserverContainer } from "./testcontainers/HomeserverContainer.ts";
+import { DendriteContainer, PineconeContainer } from "./testcontainers/dendrite.ts";
+import { HomeserverType } from "./plugins/homeserver";
 
 export interface Services {
     logger: ContainerLogger;
@@ -24,13 +26,17 @@ export interface Services {
     mailhog: StartedTestContainer;
     mailhogClient: mailhog.API;
 
-    synapseConfigOptions: SynapseConfigOptions;
     _homeserver: HomeserverContainer<any>;
     homeserver: StartedHomeserverContainer;
     mas?: StartedMatrixAuthenticationServiceContainer;
 }
 
-export const test = base.extend<Services>({
+export interface Options {
+    synapseConfigOptions: SynapseConfigOptions;
+    homeserverType: HomeserverType;
+}
+
+export const test = base.extend<Services & Options>({
     // eslint-disable-next-line no-empty-pattern
     logger: async ({}, use, testInfo) => {
         const logger = new ContainerLogger();
@@ -85,16 +91,40 @@ export const test = base.extend<Services>({
     },
 
     synapseConfigOptions: [{}, { option: true }],
-    _homeserver: async ({ request }, use) => {
-        const container = new SynapseContainer(request);
+    homeserverType: ["synapse", { option: true }],
+    _homeserver: async ({ homeserverType, request }, use) => {
+        let container: HomeserverContainer<any>;
+        switch (homeserverType) {
+            case "synapse":
+                container = new SynapseContainer(request);
+                break;
+            case "dendrite":
+                container = new DendriteContainer(request);
+                break;
+            case "pinecone":
+                container = new PineconeContainer(request);
+                break;
+        }
+
         await use(container);
     },
-    homeserver: async ({ logger, network, _homeserver: homeserver, synapseConfigOptions, mas }, use) => {
+    homeserver: async (
+        { homeserverType, logger, network, _homeserver: homeserver, synapseConfigOptions, mas },
+        use,
+    ) => {
+        test.skip(
+            !(homeserver instanceof SynapseContainer) && Object.keys(synapseConfigOptions).length > 0,
+            `Test specifies Synapse config options so is unsupported with ${homeserverType}`,
+        );
+
+        if (homeserver instanceof SynapseContainer) {
+            homeserver.withConfig(synapseConfigOptions);
+        }
+
         const container = await homeserver
             .withNetwork(network)
             .withNetworkAliases("homeserver")
-            .withLogConsumer(logger.getConsumer("synapse"))
-            .withConfig(synapseConfigOptions)
+            .withLogConsumer(logger.getConsumer(homeserverType))
             .start();
 
         await use(container);

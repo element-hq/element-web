@@ -23,7 +23,7 @@ async function expectBackupVersionToBe(page: Page, version: string) {
 }
 
 // These tests register an account with MAS because then we go through the "normal" registration flow
-// and crypto gets set up. Using the 'user' fixture create a a user an synthesizes an existing login,
+// and crypto gets set up. Using the 'user' fixture create a user and synthesizes an existing login,
 // which is faster but leaves us without crypto set up.
 test.describe("Encryption state after registration", () => {
     test.use(masHomeserver);

@@ -42,3 +42,5 @@ export interface Credentials {
     password: string | null; // null for password-less users
     displayName?: string;
 }
+
+export type HomeserverType = "synapse" | "dendrite" | "pinecone";
