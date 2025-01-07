@@ -11,7 +11,7 @@ Please see LICENSE files in the repository root for full details.
  * Only intended to run from within GitHub Actions
  */
 
-import type { Reporter, TestCase } from "@playwright/test/reporter";
+import type { Reporter, Suite, TestCase, FullConfig } from "@playwright/test/reporter";
 
 const REPO = "element-hq/element-web";
 const LABEL = "Z-Flaky-Test";
@@ -26,8 +26,16 @@ type PaginationLinks = {
 
 class FlakyReporter implements Reporter {
     private flakes = new Set<string>();
+    private ignoreSuite = false;
+
+    public onBegin(config: FullConfig, suite: Suite) {
+        const projectName = suite.project().name;
+        // Ignores flakes on Dendrite and Pinecone as they have their own flakes we do not track
+        this.ignoreSuite = ["Dendrite", "Pinecone"].includes(projectName);
+    }
 
     public onTestEnd(test: TestCase): void {
+        if (this.ignoreSuite) return;
         const title = `${test.location.file.split("playwright/e2e/")[1]}: ${test.title}`;
         if (test.outcome() === "flaky") {
             this.flakes.add(title);

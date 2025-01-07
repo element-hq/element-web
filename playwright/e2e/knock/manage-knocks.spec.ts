@@ -10,8 +10,10 @@ Please see LICENSE files in the repository root for full details.
 
 import { test, expect } from "../../element-web-test";
 import { waitForRoom } from "../utils";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 test.describe("Manage Knocks", () => {
+    test.skip(isDendrite, "Dendrite does not have support for knocking");
     test.use({
         displayName: "Alice",
         labsFlags: ["feature_ask_to_join"],

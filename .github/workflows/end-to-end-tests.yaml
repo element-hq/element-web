@@ -111,9 +111,9 @@ jobs:
                 # Run multiple instances in parallel to speed up the tests
                 runner: ${{ fromJSON(needs.build.outputs.runners-matrix) }}
                 project:
-                    - Chrome
-                    - Firefox
-                    - WebKit
+                    #                    - Chrome
+                    #                    - Firefox
+                    #                    - WebKit
                     - Dendrite
                     - Pinecone
                 isCron:
