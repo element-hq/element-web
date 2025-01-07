@@ -32,7 +32,7 @@ const SOCIALS = [
     {
         name: "Twitter",
         img: require("../../../../res/img/social/twitter-2.png"),
-        url: (url: string) => `https://twitter.com/home?status=${url}`,
+        url: (url: string) => `https://twitter.com/intent/tweet?text=${url}`,
     },
     {
         name: "LinkedIn",
