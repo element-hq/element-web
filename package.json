@@ -71,6 +71,8 @@
         "update:jitsi": "curl -s https://meet.element.io/libs/external_api.min.js > ./res/jitsi_external_api.min.js"
     },
     "resolutions": {
+        "@types/react": "18.3.18",
+        "@types/react-dom": "18.3.5",
         "oidc-client-ts": "3.1.0",
         "jwt-decode": "4.0.0",
         "caniuse-lite": "1.0.30001684",
