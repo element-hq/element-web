@@ -137,7 +137,7 @@ export const test = base.extend<Fixtures>({
     },
 
     displayName: undefined,
-    credentials: async ({ homeserver, displayName: testDisplayName }, use, testInfo) => {
+    credentials: async ({ context, homeserver, displayName: testDisplayName }, use, testInfo) => {
         const names = ["Alice", "Bob", "Charlie", "Daniel", "Eve", "Frank", "Grace", "Hannah", "Isaac", "Judy"];
         const password = _.uniqueId("password_");
         const displayName = testDisplayName ?? _.sample(names)!;
