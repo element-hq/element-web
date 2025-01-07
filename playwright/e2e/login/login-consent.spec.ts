@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -11,6 +11,7 @@ import { Page } from "playwright-core";
 import { expect, test } from "../../element-web-test";
 import { selectHomeserver } from "../utils";
 import { Credentials, HomeserverInstance } from "../../plugins/homeserver";
+import { consentHomeserver } from "../../plugins/homeserver/synapse/consentHomeserver.ts";
 
 const username = "user1234";
 const password = "p4s5W0rD";
@@ -68,14 +69,25 @@ const DEVICE_SIGNING_KEYS_BODY = {
 
 async function login(page: Page, homeserver: HomeserverInstance) {
     await page.getByRole("link", { name: "Sign in" }).click();
-    await selectHomeserver(page, homeserver.config.baseUrl);
+    await selectHomeserver(page, homeserver.baseUrl);
 
     await page.getByRole("textbox", { name: "Username" }).fill(username);
     await page.getByPlaceholder("Password").fill(password);
     await page.getByRole("button", { name: "Sign in" }).click();
 }
 
-test.use({ startHomeserverOpts: "consent" });
+test.use(consentHomeserver);
+test.use({
+    config: {
+        // The only thing that we really *need* (otherwise Element refuses to load) is a default homeserver.
+        // We point that to a guaranteed-invalid domain.
+        default_server_config: {
+            "m.homeserver": {
+                base_url: "https://server.invalid",
+            },
+        },
+    },
+});
 
 test.describe("Login", () => {
     test.describe("Password login", () => {
@@ -99,7 +111,7 @@ test.describe("Login", () => {
             await page.getByRole("link", { name: "Sign in" }).click();
 
             // first pick the homeserver, as otherwise the user picker won't be visible
-            await selectHomeserver(page, homeserver.config.baseUrl);
+            await selectHomeserver(page, homeserver.baseUrl);
 
             await page.getByRole("button", { name: "Edit" }).click();
 
@@ -112,7 +124,7 @@ test.describe("Login", () => {
             await expect(page.locator(".mx_ServerPicker_server")).toHaveText("server.invalid");
 
             // switch back to the custom homeserver
-            await selectHomeserver(page, homeserver.config.baseUrl);
+            await selectHomeserver(page, homeserver.baseUrl);
 
             await expect(page.getByRole("textbox", { name: "Username" })).toBeVisible();
             // Disabled because flaky - see https://github.com/vector-im/element-web/issues/24688
@@ -140,10 +152,10 @@ test.describe("Login", () => {
                 homeserver,
                 request,
             }) => {
-                const res = await request.post(
-                    `${homeserver.config.baseUrl}/_matrix/client/v3/keys/device_signing/upload`,
-                    { headers: { Authorization: `Bearer ${creds.accessToken}` }, data: DEVICE_SIGNING_KEYS_BODY },
-                );
+                const res = await request.post(`${homeserver.baseUrl}/_matrix/client/v3/keys/device_signing/upload`, {
+                    headers: { Authorization: `Bearer ${creds.accessToken}` },
+                    data: DEVICE_SIGNING_KEYS_BODY,
+                });
                 if (res.status() / 100 !== 2) {
                     console.log("Uploading dummy keys failed", await res.json());
                 }
@@ -170,7 +182,7 @@ test.describe("Login", () => {
                     request,
                 }) => {
                     const res = await request.post(
-                        `${homeserver.config.baseUrl}/_matrix/client/v3/keys/device_signing/upload`,
+                        `${homeserver.baseUrl}/_matrix/client/v3/keys/device_signing/upload`,
                         { headers: { Authorization: `Bearer ${creds.accessToken}` }, data: DEVICE_SIGNING_KEYS_BODY },
                     );
                     if (res.status() / 100 !== 2) {
@@ -201,7 +213,7 @@ test.describe("Login", () => {
                 }) => {
                     console.log(`uid ${creds.userId} body`, DEVICE_SIGNING_KEYS_BODY);
                     const res = await request.post(
-                        `${homeserver.config.baseUrl}/_matrix/client/v3/keys/device_signing/upload`,
+                        `${homeserver.baseUrl}/_matrix/client/v3/keys/device_signing/upload`,
                         { headers: { Authorization: `Bearer ${creds.accessToken}` }, data: DEVICE_SIGNING_KEYS_BODY },
                     );
                     if (res.status() / 100 !== 2) {

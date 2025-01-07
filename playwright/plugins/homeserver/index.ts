@@ -2,35 +2,12 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import type { APIRequestContext } from "@playwright/test";
-import { Synapse } from "./synapse";
-import { Dendrite, Pinecone } from "./dendrite";
-
-export interface HomeserverConfig {
-    readonly configDir: string;
-    readonly baseUrl: string;
-    readonly port: number;
-    readonly registrationSecret: string;
-    readonly dockerUrl: string;
-}
-
 export interface HomeserverInstance {
-    readonly config: HomeserverConfig;
-
-    /**
-     * Update the request context for this homeserver instance.
-     * @param request
-     */
-    setRequest(request: APIRequestContext): void;
-
-    /**
-     * @returns A list of paths relative to the cwd for logfiles generated during this test run.
-     */
-    getLogs(): Promise<string[]>;
+    readonly baseUrl: string;
 
     /**
      * Register a user on the given Homeserver using the shared registration secret.
@@ -57,25 +34,6 @@ export interface HomeserverInstance {
     setThreepid(userId: string, medium: string, address: string): Promise<void>;
 }
 
-export interface StartHomeserverOpts {
-    /** path to template within playwright/plugins/{homeserver}docker/template/ directory. */
-    template: string;
-
-    /** Port of an OAuth server to configure the homeserver to use */
-    oAuthServerPort?: number;
-
-    /** Additional variables to inject into the configuration template **/
-    variables?: Record<string, string | number>;
-}
-
-export interface Homeserver {
-    start(opts: StartHomeserverOpts): Promise<HomeserverInstance>;
-    /**
-     * Stop this test homeserver instance.
-     */
-    stop(): Promise<void>;
-}
-
 export interface Credentials {
     accessToken: string;
     userId: string;
@@ -83,21 +41,4 @@ export interface Credentials {
     homeServer: string;
     password: string | null; // null for password-less users
     displayName?: string;
-}
-
-export function getHomeserver(request?: APIRequestContext): Homeserver {
-    let server: Homeserver;
-    const homeserverName = process.env["PLAYWRIGHT_HOMESERVER"];
-    switch (homeserverName) {
-        case "dendrite":
-            server = new Dendrite(request);
-            break;
-        case "pinecone":
-            server = new Pinecone(request);
-            break;
-        default:
-            server = new Synapse(request);
-    }
-
-    return server;
 }

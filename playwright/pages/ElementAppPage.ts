@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -35,6 +35,10 @@ export class ElementAppPage {
     public get timeline(): Timeline {
         if (!this._timeline) this._timeline = new Timeline(this.page);
         return this._timeline;
+    }
+
+    public async cleanup() {
+        await this._client?.cleanup();
     }
 
     /**

@@ -7,9 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { expect, test } from "../../element-web-test";
+import { consentHomeserver } from "../../plugins/homeserver/synapse/consentHomeserver.ts";
 
+test.use(consentHomeserver);
 test.use({
-    startHomeserverOpts: "consent",
     config: {
         // We redirect to decoder-ring because it's a predictable page that isn't Element itself.
         // We could use example.org, matrix.org, or something else, however this puts dependency of external

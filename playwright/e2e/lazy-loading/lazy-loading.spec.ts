@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -25,12 +25,13 @@ test.describe("Lazy Loading", () => {
         });
     });
 
-    test.beforeEach(async ({ page, homeserver, user, bot }) => {
+    test.beforeEach(async ({ page, homeserver, user, bot, app }) => {
         for (let i = 1; i <= 10; i++) {
             const displayName = `Charly #${i}`;
             const bot = new Bot(page, homeserver, { displayName, startClient: false, autoAcceptInvites: false });
             charlies.push(bot);
         }
+        await app.client.network.setupRoute();
     });
 
     const name = "Lazy Loading Test";

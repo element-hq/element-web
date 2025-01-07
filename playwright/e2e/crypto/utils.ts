@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -138,21 +138,8 @@ export async function checkDeviceIsConnectedKeyBackup(
  *
  * If a `securityKey` is given, verifies the new device using the key.
  */
-export async function logIntoElement(
-    page: Page,
-    homeserver: HomeserverInstance,
-    credentials: Credentials,
-    securityKey?: string,
-) {
+export async function logIntoElement(page: Page, credentials: Credentials, securityKey?: string) {
     await page.goto("/#/login");
-
-    // select homeserver
-    await page.getByRole("button", { name: "Edit" }).click();
-    await page.getByRole("textbox", { name: "Other homeserver" }).fill(homeserver.config.baseUrl);
-    await page.getByRole("button", { name: "Continue", exact: true }).click();
-
-    // wait for the dialog to go away
-    await expect(page.locator(".mx_ServerPickerDialog")).not.toBeVisible();
 
     await page.getByRole("textbox", { name: "Username" }).fill(credentials.userId);
     await page.getByPlaceholder("Password").fill(credentials.password);

@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -125,7 +125,7 @@ test.describe("Spotlight", () => {
         await expect(resultLocator).toHaveCount(1);
         await expect(resultLocator.first()).toContainText(room1Name);
         await resultLocator.first().click();
-        expect(page.url()).toContain(room1Id);
+        await expect(page).toHaveURL(new RegExp(`#/room/${room1Id}`));
         await expect(roomHeaderName(page)).toContainText(room1Name);
     });
 
@@ -139,7 +139,7 @@ test.describe("Spotlight", () => {
         await expect(resultLocator.first()).toContainText(room1Name);
         await expect(resultLocator.first()).toContainText("View");
         await resultLocator.first().click();
-        expect(page.url()).toContain(room1Id);
+        await expect(page).toHaveURL(new RegExp(`#/room/${room1Id}`));
         await expect(roomHeaderName(page)).toContainText(room1Name);
     });
 
@@ -153,7 +153,7 @@ test.describe("Spotlight", () => {
         await expect(resultLocator.first()).toContainText(room2Name);
         await expect(resultLocator.first()).toContainText("Join");
         await resultLocator.first().click();
-        expect(page.url()).toContain(room2Id);
+        await expect(page).toHaveURL(new RegExp(`#/room/${room2Id}`));
         await expect(page.locator(".mx_RoomView_MessageList")).toHaveCount(1);
         await expect(roomHeaderName(page)).toContainText(room2Name);
     });
@@ -168,7 +168,7 @@ test.describe("Spotlight", () => {
         await expect(resultLocator.first()).toContainText(room3Name);
         await expect(resultLocator.first()).toContainText("View");
         await resultLocator.first().click();
-        expect(page.url()).toContain(room3Id);
+        await expect(page).toHaveURL(new RegExp(`#/room/${room3Id}`));
         await page.getByRole("button", { name: "Join the discussion" }).click();
         await expect(roomHeaderName(page)).toHaveText(room3Name);
     });

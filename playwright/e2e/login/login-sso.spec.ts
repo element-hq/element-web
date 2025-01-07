@@ -9,14 +9,9 @@ Please see LICENSE files in the repository root for full details.
 import { test } from "../../element-web-test";
 import { doTokenRegistration } from "./utils";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
+import { legacyOAuthHomeserver } from "../../plugins/homeserver/synapse/legacyOAuthHomeserver.ts";
 
-test.use({
-    startHomeserverOpts: ({ oAuthServer }, use) =>
-        use({
-            template: "default",
-            oAuthServerPort: oAuthServer.port,
-        }),
-});
+test.use(legacyOAuthHomeserver);
 
 // tests for old-style SSO login, in which we exchange tokens with Synapse, and Synapse talks to an auth server
 test.describe("SSO login", () => {
