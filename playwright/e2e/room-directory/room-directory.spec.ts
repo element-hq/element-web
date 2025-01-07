@@ -31,11 +31,11 @@ test.describe("Room Directory", () => {
             const localAddresses = page.locator(".mx_SettingsFieldset", { hasText: "Local Addresses" });
             await localAddresses.getByRole("textbox").fill("gaming");
             await localAddresses.getByRole("button", { name: "Add" }).click();
-            await expect(localAddresses.getByText("#gaming:localhost")).toHaveClass("mx_EditableItem_item");
+            await expect(localAddresses.getByText(`#gaming:${user.homeServer}`)).toHaveClass("mx_EditableItem_item");
 
             // Publish into the public rooms directory
             const publishedAddresses = page.locator(".mx_SettingsFieldset", { hasText: "Published Addresses" });
-            await expect(publishedAddresses.locator("#canonicalAlias")).toHaveValue("#gaming:localhost");
+            await expect(publishedAddresses.locator("#canonicalAlias")).toHaveValue(`#gaming:${user.homeServer}`);
             const checkbox = publishedAddresses
                 .locator(".mx_SettingsFlag", {
                     hasText: "Publish this room to the public in localhost's room directory?",
@@ -86,7 +86,7 @@ test.describe("Room Directory", () => {
                 .getByRole("button", { name: "Join" })
                 .click();
 
-            await expect(page).toHaveURL("/#/room/#test1234:localhost");
+            await expect(page).toHaveURL(`/#/room/#test1234:${user.homeServer}`);
         },
     );
 });

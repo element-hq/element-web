@@ -13,6 +13,7 @@ import { test as base, expect } from "../../../element-web-test";
 import { Bot } from "../../../pages/bot";
 import { Client } from "../../../pages/client";
 import { ElementAppPage } from "../../../pages/ElementAppPage";
+import { Credentials } from "../../../plugins/homeserver";
 
 type RoomRef = { name: string; roomId: string };
 
@@ -333,12 +334,14 @@ export class Helpers {
 
     /**
      * Populate the rooms with messages and threads
+     * @param user the user sending the messages
      * @param room1
      * @param room2
      * @param msg - MessageBuilder
      * @param hasMention - whether to include a mention in the first message
      */
     async populateThreads(
+        user: Credentials,
         room1: { name: string; roomId: string },
         room2: { name: string; roomId: string },
         msg: MessageBuilder,
@@ -350,9 +353,9 @@ export class Helpers {
                 msg.threadedOff("Msg1", {
                     "body": "User",
                     "format": "org.matrix.custom.html",
-                    "formatted_body": "<a href='https://matrix.to/#/@user:localhost'>User</a>",
+                    "formatted_body": `<a href="https://matrix.to/#/${user.userId}">User</a>`,
                     "m.mentions": {
-                        user_ids: ["@user:localhost"],
+                        user_ids: [user.userId],
                     },
                 }),
             ]);

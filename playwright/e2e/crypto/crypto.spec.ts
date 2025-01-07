@@ -68,6 +68,7 @@ const bobJoin = async (page: Page, bob: Bot) => {
 };
 
 test.describe("Cryptography", function () {
+    test.skip(isDendrite, "Dendrite lacks support for MSC3967 so requires additional auth here");
     test.use({
         displayName: "Alice",
         botCreateOpts: {
@@ -78,7 +79,6 @@ test.describe("Cryptography", function () {
 
     for (const isDeviceVerified of [true, false]) {
         test.describe(`setting up secure key backup should work isDeviceVerified=${isDeviceVerified}`, () => {
-            test.skip(isDendrite, "Dendrite lacks support for MSC3967 so requires additional auth here");
             /**
              * Verify that the `m.cross_signing.${keyType}` key is available on the account data on the server
              * @param keyType

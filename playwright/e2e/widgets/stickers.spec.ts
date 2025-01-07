@@ -145,7 +145,7 @@ test.describe("Stickers", { tag: ["@no-firefox", "@no-webkit"] }, () => {
     // See sendStickerFromPicker() for more detail on iframe comms.
     let stickerPickerUrl: string;
 
-    test("should send a sticker to multiple rooms", async ({ credentials, webserver, page, app, user, room }) => {
+    test("should send a sticker to multiple rooms", async ({ webserver, page, app, user, room }) => {
         const roomId2 = await app.client.createRoom({ name: ROOM_NAME_2 });
         const { content_uri: contentUri } = await app.client.uploadContent(STICKER_IMAGE, { type: "image/png" });
         const widgetHtml = getWidgetHtml(contentUri, "image/png");
@@ -156,7 +156,7 @@ test.describe("Stickers", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         await expect(page).toHaveURL(`/#/room/${room.roomId}`);
         await openStickerPicker(app);
         await sendStickerFromPicker(page);
-        await expectTimelineSticker(page, credentials.homeServer, room.roomId, contentUri);
+        await expectTimelineSticker(page, user.homeServer, room.roomId, contentUri);
 
         // Ensure that when we switch to a different room that the sticker
         // goes to the right place
@@ -164,7 +164,7 @@ test.describe("Stickers", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         await expect(page).toHaveURL(`/#/room/${roomId2}`);
         await openStickerPicker(app);
         await sendStickerFromPicker(page);
-        await expectTimelineSticker(page, credentials.homeServer, roomId2, contentUri);
+        await expectTimelineSticker(page, user.homeServer, roomId2, contentUri);
     });
 
     test("should handle a sticker picker widget missing creatorUserId", async ({
@@ -173,7 +173,6 @@ test.describe("Stickers", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         app,
         user,
         room,
-        credentials,
     }) => {
         const { content_uri: contentUri } = await app.client.uploadContent(STICKER_IMAGE, { type: "image/png" });
         const widgetHtml = getWidgetHtml(contentUri, "image/png");
@@ -184,7 +183,7 @@ test.describe("Stickers", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         await expect(page).toHaveURL(`/#/room/${room.roomId}`);
         await openStickerPicker(app);
         await sendStickerFromPicker(page);
-        await expectTimelineSticker(page, credentials.homeServer, room.roomId, contentUri);
+        await expectTimelineSticker(page, user.homeServer, room.roomId, contentUri);
     });
 
     test("should render invalid mimetype as a file", async ({ webserver, page, app, user, room }) => {
