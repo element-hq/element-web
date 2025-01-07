@@ -124,7 +124,7 @@
         "linkify-string": "4.2.0",
         "linkifyjs": "4.2.0",
         "lodash": "^4.17.21",
-        "maplibre-gl": "^4.0.0",
+        "maplibre-gl": "^5.0.0",
         "matrix-encrypt-attachment": "^1.0.3",
         "matrix-events-sdk": "0.0.1",
         "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
