@@ -1588,37 +1588,37 @@
   resolved "https://registry.yarnpkg.com/@fontsource/inter/-/inter-5.1.0.tgz#ab629b2c662457022d2d6a29854b8dc8ba538c47"
   integrity sha512-zKZR3kf1G0noIes1frLfOHP5EXVVm0M7sV/l9f/AaYf+M/DId35FO4LkigWjqWYjTJZGgplhdv4cB+ssvCqr5A==
 
-"@formatjs/ecma402-abstract@2.3.1":
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/@formatjs/ecma402-abstract/-/ecma402-abstract-2.3.1.tgz#cdeb3ffe1aeea9c4284b85b7e37e8e8615314c39"
-  integrity sha512-Ip9uV+/MpLXWRk03U/GzeJMuPeOXpJBSB5V1tjA6kJhvqssye5J5LoYLc7Z5IAHb7nR62sRoguzrFiVCP/hnzw==
+"@formatjs/ecma402-abstract@2.3.2":
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/@formatjs/ecma402-abstract/-/ecma402-abstract-2.3.2.tgz#0ee291effe7ee2c340742a6c95d92eacb5e6c00a"
+  integrity sha512-6sE5nyvDloULiyOMbOTJEEgWL32w+VHkZQs8S02Lnn8Y/O5aQhjOEXwWzvR7SsBE/exxlSpY2EsWZgqHbtLatg==
   dependencies:
-    "@formatjs/fast-memoize" "2.2.5"
-    "@formatjs/intl-localematcher" "0.5.9"
+    "@formatjs/fast-memoize" "2.2.6"
+    "@formatjs/intl-localematcher" "0.5.10"
     decimal.js "10"
     tslib "2"
 
-"@formatjs/fast-memoize@2.2.5":
-  version "2.2.5"
-  resolved "https://registry.yarnpkg.com/@formatjs/fast-memoize/-/fast-memoize-2.2.5.tgz#54a4a1793d773b72c372d3dcab3595149aee7880"
-  integrity sha512-6PoewUMrrcqxSoBXAOJDiW1m+AmkrAj0RiXnOMD59GRaswjXhm3MDhgepXPBgonc09oSirAJTsAggzAGQf6A6g==
+"@formatjs/fast-memoize@2.2.6":
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/@formatjs/fast-memoize/-/fast-memoize-2.2.6.tgz#fac0a84207a1396be1f1aa4ee2805b179e9343d1"
+  integrity sha512-luIXeE2LJbQnnzotY1f2U2m7xuQNj2DA8Vq4ce1BY9ebRZaoPB1+8eZ6nXpLzsxuW5spQxr7LdCg+CApZwkqkw==
   dependencies:
     tslib "2"
 
-"@formatjs/intl-localematcher@0.5.9":
-  version "0.5.9"
-  resolved "https://registry.yarnpkg.com/@formatjs/intl-localematcher/-/intl-localematcher-0.5.9.tgz#43c6ee22be85b83340bcb09bdfed53657a2720db"
-  integrity sha512-8zkGu/sv5euxbjfZ/xmklqLyDGQSxsLqg8XOq88JW3cmJtzhCP8EtSJXlaKZnVO4beEaoiT9wj4eIoCQ9smwxA==
+"@formatjs/intl-localematcher@0.5.10":
+  version "0.5.10"
+  resolved "https://registry.yarnpkg.com/@formatjs/intl-localematcher/-/intl-localematcher-0.5.10.tgz#1e0bd3fc1332c1fe4540cfa28f07e9227b659a58"
+  integrity sha512-af3qATX+m4Rnd9+wHcjJ4w2ijq+rAVP3CCinJQvFv1kgSu1W6jypUmvleJxcewdxmutM8dmIRZFxO/IQBZmP2Q==
   dependencies:
     tslib "2"
 
 "@formatjs/intl-segmenter@^11.5.7":
-  version "11.7.7"
-  resolved "https://registry.yarnpkg.com/@formatjs/intl-segmenter/-/intl-segmenter-11.7.7.tgz#8a5aaa316e11ca2d31b99222e6fcf1ab539b085e"
-  integrity sha512-610J5xz5DxtEpa16zNR89CrvA9qWHxQFkUB3FKiGao0Nwn7i8cl+oyBhuH9SvtXF9j2LUOM9VMdVCMzJkVANNw==
+  version "11.7.8"
+  resolved "https://registry.yarnpkg.com/@formatjs/intl-segmenter/-/intl-segmenter-11.7.8.tgz#85990c7e3961ef686ed78b8cacb216852cadb061"
+  integrity sha512-+nqMCJ6LNLl+qXldE2uthF82O/2Yo6GZlyWbOY25fe3066iaHjmrR4nXd6AKRMCHNeBBx3rANFLm2B5cNTBzTQ==
   dependencies:
-    "@formatjs/ecma402-abstract" "2.3.1"
-    "@formatjs/intl-localematcher" "0.5.9"
+    "@formatjs/ecma402-abstract" "2.3.2"
+    "@formatjs/intl-localematcher" "0.5.10"
     tslib "2"
 
 "@humanwhocodes/config-array@^0.13.0":
@@ -3390,9 +3390,8 @@
     ts-xor "^1.3.0"
     vaul "^1.0.0"
 
-"@vector-im/matrix-wysiwyg-wasm@link:../../bindings/wysiwyg-wasm":
+"@vector-im/matrix-wysiwyg-wasm@link:../../Library/Caches/Yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.0-af862ffd231dc0a6b8d6f2cb3601e68456c0ff24-integrity/node_modules/bindings/wysiwyg-wasm":
   version "0.0.0"
-  uid ""
 
 "@vector-im/matrix-wysiwyg@2.38.0":
   version "2.38.0"
