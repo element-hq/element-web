@@ -3,7 +3,7 @@
 name: Upload Preview Build to Netlify
 on:
     workflow_run:
-        workflows: ["End to End Tests"]
+        workflows: ["Build"]
         types:
             - completed
 jobs:
@@ -32,7 +32,7 @@ jobs:
               with:
                   github-token: ${{ secrets.GITHUB_TOKEN }}
                   run-id: ${{ github.event.workflow_run.id }}
-                  name: webapp
+                  name: webapp-ubuntu-24.04
                   path: webapp
 
             - name: 📤 Deploy to Netlify
