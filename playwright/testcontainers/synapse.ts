@@ -267,7 +267,7 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
 
         const data = await res.json();
         return {
-            homeServer: data.home_server,
+            homeServer: data.home_server || data.user_id.split(":").slice(1).join(":"),
             accessToken: data.access_token,
             userId: data.user_id,
             deviceId: data.device_id,
@@ -299,7 +299,7 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
             accessToken: json.access_token,
             userId: json.user_id,
             deviceId: json.device_id,
-            homeServer: json.home_server,
+            homeServer: json.home_server || json.user_id.split(":").slice(1).join(":"),
         };
     }
 
