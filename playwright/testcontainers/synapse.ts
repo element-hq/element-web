@@ -276,6 +276,7 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
             deviceId: data.device_id,
             password,
             displayName,
+            username,
         };
     }
 
@@ -303,6 +304,7 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
             userId: json.user_id,
             deviceId: json.device_id,
             homeServer: json.home_server,
+            username: userId.slice(1).split(":")[0],
         };
     }
 
