@@ -8,8 +8,10 @@ Please see LICENSE files in the repository root for full details.
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { Layout } from "../../../src/settings/enums/Layout";
 import { test, expect } from "../../element-web-test";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 test.describe("Threads", () => {
+    test.skip(isDendrite, "due to a Dendrite bug https://github.com/element-hq/dendrite/issues/3489");
     test.use({
         displayName: "Tom",
         botCreateOpts: {

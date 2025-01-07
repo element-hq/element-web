@@ -10,6 +10,7 @@ import type { Preset, Visibility } from "matrix-js-sdk/src/matrix";
 import { test, expect } from "../../element-web-test";
 
 test.describe("Room Directory", () => {
+    test.skip(({ homeserverType }) => homeserverType === "pinecone", "Pinecone's /publicRooms API takes forever");
     test.use({
         displayName: "Ray",
         botCreateOpts: { displayName: "Paul" },
@@ -38,7 +39,7 @@ test.describe("Room Directory", () => {
             await expect(publishedAddresses.locator("#canonicalAlias")).toHaveValue(`#gaming:${user.homeServer}`);
             const checkbox = publishedAddresses
                 .locator(".mx_SettingsFlag", {
-                    hasText: "Publish this room to the public in localhost's room directory?",
+                    hasText: `Publish this room to the public in ${user.homeServer}'s room directory?`,
                 })
                 .getByRole("switch");
             await checkbox.check();
