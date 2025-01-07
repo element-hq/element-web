@@ -10,6 +10,7 @@ import type { Locator, Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
 import type { Preset, ICreateRoomOpts } from "matrix-js-sdk/src/matrix";
 import { ElementAppPage } from "../../pages/ElementAppPage";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 async function openSpaceCreateMenu(page: Page): Promise<Locator> {
     await page.getByRole("button", { name: "Create a space" }).click();
@@ -50,6 +51,7 @@ function spaceChildInitialState(roomId: string): ICreateRoomOpts["initial_state"
 }
 
 test.describe("Spaces", () => {
+    test.skip(isDendrite, "due to a Dendrite bug https://github.com/element-hq/dendrite/issues/3488");
     test.use({
         displayName: "Sue",
         botCreateOpts: { displayName: "BotBob" },

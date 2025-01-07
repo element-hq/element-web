@@ -111,8 +111,9 @@ export const test = base.extend<Services & Options>({
     homeserver: async (
         { homeserverType, logger, network, _homeserver: homeserver, synapseConfigOptions, mas },
         use,
+        testInfo,
     ) => {
-        test.skip(
+        testInfo.skip(
             !(homeserver instanceof SynapseContainer) && Object.keys(synapseConfigOptions).length > 0,
             `Test specifies Synapse config options so is unsupported with ${homeserverType}`,
         );

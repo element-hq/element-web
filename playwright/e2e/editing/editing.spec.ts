@@ -32,7 +32,7 @@ function mkPadding(n: number): IContent {
 }
 
 test.describe("Editing", () => {
-    test.skip(isDendrite, "due to a Dendrite bug https://github.com/element-hq/dendrite/issues/3123");
+    test.skip(isDendrite, "due to a Dendrite bug https://github.com/element-hq/dendrite/issues/3488");
 
     // Edit "Message"
     const editLastMessage = async (page: Page, edit: string) => {

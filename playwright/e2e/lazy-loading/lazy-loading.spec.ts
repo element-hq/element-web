@@ -11,8 +11,11 @@ import type { Locator, Page } from "@playwright/test";
 import type { ElementAppPage } from "../../pages/ElementAppPage";
 import { test, expect } from "../../element-web-test";
 import { Credentials } from "../../plugins/homeserver";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 test.describe("Lazy Loading", () => {
+    test.skip(isDendrite, "due to a Dendrite bug https://github.com/element-hq/dendrite/issues/3488");
+
     const charlies: Bot[] = [];
 
     test.use({

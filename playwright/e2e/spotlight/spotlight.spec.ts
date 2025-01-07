@@ -40,7 +40,7 @@ async function startDM(app: ElementAppPage, page: Page, name: string): Promise<v
 }
 
 test.describe("Spotlight", () => {
-    test.skip(isDendrite, "due to a Dendrite bug https://github.com/element-hq/dendrite/issues/3123");
+    test.skip(isDendrite, "due to a Dendrite bug https://github.com/element-hq/dendrite/issues/3488");
 
     const bot1Name = "BotBob";
     let bot1: Bot;
