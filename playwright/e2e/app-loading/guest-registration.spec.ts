@@ -13,7 +13,9 @@ Please see LICENSE files in the repository root for full details.
 import { expect, test } from "../../element-web-test";
 
 test.use({
-    startHomeserverOpts: "guest-enabled",
+    synapseConfigOptions: {
+        allow_guest_access: true,
+    },
 });
 
 test("Shows the welcome page by default", async ({ page }) => {

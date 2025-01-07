@@ -11,7 +11,7 @@ import { Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
 import { doTokenRegistration } from "./utils";
 import { Credentials } from "../../plugins/homeserver";
-import { isDendrite } from "../../plugins/homeserver/dendrite";
+import { legacyOAuthHomeserver } from "../../plugins/homeserver/synapse/legacyOAuthHomeserver.ts";
 
 test.describe("Soft logout", () => {
     test.use({
@@ -25,11 +25,6 @@ test.describe("Soft logout", () => {
                 },
             },
         },
-        startHomeserverOpts: ({ oAuthServer }, use) =>
-            use({
-                template: "default",
-                oAuthServerPort: oAuthServer.port,
-            }),
     });
 
     test.describe("with password user", () => {
@@ -58,8 +53,7 @@ test.describe("Soft logout", () => {
     });
 
     test.describe("with SSO user", () => {
-        test.skip(isDendrite, "does not yet support SSO");
-
+        test.use(legacyOAuthHomeserver);
         test.use({
             user: async ({ page, homeserver }, use) => {
                 const user = await doTokenRegistration(page, homeserver);

@@ -13,6 +13,8 @@ import { doTokenRegistration } from "./utils";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 import { selectHomeserver } from "../utils";
 import { Credentials, HomeserverInstance } from "../../plugins/homeserver";
+import { consentHomeserver } from "../../plugins/homeserver/synapse/consentHomeserver.ts";
+import { legacyOAuthHomeserver } from "../../plugins/homeserver/synapse/legacyOAuthHomeserver.ts";
 
 const username = "user1234";
 const password = "p4s5W0rD";
@@ -91,7 +93,7 @@ test.describe("Login", () => {
     });
 
     test.describe("Password login", () => {
-        test.use({ startHomeserverOpts: "consent" });
+        test.use(consentHomeserver);
 
         let creds: Credentials;
 
@@ -238,14 +240,7 @@ test.describe("Login", () => {
     // tests for old-style SSO login, in which we exchange tokens with Synapse, and Synapse talks to an auth server
     test.describe("SSO login", () => {
         test.skip(isDendrite, "does not yet support SSO");
-
-        test.use({
-            startHomeserverOpts: ({ oAuthServer }, use) =>
-                use({
-                    template: "default",
-                    oAuthServerPort: oAuthServer.port,
-                }),
-        });
+        test.use(legacyOAuthHomeserver);
 
         test("logs in with SSO and lands on the home screen", async ({ page, homeserver }) => {
             // If this test fails with a screen showing "Timeout connecting to remote server", it is most likely due to
@@ -259,7 +254,7 @@ test.describe("Login", () => {
     });
 
     test.describe("logout", () => {
-        test.use({ startHomeserverOpts: "consent" });
+        test.use(consentHomeserver);
 
         test("should go to login page on logout", async ({ page, user }) => {
             await page.getByRole("button", { name: "User menu" }).click();
@@ -274,8 +269,8 @@ test.describe("Login", () => {
     });
 
     test.describe("logout with logout_redirect_url", () => {
+        test.use(consentHomeserver);
         test.use({
-            startHomeserverOpts: "consent",
             config: {
                 // We redirect to decoder-ring because it's a predictable page that isn't Element itself.
                 // We could use example.org, matrix.org, or something else, however this puts dependency of external

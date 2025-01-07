@@ -8,6 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import { expect, test } from "../../element-web-test";
 import { selectHomeserver } from "../utils";
+import { emailHomeserver } from "../../plugins/homeserver/synapse/emailHomeserver.ts";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 const username = "user1234";
 // this has to be password-like enough to please zxcvbn. Needless to say it's just from pwgen.
@@ -15,6 +17,8 @@ const password = "oETo7MPf0o";
 const email = "user@nowhere.dummy";
 
 test.describe("Forgot Password", () => {
+    test.skip(isDendrite, "not yet wired up");
+    test.use(emailHomeserver);
     test.use({
         config: {
             // The only thing that we really *need* (otherwise Element refuses to load) is a default homeserver.
@@ -25,14 +29,6 @@ test.describe("Forgot Password", () => {
                 },
             },
         },
-        startHomeserverOpts: ({ mailhog }, use) =>
-            use({
-                template: "email",
-                variables: {
-                    SMTP_HOST: "host.containers.internal",
-                    SMTP_PORT: mailhog.instance.smtpPort,
-                },
-            }),
     });
 
     test("renders properly", { tag: "@screenshot" }, async ({ page, homeserver }) => {

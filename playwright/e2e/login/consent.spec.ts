@@ -7,10 +7,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { test, expect } from "../../element-web-test";
+import { consentHomeserver } from "../../plugins/homeserver/synapse/consentHomeserver.ts";
 
 test.describe("Consent", () => {
+    test.use(consentHomeserver);
     test.use({
-        startHomeserverOpts: "consent",
         displayName: "Bob",
     });
 

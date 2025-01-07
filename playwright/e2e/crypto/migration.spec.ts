@@ -9,24 +9,24 @@ Please see LICENSE files in the repository root for full details.
 import path from "path";
 import { readFile } from "node:fs/promises";
 
-import { expect, Fixtures, test as base } from "../../element-web-test";
-
-const test = base.extend<Fixtures>({
-    // Replace the `user` fixture with one which populates the indexeddb data before starting the app.
-    user: async ({ context, pageWithCredentials: page, credentials }, use) => {
-        await page.route(`/test_indexeddb_cryptostore_dump/*`, async (route, request) => {
-            const resourcePath = path.join(__dirname, new URL(request.url()).pathname);
-            const body = await readFile(resourcePath, { encoding: "utf-8" });
-            await route.fulfill({ body });
-        });
-        await page.goto("/test_indexeddb_cryptostore_dump/index.html");
-
-        await use(credentials);
-    },
-});
+import { expect, test } from "../../element-web-test";
 
 test.describe("migration", { tag: "@no-webkit" }, function () {
-    test.use({ displayName: "Alice" });
+    test.use({
+        displayName: "Alice",
+
+        // Replace the `user` fixture with one which populates the indexeddb data before starting the app.
+        user: async ({ context, pageWithCredentials: page, credentials }, use) => {
+            await page.route(`/test_indexeddb_cryptostore_dump/*`, async (route, request) => {
+                const resourcePath = path.join(__dirname, new URL(request.url()).pathname);
+                const body = await readFile(resourcePath, { encoding: "utf-8" });
+                await route.fulfill({ body });
+            });
+            await page.goto("/test_indexeddb_cryptostore_dump/index.html");
+
+            await use(credentials);
+        },
+    });
 
     test("Should support migration from legacy crypto", async ({ context, user, page }, workerInfo) => {
         test.slow();
