@@ -22,7 +22,7 @@ function getDeviceSigningKeysBody(credentials: Credentials) {
                 "ed25519:6qCouJsi2j7DzOmpxPTBALpvDTqa8p2mjrQR2P8wEbg": "6qCouJsi2j7DzOmpxPTBALpvDTqa8p2mjrQR2P8wEbg",
             },
             signatures: {
-                "@user1234:localhost": {
+                [credentials.userId]: {
                     "ed25519:6qCouJsi2j7DzOmpxPTBALpvDTqa8p2mjrQR2P8wEbg":
                         "mvwqsYiGa2gPH6ueJsiJnceHMrZhf1pqIMGxkvKisN3ucz8sU7LwyzndbYaLkUKEDx1JuOKFfZ9Mb3mqc7PMBQ",
                     "ed25519:SRHVWTNVBH":
@@ -30,33 +30,33 @@ function getDeviceSigningKeysBody(credentials: Credentials) {
                 },
             },
             usage: ["master"],
-            user_id: "@user1234:localhost",
+            user_id: credentials.userId,
         },
         self_signing_key: {
             keys: {
                 "ed25519:eqzRly4S1GvTA36v48hOKokHMtYBLm02zXRgPHue5/8": "eqzRly4S1GvTA36v48hOKokHMtYBLm02zXRgPHue5/8",
             },
             signatures: {
-                "@user1234:localhost": {
+                [credentials.userId]: {
                     "ed25519:6qCouJsi2j7DzOmpxPTBALpvDTqa8p2mjrQR2P8wEbg":
                         "M2rt5xs+23egbVUwUcZuU7pMpn0chBNC5rpdyZGayfU3FDlx1DbopbakIcl5v4uOSGMbqUotyzkE6CchB+dgDw",
                 },
             },
             usage: ["self_signing"],
-            user_id: "@user1234:localhost",
+            user_id: credentials.userId,
         },
         user_signing_key: {
             keys: {
                 "ed25519:h6C7sonjKSSa/VMvmpmFnwMA02H2rKIMSYZ2ddwgJn4": "h6C7sonjKSSa/VMvmpmFnwMA02H2rKIMSYZ2ddwgJn4",
             },
             signatures: {
-                "@user1234:localhost": {
+                [credentials.userId]: {
                     "ed25519:6qCouJsi2j7DzOmpxPTBALpvDTqa8p2mjrQR2P8wEbg":
                         "5ZMJ7SG2qr76vU2nITKap88AxLZ/RZQmF/mBcAcVZ9Bknvos3WQp8qN9jKuiqOHCq/XpPORA6XBmiDIyPqTFAA",
                 },
             },
             usage: ["user_signing"],
-            user_id: "@user1234:localhost",
+            user_id: credentials.userId,
         },
         auth: {
             type: "m.login.password",
