@@ -56,6 +56,7 @@ export async function doTokenRegistration(
         homeServer: window.mxMatrixClientPeg.get().getHomeserverUrl(),
         password: null,
         displayName: "Alice",
+        username: window.mxMatrixClientPeg.get().getUserIdLocalpart(),
     }));
 }
 
