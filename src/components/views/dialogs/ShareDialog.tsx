@@ -35,6 +35,11 @@ const SOCIALS = [
         url: (url: string) => `https://twitter.com/home?status=${url}`,
     },
     {
+        name: "Bluesky",
+        img: require("../../../../res/img/social/bluesky.png"),
+        url: (url: string) => `https://bsky.app/intent/compose?text=${url}`,
+    },
+    {
         name: "LinkedIn",
         img: require("../../../../res/img/social/linkedin.png"),
         url: (url: string) => `https://www.linkedin.com/shareArticle?mini=true&url=${url}`,
