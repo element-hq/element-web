@@ -25,8 +25,8 @@ async function expectBackupVersionToBe(page: Page, version: string) {
 // These tests register an account with MAS because then we go through the "normal" registration flow
 // and crypto gets set up. Using the 'user' fixture create a a user an synthesizes an existing login,
 // which is faster but leaves us without crypto set up.
+test.use(masHomeserver);
 test.describe("Encryption state after registration", () => {
-    test.use(masHomeserver);
     test.skip(isDendrite, "does not yet support MAS");
 
     test("Key backup is enabled by default", async ({ page, mailhogClient, app }) => {
@@ -53,7 +53,6 @@ test.describe("Encryption state after registration", () => {
 });
 
 test.describe("Key backup reset from elsewhere", () => {
-    test.use(masHomeserver);
     test.skip(isDendrite, "does not yet support MAS");
 
     test("Key backup is disabled when reset from elsewhere", async ({ page, mailhogClient, request, homeserver }) => {
