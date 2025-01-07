@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { test, expect } from "../../element-web-test";
 import { consentHomeserver } from "../../plugins/homeserver/synapse/consentHomeserver.ts";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 test.describe("Registration", () => {
     test.use(consentHomeserver);
@@ -31,6 +32,8 @@ test.describe("Registration", () => {
         "registers an account and lands on the home screen",
         { tag: "@screenshot" },
         async ({ homeserver, page, checkA11y, crypto }) => {
+            test.skip(isDendrite, "Dendrite lacks support for MSC3967 so requires additional auth here");
+
             await page.getByRole("button", { name: "Edit", exact: true }).click();
             await expect(page.getByRole("button", { name: "Continue", exact: true })).toBeVisible();
 

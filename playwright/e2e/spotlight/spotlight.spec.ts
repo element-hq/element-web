@@ -12,6 +12,7 @@ import { Filter } from "../../pages/Spotlight";
 import { Bot } from "../../pages/bot";
 import type { Locator, Page } from "@playwright/test";
 import type { ElementAppPage } from "../../pages/ElementAppPage";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 function roomHeaderName(page: Page): Locator {
     return page.locator(".mx_RoomHeader_heading");
@@ -39,6 +40,8 @@ async function startDM(app: ElementAppPage, page: Page, name: string): Promise<v
 }
 
 test.describe("Spotlight", () => {
+    test.skip(isDendrite, "due to a Dendrite bug https://github.com/element-hq/dendrite/issues/3123");
+
     const bot1Name = "BotBob";
     let bot1: Bot;
 

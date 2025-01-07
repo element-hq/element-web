@@ -12,6 +12,7 @@ import { test, expect } from "../../element-web-test";
 import { doTokenRegistration } from "./utils";
 import { Credentials } from "../../plugins/homeserver";
 import { legacyOAuthHomeserver } from "../../plugins/homeserver/synapse/legacyOAuthHomeserver.ts";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 test.describe("Soft logout", () => {
     test.use({
@@ -53,6 +54,7 @@ test.describe("Soft logout", () => {
     });
 
     test.describe("with SSO user", () => {
+        test.skip(isDendrite, "does not yet support SSO");
         test.use(legacyOAuthHomeserver);
         test.use({
             user: async ({ page, homeserver }, use) => {

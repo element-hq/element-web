@@ -11,6 +11,7 @@ import { expect, test } from "../../element-web-test";
 import { autoJoin, copyAndContinue, createSharedRoomWithUser, enableKeyBackup, verify } from "./utils";
 import { Bot } from "../../pages/bot";
 import { ElementAppPage } from "../../pages/ElementAppPage";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 const checkDMRoom = async (page: Page) => {
     const body = page.locator(".mx_RoomView_body");
@@ -77,6 +78,7 @@ test.describe("Cryptography", function () {
 
     for (const isDeviceVerified of [true, false]) {
         test.describe(`setting up secure key backup should work isDeviceVerified=${isDeviceVerified}`, () => {
+            test.skip(isDendrite, "Dendrite lacks support for MSC3967 so requires additional auth here");
             /**
              * Verify that the `m.cross_signing.${keyType}` key is available on the account data on the server
              * @param keyType
