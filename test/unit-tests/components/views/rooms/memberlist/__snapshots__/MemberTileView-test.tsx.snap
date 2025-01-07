@@ -7,7 +7,7 @@ exports[`MemberTileView RoomMemberTileView should display an verified E2EIcon wh
       aria-label="@userId:matrix.org (power 0)"
       class="mx_AccessibleButton mx_MemberTileView"
       role="button"
-      tabindex="0"
+      tabindex="-1"
     >
       <div
         class="mx_MemberTileView_left"
@@ -76,7 +76,7 @@ exports[`MemberTileView RoomMemberTileView should display an warning E2EIcon whe
       aria-label="@userId:matrix.org (power 0)"
       class="mx_AccessibleButton mx_MemberTileView"
       role="button"
-      tabindex="0"
+      tabindex="-1"
     >
       <div
         class="mx_MemberTileView_left"
@@ -145,7 +145,7 @@ exports[`MemberTileView RoomMemberTileView should not display an E2EIcon when th
       aria-label="@userId:matrix.org (power 0)"
       class="mx_AccessibleButton mx_MemberTileView"
       role="button"
-      tabindex="0"
+      tabindex="-1"
     >
       <div
         class="mx_MemberTileView_left"
@@ -195,7 +195,7 @@ exports[`MemberTileView ThreePidInviteTileView renders ThreePidInvite correctly 
     <div
       class="mx_AccessibleButton mx_MemberTileView"
       role="button"
-      tabindex="0"
+      tabindex="-1"
     >
       <div
         class="mx_MemberTileView_left"
