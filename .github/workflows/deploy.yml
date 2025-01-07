@@ -78,15 +78,15 @@ jobs:
             - name: Populate _headers
               run: cp .github/cfp_headers _deploy/_headers
 
-            # - name: Wait for other steps to succeed
-            #   uses: t3chguy/wait-on-check-action@18541021811b56544d90e0f073401c2b99e249d6 # fork
-            #   if: inputs.skip-checks != true
-            #   with:
-            #       ref: ${{ github.sha }}
-            #       running-workflow-name: "Deploy to Cloudflare Pages"
-            #       repo-token: ${{ secrets.GITHUB_TOKEN }}
-            #       wait-interval: 10
-            #       check-regexp: ^((?!SonarCloud|SonarQube|issue|board|label|Release|prepare|GitHub Pages).)*$
+            - name: Wait for other steps to succeed
+              uses: t3chguy/wait-on-check-action@18541021811b56544d90e0f073401c2b99e249d6 # fork
+              if: inputs.skip-checks != true
+              with:
+                  ref: ${{ github.sha }}
+                  running-workflow-name: "Deploy to Cloudflare Pages"
+                  repo-token: ${{ secrets.GITHUB_TOKEN }}
+                  wait-interval: 10
+                  check-regexp: ^((?!SonarCloud|SonarQube|issue|board|label|Release|prepare|GitHub Pages).)*$
 
             - name: Deploy to Cloudflare Pages
               uses: cloudflare/pages-action@f0a1cd58cd66095dee69bfa18fa5efd1dde93bca # v1
