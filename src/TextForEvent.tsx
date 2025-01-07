@@ -107,9 +107,8 @@ function textForMemberEvent(
     allowJSX: boolean,
     showHiddenEvents?: boolean,
 ): (() => string) | null {
-    // XXX: SYJS-16 "sender is sometimes null for join messages"
-    const senderName = ev.sender?.name || getRoomMemberDisplayname(client, ev);
-    const targetName = ev.target?.name || getRoomMemberDisplayname(client, ev, ev.getStateKey());
+    const senderName = getRoomMemberDisplayname(client, ev);
+    const targetName = getRoomMemberDisplayname(client, ev, ev.getStateKey());
     const prevContent = ev.getPrevContent();
     const content = ev.getContent();
     const reason = content.reason;

@@ -121,7 +121,7 @@ export class Bot extends Client {
                     return logger as unknown as Logger;
                 }
 
-                const logger = getLogger(`cypress bot ${credentials.userId}`);
+                const logger = getLogger(`playwright bot ${credentials.userId}`);
 
                 const keys = {};
 
