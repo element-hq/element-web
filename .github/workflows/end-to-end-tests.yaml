@@ -111,23 +111,23 @@ jobs:
                 # Run multiple instances in parallel to speed up the tests
                 runner: ${{ fromJSON(needs.build.outputs.runners-matrix) }}
                 project:
-                    #                    - Chrome
-                    #                    - Firefox
-                    #                    - WebKit
+                    - Chrome
+                    - Firefox
+                    - WebKit
                     - Dendrite
                     - Pinecone
-                isCron:
-                    - ${{ github.event_name == 'schedule' }}
-                # Skip the non-Chrome runs unless this was a cron trigger
-        #                exclude:
-        #                    - isCron: false
-        #                      project: Firefox
-        #                    - isCron: false
-        #                      project: WebKit
-        #                    - isCron: false
-        #                      project: Dendrite
-        #                    - isCron: false
-        #                      project: Pinecone
+                runAllTests:
+                    - true
+                # Skip the Firefox & Safari runs unless this was a cron trigger or PR has X-Run-All-Tests label
+                exclude:
+                    - runAllTests: false
+                      project: Firefox
+                    - runAllTests: false
+                      project: WebKit
+                    - runAllTests: false
+                      project: Dendrite
+                    - runAllTests: false
+                      project: Pinecone
         steps:
             - uses: actions/checkout@v4
               with:
@@ -176,7 +176,7 @@ jobs:
                   yarn playwright test \
                       --shard "${{ matrix.runner }}/${{ needs.build.outputs.num-runners }}" \
                       --project="${{ matrix.project }}" \
-                      ${{ github.event_name == 'pull_request' && '--grep-invert @mergequeue' || '' }}
+                      ${{ (github.event_name == 'pull_request' && matrix.runAllTests == false ) && '--grep-invert @mergequeue' || '' }}
 
             - name: Upload blob report to GitHub Actions Artifacts
               if: always()

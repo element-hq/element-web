@@ -17,7 +17,7 @@ jobs:
                   docker pull "$IMAGE"
                   INSPECT=$(docker inspect --format='{{index .RepoDigests 0}}' "$IMAGE")
                   DIGEST=${INSPECT#*@}
-                  sed -i "s/const DOCKER_TAG.*/const DOCKER_TAG = \"develop@$DIGEST\";/" playwright/plugins/homeserver/synapse/index.ts
+                  sed -i "s/const TAG.*/const TAG = \"develop@$DIGEST\";/" playwright/testcontainers/synapse.ts
               env:
                   IMAGE: ghcr.io/element-hq/synapse:develop
 
