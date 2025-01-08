@@ -112,7 +112,7 @@ export const test = base.extend<Fixtures>({
         await use(context);
     },
     disablePresence: false,
-    config: CONFIG_JSON,
+    config: {}, // We merge this atop the default CONFIG_JSON in the page fixture to make extending it easier
     page: async ({ homeserver, context, page, config, labsFlags, disablePresence }, use) => {
         await context.route(`http://localhost:8080/config.json*`, async (route) => {
             const json = {
