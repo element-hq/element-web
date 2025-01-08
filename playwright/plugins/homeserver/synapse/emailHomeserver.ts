@@ -10,19 +10,22 @@ import { Fixtures } from "@playwright/test";
 
 import { Services } from "../../../services.ts";
 
-export const emailHomeserver: Fixtures<Services, {}, Services> = {
-    _homeserver: async ({ _homeserver: container, mailhog }, use) => {
-        container.withConfig({
-            enable_registration_without_verification: undefined,
-            disable_msisdn_registration: undefined,
-            registrations_require_3pid: ["email"],
-            email: {
-                smtp_host: "mailhog",
-                smtp_port: 1025,
-                notif_from: "Your Friendly %(app)s homeserver <noreply@example.com>",
-                app_name: "my_branded_matrix_server",
-            },
-        });
-        await use(container);
-    },
+export const emailHomeserver: Fixtures<{}, Services> = {
+    _homeserver: [
+        async ({ _homeserver: container, mailhog }, use) => {
+            container.withConfig({
+                enable_registration_without_verification: undefined,
+                disable_msisdn_registration: undefined,
+                registrations_require_3pid: ["email"],
+                email: {
+                    smtp_host: "mailhog",
+                    smtp_port: 1025,
+                    notif_from: "Your Friendly %(app)s homeserver <noreply@example.com>",
+                    app_name: "my_branded_matrix_server",
+                },
+            });
+            await use(container);
+        },
+        { scope: "worker" },
+    ],
 };

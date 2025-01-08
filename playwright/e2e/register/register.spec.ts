@@ -9,20 +9,20 @@ Please see LICENSE files in the repository root for full details.
 import { test, expect } from "../../element-web-test";
 import { consentHomeserver } from "../../plugins/homeserver/synapse/consentHomeserver.ts";
 
-test.describe("Registration", () => {
-    test.use(consentHomeserver);
-    test.use({
-        config: {
-            // The only thing that we really *need* (otherwise Element refuses to load) is a default homeserver.
-            // We point that to a guaranteed-invalid domain.
-            default_server_config: {
-                "m.homeserver": {
-                    base_url: "https://server.invalid",
-                },
+test.use(consentHomeserver);
+test.use({
+    config: {
+        // The only thing that we really *need* (otherwise Element refuses to load) is a default homeserver.
+        // We point that to a guaranteed-invalid domain.
+        default_server_config: {
+            "m.homeserver": {
+                base_url: "https://server.invalid",
             },
         },
-    });
+    },
+});
 
+test.describe("Registration", () => {
     test.beforeEach(async ({ page }) => {
         await page.goto("/#/register");
     });

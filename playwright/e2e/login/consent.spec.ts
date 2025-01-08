@@ -9,12 +9,12 @@ Please see LICENSE files in the repository root for full details.
 import { test, expect } from "../../element-web-test";
 import { consentHomeserver } from "../../plugins/homeserver/synapse/consentHomeserver.ts";
 
-test.describe("Consent", () => {
-    test.use(consentHomeserver);
-    test.use({
-        displayName: "Bob",
-    });
+test.use(consentHomeserver);
+test.use({
+    displayName: "Bob",
+});
 
+test.describe("Consent", () => {
     test("should prompt the user to consent to terms when server deems it necessary", async ({
         context,
         page,

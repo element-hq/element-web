@@ -30,80 +30,111 @@ export interface Services {
     mas?: StartedMatrixAuthenticationServiceContainer;
 }
 
-export const test = base.extend<Services>({
-    // eslint-disable-next-line no-empty-pattern
-    logger: async ({}, use, testInfo) => {
-        const logger = new ContainerLogger();
-        await use(logger);
+export const test = base.extend<{}, Services>({
+    logger: [
+        // eslint-disable-next-line no-empty-pattern
+        async ({}, use) => {
+            const logger = new ContainerLogger();
+            await use(logger);
+        },
+        { scope: "worker" },
+    ],
+    network: [
+        // eslint-disable-next-line no-empty-pattern
+        async ({}, use) => {
+            const network = await new Network().start();
+            await use(network);
+            await network.stop();
+        },
+        { scope: "worker" },
+    ],
+    postgres: [
+        async ({ logger, network }, use) => {
+            const container = await new PostgreSqlContainer()
+                .withNetwork(network)
+                .withNetworkAliases("postgres")
+                .withLogConsumer(logger.getConsumer("postgres"))
+                .withTmpFs({
+                    "/dev/shm/pgdata/data": "",
+                })
+                .withEnvironment({
+                    PG_DATA: "/dev/shm/pgdata/data",
+                })
+                .withCommand([
+                    "-c",
+                    "shared_buffers=128MB",
+                    "-c",
+                    `fsync=off`,
+                    "-c",
+                    `synchronous_commit=off`,
+                    "-c",
+                    "full_page_writes=off",
+                ])
+                .start();
+            await use(container);
+            await container.stop();
+        },
+        { scope: "worker" },
+    ],
+
+    mailhog: [
+        async ({ logger, network }, use) => {
+            const container = await new GenericContainer("mailhog/mailhog:latest")
+                .withNetwork(network)
+                .withNetworkAliases("mailhog")
+                .withExposedPorts(8025)
+                .withLogConsumer(logger.getConsumer("mailhog"))
+                .withWaitStrategy(Wait.forListeningPorts())
+                .start();
+            await use(container);
+            await container.stop();
+        },
+        { scope: "worker" },
+    ],
+    mailhogClient: [
+        async ({ mailhog: container }, use) => {
+            await use(mailhog({ host: container.getHost(), port: container.getMappedPort(8025) }));
+        },
+        { scope: "worker" },
+    ],
+
+    synapseConfigOptions: [{}, { option: true, scope: "worker" }],
+    _homeserver: [
+        // eslint-disable-next-line no-empty-pattern
+        async ({}, use) => {
+            const container = new SynapseContainer();
+            await use(container);
+        },
+        { scope: "worker" },
+    ],
+    homeserver: [
+        async ({ logger, network, _homeserver: homeserver, synapseConfigOptions, mas }, use) => {
+            const container = await homeserver
+                .withNetwork(network)
+                .withNetworkAliases("homeserver")
+                .withLogConsumer(logger.getConsumer("synapse"))
+                .withConfig(synapseConfigOptions)
+                .start();
+
+            await use(container);
+            await container.stop();
+        },
+        { scope: "worker" },
+    ],
+    mas: [
+        // eslint-disable-next-line no-empty-pattern
+        async ({}, use) => {
+            // we stub the mas fixture to allow `homeserver` to depend on it to ensure
+            // when it is specified by `masHomeserver` it is started before the homeserver
+            await use(undefined);
+        },
+        { scope: "worker" },
+    ],
+
+    context: async ({ logger, context, request, homeserver }, use, testInfo) => {
+        homeserver.setRequest(request);
+        await logger.testStarted(testInfo);
+        await use(context);
         await logger.testFinished(testInfo);
-    },
-    // eslint-disable-next-line no-empty-pattern
-    network: async ({}, use) => {
-        const network = await new Network().start();
-        await use(network);
-        await network.stop();
-    },
-    postgres: async ({ logger, network }, use) => {
-        const container = await new PostgreSqlContainer()
-            .withNetwork(network)
-            .withNetworkAliases("postgres")
-            .withLogConsumer(logger.getConsumer("postgres"))
-            .withTmpFs({
-                "/dev/shm/pgdata/data": "",
-            })
-            .withEnvironment({
-                PG_DATA: "/dev/shm/pgdata/data",
-            })
-            .withCommand([
-                "-c",
-                "shared_buffers=128MB",
-                "-c",
-                `fsync=off`,
-                "-c",
-                `synchronous_commit=off`,
-                "-c",
-                "full_page_writes=off",
-            ])
-            .start();
-        await use(container);
-        await container.stop();
-    },
-
-    mailhog: async ({ logger, network }, use) => {
-        const container = await new GenericContainer("mailhog/mailhog:latest")
-            .withNetwork(network)
-            .withNetworkAliases("mailhog")
-            .withExposedPorts(8025)
-            .withLogConsumer(logger.getConsumer("mailhog"))
-            .withWaitStrategy(Wait.forListeningPorts())
-            .start();
-        await use(container);
-        await container.stop();
-    },
-    mailhogClient: async ({ mailhog: container }, use) => {
-        await use(mailhog({ host: container.getHost(), port: container.getMappedPort(8025) }));
-    },
-
-    synapseConfigOptions: [{}, { option: true }],
-    _homeserver: async ({ request }, use) => {
-        const container = new SynapseContainer(request);
-        await use(container);
-    },
-    homeserver: async ({ logger, network, _homeserver: homeserver, synapseConfigOptions, mas }, use) => {
-        const container = await homeserver
-            .withNetwork(network)
-            .withNetworkAliases("homeserver")
-            .withLogConsumer(logger.getConsumer("synapse"))
-            .withConfig(synapseConfigOptions)
-            .start();
-
-        await use(container);
-        await container.stop();
-    },
-    // eslint-disable-next-line no-empty-pattern
-    mas: async ({}, use) => {
-        // we stub the mas fixture to allow `homeserver` to depend on it to ensure
-        // when it is specified by `masHomeserver` it is started before the homeserver
-        await use(undefined);
     },
 });
