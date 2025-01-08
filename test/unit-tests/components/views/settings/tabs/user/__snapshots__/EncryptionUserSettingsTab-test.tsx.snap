@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<EncryptionUserSettingsTab /> should display a verify button when the device is not verified 1`] = `
+exports[`<EncryptionUserSettingsTab /> should display a verify button when the encryption is not set up 1`] = `
 <DocumentFragment>
   <div
     class="mx_SettingsTab mx_EncryptionUserSettingsTab"
