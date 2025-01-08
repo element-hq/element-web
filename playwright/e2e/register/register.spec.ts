@@ -71,12 +71,6 @@ test.describe("Registration", () => {
             await expect(termsPolicy.getByLabel("Privacy Policy")).toBeVisible();
 
             await page.getByRole("button", { name: "Accept", exact: true }).click();
-
-            await expect(page.locator(".mx_UseCaseSelection_skip")).toBeVisible();
-            await expect(page).toMatchScreenshot("use-case-selection.png", screenshotOptions);
-            await checkA11y();
-            await page.getByRole("button", { name: "Skip", exact: true }).click();
-
             await expect(page).toHaveURL(/\/#\/home$/);
 
             /*
