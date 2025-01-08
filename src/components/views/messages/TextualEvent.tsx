@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { MatrixEvent, RoomMember, RoomMemberEvent } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import RoomContext from "../../../contexts/RoomContext";
 import * as TextForEvent from "../../../TextForEvent";
@@ -20,20 +20,6 @@ interface IProps {
 export default class TextualEvent extends React.Component<IProps> {
     public static contextType = RoomContext;
     declare public context: React.ContextType<typeof RoomContext>;
-
-    public componentDidMount(): void {
-        MatrixClientPeg.get()?.on(RoomMemberEvent.Name, this.onMemberNameUpdate);
-    }
-
-    public componentWillUnmount(): void {
-        MatrixClientPeg.get()?.off(RoomMemberEvent.Name, this.onMemberNameUpdate);
-    }
-
-    private onMemberNameUpdate = (event: MatrixEvent, member: RoomMember): void => {
-        if (member.userId === this.props.mxEvent.getSender() || member.userId === this.props.mxEvent.getStateKey()) {
-            this.forceUpdate();
-        }
-    };
 
     public render(): React.ReactNode {
         const text = TextForEvent.textForEvent(
