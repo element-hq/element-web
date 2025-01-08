@@ -13,8 +13,13 @@ const NAME = "Alice";
 
 test.describe("Memberlist", () => {
     test.use({
+        synapseConfigOptions: {
+            presence: {
+                enabled: false,
+                include_offline_users_on_sync: false,
+            },
+        },
         displayName: NAME,
-        startHomeserverOpts: "no-presence",
         disablePresence: true,
     });
 

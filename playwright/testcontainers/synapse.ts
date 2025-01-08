@@ -134,6 +134,10 @@ const DEFAULT_CONFIG = {
     experimental_features: {},
     oidc_providers: [],
     serve_server_wellknown: true,
+    presence: {
+        enabled: true,
+        include_offline_users_on_sync: true,
+    },
 };
 
 export type SynapseConfigOptions = Partial<typeof DEFAULT_CONFIG>;
