@@ -16,7 +16,7 @@ You may need to follow instructions to set up your development environment for r
 Playwright by following <https://playwright.dev/docs/browsers#install-browsers> and
 <https://playwright.dev/docs/browsers#install-system-dependencies>.
 
-However, the Playwright tests are run, an element-web instance must be running on
+However the Playwright tests are run, an element-web instance must be running on
 http://localhost:8080 (this is configured in `playwright.config.ts`) - this is what will
 be tested. When running Playwright tests yourself, the standard `yarn start` from the
 element-web project is fine: leave it running it a different terminal as you would
