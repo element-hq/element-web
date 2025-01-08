@@ -25,7 +25,9 @@ import { SettingsSubheader } from "../../SettingsSubheader";
  *  - "main": The main panel with all the sections (Key storage, recovery, advanced).
  *  - "verification_required": The panel to show when the user needs to verify their session.
  *  - "change_recovery_key": The panel to show when the user is changing their recovery key.
+ *                           This happens when the user has a key backup and the user clicks on "Change recovery key" button of the RecoveryPanel.
  *  - "set_recovery_key": The panel to show when the user is setting up their recovery key.
+ *                        This happens when the user doesn't have a key backup and the user clicks on "Set up recovery key" button of the RecoveryPanel.
  */
 type State = "loading" | "main" | "verification_required" | "change_recovery_key" | "set_recovery_key";
 
