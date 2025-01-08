@@ -23,6 +23,7 @@ class StaleScreenshotReporter implements Reporter {
     private success = true;
 
     public onTestEnd(test: TestCase): void {
+        if (!test.ok()) return;
         for (const annotation of test.annotations) {
             if (annotation.type === "_screenshot") {
                 this.screenshots.add(annotation.description);
