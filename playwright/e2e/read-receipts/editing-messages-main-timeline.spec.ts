@@ -12,10 +12,7 @@ import { test } from ".";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 test.describe("Read receipts", { tag: "@mergequeue" }, () => {
-    test.skip(
-        isDendrite,
-        "due to Dendrite lacking full threads support https://github.com/element-hq/dendrite/issues/3283",
-    );
+    test.skip(isDendrite, "due to Dendrite bug https://github.com/element-hq/dendrite/issues/2970");
 
     test.describe("editing messages", () => {
         test.describe("in the main timeline", () => {
