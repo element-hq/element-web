@@ -167,6 +167,7 @@ export const test = base.extend<Fixtures>({
                 window.localStorage.setItem(
                     "mx_local_settings",
                     JSON.stringify({
+                        // Retain any other settings which may have already been set
                         ...JSON.parse(window.localStorage.getItem("mx_local_settings") || "{}"),
                         // Ensure the language is set to a consistent value
                         language: "en",
