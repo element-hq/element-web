@@ -30,7 +30,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
 
     test.beforeEach(async ({ page, homeserver, credentials }) => {
         const res = await createBot(page, homeserver, credentials);
-        aliceBotClient = res.aliceBotClient;
+        aliceBotClient = res.botClient;
         expectedBackupVersion = res.expectedBackupVersion;
     });
 

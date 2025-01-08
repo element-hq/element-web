@@ -24,7 +24,7 @@ import { ElementAppPage } from "../../pages/ElementAppPage";
 import { Bot } from "../../pages/bot";
 
 /**
- * Create a new device for the Alice user.
+ * Create a bot client and wait for the key backup to be ready.
  * This function will wait for the key backup to be ready.
  * @param page - the page to use
  * @param homeserver - the homeserver to use
@@ -34,21 +34,21 @@ export async function createBot(
     page: Page,
     homeserver: HomeserverInstance,
     credentials: Credentials,
-): Promise<{ aliceBotClient: Bot; recoveryKey: GeneratedSecretStorageKey; expectedBackupVersion: string }> {
+): Promise<{ botClient: Bot; recoveryKey: GeneratedSecretStorageKey; expectedBackupVersion: string }> {
     // Visit the login page of the app, to load the matrix sdk
     await page.goto("/#/login");
 
     // wait for the page to load
     await page.waitForSelector(".mx_AuthPage", { timeout: 30000 });
 
-    // Create a new device for alice
-    const aliceBotClient = new Bot(page, homeserver, {
+    // Create a new bot client
+    const botClient = new Bot(page, homeserver, {
         bootstrapCrossSigning: true,
         bootstrapSecretStorage: true,
     });
-    aliceBotClient.setCredentials(credentials);
+    botClient.setCredentials(credentials);
     // Backup is prepared in the background. Poll until it is ready.
-    const botClientHandle = await aliceBotClient.prepareClient();
+    const botClientHandle = await botClient.prepareClient();
     let expectedBackupVersion: string;
     await expect
         .poll(async () => {
@@ -59,9 +59,9 @@ export async function createBot(
         })
         .not.toBe(null);
 
-    const recoveryKey = await aliceBotClient.getRecoveryKey();
+    const recoveryKey = await botClient.getRecoveryKey();
 
-    return { aliceBotClient, recoveryKey, expectedBackupVersion };
+    return { botClient, recoveryKey, expectedBackupVersion };
 }
 
 /**
