@@ -11,18 +11,18 @@ import { Bot } from "../../pages/bot";
 const ROOM_NAME = "Test room";
 const NAME = "Alice";
 
-test.describe("Memberlist", () => {
-    test.use({
-        synapseConfigOptions: {
-            presence: {
-                enabled: false,
-                include_offline_users_on_sync: false,
-            },
+test.use({
+    synapseConfigOptions: {
+        presence: {
+            enabled: false,
+            include_offline_users_on_sync: false,
         },
-        displayName: NAME,
-        disablePresence: true,
-    });
+    },
+    displayName: NAME,
+    disablePresence: true,
+});
 
+test.describe("Memberlist", () => {
     test.beforeEach(async ({ app, user, page, homeserver }, testInfo) => {
         testInfo.setTimeout(testInfo.timeout + 30_000);
         const id = await app.client.createRoom({ name: ROOM_NAME });
