@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -17,6 +17,7 @@ import SettingsStore from "../../../../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../../../../src/settings/SettingLevel";
 import MatrixClientBackedController from "../../../../../../../src/settings/controllers/MatrixClientBackedController";
 import PlatformPeg from "../../../../../../../src/PlatformPeg";
+import { SettingKey } from "../../../../../../../src/settings/Settings.tsx";
 
 describe("PreferencesUserSettingsTab", () => {
     beforeEach(() => {
@@ -121,13 +122,13 @@ describe("PreferencesUserSettingsTab", () => {
         const mockGetValue = (val: boolean) => {
             const copyOfGetValueAt = SettingsStore.getValueAt;
 
-            SettingsStore.getValueAt = <T,>(
+            SettingsStore.getValueAt = (
                 level: SettingLevel,
-                name: string,
+                name: SettingKey,
                 roomId?: string,
                 isExplicit?: boolean,
-            ): T => {
-                if (name === "sendReadReceipts") return val as T;
+            ) => {
+                if (name === "sendReadReceipts") return val;
                 return copyOfGetValueAt(level, name, roomId, isExplicit);
             };
         };

@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -50,6 +50,10 @@ export class Client {
             this.client = null;
         });
         this.network = new Network(page, this);
+    }
+
+    public async cleanup() {
+        await this.network.destroyRoute();
     }
 
     public evaluate<R, Arg, O extends MatrixClient = MatrixClient>(
@@ -175,18 +179,18 @@ export class Client {
     public async createRoom(options: ICreateRoomOpts): Promise<string> {
         const client = await this.prepareClient();
         return await client.evaluate(async (cli, options) => {
-            const resp = await cli.createRoom(options);
-            const roomId = resp.room_id;
+            const roomPromise = new Promise<void>((resolve) => {
+                const onRoom = (room: Room) => {
+                    if (room.roomId === roomId) {
+                        cli.off(window.matrixcs.ClientEvent.Room, onRoom);
+                        resolve();
+                    }
+                };
+                cli.on(window.matrixcs.ClientEvent.Room, onRoom);
+            });
+            const { room_id: roomId } = await cli.createRoom(options);
             if (!cli.getRoom(roomId)) {
-                await new Promise<void>((resolve) => {
-                    const onRoom = (room: Room) => {
-                        if (room.roomId === roomId) {
-                            cli.off(window.matrixcs.ClientEvent.Room, onRoom);
-                            resolve();
-                        }
-                    };
-                    cli.on(window.matrixcs.ClientEvent.Room, onRoom);
-                });
+                await roomPromise;
             }
             return roomId;
         }, options);

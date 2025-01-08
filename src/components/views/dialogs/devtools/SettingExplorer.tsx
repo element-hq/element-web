@@ -3,7 +3,7 @@ Copyright 2024 New Vector Ltd.
 Copyright 2018-2023 The Matrix.org Foundation C.I.C.
 Copyright 2022 Michael Telatynski <7t3chguy@gmail.com>
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -15,11 +15,11 @@ import BaseTool, { DevtoolsContext, IDevtoolsProps } from "./BaseTool";
 import AccessibleButton from "../../elements/AccessibleButton";
 import SettingsStore, { LEVEL_ORDER } from "../../../../settings/SettingsStore";
 import { SettingLevel } from "../../../../settings/SettingLevel";
-import { SETTINGS } from "../../../../settings/Settings";
+import { SettingKey, SETTINGS, SettingValueType } from "../../../../settings/Settings";
 import Field from "../../elements/Field";
 
 const SettingExplorer: React.FC<IDevtoolsProps> = ({ onBack }) => {
-    const [setting, setSetting] = useState<string | null>(null);
+    const [setting, setSetting] = useState<SettingKey | null>(null);
     const [editing, setEditing] = useState(false);
 
     if (setting && editing) {
@@ -36,10 +36,10 @@ const SettingExplorer: React.FC<IDevtoolsProps> = ({ onBack }) => {
         };
         return <ViewSetting setting={setting} onBack={onBack} onEdit={onEdit} />;
     } else {
-        const onView = (setting: string): void => {
+        const onView = (setting: SettingKey): void => {
             setSetting(setting);
         };
-        const onEdit = (setting: string): void => {
+        const onEdit = (setting: SettingKey): void => {
             setSetting(setting);
             setEditing(true);
         };
@@ -50,7 +50,7 @@ const SettingExplorer: React.FC<IDevtoolsProps> = ({ onBack }) => {
 export default SettingExplorer;
 
 interface ICanEditLevelFieldProps {
-    setting: string;
+    setting: SettingKey;
     level: SettingLevel;
     roomId?: string;
 }
@@ -65,8 +65,8 @@ const CanEditLevelField: React.FC<ICanEditLevelFieldProps> = ({ setting, roomId,
     );
 };
 
-function renderExplicitSettingValues(setting: string, roomId?: string): string {
-    const vals: Record<string, number | null> = {};
+function renderExplicitSettingValues(setting: SettingKey, roomId?: string): string {
+    const vals: Record<string, SettingValueType> = {};
     for (const level of LEVEL_ORDER) {
         try {
             vals[level] = SettingsStore.getValueAt(level, setting, roomId, true, true);
@@ -81,7 +81,7 @@ function renderExplicitSettingValues(setting: string, roomId?: string): string {
 }
 
 interface IEditSettingProps extends Pick<IDevtoolsProps, "onBack"> {
-    setting: string;
+    setting: SettingKey;
 }
 
 const EditSetting: React.FC<IEditSettingProps> = ({ setting, onBack }) => {
@@ -191,7 +191,7 @@ const EditSetting: React.FC<IEditSettingProps> = ({ setting, onBack }) => {
 };
 
 interface IViewSettingProps extends Pick<IDevtoolsProps, "onBack"> {
-    setting: string;
+    setting: SettingKey;
     onEdit(): Promise<void>;
 }
 
@@ -258,7 +258,7 @@ const SettingsList: React.FC<ISettingsListProps> = ({ onBack, onView, onEdit }) 
     const [query, setQuery] = useState("");
 
     const allSettings = useMemo(() => {
-        let allSettings = Object.keys(SETTINGS);
+        let allSettings = Object.keys(SETTINGS) as SettingKey[];
         if (query) {
             const lcQuery = query.toLowerCase();
             allSettings = allSettings.filter((setting) => setting.toLowerCase().includes(lcQuery));

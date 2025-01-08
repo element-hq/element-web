@@ -2,13 +2,14 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import "@testing-library/jest-dom";
 import React, { createRef } from "react";
 import { render, screen, waitFor } from "jest-matrix-react";
+import { initOnce } from "@vector-im/matrix-wysiwyg";
 
 import MatrixClientContext from "../../../../../../../src/contexts/MatrixClientContext";
 import { WysiwygAutocomplete } from "../../../../../../../src/components/views/rooms/wysiwyg_composer/components/WysiwygAutocomplete";
@@ -41,6 +42,8 @@ const constructMockProvider = (data: ICompletion[]) =>
         getName: jest.fn().mockReturnValue("test provider"),
         renderCompletions: jest.fn().mockImplementation((components) => components),
     }) as unknown as AutocompleteProvider;
+
+beforeAll(initOnce, 10000);
 
 describe("WysiwygAutocomplete", () => {
     beforeAll(() => {

@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -11,16 +11,20 @@ import { Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
 import { doTokenRegistration } from "./utils";
 import { Credentials } from "../../plugins/homeserver";
-import { isDendrite } from "../../plugins/homeserver/dendrite";
+import { legacyOAuthHomeserver } from "../../plugins/homeserver/synapse/legacyOAuthHomeserver.ts";
 
 test.describe("Soft logout", () => {
     test.use({
         displayName: "Alice",
-        startHomeserverOpts: ({ oAuthServer }, use) =>
-            use({
-                template: "default",
-                oAuthServerPort: oAuthServer.port,
-            }),
+        config: {
+            // The only thing that we really *need* (otherwise Element refuses to load) is a default homeserver.
+            // We point that to a guaranteed-invalid domain.
+            default_server_config: {
+                "m.homeserver": {
+                    base_url: "https://server.invalid",
+                },
+            },
+        },
     });
 
     test.describe("with password user", () => {
@@ -32,7 +36,9 @@ test.describe("Soft logout", () => {
 
             // back to the welcome page
             await expect(page).toHaveURL(/\/#\/home/);
-            await expect(page.getByRole("heading", { name: `Welcome ${user.userId}`, exact: true })).toBeVisible();
+            await expect(
+                page.getByRole("heading", { name: "Now, let's help you get started", exact: true }),
+            ).toBeVisible();
         });
 
         test("still shows the soft-logout page when the page is reloaded after a soft-logout", async ({
@@ -47,8 +53,7 @@ test.describe("Soft logout", () => {
     });
 
     test.describe("with SSO user", () => {
-        test.skip(isDendrite, "does not yet support SSO");
-
+        test.use(legacyOAuthHomeserver);
         test.use({
             user: async ({ page, homeserver }, use) => {
                 const user = await doTokenRegistration(page, homeserver);

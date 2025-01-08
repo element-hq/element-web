@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -31,7 +31,7 @@ import QuestionDialog from "../../../dialogs/QuestionDialog";
 import { FilterVariation } from "../../devices/filter";
 import { OtherSessionsSectionHeading } from "../../devices/OtherSessionsSectionHeading";
 import { SettingsSection } from "../../shared/SettingsSection";
-import { OidcLogoutDialog } from "../../../dialogs/oidc/OidcLogoutDialog";
+import { getManageDeviceUrl } from "../../../../../utils/oidc/urls.ts";
 import { SDKContext } from "../../../../../contexts/SDKContext";
 import Spinner from "../../../elements/Spinner";
 
@@ -52,16 +52,6 @@ const confirmSignOut = async (sessionsToSignOutCount: number): Promise<boolean> 
         ),
         cancelButton: _t("action|cancel"),
         button: _t("action|sign_out"),
-    });
-    const [confirmed] = await finished;
-
-    return !!confirmed;
-};
-
-const confirmDelegatedAuthSignOut = async (delegatedAuthAccountUrl: string, deviceId: string): Promise<boolean> => {
-    const { finished } = Modal.createDialog(OidcLogoutDialog, {
-        deviceId,
-        delegatedAuthAccountUrl,
     });
     const [confirmed] = await finished;
 
@@ -93,20 +83,10 @@ const useSignOut = (
         if (!deviceIds.length) {
             return;
         }
-        // we can only sign out exactly one OIDC-aware device at a time
-        // we should not encounter this
-        if (delegatedAuthAccountUrl && deviceIds.length !== 1) {
-            logger.warn("Unexpectedly tried to sign out multiple OIDC-aware devices.");
-            return;
-        }
 
-        // delegated auth logout flow confirms and signs out together
-        // so only confirm if we are NOT doing a delegated auth sign out
-        if (!delegatedAuthAccountUrl) {
-            const userConfirmedSignout = await confirmSignOut(deviceIds.length);
-            if (!userConfirmedSignout) {
-                return;
-            }
+        const userConfirmedSignout = await confirmSignOut(deviceIds.length);
+        if (!userConfirmedSignout) {
+            return;
         }
 
         let success = false;
@@ -115,11 +95,8 @@ const useSignOut = (
 
             if (delegatedAuthAccountUrl) {
                 const [deviceId] = deviceIds;
-                try {
-                    success = await confirmDelegatedAuthSignOut(delegatedAuthAccountUrl, deviceId);
-                } catch (error) {
-                    logger.error("Error deleting OIDC-aware sessions", error);
-                }
+                const url = getManageDeviceUrl(delegatedAuthAccountUrl, deviceId);
+                window.open(url, "_blank");
             } else {
                 const deferredSuccess = defer<boolean>();
                 await deleteDevicesWithInteractiveAuth(matrixClient, deviceIds, async (success) => {
@@ -323,6 +300,7 @@ const SessionManagerTab: React.FC<{
                     onSignOutCurrentDevice={onSignOutCurrentDevice}
                     signOutAllOtherSessions={signOutAllOtherSessions}
                     otherSessionsCount={otherSessionsCount}
+                    delegatedAuthAccountUrl={delegatedAuthAccountUrl}
                 />
                 {shouldShowOtherSessions && (
                     <SettingsSubsection
@@ -356,7 +334,7 @@ const SessionManagerTab: React.FC<{
                             setPushNotifications={setPushNotifications}
                             ref={filteredDeviceListRef}
                             supportsMSC3881={supportsMSC3881}
-                            disableMultipleSignout={disableMultipleSignout}
+                            delegatedAuthAccountUrl={delegatedAuthAccountUrl}
                         />
                     </SettingsSubsection>
                 )}

@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021, 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -239,7 +239,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         if (!isMetaSpace(space)) {
             cliSpace = this.matrixClient.getRoom(space);
             if (!cliSpace?.isSpaceRoom()) return;
-        } else if (!this.enabledMetaSpaces.includes(space as MetaSpace)) {
+        } else if (!this.enabledMetaSpaces.includes(space)) {
             return;
         }
 
@@ -1178,7 +1178,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         }
 
         // restore selected state from last session if any and still valid
-        const lastSpaceId = window.localStorage.getItem(ACTIVE_SPACE_LS_KEY);
+        const lastSpaceId = window.localStorage.getItem(ACTIVE_SPACE_LS_KEY) as MetaSpace;
         const valid =
             lastSpaceId &&
             (!isMetaSpace(lastSpaceId) ? this.matrixClient.getRoom(lastSpaceId) : enabledMetaSpaces[lastSpaceId]);

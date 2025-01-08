@@ -3,7 +3,7 @@ Copyright 2024 New Vector Ltd.
 Copyright 2019-2024 The Matrix.org Foundation C.I.C.
 Copyright 2019 New Vector Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -89,8 +89,8 @@ function titleForTabID(tabId: UserTab): React.ReactNode {
 }
 
 export default function UserSettingsDialog(props: IProps): JSX.Element {
-    const voipEnabled = useSettingValue<boolean>(UIFeature.Voip);
-    const mjolnirEnabled = useSettingValue<boolean>("feature_mjolnir");
+    const voipEnabled = useSettingValue(UIFeature.Voip);
+    const mjolnirEnabled = useSettingValue("feature_mjolnir");
     // store this prop in state as changing tabs back and forth should clear it
     const [showMsc4108QrCode, setShowMsc4108QrCode] = useState(props.showMsc4108QrCode);
 

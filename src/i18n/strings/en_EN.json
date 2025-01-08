@@ -238,7 +238,6 @@
         "oidc": {
             "error_title": "We couldn't log you in",
             "generic_auth_error": "Something went wrong during authentication. Go to the sign in page and try again.",
-            "logout_redirect_warning": "You will be redirected to your server's authentication provider to complete sign out.",
             "missing_or_invalid_stored_state": "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again."
         },
         "password_field_keep_going_prompt": "Keep going…",
@@ -2849,6 +2848,7 @@
             "inactive_sessions_list_description": "Consider signing out from old sessions (%(inactiveAgeDays)s days or older) you don't use anymore.",
             "ip": "IP address",
             "last_activity": "Last activity",
+            "manage": "Manage this session",
             "mobile_session": "Mobile session",
             "n_sessions_selected": {
                 "one": "%(count)s session selected",

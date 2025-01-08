@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -196,7 +196,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
         await sendThreadedReadReceipt(app, thread1a, main1);
 
         // Then the room has only one unread - the one in the thread
-        await util.goTo(otherRoomName);
+        await util.goTo({ name: otherRoomName, roomId: otherRoomId });
         await util.assertUnreadThread("Message 1");
     });
 
@@ -214,7 +214,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
 
         // Then the room has no unreads
         await expect(page.getByLabel(`${otherRoomName}`)).toBeVisible();
-        await util.goTo(otherRoomName);
+        await util.goTo({ name: otherRoomName, roomId: otherRoomId });
         await util.assertReadThread("Message 1");
     });
 
@@ -239,7 +239,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
         // receipt is for a later event. The room should therefore be
         // read, and the thread unread.
         await expect(page.getByLabel(`${otherRoomName}`)).toBeVisible();
-        await util.goTo(otherRoomName);
+        await util.goTo({ name: otherRoomName, roomId: otherRoomId });
         await util.assertUnreadThread("Message 1");
     });
 

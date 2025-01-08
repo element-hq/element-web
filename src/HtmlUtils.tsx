@@ -5,12 +5,12 @@ Copyright 2019 The Matrix.org Foundation C.I.C.
 Copyright 2017, 2018 New Vector Ltd
 Copyright 2015, 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React, { LegacyRef, ReactNode } from "react";
-import sanitizeHtml from "sanitize-html";
+import sanitizeHtml, { IOptions } from "sanitize-html";
 import classNames from "classnames";
 import katex from "katex";
 import { decode } from "html-entities";
@@ -19,7 +19,6 @@ import { Optional } from "matrix-events-sdk";
 import escapeHtml from "escape-html";
 import { getEmojiFromUnicode } from "@matrix-org/emojibase-bindings";
 
-import { IExtendedSanitizeOptions } from "./@types/sanitize-html";
 import SettingsStore from "./settings/SettingsStore";
 import { stripHTMLReply, stripPlainReply } from "./utils/Reply";
 import { PERMITTED_URL_SCHEMES } from "./utils/UrlUtils";
@@ -126,7 +125,7 @@ export function isUrlPermitted(inputUrl: string): boolean {
 }
 
 // this is the same as the above except with less rewriting
-const composerSanitizeHtmlParams: IExtendedSanitizeOptions = {
+const composerSanitizeHtmlParams: IOptions = {
     ...sanitizeHtmlParams,
     transformTags: {
         "code": transformTags["code"],
@@ -135,7 +134,7 @@ const composerSanitizeHtmlParams: IExtendedSanitizeOptions = {
 };
 
 // reduced set of allowed tags to avoid turning topics into Myspace
-const topicSanitizeHtmlParams: IExtendedSanitizeOptions = {
+const topicSanitizeHtmlParams: IOptions = {
     ...sanitizeHtmlParams,
     allowedTags: [
         "font", // custom to matrix for IRC-style font coloring

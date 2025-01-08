@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -47,7 +47,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
     }
 
     test("Verify device with SAS during login", async ({ page, app, credentials, homeserver }) => {
-        await logIntoElement(page, homeserver, credentials);
+        await logIntoElement(page, credentials);
 
         // Launch the verification request between alice and the bot
         const verificationRequest = await initiateAliceVerificationRequest(page);
@@ -74,7 +74,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
 
     test("Verify device with QR code during login", async ({ page, app, credentials, homeserver }) => {
         // A mode 0x02 verification: "self-verifying in which the current device does not yet trust the master key"
-        await logIntoElement(page, homeserver, credentials);
+        await logIntoElement(page, credentials);
 
         // Launch the verification request between alice and the bot
         const verificationRequest = await initiateAliceVerificationRequest(page);
@@ -118,7 +118,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
     });
 
     test("Verify device with Security Phrase during login", async ({ page, app, credentials, homeserver }) => {
-        await logIntoElement(page, homeserver, credentials);
+        await logIntoElement(page, credentials);
 
         // Select the security phrase
         await page.locator(".mx_AuthPage").getByRole("button", { name: "Verify with Security Key or Phrase" }).click();
@@ -139,7 +139,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
     });
 
     test("Verify device with Security Key during login", async ({ page, app, credentials, homeserver }) => {
-        await logIntoElement(page, homeserver, credentials);
+        await logIntoElement(page, credentials);
 
         // Select the security phrase
         await page.locator(".mx_AuthPage").getByRole("button", { name: "Verify with Security Key or Phrase" }).click();
@@ -162,7 +162,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
     });
 
     test("Handle incoming verification request with SAS", async ({ page, credentials, homeserver, toasts }) => {
-        await logIntoElement(page, homeserver, credentials);
+        await logIntoElement(page, credentials);
 
         /* Dismiss "Verify this device" */
         const authPage = page.locator(".mx_AuthPage");

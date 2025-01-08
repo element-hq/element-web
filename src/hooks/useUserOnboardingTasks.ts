@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -145,7 +145,7 @@ const tasks: UserOnboardingTask[] = [
 ];
 
 export function useUserOnboardingTasks(context: UserOnboardingContext): UserOnboardingTaskWithResolvedCompletion[] {
-    const useCase = useSettingValue<UseCase | null>("FTUE.useCaseSelection") ?? UseCase.Skip;
+    const useCase = useSettingValue("FTUE.useCaseSelection") ?? UseCase.Skip;
 
     return useMemo<UserOnboardingTaskWithResolvedCompletion[]>(() => {
         return tasks

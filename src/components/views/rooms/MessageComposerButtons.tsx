@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -54,7 +54,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
     const matrixClient = useContext(MatrixClientContext);
     const { room, narrow } = useScopedRoomContext("room", "narrow");
 
-    const isWysiwygLabEnabled = useSettingValue<boolean>("feature_wysiwyg_composer");
+    const isWysiwygLabEnabled = useSettingValue("feature_wysiwyg_composer");
 
     if (!matrixClient || !room || props.haveRecording) {
         return null;

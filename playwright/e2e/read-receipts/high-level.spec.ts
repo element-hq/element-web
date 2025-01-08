@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -11,6 +11,8 @@ Please see LICENSE files in the repository root for full details.
 import { customEvent, many, test } from ".";
 
 test.describe("Read receipts", { tag: "@mergequeue" }, () => {
+    test.slow();
+
     test.describe("Ignored events", () => {
         test("If all events after receipt are unimportant, the room is read", async ({
             roomAlpha: room1,
@@ -120,7 +122,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
             await util.assertUnread(room2, 40);
 
             // When I jump to a message in the middle and page up
-            await msg.jumpTo(room2.name, "x\ny\nz\nMsg0020");
+            await msg.jumpTo(room2, "x\ny\nz\nMsg0020");
             await util.pageUp();
 
             // Then the room is still unread

@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -14,7 +14,6 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { _t } from "../../../languageHandler";
 import PosthogTrackers from "../../../PosthogTrackers";
-import { UseCase } from "../../../settings/enums/UseCase";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleButton";
@@ -27,8 +26,8 @@ interface Props {
 }
 
 export function UserOnboardingButton({ selected, minimized }: Props): JSX.Element {
-    const useCase = useSettingValue<UseCase | null>("FTUE.useCaseSelection");
-    const visible = useSettingValue<boolean>("FTUE.userOnboardingButton");
+    const useCase = useSettingValue("FTUE.useCaseSelection");
+    const visible = useSettingValue("FTUE.userOnboardingButton");
 
     if (!visible || minimized || !showUserOnboardingPage(useCase)) {
         return <></>;

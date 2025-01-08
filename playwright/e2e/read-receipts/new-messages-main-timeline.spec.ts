@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -59,7 +59,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
                 await util.assertUnread(room2, 30);
 
                 // When I jump to one of the older messages
-                await msg.jumpTo(room2.name, "Msg0001");
+                await msg.jumpTo(room2, "Msg0001");
 
                 // Then the room is still unread, but some messages were read
                 await util.assertUnreadLessThan(room2, 30);

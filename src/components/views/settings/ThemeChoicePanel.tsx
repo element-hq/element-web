@@ -2,7 +2,7 @@
  * Copyright 2024 New Vector Ltd.
  * Copyright 2024 The Matrix.org Foundation C.I.C.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -40,7 +40,7 @@ import { useSettingValue } from "../../../hooks/useSettings";
 export function ThemeChoicePanel(): JSX.Element {
     const themeState = useTheme();
     const themeWatcher = useRef(new ThemeWatcher());
-    const customThemeEnabled = useSettingValue<boolean>("feature_custom_themes");
+    const customThemeEnabled = useSettingValue("feature_custom_themes");
 
     return (
         <SettingsSubsection heading={_t("common|theme")} legacy={false} data-testid="themePanel">
@@ -159,7 +159,7 @@ function ThemeSelectors({ theme, disabled }: ThemeSelectorProps): JSX.Element {
  * Return all the available themes
  */
 function useThemes(): Array<ITheme & { isDark: boolean }> {
-    const customThemes = useSettingValue<CustomThemeType[] | undefined>("custom_themes");
+    const customThemes = useSettingValue("custom_themes");
     return useMemo(() => {
         // Put the custom theme into a map
         // To easily find the theme by name when going through the themes list
@@ -239,8 +239,7 @@ function CustomTheme({ theme }: CustomThemeProps): JSX.Element {
 
                     // Get the custom themes and do a cheap clone
                     // To avoid to mutate the original array in the settings
-                    const currentThemes =
-                        SettingsStore.getValue<CustomThemeType[]>("custom_themes").map((t) => t) || [];
+                    const currentThemes = SettingsStore.getValue("custom_themes").map((t) => t) || [];
 
                     try {
                         const r = await fetch(customTheme);
@@ -294,7 +293,7 @@ interface CustomThemeListProps {
  * List of the custom themes
  */
 function CustomThemeList({ theme: currentTheme }: CustomThemeListProps): JSX.Element {
-    const customThemes = useSettingValue<CustomThemeType[]>("custom_themes") || [];
+    const customThemes = useSettingValue("custom_themes") || [];
 
     return (
         <ul className="mx_ThemeChoicePanel_CustomThemeList">
@@ -309,8 +308,7 @@ function CustomThemeList({ theme: currentTheme }: CustomThemeListProps): JSX.Ele
                             onClick={async () => {
                                 // Get the custom themes and do a cheap clone
                                 // To avoid to mutate the original array in the settings
-                                const currentThemes =
-                                    SettingsStore.getValue<CustomThemeType[]>("custom_themes").map((t) => t) || [];
+                                const currentThemes = SettingsStore.getValue("custom_themes").map((t) => t) || [];
 
                                 // Remove the theme from the list
                                 const newThemes = currentThemes.filter((t) => t.name !== theme.name);

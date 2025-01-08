@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -15,11 +15,12 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { UserTab } from "./UserTab";
 import GenericFeatureFeedbackDialog from "./GenericFeatureFeedbackDialog";
+import { SettingKey } from "../../../settings/Settings.tsx";
 
 // XXX: Keep this around for re-use in future Betas
 
 interface IProps {
-    featureId: string;
+    featureId: SettingKey;
     onFinished(sendFeedback?: boolean): void;
 }
 
@@ -35,7 +36,7 @@ const BetaFeedbackDialog: React.FC<IProps> = ({ featureId, onFinished }) => {
             rageshakeLabel={info.feedbackLabel}
             rageshakeData={Object.fromEntries(
                 (SettingsStore.getBetaInfo(featureId)?.extraSettings || []).map((k) => {
-                    return SettingsStore.getValue(k);
+                    return [k, SettingsStore.getValue(k)];
                 }),
             )}
         >
