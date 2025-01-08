@@ -23,25 +23,26 @@ import { SettingsSubheader } from "../../SettingsSubheader";
  * The state in the encryption settings tab.
  *  - "loading": We are checking if the device is verified.
  *  - "main": The main panel with all the sections (Key storage, recovery, advanced).
- *  - "verification_required": The panel to show when the user needs to verify their session.
+ *  - "set_up_encryption": The panel to show when the user is setting up their encryption.
+ *                         This happens when the user doesn't have cross-signing enabled.
  *  - "change_recovery_key": The panel to show when the user is changing their recovery key.
  *                           This happens when the user has a key backup and the user clicks on "Change recovery key" button of the RecoveryPanel.
  *  - "set_recovery_key": The panel to show when the user is setting up their recovery key.
  *                        This happens when the user doesn't have a key backup and the user clicks on "Set up recovery key" button of the RecoveryPanel.
  */
-type State = "loading" | "main" | "verification_required" | "change_recovery_key" | "set_recovery_key";
+type State = "loading" | "main" | "set_up_encryption" | "change_recovery_key" | "set_recovery_key";
 
 export function EncryptionUserSettingsTab(): JSX.Element {
     const [state, setState] = useState<State>("loading");
-    const checkVerificationRequired = useVerificationRequired(setState);
+    const setUpEncryptionRequired = useSetUpEncryptionRequired(setState);
 
     let content: JSX.Element;
     switch (state) {
         case "loading":
             content = <InlineSpinner aria-label={_t("common|loading")} />;
             break;
-        case "verification_required":
-            content = <VerifySessionPanel onFinish={checkVerificationRequired} />;
+        case "set_up_encryption":
+            content = <SetUpEncryptionPanel onFinish={setUpEncryptionRequired} />;
             break;
         case "main":
             content = (
@@ -72,31 +73,31 @@ export function EncryptionUserSettingsTab(): JSX.Element {
 }
 
 /**
- * Hook to check if the user needs to verify their session.
- * If the user needs to verify their session, the state will be set to "verification_required".
- * If the user doesn't need to verify their session, the state will be set to "main".
+ * Hook to check if the user needs to set up their encryption for this session.
+ * If the user needs to set up the encryption, the state will be set to "set_up_encryption".
+ * Otherwise, the state will be set to "main".
  * @param setState
  */
-function useVerificationRequired(setState: (state: State) => void): () => Promise<void> {
+function useSetUpEncryptionRequired(setState: (state: State) => void): () => Promise<void> {
     const matrixClient = useMatrixClientContext();
 
-    const checkVerificationRequired = useCallback(async () => {
+    const setUpEncryptionRequired = useCallback(async () => {
         const crypto = matrixClient.getCrypto()!;
         const isCrossSigningReady = await crypto.isCrossSigningReady();
         if (isCrossSigningReady) setState("main");
-        else setState("verification_required");
+        else setState("set_up_encryption");
     }, [matrixClient, setState]);
 
     useEffect(() => {
-        checkVerificationRequired();
-    }, [checkVerificationRequired]);
+        setUpEncryptionRequired();
+    }, [setUpEncryptionRequired]);
 
-    return checkVerificationRequired;
+    return setUpEncryptionRequired;
 }
 
-interface VerifySessionPanelProps {
+interface SetUpEncryptionPanelProps {
     /**
-     * Callback to call when the user has finished verifying their session.
+     * Callback to call when the user has finished to set up the encryption.
      */
     onFinish: () => void;
 }
@@ -104,7 +105,7 @@ interface VerifySessionPanelProps {
 /**
  * Panel to show when the user needs to verify their session.
  */
-function VerifySessionPanel({ onFinish }: VerifySessionPanelProps): JSX.Element {
+function SetUpEncryptionPanel({ onFinish }: SetUpEncryptionPanelProps): JSX.Element {
     return (
         <SettingsSection
             legacy={false}

@@ -40,14 +40,14 @@ describe("<EncryptionUserSettingsTab />", () => {
         return render(<EncryptionUserSettingsTab />, withClientContextRenderOptions(matrixClient));
     }
 
-    it("should display a loading state when the verification state is computed", () => {
+    it("should display a loading state when the encryption state is computed", () => {
         jest.spyOn(matrixClient.getCrypto()!, "isCrossSigningReady").mockImplementation(() => new Promise(() => {}));
 
         renderComponent();
         expect(screen.getByLabelText("Loading…")).toBeInTheDocument();
     });
 
-    it("should display a verify button when the device is not verified", async () => {
+    it("should display a verify button when the encryption is not set up", async () => {
         const user = userEvent.setup();
         jest.spyOn(matrixClient.getCrypto()!, "isCrossSigningReady").mockResolvedValue(false);
 
@@ -64,7 +64,7 @@ describe("<EncryptionUserSettingsTab />", () => {
         expect(spy).toHaveBeenCalled();
     });
 
-    it("should display the recovery panel when the device is verified", async () => {
+    it("should display the recovery panel when the encryption is set up", async () => {
         renderComponent();
         await waitFor(() => expect(screen.getByText("Recovery")).toBeInTheDocument());
     });
