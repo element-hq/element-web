@@ -1,7 +1,7 @@
 /*
  * Copyright 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -118,7 +118,7 @@ function EncryptionDetails({ onResetIdentityClick }: EncryptionDetails): JSX.Ele
  * Display the never send encrypted message to unverified devices setting.
  */
 function OtherSettings(): JSX.Element | null {
-    const blacklistUnverifiedDevices = useSettingValueAt<boolean>(SettingLevel.DEVICE, "blacklistUnverifiedDevices");
+    const blacklistUnverifiedDevices = useSettingValueAt(SettingLevel.DEVICE, "blacklistUnverifiedDevices");
     const canSetValue = SettingsStore.canSetValue("blacklistUnverifiedDevices", null, SettingLevel.DEVICE);
     if (!canSetValue) return null;
 
