@@ -1579,9 +1579,14 @@
         "toggle_attribution": "Toggle attribution"
     },
     "member_list": {
+        "count": {
+            "one": "%(count)s Member",
+            "other": "%(count)s Members"
+        },
         "filter_placeholder": "Filter room members",
         "invite_button_no_perms_tooltip": "You do not have permission to invite users",
-        "invited_list_heading": "Invited",
+        "invited_label": "Invited",
+        "no_matches": "No matches",
         "power_label": "%(userName)s (power %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Room members",
@@ -1734,7 +1739,6 @@
         "custom_level": "Custom level",
         "default": "Default",
         "label": "Power level",
-        "mod": "Mod",
         "moderator": "Moderator",
         "restricted": "Restricted"
     },
@@ -3066,7 +3070,6 @@
         "invite": "Invite people",
         "invite_description": "Invite with email or username",
         "invite_link": "Share invite link",
-        "invite_this_space": "Invite to this space",
         "joining_space": "Joining",
         "landing_welcome": "Welcome to <name/>",
         "leave_dialog_action": "Leave space",

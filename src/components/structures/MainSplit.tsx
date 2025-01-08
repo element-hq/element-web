@@ -99,7 +99,7 @@ export default class MainSplit extends React.Component<IProps> {
                 <Resizable
                     key={this.props.sizeKey}
                     defaultSize={this.loadSidePanelSize()}
-                    minWidth={264}
+                    minWidth={320}
                     maxWidth="50%"
                     enable={{
                         top: false,
