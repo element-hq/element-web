@@ -405,7 +405,8 @@ export function mkEvent(opts: MakeEventProps): MatrixEvent {
 
     const mxEvent = opts.event ? new MatrixEvent(event) : (event as unknown as MatrixEvent);
     if (!mxEvent.sender && opts.user && opts.room) {
-        mxEvent.sender = {
+        // @ts-ignore - private field access
+        mxEvent._sender = {
             userId: opts.user,
             membership: KnownMembership.Join,
             name: opts.user,
@@ -470,7 +471,8 @@ export function mkMembership(
     }
     const e = mkEvent(event);
     if (opts.target) {
-        e.target = opts.target;
+        // @ts-ignore - private field access
+        e._target = opts.target;
     }
     return e;
 }

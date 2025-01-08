@@ -237,7 +237,8 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
         room_id: event.getRoomId(),
         origin_server_ts: event.getTs(),
     });
-    mockEvent.sender = {
+    // @ts-ignore - private field access
+    mockEvent._sender = {
         name: profileInfo.displayname || userId,
         rawDisplayName: profileInfo.displayname,
         userId,
