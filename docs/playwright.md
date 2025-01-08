@@ -227,6 +227,8 @@ has to be disabled in Playwright on Firefox & Webkit to retain routing functiona
 Anything testing VoIP/microphone will need to have `@no-webkit` as fake microphone functionality is not available
 there at this time.
 
+If you wish to run all tests in a PR, you can give it the label `X-Run-All-Tests`.
+
 ## Supporter container runtimes
 
 We use testcontainers to spin up various instances of Synapse, Matrix Authentication Service, and more.
