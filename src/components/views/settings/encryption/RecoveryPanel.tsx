@@ -116,7 +116,7 @@ interface SubheaderProps {
  * The subheader for the recovery panel.
  */
 function Subheader({ state }: SubheaderProps): JSX.Element {
-    // If we the secrets are not cached, we display a warning message.
+    // If the secrets are not cached, we display a warning message.
     if (state !== "secrets_not_cached") return <>{_t("settings|encryption|recovery|description")}</>;
 
     return (
