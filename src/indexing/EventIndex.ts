@@ -761,7 +761,8 @@ export default class EventIndex extends EventEmitter {
             // We set this manually to avoid emitting RoomMember.membership and
             // RoomMember.name events.
             member.events.member = memberEvent;
-            matrixEvent.sender = member;
+            // @ts-ignore - private field access
+            matrixEvent._sender = member;
 
             return matrixEvent;
         });

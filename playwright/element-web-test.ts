@@ -107,6 +107,7 @@ export interface TestFixtures {
     bot: Bot;
     labsFlags: string[];
     webserver: Webserver;
+    disablePresence: boolean;
 }
 
 type CombinedTestFixtures = PlaywrightTestArgs & TestFixtures;
@@ -121,8 +122,9 @@ export const test = base.extend<TestFixtures>({
         );
         await use(context);
     },
+    disablePresence: false,
     config: {}, // We merge this atop the default CONFIG_JSON in the page fixture to make extending it easier
-    page: async ({ homeserver, context, page, config, labsFlags }, use) => {
+    page: async ({ homeserver, context, page, config, labsFlags, disablePresence }, use) => {
         await context.route(`http://localhost:8080/config.json*`, async (route) => {
             const json = {
                 ...CONFIG_JSON,
@@ -142,6 +144,11 @@ export const test = base.extend<TestFixtures>({
                     return obj;
                 }, {}),
             };
+            if (disablePresence) {
+                json["enable_presence_by_hs_url"] = {
+                    [homeserver.baseUrl]: false,
+                };
+            }
             await route.fulfill({ json });
         });
         await use(page);

@@ -88,7 +88,7 @@ test.describe("Lazy Loading", () => {
     }
 
     function getMemberInMemberlist(page: Page, name: string): Locator {
-        return page.locator(".mx_MemberList .mx_EntityTile_name").filter({ hasText: name });
+        return page.locator(".mx_MemberListView .mx_MemberTileView_name").filter({ hasText: name });
     }
 
     async function checkMemberList(page: Page, charlies: Bot[]) {
