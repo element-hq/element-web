@@ -14,6 +14,7 @@ import { masHomeserver } from "../../plugins/homeserver/synapse/masHomeserver.ts
 
 test.use(masHomeserver);
 test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
+    test.use(masHomeserver);
     test.skip(isDendrite, "does not yet support MAS");
     test.slow(); // trace recording takes a while here
 

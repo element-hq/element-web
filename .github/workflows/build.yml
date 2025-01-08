@@ -5,6 +5,9 @@ on:
         branches: [develop, master]
     merge_group:
         types: [checks_requested]
+concurrency:
+    group: ${{ github.workflow }}-${{ github.head_ref || github.sha }}
+    cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 # develop pushes and repository_dispatch handled in build_develop.yaml
 env:
     # These must be set for fetchdep.sh to get the right branch
@@ -37,14 +40,38 @@ jobs:
 
             - uses: actions/setup-node@v4
               with:
-                  cache: "yarn"
+                  # Disable cache on Windows as it is slower than not caching
+                  # https://github.com/actions/setup-node/issues/975
+                  cache: ${{ runner.os != 'Windows' && 'yarn' || '' }}
                   node-version: "lts/*"
 
             # Workaround for yarn install timeouts, especially on Windows
             - run: yarn config set network-timeout 300000
 
-            - name: Install Dependencies
-              run: "./scripts/layered.sh"
+            - name: Fetch layered build
+              id: layered_build
+              env:
+                  # tell layered.sh to check out the right sha of the JS-SDK & EW, if they were given one
+                  JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
+              run: |
+                  scripts/layered.sh
+                  JSSDK_SHA=$(git -C matrix-js-sdk rev-parse --short=12 HEAD)
+                  VECTOR_SHA=$(git rev-parse --short=12 HEAD)
+                  echo "VERSION=$VECTOR_SHA--js-$JSSDK_SHA" >> $GITHUB_OUTPUT
+
+            - name: Copy config
+              run: cp element.io/develop/config.json config.json
 
             - name: Build
-              run: "yarn build"
+              env:
+                  CI_PACKAGE: true
+                  VERSION: "${{ steps.layered_build.outputs.VERSION }}"
+              run: |
+                  yarn build
+
+            - name: Upload Artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: webapp-${{ matrix.image }}
+                  path: webapp
+                  retention-days: 1
