@@ -10304,10 +10304,10 @@ raw-loader@^4.0.2:
     loader-utils "^2.0.0"
     schema-utils "^3.0.0"
 
-re-resizable@6.10.1:
-  version "6.10.1"
-  resolved "https://registry.yarnpkg.com/re-resizable/-/re-resizable-6.10.1.tgz#d062ca50bbc4ec7ae940f756cba36479e9015bc5"
-  integrity sha512-m33nSWRH57UZLmep5M/LatkZ2NRqimVD/bOOpvymw5Zf33+eTSEixsUugscOZzAtK0/nx+OSuOf8VbKJx/4ptw==
+re-resizable@6.10.3:
+  version "6.10.3"
+  resolved "https://registry.yarnpkg.com/re-resizable/-/re-resizable-6.10.3.tgz#72c42532ede0cbcaf93308bcbfed782abbf97e79"
+  integrity sha512-zvWb7X3RJMA4cuSrqoxgs3KR+D+pEXnGrD2FAD6BMYAULnZsSF4b7AOVyG6pC3VVNVOtlagGDCDmZSwWLjjBBw==
 
 react-beautiful-dnd@^13.1.0:
   version "13.1.1"
@@ -10815,10 +10815,10 @@ sanitize-filename@^1.6.3:
   dependencies:
     truncate-utf8-bytes "^1.0.0"
 
-sanitize-html@2.13.1:
-  version "2.13.1"
-  resolved "https://registry.yarnpkg.com/sanitize-html/-/sanitize-html-2.13.1.tgz#b4639b0a09574ab62b1b353cb99b1b87af742834"
-  integrity sha512-ZXtKq89oue4RP7abL9wp/9URJcqQNABB5GGJ2acW1sdO8JTVl92f4ygD7Yc9Ze09VAZhnt2zegeU0tbNsdcLYg==
+sanitize-html@2.14.0:
+  version "2.14.0"
+  resolved "https://registry.yarnpkg.com/sanitize-html/-/sanitize-html-2.14.0.tgz#bd2a7b97ee1d86a7f0e0babf3a4468f639c3a429"
+  integrity sha512-CafX+IUPxZshXqqRaG9ZClSlfPVjSxI0td7n07hk8QO2oO+9JDnlcL8iM8TWeOXOIBFgIOx6zioTzM53AOMn3g==
   dependencies:
     deepmerge "^4.2.2"
     escape-string-regexp "^4.0.0"
