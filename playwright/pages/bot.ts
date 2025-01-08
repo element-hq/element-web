@@ -97,7 +97,7 @@ export class Bot extends Client {
     private async buildClient(): Promise<JSHandle<ExtendedMatrixClient>> {
         const credentials = await this.getCredentials();
         const clientHandle = await this.page.evaluateHandle(
-            async ({ homeserver, credentials, opts }) => {
+            async ({ baseUrl, credentials, opts }) => {
                 function getLogger(loggerName: string): Logger {
                     const logger = {
                         getChild: (namespace: string) => getLogger(`${loggerName}:${namespace}`),
@@ -157,7 +157,7 @@ export class Bot extends Client {
                 };
 
                 const cli = new window.matrixcs.MatrixClient({
-                    baseUrl: homeserver.baseUrl,
+                    baseUrl,
                     userId: credentials.userId,
                     deviceId: credentials.deviceId,
                     accessToken: credentials.accessToken,
@@ -179,7 +179,7 @@ export class Bot extends Client {
                 return cli;
             },
             {
-                homeserver: this.homeserver.config,
+                baseUrl: this.homeserver.baseUrl,
                 credentials,
                 opts: this.opts,
             },

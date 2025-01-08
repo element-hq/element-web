@@ -11,16 +11,20 @@ import { Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
 import { doTokenRegistration } from "./utils";
 import { Credentials } from "../../plugins/homeserver";
-import { isDendrite } from "../../plugins/homeserver/dendrite";
+import { legacyOAuthHomeserver } from "../../plugins/homeserver/synapse/legacyOAuthHomeserver.ts";
 
 test.describe("Soft logout", () => {
     test.use({
         displayName: "Alice",
-        startHomeserverOpts: ({ oAuthServer }, use) =>
-            use({
-                template: "default",
-                oAuthServerPort: oAuthServer.port,
-            }),
+        config: {
+            // The only thing that we really *need* (otherwise Element refuses to load) is a default homeserver.
+            // We point that to a guaranteed-invalid domain.
+            default_server_config: {
+                "m.homeserver": {
+                    base_url: "https://server.invalid",
+                },
+            },
+        },
     });
 
     test.describe("with password user", () => {
@@ -49,8 +53,7 @@ test.describe("Soft logout", () => {
     });
 
     test.describe("with SSO user", () => {
-        test.skip(isDendrite, "does not yet support SSO");
-
+        test.use(legacyOAuthHomeserver);
         test.use({
             user: async ({ page, homeserver }, use) => {
                 const user = await doTokenRegistration(page, homeserver);

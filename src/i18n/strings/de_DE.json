@@ -1276,7 +1276,7 @@
         "error_already_invited_space": "Die Person wurde bereits eingeladen",
         "error_already_joined_room": "Die Person ist bereits im Raum",
         "error_already_joined_space": "Die Person ist bereits im Space",
-        "error_bad_state": "Verbannte Nutzer können nicht eingeladen werden.",
+        "error_bad_state": "Gesperrte Benutzer können nicht eingeladen werden.",
         "error_dm": "Wir konnten deine Direktnachricht nicht erstellen.",
         "error_find_room": "Beim Einladen der Nutzer lief etwas schief.",
         "error_find_user_description": "Folgende Nutzer konnten nicht eingeladen werden, da sie nicht existieren oder ungültig sind: %(csvNames)s",
@@ -1317,7 +1317,7 @@
         "unable_find_profiles_invite_label_default": "Dennoch einladen",
         "unable_find_profiles_invite_never_warn_label_default": "Trotzdem einladen und mich nicht mehr warnen",
         "unable_find_profiles_title": "Eventuell existieren folgende Benutzer nicht",
-        "unban_first_title": "Benutzer kann nicht eingeladen werden, solange er nicht entbannt ist"
+        "unban_first_title": "Benutzer kann nicht eingeladen werden, solange die Sperre nicht aufgehoben worden ist."
     },
     "inviting_user1_and_user2": "Lade %(user1)s und %(user2)s ein",
     "inviting_user_and_n_others": {
@@ -3732,8 +3732,8 @@
         "ban_button_room": "Bannen",
         "ban_button_space": "Bannen",
         "ban_room_confirm_title": "Aus %(roomName)s verbannen",
-        "ban_space_everything": "Überall wo ich die Rechte dazu habe bannen",
-        "ban_space_specific": "In ausgewählten Räumen und Spaces bannen",
+        "ban_space_everything": "Überall sperren, wo ich die Rechte dazu habe",
+        "ban_space_specific": "Sperre sie in ausgewählten Chatrooms und Spaces",
         "count_of_sessions": {
             "other": "%(count)s Sitzungen",
             "one": "%(count)s Sitzung"
@@ -3798,11 +3798,11 @@
         "room_unencrypted_detail": "Nachrichten in verschlüsselten Räumen können nur von dir und vom Empfänger gelesen werden.",
         "send_message": "Nachricht senden",
         "share_button": "Profil teilen",
-        "unban_button_room": "Entbannen",
-        "unban_button_space": "Entbannen",
-        "unban_room_confirm_title": "Von %(roomName)s entbannen",
-        "unban_space_everything": "Überall wo ich die Rechte dazu habe, entbannen",
-        "unban_space_specific": "In ausgewählten Räumen und Spaces entbannen",
+        "unban_button_room": "Sperrung für den Chatroom aufheben",
+        "unban_button_space": "Sperrung aus Space aufheben",
+        "unban_room_confirm_title": "Sperrung für %(roomName)s aufheben",
+        "unban_space_everything": "Die Verbannung überall aufheben wo ich die Rechte dazu habe",
+        "unban_space_specific": "In ausgewählten Chatrooms und Spaces die Sperrung für sie aufheben",
         "unban_space_warning": "Die Person wird keinen Zutritt zu Bereichen haben, in denen du nicht administrierst.",
         "unignore_button": "Nicht mehr ignorieren",
         "verify_button": "Nutzer verifizieren",
