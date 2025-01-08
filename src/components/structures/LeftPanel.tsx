@@ -35,7 +35,6 @@ import { UIComponent } from "../../settings/UIFeature";
 import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
 import PosthogTrackers from "../../PosthogTrackers";
 import PageType from "../../PageTypes";
-import { UserOnboardingButton } from "../views/user-onboarding/UserOnboardingButton";
 import { Landmark, LandmarkNavigation } from "../../accessibility/LandmarkNavigation";
 
 interface IProps {
@@ -398,10 +397,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                     {shouldShowComponent(UIComponent.FilterContainer) && this.renderSearchDialExplore()}
                     {this.renderBreadcrumbs()}
                     {!this.props.isMinimized && <RoomListHeader onVisibilityChange={this.refreshStickyHeaders} />}
-                    <UserOnboardingButton
-                        selected={this.props.pageType === PageType.HomePage}
-                        minimized={this.props.isMinimized}
-                    />
                     <nav className="mx_LeftPanel_roomListWrapper" aria-label={_t("common|rooms")}>
                         <div
                             className={roomListClasses}
