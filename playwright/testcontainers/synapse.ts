@@ -118,9 +118,7 @@ const DEFAULT_CONFIG = {
     password_config: {
         enabled: true,
     },
-    ui_auth: {
-        session_timeout: "300s",
-    },
+    ui_auth: {},
     background_updates: {
         // Inhibit background updates as this Synapse isn't long-lived
         min_batch_size: 100000,
