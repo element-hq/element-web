@@ -27,6 +27,8 @@ const getTitle = (kind: Kind): string => {
             return _t("encryption|set_up_recovery");
         case Kind.VERIFY_THIS_SESSION:
             return _t("encryption|verify_toast_title");
+        case Kind.KEY_STORAGE_OUT_OF_SYNC:
+            return _t("encryption|key_storage_out_of_sync");
     }
 };
 
@@ -49,6 +51,8 @@ const getSetupCaption = (kind: Kind): string => {
             return _t("action|continue");
         case Kind.VERIFY_THIS_SESSION:
             return _t("action|verify");
+        case Kind.KEY_STORAGE_OUT_OF_SYNC:
+            return _t("encryption|enter_recovery_key");
     }
 };
 
@@ -59,6 +63,8 @@ const getSecondaryButtonLabel = (kind: Kind): string => {
         case Kind.SET_UP_ENCRYPTION:
         case Kind.VERIFY_THIS_SESSION:
             return _t("encryption|verification|unverified_sessions_toast_reject");
+        case Kind.KEY_STORAGE_OUT_OF_SYNC:
+            return _t("encryption|forgot_recovery_key");
     }
 };
 
@@ -70,6 +76,8 @@ const getDescription = (kind: Kind): string => {
             return _t("encryption|set_up_recovery_toast_description");
         case Kind.VERIFY_THIS_SESSION:
             return _t("encryption|verify_toast_description");
+        case Kind.KEY_STORAGE_OUT_OF_SYNC:
+            return _t("encryption|key_storage_out_of_sync_description");
     }
 };
 
@@ -89,6 +97,10 @@ export enum Kind {
      * Prompt the user to verify this session
      */
     VERIFY_THIS_SESSION = "verify_this_session",
+    /**
+     * Prompt the user to enter their recovery key
+     */
+    KEY_STORAGE_OUT_OF_SYNC = "key_storage_out_of_sync",
 }
 
 const onReject = (): void => {
