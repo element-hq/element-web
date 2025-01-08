@@ -438,6 +438,7 @@ export function replaceByRegexes(text: string, mapping: IVariables | Tags): stri
     if (shouldWrapInSpan) {
         return React.createElement("span", null, ...(output as Array<number | string | React.ReactNode>));
     } else {
+        // eslint-disable-next-line @typescript-eslint/no-base-to-string
         return output.join("");
     }
 }

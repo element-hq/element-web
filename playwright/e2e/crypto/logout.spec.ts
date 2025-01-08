@@ -11,7 +11,7 @@ import { createRoom, enableKeyBackup, logIntoElement, sendMessageInCurrentRoom }
 
 test.describe("Logout tests", () => {
     test.beforeEach(async ({ page, homeserver, credentials }) => {
-        await logIntoElement(page, homeserver, credentials);
+        await logIntoElement(page, credentials);
     });
 
     test("Ask to set up recovery on logout if not setup", async ({ page, app }) => {
