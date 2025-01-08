@@ -9,8 +9,14 @@ Please see LICENSE files in the repository root for full details.
 /* See readme.md for tips on writing these tests. */
 
 import { test, expect } from ".";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 test.describe("Read receipts", { tag: "@mergequeue" }, () => {
+    test.skip(
+        isDendrite,
+        "due to Dendrite lacking full threads support https://github.com/element-hq/dendrite/issues/3283",
+    );
+
     test.describe("reactions", () => {
         test.describe("in threads", () => {
             test("A reaction to a threaded message does not make the room unread", async ({
