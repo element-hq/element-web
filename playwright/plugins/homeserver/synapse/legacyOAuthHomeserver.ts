@@ -6,44 +6,50 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Fixtures } from "@playwright/test";
 import { TestContainers } from "testcontainers";
 
-import { Options, Services } from "../../../services.ts";
 import { OAuthServer } from "../../oauth_server";
+import { Fixtures } from "../../../element-web-test.ts";
 
-export const legacyOAuthHomeserver: Fixtures<Services & Options, {}, Services & Options> = {
-    _homeserver: async ({ homeserverType, _homeserver: container }, use, testInfo) => {
-        testInfo.skip(homeserverType !== "synapse", "does not yet support MAS");
-        const server = new OAuthServer();
-        const port = server.start();
+export const legacyOAuthHomeserver: Fixtures = {
+    _homeserver: [
+        async ({ _homeserver: container }, use) => {
+            const server = new OAuthServer();
+            const port = server.start();
 
-        await TestContainers.exposeHostPorts(port);
-        container.withConfig({
-            oidc_providers: [
-                {
-                    idp_id: "test",
-                    idp_name: "OAuth test",
-                    issuer: `http://localhost:${port}/oauth`,
-                    authorization_endpoint: `http://localhost:${port}/oauth/auth.html`,
-                    // the token endpoint receives requests from synapse,
-                    // rather than the webapp, so needs to escape the docker container.
-                    token_endpoint: `http://host.testcontainers.internal:${port}/oauth/token`,
-                    userinfo_endpoint: `http://host.testcontainers.internal:${port}/oauth/userinfo`,
-                    client_id: "synapse",
-                    discover: false,
-                    scopes: ["profile"],
-                    skip_verification: true,
-                    client_auth_method: "none",
-                    user_mapping_provider: {
-                        config: {
-                            display_name_template: "{{ user.name }}",
+            await TestContainers.exposeHostPorts(port);
+            container.withConfig({
+                oidc_providers: [
+                    {
+                        idp_id: "test",
+                        idp_name: "OAuth test",
+                        issuer: `http://localhost:${port}/oauth`,
+                        authorization_endpoint: `http://localhost:${port}/oauth/auth.html`,
+                        // the token endpoint receives requests from synapse,
+                        // rather than the webapp, so needs to escape the docker container.
+                        token_endpoint: `http://host.testcontainers.internal:${port}/oauth/token`,
+                        userinfo_endpoint: `http://host.testcontainers.internal:${port}/oauth/userinfo`,
+                        client_id: "synapse",
+                        discover: false,
+                        scopes: ["profile"],
+                        skip_verification: true,
+                        client_auth_method: "none",
+                        user_mapping_provider: {
+                            config: {
+                                display_name_template: "{{ user.name }}",
+                            },
                         },
                     },
-                },
-            ],
-        });
-        await use(container);
-        server.stop();
+                ],
+            });
+            await use(container);
+            server.stop();
+        },
+        { scope: "worker" },
+    ],
+
+    context: async ({ homeserverType, context }, use, testInfo) => {
+        testInfo.skip(homeserverType !== "synapse", "does not yet support MAS");
+        await use(context);
     },
 };

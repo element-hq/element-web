@@ -10,20 +10,21 @@ import { test, expect } from "../../element-web-test";
 import { consentHomeserver } from "../../plugins/homeserver/synapse/consentHomeserver.ts";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 
-test.describe("Registration", () => {
-    test.skip(isDendrite, "Dendrite lacks support for MSC3967 so requires additional auth here");
-    test.use(consentHomeserver);
-    test.use({
-        config: {
-            // The only thing that we really *need* (otherwise Element refuses to load) is a default homeserver.
-            // We point that to a guaranteed-invalid domain.
-            default_server_config: {
-                "m.homeserver": {
-                    base_url: "https://server.invalid",
-                },
+test.use(consentHomeserver);
+test.use({
+    config: {
+        // The only thing that we really *need* (otherwise Element refuses to load) is a default homeserver.
+        // We point that to a guaranteed-invalid domain.
+        default_server_config: {
+            "m.homeserver": {
+                base_url: "https://server.invalid",
             },
         },
-    });
+    },
+});
+
+test.describe("Registration", () => {
+    test.skip(isDendrite, "Dendrite lacks support for MSC3967 so requires additional auth here");
 
     test.beforeEach(async ({ page }) => {
         await page.goto("/#/register");

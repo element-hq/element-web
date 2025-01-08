@@ -376,37 +376,42 @@ test.describe("Sliding Sync", () => {
             roomIds.push(id);
             await expect(page.getByRole("treeitem", { name: fruit })).toBeVisible();
         }
-        const [roomAId, roomPId] = roomIds;
+        const [roomAId, roomPId, roomOId] = roomIds;
 
-        const assertUnsubExists = (request: Request, subRoomId: string, unsubRoomId: string) => {
+        const matchRoomSubRequest = (subRoomId: string) => (request: Request) => {
+            if (!request.url().includes("/sync")) return false;
             const body = request.postDataJSON();
-            // There may be a request without a txn_id, ignore it, as there won't be any subscription changes
-            if (body.txn_id === undefined) {
-                return;
-            }
-            expect(body.unsubscribe_rooms).toEqual([unsubRoomId]);
-            expect(body.room_subscriptions).not.toHaveProperty(unsubRoomId);
-            expect(body.room_subscriptions).toHaveProperty(subRoomId);
+            return body.txn_id && body.room_subscriptions?.[subRoomId];
+        };
+        const matchRoomUnsubRequest = (unsubRoomId: string) => (request: Request) => {
+            if (!request.url().includes("/sync")) return false;
+            const body = request.postDataJSON();
+            return (
+                body.txn_id && body.unsubscribe_rooms?.includes(unsubRoomId) && !body.room_subscriptions?.[unsubRoomId]
+            );
         };
 
-        let promise = page.waitForRequest(/sync/);
-
-        // Select the Test Room
-        await page.getByRole("treeitem", { name: "Apple", exact: true }).click();
-
-        // and wait for playwright to get the request
-        const roomSubscriptions = (await promise).postDataJSON().room_subscriptions;
+        // Select the Test Room and wait for playwright to get the request
+        const [request] = await Promise.all([
+            page.waitForRequest(matchRoomSubRequest(roomAId)),
+            page.getByRole("treeitem", { name: "Apple", exact: true }).click(),
+        ]);
+        const roomSubscriptions = request.postDataJSON().room_subscriptions;
         expect(roomSubscriptions, "room_subscriptions is object").toBeDefined();
 
-        // Switch to another room
-        promise = page.waitForRequest(/sync/);
-        await page.getByRole("treeitem", { name: "Pineapple", exact: true }).click();
-        assertUnsubExists(await promise, roomPId, roomAId);
+        // Switch to another room and wait for playwright to get the request
+        await Promise.all([
+            page.waitForRequest(matchRoomSubRequest(roomPId)),
+            page.waitForRequest(matchRoomUnsubRequest(roomAId)),
+            page.getByRole("treeitem", { name: "Pineapple", exact: true }).click(),
+        ]);
 
-        // And switch to even another room
-        promise = page.waitForRequest(/sync/);
-        await page.getByRole("treeitem", { name: "Apple", exact: true }).click();
-        assertUnsubExists(await promise, roomPId, roomAId);
+        // And switch to even another room and wait for playwright to get the request
+        await Promise.all([
+            page.waitForRequest(matchRoomSubRequest(roomOId)),
+            page.waitForRequest(matchRoomUnsubRequest(roomPId)),
+            page.getByRole("treeitem", { name: "Orange", exact: true }).click(),
+        ]);
 
         // TODO: Add tests for encrypted rooms
     });

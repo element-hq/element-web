@@ -334,17 +334,17 @@ export class Helpers {
 
     /**
      * Populate the rooms with messages and threads
-     * @param user the user sending the messages
      * @param room1
      * @param room2
      * @param msg - MessageBuilder
+     * @param user - the user to mention in the first message
      * @param hasMention - whether to include a mention in the first message
      */
     async populateThreads(
-        user: Credentials,
         room1: { name: string; roomId: string },
         room2: { name: string; roomId: string },
         msg: MessageBuilder,
+        user: Credentials,
         hasMention = true,
     ) {
         if (hasMention) {

@@ -141,7 +141,7 @@ export type SynapseConfigOptions = Partial<typeof DEFAULT_CONFIG>;
 export class SynapseContainer extends GenericContainer implements HomeserverContainer<typeof DEFAULT_CONFIG> {
     private config: typeof DEFAULT_CONFIG;
 
-    constructor(private readonly request: APIRequestContext) {
+    constructor() {
         super(`ghcr.io/element-hq/synapse:${TAG}`);
 
         this.config = deepCopy(DEFAULT_CONFIG);
@@ -221,21 +221,24 @@ export class SynapseContainer extends GenericContainer implements HomeserverCont
             await super.start(),
             `http://localhost:${port}`,
             this.config.registration_shared_secret,
-            this.request,
         );
     }
 }
 
 export class StartedSynapseContainer extends AbstractStartedContainer implements StartedHomeserverContainer {
     private adminToken?: string;
+    private request?: APIRequestContext;
 
     constructor(
         container: StartedTestContainer,
         public readonly baseUrl: string,
         private readonly registrationSharedSecret: string,
-        private readonly request: APIRequestContext,
     ) {
         super(container);
+    }
+
+    public setRequest(request: APIRequestContext): void {
+        this.request = request;
     }
 
     private async registerUserInternal(
@@ -273,6 +276,7 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
             deviceId: data.device_id,
             password,
             displayName,
+            username,
         };
     }
 
@@ -300,6 +304,7 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
             userId: json.user_id,
             deviceId: json.device_id,
             homeServer: json.home_server || json.user_id.split(":").slice(1).join(":"),
+            username: userId.slice(1).split(":")[0],
         };
     }
 

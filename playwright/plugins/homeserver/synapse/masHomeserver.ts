@@ -6,60 +6,57 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Fixtures, PlaywrightTestArgs } from "@playwright/test";
-
-import { Options, Services } from "../../../services.ts";
-import { Fixtures as BaseFixtures } from "../../../element-web-test.ts";
+import { Fixtures } from "../../../element-web-test.ts";
 import { MatrixAuthenticationServiceContainer } from "../../../testcontainers/mas.ts";
 
-type Fixture = PlaywrightTestArgs & Services & BaseFixtures & Options;
-export const masHomeserver: Fixtures<Fixture, {}, Fixture> = {
-    mas: async ({ homeserverType, _homeserver: homeserver, logger, network, postgres, mailhog }, use, testInfo) => {
-        testInfo.skip(homeserverType !== "synapse", "does not yet support MAS");
-
-        const config = {
-            clients: [
-                {
-                    client_id: "0000000000000000000SYNAPSE",
-                    client_auth_method: "client_secret_basic",
-                    client_secret: "SomeRandomSecret",
+export const masHomeserver: Fixtures = {
+    mas: [
+        async ({ _homeserver: homeserver, logger, network, postgres, mailhog }, use) => {
+            const config = {
+                clients: [
+                    {
+                        client_id: "0000000000000000000SYNAPSE",
+                        client_auth_method: "client_secret_basic",
+                        client_secret: "SomeRandomSecret",
+                    },
+                ],
+                matrix: {
+                    homeserver: "localhost",
+                    secret: "AnotherRandomSecret",
+                    endpoint: "http://homeserver:8008",
                 },
-            ],
-            matrix: {
-                homeserver: "localhost",
-                secret: "AnotherRandomSecret",
-                endpoint: "http://homeserver:8008",
-            },
-        };
+            };
 
-        const container = await new MatrixAuthenticationServiceContainer(postgres)
-            .withNetwork(network)
-            .withNetworkAliases("mas")
-            .withLogConsumer(logger.getConsumer("mas"))
-            .withConfig(config)
-            .start();
+            const container = await new MatrixAuthenticationServiceContainer(postgres)
+                .withNetwork(network)
+                .withNetworkAliases("mas")
+                .withLogConsumer(logger.getConsumer("mas"))
+                .withConfig(config)
+                .start();
 
-        homeserver.withConfig({
-            enable_registration: undefined,
-            enable_registration_without_verification: undefined,
-            disable_msisdn_registration: undefined,
-            password_config: undefined,
-            experimental_features: {
-                msc3861: {
-                    enabled: true,
-                    issuer: `http://mas:8080/`,
-                    introspection_endpoint: "http://mas:8080/oauth2/introspect",
-                    client_id: config.clients[0].client_id,
-                    client_auth_method: config.clients[0].client_auth_method,
-                    client_secret: config.clients[0].client_secret,
-                    admin_token: config.matrix.secret,
+            homeserver.withConfig({
+                enable_registration: undefined,
+                enable_registration_without_verification: undefined,
+                disable_msisdn_registration: undefined,
+                password_config: undefined,
+                experimental_features: {
+                    msc3861: {
+                        enabled: true,
+                        issuer: `http://mas:8080/`,
+                        introspection_endpoint: "http://mas:8080/oauth2/introspect",
+                        client_id: config.clients[0].client_id,
+                        client_auth_method: config.clients[0].client_auth_method,
+                        client_secret: config.clients[0].client_secret,
+                        admin_token: config.matrix.secret,
+                    },
                 },
-            },
-        });
+            });
 
-        await use(container);
-        await container.stop();
-    },
+            await use(container);
+            await container.stop();
+        },
+        { scope: "worker" },
+    ],
 
     config: async ({ homeserver, context, mas }, use) => {
         const issuer = `${mas.baseUrl}/`;
@@ -81,5 +78,10 @@ export const masHomeserver: Fixtures<Fixture, {}, Fixture> = {
         await use({
             default_server_config: wellKnown,
         });
+    },
+
+    context: async ({ homeserverType, context }, use, testInfo) => {
+        testInfo.skip(homeserverType !== "synapse", "does not yet support MAS");
+        await use(context);
     },
 };

@@ -15,6 +15,7 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
         isDendrite,
         "due to Dendrite lacking full threads support https://github.com/element-hq/dendrite/issues/3283",
     );
+
     test.use({
         displayName: "Alice",
         botCreateOpts: { displayName: "Other User" },
@@ -79,7 +80,7 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
         { tag: "@screenshot" },
         async ({ room1, room2, util, msg, user }) => {
             await util.goTo(room2);
-            await util.populateThreads(user, room1, room2, msg);
+            await util.populateThreads(room1, room2, msg, user);
             // The indicator should be shown
             await util.assertHighlightIndicator();
 
@@ -97,7 +98,7 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
 
     test("should update with a thread is read", { tag: "@screenshot" }, async ({ room1, room2, util, msg, user }) => {
         await util.goTo(room2);
-        await util.populateThreads(user, room1, room2, msg);
+        await util.populateThreads(room1, room2, msg, user);
 
         // Click on the first room in TAC
         await util.openTac();
@@ -120,7 +121,7 @@ test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
 
     test("should order by recency after notification level", async ({ room1, room2, util, msg, user }) => {
         await util.goTo(room2);
-        await util.populateThreads(user, room1, room2, msg, false);
+        await util.populateThreads(room1, room2, msg, user, false);
 
         await util.openTac();
         await util.assertRoomsInTac([

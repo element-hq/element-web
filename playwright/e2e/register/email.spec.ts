@@ -10,21 +10,22 @@ import { test, expect } from "../../element-web-test";
 import { emailHomeserver } from "../../plugins/homeserver/synapse/emailHomeserver.ts";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 
+test.use(emailHomeserver);
+test.use({
+    config: ({ config }, use) =>
+        use({
+            ...config,
+            default_server_config: {
+                ...config.default_server_config,
+                "m.identity_server": {
+                    base_url: "https://server.invalid",
+                },
+            },
+        }),
+});
+
 test.describe("Email Registration", async () => {
     test.skip(isDendrite, "not yet wired up");
-    test.use(emailHomeserver);
-    test.use({
-        config: ({ config }, use) =>
-            use({
-                ...config,
-                default_server_config: {
-                    ...config.default_server_config,
-                    "m.identity_server": {
-                        base_url: "https://server.invalid",
-                    },
-                },
-            }),
-    });
 
     test.beforeEach(async ({ homeserver, page }) => {
         await page.goto("/#/register");

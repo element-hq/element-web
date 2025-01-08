@@ -11,8 +11,8 @@ import { registerAccountMas } from ".";
 import { ElementAppPage } from "../../pages/ElementAppPage.ts";
 import { masHomeserver } from "../../plugins/homeserver/synapse/masHomeserver.ts";
 
+test.use(masHomeserver);
 test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
-    test.use(masHomeserver);
     test.slow(); // trace recording takes a while here
 
     test("can register the oauth2 client and an account", async ({ context, page, homeserver, mailhogClient, mas }) => {

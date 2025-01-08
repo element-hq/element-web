@@ -9,13 +9,12 @@ Please see LICENSE files in the repository root for full details.
 import { Page } from "playwright-core";
 
 import { expect, test } from "../../element-web-test";
-import { doTokenRegistration } from "./utils";
-import { isDendrite } from "../../plugins/homeserver/dendrite";
 import { selectHomeserver } from "../utils";
 import { Credentials, HomeserverInstance } from "../../plugins/homeserver";
 import { consentHomeserver } from "../../plugins/homeserver/synapse/consentHomeserver.ts";
-import { legacyOAuthHomeserver } from "../../plugins/homeserver/synapse/legacyOAuthHomeserver.ts";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
+// This test requires fixed credentials for the device signing keys below to work
 const username = "user1234";
 const password = "p4s5W0rD";
 
@@ -70,39 +69,44 @@ const DEVICE_SIGNING_KEYS_BODY = {
     },
 };
 
-async function login(page: Page, homeserver: HomeserverInstance) {
+async function login(page: Page, homeserver: HomeserverInstance, credentials: Credentials) {
     await page.getByRole("link", { name: "Sign in" }).click();
     await selectHomeserver(page, homeserver.baseUrl);
 
-    await page.getByRole("textbox", { name: "Username" }).fill(username);
-    await page.getByPlaceholder("Password").fill(password);
+    await page.getByRole("textbox", { name: "Username" }).fill(credentials.username);
+    await page.getByPlaceholder("Password").fill(credentials.password);
     await page.getByRole("button", { name: "Sign in" }).click();
 }
 
-test.describe("Login", () => {
-    test.use({
-        config: {
-            // The only thing that we really *need* (otherwise Element refuses to load) is a default homeserver.
-            // We point that to a guaranteed-invalid domain.
-            default_server_config: {
-                "m.homeserver": {
-                    base_url: "https://server.invalid",
-                },
+test.use(consentHomeserver);
+test.use({
+    config: {
+        // The only thing that we really *need* (otherwise Element refuses to load) is a default homeserver.
+        // We point that to a guaranteed-invalid domain.
+        default_server_config: {
+            "m.homeserver": {
+                base_url: "https://server.invalid",
             },
         },
-    });
+    },
+    credentials: async ({ context, homeserver }, use) => {
+        const displayName = "Dave";
+        const credentials = await homeserver.registerUser(username, password, displayName);
+        console.log(`Registered test user @user:localhost with displayname ${displayName}`);
 
+        await use({
+            ...credentials,
+            displayName,
+        });
+    },
+});
+
+test.describe("Login", () => {
     test.describe("Password login", () => {
         test.skip(isDendrite, "Dendrite lacks support for MSC3967 so requires additional auth here");
-        test.use(consentHomeserver);
-
-        let creds: Credentials;
-
-        test.beforeEach(async ({ homeserver }) => {
-            creds = await homeserver.registerUser(username, password);
-        });
 
         test("Loads the welcome page by default; then logs in with an existing account and lands on the home screen", async ({
+            credentials,
             page,
             homeserver,
             checkA11y,
@@ -136,16 +140,16 @@ test.describe("Login", () => {
             // cy.percySnapshot("Login");
             await checkA11y();
 
-            await page.getByRole("textbox", { name: "Username" }).fill(username);
-            await page.getByPlaceholder("Password").fill(password);
+            await page.getByRole("textbox", { name: "Username" }).fill(credentials.username);
+            await page.getByPlaceholder("Password").fill(credentials.password);
             await page.getByRole("button", { name: "Sign in" }).click();
 
             await expect(page).toHaveURL(/\/#\/home$/);
         });
 
-        test("Follows the original link after login", async ({ page, homeserver }) => {
+        test("Follows the original link after login", async ({ page, homeserver, credentials }) => {
             await page.goto("/#/room/!room:id"); // should redirect to the welcome page
-            await login(page, homeserver);
+            await login(page, homeserver, credentials);
 
             await expect(page).toHaveURL(/\/#\/room\/!room:id$/);
             await expect(page.getByRole("button", { name: "Join the discussion" })).toBeVisible();
@@ -156,9 +160,10 @@ test.describe("Login", () => {
                 page,
                 homeserver,
                 request,
+                credentials,
             }) => {
                 const res = await request.post(`${homeserver.baseUrl}/_matrix/client/v3/keys/device_signing/upload`, {
-                    headers: { Authorization: `Bearer ${creds.accessToken}` },
+                    headers: { Authorization: `Bearer ${credentials.accessToken}` },
                     data: DEVICE_SIGNING_KEYS_BODY,
                 });
                 if (res.status() / 100 !== 2) {
@@ -167,7 +172,7 @@ test.describe("Login", () => {
                 expect(res.status() / 100).toEqual(2);
 
                 await page.goto("/");
-                await login(page, homeserver);
+                await login(page, homeserver, credentials);
 
                 await expect(page.getByRole("heading", { name: "Verify this device", level: 1 })).toBeVisible();
 
@@ -185,10 +190,14 @@ test.describe("Login", () => {
                     page,
                     homeserver,
                     request,
+                    credentials,
                 }) => {
                     const res = await request.post(
                         `${homeserver.baseUrl}/_matrix/client/v3/keys/device_signing/upload`,
-                        { headers: { Authorization: `Bearer ${creds.accessToken}` }, data: DEVICE_SIGNING_KEYS_BODY },
+                        {
+                            headers: { Authorization: `Bearer ${credentials.accessToken}` },
+                            data: DEVICE_SIGNING_KEYS_BODY,
+                        },
                     );
                     if (res.status() / 100 !== 2) {
                         console.log("Uploading dummy keys failed", await res.json());
@@ -196,7 +205,7 @@ test.describe("Login", () => {
                     expect(res.status() / 100).toEqual(2);
 
                     await page.goto("/");
-                    await login(page, homeserver);
+                    await login(page, homeserver, credentials);
 
                     await expect(page.getByRole("heading", { name: "Verify this device", level: 1 })).toBeVisible();
 
@@ -215,11 +224,15 @@ test.describe("Login", () => {
                     page,
                     homeserver,
                     request,
+                    credentials,
                 }) => {
-                    console.log(`uid ${creds.userId} body`, DEVICE_SIGNING_KEYS_BODY);
+                    console.log(`uid ${credentials.userId} body`, DEVICE_SIGNING_KEYS_BODY);
                     const res = await request.post(
                         `${homeserver.baseUrl}/_matrix/client/v3/keys/device_signing/upload`,
-                        { headers: { Authorization: `Bearer ${creds.accessToken}` }, data: DEVICE_SIGNING_KEYS_BODY },
+                        {
+                            headers: { Authorization: `Bearer ${credentials.accessToken}` },
+                            data: DEVICE_SIGNING_KEYS_BODY,
+                        },
                     );
                     if (res.status() / 100 !== 2) {
                         console.log("Uploading dummy keys failed", await res.json());
@@ -227,9 +240,9 @@ test.describe("Login", () => {
                     expect(res.status() / 100).toEqual(2);
 
                     await page.goto("/");
-                    await login(page, homeserver);
+                    await login(page, homeserver, credentials);
 
-                    const h1 = await page.getByRole("heading", { name: "Verify this device", level: 1 });
+                    const h1 = page.getByRole("heading", { name: "Verify this device", level: 1 });
                     await expect(h1).toBeVisible();
 
                     await expect(h1.locator(".mx_CompleteSecurity_skip")).toHaveCount(0);
@@ -238,25 +251,7 @@ test.describe("Login", () => {
         });
     });
 
-    // tests for old-style SSO login, in which we exchange tokens with Synapse, and Synapse talks to an auth server
-    test.describe("SSO login", () => {
-        test.skip(isDendrite, "does not yet support SSO");
-        test.use(legacyOAuthHomeserver);
-
-        test("logs in with SSO and lands on the home screen", async ({ page, homeserver }) => {
-            // If this test fails with a screen showing "Timeout connecting to remote server", it is most likely due to
-            // your firewall settings: Synapse is unable to reach the OIDC server.
-            //
-            // If you are using ufw, try something like:
-            //    sudo ufw allow in on docker0
-            //
-            await doTokenRegistration(page, homeserver);
-        });
-    });
-
     test.describe("logout", () => {
-        test.use(consentHomeserver);
-
         test("should go to login page on logout", async ({ page, user }) => {
             await page.getByRole("button", { name: "User menu" }).click();
             await expect(page.getByText(user.displayName, { exact: true })).toBeVisible();
@@ -266,31 +261,6 @@ test.describe("Login", () => {
 
             await page.locator(".mx_UserMenu_contextMenu").getByRole("menuitem", { name: "Sign out" }).click();
             await expect(page).toHaveURL(/\/#\/login$/);
-        });
-    });
-
-    test.describe("logout with logout_redirect_url", () => {
-        test.use(consentHomeserver);
-        test.use({
-            config: {
-                // We redirect to decoder-ring because it's a predictable page that isn't Element itself.
-                // We could use example.org, matrix.org, or something else, however this puts dependency of external
-                // infrastructure on our tests. In the same vein, we don't really want to figure out how to ship a
-                // `test-landing.html` page when running with an uncontrolled Element (via `yarn start`).
-                // Using the decoder-ring is just as fine, and we can search for strategic names.
-                logout_redirect_url: "/decoder-ring/",
-            },
-        });
-
-        test("should respect logout_redirect_url", async ({ page, user }) => {
-            await page.getByRole("button", { name: "User menu" }).click();
-            await expect(page.getByText(user.displayName, { exact: true })).toBeVisible();
-
-            // give a change for the outstanding requests queue to settle before logging out
-            await page.waitForTimeout(2000);
-
-            await page.locator(".mx_UserMenu_contextMenu").getByRole("menuitem", { name: "Sign out" }).click();
-            await expect(page).toHaveURL(/\/decoder-ring\/$/);
         });
     });
 });

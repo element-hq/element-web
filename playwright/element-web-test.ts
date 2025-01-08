@@ -6,7 +6,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { expect as baseExpect, Locator, Page, ExpectMatcherState, ElementHandle } from "@playwright/test";
+import {
+    expect as baseExpect,
+    Locator,
+    Page,
+    ExpectMatcherState,
+    ElementHandle,
+    PlaywrightTestArgs,
+    Fixtures as _Fixtures,
+} from "@playwright/test";
 import { sanitizeForFilePath } from "playwright-core/lib/utils";
 import AxeBuilder from "@axe-core/playwright";
 import _ from "lodash";
@@ -19,7 +27,7 @@ import { Crypto } from "./pages/crypto";
 import { Toasts } from "./pages/toasts";
 import { Bot, CreateBotOpts } from "./pages/bot";
 import { Webserver } from "./plugins/webserver";
-import { test as base } from "./services.ts";
+import { Options, Services, test as base } from "./services.ts";
 
 // Enable experimental service worker support
 // See https://playwright.dev/docs/service-workers-experimental#how-to-enable
@@ -45,7 +53,7 @@ interface CredentialsWithDisplayName extends Credentials {
     displayName: string;
 }
 
-export interface Fixtures {
+export interface TestFixtures {
     axe: AxeBuilder;
     checkA11y: () => Promise<void>;
 
@@ -101,7 +109,10 @@ export interface Fixtures {
     webserver: Webserver;
 }
 
-export const test = base.extend<Fixtures>({
+type CombinedTestFixtures = PlaywrightTestArgs & TestFixtures;
+export type Fixtures = _Fixtures<CombinedTestFixtures, Services & Options, CombinedTestFixtures>;
+
+export const test = base.extend<TestFixtures>({
     context: async ({ context }, use, testInfo) => {
         // We skip tests instead of using grep-invert to still surface the counts in the html report
         test.skip(
@@ -137,12 +148,12 @@ export const test = base.extend<Fixtures>({
     },
 
     displayName: undefined,
-    credentials: async ({ homeserver, displayName: testDisplayName }, use) => {
+    credentials: async ({ context, homeserver, displayName: testDisplayName }, use, testInfo) => {
         const names = ["Alice", "Bob", "Charlie", "Daniel", "Eve", "Frank", "Grace", "Hannah", "Isaac", "Judy"];
         const password = _.uniqueId("password_");
         const displayName = testDisplayName ?? _.sample(names)!;
 
-        const credentials = await homeserver.registerUser("user", password, displayName);
+        const credentials = await homeserver.registerUser(`user_${testInfo.testId}`, password, displayName);
         console.log(`Registered test user ${credentials.userId} with displayname ${displayName}`);
 
         await use({
@@ -167,6 +178,7 @@ export const test = base.extend<Fixtures>({
                 window.localStorage.setItem(
                     "mx_local_settings",
                     JSON.stringify({
+                        // Retain any other settings which may have already been set
                         ...JSON.parse(window.localStorage.getItem("mx_local_settings") || "{}"),
                         // Ensure the language is set to a consistent value
                         language: "en",

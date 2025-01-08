@@ -36,105 +36,132 @@ export interface Options {
     homeserverType: HomeserverType;
 }
 
-export const test = base.extend<Services & Options>({
-    // eslint-disable-next-line no-empty-pattern
-    logger: async ({}, use, testInfo) => {
-        const logger = new ContainerLogger();
-        await use(logger);
-        await logger.testFinished(testInfo);
-    },
-    // eslint-disable-next-line no-empty-pattern
-    network: async ({}, use) => {
-        const network = await new Network().start();
-        await use(network);
-        await network.stop();
-    },
-    postgres: async ({ logger, network }, use) => {
-        const container = await new PostgreSqlContainer()
-            .withNetwork(network)
-            .withNetworkAliases("postgres")
-            .withLogConsumer(logger.getConsumer("postgres"))
-            .withTmpFs({
-                "/dev/shm/pgdata/data": "",
-            })
-            .withEnvironment({
-                PG_DATA: "/dev/shm/pgdata/data",
-            })
-            .withCommand([
-                "-c",
-                "shared_buffers=128MB",
-                "-c",
-                `fsync=off`,
-                "-c",
-                `synchronous_commit=off`,
-                "-c",
-                "full_page_writes=off",
-            ])
-            .start();
-        await use(container);
-        await container.stop();
-    },
+export const test = base.extend<{}, Services & Options>({
+    logger: [
+        // eslint-disable-next-line no-empty-pattern
+        async ({}, use, testInfo) => {
+            const logger = new ContainerLogger();
+            await use(logger);
+        },
+        { scope: "worker" },
+    ],
+    network: [
+        // eslint-disable-next-line no-empty-pattern
+        async ({}, use) => {
+            const network = await new Network().start();
+            await use(network);
+            await network.stop();
+        },
+        { scope: "worker" },
+    ],
+    postgres: [
+        async ({ logger, network }, use) => {
+            const container = await new PostgreSqlContainer()
+                .withNetwork(network)
+                .withNetworkAliases("postgres")
+                .withLogConsumer(logger.getConsumer("postgres"))
+                .withTmpFs({
+                    "/dev/shm/pgdata/data": "",
+                })
+                .withEnvironment({
+                    PG_DATA: "/dev/shm/pgdata/data",
+                })
+                .withCommand([
+                    "-c",
+                    "shared_buffers=128MB",
+                    "-c",
+                    `fsync=off`,
+                    "-c",
+                    `synchronous_commit=off`,
+                    "-c",
+                    "full_page_writes=off",
+                ])
+                .start();
+            await use(container);
+            await container.stop();
+        },
+        { scope: "worker" },
+    ],
 
-    mailhog: async ({ logger, network }, use) => {
-        const container = await new GenericContainer("mailhog/mailhog:latest")
-            .withNetwork(network)
-            .withNetworkAliases("mailhog")
-            .withExposedPorts(8025)
-            .withLogConsumer(logger.getConsumer("mailhog"))
-            .withWaitStrategy(Wait.forListeningPorts())
-            .start();
-        await use(container);
-        await container.stop();
-    },
-    mailhogClient: async ({ mailhog: container }, use) => {
-        await use(mailhog({ host: container.getHost(), port: container.getMappedPort(8025) }));
-    },
+    mailhog: [
+        async ({ logger, network }, use) => {
+            const container = await new GenericContainer("mailhog/mailhog:latest")
+                .withNetwork(network)
+                .withNetworkAliases("mailhog")
+                .withExposedPorts(8025)
+                .withLogConsumer(logger.getConsumer("mailhog"))
+                .withWaitStrategy(Wait.forListeningPorts())
+                .start();
+            await use(container);
+            await container.stop();
+        },
+        { scope: "worker" },
+    ],
+    mailhogClient: [
+        async ({ mailhog: container }, use) => {
+            const client = mailhog({ host: container.getHost(), port: container.getMappedPort(8025) });
+            await use(client);
+        },
+        { scope: "worker" },
+    ],
 
-    synapseConfigOptions: [{}, { option: true }],
-    homeserverType: ["synapse", { option: true }],
-    _homeserver: async ({ homeserverType, request }, use) => {
-        let container: HomeserverContainer<any>;
-        switch (homeserverType) {
-            case "synapse":
-                container = new SynapseContainer(request);
-                break;
-            case "dendrite":
-                container = new DendriteContainer(request);
-                break;
-            case "pinecone":
-                container = new PineconeContainer(request);
-                break;
-        }
+    synapseConfigOptions: [{}, { option: true, scope: "worker" }],
+    homeserverType: ["synapse", { option: true, scope: "worker" }],
+    _homeserver: [
+        async ({ homeserverType }, use) => {
+            let container: HomeserverContainer<any>;
+            switch (homeserverType) {
+                case "synapse":
+                    container = new SynapseContainer();
+                    break;
+                case "dendrite":
+                    container = new DendriteContainer();
+                    break;
+                case "pinecone":
+                    container = new PineconeContainer();
+                    break;
+            }
 
-        await use(container);
-    },
-    homeserver: async (
-        { homeserverType, logger, network, _homeserver: homeserver, synapseConfigOptions, mas },
-        use,
-        testInfo,
-    ) => {
+            await use(container);
+        },
+        { scope: "worker" },
+    ],
+    homeserver: [
+        async ({ homeserverType, logger, network, _homeserver: homeserver, synapseConfigOptions, mas }, use) => {
+            if (homeserver instanceof SynapseContainer) {
+                homeserver.withConfig(synapseConfigOptions);
+            }
+
+            const container = await homeserver
+                .withNetwork(network)
+                .withNetworkAliases("homeserver")
+                .withLogConsumer(logger.getConsumer(homeserverType))
+                .start();
+
+            await use(container);
+            await container.stop();
+        },
+        { scope: "worker" },
+    ],
+    mas: [
+        // eslint-disable-next-line no-empty-pattern
+        async ({}, use) => {
+            // we stub the mas fixture to allow `homeserver` to depend on it to ensure
+            // when it is specified by `masHomeserver` it is started before the homeserver
+            await use(undefined);
+        },
+        { scope: "worker" },
+    ],
+
+    context: async ({ homeserverType, synapseConfigOptions, logger, context, request, homeserver }, use, testInfo) => {
         testInfo.skip(
             !(homeserver instanceof SynapseContainer) && Object.keys(synapseConfigOptions).length > 0,
             `Test specifies Synapse config options so is unsupported with ${homeserverType}`,
         );
 
-        if (homeserver instanceof SynapseContainer) {
-            homeserver.withConfig(synapseConfigOptions);
-        }
-
-        const container = await homeserver
-            .withNetwork(network)
-            .withNetworkAliases("homeserver")
-            .withLogConsumer(logger.getConsumer(homeserverType))
-            .start();
-
-        await use(container);
-        await container.stop();
-    },
-    // eslint-disable-next-line no-empty-pattern
-    mas: async ({}, use) => {
-        // we stub the mas fixture to allow `homeserver` to depend on it to ensure
-        // when it is specified by `masHomeserver` it is started before the homeserver
-        await use(undefined);
+        homeserver.setRequest(request);
+        await logger.testStarted(testInfo);
+        await use(context);
+        await logger.testFinished(testInfo);
     },
 });
