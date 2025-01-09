@@ -68,7 +68,8 @@ export function ChangeRecoveryKey({
 
     // We create a new recovery key, the recovery key will be displayed to the user
     const recoveryKey = useAsyncMemo(() => matrixClient.getCrypto()!.createRecoveryKeyFromPassphrase(), []);
-    if (!recoveryKey?.encodedPrivateKey) return null;
+    // Waiting for the recovery key to be generated
+    if (!recoveryKey) return null;
 
     let content: JSX.Element;
     switch (state) {
@@ -86,7 +87,8 @@ export function ChangeRecoveryKey({
             // Show a generated recovery key and ask the user to save it.
             content = (
                 <KeyPanel
-                    recoveryKey={recoveryKey.encodedPrivateKey}
+                    // encodedPrivateKey is always defined, the optional typing is incorrect
+                    recoveryKey={recoveryKey.encodedPrivateKey!}
                     onConfirmClick={() => setState("confirm")}
                     onCancelClick={onCancelClick}
                 />
@@ -96,7 +98,8 @@ export function ChangeRecoveryKey({
             // Ask the user to enter the recovery key they just save to confirm it.
             content = (
                 <KeyForm
-                    recoveryKey={recoveryKey.encodedPrivateKey}
+                    // encodedPrivateKey is always defined, the optional typing is incorrect
+                    recoveryKey={recoveryKey.encodedPrivateKey!}
                     onCancelClick={onCancelClick}
                     onSubmit={async () => {
                         const crypto = matrixClient.getCrypto();
