@@ -62,6 +62,8 @@ export function ChangeRecoveryKey({
 }: ChangeRecoveryKeyProps): JSX.Element | null {
     const matrixClient = useMatrixClientContext();
 
+    // If the user is setting up recovery for the first time, we first show them a panel explaining what
+    // "recovery" is about. Otherwise, we jump straight to showing the user the new key.
     const [state, setState] = useState<State>(userHasKeyBackup ? "save_key_change_flow" : "inform_user");
 
     // We create a new recovery key, the recovery key will be displayed to the user
@@ -71,6 +73,7 @@ export function ChangeRecoveryKey({
     let content: JSX.Element;
     switch (state) {
         case "inform_user":
+            // Show a panel explaining what "recovery" is for, and what a recovery key does.
             content = (
                 <InformationPanel
                     onContinueClick={() => setState("save_key_setup_flow")}
@@ -80,6 +83,7 @@ export function ChangeRecoveryKey({
             break;
         case "save_key_setup_flow":
         case "save_key_change_flow":
+            // Show a generated recovery key and ask the user to save it.
             content = (
                 <KeyPanel
                     recoveryKey={recoveryKey.encodedPrivateKey}
@@ -89,6 +93,7 @@ export function ChangeRecoveryKey({
             );
             break;
         case "confirm":
+            // Ask the user to enter the recovery key they just save to confirm it.
             content = (
                 <KeyForm
                     recoveryKey={recoveryKey.encodedPrivateKey}

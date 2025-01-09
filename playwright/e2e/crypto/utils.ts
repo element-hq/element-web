@@ -24,9 +24,8 @@ import { ElementAppPage } from "../../pages/ElementAppPage";
 import { Bot } from "../../pages/bot";
 
 /**
- * Create a bot client and wait for the key backup to be ready.
- * This function will wait for the key backup to be ready.
- * @param page - the page to use
+ * Create a bot client using the supplied credentials, and wait for the key backup to be ready.
+ * @param page - the playwright `page` fixture
  * @param homeserver - the homeserver to use
  * @param credentials - the credentials to use for the bot client
  */
