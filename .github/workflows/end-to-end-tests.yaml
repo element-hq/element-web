@@ -192,7 +192,7 @@ jobs:
     complete:
         name: end-to-end-tests
         needs: playwright
-        if: always()
+        if: ${{ !cancelled() }}
         runs-on: ubuntu-24.04
         steps:
             - uses: actions/checkout@v4
