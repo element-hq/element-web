@@ -179,8 +179,7 @@ describe("TextForEvent", () => {
                     },
                 },
             });
-            // @ts-ignore - private field access
-            mxEvent._sender = { name: userA.name } as RoomMember;
+            mxEvent.sender = { name: userA.name } as RoomMember;
             return mxEvent;
         };
 

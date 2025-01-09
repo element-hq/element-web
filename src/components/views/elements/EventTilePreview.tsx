@@ -89,8 +89,7 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
         /* eslint-enable quote-props */
 
         // Fake it more
-        // @ts-ignore - private field access
-        event._sender = {
+        event.sender = {
             name: this.props.displayName || this.props.userId,
             rawDisplayName: this.props.displayName,
             userId: this.props.userId,

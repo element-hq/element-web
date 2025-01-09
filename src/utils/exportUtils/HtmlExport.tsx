@@ -350,8 +350,7 @@ export default class HTMLExporter extends Exporter {
         }
         const modifiedEvent = new MatrixEvent();
         modifiedEvent.event = mxEv.event;
-        // @ts-ignore - private field access
-        modifiedEvent._sender = mxEv.sender;
+        modifiedEvent.sender = mxEv.sender;
         modifiedEvent.event.type = "m.room.message";
         modifiedEvent.event.content = modifiedContent;
         return modifiedEvent;
