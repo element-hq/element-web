@@ -164,16 +164,13 @@ jobs:
               if: matrix.project == 'WebKit' && steps.playwright-cache.outputs.cache-hit == 'true'
               run: yarn playwright install-deps webkit
 
-            # Restore test-results.json file, which records the execution time of each test file.
-            # splitTests function uses this file for sharding.
+            # Restore playwright-results.json file, which records the execution time of each test file.
+            # The splitTests function uses this file for sharding.
             - name: Restore playwright-results.json
               uses: actions/cache/restore@v4
               with:
                   path: playwright-results.json
-                  key: playwright-results-${{ github.ref_name }}
-                  restore-keys: |
-                      playwright-results-${{ github.base_ref }}
-                      playwright-results-develop
+                  key: playwright-results
 
             # We skip tests tagged with @mergequeue when running on PRs, but run them in MQ and everywhere else
             - name: Run Playwright tests
@@ -234,7 +231,7 @@ jobs:
               uses: actions/cache/save@v4
               with:
                   path: playwright-results.json
-                  key: playwright-results-${{ github.ref_name }}
+                  key: playwright-results
 
             # Upload the HTML report even if one of our reporters fails, this can happen when stale screenshots are detected
             - name: Upload HTML report

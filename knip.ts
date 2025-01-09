@@ -21,6 +21,8 @@ export default {
         "src/hooks/useLocalStorageState.ts",
         "src/components/views/elements/InfoTooltip.tsx",
         "src/components/views/elements/StyledCheckbox.tsx",
+        // This throws an error trying to load tenbin for an unknown reason
+        "src/playwright.config.ts",
     ],
     ignoreDependencies: [
         // Required for `action-validator`

@@ -64,6 +64,14 @@ jobs:
               id: cpu-cores
               uses: SimenB/github-actions-cpu-cores@97ba232459a8e02ff6121db9362b09661c875ab8 # v2
 
+            # Restore tenbin-report.json file, which records the execution time of each test file.
+            # @tenbin/jest/sequencer uses this file for sharding.
+            - name: Restore tenbin-report.json
+              uses: actions/cache/restore@v4
+              with:
+                  path: tenbin-report.json
+                  key: tenbin-report
+
             - name: Run tests
               run: |
                   yarn test \
@@ -77,6 +85,14 @@ jobs:
 
                   # tell jest to use coloured output
                   FORCE_COLOR: true
+
+            # @tenbin/jest/reporter generates tenbin-report.json for each shard.
+            - name: Upload tenbin-report.json
+              if: github.ref_name == 'main'
+              uses: actions/upload-artifact@v4
+              with:
+                  name: tenbin-report-${{ matrix.runner }}
+                  path: tenbin-report.json
 
             - name: Move coverage files into place
               if: env.ENABLE_COVERAGE == 'true'
@@ -112,3 +128,16 @@ jobs:
                   context: SonarCloud Code Analysis
                   sha: ${{ github.sha }}
                   target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            # Download, merge & upload tenbin-report.json
+            - uses: actions/download-artifact@v4
+              with:
+                  path: tenbin-report
+                  pattern: tenbin-report-*
+            - name: Merge  tenbin-report
+              run: jq -s add tenbin-report/**/tenbin-report.json > tenbin-report.json
+            - name: Cache tenbin-report.json
+              uses: actions/cache/save@v4
+              with:
+                  path: tenbin-report.json
+                  key: tenbin-report

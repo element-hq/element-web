@@ -52,11 +52,12 @@ const config: Config = {
     testResultsProcessor: "@casualbot/jest-sonar-reporter",
     prettierPath: null,
     moduleDirectories: ["node_modules", "test/test-utils"],
+    testSequencer: "@tenbin/jest/sequencer",
 };
 
 // if we're running under GHA, enable the GHA reporter
 if (env["GITHUB_ACTIONS"] !== undefined) {
-    const reporters: Config["reporters"] = [["github-actions", { silent: false }], "summary"];
+    const reporters: Config["reporters"] = [["github-actions", { silent: false }], "summary", "@tenbin/jest/reporter"];
 
     // if we're running against the develop branch, also enable the slow test reporter
     if (env["GITHUB_REF"] == "refs/heads/develop") {
