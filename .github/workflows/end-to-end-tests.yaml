@@ -185,7 +185,7 @@ jobs:
               if: always()
               uses: actions/upload-artifact@v4
               with:
-                  name: all-blob-reports-${{ matrix.project }}-${{ matrix.runner }}
+                  name: blob-report-${{ matrix.project }}-${{ matrix.runner }}
                   path: blob-report
                   retention-days: 1
 
@@ -215,7 +215,7 @@ jobs:
               if: inputs.skip != true
               uses: actions/download-artifact@v4
               with:
-                  pattern: all-blob-reports-*
+                  pattern: blob-report-*
                   path: all-blob-reports
 
             # Ideally we'd use merge-multiple=true on download, but it is broken in certain cases
@@ -223,12 +223,12 @@ jobs:
             - name: Check report integrity
               if: inputs.skip != true
               run: |
-                  for file in all-blob-reports/*.zip; do
+                  for file in all-blob-reports/**/*.zip; do
                       unzip -t $file
                   done
             - name: Merge blob reports
               if: inputs.skip != true
-              run: for z in all-blob-reports/*.zip; do unar -r "$z" -o all-blob-reports-merged; done
+              run: for z in all-blob-reports/**/*.zip; do unar -r "$z" -o all-blob-reports-merged; done
 
             - name: Merge into HTML Report
               if: inputs.skip != true
