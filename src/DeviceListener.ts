@@ -287,6 +287,8 @@ export default class DeviceListener {
             crossSigningStatus.privateKeysCachedLocally.selfSigningKey &&
             crossSigningStatus.privateKeysCachedLocally.userSigningKey;
 
+        const defaultKeyId = await cli.secretStorage.getDefaultKeyId();
+
         const isCurrentDeviceTrusted =
             crossSigningReady &&
             Boolean(
@@ -315,11 +317,20 @@ export default class DeviceListener {
                 // cross signing ready & device trusted, but we are missing secrets from our local cached.
                 // prompt the user to enter their recovery key.
                 showSetupEncryptionToast(SetupKind.KEY_STORAGE_OUT_OF_SYNC);
-            } else if ((await cli.secretStorage.getDefaultKeyId()) === null) {
+            } else if (defaultKeyId === null) {
                 // the user just hasn't set up 4S yet: prompt them to do so
                 showSetupEncryptionToast(SetupKind.SET_UP_RECOVERY);
             } else {
-                // some other condition... yikes!
+                // some other condition... yikes! Show the 'set up encryption' toast: this is what we previously did
+                // in 'other' situations. Possibly we should consider prompting for a full reset in this case?
+                logger.warn("Couldn't match encryption state to a know case: showing 'setup encryption' prompt", {
+                    crossSigningReady,
+                    secretStorageReady,
+                    allCrossSigningSecretsCached,
+                    isCurrentDeviceTrusted,
+                    defaultKeyId,
+                });
+                showSetupEncryptionToast(SetupKind.SET_UP_ENCRYPTION);
             }
         }
 
