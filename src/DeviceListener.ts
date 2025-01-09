@@ -34,11 +34,9 @@ import {
     hideToast as hideUnverifiedSessionsToast,
     showToast as showUnverifiedSessionsToast,
 } from "./toasts/UnverifiedSessionToast";
-import { accessSecretStorage, isSecretStorageBeingAccessed } from "./SecurityManager";
-import { isSecureBackupRequired } from "./utils/WellKnownUtils";
+import { isSecretStorageBeingAccessed } from "./SecurityManager";
 import { ActionPayload } from "./dispatcher/payloads";
 import { Action } from "./dispatcher/actions";
-import { isLoggedIn } from "./utils/login";
 import SdkConfig from "./SdkConfig";
 import PlatformPeg from "./PlatformPeg";
 import { recordClientInformation, removeClientInformation } from "./utils/device/clientInformation";
