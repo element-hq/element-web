@@ -182,6 +182,7 @@
         "@sentry/webpack-plugin": "^2.7.1",
         "@stylistic/eslint-plugin": "^2.9.0",
         "@svgr/webpack": "^8.0.0",
+        "@tenbin/playwright": "^0.5.0",
         "@testcontainers/postgresql": "^10.16.0",
         "@testing-library/dom": "^10.4.0",
         "@testing-library/jest-dom": "^6.4.8",

@@ -2717,6 +2717,20 @@
     "@svgr/plugin-jsx" "8.1.0"
     "@svgr/plugin-svgo" "8.1.0"
 
+"@tenbin/core@0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@tenbin/core/-/core-0.5.0.tgz#394f74d90e618e9c15a1f376871a5247b06e35d7"
+  integrity sha512-QawJTsn1svoLDJipr0dDl/L3npkiMmA1pO5OfveoV6/hajQSrEI0QJtxg/kXMyi0P+EUJ55KL0BVsDkh78OvZA==
+
+"@tenbin/playwright@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@tenbin/playwright/-/playwright-0.5.0.tgz#8203d3419144fb812430663cc6362658df462abd"
+  integrity sha512-ApHQnl7a4avRa89CmDA+3C01MIxavV4HPtEmgXMvc8zg5AbFlmb+bu2VPQMtqfm4u4UgY0J/oO8SLjBABF5VCw==
+  dependencies:
+    "@tenbin/core" "0.5.0"
+    glob "^11.0.0"
+    picocolors "^1.1.0"
+
 "@testcontainers/postgresql@^10.16.0":
   version "10.16.0"
   resolved "https://registry.yarnpkg.com/@testcontainers/postgresql/-/postgresql-10.16.0.tgz#0437a9b426d64ea958e745a0e2ae19462b786f81"
