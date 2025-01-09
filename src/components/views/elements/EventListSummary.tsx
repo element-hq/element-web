@@ -193,7 +193,7 @@ export default class EventListSummary extends React.Component<Props, State> {
         //  - or if the summary is about to toggle to become collapsed
         //  - or if there are fewEvents, meaning the child eventTiles are shown as-is
         //  - or if the summary members have changed
-        //  - or if the userEvents have changed
+        //  - or if the one of IUserEvents within userEvents have changed
         return (
             nextProps.events.length !== this.props.events.length ||
             nextProps.events.length < this.props.threshold ||
@@ -205,8 +205,7 @@ export default class EventListSummary extends React.Component<Props, State> {
                 nextState.userEvents[userId].some((event, i) =>
                     objectHasDiff(event, this.state.userEvents[userId]?.[i] ?? {}),
                 ),
-            ) ||
-            true
+            )
         );
     }
 

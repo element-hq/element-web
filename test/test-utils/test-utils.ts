@@ -470,8 +470,7 @@ export function mkMembership(
     }
     const e = mkEvent(event);
     if (opts.target) {
-        // @ts-ignore - private field access
-        e._target = opts.target;
+        e.target = opts.target;
     }
     return e;
 }
