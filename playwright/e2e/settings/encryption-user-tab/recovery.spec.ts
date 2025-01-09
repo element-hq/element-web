@@ -109,6 +109,8 @@ test.describe("Recovery section in Encryption tab", () => {
         await checkDeviceIsConnectedKeyBackup(page, "2", true);
     });
 
+    // This case shouldn't happen but we have seen cases where the secrets gossiping failed or shared partial secrets when verified with another device.
+    // To simulate this case, we need to delete the cached secrets in the indexedDB
     test(
         "should enter the recovery key when the secrets are not cached",
         { tag: "@screenshot" },

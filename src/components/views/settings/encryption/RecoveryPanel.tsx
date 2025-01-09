@@ -21,6 +21,7 @@ import { SettingsSubheader } from "../SettingsSubheader";
  * - `loading`: We are checking the backup, the recovery and the secrets.
  * - `missing_backup`: The user has no backup.
  * - `secrets_not_cached`: The user has a backup but the secrets are not cached.
+ *                         This shouldn't happen but we have seen cases where the secrets gossiping failed or shared partial secrets when verified with another device.
  * - `good`: The user has a backup and the secrets are cached.
  */
 type State = "loading" | "missing_backup" | "secrets_not_cached" | "good";
