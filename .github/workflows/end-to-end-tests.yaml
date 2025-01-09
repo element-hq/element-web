@@ -123,7 +123,7 @@ jobs:
                     - runAllTests: false
                       project: WebKit
         env:
-            PLAYWRIGHT_BLOB_OUTPUT_NAME: blob-report-${{ matrix.project }}-${{ matrix.runner }}
+            PLAYWRIGHT_BLOB_OUTPUT_FILE: blob-report-${{ matrix.project }}-${{ matrix.runner }}
         steps:
             - uses: actions/checkout@v4
               with:
@@ -187,9 +187,10 @@ jobs:
               if: always()
               uses: actions/upload-artifact@v4
               with:
-                  name: ${{ env.PLAYWRIGHT_BLOB_OUTPUT_NAME }}
-                  path: ${{ env.PLAYWRIGHT_BLOB_OUTPUT_NAME }}
+                  name: ${{ env.PLAYWRIGHT_BLOB_OUTPUT_FILE }}
+                  path: ${{ env.PLAYWRIGHT_BLOB_OUTPUT_FILE }}
                   retention-days: 1
+                  if-no-files-found: error
 
     report:
         name: Report results
