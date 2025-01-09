@@ -123,7 +123,7 @@ jobs:
                     - runAllTests: false
                       project: WebKit
         env:
-            PLAYWRIGHT_BLOB_OUTPUT_FILE: blob-report-${{ matrix.project }}-${{ matrix.runner }}
+            SHARD_BLOB_NAME: blob-report-${{ matrix.project }}-${{ matrix.runner }}
         steps:
             - uses: actions/checkout@v4
               with:
@@ -182,13 +182,14 @@ jobs:
                       ${{ (github.event_name == 'pull_request' && matrix.runAllTests == false ) && '--grep-invert @mergequeue' || '' }}
               env:
                   SHARD: "${{ matrix.runner }}/${{ needs.build.outputs.num-runners }}"
+                  PLAYWRIGHT_BLOB_OUTPUT_FILE: ${{ env.SHARD_BLOB_NAME }}.zip
 
             - name: Upload blob report to GitHub Actions Artifacts
               if: always()
               uses: actions/upload-artifact@v4
               with:
-                  name: ${{ env.PLAYWRIGHT_BLOB_OUTPUT_FILE }}
-                  path: ${{ env.PLAYWRIGHT_BLOB_OUTPUT_FILE }}
+                  name: ${{ env.SHARD_BLOB_NAME }}
+                  path: ${{ env.SHARD_BLOB_NAME }}
                   retention-days: 1
                   if-no-files-found: error
 
