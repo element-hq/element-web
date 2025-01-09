@@ -100,7 +100,7 @@ exports[`<RecoveryPanel /> should ask to enter the recovery key when secrets are
 </DocumentFragment>
 `;
 
-exports[`<RecoveryPanel /> should ask to set up a recovery key when there is no key backup 1`] = `
+exports[`<RecoveryPanel /> should ask to set up a recovery key when there is no recovery key 1`] = `
 <DocumentFragment>
   <div
     class="mx_SettingsSection mx_SettingsSection_newUi"
@@ -143,7 +143,7 @@ exports[`<RecoveryPanel /> should ask to set up a recovery key when there is no 
 </DocumentFragment>
 `;
 
-exports[`<RecoveryPanel /> should be in loading state when checking backup and the cached keys 1`] = `
+exports[`<RecoveryPanel /> should be in loading state when checking the recovery key and the cached keys 1`] = `
 <DocumentFragment>
   <div
     class="mx_SettingsSection mx_SettingsSection_newUi"

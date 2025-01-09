@@ -18,13 +18,13 @@ import { SettingsSubheader } from "../SettingsSubheader";
 
 /**
  * The possible states of the recovery panel.
- * - `loading`: We are checking the backup, the recovery and the secrets.
- * - `missing_backup`: The user has no backup.
+ * - `loading`: We are checking the recovery key and the secrets.
+ * - `missing_recovery_key`: The user has no recovery key.
  * - `secrets_not_cached`: The user has a backup but the secrets are not cached.
  *                         This shouldn't happen but we have seen cases where the secrets gossiping failed or shared partial secrets when verified with another device.
  * - `good`: The user has a backup and the secrets are cached.
  */
-type State = "loading" | "missing_backup" | "secrets_not_cached" | "good";
+type State = "loading" | "missing_recovery_key" | "secrets_not_cached" | "good";
 
 interface RecoveryPanelProps {
     /**
@@ -38,7 +38,7 @@ interface RecoveryPanelProps {
  */
 export function RecoveryPanel({ onChangeRecoveryKeyClick }: RecoveryPanelProps): JSX.Element {
     const [state, setState] = useState<State>("loading");
-    const isMissingBackup = state === "missing_backup";
+    const isMissingRecoveryKey = state === "missing_recovery_key";
 
     const matrixClient = useMatrixClientContext();
 
@@ -46,8 +46,8 @@ export function RecoveryPanel({ onChangeRecoveryKeyClick }: RecoveryPanelProps):
         const crypto = matrixClient.getCrypto()!;
 
         // Check if the user has a backup
-        const hasBackup = Boolean(await crypto.checkKeyBackupAndEnable());
-        if (!hasBackup) return setState("missing_backup");
+        const hasRecoveryKey = Boolean(await matrixClient.secretStorage.getDefaultKeyId());
+        if (!hasRecoveryKey) return setState("missing_recovery_key");
 
         // Check if the secrets are cached
         const cachedSecrets = (await crypto.getCrossSigningStatus()).privateKeysCachedLocally;
@@ -66,7 +66,7 @@ export function RecoveryPanel({ onChangeRecoveryKeyClick }: RecoveryPanelProps):
         case "loading":
             content = <InlineSpinner aria-label={_t("common|loading")} />;
             break;
-        case "missing_backup":
+        case "missing_recovery_key":
             content = (
                 <Button size="sm" kind="primary" Icon={KeyIcon} onClick={() => onChangeRecoveryKeyClick(true)}>
                     {_t("settings|encryption|recovery|set_up_recovery")}
@@ -97,7 +97,10 @@ export function RecoveryPanel({ onChangeRecoveryKeyClick }: RecoveryPanelProps):
         <SettingsSection
             legacy={false}
             heading={
-                <SettingsHeader hasRecommendedTag={isMissingBackup} label={_t("settings|encryption|recovery|title")} />
+                <SettingsHeader
+                    hasRecommendedTag={isMissingRecoveryKey}
+                    label={_t("settings|encryption|recovery|title")}
+                />
             }
             subHeading={<Subheader state={state} />}
         >

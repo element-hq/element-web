@@ -105,6 +105,7 @@ export function createTestClient(): MatrixClient {
             isStored: jest.fn().mockReturnValue(false),
             checkKey: jest.fn().mockResolvedValue(false),
             hasKey: jest.fn().mockReturnValue(false),
+            getDefaultKeyId: jest.fn().mockResolvedValue(null),
         },
 
         store: {

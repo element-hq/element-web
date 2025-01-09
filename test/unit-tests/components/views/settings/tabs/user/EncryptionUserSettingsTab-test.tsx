@@ -10,7 +10,6 @@ import { render, screen } from "jest-matrix-react";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
-import { KeyBackupCheck } from "matrix-js-sdk/src/crypto-api";
 
 import { EncryptionUserSettingsTab } from "../../../../../../../src/components/views/settings/tabs/user/EncryptionUserSettingsTab";
 import { createTestClient, withClientContextRenderOptions } from "../../../../../../test-utils";
@@ -22,8 +21,8 @@ describe("<EncryptionUserSettingsTab />", () => {
     beforeEach(() => {
         matrixClient = createTestClient();
         jest.spyOn(matrixClient.getCrypto()!, "isCrossSigningReady").mockResolvedValue(true);
-        // Key backup is enabled
-        jest.spyOn(matrixClient.getCrypto()!, "checkKeyBackupAndEnable").mockResolvedValue({} as KeyBackupCheck);
+        // Recovery key is available
+        jest.spyOn(matrixClient.secretStorage, "getDefaultKeyId").mockResolvedValue("default key");
         // Secrets are cached
         jest.spyOn(matrixClient.getCrypto()!, "getCrossSigningStatus").mockResolvedValue({
             privateKeysInSecretStorage: true,
@@ -83,7 +82,7 @@ describe("<EncryptionUserSettingsTab />", () => {
     });
 
     it("should display the set up recovery key when the user clicks on the set up recovery key button", async () => {
-        jest.spyOn(matrixClient.getCrypto()!, "checkKeyBackupAndEnable").mockResolvedValue(null);
+        jest.spyOn(matrixClient.secretStorage, "getDefaultKeyId").mockResolvedValue(null);
         const user = userEvent.setup();
 
         const { asFragment } = renderComponent();
