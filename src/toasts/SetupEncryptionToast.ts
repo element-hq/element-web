@@ -39,6 +39,7 @@ const getIcon = (kind: Kind): string | undefined => {
         case Kind.SET_UP_RECOVERY:
             return undefined;
         case Kind.VERIFY_THIS_SESSION:
+        case Kind.KEY_STORAGE_OUT_OF_SYNC:
             return "verification_warning";
     }
 };
