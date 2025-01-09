@@ -111,13 +111,13 @@ jobs:
                 # Run multiple instances in parallel to speed up the tests
                 runner: ${{ fromJSON(needs.build.outputs.runners-matrix) }}
                 project:
-                    #                    - Chrome
-                    #                    - Firefox
-                    #                    - WebKit
+                    - Chrome
+                    - Firefox
+                    - WebKit
                     - Dendrite
                     - Pinecone
                 runAllTests:
-                    - true
+                    - ${{ github.event_name == 'schedule' || contains(github.event.pull_request.labels.*.name, 'X-Run-All-Tests') }}
                 # Skip the Firefox & Safari runs unless this was a cron trigger or PR has X-Run-All-Tests label
                 exclude:
                     - runAllTests: false
