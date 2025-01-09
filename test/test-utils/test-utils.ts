@@ -800,6 +800,8 @@ export const mkThirdPartyInviteEvent = (user: string, displayName: string, room:
         type: EventType.RoomThirdPartyInvite,
         content: {
             display_name: displayName,
+            public_key: "foo",
+            key_validity_url: "bar",
         },
         skey: "test" + Math.random(),
         user,

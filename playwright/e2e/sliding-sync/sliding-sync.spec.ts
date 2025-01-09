@@ -7,21 +7,31 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { Page, Request } from "@playwright/test";
+import { GenericContainer, StartedTestContainer, Wait } from "testcontainers";
 
 import { test as base, expect } from "../../element-web-test";
 import type { ElementAppPage } from "../../pages/ElementAppPage";
 import type { Bot } from "../../pages/bot";
-import { ProxyInstance, SlidingSyncProxy } from "../../plugins/sliding-sync-proxy";
 
 const test = base.extend<{
-    slidingSyncProxy: ProxyInstance;
+    slidingSyncProxy: StartedTestContainer;
     testRoom: { roomId: string; name: string };
     joinedBot: Bot;
 }>({
-    slidingSyncProxy: async ({ context, page, homeserver }, use) => {
-        const proxy = new SlidingSyncProxy(homeserver.config.dockerUrl, context);
-        const proxyInstance = await proxy.start();
-        const proxyAddress = `http://localhost:${proxyInstance.port}`;
+    slidingSyncProxy: async ({ logger, network, postgres, page, homeserver }, use, testInfo) => {
+        const container = await new GenericContainer("ghcr.io/matrix-org/sliding-sync:v0.99.3")
+            .withNetwork(network)
+            .withExposedPorts(8008)
+            .withLogConsumer(logger.getConsumer("sliding-sync-proxy"))
+            .withWaitStrategy(Wait.forHttp("/client/server.json", 8008))
+            .withEnvironment({
+                SYNCV3_SECRET: "bwahahaha",
+                SYNCV3_DB: `user=${postgres.getUsername()} dbname=postgres password=${postgres.getPassword()} host=postgres sslmode=disable`,
+                SYNCV3_SERVER: `http://homeserver:8008`,
+            })
+            .start();
+
+        const proxyAddress = `http://${container.getHost()}:${container.getMappedPort(8008)}`;
         await page.addInitScript((proxyAddress) => {
             window.localStorage.setItem(
                 "mx_local_settings",
@@ -31,8 +41,8 @@ const test = base.extend<{
             );
             window.localStorage.setItem("mx_labs_feature_feature_sliding_sync", "true");
         }, proxyAddress);
-        await use(proxyInstance);
-        await proxy.stop();
+        await use(container);
+        await container.stop();
     },
     // Ensure slidingSyncProxy is set up before the user fixture as it relies on an init script
     credentials: async ({ slidingSyncProxy, credentials }, use) => {
@@ -361,37 +371,42 @@ test.describe("Sliding Sync", () => {
             roomIds.push(id);
             await expect(page.getByRole("treeitem", { name: fruit })).toBeVisible();
         }
-        const [roomAId, roomPId] = roomIds;
+        const [roomAId, roomPId, roomOId] = roomIds;
 
-        const assertUnsubExists = (request: Request, subRoomId: string, unsubRoomId: string) => {
+        const matchRoomSubRequest = (subRoomId: string) => (request: Request) => {
+            if (!request.url().includes("/sync")) return false;
             const body = request.postDataJSON();
-            // There may be a request without a txn_id, ignore it, as there won't be any subscription changes
-            if (body.txn_id === undefined) {
-                return;
-            }
-            expect(body.unsubscribe_rooms).toEqual([unsubRoomId]);
-            expect(body.room_subscriptions).not.toHaveProperty(unsubRoomId);
-            expect(body.room_subscriptions).toHaveProperty(subRoomId);
+            return body.txn_id && body.room_subscriptions?.[subRoomId];
+        };
+        const matchRoomUnsubRequest = (unsubRoomId: string) => (request: Request) => {
+            if (!request.url().includes("/sync")) return false;
+            const body = request.postDataJSON();
+            return (
+                body.txn_id && body.unsubscribe_rooms?.includes(unsubRoomId) && !body.room_subscriptions?.[unsubRoomId]
+            );
         };
 
-        let promise = page.waitForRequest(/sync/);
-
-        // Select the Test Room
-        await page.getByRole("treeitem", { name: "Apple", exact: true }).click();
-
-        // and wait for playwright to get the request
-        const roomSubscriptions = (await promise).postDataJSON().room_subscriptions;
+        // Select the Test Room and wait for playwright to get the request
+        const [request] = await Promise.all([
+            page.waitForRequest(matchRoomSubRequest(roomAId)),
+            page.getByRole("treeitem", { name: "Apple", exact: true }).click(),
+        ]);
+        const roomSubscriptions = request.postDataJSON().room_subscriptions;
         expect(roomSubscriptions, "room_subscriptions is object").toBeDefined();
 
-        // Switch to another room
-        promise = page.waitForRequest(/sync/);
-        await page.getByRole("treeitem", { name: "Pineapple", exact: true }).click();
-        assertUnsubExists(await promise, roomPId, roomAId);
+        // Switch to another room and wait for playwright to get the request
+        await Promise.all([
+            page.waitForRequest(matchRoomSubRequest(roomPId)),
+            page.waitForRequest(matchRoomUnsubRequest(roomAId)),
+            page.getByRole("treeitem", { name: "Pineapple", exact: true }).click(),
+        ]);
 
-        // And switch to even another room
-        promise = page.waitForRequest(/sync/);
-        await page.getByRole("treeitem", { name: "Apple", exact: true }).click();
-        assertUnsubExists(await promise, roomPId, roomAId);
+        // And switch to even another room and wait for playwright to get the request
+        await Promise.all([
+            page.waitForRequest(matchRoomSubRequest(roomOId)),
+            page.waitForRequest(matchRoomUnsubRequest(roomPId)),
+            page.getByRole("treeitem", { name: "Orange", exact: true }).click(),
+        ]);
 
         // TODO: Add tests for encrypted rooms
     });

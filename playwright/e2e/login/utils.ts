@@ -19,8 +19,8 @@ export async function doTokenRegistration(
     await page.goto("/#/login");
 
     await page.getByRole("button", { name: "Edit" }).click();
-    await page.getByRole("textbox", { name: "Other homeserver" }).fill(homeserver.config.baseUrl);
-    await page.getByRole("button", { name: "Continue" }).click();
+    await page.getByRole("textbox", { name: "Other homeserver" }).fill(homeserver.baseUrl);
+    await page.getByRole("button", { name: "Continue", exact: true }).click();
     // wait for the dialog to go away
     await expect(page.locator(".mx_ServerPickerDialog")).toHaveCount(0);
 
@@ -56,5 +56,44 @@ export async function doTokenRegistration(
         homeServer: window.mxMatrixClientPeg.get().getHomeserverUrl(),
         password: null,
         displayName: "Alice",
+        username: window.mxMatrixClientPeg.get().getUserIdLocalpart(),
     }));
+}
+
+/**
+ * Intercept calls to /sync and have them fail with a soft-logout
+ *
+ * Any further requests to /sync with the same access token are blocked.
+ */
+export async function interceptRequestsWithSoftLogout(page: Page, user: Credentials): Promise<void> {
+    await page.route("**/_matrix/client/*/sync*", async (route, req) => {
+        const accessToken = await req.headerValue("Authorization");
+
+        // now, if the access token on this request matches the expired one, block it
+        if (accessToken === `Bearer ${user.accessToken}`) {
+            console.log("Intercepting request with soft-logged-out access token");
+            await route.fulfill({
+                status: 401,
+                json: {
+                    errcode: "M_UNKNOWN_TOKEN",
+                    error: "Soft logout",
+                    soft_logout: true,
+                },
+            });
+            return;
+        }
+
+        // otherwise, pass through as normal
+        await route.continue();
+    });
+
+    const promise = page.waitForResponse((resp) => resp.url().includes("/sync") && resp.status() === 401);
+
+    // do something to make the active /sync return: create a new room
+    await page.evaluate(() => {
+        // don't wait for this to complete: it probably won't, because of the broken sync
+        window.mxMatrixClientPeg.get().createRoom({});
+    });
+
+    await promise;
 }

@@ -7,7 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { test, expect } from "../../element-web-test";
+import { uiaLongSessionTimeoutHomeserver } from "../../plugins/homeserver/synapse/uiaLongSessionTimeoutHomeserver.ts";
 
+// This is needed to not get stopped by UIA when deleting other devices
+test.use(uiaLongSessionTimeoutHomeserver);
 test.describe("Device manager", () => {
     test.use({
         displayName: "Alice",
