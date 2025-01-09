@@ -11,11 +11,7 @@ export default {
         "test/**",
         "res/decoder-ring/**",
     ],
-    project: [
-        "**/*.{js,ts,jsx,tsx}",
-        // This throws an error trying to load tenbin - https://knip.dev/reference/known-issues#exceptions-from-config-files
-        "!src/playwright.config.ts",
-    ],
+    project: ["**/*.{js,ts,jsx,tsx}"],
     ignore: [
         "docs/**",
         "res/jitsi_external_api.min.js",

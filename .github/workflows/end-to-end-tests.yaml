@@ -216,23 +216,22 @@ jobs:
               uses: actions/download-artifact@v4
               with:
                   pattern: blob-report-*
-                  path: all-blob-reports
 
             # Ideally we'd use merge-multiple=true on download, but it is broken in certain cases
             # https://github.com/microsoft/playwright/issues/29451
             - name: Check report integrity
               if: inputs.skip != true
               run: |
-                  for file in all-blob-reports/**/*.zip; do
+                  for file in blob-report-*/*.zip; do
                       unzip -t $file
                   done
             - name: Merge blob reports
               if: inputs.skip != true
-              run: for z in all-blob-reports/**/*.zip; do unar -r "$z" -o all-blob-reports-merged; done
+              run: for z in blob-report-*/*.zip; do unar -r "$z" -o all-blob-reports; done
 
             - name: Merge into HTML Report
               if: inputs.skip != true
-              run: yarn playwright merge-reports --reporter=html,json,./playwright/flaky-reporter.ts,./playwright/stale-screenshot-reporter.ts ./all-blob-reports-merged
+              run: yarn playwright merge-reports --reporter=html,json,./playwright/flaky-reporter.ts,./playwright/stale-screenshot-reporter.ts ./all-blob-reports
               env:
                   # Only pass creds to the flaky-reporter on main branch runs
                   GITHUB_TOKEN: ${{ github.ref_name == 'develop' && secrets.ELEMENT_BOT_TOKEN || '' }}

@@ -71,9 +71,9 @@ export default defineConfig({
     snapshotDir: "playwright/snapshots",
     snapshotPathTemplate: "{snapshotDir}/{testFilePath}/{arg}-{platform}{ext}",
     forbidOnly: !!process.env.CI,
-    testMatch: process.env.CI
+    testMatch: process.env.SHARD
         ? splitTests({
-              shard: process.env.SHARD ?? "1/1",
+              shard: process.env.SHARD,
               pattern: ["playwright/e2e/**/*.spec.ts"],
               reportFile: "playwright-results.json",
           })
