@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { defineConfig, devices } from "@playwright/test";
-import { splitTests } from "@tenbin/playwright/dist/index";
+import { splitTests } from "@tenbin/playwright";
 
 const baseURL = process.env["BASE_URL"] ?? "http://localhost:8080";
 
