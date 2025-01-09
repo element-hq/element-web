@@ -54,6 +54,15 @@ jobs:
               with:
                   repository: element-hq/element-web
 
+            # Restore playwright-results.json file, which records the execution time of each test file.
+            # The splitTests function uses this file for sharding.
+            # We do this in the build stage to ensure it remains consistent if a playwright test got manually restarted
+            - name: Restore playwright-results.json
+              uses: actions/cache/restore@v4
+              with:
+                  path: playwright-results.json
+                  key: playwright-results
+
             - uses: actions/setup-node@v4
               with:
                   cache: "yarn"
@@ -77,14 +86,15 @@ jobs:
               env:
                   CI_PACKAGE: true
                   VERSION: "${{ steps.layered_build.outputs.VERSION }}"
-              run: |
-                  yarn build
+              run: yarn build
 
             - name: Upload Artifact
               uses: actions/upload-artifact@v4
               with:
-                  name: webapp
-                  path: webapp
+                  name: build
+                  path: |
+                      webapp
+                      playwright-results.json
                   retention-days: 1
 
             - name: Calculate runner variables
@@ -133,8 +143,7 @@ jobs:
             - name: 📥 Download artifact
               uses: actions/download-artifact@v4
               with:
-                  name: webapp
-                  path: webapp
+                  name: build
 
             - uses: actions/setup-node@v4
               with:
@@ -165,14 +174,6 @@ jobs:
               # Some WebKit dependencies seem to lay outside the cache and will need to be installed separately
               if: matrix.project == 'WebKit' && steps.playwright-cache.outputs.cache-hit == 'true'
               run: yarn playwright install-deps webkit
-
-            # Restore playwright-results.json file, which records the execution time of each test file.
-            # The splitTests function uses this file for sharding.
-            - name: Restore playwright-results.json
-              uses: actions/cache/restore@v4
-              with:
-                  path: playwright-results.json
-                  key: playwright-results
 
             # We skip tests tagged with @mergequeue when running on PRs, but run them in MQ and everywhere else
             - name: Run Playwright tests
