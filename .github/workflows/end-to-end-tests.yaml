@@ -189,7 +189,7 @@ jobs:
               uses: actions/upload-artifact@v4
               with:
                   name: ${{ env.SHARD_BLOB_NAME }}
-                  path: ${{ env.SHARD_BLOB_NAME }}
+                  path: ${{ env.SHARD_BLOB_NAME }}.zip
                   retention-days: 1
                   if-no-files-found: error
 
