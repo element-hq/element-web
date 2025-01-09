@@ -88,7 +88,6 @@ jobs:
 
             # @tenbin/jest/reporter generates tenbin-report.json for each shard.
             - name: Upload tenbin-report.json
-              if: github.ref_name == 'main'
               uses: actions/upload-artifact@v4
               with:
                   name: tenbin-report-${{ matrix.runner }}

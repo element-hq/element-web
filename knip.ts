@@ -11,7 +11,11 @@ export default {
         "test/**",
         "res/decoder-ring/**",
     ],
-    project: ["**/*.{js,ts,jsx,tsx}"],
+    project: [
+        "**/*.{js,ts,jsx,tsx}",
+        // This throws an error trying to load tenbin - https://knip.dev/reference/known-issues#exceptions-from-config-files
+        "!src/playwright.config.ts",
+    ],
     ignore: [
         "docs/**",
         "res/jitsi_external_api.min.js",
@@ -21,8 +25,6 @@ export default {
         "src/hooks/useLocalStorageState.ts",
         "src/components/views/elements/InfoTooltip.tsx",
         "src/components/views/elements/StyledCheckbox.tsx",
-        // This throws an error trying to load tenbin for an unknown reason
-        "src/playwright.config.ts",
     ],
     ignoreDependencies: [
         // Required for `action-validator`
