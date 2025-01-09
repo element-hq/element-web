@@ -122,6 +122,8 @@ jobs:
                       project: Firefox
                     - runAllTests: false
                       project: WebKit
+        env:
+            PLAYWRIGHT_BLOB_OUTPUT_NAME: blob-report-${{ matrix.project }}-${{ matrix.runner }}
         steps:
             - uses: actions/checkout@v4
               with:
@@ -185,8 +187,8 @@ jobs:
               if: always()
               uses: actions/upload-artifact@v4
               with:
-                  name: blob-report-${{ matrix.project }}-${{ matrix.runner }}
-                  path: blob-report
+                  name: ${{ env.PLAYWRIGHT_BLOB_OUTPUT_NAME }}
+                  path: ${{ env.PLAYWRIGHT_BLOB_OUTPUT_NAME }}
                   retention-days: 1
 
     report:
@@ -212,11 +214,8 @@ jobs:
               uses: actions/download-artifact@v4
               with:
                   pattern: blob-report-*
-
-            # Ideally we'd use merge-multiple=true on download, but it is broken in certain cases
-            # https://github.com/microsoft/playwright/issues/29451
-            - name: Merge blob reports
-              run: for z in blob-report-*/*.zip; do unzip "$z" -d all-blob-reports; done
+                  path: all-blob-reports
+                  merge-multiple: true
 
             - name: Merge into HTML Report
               run: yarn playwright merge-reports --reporter=html,json,./playwright/flaky-reporter.ts,./playwright/stale-screenshot-reporter.ts ./all-blob-reports
