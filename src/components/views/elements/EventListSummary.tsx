@@ -621,7 +621,7 @@ export default class EventListSummary extends React.Component<Props, State> {
                 events={this.props.events}
                 threshold={this.props.threshold}
                 onToggle={this.props.onToggle}
-                startExpanded={true}
+                startExpanded={this.props.startExpanded}
                 children={this.props.children}
                 summaryMembers={this.state.summaryMembers}
                 layout={this.props.layout}
