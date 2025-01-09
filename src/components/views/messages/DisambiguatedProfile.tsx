@@ -8,15 +8,21 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { RoomMember } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
 import { getUserNameColorClass } from "../../../utils/FormattingUtils";
 import UserIdentifier from "../../../customisations/UserIdentifier";
 
+interface MemberInfo {
+    userId: string;
+    roomId: string;
+    rawDisplayName?: string;
+    disambiguate: boolean;
+}
+
 interface IProps {
-    member?: RoomMember | null;
+    member?: MemberInfo | null;
     fallbackName: string;
     onClick?(): void;
     colored?: boolean;

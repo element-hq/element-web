@@ -16,20 +16,21 @@ const username = "user1234";
 const password = "oETo7MPf0o";
 const email = "user@nowhere.dummy";
 
-test.describe("Forgot Password", () => {
-    test.skip(isDendrite, "not yet wired up");
-    test.use(emailHomeserver);
-    test.use({
-        config: {
-            // The only thing that we really *need* (otherwise Element refuses to load) is a default homeserver.
-            // We point that to a guaranteed-invalid domain.
-            default_server_config: {
-                "m.homeserver": {
-                    base_url: "https://server.invalid",
-                },
+test.use(emailHomeserver);
+test.use({
+    config: {
+        // The only thing that we really *need* (otherwise Element refuses to load) is a default homeserver.
+        // We point that to a guaranteed-invalid domain.
+        default_server_config: {
+            "m.homeserver": {
+                base_url: "https://server.invalid",
             },
         },
-    });
+    },
+});
+
+test.describe("Forgot Password", () => {
+    test.skip(isDendrite, "not yet wired up");
 
     test("renders properly", { tag: "@screenshot" }, async ({ page, homeserver }) => {
         await page.goto("/");

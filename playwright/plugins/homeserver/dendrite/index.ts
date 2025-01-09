@@ -6,31 +6,34 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Fixtures, PlaywrightTestArgs } from "@playwright/test";
+import { Fixtures } from "@playwright/test";
 
-import { Fixtures as BaseFixtures } from "../../../element-web-test.ts";
 import { DendriteContainer, PineconeContainer } from "../../../testcontainers/dendrite.ts";
 import { Services } from "../../../services.ts";
 
-type Fixture = PlaywrightTestArgs & Services & BaseFixtures;
-export const dendriteHomeserver: Fixtures<Fixture, {}, Fixture> = {
-    _homeserver: async ({ request }, use) => {
-        const container =
-            process.env["PLAYWRIGHT_HOMESERVER"] === "dendrite"
-                ? new DendriteContainer(request)
-                : new PineconeContainer(request);
-        await use(container);
-    },
-    homeserver: async ({ logger, network, _homeserver: homeserver }, use) => {
-        const container = await homeserver
-            .withNetwork(network)
-            .withNetworkAliases("homeserver")
-            .withLogConsumer(logger.getConsumer("dendrite"))
-            .start();
+export const dendriteHomeserver: Fixtures<{}, Services> = {
+    _homeserver: [
+        // eslint-disable-next-line no-empty-pattern
+        async ({}, use) => {
+            const container =
+                process.env["PLAYWRIGHT_HOMESERVER"] === "dendrite" ? new DendriteContainer() : new PineconeContainer();
+            await use(container);
+        },
+        { scope: "worker" },
+    ],
+    homeserver: [
+        async ({ logger, network, _homeserver: homeserver }, use) => {
+            const container = await homeserver
+                .withNetwork(network)
+                .withNetworkAliases("homeserver")
+                .withLogConsumer(logger.getConsumer("dendrite"))
+                .start();
 
-        await use(container);
-        await container.stop();
-    },
+            await use(container);
+            await container.stop();
+        },
+        { scope: "worker" },
+    ],
 };
 
 export function isDendrite(): boolean {

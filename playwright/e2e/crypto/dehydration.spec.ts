@@ -16,33 +16,33 @@ const ROOM_NAME = "Test room";
 const NAME = "Alice";
 
 function getMemberTileByName(page: Page, name: string): Locator {
-    return page.locator(`.mx_EntityTile, [title="${name}"]`);
+    return page.locator(`.mx_MemberTileView, [title="${name}"]`);
 }
+
+test.use({
+    displayName: NAME,
+    synapseConfigOptions: {
+        experimental_features: {
+            msc2697_enabled: false,
+            msc3814_enabled: true,
+        },
+    },
+    config: async ({ config, context }, use) => {
+        const wellKnown = {
+            ...config.default_server_config,
+            "org.matrix.msc3814": true,
+        };
+
+        await context.route("https://localhost/.well-known/matrix/client", async (route) => {
+            await route.fulfill({ json: wellKnown });
+        });
+
+        await use(config);
+    },
+});
 
 test.describe("Dehydration", () => {
     test.skip(isDendrite, "does not yet support dehydration v2");
-
-    test.use({
-        displayName: NAME,
-        synapseConfigOptions: {
-            experimental_features: {
-                msc2697_enabled: false,
-                msc3814_enabled: true,
-            },
-        },
-        config: async ({ config, context }, use) => {
-            const wellKnown = {
-                ...config.default_server_config,
-                "org.matrix.msc3814": true,
-            };
-
-            await context.route("https://localhost/.well-known/matrix/client", async (route) => {
-                await route.fulfill({ json: wellKnown });
-            });
-
-            await use(config);
-        },
-    });
 
     test("Create dehydrated device", async ({ page, user, app }, workerInfo) => {
         // Create a backup (which will create SSSS, and dehydrated device)
@@ -88,7 +88,7 @@ test.describe("Dehydration", () => {
         await viewRoomSummaryByName(page, app, ROOM_NAME);
 
         await page.locator(".mx_RightPanel").getByRole("menuitem", { name: "People" }).click();
-        await expect(page.locator(".mx_MemberList")).toBeVisible();
+        await expect(page.locator(".mx_MemberListView")).toBeVisible();
 
         await getMemberTileByName(page, NAME).click();
         await page.locator(".mx_UserInfo_devices .mx_UserInfo_expand").click();

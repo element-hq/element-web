@@ -23,20 +23,18 @@ element-web project is fine: leave it running it a different terminal as you wou
 when developing. Alternatively if you followed the development set up from element-web then
 Playwright will be capable of running the webserver on its own if it isn't already running.
 
-The tests use Docker to launch Homeserver (Synapse or Dendrite) instances to test against, so you'll also
-need to have Docker installed and working in order to run the Playwright tests.
+The tests use [testcontainers](https://node.testcontainers.org/) to launch Homeserver (Synapse or Dendrite)
+instances to test against, so you'll also need to one of the
+[supported container runtimes](#supporter-container-runtimes)
+installed and working in order to run the Playwright tests.
 
 There are a few different ways to run the tests yourself. The simplest is to run:
 
 ```shell
-docker pull ghcr.io/element-hq/synapse:develop
 yarn run test:playwright
 ```
 
 This will run the Playwright tests once, non-interactively.
-
-Note: you don't need to run the `docker pull` command every time, but you should
-do it regularly to ensure you are running against an up-to-date Synapse.
 
 You can also run individual tests this way too, as you'd expect:
 
@@ -61,29 +59,25 @@ Some tests are excluded from running on certain browsers due to incompatibilitie
 
 ## How the Tests Work
 
-Everything Playwright-related lives in the `playwright/` subdirectory of react-sdk
+Everything Playwright-related lives in the `playwright/` subdirectory
 as is typical for Playwright tests. Likewise, tests live in `playwright/e2e`.
 
-`playwright/plugins/homeservers` contains Playwright plugins that starts instances
-of Synapse/Dendrite in Docker containers. These servers are what Element-web runs
-against in the tests.
+`playwright/testcontainers` contains the testcontainers which start instances
+of Synapse/Dendrite. These servers are what Element-web runs against in the tests.
 
 Synapse can be launched with different configurations in order to test element
-in different configurations. `playwright/plugins/homeserver/synapse/templates`
-contains template configuration files for each different configuration.
+in different configurations. You can specify `synapseConfigOptions` as such:
 
-Each test suite can then launch whatever Synapse instances it needs in whatever
-configurations.
+```typescript
+test.use({
+    synapseConfigOptions: {
+        // The config options to pass to the Synapse instance
+    },
+});
+```
 
-Note that although tests should stop the Homeserver instances after running and the
-plugin also stop any remaining instances after all tests have run, it is possible
-to be left with some stray containers if, for example, you terminate a test such
-that the `after()` does not run and also exit Playwright uncleanly. All the containers
-it starts are prefixed, so they are easy to recognise. They can be removed safely.
-
-After each test run, logs from the Synapse instances are saved in `playwright/logs/synapse`
-with each instance in a separate directory named after its ID. These logs are removed
-at the start of each test run.
+The appropriate homeserver will be launched by the Playwright worker and reused for all tests which match the worker configuration.
+The logs from testcontainers will be attached to any reports output from Playwright.
 
 ## Writing Tests
 
@@ -112,25 +106,6 @@ its internal health-check.
 Homeserver instances should be reasonably cheap to start (you may see the first one take a
 while as it pulls the Docker image).
 You do not need to explicitly clean up the instance as it will be cleaned up by the fixture.
-
-### Synapse Config Templates
-
-When a Synapse instance is started, it's given a config generated from one of the config
-templates in `playwright/plugins/homeserver/synapse/templates`. There are a couple of special files
-in these templates:
-
-- `homeserver.yaml`:
-  Template substitution happens in this file. Template variables are:
-    - `REGISTRATION_SECRET`: The secret used to register users via the REST API.
-    - `MACAROON_SECRET_KEY`: Generated each time for security
-    - `FORM_SECRET`: Generated each time for security
-    - `PUBLIC_BASEURL`: The localhost url + port combination the synapse is accessible at
-- `localhost.signing.key`: A signing key is auto-generated and saved to this file.
-  Config templates should not contain a signing key and instead assume that one will exist
-  in this file.
-
-All other files in the template are copied recursively to `/data/`, so the file `foo.html`
-in a template can be referenced in the config as `/data/foo.html`.
 
 ### Logging In
 
@@ -226,6 +201,8 @@ Anything testing Matrix media will need to have `@no-firefox` and `@no-webkit` a
 has to be disabled in Playwright on Firefox & Webkit to retain routing functionality.
 Anything testing VoIP/microphone will need to have `@no-webkit` as fake microphone functionality is not available
 there at this time.
+
+If you wish to run all tests in a PR, you can give it the label `X-Run-All-Tests`.
 
 ## Supporter container runtimes
 
