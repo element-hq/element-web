@@ -68,14 +68,13 @@ class Helpers {
     }
 
     /**
-     * Delete the key backup for the given version
-     * @param backupVersion
+     * Set the default key id of the secret storage at null
      */
-    async deleteKeyBackup(backupVersion: string) {
+    async removeSecretStorageDefaultKeyId() {
         const client = await this.app.client.prepareClient();
-        await client.evaluate(async (client, backupVersion) => {
-            await client.getCrypto()?.deleteKeyBackupVersion(backupVersion);
-        }, backupVersion);
+        await client.evaluate(async (client) => {
+            await client.secretStorage.setDefaultKeyId(null);
+        });
     }
 
     /**

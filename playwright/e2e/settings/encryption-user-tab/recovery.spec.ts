@@ -79,7 +79,7 @@ test.describe("Recovery section in Encryption tab", () => {
 
     test("should setup the recovery key", { tag: "@screenshot" }, async ({ page, app, util }) => {
         await verifySession(app, "new passphrase");
-        await util.deleteKeyBackup(expectedBackupVersion);
+        await util.removeSecretStorageDefaultKeyId();
 
         // The key backup is deleted and the user needs to set it up
         const dialog = await util.openEncryptionTab();
@@ -103,6 +103,9 @@ test.describe("Recovery section in Encryption tab", () => {
 
         // Confirm the recovery key
         await util.confirmRecoveryKey("set-up-key-3-encryption-tab.png");
+
+        // The recovery key is now set up and the user can change it
+        await expect(dialog.getByRole("button", { name: "Change recovery key" })).toBeVisible();
 
         await app.closeDialog();
         // Check that the current device is connected to key backup and the backup version is the expected one
