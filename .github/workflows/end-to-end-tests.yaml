@@ -189,48 +189,36 @@ jobs:
                   path: blob-report
                   retention-days: 1
 
-    complete:
-        name: end-to-end-tests
+    report:
+        name: Report results
         needs: playwright
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && inputs.skip != true }}
         runs-on: ubuntu-24.04
         steps:
             - uses: actions/checkout@v4
-              if: inputs.skip != true
               with:
                   persist-credentials: false
                   repository: element-hq/element-web
 
             - uses: actions/setup-node@v4
-              if: inputs.skip != true
               with:
                   cache: "yarn"
                   node-version: "lts/*"
 
             - name: Install dependencies
-              if: inputs.skip != true
               run: yarn install --frozen-lockfile
 
             - name: Download blob reports from GitHub Actions Artifacts
-              if: inputs.skip != true
               uses: actions/download-artifact@v4
               with:
                   pattern: blob-report-*
 
             # Ideally we'd use merge-multiple=true on download, but it is broken in certain cases
             # https://github.com/microsoft/playwright/issues/29451
-            - name: Check report integrity
-              if: inputs.skip != true
-              run: |
-                  for file in blob-report-*/*.zip; do
-                      unzip -t $file
-                  done
             - name: Merge blob reports
-              if: inputs.skip != true
-              run: for z in blob-report-*/*.zip; do unar -r "$z" -o all-blob-reports; done
+              run: for z in blob-report-*/*.zip; do unzip "$z" -d all-blob-reports; done
 
             - name: Merge into HTML Report
-              if: inputs.skip != true
               run: yarn playwright merge-reports --reporter=html,json,./playwright/flaky-reporter.ts,./playwright/stale-screenshot-reporter.ts ./all-blob-reports
               env:
                   # Only pass creds to the flaky-reporter on main branch runs
@@ -238,7 +226,6 @@ jobs:
                   PLAYWRIGHT_JSON_OUTPUT_NAME: playwright-results.json
 
             - name: Cache playwright-results.json
-              if: inputs.skip != true
               uses: actions/cache/save@v4
               with:
                   path: playwright-results.json
@@ -246,12 +233,20 @@ jobs:
 
             # Upload the HTML report even if one of our reporters fails, this can happen when stale screenshots are detected
             - name: Upload HTML report
-              if: always() && inputs.skip != true
+              if: always()
               uses: actions/upload-artifact@v4
               with:
                   name: html-report
                   path: playwright-report
                   retention-days: 14
 
-            - if: needs.playwright.result != 'skipped' && needs.playwright.result != 'success'
+    complete:
+        name: end-to-end-tests
+        needs:
+            - playwright
+            - report
+        if: ${{ !cancelled() }}
+        runs-on: ubuntu-24.04
+        steps:
+            - if: needs.playwright.result == 'failure' || needs.report.result == 'failure'
               run: exit 1
