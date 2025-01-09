@@ -122,9 +122,8 @@ describe("ReactionEventPreview", () => {
                 type: "m.reaction",
                 room: roomId,
             });
-            // @ts-ignore - private field access
-            event._sender = new RoomMember(roomId, userId);
-            event.sender!.name = "Bob";
+            event.sender = new RoomMember(roomId, userId);
+            event.sender.name = "Bob";
 
             expect(preview.getTextFor(event)).toMatchInlineSnapshot(`"Bob reacted 🪿 to duck duck goose"`);
         });
