@@ -96,6 +96,7 @@ jobs:
                       webapp
                       playwright-results.json
                   retention-days: 1
+                  if-no-files-found: error
 
             - name: Calculate runner variables
               id: runner-vars
@@ -241,6 +242,7 @@ jobs:
                   name: html-report
                   path: playwright-report
                   retention-days: 14
+                  if-no-files-found: error
 
     complete:
         name: end-to-end-tests
