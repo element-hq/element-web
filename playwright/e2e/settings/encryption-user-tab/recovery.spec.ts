@@ -73,7 +73,11 @@ test.describe("Recovery section in Encryption tab", () => {
             await dialog.getByRole("button", { name: "Continue" }).click();
 
             // Confirm the recovery key
-            await util.confirmRecoveryKey("change-key-2-encryption-tab.png");
+            await util.confirmRecoveryKey(
+                "Enter your new recovery key",
+                "Confirm new recovery key",
+                "change-key-2-encryption-tab.png",
+            );
         },
     );
 
@@ -102,7 +106,11 @@ test.describe("Recovery section in Encryption tab", () => {
         await dialog.getByRole("button", { name: "Continue" }).click();
 
         // Confirm the recovery key
-        await util.confirmRecoveryKey("set-up-key-3-encryption-tab.png");
+        await util.confirmRecoveryKey(
+            "Enter your recovery key to confirm",
+            "Finish set up",
+            "set-up-key-3-encryption-tab.png",
+        );
 
         // The recovery key is now set up and the user can change it
         await expect(dialog.getByRole("button", { name: "Change recovery key" })).toBeVisible();

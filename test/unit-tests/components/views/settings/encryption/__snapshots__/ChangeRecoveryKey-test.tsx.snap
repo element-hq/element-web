@@ -82,7 +82,7 @@ exports[`<ChangeRecoveryKey /> flow to change the recovery key should display th
         Change recovery key?
       </h2>
       <span>
-        Get a new recovery key if you've lost your existing one. After changing your recovery key, your old one will no longer work.
+        Write down this new recovery key somewhere safe. Then click Continue to confirm the change.
       </span>
     </div>
     <div

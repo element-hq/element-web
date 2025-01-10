@@ -32,9 +32,15 @@ import { withSecretStorageKeyCache } from "../../../../SecurityManager";
  * - `inform_user`: The user is informed about the recovery key.
  * - `save_key_setup_flow`: The user is asked to save the new recovery key during the setup flow.
  * - `save_key_change_flow`: The user is asked to save the new recovery key during the change key flow.
- * - `confirm`: The user is asked to confirm the new recovery key.
+ * - `confirm_key_setup_flow`: The user is asked to confirm the new recovery key during the set up flow.
+ * - `confirm_key_change_flow`: The user is asked to confirm the new recovery key during the change key flow.
  */
-type State = "inform_user" | "save_key_setup_flow" | "save_key_change_flow" | "confirm";
+type State =
+    | "inform_user"
+    | "save_key_setup_flow"
+    | "save_key_change_flow"
+    | "confirm_key_setup_flow"
+    | "confirm_key_change_flow";
 
 interface ChangeRecoveryKeyProps {
     /**
@@ -89,12 +95,19 @@ export function ChangeRecoveryKey({
                 <KeyPanel
                     // encodedPrivateKey is always defined, the optional typing is incorrect
                     recoveryKey={recoveryKey.encodedPrivateKey!}
-                    onConfirmClick={() => setState("confirm")}
+                    onConfirmClick={() =>
+                        setState((currentState) =>
+                            currentState === "save_key_change_flow"
+                                ? "confirm_key_change_flow"
+                                : "confirm_key_setup_flow",
+                        )
+                    }
                     onCancelClick={onCancelClick}
                 />
             );
             break;
-        case "confirm":
+        case "confirm_key_setup_flow":
+        case "confirm_key_change_flow":
             // Ask the user to enter the recovery key they just save to confirm it.
             content = (
                 <KeyForm
@@ -120,6 +133,11 @@ export function ChangeRecoveryKey({
                             logger.error("Failed to bootstrap secret storage", e);
                         }
                     }}
+                    submitButtonLabel={
+                        state === "confirm_key_setup_flow"
+                            ? _t("settings|encryption|recovery|set_up_recovery_confirm_button")
+                            : _t("settings|encryption|recovery|change_recovery_confirm_button")
+                    }
                 />
             );
     }
@@ -181,10 +199,15 @@ function getLabels(state: State): Labels {
                 title: _t("settings|encryption|recovery|change_recovery_key_title"),
                 description: _t("settings|encryption|recovery|change_recovery_key_description"),
             };
-        case "confirm":
+        case "confirm_key_setup_flow":
             return {
-                title: _t("settings|encryption|recovery|confirm_title"),
-                description: _t("settings|encryption|recovery|confirm_description"),
+                title: _t("settings|encryption|recovery|set_up_recovery_confirm_title"),
+                description: _t("settings|encryption|recovery|set_up_recovery_confirm_description"),
+            };
+        case "confirm_key_change_flow":
+            return {
+                title: _t("settings|encryption|recovery|change_recovery_confirm_title"),
+                description: _t("settings|encryption|recovery|change_recovery_confirm_description"),
             };
     }
 }
@@ -279,6 +302,10 @@ interface KeyFormProps {
      * The recovery key to confirm.
      */
     recoveryKey: string;
+    /**
+     * The label for the submit button.
+     */
+    submitButtonLabel: string;
 }
 
 /**
@@ -286,7 +313,7 @@ interface KeyFormProps {
  * The finish button is disabled until the key is filled and valid.
  * The entered key is valid if it matches the recovery key.
  */
-function KeyForm({ onCancelClick, onSubmit, recoveryKey }: KeyFormProps): JSX.Element {
+function KeyForm({ onCancelClick, onSubmit, recoveryKey, submitButtonLabel }: KeyFormProps): JSX.Element {
     // Undefined by default, as the key is not filled yet
     const [isKeyValid, setIsKeyValid] = useState<boolean>();
     const isKeyInvalidAndFilled = isKeyValid === false;
@@ -316,7 +343,7 @@ function KeyForm({ onCancelClick, onSubmit, recoveryKey }: KeyFormProps): JSX.El
                 )}
             </Field>
             <div className="mx_ChangeRecoveryKey_footer">
-                <Button disabled={!isKeyValid}>{_t("settings|encryption|recovery|confirm_finish")}</Button>
+                <Button disabled={!isKeyValid}>{submitButtonLabel}</Button>
                 <Button kind="tertiary" onClick={onCancelClick}>
                     {_t("action|cancel")}
                 </Button>

@@ -80,17 +80,19 @@ class Helpers {
     /**
      * Get the security key from the clipboard and fill in the input field
      * Then click on the finish button
+     * @param title - The title of the dialog
+     * @param confirmButtonLabel - The label of the confirm button
      * @param screenshot
      */
-    async confirmRecoveryKey(screenshot: `${string}.png`) {
+    async confirmRecoveryKey(title: string, confirmButtonLabel: string, screenshot: `${string}.png`) {
         const dialog = this.getEncryptionTabContent();
-        await expect(dialog.getByText("Enter your recovery key to confirm")).toBeVisible();
+        await expect(dialog.getByText(title, { exact: true })).toBeVisible();
         await expect(dialog).toMatchScreenshot(screenshot);
 
         const handle = await this.page.evaluateHandle(() => navigator.clipboard.readText());
         const clipboardContent = await handle.jsonValue();
         await dialog.getByRole("textbox").fill(clipboardContent);
-        await dialog.getByRole("button", { name: "Finish set up" }).click();
+        await dialog.getByRole("button", { name: confirmButtonLabel }).click();
         await expect(dialog).toMatchScreenshot("default-recovery.png");
     }
 }
