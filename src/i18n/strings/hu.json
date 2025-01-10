@@ -1478,7 +1478,6 @@
     },
     "member_list": {
         "filter_placeholder": "Szoba tagság szűrése",
-        "invited_list_heading": "Meghívva",
         "power_label": "%(userName)s (szint: %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Szobatagok",
@@ -1623,7 +1622,6 @@
         "custom_level": "Egyedi szint",
         "default": "Alapértelmezett",
         "label": "Hozzáférési szint",
-        "mod": "Moderátor",
         "moderator": "Moderátor",
         "restricted": "Korlátozott"
     },
@@ -2819,7 +2817,6 @@
         "invite": "Emberek meghívása",
         "invite_description": "Meghívás e-mail-címmel vagy felhasználónévvel",
         "invite_link": "Meghívási hivatkozás megosztása",
-        "invite_this_space": "Meghívás a térbe",
         "joining_space": "Belépés",
         "landing_welcome": "Üdvözöl a(z) <name/>",
         "leave_dialog_action": "Tér elhagyása",

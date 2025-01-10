@@ -1415,7 +1415,6 @@
     "member_list": {
         "filter_placeholder": "Filtroni anëtarë dhome",
         "invite_button_no_perms_tooltip": "S’keni leje të ftoni përdorues",
-        "invited_list_heading": "I ftuar",
         "power_label": "%(userName)s (pushtet %(powerLevelNumber)si)"
     },
     "member_list_back_action_label": "Anëtarë dhome",
@@ -1561,7 +1560,6 @@
         "custom_level": "Nivel vetjak",
         "default": "Parazgjedhje",
         "label": "Shkallë pushteti",
-        "mod": "Moderator",
         "restricted": "E kufizuar"
     },
     "powered_by_matrix": "Bazuar në Matrix",
@@ -2703,7 +2701,6 @@
         "invite": "Ftoni njerëz",
         "invite_description": "Ftoni përmes email-i ose emri përdoruesi",
         "invite_link": "Jepuni lidhje ftese",
-        "invite_this_space": "Ftoni në këtë hapësirë",
         "joining_space": "Po hyhet",
         "landing_welcome": "Mirë se vini te <name/>",
         "leave_dialog_action": "Braktiseni hapësirën",

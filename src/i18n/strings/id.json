@@ -1485,7 +1485,6 @@
     "member_list": {
         "filter_placeholder": "Saring anggota ruangan",
         "invite_button_no_perms_tooltip": "Anda tidak memiliki izin untuk mengundang pengguna",
-        "invited_list_heading": "Diundang",
         "power_label": "%(userName)s (tingkat daya %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Anggota ruangan",
@@ -1631,7 +1630,6 @@
         "custom_level": "Tingkat kustom",
         "default": "Bawaan",
         "label": "Tingkat daya",
-        "mod": "Mod",
         "moderator": "Moderator",
         "restricted": "Dibatasi"
     },
@@ -2850,7 +2848,6 @@
         "invite": "Undang pengguna",
         "invite_description": "Undang dengan email atau nama pengguna",
         "invite_link": "Bagikan tautan undangan",
-        "invite_this_space": "Undang ke space ini",
         "joining_space": "Bergabung",
         "landing_welcome": "Selamat datang di <name/>",
         "leave_dialog_action": "Tinggalkan space",

@@ -1249,8 +1249,7 @@
         "share_type_prompt": "ທ່ານຕ້ອງການແບ່ງປັນສະຖານທີ່ປະເພດໃດ?"
     },
     "member_list": {
-        "filter_placeholder": "ການກັ່ນຕອງສະມາຊິກຫ້ອງ",
-        "invited_list_heading": "ເຊີນ"
+        "filter_placeholder": "ການກັ່ນຕອງສະມາຊິກຫ້ອງ"
     },
     "member_list_back_action_label": "ສະມາຊິກຫ້ອງ",
     "message_edit_dialog_title": "ແກ້ໄຂຂໍ້ຄວາມ",
@@ -1345,7 +1344,6 @@
         "custom_level": "ລະດັບທີ່ກໍາຫນົດເອງ",
         "default": "ຄ່າເລີ່ມຕົ້ນ",
         "label": "ລະດັບພະລັງງານ",
-        "mod": "ກາປັບປ່ຽນ",
         "moderator": "ຜູ້ດຳເນິນລາຍການ",
         "restricted": "ຖືກຈຳກັດ"
     },
@@ -2301,7 +2299,6 @@
         "invite": "ເຊີນຜູ້ຄົນ",
         "invite_description": "ເຊີນດ້ວຍອີເມລ໌ ຫຼື ຊື່ຜູ້ໃຊ້",
         "invite_link": "ແບ່ງປັນລິ້ງເຊີນ",
-        "invite_this_space": "ເຊີນໄປບ່ອນນີ້",
         "joining_space": "ເຂົ້າຮ່ວມ",
         "landing_welcome": "ຍິນດີຕ້ອນຮັບສູ່ <name/>",
         "leave_dialog_action": "ອອກຈາກພື້ນທີ່",

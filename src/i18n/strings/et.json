@@ -1500,7 +1500,6 @@
     "member_list": {
         "filter_placeholder": "Filtreeri jututoa liikmeid",
         "invite_button_no_perms_tooltip": "Sul pole õigusi kutse saatmiseks teistele kasutajatele",
-        "invited_list_heading": "Kutsutud",
         "power_label": "%(userName)s (õigused %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Jututoa liikmed",
@@ -1649,7 +1648,6 @@
         "custom_level": "Kohandatud õigused",
         "default": "Tavaline",
         "label": "Õiguste tase",
-        "mod": "Moderaator",
         "moderator": "Moderaator",
         "restricted": "Piiratud õigustega kasutaja"
     },
@@ -2848,7 +2846,6 @@
         "invite": "Kutsu teisi kasutajaid",
         "invite_description": "Kutsu e-posti aadressi või kasutajanime alusel",
         "invite_link": "Jaga kutse linki",
-        "invite_this_space": "Kutsu siia kogukonnakeskusesse",
         "joining_space": "Liitun",
         "landing_welcome": "Tete tulemast <name/> liikmeks",
         "leave_dialog_action": "Lahku kogukonnakeskusest",

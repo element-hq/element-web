@@ -1037,7 +1037,6 @@
     },
     "member_list": {
         "filter_placeholder": "فیلتر کردن اعضای اتاق",
-        "invited_list_heading": "دعوت شد",
         "power_label": "%(userName)s (سطح قدرت %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "اعضای اتاق",
@@ -1091,7 +1090,6 @@
         "custom_level": "سطح دلخواه",
         "default": "پیشفرض",
         "label": "سطح قدرت",
-        "mod": "معاون",
         "moderator": "معاون",
         "restricted": "ممنوع"
     },
@@ -1823,7 +1821,6 @@
         "invite": "دعوت کاربران",
         "invite_description": "دعوت با ایمیل یا نام‌کاربری",
         "invite_link": "به اشتراک‌گذاری لینک دعوت",
-        "invite_this_space": "به این فضای کاری دعوت کنید",
         "landing_welcome": "به <name/> خوش‌آمدید",
         "leave_dialog_action": "ترک محیط",
         "mark_suggested": "علامت‌گذاری به عنوان پیشنهاد‌شده",

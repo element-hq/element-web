@@ -1466,7 +1466,6 @@
     "member_list": {
         "filter_placeholder": "過濾聊天室成員",
         "invite_button_no_perms_tooltip": "您沒有權限邀請使用者",
-        "invited_list_heading": "已邀請",
         "power_label": "%(userName)s（權限等級 %(powerLevelNumber)s）"
     },
     "member_list_back_action_label": "聊天室成員",
@@ -1614,7 +1613,6 @@
         "custom_level": "自訂等級",
         "default": "預設",
         "label": "權限等級",
-        "mod": "版主",
         "moderator": "版主",
         "restricted": "已限制"
     },
@@ -2810,7 +2808,6 @@
         "invite": "邀請夥伴",
         "invite_description": "使用電子郵件或使用者名稱邀請",
         "invite_link": "分享邀請連結",
-        "invite_this_space": "邀請加入此聊天空間",
         "joining_space": "正在加入",
         "landing_welcome": "歡迎加入 <name/>",
         "leave_dialog_action": "離開聊天空間",

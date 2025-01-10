@@ -1579,9 +1579,14 @@
         "toggle_attribution": "Info ein-/ausblenden"
     },
     "member_list": {
+        "count": {
+            "one": "%(count)s Mitglied",
+            "other": "%(count)s Mitglieder"
+        },
         "filter_placeholder": "Raummitglieder filtern",
         "invite_button_no_perms_tooltip": "Du bist nicht berechtigt, Benutzer einzuladen",
-        "invited_list_heading": "Eingeladen",
+        "invited_label": "Eingeladen",
+        "no_matches": "Keine Treffer",
         "power_label": "%(userName)s (Berechtigungslevel %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Raummitglieder",
@@ -1734,7 +1739,6 @@
         "custom_level": "Selbstdefiniertes Berechtigungslevel",
         "default": "Standard",
         "label": "Berechtigungsstufe",
-        "mod": "Moderator",
         "moderator": "Moderator",
         "restricted": "Eingeschränkt"
     },
@@ -3065,7 +3069,6 @@
         "invite": "Personen einladen",
         "invite_description": "Personen mit E-Mail oder Benutzernamen einladen",
         "invite_link": "Einladungslink teilen",
-        "invite_this_space": "In diesen Space einladen",
         "joining_space": "Trete bei",
         "landing_welcome": "Willkommen bei <name/>",
         "leave_dialog_action": "Space verlassen",

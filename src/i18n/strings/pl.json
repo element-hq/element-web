@@ -1591,7 +1591,6 @@
     "member_list": {
         "filter_placeholder": "Filtruj członków pokoju",
         "invite_button_no_perms_tooltip": "Nie posiadasz uprawnień, aby zapraszać użytkowników",
-        "invited_list_heading": "Zaproszeni",
         "power_label": "%(userName)s (moc uprawnień administratorskich %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Członkowie pokoju",
@@ -1745,7 +1744,6 @@
         "custom_level": "Własny poziom",
         "default": "Domyślne",
         "label": "Poziom uprawnień",
-        "mod": "Moderator",
         "moderator": "Moderator",
         "restricted": "Ograniczony"
     },
@@ -3079,7 +3077,6 @@
         "invite": "Zaproś osoby",
         "invite_description": "Zaproś przy użyciu adresu email lub nazwy użytkownika",
         "invite_link": "Udostępnij link zaproszenia",
-        "invite_this_space": "Zaproś do tej przestrzeni",
         "joining_space": "Dołączanie",
         "landing_welcome": "Witamy w <name/>",
         "leave_dialog_action": "Opuść przestrzeń",

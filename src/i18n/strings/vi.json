@@ -1349,7 +1349,6 @@
     "member_list": {
         "filter_placeholder": "Lọc thành viên phòng",
         "invite_button_no_perms_tooltip": "Bạn không có quyền mời người khác",
-        "invited_list_heading": "Đã mời",
         "power_label": "%(userName)s (chỉ số %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Thành viên phòng",
@@ -1482,7 +1481,6 @@
         "custom_level": "Cấp độ tùy chọn",
         "default": "Mặc định",
         "label": "Cấp độ sức mạnh",
-        "mod": "Người quản trị",
         "moderator": "Điều phối viên",
         "restricted": "Bị hạn chế"
     },
@@ -2603,7 +2601,6 @@
         "invite": "Mời mọi người",
         "invite_description": "Mời bằng thư điện tử hoặc tên người dùng",
         "invite_link": "Chia sẻ liên kết mời",
-        "invite_this_space": "Mời vào space này",
         "joining_space": "Đang tham gia",
         "landing_welcome": "Chào mừng đến với <name />",
         "leave_dialog_action": "Rời space",
