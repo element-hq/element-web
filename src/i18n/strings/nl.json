@@ -1300,7 +1300,6 @@
     },
     "member_list": {
         "filter_placeholder": "Kamerleden filteren",
-        "invited_list_heading": "Uitgenodigd",
         "power_label": "%(userName)s (macht %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Kamerleden",
@@ -2469,7 +2468,6 @@
         "invite": "Personen uitnodigen",
         "invite_description": "Uitnodigen per e-mail of inlognaam",
         "invite_link": "Deel uitnodigingskoppeling",
-        "invite_this_space": "Voor deze Space uitnodigen",
         "joining_space": "Toetreden",
         "landing_welcome": "Welkom in <name/>",
         "leave_dialog_action": "Space verlaten",

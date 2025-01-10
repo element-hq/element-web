@@ -1069,7 +1069,6 @@
     },
     "member_list": {
         "filter_placeholder": "סינון חברי חדר",
-        "invited_list_heading": "מוזמן",
         "power_label": "%(userName)s (רמת הרשאה %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "חברי החדר",
@@ -1152,7 +1151,6 @@
         "custom_level": "דרגה מותאמת",
         "default": "ברירת מחדל",
         "label": "דרגת מנהל",
-        "mod": "ממתן",
         "moderator": "מנהל",
         "restricted": "מחוץ לתחום"
     },
@@ -1973,7 +1971,6 @@
         "incompatible_server_hierarchy": "השרת שלכם אינו תומך בהצגת היררכית חללי עבודה.",
         "invite": "הזמן אנשים",
         "invite_link": "שתף קישור להזמנה",
-        "invite_this_space": "הזמינו למרחב עבודה זה",
         "landing_welcome": "ברוכים הבאים אל <name/>",
         "no_search_result_hint": "אולי תרצו לנסות חיפוש אחר או לבדוק אם יש שגיאות הקלדה.",
         "search_children": "חיפוש %(spaceName)s",
