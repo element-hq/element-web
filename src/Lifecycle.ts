@@ -110,7 +110,6 @@ dis.register((payload) => {
 let sessionLockStolen = false;
 
 // this is exposed solely for unit tests.
-// ts-prune-ignore-next
 export function setSessionLockNotStolen(): void {
     sessionLockStolen = false;
 }
