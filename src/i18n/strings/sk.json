@@ -1502,7 +1502,6 @@
     "member_list": {
         "filter_placeholder": "Filtrovať členov v miestnosti",
         "invite_button_no_perms_tooltip": "Nemáte oprávnenie pozývať používateľov",
-        "invited_list_heading": "Pozvaní",
         "power_label": "%(userName)s (oprávnenie %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Členovia miestnosti",
@@ -1649,7 +1648,6 @@
         "custom_level": "Vlastná úroveň",
         "default": "Predvolené",
         "label": "Úroveň oprávnenia",
-        "mod": "Moderátor",
         "moderator": "Moderátor",
         "restricted": "Obmedzené"
     },
@@ -2878,7 +2876,6 @@
         "invite": "Pozvať ľudí",
         "invite_description": "Pozvať pomocou e-mailu alebo používateľského mena",
         "invite_link": "Zdieľať odkaz na pozvánku",
-        "invite_this_space": "Pozvať do tohto priestoru",
         "joining_space": "Pripájanie sa",
         "landing_welcome": "Vitajte v <name/>",
         "leave_dialog_action": "Opustiť priestor",

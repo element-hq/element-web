@@ -1287,7 +1287,6 @@
     },
     "member_list": {
         "filter_placeholder": "Filtrar os participantes da conversa",
-        "invited_list_heading": "Convidada",
         "power_label": "%(userName)s (permiso %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Membros da sala",
@@ -2422,7 +2421,6 @@
         "invite": "Convidar persoas",
         "invite_description": "Convida con email ou nome de usuaria",
         "invite_link": "Compartir ligazón do convite",
-        "invite_this_space": "Convidar a este espazo",
         "joining_space": "Uníndote",
         "landing_welcome": "Benvida a <name/>",
         "leave_dialog_action": "Saír do espazo",

@@ -1403,7 +1403,6 @@
     },
     "member_list": {
         "filter_placeholder": "ルームのメンバーを絞り込む",
-        "invited_list_heading": "招待済",
         "power_label": "%(userName)s（権限レベル：%(powerLevelNumber)s）"
     },
     "member_list_back_action_label": "ルームのメンバー",
@@ -1546,7 +1545,6 @@
         "custom_level": "ユーザー定義のレベル",
         "default": "既定値",
         "label": "権限レベル",
-        "mod": "モデレーター",
         "moderator": "モデレーター",
         "restricted": "制限"
     },
@@ -2633,7 +2631,6 @@
         "invite": "連絡先を招待",
         "invite_description": "メールアドレスまたはユーザー名で招待",
         "invite_link": "招待リンクを共有",
-        "invite_this_space": "このスペースに招待",
         "joining_space": "参加しています",
         "landing_welcome": "<name/>にようこそ",
         "leave_dialog_action": "スペースから退出",
