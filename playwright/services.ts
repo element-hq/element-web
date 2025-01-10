@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { test as base } from "@playwright/test";
 import mailhog from "mailhog";
-import { GenericContainer, Network, StartedNetwork, StartedTestContainer, Wait } from "testcontainers";
+import { Network, StartedNetwork } from "testcontainers";
 import { PostgreSqlContainer, StartedPostgreSqlContainer } from "@testcontainers/postgresql";
 
 import { SynapseConfigOptions, SynapseContainer } from "./testcontainers/synapse.ts";
