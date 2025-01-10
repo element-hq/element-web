@@ -24,7 +24,7 @@ const ROOM_ADDRESS_LONG =
     "loremIpsumDolorSitAmetConsecteturAdipisicingElitSedDoEiusmodTemporIncididuntUtLaboreEtDoloreMagnaAliqua";
 
 function getMemberTileByName(page: Page, name: string): Locator {
-    return page.locator(`.mx_EntityTile, [title="${name}"]`);
+    return page.locator(`.mx_MemberTileView, [title="${name}"]`);
 }
 
 test.describe("RightPanel", () => {
@@ -107,14 +107,14 @@ test.describe("RightPanel", () => {
             await viewRoomSummaryByName(page, app, ROOM_NAME);
 
             await page.locator(".mx_RightPanel").getByRole("menuitem", { name: "People" }).click();
-            await expect(page.locator(".mx_MemberList")).toBeVisible();
+            await expect(page.locator(".mx_MemberListView")).toBeVisible();
 
             await getMemberTileByName(page, NAME).click();
             await expect(page.locator(".mx_UserInfo")).toBeVisible();
             await expect(page.locator(".mx_UserInfo_profile").getByText(NAME)).toBeVisible();
 
             await page.getByTestId("base-card-back-button").click();
-            await expect(page.locator(".mx_MemberList")).toBeVisible();
+            await expect(page.locator(".mx_MemberListView")).toBeVisible();
 
             await page.getByLabel("Room info").nth(1).click();
             await checkRoomSummaryCard(page, ROOM_NAME);
@@ -130,14 +130,14 @@ test.describe("RightPanel", () => {
                 .locator(".mx_RoomInfoLine_private")
                 .getByRole("button", { name: /\d member/ })
                 .click();
-            await expect(page.locator(".mx_MemberList")).toBeVisible();
+            await expect(page.locator(".mx_MemberListView")).toBeVisible();
 
             await getMemberTileByName(page, NAME).click();
             await expect(page.locator(".mx_UserInfo")).toBeVisible();
             await expect(page.locator(".mx_UserInfo_profile").getByText(NAME)).toBeVisible();
 
             await page.getByTestId("base-card-back-button").click();
-            await expect(page.locator(".mx_MemberList")).toBeVisible();
+            await expect(page.locator(".mx_MemberListView")).toBeVisible();
         });
     });
 });

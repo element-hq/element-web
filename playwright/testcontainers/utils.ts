@@ -24,6 +24,12 @@ export class ContainerLogger {
         };
     }
 
+    public async testStarted(testInfo: TestInfo) {
+        for (const container in this.logs) {
+            this.logs[container] = "";
+        }
+    }
+
     public async testFinished(testInfo: TestInfo) {
         if (testInfo.status !== "passed") {
             for (const container in this.logs) {

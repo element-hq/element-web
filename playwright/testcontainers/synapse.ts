@@ -17,7 +17,7 @@ import { Credentials } from "../plugins/homeserver";
 import { deepCopy } from "../plugins/utils/object.ts";
 import { HomeserverContainer, StartedHomeserverContainer } from "./HomeserverContainer.ts";
 
-const TAG = "develop@sha256:17cc0a301447430624afb860276e5c13270ddeb99a3f6d1c6d519a20b1a8f650";
+const TAG = "develop@sha256:b69222d98abe9625d46f5d3cb01683d5dc173ae339215297138392cfeec935d9";
 
 const DEFAULT_CONFIG = {
     server_name: "localhost",
@@ -118,9 +118,7 @@ const DEFAULT_CONFIG = {
     password_config: {
         enabled: true,
     },
-    ui_auth: {
-        session_timeout: "300s",
-    },
+    ui_auth: {},
     background_updates: {
         // Inhibit background updates as this Synapse isn't long-lived
         min_batch_size: 100000,
@@ -134,6 +132,10 @@ const DEFAULT_CONFIG = {
     experimental_features: {},
     oidc_providers: [],
     serve_server_wellknown: true,
+    presence: {
+        enabled: true,
+        include_offline_users_on_sync: true,
+    },
 };
 
 export type SynapseConfigOptions = Partial<typeof DEFAULT_CONFIG>;
@@ -141,7 +143,7 @@ export type SynapseConfigOptions = Partial<typeof DEFAULT_CONFIG>;
 export class SynapseContainer extends GenericContainer implements HomeserverContainer<typeof DEFAULT_CONFIG> {
     private config: typeof DEFAULT_CONFIG;
 
-    constructor(private readonly request: APIRequestContext) {
+    constructor() {
         super(`ghcr.io/element-hq/synapse:${TAG}`);
 
         this.config = deepCopy(DEFAULT_CONFIG);
@@ -221,21 +223,24 @@ export class SynapseContainer extends GenericContainer implements HomeserverCont
             await super.start(),
             `http://localhost:${port}`,
             this.config.registration_shared_secret,
-            this.request,
         );
     }
 }
 
 export class StartedSynapseContainer extends AbstractStartedContainer implements StartedHomeserverContainer {
     private adminToken?: string;
+    private request?: APIRequestContext;
 
     constructor(
         container: StartedTestContainer,
         public readonly baseUrl: string,
         private readonly registrationSharedSecret: string,
-        private readonly request: APIRequestContext,
     ) {
         super(container);
+    }
+
+    public setRequest(request: APIRequestContext): void {
+        this.request = request;
     }
 
     private async registerUserInternal(
@@ -273,6 +278,7 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
             deviceId: data.device_id,
             password,
             displayName,
+            username,
         };
     }
 
@@ -300,6 +306,7 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
             userId: json.user_id,
             deviceId: json.device_id,
             homeServer: json.home_server,
+            username: userId.slice(1).split(":")[0],
         };
     }
 

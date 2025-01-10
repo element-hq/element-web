@@ -105,6 +105,7 @@ export function createTestClient(): MatrixClient {
             isStored: jest.fn().mockReturnValue(false),
             checkKey: jest.fn().mockResolvedValue(false),
             hasKey: jest.fn().mockReturnValue(false),
+            getDefaultKeyId: jest.fn().mockResolvedValue(null),
         },
 
         store: {
@@ -813,6 +814,8 @@ export const mkThirdPartyInviteEvent = (user: string, displayName: string, room:
         type: EventType.RoomThirdPartyInvite,
         content: {
             display_name: displayName,
+            public_key: "foo",
+            key_validity_url: "bar",
         },
         skey: "test" + Math.random(),
         user,

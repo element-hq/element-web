@@ -11,7 +11,7 @@ import classNames from "classnames";
 export interface SettingsTabProps extends HTMLAttributes<HTMLDivElement> {
     children?: React.ReactNode;
     /**
-     * Added to the root div
+     * Added to the classList of the root element
      */
     className?: string;
 }

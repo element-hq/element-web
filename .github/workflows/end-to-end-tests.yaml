@@ -114,13 +114,13 @@ jobs:
                     - Chrome
                     - Firefox
                     - WebKit
-                isCron:
-                    - ${{ github.event_name == 'schedule' }}
-                # Skip the Firefox & Safari runs unless this was a cron trigger
+                runAllTests:
+                    - ${{ github.event_name == 'schedule' || contains(github.event.pull_request.labels.*.name, 'X-Run-All-Tests') }}
+                # Skip the Firefox & Safari runs unless this was a cron trigger or PR has X-Run-All-Tests label
                 exclude:
-                    - isCron: false
+                    - runAllTests: false
                       project: Firefox
-                    - isCron: false
+                    - runAllTests: false
                       project: WebKit
         steps:
             - uses: actions/checkout@v4
@@ -170,7 +170,7 @@ jobs:
                   yarn playwright test \
                       --shard "${{ matrix.runner }}/${{ needs.build.outputs.num-runners }}" \
                       --project="${{ matrix.project }}" \
-                      ${{ github.event_name == 'pull_request' && '--grep-invert @mergequeue' || '' }}
+                      ${{ (github.event_name == 'pull_request' && matrix.runAllTests == false ) && '--grep-invert @mergequeue' || '' }}
 
             - name: Upload blob report to GitHub Actions Artifacts
               if: always()

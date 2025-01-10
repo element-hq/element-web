@@ -73,13 +73,17 @@ test.describe("Recovery section in Encryption tab", () => {
             await dialog.getByRole("button", { name: "Continue" }).click();
 
             // Confirm the recovery key
-            await util.confirmRecoveryKey("change-key-2-encryption-tab.png");
+            await util.confirmRecoveryKey(
+                "Enter your new recovery key",
+                "Confirm new recovery key",
+                "change-key-2-encryption-tab.png",
+            );
         },
     );
 
     test("should setup the recovery key", { tag: "@screenshot" }, async ({ page, app, util }) => {
         await verifySession(app, "new passphrase");
-        await util.deleteKeyBackup(expectedBackupVersion);
+        await util.removeSecretStorageDefaultKeyId();
 
         // The key backup is deleted and the user needs to set it up
         const dialog = await util.openEncryptionTab();
@@ -102,13 +106,22 @@ test.describe("Recovery section in Encryption tab", () => {
         await dialog.getByRole("button", { name: "Continue" }).click();
 
         // Confirm the recovery key
-        await util.confirmRecoveryKey("set-up-key-3-encryption-tab.png");
+        await util.confirmRecoveryKey(
+            "Enter your recovery key to confirm",
+            "Finish set up",
+            "set-up-key-3-encryption-tab.png",
+        );
+
+        // The recovery key is now set up and the user can change it
+        await expect(dialog.getByRole("button", { name: "Change recovery key" })).toBeVisible();
 
         await app.closeDialog();
         // Check that the current device is connected to key backup and the backup version is the expected one
         await checkDeviceIsConnectedKeyBackup(page, "2", true);
     });
 
+    // This case shouldn't happen but we have seen cases where the secrets gossiping failed or shared partial secrets when verified with another device.
+    // To simulate this case, we need to delete the cached secrets in the indexedDB
     test(
         "should enter the recovery key when the secrets are not cached",
         { tag: "@screenshot" },

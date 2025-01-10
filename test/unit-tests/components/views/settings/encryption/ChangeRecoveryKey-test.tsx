@@ -25,9 +25,13 @@ describe("<ChangeRecoveryKey />", () => {
         matrixClient = createTestClient();
     });
 
-    function renderComponent(userHasKeyBackup = true, onFinish = jest.fn(), onCancelClick = jest.fn()) {
+    function renderComponent(userHasRecoveryKey = true, onFinish = jest.fn(), onCancelClick = jest.fn()) {
         return render(
-            <ChangeRecoveryKey userHasKeyBackup={userHasKeyBackup} onFinish={onFinish} onCancelClick={onCancelClick} />,
+            <ChangeRecoveryKey
+                userHasRecoveryKey={userHasRecoveryKey}
+                onFinish={onFinish}
+                onCancelClick={onCancelClick}
+            />,
             withClientContextRenderOptions(matrixClient),
         );
     }

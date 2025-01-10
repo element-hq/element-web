@@ -24,7 +24,7 @@ import { SettingsSubheader } from "../../SettingsSubheader";
  *  - "loading": We are checking if the device is verified.
  *  - "main": The main panel with all the sections (Key storage, recovery, advanced).
  *  - "set_up_encryption": The panel to show when the user is setting up their encryption.
- *                         This happens when the user doesn't have cross-signing enabled.
+ *                         This happens when the user doesn't have cross-signing enabled, or their current device is not verified.
  *  - "change_recovery_key": The panel to show when the user is changing their recovery key.
  *                           This happens when the user has a key backup and the user clicks on "Change recovery key" button of the RecoveryPanel.
  *  - "set_recovery_key": The panel to show when the user is setting up their recovery key.
@@ -57,7 +57,7 @@ export function EncryptionUserSettingsTab(): JSX.Element {
         case "set_recovery_key":
             content = (
                 <ChangeRecoveryKey
-                    userHasKeyBackup={state === "change_recovery_key"}
+                    userHasRecoveryKey={state === "change_recovery_key"}
                     onCancelClick={() => setState("main")}
                     onFinish={() => setState("main")}
                 />
@@ -73,10 +73,15 @@ export function EncryptionUserSettingsTab(): JSX.Element {
 }
 
 /**
- * Hook to check if the user needs to set up their encryption for this session.
+ * Hook to check if the user needs to go through the SetupEncryption flow.
  * If the user needs to set up the encryption, the state will be set to "set_up_encryption".
  * Otherwise, the state will be set to "main".
- * @param setState
+ *
+ * The state is set once when the component is first mounted.
+ * Also returns a callback function which can be called to re-run the logic.
+ *
+ * @param setState - callback passed from the EncryptionUserSettingsTab to set the current `State`.
+ * @returns a callback function, which will re-run the logic and update the state.
  */
 function useSetUpEncryptionRequired(setState: (state: State) => void): () => Promise<void> {
     const matrixClient = useMatrixClientContext();
@@ -88,24 +93,30 @@ function useSetUpEncryptionRequired(setState: (state: State) => void): () => Pro
         else setState("set_up_encryption");
     }, [matrixClient, setState]);
 
+    // Initialise the state when the component is mounted
     useEffect(() => {
         setUpEncryptionRequired();
     }, [setUpEncryptionRequired]);
 
+    // Also return the callback so that the component can re-run the logic.
     return setUpEncryptionRequired;
 }
 
 interface SetUpEncryptionPanelProps {
     /**
-     * Callback to call when the user has finished to set up the encryption.
+     * Callback to call when the user has finished setting up encryption.
      */
     onFinish: () => void;
 }
 
 /**
- * Panel to show when the user needs to verify their session.
+ * Panel to show when the user needs to go through the SetupEncryption flow.
  */
 function SetUpEncryptionPanel({ onFinish }: SetUpEncryptionPanelProps): JSX.Element {
+    // Strictly speaking, the SetupEncryptionDialog may make the user do things other than
+    // verify their device (in particular, if they manage to get here without cross-signing keys existing);
+    // however the common case is that they will be asked to verify, so we just show buttons and headings
+    // that talk about verification.
     return (
         <SettingsSection
             legacy={false}

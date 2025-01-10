@@ -32,16 +32,22 @@ import { withSecretStorageKeyCache } from "../../../../SecurityManager";
  * - `inform_user`: The user is informed about the recovery key.
  * - `save_key_setup_flow`: The user is asked to save the new recovery key during the setup flow.
  * - `save_key_change_flow`: The user is asked to save the new recovery key during the change key flow.
- * - `confirm`: The user is asked to confirm the new recovery key.
+ * - `confirm_key_setup_flow`: The user is asked to confirm the new recovery key during the set up flow.
+ * - `confirm_key_change_flow`: The user is asked to confirm the new recovery key during the change key flow.
  */
-type State = "inform_user" | "save_key_setup_flow" | "save_key_change_flow" | "confirm";
+type State =
+    | "inform_user"
+    | "save_key_setup_flow"
+    | "save_key_change_flow"
+    | "confirm_key_setup_flow"
+    | "confirm_key_change_flow";
 
 interface ChangeRecoveryKeyProps {
     /**
      * If true, the component will display the flow to change the recovery key.
      * If false,the component will display the flow to set up a new recovery key.
      */
-    userHasKeyBackup: boolean;
+    userHasRecoveryKey: boolean;
     /**
      * Called when the recovery key is successfully changed.
      */
@@ -56,21 +62,25 @@ interface ChangeRecoveryKeyProps {
  * A component to set up or change the recovery key.
  */
 export function ChangeRecoveryKey({
-    userHasKeyBackup,
+    userHasRecoveryKey,
     onFinish,
     onCancelClick,
 }: ChangeRecoveryKeyProps): JSX.Element | null {
     const matrixClient = useMatrixClientContext();
 
-    const [state, setState] = useState<State>(userHasKeyBackup ? "save_key_change_flow" : "inform_user");
+    // If the user is setting up recovery for the first time, we first show them a panel explaining what
+    // "recovery" is about. Otherwise, we jump straight to showing the user the new key.
+    const [state, setState] = useState<State>(userHasRecoveryKey ? "save_key_change_flow" : "inform_user");
 
     // We create a new recovery key, the recovery key will be displayed to the user
     const recoveryKey = useAsyncMemo(() => matrixClient.getCrypto()!.createRecoveryKeyFromPassphrase(), []);
-    if (!recoveryKey?.encodedPrivateKey) return null;
+    // Waiting for the recovery key to be generated
+    if (!recoveryKey) return null;
 
     let content: JSX.Element;
     switch (state) {
         case "inform_user":
+            // Show a panel explaining what "recovery" is for, and what a recovery key does.
             content = (
                 <InformationPanel
                     onContinueClick={() => setState("save_key_setup_flow")}
@@ -80,18 +90,29 @@ export function ChangeRecoveryKey({
             break;
         case "save_key_setup_flow":
         case "save_key_change_flow":
+            // Show a generated recovery key and ask the user to save it.
             content = (
                 <KeyPanel
-                    recoveryKey={recoveryKey.encodedPrivateKey}
-                    onConfirmClick={() => setState("confirm")}
+                    // encodedPrivateKey is always defined, the optional typing is incorrect
+                    recoveryKey={recoveryKey.encodedPrivateKey!}
+                    onConfirmClick={() =>
+                        setState((currentState) =>
+                            currentState === "save_key_change_flow"
+                                ? "confirm_key_change_flow"
+                                : "confirm_key_setup_flow",
+                        )
+                    }
                     onCancelClick={onCancelClick}
                 />
             );
             break;
-        case "confirm":
+        case "confirm_key_setup_flow":
+        case "confirm_key_change_flow":
+            // Ask the user to enter the recovery key they just save to confirm it.
             content = (
                 <KeyForm
-                    recoveryKey={recoveryKey.encodedPrivateKey}
+                    // encodedPrivateKey is always defined, the optional typing is incorrect
+                    recoveryKey={recoveryKey.encodedPrivateKey!}
                     onCancelClick={onCancelClick}
                     onSubmit={async () => {
                         const crypto = matrixClient.getCrypto();
@@ -102,7 +123,7 @@ export function ChangeRecoveryKey({
                             // when we will try to access the secret storage during the bootstrap
                             await withSecretStorageKeyCache(() =>
                                 crypto.bootstrapSecretStorage({
-                                    setupNewKeyBackup: !userHasKeyBackup,
+                                    setupNewKeyBackup: !userHasRecoveryKey,
                                     setupNewSecretStorage: true,
                                     createSecretStorageKey: async () => recoveryKey,
                                 }),
@@ -112,13 +133,18 @@ export function ChangeRecoveryKey({
                             logger.error("Failed to bootstrap secret storage", e);
                         }
                     }}
+                    submitButtonLabel={
+                        state === "confirm_key_setup_flow"
+                            ? _t("settings|encryption|recovery|set_up_recovery_confirm_button")
+                            : _t("settings|encryption|recovery|change_recovery_confirm_button")
+                    }
                 />
             );
     }
 
     const pages = [
         _t("settings|encryption|title"),
-        userHasKeyBackup
+        userHasRecoveryKey
             ? _t("settings|encryption|recovery|change_recovery_key")
             : _t("settings|encryption|recovery|set_up_recovery"),
     ];
@@ -173,10 +199,15 @@ function getLabels(state: State): Labels {
                 title: _t("settings|encryption|recovery|change_recovery_key_title"),
                 description: _t("settings|encryption|recovery|change_recovery_key_description"),
             };
-        case "confirm":
+        case "confirm_key_setup_flow":
             return {
-                title: _t("settings|encryption|recovery|confirm_title"),
-                description: _t("settings|encryption|recovery|confirm_description"),
+                title: _t("settings|encryption|recovery|set_up_recovery_confirm_title"),
+                description: _t("settings|encryption|recovery|set_up_recovery_confirm_description"),
+            };
+        case "confirm_key_change_flow":
+            return {
+                title: _t("settings|encryption|recovery|change_recovery_confirm_title"),
+                description: _t("settings|encryption|recovery|change_recovery_confirm_description"),
             };
     }
 }
@@ -271,6 +302,10 @@ interface KeyFormProps {
      * The recovery key to confirm.
      */
     recoveryKey: string;
+    /**
+     * The label for the submit button.
+     */
+    submitButtonLabel: string;
 }
 
 /**
@@ -278,7 +313,7 @@ interface KeyFormProps {
  * The finish button is disabled until the key is filled and valid.
  * The entered key is valid if it matches the recovery key.
  */
-function KeyForm({ onCancelClick, onSubmit, recoveryKey }: KeyFormProps): JSX.Element {
+function KeyForm({ onCancelClick, onSubmit, recoveryKey, submitButtonLabel }: KeyFormProps): JSX.Element {
     // Undefined by default, as the key is not filled yet
     const [isKeyValid, setIsKeyValid] = useState<boolean>();
     const isKeyInvalidAndFilled = isKeyValid === false;
@@ -308,7 +343,7 @@ function KeyForm({ onCancelClick, onSubmit, recoveryKey }: KeyFormProps): JSX.El
                 )}
             </Field>
             <div className="mx_ChangeRecoveryKey_footer">
-                <Button disabled={!isKeyValid}>{_t("settings|encryption|recovery|confirm_finish")}</Button>
+                <Button disabled={!isKeyValid}>{submitButtonLabel}</Button>
                 <Button kind="tertiary" onClick={onCancelClick}>
                     {_t("action|cancel")}
                 </Button>

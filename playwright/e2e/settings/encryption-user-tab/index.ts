@@ -68,30 +68,31 @@ class Helpers {
     }
 
     /**
-     * Delete the key backup for the given version
-     * @param backupVersion
+     * Set the default key id of the secret storage at null
      */
-    async deleteKeyBackup(backupVersion: string) {
+    async removeSecretStorageDefaultKeyId() {
         const client = await this.app.client.prepareClient();
-        await client.evaluate(async (client, backupVersion) => {
-            await client.getCrypto()?.deleteKeyBackupVersion(backupVersion);
-        }, backupVersion);
+        await client.evaluate(async (client) => {
+            await client.secretStorage.setDefaultKeyId(null);
+        });
     }
 
     /**
      * Get the security key from the clipboard and fill in the input field
      * Then click on the finish button
+     * @param title - The title of the dialog
+     * @param confirmButtonLabel - The label of the confirm button
      * @param screenshot
      */
-    async confirmRecoveryKey(screenshot: `${string}.png`) {
+    async confirmRecoveryKey(title: string, confirmButtonLabel: string, screenshot: `${string}.png`) {
         const dialog = this.getEncryptionTabContent();
-        await expect(dialog.getByText("Enter your recovery key to confirm")).toBeVisible();
+        await expect(dialog.getByText(title, { exact: true })).toBeVisible();
         await expect(dialog).toMatchScreenshot(screenshot);
 
         const handle = await this.page.evaluateHandle(() => navigator.clipboard.readText());
         const clipboardContent = await handle.jsonValue();
         await dialog.getByRole("textbox").fill(clipboardContent);
-        await dialog.getByRole("button", { name: "Finish set up" }).click();
+        await dialog.getByRole("button", { name: confirmButtonLabel }).click();
         await expect(dialog).toMatchScreenshot("default-recovery.png");
     }
 }

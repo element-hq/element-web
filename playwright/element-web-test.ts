@@ -99,6 +99,7 @@ export interface Fixtures {
     bot: Bot;
     labsFlags: string[];
     webserver: Webserver;
+    disablePresence: boolean;
 }
 
 export const test = base.extend<Fixtures>({
@@ -110,8 +111,9 @@ export const test = base.extend<Fixtures>({
         );
         await use(context);
     },
+    disablePresence: false,
     config: {}, // We merge this atop the default CONFIG_JSON in the page fixture to make extending it easier
-    page: async ({ homeserver, context, page, config, labsFlags }, use) => {
+    page: async ({ homeserver, context, page, config, labsFlags, disablePresence }, use) => {
         await context.route(`http://localhost:8080/config.json*`, async (route) => {
             const json = {
                 ...CONFIG_JSON,
@@ -131,18 +133,23 @@ export const test = base.extend<Fixtures>({
                     return obj;
                 }, {}),
             };
+            if (disablePresence) {
+                json["enable_presence_by_hs_url"] = {
+                    [homeserver.baseUrl]: false,
+                };
+            }
             await route.fulfill({ json });
         });
         await use(page);
     },
 
     displayName: undefined,
-    credentials: async ({ homeserver, displayName: testDisplayName }, use) => {
+    credentials: async ({ context, homeserver, displayName: testDisplayName }, use, testInfo) => {
         const names = ["Alice", "Bob", "Charlie", "Daniel", "Eve", "Frank", "Grace", "Hannah", "Isaac", "Judy"];
         const password = _.uniqueId("password_");
         const displayName = testDisplayName ?? _.sample(names)!;
 
-        const credentials = await homeserver.registerUser("user", password, displayName);
+        const credentials = await homeserver.registerUser(`user_${testInfo.testId}`, password, displayName);
         console.log(`Registered test user @user:localhost with displayname ${displayName}`);
 
         await use({
@@ -167,6 +174,7 @@ export const test = base.extend<Fixtures>({
                 window.localStorage.setItem(
                     "mx_local_settings",
                     JSON.stringify({
+                        // Retain any other settings which may have already been set
                         ...JSON.parse(window.localStorage.getItem("mx_local_settings") || "{}"),
                         // Ensure the language is set to a consistent value
                         language: "en",

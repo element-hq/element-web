@@ -6,7 +6,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { GenericContainer, Wait } from "testcontainers";
-import { APIRequestContext } from "@playwright/test";
 import * as YAML from "yaml";
 import { set } from "lodash";
 
@@ -208,11 +207,7 @@ const DEFAULT_CONFIG = {
 export class DendriteContainer extends GenericContainer implements HomeserverContainer<typeof DEFAULT_CONFIG> {
     private config: typeof DEFAULT_CONFIG;
 
-    constructor(
-        private request: APIRequestContext,
-        image = "matrixdotorg/dendrite-monolith:main",
-        binary = "/usr/bin/dendrite",
-    ) {
+    constructor(image = "matrixdotorg/dendrite-monolith:main", binary = "/usr/bin/dendrite") {
         super(image);
 
         this.config = deepCopy(DEFAULT_CONFIG);
@@ -254,13 +249,12 @@ export class DendriteContainer extends GenericContainer implements HomeserverCon
             container,
             `http://${container.getHost()}:${container.getMappedPort(8008)}`,
             this.config.client_api.registration_shared_secret,
-            this.request,
         );
     }
 }
 
 export class PineconeContainer extends DendriteContainer {
-    constructor(request: APIRequestContext) {
-        super(request, "matrixdotorg/dendrite-demo-pinecone:main", "/usr/bin/dendrite-demo-pinecone");
+    constructor() {
+        super("matrixdotorg/dendrite-demo-pinecone:main", "/usr/bin/dendrite-demo-pinecone");
     }
 }
