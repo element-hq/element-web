@@ -1309,7 +1309,6 @@
     "member_list": {
         "filter_placeholder": "Suodata huoneen jäseniä",
         "invite_button_no_perms_tooltip": "Sinulla ei ole lupaa kutsua käyttäjiä",
-        "invited_list_heading": "Kutsuttu",
         "power_label": "%(userName)s (oikeustaso %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Huoneen jäsenet",
@@ -1452,7 +1451,6 @@
         "custom_level": "Mukautettu taso",
         "default": "Oletus",
         "label": "Oikeuksien taso",
-        "mod": "Valvoja",
         "moderator": "Valvoja",
         "restricted": "Rajoitettu"
     },
@@ -2521,7 +2519,6 @@
         "invite": "Kutsu ihmisiä",
         "invite_description": "Kutsu sähköpostiosoitteella tai käyttäjänimellä",
         "invite_link": "Jaa kutsulinkki",
-        "invite_this_space": "Kutsu tähän avaruuteen",
         "joining_space": "Liitytään",
         "landing_welcome": "Tervetuloa, tämä on <name/>",
         "leave_dialog_action": "Poistu avaruudesta",

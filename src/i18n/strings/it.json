@@ -1507,7 +1507,6 @@
     "member_list": {
         "filter_placeholder": "Filtra membri della stanza",
         "invite_button_no_perms_tooltip": "Non hai l'autorizzazione per invitare utenti",
-        "invited_list_heading": "Invitato/a",
         "power_label": "%(userName)s (poteri %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Membri stanza",
@@ -1660,7 +1659,6 @@
         "custom_level": "Livello personalizzato",
         "default": "Predefinito",
         "label": "Livello poteri",
-        "mod": "Moderatore",
         "moderator": "Moderatore",
         "restricted": "Limitato"
     },
@@ -2890,7 +2888,6 @@
         "invite": "Invita persone",
         "invite_description": "Invita con email o nome utente",
         "invite_link": "Condividi collegamento di invito",
-        "invite_this_space": "Invita in questo spazio",
         "joining_space": "Entrata in corso",
         "landing_welcome": "Ti diamo il benvenuto in <name/>",
         "leave_dialog_action": "Esci dallo spazio",

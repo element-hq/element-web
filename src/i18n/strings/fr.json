@@ -1578,7 +1578,6 @@
     "member_list": {
         "filter_placeholder": "Filtrer les membres du salon",
         "invite_button_no_perms_tooltip": "Vous n’avez pas la permission d’inviter des utilisateurs",
-        "invited_list_heading": "Invités",
         "power_label": "%(userName)s (rang %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Membres du salon",
@@ -1731,7 +1730,6 @@
         "custom_level": "Rang personnalisé",
         "default": "Par défaut",
         "label": "Rang",
-        "mod": "Modérateur",
         "moderator": "Modérateur",
         "restricted": "Restreint"
     },
@@ -3061,7 +3059,6 @@
         "invite": "Inviter des personnes",
         "invite_description": "Inviter par e-mail ou nom d’utilisateur",
         "invite_link": "Partager le lien d’invitation",
-        "invite_this_space": "Inviter dans cet espace",
         "joining_space": "En train de rejoindre",
         "landing_welcome": "Bienvenue dans <name/>",
         "leave_dialog_action": "Quitter l’espace",

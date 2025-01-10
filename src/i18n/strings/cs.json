@@ -1508,7 +1508,6 @@
     "member_list": {
         "filter_placeholder": "Najít člena místnosti",
         "invite_button_no_perms_tooltip": "Nemáte oprávnění zvát uživatele",
-        "invited_list_heading": "Pozvaní",
         "power_label": "%(userName)s (oprávnění %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Členové místnosti",
@@ -1661,7 +1660,6 @@
         "custom_level": "Vlastní úroveň",
         "default": "Výchozí",
         "label": "Úroveň oprávnění",
-        "mod": "Moderátor",
         "moderator": "Moderátor",
         "restricted": "Omezené"
     },
@@ -2897,7 +2895,6 @@
         "invite": "Pozvat lidi",
         "invite_description": "Pozvěte e-mailem nebo uživatelským jménem",
         "invite_link": "Sdílet odkaz na pozvánku",
-        "invite_this_space": "Pozvat do tohoto prostoru",
         "joining_space": "Připojování",
         "landing_welcome": "Vítejte v <name/>",
         "leave_dialog_action": "Opusit prostor",

@@ -1381,7 +1381,6 @@
     },
     "member_list": {
         "filter_placeholder": "过滤房间成员",
-        "invited_list_heading": "已邀请",
         "power_label": "%(userName)s（权力 %(powerLevelNumber)s）"
     },
     "member_list_back_action_label": "房间成员",
@@ -1516,7 +1515,6 @@
         "custom_level": "自定义级别",
         "default": "默认",
         "label": "权力级别",
-        "mod": "管理员",
         "moderator": "协管员",
         "restricted": "受限"
     },
@@ -2567,7 +2565,6 @@
         "invite": "邀请人们",
         "invite_description": "使用邮箱或者用户名邀请",
         "invite_link": "分享邀请链接",
-        "invite_this_space": "邀请至此空间",
         "joining_space": "加入中",
         "landing_welcome": "欢迎来到 <name/>",
         "leave_dialog_action": "离开空间",
