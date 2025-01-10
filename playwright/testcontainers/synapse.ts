@@ -249,6 +249,7 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
     public setRequest(request: APIRequestContext): void {
         this._request = request;
         this.csApi.setRequest(request);
+        this.adminApi.setRequest(request);
     }
 
     public setMatrixAuthenticationService(mas?: StartedMatrixAuthenticationServiceContainer): void {
