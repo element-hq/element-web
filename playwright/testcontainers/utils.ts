@@ -58,7 +58,7 @@ export class Api {
     public async request<R extends {}>(verb: "GET", path: string, token?: string, data?: never): Promise<R>;
     public async request<R extends {}>(verb: Verb, path: string, token?: string, data?: object): Promise<R>;
     public async request<R extends {}>(verb: Verb, path: string, token?: string, data?: object): Promise<R> {
-        const url = `${this.baseUrl}/_matrix/client/${path}`;
+        const url = `${this.baseUrl}${path}`;
         const res = await this._request.fetch(url, {
             data,
             method: verb,
@@ -79,7 +79,7 @@ export class Api {
 
 export class ClientServerApi extends Api {
     constructor(baseUrl: string) {
-        super(`${baseUrl}/_matrix/client/`);
+        super(`${baseUrl}/_matrix/client`);
     }
 
     public async loginUser(userId: string, password: string): Promise<Credentials> {
@@ -88,7 +88,7 @@ export class ClientServerApi extends Api {
             user_id: string;
             device_id: string;
             home_server: string;
-        }>("POST", "v3/login", undefined, {
+        }>("POST", "/v3/login", undefined, {
             type: "m.login.password",
             identifier: {
                 type: "m.id.user",

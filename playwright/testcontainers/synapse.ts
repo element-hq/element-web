@@ -243,7 +243,7 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
     ) {
         super(container);
         this.csApi = new ClientServerApi(this.baseUrl);
-        this.adminApi = new Api(`${this.baseUrl}/_synapse/admin/`);
+        this.adminApi = new Api(`${this.baseUrl}/_synapse/admin`);
     }
 
     public setRequest(request: APIRequestContext): void {
@@ -266,10 +266,10 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
         // We hide the rooms from the room directory to save time between tests and for portability between homeservers
         const { chunk: rooms } = await this.csApi.request<{
             chunk: { room_id: string }[];
-        }>("GET", "v3/publicRooms", token, {});
+        }>("GET", "/v3/publicRooms", token, {});
         await Promise.all(
             rooms.map((room) =>
-                this.csApi.request("PUT", `v3/directory/list/room/${room.room_id}`, token, { visibility: "private" }),
+                this.csApi.request("PUT", `/v3/directory/list/room/${room.room_id}`, token, { visibility: "private" }),
             ),
         );
     }
@@ -280,7 +280,7 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
         displayName?: string,
         admin = false,
     ): Promise<Credentials> {
-        const path = `v1/register`;
+        const path = "/v1/register";
         const { nonce } = await this.adminApi.request<{ nonce: string }>("GET", path, undefined, {});
         const mac = crypto
             .createHmac("sha1", this.registrationSharedSecret)
@@ -292,14 +292,12 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
             user_id: string;
             device_id: string;
         }>("POST", path, undefined, {
-            data: {
-                nonce,
-                username,
-                password,
-                mac,
-                admin,
-                displayname: displayName,
-            },
+            nonce,
+            username,
+            password,
+            mac,
+            admin,
+            displayname: displayName,
         });
 
         return {
@@ -351,7 +349,7 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
         if (this._mas) {
             return this._mas.setThreepid(userId, medium, address);
         }
-        await this.adminRequest("PUT", `v2/users/${userId}`, {
+        await this.adminRequest("PUT", `/v2/users/${userId}`, {
             threepids: [
                 {
                     medium,
