@@ -21,7 +21,7 @@ export class TestClientServerAPI extends ClientServerApi {
         homeserver: HomeserverInstance,
         private accessToken: string,
     ) {
-        super(`${homeserver.baseUrl}/_matrix/client`);
+        super(homeserver.baseUrl);
         this.setRequest(request);
     }
 
