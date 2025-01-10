@@ -24,6 +24,8 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         mailhogClient,
         mas,
     }, testInfo) => {
+        await page.clock.install();
+
         const tokenUri = `${mas.baseUrl}/oauth2/token`;
         const tokenApiPromise = page.waitForRequest(
             (request) => request.url() === tokenUri && request.postDataJSON()["grant_type"] === "authorization_code",
@@ -31,11 +33,14 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
 
         await page.goto("/#/login");
         await page.getByRole("button", { name: "Continue" }).click();
-        await registerAccountMas(page, mailhogClient, `alice_${testInfo.testId}`, "alice@email.com", "Pa$sW0rD!");
+
+        const userId = `alice_${testInfo.testId}`;
+        await registerAccountMas(page, mailhogClient, userId, "alice@email.com", "Pa$sW0rD!");
 
         // Eventually, we should end up at the home screen.
         await expect(page).toHaveURL(/\/#\/home$/, { timeout: 10000 });
-        await expect(page.getByRole("heading", { name: "Welcome alice", exact: true })).toBeVisible();
+        await expect(page.getByRole("heading", { name: `Welcome ${userId}`, exact: true })).toBeVisible();
+        await page.clock.runFor(20000); // run the timer so we see the token request
 
         const tokenApiRequest = await tokenApiPromise;
         expect(tokenApiRequest.postDataJSON()["grant_type"]).toBe("authorization_code");

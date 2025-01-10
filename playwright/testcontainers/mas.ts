@@ -5,14 +5,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { AbstractStartedContainer, GenericContainer, StartedTestContainer, Wait } from "testcontainers";
+import { AbstractStartedContainer, GenericContainer, StartedTestContainer, Wait, ExecResult } from "testcontainers";
 import { StartedPostgreSqlContainer } from "@testcontainers/postgresql";
 import * as YAML from "yaml";
 
 import { getFreePort } from "../plugins/utils/port.ts";
 import { deepCopy } from "../plugins/utils/object.ts";
 import { Credentials } from "../plugins/homeserver";
-import { ClientServerApi } from "./utils.ts";
 
 const DEFAULT_CONFIG = {
     http: {
@@ -227,10 +226,9 @@ export class StartedMatrixAuthenticationServiceContainer extends AbstractStarted
         super(container);
     }
 
-    public async getAdminToken(csApi: ClientServerApi): Promise<string> {
+    public async getAdminToken(): Promise<string> {
         if (this.adminTokenPromise === undefined) {
             this.adminTokenPromise = this.registerUserInternal(
-                csApi,
                 "admin",
                 "totalyinsecureadminpassword",
                 undefined,
@@ -240,20 +238,24 @@ export class StartedMatrixAuthenticationServiceContainer extends AbstractStarted
         return this.adminTokenPromise;
     }
 
-    private async registerUserInternal(
-        csApi: ClientServerApi,
+    private async manage(cmd: string, ...args: string[]): Promise<ExecResult> {
+        const result = await this.exec(["mas-cli", "manage", cmd, ...this.args, ...args]);
+        if (result.exitCode !== 0) {
+            throw new Error(`Failed mas-cli manage ${cmd}: ${result.output}`);
+        }
+        return result;
+    }
+
+    private async manageRegisterUser(
         username: string,
         password: string,
         displayName?: string,
         admin = false,
-    ): Promise<Credentials> {
+    ): Promise<string> {
         const args: string[] = [];
         if (admin) args.push("-a");
-        await this.exec([
-            "mas-cli",
-            "manage",
+        const result = await this.manage(
             "register-user",
-            ...this.args,
             ...args,
             "-y",
             "-p",
@@ -261,18 +263,62 @@ export class StartedMatrixAuthenticationServiceContainer extends AbstractStarted
             "-d",
             displayName ?? "",
             username,
-        ]);
+        );
 
-        return csApi.loginUser(username, password);
+        const registerLines = result.output.trim().split("\n");
+        const userId = registerLines
+            .find((line) => line.includes("Matrix ID: "))
+            ?.split(": ")
+            .pop();
+
+        if (!userId) {
+            throw new Error(`Failed to register user: ${result.output}`);
+        }
+
+        return userId;
     }
 
-    public async registerUser(
-        csApi: ClientServerApi,
+    private async manageIssueCompatibilityToken(
+        username: string,
+        admin = false,
+    ): Promise<{ accessToken: string; deviceId: string }> {
+        const args: string[] = [];
+        if (admin) args.push("--yes-i-want-to-grant-synapse-admin-privileges");
+        const result = await this.manage("issue-compatibility-token", ...args, username);
+
+        const parts = result.output.trim().split(/\s+/);
+        const accessToken = parts.find((part) => part.startsWith("mct_"));
+        const deviceId = parts.find((part) => part.startsWith("compat_session.device="))?.split("=")[1];
+
+        if (!accessToken || !deviceId) {
+            throw new Error(`Failed to issue compatibility token: ${result.output}`);
+        }
+
+        return { accessToken, deviceId };
+    }
+
+    private async registerUserInternal(
         username: string,
         password: string,
         displayName?: string,
+        admin = false,
     ): Promise<Credentials> {
-        return this.registerUserInternal(csApi, username, password, displayName, false);
+        const userId = await this.manageRegisterUser(username, password, displayName, admin);
+        const { deviceId, accessToken } = await this.manageIssueCompatibilityToken(username, admin);
+
+        return {
+            userId,
+            accessToken,
+            deviceId,
+            homeServer: userId.slice(1).split(":").slice(1).join(":"),
+            displayName,
+            username,
+            password,
+        };
+    }
+
+    public async registerUser(username: string, password: string, displayName?: string): Promise<Credentials> {
+        return this.registerUserInternal(username, password, displayName, false);
     }
 
     public async setThreepid(username: string, medium: string, address: string): Promise<void> {
@@ -280,6 +326,6 @@ export class StartedMatrixAuthenticationServiceContainer extends AbstractStarted
             throw new Error("Only email threepids are supported by MAS");
         }
 
-        await this.exec(["mas-cli", "manage", "add-email", ...this.args, username, address]);
+        await this.manage("add-email", username, address);
     }
 }

@@ -114,9 +114,8 @@ export const test = base.extend<{}, Services>({
                 .withNetworkAliases("homeserver")
                 .withLogConsumer(logger.getConsumer("synapse"))
                 .withConfig(synapseConfigOptions)
+                .withMatrixAuthenticationService(mas)
                 .start();
-
-            container.setMatrixAuthenticationService(mas);
 
             await use(container);
             await container.stop();

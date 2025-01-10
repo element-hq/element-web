@@ -13,6 +13,7 @@ import { randB64Bytes } from "../plugins/utils/rand.ts";
 import { StartedSynapseContainer } from "./synapse.ts";
 import { deepCopy } from "../plugins/utils/object.ts";
 import { HomeserverContainer } from "./HomeserverContainer.ts";
+import { StartedMatrixAuthenticationServiceContainer } from "./mas.ts";
 
 const DEFAULT_CONFIG = {
     version: 2,
@@ -233,6 +234,10 @@ export class DendriteContainer extends GenericContainer implements HomeserverCon
             ...config,
         };
         return this;
+    }
+
+    public withMatrixAuthenticationService(mas?: StartedMatrixAuthenticationServiceContainer): this {
+        throw new Error("Dendrite does not support MAS.");
     }
 
     public override async start(): Promise<StartedDendriteContainer> {

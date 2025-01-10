@@ -14,11 +14,11 @@ import { StartedMatrixAuthenticationServiceContainer } from "./mas.ts";
 export interface HomeserverContainer<Config> extends GenericContainer {
     withConfigField(key: string, value: any): this;
     withConfig(config: Partial<Config>): this;
+    withMatrixAuthenticationService(mas?: StartedMatrixAuthenticationServiceContainer): this;
     start(): Promise<StartedHomeserverContainer>;
 }
 
 export interface StartedHomeserverContainer extends AbstractStartedContainer, HomeserverInstance {
     setRequest(request: APIRequestContext): void;
-    setMatrixAuthenticationService(mas?: StartedMatrixAuthenticationServiceContainer): void;
     onTestFinished(testInfo: TestInfo): Promise<void>;
 }

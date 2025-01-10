@@ -5,7 +5,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { AbstractStartedContainer, GenericContainer, StartedTestContainer, Wait } from "testcontainers";
+import {
+    AbstractStartedContainer,
+    GenericContainer,
+    ImageName,
+    RestartOptions,
+    StartedTestContainer,
+    Wait,
+} from "testcontainers";
 import { APIRequestContext, TestInfo } from "@playwright/test";
 import crypto from "node:crypto";
 import * as YAML from "yaml";
@@ -144,6 +151,7 @@ export type SynapseConfigOptions = Partial<typeof DEFAULT_CONFIG>;
 
 export class SynapseContainer extends GenericContainer implements HomeserverContainer<typeof DEFAULT_CONFIG> {
     private config: typeof DEFAULT_CONFIG;
+    private mas?: StartedMatrixAuthenticationServiceContainer;
 
     constructor() {
         super(`ghcr.io/element-hq/synapse:${TAG}`);
@@ -203,6 +211,11 @@ export class SynapseContainer extends GenericContainer implements HomeserverCont
         return this;
     }
 
+    public withMatrixAuthenticationService(mas?: StartedMatrixAuthenticationServiceContainer): this {
+        this.mas = mas;
+        return this;
+    }
+
     public override async start(): Promise<StartedSynapseContainer> {
         // Synapse config public_baseurl needs to know what URL it'll be accessed from, so we have to map the port manually
         const port = await getFreePort();
@@ -221,20 +234,26 @@ export class SynapseContainer extends GenericContainer implements HomeserverCont
                 },
             ]);
 
-        return new StartedSynapseContainer(
-            await super.start(),
-            `http://localhost:${port}`,
-            this.config.registration_shared_secret,
-        );
+        const container = await super.start();
+        const baseUrl = `http://localhost:${port}`;
+        if (this.mas) {
+            return new StartedSynapseWithMasContainer(
+                container,
+                baseUrl,
+                this.config.registration_shared_secret,
+                this.mas,
+            );
+        }
+
+        return new StartedSynapseContainer(container, baseUrl, this.config.registration_shared_secret);
     }
 }
 
 export class StartedSynapseContainer extends AbstractStartedContainer implements StartedHomeserverContainer {
-    private adminTokenPromise?: Promise<string>;
-    private _mas?: StartedMatrixAuthenticationServiceContainer;
+    protected adminTokenPromise?: Promise<string>;
     protected _request?: APIRequestContext;
-    protected csApi: ClientServerApi;
-    protected adminApi: Api;
+    protected readonly adminApi: Api;
+    public readonly csApi: ClientServerApi;
 
     constructor(
         container: StartedTestContainer,
@@ -242,18 +261,19 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
         private readonly registrationSharedSecret: string,
     ) {
         super(container);
-        this.csApi = new ClientServerApi(this.baseUrl);
         this.adminApi = new Api(`${this.baseUrl}/_synapse/admin`);
+        this.csApi = new ClientServerApi(this.baseUrl);
+    }
+
+    public restart(options?: Partial<RestartOptions>): Promise<void> {
+        this.adminTokenPromise = undefined;
+        return super.restart(options);
     }
 
     public setRequest(request: APIRequestContext): void {
         this._request = request;
         this.csApi.setRequest(request);
         this.adminApi.setRequest(request);
-    }
-
-    public setMatrixAuthenticationService(mas?: StartedMatrixAuthenticationServiceContainer): void {
-        this._mas = mas;
     }
 
     public async onTestFinished(testInfo: TestInfo): Promise<void> {
@@ -313,10 +333,6 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
 
     protected async getAdminToken(): Promise<string> {
         if (this.adminTokenPromise === undefined) {
-            if (this._mas) {
-                return (this.adminTokenPromise = this._mas.getAdminToken(this.csApi));
-            }
-
             this.adminTokenPromise = this.registerUserInternal(
                 "admin",
                 "totalyinsecureadminpassword",
@@ -335,9 +351,6 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
     }
 
     public registerUser(username: string, password: string, displayName?: string): Promise<Credentials> {
-        if (this._mas) {
-            return this._mas.registerUser(this.csApi, username, password, displayName);
-        }
         return this.registerUserInternal(username, password, displayName, false);
     }
 
@@ -346,9 +359,6 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
     }
 
     public async setThreepid(userId: string, medium: string, address: string): Promise<void> {
-        if (this._mas) {
-            return this._mas.setThreepid(userId, medium, address);
-        }
         await this.adminRequest("PUT", `/v2/users/${userId}`, {
             threepids: [
                 {
@@ -357,5 +367,31 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
                 },
             ],
         });
+    }
+}
+
+export class StartedSynapseWithMasContainer extends StartedSynapseContainer {
+    constructor(
+        container: StartedTestContainer,
+        baseUrl: string,
+        registrationSharedSecret: string,
+        private readonly mas: StartedMatrixAuthenticationServiceContainer,
+    ) {
+        super(container, baseUrl, registrationSharedSecret);
+    }
+
+    protected async getAdminToken(): Promise<string> {
+        if (this.adminTokenPromise === undefined) {
+            this.adminTokenPromise = this.mas.getAdminToken();
+        }
+        return this.adminTokenPromise;
+    }
+
+    public registerUser(username: string, password: string, displayName?: string): Promise<Credentials> {
+        return this.mas.registerUser(username, password, displayName);
+    }
+
+    public async setThreepid(userId: string, medium: string, address: string): Promise<void> {
+        return this.mas.setThreepid(userId, medium, address);
     }
 }

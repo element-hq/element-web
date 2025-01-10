@@ -70,7 +70,9 @@ export class Api {
         });
 
         if (!res.ok()) {
-            throw await res.json();
+            throw new Error(
+                `Request to ${url} failed with status ${res.status()}: ${JSON.stringify(await res.json())}`,
+            );
         }
 
         return res.json();

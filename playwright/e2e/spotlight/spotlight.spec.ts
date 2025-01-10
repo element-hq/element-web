@@ -366,28 +366,28 @@ test.describe("Spotlight", () => {
         await spotlight.search("b");
 
         let resultLocator = spotlight.results;
-        await expect(resultLocator.count()).resolves.toBeGreaterThan(2);
+        await expect(resultLocator).toHaveCount(2);
         await expect(resultLocator.first()).toHaveAttribute("aria-selected", "true");
         await expect(resultLocator.last()).toHaveAttribute("aria-selected", "false");
 
         await spotlight.searchBox.press("ArrowDown");
         resultLocator = spotlight.results;
         await expect(resultLocator.first()).toHaveAttribute("aria-selected", "false");
-        await expect(resultLocator.nth(2)).toHaveAttribute("aria-selected", "true");
+        await expect(resultLocator.last()).toHaveAttribute("aria-selected", "true");
 
         await spotlight.searchBox.press("ArrowDown");
         resultLocator = spotlight.results;
         await expect(resultLocator.first()).toHaveAttribute("aria-selected", "false");
-        await expect(resultLocator.nth(2)).toHaveAttribute("aria-selected", "false");
+        await expect(resultLocator.last()).toHaveAttribute("aria-selected", "false");
 
         await spotlight.searchBox.press("ArrowUp");
         resultLocator = spotlight.results;
         await expect(resultLocator.first()).toHaveAttribute("aria-selected", "false");
-        await expect(resultLocator.nth(2)).toHaveAttribute("aria-selected", "true");
+        await expect(resultLocator.last()).toHaveAttribute("aria-selected", "true");
 
         await spotlight.searchBox.press("ArrowUp");
         resultLocator = spotlight.results;
         await expect(resultLocator.first()).toHaveAttribute("aria-selected", "true");
-        await expect(resultLocator.nth(2)).toHaveAttribute("aria-selected", "false");
+        await expect(resultLocator.last()).toHaveAttribute("aria-selected", "false");
     });
 });
