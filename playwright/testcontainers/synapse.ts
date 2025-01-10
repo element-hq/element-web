@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { AbstractStartedContainer, GenericContainer, StartedTestContainer, Wait } from "testcontainers";
-import { APIRequestContext } from "@playwright/test";
+import { APIRequestContext, TestInfo } from "@playwright/test";
 import crypto from "node:crypto";
 import * as YAML from "yaml";
 import { set } from "lodash";
@@ -138,6 +138,8 @@ const DEFAULT_CONFIG = {
     },
 };
 
+type Verb = "GET" | "POST" | "PUT" | "DELETE";
+
 export type SynapseConfigOptions = Partial<typeof DEFAULT_CONFIG>;
 
 export class SynapseContainer extends GenericContainer implements HomeserverContainer<typeof DEFAULT_CONFIG> {
@@ -228,8 +230,8 @@ export class SynapseContainer extends GenericContainer implements HomeserverCont
 }
 
 export class StartedSynapseContainer extends AbstractStartedContainer implements StartedHomeserverContainer {
-    private adminToken?: string;
-    private request?: APIRequestContext;
+    private adminTokenPromise?: Promise<string>;
+    protected _request?: APIRequestContext;
 
     constructor(
         container: StartedTestContainer,
@@ -240,7 +242,24 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
     }
 
     public setRequest(request: APIRequestContext): void {
-        this.request = request;
+        this._request = request;
+    }
+
+    public async onTestFinished(testInfo: TestInfo): Promise<void> {
+        // Clean up the server to prevent rooms leaking between tests
+        await this.deletePublicRooms();
+    }
+
+    protected async deletePublicRooms(): Promise<void> {
+        // We hide the rooms from the room directory to save time between tests and for portability between homeservers
+        const { chunk: rooms } = await this.request<{
+            chunk: { room_id: string }[];
+        }>("GET", "v3/publicRooms", {});
+        await Promise.all(
+            rooms.map((room) =>
+                this.request("PUT", `v3/directory/list/room/${room.room_id}`, { visibility: "private" }),
+            ),
+        );
     }
 
     private async registerUserInternal(
@@ -250,12 +269,12 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
         admin = false,
     ): Promise<Credentials> {
         const url = `${this.baseUrl}/_synapse/admin/v1/register`;
-        const { nonce } = await this.request.get(url).then((r) => r.json());
+        const { nonce } = await this._request.get(url).then((r) => r.json());
         const mac = crypto
             .createHmac("sha1", this.registrationSharedSecret)
             .update(`${nonce}\0${username}\0${password}\0${admin ? "" : "not"}admin`)
             .digest("hex");
-        const res = await this.request.post(url, {
+        const res = await this._request.post(url, {
             data: {
                 nonce,
                 username,
@@ -282,23 +301,76 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
         };
     }
 
+    protected async getAdminToken(): Promise<string> {
+        if (this.adminTokenPromise === undefined) {
+            this.adminTokenPromise = this.registerUserInternal(
+                "admin",
+                "totalyinsecureadminpassword",
+                undefined,
+                true,
+            ).then((res) => res.accessToken);
+        }
+        return this.adminTokenPromise;
+    }
+
+    private async adminRequest<R extends {}>(verb: "GET", path: string, data?: never): Promise<R>;
+    private async adminRequest<R extends {}>(verb: Verb, path: string, data?: object): Promise<R>;
+    private async adminRequest<R extends {}>(verb: Verb, path: string, data?: object): Promise<R> {
+        const adminToken = await this.getAdminToken();
+        const url = `${this.baseUrl}/_synapse/admin/${path}`;
+        const res = await this._request.fetch(url, {
+            data,
+            method: verb,
+            headers: {
+                Authorization: `Bearer ${adminToken}`,
+            },
+        });
+
+        if (!res.ok()) {
+            throw await res.json();
+        }
+
+        return res.json();
+    }
+
+    public async request<R extends {}>(verb: "GET", path: string, data?: never): Promise<R>;
+    public async request<R extends {}>(verb: Verb, path: string, data?: object): Promise<R>;
+    public async request<R extends {}>(verb: Verb, path: string, data?: object): Promise<R> {
+        const token = await this.getAdminToken();
+        const url = `${this.baseUrl}/_matrix/client/${path}`;
+        const res = await this._request.fetch(url, {
+            data,
+            method: verb,
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!res.ok()) {
+            throw await res.json();
+        }
+
+        return res.json();
+    }
+
     public registerUser(username: string, password: string, displayName?: string): Promise<Credentials> {
         return this.registerUserInternal(username, password, displayName, false);
     }
 
     public async loginUser(userId: string, password: string): Promise<Credentials> {
-        const url = `${this.baseUrl}/_matrix/client/v3/login`;
-        const res = await this.request.post(url, {
-            data: {
-                type: "m.login.password",
-                identifier: {
-                    type: "m.id.user",
-                    user: userId,
-                },
-                password: password,
+        const json = await this.request<{
+            access_token: string;
+            user_id: string;
+            device_id: string;
+            home_server: string;
+        }>("POST", "v3/login", {
+            type: "m.login.password",
+            identifier: {
+                type: "m.id.user",
+                user: userId,
             },
+            password: password,
         });
-        const json = await res.json();
 
         return {
             password,
@@ -311,28 +383,13 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
     }
 
     public async setThreepid(userId: string, medium: string, address: string): Promise<void> {
-        if (this.adminToken === undefined) {
-            const result = await this.registerUserInternal("admin", "totalyinsecureadminpassword", undefined, true);
-            this.adminToken = result.accessToken;
-        }
-
-        const url = `${this.baseUrl}/_synapse/admin/v2/users/${userId}`;
-        const res = await this.request.put(url, {
-            data: {
-                threepids: [
-                    {
-                        medium,
-                        address,
-                    },
-                ],
-            },
-            headers: {
-                Authorization: `Bearer ${this.adminToken}`,
-            },
+        await this.adminRequest("PUT", `v2/users/${userId}`, {
+            threepids: [
+                {
+                    medium,
+                    address,
+                },
+            ],
         });
-
-        if (!res.ok()) {
-            throw await res.json();
-        }
     }
 }

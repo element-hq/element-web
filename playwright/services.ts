@@ -136,5 +136,6 @@ export const test = base.extend<{}, Services>({
         await logger.testStarted(testInfo);
         await use(context);
         await logger.testFinished(testInfo);
+        await homeserver.onTestFinished(testInfo);
     },
 });

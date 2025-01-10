@@ -235,7 +235,7 @@ export class DendriteContainer extends GenericContainer implements HomeserverCon
         return this;
     }
 
-    public override async start(): Promise<StartedSynapseContainer> {
+    public override async start(): Promise<StartedDendriteContainer> {
         this.withCopyContentToContainer([
             {
                 target: "/etc/dendrite/dendrite.yaml",
@@ -244,8 +244,7 @@ export class DendriteContainer extends GenericContainer implements HomeserverCon
         ]);
 
         const container = await super.start();
-        // Surprisingly, Dendrite implements the same register user Admin API Synapse, so we can just extend it
-        return new StartedSynapseContainer(
+        return new StartedDendriteContainer(
             container,
             `http://${container.getHost()}:${container.getMappedPort(8008)}`,
             this.config.client_api.registration_shared_secret,
@@ -258,3 +257,6 @@ export class PineconeContainer extends DendriteContainer {
         super("matrixdotorg/dendrite-demo-pinecone:main", "/usr/bin/dendrite-demo-pinecone");
     }
 }
+
+// Surprisingly, Dendrite implements the same register user Admin API Synapse, so we can just extend it
+export class StartedDendriteContainer extends StartedSynapseContainer {}

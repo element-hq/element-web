@@ -6,17 +6,17 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { AbstractStartedContainer, GenericContainer } from "testcontainers";
-import { APIRequestContext } from "@playwright/test";
+import { APIRequestContext, TestInfo } from "@playwright/test";
 
-import { StartedSynapseContainer } from "./synapse.ts";
 import { HomeserverInstance } from "../plugins/homeserver";
 
 export interface HomeserverContainer<Config> extends GenericContainer {
     withConfigField(key: string, value: any): this;
     withConfig(config: Partial<Config>): this;
-    start(): Promise<StartedSynapseContainer>;
+    start(): Promise<StartedHomeserverContainer>;
 }
 
 export interface StartedHomeserverContainer extends AbstractStartedContainer, HomeserverInstance {
     setRequest(request: APIRequestContext): void;
+    onTestFinished(testInfo: TestInfo): Promise<void>;
 }
