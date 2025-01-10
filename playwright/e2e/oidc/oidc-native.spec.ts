@@ -17,7 +17,13 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
     test.skip(isDendrite, "does not yet support MAS");
     test.slow(); // trace recording takes a while here
 
-    test("can register the oauth2 client and an account", async ({ context, page, homeserver, mailhogClient, mas }) => {
+    test("can register the oauth2 client and an account", async ({
+        context,
+        page,
+        homeserver,
+        mailhogClient,
+        mas,
+    }, testInfo) => {
         const tokenUri = `${mas.baseUrl}/oauth2/token`;
         const tokenApiPromise = page.waitForRequest(
             (request) => request.url() === tokenUri && request.postDataJSON()["grant_type"] === "authorization_code",
@@ -25,7 +31,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
 
         await page.goto("/#/login");
         await page.getByRole("button", { name: "Continue" }).click();
-        await registerAccountMas(page, mailhogClient, "alice", "alice@email.com", "Pa$sW0rD!");
+        await registerAccountMas(page, mailhogClient, `alice_${testInfo.testId}`, "alice@email.com", "Pa$sW0rD!");
 
         // Eventually, we should end up at the home screen.
         await expect(page).toHaveURL(/\/#\/home$/, { timeout: 10000 });
