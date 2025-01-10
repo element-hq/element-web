@@ -258,5 +258,5 @@ export class PineconeContainer extends DendriteContainer {
     }
 }
 
-// Surprisingly, Dendrite implements the same register user Admin API Synapse, so we can just extend it
+// Surprisingly, Dendrite implements the same register user Synapse Admin API, so we can just extend it
 export class StartedDendriteContainer extends StartedSynapseContainer {}

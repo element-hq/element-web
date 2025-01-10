@@ -116,6 +116,8 @@ export const test = base.extend<{}, Services>({
                 .withConfig(synapseConfigOptions)
                 .start();
 
+            container.setMatrixAuthenticationService(mas);
+
             await use(container);
             await container.stop();
         },

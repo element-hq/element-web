@@ -9,6 +9,7 @@ import { AbstractStartedContainer, GenericContainer } from "testcontainers";
 import { APIRequestContext, TestInfo } from "@playwright/test";
 
 import { HomeserverInstance } from "../plugins/homeserver";
+import { StartedMatrixAuthenticationServiceContainer } from "./mas.ts";
 
 export interface HomeserverContainer<Config> extends GenericContainer {
     withConfigField(key: string, value: any): this;
@@ -18,5 +19,6 @@ export interface HomeserverContainer<Config> extends GenericContainer {
 
 export interface StartedHomeserverContainer extends AbstractStartedContainer, HomeserverInstance {
     setRequest(request: APIRequestContext): void;
+    setMatrixAuthenticationService(mas?: StartedMatrixAuthenticationServiceContainer): void;
     onTestFinished(testInfo: TestInfo): Promise<void>;
 }

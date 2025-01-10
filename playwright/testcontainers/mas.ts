@@ -11,6 +11,8 @@ import * as YAML from "yaml";
 
 import { getFreePort } from "../plugins/utils/port.ts";
 import { deepCopy } from "../plugins/utils/object.ts";
+import { Credentials } from "../plugins/homeserver";
+import { ClientServerApi } from "./utils.ts";
 
 const DEFAULT_CONFIG = {
     http: {
@@ -18,18 +20,11 @@ const DEFAULT_CONFIG = {
             {
                 name: "web",
                 resources: [
-                    {
-                        name: "discovery",
-                    },
-                    {
-                        name: "human",
-                    },
-                    {
-                        name: "oauth",
-                    },
-                    {
-                        name: "compat",
-                    },
+                    { name: "discovery" },
+                    { name: "human" },
+                    { name: "oauth" },
+                    { name: "compat" },
+                    { name: "adminapi" },
                     {
                         name: "graphql",
                         playground: true,
@@ -172,9 +167,12 @@ const DEFAULT_CONFIG = {
 
 export class MatrixAuthenticationServiceContainer extends GenericContainer {
     private config: typeof DEFAULT_CONFIG;
+    private readonly args = ["-c", "/config/config.yaml"];
 
     constructor(db: StartedPostgreSqlContainer) {
-        super("ghcr.io/element-hq/matrix-authentication-service:0.12.0");
+        // We rely on `mas-cli manage add-email` which isn't in a release yet
+        // https://github.com/element-hq/matrix-authentication-service/pull/3235
+        super("ghcr.io/element-hq/matrix-authentication-service:sha-0b90c33");
 
         this.config = deepCopy(DEFAULT_CONFIG);
         this.config.database.username = db.getUsername();
@@ -182,7 +180,7 @@ export class MatrixAuthenticationServiceContainer extends GenericContainer {
 
         this.withExposedPorts(8080, 8081)
             .withWaitStrategy(Wait.forHttp("/health", 8081))
-            .withCommand(["server", "--config", "/config/config.yaml"]);
+            .withCommand(["server", ...this.args]);
     }
 
     public withConfig(config: object): this {
@@ -210,15 +208,78 @@ export class MatrixAuthenticationServiceContainer extends GenericContainer {
             },
         ]);
 
-        return new StartedMatrixAuthenticationServiceContainer(await super.start(), `http://localhost:${port}`);
+        return new StartedMatrixAuthenticationServiceContainer(
+            await super.start(),
+            `http://localhost:${port}`,
+            this.args,
+        );
     }
 }
 
 export class StartedMatrixAuthenticationServiceContainer extends AbstractStartedContainer {
+    private adminTokenPromise?: Promise<string>;
+
     constructor(
         container: StartedTestContainer,
         public readonly baseUrl: string,
+        private readonly args: string[],
     ) {
         super(container);
+    }
+
+    public async getAdminToken(csApi: ClientServerApi): Promise<string> {
+        if (this.adminTokenPromise === undefined) {
+            this.adminTokenPromise = this.registerUserInternal(
+                csApi,
+                "admin",
+                "totalyinsecureadminpassword",
+                undefined,
+                true,
+            ).then((res) => res.accessToken);
+        }
+        return this.adminTokenPromise;
+    }
+
+    private async registerUserInternal(
+        csApi: ClientServerApi,
+        username: string,
+        password: string,
+        displayName?: string,
+        admin = false,
+    ): Promise<Credentials> {
+        const args: string[] = [];
+        if (admin) args.push("-a");
+        await this.exec([
+            "mas-cli",
+            "manage",
+            "register-user",
+            ...this.args,
+            ...args,
+            "-y",
+            "-p",
+            password,
+            "-d",
+            displayName ?? "",
+            username,
+        ]);
+
+        return csApi.loginUser(username, password);
+    }
+
+    public async registerUser(
+        csApi: ClientServerApi,
+        username: string,
+        password: string,
+        displayName?: string,
+    ): Promise<Credentials> {
+        return this.registerUserInternal(csApi, username, password, displayName, false);
+    }
+
+    public async setThreepid(username: string, medium: string, address: string): Promise<void> {
+        if (medium !== "email") {
+            throw new Error("Only email threepids are supported by MAS");
+        }
+
+        await this.exec(["mas-cli", "manage", "add-email", ...this.args, username, address]);
     }
 }
