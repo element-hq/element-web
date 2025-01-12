@@ -52,7 +52,7 @@ import { MainSplitContentType } from "../../../structures/RoomView.tsx";
 import defaultDispatcher from "../../../../dispatcher/dispatcher.ts";
 import { RoomSettingsTab } from "../../dialogs/RoomSettingsDialog.tsx";
 import { useScopedRoomContext } from "../../../../contexts/ScopedRoomContext.tsx";
-import { ToggleableIcon } from "./highlight/ToggleableIcon.tsx";
+import { ToggleableIcon } from "./toggle/ToggleableIcon.tsx";
 import { CurrentRightPanelPhaseContextProvider } from "../../../../contexts/CurrentRightPanelPhaseContext.tsx";
 
 export default function RoomHeader({

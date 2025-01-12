@@ -13,7 +13,7 @@ import classNames from "classnames";
 
 import MemberAvatar from "../avatars/MemberAvatar";
 import AccessibleButton, { ButtonEvent } from "./AccessibleButton";
-import { useToggled } from "../rooms/RoomHeader/highlight/useToggled";
+import { useToggled } from "../rooms/RoomHeader/toggle/useToggled";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 
 interface IProps extends Omit<HTMLAttributes<HTMLDivElement>, "onChange"> {

@@ -18,7 +18,7 @@ import { NotificationLevel } from "../../../../stores/notifications/Notification
 import { RightPanelPhases } from "../../../../stores/right-panel/RightPanelStorePhases";
 import { SDKContext } from "../../../../contexts/SDKContext";
 import { ButtonEvent } from "../../elements/AccessibleButton";
-import { ToggleableIcon } from "./highlight/ToggleableIcon";
+import { ToggleableIcon } from "./toggle/ToggleableIcon";
 
 /**
  * Display a button to toggle timeline for video rooms
