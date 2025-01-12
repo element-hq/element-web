@@ -16,7 +16,7 @@ import { CurrentRightPanelPhaseContext } from "../../../../../contexts/CurrentRi
 export function useToggled(phase: RightPanelPhases): boolean {
     const context = useContext(CurrentRightPanelPhaseContext);
     if (!context) {
-        throw new Error("Context is null, did you forget to use CurrentRightPanelPhaseContextProvider?");
+        return false;
     }
     const { currentPhase, isPanelOpen } = context;
     return !!(isPanelOpen && currentPhase === phase);

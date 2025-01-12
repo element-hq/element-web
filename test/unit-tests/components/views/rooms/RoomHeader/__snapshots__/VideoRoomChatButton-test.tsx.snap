@@ -16,6 +16,7 @@ exports[`<VideoRoomChatButton /> renders button with an unread marker when room 
     style="--cpd-icon-button-size: 100%;"
   >
     <svg
+      class=""
       fill="currentColor"
       height="1em"
       viewBox="0 0 24 24"

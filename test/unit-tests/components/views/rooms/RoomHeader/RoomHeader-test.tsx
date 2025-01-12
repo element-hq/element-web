@@ -57,7 +57,12 @@ import { SdkContextClass } from "../../../../../../src/contexts/SDKContext";
 import WidgetStore, { IApp } from "../../../../../../src/stores/WidgetStore";
 import { UIFeature } from "../../../../../../src/settings/UIFeature";
 
-jest.mock("../../../../../src/utils/ShieldUtils");
+jest.mock("../../../../../../src/utils/ShieldUtils");
+jest.mock("../../../../../../src/hooks/right-panel/useCurrentPhase", () => ({
+    useCurrentPhase: () => {
+        return { currentPhase: "foo", isOpen: false };
+    },
+}));
 
 function getWrapper(): RenderOptions {
     return {
