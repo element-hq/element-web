@@ -36,26 +36,26 @@ import {
 import { ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 import { mocked } from "jest-mock";
 
-import { filterConsole, stubClient } from "../../../../test-utils";
-import RoomHeader from "../../../../../src/components/views/rooms/RoomHeader";
-import DMRoomMap from "../../../../../src/utils/DMRoomMap";
-import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
-import RightPanelStore from "../../../../../src/stores/right-panel/RightPanelStore";
-import { RightPanelPhases } from "../../../../../src/stores/right-panel/RightPanelStorePhases";
-import LegacyCallHandler from "../../../../../src/LegacyCallHandler";
-import SettingsStore from "../../../../../src/settings/SettingsStore";
-import SdkConfig from "../../../../../src/SdkConfig";
-import dispatcher from "../../../../../src/dispatcher/dispatcher";
-import { CallStore } from "../../../../../src/stores/CallStore";
-import { Call, ElementCall } from "../../../../../src/models/Call";
-import * as ShieldUtils from "../../../../../src/utils/ShieldUtils";
-import { Container, WidgetLayoutStore } from "../../../../../src/stores/widgets/WidgetLayoutStore";
-import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import { _t } from "../../../../../src/languageHandler";
-import * as UseCall from "../../../../../src/hooks/useCall";
-import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
-import WidgetStore, { IApp } from "../../../../../src/stores/WidgetStore";
-import { UIFeature } from "../../../../../src/settings/UIFeature";
+import { filterConsole, stubClient } from "../../../../../test-utils";
+import RoomHeader from "../../../../../../src/components/views/rooms/RoomHeader/RoomHeader";
+import DMRoomMap from "../../../../../../src/utils/DMRoomMap";
+import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
+import RightPanelStore from "../../../../../../src/stores/right-panel/RightPanelStore";
+import { RightPanelPhases } from "../../../../../../src/stores/right-panel/RightPanelStorePhases";
+import LegacyCallHandler from "../../../../../../src/LegacyCallHandler";
+import SettingsStore from "../../../../../../src/settings/SettingsStore";
+import SdkConfig from "../../../../../../src/SdkConfig";
+import dispatcher from "../../../../../../src/dispatcher/dispatcher";
+import { CallStore } from "../../../../../../src/stores/CallStore";
+import { Call, ElementCall } from "../../../../../../src/models/Call";
+import * as ShieldUtils from "../../../../../../src/utils/ShieldUtils";
+import { Container, WidgetLayoutStore } from "../../../../../../src/stores/widgets/WidgetLayoutStore";
+import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
+import { _t } from "../../../../../../src/languageHandler";
+import * as UseCall from "../../../../../../src/hooks/useCall";
+import { SdkContextClass } from "../../../../../../src/contexts/SDKContext";
+import WidgetStore, { IApp } from "../../../../../../src/stores/WidgetStore";
+import { UIFeature } from "../../../../../../src/settings/UIFeature";
 
 jest.mock("../../../../../src/utils/ShieldUtils");
 

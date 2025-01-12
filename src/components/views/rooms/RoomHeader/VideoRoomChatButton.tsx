@@ -18,6 +18,7 @@ import { NotificationLevel } from "../../../../stores/notifications/Notification
 import { RightPanelPhases } from "../../../../stores/right-panel/RightPanelStorePhases";
 import { SDKContext } from "../../../../contexts/SDKContext";
 import { ButtonEvent } from "../../elements/AccessibleButton";
+import { ToggleableIcon } from "./highlight/ToggleableIcon";
 
 /**
  * Display a button to toggle timeline for video rooms
@@ -54,7 +55,7 @@ export const VideoRoomChatButton: React.FC<{ room: Room }> = ({ room }) => {
                 onClick={onClick}
                 indicator={displayUnreadIndicator ? "default" : undefined}
             >
-                <ChatIcon />
+                <ToggleableIcon Icon={ChatIcon} phase={RightPanelPhases.Timeline} />
             </IconButton>
         </Tooltip>
     );
