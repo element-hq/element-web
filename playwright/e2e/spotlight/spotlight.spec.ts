@@ -81,6 +81,11 @@ const test = base.extend<{
         });
         await use({ name, roomId });
     },
+    credentials: async ({ credentials, homeserver }, use) => {
+        // Restart the homeserver to wipe its in-memory db so we can purge the user_directory of users
+        await homeserver.restart();
+        await use(credentials);
+    },
 });
 
 test.describe("Spotlight", () => {

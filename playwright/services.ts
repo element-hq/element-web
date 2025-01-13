@@ -15,9 +15,12 @@ import { ContainerLogger } from "./testcontainers/utils.ts";
 import { StartedMatrixAuthenticationServiceContainer } from "./testcontainers/mas.ts";
 import { HomeserverContainer, StartedHomeserverContainer } from "./testcontainers/HomeserverContainer.ts";
 import { MailhogContainer, StartedMailhogContainer } from "./testcontainers/mailhog.ts";
+import { OAuthServer } from "./plugins/oauth_server";
 
-interface TestFixtures {
+export interface TestFixtures {
     mailhogClient: mailhog.API;
+    // Set in legacyOAuthHomeserver only
+    oAuthServer?: OAuthServer;
 }
 
 export interface Services {
@@ -31,6 +34,9 @@ export interface Services {
     _homeserver: HomeserverContainer<any>;
     homeserver: StartedHomeserverContainer;
     mas?: StartedMatrixAuthenticationServiceContainer;
+
+    // Set in legacyOAuthHomeserver only
+    _oAuthServer?: OAuthServer;
 }
 
 export const test = base.extend<TestFixtures, Services>({

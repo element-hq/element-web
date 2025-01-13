@@ -9,11 +9,11 @@ Please see LICENSE files in the repository root for full details.
 import { Fixtures } from "@playwright/test";
 import { TestContainers } from "testcontainers";
 
-import { Services } from "../../../services.ts";
+import { Services, TestFixtures } from "../../../services.ts";
 import { OAuthServer } from "../../oauth_server";
 
-export const legacyOAuthHomeserver: Fixtures<{}, Services> = {
-    _homeserver: [
+export const legacyOAuthHomeserver: Fixtures<TestFixtures, Services, TestFixtures> = {
+    _oAuthServer: [
         async ({ _homeserver: container }, use) => {
             const server = new OAuthServer();
             const port = server.start();
@@ -43,9 +43,13 @@ export const legacyOAuthHomeserver: Fixtures<{}, Services> = {
                     },
                 ],
             });
-            await use(container);
+            await use(server);
             server.stop();
         },
         { scope: "worker" },
     ],
+    oAuthServer: async ({ _oAuthServer }, use, testInfo) => {
+        _oAuthServer.onTestStarted(testInfo);
+        await use(_oAuthServer);
+    },
 };
