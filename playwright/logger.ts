@@ -49,6 +49,7 @@ export class Logger {
     public async onTestFinished(testInfo: TestInfo) {
         if (testInfo.status !== "passed") {
             for (const id in this.logs) {
+                if (!this.logs[id]) continue;
                 await testInfo.attach(id, {
                     body: stripAnsi(this.logs[id]),
                     contentType: "text/plain",
