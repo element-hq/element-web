@@ -129,10 +129,10 @@ export const ThreadPanelHeader: React.FC<{
     );
 
     return (
-        <div className="mx_BaseCard_header_title">
+        <div className="mx_ThreadPanelHeader">
             <Tooltip label={_t("threads|mark_all_read")}>
-                <IconButton onClick={onMarkAllThreadsReadClick} size="24px">
-                    <MarkAllThreadsReadIcon />
+                <IconButton onClick={onMarkAllThreadsReadClick} size="28px">
+                    <MarkAllThreadsReadIcon height={20} width={20} />
                 </IconButton>
             </Tooltip>
             <div className="mx_ThreadPanel_vertical_separator" />
@@ -192,9 +192,7 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
             narrow={narrow}
         >
             <BaseCard
-                header={
-                    hasThreads && <ThreadPanelHeader filterOption={filterOption} setFilterOption={setFilterOption} />
-                }
+                header={_t("common|threads")}
                 id="thread-panel"
                 className="mx_ThreadPanel"
                 ariaLabelledBy="thread-panel-tab"
@@ -204,6 +202,7 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
                 ref={card}
                 closeButtonRef={closeButonRef}
             >
+                {hasThreads && <ThreadPanelHeader filterOption={filterOption} setFilterOption={setFilterOption} />}
                 {card.current && <Measured sensor={card.current} onMeasurement={setNarrow} />}
                 {timelineSet ? (
                     <TimelinePanel
