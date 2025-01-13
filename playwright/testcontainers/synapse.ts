@@ -17,7 +17,7 @@ import { Credentials } from "../plugins/homeserver";
 import { deepCopy } from "../plugins/utils/object.ts";
 import { HomeserverContainer, StartedHomeserverContainer } from "./HomeserverContainer.ts";
 import { StartedMatrixAuthenticationServiceContainer } from "./mas.ts";
-import { Api, ClientServerApi, Verb } from "./utils.ts";
+import { Api, ClientServerApi, Verb } from "../plugins/utils/api.ts";
 
 const TAG = "develop@sha256:b69222d98abe9625d46f5d3cb01683d5dc173ae339215297138392cfeec935d9";
 
