@@ -108,7 +108,6 @@ test.describe("Sliding Sync", () => {
         await page.getByRole("menuitemradio", { name: "A-Z" }).dispatchEvent("click");
         await expect(page.locator(".mx_StyledRadioButton_checked").getByText("A-Z")).toBeVisible();
 
-        await page.pause();
         await checkOrder(["Apple", "Orange", "Pineapple", "Test Room"], page);
     });
 

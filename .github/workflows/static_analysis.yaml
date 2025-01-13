@@ -132,9 +132,3 @@ jobs:
 
             - name: Run linter
               run: "yarn run lint:knip"
-
-            - name: Install Deps
-              run: "scripts/layered.sh"
-
-            - name: Dead Code Analysis
-              run: "yarn run analyse:unused-exports"

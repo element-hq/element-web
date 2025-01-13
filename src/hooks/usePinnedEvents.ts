@@ -154,7 +154,7 @@ async function fetchPinnedEvent(room: Room, pinnedEventId: string, cli: MatrixCl
         const senderUserId = event.getSender();
         if (senderUserId && PinningUtils.isUnpinnable(event)) {
             // Inject sender information
-            event.sender = room.getMember(senderUserId);
+            event.setMetadata(room.currentState, false);
             // Also inject any edits we've found
             if (edit) event.makeReplaced(edit);
 
