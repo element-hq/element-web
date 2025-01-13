@@ -9,7 +9,7 @@ import { APIRequestContext } from "playwright-core";
 import { KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 
 import { HomeserverInstance } from "../plugins/homeserver";
-import { ClientServerApi } from "../testcontainers/utils.ts";
+import { ClientServerApi } from "../plugins/utils/api.ts";
 
 /**
  * A small subset of the Client-Server API used to manipulate the state of the
