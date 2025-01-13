@@ -237,7 +237,8 @@ export class DendriteContainer extends GenericContainer implements HomeserverCon
     }
 
     public withMatrixAuthenticationService(mas?: StartedMatrixAuthenticationServiceContainer): this {
-        throw new Error("Dendrite does not support MAS.");
+        if (mas) throw new Error("Dendrite does not support MAS.");
+        return this;
     }
 
     public override async start(): Promise<StartedDendriteContainer> {
