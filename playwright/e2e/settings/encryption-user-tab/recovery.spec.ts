@@ -117,7 +117,7 @@ test.describe("Recovery section in Encryption tab", () => {
 
         await app.closeDialog();
         // Check that the current device is connected to key backup and the backup version is the expected one
-        await checkDeviceIsConnectedKeyBackup(page, "2", true);
+        await checkDeviceIsConnectedKeyBackup(page, "1", true);
     });
 
     // Test what happens if the cross-signing secrets are in secret storage but are not cached in the local DB.

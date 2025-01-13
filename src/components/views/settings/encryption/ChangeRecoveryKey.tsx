@@ -123,7 +123,6 @@ export function ChangeRecoveryKey({
                             // when we will try to access the secret storage during the bootstrap
                             await withSecretStorageKeyCache(() =>
                                 crypto.bootstrapSecretStorage({
-                                    setupNewKeyBackup: !userHasRecoveryKey,
                                     setupNewSecretStorage: true,
                                     createSecretStorageKey: async () => recoveryKey,
                                 }),
