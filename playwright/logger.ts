@@ -26,6 +26,7 @@ export class Logger {
     }
 
     public async onTestStarted(context: BrowserContext) {
+        this.pages = [];
         for (const id in this.logs) {
             if (id.startsWith("page-")) {
                 delete this.logs[id];
