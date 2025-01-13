@@ -133,7 +133,7 @@ export const test = base.extend<{}, Services>({
 
     context: async ({ logger, context, request, homeserver }, use, testInfo) => {
         homeserver.setRequest(request);
-        await logger.onTestStarted(testInfo);
+        await logger.onTestStarted(context);
         await use(context);
         await logger.onTestFinished(testInfo);
     },

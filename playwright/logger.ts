@@ -25,7 +25,15 @@ export class Logger {
         };
     }
 
-    public attachToContext(context: BrowserContext) {
+    public async onTestStarted(context: BrowserContext) {
+        for (const id in this.logs) {
+            if (id.startsWith("page-")) {
+                delete this.logs[id];
+            } else {
+                this.logs[id] = "";
+            }
+        }
+
         context.on("console", (msg) => {
             const page = msg.page();
             let pageIdx = this.pages.indexOf(page);
@@ -38,12 +46,6 @@ export class Logger {
             const text = msg.text();
             this.logs[`page-${pageIdx}`] += `${type}: ${text}\n`;
         });
-    }
-
-    public async onTestStarted(testInfo: TestInfo) {
-        for (const id in this.logs) {
-            this.logs[id] = "";
-        }
     }
 
     public async onTestFinished(testInfo: TestInfo) {
