@@ -145,6 +145,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
               data-type="round"
               role="presentation"
               style="--cpd-avatar-size: 32px;"
+              title="@alice:example.org"
             >
               a
             </span>
@@ -222,6 +223,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
               data-type="round"
               role="presentation"
               style="--cpd-avatar-size: 32px;"
+              title="@alice:example.org"
             >
               a
             </span>
@@ -364,6 +366,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
               data-type="round"
               role="presentation"
               style="--cpd-avatar-size: 32px;"
+              title="@alice:example.org"
             >
               a
             </span>
@@ -441,6 +444,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
               data-type="round"
               role="presentation"
               style="--cpd-avatar-size: 32px;"
+              title="@alice:example.org"
             >
               a
             </span>

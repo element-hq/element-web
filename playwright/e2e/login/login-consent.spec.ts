@@ -105,6 +105,9 @@ test.use({
             ...credentials,
             displayName,
         });
+
+        // Restart the homeserver to wipe its in-memory db so we can reuse the same user ID without cross-signing prompts
+        await homeserver.restart();
     },
 });
 
