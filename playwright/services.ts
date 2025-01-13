@@ -15,6 +15,7 @@ import { Logger } from "./logger.ts";
 import { StartedMatrixAuthenticationServiceContainer } from "./testcontainers/mas.ts";
 import { HomeserverContainer, StartedHomeserverContainer } from "./testcontainers/HomeserverContainer.ts";
 import { MailhogContainer, StartedMailhogContainer } from "./testcontainers/mailhog.ts";
+import { OAuthServer } from "./plugins/oauth_server";
 
 interface TestFixtures {
     mailhogClient: mailhog.API;
@@ -30,7 +31,10 @@ export interface Services {
     synapseConfigOptions: SynapseConfigOptions;
     _homeserver: HomeserverContainer<any>;
     homeserver: StartedHomeserverContainer;
+    // Set in masHomeserver only
     mas?: StartedMatrixAuthenticationServiceContainer;
+    // Set in legacyOAuthHomeserver only
+    oAuthServer?: OAuthServer;
 }
 
 export const test = base.extend<TestFixtures, Services>({
