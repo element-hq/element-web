@@ -603,7 +603,12 @@ test.describe("Timeline", () => {
                 await messageEdit(page);
 
                 // Click timestamp to highlight hidden event line
-                await page.locator(".mx_RoomView_body .mx_EventTile_info .mx_MessageTimestamp").click();
+                const timestamp = page.locator(".mx_RoomView_body .mx_EventTile_info a", {
+                    has: page.locator(".mx_MessageTimestamp"),
+                });
+                // wait for the remote echo otherwise we get an error modal due to a 404 on the /event/ API
+                await expect(timestamp).not.toHaveAttribute("src", /~!/);
+                await timestamp.click();
 
                 // should not add inline start padding to a hidden event line on IRC layout
                 await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
