@@ -30,6 +30,7 @@ test.describe("Room Directory", () => {
             // First add a local address `gaming`
             const localAddresses = page.locator(".mx_SettingsFieldset", { hasText: "Local Addresses" });
             await localAddresses.getByRole("textbox").fill("gaming");
+            await expect(page.getByText("This address is available to use")).toBeVisible();
             await localAddresses.getByRole("button", { name: "Add" }).click();
             await expect(localAddresses.getByText("#gaming:localhost")).toHaveClass("mx_EditableItem_item");
 
