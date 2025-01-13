@@ -48,6 +48,7 @@ jobs:
         outputs:
             num-runners: ${{ env.NUM_RUNNERS }}
             runners-matrix: ${{ steps.runner-vars.outputs.matrix }}
+            docker-cache-key: ${{ steps.runner-vars.outputs.docker-cache-key }}
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
@@ -80,6 +81,12 @@ jobs:
               run: |
                   yarn build
 
+            # Heuristic for calculating a cache key which is based on all images we pass to testcontainers
+            - name: Calculate docker cache key
+              run: |
+                  grep -hr "Container(\"" --exclude-dir=snapshots --exclude-dir=sample-files playwright >> _docker_cache_key
+                  grep -hr -C1 "super(" playwright/testcontainers/ >> _docker_cache_key
+
             - name: Upload Artifact
               uses: actions/upload-artifact@v4
               with:
@@ -90,11 +97,14 @@ jobs:
             - name: Calculate runner variables
               id: runner-vars
               uses: actions/github-script@v7
+              env:
+                  DOCKER_CACHE_KEY: ${{ hashFiles('_docker_cache_key') }}
               with:
                   script: |
                       const numRunners = parseInt(process.env.NUM_RUNNERS, 10);
                       const matrix = Array.from({ length: numRunners }, (_, i) => i + 1);
                       core.setOutput("matrix", JSON.stringify(matrix));
+                      core.setOutput("docker-cache-key", process.env.DOCKER_CACHE_KEY);
 
     playwright:
         name: "Run Tests [${{ matrix.project }}] ${{ matrix.runner }}/${{ needs.build.outputs.num-runners }}"
@@ -163,6 +173,11 @@ jobs:
               # Some WebKit dependencies seem to lay outside the cache and will need to be installed separately
               if: matrix.project == 'WebKit' && steps.playwright-cache.outputs.cache-hit == 'true'
               run: yarn playwright install-deps webkit
+
+            - name: Docker image cache
+              uses: ScribeMD/docker-cache@fb28c93772363301b8d0a6072ce850224b73f74e # 0.5.0
+              with:
+                  key: ${{ needs.build.outputs.docker-cache-key }}
 
             # We skip tests tagged with @mergequeue when running on PRs, but run them in MQ and everywhere else
             - name: Run Playwright tests

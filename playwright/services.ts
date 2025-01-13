@@ -50,7 +50,7 @@ export const test = base.extend<{}, Services>({
     ],
     postgres: [
         async ({ logger, network }, use) => {
-            const container = await new PostgreSqlContainer()
+            const container = await new PostgreSqlContainer("postgres:13.3-alpine")
                 .withNetwork(network)
                 .withNetworkAliases("postgres")
                 .withLogConsumer(logger.getConsumer("postgres"))

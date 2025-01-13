@@ -17,8 +17,6 @@ import { Credentials } from "../plugins/homeserver";
 import { deepCopy } from "../plugins/utils/object.ts";
 import { HomeserverContainer, StartedHomeserverContainer } from "./HomeserverContainer.ts";
 
-const TAG = "develop@sha256:b69222d98abe9625d46f5d3cb01683d5dc173ae339215297138392cfeec935d9";
-
 const DEFAULT_CONFIG = {
     server_name: "localhost",
     public_baseurl: "", // set by start method
@@ -144,7 +142,9 @@ export class SynapseContainer extends GenericContainer implements HomeserverCont
     private config: typeof DEFAULT_CONFIG;
 
     constructor() {
-        super(`ghcr.io/element-hq/synapse:${TAG}`);
+        super(
+            `ghcr.io/element-hq/synapse:develop@sha256:b69222d98abe9625d46f5d3cb01683d5dc173ae339215297138392cfeec935d9`,
+        );
 
         this.config = deepCopy(DEFAULT_CONFIG);
         this.config.registration_shared_secret = randB64Bytes(16);
