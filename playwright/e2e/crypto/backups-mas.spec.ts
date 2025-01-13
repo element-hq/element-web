@@ -19,19 +19,19 @@ test.use(masHomeserver);
 test.describe("Encryption state after registration", () => {
     test.skip(isDendrite, "does not yet support MAS");
 
-    test("Key backup is enabled by default", async ({ page, mailhogClient, app }) => {
+    test("Key backup is enabled by default", async ({ page, mailhogClient, app }, testInfo) => {
         await page.goto("/#/login");
         await page.getByRole("button", { name: "Continue" }).click();
-        await registerAccountMas(page, mailhogClient, "alice", "alice@email.com", "Pa$sW0rD!");
+        await registerAccountMas(page, mailhogClient, `alice_${testInfo.testId}`, "alice@email.com", "Pa$sW0rD!");
 
         await app.settings.openUserSettings("Security & Privacy");
         await expect(page.getByText("This session is backing up your keys.")).toBeVisible();
     });
 
-    test("user is prompted to set up recovery", async ({ page, mailhogClient, app }) => {
+    test("user is prompted to set up recovery", async ({ page, mailhogClient, app }, testInfo) => {
         await page.goto("/#/login");
         await page.getByRole("button", { name: "Continue" }).click();
-        await registerAccountMas(page, mailhogClient, "alice", "alice@email.com", "Pa$sW0rD!");
+        await registerAccountMas(page, mailhogClient, `alice_${testInfo.testId}`, "alice@email.com", "Pa$sW0rD!");
 
         await page.getByRole("button", { name: "Add room" }).click();
         await page.getByRole("menuitem", { name: "New room" }).click();
@@ -45,8 +45,13 @@ test.describe("Encryption state after registration", () => {
 test.describe("Key backup reset from elsewhere", () => {
     test.skip(isDendrite, "does not yet support MAS");
 
-    test("Key backup is disabled when reset from elsewhere", async ({ page, mailhogClient, request, homeserver }) => {
-        const testUsername = "alice";
+    test("Key backup is disabled when reset from elsewhere", async ({
+        page,
+        mailhogClient,
+        request,
+        homeserver,
+    }, testInfo) => {
+        const testUsername = `alice_${testInfo.testId}`;
         const testPassword = "Pa$sW0rD!";
 
         // there's a delay before keys are uploaded so the error doesn't appear immediately: use a fake
@@ -62,8 +67,7 @@ test.describe("Key backup reset from elsewhere", () => {
         await page.getByRole("textbox", { name: "Name" }).fill("test room");
         await page.getByRole("button", { name: "Create room" }).click();
 
-        // @ts-ignore - this runs in the browser scope where mxMatrixClientPeg is a thing. Here, it is not.
-        const accessToken = await page.evaluate(() => mxMatrixClientPeg.get().getAccessToken());
+        const accessToken = await page.evaluate(() => window.mxMatrixClientPeg.get().getAccessToken());
 
         const csAPI = new TestClientServerAPI(request, homeserver, accessToken);
 

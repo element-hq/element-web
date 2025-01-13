@@ -15,10 +15,11 @@ import { Logger } from "./logger.ts";
 import { StartedMatrixAuthenticationServiceContainer } from "./testcontainers/mas.ts";
 import { HomeserverContainer, StartedHomeserverContainer } from "./testcontainers/HomeserverContainer.ts";
 import { MailhogContainer, StartedMailhogContainer } from "./testcontainers/mailhog.ts";
+import { OAuthServer } from "./plugins/oauth_server";
 import { DendriteContainer, PineconeContainer } from "./testcontainers/dendrite.ts";
 import { HomeserverType } from "./plugins/homeserver";
 
-interface TestFixtures {
+export interface TestFixtures {
     mailhogClient: mailhog.API;
 }
 
@@ -32,6 +33,8 @@ export interface Services {
     _homeserver: HomeserverContainer<any>;
     homeserver: StartedHomeserverContainer;
     mas?: StartedMatrixAuthenticationServiceContainer;
+    // Set in legacyOAuthHomeserver only
+    oAuthServer?: OAuthServer;
 }
 
 export interface Options {
@@ -134,6 +137,7 @@ export const test = base.extend<TestFixtures, Services & Options>({
                 .withNetwork(network)
                 .withNetworkAliases("homeserver")
                 .withLogConsumer(logger.getConsumer(homeserverType))
+                .withMatrixAuthenticationService(mas)
                 .start();
 
             await use(container);
@@ -151,15 +155,15 @@ export const test = base.extend<TestFixtures, Services & Options>({
         { scope: "worker" },
     ],
 
-    context: async ({ homeserverType, synapseConfigOptions, logger, context, request, homeserver }, use, testInfo) => {
+    context: async ({ homeserverType, synapseConfigOptions, logger, context, request, homeserver, mailhogClient }, use, testInfo) => {
         testInfo.skip(
             !(homeserver instanceof SynapseContainer) && Object.keys(synapseConfigOptions).length > 0,
             `Test specifies Synapse config options so is unsupported with ${homeserverType}`,
         );
-
         homeserver.setRequest(request);
         await logger.onTestStarted(context);
         await use(context);
         await logger.onTestFinished(testInfo);
+        await homeserver.onTestFinished(testInfo);
     },
 });

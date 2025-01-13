@@ -92,6 +92,11 @@ test.use({
             },
         },
     },
+    context: async ({ context, homeserver }, use) => {
+        // Restart the homeserver to wipe its in-memory db so we can reuse the same user ID without cross-signing prompts
+        await homeserver.restart();
+        await use(context);
+    },
     credentials: async ({ context, homeserver }, use) => {
         const displayName = "Dave";
         const credentials = await homeserver.registerUser(username, password, displayName);

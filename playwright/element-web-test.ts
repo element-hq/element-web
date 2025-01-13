@@ -49,7 +49,7 @@ const CONFIG_JSON: Partial<IConfigOptions> = {
     },
 };
 
-interface CredentialsWithDisplayName extends Credentials {
+export interface CredentialsWithDisplayName extends Credentials {
     displayName: string;
 }
 

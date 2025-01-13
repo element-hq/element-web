@@ -12,13 +12,25 @@ import { OAuthServer } from "../../oauth_server";
 import { Fixtures } from "../../../element-web-test.ts";
 
 export const legacyOAuthHomeserver: Fixtures = {
-    _homeserver: [
-        async ({ _homeserver: container }, use) => {
+    oAuthServer: [
+        // eslint-disable-next-line no-empty-pattern
+        async ({}, use) => {
             const server = new OAuthServer();
-            const port = server.start();
-
+            await use(server);
+            server.stop();
+        },
+        { scope: "worker" },
+    ],
+    context: async ({ context, oAuthServer }, use, testInfo) => {
+        testInfo.skip(homeserverType !== "synapse", "does not yet support OIDC");
+        oAuthServer.onTestStarted(testInfo);
+        await use(context);
+    },
+    _homeserver: [
+        async ({ oAuthServer, _homeserver: homeserver }, use) => {
+            const port = oAuthServer.start();
             await TestContainers.exposeHostPorts(port);
-            container.withConfig({
+            homeserver.withConfig({
                 oidc_providers: [
                     {
                         idp_id: "test",
@@ -42,14 +54,9 @@ export const legacyOAuthHomeserver: Fixtures = {
                     },
                 ],
             });
-            await use(container);
-            server.stop();
+
+            await use(homeserver);
         },
         { scope: "worker" },
     ],
-
-    context: async ({ homeserverType, context }, use, testInfo) => {
-        testInfo.skip(homeserverType !== "synapse", "does not yet support MAS");
-        await use(context);
-    },
 };

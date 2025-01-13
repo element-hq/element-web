@@ -41,6 +41,7 @@ test.describe("General room settings tab", () => {
         // 1. Set the room-address to be a really long string
         const longString = "abcasdhjasjhdaj1jh1asdhasjdhajsdhjavhjksd".repeat(4);
         await settings.locator("#roomAliases input[label='Room address']").fill(longString);
+        await expect(page.getByText("This address is available to use")).toBeVisible();
         await settings.locator("#roomAliases").getByText("Add", { exact: true }).click();
 
         // 2. wait for the new setting to apply ...
