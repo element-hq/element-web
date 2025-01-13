@@ -44,7 +44,6 @@ class StaleScreenshotReporter implements Reporter {
 
     public async onExit(): Promise<void> {
         if (this.failing) return;
-
         const screenshotFiles = new Set(await glob(`**/*.png`, { cwd: snapshotRoot }));
         for (const screenshot of screenshotFiles) {
             if (screenshot.split("-").at(-1) !== "linux.png") {
