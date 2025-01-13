@@ -170,10 +170,12 @@ const DEFAULT_CONFIG = {
     },
     rate_limiting: {
         login: {
-            burst: 1000,
+            burst: 10,
+            per_second: 1,
         },
         registration: {
-            burst: 1000,
+            burst: 10,
+            per_second: 1,
         },
     },
 };
