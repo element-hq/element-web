@@ -20,8 +20,8 @@ test.describe("1:1 chat room", () => {
 
     test.use({
         displayName: "Jeff",
-        user2: async ({ homeserver }, use) => {
-            const credentials = await homeserver.registerUser("user1234", "p4s5W0rD", "Timmy");
+        user2: async ({ homeserver }, use, testInfo) => {
+            const credentials = await homeserver.registerUser(`user2_${testInfo.testId}`, "p4s5W0rD", "Timmy");
             await use(credentials);
         },
     });

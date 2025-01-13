@@ -11,7 +11,7 @@ Please see LICENSE files in the repository root for full details.
  * Only intended to run from within GitHub Actions
  */
 
-import type { Reporter, Suite, TestCase, FullConfig } from "@playwright/test/reporter";
+import type { Reporter, TestCase } from "@playwright/test/reporter";
 
 const REPO = "element-hq/element-web";
 const LABEL = "Z-Flaky-Test";
@@ -25,20 +25,17 @@ type PaginationLinks = {
 };
 
 class FlakyReporter implements Reporter {
-    private flakes = new Set<string>();
-    private ignoreSuite = false;
-
-    public onBegin(config: FullConfig, suite: Suite) {
-        const projectName = suite.project().name;
-        // Ignores flakes on Dendrite and Pinecone as they have their own flakes we do not track
-        this.ignoreSuite = ["Dendrite", "Pinecone"].includes(projectName);
-    }
+    private flakes = new Map<string, TestCase[]>();
 
     public onTestEnd(test: TestCase): void {
-        if (this.ignoreSuite) return;
+        // Ignores flakes on Dendrite and Pinecone as they have their own flakes we do not track
+        if (["Dendrite", "Pinecone"].includes(test.parent.project()?.name)) return;
         const title = `${test.location.file.split("playwright/e2e/")[1]}: ${test.title}`;
         if (test.outcome() === "flaky") {
-            this.flakes.add(title);
+            if (!this.flakes.has(title)) {
+                this.flakes.set(title, []);
+            }
+            this.flakes.get(title).push(test);
         }
     }
 
@@ -105,11 +102,13 @@ class FlakyReporter implements Reporter {
         if (!GITHUB_TOKEN) return;
 
         const issues = await this.getAllIssues();
-        for (const flake of this.flakes) {
+        for (const [flake, results] of this.flakes) {
             const title = ISSUE_TITLE_PREFIX + "`" + flake + "`";
             const existingIssue = issues.find((issue) => issue.title === title);
             const headers = { Authorization: `Bearer ${GITHUB_TOKEN}` };
             const body = `${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}`;
+
+            const labels = [LABEL, ...results.map((test) => test.parent.project()?.name).filter(Boolean)];
 
             if (existingIssue) {
                 console.log(`Found issue ${existingIssue.number} for ${flake}, adding comment...`);
@@ -118,6 +117,11 @@ class FlakyReporter implements Reporter {
                     method: "PATCH",
                     headers,
                     body: JSON.stringify({ state: "open" }),
+                });
+                await fetch(`${existingIssue.url}/labels`, {
+                    method: "POST",
+                    headers,
+                    body: JSON.stringify({ labels }),
                 });
                 await fetch(`${existingIssue.url}/comments`, {
                     method: "POST",
@@ -132,7 +136,7 @@ class FlakyReporter implements Reporter {
                     body: JSON.stringify({
                         title,
                         body,
-                        labels: [LABEL],
+                        labels: [...labels],
                     }),
                 });
             }

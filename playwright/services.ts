@@ -7,24 +7,27 @@ Please see LICENSE files in the repository root for full details.
 
 import { test as base } from "@playwright/test";
 import mailhog from "mailhog";
-import { GenericContainer, Network, StartedNetwork, StartedTestContainer, Wait } from "testcontainers";
+import { Network, StartedNetwork } from "testcontainers";
 import { PostgreSqlContainer, StartedPostgreSqlContainer } from "@testcontainers/postgresql";
 
 import { SynapseConfigOptions, SynapseContainer } from "./testcontainers/synapse.ts";
-import { ContainerLogger } from "./testcontainers/utils.ts";
+import { Logger } from "./logger.ts";
 import { StartedMatrixAuthenticationServiceContainer } from "./testcontainers/mas.ts";
 import { HomeserverContainer, StartedHomeserverContainer } from "./testcontainers/HomeserverContainer.ts";
+import { MailhogContainer, StartedMailhogContainer } from "./testcontainers/mailhog.ts";
 import { DendriteContainer, PineconeContainer } from "./testcontainers/dendrite.ts";
 import { HomeserverType } from "./plugins/homeserver";
 
+interface TestFixtures {
+    mailhogClient: mailhog.API;
+}
+
 export interface Services {
-    logger: ContainerLogger;
+    logger: Logger;
 
     network: StartedNetwork;
     postgres: StartedPostgreSqlContainer;
-
-    mailhog: StartedTestContainer;
-    mailhogClient: mailhog.API;
+    mailhog: StartedMailhogContainer;
 
     _homeserver: HomeserverContainer<any>;
     homeserver: StartedHomeserverContainer;
@@ -36,11 +39,11 @@ export interface Options {
     homeserverType: HomeserverType;
 }
 
-export const test = base.extend<{}, Services & Options>({
+export const test = base.extend<TestFixtures, Services & Options>({
     logger: [
         // eslint-disable-next-line no-empty-pattern
-        async ({}, use, testInfo) => {
-            const logger = new ContainerLogger();
+        async ({}, use) => {
+            const logger = new Logger();
             await use(logger);
         },
         { scope: "worker" },
@@ -85,25 +88,20 @@ export const test = base.extend<{}, Services & Options>({
 
     mailhog: [
         async ({ logger, network }, use) => {
-            const container = await new GenericContainer("mailhog/mailhog:latest")
+            const container = await new MailhogContainer()
                 .withNetwork(network)
                 .withNetworkAliases("mailhog")
-                .withExposedPorts(8025)
                 .withLogConsumer(logger.getConsumer("mailhog"))
-                .withWaitStrategy(Wait.forListeningPorts())
                 .start();
             await use(container);
             await container.stop();
         },
         { scope: "worker" },
     ],
-    mailhogClient: [
-        async ({ mailhog: container }, use) => {
-            const client = mailhog({ host: container.getHost(), port: container.getMappedPort(8025) });
-            await use(client);
-        },
-        { scope: "worker" },
-    ],
+    mailhogClient: async ({ mailhog: container }, use) => {
+        await use(container.client);
+        await container.client.deleteAll();
+    },
 
     synapseConfigOptions: [{}, { option: true, scope: "worker" }],
     homeserverType: ["synapse", { option: true, scope: "worker" }],
@@ -160,8 +158,8 @@ export const test = base.extend<{}, Services & Options>({
         );
 
         homeserver.setRequest(request);
-        await logger.testStarted(testInfo);
+        await logger.onTestStarted(context);
         await use(context);
-        await logger.testFinished(testInfo);
+        await logger.onTestFinished(testInfo);
     },
 });

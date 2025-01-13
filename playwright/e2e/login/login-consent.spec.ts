@@ -78,6 +78,9 @@ async function login(page: Page, homeserver: HomeserverInstance, credentials: Cr
     await page.getByRole("button", { name: "Sign in" }).click();
 }
 
+// This test suite uses the same userId for all tests in the suite
+// due to DEVICE_SIGNING_KEYS_BODY being specific to that userId,
+// so we restart the Synapse container to make it forget everything.
 test.use(consentHomeserver);
 test.use({
     config: {
@@ -98,6 +101,9 @@ test.use({
             ...credentials,
             displayName,
         });
+
+        // Restart the homeserver to wipe its in-memory db so we can reuse the same user ID without cross-signing prompts
+        await homeserver.restart();
     },
 });
 
