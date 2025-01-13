@@ -23,7 +23,7 @@ test.describe("Share dialog", () => {
 
         const dialog = page.getByRole("dialog", { name: "Share room" });
         await expect(dialog.getByText(`https://matrix.to/#/${room.roomId}`)).toBeVisible();
-        expect(dialog).toMatchScreenshot("share-dialog-room.png", {
+        await expect(dialog).toMatchScreenshot("share-dialog-room.png", {
             // QRCode and url changes at every run
             mask: [page.locator(".mx_QRCode"), page.locator(".mx_ShareDialog_top > span")],
         });
@@ -40,7 +40,7 @@ test.describe("Share dialog", () => {
 
         const dialog = page.getByRole("dialog", { name: "Share User" });
         await expect(dialog.getByText(`https://matrix.to/#/${user.userId}`)).toBeVisible();
-        expect(dialog).toMatchScreenshot("share-dialog-user.png", {
+        await expect(dialog).toMatchScreenshot("share-dialog-user.png", {
             // QRCode changes at every run
             mask: [page.locator(".mx_QRCode")],
         });
@@ -57,7 +57,7 @@ test.describe("Share dialog", () => {
 
         const dialog = page.getByRole("dialog", { name: "Share Room Message" });
         await expect(dialog.getByRole("checkbox", { name: "Link to selected message" })).toBeChecked();
-        expect(dialog).toMatchScreenshot("share-dialog-event.png", {
+        await expect(dialog).toMatchScreenshot("share-dialog-event.png", {
             // QRCode and url changes at every run
             mask: [page.locator(".mx_QRCode"), page.locator(".mx_ShareDialog_top > span")],
         });

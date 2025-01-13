@@ -1578,7 +1578,6 @@
     "member_list": {
         "filter_placeholder": "Filtrera rumsmedlemmar",
         "invite_button_no_perms_tooltip": "Du är inte behörig att bjuda in användare",
-        "invited_list_heading": "Inbjuden",
         "power_label": "%(userName)s (behörighet %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Rumsmedlemmar",
@@ -1731,7 +1730,6 @@
         "custom_level": "Anpassad nivå",
         "default": "Standard",
         "label": "Behörighetsnivå",
-        "mod": "Mod",
         "moderator": "Moderator",
         "restricted": "Begränsad"
     },
@@ -3061,7 +3059,6 @@
         "invite": "Bjud in folk",
         "invite_description": "Bjud in med e-postadress eller användarnamn",
         "invite_link": "Skapa inbjudningslänk",
-        "invite_this_space": "Bjud in till det här utrymmet",
         "joining_space": "Går med",
         "landing_welcome": "Välkommen till <name/>",
         "leave_dialog_action": "Lämna utrymmet",

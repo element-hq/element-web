@@ -6,20 +6,35 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Fixtures } from "@playwright/test";
+import { Fixtures, PlaywrightTestArgs } from "@playwright/test";
 import { TestContainers } from "testcontainers";
 
-import { Services } from "../../../services.ts";
+import { Services, TestFixtures } from "../../../services.ts";
 import { OAuthServer } from "../../oauth_server";
 
-export const legacyOAuthHomeserver: Fixtures<{}, Services> = {
-    _homeserver: [
-        async ({ _homeserver: container }, use) => {
+export const legacyOAuthHomeserver: Fixtures<
+    TestFixtures & PlaywrightTestArgs,
+    Services,
+    TestFixtures & PlaywrightTestArgs
+> = {
+    oAuthServer: [
+        // eslint-disable-next-line no-empty-pattern
+        async ({}, use) => {
             const server = new OAuthServer();
-            const port = server.start();
-
+            await use(server);
+            server.stop();
+        },
+        { scope: "worker" },
+    ],
+    context: async ({ context, oAuthServer }, use, testInfo) => {
+        oAuthServer.onTestStarted(testInfo);
+        await use(context);
+    },
+    _homeserver: [
+        async ({ oAuthServer, _homeserver: homeserver }, use) => {
+            const port = oAuthServer.start();
             await TestContainers.exposeHostPorts(port);
-            container.withConfig({
+            homeserver.withConfig({
                 oidc_providers: [
                     {
                         idp_id: "test",
@@ -43,8 +58,8 @@ export const legacyOAuthHomeserver: Fixtures<{}, Services> = {
                     },
                 ],
             });
-            await use(container);
-            server.stop();
+
+            await use(homeserver);
         },
         { scope: "worker" },
     ],

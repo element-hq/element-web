@@ -66,7 +66,6 @@
         "test:playwright:screenshots:build": "docker build playwright -t element-web-playwright",
         "test:playwright:screenshots:run": "docker run --rm --network host -e BASE_URL -e CI -v $(pwd):/work/ -v $(node -e 'console.log(require(`path`).dirname(require.resolve(`matrix-js-sdk/package.json`)))'):/work/node_modules/matrix-js-sdk -v /var/run/docker.sock:/var/run/docker.sock -v /tmp/:/tmp/ -it element-web-playwright --grep @screenshot --project=Chrome",
         "coverage": "yarn test --coverage",
-        "analyse:unused-exports": "ts-node ./scripts/analyse_unused_exports.ts",
         "analyse:webpack-bundles": "webpack-bundle-analyzer webpack-stats.json webapp",
         "update:jitsi": "curl -s https://meet.element.io/libs/external_api.min.js > ./res/jitsi_external_api.min.js"
     },
@@ -289,7 +288,6 @@
         "terser-webpack-plugin": "^5.3.9",
         "testcontainers": "^10.16.0",
         "ts-node": "^10.9.1",
-        "ts-prune": "^0.10.3",
         "typescript": "5.7.2",
         "util": "^0.12.5",
         "web-streams-polyfill": "^4.0.0",

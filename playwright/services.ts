@@ -7,30 +7,37 @@ Please see LICENSE files in the repository root for full details.
 
 import { test as base } from "@playwright/test";
 import mailhog from "mailhog";
-import { GenericContainer, Network, StartedNetwork, StartedTestContainer, Wait } from "testcontainers";
+import { Network, StartedNetwork } from "testcontainers";
 import { PostgreSqlContainer, StartedPostgreSqlContainer } from "@testcontainers/postgresql";
 
 import { SynapseConfigOptions, SynapseContainer } from "./testcontainers/synapse.ts";
 import { ContainerLogger } from "./testcontainers/utils.ts";
 import { StartedMatrixAuthenticationServiceContainer } from "./testcontainers/mas.ts";
 import { HomeserverContainer, StartedHomeserverContainer } from "./testcontainers/HomeserverContainer.ts";
+import { MailhogContainer, StartedMailhogContainer } from "./testcontainers/mailhog.ts";
+import { OAuthServer } from "./plugins/oauth_server";
+
+export interface TestFixtures {
+    mailhogClient: mailhog.API;
+}
 
 export interface Services {
     logger: ContainerLogger;
 
     network: StartedNetwork;
     postgres: StartedPostgreSqlContainer;
-
-    mailhog: StartedTestContainer;
-    mailhogClient: mailhog.API;
+    mailhog: StartedMailhogContainer;
 
     synapseConfigOptions: SynapseConfigOptions;
     _homeserver: HomeserverContainer<any>;
     homeserver: StartedHomeserverContainer;
     mas?: StartedMatrixAuthenticationServiceContainer;
+
+    // Set in legacyOAuthHomeserver only
+    oAuthServer?: OAuthServer;
 }
 
-export const test = base.extend<{}, Services>({
+export const test = base.extend<TestFixtures, Services>({
     logger: [
         // eslint-disable-next-line no-empty-pattern
         async ({}, use) => {
@@ -79,24 +86,20 @@ export const test = base.extend<{}, Services>({
 
     mailhog: [
         async ({ logger, network }, use) => {
-            const container = await new GenericContainer("mailhog/mailhog:latest")
+            const container = await new MailhogContainer()
                 .withNetwork(network)
                 .withNetworkAliases("mailhog")
-                .withExposedPorts(8025)
                 .withLogConsumer(logger.getConsumer("mailhog"))
-                .withWaitStrategy(Wait.forListeningPorts())
                 .start();
             await use(container);
             await container.stop();
         },
         { scope: "worker" },
     ],
-    mailhogClient: [
-        async ({ mailhog: container }, use) => {
-            await use(mailhog({ host: container.getHost(), port: container.getMappedPort(8025) }));
-        },
-        { scope: "worker" },
-    ],
+    mailhogClient: async ({ mailhog: container }, use) => {
+        await use(container.client);
+        await container.client.deleteAll();
+    },
 
     synapseConfigOptions: [{}, { option: true, scope: "worker" }],
     _homeserver: [
@@ -114,6 +117,7 @@ export const test = base.extend<{}, Services>({
                 .withNetworkAliases("homeserver")
                 .withLogConsumer(logger.getConsumer("synapse"))
                 .withConfig(synapseConfigOptions)
+                .withMatrixAuthenticationService(mas)
                 .start();
 
             await use(container);
@@ -131,10 +135,12 @@ export const test = base.extend<{}, Services>({
         { scope: "worker" },
     ],
 
-    context: async ({ logger, context, request, homeserver }, use, testInfo) => {
+    context: async ({ logger, context, request, homeserver, mailhogClient }, use, testInfo) => {
         homeserver.setRequest(request);
         await logger.testStarted(testInfo);
         await use(context);
         await logger.testFinished(testInfo);
+        await homeserver.onTestFinished(testInfo);
+        await mailhogClient.deleteAll();
     },
 });

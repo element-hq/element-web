@@ -923,7 +923,6 @@
     },
     "member_list": {
         "filter_placeholder": "Filtruoti kambario dalyvius",
-        "invited_list_heading": "Pakviesta",
         "power_label": "%(userName)s (galia %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Kambario nariai",
@@ -1003,7 +1002,6 @@
         "custom_level": "Pritaikytas lygis",
         "default": "Numatytas",
         "label": "Galios lygis",
-        "mod": "Moderatorius",
         "moderator": "Moderatorius",
         "restricted": "Apribotas"
     },
@@ -1867,7 +1865,6 @@
         "invite": "Pakviesti žmonių",
         "invite_description": "Pakviesti su el. paštu arba naudotojo vardu",
         "invite_link": "Bendrinti pakvietimo nuorodą",
-        "invite_this_space": "Pakviesti į šią erdvę",
         "search_children": "Ieškoti %(spaceName)s"
     },
     "spaces": {

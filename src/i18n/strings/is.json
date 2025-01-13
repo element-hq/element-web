@@ -1237,7 +1237,6 @@
     },
     "member_list": {
         "filter_placeholder": "Sía meðlimi spjallrásar",
-        "invited_list_heading": "Boðið",
         "power_label": "%(userName)s (með völd sem %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Meðlimir spjallrásar",
@@ -1375,7 +1374,6 @@
         "custom_level": "Sérsniðið stig",
         "default": "Sjálfgefið",
         "label": "Stig valda",
-        "mod": "Umsjón",
         "moderator": "Umsjónarmaður",
         "restricted": "Takmarkað"
     },
@@ -2341,7 +2339,6 @@
         "invite": "Bjóða fólki",
         "invite_description": "Bjóða með tölvupóstfangi eða notandanafni",
         "invite_link": "Deila boðstengli",
-        "invite_this_space": "Bjóða inn á þetta svæði",
         "joining_space": "Geng í hópinn",
         "landing_welcome": "Velkomin í <name/>",
         "leave_dialog_action": "Yfirgefa svæði",

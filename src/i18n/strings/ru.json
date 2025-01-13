@@ -1497,7 +1497,6 @@
     "member_list": {
         "filter_placeholder": "Поиск по участникам",
         "invite_button_no_perms_tooltip": "У вас нет разрешения приглашать пользователей",
-        "invited_list_heading": "Приглашены",
         "power_label": "%(userName)s (уровень прав %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Участники комнаты",
@@ -1643,7 +1642,6 @@
         "custom_level": "Специальные права",
         "default": "По умолчанию",
         "label": "Уровень прав",
-        "mod": "Модератор",
         "moderator": "Модератор",
         "restricted": "Ограниченный пользователь"
     },
@@ -2876,7 +2874,6 @@
         "invite": "Пригласить людей",
         "invite_description": "Пригласить по электронной почте или имени пользователя",
         "invite_link": "Поделиться ссылкой на приглашение",
-        "invite_this_space": "Пригласить в это пространство",
         "joining_space": "Присоединение",
         "landing_welcome": "Добро пожаловать в <name/>",
         "leave_dialog_action": "Покинуть пространство",

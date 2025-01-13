@@ -1411,7 +1411,6 @@
     "member_list": {
         "filter_placeholder": "Filtrar miembros de la sala",
         "invite_button_no_perms_tooltip": "No tienes permisos para invitar usuarios",
-        "invited_list_heading": "Invitado",
         "power_label": "%(userName)s (nivel de permisos %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Miembros de la sala",
@@ -2654,7 +2653,6 @@
         "invite": "Invitar gente",
         "invite_description": "Invitar correos electrónicos o nombres de usuario",
         "invite_link": "Compartir enlace de invitación",
-        "invite_this_space": "Invitar al espacio",
         "joining_space": "Uniéndote",
         "landing_welcome": "Te damos la bienvenida a <name/>",
         "leave_dialog_action": "Salir del espacio",

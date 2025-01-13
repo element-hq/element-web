@@ -1463,7 +1463,6 @@
     "member_list": {
         "filter_placeholder": "Відфільтрувати учасників кімнати",
         "invite_button_no_perms_tooltip": "У вас немає дозволу запрошувати користувачів",
-        "invited_list_heading": "Запрошено",
         "power_label": "%(userName)s (повноваження %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Учасники кімнати",
@@ -1611,7 +1610,6 @@
         "custom_level": "Власний рівень",
         "default": "Типовий",
         "label": "Рівень повноважень",
-        "mod": "Модератор",
         "moderator": "Модератор",
         "restricted": "Обмежено"
     },
@@ -2815,7 +2813,6 @@
         "invite": "Запросити людей",
         "invite_description": "Запросити за допомогою е-пошти або імені користувача",
         "invite_link": "Надіслати запрошувальне посилання",
-        "invite_this_space": "Запросити до цього простору",
         "joining_space": "Приєднання",
         "landing_welcome": "Вітаємо у <name/>",
         "leave_dialog_action": "Вийти з простору",

@@ -1531,7 +1531,6 @@
     "member_list": {
         "filter_placeholder": "Filtrar integrantes da sala",
         "invite_button_no_perms_tooltip": "Não tens permissão para convidar utilizadores",
-        "invited_list_heading": "Convidada(o)",
         "power_label": "%(userName)s (nível de permissão %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Membros da sala",
@@ -1684,7 +1683,6 @@
         "custom_level": "Nível personalizado",
         "default": "Padrão",
         "label": "Nível de potência",
-        "mod": "Moderador",
         "moderator": "Moderador/a",
         "restricted": "Restrito"
     },
@@ -2987,7 +2985,6 @@
         "invite": "Convida pessoas",
         "invite_description": "Convidar com email ou nome de utilizador",
         "invite_link": "Partilhar a ligação de convite",
-        "invite_this_space": "Convida para este espaço",
         "joining_space": "Entrando...",
         "landing_welcome": "Bem-vindo(a) a(ao) <name/>",
         "leave_dialog_action": "Deixa espaço",
