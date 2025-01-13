@@ -160,7 +160,7 @@ export const test = base.extend<TestFixtures>({
         const displayName = testDisplayName ?? _.sample(names)!;
 
         const credentials = await homeserver.registerUser(`user_${testInfo.testId}`, password, displayName);
-        console.log(`Registered test user @user:localhost with displayname ${displayName}`);
+        console.log(`Registered test user ${credentials.userId} with displayname ${displayName}`);
 
         await use({
             ...credentials,
