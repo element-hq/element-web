@@ -62,8 +62,7 @@ test.describe("Key backup reset from elsewhere", () => {
         await page.getByRole("textbox", { name: "Name" }).fill("test room");
         await page.getByRole("button", { name: "Create room" }).click();
 
-        // @ts-ignore - this runs in the browser scope where mxMatrixClientPeg is a thing. Here, it is not.
-        const accessToken = await page.evaluate(() => mxMatrixClientPeg.get().getAccessToken());
+        const accessToken = await page.evaluate(() => window.mxMatrixClientPeg.get().getAccessToken());
 
         const csAPI = new TestClientServerAPI(request, homeserver, accessToken);
 

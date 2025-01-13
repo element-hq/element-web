@@ -47,6 +47,7 @@ test.describe("RightPanel", () => {
             // Set a local room address
             const localAddresses = page.locator(".mx_SettingsFieldset", { hasText: "Local Addresses" });
             await localAddresses.getByRole("textbox").fill(ROOM_ADDRESS_LONG);
+            await expect(page.getByText("This address is available to use")).toBeVisible();
             await localAddresses.getByRole("button", { name: "Add" }).click();
             await expect(localAddresses.getByText(`#${ROOM_ADDRESS_LONG}:localhost`)).toHaveClass(
                 "mx_EditableItem_item",

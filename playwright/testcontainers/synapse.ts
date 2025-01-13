@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { AbstractStartedContainer, GenericContainer, StartedTestContainer, Wait } from "testcontainers";
+import { AbstractStartedContainer, GenericContainer, RestartOptions, StartedTestContainer, Wait } from "testcontainers";
 import { APIRequestContext } from "@playwright/test";
 import crypto from "node:crypto";
 import * as YAML from "yaml";
@@ -237,6 +237,11 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
         private readonly registrationSharedSecret: string,
     ) {
         super(container);
+    }
+
+    public restart(options?: Partial<RestartOptions>): Promise<void> {
+        this.adminToken = undefined;
+        return super.restart(options);
     }
 
     public setRequest(request: APIRequestContext): void {
