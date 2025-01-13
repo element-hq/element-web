@@ -1109,6 +1109,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
         this.setStateForNewView({
             view: Views.WELCOME,
+            currentRoomId: null,
         });
         this.notifyNewScreen("welcome");
         ThemeController.isLogin = true;
@@ -1118,6 +1119,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private viewLogin(otherState?: any): void {
         this.setStateForNewView({
             view: Views.LOGIN,
+            currentRoomId: null,
             ...otherState,
         });
         this.notifyNewScreen("login");
@@ -1949,9 +1951,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     private setPageSubtitle(): void {
         const params: {
-            $brand: string,
-            $status: string,
-            $room_name: string|undefined,
+            $brand: string;
+            $status: string;
+            $room_name: string|undefined;
         } = {
             $brand: SdkConfig.get().brand,
             $status: this.subTitleStatus,
