@@ -156,7 +156,7 @@ export const test = base.extend<TestFixtures, Services & Options>({
         { scope: "worker" },
     ],
 
-    context: async ({ homeserverType, synapseConfigOptions, logger, context, request, homeserver, mailhogClient }, use, testInfo) => {
+    context: async ({ homeserverType, synapseConfigOptions, logger, context, request, homeserver }, use, testInfo) => {
         testInfo.skip(
             !(homeserver instanceof SynapseContainer) && Object.keys(synapseConfigOptions).length > 0,
             `Test specifies Synapse config options so is unsupported with ${homeserverType}`,
