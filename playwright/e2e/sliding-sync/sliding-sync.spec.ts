@@ -280,7 +280,7 @@ test.describe("Sliding Sync", () => {
         // now rescind the invite
         await bot.evaluate(
             async (client, { roomRescind, clientUserId }) => {
-                client.kick(roomRescind, clientUserId);
+                await client.kick(roomRescind, clientUserId);
             },
             { roomRescind, clientUserId },
         );
@@ -299,7 +299,7 @@ test.describe("Sliding Sync", () => {
             is_direct: true,
         });
         await app.client.evaluate(async (client, roomId) => {
-            client.setRoomTag(roomId, "m.favourite", { order: 0.5 });
+            await client.setRoomTag(roomId, "m.favourite", { order: 0.5 });
         }, roomId);
         await expect(page.getByRole("group", { name: "Favourites" }).getByText("Favourite DM")).toBeVisible();
         await expect(page.getByRole("group", { name: "People" }).getByText("Favourite DM")).not.toBeAttached();

@@ -171,7 +171,7 @@ export class Bot extends Client {
                 if (opts.autoAcceptInvites) {
                     cli.on(window.matrixcs.RoomMemberEvent.Membership, (event, member) => {
                         if (member.membership === "invite" && member.userId === cli.getUserId()) {
-                            cli.joinRoom(member.roomId);
+                            void cli.joinRoom(member.roomId);
                         }
                     });
                 }

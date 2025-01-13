@@ -52,7 +52,7 @@ test.describe("Manage Knocks", () => {
     });
 
     test("should deny knock using bar", async ({ page, app, bot, room }) => {
-        bot.knockRoom(room.roomId);
+        await bot.knockRoom(room.roomId);
 
         const roomKnocksBar = page.locator(".mx_RoomKnocksBar");
         await expect(roomKnocksBar.getByRole("heading", { name: "Asking to join" })).toBeVisible();

@@ -212,7 +212,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         /* on the bot side, wait for the verifier to exist ... */
         const verifier = await awaitVerifier(botVerificationRequest);
         // ... confirm ...
-        botVerificationRequest.evaluate((verificationRequest) => verificationRequest.verifier.verify());
+        void botVerificationRequest.evaluate((verificationRequest) => verificationRequest.verifier.verify());
         // ... and then check the emoji match
         await doTwoWaySasVerification(page, verifier);
 
