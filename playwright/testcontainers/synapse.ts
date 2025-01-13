@@ -244,7 +244,6 @@ export class SynapseContainer extends GenericContainer implements HomeserverCont
 
 export class StartedSynapseContainer extends AbstractStartedContainer implements StartedHomeserverContainer {
     protected adminTokenPromise?: Promise<string>;
-    protected _request?: APIRequestContext;
     protected readonly adminApi: Api;
     public readonly csApi: ClientServerApi;
 
@@ -263,13 +262,7 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
         return super.restart(options);
     }
 
-    public restart(options?: Partial<RestartOptions>): Promise<void> {
-        this.adminToken = undefined;
-        return super.restart(options);
-    }
-
     public setRequest(request: APIRequestContext): void {
-        this._request = request;
         this.csApi.setRequest(request);
         this.adminApi.setRequest(request);
     }
