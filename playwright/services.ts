@@ -31,8 +31,8 @@ export interface Services {
     synapseConfigOptions: SynapseConfigOptions;
     _homeserver: HomeserverContainer<any>;
     homeserver: StartedHomeserverContainer;
+    // Set in masHomeserver only
     mas?: StartedMatrixAuthenticationServiceContainer;
-
     // Set in legacyOAuthHomeserver only
     oAuthServer?: OAuthServer;
 }

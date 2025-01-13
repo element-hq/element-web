@@ -123,7 +123,7 @@ test.describe("Landmark navigation tests", () => {
         await expect(page.getByText("Bob joined the room")).toBeVisible();
 
         // Close the room
-        page.goto("/#/home");
+        await page.goto("/#/home");
 
         // Pressing Control+F6 will first focus the space button
         await page.keyboard.press("ControlOrMeta+F6");

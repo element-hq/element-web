@@ -150,7 +150,7 @@ test.describe("Stickers", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         const { content_uri: contentUri } = await app.client.uploadContent(STICKER_IMAGE, { type: "image/png" });
         const widgetHtml = getWidgetHtml(contentUri, "image/png");
         stickerPickerUrl = webserver.start(widgetHtml);
-        setWidgetAccountData(app, user, stickerPickerUrl);
+        await setWidgetAccountData(app, user, stickerPickerUrl);
 
         await app.viewRoomByName(ROOM_NAME_1);
         await expect(page).toHaveURL(`/#/room/${room.roomId}`);
@@ -177,7 +177,7 @@ test.describe("Stickers", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         const { content_uri: contentUri } = await app.client.uploadContent(STICKER_IMAGE, { type: "image/png" });
         const widgetHtml = getWidgetHtml(contentUri, "image/png");
         stickerPickerUrl = webserver.start(widgetHtml);
-        setWidgetAccountData(app, user, stickerPickerUrl, false);
+        await setWidgetAccountData(app, user, stickerPickerUrl, false);
 
         await app.viewRoomByName(ROOM_NAME_1);
         await expect(page).toHaveURL(`/#/room/${room.roomId}`);
@@ -192,7 +192,7 @@ test.describe("Stickers", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         });
         const widgetHtml = getWidgetHtml(contentUri, "application/octet-stream");
         stickerPickerUrl = webserver.start(widgetHtml);
-        setWidgetAccountData(app, user, stickerPickerUrl);
+        await setWidgetAccountData(app, user, stickerPickerUrl);
 
         await app.viewRoomByName(ROOM_NAME_1);
         await expect(page).toHaveURL(`/#/room/${room.roomId}`);

@@ -48,6 +48,6 @@ test.describe("Mark as Unread", () => {
         await roomTile.getByRole("button", { name: "Room options" }).click();
         await page.getByRole("menuitem", { name: "Mark as unread" }).click();
 
-        expect(page.getByLabel(TEST_ROOM_NAME + " Unread messages.")).toBeVisible();
+        await expect(page.getByLabel(TEST_ROOM_NAME + " Unread messages.")).toBeVisible();
     });
 });
