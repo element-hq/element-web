@@ -11,12 +11,12 @@ import { GenericContainer, Network, StartedNetwork, StartedTestContainer, Wait }
 import { PostgreSqlContainer, StartedPostgreSqlContainer } from "@testcontainers/postgresql";
 
 import { SynapseConfigOptions, SynapseContainer } from "./testcontainers/synapse.ts";
-import { ContainerLogger } from "./testcontainers/utils.ts";
+import { Logger } from "./logger.ts";
 import { StartedMatrixAuthenticationServiceContainer } from "./testcontainers/mas.ts";
 import { HomeserverContainer, StartedHomeserverContainer } from "./testcontainers/HomeserverContainer.ts";
 
 export interface Services {
-    logger: ContainerLogger;
+    logger: Logger;
 
     network: StartedNetwork;
     postgres: StartedPostgreSqlContainer;
@@ -34,7 +34,7 @@ export const test = base.extend<{}, Services>({
     logger: [
         // eslint-disable-next-line no-empty-pattern
         async ({}, use) => {
-            const logger = new ContainerLogger();
+            const logger = new Logger();
             await use(logger);
         },
         { scope: "worker" },
@@ -133,8 +133,8 @@ export const test = base.extend<{}, Services>({
 
     context: async ({ logger, context, request, homeserver }, use, testInfo) => {
         homeserver.setRequest(request);
-        await logger.testStarted(testInfo);
+        await logger.onTestStarted(testInfo);
         await use(context);
-        await logger.testFinished(testInfo);
+        await logger.onTestFinished(testInfo);
     },
 });

@@ -103,12 +103,13 @@ export interface Fixtures {
 }
 
 export const test = base.extend<Fixtures>({
-    context: async ({ context }, use, testInfo) => {
+    context: async ({ logger, context }, use, testInfo) => {
         // We skip tests instead of using grep-invert to still surface the counts in the html report
         test.skip(
             testInfo.tags.includes(`@no-${testInfo.project.name.toLowerCase()}`),
             `Test does not work on ${testInfo.project.name}`,
         );
+        logger.attachToContext(context);
         await use(context);
     },
     disablePresence: false,
