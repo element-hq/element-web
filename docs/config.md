@@ -211,6 +211,16 @@ Starting with `branding`, the following subproperties are available:
 2. `auth_header_logo_url`: A URL to the logo used on the login, registration, etc pages.
 3. `auth_footer_links`: A list of links to add to the footer during login, registration, etc. Each entry must have a `text` and
    `url` property.
+4. `title_template`: A template string that can be used to configure the title of the application.
+5. `title_template_in_room`: A template string that can be used to configure the title of the application. This applies while
+    the client is viewing a Matrix room.
+
+
+#### `title_template` vars
+
+- `subtitle`
+- `room_name`
+- `brand`
 
 `embedded_pages` can be configured as such:
 
