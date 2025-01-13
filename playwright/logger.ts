@@ -32,7 +32,7 @@ export class Logger {
             if (pageIdx === -1) {
                 this.pages.push(page);
                 pageIdx = this.pages.length - 1;
-                this.logs[`page-${pageIdx}`] = "";
+                this.logs[`page-${pageIdx}`] = `Console logs for page with URL: ${page.url()}\n\n`;
             }
             const type = msg.type();
             const text = msg.text();
