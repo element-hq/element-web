@@ -11,7 +11,7 @@ import { Network, StartedNetwork } from "testcontainers";
 import { PostgreSqlContainer, StartedPostgreSqlContainer } from "@testcontainers/postgresql";
 
 import { SynapseConfigOptions, SynapseContainer } from "./testcontainers/synapse.ts";
-import { ContainerLogger } from "./testcontainers/utils.ts";
+import { Logger } from "./logger.ts";
 import { StartedMatrixAuthenticationServiceContainer } from "./testcontainers/mas.ts";
 import { HomeserverContainer, StartedHomeserverContainer } from "./testcontainers/HomeserverContainer.ts";
 import { MailhogContainer, StartedMailhogContainer } from "./testcontainers/mailhog.ts";
@@ -22,7 +22,7 @@ export interface TestFixtures {
 }
 
 export interface Services {
-    logger: ContainerLogger;
+    logger: Logger;
 
     network: StartedNetwork;
     postgres: StartedPostgreSqlContainer;
@@ -41,7 +41,7 @@ export const test = base.extend<TestFixtures, Services>({
     logger: [
         // eslint-disable-next-line no-empty-pattern
         async ({}, use) => {
-            const logger = new ContainerLogger();
+            const logger = new Logger();
             await use(logger);
         },
         { scope: "worker" },
@@ -137,9 +137,9 @@ export const test = base.extend<TestFixtures, Services>({
 
     context: async ({ logger, context, request, homeserver, mailhogClient }, use, testInfo) => {
         homeserver.setRequest(request);
-        await logger.testStarted(testInfo);
+        await logger.onTestStarted(context);
         await use(context);
-        await logger.testFinished(testInfo);
+        await logger.onTestFinished(testInfo);
         await homeserver.onTestFinished(testInfo);
         await mailhogClient.deleteAll();
     },
