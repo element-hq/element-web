@@ -61,9 +61,9 @@ function EncryptionDetails({ onResetIdentityClick }: EncryptionDetails): JSX.Ele
     );
 
     return (
-        <div className="mx_AdvancedPanel_Details">
-            <div className="mx_AdvancedPanel_Details_content">
-                <span className="mx_AdvancedPanel_Details_title">
+        <div className="mx_EncryptionDetails">
+            <div className="mx_EncryptionDetails_session">
+                <span className="mx_EncryptionDetails_session_title">
                     {_t("settings|encryption|advanced|details_title")}
                 </span>
                 <div>
@@ -75,7 +75,7 @@ function EncryptionDetails({ onResetIdentityClick }: EncryptionDetails): JSX.Ele
                     <span>{keys ? keys.ed25519 : <InlineSpinner />}</span>
                 </div>
             </div>
-            <div className="mx_AdvancedPanel_buttons">
+            <div className="mx_EncryptionDetails_buttons">
                 <Button
                     size="sm"
                     kind="secondary"
