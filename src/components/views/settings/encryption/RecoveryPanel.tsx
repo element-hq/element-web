@@ -21,14 +21,17 @@ import { SettingsSubheader } from "../SettingsSubheader";
  * - `loading`: We are checking the recovery key and the secrets.
  * - `missing_recovery_key`: The user has no recovery key.
  * - `secrets_not_cached`: The user has a backup but the secrets are not cached.
- *                         This shouldn't happen but we have seen cases where the secrets gossiping failed or shared partial secrets when verified with another device.
- * - `good`: The user has a backup and the secrets are cached.
+ *                         This can happen if we verified another device and secret-gossiping failed, or the other device itself lacked the secrets.
+ * - `good`: The user has a recovery key and the secrets are cached.
  */
 type State = "loading" | "missing_recovery_key" | "secrets_not_cached" | "good";
 
 interface RecoveryPanelProps {
     /**
      * Callback for when the user wants to set up or change their recovery key.
+     *
+     * @param setupNewKeyis set if the user does not already have a recovery key (and has therefore clicked on
+     * "Set up recovery" rather than "Change recovery key").
      */
     onChangeRecoveryKeyClick: (setupNewKey: boolean) => void;
 }
@@ -45,7 +48,7 @@ export function RecoveryPanel({ onChangeRecoveryKeyClick }: RecoveryPanelProps):
     const checkEncryption = useCallback(async () => {
         const crypto = matrixClient.getCrypto()!;
 
-        // Check if the user has a backup
+        // Check if the user has a recovery key
         const hasRecoveryKey = Boolean(await matrixClient.secretStorage.getDefaultKeyId());
         if (!hasRecoveryKey) return setState("missing_recovery_key");
 
