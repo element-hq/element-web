@@ -19,9 +19,6 @@ import { OAuthServer } from "./plugins/oauth_server";
 
 export interface TestFixtures {
     mailhogClient: mailhog.API;
-
-    // Set in legacyOAuthHomeserver only
-    oAuthServer?: OAuthServer;
 }
 
 export interface Services {
@@ -37,7 +34,7 @@ export interface Services {
     mas?: StartedMatrixAuthenticationServiceContainer;
 
     // Set in legacyOAuthHomeserver only
-    _oAuthServer?: OAuthServer;
+    oAuthServer?: OAuthServer;
 }
 
 export const test = base.extend<TestFixtures, Services>({
