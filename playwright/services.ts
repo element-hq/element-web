@@ -19,6 +19,7 @@ import { OAuthServer } from "./plugins/oauth_server";
 
 export interface TestFixtures {
     mailhogClient: mailhog.API;
+
     // Set in legacyOAuthHomeserver only
     oAuthServer?: OAuthServer;
 }
