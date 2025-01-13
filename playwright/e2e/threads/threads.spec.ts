@@ -24,8 +24,7 @@ test.describe("Threads", () => {
         });
     });
 
-    // Flaky: https://github.com/vector-im/element-web/issues/26452
-    test.skip("should be usable for a conversation", { tag: "@screenshot" }, async ({ page, app, bot }) => {
+    test("should be usable for a conversation", { tag: "@screenshot" }, async ({ page, app, bot }) => {
         const roomId = await app.client.createRoom({});
         await app.client.inviteUser(roomId, bot.credentials.userId);
         await bot.joinRoom(roomId);
