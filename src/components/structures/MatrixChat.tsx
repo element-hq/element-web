@@ -226,6 +226,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private subTitleStatus: string;
     private prevWindowWidth: number;
 
+    private readonly titleTemplate: string;
+    private readonly titleTemplateInRoom: string;
+
     private readonly loggedInView = createRef<LoggedInViewType>();
     private dispatcherRef?: string;
     private themeWatcher?: ThemeWatcher;
@@ -279,6 +282,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // object field used for tracking the status info appended to the title tag.
         // we don't do it as react state as i'm scared about triggering needless react refreshes.
         this.subTitleStatus = "";
+
+        this.titleTemplate = props.config.branding?.title_template ?? '$brand $status';
+        this.titleTemplateInRoom = props.config.branding?.title_template_in_room ?? '$brand $status | $room_name';
     }
 
     /**
@@ -1941,21 +1947,32 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
     }
 
-    private setPageSubtitle(subtitle = ""): void {
+    private setPageSubtitle(): void {
+        const params: {
+            $brand: string,
+            $status: string,
+            $room_name: string|undefined,
+        } = {
+            $brand: SdkConfig.get().brand,
+            $status: this.subTitleStatus,
+            $room_name: undefined,
+        };
+
         if (this.state.currentRoomId) {
             const client = MatrixClientPeg.get();
             const room = client?.getRoom(this.state.currentRoomId);
             if (room) {
-                subtitle = `${this.subTitleStatus} | ${room.name} ${subtitle}`;
+                params.$room_name = room.name;
             }
-        } else {
-            subtitle = `${this.subTitleStatus} ${subtitle}`;
         }
+        
+        const titleTemplate = params.$room_name ? this.titleTemplateInRoom : this.titleTemplate;
 
-        const title = `${SdkConfig.get().brand} ${subtitle}`;
+        const title = Object.entries(params).reduce(
+            (title: string, [key, value]) => title.replaceAll(key, (value ?? '').replaceAll('$', '$_DLR$')), titleTemplate);
 
         if (document.title !== title) {
-            document.title = title;
+            document.title = title.replaceAll('$_DLR$', '$');
         }
     }
 
