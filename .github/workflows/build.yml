@@ -27,10 +27,17 @@ jobs:
                     - macos-14
                 isDevelop:
                     - ${{ github.event_name == 'push' && github.ref_name == 'develop' }}
+                isPullRequest:
+                    - ${{ github.event_name == 'pull_request' }}
                 # Skip the ubuntu-24.04 build for the develop branch as the dedicated CD build_develop workflow handles that
+                # Skip the non-linux builds for pull requests as Windows is awfully slow, so run in merge queue only
                 exclude:
                     - isDevelop: true
                       image: ubuntu-24.04
+                    - isPullRequest: true
+                      image: windows-2022
+                    - isPullRequest: true
+                      image: macos-14
         runs-on: ${{ matrix.image }}
         defaults:
             run:
