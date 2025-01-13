@@ -218,9 +218,9 @@ Starting with `branding`, the following subproperties are available:
 
 #### `title_template` vars
 
-- `brand` The name of the web app, as configured by the `brand` config value.
-- `room_name` The friendly name of a room. Only applicable to `title_template_in_room`.
-- `status` The client's status, repesented as. 
+- `$brand` The name of the web app, as configured by the `brand` config value.
+- `$room_name` The friendly name of a room. Only applicable to `title_template_in_room`.
+- `$status` The client's status, repesented as. 
   - The notification count, when at least one room is unread.
   - "*" when no rooms are unread, but notifications are not muted.
   - "Offline", when the client is offline.
