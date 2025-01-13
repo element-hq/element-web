@@ -170,7 +170,8 @@ jobs:
                   yarn playwright test \
                       --shard "${{ matrix.runner }}/${{ needs.build.outputs.num-runners }}" \
                       --project="${{ matrix.project }}" \
-                      ${{ (github.event_name == 'pull_request' && matrix.runAllTests == false ) && '--grep-invert @mergequeue' || '' }}
+                      ${{ (github.event_name == 'pull_request' && matrix.runAllTests == false ) && '--grep-invert @mergequeue' || '' }} \
+                      ${{ contains(github.event.pull_request.labels.*.name, 'Z-Flaky-Test') && '--repeat-each=5' || '' }}
 
             - name: Upload blob report to GitHub Actions Artifacts
               if: always()
