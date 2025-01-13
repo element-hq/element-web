@@ -263,6 +263,11 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
         return super.restart(options);
     }
 
+    public restart(options?: Partial<RestartOptions>): Promise<void> {
+        this.adminToken = undefined;
+        return super.restart(options);
+    }
+
     public setRequest(request: APIRequestContext): void {
         this._request = request;
         this.csApi.setRequest(request);

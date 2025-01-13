@@ -100,12 +100,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
         await page.goto(`/#/room/${selectedRoomId}`);
     });
 
-    // Disabled due to flakiness: https://github.com/element-hq/element-web/issues/26895
-    test.skip("With sync accumulator, considers main thread and unthreaded receipts #24629", async ({
-        page,
-        app,
-        bot,
-    }) => {
+    test("With sync accumulator, considers main thread and unthreaded receipts #24629", async ({ page, app, bot }) => {
         // Details are in https://github.com/vector-im/element-web/issues/24629
         // This proves we've fixed one of the "stuck unreads" issues.
 
