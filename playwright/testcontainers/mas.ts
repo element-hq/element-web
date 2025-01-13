@@ -168,6 +168,14 @@ const DEFAULT_CONFIG = {
         access_token_ttl: 300,
         compat_token_ttl: 300,
     },
+    rate_limiting: {
+        login: {
+            burst: 1000,
+        },
+        registration: {
+            burst: 1000,
+        },
+    },
 };
 
 export class MatrixAuthenticationServiceContainer extends GenericContainer {

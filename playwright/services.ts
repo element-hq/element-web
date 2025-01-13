@@ -131,10 +131,11 @@ export const test = base.extend<{}, Services>({
         { scope: "worker" },
     ],
 
-    context: async ({ logger, context, request, homeserver }, use, testInfo) => {
+    context: async ({ logger, context, request, homeserver, mailhogClient }, use, testInfo) => {
         homeserver.setRequest(request);
         await logger.testStarted(testInfo);
         await use(context);
         await logger.testFinished(testInfo);
+        await mailhogClient.deleteAll();
     },
 });
