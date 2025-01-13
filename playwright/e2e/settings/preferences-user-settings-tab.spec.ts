@@ -24,7 +24,7 @@ test.describe("Preferences user settings tab", () => {
     });
 
     test("should be rendered properly", { tag: "@screenshot" }, async ({ app, page, user }) => {
-        page.setViewportSize({ width: 1024, height: 3300 });
+        await page.setViewportSize({ width: 1024, height: 3300 });
         const tab = await app.settings.openUserSettings("Preferences");
         // Assert that the top heading is rendered
         await expect(tab.getByRole("heading", { name: "Preferences" })).toBeVisible();
@@ -61,7 +61,7 @@ test.describe("Preferences user settings tab", () => {
         // Click the button to display the dropdown menu
         await timezoneInput.getByRole("button", { name: "Set timezone" }).click();
         // Select a different value
-        timezoneInput.getByRole("option", { name: /Africa\/Abidjan/ }).click();
+        await timezoneInput.getByRole("option", { name: /Africa\/Abidjan/ }).click();
         // Check the new value
         await expect(timezoneValue.getByText("Africa/Abidjan")).toBeVisible();
     });
