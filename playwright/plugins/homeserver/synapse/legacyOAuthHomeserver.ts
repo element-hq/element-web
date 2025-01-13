@@ -14,12 +14,23 @@ import { OAuthServer } from "../../oauth_server";
 
 export const legacyOAuthHomeserver: Fixtures<TestFixtures, Services, TestFixtures> = {
     _oAuthServer: [
-        async ({ _homeserver: container }, use) => {
+        // eslint-disable-next-line no-empty-pattern
+        async ({}, use) => {
             const server = new OAuthServer();
+            await use(server);
+            server.stop();
+        },
+        { scope: "worker" },
+    ],
+    oAuthServer: async ({ _oAuthServer }, use, testInfo) => {
+        _oAuthServer.onTestStarted(testInfo);
+        await use(_oAuthServer);
+    },
+    _homeserver: [
+        async ({ _oAuthServer: server, _homeserver: homeserver }, use) => {
             const port = server.start();
-
             await TestContainers.exposeHostPorts(port);
-            container.withConfig({
+            homeserver.withConfig({
                 oidc_providers: [
                     {
                         idp_id: "test",
@@ -43,13 +54,9 @@ export const legacyOAuthHomeserver: Fixtures<TestFixtures, Services, TestFixture
                     },
                 ],
             });
-            await use(server);
-            server.stop();
+
+            await use(homeserver);
         },
         { scope: "worker" },
     ],
-    oAuthServer: async ({ _oAuthServer }, use, testInfo) => {
-        _oAuthServer.onTestStarted(testInfo);
-        await use(_oAuthServer);
-    },
 };
