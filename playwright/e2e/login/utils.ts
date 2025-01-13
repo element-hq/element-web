@@ -92,7 +92,7 @@ export async function interceptRequestsWithSoftLogout(page: Page, user: Credenti
     // do something to make the active /sync return: create a new room
     await page.evaluate(() => {
         // don't wait for this to complete: it probably won't, because of the broken sync
-        window.mxMatrixClientPeg.get().createRoom({});
+        void window.mxMatrixClientPeg.get().createRoom({});
     });
 
     await promise;

@@ -164,7 +164,7 @@ test.describe("Threads", () => {
         locator = page.locator(
             ".mx_ThreadView .mx_GenericEventListSummary[data-layout=bubble] .mx_EventTile_info.mx_EventTile_last",
         );
-        expect(locator.locator(".mx_EventTile_line .mx_EventTile_content"))
+        await expect(locator.locator(".mx_EventTile_line .mx_EventTile_content"))
             // 76px: ThreadViewGroupSpacingStart + 14px + 6px
             // 14px: avatar width
             // See: _EventTile.pcss
@@ -233,8 +233,8 @@ test.describe("Threads", () => {
 
         // User closes right panel after clicking back to thread list
         locator = page.locator(".mx_ThreadPanel");
-        locator.getByRole("button", { name: "Threads" }).click();
-        locator.getByRole("button", { name: "Close" }).click();
+        await locator.getByRole("button", { name: "Threads" }).click();
+        await locator.getByRole("button", { name: "Close" }).click();
 
         // Bot responds to thread
         await bot.sendMessage(roomId, "How are things?", threadId);
@@ -344,7 +344,7 @@ test.describe("Threads", () => {
 
             await expect(page.locator(".mx_ThreadView_timelinePanelWrapper")).toHaveCount(1);
 
-            (await app.openMessageComposerOptions(true)).getByRole("menuitem", { name: "Voice Message" }).click();
+            await (await app.openMessageComposerOptions(true)).getByRole("menuitem", { name: "Voice Message" }).click();
             await page.waitForTimeout(3000);
             await app.getComposer(true).getByRole("button", { name: "Send voice message" }).click();
             await expect(page.locator(".mx_ThreadView .mx_MVoiceMessageBody")).toHaveCount(1);
