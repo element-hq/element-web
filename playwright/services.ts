@@ -97,8 +97,8 @@ export const test = base.extend<TestFixtures, Services>({
         { scope: "worker" },
     ],
     mailhogClient: async ({ mailhog: container }, use) => {
-        await use(container.client);
         await container.client.deleteAll();
+        await use(container.client);
     },
 
     synapseConfigOptions: [{}, { option: true, scope: "worker" }],
@@ -139,6 +139,5 @@ export const test = base.extend<TestFixtures, Services>({
         await logger.onTestStarted(context);
         await use(context);
         await logger.onTestFinished(testInfo);
-        await mailhogClient.deleteAll();
     },
 });
