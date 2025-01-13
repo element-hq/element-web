@@ -138,7 +138,7 @@ const DEFAULT_CONFIG = {
     },
 };
 
-export type SynapseConfigOptions = Partial<typeof DEFAULT_CONFIG>;
+export type SynapseConfig = Partial<typeof DEFAULT_CONFIG>;
 
 export class SynapseContainer extends GenericContainer implements HomeserverContainer<typeof DEFAULT_CONFIG> {
     private config: typeof DEFAULT_CONFIG;

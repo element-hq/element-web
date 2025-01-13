@@ -21,7 +21,7 @@ function getMemberTileByName(page: Page, name: string): Locator {
 
 test.use({
     displayName: NAME,
-    synapseConfigOptions: {
+    synapseConfig: {
         experimental_features: {
             msc2697_enabled: false,
             msc3814_enabled: true,
