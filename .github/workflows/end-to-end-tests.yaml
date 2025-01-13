@@ -62,6 +62,8 @@ jobs:
               with:
                   path: playwright-results.json
                   key: playwright-results
+                  restore-keys: |
+                      playwright-results-*
 
             - uses: actions/setup-node@v4
               with:
@@ -232,7 +234,7 @@ jobs:
               uses: actions/cache/save@v4
               with:
                   path: playwright-results.json
-                  key: playwright-results
+                  key: playwright-results-${{ github.run_id }}
 
             # Upload the HTML report even if one of our reporters fails, this can happen when stale screenshots are detected
             - name: Upload HTML report

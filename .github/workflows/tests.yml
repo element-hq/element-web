@@ -71,6 +71,8 @@ jobs:
               with:
                   path: tenbin-report.json
                   key: tenbin-report
+                  restore-keys: |
+                      tenbin-report-*
 
             - name: Run tests
               run: |
@@ -139,4 +141,4 @@ jobs:
               uses: actions/cache/save@v4
               with:
                   path: tenbin-report.json
-                  key: tenbin-report
+                  key: tenbin-report-${{ github.run_id }}
