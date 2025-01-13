@@ -608,7 +608,7 @@ test.describe("Timeline", () => {
                 });
                 // wait for the remote echo otherwise we get an error modal due to a 404 on the /event/ API
                 await expect(timestamp).not.toHaveAttribute("href", /~!/);
-                await timestamp.click();
+                await timestamp.locator(".mx_MessageTimestamp").click();
 
                 // should not add inline start padding to a hidden event line on IRC layout
                 await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
