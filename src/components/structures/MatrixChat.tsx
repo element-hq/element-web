@@ -283,8 +283,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // we don't do it as react state as i'm scared about triggering needless react refreshes.
         this.subTitleStatus = "";
 
-        this.titleTemplate = props.config.branding?.title_template ?? '$brand $status';
-        this.titleTemplateInRoom = props.config.branding?.title_template_in_room ?? '$brand $status | $room_name';
+        this.titleTemplate = props.config.branding?.title_template ?? "$brand $status";
+        this.titleTemplateInRoom = props.config.branding?.title_template_in_room ?? "$brand $status | $room_name";
     }
 
     /**
@@ -1953,7 +1953,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const params: {
             $brand: string;
             $status: string;
-            $room_name: string|undefined;
+            $room_name: string | undefined;
         } = {
             $brand: SdkConfig.get().brand,
             $status: this.subTitleStatus,
@@ -1967,14 +1967,16 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 params.$room_name = room.name;
             }
         }
-        
+
         const titleTemplate = params.$room_name ? this.titleTemplateInRoom : this.titleTemplate;
 
         const title = Object.entries(params).reduce(
-            (title: string, [key, value]) => title.replaceAll(key, (value ?? '').replaceAll('$', '$_DLR$')), titleTemplate);
+            (title: string, [key, value]) => title.replaceAll(key, (value ?? "").replaceAll("$", "$_DLR$")),
+            titleTemplate,
+        );
 
         if (document.title !== title) {
-            document.title = title.replaceAll('$_DLR$', '$');
+            document.title = title.replaceAll("$_DLR$", "$");
         }
     }
 
