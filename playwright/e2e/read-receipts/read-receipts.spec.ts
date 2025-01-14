@@ -12,8 +12,10 @@ import { expect } from "../../element-web-test";
 import { ElementAppPage } from "../../pages/ElementAppPage";
 import { Bot } from "../../pages/bot";
 import { test } from ".";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 test.describe("Read receipts", { tag: "@mergequeue" }, () => {
+    test.skip(isDendrite, "due to Dendrite bug https://github.com/element-hq/dendrite/issues/2970");
     test.use({
         displayName: "Mae",
         botCreateOpts: { displayName: "Other User" },

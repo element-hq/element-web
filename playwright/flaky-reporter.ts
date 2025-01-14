@@ -28,6 +28,8 @@ class FlakyReporter implements Reporter {
     private flakes = new Map<string, TestCase[]>();
 
     public onTestEnd(test: TestCase): void {
+        // Ignores flakes on Dendrite and Pinecone as they have their own flakes we do not track
+        if (["Dendrite", "Pinecone"].includes(test.parent.project()?.name)) return;
         const title = `${test.location.file.split("playwright/e2e/")[1]}: ${test.title}`;
         if (test.outcome() === "flaky") {
             if (!this.flakes.has(title)) {

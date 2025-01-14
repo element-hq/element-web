@@ -66,11 +66,11 @@ as is typical for Playwright tests. Likewise, tests live in `playwright/e2e`.
 of Synapse/Dendrite. These servers are what Element-web runs against in the tests.
 
 Synapse can be launched with different configurations in order to test element
-in different configurations. You can specify `synapseConfigOptions` as such:
+in different configurations. You can specify `synapseConfig` as such:
 
 ```typescript
 test.use({
-    synapseConfigOptions: {
+    synapseConfig: {
         // The config options to pass to the Synapse instance
     },
 });

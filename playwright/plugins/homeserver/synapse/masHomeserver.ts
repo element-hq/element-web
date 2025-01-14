@@ -79,4 +79,9 @@ export const masHomeserver: Fixtures = {
             default_server_config: wellKnown,
         });
     },
+
+    context: async ({ homeserverType, context }, use, testInfo) => {
+        testInfo.skip(homeserverType !== "synapse", "does not yet support MAS");
+        await use(context);
+    },
 };
