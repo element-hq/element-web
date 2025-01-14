@@ -166,11 +166,21 @@ jobs:
 
             # We skip tests tagged with @mergequeue when running on PRs, but run them in MQ and everywhere else
             - name: Run Playwright tests
+              env:
+                  PWTEST_PROFILE_DIR: profile
               run: |
                   yarn playwright test \
                       --shard "${{ matrix.runner }}/${{ needs.build.outputs.num-runners }}" \
                       --project="${{ matrix.project }}" \
                       ${{ (github.event_name == 'pull_request' && matrix.runAllTests == false ) && '--grep-invert @mergequeue' || '' }}
+
+            - name: Upload profile
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: profile-${{ matrix.project }}-${{ matrix.runner }}
+                  path: profile
+                  retention-days: 1
 
             - name: Upload blob report to GitHub Actions Artifacts
               if: always()
