@@ -112,7 +112,6 @@ export interface TestFixtures {
 
 type CombinedTestFixtures = PlaywrightTestArgs & TestFixtures;
 export type Fixtures = _Fixtures<CombinedTestFixtures, Services & Options, CombinedTestFixtures>;
-
 export const test = base.extend<TestFixtures>({
     context: async ({ context }, use, testInfo) => {
         // We skip tests instead of using grep-invert to still surface the counts in the html report

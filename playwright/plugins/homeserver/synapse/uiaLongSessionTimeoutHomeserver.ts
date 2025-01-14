@@ -8,10 +8,10 @@ Please see LICENSE files in the repository root for full details.
 import { Fixtures } from "../../../element-web-test.ts";
 
 export const uiaLongSessionTimeoutHomeserver: Fixtures = {
-    synapseConfigOptions: [
-        async ({ synapseConfigOptions }, use) => {
+    synapseConfig: [
+        async ({ synapseConfig }, use) => {
             await use({
-                ...synapseConfigOptions,
+                ...synapseConfig,
                 ui_auth: {
                     session_timeout: "300s",
                 },

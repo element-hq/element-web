@@ -76,8 +76,6 @@ async function expectKickedMessage(page: Page, shouldExist: boolean) {
             visible: shouldExist,
         });
     }).toPass();
-
-    // Check for the event message (or lack thereof)
 }
 
 test.describe("Integration Manager: Kick", () => {

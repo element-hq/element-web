@@ -10,7 +10,7 @@ import mailhog from "mailhog";
 import { Network, StartedNetwork } from "testcontainers";
 import { PostgreSqlContainer, StartedPostgreSqlContainer } from "@testcontainers/postgresql";
 
-import { SynapseConfigOptions, SynapseContainer } from "./testcontainers/synapse.ts";
+import { SynapseConfig, SynapseContainer } from "./testcontainers/synapse.ts";
 import { Logger } from "./logger.ts";
 import { StartedMatrixAuthenticationServiceContainer } from "./testcontainers/mas.ts";
 import { HomeserverContainer, StartedHomeserverContainer } from "./testcontainers/HomeserverContainer.ts";
@@ -30,6 +30,7 @@ export interface Services {
     postgres: StartedPostgreSqlContainer;
     mailhog: StartedMailhogContainer;
 
+    synapseConfig: SynapseConfig;
     _homeserver: HomeserverContainer<any>;
     homeserver: StartedHomeserverContainer;
     // Set in masHomeserver only
@@ -107,7 +108,7 @@ export const test = base.extend<TestFixtures, Services & Options>({
         await use(container.client);
     },
 
-    synapseConfigOptions: [{}, { option: true, scope: "worker" }],
+    synapseConfig: [{}, { scope: "worker" }],
     homeserverType: ["synapse", { option: true, scope: "worker" }],
     _homeserver: [
         async ({ homeserverType }, use) => {
@@ -129,11 +130,10 @@ export const test = base.extend<TestFixtures, Services & Options>({
         { scope: "worker" },
     ],
     homeserver: [
-        async ({ homeserverType, logger, network, _homeserver: homeserver, synapseConfigOptions, mas }, use) => {
+        async ({ homeserverType, logger, network, _homeserver: homeserver, synapseConfig, mas }, use) => {
             if (homeserver instanceof SynapseContainer) {
-                homeserver.withConfig(synapseConfigOptions);
+                homeserver.withConfig(synapseConfig);
             }
-
             const container = await homeserver
                 .withNetwork(network)
                 .withNetworkAliases("homeserver")
