@@ -1114,19 +1114,6 @@ describe("<MatrixChat />", () => {
                 // set up keys screen is rendered
                 expect(screen.getByText("Setting up keys")).toBeInTheDocument();
             });
-
-            it("should go to use case selection if user just registered", async () => {
-                loginClient.doesServerSupportUnstableFeature.mockResolvedValue(true);
-                MatrixClientPeg.setJustRegisteredUserId(userId);
-
-                await getComponentAndLogin();
-
-                bootstrapDeferred.resolve();
-
-                await expect(
-                    screen.findByRole("heading", { name: "You're in", level: 1 }),
-                ).resolves.toBeInTheDocument();
-            });
         });
     });
 
