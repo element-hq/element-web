@@ -30,7 +30,6 @@ export interface Services {
     postgres: StartedPostgreSqlContainer;
     mailhog: StartedMailhogContainer;
 
-    synapseConfig: SynapseConfig;
     _homeserver: HomeserverContainer<any>;
     homeserver: StartedHomeserverContainer;
     // Set in masHomeserver only
@@ -40,7 +39,7 @@ export interface Services {
 }
 
 export interface Options {
-    synapseConfigOptions: SynapseConfigOptions;
+    synapseConfig: SynapseConfig;
     homeserverType: HomeserverType;
 }
 
@@ -156,9 +155,9 @@ export const test = base.extend<TestFixtures, Services & Options>({
         { scope: "worker" },
     ],
 
-    context: async ({ homeserverType, synapseConfigOptions, logger, context, request, homeserver }, use, testInfo) => {
+    context: async ({ homeserverType, synapseConfig, logger, context, request, homeserver }, use, testInfo) => {
         testInfo.skip(
-            !(homeserver instanceof SynapseContainer) && Object.keys(synapseConfigOptions).length > 0,
+            !(homeserver instanceof SynapseContainer) && Object.keys(synapseConfig).length > 0,
             `Test specifies Synapse config options so is unsupported with ${homeserverType}`,
         );
         homeserver.setRequest(request);
