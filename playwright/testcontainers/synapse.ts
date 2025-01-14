@@ -17,7 +17,7 @@ import { Credentials } from "../plugins/homeserver";
 import { deepCopy } from "../plugins/utils/object.ts";
 import { HomeserverContainer, StartedHomeserverContainer } from "./HomeserverContainer.ts";
 
-const TAG = "develop@sha256:b69222d98abe9625d46f5d3cb01683d5dc173ae339215297138392cfeec935d9";
+const TAG = "develop@sha256:7be2e00da62dfbb2bad071c6d408fecb1fabf740a538d08768b9b3e0a8c45350";
 
 const DEFAULT_CONFIG = {
     server_name: "localhost",
