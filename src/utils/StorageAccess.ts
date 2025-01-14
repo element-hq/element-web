@@ -122,3 +122,28 @@ export async function idbDelete(table: string, key: string | string[]): Promise<
         };
     });
 }
+
+/**
+ * Clears all records from an IndexedDB table within the underlying `matrix-react-sdk` database.
+ *
+ * If IndexedDB access is not supported in the environment, an error is thrown.
+ *
+ * @param {string} table The name of the object store where the records are stored.
+ * @returns {Promise<void>} A Promise that resolves when the record(s) have been successfully deleted.
+ */
+export async function idbClear(table: string): Promise<void> {
+    if (!idb) {
+        await idbInit();
+    }
+    return new Promise((resolve, reject) => {
+        const txn = idb!.transaction([table], "readwrite");
+        txn.onerror = reject;
+
+        const objectStore = txn.objectStore(table);
+        const request = objectStore.clear();
+        request.onerror = reject;
+        request.onsuccess = (): void => {
+            resolve();
+        };
+    });
+}
