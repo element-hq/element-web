@@ -13,7 +13,7 @@ Please see LICENSE files in the repository root for full details.
 import { expect, test } from "../../element-web-test";
 
 test.use({
-    synapseConfigOptions: {
+    synapseConfig: {
         allow_guest_access: true,
     },
 });

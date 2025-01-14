@@ -17,7 +17,7 @@ import { Credentials } from "../plugins/homeserver";
 import { deepCopy } from "../plugins/utils/object.ts";
 import { HomeserverContainer, StartedHomeserverContainer } from "./HomeserverContainer.ts";
 
-const TAG = "develop@sha256:b69222d98abe9625d46f5d3cb01683d5dc173ae339215297138392cfeec935d9";
+const TAG = "develop@sha256:7be2e00da62dfbb2bad071c6d408fecb1fabf740a538d08768b9b3e0a8c45350";
 
 const DEFAULT_CONFIG = {
     server_name: "localhost",
@@ -138,7 +138,7 @@ const DEFAULT_CONFIG = {
     },
 };
 
-export type SynapseConfigOptions = Partial<typeof DEFAULT_CONFIG>;
+export type SynapseConfig = Partial<typeof DEFAULT_CONFIG>;
 
 export class SynapseContainer extends GenericContainer implements HomeserverContainer<typeof DEFAULT_CONFIG> {
     private config: typeof DEFAULT_CONFIG;
@@ -277,7 +277,7 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
 
         const data = await res.json();
         return {
-            homeServer: data.home_server,
+            homeServer: data.home_server || data.user_id.split(":").slice(1).join(":"),
             accessToken: data.access_token,
             userId: data.user_id,
             deviceId: data.device_id,
@@ -310,7 +310,7 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
             accessToken: json.access_token,
             userId: json.user_id,
             deviceId: json.device_id,
-            homeServer: json.home_server,
+            homeServer: json.home_server || json.user_id.split(":").slice(1).join(":"),
             username: userId.slice(1).split(":")[0],
         };
     }

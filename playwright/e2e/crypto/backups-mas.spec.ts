@@ -13,7 +13,7 @@ import { TestClientServerAPI } from "../csAPI";
 import { masHomeserver } from "../../plugins/homeserver/synapse/masHomeserver.ts";
 
 // These tests register an account with MAS because then we go through the "normal" registration flow
-// and crypto gets set up. Using the 'user' fixture create a a user an synthesizes an existing login,
+// and crypto gets set up. Using the 'user' fixture create a user and synthesizes an existing login,
 // which is faster but leaves us without crypto set up.
 test.use(masHomeserver);
 test.describe("Encryption state after registration", () => {
