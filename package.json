@@ -89,6 +89,7 @@
         "@matrix-org/spec": "^1.7.0",
         "@sentry/browser": "^8.0.0",
         "@types/png-chunks-extract": "^1.0.2",
+        "@types/react-virtualized": "^9.21.30",
         "@vector-im/compound-design-tokens": "^2.1.0",
         "@vector-im/compound-web": "^7.5.0",
         "@vector-im/matrix-wysiwyg": "2.38.0",
@@ -126,7 +127,7 @@
         "maplibre-gl": "^5.0.0",
         "matrix-encrypt-attachment": "^1.0.3",
         "matrix-events-sdk": "0.0.1",
-        "matrix-js-sdk": "36.0.0",
+        "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
         "matrix-widget-api": "^1.10.0",
         "memoize-one": "^6.0.0",
         "mime": "^4.0.4",
@@ -143,6 +144,7 @@
         "react-dom": "^18.3.1",
         "react-focus-lock": "^2.5.1",
         "react-transition-group": "^4.4.1",
+        "react-virtualized": "^9.22.5",
         "rfc4648": "^1.4.0",
         "sanitize-filename": "^1.6.3",
         "sanitize-html": "2.14.0",
@@ -150,9 +152,7 @@
         "temporal-polyfill": "^0.2.5",
         "ua-parser-js": "^1.0.2",
         "uuid": "^11.0.0",
-        "what-input": "^5.2.10",
-        "@types/react-virtualized": "^9.21.30",
-        "react-virtualized": "^9.22.5"
+        "what-input": "^5.2.10"
     },
     "devDependencies": {
         "@action-validator/cli": "^0.6.0",
