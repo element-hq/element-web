@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { AbstractStartedContainer, GenericContainer, RestartOptions, StartedTestContainer, Wait } from "testcontainers";
-import { APIRequestContext } from "@playwright/test";
+import { APIRequestContext, TestInfo } from "@playwright/test";
 import crypto from "node:crypto";
 import * as YAML from "yaml";
 import { set } from "lodash";
@@ -16,6 +16,8 @@ import { randB64Bytes } from "../plugins/utils/rand.ts";
 import { Credentials } from "../plugins/homeserver";
 import { deepCopy } from "../plugins/utils/object.ts";
 import { HomeserverContainer, StartedHomeserverContainer } from "./HomeserverContainer.ts";
+import { StartedMatrixAuthenticationServiceContainer } from "./mas.ts";
+import { Api, ClientServerApi, Verb } from "../plugins/utils/api.ts";
 
 const TAG = "develop@sha256:7be2e00da62dfbb2bad071c6d408fecb1fabf740a538d08768b9b3e0a8c45350";
 
@@ -142,6 +144,7 @@ export type SynapseConfig = Partial<typeof DEFAULT_CONFIG>;
 
 export class SynapseContainer extends GenericContainer implements HomeserverContainer<typeof DEFAULT_CONFIG> {
     private config: typeof DEFAULT_CONFIG;
+    private mas?: StartedMatrixAuthenticationServiceContainer;
 
     constructor() {
         super(`ghcr.io/element-hq/synapse:${TAG}`);
@@ -201,6 +204,11 @@ export class SynapseContainer extends GenericContainer implements HomeserverCont
         return this;
     }
 
+    public withMatrixAuthenticationService(mas?: StartedMatrixAuthenticationServiceContainer): this {
+        this.mas = mas;
+        return this;
+    }
+
     public override async start(): Promise<StartedSynapseContainer> {
         // Synapse config public_baseurl needs to know what URL it'll be accessed from, so we have to map the port manually
         const port = await getFreePort();
@@ -219,17 +227,25 @@ export class SynapseContainer extends GenericContainer implements HomeserverCont
                 },
             ]);
 
-        return new StartedSynapseContainer(
-            await super.start(),
-            `http://localhost:${port}`,
-            this.config.registration_shared_secret,
-        );
+        const container = await super.start();
+        const baseUrl = `http://localhost:${port}`;
+        if (this.mas) {
+            return new StartedSynapseWithMasContainer(
+                container,
+                baseUrl,
+                this.config.registration_shared_secret,
+                this.mas,
+            );
+        }
+
+        return new StartedSynapseContainer(container, baseUrl, this.config.registration_shared_secret);
     }
 }
 
 export class StartedSynapseContainer extends AbstractStartedContainer implements StartedHomeserverContainer {
-    private adminToken?: string;
-    private request?: APIRequestContext;
+    protected adminTokenPromise?: Promise<string>;
+    protected readonly adminApi: Api;
+    public readonly csApi: ClientServerApi;
 
     constructor(
         container: StartedTestContainer,
@@ -237,15 +253,36 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
         private readonly registrationSharedSecret: string,
     ) {
         super(container);
+        this.adminApi = new Api(`${this.baseUrl}/_synapse/admin`);
+        this.csApi = new ClientServerApi(this.baseUrl);
     }
 
     public restart(options?: Partial<RestartOptions>): Promise<void> {
-        this.adminToken = undefined;
+        this.adminTokenPromise = undefined;
         return super.restart(options);
     }
 
     public setRequest(request: APIRequestContext): void {
-        this.request = request;
+        this.csApi.setRequest(request);
+        this.adminApi.setRequest(request);
+    }
+
+    public async onTestFinished(testInfo: TestInfo): Promise<void> {
+        // Clean up the server to prevent rooms leaking between tests
+        await this.deletePublicRooms();
+    }
+
+    protected async deletePublicRooms(): Promise<void> {
+        const token = await this.getAdminToken();
+        // We hide the rooms from the room directory to save time between tests and for portability between homeservers
+        const { chunk: rooms } = await this.csApi.request<{
+            chunk: { room_id: string }[];
+        }>("GET", "/v3/publicRooms", token, {});
+        await Promise.all(
+            rooms.map((room) =>
+                this.csApi.request("PUT", `/v3/directory/list/room/${room.room_id}`, token, { visibility: "private" }),
+            ),
+        );
     }
 
     private async registerUserInternal(
@@ -254,28 +291,26 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
         displayName?: string,
         admin = false,
     ): Promise<Credentials> {
-        const url = `${this.baseUrl}/_synapse/admin/v1/register`;
-        const { nonce } = await this.request.get(url).then((r) => r.json());
+        const path = "/v1/register";
+        const { nonce } = await this.adminApi.request<{ nonce: string }>("GET", path, undefined, {});
         const mac = crypto
             .createHmac("sha1", this.registrationSharedSecret)
             .update(`${nonce}\0${username}\0${password}\0${admin ? "" : "not"}admin`)
             .digest("hex");
-        const res = await this.request.post(url, {
-            data: {
-                nonce,
-                username,
-                password,
-                mac,
-                admin,
-                displayname: displayName,
-            },
+        const data = await this.adminApi.request<{
+            home_server: string;
+            access_token: string;
+            user_id: string;
+            device_id: string;
+        }>("POST", path, undefined, {
+            nonce,
+            username,
+            password,
+            mac,
+            admin,
+            displayname: displayName,
         });
 
-        if (!res.ok()) {
-            throw await res.json();
-        }
-
-        const data = await res.json();
         return {
             homeServer: data.home_server || data.user_id.split(":").slice(1).join(":"),
             accessToken: data.access_token,
@@ -287,57 +322,67 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
         };
     }
 
+    protected async getAdminToken(): Promise<string> {
+        if (this.adminTokenPromise === undefined) {
+            this.adminTokenPromise = this.registerUserInternal(
+                "admin",
+                "totalyinsecureadminpassword",
+                undefined,
+                true,
+            ).then((res) => res.accessToken);
+        }
+        return this.adminTokenPromise;
+    }
+
+    private async adminRequest<R extends {}>(verb: "GET", path: string, data?: never): Promise<R>;
+    private async adminRequest<R extends {}>(verb: Verb, path: string, data?: object): Promise<R>;
+    private async adminRequest<R extends {}>(verb: Verb, path: string, data?: object): Promise<R> {
+        const adminToken = await this.getAdminToken();
+        return this.adminApi.request(verb, path, adminToken, data);
+    }
+
     public registerUser(username: string, password: string, displayName?: string): Promise<Credentials> {
         return this.registerUserInternal(username, password, displayName, false);
     }
 
     public async loginUser(userId: string, password: string): Promise<Credentials> {
-        const url = `${this.baseUrl}/_matrix/client/v3/login`;
-        const res = await this.request.post(url, {
-            data: {
-                type: "m.login.password",
-                identifier: {
-                    type: "m.id.user",
-                    user: userId,
-                },
-                password: password,
-            },
-        });
-        const json = await res.json();
-
-        return {
-            password,
-            accessToken: json.access_token,
-            userId: json.user_id,
-            deviceId: json.device_id,
-            homeServer: json.home_server || json.user_id.split(":").slice(1).join(":"),
-            username: userId.slice(1).split(":")[0],
-        };
+        return this.csApi.loginUser(userId, password);
     }
 
     public async setThreepid(userId: string, medium: string, address: string): Promise<void> {
-        if (this.adminToken === undefined) {
-            const result = await this.registerUserInternal("admin", "totalyinsecureadminpassword", undefined, true);
-            this.adminToken = result.accessToken;
-        }
-
-        const url = `${this.baseUrl}/_synapse/admin/v2/users/${userId}`;
-        const res = await this.request.put(url, {
-            data: {
-                threepids: [
-                    {
-                        medium,
-                        address,
-                    },
-                ],
-            },
-            headers: {
-                Authorization: `Bearer ${this.adminToken}`,
-            },
+        await this.adminRequest("PUT", `/v2/users/${userId}`, {
+            threepids: [
+                {
+                    medium,
+                    address,
+                },
+            ],
         });
+    }
+}
 
-        if (!res.ok()) {
-            throw await res.json();
+export class StartedSynapseWithMasContainer extends StartedSynapseContainer {
+    constructor(
+        container: StartedTestContainer,
+        baseUrl: string,
+        registrationSharedSecret: string,
+        private readonly mas: StartedMatrixAuthenticationServiceContainer,
+    ) {
+        super(container, baseUrl, registrationSharedSecret);
+    }
+
+    protected async getAdminToken(): Promise<string> {
+        if (this.adminTokenPromise === undefined) {
+            this.adminTokenPromise = this.mas.getAdminToken();
         }
+        return this.adminTokenPromise;
+    }
+
+    public registerUser(username: string, password: string, displayName?: string): Promise<Credentials> {
+        return this.mas.registerUser(username, password, displayName);
+    }
+
+    public async setThreepid(userId: string, medium: string, address: string): Promise<void> {
+        return this.mas.setThreepid(userId, medium, address);
     }
 }

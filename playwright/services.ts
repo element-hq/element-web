@@ -119,6 +119,7 @@ export const test = base.extend<TestFixtures, Services & Options>({
                 .withNetworkAliases("homeserver")
                 .withLogConsumer(logger.getConsumer("synapse"))
                 .withConfig(synapseConfig)
+                .withMatrixAuthenticationService(mas)
                 .start();
 
             await use(container);
@@ -141,5 +142,6 @@ export const test = base.extend<TestFixtures, Services & Options>({
         await logger.onTestStarted(context);
         await use(context);
         await logger.onTestFinished(testInfo);
+        await homeserver.onTestFinished(testInfo);
     },
 });
