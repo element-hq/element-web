@@ -19,7 +19,7 @@ import { HomeserverContainer, StartedHomeserverContainer } from "./HomeserverCon
 import { StartedMatrixAuthenticationServiceContainer } from "./mas.ts";
 import { Api, ClientServerApi, Verb } from "../plugins/utils/api.ts";
 
-const TAG = "develop@sha256:b69222d98abe9625d46f5d3cb01683d5dc173ae339215297138392cfeec935d9";
+const TAG = "develop@sha256:7be2e00da62dfbb2bad071c6d408fecb1fabf740a538d08768b9b3e0a8c45350";
 
 const DEFAULT_CONFIG = {
     server_name: "localhost",
@@ -140,7 +140,7 @@ const DEFAULT_CONFIG = {
     },
 };
 
-export type SynapseConfigOptions = Partial<typeof DEFAULT_CONFIG>;
+export type SynapseConfig = Partial<typeof DEFAULT_CONFIG>;
 
 export class SynapseContainer extends GenericContainer implements HomeserverContainer<typeof DEFAULT_CONFIG> {
     private config: typeof DEFAULT_CONFIG;

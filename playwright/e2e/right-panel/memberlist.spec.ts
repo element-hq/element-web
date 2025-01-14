@@ -12,7 +12,7 @@ const ROOM_NAME = "Test room";
 const NAME = "Alice";
 
 test.use({
-    synapseConfigOptions: {
+    synapseConfig: {
         presence: {
             enabled: false,
             include_offline_users_on_sync: false,

@@ -106,7 +106,7 @@ class FlakyReporter implements Reporter {
             const headers = { Authorization: `Bearer ${GITHUB_TOKEN}` };
             const body = `${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}`;
 
-            const labels = [LABEL, ...results.map((test) => test.parent.project()?.name).filter(Boolean)];
+            const labels = [LABEL, ...results.map((test) => `${LABEL}-${test.parent.project()?.name}`)];
 
             if (existingIssue) {
                 console.log(`Found issue ${existingIssue.number} for ${flake}, adding comment...`);

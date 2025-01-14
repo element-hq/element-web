@@ -6,14 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Fixtures, PlaywrightTestArgs } from "@playwright/test";
-
-import { Services } from "../../../services.ts";
-import { Fixtures as BaseFixtures } from "../../../element-web-test.ts";
 import { MatrixAuthenticationServiceContainer } from "../../../testcontainers/mas.ts";
+import { Fixtures } from "../../../element-web-test.ts";
 
-type Fixture = PlaywrightTestArgs & BaseFixtures;
-export const masHomeserver: Fixtures<Fixture, Services, Fixture> = {
+export const masHomeserver: Fixtures = {
     mas: [
         async ({ _homeserver: homeserver, logger, network, postgres, mailhog }, use) => {
             const config = {
