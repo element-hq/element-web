@@ -10,14 +10,14 @@ import mailhog from "mailhog";
 import { Network, StartedNetwork } from "testcontainers";
 import { PostgreSqlContainer, StartedPostgreSqlContainer } from "@testcontainers/postgresql";
 
-import { SynapseConfigOptions, SynapseContainer } from "./testcontainers/synapse.ts";
+import { SynapseConfig, SynapseContainer } from "./testcontainers/synapse.ts";
 import { Logger } from "./logger.ts";
 import { StartedMatrixAuthenticationServiceContainer } from "./testcontainers/mas.ts";
 import { HomeserverContainer, StartedHomeserverContainer } from "./testcontainers/HomeserverContainer.ts";
 import { MailhogContainer, StartedMailhogContainer } from "./testcontainers/mailhog.ts";
 import { OAuthServer } from "./plugins/oauth_server";
 
-interface TestFixtures {
+export interface TestFixtures {
     mailhogClient: mailhog.API;
 }
 
@@ -28,7 +28,7 @@ export interface Services {
     postgres: StartedPostgreSqlContainer;
     mailhog: StartedMailhogContainer;
 
-    synapseConfigOptions: SynapseConfigOptions;
+    synapseConfig: SynapseConfig;
     _homeserver: HomeserverContainer<any>;
     homeserver: StartedHomeserverContainer;
     // Set in masHomeserver only
@@ -37,7 +37,9 @@ export interface Services {
     oAuthServer?: OAuthServer;
 }
 
-export const test = base.extend<TestFixtures, Services>({
+export interface Options {}
+
+export const test = base.extend<TestFixtures, Services & Options>({
     logger: [
         // eslint-disable-next-line no-empty-pattern
         async ({}, use) => {
@@ -101,7 +103,7 @@ export const test = base.extend<TestFixtures, Services>({
         await container.client.deleteAll();
     },
 
-    synapseConfigOptions: [{}, { option: true, scope: "worker" }],
+    synapseConfig: [{}, { scope: "worker" }],
     _homeserver: [
         // eslint-disable-next-line no-empty-pattern
         async ({}, use) => {
@@ -111,12 +113,12 @@ export const test = base.extend<TestFixtures, Services>({
         { scope: "worker" },
     ],
     homeserver: [
-        async ({ logger, network, _homeserver: homeserver, synapseConfigOptions, mas }, use) => {
+        async ({ logger, network, _homeserver: homeserver, synapseConfig, mas }, use) => {
             const container = await homeserver
                 .withNetwork(network)
                 .withNetworkAliases("homeserver")
                 .withLogConsumer(logger.getConsumer("synapse"))
-                .withConfig(synapseConfigOptions)
+                .withConfig(synapseConfig)
                 .start();
 
             await use(container);

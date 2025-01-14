@@ -6,12 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Fixtures } from "@playwright/test";
-
 import { DendriteContainer, PineconeContainer } from "../../../testcontainers/dendrite.ts";
-import { Services } from "../../../services.ts";
+import { Fixtures } from "../../../element-web-test.ts";
 
-export const dendriteHomeserver: Fixtures<{}, Services> = {
+export const dendriteHomeserver: Fixtures = {
     _homeserver: [
         // eslint-disable-next-line no-empty-pattern
         async ({}, use) => {
