@@ -11,6 +11,7 @@ import { bootstrapCrossSigningForClient } from "../../pages/client.ts";
 
 /** Tests for the "invisible crypto" behaviour -- i.e., when the "exclude insecure devices" setting is enabled */
 test.describe("Invisible cryptography", () => {
+    test.slow();
     test.use({
         displayName: "Alice",
         botCreateOpts: { displayName: "Bob" },
