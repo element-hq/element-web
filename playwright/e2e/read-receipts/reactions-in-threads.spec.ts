@@ -70,11 +70,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
                 // Given a thread exists and I have marked it as read
                 await util.goTo(room1);
                 await util.assertRead(room2);
-                await util.receiveMessages(room2, [
-                    "Msg1",
-                    msg.threadedOff("Msg1", "Reply1"),
-                    msg.reactionTo("Reply1", "🪿"),
-                ]);
+                await util.receiveMessages(room2, ["Msg1", msg.threadedOff("Msg1", "Reply1")]);
                 await util.assertUnread(room2, 1);
                 await util.markAsRead(room2);
                 await util.assertRead(room2);

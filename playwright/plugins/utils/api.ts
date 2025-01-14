@@ -69,7 +69,7 @@ export class ClientServerApi extends Api {
             accessToken: json.access_token,
             userId: json.user_id,
             deviceId: json.device_id,
-            homeServer: json.home_server,
+            homeServer: json.home_server || json.user_id.split(":").slice(1).join(":"),
             username: userId.slice(1).split(":")[0],
         };
     }

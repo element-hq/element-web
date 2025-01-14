@@ -312,7 +312,7 @@ export class StartedSynapseContainer extends AbstractStartedContainer implements
         });
 
         return {
-            homeServer: data.home_server,
+            homeServer: data.home_server || data.user_id.split(":").slice(1).join(":"),
             accessToken: data.access_token,
             userId: data.user_id,
             deviceId: data.device_id,
