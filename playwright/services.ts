@@ -30,6 +30,7 @@ export interface Services {
     postgres: StartedPostgreSqlContainer;
     mailhog: StartedMailhogContainer;
 
+    synapseConfig: SynapseConfig;
     _homeserver: HomeserverContainer<any>;
     homeserver: StartedHomeserverContainer;
     // Set in masHomeserver only
@@ -39,7 +40,6 @@ export interface Services {
 }
 
 export interface Options {
-    synapseConfig: SynapseConfig;
     homeserverType: HomeserverType;
 }
 
