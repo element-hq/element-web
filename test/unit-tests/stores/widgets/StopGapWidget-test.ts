@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked, MockedObject } from "jest-mock";
+import { mocked, MockedFunction, MockedObject } from "jest-mock";
 import { last } from "lodash";
 import {
     MatrixEvent,
@@ -15,15 +15,20 @@ import {
     EventTimeline,
     EventType,
     MatrixEventEvent,
+    RoomStateEvent,
+    RoomState,
 } from "matrix-js-sdk/src/matrix";
 import { ClientWidgetApi, WidgetApiFromWidgetAction } from "matrix-widget-api";
 import { waitFor } from "jest-matrix-react";
+import { Optional } from "matrix-events-sdk";
 
 import { stubClient, mkRoom, mkEvent } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { StopGapWidget } from "../../../../src/stores/widgets/StopGapWidget";
 import ActiveWidgetStore from "../../../../src/stores/ActiveWidgetStore";
 import SettingsStore from "../../../../src/settings/SettingsStore";
+import { SdkContextClass } from "../../../../src/contexts/SDKContext";
+import { UPDATE_EVENT } from "../../../../src/stores/AsyncStore";
 
 jest.mock("matrix-widget-api/lib/ClientWidgetApi");
 
@@ -53,6 +58,7 @@ describe("StopGapWidget", () => {
         // Start messaging without an iframe, since ClientWidgetApi is mocked
         widget.startMessaging(null as unknown as HTMLIFrameElement);
         messaging = mocked(last(mocked(ClientWidgetApi).mock.instances)!);
+        messaging.feedStateUpdate.mockResolvedValue();
     });
 
     afterEach(() => {
@@ -82,6 +88,20 @@ describe("StopGapWidget", () => {
         client.emit(ClientEvent.ToDeviceEvent, event);
         await Promise.resolve(); // flush promises
         expect(messaging.feedToDevice).toHaveBeenCalledWith(event.getEffectiveEvent(), false);
+    });
+
+    it("feeds incoming state updates to the widget", () => {
+        const event = mkEvent({
+            event: true,
+            type: "org.example.foo",
+            skey: "",
+            user: "@alice:example.org",
+            content: { hello: "world" },
+            room: "!1:example.org",
+        });
+
+        client.emit(RoomStateEvent.Events, event, {} as unknown as RoomState, null);
+        expect(messaging.feedStateUpdate).toHaveBeenCalledWith(event.getEffectiveEvent());
     });
 
     describe("feed event", () => {
@@ -223,6 +243,7 @@ describe("StopGapWidget", () => {
         });
     });
 });
+
 describe("StopGapWidget with stickyPromise", () => {
     let client: MockedObject<MatrixClient>;
     let widget: StopGapWidget;
@@ -286,5 +307,51 @@ describe("StopGapWidget with stickyPromise", () => {
         jest.useRealTimers();
 
         waitFor(() => expect(setPersistenceSpy).toHaveBeenCalled(), { interval: 5 });
+    });
+});
+
+describe("StopGapWidget as an account widget", () => {
+    let widget: StopGapWidget;
+    let messaging: MockedObject<ClientWidgetApi>;
+    let getRoomId: MockedFunction<() => Optional<string>>;
+
+    beforeEach(() => {
+        stubClient();
+        // I give up, getting the return type of spyOn right is hopeless
+        getRoomId = jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId") as unknown as MockedFunction<
+            () => Optional<string>
+        >;
+        getRoomId.mockReturnValue("!1:example.org");
+
+        widget = new StopGapWidget({
+            app: {
+                id: "test",
+                creatorUserId: "@alice:example.org",
+                type: "example",
+                url: "https://example.org?user-id=$matrix_user_id&device-id=$org.matrix.msc3819.matrix_device_id&base-url=$org.matrix.msc4039.matrix_base_url&theme=$org.matrix.msc2873.client_theme",
+                roomId: "!1:example.org",
+            },
+            userId: "@alice:example.org",
+            creatorUserId: "@alice:example.org",
+            waitForIframeLoad: true,
+            userWidget: false,
+        });
+        // Start messaging without an iframe, since ClientWidgetApi is mocked
+        widget.startMessaging(null as unknown as HTMLIFrameElement);
+        messaging = mocked(last(mocked(ClientWidgetApi).mock.instances)!);
+    });
+
+    afterEach(() => {
+        widget.stopMessaging();
+        getRoomId.mockRestore();
+    });
+
+    it("updates viewed room", () => {
+        expect(messaging.setViewedRoomId).toHaveBeenCalledTimes(1);
+        expect(messaging.setViewedRoomId).toHaveBeenLastCalledWith("!1:example.org");
+        getRoomId.mockReturnValue("!2:example.org");
+        SdkContextClass.instance.roomViewStore.emit(UPDATE_EVENT);
+        expect(messaging.setViewedRoomId).toHaveBeenCalledTimes(2);
+        expect(messaging.setViewedRoomId).toHaveBeenLastCalledWith("!2:example.org");
     });
 });

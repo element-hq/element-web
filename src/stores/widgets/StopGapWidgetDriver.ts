@@ -481,7 +481,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
         if (room === null) return [];
         const results: MatrixEvent[] = [];
         const events = room.getLiveTimeline().getEvents(); // timelines are most recent last
-        for (let i = events.length - 1; i > 0; i--) {
+        for (let i = events.length - 1; i >= 0; i--) {
             const ev = events[i];
             if (results.length >= limit) break;
             if (since !== undefined && ev.getId() === since) break;
