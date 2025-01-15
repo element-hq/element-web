@@ -569,7 +569,7 @@ describe("StopGapWidgetDriver", () => {
 
         it("passes the flag through to getVisibleRooms", () => {
             const driver = mkDefaultDriver();
-            driver.readRoomEvents(EventType.CallAnswer, "", 0, ["*"]);
+            driver.getKnownRooms();
             expect(client.getVisibleRooms).toHaveBeenCalledWith(false);
         });
     });
@@ -584,7 +584,7 @@ describe("StopGapWidgetDriver", () => {
 
         it("passes the flag through to getVisibleRooms", () => {
             const driver = mkDefaultDriver();
-            driver.readRoomEvents(EventType.CallAnswer, "", 0, ["*"]);
+            driver.getKnownRooms();
             expect(client.getVisibleRooms).toHaveBeenCalledWith(true);
         });
     });

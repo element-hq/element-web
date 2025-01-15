@@ -118,24 +118,24 @@ describe("StopGapWidget", () => {
 
         it("feeds incoming event to the widget", async () => {
             client.emit(ClientEvent.Event, event1);
-            expect(messaging.feedEvent).toHaveBeenCalledWith(event1.getEffectiveEvent(), "!1:example.org");
+            expect(messaging.feedEvent).toHaveBeenCalledWith(event1.getEffectiveEvent());
 
             client.emit(ClientEvent.Event, event2);
             expect(messaging.feedEvent).toHaveBeenCalledTimes(2);
-            expect(messaging.feedEvent).toHaveBeenLastCalledWith(event2.getEffectiveEvent(), "!1:example.org");
+            expect(messaging.feedEvent).toHaveBeenLastCalledWith(event2.getEffectiveEvent());
         });
 
         it("should not feed incoming event to the widget if seen already", async () => {
             client.emit(ClientEvent.Event, event1);
-            expect(messaging.feedEvent).toHaveBeenCalledWith(event1.getEffectiveEvent(), "!1:example.org");
+            expect(messaging.feedEvent).toHaveBeenCalledWith(event1.getEffectiveEvent());
 
             client.emit(ClientEvent.Event, event2);
             expect(messaging.feedEvent).toHaveBeenCalledTimes(2);
-            expect(messaging.feedEvent).toHaveBeenLastCalledWith(event2.getEffectiveEvent(), "!1:example.org");
+            expect(messaging.feedEvent).toHaveBeenLastCalledWith(event2.getEffectiveEvent());
 
             client.emit(ClientEvent.Event, event1);
             expect(messaging.feedEvent).toHaveBeenCalledTimes(2);
-            expect(messaging.feedEvent).toHaveBeenLastCalledWith(event2.getEffectiveEvent(), "!1:example.org");
+            expect(messaging.feedEvent).toHaveBeenLastCalledWith(event2.getEffectiveEvent());
         });
 
         it("feeds decrypted events asynchronously", async () => {
@@ -165,7 +165,7 @@ describe("StopGapWidget", () => {
             decryptingSpy2.mockReturnValue(false);
             client.emit(MatrixEventEvent.Decrypted, event2Encrypted);
             expect(messaging.feedEvent).toHaveBeenCalledTimes(1);
-            expect(messaging.feedEvent).toHaveBeenLastCalledWith(event2Encrypted.getEffectiveEvent(), "!1:example.org");
+            expect(messaging.feedEvent).toHaveBeenLastCalledWith(event2Encrypted.getEffectiveEvent());
             // …then event 1
             event1Encrypted.event.type = event1.getType();
             event1Encrypted.event.content = event1.getContent();
@@ -175,7 +175,7 @@ describe("StopGapWidget", () => {
             // doesn't have to be blocked on the decryption of event 1 (or
             // worse, dropped)
             expect(messaging.feedEvent).toHaveBeenCalledTimes(2);
-            expect(messaging.feedEvent).toHaveBeenLastCalledWith(event1Encrypted.getEffectiveEvent(), "!1:example.org");
+            expect(messaging.feedEvent).toHaveBeenLastCalledWith(event1Encrypted.getEffectiveEvent());
         });
 
         it("should not feed incoming event if not in timeline", () => {
@@ -191,7 +191,7 @@ describe("StopGapWidget", () => {
             });
 
             client.emit(ClientEvent.Event, event);
-            expect(messaging.feedEvent).toHaveBeenCalledWith(event.getEffectiveEvent(), "!1:example.org");
+            expect(messaging.feedEvent).toHaveBeenCalledWith(event.getEffectiveEvent());
         });
 
         it("feeds incoming event that is not in timeline but relates to unknown parent to the widget", async () => {
@@ -211,15 +211,15 @@ describe("StopGapWidget", () => {
             });
 
             client.emit(ClientEvent.Event, event1);
-            expect(messaging.feedEvent).toHaveBeenCalledWith(event1.getEffectiveEvent(), "!1:example.org");
+            expect(messaging.feedEvent).toHaveBeenCalledWith(event1.getEffectiveEvent());
 
             client.emit(ClientEvent.Event, event);
             expect(messaging.feedEvent).toHaveBeenCalledTimes(2);
-            expect(messaging.feedEvent).toHaveBeenLastCalledWith(event.getEffectiveEvent(), "!1:example.org");
+            expect(messaging.feedEvent).toHaveBeenLastCalledWith(event.getEffectiveEvent());
 
             client.emit(ClientEvent.Event, event1);
             expect(messaging.feedEvent).toHaveBeenCalledTimes(2);
-            expect(messaging.feedEvent).toHaveBeenLastCalledWith(event.getEffectiveEvent(), "!1:example.org");
+            expect(messaging.feedEvent).toHaveBeenLastCalledWith(event.getEffectiveEvent());
         });
     });
 });
