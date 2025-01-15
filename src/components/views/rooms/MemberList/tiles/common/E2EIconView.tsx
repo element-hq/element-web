@@ -12,24 +12,21 @@ import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error"
 
 import { _t } from "../../../../../../languageHandler";
 import { E2EStatus } from "../../../../../../utils/ShieldUtils";
-import { E2EState, crossSigningUserTitles } from "../../../E2EIcon";
+import { crossSigningUserTitles } from "../../../E2EIcon";
 
-function getIconFromStatus(status: E2EState | E2EStatus): React.JSX.Element | undefined {
+function getIconFromStatus(status: E2EStatus): React.JSX.Element | undefined {
     switch (status) {
-        case E2EState.Normal:
         case E2EStatus.Normal:
             return undefined;
-        case E2EState.Verified:
         case E2EStatus.Verified:
             return <VerifiedIcon height="16px" width="16px" className="mx_E2EIconView_verified" />;
-        case E2EState.Warning:
         case E2EStatus.Warning:
             return <ErrorIcon height="16px" width="16px" className="mx_E2EIconView_warning" />;
     }
 }
 
 interface Props {
-    status: E2EState | E2EStatus;
+    status: E2EStatus;
 }
 
 export const E2EIconView: React.FC<Props> = ({ status }) => {

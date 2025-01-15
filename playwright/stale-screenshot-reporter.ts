@@ -20,10 +20,13 @@ const snapshotRoot = path.join(__dirname, "snapshots");
 
 class StaleScreenshotReporter implements Reporter {
     private screenshots = new Set<string>();
+    private failing = false;
     private success = true;
 
     public onTestEnd(test: TestCase): void {
-        if (!test.ok()) return;
+        if (!test.ok()) {
+            this.failing = true;
+        }
         for (const annotation of test.annotations) {
             if (annotation.type === "_screenshot") {
                 this.screenshots.add(annotation.description);
@@ -40,6 +43,7 @@ class StaleScreenshotReporter implements Reporter {
     }
 
     public async onExit(): Promise<void> {
+        if (this.failing) return;
         const screenshotFiles = new Set(await glob(`**/*.png`, { cwd: snapshotRoot }));
         for (const screenshot of screenshotFiles) {
             if (screenshot.split("-").at(-1) !== "linux.png") {

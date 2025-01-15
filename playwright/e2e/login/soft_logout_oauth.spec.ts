@@ -26,8 +26,8 @@ test.use({
 test.use(legacyOAuthHomeserver);
 test.describe("Soft logout with SSO user", () => {
     test.use({
-        user: async ({ page, homeserver }, use) => {
-            const user = await doTokenRegistration(page, homeserver);
+        user: async ({ page, homeserver }, use, testInfo) => {
+            const user = await doTokenRegistration(page, homeserver, testInfo);
 
             // Eventually, we should end up at the home screen.
             await expect(page).toHaveURL(/\/#\/home$/);

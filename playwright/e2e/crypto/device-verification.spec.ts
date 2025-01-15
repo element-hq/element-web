@@ -193,16 +193,17 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         /* on the bot side, wait for the verifier to exist ... */
         const verifier = await awaitVerifier(botVerificationRequest);
         // ... confirm ...
-        botVerificationRequest.evaluate((verificationRequest) => verificationRequest.verifier.verify());
+        void botVerificationRequest.evaluate((verificationRequest) => verificationRequest.verifier.verify());
         // ... and then check the emoji match
         await doTwoWaySasVerification(page, verifier);
 
         /* And we're all done! */
         const infoDialog = page.locator(".mx_InfoDialog");
         await infoDialog.getByRole("button", { name: "They match" }).click();
-        await expect(
-            infoDialog.getByText(`You've successfully verified (${aliceBotClient.credentials.deviceId})!`),
-        ).toBeVisible();
+        // We don't assert the full string as the device name is unset on Synapse but set to the user ID on Dendrite
+        await expect(infoDialog.getByText(`You've successfully verified`)).toContainText(
+            `(${aliceBotClient.credentials.deviceId})`,
+        );
         await infoDialog.getByRole("button", { name: "Got it" }).click();
     });
 });

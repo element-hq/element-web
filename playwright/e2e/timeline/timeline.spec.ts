@@ -590,10 +590,6 @@ test.describe("Timeline", () => {
             "should set inline start padding to a hidden event line",
             { tag: "@screenshot" },
             async ({ page, app, room }) => {
-                test.skip(
-                    true,
-                    "Disabled due to screenshot test being flaky - https://github.com/element-hq/element-web/issues/26890",
-                );
                 await sendEvent(app.client, room.roomId);
                 await page.goto(`/#/room/${room.roomId}`);
                 await app.settings.setValue("showHiddenEventsInTimeline", null, SettingLevel.DEVICE, true);
@@ -607,7 +603,12 @@ test.describe("Timeline", () => {
                 await messageEdit(page);
 
                 // Click timestamp to highlight hidden event line
-                await page.locator(".mx_RoomView_body .mx_EventTile_info .mx_MessageTimestamp").click();
+                const timestamp = page.locator(".mx_RoomView_body .mx_EventTile_info a", {
+                    has: page.locator(".mx_MessageTimestamp"),
+                });
+                // wait for the remote echo otherwise we get an error modal due to a 404 on the /event/ API
+                await expect(timestamp).not.toHaveAttribute("href", /~!/);
+                await timestamp.locator(".mx_MessageTimestamp").click();
 
                 // should not add inline start padding to a hidden event line on IRC layout
                 await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.IRC);

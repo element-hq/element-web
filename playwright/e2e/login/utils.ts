@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Page, expect } from "@playwright/test";
+import { Page, expect, TestInfo } from "@playwright/test";
 
 import { Credentials, HomeserverInstance } from "../../plugins/homeserver";
 
@@ -15,6 +15,7 @@ import { Credentials, HomeserverInstance } from "../../plugins/homeserver";
 export async function doTokenRegistration(
     page: Page,
     homeserver: HomeserverInstance,
+    testInfo: TestInfo,
 ): Promise<Credentials & { displayName: string }> {
     await page.goto("/#/login");
 
@@ -35,7 +36,7 @@ export async function doTokenRegistration(
 
     // Synapse prompts us to pick a user ID
     await expect(page.getByRole("heading", { name: "Create your account" })).toBeVisible();
-    await page.getByRole("textbox", { name: "Username (required)" }).fill("alice");
+    await page.getByRole("textbox", { name: "Username (required)" }).fill(`alice_${testInfo.testId}`);
 
     // wait for username validation to start, and complete
     await expect(page.locator("#field-username-output")).toHaveText("");
@@ -92,7 +93,7 @@ export async function interceptRequestsWithSoftLogout(page: Page, user: Credenti
     // do something to make the active /sync return: create a new room
     await page.evaluate(() => {
         // don't wait for this to complete: it probably won't, because of the broken sync
-        window.mxMatrixClientPeg.get().createRoom({});
+        void window.mxMatrixClientPeg.get().createRoom({});
     });
 
     await promise;

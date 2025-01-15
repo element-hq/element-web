@@ -100,7 +100,7 @@ export function handleSasVerification(verifier: JSHandle<Verifier>): Promise<Emo
         return new Promise<EmojiMapping[]>((resolve) => {
             const onShowSas = (event: ShowSasCallbacks) => {
                 verifier.off("show_sas" as VerifierEvent, onShowSas);
-                event.confirm();
+                void event.confirm();
                 resolve(event.sas.emoji);
             };
 
@@ -354,7 +354,7 @@ export async function autoJoin(client: Client) {
     await client.evaluate((cli) => {
         cli.on(window.matrixcs.RoomMemberEvent.Membership, (event, member) => {
             if (member.membership === "invite" && member.userId === cli.getUserId()) {
-                cli.joinRoom(member.roomId);
+                void cli.joinRoom(member.roomId);
             }
         });
     });

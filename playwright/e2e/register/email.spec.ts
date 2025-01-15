@@ -32,7 +32,7 @@ test.describe("Email Registration", async () => {
     });
 
     test(
-        "registers an account and lands on the use case selection screen",
+        "registers an account and lands on the home page",
         { tag: "@screenshot" },
         async ({ page, mailhogClient, request, checkA11y }) => {
             await expect(page.getByRole("textbox", { name: "Username" })).toBeVisible();
@@ -57,7 +57,7 @@ test.describe("Email Registration", async () => {
             const [emailLink] = messages.items[0].text.match(/http.+/);
             await request.get(emailLink); // "Click" the link in the email
 
-            await expect(page.locator(".mx_UseCaseSelection_skip")).toBeVisible();
+            await expect(page.getByText("Welcome alice")).toBeVisible();
         },
     );
 });

@@ -1227,7 +1227,6 @@
     },
     "member_list": {
         "filter_placeholder": "Φιλτράρισμα μελών",
-        "invited_list_heading": "Προσκλήθηκε",
         "power_label": "%(userName)s (δύναμη %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Μέλη δωματίου",
@@ -1322,7 +1321,6 @@
         "custom_level": "Προσαρμοσμένο επίπεδο",
         "default": "Προεπιλογή",
         "label": "Επίπεδο ισχύος",
-        "mod": "Συντονιστής",
         "moderator": "Συντονιστής",
         "restricted": "Περιορισμένο/η"
     },
@@ -2274,7 +2272,6 @@
         "invite": "Προσκαλέστε άτομα",
         "invite_description": "Πρόσκληση με email ή όνομα χρήστη",
         "invite_link": "Κοινή χρήση συνδέσμου πρόσκλησης",
-        "invite_this_space": "Πρόσκληση σε αυτό το χώρο",
         "joining_space": "Συνδέετε",
         "landing_welcome": "Καλώς ήρθατε στο <name/>",
         "leave_dialog_action": "Αποχώρηση από τον χώρο",

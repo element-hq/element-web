@@ -411,7 +411,6 @@
             "other": "és még: %(count)s ...",
             "one": "és még egy..."
         },
-        "android": "Android",
         "appearance": "Megjelenítés",
         "application": "Alkalmazás",
         "are_you_sure": "Biztos?",
@@ -450,7 +449,6 @@
         "identity_server": "Azonosítási kiszolgáló",
         "image": "Kép",
         "integration_manager": "Integrációkezelő",
-        "ios": "iOS",
         "joined": "Csatlakozott",
         "labs": "Labor",
         "legal": "Jogi feltételek",
@@ -539,8 +537,7 @@
         "video": "Videó",
         "video_room": "Videó szoba",
         "view_message": "Üzenet megjelenítése",
-        "warning": "Figyelmeztetés",
-        "welcome": "Üdvözöljük"
+        "warning": "Figyelmeztetés"
     },
     "composer": {
         "autocomplete": {
@@ -1478,7 +1475,6 @@
     },
     "member_list": {
         "filter_placeholder": "Szoba tagság szűrése",
-        "invited_list_heading": "Meghívva",
         "power_label": "%(userName)s (szint: %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Szobatagok",
@@ -1517,61 +1513,15 @@
         "m.key.verification.request": "%(name)s ellenőrzést kér"
     },
     "onboarding": {
-        "apple_trademarks": "Az App Store® és az Apple logo® az Apple Inc. védjegyei.",
-        "community_messaging_action": "Találja meg az embereket",
-        "community_messaging_description": "Tartsa meg a közösségi beszélgetések feletti irányítást.\nAkár milliók támogatásával, hatékony moderációs és együttműködési lehetőségekkel.",
-        "community_messaging_title": "Közösségi tulajdon",
-        "complete_these": "Ezen lépések befejezésével hozhatja ki a legtöbbet a(z) %(brand)s használatából",
         "create_room": "Készíts csoportos beszélgetést",
-        "download_app": "A(z) %(brand)s letöltése",
-        "download_app_action": "Alkalmazások letöltése",
-        "download_app_description": "Ne maradjon le semmiről, legyen Önnél a(z) %(brand)s",
-        "download_app_store": "Letöltés az App Store-ból",
-        "download_brand": "A(z) %(brand)s letöltése",
-        "download_brand_desktop": "Asztali %(brand)s letöltése",
-        "download_f_droid": "Letöltés az F-Droidról",
-        "download_google_play": "Letöltés a Google Play-ből",
-        "enable_notifications": "Értesítések bekapcsolása",
-        "enable_notifications_action": "Értesítések bekapcsolása",
-        "enable_notifications_description": "Ne maradjon le a válaszról vagy egy fontos üzenetről",
         "explore_rooms": "Nyilvános szobák felfedezése",
-        "find_community_members": "Közösség tagjainak keresése és meghívása",
-        "find_coworkers": "Munkatársak keresése és meghívása",
-        "find_friends": "Keresse meg és hívja meg barátait",
-        "find_friends_action": "Barátok keresése",
-        "find_friends_description": "Kezdjünk neki, ezért van itt",
-        "find_people": "Emberek keresése",
-        "free_e2ee_messaging_unlimited_voip": "Az ingyenes, végpontok közti titkosítással rendelkező üzenetküldéssel, a korlátlan hang- és videóhívással, a(z) %(brand)s használata nagyszerű módja a kapcsolattartásnak.",
-        "get_stuff_done": "Fejezzen be dolgokat a csapattagjai megtalálásával",
-        "google_trademarks": "A Google Play és a Google Play logó a Google LLC védjegye.",
         "has_avatar_label": "Nagyszerű, ez segíteni eldönteni másoknak, hogy tényleg Ön az",
         "intro_byline": "Az ön beszélgetései csak az öné.",
         "intro_welcome": "Üdvözli a(z) %(appName)s",
         "no_avatar_label": "Állítson be egy fényképet, hogy tudják mások, hogy Ön az.",
-        "only_n_steps_to_go": {
-            "one": "Még %(count)s lépés",
-            "other": "Még %(count)s lépés"
-        },
-        "personal_messaging_action": "Kezdje el az első csevegését",
-        "personal_messaging_title": "Biztonságos üzenetküldés barátokkal, családdal",
-        "qr_or_app_links": "%(qrCode)s vagy %(appLinks)s",
         "send_dm": "Közvetlen üzenet küldése",
-        "set_up_profile": "Saját profil beállítása",
-        "set_up_profile_action": "Saját profil",
-        "set_up_profile_description": "Biztosítsa a többieket arról, hogy valóban Ön az",
-        "use_case_community_messaging": "Online közösségek tagjai",
-        "use_case_heading1": "Itt van:",
-        "use_case_heading2": "Kivel beszélget a legtöbbet?",
-        "use_case_heading3": "Segítünk a kapcsolatteremtésben.",
-        "use_case_personal_messaging": "Barátok és család",
-        "use_case_work_messaging": "Munkatársak és csoportok",
         "welcome_detail": "És most segítünk az indulásban",
-        "welcome_to_brand": "Üdvözli a(z) %(brand)s",
-        "welcome_user": "Üdv %(name)s",
-        "work_messaging_action": "Találja meg a munkatársait",
-        "work_messaging_title": "Biztonságos üzenetküldés munkához",
-        "you_did_it": "Kész!",
-        "you_made_it": "Megcsinálta!"
+        "welcome_user": "Üdv %(name)s"
     },
     "pill": {
         "permalink_other_room": "Üzenet itt: %(room)s",
@@ -1623,7 +1573,6 @@
         "custom_level": "Egyedi szint",
         "default": "Alapértelmezett",
         "label": "Hozzáférési szint",
-        "mod": "Moderátor",
         "moderator": "Moderátor",
         "restricted": "Korlátozott"
     },
@@ -2457,7 +2406,6 @@
             "room_directory_heading": "Szobalista",
             "room_list_heading": "Szobalista",
             "show_avatars_pills": "Profilképek megjelenítése a felhasználók, szobák és események megemlítésénél",
-            "show_checklist_shortcuts": "Kezdő lépések elvégzésének hivatkozásának megjelenítése a szobalista fölött",
             "show_polls_button": "Szavazások gomb megjelenítése",
             "surround_text": "Kijelölt szöveg körülvétele speciális karakterek beírásakor",
             "time_heading": "Idő megjelenítése"
@@ -2819,7 +2767,6 @@
         "invite": "Emberek meghívása",
         "invite_description": "Meghívás e-mail-címmel vagy felhasználónévvel",
         "invite_link": "Meghívási hivatkozás megosztása",
-        "invite_this_space": "Meghívás a térbe",
         "joining_space": "Belépés",
         "landing_welcome": "Üdvözöl a(z) <name/>",
         "leave_dialog_action": "Tér elhagyása",

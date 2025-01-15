@@ -12,6 +12,7 @@ import { expect, test } from "../../element-web-test";
 import { selectHomeserver } from "../utils";
 import { Credentials, HomeserverInstance } from "../../plugins/homeserver";
 import { consentHomeserver } from "../../plugins/homeserver/synapse/consentHomeserver.ts";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 // This test requires fixed credentials for the device signing keys below to work
 const username = "user1234";
@@ -77,6 +78,9 @@ async function login(page: Page, homeserver: HomeserverInstance, credentials: Cr
     await page.getByRole("button", { name: "Sign in" }).click();
 }
 
+// This test suite uses the same userId for all tests in the suite
+// due to DEVICE_SIGNING_KEYS_BODY being specific to that userId,
+// so we restart the Synapse container to make it forget everything.
 test.use(consentHomeserver);
 test.use({
     config: {
@@ -88,6 +92,11 @@ test.use({
             },
         },
     },
+    context: async ({ context, homeserver }, use) => {
+        // Restart the homeserver to wipe its in-memory db so we can reuse the same user ID without cross-signing prompts
+        await homeserver.restart();
+        await use(context);
+    },
     credentials: async ({ context, homeserver }, use) => {
         const displayName = "Dave";
         const credentials = await homeserver.registerUser(username, password, displayName);
@@ -97,11 +106,16 @@ test.use({
             ...credentials,
             displayName,
         });
+
+        // Restart the homeserver to wipe its in-memory db so we can reuse the same user ID without cross-signing prompts
+        await homeserver.restart();
     },
 });
 
 test.describe("Login", () => {
     test.describe("Password login", () => {
+        test.skip(isDendrite, "Dendrite lacks support for MSC3967 so requires additional auth here");
+
         test("Loads the welcome page by default; then logs in with an existing account and lands on the home screen", async ({
             credentials,
             page,

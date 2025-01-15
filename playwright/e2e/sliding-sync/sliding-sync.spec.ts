@@ -69,6 +69,11 @@ const test = base.extend<{
 });
 
 test.describe("Sliding Sync", () => {
+    test.skip(
+        ({ homeserverType }) => homeserverType === "pinecone",
+        "due to a bug in Pinecone https://github.com/element-hq/dendrite/issues/3490",
+    );
+
     const checkOrder = async (wantOrder: string[], page: Page) => {
         await expect(page.getByRole("group", { name: "Rooms" }).locator(".mx_RoomTile_title")).toHaveText(wantOrder);
     };
@@ -108,7 +113,6 @@ test.describe("Sliding Sync", () => {
         await page.getByRole("menuitemradio", { name: "A-Z" }).dispatchEvent("click");
         await expect(page.locator(".mx_StyledRadioButton_checked").getByText("A-Z")).toBeVisible();
 
-        await page.pause();
         await checkOrder(["Apple", "Orange", "Pineapple", "Test Room"], page);
     });
 
@@ -276,7 +280,7 @@ test.describe("Sliding Sync", () => {
         // now rescind the invite
         await bot.evaluate(
             async (client, { roomRescind, clientUserId }) => {
-                client.kick(roomRescind, clientUserId);
+                await client.kick(roomRescind, clientUserId);
             },
             { roomRescind, clientUserId },
         );
@@ -295,7 +299,7 @@ test.describe("Sliding Sync", () => {
             is_direct: true,
         });
         await app.client.evaluate(async (client, roomId) => {
-            client.setRoomTag(roomId, "m.favourite", { order: 0.5 });
+            await client.setRoomTag(roomId, "m.favourite", { order: 0.5 });
         }, roomId);
         await expect(page.getByRole("group", { name: "Favourites" }).getByText("Favourite DM")).toBeVisible();
         await expect(page.getByRole("group", { name: "People" }).getByText("Favourite DM")).not.toBeAttached();

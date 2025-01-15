@@ -418,7 +418,6 @@
             "other": "ja %(count)s muud...",
             "one": "ja üks muu..."
         },
-        "android": "Android",
         "appearance": "Välimus",
         "application": "Rakendus",
         "are_you_sure": "Kas sa oled kindel?",
@@ -457,7 +456,6 @@
         "identity_server": "Isikutuvastusserver",
         "image": "Pilt",
         "integration_manager": "Lõiminguhaldur",
-        "ios": "iOS",
         "joined": "Liitunud",
         "labs": "Katsed",
         "legal": "Juriidiline teave",
@@ -546,8 +544,7 @@
         "video": "Video",
         "video_room": "Videotuba",
         "view_message": "Vaata sõnumit",
-        "warning": "Hoiatus",
-        "welcome": "Tere tulemast"
+        "warning": "Hoiatus"
     },
     "composer": {
         "autocomplete": {
@@ -1500,7 +1497,6 @@
     "member_list": {
         "filter_placeholder": "Filtreeri jututoa liikmeid",
         "invite_button_no_perms_tooltip": "Sul pole õigusi kutse saatmiseks teistele kasutajatele",
-        "invited_list_heading": "Kutsutud",
         "power_label": "%(userName)s (õigused %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Jututoa liikmed",
@@ -1543,61 +1539,15 @@
         "m.key.verification.request": "%(name)s soovib verifitseerimist"
     },
     "onboarding": {
-        "apple_trademarks": "App Store® ja Apple logo® on Apple Inc kaubamärgid.",
-        "community_messaging_action": "Leia oma kaasteelisi",
-        "community_messaging_description": "Halda ja kontrolli suhtlust oma kogukonnas.\nSobib ka miljonitele kasutajatele ning võimaldab mitmekesist modereerimist kui liidestust.",
-        "community_messaging_title": "Kogukonnad, mida te ise haldate",
-        "complete_these": "Kasutamaks kõiki %(brand)s'i võimalusi tee läbi alljärgnev",
         "create_room": "Loo rühmavestlus",
-        "download_app": "Laadi alla %(brand)s",
-        "download_app_action": "Laadi alla rakendusi",
-        "download_app_description": "Võta %(brand)s nutiseadmesse kaasa ning ära jäta suhtlemist vahele",
-        "download_app_store": "Laadi alla App Store'st",
-        "download_brand": "Laadi alla %(brand)s",
-        "download_brand_desktop": "Laadi alla %(brand)s töölaua rakendusena",
-        "download_f_droid": "Laadi alla F-Droid'ist",
-        "download_google_play": "Laadi alla Google Play'st",
-        "enable_notifications": "Lülita seadistused välja",
-        "enable_notifications_action": "Võta teavitused kasutusele",
-        "enable_notifications_description": "Ära jäta vahele vastuseid ega olulisi sõnumeid",
         "explore_rooms": "Sirvi avalikke jututubasid",
-        "find_community_members": "Leia ja saada kutse oma kogukonna liikmetele",
-        "find_coworkers": "Leia kolleege ja saada neile kutse",
-        "find_friends": "Leia sõpru ja saada neile kutse",
-        "find_friends_action": "Leia sõpru",
-        "find_friends_description": "Selleks sa oled ju siin, alustame siis nüüd",
-        "find_people": "Leia muid suhtluspartnereid",
-        "free_e2ee_messaging_unlimited_voip": "%(brand)s on parim viis suhtluseks - siin on tasuta läbiv krüptimine kui piiramatult heli- ja videokõnesid.",
-        "get_stuff_done": "Saa tööd tehtud üheskoos oma kaasteelistega",
-        "google_trademarks": "Google Play ja Google Play logo on Google LLC kaubamärgid.",
         "has_avatar_label": "Suurepärane, nüüd teised teavad et tegemist on sinuga",
         "intro_byline": "Vestlused, mida sa tegelikult ka omad.",
         "intro_welcome": "Tere tulemast suhtlusrakenduse %(appName)s kasutajaks",
         "no_avatar_label": "Enda tutvustamiseks lisa foto.",
-        "only_n_steps_to_go": {
-            "one": "Ainult %(count)s samm veel",
-            "other": "Ainult %(count)s sammu veel"
-        },
-        "personal_messaging_action": "Alusta oma esimest vestlust",
-        "personal_messaging_title": "Turvaline suhtlus pere ja sõprade jaoks",
-        "qr_or_app_links": "%(qrCode)s või %(appLinks)s",
         "send_dm": "Saada otsesõnum",
-        "set_up_profile": "Seadista oma profiili",
-        "set_up_profile_action": "Sinu profiil",
-        "set_up_profile_description": "Taga, et sinu suhtluspartnerid võivad selles kindlad olla, et tegemist on sinuga",
-        "use_case_community_messaging": "Võrgupõhise kogukonna liikmed",
-        "use_case_heading1": "Kõik on tehtud",
-        "use_case_heading2": "Kellega sa kõige rohkem vestled?",
-        "use_case_heading3": "Me aitame sind Matrix'i võrgu kasutamisel.",
-        "use_case_personal_messaging": "Perekond ja sõbrad",
-        "use_case_work_messaging": "Kolleegid ja töörühmad",
         "welcome_detail": "Nüüd näitame sulle, mida saad järgmiseks teha",
-        "welcome_to_brand": "Tere tulemast %(brand)s'i kasutajaks",
-        "welcome_user": "Tere tulemast, %(name)s",
-        "work_messaging_action": "Leia oma kolleege",
-        "work_messaging_title": "Turvalised sõnumid töökeskkonna jaoks",
-        "you_did_it": "Valmis!",
-        "you_made_it": "Sa said valmis!"
+        "welcome_user": "Tere tulemast, %(name)s"
     },
     "pill": {
         "permalink_other_room": "Sõnum jututoas %(room)s",
@@ -1649,7 +1599,6 @@
         "custom_level": "Kohandatud õigused",
         "default": "Tavaline",
         "label": "Õiguste tase",
-        "mod": "Moderaator",
         "moderator": "Moderaator",
         "restricted": "Piiratud õigustega kasutaja"
     },
@@ -2495,7 +2444,6 @@
             "room_directory_heading": "Jututubade loend",
             "room_list_heading": "Jututubade loend",
             "show_avatars_pills": "Näita tunnuspilte kasutajate, jututubade ja sündmuste mainimistes",
-            "show_checklist_shortcuts": "Näita viidet jututubade loendi kohal",
             "show_polls_button": "Näita küsitluste nuppu",
             "surround_text": "Erimärkide sisestamisel märgista valitud tekst",
             "time_heading": "Aegade kuvamine"
@@ -2848,7 +2796,6 @@
         "invite": "Kutsu teisi kasutajaid",
         "invite_description": "Kutsu e-posti aadressi või kasutajanime alusel",
         "invite_link": "Jaga kutse linki",
-        "invite_this_space": "Kutsu siia kogukonnakeskusesse",
         "joining_space": "Liitun",
         "landing_welcome": "Tete tulemast <name/> liikmeks",
         "leave_dialog_action": "Lahku kogukonnakeskusest",
