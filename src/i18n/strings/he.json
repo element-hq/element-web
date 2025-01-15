@@ -332,7 +332,6 @@
             "one": "ועוד אחד אחר...",
             "other": "ו %(count)s אחרים..."
         },
-        "android": "אנדרויד",
         "appearance": "מראה",
         "are_you_sure": "האם אתם בטוחים?",
         "attachment": "נספחים",
@@ -1113,7 +1112,6 @@
         "intro_welcome": "ברוכים הבאים אל %(appName)s",
         "no_avatar_label": "הוסף תמונה כדי שאנשים יידעו שאתה זה.",
         "send_dm": "שלח הודעה ישירה",
-        "use_case_personal_messaging": "חברים ומשפחה",
         "welcome_detail": "עכשיו, בואו נעזור לכם להתחיל",
         "welcome_user": "ברוכים הבאים %(name)s"
     },
