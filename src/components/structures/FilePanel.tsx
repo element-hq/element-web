@@ -45,6 +45,10 @@ interface IProps {
 interface IState {
     timelineSet: EventTimelineSet | null;
     narrow: boolean;
+    /**
+     * Whether the room is encrypted or not. If null, the state is still being determined.
+     */
+    isRoomEncrypted: boolean | null;
 }
 
 /*
@@ -59,10 +63,13 @@ class FilePanel extends React.Component<IProps, IState> {
     private decryptingEvents = new Set<string>();
     public noRoom = false;
     private card = createRef<HTMLDivElement>();
+    // This is used to track if the component is unmounting to avoid adding dangling listeners
+    private isUnloading = false;
 
     public state: IState = {
         timelineSet: null,
         narrow: false,
+        isRoomEncrypted: null,
     };
 
     private onRoomTimeline = (
@@ -115,10 +122,14 @@ class FilePanel extends React.Component<IProps, IState> {
 
     public async componentDidMount(): Promise<void> {
         const client = MatrixClientPeg.safeGet();
+        const isRoomEncrypted = Boolean(await client.getCrypto()?.isEncryptionEnabledInRoom(this.props.roomId));
+        this.setState({
+            isRoomEncrypted,
+        });
 
         await this.updateTimelineSet(this.props.roomId);
 
-        if (!client.isRoomEncrypted(this.props.roomId)) return;
+        if (!isRoomEncrypted) return;
 
         // The timelineSets filter makes sure that encrypted events that contain
         // URLs never get added to the timeline, even if they are live events.
@@ -128,17 +139,18 @@ class FilePanel extends React.Component<IProps, IState> {
         // We do this only for encrypted rooms and if an event index exists,
         // this could be made more general in the future or the filter logic
         // could be fixed.
-        if (EventIndexPeg.get() !== null) {
+        //
+        // `componentDidMount` is async and we need to be sure to not put this listener when the component is unmount before the mounting is done.
+        if (EventIndexPeg.get() !== null && this.isUnloading) {
             client.on(RoomEvent.Timeline, this.onRoomTimeline);
             client.on(MatrixEventEvent.Decrypted, this.onEventDecrypted);
         }
     }
 
     public componentWillUnmount(): void {
+        this.isUnloading = true;
         const client = MatrixClientPeg.get();
-        if (client === null) return;
-
-        if (!client.isRoomEncrypted(this.props.roomId)) return;
+        if (client === null || !this.state.isRoomEncrypted) return;
 
         if (EventIndexPeg.get() !== null) {
             client.removeListener(RoomEvent.Timeline, this.onRoomTimeline);
@@ -178,7 +190,7 @@ class FilePanel extends React.Component<IProps, IState> {
         // the event index to fulfill the pagination request. Asking the server
         // to paginate won't ever work since the server can't correctly filter
         // out events containing URLs
-        if (room && client.isRoomEncrypted(roomId) && eventIndex !== null) {
+        if (room && this.state.isRoomEncrypted && eventIndex !== null) {
             return eventIndex.paginateTimelineWindow(room, timelineWindow, direction, limit);
         } else {
             return timelineWindow.paginate(direction, limit);
@@ -211,7 +223,7 @@ class FilePanel extends React.Component<IProps, IState> {
                 // event index to populate the timelineSet for us. This call
                 // will add 10 events to the live timeline of the set. More can
                 // be requested using pagination.
-                if (client.isRoomEncrypted(roomId) && eventIndex !== null) {
+                if (this.state.isRoomEncrypted && eventIndex !== null) {
                     const timeline = timelineSet.getLiveTimeline();
                     await eventIndex.populateFileTimeline(timelineSet, timeline, room, 10);
                 }
@@ -270,7 +282,8 @@ class FilePanel extends React.Component<IProps, IState> {
             />
         );
 
-        const isRoomEncrypted = this.noRoom ? false : MatrixClientPeg.safeGet().isRoomEncrypted(this.props.roomId);
+        const isRoomEncryptedLoaded = this.state.isRoomEncrypted !== null;
+        const isRoomEncrypted = Boolean(this.noRoom ? false : this.state.isRoomEncrypted);
 
         if (this.state.timelineSet) {
             return (
@@ -289,17 +302,21 @@ class FilePanel extends React.Component<IProps, IState> {
                         {this.card.current && (
                             <Measured sensor={this.card.current} onMeasurement={this.onMeasurement} />
                         )}
-                        <SearchWarning isRoomEncrypted={isRoomEncrypted} kind={WarningKind.Files} />
-                        <TimelinePanel
-                            manageReadReceipts={false}
-                            manageReadMarkers={false}
-                            timelineSet={this.state.timelineSet}
-                            showUrlPreview={false}
-                            onPaginationRequest={this.onPaginationRequest}
-                            resizeNotifier={this.props.resizeNotifier}
-                            empty={emptyState}
-                            layout={Layout.Group}
-                        />
+                        {isRoomEncryptedLoaded && (
+                            <>
+                                <SearchWarning isRoomEncrypted={isRoomEncrypted} kind={WarningKind.Files} />
+                                <TimelinePanel
+                                    manageReadReceipts={false}
+                                    manageReadMarkers={false}
+                                    timelineSet={this.state.timelineSet}
+                                    showUrlPreview={false}
+                                    onPaginationRequest={this.onPaginationRequest}
+                                    resizeNotifier={this.props.resizeNotifier}
+                                    empty={emptyState}
+                                    layout={Layout.Group}
+                                />
+                            </>
+                        )}
                     </BaseCard>
                 </ScopedRoomContextProvider>
             );
