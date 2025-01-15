@@ -26,7 +26,7 @@ import { SettingsSubheader } from "../../SettingsSubheader";
  *  - "set_up_encryption": The panel to show when the user is setting up their encryption.
  *                         This happens when the user doesn't have cross-signing enabled, or their current device is not verified.
  *  - "change_recovery_key": The panel to show when the user is changing their recovery key.
- *                           This happens when the user has a key backup and the user clicks on "Change recovery key" button of the RecoveryPanel.
+ *                           This happens when the user has a recovery key and the user clicks on "Change recovery key" button of the RecoveryPanel.
  *  - "set_recovery_key": The panel to show when the user is setting up their recovery key.
  *                        This happens when the user doesn't have a key a recovery key and the user clicks on "Set up recovery key" button of the RecoveryPanel.
  */

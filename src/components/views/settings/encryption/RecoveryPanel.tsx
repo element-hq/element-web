@@ -20,7 +20,7 @@ import { SettingsSubheader } from "../SettingsSubheader";
  * The possible states of the recovery panel.
  * - `loading`: We are checking the recovery key and the secrets.
  * - `missing_recovery_key`: The user has no recovery key.
- * - `secrets_not_cached`: The user has a backup but the secrets are not cached.
+ * - `secrets_not_cached`: The user has a recovery key but the secrets are not cached.
  *                         This can happen if we verified another device and secret-gossiping failed, or the other device itself lacked the secrets.
  * - `good`: The user has a recovery key and the secrets are cached.
  */
@@ -30,8 +30,8 @@ interface RecoveryPanelProps {
     /**
      * Callback for when the user wants to set up or change their recovery key.
      *
-     * @param setupNewKeyis set if the user does not already have a recovery key (and has therefore clicked on
-     * "Set up recovery" rather than "Change recovery key").
+     * @param setupNewKey - set if the user does not already have a recovery key (and has therefore clicked on
+     *                      "Set up recovery" rather than "Change recovery key").
      */
     onChangeRecoveryKeyClick: (setupNewKey: boolean) => void;
 }
