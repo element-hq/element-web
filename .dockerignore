@@ -10,3 +10,4 @@ config.json*
 # Exclude the playwright directory as much as we can as the snapshots are huge and we bind mount it in
 playwright/
 !playwright/docker-entrypoint.sh
+Dockerfile
