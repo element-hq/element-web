@@ -171,23 +171,6 @@ export class Client {
         });
     }
 
-    public async waitForRoom(roomId: string): Promise<void> {
-        const client = await this.prepareClient();
-        return await client.evaluate(async (cli, roomId) => {
-            if (!cli.getRoom(roomId)) {
-                await new Promise<void>((resolve) => {
-                    const onRoom = (room: Room) => {
-                        if (room.roomId === roomId) {
-                            cli.off(window.matrixcs.ClientEvent.Room, onRoom);
-                            resolve();
-                        }
-                    };
-                    cli.on(window.matrixcs.ClientEvent.Room, onRoom);
-                });
-            }
-        }, roomId);
-    }
-
     /**
      * Create a room with given options.
      * @param options the options to apply when creating the room

@@ -81,7 +81,7 @@ test.describe("Recovery section in Encryption tab", () => {
         },
     );
 
-    test("should setup the recovery key", { tag: "@screenshot" }, async ({ page, app, util }) => {
+    test("should setup the recovery key", { tag: ["@screenshot", "@no-webkit"] }, async ({ page, app, util }) => {
         await verifySession(app, "new passphrase");
         await util.removeSecretStorageDefaultKeyId();
 

@@ -38,13 +38,13 @@ export const test = base.extend<{
     room1Name: "Room 1",
     room1: async ({ room1Name: name, app, user, bot }, use) => {
         const roomId = await app.client.createRoom({ name, invite: [bot.credentials.userId] });
-        await bot.waitForRoom(roomId);
+        await bot.awaitRoomMembership(roomId);
         await use({ name, roomId });
     },
     room2Name: "Room 2",
     room2: async ({ room2Name: name, app, user, bot }, use) => {
         const roomId = await app.client.createRoom({ name, invite: [bot.credentials.userId] });
-        await bot.waitForRoom(roomId);
+        await bot.awaitRoomMembership(roomId);
         await use({ name, roomId });
     },
     msg: async ({ page, app, util }, use) => {
