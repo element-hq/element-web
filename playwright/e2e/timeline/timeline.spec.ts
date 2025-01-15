@@ -1195,6 +1195,7 @@ test.describe("Timeline", () => {
             });
 
             await sendImage(app.client, room.roomId, NEW_AVATAR);
+            await app.timeline.scrollToBottom();
             await expect(page.locator(".mx_MImageBody").first()).toBeVisible();
 
             // Exclude timestamp and read marker from snapshot
