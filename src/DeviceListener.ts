@@ -314,7 +314,7 @@ export default class DeviceListener {
                 // cross signing is ready but the current device is not trusted: prompt the user to verify
                 showSetupEncryptionToast(SetupKind.VERIFY_THIS_SESSION);
             } else if (!allCrossSigningSecretsCached) {
-                // cross signing ready & device trusted, but we are missing secrets from our local cached.
+                // cross signing ready & device trusted, but we are missing secrets from our local cache.
                 // prompt the user to enter their recovery key.
                 showSetupEncryptionToast(SetupKind.KEY_STORAGE_OUT_OF_SYNC);
             } else if (defaultKeyId === null) {
