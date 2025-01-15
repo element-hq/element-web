@@ -15,7 +15,6 @@ import type {
     ICreateRoomOpts,
     ISendEventResponse,
     MatrixClient,
-    Room,
     MatrixEvent,
     ReceiptType,
     IRoomDirectoryOptions,
