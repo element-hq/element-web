@@ -68,7 +68,7 @@ class Helpers {
     }
 
     /**
-     * Set the default key id of the secret storage at null
+     * Set the default key id of the secret storage to `null`
      */
     async removeSecretStorageDefaultKeyId() {
         const client = await this.app.client.prepareClient();

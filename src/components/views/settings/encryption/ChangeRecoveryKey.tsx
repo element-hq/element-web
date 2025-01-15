@@ -108,7 +108,7 @@ export function ChangeRecoveryKey({
             break;
         case "confirm_key_setup_flow":
         case "confirm_key_change_flow":
-            // Ask the user to enter the recovery key they just save to confirm it.
+            // Ask the user to enter the recovery key they just saved to confirm it.
             content = (
                 <KeyForm
                     // encodedPrivateKey is always defined, the optional typing is incorrect
@@ -123,7 +123,6 @@ export function ChangeRecoveryKey({
                             // when we will try to access the secret storage during the bootstrap
                             await withSecretStorageKeyCache(() =>
                                 crypto.bootstrapSecretStorage({
-                                    setupNewKeyBackup: !userHasRecoveryKey,
                                     setupNewSecretStorage: true,
                                     createSecretStorageKey: async () => recoveryKey,
                                 }),

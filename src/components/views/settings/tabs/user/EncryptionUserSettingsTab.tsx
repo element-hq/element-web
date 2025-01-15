@@ -28,7 +28,7 @@ import { SettingsSubheader } from "../../SettingsSubheader";
  *  - "change_recovery_key": The panel to show when the user is changing their recovery key.
  *                           This happens when the user has a key backup and the user clicks on "Change recovery key" button of the RecoveryPanel.
  *  - "set_recovery_key": The panel to show when the user is setting up their recovery key.
- *                        This happens when the user doesn't have a key backup and the user clicks on "Set up recovery key" button of the RecoveryPanel.
+ *                        This happens when the user doesn't have a key a recovery key and the user clicks on "Set up recovery key" button of the RecoveryPanel.
  */
 type State = "loading" | "main" | "set_up_encryption" | "change_recovery_key" | "set_recovery_key";
 
