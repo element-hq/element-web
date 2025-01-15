@@ -58,8 +58,8 @@ async function editMessage(page: Page, message: Locator, newMsg: string): Promis
     await editComposer.press("Enter");
 }
 
-const screenshotOptions = (page: Page) => ({
-    mask: [page.locator(".mx_MessageTimestamp")],
+const screenshotOptions = (page?: Page) => ({
+    mask: page ? [page.locator(".mx_MessageTimestamp")] : undefined,
     // Hide the jump to bottom button in the timeline to avoid flakiness
     css: `
         .mx_JumpToBottomButton {
@@ -100,10 +100,7 @@ test.describe("Message rendering", () => {
                 await page.goto(`#/room/${room.roomId}`);
 
                 const msgTile = await sendMessage(page, "/me lays an egg");
-                await expect(msgTile).toMatchScreenshot(
-                    `emote-ltr-${direction}displayname.png`,
-                    screenshotOptions(page),
-                );
+                await expect(msgTile).toMatchScreenshot(`emote-ltr-${direction}displayname.png`, screenshotOptions());
             });
 
             test("should render an LTR rich text emote", async ({ page, user, app, room }) => {
@@ -112,7 +109,7 @@ test.describe("Message rendering", () => {
                 const msgTile = await sendMessage(page, "/me lays a *free range* egg");
                 await expect(msgTile).toMatchScreenshot(
                     `emote-rich-ltr-${direction}displayname.png`,
-                    screenshotOptions(page),
+                    screenshotOptions(),
                 );
             });
 
@@ -160,10 +157,7 @@ test.describe("Message rendering", () => {
                 await page.goto(`#/room/${room.roomId}`);
 
                 const msgTile = await sendMessage(page, "/me يضع بيضة");
-                await expect(msgTile).toMatchScreenshot(
-                    `emote-rtl-${direction}displayname.png`,
-                    screenshotOptions(page),
-                );
+                await expect(msgTile).toMatchScreenshot(`emote-rtl-${direction}displayname.png`, screenshotOptions());
             });
 
             test("should render a richtext RTL emote", async ({ page, user, app, room }) => {
@@ -172,7 +166,7 @@ test.describe("Message rendering", () => {
                 const msgTile = await sendMessage(page, "/me أضع بيضة *حرة النطاق*");
                 await expect(msgTile).toMatchScreenshot(
                     `emote-rich-rtl-${direction}displayname.png`,
-                    screenshotOptions(page),
+                    screenshotOptions(),
                 );
             });
 
