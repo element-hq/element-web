@@ -431,8 +431,7 @@
         "video": "Vídeo",
         "video_room": "Sala de vídeo",
         "view_message": "Ver mensagem",
-        "warning": "Atenção",
-        "welcome": "Boas-vindas"
+        "warning": "Atenção"
     },
     "composer": {
         "autocomplete": {
@@ -1076,17 +1075,11 @@
     "onboarding": {
         "create_room": "Criar um chat de grupo",
         "explore_rooms": "Explorar salas públicas",
-        "find_people": "Encontrar pessoas",
         "has_avatar_label": "Ótimo, agora as pessoas identificarão você",
         "intro_welcome": "Boas-vindas ao %(appName)s",
         "no_avatar_label": "Adicione uma foto para as pessoas identificarem você.",
-        "qr_or_app_links": "%(qrCode)s ou %(appLinks)s",
         "send_dm": "Enviar uma mensagem",
-        "set_up_profile": "Configure seu perfil",
-        "set_up_profile_action": "Seu perfil",
-        "set_up_profile_description": "Certifique-se de que as pessoas saibam que é realmente você",
         "welcome_detail": "Agora, vamos começar",
-        "welcome_to_brand": "Bem-vindo a %(brand)s",
         "welcome_user": "Boas-vindas, %(name)s"
     },
     "poll": {
