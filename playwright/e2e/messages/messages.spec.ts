@@ -133,6 +133,12 @@ test.describe("Message rendering", () => {
                 const msgTile = await sendMessage(page, "مرحبا بالعالم!");
                 await expect(msgTile).toMatchScreenshot(`basic-message-rtl-${direction}displayname.png`, {
                     mask: [page.locator(".mx_MessageTimestamp")],
+                    // Hide the jump to bottom button in the timeline to avoid flakiness
+                    css: `
+                        .mx_JumpToBottomButton {
+                            display: none !important;
+                        }
+                    `,
                 });
             });
 

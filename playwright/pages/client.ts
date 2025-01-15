@@ -171,15 +171,9 @@ export class Client {
         });
     }
 
-    /**
-     * Create a room with given options.
-     * @param options the options to apply when creating the room
-     * @return the ID of the newly created room
-     */
-    public async createRoom(options: ICreateRoomOpts): Promise<string> {
+    public async waitForRoom(roomId: string): Promise<void> {
         const client = await this.prepareClient();
-        return await client.evaluate(async (cli, options) => {
-            const { room_id: roomId } = await cli.createRoom(options);
+        return await client.evaluate(async (cli, roomId) => {
             if (!cli.getRoom(roomId)) {
                 await new Promise<void>((resolve) => {
                     const onRoom = (room: Room) => {
@@ -191,8 +185,22 @@ export class Client {
                     cli.on(window.matrixcs.ClientEvent.Room, onRoom);
                 });
             }
+        }, roomId);
+    }
+
+    /**
+     * Create a room with given options.
+     * @param options the options to apply when creating the room
+     * @return the ID of the newly created room
+     */
+    public async createRoom(options: ICreateRoomOpts): Promise<string> {
+        const client = await this.prepareClient();
+        const roomId = await client.evaluate(async (cli, options) => {
+            const { room_id: roomId } = await cli.createRoom(options);
             return roomId;
         }, options);
+        await this.awaitRoomMembership(roomId);
+        return roomId;
     }
 
     /**
