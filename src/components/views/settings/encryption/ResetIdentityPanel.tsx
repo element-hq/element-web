@@ -10,14 +10,11 @@ import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check"
 import InfoIcon from "@vector-im/compound-design-tokens/assets/web/icons/info";
 import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
 import React, { MouseEventHandler } from "react";
-import { AuthDict, MatrixClient, UIAResponse } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../languageHandler";
 import { EncryptionCard } from "./EncryptionCard";
-import Modal from "../../../../Modal";
-import InteractiveAuthDialog from "../../dialogs/InteractiveAuthDialog";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
-import { SSOAuthEntry } from "../../auth/InteractiveAuthEntryComponents";
+import { uiAuthCallback } from "../../../../CreateCrossSigning";
 
 interface ResetIdentityPanelProps {
     /**
@@ -83,43 +80,4 @@ export function ResetIdentityPanel({ onCancelClick, onFinish }: ResetIdentityPan
             </EncryptionCard>
         </>
     );
-}
-
-/**
- * Handles the UIA flow for resetting the identity.
- * @param matrixClient
- * @param makeRequest
- */
-async function uiAuthCallback(
-    matrixClient: MatrixClient,
-    makeRequest: (authData: AuthDict) => Promise<UIAResponse<void>>,
-): Promise<void> {
-    const dialogAesthetics = {
-        [SSOAuthEntry.PHASE_PREAUTH]: {
-            title: _t("auth|uia|sso_title"),
-            body: _t("auth|uia|sso_preauth_body"),
-            continueText: _t("auth|sso"),
-            continueKind: "primary",
-        },
-        [SSOAuthEntry.PHASE_POSTAUTH]: {
-            title: _t("encryption|confirm_encryption_setup_title"),
-            body: _t("encryption|confirm_encryption_setup_body"),
-            continueText: _t("action|confirm"),
-            continueKind: "primary",
-        },
-    };
-
-    const { finished } = Modal.createDialog(InteractiveAuthDialog, {
-        title: _t("encryption|bootstrap_title"),
-        matrixClient,
-        makeRequest,
-        aestheticsForStagePhases: {
-            [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
-            [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
-        },
-    });
-    const [confirmed] = await finished;
-    if (!confirmed) {
-        throw new Error("Cross-signing key upload auth canceled");
-    }
 }
