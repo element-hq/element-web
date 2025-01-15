@@ -15,6 +15,7 @@ import {
     awaitVerifier,
     checkDeviceIsConnectedKeyBackup,
     checkDeviceIsCrossSigned,
+    createBot,
     doTwoWaySasVerification,
     logIntoElement,
     waitForVerificationRequest,
@@ -28,29 +29,9 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
     let expectedBackupVersion: string;
 
     test.beforeEach(async ({ page, homeserver, credentials }) => {
-        // Visit the login page of the app, to load the matrix sdk
-        await page.goto("/#/login");
-
-        // wait for the page to load
-        await page.waitForSelector(".mx_AuthPage", { timeout: 30000 });
-
-        // Create a new device for alice
-        aliceBotClient = new Bot(page, homeserver, {
-            bootstrapCrossSigning: true,
-            bootstrapSecretStorage: true,
-        });
-        aliceBotClient.setCredentials(credentials);
-
-        // Backup is prepared in the background. Poll until it is ready.
-        const botClientHandle = await aliceBotClient.prepareClient();
-        await expect
-            .poll(async () => {
-                expectedBackupVersion = await botClientHandle.evaluate((cli) =>
-                    cli.getCrypto()!.getActiveSessionBackupVersion(),
-                );
-                return expectedBackupVersion;
-            })
-            .not.toBe(null);
+        const res = await createBot(page, homeserver, credentials);
+        aliceBotClient = res.botClient;
+        expectedBackupVersion = res.expectedBackupVersion;
     });
 
     // Click the "Verify with another device" button, and have the bot client auto-accept it.
