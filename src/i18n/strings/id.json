@@ -229,7 +229,6 @@
         "no_hs_url_provided": "Tidak ada URL homeserver yang disediakan",
         "oidc": {
             "error_title": "Kami tidak dapat memasukkan Anda",
-            "logout_redirect_warning": "Anda akan diarahkan ke penyedia autentikasi server Anda untuk menyelesaikan proses keluar.",
             "missing_or_invalid_stored_state": "Kami menanyakan browser ini untuk mengingat homeserver apa yang Anda gunakan untuk membantu Anda masuk, tetapi sayangnya browser ini melupakannya. Pergi ke halaman masuk dan coba lagi."
         },
         "password_field_keep_going_prompt": "Lanjutkan…",
@@ -412,7 +411,6 @@
             "one": "dan satu lainnya...",
             "other": "dan %(count)s lainnya..."
         },
-        "android": "Android",
         "appearance": "Tampilan",
         "application": "Aplikasi",
         "are_you_sure": "Apakah Anda yakin?",
@@ -451,7 +449,6 @@
         "identity_server": "Server identitas",
         "image": "Gambar",
         "integration_manager": "Manajer integrasi",
-        "ios": "iOS",
         "joined": "Tergabung",
         "labs": "Uji Coba",
         "legal": "Hukum",
@@ -540,8 +537,7 @@
         "video": "Video",
         "video_room": "Ruangan video",
         "view_message": "Tampilkan pesan",
-        "warning": "Peringatan",
-        "welcome": "Selamat datang"
+        "warning": "Peringatan"
     },
     "composer": {
         "autocomplete": {
@@ -1368,7 +1364,6 @@
         "notification_settings_beta_caption": "Perkenalkan cara yang lebih sederhana untuk mengubah pengaturan notifikasi Anda. Sesuaikan %(brand)s Anda, sesuai keinginan Anda.",
         "notification_settings_beta_title": "Pengaturan Notifikasi",
         "notifications": "Aktifkan panel notifikasi di tajuk ruangan",
-        "oidc_native_flow": "Autentikasi asli OIDC",
         "render_reaction_images": "Render gambar khusus dalam reaksi",
         "render_reaction_images_description": "Terkadang disebut sebagai \"emoji khusus\".",
         "report_to_moderators": "Laporkan ke moderator",
@@ -1487,7 +1482,6 @@
     "member_list": {
         "filter_placeholder": "Saring anggota ruangan",
         "invite_button_no_perms_tooltip": "Anda tidak memiliki izin untuk mengundang pengguna",
-        "invited_list_heading": "Diundang",
         "power_label": "%(userName)s (tingkat daya %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Anggota ruangan",
@@ -1527,61 +1521,15 @@
         "m.key.verification.request": "%(name)s meminta verifikasi"
     },
     "onboarding": {
-        "apple_trademarks": "App Store® dan logo Apple® adalah merek dagang Apple Inc.",
-        "community_messaging_action": "Temukan orang-orang Anda",
-        "community_messaging_description": "Tetap miliki kemilikan dan kendali atas diskusi komunitas.\nBesar untuk mendukung jutaan anggota, dengan moderasi dan interoperabilitas berdaya.",
-        "community_messaging_title": "Kemilikan komunitas",
-        "complete_these": "Selesaikan untuk mendapatkan hasil yang maksimal dari %(brand)s",
         "create_room": "Buat sebuah Obrolan Grup",
-        "download_app": "Unduh %(brand)s",
-        "download_app_action": "Unduh aplikasi",
-        "download_app_description": "Jangan lewatkan hal-hal dengan membawa %(brand)s dengan Anda",
-        "download_app_store": "Unduh di App Store",
-        "download_brand": "Unduh %(brand)s",
-        "download_brand_desktop": "Unduh %(brand)s Desktop",
-        "download_f_droid": "Dapatkan di F-Droid",
-        "download_google_play": "Dapatkan di Google Play",
-        "enable_notifications": "Nyalakan notifikasi",
-        "enable_notifications_action": "Nyalakan notifikasi",
-        "enable_notifications_description": "Jangan lewatkan sebuah balasan atau pesan yang penting",
         "explore_rooms": "Jelajahi Ruangan Publik",
-        "find_community_members": "Temukan dan undang anggota komunitas Anda",
-        "find_coworkers": "Temukan dan undang rekan kerja Anda",
-        "find_friends": "Temukan dan undang teman Anda",
-        "find_friends_action": "Temukan teman-teman",
-        "find_friends_description": "Untuk itulah Anda di sini, jadi mari kita lakukan",
-        "find_people": "Temukan orang-orang",
-        "free_e2ee_messaging_unlimited_voip": "Dengan perpesanan terenkripsi ujung ke ujung gratis, dan panggilan suara & video tidak terbatas, %(brand)s adalah cara yang baik untuk tetap terhubung.",
-        "get_stuff_done": "Selesaikan hal-hal dengan menemukan rekan setim Anda",
-        "google_trademarks": "Google Play dan logo Google Play adalah merek dagang Google LLC.",
         "has_avatar_label": "Hebat, itu akan membantu orang-orang tahu bahwa itu Anda",
         "intro_byline": "Miliki percakapan Anda.",
         "intro_welcome": "Selamat datang di %(appName)s",
         "no_avatar_label": "Tambahkan sebuah foto supaya orang-orang tahu bahwa itu Anda.",
-        "only_n_steps_to_go": {
-            "one": "Hanya %(count)s langkah lagi untuk dilalui",
-            "other": "Hanya %(count)s langkah lagi untuk dilalui"
-        },
-        "personal_messaging_action": "Mulai obrolan pertama Anda",
-        "personal_messaging_title": "Perpesanan aman untuk teman dan keluarga",
-        "qr_or_app_links": "%(qrCode)s atau %(appLinks)s",
         "send_dm": "Kirim sebuah Pesan Langsung",
-        "set_up_profile": "Siapkan profil Anda",
-        "set_up_profile_action": "Profil Anda",
-        "set_up_profile_description": "Pastikan orang-orang tahu bahwa itu memang Anda",
-        "use_case_community_messaging": "Anggota komunitas daring",
-        "use_case_heading1": "Anda telah masuk",
-        "use_case_heading2": "Siapa saja yang sering Anda obrol?",
-        "use_case_heading3": "Kami akan membantu Anda untuk terhubung.",
-        "use_case_personal_messaging": "Teman dan keluarga",
-        "use_case_work_messaging": "Teman kerja dan tim",
         "welcome_detail": "Sekarang, mari bantu Anda memulai",
-        "welcome_to_brand": "Selamat datang di %(brand)s",
-        "welcome_user": "Selamat datang %(name)s",
-        "work_messaging_action": "Temukan rekan kerja Anda",
-        "work_messaging_title": "Perpesanan aman untuk berkerja",
-        "you_did_it": "Anda berhasil!",
-        "you_made_it": "Anda berhasil!"
+        "welcome_user": "Selamat datang %(name)s"
     },
     "pill": {
         "permalink_other_room": "Pesan dalam %(room)s",
@@ -1633,7 +1581,6 @@
         "custom_level": "Tingkat kustom",
         "default": "Bawaan",
         "label": "Tingkat daya",
-        "mod": "Mod",
         "moderator": "Moderator",
         "restricted": "Dibatasi"
     },
@@ -2490,7 +2437,6 @@
             "room_directory_heading": "Direktori ruangan",
             "room_list_heading": "Daftar ruangan",
             "show_avatars_pills": "Tampilkan avatar di sebutan pengguna, ruangan, dan peristiwa",
-            "show_checklist_shortcuts": "Tampilkan pintasan ke daftar centang selamat datang di atas daftar ruangan",
             "show_polls_button": "Tampilkan tombol pemungutan suara",
             "surround_text": "Kelilingi teks yang dipilih saat mengetik karakter khusus",
             "time_heading": "Tampilkan waktu"
@@ -2852,7 +2798,6 @@
         "invite": "Undang pengguna",
         "invite_description": "Undang dengan email atau nama pengguna",
         "invite_link": "Bagikan tautan undangan",
-        "invite_this_space": "Undang ke space ini",
         "joining_space": "Bergabung",
         "landing_welcome": "Selamat datang di <name/>",
         "leave_dialog_action": "Tinggalkan space",

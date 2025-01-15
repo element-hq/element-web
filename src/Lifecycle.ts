@@ -5,7 +5,7 @@ Copyright 2018 New Vector Ltd
 Copyright 2017 Vector Creations Ltd
 Copyright 2015, 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -110,7 +110,6 @@ dis.register((payload) => {
 let sessionLockStolen = false;
 
 // this is exposed solely for unit tests.
-// ts-prune-ignore-next
 export function setSessionLockNotStolen(): void {
     sessionLockStolen = false;
 }
@@ -1050,9 +1049,9 @@ async function clearStorage(opts?: { deleteEverything?: boolean }): Promise<void
         window.localStorage.clear();
 
         try {
-            await StorageAccess.idbDelete("account", ACCESS_TOKEN_STORAGE_KEY);
+            await StorageAccess.idbClear("account");
         } catch (e) {
-            logger.error("idbDelete failed for account:mx_access_token", e);
+            logger.error("idbClear failed for account", e);
         }
 
         // now restore those invites, registration time and previously set device language

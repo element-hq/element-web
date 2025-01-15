@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2017 Michael Telatynski <7t3chguy@gmail.com>
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
  */
 
@@ -11,6 +11,7 @@ import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import SettingsStore from "./settings/SettingsStore";
 import { IRoomState } from "./components/structures/RoomView";
+import { SettingKey } from "./settings/Settings.tsx";
 
 interface IDiff {
     isMemberEvent: boolean;
@@ -53,7 +54,7 @@ export default function shouldHideEvent(ev: MatrixEvent, ctx?: IRoomState): bool
     // so we should prefer using cached values if a RoomContext is available
     const isEnabled = ctx
         ? (name: keyof IRoomState) => ctx[name]
-        : (name: string) => SettingsStore.getValue(name, ev.getRoomId());
+        : (name: SettingKey) => SettingsStore.getValue(name, ev.getRoomId());
 
     // Hide redacted events
     // Deleted events with a thread are always shown regardless of user preference

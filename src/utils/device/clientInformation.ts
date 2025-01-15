@@ -2,21 +2,18 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { AccountDataEvents, MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import BasePlatform from "../../BasePlatform";
 import { IConfigOptions } from "../../IConfigOptions";
 import { DeepReadonly } from "../../@types/common";
+import { DeviceClientInformation } from "./types";
 
-export type DeviceClientInformation = {
-    name?: string;
-    version?: string;
-    url?: string;
-};
+export type { DeviceClientInformation };
 
 const formatUrl = (): string | undefined => {
     // don't record url for electron clients
@@ -34,7 +31,8 @@ const formatUrl = (): string | undefined => {
 };
 
 const clientInformationEventPrefix = "io.element.matrix_client_information.";
-export const getClientInformationEventType = (deviceId: string): string => `${clientInformationEventPrefix}${deviceId}`;
+export const getClientInformationEventType = (deviceId: string): `${typeof clientInformationEventPrefix}${string}` =>
+    `${clientInformationEventPrefix}${deviceId}`;
 
 /**
  * Record extra client information for the current device
@@ -70,7 +68,7 @@ export const pruneClientInformation = (validDeviceIds: string[], matrixClient: M
         }
         const [, deviceId] = event.getType().split(clientInformationEventPrefix);
         if (deviceId && !validDeviceIds.includes(deviceId)) {
-            matrixClient.deleteAccountData(event.getType());
+            matrixClient.deleteAccountData(event.getType() as keyof AccountDataEvents);
         }
     });
 };

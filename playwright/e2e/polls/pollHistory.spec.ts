@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 import { test, expect } from "../../element-web-test";
@@ -134,7 +134,7 @@ test.describe("Poll history", () => {
 
         await expect(dialog.getByText(pollParams2.title)).toBeAttached();
         await expect(dialog.getByText(pollParams1.title)).toBeAttached();
-        dialog.getByText("Active polls").click();
+        await dialog.getByText("Active polls").click();
 
         // no more active polls
         await expect(page.getByText("There are no active polls in this room")).toBeAttached();

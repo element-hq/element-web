@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -1114,19 +1114,6 @@ describe("<MatrixChat />", () => {
                 // set up keys screen is rendered
                 expect(screen.getByText("Setting up keys")).toBeInTheDocument();
             });
-
-            it("should go to use case selection if user just registered", async () => {
-                loginClient.doesServerSupportUnstableFeature.mockResolvedValue(true);
-                MatrixClientPeg.setJustRegisteredUserId(userId);
-
-                await getComponentAndLogin();
-
-                bootstrapDeferred.resolve();
-
-                await expect(
-                    screen.findByRole("heading", { name: "You're in", level: 1 }),
-                ).resolves.toBeInTheDocument();
-            });
         });
     });
 
@@ -1493,7 +1480,7 @@ describe("<MatrixChat />", () => {
         };
 
         const enabledMobileRegistration = (): void => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName): any => {
                 if (settingName === "Registration.mobileRegistrationHelper") return true;
                 if (settingName === UIFeature.Registration) return true;
             });

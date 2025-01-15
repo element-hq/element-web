@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -13,10 +13,11 @@ import SdkConfig from "../../../src/SdkConfig";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { mkStubRoom, mockPlatformPeg, stubClient } from "../../test-utils";
+import { SettingKey } from "../../../src/settings/Settings.tsx";
 
 const TEST_DATA = [
     {
-        name: "Electron.showTrayIcon",
+        name: "Electron.showTrayIcon" as SettingKey,
         level: SettingLevel.PLATFORM,
         value: true,
     },

@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2024 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -25,12 +25,17 @@ type PaginationLinks = {
 };
 
 class FlakyReporter implements Reporter {
-    private flakes = new Set<string>();
+    private flakes = new Map<string, TestCase[]>();
 
     public onTestEnd(test: TestCase): void {
+        // Ignores flakes on Dendrite and Pinecone as they have their own flakes we do not track
+        if (["Dendrite", "Pinecone"].includes(test.parent.project()?.name)) return;
         const title = `${test.location.file.split("playwright/e2e/")[1]}: ${test.title}`;
         if (test.outcome() === "flaky") {
-            this.flakes.add(title);
+            if (!this.flakes.has(title)) {
+                this.flakes.set(title, []);
+            }
+            this.flakes.get(title).push(test);
         }
     }
 
@@ -97,11 +102,13 @@ class FlakyReporter implements Reporter {
         if (!GITHUB_TOKEN) return;
 
         const issues = await this.getAllIssues();
-        for (const flake of this.flakes) {
+        for (const [flake, results] of this.flakes) {
             const title = ISSUE_TITLE_PREFIX + "`" + flake + "`";
             const existingIssue = issues.find((issue) => issue.title === title);
             const headers = { Authorization: `Bearer ${GITHUB_TOKEN}` };
             const body = `${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}`;
+
+            const labels = [LABEL, ...results.map((test) => `${LABEL}-${test.parent.project()?.name}`)];
 
             if (existingIssue) {
                 console.log(`Found issue ${existingIssue.number} for ${flake}, adding comment...`);
@@ -110,6 +117,11 @@ class FlakyReporter implements Reporter {
                     method: "PATCH",
                     headers,
                     body: JSON.stringify({ state: "open" }),
+                });
+                await fetch(`${existingIssue.url}/labels`, {
+                    method: "POST",
+                    headers,
+                    body: JSON.stringify({ labels }),
                 });
                 await fetch(`${existingIssue.url}/comments`, {
                     method: "POST",
@@ -124,7 +136,7 @@ class FlakyReporter implements Reporter {
                     body: JSON.stringify({
                         title,
                         body,
-                        labels: [LABEL],
+                        labels: [...labels],
                     }),
                 });
             }

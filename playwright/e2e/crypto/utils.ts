@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -12,6 +12,7 @@ import type { ICreateRoomOpts, MatrixClient } from "matrix-js-sdk/src/matrix";
 import type {
     CryptoEvent,
     EmojiMapping,
+    GeneratedSecretStorageKey,
     ShowSasCallbacks,
     VerificationRequest,
     Verifier,
@@ -21,6 +22,46 @@ import { Credentials, HomeserverInstance } from "../../plugins/homeserver";
 import { Client } from "../../pages/client";
 import { ElementAppPage } from "../../pages/ElementAppPage";
 import { Bot } from "../../pages/bot";
+
+/**
+ * Create a bot client using the supplied credentials, and wait for the key backup to be ready.
+ * @param page - the playwright `page` fixture
+ * @param homeserver - the homeserver to use
+ * @param credentials - the credentials to use for the bot client
+ */
+export async function createBot(
+    page: Page,
+    homeserver: HomeserverInstance,
+    credentials: Credentials,
+): Promise<{ botClient: Bot; recoveryKey: GeneratedSecretStorageKey; expectedBackupVersion: string }> {
+    // Visit the login page of the app, to load the matrix sdk
+    await page.goto("/#/login");
+
+    // wait for the page to load
+    await page.waitForSelector(".mx_AuthPage", { timeout: 30000 });
+
+    // Create a new bot client
+    const botClient = new Bot(page, homeserver, {
+        bootstrapCrossSigning: true,
+        bootstrapSecretStorage: true,
+    });
+    botClient.setCredentials(credentials);
+    // Backup is prepared in the background. Poll until it is ready.
+    const botClientHandle = await botClient.prepareClient();
+    let expectedBackupVersion: string;
+    await expect
+        .poll(async () => {
+            expectedBackupVersion = await botClientHandle.evaluate((cli) =>
+                cli.getCrypto()!.getActiveSessionBackupVersion(),
+            );
+            return expectedBackupVersion;
+        })
+        .not.toBe(null);
+
+    const recoveryKey = await botClient.getRecoveryKey();
+
+    return { botClient, recoveryKey, expectedBackupVersion };
+}
 
 /**
  * wait for the given client to receive an incoming verification request, and automatically accept it
@@ -59,7 +100,7 @@ export function handleSasVerification(verifier: JSHandle<Verifier>): Promise<Emo
         return new Promise<EmojiMapping[]>((resolve) => {
             const onShowSas = (event: ShowSasCallbacks) => {
                 verifier.off("show_sas" as VerifierEvent, onShowSas);
-                event.confirm();
+                void event.confirm();
                 resolve(event.sas.emoji);
             };
 
@@ -138,21 +179,8 @@ export async function checkDeviceIsConnectedKeyBackup(
  *
  * If a `securityKey` is given, verifies the new device using the key.
  */
-export async function logIntoElement(
-    page: Page,
-    homeserver: HomeserverInstance,
-    credentials: Credentials,
-    securityKey?: string,
-) {
+export async function logIntoElement(page: Page, credentials: Credentials, securityKey?: string) {
     await page.goto("/#/login");
-
-    // select homeserver
-    await page.getByRole("button", { name: "Edit" }).click();
-    await page.getByRole("textbox", { name: "Other homeserver" }).fill(homeserver.config.baseUrl);
-    await page.getByRole("button", { name: "Continue", exact: true }).click();
-
-    // wait for the dialog to go away
-    await expect(page.locator(".mx_ServerPickerDialog")).not.toBeVisible();
 
     await page.getByRole("textbox", { name: "Username" }).fill(credentials.userId);
     await page.getByPlaceholder("Password").fill(credentials.password);
@@ -220,11 +248,7 @@ export async function doTwoWaySasVerification(page: Page, verifier: JSHandle<Ver
     for (let i = 0; i < emojis.length; i++) {
         const emoji = emojis[i];
         const emojiBlock = emojiBlocks.nth(i);
-        const textContent = await emojiBlock.textContent();
-        // VerificationShowSas munges the case of the emoji descriptions returned by the js-sdk before
-        // displaying them. Once we drop support for legacy crypto, that code can go away, and so can the
-        // case-munging here.
-        expect(textContent.toLowerCase()).toEqual(emoji[0] + emoji[1].toLowerCase());
+        await expect(emojiBlock).toHaveText(emoji[0] + emoji[1]);
     }
 }
 
@@ -330,7 +354,7 @@ export async function autoJoin(client: Client) {
     await client.evaluate((cli) => {
         cli.on(window.matrixcs.RoomMemberEvent.Membership, (event, member) => {
             if (member.membership === "invite" && member.userId === cli.getUserId()) {
-                cli.joinRoom(member.roomId);
+                void cli.joinRoom(member.roomId);
             }
         });
     });

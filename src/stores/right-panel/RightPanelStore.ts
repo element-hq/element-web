@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019-2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -252,10 +252,13 @@ export default class RightPanelStore extends ReadyWatchingStore {
             const room = this.mxClient?.getRoom(this.viewedRoomId);
             if (!!room) {
                 this.global =
-                    this.global ?? convertToStatePanel(SettingsStore.getValue("RightPanel.phasesGlobal"), room);
+                    this.global ??
+                    convertToStatePanel(SettingsStore.getValue("RightPanel.phasesGlobal"), room) ??
+                    undefined;
                 this.byRoom[this.viewedRoomId] =
                     this.byRoom[this.viewedRoomId] ??
-                    convertToStatePanel(SettingsStore.getValue("RightPanel.phases", this.viewedRoomId), room);
+                    convertToStatePanel(SettingsStore.getValue("RightPanel.phases", this.viewedRoomId), room) ??
+                    undefined;
             } else {
                 logger.warn(
                     "Could not restore the right panel after load because there was no associated room object.",

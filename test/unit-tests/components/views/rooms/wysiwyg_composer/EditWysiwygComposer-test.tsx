@@ -2,13 +2,14 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import "@testing-library/jest-dom";
 import React from "react";
 import { fireEvent, render, screen, waitFor } from "jest-matrix-react";
+import { initOnce } from "@vector-im/matrix-wysiwyg";
 
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 import defaultDispatcher from "../../../../../../src/dispatcher/dispatcher";
@@ -23,6 +24,8 @@ import { ActionPayload } from "../../../../../../src/dispatcher/payloads";
 import * as EmojiButton from "../../../../../../src/components/views/rooms/EmojiButton";
 import { createMocks } from "./utils";
 import { ScopedRoomContextProvider } from "../../../../../../src/contexts/ScopedRoomContext.tsx";
+
+beforeAll(initOnce, 10000);
 
 describe("EditWysiwygComposer", () => {
     afterEach(() => {
@@ -45,17 +48,6 @@ describe("EditWysiwygComposer", () => {
             </MatrixClientContext.Provider>,
         );
     };
-
-    beforeAll(
-        async () => {
-            // Load the dynamic import
-            const component = customRender(false);
-            await component.findByRole("textbox");
-            component.unmount();
-        },
-        // it can take a while to load the wasm
-        20000,
-    );
 
     it("Should not render the component when not ready", async () => {
         // When

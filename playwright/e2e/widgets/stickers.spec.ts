@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022, 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -12,6 +12,7 @@ import type { Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
 import { ElementAppPage } from "../../pages/ElementAppPage";
 import { Credentials } from "../../plugins/homeserver";
+import type { UserWidget } from "../../../src/utils/WidgetUtils-types.ts";
 
 const STICKER_PICKER_WIDGET_ID = "fake-sticker-picker";
 const STICKER_PICKER_WIDGET_NAME = "Fake Stickers";
@@ -87,7 +88,7 @@ async function sendStickerFromPicker(page: Page) {
     await expect(page.locator(".mx_AppTileFullWidth#stickers")).not.toBeVisible();
 }
 
-async function expectTimelineSticker(page: Page, roomId: string, contentUri: string) {
+async function expectTimelineSticker(page: Page, serverName: string, roomId: string, contentUri: string) {
     const contentId = contentUri.split("/").slice(-1)[0];
     // Make sure it's in the right room
     await expect(page.locator(".mx_EventTile_sticker > a")).toHaveAttribute("href", new RegExp(`/${roomId}/`));
@@ -97,7 +98,7 @@ async function expectTimelineSticker(page: Page, roomId: string, contentUri: str
     // download URL.
     await expect(page.locator(`img[alt="${STICKER_NAME}"]`)).toHaveAttribute(
         "src",
-        new RegExp(`/localhost/${contentId}`),
+        new RegExp(`/${serverName}/${contentId}`),
     );
 }
 
@@ -123,11 +124,11 @@ async function setWidgetAccountData(
             state_key: STICKER_PICKER_WIDGET_ID,
             type: "m.widget",
             id: STICKER_PICKER_WIDGET_ID,
-        },
+        } as unknown as UserWidget,
     });
 }
 
-test.describe("Stickers", () => {
+test.describe("Stickers", { tag: ["@no-firefox", "@no-webkit"] }, () => {
     test.use({
         displayName: "Sally",
         room: async ({ app }, use) => {
@@ -149,13 +150,13 @@ test.describe("Stickers", () => {
         const { content_uri: contentUri } = await app.client.uploadContent(STICKER_IMAGE, { type: "image/png" });
         const widgetHtml = getWidgetHtml(contentUri, "image/png");
         stickerPickerUrl = webserver.start(widgetHtml);
-        setWidgetAccountData(app, user, stickerPickerUrl);
+        await setWidgetAccountData(app, user, stickerPickerUrl);
 
         await app.viewRoomByName(ROOM_NAME_1);
         await expect(page).toHaveURL(`/#/room/${room.roomId}`);
         await openStickerPicker(app);
         await sendStickerFromPicker(page);
-        await expectTimelineSticker(page, room.roomId, contentUri);
+        await expectTimelineSticker(page, user.homeServer, room.roomId, contentUri);
 
         // Ensure that when we switch to a different room that the sticker
         // goes to the right place
@@ -163,7 +164,7 @@ test.describe("Stickers", () => {
         await expect(page).toHaveURL(`/#/room/${roomId2}`);
         await openStickerPicker(app);
         await sendStickerFromPicker(page);
-        await expectTimelineSticker(page, roomId2, contentUri);
+        await expectTimelineSticker(page, user.homeServer, roomId2, contentUri);
     });
 
     test("should handle a sticker picker widget missing creatorUserId", async ({
@@ -176,13 +177,13 @@ test.describe("Stickers", () => {
         const { content_uri: contentUri } = await app.client.uploadContent(STICKER_IMAGE, { type: "image/png" });
         const widgetHtml = getWidgetHtml(contentUri, "image/png");
         stickerPickerUrl = webserver.start(widgetHtml);
-        setWidgetAccountData(app, user, stickerPickerUrl, false);
+        await setWidgetAccountData(app, user, stickerPickerUrl, false);
 
         await app.viewRoomByName(ROOM_NAME_1);
         await expect(page).toHaveURL(`/#/room/${room.roomId}`);
         await openStickerPicker(app);
         await sendStickerFromPicker(page);
-        await expectTimelineSticker(page, room.roomId, contentUri);
+        await expectTimelineSticker(page, user.homeServer, room.roomId, contentUri);
     });
 
     test("should render invalid mimetype as a file", async ({ webserver, page, app, user, room }) => {
@@ -191,7 +192,7 @@ test.describe("Stickers", () => {
         });
         const widgetHtml = getWidgetHtml(contentUri, "application/octet-stream");
         stickerPickerUrl = webserver.start(widgetHtml);
-        setWidgetAccountData(app, user, stickerPickerUrl);
+        await setWidgetAccountData(app, user, stickerPickerUrl);
 
         await app.viewRoomByName(ROOM_NAME_1);
         await expect(page).toHaveURL(`/#/room/${room.roomId}`);

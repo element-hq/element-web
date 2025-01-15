@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -13,6 +13,8 @@ import { Bot } from "../../pages/bot";
 import { Client } from "../../pages/client";
 import { ElementAppPage } from "../../pages/ElementAppPage";
 
+type RoomRef = { name: string; roomId: string };
+
 /**
  * Set up for a read receipt test:
  * - Create a user with the supplied name
@@ -22,9 +24,9 @@ import { ElementAppPage } from "../../pages/ElementAppPage";
  */
 export const test = base.extend<{
     roomAlphaName?: string;
-    roomAlpha: { name: string; roomId: string };
+    roomAlpha: RoomRef;
     roomBetaName?: string;
-    roomBeta: { name: string; roomId: string };
+    roomBeta: RoomRef;
     msg: MessageBuilder;
     util: Helpers;
 }>({
@@ -248,12 +250,13 @@ export class MessageBuilder {
     /**
      * Find and display a message.
      *
-     * @param roomName the name of the room to look inside
+     * @param roomRef the ref of the room to look inside
      * @param message the content of the message to fine
      * @param includeThreads look for messages inside threads, not just the main timeline
      */
-    async jumpTo(roomName: string, message: string, includeThreads = false) {
-        const room = await this.helpers.findRoomByName(roomName);
+    async jumpTo(roomRef: RoomRef, message: string, includeThreads = false) {
+        const room = await this.helpers.findRoomById(roomRef.roomId);
+        expect(room).toBeTruthy();
         const foundMessage = await this.getMessage(room, message, includeThreads);
         const roomId = await room.evaluate((room) => room.roomId);
         const foundMessageId = await foundMessage.evaluate((ev) => ev.getId());
@@ -333,9 +336,10 @@ class Helpers {
      * Use the supplied client to send messages or perform actions as specified by
      * the supplied {@link Message} items.
      */
-    async sendMessageAsClient(cli: Client, roomName: string | { name: string }, messages: Message[]) {
-        const room = await this.findRoomByName(typeof roomName === "string" ? roomName : roomName.name);
-        const roomId = await room.evaluate((room) => room.roomId);
+    async sendMessageAsClient(cli: Client, roomRef: RoomRef, messages: Message[]) {
+        const roomId = roomRef.roomId;
+        const room = await this.findRoomById(roomId);
+        expect(room).toBeTruthy();
 
         for (const message of messages) {
             if (typeof message === "string") {
@@ -359,7 +363,7 @@ class Helpers {
     /**
      * Open the room with the supplied name.
      */
-    async goTo(room: string | { name: string }) {
+    async goTo(room: RoomRef) {
         await this.app.viewRoomByName(typeof room === "string" ? room : room.name);
     }
 
@@ -423,17 +427,16 @@ class Helpers {
         });
     }
 
-    getRoomListTile(room: string | { name: string }) {
-        const roomName = typeof room === "string" ? room : room.name;
-        return this.page.getByRole("treeitem", { name: new RegExp("^" + roomName) });
+    getRoomListTile(label: string) {
+        return this.page.getByRole("treeitem", { name: new RegExp("^" + label) });
     }
 
     /**
      * Click the "Mark as Read" context menu item on the room with the supplied name
      * in the room list.
      */
-    async markAsRead(room: string | { name: string }) {
-        await this.getRoomListTile(room).click({ button: "right" });
+    async markAsRead(room: RoomRef) {
+        await this.getRoomListTile(room.name).click({ button: "right" });
         await this.page.getByText("Mark as read").click();
     }
 
@@ -441,8 +444,8 @@ class Helpers {
      * Assert that the room with the supplied name is "read" in the room list - i.g.
      * has not dot or count of unread messages.
      */
-    async assertRead(room: string | { name: string }) {
-        const tile = this.getRoomListTile(room);
+    async assertRead(room: RoomRef) {
+        const tile = this.getRoomListTile(room.name);
         await expect(tile.locator(".mx_NotificationBadge_dot")).not.toBeVisible();
         await expect(tile.locator(".mx_NotificationBadge_count")).not.toBeVisible();
     }
@@ -452,7 +455,7 @@ class Helpers {
      * (In practice, this just waits a short while to allow any unread marker to
      * appear, and then asserts that the room is read.)
      */
-    async assertStillRead(room: string | { name: string }) {
+    async assertStillRead(room: RoomRef) {
         await this.page.waitForTimeout(200);
         await this.assertRead(room);
     }
@@ -462,8 +465,8 @@ class Helpers {
      * @param room - the name of the room to check
      * @param count - the numeric count to assert, or if "." specified then a bold/dot (no count) state is asserted
      */
-    async assertUnread(room: string | { name: string }, count: number | ".") {
-        const tile = this.getRoomListTile(room);
+    async assertUnread(room: RoomRef, count: number | ".") {
+        const tile = this.getRoomListTile(room.name);
         if (count === ".") {
             await expect(tile.locator(".mx_NotificationBadge_dot")).toBeVisible();
         } else {
@@ -478,8 +481,8 @@ class Helpers {
      * @param room - the name of the room to check
      * @param lessThan - the number of unread messages that is too many
      */
-    async assertUnreadLessThan(room: string | { name: string }, lessThan: number) {
-        const tile = this.getRoomListTile(room);
+    async assertUnreadLessThan(room: RoomRef, lessThan: number) {
+        const tile = this.getRoomListTile(room.name);
         // https://playwright.dev/docs/test-assertions#expectpoll
         // .toBeLessThan doesn't have a retry mechanism, so we use .poll
         await expect
@@ -496,8 +499,8 @@ class Helpers {
      * @param room - the name of the room to check
      * @param greaterThan - the number of unread messages that is too few
      */
-    async assertUnreadGreaterThan(room: string | { name: string }, greaterThan: number) {
-        const tile = this.getRoomListTile(room);
+    async assertUnreadGreaterThan(room: RoomRef, greaterThan: number) {
+        const tile = this.getRoomListTile(room.name);
         // https://playwright.dev/docs/test-assertions#expectpoll
         // .toBeGreaterThan doesn't have a retry mechanism, so we use .poll
         await expect
@@ -531,10 +534,10 @@ class Helpers {
         });
     }
 
-    async findRoomByName(roomName: string): Promise<JSHandle<Room>> {
-        return this.app.client.evaluateHandle((cli, roomName) => {
-            return cli.getRooms().find((r) => r.name === roomName);
-        }, roomName);
+    async findRoomById(roomId: string): Promise<JSHandle<Room>> {
+        return this.app.client.evaluateHandle((cli, roomId) => {
+            return cli.getRooms().find((r) => r.roomId === roomId);
+        }, roomId);
     }
 
     private async getThreadListTile(rootMessage: string) {
@@ -578,7 +581,7 @@ class Helpers {
      * @param room - the name of the room to send messages into
      * @param messages - the list of messages to send, these can be strings or implementations of MessageSpec like `editOf`
      */
-    async receiveMessages(room: string | { name: string }, messages: Message[]) {
+    async receiveMessages(room: RoomRef, messages: Message[]) {
         await this.sendMessageAsClient(this.bot, room, messages);
     }
 

@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -20,6 +20,7 @@ import { IndicatorIcon } from "@vector-im/compound-web";
 import SettingsStore from "../settings/SettingsStore";
 import { NotificationLevel } from "../stores/notifications/NotificationLevel";
 import { doesRoomHaveUnreadMessages } from "../Unread";
+import { SettingKey } from "../settings/Settings.tsx";
 
 // MSC2867 is not yet spec at time of writing. We read from both stable
 // and unstable prefixes and accept the risk that the format may change,
@@ -34,13 +35,15 @@ export const MARKED_UNREAD_TYPE_UNSTABLE = "com.famedly.marked_unread";
  */
 export const MARKED_UNREAD_TYPE_STABLE = "m.marked_unread";
 
-export const deviceNotificationSettingsKeys = [
+export const deviceNotificationSettingsKeys: SettingKey[] = [
     "notificationsEnabled",
     "notificationBodyEnabled",
     "audioNotificationsEnabled",
 ];
 
-export function getLocalNotificationAccountDataEventType(deviceId: string | null): string {
+export function getLocalNotificationAccountDataEventType(
+    deviceId: string | null,
+): `${typeof LOCAL_NOTIFICATION_SETTINGS_PREFIX.name}.${string}` {
     return `${LOCAL_NOTIFICATION_SETTINGS_PREFIX.name}.${deviceId}`;
 }
 

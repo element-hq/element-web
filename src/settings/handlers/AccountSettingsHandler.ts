@@ -3,11 +3,11 @@ Copyright 2024 New Vector Ltd.
 Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 Copyright 2017 Travis Ralston
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ClientEvent, MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { AccountDataEvents, ClientEvent, MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { defer } from "matrix-js-sdk/src/utils";
 import { isEqual } from "lodash";
 
@@ -140,11 +140,11 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
     }
 
     // helper function to set account data then await it being echoed back
-    private async setAccountData(
-        eventType: string,
-        field: string,
-        value: any,
-        legacyEventType?: string,
+    private async setAccountData<K extends keyof AccountDataEvents, F extends keyof AccountDataEvents[K]>(
+        eventType: K,
+        field: F,
+        value: AccountDataEvents[K][F],
+        legacyEventType?: keyof AccountDataEvents,
     ): Promise<void> {
         let content = this.getSettings(eventType);
         if (legacyEventType && !content?.[field]) {
@@ -161,7 +161,8 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         // which race between different lines.
         const deferred = defer<void>();
         const handler = (event: MatrixEvent): void => {
-            if (event.getType() !== eventType || !isEqual(event.getContent()[field], value)) return;
+            if (event.getType() !== eventType || !isEqual(event.getContent<AccountDataEvents[K]>()[field], value))
+                return;
             this.client.off(ClientEvent.AccountData, handler);
             deferred.resolve();
         };
@@ -212,7 +213,7 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         return this.client && !this.client.isGuest();
     }
 
-    private getSettings(eventType = "im.vector.web.settings"): any {
+    private getSettings(eventType: keyof AccountDataEvents = "im.vector.web.settings"): any {
         // TODO: [TS] Types on return
         if (!this.client) return null;
 

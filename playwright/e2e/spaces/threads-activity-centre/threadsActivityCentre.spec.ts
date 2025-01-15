@@ -2,14 +2,20 @@
  * Copyright 2024 New Vector Ltd.
  * Copyright 2024 The Matrix.org Foundation C.I.C.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
  */
 
 import { expect, test } from ".";
 import { CommandOrControl } from "../../utils";
+import { isDendrite } from "../../../plugins/homeserver/dendrite";
 
-test.describe("Threads Activity Centre", () => {
+test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
+    test.skip(
+        isDendrite,
+        "due to Dendrite lacking full threads support https://github.com/element-hq/dendrite/issues/3283",
+    );
+
     test.use({
         displayName: "Alice",
         botCreateOpts: { displayName: "Other User" },
@@ -46,16 +52,21 @@ test.describe("Threads Activity Centre", () => {
         await util.assertNotificationTac();
     });
 
-    test("should show a highlight indicator when there is a mention in a thread", async ({ room1, util, msg }) => {
+    test("should show a highlight indicator when there is a mention in a thread", async ({
+        room1,
+        util,
+        msg,
+        user,
+    }) => {
         await util.goTo(room1);
         await util.receiveMessages(room1, [
             "Msg1",
             msg.threadedOff("Msg1", {
                 "body": "User",
                 "format": "org.matrix.custom.html",
-                "formatted_body": "<a href='https://matrix.to/#/@user:localhost'>User</a>",
+                "formatted_body": `<a href="https://matrix.to/#/${user.userId}">User</a>`,
                 "m.mentions": {
-                    user_ids: ["@user:localhost"],
+                    user_ids: [user.userId],
                 },
             }),
         ]);
@@ -64,26 +75,30 @@ test.describe("Threads Activity Centre", () => {
         await util.assertHighlightIndicator();
     });
 
-    test("should show the rooms with unread threads", { tag: "@screenshot" }, async ({ room1, room2, util, msg }) => {
+    test(
+        "should show the rooms with unread threads",
+        { tag: "@screenshot" },
+        async ({ room1, room2, util, msg, user }) => {
+            await util.goTo(room2);
+            await util.populateThreads(room1, room2, msg, user);
+            // The indicator should be shown
+            await util.assertHighlightIndicator();
+
+            // Verify that we have the expected rooms in the TAC
+            await util.openTac();
+            await util.assertRoomsInTac([
+                { room: room2.name, notificationLevel: "highlight" },
+                { room: room1.name, notificationLevel: "notification" },
+            ]);
+
+            // Verify that we don't have a visual regression
+            await expect(util.getTacPanel()).toMatchScreenshot("tac-panel-mix-unread.png");
+        },
+    );
+
+    test("should update with a thread is read", { tag: "@screenshot" }, async ({ room1, room2, util, msg, user }) => {
         await util.goTo(room2);
-        await util.populateThreads(room1, room2, msg);
-        // The indicator should be shown
-        await util.assertHighlightIndicator();
-
-        // Verify that we have the expected rooms in the TAC
-        await util.openTac();
-        await util.assertRoomsInTac([
-            { room: room2.name, notificationLevel: "highlight" },
-            { room: room1.name, notificationLevel: "notification" },
-        ]);
-
-        // Verify that we don't have a visual regression
-        await expect(util.getTacPanel()).toMatchScreenshot("tac-panel-mix-unread.png");
-    });
-
-    test("should update with a thread is read", { tag: "@screenshot" }, async ({ room1, room2, util, msg }) => {
-        await util.goTo(room2);
-        await util.populateThreads(room1, room2, msg);
+        await util.populateThreads(room1, room2, msg, user);
 
         // Click on the first room in TAC
         await util.openTac();
@@ -104,9 +119,9 @@ test.describe("Threads Activity Centre", () => {
         await expect(util.getTacPanel()).toMatchScreenshot("tac-panel-notification-unread.png");
     });
 
-    test("should order by recency after notification level", async ({ room1, room2, util, msg }) => {
+    test("should order by recency after notification level", async ({ room1, room2, util, msg, user }) => {
         await util.goTo(room2);
-        await util.populateThreads(room1, room2, msg, false);
+        await util.populateThreads(room1, room2, msg, user, false);
 
         await util.openTac();
         await util.assertRoomsInTac([

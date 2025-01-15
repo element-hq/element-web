@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -48,6 +48,7 @@ import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../../../src/stores/A
 import { ElementWidgetActions } from "../../../src/stores/widgets/ElementWidgetActions";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { PosthogAnalytics } from "../../../src/PosthogAnalytics";
+import { SettingKey } from "../../../src/settings/Settings.tsx";
 
 jest.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
     [MediaDeviceKindEnum.AudioInput]: [
@@ -63,7 +64,7 @@ jest.spyOn(MediaDeviceHandler, "getVideoInput").mockReturnValue("2");
 
 const enabledSettings = new Set(["feature_group_calls", "feature_video_rooms", "feature_element_call_video_rooms"]);
 jest.spyOn(SettingsStore, "getValue").mockImplementation(
-    (settingName) => enabledSettings.has(settingName) || undefined,
+    (settingName): any => enabledSettings.has(settingName) || undefined,
 );
 
 const setUpClientRoomAndStores = (): {
@@ -709,16 +710,18 @@ describe("ElementCall", () => {
 
         it("passes font settings through widget URL", async () => {
             const originalGetValue = SettingsStore.getValue;
-            SettingsStore.getValue = <T>(name: string, roomId?: string, excludeDefault?: boolean) => {
+            SettingsStore.getValue = (name: SettingKey, roomId: string | null = null, excludeDefault = false): any => {
                 switch (name) {
                     case "fontSizeDelta":
-                        return 4 as T;
+                        return 4;
                     case "useSystemFont":
-                        return true as T;
+                        return true;
                     case "systemFont":
-                        return "OpenDyslexic, DejaVu Sans" as T;
+                        return "OpenDyslexic, DejaVu Sans";
                     default:
-                        return originalGetValue<T>(name, roomId, excludeDefault);
+                        return excludeDefault
+                            ? originalGetValue(name, roomId, excludeDefault)
+                            : originalGetValue(name, roomId, excludeDefault);
                 }
             };
             document.documentElement.style.fontSize = "12px";
@@ -746,12 +749,14 @@ describe("ElementCall", () => {
 
             // Now test with the preference set to true
             const originalGetValue = SettingsStore.getValue;
-            SettingsStore.getValue = <T>(name: string, roomId?: string, excludeDefault?: boolean) => {
+            SettingsStore.getValue = (name: SettingKey, roomId: string | null = null, excludeDefault = false): any => {
                 switch (name) {
                     case "fallbackICEServerAllowed":
-                        return true as T;
+                        return true;
                     default:
-                        return originalGetValue<T>(name, roomId, excludeDefault);
+                        return excludeDefault
+                            ? originalGetValue(name, roomId, excludeDefault)
+                            : originalGetValue(name, roomId, excludeDefault);
                 }
             };
 
@@ -803,12 +808,14 @@ describe("ElementCall", () => {
         it("passes feature_allow_screen_share_only_mode setting to allowVoipWithNoMedia url param", async () => {
             // Now test with the preference set to true
             const originalGetValue = SettingsStore.getValue;
-            SettingsStore.getValue = <T>(name: string, roomId?: string, excludeDefault?: boolean) => {
+            SettingsStore.getValue = (name: SettingKey, roomId: string | null = null, excludeDefault = false): any => {
                 switch (name) {
                     case "feature_allow_screen_share_only_mode":
-                        return true as T;
+                        return true;
                     default:
-                        return originalGetValue<T>(name, roomId, excludeDefault);
+                        return excludeDefault
+                            ? originalGetValue(name, roomId, excludeDefault)
+                            : originalGetValue(name, roomId, excludeDefault);
                 }
             };
             await ElementCall.create(room);

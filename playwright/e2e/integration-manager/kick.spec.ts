@@ -2,13 +2,14 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022, 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import type { Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
 import { openIntegrationManager } from "./utils";
+import type { UserWidget } from "../../../src/utils/WidgetUtils-types.ts";
 
 const ROOM_NAME = "Integration Manager Test";
 const USER_DISPLAY_NAME = "Alice";
@@ -68,29 +69,13 @@ async function sendActionFromIntegrationManager(
     await iframe.getByRole("button", { name: "Press to send action" }).click();
 }
 
-async function clickUntilGone(page: Page, selector: string, attempt = 0) {
-    if (attempt === 11) {
-        throw new Error("clickUntilGone attempt count exceeded");
-    }
-
-    await page.locator(selector).last().click();
-
-    const count = await page.locator(selector).count();
-    if (count > 0) {
-        return clickUntilGone(page, selector, ++attempt);
-    }
-}
-
 async function expectKickedMessage(page: Page, shouldExist: boolean) {
-    // Expand any event summaries, we can't use a click multiple here because clicking one might de-render others
-    // This is quite horrible but seems the most stable way of clicking 0-N buttons,
-    // one at a time with a full re-evaluation after each click
-    await clickUntilGone(page, ".mx_GenericEventListSummary_toggle[aria-expanded=false]");
-
-    // Check for the event message (or lack thereof)
-    await expect(page.getByText(`${USER_DISPLAY_NAME} removed ${BOT_DISPLAY_NAME}: ${KICK_REASON}`)).toBeVisible({
-        visible: shouldExist,
-    });
+    await expect(async () => {
+        await page.locator(".mx_GenericEventListSummary_toggle[aria-expanded=false]").last().click();
+        await expect(page.getByText(`${USER_DISPLAY_NAME} removed ${BOT_DISPLAY_NAME}: ${KICK_REASON}`)).toBeVisible({
+            visible: shouldExist,
+        });
+    }).toPass();
 }
 
 test.describe("Integration Manager: Kick", () => {
@@ -136,7 +121,7 @@ test.describe("Integration Manager: Kick", () => {
                     },
                 },
                 id: "integration-manager",
-            },
+            } as unknown as UserWidget,
         });
 
         // Succeed when checking the token is valid

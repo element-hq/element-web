@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022, 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -90,7 +90,7 @@ test.describe("Timeline", () => {
     let oldAvatarUrl: string;
     let newAvatarUrl: string;
 
-    test.describe("useOnlyCurrentProfiles", () => {
+    test.describe("useOnlyCurrentProfiles", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         test.beforeEach(async ({ app, user }) => {
             ({ content_uri: oldAvatarUrl } = await app.client.uploadContent(OLD_AVATAR, { type: "image/png" }));
             await app.client.setAvatarUrl(oldAvatarUrl);
@@ -590,10 +590,6 @@ test.describe("Timeline", () => {
             "should set inline start padding to a hidden event line",
             { tag: "@screenshot" },
             async ({ page, app, room }) => {
-                test.skip(
-                    true,
-                    "Disabled due to screenshot test being flaky - https://github.com/element-hq/element-web/issues/26890",
-                );
                 await sendEvent(app.client, room.roomId);
                 await page.goto(`/#/room/${room.roomId}`);
                 await app.settings.setValue("showHiddenEventsInTimeline", null, SettingLevel.DEVICE, true);
@@ -607,7 +603,12 @@ test.describe("Timeline", () => {
                 await messageEdit(page);
 
                 // Click timestamp to highlight hidden event line
-                await page.locator(".mx_RoomView_body .mx_EventTile_info .mx_MessageTimestamp").click();
+                const timestamp = page.locator(".mx_RoomView_body .mx_EventTile_info a", {
+                    has: page.locator(".mx_MessageTimestamp"),
+                });
+                // wait for the remote echo otherwise we get an error modal due to a 404 on the /event/ API
+                await expect(timestamp).not.toHaveAttribute("href", /~!/);
+                await timestamp.locator(".mx_MessageTimestamp").click();
 
                 // should not add inline start padding to a hidden event line on IRC layout
                 await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
@@ -876,7 +877,7 @@ test.describe("Timeline", () => {
         });
     });
 
-    test.describe("message sending", () => {
+    test.describe("message sending", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         const MESSAGE = "Hello world";
         const reply = "Reply";
         const viewRoomSendMessageAndSetupReply = async (page: Page, app: ElementAppPage, roomId: string) => {
@@ -914,7 +915,6 @@ test.describe("Timeline", () => {
         });
 
         test("can reply with a voice message", async ({ page, app, room, context }) => {
-            await context.grantPermissions(["microphone"]);
             await viewRoomSendMessageAndSetupReply(page, app, room.roomId);
 
             const composerOptions = await app.openMessageComposerOptions();

@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2024 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -123,7 +123,7 @@ test.describe("Landmark navigation tests", () => {
         await expect(page.getByText("Bob joined the room")).toBeVisible();
 
         // Close the room
-        page.goto("/#/home");
+        await page.goto("/#/home");
 
         // Pressing Control+F6 will first focus the space button
         await page.keyboard.press("ControlOrMeta+F6");
