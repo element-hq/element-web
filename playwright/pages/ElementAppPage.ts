@@ -158,10 +158,6 @@ export class ElementAppPage {
         return button.click();
     }
 
-    public async getClipboardText(): Promise<string> {
-        return this.page.evaluate("navigator.clipboard.readText()");
-    }
-
     public async openSpotlight(): Promise<Spotlight> {
         const spotlight = new Spotlight(this.page);
         await spotlight.open();

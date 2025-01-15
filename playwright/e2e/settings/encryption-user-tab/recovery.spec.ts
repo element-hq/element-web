@@ -53,7 +53,7 @@ test.describe("Recovery section in Encryption tab", () => {
 
     test(
         "should change the recovery key",
-        { tag: "@screenshot" },
+        { tag: ["@screenshot", "@no-webkit"] },
         async ({ page, app, homeserver, credentials, util, context }) => {
             await verifySession(app, "new passphrase");
             const dialog = await util.openEncryptionTab();
