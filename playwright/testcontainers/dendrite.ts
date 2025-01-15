@@ -236,8 +236,9 @@ export class DendriteContainer extends GenericContainer implements HomeserverCon
         return this;
     }
 
+    // Dendrite does not support MAS at this time
     public withMatrixAuthenticationService(mas?: StartedMatrixAuthenticationServiceContainer): this {
-        throw new Error("Dendrite does not support MAS.");
+        return this;
     }
 
     public override async start(): Promise<StartedDendriteContainer> {
@@ -264,4 +265,10 @@ export class PineconeContainer extends DendriteContainer {
 }
 
 // Surprisingly, Dendrite implements the same register user Synapse Admin API, so we can just extend it
-export class StartedDendriteContainer extends StartedSynapseContainer {}
+export class StartedDendriteContainer extends StartedSynapseContainer {
+    protected async deletePublicRooms(): Promise<void> {
+        // Dendrite does not support admin users managing the room directory
+        // https://github.com/element-hq/dendrite/blob/main/clientapi/routing/directory.go#L365
+        return;
+    }
+}

@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { test, expect } from "../../element-web-test";
 import { consentHomeserver } from "../../plugins/homeserver/synapse/consentHomeserver.ts";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 test.use(consentHomeserver);
 test.use({
@@ -23,6 +24,8 @@ test.use({
 });
 
 test.describe("Registration", () => {
+    test.skip(isDendrite, "Dendrite lacks support for MSC3967 so requires additional auth here");
+
     test.beforeEach(async ({ page }) => {
         await page.goto("/#/register");
     });

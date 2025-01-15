@@ -11,6 +11,7 @@ import { expect, test } from "../../element-web-test";
 import { autoJoin, copyAndContinue, createSharedRoomWithUser, enableKeyBackup, verify } from "./utils";
 import { Bot } from "../../pages/bot";
 import { ElementAppPage } from "../../pages/ElementAppPage";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 const checkDMRoom = async (page: Page) => {
     const body = page.locator(".mx_RoomView_body");
@@ -67,6 +68,7 @@ const bobJoin = async (page: Page, bob: Bot) => {
 };
 
 test.describe("Cryptography", function () {
+    test.skip(isDendrite, "Dendrite lacks support for MSC3967 so requires additional auth here");
     test.use({
         displayName: "Alice",
         botCreateOpts: {

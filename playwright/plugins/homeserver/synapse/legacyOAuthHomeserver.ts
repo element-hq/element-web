@@ -21,7 +21,8 @@ export const legacyOAuthHomeserver: Fixtures = {
         },
         { scope: "worker" },
     ],
-    context: async ({ context, oAuthServer }, use, testInfo) => {
+    context: async ({ homeserverType, context, oAuthServer }, use, testInfo) => {
+        testInfo.skip(homeserverType !== "synapse", "does not yet support OIDC");
         oAuthServer.onTestStarted(testInfo);
         await use(context);
     },

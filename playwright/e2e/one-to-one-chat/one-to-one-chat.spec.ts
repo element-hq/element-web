@@ -9,12 +9,15 @@ Please see LICENSE files in the repository root for full details.
 
 import { test as base, expect } from "../../element-web-test";
 import { Credentials } from "../../plugins/homeserver";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 const test = base.extend<{
     user2?: Credentials;
 }>({});
 
 test.describe("1:1 chat room", () => {
+    test.skip(isDendrite, "due to a Dendrite bug https://github.com/element-hq/dendrite/issues/3492");
+
     test.use({
         displayName: "Jeff",
         user2: async ({ homeserver }, use, testInfo) => {
