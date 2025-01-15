@@ -323,7 +323,7 @@ export default class DeviceListener {
             } else {
                 // some other condition... yikes! Show the 'set up encryption' toast: this is what we previously did
                 // in 'other' situations. Possibly we should consider prompting for a full reset in this case?
-                logger.warn("Couldn't match encryption state to a know case: showing 'setup encryption' prompt", {
+                logger.warn("Couldn't match encryption state to a known case: showing 'setup encryption' prompt", {
                     crossSigningReady,
                     secretStorageReady,
                     allCrossSigningSecretsCached,
