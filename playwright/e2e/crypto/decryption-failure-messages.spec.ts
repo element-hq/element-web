@@ -28,6 +28,8 @@ test.describe("Cryptography", function () {
     });
 
     test.describe("decryption failure messages", () => {
+        test.skip(isDendrite, "Dendrite lacks support for MSC3967 so requires additional auth here");
+
         test("should handle device-relative historical messages", async ({
             homeserver,
             page,

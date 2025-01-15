@@ -17,7 +17,7 @@ import RightPanel from "./RightPanel";
 import Spinner from "../views/elements/Spinner";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
-import { UserOnboardingPage } from "../views/user-onboarding/UserOnboardingPage";
+import HomePage from "./HomePage.tsx";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 
 interface IProps {
@@ -93,7 +93,7 @@ export default class UserView extends React.Component<IProps, IState> {
                     defaultSize={420}
                     analyticsRoomType="user_profile"
                 >
-                    <UserOnboardingPage />
+                    <HomePage />
                 </MainSplit>
             );
         } else {

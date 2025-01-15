@@ -8,19 +8,25 @@ Please see LICENSE files in the repository root for full details.
 
 import { defineConfig, devices } from "@playwright/test";
 
+import { Options } from "./playwright/services";
+
 const baseURL = process.env["BASE_URL"] ?? "http://localhost:8080";
 
-export default defineConfig({
+const chromeProject = {
+    ...devices["Desktop Chrome"],
+    channel: "chromium",
+    permissions: ["clipboard-write", "clipboard-read", "microphone"],
+    launchOptions: {
+        args: ["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream", "--mute-audio"],
+    },
+};
+
+export default defineConfig<Options>({
     projects: [
         {
             name: "Chrome",
             use: {
-                ...devices["Desktop Chrome"],
-                channel: "chromium",
-                permissions: ["clipboard-write", "clipboard-read", "microphone"],
-                launchOptions: {
-                    args: ["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream", "--mute-audio"],
-                },
+                ...chromeProject,
             },
         },
         {
@@ -45,6 +51,22 @@ export default defineConfig({
                 // Seemingly WebKit has the same issue as Firefox in Playwright routes not working
                 // https://playwright.dev/docs/network#missing-network-events-and-service-workers
                 serviceWorkers: "block",
+            },
+            ignoreSnapshots: true,
+        },
+        {
+            name: "Dendrite",
+            use: {
+                ...chromeProject,
+                homeserverType: "dendrite",
+            },
+            ignoreSnapshots: true,
+        },
+        {
+            name: "Pinecone",
+            use: {
+                ...chromeProject,
+                homeserverType: "pinecone",
             },
             ignoreSnapshots: true,
         },

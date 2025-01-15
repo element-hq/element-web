@@ -443,7 +443,6 @@
             "other": "e %(count)s outros...",
             "one": "e um outro..."
         },
-        "android": "Android",
         "appearance": "Aparência",
         "application": "Aplicação",
         "are_you_sure": "Você tem certeza?",
@@ -483,7 +482,6 @@
         "identity_server": "Servidor de identidade",
         "image": "Imagem",
         "integration_manager": "Gestor de integração",
-        "ios": "iOS",
         "joined": "Aderiu",
         "labs": "Laboratório",
         "legal": "Legal",
@@ -576,8 +574,7 @@
         "video": "Vídeo",
         "video_room": "Sala de vídeo",
         "view_message": "Ver mensagem",
-        "warning": "Aviso",
-        "welcome": "Bem-vindo"
+        "warning": "Aviso"
     },
     "composer": {
         "autocomplete": {
@@ -1531,7 +1528,6 @@
     "member_list": {
         "filter_placeholder": "Filtrar integrantes da sala",
         "invite_button_no_perms_tooltip": "Não tens permissão para convidar utilizadores",
-        "invited_list_heading": "Convidada(o)",
         "power_label": "%(userName)s (nível de permissão %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Membros da sala",
@@ -1578,61 +1574,15 @@
         "m.key.verification.request": "%(name)s está a pedir verificação"
     },
     "onboarding": {
-        "apple_trademarks": "App Store® e o logótipo da Apple® são marcas comerciais da Apple Inc.",
-        "community_messaging_action": "Encontra as tuas pessoas",
-        "community_messaging_description": "Mantém a propriedade e o controlo da discussão da comunidade.\nAmplia a escala para suportar milhões, com moderação e interoperabilidade poderosas.",
-        "community_messaging_title": "Propriedade da comunidade",
-        "complete_these": "Completa-os para tirares o máximo partido de %(brand)s",
         "create_room": "Cria um chat de grupo",
-        "download_app": "Descarrega %(brand)s",
-        "download_app_action": "Descarregar aplicações",
-        "download_app_description": "Não percas nada ao levar %(brand)s contigo",
-        "download_app_store": "Descarregar na App Store",
-        "download_brand": "Descarrega %(brand)s",
-        "download_brand_desktop": "Descarrega %(brand)s Área de Trabalho",
-        "download_f_droid": "Obtém-no no F-Droid",
-        "download_google_play": "Obtém-no no Google Play",
-        "enable_notifications": "Ativar notificações",
-        "enable_notifications_action": "Permitir Notificações",
-        "enable_notifications_description": "Não percas uma resposta ou uma mensagem importante",
         "explore_rooms": "Explora as salas públicas",
-        "find_community_members": "Encontra e convida os membros da tua comunidade",
-        "find_coworkers": "Encontra e convida os teus colegas de trabalho",
-        "find_friends": "Encontra e convida os teus amigos",
-        "find_friends_action": "Encontra amigos",
-        "find_friends_description": "É para isso que estás aqui, por isso vamos a isso",
-        "find_people": "Encontra pessoas",
-        "free_e2ee_messaging_unlimited_voip": "Com mensagens encriptadas gratuitas de ponta a ponta e chamadas de voz e vídeo ilimitadas, %(brand)s é uma excelente forma de te manteres em contacto.",
-        "get_stuff_done": "Faz as coisas encontrando os teus colegas de equipa",
-        "google_trademarks": "Google Play e o logótipo Google Play são marcas comerciais da Google LLC.",
         "has_avatar_label": "Ótimo, isso vai ajudar as pessoas a saberem que és tu",
         "intro_byline": "Torna-te dono das tuas conversas.",
         "intro_welcome": "Bem-vindo(a) a(ao) %(appName)s",
         "no_avatar_label": "Adiciona uma fotografia para que as pessoas saibam que és tu.",
-        "only_n_steps_to_go": {
-            "one": "Apenas %(count)s passo para seguir",
-            "other": "Apenas %(count)s passos para seguir"
-        },
-        "personal_messaging_action": "Inicia a tua primeira conversa",
-        "personal_messaging_title": "Mensagens seguras para amigos e familiares",
-        "qr_or_app_links": "%(qrCode)s ou %(appLinks)s",
         "send_dm": "Envia uma mensagem direta",
-        "set_up_profile": "Configura o teu perfil",
-        "set_up_profile_action": "O teu perfil",
-        "set_up_profile_description": "Certifica-te de que as pessoas sabem que és mesmo tu",
-        "use_case_community_messaging": "Membros da comunidade online",
-        "use_case_heading1": "Estás dentro",
-        "use_case_heading2": "Com quem vais falar mais?",
-        "use_case_heading3": "Nós ajudamos-te a estabelecer uma ligação.",
-        "use_case_personal_messaging": "Amigos e família",
-        "use_case_work_messaging": "Colegas de trabalho e equipas",
         "welcome_detail": "Agora, vamos ajudar-te a começar",
-        "welcome_to_brand": "Bem-vindo ao %(brand)s",
-        "welcome_user": "Bem-vindo(a) %(name)s",
-        "work_messaging_action": "Encontra os teus colegas de trabalho",
-        "work_messaging_title": "Mensagens seguras para o trabalho",
-        "you_did_it": "Conseguiste!",
-        "you_made_it": "Conseguiste!"
+        "welcome_user": "Bem-vindo(a) %(name)s"
     },
     "pill": {
         "permalink_other_room": "Mensagem em %(room)s",
@@ -1684,7 +1634,6 @@
         "custom_level": "Nível personalizado",
         "default": "Padrão",
         "label": "Nível de potência",
-        "mod": "Moderador",
         "moderator": "Moderador/a",
         "restricted": "Restrito"
     },
@@ -2611,7 +2560,6 @@
             "room_directory_heading": "Diretório de salas",
             "room_list_heading": "Lista de salas",
             "show_avatars_pills": "Mostra os avatares nas menções de utilizadores, salas e eventos",
-            "show_checklist_shortcuts": "Mostra o atalho para a lista de boas-vindas acima da lista de salas",
             "show_polls_button": "Mostrar botão de sondagens",
             "surround_text": "Rodeia o texto selecionado ao escrever caracteres especiais",
             "time_heading": "Mostra a hora"
@@ -2987,7 +2935,6 @@
         "invite": "Convida pessoas",
         "invite_description": "Convidar com email ou nome de utilizador",
         "invite_link": "Partilhar a ligação de convite",
-        "invite_this_space": "Convida para este espaço",
         "joining_space": "Entrando...",
         "landing_welcome": "Bem-vindo(a) a(ao) <name/>",
         "leave_dialog_action": "Deixa espaço",

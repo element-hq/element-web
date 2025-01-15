@@ -6,11 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Fixtures } from "@playwright/test";
+import { Fixtures } from "../../../element-web-test.ts";
 
-import { Services } from "../../../services.ts";
-
-export const emailHomeserver: Fixtures<{}, Services> = {
+export const emailHomeserver: Fixtures = {
     _homeserver: [
         async ({ _homeserver: container, mailhog }, use) => {
             container.withConfig({
@@ -28,4 +26,9 @@ export const emailHomeserver: Fixtures<{}, Services> = {
         },
         { scope: "worker" },
     ],
+
+    context: async ({ homeserverType, context }, use, testInfo) => {
+        testInfo.skip(homeserverType !== "synapse", "does not yet support MAS");
+        await use(context);
+    },
 };

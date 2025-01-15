@@ -412,7 +412,6 @@
             "other": "a ďalších %(count)s…",
             "one": "a jeden ďalší…"
         },
-        "android": "Android",
         "appearance": "Vzhľad",
         "application": "Aplikácia",
         "are_you_sure": "Ste si istí?",
@@ -451,7 +450,6 @@
         "identity_server": "Server totožností",
         "image": "Obrázok",
         "integration_manager": "Správca integrácie",
-        "ios": "iOS",
         "joined": "Ste pripojený",
         "labs": "Experimenty",
         "legal": "Právne informácie",
@@ -540,8 +538,7 @@
         "video": "Video",
         "video_room": "Video miestnosť",
         "view_message": "Zobraziť správu",
-        "warning": "Upozornenie",
-        "welcome": "Vitajte"
+        "warning": "Upozornenie"
     },
     "composer": {
         "autocomplete": {
@@ -1502,7 +1499,6 @@
     "member_list": {
         "filter_placeholder": "Filtrovať členov v miestnosti",
         "invite_button_no_perms_tooltip": "Nemáte oprávnenie pozývať používateľov",
-        "invited_list_heading": "Pozvaní",
         "power_label": "%(userName)s (oprávnenie %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Členovia miestnosti",
@@ -1542,62 +1538,15 @@
         "m.key.verification.request": "%(name)s žiada o overenie"
     },
     "onboarding": {
-        "apple_trademarks": "App Store® a logo Apple® sú ochranné známky spoločnosti Apple Inc.",
-        "community_messaging_action": "Nájdite svojich ľudí",
-        "community_messaging_description": "Zachovajte si vlastníctvo a kontrolu nad komunitnou diskusiou.\nPodpora pre milióny ľudí s výkonným moderovaním a interoperabilitou.",
-        "community_messaging_title": "Vlastníctvo komunity",
-        "complete_these": "Dokončite to, aby ste získali čo najviac z aplikácie %(brand)s",
         "create_room": "Vytvoriť skupinovú konverzáciu",
-        "download_app": "Stiahnuť %(brand)s",
-        "download_app_action": "Stiahnite si aplikácie",
-        "download_app_description": "Nezmeškáte nič, ak so sebou vezmete %(brand)s",
-        "download_app_store": "Stiahnuť v obchode App Store",
-        "download_brand": "Stiahnuť %(brand)s",
-        "download_brand_desktop": "Stiahnuť %(brand)s Desktop",
-        "download_f_droid": "Získajte ho v službe F-Droid",
-        "download_google_play": "Získajte ho v službe Google Play",
-        "enable_notifications": "Zapnúť oznámenia",
-        "enable_notifications_action": "Povoliť oznámenia",
-        "enable_notifications_description": "Nezmeškajte odpoveď alebo dôležitú správu",
         "explore_rooms": "Preskúmať verejné miestnosti",
-        "find_community_members": "Nájdite a pozvite členov vašej komunity",
-        "find_coworkers": "Vyhľadajte a pozvite svojich spolupracovníkov",
-        "find_friends": "Nájdite a pozvite svojich priateľov",
-        "find_friends_action": "Nájsť priateľov",
-        "find_friends_description": "Kvôli tomu ste tu, tak sa do toho pustite",
-        "find_people": "Nájsť ľudí",
-        "free_e2ee_messaging_unlimited_voip": "Vďaka bezplatnému end-to-end šifrovaniu správ a neobmedzenými hlasovými a video hovormi je aplikácia %(brand)s skvelým spôsobom, ako zostať v kontakte.",
-        "get_stuff_done": "Vyriešte veci tým, že nájdete svojich tímových kolegov",
-        "google_trademarks": "Google Play a logo Google Play sú ochranné známky spoločnosti Google LLC.",
         "has_avatar_label": "Skvelé, to pomôže ľuďom zistiť, že ste to vy",
         "intro_byline": "Vlastnite svoje konverzácie.",
         "intro_welcome": "Vitajte v %(appName)s",
         "no_avatar_label": "Pridajte fotografiu, aby ľudia vedeli, že ste to vy.",
-        "only_n_steps_to_go": {
-            "one": "Zostáva už len %(count)s krok",
-            "few": "Zostávajú už len %(count)s kroky",
-            "other": "Zostáva už len %(count)s krokov"
-        },
-        "personal_messaging_action": "Spustite svoju prvú konverzáciu",
-        "personal_messaging_title": "Zabezpečené zasielanie správ pre priateľov a rodinu",
-        "qr_or_app_links": "%(qrCode)s alebo %(appLinks)s",
         "send_dm": "Poslať priamu správu",
-        "set_up_profile": "Nastavte si svoj profil",
-        "set_up_profile_action": "Váš profil",
-        "set_up_profile_description": "Uistite sa, že ľudia vedia, že ste to naozaj vy",
-        "use_case_community_messaging": "Členovia online komunity",
-        "use_case_heading1": "Ste v",
-        "use_case_heading2": "S kým budete komunikovať najčastejšie?",
-        "use_case_heading3": "Pomôžeme vám nadviazať kontakty.",
-        "use_case_personal_messaging": "Priatelia a rodina",
-        "use_case_work_messaging": "Spolupracovníci a tímy",
         "welcome_detail": "Teraz vám pomôžeme začať",
-        "welcome_to_brand": "Vitajte v aplikácii %(brand)s",
-        "welcome_user": "Vitajte %(name)s",
-        "work_messaging_action": "Nájdite svojich spolupracovníkov",
-        "work_messaging_title": "Zabezpečené posielanie správ pre prácu",
-        "you_did_it": "Dokázali ste to!",
-        "you_made_it": "Zvládli ste to!"
+        "welcome_user": "Vitajte %(name)s"
     },
     "pill": {
         "permalink_other_room": "Správa v %(room)s",
@@ -1649,7 +1598,6 @@
         "custom_level": "Vlastná úroveň",
         "default": "Predvolené",
         "label": "Úroveň oprávnenia",
-        "mod": "Moderátor",
         "moderator": "Moderátor",
         "restricted": "Obmedzené"
     },
@@ -2516,7 +2464,6 @@
             "room_directory_heading": "Adresár miestností",
             "room_list_heading": "Zoznam miestností",
             "show_avatars_pills": "Zobraziť obrázky profilov v zmienkach o používateľoch, miestnostiach a udalostiach",
-            "show_checklist_shortcuts": "Zobraziť skratku na uvítací kontrolný zoznam nad zoznamom miestností",
             "show_polls_button": "Zobraziť tlačidlo ankiet",
             "surround_text": "Obklopiť vybraný text pri písaní špeciálnych znakov",
             "time_heading": "Zobrazovanie času"
@@ -2878,7 +2825,6 @@
         "invite": "Pozvať ľudí",
         "invite_description": "Pozvať pomocou e-mailu alebo používateľského mena",
         "invite_link": "Zdieľať odkaz na pozvánku",
-        "invite_this_space": "Pozvať do tohto priestoru",
         "joining_space": "Pripájanie sa",
         "landing_welcome": "Vitajte v <name/>",
         "leave_dialog_action": "Opustiť priestor",
