@@ -298,7 +298,7 @@ export class StopGapWidget extends EventEmitter {
             this.messaging.setViewedRoomId(SdkContextClass.instance.roomViewStore.getRoomId() ?? null);
             SdkContextClass.instance.roomViewStore.on(UPDATE_EVENT, this.onRoomViewStoreUpdate);
         } else {
-            // Room widgets get looked to the room they were added in
+            // Room widgets get locked to the room they were added in
             this.messaging.setViewedRoomId(this.roomId);
         }
 
