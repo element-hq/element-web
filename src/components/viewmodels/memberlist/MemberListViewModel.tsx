@@ -19,7 +19,7 @@ import {
     UserEvent,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { throttle } from "lodash";
 
 import { RoomMember } from "../../../models/rooms/RoomMember";
@@ -122,17 +122,18 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     // This is the last known total number of members in this room.
-    const [totalMemberCount, setTotalMemberCount] = useState(0);
+    const totalMemberCount = useRef<number>(0);
 
-    const [searchQuery, setSearchQuery] = useState("");
+    const searchQuery = useRef("");
 
     const loadMembers = useMemo(
         () =>
             throttle(
+                // eslint-disable-next-line react-compiler/react-compiler
                 async (): Promise<void> => {
                     const { joined: joinedSdk, invited: invitedSdk } = await sdkContext.memberListStore.loadMemberList(
                         roomId,
-                        searchQuery,
+                        searchQuery.current,
                     );
                     const newMemberMap = new Map<string, Member>();
                     // First add the invited room members
@@ -141,7 +142,7 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
                         newMemberMap.set(member.userId, roomMember);
                     }
                     // Then add the third party invites
-                    const threePidInvited = getPending3PidInvites(room, searchQuery);
+                    const threePidInvited = getPending3PidInvites(room, searchQuery.current);
                     for (const invited of threePidInvited) {
                         const key = invited.threePidInvite!.event.getContent().display_name;
                         newMemberMap.set(key, invited);
@@ -152,23 +153,23 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
                         newMemberMap.set(member.userId, roomMember);
                     }
                     setMemberMap(newMemberMap);
-                    if (!searchQuery) {
+                    if (!searchQuery.current) {
                         /**
                          * Since searching for members only gives you the relevant
                          * members matching the query, do not update the totalMemberCount!
                          **/
-                        setTotalMemberCount(newMemberMap.size);
+                        totalMemberCount.current = newMemberMap.size;
                     }
                 },
                 500,
                 { leading: true, trailing: true },
             ),
-        [sdkContext.memberListStore, roomId, searchQuery, room],
+        [roomId, sdkContext.memberListStore, room],
     );
 
     const search = useCallback(
         (query: string) => {
-            setSearchQuery(query);
+            searchQuery.current = query;
             loadMembers();
         },
         [loadMembers],
@@ -257,7 +258,8 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
         isPresenceEnabled,
         isLoading,
         onInviteButtonClick,
-        shouldShowSearch: totalMemberCount >= 20,
+        // eslint-disable-next-line react-compiler/react-compiler
+        shouldShowSearch: totalMemberCount.current >= 20,
         canInvite,
     };
 }
