@@ -152,6 +152,7 @@ export const showToast = (kind: Kind): void => {
             onPrimaryClick: onAccept,
             secondaryLabel: getSecondaryButtonLabel(kind),
             onSecondaryClick: onReject,
+            overrideWidth: kind === Kind.KEY_STORAGE_OUT_OF_SYNC ? "366px" : undefined,
         },
         component: GenericToast,
         priority: kind === Kind.VERIFY_THIS_SESSION ? 95 : 40,
