@@ -61,18 +61,20 @@ function EncryptionDetails({ onResetIdentityClick }: EncryptionDetails): JSX.Ele
     );
 
     return (
-        <div className="mx_EncryptionDetails">
+        <div className="mx_EncryptionDetails" data-testid="encryptionDetails">
             <div className="mx_EncryptionDetails_session">
                 <h3 className="mx_EncryptionDetails_session_title">
                     {_t("settings|encryption|advanced|details_title")}
                 </h3>
                 <div>
                     <span>{_t("settings|encryption|advanced|session_id")}</span>
-                    <span>{matrixClient.deviceId}</span>
+                    <span data-testid="deviceId">{matrixClient.deviceId}</span>
                 </div>
                 <div>
                     <span>{_t("settings|encryption|advanced|session_key")}</span>
-                    <span>{keys ? keys.ed25519 : <InlineSpinner />}</span>
+                    <span data-testid="sessionKey">
+                        {keys ? keys.ed25519 : <InlineSpinner aria-label={_t("common|loading")} />}
+                    </span>
                 </div>
             </div>
             <div className="mx_EncryptionDetails_buttons">
@@ -124,7 +126,7 @@ function OtherSettings(): JSX.Element | null {
 
     return (
         <Root
-            data-testid="other-settings"
+            data-testid="otherSettings"
             className="mx_OtherSettings"
             onChange={async (evt) => {
                 const checked = new FormData(evt.currentTarget).get("neverSendEncrypted") === "on";
