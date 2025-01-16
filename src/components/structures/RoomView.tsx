@@ -1082,7 +1082,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
     };
 
-    private onCallState = (roomId: string): void => {
+    private onCallState = (roomId: string | null): void => {
         // don't filter out payloads for room IDs other than props.room because
         // we may be interested in the conf 1:1 room
 
