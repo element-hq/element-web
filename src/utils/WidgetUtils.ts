@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { useCallback, useEffect, useState } from "react";
 import { base32 } from "rfc4648";
+import { capitalize } from "lodash";
 import { IWidget, IWidgetData } from "matrix-widget-api";
 import { Room, ClientEvent, MatrixClient, RoomStateEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
@@ -30,7 +31,6 @@ import { parseUrl } from "./UrlUtils";
 import { useEventEmitter } from "../hooks/useEventEmitter";
 import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
 import { IWidgetEvent, UserWidget } from "./WidgetUtils-types";
-import { capitalize } from "lodash";
 
 // How long we wait for the state event echo to come back from the server
 // before waitFor[Room/User]Widget rejects its promise
