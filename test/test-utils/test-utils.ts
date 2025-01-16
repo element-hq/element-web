@@ -151,6 +151,7 @@ export function createTestClient(): MatrixClient {
                 },
             }),
             isCrossSigningReady: jest.fn().mockResolvedValue(false),
+            resetEncryption: jest.fn(),
         }),
 
         getPushActionsForEvent: jest.fn(),
