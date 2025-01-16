@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { randomString } from "matrix-js-sdk/src/randomstring";
+import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from "../../../languageHandler";
@@ -35,7 +35,7 @@ interface IState {
 }
 
 export default class SettingsFlag extends React.Component<IProps, IState> {
-    private readonly id = `mx_SettingsFlag_${randomString(12)}`;
+    private readonly id = `mx_SettingsFlag_${secureRandomString(12)}`;
 
     public constructor(props: IProps) {
         super(props);
