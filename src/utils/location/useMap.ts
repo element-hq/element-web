@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useState } from "react";
 
 import type { Map as MapLibreMap } from "maplibre-gl";
 import { createMap } from "./map";
@@ -26,25 +26,30 @@ interface UseMapProps {
  */
 export const useMap = ({ interactive, bodyId, onError }: UseMapProps): MapLibreMap | undefined => {
     const cli = useMatrixClientContext();
+    const [map, setMap] = useState<MapLibreMap>();
 
-    const map = useMemo(() => {
-        try {
-            return createMap(cli, !!interactive, bodyId, onError);
-        } catch (error) {
-            console.error("Error encountered in useMap", error);
-            if (error instanceof Error) {
-                onError?.(error);
+    useEffect(
+        () => {
+            let map: MapLibreMap | undefined;
+            try {
+                map = createMap(cli, !!interactive, bodyId, onError);
+                setMap(map);
+            } catch (error) {
+                console.error("Error encountered in useMap", error);
+                if (error instanceof Error) {
+                    onError?.(error);
+                }
             }
-        }
-    }, [bodyId, cli, interactive, onError]);
-
-    // cleanup
-    useEffect(() => {
-        if (!map) return;
-        return () => {
-            map.remove();
-        };
-    }, [map]);
+            return () => {
+                if (map) {
+                    map.remove();
+                    setMap(undefined);
+                }
+            };
+        },
+        // map is excluded as a dependency
+        [cli, interactive, bodyId, onError],
+    );
 
     return map;
 };
