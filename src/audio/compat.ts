@@ -17,11 +17,6 @@ import { SAMPLE_RATE } from "./VoiceRecording";
 export function createAudioContext(opts?: AudioContextOptions): AudioContext {
     if (window.AudioContext) {
         return new AudioContext(opts);
-    } else if (window.webkitAudioContext) {
-        // While the linter is correct that "a constructor name should not start with
-        // a lowercase letter", it's also wrong to think that we have control over this.
-        // eslint-disable-next-line new-cap
-        return new window.webkitAudioContext(opts);
     } else {
         throw new Error("Unsupported browser");
     }

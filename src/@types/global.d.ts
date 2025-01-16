@@ -80,9 +80,6 @@ declare global {
         mxMatrixClientPeg: IMatrixClientPeg;
         mxReactSdkConfig: DeepReadonly<IConfigOptions>;
 
-        // Needed for Safari, unknown to TypeScript
-        webkitAudioContext: typeof AudioContext;
-
         // https://docs.microsoft.com/en-us/previous-versions/hh772328(v=vs.85)
         // we only ever check for its existence, so we can ignore its actual type
         MSStream?: unknown;
