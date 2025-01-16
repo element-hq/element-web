@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { EventType, KnownMembership, MatrixEvent, Room, RoomStateEvent, RoomMember } from "matrix-js-sdk/src/matrix";
 import { CryptoApi, CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -213,9 +213,11 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
         initialisedRef.current = InitialisationStatus.Completed;
     }, [crypto, room, addMembersWhoNeedApproval, updateCurrentPrompt]);
 
-    loadMembers().catch((e) => {
-        logger.error("Error initialising UserIdentityWarning:", e);
-    });
+    useEffect(() => {
+        loadMembers().catch((e) => {
+            logger.error("Error initialising UserIdentityWarning:", e);
+        });
+    }, [loadMembers]);
 
     // When a user's verification status changes, we check if they need to be
     // added/removed from the set of members needing approval.
