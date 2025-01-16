@@ -14,7 +14,7 @@ import { Room, ClientEvent, MatrixClient, RoomStateEvent, MatrixEvent } from "ma
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
-import { randomString, randomLowercaseString, randomUppercaseString } from "matrix-js-sdk/src/randomstring";
+import { LOWERCASE, secureRandomString, secureRandomStringFrom } from "matrix-js-sdk/src/randomstring";
 
 import PlatformPeg from "../PlatformPeg";
 import SdkConfig from "../SdkConfig";
@@ -30,6 +30,7 @@ import { parseUrl } from "./UrlUtils";
 import { useEventEmitter } from "../hooks/useEventEmitter";
 import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
 import { IWidgetEvent, UserWidget } from "./WidgetUtils-types";
+import { capitalize } from "lodash";
 
 // How long we wait for the state event echo to come back from the server
 // before waitFor[Room/User]Widget rejects its promise
@@ -427,7 +428,10 @@ export default class WidgetUtils {
     ): Promise<void> {
         const domain = Jitsi.getInstance().preferredDomain;
         const auth = (await Jitsi.getInstance().getJitsiAuth()) ?? undefined;
-        const widgetId = randomString(24); // Must be globally unique
+
+        // Must be globally unique, although predicatablity is not important, the js-sdk has functions to generate
+        // secure ranom strings, and speed is not important here.
+        const widgetId = secureRandomString(24);
 
         let confId: string;
         if (auth === "openidtoken-jwt") {
@@ -437,8 +441,8 @@ export default class WidgetUtils {
             // https://github.com/matrix-org/prosody-mod-auth-matrix-user-verification
             confId = base32.stringify(new TextEncoder().encode(roomId), { pad: false });
         } else {
-            // Create a random conference ID
-            confId = `Jitsi${randomUppercaseString(1)}${randomLowercaseString(23)}`;
+            // Create a random conference ID (capitalised so the name looks sensible in Jitsi)
+            confId = `Jitsi${capitalize(secureRandomStringFrom(24, LOWERCASE))}`;
         }
 
         // TODO: Remove URL hacks when the mobile clients eventually support v2 widgets
