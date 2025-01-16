@@ -879,14 +879,18 @@
             "title": "Destroy cross-signing keys?",
             "warning": "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from."
         },
+        "enter_recovery_key": "Enter recovery key",
         "event_shield_reason_authenticity_not_guaranteed": "The authenticity of this encrypted message can't be guaranteed on this device.",
         "event_shield_reason_mismatched_sender_key": "Encrypted by an unverified session",
         "event_shield_reason_unknown_device": "Encrypted by an unknown or deleted device.",
         "event_shield_reason_unsigned_device": "Encrypted by a device not verified by its owner.",
         "event_shield_reason_unverified_identity": "Encrypted by an unverified user.",
         "export_unsupported": "Your browser does not support the required cryptography extensions",
+        "forgot_recovery_key": "Forgot recovery key?",
         "import_invalid_keyfile": "Not a valid %(brand)s keyfile",
         "import_invalid_passphrase": "Authentication check failed: incorrect password?",
+        "key_storage_out_of_sync": "Your key storage is out of sync.",
+        "key_storage_out_of_sync_description": "Confirm your recovery key to maintain access to your key storage and message history.",
         "messages_not_secure": {
             "cause_1": "Your homeserver",
             "cause_2": "The homeserver the user you're verifying is connected to",
