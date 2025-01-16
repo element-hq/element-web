@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019, 2020 , 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -11,10 +11,11 @@ import { User } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import E2EIcon, { E2EState } from "../rooms/E2EIcon";
+import E2EIcon from "../rooms/E2EIcon";
 import AccessibleButton from "../elements/AccessibleButton";
 import BaseDialog from "./BaseDialog";
 import { IDevice } from "../right_panel/UserInfo";
+import { E2EStatus } from "../../../utils/ShieldUtils";
 
 interface IProps {
     /**
@@ -54,7 +55,7 @@ const UntrustedDeviceDialog: React.FC<IProps> = ({ device, user, onFinished }) =
             className="mx_UntrustedDeviceDialog"
             title={
                 <>
-                    <E2EIcon status={E2EState.Warning} isUser size={24} hideTooltip={true} />
+                    <E2EIcon status={E2EStatus.Warning} isUser size={24} hideTooltip={true} />
                     {_t("encryption|udd|title")}
                 </>
             }

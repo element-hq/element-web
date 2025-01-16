@@ -2,25 +2,80 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { defineConfig, devices } from "@playwright/test";
 
+import { Options } from "./playwright/services";
+
 const baseURL = process.env["BASE_URL"] ?? "http://localhost:8080";
 
-export default defineConfig({
-    projects: [{ name: "Chrome", use: { ...devices["Desktop Chrome"], channel: "chromium" } }],
+const chromeProject = {
+    ...devices["Desktop Chrome"],
+    channel: "chromium",
+    permissions: ["clipboard-write", "clipboard-read", "microphone"],
+    launchOptions: {
+        args: ["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream", "--mute-audio"],
+    },
+};
+
+export default defineConfig<Options>({
+    projects: [
+        {
+            name: "Chrome",
+            use: {
+                ...chromeProject,
+            },
+        },
+        {
+            name: "Firefox",
+            use: {
+                ...devices["Desktop Firefox"],
+                launchOptions: {
+                    firefoxUserPrefs: {
+                        "permissions.default.microphone": 1,
+                    },
+                },
+                // This is needed to work around an issue between Playwright routes, Firefox, and Service workers
+                // https://github.com/microsoft/playwright/issues/33561#issuecomment-2471642120
+                serviceWorkers: "block",
+            },
+            ignoreSnapshots: true,
+        },
+        {
+            name: "WebKit",
+            use: {
+                ...devices["Desktop Safari"],
+                // Seemingly WebKit has the same issue as Firefox in Playwright routes not working
+                // https://playwright.dev/docs/network#missing-network-events-and-service-workers
+                serviceWorkers: "block",
+            },
+            ignoreSnapshots: true,
+        },
+        {
+            name: "Dendrite",
+            use: {
+                ...chromeProject,
+                homeserverType: "dendrite",
+            },
+            ignoreSnapshots: true,
+        },
+        {
+            name: "Pinecone",
+            use: {
+                ...chromeProject,
+                homeserverType: "pinecone",
+            },
+            ignoreSnapshots: true,
+        },
+    ],
     use: {
         viewport: { width: 1280, height: 720 },
         ignoreHTTPSErrors: true,
         video: "retain-on-failure",
         baseURL,
-        permissions: ["clipboard-write", "clipboard-read", "microphone"],
-        launchOptions: {
-            args: ["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream", "--mute-audio"],
-        },
         trace: "on-first-retry",
     },
     webServer: {

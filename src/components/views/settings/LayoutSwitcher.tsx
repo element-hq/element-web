@@ -2,7 +2,7 @@
  * Copyright 2024 New Vector Ltd.
  * Copyright 2024 The Matrix.org Foundation C.I.C.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -70,7 +70,7 @@ interface LayoutRadioProps {
  * @param label
  */
 function LayoutRadio({ layout, label }: LayoutRadioProps): JSX.Element {
-    const currentLayout = useSettingValue<Layout>("layout");
+    const currentLayout = useSettingValue("layout");
     const eventTileInfo = useEventTileInfo();
 
     return (
@@ -134,8 +134,8 @@ function useEventTileInfo(): EventTileInfo {
  * A toggleable setting to enable or disable the compact layout.
  */
 function ToggleCompactLayout(): JSX.Element {
-    const compactLayoutEnabled = useSettingValue<boolean>("useCompactLayout");
-    const layout = useSettingValue<Layout>("layout");
+    const compactLayoutEnabled = useSettingValue("useCompactLayout");
+    const layout = useSettingValue("layout");
 
     return (
         <Root

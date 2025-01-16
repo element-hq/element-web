@@ -3,7 +3,7 @@ Copyright 2024 New Vector Ltd.
 Copyright 2023 Suguru Hirahara
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -13,7 +13,7 @@ import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { Layout } from "../../../src/settings/enums/Layout";
 import { ElementAppPage } from "../../pages/ElementAppPage";
 
-test.describe("Audio player", () => {
+test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
     test.use({
         displayName: "Hanako",
     });
@@ -253,7 +253,6 @@ test.describe("Audio player", () => {
 
             // Find and click "Reply" button
             const clickButtonReply = async () => {
-                await tile.scrollIntoViewIfNeeded();
                 await tile.hover();
                 await tile.getByRole("button", { name: "Reply", exact: true }).click();
             };

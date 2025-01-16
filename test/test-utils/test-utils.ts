@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022, 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -105,6 +105,7 @@ export function createTestClient(): MatrixClient {
             isStored: jest.fn().mockReturnValue(false),
             checkKey: jest.fn().mockResolvedValue(false),
             hasKey: jest.fn().mockReturnValue(false),
+            getDefaultKeyId: jest.fn().mockResolvedValue(null),
         },
 
         store: {
@@ -127,7 +128,10 @@ export function createTestClient(): MatrixClient {
             bootstrapCrossSigning: jest.fn(),
             getActiveSessionBackupVersion: jest.fn().mockResolvedValue(null),
             isKeyBackupTrusted: jest.fn().mockResolvedValue({}),
-            createRecoveryKeyFromPassphrase: jest.fn().mockResolvedValue({}),
+            createRecoveryKeyFromPassphrase: jest.fn().mockResolvedValue({
+                privateKey: new Uint8Array(32),
+                encodedPrivateKey: "encoded private key",
+            }),
             bootstrapSecretStorage: jest.fn(),
             isDehydrationSupported: jest.fn().mockResolvedValue(false),
             restoreKeyBackup: jest.fn(),
@@ -137,6 +141,16 @@ export function createTestClient(): MatrixClient {
             checkKeyBackupAndEnable: jest.fn().mockResolvedValue(null),
             getKeyBackupInfo: jest.fn().mockResolvedValue(null),
             getEncryptionInfoForEvent: jest.fn().mockResolvedValue(null),
+            getCrossSigningStatus: jest.fn().mockResolvedValue({
+                publicKeysOnDevice: false,
+                privateKeysInSecretStorage: false,
+                privateKeysCachedLocally: {
+                    masterKey: false,
+                    selfSigningKey: false,
+                    userSigningKey: false,
+                },
+            }),
+            isCrossSigningReady: jest.fn().mockResolvedValue(false),
         }),
 
         getPushActionsForEvent: jest.fn(),
@@ -800,6 +814,8 @@ export const mkThirdPartyInviteEvent = (user: string, displayName: string, room:
         type: EventType.RoomThirdPartyInvite,
         content: {
             display_name: displayName,
+            public_key: "foo",
+            key_validity_url: "bar",
         },
         skey: "test" + Math.random(),
         user,

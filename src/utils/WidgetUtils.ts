@@ -3,7 +3,7 @@ Copyright 2024 New Vector Ltd.
 Copyright 2017-2020 The Matrix.org Foundation C.I.C.
 Copyright 2019 Travis Ralston
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -29,23 +29,13 @@ import WidgetStore, { IApp, isAppWidget } from "../stores/WidgetStore";
 import { parseUrl } from "./UrlUtils";
 import { useEventEmitter } from "../hooks/useEventEmitter";
 import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
+import { IWidgetEvent, UserWidget } from "./WidgetUtils-types";
 
 // How long we wait for the state event echo to come back from the server
 // before waitFor[Room/User]Widget rejects its promise
 const WIDGET_WAIT_TIME = 20000;
 
-export interface IWidgetEvent {
-    id: string;
-    type: string;
-    sender: string;
-    // eslint-disable-next-line camelcase
-    state_key: string;
-    content: IApp;
-}
-
-export interface UserWidget extends Omit<IWidgetEvent, "content"> {
-    content: IWidget & Partial<IApp>;
-}
+export type { IWidgetEvent, UserWidget };
 
 export default class WidgetUtils {
     /**

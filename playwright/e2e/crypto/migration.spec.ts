@@ -2,34 +2,33 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023, 2024 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import path from "path";
 import { readFile } from "node:fs/promises";
 
-import { expect, Fixtures, test as base } from "../../element-web-test";
+import { expect, test } from "../../element-web-test";
 
-const test = base.extend<Fixtures>({
-    // Replace the `user` fixture with one which populates the indexeddb data before starting the app.
-    user: async ({ context, pageWithCredentials: page, credentials }, use) => {
-        await page.route(`/test_indexeddb_cryptostore_dump/*`, async (route, request) => {
-            const resourcePath = path.join(__dirname, new URL(request.url()).pathname);
-            const body = await readFile(resourcePath, { encoding: "utf-8" });
-            await route.fulfill({ body });
-        });
-        await page.goto("/test_indexeddb_cryptostore_dump/index.html");
+test.describe("migration", { tag: "@no-webkit" }, function () {
+    test.use({
+        displayName: "Alice",
 
-        await use(credentials);
-    },
-});
+        // Replace the `user` fixture with one which populates the indexeddb data before starting the app.
+        user: async ({ context, pageWithCredentials: page, credentials }, use) => {
+            await page.route(`/test_indexeddb_cryptostore_dump/*`, async (route, request) => {
+                const resourcePath = path.join(__dirname, new URL(request.url()).pathname);
+                const body = await readFile(resourcePath, { encoding: "utf-8" });
+                await route.fulfill({ body });
+            });
+            await page.goto("/test_indexeddb_cryptostore_dump/index.html");
 
-test.describe("migration", function () {
-    test.use({ displayName: "Alice" });
+            await use(credentials);
+        },
+    });
 
     test("Should support migration from legacy crypto", async ({ context, user, page }, workerInfo) => {
-        test.skip(workerInfo.project.name === "Legacy Crypto", "This test only works with Rust crypto.");
         test.slow();
 
         // We should see a migration progress bar

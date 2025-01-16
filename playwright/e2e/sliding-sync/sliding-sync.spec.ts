@@ -2,22 +2,77 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { Page, Request } from "@playwright/test";
+import { GenericContainer, StartedTestContainer, Wait } from "testcontainers";
 
-import { test, expect } from "../../element-web-test";
+import { test as base, expect } from "../../element-web-test";
 import type { ElementAppPage } from "../../pages/ElementAppPage";
 import type { Bot } from "../../pages/bot";
 
-test.describe("Sliding Sync", () => {
-    let roomId: string;
+const test = base.extend<{
+    slidingSyncProxy: StartedTestContainer;
+    testRoom: { roomId: string; name: string };
+    joinedBot: Bot;
+}>({
+    slidingSyncProxy: async ({ logger, network, postgres, page, homeserver }, use, testInfo) => {
+        const container = await new GenericContainer("ghcr.io/matrix-org/sliding-sync:v0.99.3")
+            .withNetwork(network)
+            .withExposedPorts(8008)
+            .withLogConsumer(logger.getConsumer("sliding-sync-proxy"))
+            .withWaitStrategy(Wait.forHttp("/client/server.json", 8008))
+            .withEnvironment({
+                SYNCV3_SECRET: "bwahahaha",
+                SYNCV3_DB: `user=${postgres.getUsername()} dbname=postgres password=${postgres.getPassword()} host=postgres sslmode=disable`,
+                SYNCV3_SERVER: `http://homeserver:8008`,
+            })
+            .start();
 
-    test.beforeEach(async ({ slidingSyncProxy, page, user, app }) => {
-        roomId = await app.client.createRoom({ name: "Test Room" });
-    });
+        const proxyAddress = `http://${container.getHost()}:${container.getMappedPort(8008)}`;
+        await page.addInitScript((proxyAddress) => {
+            window.localStorage.setItem(
+                "mx_local_settings",
+                JSON.stringify({
+                    feature_sliding_sync_proxy_url: proxyAddress,
+                }),
+            );
+            window.localStorage.setItem("mx_labs_feature_feature_sliding_sync", "true");
+        }, proxyAddress);
+        await use(container);
+        await container.stop();
+    },
+    // Ensure slidingSyncProxy is set up before the user fixture as it relies on an init script
+    credentials: async ({ slidingSyncProxy, credentials }, use) => {
+        await use(credentials);
+    },
+    testRoom: async ({ user, app }, use) => {
+        const name = "Test Room";
+        const roomId = await app.client.createRoom({ name });
+        await use({ roomId, name });
+    },
+    joinedBot: async ({ app, bot, testRoom }, use) => {
+        const roomId = testRoom.roomId;
+        await bot.prepareClient();
+        const bobUserId = await bot.evaluate((client) => client.getUserId());
+        await app.client.evaluate(
+            async (client, { bobUserId, roomId }) => {
+                await client.invite(roomId, bobUserId);
+            },
+            { bobUserId, roomId },
+        );
+        await bot.joinRoom(roomId);
+        await use(bot);
+    },
+});
+
+test.describe("Sliding Sync", () => {
+    test.skip(
+        ({ homeserverType }) => homeserverType === "pinecone",
+        "due to a bug in Pinecone https://github.com/element-hq/dendrite/issues/3490",
+    );
 
     const checkOrder = async (wantOrder: string[], page: Page) => {
         await expect(page.getByRole("group", { name: "Rooms" }).locator(".mx_RoomTile_title")).toHaveText(wantOrder);
@@ -32,22 +87,13 @@ test.describe("Sliding Sync", () => {
         });
     };
 
-    const createAndJoinBot = async (app: ElementAppPage, bot: Bot): Promise<Bot> => {
-        await bot.prepareClient();
-        const bobUserId = await bot.evaluate((client) => client.getUserId());
-        await app.client.evaluate(
-            async (client, { bobUserId, roomId }) => {
-                await client.invite(roomId, bobUserId);
-            },
-            { bobUserId, roomId },
-        );
-        await bot.joinRoom(roomId);
-        return bot;
-    };
+    // Load the user fixture for all tests
+    test.beforeEach(({ user }) => {});
 
-    test.skip("should render the Rooms list in reverse chronological order by default and allowing sorting A-Z", async ({
+    test("should render the Rooms list in reverse chronological order by default and allowing sorting A-Z", async ({
         page,
         app,
+        testRoom,
     }) => {
         // create rooms and check room names are correct
         for (const fruit of ["Apple", "Pineapple", "Orange"]) {
@@ -55,7 +101,7 @@ test.describe("Sliding Sync", () => {
             await expect(page.getByRole("treeitem", { name: fruit })).toBeVisible();
         }
 
-        // Check count, 3 fruits + 1 room created in beforeEach = 4
+        // Check count, 3 fruits + 1 testRoom = 4
         await expect(page.locator(".mx_RoomSublist_tiles").getByRole("treeitem")).toHaveCount(4);
         await checkOrder(["Orange", "Pineapple", "Apple", "Test Room"], page);
 
@@ -67,11 +113,10 @@ test.describe("Sliding Sync", () => {
         await page.getByRole("menuitemradio", { name: "A-Z" }).dispatchEvent("click");
         await expect(page.locator(".mx_StyledRadioButton_checked").getByText("A-Z")).toBeVisible();
 
-        await page.pause();
         await checkOrder(["Apple", "Orange", "Pineapple", "Test Room"], page);
     });
 
-    test.skip("should move rooms around as new events arrive", async ({ page, app }) => {
+    test("should move rooms around as new events arrive", async ({ page, app, testRoom }) => {
         // create rooms and check room names are correct
         const roomIds: string[] = [];
         for (const fruit of ["Apple", "Pineapple", "Orange"]) {
@@ -94,7 +139,7 @@ test.describe("Sliding Sync", () => {
         await checkOrder(["Pineapple", "Orange", "Apple", "Test Room"], page);
     });
 
-    test.skip("should not move the selected room: it should be sticky", async ({ page, app }) => {
+    test("should not move the selected room: it should be sticky", async ({ page, app, testRoom }) => {
         // create rooms and check room names are correct
         const roomIds: string[] = [];
         for (const fruit of ["Apple", "Pineapple", "Orange"]) {
@@ -122,11 +167,9 @@ test.describe("Sliding Sync", () => {
         await checkOrder(["Apple", "Orange", "Pineapple", "Test Room"], page);
     });
 
-    test.skip("should show the right unread notifications", async ({ page, app, user, bot }) => {
-        const bob = await createAndJoinBot(app, bot);
-
+    test.skip("should show the right unread notifications", async ({ page, user, joinedBot: bob, testRoom }) => {
         // send a message in the test room: unread notification count should increment
-        await bob.sendMessage(roomId, "Hello World");
+        await bob.sendMessage(testRoom.roomId, "Hello World");
 
         const treeItemLocator1 = page.getByRole("treeitem", { name: "Test Room 1 unread message." });
         await expect(treeItemLocator1.locator(".mx_NotificationBadge_count")).toHaveText("1");
@@ -136,7 +179,7 @@ test.describe("Sliding Sync", () => {
         );
 
         // send an @mention: highlight count (red) should be 2.
-        await bob.sendMessage(roomId, `Hello ${user.displayName}`);
+        await bob.sendMessage(testRoom.roomId, `Hello ${user.displayName}`);
         const treeItemLocator2 = page.getByRole("treeitem", {
             name: "Test Room 2 unread messages including mentions.",
         });
@@ -150,9 +193,8 @@ test.describe("Sliding Sync", () => {
         ).not.toBeAttached();
     });
 
-    test.skip("should not show unread indicators", async ({ page, app, bot }) => {
+    test("should not show unread indicators", async ({ page, app, joinedBot: bot, testRoom }) => {
         // TODO: for now. Later we should.
-        await createAndJoinBot(app, bot);
 
         // disable notifs in this room (TODO: CS API call?)
         const locator = page.getByRole("treeitem", { name: "Test Room" });
@@ -165,7 +207,7 @@ test.describe("Sliding Sync", () => {
 
         await checkOrder(["Dummy", "Test Room"], page);
 
-        await bot.sendMessage(roomId, "Do you read me?");
+        await bot.sendMessage(testRoom.roomId, "Do you read me?");
 
         // wait for this message to arrive, tell by the room list resorting
         await checkOrder(["Test Room", "Dummy"], page);
@@ -178,15 +220,18 @@ test.describe("Sliding Sync", () => {
     test("should update user settings promptly", async ({ page, app }) => {
         await app.settings.openUserSettings("Preferences");
         const locator = page.locator(".mx_SettingsFlag").filter({ hasText: "Show timestamps in 12 hour format" });
-        expect(locator).toBeVisible();
-        expect(locator.locator(".mx_ToggleSwitch_on")).not.toBeAttached();
+        await expect(locator).toBeVisible();
+        await expect(locator.locator(".mx_ToggleSwitch_on")).not.toBeAttached();
         await locator.locator(".mx_ToggleSwitch_ball").click();
-        expect(locator.locator(".mx_ToggleSwitch_on")).toBeAttached();
+        await expect(locator.locator(".mx_ToggleSwitch_on")).toBeAttached();
     });
 
-    test.skip("should show and be able to accept/reject/rescind invites", async ({ page, app, bot }) => {
-        await createAndJoinBot(app, bot);
-
+    test("should show and be able to accept/reject/rescind invites", async ({
+        page,
+        app,
+        joinedBot: bot,
+        testRoom,
+    }) => {
         const clientUserId = await app.client.evaluate((client) => client.getUserId());
 
         // invite bot into 3 rooms:
@@ -235,7 +280,7 @@ test.describe("Sliding Sync", () => {
         // now rescind the invite
         await bot.evaluate(
             async (client, { roomRescind, clientUserId }) => {
-                client.kick(roomRescind, clientUserId);
+                await client.kick(roomRescind, clientUserId);
             },
             { roomRescind, clientUserId },
         );
@@ -254,7 +299,7 @@ test.describe("Sliding Sync", () => {
             is_direct: true,
         });
         await app.client.evaluate(async (client, roomId) => {
-            client.setRoomTag(roomId, "m.favourite", { order: 0.5 });
+            await client.setRoomTag(roomId, "m.favourite", { order: 0.5 });
         }, roomId);
         await expect(page.getByRole("group", { name: "Favourites" }).getByText("Favourite DM")).toBeVisible();
         await expect(page.getByRole("group", { name: "People" }).getByText("Favourite DM")).not.toBeAttached();
@@ -262,10 +307,10 @@ test.describe("Sliding Sync", () => {
 
     // Regression test for a bug in SS mode, but would be useful to have in non-SS mode too.
     // This ensures we are setting RoomViewStore state correctly.
-    test.skip("should clear the reply to field when swapping rooms", async ({ page, app }) => {
+    test("should clear the reply to field when swapping rooms", async ({ page, app, testRoom }) => {
         await app.client.createRoom({ name: "Other Room" });
         await expect(page.getByRole("treeitem", { name: "Other Room" })).toBeVisible();
-        await app.client.sendMessage(roomId, "Hello world");
+        await app.client.sendMessage(testRoom.roomId, "Hello world");
 
         // select the room
         await page.getByRole("treeitem", { name: "Test Room" }).click();
@@ -294,11 +339,11 @@ test.describe("Sliding Sync", () => {
     });
 
     // Regression test for https://github.com/vector-im/element-web/issues/21462
-    test.skip("should not cancel replies when permalinks are clicked", async ({ page, app }) => {
+    test("should not cancel replies when permalinks are clicked", async ({ page, app, testRoom }) => {
         // we require a first message as you cannot click the permalink text with the avatar in the way
-        await app.client.sendMessage(roomId, "First message");
-        await app.client.sendMessage(roomId, "Permalink me");
-        await app.client.sendMessage(roomId, "Reply to me");
+        await app.client.sendMessage(testRoom.roomId, "First message");
+        await app.client.sendMessage(testRoom.roomId, "Permalink me");
+        await app.client.sendMessage(testRoom.roomId, "Reply to me");
 
         // select the room
         await page.getByRole("treeitem", { name: "Test Room" }).click();
@@ -322,7 +367,7 @@ test.describe("Sliding Sync", () => {
         await expect(page.locator(".mx_ReplyPreview")).toBeVisible();
     });
 
-    test.skip("should send unsubscribe_rooms for every room switch", async ({ page, app }) => {
+    test("should send unsubscribe_rooms for every room switch", async ({ page, app }) => {
         // create rooms and check room names are correct
         const roomIds: string[] = [];
         for (const fruit of ["Apple", "Pineapple", "Orange"]) {
@@ -330,37 +375,42 @@ test.describe("Sliding Sync", () => {
             roomIds.push(id);
             await expect(page.getByRole("treeitem", { name: fruit })).toBeVisible();
         }
-        const [roomAId, roomPId] = roomIds;
+        const [roomAId, roomPId, roomOId] = roomIds;
 
-        const assertUnsubExists = (request: Request, subRoomId: string, unsubRoomId: string) => {
+        const matchRoomSubRequest = (subRoomId: string) => (request: Request) => {
+            if (!request.url().includes("/sync")) return false;
             const body = request.postDataJSON();
-            // There may be a request without a txn_id, ignore it, as there won't be any subscription changes
-            if (body.txn_id === undefined) {
-                return;
-            }
-            expect(body.unsubscribe_rooms).toEqual([unsubRoomId]);
-            expect(body.room_subscriptions).not.toHaveProperty(unsubRoomId);
-            expect(body.room_subscriptions).toHaveProperty(subRoomId);
+            return body.txn_id && body.room_subscriptions?.[subRoomId];
+        };
+        const matchRoomUnsubRequest = (unsubRoomId: string) => (request: Request) => {
+            if (!request.url().includes("/sync")) return false;
+            const body = request.postDataJSON();
+            return (
+                body.txn_id && body.unsubscribe_rooms?.includes(unsubRoomId) && !body.room_subscriptions?.[unsubRoomId]
+            );
         };
 
-        let promise = page.waitForRequest(/sync/);
-
-        // Select the Test Room
-        await page.getByRole("treeitem", { name: "Apple", exact: true }).click();
-
-        // and wait for playwright to get the request
-        const roomSubscriptions = (await promise).postDataJSON().room_subscriptions;
+        // Select the Test Room and wait for playwright to get the request
+        const [request] = await Promise.all([
+            page.waitForRequest(matchRoomSubRequest(roomAId)),
+            page.getByRole("treeitem", { name: "Apple", exact: true }).click(),
+        ]);
+        const roomSubscriptions = request.postDataJSON().room_subscriptions;
         expect(roomSubscriptions, "room_subscriptions is object").toBeDefined();
 
-        // Switch to another room
-        promise = page.waitForRequest(/sync/);
-        await page.getByRole("treeitem", { name: "Pineapple", exact: true }).click();
-        assertUnsubExists(await promise, roomPId, roomAId);
+        // Switch to another room and wait for playwright to get the request
+        await Promise.all([
+            page.waitForRequest(matchRoomSubRequest(roomPId)),
+            page.waitForRequest(matchRoomUnsubRequest(roomAId)),
+            page.getByRole("treeitem", { name: "Pineapple", exact: true }).click(),
+        ]);
 
-        // And switch to even another room
-        promise = page.waitForRequest(/sync/);
-        await page.getByRole("treeitem", { name: "Apple", exact: true }).click();
-        assertUnsubExists(await promise, roomPId, roomAId);
+        // And switch to even another room and wait for playwright to get the request
+        await Promise.all([
+            page.waitForRequest(matchRoomSubRequest(roomOId)),
+            page.waitForRequest(matchRoomUnsubRequest(roomPId)),
+            page.getByRole("treeitem", { name: "Orange", exact: true }).click(),
+        ]);
 
         // TODO: Add tests for encrypted rooms
     });

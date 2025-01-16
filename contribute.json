@@ -3,7 +3,7 @@
     "description": "A glossy Matrix collaboration client for the web.",
     "repository": {
         "url": "https://github.com/element-hq/element-web",
-        "license": "AGPL-3.0-only OR GPL-3.0-only"
+        "license": "AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial"
     },
     "bugs": {
         "list": "https://github.com/element-hq/element-web/issues",

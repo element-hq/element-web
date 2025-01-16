@@ -2,16 +2,20 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
+
 import { MsgType } from "matrix-js-sdk/src/matrix";
+import { initOnce } from "@vector-im/matrix-wysiwyg";
 
 import { filterConsole, mkEvent } from "../../../../../../test-utils";
 import {
     createMessageContent,
     EMOTE_PREFIX,
 } from "../../../../../../../src/components/views/rooms/wysiwyg_composer/utils/createMessageContent";
+
+beforeAll(initOnce, 10000);
 
 describe("createMessageContent", () => {
     const message = "<em><b>hello</b> world</em>";
@@ -24,13 +28,6 @@ describe("createMessageContent", () => {
         filterConsole(
             "WebAssembly.instantiateStreaming` failed because your server does not serve wasm with `application/wasm`",
         );
-
-        beforeAll(async () => {
-            // Warm up by creating the component once, with a long timeout.
-            // This prevents tests timing out because of the time spent loading
-            // the WASM component.
-            await createMessageContent(message, true, {});
-        }, 10000);
 
         it("Should create html message", async () => {
             // When

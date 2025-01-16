@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 import { mocked, MockedObject } from "jest-mock";
@@ -16,6 +16,7 @@ import {
     IContent,
     MatrixEvent,
     SyncState,
+    AccountDataEvents,
 } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "jest-matrix-react";
 import { CallMembership, MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
@@ -69,7 +70,7 @@ describe("Notifier", () => {
     let MockPlatform: MockedObject<BasePlatform>;
     let mockClient: MockedObject<MatrixClient>;
     let testRoom: Room;
-    let accountDataEventKey: string;
+    let accountDataEventKey: keyof AccountDataEvents;
     let accountDataStore: Record<string, MatrixEvent | undefined> = {};
 
     let mockSettings: Record<string, boolean> = {};
@@ -342,7 +343,7 @@ describe("Notifier", () => {
 
     describe("getSoundForRoom", () => {
         it("should not explode if given invalid url", () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string): any => {
                 return { url: { content_uri: "foobar" } };
             });
             expect(Notifier.getSoundForRoom("!roomId:server")).toBeNull();

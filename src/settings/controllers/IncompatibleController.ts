@@ -2,13 +2,14 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import SettingController from "./SettingController";
 import { SettingLevel } from "../SettingLevel";
 import SettingsStore from "../SettingsStore";
+import { BooleanSettingKey } from "../Settings.tsx";
 
 /**
  * Enforces that a boolean setting cannot be enabled if the incompatible setting
@@ -17,7 +18,7 @@ import SettingsStore from "../SettingsStore";
  */
 export default class IncompatibleController extends SettingController {
     public constructor(
-        private settingName: string,
+        private settingName: BooleanSettingKey,
         private forcedValue: any = false,
         private incompatibleValue: any | ((v: any) => boolean) = true,
     ) {

@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -26,6 +26,7 @@ import {
 import TextInputDialog from "../dialogs/TextInputDialog";
 import AccessibleButton from "../elements/AccessibleButton";
 import withValidation from "../elements/Validation";
+import { SettingKey, Settings } from "../../../settings/Settings.tsx";
 
 const SETTING_NAME = "room_directory_servers";
 
@@ -67,15 +68,32 @@ const validServer = withValidation<undefined, { error?: unknown }>({
     memoize: true,
 });
 
-function useSettingsValueWithSetter<T>(
-    settingName: string,
+function useSettingsValueWithSetter<S extends SettingKey>(
+    settingName: S,
+    level: SettingLevel,
+    roomId: string | null,
+    excludeDefault: true,
+): [Settings[S]["default"] | undefined, (value: Settings[S]["default"]) => Promise<void>];
+function useSettingsValueWithSetter<S extends SettingKey>(
+    settingName: S,
+    level: SettingLevel,
+    roomId?: string | null,
+    excludeDefault?: false,
+): [Settings[S]["default"], (value: Settings[S]["default"]) => Promise<void>];
+function useSettingsValueWithSetter<S extends SettingKey>(
+    settingName: S,
     level: SettingLevel,
     roomId: string | null = null,
     excludeDefault = false,
-): [T, (value: T) => Promise<void>] {
-    const [value, setValue] = useState(SettingsStore.getValue<T>(settingName, roomId ?? undefined, excludeDefault));
+): [Settings[S]["default"] | undefined, (value: Settings[S]["default"]) => Promise<void>] {
+    const [value, setValue] = useState(
+        // XXX: This seems naff but is needed to convince TypeScript that the overload is fine
+        excludeDefault
+            ? SettingsStore.getValue(settingName, roomId, excludeDefault)
+            : SettingsStore.getValue(settingName, roomId, excludeDefault),
+    );
     const setter = useCallback(
-        async (value: T): Promise<void> => {
+        async (value: Settings[S]["default"]): Promise<void> => {
             setValue(value);
             SettingsStore.setValue(settingName, roomId, level, value);
         },
@@ -84,7 +102,12 @@ function useSettingsValueWithSetter<T>(
 
     useEffect(() => {
         const ref = SettingsStore.watchSetting(settingName, roomId, () => {
-            setValue(SettingsStore.getValue<T>(settingName, roomId, excludeDefault));
+            setValue(
+                // XXX: This seems naff but is needed to convince TypeScript that the overload is fine
+                excludeDefault
+                    ? SettingsStore.getValue(settingName, roomId, excludeDefault)
+                    : SettingsStore.getValue(settingName, roomId, excludeDefault),
+            );
         });
         // clean-up
         return () => {
@@ -109,10 +132,7 @@ function removeAll<T>(target: Set<T>, ...toRemove: T[]): void {
 }
 
 function useServers(): ServerList {
-    const [userDefinedServers, setUserDefinedServers] = useSettingsValueWithSetter<string[]>(
-        SETTING_NAME,
-        SettingLevel.ACCOUNT,
-    );
+    const [userDefinedServers, setUserDefinedServers] = useSettingsValueWithSetter(SETTING_NAME, SettingLevel.ACCOUNT);
 
     const homeServer = MatrixClientPeg.safeGet().getDomain()!;
     const configServers = new Set<string>(SdkConfig.getObject("room_directory")?.get("servers") ?? []);

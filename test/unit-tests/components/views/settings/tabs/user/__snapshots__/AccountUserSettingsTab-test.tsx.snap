@@ -169,7 +169,7 @@ exports[`<AccountUserSettingsTab /> 3pids should display 3pid email addresses an
 </div>
 `;
 
-exports[`<AccountUserSettingsTab /> deactive account should render section when account deactivation feature is enabled 1`] = `
+exports[`<AccountUserSettingsTab /> deactivate account should render section when account deactivation feature is enabled 1`] = `
 <div
   class="mx_SettingsSection"
 >

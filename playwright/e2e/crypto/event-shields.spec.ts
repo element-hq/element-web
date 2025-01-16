@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022-2024 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -53,6 +53,8 @@ test.describe("Cryptography", function () {
 
             // Even though Alice has seen Bob's join event, Bob may not have done so yet. Wait for the sync to arrive.
             await bob.awaitRoomMembership(testRoomId);
+
+            await app.client.network.setupRoute();
         });
 
         test("should show the correct shield on e2e events", async ({
@@ -133,8 +135,7 @@ test.describe("Cryptography", function () {
                 "Encrypted by a device not verified by its owner.",
             );
 
-            /* In legacy crypto: should show a grey padlock for a message from a deleted device.
-             * In rust crypto: should show a red padlock for a message from an unverified device.
+            /* Should show a red padlock for a message from an unverified device.
              * Rust crypto remembers the verification state of the sending device, so it will know that the device was
              * unverified, even if it gets deleted. */
             // bob deletes his second device
@@ -168,9 +169,7 @@ test.describe("Cryptography", function () {
             await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
             await lastE2eIcon.focus();
             await expect(await app.getTooltipForElement(lastE2eIcon)).toContainText(
-                workerInfo.project.name === "Legacy Crypto"
-                    ? "Encrypted by an unknown or deleted device."
-                    : "Encrypted by a device not verified by its owner.",
+                "Encrypted by a device not verified by its owner.",
             );
         });
 
@@ -208,7 +207,7 @@ test.describe("Cryptography", function () {
                 window.localStorage.clear();
             });
             await page.reload();
-            await logIntoElement(page, homeserver, aliceCredentials, securityKey);
+            await logIntoElement(page, aliceCredentials, securityKey);
 
             /* go back to the test room and find Bob's message again */
             await app.viewRoomById(testRoomId);

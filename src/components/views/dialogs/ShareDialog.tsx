@@ -3,7 +3,7 @@ Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 Copyright 2018 New Vector Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -100,8 +100,8 @@ type ShareDialogProps = XOR<Props, EventProps>;
  * A dialog to share a link to a room, user, room member or a matrix event.
  */
 export function ShareDialog({ target, customTitle, onFinished, permalinkCreator }: ShareDialogProps): JSX.Element {
-    const showQrCode = useSettingValue<boolean>(UIFeature.ShareQRCode);
-    const showSocials = useSettingValue<boolean>(UIFeature.ShareSocial);
+    const showQrCode = useSettingValue(UIFeature.ShareQRCode);
+    const showSocials = useSettingValue(UIFeature.ShareSocial);
 
     const timeoutIdRef = useRef<number>();
     const [isCopied, setIsCopied] = useState(false);

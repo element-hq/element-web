@@ -3,7 +3,7 @@ Copyright 2024 New Vector Ltd.
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 Copyright 2019 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -263,9 +263,9 @@ export function getCustomTheme(themeName: string): CustomTheme {
     if (!customThemes) {
         throw new Error(`No custom themes set, can't set custom theme "${themeName}"`);
     }
-    const customTheme = customThemes.find((t: ITheme) => t.name === themeName);
+    const customTheme = customThemes.find((t: CustomTheme) => t.name === themeName);
     if (!customTheme) {
-        const knownNames = customThemes.map((t: ITheme) => t.name).join(", ");
+        const knownNames = customThemes.map((t: CustomTheme) => t.name).join(", ");
         throw new Error(`Can't find custom theme "${themeName}", only know ${knownNames}`);
     }
     return customTheme;

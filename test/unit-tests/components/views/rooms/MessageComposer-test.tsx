@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -10,6 +10,7 @@ import * as React from "react";
 import { EventType, MatrixEvent, RoomMember, THREAD_RELATION_TYPE } from "matrix-js-sdk/src/matrix";
 import { act, fireEvent, render, screen, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
+import { initOnce } from "@vector-im/matrix-wysiwyg";
 
 import {
     clearAllModals,
@@ -52,6 +53,8 @@ const expectVoiceMessageRecordingTriggered = (): void => {
     expect(screen.getByText("No microphone found")).toBeInTheDocument();
 };
 
+beforeAll(initOnce, 10000);
+
 describe("MessageComposer", () => {
     stubClient();
     const cli = createTestClient();
@@ -66,11 +69,13 @@ describe("MessageComposer", () => {
 
         // restore settings
         act(() => {
-            [
-                "MessageComposerInput.showStickersButton",
-                "MessageComposerInput.showPollsButton",
-                "feature_wysiwyg_composer",
-            ].forEach((setting: string): void => {
+            (
+                [
+                    "MessageComposerInput.showStickersButton",
+                    "MessageComposerInput.showPollsButton",
+                    "feature_wysiwyg_composer",
+                ] as const
+            ).forEach((setting): void => {
                 SettingsStore.setValue(setting, null, SettingLevel.DEVICE, SettingsStore.getDefaultValue(setting));
             });
         });
@@ -188,11 +193,11 @@ describe("MessageComposer", () => {
         // test button display depending on settings
         [
             {
-                setting: "MessageComposerInput.showStickersButton",
+                setting: "MessageComposerInput.showStickersButton" as const,
                 buttonLabel: "Sticker",
             },
             {
-                setting: "MessageComposerInput.showPollsButton",
+                setting: "MessageComposerInput.showPollsButton" as const,
                 buttonLabel: "Poll",
             },
         ].forEach(({ setting, buttonLabel }) => {

@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -107,7 +107,7 @@ export default class SpellCheckLanguagesDropdown extends React.Component<
 
         // default value here too, otherwise we need to handle null / undefined;
         // values between mounting and the initial value propagating
-        let language = SettingsStore.getValue<string | undefined>("language", null, /*excludeDefault:*/ true);
+        let language = SettingsStore.getValue("language", null, /*excludeDefault:*/ true);
         let value: string | undefined;
         if (language) {
             value = this.props.value || language;

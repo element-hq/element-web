@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -10,14 +10,39 @@ import { useEffect, useState } from "react";
 
 import SettingsStore from "../settings/SettingsStore";
 import { SettingLevel } from "../settings/SettingLevel";
+import { FeatureSettingKey, SettingKey, Settings } from "../settings/Settings.tsx";
 
 // Hook to fetch the value of a setting and dynamically update when it changes
-export const useSettingValue = <T>(settingName: string, roomId: string | null = null, excludeDefault = false): T => {
-    const [value, setValue] = useState(SettingsStore.getValue<T>(settingName, roomId, excludeDefault));
+export function useSettingValue<S extends SettingKey>(
+    settingName: S,
+    roomId: string | null,
+    excludeDefault: true,
+): Settings[S]["default"] | undefined;
+export function useSettingValue<S extends SettingKey>(
+    settingName: S,
+    roomId?: string | null,
+    excludeDefault?: false,
+): Settings[S]["default"];
+export function useSettingValue<S extends SettingKey>(
+    settingName: S,
+    roomId: string | null = null,
+    excludeDefault = false,
+): Settings[S]["default"] | undefined {
+    const [value, setValue] = useState(
+        // XXX: This seems naff but is needed to convince TypeScript that the overload is fine
+        excludeDefault
+            ? SettingsStore.getValue(settingName, roomId, excludeDefault)
+            : SettingsStore.getValue(settingName, roomId, excludeDefault),
+    );
 
     useEffect(() => {
         const ref = SettingsStore.watchSetting(settingName, roomId, () => {
-            setValue(SettingsStore.getValue<T>(settingName, roomId, excludeDefault));
+            setValue(
+                // XXX: This seems naff but is needed to convince TypeScript that the overload is fine
+                excludeDefault
+                    ? SettingsStore.getValue(settingName, roomId, excludeDefault)
+                    : SettingsStore.getValue(settingName, roomId, excludeDefault),
+            );
         });
         // clean-up
         return () => {
@@ -26,7 +51,7 @@ export const useSettingValue = <T>(settingName: string, roomId: string | null = 
     }, [settingName, roomId, excludeDefault]);
 
     return value;
-};
+}
 
 /**
  * Hook to fetch the value of a setting at a specific level and dynamically update when it changes
@@ -37,20 +62,18 @@ export const useSettingValue = <T>(settingName: string, roomId: string | null = 
  * @param explicit
  * @param excludeDefault
  */
-export const useSettingValueAt = <T>(
+export const useSettingValueAt = <S extends SettingKey>(
     level: SettingLevel,
-    settingName: string,
+    settingName: S,
     roomId: string | null = null,
     explicit = false,
     excludeDefault = false,
-): T => {
-    const [value, setValue] = useState(
-        SettingsStore.getValueAt<T>(level, settingName, roomId, explicit, excludeDefault),
-    );
+): Settings[S]["default"] => {
+    const [value, setValue] = useState(SettingsStore.getValueAt(level, settingName, roomId, explicit, excludeDefault));
 
     useEffect(() => {
         const ref = SettingsStore.watchSetting(settingName, roomId, () => {
-            setValue(SettingsStore.getValueAt<T>(level, settingName, roomId, explicit, excludeDefault));
+            setValue(SettingsStore.getValueAt(level, settingName, roomId, explicit, excludeDefault));
         });
         // clean-up
         return () => {
@@ -62,8 +85,8 @@ export const useSettingValueAt = <T>(
 };
 
 // Hook to fetch whether a feature is enabled and dynamically update when that changes
-export const useFeatureEnabled = (featureName: string, roomId: string | null = null): boolean => {
-    const [enabled, setEnabled] = useState(SettingsStore.getValue<boolean>(featureName, roomId));
+export const useFeatureEnabled = (featureName: FeatureSettingKey, roomId: string | null = null): boolean => {
+    const [enabled, setEnabled] = useState(SettingsStore.getValue(featureName, roomId));
 
     useEffect(() => {
         const ref = SettingsStore.watchSetting(featureName, roomId, () => {

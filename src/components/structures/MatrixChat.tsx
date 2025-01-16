@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2015-2024 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -55,7 +55,6 @@ import { FontWatcher } from "../../settings/watchers/FontWatcher";
 import { storeRoomAliasInCache } from "../../RoomAliasCache";
 import ToastStore from "../../stores/ToastStore";
 import * as StorageManager from "../../utils/StorageManager";
-import { UseCase } from "../../settings/enums/UseCase";
 import type LoggedInViewType from "./LoggedInView";
 import LoggedInView from "./LoggedInView";
 import { Action } from "../../dispatcher/actions";
@@ -114,7 +113,6 @@ import { ShowThreadPayload } from "../../dispatcher/payloads/ShowThreadPayload";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { TimelineRenderingType } from "../../contexts/RoomContext";
-import { UseCaseSelection } from "../views/elements/UseCaseSelection";
 import { ValidatedServerConfig } from "../../utils/ValidatedServerConfig";
 import { isLocalRoom } from "../../utils/localRoom/isLocalRoom";
 import { SDKContext, SdkContextClass } from "../../contexts/SDKContext";
@@ -431,8 +429,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // if cross-signing is not yet set up, do so now if possible.
             InitialCryptoSetupStore.sharedInstance().startInitialCryptoSetup(
                 cli,
-                Boolean(this.tokenLogin),
-                this.stores,
                 this.onCompleteSecurityE2eSetupFinished,
             );
             this.setStateForNewView({ view: Views.E2E_SETUP });
@@ -504,8 +500,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         UIStore.destroy();
         this.state.resizeNotifier.removeListener("middlePanelResized", this.dispatchTimelineResize);
         window.removeEventListener("resize", this.onWindowResized);
-
-        this.stores.accountPasswordStore.clearPassword();
     }
 
     private onWindowResized = (): void => {
@@ -870,8 +864,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     this.state.view !== Views.LOGIN &&
                     this.state.view !== Views.REGISTER &&
                     this.state.view !== Views.COMPLETE_SECURITY &&
-                    this.state.view !== Views.E2E_SETUP &&
-                    this.state.view !== Views.USE_CASE_SELECTION
+                    this.state.view !== Views.E2E_SETUP
                 ) {
                     this.onLoggedIn();
                 }
@@ -1363,12 +1356,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         await this.onShowPostLoginScreen();
     }
 
-    private async onShowPostLoginScreen(useCase?: UseCase): Promise<void> {
-        if (useCase) {
-            PosthogAnalytics.instance.setProperty("ftueUseCaseSelection", useCase);
-            SettingsStore.setValue("FTUE.useCaseSelection", null, SettingLevel.ACCOUNT, useCase);
-        }
-
+    private async onShowPostLoginScreen(): Promise<void> {
         this.setStateForNewView({ view: Views.LOGGED_IN });
         // If a specific screen is set to be shown after login, show that above
         // all else, as it probably means the user clicked on something already.
@@ -1935,8 +1923,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.showScreen("forgot_password");
     };
 
-    private onRegisterFlowComplete = (credentials: IMatrixClientCreds, password: string): Promise<void> => {
-        return this.onUserCompletedLoginFlow(credentials, password);
+    private onRegisterFlowComplete = (credentials: IMatrixClientCreds): Promise<void> => {
+        return this.onUserCompletedLoginFlow(credentials);
     };
 
     // returns a promise which resolves to the new MatrixClient
@@ -2003,9 +1991,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      * Note: SSO users (and any others using token login) currently do not pass through
      * this, as they instead jump straight into the app after `attemptTokenLogin`.
      */
-    private onUserCompletedLoginFlow = async (credentials: IMatrixClientCreds, password: string): Promise<void> => {
-        this.stores.accountPasswordStore.setPassword(password);
-
+    private onUserCompletedLoginFlow = async (credentials: IMatrixClientCreds): Promise<void> => {
         // Create and start the client
         await Lifecycle.setLoggedIn(credentials);
         await this.postLoginSetup();
@@ -2016,33 +2002,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     // complete security / e2e setup has finished
     private onCompleteSecurityE2eSetupFinished = (): void => {
-        if (MatrixClientPeg.currentUserIsJustRegistered() && SettingsStore.getValue("FTUE.useCaseSelection") === null) {
-            this.setStateForNewView({ view: Views.USE_CASE_SELECTION });
-
-            // Listen to changes in settings and hide the use case screen if appropriate - this is necessary because
-            // account settings can still be changing at this point in app init (due to the initial sync being cached,
-            // then subsequent syncs being received from the server)
-            //
-            // This seems unlikely for something that should happen directly after registration, but if a user does
-            // their initial login on another device/browser than they registered on, we want to avoid asking this
-            // question twice
-            //
-            // initPosthogAnalyticsToast pioneered this technique, we’re just reusing it here.
-            SettingsStore.watchSetting(
-                "FTUE.useCaseSelection",
-                null,
-                (originalSettingName, changedInRoomId, atLevel, newValueAtLevel, newValue) => {
-                    if (newValue !== null && this.state.view === Views.USE_CASE_SELECTION) {
-                        this.onShowPostLoginScreen();
-                    }
-                },
-            );
-        } else {
-            // This is async but we makign this function async to wait for it isn't useful
-            this.onShowPostLoginScreen().catch((e) => {
-                logger.error("Exception showing post-login screen", e);
-            });
-        }
+        // This is async but we making this function async to wait for it isn't useful
+        this.onShowPostLoginScreen().catch((e) => {
+            logger.error("Exception showing post-login screen", e);
+        });
     };
 
     private getFragmentAfterLogin(): string {
@@ -2162,8 +2125,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     fragmentAfterLogin={fragmentAfterLogin}
                 />
             );
-        } else if (this.state.view === Views.USE_CASE_SELECTION) {
-            view = <UseCaseSelection onFinished={(useCase): Promise<void> => this.onShowPostLoginScreen(useCase)} />;
         } else if (this.state.view === Views.LOCK_STOLEN) {
             view = <SessionLockStolenView />;
         } else {

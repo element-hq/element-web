@@ -2,26 +2,34 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2024 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { Locator, type Page } from "@playwright/test";
 
-import { test as base, expect, Fixtures } from "../../element-web-test";
+import { test, expect } from "../../element-web-test";
 import { viewRoomSummaryByName } from "../right-panel/utils";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 
-const test = base.extend<Fixtures>({
-    // eslint-disable-next-line no-empty-pattern
-    startHomeserverOpts: async ({}, use) => {
-        await use("dehydration");
+const ROOM_NAME = "Test room";
+const NAME = "Alice";
+
+function getMemberTileByName(page: Page, name: string): Locator {
+    return page.locator(`.mx_MemberTileView, [title="${name}"]`);
+}
+
+test.use({
+    displayName: NAME,
+    synapseConfig: {
+        experimental_features: {
+            msc2697_enabled: false,
+            msc3814_enabled: true,
+        },
     },
-    config: async ({ homeserver, context }, use) => {
+    config: async ({ config, context }, use) => {
         const wellKnown = {
-            "m.homeserver": {
-                base_url: homeserver.config.baseUrl,
-            },
+            ...config.default_server_config,
             "org.matrix.msc3814": true,
         };
 
@@ -29,29 +37,14 @@ const test = base.extend<Fixtures>({
             await route.fulfill({ json: wellKnown });
         });
 
-        await use({
-            default_server_config: wellKnown,
-        });
+        await use(config);
     },
 });
-
-const ROOM_NAME = "Test room";
-const NAME = "Alice";
-
-function getMemberTileByName(page: Page, name: string): Locator {
-    return page.locator(`.mx_EntityTile, [title="${name}"]`);
-}
 
 test.describe("Dehydration", () => {
     test.skip(isDendrite, "does not yet support dehydration v2");
 
-    test.use({
-        displayName: NAME,
-    });
-
     test("Create dehydrated device", async ({ page, user, app }, workerInfo) => {
-        test.skip(workerInfo.project.name === "Legacy Crypto", "This test only works with Rust crypto.");
-
         // Create a backup (which will create SSSS, and dehydrated device)
 
         const securityTab = await app.settings.openUserSettings("Security & Privacy");
@@ -95,7 +88,7 @@ test.describe("Dehydration", () => {
         await viewRoomSummaryByName(page, app, ROOM_NAME);
 
         await page.locator(".mx_RightPanel").getByRole("menuitem", { name: "People" }).click();
-        await expect(page.locator(".mx_MemberList")).toBeVisible();
+        await expect(page.locator(".mx_MemberListView")).toBeVisible();
 
         await getMemberTileByName(page, NAME).click();
         await page.locator(".mx_UserInfo_devices .mx_UserInfo_expand").click();

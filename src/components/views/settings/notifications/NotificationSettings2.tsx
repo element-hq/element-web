@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -70,9 +70,9 @@ function useHasUnreadNotifications(): boolean {
 export default function NotificationSettings2(): JSX.Element {
     const cli = useMatrixClientContext();
 
-    const desktopNotifications = useSettingValue<boolean>("notificationsEnabled");
-    const desktopShowBody = useSettingValue<boolean>("notificationBodyEnabled");
-    const audioNotifications = useSettingValue<boolean>("audioNotificationsEnabled");
+    const desktopNotifications = useSettingValue("notificationsEnabled");
+    const desktopShowBody = useSettingValue("notificationBodyEnabled");
+    const audioNotifications = useSettingValue("audioNotificationsEnabled");
 
     const { model, hasPendingChanges, reconcile } = useNotificationSettings(cli);
 

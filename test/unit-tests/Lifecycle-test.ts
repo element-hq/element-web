@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -142,6 +142,11 @@ describe("Lifecycle", () => {
             .mockImplementation(async (tableKey: string, key: string | string[]) => {
                 const table = mockStore[tableKey];
                 delete table?.[key as string];
+            });
+        jest.spyOn(StorageAccess, "idbClear")
+            .mockClear()
+            .mockImplementation(async (tableKey: string) => {
+                mockStore[tableKey] = {};
             });
     };
 
@@ -613,7 +618,7 @@ describe("Lifecycle", () => {
             it("should clear stores", async () => {
                 await setLoggedIn(credentials);
 
-                expect(StorageAccess.idbDelete).toHaveBeenCalledWith("account", "mx_access_token");
+                expect(StorageAccess.idbClear).toHaveBeenCalledWith("account");
                 expect(sessionStorage.clear).toHaveBeenCalled();
                 expect(mockClient.clearStores).toHaveBeenCalled();
             });
