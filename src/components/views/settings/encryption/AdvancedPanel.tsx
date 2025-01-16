@@ -56,9 +56,9 @@ function EncryptionDetails({ onResetIdentityClick }: EncryptionDetails): JSX.Ele
     return (
         <div className="mx_EncryptionDetails">
             <div className="mx_EncryptionDetails_session">
-                <span className="mx_EncryptionDetails_session_title">
+                <h3 className="mx_EncryptionDetails_session_title">
                     {_t("settings|encryption|advanced|details_title")}
-                </span>
+                </h3>
                 <div>
                     <span>{_t("settings|encryption|advanced|session_id")}</span>
                     <span>{matrixClient.deviceId}</span>
@@ -124,9 +124,7 @@ function OtherSettings(): JSX.Element | null {
                 await SettingsStore.setValue("blacklistUnverifiedDevices", null, SettingLevel.DEVICE, checked);
             }}
         >
-            <span className="mx_OtherSettings_title">
-                {_t("settings|encryption|advanced|other_people_device_title")}
-            </span>
+            <h3 className="mx_OtherSettings_title">{_t("settings|encryption|advanced|other_people_device_title")}</h3>
             <InlineField
                 name="neverSendEncrypted"
                 control={<ToggleControl name="neverSendEncrypted" defaultChecked={blacklistUnverifiedDevices} />}
