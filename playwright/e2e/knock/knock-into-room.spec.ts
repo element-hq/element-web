@@ -284,6 +284,7 @@ test.describe("Knock Into Room", () => {
 
         const spotlightDialog = await app.openSpotlight();
         await spotlightDialog.filter(Filter.PublicRooms);
+        await spotlightDialog.search("Cyber");
         await expect(spotlightDialog.results.nth(0)).toContainText("Cybersecurity");
         await spotlightDialog.results.nth(0).click();
 

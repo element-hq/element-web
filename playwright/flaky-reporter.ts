@@ -24,18 +24,40 @@ type PaginationLinks = {
     first?: string;
 };
 
+// We see quite a few test flakes which are caused by the app exploding
+// so we have some magic strings we check the logs for to better track the flake with its cause
+const SPECIAL_CASES = {
+    "ChunkLoadError": "ChunkLoadError",
+    "Unreachable code should not be executed": "Rust crypto panic",
+    "Out of bounds memory access": "Rust crypto memory error",
+};
+
 class FlakyReporter implements Reporter {
     private flakes = new Map<string, TestCase[]>();
 
     public onTestEnd(test: TestCase): void {
         // Ignores flakes on Dendrite and Pinecone as they have their own flakes we do not track
         if (["Dendrite", "Pinecone"].includes(test.parent.project()?.name)) return;
-        const title = `${test.location.file.split("playwright/e2e/")[1]}: ${test.title}`;
+        let failures = [`${test.location.file.split("playwright/e2e/")[1]}: ${test.title}`];
         if (test.outcome() === "flaky") {
-            if (!this.flakes.has(title)) {
-                this.flakes.set(title, []);
+            const timedOutRuns = test.results.filter((result) => result.status === "timedOut");
+            const pageLogs = timedOutRuns.flatMap((result) =>
+                result.attachments.filter((attachment) => attachment.name.startsWith("page-")),
+            );
+            // If a test failed due to a systemic fault then the test is not flaky, the app is, record it as such.
+            const specialCases = Object.keys(SPECIAL_CASES).filter((log) =>
+                pageLogs.some((attachment) => attachment.name.startsWith("page-") && attachment.body.includes(log)),
+            );
+            if (specialCases.length > 0) {
+                failures = specialCases.map((specialCase) => SPECIAL_CASES[specialCase]);
             }
-            this.flakes.get(title).push(test);
+
+            for (const title of failures) {
+                if (!this.flakes.has(title)) {
+                    this.flakes.set(title, []);
+                }
+                this.flakes.get(title).push(test);
+            }
         }
     }
 
