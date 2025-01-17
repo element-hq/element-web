@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -141,16 +141,19 @@ describe("InviteDialog", () => {
         jest.clearAllMocks();
 
         room = new Room(roomId, mockClient, mockClient.getSafeUserId());
-        room.addLiveEvents([
-            mkMessage({
-                msg: "Hello",
-                relatesTo: undefined,
-                event: true,
-                room: roomId,
-                user: mockClient.getSafeUserId(),
-                ts: Date.now(),
-            }),
-        ]);
+        room.addLiveEvents(
+            [
+                mkMessage({
+                    msg: "Hello",
+                    relatesTo: undefined,
+                    event: true,
+                    room: roomId,
+                    user: mockClient.getSafeUserId(),
+                    ts: Date.now(),
+                }),
+            ],
+            { addToState: true },
+        );
         room.currentState.setStateEvents([
             mkRoomCreateEvent(bobId, roomId),
             mkMembership({

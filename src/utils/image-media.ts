@@ -2,11 +2,11 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EncryptedFile } from "matrix-js-sdk/src/types";
+import { ImageInfo } from "matrix-js-sdk/src/types";
 
 import { BlurhashEncoder } from "../BlurhashEncoder";
 
@@ -15,19 +15,7 @@ type ThumbnailableElement = HTMLImageElement | HTMLVideoElement;
 export const BLURHASH_FIELD = "xyz.amorgan.blurhash"; // MSC2448
 
 interface IThumbnail {
-    info: {
-        thumbnail_info?: {
-            w: number;
-            h: number;
-            mimetype: string;
-            size: number;
-        };
-        w: number;
-        h: number;
-        [BLURHASH_FIELD]?: string;
-        thumbnail_url?: string;
-        thumbnail_file?: EncryptedFile;
-    };
+    info: ImageInfo;
     thumbnail: Blob;
 }
 

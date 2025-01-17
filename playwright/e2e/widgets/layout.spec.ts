@@ -4,7 +4,7 @@ Copyright 2023 The Matrix.org Foundation C.I.C.
 Copyright 2022 Oliver Sand
 Copyright 2022 Nordeck IT + Consulting GmbH.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -70,7 +70,7 @@ test.describe("Widget Layout", () => {
         await app.viewRoomByName(ROOM_NAME);
     });
 
-    test("should be set properly", async ({ page }) => {
+    test("should be set properly", { tag: "@screenshot" }, async ({ page }) => {
         await expect(page.locator(".mx_AppsDrawer")).toMatchScreenshot("apps-drawer.png");
     });
 

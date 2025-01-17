@@ -2,19 +2,22 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import { act, render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
+import { initOnce } from "@vector-im/matrix-wysiwyg";
 
 import { PlainTextComposer } from "../../../../../../../src/components/views/rooms/wysiwyg_composer/components/PlainTextComposer";
 import * as mockUseSettingsHook from "../../../../../../../src/hooks/useSettings";
 import * as mockKeyboard from "../../../../../../../src/Keyboard";
 import { createMocks } from "../utils";
-import RoomContext from "../../../../../../../src/contexts/RoomContext";
+import { ScopedRoomContextProvider } from "../../../../../../../src/contexts/ScopedRoomContext.tsx";
+
+beforeAll(initOnce, 10000);
 
 describe("PlainTextComposer", () => {
     const customRender = (
@@ -275,9 +278,9 @@ describe("PlainTextComposer", () => {
         const { defaultRoomContext } = createMocks();
 
         render(
-            <RoomContext.Provider value={defaultRoomContext}>
+            <ScopedRoomContextProvider {...defaultRoomContext}>
                 <PlainTextComposer onChange={jest.fn()} onSend={jest.fn()} disabled={false} initialContent="" />
-            </RoomContext.Provider>,
+            </ScopedRoomContextProvider>,
         );
 
         expect(screen.getByTestId("autocomplete-wrapper")).toBeInTheDocument();

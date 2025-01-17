@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -392,6 +392,7 @@ export const useRovingTabIndex = <T extends HTMLElement>(
         });
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+    // eslint-disable-next-line react-compiler/react-compiler
     const isActive = context.state.activeNode === nodeRef.current;
     return [onFocus, isActive, ref, nodeRef];
 };

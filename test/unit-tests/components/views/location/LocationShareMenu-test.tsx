@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -139,7 +139,7 @@ describe("<LocationShareMenu />", () => {
         const [, onGeolocateCallback] = mocked(mockGeolocate.on).mock.calls.find(([event]) => event === "geolocate")!;
 
         // set the location
-        onGeolocateCallback(position);
+        act(() => onGeolocateCallback(position));
     };
 
     const setLocationClick = () => {
@@ -151,7 +151,7 @@ describe("<LocationShareMenu />", () => {
             lngLat: { lng: position.coords.longitude, lat: position.coords.latitude },
         } as unknown as maplibregl.MapMouseEvent;
         // set the location
-        onMapClickCallback(event);
+        act(() => onMapClickCallback(event));
     };
 
     const shareTypeLabels: Record<LocationShareType, string> = {

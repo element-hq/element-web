@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -10,6 +10,7 @@ import React, { ComponentProps } from "react";
 import { render, screen, waitFor } from "jest-matrix-react";
 import { RoomMember } from "matrix-js-sdk/src/matrix";
 import userEvent from "@testing-library/user-event";
+import { mocked } from "jest-mock";
 
 import {
     determineAvatarPosition,
@@ -20,6 +21,9 @@ import * as languageHandler from "../../../../../src/languageHandler";
 import { stubClient } from "../../../../test-utils";
 import dispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
+import { formatDate } from "../../../../../src/DateUtils";
+
+jest.mock("../../../../../src/DateUtils");
 
 describe("ReadReceiptGroup", () => {
     describe("TooltipText", () => {
@@ -86,6 +90,10 @@ describe("ReadReceiptGroup", () => {
 
     describe("<ReadReceiptPerson />", () => {
         stubClient();
+
+        // We pick a fixed time but this can still vary depending on the locale
+        // the tests are run in. We are not testing date formatting here, so stub it out.
+        mocked(formatDate).mockReturnValue("==MOCK FORMATTED DATE==");
 
         const ROOM_ID = "roomId";
         const USER_ID = "@alice:example.org";

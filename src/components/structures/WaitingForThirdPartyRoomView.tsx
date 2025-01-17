@@ -2,14 +2,13 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React, { RefObject } from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
-import { useRoomContext } from "../../contexts/RoomContext";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
 import RoomHeader from "../views/rooms/RoomHeader";
@@ -19,6 +18,7 @@ import NewRoomIntro from "../views/rooms/NewRoomIntro";
 import { UnwrappedEventTile } from "../views/rooms/EventTile";
 import { _t } from "../../languageHandler";
 import SdkConfig from "../../SdkConfig";
+import { useScopedRoomContext } from "../../contexts/ScopedRoomContext.tsx";
 
 interface Props {
     roomView: RefObject<HTMLElement>;
@@ -32,7 +32,7 @@ interface Props {
  * To avoid UTDs, users are shown a waiting room until the others have joined.
  */
 export const WaitingForThirdPartyRoomView: React.FC<Props> = ({ roomView, resizeNotifier, inviteEvent }) => {
-    const context = useRoomContext();
+    const context = useScopedRoomContext("room");
     const brand = SdkConfig.get().brand;
 
     return (

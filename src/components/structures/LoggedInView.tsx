@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2015-2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -16,6 +16,7 @@ import {
     IUsageLimit,
     SyncStateData,
     SyncState,
+    EventType,
 } from "matrix-js-sdk/src/matrix";
 import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import classNames from "classnames";
@@ -23,7 +24,6 @@ import classNames from "classnames";
 import { isOnlyCtrlOrCmdKeyEvent, Key } from "../../Keyboard";
 import PageTypes from "../../PageTypes";
 import MediaDeviceHandler from "../../MediaDeviceHandler";
-import { fixupColorFonts } from "../../utils/FontManager";
 import dis from "../../dispatcher/dispatcher";
 import { IMatrixClientCreds } from "../../MatrixClientPeg";
 import SettingsStore from "../../settings/SettingsStore";
@@ -61,7 +61,7 @@ import { TimelineRenderingType } from "../../contexts/RoomContext";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { SwitchSpacePayload } from "../../dispatcher/payloads/SwitchSpacePayload";
 import LeftPanelLiveShareWarning from "../views/beacon/LeftPanelLiveShareWarning";
-import { UserOnboardingPage } from "../views/user-onboarding/UserOnboardingPage";
+import HomePage from "./HomePage";
 import { PipContainer } from "./PipContainer";
 import { monitorSyncedPushRules } from "../../utils/pushRules/monitorSyncedPushRules";
 import { ConfigOptions } from "../../SdkConfig";
@@ -149,8 +149,6 @@ class LoggedInView extends React.Component<IProps, IState> {
 
         MediaDeviceHandler.loadDevices();
 
-        fixupColorFonts();
-
         this._roomView = React.createRef();
         this._resizeContainer = React.createRef();
         this.resizeHandler = React.createRef();
@@ -164,7 +162,7 @@ class LoggedInView extends React.Component<IProps, IState> {
 
         this._matrixClient.on(ClientEvent.AccountData, this.onAccountData);
         // check push rules on start up as well
-        monitorSyncedPushRules(this._matrixClient.getAccountData("m.push_rules"), this._matrixClient);
+        monitorSyncedPushRules(this._matrixClient.getAccountData(EventType.PushRules), this._matrixClient);
         this._matrixClient.on(ClientEvent.Sync, this.onSync);
         // Call `onSync` with the current state as well
         this.onSync(this._matrixClient.getSyncState(), null, this._matrixClient.getSyncStateData() ?? undefined);
@@ -248,7 +246,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         } else {
             backgroundImage = OwnProfileStore.instance.getHttpAvatarUrl();
         }
-        this.setState({ backgroundImage });
+        this.setState({ backgroundImage: backgroundImage ?? undefined });
     };
 
     public canResetTimelineInRoom = (roomId: string): boolean => {
@@ -680,7 +678,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                 break;
 
             case PageTypes.HomePage:
-                pageElement = <UserOnboardingPage justRegistered={this.props.justRegistered} />;
+                pageElement = <HomePage justRegistered={this.props.justRegistered} />;
                 break;
 
             case PageTypes.UserView:

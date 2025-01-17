@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 Suguru Hirahara
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -21,7 +21,7 @@ test.describe("NotificationPanel", () => {
         await app.client.createRoom({ name: ROOM_NAME });
     });
 
-    test("should render empty state", async ({ page, app }) => {
+    test("should render empty state", { tag: "@screenshot" }, async ({ page, app }) => {
         await app.viewRoomByName(ROOM_NAME);
 
         await page.getByRole("button", { name: "Notifications" }).click();

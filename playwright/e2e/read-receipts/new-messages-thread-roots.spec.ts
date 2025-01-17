@@ -2,15 +2,18 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 /* See readme.md for tips on writing these tests. */
 
 import { many, test } from ".";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
-test.describe("Read receipts", () => {
+test.describe("Read receipts", { tag: "@mergequeue" }, () => {
+    test.skip(isDendrite, "due to Dendrite bug https://github.com/element-hq/dendrite/issues/2970");
+
     test.describe("new messages", () => {
         test.describe("thread roots", () => {
             test("Reading a thread root does not mark the thread as read", async ({
@@ -49,7 +52,7 @@ test.describe("Read receipts", () => {
                 await util.assertUnread(room2, 61); // Sanity
 
                 // When I jump to an old message and read the thread
-                await msg.jumpTo(room2.name, "beforeThread0000");
+                await msg.jumpTo(room2, "beforeThread0000");
                 // When the thread is opened, the timeline is scrolled until the thread root reached the center
                 await util.openThread("ThreadRoot");
 

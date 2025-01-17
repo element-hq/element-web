@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2015-2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -54,10 +54,8 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
     private tooltips = new ReactRootManager();
     private reactRoots = new ReactRootManager();
 
-    private ref = createRef<HTMLDivElement>();
-
     public static contextType = RoomContext;
-    public declare context: React.ContextType<typeof RoomContext>;
+    declare public context: React.ContextType<typeof RoomContext>;
 
     public state = {
         links: [],
@@ -88,7 +86,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
         if (this.props.mxEvent.getContent().format === "org.matrix.custom.html") {
             // Handle expansion and add buttons
-            const pres = this.ref.current?.getElementsByTagName("pre");
+            const pres = [...content.getElementsByTagName("pre")];
             if (pres && pres.length > 0) {
                 for (let i = 0; i < pres.length; i++) {
                     // If there already is a div wrapping the codeblock we want to skip this.
@@ -127,13 +125,14 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         root.className = "mx_EventTile_pre_container";
 
         // Insert containing div in place of <pre> block
-        pre.parentNode?.replaceChild(root, pre);
+        pre.replaceWith(root);
 
         this.reactRoots.render(
             <StrictMode>
                 <CodeBlock onHeightChanged={this.props.onHeightChanged}>{pre}</CodeBlock>
             </StrictMode>,
             root,
+            pre,
         );
     }
 
@@ -141,7 +140,8 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         if (!this.props.editState) {
             const stoppedEditing = prevProps.editState && !this.props.editState;
             const messageWasEdited = prevProps.replacingEventId !== this.props.replacingEventId;
-            if (messageWasEdited || stoppedEditing) {
+            const urlPreviewChanged = prevProps.showUrlPreview !== this.props.showUrlPreview;
+            if (messageWasEdited || stoppedEditing || urlPreviewChanged) {
                 this.applyFormatting();
             }
         }
@@ -208,10 +208,9 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                     </StrictMode>
                 );
 
-                this.reactRoots.render(spoiler, spoilerContainer);
+                this.reactRoots.render(spoiler, spoilerContainer, node);
 
-                node.parentNode?.replaceChild(spoilerContainer, node);
-
+                node.replaceWith(spoilerContainer);
                 node = spoilerContainer;
             }
 
@@ -488,7 +487,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         const stripReply = !mxEvent.replacingEvent() && !!getParentEventId(mxEvent);
 
         const htmlOpts = {
-            disableBigEmoji: isEmote || !SettingsStore.getValue<boolean>("TextualBody.enableBigEmoji"),
+            disableBigEmoji: isEmote || !SettingsStore.getValue("TextualBody.enableBigEmoji"),
             // Part of Replies fallback support
             stripReplyFallback: stripReply,
         };
@@ -540,12 +539,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
         if (isEmote) {
             return (
-                <div
-                    className="mx_MEmoteBody mx_EventTile_content"
-                    onClick={this.onBodyLinkClick}
-                    dir="auto"
-                    ref={this.ref}
-                >
+                <div className="mx_MEmoteBody mx_EventTile_content" onClick={this.onBodyLinkClick} dir="auto">
                     *&nbsp;
                     <span className="mx_MEmoteBody_sender" onClick={this.onEmoteSenderClick}>
                         {mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender()}
@@ -558,7 +552,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         }
         if (isNotice) {
             return (
-                <div className="mx_MNoticeBody mx_EventTile_content" onClick={this.onBodyLinkClick} ref={this.ref}>
+                <div className="mx_MNoticeBody mx_EventTile_content" onClick={this.onBodyLinkClick}>
                     {body}
                     {widgets}
                 </div>
@@ -566,14 +560,14 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         }
         if (isCaption) {
             return (
-                <div className="mx_MTextBody mx_EventTile_caption" onClick={this.onBodyLinkClick} ref={this.ref}>
+                <div className="mx_MTextBody mx_EventTile_caption" onClick={this.onBodyLinkClick}>
                     {body}
                     {widgets}
                 </div>
             );
         }
         return (
-            <div className="mx_MTextBody mx_EventTile_content" onClick={this.onBodyLinkClick} ref={this.ref}>
+            <div className="mx_MTextBody mx_EventTile_content" onClick={this.onBodyLinkClick}>
                 {body}
                 {widgets}
             </div>

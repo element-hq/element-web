@@ -5,7 +5,7 @@ Copyright 2017, 2018 , 2019 New Vector Ltd
 Copyright 2017 Vector Creations Ltd.
 Copyright 2015, 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -35,13 +35,11 @@ import IdentityAuthClient from "./IdentityAuthClient";
 import { crossSigningCallbacks } from "./SecurityManager";
 import { SlidingSyncManager } from "./SlidingSyncManager";
 import { _t, UserFriendlyError } from "./languageHandler";
-import { SettingLevel } from "./settings/SettingLevel";
 import MatrixClientBackedController from "./settings/controllers/MatrixClientBackedController";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import PlatformPeg from "./PlatformPeg";
 import { formatList } from "./utils/FormattingUtils";
 import SdkConfig from "./SdkConfig";
-import { Features } from "./settings/Settings";
 import { setDeviceIsolationMode } from "./settings/controllers/DeviceIsolationModeController.ts";
 
 export interface IMatrixClientCreds {
@@ -332,11 +330,6 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         if (!rustCryptoStoreKey && !rustCryptoStorePassword) {
             logger.error("Warning! Not using an encryption key for rust crypto store.");
         }
-
-        // Record the fact that we used the Rust crypto stack with this client. This just guards against people
-        // rolling back to versions of EW that did not default to Rust crypto (which would lead to an error, since
-        // we cannot migrate from Rust to Legacy crypto).
-        await SettingsStore.setValue(Features.RustCrypto, null, SettingLevel.DEVICE, true);
 
         await this.matrixClient.initRustCrypto({
             storageKey: rustCryptoStoreKey,

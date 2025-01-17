@@ -2,7 +2,7 @@
 Copyright 2019-2024 New Vector Ltd.
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -17,7 +17,7 @@ import RightPanel from "./RightPanel";
 import Spinner from "../views/elements/Spinner";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
-import { UserOnboardingPage } from "../views/user-onboarding/UserOnboardingPage";
+import HomePage from "./HomePage.tsx";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 
 interface IProps {
@@ -32,7 +32,7 @@ interface IState {
 
 export default class UserView extends React.Component<IProps, IState> {
     public static contextType = MatrixClientContext;
-    public declare context: React.ContextType<typeof MatrixClientContext>;
+    declare public context: React.ContextType<typeof MatrixClientContext>;
 
     public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
@@ -82,7 +82,7 @@ export default class UserView extends React.Component<IProps, IState> {
         } else if (this.state.member) {
             const panel = (
                 <RightPanel
-                    overwriteCard={{ phase: RightPanelPhases.RoomMemberInfo, state: { member: this.state.member } }}
+                    overwriteCard={{ phase: RightPanelPhases.MemberInfo, state: { member: this.state.member } }}
                     resizeNotifier={this.props.resizeNotifier}
                 />
             );
@@ -93,7 +93,7 @@ export default class UserView extends React.Component<IProps, IState> {
                     defaultSize={420}
                     analyticsRoomType="user_profile"
                 >
-                    <UserOnboardingPage />
+                    <HomePage />
                 </MainSplit>
             );
         } else {

@@ -6,7 +6,7 @@ Copyright 2018, 2019 New Vector Ltd
 Copyright 2017 Vector Creations Ltd
 Copyright 2015, 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -66,6 +66,10 @@ function checkBrowserFeatures(): boolean {
     // Basic test for WebAssembly support. We could also try instantiating a simple module,
     // although this would start to make (more) assumptions about how rust-crypto loads its wasm.
     window.Modernizr.addTest("wasm", () => typeof WebAssembly === "object" && typeof WebAssembly.Module === "function");
+
+    // Check that the session is in a secure context otherwise most Crypto & WebRTC APIs will be unavailable
+    // https://developer.mozilla.org/en-US/docs/Web/API/Window/isSecureContext
+    window.Modernizr.addTest("securecontext", () => window.isSecureContext);
 
     const featureList = Object.keys(window.Modernizr) as Array<keyof ModernizrStatic>;
 

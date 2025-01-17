@@ -235,7 +235,6 @@
         "oidc": {
             "error_title": "Nemohli jsme vás přihlásit",
             "generic_auth_error": "Během autentizace se něco pokazilo. Přejděte na přihlašovací stránku a zkuste to znovu.",
-            "logout_redirect_warning": "Budete přesměrováni na poskytovatele ověřování vašeho serveru, kde dokončíte odhlášení.",
             "missing_or_invalid_stored_state": "Požádali jsme prohlížeč, aby si zapamatoval, který domovský server používáte k přihlášení, ale váš prohlížeč to bohužel zapomněl. Přejděte na přihlašovací stránku a zkuste to znovu."
         },
         "password_field_keep_going_prompt": "Pokračujte…",
@@ -419,7 +418,6 @@
             "other": "a %(count)s další...",
             "one": "a někdo další..."
         },
-        "android": "Android",
         "appearance": "Vzhled",
         "application": "Aplikace",
         "are_you_sure": "Opravdu?",
@@ -458,7 +456,6 @@
         "identity_server": "Server identit",
         "image": "Obrázek",
         "integration_manager": "Správce integrací",
-        "ios": "iOS",
         "joined": "Připojeno",
         "labs": "Experimentální funkce",
         "legal": "Právní informace",
@@ -548,8 +545,7 @@
         "video": "Video",
         "video_room": "Video místnost",
         "view_message": "Zobrazit zprávu",
-        "warning": "Upozornění",
-        "welcome": "Vítejte"
+        "warning": "Upozornění"
     },
     "composer": {
         "autocomplete": {
@@ -882,7 +878,6 @@
         },
         "udd": {
             "interactive_verification_button": "Interaktivní ověření pomocí emoji",
-            "manual_verification_button": "Ruční ověření pomocí textu",
             "other_ask_verify_text": "Požádejte tohoto uživatele, aby ověřil svou relaci, nebo jí níže můžete ověřit manuálně.",
             "other_new_session_text": "%(name)s (%(userId)s) se přihlásil(a) do nové relace bez ověření:",
             "own_ask_verify_text": "Ověřte další relaci jedním z následujících způsobů.",
@@ -917,12 +912,6 @@
             "incoming_sas_dialog_waiting": "Čekání na potvrzení partnerem…",
             "incoming_sas_user_dialog_text_1": "Po ověření bude uživatel označen jako důvěryhodný. Ověřování uživatelů vám dává větší jistotu, že je komunikace důvěrná.",
             "incoming_sas_user_dialog_text_2": "Ověření uživatele označí jeho relace za důvěryhodné a vaše relace budou důvěryhodné pro něj.",
-            "manual_device_verification_device_id_label": "ID sezení",
-            "manual_device_verification_device_key_label": "Klíč relace",
-            "manual_device_verification_device_name_label": "Název relace",
-            "manual_device_verification_footer": "Pokud se neshodují, bezpečnost vaší komunikace může být kompromitována.",
-            "manual_device_verification_self_text": "Potvrďte porovnáním následujícího s uživatelským nastavením v jiné relaci:",
-            "manual_device_verification_user_text": "Potvrďte relaci tohoto uživatele porovnáním následujícího s jeho uživatelským nastavením:",
             "no_key_or_device": "Vypadá to, že nemáte bezpečnostní klíč ani žádné jiné zařízení, které byste mohli ověřit.  Toto zařízení nebude mít přístup ke starým šifrovaným zprávám. Abyste mohli na tomto zařízení ověřit svou totožnost, budete muset resetovat ověřovací klíče.",
             "no_support_qr_emoji": "Zařízení, které se snažíte ověřit, neumožňuje ověření QR kódem ani pomocí emotikonů, které %(brand)s podporuje. Zkuste použít jiného klienta.",
             "other_party_cancelled": "Druhá strana ověření zrušila.",
@@ -1046,10 +1035,6 @@
     },
     "error_user_not_logged_in": "Uživatel není přihlášen",
     "event_preview": {
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s ukončil(a) hlasové vysílání",
-            "you": "Ukončili jste hlasové vysílání"
-        },
         "m.call.answer": {
             "dm": "Probíhá hovor",
             "user": "%(senderName)s se připojil k hovoru",
@@ -1402,8 +1387,6 @@
         "notification_settings_beta_caption": "Představujeme jednodušší způsob, jak změnit nastavení oznámení. Přizpůsobte svůj %(brand)s přesně tak, jak se vám líbí.",
         "notification_settings_beta_title": "Nastavení oznámení",
         "notifications": "Zapnout panel oznámení v záhlaví místnosti",
-        "oidc_native_flow": "Nativní autentizace OIDC",
-        "oidc_native_flow_description": "⚠ VAROVÁNÍ: Experimentální. Použijte nativní ověřování OIDC, pokud je serverem podporováno.",
         "render_reaction_images": "Vykreslování vlastních obrázků v reakcích",
         "render_reaction_images_description": "Někdy se označují jako \"vlastní emoji\".",
         "report_to_moderators": "Nahlásit moderátorům",
@@ -1423,8 +1406,6 @@
         "video_rooms_faq2_answer": "Ano, časová osa chatu se zobrazuje vedle videa.",
         "video_rooms_faq2_question": "Mohu vedle videohovoru používat i textový chat?",
         "video_rooms_feedbackSubheading": "Děkujeme, že jste vyzkoušeli beta verzi, a prosíme vás o co nejpodrobnější informace, abychom ji mohli vylepšit.",
-        "voice_broadcast": "Hlasové vysílání",
-        "voice_broadcast_force_small_chunks": "Vynutit 15s délku bloku hlasového vysílání",
         "wysiwyg_composer": "Editor formátovaného textu"
     },
     "labs_mjolnir": {
@@ -1524,7 +1505,6 @@
     "member_list": {
         "filter_placeholder": "Najít člena místnosti",
         "invite_button_no_perms_tooltip": "Nemáte oprávnění zvát uživatele",
-        "invited_list_heading": "Pozvaní",
         "power_label": "%(userName)s (oprávnění %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Členové místnosti",
@@ -1568,65 +1548,18 @@
         "mute_description": "Nebudete dostávat žádná oznámení"
     },
     "notifier": {
-        "io.element.voice_broadcast_chunk": "%(senderName)s zahájil(a) hlasové vysílání",
         "m.key.verification.request": "%(name)s žádá o ověření"
     },
     "onboarding": {
-        "apple_trademarks": "App Store® a logo Apple® jsou ochranné známky společnosti Apple Inc.",
-        "community_messaging_action": "Najděte své lidi",
-        "community_messaging_description": "Zachovejte si vlastnictví a kontrolu nad komunitní diskusí.\nPodpora milionů uživatelů s účinným moderováním a interoperabilitou.",
-        "community_messaging_title": "Vlastnictví komunity",
-        "complete_these": "Dokončete následující, abyste z %(brand)s získali co nejvíce",
         "create_room": "Vytvořit skupinový chat",
-        "download_app": "Stáhnout %(brand)s",
-        "download_app_action": "Stáhnout aplikace",
-        "download_app_description": "Vezměte si %(brand)s s sebou a nic vám neunikne",
-        "download_app_store": "Stáhnout v App Store",
-        "download_brand": "Stáhnout %(brand)s",
-        "download_brand_desktop": "Stáhnout %(brand)s Desktop",
-        "download_f_droid": "Získat na F-Droid",
-        "download_google_play": "Získat na Google Play",
-        "enable_notifications": "Zapnout oznámení",
-        "enable_notifications_action": "Povolit oznámení",
-        "enable_notifications_description": "Nepropásněte odpověď nebo důležitou zprávu",
         "explore_rooms": "Prozkoumat veřejné místnosti",
-        "find_community_members": "Najděte a pozvěte členy vaší komunity",
-        "find_coworkers": "Najít a pozvat své spolupracovníky",
-        "find_friends": "Najděte a pozvěte své přátele",
-        "find_friends_action": "Najít přátele",
-        "find_friends_description": "Kvůli tomu jste tady, tak se do toho pusťte",
-        "find_people": "Najít lidi",
-        "free_e2ee_messaging_unlimited_voip": "Díky bezplatným šifrovaným zprávám a neomezeným hlasovým a videohovorům je služba %(brand)s skvělým způsobem, jak zůstat v kontaktu.",
-        "get_stuff_done": "Vyřešte věci tím, že najdete své týmové kolegy",
-        "google_trademarks": "Google Play a logo Google Play jsou ochranné známky společnosti Google LLC.",
         "has_avatar_label": "Skvělé, to pomůže lidem zjistit, že jste to vy",
         "intro_byline": "Vlastněte svoje konverzace.",
         "intro_welcome": "Vítá vás %(appName)s",
         "no_avatar_label": "Přidejte fotku, aby lidé věděli, že jste to vy.",
-        "only_n_steps_to_go": {
-            "one": "Zbývá už jen %(count)s krok",
-            "other": "Zbývá už jen %(count)s kroků"
-        },
-        "personal_messaging_action": "Začněte svůj první chat",
-        "personal_messaging_title": "Zabezpečené zasílání zpráv pro přátele a rodinu",
-        "qr_or_app_links": "%(qrCode)s nebo %(appLinks)s",
         "send_dm": "Poslat přímou zprávu",
-        "set_up_profile": "Nastavte si svůj profil",
-        "set_up_profile_action": "Váš profil",
-        "set_up_profile_description": "Ujistěte se, že lidé poznají, že jste to opravdu vy",
-        "use_case_community_messaging": "Členové online komunity",
-        "use_case_heading1": "Jste přihlášeni",
-        "use_case_heading2": "S kým si budete povídat nejčastěji?",
-        "use_case_heading3": "Pomůžeme vám připojit se.",
-        "use_case_personal_messaging": "Přátelé a rodina",
-        "use_case_work_messaging": "Spolupracovníci a týmy",
         "welcome_detail": "Nyní vám pomůžeme začít",
-        "welcome_to_brand": "Vítejte v aplikaci %(brand)s",
-        "welcome_user": "Vítejte %(name)s",
-        "work_messaging_action": "Najděte své spolupracovníky",
-        "work_messaging_title": "Zabezpečené zasílání pracovních zpráv",
-        "you_did_it": "Dokázali jste to!",
-        "you_made_it": "Zvládli jste to!"
+        "welcome_user": "Vítejte %(name)s"
     },
     "pill": {
         "permalink_other_room": "Zpráva v %(room)s",
@@ -1678,7 +1611,6 @@
         "custom_level": "Vlastní úroveň",
         "default": "Výchozí",
         "label": "Úroveň oprávnění",
-        "mod": "Moderátor",
         "moderator": "Moderátor",
         "restricted": "Omezené"
     },
@@ -2145,7 +2077,6 @@
             "error_unbanning": "Zrušení vykázání se nezdařilo",
             "events_default": "Posílat zprávy",
             "invite": "Zvát uživatele",
-            "io.element.voice_broadcast_info": "Hlasová vysílání",
             "kick": "Odebrat uživatele",
             "m.call": "Zahájit %(brand)s volání",
             "m.call.member": "Připojit se k %(brand)s volání",
@@ -2550,7 +2481,6 @@
             "room_directory_heading": "Adresář místností",
             "room_list_heading": "Seznam místností",
             "show_avatars_pills": "Zobrazovat avatary ve zmínkách o uživatelích, místnostech a událostech",
-            "show_checklist_shortcuts": "Zobrazit zástupce na uvítací kontrolní seznam nad seznamem místností",
             "show_polls_button": "Zobrazit tlačítko hlasování",
             "surround_text": "Ohraničit označený text při psaní speciálních znaků",
             "time_heading": "Zobrazování času"
@@ -2788,7 +2718,6 @@
         "warning": "<w>UPOZORNĚNÍ:</w> <description/>"
     },
     "share": {
-        "link_title": "Odkaz na místnost",
         "permalink_message": "Odkaz na vybranou zprávu",
         "permalink_most_recent": "Odkaz na nejnovější zprávu",
         "share_call": "Odkaz na pozvánku na konferenci",
@@ -2880,13 +2809,6 @@
         "upgraderoom": "Aktualizuje místnost na novou verzi",
         "upgraderoom_permission_error": "Na provedení tohoto příkazu nemáte dostatečná oprávnění.",
         "usage": "Použití",
-        "verify": "Ověří uživatele, relaci a veřejné klíče",
-        "verify_mismatch": "VAROVÁNÍ: OVĚŘENÍ KLÍČE SE NEZDAŘILO! Podpisový klíč pro uživatele %(userId)s a relaci %(deviceId)s je „%(fprint)s“, což neodpovídá klíči „%(fingerprint)s“. To by mohlo znamenat, že vaše komunikace je zachycována!",
-        "verify_nop": "Relace je už ověřená!",
-        "verify_nop_warning_mismatch": "VAROVÁNÍ: relace již byla ověřena, ale klíče se NESHODUJÍ!",
-        "verify_success_description": "Zadaný podpisový klíč odpovídá klíči relace %(deviceId)s od uživatele %(userId)s. Relace byla označena jako ověřená.",
-        "verify_success_title": "Ověřený klíč",
-        "verify_unknown_pair": "Neznámý pár (uživatel, relace): (%(userId)s, %(deviceId)s)",
         "view": "Zobrazí místnost s danou adresou",
         "whois": "Zobrazuje informace o uživateli"
     },
@@ -2923,7 +2845,6 @@
         "invite": "Pozvat lidi",
         "invite_description": "Pozvěte e-mailem nebo uživatelským jménem",
         "invite_link": "Sdílet odkaz na pozvánku",
-        "invite_this_space": "Pozvat do tohoto prostoru",
         "joining_space": "Připojování",
         "landing_welcome": "Vítejte v <name/>",
         "leave_dialog_action": "Opusit prostor",
@@ -3104,10 +3025,6 @@
         "error_rendering_message": "Tuto zprávu nelze načíst",
         "historical_messages_unavailable": "Dřívější zprávy nelze zobrazit",
         "in_room_name": " v <strong>%(room)s</strong>",
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s ukončil(a) <a>hlasové vysílání</a>",
-            "you": "Ukončili jste <a>hlasové vysílání</a>"
-        },
         "io.element.widgets.layout": "%(senderName)s aktualizoval rozvržení místnosti",
         "late_event_separator": "Původně odesláno %(dateTime)s",
         "load_error": {
@@ -3640,38 +3557,6 @@
         "switch_theme_dark": "Přepnout do tmavého režimu",
         "switch_theme_light": "Přepnout do světlého režimu"
     },
-    "voice_broadcast": {
-        "30s_backward": "30s zpět",
-        "30s_forward": "30s vpřed",
-        "action": "Hlasové vysílání",
-        "buffering": "Ukládání do vyrovnávací paměti…",
-        "confirm_listen_affirm": "Ano, ukončit nahrávání",
-        "confirm_listen_description": "Jakmile začnete poslouchat toto živé vysílání, aktuální záznam živého vysílání bude ukončen.",
-        "confirm_listen_title": "Poslouchat živé vysílání?",
-        "confirm_stop_affirm": "Ano, zastavit vysílání",
-        "confirm_stop_description": "Opravdu chcete ukončit živé vysílání? Tím se vysílání ukončí a v místnosti bude k dispozici celý záznam.",
-        "confirm_stop_title": "Ukončit živé vysílání?",
-        "connection_error": "Chyba připojení - nahrávání pozastaveno",
-        "failed_already_recording_description": "Již nahráváte hlasové vysílání. Ukončete prosím aktuální hlasové vysílání a spusťte nové.",
-        "failed_already_recording_title": "Nelze spustit nové hlasové vysílání",
-        "failed_decrypt": "Nelze dešifrovat hlasové vysílání",
-        "failed_generic": "Nelze přehrát toto hlasové vysílání",
-        "failed_insufficient_permission_description": "Nemáte potřebná oprávnění ke spuštění hlasového vysílání v této místnosti. Obraťte se na správce místnosti, aby vám zvýšil oprávnění.",
-        "failed_insufficient_permission_title": "Nelze spustit nové hlasové vysílání",
-        "failed_no_connection_description": "Bohužel nyní nemůžeme spustit nahrávání. Zkuste to prosím později.",
-        "failed_no_connection_title": "Chyba připojení",
-        "failed_others_already_recording_description": "Hlasové vysílání už nahrává někdo jiný. Počkejte, až jeho hlasové vysílání skončí, a spusťte nové.",
-        "failed_others_already_recording_title": "Nelze spustit nové hlasové vysílání",
-        "go_live": "Přejít naživo",
-        "live": "Živě",
-        "pause": "pozastavit hlasové vysílání",
-        "play": "přehrát hlasové vysílání",
-        "resume": "obnovit hlasové vysílání"
-    },
-    "voice_message": {
-        "cant_start_broadcast_description": "Hlasovou zprávu nelze spustit, protože právě nahráváte živé vysílání. Ukončete prosím živé vysílání, abyste mohli začít nahrávat hlasovou zprávu.",
-        "cant_start_broadcast_title": "Nelze spustit hlasovou zprávu"
-    },
     "voip": {
         "already_in_call": "Již máte hovor",
         "already_in_call_person": "S touto osobou již telefonujete.",
@@ -3691,7 +3576,6 @@
         "camera_disabled": "Vaše kamera je vypnutá",
         "camera_enabled": "Vaše kamera je stále zapnutá",
         "cannot_call_yourself_description": "Nemůžete volat sami sobě.",
-        "change_input_device": "Změnit vstupní zařízení",
         "close_lobby": "Zavřít lobby",
         "connecting": "Spojování",
         "connection_lost": "Došlo ke ztrátě připojení k serveru",
@@ -3710,8 +3594,6 @@
         "enable_camera": "Zapnout kameru",
         "enable_microphone": "Zrušit ztlumení mikrofonu",
         "expand": "Návrat do hovoru",
-        "failed_call_live_broadcast_description": "Nemůžete zahájit hovor, protože právě nahráváte živé vysílání. Ukončete prosím živé vysílání, abyste mohli zahájit hovor.",
-        "failed_call_live_broadcast_title": "Nelze zahájit hovor",
         "get_call_link": "Sdílet odkaz na hovor",
         "hangup": "Zavěsit",
         "hide_sidebar_button": "Skrýt postranní panel",

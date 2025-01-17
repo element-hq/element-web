@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -15,7 +15,7 @@ import { ComposerContextState } from "../ComposerContext";
 // From EditMessageComposer private get events(): MatrixEvent[]
 export function getEventsFromEditorStateTransfer(
     editorStateTransfer: EditorStateTransfer,
-    roomContext: IRoomState,
+    roomContext: Pick<IRoomState, "liveTimeline">,
     mxClient: MatrixClient,
 ): MatrixEvent[] | undefined {
     const liveTimelineEvents = roomContext.liveTimeline?.getEvents();
@@ -41,7 +41,7 @@ export function getEventsFromEditorStateTransfer(
 // From SendMessageComposer private onKeyDown = (event: KeyboardEvent): void
 export function getEventsFromRoom(
     composerContext: ComposerContextState,
-    roomContext: IRoomState,
+    roomContext: Pick<IRoomState, "liveTimeline" | "room">,
 ): MatrixEvent[] | undefined {
     const isReplyingToThread = composerContext.eventRelation?.key === THREAD_RELATION_TYPE.name;
     return roomContext.liveTimeline

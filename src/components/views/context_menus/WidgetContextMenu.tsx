@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -18,7 +18,6 @@ import { _t } from "../../../languageHandler";
 import { isAppWidget } from "../../../stores/WidgetStore";
 import WidgetUtils from "../../../utils/WidgetUtils";
 import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
-import RoomContext from "../../../contexts/RoomContext";
 import dis from "../../../dispatcher/dispatcher";
 import SettingsStore from "../../../settings/SettingsStore";
 import Modal from "../../../Modal";
@@ -30,6 +29,7 @@ import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayo
 import { getConfigLivestreamUrl, startJitsiAudioLivestream } from "../../../Livestream";
 import { ModuleRunner } from "../../../modules/ModuleRunner";
 import { ElementWidget } from "../../../stores/widgets/StopGapWidget";
+import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
 
 interface IProps extends Omit<ComponentProps<typeof IconizedContextMenu>, "children"> {
     app: IWidget;
@@ -71,7 +71,7 @@ const showDeleteButton = (canModify: boolean, onDeleteClick: undefined | (() => 
 
 const showSnapshotButton = (widgetMessaging: ClientWidgetApi | undefined): boolean => {
     return (
-        SettingsStore.getValue<boolean>("enableWidgetScreenshots") &&
+        SettingsStore.getValue("enableWidgetScreenshots") &&
         !!widgetMessaging?.hasCapability(MatrixCapabilities.Screenshots)
     );
 };
@@ -114,7 +114,7 @@ export const WidgetContextMenu: React.FC<IProps> = ({
     ...props
 }) => {
     const cli = useContext(MatrixClientContext);
-    const { room, roomId } = useContext(RoomContext);
+    const { room, roomId } = useScopedRoomContext("room", "roomId");
 
     const widgetMessaging = WidgetMessagingStore.instance.getMessagingForUid(WidgetUtils.getWidgetUid(app));
     const canModify = userWidget || WidgetUtils.canUserModifyWidgets(cli, roomId);

@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -33,6 +33,12 @@ interface IState {
 
 export default class MessageComposerFormatBar extends React.PureComponent<IProps, IState> {
     private readonly formatBarRef = createRef<HTMLDivElement>();
+    /**
+     * The height of the format bar in pixels.
+     * Height 32px + 2px border
+     * @private
+     */
+    private readonly BAR_HEIGHT = 34;
 
     public constructor(props: IProps) {
         super(props);
@@ -96,7 +102,7 @@ export default class MessageComposerFormatBar extends React.PureComponent<IProps
         this.setState({ visible: true });
         const parentRect = this.formatBarRef.current.parentElement.getBoundingClientRect();
         this.formatBarRef.current.style.left = `${selectionRect.left - parentRect.left}px`;
-        const halfBarHeight = this.formatBarRef.current.clientHeight / 2; // used to center the bar
+        const halfBarHeight = this.BAR_HEIGHT / 2; // used to center the bar
         const offset = halfBarHeight + 2; // makes sure the bar won't cover selected text
         const offsetLimit = halfBarHeight + offset;
         const position = Math.max(selectionRect.top - parentRect.top - offsetLimit, -offsetLimit);

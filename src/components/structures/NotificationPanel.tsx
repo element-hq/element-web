@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2016-2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -19,6 +19,7 @@ import { Layout } from "../../settings/enums/Layout";
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 import Measured from "../views/elements/Measured";
 import EmptyState from "../views/right_panel/EmptyState";
+import { ScopedRoomContextProvider } from "../../contexts/ScopedRoomContext.tsx";
 
 interface IProps {
     onClose(): void;
@@ -33,7 +34,7 @@ interface IState {
  */
 export default class NotificationPanel extends React.PureComponent<IProps, IState> {
     public static contextType = RoomContext;
-    public declare context: React.ContextType<typeof RoomContext>;
+    declare public context: React.ContextType<typeof RoomContext>;
 
     private card = React.createRef<HTMLDivElement>();
 
@@ -79,12 +80,10 @@ export default class NotificationPanel extends React.PureComponent<IProps, IStat
         }
 
         return (
-            <RoomContext.Provider
-                value={{
-                    ...this.context,
-                    timelineRenderingType: TimelineRenderingType.Notification,
-                    narrow: this.state.narrow,
-                }}
+            <ScopedRoomContextProvider
+                {...this.context}
+                timelineRenderingType={TimelineRenderingType.Notification}
+                narrow={this.state.narrow}
             >
                 <BaseCard
                     header={_t("notifications|enable_prompt_toast_title")}
@@ -96,10 +95,10 @@ export default class NotificationPanel extends React.PureComponent<IProps, IStat
                     onClose={this.props.onClose}
                     withoutScrollContainer={true}
                 >
-                    {this.card.current && <Measured sensor={this.card.current} onMeasurement={this.onMeasurement} />}
+                    <Measured sensor={this.card} onMeasurement={this.onMeasurement} />
                     {content}
                 </BaseCard>
-            </RoomContext.Provider>
+            </ScopedRoomContextProvider>
         );
     }
 }

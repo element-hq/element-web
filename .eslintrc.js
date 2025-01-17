@@ -1,5 +1,5 @@
 module.exports = {
-    plugins: ["matrix-org"],
+    plugins: ["matrix-org", "eslint-plugin-react-compiler"],
     extends: ["plugin:matrix-org/babel", "plugin:matrix-org/react", "plugin:matrix-org/a11y"],
     parserOptions: {
         project: ["./tsconfig.json"],
@@ -41,6 +41,10 @@ module.exports = {
             {
                 name: "setImmediate",
                 message: "Use setTimeout instead.",
+            },
+            {
+                name: "Buffer",
+                message: "Buffer is not available in the web.",
             },
         ],
 
@@ -117,10 +121,6 @@ module.exports = {
                             "!matrix-js-sdk/src/extensible_events_v1/PollResponseEvent",
                             "!matrix-js-sdk/src/extensible_events_v1/PollEndEvent",
                             "!matrix-js-sdk/src/extensible_events_v1/InvalidEventError",
-                            "!matrix-js-sdk/src/crypto",
-                            "!matrix-js-sdk/src/crypto/keybackup",
-                            "!matrix-js-sdk/src/crypto/deviceinfo",
-                            "!matrix-js-sdk/src/crypto/dehydration",
                             "!matrix-js-sdk/src/oidc",
                             "!matrix-js-sdk/src/oidc/discovery",
                             "!matrix-js-sdk/src/oidc/authorize",
@@ -170,6 +170,8 @@ module.exports = {
         "jsx-a11y/role-supports-aria-props": "off",
 
         "matrix-org/require-copyright-header": "error",
+
+        "react-compiler/react-compiler": "error",
     },
     overrides: [
         {
@@ -259,6 +261,10 @@ module.exports = {
                         additionalTestBlockFunctions: ["beforeAll", "beforeEach", "oldBackendOnly"],
                     },
                 ],
+
+                // These are fine in tests
+                "no-restricted-globals": "off",
+                "react-compiler/react-compiler": "off",
             },
         },
         {
@@ -268,6 +274,7 @@ module.exports = {
             },
             rules: {
                 "react-hooks/rules-of-hooks": ["off"],
+                "@typescript-eslint/no-floating-promises": ["error"],
             },
         },
         {

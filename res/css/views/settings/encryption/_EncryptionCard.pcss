@@ -1,0 +1,33 @@
+/*
+ * Copyright 2024 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.mx_EncryptionCard {
+    display: flex;
+    flex-direction: column;
+    gap: var(--cpd-space-8x);
+    padding: var(--cpd-space-10x);
+    border-radius: var(--cpd-space-4x);
+    /* From figma */
+    box-shadow: 0 1.2px 2.4px 0 rgba(27, 29, 34, 0.15);
+    border: 1px solid var(--cpd-color-gray-400);
+
+    .mx_EncryptionCard_header {
+        display: flex;
+        flex-direction: column;
+        gap: var(--cpd-space-4x);
+        align-items: center;
+
+        > h2 {
+            margin: 0;
+        }
+
+        > span {
+            color: var(--cpd-color-text-secondary);
+            text-align: center;
+        }
+    }
+}

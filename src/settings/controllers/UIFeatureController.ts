@@ -2,13 +2,14 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import SettingController from "./SettingController";
 import { SettingLevel } from "../SettingLevel";
 import SettingsStore from "../SettingsStore";
+import { SettingKey } from "../Settings.tsx";
 
 /**
  * Enforces that a boolean setting cannot be enabled if the corresponding
@@ -19,7 +20,7 @@ import SettingsStore from "../SettingsStore";
  */
 export default class UIFeatureController extends SettingController {
     public constructor(
-        private uiFeatureName: string,
+        private uiFeatureName: SettingKey,
         private forcedValue = false,
     ) {
         super();

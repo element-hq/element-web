@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021, 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -110,12 +110,7 @@ export default abstract class Exporter {
     }
 
     protected setEventMetadata(event: MatrixEvent): MatrixEvent {
-        const roomState = this.room.currentState;
-        const sender = event.getSender();
-        event.sender = (!!sender && roomState?.getSentinelMember(sender)) || null;
-        if (event.getType() === "m.room.member") {
-            event.target = roomState?.getSentinelMember(event.getStateKey()!) ?? null;
-        }
+        event.setMetadata(this.room.currentState, false);
         return event;
     }
 

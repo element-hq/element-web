@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -35,7 +35,7 @@ describe("MessagePreviewStore", () => {
         event: MatrixEvent,
         fireAction = true,
     ): Promise<void> {
-        room.addLiveEvents([event]);
+        room.addLiveEvents([event], { addToState: true });
         if (fireAction) {
             // @ts-ignore private access
             await store.onAction({

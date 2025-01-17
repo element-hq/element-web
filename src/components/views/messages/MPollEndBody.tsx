@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -90,7 +90,7 @@ export const MPollEndBody = React.forwardRef<any, IBodyProps>(({ mxEvent, ...pro
     const { pollStartEvent, isLoadingPollStartEvent } = usePollStartEvent(mxEvent);
 
     if (!pollStartEvent) {
-        const pollEndFallbackMessage = M_TEXT.findIn(mxEvent.getContent()) || textForEvent(mxEvent, cli);
+        const pollEndFallbackMessage = M_TEXT.findIn<string>(mxEvent.getContent()) || textForEvent(mxEvent, cli);
         return (
             <>
                 <PollIcon className="mx_MPollEndBody_icon" />

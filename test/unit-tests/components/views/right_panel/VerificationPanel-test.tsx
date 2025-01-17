@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -46,7 +46,7 @@ describe("<VerificationPanel />", () => {
             const request = makeMockVerificationRequest({
                 phase: Phase.Ready,
             });
-            request.generateQRCode.mockResolvedValue(Buffer.from("test", "utf-8"));
+            request.generateQRCode.mockResolvedValue(new Uint8ClampedArray(Buffer.from("test", "utf-8")));
             const container = renderComponent({
                 request: request,
                 layout: "dialog",
@@ -71,7 +71,7 @@ describe("<VerificationPanel />", () => {
             const request = makeMockVerificationRequest({
                 phase: Phase.Ready,
             });
-            request.generateQRCode.mockResolvedValue(Buffer.from("test", "utf-8"));
+            request.generateQRCode.mockResolvedValue(new Uint8ClampedArray(Buffer.from("test", "utf-8")));
             const container = renderComponent({
                 request: request,
                 member: new User("@other:user"),

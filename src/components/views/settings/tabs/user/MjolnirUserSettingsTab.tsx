@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -268,7 +268,6 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
                                 onChange={this.onPersonalRuleChanged}
                             />
                             <AccessibleButton
-                                type="submit"
                                 kind="primary"
                                 onClick={this.onAddPersonalRule}
                                 disabled={this.state.busy}
@@ -295,12 +294,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
                                 value={this.state.newList}
                                 onChange={this.onNewListChanged}
                             />
-                            <AccessibleButton
-                                type="submit"
-                                kind="primary"
-                                onClick={this.onSubscribeList}
-                                disabled={this.state.busy}
-                            >
+                            <AccessibleButton kind="primary" onClick={this.onSubscribeList} disabled={this.state.busy}>
                                 {_t("action|subscribe")}
                             </AccessibleButton>
                         </form>

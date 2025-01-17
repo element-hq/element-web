@@ -3,11 +3,11 @@ Copyright 2024 New Vector Ltd.
 Copyright 2019-2023 The Matrix.org Foundation C.I.C.
 Copyright 2018 New Vector Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useCallback, useContext } from "react";
+import React, { useCallback } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixEvent, Room, RoomState } from "matrix-js-sdk/src/matrix";
 
@@ -18,10 +18,10 @@ import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import EventTileBubble from "./EventTileBubble";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import RoomContext from "../../../contexts/RoomContext";
 import { useRoomState } from "../../../hooks/useRoomState";
 import SettingsStore from "../../../settings/SettingsStore";
 import MatrixToPermalinkConstructor from "../../../utils/permalinks/MatrixToPermalinkConstructor";
+import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
 
 interface IProps {
     /** The m.room.create MatrixEvent that this tile represents */
@@ -40,7 +40,7 @@ export const RoomPredecessorTile: React.FC<IProps> = ({ mxEvent, timestamp }) =>
     // the information inside mxEvent. This allows us the flexibility later to
     // use a different predecessor (e.g. through MSC3946) and still display it
     // in the timeline location of the create event.
-    const roomContext = useContext(RoomContext);
+    const roomContext = useScopedRoomContext("room");
     const predecessor = useRoomState(
         roomContext.room,
         useCallback(

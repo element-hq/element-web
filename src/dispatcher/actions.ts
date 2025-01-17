@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -134,20 +134,6 @@ export enum Action {
      * Opens the modal dial pad
      */
     OpenDialPad = "open_dial_pad",
-
-    /**
-     * Fired when CallHandler has checked for PSTN protocol support
-     * payload: none
-     * XXX: Is an action the right thing for this?
-     */
-    PstnSupportUpdated = "pstn_support_updated",
-
-    /**
-     * Similar to PstnSupportUpdated, fired when CallHandler has checked for virtual room support
-     * payload: none
-     * XXX: Ditto
-     */
-    VirtualRoomSupportUpdated = "virtual_room_support_updated",
 
     /**
      * Fired when an upload has started. Should be used with UploadStartedPayload.

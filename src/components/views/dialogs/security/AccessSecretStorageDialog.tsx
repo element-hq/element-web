@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2018-2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -19,7 +19,6 @@ import AccessibleButton, { ButtonEvent } from "../../elements/AccessibleButton";
 import { _t } from "../../../../languageHandler";
 import { accessSecretStorage } from "../../../../SecurityManager";
 import Modal from "../../../../Modal";
-import InteractiveAuthDialog from "../InteractiveAuthDialog";
 import DialogButtons from "../../elements/DialogButtons";
 import BaseDialog from "../BaseDialog";
 import { chromeFileInputFix } from "../../../../utils/BrowserWorkarounds";
@@ -226,28 +225,14 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
 
         try {
             // Force reset secret storage (which resets the key backup)
-            await accessSecretStorage(async (): Promise<void> => {
-                // Now reset cross-signing so everything Just Works™ again.
-                const cli = MatrixClientPeg.safeGet();
-                await cli.getCrypto()?.bootstrapCrossSigning({
-                    authUploadDeviceSigningKeys: async (makeRequest): Promise<void> => {
-                        const { finished } = Modal.createDialog(InteractiveAuthDialog, {
-                            title: _t("encryption|bootstrap_title"),
-                            matrixClient: cli,
-                            makeRequest,
-                        });
-                        const [confirmed] = await finished;
-                        if (!confirmed) {
-                            throw new Error("Cross-signing key upload auth canceled");
-                        }
-                    },
-                    setupNewCrossSigning: true,
-                });
-
-                // Now we can indicate that the user is done pressing buttons, finally.
-                // Upstream flows will detect the new secret storage, key backup, etc and use it.
-                this.props.onFinished({});
-            }, true);
+            await accessSecretStorage(
+                async (): Promise<void> => {
+                    // Now we can indicate that the user is done pressing buttons, finally.
+                    // Upstream flows will detect the new secret storage, key backup, etc and use it.
+                    this.props.onFinished({});
+                },
+                { forceReset: true, resetCrossSigning: true },
+            );
         } catch (e) {
             logger.error(e);
             this.props.onFinished(false);

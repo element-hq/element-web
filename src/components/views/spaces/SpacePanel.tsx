@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021, 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -88,7 +88,7 @@ export const HomeButtonContextMenu: React.FC<ComponentProps<typeof SpaceContextM
     hideHeader,
     ...props
 }) => {
-    const allRoomsInHome = useSettingValue<boolean>("Spaces.allRoomsInHome");
+    const allRoomsInHome = useSettingValue("Spaces.allRoomsInHome");
 
     return (
         <IconizedContextMenu {...props} onFinished={onFinished} className="mx_SpacePanel_contextMenu" compact>
@@ -221,7 +221,7 @@ const CreateSpaceButton: React.FC<Pick<IInnerSpacePanelProps, "isPanelCollapsed"
     isPanelCollapsed,
     setPanelCollapsed,
 }) => {
-    const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLElement>();
+    const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
 
     useEffect(() => {
         if (!isPanelCollapsed && menuDisplayed) {

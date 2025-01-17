@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022, 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -593,18 +593,21 @@ describe("HTMLExport", () => {
 
     it("should not make /messages requests when exporting 'Current Timeline'", async () => {
         client.createMessagesRequest.mockRejectedValue(new Error("Should never be called"));
-        room.addLiveEvents([
-            new MatrixEvent({
-                event_id: `$eventId`,
-                type: EventType.RoomMessage,
-                sender: client.getSafeUserId(),
-                origin_server_ts: 123456789,
-                content: {
-                    msgtype: "m.text",
-                    body: `testing testing`,
-                },
-            }),
-        ]);
+        room.addLiveEvents(
+            [
+                new MatrixEvent({
+                    event_id: `$eventId`,
+                    type: EventType.RoomMessage,
+                    sender: client.getSafeUserId(),
+                    origin_server_ts: 123456789,
+                    content: {
+                        msgtype: "m.text",
+                        body: `testing testing`,
+                    },
+                }),
+            ],
+            { addToState: true },
+        );
 
         const exporter = new HTMLExporter(
             room,

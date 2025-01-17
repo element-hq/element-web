@@ -2,22 +2,22 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { forwardRef, useContext } from "react";
+import React, { forwardRef } from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import type { RoomEncryptionEventContent } from "matrix-js-sdk/src/types";
 import { _t } from "../../../languageHandler";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import EventTileBubble from "./EventTileBubble";
-import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { objectHasDiff } from "../../../utils/objects";
 import { isLocalRoom } from "../../../utils/localRoom/isLocalRoom";
 import { MEGOLM_ENCRYPTION_ALGORITHM } from "../../../utils/crypto";
+import { useIsEncrypted } from "../../../hooks/useIsEncrypted.ts";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -25,9 +25,9 @@ interface IProps {
 }
 
 const EncryptionEvent = forwardRef<HTMLDivElement, IProps>(({ mxEvent, timestamp }, ref) => {
-    const cli = useContext(MatrixClientContext);
+    const cli = useMatrixClientContext();
     const roomId = mxEvent.getRoomId()!;
-    const isRoomEncrypted = MatrixClientPeg.safeGet().isRoomEncrypted(roomId);
+    const isRoomEncrypted = useIsEncrypted(cli, cli.getRoom(roomId) || undefined);
 
     const prevContent = mxEvent.getPrevContent() as RoomEncryptionEventContent;
     const content = mxEvent.getContent<RoomEncryptionEventContent>();

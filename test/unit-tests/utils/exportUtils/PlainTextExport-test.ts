@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -44,7 +44,7 @@ describe("PlainTextExport", () => {
         [24, false, "Fri, Apr 16, 2021, 17:20:00 - @alice:example.com: Hello, world!\n"],
         [12, true, "Fri, Apr 16, 2021, 5:20:00 PM - @alice:example.com: Hello, world!\n"],
     ])("should return text with %i hr time format", async (hour: number, setting: boolean, expectedMessage: string) => {
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) =>
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string): any =>
             settingName === "showTwelveHourTimestamps" ? setting : undefined,
         );
         const events: MatrixEvent[] = [

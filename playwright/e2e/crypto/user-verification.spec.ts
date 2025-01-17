@@ -2,12 +2,13 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { type Preset, type Visibility } from "matrix-js-sdk/src/matrix";
 
+import type { Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
 import { doTwoWaySasVerification, awaitVerifier } from "./utils";
 import { Client } from "../../pages/client";
@@ -38,6 +39,8 @@ test.describe("User verification", () => {
         toasts,
         room: { roomId: dmRoomId },
     }) => {
+        await waitForDeviceKeys(page);
+
         // once Alice has joined, Bob starts the verification
         const bobVerificationRequest = await bob.evaluateHandle(
             async (client, { dmRoomId, aliceCredentials }) => {
@@ -71,7 +74,7 @@ test.describe("User verification", () => {
         /* on the bot side, wait for the verifier to exist ... */
         const botVerifier = await awaitVerifier(bobVerificationRequest);
         // ... confirm ...
-        botVerifier.evaluate((verifier) => verifier.verify());
+        void botVerifier.evaluate((verifier) => verifier.verify());
         // ... and then check the emoji match
         await doTwoWaySasVerification(page, botVerifier);
 
@@ -87,6 +90,8 @@ test.describe("User verification", () => {
         toasts,
         room: { roomId: dmRoomId },
     }) => {
+        await waitForDeviceKeys(page);
+
         // once Alice has joined, Bob starts the verification
         const bobVerificationRequest = await bob.evaluateHandle(
             async (client, { dmRoomId, aliceCredentials }) => {
@@ -148,4 +153,16 @@ async function createDMRoom(client: Client, userId: string): Promise<string> {
             },
         ],
     });
+}
+
+/**
+ * Wait until we get the other user's device keys.
+ * In newer rust-crypto versions, the verification request will be ignored if we
+ * don't have the sender's device keys.
+ */
+async function waitForDeviceKeys(page: Page): Promise<void> {
+    await expect(page.getByRole("button", { name: "Avatar" })).toBeVisible();
+    const avatar = await page.getByRole("button", { name: "Avatar" });
+    await avatar.click();
+    await expect(page.getByText("1 session")).toBeVisible();
 }

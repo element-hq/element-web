@@ -4,7 +4,7 @@ Copyright 2019 The Matrix.org Foundation C.I.C.
 Copyright 2017, 2018 , 2019 New Vector Ltd
 Copyright 2015, 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -75,6 +75,7 @@ interface State {
 }
 
 export default class ForgotPassword extends React.Component<Props, State> {
+    private unmounted = false;
     private reset: PasswordReset;
     private fieldPassword: Field | null = null;
     private fieldPasswordConfirm: Field | null = null;
@@ -108,14 +109,20 @@ export default class ForgotPassword extends React.Component<Props, State> {
         }
     }
 
-    private async checkServerLiveliness(serverConfig: ValidatedServerConfig): Promise<void> {
+    public componentWillUnmount(): void {
+        this.unmounted = true;
+    }
+
+    private async checkServerLiveliness(serverConfig: ValidatedServerConfig): Promise<boolean> {
         try {
             await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(serverConfig.hsUrl, serverConfig.isUrl);
+            if (this.unmounted) return false;
 
             this.setState({
                 serverIsAlive: true,
             });
         } catch (e: any) {
+            if (this.unmounted) return false;
             const { serverIsAlive, serverDeadError } = AutoDiscoveryUtils.authComponentStateForError(
                 e,
                 "forgot_password",
@@ -124,7 +131,9 @@ export default class ForgotPassword extends React.Component<Props, State> {
                 serverIsAlive,
                 errorText: serverDeadError,
             });
+            return serverIsAlive;
         }
+        return true;
     }
 
     private async onPhaseEmailInputSubmit(): Promise<void> {
@@ -292,10 +301,10 @@ export default class ForgotPassword extends React.Component<Props, State> {
         });
 
         // Refresh the server errors. Just in case the server came back online of went offline.
-        await this.checkServerLiveliness(this.props.serverConfig);
+        const serverIsAlive = await this.checkServerLiveliness(this.props.serverConfig);
 
         // Server error
-        if (!this.state.serverIsAlive) return;
+        if (!serverIsAlive) return;
 
         switch (this.state.phase) {
             case Phase.EnterEmail:

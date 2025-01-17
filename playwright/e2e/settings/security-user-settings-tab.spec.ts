@@ -3,7 +3,7 @@ Copyright 2024 New Vector Ltd.
 Copyright 2024 The Matrix.org Foundation C.I.C.
 Copyright 2023 Suguru Hirahara
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -36,7 +36,7 @@ test.describe("Security user settings tab", () => {
         });
 
         test.describe("AnalyticsLearnMoreDialog", () => {
-            test("should be rendered properly", async ({ app, page }) => {
+            test("should be rendered properly", { tag: "@screenshot" }, async ({ app, page }) => {
                 const tab = await app.settings.openUserSettings("Security");
                 await tab.getByRole("button", { name: "Learn more" }).click();
                 await expect(page.locator(".mx_AnalyticsLearnMoreDialog_wrapper .mx_Dialog")).toMatchScreenshot(

@@ -2,11 +2,11 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useCallback, useContext, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { Body as BodyText, Button, IconButton, Menu, MenuItem, Tooltip } from "@vector-im/compound-web";
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
 import VoiceCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/voice-call";
@@ -48,10 +48,10 @@ import { CallGuestLinkButton } from "./RoomHeader/CallGuestLinkButton";
 import { ButtonEvent } from "../elements/AccessibleButton";
 import WithPresenceIndicator, { useDmMember } from "../avatars/WithPresenceIndicator";
 import { IOOBData } from "../../../stores/ThreepidInviteStore";
-import RoomContext from "../../../contexts/RoomContext";
 import { MainSplitContentType } from "../../structures/RoomView";
 import defaultDispatcher from "../../../dispatcher/dispatcher.ts";
 import { RoomSettingsTab } from "../dialogs/RoomSettingsDialog.tsx";
+import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
 
 export default function RoomHeader({
     room,
@@ -229,7 +229,7 @@ export default function RoomHeader({
         voiceCallButton = undefined;
     }
 
-    const roomContext = useContext(RoomContext);
+    const roomContext = useScopedRoomContext("mainSplitContentType");
     const isVideoRoom = calcIsVideoRoom(room);
     const showChatButton =
         isVideoRoom ||
@@ -310,78 +310,78 @@ export default function RoomHeader({
                         </BodyText>
                     </Box>
                 </button>
-                <Flex align="center" gap="var(--cpd-space-2x)">
-                    {additionalButtons?.map((props) => {
-                        const label = props.label();
 
-                        return (
-                            <Tooltip label={label} key={props.id}>
-                                <IconButton
-                                    aria-label={label}
-                                    onClick={(event) => {
-                                        event.stopPropagation();
-                                        props.onClick();
-                                    }}
-                                >
-                                    {typeof props.icon === "function" ? props.icon() : props.icon}
-                                </IconButton>
-                            </Tooltip>
-                        );
-                    })}
+                {additionalButtons?.map((props) => {
+                    const label = props.label();
 
-                    {isViewingCall && <CallGuestLinkButton room={room} />}
-
-                    {hasActiveCallSession && !isConnectedToCall && !isViewingCall ? (
-                        joinCallButton
-                    ) : (
-                        <>
-                            {!isVideoRoom && videoCallButton}
-                            {!useElementCallExclusively && !isVideoRoom && voiceCallButton}
-                        </>
-                    )}
-
-                    <Tooltip label={_t("right_panel|room_summary_card|title")}>
-                        <IconButton
-                            onClick={(evt) => {
-                                evt.stopPropagation();
-                                RightPanelStore.instance.showOrHidePhase(RightPanelPhases.RoomSummary);
-                            }}
-                            aria-label={_t("right_panel|room_summary_card|title")}
-                        >
-                            <RoomInfoIcon />
-                        </IconButton>
-                    </Tooltip>
-
-                    {showChatButton && <VideoRoomChatButton room={room} />}
-
-                    <Tooltip label={_t("common|threads")}>
-                        <IconButton
-                            indicator={notificationLevelToIndicator(threadNotifications)}
-                            onClick={(evt) => {
-                                evt.stopPropagation();
-                                RightPanelStore.instance.showOrHidePhase(RightPanelPhases.ThreadPanel);
-                                PosthogTrackers.trackInteraction("WebRoomHeaderButtonsThreadsButton", evt);
-                            }}
-                            aria-label={_t("common|threads")}
-                        >
-                            <ThreadsIcon />
-                        </IconButton>
-                    </Tooltip>
-                    {notificationsEnabled && (
-                        <Tooltip label={_t("notifications|enable_prompt_toast_title")}>
+                    return (
+                        <Tooltip label={label} key={props.id}>
                             <IconButton
-                                indicator={notificationLevelToIndicator(globalNotificationState.level)}
-                                onClick={(evt) => {
-                                    evt.stopPropagation();
-                                    RightPanelStore.instance.showOrHidePhase(RightPanelPhases.NotificationPanel);
+                                aria-label={label}
+                                onClick={(event) => {
+                                    event.stopPropagation();
+                                    props.onClick();
                                 }}
-                                aria-label={_t("notifications|enable_prompt_toast_title")}
                             >
-                                <NotificationsIcon />
+                                {typeof props.icon === "function" ? props.icon() : props.icon}
                             </IconButton>
                         </Tooltip>
-                    )}
-                </Flex>
+                    );
+                })}
+
+                {isViewingCall && <CallGuestLinkButton room={room} />}
+
+                {hasActiveCallSession && !isConnectedToCall && !isViewingCall ? (
+                    joinCallButton
+                ) : (
+                    <>
+                        {!isVideoRoom && videoCallButton}
+                        {!useElementCallExclusively && !isVideoRoom && voiceCallButton}
+                    </>
+                )}
+
+                {showChatButton && <VideoRoomChatButton room={room} />}
+
+                <Tooltip label={_t("common|threads")}>
+                    <IconButton
+                        indicator={notificationLevelToIndicator(threadNotifications)}
+                        onClick={(evt) => {
+                            evt.stopPropagation();
+                            RightPanelStore.instance.showOrHidePhase(RightPanelPhases.ThreadPanel);
+                            PosthogTrackers.trackInteraction("WebRoomHeaderButtonsThreadsButton", evt);
+                        }}
+                        aria-label={_t("common|threads")}
+                    >
+                        <ThreadsIcon />
+                    </IconButton>
+                </Tooltip>
+                {notificationsEnabled && (
+                    <Tooltip label={_t("notifications|enable_prompt_toast_title")}>
+                        <IconButton
+                            indicator={notificationLevelToIndicator(globalNotificationState.level)}
+                            onClick={(evt) => {
+                                evt.stopPropagation();
+                                RightPanelStore.instance.showOrHidePhase(RightPanelPhases.NotificationPanel);
+                            }}
+                            aria-label={_t("notifications|enable_prompt_toast_title")}
+                        >
+                            <NotificationsIcon />
+                        </IconButton>
+                    </Tooltip>
+                )}
+
+                <Tooltip label={_t("right_panel|room_summary_card|title")}>
+                    <IconButton
+                        onClick={(evt) => {
+                            evt.stopPropagation();
+                            RightPanelStore.instance.showOrHidePhase(RightPanelPhases.RoomSummary);
+                        }}
+                        aria-label={_t("right_panel|room_summary_card|title")}
+                    >
+                        <RoomInfoIcon />
+                    </IconButton>
+                </Tooltip>
+
                 {!isDirectMessage && (
                     <BodyText as="div" size="sm" weight="medium">
                         <FacePile
@@ -392,7 +392,7 @@ export default function RoomHeader({
                             viewUserOnClick={false}
                             tooltipLabel={_t("room|header_face_pile_tooltip")}
                             onClick={(e: ButtonEvent) => {
-                                RightPanelStore.instance.showOrHidePhase(RightPanelPhases.RoomMemberList);
+                                RightPanelStore.instance.showOrHidePhase(RightPanelPhases.MemberList);
                                 e.stopPropagation();
                             }}
                             aria-label={_t("common|n_members", { count: memberCount })}

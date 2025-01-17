@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -139,7 +139,7 @@ export function launchPollEditor(mxEvent: MatrixEvent, getRelationsForEvent?: Ge
 
 export default class MPollBody extends React.Component<IBodyProps, IState> {
     public static contextType = MatrixClientContext;
-    public declare context: React.ContextType<typeof MatrixClientContext>;
+    declare public context: React.ContextType<typeof MatrixClientContext>;
     private seenEventIds: string[] = []; // Events we have already seen
 
     public constructor(props: IBodyProps, context: React.ContextType<typeof MatrixClientContext>) {
@@ -383,7 +383,10 @@ function userResponseFromPollResponseEvent(event: MatrixEvent): UserVote {
 
 export function allVotes(voteRelations: Relations): Array<UserVote> {
     if (voteRelations) {
-        return voteRelations.getRelations().map(userResponseFromPollResponseEvent);
+        return voteRelations
+            .getRelations()
+            .filter((e) => !e.isRedacted())
+            .map(userResponseFromPollResponseEvent);
     } else {
         return [];
     }

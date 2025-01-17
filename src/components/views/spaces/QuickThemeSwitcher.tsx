@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -27,7 +27,7 @@ type Props = {
 const MATCH_SYSTEM_THEME_ID = "MATCH_SYSTEM_THEME_ID";
 
 const QuickThemeSwitcher: React.FC<Props> = ({ requestClose }) => {
-    const orderedThemes = useMemo(getOrderedThemes, []);
+    const orderedThemes = useMemo(() => getOrderedThemes(), []);
 
     const themeState = useTheme();
     const nonHighContrast = findNonHighContrastTheme(themeState.theme);

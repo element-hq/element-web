@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -11,7 +11,6 @@ import { MatrixClient, Device } from "matrix-js-sdk/src/matrix";
 import { SecretStorageKeyDescriptionAesV1, ServerSideSecretStorage } from "matrix-js-sdk/src/secret-storage";
 import { BootstrapCrossSigningOpts, CryptoApi, DeviceVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
-import { SdkContextClass } from "../../../src/contexts/SDKContext";
 import { accessSecretStorage } from "../../../src/SecurityManager";
 import { SetupEncryptionStore } from "../../../src/stores/SetupEncryptionStore";
 import { emitPromise, stubClient } from "../../test-utils";
@@ -21,7 +20,6 @@ jest.mock("../../../src/SecurityManager", () => ({
 }));
 
 describe("SetupEncryptionStore", () => {
-    const cachedPassword = "p4assword";
     let client: Mocked<MatrixClient>;
     let mockCrypto: Mocked<CryptoApi>;
     let mockSecretStorage: Mocked<ServerSideSecretStorage>;
@@ -37,6 +35,7 @@ describe("SetupEncryptionStore", () => {
             getDeviceVerificationStatus: jest.fn(),
             isDehydrationSupported: jest.fn().mockResolvedValue(false),
             startDehydration: jest.fn(),
+            getKeyBackupInfo: jest.fn().mockResolvedValue(null),
         } as unknown as Mocked<CryptoApi>;
         client.getCrypto.mockReturnValue(mockCrypto);
 
@@ -46,11 +45,6 @@ describe("SetupEncryptionStore", () => {
         Object.defineProperty(client, "secretStorage", { value: mockSecretStorage });
 
         setupEncryptionStore = new SetupEncryptionStore();
-        SdkContextClass.instance.accountPasswordStore.setPassword(cachedPassword);
-    });
-
-    afterEach(() => {
-        SdkContextClass.instance.accountPasswordStore.clearPassword();
     });
 
     describe("start", () => {
@@ -170,15 +164,9 @@ describe("SetupEncryptionStore", () => {
 
         await setupEncryptionStore.resetConfirm();
 
-        expect(mocked(accessSecretStorage)).toHaveBeenCalledWith(expect.any(Function), true);
-        expect(makeRequest).toHaveBeenCalledWith({
-            identifier: {
-                type: "m.id.user",
-                user: "@userId:matrix.org",
-            },
-            password: cachedPassword,
-            type: "m.login.password",
-            user: "@userId:matrix.org",
+        expect(mocked(accessSecretStorage)).toHaveBeenCalledWith(expect.any(Function), {
+            forceReset: true,
+            resetCrossSigning: true,
         });
     });
 });

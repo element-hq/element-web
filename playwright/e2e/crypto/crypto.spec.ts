@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022-2024 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -11,6 +11,7 @@ import { expect, test } from "../../element-web-test";
 import { autoJoin, copyAndContinue, createSharedRoomWithUser, enableKeyBackup, verify } from "./utils";
 import { Bot } from "../../pages/bot";
 import { ElementAppPage } from "../../pages/ElementAppPage";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 const checkDMRoom = async (page: Page) => {
     const body = page.locator(".mx_RoomView_body");
@@ -67,6 +68,7 @@ const bobJoin = async (page: Page, bob: Bot) => {
 };
 
 test.describe("Cryptography", function () {
+    test.skip(isDendrite, "Dendrite lacks support for MSC3967 so requires additional auth here");
     test.use({
         displayName: "Alice",
         botCreateOpts: {
@@ -81,7 +83,7 @@ test.describe("Cryptography", function () {
              * Verify that the `m.cross_signing.${keyType}` key is available on the account data on the server
              * @param keyType
              */
-            async function verifyKey(app: ElementAppPage, keyType: string) {
+            async function verifyKey(app: ElementAppPage, keyType: "master" | "self_signing" | "user_signing") {
                 const accountData: { encrypted: Record<string, Record<string, string>> } = await app.client.evaluate(
                     (cli, keyType) => cli.getAccountDataFromServer(`m.cross_signing.${keyType}`),
                     keyType,
@@ -204,30 +206,29 @@ test.describe("Cryptography", function () {
         await expect(page.locator(".mx_Dialog")).toHaveCount(1);
     });
 
-    test("creating a DM should work, being e2e-encrypted / user verification", async ({
-        page,
-        app,
-        bot: bob,
-        user: aliceCredentials,
-    }) => {
-        await app.client.bootstrapCrossSigning(aliceCredentials);
-        await startDMWithBob(page, bob);
-        // send first message
-        await page.getByRole("textbox", { name: "Send a message…" }).fill("Hey!");
-        await page.getByRole("textbox", { name: "Send a message…" }).press("Enter");
-        await checkDMRoom(page);
-        const bobRoomId = await bobJoin(page, bob);
-        await testMessages(page, bob, bobRoomId);
-        await verify(app, bob);
+    test(
+        "creating a DM should work, being e2e-encrypted / user verification",
+        { tag: "@screenshot" },
+        async ({ page, app, bot: bob, user: aliceCredentials }) => {
+            await app.client.bootstrapCrossSigning(aliceCredentials);
+            await startDMWithBob(page, bob);
+            // send first message
+            await page.getByRole("textbox", { name: "Send a message…" }).fill("Hey!");
+            await page.getByRole("textbox", { name: "Send a message…" }).press("Enter");
+            await checkDMRoom(page);
+            const bobRoomId = await bobJoin(page, bob);
+            await testMessages(page, bob, bobRoomId);
+            await verify(app, bob);
 
-        // Assert that verified icon is rendered
-        await page.getByTestId("base-card-back-button").click();
-        await page.getByLabel("Room info").nth(1).click();
-        await expect(page.locator('.mx_RoomSummaryCard_badges [data-kind="green"]')).toContainText("Encrypted");
+            // Assert that verified icon is rendered
+            await page.getByTestId("base-card-back-button").click();
+            await page.getByLabel("Room info").nth(1).click();
+            await expect(page.locator('.mx_RoomSummaryCard_badges [data-kind="green"]')).toContainText("Encrypted");
 
-        // Take a snapshot of RoomSummaryCard with a verified E2EE icon
-        await expect(page.locator(".mx_RightPanel")).toMatchScreenshot("RoomSummaryCard-with-verified-e2ee.png");
-    });
+            // Take a snapshot of RoomSummaryCard with a verified E2EE icon
+            await expect(page.locator(".mx_RightPanel")).toMatchScreenshot("RoomSummaryCard-with-verified-e2ee.png");
+        },
+    );
 
     test("should allow verification when there is no existing DM", async ({
         page,

@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -189,8 +189,7 @@ describe("MemberListStore", () => {
         });
 
         it("does not use lazy loading on encrypted rooms", async () => {
-            client.isRoomEncrypted = jest.fn();
-            mocked(client.isRoomEncrypted).mockReturnValue(true);
+            jest.spyOn(client.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
 
             const { joined } = await store.loadMemberList(roomId);
             expect(joined).toEqual([room.getMember(alice)]);
@@ -202,6 +201,7 @@ describe("MemberListStore", () => {
 function addEventToRoom(room: Room, ev: MatrixEvent) {
     room.getLiveTimeline().addEvent(ev, {
         toStartOfTimeline: false,
+        addToState: true,
     });
 }
 

@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -22,8 +22,6 @@ import { StickerEventPreview } from "./previews/StickerEventPreview";
 import { ReactionEventPreview } from "./previews/ReactionEventPreview";
 import { UPDATE_EVENT } from "../AsyncStore";
 import { IPreview } from "./previews/IPreview";
-import { VoiceBroadcastInfoEventType } from "../../voice-broadcast";
-import { VoiceBroadcastPreview } from "./previews/VoiceBroadcastPreview";
 import shouldHideEvent from "../../shouldHideEvent";
 
 // Emitted event for when a room's preview has changed. First argument will the room for which
@@ -68,10 +66,6 @@ const PREVIEWS: Record<
     [M_POLL_START.altName]: {
         isState: false,
         previewer: new PollStartEventPreview(),
-    },
-    [VoiceBroadcastInfoEventType]: {
-        isState: true,
-        previewer: new VoiceBroadcastPreview(),
     },
 };
 

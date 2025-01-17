@@ -238,7 +238,6 @@
         "oidc": {
             "error_title": "We couldn't log you in",
             "generic_auth_error": "Something went wrong during authentication. Go to the sign in page and try again.",
-            "logout_redirect_warning": "You will be redirected to your server's authentication provider to complete sign out.",
             "missing_or_invalid_stored_state": "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again."
         },
         "password_field_keep_going_prompt": "Keep going…",
@@ -398,7 +397,7 @@
     },
     "bug_reporting": {
         "additional_context": "If there is additional context that would help in analysing the issue, such as what you were doing at the time, room IDs, user IDs, etc., please include those things here.",
-        "before_submitting": "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.",
+        "before_submitting": "We recommend <a>creating a GitHub issue</a> to ensure that your report is reviewed.",
         "collecting_information": "Collecting app version information",
         "collecting_logs": "Collecting logs",
         "create_new_issue": "Please <newIssueLink>create a new issue</newIssueLink> on GitHub so that we can investigate this bug.",
@@ -452,7 +451,6 @@
             "one": "and one other...",
             "other": "and %(count)s others..."
         },
-        "android": "Android",
         "appearance": "Appearance",
         "application": "Application",
         "are_you_sure": "Are you sure?",
@@ -492,7 +490,6 @@
         "identity_server": "Identity server",
         "image": "Image",
         "integration_manager": "Integration manager",
-        "ios": "iOS",
         "joined": "Joined",
         "labs": "Labs",
         "legal": "Legal",
@@ -542,6 +539,7 @@
         "qr_code": "QR Code",
         "random": "Random",
         "reactions": "Reactions",
+        "recommended": "Recommended",
         "report_a_bug": "Report a bug",
         "room": "Room",
         "room_name": "Room name",
@@ -586,8 +584,7 @@
         "video": "Video",
         "video_room": "Video room",
         "view_message": "View message",
-        "warning": "Warning",
-        "welcome": "Welcome"
+        "warning": "Warning"
     },
     "composer": {
         "autocomplete": {
@@ -882,14 +879,18 @@
             "title": "Destroy cross-signing keys?",
             "warning": "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from."
         },
+        "enter_recovery_key": "Enter recovery key",
         "event_shield_reason_authenticity_not_guaranteed": "The authenticity of this encrypted message can't be guaranteed on this device.",
         "event_shield_reason_mismatched_sender_key": "Encrypted by an unverified session",
         "event_shield_reason_unknown_device": "Encrypted by an unknown or deleted device.",
         "event_shield_reason_unsigned_device": "Encrypted by a device not verified by its owner.",
         "event_shield_reason_unverified_identity": "Encrypted by an unverified user.",
         "export_unsupported": "Your browser does not support the required cryptography extensions",
+        "forgot_recovery_key": "Forgot recovery key?",
         "import_invalid_keyfile": "Not a valid %(brand)s keyfile",
         "import_invalid_passphrase": "Authentication check failed: incorrect password?",
+        "key_storage_out_of_sync": "Your key storage is out of sync.",
+        "key_storage_out_of_sync_description": "Confirm your recovery key to maintain access to your key storage and message history.",
         "messages_not_secure": {
             "cause_1": "Your homeserver",
             "cause_2": "The homeserver the user you're verifying is connected to",
@@ -905,6 +906,8 @@
             "warning": "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings."
         },
         "not_supported": "<not supported>",
+        "pinned_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) identity appears to have changed. <a>Learn more</a>",
+        "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>'s identity appears to have changed. <a>Learn more</a>",
         "recovery_method_removed": {
             "description_1": "This session has detected that your Security Phrase and key for Secure Messages have been removed.",
             "description_2": "If you did this accidentally, you can setup Secure Messages on this session which will re-encrypt this session's message history with a new recovery method.",
@@ -912,6 +915,9 @@
             "warning": "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings."
         },
         "reset_all_button": "Forgotten or lost all recovery methods? <a>Reset all</a>",
+        "set_up_recovery": "Set up recovery",
+        "set_up_recovery_later": "Not now",
+        "set_up_recovery_toast_description": "Generate a recovery key that can be used to restore your encrypted message history in case you lose access to your devices.",
         "set_up_toast_description": "Safeguard against losing access to encrypted messages & data",
         "set_up_toast_title": "Set up Secure Backup",
         "setup_secure_backup": {
@@ -920,7 +926,6 @@
         },
         "udd": {
             "interactive_verification_button": "Interactively verify by emoji",
-            "manual_verification_button": "Manually verify by text",
             "other_ask_verify_text": "Ask this user to verify their session, or manually verify it below.",
             "other_new_session_text": "%(name)s (%(userId)s) signed in to a new session without verifying it:",
             "own_ask_verify_text": "Verify your other session using one of the options below.",
@@ -955,12 +960,6 @@
             "incoming_sas_dialog_waiting": "Waiting for partner to confirm…",
             "incoming_sas_user_dialog_text_1": "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.",
             "incoming_sas_user_dialog_text_2": "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.",
-            "manual_device_verification_device_id_label": "Session ID",
-            "manual_device_verification_device_key_label": "Session key",
-            "manual_device_verification_device_name_label": "Session name",
-            "manual_device_verification_footer": "If they don't match, the security of your communication may be compromised.",
-            "manual_device_verification_self_text": "Confirm by comparing the following with the User Settings in your other session:",
-            "manual_device_verification_user_text": "Confirm this user's session by comparing the following with their User Settings:",
             "no_key_or_device": "It looks like you don't have a Security Key or any other devices you can verify against.  This device will not be able to access old encrypted messages. In order to verify your identity on this device, you'll need to reset your verification keys.",
             "no_support_qr_emoji": "The device you are trying to verify doesn't support scanning a QR code or emoji verification, which is what %(brand)s supports. Try with a different client.",
             "other_party_cancelled": "The other party cancelled the verification.",
@@ -1000,7 +999,7 @@
             "unverified_sessions_toast_description": "Review to ensure your account is safe",
             "unverified_sessions_toast_reject": "Later",
             "unverified_sessions_toast_title": "You have unverified sessions",
-            "verification_description": "Verify your identity to access encrypted messages and prove your identity to others.",
+            "verification_description": "Verify your identity to access encrypted messages and prove your identity to others. If you also use a mobile device, please open the app there before you proceed.",
             "verification_dialog_title_device": "Verify other device",
             "verification_dialog_title_user": "Verification Request",
             "verification_skip_warning": "Without verifying, you won't have access to all your messages and may appear as untrusted to others.",
@@ -1085,10 +1084,6 @@
     },
     "error_user_not_logged_in": "User is not logged in",
     "event_preview": {
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s ended a voice broadcast",
-            "you": "You ended a voice broadcast"
-        },
         "m.call.answer": {
             "dm": "Call in progress",
             "user": "%(senderName)s joined the call",
@@ -1467,8 +1462,6 @@
         "notification_settings_beta_caption": "Introducing a simpler way to change your notification settings. Customize your %(brand)s, just the way you like.",
         "notification_settings_beta_title": "Notification Settings",
         "notifications": "Enable the notifications panel in the room header",
-        "oidc_native_flow": "OIDC native authentication",
-        "oidc_native_flow_description": "⚠ WARNING: Experimental. Use OIDC native authentication when supported by the server.",
         "release_announcement": "Release announcement",
         "render_reaction_images": "Render custom images in reactions",
         "render_reaction_images_description": "Sometimes referred to as \"custom emojis\".",
@@ -1489,8 +1482,6 @@
         "video_rooms_faq2_answer": "Yes, the chat timeline is displayed alongside the video.",
         "video_rooms_faq2_question": "Can I use text chat alongside the video call?",
         "video_rooms_feedbackSubheading": "Thank you for trying the beta, please go into as much detail as you can so we can improve it.",
-        "voice_broadcast": "Voice broadcast",
-        "voice_broadcast_force_small_chunks": "Force 15s voice broadcast chunk length",
         "wysiwyg_composer": "Rich text editor"
     },
     "labs_mjolnir": {
@@ -1590,9 +1581,14 @@
         "toggle_attribution": "Toggle attribution"
     },
     "member_list": {
+        "count": {
+            "one": "%(count)s Member",
+            "other": "%(count)s Members"
+        },
         "filter_placeholder": "Filter room members",
         "invite_button_no_perms_tooltip": "You do not have permission to invite users",
-        "invited_list_heading": "Invited",
+        "invited_label": "Invited",
+        "no_matches": "No matches",
         "power_label": "%(userName)s (power %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Room members",
@@ -1636,65 +1632,18 @@
         "mute_description": "You won't get any notifications"
     },
     "notifier": {
-        "io.element.voice_broadcast_chunk": "%(senderName)s started a voice broadcast",
         "m.key.verification.request": "%(name)s is requesting verification"
     },
     "onboarding": {
-        "apple_trademarks": "App Store® and the Apple logo® are trademarks of Apple Inc.",
-        "community_messaging_action": "Find your people",
-        "community_messaging_description": "Keep ownership and control of community discussion.\nScale to support millions, with powerful moderation and interoperability.",
-        "community_messaging_title": "Community ownership",
-        "complete_these": "Complete these to get the most out of %(brand)s",
         "create_room": "Create a Group Chat",
-        "download_app": "Download %(brand)s",
-        "download_app_action": "Download apps",
-        "download_app_description": "Don’t miss a thing by taking %(brand)s with you",
-        "download_app_store": "Download on the App Store",
-        "download_brand": "Download %(brand)s",
-        "download_brand_desktop": "Download %(brand)s Desktop",
-        "download_f_droid": "Get it on F-Droid",
-        "download_google_play": "Get it on Google Play",
-        "enable_notifications": "Turn on desktop notifications",
-        "enable_notifications_action": "Open settings",
-        "enable_notifications_description": "Don’t miss a reply or important message",
         "explore_rooms": "Explore Public Rooms",
-        "find_community_members": "Find and invite your community members",
-        "find_coworkers": "Find and invite your co-workers",
-        "find_friends": "Find and invite your friends",
-        "find_friends_action": "Find friends",
-        "find_friends_description": "It’s what you’re here for, so lets get to it",
-        "find_people": "Find people",
-        "free_e2ee_messaging_unlimited_voip": "With free end-to-end encrypted messaging, and unlimited voice and video calls, %(brand)s is a great way to stay in touch.",
-        "get_stuff_done": "Get stuff done by finding your teammates",
-        "google_trademarks": "Google Play and the Google Play logo are trademarks of Google LLC.",
         "has_avatar_label": "Great, that'll help people know it's you",
         "intro_byline": "Own your conversations.",
         "intro_welcome": "Welcome to %(appName)s",
         "no_avatar_label": "Add a photo so people know it's you.",
-        "only_n_steps_to_go": {
-            "one": "Only %(count)s step to go",
-            "other": "Only %(count)s steps to go"
-        },
-        "personal_messaging_action": "Start your first chat",
-        "personal_messaging_title": "Secure messaging for friends and family",
-        "qr_or_app_links": "%(qrCode)s or %(appLinks)s",
         "send_dm": "Send a Direct Message",
-        "set_up_profile": "Set up your profile",
-        "set_up_profile_action": "Your profile",
-        "set_up_profile_description": "Make sure people know it’s really you",
-        "use_case_community_messaging": "Online community members",
-        "use_case_heading1": "You're in",
-        "use_case_heading2": "Who will you chat to the most?",
-        "use_case_heading3": "We'll help you get connected.",
-        "use_case_personal_messaging": "Friends and family",
-        "use_case_work_messaging": "Coworkers and teams",
         "welcome_detail": "Now, let's help you get started",
-        "welcome_to_brand": "Welcome to %(brand)s",
-        "welcome_user": "Welcome %(name)s",
-        "work_messaging_action": "Find your co-workers",
-        "work_messaging_title": "Secure messaging for work",
-        "you_did_it": "You did it!",
-        "you_made_it": "You made it!"
+        "welcome_user": "Welcome %(name)s"
     },
     "pill": {
         "permalink_other_room": "Message in %(room)s",
@@ -1746,7 +1695,6 @@
         "custom_level": "Custom level",
         "default": "Default",
         "label": "Power level",
-        "mod": "Mod",
         "moderator": "Moderator",
         "restricted": "Restricted"
     },
@@ -2251,7 +2199,6 @@
             "error_unbanning": "Failed to unban",
             "events_default": "Send messages",
             "invite": "Invite users",
-            "io.element.voice_broadcast_info": "Voice broadcasts",
             "kick": "Remove users",
             "m.call": "Start %(brand)s calls",
             "m.call.member": "Join %(brand)s calls",
@@ -2474,6 +2421,36 @@
         "emoji_autocomplete": "Enable Emoji suggestions while typing",
         "enable_markdown": "Enable Markdown",
         "enable_markdown_description": "Start messages with <code>/plain</code> to send without markdown.",
+        "encryption": {
+            "device_not_verified_button": "Verify this device",
+            "device_not_verified_description": "You need to verify this device in order to view your encryption settings.",
+            "device_not_verified_title": "Device not verified",
+            "dialog_title": "<strong>Settings:</strong> Encryption",
+            "recovery": {
+                "change_recovery_confirm_button": "Confirm new recovery key",
+                "change_recovery_confirm_description": "Enter your new recovery key below to finish. Your old one will no longer work.",
+                "change_recovery_confirm_title": "Enter your new recovery key",
+                "change_recovery_key": "Change recovery key",
+                "change_recovery_key_description": "Write down this new recovery key somewhere safe. Then click Continue to confirm the change.",
+                "change_recovery_key_title": "Change recovery key?",
+                "description": "Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.",
+                "enter_key_error": "The recovery key you entered is not correct.",
+                "enter_recovery_key": "Enter recovery key",
+                "key_storage_warning": "Your key storage is out of sync. Click the button below to fix the problem.",
+                "save_key_description": "Do not share this with anyone!",
+                "save_key_title": "Recovery key",
+                "set_up_recovery": "Set up recovery",
+                "set_up_recovery_confirm_button": "Finish set up",
+                "set_up_recovery_confirm_description": "Enter the recovery key shown on the previous screen to finish setting up recovery.",
+                "set_up_recovery_confirm_title": "Enter your recovery key to confirm",
+                "set_up_recovery_description": "Your key storage is protected by a recovery key. If you need a new recovery key after setup, you can recreate it by selecting ‘%(changeRecoveryKeyButton)s’.",
+                "set_up_recovery_save_key_description": "Write down this recovery key somewhere safe, like a password manager, encrypted note, or a physical safe.",
+                "set_up_recovery_save_key_title": "Save your recovery key somewhere safe",
+                "set_up_recovery_secondary_description": "After clicking continue, we’ll generate a recovery key for you.",
+                "title": "Recovery"
+            },
+            "title": "Encryption"
+        },
         "general": {
             "account_management_section": "Account management",
             "account_section": "Account",
@@ -2699,7 +2676,6 @@
             "room_directory_heading": "Room directory",
             "room_list_heading": "Room list",
             "show_avatars_pills": "Show avatars in user, room and event mentions",
-            "show_checklist_shortcuts": "Show shortcut to welcome checklist above the room list",
             "show_polls_button": "Show polls button",
             "surround_text": "Surround selected text when typing special characters",
             "time_heading": "Displaying time",
@@ -2833,6 +2809,7 @@
             "inactive_sessions_list_description": "Consider signing out from old sessions (%(inactiveAgeDays)s days or older) you don't use anymore.",
             "ip": "IP address",
             "last_activity": "Last activity",
+            "manage": "Manage this session",
             "mobile_session": "Mobile session",
             "n_sessions_selected": {
                 "one": "%(count)s session selected",
@@ -2950,7 +2927,7 @@
         "warning": "<w>WARNING:</w> <description/>"
     },
     "share": {
-        "link_title": "Link to room",
+        "link_copied": "Link copied",
         "permalink_message": "Link to selected message",
         "permalink_most_recent": "Link to most recent message",
         "share_call": "Conference invite link",
@@ -3042,13 +3019,6 @@
         "upgraderoom": "Upgrades a room to a new version",
         "upgraderoom_permission_error": "You do not have the required permissions to use this command.",
         "usage": "Usage",
-        "verify": "Verifies a user, session, and pubkey tuple",
-        "verify_mismatch": "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!",
-        "verify_nop": "Session already verified!",
-        "verify_nop_warning_mismatch": "WARNING: session already verified, but keys do NOT MATCH!",
-        "verify_success_description": "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.",
-        "verify_success_title": "Verified key",
-        "verify_unknown_pair": "Unknown (user, session) pair: (%(userId)s, %(deviceId)s)",
         "view": "Views room with given address",
         "whois": "Displays information about a user"
     },
@@ -3085,7 +3055,6 @@
         "invite": "Invite people",
         "invite_description": "Invite with email or username",
         "invite_link": "Share invite link",
-        "invite_this_space": "Invite to this space",
         "joining_space": "Joining",
         "landing_welcome": "Welcome to <name/>",
         "leave_dialog_action": "Leave space",
@@ -3285,10 +3254,6 @@
         "error_rendering_message": "Can't load this message",
         "historical_messages_unavailable": "You can't see earlier messages",
         "in_room_name": " in <strong>%(room)s</strong>",
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s ended a <a>voice broadcast</a>",
-            "you": "You ended a <a>voice broadcast</a>"
-        },
         "io.element.widgets.layout": "%(senderName)s has updated the room layout",
         "late_event_separator": "Originally sent %(dateTime)s",
         "load_error": {
@@ -3742,6 +3707,7 @@
         "error_files_too_large": "These files are <b>too large</b> to upload. The file size limit is %(limit)s.",
         "error_some_files_too_large": "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.",
         "error_title": "Upload Error",
+        "not_image": "The file you have chosen is not a valid image file.",
         "title": "Upload files",
         "title_progress": "Upload files (%(current)s of %(total)s)",
         "upload_all_button": "Upload all",
@@ -3837,38 +3803,6 @@
         "switch_theme_dark": "Switch to dark mode",
         "switch_theme_light": "Switch to light mode"
     },
-    "voice_broadcast": {
-        "30s_backward": "30s backward",
-        "30s_forward": "30s forward",
-        "action": "Voice broadcast",
-        "buffering": "Buffering…",
-        "confirm_listen_affirm": "Yes, end my recording",
-        "confirm_listen_description": "If you start listening to this live broadcast, your current live broadcast recording will be ended.",
-        "confirm_listen_title": "Listen to live broadcast?",
-        "confirm_stop_affirm": "Yes, stop broadcast",
-        "confirm_stop_description": "Are you sure you want to stop your live broadcast? This will end the broadcast and the full recording will be available in the room.",
-        "confirm_stop_title": "Stop live broadcasting?",
-        "connection_error": "Connection error - Recording paused",
-        "failed_already_recording_description": "You are already recording a voice broadcast. Please end your current voice broadcast to start a new one.",
-        "failed_already_recording_title": "Can't start a new voice broadcast",
-        "failed_decrypt": "Unable to decrypt voice broadcast",
-        "failed_generic": "Unable to play this voice broadcast",
-        "failed_insufficient_permission_description": "You don't have the required permissions to start a voice broadcast in this room. Contact a room administrator to upgrade your permissions.",
-        "failed_insufficient_permission_title": "Can't start a new voice broadcast",
-        "failed_no_connection_description": "Unfortunately we're unable to start a recording right now. Please try again later.",
-        "failed_no_connection_title": "Connection error",
-        "failed_others_already_recording_description": "Someone else is already recording a voice broadcast. Wait for their voice broadcast to end to start a new one.",
-        "failed_others_already_recording_title": "Can't start a new voice broadcast",
-        "go_live": "Go live",
-        "live": "Live",
-        "pause": "pause voice broadcast",
-        "play": "play voice broadcast",
-        "resume": "resume voice broadcast"
-    },
-    "voice_message": {
-        "cant_start_broadcast_description": "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.",
-        "cant_start_broadcast_title": "Can't start voice message"
-    },
     "voip": {
         "already_in_call": "Already in call",
         "already_in_call_person": "You're already in a call with this person.",
@@ -3888,7 +3822,6 @@
         "camera_disabled": "Your camera is turned off",
         "camera_enabled": "Your camera is still enabled",
         "cannot_call_yourself_description": "You cannot place a call with yourself.",
-        "change_input_device": "Change input device",
         "close_lobby": "Close lobby",
         "connecting": "Connecting",
         "connection_lost": "Connectivity to the server has been lost",
@@ -3907,8 +3840,6 @@
         "enable_camera": "Turn on camera",
         "enable_microphone": "Unmute microphone",
         "expand": "Return to call",
-        "failed_call_live_broadcast_description": "You can’t start a call as you are currently recording a live broadcast. Please end your live broadcast in order to start a call.",
-        "failed_call_live_broadcast_title": "Can’t start a call",
         "get_call_link": "Share call link",
         "hangup": "Hangup",
         "hide_sidebar_button": "Hide sidebar",

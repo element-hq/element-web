@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -12,8 +12,10 @@ import { expect } from "../../element-web-test";
 import { ElementAppPage } from "../../pages/ElementAppPage";
 import { Bot } from "../../pages/bot";
 import { test } from ".";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
-test.describe("Read receipts", () => {
+test.describe("Read receipts", { tag: "@mergequeue" }, () => {
+    test.skip(isDendrite, "due to Dendrite bug https://github.com/element-hq/dendrite/issues/2970");
     test.use({
         displayName: "Mae",
         botCreateOpts: { displayName: "Other User" },
@@ -100,12 +102,7 @@ test.describe("Read receipts", () => {
         await page.goto(`/#/room/${selectedRoomId}`);
     });
 
-    // Disabled due to flakiness: https://github.com/element-hq/element-web/issues/26895
-    test.skip("With sync accumulator, considers main thread and unthreaded receipts #24629", async ({
-        page,
-        app,
-        bot,
-    }) => {
+    test("With sync accumulator, considers main thread and unthreaded receipts #24629", async ({ page, app, bot }) => {
         // Details are in https://github.com/vector-im/element-web/issues/24629
         // This proves we've fixed one of the "stuck unreads" issues.
 
@@ -196,7 +193,7 @@ test.describe("Read receipts", () => {
         await sendThreadedReadReceipt(app, thread1a, main1);
 
         // Then the room has only one unread - the one in the thread
-        await util.goTo(otherRoomName);
+        await util.goTo({ name: otherRoomName, roomId: otherRoomId });
         await util.assertUnreadThread("Message 1");
     });
 
@@ -214,7 +211,7 @@ test.describe("Read receipts", () => {
 
         // Then the room has no unreads
         await expect(page.getByLabel(`${otherRoomName}`)).toBeVisible();
-        await util.goTo(otherRoomName);
+        await util.goTo({ name: otherRoomName, roomId: otherRoomId });
         await util.assertReadThread("Message 1");
     });
 
@@ -239,7 +236,7 @@ test.describe("Read receipts", () => {
         // receipt is for a later event. The room should therefore be
         // read, and the thread unread.
         await expect(page.getByLabel(`${otherRoomName}`)).toBeVisible();
-        await util.goTo(otherRoomName);
+        await util.goTo({ name: otherRoomName, roomId: otherRoomId });
         await util.assertUnreadThread("Message 1");
     });
 

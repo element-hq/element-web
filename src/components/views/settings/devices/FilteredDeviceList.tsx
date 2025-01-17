@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -41,10 +41,12 @@ interface Props {
     setSelectedDeviceIds: (deviceIds: ExtendedDevice["device_id"][]) => void;
     supportsMSC3881?: boolean | undefined;
     /**
-     * Only allow sessions to be signed out individually
+     * If the user's account is managed externally then sessions must be signed out individually
      * Removes checkboxes and multi selection header
+     * Removes session info as that can be seen in the account management
+     * Changes sign out button to be a manage button
      */
-    disableMultipleSignout?: boolean;
+    delegatedAuthAccountUrl?: string;
 }
 
 const isDeviceSelected = (
@@ -172,6 +174,7 @@ const DeviceListItem: React.FC<{
     setPushNotifications: (deviceId: string, enabled: boolean) => Promise<void>;
     supportsMSC3881?: boolean | undefined;
     isSelectDisabled?: boolean;
+    delegatedAuthAccountUrl?: string;
 }> = ({
     device,
     pusher,
@@ -187,6 +190,7 @@ const DeviceListItem: React.FC<{
     toggleSelected,
     supportsMSC3881,
     isSelectDisabled,
+    delegatedAuthAccountUrl,
 }) => {
     const tileContent = (
         <>
@@ -222,6 +226,7 @@ const DeviceListItem: React.FC<{
                     setPushNotifications={setPushNotifications}
                     supportsMSC3881={supportsMSC3881}
                     className="mx_FilteredDeviceList_deviceDetails"
+                    delegatedAuthAccountUrl={delegatedAuthAccountUrl}
                 />
             )}
         </li>
@@ -250,7 +255,7 @@ export const FilteredDeviceList = forwardRef(
             setPushNotifications,
             setSelectedDeviceIds,
             supportsMSC3881,
-            disableMultipleSignout,
+            delegatedAuthAccountUrl,
         }: Props,
         ref: ForwardedRef<HTMLDivElement>,
     ) => {
@@ -311,7 +316,7 @@ export const FilteredDeviceList = forwardRef(
                     selectedDeviceCount={selectedDeviceIds.length}
                     isAllSelected={isAllSelected}
                     toggleSelectAll={toggleSelectAll}
-                    isSelectDisabled={disableMultipleSignout}
+                    isSelectDisabled={!!delegatedAuthAccountUrl}
                 >
                     {selectedDeviceIds.length ? (
                         <>
@@ -361,7 +366,7 @@ export const FilteredDeviceList = forwardRef(
                             isExpanded={expandedDeviceIds.includes(device.device_id)}
                             isSigningOut={signingOutDeviceIds.includes(device.device_id)}
                             isSelected={isDeviceSelected(device.device_id, selectedDeviceIds)}
-                            isSelectDisabled={disableMultipleSignout}
+                            isSelectDisabled={!!delegatedAuthAccountUrl}
                             onDeviceExpandToggle={() => onDeviceExpandToggle(device.device_id)}
                             onSignOutDevice={() => onSignOutDevices([device.device_id])}
                             saveDeviceName={(deviceName: string) => saveDeviceName(device.device_id, deviceName)}
@@ -373,6 +378,7 @@ export const FilteredDeviceList = forwardRef(
                             setPushNotifications={setPushNotifications}
                             toggleSelected={() => toggleSelection(device.device_id)}
                             supportsMSC3881={supportsMSC3881}
+                            delegatedAuthAccountUrl={delegatedAuthAccountUrl}
                         />
                     ))}
                 </ol>

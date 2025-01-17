@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -34,11 +34,9 @@ import {
     hideToast as hideUnverifiedSessionsToast,
     showToast as showUnverifiedSessionsToast,
 } from "./toasts/UnverifiedSessionToast";
-import { accessSecretStorage, isSecretStorageBeingAccessed } from "./SecurityManager";
-import { isSecureBackupRequired } from "./utils/WellKnownUtils";
+import { isSecretStorageBeingAccessed } from "./SecurityManager";
 import { ActionPayload } from "./dispatcher/payloads";
 import { Action } from "./dispatcher/actions";
-import { isLoggedIn } from "./utils/login";
 import SdkConfig from "./SdkConfig";
 import PlatformPeg from "./PlatformPeg";
 import { recordClientInformation, removeClientInformation } from "./utils/device/clientInformation";
@@ -46,6 +44,7 @@ import SettingsStore, { CallbackFn } from "./settings/SettingsStore";
 import { UIFeature } from "./settings/UIFeature";
 import { isBulkUnverifiedDeviceReminderSnoozed } from "./utils/device/snoozeBulkUnverifiedDeviceReminder";
 import { getUserDeviceIds } from "./utils/crypto/deviceInfo";
+import { asyncSomeParallel } from "./utils/arrays.ts";
 
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
 
@@ -229,24 +228,30 @@ export default class DeviceListener {
     private async getKeyBackupInfo(): Promise<KeyBackupInfo | null> {
         if (!this.client) return null;
         const now = new Date().getTime();
+        const crypto = this.client.getCrypto();
+        if (!crypto) return null;
+
         if (
             !this.keyBackupInfo ||
             !this.keyBackupFetchedAt ||
             this.keyBackupFetchedAt < now - KEY_BACKUP_POLL_INTERVAL
         ) {
-            this.keyBackupInfo = await this.client.getKeyBackupVersion();
+            this.keyBackupInfo = await crypto.getKeyBackupInfo();
             this.keyBackupFetchedAt = now;
         }
         return this.keyBackupInfo;
     }
 
-    private shouldShowSetupEncryptionToast(): boolean {
+    private async shouldShowSetupEncryptionToast(): Promise<boolean> {
         // If we're in the middle of a secret storage operation, we're likely
         // modifying the state involved here, so don't add new toasts to setup.
         if (isSecretStorageBeingAccessed()) return false;
         // Show setup toasts once the user is in at least one encrypted room.
         const cli = this.client;
-        return cli?.getRooms().some((r) => cli.isRoomEncrypted(r.roomId)) ?? false;
+        const cryptoApi = cli?.getCrypto();
+        if (!cli || !cryptoApi) return false;
+
+        return await asyncSomeParallel(cli.getRooms(), ({ roomId }) => cryptoApi.isEncryptionEnabledInRoom(roomId));
     }
 
     private recheck(): void {
@@ -276,34 +281,56 @@ export default class DeviceListener {
 
         const crossSigningReady = await crypto.isCrossSigningReady();
         const secretStorageReady = await crypto.isSecretStorageReady();
-        const allSystemsReady = crossSigningReady && secretStorageReady;
+        const crossSigningStatus = await crypto.getCrossSigningStatus();
+        const allCrossSigningSecretsCached =
+            crossSigningStatus.privateKeysCachedLocally.masterKey &&
+            crossSigningStatus.privateKeysCachedLocally.selfSigningKey &&
+            crossSigningStatus.privateKeysCachedLocally.userSigningKey;
+
+        const defaultKeyId = await cli.secretStorage.getDefaultKeyId();
+
+        const isCurrentDeviceTrusted =
+            crossSigningReady &&
+            Boolean(
+                (await crypto.getDeviceVerificationStatus(cli.getSafeUserId(), cli.deviceId!))?.crossSigningVerified,
+            );
+
+        const allSystemsReady = crossSigningReady && secretStorageReady && allCrossSigningSecretsCached;
         await this.reportCryptoSessionStateToAnalytics(cli);
 
         if (this.dismissedThisDeviceToast || allSystemsReady) {
             hideSetupEncryptionToast();
 
             this.checkKeyBackupStatus();
-        } else if (this.shouldShowSetupEncryptionToast()) {
+        } else if (await this.shouldShowSetupEncryptionToast()) {
             // make sure our keys are finished downloading
             await crypto.getUserDeviceInfo([cli.getSafeUserId()]);
 
-            // cross signing isn't enabled - nag to enable it
-            // There are 2 different toasts for:
-            if (!(await crypto.getCrossSigningKeyId()) && (await crypto.userHasCrossSigningKeys())) {
-                // Cross-signing on account but this device doesn't trust the master key (verify this session)
+            if (!crossSigningReady) {
+                // This account is legacy and doesn't have cross-signing set up at all.
+                // Prompt the user to set it up.
+                showSetupEncryptionToast(SetupKind.SET_UP_ENCRYPTION);
+            } else if (!isCurrentDeviceTrusted) {
+                // cross signing is ready but the current device is not trusted: prompt the user to verify
                 showSetupEncryptionToast(SetupKind.VERIFY_THIS_SESSION);
-                this.checkKeyBackupStatus();
+            } else if (!allCrossSigningSecretsCached) {
+                // cross signing ready & device trusted, but we are missing secrets from our local cache.
+                // prompt the user to enter their recovery key.
+                showSetupEncryptionToast(SetupKind.KEY_STORAGE_OUT_OF_SYNC);
+            } else if (defaultKeyId === null) {
+                // the user just hasn't set up 4S yet: prompt them to do so
+                showSetupEncryptionToast(SetupKind.SET_UP_RECOVERY);
             } else {
-                // No cross-signing or key backup on account (set up encryption)
-                await cli.waitForClientWellKnown();
-                if (isSecureBackupRequired(cli) && isLoggedIn()) {
-                    // If we're meant to set up, and Secure Backup is required,
-                    // trigger the flow directly without a toast once logged in.
-                    hideSetupEncryptionToast();
-                    accessSecretStorage();
-                } else {
-                    showSetupEncryptionToast(SetupKind.SET_UP_ENCRYPTION);
-                }
+                // some other condition... yikes! Show the 'set up encryption' toast: this is what we previously did
+                // in 'other' situations. Possibly we should consider prompting for a full reset in this case?
+                logger.warn("Couldn't match encryption state to a known case: showing 'setup encryption' prompt", {
+                    crossSigningReady,
+                    secretStorageReady,
+                    allCrossSigningSecretsCached,
+                    isCurrentDeviceTrusted,
+                    defaultKeyId,
+                });
+                showSetupEncryptionToast(SetupKind.SET_UP_ENCRYPTION);
             }
         }
 
@@ -318,12 +345,6 @@ export default class DeviceListener {
         const oldUnverifiedDeviceIds = new Set<string>();
         // Unverified devices that have appeared since then
         const newUnverifiedDeviceIds = new Set<string>();
-
-        const isCurrentDeviceTrusted =
-            crossSigningReady &&
-            Boolean(
-                (await crypto.getDeviceVerificationStatus(cli.getSafeUserId(), cli.deviceId!))?.crossSigningVerified,
-            );
 
         // as long as cross-signing isn't ready,
         // you can't see or dismiss any device toasts

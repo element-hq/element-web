@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021-2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -51,6 +51,7 @@ import { ComposerInsertPayload, ComposerType } from "../../dispatcher/payloads/C
 import Heading from "../views/typography/Heading";
 import { SdkContextClass } from "../../contexts/SDKContext";
 import { ThreadPayload } from "../../dispatcher/payloads/ThreadPayload";
+import { ScopedRoomContextProvider } from "../../contexts/ScopedRoomContext.tsx";
 
 interface IProps {
     room: Room;
@@ -75,7 +76,7 @@ interface IState {
 
 export default class ThreadView extends React.Component<IProps, IState> {
     public static contextType = RoomContext;
-    public declare context: React.ContextType<typeof RoomContext>;
+    declare public context: React.ContextType<typeof RoomContext>;
 
     private dispatcherRef?: string;
     private layoutWatcherRef?: string;
@@ -422,14 +423,12 @@ export default class ThreadView extends React.Component<IProps, IState> {
         }
 
         return (
-            <RoomContext.Provider
-                value={{
-                    ...this.context,
-                    timelineRenderingType: TimelineRenderingType.Thread,
-                    threadId: this.state.thread?.id,
-                    liveTimeline: this.state?.thread?.timelineSet?.getLiveTimeline(),
-                    narrow: this.state.narrow,
-                }}
+            <ScopedRoomContextProvider
+                {...this.context}
+                timelineRenderingType={TimelineRenderingType.Thread}
+                threadId={this.state.thread?.id}
+                liveTimeline={this.state?.thread?.timelineSet?.getLiveTimeline()}
+                narrow={this.state.narrow}
             >
                 <BaseCard
                     className={classNames("mx_ThreadView mx_ThreadPanel", {
@@ -444,7 +443,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
                         PosthogTrackers.trackInteraction("WebThreadViewBackButton", ev);
                     }}
                 >
-                    {this.card.current && <Measured sensor={this.card.current} onMeasurement={this.onMeasurement} />}
+                    <Measured sensor={this.card} onMeasurement={this.onMeasurement} />
                     <div className="mx_ThreadView_timelinePanelWrapper">{timeline}</div>
 
                     {ContentMessages.sharedInstance().getCurrentUploads(threadRelation).length > 0 && (
@@ -463,7 +462,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
                         />
                     )}
                 </BaseCard>
-            </RoomContext.Provider>
+            </ScopedRoomContextProvider>
         );
     }
 }

@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -75,7 +75,7 @@ describe("<SecurityRoomSettingsTab />", () => {
 
     beforeEach(async () => {
         client.sendStateEvent.mockReset().mockResolvedValue({ event_id: "test" });
-        client.isRoomEncrypted.mockReturnValue(false);
+        jest.spyOn(client.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(false);
         client.getClientWellKnown.mockReturnValue(undefined);
         jest.spyOn(SettingsStore, "getValue").mockRestore();
 
@@ -313,7 +313,7 @@ describe("<SecurityRoomSettingsTab />", () => {
             setRoomStateEvents(room);
             getComponent(room);
 
-            expect(screen.getByLabelText("Encrypted")).not.toBeChecked();
+            await waitFor(() => expect(screen.getByLabelText("Encrypted")).not.toBeChecked());
 
             fireEvent.click(screen.getByLabelText("Encrypted"));
 
@@ -330,7 +330,7 @@ describe("<SecurityRoomSettingsTab />", () => {
             setRoomStateEvents(room);
             getComponent(room);
 
-            expect(screen.getByLabelText("Encrypted")).not.toBeChecked();
+            await waitFor(() => expect(screen.getByLabelText("Encrypted")).not.toBeChecked());
 
             fireEvent.click(screen.getByLabelText("Encrypted"));
 
@@ -416,12 +416,12 @@ describe("<SecurityRoomSettingsTab />", () => {
                 expect(screen.getByText("Once enabled, encryption cannot be disabled.")).toBeInTheDocument();
             });
 
-            it("displays unencrypted rooms with toggle disabled", () => {
+            it("displays unencrypted rooms with toggle disabled", async () => {
                 const room = new Room(roomId, client, userId);
                 setRoomStateEvents(room);
                 getComponent(room);
 
-                expect(screen.getByLabelText("Encrypted")).not.toBeChecked();
+                await waitFor(() => expect(screen.getByLabelText("Encrypted")).not.toBeChecked());
                 expect(screen.getByLabelText("Encrypted").getAttribute("aria-disabled")).toEqual("true");
                 expect(screen.queryByText("Once enabled, encryption cannot be disabled.")).not.toBeInTheDocument();
                 expect(screen.getByText("Your server requires encryption to be disabled.")).toBeInTheDocument();

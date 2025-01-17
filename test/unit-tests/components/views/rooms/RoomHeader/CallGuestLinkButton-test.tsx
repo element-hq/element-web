@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -19,7 +19,7 @@ import {
 } from "../../../../../../src/components/views/rooms/RoomHeader/CallGuestLinkButton";
 import Modal from "../../../../../../src/Modal";
 import SdkConfig from "../../../../../../src/SdkConfig";
-import ShareDialog from "../../../../../../src/components/views/dialogs/ShareDialog";
+import { ShareDialog } from "../../../../../../src/components/views/dialogs/ShareDialog";
 import { _t } from "../../../../../../src/languageHandler";
 import SettingsStore from "../../../../../../src/settings/SettingsStore";
 

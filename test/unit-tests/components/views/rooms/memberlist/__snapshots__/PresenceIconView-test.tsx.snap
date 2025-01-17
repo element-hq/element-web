@@ -1,0 +1,175 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PresenceIconView/> renders correctly for presence=busy 1`] = `
+<div>
+  <div
+    class="mx_PresenceIconView"
+  >
+    <svg
+      class="mx_PresenceIconView_dnd"
+      fill="currentColor"
+      height="8px"
+      viewBox="0 0 8 8"
+      width="8px"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g
+        clip-path="url(#a)"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M8 4a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM5.435 6.048A2.5 2.5 0 0 1 1.687 3.05l3.748 2.998Zm.914-1.19L2.648 1.897a2.5 2.5 0 0 1 3.701 2.961Z"
+          fill-rule="evenodd"
+        />
+      </g>
+      <defs>
+        <clippath
+          id="a"
+        >
+          <path
+            d="M0 0h8v8H0z"
+          />
+        </clippath>
+      </defs>
+    </svg>
+  </div>
+</div>
+`;
+
+exports[`<PresenceIconView/> renders correctly for presence=offline 1`] = `
+<div>
+  <div
+    class="mx_PresenceIconView"
+  >
+    <svg
+      class="mx_PresenceIconView_offline"
+      fill="currentColor"
+      height="8px"
+      viewBox="0 0 8 8"
+      width="8px"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g
+        clip-path="url(#a)"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M4 6.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM4 8a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"
+          fill-rule="evenodd"
+        />
+      </g>
+      <defs>
+        <clippath
+          id="a"
+        >
+          <path
+            d="M0 0h8v8H0z"
+          />
+        </clippath>
+      </defs>
+    </svg>
+  </div>
+</div>
+`;
+
+exports[`<PresenceIconView/> renders correctly for presence=online 1`] = `
+<div>
+  <div
+    class="mx_PresenceIconView"
+  >
+    <svg
+      class="mx_PresenceIconView_online"
+      fill="currentColor"
+      height="8px"
+      viewBox="0 0 8 8"
+      width="8px"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g
+        clip-path="url(#a)"
+      >
+        <path
+          d="M8 4a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"
+        />
+      </g>
+      <defs>
+        <clippath
+          id="a"
+        >
+          <path
+            d="M0 0h8v8H0z"
+          />
+        </clippath>
+      </defs>
+    </svg>
+  </div>
+</div>
+`;
+
+exports[`<PresenceIconView/> renders correctly for presence=unavailable/unreachable 1`] = `
+<div>
+  <div
+    class="mx_PresenceIconView"
+  >
+    <svg
+      class="mx_PresenceIconView_unavailable"
+      fill="currentColor"
+      height="8px"
+      viewBox="0 0 8 8"
+      width="8px"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g
+        clip-path="url(#a)"
+      >
+        <path
+          d="M8 4a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"
+        />
+      </g>
+      <defs>
+        <clippath
+          id="a"
+        >
+          <path
+            d="M0 0h8v8H0z"
+          />
+        </clippath>
+      </defs>
+    </svg>
+  </div>
+</div>
+`;
+
+exports[`<PresenceIconView/> renders correctly for presence=unavailable/unreachable 2`] = `
+<div>
+  <div
+    class="mx_PresenceIconView"
+  >
+    <svg
+      class="mx_PresenceIconView_unavailable"
+      fill="currentColor"
+      height="8px"
+      viewBox="0 0 8 8"
+      width="8px"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g
+        clip-path="url(#a)"
+      >
+        <path
+          d="M8 4a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"
+        />
+      </g>
+      <defs>
+        <clippath
+          id="a"
+        >
+          <path
+            d="M0 0h8v8H0z"
+          />
+        </clippath>
+      </defs>
+    </svg>
+  </div>
+</div>
+`;

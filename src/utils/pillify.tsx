@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019-2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -83,9 +83,8 @@ export function pillifyLinks(
                     </StrictMode>
                 );
 
-                pills.render(pill, pillContainer);
-
-                node.parentNode?.replaceChild(pillContainer, node);
+                pills.render(pill, pillContainer, node);
+                node.replaceWith(pillContainer);
                 // Pills within pills aren't going to go well, so move on
                 pillified = true;
 
@@ -147,8 +146,8 @@ export function pillifyLinks(
                             </StrictMode>
                         );
 
-                        pills.render(pill, pillContainer);
-                        roomNotifTextNode.parentNode?.replaceChild(pillContainer, roomNotifTextNode);
+                        pills.render(pill, pillContainer, roomNotifTextNode);
+                        roomNotifTextNode.replaceWith(pillContainer);
                     }
                     // Nothing else to do for a text node (and we don't need to advance
                     // the loop pointer because we did it above)

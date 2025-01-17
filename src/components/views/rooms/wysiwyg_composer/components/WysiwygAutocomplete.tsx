@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -10,11 +10,11 @@ import React, { ForwardedRef, forwardRef, FunctionComponent } from "react";
 import { FormattingFunctions, MappedSuggestion } from "@vector-im/matrix-wysiwyg";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { useRoomContext } from "../../../../../contexts/RoomContext";
 import Autocomplete from "../../Autocomplete";
 import { ICompletion } from "../../../../../autocomplete/Autocompleter";
 import { useMatrixClientContext } from "../../../../../contexts/MatrixClientContext";
 import { getMentionDisplayText, getMentionAttributes, buildQuery } from "../utils/autocomplete";
+import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.tsx";
 
 interface WysiwygAutocompleteProps {
     /**
@@ -53,7 +53,7 @@ const WysiwygAutocomplete = forwardRef(
         { suggestion, handleMention, handleCommand, handleAtRoomMention }: WysiwygAutocompleteProps,
         ref: ForwardedRef<Autocomplete>,
     ): JSX.Element | null => {
-        const { room } = useRoomContext();
+        const { room } = useScopedRoomContext("room");
         const client = useMatrixClientContext();
 
         function handleConfirm(completion: ICompletion): void {

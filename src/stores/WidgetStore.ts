@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -17,17 +17,11 @@ import WidgetEchoStore from "../stores/WidgetEchoStore";
 import ActiveWidgetStore from "../stores/ActiveWidgetStore";
 import WidgetUtils from "../utils/WidgetUtils";
 import { UPDATE_EVENT } from "./AsyncStore";
+import { IApp } from "../utils/WidgetUtils-types";
 
 interface IState {}
 
-export interface IApp extends IWidget {
-    "roomId": string;
-    "eventId"?: string; // not present on virtual widgets
-    // eslint-disable-next-line camelcase
-    "avatar_url"?: string; // MSC2765 https://github.com/matrix-org/matrix-doc/pull/2765
-    // Whether the widget was created from `widget_build_url` and thus is a call widget of some kind
-    "io.element.managed_hybrid"?: boolean;
-}
+export type { IApp };
 
 export function isAppWidget(widget: IWidget | IApp): widget is IApp {
     return "roomId" in widget && typeof widget.roomId === "string";

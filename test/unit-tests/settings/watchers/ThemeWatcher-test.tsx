@@ -2,13 +2,14 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import ThemeWatcher from "../../../../src/settings/watchers/ThemeWatcher";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
+import { SettingKey, Settings } from "../../../../src/settings/Settings.tsx";
 
 function makeMatchMedia(values: any) {
     class FakeMediaQueryList {
@@ -33,8 +34,12 @@ function makeMatchMedia(values: any) {
     };
 }
 
-function makeGetValue(values: any) {
-    return function getValue<T = any>(settingName: string, _roomId: string | null = null, _excludeDefault = false): T {
+function makeGetValue(values: any): any {
+    return function getValue<S extends SettingKey>(
+        settingName: S,
+        _roomId: string | null = null,
+        _excludeDefault = false,
+    ): Settings[S] {
         return values[settingName];
     };
 }

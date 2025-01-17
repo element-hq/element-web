@@ -3,7 +3,7 @@ Copyright 2024 New Vector Ltd.
 Copyright 2019-2022 The Matrix.org Foundation C.I.C.
 Copyright 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -34,6 +34,7 @@ import { Layout } from "../../settings/enums/Layout";
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 import Measured from "../views/elements/Measured";
 import EmptyState from "../views/right_panel/EmptyState";
+import { ScopedRoomContextProvider } from "../../contexts/ScopedRoomContext.tsx";
 
 interface IProps {
     roomId: string;
@@ -51,7 +52,7 @@ interface IState {
  */
 class FilePanel extends React.Component<IProps, IState> {
     public static contextType = RoomContext;
-    public declare context: React.ContextType<typeof RoomContext>;
+    declare public context: React.ContextType<typeof RoomContext>;
 
     // This is used to track if a decrypted event was a live event and should be
     // added to the timeline.
@@ -104,7 +105,11 @@ class FilePanel extends React.Component<IProps, IState> {
         }
 
         if (!this.state.timelineSet.eventIdToTimeline(ev.getId()!)) {
-            this.state.timelineSet.addEventToTimeline(ev, timeline, false);
+            this.state.timelineSet.addEventToTimeline(ev, timeline, {
+                fromCache: false,
+                addToState: false,
+                toStartOfTimeline: false,
+            });
         }
     }
 
@@ -269,12 +274,10 @@ class FilePanel extends React.Component<IProps, IState> {
 
         if (this.state.timelineSet) {
             return (
-                <RoomContext.Provider
-                    value={{
-                        ...this.context,
-                        timelineRenderingType: TimelineRenderingType.File,
-                        narrow: this.state.narrow,
-                    }}
+                <ScopedRoomContextProvider
+                    {...this.context}
+                    timelineRenderingType={TimelineRenderingType.File}
+                    narrow={this.state.narrow}
                 >
                     <BaseCard
                         className="mx_FilePanel"
@@ -283,9 +286,7 @@ class FilePanel extends React.Component<IProps, IState> {
                         ref={this.card}
                         header={_t("right_panel|files_button")}
                     >
-                        {this.card.current && (
-                            <Measured sensor={this.card.current} onMeasurement={this.onMeasurement} />
-                        )}
+                        <Measured sensor={this.card} onMeasurement={this.onMeasurement} />
                         <SearchWarning isRoomEncrypted={isRoomEncrypted} kind={WarningKind.Files} />
                         <TimelinePanel
                             manageReadReceipts={false}
@@ -298,16 +299,11 @@ class FilePanel extends React.Component<IProps, IState> {
                             layout={Layout.Group}
                         />
                     </BaseCard>
-                </RoomContext.Provider>
+                </ScopedRoomContextProvider>
             );
         } else {
             return (
-                <RoomContext.Provider
-                    value={{
-                        ...this.context,
-                        timelineRenderingType: TimelineRenderingType.File,
-                    }}
-                >
+                <ScopedRoomContextProvider {...this.context} timelineRenderingType={TimelineRenderingType.File}>
                     <BaseCard
                         className="mx_FilePanel"
                         onClose={this.props.onClose}
@@ -315,7 +311,7 @@ class FilePanel extends React.Component<IProps, IState> {
                     >
                         <Spinner />
                     </BaseCard>
-                </RoomContext.Provider>
+                </ScopedRoomContextProvider>
             );
         }
     }

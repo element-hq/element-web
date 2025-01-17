@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019, 2020 , 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -11,15 +11,27 @@ import { User } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import E2EIcon, { E2EState } from "../rooms/E2EIcon";
+import E2EIcon from "../rooms/E2EIcon";
 import AccessibleButton from "../elements/AccessibleButton";
 import BaseDialog from "./BaseDialog";
 import { IDevice } from "../right_panel/UserInfo";
+import { E2EStatus } from "../../../utils/ShieldUtils";
 
 interface IProps {
+    /**
+     * The user whose device is untrusted.
+     */
     user: User;
+    /**
+     * The device that is untrusted.
+     */
     device: IDevice;
-    onFinished(mode?: "legacy" | "sas" | false): void;
+    /**
+     * Callback for when the dialog is dismissed.
+     * If mode is "sas", the user wants to verify the device with SAS. Otherwise, the dialog was dismissed normally.
+     * @param mode The mode of dismissal.
+     */
+    onFinished(mode?: "sas"): void;
 }
 
 const UntrustedDeviceDialog: React.FC<IProps> = ({ device, user, onFinished }) => {
@@ -43,7 +55,7 @@ const UntrustedDeviceDialog: React.FC<IProps> = ({ device, user, onFinished }) =
             className="mx_UntrustedDeviceDialog"
             title={
                 <>
-                    <E2EIcon status={E2EState.Warning} isUser size={24} hideTooltip={true} />
+                    <E2EIcon status={E2EStatus.Warning} isUser size={24} hideTooltip={true} />
                     {_t("encryption|udd|title")}
                 </>
             }
@@ -56,13 +68,10 @@ const UntrustedDeviceDialog: React.FC<IProps> = ({ device, user, onFinished }) =
                 <p>{askToVerifyText}</p>
             </div>
             <div className="mx_Dialog_buttons">
-                <AccessibleButton kind="primary_outline" onClick={() => onFinished("legacy")}>
-                    {_t("encryption|udd|manual_verification_button")}
-                </AccessibleButton>
                 <AccessibleButton kind="primary_outline" onClick={() => onFinished("sas")}>
                     {_t("encryption|udd|interactive_verification_button")}
                 </AccessibleButton>
-                <AccessibleButton kind="primary" onClick={() => onFinished(false)}>
+                <AccessibleButton kind="primary" onClick={() => onFinished()}>
                     {_t("action|done")}
                 </AccessibleButton>
             </div>

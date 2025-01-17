@@ -1,0 +1,51 @@
+/*
+Copyright 2024 New Vector Ltd.
+Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2015, 2016 OpenMarket Ltd
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+.mx_OverflowTileView {
+    display: flex;
+    align-items: center;
+    color: $primary-content;
+    cursor: pointer;
+}
+
+.mx_OverflowTileView_text {
+    flex: 1 1 0;
+    overflow: hidden;
+    font: var(--cpd-font-body-md-regular);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-style: italic;
+}
+
+.mx_OverflowTileView:hover {
+    padding-right: 30px;
+    position: relative; /* to keep the chevron aligned */
+}
+
+.mx_OverflowTileView:hover::before {
+    content: "";
+    position: absolute;
+    top: calc(50% - 8px); /* center */
+    right: -8px;
+    mask: url("@vector-im/compound-design-tokens/icons/chevron-right.svg");
+    mask-repeat: no-repeat;
+    mask-position: center;
+    width: 16px;
+    height: 16px;
+    background-color: $header-panel-text-primary-color;
+}
+
+.mx_OverflowTileView_icon {
+    padding-left: 3px;
+    padding-right: 12px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    position: relative;
+    line-height: 0;
+}

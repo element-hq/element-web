@@ -2,14 +2,14 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import { fireEvent, render, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { Crypto } from "matrix-js-sdk/src/matrix";
+import { CryptoApi } from "matrix-js-sdk/src/crypto-api";
 
 import ImportE2eKeysDialog from "../../../../../../src/async-components/views/dialogs/security/ImportE2eKeysDialog";
 import * as MegolmExportEncryption from "../../../../../../src/utils/MegolmExportEncryption";
@@ -67,7 +67,7 @@ describe("ImportE2eKeysDialog", () => {
         cli.getCrypto = () => {
             return {
                 importRoomKeysAsJson,
-            } as unknown as Crypto.CryptoApi;
+            } as unknown as CryptoApi;
         };
 
         // Mock the result of decrypting the sessions, to avoid needing to

@@ -2,15 +2,18 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021-2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ChangeEvent, useMemo } from "react";
-import { VideoCallSolidIcon, HomeSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import {
+    VideoCallSolidIcon,
+    HomeSolidIcon,
+    UserProfileSolidIcon,
+    FavouriteSolidIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { Icon as FavoriteIcon } from "../../../../../../res/img/element-icons/roomlist/favorite.svg";
-import { Icon as MembersIcon } from "../../../../../../res/img/element-icons/room/members.svg";
 import { Icon as HashCircleIcon } from "../../../../../../res/img/element-icons/roomlist/hash-circle.svg";
 import { _t } from "../../../../../languageHandler";
 import SettingsStore from "../../../../../settings/SettingsStore";
@@ -55,8 +58,8 @@ const SidebarUserSettingsTab: React.FC = () => {
         [MetaSpace.People]: peopleEnabled,
         [MetaSpace.Orphans]: orphansEnabled,
         [MetaSpace.VideoRooms]: videoRoomsEnabled,
-    } = useSettingValue<Record<MetaSpace, boolean>>("Spaces.enabledMetaSpaces");
-    const allRoomsInHome = useSettingValue<boolean>("Spaces.allRoomsInHome");
+    } = useSettingValue("Spaces.enabledMetaSpaces");
+    const allRoomsInHome = useSettingValue("Spaces.allRoomsInHome");
     const guestSpaUrl = useMemo(() => {
         return SdkConfig.get("element_call").guest_spa_url;
     }, []);
@@ -112,7 +115,7 @@ const SidebarUserSettingsTab: React.FC = () => {
                         className="mx_SidebarUserSettingsTab_checkbox"
                     >
                         <SettingsSubsectionText>
-                            <FavoriteIcon />
+                            <FavouriteSolidIcon />
                             {_t("common|favourites")}
                         </SettingsSubsectionText>
                         <SettingsSubsectionText>
@@ -126,7 +129,7 @@ const SidebarUserSettingsTab: React.FC = () => {
                         className="mx_SidebarUserSettingsTab_checkbox"
                     >
                         <SettingsSubsectionText>
-                            <MembersIcon />
+                            <UserProfileSolidIcon />
                             {_t("common|people")}
                         </SettingsSubsectionText>
                         <SettingsSubsectionText>

@@ -6,7 +6,7 @@ Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -474,10 +474,8 @@ export default class ElectronPlatform extends BasePlatform {
         const url = super.getOidcCallbackUrl();
         url.protocol = "io.element.desktop";
         // Trim the double slash into a single slash to comply with https://datatracker.ietf.org/doc/html/rfc8252#section-7.1
-        // Chrome seems to have a strange issue where non-standard protocols prevent URL object mutations on pathname
-        // field, so we cannot mutate `pathname` reliably and instead have to rewrite the href manually.
-        if (url.pathname.startsWith("//")) {
-            url.href = url.href.replace(url.pathname, url.pathname.slice(1));
+        if (url.href.startsWith(`${url.protocol}://`)) {
+            url.href = url.href.replace("://", ":/");
         }
         return url;
     }

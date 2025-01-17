@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021-2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -20,7 +20,7 @@ import MatrixClientContext, { useMatrixClientContext } from "../../contexts/Matr
 import { _t } from "../../languageHandler";
 import { ContextMenuButton } from "../../accessibility/context_menu/ContextMenuButton";
 import ContextMenu, { ChevronFace, MenuItemRadio, useContextMenu } from "./ContextMenu";
-import RoomContext, { TimelineRenderingType, useRoomContext } from "../../contexts/RoomContext";
+import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 import TimelinePanel from "./TimelinePanel";
 import { Layout } from "../../settings/enums/Layout";
 import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
@@ -30,6 +30,7 @@ import { ButtonEvent } from "../views/elements/AccessibleButton";
 import Spinner from "../views/elements/Spinner";
 import { clearRoomNotification } from "../../utils/notifications";
 import EmptyState from "../views/right_panel/EmptyState";
+import { ScopedRoomContextProvider, useScopedRoomContext } from "../../contexts/ScopedRoomContext.tsx";
 
 interface IProps {
     roomId: string;
@@ -68,7 +69,7 @@ export const ThreadPanelHeader: React.FC<{
     setFilterOption: (filterOption: ThreadFilterType) => void;
 }> = ({ filterOption, setFilterOption }) => {
     const mxClient = useMatrixClientContext();
-    const roomContext = useRoomContext();
+    const roomContext = useScopedRoomContext("room");
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu<HTMLElement>();
     const options: readonly ThreadPanelHeaderOption[] = [
         {
@@ -184,13 +185,11 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
     }, [timelineSet, timelinePanel]);
 
     return (
-        <RoomContext.Provider
-            value={{
-                ...roomContext,
-                timelineRenderingType: TimelineRenderingType.ThreadsList,
-                showHiddenEvents: true,
-                narrow,
-            }}
+        <ScopedRoomContextProvider
+            {...roomContext}
+            timelineRenderingType={TimelineRenderingType.ThreadsList}
+            showHiddenEvents={true}
+            narrow={narrow}
         >
             <BaseCard
                 header={
@@ -205,7 +204,7 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
                 ref={card}
                 closeButtonRef={closeButonRef}
             >
-                {card.current && <Measured sensor={card.current} onMeasurement={setNarrow} />}
+                <Measured sensor={card} onMeasurement={setNarrow} />
                 {timelineSet ? (
                     <TimelinePanel
                         key={filterOption + ":" + (timelineSet.getFilter()?.filterId ?? roomId)}
@@ -241,7 +240,7 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
                     </div>
                 )}
             </BaseCard>
-        </RoomContext.Provider>
+        </ScopedRoomContextProvider>
     );
 };
 export default ThreadPanel;

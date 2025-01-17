@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -15,7 +15,6 @@ import type {
     ICreateRoomOpts,
     ISendEventResponse,
     MatrixClient,
-    Room,
     MatrixEvent,
     ReceiptType,
     IRoomDirectoryOptions,
@@ -25,6 +24,7 @@ import type {
     Upload,
     StateEvents,
     TimelineEvents,
+    AccountDataEvents,
 } from "matrix-js-sdk/src/matrix";
 import type { RoomMessageEventContent } from "matrix-js-sdk/src/types";
 import { Credentials } from "../plugins/homeserver";
@@ -49,6 +49,10 @@ export class Client {
             this.client = null;
         });
         this.network = new Network(page, this);
+    }
+
+    public async cleanup() {
+        await this.network.destroyRoute();
     }
 
     public evaluate<R, Arg, O extends MatrixClient = MatrixClient>(
@@ -173,22 +177,12 @@ export class Client {
      */
     public async createRoom(options: ICreateRoomOpts): Promise<string> {
         const client = await this.prepareClient();
-        return await client.evaluate(async (cli, options) => {
-            const resp = await cli.createRoom(options);
-            const roomId = resp.room_id;
-            if (!cli.getRoom(roomId)) {
-                await new Promise<void>((resolve) => {
-                    const onRoom = (room: Room) => {
-                        if (room.roomId === roomId) {
-                            cli.off(window.matrixcs.ClientEvent.Room, onRoom);
-                            resolve();
-                        }
-                    };
-                    cli.on(window.matrixcs.ClientEvent.Room, onRoom);
-                });
-            }
+        const roomId = await client.evaluate(async (cli, options) => {
+            const { room_id: roomId } = await cli.createRoom(options);
             return roomId;
         }, options);
+        await this.awaitRoomMembership(roomId);
+        return roomId;
     }
 
     /**
@@ -439,11 +433,14 @@ export class Client {
      * @param type The type of account data to set
      * @param content The content to set
      */
-    public async setAccountData(type: string, content: IContent): Promise<void> {
+    public async setAccountData<T extends keyof AccountDataEvents>(
+        type: T,
+        content: AccountDataEvents[T],
+    ): Promise<void> {
         const client = await this.prepareClient();
         return client.evaluate(
             async (client, { type, content }) => {
-                await client.setAccountData(type, content);
+                await client.setAccountData(type as T, content as AccountDataEvents[T]);
             },
             { type, content },
         );

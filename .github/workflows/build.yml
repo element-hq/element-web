@@ -5,11 +5,15 @@ on:
         branches: [develop, master]
     merge_group:
         types: [checks_requested]
+concurrency:
+    group: ${{ github.workflow }}-${{ github.head_ref || github.sha }}
+    cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 # develop pushes and repository_dispatch handled in build_develop.yaml
 env:
     # These must be set for fetchdep.sh to get the right branch
     REPOSITORY: ${{ github.repository }}
     PR_NUMBER: ${{ github.event.pull_request.number }}
+permissions: {} # No permissions required
 jobs:
     build:
         name: "Build on ${{ matrix.image }}"
@@ -23,10 +27,17 @@ jobs:
                     - macos-14
                 isDevelop:
                     - ${{ github.event_name == 'push' && github.ref_name == 'develop' }}
+                isPullRequest:
+                    - ${{ github.event_name == 'pull_request' }}
                 # Skip the ubuntu-24.04 build for the develop branch as the dedicated CD build_develop workflow handles that
+                # Skip the non-linux builds for pull requests as Windows is awfully slow, so run in merge queue only
                 exclude:
                     - isDevelop: true
                       image: ubuntu-24.04
+                    - isPullRequest: true
+                      image: windows-2022
+                    - isPullRequest: true
+                      image: macos-14
         runs-on: ${{ matrix.image }}
         defaults:
             run:
@@ -36,14 +47,38 @@ jobs:
 
             - uses: actions/setup-node@v4
               with:
-                  cache: "yarn"
+                  # Disable cache on Windows as it is slower than not caching
+                  # https://github.com/actions/setup-node/issues/975
+                  cache: ${{ runner.os != 'Windows' && 'yarn' || '' }}
                   node-version: "lts/*"
 
             # Workaround for yarn install timeouts, especially on Windows
             - run: yarn config set network-timeout 300000
 
-            - name: Install Dependencies
-              run: "./scripts/layered.sh"
+            - name: Fetch layered build
+              id: layered_build
+              env:
+                  # tell layered.sh to check out the right sha of the JS-SDK & EW, if they were given one
+                  JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
+              run: |
+                  scripts/layered.sh
+                  JSSDK_SHA=$(git -C matrix-js-sdk rev-parse --short=12 HEAD)
+                  VECTOR_SHA=$(git rev-parse --short=12 HEAD)
+                  echo "VERSION=$VECTOR_SHA--js-$JSSDK_SHA" >> $GITHUB_OUTPUT
+
+            - name: Copy config
+              run: cp element.io/develop/config.json config.json
 
             - name: Build
-              run: "yarn build"
+              env:
+                  CI_PACKAGE: true
+                  VERSION: "${{ steps.layered_build.outputs.VERSION }}"
+              run: |
+                  yarn build
+
+            - name: Upload Artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: webapp-${{ matrix.image }}
+                  path: webapp
+                  retention-days: 1

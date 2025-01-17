@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022-2024 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -28,6 +28,8 @@ test.describe("Cryptography", function () {
     });
 
     test.describe("decryption failure messages", () => {
+        test.skip(isDendrite, "Dendrite lacks support for MSC3967 so requires additional auth here");
+
         test("should handle device-relative historical messages", async ({
             homeserver,
             page,
@@ -45,7 +47,7 @@ test.describe("Cryptography", function () {
             await logOutOfElement(page, true);
 
             // Log in again, and see how the message looks.
-            await logIntoElement(page, homeserver, credentials);
+            await logIntoElement(page, credentials);
             await app.viewRoomByName("Test room");
             const lastTile = page.locator(".mx_EventTile").last();
             await expect(lastTile).toContainText("Historical messages are not available on this device");
@@ -62,10 +64,13 @@ test.describe("Cryptography", function () {
 
             // Finally, log out again, and back in, skipping verification for now, and see what we see.
             await logOutOfElement(page);
-            await logIntoElement(page, homeserver, credentials);
+            await logIntoElement(page, credentials);
             await page.locator(".mx_AuthPage").getByRole("button", { name: "Skip verification for now" }).click();
             await page.locator(".mx_AuthPage").getByRole("button", { name: "I'll verify later" }).click();
             await app.viewRoomByName("Test room");
+
+            // In this case, the call to cryptoApi.isEncryptionEnabledInRoom is taking a long time to resolve
+            await page.waitForTimeout(1000);
 
             // There should be two historical events in the timeline
             const tiles = await page.locator(".mx_EventTile").all();

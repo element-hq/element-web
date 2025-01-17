@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -24,7 +24,7 @@ const ROOM_ADDRESS_LONG =
     "loremIpsumDolorSitAmetConsecteturAdipisicingElitSedDoEiusmodTemporIncididuntUtLaboreEtDoloreMagnaAliqua";
 
 function getMemberTileByName(page: Page, name: string): Locator {
-    return page.locator(`.mx_EntityTile, [title="${name}"]`);
+    return page.locator(`.mx_MemberTileView, [title="${name}"]`);
 }
 
 test.describe("RightPanel", () => {
@@ -38,29 +38,34 @@ test.describe("RightPanel", () => {
     });
 
     test.describe("in rooms", () => {
-        test("should handle long room address and long room name", async ({ page, app }) => {
-            await app.client.createRoom({ name: ROOM_NAME_LONG });
-            await viewRoomSummaryByName(page, app, ROOM_NAME_LONG);
+        test(
+            "should handle long room address and long room name",
+            { tag: "@screenshot" },
+            async ({ page, app, user }) => {
+                await app.client.createRoom({ name: ROOM_NAME_LONG });
+                await viewRoomSummaryByName(page, app, ROOM_NAME_LONG);
 
-            await app.settings.openRoomSettings();
+                await app.settings.openRoomSettings();
 
-            // Set a local room address
-            const localAddresses = page.locator(".mx_SettingsFieldset", { hasText: "Local Addresses" });
-            await localAddresses.getByRole("textbox").fill(ROOM_ADDRESS_LONG);
-            await localAddresses.getByRole("button", { name: "Add" }).click();
-            await expect(localAddresses.getByText(`#${ROOM_ADDRESS_LONG}:localhost`)).toHaveClass(
-                "mx_EditableItem_item",
-            );
+                // Set a local room address
+                const localAddresses = page.locator(".mx_SettingsFieldset", { hasText: "Local Addresses" });
+                await localAddresses.getByRole("textbox").fill(ROOM_ADDRESS_LONG);
+                await expect(page.getByText("This address is available to use")).toBeVisible();
+                await localAddresses.getByRole("button", { name: "Add" }).click();
+                await expect(localAddresses.getByText(`#${ROOM_ADDRESS_LONG}:${user.homeServer}`)).toHaveClass(
+                    "mx_EditableItem_item",
+                );
 
-            await app.closeDialog();
+                await app.closeDialog();
 
-            // Close and reopen the right panel to render the room address
-            await app.toggleRoomInfoPanel();
-            await expect(page.locator(".mx_RightPanel")).not.toBeVisible();
-            await app.toggleRoomInfoPanel();
+                // Close and reopen the right panel to render the room address
+                await app.toggleRoomInfoPanel();
+                await expect(page.locator(".mx_RightPanel")).not.toBeVisible();
+                await app.toggleRoomInfoPanel();
 
-            await expect(page.locator(".mx_RightPanel")).toMatchScreenshot("with-name-and-address.png");
-        });
+                await expect(page.locator(".mx_RightPanel")).toMatchScreenshot("with-name-and-address.png");
+            },
+        );
 
         test("should handle clicking add widgets", async ({ page, app }) => {
             await viewRoomSummaryByName(page, app, ROOM_NAME);
@@ -107,14 +112,14 @@ test.describe("RightPanel", () => {
             await viewRoomSummaryByName(page, app, ROOM_NAME);
 
             await page.locator(".mx_RightPanel").getByRole("menuitem", { name: "People" }).click();
-            await expect(page.locator(".mx_MemberList")).toBeVisible();
+            await expect(page.locator(".mx_MemberListView")).toBeVisible();
 
             await getMemberTileByName(page, NAME).click();
             await expect(page.locator(".mx_UserInfo")).toBeVisible();
             await expect(page.locator(".mx_UserInfo_profile").getByText(NAME)).toBeVisible();
 
             await page.getByTestId("base-card-back-button").click();
-            await expect(page.locator(".mx_MemberList")).toBeVisible();
+            await expect(page.locator(".mx_MemberListView")).toBeVisible();
 
             await page.getByLabel("Room info").nth(1).click();
             await checkRoomSummaryCard(page, ROOM_NAME);
@@ -130,14 +135,14 @@ test.describe("RightPanel", () => {
                 .locator(".mx_RoomInfoLine_private")
                 .getByRole("button", { name: /\d member/ })
                 .click();
-            await expect(page.locator(".mx_MemberList")).toBeVisible();
+            await expect(page.locator(".mx_MemberListView")).toBeVisible();
 
             await getMemberTileByName(page, NAME).click();
             await expect(page.locator(".mx_UserInfo")).toBeVisible();
             await expect(page.locator(".mx_UserInfo_profile").getByText(NAME)).toBeVisible();
 
             await page.getByTestId("base-card-back-button").click();
-            await expect(page.locator(".mx_MemberList")).toBeVisible();
+            await expect(page.locator(".mx_MemberListView")).toBeVisible();
         });
     });
 });

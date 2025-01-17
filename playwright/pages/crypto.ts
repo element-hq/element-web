@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -27,7 +27,7 @@ export class Crypto {
             accessToken: window.mxMatrixClientPeg.get().getAccessToken(),
         }));
 
-        const res = await this.request.post(`${this.homeserver.config.baseUrl}/_matrix/client/v3/keys/query`, {
+        const res = await this.request.post(`${this.homeserver.baseUrl}/_matrix/client/v3/keys/query`, {
             headers: { Authorization: `Bearer ${accessToken}` },
             data: { device_keys: { [userId]: [] } },
         });

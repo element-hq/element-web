@@ -3,7 +3,7 @@ Copyright 2024 New Vector Ltd.
 Copyright 2020-2022 The Matrix.org Foundation C.I.C.
 Copyright 2018, 2019 New Vector Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -37,6 +37,9 @@ enum BackupStatus {
 
     /** there is a backup on the server but we are not backing up to it */
     SERVER_BACKUP_BUT_DISABLED,
+
+    /** Key backup is set up but recovery (4s) is not */
+    BACKUP_NO_RECOVERY,
 
     /** backup is not set up locally and there is no backup on the server */
     NO_BACKUP,
@@ -104,12 +107,16 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
         }
 
         if ((await crypto.getActiveSessionBackupVersion()) !== null) {
-            this.setState({ backupStatus: BackupStatus.BACKUP_ACTIVE });
+            if (await crypto.isSecretStorageReady()) {
+                this.setState({ backupStatus: BackupStatus.BACKUP_ACTIVE });
+            } else {
+                this.setState({ backupStatus: BackupStatus.BACKUP_NO_RECOVERY });
+            }
             return;
         }
 
         // backup is not active. see if there is a backup version on the server we ought to back up to.
-        const backupInfo = await client.getKeyBackupVersion();
+        const backupInfo = await crypto.getKeyBackupInfo();
         this.setState({ backupStatus: backupInfo ? BackupStatus.SERVER_BACKUP_BUT_DISABLED : BackupStatus.NO_BACKUP });
     }
 
@@ -164,13 +171,17 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
     };
 
     /**
-     * Show a dialog prompting the user to set up key backup.
+     * Show a dialog prompting the user to set up their recovery method.
      *
-     * Either there is no backup at all ({@link BackupStatus.NO_BACKUP}), there is a backup on the server but
-     * we are not connected to it ({@link BackupStatus.SERVER_BACKUP_BUT_DISABLED}), or we were unable to pull the
-     * backup data ({@link BackupStatus.ERROR}). In all three cases, we should prompt the user to set up key backup.
+     * Either:
+     *  * There is no backup at all ({@link BackupStatus.NO_BACKUP})
+     *  * There is a backup set up but recovery (4s) is not ({@link BackupStatus.BACKUP_NO_RECOVERY})
+     *  * There is a backup on the server but we are not connected to it ({@link BackupStatus.SERVER_BACKUP_BUT_DISABLED})
+     *  * We were unable to pull the backup data ({@link BackupStatus.ERROR}).
+     *
+     * In all four cases, we should prompt the user to set up a method of recovery.
      */
-    private renderSetupBackupDialog(): React.ReactNode {
+    private renderSetupRecoveryMethod(): React.ReactNode {
         const description = (
             <div>
                 <p>{_t("auth|logout_dialog|setup_secure_backup_description_1")}</p>
@@ -254,7 +265,8 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
             case BackupStatus.NO_BACKUP:
             case BackupStatus.SERVER_BACKUP_BUT_DISABLED:
             case BackupStatus.ERROR:
-                return this.renderSetupBackupDialog();
+            case BackupStatus.BACKUP_NO_RECOVERY:
+                return this.renderSetupRecoveryMethod();
         }
     }
 }

@@ -3,7 +3,7 @@ Copyright 2024 New Vector Ltd.
 Copyright 2019-2022 The Matrix.org Foundation C.I.C.
 Copyright 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -45,10 +45,6 @@ export const DEFAULTS: DeepReadonly<IConfigOptions> = {
         // eslint-disable-next-line @typescript-eslint/no-require-imports
         logo: require("../res/img/element-desktop-logo.svg").default,
         url: "https://element.io/get-started",
-    },
-    voice_broadcast: {
-        chunk_length: 2 * 60, // two minutes
-        max_length: 4 * 60 * 60, // four hours
     },
 
     feedback: {

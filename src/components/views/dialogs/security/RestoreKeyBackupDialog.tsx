@@ -3,7 +3,7 @@ Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 Copyright 2018, 2019 New Vector Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -109,7 +109,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
 
     private onResetRecoveryClick = (): void => {
         this.props.onFinished(false);
-        accessSecretStorage(async (): Promise<void> => {}, /* forceReset = */ true);
+        accessSecretStorage(async (): Promise<void> => {}, { forceReset: true });
     };
 
     /**
@@ -258,7 +258,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
         });
         try {
             const cli = MatrixClientPeg.safeGet();
-            const backupInfo = await cli.getKeyBackupVersion();
+            const backupInfo = (await cli.getCrypto()?.getKeyBackupInfo()) ?? null;
             const has4S = await cli.secretStorage.hasKey();
             const backupKeyStored = has4S ? await cli.isKeyBackupKeyStored() : null;
             this.setState({

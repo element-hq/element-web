@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022, 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -23,7 +23,6 @@ import React, { useState } from "react";
 
 import ThreadView from "../../../../src/components/structures/ThreadView";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
-import RoomContext from "../../../../src/contexts/RoomContext";
 import { SdkContextClass } from "../../../../src/contexts/SDKContext";
 import { Action } from "../../../../src/dispatcher/actions";
 import dispatcher from "../../../../src/dispatcher/dispatcher";
@@ -34,6 +33,7 @@ import { mockPlatformPeg } from "../../../test-utils/platform";
 import { getRoomContext } from "../../../test-utils/room";
 import { mkMessage, stubClient } from "../../../test-utils/test-utils";
 import { mkThread } from "../../../test-utils/threads";
+import { ScopedRoomContextProvider } from "../../../../src/contexts/ScopedRoomContext.tsx";
 
 describe("ThreadView", () => {
     const ROOM_ID = "!roomId:example.org";
@@ -51,8 +51,8 @@ describe("ThreadView", () => {
 
         return (
             <MatrixClientContext.Provider value={mockClient}>
-                <RoomContext.Provider
-                    value={getRoomContext(room, {
+                <ScopedRoomContextProvider
+                    {...getRoomContext(room, {
                         canSendMessages: true,
                     })}
                 >
@@ -63,7 +63,7 @@ describe("ThreadView", () => {
                         initialEvent={initialEvent}
                         resizeNotifier={new ResizeNotifier()}
                     />
-                </RoomContext.Provider>
+                </ScopedRoomContextProvider>
                 ,
             </MatrixClientContext.Provider>
         );

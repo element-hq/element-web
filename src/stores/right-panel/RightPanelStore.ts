@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019-2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -252,10 +252,13 @@ export default class RightPanelStore extends ReadyWatchingStore {
             const room = this.mxClient?.getRoom(this.viewedRoomId);
             if (!!room) {
                 this.global =
-                    this.global ?? convertToStatePanel(SettingsStore.getValue("RightPanel.phasesGlobal"), room);
+                    this.global ??
+                    convertToStatePanel(SettingsStore.getValue("RightPanel.phasesGlobal"), room) ??
+                    undefined;
                 this.byRoom[this.viewedRoomId] =
                     this.byRoom[this.viewedRoomId] ??
-                    convertToStatePanel(SettingsStore.getValue("RightPanel.phases", this.viewedRoomId), room);
+                    convertToStatePanel(SettingsStore.getValue("RightPanel.phases", this.viewedRoomId), room) ??
+                    undefined;
             } else {
                 logger.warn(
                     "Could not restore the right panel after load because there was no associated room object.",
@@ -304,15 +307,13 @@ export default class RightPanelStore extends ReadyWatchingStore {
                     logger.warn("removed card from right panel because of missing threadHeadEvent in card state");
                 }
                 return !!card.state?.threadHeadEvent;
-            case RightPanelPhases.RoomMemberInfo:
-            case RightPanelPhases.SpaceMemberInfo:
+            case RightPanelPhases.MemberInfo:
             case RightPanelPhases.EncryptionPanel:
                 if (!card.state?.member) {
                     logger.warn("removed card from right panel because of missing member in card state");
                 }
                 return !!card.state?.member;
-            case RightPanelPhases.Room3pidMemberInfo:
-            case RightPanelPhases.Space3pidMemberInfo:
+            case RightPanelPhases.ThreePidMemberInfo:
                 if (!card.state?.memberInfoEvent) {
                     logger.warn("removed card from right panel because of missing memberInfoEvent in card state");
                 }
@@ -327,7 +328,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
     }
 
     private getVerificationRedirect(card: IRightPanelCard): IRightPanelCard | null {
-        if (card.phase === RightPanelPhases.RoomMemberInfo && card.state) {
+        if (card.phase === RightPanelPhases.MemberInfo && card.state) {
             // RightPanelPhases.RoomMemberInfo -> needs to be changed to RightPanelPhases.EncryptionPanel if there is a pending verification request
             const { member } = card.state;
             const pendingRequest = member
@@ -385,8 +386,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
             if (panel?.history) {
                 panel.history = panel.history.filter(
                     (card: IRightPanelCard) =>
-                        card.phase != RightPanelPhases.RoomMemberInfo &&
-                        card.phase != RightPanelPhases.Room3pidMemberInfo,
+                        card.phase != RightPanelPhases.MemberInfo && card.phase != RightPanelPhases.ThreePidMemberInfo,
                 );
             }
         }

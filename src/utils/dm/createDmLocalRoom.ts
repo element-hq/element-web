@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -109,7 +109,7 @@ export async function createDmLocalRoom(client: MatrixClient, targets: Member[])
 
     localRoom.targets = targets;
     localRoom.updateMyMembership(KnownMembership.Join);
-    localRoom.addLiveEvents(events);
+    localRoom.addLiveEvents(events, { addToState: true });
     localRoom.currentState.setStateEvents(events);
     localRoom.name = localRoom.getDefaultRoomName(client.getUserId()!);
     client.store.storeRoom(localRoom);

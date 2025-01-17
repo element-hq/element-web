@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -49,7 +49,6 @@ export function arrayFastResample(input: number[], points: number): number[] {
  * @param {number} points The number of samples to end up with.
  * @returns {number[]} The resampled array.
  */
-// ts-prune-ignore-next
 export function arraySmoothingResample(input: number[], points: number): number[] {
     if (input.length === points) return input; // short-circuit a complicated call
 
@@ -92,7 +91,6 @@ export function arraySmoothingResample(input: number[], points: number): number[
  * @param {number} newMax The maximum value to scale to.
  * @returns {number[]} The rescaled array.
  */
-// ts-prune-ignore-next
 export function arrayRescale(input: number[], newMin: number, newMax: number): number[] {
     const min: number = Math.min(...input);
     const max: number = Math.max(...input);
@@ -326,6 +324,39 @@ export async function asyncSome<T>(values: Iterable<T>, predicate: (value: T) =>
         if (await predicate(value)) return true;
     }
     return false;
+}
+
+/**
+ * Async version of Array.some that runs all promises in parallel.
+ * @param values
+ * @param predicate
+ */
+export async function asyncSomeParallel<T>(
+    values: Array<T>,
+    predicate: (value: T) => Promise<boolean>,
+): Promise<boolean> {
+    try {
+        return await Promise.any<boolean>(
+            values.map((value) =>
+                predicate(value).then((result) => (result ? Promise.resolve(true) : Promise.reject(false))),
+            ),
+        );
+    } catch (e) {
+        // If the array is empty or all the promises are false, Promise.any will reject an AggregateError
+        if (e instanceof AggregateError) return false;
+        throw e;
+    }
+}
+
+/**
+ * Async version of Array.filter.
+ * If one of the promises rejects, the whole operation will reject.
+ * @param values
+ * @param predicate
+ */
+export async function asyncFilter<T>(values: Array<T>, predicate: (value: T) => Promise<boolean>): Promise<Array<T>> {
+    const results = await Promise.all(values.map(predicate));
+    return values.filter((_, i) => results[i]);
 }
 
 export function filterBoolean<T>(values: Array<T | null | undefined>): T[] {

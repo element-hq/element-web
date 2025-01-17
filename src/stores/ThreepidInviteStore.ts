@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -99,7 +99,7 @@ export default class ThreepidInviteStore extends EventEmitter {
 
     private generateIdOf(persisted: IPersistedThreepidInvite): string {
         // Use a consistent "hash" to form an ID.
-        return base32.stringify(Buffer.from(JSON.stringify(persisted)));
+        return base32.stringify(new TextEncoder().encode(JSON.stringify(persisted)));
     }
 
     private translateInvite(persisted: IPersistedThreepidInvite): IThreepidInvite {

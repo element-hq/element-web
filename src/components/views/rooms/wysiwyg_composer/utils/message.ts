@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022, 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -39,7 +39,7 @@ export interface SendMessageParams {
     mxClient: MatrixClient;
     relation?: IEventRelation;
     replyToEvent?: MatrixEvent;
-    roomContext: IRoomState;
+    roomContext: Pick<IRoomState, "timelineRenderingType" | "room">;
 }
 
 export async function sendMessage(
@@ -177,7 +177,7 @@ export async function sendMessage(
 
 interface EditMessageParams {
     mxClient: MatrixClient;
-    roomContext: IRoomState;
+    roomContext: Pick<IRoomState, "timelineRenderingType">;
     editorStateTransfer: EditorStateTransfer;
 }
 

@@ -3,7 +3,7 @@ Copyright 2024 New Vector Ltd.
 Copyright 2018-2023 The Matrix.org Foundation C.I.C.
 Copyright 2022 Michael Telatynski <7t3chguy@gmail.com>
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -22,7 +22,6 @@ import { AccountDataExplorer, RoomAccountDataExplorer } from "./devtools/Account
 import SettingsFlag from "../elements/SettingsFlag";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import ServerInfo from "./devtools/ServerInfo";
-import { Features } from "../../../settings/Settings";
 import CopyableText from "../elements/CopyableText";
 import RoomNotifications from "./devtools/RoomNotifications";
 
@@ -100,7 +99,6 @@ const DevtoolsDialog: React.FC<IProps> = ({ roomId, threadRootId, onFinished }) 
                     <SettingsFlag name="developerMode" level={SettingLevel.ACCOUNT} />
                     <SettingsFlag name="showHiddenEventsInTimeline" level={SettingLevel.DEVICE} />
                     <SettingsFlag name="enableWidgetScreenshots" level={SettingLevel.ACCOUNT} />
-                    <SettingsFlag name={Features.VoiceBroadcastForceSmallChunks} level={SettingLevel.DEVICE} />
                 </div>
             </BaseTool>
         );

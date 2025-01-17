@@ -4,7 +4,7 @@ Copyright 2019-2023 The Matrix.org Foundation C.I.C.
 Copyright 2019 New Vector Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -28,11 +28,11 @@ import {
     ReplyIcon,
     DeleteIcon,
     RestartIcon,
+    ThreadsIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { Icon as EditIcon } from "../../../../res/img/element-icons/room/message-bar/edit.svg";
 import { Icon as EmojiIcon } from "../../../../res/img/element-icons/room/message-bar/emoji.svg";
-import { Icon as ThreadIcon } from "../../../../res/img/element-icons/message/thread.svg";
 import { Icon as ExpandMessageIcon } from "../../../../res/img/element-icons/expand-message.svg";
 import { Icon as CollapseMessageIcon } from "../../../../res/img/element-icons/collapse-message.svg";
 import type { Relations } from "matrix-js-sdk/src/matrix";
@@ -58,7 +58,6 @@ import { ALTERNATE_KEY_NAME } from "../../../accessibility/KeyboardShortcuts";
 import { Action } from "../../../dispatcher/actions";
 import { ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import { GetRelationsForEvent, IEventTileType } from "../rooms/EventTile";
-import { VoiceBroadcastInfoEventType } from "../../../voice-broadcast/types";
 import { ButtonEvent } from "../elements/AccessibleButton";
 import PinningUtils from "../../../utils/PinningUtils";
 import PosthogTrackers from "../../../PosthogTrackers.ts";
@@ -243,7 +242,7 @@ const ReplyInThreadButton: React.FC<IReplyInThreadButton> = ({ mxEvent }) => {
             onContextMenu={onClick}
             placement="left"
         >
-            <ThreadIcon />
+            <ThreadsIcon />
         </RovingAccessibleButton>
     );
 };
@@ -262,7 +261,7 @@ interface IMessageActionBarProps {
 
 export default class MessageActionBar extends React.PureComponent<IMessageActionBarProps> {
     public static contextType = RoomContext;
-    public declare context: React.ContextType<typeof RoomContext>;
+    declare public context: React.ContextType<typeof RoomContext>;
 
     public componentDidMount(): void {
         if (this.props.mxEvent.status && this.props.mxEvent.status !== EventStatus.SENT) {
@@ -354,8 +353,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
              * until cross-platform support
              * (PSF-1041)
              */
-            !M_BEACON_INFO.matches(this.props.mxEvent.getType()) &&
-            !(this.props.mxEvent.getType() === VoiceBroadcastInfoEventType);
+            !M_BEACON_INFO.matches(this.props.mxEvent.getType());
 
         return inNotThreadTimeline && isAllowedMessageType;
     }
@@ -437,7 +435,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                 <RovingAccessibleButton
                     className="mx_MessageActionBar_iconButton"
                     title={isPinned ? _t("action|unpin") : _t("action|pin")}
-                    onClick={(e) => this.onPinClick(e, isPinned)}
+                    onClick={(e: ButtonEvent) => this.onPinClick(e, isPinned)}
                     onContextMenu={(e: ButtonEvent) => this.onPinClick(e, isPinned)}
                     key="pin"
                     placement="left"

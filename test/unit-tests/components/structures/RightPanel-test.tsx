@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -91,7 +91,7 @@ describe("RightPanel", () => {
             if (name !== "RightPanel.phases") return realGetValue(name, roomId);
             if (roomId === "r1") {
                 return {
-                    history: [{ phase: RightPanelPhases.RoomMemberList }],
+                    history: [{ phase: RightPanelPhases.MemberList }],
                     isOpen: true,
                 };
             }
@@ -123,8 +123,8 @@ describe("RightPanel", () => {
         await rpsUpdated;
         await waitFor(() => expect(screen.queryByTestId("spinner")).not.toBeInTheDocument());
 
-        // room one will be in the RoomMemberList phase - confirm this is rendered
-        expect(container.getElementsByClassName("mx_MemberList")).toHaveLength(1);
+        // room one will be in the MemberList phase - confirm this is rendered
+        expect(container.getElementsByClassName("mx_MemberListView")).toHaveLength(1);
 
         // wait for RPS room 2 updates to fire, then rerender
         const _rpsUpdated = waitForRpsUpdate();
@@ -146,7 +146,7 @@ describe("RightPanel", () => {
         // the correct right panel state for whichever room we are showing, so we
         // confirm we do not have the MemberList class on the page and that we have
         // the expected room title
-        expect(container.getElementsByClassName("mx_MemberList")).toHaveLength(0);
+        expect(container.getElementsByClassName("mx_MemberListView")).toHaveLength(0);
         expect(screen.getByRole("heading", { name: "r2" })).toBeInTheDocument();
     });
 });

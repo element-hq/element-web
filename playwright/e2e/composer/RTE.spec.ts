@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022, 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -79,9 +79,8 @@ test.describe("Composer", () => {
                     // Enter some more text, then send the message
                     await page.getByRole("textbox").pressSequentially("this is the spoiler text ");
                     await page.getByRole("button", { name: "Send message" }).click();
-                    // Check that a spoiler item has appeared in the timeline and locator the spoiler command text
-                    await expect(page.locator("button.mx_EventTile_spoiler")).toBeVisible();
-                    await expect(page.getByText("this is the spoiler text")).toBeVisible();
+                    // Check that a spoiler item has appeared in the timeline and contains the spoiler text
+                    await expect(page.locator("button.mx_EventTile_spoiler")).toHaveText("this is the spoiler text");
                 });
             });
         });
@@ -166,7 +165,7 @@ test.describe("Composer", () => {
             // Type another
             await page.locator("div[contenteditable=true]").pressSequentially("my message 1");
             // Send message
-            page.locator("div[contenteditable=true]").press("Enter");
+            await page.locator("div[contenteditable=true]").press("Enter");
             // It was sent
             await expect(page.locator(".mx_EventTile_last .mx_EventTile_body").getByText("my message 1")).toBeVisible();
         });

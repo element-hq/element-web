@@ -477,9 +477,7 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
 
 exports[`ThreadsActivityCentre should render the release announcement 1`] = `
 <body>
-  <div
-    data-floating-ui-inert=""
-  >
+  <div>
     <div
       class="mx_ThreadsActivityCentre_container"
     >
@@ -491,6 +489,7 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
         aria-label="Threads"
         aria-labelledby=":rc:"
         class="_icon-button_bh2qc_17 mx_ThreadsActivityCentreButton"
+        data-floating-ui-inert=""
         role="button"
         style="--cpd-icon-button-size: 32px;"
         tabindex="0"
@@ -515,6 +514,7 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
       </button>
       <span
         aria-hidden="true"
+        data-floating-ui-inert=""
         style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
         tabindex="-1"
       />
@@ -527,6 +527,7 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
       />
       <span
         aria-owns=":rh:"
+        data-floating-ui-inert=""
         style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
       />
       <span
@@ -585,7 +586,6 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
   >
     <span
       data-floating-ui-focus-guard=""
-      data-floating-ui-inert=""
       data-type="inside"
       role="button"
       style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"
@@ -648,7 +648,6 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
     </div>
     <span
       data-floating-ui-focus-guard=""
-      data-floating-ui-inert=""
       data-type="inside"
       role="button"
       style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"

@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -34,6 +34,7 @@ interface Props {
     onSignOutCurrentDevice: () => void;
     signOutAllOtherSessions?: () => void;
     saveDeviceName: (deviceName: string) => Promise<void>;
+    delegatedAuthAccountUrl?: string;
 }
 
 type CurrentDeviceSectionHeadingProps = Pick<
@@ -90,6 +91,7 @@ const CurrentDeviceSection: React.FC<Props> = ({
     onSignOutCurrentDevice,
     signOutAllOtherSessions,
     saveDeviceName,
+    delegatedAuthAccountUrl,
 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
@@ -126,6 +128,8 @@ const CurrentDeviceSection: React.FC<Props> = ({
                             onSignOutDevice={onSignOutCurrentDevice}
                             saveDeviceName={saveDeviceName}
                             className="mx_CurrentDeviceSection_deviceDetails"
+                            delegatedAuthAccountUrl={delegatedAuthAccountUrl}
+                            isCurrentDevice
                         />
                     ) : (
                         <>

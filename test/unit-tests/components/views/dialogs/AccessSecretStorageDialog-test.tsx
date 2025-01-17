@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020-2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -121,5 +121,35 @@ describe("AccessSecretStorageDialog", () => {
         ).resolves.toBeInTheDocument();
 
         expect(screen.getByPlaceholderText("Security Phrase")).toHaveFocus();
+    });
+
+    it("Can reset secret storage", async () => {
+        jest.spyOn(mockClient.secretStorage, "checkKey").mockResolvedValue(true);
+
+        const onFinished = jest.fn();
+        const checkPrivateKey = jest.fn().mockResolvedValue(true);
+        renderComponent({ onFinished, checkPrivateKey });
+
+        await userEvent.click(screen.getByText("Reset all"), { delay: null });
+
+        // It will prompt the user to confirm resetting
+        expect(screen.getByText("Reset everything")).toBeInTheDocument();
+        await userEvent.click(screen.getByText("Reset"), { delay: null });
+
+        // Then it will prompt the user to create a key/passphrase
+        await screen.findByText("Set up Secure Backup");
+        document.execCommand = jest.fn().mockReturnValue(true);
+        jest.spyOn(mockClient.getCrypto()!, "createRecoveryKeyFromPassphrase").mockResolvedValue({
+            privateKey: new Uint8Array(),
+            encodedPrivateKey: securityKey,
+        });
+        screen.getByRole("button", { name: "Continue" }).click();
+
+        await screen.findByText(/Save your Security Key/);
+        screen.getByRole("button", { name: "Copy" }).click();
+        await screen.findByText("Copied!");
+        screen.getByRole("button", { name: "Continue" }).click();
+
+        await screen.findByText("Secure Backup successful");
     });
 });

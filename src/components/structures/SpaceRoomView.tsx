@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021, 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -208,7 +208,7 @@ const SpaceLanding: React.FC<{ space: Room }> = ({ space }) => {
     const storeIsShowingSpaceMembers = useCallback(
         () =>
             RightPanelStore.instance.isOpenForRoom(space.roomId) &&
-            RightPanelStore.instance.currentCardForRoom(space.roomId)?.phase === RightPanelPhases.SpaceMemberList,
+            RightPanelStore.instance.currentCardForRoom(space.roomId)?.phase === RightPanelPhases.MemberList,
         [space.roomId],
     );
     const isShowingMembers = useEventEmitterState(RightPanelStore.instance, UPDATE_EVENT, storeIsShowingSpaceMembers);
@@ -251,7 +251,7 @@ const SpaceLanding: React.FC<{ space: Room }> = ({ space }) => {
     }
 
     const onMembersClick = (): void => {
-        RightPanelStore.instance.setCard({ phase: RightPanelPhases.SpaceMemberList });
+        RightPanelStore.instance.setCard({ phase: RightPanelPhases.MemberList });
     };
 
     return (
@@ -597,7 +597,7 @@ const SpaceSetupPrivateInvite: React.FC<{
 
 export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
     public static contextType = MatrixClientContext;
-    public declare context: React.ContextType<typeof MatrixClientContext>;
+    declare public context: React.ContextType<typeof MatrixClientContext>;
 
     private dispatcherRef?: string;
 

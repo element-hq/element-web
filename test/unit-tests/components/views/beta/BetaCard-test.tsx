@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -14,13 +14,14 @@ import { shouldShowFeedback } from "../../../../../src/utils/Feedback";
 import BetaCard from "../../../../../src/components/views/beta/BetaCard";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { TranslationKey } from "../../../../../src/languageHandler";
+import { FeatureSettingKey } from "../../../../../src/settings/Settings.tsx";
 
 jest.mock("../../../../../src/utils/Feedback");
 jest.mock("../../../../../src/settings/SettingsStore");
 
 describe("<BetaCard />", () => {
     describe("Feedback prompt", () => {
-        const featureId = "featureId";
+        const featureId = "featureId" as FeatureSettingKey;
 
         beforeEach(() => {
             mocked(SettingsStore).getBetaInfo.mockReturnValue({

@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -16,7 +16,6 @@ import { CardContext } from "../right_panel/context";
 import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
-import RoomContext from "../../../contexts/RoomContext";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { Action } from "../../../dispatcher/actions";
 import { ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
@@ -24,6 +23,7 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { useUnreadNotifications } from "../../../hooks/useUnreadNotifications";
 import { notificationLevelToIndicator } from "../../../utils/notifications";
 import { EventPreviewTile, useEventPreview } from "./EventPreview.tsx";
+import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -31,7 +31,7 @@ interface IProps {
 }
 
 const ThreadSummary: React.FC<IProps> = ({ mxEvent, thread, ...props }) => {
-    const roomContext = useContext(RoomContext);
+    const roomContext = useScopedRoomContext("narrow");
     const cardContext = useContext(CardContext);
     const count = useTypedEventEmitterState(thread, ThreadEvent.Update, () => thread.length);
     const { level } = useUnreadNotifications(thread.room, thread.id);

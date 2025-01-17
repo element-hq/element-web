@@ -3,9 +3,12 @@ on:
     workflow_dispatch: {}
     schedule:
         - cron: "0 6 * * *" # Every day at 6am UTC
+permissions: {}
 jobs:
     update:
         runs-on: ubuntu-24.04
+        permissions:
+            pull-requests: write
         steps:
             - uses: actions/checkout@v4
 
@@ -14,13 +17,13 @@ jobs:
                   docker pull "$IMAGE"
                   INSPECT=$(docker inspect --format='{{index .RepoDigests 0}}' "$IMAGE")
                   DIGEST=${INSPECT#*@}
-                  sed -i "s/const DOCKER_TAG.*/const DOCKER_TAG = \"develop@$DIGEST\";/" playwright/plugins/homeserver/synapse/index.ts
+                  sed -i "s/const TAG.*/const TAG = \"develop@$DIGEST\";/" playwright/testcontainers/synapse.ts
               env:
                   IMAGE: ghcr.io/element-hq/synapse:develop
 
             - name: Create Pull Request
               id: cpr
-              uses: peter-evans/create-pull-request@5e914681df9dc83aa4e4905692ca88beb2f9e91f # v7
+              uses: peter-evans/create-pull-request@67ccf781d68cd99b580ae25a5c18a1cc84ffff1f # v7
               with:
                   token: ${{ secrets.ELEMENT_BOT_TOKEN }}
                   branch: actions/playwright-image-updates

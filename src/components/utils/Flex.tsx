@@ -2,12 +2,12 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { useEffect, useRef } from "react";
+import React, { useMemo } from "react";
 
 type FlexProps = {
     /**
@@ -64,15 +64,16 @@ export function Flex({
     children,
     ...props
 }: React.PropsWithChildren<FlexProps>): JSX.Element {
-    const ref = useRef<HTMLElement>();
+    const style = useMemo(
+        () => ({
+            "--mx-flex-display": display,
+            "--mx-flex-direction": direction,
+            "--mx-flex-align": align,
+            "--mx-flex-justify": justify,
+            "--mx-flex-gap": gap,
+        }),
+        [align, direction, display, gap, justify],
+    );
 
-    useEffect(() => {
-        ref.current!.style.setProperty(`--mx-flex-display`, display);
-        ref.current!.style.setProperty(`--mx-flex-direction`, direction);
-        ref.current!.style.setProperty(`--mx-flex-align`, align);
-        ref.current!.style.setProperty(`--mx-flex-justify`, justify);
-        ref.current!.style.setProperty(`--mx-flex-gap`, gap);
-    }, [align, direction, display, gap, justify]);
-
-    return React.createElement(as, { ...props, className: classNames("mx_Flex", className), ref }, children);
+    return React.createElement(as, { ...props, className: classNames("mx_Flex", className), style }, children);
 }

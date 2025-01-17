@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -11,10 +11,7 @@ import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { SdkContextClass } from "../../../src/contexts/SDKContext";
 import { OidcClientStore } from "../../../src/stores/oidc/OidcClientStore";
 import { UserProfilesStore } from "../../../src/stores/UserProfilesStore";
-import { VoiceBroadcastPreRecordingStore } from "../../../src/voice-broadcast";
 import { createTestClient } from "../../test-utils";
-
-jest.mock("../../../src/voice-broadcast/stores/VoiceBroadcastPreRecordingStore");
 
 describe("SdkContextClass", () => {
     let sdkContext = SdkContextClass.instance;
@@ -31,12 +28,6 @@ describe("SdkContextClass", () => {
     it("instance should always return the same instance", () => {
         const globalInstance = SdkContextClass.instance;
         expect(SdkContextClass.instance).toBe(globalInstance);
-    });
-
-    it("voiceBroadcastPreRecordingStore should always return the same VoiceBroadcastPreRecordingStore", () => {
-        const first = sdkContext.voiceBroadcastPreRecordingStore;
-        expect(first).toBeInstanceOf(VoiceBroadcastPreRecordingStore);
-        expect(sdkContext.voiceBroadcastPreRecordingStore).toBe(first);
     });
 
     it("userProfilesStore should raise an error without a client", () => {

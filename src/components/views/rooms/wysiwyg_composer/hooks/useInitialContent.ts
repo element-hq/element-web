@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -10,11 +10,11 @@ import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import { useMemo } from "react";
 
 import { useMatrixClientContext } from "../../../../../contexts/MatrixClientContext";
-import { useRoomContext } from "../../../../../contexts/RoomContext";
 import { parseEvent } from "../../../../../editor/deserialize";
 import { CommandPartCreator, Part } from "../../../../../editor/parts";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
+import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.tsx";
 
 function getFormattedContent(editorStateTransfer: EditorStateTransfer): string {
     return (
@@ -60,12 +60,12 @@ export function parseEditorStateTransfer(
 }
 
 export function useInitialContent(editorStateTransfer: EditorStateTransfer): string | undefined {
-    const roomContext = useRoomContext();
+    const { room } = useScopedRoomContext("room");
     const mxClient = useMatrixClientContext();
 
     return useMemo<string | undefined>(() => {
-        if (editorStateTransfer && roomContext.room && mxClient) {
-            return parseEditorStateTransfer(editorStateTransfer, roomContext.room, mxClient);
+        if (editorStateTransfer && room && mxClient) {
+            return parseEditorStateTransfer(editorStateTransfer, room, mxClient);
         }
-    }, [editorStateTransfer, roomContext, mxClient]);
+    }, [editorStateTransfer, room, mxClient]);
 }

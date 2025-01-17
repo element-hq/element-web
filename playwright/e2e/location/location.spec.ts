@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -10,7 +10,8 @@ import { Locator, Page } from "@playwright/test";
 
 import { test, expect } from "../../element-web-test";
 
-test.describe("Location sharing", () => {
+// Firefox headless lacks WebGL support https://bugzilla.mozilla.org/show_bug.cgi?id=1375585
+test.describe("Location sharing", { tag: "@no-firefox" }, () => {
     const selectLocationShareTypeOption = (page: Page, shareType: string): Locator => {
         return page.getByTestId(`share-location-option-${shareType}`);
     };
