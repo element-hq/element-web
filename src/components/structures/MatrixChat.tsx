@@ -1944,20 +1944,18 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         let context: AppTitleContext = {
             brand: SdkConfig.get().brand,
             syncError: extraContext?.syncState === SyncState.Error,
+            notificationsMuted: extraContext && extraContext.userNotificationLevel < NotificationLevel.Activity,
+            unreadNotificationCount: extraContext?.unreadNotificationCount,
         };
 
-        if (extraContext) {
-            if (this.state.currentRoomId) {
-                const client = MatrixClientPeg.get();
-                const room = client?.getRoom(this.state.currentRoomId);
-                context = {
-                    ...context,
-                    roomId: this.state.currentRoomId,
-                    roomName: room?.name,
-                    notificationsMuted: extraContext.userNotificationLevel < NotificationLevel.Activity,
-                    unreadNotificationCount: extraContext.unreadNotificationCount,
-                };
-            }
+        if (this.state.currentRoomId) {
+            const client = MatrixClientPeg.get();
+            const room = client?.getRoom(this.state.currentRoomId);
+            context = {
+                ...context,
+                roomId: this.state.currentRoomId,
+                roomName: room?.name,
+            };
         }
 
         const moduleTitle = ModuleRunner.instance.extensions.branding?.getAppTitle(context);
@@ -1968,13 +1966,15 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             return;
         }
 
+        // Use application default.
+
         let subtitle = "";
         if (context?.syncError) {
             subtitle += `[${_t("common|offline")}] `;
         }
-        if ('unreadNotificationCount' in context && context.unreadNotificationCount > 0) {
+        if (context.unreadNotificationCount !== undefined && context.unreadNotificationCount > 0) {
             subtitle += `[${context.unreadNotificationCount}]`;
-        } else if ('notificationsMuted' in context && !context.notificationsMuted) {
+        } else if (context.notificationsMuted !== undefined && !context.notificationsMuted) {
             subtitle += `*`;
         }
 
