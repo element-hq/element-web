@@ -50,10 +50,7 @@ export class OidcClientStore {
         } else {
             // We are not in OIDC Native mode, as we have no locally stored issuer. Check if the server delegates auth to OIDC.
             try {
-                const authIssuer = await this.matrixClient.getAuthIssuer();
-                const { accountManagementEndpoint, metadata } = await discoverAndValidateOIDCIssuerWellKnown(
-                    authIssuer.issuer,
-                );
+                const { accountManagementEndpoint, metadata } = await this.matrixClient.getAuthMetadata();
                 this.setAccountManagementEndpoint(accountManagementEndpoint, metadata.issuer);
             } catch (e) {
                 console.log("Auth issuer not found", e);
