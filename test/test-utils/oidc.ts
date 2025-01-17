@@ -18,6 +18,7 @@ export const makeDelegatedAuthConfig = (issuer = "https://auth.org/"): OidcClien
     const metadata = mockOpenIdConfiguration(issuer);
 
     return {
+        issuer,
         accountManagementEndpoint: issuer + "account",
         registrationEndpoint: metadata.registration_endpoint,
         authorizationEndpoint: metadata.authorization_endpoint,

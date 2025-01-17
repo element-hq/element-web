@@ -38,6 +38,7 @@ describe("OidcClientStore", () => {
 
         mocked(discoverAndValidateOIDCIssuerWellKnown).mockClear().mockResolvedValue({
             metadata,
+            issuer: metadata.issuer,
             accountManagementEndpoint: account,
             authorizationEndpoint: "authorization-endpoint",
             tokenEndpoint: "token-endpoint",
@@ -131,6 +132,7 @@ describe("OidcClientStore", () => {
         it("should set account management endpoint to issuer when not configured", async () => {
             mocked(discoverAndValidateOIDCIssuerWellKnown).mockClear().mockResolvedValue({
                 metadata,
+                issuer: metadata.issuer,
                 accountManagementEndpoint: undefined,
                 authorizationEndpoint: "authorization-endpoint",
                 tokenEndpoint: "token-endpoint",
