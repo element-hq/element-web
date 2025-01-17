@@ -50,8 +50,6 @@ export interface IConfigOptions {
         welcome_background_url?: string | string[]; // chosen at random if array
         auth_header_logo_url?: string;
         auth_footer_links?: { text: string; url: string }[];
-        title_template?: string;
-        title_template_in_room?: string;
     };
 
     force_verification?: boolean; // if true, users must verify new logins

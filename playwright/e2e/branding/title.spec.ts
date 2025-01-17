@@ -28,10 +28,6 @@ test.describe("Test with custom branding", () => {
     test.use({
         config: {
             brand: "TestBrand",
-            branding: {
-                title_template: "TestingApp $ignoredParameter $brand $status $ignoredParameter",
-                title_template_in_room: "TestingApp $brand $status $room_name $ignoredParameter",
-            },
         },
     });
     test("Shows custom branding when showing the home page", async ({ pageWithCredentials: page }) => {

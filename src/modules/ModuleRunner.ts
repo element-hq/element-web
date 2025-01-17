@@ -17,6 +17,10 @@ import {
     DefaultExperimentalExtensions,
     ProvideExperimentalExtensions,
 } from "@matrix-org/react-sdk-module-api/lib/lifecycles/ExperimentalExtensions";
+import {
+    ProvideBrandingExtensions,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/BrandingExtensions";
+
 
 import { AppModule } from "./AppModule";
 import { ModuleFactory } from "./ModuleFactory";
@@ -30,6 +34,7 @@ class ExtensionsManager {
     // Private backing fields for extensions
     private cryptoSetupExtension: ProvideCryptoSetupExtensions;
     private experimentalExtension: ProvideExperimentalExtensions;
+    private brandingExtension?: ProvideBrandingExtensions;
 
     /** `true` if `cryptoSetupExtension` is the default implementation; `false` if it is implemented by a module. */
     private hasDefaultCryptoSetupExtension = true;
@@ -68,6 +73,15 @@ class ExtensionsManager {
     }
 
     /**
+     * Provides branding extension.
+     *
+     * @returns The registered extension. If no module provides this extension, undefined is returned..
+     */
+    public get branding(): ProvideBrandingExtensions|undefined {
+        return this.brandingExtension;
+    }
+
+    /**
      * Add any extensions provided by the module.
      *
      * @param module - The appModule to check for extensions.
@@ -97,6 +111,16 @@ class ExtensionsManager {
             } else {
                 throw new Error(
                     `adding experimental extension implementation from module ${runtimeModule.moduleName} but an implementation was already provided.`,
+                );
+            }
+        }
+
+        if (runtimeModule.extensions?.branding) {
+            if (!this.brandingExtension) {
+                this.brandingExtension = runtimeModule.extensions?.branding;
+            } else {
+                throw new Error(
+                    `adding experimental branding implementation from module ${runtimeModule.moduleName} but an implementation was already provided.`,
                 );
             }
         }

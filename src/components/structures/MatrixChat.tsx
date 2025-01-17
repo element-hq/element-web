@@ -131,6 +131,7 @@ import { ConfirmSessionLockTheftView } from "./auth/ConfirmSessionLockTheftView"
 import { LoginSplashView } from "./auth/LoginSplashView";
 import { cleanUpDraftsIfRequired } from "../../DraftCleaner";
 import { InitialCryptoSetupStore } from "../../stores/InitialCryptoSetupStore";
+import { AppTitleContext } from "@matrix-org/react-sdk-module-api/lib/lifecycles/BrandingExtensions";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -223,17 +224,15 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private tokenLogin?: boolean;
     // What to focus on next component update, if anything
     private focusNext: FocusNextType;
-    private subTitleStatus: string;
     private prevWindowWidth: number;
-
-    private readonly titleTemplate: string;
-    private readonly titleTemplateInRoom: string;
 
     private readonly loggedInView = createRef<LoggedInViewType>();
     private dispatcherRef?: string;
     private themeWatcher?: ThemeWatcher;
     private fontWatcher?: FontWatcher;
     private readonly stores: SdkContextClass;
+
+    private subtitleContext?: {unreadNotificationCount: number, userNotificationLevel: NotificationLevel, syncState: SyncState};
 
     public constructor(props: IProps) {
         super(props);
@@ -278,13 +277,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
 
         this.prevWindowWidth = UIStore.instance.windowWidth || 1000;
-
-        // object field used for tracking the status info appended to the title tag.
-        // we don't do it as react state as i'm scared about triggering needless react refreshes.
-        this.subTitleStatus = "";
-
-        this.titleTemplate = props.config.branding?.title_template ?? "$brand $status";
-        this.titleTemplateInRoom = props.config.branding?.title_template_in_room ?? "$brand $status | $room_name";
     }
 
     /**
@@ -1109,7 +1101,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
         this.setStateForNewView({
             view: Views.WELCOME,
-            currentRoomId: null,
         });
         this.notifyNewScreen("welcome");
         ThemeController.isLogin = true;
@@ -1119,7 +1110,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private viewLogin(otherState?: any): void {
         this.setStateForNewView({
             view: Views.LOGIN,
-            currentRoomId: null,
             ...otherState,
         });
         this.notifyNewScreen("login");
@@ -1482,7 +1472,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             collapseLhs: false,
             currentRoomId: null,
         });
-        this.subTitleStatus = "";
+        this.subtitleContext = undefined;
         this.setPageSubtitle();
         this.stores.onLoggedOut();
     }
@@ -1498,7 +1488,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             collapseLhs: false,
             currentRoomId: null,
         });
-        this.subTitleStatus = "";
+        this.subtitleContext = undefined;
         this.setPageSubtitle();
     }
 
@@ -1950,33 +1940,56 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     private setPageSubtitle(): void {
-        const params: {
-            $brand: string;
-            $status: string;
-            $room_name: string | undefined;
-        } = {
-            $brand: SdkConfig.get().brand,
-            $status: this.subTitleStatus,
-            $room_name: undefined,
+        const extraContext = this.subtitleContext;
+        let context: AppTitleContext = {
+            brand: SdkConfig.get().brand,
+            syncError: extraContext?.syncState === SyncState.Error,
         };
 
-        if (this.state.currentRoomId) {
-            const client = MatrixClientPeg.get();
-            const room = client?.getRoom(this.state.currentRoomId);
-            if (room) {
-                params.$room_name = room.name;
+        if (extraContext) {
+            if (this.state.currentRoomId) {
+                const client = MatrixClientPeg.get();
+                const room = client?.getRoom(this.state.currentRoomId);
+                context = {
+                    ...context,
+                    roomId: this.state.currentRoomId,
+                    roomName: room?.name,
+                    notificationsMuted: extraContext.userNotificationLevel < NotificationLevel.Activity,
+                    unreadNotificationCount: extraContext.unreadNotificationCount,
+                };
             }
         }
 
-        const titleTemplate = params.$room_name ? this.titleTemplateInRoom : this.titleTemplate;
+        const moduleTitle = ModuleRunner.instance.extensions.branding?.getAppTitle(context);
+        if (moduleTitle) {
+            if (document.title !== moduleTitle) {
+                document.title = moduleTitle;
+            }
+            return;
+        }
 
-        const title = Object.entries(params).reduce(
-            (title: string, [key, value]) => title.replaceAll(key, (value ?? "").replaceAll("$", "$_DLR$")),
-            titleTemplate,
-        );
+        let subtitle = "";
+        if (context?.syncError) {
+            subtitle += `[${_t("common|offline")}] `;
+        }
+        if ('unreadNotificationCount' in context && context.unreadNotificationCount > 0) {
+            subtitle += `[${context.unreadNotificationCount}]`;
+        } else if ('notificationsMuted' in context && !context.notificationsMuted) {
+            subtitle += `*`;
+        }
+
+        if ('roomId' in context && context.roomId) {
+            if (context.roomName) {
+                subtitle = `${subtitle} | ${context.roomName}`;
+            }
+        } else {
+            subtitle = subtitle;
+        }
+
+        const title = `${SdkConfig.get().brand} ${subtitle}`;
 
         if (document.title !== title) {
-            document.title = title.replaceAll("$_DLR$", "$");
+            document.title = title;
         }
     }
 
@@ -1987,17 +2000,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             PlatformPeg.get()!.setErrorStatus(state === SyncState.Error);
             PlatformPeg.get()!.setNotificationCount(numUnreadRooms);
         }
-
-        this.subTitleStatus = "";
-        if (state === SyncState.Error) {
-            this.subTitleStatus += `[${_t("common|offline")}] `;
-        }
-        if (numUnreadRooms > 0) {
-            this.subTitleStatus += `[${numUnreadRooms}]`;
-        } else if (notificationState.level >= NotificationLevel.Activity) {
-            this.subTitleStatus += `*`;
-        }
-
+        this.subtitleContext = {
+            syncState: state,
+            userNotificationLevel: notificationState.level,
+            unreadNotificationCount: numUnreadRooms,
+        };
         this.setPageSubtitle();
     };
 

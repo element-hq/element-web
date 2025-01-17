@@ -212,19 +212,6 @@ Starting with `branding`, the following subproperties are available:
 3. `auth_footer_links`: A list of links to add to the footer during login, registration, etc. Each entry must have a `text` and
    `url` property.
 
-4. `title_template`: A template string that can be used to configure the title of the application when not viewing a room.
-5. `title_template_in_room`: A template string that can be used to configure the title of the application when viewing a room
-
-#### `title_template` vars
-
-- `$brand` The name of the web app, as configured by the `brand` config value.
-- `$room_name` The friendly name of a room. Only applicable to `title_template_in_room`.
-- `$status` The client's status, repesented as.
-    - The notification count, when at least one room is unread.
-    - "\*" when no rooms are unread, but notifications are not muted.
-    - "Offline", when the client is offline.
-    - "", when the client isn't logged in or notifications are muted.
-
 `embedded_pages` can be configured as such:
 
 1. `welcome_url`: A URL to an HTML page to show as a welcome page (landing on `#/welcome`). When not specified, the default
