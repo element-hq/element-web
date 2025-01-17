@@ -2379,7 +2379,7 @@
         "all_rooms_home_description": "Alle Räume, denen du beigetreten bist, werden auf der Startseite erscheinen.",
         "always_show_message_timestamps": "Nachrichtenzeitstempel immer anzeigen",
         "appearance": {
-            "bundled_emoji_font": "Verwenden Sie den mitgelieferten Emoji Font.",
+            "bundled_emoji_font": "Mitgelieferte Emoji-Schriftart verwenden",
             "compact_layout": "Kompakten Text und Nachrichten anzeigen",
             "compact_layout_description": "Um diese Funktion nutzen zu können, muss das moderne Nachrichtenlayout ausgewählt sein.",
             "custom_font": "Systemschriftart verwenden",
