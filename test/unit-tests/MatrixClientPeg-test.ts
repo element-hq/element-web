@@ -80,10 +80,17 @@ describe("MatrixClientPeg", () => {
 
         it("should initialise the rust crypto library by default", async () => {
             const mockInitRustCrypto = jest.spyOn(testPeg.safeGet(), "initRustCrypto").mockResolvedValue(undefined);
+            const mockStartDehydration = jest.fn();
+            jest.spyOn(testPeg.safeGet(), "getCrypto").mockReturnValue({
+                isDehydrationSupported: jest.fn().mockResolvedValue(true),
+                startDehydration: mockStartDehydration,
+                setDeviceIsolationMode: jest.fn(),
+            } as any);
 
             const cryptoStoreKey = new Uint8Array([1, 2, 3, 4]);
             await testPeg.start({ rustCryptoStoreKey: cryptoStoreKey });
             expect(mockInitRustCrypto).toHaveBeenCalledWith({ storageKey: cryptoStoreKey });
+            expect(mockStartDehydration).toHaveBeenCalledWith({ onlyIfKeyCached: true, rehydrate: false });
         });
 
         it("Should migrate existing login", async () => {

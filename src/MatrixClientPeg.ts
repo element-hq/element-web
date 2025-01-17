@@ -340,7 +340,16 @@ class MatrixClientPegClass implements IMatrixClientPeg {
 
         setDeviceIsolationMode(this.matrixClient, SettingsStore.getValue("feature_exclude_insecure_devices"));
 
-        // TODO: device dehydration and whathaveyou
+        // Start dehydration. This code is only for the case where the client
+        // gets restarted, so we only do this if we already have the dehydration
+        // key cached, and we don't have to try to rehydrate a device. If this
+        // is a new login, we will start dehydration after Secret Storage is
+        // unlocked.
+        const crypto = this.matrixClient.getCrypto();
+        if (await crypto?.isDehydrationSupported()) {
+            await crypto!.startDehydration({ onlyIfKeyCached: true, rehydrate: false });
+        }
+
         return;
     }
 
