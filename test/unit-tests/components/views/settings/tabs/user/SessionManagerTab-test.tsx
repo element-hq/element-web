@@ -57,7 +57,7 @@ import SettingsStore from "../../../../../../../src/settings/SettingsStore";
 import { getClientInformationEventType } from "../../../../../../../src/utils/device/clientInformation";
 import { SDKContext, SdkContextClass } from "../../../../../../../src/contexts/SDKContext";
 import { OidcClientStore } from "../../../../../../../src/stores/oidc/OidcClientStore";
-import { makeDelegatedAuthConfig, mockOpenIdConfiguration } from "../../../../../../test-utils/oidc";
+import { makeDelegatedAuthConfig } from "../../../../../../test-utils/oidc";
 import MatrixClientContext from "../../../../../../../src/contexts/MatrixClientContext";
 
 mockPlatformPeg();
@@ -215,7 +215,7 @@ describe("<SessionManagerTab />", () => {
             getPushers: jest.fn(),
             setPusher: jest.fn(),
             setLocalNotificationSettings: jest.fn(),
-            getAuthMetadata: jest.fn().mockResolvedValue(makeDelegatedAuthConfig()),
+            getAuthMetadata: jest.fn().mockRejectedValue(new MatrixError({ errcode: "M_UNRECOGNIZED" }, 404)),
         });
         jest.clearAllMocks();
         jest.spyOn(logger, "error").mockRestore();
@@ -1615,7 +1615,6 @@ describe("<SessionManagerTab />", () => {
     describe("MSC4108 QR code login", () => {
         const settingsValueSpy = jest.spyOn(SettingsStore, "getValue");
         const issuer = "https://issuer.org";
-        const openIdConfiguration = mockOpenIdConfiguration(issuer);
 
         beforeEach(() => {
             settingsValueSpy.mockClear().mockReturnValue(true);
@@ -1631,16 +1630,16 @@ describe("<SessionManagerTab />", () => {
                     enabled: true,
                 },
             });
-            mockClient.getAuthIssuer.mockResolvedValue({ issuer });
-            mockCrypto.exportSecretsBundle = jest.fn();
-            fetchMock.mock(`${issuer}/.well-known/openid-configuration`, {
-                ...openIdConfiguration,
+            const delegatedAuthConfig = makeDelegatedAuthConfig(issuer);
+            mockClient.getAuthMetadata.mockResolvedValue({
+                ...delegatedAuthConfig,
                 grant_types_supported: [
-                    ...openIdConfiguration.grant_types_supported,
+                    ...delegatedAuthConfig.grant_types_supported,
                     "urn:ietf:params:oauth:grant-type:device_code",
                 ],
             });
-            fetchMock.mock(openIdConfiguration.jwks_uri!, {
+            mockCrypto.exportSecretsBundle = jest.fn();
+            fetchMock.mock(delegatedAuthConfig.jwks_uri!, {
                 status: 200,
                 headers: {
                     "Content-Type": "application/json",

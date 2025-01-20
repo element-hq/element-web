@@ -241,7 +241,10 @@ describe("OidcClientStore", () => {
         });
 
         it("should resolve account management endpoint", async () => {
-            mockClient.getAuthMetadata.mockResolvedValue(authConfig);
+            mockClient.getAuthMetadata.mockResolvedValue({
+                ...authConfig,
+                account_management_uri: account,
+            });
             const store = new OidcClientStore(mockClient);
             await store.readyPromise;
             expect(store.accountManagementEndpoint).toBe(account);
