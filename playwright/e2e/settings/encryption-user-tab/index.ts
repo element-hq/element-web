@@ -68,6 +68,13 @@ class Helpers {
     }
 
     /**
+     * Get the recovery section
+     */
+    getEncryptionRecoverySection() {
+        return this.page.getByTestId("recoveryPanel");
+    }
+
+    /**
      * Set the default key id of the secret storage to `null`
      */
     async removeSecretStorageDefaultKeyId() {

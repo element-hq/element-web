@@ -106,6 +106,7 @@ export function RecoveryPanel({ onChangeRecoveryKeyClick }: RecoveryPanelProps):
                 />
             }
             subHeading={<Subheader state={state} />}
+            data-testid="recoveryPanel"
         >
             {content}
         </SettingsSection>
