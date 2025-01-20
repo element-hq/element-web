@@ -61,10 +61,7 @@ describe("OIDC authorization", () => {
     });
 
     beforeAll(() => {
-        fetchMock.get(
-            `${delegatedAuthConfig.metadata.issuer}.well-known/openid-configuration`,
-            delegatedAuthConfig.metadata,
-        );
+        fetchMock.get(`${delegatedAuthConfig.issuer}.well-known/openid-configuration`, delegatedAuthConfig);
     });
 
     afterAll(() => {

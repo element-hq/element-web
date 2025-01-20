@@ -25,7 +25,7 @@ jest.mock("matrix-js-sdk/src/matrix", () => ({
 describe("OidcClientStore", () => {
     const clientId = "test-client-id";
     const authConfig = makeDelegatedAuthConfig();
-    const account = authConfig.metadata.issuer + "account";
+    const account = authConfig.issuer + "account";
 
     const mockClient = getMockClientWithEventEmitter({
         getAuthMetadata: jest.fn(),
@@ -34,19 +34,20 @@ describe("OidcClientStore", () => {
     beforeEach(() => {
         localStorage.clear();
         localStorage.setItem("mx_oidc_client_id", clientId);
-        localStorage.setItem("mx_oidc_token_issuer", authConfig.metadata.issuer);
+        localStorage.setItem("mx_oidc_token_issuer", authConfig.issuer);
 
-        mocked(discoverAndValidateOIDCIssuerWellKnown).mockClear().mockResolvedValue({
-            metadata: authConfig.metadata,
-            issuer: authConfig.metadata.issuer,
-            accountManagementEndpoint: account,
-            authorizationEndpoint: "authorization-endpoint",
-            tokenEndpoint: "token-endpoint",
-        });
+        mocked(discoverAndValidateOIDCIssuerWellKnown)
+            .mockClear()
+            .mockResolvedValue({
+                ...authConfig,
+                account_management_uri: account,
+                authorization_endpoint: "authorization-endpoint",
+                token_endpoint: "token-endpoint",
+            });
         jest.spyOn(logger, "error").mockClear();
 
-        fetchMock.get(`${authConfig.metadata.issuer}.well-known/openid-configuration`, authConfig.metadata);
-        fetchMock.get(`${authConfig.metadata.issuer}jwks`, { keys: [] });
+        fetchMock.get(`${authConfig.issuer}.well-known/openid-configuration`, authConfig);
+        fetchMock.get(`${authConfig.issuer}jwks`, { keys: [] });
         mockPlatformPeg();
     });
 
@@ -117,7 +118,7 @@ describe("OidcClientStore", () => {
             const client = await store.getOidcClient();
 
             expect(client?.settings.client_id).toEqual(clientId);
-            expect(client?.settings.authority).toEqual(authConfig.metadata.issuer);
+            expect(client?.settings.authority).toEqual(authConfig.issuer);
         });
 
         it("should set account management endpoint when configured", async () => {
@@ -130,18 +131,19 @@ describe("OidcClientStore", () => {
         });
 
         it("should set account management endpoint to issuer when not configured", async () => {
-            mocked(discoverAndValidateOIDCIssuerWellKnown).mockClear().mockResolvedValue({
-                metadata: authConfig.metadata,
-                issuer: authConfig.metadata.issuer,
-                accountManagementEndpoint: undefined,
-                authorizationEndpoint: "authorization-endpoint",
-                tokenEndpoint: "token-endpoint",
-            });
+            mocked(discoverAndValidateOIDCIssuerWellKnown)
+                .mockClear()
+                .mockResolvedValue({
+                    ...authConfig,
+                    account_management_uri: undefined,
+                    authorization_endpoint: "authorization-endpoint",
+                    token_endpoint: "token-endpoint",
+                });
             const store = new OidcClientStore(mockClient);
 
             await store.readyPromise;
 
-            expect(store.accountManagementEndpoint).toEqual(authConfig.metadata.issuer);
+            expect(store.accountManagementEndpoint).toEqual(authConfig.issuer);
         });
 
         it("should reuse initialised oidc client", async () => {
@@ -177,7 +179,7 @@ describe("OidcClientStore", () => {
 
             fetchMock.resetHistory();
             fetchMock.post(
-                authConfig.metadata.revocation_endpoint,
+                authConfig.revocation_endpoint,
                 {
                     status: 200,
                 },
@@ -199,7 +201,7 @@ describe("OidcClientStore", () => {
 
             await store.revokeTokens(accessToken, refreshToken);
 
-            expect(fetchMock).toHaveFetchedTimes(2, authConfig.metadata.revocation_endpoint);
+            expect(fetchMock).toHaveFetchedTimes(2, authConfig.revocation_endpoint);
             expect(OidcClient.prototype.revokeToken).toHaveBeenCalledWith(accessToken, "access_token");
             expect(OidcClient.prototype.revokeToken).toHaveBeenCalledWith(refreshToken, "refresh_token");
         });
@@ -208,14 +210,14 @@ describe("OidcClientStore", () => {
             // fail once, then succeed
             fetchMock
                 .postOnce(
-                    authConfig.metadata.revocation_endpoint,
+                    authConfig.revocation_endpoint,
                     {
                         status: 404,
                     },
                     { overwriteRoutes: true, sendAsJson: true },
                 )
                 .post(
-                    authConfig.metadata.revocation_endpoint,
+                    authConfig.revocation_endpoint,
                     {
                         status: 200,
                     },
@@ -228,7 +230,7 @@ describe("OidcClientStore", () => {
                 "Failed to revoke tokens",
             );
 
-            expect(fetchMock).toHaveFetchedTimes(2, authConfig.metadata.revocation_endpoint);
+            expect(fetchMock).toHaveFetchedTimes(2, authConfig.revocation_endpoint);
             expect(OidcClient.prototype.revokeToken).toHaveBeenCalledWith(accessToken, "access_token");
         });
     });

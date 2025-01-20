@@ -57,7 +57,7 @@ import SettingsStore from "../../../../../../../src/settings/SettingsStore";
 import { getClientInformationEventType } from "../../../../../../../src/utils/device/clientInformation";
 import { SDKContext, SdkContextClass } from "../../../../../../../src/contexts/SDKContext";
 import { OidcClientStore } from "../../../../../../../src/stores/oidc/OidcClientStore";
-import { mockOpenIdConfiguration } from "../../../../../../test-utils/oidc";
+import { makeDelegatedAuthConfig, mockOpenIdConfiguration } from "../../../../../../test-utils/oidc";
 import MatrixClientContext from "../../../../../../../src/contexts/MatrixClientContext";
 
 mockPlatformPeg();
@@ -215,7 +215,7 @@ describe("<SessionManagerTab />", () => {
             getPushers: jest.fn(),
             setPusher: jest.fn(),
             setLocalNotificationSettings: jest.fn(),
-            getAuthIssuer: jest.fn().mockReturnValue(new Promise(() => {})),
+            getAuthMetadata: jest.fn().mockResolvedValue(makeDelegatedAuthConfig()),
         });
         jest.clearAllMocks();
         jest.spyOn(logger, "error").mockRestore();

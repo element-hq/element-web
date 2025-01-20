@@ -158,24 +158,26 @@ describe("Registration", function () {
     describe("when delegated authentication is configured and enabled", () => {
         const authConfig = makeDelegatedAuthConfig();
         const clientId = "test-client-id";
-        // @ts-ignore
-        authConfig.metadata["prompt_values_supported"] = ["create"];
+        authConfig.prompt_values_supported = ["create"];
 
         beforeEach(() => {
             // mock a statically registered client to avoid dynamic registration
             SdkConfig.put({
                 oidc_static_clients: {
-                    [authConfig.metadata.issuer]: {
+                    [authConfig.issuer]: {
                         client_id: clientId,
                     },
                 },
             });
 
             fetchMock.get(`${defaultHsUrl}/_matrix/client/unstable/org.matrix.msc2965/auth_issuer`, {
-                issuer: authConfig.metadata.issuer,
+                issuer: authConfig.issuer,
             });
-            fetchMock.get("https://auth.org/.well-known/openid-configuration", authConfig.metadata);
-            fetchMock.get(authConfig.metadata.jwks_uri!, { keys: [] });
+            fetchMock.get("https://auth.org/.well-known/openid-configuration", {
+                ...authConfig,
+                signingKeys: undefined,
+            });
+            fetchMock.get(authConfig.jwks_uri!, { keys: [] });
         });
 
         it("should display oidc-native continue button", async () => {

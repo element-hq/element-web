@@ -50,8 +50,8 @@ export class OidcClientStore {
         } else {
             // We are not in OIDC Native mode, as we have no locally stored issuer. Check if the server delegates auth to OIDC.
             try {
-                const { accountManagementEndpoint, metadata } = await this.matrixClient.getAuthMetadata();
-                this.setAccountManagementEndpoint(accountManagementEndpoint, metadata.issuer);
+                const authMetadata = await this.matrixClient.getAuthMetadata();
+                this.setAccountManagementEndpoint(authMetadata.account_management_uri, authMetadata.issuer);
             } catch (e) {
                 console.log("Auth issuer not found", e);
             }
@@ -150,14 +150,11 @@ export class OidcClientStore {
 
         try {
             const clientId = getStoredOidcClientId();
-            const { accountManagementEndpoint, metadata, signingKeys } = await discoverAndValidateOIDCIssuerWellKnown(
-                this.authenticatedIssuer,
-            );
-            this.setAccountManagementEndpoint(accountManagementEndpoint, metadata.issuer);
+            const authMetadata = await discoverAndValidateOIDCIssuerWellKnown(this.authenticatedIssuer);
+            this.setAccountManagementEndpoint(authMetadata.account_management_uri, authMetadata.issuer);
             this.oidcClient = new OidcClient({
-                ...metadata,
-                authority: metadata.issuer,
-                signingKeys,
+                authority: authMetadata.issuer,
+                signingKeys: authMetadata.signingKeys ?? undefined,
                 redirect_uri: PlatformPeg.get()!.getOidcCallbackUrl().href,
                 client_id: clientId,
             });
