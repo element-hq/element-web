@@ -49,7 +49,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
              * joined and invited members.
              */
             return 2;
-        } else if (index === totalRows) {
+        } else if (totalRows && index === totalRows) {
             /**
              * The empty spacer div rendered at the bottom should
              * have a height of 32px.

@@ -14,7 +14,8 @@ import { E2EIconView } from "./common/E2EIconView";
 import AvatarPresenceIconView from "./common/PresenceIconView";
 import BaseAvatar from "../../../avatars/BaseAvatar";
 import { _t } from "../../../../../languageHandler";
-import { MemberTileLayout } from "./common/MemberTileLayout";
+import { MemberTileView } from "./common/MemberTileView";
+import { InvitedIconView } from "./common/InvitedIconView";
 
 interface IProps {
     member: RoomMember;
@@ -43,25 +44,23 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
         presenceJSX = <AvatarPresenceIconView presenceState={presenceState} />;
     }
 
-    let userLabelJSX;
-    if (vm.userLabel) {
-        userLabelJSX = <div className="mx_MemberTileView_user_label">{vm.userLabel}</div>;
-    }
-
-    let e2eIcon;
+    let iconJsx;
     if (vm.e2eStatus) {
-        e2eIcon = <E2EIconView status={vm.e2eStatus} />;
+        iconJsx = <E2EIconView status={vm.e2eStatus} />;
+    }
+    if (member.isInvite) {
+        iconJsx = <InvitedIconView isThreePid={false} />;
     }
 
     return (
-        <MemberTileLayout
+        <MemberTileView
             title={vm.title}
             onClick={vm.onClick}
             avatarJsx={av}
             presenceJsx={presenceJSX}
             nameJsx={nameJSX}
-            userLabelJsx={userLabelJSX}
-            e2eIconJsx={e2eIcon}
+            userLabel={vm.userLabel}
+            iconJsx={iconJsx}
         />
     );
 }
