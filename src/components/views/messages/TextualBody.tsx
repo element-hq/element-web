@@ -254,7 +254,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                         {after}
                     </>
                 );
-                this.reactRoots.render(newContent, container);
+                this.reactRoots.render(newContent, container, node);
 
                 node.parentNode?.replaceChild(container, node);
             } else if (node.childNodes && node.childNodes.length) {
