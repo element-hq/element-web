@@ -1,5 +1,5 @@
 module.exports = {
-    plugins: ["matrix-org"],
+    plugins: ["matrix-org", "eslint-plugin-react-compiler"],
     extends: ["plugin:matrix-org/babel", "plugin:matrix-org/react", "plugin:matrix-org/a11y"],
     parserOptions: {
         project: ["./tsconfig.json"],
@@ -170,6 +170,8 @@ module.exports = {
         "jsx-a11y/role-supports-aria-props": "off",
 
         "matrix-org/require-copyright-header": "error",
+
+        "react-compiler/react-compiler": "error",
     },
     overrides: [
         {
@@ -262,6 +264,7 @@ module.exports = {
 
                 // These are fine in tests
                 "no-restricted-globals": "off",
+                "react-compiler/react-compiler": "off",
             },
         },
         {

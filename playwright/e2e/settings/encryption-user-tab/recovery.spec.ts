@@ -6,13 +6,13 @@
  */
 
 import { GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
-import { Page } from "@playwright/test";
 
 import { test, expect } from ".";
 import {
     checkDeviceIsConnectedKeyBackup,
     checkDeviceIsCrossSigned,
     createBot,
+    deleteCachedSecrets,
     verifySession,
 } from "../../crypto/utils";
 
@@ -53,7 +53,7 @@ test.describe("Recovery section in Encryption tab", () => {
 
     test(
         "should change the recovery key",
-        { tag: "@screenshot" },
+        { tag: ["@screenshot", "@no-webkit"] },
         async ({ page, app, homeserver, credentials, util, context }) => {
             await verifySession(app, "new passphrase");
             const dialog = await util.openEncryptionTab();
@@ -81,7 +81,7 @@ test.describe("Recovery section in Encryption tab", () => {
         },
     );
 
-    test("should setup the recovery key", { tag: "@screenshot" }, async ({ page, app, util }) => {
+    test("should setup the recovery key", { tag: ["@screenshot", "@no-webkit"] }, async ({ page, app, util }) => {
         await verifySession(app, "new passphrase");
         await util.removeSecretStorageDefaultKeyId();
 
@@ -154,25 +154,3 @@ test.describe("Recovery section in Encryption tab", () => {
         },
     );
 });
-
-/**
- * Remove the cached secrets from the indexedDB
- * This is a workaround to simulate the case where the secrets are not cached.
- */
-async function deleteCachedSecrets(page: Page) {
-    await page.evaluate(async () => {
-        const removeCachedSecrets = new Promise((resolve) => {
-            const request = window.indexedDB.open("matrix-js-sdk::matrix-sdk-crypto");
-            request.onsuccess = async (event: Event & { target: { result: IDBDatabase } }) => {
-                const db = event.target.result;
-                const request = db.transaction("core", "readwrite").objectStore("core").delete("private_identity");
-                request.onsuccess = () => {
-                    db.close();
-                    resolve(undefined);
-                };
-            };
-        });
-        await removeCachedSecrets;
-    });
-    await page.reload();
-}

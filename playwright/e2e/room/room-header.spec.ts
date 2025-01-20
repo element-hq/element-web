@@ -111,6 +111,10 @@ test.describe("Room Header", () => {
                 async ({ page, app, user }) => {
                     await createVideoRoom(page, app);
 
+                    // Dismiss a toast that is otherwise in the way (it's the other
+                    // side but there's no need to have it in the screenshot)
+                    await page.getByRole("button", { name: "Later" }).click();
+
                     const header = page.locator(".mx_RoomHeader");
 
                     // There's two room info button - the header itself and the i button

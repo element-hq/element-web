@@ -413,3 +413,25 @@ export async function createSecondBotDevice(page: Page, homeserver: HomeserverIn
     await bobSecondDevice.prepareClient();
     return bobSecondDevice;
 }
+
+/**
+ * Remove the cached secrets from the indexedDB
+ * This is a workaround to simulate the case where the secrets are not cached.
+ */
+export async function deleteCachedSecrets(page: Page) {
+    await page.evaluate(async () => {
+        const removeCachedSecrets = new Promise((resolve) => {
+            const request = window.indexedDB.open("matrix-js-sdk::matrix-sdk-crypto");
+            request.onsuccess = (event: Event & { target: { result: IDBDatabase } }) => {
+                const db = event.target.result;
+                const request = db.transaction("core", "readwrite").objectStore("core").delete("private_identity");
+                request.onsuccess = () => {
+                    db.close();
+                    resolve(undefined);
+                };
+            };
+        });
+        await removeCachedSecrets;
+    });
+    await page.reload();
+}
