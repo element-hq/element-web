@@ -68,6 +68,13 @@ class Helpers {
     }
 
     /**
+     * Get the recovery section
+     */
+    getEncryptionRecoverySection() {
+        return this.page.getByTestId("recoveryPanel");
+    }
+
+    /**
      * Set the default key id of the secret storage to `null`
      */
     async removeSecretStorageDefaultKeyId() {
@@ -92,6 +99,6 @@ class Helpers {
         const clipboardContent = await this.app.getClipboard();
         await dialog.getByRole("textbox").fill(clipboardContent);
         await dialog.getByRole("button", { name: confirmButtonLabel }).click();
-        await expect(dialog).toMatchScreenshot("default-recovery.png");
+        await expect(this.getEncryptionRecoverySection()).toMatchScreenshot("default-recovery.png");
     }
 }
