@@ -100,7 +100,7 @@ export function sdkRoomMemberToRoomMember(member: SdkRoomMember): Member {
 }
 
 export const SEPARATOR = "SEPARATOR";
-export type MemberWithSeparator = Member | "SEPARATOR";
+export type MemberWithSeparator = Member | typeof SEPARATOR;
 
 export interface MemberListViewState {
     members: MemberWithSeparator[];
