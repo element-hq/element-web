@@ -38,7 +38,6 @@ import { WatchManager } from "./WatchManager";
 import { CustomTheme } from "../theme";
 import AnalyticsController from "./controllers/AnalyticsController";
 import FallbackIceServerController from "./controllers/FallbackIceServerController";
-import { UseCase } from "./enums/UseCase.tsx";
 import { IRightPanelForRoomStored } from "../stores/right-panel/RightPanelStoreIPanelState.ts";
 import { ILayoutSettings } from "../stores/widgets/WidgetLayoutStore.ts";
 import { ReleaseAnnouncementData } from "../stores/ReleaseAnnouncementStore.ts";
@@ -280,7 +279,6 @@ export interface Settings {
     "analyticsOptIn": IBaseSetting<boolean>;
     "pseudonymousAnalyticsOptIn": IBaseSetting<boolean | null>;
     "deviceClientInformationOptIn": IBaseSetting<boolean>;
-    "FTUE.useCaseSelection": IBaseSetting<UseCase | null>;
     "Registration.mobileRegistrationHelper": IBaseSetting<boolean>;
     "autocompleteDelay": IBaseSetting<number>;
     "readMarkerInViewThresholdMs": IBaseSetting<number>;
@@ -308,7 +306,6 @@ export interface Settings {
         deny?: string[];
     }>;
     "breadcrumbs": IBaseSetting<boolean>;
-    "FTUE.userOnboardingButton": IBaseSetting<boolean>;
     "showHiddenEventsInTimeline": IBaseSetting<boolean>;
     "lowBandwidth": IBaseSetting<boolean>;
     "fallbackICEServerAllowed": IBaseSetting<boolean | null>;
@@ -992,10 +989,6 @@ export const SETTINGS: Settings = {
         displayName: _td("settings|security|record_session_details"),
         default: false,
     },
-    "FTUE.useCaseSelection": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        default: null,
-    },
     "Registration.mobileRegistrationHelper": {
         supportedLevels: [SettingLevel.CONFIG],
         default: false,
@@ -1084,11 +1077,6 @@ export const SETTINGS: Settings = {
     "breadcrumbs": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("settings|show_breadcrumbs"),
-        default: true,
-    },
-    "FTUE.userOnboardingButton": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("settings|preferences|show_checklist_shortcuts"),
         default: true,
     },
     "showHiddenEventsInTimeline": {

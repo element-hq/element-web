@@ -16,9 +16,15 @@ describe("SetupEncryptionToast", () => {
         render(<ToastContainer />);
     });
 
-    it("should render the se up recovery toast", async () => {
+    it("should render the 'set up recovery' toast", async () => {
         showToast(Kind.SET_UP_RECOVERY);
 
         await expect(screen.findByText("Set up recovery")).resolves.toBeInTheDocument();
+    });
+
+    it("should render the 'key storage out of sync' toast", async () => {
+        showToast(Kind.KEY_STORAGE_OUT_OF_SYNC);
+
+        await expect(screen.findByText("Your key storage is out of sync.")).resolves.toBeInTheDocument();
     });
 });

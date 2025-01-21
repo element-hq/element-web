@@ -12,6 +12,7 @@ import { expect, test } from "../../element-web-test";
 import { selectHomeserver } from "../utils";
 import { Credentials, HomeserverInstance } from "../../plugins/homeserver";
 import { consentHomeserver } from "../../plugins/homeserver/synapse/consentHomeserver.ts";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 // This test requires fixed credentials for the device signing keys below to work
 const username = "user1234";
@@ -113,6 +114,8 @@ test.use({
 
 test.describe("Login", () => {
     test.describe("Password login", () => {
+        test.skip(isDendrite, "Dendrite lacks support for MSC3967 so requires additional auth here");
+
         test("Loads the welcome page by default; then logs in with an existing account and lands on the home screen", async ({
             credentials,
             page,

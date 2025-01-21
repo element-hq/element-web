@@ -6,34 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { DendriteContainer, PineconeContainer } from "../../../testcontainers/dendrite.ts";
-import { Fixtures } from "../../../element-web-test.ts";
+import { Options } from "../../../services.ts";
 
-export const dendriteHomeserver: Fixtures = {
-    _homeserver: [
-        // eslint-disable-next-line no-empty-pattern
-        async ({}, use) => {
-            const container =
-                process.env["PLAYWRIGHT_HOMESERVER"] === "dendrite" ? new DendriteContainer() : new PineconeContainer();
-            await use(container);
-        },
-        { scope: "worker" },
-    ],
-    homeserver: [
-        async ({ logger, network, _homeserver: homeserver }, use) => {
-            const container = await homeserver
-                .withNetwork(network)
-                .withNetworkAliases("homeserver")
-                .withLogConsumer(logger.getConsumer("dendrite"))
-                .start();
-
-            await use(container);
-            await container.stop();
-        },
-        { scope: "worker" },
-    ],
+export const isDendrite = ({ homeserverType }: Options): boolean => {
+    return homeserverType === "dendrite" || homeserverType === "pinecone";
 };
-
-export function isDendrite(): boolean {
-    return process.env["PLAYWRIGHT_HOMESERVER"] === "dendrite" || process.env["PLAYWRIGHT_HOMESERVER"] === "pinecone";
-}

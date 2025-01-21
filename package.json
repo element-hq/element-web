@@ -1,6 +1,6 @@
 {
     "name": "element-web",
-    "version": "1.11.89",
+    "version": "1.11.90",
     "description": "A feature-rich client for Matrix.org",
     "author": "New Vector Ltd.",
     "repository": {
@@ -89,6 +89,7 @@
         "@matrix-org/spec": "^1.7.0",
         "@sentry/browser": "^8.0.0",
         "@types/png-chunks-extract": "^1.0.2",
+        "@types/react-virtualized": "^9.21.30",
         "@vector-im/compound-design-tokens": "^2.1.0",
         "@vector-im/compound-web": "^7.5.0",
         "@vector-im/matrix-wysiwyg": "2.38.0",
@@ -143,6 +144,7 @@
         "react-dom": "^18.3.1",
         "react-focus-lock": "^2.5.1",
         "react-transition-group": "^4.4.1",
+        "react-virtualized": "^9.22.5",
         "rfc4648": "^1.4.0",
         "sanitize-filename": "^1.6.3",
         "sanitize-html": "2.14.0",
@@ -150,9 +152,7 @@
         "temporal-polyfill": "^0.2.5",
         "ua-parser-js": "^1.0.2",
         "uuid": "^11.0.0",
-        "what-input": "^5.2.10",
-        "@types/react-virtualized": "^9.21.30",
-        "react-virtualized": "^9.22.5"
+        "what-input": "^5.2.10"
     },
     "devDependencies": {
         "@action-validator/cli": "^0.6.0",
@@ -237,6 +237,7 @@
         "eslint-plugin-jsx-a11y": "^6.5.1",
         "eslint-plugin-matrix-org": "^2.0.2",
         "eslint-plugin-react": "^7.28.0",
+        "eslint-plugin-react-compiler": "^19.0.0-beta-df7b47d-20241124",
         "eslint-plugin-react-hooks": "^5.0.0",
         "eslint-plugin-unicorn": "^56.0.0",
         "express": "^4.18.2",
@@ -293,6 +294,7 @@
         "webpack-bundle-analyzer": "^4.8.0",
         "webpack-cli": "^6.0.0",
         "webpack-dev-server": "^5.0.0",
+        "webpack-retry-chunk-load-plugin": "^3.1.1",
         "webpack-version-file-plugin": "^0.5.0",
         "yaml": "^2.3.3"
     },

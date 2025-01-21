@@ -143,6 +143,11 @@ describe("Lifecycle", () => {
                 const table = mockStore[tableKey];
                 delete table?.[key as string];
             });
+        jest.spyOn(StorageAccess, "idbClear")
+            .mockClear()
+            .mockImplementation(async (tableKey: string) => {
+                mockStore[tableKey] = {};
+            });
     };
 
     const homeserverUrl = "https://server.org";
@@ -613,7 +618,7 @@ describe("Lifecycle", () => {
             it("should clear stores", async () => {
                 await setLoggedIn(credentials);
 
-                expect(StorageAccess.idbDelete).toHaveBeenCalledWith("account", "mx_access_token");
+                expect(StorageAccess.idbClear).toHaveBeenCalledWith("account");
                 expect(sessionStorage.clear).toHaveBeenCalled();
                 expect(mockClient.clearStores).toHaveBeenCalled();
             });

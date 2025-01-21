@@ -1,0 +1,79 @@
+/*
+ * Copyright 2024 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.mx_ChangeRecoveryKey {
+    .mx_InformationPanel_description {
+        text-align: center;
+    }
+
+    .mx_ChangeRecoveryKey_Form {
+        display: flex;
+        flex-direction: column;
+        gap: var(--cpd-space-8x);
+
+        .mx_ChangeRecoveryKey_footer {
+            display: flex;
+            flex-direction: column;
+            gap: var(--cpd-space-4x);
+            justify-content: center;
+        }
+    }
+
+    .mx_KeyPanel {
+        display: grid;
+        grid-template:
+            "header button" auto
+            "content button" auto / 1fr;
+
+        column-gap: var(--cpd-space-3x);
+        row-gap: var(--cpd-space-1x);
+        align-items: center;
+
+        > span {
+            grid-area: header;
+        }
+
+        > div {
+            grid-area: content;
+            display: flex;
+            flex-direction: column;
+            gap: var(--cpd-space-2x);
+            color: var(--cpd-color-text-secondary);
+
+            .mx_KeyPanel_key {
+                font-family: Inconsolata, monospace;
+                /*
+                 * From figma https://www.figma.com/design/qTWRfItpO3RdCjnTKPu4mL/Settings?node-id=375-77471&t=t7lozYrSI1AVZZ3U-4
+                 */
+                height: 70px;
+                box-sizing: border-box;
+                border-radius: var(--cpd-space-2x);
+                padding: var(--cpd-space-3x) var(--cpd-space-4x);
+                background-color: var(--cpd-color-bg-subtle-secondary);
+            }
+        }
+
+        > button {
+            margin: 0 var(--cpd-space-1x);
+            grid-area: button;
+            color: var(--cpd-color-icon-secondary-alpha);
+        }
+    }
+
+    .mx_KeyForm {
+        display: flex;
+        flex-direction: column;
+        gap: var(--cpd-space-8x);
+    }
+
+    .mx_ChangeRecoveryKey_footer {
+        display: flex;
+        flex-direction: column;
+        gap: var(--cpd-space-4x);
+        justify-content: center;
+    }
+}

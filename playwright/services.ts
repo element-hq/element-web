@@ -16,6 +16,8 @@ import { StartedMatrixAuthenticationServiceContainer } from "./testcontainers/ma
 import { HomeserverContainer, StartedHomeserverContainer } from "./testcontainers/HomeserverContainer.ts";
 import { MailhogContainer, StartedMailhogContainer } from "./testcontainers/mailhog.ts";
 import { OAuthServer } from "./plugins/oauth_server";
+import { DendriteContainer, PineconeContainer } from "./testcontainers/dendrite.ts";
+import { HomeserverType } from "./plugins/homeserver";
 
 export interface TestFixtures {
     mailhogClient: mailhog.API;
@@ -37,7 +39,9 @@ export interface Services {
     oAuthServer?: OAuthServer;
 }
 
-export interface Options {}
+export interface Options {
+    homeserverType: HomeserverType;
+}
 
 export const test = base.extend<TestFixtures, Services & Options>({
     logger: [
@@ -104,21 +108,36 @@ export const test = base.extend<TestFixtures, Services & Options>({
     },
 
     synapseConfig: [{}, { scope: "worker" }],
+    homeserverType: ["synapse", { option: true, scope: "worker" }],
     _homeserver: [
-        // eslint-disable-next-line no-empty-pattern
-        async ({}, use) => {
-            const container = new SynapseContainer();
+        async ({ homeserverType }, use) => {
+            let container: HomeserverContainer<any>;
+            switch (homeserverType) {
+                case "synapse":
+                    container = new SynapseContainer();
+                    break;
+                case "dendrite":
+                    container = new DendriteContainer();
+                    break;
+                case "pinecone":
+                    container = new PineconeContainer();
+                    break;
+            }
+
             await use(container);
         },
         { scope: "worker" },
     ],
     homeserver: [
-        async ({ logger, network, _homeserver: homeserver, synapseConfig, mas }, use) => {
+        async ({ homeserverType, logger, network, _homeserver: homeserver, synapseConfig, mas }, use) => {
+            if (homeserver instanceof SynapseContainer) {
+                homeserver.withConfig(synapseConfig);
+            }
             const container = await homeserver
                 .withNetwork(network)
                 .withNetworkAliases("homeserver")
-                .withLogConsumer(logger.getConsumer("synapse"))
-                .withConfig(synapseConfig)
+                .withLogConsumer(logger.getConsumer(homeserverType))
+                .withMatrixAuthenticationService(mas)
                 .start();
 
             await use(container);
@@ -136,10 +155,19 @@ export const test = base.extend<TestFixtures, Services & Options>({
         { scope: "worker" },
     ],
 
-    context: async ({ logger, context, request, homeserver, mailhogClient }, use, testInfo) => {
+    context: async (
+        { homeserverType, synapseConfig, logger, context, request, _homeserver, homeserver },
+        use,
+        testInfo,
+    ) => {
+        testInfo.skip(
+            !(_homeserver instanceof SynapseContainer) && Object.keys(synapseConfig).length > 0,
+            `Test specifies Synapse config options so is unsupported with ${homeserverType}`,
+        );
         homeserver.setRequest(request);
         await logger.onTestStarted(context);
         await use(context);
         await logger.onTestFinished(testInfo);
+        await homeserver.onTestFinished(testInfo);
     },
 });

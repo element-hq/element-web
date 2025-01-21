@@ -114,6 +114,8 @@ jobs:
                     - Chrome
                     - Firefox
                     - WebKit
+                    - Dendrite
+                    - Pinecone
                 runAllTests:
                     - ${{ github.event_name == 'schedule' || contains(github.event.pull_request.labels.*.name, 'X-Run-All-Tests') }}
                 # Skip the Firefox & Safari runs unless this was a cron trigger or PR has X-Run-All-Tests label
@@ -122,6 +124,10 @@ jobs:
                       project: Firefox
                     - runAllTests: false
                       project: WebKit
+                    - runAllTests: false
+                      project: Dendrite
+                    - runAllTests: false
+                      project: Pinecone
         steps:
             - uses: actions/checkout@v4
               with:

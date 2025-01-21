@@ -54,4 +54,9 @@ export const consentHomeserver: Fixtures = {
         },
         { scope: "worker" },
     ],
+
+    context: async ({ homeserverType, context }, use, testInfo) => {
+        testInfo.skip(homeserverType !== "synapse", "does not yet support MAS");
+        await use(context);
+    },
 };

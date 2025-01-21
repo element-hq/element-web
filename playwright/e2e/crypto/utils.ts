@@ -12,6 +12,7 @@ import type { ICreateRoomOpts, MatrixClient } from "matrix-js-sdk/src/matrix";
 import type {
     CryptoEvent,
     EmojiMapping,
+    GeneratedSecretStorageKey,
     ShowSasCallbacks,
     VerificationRequest,
     Verifier,
@@ -21,6 +22,46 @@ import { Credentials, HomeserverInstance } from "../../plugins/homeserver";
 import { Client } from "../../pages/client";
 import { ElementAppPage } from "../../pages/ElementAppPage";
 import { Bot } from "../../pages/bot";
+
+/**
+ * Create a bot client using the supplied credentials, and wait for the key backup to be ready.
+ * @param page - the playwright `page` fixture
+ * @param homeserver - the homeserver to use
+ * @param credentials - the credentials to use for the bot client
+ */
+export async function createBot(
+    page: Page,
+    homeserver: HomeserverInstance,
+    credentials: Credentials,
+): Promise<{ botClient: Bot; recoveryKey: GeneratedSecretStorageKey; expectedBackupVersion: string }> {
+    // Visit the login page of the app, to load the matrix sdk
+    await page.goto("/#/login");
+
+    // wait for the page to load
+    await page.waitForSelector(".mx_AuthPage", { timeout: 30000 });
+
+    // Create a new bot client
+    const botClient = new Bot(page, homeserver, {
+        bootstrapCrossSigning: true,
+        bootstrapSecretStorage: true,
+    });
+    botClient.setCredentials(credentials);
+    // Backup is prepared in the background. Poll until it is ready.
+    const botClientHandle = await botClient.prepareClient();
+    let expectedBackupVersion: string;
+    await expect
+        .poll(async () => {
+            expectedBackupVersion = await botClientHandle.evaluate((cli) =>
+                cli.getCrypto()!.getActiveSessionBackupVersion(),
+            );
+            return expectedBackupVersion;
+        })
+        .not.toBe(null);
+
+    const recoveryKey = await botClient.getRecoveryKey();
+
+    return { botClient, recoveryKey, expectedBackupVersion };
+}
 
 /**
  * wait for the given client to receive an incoming verification request, and automatically accept it
@@ -371,4 +412,26 @@ export async function createSecondBotDevice(page: Page, homeserver: HomeserverIn
     bobSecondDevice.setCredentials(await homeserver.loginUser(bob.credentials.userId, bob.credentials.password));
     await bobSecondDevice.prepareClient();
     return bobSecondDevice;
+}
+
+/**
+ * Remove the cached secrets from the indexedDB
+ * This is a workaround to simulate the case where the secrets are not cached.
+ */
+export async function deleteCachedSecrets(page: Page) {
+    await page.evaluate(async () => {
+        const removeCachedSecrets = new Promise((resolve) => {
+            const request = window.indexedDB.open("matrix-js-sdk::matrix-sdk-crypto");
+            request.onsuccess = (event: Event & { target: { result: IDBDatabase } }) => {
+                const db = event.target.result;
+                const request = db.transaction("core", "readwrite").objectStore("core").delete("private_identity");
+                request.onsuccess = () => {
+                    db.close();
+                    resolve(undefined);
+                };
+            };
+        });
+        await removeCachedSecrets;
+    });
+    await page.reload();
 }

@@ -377,7 +377,6 @@
             "one": "và một cái khác…",
             "other": "và %(count)s khác…"
         },
-        "android": "Android",
         "appearance": "Giao diện",
         "application": "Ứng dụng",
         "are_you_sure": "Bạn có chắc không?",
@@ -414,7 +413,6 @@
         "identity_server": "Máy chủ định danh",
         "image": "Hình ảnh",
         "integration_manager": "Quản lý tích hợp",
-        "ios": "iOS",
         "joined": "Đã tham gia",
         "labs": "Chức năng thí nghiệm",
         "legal": "Pháp lý",
@@ -503,8 +501,7 @@
         "video": "Truyền hình",
         "video_room": "Phòng truyền hình",
         "view_message": "Xem tin nhăn",
-        "warning": "Cảnh báo",
-        "welcome": "Chào mừng"
+        "warning": "Cảnh báo"
     },
     "composer": {
         "autocomplete": {
@@ -1390,53 +1387,15 @@
         "m.key.verification.request": "%(name)s đang yêu cầu xác thực"
     },
     "onboarding": {
-        "community_messaging_action": "Tìm người thân",
-        "community_messaging_description": "Giữ quyền sở hữu và kiểm soát thảo luận cộng đồng.\nMở rộng quy mô để hỗ trợ hàng triệu người, bằng khả năng kiểm duyệt và tương tác mạnh mẽ.",
-        "community_messaging_title": "Làm chủ cộng đồng",
-        "complete_these": "Hoàn thành những việc sau để tận dụng tất cả của %(brand)s",
         "create_room": "Tạo một cuộc trò chuyện nhóm",
-        "download_app": "Tải xuống %(brand)s",
-        "download_app_action": "Tải ứng dụng",
-        "download_app_description": "Không bỏ lỡ gì bằng cách mang %(brand)s bên bạn",
-        "download_app_store": "Tải trên App Store",
-        "download_brand": "Tải xuống %(brand)s",
-        "download_f_droid": "Tải trên F-Droid",
-        "download_google_play": "Tải trên CH Play",
-        "enable_notifications": "Bật thông báo",
-        "enable_notifications_action": "Kích hoạt thông báo",
-        "enable_notifications_description": "Đừng bỏ lỡ một tin nhắn trả lời hay tin nhắn quan trọng",
         "explore_rooms": "Khám phá các phòng chung",
-        "find_community_members": "Tìm và mời các thành viên của cộng đồng bạn",
-        "find_coworkers": "Tìm và mời các đồng nghiệp của bạn",
-        "find_friends": "Tìm và mời bạn bè",
-        "find_friends_action": "Tìm bạn bè",
-        "find_friends_description": "Đó là lí do bạn ở đây, vậy nên hãy bắt đầu nào",
-        "find_people": "Tìm mọi người",
-        "free_e2ee_messaging_unlimited_voip": "Với mã hóa đầu cuối miễn phí, cuộc gọi thoại và truyền hình không giới hạn, %(brand)s là cách tuyệt vời để giữ liên lạc.",
         "has_avatar_label": "Tuyệt vời, điều đó sẽ giúp mọi người biết đó là bạn",
         "intro_byline": "Sở hữu các cuộc trò chuyện của bạn.",
         "intro_welcome": "Chào mừng bạn đến với %(appName)s",
         "no_avatar_label": "Thêm ảnh để mọi người biết đó là bạn.",
-        "only_n_steps_to_go": {
-            "one": "Chỉ %(count)s bước nữa thôi",
-            "other": "Chỉ %(count)s bước nữa thôi"
-        },
-        "personal_messaging_action": "Bắt đầu cuộc trò chuyện đầu tiên",
-        "personal_messaging_title": "Tin nhắn bảo mật cho bạn bè và gia đình",
         "send_dm": "Gửi tin nhắn trực tiếp",
-        "set_up_profile": "Thiết lập hồ sơ của bạn",
-        "set_up_profile_action": "Hồ sơ",
-        "set_up_profile_description": "Đảm bảo mọi người nhận ra bạn",
-        "use_case_community_messaging": "Thành viên cộng đồng trực tuyến",
-        "use_case_personal_messaging": "Bạn bè và gia đình",
-        "use_case_work_messaging": "Đồng nghiệp và nhóm",
         "welcome_detail": "Bây giờ, hãy giúp bạn bắt đầu",
-        "welcome_to_brand": "Chào mừng bạn tới %(brand)s",
-        "welcome_user": "Chào mừng %(name)s",
-        "work_messaging_action": "Tìm các đồng nghiệp của bạn",
-        "work_messaging_title": "Tin nhắn bảo mật cho công việc",
-        "you_did_it": "Hoàn thành rồi!",
-        "you_made_it": "Bạn làm rồi!"
+        "welcome_user": "Chào mừng %(name)s"
     },
     "pill": {
         "permalink_other_room": "Tin nhắn trong %(room)s",
