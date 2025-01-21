@@ -49,7 +49,7 @@ describe("OIDC authorization", () => {
             origin: baseUrl,
         };
 
-        jest.spyOn(randomStringUtils, "randomString").mockRestore();
+        jest.spyOn(randomStringUtils, "secureRandomString").mockRestore();
         mockPlatformPeg();
         Object.defineProperty(window, "crypto", {
             value: {
