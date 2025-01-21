@@ -230,7 +230,7 @@
         "dotenv": "^16.0.2",
         "eslint": "8.57.1",
         "eslint-config-google": "^0.14.0",
-        "eslint-config-prettier": "^9.0.0",
+        "eslint-config-prettier": "^10.0.0",
         "eslint-plugin-deprecate": "0.8.5",
         "eslint-plugin-import": "^2.25.4",
         "eslint-plugin-jest": "^28.0.0",
