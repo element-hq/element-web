@@ -178,7 +178,7 @@
         "@peculiar/webcrypto": "^1.4.3",
         "@playwright/test": "^1.40.1",
         "@principalstudio/html-webpack-inject-preload": "^1.2.7",
-        "@sentry/webpack-plugin": "^2.7.1",
+        "@sentry/webpack-plugin": "^3.0.0",
         "@stylistic/eslint-plugin": "^2.9.0",
         "@svgr/webpack": "^8.0.0",
         "@testcontainers/postgresql": "^10.16.0",
