@@ -287,7 +287,7 @@
         "terser-webpack-plugin": "^5.3.9",
         "testcontainers": "^10.16.0",
         "ts-node": "^10.9.1",
-        "typescript": "5.7.2",
+        "typescript": "5.7.3",
         "util": "^0.12.5",
         "web-streams-polyfill": "^4.0.0",
         "webpack": "^5.89.0",
