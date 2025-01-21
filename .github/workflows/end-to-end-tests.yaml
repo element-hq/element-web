@@ -83,8 +83,13 @@ jobs:
             - name: Upload Artifact
               uses: actions/upload-artifact@v4
               with:
-                  name: webapp
-                  path: webapp
+                  name: build
+                  path: |
+                      webapp
+                      playwright
+                      playwright.config.ts
+                      package.json
+                      yarn.lock
                   retention-days: 1
 
             - name: Calculate runner variables
@@ -129,16 +134,10 @@ jobs:
                     - runAllTests: false
                       project: Pinecone
         steps:
-            - uses: actions/checkout@v4
-              with:
-                  persist-credentials: false
-                  repository: element-hq/element-web
-
             - name: 📥 Download artifact
               uses: actions/download-artifact@v4
               with:
-                  name: webapp
-                  path: webapp
+                  name: build
 
             - uses: actions/setup-node@v4
               with:
