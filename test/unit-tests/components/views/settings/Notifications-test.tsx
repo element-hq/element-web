@@ -23,7 +23,7 @@ import {
     IThreepid,
     ThreepidMedium,
 } from "matrix-js-sdk/src/matrix";
-import { randomString } from "matrix-js-sdk/src/randomstring";
+import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import {
     act,
     fireEvent,
@@ -287,7 +287,7 @@ describe("<Notifications />", () => {
 
     beforeEach(async () => {
         let i = 0;
-        mocked(randomString).mockImplementation(() => {
+        mocked(secureRandomString).mockImplementation(() => {
             return "testid_" + i++;
         });
 
