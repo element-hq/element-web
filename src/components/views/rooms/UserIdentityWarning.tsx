@@ -28,12 +28,23 @@ interface UserIdentityWarningProps {
     key: string;
 }
 
+type ViolationType = "PinViolation" | "VerificationViolation";
+
 /**
- * Does the given user's identity need to be approved?
+ * Does the given user's identity has a status violation.
  */
-async function userNeedsApproval(crypto: CryptoApi, userId: string): Promise<boolean> {
+async function userNeedsApproval(crypto: CryptoApi, userId: string): Promise<ViolationType | null> {
     const verificationStatus = await crypto.getUserVerificationStatus(userId);
-    return verificationStatus.needsUserApproval;
+    return mapToViolationType(verificationStatus);
+}
+
+function mapToViolationType(verificationStatus: UserVerificationStatus): ViolationType | null {
+    if (verificationStatus.wasCrossSigningVerified() && !verificationStatus.isCrossSigningVerified()) {
+        return "VerificationViolation";
+    } else if (verificationStatus.needsUserApproval) {
+        return "PinViolation";
+    }
+    return null;
 }
 
 /**
@@ -45,6 +56,11 @@ enum InitialisationStatus {
     Initialising,
     Completed,
 }
+
+type ViolationPrompt = {
+    member: RoomMember;
+    type: ViolationType;
+};
 
 /**
  * Displays a banner warning when there is an issue with a user's identity.
@@ -58,13 +74,13 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
 
     // The current room member that we are prompting the user to approve.
     // `undefined` means we are not currently showing a prompt.
-    const [currentPrompt, setCurrentPrompt] = useState<RoomMember | undefined>(undefined);
+    const [currentPrompt, setCurrentPrompt] = useState<ViolationPrompt | undefined>(undefined);
 
     // Whether or not we've already initialised the component by loading the
     // room membership.
     const initialisedRef = useRef<InitialisationStatus>(InitialisationStatus.Uninitialised);
     // Which room members need their identity approved.
-    const membersNeedingApprovalRef = useRef<Map<string, RoomMember>>(new Map());
+    const membersNeedingApprovalRef = useRef<Map<string, ViolationPrompt>>(new Map());
     // For each user, we assign a sequence number to each verification status
     // that we get, or fetch.
     //
@@ -100,7 +116,8 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
         setCurrentPrompt((currentPrompt) => {
             // If we're already displaying a warning, and that user still needs
             // approval, continue showing that user.
-            if (currentPrompt && membersNeedingApproval.has(currentPrompt.userId)) return currentPrompt;
+            if (currentPrompt && membersNeedingApproval.get(currentPrompt.member.userId)?.type === currentPrompt.type)
+                return currentPrompt;
 
             if (membersNeedingApproval.size === 0) {
                 if (currentPrompt) {
@@ -113,7 +130,10 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
             // We pick the user with the smallest user ID.
             const keys = Array.from(membersNeedingApproval.keys()).sort((a, b) => a.localeCompare(b));
             const selection = membersNeedingApproval.get(keys[0]!);
-            logger.debug(`UserIdentityWarning: now warning about user ${selection?.userId}`);
+            logger.debug(`UserIdentityWarning: selection is ${JSON.stringify(selection)}`);
+            logger.debug(
+                `UserIdentityWarning: now warning about user ${selection?.member.userId} for a ${selection?.type} violation`,
+            );
             return selection;
         });
     }, []);
@@ -123,15 +143,24 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
     // member of the room. If they are not a member, this function will do
     // nothing.
     const addMemberNeedingApproval = useCallback(
-        (userId: string, member?: RoomMember): void => {
+        (userId: string, violation?: ViolationType, member?: RoomMember): void => {
+            logger.debug(`UserIdentityWarning: add member ${userId} for violation ${violation}`);
+
             if (userId === cli.getUserId()) {
                 // We always skip our own user, because we can't pin our own identity.
                 return;
             }
-            member = member ?? room.getMember(userId) ?? undefined;
-            if (!member) return;
+            if (violation === undefined) return;
 
-            membersNeedingApprovalRef.current.set(userId, member);
+            // Member might be already resolved depending on the context. When called after a
+            // CryptoEvent.UserTrustStatusChanged event emitted it will not yet be resolved.
+            member = member ?? room.getMember(userId) ?? undefined;
+            if (!member) {
+                logger.debug(`UserIdentityWarning: user ${userId} not found in room members, ignoring violation`);
+                return;
+            }
+
+            membersNeedingApprovalRef.current.set(userId, { member, type: violation });
             // We only select the prompt if we are done initialising,
             // because we will select the prompt after we're done
             // initialising, and we want to start by displaying a warning
@@ -159,12 +188,12 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
                 const userId = member.userId;
                 const sequenceNum = incrementVerificationStatusSequence(userId);
                 promises.push(
-                    userNeedsApproval(crypto!, userId).then((needsApproval) => {
-                        if (needsApproval) {
+                    userNeedsApproval(crypto!, userId).then((type) => {
+                        if (type != null) {
                             // Only actually update the list if we have the most
                             // recent value.
                             if (verificationStatusSequences.get(userId) === sequenceNum) {
-                                addMemberNeedingApproval(userId, member);
+                                addMemberNeedingApproval(userId, type, member);
                             }
                         }
                     }),
@@ -231,8 +260,10 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
 
             incrementVerificationStatusSequence(userId);
 
-            if (verificationStatus.needsUserApproval) {
-                addMemberNeedingApproval(userId);
+            const violation = mapToViolationType(verificationStatus);
+
+            if (violation) {
+                addMemberNeedingApproval(userId, violation);
             } else {
                 removeMemberNeedingApproval(userId);
             }
@@ -296,39 +327,82 @@ export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }
     if (!crypto || !currentPrompt) return null;
 
     const confirmIdentity = async (): Promise<void> => {
-        await crypto.pinCurrentUserIdentity(currentPrompt.userId);
+        if (currentPrompt.type === "VerificationViolation") {
+            await crypto.withdrawVerificationRequirement(currentPrompt.member.userId);
+        } else if (currentPrompt.type === "PinViolation") {
+            await crypto.pinCurrentUserIdentity(currentPrompt.member.userId);
+        }
     };
 
-    return (
-        <div className="mx_UserIdentityWarning">
-            <Separator />
-            <div className="mx_UserIdentityWarning_row">
-                <MemberAvatar member={currentPrompt} title={currentPrompt.userId} size="30px" />
-                <span className="mx_UserIdentityWarning_main">
-                    {currentPrompt.rawDisplayName === currentPrompt.userId
-                        ? _t(
-                              "encryption|pinned_identity_changed_no_displayname",
-                              { userId: currentPrompt.userId },
-                              {
-                                  a: substituteATag,
-                                  b: substituteBTag,
-                              },
-                          )
-                        : _t(
-                              "encryption|pinned_identity_changed",
-                              { displayName: currentPrompt.rawDisplayName, userId: currentPrompt.userId },
-                              {
-                                  a: substituteATag,
-                                  b: substituteBTag,
-                              },
-                          )}
-                </span>
-                <Button kind="primary" size="sm" onClick={confirmIdentity}>
-                    {_t("action|ok")}
-                </Button>
+    if (currentPrompt.type === "VerificationViolation") {
+        return (
+            <div className="mx_UserIdentityWarning critical">
+                <Separator />
+                <div className="mx_UserIdentityWarning_row">
+                    <MemberAvatar member={currentPrompt.member} title={currentPrompt.member.userId} size="30px" />
+                    <span className="mx_UserIdentityWarning_main critical">
+                        {currentPrompt.member.rawDisplayName === currentPrompt.member.userId
+                            ? _t(
+                                  "encryption|verified_identity_changed_no_displayname",
+                                  { userId: currentPrompt.member.userId },
+                                  {
+                                      a: substituteATag,
+                                      b: substituteBTag,
+                                  },
+                              )
+                            : _t(
+                                  "encryption|verified_identity_changed",
+                                  {
+                                      displayName: currentPrompt.member.rawDisplayName,
+                                      userId: currentPrompt.member.userId,
+                                  },
+                                  {
+                                      a: substituteATag,
+                                      b: substituteBTag,
+                                  },
+                              )}
+                    </span>
+                    <Button kind="secondary" size="sm" onClick={confirmIdentity}>
+                        {_t("encryption|withdraw_verification_action")}
+                    </Button>
+                </div>
             </div>
-        </div>
-    );
+        );
+    } else {
+        return (
+            <div className="mx_UserIdentityWarning">
+                <Separator />
+                <div className="mx_UserIdentityWarning_row">
+                    <MemberAvatar member={currentPrompt.member} title={currentPrompt.member.userId} size="30px" />
+                    <span className="mx_UserIdentityWarning_main">
+                        {currentPrompt.member.rawDisplayName === currentPrompt.member.userId
+                            ? _t(
+                                  "encryption|pinned_identity_changed_no_displayname",
+                                  { userId: currentPrompt.member.userId },
+                                  {
+                                      a: substituteATag,
+                                      b: substituteBTag,
+                                  },
+                              )
+                            : _t(
+                                  "encryption|pinned_identity_changed",
+                                  {
+                                      displayName: currentPrompt.member.rawDisplayName,
+                                      userId: currentPrompt.member.userId,
+                                  },
+                                  {
+                                      a: substituteATag,
+                                      b: substituteBTag,
+                                  },
+                              )}
+                    </span>
+                    <Button kind="primary" size="sm" onClick={confirmIdentity}>
+                        {_t("action|ok")}
+                    </Button>
+                </div>
+            </div>
+        );
+    }
 };
 
 function substituteATag(sub: string): React.ReactNode {

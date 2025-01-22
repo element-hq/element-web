@@ -93,6 +93,9 @@ describe("UserIdentityWarning", () => {
         jest.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([
             mockRoomMember("@alice:example.org", "Alice"),
         ]);
+        // jest.spyOn(room, "getMember").mockReturnValue(
+        //     mockRoomMember("@alice:example.org", "Alice")
+        // );
         const crypto = client.getCrypto()!;
         jest.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
             new UserVerificationStatus(false, false, false, true),
@@ -107,6 +110,49 @@ describe("UserIdentityWarning", () => {
         );
         await userEvent.click(screen.getByRole("button")!);
         await waitFor(() => expect(crypto.pinCurrentUserIdentity).toHaveBeenCalledWith("@alice:example.org"));
+    });
+
+    // This tests the basic functionality of the component.  If we have a room
+    // member whose identity is in verification violation, we should display a warning.  When
+    // the "Withdraw verification" button gets pressed, it should call `withdrawVerification`.
+    it("displays a warning when a user's identity is in verification violation", async () => {
+        jest.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([
+            mockRoomMember("@alice:example.org", "Alice"),
+        ]);
+        const crypto = client.getCrypto()!;
+        jest.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
+            new UserVerificationStatus(false, true, false, true),
+        );
+        crypto.withdrawVerificationRequirement = jest.fn();
+        renderComponent(client, room);
+
+        await waitFor(() =>
+            expect(getWarningByText("Alice's (@alice:example.org) verified identity has changed.")).toBeInTheDocument(),
+        );
+
+        expect(
+            screen.getByRole("button", {
+                name: "Withdraw verification",
+            }),
+        ).toBeInTheDocument();
+        await userEvent.click(screen.getByRole("button")!);
+        await waitFor(() => expect(crypto.withdrawVerificationRequirement).toHaveBeenCalledWith("@alice:example.org"));
+    });
+
+    it("Should not display a warning if the user was verified and is still verified", async () => {
+        jest.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([
+            mockRoomMember("@alice:example.org", "Alice"),
+        ]);
+        const crypto = client.getCrypto()!;
+        jest.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
+            new UserVerificationStatus(true, true, false, false),
+        );
+
+        renderComponent(client, room);
+        await sleep(10); // give it some time to finish initialising
+
+        expect(() => getWarningByText("Alice's (@alice:example.org) identity appears to have changed.")).toThrow();
+        expect(() => getWarningByText("Alice's (@alice:example.org) verified identity has changed.")).toThrow();
     });
 
     // We don't display warnings in non-encrypted rooms, but if encryption is
@@ -456,6 +502,40 @@ describe("UserIdentityWarning", () => {
             expect(
                 getWarningByText("Alice's (@alice:example.org) identity appears to have changed."),
             ).toBeInTheDocument(),
+        );
+
+        // Simulate Alice's new identity having been approved, so now we warn
+        // about Bob's identity.
+        act(() => {
+            client.emit(
+                CryptoEvent.UserTrustStatusChanged,
+                "@alice:example.org",
+                new UserVerificationStatus(false, false, false, false),
+            );
+        });
+        await waitFor(() =>
+            expect(getWarningByText("@bob:example.org's identity appears to have changed.")).toBeInTheDocument(),
+        );
+    });
+
+    it("displays the next user when the verification requirement is withdrawn", async () => {
+        jest.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([
+            mockRoomMember("@alice:example.org", "Alice"),
+            mockRoomMember("@bob:example.org"),
+        ]);
+        const crypto = client.getCrypto()!;
+        jest.spyOn(crypto, "getUserVerificationStatus").mockImplementation(async (userId) => {
+            if (userId == "@alice:example.org") {
+                return new UserVerificationStatus(false, true, false, true);
+            } else {
+                return new UserVerificationStatus(false, false, false, true);
+            }
+        });
+
+        renderComponent(client, room);
+        // We should warn about Alice's identity first.
+        await waitFor(() =>
+            expect(getWarningByText("Alice's (@alice:example.org) verified identity has changed.")).toBeInTheDocument(),
         );
 
         // Simulate Alice's new identity having been approved, so now we warn
