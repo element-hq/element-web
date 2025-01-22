@@ -228,7 +228,7 @@ exports[`MemberTileView ThreePidInviteTileView renders ThreePidInvite correctly 
         <div
           class="mx_MemberTileView_userLabel"
         >
-          (Invited)
+          Invited
         </div>
         <div
           class="mx_Flex mx_InvitedIconView"

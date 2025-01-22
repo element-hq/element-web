@@ -39,7 +39,7 @@ export const startOidcLogin = async (
     const prompt = isRegistration ? "create" : undefined;
 
     const authorizationUrl = await generateOidcAuthorizationUrl({
-        metadata: delegatedAuthConfig.metadata,
+        metadata: delegatedAuthConfig,
         redirectUri,
         clientId,
         homeserverUrl,
