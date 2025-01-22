@@ -15,11 +15,16 @@ interface Props {
     onClick: () => void;
     title?: string;
     presenceJsx?: JSX.Element;
-    userLabelJsx?: JSX.Element;
-    e2eIconJsx?: JSX.Element;
+    userLabel?: React.ReactNode;
+    iconJsx?: JSX.Element;
 }
 
-export function MemberTileLayout(props: Props): JSX.Element {
+export function MemberTileView(props: Props): JSX.Element {
+    let userLabelJsx: React.ReactNode;
+    if (props.userLabel) {
+        userLabelJsx = <div className="mx_MemberTileView_userLabel">{props.userLabel}</div>;
+    }
+
     return (
         // The wrapping div is required to make the magic mouse listener work, for some reason.
         <div>
@@ -31,8 +36,8 @@ export function MemberTileLayout(props: Props): JSX.Element {
                     <div className="mx_MemberTileView_name">{props.nameJsx}</div>
                 </div>
                 <div className="mx_MemberTileView_right">
-                    {props.userLabelJsx}
-                    {props.e2eIconJsx}
+                    {userLabelJsx}
+                    {props.iconJsx}
                 </div>
             </AccessibleButton>
         </div>

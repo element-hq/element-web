@@ -18,7 +18,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership, Membership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
-import { randomString } from "matrix-js-sdk/src/randomstring";
+import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { NamespacedValue } from "matrix-js-sdk/src/NamespacedValue";
 import { IWidgetApiRequest } from "matrix-widget-api";
@@ -743,7 +743,7 @@ export class ElementCall extends Call {
         const url = ElementCall.generateWidgetUrl(client, roomId);
         return WidgetStore.instance.addVirtualWidget(
             {
-                id: randomString(24), // So that it's globally unique
+                id: secureRandomString(24), // So that it's globally unique
                 creatorUserId: client.getUserId()!,
                 name: "Element Call",
                 type: WidgetType.CALL.preferred,

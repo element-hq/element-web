@@ -31,7 +31,7 @@ Please see LICENSE files in the repository root for full details.
 
 // the frequency with which we flush to indexeddb
 import { logger } from "matrix-js-sdk/src/logger";
-import { randomString } from "matrix-js-sdk/src/randomstring";
+import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 
 import { getCircularReplacer } from "../utils/JSON";
 
@@ -135,7 +135,7 @@ export class IndexedDBLogStore {
         private indexedDB: IDBFactory,
         private logger: ConsoleLogger,
     ) {
-        this.id = "instance-" + randomString(16);
+        this.id = "instance-" + secureRandomString(16);
     }
 
     /**

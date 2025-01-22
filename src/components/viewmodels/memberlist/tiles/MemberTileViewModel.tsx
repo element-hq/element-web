@@ -145,7 +145,7 @@ export function useMemberTileViewModel(props: MemberTileViewModelProps): MemberT
         userLabel = _t(PowerLabel[powerStatus]);
     }
     if (props.member.isInvite) {
-        userLabel = `(${_t("member_list|invited_label")})`;
+        userLabel = _t("member_list|invited_label");
     }
 
     return {

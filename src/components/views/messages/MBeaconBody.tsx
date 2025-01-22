@@ -18,7 +18,7 @@ import {
     ContentHelpers,
     M_BEACON,
 } from "matrix-js-sdk/src/matrix";
-import { randomString } from "matrix-js-sdk/src/randomstring";
+import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import classNames from "classnames";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -81,10 +81,10 @@ const useBeaconState = (
 // eg thread and main timeline, reply
 // maplibregl needs a unique id to attach the map instance to
 const useUniqueId = (eventId: string): string => {
-    const [id, setId] = useState(`${eventId}_${randomString(8)}`);
+    const [id, setId] = useState(`${eventId}_${secureRandomString(8)}`);
 
     useEffect(() => {
-        setId(`${eventId}_${randomString(8)}`);
+        setId(`${eventId}_${secureRandomString(8)}`);
     }, [eventId]);
 
     return id;

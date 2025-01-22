@@ -31,8 +31,7 @@ export function shouldShowQr(
 ): boolean {
     const msc4108Supported = !!versions?.unstable_features?.["org.matrix.msc4108"];
 
-    const deviceAuthorizationGrantSupported =
-        oidcClientConfig?.metadata?.grant_types_supported.includes(DEVICE_CODE_SCOPE);
+    const deviceAuthorizationGrantSupported = oidcClientConfig?.grant_types_supported.includes(DEVICE_CODE_SCOPE);
 
     return (
         !!deviceAuthorizationGrantSupported &&
