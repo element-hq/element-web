@@ -58,6 +58,16 @@ async function editMessage(page: Page, message: Locator, newMsg: string): Promis
     await editComposer.press("Enter");
 }
 
+const screenshotOptions = (page?: Page) => ({
+    mask: page ? [page.locator(".mx_MessageTimestamp")] : undefined,
+    // Hide the jump to bottom button in the timeline to avoid flakiness
+    css: `
+        .mx_JumpToBottomButton {
+            display: none !important;
+        }
+    `,
+});
+
 test.describe("Message rendering", () => {
     [
         { direction: "ltr", displayName: "Quentin" },
@@ -79,9 +89,10 @@ test.describe("Message rendering", () => {
                     await page.goto(`#/room/${room.roomId}`);
 
                     const msgTile = await sendMessage(page, "Hello, world!");
-                    await expect(msgTile).toMatchScreenshot(`basic-message-ltr-${direction}displayname.png`, {
-                        mask: [page.locator(".mx_MessageTimestamp")],
-                    });
+                    await expect(msgTile).toMatchScreenshot(
+                        `basic-message-ltr-${direction}displayname.png`,
+                        screenshotOptions(page),
+                    );
                 },
             );
 
@@ -89,14 +100,17 @@ test.describe("Message rendering", () => {
                 await page.goto(`#/room/${room.roomId}`);
 
                 const msgTile = await sendMessage(page, "/me lays an egg");
-                await expect(msgTile).toMatchScreenshot(`emote-ltr-${direction}displayname.png`);
+                await expect(msgTile).toMatchScreenshot(`emote-ltr-${direction}displayname.png`, screenshotOptions());
             });
 
             test("should render an LTR rich text emote", async ({ page, user, app, room }) => {
                 await page.goto(`#/room/${room.roomId}`);
 
                 const msgTile = await sendMessage(page, "/me lays a *free range* egg");
-                await expect(msgTile).toMatchScreenshot(`emote-rich-ltr-${direction}displayname.png`);
+                await expect(msgTile).toMatchScreenshot(
+                    `emote-rich-ltr-${direction}displayname.png`,
+                    screenshotOptions(),
+                );
             });
 
             test("should render an edited LTR message", async ({ page, user, app, room }) => {
@@ -106,9 +120,10 @@ test.describe("Message rendering", () => {
 
                 await editMessage(page, msgTile, "Hello, universe!");
 
-                await expect(msgTile).toMatchScreenshot(`edited-message-ltr-${direction}displayname.png`, {
-                    mask: [page.locator(".mx_MessageTimestamp")],
-                });
+                await expect(msgTile).toMatchScreenshot(
+                    `edited-message-ltr-${direction}displayname.png`,
+                    screenshotOptions(page),
+                );
             });
 
             test("should render a reply of a LTR message", async ({ page, user, app, room }) => {
@@ -122,32 +137,37 @@ test.describe("Message rendering", () => {
                 ]);
 
                 await replyMessage(page, msgTile, "response to multiline message");
-                await expect(msgTile).toMatchScreenshot(`reply-message-ltr-${direction}displayname.png`, {
-                    mask: [page.locator(".mx_MessageTimestamp")],
-                });
+                await expect(msgTile).toMatchScreenshot(
+                    `reply-message-ltr-${direction}displayname.png`,
+                    screenshotOptions(page),
+                );
             });
 
             test("should render a basic RTL text message", async ({ page, user, app, room }) => {
                 await page.goto(`#/room/${room.roomId}`);
 
                 const msgTile = await sendMessage(page, "مرحبا بالعالم!");
-                await expect(msgTile).toMatchScreenshot(`basic-message-rtl-${direction}displayname.png`, {
-                    mask: [page.locator(".mx_MessageTimestamp")],
-                });
+                await expect(msgTile).toMatchScreenshot(
+                    `basic-message-rtl-${direction}displayname.png`,
+                    screenshotOptions(page),
+                );
             });
 
             test("should render an RTL emote", async ({ page, user, app, room }) => {
                 await page.goto(`#/room/${room.roomId}`);
 
                 const msgTile = await sendMessage(page, "/me يضع بيضة");
-                await expect(msgTile).toMatchScreenshot(`emote-rtl-${direction}displayname.png`);
+                await expect(msgTile).toMatchScreenshot(`emote-rtl-${direction}displayname.png`, screenshotOptions());
             });
 
             test("should render a richtext RTL emote", async ({ page, user, app, room }) => {
                 await page.goto(`#/room/${room.roomId}`);
 
                 const msgTile = await sendMessage(page, "/me أضع بيضة *حرة النطاق*");
-                await expect(msgTile).toMatchScreenshot(`emote-rich-rtl-${direction}displayname.png`);
+                await expect(msgTile).toMatchScreenshot(
+                    `emote-rich-rtl-${direction}displayname.png`,
+                    screenshotOptions(),
+                );
             });
 
             test("should render an edited RTL message", async ({ page, user, app, room }) => {
@@ -157,9 +177,10 @@ test.describe("Message rendering", () => {
 
                 await editMessage(page, msgTile, "مرحبا بالكون!");
 
-                await expect(msgTile).toMatchScreenshot(`edited-message-rtl-${direction}displayname.png`, {
-                    mask: [page.locator(".mx_MessageTimestamp")],
-                });
+                await expect(msgTile).toMatchScreenshot(
+                    `edited-message-rtl-${direction}displayname.png`,
+                    screenshotOptions(page),
+                );
             });
 
             test("should render a reply of a RTL message", async ({ page, user, app, room }) => {
@@ -173,9 +194,10 @@ test.describe("Message rendering", () => {
                 ]);
 
                 await replyMessage(page, msgTile, "مرحبا بالعالم!");
-                await expect(msgTile).toMatchScreenshot(`reply-message-trl-${direction}displayname.png`, {
-                    mask: [page.locator(".mx_MessageTimestamp")],
-                });
+                await expect(msgTile).toMatchScreenshot(
+                    `reply-message-trl-${direction}displayname.png`,
+                    screenshotOptions(page),
+                );
             });
         });
     });

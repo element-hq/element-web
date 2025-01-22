@@ -89,8 +89,7 @@ class Helpers {
         await expect(dialog.getByText(title, { exact: true })).toBeVisible();
         await expect(dialog).toMatchScreenshot(screenshot);
 
-        const handle = await this.page.evaluateHandle(() => navigator.clipboard.readText());
-        const clipboardContent = await handle.jsonValue();
+        const clipboardContent = await this.app.getClipboard();
         await dialog.getByRole("textbox").fill(clipboardContent);
         await dialog.getByRole("button", { name: confirmButtonLabel }).click();
         await expect(dialog).toMatchScreenshot("default-recovery.png");

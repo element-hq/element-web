@@ -136,20 +136,6 @@ export enum Action {
     OpenDialPad = "open_dial_pad",
 
     /**
-     * Fired when CallHandler has checked for PSTN protocol support
-     * payload: none
-     * XXX: Is an action the right thing for this?
-     */
-    PstnSupportUpdated = "pstn_support_updated",
-
-    /**
-     * Similar to PstnSupportUpdated, fired when CallHandler has checked for virtual room support
-     * payload: none
-     * XXX: Ditto
-     */
-    VirtualRoomSupportUpdated = "virtual_room_support_updated",
-
-    /**
      * Fired when an upload has started. Should be used with UploadStartedPayload.
      */
     UploadStarted = "upload_started",

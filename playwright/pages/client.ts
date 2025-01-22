@@ -15,7 +15,6 @@ import type {
     ICreateRoomOpts,
     ISendEventResponse,
     MatrixClient,
-    Room,
     MatrixEvent,
     ReceiptType,
     IRoomDirectoryOptions,
@@ -178,21 +177,12 @@ export class Client {
      */
     public async createRoom(options: ICreateRoomOpts): Promise<string> {
         const client = await this.prepareClient();
-        return await client.evaluate(async (cli, options) => {
+        const roomId = await client.evaluate(async (cli, options) => {
             const { room_id: roomId } = await cli.createRoom(options);
-            if (!cli.getRoom(roomId)) {
-                await new Promise<void>((resolve) => {
-                    const onRoom = (room: Room) => {
-                        if (room.roomId === roomId) {
-                            cli.off(window.matrixcs.ClientEvent.Room, onRoom);
-                            resolve();
-                        }
-                    };
-                    cli.on(window.matrixcs.ClientEvent.Room, onRoom);
-                });
-            }
             return roomId;
         }, options);
+        await this.awaitRoomMembership(roomId);
+        return roomId;
     }
 
     /**

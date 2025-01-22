@@ -155,9 +155,13 @@ export const test = base.extend<TestFixtures, Services & Options>({
         { scope: "worker" },
     ],
 
-    context: async ({ homeserverType, synapseConfig, logger, context, request, homeserver }, use, testInfo) => {
+    context: async (
+        { homeserverType, synapseConfig, logger, context, request, _homeserver, homeserver },
+        use,
+        testInfo,
+    ) => {
         testInfo.skip(
-            !(homeserver instanceof SynapseContainer) && Object.keys(synapseConfig).length > 0,
+            !(_homeserver instanceof SynapseContainer) && Object.keys(synapseConfig).length > 0,
             `Test specifies Synapse config options so is unsupported with ${homeserverType}`,
         );
         homeserver.setRequest(request);
