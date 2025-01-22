@@ -467,6 +467,22 @@ export class StopGapWidgetDriver extends WidgetDriver {
         }
     }
 
+    /**
+     * Reads all events of the given type, and optionally `msgtype` (if applicable/defined),
+     * the user has access to. The widget API will have already verified that the widget is
+     * capable of receiving the events. Less events than the limit are allowed to be returned,
+     * but not more.
+     * @param roomId The ID of the room to look within.
+     * @param eventType The event type to be read.
+     * @param msgtype The msgtype of the events to be read, if applicable/defined.
+     * @param stateKey The state key of the events to be read, if applicable/defined.
+     * @param limit The maximum number of events to retrieve. Will be zero to denote "as many as
+     * possible".
+     * @param since When null, retrieves the number of events specified by the "limit" parameter.
+     * Otherwise, the event ID at which only subsequent events will be returned, as many as specified
+     * in "limit".
+     * @returns {Promise<IRoomEvent[]>} Resolves to the room events, or an empty array.
+     */
     public async readRoomTimeline(
         roomId: string,
         eventType: string,
@@ -495,6 +511,15 @@ export class StopGapWidgetDriver extends WidgetDriver {
         return results.map((e) => e.getEffectiveEvent() as IRoomEvent);
     }
 
+    /**
+     * Reads the current values of all matching room state entries.
+     * @param roomId The ID of the room.
+     * @param eventType The event type of the entries to be read.
+     * @param stateKey The state key of the entry to be read. If undefined,
+     * all room state entries with a matching event type should be returned.
+     * @returns {Promise<IRoomEvent[]>} Resolves to the events representing the
+     * current values of the room state entries.
+     */
     public async readRoomState(roomId: string, eventType: string, stateKey: string | undefined): Promise<IRoomEvent[]> {
         const room = MatrixClientPeg.safeGet().getRoom(roomId);
         if (room === null) return [];
@@ -665,6 +690,11 @@ export class StopGapWidgetDriver extends WidgetDriver {
         return { file: blob };
     }
 
+    /**
+     * Gets the IDs of all joined or invited rooms currently known to the
+     * client.
+     * @returns The room IDs.
+     */
     public getKnownRooms(): string[] {
         return MatrixClientPeg.safeGet()
             .getVisibleRooms(SettingsStore.getValue("feature_dynamic_room_predecessors"))

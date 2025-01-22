@@ -158,6 +158,8 @@ export class StopGapWidget extends EventEmitter {
     private mockWidget: ElementWidget;
     private scalarToken?: string;
     private roomId?: string;
+    // The room that we're currently allowing the widget to interact with. Only
+    // used for account widgets, which may follow the user to different rooms.
     private viewedRoomId: string | null = null;
     private kind: WidgetKind;
     private readonly virtual: boolean;
@@ -257,6 +259,8 @@ export class StopGapWidget extends EventEmitter {
         }
     };
 
+    // This listener is only active for account widgets, which may follow the
+    // user to different rooms
     private onRoomViewStoreUpdate = (): void => {
         const roomId = SdkContextClass.instance.roomViewStore.getRoomId() ?? null;
         if (roomId !== this.viewedRoomId) {
