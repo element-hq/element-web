@@ -139,12 +139,12 @@ export async function checkDeviceIsCrossSigned(app: ElementAppPage): Promise<voi
  * Check that the current device is connected to the expected key backup.
  * Also checks that the decryption key is known and cached locally.
  *
- * @param page - the page to check
+ * @param app - app page
  * @param expectedBackupVersion - the version of the backup we expect to be connected to.
  * @param checkBackupKeyInCache - whether to check that the backup key is cached locally.
  */
 export async function checkDeviceIsConnectedKeyBackup(
-    page: Page,
+    app: ElementAppPage,
     expectedBackupVersion: string,
     checkBackupKeyInCache: boolean,
 ): Promise<void> {
@@ -155,23 +155,41 @@ export async function checkDeviceIsConnectedKeyBackup(
         );
     }
 
-    await page.getByRole("button", { name: "User menu" }).click();
-    await page.locator(".mx_UserMenu_contextMenu").getByRole("menuitem", { name: "Security & Privacy" }).click();
-    await expect(page.locator(".mx_Dialog").getByRole("button", { name: "Restore from Backup" })).toBeVisible();
+    const backupData = await app.client.evaluate(async (client: MatrixClient) => {
+        const crypto = client.getCrypto();
+        if (!crypto) return;
 
-    // expand the advanced section to see the active version in the reports
-    await page.locator(".mx_SecureBackupPanel_advanced").locator("..").click();
+        const backupInfo = await crypto.getKeyBackupInfo();
+        const backupKeyStored = Boolean(await client.isKeyBackupKeyStored());
+        const backupKeyFromCache = await crypto.getSessionBackupPrivateKey();
+        const backupKeyCached = Boolean(backupKeyFromCache);
+        const backupKeyWellFormed = backupKeyFromCache instanceof Uint8Array;
+        const activeBackupVersion = await crypto.getActiveSessionBackupVersion();
 
-    if (checkBackupKeyInCache) {
-        const cacheDecryptionKeyStatusElement = page.locator(".mx_SecureBackupPanel_statusList tr:nth-child(2) td");
-        await expect(cacheDecryptionKeyStatusElement).toHaveText("cached locally, well formed");
+        return { backupInfo, backupKeyStored, backupKeyCached, backupKeyWellFormed, activeBackupVersion };
+    });
+
+    if (!backupData) {
+        throw new Error("Crypo module is not available");
     }
 
-    await expect(page.locator(".mx_SecureBackupPanel_statusList tr:nth-child(5) td")).toHaveText(
-        expectedBackupVersion + " (Algorithm: m.megolm_backup.v1.curve25519-aes-sha2)",
-    );
+    const { backupInfo, backupKeyStored, backupKeyCached, backupKeyWellFormed, activeBackupVersion } = backupData;
 
-    await expect(page.locator(".mx_SecureBackupPanel_statusList tr:nth-child(6) td")).toHaveText(expectedBackupVersion);
+    // We have a key backup
+    expect(backupInfo).toBeDefined();
+    // The key backup version is as expected
+    expect(backupInfo.version).toBe(expectedBackupVersion);
+    // The active backup version is as expected
+    expect(activeBackupVersion).toBe(expectedBackupVersion);
+    // The backup key is stored in 4S
+    expect(backupKeyStored).toBe(true);
+
+    if (checkBackupKeyInCache) {
+        // The backup key is available locally
+        expect(backupKeyCached).toBe(true);
+        // The backup key is well-formed
+        expect(backupKeyWellFormed).toBe(true);
+    }
 }
 
 /**
