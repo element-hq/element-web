@@ -392,6 +392,7 @@ export const useRovingTabIndex = <T extends HTMLElement>(
         });
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+    // eslint-disable-next-line react-compiler/react-compiler
     const isActive = context.state.activeNode === nodeRef.current;
     return [onFocus, isActive, ref, nodeRef];
 };

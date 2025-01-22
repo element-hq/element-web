@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { useEffect, useRef } from "react";
+import React, { useMemo } from "react";
 
 type FlexProps = {
     /**
@@ -41,25 +41,6 @@ type FlexProps = {
 };
 
 /**
- * Set or remove a CSS property
- * @param ref the reference
- * @param name the CSS property name
- * @param value the CSS property value
- */
-function addOrRemoveProperty(
-    ref: React.MutableRefObject<HTMLElement | undefined>,
-    name: string,
-    value?: string | null,
-): void {
-    const style = ref.current!.style;
-    if (value) {
-        style.setProperty(name, value);
-    } else {
-        style.removeProperty(name);
-    }
-}
-
-/**
  * A flex child helper
  */
 export function Box({
@@ -71,12 +52,12 @@ export function Box({
     children,
     ...props
 }: React.PropsWithChildren<FlexProps>): JSX.Element {
-    const ref = useRef<HTMLElement>();
-
-    useEffect(() => {
-        addOrRemoveProperty(ref, `--mx-box-flex`, flex);
-        addOrRemoveProperty(ref, `--mx-box-shrink`, shrink);
-        addOrRemoveProperty(ref, `--mx-box-grow`, grow);
+    const style = useMemo(() => {
+        const style: Record<string, any> = {};
+        if (flex) style["--mx-box-flex"] = flex;
+        if (shrink) style["--mx-box-shrink"] = shrink;
+        if (grow) style["--mx-box-grow"] = grow;
+        return style;
     }, [flex, grow, shrink]);
 
     return React.createElement(
@@ -88,7 +69,7 @@ export function Box({
                 "mx_Box--shrink": !!shrink,
                 "mx_Box--grow": !!grow,
             }),
-            ref,
+            style,
         },
         children,
     );

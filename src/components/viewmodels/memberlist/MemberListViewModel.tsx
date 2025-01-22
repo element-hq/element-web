@@ -19,7 +19,7 @@ import {
     UserEvent,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { throttle } from "lodash";
 
 import { RoomMember } from "../../../models/rooms/RoomMember";
@@ -99,8 +99,12 @@ export function sdkRoomMemberToRoomMember(member: SdkRoomMember): Member {
     };
 }
 
+export const SEPARATOR = "SEPARATOR";
+export type MemberWithSeparator = Member | typeof SEPARATOR;
+
 export interface MemberListViewState {
-    members: Member[];
+    members: MemberWithSeparator[];
+    memberCount: number;
     search: (searchQuery: string) => void;
     isPresenceEnabled: boolean;
     shouldShowInvite: boolean;
@@ -118,60 +122,65 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
     }
 
     const sdkContext = useContext(SDKContext);
-    const [memberMap, setMemberMap] = useState<Map<string, Member>>(new Map());
+    const [memberMap, setMemberMap] = useState<Map<string, MemberWithSeparator>>(new Map());
     const [isLoading, setIsLoading] = useState<boolean>(true);
-
     // This is the last known total number of members in this room.
-    const totalMemberCount = useRef<number>(0);
-
-    const searchQuery = useRef("");
+    const [totalMemberCount, setTotalMemberCount] = useState(0);
+    /**
+     * This is the current number of members in the list.
+     * This number will be less than the total number of members
+     * in the room when the search functionality is used.
+     */
+    const [memberCount, setMemberCount] = useState(0);
 
     const loadMembers = useMemo(
         () =>
             throttle(
-                async (): Promise<void> => {
+                async (searchQuery?: string): Promise<void> => {
                     const { joined: joinedSdk, invited: invitedSdk } = await sdkContext.memberListStore.loadMemberList(
                         roomId,
-                        searchQuery.current,
+                        searchQuery,
                     );
-                    const newMemberMap = new Map<string, Member>();
-                    // First add the invited room members
-                    for (const member of invitedSdk) {
-                        const roomMember = sdkRoomMemberToRoomMember(member);
-                        newMemberMap.set(member.userId, roomMember);
-                    }
-                    // Then add the third party invites
-                    const threePidInvited = getPending3PidInvites(room, searchQuery.current);
-                    for (const invited of threePidInvited) {
-                        const key = invited.threePidInvite!.event.getContent().display_name;
-                        newMemberMap.set(key, invited);
-                    }
-                    // Finally add the joined room members
+                    const threePidInvited = getPending3PidInvites(room, searchQuery);
+
+                    const newMemberMap = new Map<string, MemberWithSeparator>();
+
+                    // First add the joined room members
                     for (const member of joinedSdk) {
                         const roomMember = sdkRoomMemberToRoomMember(member);
                         newMemberMap.set(member.userId, roomMember);
                     }
+
+                    // Then a separator if needed
+                    if (joinedSdk.length > 0 && (invitedSdk.length > 0 || threePidInvited.length > 0))
+                        newMemberMap.set(SEPARATOR, SEPARATOR);
+
+                    // Then add the invited room members
+                    for (const member of invitedSdk) {
+                        const roomMember = sdkRoomMemberToRoomMember(member);
+                        newMemberMap.set(member.userId, roomMember);
+                    }
+
+                    // Finally add the third party invites
+                    for (const invited of threePidInvited) {
+                        const key = invited.threePidInvite!.event.getContent().display_name;
+                        newMemberMap.set(key, invited);
+                    }
+
                     setMemberMap(newMemberMap);
-                    if (!searchQuery.current) {
+                    setMemberCount(joinedSdk.length + invitedSdk.length + threePidInvited.length);
+                    if (!searchQuery) {
                         /**
                          * Since searching for members only gives you the relevant
                          * members matching the query, do not update the totalMemberCount!
                          **/
-                        totalMemberCount.current = newMemberMap.size;
+                        setTotalMemberCount(newMemberMap.size);
                     }
                 },
                 500,
                 { leading: true, trailing: true },
             ),
-        [roomId, sdkContext.memberListStore, room],
-    );
-
-    const search = useCallback(
-        (query: string) => {
-            searchQuery.current = query;
-            loadMembers();
-        },
-        [loadMembers],
+        [sdkContext.memberListStore, roomId, room],
     );
 
     const isPresenceEnabled = useMemo(
@@ -252,12 +261,13 @@ export function useMemberListViewModel(roomId: string): MemberListViewState {
 
     return {
         members: Array.from(memberMap.values()),
-        search,
+        memberCount,
+        search: loadMembers,
         shouldShowInvite,
         isPresenceEnabled,
         isLoading,
         onInviteButtonClick,
-        shouldShowSearch: totalMemberCount.current >= 20,
+        shouldShowSearch: totalMemberCount >= 20,
         canInvite,
     };
 }

@@ -443,7 +443,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
                         PosthogTrackers.trackInteraction("WebThreadViewBackButton", ev);
                     }}
                 >
-                    {this.card.current && <Measured sensor={this.card.current} onMeasurement={this.onMeasurement} />}
+                    <Measured sensor={this.card} onMeasurement={this.onMeasurement} />
                     <div className="mx_ThreadView_timelinePanelWrapper">{timeline}</div>
 
                     {ContentMessages.sharedInstance().getCurrentUploads(threadRelation).length > 0 && (

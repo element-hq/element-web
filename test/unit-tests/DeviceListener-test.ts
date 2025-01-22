@@ -329,7 +329,7 @@ describe("DeviceListener", () => {
                 });
 
                 it("shows verify session toast when account has cross signing", async () => {
-                    mockCrypto!.userHasCrossSigningKeys.mockResolvedValue(true);
+                    mockCrypto!.isCrossSigningReady.mockResolvedValue(true);
                     await createAndStart();
 
                     expect(mockCrypto!.getUserDeviceInfo).toHaveBeenCalled();
@@ -337,24 +337,25 @@ describe("DeviceListener", () => {
                         SetupEncryptionToast.Kind.VERIFY_THIS_SESSION,
                     );
                 });
-
-                it("checks key backup status when when account has cross signing", async () => {
-                    mockCrypto!.getCrossSigningKeyId.mockResolvedValue(null);
-                    mockCrypto!.userHasCrossSigningKeys.mockResolvedValue(true);
-                    await createAndStart();
-
-                    expect(mockCrypto!.getActiveSessionBackupVersion).toHaveBeenCalled();
-                });
             });
 
             describe("when user does have a cross signing id on this device", () => {
                 beforeEach(() => {
+                    mockCrypto!.isCrossSigningReady.mockResolvedValue(true);
                     mockCrypto!.getCrossSigningKeyId.mockResolvedValue("abc");
+                    mockCrypto!.getDeviceVerificationStatus.mockResolvedValue(
+                        new DeviceVerificationStatus({
+                            trustCrossSignedDevices: true,
+                            crossSigningVerified: true,
+                        }),
+                    );
                 });
 
                 it("shows set up recovery toast when user has a key backup available", async () => {
                     // non falsy response
                     mockCrypto.getKeyBackupInfo.mockResolvedValue({} as unknown as KeyBackupInfo);
+                    mockClient.secretStorage.getDefaultKeyId.mockResolvedValue(null);
+
                     await createAndStart();
 
                     expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(
