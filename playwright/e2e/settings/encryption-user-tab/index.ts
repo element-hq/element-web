@@ -18,6 +18,8 @@ export { expect };
 export const test = base.extend<{
     util: Helpers;
 }>({
+    displayName: "Alice",
+
     util: async ({ page, app, bot }, use) => {
         await use(new Helpers(page, app));
     },
@@ -65,6 +67,20 @@ class Helpers {
      */
     getEncryptionTabContent() {
         return this.page.getByTestId("encryptionTab");
+    }
+
+    /**
+     * Get the recovery section
+     */
+    getEncryptionRecoverySection() {
+        return this.page.getByTestId("recoveryPanel");
+    }
+
+    /**
+     * Get the encryption details section
+     */
+    getEncryptionDetailsSection() {
+        return this.page.getByTestId("encryptionDetails");
     }
 
     /**

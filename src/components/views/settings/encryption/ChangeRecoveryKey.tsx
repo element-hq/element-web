@@ -18,6 +18,7 @@ import {
     TextControl,
 } from "@vector-im/compound-web";
 import CopyIcon from "@vector-im/compound-design-tokens/assets/web/icons/copy";
+import KeyIcon from "@vector-im/compound-design-tokens/assets/web/icons/key-solid";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../../languageHandler";
@@ -157,7 +158,12 @@ export function ChangeRecoveryKey({
                 pages={pages}
                 onPageClick={onCancelClick}
             />
-            <EncryptionCard title={labels.title} description={labels.description} className="mx_ChangeRecoveryKey">
+            <EncryptionCard
+                Icon={KeyIcon}
+                title={labels.title}
+                description={labels.description}
+                className="mx_ChangeRecoveryKey"
+            >
                 {content}
             </EncryptionCard>
         </>

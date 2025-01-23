@@ -94,4 +94,19 @@ describe("<EncryptionUserSettingsTab />", () => {
         await waitFor(() => expect(screen.getByText("Set up recovery")).toBeInTheDocument());
         expect(asFragment()).toMatchSnapshot();
     });
+
+    it("should display the reset identity panel when the user clicks on the reset cryptographic identity panel", async () => {
+        const user = userEvent.setup();
+
+        const { asFragment } = renderComponent();
+        await waitFor(() => {
+            const button = screen.getByRole("button", { name: "Reset cryptographic identity" });
+            expect(button).toBeInTheDocument();
+            user.click(button);
+        });
+        await waitFor(() =>
+            expect(screen.getByText("Are you sure you want to reset your identity?")).toBeInTheDocument(),
+        );
+        expect(asFragment()).toMatchSnapshot();
+    });
 });
