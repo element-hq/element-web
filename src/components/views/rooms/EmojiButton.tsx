@@ -19,9 +19,10 @@ interface IEmojiButtonProps {
     addEmoji: (unicode: string) => boolean;
     menuPosition?: MenuProps;
     className?: string;
+    single?: boolean;
 }
 
-export function EmojiButton({ addEmoji, menuPosition, className }: IEmojiButtonProps): JSX.Element {
+export function EmojiButton({ addEmoji, menuPosition, className, single }: IEmojiButtonProps): JSX.Element {
     const overflowMenuCloser = useContext(OverflowMenuContext);
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
 
@@ -32,10 +33,19 @@ export function EmojiButton({ addEmoji, menuPosition, className }: IEmojiButtonP
             closeMenu();
             overflowMenuCloser?.();
         };
+        const onChoose = (emoji: string) => {
+            try {
+                return addEmoji(emoji);
+            } finally {
+                if (single) {
+                    onFinished();
+                }
+            }
+        };
 
         contextMenu = (
             <ContextMenu {...position} onFinished={onFinished} managed={false}>
-                <EmojiPicker onChoose={addEmoji} onFinished={onFinished} />
+                <EmojiPicker onChoose={onChoose} onFinished={onFinished} />
             </ContextMenu>
         );
     }

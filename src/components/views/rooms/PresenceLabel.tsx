@@ -27,6 +27,7 @@ interface IProps {
     // whether to apply colouring to the label
     coloured?: boolean;
     className?: string;
+    statusMessage?: string;
 }
 
 export default class PresenceLabel extends React.Component<IProps> {
@@ -57,7 +58,7 @@ export default class PresenceLabel extends React.Component<IProps> {
     }
 
     public render(): React.ReactNode {
-        return (
+        return <>
             <div
                 className={classNames("mx_PresenceLabel", this.props.className, {
                     mx_PresenceLabel_online: this.props.coloured && this.props.presenceState === "online",
@@ -65,6 +66,8 @@ export default class PresenceLabel extends React.Component<IProps> {
             >
                 {this.getPrettyPresence(this.props.presenceState, this.props.activeAgo, this.props.currentlyActive)}
             </div>
-        );
+
+            <p>{this.props.statusMessage}</p>
+        </>;
     }
 }

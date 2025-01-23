@@ -28,11 +28,12 @@ interface IProps {
     colored?: boolean;
     emphasizeDisplayName?: boolean;
     withTooltip?: boolean;
+    statusMessage?: string;
 }
 
 export default class DisambiguatedProfile extends React.Component<IProps> {
     public render(): React.ReactNode {
-        const { fallbackName, member, colored, emphasizeDisplayName, withTooltip, onClick } = this.props;
+        const { fallbackName, member, colored, emphasizeDisplayName, withTooltip, onClick, statusMessage } = this.props;
         const rawDisplayName = member?.rawDisplayName || fallbackName;
         const mxid = member?.userId;
 
@@ -42,6 +43,7 @@ export default class DisambiguatedProfile extends React.Component<IProps> {
         }
 
         let mxidElement;
+        let statusElement;
         let title: string | undefined;
 
         if (mxid) {
@@ -59,6 +61,10 @@ export default class DisambiguatedProfile extends React.Component<IProps> {
             });
         }
 
+        if (statusMessage) {
+            statusElement = <span className="mx_DisambiguatedProfile_mxid">({statusMessage})</span>;
+        }
+
         const displayNameClasses = classNames(colorClass, {
             mx_DisambiguatedProfile_displayName: emphasizeDisplayName,
         });
@@ -69,6 +75,7 @@ export default class DisambiguatedProfile extends React.Component<IProps> {
                     {rawDisplayName}
                 </span>
                 {mxidElement}
+                {statusElement}
             </div>
         );
     }

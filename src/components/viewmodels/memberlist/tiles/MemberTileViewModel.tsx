@@ -18,6 +18,7 @@ import { RoomMember } from "../../../../models/rooms/RoomMember";
 import { _t, _td, TranslationKey } from "../../../../languageHandler";
 import UserIdentifierCustomisations from "../../../../customisations/UserIdentifier";
 import { E2EStatus } from "../../../../utils/ShieldUtils";
+import { useUserProfileValue } from "../../../../hooks/useUserProfileValue";
 
 interface MemberTileViewModelProps {
     member: RoomMember;
@@ -30,6 +31,7 @@ export interface MemberTileViewState extends MemberTileViewModelProps {
     onClick: () => void;
     title?: string;
     userLabel?: string;
+    statusMessage?: string;
 }
 
 export enum PowerStatus {
@@ -44,10 +46,10 @@ const PowerLabel: Record<PowerStatus, TranslationKey> = {
 
 export function useMemberTileViewModel(props: MemberTileViewModelProps): MemberTileViewState {
     const [e2eStatus, setE2eStatus] = useState<E2EStatus | undefined>();
+    const cli = MatrixClientPeg.safeGet();
+    const statusMessage = useUserProfileValue(cli, "uk.half-shot.status", props.member.userId);
 
     useEffect(() => {
-        const cli = MatrixClientPeg.safeGet();
-
         const updateE2EStatus = async (): Promise<void> => {
             const { userId } = props.member;
             const isMe = userId === cli.getUserId();
@@ -103,7 +105,7 @@ export function useMemberTileViewModel(props: MemberTileViewModelProps): MemberT
                 cli.removeListener(CryptoEvent.UserTrustStatusChanged, onUserTrustStatusChanged);
             }
         };
-    }, [props.member]);
+    }, [props.member, cli]);
 
     const onClick = (): void => {
         dis.dispatch({
@@ -156,5 +158,6 @@ export function useMemberTileViewModel(props: MemberTileViewModelProps): MemberT
         e2eStatus,
         showPresence: props.showPresence,
         userLabel,
+        statusMessage: statusMessage ?? undefined,
     };
 }

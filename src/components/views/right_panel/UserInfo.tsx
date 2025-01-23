@@ -85,6 +85,7 @@ import { asyncSome } from "../../../utils/arrays";
 import { Flex } from "../../utils/Flex";
 import CopyableText from "../elements/CopyableText";
 import { useUserTimezone } from "../../../hooks/useUserTimezone";
+import { useUserProfileValue } from "../../../hooks/useUserProfileValue";
 export interface IDevice extends Device {
     ambiguous?: boolean;
 }
@@ -1634,6 +1635,8 @@ export const UserInfoHeader: React.FC<{
     roomId?: string;
 }> = ({ member, e2eStatus, roomId }) => {
     const cli = useContext(MatrixClientContext);
+    console.log(cli, member);
+    const statusMessage = useUserProfileValue(cli, "uk.half-shot.status", member.userId, true);
 
     const onMemberAvatarClick = useCallback(() => {
         const avatarUrl = (member as RoomMember).getMxcAvatarUrl
@@ -1667,6 +1670,7 @@ export const UserInfoHeader: React.FC<{
     if (enablePresenceByHsUrl && enablePresenceByHsUrl[cli.baseUrl] !== undefined) {
         showPresence = enablePresenceByHsUrl[cli.baseUrl];
     }
+    
 
     let presenceLabel: JSX.Element | undefined;
     if (showPresence) {
@@ -1675,10 +1679,13 @@ export const UserInfoHeader: React.FC<{
                 activeAgo={presenceLastActiveAgo}
                 currentlyActive={presenceCurrentlyActive}
                 presenceState={presenceState}
+                statusMessage={statusMessage ?? undefined}
                 className="mx_UserInfo_profileStatus"
                 coloured
             />
         );
+    } else if (statusMessage) {
+        presenceLabel = <span>statusMessage</span>
     }
 
     const timezoneInfo = useUserTimezone(cli, member.userId);

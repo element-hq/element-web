@@ -48,7 +48,6 @@ export const useUserTimezone = (cli: MatrixClient, userId: string): { timezone: 
             return;
         }
         (async () => {
-            console.log("Trying to fetch TZ");
             try {
                 const tz = await cli.getExtendedProfileProperty(userId, "us.cloke.msc4175.tz");
                 if (typeof tz !== "string") {

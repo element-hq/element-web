@@ -14,6 +14,9 @@ import {
     MatrixEvent,
     RoomMember,
     RoomMemberEvent,
+    SyncState,
+    TypedEventEmitter,
+    ClientEvent,
 } from "matrix-js-sdk/src/matrix";
 
 import { LruCache } from "../utils/LruCache";
@@ -27,18 +30,65 @@ interface GetOptions {
     shouldThrow: boolean;
 }
 
+export enum UserProfilesStoreEvents {
+    ProfileUpdated = "profile_updated",
+}
+
+interface UserProfilesStoreEventsMap {
+    [UserProfilesStoreEvents.ProfileUpdated]: (userId: string, profile: IMatrixProfile|null) => void,
+}
+
 /**
  * This store provides cached access to user profiles.
  * Listens for membership events and invalidates the cache for a profile on update with different profile values.
  */
-export class UserProfilesStore {
+export class UserProfilesStore extends TypedEventEmitter<UserProfilesStoreEvents, UserProfilesStoreEventsMap> {
     private profiles = new LruCache<string, IMatrixProfile | null>(cacheSize);
     private profileLookupErrors = new LruCache<string, MatrixError>(cacheSize);
     private knownProfiles = new LruCache<string, IMatrixProfile | null>(cacheSize);
 
+    private readonly profileSubscriptions = new Map<string, {subs: number, lastSync: number}>();
+
     public constructor(private client: MatrixClient) {
+        super();
         client.on(RoomMemberEvent.Membership, this.onRoomMembershipEvent);
+        client.on(ClientEvent.Sync, (state) => {
+            if (state !== SyncState.Syncing) {
+                return;
+            }
+            const time = Date.now();
+            for (const [userId, entry] of this.profileSubscriptions.entries()) {
+                if (time - entry.lastSync < 60000) {
+                    continue;
+                }
+                void this.fetchProfile(userId, { shouldThrow: false});
+                entry.lastSync = time;
+            }
+        })
     }
+
+    public subscribeToProfile(userId: string) {
+        const existingProfile = this.profileSubscriptions.get(userId);
+        console.log(`Sub for ${userId} incremented to ${(existingProfile?.subs ?? 0) + 1}`);
+        if (existingProfile) {
+            existingProfile.subs += 1;
+        } else {
+            this.profileSubscriptions.set(userId, { subs: 1, lastSync: 0})
+        }
+    }
+
+    public unsubscribeToProfile(userId: string) {
+        const existingProfile = this.profileSubscriptions.get(userId);
+        if (!existingProfile) {
+            return;
+        }
+        existingProfile.subs -= 1;
+        console.log(`Sub for ${userId} reduced to ${existingProfile.subs}`);
+        if (existingProfile.subs === 0) {
+            this.profileSubscriptions.delete(userId);
+        }
+    }
+
 
     /**
      * Synchronously get a profile from the store cache.
@@ -104,6 +154,7 @@ export class UserProfilesStore {
     public async fetchProfile(userId: string, options?: GetOptions): Promise<IMatrixProfile | null> {
         const profile = await this.fetchProfileFromApi(userId, options);
         this.profiles.set(userId, profile);
+        this.emit(UserProfilesStoreEvents.ProfileUpdated, userId, profile);
         return profile;
     }
 

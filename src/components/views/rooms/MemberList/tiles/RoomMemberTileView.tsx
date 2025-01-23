@@ -35,7 +35,7 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
         />
     );
     const name = vm.name;
-    const nameJSX = <DisambiguatedProfile member={member} fallbackName={name || ""} />;
+    const nameJSX = <DisambiguatedProfile statusMessage={vm.statusMessage} member={member} fallbackName={name || ""} />;
 
     const presenceState = member.presenceState;
     let presenceJSX: JSX.Element | undefined;

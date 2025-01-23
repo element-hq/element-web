@@ -12,6 +12,8 @@ import { MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 
 import DisambiguatedProfile from "./DisambiguatedProfile";
 import { useRoomMemberProfile } from "../../../hooks/room/useRoomMemberProfile";
+import { useUserProfileValue } from "../../../hooks/useUserProfileValue";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -24,9 +26,11 @@ export default function SenderProfile({ mxEvent, onClick, withTooltip }: IProps)
         userId: mxEvent.getSender(),
         member: mxEvent.sender,
     });
+    const statusMessage = useUserProfileValue(MatrixClientPeg.safeGet(), "uk.half-shot.status", mxEvent.sender?.userId);
 
     return mxEvent.getContent().msgtype !== MsgType.Emote ? (
         <DisambiguatedProfile
+            statusMessage={statusMessage ?? undefined}
             fallbackName={mxEvent.getSender() ?? ""}
             onClick={onClick}
             member={member}

@@ -27,6 +27,9 @@ import LogoutDialog, { shouldShowLogoutDialog } from "../dialogs/LogoutDialog";
 import Modal from "../../../Modal";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Flex } from "../../utils/Flex";
+import { useUserProfileValue } from "../../../hooks/useUserProfileValue";
+import { SdkContextClass } from "../../../contexts/SDKContext";
+import { EmojiButton } from "../rooms/EmojiButton";
 
 const SpinnerToast: React.FC<{ children?: ReactNode }> = ({ children }) => (
     <>
@@ -114,9 +117,21 @@ const UserProfileSettings: React.FC<UserProfileSettingsProps> = ({
     const [maxUploadSize, setMaxUploadSize] = useState<number | undefined>();
     const [displayNameError, setDisplayNameError] = useState<boolean>(false);
 
+    const [statusMessageSupported, setStatusMessageSupported] = useState<boolean>(false);
+    const [statusMessageError, setStatusMessageError] = useState<boolean>(false);
+
     const toastRack = useToastContext();
 
     const client = useMatrixClientContext();
+    const currentStatusMessage = useUserProfileValue(client, "uk.half-shot.status", client.getSafeUserId(), true);
+    const [statusMessage, setStatusMessage] = useState<string>(currentStatusMessage ?? "");
+    
+    useEffect(() => {
+        if (currentStatusMessage) {
+            setStatusMessage(currentStatusMessage);
+        }
+    }, [currentStatusMessage]);
+
 
     useEffect(() => {
         (async () => {
@@ -126,6 +141,13 @@ const UserProfileSettings: React.FC<UserProfileSettingsProps> = ({
             } catch (e) {
                 logger.warn("Failed to get media config", e);
             }
+        })();
+    }, [client]);
+
+    useEffect(() => {
+        (async () => {
+            const supported = await client.doesServerSupportExtendedProfiles();
+            setStatusMessageSupported(supported);
         })();
     }, [client]);
 
@@ -190,6 +212,31 @@ const UserProfileSettings: React.FC<UserProfileSettingsProps> = ({
         [client],
     );
 
+    const onStatusChanged = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+        setStatusMessage(e.target.value);
+    }, []);
+
+    const onStatusAddEmoji = useCallback((emoij: string) => {
+        setStatusMessage(s => s + emoij);
+        return true;
+    }, []);
+
+    const onStatusCancelled = useCallback(() => {
+        setStatusMessage(currentStatusMessage ?? "");
+    }, [currentStatusMessage]);
+
+    const onStatusSave = useCallback(async (): Promise<void> => {
+        try {
+            setStatusMessageError(false);
+            await client.setExtendedProfileProperty("uk.half-shot.status", statusMessage);
+            // Force profile to be refetched.
+            SdkContextClass.instance.userProfilesStore.fetchProfile(client.getSafeUserId());
+        } catch (e) {
+            setStatusMessageError(true);
+            throw e;
+        }
+    }, [statusMessage, client]);
+
     const someFieldsDisabled = !canSetDisplayName || !canSetAvatar;
 
     return (
@@ -225,6 +272,22 @@ const UserProfileSettings: React.FC<UserProfileSettingsProps> = ({
                 >
                     {displayNameError && <ErrorMessage>{_t("settings|general|display_name_error")}</ErrorMessage>}
                 </EditInPlace>
+                <EditInPlace
+                    className="mx_UserProfileSettings_profile_statusMessage"
+                    label={_t("settings|general|status_message")}
+                    value={statusMessage}
+                    saveButtonLabel={_t("common|save")}
+                    cancelButtonLabel={_t("common|cancel")}
+                    savedLabel={_t("common|saved")}
+                    savingLabel={_t("common|updating")}
+                    onChange={onStatusChanged}
+                    onCancel={onStatusCancelled}
+                    onSave={onStatusSave}
+                    disabled={!statusMessageSupported}
+                >
+                    {statusMessageError && <ErrorMessage>{_t("settings|general|status_message_error")}</ErrorMessage>}
+                </EditInPlace>
+                <EmojiButton single addEmoji={onStatusAddEmoji}/>
             </div>
             {avatarError && (
                 <Alert title={_t("settings|general|avatar_upload_error_title")} type="critical">

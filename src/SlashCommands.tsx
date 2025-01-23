@@ -54,6 +54,7 @@ import { deop, op } from "./slash-commands/op";
 import { CommandCategories } from "./slash-commands/interface";
 import { Command } from "./slash-commands/command";
 import { goto, join } from "./slash-commands/join";
+import { SdkContextClass } from "./contexts/SDKContext";
 
 export { CommandCategories, Command };
 
@@ -883,6 +884,25 @@ export const Commands = [
         },
         renderingTypes: [TimelineRenderingType.Room],
     }),
+    new Command({
+        command: "statusmsg",
+        description: _td("slash_command|status_msg"),
+        category: CommandCategories.actions,
+        args: "<message>",
+        isEnabled: (cli) => !isCurrentLocalRoom(cli),
+        runFn: function (cli, _roomId, _threadId, args) {
+            return success((async () => {
+                const supported = await cli.doesServerSupportExtendedProfiles();
+                if (!supported) return reject(new UserFriendlyError("slash_command|extended_profile_not_supported"));
+                if (!args) return reject(new UserFriendlyError("slash_command|no_status_message"));
+                await cli.setExtendedProfileProperty("uk.half-shot.status", args);
+                // Refresh profile.
+                void SdkContextClass.instance.userProfilesStore.fetchProfile(cli.getSafeUserId());
+            })());
+        },
+        renderingTypes: [TimelineRenderingType.Room],
+    }),
+
 
     // Command definitions for autocompletion ONLY:
     // /me is special because its not handled by SlashCommands.js and is instead done inside the Composer classes
