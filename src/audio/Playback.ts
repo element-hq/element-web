@@ -9,7 +9,6 @@ Please see LICENSE files in the repository root for full details.
 import EventEmitter from "events";
 import { SimpleObservable } from "matrix-widget-api";
 import { logger } from "matrix-js-sdk/src/logger";
-import { defer } from "matrix-js-sdk/src/utils";
 
 import { UPDATE_EVENT } from "../stores/AsyncStore";
 import { arrayFastResample } from "../utils/arrays";
@@ -158,7 +157,7 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
             // 5mb
             logger.log("Audio file too large: processing through <audio /> element");
             this.element = document.createElement("AUDIO") as HTMLAudioElement;
-            const deferred = defer<unknown>();
+            const deferred = Promise.withResolvers<unknown>();
             this.element.onloadeddata = deferred.resolve;
             this.element.onerror = deferred.reject;
             this.element.src = URL.createObjectURL(new Blob([this.buf]));

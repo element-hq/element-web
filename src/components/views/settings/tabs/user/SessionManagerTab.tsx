@@ -9,7 +9,6 @@ Please see LICENSE files in the repository root for full details.
 import React, { lazy, Suspense, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { discoverAndValidateOIDCIssuerWellKnown, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { defer } from "matrix-js-sdk/src/utils";
 
 import { _t } from "../../../../../languageHandler";
 import Modal from "../../../../../Modal";
@@ -98,7 +97,7 @@ const useSignOut = (
                 const url = getManageDeviceUrl(delegatedAuthAccountUrl, deviceId);
                 window.open(url, "_blank");
             } else {
-                const deferredSuccess = defer<boolean>();
+                const deferredSuccess = Promise.withResolvers<boolean>();
                 await deleteDevicesWithInteractiveAuth(matrixClient, deviceIds, async (success) => {
                     deferredSuccess.resolve(success);
                 });

@@ -19,7 +19,7 @@ import {
     SyncStateData,
     TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
-import { defer, IDeferred, QueryDict } from "matrix-js-sdk/src/utils";
+import { QueryDict } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 import { throttle } from "lodash";
 import { CryptoEvent, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
@@ -217,7 +217,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     };
 
     private firstSyncComplete = false;
-    private firstSyncPromise: IDeferred<void>;
+    private firstSyncPromise: PromiseWithResolvers<void>;
 
     private screenAfterLogin?: IScreen;
     private tokenLogin?: boolean;
@@ -255,7 +255,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         // Used by _viewRoom before getting state from sync
         this.firstSyncComplete = false;
-        this.firstSyncPromise = defer();
+        this.firstSyncPromise = Promise.withResolvers();
 
         if (this.props.config.sync_timeline_limit) {
             MatrixClientPeg.opts.initialSyncLimit = this.props.config.sync_timeline_limit;
@@ -1503,7 +1503,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // since we're about to start the client and therefore about
         // to do the first sync
         this.firstSyncComplete = false;
-        this.firstSyncPromise = defer();
+        this.firstSyncPromise = Promise.withResolvers();
         const cli = MatrixClientPeg.safeGet();
 
         // Allow the JS SDK to reap timeline events. This reduces the amount of

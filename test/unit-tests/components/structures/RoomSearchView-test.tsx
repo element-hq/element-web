@@ -18,7 +18,6 @@ import {
     SearchResult,
     ISearchResults,
 } from "matrix-js-sdk/src/matrix";
-import { defer } from "matrix-js-sdk/src/utils";
 
 import { RoomSearchView } from "../../../../src/components/structures/RoomSearchView";
 import ResizeNotifier from "../../../../src/utils/ResizeNotifier";
@@ -53,7 +52,7 @@ describe("<RoomSearchView/>", () => {
     });
 
     it("should show a spinner before the promise resolves", async () => {
-        const deferred = defer<ISearchResults>();
+        const deferred = Promise.withResolvers<ISearchResults>();
 
         render(
             <RoomSearchView
@@ -267,7 +266,7 @@ describe("<RoomSearchView/>", () => {
     });
 
     it("should handle resolutions after unmounting sanely", async () => {
-        const deferred = defer<ISearchResults>();
+        const deferred = Promise.withResolvers<ISearchResults>();
 
         const { unmount } = render(
             <MatrixClientContext.Provider value={client}>
@@ -291,7 +290,7 @@ describe("<RoomSearchView/>", () => {
     });
 
     it("should handle rejections after unmounting sanely", async () => {
-        const deferred = defer<ISearchResults>();
+        const deferred = Promise.withResolvers<ISearchResults>();
 
         const { unmount } = render(
             <MatrixClientContext.Provider value={client}>
@@ -315,7 +314,7 @@ describe("<RoomSearchView/>", () => {
     });
 
     it("should show modal if error is encountered", async () => {
-        const deferred = defer<ISearchResults>();
+        const deferred = Promise.withResolvers<ISearchResults>();
 
         render(
             <MatrixClientContext.Provider value={client}>

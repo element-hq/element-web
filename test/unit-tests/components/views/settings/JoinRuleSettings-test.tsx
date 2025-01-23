@@ -21,7 +21,6 @@ import {
     Visibility,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { defer, IDeferred } from "matrix-js-sdk/src/utils";
 
 import {
     clearAllModals,
@@ -160,7 +159,7 @@ describe("<JoinRuleSettings />", () => {
             });
 
             it(`upgrades room when changing join rule to ${joinRule}`, async () => {
-                const deferredInvites: IDeferred<any>[] = [];
+                const deferredInvites: PromiseWithResolvers<any>[] = [];
                 // room that doesn't support the join rule
                 const room = new Room(roomId, client, userId);
                 const parentSpace = new Room("!parentSpace:server.org", client, userId);
@@ -183,7 +182,7 @@ describe("<JoinRuleSettings />", () => {
                 // resolve invites by hand
                 // flushPromises is too blunt to test reliably
                 client.invite.mockImplementation(() => {
-                    const p = defer<{}>();
+                    const p = Promise.withResolvers<{}>();
                     deferredInvites.push(p);
                     return p.promise;
                 });
