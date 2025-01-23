@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { mocked } from "jest-mock";
-import { randomString } from "matrix-js-sdk/src/randomstring";
+import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import { act, fireEvent, render, RenderResult } from "jest-matrix-react";
 import { EventType, MatrixClient, Room, GuestAccess, HistoryVisibility, JoinRule } from "matrix-js-sdk/src/matrix";
 
@@ -92,7 +92,7 @@ describe("<SpaceSettingsVisibilityTab />", () => {
 
     beforeEach(() => {
         let i = 0;
-        mocked(randomString).mockImplementation(() => {
+        mocked(secureRandomString).mockImplementation(() => {
             return "testid_" + i++;
         });
 

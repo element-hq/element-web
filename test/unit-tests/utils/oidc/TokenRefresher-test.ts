@@ -38,7 +38,7 @@ describe("TokenRefresher", () => {
     };
 
     beforeEach(() => {
-        fetchMock.get(`${issuer}.well-known/openid-configuration`, authConfig.metadata);
+        fetchMock.get(`${issuer}.well-known/openid-configuration`, authConfig);
         fetchMock.get(`${issuer}jwks`, {
             status: 200,
             headers: {
