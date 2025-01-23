@@ -42,7 +42,7 @@ test.describe("Memberlist", () => {
         await app.viewRoomByName(ROOM_NAME);
         const memberlist = await app.toggleMemberlistPanel();
         await expect(memberlist.locator(".mx_MemberTileView")).toHaveCount(4);
-        await expect(memberlist.getByText("(Invited)")).toHaveCount(1);
+        await expect(memberlist.getByText("Invited")).toHaveCount(1);
         await expect(page.locator(".mx_MemberListView")).toMatchScreenshot("with-four-members.png");
     });
 });

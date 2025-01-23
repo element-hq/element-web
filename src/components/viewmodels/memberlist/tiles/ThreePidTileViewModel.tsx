@@ -30,7 +30,7 @@ export function useThreePidTileViewModel(props: ThreePidTileViewModelProps): Thr
         });
     };
 
-    const userLabel = `(${_t("member_list|invited_label")})`;
+    const userLabel = _t("member_list|invited_label");
 
     return {
         name,
