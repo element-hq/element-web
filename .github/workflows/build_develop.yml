@@ -29,9 +29,9 @@ jobs:
             # Workaround for https://www.cloudflarestatus.com/incidents/t5nrjmpxc1cj
             - uses: unfor19/install-aws-cli-action@v1
               with:
-                version: 2.22.35
-                verbose: false
-                arch: amd64
+                  version: 2.22.35
+                  verbose: false
+                  arch: amd64
             - uses: actions/checkout@v4
 
             - uses: actions/setup-node@v4
