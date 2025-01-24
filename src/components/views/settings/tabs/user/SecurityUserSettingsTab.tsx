@@ -17,7 +17,6 @@ import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import dis from "../../../../../dispatcher/dispatcher";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
-import SecureBackupPanel from "../../SecureBackupPanel";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { UIFeature } from "../../../../../settings/UIFeature";
 import { ActionPayload } from "../../../../../dispatcher/payloads";
@@ -33,7 +32,6 @@ import type { IServerVersions } from "matrix-js-sdk/src/matrix";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { SettingsSubsection, SettingsSubsectionText } from "../../shared/SettingsSubsection";
-import { useOwnDevices } from "../../devices/useOwnDevices";
 import { DiscoverySettings } from "../../discovery/DiscoverySettings";
 import SetIntegrationManager from "../../SetIntegrationManager";
 
@@ -42,23 +40,6 @@ interface IIgnoredUserProps {
     onUnignored: (userId: string) => void;
     inProgress: boolean;
 }
-
-const DehydratedDeviceStatus: React.FC = () => {
-    const { dehydratedDeviceId } = useOwnDevices();
-
-    if (dehydratedDeviceId) {
-        return (
-            <div className="mx_SettingsSubsection_content">
-                <div className="mx_SettingsFlag_label">{_t("settings|security|dehydrated_device_enabled")}</div>
-                <div className="mx_SettingsSubsection_text">
-                    {_t("settings|security|dehydrated_device_description")}
-                </div>
-            </div>
-        );
-    } else {
-        return null;
-    }
-};
 
 export class IgnoredUser extends React.Component<IIgnoredUserProps> {
     private onUnignoreClicked = (): void => {
@@ -287,13 +268,6 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
     }
 
     public render(): React.ReactNode {
-        const secureBackup = (
-            <SettingsSubsection heading={_t("common|secure_backup")}>
-                <SecureBackupPanel />
-                <DehydratedDeviceStatus />
-            </SettingsSubsection>
-        );
-
         const eventIndex = (
             <SettingsSubsection heading={_t("settings|security|message_search_section")}>
                 <EventIndexPanel />
@@ -367,7 +341,6 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                 {warning}
                 <SetIntegrationManager />
                 <SettingsSection heading={_t("settings|security|encryption_section")}>
-                    {secureBackup}
                     {eventIndex}
                     {crossSigning}
                     <CryptographyPanel />
