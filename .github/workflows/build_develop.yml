@@ -117,7 +117,8 @@ jobs:
                   AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
                   # Workaround for https://www.cloudflarestatus.com/incidents/t5nrjmpxc1cj
-                  AWS_REQUEST_CHECKSUM_CALCULATION: when_required
+                  AWS_REQUEST_CHECKSUM_CALCULATION: WHEN_REQUIRED
+                  AWS_RESPONSE_CHECKSUM_VALIDATION: WHEN_REQUIRED
 
             - name: Deploy to Cloudflare Pages
               id: cfp
