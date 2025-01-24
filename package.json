@@ -90,7 +90,7 @@
         "@sentry/browser": "^8.0.0",
         "@types/png-chunks-extract": "^1.0.2",
         "@types/react-virtualized": "^9.21.30",
-        "@vector-im/compound-design-tokens": "^2.1.0",
+        "@vector-im/compound-design-tokens": "^3.0.0",
         "@vector-im/compound-web": "^7.6.1",
         "@vector-im/matrix-wysiwyg": "2.38.0",
         "@zxcvbn-ts/core": "^3.0.4",
