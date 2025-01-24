@@ -5,9 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { JSX, PropsWithChildren } from "react";
+import React, { JSX, PropsWithChildren, ComponentType, SVGAttributes } from "react";
 import { BigIcon, Heading } from "@vector-im/compound-web";
-import KeyIcon from "@vector-im/compound-design-tokens/assets/web/icons/key-solid";
 import classNames from "classnames";
 
 interface EncryptionCardProps {
@@ -22,7 +21,15 @@ interface EncryptionCardProps {
     /**
      * The description of the card.
      */
-    description: string;
+    description?: string;
+    /**
+     * Whether this icon shows a destructive action.
+     */
+    destructive?: boolean;
+    /**
+     * The icon to display.
+     */
+    Icon: ComponentType<SVGAttributes<SVGElement>>;
 }
 
 /**
@@ -32,18 +39,20 @@ export function EncryptionCard({
     title,
     description,
     className,
+    destructive = false,
+    Icon,
     children,
 }: PropsWithChildren<EncryptionCardProps>): JSX.Element {
     return (
         <div className={classNames("mx_EncryptionCard", className)}>
             <div className="mx_EncryptionCard_header">
-                <BigIcon>
-                    <KeyIcon />
+                <BigIcon destructive={destructive}>
+                    <Icon />
                 </BigIcon>
                 <Heading as="h2" size="sm" weight="semibold">
                     {title}
                 </Heading>
-                <span>{description}</span>
+                {description && <span>{description}</span>}
             </div>
             {children}
         </div>
