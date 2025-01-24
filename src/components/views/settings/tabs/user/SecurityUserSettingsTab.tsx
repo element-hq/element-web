@@ -17,7 +17,6 @@ import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import dis from "../../../../../dispatcher/dispatcher";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
-import SecureBackupPanel from "../../SecureBackupPanel";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { UIFeature } from "../../../../../settings/UIFeature";
 import { type ActionPayload } from "../../../../../dispatcher/payloads";
@@ -42,21 +41,20 @@ interface IIgnoredUserProps {
     inProgress: boolean;
 }
 
-const DehydratedDeviceStatus: React.FC = () => {
+const SecureBackup: React.FC = () => {
     const { dehydratedDeviceId } = useOwnDevices();
+    if (!dehydratedDeviceId) return null;
 
-    if (dehydratedDeviceId) {
-        return (
+    return (
+        <SettingsSubsection heading={_t("common|secure_backup")}>
             <div className="mx_SettingsSubsection_content">
                 <div className="mx_SettingsFlag_label">{_t("settings|security|dehydrated_device_enabled")}</div>
                 <div className="mx_SettingsSubsection_text">
                     {_t("settings|security|dehydrated_device_description")}
                 </div>
             </div>
-        );
-    } else {
-        return null;
-    }
+        </SettingsSubsection>
+    );
 };
 
 export class IgnoredUser extends React.Component<IIgnoredUserProps> {
@@ -297,12 +295,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
     }
 
     public render(): React.ReactNode {
-        const secureBackup = (
-            <SettingsSubsection heading={_t("common|secure_backup")}>
-                <SecureBackupPanel />
-                <DehydratedDeviceStatus />
-            </SettingsSubsection>
-        );
+        const secureBackup = <SecureBackup />;
 
         const eventIndex = (
             <SettingsSubsection heading={_t("settings|security|message_search_section")}>
