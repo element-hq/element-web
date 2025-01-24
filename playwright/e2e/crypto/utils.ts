@@ -241,18 +241,19 @@ export async function logOutOfElement(page: Page, discardKeys: boolean = false) 
 }
 
 /**
- * Open the security settings, and verify the current session using the security key.
+ * Open the encryption settings, and verify the current session using the security key.
  *
  * @param app - `ElementAppPage` wrapper for the playwright `Page`.
  * @param securityKey - The security key (i.e., 4S key), set up during a previous session.
  */
 export async function verifySession(app: ElementAppPage, securityKey: string) {
-    const settings = await app.settings.openUserSettings("Security & Privacy");
-    await settings.getByRole("button", { name: "Verify this session" }).click();
+    const settings = await app.settings.openUserSettings("Encryption");
+    await settings.getByRole("button", { name: "Verify this device" }).click();
     await app.page.getByRole("button", { name: "Verify with Security Key" }).click();
     await app.page.locator(".mx_Dialog").locator('input[type="password"]').fill(securityKey);
     await app.page.getByRole("button", { name: "Continue", disabled: false }).click();
     await app.page.getByRole("button", { name: "Done" }).click();
+    await app.settings.closeDialog();
 }
 
 /**
