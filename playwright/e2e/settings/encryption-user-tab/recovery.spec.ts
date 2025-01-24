@@ -51,8 +51,7 @@ test.describe("Recovery section in Encryption tab", () => {
 
         // Check that the current device is connected to key backup
         // The backup decryption key should be in cache also, as we got it directly from the 4S
-        await app.closeDialog();
-        await checkDeviceIsConnectedKeyBackup(page, expectedBackupVersion, true);
+        await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, true);
     });
 
     test(
@@ -119,9 +118,8 @@ test.describe("Recovery section in Encryption tab", () => {
         // The recovery key is now set up and the user can change it
         await expect(dialog.getByRole("button", { name: "Change recovery key" })).toBeVisible();
 
-        await app.closeDialog();
         // Check that the current device is connected to key backup and the backup version is the expected one
-        await checkDeviceIsConnectedKeyBackup(page, "1", true);
+        await checkDeviceIsConnectedKeyBackup(app, "1", true);
     });
 
     // Test what happens if the cross-signing secrets are in secret storage but are not cached in the local DB.
@@ -153,8 +151,7 @@ test.describe("Recovery section in Encryption tab", () => {
 
             // Check that the current device is connected to key backup
             // The backup decryption key should be in cache also, as we got it directly from the 4S
-            await app.closeDialog();
-            await checkDeviceIsConnectedKeyBackup(page, expectedBackupVersion, true);
+            await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, true);
         },
     );
 });
