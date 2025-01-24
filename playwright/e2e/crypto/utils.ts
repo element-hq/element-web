@@ -139,14 +139,14 @@ export async function checkDeviceIsCrossSigned(app: ElementAppPage): Promise<voi
  * Check that the current device is connected to the expected key backup.
  * Also checks that the decryption key is known and cached locally.
  *
- * @param app - app page
+ * @param app -` ElementAppPage` wrapper for the playwright `Page`.
  * @param expectedBackupVersion - the version of the backup we expect to be connected to.
- * @param checkBackupKeyInCache - whether to check that the backup key is cached locally.
+ * @param checkBackupPrivateKeyInCache - whether to check that the backup decryption key is cached locally
  */
 export async function checkDeviceIsConnectedKeyBackup(
     app: ElementAppPage,
     expectedBackupVersion: string,
-    checkBackupKeyInCache: boolean,
+    checkBackupPrivateKeyInCache: boolean,
 ): Promise<void> {
     // Sanity check the given backup version: if it's null, something went wrong earlier in the test.
     if (!expectedBackupVersion) {
@@ -160,20 +160,27 @@ export async function checkDeviceIsConnectedKeyBackup(
         if (!crypto) return;
 
         const backupInfo = await crypto.getKeyBackupInfo();
-        const backupKeyStored = Boolean(await client.isKeyBackupKeyStored());
-        const backupKeyFromCache = await crypto.getSessionBackupPrivateKey();
-        const backupKeyCached = Boolean(backupKeyFromCache);
-        const backupKeyWellFormed = backupKeyFromCache instanceof Uint8Array;
+        const backupKeyIn4S = Boolean(await client.isKeyBackupKeyStored());
+        const backupPrivateKeyFromCache = await crypto.getSessionBackupPrivateKey();
+        const hasBackupPrivateKeyFromCache = Boolean(backupPrivateKeyFromCache);
+        const backupPrivateKeyWellFormed = backupPrivateKeyFromCache instanceof Uint8Array;
         const activeBackupVersion = await crypto.getActiveSessionBackupVersion();
 
-        return { backupInfo, backupKeyStored, backupKeyCached, backupKeyWellFormed, activeBackupVersion };
+        return {
+            backupInfo,
+            hasBackupPrivateKeyFromCache,
+            backupPrivateKeyWellFormed,
+            backupKeyIn4S,
+            activeBackupVersion,
+        };
     });
 
     if (!backupData) {
-        throw new Error("Crypo module is not available");
+        throw new Error("Crypto module is not available");
     }
 
-    const { backupInfo, backupKeyStored, backupKeyCached, backupKeyWellFormed, activeBackupVersion } = backupData;
+    const { backupInfo, backupKeyIn4S, hasBackupPrivateKeyFromCache, backupPrivateKeyWellFormed, activeBackupVersion } =
+        backupData;
 
     // We have a key backup
     expect(backupInfo).toBeDefined();
@@ -182,13 +189,13 @@ export async function checkDeviceIsConnectedKeyBackup(
     // The active backup version is as expected
     expect(activeBackupVersion).toBe(expectedBackupVersion);
     // The backup key is stored in 4S
-    expect(backupKeyStored).toBe(true);
+    expect(backupKeyIn4S).toBe(true);
 
-    if (checkBackupKeyInCache) {
+    if (checkBackupPrivateKeyInCache) {
         // The backup key is available locally
-        expect(backupKeyCached).toBe(true);
+        expect(hasBackupPrivateKeyFromCache).toBe(true);
         // The backup key is well-formed
-        expect(backupKeyWellFormed).toBe(true);
+        expect(backupPrivateKeyWellFormed).toBe(true);
     }
 }
 
