@@ -20,7 +20,6 @@ import { SettingLevel } from "../../../../../settings/SettingLevel";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { UIFeature } from "../../../../../settings/UIFeature";
 import { ActionPayload } from "../../../../../dispatcher/payloads";
-import CryptographyPanel from "../../CryptographyPanel";
 import SettingsFlag from "../../../elements/SettingsFlag";
 import EventIndexPanel from "../../EventIndexPanel";
 import InlineSpinner from "../../../elements/InlineSpinner";
@@ -329,10 +328,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
             <SettingsTab>
                 {warning}
                 <SetIntegrationManager />
-                <SettingsSection heading={_t("settings|security|encryption_section")}>
-                    {eventIndex}
-                    <CryptographyPanel />
-                </SettingsSection>
+                <SettingsSection heading={_t("settings|security|encryption_section")}>{eventIndex}</SettingsSection>
                 <SettingsSection heading={_t("common|privacy")}>
                     <DiscoverySettings />
                     {posthogSection}
