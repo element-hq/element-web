@@ -22,7 +22,6 @@ import { UIFeature } from "../../../../../settings/UIFeature";
 import { type ActionPayload } from "../../../../../dispatcher/payloads";
 import CryptographyPanel from "../../CryptographyPanel";
 import SettingsFlag from "../../../elements/SettingsFlag";
-import CrossSigningPanel from "../../CrossSigningPanel";
 import EventIndexPanel from "../../EventIndexPanel";
 import InlineSpinner from "../../../elements/InlineSpinner";
 import { PosthogAnalytics } from "../../../../../PosthogAnalytics";
@@ -303,16 +302,6 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
             </SettingsSubsection>
         );
 
-        // XXX: There's no such panel in the current cross-signing designs, but
-        // it's useful to have for testing the feature. If there's no interest
-        // in having advanced details here once all flows are implemented, we
-        // can remove this.
-        const crossSigning = (
-            <SettingsSubsection heading={_t("common|cross_signing")}>
-                <CrossSigningPanel />
-            </SettingsSubsection>
-        );
-
         let warning;
         if (!privateShouldBeEncrypted(MatrixClientPeg.safeGet())) {
             warning = (
@@ -372,7 +361,6 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                 <SettingsSection heading={_t("settings|security|encryption_section")}>
                     {secureBackup}
                     {eventIndex}
-                    {crossSigning}
                     <CryptographyPanel />
                 </SettingsSection>
                 <SettingsSection heading={_t("common|privacy")}>
