@@ -451,7 +451,6 @@
             "other": "und %(count)s weitere …",
             "one": "und ein weiterer …"
         },
-        "android": "Android",
         "appearance": "Erscheinungsbild",
         "application": "Anwendung",
         "are_you_sure": "Bist du sicher?",
@@ -491,7 +490,6 @@
         "identity_server": "Identitäts-Server",
         "image": "Bild",
         "integration_manager": "Integrationsverwaltung",
-        "ios": "iOS",
         "joined": "Beigetreten",
         "labs": "Labor",
         "legal": "Rechtliches",
@@ -585,8 +583,7 @@
         "video": "Video",
         "video_room": "Videoraum",
         "view_message": "Nachricht anzeigen",
-        "warning": "Warnung",
-        "welcome": "Willkommen"
+        "warning": "Warnung"
     },
     "composer": {
         "autocomplete": {
@@ -1579,9 +1576,14 @@
         "toggle_attribution": "Info ein-/ausblenden"
     },
     "member_list": {
+        "count": {
+            "one": "%(count)s Mitglied",
+            "other": "%(count)s Mitglieder"
+        },
         "filter_placeholder": "Raummitglieder filtern",
         "invite_button_no_perms_tooltip": "Du bist nicht berechtigt, Benutzer einzuladen",
-        "invited_list_heading": "Eingeladen",
+        "invited_label": "Eingeladen",
+        "no_matches": "Keine Treffer",
         "power_label": "%(userName)s (Berechtigungslevel %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Raummitglieder",
@@ -1628,61 +1630,15 @@
         "m.key.verification.request": "%(name)s fordert eine Verifizierung an"
     },
     "onboarding": {
-        "apple_trademarks": "App Store® und das Apple Logo® sind eingetragene Markenzeichen von Apple Inc.",
-        "community_messaging_action": "Finde deine Leute",
-        "community_messaging_description": "Verfüge und behalte die Kontrolle über Gespräche deiner Gemeinschaft.\nSkalierbar für Millionen von Nutzenden, mit mächtigen Moderationswerkzeugen und Interoperabilität.",
-        "community_messaging_title": "In gemeinschaftlicher Hand",
-        "complete_these": "Vervollständige sie für die beste %(brand)s-Erfahrung",
         "create_room": "Gruppenraum erstellen",
-        "download_app": "%(brand)s herunterladen",
-        "download_app_action": "Apps herunterladen",
-        "download_app_description": "Nimm %(brand)s mit, um nichts mehr zu verpassen",
-        "download_app_store": "Im App Store herunterladen",
-        "download_brand": "%(brand)s herunterladen",
-        "download_brand_desktop": "%(brand)s Desktop herunterladen",
-        "download_f_droid": "In F-Droid erhältlich",
-        "download_google_play": "In Google Play erhältlich",
-        "enable_notifications": "Desktopbenachrichtigungen einschalten",
-        "enable_notifications_action": "Einstellungen öffnen",
-        "enable_notifications_description": "Verpasse keine Antworten oder wichtigen Nachrichten",
         "explore_rooms": "Öffentliche Räume erkunden",
-        "find_community_members": "Finde deine Community-Mitglieder und lade sie ein",
-        "find_coworkers": "Finde deine Kollegen und lade sie ein",
-        "find_friends": "Finde deine Freunde und lade sie ein",
-        "find_friends_action": "Freunde finden",
-        "find_friends_description": "Dafür bist du hier, also dann mal los",
-        "find_people": "Finde Personen",
-        "free_e2ee_messaging_unlimited_voip": "Dank freien, Ende-zu-Ende verschlüsselter Kommunikation und unbegrenzten Sprach- und Videoanrufen ist %(brand)s eine großartige Möglichkeit, um in Kontakt zu bleiben.",
-        "get_stuff_done": "Finde dein Team und werdet produktiv",
-        "google_trademarks": "Google Play und das Google Play Logo sind eingetragene Markenzeichen von Google LLC.",
         "has_avatar_label": "Großartig, das wird anderen helfen, dich zu erkennen",
         "intro_byline": "Besitze deine Unterhaltungen.",
         "intro_welcome": "Willkommen bei %(appName)s",
         "no_avatar_label": "Füge ein Bild hinzu, damit andere dich erkennen können.",
-        "only_n_steps_to_go": {
-            "one": "Nur noch %(count)s Schritt",
-            "other": "Nur noch %(count)s Schritte"
-        },
-        "personal_messaging_action": "Beginne eine Unterhaltung",
-        "personal_messaging_title": "Sichere Kommunikation für Freunde und Familie",
-        "qr_or_app_links": "%(qrCode)s oder %(appLinks)s",
         "send_dm": "Direkt­­nachricht senden",
-        "set_up_profile": "Richte dein Profil ein",
-        "set_up_profile_action": "Dein Profil",
-        "set_up_profile_description": "Lass andere wissen, dass du es wirklich bist",
-        "use_case_community_messaging": "Online Community-Mitglieder",
-        "use_case_heading1": "Los gehts",
-        "use_case_heading2": "Mit wem wirst du am meisten schreiben?",
-        "use_case_heading3": "Wir helfen dir, dich zu vernetzen.",
-        "use_case_personal_messaging": "Freunde und Familie",
-        "use_case_work_messaging": "Kollegen und Gruppen",
         "welcome_detail": "Nun, lassen Sie uns Ihnen den Einstieg erleichtern",
-        "welcome_to_brand": "Willkommen bei %(brand)s",
-        "welcome_user": "Willkommen %(name)s",
-        "work_messaging_action": "Finde deine Kollegen",
-        "work_messaging_title": "Sichere Kommunikation für die Arbeit",
-        "you_did_it": "Geschafft!",
-        "you_made_it": "Geschafft!"
+        "welcome_user": "Willkommen %(name)s"
     },
     "pill": {
         "permalink_other_room": "Nachricht in %(room)s",
@@ -1734,7 +1690,6 @@
         "custom_level": "Selbstdefiniertes Berechtigungslevel",
         "default": "Standard",
         "label": "Berechtigungsstufe",
-        "mod": "Moderator",
         "moderator": "Moderator",
         "restricted": "Eingeschränkt"
     },
@@ -2424,7 +2379,7 @@
         "all_rooms_home_description": "Alle Räume, denen du beigetreten bist, werden auf der Startseite erscheinen.",
         "always_show_message_timestamps": "Nachrichtenzeitstempel immer anzeigen",
         "appearance": {
-            "bundled_emoji_font": "Verwenden Sie den mitgelieferten Emoji Font.",
+            "bundled_emoji_font": "Mitgelieferte Emoji-Schriftart verwenden",
             "compact_layout": "Kompakten Text und Nachrichten anzeigen",
             "compact_layout_description": "Um diese Funktion nutzen zu können, muss das moderne Nachrichtenlayout ausgewählt sein.",
             "custom_font": "Systemschriftart verwenden",
@@ -2685,7 +2640,6 @@
             "room_directory_heading": "Raumverzeichnis",
             "room_list_heading": "Raumliste",
             "show_avatars_pills": "Profilbilder in Benutzer-, Raum- und Ereigniserwähnungen anzeigen",
-            "show_checklist_shortcuts": "Verknüpfung zu ersten Schritten (Willkommen) anzeigen",
             "show_polls_button": "Zeige Pol button",
             "surround_text": "Sonderzeichen automatisch vor und hinter Textauswahl setzen",
             "time_heading": "Zeitanzeige",
@@ -3065,7 +3019,6 @@
         "invite": "Personen einladen",
         "invite_description": "Personen mit E-Mail oder Benutzernamen einladen",
         "invite_link": "Einladungslink teilen",
-        "invite_this_space": "In diesen Space einladen",
         "joining_space": "Trete bei",
         "landing_welcome": "Willkommen bei <name/>",
         "leave_dialog_action": "Space verlassen",

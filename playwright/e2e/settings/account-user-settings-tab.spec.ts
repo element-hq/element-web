@@ -34,14 +34,14 @@ test.describe("Account user settings tab", () => {
         await expect(profile.getByRole("textbox", { name: "Display Name" })).toHaveValue(USER_NAME);
 
         // Assert that a userId is rendered
-        expect(uut.getByLabel("Username")).toHaveText(user.userId);
+        await expect(uut.getByLabel("Username")).toHaveText(user.userId);
 
         // Wait until spinners disappear
         await expect(uut.getByTestId("accountSection").locator(".mx_Spinner")).not.toBeVisible();
         await expect(uut.getByTestId("discoverySection").locator(".mx_Spinner")).not.toBeVisible();
 
         const accountSection = uut.getByTestId("accountSection");
-        accountSection.scrollIntoViewIfNeeded();
+        await accountSection.scrollIntoViewIfNeeded();
         // Assert that input areas for changing a password exists
         await expect(accountSection.getByLabel("Current password")).toBeVisible();
         await expect(accountSection.getByLabel("New Password")).toBeVisible();

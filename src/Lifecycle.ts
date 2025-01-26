@@ -110,7 +110,6 @@ dis.register((payload) => {
 let sessionLockStolen = false;
 
 // this is exposed solely for unit tests.
-// ts-prune-ignore-next
 export function setSessionLockNotStolen(): void {
     sessionLockStolen = false;
 }
@@ -1050,9 +1049,9 @@ async function clearStorage(opts?: { deleteEverything?: boolean }): Promise<void
         window.localStorage.clear();
 
         try {
-            await StorageAccess.idbDelete("account", ACCESS_TOKEN_STORAGE_KEY);
+            await StorageAccess.idbClear("account");
         } catch (e) {
-            logger.error("idbDelete failed for account:mx_access_token", e);
+            logger.error("idbClear failed for account", e);
         }
 
         // now restore those invites, registration time and previously set device language

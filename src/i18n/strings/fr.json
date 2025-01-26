@@ -451,7 +451,6 @@
             "other": "et %(count)s autres…",
             "one": "et un autre…"
         },
-        "android": "Android",
         "appearance": "Apparence",
         "application": "Application",
         "are_you_sure": "Êtes-vous sûr ?",
@@ -491,7 +490,6 @@
         "identity_server": "Serveur d’identité",
         "image": "Image",
         "integration_manager": "Gestionnaire d’intégration",
-        "ios": "iOS",
         "joined": "Rejoint",
         "labs": "Expérimental",
         "legal": "Légal",
@@ -585,8 +583,7 @@
         "video": "Vidéo",
         "video_room": "Salon vidéo",
         "view_message": "Afficher le message",
-        "warning": "Attention",
-        "welcome": "Bienvenue"
+        "warning": "Attention"
     },
     "composer": {
         "autocomplete": {
@@ -904,7 +901,7 @@
             "warning": "Si vous n’avez pas activé de nouvelle méthode de récupération, un attaquant essaye peut-être d’accéder à votre compte. Changez immédiatement le mot de passe de votre compte et configurez une nouvelle méthode de récupération dans les paramètres."
         },
         "not_supported": "<non pris en charge>",
-        "pinned_identity_changed": "%(displayName)sL'identité de (<b>%(userId)s</b>) semble avoir changé. <a>En savoir plus </a>",
+        "pinned_identity_changed": "L'identité de %(displayName)s (<b>%(userId)s</b>) semble avoir changé. <a>En savoir plus</a>",
         "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>semble avoir changé d'identité. <a>En savoir plus</a>",
         "recovery_method_removed": {
             "description_1": "Cette session a détecté que votre phrase secrète et clé de sécurité pour les messages sécurisés ont été supprimées.",
@@ -1578,7 +1575,6 @@
     "member_list": {
         "filter_placeholder": "Filtrer les membres du salon",
         "invite_button_no_perms_tooltip": "Vous n’avez pas la permission d’inviter des utilisateurs",
-        "invited_list_heading": "Invités",
         "power_label": "%(userName)s (rang %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Membres du salon",
@@ -1625,61 +1621,15 @@
         "m.key.verification.request": "%(name)s demande une vérification"
     },
     "onboarding": {
-        "apple_trademarks": "App Store® et le logo Apple® sont des marques déposées de Apple Inc.",
-        "community_messaging_action": "Trouvez vos contacts",
-        "community_messaging_description": "Gardez le contrôle sur la discussion de votre communauté.\nPrend en charge des millions de messages, avec une interopérabilité et une modération efficace.",
-        "community_messaging_title": "Propriété de la communauté",
-        "complete_these": "Terminez-les pour obtenir le maximum de %(brand)s",
         "create_room": "Créez une discussion de groupe",
-        "download_app": "Télécharger %(brand)s",
-        "download_app_action": "Télécharger les applications",
-        "download_app_description": "Ne ratez pas une miette en emportant %(brand)s avec vous",
-        "download_app_store": "Télécharger sur l’App Store",
-        "download_brand": "Télécharger %(brand)s",
-        "download_brand_desktop": "Télécharger %(brand)s Desktop",
-        "download_f_droid": "Récupérez-le sur F-Droid",
-        "download_google_play": "Récupérez-le sur Google Play",
-        "enable_notifications": "Activer les notifications",
-        "enable_notifications_action": "Ouvrir les paramètres",
-        "enable_notifications_description": "Ne ratez pas une réponse ou un message important",
         "explore_rooms": "Explorez les salons publics",
-        "find_community_members": "Trouvez et invitez les membres de votre communauté",
-        "find_coworkers": "Trouvez et invitez vos collègues",
-        "find_friends": "Trouvez et invitez vos amis",
-        "find_friends_action": "Trouver des amis",
-        "find_friends_description": "Vous êtes là pour ça, alors allons-y",
-        "find_people": "Trouver des personnes",
-        "free_e2ee_messaging_unlimited_voip": "Grâce à la messagerie chiffrée de bout en bout gratuite, ainsi que des appels audio et vidéo illimités, %(brand)s est un excellent moyen de rester en contact.",
-        "get_stuff_done": "Faites votre job en trouvant vos coéquipiers",
-        "google_trademarks": "Google Play et le logo Google Play sont des marques déposées de Google LLC.",
         "has_avatar_label": "Super, ceci aidera des personnes à confirmer qu’il s’agit bien de vous",
         "intro_byline": "Contrôlez vos conversations.",
         "intro_welcome": "Bienvenue sur %(appName)s",
         "no_avatar_label": "Ajoutez une photo pour que les gens sachent qu’il s’agit de vous.",
-        "only_n_steps_to_go": {
-            "one": "Plus que %(count)s étape",
-            "other": "Plus que %(count)s étapes"
-        },
-        "personal_messaging_action": "Démarrer votre première conversation",
-        "personal_messaging_title": "Messagerie sécurisée pour les amis et la famille",
-        "qr_or_app_links": "%(qrCode)s ou %(appLinks)s",
         "send_dm": "Envoyez un message privé",
-        "set_up_profile": "Paramétrer votre profil",
-        "set_up_profile_action": "Votre profil",
-        "set_up_profile_description": "Faites en sorte que les gens sachent que c’est vous",
-        "use_case_community_messaging": "Membres de la communauté en ligne",
-        "use_case_heading1": "Vous y êtes",
-        "use_case_heading2": "À qui allez-vous le plus parler ?",
-        "use_case_heading3": "Nous allons vous aider à vous connecter.",
-        "use_case_personal_messaging": "Famille et amis",
-        "use_case_work_messaging": "Collègues et équipes",
         "welcome_detail": "Maintenant, laissez-nous vous aider à démarrer",
-        "welcome_to_brand": "Bienvenue sur %(brand)s",
-        "welcome_user": "Bienvenue %(name)s",
-        "work_messaging_action": "Trouver vos collègues",
-        "work_messaging_title": "Messagerie sécurisée pour le travail",
-        "you_did_it": "Vous l’avez fait !",
-        "you_made_it": "Vous avez réussi !"
+        "welcome_user": "Bienvenue %(name)s"
     },
     "pill": {
         "permalink_other_room": "Message dans %(room)s",
@@ -1731,7 +1681,6 @@
         "custom_level": "Rang personnalisé",
         "default": "Par défaut",
         "label": "Rang",
-        "mod": "Modérateur",
         "moderator": "Modérateur",
         "restricted": "Restreint"
     },
@@ -2682,7 +2631,6 @@
             "room_directory_heading": "Répertoire des salons",
             "room_list_heading": "Liste de salons",
             "show_avatars_pills": "Afficher les avatars dans les mentions d'utilisateur, de salon et d’évènements",
-            "show_checklist_shortcuts": "Afficher le raccourci vers la liste de vérification de bienvenue au-dessus de la liste des salons",
             "show_polls_button": "Afficher le bouton des sondages",
             "surround_text": "Entourer le texte sélectionné lors de la saisie de certains caractères",
             "time_heading": "Affichage de l’heure",
@@ -3061,7 +3009,6 @@
         "invite": "Inviter des personnes",
         "invite_description": "Inviter par e-mail ou nom d’utilisateur",
         "invite_link": "Partager le lien d’invitation",
-        "invite_this_space": "Inviter dans cet espace",
         "joining_space": "En train de rejoindre",
         "landing_welcome": "Bienvenue dans <name/>",
         "leave_dialog_action": "Quitter l’espace",

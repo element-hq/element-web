@@ -66,17 +66,20 @@ as is typical for Playwright tests. Likewise, tests live in `playwright/e2e`.
 of Synapse/Dendrite. These servers are what Element-web runs against in the tests.
 
 Synapse can be launched with different configurations in order to test element
-in different configurations. You can specify `synapseConfigOptions` as such:
+in different configurations. You can specify `synapseConfig` as such:
 
 ```typescript
 test.use({
-    synapseConfigOptions: {
+    synapseConfig: {
         // The config options to pass to the Synapse instance
     },
 });
 ```
 
 The appropriate homeserver will be launched by the Playwright worker and reused for all tests which match the worker configuration.
+Due to homeservers being reused between tests, please use unique names for any rooms put into the room directory as
+they may be visible from other tests, the suggested approach is to use `testInfo.testId` within the name or lodash's uniqueId.
+We remove public rooms from the room directory between tests but deleting users doesn't have a homeserver agnostic solution.
 The logs from testcontainers will be attached to any reports output from Playwright.
 
 ## Writing Tests

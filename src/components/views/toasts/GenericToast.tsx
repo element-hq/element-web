@@ -25,6 +25,9 @@ interface IPropsExtended extends IProps {
     SecondaryIcon?: ComponentType<React.SVGAttributes<SVGElement>>;
     destructive?: "primary" | "secondary";
     onSecondaryClick(): void;
+
+    // If set, this will override the max-width (of the description) making the toast wider or narrower than standard
+    overrideWidth?: string;
 }
 
 const GenericToast: React.FC<XOR<IPropsExtended, IProps>> = ({
@@ -37,12 +40,13 @@ const GenericToast: React.FC<XOR<IPropsExtended, IProps>> = ({
     destructive,
     onPrimaryClick,
     onSecondaryClick,
+    overrideWidth,
 }) => {
     const detailContent = detail ? <div className="mx_Toast_detail">{detail}</div> : null;
 
     return (
         <div>
-            <div className="mx_Toast_description">
+            <div className="mx_Toast_description" style={{ maxWidth: overrideWidth }}>
                 {description}
                 {detailContent}
             </div>

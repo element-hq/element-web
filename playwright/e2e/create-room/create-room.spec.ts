@@ -27,7 +27,7 @@ test.describe("Create Room", () => {
         // Submit
         await dialog.getByRole("button", { name: "Create room" }).click();
 
-        await expect(page).toHaveURL(/\/#\/room\/#test-room-1:localhost/);
+        await expect(page).toHaveURL(new RegExp(`/#/room/#test-room-1:${user.homeServer}`));
         const header = page.locator(".mx_RoomHeader");
         await expect(header).toContainText(name);
     });

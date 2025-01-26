@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { lazy, Suspense, useCallback, useContext, useEffect, useRef, useState } from "react";
-import { discoverAndValidateOIDCIssuerWellKnown, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { defer } from "matrix-js-sdk/src/utils";
 
@@ -163,10 +163,7 @@ const SessionManagerTab: React.FC<{
     const clientVersions = useAsyncMemo(() => matrixClient.getVersions(), [matrixClient]);
     const oidcClientConfig = useAsyncMemo(async () => {
         try {
-            const authIssuer = await matrixClient?.getAuthIssuer();
-            if (authIssuer) {
-                return discoverAndValidateOIDCIssuerWellKnown(authIssuer.issuer);
-            }
+            return await matrixClient?.getAuthMetadata();
         } catch (e) {
             logger.error("Failed to discover OIDC metadata", e);
         }

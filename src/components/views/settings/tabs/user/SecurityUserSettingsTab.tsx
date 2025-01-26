@@ -319,7 +319,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
             );
         }
 
-        let privacySection;
+        let posthogSection;
         if (PosthogAnalytics.instance.isEnabled()) {
             const onClickAnalyticsLearnMore = (): void => {
                 showAnalyticsLearnMoreDialog({
@@ -327,9 +327,8 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                     hasCancel: false,
                 });
             };
-            privacySection = (
-                <SettingsSection heading={_t("common|privacy")}>
-                    <DiscoverySettings />
+            posthogSection = (
+                <>
                     <SettingsSubsection
                         heading={_t("common|analytics")}
                         description={_t("settings|security|analytics_description")}
@@ -344,7 +343,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                     <SettingsSubsection heading={_t("settings|sessions|title")}>
                         <SettingsFlag name="deviceClientInformationOptIn" level={SettingLevel.ACCOUNT} />
                     </SettingsSubsection>
-                </SettingsSection>
+                </>
             );
         }
 
@@ -373,7 +372,10 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                     {crossSigning}
                     <CryptographyPanel />
                 </SettingsSection>
-                {privacySection}
+                <SettingsSection heading={_t("common|privacy")}>
+                    <DiscoverySettings />
+                    {posthogSection}
+                </SettingsSection>
                 {advancedSection}
             </SettingsTab>
         );

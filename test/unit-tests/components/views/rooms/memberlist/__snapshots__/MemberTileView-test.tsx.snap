@@ -224,7 +224,29 @@ exports[`MemberTileView ThreePidInviteTileView renders ThreePidInvite correctly 
       </div>
       <div
         class="mx_MemberTileView_right"
-      />
+      >
+        <div
+          class="mx_MemberTileView_userLabel"
+        >
+          Invited
+        </div>
+        <div
+          class="mx_Flex mx_InvitedIconView"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
+        >
+          <svg
+            fill="currentColor"
+            height="16px"
+            viewBox="0 0 24 24"
+            width="16px"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm0 5.111a1 1 0 0 0 .514.874l7 3.89a1 1 0 0 0 .972 0l7-3.89a1 1 0 1 0-.972-1.748L12 11.856 5.486 8.237A1 1 0 0 0 4 9.111Z"
+            />
+          </svg>
+        </div>
+      </div>
     </div>
   </div>
 </div>

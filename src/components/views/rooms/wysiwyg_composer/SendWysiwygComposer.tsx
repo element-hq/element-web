@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ForwardedRef, forwardRef, MutableRefObject, useRef } from "react";
+import React, { ForwardedRef, forwardRef, MutableRefObject, useMemo } from "react";
 import { IEventRelation } from "matrix-js-sdk/src/matrix";
 
 import { useWysiwygSendActionHandler } from "./hooks/useWysiwygSendActionHandler";
@@ -52,10 +52,13 @@ export default function SendWysiwygComposer({
     ...props
 }: SendWysiwygComposerProps): JSX.Element {
     const Composer = isRichTextEnabled ? WysiwygComposer : PlainTextComposer;
-    const defaultContextValue = useRef(getDefaultContextValue({ eventRelation: props.eventRelation }));
+    const defaultContextValue = useMemo(
+        () => getDefaultContextValue({ eventRelation: props.eventRelation }),
+        [props.eventRelation],
+    );
 
     return (
-        <ComposerContext.Provider value={defaultContextValue.current}>
+        <ComposerContext.Provider value={defaultContextValue}>
             <Composer
                 className="mx_SendWysiwygComposer"
                 leftComponent={e2eStatus && <E2EIcon status={e2eStatus} />}

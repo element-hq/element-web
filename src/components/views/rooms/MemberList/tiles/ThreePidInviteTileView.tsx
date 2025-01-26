@@ -10,7 +10,8 @@ import React from "react";
 import { useThreePidTileViewModel } from "../../../../viewmodels/memberlist/tiles/ThreePidTileViewModel";
 import { ThreePIDInvite } from "../../../../../models/rooms/ThreePIDInvite";
 import BaseAvatar from "../../../avatars/BaseAvatar";
-import { MemberTileLayout } from "./common/MemberTileLayout";
+import { MemberTileView } from "./common/MemberTileView";
+import { InvitedIconView } from "./common/InvitedIconView";
 
 interface Props {
     threePidInvite: ThreePIDInvite;
@@ -19,5 +20,15 @@ interface Props {
 export function ThreePidInviteTileView(props: Props): JSX.Element {
     const vm = useThreePidTileViewModel(props);
     const av = <BaseAvatar name={vm.name} size="32px" aria-hidden="true" />;
-    return <MemberTileLayout nameJsx={vm.name} avatarJsx={av} onClick={vm.onClick} />;
+    const iconJsx = <InvitedIconView isThreePid={true} />;
+
+    return (
+        <MemberTileView
+            nameJsx={vm.name}
+            avatarJsx={av}
+            onClick={vm.onClick}
+            userLabel={vm.userLabel}
+            iconJsx={iconJsx}
+        />
+    );
 }

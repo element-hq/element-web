@@ -15,6 +15,7 @@ import {
     awaitVerifier,
     checkDeviceIsConnectedKeyBackup,
     checkDeviceIsCrossSigned,
+    createBot,
     doTwoWaySasVerification,
     logIntoElement,
     waitForVerificationRequest,
@@ -28,29 +29,9 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
     let expectedBackupVersion: string;
 
     test.beforeEach(async ({ page, homeserver, credentials }) => {
-        // Visit the login page of the app, to load the matrix sdk
-        await page.goto("/#/login");
-
-        // wait for the page to load
-        await page.waitForSelector(".mx_AuthPage", { timeout: 30000 });
-
-        // Create a new device for alice
-        aliceBotClient = new Bot(page, homeserver, {
-            bootstrapCrossSigning: true,
-            bootstrapSecretStorage: true,
-        });
-        aliceBotClient.setCredentials(credentials);
-
-        // Backup is prepared in the background. Poll until it is ready.
-        const botClientHandle = await aliceBotClient.prepareClient();
-        await expect
-            .poll(async () => {
-                expectedBackupVersion = await botClientHandle.evaluate((cli) =>
-                    cli.getCrypto()!.getActiveSessionBackupVersion(),
-                );
-                return expectedBackupVersion;
-            })
-            .not.toBe(null);
+        const res = await createBot(page, homeserver, credentials);
+        aliceBotClient = res.botClient;
+        expectedBackupVersion = res.expectedBackupVersion;
     });
 
     // Click the "Verify with another device" button, and have the bot client auto-accept it.
@@ -87,8 +68,8 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
 
         // Check that the current device is connected to key backup
         // For now we don't check that the backup key is in cache because it's a bit flaky,
-        // as we need to wait for the secret gossiping to happen and the settings dialog doesn't refresh automatically.
-        await checkDeviceIsConnectedKeyBackup(page, expectedBackupVersion, false);
+        // as we need to wait for the secret gossiping to happen.
+        await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, false);
     });
 
     test("Verify device with QR code during login", async ({ page, app, credentials, homeserver }) => {
@@ -131,9 +112,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         await checkDeviceIsCrossSigned(app);
 
         // Check that the current device is connected to key backup
-        // For now we don't check that the backup key is in cache because it's a bit flaky,
-        // as we need to wait for the secret gossiping to happen and the settings dialog doesn't refresh automatically.
-        await checkDeviceIsConnectedKeyBackup(page, expectedBackupVersion, false);
+        await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, true);
     });
 
     test("Verify device with Security Phrase during login", async ({ page, app, credentials, homeserver }) => {
@@ -154,7 +133,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
 
         // Check that the current device is connected to key backup
         // The backup decryption key should be in cache also, as we got it directly from the 4S
-        await checkDeviceIsConnectedKeyBackup(page, expectedBackupVersion, true);
+        await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, true);
     });
 
     test("Verify device with Security Key during login", async ({ page, app, credentials, homeserver }) => {
@@ -177,7 +156,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
 
         // Check that the current device is connected to key backup
         // The backup decryption key should be in cache also, as we got it directly from the 4S
-        await checkDeviceIsConnectedKeyBackup(page, expectedBackupVersion, true);
+        await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, true);
     });
 
     test("Handle incoming verification request with SAS", async ({ page, credentials, homeserver, toasts }) => {
@@ -212,16 +191,17 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         /* on the bot side, wait for the verifier to exist ... */
         const verifier = await awaitVerifier(botVerificationRequest);
         // ... confirm ...
-        botVerificationRequest.evaluate((verificationRequest) => verificationRequest.verifier.verify());
+        void botVerificationRequest.evaluate((verificationRequest) => verificationRequest.verifier.verify());
         // ... and then check the emoji match
         await doTwoWaySasVerification(page, verifier);
 
         /* And we're all done! */
         const infoDialog = page.locator(".mx_InfoDialog");
         await infoDialog.getByRole("button", { name: "They match" }).click();
-        await expect(
-            infoDialog.getByText(`You've successfully verified (${aliceBotClient.credentials.deviceId})!`),
-        ).toBeVisible();
+        // We don't assert the full string as the device name is unset on Synapse but set to the user ID on Dendrite
+        await expect(infoDialog.getByText(`You've successfully verified`)).toContainText(
+            `(${aliceBotClient.credentials.deviceId})`,
+        );
         await infoDialog.getByRole("button", { name: "Got it" }).click();
     });
 });

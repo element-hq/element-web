@@ -10,8 +10,12 @@ import { Bot } from "../../pages/bot";
 import type { Locator, Page } from "@playwright/test";
 import type { ElementAppPage } from "../../pages/ElementAppPage";
 import { test, expect } from "../../element-web-test";
+import { Credentials } from "../../plugins/homeserver";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 test.describe("Lazy Loading", () => {
+    test.skip(isDendrite, "due to a Dendrite bug https://github.com/element-hq/dendrite/issues/3488");
+
     const charlies: Bot[] = [];
 
     test.use({
@@ -35,12 +39,18 @@ test.describe("Lazy Loading", () => {
     });
 
     const name = "Lazy Loading Test";
-    const alias = "#lltest:localhost";
     const charlyMsg1 = "hi bob!";
     const charlyMsg2 = "how's it going??";
     let roomId: string;
 
-    async function setupRoomWithBobAliceAndCharlies(page: Page, app: ElementAppPage, bob: Bot, charlies: Bot[]) {
+    async function setupRoomWithBobAliceAndCharlies(
+        page: Page,
+        app: ElementAppPage,
+        user: Credentials,
+        bob: Bot,
+        charlies: Bot[],
+    ) {
+        const alias = `#lltest:${user.homeServer}`;
         const visibility = await page.evaluate(() => (window as any).matrixcs.Visibility.Public);
         roomId = await bob.createRoom({
             name,
@@ -95,7 +105,13 @@ test.describe("Lazy Loading", () => {
         }
     }
 
-    async function joinCharliesWhileAliceIsOffline(page: Page, app: ElementAppPage, charlies: Bot[]) {
+    async function joinCharliesWhileAliceIsOffline(
+        page: Page,
+        app: ElementAppPage,
+        user: Credentials,
+        charlies: Bot[],
+    ) {
+        const alias = `#lltest:${user.homeServer}`;
         await app.client.network.goOffline();
         for (const charly of charlies) {
             await charly.joinRoom(alias);
@@ -107,19 +123,19 @@ test.describe("Lazy Loading", () => {
         await app.client.waitForNextSync();
     }
 
-    test("should handle lazy loading properly even when offline", async ({ page, app, bot }) => {
+    test("should handle lazy loading properly even when offline", async ({ page, app, bot, user }) => {
         test.slow();
         const charly1to5 = charlies.slice(0, 5);
         const charly6to10 = charlies.slice(5);
 
         // Set up room with alice, bob & charlies 1-5
-        await setupRoomWithBobAliceAndCharlies(page, app, bot, charly1to5);
+        await setupRoomWithBobAliceAndCharlies(page, app, user, bot, charly1to5);
         // Alice should see 2 messages from every charly with the correct display name
         await checkPaginatedDisplayNames(app, charly1to5);
 
         await openMemberlist(app);
         await checkMemberList(page, charly1to5);
-        await joinCharliesWhileAliceIsOffline(page, app, charly6to10);
+        await joinCharliesWhileAliceIsOffline(page, app, user, charly6to10);
         await checkMemberList(page, charly6to10);
 
         for (const charly of charlies) {

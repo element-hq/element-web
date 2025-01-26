@@ -1125,7 +1125,6 @@
     },
     "member_list": {
         "filter_placeholder": "Filtri ĉambranojn",
-        "invited_list_heading": "Invititaj",
         "power_label": "%(userName)s (povnivelo je %(powerLevelNumber)s)"
     },
     "message_edit_dialog_title": "Redaktoj de mesaĝoj",
@@ -1193,7 +1192,6 @@
         "custom_level": "Propra nivelo",
         "default": "Ordinara",
         "label": "Povnivelo",
-        "mod": "Reguligisto",
         "moderator": "Ĉambrestro",
         "restricted": "Limigita"
     },
@@ -2070,7 +2068,6 @@
         "invite": "Inviti personojn",
         "invite_description": "Inviti per retpoŝtadreso aŭ uzantonomo",
         "invite_link": "Diskonigi invitan ligilon",
-        "invite_this_space": "Inviti al ĉi tiu aro",
         "landing_welcome": "Bonvenu al <name/>",
         "leave_dialog_action": "Forlasi aron",
         "leave_dialog_description": "Vi foriros de <spaceName/>.",

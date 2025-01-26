@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import dis from "../../../../dispatcher/dispatcher";
 import { Action } from "../../../../dispatcher/actions";
 import { ThreePIDInvite } from "../../../../models/rooms/ThreePIDInvite";
+import { _t } from "../../../../languageHandler";
 
 interface ThreePidTileViewModelProps {
     threePidInvite: ThreePIDInvite;
@@ -16,6 +17,7 @@ interface ThreePidTileViewModelProps {
 export interface ThreePidTileViewState {
     name: string;
     onClick: () => void;
+    userLabel?: string;
 }
 
 export function useThreePidTileViewModel(props: ThreePidTileViewModelProps): ThreePidTileViewState {
@@ -28,8 +30,11 @@ export function useThreePidTileViewModel(props: ThreePidTileViewModelProps): Thr
         });
     };
 
+    const userLabel = _t("member_list|invited_label");
+
     return {
         name,
         onClick,
+        userLabel,
     };
 }

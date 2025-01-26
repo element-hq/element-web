@@ -37,27 +37,6 @@ Please see LICENSE files in the repository root for full details.
         line-height: $font-24px;
         margin-left: 10px;
     }
-
-    .mx_UserMenu_dndBadge {
-        position: absolute;
-        bottom: -2px;
-        right: -7px;
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
-
-        &::before {
-            content: "";
-            width: 16px;
-            height: 16px;
-            position: absolute;
-            mask-position: center;
-            mask-size: contain;
-            mask-repeat: no-repeat;
-            background-color: $alert;
-            mask-image: url("$(res)/img/element-icons/roomlist/dnd.svg");
-        }
-    }
 }
 
 .mx_IconizedContextMenu {
@@ -156,14 +135,6 @@ Please see LICENSE files in the repository root for full details.
 
     .mx_UserMenu_iconHome::before {
         mask-image: url("@vector-im/compound-design-tokens/icons/home-solid.svg");
-    }
-
-    .mx_UserMenu_iconDnd::before {
-        mask-image: url("$(res)/img/element-icons/roomlist/dnd.svg");
-    }
-
-    .mx_UserMenu_iconDndOff::before {
-        mask-image: url("$(res)/img/element-icons/roomlist/dnd-cross.svg");
     }
 
     .mx_UserMenu_iconBell::before {

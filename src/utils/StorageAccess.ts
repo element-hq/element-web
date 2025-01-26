@@ -44,6 +44,27 @@ async function idbInit(): Promise<void> {
     });
 }
 
+async function idbTransaction(
+    table: string,
+    mode: IDBTransactionMode,
+    fn: (objectStore: IDBObjectStore) => IDBRequest<any>,
+): Promise<any> {
+    if (!idb) {
+        await idbInit();
+    }
+    return new Promise((resolve, reject) => {
+        const txn = idb!.transaction([table], mode);
+        txn.onerror = reject;
+
+        const objectStore = txn.objectStore(table);
+        const request = fn(objectStore);
+        request.onerror = reject;
+        request.onsuccess = (): void => {
+            resolve(request.result);
+        };
+    });
+}
+
 /**
  * Loads an item from an IndexedDB table within the underlying `matrix-react-sdk` database.
  *
@@ -57,17 +78,7 @@ export async function idbLoad(table: string, key: string | string[]): Promise<an
     if (!idb) {
         await idbInit();
     }
-    return new Promise((resolve, reject) => {
-        const txn = idb!.transaction([table], "readonly");
-        txn.onerror = reject;
-
-        const objectStore = txn.objectStore(table);
-        const request = objectStore.get(key);
-        request.onerror = reject;
-        request.onsuccess = (event): void => {
-            resolve(request.result);
-        };
-    });
+    return idbTransaction(table, "readonly", (objectStore) => objectStore.get(key));
 }
 
 /**
@@ -84,17 +95,7 @@ export async function idbSave(table: string, key: string | string[], data: any):
     if (!idb) {
         await idbInit();
     }
-    return new Promise((resolve, reject) => {
-        const txn = idb!.transaction([table], "readwrite");
-        txn.onerror = reject;
-
-        const objectStore = txn.objectStore(table);
-        const request = objectStore.put(data, key);
-        request.onerror = reject;
-        request.onsuccess = (event): void => {
-            resolve();
-        };
-    });
+    return idbTransaction(table, "readwrite", (objectStore) => objectStore.put(data, key));
 }
 
 /**
@@ -110,15 +111,20 @@ export async function idbDelete(table: string, key: string | string[]): Promise<
     if (!idb) {
         await idbInit();
     }
-    return new Promise((resolve, reject) => {
-        const txn = idb!.transaction([table], "readwrite");
-        txn.onerror = reject;
+    return idbTransaction(table, "readwrite", (objectStore) => objectStore.delete(key));
+}
 
-        const objectStore = txn.objectStore(table);
-        const request = objectStore.delete(key);
-        request.onerror = reject;
-        request.onsuccess = (): void => {
-            resolve();
-        };
-    });
+/**
+ * Clears all records from an IndexedDB table within the underlying `matrix-react-sdk` database.
+ *
+ * If IndexedDB access is not supported in the environment, an error is thrown.
+ *
+ * @param {string} table The name of the object store where the records are stored.
+ * @returns {Promise<void>} A Promise that resolves when the record(s) have been successfully deleted.
+ */
+export async function idbClear(table: string): Promise<void> {
+    if (!idb) {
+        await idbInit();
+    }
+    return idbTransaction(table, "readwrite", (objectStore) => objectStore.clear());
 }

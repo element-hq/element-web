@@ -14,23 +14,16 @@ import { Tooltip } from "@vector-im/compound-web";
 import { _t, _td, TranslationKey } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import { E2EStatus } from "../../../utils/ShieldUtils";
-import { XOR } from "../../../@types/common";
 
-export enum E2EState {
-    Verified = "verified",
-    Warning = "warning",
-    Normal = "normal",
-}
-
-export const crossSigningUserTitles: { [key in E2EState]?: TranslationKey } = {
-    [E2EState.Warning]: _td("encryption|cross_signing_user_warning"),
-    [E2EState.Normal]: _td("encryption|cross_signing_user_normal"),
-    [E2EState.Verified]: _td("encryption|cross_signing_user_verified"),
+export const crossSigningUserTitles: { [key in E2EStatus]?: TranslationKey } = {
+    [E2EStatus.Warning]: _td("encryption|cross_signing_user_warning"),
+    [E2EStatus.Normal]: _td("encryption|cross_signing_user_normal"),
+    [E2EStatus.Verified]: _td("encryption|cross_signing_user_verified"),
 };
-const crossSigningRoomTitles: { [key in E2EState]?: TranslationKey } = {
-    [E2EState.Warning]: _td("encryption|cross_signing_room_warning"),
-    [E2EState.Normal]: _td("encryption|cross_signing_room_normal"),
-    [E2EState.Verified]: _td("encryption|cross_signing_room_verified"),
+const crossSigningRoomTitles: { [key in E2EStatus]?: TranslationKey } = {
+    [E2EStatus.Warning]: _td("encryption|cross_signing_room_warning"),
+    [E2EStatus.Normal]: _td("encryption|cross_signing_room_normal"),
+    [E2EStatus.Verified]: _td("encryption|cross_signing_room_verified"),
 };
 
 interface Props {
@@ -40,19 +33,11 @@ interface Props {
     hideTooltip?: boolean;
     tooltipPlacement?: ComponentProps<typeof Tooltip>["placement"];
     bordered?: boolean;
-}
-
-interface UserProps extends Props {
-    isUser: true;
-    status: E2EState | E2EStatus;
-}
-
-interface RoomProps extends Props {
-    isUser?: false;
     status: E2EStatus;
+    isUser?: boolean;
 }
 
-const E2EIcon: React.FC<XOR<UserProps, RoomProps>> = ({
+const E2EIcon: React.FC<Props> = ({
     isUser,
     status,
     className,
@@ -66,9 +51,9 @@ const E2EIcon: React.FC<XOR<UserProps, RoomProps>> = ({
         {
             mx_E2EIcon: true,
             mx_E2EIcon_bordered: bordered,
-            mx_E2EIcon_warning: status === E2EState.Warning,
-            mx_E2EIcon_normal: status === E2EState.Normal,
-            mx_E2EIcon_verified: status === E2EState.Verified,
+            mx_E2EIcon_warning: status === E2EStatus.Warning,
+            mx_E2EIcon_normal: status === E2EStatus.Normal,
+            mx_E2EIcon_verified: status === E2EStatus.Verified,
         },
         className,
     );

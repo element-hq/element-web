@@ -12,20 +12,16 @@ import { ISendEventResponse } from "matrix-js-sdk/src/matrix";
 // we need to import the types for TS, but do not import the sendMessage
 // function to avoid importing from "@vector-im/matrix-wysiwyg"
 import { SendMessageParams } from "./utils/message";
-import { retry } from "../../../../utils/promise";
 
-// Due to issues such as https://github.com/vector-im/element-web/issues/25277, we add retry
-// attempts to all of the dynamic imports in this file
-const RETRY_COUNT = 3;
-const SendComposer = lazy(() => retry(() => import("./SendWysiwygComposer"), RETRY_COUNT));
-const EditComposer = lazy(() => retry(() => import("./EditWysiwygComposer"), RETRY_COUNT));
+const SendComposer = lazy(() => import("./SendWysiwygComposer"));
+const EditComposer = lazy(() => import("./EditWysiwygComposer"));
 
 export const dynamicImportSendMessage = async (
     message: string,
     isHTML: boolean,
     params: SendMessageParams,
 ): Promise<ISendEventResponse | undefined> => {
-    const { sendMessage } = await retry(() => import("./utils/message"), RETRY_COUNT);
+    const { sendMessage } = await import("./utils/message");
 
     return sendMessage(message, isHTML, params);
 };
@@ -55,7 +51,7 @@ export const dynamicImportConversionFunctions = async (): Promise<{
      */
     plainToRich(plain: string, inMessageFormat: boolean): Promise<string>;
 }> => {
-    const { richToPlain, plainToRich } = await retry(() => import("@vector-im/matrix-wysiwyg"), RETRY_COUNT);
+    const { richToPlain, plainToRich } = await import("@vector-im/matrix-wysiwyg");
 
     return { richToPlain, plainToRich };
 };
