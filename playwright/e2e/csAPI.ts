@@ -9,24 +9,24 @@ import { APIRequestContext } from "playwright-core";
 import { KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 
 import { HomeserverInstance } from "../plugins/homeserver";
+import { ClientServerApi } from "../plugins/utils/api.ts";
 
 /**
  * A small subset of the Client-Server API used to manipulate the state of the
  * account on the homeserver independently of the client under test.
  */
-export class TestClientServerAPI {
+export class TestClientServerAPI extends ClientServerApi {
     public constructor(
-        private request: APIRequestContext,
-        private homeserver: HomeserverInstance,
+        request: APIRequestContext,
+        homeserver: HomeserverInstance,
         private accessToken: string,
-    ) {}
+    ) {
+        super(homeserver.baseUrl);
+        this.setRequest(request);
+    }
 
     public async getCurrentBackupInfo(): Promise<KeyBackupInfo | null> {
-        const res = await this.request.get(`${this.homeserver.baseUrl}/_matrix/client/v3/room_keys/version`, {
-            headers: { Authorization: `Bearer ${this.accessToken}` },
-        });
-
-        return await res.json();
+        return this.request("GET", `/v3/room_keys/version`, this.accessToken);
     }
 
     /**
@@ -34,15 +34,6 @@ export class TestClientServerAPI {
      * @param version The version to delete
      */
     public async deleteBackupVersion(version: string): Promise<void> {
-        const res = await this.request.delete(
-            `${this.homeserver.baseUrl}/_matrix/client/v3/room_keys/version/${version}`,
-            {
-                headers: { Authorization: `Bearer ${this.accessToken}` },
-            },
-        );
-
-        if (!res.ok) {
-            throw new Error(`Failed to delete backup version: ${res.status}`);
-        }
+        await this.request("DELETE", `/v3/room_keys/version/${version}`, this.accessToken);
     }
 }

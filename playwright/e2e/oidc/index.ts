@@ -33,7 +33,7 @@ export async function registerAccountMas(
         expect(messages.items).toHaveLength(1);
     }).toPass();
     expect(messages.items[0].to).toEqual(`${username} <${email}>`);
-    const [code] = messages.items[0].text.match(/(\d{6})/);
+    const [, code] = messages.items[0].text.match(/Your verification code to confirm this email address is: (\d{6})/);
 
     await page.getByRole("textbox", { name: "6-digit code" }).fill(code);
     await page.getByRole("button", { name: "Continue" }).click();

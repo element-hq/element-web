@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { type Page } from "@playwright/test";
 
 import { test, expect } from "../../element-web-test";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 async function expectBackupVersionToBe(page: Page, version: string) {
     await expect(page.locator(".mx_SecureBackupPanel_statusList tr:nth-child(5) td")).toHaveText(
@@ -19,6 +20,7 @@ async function expectBackupVersionToBe(page: Page, version: string) {
 }
 
 test.describe("Backups", () => {
+    test.skip(isDendrite, "Dendrite lacks support for MSC3967 so requires additional auth here");
     test.use({
         displayName: "Hanako",
     });

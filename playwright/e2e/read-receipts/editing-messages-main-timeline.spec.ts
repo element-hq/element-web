@@ -9,8 +9,11 @@ Please see LICENSE files in the repository root for full details.
 /* See readme.md for tips on writing these tests. */
 
 import { test } from ".";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 test.describe("Read receipts", { tag: "@mergequeue" }, () => {
+    test.skip(isDendrite, "due to Dendrite bug https://github.com/element-hq/dendrite/issues/2970");
+
     test.describe("editing messages", () => {
         test.describe("in the main timeline", () => {
             test("Editing a message leaves a room read", async ({ roomAlpha: room1, roomBeta: room2, util, msg }) => {

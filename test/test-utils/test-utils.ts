@@ -105,6 +105,7 @@ export function createTestClient(): MatrixClient {
             isStored: jest.fn().mockReturnValue(false),
             checkKey: jest.fn().mockResolvedValue(false),
             hasKey: jest.fn().mockReturnValue(false),
+            getDefaultKeyId: jest.fn().mockResolvedValue(null),
         },
 
         store: {
@@ -115,7 +116,7 @@ export function createTestClient(): MatrixClient {
         },
 
         getCrypto: jest.fn().mockReturnValue({
-            getOwnDeviceKeys: jest.fn(),
+            getOwnDeviceKeys: jest.fn().mockResolvedValue({ ed25519: "ed25519", curve25519: "curve25519" }),
             getUserDeviceInfo: jest.fn().mockResolvedValue(new Map()),
             getUserVerificationStatus: jest.fn(),
             getDeviceVerificationStatus: jest.fn(),
@@ -127,7 +128,10 @@ export function createTestClient(): MatrixClient {
             bootstrapCrossSigning: jest.fn(),
             getActiveSessionBackupVersion: jest.fn().mockResolvedValue(null),
             isKeyBackupTrusted: jest.fn().mockResolvedValue({}),
-            createRecoveryKeyFromPassphrase: jest.fn().mockResolvedValue({}),
+            createRecoveryKeyFromPassphrase: jest.fn().mockResolvedValue({
+                privateKey: new Uint8Array(32),
+                encodedPrivateKey: "encoded private key",
+            }),
             bootstrapSecretStorage: jest.fn(),
             isDehydrationSupported: jest.fn().mockResolvedValue(false),
             restoreKeyBackup: jest.fn(),
@@ -137,6 +141,19 @@ export function createTestClient(): MatrixClient {
             checkKeyBackupAndEnable: jest.fn().mockResolvedValue(null),
             getKeyBackupInfo: jest.fn().mockResolvedValue(null),
             getEncryptionInfoForEvent: jest.fn().mockResolvedValue(null),
+            getCrossSigningStatus: jest.fn().mockResolvedValue({
+                publicKeysOnDevice: false,
+                privateKeysInSecretStorage: false,
+                privateKeysCachedLocally: {
+                    masterKey: false,
+                    selfSigningKey: false,
+                    userSigningKey: false,
+                },
+            }),
+            isCrossSigningReady: jest.fn().mockResolvedValue(false),
+            resetEncryption: jest.fn(),
+            getSessionBackupPrivateKey: jest.fn().mockResolvedValue(null),
+            isSecretStorageReady: jest.fn().mockResolvedValue(false),
         }),
 
         getPushActionsForEvent: jest.fn(),

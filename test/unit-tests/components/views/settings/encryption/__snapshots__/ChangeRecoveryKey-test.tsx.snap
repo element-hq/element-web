@@ -1,0 +1,725 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ChangeRecoveryKey /> flow to change the recovery key should display the recovery key 1`] = `
+<DocumentFragment>
+  <nav
+    class="_breadcrumb_ikpbb_17"
+  >
+    <button
+      aria-label="Back"
+      class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
+      role="button"
+      style="--cpd-icon-button-size: 28px;"
+      tabindex="0"
+    >
+      <div
+        class="_indicator-icon_133tf_26"
+        style="--cpd-icon-button-size: 100%;"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m13.3 17.3-4.6-4.6a.877.877 0 0 1-.213-.325A1.106 1.106 0 0 1 8.425 12c0-.133.02-.258.062-.375A.878.878 0 0 1 8.7 11.3l4.6-4.6a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275.948.948 0 0 1 .275.7.948.948 0 0 1-.275.7L10.8 12l3.9 3.9a.949.949 0 0 1 .275.7.948.948 0 0 1-.275.7.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+          />
+        </svg>
+      </div>
+    </button>
+    <ol
+      class="_pages_ikpbb_26"
+    >
+      <li>
+        <a
+          class="_link_ue21z_17"
+          data-kind="primary"
+          data-size="small"
+          rel="noreferrer noopener"
+          role="button"
+          tabindex="0"
+        >
+          Encryption
+        </a>
+      </li>
+      <li>
+        <span
+          aria-current="page"
+          class="_last-page_ikpbb_39"
+        >
+          Change recovery key
+        </span>
+      </li>
+    </ol>
+  </nav>
+  <div
+    class="mx_EncryptionCard mx_ChangeRecoveryKey"
+  >
+    <div
+      class="mx_EncryptionCard_header"
+    >
+      <div
+        class="_content_md016_17"
+        data-size="large"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M10.475 16.9A5.863 5.863 0 0 1 7 18c-1.667 0-3.083-.583-4.25-1.75C1.583 15.083 1 13.667 1 12c0-1.667.583-3.083 1.75-4.25C3.917 6.583 5.333 6 7 6c1.35 0 2.53.383 3.537 1.15 1.009.767 1.713 1.717 2.113 2.85h7.95a1.033 1.033 0 0 1 .725.3l1.025 1.025a.99.99 0 0 1 .2.288c.05.108.075.229.075.362a1.066 1.066 0 0 1-.25.7l-2.25 2.575a.973.973 0 0 1-1.038.313 1.033 1.033 0 0 1-.337-.188L17 14l-1.3 1.3c-.1.1-.208.17-.325.212a1.106 1.106 0 0 1-.375.063c-.133 0-.258-.02-.375-.063a.877.877 0 0 1-.325-.212L13 14h-.35a5.81 5.81 0 0 1-2.175 2.9Zm-4.887-3.487c.391.39.862.587 1.412.587.55 0 1.02-.196 1.412-.588C8.804 13.021 9 12.55 9 12c0-.55-.196-1.02-.588-1.412A1.926 1.926 0 0 0 7 10c-.55 0-1.02.196-1.412.588A1.926 1.926 0 0 0 5 12c0 .55.196 1.02.588 1.412Z"
+          />
+        </svg>
+      </div>
+      <h2
+        class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+      >
+        Change recovery key?
+      </h2>
+      <span>
+        Write down this new recovery key somewhere safe. Then click Continue to confirm the change.
+      </span>
+    </div>
+    <div
+      class="mx_KeyPanel"
+    >
+      <span
+        class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69"
+      >
+        Recovery key
+      </span>
+      <div>
+        <span
+          class="_typography_yh5dq_162 _font-body-md-regular_yh5dq_59 mx_KeyPanel_key"
+          data-testid="recoveryKey"
+        >
+          encoded private key
+        </span>
+        <span
+          class="_typography_yh5dq_162 _font-body-sm-regular_yh5dq_40"
+        >
+          Do not share this with anyone!
+        </span>
+      </div>
+      <button
+        aria-label="Copy"
+        class="_icon-button_bh2qc_17"
+        role="button"
+        style="--cpd-icon-button-size: 28px;"
+        tabindex="0"
+      >
+        <div
+          class="_indicator-icon_133tf_26"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0V5Z"
+            />
+            <path
+              d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2v-9Zm2 0v9h9v-9h-9Z"
+            />
+          </svg>
+        </div>
+      </button>
+    </div>
+    <div
+      class="mx_ChangeRecoveryKey_footer"
+    >
+      <button
+        class="_button_i91xf_17"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Continue
+      </button>
+      <button
+        class="_button_i91xf_17"
+        data-kind="tertiary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<ChangeRecoveryKey /> flow to setup a recovery key should ask the user to enter the recovery key 1`] = `
+<DocumentFragment>
+  <nav
+    class="_breadcrumb_ikpbb_17"
+  >
+    <button
+      aria-label="Back"
+      class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
+      role="button"
+      style="--cpd-icon-button-size: 28px;"
+      tabindex="0"
+    >
+      <div
+        class="_indicator-icon_133tf_26"
+        style="--cpd-icon-button-size: 100%;"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m13.3 17.3-4.6-4.6a.877.877 0 0 1-.213-.325A1.106 1.106 0 0 1 8.425 12c0-.133.02-.258.062-.375A.878.878 0 0 1 8.7 11.3l4.6-4.6a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275.948.948 0 0 1 .275.7.948.948 0 0 1-.275.7L10.8 12l3.9 3.9a.949.949 0 0 1 .275.7.948.948 0 0 1-.275.7.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+          />
+        </svg>
+      </div>
+    </button>
+    <ol
+      class="_pages_ikpbb_26"
+    >
+      <li>
+        <a
+          class="_link_ue21z_17"
+          data-kind="primary"
+          data-size="small"
+          rel="noreferrer noopener"
+          role="button"
+          tabindex="0"
+        >
+          Encryption
+        </a>
+      </li>
+      <li>
+        <span
+          aria-current="page"
+          class="_last-page_ikpbb_39"
+        >
+          Set up recovery
+        </span>
+      </li>
+    </ol>
+  </nav>
+  <div
+    class="mx_EncryptionCard mx_ChangeRecoveryKey"
+  >
+    <div
+      class="mx_EncryptionCard_header"
+    >
+      <div
+        class="_content_md016_17"
+        data-size="large"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M10.475 16.9A5.863 5.863 0 0 1 7 18c-1.667 0-3.083-.583-4.25-1.75C1.583 15.083 1 13.667 1 12c0-1.667.583-3.083 1.75-4.25C3.917 6.583 5.333 6 7 6c1.35 0 2.53.383 3.537 1.15 1.009.767 1.713 1.717 2.113 2.85h7.95a1.033 1.033 0 0 1 .725.3l1.025 1.025a.99.99 0 0 1 .2.288c.05.108.075.229.075.362a1.066 1.066 0 0 1-.25.7l-2.25 2.575a.973.973 0 0 1-1.038.313 1.033 1.033 0 0 1-.337-.188L17 14l-1.3 1.3c-.1.1-.208.17-.325.212a1.106 1.106 0 0 1-.375.063c-.133 0-.258-.02-.375-.063a.877.877 0 0 1-.325-.212L13 14h-.35a5.81 5.81 0 0 1-2.175 2.9Zm-4.887-3.487c.391.39.862.587 1.412.587.55 0 1.02-.196 1.412-.588C8.804 13.021 9 12.55 9 12c0-.55-.196-1.02-.588-1.412A1.926 1.926 0 0 0 7 10c-.55 0-1.02.196-1.412.588A1.926 1.926 0 0 0 5 12c0 .55.196 1.02.588 1.412Z"
+          />
+        </svg>
+      </div>
+      <h2
+        class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+      >
+        Enter your recovery key to confirm
+      </h2>
+      <span>
+        Enter the recovery key shown on the previous screen to finish setting up recovery.
+      </span>
+    </div>
+    <form
+      class="_root_ssths_24 mx_KeyForm"
+    >
+      <div
+        class="_field_ssths_34"
+      >
+        <label
+          class="_label_ssths_67"
+          for="radix-:r0:"
+        >
+          Enter recovery key
+        </label>
+        <input
+          class="_control_9gon8_18"
+          id="radix-:r0:"
+          name="recoveryKey"
+          required=""
+          title=""
+        />
+      </div>
+      <div
+        class="mx_ChangeRecoveryKey_footer"
+      >
+        <button
+          aria-disabled="true"
+          class="_button_i91xf_17"
+          data-kind="primary"
+          data-size="lg"
+          role="button"
+          tabindex="0"
+        >
+          Finish set up
+        </button>
+        <button
+          class="_button_i91xf_17"
+          data-kind="tertiary"
+          data-size="lg"
+          role="button"
+          tabindex="0"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<ChangeRecoveryKey /> flow to setup a recovery key should ask the user to enter the recovery key 2`] = `
+<DocumentFragment>
+  <nav
+    class="_breadcrumb_ikpbb_17"
+  >
+    <button
+      aria-label="Back"
+      class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
+      role="button"
+      style="--cpd-icon-button-size: 28px;"
+      tabindex="0"
+    >
+      <div
+        class="_indicator-icon_133tf_26"
+        style="--cpd-icon-button-size: 100%;"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m13.3 17.3-4.6-4.6a.877.877 0 0 1-.213-.325A1.106 1.106 0 0 1 8.425 12c0-.133.02-.258.062-.375A.878.878 0 0 1 8.7 11.3l4.6-4.6a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275.948.948 0 0 1 .275.7.948.948 0 0 1-.275.7L10.8 12l3.9 3.9a.949.949 0 0 1 .275.7.948.948 0 0 1-.275.7.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+          />
+        </svg>
+      </div>
+    </button>
+    <ol
+      class="_pages_ikpbb_26"
+    >
+      <li>
+        <a
+          class="_link_ue21z_17"
+          data-kind="primary"
+          data-size="small"
+          rel="noreferrer noopener"
+          role="button"
+          tabindex="0"
+        >
+          Encryption
+        </a>
+      </li>
+      <li>
+        <span
+          aria-current="page"
+          class="_last-page_ikpbb_39"
+        >
+          Set up recovery
+        </span>
+      </li>
+    </ol>
+  </nav>
+  <div
+    class="mx_EncryptionCard mx_ChangeRecoveryKey"
+  >
+    <div
+      class="mx_EncryptionCard_header"
+    >
+      <div
+        class="_content_md016_17"
+        data-size="large"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M10.475 16.9A5.863 5.863 0 0 1 7 18c-1.667 0-3.083-.583-4.25-1.75C1.583 15.083 1 13.667 1 12c0-1.667.583-3.083 1.75-4.25C3.917 6.583 5.333 6 7 6c1.35 0 2.53.383 3.537 1.15 1.009.767 1.713 1.717 2.113 2.85h7.95a1.033 1.033 0 0 1 .725.3l1.025 1.025a.99.99 0 0 1 .2.288c.05.108.075.229.075.362a1.066 1.066 0 0 1-.25.7l-2.25 2.575a.973.973 0 0 1-1.038.313 1.033 1.033 0 0 1-.337-.188L17 14l-1.3 1.3c-.1.1-.208.17-.325.212a1.106 1.106 0 0 1-.375.063c-.133 0-.258-.02-.375-.063a.877.877 0 0 1-.325-.212L13 14h-.35a5.81 5.81 0 0 1-2.175 2.9Zm-4.887-3.487c.391.39.862.587 1.412.587.55 0 1.02-.196 1.412-.588C8.804 13.021 9 12.55 9 12c0-.55-.196-1.02-.588-1.412A1.926 1.926 0 0 0 7 10c-.55 0-1.02.196-1.412.588A1.926 1.926 0 0 0 5 12c0 .55.196 1.02.588 1.412Z"
+          />
+        </svg>
+      </div>
+      <h2
+        class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+      >
+        Enter your recovery key to confirm
+      </h2>
+      <span>
+        Enter the recovery key shown on the previous screen to finish setting up recovery.
+      </span>
+    </div>
+    <form
+      class="_root_ssths_24 mx_KeyForm"
+    >
+      <div
+        class="_field_ssths_34"
+        data-invalid="true"
+      >
+        <label
+          class="_label_ssths_67"
+          data-invalid="true"
+          for="radix-:r0:"
+        >
+          Enter recovery key
+        </label>
+        <input
+          aria-describedby="radix-:r1:"
+          aria-invalid="true"
+          class="_control_9gon8_18"
+          data-invalid="true"
+          id="radix-:r0:"
+          name="recoveryKey"
+          required=""
+          title=""
+        />
+        <span
+          class="_message_ssths_93 _error-message_ssths_103"
+          id="radix-:r1:"
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 17a.97.97 0 0 0 .713-.288A.968.968 0 0 0 13 16a.968.968 0 0 0-.287-.713A.968.968 0 0 0 12 15a.968.968 0 0 0-.713.287A.968.968 0 0 0 11 16c0 .283.096.52.287.712.192.192.43.288.713.288Zm0-4c.283 0 .52-.096.713-.287A.968.968 0 0 0 13 12V8a.967.967 0 0 0-.287-.713A.968.968 0 0 0 12 7a.968.968 0 0 0-.713.287A.967.967 0 0 0 11 8v4c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 9a9.738 9.738 0 0 1-3.9-.788 10.099 10.099 0 0 1-3.175-2.137c-.9-.9-1.612-1.958-2.137-3.175A9.738 9.738 0 0 1 2 12a9.74 9.74 0 0 1 .788-3.9 10.099 10.099 0 0 1 2.137-3.175c.9-.9 1.958-1.612 3.175-2.137A9.738 9.738 0 0 1 12 2a9.74 9.74 0 0 1 3.9.788 10.098 10.098 0 0 1 3.175 2.137c.9.9 1.613 1.958 2.137 3.175A9.738 9.738 0 0 1 22 12a9.738 9.738 0 0 1-.788 3.9 10.098 10.098 0 0 1-2.137 3.175c-.9.9-1.958 1.613-3.175 2.137A9.738 9.738 0 0 1 12 22Z"
+            />
+          </svg>
+          The recovery key you entered is not correct.
+        </span>
+      </div>
+      <div
+        class="mx_ChangeRecoveryKey_footer"
+      >
+        <button
+          aria-disabled="true"
+          class="_button_i91xf_17"
+          data-kind="primary"
+          data-size="lg"
+          role="button"
+          tabindex="0"
+        >
+          Finish set up
+        </button>
+        <button
+          class="_button_i91xf_17"
+          data-kind="tertiary"
+          data-size="lg"
+          role="button"
+          tabindex="0"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<ChangeRecoveryKey /> flow to setup a recovery key should display information about the recovery key 1`] = `
+<DocumentFragment>
+  <nav
+    class="_breadcrumb_ikpbb_17"
+  >
+    <button
+      aria-label="Back"
+      class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
+      role="button"
+      style="--cpd-icon-button-size: 28px;"
+      tabindex="0"
+    >
+      <div
+        class="_indicator-icon_133tf_26"
+        style="--cpd-icon-button-size: 100%;"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m13.3 17.3-4.6-4.6a.877.877 0 0 1-.213-.325A1.106 1.106 0 0 1 8.425 12c0-.133.02-.258.062-.375A.878.878 0 0 1 8.7 11.3l4.6-4.6a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275.948.948 0 0 1 .275.7.948.948 0 0 1-.275.7L10.8 12l3.9 3.9a.949.949 0 0 1 .275.7.948.948 0 0 1-.275.7.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+          />
+        </svg>
+      </div>
+    </button>
+    <ol
+      class="_pages_ikpbb_26"
+    >
+      <li>
+        <a
+          class="_link_ue21z_17"
+          data-kind="primary"
+          data-size="small"
+          rel="noreferrer noopener"
+          role="button"
+          tabindex="0"
+        >
+          Encryption
+        </a>
+      </li>
+      <li>
+        <span
+          aria-current="page"
+          class="_last-page_ikpbb_39"
+        >
+          Set up recovery
+        </span>
+      </li>
+    </ol>
+  </nav>
+  <div
+    class="mx_EncryptionCard mx_ChangeRecoveryKey"
+  >
+    <div
+      class="mx_EncryptionCard_header"
+    >
+      <div
+        class="_content_md016_17"
+        data-size="large"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M10.475 16.9A5.863 5.863 0 0 1 7 18c-1.667 0-3.083-.583-4.25-1.75C1.583 15.083 1 13.667 1 12c0-1.667.583-3.083 1.75-4.25C3.917 6.583 5.333 6 7 6c1.35 0 2.53.383 3.537 1.15 1.009.767 1.713 1.717 2.113 2.85h7.95a1.033 1.033 0 0 1 .725.3l1.025 1.025a.99.99 0 0 1 .2.288c.05.108.075.229.075.362a1.066 1.066 0 0 1-.25.7l-2.25 2.575a.973.973 0 0 1-1.038.313 1.033 1.033 0 0 1-.337-.188L17 14l-1.3 1.3c-.1.1-.208.17-.325.212a1.106 1.106 0 0 1-.375.063c-.133 0-.258-.02-.375-.063a.877.877 0 0 1-.325-.212L13 14h-.35a5.81 5.81 0 0 1-2.175 2.9Zm-4.887-3.487c.391.39.862.587 1.412.587.55 0 1.02-.196 1.412-.588C8.804 13.021 9 12.55 9 12c0-.55-.196-1.02-.588-1.412A1.926 1.926 0 0 0 7 10c-.55 0-1.02.196-1.412.588A1.926 1.926 0 0 0 5 12c0 .55.196 1.02.588 1.412Z"
+          />
+        </svg>
+      </div>
+      <h2
+        class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+      >
+        Set up recovery
+      </h2>
+      <span>
+        Your key storage is protected by a recovery key. If you need a new recovery key after setup, you can recreate it by selecting ‘Change recovery key’.
+      </span>
+    </div>
+    <span
+      class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_InformationPanel_description"
+    >
+      After clicking continue, we’ll generate a recovery key for you.
+    </span>
+    <div
+      class="mx_ChangeRecoveryKey_footer"
+    >
+      <button
+        class="_button_i91xf_17"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Continue
+      </button>
+      <button
+        class="_button_i91xf_17"
+        data-kind="tertiary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<ChangeRecoveryKey /> flow to setup a recovery key should display the recovery key 1`] = `
+<DocumentFragment>
+  <nav
+    class="_breadcrumb_ikpbb_17"
+  >
+    <button
+      aria-label="Back"
+      class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
+      role="button"
+      style="--cpd-icon-button-size: 28px;"
+      tabindex="0"
+    >
+      <div
+        class="_indicator-icon_133tf_26"
+        style="--cpd-icon-button-size: 100%;"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m13.3 17.3-4.6-4.6a.877.877 0 0 1-.213-.325A1.106 1.106 0 0 1 8.425 12c0-.133.02-.258.062-.375A.878.878 0 0 1 8.7 11.3l4.6-4.6a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275.948.948 0 0 1 .275.7.948.948 0 0 1-.275.7L10.8 12l3.9 3.9a.949.949 0 0 1 .275.7.948.948 0 0 1-.275.7.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+          />
+        </svg>
+      </div>
+    </button>
+    <ol
+      class="_pages_ikpbb_26"
+    >
+      <li>
+        <a
+          class="_link_ue21z_17"
+          data-kind="primary"
+          data-size="small"
+          rel="noreferrer noopener"
+          role="button"
+          tabindex="0"
+        >
+          Encryption
+        </a>
+      </li>
+      <li>
+        <span
+          aria-current="page"
+          class="_last-page_ikpbb_39"
+        >
+          Set up recovery
+        </span>
+      </li>
+    </ol>
+  </nav>
+  <div
+    class="mx_EncryptionCard mx_ChangeRecoveryKey"
+  >
+    <div
+      class="mx_EncryptionCard_header"
+    >
+      <div
+        class="_content_md016_17"
+        data-size="large"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M10.475 16.9A5.863 5.863 0 0 1 7 18c-1.667 0-3.083-.583-4.25-1.75C1.583 15.083 1 13.667 1 12c0-1.667.583-3.083 1.75-4.25C3.917 6.583 5.333 6 7 6c1.35 0 2.53.383 3.537 1.15 1.009.767 1.713 1.717 2.113 2.85h7.95a1.033 1.033 0 0 1 .725.3l1.025 1.025a.99.99 0 0 1 .2.288c.05.108.075.229.075.362a1.066 1.066 0 0 1-.25.7l-2.25 2.575a.973.973 0 0 1-1.038.313 1.033 1.033 0 0 1-.337-.188L17 14l-1.3 1.3c-.1.1-.208.17-.325.212a1.106 1.106 0 0 1-.375.063c-.133 0-.258-.02-.375-.063a.877.877 0 0 1-.325-.212L13 14h-.35a5.81 5.81 0 0 1-2.175 2.9Zm-4.887-3.487c.391.39.862.587 1.412.587.55 0 1.02-.196 1.412-.588C8.804 13.021 9 12.55 9 12c0-.55-.196-1.02-.588-1.412A1.926 1.926 0 0 0 7 10c-.55 0-1.02.196-1.412.588A1.926 1.926 0 0 0 5 12c0 .55.196 1.02.588 1.412Z"
+          />
+        </svg>
+      </div>
+      <h2
+        class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+      >
+        Save your recovery key somewhere safe
+      </h2>
+      <span>
+        Write down this recovery key somewhere safe, like a password manager, encrypted note, or a physical safe.
+      </span>
+    </div>
+    <div
+      class="mx_KeyPanel"
+    >
+      <span
+        class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69"
+      >
+        Recovery key
+      </span>
+      <div>
+        <span
+          class="_typography_yh5dq_162 _font-body-md-regular_yh5dq_59 mx_KeyPanel_key"
+          data-testid="recoveryKey"
+        >
+          encoded private key
+        </span>
+        <span
+          class="_typography_yh5dq_162 _font-body-sm-regular_yh5dq_40"
+        >
+          Do not share this with anyone!
+        </span>
+      </div>
+      <button
+        aria-label="Copy"
+        class="_icon-button_bh2qc_17"
+        role="button"
+        style="--cpd-icon-button-size: 28px;"
+        tabindex="0"
+      >
+        <div
+          class="_indicator-icon_133tf_26"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0V5Z"
+            />
+            <path
+              d="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2v-9Zm2 0v9h9v-9h-9Z"
+            />
+          </svg>
+        </div>
+      </button>
+    </div>
+    <div
+      class="mx_ChangeRecoveryKey_footer"
+    >
+      <button
+        class="_button_i91xf_17"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Continue
+      </button>
+      <button
+        class="_button_i91xf_17"
+        data-kind="tertiary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;

@@ -99,6 +99,11 @@ exports[`DevtoolsDialog renders the devtools dialog 1`] = `
         >
           Server info
         </button>
+        <button
+          class="mx_DevTools_button"
+        >
+          End-to-end encryption
+        </button>
       </div>
       <div>
         <h3>

@@ -10,6 +10,7 @@ import type { Preset, Visibility } from "matrix-js-sdk/src/matrix";
 import { test, expect } from "../../element-web-test";
 
 test.describe("Room Directory", () => {
+    test.skip(({ homeserverType }) => homeserverType === "pinecone", "Pinecone's /publicRooms API takes forever");
     test.use({
         displayName: "Ray",
         botCreateOpts: { displayName: "Paul" },
@@ -30,15 +31,16 @@ test.describe("Room Directory", () => {
             // First add a local address `gaming`
             const localAddresses = page.locator(".mx_SettingsFieldset", { hasText: "Local Addresses" });
             await localAddresses.getByRole("textbox").fill("gaming");
+            await expect(page.getByText("This address is available to use")).toBeVisible();
             await localAddresses.getByRole("button", { name: "Add" }).click();
-            await expect(localAddresses.getByText("#gaming:localhost")).toHaveClass("mx_EditableItem_item");
+            await expect(localAddresses.getByText(`#gaming:${user.homeServer}`)).toHaveClass("mx_EditableItem_item");
 
             // Publish into the public rooms directory
             const publishedAddresses = page.locator(".mx_SettingsFieldset", { hasText: "Published Addresses" });
-            await expect(publishedAddresses.locator("#canonicalAlias")).toHaveValue("#gaming:localhost");
+            await expect(publishedAddresses.locator("#canonicalAlias")).toHaveValue(`#gaming:${user.homeServer}`);
             const checkbox = publishedAddresses
                 .locator(".mx_SettingsFlag", {
-                    hasText: "Publish this room to the public in localhost's room directory?",
+                    hasText: `Publish this room to the public in ${user.homeServer}'s room directory?`,
                 })
                 .getByRole("switch");
             await checkbox.check();
@@ -86,7 +88,7 @@ test.describe("Room Directory", () => {
                 .getByRole("button", { name: "Join" })
                 .click();
 
-            await expect(page).toHaveURL("/#/room/#test1234:localhost");
+            await expect(page).toHaveURL(`/#/room/#test1234:${user.homeServer}`);
         },
     );
 });
