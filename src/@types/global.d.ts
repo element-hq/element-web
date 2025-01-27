@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 // eslint-disable-next-line no-restricted-imports
 import "matrix-js-sdk/src/@types/global"; // load matrix-js-sdk's type extensions first
 import "@types/modernizr";
+import { ModuleLoader } from "@element-hq/element-web-module-api";
 
 import type { logger } from "matrix-js-sdk/src/logger";
 import ContentMessages from "../ContentMessages";
@@ -45,6 +46,7 @@ import { MatrixDispatcher } from "../dispatcher/dispatcher";
 import { DeepReadonly } from "./common";
 import MatrixChat from "../components/structures/MatrixChat";
 import { InitialCryptoSetupStore } from "../stores/InitialCryptoSetupStore";
+import { ModuleApiType } from "../modules/Api.ts";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -122,6 +124,8 @@ declare global {
         mxRoomScrollStateStore?: RoomScrollStateStore;
         mxActiveWidgetStore?: ActiveWidgetStore;
         mxOnRecaptchaLoaded?: () => void;
+        mxModuleLoader: ModuleLoader;
+        mxModuleApi: ModuleApiType;
 
         // electron-only
         electron?: Electron;

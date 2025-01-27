@@ -206,6 +206,8 @@ export interface IConfigOptions {
         policy_uri?: string;
         contacts?: string[];
     };
+
+    modules?: string[];
 }
 
 export interface ISsoRedirectOptions {

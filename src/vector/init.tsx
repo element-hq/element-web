@@ -11,6 +11,7 @@ Please see LICENSE files in the repository root for full details.
 import { createRoot } from "react-dom/client";
 import React, { StrictMode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
+import { ModuleLoader } from "@element-hq/element-web-module-api";
 
 import * as languageHandler from "../languageHandler";
 import SettingsStore from "../settings/SettingsStore";
@@ -23,6 +24,7 @@ import ElectronPlatform from "./platform/ElectronPlatform";
 import PWAPlatform from "./platform/PWAPlatform";
 import WebPlatform from "./platform/WebPlatform";
 import { initRageshake, initRageshakeStore } from "./rageshakesetup";
+import ModuleApi from "../modules/Api.ts";
 
 export const rageshakePromise = initRageshake();
 
@@ -124,6 +126,9 @@ export async function showIncompatibleBrowser(onAccept: () => void): Promise<voi
     );
 }
 
+/**
+ * @deprecated in favour of the plugin system
+ */
 export async function loadModules(): Promise<void> {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore - this path is created at runtime and therefore won't exist at typecheck time
@@ -133,6 +138,26 @@ export async function loadModules(): Promise<void> {
         // @ts-ignore - we know the constructor exists even if TypeScript can't be convinced of that
         ModuleRunner.instance.registerModule((api) => new InstalledModule(api));
     }
+}
+
+export async function loadPlugins(): Promise<void> {
+    // add React to the global namespace, to make them easier to access via the console
+    // this incidentally means we can forget our React imports in JSX files without penalty.
+    window.React = React;
+
+    const modules = SdkConfig.get("modules");
+    if (!modules?.length) return;
+    const moduleLoader = new ModuleLoader();
+    window.mxModuleLoader = moduleLoader;
+    for (const src of modules) {
+        // We need to instruct webpack to not mangle this import as it is not available at compile time
+        const module = await import(/* webpackIgnore: true */ src);
+        await moduleLoader.load(module);
+    }
+    await moduleLoader.start({
+        root: document.getElementById("matrixchat")!,
+        api: ModuleApi,
+    });
 }
 
 export { _t } from "../languageHandler";
