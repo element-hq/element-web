@@ -20,6 +20,11 @@ import { SettingsSection } from "../../shared/SettingsSection";
 import { SettingsSubheader } from "../../SettingsSubheader";
 import { AdvancedPanel } from "../../encryption/AdvancedPanel";
 import { ResetIdentityPanel } from "../../encryption/ResetIdentityPanel";
+import { KeyBackupPanel } from "../../encryption/KeyStoragePanel";
+import Spinner from "../../../elements/Spinner";
+import { useEventEmitter } from "../../../../../hooks/useEventEmitter";
+import { MatrixEvent } from "matrix-js-sdk";
+import { ClientEvent } from "matrix-js-sdk/src/matrix";
 
 /**
  * The state in the encryption settings tab.
@@ -35,44 +40,85 @@ import { ResetIdentityPanel } from "../../encryption/ResetIdentityPanel";
  */
 type State = "loading" | "main" | "set_up_encryption" | "change_recovery_key" | "set_recovery_key" | "reset_identity";
 
+const useKeyBackupIsEnabled = (): boolean | undefined => {
+    const [isEnabled, setIsEnabled] = useState<boolean | undefined>(undefined);
+    const [loading, setLoading] = useState(true);
+
+    const matrixClient = useMatrixClientContext();
+
+    const checkStatus = useCallback(async () => {
+        const crypto = matrixClient.getCrypto()!;
+        const info = await crypto.getKeyBackupInfo();
+        setIsEnabled(Boolean(info?.version));
+    }, [matrixClient]);
+
+    useEffect(() => {
+        (async () => {
+            await checkStatus();
+            setLoading(false);
+        })();
+    }, [checkStatus]);
+
+    useEventEmitter(matrixClient, ClientEvent.AccountData, (event: MatrixEvent): void => {
+        const type = event.getType();
+        if (type === "m.org.matrix.custom.backup_disabled") {
+            checkStatus();
+        }
+    });
+
+    return loading ? undefined : isEnabled;
+};
+
 export function EncryptionUserSettingsTab(): JSX.Element {
     const [state, setState] = useState<State>("loading");
     const setUpEncryptionRequired = useSetUpEncryptionRequired(setState);
+    const keyBackupIsEnabled = useKeyBackupIsEnabled();
 
     let content: JSX.Element;
-    switch (state) {
-        case "loading":
-            content = <InlineSpinner aria-label={_t("common|loading")} />;
-            break;
-        case "set_up_encryption":
-            content = <SetUpEncryptionPanel onFinish={setUpEncryptionRequired} />;
-            break;
-        case "main":
-            content = (
-                <>
-                    <RecoveryPanel
-                        onChangeRecoveryKeyClick={(setupNewKey) =>
-                            setupNewKey ? setState("set_recovery_key") : setState("change_recovery_key")
-                        }
+    if (keyBackupIsEnabled === undefined) {
+        content = <Spinner />;
+    } else {
+        switch (state) {
+            case "loading":
+                content = <InlineSpinner aria-label={_t("common|loading")} />;
+                break;
+            case "set_up_encryption":
+                content = <SetUpEncryptionPanel onFinish={setUpEncryptionRequired} />;
+                break;
+            case "main":
+                content = (
+                    <>
+                        <KeyBackupPanel />
+                        {keyBackupIsEnabled && (
+                            <>
+                                <RecoveryPanel
+                                    onChangeRecoveryKeyClick={(setupNewKey) =>
+                                        setupNewKey ? setState("set_recovery_key") : setState("change_recovery_key")
+                                    }
+                                />
+                                <Separator kind="section" />
+                            </>
+                        )}
+                        <AdvancedPanel onResetIdentityClick={() => setState("reset_identity")} />
+                    </>
+                );
+                break;
+            case "change_recovery_key":
+            case "set_recovery_key":
+                content = (
+                    <ChangeRecoveryKey
+                        userHasRecoveryKey={state === "change_recovery_key"}
+                        onCancelClick={() => setState("main")}
+                        onFinish={() => setState("main")}
                     />
-                    <Separator kind="section" />
-                    <AdvancedPanel onResetIdentityClick={() => setState("reset_identity")} />
-                </>
-            );
-            break;
-        case "change_recovery_key":
-        case "set_recovery_key":
-            content = (
-                <ChangeRecoveryKey
-                    userHasRecoveryKey={state === "change_recovery_key"}
-                    onCancelClick={() => setState("main")}
-                    onFinish={() => setState("main")}
-                />
-            );
-            break;
-        case "reset_identity":
-            content = <ResetIdentityPanel onCancelClick={() => setState("main")} onFinish={() => setState("main")} />;
-            break;
+                );
+                break;
+            case "reset_identity":
+                content = (
+                    <ResetIdentityPanel onCancelClick={() => setState("main")} onFinish={() => setState("main")} />
+                );
+                break;
+        }
     }
 
     return (

@@ -318,8 +318,11 @@ export default class DeviceListener {
                 // prompt the user to enter their recovery key.
                 showSetupEncryptionToast(SetupKind.KEY_STORAGE_OUT_OF_SYNC);
             } else if (defaultKeyId === null) {
-                // the user just hasn't set up 4S yet: prompt them to do so
-                showSetupEncryptionToast(SetupKind.SET_UP_RECOVERY);
+                // the user just hasn't set up 4S yet: prompt them to do so (unless they've explicitly said no to backups)
+                const disabledEvent = cli.getAccountData("m.org.matrix.custom.backup_disabled");
+                if (disabledEvent && !disabledEvent.getContent()?.disabled) {
+                    showSetupEncryptionToast(SetupKind.SET_UP_RECOVERY);
+                }
             } else {
                 // some other condition... yikes! Show the 'set up encryption' toast: this is what we previously did
                 // in 'other' situations. Possibly we should consider prompting for a full reset in this case?
