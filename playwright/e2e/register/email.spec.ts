@@ -34,7 +34,7 @@ test.describe("Email Registration", async () => {
     test(
         "registers an account and lands on the home page",
         { tag: "@screenshot" },
-        async ({ page, mailhogClient, request, checkA11y }) => {
+        async ({ page, mailpitClient, request, checkA11y }) => {
             await expect(page.getByRole("textbox", { name: "Username" })).toBeVisible();
             // Hide the server text as it contains the randomly allocated Homeserver port
             const screenshotOptions = { mask: [page.locator(".mx_ServerPicker_server")] };
@@ -51,10 +51,10 @@ test.describe("Email Registration", async () => {
 
             await expect(page.getByText("An error was encountered when sending the email")).not.toBeVisible();
 
-            const messages = await mailhogClient.messages();
-            expect(messages.items).toHaveLength(1);
-            expect(messages.items[0].to).toEqual("alice@email.com");
-            const [emailLink] = messages.items[0].text.match(/http.+/);
+            const summary = await mailpitClient.listMessages();
+            expect(summary.messages_count).toBe(1);
+            expect(summary.messages[0].To).toEqual("alice@email.com");
+            const [emailLink] = summary.messages[0].Snippet.match(/http.+/);
             await request.get(emailLink); // "Click" the link in the email
 
             await expect(page.getByText("Welcome alice")).toBeVisible();
