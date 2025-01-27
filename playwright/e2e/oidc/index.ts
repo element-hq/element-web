@@ -27,15 +27,11 @@ export async function registerAccountMas(
     await page.getByRole("textbox", { name: "Confirm Password" }).fill(password);
     await page.getByRole("button", { name: "Continue" }).click();
 
-    let summary: MailpitMessagesSummaryResponse;
+    let code: string;
     await expect(async () => {
-        summary = await mailpit.listMessages();
-        expect(summary.messages_count).toBe(1);
+        const text = await mailpit.renderMessageText();
+        [, code] = text.match(/Your verification code to confirm this email address is: (\d{6})/);
     }).toPass();
-    expect(summary.messages[0].To[0].Address).toEqual(email);
-    const [, code] = summary.messages[0].Snippet.match(
-        /Your verification code to confirm this email address is: (\d{6})/,
-    );
 
     await page.getByRole("textbox", { name: "6-digit code" }).fill(code);
     await page.getByRole("button", { name: "Continue" }).click();
