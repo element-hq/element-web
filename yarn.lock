@@ -3485,13 +3485,14 @@
 
 "@vector-im/matrix-wysiwyg-wasm@link:../../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.0-af862ffd231dc0a6b8d6f2cb3601e68456c0ff24-integrity/node_modules/bindings/wysiwyg-wasm":
   version "0.0.0"
+  uid ""
 
 "@vector-im/matrix-wysiwyg@2.38.0":
   version "2.38.0"
   resolved "https://registry.yarnpkg.com/@vector-im/matrix-wysiwyg/-/matrix-wysiwyg-2.38.0.tgz#af862ffd231dc0a6b8d6f2cb3601e68456c0ff24"
   integrity sha512-cMEVicFYVzFxuSyWON0aVGjAJMcgJZ+LxuLTEp8EGuu8cRacuh0RN5rapb11YVZygzFvE7X1cMedJ/fKd5vRLA==
   dependencies:
-    "@vector-im/matrix-wysiwyg-wasm" "link:../../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.0-af862ffd231dc0a6b8d6f2cb3601e68456c0ff24-integrity/node_modules/bindings/wysiwyg-wasm"
+    "@vector-im/matrix-wysiwyg-wasm" "link:../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.0-af862ffd231dc0a6b8d6f2cb3601e68456c0ff24-integrity/node_modules/bindings/wysiwyg-wasm"
 
 "@webassemblyjs/ast@1.14.1", "@webassemblyjs/ast@^1.14.1":
   version "1.14.1"
@@ -8696,9 +8697,9 @@ matrix-web-i18n@^3.2.1:
     walk "^2.3.15"
 
 matrix-widget-api@^1.10.0:
-  version "1.12.0"
-  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.12.0.tgz#b3d22bab1670051c8eeee66bb96d08b33148bc99"
-  integrity sha512-6JRd9fJGGvuBRhcTg9wX+Skn/Q1wox3jdp5yYQKJ6pPw4urW9bkTR90APBKVDB1vorJKT44jml+lCzkDMRBjww==
+  version "1.13.1"
+  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.13.1.tgz#5b1caeed2fc58148bcd2984e0546d2d06a1713ad"
+  integrity sha512-mkOHUVzaN018TCbObfGOSaMW2GoUxOfcxNNlTVx5/HeMk3OSQPQM0C9oEME5Liiv/dBUoSrEB64V8wF7e/gb1w==
   dependencies:
     "@types/events" "^3.0.0"
     events "^3.2.0"
