@@ -27,6 +27,7 @@ import {
     ISearchUserDirectoryResult,
     IGetMediaConfigResult,
     UpdateDelayedEventAction,
+    Symbols,
 } from "matrix-widget-api";
 import {
     ClientEvent,
@@ -40,6 +41,7 @@ import {
     SendDelayedEventResponse,
     StateEvents,
     TimelineEvents,
+    Room,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
@@ -710,5 +712,88 @@ export class StopGapWidgetDriver extends WidgetDriver {
      */
     public processError(error: unknown): IWidgetApiErrorResponseDataDetails | undefined {
         return error instanceof MatrixError ? { matrix_api_error: error.asWidgetApiErrorData() } : undefined;
+    }
+
+    // DEPRECATED FOR BACKWARDS COMPATIBILITY
+
+    /**
+     * Picks the rooms where the widget can read events from. If no ids are passed it will use the currently viewed room of EW to
+     * get the matrix room used for event reading.
+     * @param roomIds optional room ids. (this version of the api allows to not pass a room id. This is deprecated now. )
+     * @returns The matrix room where the widget will get events from.
+     * @deprecated it is recommended to use: readRoomTimeline and readRoomState where an explicit room id is required.
+     */
+    private pickRooms(roomIds?: (string | Symbols.AnyRoom)[]): Room[] {
+        const client = MatrixClientPeg.get();
+        if (!client) throw new Error("Not attached to a client");
+
+        const targetRooms = roomIds
+            ? roomIds.includes(Symbols.AnyRoom)
+                ? client.getVisibleRooms(SettingsStore.getValue("feature_dynamic_room_predecessors"))
+                : roomIds.map((r) => client.getRoom(r))
+            : [client.getRoom(SdkContextClass.instance.roomViewStore.getRoomId()!)];
+        return targetRooms.filter((r) => !!r) as Room[];
+    }
+
+    /**
+     * Reads state events from the room. Uses the `pickRooms` method and hence has roomIds is optional.
+     * @deprecated it is recommended to use: `readRoomState` where an explicit room id is required.
+     */
+    public async readStateEvents(
+        eventType: string,
+        stateKey: string | undefined,
+        limitPerRoom: number,
+        roomIds?: (string | Symbols.AnyRoom)[],
+    ): Promise<IRoomEvent[]> {
+        limitPerRoom = limitPerRoom > 0 ? Math.min(limitPerRoom, Number.MAX_SAFE_INTEGER) : Number.MAX_SAFE_INTEGER; // relatively arbitrary
+
+        const rooms = this.pickRooms(roomIds);
+        const allResults: IRoomEvent[] = [];
+        for (const room of rooms) {
+            const results: MatrixEvent[] = [];
+            const state = room.currentState.events.get(eventType);
+            if (state) {
+                if (stateKey === "" || !!stateKey) {
+                    const forKey = state.get(stateKey);
+                    if (forKey) results.push(forKey);
+                } else {
+                    results.push(...Array.from(state.values()));
+                }
+            }
+
+            results.slice(0, limitPerRoom).forEach((e) => allResults.push(e.getEffectiveEvent() as IRoomEvent));
+        }
+        return allResults;
+    }
+
+    /**
+     * Reads timeline events from the room. Uses the `pickRooms` method and hence has roomIds is optional.
+     * @deprecated it is recommended to use: `readRoomTimeline` where an explicit room id is required.
+     */
+    public async readRoomEvents(
+        eventType: string,
+        msgtype: string | undefined,
+        limitPerRoom: number,
+        roomIds?: (string | Symbols.AnyRoom)[],
+    ): Promise<IRoomEvent[]> {
+        limitPerRoom = limitPerRoom > 0 ? Math.min(limitPerRoom, Number.MAX_SAFE_INTEGER) : Number.MAX_SAFE_INTEGER; // relatively arbitrary
+
+        const rooms = this.pickRooms(roomIds);
+        const allResults: IRoomEvent[] = [];
+        for (const room of rooms) {
+            const results: MatrixEvent[] = [];
+            const events = room.getLiveTimeline().getEvents(); // timelines are most recent last
+            for (let i = events.length - 1; i > 0; i--) {
+                if (results.length >= limitPerRoom) break;
+
+                const ev = events[i];
+                if (ev.getType() !== eventType || ev.isState()) continue;
+                if (eventType === EventType.RoomMessage && msgtype && msgtype !== ev.getContent()["msgtype"]) continue;
+                results.push(ev);
+            }
+
+            results.forEach((e) => allResults.push(e.getEffectiveEvent() as IRoomEvent));
+        }
+        return allResults;
     }
 }
