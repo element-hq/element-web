@@ -159,7 +159,7 @@ jobs:
               with:
                   path: |
                       ~/.cache/ms-playwright
-                  key: ${{ runner.os }}-playwright-${{ steps.playwright.outputs.version }}
+                  key: ${{ runner.os }}-${{ runner.arch	}}-playwright-${{ steps.playwright.outputs.version }}
 
             - name: Install Playwright browsers
               if: steps.playwright-cache.outputs.cache-hit != 'true'
