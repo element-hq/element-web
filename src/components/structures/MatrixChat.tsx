@@ -131,6 +131,7 @@ import { ConfirmSessionLockTheftView } from "./auth/ConfirmSessionLockTheftView"
 import { LoginSplashView } from "./auth/LoginSplashView";
 import { cleanUpDraftsIfRequired } from "../../DraftCleaner";
 import { InitialCryptoSetupStore } from "../../stores/InitialCryptoSetupStore";
+import { AppTitleContext } from "@matrix-org/react-sdk-module-api/lib/lifecycles/BrandingExtensions";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -223,7 +224,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private tokenLogin?: boolean;
     // What to focus on next component update, if anything
     private focusNext: FocusNextType;
-    private subTitleStatus: string;
     private prevWindowWidth: number;
 
     private readonly loggedInView = createRef<LoggedInViewType>();
@@ -231,6 +231,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private themeWatcher?: ThemeWatcher;
     private fontWatcher?: FontWatcher;
     private readonly stores: SdkContextClass;
+
+    private subtitleContext?: {unreadNotificationCount: number, userNotificationLevel: NotificationLevel, syncState: SyncState};
 
     public constructor(props: IProps) {
         super(props);
@@ -275,10 +277,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
 
         this.prevWindowWidth = UIStore.instance.windowWidth || 1000;
-
-        // object field used for tracking the status info appended to the title tag.
-        // we don't do it as react state as i'm scared about triggering needless react refreshes.
-        this.subTitleStatus = "";
     }
 
     /**
@@ -1474,7 +1472,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             collapseLhs: false,
             currentRoomId: null,
         });
-        this.subTitleStatus = "";
+        this.subtitleContext = undefined;
         this.setPageSubtitle();
         this.stores.onLoggedOut();
     }
@@ -1490,7 +1488,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             collapseLhs: false,
             currentRoomId: null,
         });
-        this.subTitleStatus = "";
+        this.subtitleContext = undefined;
         this.setPageSubtitle();
     }
 
@@ -1941,15 +1939,51 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
     }
 
-    private setPageSubtitle(subtitle = ""): void {
+    private setPageSubtitle(): void {
+        const extraContext = this.subtitleContext;
+        let context: AppTitleContext = {
+            brand: SdkConfig.get().brand,
+            syncError: extraContext?.syncState === SyncState.Error,
+            notificationsMuted: extraContext && extraContext.userNotificationLevel < NotificationLevel.Activity,
+            unreadNotificationCount: extraContext?.unreadNotificationCount,
+        };
+
         if (this.state.currentRoomId) {
             const client = MatrixClientPeg.get();
             const room = client?.getRoom(this.state.currentRoomId);
-            if (room) {
-                subtitle = `${this.subTitleStatus} | ${room.name} ${subtitle}`;
+            context = {
+                ...context,
+                roomId: this.state.currentRoomId,
+                roomName: room?.name,
+            };
+        }
+
+        const moduleTitle = ModuleRunner.instance.extensions.branding?.getAppTitle(context);
+        if (moduleTitle) {
+            if (document.title !== moduleTitle) {
+                document.title = moduleTitle;
+            }
+            return;
+        }
+
+        // Use application default.
+
+        let subtitle = "";
+        if (context?.syncError) {
+            subtitle += `[${_t("common|offline")}] `;
+        }
+        if (context.unreadNotificationCount !== undefined && context.unreadNotificationCount > 0) {
+            subtitle += `[${context.unreadNotificationCount}]`;
+        } else if (context.notificationsMuted !== undefined && !context.notificationsMuted) {
+            subtitle += `*`;
+        }
+
+        if ('roomId' in context && context.roomId) {
+            if (context.roomName) {
+                subtitle = `${subtitle} | ${context.roomName}`;
             }
         } else {
-            subtitle = `${this.subTitleStatus} ${subtitle}`;
+            subtitle = subtitle;
         }
 
         const title = `${SdkConfig.get().brand} ${subtitle}`;
@@ -1966,17 +2000,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             PlatformPeg.get()!.setErrorStatus(state === SyncState.Error);
             PlatformPeg.get()!.setNotificationCount(numUnreadRooms);
         }
-
-        this.subTitleStatus = "";
-        if (state === SyncState.Error) {
-            this.subTitleStatus += `[${_t("common|offline")}] `;
-        }
-        if (numUnreadRooms > 0) {
-            this.subTitleStatus += `[${numUnreadRooms}]`;
-        } else if (notificationState.level >= NotificationLevel.Activity) {
-            this.subTitleStatus += `*`;
-        }
-
+        this.subtitleContext = {
+            syncState: state,
+            userNotificationLevel: notificationState.level,
+            unreadNotificationCount: numUnreadRooms,
+        };
         this.setPageSubtitle();
     };
 
