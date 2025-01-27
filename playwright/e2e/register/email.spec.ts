@@ -51,9 +51,11 @@ test.describe("Email Registration", async () => {
 
             await expect(page.getByText("An error was encountered when sending the email")).not.toBeVisible();
 
-            const { Links: links } = await mailpitClient.linkCheck();
-            expect(links).toHaveLength(1);
-            const emailLink = links[0].URL;
+            const messages = await mailpitClient.listMessages();
+            expect(messages.messages).toHaveLength(1);
+            expect(messages.messages[0].To[0].Address).toEqual("alice@email.com");
+            const text = await mailpitClient.renderMessageText(messages.messages[0].ID);
+            const [emailLink] = text.match(/http.+/);
             await request.get(emailLink); // "Click" the link in the email
 
             await expect(page.getByText("Welcome alice")).toBeVisible();

@@ -29,7 +29,9 @@ export async function registerAccountMas(
 
     let code: string;
     await expect(async () => {
-        const text = await mailpit.renderMessageText();
+        const messages = await mailpit.listMessages();
+        expect(messages.messages[0].To[0].Address).toEqual(email);
+        const text = await mailpit.renderMessageText(messages.messages[0].ID);
         [, code] = text.match(/Your verification code to confirm this email address is: (\d{6})/);
     }).toPass();
 

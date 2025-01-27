@@ -12,7 +12,10 @@ export class MailhogContainer extends GenericContainer {
     constructor() {
         super("axllent/mailpit:latest");
 
-        this.withExposedPorts(8025).withWaitStrategy(Wait.forListeningPorts());
+        this.withExposedPorts(8025).withWaitStrategy(Wait.forListeningPorts()).withEnvironment({
+            MP_SMTP_AUTH_ALLOW_INSECURE: "true",
+            MP_SMTP_AUTH_ACCEPT_ANY: "true",
+        });
     }
 
     public override async start(): Promise<StartedMailhogContainer> {
