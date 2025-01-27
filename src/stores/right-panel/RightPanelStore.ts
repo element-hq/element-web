@@ -239,7 +239,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
      * @param cardState The state within the phase.
      */
     public showOrHidePhase(phase: RightPanelPhases, cardState?: Partial<IRightPanelCardState>): void {
-        if (this.currentCard.phase == phase && !cardState && this.isOpen) {
+        if (this.currentCard.phase === phase && !cardState && this.isOpen) {
             this.togglePanel(null);
         } else {
             this.setCard({ phase, state: cardState });
