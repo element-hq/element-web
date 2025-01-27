@@ -6,13 +6,16 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { AbstractStartedContainer, GenericContainer, StartedTestContainer, Wait } from "testcontainers";
-import mailhog from "mailhog";
+import { MailpitClient } from "mailpit-api";
 
 export class MailhogContainer extends GenericContainer {
     constructor() {
-        super("mailhog/mailhog:latest");
+        super("axllent/mailpit:latest");
 
-        this.withExposedPorts(8025).withWaitStrategy(Wait.forListeningPorts());
+        this.withExposedPorts(8025).withWaitStrategy(Wait.forListeningPorts()).withEnvironment({
+            MP_SMTP_AUTH_ALLOW_INSECURE: "true",
+            MP_SMTP_AUTH_ACCEPT_ANY: "true",
+        });
     }
 
     public override async start(): Promise<StartedMailhogContainer> {
@@ -21,10 +24,10 @@ export class MailhogContainer extends GenericContainer {
 }
 
 export class StartedMailhogContainer extends AbstractStartedContainer {
-    public readonly client: mailhog.API;
+    public readonly client: MailpitClient;
 
     constructor(container: StartedTestContainer) {
         super(container);
-        this.client = mailhog({ host: container.getHost(), port: container.getMappedPort(8025) });
+        this.client = new MailpitClient(`http://${container.getHost()}:${container.getMappedPort(8025)}`);
     }
 }

@@ -19,19 +19,19 @@ test.use(masHomeserver);
 test.describe("Encryption state after registration", () => {
     test.skip(isDendrite, "does not yet support MAS");
 
-    test("Key backup is enabled by default", async ({ page, mailhogClient, app }, testInfo) => {
+    test("Key backup is enabled by default", async ({ page, mailpitClient, app }, testInfo) => {
         await page.goto("/#/login");
         await page.getByRole("button", { name: "Continue" }).click();
-        await registerAccountMas(page, mailhogClient, `alice_${testInfo.testId}`, "alice@email.com", "Pa$sW0rD!");
+        await registerAccountMas(page, mailpitClient, `alice_${testInfo.testId}`, "alice@email.com", "Pa$sW0rD!");
 
         await app.settings.openUserSettings("Security & Privacy");
         await expect(page.getByText("This session is backing up your keys.")).toBeVisible();
     });
 
-    test("user is prompted to set up recovery", async ({ page, mailhogClient, app }, testInfo) => {
+    test("user is prompted to set up recovery", async ({ page, mailpitClient, app }, testInfo) => {
         await page.goto("/#/login");
         await page.getByRole("button", { name: "Continue" }).click();
-        await registerAccountMas(page, mailhogClient, `alice_${testInfo.testId}`, "alice@email.com", "Pa$sW0rD!");
+        await registerAccountMas(page, mailpitClient, `alice_${testInfo.testId}`, "alice@email.com", "Pa$sW0rD!");
 
         await page.getByRole("button", { name: "Add room" }).click();
         await page.getByRole("menuitem", { name: "New room" }).click();
@@ -47,7 +47,7 @@ test.describe("Key backup reset from elsewhere", () => {
 
     test("Key backup is disabled when reset from elsewhere", async ({
         page,
-        mailhogClient,
+        mailpitClient,
         request,
         homeserver,
     }, testInfo) => {
@@ -60,7 +60,7 @@ test.describe("Key backup reset from elsewhere", () => {
 
         await page.goto("/#/login");
         await page.getByRole("button", { name: "Continue" }).click();
-        await registerAccountMas(page, mailhogClient, testUsername, "alice@email.com", testPassword);
+        await registerAccountMas(page, mailpitClient, testUsername, "alice@email.com", testPassword);
 
         await page.getByRole("button", { name: "Add room" }).click();
         await page.getByRole("menuitem", { name: "New room" }).click();
