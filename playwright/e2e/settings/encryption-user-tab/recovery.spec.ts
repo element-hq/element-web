@@ -32,23 +32,26 @@ test.describe("Recovery section in Encryption tab", () => {
 
     test("should verify the device", { tag: "@screenshot" }, async ({ page, app, util }) => {
         const dialog = await util.openEncryptionTab();
+        const content = util.getEncryptionTabContent();
 
         // The user's device is in an unverified state, therefore the only option available to them here is to verify it
         const verifyButton = dialog.getByRole("button", { name: "Verify this device" });
         await expect(verifyButton).toBeVisible();
-        await expect(util.getEncryptionTabContent()).toMatchScreenshot("verify-device-encryption-tab.png");
+        await expect(content).toMatchScreenshot("verify-device-encryption-tab.png");
         await verifyButton.click();
 
         await util.verifyDevice(recoveryKey);
-        await expect(util.getEncryptionTabContent()).toMatchScreenshot("default-recovery.png");
+
+        await expect(content).toMatchScreenshot("default-tab.png", {
+            mask: [content.getByTestId("deviceId"), content.getByTestId("sessionKey")],
+        });
 
         // Check that our device is now cross-signed
         await checkDeviceIsCrossSigned(app);
 
         // Check that the current device is connected to key backup
         // The backup decryption key should be in cache also, as we got it directly from the 4S
-        await app.closeDialog();
-        await checkDeviceIsConnectedKeyBackup(page, expectedBackupVersion, true);
+        await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, true);
     });
 
     test(
@@ -61,7 +64,7 @@ test.describe("Recovery section in Encryption tab", () => {
             // The user can only change the recovery key
             const changeButton = dialog.getByRole("button", { name: "Change recovery key" });
             await expect(changeButton).toBeVisible();
-            await expect(util.getEncryptionTabContent()).toMatchScreenshot("default-recovery.png");
+            await expect(util.getEncryptionRecoverySection()).toMatchScreenshot("default-recovery.png");
             await changeButton.click();
 
             // Display the new recovery key and click on the copy button
@@ -89,7 +92,7 @@ test.describe("Recovery section in Encryption tab", () => {
         const dialog = await util.openEncryptionTab();
         const setupButton = dialog.getByRole("button", { name: "Set up recovery" });
         await expect(setupButton).toBeVisible();
-        await expect(util.getEncryptionTabContent()).toMatchScreenshot("set-up-recovery.png");
+        await expect(util.getEncryptionRecoverySection()).toMatchScreenshot("set-up-recovery.png");
         await setupButton.click();
 
         // Display an informative panel about the recovery key
@@ -115,9 +118,8 @@ test.describe("Recovery section in Encryption tab", () => {
         // The recovery key is now set up and the user can change it
         await expect(dialog.getByRole("button", { name: "Change recovery key" })).toBeVisible();
 
-        await app.closeDialog();
         // Check that the current device is connected to key backup and the backup version is the expected one
-        await checkDeviceIsConnectedKeyBackup(page, "1", true);
+        await checkDeviceIsConnectedKeyBackup(app, "1", true);
     });
 
     // Test what happens if the cross-signing secrets are in secret storage but are not cached in the local DB.
@@ -137,20 +139,19 @@ test.describe("Recovery section in Encryption tab", () => {
             const dialog = util.getEncryptionTabContent();
             const enterKeyButton = dialog.getByRole("button", { name: "Enter recovery key" });
             await expect(enterKeyButton).toBeVisible();
-            await expect(dialog).toMatchScreenshot("out-of-sync-recovery.png");
+            await expect(util.getEncryptionRecoverySection()).toMatchScreenshot("out-of-sync-recovery.png");
             await enterKeyButton.click();
 
             // Fill the recovery key
             await util.enterRecoveryKey(recoveryKey);
-            await expect(dialog).toMatchScreenshot("default-recovery.png");
+            await expect(util.getEncryptionRecoverySection()).toMatchScreenshot("default-recovery.png");
 
             // Check that our device is now cross-signed
             await checkDeviceIsCrossSigned(app);
 
             // Check that the current device is connected to key backup
             // The backup decryption key should be in cache also, as we got it directly from the 4S
-            await app.closeDialog();
-            await checkDeviceIsConnectedKeyBackup(page, expectedBackupVersion, true);
+            await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, true);
         },
     );
 });

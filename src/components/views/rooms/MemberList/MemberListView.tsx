@@ -21,6 +21,7 @@ import { ThreePidInviteTileView } from "./tiles/ThreePidInviteTileView";
 import { MemberListHeaderView } from "./MemberListHeaderView";
 import BaseCard from "../../right_panel/BaseCard";
 import { _t } from "../../../../languageHandler";
+import { RovingTabIndexProvider } from "../../../../accessibility/RovingTabIndex";
 
 interface IProps {
     roomId: string;
@@ -86,24 +87,33 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
             header={_t("common|people")}
             onClose={props.onClose}
         >
-            <Flex align="stretch" direction="column" className="mx_MemberListView_container">
-                <Form.Root>
-                    <MemberListHeaderView vm={vm} />
-                </Form.Root>
-                <AutoSizer>
-                    {({ height, width }) => (
-                        <List
-                            rowRenderer={rowRenderer}
-                            rowHeight={getRowHeight}
-                            // The +1 refers to the additional empty div that we render at the end of the list.
-                            rowCount={totalRows + 1}
-                            // Subtract the height of MemberlistHeaderView so that the parent div does not overflow.
-                            height={height - 113}
-                            width={width}
-                        />
-                    )}
-                </AutoSizer>
-            </Flex>
+            <RovingTabIndexProvider handleUpDown scrollIntoView>
+                {({ onKeyDownHandler }) => (
+                    <Flex
+                        align="stretch"
+                        direction="column"
+                        className="mx_MemberListView_container"
+                        onKeyDown={onKeyDownHandler}
+                    >
+                        <Form.Root>
+                            <MemberListHeaderView vm={vm} />
+                        </Form.Root>
+                        <AutoSizer>
+                            {({ height, width }) => (
+                                <List
+                                    rowRenderer={rowRenderer}
+                                    rowHeight={getRowHeight}
+                                    // The +1 refers to the additional empty div that we render at the end of the list.
+                                    rowCount={totalRows + 1}
+                                    // Subtract the height of MemberlistHeaderView so that the parent div does not overflow.
+                                    height={height - 113}
+                                    width={width}
+                                />
+                            )}
+                        </AutoSizer>
+                    </Flex>
+                )}
+            </RovingTabIndexProvider>
         </BaseCard>
     );
 };

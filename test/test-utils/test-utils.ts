@@ -116,7 +116,7 @@ export function createTestClient(): MatrixClient {
         },
 
         getCrypto: jest.fn().mockReturnValue({
-            getOwnDeviceKeys: jest.fn(),
+            getOwnDeviceKeys: jest.fn().mockResolvedValue({ ed25519: "ed25519", curve25519: "curve25519" }),
             getUserDeviceInfo: jest.fn().mockResolvedValue(new Map()),
             getUserVerificationStatus: jest.fn(),
             getDeviceVerificationStatus: jest.fn(),
@@ -151,6 +151,9 @@ export function createTestClient(): MatrixClient {
                 },
             }),
             isCrossSigningReady: jest.fn().mockResolvedValue(false),
+            resetEncryption: jest.fn(),
+            getSessionBackupPrivateKey: jest.fn().mockResolvedValue(null),
+            isSecretStorageReady: jest.fn().mockResolvedValue(false),
         }),
 
         getPushActionsForEvent: jest.fn(),

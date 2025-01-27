@@ -6,14 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { API, Messages } from "mailhog";
+import { MailpitClient } from "mailpit-api";
 import { Page } from "@playwright/test";
 
 import { expect } from "../../element-web-test";
 
 export async function registerAccountMas(
     page: Page,
-    mailhog: API,
+    mailpit: MailpitClient,
     username: string,
     email: string,
     password: string,
@@ -27,13 +27,13 @@ export async function registerAccountMas(
     await page.getByRole("textbox", { name: "Confirm Password" }).fill(password);
     await page.getByRole("button", { name: "Continue" }).click();
 
-    let messages: Messages;
+    let code: string;
     await expect(async () => {
-        messages = await mailhog.messages();
-        expect(messages.items).toHaveLength(1);
+        const messages = await mailpit.listMessages();
+        expect(messages.messages[0].To[0].Address).toEqual(email);
+        const text = await mailpit.renderMessageText(messages.messages[0].ID);
+        [, code] = text.match(/Your verification code to confirm this email address is: (\d{6})/);
     }).toPass();
-    expect(messages.items[0].to).toEqual(`${username} <${email}>`);
-    const [, code] = messages.items[0].text.match(/Your verification code to confirm this email address is: (\d{6})/);
 
     await page.getByRole("textbox", { name: "6-digit code" }).fill(code);
     await page.getByRole("button", { name: "Continue" }).click();
