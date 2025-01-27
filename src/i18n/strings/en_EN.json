@@ -2483,9 +2483,9 @@
             "device_not_verified_title": "Device not verified",
             "dialog_title": "<strong>Settings:</strong> Encryption",
             "key_storage": {
-                "title": "Key storage",
+                "allow_key_storage": "Allow key storage",
                 "description": "Store your cryptographic identity and message keys securely on the server. This will allow you to view your message history on any new devices. <a>Learn more</a>",
-                "allow_key_storage": "Allow key storage"
+                "title": "Key storage"
             },
             "recovery": {
                 "change_recovery_confirm_button": "Confirm new recovery key",
