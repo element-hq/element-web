@@ -12,7 +12,7 @@ import { RightPanelPhases } from "../../../../../stores/right-panel/RightPanelSt
 import { useToggled } from "./useToggled";
 
 type Props = {
-    Icon: React.ComponentType<any>;
+    Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
     phase: RightPanelPhases;
 };
 
