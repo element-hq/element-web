@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { test as base } from "@playwright/test";
-import mailhog from "mailhog";
+import { MailpitClient } from "mailpit-api";
 import { Network, StartedNetwork } from "testcontainers";
 import { PostgreSqlContainer, StartedPostgreSqlContainer } from "@testcontainers/postgresql";
 
@@ -14,13 +14,13 @@ import { SynapseConfig, SynapseContainer } from "./testcontainers/synapse.ts";
 import { Logger } from "./logger.ts";
 import { StartedMatrixAuthenticationServiceContainer } from "./testcontainers/mas.ts";
 import { HomeserverContainer, StartedHomeserverContainer } from "./testcontainers/HomeserverContainer.ts";
-import { MailhogContainer, StartedMailhogContainer } from "./testcontainers/mailhog.ts";
+import { MailhogContainer, StartedMailhogContainer } from "./testcontainers/mailpit.ts";
 import { OAuthServer } from "./plugins/oauth_server";
 import { DendriteContainer, PineconeContainer } from "./testcontainers/dendrite.ts";
 import { HomeserverType } from "./plugins/homeserver";
 
 export interface TestFixtures {
-    mailhogClient: mailhog.API;
+    mailpitClient: MailpitClient;
 }
 
 export interface Services {
@@ -28,7 +28,7 @@ export interface Services {
 
     network: StartedNetwork;
     postgres: StartedPostgreSqlContainer;
-    mailhog: StartedMailhogContainer;
+    mailpit: StartedMailhogContainer;
 
     synapseConfig: SynapseConfig;
     _homeserver: HomeserverContainer<any>;
@@ -90,20 +90,20 @@ export const test = base.extend<TestFixtures, Services & Options>({
         { scope: "worker" },
     ],
 
-    mailhog: [
+    mailpit: [
         async ({ logger, network }, use) => {
             const container = await new MailhogContainer()
                 .withNetwork(network)
-                .withNetworkAliases("mailhog")
-                .withLogConsumer(logger.getConsumer("mailhog"))
+                .withNetworkAliases("mailpit")
+                .withLogConsumer(logger.getConsumer("mailpit"))
                 .start();
             await use(container);
             await container.stop();
         },
         { scope: "worker" },
     ],
-    mailhogClient: async ({ mailhog: container }, use) => {
-        await container.client.deleteAll();
+    mailpitClient: async ({ mailpit: container }, use) => {
+        await container.client.deleteMessages();
         await use(container.client);
     },
 
