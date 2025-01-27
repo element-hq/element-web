@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MailpitClient, MailpitMessagesSummaryResponse } from "mailpit-api";
+import { MailpitClient } from "mailpit-api";
 import { Page } from "@playwright/test";
 
 import { expect } from "../../element-web-test";
