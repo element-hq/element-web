@@ -1,0 +1,36 @@
+{
+    "name": "@element-hq/element-web-module-api",
+    "version": "0.1.0",
+    "description": "Module API surface for element-web",
+    "repository": "https://github.com/element-hq/element-web-modules",
+    "author": "element-hq",
+    "license": "SEE LICENSE IN README.md",
+    "type": "module",
+    "types": "./lib/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./lib/index.d.ts",
+            "import": "./lib/element-web-plugin-engine.js",
+            "require": "./lib/element-web-plugin-engine.umd.js"
+        }
+    },
+    "devDependencies": {
+        "@types/node": "^22.10.7",
+        "@types/semver": "^7.5.8",
+        "semver": "^7.6.3",
+        "typescript": "^5.7.3",
+        "vite": "^6.0.11",
+        "vite-plugin-dts": "^4.5.0"
+    },
+    "peerDependencies": {
+        "@matrix-org/react-sdk-module-api": "^2.5.0",
+        "@types/react": "*",
+        "@types/react-dom": "*",
+        "react": "^18"
+    },
+    "peerDependenciesMeta": {
+        "@matrix-org/react-sdk-module-api": {
+            "optional": true
+        }
+    }
+}
