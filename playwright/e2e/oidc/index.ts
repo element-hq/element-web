@@ -32,7 +32,7 @@ export async function registerAccountMas(
         summary = await mailpit.listMessages();
         expect(summary.messages_count).toBe(1);
     }).toPass();
-    expect(summary.messages[0].To).toEqual(`${username} <${email}>`);
+    expect(summary.messages[0].To[0].Address).toEqual(email);
     const [, code] = summary.messages[0].Snippet.match(
         /Your verification code to confirm this email address is: (\d{6})/,
     );

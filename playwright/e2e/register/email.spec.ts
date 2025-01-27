@@ -53,7 +53,7 @@ test.describe("Email Registration", async () => {
 
             const summary = await mailpitClient.listMessages();
             expect(summary.messages_count).toBe(1);
-            expect(summary.messages[0].To).toEqual("alice@email.com");
+            expect(summary.messages[0].To[0].Address).toEqual("alice@email.com");
             const [emailLink] = summary.messages[0].Snippet.match(/http.+/);
             await request.get(emailLink); // "Click" the link in the email
 
