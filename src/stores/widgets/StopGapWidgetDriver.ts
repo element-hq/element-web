@@ -65,7 +65,7 @@ import { navigateToPermalink } from "../../utils/permalinks/navigator";
 import { SdkContextClass } from "../../contexts/SDKContext";
 import { ModuleRunner } from "../../modules/ModuleRunner";
 import SettingsStore from "../../settings/SettingsStore";
-import { Media } from "../../customisations/Media";
+import { mediaFromMxc } from "../../customisations/Media";
 
 // TODO: Purge this from the universe
 
@@ -684,7 +684,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
      */
     public async downloadFile(contentUri: string): Promise<{ file: XMLHttpRequestBodyInit }> {
         const client = MatrixClientPeg.safeGet();
-        const media = new Media({ mxc: contentUri }, client);
+        const media = mediaFromMxc(contentUri, client);
         const response = await media.downloadSource();
         const blob = await response.blob();
         return { file: blob };
