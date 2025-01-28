@@ -320,7 +320,7 @@ export default class DeviceListener {
             } else if (defaultKeyId === null) {
                 // the user just hasn't set up 4S yet: prompt them to do so (unless they've explicitly said no to backups)
                 const disabledEvent = cli.getAccountData("m.org.matrix.custom.backup_disabled");
-                if (disabledEvent && !disabledEvent.getContent()?.disabled) {
+                if (!disabledEvent || !disabledEvent.getContent()?.disabled) {
                     showSetupEncryptionToast(SetupKind.SET_UP_RECOVERY);
                 }
             } else {
