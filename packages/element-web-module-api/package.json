@@ -15,10 +15,12 @@
         }
     },
     "scripts": {
+        "prepare": "vite build",
         "lint:ts": "tsc --noEmit"
     },
     "devDependencies": {
         "@matrix-org/react-sdk-module-api": "^2.5.0",
+        "@types/react": "^18",
         "@types/node": "^22.10.7",
         "@types/semver": "^7.5.8",
         "matrix-web-i18n": "^3.3.0",
