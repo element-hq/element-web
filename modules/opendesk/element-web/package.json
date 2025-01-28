@@ -7,6 +7,7 @@
         "**/*.css"
     ],
     "scripts": {
+        "prepare": "vite build",
         "lint:ts": "tsc --noEmit"
     },
     "devDependencies": {
