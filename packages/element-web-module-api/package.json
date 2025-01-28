@@ -14,6 +14,10 @@
             "require": "./lib/element-web-plugin-engine.umd.js"
         }
     },
+    "scripts": {
+        "lint:ts": "tsc --noEmit",
+        "lint:js": "eslint --max-warnings 0 src"
+    },
     "devDependencies": {
         "@types/node": "^22.10.7",
         "@types/semver": "^7.5.8",
