@@ -74,7 +74,7 @@ test.describe("User verification", () => {
         /* on the bot side, wait for the verifier to exist ... */
         const botVerifier = await awaitVerifier(bobVerificationRequest);
         // ... confirm ...
-        botVerifier.evaluate((verifier) => verifier.verify());
+        void botVerifier.evaluate((verifier) => verifier.verify());
         // ... and then check the emoji match
         await doTwoWaySasVerification(page, botVerifier);
 

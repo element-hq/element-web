@@ -17,13 +17,13 @@ test.use(legacyOAuthHomeserver);
 test.describe("SSO login", () => {
     test.skip(isDendrite, "does not yet support SSO");
 
-    test("logs in with SSO and lands on the home screen", async ({ page, homeserver }) => {
+    test("logs in with SSO and lands on the home screen", async ({ page, homeserver }, testInfo) => {
         // If this test fails with a screen showing "Timeout connecting to remote server", it is most likely due to
         // your firewall settings: Synapse is unable to reach the OIDC server.
         //
         // If you are using ufw, try something like:
         //    sudo ufw allow in on docker0
         //
-        await doTokenRegistration(page, homeserver);
+        await doTokenRegistration(page, homeserver, testInfo);
     });
 });

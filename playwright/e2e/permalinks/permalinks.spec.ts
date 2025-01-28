@@ -31,7 +31,7 @@ test.describe("permalinks", () => {
         await charlotte.prepareClient();
 
         // We don't use a bot for danielle as we want a stable MXID.
-        const danielleId = "@danielle:localhost";
+        const danielleId = `@danielle:${user.homeServer}`;
 
         const room1Id = await app.client.createRoom({ name: room1Name });
         const room2Id = await app.client.createRoom({ name: room2Name });

@@ -110,6 +110,7 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
+            class=""
             fill="currentColor"
             height="1em"
             viewBox="0 0 24 24"
@@ -135,6 +136,7 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
+            class=""
             fill="currentColor"
             height="1em"
             viewBox="0 0 24 24"
@@ -323,6 +325,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
+            class=""
             fill="currentColor"
             height="1em"
             viewBox="0 0 24 24"
@@ -348,6 +351,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
+            class=""
             fill="currentColor"
             height="1em"
             viewBox="0 0 24 24"
@@ -621,6 +625,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
+            class=""
             fill="currentColor"
             height="1em"
             viewBox="0 0 24 24"
@@ -646,6 +651,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
+            class=""
             fill="currentColor"
             height="1em"
             viewBox="0 0 24 24"
@@ -996,6 +1002,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
+            class=""
             fill="currentColor"
             height="1em"
             viewBox="0 0 24 24"
@@ -1021,6 +1028,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
+            class=""
             fill="currentColor"
             height="1em"
             viewBox="0 0 24 24"
@@ -1379,6 +1387,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
+                class=""
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -1404,6 +1413,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
+                class=""
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -1585,6 +1595,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
+                class=""
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -1610,6 +1621,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
+                class=""
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -1912,6 +1924,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
+                class="mx_RoomHeader_toggled"
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -1937,6 +1950,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
+                class=""
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"
@@ -1962,6 +1976,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
               style="--cpd-icon-button-size: 100%;"
             >
               <svg
+                class=""
                 fill="currentColor"
                 height="1em"
                 viewBox="0 0 24 24"

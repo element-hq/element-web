@@ -165,7 +165,7 @@ test.describe("Composer", () => {
             // Type another
             await page.locator("div[contenteditable=true]").pressSequentially("my message 1");
             // Send message
-            page.locator("div[contenteditable=true]").press("Enter");
+            await page.locator("div[contenteditable=true]").press("Enter");
             // It was sent
             await expect(page.locator(".mx_EventTile_last .mx_EventTile_body").getByText("my message 1")).toBeVisible();
         });

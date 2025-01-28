@@ -27,7 +27,7 @@ type Props = {
 const MATCH_SYSTEM_THEME_ID = "MATCH_SYSTEM_THEME_ID";
 
 const QuickThemeSwitcher: React.FC<Props> = ({ requestClose }) => {
-    const orderedThemes = useMemo(getOrderedThemes, []);
+    const orderedThemes = useMemo(() => getOrderedThemes(), []);
 
     const themeState = useTheme();
     const nonHighContrast = findNonHighContrastTheme(themeState.theme);

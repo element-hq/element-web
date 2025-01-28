@@ -7,14 +7,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { useEffect, useRef } from "react";
+import React, { ComponentProps, JSXElementConstructor, useMemo } from "react";
 
-type FlexProps = {
+type FlexProps<T extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>> = {
     /**
      * The type of the HTML element
      * @default div
      */
-    as?: string;
+    as?: T;
     /**
      * The CSS class name.
      */
@@ -30,7 +30,7 @@ type FlexProps = {
      */
     direction?: "row" | "column" | "row-reverse" | "column-reverse";
     /**
-     * The alingment of the flex children
+     * The alignment of the flex children
      * @default start
      */
     align?: "start" | "center" | "end" | "baseline" | "stretch";
@@ -48,12 +48,12 @@ type FlexProps = {
      * the on click event callback
      */
     onClick?: (e: React.MouseEvent) => void;
-};
+} & ComponentProps<T>;
 
 /**
  * A flexbox container helper
  */
-export function Flex({
+export function Flex<T extends keyof JSX.IntrinsicElements | JSXElementConstructor<any> = "div">({
     as = "div",
     display = "flex",
     direction = "row",
@@ -63,16 +63,17 @@ export function Flex({
     className,
     children,
     ...props
-}: React.PropsWithChildren<FlexProps>): JSX.Element {
-    const ref = useRef<HTMLElement>();
+}: React.PropsWithChildren<FlexProps<T>>): JSX.Element {
+    const style = useMemo(
+        () => ({
+            "--mx-flex-display": display,
+            "--mx-flex-direction": direction,
+            "--mx-flex-align": align,
+            "--mx-flex-justify": justify,
+            "--mx-flex-gap": gap,
+        }),
+        [align, direction, display, gap, justify],
+    );
 
-    useEffect(() => {
-        ref.current!.style.setProperty(`--mx-flex-display`, display);
-        ref.current!.style.setProperty(`--mx-flex-direction`, direction);
-        ref.current!.style.setProperty(`--mx-flex-align`, align);
-        ref.current!.style.setProperty(`--mx-flex-justify`, justify);
-        ref.current!.style.setProperty(`--mx-flex-gap`, gap);
-    }, [align, direction, display, gap, justify]);
-
-    return React.createElement(as, { ...props, className: classNames("mx_Flex", className), ref }, children);
+    return React.createElement(as, { ...props, className: classNames("mx_Flex", className), style }, children);
 }

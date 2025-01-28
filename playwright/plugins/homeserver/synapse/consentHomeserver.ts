@@ -6,13 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Fixtures } from "@playwright/test";
+import { Fixtures } from "../../../element-web-test.ts";
 
-import { Services } from "../../../services.ts";
-
-export const consentHomeserver: Fixtures<{}, Services> = {
+export const consentHomeserver: Fixtures = {
     _homeserver: [
-        async ({ _homeserver: container, mailhog }, use) => {
+        async ({ _homeserver: container, mailpit }, use) => {
             container
                 .withCopyDirectoriesToContainer([
                     { source: "playwright/plugins/homeserver/synapse/res", target: "/data/res" },
@@ -20,7 +18,7 @@ export const consentHomeserver: Fixtures<{}, Services> = {
                 .withConfig({
                     email: {
                         enable_notifs: false,
-                        smtp_host: "mailhog",
+                        smtp_host: "mailpit",
                         smtp_port: 1025,
                         smtp_user: "username",
                         smtp_pass: "password",
@@ -56,4 +54,9 @@ export const consentHomeserver: Fixtures<{}, Services> = {
         },
         { scope: "worker" },
     ],
+
+    context: async ({ homeserverType, context }, use, testInfo) => {
+        testInfo.skip(homeserverType !== "synapse", "does not yet support MAS");
+        await use(context);
+    },
 };

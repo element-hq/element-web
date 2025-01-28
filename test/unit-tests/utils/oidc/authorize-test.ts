@@ -49,7 +49,7 @@ describe("OIDC authorization", () => {
             origin: baseUrl,
         };
 
-        jest.spyOn(randomStringUtils, "randomString").mockRestore();
+        jest.spyOn(randomStringUtils, "secureRandomString").mockRestore();
         mockPlatformPeg();
         Object.defineProperty(window, "crypto", {
             value: {
@@ -61,10 +61,7 @@ describe("OIDC authorization", () => {
     });
 
     beforeAll(() => {
-        fetchMock.get(
-            `${delegatedAuthConfig.metadata.issuer}.well-known/openid-configuration`,
-            delegatedAuthConfig.metadata,
-        );
+        fetchMock.get(`${delegatedAuthConfig.issuer}.well-known/openid-configuration`, delegatedAuthConfig);
     });
 
     afterAll(() => {

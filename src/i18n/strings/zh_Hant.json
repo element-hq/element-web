@@ -410,7 +410,6 @@
             "other": "與另 %(count)s 個人…",
             "one": "與另 1 個人…"
         },
-        "android": "安卓",
         "appearance": "外觀",
         "application": "應用程式",
         "are_you_sure": "您確定嗎？",
@@ -448,7 +447,6 @@
         "identity_server": "身分伺服器",
         "image": "圖片",
         "integration_manager": "整合管理員",
-        "ios": "iOS",
         "joined": "已加入",
         "labs": "實驗室",
         "legal": "法律",
@@ -536,8 +534,7 @@
         "video": "影片",
         "video_room": "視訊聊天室",
         "view_message": "檢視訊息",
-        "warning": "警告",
-        "welcome": "歡迎"
+        "warning": "警告"
     },
     "composer": {
         "autocomplete": {
@@ -1466,7 +1463,6 @@
     "member_list": {
         "filter_placeholder": "過濾聊天室成員",
         "invite_button_no_perms_tooltip": "您沒有權限邀請使用者",
-        "invited_list_heading": "已邀請",
         "power_label": "%(userName)s（權限等級 %(powerLevelNumber)s）"
     },
     "member_list_back_action_label": "聊天室成員",
@@ -1508,61 +1504,15 @@
         "m.key.verification.request": "%(name)s 正在要求驗證"
     },
     "onboarding": {
-        "apple_trademarks": "App Store® 與 Apple logo® 是 Apple Inc 的註冊商標。",
-        "community_messaging_action": "尋找您的夥伴",
-        "community_messaging_description": "保持對社群討論的所有權與控制權。\n具有強大的審核工具與互操作性，可擴充至支援數百萬人。",
-        "community_messaging_title": "社群所有權",
-        "complete_these": "完成這些步驟以充分利用 %(brand)s",
         "create_room": "建立群組聊天",
-        "download_app": "下載 %(brand)s",
-        "download_app_action": "下載應用程式",
-        "download_app_description": "隨身攜帶 %(brand)s，不錯過任何事情",
-        "download_app_store": "在 App Store 上下載",
-        "download_brand": "下載 %(brand)s",
-        "download_brand_desktop": "下載 %(brand)s 桌面版",
-        "download_f_droid": "在 F-Droid 上取得",
-        "download_google_play": "在 Google Play 上取得",
-        "enable_notifications": "開啟通知",
-        "enable_notifications_action": "啟用通知",
-        "enable_notifications_description": "不要錯過回覆或重要訊息",
         "explore_rooms": "探索公開聊天室",
-        "find_community_members": "尋找並邀請您的社群成員",
-        "find_coworkers": "尋找並邀請您的同事",
-        "find_friends": "尋找並邀請您的朋友",
-        "find_friends_action": "尋找朋友",
-        "find_friends_description": "這就是您來這裡的目的，所以讓我們開始吧",
-        "find_people": "尋找夥伴",
-        "free_e2ee_messaging_unlimited_voip": "%(brand)s 提供免費的端對端加密通訊，以及無限制的語音及視訊通話，是維持聯絡的絕佳方式。",
-        "get_stuff_done": "透過找到您的團隊成員來完成工作",
-        "google_trademarks": "Google Play 與 Google Play 圖示是 Google LLC 的註冊商標。",
         "has_avatar_label": "太好了，這會讓人們知道是您",
         "intro_byline": "擁有您的對話。",
         "intro_welcome": "歡迎使用 %(appName)s",
         "no_avatar_label": "新增照片以讓其他人知道是您。",
-        "only_n_steps_to_go": {
-            "one": "僅需 %(count)s 步",
-            "other": "僅需 %(count)s 步"
-        },
-        "personal_messaging_action": "開始您的第一個聊天",
-        "personal_messaging_title": "為朋友與家人提供的安全訊息",
-        "qr_or_app_links": "%(qrCode)s 或 %(appLinks)s",
         "send_dm": "傳送私人訊息",
-        "set_up_profile": "設定您的個人檔案",
-        "set_up_profile_action": "您的個人檔案",
-        "set_up_profile_description": "確保人們知道這真的是您",
-        "use_case_community_messaging": "線上社群成員",
-        "use_case_heading1": "加入成功！",
-        "use_case_heading2": "您最常與誰聊天？",
-        "use_case_heading3": "我們將會協助您建立聯繫。",
-        "use_case_personal_messaging": "朋友與家人",
-        "use_case_work_messaging": "同事與團隊",
         "welcome_detail": "現在，讓我們協助您開始",
-        "welcome_to_brand": "歡迎使用 %(brand)s",
-        "welcome_user": "歡迎 %(name)s",
-        "work_messaging_action": "尋找您的同事",
-        "work_messaging_title": "工作用的安全通訊",
-        "you_did_it": "您做到了！",
-        "you_made_it": "您做到了！"
+        "welcome_user": "歡迎 %(name)s"
     },
     "pill": {
         "permalink_other_room": "%(room)s 中的訊息",
@@ -1614,7 +1564,6 @@
         "custom_level": "自訂等級",
         "default": "預設",
         "label": "權限等級",
-        "mod": "版主",
         "moderator": "版主",
         "restricted": "已限制"
     },
@@ -2457,7 +2406,6 @@
             "room_directory_heading": "聊天室目錄",
             "room_list_heading": "聊天室清單",
             "show_avatars_pills": "在使用者、聊天室與事件提及中顯示大頭貼",
-            "show_checklist_shortcuts": "在聊天室清單上方顯示歡迎新人檢核表的捷徑",
             "show_polls_button": "顯示投票按鈕",
             "surround_text": "輸入特殊字元時，圍繞選取的文字",
             "time_heading": "顯示時間"
@@ -2810,7 +2758,6 @@
         "invite": "邀請夥伴",
         "invite_description": "使用電子郵件或使用者名稱邀請",
         "invite_link": "分享邀請連結",
-        "invite_this_space": "邀請加入此聊天空間",
         "joining_space": "正在加入",
         "landing_welcome": "歡迎加入 <name/>",
         "leave_dialog_action": "離開聊天空間",

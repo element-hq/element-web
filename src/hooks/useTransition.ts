@@ -22,6 +22,6 @@ export const useTransition = <D extends DependencyList>(callback: (...params: D)
     useEffect(() => {
         if (args.current !== null) func.current(...args.current);
         args.current = deps;
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-compiler/react-compiler,react-hooks/exhaustive-deps
     }, deps);
 };

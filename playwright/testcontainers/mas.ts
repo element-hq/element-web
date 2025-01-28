@@ -5,12 +5,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { AbstractStartedContainer, GenericContainer, StartedTestContainer, Wait } from "testcontainers";
+import { AbstractStartedContainer, GenericContainer, StartedTestContainer, Wait, ExecResult } from "testcontainers";
 import { StartedPostgreSqlContainer } from "@testcontainers/postgresql";
 import * as YAML from "yaml";
 
 import { getFreePort } from "../plugins/utils/port.ts";
 import { deepCopy } from "../plugins/utils/object.ts";
+import { Credentials } from "../plugins/homeserver";
 
 const DEFAULT_CONFIG = {
     http: {
@@ -18,18 +19,10 @@ const DEFAULT_CONFIG = {
             {
                 name: "web",
                 resources: [
-                    {
-                        name: "discovery",
-                    },
-                    {
-                        name: "human",
-                    },
-                    {
-                        name: "oauth",
-                    },
-                    {
-                        name: "compat",
-                    },
+                    { name: "discovery" },
+                    { name: "human" },
+                    { name: "oauth" },
+                    { name: "compat" },
                     {
                         name: "graphql",
                         playground: true,
@@ -99,7 +92,7 @@ const DEFAULT_CONFIG = {
         reply_to: '"Authentication Service" <root@localhost>',
         transport: "smtp",
         mode: "plain",
-        hostname: "mailhog",
+        hostname: "mailpit",
         port: 1025,
         username: "username",
         password: "password",
@@ -168,13 +161,26 @@ const DEFAULT_CONFIG = {
         access_token_ttl: 300,
         compat_token_ttl: 300,
     },
+    rate_limiting: {
+        login: {
+            burst: 10,
+            per_second: 1,
+        },
+        registration: {
+            burst: 10,
+            per_second: 1,
+        },
+    },
 };
 
 export class MatrixAuthenticationServiceContainer extends GenericContainer {
     private config: typeof DEFAULT_CONFIG;
+    private readonly args = ["-c", "/config/config.yaml"];
 
     constructor(db: StartedPostgreSqlContainer) {
-        super("ghcr.io/element-hq/matrix-authentication-service:0.12.0");
+        // We rely on `mas-cli manage add-email` which isn't in a release yet
+        // https://github.com/element-hq/matrix-authentication-service/pull/3235
+        super("ghcr.io/element-hq/matrix-authentication-service:sha-0b90c33");
 
         this.config = deepCopy(DEFAULT_CONFIG);
         this.config.database.username = db.getUsername();
@@ -182,7 +188,7 @@ export class MatrixAuthenticationServiceContainer extends GenericContainer {
 
         this.withExposedPorts(8080, 8081)
             .withWaitStrategy(Wait.forHttp("/health", 8081))
-            .withCommand(["server", "--config", "/config/config.yaml"]);
+            .withCommand(["server", ...this.args]);
     }
 
     public withConfig(config: object): this {
@@ -210,15 +216,125 @@ export class MatrixAuthenticationServiceContainer extends GenericContainer {
             },
         ]);
 
-        return new StartedMatrixAuthenticationServiceContainer(await super.start(), `http://localhost:${port}`);
+        return new StartedMatrixAuthenticationServiceContainer(
+            await super.start(),
+            `http://localhost:${port}`,
+            this.args,
+        );
     }
 }
 
 export class StartedMatrixAuthenticationServiceContainer extends AbstractStartedContainer {
+    private adminTokenPromise?: Promise<string>;
+
     constructor(
         container: StartedTestContainer,
         public readonly baseUrl: string,
+        private readonly args: string[],
     ) {
         super(container);
+    }
+
+    public async getAdminToken(): Promise<string> {
+        if (this.adminTokenPromise === undefined) {
+            this.adminTokenPromise = this.registerUserInternal(
+                "admin",
+                "totalyinsecureadminpassword",
+                undefined,
+                true,
+            ).then((res) => res.accessToken);
+        }
+        return this.adminTokenPromise;
+    }
+
+    private async manage(cmd: string, ...args: string[]): Promise<ExecResult> {
+        const result = await this.exec(["mas-cli", "manage", cmd, ...this.args, ...args]);
+        if (result.exitCode !== 0) {
+            throw new Error(`Failed mas-cli manage ${cmd}: ${result.output}`);
+        }
+        return result;
+    }
+
+    private async manageRegisterUser(
+        username: string,
+        password: string,
+        displayName?: string,
+        admin = false,
+    ): Promise<string> {
+        const args: string[] = [];
+        if (admin) args.push("-a");
+        const result = await this.manage(
+            "register-user",
+            ...args,
+            "-y",
+            "-p",
+            password,
+            "-d",
+            displayName ?? "",
+            username,
+        );
+
+        const registerLines = result.output.trim().split("\n");
+        const userId = registerLines
+            .find((line) => line.includes("Matrix ID: "))
+            ?.split(": ")
+            .pop();
+
+        if (!userId) {
+            throw new Error(`Failed to register user: ${result.output}`);
+        }
+
+        return userId;
+    }
+
+    private async manageIssueCompatibilityToken(
+        username: string,
+        admin = false,
+    ): Promise<{ accessToken: string; deviceId: string }> {
+        const args: string[] = [];
+        if (admin) args.push("--yes-i-want-to-grant-synapse-admin-privileges");
+        const result = await this.manage("issue-compatibility-token", ...args, username);
+
+        const parts = result.output.trim().split(/\s+/);
+        const accessToken = parts.find((part) => part.startsWith("mct_"));
+        const deviceId = parts.find((part) => part.startsWith("compat_session.device="))?.split("=")[1];
+
+        if (!accessToken || !deviceId) {
+            throw new Error(`Failed to issue compatibility token: ${result.output}`);
+        }
+
+        return { accessToken, deviceId };
+    }
+
+    private async registerUserInternal(
+        username: string,
+        password: string,
+        displayName?: string,
+        admin = false,
+    ): Promise<Credentials> {
+        const userId = await this.manageRegisterUser(username, password, displayName, admin);
+        const { deviceId, accessToken } = await this.manageIssueCompatibilityToken(username, admin);
+
+        return {
+            userId,
+            accessToken,
+            deviceId,
+            homeServer: userId.slice(1).split(":").slice(1).join(":"),
+            displayName,
+            username,
+            password,
+        };
+    }
+
+    public async registerUser(username: string, password: string, displayName?: string): Promise<Credentials> {
+        return this.registerUserInternal(username, password, displayName, false);
+    }
+
+    public async setThreepid(username: string, medium: string, address: string): Promise<void> {
+        if (medium !== "email") {
+            throw new Error("Only email threepids are supported by MAS");
+        }
+
+        await this.manage("add-email", username, address);
     }
 }

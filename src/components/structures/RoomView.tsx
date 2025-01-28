@@ -66,7 +66,7 @@ import RoomPreviewBar from "../views/rooms/RoomPreviewBar";
 import RoomPreviewCard from "../views/rooms/RoomPreviewCard";
 import RoomUpgradeWarningBar from "../views/rooms/RoomUpgradeWarningBar";
 import AuxPanel from "../views/rooms/AuxPanel";
-import RoomHeader from "../views/rooms/RoomHeader";
+import RoomHeader from "../views/rooms/RoomHeader/RoomHeader";
 import { IOOBData, IThreepidInvite } from "../../stores/ThreepidInviteStore";
 import EffectsOverlay from "../views/elements/EffectsOverlay";
 import { containsEmoji } from "../../effects/utils";
@@ -273,6 +273,7 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
     }
 
     const onRetryClicked = (): void => {
+        // eslint-disable-next-line react-compiler/react-compiler
         room.state = LocalRoomState.NEW;
         defaultDispatcher.dispatch({
             action: "local_room_event",
@@ -1082,7 +1083,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
     };
 
-    private onCallState = (roomId: string): void => {
+    private onCallState = (roomId: string | null): void => {
         // don't filter out payloads for room IDs other than props.room because
         // we may be interested in the conf 1:1 room
 
@@ -2514,9 +2515,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 mainSplitContentClassName = "mx_MainSplit_timeline";
                 mainSplitBody = (
                     <>
-                        {this.roomViewBody.current && (
-                            <Measured sensor={this.roomViewBody.current} onMeasurement={this.onMeasurement} />
-                        )}
+                        <Measured sensor={this.roomViewBody} onMeasurement={this.onMeasurement} />
                         {auxPanel}
                         {pinnedMessageBanner}
                         <main className={timelineClasses}>

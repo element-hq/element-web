@@ -1,0 +1,149 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
+<DocumentFragment>
+  <header
+    class="mx_Flex mx_RoomHeader light-panel"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+  >
+    <button
+      aria-label="Open room settings"
+      aria-live="off"
+      class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+      data-color="3"
+      data-testid="avatar-img"
+      data-type="round"
+      role="button"
+      style="--cpd-avatar-size: 40px;"
+      tabindex="-1"
+    >
+      !
+    </button>
+    <button
+      aria-label="Room info"
+      class="mx_RoomHeader_infoWrapper"
+      tabindex="0"
+    >
+      <div
+        class="mx_Box mx_RoomHeader_info mx_Box--flex"
+        style="--mx-box-flex: 1;"
+      >
+        <div
+          aria-level="1"
+          class="_typography_yh5dq_162 _font-body-lg-semibold_yh5dq_83 mx_RoomHeader_heading"
+          dir="auto"
+          role="heading"
+        >
+          <span
+            class="mx_RoomHeader_truncated mx_lineClamp"
+          >
+            !1:example.org
+          </span>
+        </div>
+      </div>
+    </button>
+    <button
+      aria-labelledby=":r16c:"
+      class="_icon-button_bh2qc_17"
+      role="button"
+      style="--cpd-icon-button-size: 32px;"
+      tabindex="0"
+    >
+      <div
+        class="_indicator-icon_133tf_26"
+        style="--cpd-icon-button-size: 100%;"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+          />
+        </svg>
+      </div>
+    </button>
+    <button
+      aria-disabled="true"
+      aria-label="There's no one here to call"
+      aria-labelledby=":r16h:"
+      class="_icon-button_bh2qc_17"
+      role="button"
+      style="--cpd-icon-button-size: 32px;"
+      tabindex="0"
+    >
+      <div
+        class="_indicator-icon_133tf_26"
+        style="--cpd-icon-button-size: 100%; --cpd-color-icon-tertiary: var(--cpd-color-icon-disabled);"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m20.958 16.374.039 3.527c0 .285-.11.537-.33.756-.22.22-.472.33-.756.33a15.97 15.97 0 0 1-6.57-1.105 16.223 16.223 0 0 1-5.563-3.663 16.084 16.084 0 0 1-3.653-5.573 16.313 16.313 0 0 1-1.115-6.56c0-.285.11-.537.33-.757.22-.22.471-.329.755-.329l3.528.039a1.069 1.069 0 0 1 1.085.93l.543 3.954c.026.181.013.349-.039.504a1.088 1.088 0 0 1-.271.426l-1.64 1.64c.337.672.721 1.308 1.154 1.909.433.6 1.444 1.696 1.444 1.696s1.095 1.01 1.696 1.444c.6.433 1.237.817 1.909 1.153l1.64-1.64a1.08 1.08 0 0 1 .426-.27c.155-.052.323-.065.504-.04l3.954.543a1.069 1.069 0 0 1 .93 1.085Z"
+          />
+        </svg>
+      </div>
+    </button>
+    <button
+      aria-label="Threads"
+      aria-labelledby=":r16m:"
+      class="_icon-button_bh2qc_17"
+      role="button"
+      style="--cpd-icon-button-size: 32px;"
+      tabindex="0"
+    >
+      <div
+        class="_indicator-icon_133tf_26"
+        style="--cpd-icon-button-size: 100%;"
+      >
+        <svg
+          class=""
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M4 3h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2Zm3 7h10a.97.97 0 0 0 .712-.287A.967.967 0 0 0 18 9a.967.967 0 0 0-.288-.713A.968.968 0 0 0 17 8H7a.968.968 0 0 0-.713.287A.968.968 0 0 0 6 9c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 4h6c.283 0 .52-.096.713-.287A.968.968 0 0 0 14 13a.968.968 0 0 0-.287-.713A.968.968 0 0 0 13 12H7a.967.967 0 0 0-.713.287A.968.968 0 0 0 6 13c0 .283.096.52.287.713.192.191.43.287.713.287Z"
+          />
+        </svg>
+      </div>
+    </button>
+    <button
+      aria-label="Room info"
+      aria-labelledby=":r16r:"
+      class="_icon-button_bh2qc_17"
+      role="button"
+      style="--cpd-icon-button-size: 32px;"
+      tabindex="0"
+    >
+      <div
+        class="_indicator-icon_133tf_26"
+        style="--cpd-icon-button-size: 100%;"
+      >
+        <svg
+          class=""
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 17a.97.97 0 0 0 .713-.288A.968.968 0 0 0 13 16v-4a.968.968 0 0 0-.287-.713A.968.968 0 0 0 12 11a.968.968 0 0 0-.713.287A.968.968 0 0 0 11 12v4c0 .283.096.52.287.712.192.192.43.288.713.288Zm0-8c.283 0 .52-.096.713-.287A.967.967 0 0 0 13 8a.967.967 0 0 0-.287-.713A.968.968 0 0 0 12 7a.968.968 0 0 0-.713.287A.967.967 0 0 0 11 8c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 13a9.738 9.738 0 0 1-3.9-.788 10.099 10.099 0 0 1-3.175-2.137c-.9-.9-1.612-1.958-2.137-3.175A9.738 9.738 0 0 1 2 12a9.74 9.74 0 0 1 .788-3.9 10.099 10.099 0 0 1 2.137-3.175c.9-.9 1.958-1.612 3.175-2.137A9.738 9.738 0 0 1 12 2a9.74 9.74 0 0 1 3.9.788 10.098 10.098 0 0 1 3.175 2.137c.9.9 1.613 1.958 2.137 3.175A9.738 9.738 0 0 1 22 12a9.738 9.738 0 0 1-.788 3.9 10.098 10.098 0 0 1-2.137 3.175c-.9.9-1.958 1.613-3.175 2.137A9.738 9.738 0 0 1 12 22Z"
+          />
+        </svg>
+      </div>
+    </button>
+  </header>
+</DocumentFragment>
+`;
