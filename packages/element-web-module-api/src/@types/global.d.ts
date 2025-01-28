@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 declare global {
+    // eslint-disable-next-line no-var
     var __VERSION__: string; // injected by vite
 }
 

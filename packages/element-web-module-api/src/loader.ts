@@ -10,7 +10,7 @@ import { satisfies } from "semver";
 import { Api, isModule, Module, ModuleExport } from "./api";
 
 export class ModuleIncompatibleError extends Error {
-    constructor(pluginVersion: string) {
+    public constructor(pluginVersion: string) {
         super(`Plugin version ${pluginVersion} is incompatible with engine version ${__VERSION__}`);
     }
 }
@@ -30,7 +30,8 @@ export class ModuleLoader {
         if (!satisfies(__VERSION__, moduleExport.default.moduleApiVersion)) {
             throw new ModuleIncompatibleError(moduleExport.default.moduleApiVersion);
         }
-        this.#modules.push(new moduleExport.default(this.api));
+        const { default: Module } = moduleExport;
+        this.#modules.push(new Module(this.api));
     }
 
     #started = false;

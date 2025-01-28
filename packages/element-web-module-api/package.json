@@ -15,8 +15,7 @@
         }
     },
     "scripts": {
-        "lint:ts": "tsc --noEmit",
-        "lint:js": "eslint --max-warnings 0 src"
+        "lint:ts": "tsc --noEmit"
     },
     "devDependencies": {
         "@types/node": "^22.10.7",

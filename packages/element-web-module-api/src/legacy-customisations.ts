@@ -77,12 +77,12 @@ export interface Media {
     downloadSource(): Promise<Response>;
 }
 
-export interface MediaContructable {
-    new (prepared: { mxc: string; thumbnail?: any; file?: any }): Media;
+export interface MediaContructable<Thumbnail, File> {
+    new (prepared: { mxc: string; thumbnail?: Thumbnail; file?: File }): Media;
 }
 
-export interface MediaCustomisations<Content, Client> {
-    readonly Media: MediaContructable;
+export interface MediaCustomisations<Content, Client, Thumbnail, File> {
+    readonly Media: MediaContructable<Thumbnail, File>;
     mediaFromContent(content: Content, client?: Client): Media;
     mediaFromMxc(mxc?: string, client?: Client): Media;
 }
@@ -166,7 +166,7 @@ export interface LegacyCustomisationsApiExtension {
     /**
      * @deprecated
      */
-    readonly _registerLegacyChatExportCustomisations: LegacyCustomisations<ChatExportCustomisations<any, any>>;
+    readonly _registerLegacyChatExportCustomisations: LegacyCustomisations<ChatExportCustomisations<never, never>>;
     /**
      * @deprecated
      */
@@ -182,11 +182,11 @@ export interface LegacyCustomisationsApiExtension {
     /**
      * @deprecated
      */
-    readonly _registerLegacyMediaCustomisations: LegacyCustomisations<MediaCustomisations<any, any>>;
+    readonly _registerLegacyMediaCustomisations: LegacyCustomisations<MediaCustomisations<never, never, never, never>>;
     /**
      * @deprecated
      */
-    readonly _registerLegacyRoomListCustomisations: LegacyCustomisations<RoomListCustomisations<any>>;
+    readonly _registerLegacyRoomListCustomisations: LegacyCustomisations<RoomListCustomisations<never>>;
     /**
      * @deprecated
      */
@@ -195,7 +195,7 @@ export interface LegacyCustomisationsApiExtension {
      * @deprecated
      */
     readonly _registerLegacyWidgetPermissionsCustomisations: LegacyCustomisations<
-        WidgetPermissionsCustomisations<any, any>
+        WidgetPermissionsCustomisations<never, never>
     >;
     /**
      * @deprecated
