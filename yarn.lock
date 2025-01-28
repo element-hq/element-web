@@ -2046,10 +2046,10 @@
     emojibase "^15.3.1"
     emojibase-data "^15.3.1"
 
-"@matrix-org/matrix-sdk-crypto-wasm@^12.1.0":
-  version "12.1.0"
-  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-12.1.0.tgz#2aef64eab2d30c0a1ace9c0fe876f53aa2949f14"
-  integrity sha512-NhJFu/8FOGjnW7mDssRUzaMSwXrYOcCqgAjZyAw9KQ9unNADKEi7KoIKe7GtrG2PWtm36y2bUf+hB8vhSY6Wdw==
+"@matrix-org/matrix-sdk-crypto-wasm@^13.0.0":
+  version "13.0.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-13.0.0.tgz#658bed951e4c8a06a6dd545575a79cf32022d4ba"
+  integrity sha512-2gtpjnxL42sdJAgkwitpMMI4cw7Gcjf5sW0MXoe+OAlXPlxIzyM+06F5JJ8ENvBeHkuV2RqtFIRrh8i90HLsMw==
 
 "@matrix-org/olm@3.2.15":
   version "3.2.15"
@@ -3483,8 +3483,9 @@
     ts-xor "^1.3.0"
     vaul "^1.0.0"
 
-"@vector-im/matrix-wysiwyg-wasm@link:../../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.0-af862ffd231dc0a6b8d6f2cb3601e68456c0ff24-integrity/node_modules/bindings/wysiwyg-wasm":
+"@vector-im/matrix-wysiwyg-wasm@link:../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.0-af862ffd231dc0a6b8d6f2cb3601e68456c0ff24-integrity/node_modules/bindings/wysiwyg-wasm":
   version "0.0.0"
+  uid ""
 
 "@vector-im/matrix-wysiwyg@2.38.0":
   version "2.38.0"
@@ -4075,6 +4076,15 @@ axe-core@^4.10.0, axe-core@~4.10.2:
   version "4.10.2"
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.10.2.tgz#85228e3e1d8b8532a27659b332e39b7fa0e022df"
   integrity sha512-RE3mdQ7P3FRSe7eqCWoeQ/Z9QXrtniSjp1wUjt5nRC3WIpz5rSCve6o3fsZ2aCpJtrZjSZgjwXAoTO5k4tEI0w==
+
+axios@^1.7.8:
+  version "1.7.9"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.7.9.tgz#d7d071380c132a24accda1b2cfc1535b79ec650a"
+  integrity sha512-LhLcE7Hbiryz8oMDdDptSrWowmB4Bl6RCt6sIJKpRB4XtVf0iEgewX3au/pJqm+Py1kCASkb/FFKjxQaLtxJvw==
+  dependencies:
+    follow-redirects "^1.15.6"
+    form-data "^4.0.0"
+    proxy-from-env "^1.1.0"
 
 axobject-query@^4.1.0:
   version "4.1.0"
@@ -6514,7 +6524,7 @@ focus-lock@^1.3.5:
   dependencies:
     tslib "^2.0.3"
 
-follow-redirects@^1.0.0:
+follow-redirects@^1.0.0, follow-redirects@^1.15.6:
   version "1.15.9"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.9.tgz#a604fa10e443bf98ca94228d9eebcc2e8a2c8ee1"
   integrity sha512-gew4GsXizNgdoRyqmyfMHyAmXsZDk6mHkSxZFCzW9gwlbtOW44CDtYavM+y+72qD/Vq2l550kMF52DT8fOLJqQ==
@@ -7127,7 +7137,7 @@ iconv-lite@0.4.24:
   dependencies:
     safer-buffer ">= 2.1.2 < 3"
 
-iconv-lite@0.6.3, iconv-lite@^0.6, iconv-lite@^0.6.3:
+iconv-lite@0.6.3, iconv-lite@^0.6.3:
   version "0.6.3"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.6.3.tgz#a52f80bf38da1952eb5c681790719871a1a72501"
   integrity sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==
@@ -8566,12 +8576,12 @@ magic-string@0.30.8:
   dependencies:
     "@jridgewell/sourcemap-codec" "^1.4.15"
 
-mailhog@^4.16.0:
-  version "4.16.0"
-  resolved "https://registry.yarnpkg.com/mailhog/-/mailhog-4.16.0.tgz#1ad4dda104505399f3f17824737a962696e7d240"
-  integrity sha512-wXrGik+0MaAy4dbYTImxa8niX9a4aRpZTzC/b1GzCvQs09khhs0aKZgHjgScakI4Y18WInDvvF48hhEz9ifN4g==
-  optionalDependencies:
-    iconv-lite "^0.6"
+mailpit-api@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/mailpit-api/-/mailpit-api-1.0.5.tgz#3383593707a7bc502af0ae6bf1296160daf8c730"
+  integrity sha512-55OjUjNv4hwrQKIzN8DqWywuW7UIyzN1FrEd3A87sJ9Ni07LZC/f7hgeW7dp36YYxrmV8voGzUmCY3dWJ3D6Og==
+  dependencies:
+    axios "^1.7.8"
 
 make-dir@^4.0.0:
   version "4.0.0"
@@ -8656,11 +8666,11 @@ matrix-events-sdk@0.0.1:
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "36.0.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/07f97d724f755a131571511af6662d4e3b345728"
+  version "36.1.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/8175683d4bc65b730e9475d016372b948b2a6cb9"
   dependencies:
     "@babel/runtime" "^7.12.5"
-    "@matrix-org/matrix-sdk-crypto-wasm" "^12.1.0"
+    "@matrix-org/matrix-sdk-crypto-wasm" "^13.0.0"
     "@matrix-org/olm" "3.2.15"
     another-json "^0.2.0"
     bs58 "^6.0.0"
@@ -8687,9 +8697,9 @@ matrix-web-i18n@^3.2.1:
     walk "^2.3.15"
 
 matrix-widget-api@^1.10.0:
-  version "1.12.0"
-  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.12.0.tgz#b3d22bab1670051c8eeee66bb96d08b33148bc99"
-  integrity sha512-6JRd9fJGGvuBRhcTg9wX+Skn/Q1wox3jdp5yYQKJ6pPw4urW9bkTR90APBKVDB1vorJKT44jml+lCzkDMRBjww==
+  version "1.13.1"
+  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.13.1.tgz#5b1caeed2fc58148bcd2984e0546d2d06a1713ad"
+  integrity sha512-mkOHUVzaN018TCbObfGOSaMW2GoUxOfcxNNlTVx5/HeMk3OSQPQM0C9oEME5Liiv/dBUoSrEB64V8wF7e/gb1w==
   dependencies:
     "@types/events" "^3.0.0"
     events "^3.2.0"

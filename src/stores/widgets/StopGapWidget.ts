@@ -43,7 +43,6 @@ import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { OwnProfileStore } from "../OwnProfileStore";
 import WidgetUtils from "../../utils/WidgetUtils";
 import { IntegrationManagers } from "../../integrations/IntegrationManagers";
-import SettingsStore from "../../settings/SettingsStore";
 import { WidgetType } from "../../widgets/WidgetType";
 import ActiveWidgetStore from "../ActiveWidgetStore";
 import { objectShallowClone } from "../../utils/objects";
@@ -52,7 +51,7 @@ import { Action } from "../../dispatcher/actions";
 import { ElementWidgetActions, IHangupCallApiRequest, IViewRoomApiRequest } from "./ElementWidgetActions";
 import { ModalWidgetStore } from "../ModalWidgetStore";
 import { IApp, isAppWidget } from "../WidgetStore";
-import ThemeWatcher from "../../settings/watchers/ThemeWatcher";
+import ThemeWatcher, { ThemeWatcherEvent } from "../../settings/watchers/ThemeWatcher";
 import { getCustomTheme } from "../../theme";
 import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
 import { ELEMENT_CLIENT_ID } from "../../identifiers";
@@ -163,6 +162,7 @@ export class StopGapWidget extends EventEmitter {
     private viewedRoomId: string | null = null;
     private kind: WidgetKind;
     private readonly virtual: boolean;
+    private readonly themeWatcher = new ThemeWatcher();
     private readUpToMap: { [roomId: string]: string } = {}; // room ID to event ID
     // This promise will be called and needs to resolve before the widget will actually become sticky.
     private stickyPromise?: () => Promise<void>;
@@ -213,7 +213,7 @@ export class StopGapWidget extends EventEmitter {
             userDisplayName: OwnProfileStore.instance.displayName ?? undefined,
             userHttpAvatarUrl: OwnProfileStore.instance.getHttpAvatarUrl() ?? undefined,
             clientId: ELEMENT_CLIENT_ID,
-            clientTheme: SettingsStore.getValue("theme"),
+            clientTheme: this.themeWatcher.getEffectiveTheme(),
             clientLanguage: getUserLanguage(),
             deviceId: this.client.getDeviceId() ?? undefined,
             baseUrl: this.client.baseUrl,
@@ -244,6 +244,10 @@ export class StopGapWidget extends EventEmitter {
     public get started(): boolean {
         return !!this.messaging;
     }
+
+    private onThemeChange = (theme: string): void => {
+        this.messaging?.updateTheme({ name: theme });
+    };
 
     private onOpenModal = async (ev: CustomEvent<IModalWidgetOpenRequest>): Promise<void> => {
         ev.preventDefault();
@@ -288,9 +292,14 @@ export class StopGapWidget extends EventEmitter {
         this.messaging = new ClientWidgetApi(this.mockWidget, iframe, driver);
         this.messaging.on("preparing", () => this.emit("preparing"));
         this.messaging.on("error:preparing", (err: unknown) => this.emit("error:preparing", err));
-        this.messaging.on("ready", () => {
+        this.messaging.once("ready", () => {
             WidgetMessagingStore.instance.storeMessaging(this.mockWidget, this.roomId, this.messaging!);
             this.emit("ready");
+
+            this.themeWatcher.start();
+            this.themeWatcher.on(ThemeWatcherEvent.Change, this.onThemeChange);
+            // Theme may have changed while messaging was starting
+            this.onThemeChange(this.themeWatcher.getEffectiveTheme());
         });
         this.messaging.on("capabilitiesNotified", () => this.emit("capabilitiesNotified"));
         this.messaging.on(`action:${WidgetApiFromWidgetAction.OpenModalWidget}`, this.onOpenModal);

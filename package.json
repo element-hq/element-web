@@ -1,6 +1,6 @@
 {
     "name": "element-web",
-    "version": "1.11.90",
+    "version": "1.11.91",
     "description": "A feature-rich client for Matrix.org",
     "author": "New Vector Ltd.",
     "repository": {
@@ -256,7 +256,7 @@
         "jsqr": "^1.4.0",
         "knip": "^5.36.2",
         "lint-staged": "^15.0.2",
-        "mailhog": "^4.16.0",
+        "mailpit-api": "^1.0.5",
         "matrix-web-i18n": "^3.2.1",
         "mini-css-extract-plugin": "2.9.2",
         "minimist": "^1.2.6",
