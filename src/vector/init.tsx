@@ -147,17 +147,14 @@ export async function loadPlugins(): Promise<void> {
 
     const modules = SdkConfig.get("modules");
     if (!modules?.length) return;
-    const moduleLoader = new ModuleLoader();
+    const moduleLoader = new ModuleLoader(ModuleApi);
     window.mxModuleLoader = moduleLoader;
     for (const src of modules) {
         // We need to instruct webpack to not mangle this import as it is not available at compile time
         const module = await import(/* webpackIgnore: true */ src);
         await moduleLoader.load(module);
     }
-    await moduleLoader.start({
-        root: document.getElementById("matrixchat")!,
-        api: ModuleApi,
-    });
+    await moduleLoader.start();
 }
 
 export { _t } from "../languageHandler";

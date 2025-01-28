@@ -152,13 +152,15 @@ class MediaImplementation implements Media {
 
 export type { Media };
 
+type BaseMedia = MediaCustomisations<Partial<MediaEventContent>, MatrixClient, IPreparedMedia>;
+
 /**
  * Creates a media object from event content.
  * @param {MediaEventContent} content The event content.
  * @param {MatrixClient} client Optional client to use.
  * @returns {MediaImplementation} The media object.
  */
-export const mediaFromContent: MediaCustomisations<Partial<MediaEventContent>, MatrixClient>["mediaFromContent"] = (
+export const mediaFromContent: BaseMedia["mediaFromContent"] = (
     content: Partial<MediaEventContent>,
     client?: MatrixClient,
 ): Media => new MediaImplementation(prepEventContentAsMedia(content), client);
@@ -169,9 +171,6 @@ export const mediaFromContent: MediaCustomisations<Partial<MediaEventContent>, M
  * @param {MatrixClient} client Optional client to use.
  * @returns {MediaImplementation} The media object.
  */
-export const mediaFromMxc: MediaCustomisations<Partial<MediaEventContent>, MatrixClient>["mediaFromMxc"] = (
-    mxc?: string,
-    client?: MatrixClient,
-): Media => {
+export const mediaFromMxc: BaseMedia["mediaFromMxc"] = (mxc?: string, client?: MatrixClient): Media => {
     return mediaFromContent({ url: mxc }, client);
 };
