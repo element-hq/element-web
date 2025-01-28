@@ -123,7 +123,6 @@ describe("StopGapWidget", () => {
             defaultDispatcher.dispatch({ action: Action.RecheckTheme }, true);
             expect(messaging.updateTheme).toHaveBeenLastCalledWith({ name: "dark" });
         } finally {
-            console.log("TEST OVER");
             settingsSpy.mockRestore();
         }
     });
