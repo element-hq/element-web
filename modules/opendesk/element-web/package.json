@@ -6,6 +6,9 @@
     "sideEffects": [
         "**/*.css"
     ],
+    "scripts": {
+        "lint:ts": "tsc --noEmit"
+    },
     "devDependencies": {
         "@element-hq/element-web-module-api": "^0.1.0",
         "@nordeck/element-web-guest-module": "^2.0.0",
