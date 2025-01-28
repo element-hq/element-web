@@ -37,7 +37,7 @@ const moduleExportSignature: Record<keyof ModuleExport, Type> = {
 
 type Type = "function" | "string" | "number" | "boolean" | "object";
 
-export function isInterface<T>(obj: unknown, keys: Record<keyof T, Type>): obj is T {
+function isInterface<T>(obj: unknown, keys: Record<keyof T, Type>): obj is T {
     if (obj === null || typeof obj !== "object") return false;
     for (const key in keys) {
         if (typeof (obj as Record<keyof T, unknown>)[key] !== keys[key]) return false;
