@@ -8,6 +8,7 @@
 import React, { JSX, useCallback, useEffect, useState } from "react";
 import { Button, InlineSpinner, Separator } from "@vector-im/compound-web";
 import ComputerIcon from "@vector-im/compound-design-tokens/assets/web/icons/computer";
+import { ClientEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import SettingsTab from "../SettingsTab";
 import { RecoveryPanel } from "../../encryption/RecoveryPanel";
@@ -23,7 +24,6 @@ import { ResetIdentityPanel } from "../../encryption/ResetIdentityPanel";
 import { KeyBackupPanel } from "../../encryption/KeyStoragePanel";
 import Spinner from "../../../elements/Spinner";
 import { useEventEmitter } from "../../../../../hooks/useEventEmitter";
-import { ClientEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 /**
  * The state in the encryption settings tab.
