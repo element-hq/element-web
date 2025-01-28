@@ -23,8 +23,7 @@ import { ResetIdentityPanel } from "../../encryption/ResetIdentityPanel";
 import { KeyBackupPanel } from "../../encryption/KeyStoragePanel";
 import Spinner from "../../../elements/Spinner";
 import { useEventEmitter } from "../../../../../hooks/useEventEmitter";
-import { MatrixEvent } from "matrix-js-sdk";
-import { ClientEvent } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 /**
  * The state in the encryption settings tab.
