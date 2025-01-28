@@ -40,7 +40,7 @@ type Type = "function" | "string" | "number" | "boolean" | "object";
 export function isInterface<T>(obj: unknown, keys: Record<keyof T, Type>): obj is T {
     if (obj === null || typeof obj !== "object") return false;
     for (const key in keys) {
-        if (typeof obj[key] !== keys[key]) return false;
+        if (typeof (obj as Record<keyof T, unknown>)[key] !== keys[key]) return false;
     }
     return true;
 }
