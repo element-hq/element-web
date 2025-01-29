@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { JSX, useCallback, useEffect, useState } from "react";
+import React, { JSX } from "react";
 import { Button, InlineSpinner } from "@vector-im/compound-web";
 import KeyIcon from "@vector-im/compound-design-tokens/assets/web/icons/key";
 
@@ -15,16 +15,15 @@ import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext
 import { SettingsHeader } from "../SettingsHeader";
 import { accessSecretStorage } from "../../../../SecurityManager";
 import { SettingsSubheader } from "../SettingsSubheader";
+import { useAsyncMemo } from "../../../../hooks/useAsyncMemo";
 
 /**
  * The possible states of the recovery panel.
  * - `loading`: We are checking the recovery key and the secrets.
  * - `missing_recovery_key`: The user has no recovery key.
- * - `secrets_not_cached`: The user has a recovery key but the secrets are not cached.
- *                         This can happen if we verified another device and secret-gossiping failed, or the other device itself lacked the secrets.
  * - `good`: The user has a recovery key and the secrets are cached.
  */
-type State = "loading" | "missing_recovery_key" | "secrets_not_cached" | "good";
+type State = "loading" | "missing_recovery_key" | "good";
 
 interface RecoveryPanelProps {
     /**
@@ -40,29 +39,18 @@ interface RecoveryPanelProps {
  * This component allows the user to set up or change their recovery key.
  */
 export function RecoveryPanel({ onChangeRecoveryKeyClick }: RecoveryPanelProps): JSX.Element {
-    const [state, setState] = useState<State>("loading");
-    const isMissingRecoveryKey = state === "missing_recovery_key";
-
     const matrixClient = useMatrixClientContext();
-
-    const checkEncryption = useCallback(async () => {
-        const crypto = matrixClient.getCrypto()!;
-
-        // Check if the user has a recovery key
-        const hasRecoveryKey = Boolean(await matrixClient.secretStorage.getDefaultKeyId());
-        if (!hasRecoveryKey) return setState("missing_recovery_key");
-
-        // Check if the secrets are cached
-        const cachedSecrets = (await crypto.getCrossSigningStatus()).privateKeysCachedLocally;
-        const secretsOk = cachedSecrets.masterKey && cachedSecrets.selfSigningKey && cachedSecrets.userSigningKey;
-        if (!secretsOk) return setState("secrets_not_cached");
-
-        setState("good");
-    }, [matrixClient]);
-
-    useEffect(() => {
-        checkEncryption();
-    }, [checkEncryption]);
+    const state = useAsyncMemo<State>(
+        async () => {
+            // Check if the user has a recovery key
+            const hasRecoveryKey = Boolean(await matrixClient.secretStorage.getDefaultKeyId());
+            if (hasRecoveryKey) return "good";
+            else return "missing_recovery_key";
+        },
+        [matrixClient],
+        "loading",
+    );
+    const isMissingRecoveryKey = state === "missing_recovery_key";
 
     let content: JSX.Element;
     switch (state) {
@@ -73,18 +61,6 @@ export function RecoveryPanel({ onChangeRecoveryKeyClick }: RecoveryPanelProps):
             content = (
                 <Button size="sm" kind="primary" Icon={KeyIcon} onClick={() => onChangeRecoveryKeyClick(true)}>
                     {_t("settings|encryption|recovery|set_up_recovery")}
-                </Button>
-            );
-            break;
-        case "secrets_not_cached":
-            content = (
-                <Button
-                    size="sm"
-                    kind="primary"
-                    Icon={KeyIcon}
-                    onClick={async () => await accessSecretStorage(checkEncryption)}
-                >
-                    {_t("settings|encryption|recovery|enter_recovery_key")}
                 </Button>
             );
             break;
@@ -105,34 +81,11 @@ export function RecoveryPanel({ onChangeRecoveryKeyClick }: RecoveryPanelProps):
                     label={_t("settings|encryption|recovery|title")}
                 />
             }
-            subHeading={<Subheader state={state} />}
+            subHeading={_t("settings|encryption|recovery|description")}
             data-testid="recoveryPanel"
         >
             {content}
         </SettingsSection>
-    );
-}
-
-interface SubheaderProps {
-    /**
-     * The state of the recovery panel.
-     */
-    state: State;
-}
-
-/**
- * The subheader for the recovery panel.
- */
-function Subheader({ state }: SubheaderProps): JSX.Element {
-    // If the secrets are not cached, we display a warning message.
-    if (state !== "secrets_not_cached") return <>{_t("settings|encryption|recovery|description")}</>;
-
-    return (
-        <SettingsSubheader
-            label={_t("settings|encryption|recovery|description")}
-            state="error"
-            stateMessage={_t("settings|encryption|recovery|key_storage_warning")}
-        />
     );
 }
 
