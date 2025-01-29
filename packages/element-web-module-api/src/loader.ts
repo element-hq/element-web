@@ -24,11 +24,13 @@ export class ModuleIncompatibleError extends Error {
  * @public
  */
 export class ModuleLoader {
+    private modules: Module[] = [];
+    private started = false;
+
     public constructor(private api: Api) {}
 
-    #modules: Module[] = [];
     public async load(moduleExport: ModuleExport): Promise<void> {
-        if (this.#started) {
+        if (this.started) {
             throw new Error("PluginEngine.start() has already been called");
         }
 
@@ -39,16 +41,15 @@ export class ModuleLoader {
             throw new ModuleIncompatibleError(moduleExport.default.moduleApiVersion);
         }
         const { default: Module } = moduleExport;
-        this.#modules.push(new Module(this.api));
+        this.modules.push(new Module(this.api));
     }
 
-    #started = false;
     public async start(): Promise<void> {
-        if (this.#started) {
+        if (this.started) {
             throw new Error("PluginEngine.start() has already been called");
         }
-        this.#started = true;
+        this.started = true;
 
-        await Promise.all(this.#modules.map((plugin) => plugin.load()));
+        await Promise.all(this.modules.map((plugin) => plugin.load()));
     }
 }
