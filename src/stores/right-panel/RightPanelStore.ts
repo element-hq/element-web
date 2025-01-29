@@ -48,7 +48,6 @@ function getPhasesForPhase(phase: IRightPanelCard["phase"]): RightPanelPhases[] 
     }
 }
 
-
 /**
  * A class for tracking the state of the right panel between layouts and
  * sessions. This state includes a history for each room. Each history element
