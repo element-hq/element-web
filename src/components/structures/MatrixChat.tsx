@@ -1698,13 +1698,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         if (crypto) {
             const blacklistEnabled = SettingsStore.getValueAt(SettingLevel.DEVICE, "blacklistUnverifiedDevices");
             crypto.globalBlacklistUnverifiedDevices = blacklistEnabled;
-
-            // With cross-signing enabled, we send to unknown devices
-            // without prompting. Any bad-device status the user should
-            // be aware of will be signalled through the room shield
-            // changing colour. More advanced behaviour will come once
-            // we implement more settings.
-            cli.setGlobalErrorOnUnknownDevices(false);
         }
 
         // Cannot be done in OnLoggedIn as at that point the AccountSettingsHandler doesn't yet have a client
