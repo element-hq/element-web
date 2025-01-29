@@ -31,7 +31,7 @@ import { SdkContextClass } from "../../contexts/SDKContext";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 
 /**
- * @see generateDefaultHistoryForPhase
+ * @see RightPanelStore#generateHistoryForPhase
  */
 function getPhasesForPhase(phase: IRightPanelCard["phase"]): RightPanelPhases[] {
     switch (phase) {
@@ -48,19 +48,6 @@ function getPhasesForPhase(phase: IRightPanelCard["phase"]): RightPanelPhases[] 
     }
 }
 
-/**
- * For a given phase, generates card history such that it looks
- * similar to how an user typically would reach said phase in the app.
- * eg: User would usually reach the memberlist via room-info panel, so
- * that history is added.
- */
-function generateDefaultHistoryForPhase(
-    phase: IRightPanelCard["phase"],
-    cardState?: Partial<IRightPanelCardState>,
-): IRightPanelCard[] {
-    const cards = getPhasesForPhase(phase).map((p) => ({ phase: p }));
-    return [...cards, { phase, state: cardState }];
-}
 
 /**
  * A class for tracking the state of the right panel between layouts and
@@ -171,7 +158,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
      * - If the same phase is sent along with a non-empty state, only the state is updated and history is retained.
      * - If the provided phase is different to the current phase:
      *     - Existing history is thrown away.
-     *     - New card is added along with a different history, see {@link generateDefaultHistoryForPhase}
+     *     - New card is added along with a different history, see {@link generateHistoryForPhase}
      *
      * If the right panel was set, this function also shows the right panel.
      */
@@ -191,7 +178,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
             this.emitAndUpdateSettings();
         } else if (targetPhase !== this.currentCardForRoom(rId)?.phase || !this.byRoom[rId]) {
             // Set right panel and initialize/erase history
-            const history = generateDefaultHistoryForPhase(targetPhase!, cardState ?? {});
+            const history = this.generateHistoryForPhase(targetPhase!, cardState ?? {});
             this.byRoom[rId] = { history, isOpen: true };
             this.emitAndUpdateSettings();
         } else {
@@ -281,6 +268,31 @@ export default class RightPanelStore extends ReadyWatchingStore {
             this.setCard({ phase, state: cardState });
             if (!this.isOpen) this.togglePanel(null);
         }
+    }
+
+    /**
+     * For a given phase, generates card history such that it looks
+     * similar to how an user typically would reach said phase in the app.
+     * eg: User would usually reach the memberlist via room-info panel, so
+     * that history is added.
+     */
+    private generateHistoryForPhase(
+        phase: IRightPanelCard["phase"],
+        cardState?: Partial<IRightPanelCardState>,
+    ): IRightPanelCard[] {
+        const card = { phase, state: cardState };
+        if (!this.isCardStateValid(card)) {
+            /**
+             * If the card we're adding is not valid, then we just return
+             * an empty history.
+             * This is to avoid a scenario where, for eg, you set a member info
+             * card with invalid card state (no member) but the member list is
+             * shown since the created history is valid except for the last card.
+             */
+            return [];
+        }
+        const cards = getPhasesForPhase(phase).map((p) => ({ phase: p, state: {} }));
+        return [...cards, card];
     }
 
     private loadCacheFromSettings(): void {
