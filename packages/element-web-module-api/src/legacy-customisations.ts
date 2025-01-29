@@ -77,12 +77,12 @@ export interface Media {
     downloadSource(): Promise<Response>;
 }
 
-export interface MediaContructable<Thumbnail, File> {
-    new (prepared: { mxc: string; thumbnail?: Thumbnail; file?: File }): Media;
+export interface MediaContructable<PreparedMedia> {
+    new (prepared: PreparedMedia): Media;
 }
 
-export interface MediaCustomisations<Content, Client, Thumbnail, File> {
-    readonly Media: MediaContructable<Thumbnail, File>;
+export interface MediaCustomisations<Content, Client, PreparedMedia> {
+    readonly Media: MediaContructable<PreparedMedia>;
     mediaFromContent(content: Content, client?: Client): Media;
     mediaFromMxc(mxc?: string, client?: Client): Media;
 }
@@ -182,7 +182,7 @@ export interface LegacyCustomisationsApiExtension {
     /**
      * @deprecated
      */
-    readonly _registerLegacyMediaCustomisations: LegacyCustomisations<MediaCustomisations<never, never, never, never>>;
+    readonly _registerLegacyMediaCustomisations: LegacyCustomisations<MediaCustomisations<never, never, never>>;
     /**
      * @deprecated
      */

@@ -6,6 +6,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 export { ModuleLoader, ModuleIncompatibleError } from "./loader";
-export type { Api, Module, ModuleFactory } from "./api";
+export type { Api, Module, ModuleFactory, Config, ConfigApi } from "./api";
 export type * from "./legacy-modules";
 export type * from "./legacy-customisations";

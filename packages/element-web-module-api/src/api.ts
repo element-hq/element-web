@@ -53,4 +53,19 @@ export function isModule(module: unknown): module is ModuleExport {
     );
 }
 
-export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiExtension {}
+export interface Config {
+    // The branding name of the application
+    brand: string;
+    // Other config options are available but not specified in the types as that would make it difficult to change for element-web
+    // they are accessible at runtime all the same, see list at https://github.com/element-hq/element-web/blob/develop/docs/config.md
+}
+
+export interface ConfigApi {
+    get(): Config;
+    get<K extends keyof Config>(key: K): Config[K];
+    get<K extends keyof Config = never>(key?: K): Config | Config[K];
+}
+
+export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiExtension {
+    config: ConfigApi;
+}
