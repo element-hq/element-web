@@ -42,7 +42,6 @@ function getPhasesForPhase(phase: IRightPanelCard["phase"]): RightPanelPhases[] 
         case RightPanelPhases.MemberInfo:
         case RightPanelPhases.ThreePidMemberInfo:
             return [RightPanelPhases.RoomSummary, RightPanelPhases.MemberList];
-        case null:
         default:
             return [];
     }
