@@ -37,12 +37,20 @@ interface UserIdentityWarningProps {
  * button to acknowledge the change.
  */
 export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }) => {
-    const { currentPrompt, onButtonClick } = useUserIdentityWarningViewModel(room, room.roomId);
+    const { currentPrompt, dispatchAction } = useUserIdentityWarningViewModel(room, room.roomId);
 
     if (!currentPrompt) return null;
 
     const [title, action] = getTitleAndAction(currentPrompt);
 
+    const onButtonClick = (ev: ButtonEvent): void => {
+        ev.preventDefault();
+        if (currentPrompt.type === "VerificationViolation") {
+            dispatchAction({ type: "WithdrawVerification", userId: currentPrompt.member.userId });
+        } else {
+            dispatchAction({ type: "PinUserIdentity", userId: currentPrompt.member.userId });
+        }
+    };
     return warningBanner(
         currentPrompt.type === "VerificationViolation",
         memberAvatar(currentPrompt.member),

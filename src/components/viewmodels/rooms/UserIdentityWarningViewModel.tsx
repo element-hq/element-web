@@ -13,7 +13,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext.tsx";
 import { useTypedEventEmitter } from "../../../hooks/useEventEmitter.ts";
-import { ButtonEvent } from "../../views/elements/AccessibleButton.tsx";
 
 export type ViolationType = "PinViolation" | "VerificationViolation";
 
@@ -34,8 +33,15 @@ export type ViolationPrompt = {
  */
 export interface UserIdentityWarningState {
     currentPrompt?: ViolationPrompt;
-    onButtonClick: (ev: ButtonEvent) => void;
+    dispatchAction: (action: UserIdentityWarningViewModelAction) => void;
 }
+
+/**
+ * List of actions that can be dispatched to the UserIdentityWarningViewModel.
+ */
+export type UserIdentityWarningViewModelAction =
+    | { type: "PinUserIdentity"; userId: string }
+    | { type: "WithdrawVerification"; userId: string };
 
 /**
  * Maps a list of room members to a list of violations.
@@ -161,28 +167,26 @@ export function useUserIdentityWarningViewModel(room: Room, key: string): UserId
         });
     }, [loadViolations]);
 
-    let onButtonClick: (ev: ButtonEvent) => void = () => {};
-    if (currentPrompt) {
-        onButtonClick = (ev: ButtonEvent): void => {
-            // XXX do we want some posthog tracking?
+    const dispatchAction = useCallback(
+        (action: UserIdentityWarningViewModelAction): void => {
             if (!crypto) {
                 return;
             }
-            ev.preventDefault();
-            if (currentPrompt.type === "VerificationViolation") {
-                crypto.withdrawVerificationRequirement(currentPrompt.member.userId).catch((e) => {
-                    logger.error("Error withdrawing verification requirement:", e);
-                });
-            } else if (currentPrompt.type === "PinViolation") {
-                crypto.pinCurrentUserIdentity(currentPrompt.member.userId).catch((e) => {
+            if (action.type === "PinUserIdentity") {
+                crypto.pinCurrentUserIdentity(action.userId).catch((e) => {
                     logger.error("Error pinning user identity:", e);
                 });
+            } else if (action.type === "WithdrawVerification") {
+                crypto.withdrawVerificationRequirement(action.userId).catch((e) => {
+                    logger.error("Error withdrawing verification requirement:", e);
+                });
             }
-        };
-    }
+        },
+        [crypto],
+    );
 
     return {
         currentPrompt,
-        onButtonClick,
+        dispatchAction,
     };
 }
