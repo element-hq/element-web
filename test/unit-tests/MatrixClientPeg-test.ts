@@ -80,6 +80,14 @@ describe("MatrixClientPeg", () => {
 
         it("should initialise the rust crypto library by default", async () => {
             const mockInitRustCrypto = jest.spyOn(testPeg.safeGet(), "initRustCrypto").mockResolvedValue(undefined);
+
+            const cryptoStoreKey = new Uint8Array([1, 2, 3, 4]);
+            await testPeg.start({ rustCryptoStoreKey: cryptoStoreKey });
+            expect(mockInitRustCrypto).toHaveBeenCalledWith({ storageKey: cryptoStoreKey });
+        });
+
+        it("should try to start dehydration if dehydration is enabled", async () => {
+            const mockInitRustCrypto = jest.spyOn(testPeg.safeGet(), "initRustCrypto").mockResolvedValue(undefined);
             const mockStartDehydration = jest.fn();
             jest.spyOn(testPeg.safeGet(), "getCrypto").mockReturnValue({
                 isDehydrationSupported: jest.fn().mockResolvedValue(true),
@@ -87,6 +95,9 @@ describe("MatrixClientPeg", () => {
                 setDeviceIsolationMode: jest.fn(),
             } as any);
             jest.spyOn(testPeg.safeGet(), "waitForClientWellKnown").mockResolvedValue({
+                "m.homeserver": {
+                    base_url: "http://example.com",
+                },
                 "org.matrix.msc3814": true,
             } as any);
 
