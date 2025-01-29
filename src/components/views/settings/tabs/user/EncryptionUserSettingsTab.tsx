@@ -33,11 +33,43 @@ import { ResetIdentityPanel } from "../../encryption/ResetIdentityPanel";
  *                        This happens when the user doesn't have a key a recovery key and the user clicks on "Set up recovery key" button of the RecoveryPanel.
  *  - "reset_identity": The panel to show when the user is resetting their identity.
  */
-type State = "loading" | "main" | "set_up_encryption" | "change_recovery_key" | "set_recovery_key" | "reset_identity";
+export type State =
+    | "loading"
+    | "main"
+    | "set_up_encryption"
+    | "change_recovery_key"
+    | "set_recovery_key"
+    | "reset_identity_compromised"
+    | "reset_identity_forgot";
 
-export function EncryptionUserSettingsTab(): JSX.Element {
-    const [state, setState] = useState<State>("loading");
-    const setUpEncryptionRequired = useSetUpEncryptionRequired(setState);
+interface Props {
+    /**
+     * If the tab should start in a state other than the deasult
+     */
+    initialState?: State;
+}
+
+export function EncryptionUserSettingsTab({ initialState = "loading" }: Props): JSX.Element {
+    const [state, setState] = useState<State>(initialState);
+    //const [isCrossSigningReady, setIsCrossSigningReady] = useState<boolean | undefined>(undefined);
+    const matrixClient = useMatrixClientContext();
+
+    const recheckSetupRequired = useCallback(() => {
+        (async () => {
+            const crypto = matrixClient.getCrypto()!;
+            const isCrossSigningReady = await crypto.isCrossSigningReady();
+            //setIsCrossSigningReady(isCrossSigningReady);
+            if (isCrossSigningReady) {
+                setState("main");
+            } else {
+                setState("set_up_encryption");
+            }
+        })();
+    }, []);
+
+    useEffect(() => {
+        if (state === "loading") recheckSetupRequired();
+    }, [recheckSetupRequired]);
 
     let content: JSX.Element;
     switch (state) {
@@ -45,7 +77,7 @@ export function EncryptionUserSettingsTab(): JSX.Element {
             content = <InlineSpinner aria-label={_t("common|loading")} />;
             break;
         case "set_up_encryption":
-            content = <SetUpEncryptionPanel onFinish={setUpEncryptionRequired} />;
+            content = <SetUpEncryptionPanel onFinish={recheckSetupRequired} />;
             break;
         case "main":
             content = (
@@ -56,7 +88,7 @@ export function EncryptionUserSettingsTab(): JSX.Element {
                         }
                     />
                     <Separator kind="section" />
-                    <AdvancedPanel onResetIdentityClick={() => setState("reset_identity")} />
+                    <AdvancedPanel onResetIdentityClick={() => setState("reset_identity_compromised")} />
                 </>
             );
             break;
@@ -70,8 +102,23 @@ export function EncryptionUserSettingsTab(): JSX.Element {
                 />
             );
             break;
-        case "reset_identity":
-            content = <ResetIdentityPanel onCancelClick={() => setState("main")} onFinish={() => setState("main")} />;
+        case "reset_identity_compromised":
+            content = (
+                <ResetIdentityPanel
+                    variant="compromised"
+                    onCancelClick={() => setState("main")}
+                    onFinish={() => setState("main")}
+                />
+            );
+            break;
+        case "reset_identity_forgot":
+            content = (
+                <ResetIdentityPanel
+                    variant="forgot"
+                    onCancelClick={() => setState("main")}
+                    onFinish={() => setState("main")}
+                />
+            );
             break;
     }
 
@@ -80,36 +127,6 @@ export function EncryptionUserSettingsTab(): JSX.Element {
             {content}
         </SettingsTab>
     );
-}
-
-/**
- * Hook to check if the user needs to go through the SetupEncryption flow.
- * If the user needs to set up the encryption, the state will be set to "set_up_encryption".
- * Otherwise, the state will be set to "main".
- *
- * The state is set once when the component is first mounted.
- * Also returns a callback function which can be called to re-run the logic.
- *
- * @param setState - callback passed from the EncryptionUserSettingsTab to set the current `State`.
- * @returns a callback function, which will re-run the logic and update the state.
- */
-function useSetUpEncryptionRequired(setState: (state: State) => void): () => Promise<void> {
-    const matrixClient = useMatrixClientContext();
-
-    const setUpEncryptionRequired = useCallback(async () => {
-        const crypto = matrixClient.getCrypto()!;
-        const isCrossSigningReady = await crypto.isCrossSigningReady();
-        if (isCrossSigningReady) setState("main");
-        else setState("set_up_encryption");
-    }, [matrixClient, setState]);
-
-    // Initialise the state when the component is mounted
-    useEffect(() => {
-        setUpEncryptionRequired();
-    }, [setUpEncryptionRequired]);
-
-    // Also return the callback so that the component can re-run the logic.
-    return setUpEncryptionRequired;
 }
 
 interface SetUpEncryptionPanelProps {
