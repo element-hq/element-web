@@ -22,14 +22,14 @@ import { MatrixClientPeg } from "../../MatrixClientPeg";
  *
  * Dehydration can currently only be enabled by setting a flag in the .well-known file.
  */
-async function deviceDehydrationEnabled(crypto: CryptoApi | undefined): Promise<boolean> {
+async function deviceDehydrationEnabled(client: MatrixClient, crypto: CryptoApi | undefined): Promise<boolean> {
     if (!crypto) {
         return false;
     }
     if (!(await crypto.isDehydrationSupported())) {
         return false;
     }
-    const wellknown = await MatrixClientPeg.safeGet().waitForClientWellKnown();
+    const wellknown = await client.waitForClientWellKnown();
     return !!wellknown?.["org.matrix.msc3814"];
 }
 
@@ -44,7 +44,7 @@ async function deviceDehydrationEnabled(crypto: CryptoApi | undefined): Promise<
 export async function initialiseDehydration(opts: StartDehydrationOpts = {}, client?: MatrixClient): Promise<void> {
     client = client || MatrixClientPeg.safeGet();
     const crypto = client.getCrypto();
-    if (await deviceDehydrationEnabled(crypto)) {
+    if (await deviceDehydrationEnabled(client, crypto)) {
         logger.log("Device dehydration enabled");
         await crypto!.startDehydration(opts);
     }
