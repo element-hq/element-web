@@ -10,7 +10,7 @@ import { Button, InlineSpinner, Separator } from "@vector-im/compound-web";
 import ComputerIcon from "@vector-im/compound-design-tokens/assets/web/icons/computer";
 
 import SettingsTab from "../SettingsTab";
-import { RecoveryPanel } from "../../encryption/RecoveryPanel";
+import { RecoveryPanel, RecoveryPanelOutOfSync } from "../../encryption/RecoveryPanel";
 import { ChangeRecoveryKey } from "../../encryption/ChangeRecoveryKey";
 import { useMatrixClientContext } from "../../../../../contexts/MatrixClientContext";
 import { _t } from "../../../../../languageHandler";
@@ -32,12 +32,21 @@ import { ResetIdentityPanel } from "../../encryption/ResetIdentityPanel";
  *  - "set_recovery_key": The panel to show when the user is setting up their recovery key.
  *                        This happens when the user doesn't have a key a recovery key and the user clicks on "Set up recovery key" button of the RecoveryPanel.
  *  - "reset_identity": The panel to show when the user is resetting their identity.
+ *  - `secrets_not_cached`: The user has a recovery key but the secrets are not cached.
+ *                          This can happen if we verified another device and secret-gossiping failed, or the other device itself lacked the secrets.
  */
-type State = "loading" | "main" | "set_up_encryption" | "change_recovery_key" | "set_recovery_key" | "reset_identity";
+type State =
+    | "loading"
+    | "main"
+    | "set_up_encryption"
+    | "change_recovery_key"
+    | "set_recovery_key"
+    | "reset_identity"
+    | "secrets_not_cached";
 
 export function EncryptionUserSettingsTab(): JSX.Element {
     const [state, setState] = useState<State>("loading");
-    const setUpEncryptionRequired = useSetUpEncryptionRequired(setState);
+    const checkEncryptionState = useCheckEncryptionState(setState);
 
     let content: JSX.Element;
     switch (state) {
@@ -45,7 +54,10 @@ export function EncryptionUserSettingsTab(): JSX.Element {
             content = <InlineSpinner aria-label={_t("common|loading")} />;
             break;
         case "set_up_encryption":
-            content = <SetUpEncryptionPanel onFinish={setUpEncryptionRequired} />;
+            content = <SetUpEncryptionPanel onFinish={checkEncryptionState} />;
+            break;
+        case "secrets_not_cached":
+            content = <RecoveryPanelOutOfSync onFinish={checkEncryptionState} />;
             break;
         case "main":
             content = (
@@ -83,8 +95,12 @@ export function EncryptionUserSettingsTab(): JSX.Element {
 }
 
 /**
- * Hook to check if the user needs to go through the SetupEncryption flow.
+ * Hook to check if the user needs:
+ * - to go through the SetupEncryption flow.
+ * - to enter their recovery key, if the secrets are not cached.
+ *
  * If the user needs to set up the encryption, the state will be set to "set_up_encryption".
+ * If the user secrets are not cached, the state will be set to "secrets_not_cached".
  * Otherwise, the state will be set to "main".
  *
  * The state is set once when the component is first mounted.
@@ -93,23 +109,29 @@ export function EncryptionUserSettingsTab(): JSX.Element {
  * @param setState - callback passed from the EncryptionUserSettingsTab to set the current `State`.
  * @returns a callback function, which will re-run the logic and update the state.
  */
-function useSetUpEncryptionRequired(setState: (state: State) => void): () => Promise<void> {
+function useCheckEncryptionState(setState: (state: State) => void): () => Promise<void> {
     const matrixClient = useMatrixClientContext();
 
-    const setUpEncryptionRequired = useCallback(async () => {
+    const checkEncryptionState = useCallback(async () => {
         const crypto = matrixClient.getCrypto()!;
         const isCrossSigningReady = await crypto.isCrossSigningReady();
-        if (isCrossSigningReady) setState("main");
-        else setState("set_up_encryption");
+
+        // Check if the secrets are cached
+        const cachedSecrets = (await crypto.getCrossSigningStatus()).privateKeysCachedLocally;
+        const secretsOk = cachedSecrets.masterKey && cachedSecrets.selfSigningKey && cachedSecrets.userSigningKey;
+
+        if (isCrossSigningReady && secretsOk) setState("main");
+        else if (!isCrossSigningReady) setState("set_up_encryption");
+        else setState("secrets_not_cached");
     }, [matrixClient, setState]);
 
     // Initialise the state when the component is mounted
     useEffect(() => {
-        setUpEncryptionRequired();
-    }, [setUpEncryptionRequired]);
+        checkEncryptionState();
+    }, [checkEncryptionState]);
 
     // Also return the callback so that the component can re-run the logic.
-    return setUpEncryptionRequired;
+    return checkEncryptionState;
 }
 
 interface SetUpEncryptionPanelProps {

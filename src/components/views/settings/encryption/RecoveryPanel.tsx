@@ -135,3 +135,34 @@ function Subheader({ state }: SubheaderProps): JSX.Element {
         />
     );
 }
+
+interface RecoveryPanelOutOfSyncProps {
+    /**
+     * Callback for when the user has finished entering their recovery key.
+     */
+    onFinish: () => Promise<void>;
+}
+
+/**
+ * This component is shown when the user secrets are not cached and the recovery key needs to be enter.
+ */
+export function RecoveryPanelOutOfSync({ onFinish }: RecoveryPanelOutOfSyncProps): JSX.Element {
+    return (
+        <SettingsSection
+            legacy={false}
+            heading={_t("settings|encryption|recovery|title")}
+            subHeading={
+                <SettingsSubheader
+                    label={_t("settings|encryption|recovery|description")}
+                    state="error"
+                    stateMessage={_t("settings|encryption|recovery|key_storage_warning")}
+                />
+            }
+            data-testid="recoveryPanel"
+        >
+            <Button size="sm" kind="primary" Icon={KeyIcon} onClick={async () => await accessSecretStorage(onFinish)}>
+                {_t("settings|encryption|recovery|enter_recovery_key")}
+            </Button>
+        </SettingsSection>
+    );
+}
