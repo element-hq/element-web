@@ -6,22 +6,26 @@
     "author": "element-hq",
     "license": "SEE LICENSE IN README.md",
     "type": "module",
-    "types": "./lib/index.d.ts",
+    "types": "./lib/element-web-module-api-alpha.d.ts",
     "exports": {
         ".": {
-            "types": "./lib/index.d.ts",
+            "types": "./lib/element-web-module-api-alpha.d.ts",
             "import": "./lib/element-web-plugin-engine.js",
             "require": "./lib/element-web-plugin-engine.umd.js"
         }
     },
+    "files": [
+        "lib"
+    ],
     "scripts": {
-        "prepare": "vite build",
+        "prepare": "vite build && api-extractor run",
         "lint:ts": "tsc --noEmit"
     },
     "devDependencies": {
         "@matrix-org/react-sdk-module-api": "^2.5.0",
-        "@types/react": "^18",
+        "@microsoft/api-extractor": "^7.49.1",
         "@types/node": "^22.10.7",
+        "@types/react": "^18",
         "@types/semver": "^7.5.8",
         "matrix-web-i18n": "^3.3.0",
         "semver": "^7.6.3",

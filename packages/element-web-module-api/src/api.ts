@@ -8,6 +8,10 @@ Please see LICENSE files in the repository root for full details.
 import { LegacyModuleApiExtension } from "./legacy-modules";
 import { LegacyCustomisationsApiExtension } from "./legacy-customisations";
 
+/**
+ * Module interface for modules to implement.
+ * @public
+ */
 export interface Module {
     load(): Promise<void>;
 }
@@ -16,6 +20,10 @@ const moduleSignature: Record<keyof Module, Type> = {
     load: "function",
 };
 
+/**
+ * Module interface for modules to export as the default export.
+ * @public
+ */
 export interface ModuleFactory {
     readonly moduleApiVersion: string;
     new (api: Api): Module;
@@ -53,6 +61,11 @@ export function isModule(module: unknown): module is ModuleExport {
     );
 }
 
+/**
+ * The configuration for the application.
+ * Should be extended via declaration merging.
+ * @public
+ */
 export interface Config {
     // The branding name of the application
     brand: string;
@@ -60,12 +73,20 @@ export interface Config {
     // they are accessible at runtime all the same, see list at https://github.com/element-hq/element-web/blob/develop/docs/config.md
 }
 
+/**
+ * API for accessing the configuration.
+ * @public
+ */
 export interface ConfigApi {
     get(): Config;
     get<K extends keyof Config>(key: K): Config[K];
     get<K extends keyof Config = never>(key?: K): Config | Config[K];
 }
 
+/**
+ * The API for modules to interact with the application.
+ * @public
+ */
 export interface Api extends LegacyModuleApiExtension, LegacyCustomisationsApiExtension {
     config: ConfigApi;
 }

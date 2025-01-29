@@ -9,11 +9,19 @@ Please see LICENSE files in the repository root for full details.
  * The types here suck but these customisations are deprecated and will be removed soon.
  */
 
+/**
+ * @alpha
+ * @deprecated in favour of the new Module API
+ */
 export interface AliasCustomisations {
     // E.g. prefer one of the aliases over another
     getDisplayAliasForAliasSet?(canonicalAlias: string | null, altAliases: string[]): string | null;
 }
 
+/**
+ * @alpha
+ * @deprecated in favour of the new Module API
+ */
 export interface ChatExportCustomisations<ExportFormat, ExportType> {
     /**
      * Force parameters in room chat export fields returned here are forced
@@ -33,6 +41,10 @@ export interface ChatExportCustomisations<ExportFormat, ExportType> {
     };
 }
 
+/**
+ * @alpha
+ * @deprecated in favour of the new Module API
+ */
 export interface ComponentVisibilityCustomisations {
     /**
      * Determines whether or not the active MatrixClient user should be able to use
@@ -40,9 +52,8 @@ export interface ComponentVisibilityCustomisations {
      * component depending on their contextual permissions. For example, invite options
      * might be shown to the user but they won't have permission to invite users to
      * the current room: the button will appear disabled.
-     * @param {UIComponent} component The component to check visibility for.
-     * @returns {boolean} True (default) if the user is able to see the component, false
-     * otherwise.
+     * @param component - The component to check visibility for.
+     * @returns True (default) if the user is able to see the component, false otherwise.
      */
     shouldShowComponent?(
         component:
@@ -56,14 +67,26 @@ export interface ComponentVisibilityCustomisations {
     ): boolean;
 }
 
+/**
+ * @alpha
+ * @deprecated in favour of the new Module API
+ */
 export interface DirectoryCustomisations {
     requireCanonicalAliasAccessToPublish?(): boolean;
 }
 
+/**
+ * @alpha
+ * @deprecated in favour of the new Module API
+ */
 export interface LifecycleCustomisations {
     onLoggedOutAndStorageCleared?(): void;
 }
 
+/**
+ * @alpha
+ * @deprecated in favour of the new Module API
+ */
 export interface Media {
     readonly isEncrypted: boolean;
     readonly srcMxc: string;
@@ -77,16 +100,28 @@ export interface Media {
     downloadSource(): Promise<Response>;
 }
 
+/**
+ * @alpha
+ * @deprecated in favour of the new Module API
+ */
 export interface MediaContructable<PreparedMedia> {
     new (prepared: PreparedMedia): Media;
 }
 
+/**
+ * @alpha
+ * @deprecated in favour of the new Module API
+ */
 export interface MediaCustomisations<Content, Client, PreparedMedia> {
     readonly Media: MediaContructable<PreparedMedia>;
     mediaFromContent(content: Content, client?: Client): Media;
     mediaFromMxc(mxc?: string, client?: Client): Media;
 }
 
+/**
+ * @alpha
+ * @deprecated in favour of the new Module API
+ */
 export interface RoomListCustomisations<Room> {
     /**
      * Determines if a room is visible in the room list or not. By default,
@@ -96,12 +131,16 @@ export interface RoomListCustomisations<Room> {
      *
      * This function should be as fast as possible to avoid slowing down the
      * client.
-     * @param {Room} room The room to check the visibility of.
-     * @returns {boolean} True if the room should be visible, false otherwise.
+     * @param room - The room to check the visibility of.
+     * @returns True if the room should be visible, false otherwise.
      */
     isRoomVisible?(room: Room): boolean;
 }
 
+/**
+ * @alpha
+ * @deprecated in favour of the new Module API
+ */
 export interface UserIdentifierCustomisations {
     /**
      * Customise display of the user identifier
@@ -112,6 +151,10 @@ export interface UserIdentifierCustomisations {
     getDisplayUserIdentifier(userId: string, opts: { roomId?: string; withDisplayName?: boolean }): string | null;
 }
 
+/**
+ * @alpha
+ * @deprecated in favour of the new Module API
+ */
 export interface WidgetPermissionsCustomisations<Widget, Capability> {
     /**
      * Approves the widget for capabilities that it requested, if any can be
@@ -120,14 +163,18 @@ export interface WidgetPermissionsCustomisations<Widget, Capability> {
      * capabilities that Element will be automatically granting, such as the
      * ability for Jitsi widgets to stay on screen - those will be approved
      * regardless.
-     * @param {Widget} widget The widget to approve capabilities for.
-     * @param {Set<Capability>} requestedCapabilities The capabilities the widget requested.
-     * @returns {Set<Capability>} Resolves to the capabilities that are approved for use
+     * @param widget - The widget to approve capabilities for.
+     * @param requestedCapabilities - The capabilities the widget requested.
+     * @returns Resolves to the capabilities that are approved for use
      * by the widget. If none are approved, this should return an empty Set.
      */
     preapproveCapabilities?(widget: Widget, requestedCapabilities: Set<Capability>): Promise<Set<Capability>>;
 }
 
+/**
+ * @alpha
+ * @deprecated in favour of the new Module API
+ */
 export interface WidgetVariablesCustomisations {
     /**
      * Provides a partial set of the variables needed to render any widget. If
@@ -151,54 +198,62 @@ export interface WidgetVariablesCustomisations {
      * Resolves to whether or not the customisation point is ready for variables
      * to be provided. This will block widgets being rendered.
      * If not provided, the app will assume that the customisation is always ready.
-     * @returns {Promise<boolean>} Resolves when ready.
+     * @returns a promise which resolves when ready.
      */
     isReady?(): Promise<void>;
 }
 
+/**
+ * @alpha
+ * @deprecated in favour of the new Module API
+ */
 export type LegacyCustomisations<T extends object> = (customisations: T) => void;
 
+/**
+ * @alpha
+ * @deprecated in favour of the new Module API
+ */
 export interface LegacyCustomisationsApiExtension {
     /**
-     * @deprecated
+     * @deprecated in favour of the new Module API
      */
     readonly _registerLegacyAliasCustomisations: LegacyCustomisations<AliasCustomisations>;
     /**
-     * @deprecated
+     * @deprecated in favour of the new Module API
      */
     readonly _registerLegacyChatExportCustomisations: LegacyCustomisations<ChatExportCustomisations<never, never>>;
     /**
-     * @deprecated
+     * @deprecated in favour of the new Module API
      */
     readonly _registerLegacyComponentVisibilityCustomisations: LegacyCustomisations<ComponentVisibilityCustomisations>;
     /**
-     * @deprecated
+     * @deprecated in favour of the new Module API
      */
     readonly _registerLegacyDirectoryCustomisations: LegacyCustomisations<DirectoryCustomisations>;
     /**
-     * @deprecated
+     * @deprecated in favour of the new Module API
      */
     readonly _registerLegacyLifecycleCustomisations: LegacyCustomisations<LifecycleCustomisations>;
     /**
-     * @deprecated
+     * @deprecated in favour of the new Module API
      */
     readonly _registerLegacyMediaCustomisations: LegacyCustomisations<MediaCustomisations<never, never, never>>;
     /**
-     * @deprecated
+     * @deprecated in favour of the new Module API
      */
     readonly _registerLegacyRoomListCustomisations: LegacyCustomisations<RoomListCustomisations<never>>;
     /**
-     * @deprecated
+     * @deprecated in favour of the new Module API
      */
     readonly _registerLegacyUserIdentifierCustomisations: LegacyCustomisations<UserIdentifierCustomisations>;
     /**
-     * @deprecated
+     * @deprecated in favour of the new Module API
      */
     readonly _registerLegacyWidgetPermissionsCustomisations: LegacyCustomisations<
         WidgetPermissionsCustomisations<never, never>
     >;
     /**
-     * @deprecated
+     * @deprecated in favour of the new Module API
      */
     readonly _registerLegacyWidgetVariablesCustomisations: LegacyCustomisations<WidgetVariablesCustomisations>;
 }

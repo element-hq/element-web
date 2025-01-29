@@ -9,12 +9,20 @@ import { satisfies } from "semver";
 
 import { Api, isModule, Module, ModuleExport } from "./api";
 
+/**
+ * Error thrown when a module is incompatible with the engine version.
+ * @public
+ */
 export class ModuleIncompatibleError extends Error {
     public constructor(pluginVersion: string) {
         super(`Plugin version ${pluginVersion} is incompatible with engine version ${__VERSION__}`);
     }
 }
 
+/**
+ * A module loader for loading and starting modules.
+ * @public
+ */
 export class ModuleLoader {
     public constructor(private api: Api) {}
 

@@ -23,11 +23,7 @@ export default defineConfig({
         target: "esnext",
         sourcemap: true,
     },
-    plugins: [
-        dts({
-            rollupTypes: true,
-        }),
-    ],
+    plugins: [dts()],
     define: {
         __VERSION__: JSON.stringify(process.env.npm_package_version),
     },
