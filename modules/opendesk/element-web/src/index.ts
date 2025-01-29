@@ -5,7 +5,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Module, Api, ModuleFactory } from "@element-hq/element-web-module-api";
 import NordeckOpendeskModule from "@nordeck/element-web-opendesk-module";
 import GuestModule, {
     assertValidGuestModuleConfig,
@@ -15,6 +14,8 @@ import GuestModule, {
 } from "@nordeck/element-web-guest-module";
 import WidgetLifecycleModule from "@nordeck/element-web-widget-lifecycle-module";
 import WidgetTogglesModule from "@nordeck/element-web-widget-toggles-module";
+
+import type { Module, Api, ModuleFactory } from "@element-hq/element-web-module-api";
 
 declare module "@element-hq/element-web-module-api" {
     interface Config {
