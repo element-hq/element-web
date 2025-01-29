@@ -7,10 +7,37 @@ Please see LICENSE files in the repository root for full details.
 
 import { Module, Api, ModuleFactory } from "@element-hq/element-web-module-api";
 import NordeckOpendeskModule from "@nordeck/element-web-opendesk-module";
-import GuestModule from "@nordeck/element-web-guest-module";
+import GuestModule, {
+    assertValidGuestModuleConfig,
+    GUEST_MODULE_CONFIG_KEY,
+    GUEST_MODULE_CONFIG_NAMESPACE,
+    shouldShowComponent as shouldShowComponentShared,
+} from "@nordeck/element-web-guest-module";
 import WidgetLifecycleModule from "@nordeck/element-web-widget-lifecycle-module";
 import WidgetTogglesModule from "@nordeck/element-web-widget-toggles-module";
-import { ComponentVisibilityCustomisations } from "@nordeck/element-web-guest-module/customisations/ComponentVisibility";
+
+declare module "@element-hq/element-web-module-api" {
+    interface Config {
+        [GUEST_MODULE_CONFIG_NAMESPACE]: {
+            [GUEST_MODULE_CONFIG_KEY]: {
+                guest_user_homeserver_url: string;
+                skip_single_sign_on?: boolean;
+                guest_user_prefix?: string;
+            };
+        };
+    }
+}
+
+declare global {
+    interface Window {
+        // XXX: temporary hack until we rewrite everything in modern modules
+        mxMatrixClientPeg: {
+            safeGet(): {
+                getSafeUserId(): string;
+            };
+        };
+    }
+}
 
 class OpendeskModule implements Module {
     public static readonly moduleApiVersion = "^0.1.0";
@@ -18,11 +45,33 @@ class OpendeskModule implements Module {
     public constructor(private api: Api) {}
 
     public async load(): Promise<void> {
-        this.api._registerLegacyModule(NordeckOpendeskModule);
-        this.api._registerLegacyModule(GuestModule);
-        this.api._registerLegacyModule(WidgetLifecycleModule);
-        this.api._registerLegacyModule(WidgetTogglesModule);
-        this.api._registerLegacyComponentVisibilityCustomisations(ComponentVisibilityCustomisations);
+        const { api } = this;
+
+        api._registerLegacyModule(NordeckOpendeskModule);
+        api._registerLegacyModule(GuestModule);
+        api._registerLegacyModule(WidgetLifecycleModule);
+        api._registerLegacyModule(WidgetTogglesModule);
+        api._registerLegacyComponentVisibilityCustomisations({
+            // XXX: the following is cribbed out of `@nordeck/element-web-guest-module` due to
+            // it making imports incompatible with workspaces
+            /**
+             * Determines whether or not the active MatrixClient user should be able to use
+             * the given UI component. If shown, the user might still not be able to use the
+             * component depending on their contextual permissions. For example, invite options
+             * might be shown to the user but they won't have permission to invite users to
+             * the current room: the button will appear disabled.
+             * @param {UIComponent} component The component to check visibility for.
+             * @returns {boolean} True (default) if the user is able to see the component, false
+             * otherwise.
+             */
+            shouldShowComponent(component): boolean {
+                const config = api.config.get(GUEST_MODULE_CONFIG_NAMESPACE)?.[GUEST_MODULE_CONFIG_KEY] ?? {};
+                assertValidGuestModuleConfig(config);
+
+                const myUserId = window.mxMatrixClientPeg.safeGet().getSafeUserId();
+                return shouldShowComponentShared(config, myUserId, component);
+            },
+        });
     }
 }
 
