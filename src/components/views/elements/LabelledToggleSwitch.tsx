@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import classNames from "classnames";
-import { randomString } from "matrix-js-sdk/src/randomstring";
+import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 
 import ToggleSwitch from "./ToggleSwitch";
 import { Caption } from "../typography/Caption";
@@ -36,7 +36,7 @@ interface IProps {
 }
 
 export default class LabelledToggleSwitch extends React.PureComponent<IProps> {
-    private readonly id = `mx_LabelledToggleSwitch_${randomString(12)}`;
+    private readonly id = `mx_LabelledToggleSwitch_${secureRandomString(12)}`;
 
     public render(): React.ReactNode {
         // This is a minimal version of a SettingsFlag

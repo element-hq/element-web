@@ -18,6 +18,8 @@ export { expect };
 export const test = base.extend<{
     util: Helpers;
 }>({
+    displayName: "Alice",
+
     util: async ({ page, app, bot }, use) => {
         await use(new Helpers(page, app));
     },
@@ -68,6 +70,20 @@ class Helpers {
     }
 
     /**
+     * Get the recovery section
+     */
+    getEncryptionRecoverySection() {
+        return this.page.getByTestId("recoveryPanel");
+    }
+
+    /**
+     * Get the encryption details section
+     */
+    getEncryptionDetailsSection() {
+        return this.page.getByTestId("encryptionDetails");
+    }
+
+    /**
      * Set the default key id of the secret storage to `null`
      */
     async removeSecretStorageDefaultKeyId() {
@@ -92,6 +108,6 @@ class Helpers {
         const clipboardContent = await this.app.getClipboard();
         await dialog.getByRole("textbox").fill(clipboardContent);
         await dialog.getByRole("button", { name: confirmButtonLabel }).click();
-        await expect(dialog).toMatchScreenshot("default-recovery.png");
+        await expect(this.getEncryptionRecoverySection()).toMatchScreenshot("default-recovery.png");
     }
 }

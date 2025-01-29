@@ -105,6 +105,7 @@ exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
         style="--cpd-icon-button-size: 100%;"
       >
         <svg
+          class=""
           fill="currentColor"
           height="1em"
           viewBox="0 0 24 24"
@@ -130,6 +131,7 @@ exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
         style="--cpd-icon-button-size: 100%;"
       >
         <svg
+          class=""
           fill="currentColor"
           height="1em"
           viewBox="0 0 24 24"

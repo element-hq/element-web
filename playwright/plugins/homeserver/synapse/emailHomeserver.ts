@@ -10,13 +10,13 @@ import { Fixtures } from "../../../element-web-test.ts";
 
 export const emailHomeserver: Fixtures = {
     _homeserver: [
-        async ({ _homeserver: container, mailhog }, use) => {
+        async ({ _homeserver: container, mailpit }, use) => {
             container.withConfig({
                 enable_registration_without_verification: undefined,
                 disable_msisdn_registration: undefined,
                 registrations_require_3pid: ["email"],
                 email: {
-                    smtp_host: "mailhog",
+                    smtp_host: "mailpit",
                     smtp_port: 1025,
                     notif_from: "Your Friendly %(app)s homeserver <noreply@example.com>",
                     app_name: "my_branded_matrix_server",

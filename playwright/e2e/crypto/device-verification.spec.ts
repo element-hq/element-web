@@ -68,8 +68,8 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
 
         // Check that the current device is connected to key backup
         // For now we don't check that the backup key is in cache because it's a bit flaky,
-        // as we need to wait for the secret gossiping to happen and the settings dialog doesn't refresh automatically.
-        await checkDeviceIsConnectedKeyBackup(page, expectedBackupVersion, false);
+        // as we need to wait for the secret gossiping to happen.
+        await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, false);
     });
 
     test("Verify device with QR code during login", async ({ page, app, credentials, homeserver }) => {
@@ -112,9 +112,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         await checkDeviceIsCrossSigned(app);
 
         // Check that the current device is connected to key backup
-        // For now we don't check that the backup key is in cache because it's a bit flaky,
-        // as we need to wait for the secret gossiping to happen and the settings dialog doesn't refresh automatically.
-        await checkDeviceIsConnectedKeyBackup(page, expectedBackupVersion, false);
+        await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, true);
     });
 
     test("Verify device with Security Phrase during login", async ({ page, app, credentials, homeserver }) => {
@@ -135,7 +133,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
 
         // Check that the current device is connected to key backup
         // The backup decryption key should be in cache also, as we got it directly from the 4S
-        await checkDeviceIsConnectedKeyBackup(page, expectedBackupVersion, true);
+        await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, true);
     });
 
     test("Verify device with Security Key during login", async ({ page, app, credentials, homeserver }) => {
@@ -158,7 +156,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
 
         // Check that the current device is connected to key backup
         // The backup decryption key should be in cache also, as we got it directly from the 4S
-        await checkDeviceIsConnectedKeyBackup(page, expectedBackupVersion, true);
+        await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, true);
     });
 
     test("Handle incoming verification request with SAS", async ({ page, credentials, homeserver, toasts }) => {

@@ -71,6 +71,7 @@ Please see LICENSE files in the repository root for full details.
     padding: var(--cpd-space-1-5x);
     cursor: pointer;
     user-select: none;
+    font: var(--cpd-font-body-sm-medium);
 
     /* RoomAvatar doesn't pass classes down to avatar
     So set style here
@@ -83,6 +84,12 @@ Please see LICENSE files in the repository root for full details.
         color: $primary-content;
         background: var(--cpd-color-bg-subtle-primary);
     }
+
+    &.mx_FacePile_toggled {
+        background: var(--cpd-color-bg-success-subtle);
+        color: var(--cpd-color-text-action-accent);
+        font: var(--cpd-font-body-sm-semibold);
+    }
 }
 
 .mx_RoomHeader .mx_BaseAvatar {
@@ -92,4 +99,8 @@ Please see LICENSE files in the repository root for full details.
 .mx_RoomHeader_videoCallOption {
     /* Workaround for https://github.com/element-hq/compound/issues/331 */
     min-width: 240px;
+}
+
+.mx_RoomHeader .mx_RoomHeader_toggled {
+    color: var(--cpd-color-icon-accent-primary);
 }

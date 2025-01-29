@@ -4,6 +4,7 @@ exports[`<RecoveryPanel /> should allow to change the recovery key when everythi
 <DocumentFragment>
   <div
     class="mx_SettingsSection mx_SettingsSection_newUi"
+    data-testid="recoveryPanel"
   >
     <div
       class="mx_SettingsSection_header"
@@ -44,6 +45,7 @@ exports[`<RecoveryPanel /> should ask to enter the recovery key when secrets are
 <DocumentFragment>
   <div
     class="mx_SettingsSection mx_SettingsSection_newUi"
+    data-testid="recoveryPanel"
   >
     <div
       class="mx_SettingsSection_header"
@@ -104,6 +106,7 @@ exports[`<RecoveryPanel /> should ask to set up a recovery key when there is no 
 <DocumentFragment>
   <div
     class="mx_SettingsSection mx_SettingsSection_newUi"
+    data-testid="recoveryPanel"
   >
     <div
       class="mx_SettingsSection_header"
@@ -147,6 +150,7 @@ exports[`<RecoveryPanel /> should be in loading state when checking the recovery
 <DocumentFragment>
   <div
     class="mx_SettingsSection mx_SettingsSection_newUi"
+    data-testid="recoveryPanel"
   >
     <div
       class="mx_SettingsSection_header"

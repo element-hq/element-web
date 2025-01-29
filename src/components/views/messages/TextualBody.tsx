@@ -7,8 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef, SyntheticEvent, MouseEvent, StrictMode } from "react";
-import { MsgType } from "matrix-js-sdk/src/matrix";
+import { MsgType, PushRuleKind } from "matrix-js-sdk/src/matrix";
 import { TooltipProvider } from "@vector-im/compound-web";
+import { globToRegexp } from "matrix-js-sdk/src/utils";
 
 import * as HtmlUtils from "../../../HtmlUtils";
 import { formatDate } from "../../../DateUtils";
@@ -35,6 +36,7 @@ import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
 import { IEventTileOps } from "../rooms/EventTile";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import CodeBlock from "./CodeBlock";
+import { Pill, PillType } from "../elements/Pill";
 import { ReactRootManager } from "../../../utils/react";
 
 interface IState {
@@ -99,6 +101,16 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                     this.wrapPreInReact(pres[i]);
                 }
             }
+        }
+
+        // Highlight notification keywords using pills
+        const pushDetails = this.props.mxEvent.getPushDetails();
+        if (
+            pushDetails.rule?.enabled &&
+            pushDetails.rule.kind === PushRuleKind.ContentSpecific &&
+            pushDetails.rule.pattern
+        ) {
+            this.pillifyNotificationKeywords([content], this.regExpForKeywordPattern(pushDetails.rule.pattern));
         }
     }
 
@@ -208,6 +220,55 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
             node = node.nextSibling as Element;
         }
+    }
+
+    /**
+     * Marks the text that activated a push-notification keyword pattern.
+     */
+    private pillifyNotificationKeywords(nodes: ArrayLike<Element>, exp: RegExp): void {
+        let node: Node | null = nodes[0];
+        while (node) {
+            if (node.nodeType === Node.TEXT_NODE) {
+                const text = node.nodeValue;
+                if (!text) {
+                    node = node.nextSibling;
+                    continue;
+                }
+                const match = text.match(exp);
+                if (!match || match.length < 3) {
+                    node = node.nextSibling;
+                    continue;
+                }
+                const keywordText = match[2];
+                const idx = match.index! + match[1].length;
+                const before = text.substring(0, idx);
+                const after = text.substring(idx + keywordText.length);
+
+                const container = document.createElement("span");
+                const newContent = (
+                    <>
+                        {before}
+                        <TooltipProvider>
+                            <Pill text={keywordText} type={PillType.Keyword} />
+                        </TooltipProvider>
+                        {after}
+                    </>
+                );
+                this.reactRoots.render(newContent, container, node);
+
+                node.parentNode?.replaceChild(container, node);
+            } else if (node.childNodes && node.childNodes.length) {
+                this.pillifyNotificationKeywords(node.childNodes as NodeListOf<Element>, exp);
+            }
+
+            node = node.nextSibling;
+        }
+    }
+
+    private regExpForKeywordPattern(pattern: string): RegExp {
+        // Reflects the push notification pattern-matching implementation at
+        // https://github.com/matrix-org/matrix-js-sdk/blob/dbd7d26968b94700827bac525c39afff2c198e61/src/pushprocessor.ts#L570
+        return new RegExp("(^|\\W)(" + globToRegexp(pattern) + ")(\\W|$)", "i");
     }
 
     private findLinks(nodes: ArrayLike<Element>): string[] {
