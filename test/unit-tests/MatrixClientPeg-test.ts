@@ -86,6 +86,9 @@ describe("MatrixClientPeg", () => {
                 startDehydration: mockStartDehydration,
                 setDeviceIsolationMode: jest.fn(),
             } as any);
+            jest.spyOn(testPeg.safeGet(), "waitForClientWellKnown").mockResolvedValue({
+                "org.matrix.msc3814": true,
+            } as any);
 
             const cryptoStoreKey = new Uint8Array([1, 2, 3, 4]);
             await testPeg.start({ rustCryptoStoreKey: cryptoStoreKey });

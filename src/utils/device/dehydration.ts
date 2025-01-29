@@ -21,7 +21,7 @@ import { MatrixClientPeg } from "../../MatrixClientPeg";
  *
  * Dehydration can currently only be enabled by setting a flag in the .well-known file.
  */
-async function deviceDehydrationEnabled(crypto: CryptoApi | undefined): Promise<boolean> {
+export async function deviceDehydrationEnabled(crypto: CryptoApi | undefined): Promise<boolean> {
     if (!crypto) {
         return false;
     }
