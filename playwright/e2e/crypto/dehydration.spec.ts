@@ -11,6 +11,7 @@ import { Locator, type Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
 import { viewRoomSummaryByName } from "../right-panel/utils";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
+import { completeCreateSecretStorageDialog } from "./utils.ts";
 
 const ROOM_NAME = "Test room";
 const NAME = "Alice";
@@ -44,7 +45,7 @@ test.use({
 test.describe("Dehydration", () => {
     test.skip(isDendrite, "does not yet support dehydration v2");
 
-    test("Create dehydrated device", async ({ page, user, app }, workerInfo) => {
+    test("'Set up secure backup' creates dehydrated device", async ({ page, user, app }, workerInfo) => {
         // Create a backup (which will create SSSS, and dehydrated device)
 
         const securityTab = await app.settings.openUserSettings("Security & Privacy");
@@ -53,17 +54,7 @@ test.describe("Dehydration", () => {
         await expect(securityTab.getByText("Offline device enabled")).not.toBeVisible();
         await securityTab.getByRole("button", { name: "Set up", exact: true }).click();
 
-        const currentDialogLocator = page.locator(".mx_Dialog");
-
-        // It's the first time and secure storage is not set up, so it will create one
-        await expect(currentDialogLocator.getByRole("heading", { name: "Set up Secure Backup" })).toBeVisible();
-        await currentDialogLocator.getByRole("button", { name: "Continue", exact: true }).click();
-        await expect(currentDialogLocator.getByRole("heading", { name: "Save your Security Key" })).toBeVisible();
-        await currentDialogLocator.getByRole("button", { name: "Copy", exact: true }).click();
-        await currentDialogLocator.getByRole("button", { name: "Continue", exact: true }).click();
-
-        await expect(currentDialogLocator.getByRole("heading", { name: "Secure Backup successful" })).toBeVisible();
-        await currentDialogLocator.getByRole("button", { name: "Done", exact: true }).click();
+        await completeCreateSecretStorageDialog(page);
 
         // Open the settings again
         await app.settings.openUserSettings("Security & Privacy");

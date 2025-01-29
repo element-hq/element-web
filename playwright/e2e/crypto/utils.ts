@@ -288,19 +288,38 @@ export async function doTwoWaySasVerification(page: Page, verifier: JSHandle<Ver
 export async function enableKeyBackup(app: ElementAppPage): Promise<string> {
     await app.settings.openUserSettings("Security & Privacy");
     await app.page.getByRole("button", { name: "Set up Secure Backup" }).click();
-    const dialog = app.page.locator(".mx_Dialog");
-    // Recovery key is selected by default
-    await dialog.getByRole("button", { name: "Continue" }).click({ timeout: 60000 });
 
-    // copy the text ourselves
-    const securityKey = await dialog.locator(".mx_CreateSecretStorageDialog_recoveryKey code").textContent();
-    await copyAndContinue(app.page);
+    return await completeCreateSecretStorageDialog(app.page);
+}
 
-    await expect(dialog.getByText("Secure Backup successful")).toBeVisible();
-    await dialog.getByRole("button", { name: "Done" }).click();
-    await expect(dialog.getByText("Secure Backup successful")).not.toBeVisible();
+/**
+ * Go through the "Set up Secure Backup" dialog (aka the `CreateSecretStorageDialog`).
+ *
+ * Assumes the dialog is already open for some reason (see also {@link enableKeyBackup}).
+ *
+ * @returns the new recovery key.
+ */
+export async function completeCreateSecretStorageDialog(page: Page): Promise<string> {
+    const currentDialogLocator = page.locator(".mx_Dialog");
 
-    return securityKey;
+    await expect(currentDialogLocator.getByRole("heading", { name: "Set up Secure Backup" })).toBeVisible();
+    // "Generate a Security Key" is selected by default
+    await currentDialogLocator.getByRole("button", { name: "Continue", exact: true }).click();
+    await expect(currentDialogLocator.getByRole("heading", { name: "Save your Security Key" })).toBeVisible();
+    await currentDialogLocator.getByRole("button", { name: "Copy", exact: true }).click();
+    // copy the recovery key to use it later
+    const recoveryKey = await page.evaluate(() => navigator.clipboard.readText());
+    await currentDialogLocator.getByRole("button", { name: "Continue", exact: true }).click();
+
+    // If the device is unverified, there should be a "Setting up keys" step; however, it
+    // can be quite quick, and playwright can miss it, so we can't test for it.
+
+    // Either way, we end up at a success dialog:
+    await expect(currentDialogLocator.getByRole("heading", { name: "Secure Backup successful" })).toBeVisible();
+    await currentDialogLocator.getByRole("button", { name: "Done", exact: true }).click();
+    await expect(currentDialogLocator.getByText("Secure Backup successful")).not.toBeVisible();
+
+    return recoveryKey;
 }
 
 /**
