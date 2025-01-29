@@ -2038,10 +2038,10 @@
   resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.29.1.tgz#b812b932d82de1409fa47199260c9a4d4f8349e8"
   integrity sha512-EyN6TMG4fCeNoQEa0uYTNnMLT4M/F3eCU/usjLDHkVgIcwevvBCHxw2379IbOm4kJBbhSW/pcNkGRKntWu0J9g==
 
-"@matrix-org/emojibase-bindings@^1.3.3":
-  version "1.3.3"
-  resolved "https://registry.yarnpkg.com/@matrix-org/emojibase-bindings/-/emojibase-bindings-1.3.3.tgz#cee82a739c0866bf3100b03755647ace1f3ba6ef"
-  integrity sha512-GwuZdmF+wZT34RKehQYjTzdgba1ju2W3FM4jPJfwqh0jUxVXZLb+6b6dV3lna6/7EDzgGvOMwTwCAolILDwS0g==
+"@matrix-org/emojibase-bindings@^1.3.4":
+  version "1.3.4"
+  resolved "https://registry.yarnpkg.com/@matrix-org/emojibase-bindings/-/emojibase-bindings-1.3.4.tgz#b0dad8e8b8bbe433e419b59e38f933bcdaf9c271"
+  integrity sha512-+nhBg0dxjy3U4/Tn6WIsnzqiqazc0pfStc2dkSBxDnc4xnimDB6vcIad53fUIsl7SeT50ake0hhnBJs0ZDDk6Q==
   dependencies:
     emojibase "^15.3.1"
     emojibase-data "^15.3.1"
@@ -3483,7 +3483,7 @@
     ts-xor "^1.3.0"
     vaul "^1.0.0"
 
-"@vector-im/matrix-wysiwyg-wasm@link:../../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.0-af862ffd231dc0a6b8d6f2cb3601e68456c0ff24-integrity/node_modules/bindings/wysiwyg-wasm":
+"@vector-im/matrix-wysiwyg-wasm@link:../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.0-af862ffd231dc0a6b8d6f2cb3601e68456c0ff24-integrity/node_modules/bindings/wysiwyg-wasm":
   version "0.0.0"
   uid ""
 
@@ -3492,7 +3492,7 @@
   resolved "https://registry.yarnpkg.com/@vector-im/matrix-wysiwyg/-/matrix-wysiwyg-2.38.0.tgz#af862ffd231dc0a6b8d6f2cb3601e68456c0ff24"
   integrity sha512-cMEVicFYVzFxuSyWON0aVGjAJMcgJZ+LxuLTEp8EGuu8cRacuh0RN5rapb11YVZygzFvE7X1cMedJ/fKd5vRLA==
   dependencies:
-    "@vector-im/matrix-wysiwyg-wasm" "link:../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.0-af862ffd231dc0a6b8d6f2cb3601e68456c0ff24-integrity/node_modules/bindings/wysiwyg-wasm"
+    "@vector-im/matrix-wysiwyg-wasm" "link:../../Library/Caches/Yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.0-af862ffd231dc0a6b8d6f2cb3601e68456c0ff24-integrity/node_modules/bindings/wysiwyg-wasm"
 
 "@webassemblyjs/ast@1.14.1", "@webassemblyjs/ast@^1.14.1":
   version "1.14.1"
