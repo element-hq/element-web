@@ -33,8 +33,9 @@ import { RecoveryPanelOutOfSync } from "../../encryption/RecoveryPanelOutOfSync"
  *  - "set_recovery_key": The panel to show when the user is setting up their recovery key.
  *                        This happens when the user doesn't have a key a recovery key and the user clicks on "Set up recovery key" button of the RecoveryPanel.
  *  - "reset_identity": The panel to show when the user is resetting their identity.
- *  - `secrets_not_cached`: The user has a recovery key but the secrets are not cached.
- *                          This can happen if we verified another device and secret-gossiping failed, or the other device itself lacked the secrets.
+ *  - `secrets_not_cached`: The secrets are not cached locally. This can happen if we verified another device and secret-gossiping failed, or the other device itself lacked the secrets.
+ *                          If the "set_up_encryption" and "secrets_not_cached" conditions are both filled, "set_up_encryption" prevails.
+ *
  */
 type State =
     | "loading"
@@ -98,7 +99,7 @@ export function EncryptionUserSettingsTab(): JSX.Element {
 /**
  * Hook to check if the user needs:
  * - to go through the SetupEncryption flow.
- * - to enter their recovery key, if the secrets are not cached.
+ * - to enter their recovery key, if the secrets are not cached locally.
  *
  * If the user needs to set up the encryption, the state will be set to "set_up_encryption".
  * If the user secrets are not cached, the state will be set to "secrets_not_cached".
