@@ -43,6 +43,7 @@ import { ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePaylo
 import { SDKContext } from "../../contexts/SDKContext";
 import { shouldShowFeedback } from "../../utils/Feedback";
 import DarkLightModeSvg from "../../../res/img/element-icons/roomlist/dark-light-mode.svg";
+import { ModuleRunner } from "../../modules/ModuleRunner";
 
 interface IProps {
     isPanelCollapsed: boolean;
@@ -410,11 +411,15 @@ export default class UserMenu extends React.Component<IProps, IState> {
 
         const userId = MatrixClientPeg.safeGet().getSafeUserId();
         const displayName = OwnProfileStore.instance.displayName || userId;
-        const avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(avatarSize);
+        let avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(avatarSize);
 
         let name: JSX.Element | undefined;
         if (!this.props.isPanelCollapsed) {
             name = <div className="mx_UserMenu_name">{displayName}</div>;
+        }
+
+        if (!avatarUrl) {
+            avatarUrl = ModuleRunner.instance.extensions.conference.defaultAvatarUrlForString(userId);
         }
 
         return (

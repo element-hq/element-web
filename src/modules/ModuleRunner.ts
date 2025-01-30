@@ -17,6 +17,10 @@ import {
     DefaultExperimentalExtensions,
     ProvideExperimentalExtensions,
 } from "@matrix-org/react-sdk-module-api/lib/lifecycles/ExperimentalExtensions";
+import {
+    DefaultConferenceExtensions,
+    ProvideConferenceExtensions,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/ConferenceExtensions";
 
 import { AppModule } from "./AppModule";
 import { ModuleFactory } from "./ModuleFactory";
@@ -30,12 +34,16 @@ class ExtensionsManager {
     // Private backing fields for extensions
     private cryptoSetupExtension: ProvideCryptoSetupExtensions;
     private experimentalExtension: ProvideExperimentalExtensions;
+    private conferenceExtension: ProvideConferenceExtensions;
 
     /** `true` if `cryptoSetupExtension` is the default implementation; `false` if it is implemented by a module. */
     private hasDefaultCryptoSetupExtension = true;
 
     /** `true` if `experimentalExtension` is the default implementation; `false` if it is implemented by a module. */
     private hasDefaultExperimentalExtension = true;
+
+    /** `true` if `conferenceExtension` is the default implementation; `false` if it is implemented by a module. */
+    private hasDefaultConferenceExtension = true;
 
     /**
      * Create a new instance.
@@ -44,6 +52,7 @@ class ExtensionsManager {
         // Set up defaults
         this.cryptoSetupExtension = new DefaultCryptoSetupExtensions();
         this.experimentalExtension = new DefaultExperimentalExtensions();
+        this.conferenceExtension = new DefaultConferenceExtensions();
     }
 
     /**
@@ -65,6 +74,15 @@ class ExtensionsManager {
      */
     public get experimental(): ProvideExperimentalExtensions {
         return this.experimentalExtension;
+    }
+
+    /**
+     * Provides extensions useful to conferences.
+     *
+     * @returns The registered extension. If no module provides this extension, a default implementation is returned.
+     */
+    public get conference(): ProvideConferenceExtensions {
+        return this.conferenceExtension;
     }
 
     /**
@@ -97,6 +115,18 @@ class ExtensionsManager {
             } else {
                 throw new Error(
                     `adding experimental extension implementation from module ${runtimeModule.moduleName} but an implementation was already provided.`,
+                );
+            }
+        }
+
+        /* Add the experimental extension if any */
+        if (runtimeModule.extensions?.conference) {
+            if (this.hasDefaultConferenceExtension) {
+                this.conferenceExtension = runtimeModule.extensions.conference;
+                this.hasDefaultConferenceExtension = false;
+            } else {
+                throw new Error(
+                    `adding conference extension implementation from module ${runtimeModule.moduleName} but an implementation was already provided.`,
                 );
             }
         }

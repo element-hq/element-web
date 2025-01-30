@@ -132,6 +132,7 @@ import { SessionLockStolenView } from "./auth/SessionLockStolenView";
 import { ConfirmSessionLockTheftView } from "./auth/ConfirmSessionLockTheftView";
 import { LoginSplashView } from "./auth/LoginSplashView";
 import { cleanUpDraftsIfRequired } from "../../DraftCleaner";
+import { ClientLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/ClientLifecycle";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -1553,6 +1554,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
             this.firstSyncComplete = true;
             this.firstSyncPromise.resolve();
+            console.log('TEST!!!');
+            ModuleRunner.instance.invoke(ClientLifecycle.FirstSync);
 
             if (Notifier.shouldShowPrompt() && !MatrixClientPeg.userRegisteredWithinLastHours(24)) {
                 showNotificationsToast(false);

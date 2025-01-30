@@ -13,6 +13,7 @@ import DMRoomMap from "./utils/DMRoomMap";
 import { mediaFromMxc } from "./customisations/Media";
 import { isLocalRoom } from "./utils/localRoom/isLocalRoom";
 import { getFirstGrapheme } from "./utils/strings";
+import { ModuleRunner } from "./modules/ModuleRunner";
 
 /**
  * Hardcoded from the Compound colors.
@@ -98,6 +99,12 @@ const colorToDataURLCache = new Map<string, string>();
 
 export function defaultAvatarUrlForString(s: string): string {
     if (!s) return ""; // XXX: should never happen but empirically does by evidence of a rageshake
+
+    const avatar = ModuleRunner.instance.extensions.conference.defaultAvatarUrlForString(s);
+    if (avatar !== null) {
+        return avatar;
+    }
+
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const colorIndex = useIdColorHash(s);
     // overwritten color value in custom themes
@@ -132,6 +139,11 @@ export function getInitialLetter(name: string): string | undefined {
     }
     if (name.length < 1) {
         return undefined;
+    }
+
+    const avatar = ModuleRunner.instance.extensions.conference.getAvatarInitialLetter(name);
+    if (avatar !== null) {
+        return avatar;
     }
 
     const initial = name[0];

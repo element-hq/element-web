@@ -26,6 +26,7 @@ import {
 import TextInputDialog from "../dialogs/TextInputDialog";
 import AccessibleButton from "../elements/AccessibleButton";
 import withValidation from "../elements/Validation";
+import { ModuleRunner } from "../../../modules/ModuleRunner";
 
 const SETTING_NAME = "room_directory_servers";
 
@@ -122,13 +123,17 @@ function useServers(): ServerList {
     removeAll(removableServers, homeServer);
     removeAll(removableServers, ...configServers);
 
+    const allServers = [
+        // we always show our connected HS, this takes precedence over it being configured or user-defined
+        homeServer,
+        ...Array.from(configServers).sort(),
+        ...Array.from(removableServers).sort(),
+    ]
+
+    
+
     return {
-        allServers: [
-            // we always show our connected HS, this takes precedence over it being configured or user-defined
-            homeServer,
-            ...Array.from(configServers).sort(),
-            ...Array.from(removableServers).sort(),
-        ],
+        allServers: ModuleRunner.instance.extensions.conference.filterServerList(allServers),
         homeServer,
         userDefinedServers: Array.from(removableServers).sort(),
         setUserDefinedServers,

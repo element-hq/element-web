@@ -16,6 +16,7 @@ import SdkConfig from "../../../SdkConfig";
 import Modal from "../../../Modal";
 import ServerPickerDialog from "../dialogs/ServerPickerDialog";
 import InfoDialog from "../dialogs/InfoDialog";
+import { ModuleRunner } from "../../../modules/ModuleRunner";
 
 interface IProps {
     title?: string;
@@ -77,7 +78,10 @@ const ServerPicker: React.FC<IProps> = ({ title, dialogTitle, serverConfig, onSe
     }
 
     let desc;
-    if (serverConfig.hsName === "matrix.org") {
+    const moduleDesc = ModuleRunner.instance.extensions.conference.serverLoginNotice(serverConfig.hsName);
+    if (moduleDesc) {
+        desc = <span className="mx_ServerPicker_desc">{moduleDesc}</span>;
+    } else if (serverConfig.hsName === "matrix.org") {
         desc = <span className="mx_ServerPicker_desc">{_t("auth|server_picker_description_matrix.org")}</span>;
     }
 
