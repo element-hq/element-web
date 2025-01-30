@@ -297,9 +297,17 @@ export async function enableKeyBackup(app: ElementAppPage): Promise<string> {
  *
  * Assumes the dialog is already open for some reason (see also {@link enableKeyBackup}).
  *
+ * @param page - The playwright `Page` fixture.
+ * @param opts - Options object
+ * @param opts.accountPassword - The user's account password. If we are also resetting cross-signing, then we will need
+ *   to upload the public cross-signing keys, which will cause the app to prompt for the password.
+ *
  * @returns the new recovery key.
  */
-export async function completeCreateSecretStorageDialog(page: Page): Promise<string> {
+export async function completeCreateSecretStorageDialog(
+    page: Page,
+    opts?: { accountPassword?: string },
+): Promise<string> {
     const currentDialogLocator = page.locator(".mx_Dialog");
 
     await expect(currentDialogLocator.getByRole("heading", { name: "Set up Secure Backup" })).toBeVisible();
@@ -311,8 +319,14 @@ export async function completeCreateSecretStorageDialog(page: Page): Promise<str
     const recoveryKey = await page.evaluate(() => navigator.clipboard.readText());
     await currentDialogLocator.getByRole("button", { name: "Continue", exact: true }).click();
 
-    // If the device is unverified, there should be a "Setting up keys" step; however, it
-    // can be quite quick, and playwright can miss it, so we can't test for it.
+    // If the device is unverified, there should be a "Setting up keys" step.
+    // If this is not the first time we are setting up cross-signing, the app will prompt for our password; otherwise
+    // the step is quite quick, and playwright can miss it, so we can't test for it.
+    if (opts && Object.hasOwn(opts, "accountPassword")) {
+        await expect(currentDialogLocator.getByRole("heading", { name: "Setting up keys" })).toBeVisible();
+        await page.getByPlaceholder("Password").fill(opts!.accountPassword);
+        await currentDialogLocator.getByRole("button", { name: "Continue" }).click();
+    }
 
     // Either way, we end up at a success dialog:
     await expect(currentDialogLocator.getByRole("heading", { name: "Secure Backup successful" })).toBeVisible();

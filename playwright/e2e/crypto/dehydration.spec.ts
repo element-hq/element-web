@@ -11,7 +11,8 @@ import { Locator, type Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
 import { viewRoomSummaryByName } from "../right-panel/utils";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
-import { completeCreateSecretStorageDialog } from "./utils.ts";
+import { completeCreateSecretStorageDialog, createBot, logIntoElement } from "./utils.ts";
+import { Client } from "../../pages/client.ts";
 
 const ROOM_NAME = "Test room";
 const NAME = "Alice";
@@ -87,4 +88,49 @@ test.describe("Dehydration", () => {
         await expect(page.locator(".mx_UserInfo_devices").getByText("Offline device enabled")).toBeVisible();
         await expect(page.locator(".mx_UserInfo_devices").getByText("Dehydrated device")).not.toBeVisible();
     });
+
+    test("Reset recovery key during login re-creates dehydrated device", async ({
+        page,
+        homeserver,
+        app,
+        credentials,
+    }) => {
+        // Set up cross-signing and recovery
+        const { botClient } = await createBot(page, homeserver, credentials);
+        // ... and dehydration
+        await botClient.evaluate(async (client) => await client.getCrypto().startDehydration());
+
+        const initialDehydratedDeviceIds = await getDehydratedDeviceIds(botClient);
+        expect(initialDehydratedDeviceIds.length).toBe(1);
+
+        await botClient.evaluate(async (client) => client.stopClient());
+
+        // Log in our client
+        await logIntoElement(page, credentials);
+
+        // Oh no, we forgot our recovery key
+        await page.locator(".mx_AuthPage").getByRole("button", { name: "Reset all" }).click();
+        await page.locator(".mx_AuthPage").getByRole("button", { name: "Proceed with reset" }).click();
+
+        await completeCreateSecretStorageDialog(page, { accountPassword: credentials.password });
+
+        // There should be a brand new dehydrated device
+        const dehydratedDeviceIds = await getDehydratedDeviceIds(app.client);
+        expect(dehydratedDeviceIds.length).toBe(1);
+        expect(dehydratedDeviceIds[0]).not.toEqual(initialDehydratedDeviceIds[0]);
+    });
 });
+
+async function getDehydratedDeviceIds(client: Client): Promise<string[]> {
+    return await client.evaluate(async (client) => {
+        const userId = client.getUserId();
+        const devices = await client.getCrypto().getUserDeviceInfo([userId]);
+        return Array.from(
+            devices
+                .get(userId)
+                .values()
+                .filter((d) => d.dehydrated)
+                .map((d) => d.deviceId),
+        );
+    });
+}
