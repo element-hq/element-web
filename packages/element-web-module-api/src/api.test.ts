@@ -7,15 +7,14 @@ Please see LICENSE files in the repository root for full details.
 
 import { expect, test } from "vitest";
 
-import { Api, isModule } from "./api.js";
+import { Api } from ".";
+import { isModule } from "./api.js";
 
 const TestModule = {
     default: class TestModule {
         public static moduleApiVersion = "1.0.0";
         public constructor(private readonly api: Api) {}
-        public async load(): Promise<void> {
-            console.log("TestModule loaded");
-        }
+        public async load(): Promise<void> {}
     },
 };
 
