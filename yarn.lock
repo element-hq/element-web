@@ -1533,6 +1533,11 @@
   resolved "https://registry.yarnpkg.com/@dual-bundle/import-meta-resolve/-/import-meta-resolve-4.1.0.tgz#519c1549b0e147759e7825701ecffd25e5819f7b"
   integrity sha512-+nxncfwHM5SgAtrVzgpzJOI1ol0PkumhVo469KCf9lUi21IGcY90G98VuHm9VRrUypmAzawAHO9bs6hqeADaVg==
 
+"@element-hq/element-web-module-api@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@element-hq/element-web-module-api/-/element-web-module-api-0.1.0.tgz#9785e97b229234eb20a477a3f2eb1674b8fd9678"
+  integrity sha512-CqlY9H9ei0bev+dw7UgaB0zisMjYhxSqCzKi2FkChcvmH8bPHQ0F4ROtDTugBsa1AYCNumk97yaTUsZR5BcBpw==
+
 "@eslint-community/eslint-utils@^4.2.0":
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/@eslint-community/eslint-utils/-/eslint-utils-4.4.0.tgz#a23514e8fb9af1269d5f7788aa556798d61c6b59"

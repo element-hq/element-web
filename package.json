@@ -80,6 +80,7 @@
     },
     "dependencies": {
         "@babel/runtime": "^7.12.5",
+        "@element-hq/element-web-module-api": "^0.1.0",
         "@fontsource/inconsolata": "^5",
         "@fontsource/inter": "^5",
         "@formatjs/intl-segmenter": "^11.5.7",
