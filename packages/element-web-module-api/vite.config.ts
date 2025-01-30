@@ -27,4 +27,22 @@ export default defineConfig({
     define: {
         __VERSION__: JSON.stringify(process.env.npm_package_version),
     },
+    test: {
+        coverage: {
+            provider: "v8",
+            include: ["src/**/*"],
+            reporter: "lcov",
+        },
+        reporters: [
+            [
+                "vitest-sonar-reporter",
+                {
+                    outputFile: "coverage/sonar-report.xml",
+                    onWritePath(path: string): string {
+                        return `packages/element-web-module-api/${path}`;
+                    },
+                },
+            ],
+        ],
+    },
 });
