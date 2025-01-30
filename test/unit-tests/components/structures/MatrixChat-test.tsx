@@ -125,7 +125,6 @@ describe("<MatrixChat />", () => {
         }),
         getVisibleRooms: jest.fn().mockReturnValue([]),
         getRooms: jest.fn().mockReturnValue([]),
-        setGlobalErrorOnUnknownDevices: jest.fn(),
         getCrypto: jest.fn().mockReturnValue({
             getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
             isCrossSigningReady: jest.fn().mockReturnValue(false),
