@@ -10,7 +10,7 @@ import { Button, InlineSpinner, Separator } from "@vector-im/compound-web";
 import ComputerIcon from "@vector-im/compound-design-tokens/assets/web/icons/computer";
 
 import SettingsTab from "../SettingsTab";
-import { RecoveryPanel, RecoveryPanelOutOfSync } from "../../encryption/RecoveryPanel";
+import { RecoveryPanel } from "../../encryption/RecoveryPanel";
 import { ChangeRecoveryKey } from "../../encryption/ChangeRecoveryKey";
 import { useMatrixClientContext } from "../../../../../contexts/MatrixClientContext";
 import { _t } from "../../../../../languageHandler";
@@ -20,6 +20,7 @@ import { SettingsSection } from "../../shared/SettingsSection";
 import { SettingsSubheader } from "../../SettingsSubheader";
 import { AdvancedPanel } from "../../encryption/AdvancedPanel";
 import { ResetIdentityPanel } from "../../encryption/ResetIdentityPanel";
+import { RecoveryPanelOutOfSync } from "../../encryption/RecoveryPanelOutOfSync";
 
 /**
  * The state in the encryption settings tab.
