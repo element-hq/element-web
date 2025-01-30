@@ -51,25 +51,23 @@ interface Props {
 
 export function EncryptionUserSettingsTab({ initialState = "loading" }: Props): JSX.Element {
     const [state, setState] = useState<State>(initialState);
-    //const [isCrossSigningReady, setIsCrossSigningReady] = useState<boolean | undefined>(undefined);
     const matrixClient = useMatrixClientContext();
 
     const recheckSetupRequired = useCallback(() => {
         (async () => {
             const crypto = matrixClient.getCrypto()!;
             const isCrossSigningReady = await crypto.isCrossSigningReady();
-            //setIsCrossSigningReady(isCrossSigningReady);
             if (isCrossSigningReady) {
                 setState("main");
             } else {
                 setState("set_up_encryption");
             }
         })();
-    }, []);
+    }, [matrixClient]);
 
     useEffect(() => {
         if (state === "loading") recheckSetupRequired();
-    }, [recheckSetupRequired]);
+    }, [recheckSetupRequired, state]);
 
     let content: JSX.Element;
     switch (state) {
