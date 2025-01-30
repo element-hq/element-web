@@ -81,26 +81,22 @@ async function getSecretStorageKey(
     secretName: string,
 ): Promise<[string, Uint8Array]> {
     const cli = MatrixClientPeg.safeGet();
-    let keyId = await cli.secretStorage.getDefaultKeyId();
-    let keyInfo!: SecretStorage.SecretStorageKeyDescription;
-    if (keyId) {
-        // use the default SSSS key if set
-        keyInfo = keyInfos[keyId];
-        if (!keyInfo) {
-            // if the default key is not available, pretend the default key
-            // isn't set
-            keyId = null;
-        }
-    }
-    if (!keyId) {
-        // if no default SSSS key is set, fall back to a heuristic of using the
+    const defaultKeyId = await cli.secretStorage.getDefaultKeyId();
+
+    let keyId: string;
+    // If the defaultKey is useful, use that
+    if (defaultKeyId && keyInfos[defaultKeyId]) {
+        keyId = defaultKeyId;
+    } else {
+        // Fall back to a heuristic of using the
         // only available key, if only one key is set
-        const keyInfoEntries = Object.entries(keyInfos);
-        if (keyInfoEntries.length > 1) {
+        const usefulKeys = Object.keys(keyInfos);
+        if (usefulKeys.length > 1) {
             throw new Error("Multiple storage key requests not implemented");
         }
-        [keyId, keyInfo] = keyInfoEntries[0];
+        keyId = usefulKeys[0];
     }
+    const keyInfo = keyInfos[keyId];
     logger.debug(
         `getSecretStorageKey: request for 4S keys [${Object.keys(keyInfos)}] for secret \`${secretName}\`: looking for key ${keyId}`,
     );
@@ -116,6 +112,12 @@ async function getSecretStorageKey(
         logger.debug("getSecretStorageKey: Using secret storage key from CryptoSetupExtension");
         cacheSecretStorageKey(keyId, keyInfo, keyFromCustomisations);
         return [keyId, keyFromCustomisations];
+    }
+
+    // We only prompt the user for the default key
+    if (keyId !== defaultKeyId) {
+        logger.debug(`getSecretStorageKey: request for non-default key ${keyId}: not prompting user`);
+        throw new Error("Request for non-default 4S key");
     }
 
     logger.debug(`getSecretStorageKey: prompting user for key ${keyId}`);
