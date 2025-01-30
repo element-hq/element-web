@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { expect, test, describe, vi, beforeEach, afterEach } from "vitest";
+import { expect, test, describe, vi, beforeEach } from "vitest";
 
 import { Api, ModuleIncompatibleError, ModuleLoader } from ".";
 
