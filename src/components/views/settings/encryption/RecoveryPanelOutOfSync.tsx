@@ -22,7 +22,11 @@ interface RecoveryPanelOutOfSyncProps {
 }
 
 /**
- * This component is shown when the user secrets are not cached and the recovery key needs to be entered.
+ * This component is shown as part of the {@link EncryptionUserSettingsTab}, instead of the
+ * {@link RecoveryPanel}, when some of the user secrets are not cached in the local client.
+ *
+ * It prompts the user to enter their recovery key so that the secrets can be loaded from 4S into
+ * the client.
  */
 export function RecoveryPanelOutOfSync({ onFinish }: RecoveryPanelOutOfSyncProps): JSX.Element {
     return (
