@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, screen, waitFor } from "jest-matrix-react";
+import { render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
 import ToastContainer from "../../../src/components/structures/ToastContainer";
