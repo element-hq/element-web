@@ -16,7 +16,7 @@ import {
     verifySession,
 } from "../../crypto/utils";
 
-test.describe("Recovery section in Encryption tab", () => {
+test.describe("Encryption tab", () => {
     test.use({
         displayName: "Alice",
     });
@@ -25,41 +25,46 @@ test.describe("Recovery section in Encryption tab", () => {
     let expectedBackupVersion: string;
 
     test.beforeEach(async ({ page, homeserver, credentials }) => {
+        // The bot bootstraps cross-signing, creates a key backup and sets up a recovery key
         const res = await createBot(page, homeserver, credentials);
         recoveryKey = res.recoveryKey;
         expectedBackupVersion = res.expectedBackupVersion;
     });
 
-    test("should verify the device", { tag: "@screenshot" }, async ({ page, app, util }) => {
-        const dialog = await util.openEncryptionTab();
-        const content = util.getEncryptionTabContent();
+    test(
+        "should show a 'Verify this device' button if the device is unverified",
+        { tag: "@screenshot" },
+        async ({ page, app, util }) => {
+            const dialog = await util.openEncryptionTab();
+            const content = util.getEncryptionTabContent();
 
-        // The user's device is in an unverified state, therefore the only option available to them here is to verify it
-        const verifyButton = dialog.getByRole("button", { name: "Verify this device" });
-        await expect(verifyButton).toBeVisible();
-        await expect(content).toMatchScreenshot("verify-device-encryption-tab.png");
-        await verifyButton.click();
+            // The user's device is in an unverified state, therefore the only option available to them here is to verify it
+            const verifyButton = dialog.getByRole("button", { name: "Verify this device" });
+            await expect(verifyButton).toBeVisible();
+            await expect(content).toMatchScreenshot("verify-device-encryption-tab.png");
+            await verifyButton.click();
 
-        await util.verifyDevice(recoveryKey);
+            await util.verifyDevice(recoveryKey);
 
-        await expect(content).toMatchScreenshot("default-tab.png", {
-            mask: [content.getByTestId("deviceId"), content.getByTestId("sessionKey")],
-        });
+            await expect(content).toMatchScreenshot("default-tab.png", {
+                mask: [content.getByTestId("deviceId"), content.getByTestId("sessionKey")],
+            });
 
-        // Check that our device is now cross-signed
-        await checkDeviceIsCrossSigned(app);
+            // Check that our device is now cross-signed
+            await checkDeviceIsCrossSigned(app);
 
-        // Check that the current device is connected to key backup
-        // The backup decryption key should be in cache also, as we got it directly from the 4S
-        await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, true);
-    });
+            // Check that the current device is connected to key backup
+            // The backup decryption key should be in cache also, as we got it directly from the 4S
+            await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, true);
+        },
+    );
 
     // Test what happens if the cross-signing secrets are in secret storage but are not cached in the local DB.
     //
     // This can happen if we verified another device and secret-gossiping failed, or the other device itself lacked the secrets.
     // We simulate this case by deleting the cached secrets in the indexedDB.
     test(
-        "should enter the recovery key when the secrets are not cached",
+        "should prompt to enter the recovery key when the secrets are not cached locally",
         { tag: "@screenshot" },
         async ({ page, app, util }) => {
             await verifySession(app, "new passphrase");

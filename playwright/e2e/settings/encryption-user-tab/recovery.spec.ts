@@ -14,6 +14,7 @@ test.describe("Recovery section in Encryption tab", () => {
     });
 
     test.beforeEach(async ({ page, homeserver, credentials }) => {
+        // The bot bootstraps cross-signing, creates a key backup and sets up a recovery key
         await createBot(page, homeserver, credentials);
     });
 
