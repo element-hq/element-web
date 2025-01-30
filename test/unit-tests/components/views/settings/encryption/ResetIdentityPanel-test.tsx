@@ -25,7 +25,7 @@ describe("<ResetIdentityPanel />", () => {
 
         const onFinish = jest.fn();
         const { asFragment } = render(
-            <ResetIdentityPanel onFinish={onFinish} onCancelClick={jest.fn()} />,
+            <ResetIdentityPanel variant="compromised" onFinish={onFinish} onCancelClick={jest.fn()} />,
             withClientContextRenderOptions(matrixClient),
         );
         expect(asFragment()).toMatchSnapshot();

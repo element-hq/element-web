@@ -16,7 +16,6 @@ import GenericToast from "../components/views/toasts/GenericToast";
 import { ModuleRunner } from "../modules/ModuleRunner";
 import { SetupEncryptionStore } from "../stores/SetupEncryptionStore";
 import Spinner from "../components/views/elements/Spinner";
-import AccessSecretStorageDialog from "../components/views/dialogs/security/AccessSecretStorageDialog";
 import { OpenToTabPayload } from "../dispatcher/payloads/OpenToTabPayload";
 import { Action } from "../dispatcher/actions";
 import { UserTab } from "../components/views/dialogs/UserTab";
