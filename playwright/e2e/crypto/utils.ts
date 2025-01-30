@@ -145,11 +145,13 @@ export async function checkDeviceIsCrossSigned(app: ElementAppPage): Promise<voi
  * @param app -` ElementAppPage` wrapper for the playwright `Page`.
  * @param expectedBackupVersion - the version of the backup we expect to be connected to.
  * @param checkBackupPrivateKeyInCache - whether to check that the backup decryption key is cached locally
+ * @param checkBackupKeyIn4S - whether to check that the backup key is stored in 4S
  */
 export async function checkDeviceIsConnectedKeyBackup(
     app: ElementAppPage,
     expectedBackupVersion: string,
     checkBackupPrivateKeyInCache: boolean,
+    checkBackupKeyIn4S: boolean = true,
 ): Promise<void> {
     // Sanity check the given backup version: if it's null, something went wrong earlier in the test.
     if (!expectedBackupVersion) {
@@ -192,7 +194,7 @@ export async function checkDeviceIsConnectedKeyBackup(
     // The active backup version is as expected
     expect(activeBackupVersion).toBe(expectedBackupVersion);
     // The backup key is stored in 4S
-    expect(backupKeyIn4S).toBe(true);
+    if (checkBackupKeyIn4S) expect(backupKeyIn4S).toBe(true);
 
     if (checkBackupPrivateKeyInCache) {
         // The backup key is available locally

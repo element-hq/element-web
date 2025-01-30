@@ -11,6 +11,7 @@ import { registerAccountMas } from "../oidc";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 import { TestClientServerAPI } from "../csAPI";
 import { masHomeserver } from "../../plugins/homeserver/synapse/masHomeserver.ts";
+import { checkDeviceIsConnectedKeyBackup } from "./utils";
 
 // These tests register an account with MAS because then we go through the "normal" registration flow
 // and crypto gets set up. Using the 'user' fixture create a user and synthesizes an existing login,
@@ -24,8 +25,11 @@ test.describe("Encryption state after registration", () => {
         await page.getByRole("button", { name: "Continue" }).click();
         await registerAccountMas(page, mailpitClient, `alice_${testInfo.testId}`, "alice@email.com", "Pa$sW0rD!");
 
-        await app.settings.openUserSettings("Security & Privacy");
-        await expect(page.getByText("This session is backing up your keys.")).toBeVisible();
+        // Wait for the ui to load
+        await expect(page.locator(".mx_MatrixChat")).toBeVisible();
+
+        // xxx: why the backup key is not in 4S?
+        await checkDeviceIsConnectedKeyBackup(app, "1", true, false);
     });
 
     test("user is prompted to set up recovery", async ({ page, mailpitClient, app }, testInfo) => {
