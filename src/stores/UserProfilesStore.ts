@@ -75,6 +75,7 @@ export class UserProfilesStore extends TypedEventEmitter<UserProfilesStoreEvents
         } else {
             this.profileSubscriptions.set(userId, { subs: 1, lastSync: 0})
         }
+        console.log(`Number of subs: ${this.profileSubscriptions.size}`);
     }
 
     public unsubscribeToProfile(userId: string) {

@@ -287,7 +287,7 @@ const UserProfileSettings: React.FC<UserProfileSettingsProps> = ({
                 >
                     {statusMessageError && <ErrorMessage>{_t("settings|general|status_message_error")}</ErrorMessage>}
                 </EditInPlace>
-                <EmojiButton single addEmoji={onStatusAddEmoji}/>
+                {statusMessageSupported ? <EmojiButton single addEmoji={onStatusAddEmoji}/> : null}
             </div>
             {avatarError && (
                 <Alert title={_t("settings|general|avatar_upload_error_title")} type="critical">

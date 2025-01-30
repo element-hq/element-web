@@ -1685,7 +1685,7 @@ export const UserInfoHeader: React.FC<{
             />
         );
     } else if (statusMessage) {
-        presenceLabel = <span>statusMessage</span>
+        presenceLabel = <span>{statusMessage}</span>
     }
 
     const timezoneInfo = useUserTimezone(cli, member.userId);
