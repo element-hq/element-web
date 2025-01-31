@@ -7,8 +7,9 @@
  */
 
 // Populate this class with the details of your customisations when copying it.
-import { WidgetPermissionsCustomisations } from "@element-hq/element-web-module-api";
 import { Capability, Widget } from "matrix-widget-api";
+
+import type { WidgetPermissionsCustomisations } from "@element-hq/element-web-module-api";
 
 // A real customisation module will define and export one or more of the
 // customisation points that make up the interface above.

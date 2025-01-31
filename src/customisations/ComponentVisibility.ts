@@ -12,7 +12,7 @@ Please see LICENSE files in the repository root for full details.
 
 // Populate this class with the details of your customisations when copying it.
 
-import { ComponentVisibilityCustomisations as IComponentVisibilityCustomisations } from "@element-hq/element-web-module-api";
+import type { ComponentVisibilityCustomisations as IComponentVisibilityCustomisations } from "@element-hq/element-web-module-api";
 
 // A real customisation module will define and export one or more of the
 // customisation points that make up the interface above.

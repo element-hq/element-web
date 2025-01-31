@@ -9,8 +9,8 @@
 import { MatrixClient, parseErrorResponse, ResizeMethod } from "matrix-js-sdk/src/matrix";
 import { MediaEventContent } from "matrix-js-sdk/src/types";
 import { Optional } from "matrix-events-sdk";
-import { MediaCustomisations, Media } from "@element-hq/element-web-module-api";
 
+import type { MediaCustomisations, Media } from "@element-hq/element-web-module-api";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { IPreparedMedia, prepEventContentAsMedia } from "./models/IMediaEventContent";
 import { UserFriendlyError } from "../languageHandler";

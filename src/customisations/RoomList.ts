@@ -6,8 +6,9 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { RoomListCustomisations as IRoomListCustomisations } from "@element-hq/element-web-module-api";
 import { Room } from "matrix-js-sdk/src/matrix";
+
+import type { RoomListCustomisations as IRoomListCustomisations } from "@element-hq/element-web-module-api";
 
 // Populate this file with the details of your customisations when copying it.
 
