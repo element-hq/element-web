@@ -16,6 +16,7 @@ import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import AvatarSetting from "../settings/AvatarSetting";
 import { htmlSerializeFromMdIfNeeded } from "../../../editor/serialize";
 import { idNameForRoom } from "../avatars/RoomAvatar";
+import { parseTopicContent } from "matrix-js-sdk/src/content-helpers";
 
 interface IProps {
     roomId: string;
@@ -51,7 +52,7 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
         const avatarUrl = avatarEvent?.getContent()["url"] ?? null;
 
         const topicEvent = room.currentState.getStateEvents(EventType.RoomTopic, "");
-        const topic = topicEvent && topicEvent.getContent() ? topicEvent.getContent()["topic"] : "";
+        const topic = topicEvent && parseTopicContent(topicEvent.getContent()).text || "";
 
         const nameEvent = room.currentState.getStateEvents(EventType.RoomName, "");
         const name = nameEvent && nameEvent.getContent() ? nameEvent.getContent()["name"] : "";
@@ -145,6 +146,8 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
 
         if (this.state.originalTopic !== this.state.topic) {
             const html = htmlSerializeFromMdIfNeeded(this.state.topic, { forceHTML: false });
+            // XXX: Note that we deliberately send an empty string on an empty topic rather
+            // than a clearer `undefined` value. Synapse still requires a string in a topic.
             await client.setRoomTopic(this.props.roomId, this.state.topic, html);
             newState.originalTopic = this.state.topic;
         }
