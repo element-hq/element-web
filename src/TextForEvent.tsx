@@ -17,6 +17,7 @@ import {
     MsgType,
     M_POLL_START,
     M_POLL_END,
+    ContentHelpers,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -227,11 +228,16 @@ function textForMemberEvent(
 
 function textForTopicEvent(ev: MatrixEvent): (() => string) | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
+    const topic = ContentHelpers.parseTopicContent(ev.getContent()).text;
     return () =>
-        _t("timeline|m.room.topic", {
-            senderDisplayName,
-            topic: ev.getContent().topic,
-        });
+        topic
+            ? _t("timeline|m.room.topic|changed", {
+                  senderDisplayName,
+                  topic,
+              })
+            : _t("timeline|m.room.topic|removed", {
+                  senderDisplayName,
+              });
 }
 
 function textForRoomAvatarEvent(ev: MatrixEvent): (() => string) | null {

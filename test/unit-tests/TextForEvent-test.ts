@@ -12,6 +12,7 @@ import {
     JoinRule,
     MatrixClient,
     MatrixEvent,
+    MRoomTopicEventContent,
     Room,
     RoomMember,
 } from "matrix-js-sdk/src/matrix";
@@ -612,5 +613,48 @@ describe("TextForEvent", () => {
                 ).toEqual(result);
             },
         );
+    });
+
+    describe("textForTopicEvent()", () => {
+        type TestCase = [string, MRoomTopicEventContent, { result: string }];
+        const testCases: TestCase[] = [
+            ["the legacy key", { topic: "My topic" }, { result: '@a changed the topic to "My topic".' }],
+            [
+                "the legacy key with an empty m.topic key",
+                { "topic": "My topic", "m.topic": [] },
+                { result: '@a changed the topic to "My topic".' },
+            ],
+            [
+                "the m.topic key",
+                { "topic": "Ignore this", "m.topic": [{ mimetype: "text/plain", body: "My topic" }] },
+                { result: '@a changed the topic to "My topic".' },
+            ],
+            [
+                "the m.topic key and the legacy key undefined",
+                { "topic": undefined, "m.topic": [{ mimetype: "text/plain", body: "My topic" }] },
+                { result: '@a changed the topic to "My topic".' },
+            ],
+            ["the legacy key undefined", { topic: undefined }, { result: "@a removed the topic." }],
+            ["the legacy key empty string", { topic: "" }, { result: "@a removed the topic." }],
+            [
+                "both the legacy and new keys removed",
+                { "topic": undefined, "m.topic": [] },
+                { result: "@a removed the topic." },
+            ],
+        ];
+
+        it.each(testCases)("returns correct message for topic event with %s", (_caseName, content, { result }) => {
+            expect(
+                textForEvent(
+                    new MatrixEvent({
+                        type: "m.room.topic",
+                        sender: "@a",
+                        content: content,
+                        state_key: "",
+                    }),
+                    mockClient,
+                ),
+            ).toEqual(result);
+        });
     });
 });
