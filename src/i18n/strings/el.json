@@ -2592,9 +2592,7 @@
             "sent": "Ο %(senderName)s έστειλε μια πρόσκληση στον %(targetDisplayName)s για να συνδεθεί στο δωμάτιο."
         },
         "m.room.tombstone": "Ο %(senderDisplayName)s αναβάθμισε αυτό το δωμάτιο.",
-        "m.room.topic": {
-            "changed": "Ο %(senderDisplayName)s άλλαξε το θέμα σε \"%(topic)s\"."
-        },
+        "m.room.topic": "Ο %(senderDisplayName)s άλλαξε το θέμα σε \"%(topic)s\".",
         "m.sticker": "Ο %(senderDisplayName)s έστειλε ένα αυτοκόλλητο.",
         "m.video": {
             "error_decrypting": "Σφάλμα κατά την αποκρυπτογράφηση του βίντεο"

@@ -2756,9 +2756,7 @@
             "sent": "%(senderName)s heeft %(targetDisplayName)s in deze kamer uitgenodigd."
         },
         "m.room.tombstone": "%(senderDisplayName)s heeft deze kamer geüpgraded.",
-        "m.room.topic": {
-            "changed": "%(senderDisplayName)s heeft het onderwerp gewijzigd naar ‘%(topic)s’."
-        },
+        "m.room.topic": "%(senderDisplayName)s heeft het onderwerp gewijzigd naar ‘%(topic)s’.",
         "m.sticker": "%(senderDisplayName)s Verstuurde een sticker.",
         "m.video": {
             "error_decrypting": "Fout bij het ontsleutelen van de video"

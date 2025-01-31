@@ -3388,9 +3388,7 @@
             "sent": "%(senderName)s a invité %(targetDisplayName)s à rejoindre le salon."
         },
         "m.room.tombstone": "%(senderDisplayName)s a mis à niveau ce salon.",
-        "m.room.topic": {
-            "changed": "%(senderDisplayName)s a changé le sujet du salon en « %(topic)s »."
-        },
+        "m.room.topic": "%(senderDisplayName)s a changé le sujet du salon en « %(topic)s ».",
         "m.sticker": "%(senderDisplayName)s a envoyé un autocollant.",
         "m.video": {
             "error_decrypting": "Erreur lors du déchiffrement de la vidéo"

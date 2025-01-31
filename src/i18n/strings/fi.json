@@ -2812,9 +2812,7 @@
             "sent": "%(senderName)s kutsui käyttäjän %(targetDisplayName)s liittymään huoneeseen."
         },
         "m.room.tombstone": "%(senderDisplayName)s päivitti tämän huoneen.",
-        "m.room.topic": {
-            "changed": "%(senderDisplayName)s vaihtoi aiheeksi \"%(topic)s\"."
-        },
+        "m.room.topic": "%(senderDisplayName)s vaihtoi aiheeksi \"%(topic)s\".",
         "m.sticker": "%(senderDisplayName)s lähetti tarran.",
         "m.video": {
             "error_decrypting": "Virhe purettaessa videon salausta"

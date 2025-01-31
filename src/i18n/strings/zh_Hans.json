@@ -2863,9 +2863,7 @@
             "sent": "%(senderName)s 向 %(targetDisplayName)s 发了加入房间的邀请。"
         },
         "m.room.tombstone": "%(senderDisplayName)s 升级了此房间。",
-        "m.room.topic": {
-            "changed": "%(senderDisplayName)s 将话题修改为 “%(topic)s”。"
-        },
+        "m.room.topic": "%(senderDisplayName)s 将话题修改为 “%(topic)s”。",
         "m.sticker": "%(senderDisplayName)s 发送了一张贴纸。",
         "m.video": {
             "error_decrypting": "解密视频时出错"

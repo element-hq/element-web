@@ -3120,9 +3120,7 @@
             "sent": "%(senderName)s meghívót küldött %(targetDisplayName)s számára, hogy lépjen be a szobába."
         },
         "m.room.tombstone": "%(senderDisplayName)s fejlesztette a szobát.",
-        "m.room.topic": {
-            "changed": "%(senderDisplayName)s a következőre változtatta a témát: „%(topic)s”."
-        },
+        "m.room.topic": "%(senderDisplayName)s a következőre változtatta a témát: „%(topic)s”.",
         "m.sticker": "%(senderDisplayName)s matricát küldött.",
         "m.video": {
             "error_decrypting": "Hiba a videó visszafejtésénél"

@@ -3205,9 +3205,7 @@
             "sent": "%(senderName)s pozval(a) uživatele %(targetDisplayName)s ke vstupu do místnosti."
         },
         "m.room.tombstone": "%(senderDisplayName)s aktualizoval(a) místnost.",
-        "m.room.topic": {
-            "changed": "%(senderDisplayName)s změnil(a) téma na „%(topic)s“."
-        },
+        "m.room.topic": "%(senderDisplayName)s změnil(a) téma na „%(topic)s“.",
         "m.sticker": "%(senderDisplayName)s poslal(a) nálepku.",
         "m.video": {
             "error_decrypting": "Chyba při dešifrování videa"

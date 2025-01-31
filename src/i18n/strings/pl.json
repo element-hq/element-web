@@ -3405,9 +3405,7 @@
             "sent": "%(senderName)s wysłał zaproszenie do %(targetDisplayName)s do dołączenia do pokoju."
         },
         "m.room.tombstone": "%(senderDisplayName)s ulepszył ten pokój.",
-        "m.room.topic": {
-            "changed": "%(senderDisplayName)s zmienił temat na \"%(topic)s\"."
-        },
+        "m.room.topic": "%(senderDisplayName)s zmienił temat na \"%(topic)s\".",
         "m.sticker": "%(senderDisplayName)s wysłał naklejkę.",
         "m.video": {
             "error_decrypting": "Błąd deszyfrowania wideo"

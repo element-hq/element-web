@@ -2062,9 +2062,7 @@
             "sent": "%(senderName)s išsiuntė pakvietimą %(targetDisplayName)s prisijungti prie kambario."
         },
         "m.room.tombstone": "%(senderDisplayName)s atnaujino šį kambarį.",
-        "m.room.topic": {
-            "changed": "%(senderDisplayName)s pakeitė temą į \"%(topic)s\"."
-        },
+        "m.room.topic": "%(senderDisplayName)s pakeitė temą į \"%(topic)s\".",
         "m.sticker": "%(senderDisplayName)s nusiuntė lipduką.",
         "m.video": {
             "error_decrypting": "Klaida iššifruojant vaizdo įrašą"

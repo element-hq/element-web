@@ -3489,9 +3489,7 @@
             "sent": "%(senderName)s hat %(targetDisplayName)s in diesen Raum eingeladen."
         },
         "m.room.tombstone": "%(senderDisplayName)s hat diesen Raum aktualisiert.",
-        "m.room.topic": {
-            "changed": "%(senderDisplayName)s hat das Thema geändert in \"%(topic)s\"."
-        },
+        "m.room.topic": "%(senderDisplayName)s hat das Thema geändert in \"%(topic)s\".",
         "m.sticker": "%(senderDisplayName)s hat einen Sticker gesendet.",
         "m.video": {
             "error_decrypting": "Videoentschlüsselung fehlgeschlagen"

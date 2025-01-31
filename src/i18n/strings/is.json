@@ -2625,9 +2625,7 @@
             "sent": "%(senderName)s sendi boð til %(targetDisplayName)s um þátttöku í spjallrásinni."
         },
         "m.room.tombstone": "%(senderDisplayName)s uppfærði þessa spjallrás.",
-        "m.room.topic": {
-            "changed": "%(senderDisplayName)s breytti umræðuefninu í \"%(topic)s\"."
-        },
+        "m.room.topic": "%(senderDisplayName)s breytti umræðuefninu í \"%(topic)s\".",
         "m.sticker": "%(senderDisplayName)s sendi límmerki.",
         "m.video": {
             "error_decrypting": "Villa við afkóðun myndskeiðs"

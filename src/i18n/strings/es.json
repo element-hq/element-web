@@ -2950,9 +2950,7 @@
             "sent": "%(senderName)s invitó a %(targetDisplayName)s a unirse a la sala."
         },
         "m.room.tombstone": "%(senderDisplayName)s actualizó esta sala.",
-        "m.room.topic": {
-            "changed": "%(senderDisplayName)s cambió el asunto a «%(topic)s»."
-        },
+        "m.room.topic": "%(senderDisplayName)s cambió el asunto a «%(topic)s».",
         "m.sticker": "%(senderDisplayName)s envió una pegatina.",
         "m.video": {
             "error_decrypting": "Error al descifrar el vídeo"

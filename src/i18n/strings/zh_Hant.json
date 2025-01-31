@@ -3107,9 +3107,7 @@
             "sent": "%(senderName)s 向 %(targetDisplayName)s 傳送了加入聊天室的邀請。"
         },
         "m.room.tombstone": "%(senderDisplayName)s 升級了此聊天室。",
-        "m.room.topic": {
-            "changed": "%(senderDisplayName)s 將主題變更為「%(topic)s」。"
-        },
+        "m.room.topic": "%(senderDisplayName)s 將主題變更為「%(topic)s」。",
         "m.sticker": "%(senderDisplayName)s 傳送了貼圖。",
         "m.video": {
             "error_decrypting": "解密影片出錯"

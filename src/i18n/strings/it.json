@@ -3198,9 +3198,7 @@
             "sent": "%(senderName)s ha mandato un invito a %(targetDisplayName)s per unirsi alla stanza."
         },
         "m.room.tombstone": "%(senderDisplayName)s ha aggiornato questa stanza.",
-        "m.room.topic": {
-            "changed": "%(senderDisplayName)s ha modificato l'argomento in \"%(topic)s\"."
-        },
+        "m.room.topic": "%(senderDisplayName)s ha modificato l'argomento in \"%(topic)s\".",
         "m.sticker": "%(senderDisplayName)s ha inviato uno sticker.",
         "m.video": {
             "error_decrypting": "Errore decifratura video"
