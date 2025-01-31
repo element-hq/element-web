@@ -1,0 +1,113 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`dialogTermsInteractionCallback should render a dialog with the expected terms 1`] = `
+<div
+  aria-describedby="mx_Dialog_content"
+  aria-labelledby="mx_BaseDialog_title"
+  class=""
+  data-focus-lock-disabled="false"
+  role="dialog"
+>
+  <div
+    class="mx_Dialog_header"
+  >
+    <h1
+      class="mx_Heading_h3 mx_Dialog_title"
+      id="mx_BaseDialog_title"
+    >
+      Terms of Service
+    </h1>
+  </div>
+  <div
+    id="mx_Dialog_content"
+  >
+    <p>
+      To continue you need to accept the terms of this service.
+    </p>
+    <table
+      class="mx_TermsDialog_termsTable"
+    >
+      <tbody>
+        <tr
+          class="mx_TermsDialog_termsTableHeader"
+        >
+          <th>
+            Service
+          </th>
+          <th>
+            Summary
+          </th>
+          <th>
+            Document
+          </th>
+          <th>
+            Accept
+          </th>
+        </tr>
+        <tr>
+          <td
+            class="mx_TermsDialog_service"
+          >
+            <div>
+              Identity server
+              <br />
+              (
+              base_url
+              )
+            </div>
+          </td>
+          <td
+            class="mx_TermsDialog_summary"
+          >
+            <div>
+              Find others by phone or email
+              <br />
+              Be found by phone or email
+            </div>
+          </td>
+          <td>
+            <a
+              class="mx_ExternalLink"
+              href="http://base_url/terms"
+              rel="noreferrer noopener"
+              target="_blank"
+            >
+              Terms
+              <i
+                class="mx_ExternalLink_icon"
+              />
+            </a>
+          </td>
+          <td>
+            <input
+              type="checkbox"
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div
+    class="mx_Dialog_buttons"
+  >
+    <span
+      class="mx_Dialog_buttons_row"
+    >
+      <button
+        data-testid="dialog-cancel-button"
+        type="button"
+      >
+        Cancel
+      </button>
+      <button
+        class="mx_Dialog_primary"
+        data-testid="dialog-primary-button"
+        disabled=""
+        type="button"
+      >
+        Next
+      </button>
+    </span>
+  </div>
+</div>
+`;

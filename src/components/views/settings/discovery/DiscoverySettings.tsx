@@ -58,7 +58,7 @@ export const DiscoverySettings: React.FC = () => {
         agreedUrls: null, // From the startTermsFlow callback
         resolve: null, // Promise resolve function for startTermsFlow callback
     });
-    const [hasTerms, setHasTerms] = useState<boolean>(false);
+    const [mustAgreeToTerms, setMustAgreeToTerms] = useState<boolean>(false);
 
     const getThreepidState = useCallback(async () => {
         setIsLoadingThreepids(true);
@@ -103,7 +103,7 @@ export const DiscoverySettings: React.FC = () => {
                         (policiesAndServices, agreedUrls, extraClassNames) => {
                             return new Promise((resolve) => {
                                 setIdServerName(abbreviateUrl(idServerUrl));
-                                setHasTerms(true);
+                                setMustAgreeToTerms(true);
                                 setRequiredPolicyInfo({
                                     policiesAndServices,
                                     agreedUrls,
@@ -113,7 +113,7 @@ export const DiscoverySettings: React.FC = () => {
                         },
                     );
                     // User accepted all terms
-                    setHasTerms(false);
+                    setMustAgreeToTerms(false);
                 } catch (e) {
                     logger.warn(
                         `Unable to reach identity server at ${idServerUrl} to check ` + `for terms in Settings`,
@@ -126,7 +126,7 @@ export const DiscoverySettings: React.FC = () => {
 
     if (!SettingsStore.getValue(UIFeature.ThirdPartyID)) return null;
 
-    if (hasTerms && requiredPolicyInfo.policiesAndServices) {
+    if (mustAgreeToTerms && requiredPolicyInfo.policiesAndServices) {
         const intro = (
             <Alert type="info" title={_t("settings|general|discovery_needs_terms_title")}>
                 {_t("settings|general|discovery_needs_terms", { serverName: idServerName })}
@@ -160,7 +160,7 @@ export const DiscoverySettings: React.FC = () => {
                         medium={ThreepidMedium.Email}
                         threepids={emails}
                         onChange={getThreepidState}
-                        disabled={!hasTerms}
+                        disabled={mustAgreeToTerms}
                         isLoading={isLoadingThreepids}
                     />
                 </SettingsSubsection>
@@ -174,7 +174,7 @@ export const DiscoverySettings: React.FC = () => {
                         medium={ThreepidMedium.Phone}
                         threepids={phoneNumbers}
                         onChange={getThreepidState}
-                        disabled={!hasTerms}
+                        disabled={mustAgreeToTerms}
                         isLoading={isLoadingThreepids}
                     />
                 </SettingsSubsection>

@@ -97,7 +97,7 @@ describe("ScalarAuthClient", function () {
                 body: { errcode: "M_TERMS_NOT_SIGNED" },
             });
             sac.exchangeForScalarToken = jest.fn(() => Promise.resolve("testtoken1"));
-            mocked(client.getTerms).mockResolvedValue({ policies: [] });
+            mocked(client.getTerms).mockResolvedValue({ policies: {} });
 
             await expect(sac.registerForToken()).resolves.toBe("testtoken1");
         });

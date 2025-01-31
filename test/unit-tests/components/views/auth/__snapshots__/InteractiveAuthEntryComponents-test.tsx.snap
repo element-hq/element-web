@@ -82,3 +82,38 @@ exports[`<MasUnlockCrossSigningAuthEntry/> should render 1`] = `
   </div>
 </div>
 `;
+
+exports[`<TermsAuthEntry/> should render 1`] = `
+<div>
+  <div
+    class="mx_InteractiveAuthEntryComponents"
+  >
+    <p>
+      Please review and accept the policies of this homeserver:
+    </p>
+    <label
+      class="mx_InteractiveAuthEntryComponents_termsPolicy"
+    >
+      <input
+        type="checkbox"
+      />
+      <a
+        href="https://example.com/en"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        Test Policy
+      </a>
+    </label>
+    <div
+      aria-disabled="true"
+      class="mx_AccessibleButton mx_InteractiveAuthEntryComponents_termsSubmit mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary mx_AccessibleButton_disabled"
+      disabled=""
+      role="button"
+      tabindex="0"
+    >
+      Accept
+    </div>
+  </div>
+</div>
+`;
