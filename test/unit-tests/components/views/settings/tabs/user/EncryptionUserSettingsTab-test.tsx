@@ -10,6 +10,7 @@ import { render, screen } from "jest-matrix-react";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
+import { KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 
 import { EncryptionUserSettingsTab } from "../../../../../../../src/components/views/settings/tabs/user/EncryptionUserSettingsTab";
 import { createTestClient, withClientContextRenderOptions } from "../../../../../../test-utils";
@@ -63,12 +64,24 @@ describe("<EncryptionUserSettingsTab />", () => {
         expect(spy).toHaveBeenCalled();
     });
 
-    it("should display the recovery panel when the encryption is set up", async () => {
+    it("should display the recovery panel when key storage is enabled", async () => {
+        jest.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue({
+            version: "1",
+        } as KeyBackupInfo);
         renderComponent();
         await waitFor(() => expect(screen.getByText("Recovery")).toBeInTheDocument());
     });
 
+    it("should not display the recovery panel when key storage is not enabled", async () => {
+        jest.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue(null);
+        renderComponent();
+        await expect(screen.queryByText("Recovery")).not.toBeInTheDocument();
+    });
+
     it("should display the change recovery key panel when the user clicks on the change recovery button", async () => {
+        jest.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue({
+            version: "1",
+        } as KeyBackupInfo);
         const user = userEvent.setup();
 
         const { asFragment } = renderComponent();
@@ -82,6 +95,9 @@ describe("<EncryptionUserSettingsTab />", () => {
     });
 
     it("should display the set up recovery key when the user clicks on the set up recovery key button", async () => {
+        jest.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue({
+            version: "1",
+        } as KeyBackupInfo);
         jest.spyOn(matrixClient.secretStorage, "getDefaultKeyId").mockResolvedValue(null);
         const user = userEvent.setup();
 

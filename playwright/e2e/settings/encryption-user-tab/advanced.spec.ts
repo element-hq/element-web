@@ -63,9 +63,7 @@ test.describe("Advanced section in Encryption tab", () => {
             await expect(section.getByRole("button", { name: "Reset cryptographic identity" })).toBeVisible();
 
             // After resetting the identity, the user should set up a new recovery key
-            await expect(
-                util.getEncryptionRecoverySection().getByRole("button", { name: "Set up recovery" }),
-            ).toBeVisible();
+            await expect(page.getByRole("checkbox", { name: "Allow key storage" })).not.toBeChecked();
 
             await checkDeviceIsCrossSigned(app);
         },
