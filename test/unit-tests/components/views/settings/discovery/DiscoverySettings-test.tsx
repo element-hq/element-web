@@ -32,6 +32,12 @@ const sampleTerms = {
     },
 } satisfies Terms;
 
+const invalidTerms = {
+    policies: {
+        terms: { version: "invalid" },
+    },
+} satisfies Terms;
+
 describe("DiscoverySettings", () => {
     let client: MatrixClient;
 
@@ -62,6 +68,7 @@ describe("DiscoverySettings", () => {
         render(<DiscoverySettings />, { wrapper: DiscoveryWrapper });
 
         expect(await screen.findByText("Let people find you")).toBeInTheDocument();
+        expect(screen.getByRole("link")).toHaveAttribute("href", "https://foobar");
     });
 
     it("button to accept terms is disabled if checkbox not checked", async () => {
@@ -120,5 +127,14 @@ describe("DiscoverySettings", () => {
 
         const shareButton = await screen.findByRole("button", { name: "Share" });
         expect(shareButton).not.toHaveAttribute("aria-disabled", "true");
+    });
+
+    it("should not show invalid terms", async () => {
+        mocked(client).getIdentityServerUrl.mockReturnValue("https://example.com");
+        mocked(client).getTerms.mockResolvedValue(invalidTerms);
+
+        render(<DiscoverySettings />, { wrapper: DiscoveryWrapper });
+
+        expect(screen.queryByRole("link")).not.toBeInTheDocument();
     });
 });
