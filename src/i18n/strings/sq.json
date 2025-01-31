@@ -2995,7 +2995,9 @@
             "sent": "%(senderName)s dërgoi një ftesë për %(targetDisplayName)s që të marrë pjesë në dhomë."
         },
         "m.room.tombstone": "%(senderDisplayName)s e përmirësoi këtë dhomë.",
-        "m.room.topic": "%(senderDisplayName)s ndryshoi temën në \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s ndryshoi temën në \"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s dërgoi një ngjitës.",
         "m.video": {
             "error_decrypting": "Gabim në shfshehtëzim videoje"

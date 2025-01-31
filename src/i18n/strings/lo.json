@@ -2606,7 +2606,9 @@
             "sent": "%(senderName)s ສົ່ງຄຳເຊີນໄປຫາ %(targetDisplayName)s ເພື່ອເຂົ້າຮ່ວມຫ້ອງ."
         },
         "m.room.tombstone": "%(senderDisplayName)s ຍົກລະດັບຫ້ອງນີ້ແລ້ວ.",
-        "m.room.topic": "%(senderDisplayName)s ໄດ້ປ່ຽນຫົວຂໍ້ເປັນ \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s ໄດ້ປ່ຽນຫົວຂໍ້ເປັນ \"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s ສົ່ງສະຕິກເກີ.",
         "m.video": {
             "error_decrypting": "ການຖອດລະຫັດວິດີໂອຜິດພາດ"

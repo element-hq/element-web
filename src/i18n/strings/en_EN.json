@@ -3490,7 +3490,10 @@
             "sent": "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room."
         },
         "m.room.tombstone": "%(senderDisplayName)s upgraded this room.",
-        "m.room.topic": "%(senderDisplayName)s changed the topic to \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s changed the topic to \"%(topic)s\".",
+            "removed": "%(senderDisplayName)s removed the topic."
+        },
         "m.sticker": "%(senderDisplayName)s sent a sticker.",
         "m.video": {
             "error_decrypting": "Error decrypting video"

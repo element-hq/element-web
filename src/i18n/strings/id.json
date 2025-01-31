@@ -3152,7 +3152,9 @@
             "sent": "%(senderName)s mengirim sebuah undangan ke %(targetDisplayName)s untuk bergabung dengan ruangan ini."
         },
         "m.room.tombstone": "%(senderDisplayName)s meningkatkan ruangan ini.",
-        "m.room.topic": "%(senderDisplayName)s telah mengubah topik menjadi \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s telah mengubah topik menjadi \"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s mengirim sebuah stiker.",
         "m.video": {
             "error_decrypting": "Terjadi kesalahan mendekripsi video"

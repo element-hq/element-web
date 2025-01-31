@@ -3149,7 +3149,9 @@
             "sent": "%(senderName)s saatis %(targetDisplayName)s'le kutse jututoaga liitumiseks."
         },
         "m.room.tombstone": "%(senderDisplayName)s uuendas seda jututuba.",
-        "m.room.topic": "%(senderDisplayName)s muutis uueks teemaks „%(topic)s“.",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s muutis uueks teemaks „%(topic)s“."
+        },
         "m.sticker": "%(senderDisplayName)s saatis kleepsu.",
         "m.video": {
             "error_decrypting": "Viga videovoo dekrüptimisel"

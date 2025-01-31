@@ -3182,7 +3182,9 @@
             "sent": "%(senderName)s pozval %(targetDisplayName)s vstúpiť do miestnosti."
         },
         "m.room.tombstone": "%(senderDisplayName)s aktualizoval túto miestnosť.",
-        "m.room.topic": "%(senderDisplayName)s zmenil tému na \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s zmenil tému na \"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s poslal nálepku.",
         "m.video": {
             "error_decrypting": "Chyba pri dešifrovaní videa"

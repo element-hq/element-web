@@ -2889,7 +2889,9 @@
             "sent": "%(senderName)s đã mời %(targetDisplayName)s tham gia phòng."
         },
         "m.room.tombstone": "%(senderDisplayName)s đã nâng cấp phòng này.",
-        "m.room.topic": "%(senderDisplayName)s đổi chủ đề thành \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s đổi chủ đề thành \"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s đã gửi một sticker.",
         "m.video": {
             "error_decrypting": "Lỗi khi giải mã video"

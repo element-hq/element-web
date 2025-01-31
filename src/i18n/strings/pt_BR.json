@@ -2233,7 +2233,9 @@
             "sent": "%(senderName)s enviou um convite para %(targetDisplayName)s entrar na sala."
         },
         "m.room.tombstone": "%(senderDisplayName)s atualizou esta sala.",
-        "m.room.topic": "%(senderDisplayName)s alterou a descrição para \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s alterou a descrição para \"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s enviou uma figurinha.",
         "m.video": {
             "error_decrypting": "Erro ao descriptografar o vídeo"

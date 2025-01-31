@@ -38,6 +38,7 @@ import { highlightEvent, isLocationEvent } from "./utils/EventUtils";
 import { ElementCall } from "./models/Call";
 import { getSenderName } from "./utils/event/getSenderName";
 import PosthogTrackers from "./PosthogTrackers.ts";
+import { parseTopicContent } from "matrix-js-sdk/lib/content-helpers";
 
 function getRoomMemberDisplayname(client: MatrixClient, event: MatrixEvent, userId = event.getSender()): string {
     const roomId = event.getRoomId();
@@ -227,10 +228,13 @@ function textForMemberEvent(
 
 function textForTopicEvent(ev: MatrixEvent): (() => string) | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
+    const topic = parseTopicContent(ev.getContent()).text;
     return () =>
-        _t("timeline|m.room.topic", {
+        topic ? _t("timeline|m.room.topic|changed", {
             senderDisplayName,
             topic: ev.getContent().topic,
+        }) : _t("timeline|m.room.topic|removed", {
+            senderDisplayName,
         });
 }
 
