@@ -114,11 +114,14 @@ describe("RightPanelStore", () => {
             expect(store.isOpenForRoom("!1:example.org")).toEqual(true);
             expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.RoomSummary);
         });
-        it("overwrites history if changing the phase", async () => {
+        it("history is generated for certain phases", async () => {
             await viewRoom("!1:example.org");
-            store.setCard({ phase: RightPanelPhases.RoomSummary }, true, "!1:example.org");
+            // Setting the memberlist card should also generate a history with room summary card
             store.setCard({ phase: RightPanelPhases.MemberList }, true, "!1:example.org");
-            expect(store.roomPhaseHistory).toEqual([{ phase: RightPanelPhases.MemberList, state: {} }]);
+            expect(store.roomPhaseHistory).toEqual([
+                { phase: RightPanelPhases.RoomSummary, state: {} },
+                { phase: RightPanelPhases.MemberList, state: {} },
+            ]);
         });
     });
 
