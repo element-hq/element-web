@@ -240,7 +240,7 @@ describe("UserIdentityWarning", () => {
         );
     });
 
-    describe("Warning are displayed in consistent order", () => {
+    describe("Warnings are displayed in consistent order", () => {
         it("Ensure lexicographic order for prompt", async () => {
             // members are not returned lexicographic order
             mockMembershipForRoom(room, ["@b:example.org", "@a:example.org"]);
@@ -340,10 +340,6 @@ describe("UserIdentityWarning", () => {
         it("when invited users can see encrypted messages", async () => {
             // Nobody in the room yet
             mockMembershipForRoom(room, []);
-            // jest.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([]);
-            // jest.spyOn(room, "getMember").mockImplementation((userId) => {
-            //     return null;
-            // });
             jest.spyOn(room, "shouldEncryptForInvitedMembers").mockReturnValue(true);
             const crypto = client.getCrypto()!;
             jest.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
@@ -613,11 +609,7 @@ describe("UserIdentityWarning", () => {
             renderComponent(client, room);
             await sleep(10); // give it some time to finish initialising
 
-            // jest.spyOn(crypto, "getUserVerificationStatus").mockImplementation(async () => {
             act(() => {
-                // jest.spyOn(crypto, "getUserVerificationStatus").mockResolvedValue(
-                //     new UserVerificationStatus(false, false, false, true),
-                // );
                 client.emit(
                     CryptoEvent.UserTrustStatusChanged,
                     "@alice:example.org",
@@ -625,8 +617,6 @@ describe("UserIdentityWarning", () => {
                 );
                 firstStatusPromise.resolve(undefined);
             });
-            //     return Promise.resolve(new UserVerificationStatus(false, false, false, false));
-            // });
             await waitFor(() =>
                 expect(
                     getWarningByText("Alice's (@alice:example.org) identity appears to have changed."),
