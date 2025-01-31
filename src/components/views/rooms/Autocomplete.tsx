@@ -10,7 +10,6 @@ import React, { createRef, KeyboardEvent, RefObject } from "react";
 import classNames from "classnames";
 import { flatMap } from "lodash";
 import { Room } from "matrix-js-sdk/src/matrix";
-import { defer } from "matrix-js-sdk/src/utils";
 
 import Autocompleter, { ICompletion, ISelectionRange, IProviderCompletions } from "../../../autocomplete/Autocompleter";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -173,7 +172,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
             }
         }
 
-        const deferred = defer<void>();
+        const deferred = Promise.withResolvers<void>();
         this.setState(
             {
                 completions,

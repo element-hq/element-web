@@ -46,7 +46,7 @@ import {
     SlidingSync,
 } from "matrix-js-sdk/src/sliding-sync";
 import { logger } from "matrix-js-sdk/src/logger";
-import { defer, sleep } from "matrix-js-sdk/src/utils";
+import { sleep } from "matrix-js-sdk/src/utils";
 
 import SettingsStore from "./settings/SettingsStore";
 import SlidingSyncController from "./settings/controllers/SlidingSyncController";
@@ -110,7 +110,7 @@ export class SlidingSyncManager {
     public slidingSync?: SlidingSync;
     private client?: MatrixClient;
 
-    private configureDefer = defer<void>();
+    private configureDefer = Promise.withResolvers<void>();
 
     public static get instance(): SlidingSyncManager {
         return SlidingSyncManager.internalInstance;

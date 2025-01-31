@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { MatrixClient, MatrixEvent, RoomState, RoomStateEvent, StateEvents } from "matrix-js-sdk/src/matrix";
-import { defer } from "matrix-js-sdk/src/utils";
 
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
 import { objectClone, objectKeyChanges } from "../../utils/objects";
@@ -92,7 +91,7 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
 
         const { event_id: eventId } = await this.client.sendStateEvent(roomId, eventType, content);
 
-        const deferred = defer<void>();
+        const deferred = Promise.withResolvers<void>();
         const handler = (event: MatrixEvent): void => {
             if (event.getId() !== eventId) return;
             this.client.off(RoomStateEvent.Events, handler);

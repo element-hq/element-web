@@ -11,7 +11,6 @@ import { fireEvent, getByRole, render, RenderResult, screen, waitFor } from "jes
 import { MatrixClient, EventType, MatrixEvent, Room, RoomMember, ISendEventResponse } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { mocked } from "jest-mock";
-import { defer } from "matrix-js-sdk/src/utils";
 import userEvent from "@testing-library/user-event";
 
 import RolesRoomSettingsTab from "../../../../../../../src/components/views/settings/tabs/room/RolesRoomSettingsTab";
@@ -202,7 +201,7 @@ describe("RolesRoomSettingsTab", () => {
     });
 
     it("should roll back power level change on error", async () => {
-        const deferred = defer<ISendEventResponse>();
+        const deferred = Promise.withResolvers<ISendEventResponse>();
         mocked(cli.sendStateEvent).mockReturnValue(deferred.promise);
         mocked(cli.getRoom).mockReturnValue(room);
         // @ts-ignore - mocked doesn't support overloads properly

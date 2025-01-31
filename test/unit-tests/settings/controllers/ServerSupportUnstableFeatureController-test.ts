@@ -6,7 +6,6 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { defer } from "matrix-js-sdk/src/utils";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import ServerSupportUnstableFeatureController from "../../../../src/settings/controllers/ServerSupportUnstableFeatureController";
@@ -34,7 +33,7 @@ describe("ServerSupportUnstableFeatureController", () => {
             controller,
         };
 
-        const deferred = defer<any>();
+        const deferred = Promise.withResolvers<any>();
         watchers.watchSetting(setting, null, deferred.resolve);
         MatrixClientBackedController.matrixClient = cli;
         await deferred.promise;
