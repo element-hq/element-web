@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { createRef } from "react";
 import classNames from "classnames";
-import { EventType } from "matrix-js-sdk/src/matrix";
+import { ContentHelpers, EventType } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -16,7 +16,6 @@ import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import AvatarSetting from "../settings/AvatarSetting";
 import { htmlSerializeFromMdIfNeeded } from "../../../editor/serialize";
 import { idNameForRoom } from "../avatars/RoomAvatar";
-import { parseTopicContent } from "matrix-js-sdk/src/content-helpers";
 
 interface IProps {
     roomId: string;
@@ -52,7 +51,7 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
         const avatarUrl = avatarEvent?.getContent()["url"] ?? null;
 
         const topicEvent = room.currentState.getStateEvents(EventType.RoomTopic, "");
-        const topic = topicEvent && parseTopicContent(topicEvent.getContent()).text || "";
+        const topic = (topicEvent && ContentHelpers.parseTopicContent(topicEvent.getContent()).text) || "";
 
         const nameEvent = room.currentState.getStateEvents(EventType.RoomName, "");
         const name = nameEvent && nameEvent.getContent() ? nameEvent.getContent()["name"] : "";
