@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { InternationalisedPolicy, Terms, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { AuthType, AuthDict, IInputs, IStageStatus } from "matrix-js-sdk/src/interactive-auth";
 import { logger } from "matrix-js-sdk/src/logger";
 import React, { ChangeEvent, createRef, FormEvent, Fragment } from "react";
@@ -17,7 +17,6 @@ import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-o
 import EmailPromptIcon from "../../../../res/img/element-icons/email-prompt.svg";
 import { _t } from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
-import { LocalisedPolicy, Policies } from "../../../Terms";
 import { AuthHeaderModifier } from "../../structures/auth/header/AuthHeaderModifier";
 import AccessibleButton, { AccessibleButtonKind, ButtonEvent } from "../elements/AccessibleButton";
 import Field from "../elements/Field";
@@ -235,12 +234,10 @@ export class RecaptchaAuthEntry extends React.Component<IRecaptchaAuthEntryProps
 }
 
 interface ITermsAuthEntryProps extends IAuthEntryProps {
-    stageParams?: {
-        policies?: Policies;
-    };
+    stageParams?: Partial<Terms>;
 }
 
-interface LocalisedPolicyWithId extends LocalisedPolicy {
+interface LocalisedPolicyWithId extends InternationalisedPolicy {
     id: string;
 }
 
@@ -291,14 +288,15 @@ export class TermsAuthEntry extends React.Component<ITermsAuthEntryProps, ITerms
             // Pick a language based on the user's language, falling back to english,
             // and finally to the first language available. If there's still no policy
             // available then the homeserver isn't respecting the spec.
-            let langPolicy: LocalisedPolicy | undefined = policy[prefLang];
-            if (!langPolicy) langPolicy = policy["en"];
+            let langPolicy: InternationalisedPolicy | string | undefined = policy[prefLang] ?? policy["en"];
             if (!langPolicy) {
                 // last resort
                 const firstLang = Object.keys(policy).find((e) => e !== "version");
                 langPolicy = firstLang ? policy[firstLang] : undefined;
             }
-            if (!langPolicy) throw new Error("Failed to find a policy to show the user");
+            if (!langPolicy || typeof langPolicy === "string") {
+                throw new Error("Failed to find a policy to show the user");
+            }
 
             initToggles[policyId] = false;
 

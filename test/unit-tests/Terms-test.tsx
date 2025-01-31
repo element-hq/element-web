@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixEvent, EventType, SERVICE_TYPES } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, EventType, SERVICE_TYPES, Policy, Terms } from "matrix-js-sdk/src/matrix";
 
 import { startTermsFlow, Service } from "../../src/Terms";
 import { getMockClientWithEventEmitter } from "../test-utils";
@@ -18,7 +18,7 @@ const POLICY_ONE = {
         name: "The first policy",
         url: "http://example.com/one",
     },
-};
+} satisfies Policy;
 
 const POLICY_TWO = {
     version: "IX",
@@ -26,7 +26,7 @@ const POLICY_TWO = {
         name: "The second policy",
         url: "http://example.com/two",
     },
-};
+} satisfies Policy;
 
 const IM_SERVICE_ONE = new Service(SERVICE_TYPES.IM, "https://imone.test", "a token token");
 const IM_SERVICE_TWO = new Service(SERVICE_TYPES.IM, "https://imtwo.test", "a token token");
@@ -42,7 +42,7 @@ describe("Terms", function () {
     beforeEach(function () {
         jest.clearAllMocks();
         mockClient.getAccountData.mockReturnValue(undefined);
-        mockClient.getTerms.mockResolvedValue(null);
+        mockClient.getTerms.mockResolvedValue({ policies: {} });
         mockClient.setAccountData.mockResolvedValue({});
     });
 
@@ -141,22 +141,25 @@ describe("Terms", function () {
         });
         mockClient.getAccountData.mockReturnValue(directEvent);
 
-        mockClient.getTerms.mockImplementation(async (_serviceTypes: SERVICE_TYPES, baseUrl: string) => {
-            switch (baseUrl) {
-                case "https://imone.test":
-                    return {
-                        policies: {
-                            policy_the_first: POLICY_ONE,
-                        },
-                    };
-                case "https://imtwo.test":
-                    return {
-                        policies: {
-                            policy_the_second: POLICY_TWO,
-                        },
-                    };
-            }
-        });
+        mockClient.getTerms.mockImplementation(
+            async (_serviceTypes: SERVICE_TYPES, baseUrl: string): Promise<Terms> => {
+                switch (baseUrl) {
+                    case "https://imone.test":
+                        return {
+                            policies: {
+                                policy_the_first: POLICY_ONE,
+                            },
+                        };
+                    case "https://imtwo.test":
+                        return {
+                            policies: {
+                                policy_the_second: POLICY_TWO,
+                            },
+                        };
+                }
+                return { policies: {} };
+            },
+        );
 
         const interactionCallback = jest.fn().mockResolvedValue(["http://example.com/one", "http://example.com/two"]);
         await startTermsFlow(mockClient, [IM_SERVICE_ONE, IM_SERVICE_TWO], interactionCallback);
