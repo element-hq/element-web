@@ -6,9 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixEvent, EventType, SERVICE_TYPES, Policy, Terms } from "matrix-js-sdk/src/matrix";
+import { EventType, MatrixEvent, Policy, SERVICE_TYPES, Terms } from "matrix-js-sdk/src/matrix";
+import { screen, within } from "jest-matrix-react";
 
-import { startTermsFlow, Service } from "../../src/Terms";
+import { dialogTermsInteractionCallback, Service, startTermsFlow } from "../../src/Terms";
 import { getMockClientWithEventEmitter } from "../test-utils";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 
@@ -181,5 +182,31 @@ describe("Terms", function () {
         expect(mockClient.agreeToTerms).toHaveBeenCalledWith(SERVICE_TYPES.IM, "https://imtwo.test", "a token token", [
             "http://example.com/two",
         ]);
+    });
+});
+
+describe("dialogTermsInteractionCallback", () => {
+    it("should render a dialog with the expected terms", async () => {
+        dialogTermsInteractionCallback(
+            [
+                {
+                    service: new Service(SERVICE_TYPES.IS, "http://base_url", "access_token"),
+                    policies: {
+                        sample: {
+                            version: "VERSION",
+                            en: {
+                                name: "Terms",
+                                url: "http://base_url/terms",
+                            },
+                        },
+                    },
+                },
+            ],
+            [],
+        );
+
+        const dialog = await screen.findByRole("dialog");
+        expect(within(dialog).getByRole("link")).toHaveAttribute("href", "http://base_url/terms");
+        expect(dialog).toMatchSnapshot();
     });
 });

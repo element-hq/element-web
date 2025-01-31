@@ -135,6 +135,7 @@ describe("DiscoverySettings", () => {
 
         render(<DiscoverySettings />, { wrapper: DiscoveryWrapper });
 
+        expect(await screen.findByText("Let people find you")).toBeInTheDocument();
         expect(screen.queryByRole("link")).not.toBeInTheDocument();
     });
 });
