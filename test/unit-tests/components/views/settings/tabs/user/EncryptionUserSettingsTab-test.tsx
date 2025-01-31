@@ -11,7 +11,10 @@ import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 
-import { EncryptionUserSettingsTab } from "../../../../../../../src/components/views/settings/tabs/user/EncryptionUserSettingsTab";
+import {
+    EncryptionUserSettingsTab,
+    State,
+} from "../../../../../../../src/components/views/settings/tabs/user/EncryptionUserSettingsTab";
 import { createTestClient, withClientContextRenderOptions } from "../../../../../../test-utils";
 import Modal from "../../../../../../../src/Modal";
 
@@ -35,8 +38,8 @@ describe("<EncryptionUserSettingsTab />", () => {
         });
     });
 
-    function renderComponent() {
-        return render(<EncryptionUserSettingsTab />, withClientContextRenderOptions(matrixClient));
+    function renderComponent(props: { initialState?: State } = {}) {
+        return render(<EncryptionUserSettingsTab {...props} />, withClientContextRenderOptions(matrixClient));
     }
 
     it("should display a loading state when the encryption state is computed", () => {
@@ -108,5 +111,13 @@ describe("<EncryptionUserSettingsTab />", () => {
             expect(screen.getByText("Are you sure you want to reset your identity?")).toBeInTheDocument(),
         );
         expect(asFragment()).toMatchSnapshot();
+    });
+
+    it("should enter reset flow when showResetIdentity is set", () => {
+        renderComponent({ initialState: "reset_identity_forgot" });
+
+        expect(
+            screen.getByRole("heading", { name: "Forgot your recovery key? You’ll need to reset your identity." }),
+        ).toBeVisible();
     });
 });
