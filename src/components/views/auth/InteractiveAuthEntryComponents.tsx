@@ -16,13 +16,13 @@ import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-o
 
 import EmailPromptIcon from "../../../../res/img/element-icons/email-prompt.svg";
 import { _t } from "../../../languageHandler";
-import SettingsStore from "../../../settings/SettingsStore";
 import { AuthHeaderModifier } from "../../structures/auth/header/AuthHeaderModifier";
 import AccessibleButton, { AccessibleButtonKind, ButtonEvent } from "../elements/AccessibleButton";
 import Field from "../elements/Field";
 import Spinner from "../elements/Spinner";
 import CaptchaForm from "./CaptchaForm";
 import { Flex } from "../../utils/Flex";
+import { pickBestPolicyLanguage } from "../../../Terms.ts";
 
 /* This file contains a collection of components which are used by the
  * InteractiveAuth to prompt the user to enter the information needed
@@ -275,7 +275,6 @@ export class TermsAuthEntry extends React.Component<ITermsAuthEntryProps, ITerms
         // }
 
         const allPolicies = this.props.stageParams?.policies || {};
-        const prefLang = SettingsStore.getValue("language");
         const initToggles: Record<string, boolean> = {};
         const pickedPolicies: {
             id: string;
@@ -284,19 +283,8 @@ export class TermsAuthEntry extends React.Component<ITermsAuthEntryProps, ITerms
         }[] = [];
         for (const policyId of Object.keys(allPolicies)) {
             const policy = allPolicies[policyId];
-
-            // Pick a language based on the user's language, falling back to english,
-            // and finally to the first language available. If there's still no policy
-            // available then the homeserver isn't respecting the spec.
-            let langPolicy: InternationalisedPolicy | string | undefined = policy[prefLang] ?? policy["en"];
-            if (!langPolicy) {
-                // last resort
-                const firstLang = Object.keys(policy).find((e) => e !== "version");
-                langPolicy = firstLang ? policy[firstLang] : undefined;
-            }
-            if (!langPolicy || typeof langPolicy === "string") {
-                throw new Error("Failed to find a policy to show the user");
-            }
+            const langPolicy = pickBestPolicyLanguage(policy);
+            if (!langPolicy) throw new Error("Failed to find a policy to show the user");
 
             initToggles[policyId] = false;
 

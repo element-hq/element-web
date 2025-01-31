@@ -44,9 +44,9 @@ export type TermsInteractionCallback = (
     extraClassNames?: string,
 ) => Promise<string[]>;
 
-export function pickBestPolicyLanguage(policy: Policy): InternationalisedPolicy | null {
+export function pickBestPolicyLanguage(policy: Policy): InternationalisedPolicy | undefined {
     const termsLang = pickBestLanguage(Object.keys(policy).filter((k) => k !== "version"));
-    return <InternationalisedPolicy>policy[termsLang] ?? null;
+    return <InternationalisedPolicy>policy[termsLang];
 }
 
 /**
