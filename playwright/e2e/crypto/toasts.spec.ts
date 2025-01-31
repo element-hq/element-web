@@ -48,12 +48,9 @@ test.describe("Key storage out of sync toast", () => {
         await expect(page.getByRole("button", { name: "Enter recovery key" })).toBeVisible();
     });
 
-    test("should display 'key storage out of sync' is keys not cached", { tag: "@screenshot" }, async ({ page }) => {
-        // This toast is wider than normal: take a screenshot to assert that it's presented how it should be
-        //await expect(page.getByRole("alert").first()).toMatchScreenshot("key-storage-out-of-sync-toast.png");
-    });
+    test("should prompt for recovery key if 'enter recovery key' pressed", { tag: "@screenshot" }, async ({ page }) => {
+        await expect(page.getByRole("alert").first()).toMatchScreenshot("key-storage-out-of-sync-toast.png");
 
-    test("should prompt for recovery key if 'enter recovery key' pressed", async ({ page }) => {
         await page.getByRole("button", { name: "Enter recovery key" }).click();
 
         await page.getByRole("textbox", { name: "Security key" }).fill(recoveryKey);
