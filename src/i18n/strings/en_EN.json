@@ -1058,8 +1058,11 @@
             "waiting_other_user": "Waiting for %(displayName)s to verify…"
         },
         "verification_requested_toast_title": "Verification requested",
+        "verified_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) verified identity has changed. <a>Learn more</a>",
+        "verified_identity_changed_no_displayname": "<b>%(userId)s</b>'s verified identity has changed. <a>Learn more</a>",
         "verify_toast_description": "Other users may not trust it",
-        "verify_toast_title": "Verify this session"
+        "verify_toast_title": "Verify this session",
+        "withdraw_verification_action": "Withdraw verification"
     },
     "error": {
         "admin_contact": "Please <a>contact your service administrator</a> to continue using this service.",
