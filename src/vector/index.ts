@@ -49,6 +49,8 @@ function checkBrowserFeatures(): boolean {
     window.Modernizr.addTest("promiseprototypefinally", () => typeof window.Promise?.prototype?.finally === "function");
     // ES2020: http://262.ecma-international.org/#sec-promise.allsettled
     window.Modernizr.addTest("promiseallsettled", () => typeof window.Promise?.allSettled === "function");
+    // ES2024: https://2ality.com/2024/05/proposal-promise-with-resolvers.html
+    window.Modernizr.addTest("promisewithresolvers", () => typeof window.Promise?.withResolvers === "function");
     // ES2018: https://262.ecma-international.org/9.0/#sec-get-regexp.prototype.dotAll
     window.Modernizr.addTest(
         "regexpdotall",

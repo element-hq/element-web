@@ -10,7 +10,6 @@ Please see LICENSE files in the repository root for full details.
 import React, { StrictMode } from "react";
 import { createRoot, Root } from "react-dom/client";
 import classNames from "classnames";
-import { IDeferred, defer } from "matrix-js-sdk/src/utils";
 import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 import { Glass, TooltipProvider } from "@vector-im/compound-web";
 
@@ -45,7 +44,7 @@ export interface IModal<C extends ComponentType> {
     onFinished: ComponentProps<C>["onFinished"];
     close(...args: Parameters<ComponentProps<C>["onFinished"]>): void;
     hidden?: boolean;
-    deferred?: IDeferred<Parameters<ComponentProps<C>["onFinished"]>>;
+    deferred?: PromiseWithResolvers<Parameters<ComponentProps<C>["onFinished"]>>;
 }
 
 export interface IHandle<C extends ComponentType> {
@@ -214,7 +213,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
         modal: IModal<C>,
         props?: ComponentProps<C>,
     ): [IHandle<C>["close"], IHandle<C>["finished"]] {
-        modal.deferred = defer<Parameters<ComponentProps<C>["onFinished"]>>();
+        modal.deferred = Promise.withResolvers<Parameters<ComponentProps<C>["onFinished"]>>();
         return [
             async (...args: Parameters<ComponentProps<C>["onFinished"]>): Promise<void> => {
                 if (modal.beforeClosePromise) {

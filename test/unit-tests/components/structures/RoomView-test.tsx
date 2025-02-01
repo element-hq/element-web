@@ -35,7 +35,6 @@ import {
     cleanup,
 } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { defer } from "matrix-js-sdk/src/utils";
 
 import {
     stubClient,
@@ -303,7 +302,7 @@ describe("RoomView", () => {
     it("should not display the timeline when the room encryption is loading", async () => {
         jest.spyOn(room, "getMyMembership").mockReturnValue(KnownMembership.Join);
         jest.spyOn(cli, "getCrypto").mockReturnValue(crypto);
-        const deferred = defer<boolean>();
+        const deferred = Promise.withResolvers<boolean>();
         jest.spyOn(cli.getCrypto()!, "isEncryptionEnabledInRoom").mockImplementation(() => deferred.promise);
 
         const { asFragment, container } = await mountRoomView();
