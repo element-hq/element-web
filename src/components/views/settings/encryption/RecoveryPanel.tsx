@@ -15,6 +15,8 @@ import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext
 import { SettingsHeader } from "../SettingsHeader";
 import { useAsyncMemo } from "../../../../hooks/useAsyncMemo";
 
+// This comment is here to allow to create the PR.
+
 /**
  * The possible states of the recovery panel.
  * - `loading`: We are checking the recovery key and the secrets.
