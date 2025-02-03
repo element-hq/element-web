@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { KeyboardEvent } from "react";
+import React from "react";
 
 import { Part, CommandPartCreator, PartCreator } from "./parts";
 import DocumentPosition from "./position";
@@ -33,7 +33,7 @@ export default class AutocompleteWrapperModel {
         private partCreator: PartCreator | CommandPartCreator,
     ) {}
 
-    public onEscape(e: KeyboardEvent): void {
+    public onEscape(e: KeyboardEvent | React.KeyboardEvent<HTMLDivElement>): void {
         this.getAutocompleterComponent()?.onEscape(e);
     }
 

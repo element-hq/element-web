@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, KeyboardEvent, RefObject } from "react";
+import React, { createRef, RefObject } from "react";
 import classNames from "classnames";
 import { flatMap } from "lodash";
 import { Room } from "matrix-js-sdk/src/matrix";
@@ -206,7 +206,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         this.setSelection(1 + index);
     }
 
-    public onEscape(e: KeyboardEvent): boolean | undefined {
+    public onEscape(e: KeyboardEvent | React.KeyboardEvent<HTMLDivElement>): boolean | undefined {
         const completionCount = this.countCompletions();
         if (completionCount === 0) {
             // autocomplete is already empty, so don't preventDefault
