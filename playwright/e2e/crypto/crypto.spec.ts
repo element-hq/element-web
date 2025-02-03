@@ -8,7 +8,14 @@ Please see LICENSE files in the repository root for full details.
 
 import type { Page } from "@playwright/test";
 import { expect, test } from "../../element-web-test";
-import { autoJoin, copyAndContinue, createSharedRoomWithUser, enableKeyBackup, verify } from "./utils";
+import {
+    autoJoin,
+    completeCreateSecretStorageDialog,
+    copyAndContinue,
+    createSharedRoomWithUser,
+    enableKeyBackup,
+    verify,
+} from "./utils";
 import { Bot } from "../../pages/bot";
 import { ElementAppPage } from "../../pages/ElementAppPage";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
@@ -111,18 +118,7 @@ test.describe("Cryptography", function () {
                 await app.settings.openUserSettings("Security & Privacy");
                 await page.getByRole("button", { name: "Set up Secure Backup" }).click();
 
-                const dialog = page.locator(".mx_Dialog");
-                // Recovery key is selected by default
-                await dialog.getByRole("button", { name: "Continue" }).click();
-                await copyAndContinue(page);
-
-                // If the device is unverified, there should be a "Setting up keys" step; however, it
-                // can be quite quick, and playwright can miss it, so we can't test for it.
-
-                // Either way, we end up at a success dialog:
-                await expect(dialog.getByText("Secure Backup successful")).toBeVisible();
-                await dialog.getByRole("button", { name: "Done" }).click();
-                await expect(dialog.getByText("Secure Backup successful")).not.toBeVisible();
+                await completeCreateSecretStorageDialog(page);
 
                 // Verify that the SSSS keys are in the account data stored in the server
                 await verifyKey(app, "master");

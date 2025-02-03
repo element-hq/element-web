@@ -31,6 +31,23 @@ import { SdkContextClass } from "../../contexts/SDKContext";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 
 /**
+ * @see RightPanelStore#generateHistoryForPhase
+ */
+function getPhasesForPhase(phase: IRightPanelCard["phase"]): RightPanelPhases[] {
+    switch (phase) {
+        case RightPanelPhases.ThreadPanel:
+        case RightPanelPhases.MemberList:
+        case RightPanelPhases.PinnedMessages:
+            return [RightPanelPhases.RoomSummary];
+        case RightPanelPhases.MemberInfo:
+        case RightPanelPhases.ThreePidMemberInfo:
+            return [RightPanelPhases.RoomSummary, RightPanelPhases.MemberList];
+        default:
+            return [];
+    }
+}
+
+/**
  * A class for tracking the state of the right panel between layouts and
  * sessions. This state includes a history for each room. Each history element
  * contains the phase (e.g. RightPanelPhase.RoomMemberInfo) and the state (e.g.
@@ -134,16 +151,20 @@ export default class RightPanelStore extends ReadyWatchingStore {
         return { state: {}, phase: null };
     }
 
-    // Setters
+    /**
+     * This function behaves as following:
+     * - If the same phase is sent along with a non-empty state, only the state is updated and history is retained.
+     * - If the provided phase is different to the current phase:
+     *     - Existing history is thrown away.
+     *     - New card is added along with a different history, see {@link generateHistoryForPhase}
+     *
+     * If the right panel was set, this function also shows the right panel.
+     */
     public setCard(card: IRightPanelCard, allowClose = true, roomId?: string): void {
         const rId = roomId ?? this.viewedRoomId ?? "";
-        // This function behaves as following:
-        // Update state: if the same phase is send but with a state
-        // Set right panel and erase history: if a "different to the current" phase is send (with or without a state)
-        // If the right panel is set, this function also shows the right panel.
         const redirect = this.getVerificationRedirect(card);
         const targetPhase = redirect?.phase ?? card.phase;
-        const cardState = redirect?.state ?? (Object.keys(card.state ?? {}).length === 0 ? null : card.state);
+        const cardState = redirect?.state ?? (Object.keys(card.state ?? {}).length === 0 ? undefined : card.state);
 
         // Checks for wrong SetRightPanelPhase requests
         if (!this.isPhaseValid(targetPhase, Boolean(rId))) return;
@@ -155,7 +176,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
             this.emitAndUpdateSettings();
         } else if (targetPhase !== this.currentCardForRoom(rId)?.phase || !this.byRoom[rId]) {
             // Set right panel and initialize/erase history
-            const history = [{ phase: targetPhase, state: cardState ?? {} }];
+            const history = this.generateHistoryForPhase(targetPhase!, cardState ?? {});
             this.byRoom[rId] = { history, isOpen: true };
             this.emitAndUpdateSettings();
         } else {
@@ -245,6 +266,31 @@ export default class RightPanelStore extends ReadyWatchingStore {
             this.setCard({ phase, state: cardState });
             if (!this.isOpen) this.togglePanel(null);
         }
+    }
+
+    /**
+     * For a given phase, generates card history such that it looks
+     * similar to how an user typically would reach said phase in the app.
+     * eg: User would usually reach the memberlist via room-info panel, so
+     * that history is added.
+     */
+    private generateHistoryForPhase(
+        phase: IRightPanelCard["phase"],
+        cardState?: Partial<IRightPanelCardState>,
+    ): IRightPanelCard[] {
+        const card = { phase, state: cardState };
+        if (!this.isCardStateValid(card)) {
+            /**
+             * If the card we're adding is not valid, then we just return
+             * an empty history.
+             * This is to avoid a scenario where, for eg, you set a member info
+             * card with invalid card state (no member) but the member list is
+             * shown since the created history is valid except for the last card.
+             */
+            return [];
+        }
+        const cards = getPhasesForPhase(phase).map((p) => ({ phase: p, state: {} }));
+        return [...cards, card];
     }
 
     private loadCacheFromSettings(): void {

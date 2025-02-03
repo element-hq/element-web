@@ -41,6 +41,7 @@ import PlatformPeg from "./PlatformPeg";
 import { formatList } from "./utils/FormattingUtils";
 import SdkConfig from "./SdkConfig";
 import { setDeviceIsolationMode } from "./settings/controllers/DeviceIsolationModeController.ts";
+import { initialiseDehydration } from "./utils/device/dehydration";
 
 export interface IMatrixClientCreds {
     homeserverUrl: string;
@@ -340,7 +341,20 @@ class MatrixClientPegClass implements IMatrixClientPeg {
 
         setDeviceIsolationMode(this.matrixClient, SettingsStore.getValue("feature_exclude_insecure_devices"));
 
-        // TODO: device dehydration and whathaveyou
+        // Start dehydration. This code is only for the case where the client
+        // gets restarted, so we only do this if we already have the dehydration
+        // key cached, and we don't have to try to rehydrate a device. If this
+        // is a new login, we will start dehydration after Secret Storage is
+        // unlocked.
+        try {
+            await initialiseDehydration({ onlyIfKeyCached: true, rehydrate: false }, this.matrixClient);
+        } catch (e) {
+            // We may get an error dehydrating, such as if cross-signing and
+            // SSSS are not set up yet.  Just log the error and continue.
+            // If SSSS gets set up later, we will re-try dehydration.
+            console.log("Error starting device dehydration", e);
+        }
+
         return;
     }
 
