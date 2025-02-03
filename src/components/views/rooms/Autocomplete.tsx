@@ -206,7 +206,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         this.setSelection(1 + index);
     }
 
-    public onEscape(e: KeyboardEvent | React.KeyboardEvent<HTMLDivElement>): boolean | undefined {
+    public onEscape(e: KeyboardEvent | React.KeyboardEvent): boolean | undefined {
         const completionCount = this.countCompletions();
         if (completionCount === 0) {
             // autocomplete is already empty, so don't preventDefault

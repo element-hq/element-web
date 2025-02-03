@@ -33,7 +33,7 @@ export default class AutocompleteWrapperModel {
         private partCreator: PartCreator | CommandPartCreator,
     ) {}
 
-    public onEscape(e: KeyboardEvent | React.KeyboardEvent<HTMLDivElement>): void {
+    public onEscape(e: KeyboardEvent | React.KeyboardEvent): void {
         this.getAutocompleterComponent()?.onEscape(e);
     }
 
