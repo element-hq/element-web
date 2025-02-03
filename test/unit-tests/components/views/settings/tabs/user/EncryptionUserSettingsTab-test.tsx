@@ -10,10 +10,16 @@ import { render, screen } from "jest-matrix-react";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
+import { mocked } from "jest-mock";
 
 import { EncryptionUserSettingsTab } from "../../../../../../../src/components/views/settings/tabs/user/EncryptionUserSettingsTab";
 import { createTestClient, withClientContextRenderOptions } from "../../../../../../test-utils";
 import Modal from "../../../../../../../src/Modal";
+import { accessSecretStorage } from "../../../../../../../src/SecurityManager";
+
+jest.mock("../../../../../../../src/SecurityManager", () => ({
+    accessSecretStorage: jest.fn(),
+}));
 
 describe("<EncryptionUserSettingsTab />", () => {
     let matrixClient: MatrixClient;
@@ -33,6 +39,8 @@ describe("<EncryptionUserSettingsTab />", () => {
                 userSigningKey: true,
             },
         });
+
+        mocked(accessSecretStorage).mockClear().mockResolvedValue();
     });
 
     function renderComponent() {
@@ -66,6 +74,28 @@ describe("<EncryptionUserSettingsTab />", () => {
     it("should display the recovery panel when the encryption is set up", async () => {
         renderComponent();
         await waitFor(() => expect(screen.getByText("Recovery")).toBeInTheDocument());
+    });
+
+    it("should ask to enter the recovery key when secrets are not cached", async () => {
+        // Secrets are not cached
+        jest.spyOn(matrixClient.getCrypto()!, "getCrossSigningStatus").mockResolvedValue({
+            privateKeysInSecretStorage: true,
+            publicKeysOnDevice: true,
+            privateKeysCachedLocally: {
+                masterKey: false,
+                selfSigningKey: true,
+                userSigningKey: true,
+            },
+        });
+
+        const user = userEvent.setup();
+        const { asFragment } = renderComponent();
+
+        await waitFor(() => screen.getByRole("button", { name: "Enter recovery key" }));
+        expect(asFragment()).toMatchSnapshot();
+
+        await user.click(screen.getByRole("button", { name: "Enter recovery key" }));
+        expect(accessSecretStorage).toHaveBeenCalled();
     });
 
     it("should display the change recovery key panel when the user clicks on the change recovery button", async () => {
