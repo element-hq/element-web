@@ -25,7 +25,7 @@ describe("<ResetIdentityPanel />", () => {
 
         const onFinish = jest.fn();
         const { asFragment } = render(
-            <ResetIdentityPanel onFinish={onFinish} onCancelClick={jest.fn()} />,
+            <ResetIdentityPanel variant="compromised" onFinish={onFinish} onCancelClick={jest.fn()} />,
             withClientContextRenderOptions(matrixClient),
         );
         expect(asFragment()).toMatchSnapshot();
@@ -33,5 +33,14 @@ describe("<ResetIdentityPanel />", () => {
         await user.click(screen.getByRole("button", { name: "Continue" }));
         expect(matrixClient.getCrypto()!.resetEncryption).toHaveBeenCalled();
         expect(onFinish).toHaveBeenCalled();
+    });
+
+    it("should display the 'forgot recovery key' variant correctly", async () => {
+        const onFinish = jest.fn();
+        const { asFragment } = render(
+            <ResetIdentityPanel variant="forgot" onFinish={onFinish} onCancelClick={jest.fn()} />,
+            withClientContextRenderOptions(matrixClient),
+        );
+        expect(asFragment()).toMatchSnapshot();
     });
 });
