@@ -3495,10 +3495,10 @@
   resolved "https://registry.yarnpkg.com/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
-"@vector-im/compound-design-tokens@^2.1.0":
-  version "2.1.3"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-2.1.3.tgz#8205ffb455a09d71a02d838f3dbb8503c4e6ec27"
-  integrity sha512-U4UF7MVguENf0lQnkU2a9p/3llTsLXzbzmFFOxi0h6ny2igNxZj/kROP/jXTxxV9xD4TNn3z098Bos4J/qJpBA==
+"@vector-im/compound-design-tokens@^3.0.0":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-3.0.1.tgz#ee9c6ca84946b17900cdda10715b69c4b4b29264"
+  integrity sha512-uwpMteMxfX1xRKM5xe6IcuHAGMWYFHAD/R0ANia6JYnP2Q2ytlqUDDFa/nqNqMLYdVytbZs3bJtOfuJxmUJfgg==
 
 "@vector-im/compound-web@^7.6.1":
   version "7.6.1"
@@ -3516,9 +3516,8 @@
     ts-xor "^1.3.0"
     vaul "^1.0.0"
 
-"@vector-im/matrix-wysiwyg-wasm@link:../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.0-af862ffd231dc0a6b8d6f2cb3601e68456c0ff24-integrity/node_modules/bindings/wysiwyg-wasm":
+"@vector-im/matrix-wysiwyg-wasm@link:../../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.0-af862ffd231dc0a6b8d6f2cb3601e68456c0ff24-integrity/node_modules/bindings/wysiwyg-wasm":
   version "0.0.0"
-  uid ""
 
 "@vector-im/matrix-wysiwyg@2.38.0":
   version "2.38.0"
