@@ -10,6 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { lazy, ReactNode } from "react";
 import { CryptoEvent, BackupTrustInfo, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
+import { EmptyObject } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";
@@ -60,10 +61,10 @@ interface IState {
     sessionsRemaining: number | null;
 }
 
-export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
+export default class SecureBackupPanel extends React.PureComponent<EmptyObject, IState> {
     private unmounted = false;
 
-    public constructor(props: {}) {
+    public constructor(props: EmptyObject) {
         super(props);
 
         this.state = {
