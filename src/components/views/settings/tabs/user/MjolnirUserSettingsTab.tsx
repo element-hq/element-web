@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { ChangeEvent, SyntheticEvent } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
+import { EmptyObject } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../../languageHandler";
 import SdkConfig from "../../../../../SdkConfig";
@@ -30,8 +31,8 @@ interface IState {
     newList: string;
 }
 
-export default class MjolnirUserSettingsTab extends React.Component<{}, IState> {
-    public constructor(props: {}) {
+export default class MjolnirUserSettingsTab extends React.Component<EmptyObject, IState> {
+    public constructor(props: EmptyObject) {
         super(props);
 
         this.state = {

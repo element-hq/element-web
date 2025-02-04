@@ -192,7 +192,6 @@ export class Bot extends Client {
 
         await clientHandle.evaluate(async (cli) => {
             await cli.initRustCrypto({ useIndexedDB: false });
-            cli.setGlobalErrorOnUnknownDevices(false);
             await cli.startClient();
         });
 
