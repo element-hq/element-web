@@ -14,6 +14,7 @@ import {
     LocalNotificationSettings,
     ReceiptType,
     IMarkedUnreadEvent,
+    EmptyObject,
 } from "matrix-js-sdk/src/matrix";
 import { IndicatorIcon } from "@vector-im/compound-web";
 
@@ -80,7 +81,7 @@ export function localNotificationsAreSilenced(cli: MatrixClient): boolean {
  * @param client
  * @returns a promise that resolves when the room has been marked as read
  */
-export async function clearRoomNotification(room: Room, client: MatrixClient): Promise<{} | undefined> {
+export async function clearRoomNotification(room: Room, client: MatrixClient): Promise<EmptyObject | undefined> {
     const lastEvent = room.getLastLiveEvent();
 
     await setMarkedUnreadState(room, client, false);
@@ -115,15 +116,17 @@ export async function clearRoomNotification(room: Room, client: MatrixClient): P
  * @param client The matrix client
  * @returns a promise that resolves when all rooms have been marked as read
  */
-export function clearAllNotifications(client: MatrixClient): Promise<Array<{} | undefined>> {
-    const receiptPromises = client.getRooms().reduce((promises: Array<Promise<{} | undefined>>, room: Room) => {
-        if (doesRoomHaveUnreadMessages(room, true)) {
-            const promise = clearRoomNotification(room, client);
-            promises.push(promise);
-        }
+export function clearAllNotifications(client: MatrixClient): Promise<Array<EmptyObject | undefined>> {
+    const receiptPromises = client
+        .getRooms()
+        .reduce((promises: Array<Promise<EmptyObject | undefined>>, room: Room) => {
+            if (doesRoomHaveUnreadMessages(room, true)) {
+                const promise = clearRoomNotification(room, client);
+                promises.push(promise);
+            }
 
-        return promises;
-    }, []);
+            return promises;
+        }, []);
 
     return Promise.all(receiptPromises);
 }

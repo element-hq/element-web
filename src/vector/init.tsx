@@ -12,6 +12,7 @@ import { createRoot } from "react-dom/client";
 import React, { StrictMode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
+import type { QueryDict } from "matrix-js-sdk/src/utils";
 import * as languageHandler from "../languageHandler";
 import SettingsStore from "../settings/SettingsStore";
 import PlatformPeg from "../PlatformPeg";
@@ -83,7 +84,7 @@ export async function loadTheme(): Promise<void> {
     return setTheme();
 }
 
-export async function loadApp(fragParams: {}): Promise<void> {
+export async function loadApp(fragParams: QueryDict): Promise<void> {
     // load app.js async so that its code is not executed immediately and we can catch any exceptions
     const module = await import(
         /* webpackChunkName: "element-web-app" */

@@ -18,9 +18,7 @@ interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
     childrenInLabel?: boolean;
 }
 
-interface IState {}
-
-export default class StyledRadioButton extends React.PureComponent<IProps, IState> {
+export default class StyledRadioButton extends React.PureComponent<IProps> {
     public static readonly defaultProps = {
         className: "",
         childrenInLabel: true,
