@@ -50,21 +50,13 @@ interface EncryptionUserSettingsTabProps {
     initialState?: State;
 }
 
+/**
+ * The encryption settings tab.
+ */
 export function EncryptionUserSettingsTab({ initialState = "loading" }: EncryptionUserSettingsTabProps): JSX.Element {
     const [state, setState] = useState<State>(initialState);
-    const matrixClient = useMatrixClientContext();
 
-    const recheckSetupRequired = useCallback(() => {
-        (async () => {
-            const crypto = matrixClient.getCrypto()!;
-            const isCrossSigningReady = await crypto.isCrossSigningReady();
-            if (isCrossSigningReady) {
-                setState("main");
-            } else {
-                setState("set_up_encryption");
-            }
-        })();
-    }, [matrixClient]);
+    const recheckSetupRequired = useRecheckSetupRequired(setState);
 
     useEffect(() => {
         if (state === "loading") recheckSetupRequired();
@@ -127,6 +119,24 @@ export function EncryptionUserSettingsTab({ initialState = "loading" }: Encrypti
         </SettingsTab>
     );
 }
+
+const useRecheckSetupRequired = (setState: (state: State) => void): (() => void) => {
+    const matrixClient = useMatrixClientContext();
+
+    const recheckSetupRequired = useCallback(() => {
+        (async () => {
+            const crypto = matrixClient.getCrypto()!;
+            const isCrossSigningReady = await crypto.isCrossSigningReady();
+            if (isCrossSigningReady) {
+                setState("main");
+            } else {
+                setState("set_up_encryption");
+            }
+        })();
+    }, [matrixClient, setState]);
+
+    return recheckSetupRequired;
+};
 
 interface SetUpEncryptionPanelProps {
     /**
