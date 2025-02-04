@@ -214,6 +214,7 @@ export async function logIntoElement(page: Page, credentials: Credentials, secur
     // if a securityKey was given, verify the new device
     if (securityKey !== undefined) {
         await page.locator(".mx_AuthPage").getByRole("button", { name: "Verify with Security Key" }).click();
+        await page.locator(".mx_Dialog").getByRole("button", { name: "use your Security Key" }).click();
         // Fill in the security key
         await page.locator(".mx_Dialog").locator('input[type="password"]').fill(securityKey);
         await page.locator(".mx_Dialog_primary:not([disabled])", { hasText: "Continue" }).click();

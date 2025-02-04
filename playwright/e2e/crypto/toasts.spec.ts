@@ -5,61 +5,44 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+import { GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
+
 import { test, expect } from "../../element-web-test";
-import { isDendrite } from "../../plugins/homeserver/dendrite";
-import { masHomeserver } from "../../plugins/homeserver/synapse/masHomeserver";
-import { registerAccountMas } from "../oidc";
-import { deleteCachedSecrets } from "./utils";
+import { createBot, deleteCachedSecrets, logIntoElement } from "./utils";
 
-test.use(masHomeserver);
 test.describe("Key storage out of sync toast", () => {
-    test.skip(isDendrite, "does not yet support MAS");
+    let recoveryKey: GeneratedSecretStorageKey;
 
-    let recoveryKey;
+    test.beforeEach(async ({ page, homeserver, credentials }) => {
+        const res = await createBot(page, homeserver, credentials);
+        recoveryKey = res.recoveryKey;
 
-    test.beforeEach(async ({ page, app, mailpitClient }) => {
-        await page.goto("/#/login");
-        await page.getByRole("button", { name: "Continue" }).click();
-        await registerAccountMas(page, mailpitClient, "alice", "alice@email.com", "Pa$sW0rD!");
+        await logIntoElement(page, credentials, recoveryKey.encodedPrivateKey);
 
-        await expect(page.getByRole("heading", { level: 1, name: "Welcome alice" })).toBeVisible();
+        await deleteCachedSecrets(page);
 
-        // We won't be prompted for crypto setup unless we have na e2e room, so make one
+        // We won't be prompted for crypto setup unless we have an e2e room, so make one
         await page.getByRole("button", { name: "Add room" }).click();
         await page.getByRole("menuitem", { name: "New room" }).click();
         await page.getByRole("textbox", { name: "Name" }).fill("Test room");
         await page.getByRole("button", { name: "Create room" }).click();
-
-        // Now set up recovery (otherwise we'll delete the only copy of the secret)
-        await page.getByLabel("User menu").click();
-        await page.getByLabel("All settings").click();
-        await page.getByRole("tab", { name: "Encryption" }).click();
-        await page.getByRole("button", { name: "Set up recovery" }).click();
-        await page.getByRole("button", { name: "Continue" }).click();
-        recoveryKey = await page.getByTestId("recoveryKey").textContent();
-        await page.getByRole("button", { name: "Continue" }).click();
-        await page.getByRole("textbox", { name: "Enter recovery key" }).fill(recoveryKey);
-        await page.getByRole("button", { name: "Finish set up" }).click();
-
-        await expect(page.getByRole("button", { name: "Change recovery key" })).toBeVisible();
-
-        await deleteCachedSecrets(page);
-
-        await expect(page.getByRole("button", { name: "Enter recovery key" })).toBeVisible();
     });
 
     test("should prompt for recovery key if 'enter recovery key' pressed", { tag: "@screenshot" }, async ({ page }) => {
         await expect(page.getByRole("alert").first()).toMatchScreenshot("key-storage-out-of-sync-toast.png");
 
         await page.getByRole("button", { name: "Enter recovery key" }).click();
+        await page.locator(".mx_Dialog").getByRole("button", { name: "use your Security Key" }).click();
 
-        await page.getByRole("textbox", { name: "Security key" }).fill(recoveryKey);
+        await page.getByRole("textbox", { name: "Security key" }).fill(recoveryKey.encodedPrivateKey);
         await page.getByRole("button", { name: "Continue" }).click();
 
         await expect(page.getByRole("button", { name: "Enter recovery key" })).not.toBeVisible();
     });
 
-    test("should open settings to reset flow if 'forgot recovery key' pressed", async ({ page }) => {
+    test("should open settings to reset flow if 'forgot recovery key' pressed", async ({ page, app, credentials }) => {
+        await expect(page.getByRole("button", { name: "Enter recovery key" })).toBeVisible();
+
         await page.getByRole("button", { name: "Forgot recovery key?" }).click();
 
         await expect(
