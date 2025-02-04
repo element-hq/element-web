@@ -42,7 +42,7 @@ export type State =
     | "reset_identity_compromised"
     | "reset_identity_forgot";
 
-interface Props {
+interface EncryptionUserSettingsTabProps {
     /**
      * If the tab should start in a state other than the deasult
      */
