@@ -101,7 +101,7 @@ interface IProps {
     onNewItemChanged?(item: string): void;
 }
 
-export default class EditableItemList<P = {}> extends React.PureComponent<IProps & P> {
+export default class EditableItemList<P extends object> extends React.PureComponent<IProps & P> {
     protected onItemAdded = (e: ButtonEvent): void => {
         e.stopPropagation();
         e.preventDefault();
