@@ -16,6 +16,7 @@ import {
     IThreepid,
     ThreepidMedium,
     LocalNotificationSettings,
+    EmptyObject,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -107,8 +108,6 @@ interface IVectorPushRule {
     // undefined when rule has no synced rules
     syncedVectorState?: VectorState;
 }
-
-interface IProps {}
 
 interface IState {
     phase: Phase;
@@ -205,10 +204,10 @@ const NotificationActivitySettings = (): JSX.Element => {
 /**
  * The old, deprecated notifications tab view, only displayed if the user has the labs flag disabled.
  */
-export default class Notifications extends React.PureComponent<IProps, IState> {
+export default class Notifications extends React.PureComponent<EmptyObject, IState> {
     private settingWatchers: string[] = [];
 
-    public constructor(props: IProps) {
+    public constructor(props: EmptyObject) {
         super(props);
 
         this.state = {
@@ -255,7 +254,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
         this.settingWatchers.forEach((watcher) => SettingsStore.unwatchSetting(watcher));
     }
 
-    public componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>): void {
+    public componentDidUpdate(prevProps: Readonly<EmptyObject>, prevState: Readonly<IState>): void {
         if (this.state.deviceNotificationsEnabled !== prevState.deviceNotificationsEnabled) {
             this.persistLocalNotificationSettings(this.state.deviceNotificationsEnabled);
         }
@@ -291,7 +290,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
         }
     }
 
-    private persistLocalNotificationSettings(enabled: boolean): Promise<{}> {
+    private persistLocalNotificationSettings(enabled: boolean): Promise<EmptyObject> {
         const cli = MatrixClientPeg.safeGet();
         return cli.setAccountData(getLocalNotificationAccountDataEventType(cli.deviceId), {
             is_silenced: !enabled,
