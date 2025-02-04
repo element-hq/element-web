@@ -17,6 +17,7 @@ import {
     MatrixEvent,
     ClientEvent,
     ISendEventResponse,
+    EmptyObject,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -62,8 +63,6 @@ import { ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePaylo
 import { SwitchSpacePayload } from "../../dispatcher/payloads/SwitchSpacePayload";
 import { AfterLeaveRoomPayload } from "../../dispatcher/payloads/AfterLeaveRoomPayload";
 import { SdkContextClass } from "../../contexts/SDKContext";
-
-interface IState {}
 
 const ACTIVE_SPACE_LS_KEY = "mx_active_space";
 
@@ -123,7 +122,7 @@ type SpaceStoreActions =
     | SwitchSpacePayload
     | AfterLeaveRoomPayload;
 
-export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
+export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
     // The spaces representing the roots of the various tree-like hierarchies
     private rootSpaces: Room[] = [];
     // Map from room/space ID to set of spaces which list it as a child

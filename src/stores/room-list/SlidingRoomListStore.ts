@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room } from "matrix-js-sdk/src/matrix";
+import { EmptyObject, Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { MSC3575Filter, SlidingSyncEvent } from "matrix-js-sdk/src/sliding-sync";
 import { Optional } from "matrix-events-sdk";
@@ -22,10 +22,6 @@ import { MetaSpace, SpaceKey, UPDATE_SELECTED_SPACE } from "../spaces";
 import { LISTS_LOADING_EVENT } from "./RoomListStore";
 import { UPDATE_EVENT } from "../AsyncStore";
 import { SdkContextClass } from "../../contexts/SDKContext";
-
-interface IState {
-    // state is tracked in underlying classes
-}
 
 export const SlidingSyncSortToFilter: Record<SortAlgorithm, string[]> = {
     [SortAlgorithm.Alphabetic]: ["by_name", "by_recency"],
@@ -66,7 +62,7 @@ const filterConditions: Record<TagID, MSC3575Filter> = {
 
 export const LISTS_UPDATE_EVENT = RoomListStoreEvent.ListsUpdate;
 
-export class SlidingRoomListStoreClass extends AsyncStoreWithClient<IState> implements Interface {
+export class SlidingRoomListStoreClass extends AsyncStoreWithClient<EmptyObject> implements Interface {
     private tagIdToSortAlgo: Record<TagID, SortAlgorithm> = {};
     private tagMap: ITagMap = {};
     private counts: Record<TagID, number> = {};

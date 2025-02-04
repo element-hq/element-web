@@ -1104,8 +1104,9 @@ describe("<SessionManagerTab />", () => {
                 // because promise flushing after the confirm modal is resolving this too
                 // and we want to test the loading state here
                 const resolveDeleteRequest = defer<IAuthData>();
-                mockClient.deleteMultipleDevices.mockImplementation(() => {
-                    return resolveDeleteRequest.promise;
+                mockClient.deleteMultipleDevices.mockImplementation(async () => {
+                    await resolveDeleteRequest.promise;
+                    return {};
                 });
 
                 const { getByTestId } = render(getComponent());

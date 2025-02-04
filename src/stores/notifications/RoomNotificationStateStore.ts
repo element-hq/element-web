@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room, ClientEvent, SyncState } from "matrix-js-sdk/src/matrix";
+import { Room, ClientEvent, SyncState, EmptyObject } from "matrix-js-sdk/src/matrix";
 
 import { ActionPayload } from "../../dispatcher/payloads";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
@@ -19,11 +19,9 @@ import { VisibilityProvider } from "../room-list/filters/VisibilityProvider";
 import { PosthogAnalytics } from "../../PosthogAnalytics";
 import SettingsStore from "../../settings/SettingsStore";
 
-interface IState {}
-
 export const UPDATE_STATUS_INDICATOR = Symbol("update-status-indicator");
 
-export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
+export class RoomNotificationStateStore extends AsyncStoreWithClient<EmptyObject> {
     private static readonly internalInstance = (() => {
         const instance = new RoomNotificationStateStore();
         instance.start();

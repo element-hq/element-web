@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixError, MatrixClient, EventType } from "matrix-js-sdk/src/matrix";
+import { MatrixError, MatrixClient, EventType, EmptyObject } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { defer, IDeferred } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -117,7 +117,7 @@ export default class MultiInviter {
         return this.errors[addr]?.errorText ?? null;
     }
 
-    private async inviteToRoom(roomId: string, addr: string, ignoreProfile = false): Promise<{}> {
+    private async inviteToRoom(roomId: string, addr: string, ignoreProfile = false): Promise<EmptyObject> {
         const addrType = getAddressType(addr);
 
         if (addrType === AddressType.Email) {

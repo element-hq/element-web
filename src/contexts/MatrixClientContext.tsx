@@ -24,7 +24,7 @@ export function useMatrixClientContext(): MatrixClient {
     return useContext(MatrixClientContext);
 }
 
-const matrixHOC = <ComposedComponentProps extends {}>(
+const matrixHOC = <ComposedComponentProps extends object>(
     ComposedComponent: ComponentClass<ComposedComponentProps>,
 ): ((
     props: Omit<ComposedComponentProps, "mxClient"> & React.RefAttributes<InstanceType<typeof ComposedComponent>>,

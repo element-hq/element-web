@@ -18,6 +18,7 @@ declare module "diff-dom" {
         newValue: HTMLElement | string;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     interface IOpts {}
 
     export class DiffDOM {

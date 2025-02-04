@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { logger } from "matrix-js-sdk/src/logger";
+import { EmptyObject } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
@@ -19,15 +20,13 @@ import Heading from "../typography/Heading";
 import { SettingsSubsectionText } from "./shared/SettingsSubsection";
 import { UIFeature } from "../../../settings/UIFeature";
 
-interface IProps {}
-
 interface IState {
     currentManager: IntegrationManagerInstance | null;
     provisioningEnabled: boolean;
 }
 
-export default class SetIntegrationManager extends React.Component<IProps, IState> {
-    public constructor(props: IProps) {
+export default class SetIntegrationManager extends React.Component<EmptyObject, IState> {
+    public constructor(props: EmptyObject) {
         super(props);
 
         const currentManager = IntegrationManagers.sharedInstance().getPrimaryManager();

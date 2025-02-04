@@ -92,7 +92,7 @@ export function handleEventWithAutocomplete(
                 handled = true;
                 break;
             case KeyBindingAction.CancelAutocomplete:
-                autocompleteRef.current.onEscape(event as {} as React.KeyboardEvent);
+                autocompleteRef.current.onEscape(event);
                 handled = true;
                 break;
             default:

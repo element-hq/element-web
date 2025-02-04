@@ -10,6 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { ReactNode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { FALLBACK_ICE_SERVER } from "matrix-js-sdk/src/webrtc/call";
+import { EmptyObject } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../../languageHandler";
 import MediaDeviceHandler, { IMediaDevices, MediaDeviceKindEnum } from "../../../../../MediaDeviceHandler";
@@ -49,11 +50,11 @@ const mapDeviceKindToHandlerValue = (deviceKind: MediaDeviceKindEnum): string | 
     }
 };
 
-export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
+export default class VoiceUserSettingsTab extends React.Component<EmptyObject, IState> {
     public static contextType = MatrixClientContext;
     declare public context: React.ContextType<typeof MatrixClientContext>;
 
-    public constructor(props: {}, context: React.ContextType<typeof MatrixClientContext>) {
+    public constructor(props: EmptyObject, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
 
         this.state = {
