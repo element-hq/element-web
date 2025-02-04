@@ -21,9 +21,7 @@ interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
     id?: string;
 }
 
-interface IState {}
-
-export default class StyledCheckbox extends React.PureComponent<IProps, IState> {
+export default class StyledCheckbox extends React.PureComponent<IProps> {
     private id: string;
 
     public static readonly defaultProps = {

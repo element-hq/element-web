@@ -200,8 +200,13 @@ module.exports = {
                 "@typescript-eslint/ban-ts-comment": "off",
                 // We're okay with assertion errors when we ask for them
                 "@typescript-eslint/no-non-null-assertion": "off",
-                // We do this sometimes to brand interfaces
-                "@typescript-eslint/no-empty-object-type": "off",
+                "@typescript-eslint/no-empty-object-type": [
+                    "error",
+                    {
+                        // We do this sometimes to brand interfaces
+                        allowInterfaces: "with-single-extends",
+                    },
+                ],
             },
         },
         // temporary override for offending icon require files
@@ -247,6 +252,7 @@ module.exports = {
                 // We don't need super strict typing in test utilities
                 "@typescript-eslint/explicit-function-return-type": "off",
                 "@typescript-eslint/explicit-member-accessibility": "off",
+                "@typescript-eslint/no-empty-object-type": "off",
 
                 // Jest/Playwright specific
 
