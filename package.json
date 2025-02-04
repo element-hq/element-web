@@ -74,7 +74,7 @@
         "@types/react-dom": "18.3.5",
         "oidc-client-ts": "3.1.0",
         "jwt-decode": "4.0.0",
-        "caniuse-lite": "1.0.30001692",
+        "caniuse-lite": "1.0.30001696",
         "wrap-ansi-cjs": "npm:wrap-ansi@^7.0.0",
         "wrap-ansi": "npm:wrap-ansi@^7.0.0"
     },
