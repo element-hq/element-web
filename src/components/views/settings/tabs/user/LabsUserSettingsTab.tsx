@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { sortBy } from "lodash";
+import { EmptyObject } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../../languageHandler";
 import SettingsStore from "../../../../../settings/SettingsStore";
@@ -24,11 +25,11 @@ export const showLabsFlags = (): boolean => {
     return SdkConfig.get("show_labs_settings") || SettingsStore.getValue("developerMode");
 };
 
-export default class LabsUserSettingsTab extends React.Component<{}> {
+export default class LabsUserSettingsTab extends React.Component<EmptyObject> {
     private readonly labs: FeatureSettingKey[];
     private readonly betas: FeatureSettingKey[];
 
-    public constructor(props: {}) {
+    public constructor(props: EmptyObject) {
         super(props);
 
         const features = SettingsStore.getFeatureSettingNames();

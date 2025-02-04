@@ -14,10 +14,7 @@ import SettingsStore from "../../../../../../../src/settings/SettingsStore";
 import SdkConfig from "../../../../../../../src/SdkConfig";
 
 describe("<LabsUserSettingsTab />", () => {
-    const defaultProps = {
-        closeSettingsFn: jest.fn(),
-    };
-    const getComponent = () => <LabsUserSettingsTab {...defaultProps} />;
+    const getComponent = () => <LabsUserSettingsTab />;
 
     const settingsValueSpy = jest.spyOn(SettingsStore, "getValue");
 
