@@ -17,6 +17,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { createClient, AutoDiscovery, ClientConfig } from "matrix-js-sdk/src/matrix";
 import { WrapperLifecycle, WrapperOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WrapperLifecycle";
 
+import type { QueryDict } from "matrix-js-sdk/src/utils";
 import PlatformPeg from "../PlatformPeg";
 import AutoDiscoveryUtils from "../utils/AutoDiscoveryUtils";
 import * as Lifecycle from "../Lifecycle";
@@ -54,7 +55,7 @@ function onTokenLoginCompleted(): void {
     window.history.replaceState(null, "", url.href);
 }
 
-export async function loadApp(fragParams: {}, matrixChatRef: React.Ref<MatrixChat>): Promise<ReactElement> {
+export async function loadApp(fragParams: QueryDict, matrixChatRef: React.Ref<MatrixChat>): Promise<ReactElement> {
     initRouting();
     const platform = PlatformPeg.get();
 

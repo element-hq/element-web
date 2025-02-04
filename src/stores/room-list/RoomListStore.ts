@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixClient, Room, RoomState, EventType } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, Room, RoomState, EventType, EmptyObject } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -32,14 +32,10 @@ import { UPDATE_EVENT } from "../AsyncStore";
 import { SdkContextClass } from "../../contexts/SDKContext";
 import { getChangedOverrideRoomMutePushRules } from "./utils/roomMute";
 
-interface IState {
-    // state is tracked in underlying classes
-}
-
 export const LISTS_UPDATE_EVENT = RoomListStoreEvent.ListsUpdate;
 export const LISTS_LOADING_EVENT = RoomListStoreEvent.ListsLoading; // unused; used by SlidingRoomListStore
 
-export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements Interface {
+export class RoomListStoreClass extends AsyncStoreWithClient<EmptyObject> implements Interface {
     /**
      * Set to true if you're running tests on the store. Should not be touched in
      * any other environment.

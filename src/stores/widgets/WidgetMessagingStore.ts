@@ -7,6 +7,7 @@
  */
 
 import { ClientWidgetApi, Widget } from "matrix-widget-api";
+import { EmptyObject } from "matrix-js-sdk/src/matrix";
 
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import defaultDispatcher from "../../dispatcher/dispatcher";
@@ -24,7 +25,7 @@ export enum WidgetMessagingStoreEvent {
  * going to be merged with a more complete WidgetStore, but for now it's
  * easiest to split this into a single place.
  */
-export class WidgetMessagingStore extends AsyncStoreWithClient<{}> {
+export class WidgetMessagingStore extends AsyncStoreWithClient<EmptyObject> {
     private static readonly internalInstance = (() => {
         const instance = new WidgetMessagingStore();
         instance.start();
