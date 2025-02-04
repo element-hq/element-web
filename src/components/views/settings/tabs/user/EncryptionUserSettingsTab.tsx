@@ -31,7 +31,8 @@ import { ResetIdentityPanel } from "../../encryption/ResetIdentityPanel";
  *                           This happens when the user has a recovery key and the user clicks on "Change recovery key" button of the RecoveryPanel.
  *  - "set_recovery_key": The panel to show when the user is setting up their recovery key.
  *                        This happens when the user doesn't have a key a recovery key and the user clicks on "Set up recovery key" button of the RecoveryPanel.
- *  - "reset_identity": The panel to show when the user is resetting their identity.
+ *  - "reset_identity_compromised": The panel to show when the user is resetting their identity, in te case where their key is compromised.
+ * - "reset_identity_forgot": The panel to show when the user is resetting their identity, in the case where they forgot their recovery key.
  */
 export type State =
     | "loading"
@@ -49,7 +50,7 @@ interface EncryptionUserSettingsTabProps {
     initialState?: State;
 }
 
-export function EncryptionUserSettingsTab({ initialState = "loading" }: Props): JSX.Element {
+export function EncryptionUserSettingsTab({ initialState = "loading" }: EncryptionUserSettingsTabProps): JSX.Element {
     const [state, setState] = useState<State>(initialState);
     const matrixClient = useMatrixClientContext();
 
