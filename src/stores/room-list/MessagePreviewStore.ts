@@ -6,7 +6,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room, RelationType, MatrixEvent, Thread, M_POLL_START, RoomEvent } from "matrix-js-sdk/src/matrix";
+import {
+    Room,
+    RelationType,
+    MatrixEvent,
+    Thread,
+    M_POLL_START,
+    RoomEvent,
+    EmptyObject,
+} from "matrix-js-sdk/src/matrix";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 
 import { ActionPayload } from "../../dispatcher/payloads";
@@ -76,10 +84,6 @@ const MAX_EVENTS_BACKWARDS = 50;
 type TAG_ANY = "im.vector.any"; // eslint-disable-line @typescript-eslint/naming-convention
 const TAG_ANY: TAG_ANY = "im.vector.any";
 
-interface IState {
-    // Empty because we don't actually use the state
-}
-
 export interface MessagePreview {
     event: MatrixEvent;
     isThreadReply: boolean;
@@ -117,7 +121,7 @@ const mkMessagePreview = (text: string, event: MatrixEvent): MessagePreview => {
     };
 };
 
-export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
+export class MessagePreviewStore extends AsyncStoreWithClient<EmptyObject> {
     private static readonly internalInstance = (() => {
         const instance = new MessagePreviewStore();
         instance.start();
