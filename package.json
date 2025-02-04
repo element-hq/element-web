@@ -1,7 +1,7 @@
 {
     "name": "element-web",
     "version": "1.11.91",
-    "description": "A feature-rich client for Matrix.org",
+    "description": "Element: the future of secure communication",
     "author": "New Vector Ltd.",
     "repository": {
         "type": "git",
