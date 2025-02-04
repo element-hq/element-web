@@ -29,6 +29,8 @@ test.describe("Key storage out of sync toast", () => {
     });
 
     test("should prompt for recovery key if 'enter recovery key' pressed", { tag: "@screenshot" }, async ({ page }) => {
+        // Need to wait for 2 to appear since playwright only evaluates 'first()' initially, so the waiting won't work
+        await expect(page.getByRole("alert")).toHaveCount(2);
         await expect(page.getByRole("alert").first()).toMatchScreenshot("key-storage-out-of-sync-toast.png");
 
         await page.getByRole("button", { name: "Enter recovery key" }).click();
