@@ -57,9 +57,9 @@ describe("<UserSettingsDialog />", () => {
 
     let sdkContext: SdkContextClass;
     const defaultProps = { onFinished: jest.fn() };
-    const getComponent = (props: Partial<typeof defaultProps & { initialTabId?: UserTab }> = {}): ReactElement => (
-        <UserSettingsDialog sdkContext={sdkContext} {...defaultProps} {...props} />
-    );
+    const getComponent = (
+        props: Partial<typeof defaultProps & { initialTabId?: UserTab; props: Record<string, any> }> = {},
+    ): ReactElement => <UserSettingsDialog sdkContext={sdkContext} {...defaultProps} {...props} />;
 
     beforeEach(() => {
         jest.clearAllMocks();
