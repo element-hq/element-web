@@ -1,14 +1,14 @@
 {
-  "name": "@nordeck/synapse-guest-module",
+  "name": "@element-hq/synapse-guest-module",
   "version": "2.0.0",
   "private": true,
   "description": "A synapse module to restrict the actions of guests",
-  "author": "Nordeck IT + Consulting GmbH",
+  "author": "New Vector Ltd.",
   "license": "Apache-2.0",
   "scripts": {
     "clean": "echo \"Nothing to clean\"",
     "build": "echo \"Nothing to build\"",
-    "docker:build": "docker build -t nordeck/synapse-guest-module -f Dockerfile .",
+    "docker:build": "docker build -t element-hq/synapse-guest-module -f Dockerfile .",
     "tsc": "echo \"Nothing to tsc\"",
     "lint": "echo \"Nothing to lint\"",
     "types:py": "node ./scripts/run_in_venv.js tox -e check_types",

@@ -1,6 +1,6 @@
 # Synapse Guest Module
 
-A [pluggable synapse module](https://matrix-org.github.io/synapse/latest/modules/index.html) to restrict the actions of guests.
+A [pluggable synapse module](https://element-hq.github.io/synapse/latest/modules/index.html) to restrict the actions of guests.
 
 **Features:**
 
