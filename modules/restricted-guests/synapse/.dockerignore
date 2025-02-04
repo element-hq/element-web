@@ -1,0 +1,3 @@
+# ignore all files except the build folder
+*
+!/synapse_guest_module/*.py
