@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { useContext, useState } from "react";
 
 import { SDKContext } from "../../contexts/SDKContext";
-import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
+import { type RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
 import { useEventEmitter } from "../useEventEmitter";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 

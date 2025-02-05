@@ -8,12 +8,12 @@ Please see LICENSE files in the repository root for full details.
 
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
-import BasePlatform from "../../../../src/BasePlatform";
-import { IConfigOptions } from "../../../../src/IConfigOptions";
+import type BasePlatform from "../../../../src/BasePlatform";
+import { type IConfigOptions } from "../../../../src/IConfigOptions";
 import { getDeviceClientInformation, recordClientInformation } from "../../../../src/utils/device/clientInformation";
 import { getMockClientWithEventEmitter } from "../../../test-utils";
 import { DEFAULTS } from "../../../../src/SdkConfig";
-import { DeepReadonly } from "../../../../src/@types/common";
+import { type DeepReadonly } from "../../../../src/@types/common";
 
 describe("recordClientInformation()", () => {
     const deviceId = "my-device-id";

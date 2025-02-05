@@ -9,17 +9,17 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { MatrixClient, UIAResponse } from "matrix-js-sdk/src/matrix";
-import { AuthType } from "matrix-js-sdk/src/interactive-auth";
+import { type MatrixClient, type UIAResponse } from "matrix-js-sdk/src/matrix";
+import { type AuthType } from "matrix-js-sdk/src/interactive-auth";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import InteractiveAuth, {
     ERROR_USER_CANCELLED,
-    InteractiveAuthCallback,
-    InteractiveAuthProps,
+    type InteractiveAuthCallback,
+    type InteractiveAuthProps,
 } from "../../structures/InteractiveAuth";
-import { ContinueKind, SSOAuthEntry } from "../auth/InteractiveAuthEntryComponents";
+import { type ContinueKind, SSOAuthEntry } from "../auth/InteractiveAuthEntryComponents";
 import BaseDialog from "./BaseDialog";
 import { Linkify } from "../../../Linkify";
 

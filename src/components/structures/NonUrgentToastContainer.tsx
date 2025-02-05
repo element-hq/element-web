@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import * as React from "react";
-import { EmptyObject } from "matrix-js-sdk/src/matrix";
+import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 
-import { ComponentClass } from "../../@types/common";
+import { type ComponentClass } from "../../@types/common";
 import NonUrgentToastStore from "../../stores/NonUrgentToastStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 

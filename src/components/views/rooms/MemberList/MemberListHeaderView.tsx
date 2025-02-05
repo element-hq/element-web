@@ -11,7 +11,7 @@ import InviteIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-
 import { UserAddIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { Flex } from "../../../utils/Flex";
-import { MemberListViewState } from "../../../viewmodels/memberlist/MemberListViewModel";
+import { type MemberListViewState } from "../../../viewmodels/memberlist/MemberListViewModel";
 import { _t } from "../../../../languageHandler";
 
 interface TooltipProps {

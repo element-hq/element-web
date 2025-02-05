@@ -6,12 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Mocked, mocked } from "jest-mock";
+import { type Mocked, mocked } from "jest-mock";
 import {
-    HttpApiEvent,
-    HttpApiEventHandlerMap,
-    IHttpOpts,
-    MatrixClient,
+    type HttpApiEvent,
+    type HttpApiEventHandlerMap,
+    type IHttpOpts,
+    type MatrixClient,
     TypedEventEmitter,
     MatrixHttpApi,
 } from "matrix-js-sdk/src/matrix";
@@ -20,8 +20,8 @@ import fetchMock from "fetch-mock-jest";
 import { getMockClientWithEventEmitter, mockClientMethodsCrypto, mockPlatformPeg } from "../test-utils";
 import { collectBugReport } from "../../src/rageshake/submit-rageshake";
 import SettingsStore from "../../src/settings/SettingsStore";
-import { ConsoleLogger } from "../../src/rageshake/rageshake";
-import { FeatureSettingKey, SettingKey } from "../../src/settings/Settings.tsx";
+import { type ConsoleLogger } from "../../src/rageshake/rageshake";
+import { type FeatureSettingKey, type SettingKey } from "../../src/settings/Settings.tsx";
 
 describe("Rageshakes", () => {
     const RUST_CRYPTO_VERSION = "Rust SDK 0.7.0 (691ec63), Vodozemac 0.5.0";

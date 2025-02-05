@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useMemo } from "react";
-import { EventType, JoinRule, Room } from "matrix-js-sdk/src/matrix";
+import { EventType, JoinRule, type Room } from "matrix-js-sdk/src/matrix";
 
 import SdkConfig from "../../SdkConfig";
 import { useRoomState } from "../useRoomState";

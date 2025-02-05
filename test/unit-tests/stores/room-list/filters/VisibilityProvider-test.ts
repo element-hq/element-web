@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked } from "jest-mock";
-import { Room, RoomType } from "matrix-js-sdk/src/matrix";
+import { type Room, RoomType } from "matrix-js-sdk/src/matrix";
 
 import { VisibilityProvider } from "../../../../../src/stores/room-list/filters/VisibilityProvider";
 import LegacyCallHandler from "../../../../../src/LegacyCallHandler";

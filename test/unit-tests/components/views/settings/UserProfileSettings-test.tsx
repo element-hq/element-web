@@ -6,16 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent } from "react";
+import React, { type ChangeEvent } from "react";
 import { act, render, screen } from "jest-matrix-react";
-import { MatrixClient, UploadResponse } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type UploadResponse } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 import { TooltipProvider } from "@vector-im/compound-web";
 
 import UserProfileSettings from "../../../../../src/components/views/settings/UserProfileSettings";
 import { mkStubRoom, stubClient } from "../../../../test-utils";
-import { ToastContext, ToastRack } from "../../../../../src/contexts/ToastContext";
+import { ToastContext, type ToastRack } from "../../../../../src/contexts/ToastContext";
 import { OwnProfileStore } from "../../../../../src/stores/OwnProfileStore";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import dis from "../../../../../src/dispatcher/dispatcher";

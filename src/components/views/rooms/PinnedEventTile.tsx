@@ -7,8 +7,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { JSX, useCallback, useState } from "react";
-import { EventTimeline, EventType, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import React, { type JSX, useCallback, useState } from "react";
+import { EventTimeline, EventType, type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
 import { IconButton, Menu, MenuItem, Separator, Tooltip } from "@vector-im/compound-web";
 import ViewIcon from "@vector-im/compound-design-tokens/assets/web/icons/visibility-on";
 import UnpinIcon from "@vector-im/compound-design-tokens/assets/web/icons/unpin";
@@ -24,15 +24,15 @@ import MessageEvent from "../messages/MessageEvent";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { _t } from "../../../languageHandler";
 import { getUserNameColorClass } from "../../../utils/FormattingUtils";
-import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useRoomState } from "../../../hooks/useRoomState";
 import { isContentActionable } from "../../../utils/EventUtils";
 import { getForwardableEvent } from "../../../events";
-import { OpenForwardDialogPayload } from "../../../dispatcher/payloads/OpenForwardDialogPayload";
+import { type OpenForwardDialogPayload } from "../../../dispatcher/payloads/OpenForwardDialogPayload";
 import { createRedactEventDialog } from "../dialogs/ConfirmRedactDialog";
-import { ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
+import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import PinningUtils from "../../../utils/PinningUtils.ts";
 import PosthogTrackers from "../../../PosthogTrackers.ts";
 

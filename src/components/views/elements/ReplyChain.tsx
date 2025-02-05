@@ -9,13 +9,13 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import classNames from "classnames";
-import { MatrixEvent, Room, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, type Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
-import { makeUserPermalink, RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import { makeUserPermalink, type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import SettingsStore from "../../../settings/SettingsStore";
-import { Layout } from "../../../settings/enums/Layout";
+import { type Layout } from "../../../settings/enums/Layout";
 import { getUserNameColorClass } from "../../../utils/FormattingUtils";
 import { Action } from "../../../dispatcher/actions";
 import Spinner from "./Spinner";
@@ -25,7 +25,7 @@ import AccessibleButton from "./AccessibleButton";
 import { getParentEventId, shouldDisplayReply } from "../../../utils/Reply";
 import RoomContext from "../../../contexts/RoomContext";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { GetRelationsForEvent } from "../rooms/EventTile";
+import { type GetRelationsForEvent } from "../rooms/EventTile";
 
 /**
  * This number is based on the previous behavior - if we have message of height

@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Locator } from "@playwright/test";
+import { type Locator } from "@playwright/test";
 
 import { expect, test } from "../../element-web-test";
 import {
@@ -20,7 +20,7 @@ import {
     waitForDevices,
 } from "./utils";
 import { bootstrapCrossSigningForClient } from "../../pages/client.ts";
-import { ElementAppPage } from "../../pages/ElementAppPage.ts";
+import { type ElementAppPage } from "../../pages/ElementAppPage.ts";
 
 test.describe("Cryptography", function () {
     test.use({

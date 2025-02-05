@@ -6,21 +6,21 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked, Mocked } from "jest-mock";
-import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { mocked, type Mocked } from "jest-mock";
+import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
 
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import { mkRoom, resetAsyncStoreWithClient, setupAsyncStoreWithClient, stubClient } from "../../test-utils";
 import defaultDispatcher from "../../../src/dispatcher/dispatcher";
-import { ViewRoomPayload } from "../../../src/dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../../src/dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../../src/dispatcher/actions";
 import { leaveRoomBehaviour } from "../../../src/utils/leave-behaviour";
 import { SdkContextClass } from "../../../src/contexts/SDKContext";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
 import SpaceStore from "../../../src/stores/spaces/SpaceStore";
 import { MetaSpace } from "../../../src/stores/spaces";
-import { ActionPayload } from "../../../src/dispatcher/payloads";
+import { type ActionPayload } from "../../../src/dispatcher/payloads";
 import SettingsStore from "../../../src/settings/SettingsStore";
 
 describe("leaveRoomBehaviour", () => {

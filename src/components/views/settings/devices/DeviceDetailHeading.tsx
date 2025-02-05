@@ -9,13 +9,13 @@ Please see LICENSE files in the repository root for full details.
 import React, { useEffect, useState } from "react";
 
 import { _t } from "../../../../languageHandler";
-import AccessibleButton, { ButtonEvent } from "../../elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../../elements/AccessibleButton";
 import Field from "../../elements/Field";
 import LearnMore from "../../elements/LearnMore";
 import Spinner from "../../elements/Spinner";
 import { Caption } from "../../typography/Caption";
 import Heading from "../../typography/Heading";
-import { ExtendedDevice } from "./types";
+import { type ExtendedDevice } from "./types";
 
 interface Props {
     device: ExtendedDevice;

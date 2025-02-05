@@ -9,8 +9,8 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 
 import { _t } from "../../../languageHandler";
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
-import { IBodyProps } from "./IBodyProps";
+import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
+import { type IBodyProps } from "./IBodyProps";
 
 export default class MjolnirBody extends React.Component<IBodyProps> {
     private onAllowClick = (e: ButtonEvent): void => {

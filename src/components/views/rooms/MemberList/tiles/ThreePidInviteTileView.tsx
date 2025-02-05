@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 
 import { useThreePidTileViewModel } from "../../../../viewmodels/memberlist/tiles/ThreePidTileViewModel";
-import { ThreePIDInvite } from "../../../../../models/rooms/ThreePIDInvite";
+import { type ThreePIDInvite } from "../../../../../models/rooms/ThreePIDInvite";
 import BaseAvatar from "../../../avatars/BaseAvatar";
 import { MemberTileView } from "./common/MemberTileView";
 import { InvitedIconView } from "./common/InvitedIconView";

@@ -16,8 +16,8 @@ import {
     enableKeyBackup,
     verify,
 } from "./utils";
-import { Bot } from "../../pages/bot";
-import { ElementAppPage } from "../../pages/ElementAppPage";
+import { type Bot } from "../../pages/bot";
+import { type ElementAppPage } from "../../pages/ElementAppPage";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 const checkDMRoom = async (page: Page) => {

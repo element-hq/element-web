@@ -2467,6 +2467,7 @@
                 "breadcrumb_second_description": "You will lose any message history that’s stored only on the server",
                 "breadcrumb_third_description": "You will need to verify all your existing devices and contacts again",
                 "breadcrumb_title": "Are you sure you want to reset your identity?",
+                "breadcrumb_title_forgot": "Forgot your recovery key? You’ll need to reset your identity.",
                 "breadcrumb_warning": "Only do this if you believe your account has been compromised.",
                 "details_title": "Encryption details",
                 "export_keys": "Export keys",

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import classNames from "classnames";
-import { IPusher, PUSHER_ENABLED, LocalNotificationSettings } from "matrix-js-sdk/src/matrix";
+import { type IPusher, PUSHER_ENABLED, type LocalNotificationSettings } from "matrix-js-sdk/src/matrix";
 
 import { formatDate } from "../../../../DateUtils";
 import { _t } from "../../../../languageHandler";
@@ -17,7 +17,7 @@ import Spinner from "../../elements/Spinner";
 import ToggleSwitch from "../../elements/ToggleSwitch";
 import { DeviceDetailHeading } from "./DeviceDetailHeading";
 import { DeviceVerificationStatusCard } from "./DeviceVerificationStatusCard";
-import { ExtendedDevice } from "./types";
+import { type ExtendedDevice } from "./types";
 import { getManageDeviceUrl } from "../../../../utils/oidc/urls.ts";
 
 interface Props {

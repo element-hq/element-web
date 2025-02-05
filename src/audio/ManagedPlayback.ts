@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { Playback } from "./Playback";
-import { PlaybackManager } from "./PlaybackManager";
+import { type PlaybackManager } from "./PlaybackManager";
 import { DEFAULT_WAVEFORM } from "./consts";
 
 /**

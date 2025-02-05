@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { DetailedHTMLProps, HTMLAttributes, ReactNode } from "react";
+import React, { type DetailedHTMLProps, type HTMLAttributes, type ReactNode } from "react";
 
 interface Props extends DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> {
     className?: string;

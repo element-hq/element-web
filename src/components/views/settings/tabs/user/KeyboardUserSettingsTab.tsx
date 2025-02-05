@@ -9,7 +9,12 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 
-import { ICategory, CATEGORIES, CategoryName, KeyBindingAction } from "../../../../../accessibility/KeyboardShortcuts";
+import {
+    type ICategory,
+    CATEGORIES,
+    CategoryName,
+    type KeyBindingAction,
+} from "../../../../../accessibility/KeyboardShortcuts";
 import { _t } from "../../../../../languageHandler";
 import {
     getKeyboardShortcutDisplayName,

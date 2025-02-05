@@ -14,11 +14,11 @@ import {
     MSC4108SecureChannel,
     MSC4108SignInWithQR,
     RendezvousError,
-    RendezvousFailureReason,
+    type RendezvousFailureReason,
     RendezvousIntent,
 } from "matrix-js-sdk/src/rendezvous";
 import { logger } from "matrix-js-sdk/src/logger";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { Click, Mode, Phase } from "./LoginWithQR-types";
 import LoginWithQRFlow from "./LoginWithQRFlow";

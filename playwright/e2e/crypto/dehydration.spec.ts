@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { test, expect } from "../../element-web-test";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 import { completeCreateSecretStorageDialog, createBot, logIntoElement } from "./utils.ts";
-import { Client } from "../../pages/client.ts";
+import { type Client } from "../../pages/client.ts";
 
 const NAME = "Alice";
 

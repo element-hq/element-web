@@ -10,7 +10,7 @@ import { expect, test as base } from "../../element-web-test";
 import { selectHomeserver } from "../utils";
 import { emailHomeserver } from "../../plugins/homeserver/synapse/emailHomeserver.ts";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
-import { Credentials } from "../../plugins/homeserver";
+import { type Credentials } from "../../plugins/homeserver";
 
 const email = "user@nowhere.dummy";
 

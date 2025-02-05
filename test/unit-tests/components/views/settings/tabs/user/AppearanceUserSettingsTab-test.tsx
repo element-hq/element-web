@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { render } from "jest-matrix-react";
 import React from "react";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import AppearanceUserSettingsTab from "../../../../../../../src/components/views/settings/tabs/user/AppearanceUserSettingsTab";
 import { withClientContextRenderOptions, stubClient } from "../../../../../../test-utils";

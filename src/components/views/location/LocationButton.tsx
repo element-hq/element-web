@@ -6,13 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode, SyntheticEvent, useContext } from "react";
+import React, { type ReactNode, type SyntheticEvent, useContext } from "react";
 import classNames from "classnames";
-import { RoomMember, IEventRelation } from "matrix-js-sdk/src/matrix";
+import { type RoomMember, type IEventRelation } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import { CollapsibleButton } from "../rooms/CollapsibleButton";
-import { aboveLeftOf, useContextMenu, MenuProps } from "../../structures/ContextMenu";
+import { aboveLeftOf, useContextMenu, type MenuProps } from "../../structures/ContextMenu";
 import { OverflowMenuContext } from "../rooms/MessageComposerButtons";
 import LocationShareMenu from "./LocationShareMenu";
 

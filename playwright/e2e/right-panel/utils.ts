@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type Page, expect } from "@playwright/test";
 
-import { ElementAppPage } from "../../pages/ElementAppPage";
+import { type ElementAppPage } from "../../pages/ElementAppPage";
 
 export async function viewRoomSummaryByName(page: Page, app: ElementAppPage, name: string): Promise<void> {
     await app.viewRoomByName(name);

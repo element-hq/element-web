@@ -11,8 +11,8 @@ Please see LICENSE files in the repository root for full details.
 import { at, uniq } from "lodash";
 import { removeHiddenChars } from "matrix-js-sdk/src/utils";
 
-import { TimelineRenderingType } from "../contexts/RoomContext";
-import { Leaves } from "../@types/common";
+import { type TimelineRenderingType } from "../contexts/RoomContext";
+import { type Leaves } from "../@types/common";
 
 interface IOptions<T extends object> {
     keys: Array<Leaves<T>>;

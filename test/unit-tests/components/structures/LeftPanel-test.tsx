@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, RenderResult, screen } from "jest-matrix-react";
+import { render, type RenderResult, screen } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 
 import LeftPanel from "../../../../src/components/structures/LeftPanel";

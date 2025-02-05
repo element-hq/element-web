@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { createRef } from "react";
 
-import AutoHideScrollbar, { IProps as AutoHideScrollbarProps } from "./AutoHideScrollbar";
+import AutoHideScrollbar, { type IProps as AutoHideScrollbarProps } from "./AutoHideScrollbar";
 import UIStore, { UI_EVENTS } from "../../stores/UIStore";
 
 export type IProps<T extends keyof JSX.IntrinsicElements> = Omit<AutoHideScrollbarProps<T>, "onWheel" | "element"> & {

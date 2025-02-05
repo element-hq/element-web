@@ -11,7 +11,7 @@ import classNames from "classnames";
 import { ErrorIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
-import { getLocationShareErrorMessage, LocationShareError } from "../../../utils/location";
+import { getLocationShareErrorMessage, type LocationShareError } from "../../../utils/location";
 import AccessibleButton from "../elements/AccessibleButton";
 import Heading from "../typography/Heading";
 

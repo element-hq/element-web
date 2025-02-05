@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import fetchMock from "fetch-mock-jest";
 import { completeAuthorizationCodeGrant } from "matrix-js-sdk/src/oidc/authorize";
 import * as randomStringUtils from "matrix-js-sdk/src/randomstring";
-import { BearerTokenResponse } from "matrix-js-sdk/src/oidc/validate";
+import { type BearerTokenResponse } from "matrix-js-sdk/src/oidc/validate";
 import { mocked } from "jest-mock";
 import { Crypto } from "@peculiar/webcrypto";
 import { getRandomValues } from "node:crypto";

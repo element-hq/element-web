@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 
 import ToastStore from "../../../stores/ToastStore";
-import GenericToast, { IProps as IGenericToastProps } from "./GenericToast";
+import GenericToast, { type IProps as IGenericToastProps } from "./GenericToast";
 import { useExpiringCounter } from "../../../hooks/useTimeout";
 
 interface IProps extends IGenericToastProps {

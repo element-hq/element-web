@@ -7,7 +7,7 @@
  */
 
 import { render, screen } from "jest-matrix-react";
-import React, { ComponentProps } from "react";
+import React, { type ComponentProps } from "react";
 import userEvent from "@testing-library/user-event";
 
 import { PowerLevelSelector } from "../../../../../src/components/views/settings/PowerLevelSelector";

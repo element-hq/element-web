@@ -6,9 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Action } from "../actions";
-import { ActionPayload } from "../payloads";
-import BasePlatform from "../../BasePlatform";
+import { type Action } from "../actions";
+import { type ActionPayload } from "../payloads";
+import type BasePlatform from "../../BasePlatform";
 
 export interface PlatformSetPayload extends ActionPayload {
     action: Action.PlatformSet;

@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ReactNode } from "react";
+import { type ReactNode } from "react";
 import { OidcError } from "matrix-js-sdk/src/oidc/error";
 
 import { _t } from "../../languageHandler";

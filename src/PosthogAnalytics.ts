@@ -6,20 +6,20 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import posthog, { CaptureOptions, PostHog, Properties } from "posthog-js";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import posthog, { type CaptureOptions, type PostHog, type Properties } from "posthog-js";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { UserProperties } from "@matrix-org/analytics-events/types/typescript/UserProperties";
-import { Signup } from "@matrix-org/analytics-events/types/typescript/Signup";
+import { type UserProperties } from "@matrix-org/analytics-events/types/typescript/UserProperties";
+import { type Signup } from "@matrix-org/analytics-events/types/typescript/Signup";
 
 import PlatformPeg from "./PlatformPeg";
 import SdkConfig from "./SdkConfig";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import SettingsStore from "./settings/SettingsStore";
-import { ScreenName } from "./PosthogTrackers";
-import { ActionPayload } from "./dispatcher/payloads";
+import { type ScreenName } from "./PosthogTrackers";
+import { type ActionPayload } from "./dispatcher/payloads";
 import { Action } from "./dispatcher/actions";
-import { SettingUpdatedPayload } from "./dispatcher/payloads/SettingUpdatedPayload";
+import { type SettingUpdatedPayload } from "./dispatcher/payloads/SettingUpdatedPayload";
 import dis from "./dispatcher/dispatcher";
 import { Layout } from "./settings/enums/Layout";
 

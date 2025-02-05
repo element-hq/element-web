@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { ReactNode } from "react";
+import { type ReactNode } from "react";
 import { ClientEvent, SyncState } from "matrix-js-sdk/src/matrix";
 
 import DeviceSettingsHandler from "./handlers/DeviceSettingsHandler";
@@ -20,12 +20,20 @@ import RoomSettingsHandler from "./handlers/RoomSettingsHandler";
 import ConfigSettingsHandler from "./handlers/ConfigSettingsHandler";
 import { _t } from "../languageHandler";
 import dis from "../dispatcher/dispatcher";
-import { IFeature, ISetting, LabGroup, SETTINGS, defaultWatchManager, SettingKey, Settings } from "./Settings";
+import {
+    type IFeature,
+    type ISetting,
+    type LabGroup,
+    SETTINGS,
+    defaultWatchManager,
+    type SettingKey,
+    type Settings,
+} from "./Settings";
 import LocalEchoWrapper from "./handlers/LocalEchoWrapper";
-import { CallbackFn as WatchCallbackFn } from "./WatchManager";
+import { type CallbackFn as WatchCallbackFn } from "./WatchManager";
 import { SettingLevel } from "./SettingLevel";
-import SettingsHandler from "./handlers/SettingsHandler";
-import { SettingUpdatedPayload } from "../dispatcher/payloads/SettingUpdatedPayload";
+import type SettingsHandler from "./handlers/SettingsHandler";
+import { type SettingUpdatedPayload } from "../dispatcher/payloads/SettingUpdatedPayload";
 import { Action } from "../dispatcher/actions";
 import PlatformSettingsHandler from "./handlers/PlatformSettingsHandler";
 import ReloadOnChangeController from "./controllers/ReloadOnChangeController";

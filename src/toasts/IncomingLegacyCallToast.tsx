@@ -10,14 +10,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { CallType, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { CallType, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import classNames from "classnames";
 
 import LegacyCallHandler, { LegacyCallHandlerEvent } from "../LegacyCallHandler";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { _t } from "../languageHandler";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
-import AccessibleButton, { ButtonEvent } from "../components/views/elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../components/views/elements/AccessibleButton";
 
 export const getIncomingLegacyCallToastKey = (callId: string): string => `call_${callId}`;
 

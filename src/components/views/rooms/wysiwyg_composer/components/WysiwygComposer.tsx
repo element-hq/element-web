@@ -6,13 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { memo, MutableRefObject, ReactNode, useEffect, useMemo, useRef } from "react";
-import { IEventRelation } from "matrix-js-sdk/src/matrix";
+import React, { memo, type MutableRefObject, type ReactNode, useEffect, useMemo, useRef } from "react";
+import { type IEventRelation } from "matrix-js-sdk/src/matrix";
 import { EMOTICON_TO_EMOJI } from "@matrix-org/emojibase-bindings";
-import { useWysiwyg, FormattingFunctions } from "@vector-im/matrix-wysiwyg";
+import { useWysiwyg, type FormattingFunctions } from "@vector-im/matrix-wysiwyg";
 import classNames from "classnames";
 
-import Autocomplete from "../../Autocomplete";
+import type Autocomplete from "../../Autocomplete";
 import { WysiwygAutocomplete } from "./WysiwygAutocomplete";
 import { FormattingButtons } from "./FormattingButtons";
 import { Editor } from "./Editor";

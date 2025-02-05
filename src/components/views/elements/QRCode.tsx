@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import * as React from "react";
-import { toDataURL, QRCodeSegment, QRCodeToDataURLOptions, QRCodeRenderersOptions } from "qrcode";
+import { toDataURL, type QRCodeSegment, type QRCodeToDataURLOptions, type QRCodeRenderersOptions } from "qrcode";
 import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";

@@ -10,8 +10,8 @@ import React from "react";
 import { act, fireEvent, render, screen, waitFor, within } from "jest-matrix-react";
 import {
     EventType,
-    GuestAccess,
-    HistoryVisibility,
+    type GuestAccess,
+    type HistoryVisibility,
     JoinRule,
     MatrixEvent,
     Room,
@@ -21,7 +21,7 @@ import {
     Visibility,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { defer, IDeferred } from "matrix-js-sdk/src/utils";
+import { defer, type IDeferred } from "matrix-js-sdk/src/utils";
 
 import {
     clearAllModals,
@@ -30,7 +30,9 @@ import {
     mockClientMethodsUser,
 } from "../../../../test-utils";
 import { filterBoolean } from "../../../../../src/utils/arrays";
-import JoinRuleSettings, { JoinRuleSettingsProps } from "../../../../../src/components/views/settings/JoinRuleSettings";
+import JoinRuleSettings, {
+    type JoinRuleSettingsProps,
+} from "../../../../../src/components/views/settings/JoinRuleSettings";
 import { PreferredRoomVersions } from "../../../../../src/utils/PreferredRoomVersions";
 import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import SettingsStore from "../../../../../src/settings/SettingsStore";

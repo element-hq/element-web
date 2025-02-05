@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { Ref } from "react";
+import React, { type Ref } from "react";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import classnames from "classnames";
 

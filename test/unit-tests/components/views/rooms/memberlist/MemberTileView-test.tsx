@@ -8,13 +8,13 @@
 
 import React from "react";
 import { render, screen, waitFor } from "jest-matrix-react";
-import { MatrixClient, RoomMember as SdkRoomMember, Device, Room } from "matrix-js-sdk/src/matrix";
-import { UserVerificationStatus, DeviceVerificationStatus } from "matrix-js-sdk/src/crypto-api";
+import { type MatrixClient, RoomMember as SdkRoomMember, type Device, Room } from "matrix-js-sdk/src/matrix";
+import { type UserVerificationStatus, type DeviceVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 
 import * as TestUtils from "../../../../../test-utils";
-import { RoomMember } from "../../../../../../src/models/rooms/RoomMember";
+import { type RoomMember } from "../../../../../../src/models/rooms/RoomMember";
 import {
     getPending3PidInvites,
     sdkRoomMemberToRoomMember,

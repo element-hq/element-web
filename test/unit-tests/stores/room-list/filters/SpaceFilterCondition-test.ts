@@ -7,12 +7,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked } from "jest-mock";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk/src/matrix";
 
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { FILTER_CHANGED } from "../../../../../src/stores/room-list/filters/IFilterCondition";
 import { SpaceFilterCondition } from "../../../../../src/stores/room-list/filters/SpaceFilterCondition";
-import { MetaSpace, SpaceKey } from "../../../../../src/stores/spaces";
+import { MetaSpace, type SpaceKey } from "../../../../../src/stores/spaces";
 import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 
 jest.mock("../../../../../src/settings/SettingsStore");
