@@ -78,7 +78,6 @@ interface IState {
     // does the server offer a UI auth flow with just m.login.password
     // for /keys/device_signing/upload?
     canUploadKeysWithPasswordOnly: boolean | null;
-    accountPassword: string;
     canSkip: boolean;
     passPhraseKeySelected: string;
     error?: boolean;
@@ -129,7 +128,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             canSkip: !isSecureBackupRequired(cli),
             canUploadKeysWithPasswordOnly: null,
             passPhraseKeySelected,
-            accountPassword: "",
         };
     }
 
@@ -219,44 +217,33 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
     private doBootstrapUIAuth = async (
         makeRequest: (authData: AuthDict) => Promise<UIAResponse<void>>,
     ): Promise<void> => {
-        if (this.state.canUploadKeysWithPasswordOnly && this.state.accountPassword) {
-            await makeRequest({
-                type: "m.login.password",
-                identifier: {
-                    type: "m.id.user",
-                    user: MatrixClientPeg.safeGet().getSafeUserId(),
-                },
-                password: this.state.accountPassword,
-            });
-        } else {
-            const dialogAesthetics = {
-                [SSOAuthEntry.PHASE_PREAUTH]: {
-                    title: _t("auth|uia|sso_title"),
-                    body: _t("auth|uia|sso_preauth_body"),
-                    continueText: _t("auth|sso"),
-                    continueKind: "primary",
-                },
-                [SSOAuthEntry.PHASE_POSTAUTH]: {
-                    title: _t("encryption|confirm_encryption_setup_title"),
-                    body: _t("encryption|confirm_encryption_setup_body"),
-                    continueText: _t("action|confirm"),
-                    continueKind: "primary",
-                },
-            };
+        const dialogAesthetics = {
+            [SSOAuthEntry.PHASE_PREAUTH]: {
+                title: _t("auth|uia|sso_title"),
+                body: _t("auth|uia|sso_preauth_body"),
+                continueText: _t("auth|sso"),
+                continueKind: "primary",
+            },
+            [SSOAuthEntry.PHASE_POSTAUTH]: {
+                title: _t("encryption|confirm_encryption_setup_title"),
+                body: _t("encryption|confirm_encryption_setup_body"),
+                continueText: _t("action|confirm"),
+                continueKind: "primary",
+            },
+        };
 
-            const { finished } = Modal.createDialog(InteractiveAuthDialog, {
-                title: _t("encryption|bootstrap_title"),
-                matrixClient: MatrixClientPeg.safeGet(),
-                makeRequest,
-                aestheticsForStagePhases: {
-                    [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
-                    [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
-                },
-            });
-            const [confirmed] = await finished;
-            if (!confirmed) {
-                throw new Error("Cross-signing key upload auth canceled");
-            }
+        const { finished } = Modal.createDialog(InteractiveAuthDialog, {
+            title: _t("encryption|bootstrap_title"),
+            matrixClient: MatrixClientPeg.safeGet(),
+            makeRequest,
+            aestheticsForStagePhases: {
+                [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
+                [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
+            },
+        });
+        const [confirmed] = await finished;
+        if (!confirmed) {
+            throw new Error("Cross-signing key upload auth canceled");
         }
     };
 
