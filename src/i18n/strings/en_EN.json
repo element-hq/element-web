@@ -548,7 +548,6 @@
         "saved": "Saved",
         "saving": "Saving…",
         "secure_backup": "Secure Backup",
-        "security": "Security",
         "select_all": "Select all",
         "server": "Server",
         "settings": "Settings",
@@ -971,7 +970,6 @@
             "title": "Not Trusted"
         },
         "unable_to_setup_keys_error": "Unable to set up keys",
-        "unsupported": "This client does not support end-to-end encryption.",
         "verification": {
             "accepting": "Accepting…",
             "after_new_login": {
@@ -3785,18 +3783,9 @@
         "ban_room_confirm_title": "Ban from %(roomName)s",
         "ban_space_everything": "Ban them from everything I'm able to",
         "ban_space_specific": "Ban them from specific things I'm able to",
-        "count_of_sessions": {
-            "one": "%(count)s session",
-            "other": "%(count)s sessions"
-        },
-        "count_of_verified_sessions": {
-            "one": "1 verified session",
-            "other": "%(count)s verified sessions"
-        },
         "deactivate_confirm_action": "Deactivate user",
         "deactivate_confirm_description": "Deactivating this user will log them out and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?",
         "deactivate_confirm_title": "Deactivate user?",
-        "dehydrated_device_enabled": "Offline device enabled",
         "demote_button": "Demote",
         "demote_self_confirm_description_space": "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the space it will be impossible to regain privileges.",
         "demote_self_confirm_room": "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.",
@@ -3804,15 +3793,12 @@
         "disinvite_button_room": "Disinvite from room",
         "disinvite_button_room_name": "Disinvite from %(roomName)s",
         "disinvite_button_space": "Disinvite from space",
-        "edit_own_devices": "Edit devices",
         "error_ban_user": "Failed to ban user",
         "error_deactivate": "Failed to deactivate user",
         "error_kicking_user": "Failed to remove user",
         "error_mute_user": "Failed to mute user",
         "error_revoke_3pid_invite_description": "Could not revoke the invite. The server may be experiencing a temporary problem or you do not have sufficient permissions to revoke the invite.",
         "error_revoke_3pid_invite_title": "Failed to revoke invite",
-        "hide_sessions": "Hide sessions",
-        "hide_verified_sessions": "Hide verified sessions",
         "ignore_button": "Ignore",
         "ignore_confirm_description": "All messages and invites from this user will be hidden. Are you sure you want to ignore them?",
         "ignore_confirm_title": "Ignore %(user)s",
@@ -3856,6 +3842,7 @@
         "unban_space_specific": "Unban them from specific things I'm able to",
         "unban_space_warning": "They won't be able to access whatever you're not an admin of.",
         "unignore_button": "Unignore",
+        "verification_unavailable": "User verification unavailable",
         "verify_button": "Verify User",
         "verify_explainer": "For extra security, verify this user by checking a one-time code on both of your devices."
     },

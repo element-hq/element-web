@@ -37,10 +37,6 @@ Please see LICENSE files in the repository root for full details.
         padding: var(--cpd-space-2x) 0 var(--cpd-space-4x);
         margin: 0 var(--cpd-space-4x);
 
-        .mx_UserInfo_container_verifyButton {
-            margin-top: $spacing-8;
-        }
-
         & + .mx_UserInfo_container {
             border-top: 1px solid $separator;
         }
@@ -178,6 +174,28 @@ Please see LICENSE files in the repository root for full details.
     .mx_PresenceLabel {
         font: var(--cpd-font-body-sm-regular);
         opacity: 1;
+    }
+
+    .mx_UserInfo_verification {
+        margin-top: var(--cpd-space-4x);
+        height: 36px;
+
+        .mx_UserInfo_verified_badge {
+            width: 68px;
+            height: 20px;
+
+            .mx_UserInfo_verified_icon {
+                flex-shrink: 0;
+            }
+
+            .mx_UserInfo_verified_label {
+                margin: 0;
+            }
+        }
+
+        .mx_UserInfo_verification_unavailable {
+            color: var(--cpd-color-text-secondary);
+        }
     }
 
     .mx_UserInfo_memberDetails {
