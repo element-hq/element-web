@@ -62,7 +62,6 @@ const PASSWORD_MIN_SCORE = 4; // So secure, many characters, much complex, wow, 
 
 interface IProps {
     hasCancel?: boolean;
-    accountPassword?: string;
     forceReset?: boolean;
     resetCrossSigning?: boolean;
     onFinished(ok?: boolean): void;
@@ -116,16 +115,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             passPhraseKeySelected = SecureBackupSetupMethod.Passphrase;
         }
 
-        const accountPassword = props.accountPassword || "";
-        let canUploadKeysWithPasswordOnly: boolean | null = null;
-        if (accountPassword) {
-            // If we have an account password in memory, let's simplify and
-            // assume it means password auth is also supported for device
-            // signing key upload as well. This avoids hitting the server to
-            // test auth flows, which may be slow under high load.
-            canUploadKeysWithPasswordOnly = true;
-        }
-
         const keyFromCustomisations = ModuleRunner.instance.extensions.cryptoSetup.createSecretStorageKey();
         const phase = keyFromCustomisations ? Phase.Loading : Phase.ChooseKeyPassphrase;
 
@@ -140,9 +129,9 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             // does the server offer a UI auth flow with just m.login.password
             // for /keys/device_signing/upload?
             canSkip: !isSecureBackupRequired(cli),
-            canUploadKeysWithPasswordOnly,
+            canUploadKeysWithPasswordOnly: null,
             passPhraseKeySelected,
-            accountPassword,
+            accountPassword: "",
         };
     }
 
