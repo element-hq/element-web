@@ -8,10 +8,10 @@ Please see LICENSE files in the repository root for full details.
 
 import * as React from "react";
 import { createRef } from "react";
-import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
-import ContextMenu, { IProps as IContextMenuProps } from "../../structures/ContextMenu";
+import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
+import ContextMenu, { type IProps as IContextMenuProps } from "../../structures/ContextMenu";
 import Field from "../elements/Field";
 import DialPad from "../voip/DialPad";
 

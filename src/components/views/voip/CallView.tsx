@@ -6,10 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { FC, useContext, useEffect, AriaRole, useCallback } from "react";
+import React, { type FC, useContext, useEffect, type AriaRole, useCallback } from "react";
 
 import type { Room } from "matrix-js-sdk/src/matrix";
-import { Call, ConnectionState, ElementCall } from "../../../models/Call";
+import { type Call, ConnectionState, ElementCall } from "../../../models/Call";
 import { useCall } from "../../../hooks/useCall";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AppTile from "../elements/AppTile";

@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    MatrixEvent,
-    IContent,
-    MatrixClient,
+    type MatrixEvent,
+    type IContent,
+    type MatrixClient,
     EventType,
     MsgType,
     M_POLL_END,

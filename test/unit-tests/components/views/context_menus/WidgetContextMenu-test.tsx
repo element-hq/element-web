@@ -7,19 +7,19 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ComponentProps } from "react";
+import React, { type ComponentProps } from "react";
 import { screen, render } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { MatrixWidgetType } from "matrix-widget-api";
 import {
-    ApprovalOpts,
-    WidgetInfo,
+    type ApprovalOpts,
+    type WidgetInfo,
     WidgetLifecycle,
 } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
 
 import { WidgetContextMenu } from "../../../../../src/components/views/context_menus/WidgetContextMenu";
-import { IApp } from "../../../../../src/stores/WidgetStore";
+import { type IApp } from "../../../../../src/stores/WidgetStore";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import WidgetUtils from "../../../../../src/utils/WidgetUtils";
 import { ModuleRunner } from "../../../../../src/modules/ModuleRunner";

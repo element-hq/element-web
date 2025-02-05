@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { SdkContextClass } from "../contexts/SDKContext";
+import { type SdkContextClass } from "../contexts/SDKContext";
 import SettingsStore from "../settings/SettingsStore";
 import { isLocalRoom } from "../utils/localRoom/isLocalRoom";
 import Timer from "../utils/Timer";

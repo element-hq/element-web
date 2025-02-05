@@ -15,7 +15,7 @@ import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { SpaceButton } from "../../../../../src/components/views/spaces/SpaceTreeLevel";
-import { MetaSpace, SpaceKey } from "../../../../../src/stores/spaces";
+import { MetaSpace, type SpaceKey } from "../../../../../src/stores/spaces";
 import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import { StaticNotificationState } from "../../../../../src/stores/notifications/StaticNotificationState";
 import { NotificationLevel } from "../../../../../src/stores/notifications/NotificationLevel";

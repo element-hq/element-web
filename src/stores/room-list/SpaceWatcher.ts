@@ -6,10 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { RoomListStore as Interface } from "./Interface";
+import { type RoomListStore as Interface } from "./Interface";
 import { SpaceFilterCondition } from "./filters/SpaceFilterCondition";
 import SpaceStore from "../spaces/SpaceStore";
-import { MetaSpace, SpaceKey, UPDATE_HOME_BEHAVIOUR, UPDATE_SELECTED_SPACE } from "../spaces";
+import { MetaSpace, type SpaceKey, UPDATE_HOME_BEHAVIOUR, UPDATE_SELECTED_SPACE } from "../spaces";
 
 /**
  * Watches for changes in spaces to manage the filter on the provided RoomListStore

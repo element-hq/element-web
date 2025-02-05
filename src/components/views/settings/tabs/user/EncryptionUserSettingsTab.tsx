@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { JSX, useCallback, useEffect, useState } from "react";
+import React, { type JSX, useCallback, useEffect, useState } from "react";
 import { Button, InlineSpinner, Separator } from "@vector-im/compound-web";
 import ComputerIcon from "@vector-im/compound-design-tokens/assets/web/icons/computer";
 

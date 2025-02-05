@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { mocked } from "jest-mock";
 import React from "react";
 
-import { ICompletion } from "../../../../../../../src/autocomplete/Autocompleter";
+import { type ICompletion } from "../../../../../../../src/autocomplete/Autocompleter";
 import {
     buildQuery,
     getRoomFromCompletion,

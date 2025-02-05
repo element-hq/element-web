@@ -11,7 +11,7 @@ import * as React from "react";
 
 import { ALTERNATE_KEY_NAME } from "../../accessibility/KeyboardShortcuts";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import { ActionPayload } from "../../dispatcher/payloads";
+import { type ActionPayload } from "../../dispatcher/payloads";
 import { IS_MAC, Key } from "../../Keyboard";
 import { _t } from "../../languageHandler";
 import AccessibleButton from "../views/elements/AccessibleButton";

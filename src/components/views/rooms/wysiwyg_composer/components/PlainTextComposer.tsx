@@ -7,15 +7,15 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import { IEventRelation } from "matrix-js-sdk/src/matrix";
-import React, { MutableRefObject, ReactNode } from "react";
+import { type IEventRelation } from "matrix-js-sdk/src/matrix";
+import React, { type MutableRefObject, type ReactNode } from "react";
 
 import { useComposerFunctions } from "../hooks/useComposerFunctions";
 import { useIsFocused } from "../hooks/useIsFocused";
 import { usePlainTextInitialization } from "../hooks/usePlainTextInitialization";
 import { usePlainTextListeners } from "../hooks/usePlainTextListeners";
 import { useSetCursorPosition } from "../hooks/useSetCursorPosition";
-import { ComposerFunctions } from "../types";
+import { type ComposerFunctions } from "../types";
 import { Editor } from "./Editor";
 import { WysiwygAutocomplete } from "./WysiwygAutocomplete";
 import { useSettingValue } from "../../../../../hooks/useSettings";

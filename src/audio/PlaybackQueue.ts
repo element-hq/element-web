@@ -6,10 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixEvent, Room, EventType } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, type Room, EventType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { Playback, PlaybackState } from "./Playback";
+import { type Playback, PlaybackState } from "./Playback";
 import { UPDATE_EVENT } from "../stores/AsyncStore";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { arrayFastClone } from "../utils/arrays";

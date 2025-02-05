@@ -11,9 +11,9 @@ import React from "react";
 
 import {
     DeviceVerificationStatusCard,
-    DeviceVerificationStatusCardProps,
+    type DeviceVerificationStatusCardProps,
 } from "../../../../../../src/components/views/settings/devices/DeviceVerificationStatusCard";
-import { ExtendedDevice } from "../../../../../../src/components/views/settings/devices/types";
+import { type ExtendedDevice } from "../../../../../../src/components/views/settings/devices/types";
 import { DeviceType } from "../../../../../../src/utils/device/parseUserAgent";
 
 describe("<DeviceVerificationStatusCard />", () => {

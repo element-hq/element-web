@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import EventIndexPeg from "../../../indexing/EventIndexPeg";
@@ -15,7 +15,7 @@ import SdkConfig from "../../../SdkConfig";
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { UserTab } from "../dialogs/UserTab";
-import AccessibleButton, { ButtonEvent } from "./AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "./AccessibleButton";
 
 export enum WarningKind {
     Files,

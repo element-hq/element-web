@@ -14,12 +14,12 @@ import {
     Room,
     EventStatus,
     EventType,
-    MatrixEvent,
+    type MatrixEvent,
     PendingEventOrdering,
+    type MatrixClient,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
-import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { mkEvent, mkRoom, mkRoomMember, muteRoom, stubClient, upsertRoomStateEvents } from "../test-utils";
 import {
     getRoomNotifsState,

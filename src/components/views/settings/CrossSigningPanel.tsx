@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { ClientEvent, EmptyObject, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, type EmptyObject, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 

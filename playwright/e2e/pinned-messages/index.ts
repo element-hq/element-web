@@ -6,12 +6,12 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { Page } from "@playwright/test";
+import { type Page } from "@playwright/test";
 
 import { test as base, expect } from "../../element-web-test";
-import { Client } from "../../pages/client";
-import { ElementAppPage } from "../../pages/ElementAppPage";
-import { Bot } from "../../pages/bot";
+import { type Client } from "../../pages/client";
+import { type ElementAppPage } from "../../pages/ElementAppPage";
+import { type Bot } from "../../pages/bot";
 
 type RoomRef = { name: string; roomId: string };
 

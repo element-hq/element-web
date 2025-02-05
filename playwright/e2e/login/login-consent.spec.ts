@@ -6,11 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Page } from "playwright-core";
+import { type Page } from "playwright-core";
 
 import { expect, test } from "../../element-web-test";
 import { selectHomeserver } from "../utils";
-import { Credentials, HomeserverInstance } from "../../plugins/homeserver";
+import { type Credentials, type HomeserverInstance } from "../../plugins/homeserver";
 import { consentHomeserver } from "../../plugins/homeserver/synapse/consentHomeserver.ts";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 

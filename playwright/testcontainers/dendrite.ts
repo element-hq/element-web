@@ -12,8 +12,8 @@ import { set } from "lodash";
 import { randB64Bytes } from "../plugins/utils/rand.ts";
 import { StartedSynapseContainer } from "./synapse.ts";
 import { deepCopy } from "../plugins/utils/object.ts";
-import { HomeserverContainer } from "./HomeserverContainer.ts";
-import { StartedMatrixAuthenticationServiceContainer } from "./mas.ts";
+import { type HomeserverContainer } from "./HomeserverContainer.ts";
+import { type StartedMatrixAuthenticationServiceContainer } from "./mas.ts";
 
 const DEFAULT_CONFIG = {
     version: 2,

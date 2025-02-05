@@ -18,7 +18,7 @@ import VerifiedIcon from "@vector-im/compound-design-tokens/assets/web/icons/ver
 import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
 import PublicIcon from "@vector-im/compound-design-tokens/assets/web/icons/public";
 import { JoinRule, type Room } from "matrix-js-sdk/src/matrix";
-import { ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
+import { type ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 
 import { useRoomName } from "../../../../hooks/useRoomName.ts";
 import { RightPanelPhases } from "../../../../stores/right-panel/RightPanelStorePhases.ts";
@@ -45,9 +45,9 @@ import { RoomKnocksBar } from "../RoomKnocksBar.tsx";
 import { isVideoRoom as calcIsVideoRoom } from "../../../../utils/video-rooms.ts";
 import { notificationLevelToIndicator } from "../../../../utils/notifications.ts";
 import { CallGuestLinkButton } from "./CallGuestLinkButton.tsx";
-import { ButtonEvent } from "../../elements/AccessibleButton.tsx";
+import { type ButtonEvent } from "../../elements/AccessibleButton.tsx";
 import WithPresenceIndicator, { useDmMember } from "../../avatars/WithPresenceIndicator.tsx";
-import { IOOBData } from "../../../../stores/ThreepidInviteStore.ts";
+import { type IOOBData } from "../../../../stores/ThreepidInviteStore.ts";
 import { MainSplitContentType } from "../../../structures/RoomView.tsx";
 import defaultDispatcher from "../../../../dispatcher/dispatcher.ts";
 import { RoomSettingsTab } from "../../dialogs/RoomSettingsDialog.tsx";

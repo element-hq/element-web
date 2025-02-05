@@ -11,7 +11,7 @@ import { TooltipProvider } from "@vector-im/compound-web";
 
 import PlatformPeg from "../PlatformPeg";
 import LinkWithTooltip from "../components/views/elements/LinkWithTooltip";
-import { ReactRootManager } from "./react";
+import { type ReactRootManager } from "./react";
 
 /**
  * If the platform enabled needsUrlTooltips, recurses depth-first through a DOM tree, adding tooltip previews

@@ -6,10 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactElement, RefCallback } from "react";
+import { type ReactElement, type RefCallback } from "react";
 
+import type React from "react";
 import { useRovingTabIndex } from "../RovingTabIndex";
-import { FocusHandler, Ref } from "./types";
+import { type FocusHandler, type Ref } from "./types";
 
 interface IProps {
     inputRef?: Ref;

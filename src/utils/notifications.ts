@@ -7,21 +7,21 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    MatrixClient,
+    type MatrixClient,
     LOCAL_NOTIFICATION_SETTINGS_PREFIX,
     NotificationCountType,
-    Room,
-    LocalNotificationSettings,
+    type Room,
+    type LocalNotificationSettings,
     ReceiptType,
-    IMarkedUnreadEvent,
-    EmptyObject,
+    type IMarkedUnreadEvent,
+    type EmptyObject,
 } from "matrix-js-sdk/src/matrix";
-import { IndicatorIcon } from "@vector-im/compound-web";
+import { type IndicatorIcon } from "@vector-im/compound-web";
 
 import SettingsStore from "../settings/SettingsStore";
 import { NotificationLevel } from "../stores/notifications/NotificationLevel";
 import { doesRoomHaveUnreadMessages } from "../Unread";
-import { SettingKey } from "../settings/Settings.tsx";
+import { type SettingKey } from "../settings/Settings.tsx";
 
 // MSC2867 is not yet spec at time of writing. We read from both stable
 // and unstable prefixes and accept the risk that the format may change,

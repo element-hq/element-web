@@ -6,14 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ClientEvent, MatrixClient, Room, SyncState } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, type MatrixClient, type Room, SyncState } from "matrix-js-sdk/src/matrix";
 
-import BasePlatform from "../../../src/BasePlatform";
+import type BasePlatform from "../../../src/BasePlatform";
 import SdkConfig from "../../../src/SdkConfig";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { mkStubRoom, mockPlatformPeg, stubClient } from "../../test-utils";
-import { SettingKey } from "../../../src/settings/Settings.tsx";
+import { type SettingKey } from "../../../src/settings/Settings.tsx";
 
 const TEST_DATA = [
     {

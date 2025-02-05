@@ -5,10 +5,10 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { Page } from "@playwright/test";
-import { GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
+import { type Page } from "@playwright/test";
+import { type GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
 
-import { ElementAppPage } from "../../../pages/ElementAppPage";
+import { type ElementAppPage } from "../../../pages/ElementAppPage";
 import { test as base, expect } from "../../../element-web-test";
 export { expect };
 

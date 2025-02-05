@@ -6,18 +6,21 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ModuleApi } from "@matrix-org/react-sdk-module-api/lib/ModuleApi";
-import { TranslationStringsObject, PlainSubstitution } from "@matrix-org/react-sdk-module-api/lib/types/translations";
-import { Optional } from "matrix-events-sdk";
-import { DialogContent, DialogProps } from "@matrix-org/react-sdk-module-api/lib/components/DialogContent";
-import React from "react";
-import { AccountAuthInfo } from "@matrix-org/react-sdk-module-api/lib/types/AccountAuthInfo";
+import { type ModuleApi } from "@matrix-org/react-sdk-module-api/lib/ModuleApi";
+import {
+    type TranslationStringsObject,
+    type PlainSubstitution,
+} from "@matrix-org/react-sdk-module-api/lib/types/translations";
+import { type Optional } from "matrix-events-sdk";
+import { type DialogContent, type DialogProps } from "@matrix-org/react-sdk-module-api/lib/components/DialogContent";
+import { type AccountAuthInfo } from "@matrix-org/react-sdk-module-api/lib/types/AccountAuthInfo";
 import * as Matrix from "matrix-js-sdk/src/matrix";
-import { IRegisterRequestParams } from "matrix-js-sdk/src/matrix";
-import { ModuleUiDialogOptions } from "@matrix-org/react-sdk-module-api/lib/types/ModuleUiDialogOptions";
+import { type IRegisterRequestParams } from "matrix-js-sdk/src/matrix";
+import { type ModuleUiDialogOptions } from "@matrix-org/react-sdk-module-api/lib/types/ModuleUiDialogOptions";
 
+import type React from "react";
 import Modal from "../Modal";
-import { _t, TranslationKey } from "../languageHandler";
+import { _t, type TranslationKey } from "../languageHandler";
 import { ModuleUiDialog } from "../components/views/dialogs/ModuleUiDialog";
 import SdkConfig from "../SdkConfig";
 import PlatformPeg from "../PlatformPeg";
@@ -27,11 +30,11 @@ import { parsePermalink } from "../utils/permalinks/Permalinks";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { getCachedRoomIDForAlias } from "../RoomAliasCache";
 import { Action } from "../dispatcher/actions";
-import { OverwriteLoginPayload } from "../dispatcher/payloads/OverwriteLoginPayload";
-import { ActionPayload } from "../dispatcher/payloads";
+import { type OverwriteLoginPayload } from "../dispatcher/payloads/OverwriteLoginPayload";
+import { type ActionPayload } from "../dispatcher/payloads";
 import SettingsStore from "../settings/SettingsStore";
-import WidgetStore, { IApp } from "../stores/WidgetStore";
-import { Container, WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
+import WidgetStore, { type IApp } from "../stores/WidgetStore";
+import { type Container, WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
 
 /**
  * Glue between the `ModuleApi` interface and the react-sdk. Anticipates one instance

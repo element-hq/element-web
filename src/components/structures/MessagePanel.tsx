@@ -6,9 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, ReactNode, TransitionEvent } from "react";
+import React, { createRef, type ReactNode, type TransitionEvent } from "react";
 import classNames from "classnames";
-import { Room, MatrixClient, RoomStateEvent, EventStatus, MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
+import {
+    type Room,
+    type MatrixClient,
+    RoomStateEvent,
+    EventStatus,
+    type MatrixEvent,
+    EventType,
+} from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { isSupportedReceiptType } from "matrix-js-sdk/src/utils";
 
@@ -19,30 +26,30 @@ import SettingsStore from "../../settings/SettingsStore";
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 import { Layout } from "../../settings/enums/Layout";
 import EventTile, {
-    GetRelationsForEvent,
-    IReadReceiptProps,
+    type GetRelationsForEvent,
+    type IReadReceiptProps,
     isEligibleForSpecialReceipt,
-    UnwrappedEventTile,
+    type UnwrappedEventTile,
 } from "../views/rooms/EventTile";
 import IRCTimelineProfileResizer from "../views/elements/IRCTimelineProfileResizer";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import LegacyCallEventGrouper from "./LegacyCallEventGrouper";
+import type LegacyCallEventGrouper from "./LegacyCallEventGrouper";
 import WhoIsTypingTile from "../views/rooms/WhoIsTypingTile";
-import ScrollPanel, { IScrollState } from "./ScrollPanel";
+import ScrollPanel, { type IScrollState } from "./ScrollPanel";
 import DateSeparator from "../views/messages/DateSeparator";
 import TimelineSeparator, { SeparatorKind } from "../views/messages/TimelineSeparator";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
-import ResizeNotifier from "../../utils/ResizeNotifier";
+import type ResizeNotifier from "../../utils/ResizeNotifier";
 import Spinner from "../views/elements/Spinner";
-import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
-import EditorStateTransfer from "../../utils/EditorStateTransfer";
+import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
+import type EditorStateTransfer from "../../utils/EditorStateTransfer";
 import { Action } from "../../dispatcher/actions";
 import { getEventDisplayInfo } from "../../utils/EventRenderingUtils";
-import { IReadReceiptPosition } from "../views/rooms/ReadReceiptMarker";
+import { type IReadReceiptPosition } from "../views/rooms/ReadReceiptMarker";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
 import { editorRoomKey } from "../../Editing";
 import { hasThreadSummary } from "../../utils/EventUtils";
-import { BaseGrouper } from "./grouper/BaseGrouper";
+import { type BaseGrouper } from "./grouper/BaseGrouper";
 import { MainGrouper } from "./grouper/MainGrouper";
 import { CreationGrouper } from "./grouper/CreationGrouper";
 import { _t } from "../../languageHandler";

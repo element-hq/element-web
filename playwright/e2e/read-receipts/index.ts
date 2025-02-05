@@ -9,9 +9,9 @@ Please see LICENSE files in the repository root for full details.
 import type { JSHandle, Page } from "@playwright/test";
 import type { MatrixEvent, Room, IndexedDBStore, ReceiptType } from "matrix-js-sdk/src/matrix";
 import { test as base, expect } from "../../element-web-test";
-import { Bot } from "../../pages/bot";
-import { Client } from "../../pages/client";
-import { ElementAppPage } from "../../pages/ElementAppPage";
+import { type Bot } from "../../pages/bot";
+import { type Client } from "../../pages/client";
+import { type ElementAppPage } from "../../pages/ElementAppPage";
 
 type RoomRef = { name: string; roomId: string };
 

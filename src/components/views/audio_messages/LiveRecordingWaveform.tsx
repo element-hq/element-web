@@ -8,11 +8,11 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 
-import { IRecordingUpdate, RECORDING_PLAYBACK_SAMPLES } from "../../../audio/VoiceRecording";
+import { type IRecordingUpdate, RECORDING_PLAYBACK_SAMPLES } from "../../../audio/VoiceRecording";
 import { arrayFastResample, arraySeed } from "../../../utils/arrays";
 import Waveform from "./Waveform";
 import { MarkedExecution } from "../../../utils/MarkedExecution";
-import { VoiceMessageRecording } from "../../../audio/VoiceMessageRecording";
+import { type VoiceMessageRecording } from "../../../audio/VoiceMessageRecording";
 
 interface IProps {
     recorder: VoiceMessageRecording;
