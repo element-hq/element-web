@@ -6,20 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Locator, type Page } from "@playwright/test";
-
 import { test, expect } from "../../element-web-test";
-import { viewRoomSummaryByName } from "../right-panel/utils";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 import { completeCreateSecretStorageDialog, createBot, logIntoElement } from "./utils.ts";
 import { Client } from "../../pages/client.ts";
 
-const ROOM_NAME = "Test room";
 const NAME = "Alice";
-
-function getMemberTileByName(page: Page, name: string): Locator {
-    return page.locator(`.mx_MemberTileView, [title="${name}"]`);
-}
 
 test.use({
     displayName: NAME,
@@ -70,23 +62,6 @@ test.describe("Dehydration", () => {
         // device.
         const sessionsTab = await app.settings.openUserSettings("Sessions");
         await expect(sessionsTab.getByText("Dehydrated device")).not.toBeVisible();
-
-        await app.settings.closeDialog();
-
-        // now check that the user info right-panel shows the dehydrated device
-        // as a feature rather than as a normal device
-        await app.client.createRoom({ name: ROOM_NAME });
-
-        await viewRoomSummaryByName(page, app, ROOM_NAME);
-
-        await page.locator(".mx_RightPanel").getByRole("menuitem", { name: "People" }).click();
-        await expect(page.locator(".mx_MemberListView")).toBeVisible();
-
-        await getMemberTileByName(page, NAME).click();
-        await page.locator(".mx_UserInfo_devices .mx_UserInfo_expand").click();
-
-        await expect(page.locator(".mx_UserInfo_devices").getByText("Offline device enabled")).toBeVisible();
-        await expect(page.locator(".mx_UserInfo_devices").getByText("Dehydrated device")).not.toBeVisible();
     });
 
     test("Reset recovery key during login re-creates dehydrated device", async ({

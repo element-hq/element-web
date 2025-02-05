@@ -494,3 +494,27 @@ export async function deleteCachedSecrets(page: Page) {
     });
     await page.reload();
 }
+
+/**
+ * Wait until the given user has a given number of devices.
+ * This function will check the device keys ten times and if
+ * the expected number of devices were not found by then, an
+ * error is thrown.
+ */
+export async function waitForDevices(app: ElementAppPage, userId: string, expectedNumberOfDevices: number): Promise<void> {
+    const result = await app.client.evaluate(
+        async (cli, { userId, expectedNumberOfDevices }) => {
+            for (let i = 0; i < 10; ++i) {
+                const userDeviceMap = await cli.getCrypto()?.getUserDeviceInfo([userId], true);
+                const deviceMap = userDeviceMap?.get(userId);
+                if (deviceMap.size === expectedNumberOfDevices) return true;
+                await new Promise((r) => setTimeout(r, 500));
+            }
+            return false;
+        },
+        { userId, expectedNumberOfDevices },
+    );
+    if (!result) {
+        throw new Error(`User ${userId} did not have ${expectedNumberOfDevices} devices within ten iterations!`);
+    }
+}

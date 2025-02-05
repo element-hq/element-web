@@ -8,9 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import { type Preset, type Visibility } from "matrix-js-sdk/src/matrix";
 
-import type { Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
-import { doTwoWaySasVerification, awaitVerifier } from "./utils";
+import { doTwoWaySasVerification, awaitVerifier, waitForDevices } from "./utils";
 import { Client } from "../../pages/client";
 
 test.describe("User verification", () => {
@@ -33,13 +32,17 @@ test.describe("User verification", () => {
     });
 
     test("can receive a verification request when there is no existing DM", async ({
+        app,
         page,
         bot: bob,
         user: aliceCredentials,
         toasts,
         room: { roomId: dmRoomId },
     }) => {
-        await waitForDeviceKeys(page);
+        await waitForDevices(app, bob.credentials.userId, 1);
+        await expect(page.getByRole("button", { name: "Avatar" })).toBeVisible();
+        const avatar = page.getByRole("button", { name: "Avatar" });
+        await avatar.click();
 
         // once Alice has joined, Bob starts the verification
         const bobVerificationRequest = await bob.evaluateHandle(
@@ -84,13 +87,17 @@ test.describe("User verification", () => {
     });
 
     test("can abort emoji verification when emoji mismatch", async ({
+        app,
         page,
         bot: bob,
         user: aliceCredentials,
         toasts,
         room: { roomId: dmRoomId },
     }) => {
-        await waitForDeviceKeys(page);
+        await waitForDevices(app, bob.credentials.userId, 1);
+        await expect(page.getByRole("button", { name: "Avatar" })).toBeVisible();
+        const avatar = page.getByRole("button", { name: "Avatar" });
+        await avatar.click();
 
         // once Alice has joined, Bob starts the verification
         const bobVerificationRequest = await bob.evaluateHandle(
@@ -153,16 +160,4 @@ async function createDMRoom(client: Client, userId: string): Promise<string> {
             },
         ],
     });
-}
-
-/**
- * Wait until we get the other user's device keys.
- * In newer rust-crypto versions, the verification request will be ignored if we
- * don't have the sender's device keys.
- */
-async function waitForDeviceKeys(page: Page): Promise<void> {
-    await expect(page.getByRole("button", { name: "Avatar" })).toBeVisible();
-    const avatar = await page.getByRole("button", { name: "Avatar" });
-    await avatar.click();
-    await expect(page.getByText("1 session")).toBeVisible();
 }
