@@ -8,3 +8,6 @@ known_first_party = [
     "synapse_guest_module",
     "tests"
 ]
+known_third_party = [
+    "synapse"
+]

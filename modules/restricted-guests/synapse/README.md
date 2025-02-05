@@ -66,7 +66,7 @@ The module is not published to a python registry, but we provide a docker contai
       spec:
 +       # The init container copies the module to he `synapse-modules` volume
 +       initContainers:
-+         - image: ghcr.io/nordeck/synapse-guest-module:<version>
++         - image: ghcr.io/element-hq/synapse-guest-module:<version>
 +           name: install-guest-module
 +           volumeMounts:
 +           - mountPath: /modules
