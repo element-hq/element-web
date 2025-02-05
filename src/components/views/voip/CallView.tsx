@@ -29,6 +29,7 @@ const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call, skipLobby, 
 
     useEffect(() => {
         // We'll take this opportunity to tidy up our room state
+        // Only needed for jitsi.
         call.clean();
     }, [call]);
 
@@ -44,10 +45,6 @@ const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call, skipLobby, 
             // (this will start the lobby view in the widget and connect to all required widget events)
             call.start();
         }
-        return (): void => {
-            // If we are connected the widget is sticky and we do not want to destroy the call.
-            if (!call.connected) call.destroy();
-        };
     }, [call]);
     const disconnectAllOtherCalls: () => Promise<void> = useCallback(async () => {
         // The stickyPromise has to resolve before the widget actually becomes sticky.
@@ -88,11 +85,6 @@ interface CallViewProps {
 export const CallView: FC<CallViewProps> = ({ room, resizing, waitForCall, skipLobby, role }) => {
     const call = useCall(room.roomId);
 
-    useEffect(() => {
-        if (call === null && !waitForCall) {
-            ElementCall.create(room, skipLobby);
-        }
-    }, [call, room, skipLobby, waitForCall]);
     if (call === null) {
         return null;
     } else {

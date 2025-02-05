@@ -50,6 +50,7 @@ import { type CancelAskToJoinPayload } from "../dispatcher/payloads/CancelAskToJ
 import { type SubmitAskToJoinPayload } from "../dispatcher/payloads/SubmitAskToJoinPayload";
 import { ModuleRunner } from "../modules/ModuleRunner";
 import { setMarkedUnreadState } from "../utils/notifications";
+import { ElementCall } from "../models/Call";
 
 const NUM_JOIN_RETRY = 5;
 
@@ -351,6 +352,19 @@ export class RoomViewStore extends EventEmitter {
                     isSpace: room?.isSpaceRoom(),
                     activeSpace,
                 });
+            }
+
+            // Start call when requested
+            const currentRoomCall = this.state.roomId ? CallStore.instance.getCall(this.state.roomId) : null;
+            if (payload.view_call && room) {
+                if (!currentRoomCall) {
+                    ElementCall.create(room, false);
+                }
+            }
+            // Destroy call when requested leaving call view
+            const prevRoomCall = this.state.roomId ? CallStore.instance.getCall(this.state.roomId) : null;
+            if (prevRoomCall && !prevRoomCall.connected) {
+                currentRoomCall?.destroy();
             }
 
             if (SettingsStore.getValue("feature_sliding_sync") && this.state.roomId !== payload.room_id) {
