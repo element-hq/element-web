@@ -25,7 +25,8 @@ import {
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { UserVerificationStatus, VerificationRequest, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
-import { Heading, MenuItem, Text, Tooltip } from "@vector-im/compound-web";
+import { Badge, Button, Heading, InlineSpinner, MenuItem, Text, Tooltip } from "@vector-im/compound-web";
+import VerifiedIcon from "@vector-im/compound-design-tokens/assets/web/icons/verified";
 import ChatIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat";
 import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 import ShareIcon from "@vector-im/compound-design-tokens/assets/web/icons/share";
@@ -45,7 +46,6 @@ import DMRoomMap from "../../../utils/DMRoomMap";
 import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import SdkConfig from "../../../SdkConfig";
 import MultiInviter from "../../../utils/MultiInviter";
-import E2EIcon from "../rooms/E2EIcon";
 import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import { textualPowerLevel } from "../../../Roles";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -230,144 +230,6 @@ export function DeviceItem({
             </AccessibleButton>
         );
     }
-}
-
-/**
- * Display a list of devices
- * @param devices devices to display
- * @param userId current user id
- * @param loading displays a spinner instead of the device section
- * @param isUserVerified is false when
- *  - the user is not verified, or
- *  - `MatrixClient.getCrypto.getUserVerificationStatus` async call is in progress (in which case `loading` will also be `true`)
- * @constructor
- */
-function DevicesSection({
-    devices,
-    userId,
-    loading,
-    isUserVerified,
-}: {
-    devices: IDevice[];
-    userId: string;
-    loading: boolean;
-    isUserVerified: boolean;
-}): JSX.Element {
-    const cli = useContext(MatrixClientContext);
-
-    const [isExpanded, setExpanded] = useState(false);
-
-    const deviceTrusts = useAsyncMemo(() => {
-        const cryptoApi = cli.getCrypto();
-        if (!cryptoApi) return Promise.resolve(undefined);
-        return Promise.all(devices.map((d) => cryptoApi.getDeviceVerificationStatus(userId, d.deviceId)));
-    }, [cli, userId, devices]);
-
-    if (loading || deviceTrusts === undefined) {
-        // still loading
-        return <Spinner />;
-    }
-    const isMe = userId === cli.getUserId();
-
-    let expandSectionDevices: IDevice[] = [];
-    const unverifiedDevices: IDevice[] = [];
-
-    let expandCountCaption;
-    let expandHideCaption;
-    let expandIconClasses = "mx_E2EIcon";
-
-    const dehydratedDeviceIds: string[] = [];
-    for (const device of devices) {
-        if (device.dehydrated) {
-            dehydratedDeviceIds.push(device.deviceId);
-        }
-    }
-    // If the user has exactly one device marked as dehydrated, we consider
-    // that as the dehydrated device, and hide it as a normal device (but
-    // indicate that the user is using a dehydrated device).  If the user has
-    // more than one, that is anomalous, and we show all the devices so that
-    // nothing is hidden.
-    const dehydratedDeviceId: string | undefined = dehydratedDeviceIds.length == 1 ? dehydratedDeviceIds[0] : undefined;
-    let dehydratedDeviceInExpandSection = false;
-
-    if (isUserVerified) {
-        for (let i = 0; i < devices.length; ++i) {
-            const device = devices[i];
-            const deviceTrust = deviceTrusts[i];
-            // For your own devices, we use the stricter check of cross-signing
-            // verification to encourage everyone to trust their own devices via
-            // cross-signing so that other users can then safely trust you.
-            // For other people's devices, the more general verified check that
-            // includes locally verified devices can be used.
-            const isVerified = deviceTrust && (isMe ? deviceTrust.crossSigningVerified : deviceTrust.isVerified());
-
-            if (isVerified) {
-                // don't show dehydrated device as a normal device, if it's
-                // verified
-                if (device.deviceId === dehydratedDeviceId) {
-                    dehydratedDeviceInExpandSection = true;
-                } else {
-                    expandSectionDevices.push(device);
-                }
-            } else {
-                unverifiedDevices.push(device);
-            }
-        }
-        expandCountCaption = _t("user_info|count_of_verified_sessions", { count: expandSectionDevices.length });
-        expandHideCaption = _t("user_info|hide_verified_sessions");
-        expandIconClasses += " mx_E2EIcon_verified";
-    } else {
-        if (dehydratedDeviceId) {
-            devices = devices.filter((device) => device.deviceId !== dehydratedDeviceId);
-            dehydratedDeviceInExpandSection = true;
-        }
-        expandSectionDevices = devices;
-        expandCountCaption = _t("user_info|count_of_sessions", { count: devices.length });
-        expandHideCaption = _t("user_info|hide_sessions");
-        expandIconClasses += " mx_E2EIcon_normal";
-    }
-
-    let expandButton;
-    if (expandSectionDevices.length) {
-        if (isExpanded) {
-            expandButton = (
-                <AccessibleButton kind="link" className="mx_UserInfo_expand" onClick={() => setExpanded(false)}>
-                    <div>{expandHideCaption}</div>
-                </AccessibleButton>
-            );
-        } else {
-            expandButton = (
-                <AccessibleButton kind="link" className="mx_UserInfo_expand" onClick={() => setExpanded(true)}>
-                    <div className={expandIconClasses} />
-                    <div>{expandCountCaption}</div>
-                </AccessibleButton>
-            );
-        }
-    }
-
-    let deviceList = unverifiedDevices.map((device, i) => {
-        return <DeviceItem key={i} userId={userId} device={device} isUserVerified={isUserVerified} />;
-    });
-    if (isExpanded) {
-        const keyStart = unverifiedDevices.length;
-        deviceList = deviceList.concat(
-            expandSectionDevices.map((device, i) => {
-                return (
-                    <DeviceItem key={i + keyStart} userId={userId} device={device} isUserVerified={isUserVerified} />
-                );
-            }),
-        );
-        if (dehydratedDeviceInExpandSection) {
-            deviceList.push(<div>{_t("user_info|dehydrated_device_enabled")}</div>);
-        }
-    }
-
-    return (
-        <div className="mx_UserInfo_devices">
-            <div>{deviceList}</div>
-            <div>{expandButton}</div>
-        </div>
-    );
 }
 
 const MessageButton = ({ member }: { member: Member }): JSX.Element => {
@@ -1457,9 +1319,7 @@ const VerificationSection: React.FC<{
 const BasicUserInfo: React.FC<{
     room: Room;
     member: User | RoomMember;
-    devices: IDevice[];
-    isRoomEncrypted: boolean;
-}> = ({ room, member, devices, isRoomEncrypted }) => {
+}> = ({ room, member }) => {
     const cli = useContext(MatrixClientContext);
 
     const powerLevels = useRoomPowerLevels(cli, room);
@@ -1557,111 +1417,10 @@ const BasicUserInfo: React.FC<{
         spinner = <Spinner />;
     }
 
-    // only display the devices list if our client supports E2E
-    const cryptoEnabled = Boolean(cli.getCrypto());
-
-    let text;
-    if (!isRoomEncrypted) {
-        if (!cryptoEnabled) {
-            text = _t("encryption|unsupported");
-        } else if (room && !room.isSpaceRoom()) {
-            text = _t("user_info|room_unencrypted");
-        }
-    } else if (!room.isSpaceRoom()) {
-        text = _t("user_info|room_encrypted");
-    }
-
-    let verifyButton;
-    const homeserverSupportsCrossSigning = useHomeserverSupportsCrossSigning(cli);
-
-    const userTrust = useAsyncMemo<UserVerificationStatus | undefined>(
-        async () => cli.getCrypto()?.getUserVerificationStatus(member.userId),
-        [member.userId],
-        // the user verification status is not initialized
-        undefined,
-    );
-    const hasUserVerificationStatus = Boolean(userTrust);
-    const isUserVerified = Boolean(userTrust?.isVerified());
     const isMe = member.userId === cli.getUserId();
-    const canVerify =
-        hasUserVerificationStatus &&
-        homeserverSupportsCrossSigning &&
-        !isUserVerified &&
-        !isMe &&
-        devices &&
-        devices.length > 0;
-
-    const setUpdating: SetUpdating = (updating) => {
-        setPendingUpdateCount((count) => count + (updating ? 1 : -1));
-    };
-    const hasCrossSigningKeys = useHasCrossSigningKeys(cli, member as User, canVerify, setUpdating);
-
-    // Display the spinner only when
-    // - the devices are not populated yet, or
-    // - the crypto is available and we don't have the user verification status yet
-    const showDeviceListSpinner = (cryptoEnabled && !hasUserVerificationStatus) || devices === undefined;
-    if (canVerify) {
-        if (hasCrossSigningKeys !== undefined) {
-            // Note: mx_UserInfo_verifyButton is for the end-to-end tests
-            verifyButton = (
-                <div className="mx_UserInfo_container_verifyButton">
-                    <AccessibleButton
-                        kind="link"
-                        className="mx_UserInfo_field mx_UserInfo_verifyButton"
-                        onClick={() => verifyUser(cli, member as User)}
-                    >
-                        {_t("action|verify")}
-                    </AccessibleButton>
-                </div>
-            );
-        } else if (!showDeviceListSpinner) {
-            // HACK: only show a spinner if the device section spinner is not shown,
-            // to avoid showing a double spinner
-            // We should ask for a design that includes all the different loading states here
-            verifyButton = <Spinner />;
-        }
-    }
-
-    let editDevices;
-    if (member.userId == cli.getUserId()) {
-        editDevices = (
-            <div>
-                <AccessibleButton
-                    kind="link"
-                    className="mx_UserInfo_field"
-                    onClick={() => {
-                        dis.dispatch({
-                            action: Action.ViewUserDeviceSettings,
-                        });
-                    }}
-                >
-                    {_t("user_info|edit_own_devices")}
-                </AccessibleButton>
-            </div>
-        );
-    }
-
-    const securitySection = (
-        <Container>
-            <h2>{_t("common|security")}</h2>
-            <p>{text}</p>
-            {verifyButton}
-            {cryptoEnabled && (
-                <DevicesSection
-                    loading={showDeviceListSpinner}
-                    devices={devices}
-                    userId={member.userId}
-                    isUserVerified={isUserVerified}
-                />
-            )}
-            {editDevices}
-        </Container>
-    );
 
     return (
         <React.Fragment>
-            {securitySection}
-
             <UserOptionsSection
                 canInvite={roomPermissions.canInvite}
                 member={member as RoomMember}
@@ -1669,15 +1428,12 @@ const BasicUserInfo: React.FC<{
             >
                 {memberDetails}
             </UserOptionsSection>
-
             {adminToolsContainer}
-
             {!isMe && (
                 <Container>
                     <IgnoreToggleButton member={member} />
                 </Container>
             )}
-
             {spinner}
         </React.Fragment>
     );
@@ -1687,9 +1443,10 @@ export type Member = User | RoomMember;
 
 export const UserInfoHeader: React.FC<{
     member: Member;
-    e2eStatus?: E2EStatus;
+    devices: IDevice[];
     roomId?: string;
-}> = ({ member, e2eStatus, roomId }) => {
+    hideVerificationSection?: boolean;
+}> = ({ member, devices, roomId, hideVerificationSection }) => {
     const cli = useContext(MatrixClientContext);
 
     const onMemberAvatarClick = useCallback(() => {
@@ -1740,7 +1497,6 @@ export const UserInfoHeader: React.FC<{
 
     const timezoneInfo = useUserTimezone(cli, member.userId);
 
-    const e2eIcon = e2eStatus ? <E2EIcon size={18} status={e2eStatus} isUser={true} /> : null;
     const userIdentifier = UserIdentifierCustomisations.getDisplayUserIdentifier?.(member.userId, {
         roomId,
         withDisplayName: true,
@@ -1769,7 +1525,6 @@ export const UserInfoHeader: React.FC<{
                     <Heading size="sm" weight="semibold" as="h1" dir="auto">
                         <Flex className="mx_UserInfo_profile_name" direction="row-reverse" align="center">
                             {displayName}
-                            {e2eIcon}
                         </Flex>
                     </Heading>
                     {presenceLabel}
@@ -1788,6 +1543,7 @@ export const UserInfoHeader: React.FC<{
                         </CopyableText>
                     </Text>
                 </Flex>
+                {!hideVerificationSection && <VerificationSection member={member} devices={devices} />}
             </Container>
         </React.Fragment>
     );
@@ -1811,13 +1567,6 @@ const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPha
     const isRoomEncrypted = useIsEncrypted(cli, room);
     const devices = useDevices(user.userId) ?? [];
 
-    const e2eStatus = useAsyncMemo(async () => {
-        if (!isRoomEncrypted || !devices) {
-            return undefined;
-        }
-        return await getE2EStatus(cli, user.userId, devices);
-    }, [cli, isRoomEncrypted, user.userId, devices]);
-
     const classes = ["mx_UserInfo"];
 
     let cardState: IRightPanelCardState = {};
@@ -1833,14 +1582,7 @@ const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPha
     let content: JSX.Element | undefined;
     switch (phase) {
         case RightPanelPhases.MemberInfo:
-            content = (
-                <BasicUserInfo
-                    room={room as Room}
-                    member={member as User}
-                    devices={devices}
-                    isRoomEncrypted={Boolean(isRoomEncrypted)}
-                />
-            );
+            content = <BasicUserInfo room={room as Room} member={member as User} />;
             break;
         case RightPanelPhases.EncryptionPanel:
             classes.push("mx_UserInfo_smallAvatar");
@@ -1865,7 +1607,12 @@ const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPha
 
     const header = (
         <>
-            <UserInfoHeader member={member} e2eStatus={e2eStatus} roomId={room?.roomId} />
+            <UserInfoHeader
+                hideVerificationSection={phase === RightPanelPhases.EncryptionPanel}
+                member={member}
+                devices={devices}
+                roomId={room?.roomId}
+            />
         </>
     );
 
