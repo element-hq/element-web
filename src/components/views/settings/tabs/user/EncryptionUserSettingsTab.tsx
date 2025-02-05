@@ -24,6 +24,7 @@ import { ResetIdentityPanel } from "../../encryption/ResetIdentityPanel";
 import { RecoveryPanelOutOfSync } from "../../encryption/RecoveryPanelOutOfSync";
 import Spinner from "../../../elements/Spinner";
 import { useEventEmitter } from "../../../../../hooks/useEventEmitter";
+import { KeyBackupPanel } from "../../encryption/KeyStoragePanel";
 
 /**
  * The state in the encryption settings tab.
@@ -112,13 +113,20 @@ export function EncryptionUserSettingsTab({ initialState = "loading" }: Encrypti
             case "main":
                 content = (
                     <>
-                        <RecoveryPanel
-                            onChangeRecoveryKeyClick={(setupNewKey) =>
-                                setupNewKey ? setState("set_recovery_key") : setState("change_recovery_key")
-                            }
-                        />
-                        <Separator kind="section" />
-                        <AdvancedPanel onResetIdentityClick={() => setState("reset_identity_compromised")} />
+                        <KeyBackupPanel />
+                        {keyBackupIsEnabled && (
+                            <>
+                                <RecoveryPanel
+                                    onChangeRecoveryKeyClick={(setupNewKey) =>
+                                        setupNewKey ? setState("set_recovery_key") : setState("change_recovery_key")
+                                    }
+                                />
+                                <Separator kind="section" />
+                                <AdvancedPanel
+                                    onResetIdentityClick={() => setState("reset_identity_compromised")}
+                                />{" "}
+                            </>
+                        )}
                     </>
                 );
                 break;
