@@ -256,7 +256,7 @@ async function doAccessSecretStorage(func: () => Promise<void>, opts: AccessSecr
             // passphrase creation.
             const { finished } = Modal.createDialog(
                 lazy(() => import("./async-components/views/dialogs/security/CreateSecretStorageDialog")),
-                opts,
+                { resetCrossSigning: opts.resetCrossSigning },
                 undefined,
                 /* priority = */ false,
                 /* static = */ true,

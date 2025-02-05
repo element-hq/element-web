@@ -13,7 +13,7 @@ import { mocked, type MockedObject } from "jest-mock";
 import { type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
 
-import { filterConsole, flushPromises, stubClient } from "../../../../../test-utils";
+import { flushPromises, stubClient } from "../../../../../test-utils";
 import CreateSecretStorageDialog from "../../../../../../src/async-components/views/dialogs/security/CreateSecretStorageDialog";
 
 describe("CreateSecretStorageDialog", () => {
@@ -73,33 +73,8 @@ describe("CreateSecretStorageDialog", () => {
         await screen.findByText("Unable to set up secret storage");
     });
 
-    describe("when there is an error fetching the backup version", () => {
-        filterConsole("Error fetching backup data from server");
-
-        it("shows an error", async () => {
-            jest.spyOn(mockClient.getCrypto()!, "getKeyBackupInfo").mockImplementation(async () => {
-                throw new Error("bleh bleh");
-            });
-
-            const result = renderComponent();
-            // We go though the dialog until we have to get the key backup
-            await userEvent.click(result.getByRole("button", { name: "Continue" }));
-            await userEvent.click(screen.getByRole("button", { name: "Copy" }));
-            await userEvent.click(screen.getByRole("button", { name: "Continue" }));
-
-            // XXX the error message is... misleading.
-            await screen.findByText("Unable to query secret storage status");
-            expect(result.container).toMatchSnapshot();
-
-            // Now we can get the backup and we retry
-            jest.spyOn(mockClient.getCrypto()!, "getKeyBackupInfo").mockRestore();
-            await userEvent.click(screen.getByRole("button", { name: "Retry" }));
-            await screen.findByText("Your keys are now being backed up from this device.");
-        });
-    });
-
     it("resets keys in the right order when resetting secret storage and cross-signing", async () => {
-        const result = renderComponent({ forceReset: true, resetCrossSigning: true });
+        const result = renderComponent({ resetCrossSigning: true });
 
         await result.findByText(/Set up Secure Backup/);
         jest.spyOn(mockClient.getCrypto()!, "createRecoveryKeyFromPassphrase").mockResolvedValue({
