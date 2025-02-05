@@ -19,6 +19,10 @@ export class BackgroundAudio {
     private audioContext = createAudioContext();
     private sounds: Record<string, AudioBuffer> = {};
 
+    public constructor() {
+        this.audioContext.suspend();
+    }
+
     public async pickFormatAndPlay<F extends Array<keyof typeof formatMap>>(
         urlPrefix: string,
         formats: F,
@@ -48,6 +52,12 @@ export class BackgroundAudio {
         source.buffer = this.sounds[url];
         source.loop = loop;
         source.connect(this.audioContext.destination);
+
+        this.audioContext.resume();
+        source.onended = () => {
+            this.audioContext.suspend();
+        };
+
         source.start();
         return source;
     }
