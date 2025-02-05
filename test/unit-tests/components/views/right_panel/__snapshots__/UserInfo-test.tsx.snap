@@ -187,7 +187,9 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
           <p
             class="_typography_yh5dq_162 _font-body-sm-regular_yh5dq_40 mx_UserInfo_verification_unavailable"
           >
-            (User verification unavailable)
+            (
+            User verification unavailable
+            )
           </p>
         </div>
       </div>
@@ -761,7 +763,9 @@ exports[`<UserInfoHeader /> renders verification unavailable message 1`] = `
       <p
         class="_typography_yh5dq_162 _font-body-sm-regular_yh5dq_40 mx_UserInfo_verification_unavailable"
       >
-        (User verification unavailable)
+        (
+        User verification unavailable
+        )
       </p>
     </div>
   </div>
