@@ -146,27 +146,6 @@ async function openDmForUser(matrixClient: MatrixClient, user: Member): Promise<
     await startDmOnFirstMessage(matrixClient, [startDmUser]);
 }
 
-type SetUpdating = (updating: boolean) => void;
-
-function useHasCrossSigningKeys(
-    cli: MatrixClient,
-    member: User,
-    canVerify: boolean,
-    setUpdating: SetUpdating,
-): boolean | undefined {
-    return useAsyncMemo(async () => {
-        if (!canVerify) {
-            return undefined;
-        }
-        setUpdating(true);
-        try {
-            return await cli.getCrypto()?.userHasCrossSigningKeys(member.userId, true);
-        } finally {
-            setUpdating(false);
-        }
-    }, [cli, member, canVerify]);
-}
-
 /**
  * Display one device and the related actions
  * @param userId current user id
@@ -1398,6 +1377,81 @@ export const useDevices = (userId: string): IDevice[] | undefined | null => {
     }, [cli, userId]);
 
     return devices;
+};
+
+function useHasCrossSigningKeys(cli: MatrixClient, member: User, canVerify: boolean): boolean | undefined {
+    return useAsyncMemo(async () => {
+        if (!canVerify) return undefined;
+        return await cli.getCrypto()?.userHasCrossSigningKeys(member.userId, true);
+    }, [cli, member, canVerify]);
+}
+
+const VerificationSection: React.FC<{
+    member: User | RoomMember;
+    devices: IDevice[];
+}> = ({ member, devices }) => {
+    const cli = useContext(MatrixClientContext);
+    let content;
+    const homeserverSupportsCrossSigning = useHomeserverSupportsCrossSigning(cli);
+
+    const userTrust = useAsyncMemo<UserVerificationStatus | undefined>(
+        async () => cli.getCrypto()?.getUserVerificationStatus(member.userId),
+        [member.userId],
+        // the user verification status is not initialized
+        undefined,
+    );
+    const hasUserVerificationStatus = Boolean(userTrust);
+    const isUserVerified = Boolean(userTrust?.isVerified());
+    const isMe = member.userId === cli.getUserId();
+    const canVerify =
+        hasUserVerificationStatus &&
+        homeserverSupportsCrossSigning &&
+        !isUserVerified &&
+        !isMe &&
+        devices &&
+        devices.length > 0;
+    console.log("canVerify", canVerify, isMe);
+
+    const hasCrossSigningKeys = useHasCrossSigningKeys(cli, member as User, canVerify);
+
+    if (isUserVerified) {
+        content = (
+            <Badge kind="green" className="mx_UserInfo_verified_badge">
+                <VerifiedIcon className="mx_UserInfo_verified_icon" height="16px" width="16px" />
+                <Text size="sm" weight="medium" className="mx_UserInfo_verified_label">
+                    {_t("common|verified")}
+                </Text>
+            </Badge>
+        );
+    } else if (hasCrossSigningKeys === undefined) {
+        // We are still fetching the cross-signing keys for the user, show spinner.
+        content = <InlineSpinner size={24} />;
+    } else if (canVerify && hasCrossSigningKeys) {
+        content = (
+            <div className="mx_UserInfo_container_verifyButton">
+                <Button
+                    className="mx_UserInfo_verify_button"
+                    kind="tertiary"
+                    size="sm"
+                    onClick={() => verifyUser(cli, member as User)}
+                >
+                    {_t("user_info|verify_button")}
+                </Button>
+            </div>
+        );
+    } else {
+        content = (
+            <Text className="mx_UserInfo_verification_unavailable" size="sm">
+                ({_t("user_info|verification_unavailable")})
+            </Text>
+        );
+    }
+
+    return (
+        <Flex justify="center" align="center" className="mx_UserInfo_verification">
+            {content}
+        </Flex>
+    );
 };
 
 const BasicUserInfo: React.FC<{
