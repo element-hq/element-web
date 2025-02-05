@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render, RenderResult, screen, waitFor } from "jest-matrix-react";
+import { fireEvent, render, type RenderResult, screen, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
 import PreferencesUserSettingsTab from "../../../../../../../src/components/views/settings/tabs/user/PreferencesUserSettingsTab";
@@ -17,7 +17,7 @@ import SettingsStore from "../../../../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../../../../src/settings/SettingLevel";
 import MatrixClientBackedController from "../../../../../../../src/settings/controllers/MatrixClientBackedController";
 import PlatformPeg from "../../../../../../../src/PlatformPeg";
-import { SettingKey } from "../../../../../../../src/settings/Settings.tsx";
+import { type SettingKey } from "../../../../../../../src/settings/Settings.tsx";
 
 describe("PreferencesUserSettingsTab", () => {
     beforeEach(() => {

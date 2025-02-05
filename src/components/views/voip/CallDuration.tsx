@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { FC, useState, useEffect, memo } from "react";
-import { MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
+import React, { type FC, useState, useEffect, memo } from "react";
+import { type MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 
 import { formatPreciseDuration } from "../../../DateUtils";
 

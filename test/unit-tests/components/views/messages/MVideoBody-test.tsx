@@ -7,12 +7,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { EventType, getHttpUriForMxc, IContent, MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { render, RenderResult } from "jest-matrix-react";
+import { EventType, getHttpUriForMxc, type IContent, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { render, type RenderResult } from "jest-matrix-react";
 import fetchMock from "fetch-mock-jest";
 
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
+import { type RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import { MediaEventHelper } from "../../../../../src/utils/MediaEventHelper";
 import {
     getMockClientWithEventEmitter,

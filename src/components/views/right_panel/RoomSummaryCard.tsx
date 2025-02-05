@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent, SyntheticEvent, useContext, useEffect, useRef, useState } from "react";
+import React, { type ChangeEvent, type SyntheticEvent, useContext, useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 import {
     MenuItem,
@@ -37,7 +37,7 @@ import LockOffIcon from "@vector-im/compound-design-tokens/assets/web/icons/lock
 import PublicIcon from "@vector-im/compound-design-tokens/assets/web/icons/public";
 import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
-import { EventType, JoinRule, Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { EventType, JoinRule, type Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { useIsEncrypted } from "../../../hooks/useIsEncrypted";
@@ -50,7 +50,7 @@ import Modal from "../../../Modal";
 import { ShareDialog } from "../dialogs/ShareDialog";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import { E2EStatus } from "../../../utils/ShieldUtils";
-import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { TimelineRenderingType } from "../../../contexts/RoomContext";
 import RoomName from "../elements/RoomName";
 import ExportDialog from "../dialogs/ExportDialog";

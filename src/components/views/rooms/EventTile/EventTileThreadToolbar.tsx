@@ -13,7 +13,7 @@ import { RovingAccessibleButton } from "../../../../accessibility/RovingTabIndex
 import Toolbar from "../../../../accessibility/Toolbar";
 import { _t } from "../../../../languageHandler";
 import { Icon as ViewInRoomIcon } from "../../../../../res/img/element-icons/view-in-room.svg";
-import { ButtonEvent } from "../../elements/AccessibleButton";
+import { type ButtonEvent } from "../../elements/AccessibleButton";
 
 export function EventTileThreadToolbar({
     viewInRoom,

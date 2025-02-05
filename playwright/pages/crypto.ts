@@ -6,9 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { APIRequestContext, Page, expect } from "@playwright/test";
+import { type APIRequestContext, type Page, expect } from "@playwright/test";
 
-import { HomeserverInstance } from "../plugins/homeserver";
+import { type HomeserverInstance } from "../plugins/homeserver";
 
 export class Crypto {
     public constructor(

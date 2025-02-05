@@ -36,10 +36,10 @@ Please see LICENSE files in the repository root for full details.
  *                      list ops)
  */
 
-import { MatrixClient, EventType, AutoDiscovery, Method, timeoutSignal } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, EventType, AutoDiscovery, Method, timeoutSignal } from "matrix-js-sdk/src/matrix";
 import {
-    MSC3575Filter,
-    MSC3575List,
+    type MSC3575Filter,
+    type MSC3575List,
     MSC3575_STATE_KEY_LAZY,
     MSC3575_STATE_KEY_ME,
     MSC3575_WILDCARD,

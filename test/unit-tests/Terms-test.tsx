@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EventType, MatrixEvent, Policy, SERVICE_TYPES, Terms } from "matrix-js-sdk/src/matrix";
+import { EventType, MatrixEvent, type Policy, SERVICE_TYPES, type Terms } from "matrix-js-sdk/src/matrix";
 import { screen, within } from "jest-matrix-react";
 
 import { dialogTermsInteractionCallback, Service, startTermsFlow } from "../../src/Terms";

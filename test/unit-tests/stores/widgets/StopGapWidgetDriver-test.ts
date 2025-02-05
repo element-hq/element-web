@@ -6,33 +6,33 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked, MockedObject } from "jest-mock";
+import { mocked, type MockedObject } from "jest-mock";
 import fetchMockJest from "fetch-mock-jest";
 import {
-    MatrixClient,
+    type MatrixClient,
     ClientEvent,
-    ITurnServer as IClientTurnServer,
+    type ITurnServer as IClientTurnServer,
     Direction,
     EventType,
     MatrixEvent,
     MsgType,
     RelationType,
-    Room,
+    type Room,
 } from "matrix-js-sdk/src/matrix";
 import {
     Widget,
     MatrixWidgetType,
     WidgetKind,
-    WidgetDriver,
-    ITurnServer,
+    type WidgetDriver,
+    type ITurnServer,
     SimpleObservable,
     OpenIDRequestState,
-    IOpenIDUpdate,
+    type IOpenIDUpdate,
     UpdateDelayedEventAction,
 } from "matrix-widget-api";
 import {
-    ApprovalOpts,
-    CapabilitiesOpts,
+    type ApprovalOpts,
+    type CapabilitiesOpts,
     WidgetLifecycle,
 } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
 

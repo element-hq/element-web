@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { EventEmitter } from "events";
-import { MatrixEvent, Room, RoomMember, Thread, ReceiptType } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, Room, RoomMember, type Thread, ReceiptType } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { render } from "jest-matrix-react";
 
@@ -27,8 +27,8 @@ import {
     mockClientMethodsEvents,
     mockClientMethodsUser,
 } from "../../../test-utils";
-import ResizeNotifier from "../../../../src/utils/ResizeNotifier";
-import { IRoomState } from "../../../../src/components/structures/RoomView";
+import type ResizeNotifier from "../../../../src/utils/ResizeNotifier";
+import { type IRoomState } from "../../../../src/components/structures/RoomView";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { ScopedRoomContextProvider } from "../../../../src/contexts/ScopedRoomContext.tsx";
 

@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
+import { type GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
 
 import { test, expect } from "../../element-web-test";
 import { createBot, deleteCachedSecrets, logIntoElement } from "./utils";

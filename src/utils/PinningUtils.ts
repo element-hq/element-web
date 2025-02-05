@@ -7,13 +7,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    MatrixEvent,
+    type MatrixEvent,
     EventType,
     M_POLL_START,
-    MatrixClient,
+    type MatrixClient,
     EventTimeline,
-    Room,
-    EmptyObject,
+    type Room,
+    type EmptyObject,
 } from "matrix-js-sdk/src/matrix";
 
 import { isContentActionable } from "./EventUtils";

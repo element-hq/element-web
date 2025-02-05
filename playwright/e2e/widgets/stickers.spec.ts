@@ -10,8 +10,8 @@ import * as fs from "node:fs";
 
 import type { Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
-import { ElementAppPage } from "../../pages/ElementAppPage";
-import { Credentials } from "../../plugins/homeserver";
+import { type ElementAppPage } from "../../pages/ElementAppPage";
+import { type Credentials } from "../../plugins/homeserver";
 import type { UserWidget } from "../../../src/utils/WidgetUtils-types.ts";
 
 const STICKER_PICKER_WIDGET_ID = "fake-sticker-picker";

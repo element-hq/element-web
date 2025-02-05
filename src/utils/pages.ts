@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { IConfigOptions } from "../IConfigOptions";
+import { type IConfigOptions } from "../IConfigOptions";
 import { getEmbeddedPagesWellKnown } from "../utils/WellKnownUtils";
 import { SnakedObject } from "./SnakedObject";
 

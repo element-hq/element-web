@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { mocked, MockedObject } from "jest-mock";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
-import { CryptoApi, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
-import { fireEvent, render, RenderResult, screen } from "jest-matrix-react";
+import { mocked, type MockedObject } from "jest-mock";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type CryptoApi, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
+import { fireEvent, render, type RenderResult, screen } from "jest-matrix-react";
 
 import { filterConsole, getMockClientWithEventEmitter, mockClientMethodsCrypto } from "../../../../test-utils";
 import LogoutDialog from "../../../../../src/components/views/dialogs/LogoutDialog";

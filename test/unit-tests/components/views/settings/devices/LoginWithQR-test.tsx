@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { cleanup, render, waitFor } from "jest-matrix-react";
-import { mocked, MockedObject } from "jest-mock";
+import { mocked, type MockedObject } from "jest-mock";
 import React from "react";
 import {
     ClientRendezvousFailureReason,
@@ -15,7 +15,7 @@ import {
     MSC4108SignInWithQR,
     RendezvousError,
 } from "matrix-js-sdk/src/rendezvous";
-import { HTTPError, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { HTTPError, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import LoginWithQR from "../../../../../../src/components/views/auth/LoginWithQR";
 import { Click, Mode, Phase } from "../../../../../../src/components/views/auth/LoginWithQR-types";

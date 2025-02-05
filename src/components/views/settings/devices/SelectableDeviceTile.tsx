@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 
 import StyledCheckbox, { CheckboxStyle } from "../../elements/StyledCheckbox";
-import DeviceTile, { DeviceTileProps } from "./DeviceTile";
+import DeviceTile, { type DeviceTileProps } from "./DeviceTile";
 
 interface Props extends DeviceTileProps {
     isSelected: boolean;

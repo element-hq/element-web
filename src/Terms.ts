@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import { SERVICE_TYPES, MatrixClient, Terms, Policy, InternationalisedPolicy } from "matrix-js-sdk/src/matrix";
+import { type SERVICE_TYPES, type MatrixClient, type Terms, type Policy, type InternationalisedPolicy } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import Modal from "./Modal";

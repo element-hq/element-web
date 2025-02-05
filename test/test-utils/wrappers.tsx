@@ -6,13 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ComponentType, Ref } from "react";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
-import { RenderOptions } from "jest-matrix-react";
+import React, { type ComponentType, type Ref } from "react";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type RenderOptions } from "jest-matrix-react";
 
 import { MatrixClientPeg as peg } from "../../src/MatrixClientPeg";
 import MatrixClientContext from "../../src/contexts/MatrixClientContext";
-import { SDKContext, SdkContextClass } from "../../src/contexts/SDKContext";
+import { SDKContext, type SdkContextClass } from "../../src/contexts/SDKContext";
 
 type WrapperProps<T> = { wrappedRef?: Ref<ComponentType<T>> } & T;
 

@@ -6,21 +6,21 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import {
     AutoDiscovery,
     AutoDiscoveryError,
-    ClientConfig,
-    IClientWellKnown,
+    type ClientConfig,
+    type IClientWellKnown,
     MatrixClient,
     MatrixError,
-    OidcClientConfig,
+    type OidcClientConfig,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _t, _td, TranslationKey, UserFriendlyError } from "../languageHandler";
+import { _t, _td, type TranslationKey, UserFriendlyError } from "../languageHandler";
 import SdkConfig from "../SdkConfig";
-import { ValidatedServerConfig } from "./ValidatedServerConfig";
+import { type ValidatedServerConfig } from "./ValidatedServerConfig";
 
 const LIVELINESS_DISCOVERY_ERRORS: AutoDiscoveryError[] = [
     AutoDiscovery.ERROR_INVALID_HOMESERVER,

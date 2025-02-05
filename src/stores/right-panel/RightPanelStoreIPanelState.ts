@@ -6,10 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixEvent, Room, RoomMember, User } from "matrix-js-sdk/src/matrix";
-import { VerificationRequest } from "matrix-js-sdk/src/crypto-api";
+import { type MatrixEvent, type Room, type RoomMember, type User } from "matrix-js-sdk/src/matrix";
+import { type VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 
-import { RightPanelPhases } from "./RightPanelStorePhases";
+import { type RightPanelPhases } from "./RightPanelStorePhases";
 
 export interface IRightPanelCardState {
     member?: RoomMember | User;

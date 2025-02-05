@@ -5,13 +5,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { AbstractStartedContainer, GenericContainer, StartedTestContainer, Wait, ExecResult } from "testcontainers";
-import { StartedPostgreSqlContainer } from "@testcontainers/postgresql";
+import { AbstractStartedContainer, GenericContainer, type StartedTestContainer, Wait, type ExecResult } from "testcontainers";
+import { type StartedPostgreSqlContainer } from "@testcontainers/postgresql";
 import * as YAML from "yaml";
 
 import { getFreePort } from "../plugins/utils/port.ts";
 import { deepCopy } from "../plugins/utils/object.ts";
-import { Credentials } from "../plugins/homeserver";
+import { type Credentials } from "../plugins/homeserver";
 
 const DEFAULT_CONFIG = {
     http: {

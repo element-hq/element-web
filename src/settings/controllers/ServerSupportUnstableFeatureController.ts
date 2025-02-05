@@ -6,11 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { SettingLevel } from "../SettingLevel";
+import { type SettingLevel } from "../SettingLevel";
 import MatrixClientBackedController from "./MatrixClientBackedController";
-import { WatchManager } from "../WatchManager";
+import { type WatchManager } from "../WatchManager";
 import SettingsStore from "../SettingsStore";
-import { SettingKey } from "../Settings.tsx";
+import { type SettingKey } from "../Settings.tsx";
 
 /**
  * Disables a given setting if the server unstable feature it requires is not supported

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import SettingsHandler from "./SettingsHandler";
-import { SettingLevel } from "../SettingLevel";
+import { type SettingLevel } from "../SettingLevel";
 
 /**
  * A wrapper for a SettingsHandler that performs local echo on

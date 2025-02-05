@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixEvent, RoomStateEvent, Preset } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, RoomStateEvent, Preset } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
@@ -15,8 +15,8 @@ import SettingsStore from "../settings/SettingsStore";
 import { _t } from "../languageHandler";
 import dis from "../dispatcher/dispatcher";
 import { SettingLevel } from "../settings/SettingLevel";
-import { ActionPayload } from "../dispatcher/payloads";
-import { DoAfterSyncPreparedPayload } from "../dispatcher/payloads/DoAfterSyncPreparedPayload";
+import { type ActionPayload } from "../dispatcher/payloads";
+import { type DoAfterSyncPreparedPayload } from "../dispatcher/payloads/DoAfterSyncPreparedPayload";
 import { Action } from "../dispatcher/actions";
 
 // TODO: Move this and related files to the js-sdk or something once finalized.

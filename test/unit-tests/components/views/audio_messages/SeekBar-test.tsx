@@ -6,11 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, RefObject } from "react";
+import React, { createRef, type RefObject } from "react";
 import { mocked } from "jest-mock";
-import { act, fireEvent, render, RenderResult } from "jest-matrix-react";
+import { act, fireEvent, render, type RenderResult } from "jest-matrix-react";
 
-import { Playback } from "../../../../../src/audio/Playback";
+import { type Playback } from "../../../../../src/audio/Playback";
 import { createTestPlayback } from "../../../../test-utils/audio";
 import SeekBar from "../../../../../src/components/views/audio_messages/SeekBar";
 

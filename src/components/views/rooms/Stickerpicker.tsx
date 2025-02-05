@@ -6,23 +6,23 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { Room, ClientEvent } from "matrix-js-sdk/src/matrix";
+import { type Room, ClientEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { IWidget } from "matrix-widget-api";
+import { type IWidget } from "matrix-widget-api";
 
-import { _t, _td, TranslationKey } from "../../../languageHandler";
+import { _t, _td, type TranslationKey } from "../../../languageHandler";
 import AppTile from "../elements/AppTile";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
 import AccessibleButton from "../elements/AccessibleButton";
-import WidgetUtils, { UserWidget } from "../../../utils/WidgetUtils";
+import WidgetUtils, { type UserWidget } from "../../../utils/WidgetUtils";
 import PersistedElement from "../elements/PersistedElement";
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import ContextMenu, { ChevronFace } from "../../structures/ContextMenu";
 import { WidgetType } from "../../../widgets/WidgetType";
 import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
-import { ActionPayload } from "../../../dispatcher/payloads";
-import ScalarAuthClient from "../../../ScalarAuthClient";
+import { type ActionPayload } from "../../../dispatcher/payloads";
+import type ScalarAuthClient from "../../../ScalarAuthClient";
 import GenericElementContextMenu from "../context_menus/GenericElementContextMenu";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";

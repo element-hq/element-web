@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import IncompatibleController from "../../../../src/settings/controllers/IncompatibleController";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import SettingsStore from "../../../../src/settings/SettingsStore";
-import { FeatureSettingKey } from "../../../../src/settings/Settings.tsx";
+import { type FeatureSettingKey } from "../../../../src/settings/Settings.tsx";
 
 describe("IncompatibleController", () => {
     const settingsGetValueSpy = jest.spyOn(SettingsStore, "getValue");

@@ -7,13 +7,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { EmptyObject } from "matrix-js-sdk/src/matrix";
+import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 
-import { TagID } from "./models";
+import { type TagID } from "./models";
 import { ListLayout } from "./ListLayout";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import { ActionPayload } from "../../dispatcher/payloads";
+import { type ActionPayload } from "../../dispatcher/payloads";
 
 export default class RoomListLayoutStore extends AsyncStoreWithClient<EmptyObject> {
     private static internalInstance: RoomListLayoutStore;

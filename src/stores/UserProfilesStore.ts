@@ -8,11 +8,11 @@ Please see LICENSE files in the repository root for full details.
 
 import { logger } from "matrix-js-sdk/src/logger";
 import {
-    IMatrixProfile,
-    MatrixClient,
+    type IMatrixProfile,
+    type MatrixClient,
     MatrixError,
-    MatrixEvent,
-    RoomMember,
+    type MatrixEvent,
+    type RoomMember,
     RoomMemberEvent,
 } from "matrix-js-sdk/src/matrix";
 

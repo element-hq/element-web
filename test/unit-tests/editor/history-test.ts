@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import HistoryManager, { IHistory, MAX_STEP_LENGTH } from "../../../src/editor/history";
-import EditorModel from "../../../src/editor/model";
+import HistoryManager, { type IHistory, MAX_STEP_LENGTH } from "../../../src/editor/history";
+import type EditorModel from "../../../src/editor/model";
 import DocumentPosition from "../../../src/editor/position";
 
 describe("editor/history", function () {

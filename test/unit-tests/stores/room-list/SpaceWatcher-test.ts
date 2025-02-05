@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked } from "jest-mock";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk/src/matrix";
 
 import { SpaceWatcher } from "../../../../src/stores/room-list/SpaceWatcher";
 import type { RoomListStoreClass } from "../../../../src/stores/room-list/RoomListStore";

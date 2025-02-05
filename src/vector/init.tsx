@@ -19,7 +19,7 @@ import PlatformPeg from "../PlatformPeg";
 import SdkConfig from "../SdkConfig";
 import { setTheme } from "../theme";
 import { ModuleRunner } from "../modules/ModuleRunner";
-import MatrixChat from "../components/structures/MatrixChat";
+import type MatrixChat from "../components/structures/MatrixChat";
 import ElectronPlatform from "./platform/ElectronPlatform";
 import PWAPlatform from "./platform/PWAPlatform";
 import WebPlatform from "./platform/WebPlatform";

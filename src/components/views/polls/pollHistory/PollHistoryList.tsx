@@ -8,12 +8,12 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import classNames from "classnames";
-import { MatrixEvent, Poll } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, type Poll } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../languageHandler";
 import { FilterTabGroup } from "../../elements/FilterTabGroup";
 import InlineSpinner from "../../elements/InlineSpinner";
-import { PollHistoryFilter } from "./types";
+import { type PollHistoryFilter } from "./types";
 import { PollListItem } from "./PollListItem";
 import { PollListItemEnded } from "./PollListItemEnded";
 import AccessibleButton from "../../elements/AccessibleButton";

@@ -5,8 +5,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { BrowserContext, Page, TestInfo } from "@playwright/test";
-import { Readable } from "stream";
+import { type BrowserContext, type Page, type TestInfo } from "@playwright/test";
+import { type Readable } from "stream";
 import stripAnsi from "strip-ansi";
 
 export class Logger {

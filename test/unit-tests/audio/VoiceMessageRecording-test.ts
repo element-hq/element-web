@@ -7,11 +7,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked } from "jest-mock";
-import { UploadOpts, MatrixClient } from "matrix-js-sdk/src/matrix";
-import { EncryptedFile } from "matrix-js-sdk/src/types";
+import { type UploadOpts, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type EncryptedFile } from "matrix-js-sdk/src/types";
 
 import { createVoiceMessageRecording, VoiceMessageRecording } from "../../../src/audio/VoiceMessageRecording";
-import { RecordingState, VoiceRecording } from "../../../src/audio/VoiceRecording";
+import { RecordingState, type VoiceRecording } from "../../../src/audio/VoiceRecording";
 import { uploadFile } from "../../../src/ContentMessages";
 import { stubClient } from "../../test-utils";
 import { Playback } from "../../../src/audio/Playback";

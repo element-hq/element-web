@@ -7,7 +7,7 @@
  */
 
 // Populate this class with the details of your customisations when copying it.
-import { ITemplateParams } from "matrix-widget-api";
+import { type ITemplateParams } from "matrix-widget-api";
 
 /**
  * Provides a partial set of the variables needed to render any widget. If

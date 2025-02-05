@@ -7,15 +7,15 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { lazy } from "react";
-import { SecretStorage } from "matrix-js-sdk/src/matrix";
-import { deriveRecoveryKeyFromPassphrase, decodeRecoveryKey, CryptoCallbacks } from "matrix-js-sdk/src/crypto-api";
+import { type SecretStorage } from "matrix-js-sdk/src/matrix";
+import { deriveRecoveryKeyFromPassphrase, decodeRecoveryKey, type CryptoCallbacks } from "matrix-js-sdk/src/crypto-api";
 import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 
 import Modal from "./Modal";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import { _t } from "./languageHandler";
 import { isSecureBackupRequired } from "./utils/WellKnownUtils";
-import AccessSecretStorageDialog, { KeyParams } from "./components/views/dialogs/security/AccessSecretStorageDialog";
+import AccessSecretStorageDialog, { type KeyParams } from "./components/views/dialogs/security/AccessSecretStorageDialog";
 import { ModuleRunner } from "./modules/ModuleRunner";
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import InteractiveAuthDialog from "./components/views/dialogs/InteractiveAuthDialog";

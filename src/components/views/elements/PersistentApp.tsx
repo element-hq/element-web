@@ -7,8 +7,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ContextType, CSSProperties, MutableRefObject, ReactNode } from "react";
-import { Room } from "matrix-js-sdk/src/matrix";
+import React, { type ContextType, type CSSProperties, type MutableRefObject, type ReactNode } from "react";
+import { type Room } from "matrix-js-sdk/src/matrix";
 
 import WidgetUtils from "../../../utils/WidgetUtils";
 import AppTile from "./AppTile";

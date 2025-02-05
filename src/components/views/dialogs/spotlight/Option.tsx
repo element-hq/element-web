@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 
 import { useRovingTabIndex } from "../../../../accessibility/RovingTabIndex";
-import AccessibleButton, { ButtonEvent } from "../../elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../../elements/AccessibleButton";
 
 interface OptionProps {
     endAdornment?: ReactNode;

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { Beacon } from "matrix-js-sdk/src/matrix";
+import { type Beacon } from "matrix-js-sdk/src/matrix";
 import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 
 import { _t } from "../../../languageHandler";

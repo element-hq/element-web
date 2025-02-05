@@ -12,10 +12,10 @@ Please see LICENSE files in the repository root for full details.
 import counterpart from "counterpart";
 import React from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { Optional } from "matrix-events-sdk";
+import { type Optional } from "matrix-events-sdk";
 import { MapWithDefault } from "matrix-js-sdk/src/utils";
-import { normalizeLanguageKey, TranslationKey as _TranslationKey, KEY_SEPARATOR } from "matrix-web-i18n";
-import { TranslationStringsObject } from "@matrix-org/react-sdk-module-api";
+import { normalizeLanguageKey, type TranslationKey as _TranslationKey, KEY_SEPARATOR } from "matrix-web-i18n";
+import { type TranslationStringsObject } from "@matrix-org/react-sdk-module-api";
 import _ from "lodash";
 
 import type Translations from "./i18n/strings/en_EN.json";

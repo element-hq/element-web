@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { getByLabelText, getAllByLabelText, render } from "jest-matrix-react";
-import { Room, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import userEvent from "@testing-library/user-event";
 
 import { stubClient } from "../../../../test-utils";
