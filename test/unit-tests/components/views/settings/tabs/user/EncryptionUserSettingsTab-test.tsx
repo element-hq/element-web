@@ -145,6 +145,10 @@ describe("<EncryptionUserSettingsTab />", () => {
     });
 
     it("should display the reset identity panel when the user clicks on the reset cryptographic identity panel", async () => {
+        jest.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue({
+            version: "1",
+        } as KeyBackupInfo);
+
         const user = userEvent.setup();
 
         const { asFragment } = renderComponent();
@@ -159,11 +163,17 @@ describe("<EncryptionUserSettingsTab />", () => {
         expect(asFragment()).toMatchSnapshot();
     });
 
-    it("should enter reset flow when showResetIdentity is set", () => {
+    it("should enter reset flow when showResetIdentity is set", async () => {
+        jest.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue({
+            version: "1",
+        } as KeyBackupInfo);
+
         renderComponent({ initialState: "reset_identity_forgot" });
 
-        expect(
-            screen.getByRole("heading", { name: "Forgot your recovery key? You’ll need to reset your identity." }),
+        await expect(
+            await screen.findByRole("heading", {
+                name: "Forgot your recovery key? You’ll need to reset your identity.",
+            }),
         ).toBeVisible();
     });
 });

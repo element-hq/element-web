@@ -71,14 +71,14 @@ const useKeyBackupIsEnabled = (): boolean | undefined => {
         const crypto = matrixClient.getCrypto()!;
         const info = await crypto.getKeyBackupInfo();
         setIsEnabled(Boolean(info?.version));
-    }, [matrixClient]);
+    }, [matrixClient, setIsEnabled]);
 
     useEffect(() => {
         (async () => {
             await checkStatus();
             setLoading(false);
         })();
-    }, [checkStatus]);
+    }, [checkStatus, setLoading]);
 
     useEventEmitter(matrixClient, ClientEvent.AccountData, (event: MatrixEvent): void => {
         const type = event.getType();
