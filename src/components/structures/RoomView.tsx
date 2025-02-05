@@ -1697,7 +1697,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             .sendStickerContentToRoom(url, roomId, threadId, info, text, this.context.client)
             .then(undefined, (error) => {
                 if (error.name === "UnknownDeviceError") {
-                    // Let the staus bar handle this
+                    // Let the status bar handle this
                     return;
                 }
             });
