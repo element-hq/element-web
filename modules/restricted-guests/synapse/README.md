@@ -28,8 +28,8 @@ Add module configuration into `modules` section of `homeserver.yaml`:
 
 ```yaml
 modules:
-  - module: synapse_guest_module.GuestModule
-    config: {}
+    - module: synapse_guest_module.GuestModule
+      config: {}
 ```
 
 ## Module configuration
@@ -45,10 +45,10 @@ Example configuration:
 
 ```yaml
 modules:
-  - module: synapse_guest_module.GuestModule
-    config:
-      # Use a german suffix
-      display_name_suffix: ' (Gast)'
+    - module: synapse_guest_module.GuestModule
+      config:
+          # Use a german suffix
+          display_name_suffix: " (Gast)"
 ```
 
 ## Production installation

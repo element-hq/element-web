@@ -21,39 +21,39 @@
 //
 // Example: $ node ./run_in_venv.js python --version
 
-const fs = require('fs');
-const path = require('path');
-const child_process = require('child_process');
+const fs = require("fs");
+const path = require("path");
+const child_process = require("child_process");
 
-const cwd = path.resolve(__dirname, '..');
-const venvPath = path.resolve(__dirname, '../../../.venv');
+const cwd = path.resolve(__dirname, "..");
+const venvPath = path.resolve(__dirname, "../../../.venv");
 const venvRelativeToCwd = path.relative(cwd, venvPath);
 
 function run(command) {
-  return new Promise((resolve) => {
-    const proc = child_process.spawn(
-      `source ${venvRelativeToCwd}/bin/activate && ${command}`,
-      [],
-      { cwd, stdio: 'inherit', shell: true },
-    );
+    return new Promise((resolve) => {
+        const proc = child_process.spawn(`source ${venvRelativeToCwd}/bin/activate && ${command}`, [], {
+            cwd,
+            stdio: "inherit",
+            shell: true,
+        });
 
-    proc.on('close', (code) => {
-      console.log('command terminated:', code);
-      resolve();
+        proc.on("close", (code) => {
+            console.log("command terminated:", code);
+            resolve();
+        });
     });
-  });
 }
 
 async function main() {
-  if (!fs.existsSync(venvPath) || !fs.lstatSync(venvPath).isDirectory()) {
-    child_process.execSync(`python3 -m venv ${venvRelativeToCwd}`, { cwd });
-    await run('pip install tox');
-    await run('pip install -e ."[dev]"');
-  }
+    if (!fs.existsSync(venvPath) || !fs.lstatSync(venvPath).isDirectory()) {
+        child_process.execSync(`python3 -m venv ${venvRelativeToCwd}`, { cwd });
+        await run("pip install tox");
+        await run('pip install -e ."[dev]"');
+    }
 
-  const command = process.argv.slice(2).join(' ');
+    const command = process.argv.slice(2).join(" ");
 
-  await run(command);
+    await run(command);
 }
 
 main();
