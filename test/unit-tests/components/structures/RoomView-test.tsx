@@ -424,7 +424,7 @@ describe("RoomView", () => {
                     jest.spyOn(cli, "getCrypto").mockReturnValue(crypto);
                     jest.spyOn(cli.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
                     jest.spyOn(cli.getCrypto()!, "getUserVerificationStatus").mockResolvedValue(
-                        new UserVerificationStatus(false, true, false),
+                        new UserVerificationStatus(false, false, false),
                     );
                     localRoom.encrypted = true;
                     localRoom.currentState.setStateEvents([

@@ -19,7 +19,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         context,
         page,
         homeserver,
-        mailhogClient,
+        mailpitClient,
         mas,
     }, testInfo) => {
         await page.clock.install();
@@ -33,7 +33,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         await page.getByRole("button", { name: "Continue" }).click();
 
         const userId = `alice_${testInfo.testId}`;
-        await registerAccountMas(page, mailhogClient, userId, "alice@email.com", "Pa$sW0rD!");
+        await registerAccountMas(page, mailpitClient, userId, "alice@email.com", "Pa$sW0rD!");
 
         // Eventually, we should end up at the home screen.
         await expect(page).toHaveURL(/\/#\/home$/, { timeout: 10000 });

@@ -92,7 +92,7 @@ const DEFAULT_CONFIG = {
         reply_to: '"Authentication Service" <root@localhost>',
         transport: "smtp",
         mode: "plain",
-        hostname: "mailhog",
+        hostname: "mailpit",
         port: 1025,
         username: "username",
         password: "password",

@@ -125,10 +125,10 @@ describe("<MatrixChat />", () => {
         }),
         getVisibleRooms: jest.fn().mockReturnValue([]),
         getRooms: jest.fn().mockReturnValue([]),
-        setGlobalErrorOnUnknownDevices: jest.fn(),
         getCrypto: jest.fn().mockReturnValue({
             getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
             isCrossSigningReady: jest.fn().mockReturnValue(false),
+            isDehydrationSupported: jest.fn().mockReturnValue(false),
             getUserDeviceInfo: jest.fn().mockReturnValue(new Map()),
             getUserVerificationStatus: jest.fn().mockResolvedValue(new UserVerificationStatus(false, false, false)),
             getVersion: jest.fn().mockReturnValue("1"),
@@ -1006,6 +1006,7 @@ describe("<MatrixChat />", () => {
                     resetKeyBackup: jest.fn(),
                     isEncryptionEnabledInRoom: jest.fn().mockResolvedValue(false),
                     checkKeyBackupAndEnable: jest.fn().mockResolvedValue(null),
+                    isDehydrationSupported: jest.fn().mockReturnValue(false),
                 };
                 loginClient.getCrypto.mockReturnValue(mockCrypto as any);
             });

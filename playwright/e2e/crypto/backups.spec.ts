@@ -10,6 +10,7 @@ import { type Page } from "@playwright/test";
 
 import { test, expect } from "../../element-web-test";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
+import { completeCreateSecretStorageDialog } from "./utils.ts";
 
 async function expectBackupVersionToBe(page: Page, version: string) {
     await expect(page.locator(".mx_SecureBackupPanel_statusList tr:nth-child(5) td")).toHaveText(
@@ -35,19 +36,7 @@ test.describe("Backups", () => {
             await expect(securityTab.getByRole("heading", { name: "Secure Backup" })).toBeVisible();
             await securityTab.getByRole("button", { name: "Set up", exact: true }).click();
 
-            const currentDialogLocator = page.locator(".mx_Dialog");
-
-            // It's the first time and secure storage is not set up, so it will create one
-            await expect(currentDialogLocator.getByRole("heading", { name: "Set up Secure Backup" })).toBeVisible();
-            await currentDialogLocator.getByRole("button", { name: "Continue", exact: true }).click();
-            await expect(currentDialogLocator.getByRole("heading", { name: "Save your Security Key" })).toBeVisible();
-            await currentDialogLocator.getByRole("button", { name: "Copy", exact: true }).click();
-            // copy the recovery key to use it later
-            const securityKey = await app.getClipboard();
-            await currentDialogLocator.getByRole("button", { name: "Continue", exact: true }).click();
-
-            await expect(currentDialogLocator.getByRole("heading", { name: "Secure Backup successful" })).toBeVisible();
-            await currentDialogLocator.getByRole("button", { name: "Done", exact: true }).click();
+            const securityKey = await completeCreateSecretStorageDialog(page);
 
             // Open the settings again
             await app.settings.openUserSettings("Security & Privacy");
@@ -62,6 +51,7 @@ test.describe("Backups", () => {
             await expectBackupVersionToBe(page, "1");
 
             await securityTab.getByRole("button", { name: "Delete Backup", exact: true }).click();
+            const currentDialogLocator = page.locator(".mx_Dialog");
             await expect(currentDialogLocator.getByRole("heading", { name: "Delete Backup" })).toBeVisible();
             // Delete it
             await currentDialogLocator.getByTestId("dialog-primary-button").click(); // Click "Delete Backup"

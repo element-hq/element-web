@@ -25,6 +25,7 @@ import type {
     StateEvents,
     TimelineEvents,
     AccountDataEvents,
+    EmptyObject,
 } from "matrix-js-sdk/src/matrix";
 import type { RoomMessageEventContent } from "matrix-js-sdk/src/types";
 import { Credentials } from "../plugins/homeserver";
@@ -363,7 +364,7 @@ export class Client {
         event: JSHandle<MatrixEvent>,
         receiptType?: ReceiptType,
         unthreaded?: boolean,
-    ): Promise<{}> {
+    ): Promise<EmptyObject> {
         const client = await this.prepareClient();
         return client.evaluate(
             (client, { event, receiptType, unthreaded }) => {
@@ -386,7 +387,7 @@ export class Client {
      * @return {Promise} Resolves: {} an empty object.
      * @return {module:http-api.MatrixError} Rejects: with an error response.
      */
-    public async setDisplayName(name: string): Promise<{}> {
+    public async setDisplayName(name: string): Promise<EmptyObject> {
         const client = await this.prepareClient();
         return client.evaluate(async (cli: MatrixClient, name) => cli.setDisplayName(name), name);
     }
@@ -397,7 +398,7 @@ export class Client {
      * @return {Promise} Resolves: {} an empty object.
      * @return {module:http-api.MatrixError} Rejects: with an error response.
      */
-    public async setAvatarUrl(url: string): Promise<{}> {
+    public async setAvatarUrl(url: string): Promise<EmptyObject> {
         const client = await this.prepareClient();
         return client.evaluate(async (cli: MatrixClient, url) => cli.setAvatarUrl(url), url);
     }

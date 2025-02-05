@@ -50,6 +50,7 @@ import { EncryptionUserSettingsTab } from "../settings/tabs/user/EncryptionUserS
 interface IProps {
     initialTabId?: UserTab;
     showMsc4108QrCode?: boolean;
+    showResetIdentity?: boolean;
     sdkContext: SdkContextClass;
     onFinished(): void;
 }
@@ -91,8 +92,9 @@ function titleForTabID(tabId: UserTab): React.ReactNode {
 export default function UserSettingsDialog(props: IProps): JSX.Element {
     const voipEnabled = useSettingValue(UIFeature.Voip);
     const mjolnirEnabled = useSettingValue("feature_mjolnir");
-    // store this prop in state as changing tabs back and forth should clear it
+    // store these props in state as changing tabs back and forth should clear it
     const [showMsc4108QrCode, setShowMsc4108QrCode] = useState(props.showMsc4108QrCode);
+    const [showResetIdentity, setShowResetIdentity] = useState(props.showResetIdentity);
 
     const getTabs = (): NonEmptyArray<Tab<UserTab>> => {
         const tabs: Tab<UserTab>[] = [];
@@ -184,7 +186,12 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
         );
 
         tabs.push(
-            new Tab(UserTab.Encryption, _td("settings|encryption|title"), <KeyIcon />, <EncryptionUserSettingsTab />),
+            new Tab(
+                UserTab.Encryption,
+                _td("settings|encryption|title"),
+                <KeyIcon />,
+                <EncryptionUserSettingsTab initialState={showResetIdentity ? "reset_identity_forgot" : undefined} />,
+            ),
         );
 
         if (showLabsFlags() || SettingsStore.getFeatureSettingNames().some((k) => SettingsStore.getBetaInfo(k))) {
@@ -219,8 +226,9 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
     const [activeTabId, _setActiveTabId] = useActiveTabWithDefault(getTabs(), UserTab.Account, props.initialTabId);
     const setActiveTabId = (tabId: UserTab): void => {
         _setActiveTabId(tabId);
-        // Clear this so switching away from the tab and back to it will not show the QR code again
+        // Clear these so switching away from the tab and back to it will not show the QR code again
         setShowMsc4108QrCode(false);
+        setShowResetIdentity(false);
     };
 
     const [activeToast, toastRack] = useActiveToast();

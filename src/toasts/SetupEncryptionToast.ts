@@ -16,6 +16,10 @@ import GenericToast from "../components/views/toasts/GenericToast";
 import { ModuleRunner } from "../modules/ModuleRunner";
 import { SetupEncryptionStore } from "../stores/SetupEncryptionStore";
 import Spinner from "../components/views/elements/Spinner";
+import { OpenToTabPayload } from "../dispatcher/payloads/OpenToTabPayload";
+import { Action } from "../dispatcher/actions";
+import { UserTab } from "../components/views/dialogs/UserTab";
+import defaultDispatcher from "../dispatcher/dispatcher";
 
 const TOAST_KEY = "setupencryption";
 
@@ -104,10 +108,6 @@ export enum Kind {
     KEY_STORAGE_OUT_OF_SYNC = "key_storage_out_of_sync",
 }
 
-const onReject = (): void => {
-    DeviceListener.sharedInstance().dismissEncryptionSetup();
-};
-
 /**
  * Show a toast prompting the user for some action related to setting up their encryption.
  *
@@ -123,7 +123,7 @@ export const showToast = (kind: Kind): void => {
         return;
     }
 
-    const onAccept = async (): Promise<void> => {
+    const onPrimaryClick = async (): Promise<void> => {
         if (kind === Kind.VERIFY_THIS_SESSION) {
             Modal.createDialog(SetupEncryptionDialog, {}, undefined, /* priority = */ false, /* static = */ true);
         } else {
@@ -142,6 +142,19 @@ export const showToast = (kind: Kind): void => {
         }
     };
 
+    const onSecondaryClick = (): void => {
+        if (kind === Kind.KEY_STORAGE_OUT_OF_SYNC) {
+            const payload: OpenToTabPayload = {
+                action: Action.ViewUserSettings,
+                initialTabId: UserTab.Encryption,
+                props: { showResetIdentity: true },
+            };
+            defaultDispatcher.dispatch(payload);
+        } else {
+            DeviceListener.sharedInstance().dismissEncryptionSetup();
+        }
+    };
+
     ToastStore.sharedInstance().addOrReplaceToast({
         key: TOAST_KEY,
         title: getTitle(kind),
@@ -149,9 +162,9 @@ export const showToast = (kind: Kind): void => {
         props: {
             description: getDescription(kind),
             primaryLabel: getSetupCaption(kind),
-            onPrimaryClick: onAccept,
+            onPrimaryClick,
             secondaryLabel: getSecondaryButtonLabel(kind),
-            onSecondaryClick: onReject,
+            onSecondaryClick,
             overrideWidth: kind === Kind.KEY_STORAGE_OUT_OF_SYNC ? "366px" : undefined,
         },
         component: GenericToast,

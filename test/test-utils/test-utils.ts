@@ -217,6 +217,7 @@ export function createTestClient(): MatrixClient {
         registerWithIdentityServer: jest.fn().mockResolvedValue({}),
         getIdentityAccount: jest.fn().mockResolvedValue({}),
         getTerms: jest.fn().mockResolvedValue({ policies: [] }),
+        agreeToTerms: jest.fn(),
         doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(undefined),
         isVersionSupported: jest.fn().mockResolvedValue(undefined),
         getPushRules: jest.fn().mockResolvedValue(undefined),
