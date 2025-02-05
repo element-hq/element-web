@@ -6,6 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import KeyIcon from "@vector-im/compound-design-tokens/assets/web/icons/key";
+import { type ComponentType } from "react";
+
+import type React from "react";
 import Modal from "../Modal";
 import { _t } from "../languageHandler";
 import DeviceListener from "../DeviceListener";
@@ -58,6 +62,19 @@ const getSetupCaption = (kind: Kind): string => {
             return _t("action|verify");
         case Kind.KEY_STORAGE_OUT_OF_SYNC:
             return _t("encryption|enter_recovery_key");
+    }
+};
+
+/**
+ * Get the icon to show on the primary button.
+ * @param kind
+ */
+const getPrimaryButtonIcon = (kind: Kind): ComponentType<React.SVGAttributes<SVGElement>> | undefined => {
+    switch (kind) {
+        case Kind.KEY_STORAGE_OUT_OF_SYNC:
+            return KeyIcon;
+        default:
+            return;
     }
 };
 
@@ -162,6 +179,7 @@ export const showToast = (kind: Kind): void => {
         props: {
             description: getDescription(kind),
             primaryLabel: getSetupCaption(kind),
+            PrimaryIcon: getPrimaryButtonIcon(kind),
             onPrimaryClick,
             secondaryLabel: getSecondaryButtonLabel(kind),
             onSecondaryClick,
