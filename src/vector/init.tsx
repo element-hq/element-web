@@ -137,8 +137,9 @@ export async function loadModules(): Promise<void> {
 }
 
 export async function loadPlugins(): Promise<void> {
-    // add React to the global namespace, to make them easier to access via the console
-    // this incidentally means we can forget our React imports in JSX files without penalty.
+    // Add React to the global namespace, this is part of the new Module API contract to avoid needing
+    // every single module to ship its own copy of React. This also makes it easier to access via the console
+    // and incidentally means we can forget our React imports in JSX files without penalty.
     window.React = React;
 
     const modules = SdkConfig.get("modules");

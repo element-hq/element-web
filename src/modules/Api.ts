@@ -39,6 +39,9 @@ class ConfigApi {
     }
 }
 
+/**
+ * Implementation of the @element-hq/element-web-module-api runtime module API.
+ */
 class ModuleApi implements Api {
     /* eslint-disable @typescript-eslint/naming-convention */
     public async _registerLegacyModule(LegacyModule: RuntimeModuleConstructor): Promise<void> {
