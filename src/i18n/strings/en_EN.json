@@ -2487,7 +2487,7 @@
                 "confirm": "Delete key storage",
                 "description": "Deleting key storage will remove your cryptographic identity and message keys from the server and turn off the following security features:",
                 "list_first": "You will not have encrypted message history on new devices",
-                "list_second": "You will lose access to your encrypted messages if you are signed out of Element everywhere",
+                "list_second": "You will lose access to your encrypted messages if you are signed out of %(brand)s everywhere",
                 "title": "Are you sure you want to turn off key storage and delete it?"
             },
             "device_not_verified_button": "Verify this device",

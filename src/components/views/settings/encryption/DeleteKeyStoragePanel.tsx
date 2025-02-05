@@ -13,6 +13,7 @@ import React, { useCallback, useState } from "react";
 import { _t } from "../../../../languageHandler";
 import { EncryptionCard } from "./EncryptionCard";
 import { useKeyStoragePanelViewModel } from "../../../viewmodels/settings/encryption/KeyStoragePanelViewModel";
+import SdkConfig from "../../../../SdkConfig";
 
 interface ResetIdentityPanelProps {
     onFinish: () => void;
@@ -56,7 +57,7 @@ export function DeleteKeyStoragePanel({ onFinish }: ResetIdentityPanelProps): JS
                             {_t("settings|encryption|delete_key_storage|list_first")}
                         </VisualListItem>
                         <VisualListItem Icon={CrossIcon} destructive={true}>
-                            {_t("settings|encryption|delete_key_storage|list_second")}
+                            {_t("settings|encryption|delete_key_storage|list_second", { brand: SdkConfig.get().brand })}
                         </VisualListItem>
                     </VisualList>
                 </div>
