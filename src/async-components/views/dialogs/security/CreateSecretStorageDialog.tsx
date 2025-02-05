@@ -80,7 +80,6 @@ interface IState {
     // for /keys/device_signing/upload?
     canUploadKeysWithPasswordOnly: boolean | null;
     accountPassword: string;
-    accountPasswordCorrect: boolean | null;
     canSkip: boolean;
     passPhraseKeySelected: string;
     error?: boolean;
@@ -138,7 +137,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             setPassphrase: false,
             // does the server offer a UI auth flow with just m.login.password
             // for /keys/device_signing/upload?
-            accountPasswordCorrect: null,
             canSkip: !isSecureBackupRequired(cli),
             canUploadKeysWithPasswordOnly,
             passPhraseKeySelected,
