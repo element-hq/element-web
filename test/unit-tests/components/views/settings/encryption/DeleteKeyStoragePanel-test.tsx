@@ -6,11 +6,11 @@
  */
 
 import React from "react";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { render, screen, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
 
+import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { createTestClient, withClientContextRenderOptions } from "../../../../../test-utils";
 import { DeleteKeyStoragePanel } from "../../../../../../src/components/views/settings/encryption/DeleteKeyStoragePanel";
 import { useKeyStoragePanelViewModel } from "../../../../../../src/components/viewmodels/settings/encryption/KeyStoragePanelViewModel";
