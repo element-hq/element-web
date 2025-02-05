@@ -1244,7 +1244,6 @@ const VerificationSection: React.FC<{
         !isMe &&
         devices &&
         devices.length > 0;
-    console.log("canVerify", canVerify, isMe);
 
     const hasCrossSigningKeys = useHasCrossSigningKeys(cli, member as User, canVerify);
 
