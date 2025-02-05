@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render, screen, cleanup, act, within, waitForElementToBeRemoved } from "jest-matrix-react";
+import { fireEvent, render, screen, cleanup, act, waitForElementToBeRemoved, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { Mocked, mocked } from "jest-mock";
 import { Room, User, MatrixClient, RoomMember, MatrixEvent, EventType, Device } from "matrix-js-sdk/src/matrix";
@@ -42,7 +42,6 @@ import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext
 import MultiInviter from "../../../../../src/utils/MultiInviter";
 import * as mockVerification from "../../../../../src/verification";
 import Modal from "../../../../../src/Modal";
-import { E2EStatus } from "../../../../../src/utils/ShieldUtils";
 import { DirectoryMember, startDmOnFirstMessage } from "../../../../../src/utils/direct-messages";
 import { clearAllModals, flushPromises } from "../../../../test-utils";
 import ErrorDialog from "../../../../../src/components/views/dialogs/ErrorDialog";
@@ -437,20 +436,6 @@ describe("<UserInfo />", () => {
             mockCrypto.getUserDeviceInfo.mockResolvedValue(userDeviceMap);
         });
 
-        it("renders a device list which can be expanded", async () => {
-            renderComponent();
-            await flushPromises();
-
-            // check the button exists with the expected text
-            const devicesButton = screen.getByRole("button", { name: "1 session" });
-
-            // click it
-            await userEvent.click(devicesButton);
-
-            // there should now be a button with the device id which should contain the device name
-            expect(screen.getByRole("button", { name: "my device" })).toBeInTheDocument();
-        });
-
         it("renders <BasicUserInfo />", async () => {
             mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(false, false, false));
 
@@ -460,188 +445,7 @@ describe("<UserInfo />", () => {
                 room: mockRoom,
             });
             await flushPromises();
-
-            await expect(screen.findByRole("button", { name: "Verify" })).resolves.toBeInTheDocument();
             expect(container).toMatchSnapshot();
-        });
-
-        describe("device dehydration", () => {
-            it("hides a verified dehydrated device (unverified user)", async () => {
-                const device1 = new Device({
-                    deviceId: "d1",
-                    userId: defaultUserId,
-                    displayName: "my device",
-                    algorithms: [],
-                    keys: new Map(),
-                });
-                const device2 = new Device({
-                    deviceId: "d2",
-                    userId: defaultUserId,
-                    displayName: "dehydrated device",
-                    algorithms: [],
-                    keys: new Map(),
-                    dehydrated: true,
-                });
-                const devicesMap = new Map<string, Device>([
-                    [device1.deviceId, device1],
-                    [device2.deviceId, device2],
-                ]);
-                const userDeviceMap = new Map<string, Map<string, Device>>([[defaultUserId, devicesMap]]);
-                mockCrypto.getUserDeviceInfo.mockResolvedValue(userDeviceMap);
-
-                renderComponent({ room: mockRoom });
-                await flushPromises();
-
-                // check the button exists with the expected text (the dehydrated device shouldn't be counted)
-                const devicesButton = screen.getByRole("button", { name: "1 session" });
-
-                // click it
-                await act(() => {
-                    return userEvent.click(devicesButton);
-                });
-
-                // there should now be a button with the non-dehydrated device ID
-                expect(screen.getByRole("button", { name: "my device" })).toBeInTheDocument();
-
-                // but not for the dehydrated device ID
-                expect(screen.queryByRole("button", { name: "dehydrated device" })).not.toBeInTheDocument();
-
-                // there should be a line saying that the user has "Offline device" enabled
-                expect(screen.getByText("Offline device enabled")).toBeInTheDocument();
-            });
-
-            it("hides a verified dehydrated device (verified user)", async () => {
-                const device1 = new Device({
-                    deviceId: "d1",
-                    userId: defaultUserId,
-                    displayName: "my device",
-                    algorithms: [],
-                    keys: new Map(),
-                });
-                const device2 = new Device({
-                    deviceId: "d2",
-                    userId: defaultUserId,
-                    displayName: "dehydrated device",
-                    algorithms: [],
-                    keys: new Map(),
-                    dehydrated: true,
-                });
-                const devicesMap = new Map<string, Device>([
-                    [device1.deviceId, device1],
-                    [device2.deviceId, device2],
-                ]);
-                const userDeviceMap = new Map<string, Map<string, Device>>([[defaultUserId, devicesMap]]);
-                mockCrypto.getUserDeviceInfo.mockResolvedValue(userDeviceMap);
-                mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(true, true, true));
-                mockCrypto.getDeviceVerificationStatus.mockResolvedValue({
-                    isVerified: () => true,
-                } as DeviceVerificationStatus);
-
-                renderComponent({ room: mockRoom });
-                await flushPromises();
-
-                // check the button exists with the expected text (the dehydrated device shouldn't be counted)
-                const devicesButton = screen.getByRole("button", { name: "1 verified session" });
-
-                // click it
-                await act(() => {
-                    return userEvent.click(devicesButton);
-                });
-
-                // there should now be a button with the non-dehydrated device ID
-                expect(screen.getByTitle("d1")).toBeInTheDocument();
-
-                // but not for the dehydrated device ID
-                expect(screen.queryByTitle("d2")).not.toBeInTheDocument();
-
-                // there should be a line saying that the user has "Offline device" enabled
-                expect(screen.getByText("Offline device enabled")).toBeInTheDocument();
-            });
-
-            it("shows an unverified dehydrated device", async () => {
-                const device1 = new Device({
-                    deviceId: "d1",
-                    userId: defaultUserId,
-                    displayName: "my device",
-                    algorithms: [],
-                    keys: new Map(),
-                });
-                const device2 = new Device({
-                    deviceId: "d2",
-                    userId: defaultUserId,
-                    displayName: "dehydrated device",
-                    algorithms: [],
-                    keys: new Map(),
-                    dehydrated: true,
-                });
-                const devicesMap = new Map<string, Device>([
-                    [device1.deviceId, device1],
-                    [device2.deviceId, device2],
-                ]);
-                const userDeviceMap = new Map<string, Map<string, Device>>([[defaultUserId, devicesMap]]);
-                mockCrypto.getUserDeviceInfo.mockResolvedValue(userDeviceMap);
-                mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(true, true, true));
-
-                renderComponent({ room: mockRoom });
-                await flushPromises();
-
-                // the dehydrated device should be shown as an unverified device, which means
-                // there should now be a button with the device id ...
-                const deviceButton = screen.getByRole("button", { name: "dehydrated device" });
-
-                // ... which should contain the device name
-                expect(within(deviceButton).getByText("dehydrated device")).toBeInTheDocument();
-            });
-
-            it("shows dehydrated devices if there is more than one", async () => {
-                const device1 = new Device({
-                    deviceId: "d1",
-                    userId: defaultUserId,
-                    displayName: "dehydrated device 1",
-                    algorithms: [],
-                    keys: new Map(),
-                    dehydrated: true,
-                });
-                const device2 = new Device({
-                    deviceId: "d2",
-                    userId: defaultUserId,
-                    displayName: "dehydrated device 2",
-                    algorithms: [],
-                    keys: new Map(),
-                    dehydrated: true,
-                });
-                const devicesMap = new Map<string, Device>([
-                    [device1.deviceId, device1],
-                    [device2.deviceId, device2],
-                ]);
-                const userDeviceMap = new Map<string, Map<string, Device>>([[defaultUserId, devicesMap]]);
-                mockCrypto.getUserDeviceInfo.mockResolvedValue(userDeviceMap);
-
-                renderComponent({ room: mockRoom });
-                await flushPromises();
-
-                // check the button exists with the expected text (the dehydrated device shouldn't be counted)
-                const devicesButton = screen.getByRole("button", { name: "2 sessions" });
-
-                // click it
-                await act(() => {
-                    return userEvent.click(devicesButton);
-                });
-
-                // the dehydrated devices should be shown as an unverified device, which means
-                // there should now be a button with the first dehydrated device...
-                const device1Button = screen.getByRole("button", { name: "dehydrated device 1" });
-                expect(device1Button).toBeVisible();
-
-                // ... which should contain the device name
-                expect(within(device1Button).getByText("dehydrated device 1")).toBeInTheDocument();
-                // and a button with the second dehydrated device...
-                const device2Button = screen.getByRole("button", { name: "dehydrated device 2" });
-                expect(device2Button).toBeVisible();
-
-                // ... which should contain the device name
-                expect(within(device2Button).getByText("dehydrated device 2")).toBeInTheDocument();
-            });
         });
 
         it("should render a deactivate button for users of the same server if we are a server admin", async () => {
@@ -660,34 +464,6 @@ describe("<UserInfo />", () => {
             expect(container).toMatchSnapshot();
         });
     });
-
-    describe("with an encrypted room", () => {
-        beforeEach(() => {
-            jest.spyOn(mockClient.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
-        });
-
-        it("renders unverified user info", async () => {
-            mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(false, false, false));
-            renderComponent({ room: mockRoom });
-            await flushPromises();
-
-            const userHeading = screen.getByRole("heading", { name: /@user:example.com/ });
-
-            // there should be a "normal" E2E padlock
-            expect(userHeading.getElementsByClassName("mx_E2EIcon_normal")).toHaveLength(1);
-        });
-
-        it("renders verified user info", async () => {
-            mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(true, false, false));
-            renderComponent({ room: mockRoom });
-            await flushPromises();
-
-            const userHeading = screen.getByRole("heading", { name: /@user:example.com/ });
-
-            // there should be a "verified" E2E padlock
-            expect(userHeading.getElementsByClassName("mx_E2EIcon_verified")).toHaveLength(1);
-        });
-    });
 });
 
 describe("<UserInfoHeader />", () => {
@@ -699,33 +475,52 @@ describe("<UserInfoHeader />", () => {
     };
 
     const renderComponent = (props = {}) => {
+        const device1 = new Device({
+            deviceId: "d1",
+            userId: defaultUserId,
+            displayName: "my device",
+            algorithms: [],
+            keys: new Map(),
+        });
+        const devicesMap = new Map<string, Device>([[device1.deviceId, device1]]);
+        const userDeviceMap = new Map<string, Map<string, Device>>([[defaultUserId, devicesMap]]);
+        mockCrypto.getUserDeviceInfo.mockResolvedValue(userDeviceMap);
+        mockClient.doesServerSupportUnstableFeature.mockResolvedValue(true);
         const Wrapper = (wrapperProps = {}) => {
             return <MatrixClientContext.Provider value={mockClient} {...wrapperProps} />;
         };
 
-        return render(<UserInfoHeader {...defaultProps} {...props} />, {
+        return render(<UserInfoHeader {...defaultProps} {...props} devices={[device1]} />, {
             wrapper: Wrapper,
         });
     };
 
-    it("does not render an e2e icon in the header if e2eStatus prop is undefined", () => {
-        renderComponent();
-        const header = screen.getByRole("heading", { name: defaultUserId });
-
-        expect(header.getElementsByClassName("mx_E2EIcon")).toHaveLength(0);
-    });
-
-    it("renders an e2e icon in the header if e2eStatus prop is defined", () => {
-        renderComponent({ e2eStatus: E2EStatus.Normal });
-        const header = screen.getByRole("heading");
-
-        expect(header.getElementsByClassName("mx_E2EIcon")).toHaveLength(1);
-    });
-
     it("renders custom user identifiers in the header", () => {
         renderComponent();
-
         expect(screen.getByText("customUserIdentifier")).toBeInTheDocument();
+    });
+
+    it("renders verified badge when user is verified", async () => {
+        mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(true, true, false));
+        const { container } = renderComponent();
+        await waitFor(() => expect(screen.getByText("Verified")).toBeInTheDocument());
+        expect(container).toMatchSnapshot();
+    });
+
+    it("renders verify button", async () => {
+        mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(false, false, false));
+        mockCrypto.userHasCrossSigningKeys.mockResolvedValue(true);
+        const { container } = renderComponent();
+        await waitFor(() => expect(screen.getByText("Verify User")).toBeInTheDocument());
+        expect(container).toMatchSnapshot();
+    });
+
+    it("renders verification unavailable message", async () => {
+        mockCrypto.getUserVerificationStatus.mockResolvedValue(new UserVerificationStatus(false, false, false));
+        mockCrypto.userHasCrossSigningKeys.mockResolvedValue(false);
+        const { container } = renderComponent();
+        await waitFor(() => expect(screen.getByText("(User verification unavailable)")).toBeInTheDocument());
+        expect(container).toMatchSnapshot();
     });
 });
 
