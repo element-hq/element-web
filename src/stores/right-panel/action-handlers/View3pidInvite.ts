@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ActionPayload } from "../../../dispatcher/payloads";
-import RightPanelStore from "../RightPanelStore";
+import { type ActionPayload } from "../../../dispatcher/payloads";
+import type RightPanelStore from "../RightPanelStore";
 import { RightPanelPhases } from "../RightPanelStorePhases";
 
 /**

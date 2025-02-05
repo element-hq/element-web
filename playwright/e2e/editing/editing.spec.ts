@@ -6,11 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Locator, Page } from "@playwright/test";
+import { type Locator, type Page } from "@playwright/test";
 
 import type { EventType, IContent, ISendEventResponse, MsgType, Visibility } from "matrix-js-sdk/src/matrix";
 import { expect, test } from "../../element-web-test";
-import { ElementAppPage } from "../../pages/ElementAppPage";
+import { type ElementAppPage } from "../../pages/ElementAppPage";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 

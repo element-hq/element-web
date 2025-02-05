@@ -12,7 +12,7 @@ import { SERVICE_TYPES } from "matrix-js-sdk/src/matrix";
 import { _t } from "../../../languageHandler";
 import DialogButtons from "../elements/DialogButtons";
 import BaseDialog from "./BaseDialog";
-import { pickBestPolicyLanguage, ServicePolicyPair } from "../../../Terms";
+import { pickBestPolicyLanguage, type ServicePolicyPair } from "../../../Terms";
 import ExternalLink from "../elements/ExternalLink";
 import { parseUrl } from "../../../utils/UrlUtils";
 

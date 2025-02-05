@@ -7,7 +7,16 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
-import React, { ContextType, createContext, memo, ReactNode, useContext, useEffect, useMemo, useState } from "react";
+import React, {
+    type ContextType,
+    createContext,
+    memo,
+    type ReactNode,
+    useContext,
+    useEffect,
+    useMemo,
+    useState,
+} from "react";
 
 import { objectKeyChanges } from "../utils/objects.ts";
 import { useTypedEventEmitter } from "../hooks/useEventEmitter.ts";

@@ -6,18 +6,18 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ListIteratee, Many, sortBy } from "lodash";
+import { type ListIteratee, type Many, sortBy } from "lodash";
 import {
     EventType,
     RoomType,
-    Room,
+    type Room,
     RoomEvent,
-    RoomMember,
+    type RoomMember,
     RoomStateEvent,
-    MatrixEvent,
+    type MatrixEvent,
     ClientEvent,
-    ISendEventResponse,
-    EmptyObject,
+    type ISendEventResponse,
+    type EmptyObject,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -27,7 +27,7 @@ import defaultDispatcher from "../../dispatcher/dispatcher";
 import RoomListStore from "../room-list/RoomListStore";
 import SettingsStore from "../../settings/SettingsStore";
 import DMRoomMap from "../../utils/DMRoomMap";
-import { FetchRoomFn } from "../notifications/ListNotificationState";
+import { type FetchRoomFn } from "../notifications/ListNotificationState";
 import { SpaceNotificationState } from "../notifications/SpaceNotificationState";
 import { RoomNotificationStateStore } from "../notifications/RoomNotificationStateStore";
 import { DefaultTagID } from "../room-list/models";
@@ -37,12 +37,12 @@ import { Action } from "../../dispatcher/actions";
 import { arrayHasDiff, arrayHasOrderChange, filterBoolean } from "../../utils/arrays";
 import { reorderLexicographically } from "../../utils/stringOrderField";
 import { TAG_ORDER } from "../../components/views/rooms/RoomList";
-import { SettingUpdatedPayload } from "../../dispatcher/payloads/SettingUpdatedPayload";
+import { type SettingUpdatedPayload } from "../../dispatcher/payloads/SettingUpdatedPayload";
 import {
     isMetaSpace,
-    ISuggestedRoom,
+    type ISuggestedRoom,
     MetaSpace,
-    SpaceKey,
+    type SpaceKey,
     UPDATE_HOME_BEHAVIOUR,
     UPDATE_INVITED_SPACES,
     UPDATE_SELECTED_SPACE,
@@ -53,15 +53,15 @@ import { getCachedRoomIDForAlias } from "../../RoomAliasCache";
 import { EffectiveMembership, getEffectiveMembership } from "../../utils/membership";
 import {
     flattenSpaceHierarchyWithCache,
-    SpaceEntityMap,
-    SpaceDescendantMap,
+    type SpaceEntityMap,
+    type SpaceDescendantMap,
     flattenSpaceHierarchy,
 } from "./flattenSpaceHierarchy";
 import { PosthogAnalytics } from "../../PosthogAnalytics";
-import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
-import { ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePayload";
-import { SwitchSpacePayload } from "../../dispatcher/payloads/SwitchSpacePayload";
-import { AfterLeaveRoomPayload } from "../../dispatcher/payloads/AfterLeaveRoomPayload";
+import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePayload";
+import { type SwitchSpacePayload } from "../../dispatcher/payloads/SwitchSpacePayload";
+import { type AfterLeaveRoomPayload } from "../../dispatcher/payloads/AfterLeaveRoomPayload";
 import { SdkContextClass } from "../../contexts/SDKContext";
 
 const ACTIVE_SPACE_LS_KEY = "mx_active_space";

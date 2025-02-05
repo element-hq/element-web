@@ -13,19 +13,19 @@ import { Alert } from "@vector-im/compound-web";
 
 import { getThreepidsWithBindStatus } from "../../../../boundThreepids";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
-import { ThirdPartyIdentifier } from "../../../../AddThreepid";
+import { type ThirdPartyIdentifier } from "../../../../AddThreepid";
 import SettingsStore from "../../../../settings/SettingsStore";
 import { UIFeature } from "../../../../settings/UIFeature";
 import { _t } from "../../../../languageHandler";
 import SetIdServer from "../SetIdServer";
 import { SettingsSubsection } from "../shared/SettingsSubsection";
 import InlineTermsAgreement from "../../terms/InlineTermsAgreement";
-import { Service, ServicePolicyPair, startTermsFlow } from "../../../../Terms";
+import { Service, type ServicePolicyPair, startTermsFlow } from "../../../../Terms";
 import IdentityAuthClient from "../../../../IdentityAuthClient";
 import { abbreviateUrl } from "../../../../utils/UrlUtils";
 import { useDispatcher } from "../../../../hooks/useDispatcher";
 import defaultDispatcher from "../../../../dispatcher/dispatcher";
-import { ActionPayload } from "../../../../dispatcher/payloads";
+import { type ActionPayload } from "../../../../dispatcher/payloads";
 import { AddRemoveThreepids } from "../AddRemoveThreepids";
 
 type RequiredPolicyInfo =

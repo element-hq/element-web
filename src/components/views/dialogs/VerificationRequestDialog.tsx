@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { VerificationRequest } from "matrix-js-sdk/src/crypto-api";
-import { User } from "matrix-js-sdk/src/matrix";
+import { type VerificationRequest } from "matrix-js-sdk/src/crypto-api";
+import { type User } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";

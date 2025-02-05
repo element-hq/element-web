@@ -8,9 +8,9 @@ Please see LICENSE files in the repository root for full details.
 
 import * as React from "react";
 
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import { _t } from "../../../languageHandler";
-import { XOR } from "../../../@types/common";
+import { type XOR } from "../../../@types/common";
 
 export const BUTTONS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "*", "0", "#"];
 export const BUTTON_LETTERS = ["", "ABC", "DEF", "GHI", "JKL", "MNO", "PQRS", "TUV", "WXYZ", "", "+", ""];

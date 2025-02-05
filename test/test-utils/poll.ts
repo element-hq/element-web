@@ -6,13 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Mocked } from "jest-mock";
+import { type Mocked } from "jest-mock";
 import {
-    MatrixClient,
+    type MatrixClient,
     MatrixEvent,
     Room,
     M_POLL_START,
-    PollAnswer,
+    type PollAnswer,
     M_POLL_KIND_DISCLOSED,
     M_POLL_END,
     M_POLL_RESPONSE,

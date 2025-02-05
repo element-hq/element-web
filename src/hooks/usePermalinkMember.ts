@@ -6,12 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { IMatrixProfile, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { type IMatrixProfile, type MatrixEvent, type Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { useEffect, useState } from "react";
 
 import { PillType } from "../components/views/elements/Pill";
 import { SdkContextClass } from "../contexts/SDKContext";
-import { PermalinkParts } from "../utils/permalinks/PermalinkConstructor";
+import { type PermalinkParts } from "../utils/permalinks/PermalinkConstructor";
 
 const createMemberFromProfile = (userId: string, profile: IMatrixProfile): RoomMember => {
     const member = new RoomMember("", userId);

@@ -6,13 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Locator, type Page } from "@playwright/test";
+import { type Locator, type Page } from "@playwright/test";
 
 import { test, expect } from "../../element-web-test";
 import { viewRoomSummaryByName } from "../right-panel/utils";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 import { completeCreateSecretStorageDialog, createBot, logIntoElement } from "./utils.ts";
-import { Client } from "../../pages/client.ts";
+import { type Client } from "../../pages/client.ts";
 
 const ROOM_NAME = "Test room";
 const NAME = "Alice";

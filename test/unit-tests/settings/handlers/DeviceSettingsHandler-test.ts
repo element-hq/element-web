@@ -11,7 +11,7 @@ import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import DeviceSettingsHandler from "../../../../src/settings/handlers/DeviceSettingsHandler";
-import { CallbackFn, WatchManager } from "../../../../src/settings/WatchManager";
+import { type CallbackFn, WatchManager } from "../../../../src/settings/WatchManager";
 import { stubClient } from "../../../test-utils/test-utils";
 
 describe("DeviceSettingsHandler", () => {

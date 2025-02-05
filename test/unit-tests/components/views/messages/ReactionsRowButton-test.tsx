@@ -7,12 +7,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { IContent, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { type IContent, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { render } from "jest-matrix-react";
 
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { getMockClientWithEventEmitter } from "../../../../test-utils";
-import ReactionsRowButton, { IProps } from "../../../../../src/components/views/messages/ReactionsRowButton";
+import ReactionsRowButton, { type IProps } from "../../../../../src/components/views/messages/ReactionsRowButton";
 
 describe("ReactionsRowButton", () => {
     const userId = "@alice:server";

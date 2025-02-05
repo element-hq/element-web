@@ -8,16 +8,17 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import SettingsStore from "../../../settings/SettingsStore";
-import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import DateSeparator from "../messages/DateSeparator";
 import EventTile from "./EventTile";
 import { shouldFormContinuation } from "../../structures/MessagePanel";
 import { wantsDateSeparator } from "../../../DateUtils";
-import LegacyCallEventGrouper, { buildLegacyCallEventGroupers } from "../../structures/LegacyCallEventGrouper";
+import type LegacyCallEventGrouper from "../../structures/LegacyCallEventGrouper";
+import { buildLegacyCallEventGroupers } from "../../structures/LegacyCallEventGrouper";
 import { haveRendererForEvent } from "../../../events/EventTileFactory";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 

@@ -24,14 +24,14 @@ import {
     getDefaultContextValue,
 } from "../../../../../../../src/components/views/rooms/wysiwyg_composer/ComposerContext";
 import { createMocks } from "../utils";
-import EditorStateTransfer from "../../../../../../../src/utils/EditorStateTransfer";
-import { SubSelection } from "../../../../../../../src/components/views/rooms/wysiwyg_composer/types";
+import type EditorStateTransfer from "../../../../../../../src/utils/EditorStateTransfer";
+import { type SubSelection } from "../../../../../../../src/components/views/rooms/wysiwyg_composer/types";
 import { setSelection } from "../../../../../../../src/components/views/rooms/wysiwyg_composer/utils/selection";
 import { parseEditorStateTransfer } from "../../../../../../../src/components/views/rooms/wysiwyg_composer/hooks/useInitialContent";
-import Autocompleter, { ICompletion } from "../../../../../../../src/autocomplete/Autocompleter";
-import AutocompleteProvider from "../../../../../../../src/autocomplete/AutocompleteProvider";
+import Autocompleter, { type ICompletion } from "../../../../../../../src/autocomplete/Autocompleter";
+import type AutocompleteProvider from "../../../../../../../src/autocomplete/AutocompleteProvider";
 import * as Permalinks from "../../../../../../../src/utils/permalinks/Permalinks";
-import { PermalinkParts } from "../../../../../../../src/utils/permalinks/PermalinkConstructor";
+import { type PermalinkParts } from "../../../../../../../src/utils/permalinks/PermalinkConstructor";
 import { ScopedRoomContextProvider } from "../../../../../../../src/contexts/ScopedRoomContext.tsx";
 
 beforeAll(initOnce, 10000);

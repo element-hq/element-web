@@ -7,13 +7,13 @@ Please see LICENSE files in the repository root for full details.
  */
 
 import React, {
-    ComponentProps,
-    ComponentPropsWithoutRef,
+    type ComponentProps,
+    type ComponentPropsWithoutRef,
     forwardRef,
-    FunctionComponent,
-    ReactElement,
-    KeyboardEvent,
-    Ref,
+    type FunctionComponent,
+    type ReactElement,
+    type KeyboardEvent,
+    type Ref,
 } from "react";
 import classnames from "classnames";
 import { Tooltip } from "@vector-im/compound-web";

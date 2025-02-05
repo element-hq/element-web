@@ -6,10 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Page } from "@playwright/test";
+import { type Page } from "@playwright/test";
 
 import { test, expect } from "../../element-web-test";
-import { ElementAppPage } from "../../pages/ElementAppPage";
+import { type ElementAppPage } from "../../pages/ElementAppPage";
 
 test.describe("Room Header", () => {
     test.use({

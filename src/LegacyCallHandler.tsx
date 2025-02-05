@@ -12,14 +12,14 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { MatrixError, RuleId, TweakName, SyncState, TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 import {
-    CallError,
+    type CallError,
     CallErrorCode,
     CallEvent,
     CallParty,
     CallState,
     CallType,
     FALLBACK_ICE_SERVER,
-    MatrixCall,
+    type MatrixCall,
 } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
@@ -48,9 +48,9 @@ import { Container, WidgetLayoutStore } from "./stores/widgets/WidgetLayoutStore
 import IncomingLegacyCallToast, { getIncomingLegacyCallToastKey } from "./toasts/IncomingLegacyCallToast";
 import ToastStore from "./stores/ToastStore";
 import Resend from "./Resend";
-import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
 import { InviteKind } from "./components/views/dialogs/InviteDialogTypes";
-import { OpenInviteDialogPayload } from "./dispatcher/payloads/OpenInviteDialogPayload";
+import { type OpenInviteDialogPayload } from "./dispatcher/payloads/OpenInviteDialogPayload";
 import { findDMForUser } from "./utils/dm/findDMForUser";
 import { getJoinedNonFunctionalMembers } from "./utils/room/getJoinedNonFunctionalMembers";
 import { localNotificationsAreSilenced } from "./utils/notifications";

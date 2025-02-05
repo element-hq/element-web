@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { MatrixAuthenticationServiceContainer } from "../../../testcontainers/mas.ts";
-import { Fixtures } from "../../../element-web-test.ts";
+import { type Fixtures } from "../../../element-web-test.ts";
 
 export const masHomeserver: Fixtures = {
     mas: [

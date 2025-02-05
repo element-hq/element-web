@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import SettingController from "./SettingController";
 import SettingsStore from "../SettingsStore";
 import dis from "../../dispatcher/dispatcher";
-import { UpdateSystemFontPayload } from "../../dispatcher/payloads/UpdateSystemFontPayload";
+import { type UpdateSystemFontPayload } from "../../dispatcher/payloads/UpdateSystemFontPayload";
 import { Action } from "../../dispatcher/actions";
 
 export default class SystemFontController extends SettingController {

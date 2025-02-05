@@ -8,9 +8,9 @@ Please see LICENSE files in the repository root for full details.
 
 import type { Room } from "matrix-js-sdk/src/matrix";
 import type { EventEmitter } from "events";
-import { ITagMap, ListAlgorithm, SortAlgorithm } from "./algorithms/models";
-import { RoomUpdateCause, TagID } from "./models";
-import { IFilterCondition } from "./filters/IFilterCondition";
+import { type ITagMap, type ListAlgorithm, type SortAlgorithm } from "./algorithms/models";
+import { type RoomUpdateCause, type TagID } from "./models";
+import { type IFilterCondition } from "./filters/IFilterCondition";
 
 export enum RoomListStoreEvent {
     // The event/channel which is called when the room lists have been changed.

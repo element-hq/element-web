@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { mocked } from "jest-mock";
 import { act } from "react";
 import { Crypto } from "@peculiar/webcrypto";
-import { CryptoApi, deriveRecoveryKeyFromPassphrase } from "matrix-js-sdk/src/crypto-api";
+import { type CryptoApi, deriveRecoveryKeyFromPassphrase } from "matrix-js-sdk/src/crypto-api";
 import { SecretStorage } from "matrix-js-sdk/src/matrix";
 
 import { accessSecretStorage, crossSigningCallbacks } from "../../src/SecurityManager";
@@ -17,7 +17,7 @@ import { filterConsole, stubClient } from "../test-utils";
 import Modal from "../../src/Modal.tsx";
 import {
     default as AccessSecretStorageDialog,
-    KeyParams,
+    type KeyParams,
 } from "../../src/components/views/dialogs/security/AccessSecretStorageDialog.tsx";
 
 jest.mock("react", () => {

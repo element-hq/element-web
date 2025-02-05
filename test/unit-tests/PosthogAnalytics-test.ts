@@ -7,11 +7,16 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked } from "jest-mock";
-import { PostHog } from "posthog-js";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
-import { CryptoApi } from "matrix-js-sdk/src/crypto-api";
+import { type PostHog } from "posthog-js";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
 
-import { Anonymity, getRedactedCurrentLocation, IPosthogEvent, PosthogAnalytics } from "../../src/PosthogAnalytics";
+import {
+    Anonymity,
+    getRedactedCurrentLocation,
+    type IPosthogEvent,
+    PosthogAnalytics,
+} from "../../src/PosthogAnalytics";
 import SdkConfig from "../../src/SdkConfig";
 import { getMockClientWithEventEmitter } from "../test-utils";
 import SettingsStore from "../../src/settings/SettingsStore";

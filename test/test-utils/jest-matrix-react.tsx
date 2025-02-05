@@ -6,9 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactElement } from "react";
+import React, { type ReactElement } from "react";
 // eslint-disable-next-line no-restricted-imports
-import { render, RenderOptions } from "@testing-library/react";
+import { render, type RenderOptions } from "@testing-library/react";
 import { TooltipProvider } from "@vector-im/compound-web";
 
 const wrapWithTooltipProvider = (Wrapper: RenderOptions["wrapper"]) => {

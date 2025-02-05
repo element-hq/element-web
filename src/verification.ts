@@ -6,17 +6,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { User, MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
-import { CrossSigningKey, VerificationRequest } from "matrix-js-sdk/src/crypto-api";
+import { type User, type MatrixClient, type RoomMember } from "matrix-js-sdk/src/matrix";
+import { CrossSigningKey, type VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 
 import dis from "./dispatcher/dispatcher";
 import Modal from "./Modal";
 import { RightPanelPhases } from "./stores/right-panel/RightPanelStorePhases";
 import { accessSecretStorage } from "./SecurityManager";
 import UntrustedDeviceDialog from "./components/views/dialogs/UntrustedDeviceDialog";
-import { IDevice } from "./components/views/right_panel/UserInfo";
+import { type IDevice } from "./components/views/right_panel/UserInfo";
 import RightPanelStore from "./stores/right-panel/RightPanelStore";
-import { IRightPanelCardState } from "./stores/right-panel/RightPanelStoreIPanelState";
+import { type IRightPanelCardState } from "./stores/right-panel/RightPanelStoreIPanelState";
 import { findDMForUser } from "./utils/dm/findDMForUser";
 
 async function enable4SIfNeeded(matrixClient: MatrixClient): Promise<boolean> {

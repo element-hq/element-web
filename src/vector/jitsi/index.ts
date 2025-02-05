@@ -7,13 +7,13 @@ Please see LICENSE files in the repository root for full details.
 
 import { KJUR } from "jsrsasign";
 import {
-    IOpenIDCredentials,
-    IWidgetApiRequest,
-    IWidgetApiRequestData,
-    IWidgetApiResponseData,
+    type IOpenIDCredentials,
+    type IWidgetApiRequest,
+    type IWidgetApiRequestData,
+    type IWidgetApiResponseData,
     VideoConferenceCapabilities,
     WidgetApi,
-    WidgetApiAction,
+    type WidgetApiAction,
 } from "matrix-widget-api";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -28,7 +28,7 @@ import type {
     InterfaceConfig as _InterfaceConfig,
 } from "jitsi-meet";
 import { ElementWidgetActions } from "../../stores/widgets/ElementWidgetActions";
-import { IConfigOptions } from "../../IConfigOptions";
+import { type IConfigOptions } from "../../IConfigOptions";
 import { SnakedObject } from "../../utils/SnakedObject";
 import { ElementWidgetCapabilities } from "../../stores/widgets/ElementWidgetCapabilities";
 import { getVectorConfig } from "../getconfig";

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import dis from "../../../../dispatcher/dispatcher";
 import { Action } from "../../../../dispatcher/actions";
-import { ThreePIDInvite } from "../../../../models/rooms/ThreePIDInvite";
+import { type ThreePIDInvite } from "../../../../models/rooms/ThreePIDInvite";
 import { _t } from "../../../../languageHandler";
 
 interface ThreePidTileViewModelProps {

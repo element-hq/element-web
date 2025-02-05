@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { groupBy, mapValues, maxBy, minBy, sumBy, takeRight } from "lodash";
-import { MatrixClient, Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type Room, type RoomMember } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
-import { Member } from "./direct-messages";
+import { type Member } from "./direct-messages";
 import DMRoomMap from "./DMRoomMap";
 
 export const compareMembers =

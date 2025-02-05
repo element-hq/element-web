@@ -8,8 +8,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ComponentProps, ReactNode } from "react";
-import { EventType, MatrixEvent, MatrixEventEvent, RoomMember } from "matrix-js-sdk/src/matrix";
+import React, { type ComponentProps, type ReactNode } from "react";
+import { EventType, type MatrixEvent, MatrixEventEvent, type RoomMember } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { throttle } from "lodash";
 

@@ -6,12 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, KeyboardEventHandler } from "react";
+import React, { createRef, type KeyboardEventHandler } from "react";
 import { MatrixError } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
-import withValidation, { IFieldState, IValidationResult } from "./Validation";
-import Field, { IValidateOpts } from "./Field";
+import withValidation, { type IFieldState, type IValidationResult } from "./Validation";
+import Field, { type IValidateOpts } from "./Field";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 interface IProps {

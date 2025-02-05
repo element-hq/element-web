@@ -8,16 +8,16 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { StrictMode } from "react";
-import { createRoot, Root } from "react-dom/client";
+import { createRoot, type Root } from "react-dom/client";
 import classNames from "classnames";
-import { IDeferred, defer } from "matrix-js-sdk/src/utils";
+import { type IDeferred, defer } from "matrix-js-sdk/src/utils";
 import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 import { Glass, TooltipProvider } from "@vector-im/compound-web";
 
 import defaultDispatcher from "./dispatcher/dispatcher";
 import AsyncWrapper from "./AsyncWrapper";
-import { Defaultize } from "./@types/common";
-import { ActionPayload } from "./dispatcher/payloads";
+import { type Defaultize } from "./@types/common";
+import { type ActionPayload } from "./dispatcher/payloads";
 
 const DIALOG_CONTAINER_ID = "mx_Dialog_Container";
 const STATIC_DIALOG_CONTAINER_ID = "mx_Dialog_StaticContainer";

@@ -7,13 +7,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { MockedObject } from "jest-mock";
+import { type MockedObject } from "jest-mock";
 import { Room } from "matrix-js-sdk/src/matrix";
 import { fireEvent, render, screen, waitFor } from "jest-matrix-react";
 
 import { VideoRoomChatButton } from "../../../../../../src/components/views/rooms/RoomHeader/VideoRoomChatButton";
 import { SDKContext, SdkContextClass } from "../../../../../../src/contexts/SDKContext";
-import RightPanelStore from "../../../../../../src/stores/right-panel/RightPanelStore";
+import type RightPanelStore from "../../../../../../src/stores/right-panel/RightPanelStore";
 import { getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../../../test-utils";
 import { RoomNotificationState } from "../../../../../../src/stores/notifications/RoomNotificationState";
 import { NotificationLevel } from "../../../../../../src/stores/notifications/NotificationLevel";

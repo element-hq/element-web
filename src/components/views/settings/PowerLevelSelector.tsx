@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { useState, JSX, PropsWithChildren } from "react";
+import React, { useState, type JSX, type PropsWithChildren } from "react";
 import { Button } from "@vector-im/compound-web";
 
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";

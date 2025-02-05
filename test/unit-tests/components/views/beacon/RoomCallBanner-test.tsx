@@ -7,10 +7,16 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { Room, PendingEventOrdering, MatrixClient, RoomMember, RoomStateEvent } from "matrix-js-sdk/src/matrix";
-import { ClientWidgetApi, Widget } from "matrix-widget-api";
+import {
+    Room,
+    PendingEventOrdering,
+    type MatrixClient,
+    type RoomMember,
+    RoomStateEvent,
+} from "matrix-js-sdk/src/matrix";
+import { type ClientWidgetApi, Widget } from "matrix-widget-api";
 import { act, cleanup, render, screen } from "jest-matrix-react";
-import { mocked, Mocked } from "jest-mock";
+import { mocked, type Mocked } from "jest-mock";
 
 import {
     mkRoomMember,

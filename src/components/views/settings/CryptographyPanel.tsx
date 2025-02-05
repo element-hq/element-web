@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { lazy } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { EmptyObject } from "matrix-js-sdk/src/matrix";
+import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";

@@ -6,9 +6,9 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { Locator, Page } from "@playwright/test";
+import { type Locator, type Page } from "@playwright/test";
 
-import { ElementAppPage } from "../../../pages/ElementAppPage";
+import { type ElementAppPage } from "../../../pages/ElementAppPage";
 import { test as base, expect } from "../../../element-web-test";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import { Layout } from "../../../../src/settings/enums/Layout";

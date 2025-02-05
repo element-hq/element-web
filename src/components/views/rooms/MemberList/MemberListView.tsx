@@ -7,12 +7,12 @@ Please see LICENSE files in the repository root for full details.
 
 import { Form } from "@vector-im/compound-web";
 import React from "react";
-import { List, ListRowProps } from "react-virtualized/dist/commonjs/List";
+import { List, type ListRowProps } from "react-virtualized/dist/commonjs/List";
 import { AutoSizer } from "react-virtualized";
 
 import { Flex } from "../../../utils/Flex";
 import {
-    MemberWithSeparator,
+    type MemberWithSeparator,
     SEPARATOR,
     useMemberListViewModel,
 } from "../../../viewmodels/memberlist/MemberListViewModel";

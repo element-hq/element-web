@@ -5,13 +5,18 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked, Mocked, MockedObject } from "jest-mock";
-import { HttpApiEvent, MatrixClient, MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
+import { mocked, type Mocked, type MockedObject } from "jest-mock";
+import { HttpApiEvent, type MatrixClient, type MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
 import { decryptExistingEvent, mkDecryptionFailureMatrixEvent } from "matrix-js-sdk/src/testing";
-import { CryptoApi, DecryptionFailureCode, UserVerificationStatus, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
+import {
+    type CryptoApi,
+    DecryptionFailureCode,
+    UserVerificationStatus,
+    CryptoEvent,
+} from "matrix-js-sdk/src/crypto-api";
 import { sleep } from "matrix-js-sdk/src/utils";
 
-import { DecryptionFailureTracker, ErrorProperties } from "../../src/DecryptionFailureTracker";
+import { DecryptionFailureTracker, type ErrorProperties } from "../../src/DecryptionFailureTracker";
 import { stubClient } from "../test-utils";
 import * as Lifecycle from "../../src/Lifecycle";
 

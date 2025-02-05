@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { HTMLAttributes } from "react";
+import React, { type HTMLAttributes } from "react";
 
 interface Props extends Omit<HTMLAttributes<HTMLSpanElement>, "className"> {
     children: React.ReactNode;

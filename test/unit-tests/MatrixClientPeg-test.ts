@@ -10,7 +10,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import fetchMockJest from "fetch-mock-jest";
 
 import { advanceDateAndTime, stubClient } from "../test-utils";
-import { IMatrixClientPeg, MatrixClientPeg as peg } from "../../src/MatrixClientPeg";
+import { type IMatrixClientPeg, MatrixClientPeg as peg } from "../../src/MatrixClientPeg";
 
 jest.useFakeTimers();
 

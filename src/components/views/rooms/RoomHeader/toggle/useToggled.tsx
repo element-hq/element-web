@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { useContext } from "react";
 
-import { RightPanelPhases } from "../../../../../stores/right-panel/RightPanelStorePhases";
+import { type RightPanelPhases } from "../../../../../stores/right-panel/RightPanelStorePhases";
 import { CurrentRightPanelPhaseContext } from "../../../../../contexts/CurrentRightPanelPhaseContext";
 
 /**

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { act, fireEvent, render } from "jest-matrix-react";
-import { Beacon, RoomMember, MatrixEvent, LocationAssetType } from "matrix-js-sdk/src/matrix";
+import { Beacon, RoomMember, type MatrixEvent, LocationAssetType } from "matrix-js-sdk/src/matrix";
 
 import BeaconListItem from "../../../../../src/components/views/beacon/BeaconListItem";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";

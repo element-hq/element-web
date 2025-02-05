@@ -8,14 +8,14 @@ Please see LICENSE files in the repository root for full details.
 
 import EventEmitter from "events";
 import {
-    KeyBackupInfo,
+    type KeyBackupInfo,
     VerificationPhase,
-    VerificationRequest,
+    type VerificationRequest,
     VerificationRequestEvent,
     CryptoEvent,
 } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
-import { Device, SecretStorage } from "matrix-js-sdk/src/matrix";
+import { type Device, type SecretStorage } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { AccessCancelledError, accessSecretStorage } from "../SecurityManager";

@@ -6,11 +6,11 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { Widget, WidgetKind } from "matrix-widget-api";
+import { type Widget, WidgetKind } from "matrix-widget-api";
 
 import SettingsStore from "../../settings/SettingsStore";
 import { SettingLevel } from "../../settings/SettingLevel";
-import { SdkContextClass } from "../../contexts/SDKContext";
+import { type SdkContextClass } from "../../contexts/SDKContext";
 
 export enum OIDCState {
     Allowed, // user has set the remembered value as allowed

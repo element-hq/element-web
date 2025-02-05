@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import classNames from "classnames";
 
-import { RightPanelPhases } from "../../../../../stores/right-panel/RightPanelStorePhases";
+import { type RightPanelPhases } from "../../../../../stores/right-panel/RightPanelStorePhases";
 import { useToggled } from "./useToggled";
 
 type Props = {

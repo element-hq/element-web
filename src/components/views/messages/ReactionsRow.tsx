@@ -6,9 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { SyntheticEvent } from "react";
+import React, { type SyntheticEvent } from "react";
 import classNames from "classnames";
-import { MatrixEvent, MatrixEventEvent, Relations, RelationsEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, MatrixEventEvent, type Relations, RelationsEvent } from "matrix-js-sdk/src/matrix";
 import { uniqBy } from "lodash";
 import { UnstableValue } from "matrix-js-sdk/src/NamespacedValue";
 

@@ -6,17 +6,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, RefObject } from "react";
+import React, { createRef, type RefObject } from "react";
 import { render } from "jest-matrix-react";
-import { MatrixClient, MsgType, Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, MsgType, type Room } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 
 import VoiceRecordComposerTile from "../../../../../src/components/views/rooms/VoiceRecordComposerTile";
 import { doMaybeLocalRoomAction } from "../../../../../src/utils/local-room";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
-import { IUpload, VoiceMessageRecording } from "../../../../../src/audio/VoiceMessageRecording";
+import { type IUpload, type VoiceMessageRecording } from "../../../../../src/audio/VoiceMessageRecording";
 import { VoiceRecordingStore } from "../../../../../src/stores/VoiceRecordingStore";
-import { PlaybackClock } from "../../../../../src/audio/PlaybackClock";
+import { type PlaybackClock } from "../../../../../src/audio/PlaybackClock";
 import { mkEvent } from "../../../../test-utils";
 
 jest.mock("../../../../../src/utils/local-room", () => ({

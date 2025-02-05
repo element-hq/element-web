@@ -6,9 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { RefObject } from "react";
+import React, { type RefObject } from "react";
 
-import AccessibleButton, { ButtonProps } from "../../components/views/elements/AccessibleButton";
+import AccessibleButton, { type ButtonProps } from "../../components/views/elements/AccessibleButton";
 import { useRovingTabIndex } from "../RovingTabIndex";
 
 type Props<T extends keyof HTMLElementTagNameMap> = Omit<ButtonProps<T>, "tabIndex"> & {

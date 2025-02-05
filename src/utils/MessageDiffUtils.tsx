@@ -9,12 +9,12 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import classNames from "classnames";
 import DiffMatchPatch from "diff-match-patch";
-import { DiffDOM, IDiff } from "diff-dom";
-import { IContent } from "matrix-js-sdk/src/matrix";
+import { DiffDOM, type IDiff } from "diff-dom";
+import { type IContent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { unescape } from "lodash";
 
-import { bodyToHtml, checkBlockNode, EventRenderOpts } from "../HtmlUtils";
+import { bodyToHtml, checkBlockNode, type EventRenderOpts } from "../HtmlUtils";
 
 function textToHtml(text: string): string {
     const container = document.createElement("div");

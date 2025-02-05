@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { M_BEACON_INFO, MatrixEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { M_BEACON_INFO, type MatrixEvent, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { getShareableLocationEventForBeacon } from "../../utils/beacon/getShareableLocation";
 import { isLocationEvent } from "../../utils/EventUtils";

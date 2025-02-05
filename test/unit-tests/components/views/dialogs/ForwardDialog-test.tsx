@@ -16,7 +16,7 @@ import {
     M_TIMESTAMP,
     M_TEXT,
 } from "matrix-js-sdk/src/matrix";
-import { act, fireEvent, getByTestId, render, RenderResult, screen, waitFor } from "jest-matrix-react";
+import { act, fireEvent, getByTestId, render, type RenderResult, screen, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { sleep } from "matrix-js-sdk/src/utils";
 

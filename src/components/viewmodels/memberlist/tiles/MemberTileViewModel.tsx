@@ -6,16 +6,16 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useEffect, useMemo, useState } from "react";
-import { RoomStateEvent, MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
-import { UserVerificationStatus, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
+import { RoomStateEvent, type MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
+import { type UserVerificationStatus, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 
 import dis from "../../../../dispatcher/dispatcher";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import { Action } from "../../../../dispatcher/actions";
 import { asyncSome } from "../../../../utils/arrays";
 import { getUserDeviceIds } from "../../../../utils/crypto/deviceInfo";
-import { RoomMember } from "../../../../models/rooms/RoomMember";
-import { _t, _td, TranslationKey } from "../../../../languageHandler";
+import { type RoomMember } from "../../../../models/rooms/RoomMember";
+import { _t, _td, type TranslationKey } from "../../../../languageHandler";
 import UserIdentifierCustomisations from "../../../../customisations/UserIdentifier";
 import { E2EStatus } from "../../../../utils/ShieldUtils";
 

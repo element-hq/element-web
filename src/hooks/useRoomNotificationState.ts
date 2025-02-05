@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useCallback, useMemo, useState } from "react";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk/src/matrix";
 
-import { RoomNotifState } from "../RoomNotifs";
+import { type RoomNotifState } from "../RoomNotifs";
 import { EchoChamber } from "../stores/local-echo/EchoChamber";
 import { PROPERTY_UPDATED } from "../stores/local-echo/GenericEchoChamber";
 import { CachedRoomKey } from "../stores/local-echo/RoomEchoChamber";

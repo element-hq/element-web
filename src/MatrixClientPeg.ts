@@ -12,14 +12,14 @@ Please see LICENSE files in the repository root for full details.
 import {
     EventTimeline,
     EventTimelineSet,
-    ICreateClientOpts,
-    IStartClientOpts,
-    MatrixClient,
+    type ICreateClientOpts,
+    type IStartClientOpts,
+    type MatrixClient,
     MemoryStore,
     PendingEventOrdering,
-    RoomNameState,
+    type RoomNameState,
     RoomNameType,
-    TokenRefreshFunction,
+    type TokenRefreshFunction,
 } from "matrix-js-sdk/src/matrix";
 import { VerificationMethod } from "matrix-js-sdk/src/types";
 import * as utils from "matrix-js-sdk/src/utils";

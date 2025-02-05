@@ -8,8 +8,16 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { act } from "react";
-import { render, RenderResult, waitFor } from "jest-matrix-react";
-import { Room, MatrixClient, RoomState, RoomMember, User, EventType, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { render, type RenderResult, waitFor } from "jest-matrix-react";
+import {
+    Room,
+    type MatrixClient,
+    type RoomState,
+    RoomMember,
+    User,
+    EventType,
+    RoomStateEvent,
+} from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";

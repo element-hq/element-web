@@ -9,16 +9,16 @@ Please see LICENSE files in the repository root for full details.
 import { mocked } from "jest-mock";
 import {
     ContentHelpers,
-    MatrixClient,
-    LegacyLocationEventContent,
-    MLocationEventContent,
+    type MatrixClient,
+    type LegacyLocationEventContent,
+    type MLocationEventContent,
 } from "matrix-js-sdk/src/matrix";
 
 import { doMaybeLocalRoomAction } from "../../../../../src/utils/local-room";
 import {
     LocationShareType,
     shareLocation,
-    ShareLocationFn,
+    type ShareLocationFn,
 } from "../../../../../src/components/views/location/shareLocation";
 
 jest.mock("../../../../../src/utils/local-room", () => ({

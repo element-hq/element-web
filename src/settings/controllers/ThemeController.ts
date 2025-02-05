@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 
 import SettingController from "./SettingController";
 import { DEFAULT_THEME, enumerateThemes } from "../../theme";
-import { SettingLevel } from "../SettingLevel";
+import { type SettingLevel } from "../SettingLevel";
 
 export default class ThemeController extends SettingController {
     public static isLogin = false;

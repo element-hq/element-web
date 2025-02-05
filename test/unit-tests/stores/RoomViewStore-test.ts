@@ -9,7 +9,10 @@ Please see LICENSE files in the repository root for full details.
 import { mocked } from "jest-mock";
 import { MatrixError, Room } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
-import { RoomViewLifecycle, ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
+import {
+    RoomViewLifecycle,
+    type ViewRoomOpts,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 
 import { RoomViewStore } from "../../../src/stores/RoomViewStore";
 import { Action } from "../../../src/dispatcher/actions";
@@ -20,15 +23,15 @@ import { PosthogAnalytics } from "../../../src/PosthogAnalytics";
 import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
 import { MatrixDispatcher } from "../../../src/dispatcher/dispatcher";
 import { UPDATE_EVENT } from "../../../src/stores/AsyncStore";
-import { ActiveRoomChangedPayload } from "../../../src/dispatcher/payloads/ActiveRoomChangedPayload";
+import { type ActiveRoomChangedPayload } from "../../../src/dispatcher/payloads/ActiveRoomChangedPayload";
 import { SpaceStoreClass } from "../../../src/stores/spaces/SpaceStore";
 import { TestSdkContext } from "../TestSdkContext";
-import { ViewRoomPayload } from "../../../src/dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../../src/dispatcher/payloads/ViewRoomPayload";
 import Modal from "../../../src/Modal";
 import ErrorDialog from "../../../src/components/views/dialogs/ErrorDialog";
-import { CancelAskToJoinPayload } from "../../../src/dispatcher/payloads/CancelAskToJoinPayload";
-import { JoinRoomErrorPayload } from "../../../src/dispatcher/payloads/JoinRoomErrorPayload";
-import { SubmitAskToJoinPayload } from "../../../src/dispatcher/payloads/SubmitAskToJoinPayload";
+import { type CancelAskToJoinPayload } from "../../../src/dispatcher/payloads/CancelAskToJoinPayload";
+import { type JoinRoomErrorPayload } from "../../../src/dispatcher/payloads/JoinRoomErrorPayload";
+import { type SubmitAskToJoinPayload } from "../../../src/dispatcher/payloads/SubmitAskToJoinPayload";
 import { ModuleRunner } from "../../../src/modules/ModuleRunner";
 
 jest.mock("../../../src/Modal");

@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { JSHandle, Page } from "@playwright/test";
-import { PageFunctionOn } from "playwright-core/types/structs";
+import { type JSHandle, type Page } from "@playwright/test";
+import { type PageFunctionOn } from "playwright-core/types/structs";
 
 import { Network } from "./network";
 import type {
@@ -28,7 +28,7 @@ import type {
     EmptyObject,
 } from "matrix-js-sdk/src/matrix";
 import type { RoomMessageEventContent } from "matrix-js-sdk/src/types";
-import { Credentials } from "../plugins/homeserver";
+import { type Credentials } from "../plugins/homeserver";
 
 export class Client {
     public network: Network;

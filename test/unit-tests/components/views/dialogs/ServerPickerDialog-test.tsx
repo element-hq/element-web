@@ -13,7 +13,7 @@ import fetchMock from "fetch-mock-jest";
 import ServerPickerDialog from "../../../../../src/components/views/dialogs/ServerPickerDialog";
 import SdkConfig from "../../../../../src/SdkConfig";
 import { flushPromises } from "../../../../test-utils";
-import { ValidatedServerConfig } from "../../../../../src/utils/ValidatedServerConfig";
+import { type ValidatedServerConfig } from "../../../../../src/utils/ValidatedServerConfig";
 
 /** The matrix versions our mock server claims to support */
 const SERVER_SUPPORTED_MATRIX_VERSIONS = ["v1.1", "v1.5", "v1.6", "v1.8", "v1.9"];

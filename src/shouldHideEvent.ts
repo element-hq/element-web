@@ -6,12 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
  */
 
-import { MatrixEvent, EventType, RelationType } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, EventType, RelationType } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import SettingsStore from "./settings/SettingsStore";
-import { IRoomState } from "./components/structures/RoomView";
-import { SettingKey } from "./settings/Settings.tsx";
+import { type IRoomState } from "./components/structures/RoomView";
+import { type SettingKey } from "./settings/Settings.tsx";
 
 interface IDiff {
     isMemberEvent: boolean;

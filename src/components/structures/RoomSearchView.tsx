@@ -8,9 +8,9 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { forwardRef, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import {
-    ISearchResults,
-    IThreadBundledRelationship,
-    MatrixEvent,
+    type ISearchResults,
+    type IThreadBundledRelationship,
+    type MatrixEvent,
     THREAD_RELATION_TYPE,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -23,7 +23,7 @@ import SearchResultTile from "../views/rooms/SearchResultTile";
 import { searchPagination, SearchScope } from "../../Searching";
 import Modal from "../../Modal";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
-import ResizeNotifier from "../../utils/ResizeNotifier";
+import type ResizeNotifier from "../../utils/ResizeNotifier";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import { useScopedRoomContext } from "../../contexts/ScopedRoomContext.tsx";

@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 
 import BasicMessageComposer from "../../../../../src/components/views/rooms/BasicMessageComposer";
 import * as TestUtils from "../../../../test-utils";

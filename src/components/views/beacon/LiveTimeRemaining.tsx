@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useCallback, useEffect, useState } from "react";
-import { BeaconEvent, Beacon } from "matrix-js-sdk/src/matrix";
+import { BeaconEvent, type Beacon } from "matrix-js-sdk/src/matrix";
 
 import { formatDuration } from "../../../DateUtils";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";

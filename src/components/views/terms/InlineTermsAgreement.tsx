@@ -12,7 +12,7 @@ import { _t } from "../../../languageHandler";
 import { objectClone } from "../../../utils/objects";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import AccessibleButton from "../elements/AccessibleButton";
-import { pickBestPolicyLanguage, ServicePolicyPair } from "../../../Terms";
+import { pickBestPolicyLanguage, type ServicePolicyPair } from "../../../Terms";
 
 interface IProps {
     policiesAndServicePairs: ServicePolicyPair[];

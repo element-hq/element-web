@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, ReactNode } from "react";
+import React, { createRef, type ReactNode } from "react";
 import { ClientRendezvousFailureReason, MSC4108FailureReason } from "matrix-js-sdk/src/rendezvous";
 import ChevronLeftIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-left";
 import CheckCircleSolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/check-circle-solid";
@@ -21,7 +21,7 @@ import QRCode from "../elements/QRCode";
 import Spinner from "../elements/Spinner";
 import { Click, Phase } from "./LoginWithQR-types";
 import SdkConfig from "../../../SdkConfig";
-import { FailureReason, LoginWithQRFailureReason } from "./LoginWithQR";
+import { type FailureReason, LoginWithQRFailureReason } from "./LoginWithQR";
 import { ErrorMessage } from "../../structures/ErrorMessage";
 
 interface Props {

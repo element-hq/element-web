@@ -9,19 +9,19 @@ Please see LICENSE files in the repository root for full details.
 import React, { createRef } from "react";
 import {
     AuthType,
-    IAuthData,
-    AuthDict,
-    IInputs,
+    type IAuthData,
+    type AuthDict,
+    type IInputs,
     InteractiveAuth,
-    IStageStatus,
+    type IStageStatus,
 } from "matrix-js-sdk/src/interactive-auth";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import getEntryComponentForLoginType, {
-    ContinueKind,
-    CustomAuthType,
-    IStageComponent,
+    type ContinueKind,
+    type CustomAuthType,
+    type IStageComponent,
 } from "../views/auth/InteractiveAuthEntryComponents";
 import Spinner from "../views/elements/Spinner";
 

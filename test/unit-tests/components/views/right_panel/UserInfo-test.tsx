@@ -9,18 +9,26 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { fireEvent, render, screen, cleanup, act, within, waitForElementToBeRemoved } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { Mocked, mocked } from "jest-mock";
-import { Room, User, MatrixClient, RoomMember, MatrixEvent, EventType, Device } from "matrix-js-sdk/src/matrix";
+import { type Mocked, mocked } from "jest-mock";
+import {
+    type Room,
+    User,
+    type MatrixClient,
+    RoomMember,
+    MatrixEvent,
+    EventType,
+    Device,
+} from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { defer } from "matrix-js-sdk/src/utils";
 import { EventEmitter } from "events";
 import {
     UserVerificationStatus,
-    VerificationRequest,
+    type VerificationRequest,
     VerificationPhase as Phase,
     VerificationRequestEvent,
-    CryptoApi,
-    DeviceVerificationStatus,
+    type CryptoApi,
+    type DeviceVerificationStatus,
 } from "matrix-js-sdk/src/crypto-api";
 
 import UserInfo, {

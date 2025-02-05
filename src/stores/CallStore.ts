@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { logger } from "matrix-js-sdk/src/logger";
 import { GroupCallEventHandlerEvent } from "matrix-js-sdk/src/webrtc/groupCallEventHandler";
-import { MatrixRTCSession, MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc";
+import { type MatrixRTCSession, MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc";
 
 import type { EmptyObject, GroupCall, Room } from "matrix-js-sdk/src/matrix";
 import defaultDispatcher from "../dispatcher/dispatcher";

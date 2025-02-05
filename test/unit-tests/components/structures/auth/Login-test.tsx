@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { fireEvent, render, screen, waitForElementToBeRemoved } from "jest-matrix-react";
-import { mocked, MockedObject } from "jest-mock";
+import { mocked, type MockedObject } from "jest-mock";
 import fetchMock from "fetch-mock-jest";
-import { DELEGATED_OIDC_COMPATIBILITY, IdentityProviderBrand, OidcClientConfig } from "matrix-js-sdk/src/matrix";
+import { DELEGATED_OIDC_COMPATIBILITY, IdentityProviderBrand, type OidcClientConfig } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import * as Matrix from "matrix-js-sdk/src/matrix";
 import { OidcError } from "matrix-js-sdk/src/oidc/error";
@@ -17,7 +17,7 @@ import { OidcError } from "matrix-js-sdk/src/oidc/error";
 import SdkConfig from "../../../../../src/SdkConfig";
 import { mkServerConfig, mockPlatformPeg, unmockPlatformPeg } from "../../../../test-utils";
 import Login from "../../../../../src/components/structures/auth/Login";
-import BasePlatform from "../../../../../src/BasePlatform";
+import type BasePlatform from "../../../../../src/BasePlatform";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import * as registerClientUtils from "../../../../../src/utils/oidc/registerClient";
 import { makeDelegatedAuthConfig } from "../../../../test-utils/oidc";

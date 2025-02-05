@@ -10,8 +10,8 @@ import { mocked } from "jest-mock";
 import {
     ClientEvent,
     EventType,
-    MatrixClient,
-    MatrixEvent,
+    type MatrixClient,
+    type MatrixEvent,
     MatrixEventEvent,
     SyncState,
 } from "matrix-js-sdk/src/matrix";

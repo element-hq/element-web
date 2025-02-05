@@ -5,23 +5,23 @@ Copyright 2022 The Matrix.org Foundation C.I.C.
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
-import { mocked, MockedObject } from "jest-mock";
+import { mocked, type MockedObject } from "jest-mock";
 import {
     ClientEvent,
-    MatrixClient,
+    type MatrixClient,
     Room,
     RoomEvent,
     EventType,
     MsgType,
-    IContent,
+    type IContent,
     MatrixEvent,
     SyncState,
-    AccountDataEvents,
+    type AccountDataEvents,
 } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "jest-matrix-react";
 import { CallMembership, MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 
-import BasePlatform from "../../src/BasePlatform";
+import type BasePlatform from "../../src/BasePlatform";
 import Notifier from "../../src/Notifier";
 import SettingsStore from "../../src/settings/SettingsStore";
 import ToastStore from "../../src/stores/ToastStore";
@@ -42,7 +42,7 @@ import UserActivity from "../../src/UserActivity";
 import Modal from "../../src/Modal";
 import { mkThread } from "../test-utils/threads";
 import dis from "../../src/dispatcher/dispatcher";
-import { ThreadPayload } from "../../src/dispatcher/payloads/ThreadPayload";
+import { type ThreadPayload } from "../../src/dispatcher/payloads/ThreadPayload";
 import { Action } from "../../src/dispatcher/actions";
 import { addReplyToMessageContent } from "../../src/utils/Reply";
 

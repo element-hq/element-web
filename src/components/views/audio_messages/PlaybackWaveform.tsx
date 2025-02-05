@@ -10,7 +10,7 @@ import React from "react";
 
 import { arraySeed, arrayTrimFill } from "../../../utils/arrays";
 import Waveform from "./Waveform";
-import { Playback } from "../../../audio/Playback";
+import { type Playback } from "../../../audio/Playback";
 import { percentageOf } from "../../../utils/numbers";
 import { PLAYBACK_WAVEFORM_SAMPLES } from "../../../audio/consts";
 

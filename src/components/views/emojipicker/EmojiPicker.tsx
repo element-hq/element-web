@@ -7,8 +7,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { Dispatch } from "react";
-import { DATA_BY_CATEGORY, getEmojiFromUnicode, Emoji as IEmoji } from "@matrix-org/emojibase-bindings";
+import React, { type Dispatch } from "react";
+import { DATA_BY_CATEGORY, getEmojiFromUnicode, type Emoji as IEmoji } from "@matrix-org/emojibase-bindings";
 
 import { _t } from "../../../languageHandler";
 import * as recent from "../../../emojipicker/recent";
@@ -17,17 +17,17 @@ import Header from "./Header";
 import Search from "./Search";
 import Preview from "./Preview";
 import QuickReactions from "./QuickReactions";
-import Category, { CategoryKey, ICategory } from "./Category";
+import Category, { type CategoryKey, type ICategory } from "./Category";
 import { filterBoolean } from "../../../utils/arrays";
 import {
-    IAction as RovingAction,
-    IState as RovingState,
+    type IAction as RovingAction,
+    type IState as RovingState,
     RovingTabIndexProvider,
     Type,
 } from "../../../accessibility/RovingTabIndex";
 import { Key } from "../../../Keyboard";
 import { clamp } from "../../../utils/numbers";
-import { ButtonEvent } from "../elements/AccessibleButton";
+import { type ButtonEvent } from "../elements/AccessibleButton";
 
 export const CATEGORY_HEADER_HEIGHT = 20;
 export const EMOJI_HEIGHT = 35;

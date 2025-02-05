@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import classNames from "classnames";
 import { EventType } from "matrix-js-sdk/src/matrix";
-import React, { useContext, useRef, useState, MouseEvent, ReactNode } from "react";
+import React, { useContext, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import { Tooltip } from "@vector-im/compound-web";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";

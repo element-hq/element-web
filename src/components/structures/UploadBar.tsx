@@ -7,18 +7,18 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { Room, IEventRelation } from "matrix-js-sdk/src/matrix";
-import { Optional } from "matrix-events-sdk";
+import { type Room, type IEventRelation } from "matrix-js-sdk/src/matrix";
+import { type Optional } from "matrix-events-sdk";
 
 import ContentMessages from "../../ContentMessages";
 import dis from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
 import { Action } from "../../dispatcher/actions";
 import ProgressBar from "../views/elements/ProgressBar";
-import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
-import { RoomUpload } from "../../models/RoomUpload";
-import { ActionPayload } from "../../dispatcher/payloads";
-import { UploadPayload } from "../../dispatcher/payloads/UploadPayload";
+import AccessibleButton, { type ButtonEvent } from "../views/elements/AccessibleButton";
+import { type RoomUpload } from "../../models/RoomUpload";
+import { type ActionPayload } from "../../dispatcher/payloads";
+import { type UploadPayload } from "../../dispatcher/payloads/UploadPayload";
 import { fileSize } from "../../utils/FileUtils";
 
 interface IProps {

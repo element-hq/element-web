@@ -7,9 +7,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { forwardRef, ForwardRefExoticComponent } from "react";
+import React, { forwardRef, type ForwardRefExoticComponent } from "react";
 
-import { IBodyProps } from "./IBodyProps";
+import { type IBodyProps } from "./IBodyProps";
 
 export default forwardRef<HTMLDivElement, IBodyProps>(({ mxEvent, children }, ref) => {
     const text = mxEvent.getContent().body;

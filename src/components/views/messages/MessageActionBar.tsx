@@ -8,10 +8,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactElement, useCallback, useContext, useEffect } from "react";
+import React, { type ReactElement, useCallback, useContext, useEffect } from "react";
 import {
     EventStatus,
-    MatrixEvent,
+    type MatrixEvent,
     MatrixEventEvent,
     MsgType,
     RelationType,
@@ -19,6 +19,7 @@ import {
     EventTimeline,
     RoomStateEvent,
     EventType,
+    type Relations,
 } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 import {
@@ -35,7 +36,6 @@ import { Icon as EditIcon } from "../../../../res/img/element-icons/room/message
 import { Icon as EmojiIcon } from "../../../../res/img/element-icons/room/message-bar/emoji.svg";
 import { Icon as ExpandMessageIcon } from "../../../../res/img/element-icons/expand-message.svg";
 import { Icon as CollapseMessageIcon } from "../../../../res/img/element-icons/collapse-message.svg";
-import type { Relations } from "matrix-js-sdk/src/matrix";
 import { _t } from "../../../languageHandler";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import ContextMenu, { aboveLeftOf, ContextMenuTooltipButton, useContextMenu } from "../../structures/ContextMenu";
@@ -48,17 +48,17 @@ import Resend from "../../../Resend";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import DownloadActionButton from "./DownloadActionButton";
-import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
-import ReplyChain from "../elements/ReplyChain";
+import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import type ReplyChain from "../elements/ReplyChain";
 import ReactionPicker from "../emojipicker/ReactionPicker";
 import { CardContext } from "../right_panel/context";
 import { shouldDisplayReply } from "../../../utils/Reply";
 import { Key } from "../../../Keyboard";
 import { ALTERNATE_KEY_NAME } from "../../../accessibility/KeyboardShortcuts";
 import { Action } from "../../../dispatcher/actions";
-import { ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
-import { GetRelationsForEvent, IEventTileType } from "../rooms/EventTile";
-import { ButtonEvent } from "../elements/AccessibleButton";
+import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
+import { type GetRelationsForEvent, type IEventTileType } from "../rooms/EventTile";
+import { type ButtonEvent } from "../elements/AccessibleButton";
 import PinningUtils from "../../../utils/PinningUtils";
 import PosthogTrackers from "../../../PosthogTrackers.ts";
 

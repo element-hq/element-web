@@ -30,7 +30,7 @@ import {
 } from "../../../../test-utils";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import RoomContext, { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
-import { IRoomState } from "../../../../../src/components/structures/RoomView";
+import { type IRoomState } from "../../../../../src/components/structures/RoomView";
 import dispatcher from "../../../../../src/dispatcher/dispatcher";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { Action } from "../../../../../src/dispatcher/actions";

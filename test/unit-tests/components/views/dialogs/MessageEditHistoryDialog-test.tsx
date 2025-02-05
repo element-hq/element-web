@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, RenderResult, waitForElementToBeRemoved } from "jest-matrix-react";
+import { render, type RenderResult, waitForElementToBeRemoved } from "jest-matrix-react";
 import { EventType, MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";

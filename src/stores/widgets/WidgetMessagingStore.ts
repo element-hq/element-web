@@ -6,12 +6,12 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { ClientWidgetApi, Widget } from "matrix-widget-api";
-import { EmptyObject } from "matrix-js-sdk/src/matrix";
+import { type ClientWidgetApi, type Widget } from "matrix-widget-api";
+import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import { ActionPayload } from "../../dispatcher/payloads";
+import { type ActionPayload } from "../../dispatcher/payloads";
 import { EnhancedMap } from "../../utils/maps";
 import WidgetUtils from "../../utils/WidgetUtils";
 

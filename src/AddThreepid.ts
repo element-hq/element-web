@@ -9,21 +9,23 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    IAddThreePidOnlyBody,
-    IRequestMsisdnTokenResponse,
-    IRequestTokenResponse,
-    MatrixClient,
+    type IAddThreePidOnlyBody,
+    type IRequestMsisdnTokenResponse,
+    type IRequestTokenResponse,
+    type MatrixClient,
     MatrixError,
     HTTPError,
-    IThreepid,
-    UIAResponse,
+    type IThreepid,
+    type UIAResponse,
 } from "matrix-js-sdk/src/matrix";
 
 import Modal from "./Modal";
 import { _t, UserFriendlyError } from "./languageHandler";
 import IdentityAuthClient from "./IdentityAuthClient";
 import { SSOAuthEntry } from "./components/views/auth/InteractiveAuthEntryComponents";
-import InteractiveAuthDialog, { InteractiveAuthDialogProps } from "./components/views/dialogs/InteractiveAuthDialog";
+import InteractiveAuthDialog, {
+    type InteractiveAuthDialogProps,
+} from "./components/views/dialogs/InteractiveAuthDialog";
 
 function getIdServerDomain(matrixClient: MatrixClient): string {
     const idBaseUrl = matrixClient.getIdentityServerUrl(true);

@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 
 import { _t } from "../../../languageHandler";
-import { Command, CommandCategories, Commands } from "../../../SlashCommands";
+import { type Command, CommandCategories, Commands } from "../../../SlashCommands";
 import InfoDialog from "./InfoDialog";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 

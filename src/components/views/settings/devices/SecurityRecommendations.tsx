@@ -13,8 +13,8 @@ import AccessibleButton from "../../elements/AccessibleButton";
 import { SettingsSubsection } from "../shared/SettingsSubsection";
 import DeviceSecurityCard from "./DeviceSecurityCard";
 import { DeviceSecurityLearnMore } from "./DeviceSecurityLearnMore";
-import { filterDevicesBySecurityRecommendation, FilterVariation, INACTIVE_DEVICE_AGE_DAYS } from "./filter";
-import { DeviceSecurityVariation, ExtendedDevice, DevicesDictionary } from "./types";
+import { filterDevicesBySecurityRecommendation, type FilterVariation, INACTIVE_DEVICE_AGE_DAYS } from "./filter";
+import { DeviceSecurityVariation, type ExtendedDevice, type DevicesDictionary } from "./types";
 
 interface Props {
     devices: DevicesDictionary;

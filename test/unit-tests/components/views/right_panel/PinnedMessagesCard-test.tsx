@@ -7,19 +7,19 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, act, RenderResult, waitForElementToBeRemoved, screen, waitFor } from "jest-matrix-react";
-import { mocked, MockedObject } from "jest-mock";
+import { render, act, type RenderResult, waitForElementToBeRemoved, screen, waitFor } from "jest-matrix-react";
+import { mocked, type MockedObject } from "jest-mock";
 import {
     MatrixEvent,
     RoomStateEvent,
     Room,
-    IMinimalEvent,
+    type IMinimalEvent,
     EventType,
     RelationType,
     MsgType,
     M_POLL_KIND_DISCLOSED,
     EventTimeline,
-    MatrixClient,
+    type MatrixClient,
 } from "matrix-js-sdk/src/matrix";
 import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
 import { PollResponseEvent } from "matrix-js-sdk/src/extensible_events_v1/PollResponseEvent";

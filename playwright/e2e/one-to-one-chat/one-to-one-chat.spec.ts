@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { test as base, expect } from "../../element-web-test";
-import { Credentials } from "../../plugins/homeserver";
+import { type Credentials } from "../../plugins/homeserver";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 const test = base.extend<{

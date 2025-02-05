@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 
 import SpellCheckLanguagesDropdown from "../../../components/views/elements/SpellCheckLanguagesDropdown";
-import AccessibleButton, { ButtonEvent } from "../../../components/views/elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../../../components/views/elements/AccessibleButton";
 import { _t, getUserLanguage } from "../../../languageHandler";
 
 interface ExistingSpellCheckLanguageIProps {

@@ -9,22 +9,22 @@ Please see LICENSE files in the repository root for full details.
 import React, { useCallback, useRef, useState } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
-    IRequestMsisdnTokenResponse,
-    IRequestTokenResponse,
+    type IRequestMsisdnTokenResponse,
+    type IRequestTokenResponse,
     MatrixError,
     ThreepidMedium,
 } from "matrix-js-sdk/src/matrix";
 
-import AddThreepid, { Binding, ThirdPartyIdentifier } from "../../../AddThreepid";
+import AddThreepid, { type Binding, type ThirdPartyIdentifier } from "../../../AddThreepid";
 import { _t, UserFriendlyError } from "../../../languageHandler";
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import Modal from "../../../Modal";
 import ErrorDialog, { extractErrorMessageFromError } from "../dialogs/ErrorDialog";
 import Field from "../elements/Field";
 import { looksValid as emailLooksValid } from "../../../email";
 import CountryDropdown from "../auth/CountryDropdown";
-import { PhoneNumberCountryDefinition } from "../../../phonenumber";
+import { type PhoneNumberCountryDefinition } from "../../../phonenumber";
 import InlineSpinner from "../elements/InlineSpinner";
 
 // Whether we're adding 3pids to the user's account on the homeserver or sharing them on an identity server

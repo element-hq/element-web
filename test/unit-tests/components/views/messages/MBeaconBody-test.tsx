@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ComponentProps } from "react";
+import React, { type ComponentProps } from "react";
 import { act, fireEvent, render } from "jest-matrix-react";
 import * as maplibregl from "maplibre-gl";
 import {
@@ -17,7 +17,7 @@ import {
     EventType,
     Relations,
     M_BEACON,
-    Room,
+    type Room,
 } from "matrix-js-sdk/src/matrix";
 
 import MBeaconBody from "../../../../../src/components/views/messages/MBeaconBody";
@@ -28,8 +28,8 @@ import {
     makeRoomWithBeacons,
     makeRoomWithStateEvents,
 } from "../../../../test-utils";
-import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
-import { MediaEventHelper } from "../../../../../src/utils/MediaEventHelper";
+import { type RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
+import { type MediaEventHelper } from "../../../../../src/utils/MediaEventHelper";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import Modal from "../../../../../src/Modal";
 import { TILE_SERVER_WK_KEY } from "../../../../../src/utils/WellKnownUtils";

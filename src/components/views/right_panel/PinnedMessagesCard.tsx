@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useCallback, useEffect, JSX, useContext } from "react";
-import { Room, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import React, { useCallback, useEffect, type JSX, useContext } from "react";
+import { type Room, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { Button, Separator } from "@vector-im/compound-web";
 import classNames from "classnames";
 import PinIcon from "@vector-im/compound-design-tokens/assets/web/icons/pin";
@@ -20,7 +20,7 @@ import { PinnedEventTile } from "../rooms/PinnedEventTile";
 import { useRoomState } from "../../../hooks/useRoomState";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { ReadPinsEventId } from "./types";
-import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { filterBoolean } from "../../../utils/arrays";
 import Modal from "../../../Modal";
 import { UnpinAllDialog } from "../dialogs/UnpinAllDialog";

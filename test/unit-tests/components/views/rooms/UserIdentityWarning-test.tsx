@@ -9,12 +9,12 @@ import React from "react";
 import { sleep, defer } from "matrix-js-sdk/src/utils";
 import {
     EventType,
-    MatrixClient,
+    type MatrixClient,
     MatrixEvent,
-    Room,
+    type Room,
     RoomState,
     RoomStateEvent,
-    RoomMember,
+    type RoomMember,
 } from "matrix-js-sdk/src/matrix";
 import { CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 import { act, render, screen, waitFor } from "jest-matrix-react";

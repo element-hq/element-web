@@ -6,7 +6,7 @@
  */
 
 import React from "react";
-import { Device, MatrixClient, User } from "matrix-js-sdk/src/matrix";
+import { Device, type MatrixClient, User } from "matrix-js-sdk/src/matrix";
 import { render, screen } from "jest-matrix-react";
 
 import { stubClient } from "../../../../test-utils";

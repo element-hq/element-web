@@ -6,10 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode, useCallback, useEffect, useState } from "react";
-import * as maplibregl from "maplibre-gl";
-import { RoomMember } from "matrix-js-sdk/src/matrix";
+import React, { type ReactNode, useCallback, useEffect, useState } from "react";
+import { type RoomMember } from "matrix-js-sdk/src/matrix";
 
+import type * as maplibregl from "maplibre-gl";
 import { parseGeoUri } from "../../../utils/location";
 import { createMarker } from "../../../utils/location/map";
 import Marker from "./Marker";

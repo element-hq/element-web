@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { IAnnotatedPushRule, IPushRules, PushRuleKind, RuleId } from "matrix-js-sdk/src/matrix";
+import { type IAnnotatedPushRule, type IPushRules, PushRuleKind, type RuleId } from "matrix-js-sdk/src/matrix";
 
 export type PushRuleMap = Map<RuleId | string, IAnnotatedPushRule>;
 

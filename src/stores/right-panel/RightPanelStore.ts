@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { logger } from "matrix-js-sdk/src/logger";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
-import { Optional } from "matrix-events-sdk";
+import { type Optional } from "matrix-events-sdk";
 
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { pendingVerificationRequestForUser } from "../../verification";
@@ -20,13 +20,13 @@ import { ReadyWatchingStore } from "../ReadyWatchingStore";
 import {
     convertToStatePanel,
     convertToStorePanel,
-    IRightPanelCard,
-    IRightPanelCardState,
-    IRightPanelForRoom,
+    type IRightPanelCard,
+    type IRightPanelCardState,
+    type IRightPanelForRoom,
 } from "./RightPanelStoreIPanelState";
-import { ActionPayload } from "../../dispatcher/payloads";
+import { type ActionPayload } from "../../dispatcher/payloads";
 import { Action } from "../../dispatcher/actions";
-import { ActiveRoomChangedPayload } from "../../dispatcher/payloads/ActiveRoomChangedPayload";
+import { type ActiveRoomChangedPayload } from "../../dispatcher/payloads/ActiveRoomChangedPayload";
 import { SdkContextClass } from "../../contexts/SDKContext";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 

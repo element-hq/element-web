@@ -6,16 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Optional } from "matrix-events-sdk";
+import { type Optional } from "matrix-events-sdk";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { EventTimelineSet, Room, Thread } from "matrix-js-sdk/src/matrix";
+import { type EventTimelineSet, type Room, Thread } from "matrix-js-sdk/src/matrix";
 import { IconButton, Tooltip } from "@vector-im/compound-web";
 import { logger } from "matrix-js-sdk/src/logger";
 import ThreadsIcon from "@vector-im/compound-design-tokens/assets/web/icons/threads";
 
 import { Icon as MarkAllThreadsReadIcon } from "../../../res/img/element-icons/check-all.svg";
 import BaseCard from "../views/right_panel/BaseCard";
-import ResizeNotifier from "../../utils/ResizeNotifier";
+import type ResizeNotifier from "../../utils/ResizeNotifier";
 import MatrixClientContext, { useMatrixClientContext } from "../../contexts/MatrixClientContext";
 import { _t } from "../../languageHandler";
 import { ContextMenuButton } from "../../accessibility/context_menu/ContextMenuButton";
@@ -23,10 +23,10 @@ import ContextMenu, { ChevronFace, MenuItemRadio, useContextMenu } from "./Conte
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 import TimelinePanel from "./TimelinePanel";
 import { Layout } from "../../settings/enums/Layout";
-import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
+import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import Measured from "../views/elements/Measured";
 import PosthogTrackers from "../../PosthogTrackers";
-import { ButtonEvent } from "../views/elements/AccessibleButton";
+import { type ButtonEvent } from "../views/elements/AccessibleButton";
 import Spinner from "../views/elements/Spinner";
 import { clearRoomNotification } from "../../utils/notifications";
 import EmptyState from "../views/right_panel/EmptyState";

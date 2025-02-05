@@ -9,8 +9,8 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import fetchMock from "fetch-mock-jest";
-import { render, RenderResult, screen } from "jest-matrix-react";
-import { WrapperLifecycle, WrapperOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WrapperLifecycle";
+import { render, type RenderResult, screen } from "jest-matrix-react";
+import { WrapperLifecycle, type WrapperOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WrapperLifecycle";
 
 import SdkConfig from "../../src/SdkConfig";
 import PlatformPeg from "../../src/PlatformPeg";

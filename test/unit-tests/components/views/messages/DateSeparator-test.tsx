@@ -9,11 +9,11 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { mocked } from "jest-mock";
 import { fireEvent, render, screen, waitFor } from "jest-matrix-react";
-import { TimestampToEventResponse, ConnectionError, HTTPError, MatrixError } from "matrix-js-sdk/src/matrix";
+import { type TimestampToEventResponse, ConnectionError, HTTPError, MatrixError } from "matrix-js-sdk/src/matrix";
 
 import dispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
-import { ViewRoomPayload } from "../../../../../src/dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../../../../src/dispatcher/payloads/ViewRoomPayload";
 import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
 import { formatFullDateNoTime } from "../../../../../src/DateUtils";
 import SettingsStore from "../../../../../src/settings/SettingsStore";

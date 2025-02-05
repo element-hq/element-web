@@ -7,13 +7,19 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, screen, act, RenderResult } from "jest-matrix-react";
-import { mocked, Mocked } from "jest-mock";
-import { MatrixClient, PendingEventOrdering, Room, RoomStateEvent, Thread } from "matrix-js-sdk/src/matrix";
+import { render, screen, act, type RenderResult } from "jest-matrix-react";
+import { mocked, type Mocked } from "jest-mock";
+import {
+    type MatrixClient,
+    PendingEventOrdering,
+    Room,
+    RoomStateEvent,
+    type Thread,
+    type RoomMember,
+} from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { Widget } from "matrix-widget-api";
 
-import type { RoomMember } from "matrix-js-sdk/src/matrix";
 import type { ClientWidgetApi } from "matrix-widget-api";
 import {
     stubClient,
@@ -31,7 +37,7 @@ import RoomTile from "../../../../../src/components/views/rooms/RoomTile";
 import { DefaultTagID } from "../../../../../src/stores/room-list/models";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import PlatformPeg from "../../../../../src/PlatformPeg";
-import BasePlatform from "../../../../../src/BasePlatform";
+import type BasePlatform from "../../../../../src/BasePlatform";
 import { WidgetMessagingStore } from "../../../../../src/stores/widgets/WidgetMessagingStore";
 import { TestSdkContext } from "../../../TestSdkContext";
 import { SDKContext } from "../../../../../src/contexts/SDKContext";

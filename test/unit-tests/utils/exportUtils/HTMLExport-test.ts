@@ -8,10 +8,10 @@ Please see LICENSE files in the repository root for full details.
 
 import {
     EventTimeline,
-    EventTimelineSet,
+    type EventTimelineSet,
     EventType,
-    IRoomEvent,
-    MatrixClient,
+    type IRoomEvent,
+    type MatrixClient,
     MatrixEvent,
     MsgType,
     Relations,
@@ -22,10 +22,10 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import fetchMock from "fetch-mock-jest";
 import escapeHtml from "escape-html";
-import { RelationsContainer } from "matrix-js-sdk/src/models/relations-container";
+import { type RelationsContainer } from "matrix-js-sdk/src/models/relations-container";
 
 import { filterConsole, mkReaction, mkStubRoom, REPEATABLE_DATE, stubClient } from "../../../test-utils";
-import { ExportType, IExportOptions } from "../../../../src/utils/exportUtils/exportUtils";
+import { ExportType, type IExportOptions } from "../../../../src/utils/exportUtils/exportUtils";
 import SdkConfig from "../../../../src/SdkConfig";
 import HTMLExporter from "../../../../src/utils/exportUtils/HtmlExport";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";

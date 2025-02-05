@@ -6,16 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { IWidget } from "matrix-widget-api";
+import { type IWidget } from "matrix-widget-api";
 import { logger } from "matrix-js-sdk/src/logger";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { getCallBehaviourWellKnown } from "../utils/WellKnownUtils";
 import WidgetUtils from "../utils/WidgetUtils";
-import { IStoredLayout, WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
+import { type IStoredLayout, WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
 import WidgetEchoStore from "../stores/WidgetEchoStore";
-import WidgetStore, { IApp } from "../stores/WidgetStore";
+import WidgetStore, { type IApp } from "../stores/WidgetStore";
 import SdkConfig from "../SdkConfig";
 import { getJoinedNonFunctionalMembers } from "../utils/room/getJoinedNonFunctionalMembers";
 

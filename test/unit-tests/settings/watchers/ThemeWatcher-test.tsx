@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import ThemeWatcher from "../../../../src/settings/watchers/ThemeWatcher";
-import { SettingLevel } from "../../../../src/settings/SettingLevel";
-import { SettingKey, Settings } from "../../../../src/settings/Settings.tsx";
+import { type SettingLevel } from "../../../../src/settings/SettingLevel";
+import { type SettingKey, type Settings } from "../../../../src/settings/Settings.tsx";
 
 function makeMatchMedia(values: any) {
     class FakeMediaQueryList {

@@ -9,9 +9,9 @@ Please see LICENSE files in the repository root for full details.
 import * as React from "react";
 import classNames from "classnames";
 import { Text } from "@vector-im/compound-web";
-import { EmptyObject } from "matrix-js-sdk/src/matrix";
+import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 
-import ToastStore, { IToast } from "../../stores/ToastStore";
+import ToastStore, { type IToast } from "../../stores/ToastStore";
 
 interface IState {
     toasts: IToast<any>[];

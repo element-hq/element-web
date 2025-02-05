@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // Based on https://stackoverflow.com/a/61680184
 
-import { DependencyList, useEffect, useRef } from "react";
+import { type DependencyList, useEffect, useRef } from "react";
 
 export const useTransition = <D extends DependencyList>(callback: (...params: D) => void, deps: D): void => {
     const func = useRef<(...params: D) => void>(callback);

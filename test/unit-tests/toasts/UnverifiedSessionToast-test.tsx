@@ -7,11 +7,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, RenderResult, screen } from "jest-matrix-react";
+import { render, type RenderResult, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { mocked, Mocked } from "jest-mock";
-import { IMyDevice, MatrixClient } from "matrix-js-sdk/src/matrix";
-import { CryptoApi, DeviceVerificationStatus } from "matrix-js-sdk/src/crypto-api";
+import { mocked, type Mocked } from "jest-mock";
+import { type IMyDevice, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type CryptoApi, DeviceVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
 import dis from "../../../src/dispatcher/dispatcher";
 import { showToast } from "../../../src/toasts/UnverifiedSessionToast";

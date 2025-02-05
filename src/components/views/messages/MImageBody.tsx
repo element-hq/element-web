@@ -7,13 +7,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ComponentProps, createRef, ReactNode } from "react";
+import React, { type ComponentProps, createRef, type ReactNode } from "react";
 import { Blurhash } from "react-blurhash";
 import classNames from "classnames";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ClientEvent } from "matrix-js-sdk/src/matrix";
-import { ImageContent } from "matrix-js-sdk/src/types";
+import { type ImageContent } from "matrix-js-sdk/src/types";
 import { Tooltip } from "@vector-im/compound-web";
 
 import MFileBody from "./MFileBody";
@@ -21,11 +21,11 @@ import Modal from "../../../Modal";
 import { _t } from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
 import Spinner from "../elements/Spinner";
-import { Media, mediaFromContent } from "../../../customisations/Media";
+import { type Media, mediaFromContent } from "../../../customisations/Media";
 import { BLURHASH_FIELD, createThumbnail } from "../../../utils/image-media";
 import ImageView from "../elements/ImageView";
-import { IBodyProps } from "./IBodyProps";
-import { ImageSize, suggestedSize as suggestedImageSize } from "../../../settings/enums/ImageSize";
+import { type IBodyProps } from "./IBodyProps";
+import { type ImageSize, suggestedSize as suggestedImageSize } from "../../../settings/enums/ImageSize";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { blobIsAnimated, mayBeAnimated } from "../../../utils/Image";

@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ReactElement, ReactNode } from "react";
+import { type ReactElement, type ReactNode } from "react";
 import { useIdColorHash } from "@vector-im/compound-web";
 
 import { _t, getCurrentLanguage, getUserLanguage } from "../languageHandler";

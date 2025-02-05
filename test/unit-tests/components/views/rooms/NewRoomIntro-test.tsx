@@ -9,13 +9,13 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render, screen } from "jest-matrix-react";
-import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 
 import { LocalRoom } from "../../../../../src/models/LocalRoom";
 import { filterConsole, mkRoomMemberJoinEvent, mkThirdPartyInviteEvent, stubClient } from "../../../../test-utils";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import NewRoomIntro from "../../../../../src/components/views/rooms/NewRoomIntro";
-import { IRoomState } from "../../../../../src/components/structures/RoomView";
+import { type IRoomState } from "../../../../../src/components/structures/RoomView";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { DirectoryMember } from "../../../../../src/utils/direct-messages";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";

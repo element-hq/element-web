@@ -15,7 +15,7 @@ import dis from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import ThemeController from "../controllers/ThemeController";
 import { findHighContrastTheme } from "../../theme";
-import { ActionPayload } from "../../dispatcher/payloads";
+import { type ActionPayload } from "../../dispatcher/payloads";
 import { SettingLevel } from "../SettingLevel";
 
 export enum ThemeWatcherEvent {

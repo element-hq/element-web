@@ -6,16 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import {
     ClientEvent,
     EventStatus,
-    MatrixError,
-    MatrixEvent,
-    Room,
+    type MatrixError,
+    type MatrixEvent,
+    type Room,
     RoomEvent,
-    SyncState,
-    SyncStateData,
+    type SyncState,
+    type SyncStateData,
 } from "matrix-js-sdk/src/matrix";
 import { WarningIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 

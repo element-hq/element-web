@@ -6,19 +6,19 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ForwardedRef, forwardRef } from "react";
-import { IPusher, PUSHER_DEVICE_ID, LocalNotificationSettings } from "matrix-js-sdk/src/matrix";
+import React, { type ForwardedRef, forwardRef } from "react";
+import { type IPusher, PUSHER_DEVICE_ID, type LocalNotificationSettings } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../languageHandler";
 import AccessibleButton from "../../elements/AccessibleButton";
-import { FilterDropdown, FilterDropdownOption } from "../../elements/FilterDropdown";
+import { FilterDropdown, type FilterDropdownOption } from "../../elements/FilterDropdown";
 import DeviceDetails from "./DeviceDetails";
 import { DeviceExpandDetailsButton } from "./DeviceExpandDetailsButton";
 import DeviceSecurityCard from "./DeviceSecurityCard";
-import { filterDevicesBySecurityRecommendation, FilterVariation, INACTIVE_DEVICE_AGE_DAYS } from "./filter";
+import { filterDevicesBySecurityRecommendation, type FilterVariation, INACTIVE_DEVICE_AGE_DAYS } from "./filter";
 import SelectableDeviceTile from "./SelectableDeviceTile";
-import { DevicesDictionary, DeviceSecurityVariation, ExtendedDevice } from "./types";
-import { DevicesState } from "./useOwnDevices";
+import { type DevicesDictionary, DeviceSecurityVariation, type ExtendedDevice } from "./types";
+import { type DevicesState } from "./useOwnDevices";
 import FilteredDeviceListHeader from "./FilteredDeviceListHeader";
 import Spinner from "../../elements/Spinner";
 import { DeviceSecurityLearnMore } from "./DeviceSecurityLearnMore";

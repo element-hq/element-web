@@ -20,7 +20,7 @@ import {
     logIntoElement,
     waitForVerificationRequest,
 } from "./utils";
-import { Bot } from "../../pages/bot";
+import { type Bot } from "../../pages/bot";
 
 test.describe("Device verification", { tag: "@no-webkit" }, () => {
     let aliceBotClient: Bot;

@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { CredentialsWithDisplayName, expect, test as base } from "../../element-web-test";
+import { type CredentialsWithDisplayName, expect, test as base } from "../../element-web-test";
 import { selectHomeserver } from "../utils";
 import { emailHomeserver } from "../../plugins/homeserver/synapse/emailHomeserver.ts";
 import { isDendrite } from "../../plugins/homeserver/dendrite";

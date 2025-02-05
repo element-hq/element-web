@@ -7,15 +7,15 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { mocked, Mocked } from "jest-mock";
+import { mocked, type Mocked } from "jest-mock";
 import { render, screen } from "jest-matrix-react";
-import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import { MatrixWidgetType } from "matrix-widget-api";
 import userEvent from "@testing-library/user-event";
 
 import ExtensionsCard from "../../../../../src/components/views/right_panel/ExtensionsCard";
 import { stubClient } from "../../../../test-utils";
-import { IApp } from "../../../../../src/stores/WidgetStore";
+import { type IApp } from "../../../../../src/stores/WidgetStore";
 import WidgetUtils, { useWidgets } from "../../../../../src/utils/WidgetUtils";
 import { WidgetLayoutStore } from "../../../../../src/stores/widgets/WidgetLayoutStore";
 import { IntegrationManagers } from "../../../../../src/integrations/IntegrationManagers";

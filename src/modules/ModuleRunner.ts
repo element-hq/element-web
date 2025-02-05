@@ -7,19 +7,19 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { safeSet } from "matrix-js-sdk/src/utils";
-import { TranslationStringsObject } from "@matrix-org/react-sdk-module-api/lib/types/translations";
-import { AnyLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/types";
+import { type TranslationStringsObject } from "@matrix-org/react-sdk-module-api/lib/types/translations";
+import { type AnyLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/types";
 import {
     DefaultCryptoSetupExtensions,
-    ProvideCryptoSetupExtensions,
+    type ProvideCryptoSetupExtensions,
 } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CryptoSetupExtensions";
 import {
     DefaultExperimentalExtensions,
-    ProvideExperimentalExtensions,
+    type ProvideExperimentalExtensions,
 } from "@matrix-org/react-sdk-module-api/lib/lifecycles/ExperimentalExtensions";
 
 import { AppModule } from "./AppModule";
-import { ModuleFactory } from "./ModuleFactory";
+import { type ModuleFactory } from "./ModuleFactory";
 
 import "./ModuleComponents";
 

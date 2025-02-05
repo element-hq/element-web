@@ -8,11 +8,11 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { EmptyObject } from "matrix-js-sdk/src/matrix";
+import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
-import { IntegrationManagerInstance } from "../../../integrations/IntegrationManagerInstance";
+import { type IntegrationManagerInstance } from "../../../integrations/IntegrationManagerInstance";
 import SettingsStore from "../../../settings/SettingsStore";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import ToggleSwitch from "../elements/ToggleSwitch";

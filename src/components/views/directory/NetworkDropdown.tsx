@@ -17,16 +17,16 @@ import Modal from "../../../Modal";
 import SdkConfig from "../../../SdkConfig";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import SettingsStore from "../../../settings/SettingsStore";
-import { Protocols } from "../../../utils/DirectoryUtils";
+import { type Protocols } from "../../../utils/DirectoryUtils";
 import {
-    AdditionalOptionsProps,
+    type AdditionalOptionsProps,
     GenericDropdownMenu,
-    GenericDropdownMenuItem,
+    type GenericDropdownMenuItem,
 } from "../../structures/GenericDropdownMenu";
 import TextInputDialog from "../dialogs/TextInputDialog";
 import AccessibleButton from "../elements/AccessibleButton";
 import withValidation from "../elements/Validation";
-import { SettingKey, Settings } from "../../../settings/Settings.tsx";
+import { type SettingKey, type Settings } from "../../../settings/Settings.tsx";
 
 const SETTING_NAME = "room_directory_servers";
 

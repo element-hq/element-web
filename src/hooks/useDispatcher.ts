@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import { useEffect, useRef } from "react";
 
-import { ActionPayload } from "../dispatcher/payloads";
-import { MatrixDispatcher } from "../dispatcher/dispatcher";
+import { type ActionPayload } from "../dispatcher/payloads";
+import { type MatrixDispatcher } from "../dispatcher/dispatcher";
 
 // Hook to simplify listening to event dispatches
 export const useDispatcher = (dispatcher: MatrixDispatcher, handler: (payload: ActionPayload) => void): void => {

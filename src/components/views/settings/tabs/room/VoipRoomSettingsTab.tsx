@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useCallback, useMemo, useState } from "react";
-import { JoinRule, EventType, RoomState, Room } from "matrix-js-sdk/src/matrix";
-import { RoomPowerLevelsEventContent } from "matrix-js-sdk/src/types";
+import { JoinRule, EventType, type RoomState, type Room } from "matrix-js-sdk/src/matrix";
+import { type RoomPowerLevelsEventContent } from "matrix-js-sdk/src/types";
 
 import { _t } from "../../../../../languageHandler";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";

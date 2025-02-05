@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { KeyCombo } from "../KeyBindingsManager";
+import { type KeyCombo } from "../KeyBindingsManager";
 import { IS_MAC, Key } from "../Keyboard";
 import { _t, _td } from "../languageHandler";
 import PlatformPeg from "../PlatformPeg";
@@ -14,10 +14,10 @@ import SettingsStore from "../settings/SettingsStore";
 import {
     DESKTOP_SHORTCUTS,
     DIGITS,
-    IKeyboardShortcuts,
+    type IKeyboardShortcuts,
     KeyBindingAction,
     KEYBOARD_SHORTCUTS,
-    KeyboardShortcutSetting,
+    type KeyboardShortcutSetting,
     MAC_ONLY_SHORTCUTS,
 } from "./KeyboardShortcuts";
 

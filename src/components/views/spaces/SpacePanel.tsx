@@ -7,20 +7,20 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, {
-    ComponentProps,
-    Dispatch,
-    ReactNode,
-    RefCallback,
-    SetStateAction,
+    type ComponentProps,
+    type Dispatch,
+    type ReactNode,
+    type RefCallback,
+    type SetStateAction,
     useCallback,
     useEffect,
     useLayoutEffect,
     useRef,
     useState,
 } from "react";
-import { DragDropContext, Draggable, Droppable, DroppableProvidedProps } from "react-beautiful-dnd";
+import { DragDropContext, Draggable, Droppable, type DroppableProvidedProps } from "react-beautiful-dnd";
 import classNames from "classnames";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import { useContextMenu } from "../../structures/ContextMenu";
@@ -31,7 +31,7 @@ import SpaceStore from "../../../stores/spaces/SpaceStore";
 import {
     getMetaSpaceName,
     MetaSpace,
-    SpaceKey,
+    type SpaceKey,
     UPDATE_HOME_BEHAVIOUR,
     UPDATE_INVITED_SPACES,
     UPDATE_SELECTED_SPACE,
@@ -42,7 +42,7 @@ import {
     RoomNotificationStateStore,
     UPDATE_STATUS_INDICATOR,
 } from "../../../stores/notifications/RoomNotificationStateStore";
-import SpaceContextMenu from "../context_menus/SpaceContextMenu";
+import type SpaceContextMenu from "../context_menus/SpaceContextMenu";
 import IconizedContextMenu, {
     IconizedContextMenuCheckbox,
     IconizedContextMenuOptionList,
@@ -56,9 +56,9 @@ import UserMenu from "../../structures/UserMenu";
 import IndicatorScrollbar from "../../structures/IndicatorScrollbar";
 import { useDispatcher } from "../../../hooks/useDispatcher";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import { ActionPayload } from "../../../dispatcher/payloads";
+import { type ActionPayload } from "../../../dispatcher/payloads";
 import { Action } from "../../../dispatcher/actions";
-import { NotificationState } from "../../../stores/notifications/NotificationState";
+import { type NotificationState } from "../../../stores/notifications/NotificationState";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";

@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { VerificationPhase, VerificationRequest, VerificationRequestEvent } from "matrix-js-sdk/src/crypto-api";
-import { RoomMember, User } from "matrix-js-sdk/src/matrix";
+import { VerificationPhase, type VerificationRequest, VerificationRequestEvent } from "matrix-js-sdk/src/crypto-api";
+import { type RoomMember, type User } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import EncryptionInfo from "./EncryptionInfo";

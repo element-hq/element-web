@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useCallback, useState } from "react";
-import { AccountDataEvents, ClientEvent, MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type AccountDataEvents, ClientEvent, type MatrixClient, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { useTypedEventEmitter } from "./useEventEmitter";
 

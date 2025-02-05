@@ -11,7 +11,7 @@ import LeftCaretIcon from "@vector-im/compound-design-tokens/assets/web/icons/ch
 
 import { _t } from "../../../../languageHandler";
 import AccessibleButton from "../../elements/AccessibleButton";
-import { PollHistoryFilter } from "./types";
+import { type PollHistoryFilter } from "./types";
 
 interface Props {
     filter: PollHistoryFilter;

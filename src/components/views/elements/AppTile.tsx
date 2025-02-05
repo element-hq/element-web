@@ -9,13 +9,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ContextType, createRef, CSSProperties, MutableRefObject, ReactNode } from "react";
+import React, { type ContextType, createRef, type CSSProperties, type MutableRefObject, type ReactNode } from "react";
 import classNames from "classnames";
-import { IWidget, MatrixCapabilities } from "matrix-widget-api";
-import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { type IWidget, MatrixCapabilities } from "matrix-widget-api";
+import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
-import { ApprovalOpts, WidgetLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
+import { type ApprovalOpts, WidgetLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
 import {
     OverflowHorizontalIcon,
     MinusIcon,
@@ -38,14 +38,14 @@ import { ElementWidget, StopGapWidget } from "../../../stores/widgets/StopGapWid
 import { showContextMenu, WidgetContextMenu } from "../context_menus/WidgetContextMenu";
 import WidgetAvatar from "../avatars/WidgetAvatar";
 import LegacyCallHandler from "../../../LegacyCallHandler";
-import { IApp, isAppWidget } from "../../../stores/WidgetStore";
+import { type IApp, isAppWidget } from "../../../stores/WidgetStore";
 import { Icon as PopoutIcon } from "../../../../res/img/external-link.svg";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import WidgetUtils from "../../../utils/WidgetUtils";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import { ActionPayload } from "../../../dispatcher/payloads";
+import { type ActionPayload } from "../../../dispatcher/payloads";
 import { Action } from "../../../dispatcher/actions";
 import { ElementWidgetCapabilities } from "../../../stores/widgets/ElementWidgetCapabilities";
 import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";

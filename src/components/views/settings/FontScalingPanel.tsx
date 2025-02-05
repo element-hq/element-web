@@ -7,11 +7,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { EmptyObject } from "matrix-js-sdk/src/matrix";
+import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 
 import EventTilePreview from "../elements/EventTilePreview";
 import SettingsStore from "../../../settings/SettingsStore";
-import { Layout } from "../../../settings/enums/Layout";
+import { type Layout } from "../../../settings/enums/Layout";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import { _t } from "../../../languageHandler";

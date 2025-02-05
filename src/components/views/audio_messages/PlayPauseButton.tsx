@@ -6,12 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
-import { Playback, PlaybackState } from "../../../audio/Playback";
-import AccessibleButton, { ButtonProps } from "../elements/AccessibleButton";
+import { type Playback, PlaybackState } from "../../../audio/Playback";
+import AccessibleButton, { type ButtonProps } from "../elements/AccessibleButton";
 
 type Props = Omit<ButtonProps<"div">, "title" | "onClick" | "disabled" | "element" | "ref"> & {
     // Playback instance to manipulate. Cannot change during the component lifecycle.

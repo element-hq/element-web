@@ -10,7 +10,7 @@ import React from "react";
 import { act, fireEvent, render } from "jest-matrix-react";
 
 import TabbedView, { Tab, TabLocation } from "../../../../src/components/structures/TabbedView";
-import { NonEmptyArray } from "../../../../src/@types/common";
+import { type NonEmptyArray } from "../../../../src/@types/common";
 import { _t } from "../../../../src/languageHandler";
 
 describe("<TabbedView />", () => {

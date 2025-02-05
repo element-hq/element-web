@@ -6,10 +6,10 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { ComponentProps, JSX, PropsWithChildren } from "react";
+import React, { type ComponentProps, type JSX, type PropsWithChildren } from "react";
 import { ReleaseAnnouncement as ReleaseAnnouncementCompound } from "@vector-im/compound-web";
 
-import { ReleaseAnnouncementStore, Feature } from "../../stores/ReleaseAnnouncementStore";
+import { ReleaseAnnouncementStore, type Feature } from "../../stores/ReleaseAnnouncementStore";
 import { useIsReleaseAnnouncementOpen } from "../../hooks/useIsReleaseAnnouncementOpen";
 
 interface ReleaseAnnouncementProps

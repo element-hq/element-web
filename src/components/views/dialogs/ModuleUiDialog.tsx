@@ -7,12 +7,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef } from "react";
-import { DialogContent, DialogProps } from "@matrix-org/react-sdk-module-api/lib/components/DialogContent";
+import { type DialogContent, type DialogProps } from "@matrix-org/react-sdk-module-api/lib/components/DialogContent";
 import { logger } from "matrix-js-sdk/src/logger";
-import { ModuleApi } from "@matrix-org/react-sdk-module-api/lib/ModuleApi";
-import { ModuleUiDialogOptions } from "@matrix-org/react-sdk-module-api/lib/types/ModuleUiDialogOptions";
+import { type ModuleApi } from "@matrix-org/react-sdk-module-api/lib/ModuleApi";
+import { type ModuleUiDialogOptions } from "@matrix-org/react-sdk-module-api/lib/types/ModuleUiDialogOptions";
 
-import ScrollableBaseModal, { IScrollableBaseState } from "./ScrollableBaseModal";
+import ScrollableBaseModal, { type IScrollableBaseState } from "./ScrollableBaseModal";
 import { _t } from "../../../languageHandler";
 
 interface IProps<P extends DialogProps, C extends DialogContent<P>> {

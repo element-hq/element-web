@@ -11,7 +11,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import * as MatrixJs from "matrix-js-sdk/src/matrix";
 import { decodeBase64, encodeUnpaddedBase64 } from "matrix-js-sdk/src/matrix";
 import * as encryptAESSecretStorageItemModule from "matrix-js-sdk/src/utils/encryptAESSecretStorageItem";
-import { mocked, MockedObject } from "jest-mock";
+import { mocked, type MockedObject } from "jest-mock";
 import fetchMock from "fetch-mock-jest";
 
 import StorageEvictedDialog from "../../src/components/views/dialogs/StorageEvictedDialog";

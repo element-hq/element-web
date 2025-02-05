@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import http from "http";
 import express from "express";
-import { AddressInfo } from "net";
-import { TestInfo } from "@playwright/test";
+import { type AddressInfo } from "net";
+import { type TestInfo } from "@playwright/test";
 
 import { randB64Bytes } from "../utils/rand.ts";
 

@@ -6,15 +6,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { ViewRoom as ViewRoomEvent } from "@matrix-org/analytics-events/types/typescript/ViewRoom";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type ViewRoom as ViewRoomEvent } from "@matrix-org/analytics-events/types/typescript/ViewRoom";
 
-import { ActionPayload } from "../payloads";
-import { Action } from "../actions";
-import { IOOBData, IThreepidInvite } from "../../stores/ThreepidInviteStore";
-import { IOpts } from "../../createRoom";
-import { JoinRoomPayload } from "./JoinRoomPayload";
-import { AtLeastOne } from "../../@types/common";
+import { type ActionPayload } from "../payloads";
+import { type Action } from "../actions";
+import { type IOOBData, type IThreepidInvite } from "../../stores/ThreepidInviteStore";
+import { type IOpts } from "../../createRoom";
+import { type JoinRoomPayload } from "./JoinRoomPayload";
+import { type AtLeastOne } from "../../@types/common";
 
 export type FocusNextType = "composer" | "threadsPanel" | undefined;
 

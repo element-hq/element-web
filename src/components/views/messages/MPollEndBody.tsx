@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useEffect, useState, useContext, ForwardRefExoticComponent } from "react";
+import React, { useEffect, useState, useContext, type ForwardRefExoticComponent } from "react";
 import { MatrixEvent, M_TEXT } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -15,7 +15,7 @@ import MatrixClientContext, { useMatrixClientContext } from "../../../contexts/M
 import { _t } from "../../../languageHandler";
 import { textForEvent } from "../../../TextForEvent";
 import { Caption } from "../typography/Caption";
-import { IBodyProps } from "./IBodyProps";
+import { type IBodyProps } from "./IBodyProps";
 import MPollBody from "./MPollBody";
 
 const getRelatedPollStartEventId = (event: MatrixEvent): string | undefined => {

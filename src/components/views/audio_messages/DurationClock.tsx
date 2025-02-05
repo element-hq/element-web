@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 
 import Clock from "./Clock";
-import { Playback } from "../../../audio/Playback";
+import { type Playback } from "../../../audio/Playback";
 
 interface IProps {
     playback: Playback;

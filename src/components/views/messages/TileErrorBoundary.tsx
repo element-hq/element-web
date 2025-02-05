@@ -6,9 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import classNames from "classnames";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
@@ -17,7 +17,7 @@ import BugReportDialog from "../dialogs/BugReportDialog";
 import AccessibleButton from "../elements/AccessibleButton";
 import SettingsStore from "../../../settings/SettingsStore";
 import ViewSource from "../../structures/ViewSource";
-import { Layout } from "../../../settings/enums/Layout";
+import { type Layout } from "../../../settings/enums/Layout";
 
 interface IProps {
     mxEvent: MatrixEvent;

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { createContext } from "react";
 
 import { useCurrentPhase } from "../hooks/right-panel/useCurrentPhase";
-import { RightPanelPhases } from "../stores/right-panel/RightPanelStorePhases";
+import { type RightPanelPhases } from "../stores/right-panel/RightPanelStorePhases";
 
 type Context = {
     isPanelOpen: boolean;

@@ -6,11 +6,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { AllDevicesIsolationMode, OnlySignedDevicesIsolationMode } from "matrix-js-sdk/src/crypto-api";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import SettingController from "./SettingController";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-import { SettingLevel } from "../SettingLevel";
+import { type SettingLevel } from "../SettingLevel";
 
 /**
  * A controller for the "exclude_insecure_devices" setting, which will

@@ -12,7 +12,7 @@ import classNames from "classnames";
 import { findLastIndex } from "lodash";
 
 import { _t } from "../../../languageHandler";
-import { CategoryKey, ICategory } from "./Category";
+import { type CategoryKey, type ICategory } from "./Category";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 

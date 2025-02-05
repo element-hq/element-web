@@ -10,7 +10,7 @@ import React, { Fragment } from "react";
 
 import { Icon as InactiveIcon } from "../../../../../res/img/element-icons/settings/inactive.svg";
 import { INACTIVE_DEVICE_AGE_DAYS, isDeviceInactive } from "../../../../components/views/settings/devices/filter";
-import { ExtendedDevice } from "../../../../components/views/settings/devices/types";
+import { type ExtendedDevice } from "../../../../components/views/settings/devices/types";
 import { formatDate, formatRelativeTime } from "../../../../DateUtils";
 import { _t } from "../../../../languageHandler";
 

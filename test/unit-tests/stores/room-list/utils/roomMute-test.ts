@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ConditionKind, EventType, IPushRule, MatrixEvent, PushRuleActionName } from "matrix-js-sdk/src/matrix";
+import { ConditionKind, EventType, type IPushRule, MatrixEvent, PushRuleActionName } from "matrix-js-sdk/src/matrix";
 
 import { getChangedOverrideRoomMutePushRules } from "../../../../../src/stores/room-list/utils/roomMute";
 import { DEFAULT_PUSH_RULES, getDefaultRuleWithKind, makePushRule } from "../../../../test-utils/pushRules";

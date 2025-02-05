@@ -17,7 +17,10 @@ import { Action } from "../../../../../../src/dispatcher/actions";
 import { flushPromises } from "../../../../../test-utils";
 import { SendWysiwygComposer } from "../../../../../../src/components/views/rooms/wysiwyg_composer/";
 import { aboveLeftOf } from "../../../../../../src/components/structures/ContextMenu";
-import { ComposerInsertPayload, ComposerType } from "../../../../../../src/dispatcher/payloads/ComposerInsertPayload";
+import {
+    type ComposerInsertPayload,
+    ComposerType,
+} from "../../../../../../src/dispatcher/payloads/ComposerInsertPayload";
 import { setSelection } from "../../../../../../src/components/views/rooms/wysiwyg_composer/utils/selection";
 import { createMocks } from "./utils";
 import { ScopedRoomContextProvider } from "../../../../../../src/contexts/ScopedRoomContext.tsx";

@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { JSX } from "react";
+import React, { type JSX } from "react";
 import { Heading } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";

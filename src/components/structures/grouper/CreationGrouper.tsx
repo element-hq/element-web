@@ -6,12 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode } from "react";
-import { EventType, M_BEACON_INFO, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import React, { type ReactNode } from "react";
+import { EventType, M_BEACON_INFO, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { BaseGrouper } from "./BaseGrouper";
-import MessagePanel, { WrappedEvent } from "../MessagePanel";
+import { type WrappedEvent } from "../MessagePanel";
+import type MessagePanel from "../MessagePanel";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { _t } from "../../../languageHandler";
 import DateSeparator from "../../views/messages/DateSeparator";

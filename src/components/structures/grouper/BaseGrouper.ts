@@ -6,10 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ReactNode } from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type ReactNode } from "react";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
-import MessagePanel, { WrappedEvent } from "../MessagePanel";
+import { type WrappedEvent } from "../MessagePanel";
+import type MessagePanel from "../MessagePanel";
 
 /* Grouper classes determine when events can be grouped together in a summary.
  * Groupers should have the following methods:

@@ -6,12 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ComponentProps, lazy, Suspense } from "react";
-import { ISendEventResponse } from "matrix-js-sdk/src/matrix";
+import React, { type ComponentProps, lazy, Suspense } from "react";
+import { type ISendEventResponse } from "matrix-js-sdk/src/matrix";
 
 // we need to import the types for TS, but do not import the sendMessage
 // function to avoid importing from "@vector-im/matrix-wysiwyg"
-import { SendMessageParams } from "./utils/message";
+import { type SendMessageParams } from "./utils/message";
 
 const SendComposer = lazy(() => import("./SendWysiwygComposer"));
 const EditComposer = lazy(() => import("./EditWysiwygComposer"));

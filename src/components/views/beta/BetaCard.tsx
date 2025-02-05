@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode, useState } from "react";
+import React, { type ReactNode, useState } from "react";
 import { sleep } from "matrix-js-sdk/src/utils";
 
 import { _t } from "../../../languageHandler";
@@ -20,7 +20,7 @@ import SettingsFlag from "../elements/SettingsFlag";
 import { useFeatureEnabled } from "../../../hooks/useSettings";
 import InlineSpinner from "../elements/InlineSpinner";
 import { shouldShowFeedback } from "../../../utils/Feedback";
-import { FeatureSettingKey } from "../../../settings/Settings.tsx";
+import { type FeatureSettingKey } from "../../../settings/Settings.tsx";
 
 // XXX: Keep this around for re-use in future Betas
 

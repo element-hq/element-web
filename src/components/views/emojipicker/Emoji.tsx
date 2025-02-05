@@ -8,9 +8,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { Emoji as IEmoji } from "@matrix-org/emojibase-bindings";
+import { type Emoji as IEmoji } from "@matrix-org/emojibase-bindings";
 
-import { ButtonEvent } from "../elements/AccessibleButton";
+import { type ButtonEvent } from "../elements/AccessibleButton";
 import { RovingAccessibleButton } from "../../../accessibility/RovingTabIndex";
 
 interface IProps {

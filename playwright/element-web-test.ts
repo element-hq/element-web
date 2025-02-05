@@ -8,12 +8,12 @@ Please see LICENSE files in the repository root for full details.
 
 import {
     expect as baseExpect,
-    Locator,
-    Page,
-    ExpectMatcherState,
-    ElementHandle,
-    PlaywrightTestArgs,
-    Fixtures as _Fixtures,
+    type Locator,
+    type Page,
+    type ExpectMatcherState,
+    type ElementHandle,
+    type PlaywrightTestArgs,
+    type Fixtures as _Fixtures,
 } from "@playwright/test";
 import { sanitizeForFilePath } from "playwright-core/lib/utils";
 import AxeBuilder from "@axe-core/playwright";
@@ -21,13 +21,13 @@ import _ from "lodash";
 import { extname } from "node:path";
 
 import type { IConfigOptions } from "../src/IConfigOptions";
-import { Credentials } from "./plugins/homeserver";
+import { type Credentials } from "./plugins/homeserver";
 import { ElementAppPage } from "./pages/ElementAppPage";
 import { Crypto } from "./pages/crypto";
 import { Toasts } from "./pages/toasts";
-import { Bot, CreateBotOpts } from "./pages/bot";
+import { Bot, type CreateBotOpts } from "./pages/bot";
 import { Webserver } from "./plugins/webserver";
-import { Options, Services, test as base } from "./services.ts";
+import { type Options, type Services, test as base } from "./services.ts";
 
 // Enable experimental service worker support
 // See https://playwright.dev/docs/service-workers-experimental#how-to-enable

@@ -7,11 +7,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    IProtocol,
+    type IProtocol,
     LOCAL_NOTIFICATION_SETTINGS_PREFIX,
     MatrixEvent,
     PushRuleKind,
-    Room,
+    type Room,
     RuleId,
     TweakName,
 } from "matrix-js-sdk/src/matrix";

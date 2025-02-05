@@ -6,9 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent, createRef, SyntheticEvent } from "react";
+import React, { type ChangeEvent, createRef, type SyntheticEvent } from "react";
 
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import Field from "../elements/Field";
 import DialPad from "./DialPad";
 import DialPadBackspaceButton from "../elements/DialPadBackspaceButton";

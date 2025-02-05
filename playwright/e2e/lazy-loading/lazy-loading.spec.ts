@@ -10,7 +10,7 @@ import { Bot } from "../../pages/bot";
 import type { Locator, Page } from "@playwright/test";
 import type { ElementAppPage } from "../../pages/ElementAppPage";
 import { test, expect } from "../../element-web-test";
-import { Credentials } from "../../plugins/homeserver";
+import { type Credentials } from "../../plugins/homeserver";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 test.describe("Lazy Loading", () => {

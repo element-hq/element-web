@@ -4115,7 +4115,7 @@ axe-core@^4.10.0, axe-core@~4.10.2:
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.10.2.tgz#85228e3e1d8b8532a27659b332e39b7fa0e022df"
   integrity sha512-RE3mdQ7P3FRSe7eqCWoeQ/Z9QXrtniSjp1wUjt5nRC3WIpz5rSCve6o3fsZ2aCpJtrZjSZgjwXAoTO5k4tEI0w==
 
-axios@^1.7.8:
+axios@^1.7.9:
   version "1.7.9"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.7.9.tgz#d7d071380c132a24accda1b2cfc1535b79ec650a"
   integrity sha512-LhLcE7Hbiryz8oMDdDptSrWowmB4Bl6RCt6sIJKpRB4XtVf0iEgewX3au/pJqm+Py1kCASkb/FFKjxQaLtxJvw==
@@ -6012,9 +6012,9 @@ eslint-plugin-jsx-a11y@^6.5.1:
     string.prototype.includes "^2.0.1"
 
 eslint-plugin-matrix-org@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-matrix-org/-/eslint-plugin-matrix-org-2.0.2.tgz#95b86b0f16704ab19740f7c3c62eae69e20365e6"
-  integrity sha512-cQy5Rjeq6uyu1mLXlPZwEJdyM0NmclrnEz68y792FSuuxzMyJNNYLGDQ5CkYW8H+PrD825HUFZ34pNXnjMOzOw==
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-matrix-org/-/eslint-plugin-matrix-org-2.1.0.tgz#9053726119f107154f5210665c2f84219425c190"
+  integrity sha512-YjVQ0qunzVV34tpUchLWhOrOalGfRLm0tclS4dPYnXS8Ui+p12o/YtRHt+26Mg5tJ0QH76HsGC0LJKLVLNoqfg==
 
 eslint-plugin-react-compiler@^19.0.0-beta-df7b47d-20241124:
   version "19.0.0-beta-df7b47d-20241124"
@@ -8629,11 +8629,11 @@ magic-string@0.30.8:
     "@jridgewell/sourcemap-codec" "^1.4.15"
 
 mailpit-api@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/mailpit-api/-/mailpit-api-1.0.5.tgz#3383593707a7bc502af0ae6bf1296160daf8c730"
-  integrity sha512-55OjUjNv4hwrQKIzN8DqWywuW7UIyzN1FrEd3A87sJ9Ni07LZC/f7hgeW7dp36YYxrmV8voGzUmCY3dWJ3D6Og==
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/mailpit-api/-/mailpit-api-1.0.6.tgz#b3a552281d90aafceed3d8792936eb386ab751ce"
+  integrity sha512-k/ESNdqKo4FQY4hFELQ4saBJJr5+XVnl+7qjgFjPyBHswa9ZPLCJ7opIXBmugX6403HUyJUDkqwlJ0To/nfDFw==
   dependencies:
-    axios "^1.7.8"
+    axios "^1.7.9"
 
 make-dir@^4.0.0:
   version "4.0.0"

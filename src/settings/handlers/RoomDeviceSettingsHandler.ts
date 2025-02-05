@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import { safeSet } from "matrix-js-sdk/src/utils";
 
 import { SettingLevel } from "../SettingLevel";
-import { WatchManager } from "../WatchManager";
+import { type WatchManager } from "../WatchManager";
 import AbstractLocalStorageSettingsHandler from "./AbstractLocalStorageSettingsHandler";
 
 /**

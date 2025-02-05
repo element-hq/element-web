@@ -6,9 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixEvent, EventType, IPushRules } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, EventType, type IPushRules } from "matrix-js-sdk/src/matrix";
 
-import { ActionPayload } from "../../../dispatcher/payloads";
+import { type ActionPayload } from "../../../dispatcher/payloads";
 import { isRuleMaybeRoomMuteRule } from "../../../RoomNotifs";
 import { arrayDiff } from "../../../utils/arrays";
 

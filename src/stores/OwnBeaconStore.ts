@@ -8,31 +8,31 @@ Please see LICENSE files in the repository root for full details.
 
 import { debounce } from "lodash";
 import {
-    Beacon,
-    BeaconIdentifier,
+    type Beacon,
+    type BeaconIdentifier,
     BeaconEvent,
-    MatrixEvent,
-    Room,
-    RoomMember,
-    RoomState,
+    type MatrixEvent,
+    type Room,
+    type RoomMember,
+    type RoomState,
     RoomStateEvent,
     ContentHelpers,
-    MBeaconInfoEventContent,
+    type MBeaconInfoEventContent,
     M_BEACON,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import defaultDispatcher from "../dispatcher/dispatcher";
-import { ActionPayload } from "../dispatcher/payloads";
+import { type ActionPayload } from "../dispatcher/payloads";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import { arrayDiff } from "../utils/arrays";
 import {
-    ClearWatchCallback,
+    type ClearWatchCallback,
     GeolocationError,
     mapGeolocationPositionToTimedGeo,
     sortBeaconsByLatestCreation,
-    TimedGeoUri,
+    type TimedGeoUri,
     watchPosition,
     getCurrentPosition,
 } from "../utils/beacon";

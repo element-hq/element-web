@@ -7,12 +7,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import * as Sentry from "@sentry/browser";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import SdkConfig from "./SdkConfig";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import SettingsStore from "./settings/SettingsStore";
-import { IConfigOptions } from "./IConfigOptions";
+import { type IConfigOptions } from "./IConfigOptions";
 
 /* eslint-disable camelcase */
 

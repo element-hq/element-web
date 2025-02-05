@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { JSX, PropsWithChildren, ComponentType, SVGAttributes } from "react";
+import React, { type JSX, type PropsWithChildren, type ComponentType, type SVGAttributes } from "react";
 import { BigIcon, Heading } from "@vector-im/compound-web";
 import classNames from "classnames";
 

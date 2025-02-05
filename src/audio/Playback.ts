@@ -13,7 +13,7 @@ import { defer } from "matrix-js-sdk/src/utils";
 
 import { UPDATE_EVENT } from "../stores/AsyncStore";
 import { arrayFastResample } from "../utils/arrays";
-import { IDestroyable } from "../utils/IDestroyable";
+import { type IDestroyable } from "../utils/IDestroyable";
 import { PlaybackClock } from "./PlaybackClock";
 import { createAudioContext, decodeOgg } from "./compat";
 import { clamp } from "../utils/numbers";

@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import EventEmitter from "events";
-import { IWidget } from "matrix-widget-api";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type IWidget } from "matrix-widget-api";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
-import { WidgetType } from "../widgets/WidgetType";
+import { type WidgetType } from "../widgets/WidgetType";
 
 /**
  * Acts as a place to get & set widget state, storing local echo state and

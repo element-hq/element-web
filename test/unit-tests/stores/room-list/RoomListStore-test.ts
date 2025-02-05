@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import {
     ConditionKind,
     EventType,
-    IPushRule,
+    type IPushRule,
     JoinRule,
     MatrixEvent,
     PendingEventOrdering,
@@ -19,9 +19,9 @@ import {
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { mocked } from "jest-mock";
 
-import defaultDispatcher, { MatrixDispatcher } from "../../../../src/dispatcher/dispatcher";
+import defaultDispatcher, { type MatrixDispatcher } from "../../../../src/dispatcher/dispatcher";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
-import SettingsStore, { CallbackFn } from "../../../../src/settings/SettingsStore";
+import SettingsStore, { type CallbackFn } from "../../../../src/settings/SettingsStore";
 import { ListAlgorithm, SortAlgorithm } from "../../../../src/stores/room-list/algorithms/models";
 import { DefaultTagID, OrderedDefaultTagIDs, RoomUpdateCause } from "../../../../src/stores/room-list/models";
 import RoomListStore, { RoomListStoreClass } from "../../../../src/stores/room-list/RoomListStore";

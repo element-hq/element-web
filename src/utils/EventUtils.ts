@@ -13,7 +13,7 @@ import {
     EVENT_VISIBILITY_CHANGE_TYPE,
     MsgType,
     RelationType,
-    MatrixClient,
+    type MatrixClient,
     THREAD_RELATION_TYPE,
     M_POLL_END,
     M_POLL_START,
@@ -23,13 +23,13 @@ import {
 import { logger } from "matrix-js-sdk/src/logger";
 
 import shouldHideEvent from "../shouldHideEvent";
-import { GetRelationsForEvent } from "../components/views/rooms/EventTile";
+import { type GetRelationsForEvent } from "../components/views/rooms/EventTile";
 import SettingsStore from "../settings/SettingsStore";
 import defaultDispatcher from "../dispatcher/dispatcher";
-import { TimelineRenderingType } from "../contexts/RoomContext";
+import { type TimelineRenderingType } from "../contexts/RoomContext";
 import { launchPollEditor } from "../components/views/messages/MPollBody";
 import { Action } from "../dispatcher/actions";
-import { ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
 
 /**
  * Returns whether an event should allow actions like reply, reactions, edit, etc.

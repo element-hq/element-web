@@ -6,10 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ComponentProps } from "react";
-import { render, RenderResult } from "jest-matrix-react";
-import { MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
-import { KnownMembership, Membership } from "matrix-js-sdk/src/types";
+import React, { type ComponentProps } from "react";
+import { render, type RenderResult } from "jest-matrix-react";
+import { type MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
+import { KnownMembership, type Membership } from "matrix-js-sdk/src/types";
 
 import {
     getMockClientWithEventEmitter,

@@ -9,40 +9,48 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent, ComponentProps, createRef, ReactElement, ReactNode, RefObject, JSX } from "react";
+import React, {
+    type ChangeEvent,
+    type ComponentProps,
+    createRef,
+    type ReactElement,
+    type ReactNode,
+    type RefObject,
+    type JSX,
+} from "react";
 import classNames from "classnames";
 import {
-    IRecommendedVersion,
+    type IRecommendedVersion,
     NotificationCountType,
-    Room,
+    type Room,
     RoomEvent,
-    RoomState,
+    type RoomState,
     RoomStateEvent,
-    MatrixEvent,
+    type MatrixEvent,
     MatrixEventEvent,
-    EventTimeline,
-    IRoomTimelineData,
+    type EventTimeline,
+    type IRoomTimelineData,
     EventType,
     HistoryVisibility,
     JoinRule,
     ClientEvent,
-    MatrixError,
-    ISearchResults,
+    type MatrixError,
+    type ISearchResults,
     THREAD_RELATION_TYPE,
-    MatrixClient,
+    type MatrixClient,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
-import { CallState, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { type CallState, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { debounce, throttle } from "lodash";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
-import { ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
+import { type ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 
 import shouldHideEvent from "../../shouldHideEvent";
 import { _t } from "../../languageHandler";
 import * as TimezoneHandler from "../../TimezoneHandler";
 import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
-import ResizeNotifier from "../../utils/ResizeNotifier";
+import type ResizeNotifier from "../../utils/ResizeNotifier";
 import ContentMessages from "../../ContentMessages";
 import Modal from "../../Modal";
 import { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
@@ -50,15 +58,15 @@ import defaultDispatcher from "../../dispatcher/dispatcher";
 import * as Rooms from "../../Rooms";
 import MainSplit from "./MainSplit";
 import RightPanel from "./RightPanel";
-import RoomScrollStateStore, { ScrollState } from "../../stores/RoomScrollStateStore";
+import RoomScrollStateStore, { type ScrollState } from "../../stores/RoomScrollStateStore";
 import WidgetEchoStore from "../../stores/WidgetEchoStore";
 import SettingsStore from "../../settings/SettingsStore";
 import { Layout } from "../../settings/enums/Layout";
-import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../views/elements/AccessibleButton";
 import { TimelineRenderingType, MainSplitContentType } from "../../contexts/RoomContext";
 import { E2EStatus, shieldStatusForRoom } from "../../utils/ShieldUtils";
 import { Action } from "../../dispatcher/actions";
-import { IMatrixClientCreds } from "../../MatrixClientPeg";
+import { type IMatrixClientCreds } from "../../MatrixClientPeg";
 import ScrollPanel from "./ScrollPanel";
 import TimelinePanel from "./TimelinePanel";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
@@ -67,7 +75,7 @@ import RoomPreviewCard from "../views/rooms/RoomPreviewCard";
 import RoomUpgradeWarningBar from "../views/rooms/RoomUpgradeWarningBar";
 import AuxPanel from "../views/rooms/AuxPanel";
 import RoomHeader from "../views/rooms/RoomHeader/RoomHeader";
-import { IOOBData, IThreepidInvite } from "../../stores/ThreepidInviteStore";
+import { type IOOBData, type IThreepidInvite } from "../../stores/ThreepidInviteStore";
 import EffectsOverlay from "../views/elements/EffectsOverlay";
 import { containsEmoji } from "../../effects/utils";
 import { CHAT_EFFECTS } from "../../effects";
@@ -79,7 +87,7 @@ import { Container, WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutS
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { objectHasDiff } from "../../utils/objects";
 import SpaceRoomView from "./SpaceRoomView";
-import { IOpts } from "../../createRoom";
+import { type IOpts } from "../../createRoom";
 import EditorStateTransfer from "../../utils/EditorStateTransfer";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
 import UploadBar from "./UploadBar";
@@ -88,32 +96,32 @@ import MessageComposer from "../views/rooms/MessageComposer";
 import JumpToBottomButton from "../views/rooms/JumpToBottomButton";
 import TopUnreadMessagesBar from "../views/rooms/TopUnreadMessagesBar";
 import { fetchInitialEvent } from "../../utils/EventUtils";
-import { ComposerInsertPayload, ComposerType } from "../../dispatcher/payloads/ComposerInsertPayload";
+import { type ComposerInsertPayload, ComposerType } from "../../dispatcher/payloads/ComposerInsertPayload";
 import AppsDrawer from "../views/rooms/AppsDrawer";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
-import { ActionPayload } from "../../dispatcher/payloads";
+import { type ActionPayload } from "../../dispatcher/payloads";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
-import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
-import { JoinRoomPayload } from "../../dispatcher/payloads/JoinRoomPayload";
-import { DoAfterSyncPreparedPayload } from "../../dispatcher/payloads/DoAfterSyncPreparedPayload";
+import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import { type JoinRoomPayload } from "../../dispatcher/payloads/JoinRoomPayload";
+import { type DoAfterSyncPreparedPayload } from "../../dispatcher/payloads/DoAfterSyncPreparedPayload";
 import FileDropTarget from "./FileDropTarget";
 import Measured from "../views/elements/Measured";
-import { FocusComposerPayload } from "../../dispatcher/payloads/FocusComposerPayload";
+import { type FocusComposerPayload } from "../../dispatcher/payloads/FocusComposerPayload";
 import { LocalRoom, LocalRoomState } from "../../models/LocalRoom";
 import { createRoomFromLocalRoom } from "../../utils/direct-messages";
 import NewRoomIntro from "../views/rooms/NewRoomIntro";
 import EncryptionEvent from "../views/messages/EncryptionEvent";
 import { StaticNotificationState } from "../../stores/notifications/StaticNotificationState";
 import { isLocalRoom } from "../../utils/localRoom/isLocalRoom";
-import { ShowThreadPayload } from "../../dispatcher/payloads/ShowThreadPayload";
+import { type ShowThreadPayload } from "../../dispatcher/payloads/ShowThreadPayload";
 import { RoomStatusBarUnsentMessages } from "./RoomStatusBarUnsentMessages";
 import { LargeLoader } from "./LargeLoader";
 import { isVideoRoom } from "../../utils/video-rooms";
 import { SDKContext } from "../../contexts/SDKContext";
 import { CallStore, CallStoreEvent } from "../../stores/CallStore";
-import { Call } from "../../models/Call";
+import { type Call } from "../../models/Call";
 import { RoomSearchView } from "./RoomSearchView";
-import eventSearch, { SearchInfo, SearchScope } from "../../Searching";
+import eventSearch, { type SearchInfo, SearchScope } from "../../Searching";
 import VoipUserMapper from "../../VoipUserMapper";
 import { isCallEvent } from "./LegacyCallEventGrouper";
 import { WidgetType } from "../../widgets/WidgetType";
@@ -121,8 +129,8 @@ import WidgetUtils from "../../utils/WidgetUtils";
 import { shouldEncryptRoomWithSingle3rdPartyInvite } from "../../utils/room/shouldEncryptRoomWithSingle3rdPartyInvite";
 import { WaitingForThirdPartyRoomView } from "./WaitingForThirdPartyRoomView";
 import { isNotUndefined } from "../../Typeguards";
-import { CancelAskToJoinPayload } from "../../dispatcher/payloads/CancelAskToJoinPayload";
-import { SubmitAskToJoinPayload } from "../../dispatcher/payloads/SubmitAskToJoinPayload";
+import { type CancelAskToJoinPayload } from "../../dispatcher/payloads/CancelAskToJoinPayload";
+import { type SubmitAskToJoinPayload } from "../../dispatcher/payloads/SubmitAskToJoinPayload";
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { onView3pidInvite } from "../../stores/right-panel/action-handlers";
 import RoomSearchAuxPanel from "../views/rooms/RoomSearchAuxPanel";

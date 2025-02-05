@@ -9,17 +9,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { _td } from "../languageHandler";
 import { reject, success } from "./utils";
 import { isPermalinkHost, parsePermalink } from "../utils/permalinks/Permalinks";
 import dis from "../dispatcher/dispatcher";
-import { ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../dispatcher/actions";
 import { TimelineRenderingType } from "../contexts/RoomContext";
 import { Command } from "./command";
-import { CommandCategories, RunResult } from "./interface";
+import { CommandCategories, type RunResult } from "./interface";
 
 // A return of undefined here signals a usage error, where the command should return `reject(this.getUsage());`
 function openRoom(cli: MatrixClient, args: string | undefined, autoJoin: boolean): RunResult | undefined {

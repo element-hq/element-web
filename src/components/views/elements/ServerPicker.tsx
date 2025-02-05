@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 
 import AccessibleButton from "./AccessibleButton";
-import { ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
+import { type ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
 import { _t } from "../../../languageHandler";
 import TextWithTooltip from "./TextWithTooltip";
 import SdkConfig from "../../../SdkConfig";

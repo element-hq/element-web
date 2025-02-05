@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useEffect, useState } from "react";
-import { ContentHelpers } from "matrix-js-sdk/src/matrix";
+import { type ContentHelpers } from "matrix-js-sdk/src/matrix";
 import { Tooltip } from "@vector-im/compound-web";
 
 import { Icon as ExternalLinkIcon } from "../../../../res/img/external-link.svg";

@@ -6,13 +6,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { ComponentProps, forwardRef } from "react";
+import React, { type ComponentProps, forwardRef } from "react";
 import ThreadsSolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/threads-solid";
 import classNames from "classnames";
 import { IconButton, Text, Tooltip } from "@vector-im/compound-web";
 
 import { _t } from "../../../../languageHandler";
-import { NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
+import { type NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
 import { notificationLevelToIndicator } from "../../../../utils/notifications";
 
 interface ThreadsActivityCentreButtonProps extends ComponentProps<typeof IconButton> {

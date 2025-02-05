@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { RoomEvent, Room, RoomStateEvent, MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
+import { RoomEvent, type Room, RoomStateEvent, type MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
 
 import TabbedView, { Tab } from "../../structures/TabbedView";
 import { _t, _td } from "../../../languageHandler";
@@ -26,8 +26,8 @@ import { UIFeature } from "../../../settings/UIFeature";
 import BaseDialog from "./BaseDialog";
 import { Action } from "../../../dispatcher/actions";
 import { VoipRoomSettingsTab } from "../settings/tabs/room/VoipRoomSettingsTab";
-import { ActionPayload } from "../../../dispatcher/payloads";
-import { NonEmptyArray } from "../../../@types/common";
+import { type ActionPayload } from "../../../dispatcher/payloads";
+import { type NonEmptyArray } from "../../../@types/common";
 import { PollHistoryTab } from "../settings/tabs/room/PollHistoryTab";
 import ErrorBoundary from "../elements/ErrorBoundary";
 import { PeopleRoomSettingsTab } from "../settings/tabs/room/PeopleRoomSettingsTab";

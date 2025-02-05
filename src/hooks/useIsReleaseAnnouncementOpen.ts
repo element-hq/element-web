@@ -9,7 +9,7 @@
 import { useState } from "react";
 
 import { useTypedEventEmitter, useTypedEventEmitterState } from "./useEventEmitter";
-import { Feature, ReleaseAnnouncementStore } from "../stores/ReleaseAnnouncementStore";
+import { type Feature, ReleaseAnnouncementStore } from "../stores/ReleaseAnnouncementStore";
 import Modal, { ModalManagerEvent } from "../Modal";
 
 /**

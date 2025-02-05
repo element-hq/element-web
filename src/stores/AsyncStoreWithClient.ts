@@ -6,12 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { AsyncStore } from "./AsyncStore";
-import { ActionPayload } from "../dispatcher/payloads";
+import { type ActionPayload } from "../dispatcher/payloads";
 import { ReadyWatchingStore } from "./ReadyWatchingStore";
-import { MatrixDispatcher } from "../dispatcher/dispatcher";
+import { type MatrixDispatcher } from "../dispatcher/dispatcher";
 
 export abstract class AsyncStoreWithClient<T extends object> extends AsyncStore<T> {
     protected readyStore: ReadyWatchingStore;

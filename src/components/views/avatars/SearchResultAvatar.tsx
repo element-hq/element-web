@@ -7,11 +7,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { RoomMember } from "matrix-js-sdk/src/matrix";
+import { type RoomMember } from "matrix-js-sdk/src/matrix";
 
 import emailPillAvatar from "../../../../res/img/icon-email-pill-avatar.svg";
 import { mediaFromMxc } from "../../../customisations/Media";
-import { Member, ThreepidMember } from "../../../utils/direct-messages";
+import { type Member, type ThreepidMember } from "../../../utils/direct-messages";
 import BaseAvatar from "./BaseAvatar";
 
 interface SearchResultAvatarProps {

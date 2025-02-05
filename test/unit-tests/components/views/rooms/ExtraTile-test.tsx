@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { getByRole, render } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import React, { ComponentProps } from "react";
+import React, { type ComponentProps } from "react";
 
 import ExtraTile from "../../../../../src/components/views/rooms/ExtraTile";
 

@@ -11,8 +11,8 @@ import classNames from "classnames";
 
 import { RovingAccessibleButton } from "../../../accessibility/RovingTabIndex";
 import NotificationBadge from "./NotificationBadge";
-import { NotificationState } from "../../../stores/notifications/NotificationState";
-import { ButtonEvent } from "../elements/AccessibleButton";
+import { type NotificationState } from "../../../stores/notifications/NotificationState";
+import { type ButtonEvent } from "../elements/AccessibleButton";
 import useHover from "../../../hooks/useHover";
 
 interface ExtraTileProps {

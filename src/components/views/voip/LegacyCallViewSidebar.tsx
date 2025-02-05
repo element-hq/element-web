@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
-import { CallFeed } from "matrix-js-sdk/src/webrtc/callFeed";
+import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { type CallFeed } from "matrix-js-sdk/src/webrtc/callFeed";
 import classNames from "classnames";
 
 import VideoFeed from "./VideoFeed";

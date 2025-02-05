@@ -9,8 +9,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { Method, MatrixClient } from "matrix-js-sdk/src/matrix";
-import { CryptoApi } from "matrix-js-sdk/src/crypto-api";
+import { Method, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
 
 import type * as Pako from "pako";
 import { MatrixClientPeg } from "../MatrixClientPeg";

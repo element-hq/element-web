@@ -12,7 +12,7 @@ import userEvent from "@testing-library/user-event";
 
 import DesktopCapturerSourcePicker from "../../../../../src/components/views/elements/DesktopCapturerSourcePicker";
 import PlatformPeg from "../../../../../src/PlatformPeg";
-import BasePlatform from "../../../../../src/BasePlatform";
+import type BasePlatform from "../../../../../src/BasePlatform";
 
 const SOURCES = [
     {

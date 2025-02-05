@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { CallType, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { CallType, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import {
     EventType,
     JoinRule,
@@ -29,11 +29,11 @@ import {
     queryAllByLabelText,
     queryByLabelText,
     render,
-    RenderOptions,
+    type RenderOptions,
     screen,
     waitFor,
 } from "jest-matrix-react";
-import { ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
+import { type ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 import { mocked } from "jest-mock";
 
 import { filterConsole, stubClient } from "../../../../../test-utils";
@@ -47,14 +47,14 @@ import SettingsStore from "../../../../../../src/settings/SettingsStore";
 import SdkConfig from "../../../../../../src/SdkConfig";
 import dispatcher from "../../../../../../src/dispatcher/dispatcher";
 import { CallStore } from "../../../../../../src/stores/CallStore";
-import { Call, ElementCall } from "../../../../../../src/models/Call";
+import { type Call, ElementCall } from "../../../../../../src/models/Call";
 import * as ShieldUtils from "../../../../../../src/utils/ShieldUtils";
 import { Container, WidgetLayoutStore } from "../../../../../../src/stores/widgets/WidgetLayoutStore";
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 import { _t } from "../../../../../../src/languageHandler";
 import * as UseCall from "../../../../../../src/hooks/useCall";
 import { SdkContextClass } from "../../../../../../src/contexts/SDKContext";
-import WidgetStore, { IApp } from "../../../../../../src/stores/WidgetStore";
+import WidgetStore, { type IApp } from "../../../../../../src/stores/WidgetStore";
 import { UIFeature } from "../../../../../../src/settings/UIFeature";
 
 jest.mock("../../../../../../src/utils/ShieldUtils");

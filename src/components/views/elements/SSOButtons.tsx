@@ -10,14 +10,14 @@ import React from "react";
 import { chunk } from "lodash";
 import classNames from "classnames";
 import {
-    MatrixClient,
+    type MatrixClient,
     IdentityProviderBrand,
-    SSOFlow,
-    SSOAction,
-    IIdentityProvider,
+    type SSOFlow,
+    type SSOAction,
+    type IIdentityProvider,
     DELEGATED_OIDC_COMPATIBILITY,
 } from "matrix-js-sdk/src/matrix";
-import { Signup } from "@matrix-org/analytics-events/types/typescript/Signup";
+import { type Signup } from "@matrix-org/analytics-events/types/typescript/Signup";
 
 import PlatformPeg from "../../../PlatformPeg";
 import AccessibleButton from "./AccessibleButton";

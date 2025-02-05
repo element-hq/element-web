@@ -10,10 +10,10 @@ import React, { forwardRef } from "react";
 import classNames from "classnames";
 
 import { formatCount } from "../../../../utils/FormattingUtils";
-import AccessibleButton, { ButtonEvent } from "../../elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../../elements/AccessibleButton";
 import { NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
 import { useSettingValue } from "../../../../hooks/useSettings";
-import { XOR } from "../../../../@types/common";
+import { type XOR } from "../../../../@types/common";
 
 interface Props {
     symbol: string | null;

@@ -8,12 +8,18 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render, screen, cleanup, fireEvent, waitFor } from "jest-matrix-react";
-import { mocked, Mocked } from "jest-mock";
-import { Room, RoomStateEvent, MatrixEvent, MatrixEventEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
-import { ClientWidgetApi, Widget } from "matrix-widget-api";
-import { ICallNotifyContent } from "matrix-js-sdk/src/matrixrtc";
+import { mocked, type Mocked } from "jest-mock";
+import {
+    Room,
+    RoomStateEvent,
+    type MatrixEvent,
+    MatrixEventEvent,
+    type MatrixClient,
+    type RoomMember,
+} from "matrix-js-sdk/src/matrix";
+import { type ClientWidgetApi, Widget } from "matrix-widget-api";
+import { type ICallNotifyContent } from "matrix-js-sdk/src/matrixrtc";
 
-import type { RoomMember } from "matrix-js-sdk/src/matrix";
 import {
     useMockedCalls,
     MockedCall,

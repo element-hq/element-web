@@ -9,10 +9,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { RoomMessageEventContent } from "matrix-js-sdk/src/types";
+import { type RoomMessageEventContent } from "matrix-js-sdk/src/types";
 
 import { _td } from "../languageHandler";
-import { XOR } from "../@types/common";
+import { type XOR } from "../@types/common";
 
 export const CommandCategories = {
     messages: _td("slash_command|category_messages"),

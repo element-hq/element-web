@@ -17,12 +17,12 @@ import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../LegacyCallHandl
 import { HEADER_HEIGHT } from "../views/rooms/RoomSublist";
 import { Action } from "../../dispatcher/actions";
 import RoomSearch from "./RoomSearch";
-import ResizeNotifier from "../../utils/ResizeNotifier";
+import type ResizeNotifier from "../../utils/ResizeNotifier";
 import SpaceStore from "../../stores/spaces/SpaceStore";
-import { MetaSpace, SpaceKey, UPDATE_SELECTED_SPACE } from "../../stores/spaces";
+import { MetaSpace, type SpaceKey, UPDATE_SELECTED_SPACE } from "../../stores/spaces";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import UIStore from "../../stores/UIStore";
-import { IState as IRovingTabIndexState } from "../../accessibility/RovingTabIndex";
+import { type IState as IRovingTabIndexState } from "../../accessibility/RovingTabIndex";
 import RoomListHeader from "../views/rooms/RoomListHeader";
 import { BreadcrumbsStore } from "../../stores/BreadcrumbsStore";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../stores/room-list/RoomListStore";
@@ -32,9 +32,9 @@ import RoomBreadcrumbs from "../views/rooms/RoomBreadcrumbs";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../settings/UIFeature";
-import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../views/elements/AccessibleButton";
 import PosthogTrackers from "../../PosthogTrackers";
-import PageType from "../../PageTypes";
+import type PageType from "../../PageTypes";
 import { Landmark, LandmarkNavigation } from "../../accessibility/LandmarkNavigation";
 
 interface IProps {

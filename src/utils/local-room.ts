@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import defaultDispatcher from "../dispatcher/dispatcher";
-import { LocalRoom, LocalRoomState } from "../models/LocalRoom";
+import { type LocalRoom, LocalRoomState } from "../models/LocalRoom";
 import { isLocalRoom } from "./localRoom/isLocalRoom";
 import { isRoomReady } from "./localRoom/isRoomReady";
 

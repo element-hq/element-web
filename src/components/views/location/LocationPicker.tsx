@@ -6,22 +6,22 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { SyntheticEvent } from "react";
-import maplibregl, { MapMouseEvent } from "maplibre-gl";
+import React, { type SyntheticEvent } from "react";
+import maplibregl, { type MapMouseEvent } from "maplibre-gl";
 import { logger } from "matrix-js-sdk/src/logger";
-import { RoomMember, ClientEvent, IClientWellKnown } from "matrix-js-sdk/src/matrix";
+import { type RoomMember, ClientEvent, type IClientWellKnown } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import Modal from "../../../Modal";
 import { tileServerFromWellKnown } from "../../../utils/WellKnownUtils";
-import { GenericPosition, genericPositionFromGeolocation, getGeoUri } from "../../../utils/beacon";
+import { type GenericPosition, genericPositionFromGeolocation, getGeoUri } from "../../../utils/beacon";
 import { LocationShareError, findMapStyleUrl, positionFailureMessage } from "../../../utils/location";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import AccessibleButton from "../elements/AccessibleButton";
 import { MapError } from "./MapError";
 import LiveDurationDropdown, { DEFAULT_DURATION_MS } from "./LiveDurationDropdown";
-import { LocationShareType, ShareLocationFn } from "./shareLocation";
+import { LocationShareType, type ShareLocationFn } from "./shareLocation";
 import Marker from "./Marker";
 
 export interface ILocationPickerProps {

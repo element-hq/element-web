@@ -7,13 +7,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { TranslationStringsObject } from "@matrix-org/react-sdk-module-api/lib/types/translations";
-import { AccountAuthInfo } from "@matrix-org/react-sdk-module-api/lib/types/AccountAuthInfo";
-import { DialogContent, DialogProps } from "@matrix-org/react-sdk-module-api/lib/components/DialogContent";
+import { type TranslationStringsObject } from "@matrix-org/react-sdk-module-api/lib/types/translations";
+import { type AccountAuthInfo } from "@matrix-org/react-sdk-module-api/lib/types/AccountAuthInfo";
+import { DialogContent, type DialogProps } from "@matrix-org/react-sdk-module-api/lib/components/DialogContent";
 import { screen, within } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
-import { Mocked } from "jest-mock";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type Mocked } from "jest-mock";
 
 import { ProxiedModuleApi } from "../../../src/modules/ProxiedModuleApi";
 import { getMockClientWithEventEmitter, mkRoom, stubClient } from "../../test-utils";
@@ -22,7 +22,7 @@ import { ModuleRunner } from "../../../src/modules/ModuleRunner";
 import { registerMockModule } from "./MockModule";
 import defaultDispatcher from "../../../src/dispatcher/dispatcher";
 import { Action } from "../../../src/dispatcher/actions";
-import WidgetStore, { IApp } from "../../../src/stores/WidgetStore";
+import WidgetStore, { type IApp } from "../../../src/stores/WidgetStore";
 import { Container, WidgetLayoutStore } from "../../../src/stores/widgets/WidgetLayoutStore";
 
 describe("ProxiedApiModule", () => {

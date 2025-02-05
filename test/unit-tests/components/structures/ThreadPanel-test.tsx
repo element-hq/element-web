@@ -10,8 +10,8 @@ import React from "react";
 import { render, screen, fireEvent, waitFor, getByRole } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 import {
-    MatrixClient,
-    MatrixEvent,
+    type MatrixClient,
+    type MatrixEvent,
     PendingEventOrdering,
     Room,
     FeatureSupport,
@@ -26,7 +26,7 @@ import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalink
 import ResizeNotifier from "../../../../src/utils/ResizeNotifier";
 import { createTestClient, getRoomContext, mkRoom, mockPlatformPeg, stubClient } from "../../../test-utils";
 import { mkThread } from "../../../test-utils/threads";
-import { IRoomState } from "../../../../src/components/structures/RoomView";
+import { type IRoomState } from "../../../../src/components/structures/RoomView";
 import { ScopedRoomContextProvider } from "../../../../src/contexts/ScopedRoomContext.tsx";
 
 jest.mock("../../../../src/utils/Feedback");

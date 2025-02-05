@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode, createRef, useCallback, useEffect, useState, useId } from "react";
+import React, { type ReactNode, createRef, useCallback, useEffect, useState, useId } from "react";
 import EditIcon from "@vector-im/compound-design-tokens/assets/web/icons/edit";
 import UploadIcon from "@vector-im/compound-design-tokens/assets/web/icons/share";
 import DeleteIcon from "@vector-im/compound-design-tokens/assets/web/icons/delete";

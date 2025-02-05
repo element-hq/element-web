@@ -11,10 +11,10 @@ Please see LICENSE files in the repository root for full details.
 import * as React from "react";
 import classNames from "classnames";
 
-import { _t, TranslationKey } from "../../languageHandler";
+import { _t, type TranslationKey } from "../../languageHandler";
 import AutoHideScrollbar from "./AutoHideScrollbar";
-import { PosthogScreenTracker, ScreenName } from "../../PosthogTrackers";
-import { NonEmptyArray } from "../../@types/common";
+import { PosthogScreenTracker, type ScreenName } from "../../PosthogTrackers";
+import { type NonEmptyArray } from "../../@types/common";
 import { RovingAccessibleButton, RovingTabIndexProvider } from "../../accessibility/RovingTabIndex";
 import { useWindowWidth } from "../../hooks/useWindowWidth";
 

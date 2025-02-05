@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { MatrixEvent, RoomMember, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, RoomMember, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import Modal from "../../Modal";
 import { _t } from "../../languageHandler";
@@ -15,7 +15,7 @@ import ErrorDialog from "../views/dialogs/ErrorDialog";
 import MainSplit from "./MainSplit";
 import RightPanel from "./RightPanel";
 import Spinner from "../views/elements/Spinner";
-import ResizeNotifier from "../../utils/ResizeNotifier";
+import type ResizeNotifier from "../../utils/ResizeNotifier";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
 import HomePage from "./HomePage.tsx";
 import MatrixClientContext from "../../contexts/MatrixClientContext";

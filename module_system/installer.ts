@@ -9,7 +9,7 @@ import * as fs from "fs";
 import * as childProcess from "child_process";
 import * as semver from "semver";
 
-import { BuildConfig } from "./BuildConfig";
+import { type BuildConfig } from "./BuildConfig";
 
 // This expects to be run from ./scripts/install.ts
 

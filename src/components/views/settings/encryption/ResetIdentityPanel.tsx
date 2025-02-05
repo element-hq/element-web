@@ -9,7 +9,7 @@ import { Breadcrumb, Button, VisualList, VisualListItem } from "@vector-im/compo
 import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 import InfoIcon from "@vector-im/compound-design-tokens/assets/web/icons/info";
 import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
-import React, { MouseEventHandler } from "react";
+import React, { type MouseEventHandler } from "react";
 
 import { _t } from "../../../../languageHandler";
 import { EncryptionCard } from "./EncryptionCard";

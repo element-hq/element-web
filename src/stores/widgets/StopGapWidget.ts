@@ -7,26 +7,26 @@
  */
 
 import {
-    Room,
-    MatrixEvent,
+    type Room,
+    type MatrixEvent,
     MatrixEventEvent,
-    MatrixClient,
+    type MatrixClient,
     ClientEvent,
     RoomStateEvent,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import {
     ClientWidgetApi,
-    IModalWidgetOpenRequest,
-    IRoomEvent,
-    IStickerActionRequest,
-    IStickyActionRequest,
-    ITemplateParams,
-    IWidget,
-    IWidgetApiErrorResponseData,
-    IWidgetApiRequest,
-    IWidgetApiRequestEmptyData,
-    IWidgetData,
+    type IModalWidgetOpenRequest,
+    type IRoomEvent,
+    type IStickerActionRequest,
+    type IStickyActionRequest,
+    type ITemplateParams,
+    type IWidget,
+    type IWidgetApiErrorResponseData,
+    type IWidgetApiRequest,
+    type IWidgetApiRequestEmptyData,
+    type IWidgetData,
     MatrixCapabilities,
     runTemplate,
     Widget,
@@ -48,16 +48,16 @@ import ActiveWidgetStore from "../ActiveWidgetStore";
 import { objectShallowClone } from "../../utils/objects";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
-import { ElementWidgetActions, IHangupCallApiRequest, IViewRoomApiRequest } from "./ElementWidgetActions";
+import { ElementWidgetActions, type IHangupCallApiRequest, type IViewRoomApiRequest } from "./ElementWidgetActions";
 import { ModalWidgetStore } from "../ModalWidgetStore";
-import { IApp, isAppWidget } from "../WidgetStore";
+import { type IApp, isAppWidget } from "../WidgetStore";
 import ThemeWatcher, { ThemeWatcherEvent } from "../../settings/watchers/ThemeWatcher";
 import { getCustomTheme } from "../../theme";
 import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
 import { ELEMENT_CLIENT_ID } from "../../identifiers";
 import { WidgetVariableCustomisations } from "../../customisations/WidgetVariables";
 import { arrayFastClone } from "../../utils/arrays";
-import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import Modal from "../../Modal";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
 import { SdkContextClass } from "../../contexts/SDKContext";

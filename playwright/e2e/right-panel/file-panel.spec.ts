@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Download, type Page } from "@playwright/test";
+import { type Download, type Page } from "@playwright/test";
 
 import { test, expect } from "../../element-web-test";
 import { viewRoomSummaryByName } from "./utils";

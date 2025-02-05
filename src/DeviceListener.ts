@@ -7,17 +7,17 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    MatrixEvent,
+    type MatrixEvent,
     ClientEvent,
     EventType,
-    MatrixClient,
+    type MatrixClient,
     RoomStateEvent,
-    SyncState,
+    type SyncState,
     ClientStoppedError,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { CryptoEvent, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
-import { CryptoSessionStateChange } from "@matrix-org/analytics-events/types/typescript/CryptoSessionStateChange";
+import { CryptoEvent, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
+import { type CryptoSessionStateChange } from "@matrix-org/analytics-events/types/typescript/CryptoSessionStateChange";
 
 import { PosthogAnalytics } from "./PosthogAnalytics";
 import dis from "./dispatcher/dispatcher";
@@ -35,12 +35,12 @@ import {
     showToast as showUnverifiedSessionsToast,
 } from "./toasts/UnverifiedSessionToast";
 import { isSecretStorageBeingAccessed } from "./SecurityManager";
-import { ActionPayload } from "./dispatcher/payloads";
+import { type ActionPayload } from "./dispatcher/payloads";
 import { Action } from "./dispatcher/actions";
 import SdkConfig from "./SdkConfig";
 import PlatformPeg from "./PlatformPeg";
 import { recordClientInformation, removeClientInformation } from "./utils/device/clientInformation";
-import SettingsStore, { CallbackFn } from "./settings/SettingsStore";
+import SettingsStore, { type CallbackFn } from "./settings/SettingsStore";
 import { UIFeature } from "./settings/UIFeature";
 import { isBulkUnverifiedDeviceReminderSnoozed } from "./utils/device/snoozeBulkUnverifiedDeviceReminder";
 import { getUserDeviceIds } from "./utils/crypto/deviceInfo";

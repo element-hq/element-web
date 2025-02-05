@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { AuthDict, MatrixClient, MatrixError, UIAResponse } from "matrix-js-sdk/src/matrix";
+import { type AuthDict, type MatrixClient, MatrixError, type UIAResponse } from "matrix-js-sdk/src/matrix";
 
 import { SSOAuthEntry } from "./components/views/auth/InteractiveAuthEntryComponents";
 import Modal from "./Modal";

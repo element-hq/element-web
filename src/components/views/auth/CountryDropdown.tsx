@@ -6,13 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactElement } from "react";
+import React, { type ReactElement } from "react";
 
-import { COUNTRIES, getEmojiFlag, PhoneNumberCountryDefinition } from "../../../phonenumber";
+import { COUNTRIES, getEmojiFlag, type PhoneNumberCountryDefinition } from "../../../phonenumber";
 import SdkConfig from "../../../SdkConfig";
 import { _t, getUserLanguage } from "../../../languageHandler";
 import Dropdown from "../elements/Dropdown";
-import { NonEmptyArray } from "../../../@types/common";
+import { type NonEmptyArray } from "../../../@types/common";
 
 interface InternationalisedCountry extends PhoneNumberCountryDefinition {
     name: string; // already translated to the user's locale

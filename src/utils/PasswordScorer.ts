@@ -5,10 +5,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { zxcvbn, zxcvbnOptions, ZxcvbnResult, TranslationKeys } from "@zxcvbn-ts/core";
+import { zxcvbn, zxcvbnOptions, type ZxcvbnResult, type TranslationKeys } from "@zxcvbn-ts/core";
 import * as zxcvbnCommonPackage from "@zxcvbn-ts/language-common";
 import * as zxcvbnEnPackage from "@zxcvbn-ts/language-en";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../languageHandler";
 import SdkConfig from "../SdkConfig";

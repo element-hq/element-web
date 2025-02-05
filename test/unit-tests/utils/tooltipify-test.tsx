@@ -11,7 +11,7 @@ import { act, render } from "jest-matrix-react";
 
 import { tooltipifyLinks } from "../../../src/utils/tooltipify";
 import PlatformPeg from "../../../src/PlatformPeg";
-import BasePlatform from "../../../src/BasePlatform";
+import type BasePlatform from "../../../src/BasePlatform";
 import { ReactRootManager } from "../../../src/utils/react.tsx";
 
 describe("tooltipify", () => {

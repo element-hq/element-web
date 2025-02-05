@@ -7,21 +7,21 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, forwardRef, JSX, MouseEvent, ReactNode } from "react";
+import React, { createRef, forwardRef, type JSX, type MouseEvent, type ReactNode } from "react";
 import classNames from "classnames";
 import {
     EventStatus,
     EventType,
-    MatrixEvent,
+    type MatrixEvent,
     MatrixEventEvent,
     MsgType,
-    NotificationCountType,
-    Relations,
-    RelationType,
-    Room,
+    type NotificationCountType,
+    type Relations,
+    type RelationType,
+    type Room,
     RoomEvent,
-    RoomMember,
-    Thread,
+    type RoomMember,
+    type Thread,
     ThreadEvent,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -31,7 +31,7 @@ import {
     DecryptionFailureCode,
     EventShieldColour,
     EventShieldReason,
-    UserVerificationStatus,
+    type UserVerificationStatus,
 } from "matrix-js-sdk/src/crypto-api";
 import { Tooltip } from "@vector-im/compound-web";
 
@@ -46,35 +46,35 @@ import RoomAvatar from "../avatars/RoomAvatar";
 import MessageContextMenu from "../context_menus/MessageContextMenu";
 import { aboveRightOf } from "../../structures/ContextMenu";
 import { objectHasDiff } from "../../../utils/objects";
-import EditorStateTransfer from "../../../utils/EditorStateTransfer";
-import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import type EditorStateTransfer from "../../../utils/EditorStateTransfer";
+import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
 import NotificationBadge from "./NotificationBadge";
-import LegacyCallEventGrouper from "../../structures/LegacyCallEventGrouper";
-import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
+import type LegacyCallEventGrouper from "../../structures/LegacyCallEventGrouper";
+import { type ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
 import { Action } from "../../../dispatcher/actions";
 import PlatformPeg from "../../../PlatformPeg";
 import MemberAvatar from "../avatars/MemberAvatar";
 import SenderProfile from "../messages/SenderProfile";
 import MessageTimestamp from "../messages/MessageTimestamp";
-import { IReadReceiptPosition } from "./ReadReceiptMarker";
+import { type IReadReceiptPosition } from "./ReadReceiptMarker";
 import MessageActionBar from "../messages/MessageActionBar";
 import ReactionsRow from "../messages/ReactionsRow";
 import { getEventDisplayInfo } from "../../../utils/EventRenderingUtils";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
-import { ButtonEvent } from "../elements/AccessibleButton";
+import { type ButtonEvent } from "../elements/AccessibleButton";
 import { copyPlaintext, getSelectedText } from "../../../utils/strings";
 import { DecryptionFailureTracker } from "../../../DecryptionFailureTracker";
 import RedactedBody from "../messages/RedactedBody";
-import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { shouldDisplayReply } from "../../../utils/Reply";
 import PosthogTrackers from "../../../PosthogTrackers";
 import TileErrorBoundary from "../messages/TileErrorBoundary";
 import { haveRendererForEvent, isMessageEvent, renderTile } from "../../../events/EventTileFactory";
 import ThreadSummary, { ThreadMessagePreview } from "./ThreadSummary";
 import { ReadReceiptGroup } from "./ReadReceiptGroup";
-import { ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
+import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import { isLocalRoom } from "../../../utils/localRoom/isLocalRoom";
 import { ElementCall } from "../../../models/Call";
 import { UnreadNotificationBadge } from "./NotificationBadge/UnreadNotificationBadge";

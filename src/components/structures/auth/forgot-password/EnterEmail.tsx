@@ -6,15 +6,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode, useRef } from "react";
+import React, { type ReactNode, useRef } from "react";
 import { EmailSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t, _td } from "../../../../languageHandler";
 import EmailField from "../../../views/auth/EmailField";
 import { ErrorMessage } from "../../ErrorMessage";
 import Spinner from "../../../views/elements/Spinner";
-import Field from "../../../views/elements/Field";
-import AccessibleButton, { ButtonEvent } from "../../../views/elements/AccessibleButton";
+import type Field from "../../../views/elements/Field";
+import AccessibleButton, { type ButtonEvent } from "../../../views/elements/AccessibleButton";
 
 interface EnterEmailProps {
     email: string;

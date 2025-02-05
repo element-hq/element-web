@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import * as http from "http";
-import { AddressInfo } from "net";
+import { type AddressInfo } from "net";
 
 export class Webserver {
     private server?: http.Server;

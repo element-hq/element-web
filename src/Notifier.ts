@@ -10,21 +10,21 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    MatrixEvent,
+    type MatrixEvent,
     MatrixEventEvent,
-    Room,
+    type Room,
     RoomEvent,
     ClientEvent,
     MsgType,
     SyncState,
-    SyncStateData,
-    IRoomTimelineData,
+    type SyncStateData,
+    type IRoomTimelineData,
     M_LOCATION,
     EventType,
     TypedEventEmitter,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { PermissionChanged as PermissionChangedEvent } from "@matrix-org/analytics-events/types/typescript/PermissionChanged";
+import { type PermissionChanged as PermissionChangedEvent } from "@matrix-org/analytics-events/types/typescript/PermissionChanged";
 import { MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";

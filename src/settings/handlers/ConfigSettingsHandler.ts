@@ -12,7 +12,7 @@ import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import SettingsHandler from "./SettingsHandler";
 import SdkConfig from "../../SdkConfig";
 import { SnakedObject } from "../../utils/SnakedObject";
-import { IConfigOptions } from "../../IConfigOptions";
+import { type IConfigOptions } from "../../IConfigOptions";
 
 /**
  * Gets and sets settings at the "config" level. This handler does not make use of the

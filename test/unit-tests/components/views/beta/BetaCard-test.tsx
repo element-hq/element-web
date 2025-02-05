@@ -13,8 +13,8 @@ import { render, screen } from "jest-matrix-react";
 import { shouldShowFeedback } from "../../../../../src/utils/Feedback";
 import BetaCard from "../../../../../src/components/views/beta/BetaCard";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
-import { TranslationKey } from "../../../../../src/languageHandler";
-import { FeatureSettingKey } from "../../../../../src/settings/Settings.tsx";
+import { type TranslationKey } from "../../../../../src/languageHandler";
+import { type FeatureSettingKey } from "../../../../../src/settings/Settings.tsx";
 
 jest.mock("../../../../../src/utils/Feedback");
 jest.mock("../../../../../src/settings/SettingsStore");

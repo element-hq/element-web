@@ -12,7 +12,7 @@ Please see LICENSE files in the repository root for full details.
 
 // Populate this class with the details of your customisations when copying it.
 
-import { UIComponent } from "../settings/UIFeature";
+import { type UIComponent } from "../settings/UIFeature";
 
 /**
  * Determines whether or not the active MatrixClient user should be able to use

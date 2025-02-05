@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { useState } from "react";
 
-import { SummarizedNotificationState } from "../stores/notifications/SummarizedNotificationState";
+import { type SummarizedNotificationState } from "../stores/notifications/SummarizedNotificationState";
 import {
     RoomNotificationStateStore,
     UPDATE_STATUS_INDICATOR,

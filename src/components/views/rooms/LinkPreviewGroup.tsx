@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useContext, useEffect } from "react";
-import { MatrixEvent, MatrixError, IPreviewUrlResponse, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, MatrixError, type IPreviewUrlResponse, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 

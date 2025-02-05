@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { MatrixClient, MatrixEvent, PushRuleKind } from "matrix-js-sdk/src/matrix";
-import { mocked, MockedObject } from "jest-mock";
+import { type MatrixClient, type MatrixEvent, PushRuleKind } from "matrix-js-sdk/src/matrix";
+import { mocked, type MockedObject } from "jest-mock";
 import { render, waitFor } from "jest-matrix-react";
 
 import { getMockClientWithEventEmitter, mkEvent, mkMessage, mkStubRoom } from "../../../../test-utils";
@@ -18,7 +18,7 @@ import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import TextualBody from "../../../../../src/components/views/messages/TextualBody";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
-import { MediaEventHelper } from "../../../../../src/utils/MediaEventHelper";
+import { type MediaEventHelper } from "../../../../../src/utils/MediaEventHelper";
 
 const room1Id = "!room1:example.com";
 const room2Id = "!room2:example.com";

@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { act, render, screen, waitFor } from "jest-matrix-react";
 import * as maplibregl from "maplibre-gl";
-import { Beacon, Room, RoomMember, MatrixEvent, getBeaconInfoIdentifier } from "matrix-js-sdk/src/matrix";
+import { Beacon, type Room, RoomMember, type MatrixEvent, getBeaconInfoIdentifier } from "matrix-js-sdk/src/matrix";
 
 import BeaconMarker from "../../../../../src/components/views/beacon/BeaconMarker";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";

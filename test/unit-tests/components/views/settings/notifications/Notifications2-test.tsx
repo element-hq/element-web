@@ -10,8 +10,8 @@ import { act, findByRole, getByRole, queryByRole, render, waitFor } from "jest-m
 import userEvent from "@testing-library/user-event";
 import {
     ThreepidMedium,
-    IPushRules,
-    MatrixClient,
+    type IPushRules,
+    type MatrixClient,
     NotificationCountType,
     PushRuleKind,
     Room,

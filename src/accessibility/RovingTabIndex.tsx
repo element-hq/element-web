@@ -13,16 +13,16 @@ import React, {
     useMemo,
     useRef,
     useReducer,
-    Reducer,
-    Dispatch,
-    RefObject,
-    ReactNode,
-    RefCallback,
+    type Reducer,
+    type Dispatch,
+    type RefObject,
+    type ReactNode,
+    type RefCallback,
 } from "react";
 
 import { getKeyBindingsManager } from "../KeyBindingsManager";
 import { KeyBindingAction } from "./KeyboardShortcuts";
-import { FocusHandler } from "./roving/types";
+import { type FocusHandler } from "./roving/types";
 
 /**
  * Module to simplify implementing the Roving TabIndex accessibility technique

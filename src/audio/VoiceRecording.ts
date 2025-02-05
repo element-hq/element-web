@@ -13,7 +13,7 @@ import EventEmitter from "events";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import MediaDeviceHandler from "../MediaDeviceHandler";
-import { IDestroyable } from "../utils/IDestroyable";
+import { type IDestroyable } from "../utils/IDestroyable";
 import { Singleflight } from "../utils/Singleflight";
 import { PayloadEvent, WORKLET_NAME } from "./consts";
 import { UPDATE_EVENT } from "../stores/AsyncStore";

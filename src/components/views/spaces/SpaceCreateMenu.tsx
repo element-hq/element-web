@@ -7,15 +7,15 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, {
-    ComponentProps,
-    RefObject,
-    SyntheticEvent,
-    KeyboardEvent,
+    type ComponentProps,
+    type RefObject,
+    type SyntheticEvent,
+    type KeyboardEvent,
     useContext,
     useRef,
     useState,
-    ChangeEvent,
-    ReactNode,
+    type ChangeEvent,
+    type ReactNode,
     useEffect,
 } from "react";
 import classNames from "classnames";
@@ -24,17 +24,18 @@ import {
     HistoryVisibility,
     Preset,
     Visibility,
-    MatrixClient,
-    ICreateRoomOpts,
+    type MatrixClient,
+    type ICreateRoomOpts,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";
 import ContextMenu, { ChevronFace } from "../../structures/ContextMenu";
-import createRoom, { IOpts as ICreateOpts } from "../../../createRoom";
+import createRoom, { type IOpts as ICreateOpts } from "../../../createRoom";
 import MatrixClientContext, { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
-import SpaceBasicSettings, { SpaceAvatar } from "./SpaceBasicSettings";
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
+import type SpaceBasicSettings from "./SpaceBasicSettings";
+import { SpaceAvatar } from "./SpaceBasicSettings";
+import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import Field from "../elements/Field";
 import withValidation from "../elements/Validation";
 import RoomAliasField from "../elements/RoomAliasField";
@@ -43,7 +44,7 @@ import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { Filter } from "../dialogs/spotlight/Filter";
-import { OpenSpotlightPayload } from "../../../dispatcher/payloads/OpenSpotlightPayload.ts";
+import { type OpenSpotlightPayload } from "../../../dispatcher/payloads/OpenSpotlightPayload.ts";
 
 export const createSpace = async (
     client: MatrixClient,

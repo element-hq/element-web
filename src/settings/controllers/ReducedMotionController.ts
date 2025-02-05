@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import SettingController from "./SettingController";
-import { SettingLevel } from "../SettingLevel";
+import { type SettingLevel } from "../SettingLevel";
 
 /**
  * For animation-like settings, this controller checks whether the user has

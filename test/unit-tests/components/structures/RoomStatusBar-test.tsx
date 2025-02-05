@@ -9,10 +9,10 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { render } from "jest-matrix-react";
 import {
-    MatrixClient,
+    type MatrixClient,
     PendingEventOrdering,
     EventStatus,
-    MatrixEvent,
+    type MatrixEvent,
     Room,
     MatrixError,
 } from "matrix-js-sdk/src/matrix";

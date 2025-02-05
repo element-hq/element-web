@@ -10,16 +10,16 @@ import {
     EventType,
     HistoryVisibility,
     JoinRule,
-    MatrixClient,
+    type MatrixClient,
     MatrixEvent,
-    MRoomTopicEventContent,
+    type MRoomTopicEventContent,
     Room,
-    RoomMember,
+    type RoomMember,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { render } from "jest-matrix-react";
-import { ReactElement } from "react";
-import { Mocked, mocked } from "jest-mock";
+import { type ReactElement } from "react";
+import { type Mocked, mocked } from "jest-mock";
 
 import { textForEvent } from "../../src/TextForEvent";
 import SettingsStore from "../../src/settings/SettingsStore";

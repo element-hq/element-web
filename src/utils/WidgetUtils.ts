@@ -10,8 +10,8 @@ Please see LICENSE files in the repository root for full details.
 import { useCallback, useEffect, useState } from "react";
 import { base32 } from "rfc4648";
 import { capitalize } from "lodash";
-import { IWidget, IWidgetData } from "matrix-widget-api";
-import { Room, ClientEvent, MatrixClient, RoomStateEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type IWidget, type IWidgetData } from "matrix-widget-api";
+import { type Room, ClientEvent, type MatrixClient, RoomStateEvent, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
@@ -26,11 +26,11 @@ import { WidgetType } from "../widgets/WidgetType";
 import { Jitsi } from "../widgets/Jitsi";
 import { objectClone } from "./objects";
 import { _t } from "../languageHandler";
-import WidgetStore, { IApp, isAppWidget } from "../stores/WidgetStore";
+import WidgetStore, { type IApp, isAppWidget } from "../stores/WidgetStore";
 import { parseUrl } from "./UrlUtils";
 import { useEventEmitter } from "../hooks/useEventEmitter";
 import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
-import { IWidgetEvent, UserWidget } from "./WidgetUtils-types";
+import { type IWidgetEvent, type UserWidget } from "./WidgetUtils-types";
 
 // How long we wait for the state event echo to come back from the server
 // before waitFor[Room/User]Widget rejects its promise

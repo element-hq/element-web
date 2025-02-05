@@ -6,8 +6,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { HTMLProps, JSX, useContext, useState } from "react";
-import { IContent, M_POLL_START, MatrixEvent, MatrixEventEvent, MsgType } from "matrix-js-sdk/src/matrix";
+import React, { type HTMLProps, type JSX, useContext, useState } from "react";
+import { type IContent, M_POLL_START, type MatrixEvent, MatrixEventEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";

@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { MouseEventHandler, ReactNode } from "react";
-import { FormattingFunctions, AllActionStates, ActionState } from "@vector-im/matrix-wysiwyg";
+import React, { type MouseEventHandler, type ReactNode } from "react";
+import { type FormattingFunctions, type AllActionStates, type ActionState } from "@vector-im/matrix-wysiwyg";
 import classNames from "classnames";
 import BoldIcon from "@vector-im/compound-design-tokens/assets/web/icons/bold";
 import BulletedListIcon from "@vector-im/compound-design-tokens/assets/web/icons/list-bulleted";
@@ -23,11 +23,11 @@ import UnderlineIcon from "@vector-im/compound-design-tokens/assets/web/icons/un
 import LinkIcon from "@vector-im/compound-design-tokens/assets/web/icons/link";
 
 import { _t } from "../../../../../languageHandler";
-import AccessibleButton, { ButtonEvent } from "../../../elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../../../elements/AccessibleButton";
 import { openLinkModal } from "./LinkModal";
 import { useComposerContext } from "../ComposerContext";
 import { KeyboardShortcut } from "../../../settings/KeyboardShortcut";
-import { KeyCombo } from "../../../../../KeyBindingsManager";
+import { type KeyCombo } from "../../../../../KeyBindingsManager";
 
 interface ButtonProps {
     icon: ReactNode;

@@ -8,7 +8,7 @@
 
 import React from "react";
 import {
-    MatrixClient,
+    type MatrixClient,
     MatrixEventEvent,
     NotificationCountType,
     PendingEventOrdering,

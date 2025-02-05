@@ -17,7 +17,7 @@ import {
 } from "../../../src/editor/operations";
 import { Formatting } from "../../../src/components/views/rooms/MessageComposerFormatBar";
 import { longestBacktickSequence } from "../../../src/editor/deserialize";
-import DocumentPosition from "../../../src/editor/position";
+import type DocumentPosition from "../../../src/editor/position";
 
 const SERIALIZED_NEWLINE = { text: "\n", type: "newline" };
 

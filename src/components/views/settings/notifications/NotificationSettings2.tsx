@@ -15,7 +15,7 @@ import { useSettingValue } from "../../../../hooks/useSettings";
 import { _t } from "../../../../languageHandler";
 import {
     DefaultNotificationSettings,
-    NotificationSettings,
+    type NotificationSettings,
 } from "../../../../models/notificationsettings/NotificationSettings";
 import { RoomNotifState } from "../../../../RoomNotifs";
 import { SettingLevel } from "../../../../settings/SettingLevel";

@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import SettingController from "./SettingController";
-import { SettingLevel } from "../SettingLevel";
-import PosthogTrackers, { InteractionName } from "../../PosthogTrackers";
+import { type SettingLevel } from "../SettingLevel";
+import PosthogTrackers, { type InteractionName } from "../../PosthogTrackers";
 
 /**
  * Controller that sends events to analytics when a setting is changed.

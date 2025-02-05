@@ -8,19 +8,19 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import {
-    IPushRule,
-    IPushRules,
+    type IPushRule,
+    type IPushRules,
     RuleId,
-    IPusher,
+    type IPusher,
     LOCAL_NOTIFICATION_SETTINGS_PREFIX,
     MatrixEvent,
     Room,
     PushRuleActionName,
     TweakName,
     ConditionKind,
-    IPushRuleCondition,
+    type IPushRuleCondition,
     PushRuleKind,
-    IThreepid,
+    type IThreepid,
     ThreepidMedium,
 } from "matrix-js-sdk/src/matrix";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";

@@ -6,22 +6,22 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, KeyboardEvent, SyntheticEvent } from "react";
+import React, { createRef, type KeyboardEvent, type SyntheticEvent } from "react";
 import {
-    IContent,
-    MatrixEvent,
-    IEventRelation,
-    IMentions,
-    Room,
+    type IContent,
+    type MatrixEvent,
+    type IEventRelation,
+    type IMentions,
+    type Room,
     EventType,
     MsgType,
     RelationType,
     THREAD_RELATION_TYPE,
 } from "matrix-js-sdk/src/matrix";
-import { DebouncedFunc, throttle } from "lodash";
+import { type DebouncedFunc, throttle } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
-import { Composer as ComposerEvent } from "@matrix-org/analytics-events/types/typescript/Composer";
-import { RoomMessageEventContent } from "matrix-js-sdk/src/types";
+import { type Composer as ComposerEvent } from "@matrix-org/analytics-events/types/typescript/Composer";
+import { type RoomMessageEventContent } from "matrix-js-sdk/src/types";
 
 import dis from "../../../dispatcher/dispatcher";
 import EditorModel from "../../../editor/model";
@@ -35,19 +35,19 @@ import {
     unescapeMessage,
 } from "../../../editor/serialize";
 import BasicMessageComposer, { REGEX_EMOTICON } from "./BasicMessageComposer";
-import { CommandPartCreator, Part, PartCreator, SerializedPart, Type } from "../../../editor/parts";
+import { CommandPartCreator, type Part, type PartCreator, type SerializedPart, Type } from "../../../editor/parts";
 import { findEditableEvent } from "../../../utils/EventUtils";
 import SendHistoryManager from "../../../SendHistoryManager";
 import { CommandCategories } from "../../../SlashCommands";
 import ContentMessages from "../../../ContentMessages";
-import { withMatrixClientHOC, MatrixClientProps } from "../../../contexts/MatrixClientContext";
+import { withMatrixClientHOC, type MatrixClientProps } from "../../../contexts/MatrixClientContext";
 import { Action } from "../../../dispatcher/actions";
 import { containsEmoji } from "../../../effects/utils";
 import { CHAT_EFFECTS } from "../../../effects";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import SettingsStore from "../../../settings/SettingsStore";
-import { ActionPayload } from "../../../dispatcher/payloads";
+import { type ActionPayload } from "../../../dispatcher/payloads";
 import { decorateStartSendingTime, sendRoundTripMetric } from "../../../sendTimePerformanceMetrics";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import DocumentPosition from "../../../editor/position";
@@ -57,8 +57,8 @@ import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { PosthogAnalytics } from "../../../PosthogAnalytics";
 import { addReplyToMessageContent } from "../../../utils/Reply";
 import { doMaybeLocalRoomAction } from "../../../utils/local-room";
-import { Caret } from "../../../editor/caret";
-import { IDiff } from "../../../editor/diff";
+import { type Caret } from "../../../editor/caret";
+import { type IDiff } from "../../../editor/diff";
 import { getBlobSafeMimeType } from "../../../utils/blobs";
 import { EMOJI_REGEX } from "../../../HtmlUtils";
 

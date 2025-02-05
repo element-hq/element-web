@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render } from "jest-matrix-react";
-import { IPublicRoomsChunkRoom } from "matrix-js-sdk/src/matrix";
+import { type IPublicRoomsChunkRoom } from "matrix-js-sdk/src/matrix";
 
 import { PublicRoomResultDetails } from "../../../../../../src/components/views/dialogs/spotlight/PublicRoomResultDetails";
 

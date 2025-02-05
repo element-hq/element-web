@@ -8,7 +8,7 @@
 
 import { act, screen, render } from "jest-matrix-react";
 import React from "react";
-import { EventType, IEvent, MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { EventType, type IEvent, type MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import userEvent from "@testing-library/user-event";
 
 import * as pinnedEventHooks from "../../../../../src/hooks/usePinnedEvents";

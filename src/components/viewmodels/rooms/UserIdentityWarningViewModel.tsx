@@ -6,8 +6,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { EventType, MatrixEvent, Room, RoomMember, RoomStateEvent } from "matrix-js-sdk/src/matrix";
-import { CryptoApi, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
+import { EventType, type MatrixEvent, type Room, type RoomMember, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { type CryptoApi, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { throttle } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
 

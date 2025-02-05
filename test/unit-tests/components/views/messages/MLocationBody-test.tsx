@@ -15,8 +15,8 @@ import { sleep } from "matrix-js-sdk/src/utils";
 
 import MLocationBody from "../../../../../src/components/views/messages/MLocationBody";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
-import { MediaEventHelper } from "../../../../../src/utils/MediaEventHelper";
+import { type RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
+import { type MediaEventHelper } from "../../../../../src/utils/MediaEventHelper";
 import Modal from "../../../../../src/Modal";
 import SdkConfig from "../../../../../src/SdkConfig";
 import { TILE_SERVER_WK_KEY } from "../../../../../src/utils/WellKnownUtils";

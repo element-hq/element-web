@@ -6,9 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixError, MatrixClient, EventType, EmptyObject } from "matrix-js-sdk/src/matrix";
+import { MatrixError, type MatrixClient, EventType, type EmptyObject } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { defer, IDeferred } from "matrix-js-sdk/src/utils";
+import { defer, type IDeferred } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { AddressType, getAddressType } from "../UserAddress";

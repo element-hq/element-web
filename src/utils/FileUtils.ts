@@ -9,15 +9,15 @@ Please see LICENSE files in the repository root for full details.
 
 import {
     filesize,
-    FileSizeOptionsArray,
-    FileSizeOptionsBase,
-    FileSizeOptionsExponent,
-    FileSizeOptionsObject,
-    FileSizeOptionsString,
-    FileSizeReturnArray,
-    FileSizeReturnObject,
+    type FileSizeOptionsArray,
+    type FileSizeOptionsBase,
+    type FileSizeOptionsExponent,
+    type FileSizeOptionsObject,
+    type FileSizeOptionsString,
+    type FileSizeReturnArray,
+    type FileSizeReturnObject,
 } from "filesize";
-import { MediaEventContent } from "matrix-js-sdk/src/types";
+import { type MediaEventContent } from "matrix-js-sdk/src/types";
 
 import { _t } from "../languageHandler";
 

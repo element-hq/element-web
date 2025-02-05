@@ -6,15 +6,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked, MockedObject } from "jest-mock";
-import { MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
+import { mocked, type MockedObject } from "jest-mock";
+import { type MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
 
 import { stubClient } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { Action } from "../../../../src/dispatcher/actions";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
-import { ActiveRoomChangedPayload } from "../../../../src/dispatcher/payloads/ActiveRoomChangedPayload";
+import { type ActiveRoomChangedPayload } from "../../../../src/dispatcher/payloads/ActiveRoomChangedPayload";
 import RightPanelStore from "../../../../src/stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../../src/stores/right-panel/RightPanelStorePhases";
 import SettingsStore from "../../../../src/settings/SettingsStore";

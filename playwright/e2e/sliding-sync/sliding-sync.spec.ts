@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Page, Request } from "@playwright/test";
-import { GenericContainer, StartedTestContainer, Wait } from "testcontainers";
+import { type Page, type Request } from "@playwright/test";
+import { GenericContainer, type StartedTestContainer, Wait } from "testcontainers";
 
 import { test as base, expect } from "../../element-web-test";
 import type { ElementAppPage } from "../../pages/ElementAppPage";

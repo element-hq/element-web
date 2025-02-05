@@ -6,9 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ComponentProps, createRef, ReactNode } from "react";
+import React, { type ComponentProps, createRef, type ReactNode } from "react";
 import { decode } from "html-entities";
-import { MatrixEvent, IPreviewUrlResponse } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, type IPreviewUrlResponse } from "matrix-js-sdk/src/matrix";
 
 import { Linkify } from "../../../HtmlUtils";
 import SettingsStore from "../../../settings/SettingsStore";

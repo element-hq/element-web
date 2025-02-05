@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Page, expect, Locator } from "@playwright/test";
+import { type Page, expect, type Locator } from "@playwright/test";
 
 export class Toasts {
     public constructor(private readonly page: Page) {}

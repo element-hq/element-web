@@ -9,16 +9,16 @@ Please see LICENSE files in the repository root for full details.
 import * as React from "react";
 import {
     ClientWidgetApi,
-    IModalWidgetCloseRequest,
-    IModalWidgetOpenRequestData,
-    IModalWidgetReturnData,
-    ISetModalButtonEnabledActionRequest,
-    IWidgetApiAcknowledgeResponseData,
-    IWidgetApiErrorResponseData,
+    type IModalWidgetCloseRequest,
+    type IModalWidgetOpenRequestData,
+    type IModalWidgetReturnData,
+    type ISetModalButtonEnabledActionRequest,
+    type IWidgetApiAcknowledgeResponseData,
+    type IWidgetApiErrorResponseData,
     BuiltInModalButtonID,
-    ModalButtonID,
+    type ModalButtonID,
     ModalButtonKind,
-    Widget,
+    type Widget,
     WidgetApiFromWidgetAction,
     WidgetKind,
 } from "matrix-widget-api";
@@ -26,7 +26,7 @@ import { ErrorIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import BaseDialog from "./BaseDialog";
 import { _t, getUserLanguage } from "../../../languageHandler";
-import AccessibleButton, { AccessibleButtonKind } from "../elements/AccessibleButton";
+import AccessibleButton, { type AccessibleButtonKind } from "../elements/AccessibleButton";
 import { StopGapWidgetDriver } from "../../../stores/widgets/StopGapWidgetDriver";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";

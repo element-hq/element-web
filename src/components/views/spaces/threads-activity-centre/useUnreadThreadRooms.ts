@@ -7,7 +7,7 @@
  */
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ClientEvent, MatrixClient, MatrixEventEvent, Room } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, type MatrixClient, MatrixEventEvent, type Room } from "matrix-js-sdk/src/matrix";
 import { throttle } from "lodash";
 
 import { doesRoomHaveUnreadThreads } from "../../../../Unread";

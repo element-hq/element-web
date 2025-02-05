@@ -282,7 +282,7 @@ Response:
 
 */
 
-import { IContent, MatrixEvent, IEvent, StateEvents } from "matrix-js-sdk/src/matrix";
+import { type IContent, type MatrixEvent, type IEvent, type StateEvents } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 

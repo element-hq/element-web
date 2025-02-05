@@ -7,13 +7,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import Field from "../elements/Field";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import AccessibleButton, { AccessibleButtonKind } from "../elements/AccessibleButton";
+import AccessibleButton, { type AccessibleButtonKind } from "../elements/AccessibleButton";
 import Spinner from "../elements/Spinner";
-import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
+import withValidation, { type IFieldState, type IValidationResult } from "../elements/Validation";
 import { UserFriendlyError, _t, _td } from "../../../languageHandler";
 import Modal from "../../../Modal";
 import PassphraseField from "../auth/PassphraseField";

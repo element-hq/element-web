@@ -12,13 +12,13 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { sortBy } from "lodash";
 import {
-    MatrixEvent,
-    Room,
+    type MatrixEvent,
+    type Room,
     RoomEvent,
-    RoomMember,
-    RoomState,
+    type RoomMember,
+    type RoomState,
     RoomStateEvent,
-    IRoomTimelineData,
+    type IRoomTimelineData,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
@@ -28,9 +28,9 @@ import { PillCompletion } from "./Components";
 import AutocompleteProvider from "./AutocompleteProvider";
 import { _t } from "../languageHandler";
 import { makeUserPermalink } from "../utils/permalinks/Permalinks";
-import { ICompletion, ISelectionRange } from "./Autocompleter";
+import { type ICompletion, type ISelectionRange } from "./Autocompleter";
 import MemberAvatar from "../components/views/avatars/MemberAvatar";
-import { TimelineRenderingType } from "../contexts/RoomContext";
+import { type TimelineRenderingType } from "../contexts/RoomContext";
 import UserIdentifierCustomisations from "../customisations/UserIdentifier";
 
 const USER_REGEX = /\B@\S*/g;

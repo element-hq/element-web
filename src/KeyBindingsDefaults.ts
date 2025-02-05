@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import { IS_MAC, Key } from "./Keyboard";
 import SettingsStore from "./settings/SettingsStore";
 import SdkConfig from "./SdkConfig";
-import { IKeyBindingsProvider, KeyBinding } from "./KeyBindingsManager";
+import { type IKeyBindingsProvider, type KeyBinding } from "./KeyBindingsManager";
 import { CATEGORIES, CategoryName, KeyBindingAction } from "./accessibility/KeyboardShortcuts";
 import { getKeyboardShortcuts } from "./accessibility/KeyboardShortcutUtils";
 

@@ -10,8 +10,14 @@ Please see LICENSE files in the repository root for full details.
 import React, { createRef } from "react";
 import FileSaver from "file-saver";
 import { logger } from "matrix-js-sdk/src/logger";
-import { AuthDict, CrossSigningKeys, MatrixError, UIAFlow, UIAResponse } from "matrix-js-sdk/src/matrix";
-import { GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
+import {
+    type AuthDict,
+    type CrossSigningKeys,
+    MatrixError,
+    type UIAFlow,
+    type UIAResponse,
+} from "matrix-js-sdk/src/matrix";
+import { type GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
 import classNames from "classnames";
 import CheckmarkIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 
@@ -31,11 +37,11 @@ import {
     SecureBackupSetupMethod,
 } from "../../../../utils/WellKnownUtils";
 import { ModuleRunner } from "../../../../modules/ModuleRunner";
-import Field from "../../../../components/views/elements/Field";
+import type Field from "../../../../components/views/elements/Field";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
 import Spinner from "../../../../components/views/elements/Spinner";
 import InteractiveAuthDialog from "../../../../components/views/dialogs/InteractiveAuthDialog";
-import { IValidationResult } from "../../../../components/views/elements/Validation";
+import { type IValidationResult } from "../../../../components/views/elements/Validation";
 import PassphraseConfirmField from "../../../../components/views/auth/PassphraseConfirmField";
 import { initialiseDehydration } from "../../../../utils/device/dehydration";
 

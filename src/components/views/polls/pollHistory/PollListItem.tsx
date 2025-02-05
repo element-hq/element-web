@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { Tooltip } from "@vector-im/compound-web";
 
 import { Icon as PollIcon } from "../../../../../res/img/element-icons/room/composer/poll.svg";

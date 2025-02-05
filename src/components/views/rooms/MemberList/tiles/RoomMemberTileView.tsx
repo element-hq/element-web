@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 
 import DisambiguatedProfile from "../../../messages/DisambiguatedProfile";
-import { RoomMember } from "../../../../../models/rooms/RoomMember";
+import { type RoomMember } from "../../../../../models/rooms/RoomMember";
 import { useMemberTileViewModel } from "../../../../viewmodels/memberlist/tiles/MemberTileViewModel";
 import { E2EIconView } from "./common/E2EIconView";
 import AvatarPresenceIconView from "./common/PresenceIconView";

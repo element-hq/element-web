@@ -6,10 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
-import { SerializedPart } from "../editor/parts";
-import DocumentOffset from "../editor/offset";
+import { type SerializedPart } from "../editor/parts";
+import type DocumentOffset from "../editor/offset";
 
 /**
  * Used while editing, to pass the event, and to preserve editor state

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classnames from "classnames";
-import React, { HTMLAttributes } from "react";
+import React, { type HTMLAttributes } from "react";
 
 import Heading from "../../typography/Heading";
 import { SettingsHeader } from "../SettingsHeader";

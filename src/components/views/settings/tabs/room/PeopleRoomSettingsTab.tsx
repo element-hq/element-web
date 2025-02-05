@@ -6,15 +6,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EventTimeline, MatrixError, Room, RoomMember, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { EventTimeline, type MatrixError, type Room, type RoomMember, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import React, { useCallback, useState, VFC } from "react";
+import React, { useCallback, useState, type VFC } from "react";
 import { CloseIcon, CheckIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { formatRelativeTime } from "../../../../../DateUtils";
 import { useTypedEventEmitterState } from "../../../../../hooks/useEventEmitter";
 import { _t } from "../../../../../languageHandler";
-import Modal, { IHandle } from "../../../../../Modal";
+import Modal, { type IHandle } from "../../../../../Modal";
 import MemberAvatar from "../../../avatars/MemberAvatar";
 import ErrorDialog from "../../../dialogs/ErrorDialog";
 import AccessibleButton from "../../../elements/AccessibleButton";

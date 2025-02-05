@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import EventEmitter from "events";
-import { MatrixEvent, RoomStateEvent, RoomState } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, RoomStateEvent, type RoomState } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import WidgetUtils from "../utils/WidgetUtils";

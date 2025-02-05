@@ -7,14 +7,14 @@
 
 import React from "react";
 import { render, screen } from "jest-matrix-react";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
 
 import {
     EncryptionUserSettingsTab,
-    State,
+    type State,
 } from "../../../../../../../src/components/views/settings/tabs/user/EncryptionUserSettingsTab";
 import { createTestClient, withClientContextRenderOptions } from "../../../../../../test-utils";
 import Modal from "../../../../../../../src/Modal";

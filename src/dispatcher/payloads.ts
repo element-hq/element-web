@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { DispatcherAction } from "./actions";
+import { type DispatcherAction } from "./actions";
 
 /**
  * The base dispatch type exposed by our dispatcher.

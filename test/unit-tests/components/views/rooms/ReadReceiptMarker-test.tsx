@@ -9,7 +9,9 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { render, screen } from "jest-matrix-react";
 
-import ReadReceiptMarker, { IReadReceiptPosition } from "../../../../../src/components/views/rooms/ReadReceiptMarker";
+import ReadReceiptMarker, {
+    type IReadReceiptPosition,
+} from "../../../../../src/components/views/rooms/ReadReceiptMarker";
 
 describe("ReadReceiptMarker", () => {
     afterEach(() => {
