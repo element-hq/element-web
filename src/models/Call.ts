@@ -21,7 +21,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { NamespacedValue } from "matrix-js-sdk/src/NamespacedValue";
-import { type IWidgetApiRequest , type ClientWidgetApi, type IWidgetData } from "matrix-widget-api";
+import { type IWidgetApiRequest, type ClientWidgetApi, type IWidgetData } from "matrix-widget-api";
 import {
     MatrixRTCSession,
     MatrixRTCSessionEvent,

@@ -10,7 +10,15 @@ import React from "react";
 import { fireEvent, render, screen, cleanup, act, within, waitForElementToBeRemoved } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { type Mocked, mocked } from "jest-mock";
-import { type Room, User, type MatrixClient, RoomMember, MatrixEvent, EventType, Device } from "matrix-js-sdk/src/matrix";
+import {
+    type Room,
+    User,
+    type MatrixClient,
+    RoomMember,
+    MatrixEvent,
+    EventType,
+    Device,
+} from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { defer } from "matrix-js-sdk/src/utils";
 import { EventEmitter } from "events";

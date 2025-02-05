@@ -7,7 +7,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked } from "jest-mock";
-import { type ISendEventResponse, type MatrixClient, RelationType, type UploadResponse } from "matrix-js-sdk/src/matrix";
+import {
+    type ISendEventResponse,
+    type MatrixClient,
+    RelationType,
+    type UploadResponse,
+} from "matrix-js-sdk/src/matrix";
 import { type ImageInfo } from "matrix-js-sdk/src/types";
 import { defer } from "matrix-js-sdk/src/utils";
 import encrypt, { type IEncryptedFile } from "matrix-encrypt-attachment";

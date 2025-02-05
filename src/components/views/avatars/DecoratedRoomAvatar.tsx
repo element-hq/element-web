@@ -8,7 +8,15 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import classNames from "classnames";
-import { EventType, JoinRule, type MatrixEvent, type Room, RoomEvent, type User, UserEvent } from "matrix-js-sdk/src/matrix";
+import {
+    EventType,
+    JoinRule,
+    type MatrixEvent,
+    type Room,
+    RoomEvent,
+    type User,
+    UserEvent,
+} from "matrix-js-sdk/src/matrix";
 import { UnstableValue } from "matrix-js-sdk/src/NamespacedValue";
 import { Tooltip } from "@vector-im/compound-web";
 

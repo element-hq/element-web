@@ -15,7 +15,7 @@ import UserProvider from "./UserProvider";
 import EmojiProvider from "./EmojiProvider";
 import NotifProvider from "./NotifProvider";
 import { timeout } from "../utils/promise";
-import {type ICommand} from "./AutocompleteProvider";
+import { type ICommand } from "./AutocompleteProvider";
 import type AutocompleteProvider from "./AutocompleteProvider";
 import SpaceProvider from "./SpaceProvider";
 import { TimelineRenderingType } from "../contexts/RoomContext";

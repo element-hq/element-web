@@ -38,7 +38,13 @@ import PlatformPeg from "../PlatformPeg";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import SettingsStore from "../settings/SettingsStore";
 import { SettingLevel } from "../settings/SettingLevel";
-import { type ICrawlerCheckpoint, type IEventAndProfile, type IIndexStats, type ILoadArgs, type ISearchArgs } from "./BaseEventIndexManager";
+import {
+    type ICrawlerCheckpoint,
+    type IEventAndProfile,
+    type IIndexStats,
+    type ILoadArgs,
+    type ISearchArgs,
+} from "./BaseEventIndexManager";
 import { asyncFilter } from "../utils/arrays.ts";
 
 // The time in ms that the crawler will wait loop iterations if there

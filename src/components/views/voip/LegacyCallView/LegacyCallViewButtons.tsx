@@ -24,7 +24,10 @@ import {
 import { _t } from "../../../../languageHandler";
 import DeviceContextMenu from "../../context_menus/DeviceContextMenu";
 import { MediaDeviceKindEnum } from "../../../../MediaDeviceHandler";
-import AccessibleButton, { type ButtonEvent, type ButtonProps as AccessibleButtonProps } from "../../elements/AccessibleButton";
+import AccessibleButton, {
+    type ButtonEvent,
+    type ButtonProps as AccessibleButtonProps,
+} from "../../elements/AccessibleButton";
 
 // Height of the header duplicated from CSS because we need to subtract it from our max
 // height to get the max height of the video

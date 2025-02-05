@@ -12,7 +12,13 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import SettingsStore from "../../settings/SettingsStore";
 import { DefaultTagID, OrderedDefaultTagIDs, RoomUpdateCause, type TagID } from "./models";
-import { type IListOrderingMap, type ITagMap, type ITagSortingMap, ListAlgorithm, SortAlgorithm } from "./algorithms/models";
+import {
+    type IListOrderingMap,
+    type ITagMap,
+    type ITagSortingMap,
+    ListAlgorithm,
+    SortAlgorithm,
+} from "./algorithms/models";
 import { type ActionPayload } from "../../dispatcher/payloads";
 import defaultDispatcher, { type MatrixDispatcher } from "../../dispatcher/dispatcher";
 import { readReceiptChangeIsFor } from "../../utils/read-receipts";

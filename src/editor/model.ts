@@ -10,7 +10,7 @@ import { diffAtCaret, diffDeletion, type IDiff } from "./diff";
 import DocumentPosition, { type IPosition } from "./position";
 import Range from "./range";
 import { type SerializedPart, type Part, type PartCreator } from "./parts";
-import {type ICallback} from "./autocomplete";
+import { type ICallback } from "./autocomplete";
 import type AutocompleteWrapperModel from "./autocomplete";
 import type DocumentOffset from "./offset";
 import { type Caret } from "./caret";

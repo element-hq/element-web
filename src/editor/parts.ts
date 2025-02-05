@@ -8,7 +8,11 @@ Please see LICENSE files in the repository root for full details.
 
 import { type MatrixClient, type RoomMember, type Room } from "matrix-js-sdk/src/matrix";
 
-import AutocompleteWrapperModel, { type GetAutocompleterComponent, type UpdateCallback, type UpdateQuery } from "./autocomplete";
+import AutocompleteWrapperModel, {
+    type GetAutocompleterComponent,
+    type UpdateCallback,
+    type UpdateQuery,
+} from "./autocomplete";
 import { EMOJI_REGEX, unicodeToShortcode } from "../HtmlUtils";
 import * as Avatar from "../Avatar";
 import defaultDispatcher from "../dispatcher/dispatcher";

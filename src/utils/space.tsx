@@ -25,7 +25,10 @@ import { Action } from "../dispatcher/actions";
 import Spinner from "../components/views/elements/Spinner";
 import { shouldShowComponent } from "../customisations/helpers/UIComponents";
 import { UIComponent } from "../settings/UIFeature";
-import { type OpenSpacePreferencesPayload, type SpacePreferenceTab } from "../dispatcher/payloads/OpenSpacePreferencesPayload";
+import {
+    type OpenSpacePreferencesPayload,
+    type SpacePreferenceTab,
+} from "../dispatcher/payloads/OpenSpacePreferencesPayload";
 import { type OpenSpaceSettingsPayload } from "../dispatcher/payloads/OpenSpaceSettingsPayload";
 import { type OpenAddExistingToSpaceDialogPayload } from "../dispatcher/payloads/OpenAddExistingToSpaceDialogPayload";
 import { SdkContextClass } from "../contexts/SDKContext";

@@ -30,7 +30,10 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { ContextMenuTooltipButton } from "../../../accessibility/context_menu/ContextMenuTooltipButton";
 import { toRightOf, useContextMenu } from "../../structures/ContextMenu";
-import AccessibleButton, { type ButtonEvent, type ButtonProps as AccessibleButtonProps } from "../elements/AccessibleButton";
+import AccessibleButton, {
+    type ButtonEvent,
+    type ButtonProps as AccessibleButtonProps,
+} from "../elements/AccessibleButton";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
 import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";

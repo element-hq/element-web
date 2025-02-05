@@ -20,7 +20,13 @@ import { ReadyWatchingStore } from "../ReadyWatchingStore";
 import { SettingLevel } from "../../settings/SettingLevel";
 import { arrayFastClone } from "../../utils/arrays";
 import { UPDATE_EVENT } from "../AsyncStore";
-import { Container, type IStoredLayout, type ILayoutStateEvent, WIDGET_LAYOUT_EVENT_TYPE, type IWidgetLayouts } from "./types";
+import {
+    Container,
+    type IStoredLayout,
+    type ILayoutStateEvent,
+    WIDGET_LAYOUT_EVENT_TYPE,
+    type IWidgetLayouts,
+} from "./types";
 
 export type { IStoredLayout, ILayoutStateEvent };
 export { Container, WIDGET_LAYOUT_EVENT_TYPE };

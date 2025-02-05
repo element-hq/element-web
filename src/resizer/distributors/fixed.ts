@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import ResizeItem from "../item";
 import Sizer from "../sizer";
-import {type IConfig} from "../resizer";
+import { type IConfig } from "../resizer";
 import type Resizer from "../resizer";
 
 export abstract class BaseDistributor<C extends IConfig, I extends ResizeItem<C> = ResizeItem<C>> {

@@ -6,7 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useState, type ReactNode, type ChangeEvent, type KeyboardEvent, useRef, type ReactElement } from "react";
+import React, {
+    useState,
+    type ReactNode,
+    type ChangeEvent,
+    type KeyboardEvent,
+    useRef,
+    type ReactElement,
+} from "react";
 import classNames from "classnames";
 import { SearchIcon, CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 

@@ -31,7 +31,12 @@ import dis from "../../../dispatcher/dispatcher";
 import { type RecheckThemePayload } from "../../../dispatcher/payloads/RecheckThemePayload";
 import { Action } from "../../../dispatcher/actions";
 import { useTheme } from "../../../hooks/useTheme";
-import { findHighContrastTheme, getOrderedThemes, type CustomTheme as CustomThemeType, type ITheme } from "../../../theme";
+import {
+    findHighContrastTheme,
+    getOrderedThemes,
+    type CustomTheme as CustomThemeType,
+    type ITheme,
+} from "../../../theme";
 import { useSettingValue } from "../../../hooks/useSettings";
 
 /**

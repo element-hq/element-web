@@ -67,7 +67,10 @@ import {
     UPDATE_STATUS_INDICATOR,
 } from "../../stores/notifications/RoomNotificationStateStore";
 import { SettingLevel } from "../../settings/SettingLevel";
-import ThreepidInviteStore, { type IThreepidInvite, type IThreepidInviteWireFormat } from "../../stores/ThreepidInviteStore";
+import ThreepidInviteStore, {
+    type IThreepidInvite,
+    type IThreepidInviteWireFormat,
+} from "../../stores/ThreepidInviteStore";
 import { UIFeature } from "../../settings/UIFeature";
 import DialPadModal from "../views/voip/DialPadModal";
 import { showToast as showMobileGuideToast } from "../../toasts/MobileGuideToast";

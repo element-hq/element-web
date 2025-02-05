@@ -10,7 +10,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import * as React from "react";
-import { ContentHelpers, Direction, EventType, type IContent, type MRoomTopicEventContent, type User } from "matrix-js-sdk/src/matrix";
+import {
+    ContentHelpers,
+    Direction,
+    EventType,
+    type IContent,
+    type MRoomTopicEventContent,
+    type User,
+} from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { KnownMembership, type RoomMemberEventContent } from "matrix-js-sdk/src/types";
 

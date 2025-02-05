@@ -11,7 +11,11 @@ import classNames from "classnames";
 import { EventStatus, type MatrixEvent, type Room, MsgType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type Composer as ComposerEvent } from "@matrix-org/analytics-events/types/typescript/Composer";
-import { type ReplacementEvent, type RoomMessageEventContent, type RoomMessageTextEventContent } from "matrix-js-sdk/src/types";
+import {
+    type ReplacementEvent,
+    type RoomMessageEventContent,
+    type RoomMessageTextEventContent,
+} from "matrix-js-sdk/src/types";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";

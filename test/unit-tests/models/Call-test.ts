@@ -17,7 +17,10 @@ import {
     RoomStateEvent,
     PendingEventOrdering,
     type IContent,
- type MatrixClient, type IMyDevice, type RoomMember } from "matrix-js-sdk/src/matrix";
+    type MatrixClient,
+    type IMyDevice,
+    type RoomMember,
+} from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { Widget } from "matrix-widget-api";
 import {

@@ -17,7 +17,10 @@ import { type ViewRoom as ViewRoomEvent } from "@matrix-org/analytics-events/typ
 import { type JoinedRoom as JoinedRoomEvent } from "@matrix-org/analytics-events/types/typescript/JoinedRoom";
 import { type Optional } from "matrix-events-sdk";
 import EventEmitter from "events";
-import { RoomViewLifecycle, type ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
+import {
+    RoomViewLifecycle,
+    type ViewRoomOpts,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 
 import { type MatrixDispatcher } from "../dispatcher/dispatcher";
 import { MatrixClientPeg } from "../MatrixClientPeg";

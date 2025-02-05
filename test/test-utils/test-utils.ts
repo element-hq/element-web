@@ -29,7 +29,8 @@ import {
     RelationType,
     JoinRule,
     type OidcClientConfig,
- type GroupCall } from "matrix-js-sdk/src/matrix";
+    type GroupCall,
+} from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { normalize } from "matrix-js-sdk/src/utils";
 import { ReEmitter } from "matrix-js-sdk/src/ReEmitter";

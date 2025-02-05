@@ -12,7 +12,11 @@ import { flatMap } from "lodash";
 import { type Room } from "matrix-js-sdk/src/matrix";
 import { defer } from "matrix-js-sdk/src/utils";
 
-import Autocompleter, { type ICompletion, type ISelectionRange, type IProviderCompletions } from "../../../autocomplete/Autocompleter";
+import Autocompleter, {
+    type ICompletion,
+    type ISelectionRange,
+    type IProviderCompletions,
+} from "../../../autocomplete/Autocompleter";
 import SettingsStore from "../../../settings/SettingsStore";
 import RoomContext from "../../../contexts/RoomContext";
 

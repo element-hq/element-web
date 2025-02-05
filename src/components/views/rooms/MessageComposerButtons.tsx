@@ -7,7 +7,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import { type IEventRelation, type Room, type MatrixClient, THREAD_RELATION_TYPE, M_POLL_START } from "matrix-js-sdk/src/matrix";
+import {
+    type IEventRelation,
+    type Room,
+    type MatrixClient,
+    THREAD_RELATION_TYPE,
+    M_POLL_START,
+} from "matrix-js-sdk/src/matrix";
 import React, { createContext, type ReactElement, type ReactNode, useContext, useRef } from "react";
 
 import { _t } from "../../../languageHandler";

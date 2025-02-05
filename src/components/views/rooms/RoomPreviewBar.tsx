@@ -10,7 +10,10 @@ import React, { type ChangeEvent, type ReactNode } from "react";
 import { type Room, type RoomMember, EventType, RoomType, JoinRule, type MatrixError } from "matrix-js-sdk/src/matrix";
 import { KnownMembership, type RoomJoinRulesEventContent } from "matrix-js-sdk/src/types";
 import classNames from "classnames";
-import { type RoomPreviewOpts, RoomViewLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
+import {
+    type RoomPreviewOpts,
+    RoomViewLifecycle,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";

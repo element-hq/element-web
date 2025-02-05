@@ -7,7 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type ModuleApi } from "@matrix-org/react-sdk-module-api/lib/ModuleApi";
-import { type TranslationStringsObject, type PlainSubstitution } from "@matrix-org/react-sdk-module-api/lib/types/translations";
+import {
+    type TranslationStringsObject,
+    type PlainSubstitution,
+} from "@matrix-org/react-sdk-module-api/lib/types/translations";
 import { type Optional } from "matrix-events-sdk";
 import { type DialogContent, type DialogProps } from "@matrix-org/react-sdk-module-api/lib/components/DialogContent";
 import { type AccountAuthInfo } from "@matrix-org/react-sdk-module-api/lib/types/AccountAuthInfo";

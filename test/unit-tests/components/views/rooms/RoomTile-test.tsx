@@ -9,7 +9,14 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { render, screen, act, type RenderResult } from "jest-matrix-react";
 import { mocked, type Mocked } from "jest-mock";
-import { type MatrixClient, PendingEventOrdering, Room, RoomStateEvent, type Thread , type RoomMember } from "matrix-js-sdk/src/matrix";
+import {
+    type MatrixClient,
+    PendingEventOrdering,
+    Room,
+    RoomStateEvent,
+    type Thread,
+    type RoomMember,
+} from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { Widget } from "matrix-widget-api";
 

@@ -11,7 +11,7 @@ import { EventType, M_BEACON_INFO, type MatrixEvent } from "matrix-js-sdk/src/ma
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { BaseGrouper } from "./BaseGrouper";
-import {type WrappedEvent} from "../MessagePanel";
+import { type WrappedEvent } from "../MessagePanel";
 import type MessagePanel from "../MessagePanel";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { _t } from "../../../languageHandler";

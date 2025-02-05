@@ -19,7 +19,8 @@ import {
     EventTimeline,
     RoomStateEvent,
     EventType,
- type Relations } from "matrix-js-sdk/src/matrix";
+    type Relations,
+} from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 import {
     PinIcon,

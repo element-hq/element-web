@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type Room, type MatrixClient, type RoomMember } from "matrix-js-sdk/src/matrix";
 
-import {type UpdateCallback} from "../../../src/editor/autocomplete";
+import { type UpdateCallback } from "../../../src/editor/autocomplete";
 import type AutocompleteWrapperModel from "../../../src/editor/autocomplete";
 import { type Caret } from "../../../src/editor/caret";
 import { type PillPart, type Part, PartCreator } from "../../../src/editor/parts";

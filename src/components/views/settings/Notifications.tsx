@@ -28,7 +28,8 @@ import {
     PushRuleVectorState,
     VectorPushRulesDefinitions,
     VectorState,
- type VectorPushRuleDefinition } from "../../../notifications";
+    type VectorPushRuleDefinition,
+} from "../../../notifications";
 import { _t, type TranslatedString } from "../../../languageHandler";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import SettingsStore from "../../../settings/SettingsStore";

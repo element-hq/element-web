@@ -8,7 +8,14 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { createRef, type ReactNode, type TransitionEvent } from "react";
 import classNames from "classnames";
-import { type Room, type MatrixClient, RoomStateEvent, EventStatus, type MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
+import {
+    type Room,
+    type MatrixClient,
+    RoomStateEvent,
+    EventStatus,
+    type MatrixEvent,
+    EventType,
+} from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { isSupportedReceiptType } from "matrix-js-sdk/src/utils";
 

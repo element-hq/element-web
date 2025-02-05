@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { BaseDistributor } from "./fixed";
 import ResizeItem from "../item";
-import {type IConfig} from "../resizer";
+import { type IConfig } from "../resizer";
 import type Resizer from "../resizer";
 import type Sizer from "../sizer";
 

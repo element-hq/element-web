@@ -5,7 +5,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { AbstractStartedContainer, GenericContainer, type StartedTestContainer, Wait, type ExecResult } from "testcontainers";
+import {
+    AbstractStartedContainer,
+    GenericContainer,
+    type StartedTestContainer,
+    Wait,
+    type ExecResult,
+} from "testcontainers";
 import { type StartedPostgreSqlContainer } from "@testcontainers/postgresql";
 import * as YAML from "yaml";
 

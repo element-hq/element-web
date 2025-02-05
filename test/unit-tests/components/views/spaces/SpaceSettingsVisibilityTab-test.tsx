@@ -10,7 +10,14 @@ import React from "react";
 import { mocked } from "jest-mock";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import { act, fireEvent, render, type RenderResult } from "jest-matrix-react";
-import { EventType, type MatrixClient, type Room, GuestAccess, HistoryVisibility, JoinRule } from "matrix-js-sdk/src/matrix";
+import {
+    EventType,
+    type MatrixClient,
+    type Room,
+    GuestAccess,
+    HistoryVisibility,
+    JoinRule,
+} from "matrix-js-sdk/src/matrix";
 
 import _SpaceSettingsVisibilityTab from "../../../../../src/components/views/spaces/SpaceSettingsVisibilityTab";
 import {

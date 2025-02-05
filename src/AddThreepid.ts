@@ -23,7 +23,9 @@ import Modal from "./Modal";
 import { _t, UserFriendlyError } from "./languageHandler";
 import IdentityAuthClient from "./IdentityAuthClient";
 import { SSOAuthEntry } from "./components/views/auth/InteractiveAuthEntryComponents";
-import InteractiveAuthDialog, { type InteractiveAuthDialogProps } from "./components/views/dialogs/InteractiveAuthDialog";
+import InteractiveAuthDialog, {
+    type InteractiveAuthDialogProps,
+} from "./components/views/dialogs/InteractiveAuthDialog";
 
 function getIdServerDomain(matrixClient: MatrixClient): string {
     const idBaseUrl = matrixClient.getIdentityServerUrl(true);

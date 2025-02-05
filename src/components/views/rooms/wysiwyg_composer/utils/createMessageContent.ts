@@ -8,7 +8,11 @@ Please see LICENSE files in the repository root for full details.
 
 import { richToPlain, plainToRich } from "@vector-im/matrix-wysiwyg";
 import { type IContent, type IEventRelation, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
-import { type ReplacementEvent, type RoomMessageEventContent, type RoomMessageTextEventContent } from "matrix-js-sdk/src/types";
+import {
+    type ReplacementEvent,
+    type RoomMessageEventContent,
+    type RoomMessageTextEventContent,
+} from "matrix-js-sdk/src/types";
 
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { parsePermalink } from "../../../../../utils/permalinks/Permalinks";

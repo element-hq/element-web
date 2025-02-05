@@ -30,7 +30,9 @@ import {
     mockClientMethodsUser,
 } from "../../../../test-utils";
 import { filterBoolean } from "../../../../../src/utils/arrays";
-import JoinRuleSettings, { type JoinRuleSettingsProps } from "../../../../../src/components/views/settings/JoinRuleSettings";
+import JoinRuleSettings, {
+    type JoinRuleSettingsProps,
+} from "../../../../../src/components/views/settings/JoinRuleSettings";
 import { PreferredRoomVersions } from "../../../../../src/utils/PreferredRoomVersions";
 import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import SettingsStore from "../../../../../src/settings/SettingsStore";

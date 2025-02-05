@@ -15,7 +15,9 @@ import Modal from "./Modal";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import { _t } from "./languageHandler";
 import { isSecureBackupRequired } from "./utils/WellKnownUtils";
-import AccessSecretStorageDialog, { type KeyParams } from "./components/views/dialogs/security/AccessSecretStorageDialog";
+import AccessSecretStorageDialog, {
+    type KeyParams,
+} from "./components/views/dialogs/security/AccessSecretStorageDialog";
 import { ModuleRunner } from "./modules/ModuleRunner";
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import InteractiveAuthDialog from "./components/views/dialogs/InteractiveAuthDialog";

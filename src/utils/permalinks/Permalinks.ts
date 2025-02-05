@@ -16,7 +16,7 @@ import MatrixToPermalinkConstructor, {
     baseUrl as matrixtoBaseUrl,
     baseUrlPattern as matrixToBaseUrlPattern,
 } from "./MatrixToPermalinkConstructor";
-import {type PermalinkParts} from "./PermalinkConstructor";
+import { type PermalinkParts } from "./PermalinkConstructor";
 import type PermalinkConstructor from "./PermalinkConstructor";
 import ElementPermalinkConstructor from "./ElementPermalinkConstructor";
 import SdkConfig from "../../SdkConfig";

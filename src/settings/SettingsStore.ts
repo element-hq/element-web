@@ -20,7 +20,15 @@ import RoomSettingsHandler from "./handlers/RoomSettingsHandler";
 import ConfigSettingsHandler from "./handlers/ConfigSettingsHandler";
 import { _t } from "../languageHandler";
 import dis from "../dispatcher/dispatcher";
-import { type IFeature, type ISetting, type LabGroup, SETTINGS, defaultWatchManager, type SettingKey, type Settings } from "./Settings";
+import {
+    type IFeature,
+    type ISetting,
+    type LabGroup,
+    SETTINGS,
+    defaultWatchManager,
+    type SettingKey,
+    type Settings,
+} from "./Settings";
 import LocalEchoWrapper from "./handlers/LocalEchoWrapper";
 import { type CallbackFn as WatchCallbackFn } from "./WatchManager";
 import { SettingLevel } from "./SettingLevel";

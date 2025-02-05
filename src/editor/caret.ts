@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { needsCaretNodeBefore, needsCaretNodeAfter } from "./render";
 import Range from "./range";
 import type EditorModel from "./model";
-import {type IPosition} from "./position";
+import { type IPosition } from "./position";
 import type DocumentPosition from "./position";
 import { type Part, Type } from "./parts";
 

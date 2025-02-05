@@ -7,7 +7,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { EventType, type RoomMember, type RoomState, RoomStateEvent, type Room, type IContent } from "matrix-js-sdk/src/matrix";
+import {
+    EventType,
+    type RoomMember,
+    type RoomState,
+    RoomStateEvent,
+    type Room,
+    type IContent,
+} from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { throttle, get } from "lodash";
 import { KnownMembership, type RoomPowerLevelsEventContent } from "matrix-js-sdk/src/types";

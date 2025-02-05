@@ -9,7 +9,10 @@ Please see LICENSE files in the repository root for full details.
 import { mocked } from "jest-mock";
 import { MatrixError, Room } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
-import { RoomViewLifecycle, type ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
+import {
+    RoomViewLifecycle,
+    type ViewRoomOpts,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 
 import { RoomViewStore } from "../../../src/stores/RoomViewStore";
 import { Action } from "../../../src/dispatcher/actions";
