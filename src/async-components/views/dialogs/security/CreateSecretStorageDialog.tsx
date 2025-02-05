@@ -10,13 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { createRef } from "react";
 import FileSaver from "file-saver";
 import { logger } from "matrix-js-sdk/src/logger";
-import {
-    type AuthDict,
-    type CrossSigningKeys,
-    MatrixError,
-    type UIAFlow,
-    type UIAResponse,
-} from "matrix-js-sdk/src/matrix";
+import { type AuthDict, type UIAResponse } from "matrix-js-sdk/src/matrix";
 import { type GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
 import classNames from "classnames";
 import CheckmarkIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
@@ -75,9 +69,6 @@ interface IState {
     downloaded: boolean;
     setPassphrase: boolean;
 
-    // does the server offer a UI auth flow with just m.login.password
-    // for /keys/device_signing/upload?
-    canUploadKeysWithPasswordOnly: boolean | null;
     canSkip: boolean;
     passPhraseKeySelected: string;
     error?: boolean;
@@ -126,7 +117,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             // does the server offer a UI auth flow with just m.login.password
             // for /keys/device_signing/upload?
             canSkip: !isSecureBackupRequired(cli),
-            canUploadKeysWithPasswordOnly: null,
             passPhraseKeySelected,
         };
     }
@@ -134,10 +124,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
     public componentDidMount(): void {
         const keyFromCustomisations = ModuleRunner.instance.extensions.cryptoSetup.createSecretStorageKey();
         if (keyFromCustomisations) this.initExtension(keyFromCustomisations);
-
-        if (this.state.canUploadKeysWithPasswordOnly === null) {
-            this.queryKeyUploadAuth();
-        }
     }
 
     private initExtension(keyFromCustomisations: Uint8Array): void {
@@ -146,27 +132,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             privateKey: keyFromCustomisations,
         };
         this.bootstrapSecretStorage();
-    }
-
-    private async queryKeyUploadAuth(): Promise<void> {
-        try {
-            await MatrixClientPeg.safeGet().uploadDeviceSigningKeys(undefined, {} as CrossSigningKeys);
-            // We should never get here: the server should always require
-            // UI auth to upload device signing keys. If we do, we upload
-            // no keys which would be a no-op.
-            logger.log("uploadDeviceSigningKeys unexpectedly succeeded without UI auth!");
-        } catch (error) {
-            if (!(error instanceof MatrixError) || !error.data || !error.data.flows) {
-                logger.log("uploadDeviceSigningKeys advertised no flows!");
-                return;
-            }
-            const canUploadKeysWithPasswordOnly = error.data.flows.some((f: UIAFlow) => {
-                return f.stages.length === 1 && f.stages[0] === "m.login.password";
-            });
-            this.setState({
-                canUploadKeysWithPasswordOnly,
-            });
-        }
     }
 
     private onKeyPassphraseChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
