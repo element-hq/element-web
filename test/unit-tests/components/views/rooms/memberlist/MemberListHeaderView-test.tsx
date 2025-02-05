@@ -62,7 +62,7 @@ describe("MemberListHeaderView", () => {
     });
 
     it("Does not show search box when there's less than 20 members", async () => {
-        expect(screen.queryByPlaceholderText("Filter room members")).toBeNull();
+        expect(screen.queryByPlaceholderText("Search room members")).toBeNull();
     });
 
     it("Shows search box when there's more than 20 members", async () => {
@@ -80,7 +80,7 @@ describe("MemberListHeaderView", () => {
             memberListRoom.currentState.members[newMember.userId] = newMember;
         }
         await reRender();
-        expect(screen.queryByPlaceholderText("Filter room members")).toBeVisible();
+        expect(screen.queryByPlaceholderText("Search room members")).toBeVisible();
     });
 
     describe("Invite button functionality", () => {
