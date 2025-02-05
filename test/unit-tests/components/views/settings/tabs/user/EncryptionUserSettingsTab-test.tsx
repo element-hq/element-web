@@ -10,9 +10,9 @@ import { render, screen } from "jest-matrix-react";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
-import { KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 import { mocked } from "jest-mock";
 
+import type { KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 import {
     EncryptionUserSettingsTab,
     State,

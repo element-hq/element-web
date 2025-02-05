@@ -5,9 +5,10 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { FormEvent, useCallback } from "react";
+import React, { useCallback } from "react";
 import { InlineField, InlineSpinner, Label, Root, ToggleControl } from "@vector-im/compound-web";
 
+import type { FormEvent } from "react";
 import { SettingsSection } from "../shared/SettingsSection";
 import { _t } from "../../../../languageHandler";
 import { SettingsHeader } from "../SettingsHeader";
