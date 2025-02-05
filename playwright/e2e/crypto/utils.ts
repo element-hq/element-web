@@ -506,7 +506,11 @@ export async function deleteCachedSecrets(page: Page) {
  * the expected number of devices were not found by then, an
  * error is thrown.
  */
-export async function waitForDevices(app: ElementAppPage, userId: string, expectedNumberOfDevices: number): Promise<void> {
+export async function waitForDevices(
+    app: ElementAppPage,
+    userId: string,
+    expectedNumberOfDevices: number,
+): Promise<void> {
     const result = await app.client.evaluate(
         async (cli, { userId, expectedNumberOfDevices }) => {
             for (let i = 0; i < 10; ++i) {
