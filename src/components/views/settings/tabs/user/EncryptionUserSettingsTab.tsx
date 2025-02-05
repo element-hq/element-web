@@ -24,7 +24,8 @@ import { ResetIdentityPanel } from "../../encryption/ResetIdentityPanel";
 import { RecoveryPanelOutOfSync } from "../../encryption/RecoveryPanelOutOfSync";
 import Spinner from "../../../elements/Spinner";
 import { useEventEmitter } from "../../../../../hooks/useEventEmitter";
-import { KeyBackupPanel } from "../../encryption/KeyStoragePanel";
+import { KeyStoragePanel } from "../../encryption/KeyStoragePanel";
+import { DeleteKeyStoragePanel } from "../../encryption/DeleteKeyStoragePanel";
 
 /**
  * The state in the encryption settings tab.
@@ -49,7 +50,8 @@ export type State =
     | "set_recovery_key"
     | "reset_identity_compromised"
     | "reset_identity_forgot"
-    | "secrets_not_cached";
+    | "secrets_not_cached"
+    | "key_storage_delete";
 
 interface EncryptionUserSettingsTabProps {
     /**
@@ -113,7 +115,7 @@ export function EncryptionUserSettingsTab({ initialState = "loading" }: Encrypti
             case "main":
                 content = (
                     <>
-                        <KeyBackupPanel />
+                        <KeyStoragePanel onKeyStorageDisableClick={() => setState("key_storage_delete")} />
                         {keyBackupIsEnabled && (
                             <>
                                 <RecoveryPanel
@@ -157,6 +159,9 @@ export function EncryptionUserSettingsTab({ initialState = "loading" }: Encrypti
                         onFinish={() => setState("main")}
                     />
                 );
+                break;
+            case "key_storage_delete":
+                content = <DeleteKeyStoragePanel onFinish={() => setState("main")} />;
                 break;
         }
     }

@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { FormEvent, JSX, useCallback } from "react";
+import React, { FormEvent, useCallback } from "react";
 import { InlineField, InlineSpinner, Label, Root, ToggleControl } from "@vector-im/compound-web";
 
 import { SettingsSection } from "../shared/SettingsSection";
@@ -13,17 +13,25 @@ import { _t } from "../../../../languageHandler";
 import { SettingsHeader } from "../SettingsHeader";
 import { useKeyStoragePanelViewModel } from "../../../viewmodels/settings/encryption/KeyStoragePanelViewModel";
 
+interface Props {
+    onKeyStorageDisableClick: () => void;
+}
+
 /**
  * This component allows the user to set up or change their recovery key.
  */
-export function KeyBackupPanel(): JSX.Element {
+export const KeyStoragePanel: React.FC<Props> = ({ onKeyStorageDisableClick }) => {
     const { isEnabled, setEnabled, loading, busy } = useKeyStoragePanelViewModel();
 
     const onKeyBackupChange = useCallback(
         (e: FormEvent<HTMLInputElement>) => {
-            setEnabled(e.currentTarget.checked);
+            if (e.currentTarget.checked) {
+                setEnabled(true);
+            } else {
+                onKeyStorageDisableClick();
+            }
         },
-        [setEnabled],
+        [setEnabled, onKeyStorageDisableClick],
     );
 
     if (loading) {
@@ -58,4 +66,4 @@ export function KeyBackupPanel(): JSX.Element {
             </Root>
         </SettingsSection>
     );
-}
+};
