@@ -256,7 +256,7 @@ Inheriting all the rules of TypeScript, the following additionally apply:
 
 10. Stores must support using an alternative MatrixClient and dispatcher instance.
 11. Utilities which require JSX must be split out from utilities which do not. This is to prevent import
-   cycles during runtime where components accidentally include more of the app than they intended.
+    cycles during runtime where components accidentally include more of the app than they intended.
 12. Interdependence between stores should be kept to a minimum. Break functions and constants out to utilities
     if at all possible.
 13. A component should only use CSS class names in line with the component name.
@@ -311,7 +311,7 @@ Note: We use PostCSS + some plugins to process our styles. It looks like SCSS, b
 
 10. Non-shared variables should use $lowerCamelCase. Shared variables use $dashed-naming.
 11. Overrides to Z indexes, adjustments of dimensions/padding with pixels, and so on should all be
-   [documented](#comments) for what the values mean:
+    [documented](#comments) for what the values mean:
 
     ```scss
     .mx_MyFoo {

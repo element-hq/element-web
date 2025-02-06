@@ -111,7 +111,6 @@ yarn test
 
 See [matrix-react-sdk](https://github.com/matrix-org/matrix-react-sdk/#end-to-end-tests) for how to run the end-to-end tests.
 
-
 ## General github guidelines
 
 1. **Pull requests must only be filed against the `develop` branch.**
@@ -121,7 +120,7 @@ See [matrix-react-sdk](https://github.com/matrix-org/matrix-react-sdk/#end-to-en
 ## Adding new code
 
 New code should be committed as follows:
+
 - All new components: https://github.com/element-hq/element-web/tree/develop/src/components
 - CSS: https://github.com/element-hq/element-web/tree/develop/res/css
 - Theme specific CSS & resources: https://github.com/element-hq/element-web/tree/develop/res/themes
-
