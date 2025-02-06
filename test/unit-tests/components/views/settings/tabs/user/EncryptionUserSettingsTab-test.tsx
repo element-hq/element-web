@@ -6,10 +6,11 @@
  */
 
 import React from "react";
-import { render, screen } from "jest-matrix-react";
+import { act, render, screen } from "jest-matrix-react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
+import { ClientEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import type { KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 import {
@@ -169,5 +170,26 @@ describe("<EncryptionUserSettingsTab />", () => {
                 name: "Forgot your recovery key? You’ll need to reset your identity.",
             }),
         ).toBeVisible();
+    });
+
+    it("should update when backup_disabled account data is changed", async () => {
+        jest.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue({
+            version: "1",
+        } as KeyBackupInfo);
+
+        renderComponent();
+
+        await expect(await screen.findByRole("heading", { name: "Recovery" })).toBeVisible();
+
+        jest.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue(null);
+
+        act(() => {
+            const accountDataEvent = new MatrixEvent({ type: "m.org.matrix.custom.backup_disabled" });
+            matrixClient.emit(ClientEvent.AccountData, accountDataEvent);
+        });
+
+        await waitFor(() => {
+            expect(screen.queryByRole("heading", { name: "Recovery" })).toBeNull();
+        });
     });
 });

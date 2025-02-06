@@ -82,6 +82,7 @@ const useKeyBackupIsEnabled = (): boolean | undefined => {
 
     useEventEmitter(matrixClient, ClientEvent.AccountData, (event: MatrixEvent): void => {
         const type = event.getType();
+        // Recheck the status if this account data has been updated as this implies it has changed
         if (type === "m.org.matrix.custom.backup_disabled") {
             checkStatus();
         }
