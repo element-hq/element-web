@@ -19,6 +19,10 @@ interface RecoveryPanelOutOfSyncProps {
      * Callback for when the user has finished entering their recovery key.
      */
     onFinish: () => void;
+    /**
+     * Callback for when the user clicks on the "Forgot recovery key?" button.
+     */
+    onForgotRecoveryKey: () => void;
 }
 
 /**
@@ -28,7 +32,7 @@ interface RecoveryPanelOutOfSyncProps {
  * It prompts the user to enter their recovery key so that the secrets can be loaded from 4S into
  * the client.
  */
-export function RecoveryPanelOutOfSync({ onFinish }: RecoveryPanelOutOfSyncProps): JSX.Element {
+export function RecoveryPanelOutOfSync({ onForgotRecoveryKey, onFinish }: RecoveryPanelOutOfSyncProps): JSX.Element {
     return (
         <SettingsSection
             legacy={false}
@@ -42,17 +46,22 @@ export function RecoveryPanelOutOfSync({ onFinish }: RecoveryPanelOutOfSyncProps
             }
             data-testid="recoveryPanel"
         >
-            <Button
-                size="sm"
-                kind="primary"
-                Icon={KeyIcon}
-                onClick={async () => {
-                    await accessSecretStorage();
-                    onFinish();
-                }}
-            >
-                {_t("settings|encryption|recovery|enter_recovery_key")}
-            </Button>
+            <div className="mx_RecoveryPanelOutOfSync">
+                <Button size="sm" kind="secondary" onClick={onForgotRecoveryKey}>
+                    {_t("settings|encryption|recovery|forgot_recovery_key")}
+                </Button>
+                <Button
+                    size="sm"
+                    kind="primary"
+                    Icon={KeyIcon}
+                    onClick={async () => {
+                        await accessSecretStorage();
+                        onFinish();
+                    }}
+                >
+                    {_t("settings|encryption|recovery|enter_recovery_key")}
+                </Button>
+            </div>
         </SettingsSection>
     );
 }
