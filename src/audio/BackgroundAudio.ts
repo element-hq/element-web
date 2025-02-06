@@ -19,10 +19,6 @@ export class BackgroundAudio {
     private audioContext = createAudioContext();
     private sounds: Record<string, AudioBuffer> = {};
 
-    public constructor() {
-        this.audioContext.suspend();
-    }
-
     public async pickFormatAndPlay<F extends Array<keyof typeof formatMap>>(
         urlPrefix: string,
         formats: F,
