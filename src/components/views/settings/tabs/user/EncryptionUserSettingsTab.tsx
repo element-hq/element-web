@@ -123,6 +123,7 @@ export function EncryptionUserSettingsTab({ initialState = "loading" }: Encrypti
                 content = (
                     <>
                         <KeyStoragePanel onKeyStorageDisableClick={() => setState("key_storage_delete")} />
+                        <Separator kind="section" />
                         {keyBackupIsEnabled && (
                             <>
                                 <RecoveryPanel
@@ -131,11 +132,9 @@ export function EncryptionUserSettingsTab({ initialState = "loading" }: Encrypti
                                     }
                                 />
                                 <Separator kind="section" />
-                                <AdvancedPanel
-                                    onResetIdentityClick={() => setState("reset_identity_compromised")}
-                                />{" "}
                             </>
                         )}
+                        <AdvancedPanel onResetIdentityClick={() => setState("reset_identity_compromised")} />{" "}
                     </>
                 );
                 break;
