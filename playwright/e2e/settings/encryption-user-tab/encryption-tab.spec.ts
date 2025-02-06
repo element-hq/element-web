@@ -93,4 +93,22 @@ test.describe("Encryption tab", () => {
             await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, true);
         },
     );
+
+    test("should display the reset identity panel when the user clicks on 'Forgot recovery key?'", async ({
+        page,
+        app,
+        util,
+    }) => {
+        await verifySession(app, "new passphrase");
+        // We need to delete the cached secrets
+        await deleteCachedSecrets(page);
+
+        // The "Key storage is out sync" section is displayed and the user click on the "Forgot recovery key?" button
+        await util.openEncryptionTab();
+        const dialog = util.getEncryptionTabContent();
+        await dialog.getByRole("button", { name: "Forgot recovery key?" }).click();
+
+        // The user is prompted to reset their identity
+        await expect(dialog.getByText("Forgot your recovery key? You’ll need to reset your identity.")).toBeVisible();
+    });
 });

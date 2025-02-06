@@ -71,7 +71,12 @@ export function EncryptionUserSettingsTab({ initialState = "loading" }: Encrypti
             content = <SetUpEncryptionPanel onFinish={checkEncryptionState} />;
             break;
         case "secrets_not_cached":
-            content = <RecoveryPanelOutOfSync onFinish={checkEncryptionState} />;
+            content = (
+                <RecoveryPanelOutOfSync
+                    onFinish={checkEncryptionState}
+                    onForgotRecoveryKey={() => setState("reset_identity_forgot")}
+                />
+            );
             break;
         case "main":
             content = (
