@@ -5,15 +5,6 @@ adjacent to. As of writing, these are:
 
 - element-desktop
 - element-web
-- matrix-js-sdk
-
-Other projects might extend this code style for increased strictness. For example, matrix-events-sdk
-has stricter code organization to reduce the maintenance burden. These projects will declare their code
-style within their own repos.
-
-Note that some requirements will be layer-specific. Where the requirements don't make sense for the
-project, they are used to the best of their ability, used in spirit, or ignored if not applicable,
-in that order.
 
 ## Guiding principles
 
