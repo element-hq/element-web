@@ -65,29 +65,6 @@ interface IState {
     sidebarShown: boolean;
 }
 
-function getFullScreenElement(): Element | null {
-    return (
-        document.fullscreenElement ||
-        // moz omitted because firefox supports this unprefixed now (webkit here for safari)
-        document.webkitFullscreenElement ||
-        document.msFullscreenElement
-    );
-}
-
-function requestFullscreen(element: Element): void {
-    const method =
-        element.requestFullscreen ||
-        // moz omitted since firefox supports unprefixed now
-        element.webkitRequestFullScreen ||
-        element.msRequestFullscreen;
-    if (method) method.call(element);
-}
-
-function exitFullscreen(): void {
-    const exitMethod = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
-    if (exitMethod) exitMethod.call(document);
-}
-
 export default class LegacyCallView extends React.Component<IProps, IState> {
     private dispatcherRef?: string;
     private contentWrapperRef = createRef<HTMLDivElement>();
@@ -119,8 +96,8 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
     }
 
     public componentWillUnmount(): void {
-        if (getFullScreenElement()) {
-            exitFullscreen();
+        if (document.fullscreenElement) {
+            document.exitFullscreen();
         }
 
         document.removeEventListener("keydown", this.onNativeKeyDown);
@@ -159,9 +136,9 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
                     return;
                 }
                 if (payload.fullscreen) {
-                    requestFullscreen(this.contentWrapperRef.current);
-                } else if (getFullScreenElement()) {
-                    exitFullscreen();
+                    this.contentWrapperRef.current?.requestFullscreen();
+                } else if (document.fullscreenElement) {
+                    document.exitFullscreen();
                 }
                 break;
             }
