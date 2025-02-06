@@ -97,7 +97,7 @@ export function useKeyStoragePanelViewModel(): KeyStoragePanelState {
 
                     // finally, set a flag to say that the user doesn't want key backup.
                     // Element X uses this to determine whether to set up automatically,
-                    // so this will prevent EX from turning it back on.
+                    // so this will stop EX turning it back on spontaneously.
                     await matrixClient.setAccountData("m.org.matrix.custom.backup_disabled", { disabled: true });
                 }
 
