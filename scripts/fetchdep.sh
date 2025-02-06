@@ -72,6 +72,13 @@ if [[ "$head" == *":"* ]]; then
 fi
 clone ${TRY_ORG} $defrepo ${TRY_BRANCH}
 
+# For merge queue runs we need to extract the temporary branch name
+# the ref_name will look like `gh-readonly-queue/<branch>/pr-<number>-<sha>`
+if [[ "$GITHUB_EVENT_NAME" == "merge_group" ]]; then
+    withoutPrefix=${GITHUB_REF_NAME#gh-readonly-queue/}
+    clone $deforg $defrepo ${withoutPrefix%%/pr-*}
+fi
+
 # Try the target branch of the push or PR.
 if [ -n "$GITHUB_BASE_REF" ]; then
     clone $deforg $defrepo $GITHUB_BASE_REF
