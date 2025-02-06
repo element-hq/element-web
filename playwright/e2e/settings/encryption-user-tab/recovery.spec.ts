@@ -7,22 +7,25 @@
 
 import { test, expect } from ".";
 import { checkDeviceIsConnectedKeyBackup, createBot, verifySession } from "../../crypto/utils";
+import type { GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
 
 test.describe("Recovery section in Encryption tab", () => {
     test.use({
         displayName: "Alice",
     });
 
+    let recoveryKey: GeneratedSecretStorageKey;
     test.beforeEach(async ({ page, homeserver, credentials }) => {
         // The bot bootstraps cross-signing, creates a key backup and sets up a recovery key
-        await createBot(page, homeserver, credentials);
+        const res = await createBot(page, homeserver, credentials);
+        recoveryKey = res.recoveryKey;
     });
 
     test(
         "should change the recovery key",
         { tag: ["@screenshot", "@no-webkit"] },
         async ({ page, app, homeserver, credentials, util, context }) => {
-            await verifySession(app, "new passphrase");
+            await verifySession(app, recoveryKey.encodedPrivateKey);
             const dialog = await util.openEncryptionTab();
 
             // The user can only change the recovery key
@@ -49,7 +52,7 @@ test.describe("Recovery section in Encryption tab", () => {
     );
 
     test("should setup the recovery key", { tag: ["@screenshot", "@no-webkit"] }, async ({ page, app, util }) => {
-        await verifySession(app, "new passphrase");
+        await verifySession(app, recoveryKey.encodedPrivateKey);
         await util.removeSecretStorageDefaultKeyId();
 
         // The key backup is deleted and the user needs to set it up

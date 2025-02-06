@@ -43,7 +43,7 @@ class Helpers {
      */
     async verifyDevice(recoveryKey: GeneratedSecretStorageKey) {
         // Select the security phrase
-        await this.page.getByRole("button", { name: "Verify with Security Key or Phrase" }).click();
+        await this.page.getByRole("button", { name: "Verify with Security Key" }).click();
         await this.enterRecoveryKey(recoveryKey);
         await this.page.getByRole("button", { name: "Done" }).click();
     }
@@ -53,9 +53,6 @@ class Helpers {
      * @param recoveryKey
      */
     async enterRecoveryKey(recoveryKey: GeneratedSecretStorageKey) {
-        // Select to use recovery key
-        await this.page.getByRole("button", { name: "use your Security Key" }).click();
-
         // Fill the recovery key
         const dialog = this.page.locator(".mx_Dialog");
         await dialog.getByRole("textbox").fill(recoveryKey.encodedPrivateKey);
