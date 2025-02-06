@@ -10,7 +10,7 @@ import { MatrixWidgetType } from "matrix-widget-api";
 
 import type { GroupCall, Room, RoomMember, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { mkEvent } from "./test-utils";
-import { Call, ConnectionState, ElementCall, JitsiCall } from "../../src/models/Call";
+import { Call, type ConnectionState, ElementCall, JitsiCall } from "../../src/models/Call";
 import { CallStore } from "../../src/stores/CallStore";
 
 export class MockedCall extends Call {

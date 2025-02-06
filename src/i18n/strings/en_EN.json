@@ -2469,6 +2469,7 @@
                 "breadcrumb_second_description": "You will lose any message history that’s stored only on the server",
                 "breadcrumb_third_description": "You will need to verify all your existing devices and contacts again",
                 "breadcrumb_title": "Are you sure you want to reset your identity?",
+                "breadcrumb_title_forgot": "Forgot your recovery key? You’ll need to reset your identity.",
                 "breadcrumb_warning": "Only do this if you believe your account has been compromised.",
                 "details_title": "Encryption details",
                 "export_keys": "Export keys",
@@ -3493,7 +3494,10 @@
             "sent": "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room."
         },
         "m.room.tombstone": "%(senderDisplayName)s upgraded this room.",
-        "m.room.topic": "%(senderDisplayName)s changed the topic to \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s changed the topic to \"%(topic)s\".",
+            "removed": "%(senderDisplayName)s removed the topic."
+        },
         "m.sticker": "%(senderDisplayName)s sent a sticker.",
         "m.video": {
             "error_decrypting": "Error decrypting video"

@@ -7,12 +7,18 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import { IEventRelation, Room, MatrixClient, THREAD_RELATION_TYPE, M_POLL_START } from "matrix-js-sdk/src/matrix";
-import React, { createContext, ReactElement, ReactNode, useContext, useRef } from "react";
+import {
+    type IEventRelation,
+    type Room,
+    type MatrixClient,
+    THREAD_RELATION_TYPE,
+    M_POLL_START,
+} from "matrix-js-sdk/src/matrix";
+import React, { createContext, type ReactElement, type ReactNode, useContext, useRef } from "react";
 
 import { _t } from "../../../languageHandler";
 import { CollapsibleButton } from "./CollapsibleButton";
-import { MenuProps } from "../../structures/ContextMenu";
+import { type MenuProps } from "../../structures/ContextMenu";
 import dis from "../../../dispatcher/dispatcher";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import { LocationButton } from "../location";
@@ -27,7 +33,7 @@ import IconizedContextMenu, { IconizedContextMenuOptionList } from "../context_m
 import { EmojiButton } from "./EmojiButton";
 import { filterBoolean } from "../../../utils/arrays";
 import { useSettingValue } from "../../../hooks/useSettings";
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
 
 interface IProps {

@@ -10,8 +10,8 @@ import React, { useEffect, useState } from "react";
 
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../MediaDeviceHandler";
 import IconizedContextMenu, { IconizedContextMenuOptionList, IconizedContextMenuRadio } from "./IconizedContextMenu";
-import { IProps as IContextMenuProps } from "../../structures/ContextMenu";
-import { _t, _td, TranslationKey } from "../../../languageHandler";
+import { type IProps as IContextMenuProps } from "../../structures/ContextMenu";
+import { _t, _td, type TranslationKey } from "../../../languageHandler";
 
 const SECTION_NAMES: Record<MediaDeviceKindEnum, TranslationKey> = {
     [MediaDeviceKindEnum.AudioInput]: _td("voip|input_devices"),

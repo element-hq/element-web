@@ -6,9 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked, Mocked } from "jest-mock";
+import { mocked, type Mocked } from "jest-mock";
 import { logger } from "matrix-js-sdk/src/logger";
-import { ClientEvent, EventType, IContent, MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import {
+    ClientEvent,
+    EventType,
+    type IContent,
+    type MatrixClient,
+    type MatrixEvent,
+    type Room,
+} from "matrix-js-sdk/src/matrix";
 
 import DMRoomMap from "../../../src/utils/DMRoomMap";
 import { mkEvent, stubClient } from "../../test-utils";

@@ -6,8 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import type { ChatExportCustomisations } from "@element-hq/element-web-module-api";
-import { ExportFormat, ExportType } from "../utils/exportUtils/exportUtils";
+import { type ChatExportCustomisations } from "@element-hq/element-web-module-api";
+
+import { type ExportFormat, type ExportType } from "../utils/exportUtils/exportUtils";
 
 export type ForceChatExportParameters = ReturnType<
     ChatExportCustomisations<ExportFormat, ExportType>["getForceChatExportParameters"]

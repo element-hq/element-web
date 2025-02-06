@@ -7,7 +7,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useState } from "react";
-import { Room, EventType, GuestAccess, HistoryVisibility, JoinRule, MatrixClient } from "matrix-js-sdk/src/matrix";
+import {
+    type Room,
+    EventType,
+    GuestAccess,
+    HistoryVisibility,
+    JoinRule,
+    type MatrixClient,
+} from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";

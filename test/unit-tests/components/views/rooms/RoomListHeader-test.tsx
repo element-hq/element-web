@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { MatrixClient, Room, EventType } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type Room, EventType } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
-import { act, render, screen, fireEvent, RenderResult } from "jest-matrix-react";
+import { act, render, screen, fireEvent, type RenderResult } from "jest-matrix-react";
 
 import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import { MetaSpace } from "../../../../../src/stores/spaces";

@@ -7,17 +7,17 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import { InternationalisedPolicy, Terms, MatrixClient } from "matrix-js-sdk/src/matrix";
-import { AuthType, AuthDict, IInputs, IStageStatus } from "matrix-js-sdk/src/interactive-auth";
+import { type InternationalisedPolicy, type Terms, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { AuthType, type AuthDict, type IInputs, type IStageStatus } from "matrix-js-sdk/src/interactive-auth";
 import { logger } from "matrix-js-sdk/src/logger";
-import React, { ChangeEvent, createRef, FormEvent, Fragment } from "react";
+import React, { type ChangeEvent, createRef, type FormEvent, Fragment } from "react";
 import { Button, Text } from "@vector-im/compound-web";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
 
 import EmailPromptIcon from "../../../../res/img/element-icons/email-prompt.svg";
 import { _t } from "../../../languageHandler";
 import { AuthHeaderModifier } from "../../structures/auth/header/AuthHeaderModifier";
-import AccessibleButton, { AccessibleButtonKind, ButtonEvent } from "../elements/AccessibleButton";
+import AccessibleButton, { type AccessibleButtonKind, type ButtonEvent } from "../elements/AccessibleButton";
 import Field from "../elements/Field";
 import Spinner from "../elements/Spinner";
 import CaptchaForm from "./CaptchaForm";
@@ -894,7 +894,7 @@ export class SSOAuthEntry extends React.Component<ISSOAuthEntryProps, ISSOAuthEn
     }
 }
 
-export class FallbackAuthEntry<T = {}> extends React.Component<IAuthEntryProps & T> {
+export class FallbackAuthEntry<T extends object> extends React.Component<IAuthEntryProps & T> {
     protected popupWindow: Window | null;
     protected fallbackButton = createRef<HTMLDivElement>();
 

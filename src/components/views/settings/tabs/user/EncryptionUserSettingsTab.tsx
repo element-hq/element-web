@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { JSX, useCallback, useEffect, useState } from "react";
+import React, { type JSX, useCallback, useEffect, useState } from "react";
 import { Button, InlineSpinner, Separator } from "@vector-im/compound-web";
 import ComputerIcon from "@vector-im/compound-design-tokens/assets/web/icons/computer";
 
@@ -20,6 +20,7 @@ import { SettingsSection } from "../../shared/SettingsSection";
 import { SettingsSubheader } from "../../SettingsSubheader";
 import { AdvancedPanel } from "../../encryption/AdvancedPanel";
 import { ResetIdentityPanel } from "../../encryption/ResetIdentityPanel";
+import { RecoveryPanelOutOfSync } from "../../encryption/RecoveryPanelOutOfSync";
 
 /**
  * The state in the encryption settings tab.
@@ -31,13 +32,35 @@ import { ResetIdentityPanel } from "../../encryption/ResetIdentityPanel";
  *                           This happens when the user has a recovery key and the user clicks on "Change recovery key" button of the RecoveryPanel.
  *  - "set_recovery_key": The panel to show when the user is setting up their recovery key.
  *                        This happens when the user doesn't have a key a recovery key and the user clicks on "Set up recovery key" button of the RecoveryPanel.
- *  - "reset_identity": The panel to show when the user is resetting their identity.
+ *  - "reset_identity_compromised": The panel to show when the user is resetting their identity, in te case where their key is compromised.
+ * - "reset_identity_forgot": The panel to show when the user is resetting their identity, in the case where they forgot their recovery key.
+ * - `secrets_not_cached`: The secrets are not cached locally. This can happen if we verified another device and secret-gossiping failed, or the other device itself lacked the secrets.
+ *                          If the "set_up_encryption" and "secrets_not_cached" conditions are both filled, "set_up_encryption" prevails.
  */
-type State = "loading" | "main" | "set_up_encryption" | "change_recovery_key" | "set_recovery_key" | "reset_identity";
+export type State =
+    | "loading"
+    | "main"
+    | "set_up_encryption"
+    | "change_recovery_key"
+    | "set_recovery_key"
+    | "reset_identity_compromised"
+    | "reset_identity_forgot"
+    | "secrets_not_cached";
 
-export function EncryptionUserSettingsTab(): JSX.Element {
-    const [state, setState] = useState<State>("loading");
-    const setUpEncryptionRequired = useSetUpEncryptionRequired(setState);
+interface EncryptionUserSettingsTabProps {
+    /**
+     * If the tab should start in a state other than the deasult
+     */
+    initialState?: State;
+}
+
+/**
+ * The encryption settings tab.
+ */
+export function EncryptionUserSettingsTab({ initialState = "loading" }: EncryptionUserSettingsTabProps): JSX.Element {
+    const [state, setState] = useState<State>(initialState);
+
+    const checkEncryptionState = useCheckEncryptionState(state, setState);
 
     let content: JSX.Element;
     switch (state) {
@@ -45,7 +68,10 @@ export function EncryptionUserSettingsTab(): JSX.Element {
             content = <InlineSpinner aria-label={_t("common|loading")} />;
             break;
         case "set_up_encryption":
-            content = <SetUpEncryptionPanel onFinish={setUpEncryptionRequired} />;
+            content = <SetUpEncryptionPanel onFinish={checkEncryptionState} />;
+            break;
+        case "secrets_not_cached":
+            content = <RecoveryPanelOutOfSync onFinish={checkEncryptionState} />;
             break;
         case "main":
             content = (
@@ -56,7 +82,7 @@ export function EncryptionUserSettingsTab(): JSX.Element {
                         }
                     />
                     <Separator kind="section" />
-                    <AdvancedPanel onResetIdentityClick={() => setState("reset_identity")} />
+                    <AdvancedPanel onResetIdentityClick={() => setState("reset_identity_compromised")} />
                 </>
             );
             break;
@@ -70,8 +96,23 @@ export function EncryptionUserSettingsTab(): JSX.Element {
                 />
             );
             break;
-        case "reset_identity":
-            content = <ResetIdentityPanel onCancelClick={() => setState("main")} onFinish={() => setState("main")} />;
+        case "reset_identity_compromised":
+            content = (
+                <ResetIdentityPanel
+                    variant="compromised"
+                    onCancelClick={() => setState("main")}
+                    onFinish={() => setState("main")}
+                />
+            );
+            break;
+        case "reset_identity_forgot":
+            content = (
+                <ResetIdentityPanel
+                    variant="forgot"
+                    onCancelClick={() => setState("main")}
+                    onFinish={() => setState("main")}
+                />
+            );
             break;
     }
 
@@ -83,8 +124,12 @@ export function EncryptionUserSettingsTab(): JSX.Element {
 }
 
 /**
- * Hook to check if the user needs to go through the SetupEncryption flow.
+ * Hook to check if the user needs:
+ * - to go through the SetupEncryption flow.
+ * - to enter their recovery key, if the secrets are not cached locally.
+ *
  * If the user needs to set up the encryption, the state will be set to "set_up_encryption".
+ * If the user secrets are not cached, the state will be set to "secrets_not_cached".
  * Otherwise, the state will be set to "main".
  *
  * The state is set once when the component is first mounted.
@@ -93,23 +138,29 @@ export function EncryptionUserSettingsTab(): JSX.Element {
  * @param setState - callback passed from the EncryptionUserSettingsTab to set the current `State`.
  * @returns a callback function, which will re-run the logic and update the state.
  */
-function useSetUpEncryptionRequired(setState: (state: State) => void): () => Promise<void> {
+function useCheckEncryptionState(state: State, setState: (state: State) => void): () => Promise<void> {
     const matrixClient = useMatrixClientContext();
 
-    const setUpEncryptionRequired = useCallback(async () => {
+    const checkEncryptionState = useCallback(async () => {
         const crypto = matrixClient.getCrypto()!;
         const isCrossSigningReady = await crypto.isCrossSigningReady();
-        if (isCrossSigningReady) setState("main");
-        else setState("set_up_encryption");
+
+        // Check if the secrets are cached
+        const cachedSecrets = (await crypto.getCrossSigningStatus()).privateKeysCachedLocally;
+        const secretsOk = cachedSecrets.masterKey && cachedSecrets.selfSigningKey && cachedSecrets.userSigningKey;
+
+        if (isCrossSigningReady && secretsOk) setState("main");
+        else if (!isCrossSigningReady) setState("set_up_encryption");
+        else setState("secrets_not_cached");
     }, [matrixClient, setState]);
 
     // Initialise the state when the component is mounted
     useEffect(() => {
-        setUpEncryptionRequired();
-    }, [setUpEncryptionRequired]);
+        if (state === "loading") checkEncryptionState();
+    }, [checkEncryptionState, state]);
 
     // Also return the callback so that the component can re-run the logic.
-    return setUpEncryptionRequired;
+    return checkEncryptionState;
 }
 
 interface SetUpEncryptionPanelProps {

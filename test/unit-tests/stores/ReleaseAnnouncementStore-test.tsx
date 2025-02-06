@@ -8,9 +8,9 @@
 
 import { mocked } from "jest-mock";
 
-import SettingsStore, { CallbackFn } from "../../../src/settings/SettingsStore";
-import { Feature, ReleaseAnnouncementStore } from "../../../src/stores/ReleaseAnnouncementStore";
-import { SettingLevel } from "../../../src/settings/SettingLevel";
+import SettingsStore, { type CallbackFn } from "../../../src/settings/SettingsStore";
+import { type Feature, ReleaseAnnouncementStore } from "../../../src/stores/ReleaseAnnouncementStore";
+import { type SettingLevel } from "../../../src/settings/SettingLevel";
 
 jest.mock("../../../src/settings/SettingsStore");
 

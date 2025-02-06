@@ -13,13 +13,14 @@ import React, { StrictMode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ModuleLoader } from "@element-hq/element-web-module-api";
 
+import type { QueryDict } from "matrix-js-sdk/src/utils";
 import * as languageHandler from "../languageHandler";
 import SettingsStore from "../settings/SettingsStore";
 import PlatformPeg from "../PlatformPeg";
 import SdkConfig from "../SdkConfig";
 import { setTheme } from "../theme";
 import { ModuleRunner } from "../modules/ModuleRunner";
-import MatrixChat from "../components/structures/MatrixChat";
+import type MatrixChat from "../components/structures/MatrixChat";
 import ElectronPlatform from "./platform/ElectronPlatform";
 import PWAPlatform from "./platform/PWAPlatform";
 import WebPlatform from "./platform/WebPlatform";
@@ -85,7 +86,7 @@ export async function loadTheme(): Promise<void> {
     return setTheme();
 }
 
-export async function loadApp(fragParams: {}): Promise<void> {
+export async function loadApp(fragParams: QueryDict): Promise<void> {
     // load app.js async so that its code is not executed immediately and we can catch any exceptions
     const module = await import(
         /* webpackChunkName: "element-web-app" */

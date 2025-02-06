@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { SERVICE_TYPES, createClient, MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
+import { SERVICE_TYPES, createClient, type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";

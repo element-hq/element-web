@@ -7,9 +7,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactElement, useCallback, useEffect, useState } from "react";
+import React, { type ReactElement, useCallback, useEffect, useState } from "react";
 
-import { NonEmptyArray } from "../../../../../@types/common";
+import { type NonEmptyArray } from "../../../../../@types/common";
 import { _t, getCurrentLanguage } from "../../../../../languageHandler";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import Field from "../../../elements/Field";
@@ -19,7 +19,7 @@ import SettingsFlag from "../../../elements/SettingsFlag";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import dis from "../../../../../dispatcher/dispatcher";
 import { UserTab } from "../../../dialogs/UserTab";
-import { OpenToTabPayload } from "../../../../../dispatcher/payloads/OpenToTabPayload";
+import { type OpenToTabPayload } from "../../../../../dispatcher/payloads/OpenToTabPayload";
 import { Action } from "../../../../../dispatcher/actions";
 import SdkConfig from "../../../../../SdkConfig";
 import { SettingsSubsection } from "../../shared/SettingsSubsection";
@@ -31,7 +31,7 @@ import { IS_MAC } from "../../../../../Keyboard";
 import SpellCheckSettings from "../../SpellCheckSettings";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import * as TimezoneHandler from "../../../../../TimezoneHandler";
-import { BooleanSettingKey } from "../../../../../settings/Settings.tsx";
+import { type BooleanSettingKey } from "../../../../../settings/Settings.tsx";
 
 interface IProps {
     closeSettingsFn(success: boolean): void;

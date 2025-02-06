@@ -7,13 +7,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
  */
 import { _t, _td } from "../languageHandler";
-import { ConfettiOptions } from "./confetti";
-import { Effect } from "./effect";
-import { FireworksOptions } from "./fireworks";
-import { RainfallOptions } from "./rainfall";
-import { SnowfallOptions } from "./snowfall";
-import { SpaceInvadersOptions } from "./spaceinvaders";
-import { HeartOptions } from "./hearts";
+import { type ConfettiOptions } from "./confetti";
+import { type Effect } from "./effect";
+import { type FireworksOptions } from "./fireworks";
+import { type RainfallOptions } from "./rainfall";
+import { type SnowfallOptions } from "./snowfall";
+import { type SpaceInvadersOptions } from "./spaceinvaders";
+import { type HeartOptions } from "./hearts";
 
 /**
  * This configuration defines room effects that can be triggered by custom message types and emojis

@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import Range from "./range";
-import { Part, Type } from "./parts";
+import type Range from "./range";
+import { type Part, Type } from "./parts";
 import { Formatting } from "../components/views/rooms/MessageComposerFormatBar";
 import { longestBacktickSequence } from "./deserialize";
 

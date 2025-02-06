@@ -6,16 +6,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import {
-    IAnnotatedPushRule,
-    IPusher,
-    PushRuleAction,
+    type IAnnotatedPushRule,
+    type IPusher,
+    type PushRuleAction,
     PushRuleKind,
     RuleId,
-    IThreepid,
+    type IThreepid,
     ThreepidMedium,
-    LocalNotificationSettings,
+    type LocalNotificationSettings,
+    type EmptyObject,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -23,13 +24,13 @@ import Spinner from "../elements/Spinner";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import {
     ContentRules,
-    IContentRules,
+    type IContentRules,
     PushRuleVectorState,
     VectorPushRulesDefinitions,
     VectorState,
+    type VectorPushRuleDefinition,
 } from "../../../notifications";
-import type { VectorPushRuleDefinition } from "../../../notifications";
-import { _t, TranslatedString } from "../../../languageHandler";
+import { _t, type TranslatedString } from "../../../languageHandler";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import SettingsStore from "../../../settings/SettingsStore";
 import StyledRadioButton from "../elements/StyledRadioButton";
@@ -107,8 +108,6 @@ interface IVectorPushRule {
     // undefined when rule has no synced rules
     syncedVectorState?: VectorState;
 }
-
-interface IProps {}
 
 interface IState {
     phase: Phase;
@@ -205,10 +204,10 @@ const NotificationActivitySettings = (): JSX.Element => {
 /**
  * The old, deprecated notifications tab view, only displayed if the user has the labs flag disabled.
  */
-export default class Notifications extends React.PureComponent<IProps, IState> {
+export default class Notifications extends React.PureComponent<EmptyObject, IState> {
     private settingWatchers: string[] = [];
 
-    public constructor(props: IProps) {
+    public constructor(props: EmptyObject) {
         super(props);
 
         this.state = {
@@ -255,7 +254,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
         this.settingWatchers.forEach((watcher) => SettingsStore.unwatchSetting(watcher));
     }
 
-    public componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>): void {
+    public componentDidUpdate(prevProps: Readonly<EmptyObject>, prevState: Readonly<IState>): void {
         if (this.state.deviceNotificationsEnabled !== prevState.deviceNotificationsEnabled) {
             this.persistLocalNotificationSettings(this.state.deviceNotificationsEnabled);
         }
@@ -291,7 +290,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
         }
     }
 
-    private persistLocalNotificationSettings(enabled: boolean): Promise<{}> {
+    private persistLocalNotificationSettings(enabled: boolean): Promise<EmptyObject> {
         const cli = MatrixClientPeg.safeGet();
         return cli.setAccountData(getLocalNotificationAccountDataEventType(cli.deviceId), {
             is_silenced: !enabled,

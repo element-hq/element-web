@@ -8,8 +8,9 @@ Please see LICENSE files in the repository root for full details.
 
 import { BaseDistributor } from "./fixed";
 import ResizeItem from "../item";
-import Resizer, { IConfig } from "../resizer";
-import Sizer from "../sizer";
+import { type IConfig } from "../resizer";
+import type Resizer from "../resizer";
+import type Sizer from "../sizer";
 
 export interface ICollapseConfig extends IConfig {
     toggleSize: number;

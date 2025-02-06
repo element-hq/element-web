@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EmojiMapping } from "matrix-js-sdk/src/crypto-api";
+import { type EmojiMapping } from "matrix-js-sdk/src/crypto-api";
 
 import { tEmoji } from "../../../../src/components/views/verification/VerificationShowSas";
 

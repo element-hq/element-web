@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { useState, useEffect, DependencyList } from "react";
+import { useState, useEffect, type DependencyList } from "react";
 
 type Fn<T> = () => Promise<T>;
 

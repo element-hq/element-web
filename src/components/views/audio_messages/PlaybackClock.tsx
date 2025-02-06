@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 
 import Clock from "./Clock";
-import { Playback, PlaybackState } from "../../../audio/Playback";
+import { type Playback, PlaybackState } from "../../../audio/Playback";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 
 interface IProps {

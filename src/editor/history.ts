@@ -6,10 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import EditorModel from "./model";
-import { IDiff } from "./diff";
-import { SerializedPart } from "./parts";
-import { Caret } from "./caret";
+import type EditorModel from "./model";
+import { type IDiff } from "./diff";
+import { type SerializedPart } from "./parts";
+import { type Caret } from "./caret";
 
 export interface IHistory {
     parts: SerializedPart[];

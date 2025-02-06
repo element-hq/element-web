@@ -11,7 +11,7 @@ import type { Locator, Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { Layout } from "../../../src/settings/enums/Layout";
-import { ElementAppPage } from "../../pages/ElementAppPage";
+import { type ElementAppPage } from "../../pages/ElementAppPage";
 
 // Find and click "Reply" button
 const clickButtonReply = async (tile: Locator) => {

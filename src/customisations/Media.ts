@@ -6,13 +6,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { MatrixClient, parseErrorResponse, ResizeMethod } from "matrix-js-sdk/src/matrix";
-import { MediaEventContent } from "matrix-js-sdk/src/types";
-import { Optional } from "matrix-events-sdk";
+import { type MatrixClient, parseErrorResponse, type ResizeMethod } from "matrix-js-sdk/src/matrix";
+import { type MediaEventContent } from "matrix-js-sdk/src/types";
+import { type Optional } from "matrix-events-sdk";
 
 import type { MediaCustomisations, Media } from "@element-hq/element-web-module-api";
 import { MatrixClientPeg } from "../MatrixClientPeg";
-import { IPreparedMedia, prepEventContentAsMedia } from "./models/IMediaEventContent";
+import { type IPreparedMedia, prepEventContentAsMedia } from "./models/IMediaEventContent";
 import { UserFriendlyError } from "../languageHandler";
 
 // Populate this class with the details of your customisations when copying it.

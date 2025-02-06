@@ -7,17 +7,17 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useContext } from "react";
-import { EventType, Room, User, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { EventType, type Room, type User, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import DMRoomMap from "../../../utils/DMRoomMap";
-import { _t, _td, TranslationKey } from "../../../languageHandler";
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
+import { _t, _td, type TranslationKey } from "../../../languageHandler";
+import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import MiniAvatarUploader, { AVATAR_SIZE } from "../elements/MiniAvatarUploader";
 import RoomAvatar from "../avatars/RoomAvatar";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import { ViewUserPayload } from "../../../dispatcher/payloads/ViewUserPayload";
+import { type ViewUserPayload } from "../../../dispatcher/payloads/ViewUserPayload";
 import { Action } from "../../../dispatcher/actions";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
 import { showSpaceInvite } from "../../../utils/space";

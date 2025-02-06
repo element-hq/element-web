@@ -9,26 +9,26 @@ Please see LICENSE files in the repository root for full details.
 import { EventEmitter } from "events";
 import {
     RoomMember,
-    Room,
+    type Room,
     RoomEvent,
-    RoomState,
+    type RoomState,
     RoomStateEvent,
-    MatrixEvent,
+    type MatrixEvent,
     Direction,
     EventTimeline,
-    EventTimelineSet,
-    IRoomTimelineData,
+    type EventTimelineSet,
+    type IRoomTimelineData,
     EventType,
     ClientEvent,
-    MatrixClient,
+    type MatrixClient,
     HTTPError,
-    IEventWithRoomId,
-    IMatrixProfile,
-    IResultRoomEvents,
-    SyncStateData,
-    SyncState,
-    TimelineIndex,
-    TimelineWindow,
+    type IEventWithRoomId,
+    type IMatrixProfile,
+    type IResultRoomEvents,
+    type SyncStateData,
+    type SyncState,
+    type TimelineIndex,
+    type TimelineWindow,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { sleep } from "matrix-js-sdk/src/utils";
@@ -38,7 +38,13 @@ import PlatformPeg from "../PlatformPeg";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import SettingsStore from "../settings/SettingsStore";
 import { SettingLevel } from "../settings/SettingLevel";
-import { ICrawlerCheckpoint, IEventAndProfile, IIndexStats, ILoadArgs, ISearchArgs } from "./BaseEventIndexManager";
+import {
+    type ICrawlerCheckpoint,
+    type IEventAndProfile,
+    type IIndexStats,
+    type ILoadArgs,
+    type ISearchArgs,
+} from "./BaseEventIndexManager";
 import { asyncFilter } from "../utils/arrays.ts";
 
 // The time in ms that the crawler will wait loop iterations if there

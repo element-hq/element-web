@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { registerOidcClient, OidcClientConfig } from "matrix-js-sdk/src/matrix";
+import { registerOidcClient, type OidcClientConfig } from "matrix-js-sdk/src/matrix";
 
-import { IConfigOptions } from "../../IConfigOptions";
+import { type IConfigOptions } from "../../IConfigOptions";
 import PlatformPeg from "../../PlatformPeg";
 
 /**

@@ -8,7 +8,7 @@
 
 import React from "react";
 import { render } from "jest-matrix-react";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { mkDecryptionFailureMatrixEvent } from "matrix-js-sdk/src/testing";
 import { DecryptionFailureCode } from "matrix-js-sdk/src/crypto-api";
 

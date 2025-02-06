@@ -33,19 +33,15 @@ module.exports = {
         "import-notation": null,
         "value-keyword-case": null,
         "declaration-block-no-redundant-longhand-properties": null,
-        "declaration-block-no-duplicate-properties": [
-            true,
-            // useful for fallbacks
-            { ignore: ["consecutive-duplicates-with-different-values"] },
-        ],
         "shorthand-property-no-redundant-values": null,
         "property-no-vendor-prefix": null,
-        "value-no-vendor-prefix": null,
         "selector-no-vendor-prefix": null,
         "media-feature-name-no-vendor-prefix": null,
         "number-max-precision": null,
         "no-invalid-double-slash-comments": true,
         "media-feature-range-notation": null,
+        "declaration-property-value-no-unknown": null,
+        "declaration-property-value-keyword-no-deprecated": null,
         "csstools/value-no-unknown-custom-properties": [
             true,
             {

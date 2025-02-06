@@ -6,24 +6,22 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room, ClientEvent, SyncState } from "matrix-js-sdk/src/matrix";
+import { type Room, ClientEvent, SyncState, type EmptyObject } from "matrix-js-sdk/src/matrix";
 
-import { ActionPayload } from "../../dispatcher/payloads";
+import { type ActionPayload } from "../../dispatcher/payloads";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
-import defaultDispatcher, { MatrixDispatcher } from "../../dispatcher/dispatcher";
-import { DefaultTagID, TagID } from "../room-list/models";
-import { FetchRoomFn, ListNotificationState } from "./ListNotificationState";
+import defaultDispatcher, { type MatrixDispatcher } from "../../dispatcher/dispatcher";
+import { DefaultTagID, type TagID } from "../room-list/models";
+import { type FetchRoomFn, ListNotificationState } from "./ListNotificationState";
 import { RoomNotificationState } from "./RoomNotificationState";
 import { SummarizedNotificationState } from "./SummarizedNotificationState";
 import { VisibilityProvider } from "../room-list/filters/VisibilityProvider";
 import { PosthogAnalytics } from "../../PosthogAnalytics";
 import SettingsStore from "../../settings/SettingsStore";
 
-interface IState {}
-
 export const UPDATE_STATUS_INDICATOR = Symbol("update-status-indicator");
 
-export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
+export class RoomNotificationStateStore extends AsyncStoreWithClient<EmptyObject> {
     private static readonly internalInstance = (() => {
         const instance = new RoomNotificationStateStore();
         instance.start();

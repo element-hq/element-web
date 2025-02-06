@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 /* See readme.md for tips on writing these tests. */
 
-import { Locator, Page } from "playwright-core";
+import { type Locator, type Page } from "playwright-core";
 
 import { test, expect } from "../../element-web-test";
 

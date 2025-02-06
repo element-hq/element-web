@@ -6,11 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, ReactNode, SyntheticEvent } from "react";
+import React, { createRef, type ReactNode, type SyntheticEvent } from "react";
 import classNames from "classnames";
-import { RoomMember, Room, MatrixError, EventType } from "matrix-js-sdk/src/matrix";
+import { RoomMember, type Room, MatrixError, EventType } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
 import { uniqBy } from "lodash";
 import { CloseIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
@@ -26,7 +26,7 @@ import { buildActivityScores, buildMemberScores, compareMembers } from "../../..
 import { abbreviateUrl } from "../../../utils/UrlUtils";
 import IdentityAuthClient from "../../../IdentityAuthClient";
 import { humanizeTime } from "../../../utils/humanize";
-import { IInviteResult, inviteMultipleToRoom, showAnyInviteErrors } from "../../../RoomInvite";
+import { type IInviteResult, inviteMultipleToRoom, showAnyInviteErrors } from "../../../RoomInvite";
 import { Action } from "../../../dispatcher/actions";
 import { DefaultTagID } from "../../../stores/room-list/models";
 import RoomListStore from "../../../stores/room-list/RoomListStore";
@@ -35,7 +35,7 @@ import { UIFeature } from "../../../settings/UIFeature";
 import { mediaFromMxc } from "../../../customisations/Media";
 import BaseAvatar from "../avatars/BaseAvatar";
 import { SearchResultAvatar } from "../avatars/SearchResultAvatar";
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import { selectText } from "../../../utils/strings";
 import Field from "../elements/Field";
 import TabbedView, { Tab, TabLocation } from "../../structures/TabbedView";
@@ -47,13 +47,13 @@ import DialPadBackspaceButton from "../elements/DialPadBackspaceButton";
 import LegacyCallHandler from "../../../LegacyCallHandler";
 import UserIdentifierCustomisations from "../../../customisations/UserIdentifier";
 import CopyableText from "../elements/CopyableText";
-import { ScreenName } from "../../../PosthogTrackers";
+import { type ScreenName } from "../../../PosthogTrackers";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import {
     DirectoryMember,
-    IDMUserTileProps,
-    Member,
+    type IDMUserTileProps,
+    type Member,
     startDmOnFirstMessage,
     ThreepidMember,
 } from "../../../utils/direct-messages";
@@ -61,11 +61,11 @@ import { InviteKind } from "./InviteDialogTypes";
 import Modal from "../../../Modal";
 import dis from "../../../dispatcher/dispatcher";
 import { privateShouldBeEncrypted } from "../../../utils/rooms";
-import { NonEmptyArray } from "../../../@types/common";
+import { type NonEmptyArray } from "../../../@types/common";
 import { UNKNOWN_PROFILE_ERRORS } from "../../../utils/MultiInviter";
-import AskInviteAnywayDialog, { UnknownProfiles } from "./AskInviteAnywayDialog";
+import AskInviteAnywayDialog, { type UnknownProfiles } from "./AskInviteAnywayDialog";
 import { SdkContextClass } from "../../../contexts/SDKContext";
-import { UserProfilesStore } from "../../../stores/UserProfilesStore";
+import { type UserProfilesStore } from "../../../stores/UserProfilesStore";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 // Exports location components which touch maplibre-gs wrapped in React Suspense to enable code splitting
 
-import React, { ComponentProps, lazy, Suspense } from "react";
+import React, { type ComponentProps, lazy, Suspense } from "react";
 
 import Spinner from "../elements/Spinner";
 

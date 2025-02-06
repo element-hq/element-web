@@ -8,13 +8,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useContext, useEffect, useMemo, useState } from "react";
-import { IContent, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type IContent, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
 import { _t, _td } from "../../../../languageHandler";
-import BaseTool, { DevtoolsContext, IDevtoolsProps } from "./BaseTool";
+import BaseTool, { DevtoolsContext, type IDevtoolsProps } from "./BaseTool";
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
-import { EventEditor, EventViewer, eventTypeField, stateKeyField, IEditorProps, stringify } from "./Event";
+import { EventEditor, EventViewer, eventTypeField, stateKeyField, type IEditorProps, stringify } from "./Event";
 import FilteredList from "./FilteredList";
 import Spinner from "../../elements/Spinner";
 import SyntaxHighlight from "../../elements/SyntaxHighlight";

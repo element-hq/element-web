@@ -7,7 +7,7 @@
  */
 
 // Populate this class with the details of your customisations when copying it.
-import { Capability, Widget } from "matrix-widget-api";
+import { type Capability, type Widget } from "matrix-widget-api";
 
 import type { WidgetPermissionsCustomisations } from "@element-hq/element-web-module-api";
 

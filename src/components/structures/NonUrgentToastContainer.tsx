@@ -7,19 +7,18 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import * as React from "react";
+import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 
-import { ComponentClass } from "../../@types/common";
+import { type ComponentClass } from "../../@types/common";
 import NonUrgentToastStore from "../../stores/NonUrgentToastStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
-
-interface IProps {}
 
 interface IState {
     toasts: ComponentClass[];
 }
 
-export default class NonUrgentToastContainer extends React.PureComponent<IProps, IState> {
-    public constructor(props: IProps) {
+export default class NonUrgentToastContainer extends React.PureComponent<EmptyObject, IState> {
+    public constructor(props: EmptyObject) {
         super(props);
 
         this.state = {

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { test, expect } from "../../element-web-test";
 import type { Bot } from "../../pages/bot";
 import type { Client } from "../../pages/client";
-import { ElementAppPage } from "../../pages/ElementAppPage";
+import { type ElementAppPage } from "../../pages/ElementAppPage";
 
 test.describe("Poll history", () => {
     type CreatePollOptions = {

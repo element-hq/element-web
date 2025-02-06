@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import SettingController from "./SettingController";
 import PlatformPeg from "../../PlatformPeg";
-import { SettingLevel } from "../SettingLevel";
+import { type SettingLevel } from "../SettingLevel";
 
 export default class ReloadOnChangeController extends SettingController {
     public onChange(level: SettingLevel, roomId: string, newValue: any): void {

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { ClientEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, type EmptyObject, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 
@@ -33,10 +33,10 @@ interface IState {
     crossSigningReady?: boolean;
 }
 
-export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
+export default class CrossSigningPanel extends React.PureComponent<EmptyObject, IState> {
     private unmounted = false;
 
-    public constructor(props: {}) {
+    public constructor(props: EmptyObject) {
         super(props);
 
         this.state = {

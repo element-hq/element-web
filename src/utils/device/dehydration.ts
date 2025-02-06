@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { CryptoApi, StartDehydrationOpts } from "matrix-js-sdk/src/crypto-api";
+import { type CryptoApi, type StartDehydrationOpts } from "matrix-js-sdk/src/crypto-api";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
