@@ -49,7 +49,7 @@ export class BackgroundAudio {
         source.loop = loop;
         source.connect(this.audioContext.destination);
 
-        this.audioContext.resume();
+        await this.audioContext.resume();
         source.onended = () => {
             this.audioContext.suspend();
         };
