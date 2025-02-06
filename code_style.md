@@ -280,7 +280,7 @@ Inheriting all the rules of TypeScript, the following additionally apply:
 
 Note: We use PostCSS + some plugins to process our styles. It looks like SCSS, but actually it is not.
 
-1. The view's CSS file MUST have the same name (e.g. view/rooms/MessageTile.css).
+1. The view's CSS file MUST have the same name as the component (e.g. `view/rooms/_MessageTile.css` for `MessageTile.tsx` component).
 2. Per-view CSS is optional - it could choose to inherit all its styling from the context of the rest of the app, although this is unusual.
 3. Class names must be prefixed with "mx\_".
 4. Class names must strictly denote the component which defines them.
