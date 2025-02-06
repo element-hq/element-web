@@ -7,7 +7,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { Capability, isTimelineCapability, Widget, WidgetEventCapability, WidgetKind } from "matrix-widget-api";
+import {
+    type Capability,
+    isTimelineCapability,
+    type Widget,
+    WidgetEventCapability,
+    type WidgetKind,
+} from "matrix-widget-api";
 import { lexicographicCompare } from "matrix-js-sdk/src/utils";
 
 import BaseDialog from "./BaseDialog";

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import classNames from "classnames";
-import { EmptyObject } from "matrix-js-sdk/src/matrix";
+import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 
 import SdkConfig from "../../../SdkConfig";
 import AuthPage from "./AuthPage";

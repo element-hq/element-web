@@ -16,22 +16,24 @@ import {
     MatrixEvent,
     RoomStateEvent,
     PendingEventOrdering,
-    IContent,
+    type IContent,
+    type MatrixClient,
+    type IMyDevice,
+    type RoomMember,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { Widget } from "matrix-widget-api";
 import {
-    CallMembership,
+    type CallMembership,
     MatrixRTCSessionManagerEvents,
     MatrixRTCSession,
     MatrixRTCSessionEvent,
 } from "matrix-js-sdk/src/matrixrtc";
 
 import type { Mocked } from "jest-mock";
-import type { MatrixClient, IMyDevice, RoomMember } from "matrix-js-sdk/src/matrix";
 import type { ClientWidgetApi } from "matrix-widget-api";
 import {
-    JitsiCallMemberContent,
+    type JitsiCallMemberContent,
     Layout,
     Call,
     CallEvent,
@@ -48,7 +50,7 @@ import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../../../src/stores/A
 import { ElementWidgetActions } from "../../../src/stores/widgets/ElementWidgetActions";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { PosthogAnalytics } from "../../../src/PosthogAnalytics";
-import { SettingKey } from "../../../src/settings/Settings.tsx";
+import { type SettingKey } from "../../../src/settings/Settings.tsx";
 
 jest.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
     [MediaDeviceKindEnum.AudioInput]: [

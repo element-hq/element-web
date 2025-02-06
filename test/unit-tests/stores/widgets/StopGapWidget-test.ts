@@ -6,21 +6,21 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked, MockedFunction, MockedObject } from "jest-mock";
+import { mocked, type MockedFunction, type MockedObject } from "jest-mock";
 import { findLast, last } from "lodash";
 import {
     MatrixEvent,
-    MatrixClient,
+    type MatrixClient,
     ClientEvent,
-    EventTimeline,
+    type EventTimeline,
     EventType,
     MatrixEventEvent,
     RoomStateEvent,
-    RoomState,
+    type RoomState,
 } from "matrix-js-sdk/src/matrix";
 import { ClientWidgetApi, WidgetApiFromWidgetAction } from "matrix-widget-api";
 import { waitFor } from "jest-matrix-react";
-import { Optional } from "matrix-events-sdk";
+import { type Optional } from "matrix-events-sdk";
 
 import { stubClient, mkRoom, mkEvent } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";

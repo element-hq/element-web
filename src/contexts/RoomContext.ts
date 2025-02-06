@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { createContext } from "react";
 
-import { IRoomState } from "../components/structures/RoomView";
+import { type IRoomState } from "../components/structures/RoomView";
 import { Layout } from "../settings/enums/Layout";
 
 export enum TimelineRenderingType {

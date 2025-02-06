@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef } from "react";
-import { EmptyObject, Room } from "matrix-js-sdk/src/matrix";
+import { type EmptyObject, type Room } from "matrix-js-sdk/src/matrix";
 import { CSSTransition } from "react-transition-group";
 
 import { BreadcrumbsStore } from "../../../stores/BreadcrumbsStore";
@@ -18,8 +18,8 @@ import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { useRovingTabIndex } from "../../../accessibility/RovingTabIndex";
 import Toolbar from "../../../accessibility/Toolbar";
 import { Action } from "../../../dispatcher/actions";
-import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
+import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 
 interface IState {
     // Both of these control the animation for the breadcrumbs. For details on the

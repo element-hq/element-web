@@ -6,14 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { JSHandle, Locator, Page } from "@playwright/test";
+import { type JSHandle, type Locator, type Page } from "@playwright/test";
 
 import type { MatrixEvent, IContent, Room } from "matrix-js-sdk/src/matrix";
 import { test as base, expect } from "../../../element-web-test";
-import { Bot } from "../../../pages/bot";
-import { Client } from "../../../pages/client";
-import { ElementAppPage } from "../../../pages/ElementAppPage";
-import { Credentials } from "../../../plugins/homeserver";
+import { type Bot } from "../../../pages/bot";
+import { type Client } from "../../../pages/client";
+import { type ElementAppPage } from "../../../pages/ElementAppPage";
+import { type Credentials } from "../../../plugins/homeserver";
 
 type RoomRef = { name: string; roomId: string };
 

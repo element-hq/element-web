@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { HTMLAttributes, ReactHTML, ReactNode, WheelEvent } from "react";
+import React, { type HTMLAttributes, type ReactHTML, type ReactNode, type WheelEvent } from "react";
 
 type DynamicHtmlElementProps<T extends keyof JSX.IntrinsicElements> =
     JSX.IntrinsicElements[T] extends HTMLAttributes<object> ? DynamicElementProps<T> : DynamicElementProps<"div">;

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import Sizer from "../sizer";
 import FixedDistributor from "./fixed";
-import { IConfig } from "../resizer";
+import { type IConfig } from "../resizer";
 
 class PercentageSizer extends Sizer {
     public start(item: HTMLElement): void {

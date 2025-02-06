@@ -6,13 +6,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { Room, RoomStateEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { Optional } from "matrix-events-sdk";
+import { type Room, RoomStateEvent, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type Optional } from "matrix-events-sdk";
 import { MapWithDefault, recursiveMapToObject } from "matrix-js-sdk/src/utils";
-import { IWidget } from "matrix-widget-api";
+import { type IWidget } from "matrix-widget-api";
 
 import SettingsStore from "../../settings/SettingsStore";
-import WidgetStore, { IApp } from "../WidgetStore";
+import WidgetStore, { type IApp } from "../WidgetStore";
 import { WidgetType } from "../../widgets/WidgetType";
 import { clamp, defaultNumber, sum } from "../../utils/numbers";
 import defaultDispatcher from "../../dispatcher/dispatcher";
@@ -20,7 +20,13 @@ import { ReadyWatchingStore } from "../ReadyWatchingStore";
 import { SettingLevel } from "../../settings/SettingLevel";
 import { arrayFastClone } from "../../utils/arrays";
 import { UPDATE_EVENT } from "../AsyncStore";
-import { Container, IStoredLayout, ILayoutStateEvent, WIDGET_LAYOUT_EVENT_TYPE, IWidgetLayouts } from "./types";
+import {
+    Container,
+    type IStoredLayout,
+    type ILayoutStateEvent,
+    WIDGET_LAYOUT_EVENT_TYPE,
+    type IWidgetLayouts,
+} from "./types";
 
 export type { IStoredLayout, ILayoutStateEvent };
 export { Container, WIDGET_LAYOUT_EVENT_TYPE };

@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { IEventRelation, UploadProgress } from "matrix-js-sdk/src/matrix";
-import { EncryptedFile } from "matrix-js-sdk/src/types";
+import { type IEventRelation, type UploadProgress } from "matrix-js-sdk/src/matrix";
+import { type EncryptedFile } from "matrix-js-sdk/src/types";
 
 export class RoomUpload {
     public readonly abortController = new AbortController();

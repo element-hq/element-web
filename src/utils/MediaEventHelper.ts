@@ -6,14 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixEvent, EventType, MsgType } from "matrix-js-sdk/src/matrix";
-import { FileContent, ImageContent, MediaEventContent } from "matrix-js-sdk/src/types";
+import { type MatrixEvent, EventType, MsgType } from "matrix-js-sdk/src/matrix";
+import { type FileContent, type ImageContent, type MediaEventContent } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { LazyValue } from "./LazyValue";
-import { Media, mediaFromContent } from "../customisations/Media";
+import { type Media, mediaFromContent } from "../customisations/Media";
 import { decryptFile } from "./DecryptFile";
-import { IDestroyable } from "./IDestroyable";
+import { type IDestroyable } from "./IDestroyable";
 
 // TODO: We should consider caching the blobs. https://github.com/vector-im/element-web/issues/17192
 

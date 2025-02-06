@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { RuntimeModule } from "@matrix-org/react-sdk-module-api/lib/RuntimeModule";
-import { ModuleApi } from "@matrix-org/react-sdk-module-api/lib/ModuleApi";
-import { AllExtensions } from "@matrix-org/react-sdk-module-api/lib/types/extensions";
-import { ProvideCryptoSetupExtensions } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CryptoSetupExtensions";
-import { ProvideExperimentalExtensions } from "@matrix-org/react-sdk-module-api/lib/lifecycles/ExperimentalExtensions";
+import { type ModuleApi } from "@matrix-org/react-sdk-module-api/lib/ModuleApi";
+import { type AllExtensions } from "@matrix-org/react-sdk-module-api/lib/types/extensions";
+import { type ProvideCryptoSetupExtensions } from "@matrix-org/react-sdk-module-api/lib/lifecycles/CryptoSetupExtensions";
+import { type ProvideExperimentalExtensions } from "@matrix-org/react-sdk-module-api/lib/lifecycles/ExperimentalExtensions";
 
 import { ModuleRunner } from "../../../src/modules/ModuleRunner";
 

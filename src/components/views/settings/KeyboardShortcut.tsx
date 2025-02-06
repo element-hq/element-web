@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 
 import { ALTERNATE_KEY_NAME, KEY_ICON } from "../../../accessibility/KeyboardShortcuts";
-import { KeyCombo } from "../../../KeyBindingsManager";
+import { type KeyCombo } from "../../../KeyBindingsManager";
 import { IS_MAC, Key } from "../../../Keyboard";
 import { _t } from "../../../languageHandler";
 

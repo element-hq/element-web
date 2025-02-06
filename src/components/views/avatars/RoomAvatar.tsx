@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ComponentProps } from "react";
-import { Room, RoomStateEvent, MatrixEvent, EventType, RoomType } from "matrix-js-sdk/src/matrix";
+import React, { type ComponentProps } from "react";
+import { type Room, RoomStateEvent, type MatrixEvent, EventType, RoomType } from "matrix-js-sdk/src/matrix";
 
 import BaseAvatar from "./BaseAvatar";
 import ImageView from "../elements/ImageView";
@@ -16,7 +16,7 @@ import Modal from "../../../Modal";
 import * as Avatar from "../../../Avatar";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { mediaFromMxc } from "../../../customisations/Media";
-import { IOOBData } from "../../../stores/ThreepidInviteStore";
+import { type IOOBData } from "../../../stores/ThreepidInviteStore";
 import { LocalRoom } from "../../../models/LocalRoom";
 import { filterBoolean } from "../../../utils/arrays";
 

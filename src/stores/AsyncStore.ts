@@ -9,8 +9,8 @@ Please see LICENSE files in the repository root for full details.
 import { EventEmitter } from "events";
 import AwaitLock from "await-lock";
 
-import { ActionPayload } from "../dispatcher/payloads";
-import { MatrixDispatcher } from "../dispatcher/dispatcher";
+import { type ActionPayload } from "../dispatcher/payloads";
+import { type MatrixDispatcher } from "../dispatcher/dispatcher";
 
 /**
  * The event/channel to listen for in an AsyncStore.

@@ -7,29 +7,29 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    Room,
+    type Room,
     RelationType,
-    MatrixEvent,
-    Thread,
+    type MatrixEvent,
+    type Thread,
     M_POLL_START,
     RoomEvent,
-    EmptyObject,
+    type EmptyObject,
 } from "matrix-js-sdk/src/matrix";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 
-import { ActionPayload } from "../../dispatcher/payloads";
+import { type ActionPayload } from "../../dispatcher/payloads";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { MessageEventPreview } from "./previews/MessageEventPreview";
 import { PollStartEventPreview } from "./previews/PollStartEventPreview";
-import { TagID } from "./models";
+import { type TagID } from "./models";
 import { LegacyCallInviteEventPreview } from "./previews/LegacyCallInviteEventPreview";
 import { LegacyCallAnswerEventPreview } from "./previews/LegacyCallAnswerEventPreview";
 import { LegacyCallHangupEvent } from "./previews/LegacyCallHangupEvent";
 import { StickerEventPreview } from "./previews/StickerEventPreview";
 import { ReactionEventPreview } from "./previews/ReactionEventPreview";
 import { UPDATE_EVENT } from "../AsyncStore";
-import { IPreview } from "./previews/IPreview";
+import { type IPreview } from "./previews/IPreview";
 import shouldHideEvent from "../../shouldHideEvent";
 
 // Emitted event for when a room's preview has changed. First argument will the room for which

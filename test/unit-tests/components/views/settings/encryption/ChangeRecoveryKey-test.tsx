@@ -7,7 +7,7 @@
 
 import React from "react";
 import { render, screen, waitFor } from "jest-matrix-react";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import userEvent from "@testing-library/user-event";
 
 import { ChangeRecoveryKey } from "../../../../../../src/components/views/settings/encryption/ChangeRecoveryKey";

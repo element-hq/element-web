@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { waitFor, renderHook, act } from "jest-matrix-react";
-import { IRoomDirectoryOptions, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type IRoomDirectoryOptions, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { usePublicRoomDirectory } from "../../../src/hooks/usePublicRoomDirectory";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";

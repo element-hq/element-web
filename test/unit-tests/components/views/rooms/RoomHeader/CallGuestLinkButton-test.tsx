@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { fireEvent, getByLabelText, getByText, render, screen, waitFor } from "jest-matrix-react";
-import { EventTimeline, JoinRule, Room } from "matrix-js-sdk/src/matrix";
+import { type EventTimeline, JoinRule, Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { SDKContext, SdkContextClass } from "../../../../../../src/contexts/SDKContext";

@@ -8,9 +8,9 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { mocked } from "jest-mock";
-import { RoomMember, RelationType, MatrixClient, M_ASSET, LocationAssetType } from "matrix-js-sdk/src/matrix";
+import { RoomMember, RelationType, type MatrixClient, M_ASSET, LocationAssetType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { act, fireEvent, render, RenderResult } from "jest-matrix-react";
+import { act, fireEvent, render, type RenderResult } from "jest-matrix-react";
 import * as maplibregl from "maplibre-gl";
 
 import LocationShareMenu from "../../../../../src/components/views/location/LocationShareMenu";

@@ -7,15 +7,15 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { createRef, ClipboardEvent, SyntheticEvent } from "react";
-import { Room, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import React, { createRef, type ClipboardEvent, type SyntheticEvent } from "react";
+import { type Room, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import EMOTICON_REGEX from "emojibase-regex/emoticon";
 import { logger } from "matrix-js-sdk/src/logger";
 import { EMOTICON_TO_EMOJI } from "@matrix-org/emojibase-bindings";
 
-import EditorModel from "../../../editor/model";
+import type EditorModel from "../../../editor/model";
 import HistoryManager from "../../../editor/history";
-import { Caret, setSelection } from "../../../editor/caret";
+import { type Caret, setSelection } from "../../../editor/caret";
 import {
     formatRange,
     formatRangeAsLink,
@@ -24,7 +24,7 @@ import {
 } from "../../../editor/operations";
 import { getCaretOffsetAndText, getRangeForSelection } from "../../../editor/dom";
 import Autocomplete, { generateCompletionDomId } from "../rooms/Autocomplete";
-import { getAutoCompleteCreator, Part, SerializedPart, Type } from "../../../editor/parts";
+import { getAutoCompleteCreator, type Part, type SerializedPart, Type } from "../../../editor/parts";
 import { parseEvent, parsePlainTextMessage } from "../../../editor/deserialize";
 import { renderModel } from "../../../editor/render";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -32,11 +32,11 @@ import { IS_MAC, Key } from "../../../Keyboard";
 import { CommandCategories, CommandMap, parseCommandString } from "../../../SlashCommands";
 import Range from "../../../editor/range";
 import MessageComposerFormatBar, { Formatting } from "./MessageComposerFormatBar";
-import DocumentOffset from "../../../editor/offset";
-import { IDiff } from "../../../editor/diff";
-import AutocompleteWrapperModel from "../../../editor/autocomplete";
-import DocumentPosition from "../../../editor/position";
-import { ICompletion } from "../../../autocomplete/Autocompleter";
+import type DocumentOffset from "../../../editor/offset";
+import { type IDiff } from "../../../editor/diff";
+import type AutocompleteWrapperModel from "../../../editor/autocomplete";
+import type DocumentPosition from "../../../editor/position";
+import { type ICompletion } from "../../../autocomplete/Autocompleter";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { ALTERNATE_KEY_NAME, KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { _t } from "../../../languageHandler";

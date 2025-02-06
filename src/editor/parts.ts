@@ -6,9 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixClient, RoomMember, Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type RoomMember, type Room } from "matrix-js-sdk/src/matrix";
 
-import AutocompleteWrapperModel, { GetAutocompleterComponent, UpdateCallback, UpdateQuery } from "./autocomplete";
+import AutocompleteWrapperModel, {
+    type GetAutocompleterComponent,
+    type UpdateCallback,
+    type UpdateQuery,
+} from "./autocomplete";
 import { EMOJI_REGEX, unicodeToShortcode } from "../HtmlUtils";
 import * as Avatar from "../Avatar";
 import defaultDispatcher from "../dispatcher/dispatcher";

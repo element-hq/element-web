@@ -8,32 +8,32 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef } from "react";
-import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import classNames from "classnames";
 
 import type { Call } from "../../../models/Call";
 import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
-import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../../views/elements/AccessibleButton";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { _t } from "../../../languageHandler";
-import { ChevronFace, ContextMenuTooltipButton, MenuProps } from "../../structures/ContextMenu";
-import { DefaultTagID, TagID } from "../../../stores/room-list/models";
-import { MessagePreview, MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
+import { ChevronFace, ContextMenuTooltipButton, type MenuProps } from "../../structures/ContextMenu";
+import { DefaultTagID, type TagID } from "../../../stores/room-list/models";
+import { type MessagePreview, MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import { RoomNotifState } from "../../../RoomNotifs";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { RoomNotificationContextMenu } from "../context_menus/RoomNotificationContextMenu";
 import NotificationBadge from "./NotificationBadge";
-import { ActionPayload } from "../../../dispatcher/payloads";
+import { type ActionPayload } from "../../../dispatcher/payloads";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
-import { NotificationState, NotificationStateEvents } from "../../../stores/notifications/NotificationState";
+import { type NotificationState, NotificationStateEvents } from "../../../stores/notifications/NotificationState";
 import { EchoChamber } from "../../../stores/local-echo/EchoChamber";
-import { CachedRoomKey, RoomEchoChamber } from "../../../stores/local-echo/RoomEchoChamber";
+import { CachedRoomKey, type RoomEchoChamber } from "../../../stores/local-echo/RoomEchoChamber";
 import { PROPERTY_UPDATED } from "../../../stores/local-echo/GenericEchoChamber";
 import PosthogTrackers from "../../../PosthogTrackers";
-import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { RoomGeneralContextMenu } from "../context_menus/RoomGeneralContextMenu";

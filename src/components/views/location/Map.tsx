@@ -6,10 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode, useContext, useEffect, useState } from "react";
+import React, { type ReactNode, useContext, useEffect, useState } from "react";
 import classNames from "classnames";
 import * as maplibregl from "maplibre-gl";
-import { ClientEvent, IClientWellKnown } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, type IClientWellKnown } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -17,7 +17,7 @@ import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import { parseGeoUri, positionFailureMessage } from "../../../utils/location";
 import { tileServerFromWellKnown } from "../../../utils/WellKnownUtils";
 import { useMap } from "../../../utils/location/useMap";
-import { Bounds } from "../../../utils/beacon/bounds";
+import { type Bounds } from "../../../utils/beacon/bounds";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import { _t } from "../../../languageHandler";

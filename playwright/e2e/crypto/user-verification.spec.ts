@@ -11,7 +11,7 @@ import { type Preset, type Visibility } from "matrix-js-sdk/src/matrix";
 import type { Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
 import { doTwoWaySasVerification, awaitVerifier } from "./utils";
-import { Client } from "../../pages/client";
+import { type Client } from "../../pages/client";
 
 test.describe("User verification", () => {
     // note that there are other tests that check user verification works in `crypto.spec.ts`.

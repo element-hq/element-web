@@ -6,16 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
-import { EncryptedFile } from "matrix-js-sdk/src/types";
-import { SimpleObservable } from "matrix-widget-api";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type EncryptedFile } from "matrix-js-sdk/src/types";
+import { type SimpleObservable } from "matrix-widget-api";
 
 import { uploadFile } from "../ContentMessages";
 import { concat } from "../utils/arrays";
-import { IDestroyable } from "../utils/IDestroyable";
+import { type IDestroyable } from "../utils/IDestroyable";
 import { Singleflight } from "../utils/Singleflight";
 import { Playback } from "./Playback";
-import { IRecordingUpdate, RecordingState, VoiceRecording } from "./VoiceRecording";
+import { type IRecordingUpdate, RecordingState, VoiceRecording } from "./VoiceRecording";
 
 export interface IUpload {
     mxc?: string; // for unencrypted uploads

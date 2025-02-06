@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { TextInputField } from "@matrix-org/react-sdk-module-api/lib/components/TextInputField";
 import { Spinner as ModuleSpinner } from "@matrix-org/react-sdk-module-api/lib/components/Spinner";
-import React, { ChangeEvent } from "react";
+import React, { type ChangeEvent } from "react";
 
 import Field from "../components/views/elements/Field";
 import Spinner from "../components/views/elements/Spinner";

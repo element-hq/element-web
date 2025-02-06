@@ -12,17 +12,17 @@ import {
     createClient,
     EventType,
     HttpApiEvent,
-    MatrixClient,
-    MatrixEvent,
-    RoomType,
+    type MatrixClient,
+    type MatrixEvent,
+    type RoomType,
     SyncState,
-    SyncStateData,
-    TimelineEvents,
+    type SyncStateData,
+    type TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
-import { defer, IDeferred, QueryDict } from "matrix-js-sdk/src/utils";
+import { defer, type IDeferred, type QueryDict } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 import { throttle } from "lodash";
-import { CryptoEvent, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
+import { CryptoEvent, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 import { TooltipProvider } from "@vector-im/compound-web";
 
 // what-input helps improve keyboard accessibility
@@ -30,9 +30,9 @@ import "what-input";
 
 import PosthogTrackers from "../../PosthogTrackers";
 import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
-import { IMatrixClientCreds, MatrixClientPeg } from "../../MatrixClientPeg";
+import { type IMatrixClientCreds, MatrixClientPeg } from "../../MatrixClientPeg";
 import PlatformPeg from "../../PlatformPeg";
-import SdkConfig, { ConfigOptions } from "../../SdkConfig";
+import SdkConfig, { type ConfigOptions } from "../../SdkConfig";
 import dis from "../../dispatcher/dispatcher";
 import Notifier from "../../Notifier";
 import Modal from "../../Modal";
@@ -43,7 +43,7 @@ import * as Lifecycle from "../../Lifecycle";
 import "../../stores/LifecycleStore";
 import "../../stores/AutoRageshakeStore";
 import PageType from "../../PageTypes";
-import createRoom, { IOpts } from "../../createRoom";
+import createRoom, { type IOpts } from "../../createRoom";
 import { _t, _td } from "../../languageHandler";
 import SettingsStore from "../../settings/SettingsStore";
 import ThemeController from "../../settings/controllers/ThemeController";
@@ -60,14 +60,17 @@ import LoggedInView from "./LoggedInView";
 import { Action } from "../../dispatcher/actions";
 import { hideToast as hideAnalyticsToast, showToast as showAnalyticsToast } from "../../toasts/AnalyticsToast";
 import { showToast as showNotificationsToast } from "../../toasts/DesktopNotificationsToast";
-import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
+import { type OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
 import {
     RoomNotificationStateStore,
     UPDATE_STATUS_INDICATOR,
 } from "../../stores/notifications/RoomNotificationStateStore";
 import { SettingLevel } from "../../settings/SettingLevel";
-import ThreepidInviteStore, { IThreepidInvite, IThreepidInviteWireFormat } from "../../stores/ThreepidInviteStore";
+import ThreepidInviteStore, {
+    type IThreepidInvite,
+    type IThreepidInviteWireFormat,
+} from "../../stores/ThreepidInviteStore";
 import { UIFeature } from "../../settings/UIFeature";
 import DialPadModal from "../views/voip/DialPadModal";
 import { showToast as showMobileGuideToast } from "../../toasts/MobileGuideToast";
@@ -97,23 +100,23 @@ import { PosthogAnalytics } from "../../PosthogAnalytics";
 import { initSentry } from "../../sentry";
 import LegacyCallHandler from "../../LegacyCallHandler";
 import { showSpaceInvite } from "../../utils/space";
-import { ButtonEvent } from "../views/elements/AccessibleButton";
-import { ActionPayload } from "../../dispatcher/payloads";
-import { SummarizedNotificationState } from "../../stores/notifications/SummarizedNotificationState";
+import { type ButtonEvent } from "../views/elements/AccessibleButton";
+import { type ActionPayload } from "../../dispatcher/payloads";
+import { type SummarizedNotificationState } from "../../stores/notifications/SummarizedNotificationState";
 import Views from "../../Views";
-import { FocusNextType, ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
-import { ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePayload";
-import { AfterLeaveRoomPayload } from "../../dispatcher/payloads/AfterLeaveRoomPayload";
-import { DoAfterSyncPreparedPayload } from "../../dispatcher/payloads/DoAfterSyncPreparedPayload";
-import { ViewStartChatOrReusePayload } from "../../dispatcher/payloads/ViewStartChatOrReusePayload";
+import { type FocusNextType, type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePayload";
+import { type AfterLeaveRoomPayload } from "../../dispatcher/payloads/AfterLeaveRoomPayload";
+import { type DoAfterSyncPreparedPayload } from "../../dispatcher/payloads/DoAfterSyncPreparedPayload";
+import { type ViewStartChatOrReusePayload } from "../../dispatcher/payloads/ViewStartChatOrReusePayload";
 import { leaveRoomBehaviour } from "../../utils/leave-behaviour";
 import { CallStore } from "../../stores/CallStore";
-import { IRoomStateEventsActionPayload } from "../../actions/MatrixActionCreators";
-import { ShowThreadPayload } from "../../dispatcher/payloads/ShowThreadPayload";
+import { type IRoomStateEventsActionPayload } from "../../actions/MatrixActionCreators";
+import { type ShowThreadPayload } from "../../dispatcher/payloads/ShowThreadPayload";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { TimelineRenderingType } from "../../contexts/RoomContext";
-import { ValidatedServerConfig } from "../../utils/ValidatedServerConfig";
+import { type ValidatedServerConfig } from "../../utils/ValidatedServerConfig";
 import { isLocalRoom } from "../../utils/localRoom/isLocalRoom";
 import { SDKContext, SdkContextClass } from "../../contexts/SDKContext";
 import { viewUserDeviceSettings } from "../../actions/handlers/viewUserDeviceSettings";
@@ -122,7 +125,7 @@ import RovingSpotlightDialog from "../views/dialogs/spotlight/SpotlightDialog";
 import { findDMForUser } from "../../utils/dm/findDMForUser";
 import { Linkify } from "../../HtmlUtils";
 import { NotificationLevel } from "../../stores/notifications/NotificationLevel";
-import { UserTab } from "../views/dialogs/UserTab";
+import { type UserTab } from "../views/dialogs/UserTab";
 import { shouldSkipSetupEncryption } from "../../utils/crypto/shouldSkipSetupEncryption";
 import { Filter } from "../views/dialogs/spotlight/Filter";
 import { checkSessionLockFree, getSessionLock } from "../../utils/SessionLock";

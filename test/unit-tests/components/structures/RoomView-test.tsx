@@ -6,15 +6,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, RefObject } from "react";
-import { mocked, MockedObject } from "jest-mock";
+import React, { createRef, type RefObject } from "react";
+import { mocked, type MockedObject } from "jest-mock";
 import {
     ClientEvent,
     EventTimeline,
     EventType,
-    IEvent,
+    type IEvent,
     JoinRule,
-    MatrixClient,
+    type MatrixClient,
     MatrixError,
     MatrixEvent,
     Room,
@@ -22,13 +22,13 @@ import {
     RoomStateEvent,
     SearchResult,
 } from "matrix-js-sdk/src/matrix";
-import { CryptoApi, UserVerificationStatus, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
+import { type CryptoApi, UserVerificationStatus, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import {
     fireEvent,
     render,
     screen,
-    RenderResult,
+    type RenderResult,
     waitForElementToBeRemoved,
     waitFor,
     act,
@@ -54,7 +54,7 @@ import {
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { Action } from "../../../../src/dispatcher/actions";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
-import { ViewRoomPayload } from "../../../../src/dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../../../src/dispatcher/payloads/ViewRoomPayload";
 import { RoomView } from "../../../../src/components/structures/RoomView";
 import ResizeNotifier from "../../../../src/utils/ResizeNotifier";
 import SettingsStore from "../../../../src/settings/SettingsStore";
@@ -62,7 +62,7 @@ import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { NotificationState } from "../../../../src/stores/notifications/NotificationState";
 import { RightPanelPhases } from "../../../../src/stores/right-panel/RightPanelStorePhases";
-import { LocalRoom, LocalRoomState } from "../../../../src/models/LocalRoom";
+import { type LocalRoom, LocalRoomState } from "../../../../src/models/LocalRoom";
 import { DirectoryMember } from "../../../../src/utils/direct-messages";
 import { createDmLocalRoom } from "../../../../src/utils/dm/createDmLocalRoom";
 import { UPDATE_EVENT } from "../../../../src/stores/AsyncStore";
@@ -71,11 +71,11 @@ import VoipUserMapper from "../../../../src/VoipUserMapper";
 import WidgetUtils from "../../../../src/utils/WidgetUtils";
 import { WidgetType } from "../../../../src/widgets/WidgetType";
 import WidgetStore from "../../../../src/stores/WidgetStore";
-import { ViewRoomErrorPayload } from "../../../../src/dispatcher/payloads/ViewRoomErrorPayload";
+import { type ViewRoomErrorPayload } from "../../../../src/dispatcher/payloads/ViewRoomErrorPayload";
 import { SearchScope } from "../../../../src/Searching";
 import { MEGOLM_ENCRYPTION_ALGORITHM } from "../../../../src/utils/crypto";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
-import { ViewUserPayload } from "../../../../src/dispatcher/payloads/ViewUserPayload.ts";
+import { type ViewUserPayload } from "../../../../src/dispatcher/payloads/ViewUserPayload.ts";
 
 describe("RoomView", () => {
     let cli: MockedObject<MatrixClient>;

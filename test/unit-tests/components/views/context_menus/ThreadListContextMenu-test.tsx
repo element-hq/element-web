@@ -9,11 +9,11 @@ Please see LICENSE files in the repository root for full details.
 import { getByTestId, render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
-import { MatrixClient, PendingEventOrdering, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, PendingEventOrdering, type MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import React from "react";
 
 import ThreadListContextMenu, {
-    ThreadListContextMenuProps,
+    type ThreadListContextMenuProps,
 } from "../../../../../src/components/views/context_menus/ThreadListContextMenu";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";

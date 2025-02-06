@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import fetchMockJest from "fetch-mock-jest";
 import { OidcError } from "matrix-js-sdk/src/oidc/error";
-import { OidcClientConfig } from "matrix-js-sdk/src/matrix";
+import { type OidcClientConfig } from "matrix-js-sdk/src/matrix";
 
 import { getOidcClientId } from "../../../../src/utils/oidc/registerClient";
 import { mockPlatformPeg } from "../../../test-utils";

@@ -41,8 +41,8 @@ import SidebarUserSettingsTab from "../settings/tabs/user/SidebarUserSettingsTab
 import KeyboardUserSettingsTab from "../settings/tabs/user/KeyboardUserSettingsTab";
 import SessionManagerTab from "../settings/tabs/user/SessionManagerTab";
 import { UserTab } from "./UserTab";
-import { NonEmptyArray } from "../../../@types/common";
-import { SDKContext, SdkContextClass } from "../../../contexts/SDKContext";
+import { type NonEmptyArray } from "../../../@types/common";
+import { SDKContext, type SdkContextClass } from "../../../contexts/SDKContext";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { ToastContext, useActiveToast } from "../../../contexts/ToastContext";
 import { EncryptionUserSettingsTab } from "../settings/tabs/user/EncryptionUserSettingsTab";

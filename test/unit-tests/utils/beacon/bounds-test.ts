@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { Beacon } from "matrix-js-sdk/src/matrix";
 
-import { Bounds, getBeaconBounds } from "../../../../src/utils/beacon/bounds";
+import { type Bounds, getBeaconBounds } from "../../../../src/utils/beacon/bounds";
 import { makeBeaconEvent, makeBeaconInfoEvent } from "../../../test-utils";
 
 describe("getBeaconBounds()", () => {

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useContext } from "react";
-import { Beacon, LocationAssetType } from "matrix-js-sdk/src/matrix";
+import { type Beacon, LocationAssetType } from "matrix-js-sdk/src/matrix";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import BeaconStatus from "./BeaconStatus";
