@@ -15,14 +15,14 @@ import { EncryptionCard } from "./EncryptionCard";
 import { useKeyStoragePanelViewModel } from "../../../viewmodels/settings/encryption/KeyStoragePanelViewModel";
 import SdkConfig from "../../../../SdkConfig";
 
-interface ResetIdentityPanelProps {
+interface Props {
     onFinish: () => void;
 }
 
 /**
  * Confirms that the user really wants to turn off and delete their key storage
  */
-export function DeleteKeyStoragePanel({ onFinish }: ResetIdentityPanelProps): JSX.Element {
+export function DeleteKeyStoragePanel({ onFinish }: Props): JSX.Element {
     const { setEnabled } = useKeyStoragePanelViewModel();
     const [busy, setBusy] = useState(false);
 
@@ -48,9 +48,9 @@ export function DeleteKeyStoragePanel({ onFinish }: ResetIdentityPanelProps): JS
                 Icon={ErrorIcon}
                 destructive={true}
                 title={_t("settings|encryption|delete_key_storage|title")}
-                className="mx_ResetIdentityPanel"
+                className="mx_DeleteKeyStoragePanel"
             >
-                <div className="mx_ResetIdentityPanel_content">
+                <div className="mx_DeleteKeyStoragePanel_content">
                     {_t("settings|encryption|delete_key_storage|description")}
                     <VisualList>
                         <VisualListItem Icon={CrossIcon} destructive={true}>
@@ -61,7 +61,7 @@ export function DeleteKeyStoragePanel({ onFinish }: ResetIdentityPanelProps): JS
                         </VisualListItem>
                     </VisualList>
                 </div>
-                <div className="mx_ResetIdentityPanel_footer">
+                <div className="mx_DeleteKeyStoragePanel_footer">
                     <Button destructive={true} onClick={onDeleteClick} disabled={busy}>
                         {_t("settings|encryption|delete_key_storage|confirm")}
                     </Button>
