@@ -89,13 +89,7 @@ describe("KeyStoragePanelViewModel", () => {
     it("should delete data stored in 4s when disabling", async () => {
         mocked(matrixClient.getCrypto()!.checkKeyBackupAndEnable).mockResolvedValue({} as KeyBackupCheck);
         mocked(matrixClient.getCrypto()!.getKeyBackupInfo).mockResolvedValue({ version: "99" } as KeyBackupInfo);
-        mocked(matrixClient.getAccountData).mockImplementation((k): MatrixEvent | undefined => {
-            if (k === "m.secret_storage.default_key") {
-                return new MatrixEvent({ content: { key: "thekey" } });
-            }
-
-            return undefined;
-        });
+        mocked(matrixClient.secretStorage.getDefaultKeyId).mockResolvedValue("thekey");
 
         const { result } = renderHook(
             () => useKeyStoragePanelViewModel(),

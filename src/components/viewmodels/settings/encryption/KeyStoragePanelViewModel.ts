@@ -99,13 +99,10 @@ export function useKeyStoragePanelViewModel(): KeyStoragePanelState {
                     await matrixClient.deleteAccountData("m.megolm_backup.v1");
 
                     // Delete the key information
-                    const defaultKeyEvent = matrixClient.getAccountData("m.secret_storage.default_key");
-                    if (defaultKeyEvent) {
-                        if (defaultKeyEvent.getContent()?.key) {
-                            await matrixClient.deleteAccountData(
-                                `m.secret_storage.key.${defaultKeyEvent.getContent().key}`,
-                            );
-                        }
+                    const defaultKey = await matrixClient.secretStorage.getDefaultKeyId();
+                    if (defaultKey) {
+                        await matrixClient.deleteAccountData(`m.secret_storage.key.${defaultKey}`);
+
                         // ...and the default key pointer
                         await matrixClient.deleteAccountData("m.secret_storage.default_key");
                     }
