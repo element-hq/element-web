@@ -113,7 +113,7 @@ test.describe("Encryption tab", () => {
     });
 
     test("should warn before turning off key storage", { tag: "@screenshot" }, async ({ page, app, util }) => {
-        await verifySession(app, "new passphrase");
+        await verifySession(app, recoveryKey.encodedPrivateKey);
         await util.openEncryptionTab();
 
         await page.getByRole("checkbox", { name: "Allow key storage" }).click();
