@@ -23,8 +23,7 @@ import { SettingsSubheader } from "../../SettingsSubheader";
 import { AdvancedPanel } from "../../encryption/AdvancedPanel";
 import { ResetIdentityPanel } from "../../encryption/ResetIdentityPanel";
 import { RecoveryPanelOutOfSync } from "../../encryption/RecoveryPanelOutOfSync";
-import Spinner from "../../../elements/Spinner";
-import { useEventEmitter } from "../../../../../hooks/useEventEmitter";
+import { useTypedEventEmitter } from "../../../../../hooks/useEventEmitter";
 import { KeyStoragePanel } from "../../encryption/KeyStoragePanel";
 import { DeleteKeyStoragePanel } from "../../encryption/DeleteKeyStoragePanel";
 
@@ -63,8 +62,8 @@ interface EncryptionUserSettingsTabProps {
 }
 
 const useKeyBackupIsEnabled = (): boolean | undefined => {
+    // The enabled state, or undefined when still loading
     const [isEnabled, setIsEnabled] = useState<boolean | undefined>(undefined);
-    const [loading, setLoading] = useState(true);
 
     const matrixClient = useMatrixClientContext();
 
@@ -77,11 +76,10 @@ const useKeyBackupIsEnabled = (): boolean | undefined => {
     useEffect(() => {
         (async () => {
             await checkStatus();
-            setLoading(false);
         })();
-    }, [checkStatus, setLoading]);
+    }, [checkStatus]);
 
-    useEventEmitter(matrixClient, ClientEvent.AccountData, (event: MatrixEvent): void => {
+    useTypedEventEmitter(matrixClient, ClientEvent.AccountData, (event: MatrixEvent): void => {
         const type = event.getType();
         // Recheck the status if this account data has been updated as this implies it has changed
         if (type === "m.org.matrix.custom.backup_disabled") {
@@ -89,7 +87,7 @@ const useKeyBackupIsEnabled = (): boolean | undefined => {
         }
     });
 
-    return loading ? undefined : isEnabled;
+    return isEnabled;
 };
 
 /**
