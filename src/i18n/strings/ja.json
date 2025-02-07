@@ -2928,7 +2928,9 @@
             "sent": "%(senderName)sが%(targetDisplayName)sをこのルームに招待しました。"
         },
         "m.room.tombstone": "%(senderDisplayName)sがこのルームをアップグレードしました。",
-        "m.room.topic": "%(senderDisplayName)sがトピックを\"%(topic)s\"に変更しました。",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)sがトピックを\"%(topic)s\"に変更しました。"
+        },
         "m.sticker": "%(senderDisplayName)sがステッカーを送信しました。",
         "m.video": {
             "error_decrypting": "動画を復号化する際にエラーが発生しました"
