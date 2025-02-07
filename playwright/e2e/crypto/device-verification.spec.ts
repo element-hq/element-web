@@ -29,7 +29,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
     let expectedBackupVersion: string;
 
     test.beforeEach(async ({ page, homeserver, credentials }) => {
-        const res = await createBot(page, homeserver, credentials);
+        const res = await createBot(page, homeserver, credentials, true);
         aliceBotClient = res.botClient;
         expectedBackupVersion = res.expectedBackupVersion;
     });

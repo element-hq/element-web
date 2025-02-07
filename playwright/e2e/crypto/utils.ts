@@ -28,11 +28,13 @@ import { Bot } from "../../pages/bot";
  * @param page - the playwright `page` fixture
  * @param homeserver - the homeserver to use
  * @param credentials - the credentials to use for the bot client
+ * @param usePassphrase - whether to use a passphrase when creating the recovery key
  */
 export async function createBot(
     page: Page,
     homeserver: HomeserverInstance,
     credentials: Credentials,
+    usePassphrase = false,
 ): Promise<{ botClient: Bot; recoveryKey: GeneratedSecretStorageKey; expectedBackupVersion: string }> {
     // Visit the login page of the app, to load the matrix sdk
     await page.goto("/#/login");
@@ -44,6 +46,7 @@ export async function createBot(
     const botClient = new Bot(page, homeserver, {
         bootstrapCrossSigning: true,
         bootstrapSecretStorage: true,
+        usePassphrase,
     });
     botClient.setCredentials(credentials);
     // Backup is prepared in the background. Poll until it is ready.
