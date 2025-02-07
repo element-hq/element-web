@@ -28,9 +28,9 @@ cd -- "$(dirname -- "$0")/.."
 repo_root=$(git rev-parse --show-cdup)
 venv_path=${repo_root:-./}.venv
 
-[ -d "$venv_path" ] || python${PYTHON_VERSION:-3} -m venv "$venv_path"
-. "$venv_path/bin/activate"
+if [ ! -d "$venv_path" ]; then
+    "python${PYTHON_VERSION:-3}" -m venv "$venv_path"
+    "$venv_path/bin/pip" install -e ."[dev]"
+fi
 
-pip install -e ."[dev]"
-
-[ $# -gt 1 ] && "$@"
+[ $# -gt 1 ] && . "$venv_path/bin/activate" && "$@"
