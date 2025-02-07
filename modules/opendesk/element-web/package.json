@@ -9,7 +9,8 @@
     "scripts": {
         "prepare": "vite build",
         "lint:ts": "tsc --noEmit",
-        "test": "echo no tests yet"
+        "test": "echo no tests yet",
+        "vitest": "echo no tests yet"
     },
     "devDependencies": {
         "@element-hq/element-web-module-api": "^0.1.0",
