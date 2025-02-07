@@ -89,7 +89,7 @@ describe("<RestoreKeyBackupDialog />", () => {
         const { asFragment } = render(<RestoreKeyBackupDialog onFinished={jest.fn()} />);
         await waitFor(() => expect(screen.getByText("Enter Recovery Key")).toBeInTheDocument());
 
-        await userEvent.type(screen.getByRole("textbox"), "my Recovery key");
+        await userEvent.type(screen.getByRole("textbox"), "my recovery key");
         await userEvent.click(screen.getByRole("button", { name: "Next" }));
 
         await waitFor(() => expect(screen.getByText("Successfully restored 1 keys")).toBeInTheDocument());
