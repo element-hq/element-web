@@ -23,14 +23,14 @@
 
 set -e
 
-cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.."
+cd -- "$(dirname -- "$0")/.."
 
 repo_root=$(git rev-parse --show-cdup)
 venv_path=${repo_root:-./}.venv
 
 [ -d "$venv_path" ] || python3.11 -m venv "$venv_path"
-source "$venv_path/bin/activate"
+. "$venv_path/bin/activate"
 
 pip install -e ."[dev]"
 
-[ $# -gt 1 ] && $*
+[ $# -gt 1 ] && "$@"
