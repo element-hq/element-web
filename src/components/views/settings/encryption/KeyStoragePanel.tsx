@@ -15,6 +15,9 @@ import { SettingsHeader } from "../SettingsHeader";
 import { useKeyStoragePanelViewModel } from "../../../viewmodels/settings/encryption/KeyStoragePanelViewModel";
 
 interface Props {
+    /**
+     * Called when the user turns off the "allow key storage" toggle
+     */
     onKeyStorageDisableClick: () => void;
 }
 
@@ -36,7 +39,7 @@ export const KeyStoragePanel: React.FC<Props> = ({ onKeyStorageDisableClick }) =
     );
 
     if (loading) {
-        return <InlineSpinner />;
+        return <InlineSpinner aria-label={_t("common|loading")} />;
     }
 
     return (
