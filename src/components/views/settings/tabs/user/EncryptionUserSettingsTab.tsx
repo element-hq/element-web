@@ -61,43 +61,13 @@ interface EncryptionUserSettingsTabProps {
     initialState?: State;
 }
 
-const useKeyBackupIsEnabled = (): boolean | undefined => {
-    // The enabled state, or undefined when still loading
-    const [isEnabled, setIsEnabled] = useState<boolean | undefined>(undefined);
-
-    const matrixClient = useMatrixClientContext();
-
-    const checkStatus = useCallback(async () => {
-        const crypto = matrixClient.getCrypto()!;
-        const info = await crypto.getKeyBackupInfo();
-        setIsEnabled(Boolean(info?.version));
-    }, [matrixClient, setIsEnabled]);
-
-    useEffect(() => {
-        (async () => {
-            await checkStatus();
-        })();
-    }, [checkStatus]);
-
-    useTypedEventEmitter(matrixClient, ClientEvent.AccountData, (event: MatrixEvent): void => {
-        const type = event.getType();
-        // Recheck the status if this account data has been updated as this implies it has changed
-        if (type === "m.org.matrix.custom.backup_disabled") {
-            checkStatus();
-        }
-    });
-
-    return isEnabled;
-};
-
 /**
  * The encryption settings tab.
  */
 export function EncryptionUserSettingsTab({ initialState = "loading" }: EncryptionUserSettingsTabProps): JSX.Element {
     const [state, setState] = useState<State>(initialState);
 
-    const checkEncryptionState = useCheckEncryptionState(state, setState);
-    const keyBackupIsEnabled = useKeyBackupIsEnabled();
+    const { checkEncryptionState, keyBackupIsEnabled } = useCheckEncryptionState(state, setState);
 
     let content: JSX.Element;
     if (keyBackupIsEnabled === undefined || state === "loading") {
@@ -175,10 +145,23 @@ export function EncryptionUserSettingsTab({ initialState = "loading" }: Encrypti
     );
 }
 
+interface CheckEncryptionStateReturn {
+    /**
+     * A function that can be called to re-run the check
+     */
+    checkEncryptionState: () => Promise<void>;
+
+    /**
+     * True is key backup is enabled, false if not and undefined whilst loading the state
+     */
+    keyBackupIsEnabled: boolean | undefined;
+}
+
 /**
  * Hook to check if the user needs:
  * - to go through the SetupEncryption flow.
  * - to enter their recovery key, if the secrets are not cached locally.
+ * ...and also whether key backup is enabled.
  *
  * If the user needs to set up the encryption, the state will be set to "set_up_encryption".
  * If the user secrets are not cached, the state will be set to "secrets_not_cached".
@@ -190,7 +173,10 @@ export function EncryptionUserSettingsTab({ initialState = "loading" }: Encrypti
  * @param setState - callback passed from the EncryptionUserSettingsTab to set the current `State`.
  * @returns a callback function, which will re-run the logic and update the state.
  */
-function useCheckEncryptionState(state: State, setState: (state: State) => void): () => Promise<void> {
+function useCheckEncryptionState(state: State, setState: (state: State) => void): CheckEncryptionStateReturn {
+    // The enabled state, or undefined when still loading
+    const [keyBackupIsEnabled, setKeyBackupIsEnabled] = useState<boolean | undefined>(undefined);
+
     const matrixClient = useMatrixClientContext();
 
     const checkEncryptionState = useCallback(async () => {
@@ -201,9 +187,14 @@ function useCheckEncryptionState(state: State, setState: (state: State) => void)
         const cachedSecrets = (await crypto.getCrossSigningStatus()).privateKeysCachedLocally;
         const secretsOk = cachedSecrets.masterKey && cachedSecrets.selfSigningKey && cachedSecrets.userSigningKey;
 
+        // Also check the key backup status
+        const backupInfo = await crypto.getKeyBackupInfo();
+
         if (isCrossSigningReady && secretsOk) setState("main");
         else if (!isCrossSigningReady) setState("set_up_encryption");
         else setState("secrets_not_cached");
+
+        setKeyBackupIsEnabled(Boolean(backupInfo?.version));
     }, [matrixClient, setState]);
 
     // Initialise the state when the component is mounted
@@ -211,8 +202,16 @@ function useCheckEncryptionState(state: State, setState: (state: State) => void)
         if (state === "loading") checkEncryptionState();
     }, [checkEncryptionState, state]);
 
+    useTypedEventEmitter(matrixClient, ClientEvent.AccountData, (event: MatrixEvent): void => {
+        const type = event.getType();
+        // Recheck the status if this account data has been updated as this implies it has changed
+        if (type === "m.org.matrix.custom.backup_disabled") {
+            checkEncryptionState();
+        }
+    });
+
     // Also return the callback so that the component can re-run the logic.
-    return checkEncryptionState;
+    return { checkEncryptionState, keyBackupIsEnabled };
 }
 
 interface SetUpEncryptionPanelProps {
