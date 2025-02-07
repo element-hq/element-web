@@ -67,7 +67,7 @@ test.describe("Encryption tab", () => {
         "should prompt to enter the recovery key when the secrets are not cached locally",
         { tag: "@screenshot" },
         async ({ page, app, util }) => {
-            await verifySession(app, "new passphrase");
+            await verifySession(app, recoveryKey.encodedPrivateKey);
             // We need to delete the cached secrets
             await deleteCachedSecrets(page);
 
@@ -99,7 +99,7 @@ test.describe("Encryption tab", () => {
         app,
         util,
     }) => {
-        await verifySession(app, "new passphrase");
+        await verifySession(app, recoveryKey.encodedPrivateKey);
         // We need to delete the cached secrets
         await deleteCachedSecrets(page);
 

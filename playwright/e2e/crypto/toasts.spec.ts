@@ -34,7 +34,6 @@ test.describe("Key storage out of sync toast", () => {
         await expect(page.getByRole("alert").first()).toMatchScreenshot("key-storage-out-of-sync-toast.png");
 
         await page.getByRole("button", { name: "Enter recovery key" }).click();
-        await page.locator(".mx_Dialog").getByRole("button", { name: "use your Security Key" }).click();
 
         await page.getByRole("textbox", { name: "Security key" }).fill(recoveryKey.encodedPrivateKey);
         await page.getByRole("button", { name: "Continue" }).click();
