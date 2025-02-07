@@ -40,8 +40,9 @@ import { DeleteKeyStoragePanel } from "../../encryption/DeleteKeyStoragePanel";
  *                        This happens when the user doesn't have a key a recovery key and the user clicks on "Set up recovery key" button of the RecoveryPanel.
  *  - "reset_identity_compromised": The panel to show when the user is resetting their identity, in te case where their key is compromised.
  * - "reset_identity_forgot": The panel to show when the user is resetting their identity, in the case where they forgot their recovery key.
- * - `secrets_not_cached`: The secrets are not cached locally. This can happen if we verified another device and secret-gossiping failed, or the other device itself lacked the secrets.
+ * - "secrets_not_cached": The secrets are not cached locally. This can happen if we verified another device and secret-gossiping failed, or the other device itself lacked the secrets.
  *                          If the "set_up_encryption" and "secrets_not_cached" conditions are both filled, "set_up_encryption" prevails.
+ * - "key_storage_delete": The confirmation page asking if the user realy wants to turn off key storage
  */
 export type State =
     | "loading"
@@ -101,13 +102,10 @@ export function EncryptionUserSettingsTab({ initialState = "loading" }: Encrypti
     const keyBackupIsEnabled = useKeyBackupIsEnabled();
 
     let content: JSX.Element;
-    if (keyBackupIsEnabled === undefined) {
-        content = <Spinner />;
+    if (keyBackupIsEnabled === undefined || state === "loading") {
+        content = <InlineSpinner aria-label={_t("common|loading")} />;
     } else {
         switch (state) {
-            case "loading":
-                content = <InlineSpinner aria-label={_t("common|loading")} />;
-                break;
             case "set_up_encryption":
                 content = <SetUpEncryptionPanel onFinish={checkEncryptionState} />;
                 break;
