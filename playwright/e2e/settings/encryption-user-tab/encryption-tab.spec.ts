@@ -112,7 +112,7 @@ test.describe("Encryption tab", () => {
         await expect(dialog.getByText("Forgot your recovery key? You’ll need to reset your identity.")).toBeVisible();
     });
 
-    test("should warn before turning off key storage", async ({ page, app, util }) => {
+    test("should warn before turning off key storage", { tag: "@screenshot" }, async ({ page, app, util }) => {
         await verifySession(app, "new passphrase");
         await util.openEncryptionTab();
 
@@ -121,6 +121,8 @@ test.describe("Encryption tab", () => {
         await expect(
             page.getByRole("heading", { name: "Are you sure you want to turn off key storage and delete it?" }),
         ).toBeVisible();
+
+        await expect(util.getEncryptionTabContent()).toMatchScreenshot("delete-key-storage-confirm.png");
 
         await page.getByRole("button", { name: "Delete key storage" }).click();
 
