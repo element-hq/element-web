@@ -144,4 +144,30 @@ describe("<EncryptionUserSettingsTab />", () => {
             screen.getByRole("heading", { name: "Forgot your recovery key? You’ll need to reset your identity." }),
         ).toBeVisible();
     });
+
+    it("should re-check the encryption state and displays the correct panel when the user clicks cancel the reset identity flow", async () => {
+        const user = userEvent.setup();
+
+        // Secrets are not cached
+        jest.spyOn(matrixClient.getCrypto()!, "getCrossSigningStatus").mockResolvedValue({
+            privateKeysInSecretStorage: true,
+            publicKeysOnDevice: true,
+            privateKeysCachedLocally: {
+                masterKey: false,
+                selfSigningKey: true,
+                userSigningKey: true,
+            },
+        });
+
+        renderComponent({ initialState: "reset_identity_forgot" });
+
+        expect(
+            screen.getByRole("heading", { name: "Forgot your recovery key? You’ll need to reset your identity." }),
+        ).toBeVisible();
+
+        await user.click(screen.getByRole("button", { name: "Back" }));
+        await waitFor(() =>
+            screen.getByText("Your key storage is out of sync. Click one of the buttons below to fix the problem."),
+        );
+    });
 });
