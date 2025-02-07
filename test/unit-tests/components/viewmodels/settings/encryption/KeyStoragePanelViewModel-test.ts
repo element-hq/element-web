@@ -8,7 +8,6 @@ Please see LICENSE files in the repository root for full details.
 import { renderHook } from "jest-matrix-react";
 import { act } from "react";
 import { mocked } from "jest-mock";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import type { KeyBackupCheck, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
