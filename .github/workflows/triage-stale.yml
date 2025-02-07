@@ -10,6 +10,7 @@ jobs:
         permissions:
             actions: write
             issues: write
+            pull-requests: write
         steps:
             - uses: actions/stale@v9
               with:
