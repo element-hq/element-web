@@ -70,72 +70,72 @@ export function EncryptionUserSettingsTab({ initialState = "loading" }: Encrypti
     const { checkEncryptionState, keyBackupIsEnabled } = useCheckEncryptionState(state, setState);
 
     let content: JSX.Element;
-    if (keyBackupIsEnabled === undefined || state === "loading") {
-        content = <InlineSpinner aria-label={_t("common|loading")} />;
-    } else {
-        switch (state) {
-            case "set_up_encryption":
-                content = <SetUpEncryptionPanel onFinish={checkEncryptionState} />;
-                break;
-            case "secrets_not_cached":
-                content = (
-                    <RecoveryPanelOutOfSync
-                        onFinish={checkEncryptionState}
-                        onForgotRecoveryKey={() => setState("reset_identity_forgot")}
-                    />
-                );
-                break;
-            case "main":
-                content = (
-                    <>
-                        <KeyStoragePanel onKeyStorageDisableClick={() => setState("key_storage_delete")} />
-                        <Separator kind="section" />
-                        {keyBackupIsEnabled && (
-                            <>
-                                <RecoveryPanel
-                                    onChangeRecoveryKeyClick={(setupNewKey) =>
-                                        setupNewKey ? setState("set_recovery_key") : setState("change_recovery_key")
-                                    }
-                                />
-                                <Separator kind="section" />
-                            </>
-                        )}
-                        <AdvancedPanel onResetIdentityClick={() => setState("reset_identity_compromised")} />{" "}
-                    </>
-                );
-                break;
-            case "change_recovery_key":
-            case "set_recovery_key":
-                content = (
-                    <ChangeRecoveryKey
-                        userHasRecoveryKey={state === "change_recovery_key"}
-                        onCancelClick={() => setState("main")}
-                        onFinish={() => setState("main")}
-                    />
-                );
-                break;
-            case "reset_identity_compromised":
-                content = (
-                    <ResetIdentityPanel
-                        variant="compromised"
-                        onCancelClick={() => setState("main")}
-                        onFinish={() => setState("main")}
-                    />
-                );
-                break;
-            case "reset_identity_forgot":
-                content = (
-                    <ResetIdentityPanel
-                        variant="forgot"
-                        onCancelClick={() => setState("main")}
-                        onFinish={() => setState("main")}
-                    />
-                );
-                break;
-            case "key_storage_delete":
-                content = <DeleteKeyStoragePanel onFinish={() => setState("main")} />;
-                break;
-        }
+
+    switch (state) {
+        case "loading":
+            content = <InlineSpinner aria-label={_t("common|loading")} />;
+            break;
+        case "set_up_encryption":
+            content = <SetUpEncryptionPanel onFinish={checkEncryptionState} />;
+            break;
+        case "secrets_not_cached":
+            content = (
+                <RecoveryPanelOutOfSync
+                    onFinish={checkEncryptionState}
+                    onForgotRecoveryKey={() => setState("reset_identity_forgot")}
+                />
+            );
+            break;
+        case "main":
+            content = (
+                <>
+                    <KeyStoragePanel onKeyStorageDisableClick={() => setState("key_storage_delete")} />
+                    <Separator kind="section" />
+                    {keyBackupIsEnabled && (
+                        <>
+                            <RecoveryPanel
+                                onChangeRecoveryKeyClick={(setupNewKey) =>
+                                    setupNewKey ? setState("set_recovery_key") : setState("change_recovery_key")
+                                }
+                            />
+                            <Separator kind="section" />
+                        </>
+                    )}
+                    <AdvancedPanel onResetIdentityClick={() => setState("reset_identity_compromised")} />{" "}
+                </>
+            );
+            break;
+        case "change_recovery_key":
+        case "set_recovery_key":
+            content = (
+                <ChangeRecoveryKey
+                    userHasRecoveryKey={state === "change_recovery_key"}
+                    onCancelClick={() => setState("main")}
+                    onFinish={() => setState("main")}
+                />
+            );
+            break;
+        case "reset_identity_compromised":
+            content = (
+                <ResetIdentityPanel
+                    variant="compromised"
+                    onCancelClick={() => setState("main")}
+                    onFinish={() => setState("main")}
+                />
+            );
+            break;
+        case "reset_identity_forgot":
+            content = (
+                <ResetIdentityPanel
+                    variant="forgot"
+                    onCancelClick={() => setState("main")}
+                    onFinish={() => setState("main")}
+                />
+            );
+            break;
+        case "key_storage_delete":
+            content = <DeleteKeyStoragePanel onFinish={() => setState("main")} />;
+            break;
     }
 
     return (
