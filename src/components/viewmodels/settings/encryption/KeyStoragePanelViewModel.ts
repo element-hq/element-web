@@ -11,11 +11,26 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 
 interface KeyStoragePanelState {
-    // 'null' means no backup is active. 'undefined' means we're still loading.
+    /**
+     * Whether key storage is enabled, or 'undefined' if the state is still loading.
+     */
     isEnabled: boolean | undefined;
+
+    /**
+     * A function that can be called to enable or disable key storage.
+     * @param enable True to turn key storage on or false to turn it off
+     */
     setEnabled: (enable: boolean) => void;
-    loading: boolean; // true if the state is still loading for the first time
-    busy: boolean; // true if the status is in the process of being changed
+
+    /**
+     * True if the state is still loading for the first time
+     */
+    loading: boolean;
+
+    /**
+     * True if the status is in the process of being changed
+     */
+    busy: boolean;
 }
 
 export function useKeyStoragePanelViewModel(): KeyStoragePanelState {

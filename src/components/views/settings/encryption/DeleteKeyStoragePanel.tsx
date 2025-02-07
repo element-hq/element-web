@@ -16,6 +16,9 @@ import { useKeyStoragePanelViewModel } from "../../../viewmodels/settings/encryp
 import SdkConfig from "../../../../SdkConfig";
 
 interface Props {
+    /**
+     * Called when the user either cancels the operation or key storage has been disabled
+     */
     onFinish: () => void;
 }
 
