@@ -43,7 +43,7 @@ class Helpers {
      */
     async verifyDevice(recoveryKey: GeneratedSecretStorageKey) {
         // Select the security phrase
-        await this.page.getByRole("button", { name: "Verify with Security Key" }).click();
+        await this.page.getByRole("button", { name: "Verify with Recovery Key" }).click();
         await this.enterRecoveryKey(recoveryKey);
         await this.page.getByRole("button", { name: "Done" }).click();
     }
@@ -91,7 +91,7 @@ class Helpers {
     }
 
     /**
-     * Get the security key from the clipboard and fill in the input field
+     * Get the recovery key from the clipboard and fill in the input field
      * Then click on the finish button
      * @param title - The title of the dialog
      * @param confirmButtonLabel - The label of the confirm button

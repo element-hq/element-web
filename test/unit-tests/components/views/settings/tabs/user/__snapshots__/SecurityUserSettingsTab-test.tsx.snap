@@ -89,7 +89,7 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
               <div
                 class="mx_SettingsSubsection_text"
               >
-                Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.
+                Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Recovery Key.
               </div>
               <div
                 class="mx_Spinner"

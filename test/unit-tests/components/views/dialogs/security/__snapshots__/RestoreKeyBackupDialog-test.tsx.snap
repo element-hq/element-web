@@ -20,7 +20,7 @@ exports[`<RestoreKeyBackupDialog /> should display an error when recovery key is
         class="mx_Heading_h3 mx_Dialog_title"
         id="mx_BaseDialog_title"
       >
-        Enter Security Key
+        Enter Recovery Key
       </h1>
     </div>
     <div
@@ -36,7 +36,7 @@ exports[`<RestoreKeyBackupDialog /> should display an error when recovery key is
           </span>
         </p>
         <p>
-          Access your secure message history and set up secure messaging by entering your Security Key.
+          Access your secure message history and set up secure messaging by entering your Recovery Key.
         </p>
         <div
           class="mx_RestoreKeyBackupDialog_primaryContainer"
@@ -48,7 +48,7 @@ exports[`<RestoreKeyBackupDialog /> should display an error when recovery key is
           <div
             class="mx_RestoreKeyBackupDialog_keyStatus"
           >
-            👎 Not a valid Security Key
+            👎 Not a valid Recovery Key
           </div>
           <div
             class="mx_Dialog_buttons"
@@ -74,7 +74,7 @@ exports[`<RestoreKeyBackupDialog /> should display an error when recovery key is
           </div>
         </div>
         <span>
-          If you've forgotten your Security Key you can 
+          If you've forgotten your Recovery Key you can 
           <div
             class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
             role="button"
@@ -120,7 +120,7 @@ exports[`<RestoreKeyBackupDialog /> should not raise an error when recovery is v
         class="mx_Heading_h3 mx_Dialog_title"
         id="mx_BaseDialog_title"
       >
-        Enter Security Key
+        Enter Recovery Key
       </h1>
     </div>
     <div
@@ -136,7 +136,7 @@ exports[`<RestoreKeyBackupDialog /> should not raise an error when recovery is v
           </span>
         </p>
         <p>
-          Access your secure message history and set up secure messaging by entering your Security Key.
+          Access your secure message history and set up secure messaging by entering your Recovery Key.
         </p>
         <div
           class="mx_RestoreKeyBackupDialog_primaryContainer"
@@ -148,7 +148,7 @@ exports[`<RestoreKeyBackupDialog /> should not raise an error when recovery is v
           <div
             class="mx_RestoreKeyBackupDialog_keyStatus"
           >
-            👍 This looks like a valid Security Key!
+            👍 This looks like a valid Recovery Key!
           </div>
           <div
             class="mx_Dialog_buttons"
@@ -173,7 +173,7 @@ exports[`<RestoreKeyBackupDialog /> should not raise an error when recovery is v
           </div>
         </div>
         <span>
-          If you've forgotten your Security Key you can 
+          If you've forgotten your Recovery Key you can 
           <div
             class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
             role="button"
@@ -219,7 +219,7 @@ exports[`<RestoreKeyBackupDialog /> should render 1`] = `
         class="mx_Heading_h3 mx_Dialog_title"
         id="mx_BaseDialog_title"
       >
-        Enter Security Key
+        Enter Recovery Key
       </h1>
     </div>
     <div
@@ -235,7 +235,7 @@ exports[`<RestoreKeyBackupDialog /> should render 1`] = `
           </span>
         </p>
         <p>
-          Access your secure message history and set up secure messaging by entering your Security Key.
+          Access your secure message history and set up secure messaging by entering your Recovery Key.
         </p>
         <div
           class="mx_RestoreKeyBackupDialog_primaryContainer"
@@ -271,7 +271,7 @@ exports[`<RestoreKeyBackupDialog /> should render 1`] = `
           </div>
         </div>
         <span>
-          If you've forgotten your Security Key you can 
+          If you've forgotten your Recovery Key you can 
           <div
             class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
             role="button"
@@ -297,7 +297,7 @@ exports[`<RestoreKeyBackupDialog /> should render 1`] = `
 </DocumentFragment>
 `;
 
-exports[`<RestoreKeyBackupDialog /> should restore key backup when passphrase is filled 1`] = `
+exports[`<RestoreKeyBackupDialog /> should restore key backup when Recovery key is filled by user 1`] = `
 <DocumentFragment>
   <div
     data-focus-guard="true"
@@ -362,7 +362,7 @@ exports[`<RestoreKeyBackupDialog /> should restore key backup when passphrase is
 </DocumentFragment>
 `;
 
-exports[`<RestoreKeyBackupDialog /> should restore key backup when security key is filled by user 1`] = `
+exports[`<RestoreKeyBackupDialog /> should restore key backup when passphrase is filled 1`] = `
 <DocumentFragment>
   <div
     data-focus-guard="true"
