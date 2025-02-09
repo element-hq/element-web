@@ -43,7 +43,7 @@ import dis from "../../../dispatcher/dispatcher";
 import Modal from "../../../Modal";
 import { _t, UserFriendlyError } from "../../../languageHandler";
 import DMRoomMap from "../../../utils/DMRoomMap";
-import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
+import { type ButtonEvent } from "../elements/AccessibleButton";
 import SdkConfig from "../../../SdkConfig";
 import MultiInviter from "../../../utils/MultiInviter";
 import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
@@ -52,7 +52,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import EncryptionPanel from "./EncryptionPanel";
 import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
-import { verifyDevice, verifyUser } from "../../../verification";
+import { verifyUser } from "../../../verification";
 import { Action } from "../../../dispatcher/actions";
 import { useIsEncrypted } from "../../../hooks/useIsEncrypted";
 import BaseCard from "./BaseCard";
@@ -116,92 +116,6 @@ async function openDmForUser(matrixClient: MatrixClient, user: Member): Promise<
         avatar_url: avatarUrl,
     });
     await startDmOnFirstMessage(matrixClient, [startDmUser]);
-}
-
-/**
- * Display one device and the related actions
- * @param userId current user id
- * @param device device to display
- * @param isUserVerified false when the user is not verified
- * @constructor
- */
-export function DeviceItem({
-    userId,
-    device,
-    isUserVerified,
-}: {
-    userId: string;
-    device: IDevice;
-    isUserVerified: boolean;
-}): JSX.Element {
-    const cli = useContext(MatrixClientContext);
-    const isMe = userId === cli.getUserId();
-
-    /** is the device verified? */
-    const isVerified = useAsyncMemo(async () => {
-        const deviceTrust = await cli.getCrypto()?.getDeviceVerificationStatus(userId, device.deviceId);
-        if (!deviceTrust) return false;
-
-        // For your own devices, we use the stricter check of cross-signing
-        // verification to encourage everyone to trust their own devices via
-        // cross-signing so that other users can then safely trust you.
-        // For other people's devices, the more general verified check that
-        // includes locally verified devices can be used.
-        return isMe ? deviceTrust.crossSigningVerified : deviceTrust.isVerified();
-    }, [cli, userId, device]);
-
-    const classes = classNames("mx_UserInfo_device", {
-        mx_UserInfo_device_verified: isVerified,
-        mx_UserInfo_device_unverified: !isVerified,
-    });
-    const iconClasses = classNames("mx_E2EIcon", {
-        mx_E2EIcon_normal: !isUserVerified,
-        mx_E2EIcon_verified: isVerified,
-        mx_E2EIcon_warning: isUserVerified && !isVerified,
-    });
-
-    const onDeviceClick = (): void => {
-        const user = cli.getUser(userId);
-        if (user) {
-            verifyDevice(cli, user, device);
-        }
-    };
-
-    let deviceName;
-    if (!device.displayName?.trim()) {
-        deviceName = device.deviceId;
-    } else {
-        deviceName = device.ambiguous ? device.displayName + " (" + device.deviceId + ")" : device.displayName;
-    }
-
-    let trustedLabel: string | undefined;
-    if (isUserVerified) trustedLabel = isVerified ? _t("common|trusted") : _t("common|not_trusted");
-
-    if (isVerified === undefined) {
-        // we're still deciding if the device is verified
-        return <div className={classes} title={device.deviceId} />;
-    } else if (isVerified) {
-        return (
-            <div className={classes} title={device.deviceId}>
-                <div className={iconClasses} />
-                <div className="mx_UserInfo_device_name">{deviceName}</div>
-                <div className="mx_UserInfo_device_trusted">{trustedLabel}</div>
-            </div>
-        );
-    } else {
-        return (
-            <AccessibleButton
-                className={classes}
-                title={device.deviceId}
-                aria-label={deviceName}
-                onClick={onDeviceClick}
-            >
-                <div className={iconClasses} />
-                <div className="mx_UserInfo_device_name">{deviceName}</div>
-                <div className="mx_UserInfo_device_trusted">{trustedLabel}</div>
-            </AccessibleButton>
-        );
-    }
 }
 
 const MessageButton = ({ member }: { member: Member }): JSX.Element => {

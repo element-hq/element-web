@@ -28,12 +28,10 @@ import {
     VerificationPhase as Phase,
     VerificationRequestEvent,
     type CryptoApi,
-    type DeviceVerificationStatus,
 } from "matrix-js-sdk/src/crypto-api";
 
 import UserInfo, {
     BanToggleButton,
-    DeviceItem,
     disambiguateDevices,
     getPowerLevels,
     isMuted,
@@ -48,7 +46,6 @@ import { RightPanelPhases } from "../../../../../src/stores/right-panel/RightPan
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import MultiInviter from "../../../../../src/utils/MultiInviter";
-import * as mockVerification from "../../../../../src/verification";
 import Modal from "../../../../../src/Modal";
 import { DirectoryMember, startDmOnFirstMessage } from "../../../../../src/utils/direct-messages";
 import { clearAllModals, flushPromises } from "../../../../test-utils";
@@ -528,153 +525,6 @@ describe("<UserInfoHeader />", () => {
         mockCrypto.userHasCrossSigningKeys.mockResolvedValue(false);
         const { container } = renderComponent();
         await waitFor(() => expect(screen.getByText("(User verification unavailable)")).toBeInTheDocument());
-        expect(container).toMatchSnapshot();
-    });
-});
-
-describe("<DeviceItem />", () => {
-    const device = { deviceId: "deviceId", displayName: "deviceName" } as Device;
-    const defaultProps = {
-        userId: defaultUserId,
-        device,
-        isUserVerified: false,
-    };
-
-    const renderComponent = (props = {}) => {
-        const Wrapper = (wrapperProps = {}) => {
-            return <MatrixClientContext.Provider value={mockClient} {...wrapperProps} />;
-        };
-
-        return render(<DeviceItem {...defaultProps} {...props} />, {
-            wrapper: Wrapper,
-        });
-    };
-
-    const setMockDeviceTrust = (isVerified = false, isCrossSigningVerified = false) => {
-        mockCrypto.getDeviceVerificationStatus.mockResolvedValue({
-            isVerified: () => isVerified,
-            crossSigningVerified: isCrossSigningVerified,
-        } as DeviceVerificationStatus);
-    };
-
-    const mockVerifyDevice = jest.spyOn(mockVerification, "verifyDevice");
-
-    beforeEach(() => {
-        setMockDeviceTrust();
-    });
-
-    afterEach(() => {
-        mockCrypto.getDeviceVerificationStatus.mockReset();
-        mockVerifyDevice.mockClear();
-    });
-
-    afterAll(() => {
-        mockVerifyDevice.mockRestore();
-    });
-
-    it("with unverified user and device, displays button without a label", async () => {
-        renderComponent();
-        await flushPromises();
-
-        expect(screen.getByRole("button", { name: device.displayName! })).toBeInTheDocument();
-        expect(screen.queryByText(/trusted/i)).not.toBeInTheDocument();
-    });
-
-    it("with verified user only, displays button with a 'Not trusted' label", async () => {
-        renderComponent({ isUserVerified: true });
-        await flushPromises();
-
-        const button = screen.getByRole("button", { name: device.displayName });
-        expect(button).toHaveTextContent(`${device.displayName}Not trusted`);
-    });
-
-    it("with verified device only, displays no button without a label", async () => {
-        setMockDeviceTrust(true);
-        renderComponent();
-        await flushPromises();
-
-        expect(screen.getByText(device.displayName!)).toBeInTheDocument();
-        expect(screen.queryByText(/trusted/)).not.toBeInTheDocument();
-    });
-
-    it("when userId is the same as userId from client, uses isCrossSigningVerified to determine if button is shown", async () => {
-        const deferred = defer<DeviceVerificationStatus>();
-        mockCrypto.getDeviceVerificationStatus.mockReturnValue(deferred.promise);
-
-        mockClient.getSafeUserId.mockReturnValueOnce(defaultUserId);
-        mockClient.getUserId.mockReturnValueOnce(defaultUserId);
-        renderComponent();
-        await flushPromises();
-
-        // set trust to be false for isVerified, true for isCrossSigningVerified
-        deferred.resolve({
-            isVerified: () => false,
-            crossSigningVerified: true,
-        } as DeviceVerificationStatus);
-
-        await expect(screen.findByText(device.displayName!)).resolves.toBeInTheDocument();
-        // expect to see no button in this case
-        expect(screen.queryByRole("button")).not.toBeInTheDocument();
-    });
-
-    it("with verified user and device, displays no button and a 'Trusted' label", async () => {
-        setMockDeviceTrust(true);
-        renderComponent({ isUserVerified: true });
-        await flushPromises();
-
-        expect(screen.queryByRole("button")).not.toBeInTheDocument();
-        expect(screen.getByText(device.displayName!)).toBeInTheDocument();
-        expect(screen.getByText("Trusted")).toBeInTheDocument();
-    });
-
-    it("does not call verifyDevice if client.getUser returns null", async () => {
-        mockClient.getUser.mockReturnValueOnce(null);
-        renderComponent();
-        await flushPromises();
-
-        const button = screen.getByRole("button", { name: device.displayName! });
-        expect(button).toBeInTheDocument();
-        await userEvent.click(button);
-
-        expect(mockVerifyDevice).not.toHaveBeenCalled();
-    });
-
-    it("calls verifyDevice if client.getUser returns an object", async () => {
-        mockClient.getUser.mockReturnValueOnce(defaultUser);
-        // set mock return of isGuest to short circuit verifyDevice call to avoid
-        // even more mocking
-        mockClient.isGuest.mockReturnValueOnce(true);
-        renderComponent();
-        await flushPromises();
-
-        const button = screen.getByRole("button", { name: device.displayName! });
-        expect(button).toBeInTheDocument();
-        await userEvent.click(button);
-
-        expect(mockVerifyDevice).toHaveBeenCalledTimes(1);
-        expect(mockVerifyDevice).toHaveBeenCalledWith(mockClient, defaultUser, device);
-    });
-
-    it("with display name", async () => {
-        const { container } = renderComponent();
-        await flushPromises();
-
-        expect(container).toMatchSnapshot();
-    });
-
-    it("without display name", async () => {
-        const device = { deviceId: "deviceId" } as Device;
-        const { container } = renderComponent({ device, userId: defaultUserId });
-        await flushPromises();
-
-        expect(container).toMatchSnapshot();
-    });
-
-    it("ambiguous display name", async () => {
-        const device = { deviceId: "deviceId", ambiguous: true, displayName: "my display name" };
-        const { container } = renderComponent({ device, userId: defaultUserId });
-        await flushPromises();
-
         expect(container).toMatchSnapshot();
     });
 });
