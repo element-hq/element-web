@@ -292,17 +292,31 @@ export async function doTwoWaySasVerification(page: Page, verifier: JSHandle<Ver
 }
 
 /**
- * Open the security settings and enable secure key backup.
+ * Open the encryption settings and enable the key backup by
+ * - enabling key storage
+ * - set up a recovery key
  *
- * Assumes that the current device has been cross-signed (which means that we skip a step where we set it up).
+ * Assumes that the current device has been verified
  *
  * Returns the recovery key
  */
 export async function enableKeyBackup(app: ElementAppPage): Promise<string> {
-    await app.settings.openUserSettings("Security & Privacy");
-    await app.page.getByRole("button", { name: "Set up Secure Backup" }).click();
+    const encryptionTab = await app.settings.openUserSettings("Encryption");
 
-    return await completeCreateSecretStorageDialog(app.page);
+    const keyStorageToggle = encryptionTab.getByRole("checkbox", { name: "Allow key storage" });
+    if (!(await keyStorageToggle.isChecked())) {
+        await encryptionTab.getByRole("checkbox", { name: "Allow key storage" }).click();
+    }
+
+    await encryptionTab.getByRole("button", { name: "Set up recovery" }).click();
+    await encryptionTab.getByRole("button", { name: "Continue" }).click();
+
+    const recoveryKey = await encryptionTab.getByTestId("recoveryKey").innerText();
+    await encryptionTab.getByRole("button", { name: "Continue" }).click();
+    await encryptionTab.getByRole("textbox").fill(recoveryKey);
+    await encryptionTab.getByRole("button", { name: "Finish set up" }).click();
+    await app.settings.closeDialog();
+    return recoveryKey;
 }
 
 /**
