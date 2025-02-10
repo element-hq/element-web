@@ -3388,7 +3388,9 @@
             "sent": "%(senderName)s bjöd in %(targetDisplayName)s att gå med i rummet."
         },
         "m.room.tombstone": "%(senderDisplayName)s uppgraderade det här rummet.",
-        "m.room.topic": "%(senderDisplayName)s bytte rummets ämne till \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s bytte rummets ämne till \"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s skickade en dekal.",
         "m.video": {
             "error_decrypting": "Fel vid avkryptering av video"

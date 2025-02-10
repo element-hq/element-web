@@ -3181,7 +3181,9 @@
             "sent": "%(senderName)s пригласил(а) %(targetDisplayName)s в комнату."
         },
         "m.room.tombstone": "%(senderDisplayName)s обновил(а) эту комнату.",
-        "m.room.topic": "%(senderDisplayName)s изменил(а) тему комнаты на \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s изменил(а) тему комнаты на \"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s отправил(а) наклейку.",
         "m.video": {
             "error_decrypting": "Ошибка расшифровки видео"

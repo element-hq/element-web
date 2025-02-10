@@ -2049,7 +2049,9 @@
             "sent": "%(senderName)s %(targetDisplayName)s را به اتاق دعوت کرد."
         },
         "m.room.tombstone": "%(senderDisplayName)s این اتاق را ارتقا داد.",
-        "m.room.topic": "%(senderDisplayName)s موضوع را به %(topic)s تغییر داد.",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s موضوع را به %(topic)s تغییر داد."
+        },
         "m.sticker": "%(senderDisplayName)s یک برچسب فرستاد.",
         "m.video": {
             "error_decrypting": "خطا در رمزگشایی ویدیو"

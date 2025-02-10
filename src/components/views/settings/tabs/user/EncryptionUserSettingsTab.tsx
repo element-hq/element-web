@@ -116,20 +116,12 @@ export function EncryptionUserSettingsTab({ initialState = "loading" }: Encrypti
             );
             break;
         case "reset_identity_compromised":
-            content = (
-                <ResetIdentityPanel
-                    variant="compromised"
-                    onCancelClick={() => setState("main")}
-                    onFinish={() => setState("main")}
-                />
-            );
-            break;
         case "reset_identity_forgot":
             content = (
                 <ResetIdentityPanel
-                    variant="forgot"
-                    onCancelClick={() => setState("main")}
-                    onFinish={() => setState("main")}
+                    variant={state === "reset_identity_compromised" ? "compromised" : "forgot"}
+                    onCancelClick={checkEncryptionState}
+                    onFinish={checkEncryptionState}
                 />
             );
             break;

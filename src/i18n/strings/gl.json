@@ -2705,7 +2705,9 @@
             "sent": "%(senderName)s enviou un convite a %(targetDisplayName)s para unirse a sala."
         },
         "m.room.tombstone": "%(senderDisplayName)s actualizou esta sala.",
-        "m.room.topic": "%(senderDisplayName)s cambiou o asunto a \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s cambiou o asunto a \"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s enviou un adhesivo.",
         "m.video": {
             "error_decrypting": "Fallo descifrando vídeo"
