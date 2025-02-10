@@ -83,6 +83,9 @@ describe("<EncryptionUserSettingsTab />", () => {
     });
 
     it("should display the recovery out of sync panel when secrets are not cached", async () => {
+        jest.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue({
+            version: "1",
+        } as KeyBackupInfo);
         // Secrets are not cached
         jest.spyOn(matrixClient.getCrypto()!, "getCrossSigningStatus").mockResolvedValue({
             privateKeysInSecretStorage: true,
@@ -195,6 +198,10 @@ describe("<EncryptionUserSettingsTab />", () => {
 
     it("should re-check the encryption state and displays the correct panel when the user clicks cancel the reset identity flow", async () => {
         const user = userEvent.setup();
+
+        jest.spyOn(matrixClient.getCrypto()!, "getKeyBackupInfo").mockResolvedValue({
+            version: "1",
+        } as KeyBackupInfo);
 
         // Secrets are not cached
         jest.spyOn(matrixClient.getCrypto()!, "getCrossSigningStatus").mockResolvedValue({
