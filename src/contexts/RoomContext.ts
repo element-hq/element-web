@@ -2,13 +2,13 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { createContext, useContext } from "react";
+import { createContext } from "react";
 
-import { IRoomState } from "../components/structures/RoomView";
+import { type IRoomState } from "../components/structures/RoomView";
 import { Layout } from "../settings/enums/Layout";
 
 export enum TimelineRenderingType {
@@ -79,6 +79,3 @@ const RoomContext = createContext<
 });
 RoomContext.displayName = "RoomContext";
 export default RoomContext;
-export function useRoomContext(): IRoomState {
-    return useContext(RoomContext);
-}

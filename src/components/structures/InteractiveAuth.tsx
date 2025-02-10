@@ -2,26 +2,26 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2017-2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef } from "react";
 import {
     AuthType,
-    IAuthData,
-    AuthDict,
-    IInputs,
+    type IAuthData,
+    type AuthDict,
+    type IInputs,
     InteractiveAuth,
-    IStageStatus,
+    type IStageStatus,
 } from "matrix-js-sdk/src/interactive-auth";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import getEntryComponentForLoginType, {
-    ContinueKind,
-    CustomAuthType,
-    IStageComponent,
+    type ContinueKind,
+    type CustomAuthType,
+    type IStageComponent,
 } from "../views/auth/InteractiveAuthEntryComponents";
 import Spinner from "../views/elements/Spinner";
 

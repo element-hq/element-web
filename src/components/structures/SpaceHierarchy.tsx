@@ -2,17 +2,17 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021-2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React, {
-    Dispatch,
-    KeyboardEvent,
-    KeyboardEventHandler,
-    ReactElement,
-    ReactNode,
-    SetStateAction,
+    type Dispatch,
+    type KeyboardEvent,
+    type KeyboardEventHandler,
+    type ReactElement,
+    type ReactNode,
+    type SetStateAction,
     useCallback,
     useContext,
     useEffect,
@@ -21,28 +21,28 @@ import React, {
     useState,
 } from "react";
 import {
-    Room,
+    type Room,
     RoomEvent,
     ClientEvent,
-    MatrixClient,
+    type MatrixClient,
     MatrixError,
     EventType,
     RoomType,
     GuestAccess,
     HistoryVisibility,
-    HierarchyRelation,
-    HierarchyRoom,
+    type HierarchyRelation,
+    type HierarchyRoom,
     JoinRule,
 } from "matrix-js-sdk/src/matrix";
 import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
 import classNames from "classnames";
 import { sortBy, uniqBy } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
-import { KnownMembership, SpaceChildEventContent } from "matrix-js-sdk/src/types";
+import { KnownMembership, type SpaceChildEventContent } from "matrix-js-sdk/src/types";
 
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
-import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../views/elements/AccessibleButton";
 import Spinner from "../views/elements/Spinner";
 import SearchBox from "./SearchBox";
 import RoomAvatar from "../views/avatars/RoomAvatar";
@@ -56,13 +56,13 @@ import { getChildOrder } from "../../stores/spaces/SpaceStore";
 import { Linkify, topicToHtml } from "../../HtmlUtils";
 import { useDispatcher } from "../../hooks/useDispatcher";
 import { Action } from "../../dispatcher/actions";
-import { IState, RovingTabIndexProvider, useRovingTabIndex } from "../../accessibility/RovingTabIndex";
+import { type IState, RovingTabIndexProvider, useRovingTabIndex } from "../../accessibility/RovingTabIndex";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { useTypedEventEmitterState } from "../../hooks/useEventEmitter";
-import { IOOBData } from "../../stores/ThreepidInviteStore";
+import { type IOOBData } from "../../stores/ThreepidInviteStore";
 import { awaitRoomDownSync } from "../../utils/RoomUpgrade";
-import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
-import { JoinRoomReadyPayload } from "../../dispatcher/payloads/JoinRoomReadyPayload";
+import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import { type JoinRoomReadyPayload } from "../../dispatcher/payloads/JoinRoomReadyPayload";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { getTopic } from "../../hooks/room/useTopic";

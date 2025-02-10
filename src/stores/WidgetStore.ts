@@ -2,32 +2,24 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room, RoomStateEvent, MatrixEvent, ClientEvent } from "matrix-js-sdk/src/matrix";
-import { IWidget } from "matrix-widget-api";
+import { type Room, RoomStateEvent, type MatrixEvent, ClientEvent, type EmptyObject } from "matrix-js-sdk/src/matrix";
+import { type IWidget } from "matrix-widget-api";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { ActionPayload } from "../dispatcher/payloads";
+import { type ActionPayload } from "../dispatcher/payloads";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import WidgetEchoStore from "../stores/WidgetEchoStore";
 import ActiveWidgetStore from "../stores/ActiveWidgetStore";
 import WidgetUtils from "../utils/WidgetUtils";
 import { UPDATE_EVENT } from "./AsyncStore";
+import { type IApp } from "../utils/WidgetUtils-types";
 
-interface IState {}
-
-export interface IApp extends IWidget {
-    "roomId": string;
-    "eventId"?: string; // not present on virtual widgets
-    // eslint-disable-next-line camelcase
-    "avatar_url"?: string; // MSC2765 https://github.com/matrix-org/matrix-doc/pull/2765
-    // Whether the widget was created from `widget_build_url` and thus is a call widget of some kind
-    "io.element.managed_hybrid"?: boolean;
-}
+export type { IApp };
 
 export function isAppWidget(widget: IWidget | IApp): widget is IApp {
     return "roomId" in widget && typeof widget.roomId === "string";
@@ -42,7 +34,7 @@ interface IRoomWidgets {
 
 // TODO consolidate WidgetEchoStore into this
 // TODO consolidate ActiveWidgetStore into this
-export default class WidgetStore extends AsyncStoreWithClient<IState> {
+export default class WidgetStore extends AsyncStoreWithClient<EmptyObject> {
     private static readonly internalInstance = (() => {
         const instance = new WidgetStore();
         instance.start();

@@ -394,8 +394,7 @@
         "video": "Vaizdo įrašas",
         "video_room": "Vaizdo kambarys",
         "view_message": "Žiūrėti žinutę",
-        "warning": "Įspėjimas",
-        "welcome": "Sveiki atvykę"
+        "warning": "Įspėjimas"
     },
     "composer": {
         "autocomplete": {
@@ -597,12 +596,6 @@
             "incoming_sas_dialog_title": "Įeinantis Patikrinimo Prašymas",
             "incoming_sas_user_dialog_text_1": "Patvirtinkite šį vartotoją, kad pažymėtumėte jį kaip patikimą. Vartotojų pažymėjimas patikimais suteikia jums papildomos ramybės naudojant visapusiškai užšifruotas žinutes.",
             "incoming_sas_user_dialog_text_2": "Patvirtinant šį vartotoją, jo seansas bus pažymėtas kaip patikimas, taip pat jūsų seansas bus pažymėtas kaip patikimas jam.",
-            "manual_device_verification_device_id_label": "Seanso ID",
-            "manual_device_verification_device_key_label": "Seanso raktas",
-            "manual_device_verification_device_name_label": "Seanso pavadinimas",
-            "manual_device_verification_footer": "Jei jie nesutampa, gali būti pažeistas jūsų komunikacijos saugumas.",
-            "manual_device_verification_self_text": "Patvirtinkite, palygindami tai, kas nurodyta toliau, su Vartotojo Nustatymais kitame jūsų seanse:",
-            "manual_device_verification_user_text": "Patvirtinkite šio vartotojo seansą, palygindami tai, kas nurodyta toliau, su jo Vartotojo Nustatymais:",
             "no_support_qr_emoji": "Įrenginys, kurį bandote patvirtinti, nepalaiko QR kodo nuskaitymo arba jaustukų patikrinimo, kurį palaiko %(brand)s. Pabandykite naudoti kitą klientą.",
             "other_party_cancelled": "Kita šalis atšaukė patvirtinimą.",
             "prompt_encrypted": "Patvirtinkite visus vartotojus kambaryje, kad užtikrintumėte jo saugumą.",
@@ -886,8 +879,7 @@
         "video_rooms_faq1_answer": "Kairiajame skydelyje esančioje kambarių skiltyje naudokite mygtuką “+”.",
         "video_rooms_faq1_question": "Kaip galiu sukurti vaizdo kambarį?",
         "video_rooms_faq2_answer": "Taip, pokalbių laiko juosta rodoma kartu su vaizdu.",
-        "video_rooms_faq2_question": "Ar galiu naudoti teksto pokalbius kartu su vaizdo skambučiu?",
-        "voice_broadcast": "Balso transliacija"
+        "video_rooms_faq2_question": "Ar galiu naudoti teksto pokalbius kartu su vaizdo skambučiu?"
     },
     "labs_mjolnir": {
         "advanced_warning": "⚠ Šie nustatymai yra skirti pažengusiems vartotojams.",
@@ -930,7 +922,6 @@
     },
     "member_list": {
         "filter_placeholder": "Filtruoti kambario dalyvius",
-        "invited_list_heading": "Pakviesta",
         "power_label": "%(userName)s (galia %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Kambario nariai",
@@ -966,43 +957,10 @@
         "m.key.verification.request": "%(name)s prašo patvirtinimo"
     },
     "onboarding": {
-        "community_messaging_action": "Rasti savo žmones",
-        "community_messaging_description": "Išlaikykite bendruomenės diskusijų nuosavybę ir kontrolę.\nPlėskitės ir palaikykite milijonus žmonių, naudodami galingą moderavimą ir sąveiką.",
-        "community_messaging_title": "Bendruomenės nuosavybė",
-        "complete_these": "Užbaikite šiuos žingsnius, kad gautumėte daugiausiai iš %(brand)s",
         "create_room": "Sukurti grupės pokalbį",
-        "download_app": "Atsisiųsti %(brand)s",
-        "download_app_action": "Atsisiųsti programėles",
-        "download_app_description": "Nepraleiskite nieko, jei su savimi pasiimsite %(brand)s",
-        "download_brand": "Atsisiųsti %(brand)s",
-        "enable_notifications": "Įjungti pranešimus",
-        "enable_notifications_action": "Įjungti pranešimus",
-        "enable_notifications_description": "Nepraleiskite atsakymo ar svarbios žinutės",
         "explore_rooms": "Žvalgyti viešus kambarius",
-        "find_community_members": "Rasti ir pakviesti savo bendruomenės narius",
-        "find_coworkers": "Rasti ir pakviesti bendradarbius",
-        "find_friends": "Rasti ir pakviesti draugus",
-        "find_friends_action": "Rasti draugus",
-        "find_friends_description": "Dėl to čia ir esate, todėl imkimės to",
-        "find_people": "Rasti žmones",
-        "free_e2ee_messaging_unlimited_voip": "%(brand)s - tai puikus būdas palaikyti ryšį: nemokamos visapusiškai šifruotos žinutės ir neriboti balso bei vaizdo skambučiai.",
-        "get_stuff_done": "Atlikite darbus suradę komandos draugus",
         "intro_welcome": "Sveiki prisijungę į %(appName)s",
-        "only_n_steps_to_go": {
-            "one": "Liko tik %(count)s žingsnis",
-            "other": "Liko tik %(count)s žingsniai"
-        },
-        "personal_messaging_action": "Pradėkite pirmąjį pokalbį",
-        "personal_messaging_title": "Saugūs pokalbiai draugams ir šeimai",
-        "send_dm": "Siųsti tiesioginę žinutę",
-        "set_up_profile": "Nustatykite savo profilį",
-        "set_up_profile_action": "Jūsų profilis",
-        "set_up_profile_description": "Įsitikinkite, kad žmonės žino, jog tai tikrai jūs",
-        "welcome_to_brand": "Sveiki atvykę į %(brand)s",
-        "work_messaging_action": "Rasti savo bendradarbius",
-        "work_messaging_title": "Saugūs pokalbiai darbui",
-        "you_did_it": "Jums pavyko!",
-        "you_made_it": "Jums pavyko!"
+        "send_dm": "Siųsti tiesioginę žinutę"
     },
     "power_level": {
         "admin": "Administratorius",
@@ -1010,7 +968,6 @@
         "custom_level": "Pritaikytas lygis",
         "default": "Numatytas",
         "label": "Galios lygis",
-        "mod": "Moderatorius",
         "moderator": "Moderatorius",
         "restricted": "Apribotas"
     },
@@ -1859,11 +1816,6 @@
         "upgraderoom": "Atnaujina kambarį į naują versiją",
         "upgraderoom_permission_error": "Jūs neturite reikalingų leidimų naudoti šią komandą.",
         "usage": "Naudojimas",
-        "verify": "Patvirtina vartotojo, seanso ir pubkey daugiadalę duomenų struktūrą",
-        "verify_mismatch": "ĮSPĖJIMAS: RAKTŲ PATIKRINIMAS NEPAVYKO! Pasirašymo raktas vartotojui %(userId)s ir seansui %(deviceId)s yra \"%(fprint)s\", kuris nesutampa su pateiktu raktu \"%(fingerprint)s\". Tai gali reikšti, kad jūsų komunikacijos yra perimamos!",
-        "verify_nop": "Seansas jau patvirtintas!",
-        "verify_success_description": "Jūsų pateiktas pasirašymo raktas sutampa su pasirašymo raktu, gautu iš vartotojo %(userId)s seanso %(deviceId)s. Seansas pažymėtas kaip patikrintas.",
-        "verify_success_title": "Patvirtintas raktas",
         "whois": "Parodo informaciją apie vartotoją"
     },
     "space": {
@@ -1879,7 +1831,6 @@
         "invite": "Pakviesti žmonių",
         "invite_description": "Pakviesti su el. paštu arba naudotojo vardu",
         "invite_link": "Bendrinti pakvietimo nuorodą",
-        "invite_this_space": "Pakviesti į šią erdvę",
         "search_children": "Ieškoti %(spaceName)s"
     },
     "spaces": {
@@ -2111,7 +2062,9 @@
             "sent": "%(senderName)s išsiuntė pakvietimą %(targetDisplayName)s prisijungti prie kambario."
         },
         "m.room.tombstone": "%(senderDisplayName)s atnaujino šį kambarį.",
-        "m.room.topic": "%(senderDisplayName)s pakeitė temą į \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s pakeitė temą į \"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s nusiuntė lipduką.",
         "m.video": {
             "error_decrypting": "Klaida iššifruojant vaizdo įrašą"
@@ -2384,15 +2337,6 @@
     },
     "user_menu": {
         "settings": "Visi nustatymai"
-    },
-    "voice_broadcast": {
-        "action": "Balso transliacija",
-        "confirm_stop_affirm": "Taip, sustabdyti transliaciją",
-        "confirm_stop_title": "Sustabdyti transliaciją gyvai?",
-        "live": "Gyvai",
-        "pause": "pristabdyti balso transliaciją",
-        "play": "paleisti balso transliaciją",
-        "resume": "tęsti balso transliaciją"
     },
     "voip": {
         "already_in_call": "Jau pokalbyje",

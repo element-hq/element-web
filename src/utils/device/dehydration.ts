@@ -2,13 +2,14 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2024 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { Crypto } from "matrix-js-sdk/src/matrix";
+import { type CryptoApi, type StartDehydrationOpts } from "matrix-js-sdk/src/crypto-api";
 
+import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 
 /**
@@ -21,14 +22,14 @@ import { MatrixClientPeg } from "../../MatrixClientPeg";
  *
  * Dehydration can currently only be enabled by setting a flag in the .well-known file.
  */
-async function deviceDehydrationEnabled(crypto: Crypto.CryptoApi | undefined): Promise<boolean> {
+async function deviceDehydrationEnabled(client: MatrixClient, crypto: CryptoApi | undefined): Promise<boolean> {
     if (!crypto) {
         return false;
     }
     if (!(await crypto.isDehydrationSupported())) {
         return false;
     }
-    const wellknown = await MatrixClientPeg.safeGet().waitForClientWellKnown();
+    const wellknown = await client.waitForClientWellKnown();
     return !!wellknown?.["org.matrix.msc3814"];
 }
 
@@ -40,10 +41,11 @@ async function deviceDehydrationEnabled(crypto: Crypto.CryptoApi | undefined): P
  * @param createNewKey: force a new dehydration key to be created, even if one
  *   already exists.  This is used when we reset secret storage.
  */
-export async function initialiseDehydration(createNewKey: boolean = false): Promise<void> {
-    const crypto = MatrixClientPeg.safeGet().getCrypto();
-    if (await deviceDehydrationEnabled(crypto)) {
+export async function initialiseDehydration(opts: StartDehydrationOpts = {}, client?: MatrixClient): Promise<void> {
+    client = client || MatrixClientPeg.safeGet();
+    const crypto = client.getCrypto();
+    if (await deviceDehydrationEnabled(client, crypto)) {
         logger.log("Device dehydration enabled");
-        await crypto!.startDehydration(createNewKey);
+        await crypto!.startDehydration(opts);
     }
 }

@@ -2,12 +2,12 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render, RenderResult } from "jest-matrix-react";
+import { fireEvent, render, type RenderResult } from "jest-matrix-react";
 import {
     Room,
     MatrixEvent,
@@ -17,7 +17,7 @@ import {
     M_TEXT,
 } from "matrix-js-sdk/src/matrix";
 import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
-import { ReplacementEvent } from "matrix-js-sdk/src/types";
+import { type ReplacementEvent } from "matrix-js-sdk/src/types";
 
 import { getMockClientWithEventEmitter } from "../../../../test-utils";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";

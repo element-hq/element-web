@@ -3,13 +3,13 @@ Copyright 2024 New Vector Ltd.
 Copyright 2019-2021 , 2022 The Matrix.org Foundation C.I.C.
 Copyright 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import { EventEmitter } from "events";
-import { MatrixEvent, Room, RoomMember, Thread, ReceiptType } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, Room, RoomMember, type Thread, ReceiptType } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { render } from "jest-matrix-react";
 
@@ -27,9 +27,10 @@ import {
     mockClientMethodsEvents,
     mockClientMethodsUser,
 } from "../../../test-utils";
-import ResizeNotifier from "../../../../src/utils/ResizeNotifier";
-import { IRoomState } from "../../../../src/components/structures/RoomView";
+import type ResizeNotifier from "../../../../src/utils/ResizeNotifier";
+import { type IRoomState } from "../../../../src/components/structures/RoomView";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
+import { ScopedRoomContextProvider } from "../../../../src/contexts/ScopedRoomContext.tsx";
 
 jest.mock("../../../../src/utils/beacon", () => ({
     useBeacon: jest.fn(),
@@ -91,9 +92,9 @@ describe("MessagePanel", function () {
 
     const getComponent = (props = {}, roomContext: Partial<IRoomState> = {}) => (
         <MatrixClientContext.Provider value={client}>
-            <RoomContext.Provider value={{ ...defaultRoomContext, ...roomContext }}>
+            <ScopedRoomContextProvider {...defaultRoomContext} {...roomContext}>
                 <MessagePanel {...defaultProps} {...props} />
-            </RoomContext.Provider>
+            </ScopedRoomContextProvider>
         </MatrixClientContext.Provider>
     );
 

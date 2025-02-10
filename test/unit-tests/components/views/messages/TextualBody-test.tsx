@@ -2,13 +2,13 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019-2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { mocked, MockedObject } from "jest-mock";
+import { type MatrixClient, type MatrixEvent, PushRuleKind } from "matrix-js-sdk/src/matrix";
+import { mocked, type MockedObject } from "jest-mock";
 import { render, waitFor } from "jest-matrix-react";
 
 import { getMockClientWithEventEmitter, mkEvent, mkMessage, mkStubRoom } from "../../../../test-utils";
@@ -18,7 +18,7 @@ import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import TextualBody from "../../../../../src/components/views/messages/TextualBody";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
-import { MediaEventHelper } from "../../../../../src/utils/MediaEventHelper";
+import { type MediaEventHelper } from "../../../../../src/utils/MediaEventHelper";
 
 const room1Id = "!room1:example.com";
 const room2Id = "!room2:example.com";
@@ -228,6 +228,23 @@ describe("<TextualBody />", () => {
             const content = container.querySelector(".mx_EventTile_body");
             expect(content.innerHTML.replace(defaultEvent.getId(), "%event_id%")).toMatchSnapshot();
         });
+
+        it("should pillify a keyword responsible for triggering a notification", () => {
+            const ev = mkRoomTextMessage("foo bar baz");
+            ev.setPushDetails(undefined, {
+                actions: [],
+                pattern: "bar",
+                rule_id: "bar",
+                default: false,
+                enabled: true,
+                kind: PushRuleKind.ContentSpecific,
+            });
+            const { container } = getComponent({ mxEvent: ev });
+            const content = container.querySelector(".mx_EventTile_body");
+            expect(content.innerHTML).toMatchInlineSnapshot(
+                `"<span>foo <bdi><span tabindex="0"><span class="mx_Pill mx_KeywordPill"><span class="mx_Pill_text">bar</span></span></span></bdi> baz</span>"`,
+            );
+        });
     });
 
     describe("renders formatted m.text correctly", () => {
@@ -375,55 +392,73 @@ describe("<TextualBody />", () => {
         });
     });
 
-    it("renders url previews correctly", () => {
-        languageHandler.setMissingEntryGenerator((key) => key.split("|", 2)[1]);
+    describe("url preview", () => {
+        let matrixClient: MatrixClient;
 
-        const matrixClient = getMockClientWithEventEmitter({
-            getRoom: () => mkStubRoom("room_id", "room name", undefined),
-            getAccountData: (): MatrixClient | undefined => undefined,
-            getUrlPreview: (url: string) => new Promise(() => {}),
-            isGuest: () => false,
-            mxcUrlToHttp: (s: string) => s,
+        beforeEach(() => {
+            languageHandler.setMissingEntryGenerator((key) => key.split("|", 2)[1]);
+            matrixClient = getMockClientWithEventEmitter({
+                getRoom: () => mkStubRoom("room_id", "room name", undefined),
+                getAccountData: (): MatrixClient | undefined => undefined,
+                getUrlPreview: (url: string) => new Promise(() => {}),
+                isGuest: () => false,
+                mxcUrlToHttp: (s: string) => s,
+            });
+            DMRoomMap.makeShared(defaultMatrixClient);
         });
-        DMRoomMap.makeShared(defaultMatrixClient);
 
-        const ev = mkRoomTextMessage("Visit https://matrix.org/");
-        const { container, rerender } = getComponent(
-            { mxEvent: ev, showUrlPreview: true, onHeightChanged: jest.fn() },
-            matrixClient,
-        );
+        it("renders url previews correctly", () => {
+            const ev = mkRoomTextMessage("Visit https://matrix.org/");
+            const { container, rerender } = getComponent(
+                { mxEvent: ev, showUrlPreview: true, onHeightChanged: jest.fn() },
+                matrixClient,
+            );
 
-        expect(container).toHaveTextContent(ev.getContent().body);
-        expect(container.querySelector("a")).toHaveAttribute("href", "https://matrix.org/");
+            expect(container).toHaveTextContent(ev.getContent().body);
+            expect(container.querySelector("a")).toHaveAttribute("href", "https://matrix.org/");
 
-        // simulate an event edit and check the transition from the old URL preview to the new one
-        const ev2 = mkEvent({
-            type: "m.room.message",
-            room: "room_id",
-            user: "sender",
-            content: {
-                "m.new_content": {
-                    body: "Visit https://vector.im/ and https://riot.im/",
-                    msgtype: "m.text",
+            // simulate an event edit and check the transition from the old URL preview to the new one
+            const ev2 = mkEvent({
+                type: "m.room.message",
+                room: "room_id",
+                user: "sender",
+                content: {
+                    "m.new_content": {
+                        body: "Visit https://vector.im/ and https://riot.im/",
+                        msgtype: "m.text",
+                    },
                 },
-            },
-            event: true,
+                event: true,
+            });
+            jest.spyOn(ev, "replacingEventDate").mockReturnValue(new Date(1993, 7, 3));
+            ev.makeReplaced(ev2);
+
+            getComponent(
+                { mxEvent: ev, showUrlPreview: true, onHeightChanged: jest.fn(), replacingEventId: ev.getId() },
+                matrixClient,
+                rerender,
+            );
+
+            expect(container).toHaveTextContent(ev2.getContent()["m.new_content"].body + "(edited)");
+
+            const links = ["https://vector.im/", "https://riot.im/"];
+            const anchorNodes = container.querySelectorAll("a");
+            Array.from(anchorNodes).forEach((node, index) => {
+                expect(node).toHaveAttribute("href", links[index]);
+            });
         });
-        jest.spyOn(ev, "replacingEventDate").mockReturnValue(new Date(1993, 7, 3));
-        ev.makeReplaced(ev2);
 
-        getComponent(
-            { mxEvent: ev, showUrlPreview: true, onHeightChanged: jest.fn(), replacingEventId: ev.getId() },
-            matrixClient,
-            rerender,
-        );
+        it("should listen to showUrlPreview change", () => {
+            const ev = mkRoomTextMessage("Visit https://matrix.org/");
 
-        expect(container).toHaveTextContent(ev2.getContent()["m.new_content"].body + "(edited)");
+            const { container, rerender } = getComponent(
+                { mxEvent: ev, showUrlPreview: false, onHeightChanged: jest.fn() },
+                matrixClient,
+            );
+            expect(container.querySelector(".mx_LinkPreviewGroup")).toBeNull();
 
-        const links = ["https://vector.im/", "https://riot.im/"];
-        const anchorNodes = container.querySelectorAll("a");
-        Array.from(anchorNodes).forEach((node, index) => {
-            expect(node).toHaveAttribute("href", links[index]);
+            getComponent({ mxEvent: ev, showUrlPreview: true, onHeightChanged: jest.fn() }, matrixClient, rerender);
+            expect(container.querySelector(".mx_LinkPreviewGroup")).toBeTruthy();
         });
     });
 });

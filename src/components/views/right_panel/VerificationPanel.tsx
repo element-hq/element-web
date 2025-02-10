@@ -2,20 +2,20 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import {
-    ShowQrCodeCallbacks,
-    ShowSasCallbacks,
+    type ShowQrCodeCallbacks,
+    type ShowSasCallbacks,
     VerificationPhase as Phase,
-    VerificationRequest,
+    type VerificationRequest,
     VerificationRequestEvent,
     VerifierEvent,
 } from "matrix-js-sdk/src/crypto-api";
-import { Device, RoomMember, User } from "matrix-js-sdk/src/matrix";
+import { type Device, type RoomMember, type User } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { VerificationMethod } from "matrix-js-sdk/src/types";
 
@@ -23,11 +23,12 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import VerificationQRCode from "../elements/crypto/VerificationQRCode";
 import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
-import E2EIcon, { E2EState } from "../rooms/E2EIcon";
+import E2EIcon from "../rooms/E2EIcon";
 import Spinner from "../elements/Spinner";
 import AccessibleButton from "../elements/AccessibleButton";
 import VerificationShowSas from "../verification/VerificationShowSas";
 import { getDeviceCryptoInfo } from "../../../utils/crypto/deviceInfo";
+import { E2EStatus } from "../../../utils/ShieldUtils";
 
 interface IProps {
     layout: string;
@@ -46,7 +47,7 @@ interface IState {
      * We attempt to calculate this once the verification request transitions into the "Ready" phase. If the other
      * side cannot scan QR codes, it will remain `undefined`.
      */
-    qrCodeBytes: Buffer | undefined;
+    qrCodeBytes: Uint8ClampedArray | undefined;
 
     sasEvent: ShowSasCallbacks | null;
     emojiButtonClicked?: boolean;
@@ -233,7 +234,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
             body = (
                 <React.Fragment>
                     <p>{description}</p>
-                    <E2EIcon isUser={true} status={E2EState.Verified} size={128} hideTooltip={true} />
+                    <E2EIcon isUser={true} status={E2EStatus.Verified} size={128} hideTooltip={true} />
                     <div className="mx_VerificationPanel_reciprocateButtons">
                         <AccessibleButton
                             kind="danger"
@@ -302,7 +303,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         return (
             <div className="mx_UserInfo_container mx_VerificationPanel_verified_section">
                 <p>{description}</p>
-                <E2EIcon isUser={true} status={E2EState.Verified} size={128} hideTooltip={true} />
+                <E2EIcon isUser={true} status={E2EStatus.Verified} size={128} hideTooltip={true} />
                 {text ? <p>{text}</p> : null}
                 <AccessibleButton kind="primary" className="mx_UserInfo_wideButton" onClick={this.props.onClose}>
                     {_t("action|got_it")}

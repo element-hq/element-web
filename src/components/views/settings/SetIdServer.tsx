@@ -2,13 +2,13 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { IThreepid } from "matrix-js-sdk/src/matrix";
+import { type IThreepid } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -19,7 +19,7 @@ import IdentityAuthClient from "../../../IdentityAuthClient";
 import { abbreviateUrl, parseUrl, unabbreviateUrl } from "../../../utils/UrlUtils";
 import { getDefaultIdentityServerUrl, doesIdentityServerHaveTerms } from "../../../utils/IdentityServerUtils";
 import { timeout } from "../../../utils/promise";
-import { ActionPayload } from "../../../dispatcher/payloads";
+import { type ActionPayload } from "../../../dispatcher/payloads";
 import InlineSpinner from "../elements/InlineSpinner";
 import AccessibleButton from "../elements/AccessibleButton";
 import Field from "../elements/Field";
@@ -407,7 +407,6 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                         forceValidity={this.state.error ? false : undefined}
                     />
                     <AccessibleButton
-                        type="submit"
                         kind="primary_sm"
                         onClick={this.checkIdServer}
                         disabled={!this.idServerChangeEnabled()}

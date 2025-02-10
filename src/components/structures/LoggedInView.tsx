@@ -2,47 +2,48 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2015-2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ClipboardEvent } from "react";
+import React, { type ClipboardEvent } from "react";
 import {
     ClientEvent,
-    MatrixClient,
-    MatrixEvent,
+    type MatrixClient,
+    type MatrixEvent,
     RoomStateEvent,
-    MatrixError,
-    IUsageLimit,
-    SyncStateData,
+    type MatrixError,
+    type IUsageLimit,
+    type SyncStateData,
     SyncState,
+    EventType,
 } from "matrix-js-sdk/src/matrix";
-import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import classNames from "classnames";
 
 import { isOnlyCtrlOrCmdKeyEvent, Key } from "../../Keyboard";
 import PageTypes from "../../PageTypes";
 import MediaDeviceHandler from "../../MediaDeviceHandler";
 import dis from "../../dispatcher/dispatcher";
-import { IMatrixClientCreds } from "../../MatrixClientPeg";
+import { type IMatrixClientCreds } from "../../MatrixClientPeg";
 import SettingsStore from "../../settings/SettingsStore";
 import { SettingLevel } from "../../settings/SettingLevel";
 import ResizeHandle from "../views/elements/ResizeHandle";
 import { CollapseDistributor, Resizer } from "../../resizer";
-import ResizeNotifier from "../../utils/ResizeNotifier";
+import type ResizeNotifier from "../../utils/ResizeNotifier";
 import PlatformPeg from "../../PlatformPeg";
 import { DefaultTagID } from "../../stores/room-list/models";
 import { hideToast as hideServerLimitToast, showToast as showServerLimitToast } from "../../toasts/ServerLimitToast";
 import { Action } from "../../dispatcher/actions";
 import LeftPanel from "./LeftPanel";
-import { ViewRoomDeltaPayload } from "../../dispatcher/payloads/ViewRoomDeltaPayload";
+import { type ViewRoomDeltaPayload } from "../../dispatcher/payloads/ViewRoomDeltaPayload";
 import RoomListStore from "../../stores/room-list/RoomListStore";
 import NonUrgentToastContainer from "./NonUrgentToastContainer";
-import { IOOBData, IThreepidInvite } from "../../stores/ThreepidInviteStore";
+import { type IOOBData, type IThreepidInvite } from "../../stores/ThreepidInviteStore";
 import Modal from "../../Modal";
-import { CollapseItem, ICollapseConfig } from "../../resizer/distributors/collapse";
+import { type CollapseItem, type ICollapseConfig } from "../../resizer/distributors/collapse";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
-import { IOpts } from "../../createRoom";
+import { type IOpts } from "../../createRoom";
 import SpacePanel from "../views/spaces/SpacePanel";
 import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
 import AudioFeedArrayForLegacyCall from "../views/voip/AudioFeedArrayForLegacyCall";
@@ -54,16 +55,16 @@ import UserView from "./UserView";
 import { BackdropPanel } from "./BackdropPanel";
 import { mediaFromMxc } from "../../customisations/Media";
 import { UserTab } from "../views/dialogs/UserTab";
-import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
+import { type OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { TimelineRenderingType } from "../../contexts/RoomContext";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
-import { SwitchSpacePayload } from "../../dispatcher/payloads/SwitchSpacePayload";
+import { type SwitchSpacePayload } from "../../dispatcher/payloads/SwitchSpacePayload";
 import LeftPanelLiveShareWarning from "../views/beacon/LeftPanelLiveShareWarning";
-import { UserOnboardingPage } from "../views/user-onboarding/UserOnboardingPage";
+import HomePage from "./HomePage";
 import { PipContainer } from "./PipContainer";
 import { monitorSyncedPushRules } from "../../utils/pushRules/monitorSyncedPushRules";
-import { ConfigOptions } from "../../SdkConfig";
+import { type ConfigOptions } from "../../SdkConfig";
 import { MatrixClientContextProvider } from "./MatrixClientContextProvider";
 import { Landmark, LandmarkNavigation } from "../../accessibility/LandmarkNavigation";
 
@@ -161,7 +162,7 @@ class LoggedInView extends React.Component<IProps, IState> {
 
         this._matrixClient.on(ClientEvent.AccountData, this.onAccountData);
         // check push rules on start up as well
-        monitorSyncedPushRules(this._matrixClient.getAccountData("m.push_rules"), this._matrixClient);
+        monitorSyncedPushRules(this._matrixClient.getAccountData(EventType.PushRules), this._matrixClient);
         this._matrixClient.on(ClientEvent.Sync, this.onSync);
         // Call `onSync` with the current state as well
         this.onSync(this._matrixClient.getSyncState(), null, this._matrixClient.getSyncStateData() ?? undefined);
@@ -245,7 +246,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         } else {
             backgroundImage = OwnProfileStore.instance.getHttpAvatarUrl();
         }
-        this.setState({ backgroundImage });
+        this.setState({ backgroundImage: backgroundImage ?? undefined });
     };
 
     public canResetTimelineInRoom = (roomId: string): boolean => {
@@ -677,7 +678,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                 break;
 
             case PageTypes.HomePage:
-                pageElement = <UserOnboardingPage justRegistered={this.props.justRegistered} />;
+                pageElement = <HomePage justRegistered={this.props.justRegistered} />;
                 break;
 
             case PageTypes.UserView:

@@ -2,24 +2,24 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { render } from "jest-matrix-react";
 import {
-    IContent,
-    MatrixClient,
+    type IContent,
+    type MatrixClient,
     MatrixEvent,
     Room,
-    RoomMember,
+    type RoomMember,
     RelationType,
     EventType,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
-import { IExportOptions, ExportType, ExportFormat } from "../../../src/utils/exportUtils/exportUtils";
+import { type IExportOptions, ExportType, ExportFormat } from "../../../src/utils/exportUtils/exportUtils";
 import PlainTextExporter from "../../../src/utils/exportUtils/PlainTextExport";
 import HTMLExporter from "../../../src/utils/exportUtils/HtmlExport";
 import * as TestUtilsMatrix from "../../test-utils";

@@ -2,13 +2,13 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019-2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import classNames from "classnames";
-import { randomString } from "matrix-js-sdk/src/randomstring";
+import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 
 import ToggleSwitch from "./ToggleSwitch";
 import { Caption } from "../typography/Caption";
@@ -36,7 +36,7 @@ interface IProps {
 }
 
 export default class LabelledToggleSwitch extends React.PureComponent<IProps> {
-    private readonly id = `mx_LabelledToggleSwitch_${randomString(12)}`;
+    private readonly id = `mx_LabelledToggleSwitch_${secureRandomString(12)}`;
 
     public render(): React.ReactNode {
         // This is a minimal version of a SettingsFlag

@@ -2,24 +2,24 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    IResultRoomEvents,
-    ISearchRequestBody,
-    ISearchResponse,
-    ISearchResult,
-    ISearchResults,
+    type IResultRoomEvents,
+    type ISearchRequestBody,
+    type ISearchResponse,
+    type ISearchResult,
+    type ISearchResults,
     SearchOrderBy,
-    IRoomEventFilter,
+    type IRoomEventFilter,
     EventType,
-    MatrixClient,
-    SearchResult,
+    type MatrixClient,
+    type SearchResult,
 } from "matrix-js-sdk/src/matrix";
 
-import { ISearchArgs } from "./indexing/BaseEventIndexManager";
+import { type ISearchArgs } from "./indexing/BaseEventIndexManager";
 import EventIndexPeg from "./indexing/EventIndexPeg";
 import { isNotUndefined } from "./Typeguards";
 

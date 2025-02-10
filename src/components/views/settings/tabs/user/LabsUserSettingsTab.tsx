@@ -1,12 +1,13 @@
 /*
 Copyright 2019-2024 New Vector Ltd.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import { sortBy } from "lodash";
+import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../../languageHandler";
 import SettingsStore from "../../../../../settings/SettingsStore";
@@ -14,7 +15,7 @@ import { SettingLevel } from "../../../../../settings/SettingLevel";
 import SdkConfig from "../../../../../SdkConfig";
 import BetaCard from "../../../beta/BetaCard";
 import SettingsFlag from "../../../elements/SettingsFlag";
-import { LabGroup, labGroupNames } from "../../../../../settings/Settings";
+import { type FeatureSettingKey, LabGroup, labGroupNames } from "../../../../../settings/Settings";
 import { EnhancedMap } from "../../../../../utils/maps";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { SettingsSubsection, SettingsSubsectionText } from "../../shared/SettingsSubsection";
@@ -24,20 +25,20 @@ export const showLabsFlags = (): boolean => {
     return SdkConfig.get("show_labs_settings") || SettingsStore.getValue("developerMode");
 };
 
-export default class LabsUserSettingsTab extends React.Component<{}> {
-    private readonly labs: string[];
-    private readonly betas: string[];
+export default class LabsUserSettingsTab extends React.Component<EmptyObject> {
+    private readonly labs: FeatureSettingKey[];
+    private readonly betas: FeatureSettingKey[];
 
-    public constructor(props: {}) {
+    public constructor(props: EmptyObject) {
         super(props);
 
         const features = SettingsStore.getFeatureSettingNames();
         const [labs, betas] = features.reduce(
             (arr, f) => {
-                arr[SettingsStore.getBetaInfo(f) ? 1 : 0].push(f);
+                arr[SettingsStore.getBetaInfo(f) ? 1 : 0].push(f as FeatureSettingKey);
                 return arr;
             },
-            [[], []] as [string[], string[]],
+            [[], []] as [FeatureSettingKey[], FeatureSettingKey[]],
         );
 
         this.labs = labs;

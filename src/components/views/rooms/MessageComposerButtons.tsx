@@ -2,17 +2,23 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import { IEventRelation, Room, MatrixClient, THREAD_RELATION_TYPE, M_POLL_START } from "matrix-js-sdk/src/matrix";
-import React, { createContext, ReactElement, ReactNode, useContext, useRef } from "react";
+import {
+    type IEventRelation,
+    type Room,
+    type MatrixClient,
+    THREAD_RELATION_TYPE,
+    M_POLL_START,
+} from "matrix-js-sdk/src/matrix";
+import React, { createContext, type ReactElement, type ReactNode, useContext, useRef } from "react";
 
 import { _t } from "../../../languageHandler";
 import { CollapsibleButton } from "./CollapsibleButton";
-import { MenuProps } from "../../structures/ContextMenu";
+import { type MenuProps } from "../../structures/ContextMenu";
 import dis from "../../../dispatcher/dispatcher";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import { LocationButton } from "../location";
@@ -21,14 +27,14 @@ import PollCreateDialog from "../elements/PollCreateDialog";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import ContentMessages from "../../../ContentMessages";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import RoomContext from "../../../contexts/RoomContext";
 import { useDispatcher } from "../../../hooks/useDispatcher";
 import { chromeFileInputFix } from "../../../utils/BrowserWorkarounds";
 import IconizedContextMenu, { IconizedContextMenuOptionList } from "../context_menus/IconizedContextMenu";
 import { EmojiButton } from "./EmojiButton";
 import { filterBoolean } from "../../../utils/arrays";
 import { useSettingValue } from "../../../hooks/useSettings";
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
+import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
 
 interface IProps {
     addEmoji: (emoji: string) => boolean;
@@ -43,8 +49,6 @@ interface IProps {
     showPollsButton: boolean;
     showStickersButton: boolean;
     toggleButtonMenu: () => void;
-    showVoiceBroadcastButton: boolean;
-    onStartVoiceBroadcastClick: () => void;
     isRichTextEnabled: boolean;
     onComposerModeClick: () => void;
 }
@@ -54,9 +58,9 @@ export const OverflowMenuContext = createContext<OverflowMenuCloser | null>(null
 
 const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
     const matrixClient = useContext(MatrixClientContext);
-    const { room, narrow } = useContext(RoomContext);
+    const { room, narrow } = useScopedRoomContext("room", "narrow");
 
-    const isWysiwygLabEnabled = useSettingValue<boolean>("feature_wysiwyg_composer");
+    const isWysiwygLabEnabled = useSettingValue("feature_wysiwyg_composer");
 
     if (!matrixClient || !room || props.haveRecording) {
         return null;
@@ -80,7 +84,6 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
             uploadButton(), // props passed via UploadButtonContext
             showStickersButton(props),
             voiceRecordingButton(props, narrow),
-            startVoiceBroadcastButton(props),
             props.showPollsButton ? pollButton(room, props.relation) : null,
             showLocationButton(props, room, matrixClient),
         ];
@@ -100,7 +103,6 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
         moreButtons = [
             showStickersButton(props),
             voiceRecordingButton(props, narrow),
-            startVoiceBroadcastButton(props),
             props.showPollsButton ? pollButton(room, props.relation) : null,
             showLocationButton(props, room, matrixClient),
         ];
@@ -168,7 +170,7 @@ interface IUploadButtonProps {
 // We put the file input outside the UploadButton component so that it doesn't get killed when the context menu closes.
 const UploadButtonContextProvider: React.FC<IUploadButtonProps> = ({ roomId, relation, children }) => {
     const cli = useContext(MatrixClientContext);
-    const roomContext = useContext(RoomContext);
+    const roomContext = useScopedRoomContext("timelineRenderingType");
     const uploadInput = useRef<HTMLInputElement>(null);
 
     const onUploadClick = (): void => {
@@ -254,18 +256,6 @@ function showStickersButton(props: IProps): ReactElement | null {
     ) : null;
 }
 
-const startVoiceBroadcastButton: React.FC<IProps> = (props: IProps): ReactElement | null => {
-    return props.showVoiceBroadcastButton ? (
-        <CollapsibleButton
-            key="start_voice_broadcast"
-            className="mx_MessageComposer_button"
-            iconClassName="mx_MessageComposer_voiceBroadcast"
-            onClick={props.onStartVoiceBroadcastClick}
-            title={_t("voice_broadcast|action")}
-        />
-    ) : null;
-};
-
 function voiceRecordingButton(props: IProps, narrow: boolean): ReactElement | null {
     // XXX: recording UI does not work well in narrow mode, so hide for now
     return narrow ? null : (
@@ -290,7 +280,7 @@ interface IPollButtonProps {
 
 class PollButton extends React.PureComponent<IPollButtonProps> {
     public static contextType = OverflowMenuContext;
-    public declare context: React.ContextType<typeof OverflowMenuContext>;
+    declare public context: React.ContextType<typeof OverflowMenuContext>;
 
     private onCreateClick = (): void => {
         this.context?.(); // close overflow menu

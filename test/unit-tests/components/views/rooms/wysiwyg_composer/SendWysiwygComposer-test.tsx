@@ -2,24 +2,28 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import "@testing-library/jest-dom";
 import React from "react";
 import { act, fireEvent, render, screen, waitFor } from "jest-matrix-react";
+import { initOnce } from "@vector-im/matrix-wysiwyg";
 
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
-import RoomContext from "../../../../../../src/contexts/RoomContext";
 import defaultDispatcher from "../../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../../src/dispatcher/actions";
 import { flushPromises } from "../../../../../test-utils";
 import { SendWysiwygComposer } from "../../../../../../src/components/views/rooms/wysiwyg_composer/";
 import { aboveLeftOf } from "../../../../../../src/components/structures/ContextMenu";
-import { ComposerInsertPayload, ComposerType } from "../../../../../../src/dispatcher/payloads/ComposerInsertPayload";
+import {
+    type ComposerInsertPayload,
+    ComposerType,
+} from "../../../../../../src/dispatcher/payloads/ComposerInsertPayload";
 import { setSelection } from "../../../../../../src/components/views/rooms/wysiwyg_composer/utils/selection";
 import { createMocks } from "./utils";
+import { ScopedRoomContextProvider } from "../../../../../../src/contexts/ScopedRoomContext.tsx";
 
 jest.mock("../../../../../../src/components/views/rooms/EmojiButton", () => ({
     EmojiButton: ({ addEmoji }: { addEmoji: (emoji: string) => void }) => {
@@ -30,6 +34,8 @@ jest.mock("../../../../../../src/components/views/rooms/EmojiButton", () => ({
         );
     },
 }));
+
+beforeAll(initOnce, 10000);
 
 describe("SendWysiwygComposer", () => {
     afterEach(() => {
@@ -66,7 +72,7 @@ describe("SendWysiwygComposer", () => {
     ) => {
         return render(
             <MatrixClientContext.Provider value={mockClient}>
-                <RoomContext.Provider value={defaultRoomContext}>
+                <ScopedRoomContextProvider {...defaultRoomContext}>
                     <SendWysiwygComposer
                         onChange={onChange}
                         onSend={onSend}
@@ -75,7 +81,7 @@ describe("SendWysiwygComposer", () => {
                         menuPosition={aboveLeftOf({ top: 0, bottom: 0, right: 0 })}
                         placeholder={placeholder}
                     />
-                </RoomContext.Provider>
+                </ScopedRoomContextProvider>
             </MatrixClientContext.Provider>,
         );
     };

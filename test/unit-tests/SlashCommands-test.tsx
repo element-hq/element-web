@@ -2,15 +2,15 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixClient, Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { mocked } from "jest-mock";
 
-import { Command, Commands, getCommand } from "../../src/SlashCommands";
+import { type Command, Commands, getCommand } from "../../src/SlashCommands";
 import { createTestClient } from "../test-utils";
 import { LocalRoom, LOCAL_ROOM_ID_PREFIX } from "../../src/models/LocalRoom";
 import SettingsStore from "../../src/settings/SettingsStore";

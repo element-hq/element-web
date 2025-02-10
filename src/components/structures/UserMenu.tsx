@@ -2,28 +2,28 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, ReactNode } from "react";
-import { Room } from "matrix-js-sdk/src/matrix";
+import React, { createRef, type ReactNode } from "react";
+import { type Room } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import { ActionPayload } from "../../dispatcher/payloads";
+import { type ActionPayload } from "../../dispatcher/payloads";
 import { Action } from "../../dispatcher/actions";
 import { _t } from "../../languageHandler";
-import { ChevronFace, ContextMenuButton, MenuProps } from "./ContextMenu";
+import { ChevronFace, ContextMenuButton, type MenuProps } from "./ContextMenu";
 import { UserTab } from "../views/dialogs/UserTab";
-import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
+import { type OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
 import FeedbackDialog from "../views/dialogs/FeedbackDialog";
 import Modal from "../../Modal";
 import LogoutDialog, { shouldShowLogoutDialog } from "../views/dialogs/LogoutDialog";
 import SettingsStore from "../../settings/SettingsStore";
 import { findHighContrastTheme, getCustomTheme, isHighContrastTheme } from "../../theme";
 import { RovingAccessibleButton } from "../../accessibility/RovingTabIndex";
-import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../views/elements/AccessibleButton";
 import SdkConfig from "../../SdkConfig";
 import { getHomePageUrl } from "../../utils/pages";
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
@@ -39,9 +39,7 @@ import SpaceStore from "../../stores/spaces/SpaceStore";
 import { UPDATE_SELECTED_SPACE } from "../../stores/spaces";
 import UserIdentifierCustomisations from "../../customisations/UserIdentifier";
 import PosthogTrackers from "../../PosthogTrackers";
-import { ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePayload";
-import { Icon as LiveIcon } from "../../../res/img/compound/live-8px.svg";
-import { VoiceBroadcastRecording, VoiceBroadcastRecordingsStoreEvent } from "../../voice-broadcast";
+import { type ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePayload";
 import { SDKContext } from "../../contexts/SDKContext";
 import { shouldShowFeedback } from "../../utils/Feedback";
 import DarkLightModeSvg from "../../../res/img/element-icons/roomlist/dark-light-mode.svg";
@@ -58,7 +56,6 @@ interface IState {
     isDarkTheme: boolean;
     isHighContrast: boolean;
     selectedSpace?: Room | null;
-    showLiveAvatarAddon: boolean;
 }
 
 const toRightOf = (rect: PartialDOMRect): MenuProps => {
@@ -79,7 +76,7 @@ const below = (rect: PartialDOMRect): MenuProps => {
 
 export default class UserMenu extends React.Component<IProps, IState> {
     public static contextType = SDKContext;
-    public declare context: React.ContextType<typeof SDKContext>;
+    declare public context: React.ContextType<typeof SDKContext>;
 
     private dispatcherRef?: string;
     private themeWatcherRef?: string;
@@ -94,7 +91,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
             isDarkTheme: this.isUserOnDarkTheme(),
             isHighContrast: this.isUserOnHighContrastTheme(),
             selectedSpace: SpaceStore.instance.activeSpaceRoom,
-            showLiveAvatarAddon: this.context.voiceBroadcastRecordingsStore.hasCurrent(),
         };
     }
 
@@ -102,19 +98,9 @@ export default class UserMenu extends React.Component<IProps, IState> {
         return !!getHomePageUrl(SdkConfig.get(), this.context.client!);
     }
 
-    private onCurrentVoiceBroadcastRecordingChanged = (recording: VoiceBroadcastRecording | null): void => {
-        this.setState({
-            showLiveAvatarAddon: recording !== null,
-        });
-    };
-
     public componentDidMount(): void {
         OwnProfileStore.instance.on(UPDATE_EVENT, this.onProfileUpdate);
         SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.onSelectedSpaceUpdate);
-        this.context.voiceBroadcastRecordingsStore.on(
-            VoiceBroadcastRecordingsStoreEvent.CurrentChanged,
-            this.onCurrentVoiceBroadcastRecordingChanged,
-        );
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
         this.themeWatcherRef = SettingsStore.watchSetting("theme", null, this.onThemeChanged);
     }
@@ -125,10 +111,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
         defaultDispatcher.unregister(this.dispatcherRef);
         OwnProfileStore.instance.off(UPDATE_EVENT, this.onProfileUpdate);
         SpaceStore.instance.off(UPDATE_SELECTED_SPACE, this.onSelectedSpaceUpdate);
-        this.context.voiceBroadcastRecordingsStore.off(
-            VoiceBroadcastRecordingsStoreEvent.CurrentChanged,
-            this.onCurrentVoiceBroadcastRecordingChanged,
-        );
     }
 
     private isUserOnDarkTheme(): boolean {
@@ -435,12 +417,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
             name = <div className="mx_UserMenu_name">{displayName}</div>;
         }
 
-        const liveAvatarAddon = this.state.showLiveAvatarAddon ? (
-            <div className="mx_UserMenu_userAvatarLive" data-testid="user-menu-live-vb">
-                <LiveIcon className="mx_Icon_8" />
-            </div>
-        ) : null;
-
         return (
             <div className="mx_UserMenu">
                 <ContextMenuButton
@@ -459,7 +435,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
                             size={avatarSize + "px"}
                             className="mx_UserMenu_userAvatar_BaseAvatar"
                         />
-                        {liveAvatarAddon}
                     </div>
                     {name}
                     {this.renderContextMenu()}

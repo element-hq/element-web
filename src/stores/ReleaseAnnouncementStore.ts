@@ -2,7 +2,7 @@
  * Copyright 2024 New Vector Ltd.
  * Copyright 2024 The Matrix.org Foundation C.I.C.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -26,7 +26,9 @@ export type Feature = (typeof FEATURES)[number];
  * The stored settings for the release announcements.
  * The boolean is at true when the user has viewed the feature
  */
-type StoredSettings = Record<Feature, boolean>;
+type StoredSettings = Partial<Record<Feature, boolean>>;
+
+export type ReleaseAnnouncementData = StoredSettings;
 
 /**
  * The events emitted by the ReleaseAnnouncementStore.
@@ -82,7 +84,7 @@ export class ReleaseAnnouncementStore extends TypedEventEmitter<ReleaseAnnouncem
      */
     private getViewedReleaseAnnouncements(): StoredSettings {
         // Clone the settings to avoid to mutate the internal stored value in the SettingsStore
-        return cloneDeep(SettingsStore.getValue<StoredSettings>("releaseAnnouncementData"));
+        return cloneDeep(SettingsStore.getValue("releaseAnnouncementData"));
     }
 
     /**
@@ -90,7 +92,7 @@ export class ReleaseAnnouncementStore extends TypedEventEmitter<ReleaseAnnouncem
      * @private
      */
     private isReleaseAnnouncementEnabled(): boolean {
-        return SettingsStore.getValue<boolean>(Features.ReleaseAnnouncement);
+        return SettingsStore.getValue(Features.ReleaseAnnouncement);
     }
 
     /**

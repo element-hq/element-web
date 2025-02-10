@@ -2,14 +2,14 @@
  * Copyright 2024 New Vector Ltd.
  * Copyright 2024 The Matrix.org Foundation C.I.C.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { JSX, useEffect, useState } from "react";
+import React, { type JSX, useEffect, useRef, useState } from "react";
 import PinIcon from "@vector-im/compound-design-tokens/assets/web/icons/pin-solid";
 import { Button } from "@vector-im/compound-web";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
 import { usePinnedEvents, useSortedFetchedPinnedEvents } from "../../../hooks/usePinnedEvents";
@@ -18,13 +18,14 @@ import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import { useEventEmitter } from "../../../hooks/useEventEmitter";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
-import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import dis from "../../../dispatcher/dispatcher";
-import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../../dispatcher/actions";
 import MessageEvent from "../messages/MessageEvent";
 import PosthogTrackers from "../../../PosthogTrackers.ts";
 import { EventPreview } from "./EventPreview.tsx";
+import type ResizeNotifier from "../../../utils/ResizeNotifier";
 
 /**
  * The props for the {@link PinnedMessageBanner} component.
@@ -38,12 +39,20 @@ interface PinnedMessageBannerProps {
      * The room where the banner is displayed
      */
     room: Room;
+    /**
+     * The resize notifier to notify the timeline to resize itself when the banner is displayed or hidden.
+     */
+    resizeNotifier: ResizeNotifier;
 }
 
 /**
  * A banner that displays the pinned messages in a room.
  */
-export function PinnedMessageBanner({ room, permalinkCreator }: PinnedMessageBannerProps): JSX.Element | null {
+export function PinnedMessageBanner({
+    room,
+    permalinkCreator,
+    resizeNotifier,
+}: PinnedMessageBannerProps): JSX.Element | null {
     const pinnedEventIds = usePinnedEvents(room);
     const pinnedEvents = useSortedFetchedPinnedEvents(room, pinnedEventIds);
     const eventCount = pinnedEvents.length;
@@ -56,6 +65,8 @@ export function PinnedMessageBanner({ room, permalinkCreator }: PinnedMessageBan
     }, [eventCount]);
 
     const pinnedEvent = pinnedEvents[currentEventIndex];
+    useNotifyTimeline(pinnedEvent, resizeNotifier);
+
     if (!pinnedEvent) return null;
 
     const shouldUseMessageEvent = pinnedEvent.isRedacted() || pinnedEvent.isDecryptionFailure();
@@ -126,6 +137,23 @@ export function PinnedMessageBanner({ room, permalinkCreator }: PinnedMessageBan
             {!isSinglePinnedEvent && <BannerButton room={room} />}
         </div>
     );
+}
+
+/**
+ * When the banner is displayed or hidden, we want to notify the timeline to resize itself.
+ * @param pinnedEvent
+ * @param resizeNotifier
+ */
+function useNotifyTimeline(pinnedEvent: MatrixEvent | null, resizeNotifier: ResizeNotifier): void {
+    const previousEvent = useRef<MatrixEvent | null>(null);
+    useEffect(() => {
+        // If we switch from a pinned message to no pinned message or the opposite, we want to resize the timeline
+        if ((previousEvent.current && !pinnedEvent) || (!previousEvent.current && pinnedEvent)) {
+            resizeNotifier.notifyTimelineHeightChanged();
+        }
+
+        previousEvent.current = pinnedEvent;
+    }, [pinnedEvent, resizeNotifier]);
 }
 
 const MAX_INDICATORS = 3;

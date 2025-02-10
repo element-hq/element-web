@@ -3,12 +3,12 @@ Copyright 2024 New Vector Ltd.
 Copyright 2019-2022 The Matrix.org Foundation C.I.C.
 Copyright 2018 New Vector Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ContextType, CSSProperties, MutableRefObject, ReactNode } from "react";
-import { Room } from "matrix-js-sdk/src/matrix";
+import React, { type ContextType, type CSSProperties, type MutableRefObject, type ReactNode } from "react";
+import { type Room } from "matrix-js-sdk/src/matrix";
 
 import WidgetUtils from "../../../utils/WidgetUtils";
 import AppTile from "./AppTile";
@@ -25,7 +25,7 @@ interface IProps {
 
 export default class PersistentApp extends React.Component<IProps> {
     public static contextType = MatrixClientContext;
-    public declare context: ContextType<typeof MatrixClientContext>;
+    declare public context: ContextType<typeof MatrixClientContext>;
     private room: Room;
 
     public constructor(props: IProps, context: ContextType<typeof MatrixClientContext>) {

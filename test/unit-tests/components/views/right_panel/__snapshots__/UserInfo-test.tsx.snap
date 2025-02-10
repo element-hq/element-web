@@ -88,7 +88,7 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
         </p>
       </div>
       <button
-        aria-labelledby=":r6s:"
+        aria-labelledby=":r74:"
         class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
         data-testid="base-card-close-button"
         role="button"
@@ -142,7 +142,7 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
         </div>
       </div>
       <div
-        class="mx_UserInfo_container"
+        class="mx_UserInfo_container mx_UserInfo_header"
       >
         <div
           class="mx_Flex mx_UserInfo_profile"
@@ -153,7 +153,7 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
             dir="auto"
           >
             <div
-              class="mx_Flex"
+              class="mx_Flex mx_UserInfo_profile_name"
               style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
             >
               @user:example.com
@@ -402,7 +402,7 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
         </p>
       </div>
       <button
-        aria-labelledby=":r92:"
+        aria-labelledby=":r9a:"
         class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
         data-testid="base-card-close-button"
         role="button"
@@ -456,7 +456,7 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
         </div>
       </div>
       <div
-        class="mx_UserInfo_container"
+        class="mx_UserInfo_container mx_UserInfo_header"
       >
         <div
           class="mx_Flex mx_UserInfo_profile"
@@ -467,7 +467,7 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
             dir="auto"
           >
             <div
-              class="mx_Flex"
+              class="mx_Flex mx_UserInfo_profile_name"
               style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
             >
               @user:example.com

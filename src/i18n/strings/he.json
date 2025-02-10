@@ -332,7 +332,6 @@
             "one": "ועוד אחד אחר...",
             "other": "ו %(count)s אחרים..."
         },
-        "android": "אנדרויד",
         "appearance": "מראה",
         "are_you_sure": "האם אתם בטוחים?",
         "attachment": "נספחים",
@@ -662,12 +661,6 @@
             "incoming_sas_dialog_title": "בקשת אימות נכנסת",
             "incoming_sas_user_dialog_text_1": "אמתו את המשתמש הזה כדי לסמן אותו כאמין. אמון במשתמשים מעניק לכם שקט נפשי נוסף בשימוש בהודעות מוצפנות מקצה לקצה.",
             "incoming_sas_user_dialog_text_2": "אימות משתמש זה יסמן את ההפעלה שלו כאמינה, וגם יסמן את ההפעלה שלכם כאמינה להם.",
-            "manual_device_verification_device_id_label": "זהות מושב",
-            "manual_device_verification_device_key_label": "מפתח מושב",
-            "manual_device_verification_device_name_label": "שם מושב",
-            "manual_device_verification_footer": "אם הם לא תואמים, אבטחת התקשורת שלך עלולה להיפגע.",
-            "manual_device_verification_self_text": "אשר על ידי השוואה בין הדברים הבאים להגדרות המשתמש בפגישה האחרת שלך:",
-            "manual_device_verification_user_text": "אשר את הפעלת המשתמש הזה על ידי השוואה בין הדברים הבאים להגדרות המשתמש שלהם:",
             "other_party_cancelled": "הצד השני ביטל את האימות.",
             "prompt_encrypted": "אמת את כל המשתמשים בחדר כדי לוודא שהוא מאובטח.",
             "prompt_self": "התחל אימות שוב מההודעה.",
@@ -1075,7 +1068,6 @@
     },
     "member_list": {
         "filter_placeholder": "סינון חברי חדר",
-        "invited_list_heading": "מוזמן",
         "power_label": "%(userName)s (רמת הרשאה %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "חברי החדר",
@@ -1120,7 +1112,6 @@
         "intro_welcome": "ברוכים הבאים אל %(appName)s",
         "no_avatar_label": "הוסף תמונה כדי שאנשים יידעו שאתה זה.",
         "send_dm": "שלח הודעה ישירה",
-        "use_case_personal_messaging": "חברים ומשפחה",
         "welcome_detail": "עכשיו, בואו נעזור לכם להתחיל",
         "welcome_user": "ברוכים הבאים %(name)s"
     },
@@ -1158,7 +1149,6 @@
         "custom_level": "דרגה מותאמת",
         "default": "ברירת מחדל",
         "label": "דרגת מנהל",
-        "mod": "ממתן",
         "moderator": "מנהל",
         "restricted": "מחוץ לתחום"
     },
@@ -1454,7 +1444,6 @@
             "error_unbanning": "שגיאה בהסרת חסימה",
             "events_default": "שלח הודעות",
             "invite": "הזמנת משתמשים",
-            "io.element.voice_broadcast_info": "שליחת הקלטות קוליות",
             "kick": "הסר משתמשים",
             "m.reaction": "שלח תגובות",
             "m.room.avatar": "שנה אווטר של החדר",
@@ -1958,11 +1947,6 @@
         "upgraderoom": "משדרג את החדר לגרסא חדשה",
         "upgraderoom_permission_error": "אין לכם הרשאות להשתמש בפקודה זו.",
         "usage": "שימוש",
-        "verify": "מוודא משתמש, התחברות וצמד מפתח ציבורי",
-        "verify_mismatch": "אזהרה: אימות מפתח נכשל! חתימת המפתח של %(userId)s ושל ההתחברות של מכשיר %(deviceId)s הינו \"%(fprint)s\" אשר אינו תואם למפתח הנתון \"%(fingerprint)s\". דבר זה יכול להעיר על כך שישנו נסיון להאזין לתקשורת שלכם!",
-        "verify_nop": "ההתחברות כבר אושרה!",
-        "verify_success_description": "המפתח החתום שנתתם תואם את המפתח שקבלתם מ %(userId)s מהתחברות %(deviceId)s. ההתחברות סומנה כמאושרת.",
-        "verify_success_title": "מפתח מאושר",
         "whois": "מציג מידע אודות משתמש"
     },
     "space": {
@@ -1985,7 +1969,6 @@
         "incompatible_server_hierarchy": "השרת שלכם אינו תומך בהצגת היררכית חללי עבודה.",
         "invite": "הזמן אנשים",
         "invite_link": "שתף קישור להזמנה",
-        "invite_this_space": "הזמינו למרחב עבודה זה",
         "landing_welcome": "ברוכים הבאים אל <name/>",
         "no_search_result_hint": "אולי תרצו לנסות חיפוש אחר או לבדוק אם יש שגיאות הקלדה.",
         "search_children": "חיפוש %(spaceName)s",
@@ -2219,7 +2202,9 @@
             "sent": "%(senderName)s שלח הזמנה ל%(targetDisplayName)s להצטרף אל החדר."
         },
         "m.room.tombstone": "%(senderDisplayName)s שידרג את החדר הזה.",
-        "m.room.topic": "%(senderDisplayName)s שינה את שם הנושא ל-\"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s שינה את שם הנושא ל-\"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s שלח מדבקה",
         "m.video": {
             "error_decrypting": "שגיאה בפענוח וידאו"

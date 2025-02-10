@@ -2,12 +2,19 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixEvent, NotificationCountType, Room, MatrixClient, ReceiptType } from "matrix-js-sdk/src/matrix";
-import { Mocked, mocked } from "jest-mock";
+import {
+    MatrixEvent,
+    NotificationCountType,
+    Room,
+    type MatrixClient,
+    ReceiptType,
+    type AccountDataEvents,
+} from "matrix-js-sdk/src/matrix";
+import { type Mocked, mocked } from "jest-mock";
 
 import {
     localNotificationsAreSilenced,
@@ -32,7 +39,7 @@ jest.mock("../../../src/settings/SettingsStore");
 describe("notifications", () => {
     let accountDataStore: Record<string, MatrixEvent> = {};
     let mockClient: Mocked<MatrixClient>;
-    let accountDataEventKey: string;
+    let accountDataEventKey: keyof AccountDataEvents;
 
     beforeEach(() => {
         jest.clearAllMocks();
@@ -121,7 +128,7 @@ describe("notifications", () => {
                 user: USER_ID,
                 msg: "Hello",
             });
-            room.addLiveEvents([message]);
+            room.addLiveEvents([message], { addToState: true });
             sendReadReceiptSpy = jest.spyOn(client, "sendReadReceipt").mockResolvedValue({});
             jest.spyOn(client, "getRooms").mockReturnValue([room]);
             jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
@@ -187,7 +194,7 @@ describe("notifications", () => {
                 user: USER_ID,
                 ts: 1,
             });
-            room.addLiveEvents([message]);
+            room.addLiveEvents([message], { addToState: true });
             room.setUnreadNotificationCount(NotificationCountType.Total, 1);
 
             await clearAllNotifications(client);
@@ -202,7 +209,7 @@ describe("notifications", () => {
                 user: USER_ID,
                 ts: 1,
             });
-            room.addLiveEvents([message]);
+            room.addLiveEvents([message], { addToState: true });
             room.setUnreadNotificationCount(NotificationCountType.Total, 1);
 
             jest.spyOn(SettingsStore, "getValue").mockReset().mockReturnValue(false);

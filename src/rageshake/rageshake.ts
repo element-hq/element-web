@@ -4,7 +4,7 @@ Copyright 2019 The Matrix.org Foundation C.I.C.
 Copyright 2018 New Vector Ltd
 Copyright 2017 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -31,7 +31,7 @@ Please see LICENSE files in the repository root for full details.
 
 // the frequency with which we flush to indexeddb
 import { logger } from "matrix-js-sdk/src/logger";
-import { randomString } from "matrix-js-sdk/src/randomstring";
+import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 
 import { getCircularReplacer } from "../utils/JSON";
 
@@ -97,6 +97,7 @@ export class ConsoleLogger {
         // run.
         // Example line:
         // 2017-01-18T11:23:53.214Z W Failed to set badge count
+        // eslint-disable-next-line @typescript-eslint/no-base-to-string
         let line = `${ts} ${level} ${args.join(" ")}\n`;
         // Do some cleanup
         line = line.replace(/token=[a-zA-Z0-9-]+/gm, "token=xxxxx");
@@ -134,7 +135,7 @@ export class IndexedDBLogStore {
         private indexedDB: IDBFactory,
         private logger: ConsoleLogger,
     ) {
-        this.id = "instance-" + randomString(16);
+        this.id = "instance-" + secureRandomString(16);
     }
 
     /**

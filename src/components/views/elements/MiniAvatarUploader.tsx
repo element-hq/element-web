@@ -2,22 +2,22 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
 import { EventType } from "matrix-js-sdk/src/matrix";
-import React, { useContext, useRef, useState, MouseEvent, ReactNode } from "react";
+import React, { useContext, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import { Tooltip } from "@vector-im/compound-web";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import RoomContext from "../../../contexts/RoomContext";
 import { useTimeout } from "../../../hooks/useTimeout";
 import { chromeFileInputFix } from "../../../utils/BrowserWorkarounds";
 import AccessibleButton from "./AccessibleButton";
 import Spinner from "./Spinner";
 import { getFileChanged } from "../settings/AvatarSetting.tsx";
+import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
 
 export const AVATAR_SIZE = "52px";
 
@@ -56,7 +56,7 @@ const MiniAvatarUploader: React.FC<IProps> = ({
 
     const label = hasAvatar || busy ? hasAvatarLabel : noAvatarLabel;
 
-    const { room } = useContext(RoomContext);
+    const { room } = useScopedRoomContext("room");
     const canSetAvatar =
         isUserAvatar || room?.currentState?.maySendStateEvent(EventType.RoomAvatar, cli.getSafeUserId());
     if (!canSetAvatar) return <React.Fragment>{children}</React.Fragment>;

@@ -2,24 +2,24 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021, 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent, createRef } from "react";
+import React, { type ChangeEvent, createRef } from "react";
 import {
-    Room,
-    MatrixEvent,
-    KnownPollKind,
+    type Room,
+    type MatrixEvent,
+    type KnownPollKind,
     M_POLL_KIND_DISCLOSED,
     M_POLL_KIND_UNDISCLOSED,
     M_POLL_START,
-    IPartialEvent,
-    TimelineEvents,
+    type IPartialEvent,
+    type TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
 import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
 
-import ScrollableBaseModal, { IScrollableBaseState } from "../dialogs/ScrollableBaseModal";
+import ScrollableBaseModal, { type IScrollableBaseState } from "../dialogs/ScrollableBaseModal";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import Modal from "../../../Modal";
 import { _t } from "../../../languageHandler";

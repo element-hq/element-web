@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -10,7 +10,7 @@ import { MatrixWidgetType } from "matrix-widget-api";
 
 import type { GroupCall, Room, RoomMember, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { mkEvent } from "./test-utils";
-import { Call, ConnectionState, ElementCall, JitsiCall } from "../../src/models/Call";
+import { Call, type ConnectionState, ElementCall, JitsiCall } from "../../src/models/Call";
 import { CallStore } from "../../src/stores/CallStore";
 
 export class MockedCall extends Call {
@@ -44,17 +44,20 @@ export class MockedCall extends Call {
     }
 
     public static create(room: Room, id: string) {
-        room.addLiveEvents([
-            mkEvent({
-                event: true,
-                type: this.EVENT_TYPE,
-                room: room.roomId,
-                user: "@alice:example.org",
-                content: { "m.type": "m.video", "m.intent": "m.prompt" },
-                skey: id,
-                ts: Date.now(),
-            }),
-        ]);
+        room.addLiveEvents(
+            [
+                mkEvent({
+                    event: true,
+                    type: this.EVENT_TYPE,
+                    room: room.roomId,
+                    user: "@alice:example.org",
+                    content: { "m.type": "m.video", "m.intent": "m.prompt" },
+                    skey: id,
+                    ts: Date.now(),
+                }),
+            ],
+            { addToState: true },
+        );
         // @ts-ignore deliberately calling a private method
         // Let CallStore know that a call might now exist
         CallStore.instance.updateRoom(room);
@@ -81,17 +84,20 @@ export class MockedCall extends Call {
 
     public destroy() {
         // Terminate the call for good measure
-        this.room.addLiveEvents([
-            mkEvent({
-                event: true,
-                type: MockedCall.EVENT_TYPE,
-                room: this.room.roomId,
-                user: "@alice:example.org",
-                content: { ...this.event.getContent(), "m.terminated": "Call ended" },
-                skey: this.widget.id,
-                ts: Date.now(),
-            }),
-        ]);
+        this.room.addLiveEvents(
+            [
+                mkEvent({
+                    event: true,
+                    type: MockedCall.EVENT_TYPE,
+                    room: this.room.roomId,
+                    user: "@alice:example.org",
+                    content: { ...this.event.getContent(), "m.terminated": "Call ended" },
+                    skey: this.widget.id,
+                    ts: Date.now(),
+                }),
+            ],
+            { addToState: true },
+        );
 
         super.destroy();
     }

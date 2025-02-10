@@ -2,7 +2,7 @@
  * Copyright 2024 New Vector Ltd.
  * Copyright 2024 The Matrix.org Foundation C.I.C.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -57,7 +57,7 @@ describe("<LayoutSwitcher />", () => {
             act(() => screen.getByRole("radio", { name: "Message bubbles" }).click());
 
             expect(screen.getByRole("radio", { name: "Message bubbles" })).toBeChecked();
-            await waitFor(() => expect(SettingsStore.getValue<boolean>("layout")).toBe(Layout.Bubble));
+            await waitFor(() => expect(SettingsStore.getValue("layout")).toBe(Layout.Bubble));
         });
     });
 
@@ -77,7 +77,7 @@ describe("<LayoutSwitcher />", () => {
             await renderLayoutSwitcher();
             act(() => screen.getByRole("checkbox", { name: "Show compact text and messages" }).click());
 
-            await waitFor(() => expect(SettingsStore.getValue<boolean>("useCompactLayout")).toBe(true));
+            await waitFor(() => expect(SettingsStore.getValue("useCompactLayout")).toBe(true));
         });
 
         it("should be disabled when the modern layout is not enabled", async () => {

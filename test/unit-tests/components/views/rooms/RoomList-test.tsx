@@ -3,7 +3,7 @@ Copyright 2024 New Vector Ltd.
 Copyright 2023 Mikhail Aheichyk
 Copyright 2023 Nordeck IT + Consulting GmbH.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -11,7 +11,7 @@ import React from "react";
 import { cleanup, queryByRole, render, screen, within } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk/src/matrix";
 
 import RoomList from "../../../../../src/components/views/rooms/RoomList";
 import ResizeNotifier from "../../../../../src/utils/ResizeNotifier";
@@ -26,7 +26,7 @@ import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import RoomListStore from "../../../../../src/stores/room-list/RoomListStore";
-import { ITagMap } from "../../../../../src/stores/room-list/algorithms/models";
+import { type ITagMap } from "../../../../../src/stores/room-list/algorithms/models";
 import { DefaultTagID } from "../../../../../src/stores/room-list/models";
 
 jest.mock("../../../../../src/customisations/helpers/UIComponents", () => ({

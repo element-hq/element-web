@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -10,9 +10,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import fetchMockJest from "fetch-mock-jest";
 
 import { advanceDateAndTime, stubClient } from "../test-utils";
-import { IMatrixClientPeg, MatrixClientPeg as peg } from "../../src/MatrixClientPeg";
-import SettingsStore from "../../src/settings/SettingsStore";
-import { SettingLevel } from "../../src/settings/SettingLevel";
+import { type IMatrixClientPeg, MatrixClientPeg as peg } from "../../src/MatrixClientPeg";
 
 jest.useFakeTimers();
 
@@ -81,27 +79,39 @@ describe("MatrixClientPeg", () => {
         });
 
         it("should initialise the rust crypto library by default", async () => {
-            const mockSetValue = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
-
             const mockInitRustCrypto = jest.spyOn(testPeg.safeGet(), "initRustCrypto").mockResolvedValue(undefined);
 
             const cryptoStoreKey = new Uint8Array([1, 2, 3, 4]);
             await testPeg.start({ rustCryptoStoreKey: cryptoStoreKey });
             expect(mockInitRustCrypto).toHaveBeenCalledWith({ storageKey: cryptoStoreKey });
+        });
 
-            // we should have stashed the setting in the settings store
-            expect(mockSetValue).toHaveBeenCalledWith("feature_rust_crypto", null, SettingLevel.DEVICE, true);
+        it("should try to start dehydration if dehydration is enabled", async () => {
+            const mockInitRustCrypto = jest.spyOn(testPeg.safeGet(), "initRustCrypto").mockResolvedValue(undefined);
+            const mockStartDehydration = jest.fn();
+            jest.spyOn(testPeg.safeGet(), "getCrypto").mockReturnValue({
+                isDehydrationSupported: jest.fn().mockResolvedValue(true),
+                startDehydration: mockStartDehydration,
+                setDeviceIsolationMode: jest.fn(),
+            } as any);
+            jest.spyOn(testPeg.safeGet(), "waitForClientWellKnown").mockResolvedValue({
+                "m.homeserver": {
+                    base_url: "http://example.com",
+                },
+                "org.matrix.msc3814": true,
+            } as any);
+
+            const cryptoStoreKey = new Uint8Array([1, 2, 3, 4]);
+            await testPeg.start({ rustCryptoStoreKey: cryptoStoreKey });
+            expect(mockInitRustCrypto).toHaveBeenCalledWith({ storageKey: cryptoStoreKey });
+            expect(mockStartDehydration).toHaveBeenCalledWith({ onlyIfKeyCached: true, rehydrate: false });
         });
 
         it("Should migrate existing login", async () => {
-            const mockSetValue = jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
             const mockInitRustCrypto = jest.spyOn(testPeg.safeGet(), "initRustCrypto").mockResolvedValue(undefined);
 
             await testPeg.start();
             expect(mockInitRustCrypto).toHaveBeenCalledTimes(1);
-
-            // we should have stashed the setting in the settings store
-            expect(mockSetValue).toHaveBeenCalledWith("feature_rust_crypto", null, SettingLevel.DEVICE, true);
         });
     });
 });

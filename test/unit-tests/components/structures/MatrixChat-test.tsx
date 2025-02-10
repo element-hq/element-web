@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -10,18 +10,18 @@ Please see LICENSE files in the repository root for full details.
 // https://github.com/dumbmatter/fakeIndexedDB?tab=readme-ov-file#jsdom-often-used-with-jest
 import "core-js/stable/structured-clone";
 import "fake-indexeddb/auto";
-import React, { ComponentProps } from "react";
-import { fireEvent, render, RenderResult, screen, waitFor, within, act } from "jest-matrix-react";
+import React, { type ComponentProps } from "react";
+import { fireEvent, render, type RenderResult, screen, waitFor, within, act } from "jest-matrix-react";
 import fetchMock from "fetch-mock-jest";
-import { Mocked, mocked } from "jest-mock";
-import { ClientEvent, MatrixClient, MatrixEvent, Room, SyncState } from "matrix-js-sdk/src/matrix";
-import { MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
+import { type Mocked, mocked } from "jest-mock";
+import { ClientEvent, type MatrixClient, MatrixEvent, Room, SyncState } from "matrix-js-sdk/src/matrix";
+import { type MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
 import * as MatrixJs from "matrix-js-sdk/src/matrix";
 import { completeAuthorizationCodeGrant } from "matrix-js-sdk/src/oidc/authorize";
 import { logger } from "matrix-js-sdk/src/logger";
 import { OidcError } from "matrix-js-sdk/src/oidc/error";
-import { BearerTokenResponse } from "matrix-js-sdk/src/oidc/validate";
-import { defer, IDeferred, sleep } from "matrix-js-sdk/src/utils";
+import { type BearerTokenResponse } from "matrix-js-sdk/src/oidc/validate";
+import { defer, type IDeferred, sleep } from "matrix-js-sdk/src/utils";
 import { CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
 import MatrixChat from "../../../../src/components/structures/MatrixChat";
@@ -44,10 +44,9 @@ import {
 } from "../../../test-utils";
 import * as leaveRoomUtils from "../../../../src/utils/leave-behaviour";
 import { OidcClientError } from "../../../../src/utils/oidc/error";
-import * as voiceBroadcastUtils from "../../../../src/voice-broadcast/utils/cleanUpBroadcasts";
 import LegacyCallHandler from "../../../../src/LegacyCallHandler";
 import { CallStore } from "../../../../src/stores/CallStore";
-import { Call } from "../../../../src/models/Call";
+import { type Call } from "../../../../src/models/Call";
 import { PosthogAnalytics } from "../../../../src/PosthogAnalytics";
 import PlatformPeg from "../../../../src/PlatformPeg";
 import EventIndexPeg from "../../../../src/indexing/EventIndexPeg";
@@ -61,7 +60,7 @@ import { ReleaseAnnouncementStore } from "../../../../src/stores/ReleaseAnnounce
 import { DRAFT_LAST_CLEANUP_KEY } from "../../../../src/DraftCleaner";
 import { UIFeature } from "../../../../src/settings/UIFeature";
 import AutoDiscoveryUtils from "../../../../src/utils/AutoDiscoveryUtils";
-import { ValidatedServerConfig } from "../../../../src/utils/ValidatedServerConfig";
+import { type ValidatedServerConfig } from "../../../../src/utils/ValidatedServerConfig";
 import Modal from "../../../../src/Modal.tsx";
 
 jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
@@ -126,10 +125,10 @@ describe("<MatrixChat />", () => {
         }),
         getVisibleRooms: jest.fn().mockReturnValue([]),
         getRooms: jest.fn().mockReturnValue([]),
-        setGlobalErrorOnUnknownDevices: jest.fn(),
         getCrypto: jest.fn().mockReturnValue({
             getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
             isCrossSigningReady: jest.fn().mockReturnValue(false),
+            isDehydrationSupported: jest.fn().mockReturnValue(false),
             getUserDeviceInfo: jest.fn().mockReturnValue(new Map()),
             getUserVerificationStatus: jest.fn().mockResolvedValue(new UserVerificationStatus(false, false, false)),
             getVersion: jest.fn().mockReturnValue("1"),
@@ -811,7 +810,6 @@ describe("<MatrixChat />", () => {
                     jest.spyOn(LegacyCallHandler.instance, "hangupAllCalls")
                         .mockClear()
                         .mockImplementation(() => {});
-                    jest.spyOn(voiceBroadcastUtils, "cleanUpBroadcasts").mockImplementation(async () => {});
                     jest.spyOn(PosthogAnalytics.instance, "logout").mockImplementation(() => {});
                     jest.spyOn(EventIndexPeg, "deleteEventIndex").mockImplementation(async () => {});
 
@@ -831,20 +829,10 @@ describe("<MatrixChat />", () => {
                     jest.spyOn(logger, "warn").mockClear();
                 });
 
-                afterAll(() => {
-                    jest.spyOn(voiceBroadcastUtils, "cleanUpBroadcasts").mockRestore();
-                });
-
                 it("should hangup all legacy calls", async () => {
                     await getComponentAndWaitForReady();
                     await dispatchLogoutAndWait();
                     expect(LegacyCallHandler.instance.hangupAllCalls).toHaveBeenCalled();
-                });
-
-                it("should cleanup broadcasts", async () => {
-                    await getComponentAndWaitForReady();
-                    await dispatchLogoutAndWait();
-                    expect(voiceBroadcastUtils.cleanUpBroadcasts).toHaveBeenCalled();
                 });
 
                 it("should disconnect all calls", async () => {
@@ -1015,7 +1003,10 @@ describe("<MatrixChat />", () => {
                     userHasCrossSigningKeys: jest.fn().mockResolvedValue(false),
                     // This needs to not finish immediately because we need to test the screen appears
                     bootstrapCrossSigning: jest.fn().mockImplementation(() => bootstrapDeferred.promise),
+                    resetKeyBackup: jest.fn(),
                     isEncryptionEnabledInRoom: jest.fn().mockResolvedValue(false),
+                    checkKeyBackupAndEnable: jest.fn().mockResolvedValue(null),
+                    isDehydrationSupported: jest.fn().mockReturnValue(false),
                 };
                 loginClient.getCrypto.mockReturnValue(mockCrypto as any);
             });
@@ -1123,19 +1114,6 @@ describe("<MatrixChat />", () => {
 
                 // set up keys screen is rendered
                 expect(screen.getByText("Setting up keys")).toBeInTheDocument();
-            });
-
-            it("should go to use case selection if user just registered", async () => {
-                loginClient.doesServerSupportUnstableFeature.mockResolvedValue(true);
-                MatrixClientPeg.setJustRegisteredUserId(userId);
-
-                await getComponentAndLogin();
-
-                bootstrapDeferred.resolve();
-
-                await expect(
-                    screen.findByRole("heading", { name: "You're in", level: 1 }),
-                ).resolves.toBeInTheDocument();
             });
         });
     });
@@ -1503,7 +1481,7 @@ describe("<MatrixChat />", () => {
         };
 
         const enabledMobileRegistration = (): void => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName): any => {
                 if (settingName === "Registration.mobileRegistrationHelper") return true;
                 if (settingName === UIFeature.Registration) return true;
             });

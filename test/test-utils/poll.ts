@@ -2,23 +2,23 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Mocked } from "jest-mock";
+import { type Mocked } from "jest-mock";
 import {
-    MatrixClient,
+    type MatrixClient,
     MatrixEvent,
     Room,
     M_POLL_START,
-    PollAnswer,
+    type PollAnswer,
     M_POLL_KIND_DISCLOSED,
     M_POLL_END,
     M_POLL_RESPONSE,
     M_TEXT,
 } from "matrix-js-sdk/src/matrix";
-import { randomString } from "matrix-js-sdk/src/randomstring";
+import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 
 import { flushPromises } from "./utilities";
 
@@ -67,7 +67,7 @@ export const makePollEndEvent = (
     id?: string,
 ): MatrixEvent => {
     return new MatrixEvent({
-        event_id: id || randomString(16),
+        event_id: id || secureRandomString(16),
         room_id: roomId,
         origin_server_ts: ts,
         type: M_POLL_END.name,
@@ -91,7 +91,7 @@ export const makePollResponseEvent = (
     ts = 0,
 ): MatrixEvent =>
     new MatrixEvent({
-        event_id: randomString(16),
+        event_id: secureRandomString(16),
         room_id: roomId,
         origin_server_ts: ts,
         type: M_POLL_RESPONSE.name,

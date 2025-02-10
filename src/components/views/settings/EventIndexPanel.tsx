@@ -2,11 +2,12 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React, { lazy } from "react";
+import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
@@ -28,8 +29,8 @@ interface IState {
     eventIndexingEnabled: boolean;
 }
 
-export default class EventIndexPanel extends React.Component<{}, IState> {
-    public constructor(props: {}) {
+export default class EventIndexPanel extends React.Component<EmptyObject, IState> {
+    public constructor(props: EmptyObject) {
         super(props);
 
         this.state = {
@@ -214,7 +215,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
                     <SettingsSubsectionText>
                         {this.state.enabling ? <InlineSpinner /> : _t("settings|security|message_search_failed")}
                     </SettingsSubsectionText>
-                    {EventIndexPeg.error && (
+                    {EventIndexPeg.error ? (
                         <SettingsSubsectionText>
                             <details>
                                 <summary>{_t("common|advanced")}</summary>
@@ -230,7 +231,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
                                 </p>
                             </details>
                         </SettingsSubsectionText>
-                    )}
+                    ) : undefined}
                 </>
             );
         }

@@ -2,17 +2,17 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef } from "react";
-import { DialogContent, DialogProps } from "@matrix-org/react-sdk-module-api/lib/components/DialogContent";
+import { type DialogContent, type DialogProps } from "@matrix-org/react-sdk-module-api/lib/components/DialogContent";
 import { logger } from "matrix-js-sdk/src/logger";
-import { ModuleApi } from "@matrix-org/react-sdk-module-api/lib/ModuleApi";
-import { ModuleUiDialogOptions } from "@matrix-org/react-sdk-module-api/lib/types/ModuleUiDialogOptions";
+import { type ModuleApi } from "@matrix-org/react-sdk-module-api/lib/ModuleApi";
+import { type ModuleUiDialogOptions } from "@matrix-org/react-sdk-module-api/lib/types/ModuleUiDialogOptions";
 
-import ScrollableBaseModal, { IScrollableBaseState } from "./ScrollableBaseModal";
+import ScrollableBaseModal, { type IScrollableBaseState } from "./ScrollableBaseModal";
 import { _t } from "../../../languageHandler";
 
 interface IProps<P extends DialogProps, C extends DialogContent<P>> {

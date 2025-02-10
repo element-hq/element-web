@@ -10,6 +10,7 @@ const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const HtmlWebpackInjectPreload = require("@principalstudio/html-webpack-inject-preload");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const VersionFilePlugin = require("webpack-version-file-plugin");
+const { RetryChunkLoadPlugin } = require("webpack-retry-chunk-load-plugin");
 
 // Environment variables
 // RIOT_OG_IMAGE_URL: specifies the URL to the image which should be used for the opengraph logo.
@@ -120,6 +121,10 @@ module.exports = (env, argv) => {
     return {
         ...development,
 
+        experiments: {
+            asyncWebAssembly: true,
+        },
+
         bail: true,
 
         entry: {
@@ -187,18 +192,6 @@ module.exports = (env, argv) => {
         },
 
         resolve: {
-            // We define an alternative import path so we can safely use src/ across the react-sdk
-            // and js-sdk. We already import from src/ where possible to ensure our source maps are
-            // extremely accurate (and because we're capable of compiling the layers manually rather
-            // than relying on partially-mangled output from babel), though we do need to fix the
-            // package level import (stuff like `import {Thing} from "matrix-js-sdk"` for example).
-            // We can't use the aliasing down below to point at src/ because that'll fail to resolve
-            // the package.json for the dependency. Instead, we rely on the package.json of each
-            // layer to have our custom alternate fields to load things in the right order. These are
-            // the defaults of webpack prepended with `matrix_src_`.
-            mainFields: ["matrix_src_browser", "matrix_src_main", "browser", "main"],
-            aliasFields: ["matrix_src_browser", "browser"],
-
             // We need to specify that TS can be resolved without an extension
             extensions: [".js", ".json", ".ts", ".tsx"],
             alias: {
@@ -231,12 +224,23 @@ module.exports = (env, argv) => {
 
                 // Polyfill needed by counterpart
                 "util": require.resolve("util/"),
-                // Polyfill needed by matrix-js-sdk/src/crypto
-                "buffer": require.resolve("buffer/"),
                 // Polyfill needed by sentry
                 "process/browser": require.resolve("process/browser"),
             },
+
+            // Enable the custom "wasm-esm" export condition [1] to indicate to
+            // matrix-sdk-crypto-wasm that we support the ES Module Integration
+            // Proposal for WebAssembly [2].  The "..." magic value means "the
+            // default conditions" [3].
+            //
+            // [1]: https://nodejs.org/api/packages.html#conditional-exports
+            // [2]: https://github.com/webassembly/esm-integration
+            // [3]: https://github.com/webpack/webpack/issues/17692#issuecomment-1866272674.
+            conditionNames: ["matrix-org:wasm-esm", "..."],
         },
+
+        // Some of our deps have broken source maps, so we have to ignore warnings or exclude them one-by-one
+        ignoreWarnings: [/Failed to parse source map/],
 
         module: {
             noParse: [
@@ -250,6 +254,11 @@ module.exports = (env, argv) => {
                 /highlight\.js[\\/]lib[\\/]languages/,
             ],
             rules: [
+                {
+                    test: /\.js$/,
+                    enforce: "pre",
+                    use: ["source-map-loader"],
+                },
                 {
                     test: /\.(ts|js)x?$/,
                     include: (f) => {
@@ -671,7 +680,6 @@ module.exports = (env, argv) => {
             // Automatically load buffer & process modules as we use them without explicitly
             // importing them
             new webpack.ProvidePlugin({
-                Buffer: ["buffer", "Buffer"],
                 process: "process/browser",
             }),
 
@@ -683,18 +691,33 @@ module.exports = (env, argv) => {
                 templateString: "<%= extras.VERSION %>",
                 extras: { VERSION },
             }),
+
+            // Due to issues such as https://github.com/vector-im/element-web/issues/25277 we should retry chunk loading
+            new RetryChunkLoadPlugin({
+                cacheBust: `() => Date.now()`,
+                retryDelay: 500,
+                maxRetries: 3,
+            }),
         ].filter(Boolean),
 
         output: {
             path: path.join(__dirname, "webapp"),
 
-            // The generated JS (and CSS, from the extraction plugin) are put in a
-            // unique subdirectory for the build. There will only be one such
-            // 'bundle' directory in the generated tarball; however, hosting
-            // servers can collect 'bundles' from multiple versions into one
-            // directory and symlink it into place - this allows users who loaded
-            // an older version of the application to continue to access webpack
-            // chunks even after the app is redeployed.
+            // There are a lot of assets that need to be kept in sync with each other
+            // (once a user loads one version of the app, they need to keep being served
+            // assets for that version).
+            //
+            // To deal with this, we try to put as many as possible of the referenced assets
+            // into a build-specific subdirectory. This includes generated javascript, as well
+            // as CSS extracted by the MiniCssExtractPlugin (see config above) and WASM modules
+            // referenced via `import` statements.
+            //
+            // Hosting servers can then collect 'bundles' from multiple versions
+            // into one directory, and continue to serve them even after a new version is deployed.
+            // This allows users who loaded an older version of the application to continue to
+            // access assets even after the app is redeployed.
+            //
+            // See `scripts/deploy.py` for a script which manages the deployment in this way.
             filename: "bundles/[fullhash]/[name].js",
             chunkFilename: "bundles/[fullhash]/[name].js",
             webassemblyModuleFilename: "bundles/[fullhash]/[modulehash].wasm",
@@ -742,9 +765,11 @@ module.exports = (env, argv) => {
  */
 function getAssetOutputPath(url, resourcePath) {
     const isKaTeX = resourcePath.includes("KaTeX");
+    const isFontSource = resourcePath.includes("@fontsource");
     // `res` is the parent dir for our own assets in various layers
     // `dist` is the parent dir for KaTeX assets
-    const prefix = /^.*[/\\](dist|res)[/\\]/;
+    // `files` is the parent dir for @fontsource assets
+    const prefix = /^.*[/\\](dist|res|files)[/\\]/;
 
     /**
      * Only needed for https://github.com/element-hq/element-web/pull/15939
@@ -768,6 +793,10 @@ function getAssetOutputPath(url, resourcePath) {
     const compoundMatch = outputDir.match(compoundImportsPrefix);
     if (compoundMatch) {
         outputDir = outputDir.substring(compoundMatch.index + compoundMatch[0].length);
+    }
+
+    if (isFontSource) {
+        outputDir = "fonts";
     }
 
     if (isKaTeX) {

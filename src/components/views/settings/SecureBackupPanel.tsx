@@ -3,13 +3,14 @@ Copyright 2024 New Vector Ltd.
 Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 Copyright 2018 New Vector Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { lazy, ReactNode } from "react";
-import { CryptoEvent, BackupTrustInfo, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
+import React, { lazy, type ReactNode } from "react";
+import { CryptoEvent, type BackupTrustInfo, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
+import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";
@@ -60,10 +61,10 @@ interface IState {
     sessionsRemaining: number | null;
 }
 
-export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
+export default class SecureBackupPanel extends React.PureComponent<EmptyObject, IState> {
     private unmounted = false;
 
-    public constructor(props: {}) {
+    public constructor(props: EmptyObject) {
         super(props);
 
         this.state = {

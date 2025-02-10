@@ -2,21 +2,21 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Mocked, mocked } from "jest-mock";
-import { MatrixEvent, Room, MatrixClient, Device, ClientStoppedError } from "matrix-js-sdk/src/matrix";
+import { type Mocked, mocked } from "jest-mock";
+import { MatrixEvent, type Room, type MatrixClient, Device, ClientStoppedError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
     CryptoEvent,
-    CrossSigningStatus,
-    CryptoApi,
+    type CrossSigningStatus,
+    type CryptoApi,
     DeviceVerificationStatus,
-    KeyBackupInfo,
+    type KeyBackupInfo,
 } from "matrix-js-sdk/src/crypto-api";
-import { CryptoSessionStateChange } from "@matrix-org/analytics-events/types/typescript/CryptoSessionStateChange";
+import { type CryptoSessionStateChange } from "@matrix-org/analytics-events/types/typescript/CryptoSessionStateChange";
 
 import DeviceListener from "../../src/DeviceListener";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
@@ -329,7 +329,7 @@ describe("DeviceListener", () => {
                 });
 
                 it("shows verify session toast when account has cross signing", async () => {
-                    mockCrypto!.userHasCrossSigningKeys.mockResolvedValue(true);
+                    mockCrypto!.isCrossSigningReady.mockResolvedValue(true);
                     await createAndStart();
 
                     expect(mockCrypto!.getUserDeviceInfo).toHaveBeenCalled();
@@ -337,28 +337,29 @@ describe("DeviceListener", () => {
                         SetupEncryptionToast.Kind.VERIFY_THIS_SESSION,
                     );
                 });
-
-                it("checks key backup status when when account has cross signing", async () => {
-                    mockCrypto!.getCrossSigningKeyId.mockResolvedValue(null);
-                    mockCrypto!.userHasCrossSigningKeys.mockResolvedValue(true);
-                    await createAndStart();
-
-                    expect(mockCrypto!.getActiveSessionBackupVersion).toHaveBeenCalled();
-                });
             });
 
             describe("when user does have a cross signing id on this device", () => {
                 beforeEach(() => {
+                    mockCrypto!.isCrossSigningReady.mockResolvedValue(true);
                     mockCrypto!.getCrossSigningKeyId.mockResolvedValue("abc");
+                    mockCrypto!.getDeviceVerificationStatus.mockResolvedValue(
+                        new DeviceVerificationStatus({
+                            trustCrossSignedDevices: true,
+                            crossSigningVerified: true,
+                        }),
+                    );
                 });
 
-                it("shows set up encryption toast when user has a key backup available", async () => {
+                it("shows set up recovery toast when user has a key backup available", async () => {
                     // non falsy response
                     mockCrypto.getKeyBackupInfo.mockResolvedValue({} as unknown as KeyBackupInfo);
+                    mockClient.secretStorage.getDefaultKeyId.mockResolvedValue(null);
+
                     await createAndStart();
 
                     expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(
-                        SetupEncryptionToast.Kind.SET_UP_ENCRYPTION,
+                        SetupEncryptionToast.Kind.SET_UP_RECOVERY,
                     );
                 });
             });

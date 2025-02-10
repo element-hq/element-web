@@ -2,13 +2,13 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021-2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { Room, MatrixEvent, EventType, MsgType } from "matrix-js-sdk/src/matrix";
+import { type Room, MatrixEvent, EventType, MsgType } from "matrix-js-sdk/src/matrix";
 import { renderToStaticMarkup } from "react-dom/server";
 import { logger } from "matrix-js-sdk/src/logger";
 import escapeHtml from "escape-html";
@@ -26,7 +26,7 @@ import * as Avatar from "../../Avatar";
 import EventTile from "../../components/views/rooms/EventTile";
 import DateSeparator from "../../components/views/messages/DateSeparator";
 import BaseAvatar from "../../components/views/avatars/BaseAvatar";
-import { ExportType, IExportOptions } from "./exportUtils";
+import { type ExportType, type IExportOptions } from "./exportUtils";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import getExportCSS from "./exportCSS";
 import { textForEvent } from "../../TextForEvent";
@@ -431,7 +431,7 @@ export default class HTMLExporter extends Exporter {
                 !this.needsDateSeparator(event, prevEvent) &&
                 shouldFormContinuation(prevEvent, event, this.room.client, false);
             const body = await this.createMessageBody(event, shouldBeJoined);
-            this.totalSize += Buffer.byteLength(body);
+            this.totalSize += new TextEncoder().encode(body).byteLength;
             content += body;
             prevEvent = event;
         }

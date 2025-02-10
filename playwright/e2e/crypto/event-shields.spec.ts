@@ -2,9 +2,11 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022-2024 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
+
+import { type Locator } from "@playwright/test";
 
 import { expect, test } from "../../element-web-test";
 import {
@@ -17,6 +19,7 @@ import {
     verify,
 } from "./utils";
 import { bootstrapCrossSigningForClient } from "../../pages/client.ts";
+import { type ElementAppPage } from "../../pages/ElementAppPage.ts";
 
 test.describe("Cryptography", function () {
     test.use({
@@ -50,6 +53,8 @@ test.describe("Cryptography", function () {
 
             // Even though Alice has seen Bob's join event, Bob may not have done so yet. Wait for the sync to arrive.
             await bob.awaitRoomMembership(testRoomId);
+
+            await app.client.network.setupRoute();
         });
 
         test("should show the correct shield on e2e events", async ({
@@ -60,6 +65,9 @@ test.describe("Cryptography", function () {
         }, workerInfo) => {
             // Bob has a second, not cross-signed, device
             const bobSecondDevice = await createSecondBotDevice(page, homeserver, bob);
+
+            // Dismiss the toast nagging us to set up recovery otherwise it gets in the way of clicking the room list
+            await page.getByRole("button", { name: "Not now" }).click();
 
             await bob.sendEvent(testRoomId, null, "m.room.encrypted", {
                 algorithm: "m.megolm.v1.aes-sha2",
@@ -130,8 +138,7 @@ test.describe("Cryptography", function () {
                 "Encrypted by a device not verified by its owner.",
             );
 
-            /* In legacy crypto: should show a grey padlock for a message from a deleted device.
-             * In rust crypto: should show a red padlock for a message from an unverified device.
+            /* Should show a red padlock for a message from an unverified device.
              * Rust crypto remembers the verification state of the sending device, so it will know that the device was
              * unverified, even if it gets deleted. */
             // bob deletes his second device
@@ -165,9 +172,7 @@ test.describe("Cryptography", function () {
             await expect(lastE2eIcon).toHaveClass(/mx_EventTile_e2eIcon_warning/);
             await lastE2eIcon.focus();
             await expect(await app.getTooltipForElement(lastE2eIcon)).toContainText(
-                workerInfo.project.name === "Legacy Crypto"
-                    ? "Encrypted by an unknown or deleted device."
-                    : "Encrypted by a device not verified by its owner.",
+                "Encrypted by a device not verified by its owner.",
             );
         });
 
@@ -205,7 +210,7 @@ test.describe("Cryptography", function () {
                 window.localStorage.clear();
             });
             await page.reload();
-            await logIntoElement(page, homeserver, aliceCredentials, securityKey);
+            await logIntoElement(page, aliceCredentials, securityKey);
 
             /* go back to the test room and find Bob's message again */
             await app.viewRoomById(testRoomId);
@@ -277,6 +282,15 @@ test.describe("Cryptography", function () {
             bot: bob,
             homeserver,
         }) => {
+            // Workaround for https://github.com/element-hq/element-web/issues/28640:
+            // make sure that Alice has seen Bob's identity before she goes offline. We do this by opening
+            // his user info.
+            await app.toggleRoomInfoPanel();
+            const rightPanel = page.locator(".mx_RightPanel");
+            await rightPanel.getByRole("menuitem", { name: "People" }).click();
+            await rightPanel.getByRole("button", { name: bob.credentials!.userId }).click();
+            await expect(rightPanel.locator(".mx_UserInfo_devices")).toContainText("1 session");
+
             // Our app is blocked from syncing while Bob sends his messages.
             await app.client.network.goOffline();
 
@@ -306,7 +320,7 @@ test.describe("Cryptography", function () {
             );
 
             const penultimate = page.locator(".mx_EventTile").filter({ hasText: "test encrypted from verified" });
-            await expect(penultimate.locator(".mx_EventTile_e2eIcon")).not.toBeVisible();
+            await assertNoE2EIcon(penultimate, app);
         });
 
         test("should show correct shields on events sent by users with changed identity", async ({
@@ -335,3 +349,21 @@ test.describe("Cryptography", function () {
         });
     });
 });
+
+/**
+ * Check that the given message doesn't have an E2E warning icon.
+ *
+ * If it does, throw an error.
+ */
+async function assertNoE2EIcon(messageLocator: Locator, app: ElementAppPage) {
+    // Make sure the message itself exists, before we check if it has any icons
+    await messageLocator.waitFor();
+
+    const e2eIcon = messageLocator.locator(".mx_EventTile_e2eIcon");
+    if ((await e2eIcon.count()) > 0) {
+        // uh-oh, there is an e2e icon. Let's find out what it's about so that we can throw a helpful error.
+        await e2eIcon.focus();
+        const tooltip = await app.getTooltipForElement(e2eIcon);
+        throw new Error(`Found an unexpected e2eIcon with tooltip '${await tooltip.textContent()}'`);
+    }
+}

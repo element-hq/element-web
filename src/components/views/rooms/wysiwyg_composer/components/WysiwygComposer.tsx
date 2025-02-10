@@ -2,29 +2,29 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { memo, MutableRefObject, ReactNode, useEffect, useMemo, useRef } from "react";
-import { IEventRelation } from "matrix-js-sdk/src/matrix";
+import React, { memo, type MutableRefObject, type ReactNode, useEffect, useMemo, useRef } from "react";
+import { type IEventRelation } from "matrix-js-sdk/src/matrix";
 import { EMOTICON_TO_EMOJI } from "@matrix-org/emojibase-bindings";
-import { useWysiwyg, FormattingFunctions } from "@vector-im/matrix-wysiwyg";
+import { useWysiwyg, type FormattingFunctions } from "@vector-im/matrix-wysiwyg";
 import classNames from "classnames";
 
-import Autocomplete from "../../Autocomplete";
+import type Autocomplete from "../../Autocomplete";
 import { WysiwygAutocomplete } from "./WysiwygAutocomplete";
 import { FormattingButtons } from "./FormattingButtons";
 import { Editor } from "./Editor";
 import { useInputEventProcessor } from "../hooks/useInputEventProcessor";
 import { useSetCursorPosition } from "../hooks/useSetCursorPosition";
 import { useIsFocused } from "../hooks/useIsFocused";
-import { useRoomContext } from "../../../../../contexts/RoomContext";
 import defaultDispatcher from "../../../../../dispatcher/dispatcher";
 import { Action } from "../../../../../dispatcher/actions";
 import { parsePermalink } from "../../../../../utils/permalinks/Permalinks";
 import { isNotNull } from "../../../../../Typeguards";
 import { useSettingValue } from "../../../../../hooks/useSettings";
+import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.tsx";
 
 interface WysiwygComposerProps {
     disabled?: boolean;
@@ -56,12 +56,12 @@ export const WysiwygComposer = memo(function WysiwygComposer({
     children,
     eventRelation,
 }: WysiwygComposerProps) {
-    const { room } = useRoomContext();
+    const { room } = useScopedRoomContext("room");
     const autocompleteRef = useRef<Autocomplete | null>(null);
 
     const inputEventProcessor = useInputEventProcessor(onSend, autocompleteRef, initialContent, eventRelation);
 
-    const isAutoReplaceEmojiEnabled = useSettingValue<boolean>("MessageComposerInput.autoReplaceEmoji");
+    const isAutoReplaceEmojiEnabled = useSettingValue("MessageComposerInput.autoReplaceEmoji");
     const emojiSuggestions = useMemo(() => getEmojiSuggestions(isAutoReplaceEmojiEnabled), [isAutoReplaceEmojiEnabled]);
 
     const { ref, isWysiwygReady, content, actionStates, wysiwyg, suggestion, messageContent } = useWysiwyg({

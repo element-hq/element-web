@@ -1,12 +1,12 @@
 /*
 Copyright 2018-2024 New Vector Ltd.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import EventEmitter from "events";
-import { MatrixEvent, RoomStateEvent, RoomState } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, RoomStateEvent, type RoomState } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import WidgetUtils from "../utils/WidgetUtils";

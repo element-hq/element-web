@@ -2,19 +2,19 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022, 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Composer as ComposerEvent } from "@matrix-org/analytics-events/types/typescript/Composer";
+import { type Composer as ComposerEvent } from "@matrix-org/analytics-events/types/typescript/Composer";
 import {
-    IEventRelation,
-    MatrixEvent,
-    ISendEventResponse,
-    MatrixClient,
+    type IEventRelation,
+    type MatrixEvent,
+    type ISendEventResponse,
+    type MatrixClient,
     THREAD_RELATION_TYPE,
 } from "matrix-js-sdk/src/matrix";
-import { RoomMessageEventContent } from "matrix-js-sdk/src/types";
+import { type RoomMessageEventContent } from "matrix-js-sdk/src/types";
 
 import { PosthogAnalytics } from "../../../../../PosthogAnalytics";
 import SettingsStore from "../../../../../settings/SettingsStore";
@@ -22,11 +22,11 @@ import { decorateStartSendingTime, sendRoundTripMetric } from "../../../../../se
 import { doMaybeLocalRoomAction } from "../../../../../utils/local-room";
 import { CHAT_EFFECTS } from "../../../../../effects";
 import { containsEmoji } from "../../../../../effects/utils";
-import { IRoomState } from "../../../../structures/RoomView";
+import { type IRoomState } from "../../../../structures/RoomView";
 import dis from "../../../../../dispatcher/dispatcher";
 import { createRedactEventDialog } from "../../../dialogs/ConfirmRedactDialog";
 import { endEditing, cancelPreviousPendingEdit } from "./editing";
-import EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
+import type EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
 import { createMessageContent, EMOTE_PREFIX } from "./createMessageContent";
 import { isContentModified } from "./isContentModified";
 import { CommandCategories, getCommand } from "../../../../../SlashCommands";
@@ -39,7 +39,7 @@ export interface SendMessageParams {
     mxClient: MatrixClient;
     relation?: IEventRelation;
     replyToEvent?: MatrixEvent;
-    roomContext: IRoomState;
+    roomContext: Pick<IRoomState, "timelineRenderingType" | "room">;
 }
 
 export async function sendMessage(
@@ -177,7 +177,7 @@ export async function sendMessage(
 
 interface EditMessageParams {
     mxClient: MatrixClient;
-    roomContext: IRoomState;
+    roomContext: Pick<IRoomState, "timelineRenderingType">;
     editorStateTransfer: EditorStateTransfer;
 }
 

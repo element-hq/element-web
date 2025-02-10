@@ -2,14 +2,14 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021, 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode } from "react";
-import { Room, IEventRelation, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import React, { type ReactNode } from "react";
+import { type Room, type IEventRelation, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { Optional } from "matrix-events-sdk";
+import { type Optional } from "matrix-events-sdk";
 
 import { _t } from "../../../languageHandler";
 import { RecordingState } from "../../../audio/VoiceRecording";
@@ -32,7 +32,7 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { attachMentions, attachRelation } from "./SendMessageComposer";
 import { addReplyToMessageContent } from "../../../utils/Reply";
 import RoomContext from "../../../contexts/RoomContext";
-import { IUpload, VoiceMessageRecording } from "../../../audio/VoiceMessageRecording";
+import { type IUpload, type VoiceMessageRecording } from "../../../audio/VoiceMessageRecording";
 import { createVoiceMessageContent } from "../../../utils/createVoiceMessageContent";
 import AccessibleButton from "../elements/AccessibleButton";
 
@@ -53,7 +53,7 @@ interface IState {
  */
 export default class VoiceRecordComposerTile extends React.PureComponent<IProps, IState> {
     public static contextType = RoomContext;
-    public declare context: React.ContextType<typeof RoomContext>;
+    declare public context: React.ContextType<typeof RoomContext>;
     private voiceRecordingId: string;
 
     public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {

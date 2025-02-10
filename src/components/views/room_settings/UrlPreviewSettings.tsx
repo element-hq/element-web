@@ -5,12 +5,12 @@ Copyright 2018, 2019 New Vector Ltd
 Copyright 2017 Travis Ralston
 Copyright 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode, JSX } from "react";
-import { Room } from "matrix-js-sdk/src/matrix";
+import React, { type ReactNode, type JSX } from "react";
+import { type Room } from "matrix-js-sdk/src/matrix";
 import { InlineSpinner } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
@@ -20,7 +20,7 @@ import { Action } from "../../../dispatcher/actions";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import SettingsFlag from "../elements/SettingsFlag";
 import SettingsFieldset from "../settings/SettingsFieldset";
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import { useIsEncrypted } from "../../../hooks/useIsEncrypted.ts";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext.tsx";
 import { useSettingValueAt } from "../../../hooks/useSettings.ts";

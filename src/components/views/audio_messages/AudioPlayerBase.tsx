@@ -2,20 +2,20 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021, 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, ReactNode, RefObject } from "react";
+import React, { createRef, type ReactNode, type RefObject } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { Playback, PlaybackState } from "../../../audio/Playback";
+import { type Playback, type PlaybackState } from "../../../audio/Playback";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { _t } from "../../../languageHandler";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
-import SeekBar from "./SeekBar";
-import PlayPauseButton from "./PlayPauseButton";
+import type SeekBar from "./SeekBar";
+import type PlayPauseButton from "./PlayPauseButton";
 
 export interface IProps {
     // Playback instance to render. Cannot change during component lifecycle: create

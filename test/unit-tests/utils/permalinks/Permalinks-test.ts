@@ -3,11 +3,11 @@ Copyright 2024 New Vector Ltd.
 Copyright 2019-2022 The Matrix.org Foundation C.I.C.
 Copyright 2018 New Vector Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EventEmitter } from "events";
+import { type EventEmitter } from "events";
 import { Room, RoomMember, EventType, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
@@ -19,7 +19,7 @@ import {
     parsePermalink,
     RoomPermalinkCreator,
 } from "../../../../src/utils/permalinks/Permalinks";
-import { IConfigOptions } from "../../../../src/IConfigOptions";
+import { type IConfigOptions } from "../../../../src/IConfigOptions";
 import SdkConfig from "../../../../src/SdkConfig";
 import { getMockClientWithEventEmitter } from "../../../test-utils";
 

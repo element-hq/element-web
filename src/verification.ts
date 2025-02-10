@@ -2,22 +2,21 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019, 2020 , 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { User, MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
-import { CrossSigningKey, VerificationRequest } from "matrix-js-sdk/src/crypto-api";
+import { type User, type MatrixClient, type RoomMember } from "matrix-js-sdk/src/matrix";
+import { CrossSigningKey, type VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 
 import dis from "./dispatcher/dispatcher";
 import Modal from "./Modal";
 import { RightPanelPhases } from "./stores/right-panel/RightPanelStorePhases";
 import { accessSecretStorage } from "./SecurityManager";
 import UntrustedDeviceDialog from "./components/views/dialogs/UntrustedDeviceDialog";
-import { IDevice } from "./components/views/right_panel/UserInfo";
-import { ManualDeviceKeyVerificationDialog } from "./components/views/dialogs/ManualDeviceKeyVerificationDialog";
+import { type IDevice } from "./components/views/right_panel/UserInfo";
 import RightPanelStore from "./stores/right-panel/RightPanelStore";
-import { IRightPanelCardState } from "./stores/right-panel/RightPanelStoreIPanelState";
+import { type IRightPanelCardState } from "./stores/right-panel/RightPanelStoreIPanelState";
 import { findDMForUser } from "./utils/dm/findDMForUser";
 
 async function enable4SIfNeeded(matrixClient: MatrixClient): Promise<boolean> {
@@ -53,11 +52,6 @@ export async function verifyDevice(matrixClient: MatrixClient, user: User, devic
                     .getCrypto()
                     ?.requestDeviceVerification(user.userId, device.deviceId);
                 setRightPanel({ member: user, verificationRequestPromise });
-            } else if (action === "legacy") {
-                Modal.createDialog(ManualDeviceKeyVerificationDialog, {
-                    userId: user.userId,
-                    device,
-                });
             }
         },
     });
@@ -81,7 +75,7 @@ function setRightPanel(state: IRightPanelCardState): void {
     } else {
         RightPanelStore.instance.setCards([
             { phase: RightPanelPhases.RoomSummary },
-            { phase: RightPanelPhases.RoomMemberInfo, state: { member: state.member } },
+            { phase: RightPanelPhases.MemberInfo, state: { member: state.member } },
             { phase: RightPanelPhases.EncryptionPanel, state },
         ]);
     }

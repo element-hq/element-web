@@ -2,24 +2,24 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    MatrixClient,
-    IEventRelation,
-    MatrixError,
+    type MatrixClient,
+    type IEventRelation,
+    type MatrixError,
     THREAD_RELATION_TYPE,
     ContentHelpers,
     LocationAssetType,
 } from "matrix-js-sdk/src/matrix";
-import { RoomMessageEventContent } from "matrix-js-sdk/src/types";
+import { type RoomMessageEventContent } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
-import QuestionDialog, { IQuestionDialogProps } from "../dialogs/QuestionDialog";
+import QuestionDialog, { type IQuestionDialogProps } from "../dialogs/QuestionDialog";
 import SdkConfig from "../../../SdkConfig";
 import { OwnBeaconStore } from "../../../stores/OwnBeaconStore";
 import { doMaybeLocalRoomAction } from "../../../utils/local-room";

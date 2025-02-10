@@ -2,17 +2,17 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { FormattingFunctions } from "@vector-im/matrix-wysiwyg";
-import React, { ChangeEvent, useState } from "react";
+import { type FormattingFunctions } from "@vector-im/matrix-wysiwyg";
+import React, { type ChangeEvent, useState } from "react";
 
 import { _t } from "../../../../../languageHandler";
 import Modal from "../../../../../Modal";
 import Field from "../../../elements/Field";
-import { ComposerContextState } from "../ComposerContext";
+import { type ComposerContextState } from "../ComposerContext";
 import { isSelectionEmpty, setSelection } from "../utils/selection";
 import BaseDialog from "../../../dialogs/BaseDialog";
 import DialogButtons from "../../../elements/DialogButtons";

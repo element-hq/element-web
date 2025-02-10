@@ -2,15 +2,15 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MockedObject } from "jest-mock";
-import { EventTimeline, EventType, MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { type MockedObject } from "jest-mock";
+import { type EventTimeline, EventType, type MatrixClient, type MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
-import { IRoomState, MainSplitContentType } from "../../src/components/structures/RoomView";
+import { type IRoomState, MainSplitContentType } from "../../src/components/structures/RoomView";
 import { TimelineRenderingType } from "../../src/contexts/RoomContext";
 import { Layout } from "../../src/settings/enums/Layout";
 import { mkEvent } from "./test-utils";

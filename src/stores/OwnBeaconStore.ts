@@ -2,37 +2,37 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { debounce } from "lodash";
 import {
-    Beacon,
-    BeaconIdentifier,
+    type Beacon,
+    type BeaconIdentifier,
     BeaconEvent,
-    MatrixEvent,
-    Room,
-    RoomMember,
-    RoomState,
+    type MatrixEvent,
+    type Room,
+    type RoomMember,
+    type RoomState,
     RoomStateEvent,
     ContentHelpers,
-    MBeaconInfoEventContent,
+    type MBeaconInfoEventContent,
     M_BEACON,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import defaultDispatcher from "../dispatcher/dispatcher";
-import { ActionPayload } from "../dispatcher/payloads";
+import { type ActionPayload } from "../dispatcher/payloads";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import { arrayDiff } from "../utils/arrays";
 import {
-    ClearWatchCallback,
+    type ClearWatchCallback,
     GeolocationError,
     mapGeolocationPositionToTimedGeo,
     sortBeaconsByLatestCreation,
-    TimedGeoUri,
+    type TimedGeoUri,
     watchPosition,
     getCurrentPosition,
 } from "../utils/beacon";

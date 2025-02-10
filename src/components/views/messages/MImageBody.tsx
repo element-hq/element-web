@@ -3,17 +3,17 @@ Copyright 2024 New Vector Ltd.
 Copyright 2015-2021 The Matrix.org Foundation C.I.C.
 Copyright 2018, 2019 Michael Telatynski <7t3chguy@gmail.com>
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ComponentProps, createRef, ReactNode } from "react";
+import React, { type ComponentProps, createRef, type ReactNode } from "react";
 import { Blurhash } from "react-blurhash";
 import classNames from "classnames";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ClientEvent } from "matrix-js-sdk/src/matrix";
-import { ImageContent } from "matrix-js-sdk/src/types";
+import { type ImageContent } from "matrix-js-sdk/src/types";
 import { Tooltip } from "@vector-im/compound-web";
 
 import MFileBody from "./MFileBody";
@@ -21,11 +21,11 @@ import Modal from "../../../Modal";
 import { _t } from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
 import Spinner from "../elements/Spinner";
-import { Media, mediaFromContent } from "../../../customisations/Media";
+import { type Media, mediaFromContent } from "../../../customisations/Media";
 import { BLURHASH_FIELD, createThumbnail } from "../../../utils/image-media";
 import ImageView from "../elements/ImageView";
-import { IBodyProps } from "./IBodyProps";
-import { ImageSize, suggestedSize as suggestedImageSize } from "../../../settings/enums/ImageSize";
+import { type IBodyProps } from "./IBodyProps";
+import { type ImageSize, suggestedSize as suggestedImageSize } from "../../../settings/enums/ImageSize";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { blobIsAnimated, mayBeAnimated } from "../../../utils/Image";
@@ -51,13 +51,14 @@ interface IState {
         naturalHeight: number;
     };
     hover: boolean;
+    focus: boolean;
     showImage: boolean;
     placeholder: Placeholder;
 }
 
 export default class MImageBody extends React.Component<IBodyProps, IState> {
     public static contextType = RoomContext;
-    public declare context: React.ContextType<typeof RoomContext>;
+    declare public context: React.ContextType<typeof RoomContext>;
 
     private unmounted = false;
     private image = createRef<HTMLImageElement>();
@@ -71,6 +72,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         imgError: false,
         imgLoaded: false,
         hover: false,
+        focus: false,
         showImage: SettingsStore.getValue("showImages"),
         placeholder: Placeholder.NoImage,
     };
@@ -120,30 +122,29 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         }
     };
 
-    protected onImageEnter = (e: React.MouseEvent<HTMLImageElement>): void => {
-        this.setState({ hover: true });
-
-        if (
+    private get shouldAutoplay(): boolean {
+        return !(
             !this.state.contentUrl ||
             !this.state.showImage ||
             !this.state.isAnimated ||
             SettingsStore.getValue("autoplayGifs")
-        ) {
-            return;
-        }
-        const imgElement = e.currentTarget;
-        imgElement.src = this.state.contentUrl;
+        );
+    }
+
+    protected onImageEnter = (): void => {
+        this.setState({ hover: true });
     };
 
-    protected onImageLeave = (e: React.MouseEvent<HTMLImageElement>): void => {
+    protected onImageLeave = (): void => {
         this.setState({ hover: false });
+    };
 
-        const url = this.state.thumbUrl ?? this.state.contentUrl;
-        if (!url || !this.state.showImage || !this.state.isAnimated || SettingsStore.getValue("autoplayGifs")) {
-            return;
-        }
-        const imgElement = e.currentTarget;
-        imgElement.src = url;
+    private onFocus = (): void => {
+        this.setState({ focus: true });
+    };
+
+    private onBlur = (): void => {
+        this.setState({ focus: false });
     };
 
     private reconnectedListener = createReconnectedListener((): void => {
@@ -470,14 +471,20 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
 
         let showPlaceholder = Boolean(placeholder);
 
+        const hoverOrFocus = this.state.hover || this.state.focus;
         if (thumbUrl && !this.state.imgError) {
+            let url = thumbUrl;
+            if (hoverOrFocus && this.shouldAutoplay) {
+                url = this.state.contentUrl!;
+            }
+
             // Restrict the width of the thumbnail here, otherwise it will fill the container
             // which has the same width as the timeline
             // mx_MImageBody_thumbnail resizes img to exactly container size
             img = (
                 <img
                     className="mx_MImageBody_thumbnail"
-                    src={thumbUrl}
+                    src={url}
                     ref={this.image}
                     alt={content.body}
                     onError={this.onImageError}
@@ -493,13 +500,13 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
             showPlaceholder = false; // because we're hiding the image, so don't show the placeholder.
         }
 
-        if (this.state.isAnimated && !SettingsStore.getValue("autoplayGifs") && !this.state.hover) {
+        if (this.state.isAnimated && !SettingsStore.getValue("autoplayGifs") && !hoverOrFocus) {
             // XXX: Arguably we may want a different label when the animated image is WEBP and not GIF
             gifLabel = <p className="mx_MImageBody_gifLabel">GIF</p>;
         }
 
         let banner: ReactNode | undefined;
-        if (this.state.showImage && this.state.hover) {
+        if (this.state.showImage && hoverOrFocus) {
             banner = this.getBanner(content);
         }
 
@@ -568,7 +575,13 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     protected wrapImage(contentUrl: string | null | undefined, children: JSX.Element): ReactNode {
         if (contentUrl) {
             return (
-                <a href={contentUrl} target={this.props.forExport ? "_blank" : undefined} onClick={this.onClick}>
+                <a
+                    href={contentUrl}
+                    target={this.props.forExport ? "_blank" : undefined}
+                    onClick={this.onClick}
+                    onFocus={this.onFocus}
+                    onBlur={this.onBlur}
+                >
                     {children}
                 </a>
             );
@@ -657,17 +670,14 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
 }
 
 interface PlaceholderIProps {
-    hover?: boolean;
     maxWidth?: number;
 }
 
 export class HiddenImagePlaceholder extends React.PureComponent<PlaceholderIProps> {
     public render(): React.ReactNode {
         const maxWidth = this.props.maxWidth ? this.props.maxWidth + "px" : null;
-        let className = "mx_HiddenImagePlaceholder";
-        if (this.props.hover) className += " mx_HiddenImagePlaceholder_hover";
         return (
-            <div className={className} style={{ maxWidth: `min(100%, ${maxWidth}px)` }}>
+            <div className="mx_HiddenImagePlaceholder" style={{ maxWidth: `min(100%, ${maxWidth}px)` }}>
                 <div className="mx_HiddenImagePlaceholder_button">
                     <span className="mx_HiddenImagePlaceholder_eye" />
                     <span>{_t("timeline|m.image|show_image")}</span>

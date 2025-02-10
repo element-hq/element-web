@@ -4,26 +4,28 @@ Copyright 2019 The Matrix.org Foundation C.I.C.
 Copyright 2017 Vector Creations Ltd
 Copyright 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    IAddThreePidOnlyBody,
-    IRequestMsisdnTokenResponse,
-    IRequestTokenResponse,
-    MatrixClient,
+    type IAddThreePidOnlyBody,
+    type IRequestMsisdnTokenResponse,
+    type IRequestTokenResponse,
+    type MatrixClient,
     MatrixError,
     HTTPError,
-    IThreepid,
-    UIAResponse,
+    type IThreepid,
+    type UIAResponse,
 } from "matrix-js-sdk/src/matrix";
 
 import Modal from "./Modal";
 import { _t, UserFriendlyError } from "./languageHandler";
 import IdentityAuthClient from "./IdentityAuthClient";
 import { SSOAuthEntry } from "./components/views/auth/InteractiveAuthEntryComponents";
-import InteractiveAuthDialog, { InteractiveAuthDialogProps } from "./components/views/dialogs/InteractiveAuthDialog";
+import InteractiveAuthDialog, {
+    type InteractiveAuthDialogProps,
+} from "./components/views/dialogs/InteractiveAuthDialog";
 
 function getIdServerDomain(matrixClient: MatrixClient): string {
     const idBaseUrl = matrixClient.getIdentityServerUrl(true);
@@ -249,6 +251,7 @@ export default class AddThreepid {
      * @param {{type: string, session?: string}} auth UI auth object
      * @return {Promise<Object>} Response from /3pid/add call (in current spec, an empty object)
      */
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     private makeAddThreepidOnlyRequest = (auth?: IAddThreePidOnlyBody["auth"] | null): Promise<{}> => {
         return this.matrixClient.addThreePidOnly({
             sid: this.sessionId!,

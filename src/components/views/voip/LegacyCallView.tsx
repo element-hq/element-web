@@ -4,14 +4,14 @@ Copyright 2021, 2022 Šimon Brandner <simon.bra.ag@gmail.com>
 Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 Copyright 2015, 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef } from "react";
-import { CallEvent, CallState, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { CallEvent, CallState, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import classNames from "classnames";
-import { CallFeed } from "matrix-js-sdk/src/webrtc/callFeed";
+import { type CallFeed } from "matrix-js-sdk/src/webrtc/callFeed";
 import { SDPStreamMetadataPurpose } from "matrix-js-sdk/src/webrtc/callEventTypes";
 
 import dis from "../../../dispatcher/dispatcher";
@@ -25,7 +25,7 @@ import { avatarUrlForMember } from "../../../Avatar";
 import LegacyCallViewSidebar from "./LegacyCallViewSidebar";
 import LegacyCallViewHeader from "./LegacyCallView/LegacyCallViewHeader";
 import LegacyCallViewButtons from "./LegacyCallView/LegacyCallViewButtons";
-import { ActionPayload } from "../../../dispatcher/payloads";
+import { type ActionPayload } from "../../../dispatcher/payloads";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 

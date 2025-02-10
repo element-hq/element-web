@@ -2,11 +2,11 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021-2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent, useMemo } from "react";
+import React, { type ChangeEvent, useMemo } from "react";
 import {
     VideoCallSolidIcon,
     HomeSolidIcon,
@@ -58,8 +58,8 @@ const SidebarUserSettingsTab: React.FC = () => {
         [MetaSpace.People]: peopleEnabled,
         [MetaSpace.Orphans]: orphansEnabled,
         [MetaSpace.VideoRooms]: videoRoomsEnabled,
-    } = useSettingValue<Record<MetaSpace, boolean>>("Spaces.enabledMetaSpaces");
-    const allRoomsInHome = useSettingValue<boolean>("Spaces.allRoomsInHome");
+    } = useSettingValue("Spaces.enabledMetaSpaces");
+    const allRoomsInHome = useSettingValue("Spaces.allRoomsInHome");
     const guestSpaUrl = useMemo(() => {
         return SdkConfig.get("element_call").guest_spa_url;
     }, []);

@@ -2,23 +2,22 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useContext } from "react";
-import { EventType, Room, User, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { EventType, type Room, type User, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import RoomContext from "../../../contexts/RoomContext";
 import DMRoomMap from "../../../utils/DMRoomMap";
-import { _t, _td, TranslationKey } from "../../../languageHandler";
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
+import { _t, _td, type TranslationKey } from "../../../languageHandler";
+import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import MiniAvatarUploader, { AVATAR_SIZE } from "../elements/MiniAvatarUploader";
 import RoomAvatar from "../avatars/RoomAvatar";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import { ViewUserPayload } from "../../../dispatcher/payloads/ViewUserPayload";
+import { type ViewUserPayload } from "../../../dispatcher/payloads/ViewUserPayload";
 import { Action } from "../../../dispatcher/actions";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
 import { showSpaceInvite } from "../../../utils/space";
@@ -30,6 +29,7 @@ import { UIComponent } from "../../../settings/UIFeature";
 import { privateShouldBeEncrypted } from "../../../utils/rooms";
 import { LocalRoom } from "../../../models/LocalRoom";
 import { shouldEncryptRoomWithSingle3rdPartyInvite } from "../../../utils/room/shouldEncryptRoomWithSingle3rdPartyInvite";
+import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
 
 function hasExpectedEncryptionSettings(matrixClient: MatrixClient, room: Room): boolean {
     const isEncrypted: boolean = matrixClient.isRoomEncrypted(room.roomId);
@@ -51,7 +51,7 @@ const determineIntroMessage = (room: Room, encryptedSingle3rdPartyInvite: boolea
 
 const NewRoomIntro: React.FC = () => {
     const cli = useContext(MatrixClientContext);
-    const { room, roomId } = useContext(RoomContext);
+    const { room, roomId } = useScopedRoomContext("room", "roomId");
 
     if (!room || !roomId) {
         throw new Error("Unable to create a NewRoomIntro without room and roomId");

@@ -3,43 +3,42 @@ Copyright 2024 New Vector Ltd.
 Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
 Copyright 2015-2017 , 2019-2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef } from "react";
-import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import classNames from "classnames";
 
 import type { Call } from "../../../models/Call";
 import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
-import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../../views/elements/AccessibleButton";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { _t } from "../../../languageHandler";
-import { ChevronFace, ContextMenuTooltipButton, MenuProps } from "../../structures/ContextMenu";
-import { DefaultTagID, TagID } from "../../../stores/room-list/models";
-import { MessagePreview, MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
+import { ChevronFace, ContextMenuTooltipButton, type MenuProps } from "../../structures/ContextMenu";
+import { DefaultTagID, type TagID } from "../../../stores/room-list/models";
+import { type MessagePreview, MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import { RoomNotifState } from "../../../RoomNotifs";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { RoomNotificationContextMenu } from "../context_menus/RoomNotificationContextMenu";
 import NotificationBadge from "./NotificationBadge";
-import { ActionPayload } from "../../../dispatcher/payloads";
+import { type ActionPayload } from "../../../dispatcher/payloads";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
-import { NotificationState, NotificationStateEvents } from "../../../stores/notifications/NotificationState";
+import { type NotificationState, NotificationStateEvents } from "../../../stores/notifications/NotificationState";
 import { EchoChamber } from "../../../stores/local-echo/EchoChamber";
-import { CachedRoomKey, RoomEchoChamber } from "../../../stores/local-echo/RoomEchoChamber";
+import { CachedRoomKey, type RoomEchoChamber } from "../../../stores/local-echo/RoomEchoChamber";
 import { PROPERTY_UPDATED } from "../../../stores/local-echo/GenericEchoChamber";
 import PosthogTrackers from "../../../PosthogTrackers";
-import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { RoomGeneralContextMenu } from "../context_menus/RoomGeneralContextMenu";
 import { CallStore, CallStoreEvent } from "../../../stores/CallStore";
 import { SdkContextClass } from "../../../contexts/SDKContext";
-import { useHasRoomLiveVoiceBroadcast } from "../../../voice-broadcast";
 import { RoomTileSubtitle } from "./RoomTileSubtitle";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
@@ -51,10 +50,6 @@ interface Props {
     showMessagePreview: boolean;
     isMinimized: boolean;
     tag: TagID;
-}
-
-interface ClassProps extends Props {
-    hasLiveVoiceBroadcast: boolean;
 }
 
 type PartialDOMRect = Pick<DOMRect, "left" | "bottom">;
@@ -77,13 +72,13 @@ export const contextMenuBelow = (elementRect: PartialDOMRect): MenuProps => {
     return { left, top, chevronFace };
 };
 
-export class RoomTile extends React.PureComponent<ClassProps, State> {
+class RoomTile extends React.PureComponent<Props, State> {
     private dispatcherRef?: string;
     private roomTileRef = createRef<HTMLDivElement>();
     private notificationState: NotificationState;
     private roomProps: RoomEchoChamber;
 
-    public constructor(props: ClassProps) {
+    public constructor(props: Props) {
         super(props);
 
         this.state = {
@@ -370,15 +365,10 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
     /**
      * RoomTile has a subtile if one of the following applies:
      * - there is a call
-     * - there is a live voice broadcast
      * - message previews are enabled and there is a previewable message
      */
     private get shouldRenderSubtitle(): boolean {
-        return (
-            !!this.state.call ||
-            this.props.hasLiveVoiceBroadcast ||
-            (this.props.showMessagePreview && !!this.state.messagePreview)
-        );
+        return !!this.state.call || (this.props.showMessagePreview && !!this.state.messagePreview);
     }
 
     public render(): React.ReactElement {
@@ -409,7 +399,6 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
         const subtitle = this.shouldRenderSubtitle ? (
             <RoomTileSubtitle
                 call={this.state.call}
-                hasLiveVoiceBroadcast={this.props.hasLiveVoiceBroadcast}
                 messagePreview={this.state.messagePreview}
                 roomId={this.props.room.roomId}
                 showMessagePreview={this.props.showMessagePreview}
@@ -491,9 +480,4 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
     }
 }
 
-const RoomTileHOC: React.FC<Props> = (props: Props) => {
-    const hasLiveVoiceBroadcast = useHasRoomLiveVoiceBroadcast(props.room);
-    return <RoomTile {...props} hasLiveVoiceBroadcast={hasLiveVoiceBroadcast} />;
-};
-
-export default RoomTileHOC;
+export default RoomTile;

@@ -2,12 +2,12 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { FC } from "react";
-import { Room, JoinRule, MatrixClient } from "matrix-js-sdk/src/matrix";
+import React, { type FC } from "react";
+import { type Room, JoinRule, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { _t } from "../../../languageHandler";
@@ -64,7 +64,7 @@ const RoomInfoLine: FC<IProps> = ({ room }) => {
         // summary is not still loading
         const viewMembers = (): void =>
             RightPanelStore.instance.setCard({
-                phase: room.isSpaceRoom() ? RightPanelPhases.SpaceMemberList : RightPanelPhases.RoomMemberList,
+                phase: RightPanelPhases.MemberList,
             });
 
         members = (

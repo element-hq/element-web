@@ -2,34 +2,34 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
-    MatrixEvent,
-    MatrixClient,
-    Relations,
-    Poll,
+    type MatrixEvent,
+    type MatrixClient,
+    type Relations,
+    type Poll,
     PollEvent,
     M_POLL_KIND_DISCLOSED,
     M_POLL_RESPONSE,
     M_POLL_START,
-    TimelineEvents,
+    type TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
 import { RelatedRelations } from "matrix-js-sdk/src/models/related-relations";
-import { PollStartEvent, PollAnswerSubevent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
+import { type PollStartEvent, type PollAnswerSubevent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
 import { PollResponseEvent } from "matrix-js-sdk/src/extensible_events_v1/PollResponseEvent";
 
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
-import { IBodyProps } from "./IBodyProps";
+import { type IBodyProps } from "./IBodyProps";
 import { formatList } from "../../../utils/FormattingUtils";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import ErrorDialog from "../dialogs/ErrorDialog";
-import { GetRelationsForEvent } from "../rooms/EventTile";
+import { type GetRelationsForEvent } from "../rooms/EventTile";
 import PollCreateDialog from "../elements/PollCreateDialog";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Spinner from "../elements/Spinner";
@@ -139,7 +139,7 @@ export function launchPollEditor(mxEvent: MatrixEvent, getRelationsForEvent?: Ge
 
 export default class MPollBody extends React.Component<IBodyProps, IState> {
     public static contextType = MatrixClientContext;
-    public declare context: React.ContextType<typeof MatrixClientContext>;
+    declare public context: React.ContextType<typeof MatrixClientContext>;
     private seenEventIds: string[] = []; // Events we have already seen
 
     public constructor(props: IBodyProps, context: React.ContextType<typeof MatrixClientContext>) {

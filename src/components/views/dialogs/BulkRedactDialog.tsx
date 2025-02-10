@@ -2,13 +2,20 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useState } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { MatrixClient, RoomMember, Room, MatrixEvent, EventTimeline, EventType } from "matrix-js-sdk/src/matrix";
+import {
+    type MatrixClient,
+    type RoomMember,
+    type Room,
+    type MatrixEvent,
+    EventTimeline,
+    EventType,
+} from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";

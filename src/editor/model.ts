@@ -2,17 +2,18 @@
 Copyright 2019-2024 New Vector Ltd.
 Copyright 2019 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { diffAtCaret, diffDeletion, IDiff } from "./diff";
-import DocumentPosition, { IPosition } from "./position";
+import { diffAtCaret, diffDeletion, type IDiff } from "./diff";
+import DocumentPosition, { type IPosition } from "./position";
 import Range from "./range";
-import { SerializedPart, Part, PartCreator } from "./parts";
-import AutocompleteWrapperModel, { ICallback } from "./autocomplete";
-import DocumentOffset from "./offset";
-import { Caret } from "./caret";
+import { type SerializedPart, type Part, type PartCreator } from "./parts";
+import { type ICallback } from "./autocomplete";
+import type AutocompleteWrapperModel from "./autocomplete";
+import type DocumentOffset from "./offset";
+import { type Caret } from "./caret";
 
 /**
  * @callback ModelCallback

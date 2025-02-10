@@ -2,11 +2,11 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent, SyntheticEvent, useContext, useEffect, useRef, useState } from "react";
+import React, { type ChangeEvent, type SyntheticEvent, useContext, useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 import {
     MenuItem,
@@ -37,7 +37,7 @@ import LockOffIcon from "@vector-im/compound-design-tokens/assets/web/icons/lock
 import PublicIcon from "@vector-im/compound-design-tokens/assets/web/icons/public";
 import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
-import { EventType, JoinRule, Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { EventType, JoinRule, type Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { useIsEncrypted } from "../../../hooks/useIsEncrypted";
@@ -47,11 +47,11 @@ import RoomAvatar from "../avatars/RoomAvatar";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import Modal from "../../../Modal";
-import ShareDialog from "../dialogs/ShareDialog";
+import { ShareDialog } from "../dialogs/ShareDialog";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import { E2EStatus } from "../../../utils/ShieldUtils";
-import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
-import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
+import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import { TimelineRenderingType } from "../../../contexts/RoomContext";
 import RoomName from "../elements/RoomName";
 import ExportDialog from "../dialogs/ExportDialog";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
@@ -76,6 +76,7 @@ import { useTransition } from "../../../hooks/useTransition";
 import { isVideoRoom as calcIsVideoRoom } from "../../../utils/video-rooms";
 import { usePinnedEvents } from "../../../hooks/usePinnedEvents";
 import { ReleaseAnnouncement } from "../../structures/ReleaseAnnouncement.tsx";
+import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
 
 interface IProps {
     room: Room;
@@ -86,7 +87,7 @@ interface IProps {
 }
 
 const onRoomMembersClick = (): void => {
-    RightPanelStore.instance.pushCard({ phase: RightPanelPhases.RoomMemberList }, true);
+    RightPanelStore.instance.pushCard({ phase: RightPanelPhases.MemberList }, true);
 };
 
 const onRoomThreadsClick = (): void => {
@@ -232,7 +233,7 @@ const RoomSummaryCard: React.FC<IProps> = ({
     };
 
     const isRoomEncrypted = useIsEncrypted(cli, room);
-    const roomContext = useContext(RoomContext);
+    const roomContext = useScopedRoomContext("e2eStatus", "timelineRenderingType");
     const e2eStatus = roomContext.e2eStatus;
     const isVideoRoom = calcIsVideoRoom(room);
 

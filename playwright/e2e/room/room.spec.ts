@@ -2,11 +2,11 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import type { EventType } from "matrix-js-sdk/src/matrix";
+import type { AccountDataEvents } from "matrix-js-sdk/src/matrix";
 import { test, expect } from "../../element-web-test";
 import { Bot } from "../../pages/bot";
 
@@ -28,7 +28,7 @@ test.describe("Room Directory", () => {
                 const charlieRoom = await cli.createRoom({ is_direct: true });
                 await cli.invite(bobRoom.room_id, bob);
                 await cli.invite(charlieRoom.room_id, charlie);
-                await cli.setAccountData("m.direct" as EventType, {
+                await cli.setAccountData("m.direct" as keyof AccountDataEvents, {
                     [bob]: [bobRoom.room_id],
                     [charlie]: [charlieRoom.room_id],
                 });

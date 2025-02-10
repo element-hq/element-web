@@ -2,16 +2,16 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { RoomMember } from "matrix-js-sdk/src/matrix";
+import { type RoomMember } from "matrix-js-sdk/src/matrix";
 
 import emailPillAvatar from "../../../../res/img/icon-email-pill-avatar.svg";
 import { mediaFromMxc } from "../../../customisations/Media";
-import { Member, ThreepidMember } from "../../../utils/direct-messages";
+import { type Member, type ThreepidMember } from "../../../utils/direct-messages";
 import BaseAvatar from "./BaseAvatar";
 
 interface SearchResultAvatarProps {

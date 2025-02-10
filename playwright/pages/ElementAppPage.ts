@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -35,6 +35,10 @@ export class ElementAppPage {
     public get timeline(): Timeline {
         if (!this._timeline) this._timeline = new Timeline(this.page);
         return this._timeline;
+    }
+
+    public async cleanup() {
+        await this._client?.cleanup();
     }
 
     /**
@@ -154,10 +158,6 @@ export class ElementAppPage {
         return button.click();
     }
 
-    public async getClipboardText(): Promise<string> {
-        return this.page.evaluate("navigator.clipboard.readText()");
-    }
-
     public async openSpotlight(): Promise<Spotlight> {
         const spotlight = new Spotlight(this.page);
         await spotlight.open();
@@ -171,6 +171,18 @@ export class ElementAppPage {
     public async toggleRoomInfoPanel(): Promise<Locator> {
         await this.page.getByRole("button", { name: "Room info" }).first().click();
         return this.page.locator(".mx_RightPanel");
+    }
+
+    /**
+     * Opens/closes the memberlist panel
+     * @returns locator to the memberlist panel
+     */
+    public async toggleMemberlistPanel(): Promise<Locator> {
+        const locator = this.page.locator(".mx_FacePile");
+        await locator.click();
+        const memberlist = this.page.locator(".mx_MemberListView");
+        await memberlist.waitFor();
+        return memberlist;
     }
 
     /**

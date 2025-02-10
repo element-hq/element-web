@@ -2,15 +2,15 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2015, 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent, createRef } from "react";
+import React, { type ChangeEvent, createRef } from "react";
 
 import Field from "../elements/Field";
-import { _t, _td, TranslationKey } from "../../../languageHandler";
-import { IFieldState, IValidationResult } from "../elements/Validation";
+import { _t, _td, type TranslationKey } from "../../../languageHandler";
+import { type IFieldState, type IValidationResult } from "../elements/Validation";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 

@@ -2,20 +2,20 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2018-2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { debounce } from "lodash";
 import classNames from "classnames";
-import React, { ChangeEvent, FormEvent } from "react";
+import React, { type ChangeEvent, type FormEvent } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { decodeRecoveryKey } from "matrix-js-sdk/src/crypto-api";
-import { SecretStorage } from "matrix-js-sdk/src/matrix";
+import { type SecretStorage } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import Field from "../../elements/Field";
-import AccessibleButton, { ButtonEvent } from "../../elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../../elements/AccessibleButton";
 import { _t } from "../../../../languageHandler";
 import { accessSecretStorage } from "../../../../SecurityManager";
 import Modal from "../../../../Modal";

@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -32,9 +32,6 @@ enum Views {
 
     // flow to setup SSSS / cross-signing on this account
     E2E_SETUP,
-
-    // screen that allows users to select which use case they’ll use matrix for
-    USE_CASE_SELECTION,
 
     // we are logged in with an active matrix client. The logged_in state also
     // includes guests users as they too are logged in at the client level.

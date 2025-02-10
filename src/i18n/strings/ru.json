@@ -230,7 +230,6 @@
         "oidc": {
             "error_title": "Нам не удалось войти в систему",
             "generic_auth_error": "Во время аутентификации что-то пошло не так. Перейдите на страницу входа и попробуйте еще раз.",
-            "logout_redirect_warning": "Вы будете перенаправлены к поставщику аутентификации вашего сервера для завершения выхода из системы.",
             "missing_or_invalid_stored_state": "Мы попросили браузер запомнить, какой домашний сервер вы используете для входа в систему, но, к сожалению, ваш браузер забыл об этом. Перейдите на страницу входа и попробуйте ещё раз."
         },
         "password_field_keep_going_prompt": "Продолжить",
@@ -413,7 +412,6 @@
             "other": "и %(count)s других...",
             "one": "и ещё кто-то..."
         },
-        "android": "Android",
         "appearance": "Внешний вид",
         "application": "Приложение",
         "are_you_sure": "Вы уверены?",
@@ -452,7 +450,6 @@
         "identity_server": "Идентификационный сервер",
         "image": "Изображение",
         "integration_manager": "Менеджер интеграции",
-        "ios": "iOS",
         "joined": "Присоединился",
         "labs": "Лаборатория",
         "legal": "Правовая информация",
@@ -541,8 +538,7 @@
         "video": "Видео",
         "video_room": "Видеокомната",
         "view_message": "Посмотреть сообщение",
-        "warning": "Внимание",
-        "welcome": "Добро пожаловать"
+        "warning": "Внимание"
     },
     "composer": {
         "autocomplete": {
@@ -877,7 +873,6 @@
         },
         "udd": {
             "interactive_verification_button": "Интерактивная сверка по смайлам",
-            "manual_verification_button": "Ручная сверка по тексту",
             "other_ask_verify_text": "Попросите этого пользователя подтвердить сеанс или подтвердите его вручную ниже.",
             "other_new_session_text": "%(name)s (%(userId)s) произвел(а) вход через новый сеанс без подтверждения:",
             "own_ask_verify_text": "Подтвердите ваш другой сеанс, используя один из вариантов ниже.",
@@ -912,12 +907,6 @@
             "incoming_sas_dialog_waiting": "Ожидаем подтверждения от партнера…",
             "incoming_sas_user_dialog_text_1": "Проверить этого пользователя, чтобы отметить его, как доверенного. Доверенные пользователи дают вам больше уверенности при использовании шифрованных сообщений.",
             "incoming_sas_user_dialog_text_2": "Подтверждение этого пользователя сделает его сеанс доверенным у вас, а также сделает ваш сеанс доверенным у него.",
-            "manual_device_verification_device_id_label": "ID сеанса",
-            "manual_device_verification_device_key_label": "Ключ сеанса",
-            "manual_device_verification_device_name_label": "Название сеанса",
-            "manual_device_verification_footer": "Если они не совпадают, безопасность вашего общения может быть поставлена под угрозу.",
-            "manual_device_verification_self_text": "Сравните следующие параметры с \"Пользовательскими настройками\" в другом вашем сеансе:",
-            "manual_device_verification_user_text": "Подтвердите сеанс этого пользователя, сравнив следующие параметры с его \"Пользовательскими настройками\":",
             "no_key_or_device": "Похоже, у вас нет бумажного ключа, или других сеансов, с которыми вы могли бы свериться.  В этом сеансе вы не сможете получить доступ к старым зашифрованным сообщениям. Чтобы подтвердить свою личность в этом сеансе, вам нужно будет сбросить свои ключи шифрования.",
             "no_support_qr_emoji": "Устройство, которое вы пытаетесь проверить, не поддерживает сканирование QR-кода или проверку смайликов, которые поддерживает %(brand)s. Попробуйте использовать другой клиент.",
             "other_party_cancelled": "Другая сторона отменила проверку.",
@@ -1036,10 +1025,6 @@
     },
     "error_user_not_logged_in": "Пользователь не вошел в систему",
     "event_preview": {
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s завершил(а) голосовую трансляцию",
-            "you": "Вы завершили голосовую трансляцию"
-        },
         "m.call.answer": {
             "dm": "Звонок в процессе",
             "user": "%(senderName)s присоединился(лась) к звонку",
@@ -1391,8 +1376,6 @@
         "notification_settings_beta_caption": "Представляем вам более простой способ изменения настроек уведомлений. Настройте свои настройки так %(brand)s, как вам удобно.",
         "notification_settings_beta_title": "Настройки уведомлений",
         "notifications": "Включить панель уведомлений в заголовке комнаты",
-        "oidc_native_flow": "Встроенная аутентификация OIDC",
-        "oidc_native_flow_description": "⚠ ВНИМАНИЕ: Экспериментально. Используйте встроенную аутентификацию OIDC, если она поддерживается сервером.",
         "render_reaction_images": "Обработка пользовательских изображений в реакциях",
         "render_reaction_images_description": "Иногда их называют \"пользовательскими эмодзи\".",
         "report_to_moderators": "Пожаловаться модераторам",
@@ -1412,8 +1395,6 @@
         "video_rooms_faq2_answer": "Да, лента сообщений отображается рядом с видео.",
         "video_rooms_faq2_question": "Можно ли использовать текстовый чат одновременно с видеозвонком?",
         "video_rooms_feedbackSubheading": "Спасибо, что попробовали бета-версию. Пожалуйста, расскажите как можно подробнее, чтобы мы могли ее улучшить.",
-        "voice_broadcast": "Голосовая трансляция",
-        "voice_broadcast_force_small_chunks": "Длина фрагмента голосовой трансляции 15s",
         "wysiwyg_composer": "Наглядный текстовый редактор"
     },
     "labs_mjolnir": {
@@ -1513,7 +1494,6 @@
     "member_list": {
         "filter_placeholder": "Поиск по участникам",
         "invite_button_no_perms_tooltip": "У вас нет разрешения приглашать пользователей",
-        "invited_list_heading": "Приглашены",
         "power_label": "%(userName)s (уровень прав %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Участники комнаты",
@@ -1550,65 +1530,18 @@
         "mute_description": "Вы не будете получать никаких уведомлений"
     },
     "notifier": {
-        "io.element.voice_broadcast_chunk": "%(senderName)s начал(а) голосовую трансляцию",
         "m.key.verification.request": "%(name)s запрашивает проверку"
     },
     "onboarding": {
-        "apple_trademarks": "App Store® и Логотип Apple® являются товарными знаками Apple Inc.",
-        "community_messaging_action": "Найдите людей",
-        "community_messaging_description": "Сохраняйте право над владением и контроль над обсуждением в сообществе.\nМасштабируйте, чтобы поддерживать миллионы, с мощной модерацией и функциональной совместимостью.",
-        "community_messaging_title": "Владение сообществом",
-        "complete_these": "Выполните их, чтобы получить максимальную отдачу от %(brand)s",
         "create_room": "Создать комнату",
-        "download_app": "Скачать %(brand)s",
-        "download_app_action": "Скачать приложения",
-        "download_app_description": "Не пропустите ничего, взяв %(brand)s с тобой",
-        "download_app_store": "Скачать в App Store",
-        "download_brand": "Скачать %(brand)s",
-        "download_brand_desktop": "Скачать %(brand)s Desktop",
-        "download_f_droid": "Скачать на F-Droid",
-        "download_google_play": "Скачать в Google Play",
-        "enable_notifications": "Включить уведомления",
-        "enable_notifications_action": "Включить уведомления",
-        "enable_notifications_description": "Не пропустите ответ или важное сообщение",
         "explore_rooms": "Просмотреть публичные комнаты",
-        "find_community_members": "Найдите и пригласите участников сообщества",
-        "find_coworkers": "Найдите и пригласите своих коллег",
-        "find_friends": "Найдите и пригласите своих друзей",
-        "find_friends_action": "Найти друзей",
-        "find_friends_description": "Это то, для чего вы здесь, так что давайте приступим к делу",
-        "find_people": "Найти людей",
-        "free_e2ee_messaging_unlimited_voip": "Благодаря бесплатному сквозному шифрованному обмену сообщениями и неограниченным голосовым и видеозвонкам, %(brand)s это отличный способ оставаться на связи.",
-        "get_stuff_done": "Добейтесь успеха, найдя своих товарищей по команде",
-        "google_trademarks": "Google Play и Логотип Google Play являются торговыми знаками Google LLC.",
         "has_avatar_label": "Отлично, это поможет людям узнать, что это ты",
         "intro_byline": "Владейте своими разговорами.",
         "intro_welcome": "Добро пожаловать в %(appName)s",
         "no_avatar_label": "Добавьте фото, чтобы люди знали, что это вы.",
-        "only_n_steps_to_go": {
-            "one": "Осталось всего %(count)s шагов до конца",
-            "other": "Осталось всего %(count)s шагов"
-        },
-        "personal_messaging_action": "Начните свою первую беседу",
-        "personal_messaging_title": "Безопасный обмен сообщениями для друзей и семьи",
-        "qr_or_app_links": "%(qrCode)s или %(appLinks)s",
         "send_dm": "Отправить личное сообщение",
-        "set_up_profile": "Настройте свой профиль",
-        "set_up_profile_action": "Ваш профиль",
-        "set_up_profile_description": "Убедитесь, что люди знают, что это действительно вы",
-        "use_case_community_messaging": "Участники сообщества в сети",
-        "use_case_heading1": "Вы в",
-        "use_case_heading2": "С кем вы будете общаться чаще всего?",
-        "use_case_heading3": "Мы поможем вам подключиться.",
-        "use_case_personal_messaging": "Друзья и семья",
-        "use_case_work_messaging": "Коллеги и команды",
         "welcome_detail": "Теперь давайте поможем вам начать",
-        "welcome_to_brand": "Добро пожаловать в %(brand)s",
-        "welcome_user": "Добро пожаловать, %(name)s",
-        "work_messaging_action": "Найдите коллег",
-        "work_messaging_title": "Безопасный обмен сообщениями для работы",
-        "you_did_it": "Вы сделали это!",
-        "you_made_it": "Вы сделали это!"
+        "welcome_user": "Добро пожаловать, %(name)s"
     },
     "pill": {
         "permalink_other_room": "Сообщение в %(room)s",
@@ -1660,7 +1593,6 @@
         "custom_level": "Специальные права",
         "default": "По умолчанию",
         "label": "Уровень прав",
-        "mod": "Модератор",
         "moderator": "Модератор",
         "restricted": "Ограниченный пользователь"
     },
@@ -2126,7 +2058,6 @@
             "error_unbanning": "Не удалось разблокировать",
             "events_default": "Отправить сообщения",
             "invite": "Пригласить пользователей",
-            "io.element.voice_broadcast_info": "Голосовые трансляции",
             "kick": "Удалять пользователей",
             "m.call": "Начать %(brand)s звонок",
             "m.call.member": "Присоединяйтесь к %(brand)s звонку",
@@ -2531,7 +2462,6 @@
             "room_directory_heading": "Каталог комнат",
             "room_list_heading": "Список комнат",
             "show_avatars_pills": "Показывать аватары в упоминаниях пользователей, комнатах и событиях",
-            "show_checklist_shortcuts": "Показывать ярлык приветственного проверенного списка над списком комнат",
             "show_polls_button": "Показывать кнопку опроса",
             "surround_text": "Обводить выделенный текст при вводе специальных символов",
             "time_heading": "Отображение времени"
@@ -2769,7 +2699,6 @@
         "warning": "<w>ВНИМАНИЕ:</w> <description/>"
     },
     "share": {
-        "link_title": "Ссылка на комнату",
         "permalink_message": "Ссылка на выбранное сообщение",
         "permalink_most_recent": "Ссылка на последнее сообщение",
         "title_message": "Поделиться сообщением",
@@ -2858,13 +2787,6 @@
         "upgraderoom": "Обновляет комнату до новой версии",
         "upgraderoom_permission_error": "У вас нет необходимых разрешений для использования этой команды.",
         "usage": "Использование",
-        "verify": "Проверяет пользователя, сеанс и публичные ключи",
-        "verify_mismatch": "ВНИМАНИЕ: ПРОВЕРКА КЛЮЧА НЕ ПРОШЛА! Ключом подписи для %(userId)s и сеанса %(deviceId)s является \"%(fprint)s\", что не соответствует указанному ключу \"%(fingerprint)s\". Это может означать, что ваши сообщения перехватываются!",
-        "verify_nop": "Сеанс уже подтверждён!",
-        "verify_nop_warning_mismatch": "ВНИМАНИЕ: сеанс уже заверен, но ключи НЕ СОВПАДАЮТ!",
-        "verify_success_description": "Ключ подписи, который вы предоставили, соответствует ключу подписи, который вы получили от пользователя %(userId)s через сеанс %(deviceId)s. Сеанс отмечен как подтверждённый.",
-        "verify_success_title": "Ключ проверен",
-        "verify_unknown_pair": "Неизвестная пара (пользователь, сеанс): (%(userId)s, %(deviceId)s)",
         "view": "Просмотр комнаты с указанным адресом",
         "whois": "Показать информацию о пользователе"
     },
@@ -2902,7 +2824,6 @@
         "invite": "Пригласить людей",
         "invite_description": "Пригласить по электронной почте или имени пользователя",
         "invite_link": "Поделиться ссылкой на приглашение",
-        "invite_this_space": "Пригласить в это пространство",
         "joining_space": "Присоединение",
         "landing_welcome": "Добро пожаловать в <name/>",
         "leave_dialog_action": "Покинуть пространство",
@@ -3080,10 +3001,6 @@
         "error_rendering_message": "Не удалось загрузить это сообщение",
         "historical_messages_unavailable": "Вы не можете просматривать более старые сообщения",
         "in_room_name": " в <strong>%(room)s</strong>",
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s завершил(а) <a>голосовую трансляцию</a>",
-            "you": "Вы завершили <a>голосовую трансляцию</a>"
-        },
         "io.element.widgets.layout": "%(senderName)s обновил(а) макет комнаты",
         "late_event_separator": "Первоначально отправлено %(dateTime)s",
         "load_error": {
@@ -3264,7 +3181,9 @@
             "sent": "%(senderName)s пригласил(а) %(targetDisplayName)s в комнату."
         },
         "m.room.tombstone": "%(senderDisplayName)s обновил(а) эту комнату.",
-        "m.room.topic": "%(senderDisplayName)s изменил(а) тему комнаты на \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s изменил(а) тему комнаты на \"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s отправил(а) наклейку.",
         "m.video": {
             "error_decrypting": "Ошибка расшифровки видео"
@@ -3618,38 +3537,6 @@
         "switch_theme_dark": "Переключить в тёмный режим",
         "switch_theme_light": "Переключить в светлый режим"
     },
-    "voice_broadcast": {
-        "30s_backward": "30с назад",
-        "30s_forward": "30с вперёд",
-        "action": "Голосовая трансляция",
-        "buffering": "Буферизация…",
-        "confirm_listen_affirm": "Да, закончить мою запись",
-        "confirm_listen_description": "Если вы начнете слушать данную трансляцию, то текущая запись прямой трансляции будет завершена.",
-        "confirm_listen_title": "Слушать прямой эфир?",
-        "confirm_stop_affirm": "Да, остановить трансляцию",
-        "confirm_stop_description": "Вы действительно хотите прекратить прямую трансляцию? На этом трансляция закончится и полная запись будет доступна в комнате.",
-        "confirm_stop_title": "Закончить голосовую трансляцию?",
-        "connection_error": "Ошибка подключения — запись приостановлена",
-        "failed_already_recording_description": "Вы уже записываете голосовую трансляцию. Пожалуйста, завершите текущую голосовую трансляцию, чтобы начать новую.",
-        "failed_already_recording_title": "Не получилось начать новую голосовую трансляцию",
-        "failed_decrypt": "Невозможно расшифровать голосовую трансляцию",
-        "failed_generic": "Невозможно воспроизвести эту голосовую трансляцию",
-        "failed_insufficient_permission_description": "У вас нет необходимых разрешений, чтобы начать голосовую трансляцию в этой комнате. Свяжитесь с администратором комнаты для получения разрешений.",
-        "failed_insufficient_permission_title": "Не получилось начать новую голосовую трансляцию",
-        "failed_no_connection_description": "К сожалению, сейчас мы не можем начать запись. Пожалуйста, попробуйте позже.",
-        "failed_no_connection_title": "Ошибка подключения",
-        "failed_others_already_recording_description": "Кто-то уже записывает голосовую трансляцию. Ждите окончания их голосовой трансляции, чтобы начать новую.",
-        "failed_others_already_recording_title": "Не получилось начать новую голосовую трансляцию",
-        "go_live": "Начать эфир",
-        "live": "В эфире",
-        "pause": "приостановить голосовую трансляцию",
-        "play": "проиграть голосовую трансляцию",
-        "resume": "продолжить голосовую трансляцию"
-    },
-    "voice_message": {
-        "cant_start_broadcast_description": "Вы не можете начать голосовое сообщение, так как вы сейчас записываете прямую трансляцию. Завершите прямую трансляцию, чтобы начать запись голосового сообщения.",
-        "cant_start_broadcast_title": "Не удается запустить голосовое сообщение"
-    },
     "voip": {
         "already_in_call": "Уже в вызове",
         "already_in_call_person": "Вы уже разговариваете с этим человеком.",
@@ -3669,7 +3556,6 @@
         "camera_disabled": "Ваша камера выключена",
         "camera_enabled": "Ваша камера всё ещё включена",
         "cannot_call_yourself_description": "Вы не можете позвонить самому себе.",
-        "change_input_device": "Смените устройство ввода",
         "connecting": "Подключение",
         "connection_lost": "Соединение с сервером потеряно",
         "connection_lost_description": "Вы не можете совершать вызовы без подключения к серверу.",
@@ -3686,8 +3572,6 @@
         "enable_camera": "Включить камеру",
         "enable_microphone": "Включить микрофон",
         "expand": "Вернуться к звонку",
-        "failed_call_live_broadcast_description": "Вы не можете начать звонок, так как вы производите живое вещание. Пожалуйста, остановите вещание, чтобы начать звонок.",
-        "failed_call_live_broadcast_title": "Невозможно начать звонок",
         "hangup": "Повесить трубку",
         "hide_sidebar_button": "Скрыть боковую панель",
         "input_devices": "Устройства ввода",

@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -26,7 +26,8 @@ Please see LICENSE files in the repository root for full details.
     }
 
     &.mx_UserPill_me,
-    &.mx_AtRoomPill {
+    &.mx_AtRoomPill,
+    &.mx_KeywordPill {
         background-color: var(--cpd-color-bg-critical-primary) !important; /* To override .markdown-body */
     }
 
@@ -45,7 +46,8 @@ Please see LICENSE files in the repository root for full details.
     }
 
     /* We don't want to indicate clickability */
-    &.mx_AtRoomPill:hover {
+    &.mx_AtRoomPill:hover,
+    &.mx_KeywordPill:hover {
         background-color: var(--cpd-color-bg-critical-primary) !important; /* To override .markdown-body */
         cursor: unset;
     }

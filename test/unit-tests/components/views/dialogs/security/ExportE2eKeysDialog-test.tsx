@@ -2,14 +2,15 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import { screen, fireEvent, render, waitFor, act } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { Crypto, IMegolmSessionData } from "matrix-js-sdk/src/matrix";
+import { type IMegolmSessionData } from "matrix-js-sdk/src/matrix";
+import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
 
 import * as MegolmExportEncryption from "../../../../../../src/utils/MegolmExportEncryption";
 import ExportE2eKeysDialog from "../../../../../../src/async-components/views/dialogs/security/ExportE2eKeysDialog";
@@ -62,7 +63,7 @@ describe("ExportE2eKeysDialog", () => {
         cli.getCrypto = () => {
             return {
                 exportRoomKeysAsJson,
-            } as unknown as Crypto.CryptoApi;
+            } as unknown as CryptoApi;
         };
 
         // Mock the result of encrypting the sessions. If we don't do this, the

@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019-2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -13,7 +13,7 @@ import {
     EVENT_VISIBILITY_CHANGE_TYPE,
     MsgType,
     RelationType,
-    MatrixClient,
+    type MatrixClient,
     THREAD_RELATION_TYPE,
     M_POLL_END,
     M_POLL_START,
@@ -23,14 +23,13 @@ import {
 import { logger } from "matrix-js-sdk/src/logger";
 
 import shouldHideEvent from "../shouldHideEvent";
-import { GetRelationsForEvent } from "../components/views/rooms/EventTile";
+import { type GetRelationsForEvent } from "../components/views/rooms/EventTile";
 import SettingsStore from "../settings/SettingsStore";
 import defaultDispatcher from "../dispatcher/dispatcher";
-import { TimelineRenderingType } from "../contexts/RoomContext";
+import { type TimelineRenderingType } from "../contexts/RoomContext";
 import { launchPollEditor } from "../components/views/messages/MPollBody";
 import { Action } from "../dispatcher/actions";
-import { ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
-import { VoiceBroadcastInfoEventType, VoiceBroadcastInfoState } from "../voice-broadcast/types";
+import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
 
 /**
  * Returns whether an event should allow actions like reply, reactions, edit, etc.
@@ -56,9 +55,7 @@ export function isContentActionable(mxEvent: MatrixEvent): boolean {
             mxEvent.getType() === "m.sticker" ||
             M_POLL_START.matches(mxEvent.getType()) ||
             M_POLL_END.matches(mxEvent.getType()) ||
-            M_BEACON_INFO.matches(mxEvent.getType()) ||
-            (mxEvent.getType() === VoiceBroadcastInfoEventType &&
-                mxEvent.getContent()?.state === VoiceBroadcastInfoState.Started)
+            M_BEACON_INFO.matches(mxEvent.getType())
         ) {
             return true;
         }

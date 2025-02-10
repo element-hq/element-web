@@ -2,18 +2,19 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent, SyntheticEvent } from "react";
+import React, { type ChangeEvent, type SyntheticEvent } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
+import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../../languageHandler";
 import SdkConfig from "../../../../../SdkConfig";
 import { Mjolnir } from "../../../../../mjolnir/Mjolnir";
-import { ListRule } from "../../../../../mjolnir/ListRule";
-import { BanList, RULE_SERVER, RULE_USER } from "../../../../../mjolnir/BanList";
+import { type ListRule } from "../../../../../mjolnir/ListRule";
+import { type BanList, RULE_SERVER, RULE_USER } from "../../../../../mjolnir/BanList";
 import Modal from "../../../../../Modal";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import ErrorDialog from "../../../dialogs/ErrorDialog";
@@ -30,8 +31,8 @@ interface IState {
     newList: string;
 }
 
-export default class MjolnirUserSettingsTab extends React.Component<{}, IState> {
-    public constructor(props: {}) {
+export default class MjolnirUserSettingsTab extends React.Component<EmptyObject, IState> {
+    public constructor(props: EmptyObject) {
         super(props);
 
         this.state = {
@@ -268,7 +269,6 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
                                 onChange={this.onPersonalRuleChanged}
                             />
                             <AccessibleButton
-                                type="submit"
                                 kind="primary"
                                 onClick={this.onAddPersonalRule}
                                 disabled={this.state.busy}
@@ -295,12 +295,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
                                 value={this.state.newList}
                                 onChange={this.onNewListChanged}
                             />
-                            <AccessibleButton
-                                type="submit"
-                                kind="primary"
-                                onClick={this.onSubscribeList}
-                                disabled={this.state.busy}
-                            >
+                            <AccessibleButton kind="primary" onClick={this.onSubscribeList} disabled={this.state.busy}>
                                 {_t("action|subscribe")}
                             </AccessibleButton>
                         </form>

@@ -2,17 +2,17 @@
  * Copyright 2024 New Vector Ltd.
  * Copyright 2021, 2022 The Matrix.org Foundation C.I.C.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { Room, RoomStateEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { Optional } from "matrix-events-sdk";
+import { type Room, RoomStateEvent, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type Optional } from "matrix-events-sdk";
 import { MapWithDefault, recursiveMapToObject } from "matrix-js-sdk/src/utils";
-import { IWidget } from "matrix-widget-api";
+import { type IWidget } from "matrix-widget-api";
 
 import SettingsStore from "../../settings/SettingsStore";
-import WidgetStore, { IApp } from "../WidgetStore";
+import WidgetStore, { type IApp } from "../WidgetStore";
 import { WidgetType } from "../../widgets/WidgetType";
 import { clamp, defaultNumber, sum } from "../../utils/numbers";
 import defaultDispatcher from "../../dispatcher/dispatcher";
@@ -20,14 +20,20 @@ import { ReadyWatchingStore } from "../ReadyWatchingStore";
 import { SettingLevel } from "../../settings/SettingLevel";
 import { arrayFastClone } from "../../utils/arrays";
 import { UPDATE_EVENT } from "../AsyncStore";
-import { Container, IStoredLayout, ILayoutStateEvent, WIDGET_LAYOUT_EVENT_TYPE, IWidgetLayouts } from "./types";
+import {
+    Container,
+    type IStoredLayout,
+    type ILayoutStateEvent,
+    WIDGET_LAYOUT_EVENT_TYPE,
+    type IWidgetLayouts,
+} from "./types";
 
 export type { IStoredLayout, ILayoutStateEvent };
 export { Container, WIDGET_LAYOUT_EVENT_TYPE };
 
-interface ILayoutSettings extends ILayoutStateEvent {
+export type ILayoutSettings = Partial<ILayoutStateEvent> & {
     overrides?: string; // event ID for layout state event, if present
-}
+};
 
 // Dev note: "Pinned" widgets are ones in the top container.
 export const MAX_PINNED = 3;
@@ -149,7 +155,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
 
         const layoutEv = room.currentState.getStateEvents(WIDGET_LAYOUT_EVENT_TYPE, "");
         const legacyPinned = SettingsStore.getValue("Widgets.pinned", room.roomId);
-        let userLayout = SettingsStore.getValue<ILayoutSettings | null>("Widgets.layout", room.roomId);
+        let userLayout = SettingsStore.getValue("Widgets.layout", room.roomId);
 
         if (layoutEv && userLayout && userLayout.overrides !== layoutEv.getId()) {
             // For some other layout that we don't really care about. The user can reset this

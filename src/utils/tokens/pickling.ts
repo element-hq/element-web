@@ -5,7 +5,7 @@ Copyright 2018 New Vector Ltd
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -118,7 +118,7 @@ export async function buildAndEncodePickleKey(
             data.encrypted,
         );
         if (pickleKeyBuf) {
-            return encodeUnpaddedBase64(pickleKeyBuf);
+            return encodeUnpaddedBase64(new Uint8Array(pickleKeyBuf));
         }
     } catch {
         logger.error("Error decrypting pickle key");

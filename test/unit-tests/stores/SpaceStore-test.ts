@@ -2,22 +2,22 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EventEmitter } from "events";
+import { type EventEmitter } from "events";
 import { mocked } from "jest-mock";
 import {
     EventType,
     RoomMember,
     RoomStateEvent,
     ClientEvent,
-    MatrixEvent,
-    Room,
+    type MatrixEvent,
+    type Room,
     RoomEvent,
     JoinRule,
-    RoomState,
+    type RoomState,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { defer } from "matrix-js-sdk/src/utils";

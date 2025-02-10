@@ -2,16 +2,16 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MockedObject } from "jest-mock";
+import { type MockedObject } from "jest-mock";
 import { EventType, MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { Action } from "../../../../../src/dispatcher/actions";
 import { onView3pidInvite } from "../../../../../src/stores/right-panel/action-handlers";
-import RightPanelStore from "../../../../../src/stores/right-panel/RightPanelStore";
+import type RightPanelStore from "../../../../../src/stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../../../src/stores/right-panel/RightPanelStorePhases";
 
 describe("onView3pidInvite()", () => {
@@ -30,7 +30,7 @@ describe("onView3pidInvite()", () => {
         };
         onView3pidInvite(payload, rightPanelStore);
 
-        expect(rightPanelStore.showOrHidePhase).toHaveBeenCalledWith(RightPanelPhases.RoomMemberList);
+        expect(rightPanelStore.showOrHidePhase).toHaveBeenCalledWith(RightPanelPhases.MemberList);
         expect(rightPanelStore.pushCard).not.toHaveBeenCalled();
     });
 
@@ -43,7 +43,7 @@ describe("onView3pidInvite()", () => {
 
         expect(rightPanelStore.showOrHidePhase).not.toHaveBeenCalled();
         expect(rightPanelStore.pushCard).toHaveBeenCalledWith({
-            phase: RightPanelPhases.Room3pidMemberInfo,
+            phase: RightPanelPhases.ThreePidMemberInfo,
             state: { memberInfoEvent: payload.event },
         });
     });

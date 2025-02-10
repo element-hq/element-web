@@ -230,7 +230,6 @@
         "oidc": {
             "error_title": "我们无法使你登入",
             "generic_auth_error": "验证时出了问题。前往登录页面并重试。",
-            "logout_redirect_warning": "你将被重定向到服务器的验证提供者以完成登出。",
             "missing_or_invalid_stored_state": "我们已要求浏览器记住你使用的家服务器，但不幸的是你的浏览器已忘记。请前往登录页面重试。"
         },
         "password_field_keep_going_prompt": "继续前进……",
@@ -396,7 +395,6 @@
             "other": "和其他%(count)s个人……",
             "one": "和其它一个..."
         },
-        "android": "安卓",
         "appearance": "外观",
         "application": "应用",
         "are_you_sure": "你确定吗？",
@@ -435,7 +433,6 @@
         "identity_server": "身份服务器",
         "image": "图片",
         "integration_manager": "集成管理器",
-        "ios": "ios",
         "joined": "已加入",
         "labs": "实验室",
         "legal": "法律信息",
@@ -522,8 +519,7 @@
         "video": "视频",
         "video_room": "视频房间",
         "view_message": "查看消息",
-        "warning": "警告",
-        "welcome": "欢迎"
+        "warning": "警告"
     },
     "composer": {
         "autocomplete": {
@@ -809,7 +805,6 @@
         },
         "udd": {
             "interactive_verification_button": "用表情符号交互式验证",
-            "manual_verification_button": "用文本手动验证",
             "other_ask_verify_text": "要求此用户验证其会话，或在下面手动进行验证。",
             "other_new_session_text": "%(name)s(%(userId)s)登录到未验证的新会话：",
             "own_ask_verify_text": "使用以下选项之一验证你的其他会话。",
@@ -841,12 +836,6 @@
             "incoming_sas_dialog_title": "收到验证请求",
             "incoming_sas_user_dialog_text_1": "验证此用户并将其标记为已信任。在收发端到端加密消息时，信任用户可让你更加放心。",
             "incoming_sas_user_dialog_text_2": "验证此用户会将其会话标记为已信任，与此同时，你的会话也会被此用户标记为已信任。",
-            "manual_device_verification_device_id_label": "会话 ID",
-            "manual_device_verification_device_key_label": "会话密钥",
-            "manual_device_verification_device_name_label": "会话名称",
-            "manual_device_verification_footer": "如果它们不匹配，你通讯的安全性可能已受损。",
-            "manual_device_verification_self_text": "通过比较下方内容和你别的会话中的用户设置来确认：",
-            "manual_device_verification_user_text": "通过比较下方内容和对方用户设置来确认此用户会话：",
             "no_key_or_device": "看起来你没有安全密钥或者任何其他可以验证的设备。 此设备将无法访问旧的加密消息。为了在这个设备上验证你的身份，你需要重置你的验证密钥。",
             "no_support_qr_emoji": "你正在尝试验证的设备不支持扫码QR码或表情符号验证，这是%(brand)s所支持的。用不同的客户端试试。",
             "other_party_cancelled": "另一方取消了验证。",
@@ -1296,7 +1285,6 @@
         "video_rooms_faq1_question": "我如何创建视频房间？",
         "video_rooms_faq2_answer": "是的，聊天时间线显示在视频旁。",
         "video_rooms_faq2_question": "我能在视频通话的同时使用文字聊天吗？",
-        "voice_broadcast": "语音广播",
         "wysiwyg_composer": "富文本编辑器"
     },
     "labs_mjolnir": {
@@ -1390,7 +1378,6 @@
     },
     "member_list": {
         "filter_placeholder": "过滤房间成员",
-        "invited_list_heading": "已邀请",
         "power_label": "%(userName)s（权力 %(powerLevelNumber)s）"
     },
     "member_list_back_action_label": "房间成员",
@@ -1426,61 +1413,18 @@
         "mute_description": "你不会收到任何通知"
     },
     "notifier": {
-        "io.element.voice_broadcast_chunk": "%(senderName)s开始了语音广播",
         "m.key.verification.request": "%(name)s 正在请求验证"
     },
     "onboarding": {
-        "apple_trademarks": "App Store®和Apple logo®是Apple Inc.的商标",
-        "community_messaging_action": "寻找你的人",
-        "community_messaging_description": "保持对社区讨论的所有权和控制权。\n可扩展至支持数百万人，具有强大的管理审核功能和互操作性。",
-        "community_messaging_title": "社群所有权",
-        "complete_these": "完成这些步骤以充分利用%(brand)s",
         "create_room": "创建一个群聊",
-        "download_app": "下载%(brand)s",
-        "download_app_action": "下载应用",
-        "download_app_description": "随身携带%(brand)s，不错过任何事情",
-        "download_app_store": "在App Store下载",
-        "download_brand": "下载%(brand)s",
-        "download_brand_desktop": "下载%(brand)s桌面版",
-        "enable_notifications": "打开通知",
-        "enable_notifications_action": "启用通知",
-        "enable_notifications_description": "不要错过回复或重要消息",
         "explore_rooms": "探索公共房间",
-        "find_community_members": "发现并邀请你的社群成员",
-        "find_coworkers": "发现并邀请你的同事",
-        "find_friends": "发现并邀请你的朋友",
-        "find_friends_action": "发现朋友",
-        "find_friends_description": "这就是你来这里的目的，所以让我们开始吧",
-        "find_people": "找人",
-        "free_e2ee_messaging_unlimited_voip": "%(brand)s提供免费的端到端加密消息传递以及无限制的语音和视频通话，是保持联系的绝佳方式。",
-        "get_stuff_done": "找到队友，完成任务",
-        "google_trademarks": "Google Play及其logo是Google LLC的商标。",
         "has_avatar_label": "很好，这样大家就知道是你了",
         "intro_byline": "拥有您的对话。",
         "intro_welcome": "欢迎来到 %(appName)s",
         "no_avatar_label": "添加照片，让人们知道这是你。",
-        "only_n_steps_to_go": {
-            "other": "仅需%(count)s步",
-            "one": "仅需%(count)s步"
-        },
-        "personal_messaging_action": "开始你的第一个聊天",
-        "personal_messaging_title": "和朋友家人安全地收发消息",
-        "qr_or_app_links": "%(qrCode)s或%(appLinks)s",
         "send_dm": "发送私聊",
-        "set_up_profile": "设置你的用户资料",
-        "set_up_profile_action": "你的用户资料",
-        "set_up_profile_description": "确保人们知道这真的是你",
-        "use_case_community_messaging": "在线社群成员",
-        "use_case_heading2": "你会和谁聊得最多？",
-        "use_case_personal_messaging": "朋友和家人",
-        "use_case_work_messaging": "同事和团队",
         "welcome_detail": "现在，让我们协助你开始",
-        "welcome_to_brand": "欢迎来到%(brand)s",
-        "welcome_user": "欢迎 %(name)s",
-        "work_messaging_action": "找到你的同事",
-        "work_messaging_title": "用于工作的安全的消息传送",
-        "you_did_it": "你做到了！",
-        "you_made_it": "你做到了！"
+        "welcome_user": "欢迎 %(name)s"
     },
     "poll": {
         "create_poll_action": "创建投票",
@@ -1526,7 +1470,6 @@
         "custom_level": "自定义级别",
         "default": "默认",
         "label": "权力级别",
-        "mod": "管理员",
         "moderator": "协管员",
         "restricted": "受限"
     },
@@ -1917,7 +1860,6 @@
             "error_unbanning": "解除封禁失败",
             "events_default": "发送消息",
             "invite": "邀请用户",
-            "io.element.voice_broadcast_info": "语音广播",
             "kick": "移除用户",
             "m.call": "开始%(brand)s呼叫",
             "m.call.member": "加入%(brand)s呼叫",
@@ -2269,7 +2211,6 @@
             "rm_lifetime": "已读标记生存期（毫秒）",
             "rm_lifetime_offscreen": "已读标记屏幕外生存期（毫秒）",
             "room_list_heading": "房间列表",
-            "show_checklist_shortcuts": "在房间列表上方显示欢迎清单的捷径",
             "show_polls_button": "显示投票按钮",
             "surround_text": "输入特殊字符时圈出选定的文本",
             "time_heading": "显示的时间戳"
@@ -2457,7 +2398,6 @@
         "warning": "<w>警告：</w><description/>"
     },
     "share": {
-        "link_title": "房间链接",
         "permalink_message": "选中消息的链接",
         "permalink_most_recent": "最新消息的链接",
         "title_message": "分享房间消息",
@@ -2544,13 +2484,6 @@
         "upgraderoom": "将房间升级到新版本",
         "upgraderoom_permission_error": "你没有权限使用此命令。",
         "usage": "用法",
-        "verify": "验证用户、会话和公钥元组",
-        "verify_mismatch": "警告：密钥验证失败！%(userId)s 的会话 %(deviceId)s 的签名密钥为 %(fprint)s，与提供的密钥 %(fingerprint)s 不符。这可能表示你的通讯已被截获！",
-        "verify_nop": "会话已验证！",
-        "verify_nop_warning_mismatch": "警告：会话已验证，然而密钥不匹配！",
-        "verify_success_description": "你提供的签名密钥与你从 %(userId)s 的会话 %(deviceId)s 获取的一致。此会话被标为已验证。",
-        "verify_success_title": "已验证的密钥",
-        "verify_unknown_pair": "未知用户会话配对：（%(userId)s：%(deviceId)s）",
         "whois": "显示关于用户的信息"
     },
     "space": {
@@ -2586,7 +2519,6 @@
         "invite": "邀请人们",
         "invite_description": "使用邮箱或者用户名邀请",
         "invite_link": "分享邀请链接",
-        "invite_this_space": "邀请至此空间",
         "joining_space": "加入中",
         "landing_welcome": "欢迎来到 <name/>",
         "leave_dialog_action": "离开空间",
@@ -2931,7 +2863,9 @@
             "sent": "%(senderName)s 向 %(targetDisplayName)s 发了加入房间的邀请。"
         },
         "m.room.tombstone": "%(senderDisplayName)s 升级了此房间。",
-        "m.room.topic": "%(senderDisplayName)s 将话题修改为 “%(topic)s”。",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s 将话题修改为 “%(topic)s”。"
+        },
         "m.sticker": "%(senderDisplayName)s 发送了一张贴纸。",
         "m.video": {
             "error_decrypting": "解密视频时出错"
@@ -3256,27 +3190,6 @@
         "switch_theme_dark": "切换到深色模式",
         "switch_theme_light": "切换到浅色模式"
     },
-    "voice_broadcast": {
-        "30s_backward": "后退30秒",
-        "30s_forward": "前进30秒",
-        "action": "语音广播",
-        "buffering": "正在缓冲……",
-        "confirm_stop_affirm": "是的，停止广播",
-        "confirm_stop_title": "停止直播吗？",
-        "failed_already_recording_description": "你已经在录制一个语音广播。请结束你当前的语音广播以开始新的语音广播。",
-        "failed_already_recording_title": "无法开始新的语音广播",
-        "failed_insufficient_permission_description": "你没有必要的权限在这个房间开始语音广播。请联系房间管理员以提升你的权限。",
-        "failed_insufficient_permission_title": "无法开始新的语音广播",
-        "failed_no_connection_description": "很遗憾，我们现在无法开始录音。请稍后再试。",
-        "failed_no_connection_title": "连接错误",
-        "failed_others_already_recording_description": "别人已经在录制语音广播了。等到他们的语音广播结束后再开始新的广播。",
-        "failed_others_already_recording_title": "无法开始新的语音广播",
-        "go_live": "开始直播",
-        "live": "实时",
-        "pause": "暂停语音广播",
-        "play": "播放语音广播",
-        "resume": "恢复语音广播"
-    },
     "voip": {
         "already_in_call": "正在通话中",
         "already_in_call_person": "你正在与其通话。",
@@ -3296,7 +3209,6 @@
         "camera_disabled": "你的摄像头已关闭",
         "camera_enabled": "你的摄像头仍然处于启用状态",
         "cannot_call_yourself_description": "你不能打给自己。",
-        "change_input_device": "变更输入设备",
         "connecting": "连接中",
         "connection_lost": "已丢失与服务器的连接",
         "connection_lost_description": "你不能在未连接到服务器时进行呼叫。",
@@ -3313,7 +3225,6 @@
         "enable_camera": "启动相机",
         "enable_microphone": "取消静音麦克风",
         "expand": "返回通话",
-        "failed_call_live_broadcast_title": "无法开始通话",
         "hangup": "挂断",
         "hide_sidebar_button": "隐藏侧边栏",
         "input_devices": "输入设备",

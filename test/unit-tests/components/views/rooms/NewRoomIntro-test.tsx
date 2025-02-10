@@ -3,29 +3,29 @@ Copyright 2024 New Vector Ltd.
 Copyright 2015-2022 The Matrix.org Foundation C.I.C.
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import { render, screen } from "jest-matrix-react";
-import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 
 import { LocalRoom } from "../../../../../src/models/LocalRoom";
 import { filterConsole, mkRoomMemberJoinEvent, mkThirdPartyInviteEvent, stubClient } from "../../../../test-utils";
-import RoomContext from "../../../../../src/contexts/RoomContext";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import NewRoomIntro from "../../../../../src/components/views/rooms/NewRoomIntro";
-import { IRoomState } from "../../../../../src/components/structures/RoomView";
+import { type IRoomState } from "../../../../../src/components/structures/RoomView";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { DirectoryMember } from "../../../../../src/utils/direct-messages";
+import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 
 const renderNewRoomIntro = (client: MatrixClient, room: Room | LocalRoom) => {
     render(
         <MatrixClientContext.Provider value={client}>
-            <RoomContext.Provider value={{ room, roomId: room.roomId } as unknown as IRoomState}>
+            <ScopedRoomContextProvider {...({ room, roomId: room.roomId } as unknown as IRoomState)}>
                 <NewRoomIntro />
-            </RoomContext.Provider>
+            </ScopedRoomContextProvider>
         </MatrixClientContext.Provider>,
     );
 };

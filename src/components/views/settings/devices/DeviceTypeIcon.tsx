@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -15,8 +15,8 @@ import { Icon as WebIcon } from "../../../../../res/img/element-icons/settings/w
 import { Icon as MobileIcon } from "../../../../../res/img/element-icons/settings/mobile.svg";
 import { Icon as VerifiedIcon } from "../../../../../res/img/e2e/verified.svg";
 import { Icon as UnverifiedIcon } from "../../../../../res/img/e2e/warning.svg";
-import { _t, _td, TranslationKey } from "../../../../languageHandler";
-import { ExtendedDevice } from "./types";
+import { _t, _td, type TranslationKey } from "../../../../languageHandler";
+import { type ExtendedDevice } from "./types";
 import { DeviceType } from "../../../../utils/device/parseUserAgent";
 
 interface Props {

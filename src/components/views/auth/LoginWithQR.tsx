@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -14,11 +14,11 @@ import {
     MSC4108SecureChannel,
     MSC4108SignInWithQR,
     RendezvousError,
-    RendezvousFailureReason,
+    type RendezvousFailureReason,
     RendezvousIntent,
 } from "matrix-js-sdk/src/rendezvous";
 import { logger } from "matrix-js-sdk/src/logger";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { Click, Mode, Phase } from "./LoginWithQR-types";
 import LoginWithQRFlow from "./LoginWithQRFlow";
@@ -37,7 +37,6 @@ interface IState {
     userCode?: string;
     checkCode?: string;
     failureReason?: FailureReason;
-    lastScannedCode?: Buffer;
 }
 
 export enum LoginWithQRFailureReason {
@@ -108,12 +107,9 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
     private generateAndShowCode = async (): Promise<void> => {
         let rendezvous: MSC4108SignInWithQR;
         try {
-            const fallbackRzServer = this.props.client?.getClientWellKnown()?.["io.element.rendezvous"]?.server;
-
             const transport = new MSC4108RendezvousSession({
                 onFailure: this.onFailure,
                 client: this.props.client,
-                fallbackRzServer,
             });
             await transport.send("");
             const channel = new MSC4108SecureChannel(transport, undefined, this.onFailure);
@@ -157,7 +153,7 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
             throw new Error("Rendezvous not found");
         }
 
-        if (!this.state.lastScannedCode && this.state.rendezvous?.checkCode !== checkCode) {
+        if (this.state.rendezvous?.checkCode !== checkCode) {
             this.setState({ failureReason: LoginWithQRFailureReason.CheckCodeMismatch });
             return;
         }
@@ -204,7 +200,6 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
             failureReason: undefined,
             userCode: undefined,
             checkCode: undefined,
-            lastScannedCode: undefined,
             mediaPermissionError: false,
         });
     }

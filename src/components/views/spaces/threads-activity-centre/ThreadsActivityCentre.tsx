@@ -2,25 +2,25 @@
  * Copyright 2024 New Vector Ltd.
  * Copyright 2024 The Matrix.org Foundation C.I.C.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { JSX, useState } from "react";
+import React, { type JSX, useState } from "react";
 import { Menu, MenuItem } from "@vector-im/compound-web";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk/src/matrix";
 
 import { ThreadsActivityCentreButton } from "./ThreadsActivityCentreButton";
 import { _t } from "../../../../languageHandler";
 import DecoratedRoomAvatar from "../../avatars/DecoratedRoomAvatar";
 import { Action } from "../../../../dispatcher/actions";
 import defaultDispatcher from "../../../../dispatcher/dispatcher";
-import { ViewRoomPayload } from "../../../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../../../dispatcher/payloads/ViewRoomPayload";
 import RightPanelStore from "../../../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../../stores/right-panel/RightPanelStorePhases";
 import { useUnreadThreadRooms } from "./useUnreadThreadRooms";
 import { StatelessNotificationBadge } from "../../rooms/NotificationBadge/StatelessNotificationBadge";
-import { NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
+import { type NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
 import PosthogTrackers from "../../../../PosthogTrackers";
 import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
@@ -44,7 +44,7 @@ export function ThreadsActivityCentre({ displayButtonLabel }: ThreadsActivityCen
     const [open, setOpen] = useState(false);
     const roomsAndNotifications = useUnreadThreadRooms(open);
     const isReleaseAnnouncementOpen = useIsReleaseAnnouncementOpen("threadsActivityCentre");
-    const settingTACOnlyNotifs = useSettingValue<boolean>("Notifications.tac_only_notifications");
+    const settingTACOnlyNotifs = useSettingValue("Notifications.tac_only_notifications");
 
     const emptyCaption = settingTACOnlyNotifs
         ? _t("threads_activity_centre|no_rooms_with_threads_notifs")

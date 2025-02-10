@@ -2,14 +2,13 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { M_POLL_END, M_POLL_START, M_BEACON_INFO, MatrixEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { M_POLL_END, M_POLL_START, M_BEACON_INFO, type MatrixEvent, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { getShareableLocationEventForBeacon } from "../../utils/beacon/getShareableLocation";
-import { VoiceBroadcastInfoEventType } from "../../voice-broadcast/types";
 
 /**
  * Get forwardable event for a given event
@@ -19,8 +18,6 @@ export const getForwardableEvent = (event: MatrixEvent, cli: MatrixClient): Matr
     if (M_POLL_START.matches(event.getType()) || M_POLL_END.matches(event.getType())) {
         return null;
     }
-
-    if (event.getType() === VoiceBroadcastInfoEventType) return null;
 
     // Live location beacons should forward their latest location as a static pin location
     // If the beacon is not live, or doesn't have a location forwarding is not allowed

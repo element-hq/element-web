@@ -2,19 +2,28 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import http from "http";
 import express from "express";
-import { AddressInfo } from "net";
+import { type AddressInfo } from "net";
+import { type TestInfo } from "@playwright/test";
+
+import { randB64Bytes } from "../utils/rand.ts";
 
 export class OAuthServer {
     private server?: http.Server;
+    private sub?: string;
+
+    public onTestStarted(testInfo: TestInfo): void {
+        this.sub = testInfo.testId;
+    }
 
     public start(): number {
         if (this.server) this.stop();
+        const token = randB64Bytes(16);
 
         const app = express();
 
@@ -28,7 +37,7 @@ export class OAuthServer {
             const code = req.body.code;
             if (code === "valid_auth_code") {
                 res.send({
-                    access_token: "oauth_access_token",
+                    access_token: token,
                     token_type: "Bearer",
                     expires_in: "3600",
                 });
@@ -43,7 +52,7 @@ export class OAuthServer {
 
             // return an OAuth2 user info object
             res.send({
-                sub: "alice",
+                sub: this.sub,
                 name: "Alice",
             });
         });

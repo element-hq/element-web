@@ -2,21 +2,22 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import "@testing-library/jest-dom";
 import React, { createRef } from "react";
 import { render, screen, waitFor } from "jest-matrix-react";
+import { initOnce } from "@vector-im/matrix-wysiwyg";
 
 import MatrixClientContext from "../../../../../../../src/contexts/MatrixClientContext";
-import RoomContext from "../../../../../../../src/contexts/RoomContext";
 import { WysiwygAutocomplete } from "../../../../../../../src/components/views/rooms/wysiwyg_composer/components/WysiwygAutocomplete";
 import { getRoomContext, mkStubRoom, stubClient } from "../../../../../../test-utils";
-import Autocomplete from "../../../../../../../src/components/views/rooms/Autocomplete";
-import Autocompleter, { ICompletion } from "../../../../../../../src/autocomplete/Autocompleter";
-import AutocompleteProvider from "../../../../../../../src/autocomplete/AutocompleteProvider";
+import type Autocomplete from "../../../../../../../src/components/views/rooms/Autocomplete";
+import Autocompleter, { type ICompletion } from "../../../../../../../src/autocomplete/Autocompleter";
+import type AutocompleteProvider from "../../../../../../../src/autocomplete/AutocompleteProvider";
+import { ScopedRoomContextProvider } from "../../../../../../../src/contexts/ScopedRoomContext.tsx";
 
 const mockCompletion: ICompletion[] = [
     {
@@ -41,6 +42,8 @@ const constructMockProvider = (data: ICompletion[]) =>
         getName: jest.fn().mockReturnValue("test provider"),
         renderCompletions: jest.fn().mockImplementation((components) => components),
     }) as unknown as AutocompleteProvider;
+
+beforeAll(initOnce, 10000);
 
 describe("WysiwygAutocomplete", () => {
     beforeAll(() => {
@@ -71,7 +74,7 @@ describe("WysiwygAutocomplete", () => {
 
         return render(
             <MatrixClientContext.Provider value={mockClient}>
-                <RoomContext.Provider value={mockRoomContext}>
+                <ScopedRoomContextProvider {...mockRoomContext}>
                     <WysiwygAutocomplete
                         ref={autocompleteRef}
                         suggestion={null}
@@ -80,7 +83,7 @@ describe("WysiwygAutocomplete", () => {
                         handleAtRoomMention={mockHandleAtRoomMention}
                         {...props}
                     />
-                </RoomContext.Provider>
+                </ScopedRoomContextProvider>
             </MatrixClientContext.Provider>,
         );
     };

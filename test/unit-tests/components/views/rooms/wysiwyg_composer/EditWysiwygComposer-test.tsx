@@ -2,16 +2,16 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import "@testing-library/jest-dom";
 import React from "react";
 import { fireEvent, render, screen, waitFor } from "jest-matrix-react";
+import { initOnce } from "@vector-im/matrix-wysiwyg";
 
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
-import RoomContext from "../../../../../../src/contexts/RoomContext";
 import defaultDispatcher from "../../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../../src/dispatcher/actions";
 import { flushPromises, mkEvent } from "../../../../../test-utils";
@@ -19,10 +19,16 @@ import { EditWysiwygComposer } from "../../../../../../src/components/views/room
 import EditorStateTransfer from "../../../../../../src/utils/EditorStateTransfer";
 import { Emoji } from "../../../../../../src/components/views/rooms/wysiwyg_composer/components/Emoji";
 import { ChevronFace } from "../../../../../../src/components/structures/ContextMenu";
-import { ComposerInsertPayload, ComposerType } from "../../../../../../src/dispatcher/payloads/ComposerInsertPayload";
-import { ActionPayload } from "../../../../../../src/dispatcher/payloads";
+import {
+    type ComposerInsertPayload,
+    ComposerType,
+} from "../../../../../../src/dispatcher/payloads/ComposerInsertPayload";
+import { type ActionPayload } from "../../../../../../src/dispatcher/payloads";
 import * as EmojiButton from "../../../../../../src/components/views/rooms/EmojiButton";
 import { createMocks } from "./utils";
+import { ScopedRoomContextProvider } from "../../../../../../src/contexts/ScopedRoomContext.tsx";
+
+beforeAll(initOnce, 10000);
 
 describe("EditWysiwygComposer", () => {
     afterEach(() => {
@@ -39,23 +45,12 @@ describe("EditWysiwygComposer", () => {
     ) => {
         return render(
             <MatrixClientContext.Provider value={client}>
-                <RoomContext.Provider value={roomContext}>
+                <ScopedRoomContextProvider {...roomContext}>
                     <EditWysiwygComposer disabled={disabled} editorStateTransfer={_editorStateTransfer} />
-                </RoomContext.Provider>
+                </ScopedRoomContextProvider>
             </MatrixClientContext.Provider>,
         );
     };
-
-    beforeAll(
-        async () => {
-            // Load the dynamic import
-            const component = customRender(false);
-            await component.findByRole("textbox");
-            component.unmount();
-        },
-        // it can take a while to load the wasm
-        20000,
-    );
 
     it("Should not render the component when not ready", async () => {
         // When
@@ -64,9 +59,9 @@ describe("EditWysiwygComposer", () => {
 
         rerender(
             <MatrixClientContext.Provider value={mockClient}>
-                <RoomContext.Provider value={{ ...defaultRoomContext, room: undefined }}>
+                <ScopedRoomContextProvider {...defaultRoomContext} room={undefined}>
                     <EditWysiwygComposer disabled={false} editorStateTransfer={editorStateTransfer} />
-                </RoomContext.Provider>
+                </ScopedRoomContextProvider>
             </MatrixClientContext.Provider>,
         );
 
@@ -196,9 +191,9 @@ describe("EditWysiwygComposer", () => {
             // Then
             screen.getByText("Save").click();
             const expectedContent = {
-                "body": ` * foo bar`,
+                "body": `* foo bar`,
                 "format": "org.matrix.custom.html",
-                "formatted_body": ` * foo bar`,
+                "formatted_body": `* foo bar`,
                 "m.new_content": {
                     body: "foo bar",
                     format: "org.matrix.custom.html",
@@ -275,10 +270,10 @@ describe("EditWysiwygComposer", () => {
         );
         render(
             <MatrixClientContext.Provider value={mockClient}>
-                <RoomContext.Provider value={defaultRoomContext}>
+                <ScopedRoomContextProvider {...defaultRoomContext}>
                     <EditWysiwygComposer editorStateTransfer={editorStateTransfer} />
                     <Emoji menuPosition={{ chevronFace: ChevronFace.Top }} />
-                </RoomContext.Provider>
+                </ScopedRoomContextProvider>
             </MatrixClientContext.Provider>,
         );
         // Same behavior as in RoomView.tsx

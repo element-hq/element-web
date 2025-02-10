@@ -2,13 +2,13 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { VerificationPhase, VerificationRequest, VerificationRequestEvent } from "matrix-js-sdk/src/crypto-api";
-import { RoomMember, User } from "matrix-js-sdk/src/matrix";
+import { VerificationPhase, type VerificationRequest, VerificationRequestEvent } from "matrix-js-sdk/src/crypto-api";
+import { type RoomMember, type User } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import EncryptionInfo from "./EncryptionInfo";

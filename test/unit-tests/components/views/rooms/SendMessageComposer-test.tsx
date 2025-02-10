@@ -2,13 +2,13 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import { fireEvent, render, waitFor } from "jest-matrix-react";
-import { IContent, MatrixClient, MsgType } from "matrix-js-sdk/src/matrix";
+import { type IContent, type MatrixClient, MsgType } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 
@@ -18,7 +18,7 @@ import SendMessageComposer, {
     isQuickReaction,
 } from "../../../../../src/components/views/rooms/SendMessageComposer";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import RoomContext, { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
+import { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
 import EditorModel from "../../../../../src/editor/model";
 import { createPartCreator } from "../../../editor/mock";
 import { createTestClient, mkEvent, mkStubRoom, stubClient } from "../../../../test-utils";
@@ -26,10 +26,11 @@ import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import DocumentOffset from "../../../../../src/editor/offset";
 import { Layout } from "../../../../../src/settings/enums/Layout";
-import { IRoomState, MainSplitContentType } from "../../../../../src/components/structures/RoomView";
+import { type IRoomState, MainSplitContentType } from "../../../../../src/components/structures/RoomView";
 import { mockPlatformPeg } from "../../../../test-utils/platform";
 import { doMaybeLocalRoomAction } from "../../../../../src/utils/local-room";
 import { addTextToComposer } from "../../../../test-utils/composer";
+import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 
 jest.mock("../../../../../src/utils/local-room", () => ({
     doMaybeLocalRoomAction: jest.fn(),
@@ -365,9 +366,9 @@ describe("<SendMessageComposer/>", () => {
         };
         const getRawComponent = (props = {}, roomContext = defaultRoomContext, client = mockClient) => (
             <MatrixClientContext.Provider value={client}>
-                <RoomContext.Provider value={roomContext}>
+                <ScopedRoomContextProvider {...roomContext}>
                     <SendMessageComposer {...defaultProps} {...props} />
-                </RoomContext.Provider>
+                </ScopedRoomContextProvider>
             </MatrixClientContext.Provider>
         );
         const getComponent = (props = {}, roomContext = defaultRoomContext, client = mockClient) => {

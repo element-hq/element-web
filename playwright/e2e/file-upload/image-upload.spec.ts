@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2024 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -25,7 +25,7 @@ test.describe("Image Upload", () => {
         ).toBeVisible();
     });
 
-    test("should show image preview when uploading an image", async ({ page, app }) => {
+    test("should show image preview when uploading an image", { tag: "@screenshot" }, async ({ page, app }) => {
         await page
             .locator(".mx_MessageComposer_actions input[type='file']")
             .setInputFiles("playwright/sample-files/riot.png");

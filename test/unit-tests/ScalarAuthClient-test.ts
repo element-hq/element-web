@@ -2,13 +2,13 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked } from "jest-mock";
 import fetchMock from "fetch-mock-jest";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import ScalarAuthClient from "../../src/ScalarAuthClient";
 import { stubClient } from "../test-utils";
@@ -97,7 +97,7 @@ describe("ScalarAuthClient", function () {
                 body: { errcode: "M_TERMS_NOT_SIGNED" },
             });
             sac.exchangeForScalarToken = jest.fn(() => Promise.resolve("testtoken1"));
-            mocked(client.getTerms).mockResolvedValue({ policies: [] });
+            mocked(client.getTerms).mockResolvedValue({ policies: {} });
 
             await expect(sac.registerForToken()).resolves.toBe("testtoken1");
         });

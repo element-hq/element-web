@@ -1,7 +1,8 @@
 # Manual deploy workflow for deploying to app.element.io & staging.element.io
 # Runs automatically for staging.element.io when an RC or Release is published
 # Note: Does *NOT* run automatically for app.element.io so that it gets tested on staging.element.io beforehand
-name: Build and Deploy ${{ inputs.site || 'staging.element.io' }}
+name: Deploy release
+run-name: Deploy ${{ github.ref_name }} to ${{ inputs.site || 'staging.element.io' }}
 on:
     release:
         types: [published]
@@ -15,6 +16,11 @@ on:
                 options:
                     - staging.element.io
                     - app.element.io
+            skip-checks:
+                description: Skip CI on the tagged commit
+                required: true
+                default: false
+                type: boolean
 concurrency: ${{ inputs.site || 'staging.element.io' }}
 permissions: {}
 jobs:
@@ -28,37 +34,40 @@ jobs:
         env:
             SITE: ${{ inputs.site || 'staging.element.io' }}
         steps:
+            - uses: actions/checkout@v4
+
             - name: Load GPG key
               run: |
                   curl https://packages.element.io/element-release-key.gpg | gpg --import
                   gpg -k "$GPG_FINGERPRINT"
               env:
-                  GPG_FINGERPRINT: ${{ secrets.GPG_FINGERPRINT }}
+                  GPG_FINGERPRINT: ${{ vars.GPG_FINGERPRINT }}
 
             - name: Check current version on deployment
               id: current_version
               run: |
-                  echo "version=$(curl -s https://$SITE/version)" >> $GITHUB_OUTPUT
+                  version=$(curl -s https://$SITE/version)
+                  echo "version=${version#v}" >> $GITHUB_OUTPUT
 
             # The current version bundle melding dance is skipped if the version we're deploying is the same
             # as then we're just doing a re-deploy of the same version with potentially different configs.
             - name: Download current version for its old bundles
               id: current_download
               if: steps.current_version.outputs.version != github.ref_name
-              uses: element-hq/element-web/.github/actions/download-verify-element-tarball@${{ github.ref_name }}
+              uses: ./.github/actions/download-verify-element-tarball
               with:
-                  tag: steps.current_version.outputs.version
-                  out-file-path: current_version
+                  tag: v${{ steps.current_version.outputs.version }}
+                  out-file-path: _current_version
 
             - name: Download target version
-              uses: element-hq/element-web/.github/actions/download-verify-element-tarball@${{ github.ref_name }}
+              uses: ./.github/actions/download-verify-element-tarball
               with:
                   tag: ${{ github.ref_name }}
                   out-file-path: _deploy
 
             - name: Merge current bundles into target
               if: steps.current_download.outcome == 'success'
-              run: cp -vnpr current_version/bundles/* _deploy/bundles/
+              run: cp -vnpr _current_version/bundles/* _deploy/bundles/
 
             - name: Copy config
               run: cp element.io/app/config.json _deploy/config.json
@@ -71,9 +80,10 @@ jobs:
 
             - name: Wait for other steps to succeed
               uses: t3chguy/wait-on-check-action@18541021811b56544d90e0f073401c2b99e249d6 # fork
+              if: inputs.skip-checks != true
               with:
                   ref: ${{ github.sha }}
-                  running-workflow-name: "Build and Deploy ${{ env.SITE }}"
+                  running-workflow-name: "Deploy to Cloudflare Pages"
                   repo-token: ${{ secrets.GITHUB_TOKEN }}
                   wait-interval: 10
                   check-regexp: ^((?!SonarCloud|SonarQube|issue|board|label|Release|prepare|GitHub Pages).)*$
@@ -86,3 +96,4 @@ jobs:
                   projectName: ${{ env.SITE == 'staging.element.io' && 'element-web-staging' || 'element-web' }}
                   directory: _deploy
                   gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+                  branch: main

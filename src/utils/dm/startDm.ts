@@ -2,22 +2,22 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { IInvite3PID, MatrixClient, Room } from "matrix-js-sdk/src/matrix";
-import { Optional } from "matrix-events-sdk";
+import { type IInvite3PID, type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
+import { type Optional } from "matrix-events-sdk";
 
 import { Action } from "../../dispatcher/actions";
-import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
-import { determineCreateRoomEncryptionOption, Member } from "../direct-messages";
+import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import { determineCreateRoomEncryptionOption, type Member } from "../direct-messages";
 import DMRoomMap from "../DMRoomMap";
 import { isLocalRoom } from "../localRoom/isLocalRoom";
 import { findDMForUser } from "./findDMForUser";
 import dis from "../../dispatcher/dispatcher";
 import { getAddressType } from "../../UserAddress";
-import createRoom, { IOpts } from "../../createRoom";
+import createRoom, { type IOpts } from "../../createRoom";
 
 /**
  * Start a DM.

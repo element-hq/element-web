@@ -2,14 +2,14 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2016-2018 , 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 // Pull in the encryption lib so that we can decrypt attachments.
 import encrypt from "matrix-encrypt-attachment";
 import { parseErrorResponse } from "matrix-js-sdk/src/matrix";
-import { EncryptedFile, MediaEventInfo } from "matrix-js-sdk/src/types";
+import { type EncryptedFile, type MediaEventInfo } from "matrix-js-sdk/src/types";
 
 import { mediaFromContent } from "../customisations/Media";
 import { getBlobSafeMimeType } from "./blobs";

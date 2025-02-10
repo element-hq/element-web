@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -17,7 +17,7 @@ import {
 } from "../../../src/editor/operations";
 import { Formatting } from "../../../src/components/views/rooms/MessageComposerFormatBar";
 import { longestBacktickSequence } from "../../../src/editor/deserialize";
-import DocumentPosition from "../../../src/editor/position";
+import type DocumentPosition from "../../../src/editor/position";
 
 const SERIALIZED_NEWLINE = { text: "\n", type: "newline" };
 

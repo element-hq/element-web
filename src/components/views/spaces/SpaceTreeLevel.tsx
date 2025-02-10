@@ -2,27 +2,27 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021-2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React, {
-    MouseEvent,
-    ComponentProps,
-    ComponentType,
+    type MouseEvent,
+    type ComponentProps,
+    type ComponentType,
     createRef,
-    InputHTMLAttributes,
-    LegacyRef,
-    RefObject,
+    type InputHTMLAttributes,
+    type LegacyRef,
+    type RefObject,
 } from "react";
 import classNames from "classnames";
-import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
+import { type DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 
 import RoomAvatar from "../avatars/RoomAvatar";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
-import { SpaceKey } from "../../../stores/spaces";
+import { type SpaceKey } from "../../../stores/spaces";
 import SpaceTreeLevelLayoutStore from "../../../stores/spaces/SpaceTreeLevelLayoutStore";
 import NotificationBadge from "../rooms/NotificationBadge";
 import { _t } from "../../../languageHandler";
@@ -30,17 +30,20 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { ContextMenuTooltipButton } from "../../../accessibility/context_menu/ContextMenuTooltipButton";
 import { toRightOf, useContextMenu } from "../../structures/ContextMenu";
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
+import AccessibleButton, {
+    type ButtonEvent,
+    type ButtonProps as AccessibleButtonProps,
+} from "../elements/AccessibleButton";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
 import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
-import { NotificationState } from "../../../stores/notifications/NotificationState";
+import { type NotificationState } from "../../../stores/notifications/NotificationState";
 import SpaceContextMenu from "../context_menus/SpaceContextMenu";
 import { useRovingTabIndex } from "../../../accessibility/RovingTabIndex";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 
-type ButtonProps<T extends keyof JSX.IntrinsicElements> = Omit<
-    ComponentProps<typeof AccessibleButton<T>>,
+type ButtonProps<T extends keyof HTMLElementTagNameMap> = Omit<
+    AccessibleButtonProps<T>,
     "title" | "onClick" | "size" | "element"
 > & {
     space?: Room;
@@ -52,12 +55,12 @@ type ButtonProps<T extends keyof JSX.IntrinsicElements> = Omit<
     notificationState?: NotificationState;
     isNarrow?: boolean;
     size: string;
-    innerRef?: RefObject<HTMLElement>;
+    innerRef?: RefObject<HTMLDivElement>;
     ContextMenuComponent?: ComponentType<ComponentProps<typeof SpaceContextMenu>>;
     onClick?(ev?: ButtonEvent): void;
 };
 
-export const SpaceButton = <T extends keyof JSX.IntrinsicElements>({
+export const SpaceButton = <T extends keyof HTMLElementTagNameMap>({
     space,
     spaceKey: _spaceKey,
     className,
@@ -72,8 +75,8 @@ export const SpaceButton = <T extends keyof JSX.IntrinsicElements>({
     ContextMenuComponent,
     ...props
 }: ButtonProps<T>): JSX.Element => {
-    const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLElement>(innerRef);
-    const [onFocus, isActive, ref] = useRovingTabIndex(handle);
+    const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>(innerRef);
+    const [onFocus, isActive, ref] = useRovingTabIndex<HTMLDivElement>(handle);
     const tabIndex = isActive ? 0 : -1;
 
     const spaceKey = _spaceKey ?? space?.roomId;

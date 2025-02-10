@@ -2,24 +2,26 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    MatrixClient,
+    type MatrixClient,
     LOCAL_NOTIFICATION_SETTINGS_PREFIX,
     NotificationCountType,
-    Room,
-    LocalNotificationSettings,
+    type Room,
+    type LocalNotificationSettings,
     ReceiptType,
-    IMarkedUnreadEvent,
+    type IMarkedUnreadEvent,
+    type EmptyObject,
 } from "matrix-js-sdk/src/matrix";
-import { IndicatorIcon } from "@vector-im/compound-web";
+import { type IndicatorIcon } from "@vector-im/compound-web";
 
 import SettingsStore from "../settings/SettingsStore";
 import { NotificationLevel } from "../stores/notifications/NotificationLevel";
 import { doesRoomHaveUnreadMessages } from "../Unread";
+import { type SettingKey } from "../settings/Settings.tsx";
 
 // MSC2867 is not yet spec at time of writing. We read from both stable
 // and unstable prefixes and accept the risk that the format may change,
@@ -34,13 +36,15 @@ export const MARKED_UNREAD_TYPE_UNSTABLE = "com.famedly.marked_unread";
  */
 export const MARKED_UNREAD_TYPE_STABLE = "m.marked_unread";
 
-export const deviceNotificationSettingsKeys = [
+export const deviceNotificationSettingsKeys: SettingKey[] = [
     "notificationsEnabled",
     "notificationBodyEnabled",
     "audioNotificationsEnabled",
 ];
 
-export function getLocalNotificationAccountDataEventType(deviceId: string | null): string {
+export function getLocalNotificationAccountDataEventType(
+    deviceId: string | null,
+): `${typeof LOCAL_NOTIFICATION_SETTINGS_PREFIX.name}.${string}` {
     return `${LOCAL_NOTIFICATION_SETTINGS_PREFIX.name}.${deviceId}`;
 }
 
@@ -77,7 +81,7 @@ export function localNotificationsAreSilenced(cli: MatrixClient): boolean {
  * @param client
  * @returns a promise that resolves when the room has been marked as read
  */
-export async function clearRoomNotification(room: Room, client: MatrixClient): Promise<{} | undefined> {
+export async function clearRoomNotification(room: Room, client: MatrixClient): Promise<EmptyObject | undefined> {
     const lastEvent = room.getLastLiveEvent();
 
     await setMarkedUnreadState(room, client, false);
@@ -112,15 +116,17 @@ export async function clearRoomNotification(room: Room, client: MatrixClient): P
  * @param client The matrix client
  * @returns a promise that resolves when all rooms have been marked as read
  */
-export function clearAllNotifications(client: MatrixClient): Promise<Array<{} | undefined>> {
-    const receiptPromises = client.getRooms().reduce((promises: Array<Promise<{} | undefined>>, room: Room) => {
-        if (doesRoomHaveUnreadMessages(room, true)) {
-            const promise = clearRoomNotification(room, client);
-            promises.push(promise);
-        }
+export function clearAllNotifications(client: MatrixClient): Promise<Array<EmptyObject | undefined>> {
+    const receiptPromises = client
+        .getRooms()
+        .reduce((promises: Array<Promise<EmptyObject | undefined>>, room: Room) => {
+            if (doesRoomHaveUnreadMessages(room, true)) {
+                const promise = clearRoomNotification(room, client);
+                promises.push(promise);
+            }
 
-        return promises;
-    }, []);
+            return promises;
+        }, []);
 
     return Promise.all(receiptPromises);
 }

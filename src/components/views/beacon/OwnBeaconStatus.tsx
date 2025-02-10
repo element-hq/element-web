@@ -2,19 +2,19 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Beacon } from "matrix-js-sdk/src/matrix";
-import React, { HTMLProps } from "react";
+import { type Beacon } from "matrix-js-sdk/src/matrix";
+import React, { type HTMLProps } from "react";
 
 import { _t } from "../../../languageHandler";
 import { useOwnLiveBeacons } from "../../../utils/beacon";
 import { preventDefaultWrapper } from "../../../utils/NativeEventUtils";
 import BeaconStatus from "./BeaconStatus";
 import { BeaconDisplayStatus } from "./displayStatus";
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 
 interface Props {
     displayStatus: BeaconDisplayStatus;

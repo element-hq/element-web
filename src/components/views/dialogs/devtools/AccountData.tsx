@@ -3,25 +3,25 @@ Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 Copyright 2022 Michael Telatynski <7t3chguy@gmail.com>
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useContext, useMemo, useState } from "react";
-import { IContent, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type AccountDataEvents, type IContent, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
-import BaseTool, { DevtoolsContext, IDevtoolsProps } from "./BaseTool";
+import BaseTool, { DevtoolsContext, type IDevtoolsProps } from "./BaseTool";
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
-import { EventEditor, EventViewer, eventTypeField, IEditorProps, stringify } from "./Event";
+import { EventEditor, EventViewer, eventTypeField, type IEditorProps, stringify } from "./Event";
 import FilteredList from "./FilteredList";
-import { _td, TranslationKey } from "../../../../languageHandler";
+import { _td, type TranslationKey } from "../../../../languageHandler";
 
 export const AccountDataEventEditor: React.FC<IEditorProps> = ({ mxEvent, onBack }) => {
     const cli = useContext(MatrixClientContext);
 
     const fields = useMemo(() => [eventTypeField(mxEvent?.getType())], [mxEvent]);
 
-    const onSend = async ([eventType]: string[], content?: IContent): Promise<void> => {
+    const onSend = async ([eventType]: Array<keyof AccountDataEvents>, content?: IContent): Promise<void> => {
         await cli.setAccountData(eventType, content || {});
     };
 

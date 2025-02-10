@@ -2,15 +2,15 @@
  * Copyright 2024 New Vector Ltd.
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { Widget, WidgetKind } from "matrix-widget-api";
+import { type Widget, WidgetKind } from "matrix-widget-api";
 
 import SettingsStore from "../../settings/SettingsStore";
 import { SettingLevel } from "../../settings/SettingLevel";
-import { SdkContextClass } from "../../contexts/SDKContext";
+import { type SdkContextClass } from "../../contexts/SDKContext";
 
 export enum OIDCState {
     Allowed, // user has set the remembered value as allowed
@@ -53,10 +53,7 @@ export class WidgetPermissionStore {
     public setOIDCState(widget: Widget, kind: WidgetKind, roomId: string | undefined, newState: OIDCState): void {
         const settingsKey = this.packSettingKey(widget, kind, roomId);
 
-        let currentValues = SettingsStore.getValue<{
-            allow?: string[];
-            deny?: string[];
-        }>("widgetOpenIDPermissions");
+        let currentValues = SettingsStore.getValue("widgetOpenIDPermissions");
         if (!currentValues) {
             currentValues = {};
         }

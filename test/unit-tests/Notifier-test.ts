@@ -2,25 +2,26 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
-import { mocked, MockedObject } from "jest-mock";
+import { mocked, type MockedObject } from "jest-mock";
 import {
     ClientEvent,
-    MatrixClient,
+    type MatrixClient,
     Room,
     RoomEvent,
     EventType,
     MsgType,
-    IContent,
+    type IContent,
     MatrixEvent,
     SyncState,
+    type AccountDataEvents,
 } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "jest-matrix-react";
 import { CallMembership, MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 
-import BasePlatform from "../../src/BasePlatform";
+import type BasePlatform from "../../src/BasePlatform";
 import Notifier from "../../src/Notifier";
 import SettingsStore from "../../src/settings/SettingsStore";
 import ToastStore from "../../src/stores/ToastStore";
@@ -41,10 +42,8 @@ import UserActivity from "../../src/UserActivity";
 import Modal from "../../src/Modal";
 import { mkThread } from "../test-utils/threads";
 import dis from "../../src/dispatcher/dispatcher";
-import { ThreadPayload } from "../../src/dispatcher/payloads/ThreadPayload";
+import { type ThreadPayload } from "../../src/dispatcher/payloads/ThreadPayload";
 import { Action } from "../../src/dispatcher/actions";
-import { VoiceBroadcastChunkEventType, VoiceBroadcastInfoState } from "../../src/voice-broadcast";
-import { mkVoiceBroadcastInfoStateEvent } from "./voice-broadcast/utils/test-utils";
 import { addReplyToMessageContent } from "../../src/utils/Reply";
 
 jest.mock("../../src/utils/notifications", () => ({
@@ -71,7 +70,7 @@ describe("Notifier", () => {
     let MockPlatform: MockedObject<BasePlatform>;
     let mockClient: MockedObject<MatrixClient>;
     let testRoom: Room;
-    let accountDataEventKey: string;
+    let accountDataEventKey: keyof AccountDataEvents;
     let accountDataStore: Record<string, MatrixEvent | undefined> = {};
 
     let mockSettings: Record<string, boolean> = {};
@@ -85,16 +84,13 @@ describe("Notifier", () => {
         });
     };
 
-    const mkAudioEvent = (broadcastChunkContent?: object): MatrixEvent => {
-        const chunkContent = broadcastChunkContent ? { [VoiceBroadcastChunkEventType]: broadcastChunkContent } : {};
-
+    const mkAudioEvent = (): MatrixEvent => {
         return mkEvent({
             event: true,
             type: EventType.RoomMessage,
             user: "@user:example.com",
             room: "!room:example.com",
             content: {
-                ...chunkContent,
                 msgtype: MsgType.Audio,
                 body: "test audio message",
             },
@@ -320,24 +316,6 @@ describe("Notifier", () => {
             );
         });
 
-        it("should display the expected notification for a broadcast chunk with sequence = 1", () => {
-            const audioEvent = mkAudioEvent({ sequence: 1 });
-            Notifier.displayPopupNotification(audioEvent, testRoom);
-            expect(MockPlatform.displayNotification).toHaveBeenCalledWith(
-                "@user:example.com (!room1:server)",
-                "@user:example.com started a voice broadcast",
-                "data:image/png;base64,00",
-                testRoom,
-                audioEvent,
-            );
-        });
-
-        it("should display the expected notification for a broadcast chunk with sequence = 2", () => {
-            const audioEvent = mkAudioEvent({ sequence: 2 });
-            Notifier.displayPopupNotification(audioEvent, testRoom);
-            expect(MockPlatform.displayNotification).not.toHaveBeenCalled();
-        });
-
         it("should strip reply fallback", () => {
             const event = mkMessage({
                 msg: "Test",
@@ -365,7 +343,7 @@ describe("Notifier", () => {
 
     describe("getSoundForRoom", () => {
         it("should not explode if given invalid url", () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string): any => {
                 return { url: { content_uri: "foobar" } };
             });
             expect(Notifier.getSoundForRoom("!roomId:server")).toBeNull();
@@ -581,24 +559,6 @@ describe("Notifier", () => {
             Notifier.evaluateEvent(mkAudioEvent());
             expect(Notifier.displayPopupNotification).toHaveBeenCalledTimes(1);
         });
-
-        it("should not show a notification for broadcast info events in any case", () => {
-            // Let client decide to show a notification
-            mockClient.getPushActionsForEvent.mockReturnValue({
-                notify: true,
-                tweaks: {},
-            });
-
-            const broadcastStartedEvent = mkVoiceBroadcastInfoStateEvent(
-                "!other:example.org",
-                VoiceBroadcastInfoState.Started,
-                "@user:example.com",
-                "ABC123",
-            );
-
-            Notifier.evaluateEvent(broadcastStartedEvent);
-            expect(Notifier.displayPopupNotification).not.toHaveBeenCalled();
-        });
     });
 
     describe("setPromptHidden", () => {
@@ -624,8 +584,7 @@ describe("Notifier", () => {
                     content: { body: "this is a thread root" },
                 }),
                 testRoom.threadsTimelineSets[0]!.getLiveTimeline(),
-                false,
-                false,
+                { toStartOfTimeline: false, fromCache: false, addToState: true },
             );
 
             expect(fn).not.toHaveBeenCalled();

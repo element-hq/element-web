@@ -2,13 +2,13 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked, Mocked } from "jest-mock";
-import { MatrixClient, Device, Preset, RoomType } from "matrix-js-sdk/src/matrix";
-import { CryptoApi } from "matrix-js-sdk/src/crypto-api";
+import { mocked, type Mocked } from "jest-mock";
+import { type MatrixClient, type Device, Preset, RoomType } from "matrix-js-sdk/src/matrix";
+import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
 import { MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 
 import { stubClient, setupAsyncStoreWithClient, mockPlatformPeg, getMockClientWithEventEmitter } from "../test-utils";
@@ -105,7 +105,7 @@ describe("createRoom", () => {
     });
 
     it("correctly sets up MSC3401 power levels", async () => {
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string): any => {
             if (name === "feature_group_calls") return true;
         });
 

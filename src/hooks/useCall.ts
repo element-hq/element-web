@@ -2,14 +2,14 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { useState, useCallback, useMemo } from "react";
 
 import type { RoomMember } from "matrix-js-sdk/src/matrix";
-import { Call, ConnectionState, CallEvent } from "../models/Call";
+import { type Call, ConnectionState, CallEvent } from "../models/Call";
 import { useTypedEventEmitterState, useEventEmitter } from "./useEventEmitter";
 import { CallStore, CallStoreEvent } from "../stores/CallStore";
 import SdkConfig, { DEFAULTS } from "../SdkConfig";

@@ -2,26 +2,26 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import {
-    MatrixEvent,
+    type MatrixEvent,
     EventType,
     MsgType,
     RelationType,
-    MatrixClient,
+    type MatrixClient,
     GroupCallIntent,
     M_POLL_END,
     M_POLL_START,
 } from "matrix-js-sdk/src/matrix";
-import { Optional } from "matrix-events-sdk";
+import { type Optional } from "matrix-events-sdk";
 
 import SettingsStore from "../settings/SettingsStore";
-import LegacyCallEventGrouper from "../components/structures/LegacyCallEventGrouper";
-import { EventTileProps } from "../components/views/rooms/EventTile";
+import type LegacyCallEventGrouper from "../components/structures/LegacyCallEventGrouper";
+import { type EventTileProps } from "../components/views/rooms/EventTile";
 import { TimelineRenderingType } from "../contexts/RoomContext";
 import MessageEvent from "../components/views/messages/MessageEvent";
 import LegacyCallEvent from "../components/views/messages/LegacyCallEvent";
@@ -41,13 +41,7 @@ import { getMessageModerationState, MessageModerationState } from "../utils/Even
 import HiddenBody from "../components/views/messages/HiddenBody";
 import ViewSourceEvent from "../components/views/messages/ViewSourceEvent";
 import { shouldDisplayAsBeaconTile } from "../utils/beacon/timeline";
-import { shouldDisplayAsVoiceBroadcastTile } from "../voice-broadcast/utils/shouldDisplayAsVoiceBroadcastTile";
 import { ElementCall } from "../models/Call";
-import {
-    isRelatedToVoiceBroadcast,
-    shouldDisplayAsVoiceBroadcastStoppedText,
-    VoiceBroadcastChunkEventType,
-} from "../voice-broadcast";
 
 // Subset of EventTile's IProps plus some mixins
 export interface EventTileTypeProps
@@ -223,12 +217,6 @@ export function pickFactory(
             return MessageEventFactory;
         }
 
-        if (shouldDisplayAsVoiceBroadcastTile(mxEvent)) {
-            return MessageEventFactory;
-        } else if (shouldDisplayAsVoiceBroadcastStoppedText(mxEvent)) {
-            return TextualEventFactory;
-        }
-
         if (SINGULAR_STATE_EVENTS.has(evType) && mxEvent.getStateKey() !== "") {
             return noEventFactoryFactory(); // improper event type to render
         }
@@ -246,16 +234,6 @@ export function pickFactory(
     }
 
     if (mxEvent.isRelation(RelationType.Replace)) {
-        return noEventFactoryFactory();
-    }
-
-    if (mxEvent.getContent()[VoiceBroadcastChunkEventType]) {
-        // hide voice broadcast chunks
-        return noEventFactoryFactory();
-    }
-
-    if (!showHiddenEvents && mxEvent.isDecryptionFailure() && isRelatedToVoiceBroadcast(mxEvent, cli)) {
-        // hide utd events related to a broadcast
         return noEventFactoryFactory();
     }
 

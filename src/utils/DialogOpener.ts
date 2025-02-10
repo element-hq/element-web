@@ -2,16 +2,16 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import classnames from "classnames";
-import { ComponentProps } from "react";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type ComponentProps } from "react";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import defaultDispatcher from "../dispatcher/dispatcher";
-import { ActionPayload } from "../dispatcher/payloads";
+import { type ActionPayload } from "../dispatcher/payloads";
 import Modal from "../Modal";
 import RoomSettingsDialog from "../components/views/dialogs/RoomSettingsDialog";
 import ForwardDialog from "../components/views/dialogs/ForwardDialog";
@@ -21,7 +21,7 @@ import SpacePreferencesDialog from "../components/views/dialogs/SpacePreferences
 import SpaceSettingsDialog from "../components/views/dialogs/SpaceSettingsDialog";
 import InviteDialog from "../components/views/dialogs/InviteDialog";
 import AddExistingToSpaceDialog from "../components/views/dialogs/AddExistingToSpaceDialog";
-import { ButtonEvent } from "../components/views/elements/AccessibleButton";
+import { type ButtonEvent } from "../components/views/elements/AccessibleButton";
 import PosthogTrackers from "../PosthogTrackers";
 import { showAddExistingSubspace, showCreateNewRoom } from "./space";
 import { SdkContextClass } from "../contexts/SDKContext";
