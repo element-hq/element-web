@@ -55,7 +55,7 @@ exports[`<DeleteKeyStoragePanel /> should match snapshot 1`] = `
     </ol>
   </nav>
   <div
-    class="mx_EncryptionCard mx_DeleteKeyStoragePanel"
+    class="mx_EncryptionCard mx_DestructiveComponent"
   >
     <div
       class="mx_EncryptionCard_header"
@@ -83,7 +83,7 @@ exports[`<DeleteKeyStoragePanel /> should match snapshot 1`] = `
       </h2>
     </div>
     <div
-      class="mx_DeleteKeyStoragePanel_content"
+      class="mx_DestructiveComponent_content"
     >
       Deleting key storage will remove your cryptographic identity and message keys from the server and turn off the following security features:
       <ul
@@ -128,7 +128,7 @@ exports[`<DeleteKeyStoragePanel /> should match snapshot 1`] = `
       </ul>
     </div>
     <div
-      class="mx_DeleteKeyStoragePanel_footer"
+      class="mx_DestructiveComponent_footer"
     >
       <button
         aria-disabled="false"
