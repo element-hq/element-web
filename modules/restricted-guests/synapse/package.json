@@ -4,7 +4,7 @@
     "private": true,
     "description": "A synapse module to restrict the actions of guests",
     "author": "New Vector Ltd.",
-    "license": "Apache-2.0",
+    "license": "SEE LICENSE IN README.md",
     "scripts": {
         "prepare": "echo \"Nothing to prepare\"",
         "clean": "echo \"Nothing to clean\"",
