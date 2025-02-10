@@ -9,6 +9,7 @@ import React from "react";
 import { render, screen, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
+import { defer } from "matrix-js-sdk/src/utils";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { createTestClient, withClientContextRenderOptions } from "../../../../../test-utils";
@@ -70,13 +71,10 @@ describe("<DeleteKeyStoragePanel />", () => {
     });
 
     it("should wait with button disabled while setEnabled runs", async () => {
-        let setEnabledResolve: () => void;
-        const setEnabledPromise = new Promise<void>((r) => {
-            setEnabledResolve = r;
-        });
+        const setEnabledDefer = defer();
 
         mocked(useKeyStoragePanelViewModel).mockReturnValue({
-            setEnabled: jest.fn().mockReturnValue(setEnabledPromise),
+            setEnabled: jest.fn().mockReturnValue(setEnabledDefer.promise),
             isEnabled: true,
             loading: false,
             busy: false,
@@ -91,7 +89,7 @@ describe("<DeleteKeyStoragePanel />", () => {
 
         expect(onFinish).not.toHaveBeenCalled();
         expect(screen.getByRole("button", { name: "Delete key storage" })).toHaveAttribute("aria-disabled", "true");
-        setEnabledResolve!();
+        setEnabledDefer.resolve();
         await waitFor(() => expect(onFinish).toHaveBeenCalled());
     });
 });
