@@ -51,9 +51,9 @@ export function DeleteKeyStoragePanel({ onFinish }: Props): JSX.Element {
                 Icon={ErrorIcon}
                 destructive={true}
                 title={_t("settings|encryption|delete_key_storage|title")}
-                className="mx_DeleteKeyStoragePanel"
+                className="mx_DestructiveComponent"
             >
-                <div className="mx_DeleteKeyStoragePanel_content">
+                <div className="mx_DestructiveComponent_content">
                     {_t("settings|encryption|delete_key_storage|description")}
                     <VisualList>
                         <VisualListItem Icon={CrossIcon} destructive={true}>
@@ -64,7 +64,7 @@ export function DeleteKeyStoragePanel({ onFinish }: Props): JSX.Element {
                         </VisualListItem>
                     </VisualList>
                 </div>
-                <div className="mx_DeleteKeyStoragePanel_footer">
+                <div className="mx_DestructiveComponent_footer">
                     <Button destructive={true} onClick={onDeleteClick} disabled={busy}>
                         {_t("settings|encryption|delete_key_storage|confirm")}
                     </Button>

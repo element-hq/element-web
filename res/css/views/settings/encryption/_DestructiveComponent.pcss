@@ -5,8 +5,11 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-.mx_DeleteKeyStoragePanel {
-    .mx_DeleteKeyStoragePanel_content {
+/**
+ * Shared by multiple components that confirm a destructive action in the user settings dialog.
+ */
+.mx_DestructiveComponent {
+    .mx_DestructiveComponent_content {
         display: flex;
         flex-direction: column;
         gap: var(--cpd-space-3x);
@@ -17,7 +20,7 @@
         }
     }
 
-    .mx_DeleteKeyStoragePanel_footer {
+    .mx_DestructiveComponent_footer {
         display: flex;
         flex-direction: column;
         gap: var(--cpd-space-4x);
