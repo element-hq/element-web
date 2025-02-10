@@ -72,7 +72,15 @@ jest.mock("../../../src/utils/DMRoomMap", () => {
     };
 });
 
-jest.mock("../../../src/stores/WidgetStore");
+jest.mock("../../../src/stores/WidgetStore", () => {
+    return {
+        instance: {
+            getApps: () => [],
+            addVirtualWidget: jest.fn(),
+            emit: jest.fn(),
+        },
+    };
+});
 jest.mock("../../../src/stores/widgets/WidgetLayoutStore");
 
 describe("RoomViewStore", function () {
@@ -97,6 +105,7 @@ describe("RoomViewStore", function () {
         knockRoom: jest.fn(),
         leave: jest.fn(),
         setRoomAccountData: jest.fn(),
+        getAccountData: jest.fn(),
     });
     const room = new Room(roomId, mockClient, userId);
     const room2 = new Room(roomId2, mockClient, userId);
@@ -307,6 +316,7 @@ describe("RoomViewStore", function () {
     it("should display an error message when the room is unreachable via the roomId", async () => {
         // When
         // View and wait for the room
+        // jest.spyOn(WidgetStore).mockReturnValue({ getApps: () => [] } as unknown as void & WidgetStore);
         dis.dispatch({ action: Action.ViewRoom, room_id: roomId });
         await untilDispatch(Action.ActiveRoomChanged, dis);
         // Generate error to display the expected error message

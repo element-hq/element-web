@@ -35,7 +35,7 @@ import { WidgetMessagingStore } from "../../../../../src/stores/widgets/WidgetMe
 import { CallStore } from "../../../../../src/stores/CallStore";
 import { Call, ConnectionState } from "../../../../../src/models/Call";
 import { RoomViewStore } from "../../../../../src/stores/RoomViewStore";
-import { ViewRoomPayload } from "../../../../../src/dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../../../../src/dispatcher/payloads/ViewRoomPayload";
 import { MatrixDispatcher } from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { TestSdkContext } from "../../../TestSdkContext";
