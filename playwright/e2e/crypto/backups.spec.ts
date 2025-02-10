@@ -58,8 +58,8 @@ test.describe("Backups", () => {
 
             // Create another
             await securityTab.getByRole("button", { name: "Set up", exact: true }).click();
-            await expect(currentDialogLocator.getByRole("heading", { name: "Security Key" })).toBeVisible();
-            await currentDialogLocator.getByLabel("Security Key").fill(securityKey);
+            await expect(currentDialogLocator.getByRole("heading", { name: "Recovery Key" })).toBeVisible();
+            await currentDialogLocator.getByLabel("Recovery Key").fill(securityKey);
             await currentDialogLocator.getByRole("button", { name: "Continue", exact: true }).click();
 
             // Should be successful
@@ -90,8 +90,8 @@ test.describe("Backups", () => {
 
             // Try to create another
             await securityTab.getByRole("button", { name: "Set up", exact: true }).click();
-            await expect(currentDialogLocator.getByRole("heading", { name: "Security Key" })).toBeVisible();
-            // But cancel the security key dialog, to simulate not having the secret storage passphrase
+            await expect(currentDialogLocator.getByRole("heading", { name: "Recovery Key" })).toBeVisible();
+            // But cancel the recovery key dialog, to simulate not having the secret storage passphrase
             await currentDialogLocator.getByTestId("dialog-cancel-button").click();
 
             await expect(currentDialogLocator.getByRole("heading", { name: "Starting backup…" })).toBeVisible();
