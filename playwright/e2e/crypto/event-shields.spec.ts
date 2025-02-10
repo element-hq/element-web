@@ -17,6 +17,7 @@ import {
     logIntoElement,
     logOutOfElement,
     verify,
+    waitForDevices,
 } from "./utils";
 import { bootstrapCrossSigningForClient } from "../../pages/client.ts";
 import { type ElementAppPage } from "../../pages/ElementAppPage.ts";
@@ -144,25 +145,8 @@ test.describe("Cryptography", function () {
             // bob deletes his second device
             await bobSecondDevice.evaluate((cli) => cli.logout(true));
 
-            // wait for the logout to propagate. Workaround for https://github.com/vector-im/element-web/issues/26263 by repeatedly closing and reopening Bob's user info.
-            async function awaitOneDevice(iterations = 1) {
-                const rightPanel = page.locator(".mx_RightPanel");
-                await rightPanel.getByTestId("base-card-back-button").click();
-                await rightPanel.getByText("Bob").click();
-                const sessionCountText = await rightPanel
-                    .locator(".mx_UserInfo_devices")
-                    .getByText(" session", { exact: false })
-                    .textContent();
-                // cf https://github.com/vector-im/element-web/issues/26279: Element-R uses the wrong text here
-                if (sessionCountText != "1 session" && sessionCountText != "1 verified session") {
-                    if (iterations >= 10) {
-                        throw new Error(`Bob still has ${sessionCountText} after 10 iterations`);
-                    }
-                    await awaitOneDevice(iterations + 1);
-                }
-            }
-
-            await awaitOneDevice();
+            // wait for the logout to propagate.
+            await waitForDevices(app, bob.credentials.userId, 1);
 
             // close and reopen the room, to get the shield to update.
             await app.viewRoomByName("Bob");
@@ -285,11 +269,7 @@ test.describe("Cryptography", function () {
             // Workaround for https://github.com/element-hq/element-web/issues/28640:
             // make sure that Alice has seen Bob's identity before she goes offline. We do this by opening
             // his user info.
-            await app.toggleRoomInfoPanel();
-            const rightPanel = page.locator(".mx_RightPanel");
-            await rightPanel.getByRole("menuitem", { name: "People" }).click();
-            await rightPanel.getByRole("button", { name: bob.credentials!.userId }).click();
-            await expect(rightPanel.locator(".mx_UserInfo_devices")).toContainText("1 session");
+            await waitForDevices(app, bob.credentials.userId, 1);
 
             // Our app is blocked from syncing while Bob sends his messages.
             await app.client.network.goOffline();
