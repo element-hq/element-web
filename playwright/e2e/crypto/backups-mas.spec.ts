@@ -28,7 +28,7 @@ test.describe("Encryption state after registration", () => {
         // Wait for the ui to load
         await expect(page.locator(".mx_MatrixChat")).toBeVisible();
 
-        // xxx: why the backup key is not in 4S?
+        // Recovery is not set up yet
         await checkDeviceIsConnectedKeyBackup(app, "1", true, false);
     });
 
