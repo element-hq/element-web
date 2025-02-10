@@ -34,6 +34,12 @@ import { CallView as _CallView } from "../../../../../src/components/views/voip/
 import { WidgetMessagingStore } from "../../../../../src/stores/widgets/WidgetMessagingStore";
 import { CallStore } from "../../../../../src/stores/CallStore";
 import { Call, ConnectionState } from "../../../../../src/models/Call";
+import { RoomViewStore } from "../../../../../src/stores/RoomViewStore";
+import { ViewRoomPayload } from "../../../../../src/dispatcher/payloads/ViewRoomPayload";
+import { MatrixDispatcher } from "../../../../../src/dispatcher/dispatcher";
+import { Action } from "../../../../../src/dispatcher/actions";
+import { TestSdkContext } from "../../../TestSdkContext";
+import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 
 const CallView = wrapInMatrixClientContext(_CallView);
 
@@ -156,7 +162,18 @@ describe("CallView", () => {
     describe("without an existing call", () => {
         it("creates and connects to a new call when the join button is pressed", async () => {
             expect(Call.get(room)).toBeNull();
+            const disp = new MatrixDispatcher();
+            const stores = new TestSdkContext();
+            stores.client = room.client;
+            DMRoomMap.makeShared(room.client);
+            new RoomViewStore(disp, stores);
             await renderView(true);
+            disp.dispatch<ViewRoomPayload>({
+                action: Action.ViewRoom,
+                room_id: room.roomId,
+                view_call: true,
+                metricsTrigger: "Timeline",
+            });
             await waitFor(() => expect(CallStore.instance.getCall(room.roomId)).not.toBeNull());
             const call = CallStore.instance.getCall(room.roomId)!;
 
