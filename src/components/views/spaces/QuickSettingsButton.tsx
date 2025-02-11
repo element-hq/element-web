@@ -48,7 +48,9 @@ const QuickSettingsButton: React.FC<{
         contextMenu = (
             <ContextMenu
                 {...alwaysAboveRightOf(handle.current.getBoundingClientRect(), ChevronFace.None, 16)}
-                wrapperClassName="mx_QuickSettingsButton_ContextMenuWrapper"
+                wrapperClassName={classNames("mx_QuickSettingsButton_ContextMenuWrapper", {
+                    mx_QuickSettingsButton_ContextMenuWrapper_new_room_list: newRoomListEnabled,
+                })}
                 onFinished={closeMenu}
                 managed={false}
                 focusLock={true}
@@ -83,13 +85,13 @@ const QuickSettingsButton: React.FC<{
                     </AccessibleButton>
                 )}
 
-                <h4 className="mx_QuickSettingsButton_pinToSidebarHeading">
-                    <PinUprightIcon className="mx_QuickSettingsButton_icon" />
-                    {_t("quick_settings|metaspace_section")}
-                </h4>
-
                 {!newRoomListEnabled && (
                     <>
+                        <h4 className="mx_QuickSettingsButton_pinToSidebarHeading">
+                            <PinUprightIcon className="mx_QuickSettingsButton_icon" />
+                            {_t("quick_settings|metaspace_section")}
+                        </h4>
+
                         <StyledCheckbox
                             className="mx_QuickSettingsButton_favouritesCheckbox"
                             checked={!!favouritesEnabled}
@@ -112,22 +114,21 @@ const QuickSettingsButton: React.FC<{
                             <UserProfileSolidIcon className="mx_QuickSettingsButton_icon" />
                             {_t("common|people")}
                         </StyledCheckbox>
+                        <AccessibleButton
+                            className="mx_QuickSettingsButton_moreOptionsButton"
+                            onClick={() => {
+                                closeMenu();
+                                defaultDispatcher.dispatch({
+                                    action: Action.ViewUserSettings,
+                                    initialTabId: UserTab.Sidebar,
+                                });
+                            }}
+                        >
+                            <OverflowHorizontalIcon className="mx_QuickSettingsButton_icon" />
+                            {_t("quick_settings|sidebar_settings")}
+                        </AccessibleButton>
                     </>
                 )}
-                <AccessibleButton
-                    className="mx_QuickSettingsButton_moreOptionsButton"
-                    onClick={() => {
-                        closeMenu();
-                        defaultDispatcher.dispatch({
-                            action: Action.ViewUserSettings,
-                            initialTabId: UserTab.Sidebar,
-                        });
-                    }}
-                >
-                    <OverflowHorizontalIcon className="mx_QuickSettingsButton_icon" />
-                    {_t("quick_settings|sidebar_settings")}
-                </AccessibleButton>
-
                 <QuickThemeSwitcher requestClose={closeMenu} />
             </ContextMenu>
         );
