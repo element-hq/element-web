@@ -245,7 +245,10 @@ describe("<UserInfo />", () => {
                 _locale,
                 opts,
             ) {
-                return origDate.call(this, "en-US", opts);
+                return origDate.call(this, "en-US", {
+                    ...opts,
+                    hourCycle: "h12",
+                });
             });
             mockClient.doesServerSupportExtendedProfiles.mockResolvedValue(true);
             mockClient.getExtendedProfileProperty.mockResolvedValue("Europe/London");
