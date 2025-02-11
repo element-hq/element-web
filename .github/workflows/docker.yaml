@@ -15,6 +15,7 @@ jobs:
         environment: dockerhub
         permissions:
             id-token: write # needed for signing the images with GitHub OIDC Token
+            packages: write # needed for publishing packages to GHCR
         steps:
             - uses: actions/checkout@v4
               with:
