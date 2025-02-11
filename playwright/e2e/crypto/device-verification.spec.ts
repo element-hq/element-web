@@ -29,7 +29,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
     let expectedBackupVersion: string;
 
     test.beforeEach(async ({ page, homeserver, credentials }) => {
-        const res = await createBot(page, homeserver, credentials);
+        const res = await createBot(page, homeserver, credentials, true);
         aliceBotClient = res.botClient;
         expectedBackupVersion = res.expectedBackupVersion;
     });
@@ -119,7 +119,7 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         await logIntoElement(page, credentials);
 
         // Select the security phrase
-        await page.locator(".mx_AuthPage").getByRole("button", { name: "Verify with Security Key or Phrase" }).click();
+        await page.locator(".mx_AuthPage").getByRole("button", { name: "Verify with Recovery Key or Phrase" }).click();
 
         // Fill the passphrase
         const dialog = page.locator(".mx_Dialog");
@@ -136,15 +136,15 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, true);
     });
 
-    test("Verify device with Security Key during login", async ({ page, app, credentials, homeserver }) => {
+    test("Verify device with Recovery Key during login", async ({ page, app, credentials, homeserver }) => {
         await logIntoElement(page, credentials);
 
         // Select the security phrase
-        await page.locator(".mx_AuthPage").getByRole("button", { name: "Verify with Security Key or Phrase" }).click();
+        await page.locator(".mx_AuthPage").getByRole("button", { name: "Verify with Recovery Key or Phrase" }).click();
 
-        // Fill the security key
+        // Fill the recovery key
         const dialog = page.locator(".mx_Dialog");
-        await dialog.getByRole("button", { name: "use your Security Key" }).click();
+        await dialog.getByRole("button", { name: "use your Recovery Key" }).click();
         const aliceRecoveryKey = await aliceBotClient.getRecoveryKey();
         await dialog.locator("#mx_securityKey").fill(aliceRecoveryKey.encodedPrivateKey);
         await dialog.locator(".mx_Dialog_primary:not([disabled])", { hasText: "Continue" }).click();

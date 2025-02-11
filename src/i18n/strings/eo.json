@@ -2343,7 +2343,9 @@
             "sent": "%(senderName)s sendis ĉambran inviton al %(targetDisplayName)s."
         },
         "m.room.tombstone": "%(senderDisplayName)s gradaltigis ĉi tiun ĉambron.",
-        "m.room.topic": "%(senderDisplayName)s ŝanĝis la temon al « %(topic)s ».",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s ŝanĝis la temon al « %(topic)s »."
+        },
         "m.sticker": "%(senderDisplayName)s sendis glumarkon.",
         "m.video": {
             "error_decrypting": "Malĉifro de filmo eraris"

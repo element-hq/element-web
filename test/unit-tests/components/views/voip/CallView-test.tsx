@@ -69,8 +69,8 @@ describe("CallView", () => {
         client.reEmitter.stopReEmitting(room, [RoomStateEvent.Events]);
     });
 
-    const renderView = async (skipLobby = false): Promise<void> => {
-        render(<CallView room={room} resizing={false} waitForCall={false} skipLobby={skipLobby} />);
+    const renderView = async (skipLobby = false, role: string | undefined = undefined): Promise<void> => {
+        render(<CallView room={room} resizing={false} waitForCall={false} skipLobby={skipLobby} role={role} />);
         await act(() => Promise.resolve()); // Let effects settle
     };
 
@@ -94,6 +94,11 @@ describe("CallView", () => {
             cleanup(); // Unmount before we do any cleanup that might update the component
             call.destroy();
             WidgetMessagingStore.instance.stopMessaging(widget, room.roomId);
+        });
+
+        it("accepts an accessibility role", async () => {
+            await renderView(undefined, "main");
+            screen.getByRole("main");
         });
 
         it("calls clean on mount", async () => {

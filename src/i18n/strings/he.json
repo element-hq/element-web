@@ -2202,7 +2202,9 @@
             "sent": "%(senderName)s שלח הזמנה ל%(targetDisplayName)s להצטרף אל החדר."
         },
         "m.room.tombstone": "%(senderDisplayName)s שידרג את החדר הזה.",
-        "m.room.topic": "%(senderDisplayName)s שינה את שם הנושא ל-\"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s שינה את שם הנושא ל-\"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s שלח מדבקה",
         "m.video": {
             "error_decrypting": "שגיאה בפענוח וידאו"

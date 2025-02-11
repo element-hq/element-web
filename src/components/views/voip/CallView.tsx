@@ -58,7 +58,7 @@ const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call, skipLobby, 
         await Promise.all(calls.map(async (call) => await call.disconnect()));
     }, []);
     return (
-        <div className="mx_CallView">
+        <div className="mx_CallView" role={role}>
             <AppTile
                 app={call.widget}
                 room={room}

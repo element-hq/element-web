@@ -1058,8 +1058,11 @@
             "waiting_other_user": "Warte darauf, dass %(displayName)s bestätigt…"
         },
         "verification_requested_toast_title": "Verifizierung angefragt",
+        "verified_identity_changed": "Die verifizierte Identität von %(displayName)s (<b>%(userId)s</b>) hat sich geändert. <a>Weitere Informationen</a>",
+        "verified_identity_changed_no_displayname": "Die Identität von <b>%(userId)</b> hat sich geändert. <a>Weitere Informationen</a>",
         "verify_toast_description": "Andere Benutzer vertrauen ihr vielleicht nicht",
-        "verify_toast_title": "Sitzung verifizieren"
+        "verify_toast_title": "Sitzung verifizieren",
+        "withdraw_verification_action": "Verifizierung zurückziehen"
     },
     "error": {
         "admin_contact": "Bitte <a>kontaktiere deinen Systemadministrator</a> um diesen Dienst weiter zu nutzen.",
@@ -2465,6 +2468,7 @@
                 "breadcrumb_second_description": "Sie verlieren jeglichen Nachrichtenverlauf, der nur auf dem Server gespeichert ist",
                 "breadcrumb_third_description": "Sie müssen alle Ihre vorhandenen Geräte und Kontakte erneut verifizieren",
                 "breadcrumb_title": "Sind Sie sicher, dass Sie Ihre Identität zurücksetzen möchten?",
+                "breadcrumb_title_forgot": "Haben Sie Ihren Wiederherstellungsschlüssel vergessen? Sie müssen Ihre Identität zurücksetzen.",
                 "breadcrumb_warning": "Tun Sie dies nur, wenn Sie glauben, dass Ihr Konto kompromittiert wurde.",
                 "details_title": "Angaben zur Verschlüsselung",
                 "export_keys": "Schlüssel exportieren",
@@ -3489,7 +3493,10 @@
             "sent": "%(senderName)s hat %(targetDisplayName)s in diesen Raum eingeladen."
         },
         "m.room.tombstone": "%(senderDisplayName)s hat diesen Raum aktualisiert.",
-        "m.room.topic": "%(senderDisplayName)s hat das Thema geändert in \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s hat das Thema geändert in \"%(topic)s\".",
+            "removed": "%(senderDisplayName)shat das Thema entfernt."
+        },
         "m.sticker": "%(senderDisplayName)s hat einen Sticker gesendet.",
         "m.video": {
             "error_decrypting": "Videoentschlüsselung fehlgeschlagen"

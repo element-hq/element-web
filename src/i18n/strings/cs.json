@@ -1059,8 +1059,11 @@
             "waiting_other_user": "Čekám až nás %(displayName)s ověří…"
         },
         "verification_requested_toast_title": "Žádost ověření",
+        "verified_identity_changed": "Ověřená identita %(displayName)s (<b>%(userId)s</b>) se změnila. <a>Další informace</a>",
+        "verified_identity_changed_no_displayname": "Ověřená identita uživatele <b>%(userId)s</b> se změnila. <a>Další informace</a>",
         "verify_toast_description": "Ostatní uživatelé této relaci nemusí věřit",
-        "verify_toast_title": "Ověřit tuto relaci"
+        "verify_toast_title": "Ověřit tuto relaci",
+        "withdraw_verification_action": "Zrušit ověření"
     },
     "error": {
         "admin_contact": "Pro pokračování využívání této služby prosím kontaktujte jejího <a>správce</a>.",
@@ -3495,7 +3498,9 @@
             "sent": "%(senderName)s pozval(a) uživatele %(targetDisplayName)s ke vstupu do místnosti."
         },
         "m.room.tombstone": "%(senderDisplayName)s aktualizoval(a) místnost.",
-        "m.room.topic": "%(senderDisplayName)s změnil(a) téma na „%(topic)s“.",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s změnil(a) téma na „%(topic)s“."
+        },
         "m.sticker": "%(senderDisplayName)s poslal(a) nálepku.",
         "m.video": {
             "error_decrypting": "Chyba při dešifrování videa"
