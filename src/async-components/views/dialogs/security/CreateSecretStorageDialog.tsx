@@ -114,8 +114,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             copied: false,
             downloaded: false,
             setPassphrase: false,
-            // does the server offer a UI auth flow with just m.login.password
-            // for /keys/device_signing/upload?
             canSkip: !isSecureBackupRequired(cli),
             passPhraseKeySelected,
         };
