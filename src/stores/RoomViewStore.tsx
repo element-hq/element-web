@@ -354,15 +354,21 @@ export class RoomViewStore extends EventEmitter {
                 });
             }
 
-            // Start a call if requested
-            const currentRoomCall = this.state.roomId ? CallStore.instance.getCall(this.state.roomId) : null;
+            // Start a call if requested and not already there
+            const currentRoomCall = payload.room_id ? CallStore.instance.getCall(payload.room_id) : null;
             if (payload.view_call && room && !currentRoomCall) {
                 ElementCall.create(room, false);
             }
-            // Destroy the call when leaving call view
+            // Destroy all calls that are not connected when dispatching to a new room id.
             const prevRoomCall = this.state.roomId ? CallStore.instance.getCall(this.state.roomId) : null;
-            if (prevRoomCall && !prevRoomCall.connected) {
-                currentRoomCall?.destroy();
+            if (
+                // not looking at prevRoomCall anymore
+                (!payload.view_call || payload.room_id !== this.state.roomId) &&
+                // not connected to the previous call anymore
+                prevRoomCall &&
+                !prevRoomCall.connected
+            ) {
+                prevRoomCall?.destroy();
             }
 
             if (SettingsStore.getValue("feature_sliding_sync") && this.state.roomId !== payload.room_id) {

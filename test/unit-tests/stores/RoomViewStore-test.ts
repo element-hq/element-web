@@ -316,7 +316,6 @@ describe("RoomViewStore", function () {
     it("should display an error message when the room is unreachable via the roomId", async () => {
         // When
         // View and wait for the room
-        // jest.spyOn(WidgetStore).mockReturnValue({ getApps: () => [] } as unknown as void & WidgetStore);
         dis.dispatch({ action: Action.ViewRoom, room_id: roomId });
         await untilDispatch(Action.ActiveRoomChanged, dis);
         // Generate error to display the expected error message
