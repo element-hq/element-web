@@ -154,6 +154,7 @@ export function createTestClient(): MatrixClient {
             resetEncryption: jest.fn(),
             getSessionBackupPrivateKey: jest.fn().mockResolvedValue(null),
             isSecretStorageReady: jest.fn().mockResolvedValue(false),
+            deleteKeyBackupVersion: jest.fn(),
         }),
 
         getPushActionsForEvent: jest.fn(),
@@ -192,6 +193,7 @@ export function createTestClient(): MatrixClient {
         }),
         mxcUrlToHttp: jest.fn().mockImplementation((mxc: string) => `http://this.is.a.url/${mxc.substring(6)}`),
         setAccountData: jest.fn(),
+        deleteAccountData: jest.fn(),
         setRoomAccountData: jest.fn(),
         setRoomTopic: jest.fn(),
         setRoomReadMarkers: jest.fn().mockResolvedValue({}),

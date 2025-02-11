@@ -58,9 +58,9 @@ export function ResetIdentityPanel({ onCancelClick, onFinish, variant }: ResetId
                         ? _t("settings|encryption|advanced|breadcrumb_title_forgot")
                         : _t("settings|encryption|advanced|breadcrumb_title")
                 }
-                className="mx_ResetIdentityPanel"
+                className="mx_DestructiveComponent"
             >
-                <div className="mx_ResetIdentityPanel_content">
+                <div className="mx_DestructiveComponent_content">
                     <VisualList>
                         <VisualListItem Icon={CheckIcon} success={true}>
                             {_t("settings|encryption|advanced|breadcrumb_first_description")}
@@ -74,7 +74,7 @@ export function ResetIdentityPanel({ onCancelClick, onFinish, variant }: ResetId
                     </VisualList>
                     {variant === "compromised" && <span>{_t("settings|encryption|advanced|breadcrumb_warning")}</span>}
                 </div>
-                <div className="mx_ResetIdentityPanel_footer">
+                <div className="mx_DestructiveComponent_footer">
                     <Button
                         destructive={true}
                         onClick={async (evt) => {
