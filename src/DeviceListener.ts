@@ -15,7 +15,7 @@ import {
     SyncState,
     ClientStoppedError,
 } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+import { logger as baseLogger } from "matrix-js-sdk/src/logger";
 import { CryptoEvent, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 import { CryptoSessionStateChange } from "@matrix-org/analytics-events/types/typescript/CryptoSessionStateChange";
 
@@ -47,6 +47,8 @@ import { getUserDeviceIds } from "./utils/crypto/deviceInfo";
 import { asyncSomeParallel } from "./utils/arrays.ts";
 
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
+
+const logger = baseLogger.getChild("DeviceListener:");
 
 export default class DeviceListener {
     private dispatcherRef?: string;
@@ -131,7 +133,7 @@ export default class DeviceListener {
      * @param {String[]} deviceIds List of device IDs to dismiss notifications for
      */
     public async dismissUnverifiedSessions(deviceIds: Iterable<string>): Promise<void> {
-        logger.log("Dismissing unverified sessions: " + Array.from(deviceIds).join(","));
+        logger.debug("Dismissing unverified sessions: " + Array.from(deviceIds).join(","));
         for (const d of deviceIds) {
             this.dismissed.add(d);
         }
@@ -309,16 +311,20 @@ export default class DeviceListener {
             if (!crossSigningReady) {
                 // This account is legacy and doesn't have cross-signing set up at all.
                 // Prompt the user to set it up.
+                logger.info("Cross-signing not ready: showing SET_UP_ENCRYPTION toast");
                 showSetupEncryptionToast(SetupKind.SET_UP_ENCRYPTION);
             } else if (!isCurrentDeviceTrusted) {
                 // cross signing is ready but the current device is not trusted: prompt the user to verify
+                logger.info("Current device not verified: showing VERIFY_THIS_SESSION toast");
                 showSetupEncryptionToast(SetupKind.VERIFY_THIS_SESSION);
             } else if (!allCrossSigningSecretsCached) {
                 // cross signing ready & device trusted, but we are missing secrets from our local cache.
                 // prompt the user to enter their recovery key.
+                logger.info("Some secrets not cached: showing KEY_STORAGE_OUT_OF_SYNC toast");
                 showSetupEncryptionToast(SetupKind.KEY_STORAGE_OUT_OF_SYNC);
             } else if (defaultKeyId === null) {
                 // the user just hasn't set up 4S yet: prompt them to do so
+                logger.info("No default 4S key: showing SET_UP_RECOVERY toast");
                 showSetupEncryptionToast(SetupKind.SET_UP_RECOVERY);
             } else {
                 // some other condition... yikes! Show the 'set up encryption' toast: this is what we previously did
