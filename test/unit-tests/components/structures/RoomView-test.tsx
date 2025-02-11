@@ -223,6 +223,31 @@ describe("RoomView", () => {
         expect(instance.getHiddenHighlightCount()).toBe(0);
     });
 
+    // Regression test for https://github.com/element-hq/element-web/issues/29072
+    it("does not force a reload on sync unless the client is coming back online", async () => {
+        cli.isInitialSyncComplete.mockReturnValue(false);
+
+        const instance = await getRoomViewInstance();
+        const onRoomViewUpdateMock = jest.fn();
+        (instance as any).onRoomViewStoreUpdate = onRoomViewUpdateMock;
+
+        act(() => {
+            // As if a connectivity check happened (we are still offline)
+            defaultDispatcher.dispatch({ action: "MatrixActions.sync" }, true);
+            // ...so it still should not force a reload
+            expect(onRoomViewUpdateMock).not.toHaveBeenCalledWith(true);
+        });
+
+        act(() => {
+            // set us to online again
+            cli.isInitialSyncComplete.mockReturnValue(true);
+            defaultDispatcher.dispatch({ action: "MatrixActions.sync" }, true);
+        });
+
+        // It should now force a reload
+        expect(onRoomViewUpdateMock).toHaveBeenCalledWith(true);
+    });
+
     describe("when there is an old room", () => {
         let instance: RoomView;
         let oldRoom: Room;
