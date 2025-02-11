@@ -36,6 +36,8 @@ import AccessibleButton, { type ButtonEvent } from "../views/elements/Accessible
 import PosthogTrackers from "../../PosthogTrackers";
 import type PageType from "../../PageTypes";
 import { Landmark, LandmarkNavigation } from "../../accessibility/LandmarkNavigation";
+import SettingsStore from "../../settings/SettingsStore";
+import { NewRoomListView } from "../views/rooms/NewRoomListView";
 
 interface IProps {
     isMinimized: boolean;
@@ -377,6 +379,23 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     }
 
     public render(): React.ReactNode {
+        const containerClasses = classNames({
+            mx_LeftPanel: true,
+            mx_LeftPanel_minimized: this.props.isMinimized,
+        });
+
+        const roomListClasses = classNames("mx_LeftPanel_actualRoomListContainer", "mx_AutoHideScrollbar");
+        const useNewRoomList = SettingsStore.getValue("feature_new_room_list");
+        if (useNewRoomList) {
+            return (
+                <div className={containerClasses}>
+                    <div className="mx_LeftPanel_roomListContainer">
+                        <NewRoomListView />
+                    </div>
+                </div>
+            );
+        }
+
         const roomList = (
             <RoomList
                 onKeyDown={this.onKeyDown}
@@ -390,13 +409,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                 ref={this.roomListRef}
             />
         );
-
-        const containerClasses = classNames({
-            mx_LeftPanel: true,
-            mx_LeftPanel_minimized: this.props.isMinimized,
-        });
-
-        const roomListClasses = classNames("mx_LeftPanel_actualRoomListContainer", "mx_AutoHideScrollbar");
 
         return (
             <div className={containerClasses}>
