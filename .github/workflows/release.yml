@@ -50,7 +50,7 @@ jobs:
         permissions:
             checks: read
         steps:
-            - name: Wait for dockerhub
+            - name: Wait for docker build
               uses: t3chguy/wait-on-check-action@18541021811b56544d90e0f073401c2b99e249d6 # fork
               with:
                   ref: master
