@@ -40,6 +40,8 @@ const QuickSettingsButton: React.FC<{
 
     const currentRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
     const developerModeEnabled = useSettingValue("developerMode");
+    // "Favourites" and "People" meta spaces are not available in the new room list
+    const newRoomListEnabled = useSettingValue("feature_new_room_list");
 
     let contextMenu: JSX.Element | undefined;
     if (menuDisplayed && handle.current) {
@@ -86,22 +88,32 @@ const QuickSettingsButton: React.FC<{
                     {_t("quick_settings|metaspace_section")}
                 </h4>
 
-                <StyledCheckbox
-                    className="mx_QuickSettingsButton_favouritesCheckbox"
-                    checked={!!favouritesEnabled}
-                    onChange={onMetaSpaceChangeFactory(MetaSpace.Favourites, "WebQuickSettingsPinToSidebarCheckbox")}
-                >
-                    <FavouriteSolidIcon className="mx_QuickSettingsButton_icon" />
-                    {_t("common|favourites")}
-                </StyledCheckbox>
-                <StyledCheckbox
-                    className="mx_QuickSettingsButton_peopleCheckbox"
-                    checked={!!peopleEnabled}
-                    onChange={onMetaSpaceChangeFactory(MetaSpace.People, "WebQuickSettingsPinToSidebarCheckbox")}
-                >
-                    <UserProfileSolidIcon className="mx_QuickSettingsButton_icon" />
-                    {_t("common|people")}
-                </StyledCheckbox>
+                {!newRoomListEnabled && (
+                    <>
+                        <StyledCheckbox
+                            className="mx_QuickSettingsButton_favouritesCheckbox"
+                            checked={!!favouritesEnabled}
+                            onChange={onMetaSpaceChangeFactory(
+                                MetaSpace.Favourites,
+                                "WebQuickSettingsPinToSidebarCheckbox",
+                            )}
+                        >
+                            <FavouriteSolidIcon className="mx_QuickSettingsButton_icon" />
+                            {_t("common|favourites")}
+                        </StyledCheckbox>
+                        <StyledCheckbox
+                            className="mx_QuickSettingsButton_peopleCheckbox"
+                            checked={!!peopleEnabled}
+                            onChange={onMetaSpaceChangeFactory(
+                                MetaSpace.People,
+                                "WebQuickSettingsPinToSidebarCheckbox",
+                            )}
+                        >
+                            <UserProfileSolidIcon className="mx_QuickSettingsButton_icon" />
+                            {_t("common|people")}
+                        </StyledCheckbox>
+                    </>
+                )}
                 <AccessibleButton
                     className="mx_QuickSettingsButton_moreOptionsButton"
                     onClick={() => {
