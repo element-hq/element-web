@@ -631,6 +631,7 @@ export const SETTINGS: Settings = {
         description: _td("labs|under_active_development"),
         isFeature: true,
         default: false,
+        controller: new ReloadOnChangeController(),
     },
     /**
      * With the transition to Compound we are moving to a base font size
