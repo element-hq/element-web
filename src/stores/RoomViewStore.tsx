@@ -356,10 +356,8 @@ export class RoomViewStore extends EventEmitter {
 
             // Start a call if requested
             const currentRoomCall = this.state.roomId ? CallStore.instance.getCall(this.state.roomId) : null;
-            if (payload.view_call && room) {
-                if (!currentRoomCall) {
-                    ElementCall.create(room, false);
-                }
+            if (payload.view_call && room && !currentRoomCall) {
+                ElementCall.create(room, false);
             }
             // Destroy the call when leaving call view
             const prevRoomCall = this.state.roomId ? CallStore.instance.getCall(this.state.roomId) : null;
