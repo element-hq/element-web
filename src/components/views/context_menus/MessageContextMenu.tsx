@@ -207,7 +207,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         this.closeMenu();
     };
 
-    private onViewSourceClick = (): void => {
+   /* private onViewSourceClick = (): void => {
         Modal.createDialog(
             ViewSource,
             {
@@ -216,7 +216,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             "mx_Dialog_viewsource",
         );
         this.closeMenu();
-    };
+    };*/
 
     private onRedactClick = (): void => {
         const { mxEvent, onCloseDialog } = this.props;
