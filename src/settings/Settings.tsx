@@ -208,7 +208,6 @@ export interface Settings {
     "feature_ask_to_join": IFeature;
     "feature_notifications": IFeature;
     // These are in the feature namespace but aren't actually features
-    "feature_sliding_sync_proxy_url": IBaseSetting<string>;
     "feature_hidebold": IBaseSetting<boolean>;
 
     "useOnlyCurrentProfiles": IBaseSetting<boolean>;

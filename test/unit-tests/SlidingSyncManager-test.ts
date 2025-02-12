@@ -14,7 +14,6 @@ import fetchMockJest from "fetch-mock-jest";
 import { SlidingSyncManager } from "../../src/SlidingSyncManager";
 import { stubClient } from "../test-utils";
 import SlidingSyncController from "../../src/settings/controllers/SlidingSyncController";
-import SettingsStore from "../../src/settings/SettingsStore";
 
 jest.mock("matrix-js-sdk/src/sliding-sync");
 const MockSlidingSync = <jest.Mock<SlidingSync>>(<unknown>SlidingSync);
