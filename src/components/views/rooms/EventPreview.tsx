@@ -2,12 +2,12 @@
  * Copyright 2024 New Vector Ltd.
  * Copyright 2024 The Matrix.org Foundation C.I.C.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { HTMLProps, JSX, useContext, useState } from "react";
-import { IContent, M_POLL_START, MatrixEvent, MatrixEventEvent, MsgType } from "matrix-js-sdk/src/matrix";
+import React, { type HTMLProps, type JSX, useContext, useState } from "react";
+import { type IContent, M_POLL_START, type MatrixEvent, MatrixEventEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";

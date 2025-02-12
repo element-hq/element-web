@@ -368,7 +368,6 @@
         "room": "Kambarys",
         "rooms": "Kambariai",
         "secure_backup": "Saugi Atsarginė Kopija",
-        "security": "Saugumas",
         "select_all": "Pasirinkti viską",
         "settings": "Nustatymai",
         "show_more": "Rodyti daugiau",
@@ -382,7 +381,6 @@
         "theme": "Tema",
         "threads": "Temos",
         "timeline": "Laiko juosta",
-        "trusted": "Patikimas",
         "unencrypted": "Neužšifruota",
         "unmute": "Atšaukti nutildymą",
         "unnamed_room": "Bevardis Kambarys",
@@ -394,8 +392,7 @@
         "video": "Vaizdo įrašas",
         "video_room": "Vaizdo kambarys",
         "view_message": "Žiūrėti žinutę",
-        "warning": "Įspėjimas",
-        "welcome": "Sveiki atvykę"
+        "warning": "Įspėjimas"
     },
     "composer": {
         "autocomplete": {
@@ -580,7 +577,6 @@
             "title": "Nepatikimas"
         },
         "unable_to_setup_keys_error": "Nepavyksta nustatyti raktų",
-        "unsupported": "Šis klientas nepalaiko visapusio šifravimo.",
         "verification": {
             "accepting": "Priimama…",
             "cancelled": "Jūs atšaukėte patvirtinimą.",
@@ -923,7 +919,6 @@
     },
     "member_list": {
         "filter_placeholder": "Filtruoti kambario dalyvius",
-        "invited_list_heading": "Pakviesta",
         "power_label": "%(userName)s (galia %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Kambario nariai",
@@ -959,43 +954,10 @@
         "m.key.verification.request": "%(name)s prašo patvirtinimo"
     },
     "onboarding": {
-        "community_messaging_action": "Rasti savo žmones",
-        "community_messaging_description": "Išlaikykite bendruomenės diskusijų nuosavybę ir kontrolę.\nPlėskitės ir palaikykite milijonus žmonių, naudodami galingą moderavimą ir sąveiką.",
-        "community_messaging_title": "Bendruomenės nuosavybė",
-        "complete_these": "Užbaikite šiuos žingsnius, kad gautumėte daugiausiai iš %(brand)s",
         "create_room": "Sukurti grupės pokalbį",
-        "download_app": "Atsisiųsti %(brand)s",
-        "download_app_action": "Atsisiųsti programėles",
-        "download_app_description": "Nepraleiskite nieko, jei su savimi pasiimsite %(brand)s",
-        "download_brand": "Atsisiųsti %(brand)s",
-        "enable_notifications": "Įjungti pranešimus",
-        "enable_notifications_action": "Įjungti pranešimus",
-        "enable_notifications_description": "Nepraleiskite atsakymo ar svarbios žinutės",
         "explore_rooms": "Žvalgyti viešus kambarius",
-        "find_community_members": "Rasti ir pakviesti savo bendruomenės narius",
-        "find_coworkers": "Rasti ir pakviesti bendradarbius",
-        "find_friends": "Rasti ir pakviesti draugus",
-        "find_friends_action": "Rasti draugus",
-        "find_friends_description": "Dėl to čia ir esate, todėl imkimės to",
-        "find_people": "Rasti žmones",
-        "free_e2ee_messaging_unlimited_voip": "%(brand)s - tai puikus būdas palaikyti ryšį: nemokamos visapusiškai šifruotos žinutės ir neriboti balso bei vaizdo skambučiai.",
-        "get_stuff_done": "Atlikite darbus suradę komandos draugus",
         "intro_welcome": "Sveiki prisijungę į %(appName)s",
-        "only_n_steps_to_go": {
-            "one": "Liko tik %(count)s žingsnis",
-            "other": "Liko tik %(count)s žingsniai"
-        },
-        "personal_messaging_action": "Pradėkite pirmąjį pokalbį",
-        "personal_messaging_title": "Saugūs pokalbiai draugams ir šeimai",
-        "send_dm": "Siųsti tiesioginę žinutę",
-        "set_up_profile": "Nustatykite savo profilį",
-        "set_up_profile_action": "Jūsų profilis",
-        "set_up_profile_description": "Įsitikinkite, kad žmonės žino, jog tai tikrai jūs",
-        "welcome_to_brand": "Sveiki atvykę į %(brand)s",
-        "work_messaging_action": "Rasti savo bendradarbius",
-        "work_messaging_title": "Saugūs pokalbiai darbui",
-        "you_did_it": "Jums pavyko!",
-        "you_made_it": "Jums pavyko!"
+        "send_dm": "Siųsti tiesioginę žinutę"
     },
     "power_level": {
         "admin": "Administratorius",
@@ -1003,7 +965,6 @@
         "custom_level": "Pritaikytas lygis",
         "default": "Numatytas",
         "label": "Galios lygis",
-        "mod": "Moderatorius",
         "moderator": "Moderatorius",
         "restricted": "Apribotas"
     },
@@ -1867,7 +1828,6 @@
         "invite": "Pakviesti žmonių",
         "invite_description": "Pakviesti su el. paštu arba naudotojo vardu",
         "invite_link": "Bendrinti pakvietimo nuorodą",
-        "invite_this_space": "Pakviesti į šią erdvę",
         "search_children": "Ieškoti %(spaceName)s"
     },
     "spaces": {
@@ -2099,7 +2059,9 @@
             "sent": "%(senderName)s išsiuntė pakvietimą %(targetDisplayName)s prisijungti prie kambario."
         },
         "m.room.tombstone": "%(senderDisplayName)s atnaujino šį kambarį.",
-        "m.room.topic": "%(senderDisplayName)s pakeitė temą į \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s pakeitė temą į \"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s nusiuntė lipduką.",
         "m.video": {
             "error_decrypting": "Klaida iššifruojant vaizdo įrašą"
@@ -2308,14 +2270,6 @@
         "ban_room_confirm_title": "Atblokuoti už %(roomName)s",
         "ban_space_everything": "Užblokuoti juos iš visko, kur galiu",
         "ban_space_specific": "Užblokuoti juos konkrečiuose dalykuose, kuriuose galiu",
-        "count_of_sessions": {
-            "other": "%(count)s seansai(-ų)",
-            "one": "%(count)s seansas"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s patvirtintų seansų",
-            "one": "1 patvirtintas seansas"
-        },
         "deactivate_confirm_action": "Deaktyvuoti vartotoją",
         "deactivate_confirm_description": "Šio vartotojo deaktyvavimas atjungs juos ir neleis jiems vėl prisijungti atgal. Taip pat jie išeis iš visų kambarių, kuriuose jie yra. Šis veiksmas negali būti atšauktas. Ar tikrai norite deaktyvuoti šį vartotoją?",
         "deactivate_confirm_title": "Deaktyvuoti vartotoją?",
@@ -2326,15 +2280,12 @@
         "disinvite_button_room": "Atšaukti kvietimą iš kambario",
         "disinvite_button_room_name": "Atšaukti kvietimą iš %(roomName)s",
         "disinvite_button_space": "Atšaukti kvietimą iš erdvės",
-        "edit_own_devices": "Redaguoti įrenginius",
         "error_ban_user": "Nepavyko užblokuoti vartotojo",
         "error_deactivate": "Nepavyko deaktyvuoti vartotojo",
         "error_kicking_user": "Nepavyko pašalinti naudotojo",
         "error_mute_user": "Nepavyko nutildyti vartotojo",
         "error_revoke_3pid_invite_description": "Kvietimo atšaukti nepavyko. Gali būti, kad serveryje kilo laikina problema arba neturite pakankamų leidimų atšaukti kvietimą.",
         "error_revoke_3pid_invite_title": "Nepavyko atšaukti kvietimo",
-        "hide_sessions": "Slėpti seansus",
-        "hide_verified_sessions": "Slėpti patvirtintus seansus",
         "invited_by": "Pakvietė %(sender)s",
         "jump_to_rr_button": "Nušokti iki perskaitytų žinučių",
         "kick_button_room": "Pašalinti iš kambario",

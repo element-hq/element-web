@@ -8,11 +8,13 @@
 
 #### develop
 
-The develop branch holds the very latest and greatest code we have to offer, as such it may be less stable. It corresponds to the develop.element.io CD platform.
+The develop branch holds the very latest and greatest code we have to offer, as such it may be less stable.
+It is auto-deployed on every commit to element-web or matrix-js-sdk to develop.element.io via GitHub Actions `build_develop.yml`.
 
 #### staging
 
 The staging branch corresponds to the very latest release regardless of whether it is an RC or not. Deployed to staging.element.io manually.
+It is auto-deployed on every release of element-web to staging.element.io via GitHub Actions `deploy.yml`.
 
 #### master
 
@@ -126,7 +128,7 @@ flowchart TD
 
     subgraph Deploying
         D1[\Deploy staging.element.io/]
-        D2[\Check dockerhub/]
+        D2[\Check docker build/]
         D3[\Deploy app.element.io/]
         D4[\Check desktop package/]
 
@@ -211,11 +213,11 @@ switched back to the version of the dependency from the master branch to not lea
 # Deploying
 
 We ship the SDKs to npm, this happens as part of the release process.
-We ship Element Web to dockerhub, `*.element.io`, and packages.element.io.
+We ship Element Web to dockerhub, ghcr.io, `*.element.io`, and packages.element.io.
 We ship Element Desktop to packages.element.io.
 
-- [ ] Check that element-web has shipped to dockerhub
-- [ ] Deploy staging.element.io. [See docs.](https://handbook.element.io/books/element-web-team/page/deploying-appstagingelementio)
+- [ ] Check that element-web has shipped to dockerhub & ghcr.io
+- [ ] Check that the staging [deployment](https://github.com/element-hq/element-web/actions/workflows/deploy.yml) has completed successfully
 - [ ] Test staging.element.io
 
 For final releases additionally do these steps:
@@ -224,6 +226,9 @@ For final releases additionally do these steps:
 - [ ] Test app.element.io
 - [ ] Ensure Element Web package has shipped to packages.element.io
 - [ ] Ensure Element Desktop packages have shipped to packages.element.io
+
+If you need to roll back a deployment to staging.element.io,
+you can run the `deploy.yml` automation choosing an older tag which you wish to deploy.
 
 # Housekeeping
 

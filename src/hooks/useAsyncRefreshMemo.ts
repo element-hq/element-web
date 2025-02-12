@@ -2,11 +2,11 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { DependencyList, useCallback, useEffect, useState } from "react";
+import { type DependencyList, useCallback, useEffect, useState } from "react";
 
 type Fn<T> = () => Promise<T>;
 
@@ -34,7 +34,7 @@ export function useAsyncRefreshMemo<T>(fn: Fn<T>, deps: DependencyList, initialV
         return () => {
             discard = true;
         };
-    }, deps); // eslint-disable-line react-hooks/exhaustive-deps
+    }, deps); // eslint-disable-line react-hooks/exhaustive-deps,react-compiler/react-compiler
     useEffect(refresh, [refresh]);
     return [value, refresh];
 }

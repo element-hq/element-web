@@ -3,12 +3,12 @@ Copyright 2024 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 Copyright 2019 Travis Ralston
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { Widget, WidgetKind } from "matrix-widget-api";
+import { type Widget, type WidgetKind } from "matrix-widget-api";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";

@@ -5,20 +5,20 @@ Copyright 2017 Vector Creations Ltd
 Copyright 2017 New Vector Ltd
 Copyright 2016 Aviral Dasgupta
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../languageHandler";
 import AutocompleteProvider from "./AutocompleteProvider";
 import QueryMatcher from "./QueryMatcher";
 import { TextualCompletion } from "./Components";
-import { ICompletion, ISelectionRange } from "./Autocompleter";
-import { Command, Commands, CommandMap } from "../SlashCommands";
-import { TimelineRenderingType } from "../contexts/RoomContext";
+import { type ICompletion, type ISelectionRange } from "./Autocompleter";
+import { type Command, Commands, CommandMap } from "../SlashCommands";
+import { type TimelineRenderingType } from "../contexts/RoomContext";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 
 const COMMAND_RE = /(^\/\w*)(?: .*)?/g;

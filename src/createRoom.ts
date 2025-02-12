@@ -3,18 +3,18 @@ Copyright 2024 New Vector Ltd.
 Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 Copyright 2015, 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    MatrixClient,
+    type MatrixClient,
     ClientEvent,
-    Room,
+    type Room,
     EventType,
     RoomCreateTypeField,
     RoomType,
-    ICreateRoomOpts,
+    type ICreateRoomOpts,
     HistoryVisibility,
     JoinRule,
     Preset,
@@ -23,7 +23,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import Modal, { IHandle } from "./Modal";
+import Modal, { type IHandle } from "./Modal";
 import { _t, UserFriendlyError } from "./languageHandler";
 import dis from "./dispatcher/dispatcher";
 import * as Rooms from "./Rooms";
@@ -35,7 +35,7 @@ import { JitsiCall, ElementCall } from "./models/Call";
 import { Action } from "./dispatcher/actions";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import Spinner from "./components/views/elements/Spinner";
-import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
 import { findDMForUser } from "./utils/dm/findDMForUser";
 import { privateShouldBeEncrypted } from "./utils/rooms";
 import { shouldForceDisableEncryption } from "./utils/crypto/shouldForceDisableEncryption";

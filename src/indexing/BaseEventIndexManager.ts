@@ -2,15 +2,15 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    IMatrixProfile,
-    IEventWithRoomId as IMatrixEvent,
-    IResultRoomEvents,
-    Direction,
+    type IMatrixProfile,
+    type IEventWithRoomId as IMatrixEvent,
+    type IResultRoomEvents,
+    type Direction,
 } from "matrix-js-sdk/src/matrix";
 
 // The following interfaces take their names and member names from seshat and the spec

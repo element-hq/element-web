@@ -2,23 +2,23 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useContext } from "react";
-import { Thread, ThreadEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type Thread, ThreadEvent, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { IndicatorIcon } from "@vector-im/compound-web";
 import ThreadIconSolid from "@vector-im/compound-design-tokens/assets/web/icons/threads-solid";
 
 import { _t } from "../../../languageHandler";
 import { CardContext } from "../right_panel/context";
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { Action } from "../../../dispatcher/actions";
-import { ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
+import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { useUnreadNotifications } from "../../../hooks/useUnreadNotifications";
 import { notificationLevelToIndicator } from "../../../utils/notifications";

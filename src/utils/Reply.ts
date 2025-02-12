@@ -3,11 +3,11 @@
  * Copyright 2023 The Matrix.org Foundation C.I.C.
  * Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { IContent, IEventRelation, MatrixEvent, THREAD_RELATION_TYPE } from "matrix-js-sdk/src/matrix";
+import { type IContent, type IEventRelation, type MatrixEvent, THREAD_RELATION_TYPE } from "matrix-js-sdk/src/matrix";
 import sanitizeHtml from "sanitize-html";
 
 import { PERMITTED_URL_SCHEMES } from "./UrlUtils";

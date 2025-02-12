@@ -2,24 +2,24 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2015-2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import classNames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
-import { SSOFlow, SSOAction } from "matrix-js-sdk/src/matrix";
+import { type SSOFlow, SSOAction } from "matrix-js-sdk/src/matrix";
 
 import { _t, UserFriendlyError } from "../../../languageHandler";
-import Login, { ClientLoginFlow, OidcNativeFlow } from "../../../Login";
+import Login, { type ClientLoginFlow, type OidcNativeFlow } from "../../../Login";
 import { messageForConnectionError, messageForLoginError } from "../../../utils/ErrorUtils";
 import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
 import AuthPage from "../../views/auth/AuthPage";
 import PlatformPeg from "../../../PlatformPeg";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
-import { IMatrixClientCreds } from "../../../MatrixClientPeg";
+import { type IMatrixClientCreds } from "../../../MatrixClientPeg";
 import PasswordLogin from "../../views/auth/PasswordLogin";
 import InlineSpinner from "../../views/elements/InlineSpinner";
 import Spinner from "../../views/elements/Spinner";
@@ -27,10 +27,9 @@ import SSOButtons from "../../views/elements/SSOButtons";
 import ServerPicker from "../../views/elements/ServerPicker";
 import AuthBody from "../../views/auth/AuthBody";
 import AuthHeader from "../../views/auth/AuthHeader";
-import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleButton";
-import { ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
+import AccessibleButton, { type ButtonEvent } from "../../views/elements/AccessibleButton";
+import { type ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
 import { filterBoolean } from "../../../utils/arrays";
-import { Features } from "../../../settings/Settings";
 import { startOidcLogin } from "../../../utils/oidc/authorize";
 
 interface IProps {
@@ -48,10 +47,7 @@ interface IProps {
 
     // Called when the user has logged in. Params:
     // - The object returned by the login API
-    // - The user's password, if applicable, (may be cached in memory for a
-    //   short time so the user is not required to re-enter their password
-    //   for operations like uploading cross-signing keys).
-    onLoggedIn(data: IMatrixClientCreds, password: string): void;
+    onLoggedIn(data: IMatrixClientCreds): void;
 
     // login shouldn't know or care how registration, password recovery, etc is done.
     onRegisterClick(): void;
@@ -93,16 +89,12 @@ type OnPasswordLogin = {
  */
 export default class LoginComponent extends React.PureComponent<IProps, IState> {
     private unmounted = false;
-    private oidcNativeFlowEnabled = false;
     private loginLogic!: Login;
 
     private readonly stepRendererMap: Record<string, () => ReactNode>;
 
     public constructor(props: IProps) {
         super(props);
-
-        // only set on a config level, so we don't need to watch
-        this.oidcNativeFlowEnabled = SettingsStore.getValue(Features.OidcNativeFlow);
 
         this.state = {
             busy: false,
@@ -199,7 +191,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         this.loginLogic.loginViaPassword(username, phoneCountry, phoneNumber, password).then(
             (data) => {
                 this.setState({ serverIsAlive: true }); // it must be, we logged in.
-                this.props.onLoggedIn(data, password);
+                this.props.onLoggedIn(data);
             },
             (error) => {
                 if (this.unmounted) return;
@@ -361,10 +353,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
 
         const loginLogic = new Login(hsUrl, isUrl, fallbackHsUrl, {
             defaultDeviceDisplayName: this.props.defaultDeviceDisplayName,
-            // if native OIDC is enabled in the client pass the server's delegated auth settings
-            delegatedAuthentication: this.oidcNativeFlowEnabled
-                ? this.props.serverConfig.delegatedAuthentication
-                : undefined,
+            delegatedAuthentication: this.props.serverConfig.delegatedAuthentication,
         });
         this.loginLogic = loginLogic;
 

@@ -1,13 +1,13 @@
 /*
 Copyright 2018-2024 New Vector Ltd.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ComponentProps, ReactNode } from "react";
-import { Tooltip } from "@vector-im/compound-web";
-import { MediaEventContent } from "matrix-js-sdk/src/types";
+import React, { type ComponentProps, type ReactNode } from "react";
+import { type Tooltip } from "@vector-im/compound-web";
+import { type MediaEventContent } from "matrix-js-sdk/src/types";
 
 import MImageBody from "./MImageBody";
 import { BLURHASH_FIELD } from "../../../utils/image-media";

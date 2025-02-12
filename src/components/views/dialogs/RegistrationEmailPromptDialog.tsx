@@ -2,15 +2,15 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import * as React from "react";
-import { SyntheticEvent, useRef, useState } from "react";
+import { type SyntheticEvent, useRef, useState } from "react";
 
 import { _t, _td } from "../../../languageHandler";
-import Field from "../elements/Field";
+import type Field from "../elements/Field";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 import EmailField from "../auth/EmailField";

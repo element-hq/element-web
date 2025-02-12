@@ -2,18 +2,18 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2016-2019 , 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { SERVICE_TYPES, Room, IOpenIDToken } from "matrix-js-sdk/src/matrix";
+import { SERVICE_TYPES, type Room, type IOpenIDToken } from "matrix-js-sdk/src/matrix";
 
 import SettingsStore from "./settings/SettingsStore";
-import { Service, startTermsFlow, TermsInteractionCallback, TermsNotSignedError } from "./Terms";
+import { Service, startTermsFlow, type TermsInteractionCallback, TermsNotSignedError } from "./Terms";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import SdkConfig from "./SdkConfig";
-import { WidgetType } from "./widgets/WidgetType";
+import { type WidgetType } from "./widgets/WidgetType";
 import { parseUrl } from "./utils/UrlUtils";
 
 // The version of the integration manager API we're intending to work with

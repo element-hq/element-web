@@ -2,11 +2,11 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk/src/matrix";
 import React from "react";
 
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
@@ -14,12 +14,12 @@ import { useNotificationState } from "../../../hooks/useRoomNotificationState";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { _t } from "../../../languageHandler";
 import { RoomNotifState } from "../../../RoomNotifs";
-import { IProps as IContextMenuProps } from "../../structures/ContextMenu";
+import { type IProps as IContextMenuProps } from "../../structures/ContextMenu";
 import IconizedContextMenu, {
     IconizedContextMenuOptionList,
     IconizedContextMenuRadio,
 } from "../context_menus/IconizedContextMenu";
-import { ButtonEvent } from "../elements/AccessibleButton";
+import { type ButtonEvent } from "../elements/AccessibleButton";
 
 interface IProps extends IContextMenuProps {
     room: Room;

@@ -2,18 +2,18 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, RenderResult, screen } from "jest-matrix-react";
+import { render, type RenderResult, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { mocked, Mocked } from "jest-mock";
-import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { mocked, type Mocked } from "jest-mock";
+import { type MatrixClient, type MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 
 import dis from "../../../../../src/dispatcher/dispatcher";
-import { Pill, PillProps, PillType } from "../../../../../src/components/views/elements/Pill";
+import { Pill, type PillProps, PillType } from "../../../../../src/components/views/elements/Pill";
 import {
     filterConsole,
     flushPromises,
@@ -24,7 +24,7 @@ import {
 } from "../../../../test-utils";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { Action } from "../../../../../src/dispatcher/actions";
-import { ButtonEvent } from "../../../../../src/components/views/elements/AccessibleButton";
+import { type ButtonEvent } from "../../../../../src/components/views/elements/AccessibleButton";
 import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
 
 describe("<Pill>", () => {

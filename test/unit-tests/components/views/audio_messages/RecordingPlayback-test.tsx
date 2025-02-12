@@ -2,14 +2,14 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import { mocked } from "jest-mock";
 import { logger } from "matrix-js-sdk/src/logger";
-import { fireEvent, render, RenderResult } from "jest-matrix-react";
+import { fireEvent, render, type RenderResult } from "jest-matrix-react";
 
 import RecordingPlayback, {
     PlaybackLayout,
@@ -18,7 +18,7 @@ import { Playback } from "../../../../../src/audio/Playback";
 import { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
 import { createAudioContext } from "../../../../../src/audio/compat";
 import { flushPromises } from "../../../../test-utils";
-import { IRoomState } from "../../../../../src/components/structures/RoomView";
+import { type IRoomState } from "../../../../../src/components/structures/RoomView";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 
 jest.mock("../../../../../src/WorkerManager", () => ({

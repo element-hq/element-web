@@ -4,7 +4,7 @@ Copyright 2023 Mikhail Aheichyk
 Copyright 2023 Nordeck IT + Consulting GmbH.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -12,7 +12,7 @@ import { uniqueId } from "lodash";
 import { expect, type Page } from "@playwright/test";
 
 import type { ClientEvent, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
-import { Client } from "../pages/client";
+import { type Client } from "../pages/client";
 
 /**
  * Resolves when room state matches predicate.

@@ -1,11 +1,11 @@
 /*
 Copyright 2020-2024 New Vector Ltd.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import { Text, Heading, Button, Separator } from "@vector-im/compound-web";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
 

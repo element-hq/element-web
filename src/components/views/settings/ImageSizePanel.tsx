@@ -2,11 +2,12 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
+import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import StyledRadioButton from "../elements/StyledRadioButton";
@@ -15,16 +16,12 @@ import { SettingLevel } from "../../../settings/SettingLevel";
 import { ImageSize } from "../../../settings/enums/ImageSize";
 import { SettingsSubsection } from "./shared/SettingsSubsection";
 
-interface IProps {
-    // none
-}
-
 interface IState {
     size: ImageSize;
 }
 
-export default class ImageSizePanel extends React.Component<IProps, IState> {
-    public constructor(props: IProps) {
+export default class ImageSizePanel extends React.Component<EmptyObject, IState> {
+    public constructor(props: EmptyObject) {
         super(props);
 
         this.state = {

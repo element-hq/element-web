@@ -2,11 +2,11 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { FormattingFunctions } from "@vector-im/matrix-wysiwyg";
+import { type FormattingFunctions } from "@vector-im/matrix-wysiwyg";
 import { render, screen, waitFor } from "jest-matrix-react";
 import React from "react";
 import userEvent from "@testing-library/user-event";
@@ -14,7 +14,7 @@ import userEvent from "@testing-library/user-event";
 import { LinkModal } from "../../../../../../../src/components/views/rooms/wysiwyg_composer/components/LinkModal";
 import { mockPlatformPeg } from "../../../../../../test-utils";
 import * as selection from "../../../../../../../src/components/views/rooms/wysiwyg_composer/utils/selection";
-import { SubSelection } from "../../../../../../../src/components/views/rooms/wysiwyg_composer/types";
+import { type SubSelection } from "../../../../../../../src/components/views/rooms/wysiwyg_composer/types";
 
 describe("LinkModal", () => {
     const formattingFunctions = {

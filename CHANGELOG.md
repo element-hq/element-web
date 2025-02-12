@@ -1,3 +1,107 @@
+Changes in [1.11.92](https://github.com/element-hq/element-web/releases/tag/v1.11.92) (2025-02-11)
+==================================================================================================
+## ✨ Features
+
+* [Backport staging] Log when we show, and hide, encryption setup toasts ([#29238](https://github.com/element-hq/element-web/pull/29238)). Contributed by @richvdh.
+* Make profile header section match the designs ([#29163](https://github.com/element-hq/element-web/pull/29163)). Contributed by @MidhunSureshR.
+* Always show back button in the right panel ([#29128](https://github.com/element-hq/element-web/pull/29128)). Contributed by @MidhunSureshR.
+* Schedule dehydration on reload if the dehydration key is already cached locally ([#29021](https://github.com/element-hq/element-web/pull/29021)). Contributed by @uhoreg.
+* update to twemoji 15.1.0 ([#29115](https://github.com/element-hq/element-web/pull/29115)). Contributed by @ara4n.
+* Update matrix-widget-api ([#29112](https://github.com/element-hq/element-web/pull/29112)). Contributed by @toger5.
+* Allow navigating through the memberlist using up/down keys ([#28949](https://github.com/element-hq/element-web/pull/28949)). Contributed by @MidhunSureshR.
+* Style room header icons and facepile for toggled state ([#28968](https://github.com/element-hq/element-web/pull/28968)). Contributed by @MidhunSureshR.
+* Move threads header below base card header ([#28969](https://github.com/element-hq/element-web/pull/28969)). Contributed by @MidhunSureshR.
+* Add `Advanced` section to the user settings encryption tab ([#28804](https://github.com/element-hq/element-web/pull/28804)). Contributed by @florianduros.
+* Fix outstanding UX issues with replies/mentions/keyword notifs ([#28270](https://github.com/element-hq/element-web/pull/28270)). Contributed by @taffyko.
+* Distinguish room state and timeline events when dealing with widgets ([#28681](https://github.com/element-hq/element-web/pull/28681)). Contributed by @robintown.
+* Switch OIDC primarily to new `/auth_metadata` API ([#29019](https://github.com/element-hq/element-web/pull/29019)). Contributed by @t3chguy.
+* More memberlist changes ([#29069](https://github.com/element-hq/element-web/pull/29069)). Contributed by @MidhunSureshR.
+
+## 🐛 Bug Fixes
+
+* [Backport staging] Wire up the "Forgot recovery key" button for the "Key storage out of sync" toast ([#29190](https://github.com/element-hq/element-web/pull/29190)). Contributed by @RiotRobot.
+* Encryption tab: hide `Advanced` section when the key storage is out of sync ([#29129](https://github.com/element-hq/element-web/pull/29129)). Contributed by @florianduros.
+* Fix share button in discovery settings being disabled incorrectly ([#29151](https://github.com/element-hq/element-web/pull/29151)). Contributed by @t3chguy.
+* Ensure switching rooms does not wrongly focus timeline search ([#29153](https://github.com/element-hq/element-web/pull/29153)). Contributed by @t3chguy.
+* Stop showing a dialog prompting the user to enter an old recovery key ([#29143](https://github.com/element-hq/element-web/pull/29143)). Contributed by @richvdh.
+* Make themed widgets reflect the effective theme ([#28342](https://github.com/element-hq/element-web/pull/28342)). Contributed by @robintown.
+* support non-VS16 emoji ligatures in TwemojiMozilla ([#29100](https://github.com/element-hq/element-web/pull/29100)). Contributed by @ara4n.
+* e2e test: Verify session with the encryption tab instead of the security \& privacy tab ([#29090](https://github.com/element-hq/element-web/pull/29090)). Contributed by @florianduros.
+* Work around cloudflare R2 / aws client incompatability ([#29086](https://github.com/element-hq/element-web/pull/29086)). Contributed by @dbkr.
+* Fix identity server settings visibility ([#29083](https://github.com/element-hq/element-web/pull/29083)). Contributed by @dbkr.
+
+
+Changes in [1.11.91](https://github.com/element-hq/element-web/releases/tag/v1.11.91) (2025-01-28)
+==================================================================================================
+## ✨ Features
+
+* Implement changes to memberlist from feedback ([#29029](https://github.com/element-hq/element-web/pull/29029)). Contributed by @MidhunSureshR.
+* Add toast for recovery keys being out of sync ([#28946](https://github.com/element-hq/element-web/pull/28946)). Contributed by @dbkr.
+* Refactor LegacyCallHandler event emitter to use TypedEventEmitter ([#29008](https://github.com/element-hq/element-web/pull/29008)). Contributed by @t3chguy.
+* Add `Recovery` section in the new user settings `Encryption` tab ([#28673](https://github.com/element-hq/element-web/pull/28673)). Contributed by @florianduros.
+* Retry loading chunks to make the app more resilient ([#29001](https://github.com/element-hq/element-web/pull/29001)). Contributed by @t3chguy.
+* Clear account idb table on logout ([#28996](https://github.com/element-hq/element-web/pull/28996)). Contributed by @t3chguy.
+* Implement new memberlist design with MVVM architecture  ([#28874](https://github.com/element-hq/element-web/pull/28874)). Contributed by @MidhunSureshR.
+
+## 🐛 Bug Fixes
+
+* [Backport staging] Switch to secure random strings ([#29035](https://github.com/element-hq/element-web/pull/29035)). Contributed by @RiotRobot.
+* React to MatrixEvent sender/target being updated for rendering state events ([#28947](https://github.com/element-hq/element-web/pull/28947)). Contributed by @t3chguy.
+
+
+Changes in [1.11.90](https://github.com/element-hq/element-web/releases/tag/v1.11.90) (2025-01-14)
+==================================================================================================
+## ✨ Features
+
+* Docker: run as non-root ([#28849](https://github.com/element-hq/element-web/pull/28849)). Contributed by @richvdh.
+* Docker: allow configuration of HTTP listen port via env var ([#28840](https://github.com/element-hq/element-web/pull/28840)). Contributed by @richvdh.
+* Update matrix-wysiwyg to consume WASM asset ([#28838](https://github.com/element-hq/element-web/pull/28838)). Contributed by @t3chguy.
+* OIDC settings tweaks ([#28787](https://github.com/element-hq/element-web/pull/28787)). Contributed by @t3chguy.
+* Delabs native OIDC support ([#28615](https://github.com/element-hq/element-web/pull/28615)). Contributed by @t3chguy.
+* Move room header info button to right-most position ([#28754](https://github.com/element-hq/element-web/pull/28754)). Contributed by @t3chguy.
+* Enable key backup by default ([#28691](https://github.com/element-hq/element-web/pull/28691)). Contributed by @dbkr.
+
+## 🐛 Bug Fixes
+
+* Fix building the automations mermaid diagram ([#28881](https://github.com/element-hq/element-web/pull/28881)). Contributed by @dbkr.
+* Playwright: wait for the network listener on the postgres db ([#28808](https://github.com/element-hq/element-web/pull/28808)). Contributed by @dbkr.
+
+
+Changes in [1.11.89](https://github.com/element-hq/element-web/releases/tag/v1.11.89) (2024-12-18)
+==================================================================================================
+This is a patch release to fix a bug which could prevent loading stored crypto state from storage, and also to fix URL previews when switching back to a room.
+
+## 🐛 Bug Fixes
+
+* Upgrade matrix-sdk-crypto-wasm to 1.11.0 (https://github.com/matrix-org/matrix-js-sdk/pull/4593)
+* Fix url preview display ([#28766](https://github.com/element-hq/element-web/pull/28766)).
+
+
+Changes in [1.11.88](https://github.com/element-hq/element-web/releases/tag/v1.11.88) (2024-12-17)
+==================================================================================================
+## ✨ Features
+
+* Allow trusted Element Call widget to send and receive media encryption key to-device messages ([#28316](https://github.com/element-hq/element-web/pull/28316)). Contributed by @hughns.
+* increase ringing timeout from 10 seconds to 90 seconds ([#28630](https://github.com/element-hq/element-web/pull/28630)). Contributed by @fkwp.
+* Add `Close` tooltip to dialog ([#28617](https://github.com/element-hq/element-web/pull/28617)). Contributed by @florianduros.
+* New UX for Share dialog ([#28598](https://github.com/element-hq/element-web/pull/28598)). Contributed by @florianduros.
+* Improve performance of RoomContext in RoomHeader ([#28574](https://github.com/element-hq/element-web/pull/28574)). Contributed by @t3chguy.
+* Remove `Features.RustCrypto` flag ([#28582](https://github.com/element-hq/element-web/pull/28582)). Contributed by @florianduros.
+* Add Modernizr warning when running in non-secure context ([#28581](https://github.com/element-hq/element-web/pull/28581)). Contributed by @t3chguy.
+
+## 🐛 Bug Fixes
+
+* Fix jumpy timeline when the pinned message banner is displayed ([#28654](https://github.com/element-hq/element-web/pull/28654)). Contributed by @florianduros.
+* Fix font \& spaces in settings subsection ([#28631](https://github.com/element-hq/element-web/pull/28631)). Contributed by @florianduros.
+* Remove manual device verification which is not supported by the new cryptography stack ([#28588](https://github.com/element-hq/element-web/pull/28588)). Contributed by @florianduros.
+* Fix code block highlighting not working reliably with many code blocks ([#28613](https://github.com/element-hq/element-web/pull/28613)). Contributed by @t3chguy.
+* Remove remaining reply fallbacks code ([#28610](https://github.com/element-hq/element-web/pull/28610)). Contributed by @t3chguy.
+* Provide a way to activate GIFs via the keyboard for a11y ([#28611](https://github.com/element-hq/element-web/pull/28611)). Contributed by @t3chguy.
+* Fix format bar position ([#28591](https://github.com/element-hq/element-web/pull/28591)). Contributed by @florianduros.
+* Fix room taking long time to load ([#28579](https://github.com/element-hq/element-web/pull/28579)). Contributed by @florianduros.
+* Show the correct shield status in tooltip for more conditions ([#28476](https://github.com/element-hq/element-web/pull/28476)). Contributed by @uhoreg.
+
+
 Changes in [1.11.87](https://github.com/element-hq/element-web/releases/tag/v1.11.87) (2024-12-03)
 ==================================================================================================
 ## ✨ Features

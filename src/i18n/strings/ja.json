@@ -489,7 +489,6 @@
         "rooms": "ルーム",
         "saving": "保存しています…",
         "secure_backup": "セキュアバックアップ",
-        "security": "セキュリティー",
         "select_all": "全て選択",
         "server": "サーバー",
         "settings": "設定",
@@ -508,7 +507,6 @@
         "thread": "スレッド",
         "threads": "スレッド",
         "timeline": "タイムライン",
-        "trusted": "信頼済",
         "unencrypted": "暗号化されていません",
         "unmute": "ミュート解除",
         "unnamed_room": "名前のないルーム",
@@ -522,8 +520,7 @@
         "video": "動画",
         "video_room": "ビデオ通話ルーム",
         "view_message": "メッセージを表示",
-        "warning": "警告",
-        "welcome": "ようこそ"
+        "warning": "警告"
     },
     "composer": {
         "autocomplete": {
@@ -840,7 +837,6 @@
             "title": "信頼されていません"
         },
         "unable_to_setup_keys_error": "鍵を設定できません",
-        "unsupported": "このクライアントはエンドツーエンド暗号化に対応していません。",
         "verification": {
             "accepting": "承認しています…",
             "after_new_login": {
@@ -1403,7 +1399,6 @@
     },
     "member_list": {
         "filter_placeholder": "ルームのメンバーを絞り込む",
-        "invited_list_heading": "招待済",
         "power_label": "%(userName)s（権限レベル：%(powerLevelNumber)s）"
     },
     "member_list_back_action_label": "ルームのメンバー",
@@ -1445,61 +1440,15 @@
         "m.key.verification.request": "%(name)sは認証を要求しています"
     },
     "onboarding": {
-        "apple_trademarks": "App Store®とAppleロゴ®はApple Incの商標です。",
-        "community_messaging_action": "知人を見つける",
-        "community_messaging_description": "コミュニティーの会話の所有権とコントロールを維持しましょう。\n強力なモデレートと相互運用性で、数百万人のユーザーまでサポートできます。",
-        "community_messaging_title": "コミュニティーの手に",
-        "complete_these": "以下を完了し、%(brand)sを最大限に活用しましょう",
         "create_room": "グループチャットを作成",
-        "download_app": "%(brand)sをダウンロード",
-        "download_app_action": "アプリをダウンロード",
-        "download_app_description": "%(brand)sを持ち歩いて、情報を見逃さないようにしましょう",
-        "download_app_store": "App Storeでダウンロード",
-        "download_brand": "%(brand)sをダウンロード",
-        "download_brand_desktop": "%(brand)sデスクトップをダウンロード",
-        "download_f_droid": "F-Droidで入手",
-        "download_google_play": "Google Playで入手",
-        "enable_notifications": "通知を有効にする",
-        "enable_notifications_action": "通知を有効にする",
-        "enable_notifications_description": "返信または重要なメッセージを見逃さないようにしましょう",
         "explore_rooms": "公開ルームを探す",
-        "find_community_members": "コミュニティの参加者を探して招待しましょう",
-        "find_coworkers": "同僚を探して招待しましょう",
-        "find_friends": "友達を探して招待しましょう",
-        "find_friends_action": "友達を見つける",
-        "find_friends_description": "友達を見つけて、チャットを開始しましょう",
-        "find_people": "知人を見つける",
-        "free_e2ee_messaging_unlimited_voip": "自由なエンドツーエンド暗号化のメッセージのやり取りと音声・ビデオ通話で、%(brand)sは連絡を取るのに最適な手段です。",
-        "get_stuff_done": "同僚を見つけて、仕事を片付けましょう",
-        "google_trademarks": "Google PlayとGoogle PlayロゴはGoogle LLC.の商標です。",
         "has_avatar_label": "すばらしい、他の人があなただと気づく助けになるでしょう",
         "intro_byline": "自分の会話は、自分のもの。",
         "intro_welcome": "%(appName)sにようこそ",
         "no_avatar_label": "写真を追加して、あなただとわかるようにしましょう。",
-        "only_n_steps_to_go": {
-            "one": "あと%(count)sつのステップです",
-            "other": "あと%(count)sつのステップです"
-        },
-        "personal_messaging_action": "最初のチャットを始めましょう",
-        "personal_messaging_title": "友達や家族と安全なメッセージングを",
-        "qr_or_app_links": "%(qrCode)sまたは%(appLinks)s",
         "send_dm": "ダイレクトメッセージを送信",
-        "set_up_profile": "プロフィールの設定",
-        "set_up_profile_action": "あなたのプロフィール",
-        "set_up_profile_description": "相手に自分だと分かるようにしましょう",
-        "use_case_community_messaging": "オンラインコミュニティーのメンバー",
-        "use_case_heading1": "始めましょう",
-        "use_case_heading2": "誰と最もよく会話しますか？",
-        "use_case_heading3": "みんなと繋がる手助けをいたします。",
-        "use_case_personal_messaging": "友達と家族",
-        "use_case_work_messaging": "同僚とチーム",
         "welcome_detail": "何をしたいですか？",
-        "welcome_to_brand": "%(brand)sにようこそ",
-        "welcome_user": "ようこそ、%(name)s",
-        "work_messaging_action": "同僚を見つける",
-        "work_messaging_title": "仕事で安全なメッセージングを",
-        "you_did_it": "完了しました！",
-        "you_made_it": "完了しました！"
+        "welcome_user": "ようこそ、%(name)s"
     },
     "poll": {
         "create_poll_action": "アンケートを作成",
@@ -1546,7 +1495,6 @@
         "custom_level": "ユーザー定義のレベル",
         "default": "既定値",
         "label": "権限レベル",
-        "mod": "モデレーター",
         "moderator": "モデレーター",
         "restricted": "制限"
     },
@@ -2290,7 +2238,6 @@
             "rm_lifetime_offscreen": "既読マーカーを動かすまでの時間（画面オフ時）（ミリ秒）",
             "room_list_heading": "ルーム一覧",
             "show_avatars_pills": "アバターをユーザー、ルーム、イベントのメンションに表示",
-            "show_checklist_shortcuts": "ルームの一覧の上に、最初に設定すべき項目のチェックリストのショートカットを表示",
             "show_polls_button": "アンケートのボタンを表示",
             "surround_text": "特殊な文字の入力中に、選択した文章を囲む",
             "time_heading": "表示時刻"
@@ -2633,7 +2580,6 @@
         "invite": "連絡先を招待",
         "invite_description": "メールアドレスまたはユーザー名で招待",
         "invite_link": "招待リンクを共有",
-        "invite_this_space": "このスペースに招待",
         "joining_space": "参加しています",
         "landing_welcome": "<name/>にようこそ",
         "leave_dialog_action": "スペースから退出",
@@ -2979,7 +2925,9 @@
             "sent": "%(senderName)sが%(targetDisplayName)sをこのルームに招待しました。"
         },
         "m.room.tombstone": "%(senderDisplayName)sがこのルームをアップグレードしました。",
-        "m.room.topic": "%(senderDisplayName)sがトピックを\"%(topic)s\"に変更しました。",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)sがトピックを\"%(topic)s\"に変更しました。"
+        },
         "m.sticker": "%(senderDisplayName)sがステッカーを送信しました。",
         "m.video": {
             "error_decrypting": "動画を復号化する際にエラーが発生しました"
@@ -3243,14 +3191,6 @@
         "ban_room_confirm_title": "%(roomName)sからブロック",
         "ban_space_everything": "自分に可能な範囲で、全てのものからブロック",
         "ban_space_specific": "自分に可能な範囲で、特定のものからブロック",
-        "count_of_sessions": {
-            "other": "%(count)s個のセッション",
-            "one": "%(count)s個のセッション"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s件の認証済のセッション",
-            "one": "1件の認証済のセッション"
-        },
         "deactivate_confirm_action": "ユーザーを無効化",
         "deactivate_confirm_description": "このユーザーを無効化すると、このユーザーはログアウトし、再度ログインすることはできなくなります。また、現在参加している全てのルームから退出します。このアクションを元に戻すことはできません。このユーザーを無効化してもよろしいですか？",
         "deactivate_confirm_title": "ユーザーを無効化しますか？",
@@ -3261,15 +3201,12 @@
         "disinvite_button_room": "ルームへの招待を取り消す",
         "disinvite_button_room_name": "%(roomName)sへの招待を取り消す",
         "disinvite_button_space": "スペースへの招待を取り消す",
-        "edit_own_devices": "端末を編集",
         "error_ban_user": "ユーザーをブロックできませんでした",
         "error_deactivate": "ユーザーの無効化に失敗しました",
         "error_kicking_user": "ユーザーの追放に失敗しました",
         "error_mute_user": "ユーザーのミュートに失敗しました",
         "error_revoke_3pid_invite_description": "招待を取り消すことができませんでした。サーバーで一時的な問題が発生しているか、招待を取り消すための十分な権限がありません。",
         "error_revoke_3pid_invite_title": "招待を取り消せませんでした",
-        "hide_sessions": "セッションを隠す",
-        "hide_verified_sessions": "認証済のセッションを隠す",
         "ignore_confirm_description": "このユーザーのメッセージと招待を非表示にします。無視してよろしいですか？",
         "ignore_confirm_title": "%(user)sを無視",
         "invited_by": "%(sender)sからの招待",

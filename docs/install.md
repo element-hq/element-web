@@ -60,6 +60,22 @@ would be:
 docker run --rm -p 127.0.0.1:80:80 -v /etc/element-web/config.json:/app/config.json vectorim/element-web
 ```
 
+The Docker image is configured to run as an unprivileged (non-root) user by
+default. This should be fine on modern Docker runtimes, but binding to port 80
+on other runtimes may require root privileges. To resolve this, either run the
+image as root (`docker run --user 0`) or, better, change the port that nginx
+listens on via the `ELEMENT_WEB_PORT` environment variable.
+
+The behaviour of the docker image can be customised via the following
+environment variables:
+
+- `ELEMENT_WEB_PORT`
+
+    The port to listen on (within the docker container) for HTTP
+    traffic. Defaults to `80`.
+
+### Building the docker image
+
 To build the image yourself:
 
 ```bash

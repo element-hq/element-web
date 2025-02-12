@@ -2,18 +2,18 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { HTMLAttributes, useContext } from "react";
+import React, { type HTMLAttributes, useContext } from "react";
 import LocationIcon from "@vector-im/compound-design-tokens/assets/web/icons/location-pin-solid";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { _t } from "../../../languageHandler";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import BaseAvatar from "../avatars/BaseAvatar";
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import Heading from "../typography/Heading";
 import { LocationShareType } from "./shareLocation";
 import StyledLiveBeaconIcon from "../beacon/StyledLiveBeaconIcon";

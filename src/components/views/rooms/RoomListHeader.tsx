@@ -2,11 +2,11 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021, 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EventType, RoomType, Room, RoomEvent, ClientEvent } from "matrix-js-sdk/src/matrix";
+import { EventType, RoomType, type Room, RoomEvent, ClientEvent } from "matrix-js-sdk/src/matrix";
 import React, { useContext, useEffect, useState } from "react";
 import { Tooltip } from "@vector-im/compound-web";
 
@@ -14,7 +14,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { Action } from "../../../dispatcher/actions";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { useDispatcher } from "../../../hooks/useDispatcher";
 import { useEventEmitterState, useTypedEventEmitter, useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
 import { useFeatureEnabled } from "../../../hooks/useSettings";
@@ -24,7 +24,7 @@ import { UIComponent } from "../../../settings/UIFeature";
 import {
     getMetaSpaceName,
     MetaSpace,
-    SpaceKey,
+    type SpaceKey,
     UPDATE_HOME_BEHAVIOUR,
     UPDATE_SELECTED_SPACE,
 } from "../../../stores/spaces";
@@ -40,7 +40,7 @@ import {
     ChevronFace,
     ContextMenuTooltipButton,
     useContextMenu,
-    MenuProps,
+    type MenuProps,
     ContextMenuButton,
 } from "../../structures/ContextMenu";
 import { BetaPill } from "../beta/BetaCard";

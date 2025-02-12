@@ -230,7 +230,6 @@
         "oidc": {
             "error_title": "我们无法使你登入",
             "generic_auth_error": "验证时出了问题。前往登录页面并重试。",
-            "logout_redirect_warning": "你将被重定向到服务器的验证提供者以完成登出。",
             "missing_or_invalid_stored_state": "我们已要求浏览器记住你使用的家服务器，但不幸的是你的浏览器已忘记。请前往登录页面重试。"
         },
         "password_field_keep_going_prompt": "继续前进……",
@@ -396,7 +395,6 @@
             "other": "和其他%(count)s个人……",
             "one": "和其它一个..."
         },
-        "android": "安卓",
         "appearance": "外观",
         "application": "应用",
         "are_you_sure": "你确定吗？",
@@ -435,7 +433,6 @@
         "identity_server": "身份服务器",
         "image": "图片",
         "integration_manager": "集成管理器",
-        "ios": "ios",
         "joined": "已加入",
         "labs": "实验室",
         "legal": "法律信息",
@@ -488,7 +485,6 @@
         "room_name": "房间名称",
         "rooms": "房间",
         "secure_backup": "安全备份",
-        "security": "安全",
         "select_all": "全选",
         "server": "服务器",
         "settings": "设置",
@@ -507,7 +503,6 @@
         "thread": "消息列",
         "threads": "消息列",
         "timeline": "时间线",
-        "trusted": "受信任的",
         "unencrypted": "未加密",
         "unmute": "取消静音",
         "unnamed_room": "未命名的房间",
@@ -522,8 +517,7 @@
         "video": "视频",
         "video_room": "视频房间",
         "view_message": "查看消息",
-        "warning": "警告",
-        "welcome": "欢迎"
+        "warning": "警告"
     },
     "composer": {
         "autocomplete": {
@@ -816,7 +810,6 @@
             "title": "不可信任"
         },
         "unable_to_setup_keys_error": "无法设置密钥",
-        "unsupported": "此客户端不支持端到端加密。",
         "verification": {
             "accepting": "正在接受……",
             "after_new_login": {
@@ -1382,7 +1375,6 @@
     },
     "member_list": {
         "filter_placeholder": "过滤房间成员",
-        "invited_list_heading": "已邀请",
         "power_label": "%(userName)s（权力 %(powerLevelNumber)s）"
     },
     "member_list_back_action_label": "房间成员",
@@ -1421,57 +1413,15 @@
         "m.key.verification.request": "%(name)s 正在请求验证"
     },
     "onboarding": {
-        "apple_trademarks": "App Store®和Apple logo®是Apple Inc.的商标",
-        "community_messaging_action": "寻找你的人",
-        "community_messaging_description": "保持对社区讨论的所有权和控制权。\n可扩展至支持数百万人，具有强大的管理审核功能和互操作性。",
-        "community_messaging_title": "社群所有权",
-        "complete_these": "完成这些步骤以充分利用%(brand)s",
         "create_room": "创建一个群聊",
-        "download_app": "下载%(brand)s",
-        "download_app_action": "下载应用",
-        "download_app_description": "随身携带%(brand)s，不错过任何事情",
-        "download_app_store": "在App Store下载",
-        "download_brand": "下载%(brand)s",
-        "download_brand_desktop": "下载%(brand)s桌面版",
-        "enable_notifications": "打开通知",
-        "enable_notifications_action": "启用通知",
-        "enable_notifications_description": "不要错过回复或重要消息",
         "explore_rooms": "探索公共房间",
-        "find_community_members": "发现并邀请你的社群成员",
-        "find_coworkers": "发现并邀请你的同事",
-        "find_friends": "发现并邀请你的朋友",
-        "find_friends_action": "发现朋友",
-        "find_friends_description": "这就是你来这里的目的，所以让我们开始吧",
-        "find_people": "找人",
-        "free_e2ee_messaging_unlimited_voip": "%(brand)s提供免费的端到端加密消息传递以及无限制的语音和视频通话，是保持联系的绝佳方式。",
-        "get_stuff_done": "找到队友，完成任务",
-        "google_trademarks": "Google Play及其logo是Google LLC的商标。",
         "has_avatar_label": "很好，这样大家就知道是你了",
         "intro_byline": "拥有您的对话。",
         "intro_welcome": "欢迎来到 %(appName)s",
         "no_avatar_label": "添加照片，让人们知道这是你。",
-        "only_n_steps_to_go": {
-            "other": "仅需%(count)s步",
-            "one": "仅需%(count)s步"
-        },
-        "personal_messaging_action": "开始你的第一个聊天",
-        "personal_messaging_title": "和朋友家人安全地收发消息",
-        "qr_or_app_links": "%(qrCode)s或%(appLinks)s",
         "send_dm": "发送私聊",
-        "set_up_profile": "设置你的用户资料",
-        "set_up_profile_action": "你的用户资料",
-        "set_up_profile_description": "确保人们知道这真的是你",
-        "use_case_community_messaging": "在线社群成员",
-        "use_case_heading2": "你会和谁聊得最多？",
-        "use_case_personal_messaging": "朋友和家人",
-        "use_case_work_messaging": "同事和团队",
         "welcome_detail": "现在，让我们协助你开始",
-        "welcome_to_brand": "欢迎来到%(brand)s",
-        "welcome_user": "欢迎 %(name)s",
-        "work_messaging_action": "找到你的同事",
-        "work_messaging_title": "用于工作的安全的消息传送",
-        "you_did_it": "你做到了！",
-        "you_made_it": "你做到了！"
+        "welcome_user": "欢迎 %(name)s"
     },
     "poll": {
         "create_poll_action": "创建投票",
@@ -1517,7 +1467,6 @@
         "custom_level": "自定义级别",
         "default": "默认",
         "label": "权力级别",
-        "mod": "管理员",
         "moderator": "协管员",
         "restricted": "受限"
     },
@@ -2259,7 +2208,6 @@
             "rm_lifetime": "已读标记生存期（毫秒）",
             "rm_lifetime_offscreen": "已读标记屏幕外生存期（毫秒）",
             "room_list_heading": "房间列表",
-            "show_checklist_shortcuts": "在房间列表上方显示欢迎清单的捷径",
             "show_polls_button": "显示投票按钮",
             "surround_text": "输入特殊字符时圈出选定的文本",
             "time_heading": "显示的时间戳"
@@ -2568,7 +2516,6 @@
         "invite": "邀请人们",
         "invite_description": "使用邮箱或者用户名邀请",
         "invite_link": "分享邀请链接",
-        "invite_this_space": "邀请至此空间",
         "joining_space": "加入中",
         "landing_welcome": "欢迎来到 <name/>",
         "leave_dialog_action": "离开空间",
@@ -2913,7 +2860,9 @@
             "sent": "%(senderName)s 向 %(targetDisplayName)s 发了加入房间的邀请。"
         },
         "m.room.tombstone": "%(senderDisplayName)s 升级了此房间。",
-        "m.room.topic": "%(senderDisplayName)s 将话题修改为 “%(topic)s”。",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s 将话题修改为 “%(topic)s”。"
+        },
         "m.sticker": "%(senderDisplayName)s 发送了一张贴纸。",
         "m.video": {
             "error_decrypting": "解密视频时出错"
@@ -3171,14 +3120,6 @@
         "ban_room_confirm_title": "禁止进入 %(roomName)s",
         "ban_space_everything": "禁止这些人做任何我有权决定的事",
         "ban_space_specific": "禁止这些人做某些我有权决定的事",
-        "count_of_sessions": {
-            "other": "%(count)s 个会话",
-            "one": "%(count)s 个会话"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s 个已验证的会话",
-            "one": "1 个已验证的会话"
-        },
         "deactivate_confirm_action": "停用用户",
         "deactivate_confirm_description": "停用此用户将会使其登出并阻止其再次登入。而且此用户也会离开其所在的所有房间。此操作不可逆。你确定要停用此用户吗？",
         "deactivate_confirm_title": "停用用户吗？",
@@ -3189,15 +3130,12 @@
         "disinvite_button_room": "从房间取消邀请",
         "disinvite_button_room_name": "取消邀请加入 %(roomName)s",
         "disinvite_button_space": "从空间取消邀请",
-        "edit_own_devices": "编辑设备",
         "error_ban_user": "封禁失败",
         "error_deactivate": "停用用户失败",
         "error_kicking_user": "移除用户失败",
         "error_mute_user": "禁言用户失败",
         "error_revoke_3pid_invite_description": "无法撤销邀请。此服务器可能出现了临时错误，或者你没有足够的权限来撤销邀请。",
         "error_revoke_3pid_invite_title": "撤销邀请失败",
-        "hide_sessions": "隐藏会话",
-        "hide_verified_sessions": "隐藏已验证的会话",
         "invited_by": "被 %(sender)s 邀请",
         "jump_to_rr_button": "跳到阅读回执",
         "kick_button_room": "从房间移除",

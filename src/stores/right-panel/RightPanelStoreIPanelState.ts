@@ -2,14 +2,14 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixEvent, Room, RoomMember, User } from "matrix-js-sdk/src/matrix";
-import { VerificationRequest } from "matrix-js-sdk/src/crypto-api";
+import { type MatrixEvent, type Room, type RoomMember, type User } from "matrix-js-sdk/src/matrix";
+import { type VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 
-import { RightPanelPhases } from "./RightPanelStorePhases";
+import { type RightPanelPhases } from "./RightPanelStorePhases";
 
 export interface IRightPanelCardState {
     member?: RoomMember | User;
@@ -38,8 +38,6 @@ export interface IRightPanelCardStateStored {
     initialEventId?: string;
     isInitialEventHighlighted?: boolean;
     initialEventScrollIntoView?: boolean;
-    // room summary card
-    focusRoomSearch?: boolean;
 }
 
 export interface IRightPanelCard {
@@ -57,10 +55,10 @@ export interface IRightPanelForRoom {
     history: Array<IRightPanelCard>;
 }
 
-interface IRightPanelForRoomStored {
+export type IRightPanelForRoomStored = {
     isOpen: boolean;
     history: Array<IRightPanelCardStored>;
-}
+};
 
 export function convertToStorePanel(cacheRoom?: IRightPanelForRoom): IRightPanelForRoomStored | undefined {
     if (!cacheRoom) return undefined;
@@ -68,7 +66,7 @@ export function convertToStorePanel(cacheRoom?: IRightPanelForRoom): IRightPanel
     return { isOpen: cacheRoom.isOpen, history: storeHistory };
 }
 
-export function convertToStatePanel(storeRoom: IRightPanelForRoomStored, room: Room): IRightPanelForRoom {
+export function convertToStatePanel(storeRoom: IRightPanelForRoomStored | null, room: Room): IRightPanelForRoom | null {
     if (!storeRoom) return storeRoom;
     const stateHistory = [...storeRoom.history].map((panelStateStore) => convertStoreToCard(panelStateStore, room));
     return { history: stateHistory, isOpen: storeRoom.isOpen };
@@ -84,7 +82,6 @@ export function convertCardToStore(panelState: IRightPanelCard): IRightPanelCard
         memberInfoEventId: !!state?.memberInfoEvent?.getId() ? state.memberInfoEvent.getId() : undefined,
         initialEventId: !!state?.initialEvent?.getId() ? state.initialEvent.getId() : undefined,
         memberId: !!state?.member?.userId ? state.member.userId : undefined,
-        focusRoomSearch: state.focusRoomSearch,
     };
 
     return { state: stateStored, phase: panelState.phase };
@@ -104,7 +101,6 @@ function convertStoreToCard(panelStateStore: IRightPanelCardStored, room: Room):
             : undefined,
         initialEvent: !!stateStored?.initialEventId ? room.findEventById(stateStored.initialEventId) : undefined,
         member: (!!stateStored?.memberId && room.getMember(stateStored.memberId)) || undefined,
-        focusRoomSearch: stateStored?.focusRoomSearch,
     };
 
     return { state: state, phase: panelStateStore.phase };

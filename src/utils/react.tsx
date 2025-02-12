@@ -1,12 +1,12 @@
 /*
 Copyright 2024 New Vector Ltd.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ReactNode } from "react";
-import { createRoot, Root } from "react-dom/client";
+import { type ReactNode } from "react";
+import { createRoot, type Root } from "react-dom/client";
 
 /**
  * Utility class to render & unmount additional React roots,
@@ -15,7 +15,7 @@ import { createRoot, Root } from "react-dom/client";
 export class ReactRootManager {
     private roots: Root[] = [];
     private rootElements: Element[] = [];
-    private revertElements: Array<null | Element> = [];
+    private revertElements: Array<Node | null> = [];
 
     public get elements(): Element[] {
         return this.rootElements;
@@ -26,12 +26,13 @@ export class ReactRootManager {
      * @param children the React component to render
      * @param rootElement the root element to render the component into
      * @param revertElement the element to replace the root element with when unmounting
+     *     needed to support double-rendering in React 18 Strict Dev mode
      */
-    public render(children: ReactNode, rootElement: Element, revertElement?: Element): void {
+    public render(children: ReactNode, rootElement: Element, revertElement: Node | null): void {
         const root = createRoot(rootElement);
         this.roots.push(root);
         this.rootElements.push(rootElement);
-        this.revertElements.push(revertElement ?? null);
+        this.revertElements.push(revertElement);
         root.render(children);
     }
 

@@ -2,15 +2,15 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ISendEventResponse } from "matrix-js-sdk/src/matrix";
+import { type ISendEventResponse } from "matrix-js-sdk/src/matrix";
 import { useCallback, useState } from "react";
 
 import { useMatrixClientContext } from "../../../../../contexts/MatrixClientContext";
-import EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
+import type EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
 import { endEditing } from "../utils/editing";
 import { editMessage } from "../utils/message";
 import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.tsx";

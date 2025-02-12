@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -11,7 +11,7 @@ import { TooltipProvider } from "@vector-im/compound-web";
 
 import PlatformPeg from "../PlatformPeg";
 import LinkWithTooltip from "../components/views/elements/LinkWithTooltip";
-import { ReactRootManager } from "./react";
+import { type ReactRootManager } from "./react";
 
 /**
  * If the platform enabled needsUrlTooltips, recurses depth-first through a DOM tree, adding tooltip previews
@@ -66,7 +66,7 @@ export function tooltipifyLinks(
                 </StrictMode>
             );
 
-            tooltips.render(tooltip, node);
+            tooltips.render(tooltip, node, null);
         } else if (node.childNodes?.length) {
             tooltipifyLinks(node.childNodes as NodeListOf<Element>, ignoredNodes, tooltips);
         }

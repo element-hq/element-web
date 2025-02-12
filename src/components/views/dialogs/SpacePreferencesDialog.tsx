@@ -2,12 +2,12 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent } from "react";
-import { Room } from "matrix-js-sdk/src/matrix";
+import React, { type ChangeEvent } from "react";
+import { type Room } from "matrix-js-sdk/src/matrix";
 
 import { _t, _td } from "../../../languageHandler";
 import BaseDialog from "../dialogs/BaseDialog";
@@ -18,7 +18,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import RoomName from "../elements/RoomName";
 import { SpacePreferenceTab } from "../../../dispatcher/payloads/OpenSpacePreferencesPayload";
-import { NonEmptyArray } from "../../../@types/common";
+import { type NonEmptyArray } from "../../../@types/common";
 import SettingsTab from "../settings/tabs/SettingsTab";
 import { SettingsSection } from "../settings/shared/SettingsSection";
 import { SettingsSubsection, SettingsSubsectionText } from "../settings/shared/SettingsSubsection";

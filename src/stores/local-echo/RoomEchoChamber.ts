@@ -2,15 +2,15 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixEvent, ClientEvent, MatrixClient, EventType } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, ClientEvent, type MatrixClient, EventType } from "matrix-js-sdk/src/matrix";
 
 import { GenericEchoChamber, implicitlyReverted, PROPERTY_UPDATED } from "./GenericEchoChamber";
-import { getRoomNotifsState, RoomNotifState, setRoomNotifsState } from "../../RoomNotifs";
-import { RoomEchoContext } from "./RoomEchoContext";
+import { getRoomNotifsState, type RoomNotifState, setRoomNotifsState } from "../../RoomNotifs";
+import { type RoomEchoContext } from "./RoomEchoContext";
 import { _t } from "../../languageHandler";
 
 export enum CachedRoomKey {

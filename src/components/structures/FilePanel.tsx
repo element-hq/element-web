@@ -3,21 +3,21 @@ Copyright 2024 New Vector Ltd.
 Copyright 2019-2022 The Matrix.org Foundation C.I.C.
 Copyright 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef } from "react";
 import {
     Filter,
-    EventTimelineSet,
-    IRoomTimelineData,
-    Direction,
-    MatrixEvent,
+    type EventTimelineSet,
+    type IRoomTimelineData,
+    type Direction,
+    type MatrixEvent,
     MatrixEventEvent,
-    Room,
+    type Room,
     RoomEvent,
-    TimelineWindow,
+    type TimelineWindow,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import FilesIcon from "@vector-im/compound-design-tokens/assets/web/icons/files";
@@ -27,7 +27,7 @@ import EventIndexPeg from "../../indexing/EventIndexPeg";
 import { _t } from "../../languageHandler";
 import SearchWarning, { WarningKind } from "../views/elements/SearchWarning";
 import BaseCard from "../views/right_panel/BaseCard";
-import ResizeNotifier from "../../utils/ResizeNotifier";
+import type ResizeNotifier from "../../utils/ResizeNotifier";
 import TimelinePanel from "./TimelinePanel";
 import Spinner from "../views/elements/Spinner";
 import { Layout } from "../../settings/enums/Layout";
@@ -286,9 +286,7 @@ class FilePanel extends React.Component<IProps, IState> {
                         ref={this.card}
                         header={_t("right_panel|files_button")}
                     >
-                        {this.card.current && (
-                            <Measured sensor={this.card.current} onMeasurement={this.onMeasurement} />
-                        )}
+                        <Measured sensor={this.card} onMeasurement={this.onMeasurement} />
                         <SearchWarning isRoomEncrypted={isRoomEncrypted} kind={WarningKind.Files} />
                         <TimelinePanel
                             manageReadReceipts={false}

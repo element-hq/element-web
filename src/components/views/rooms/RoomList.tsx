@@ -2,47 +2,47 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2015-2018 , 2020, 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EventType, RoomType, Room } from "matrix-js-sdk/src/matrix";
-import React, { ComponentType, createRef, ReactComponentElement, SyntheticEvent } from "react";
+import { EventType, type Room, RoomType } from "matrix-js-sdk/src/matrix";
+import React, { type ComponentType, createRef, type ReactComponentElement, type SyntheticEvent } from "react";
 
-import { IState as IRovingTabIndexState, RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex";
+import { type IState as IRovingTabIndexState, RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { Action } from "../../../dispatcher/actions";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import { ActionPayload } from "../../../dispatcher/payloads";
-import { ViewRoomDeltaPayload } from "../../../dispatcher/payloads/ViewRoomDeltaPayload";
-import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { type ActionPayload } from "../../../dispatcher/payloads";
+import { type ViewRoomDeltaPayload } from "../../../dispatcher/payloads/ViewRoomDeltaPayload";
+import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
-import { _t, _td, TranslationKey } from "../../../languageHandler";
+import { _t, _td, type TranslationKey } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import PosthogTrackers from "../../../PosthogTrackers";
 import SettingsStore from "../../../settings/SettingsStore";
 import { useFeatureEnabled } from "../../../hooks/useSettings";
 import { UIComponent } from "../../../settings/UIFeature";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
-import { ITagMap } from "../../../stores/room-list/algorithms/models";
-import { DefaultTagID, TagID } from "../../../stores/room-list/models";
+import { type ITagMap } from "../../../stores/room-list/algorithms/models";
+import { DefaultTagID, type TagID } from "../../../stores/room-list/models";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
 import {
     isMetaSpace,
-    ISuggestedRoom,
+    type ISuggestedRoom,
     MetaSpace,
-    SpaceKey,
+    type SpaceKey,
     UPDATE_SELECTED_SPACE,
     UPDATE_SUGGESTED_ROOMS,
 } from "../../../stores/spaces";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
 import { arrayFastClone, arrayHasDiff } from "../../../utils/arrays";
 import { objectShallowClone, objectWithOnly } from "../../../utils/objects";
-import ResizeNotifier from "../../../utils/ResizeNotifier";
+import type ResizeNotifier from "../../../utils/ResizeNotifier";
 import { shouldShowSpaceInvite, showAddExistingRooms, showCreateNewRoom, showSpaceInvite } from "../../../utils/space";
-import { ChevronFace, ContextMenuTooltipButton, MenuProps, useContextMenu } from "../../structures/ContextMenu";
+import { ChevronFace, ContextMenuTooltipButton, type MenuProps, useContextMenu } from "../../structures/ContextMenu";
 import RoomAvatar from "../avatars/RoomAvatar";
 import { BetaPill } from "../beta/BetaCard";
 import IconizedContextMenu, {
@@ -50,12 +50,13 @@ import IconizedContextMenu, {
     IconizedContextMenuOptionList,
 } from "../context_menus/IconizedContextMenu";
 import ExtraTile from "./ExtraTile";
-import RoomSublist, { IAuxButtonProps } from "./RoomSublist";
+import RoomSublist, { type IAuxButtonProps } from "./RoomSublist";
 import { SdkContextClass } from "../../../contexts/SDKContext";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import AccessibleButton from "../elements/AccessibleButton";
 import { Landmark, LandmarkNavigation } from "../../../accessibility/LandmarkNavigation";
+import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../../LegacyCallHandler.tsx";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent, state: IRovingTabIndexState) => void;
@@ -440,6 +441,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         SdkContextClass.instance.roomViewStore.on(UPDATE_EVENT, this.onRoomViewStoreUpdate);
         SpaceStore.instance.on(UPDATE_SUGGESTED_ROOMS, this.updateSuggestedRooms);
         RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.updateLists);
+        LegacyCallHandler.instance.on(LegacyCallHandlerEvent.ProtocolSupport, this.updateProtocolSupport);
         this.updateLists(); // trigger the first update
     }
 
@@ -448,7 +450,12 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.updateLists);
         defaultDispatcher.unregister(this.dispatcherRef);
         SdkContextClass.instance.roomViewStore.off(UPDATE_EVENT, this.onRoomViewStoreUpdate);
+        LegacyCallHandler.instance.off(LegacyCallHandlerEvent.ProtocolSupport, this.updateProtocolSupport);
     }
+
+    private updateProtocolSupport = (): void => {
+        this.updateLists();
+    };
 
     private onRoomViewStoreUpdate = (): void => {
         this.setState({
@@ -471,8 +478,6 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                     metricsViaKeyboard: true,
                 });
             }
-        } else if (payload.action === Action.PstnSupportUpdated) {
-            this.updateLists();
         }
     };
 

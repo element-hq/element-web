@@ -2,18 +2,18 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2017-2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import dis from "../../../dispatcher/dispatcher";
 import { _t } from "../../../languageHandler";
-import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import ReplyTile from "./ReplyTile";
-import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
+import RoomContext, { type TimelineRenderingType } from "../../../contexts/RoomContext";
 import AccessibleButton from "../elements/AccessibleButton";
 
 function cancelQuoting(context: TimelineRenderingType): void {

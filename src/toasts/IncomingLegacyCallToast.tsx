@@ -5,19 +5,19 @@ Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 Copyright 2018 New Vector Ltd
 Copyright 2015, 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { CallType, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { CallType, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import classNames from "classnames";
 
 import LegacyCallHandler, { LegacyCallHandlerEvent } from "../LegacyCallHandler";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { _t } from "../languageHandler";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
-import AccessibleButton, { ButtonEvent } from "../components/views/elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../components/views/elements/AccessibleButton";
 
 export const getIncomingLegacyCallToastKey = (callId: string): string => `call_${callId}`;
 

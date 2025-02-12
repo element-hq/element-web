@@ -2,18 +2,18 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { fireEvent, render, RenderResult, screen, waitFor } from "jest-matrix-react";
+import { fireEvent, render, type RenderResult, screen, waitFor } from "jest-matrix-react";
 import {
     EventStatus,
     MatrixEvent,
     Room,
     PendingEventOrdering,
-    BeaconIdentifier,
+    type BeaconIdentifier,
     Beacon,
     getBeaconInfoIdentifier,
     EventType,
@@ -28,7 +28,7 @@ import userEvent from "@testing-library/user-event";
 
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
-import { IRoomState } from "../../../../../src/components/structures/RoomView";
+import { type IRoomState } from "../../../../../src/components/structures/RoomView";
 import { canEditContent } from "../../../../../src/utils/EventUtils";
 import { copyPlaintext, getSelectedText } from "../../../../../src/utils/strings";
 import MessageContextMenu from "../../../../../src/components/views/context_menus/MessageContextMenu";

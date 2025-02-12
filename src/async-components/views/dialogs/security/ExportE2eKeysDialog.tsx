@@ -3,22 +3,22 @@ Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 Copyright 2017 Vector Creations Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import FileSaver from "file-saver";
-import React, { ChangeEvent } from "react";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import React, { type ChangeEvent } from "react";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t, _td } from "../../../../languageHandler";
 import * as MegolmExportEncryption from "../../../../utils/MegolmExportEncryption";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
-import { KeysStartingWith } from "../../../../@types/common";
+import { type KeysStartingWith } from "../../../../@types/common";
 import PassphraseField from "../../../../components/views/auth/PassphraseField";
 import PassphraseConfirmField from "../../../../components/views/auth/PassphraseConfirmField";
-import Field from "../../../../components/views/elements/Field";
+import type Field from "../../../../components/views/elements/Field";
 
 enum Phase {
     Edit = "edit",

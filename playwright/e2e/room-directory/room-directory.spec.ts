@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -10,42 +10,50 @@ import type { Preset, Visibility } from "matrix-js-sdk/src/matrix";
 import { test, expect } from "../../element-web-test";
 
 test.describe("Room Directory", () => {
+    test.skip(({ homeserverType }) => homeserverType === "pinecone", "Pinecone's /publicRooms API takes forever");
     test.use({
         displayName: "Ray",
         botCreateOpts: { displayName: "Paul" },
     });
 
-    test("should allow admin to add alias & publish room to directory", async ({ page, app, user, bot }) => {
-        const roomId = await app.client.createRoom({
-            name: "Gaming",
-            preset: "public_chat" as Preset,
-        });
+    test(
+        "should allow admin to add alias & publish room to directory",
+        { tag: "@no-webkit" },
+        async ({ page, app, user, bot }) => {
+            const roomId = await app.client.createRoom({
+                name: "Gaming",
+                preset: "public_chat" as Preset,
+            });
 
-        await app.viewRoomByName("Gaming");
-        await app.settings.openRoomSettings();
+            await app.viewRoomByName("Gaming");
+            await app.settings.openRoomSettings();
 
-        // First add a local address `gaming`
-        const localAddresses = page.locator(".mx_SettingsFieldset", { hasText: "Local Addresses" });
-        await localAddresses.getByRole("textbox").fill("gaming");
-        await localAddresses.getByRole("button", { name: "Add" }).click();
-        await expect(localAddresses.getByText("#gaming:localhost")).toHaveClass("mx_EditableItem_item");
+            // First add a local address `gaming`
+            const localAddresses = page.locator(".mx_SettingsFieldset", { hasText: "Local Addresses" });
+            await localAddresses.getByRole("textbox").fill("gaming");
+            await expect(page.getByText("This address is available to use")).toBeVisible();
+            await localAddresses.getByRole("button", { name: "Add" }).click();
+            await expect(localAddresses.getByText(`#gaming:${user.homeServer}`)).toHaveClass("mx_EditableItem_item");
 
-        // Publish into the public rooms directory
-        const publishedAddresses = page.locator(".mx_SettingsFieldset", { hasText: "Published Addresses" });
-        await expect(publishedAddresses.locator("#canonicalAlias")).toHaveValue("#gaming:localhost");
-        const checkbox = publishedAddresses
-            .locator(".mx_SettingsFlag", { hasText: "Publish this room to the public in localhost's room directory?" })
-            .getByRole("switch");
-        await checkbox.check();
-        await expect(checkbox).toBeChecked();
+            // Publish into the public rooms directory
+            const publishedAddresses = page.locator(".mx_SettingsFieldset", { hasText: "Published Addresses" });
+            await expect(publishedAddresses.locator("#canonicalAlias")).toHaveValue(`#gaming:${user.homeServer}`);
+            const checkbox = publishedAddresses
+                .locator(".mx_SettingsFlag", {
+                    hasText: `Publish this room to the public in ${user.homeServer}'s room directory?`,
+                })
+                .getByRole("switch");
+            await checkbox.check();
+            await expect(checkbox).toBeChecked();
 
-        await app.closeDialog();
+            await app.closeDialog();
 
-        const resp = await bot.publicRooms({});
-        expect(resp.total_room_count_estimate).toEqual(1);
-        expect(resp.chunk).toHaveLength(1);
-        expect(resp.chunk[0].room_id).toEqual(roomId);
-    });
+            const resp = await bot.publicRooms({});
+            expect(resp.total_room_count_estimate).toEqual(1);
+            expect(resp.chunk).toHaveLength(1);
+            expect(resp.chunk[0].room_id).toEqual(roomId);
+        },
+    );
 
     test(
         "should allow finding published rooms in directory",
@@ -80,7 +88,7 @@ test.describe("Room Directory", () => {
                 .getByRole("button", { name: "Join" })
                 .click();
 
-            await expect(page).toHaveURL("/#/room/#test1234:localhost");
+            await expect(page).toHaveURL(`/#/room/#test1234:${user.homeServer}`);
         },
     );
 });

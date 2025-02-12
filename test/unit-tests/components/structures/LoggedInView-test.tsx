@@ -2,13 +2,20 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2015-2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, RenderResult } from "jest-matrix-react";
-import { ConditionKind, EventType, IPushRule, MatrixEvent, ClientEvent, PushRuleKind } from "matrix-js-sdk/src/matrix";
+import { render, type RenderResult } from "jest-matrix-react";
+import {
+    ConditionKind,
+    EventType,
+    type IPushRule,
+    MatrixEvent,
+    ClientEvent,
+    PushRuleKind,
+} from "matrix-js-sdk/src/matrix";
 import { MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
 import { logger } from "matrix-js-sdk/src/logger";
 import userEvent from "@testing-library/user-event";

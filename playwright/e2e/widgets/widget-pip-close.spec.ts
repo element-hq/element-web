@@ -4,14 +4,14 @@ Copyright 2023 The Matrix.org Foundation C.I.C.
 Copyright 2022 Mikhail Aheichyk
 Copyright 2022 Nordeck IT + Consulting GmbH.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import type { IWidget } from "matrix-widget-api/src/interfaces/IWidget";
 import type { MatrixEvent, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { test, expect } from "../../element-web-test";
-import { Client } from "../../pages/client";
+import { type Client } from "../../pages/client";
 
 const DEMO_WIDGET_ID = "demo-widget-id";
 const DEMO_WIDGET_NAME = "Demo Widget";

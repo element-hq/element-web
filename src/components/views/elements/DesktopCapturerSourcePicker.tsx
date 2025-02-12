@@ -2,20 +2,20 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import classNames from "classnames";
 
-import { _t, _td, TranslationKey } from "../../../languageHandler";
+import { _t, _td, type TranslationKey } from "../../../languageHandler";
 import BaseDialog from "..//dialogs/BaseDialog";
 import DialogButtons from "./DialogButtons";
 import AccessibleButton from "./AccessibleButton";
 import TabbedView, { Tab, TabLocation } from "../../structures/TabbedView";
 import PlatformPeg from "../../../PlatformPeg";
-import { NonEmptyArray } from "../../../@types/common";
+import { type NonEmptyArray } from "../../../@types/common";
 
 export function getDesktopCapturerSources(): Promise<Array<DesktopCapturerSource>> {
     const options: GetSourcesOptions = {

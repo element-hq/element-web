@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021-2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -10,8 +10,8 @@ import React from "react";
 import { render, screen, fireEvent, waitFor, getByRole } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 import {
-    MatrixClient,
-    MatrixEvent,
+    type MatrixClient,
+    type MatrixEvent,
     PendingEventOrdering,
     Room,
     FeatureSupport,
@@ -26,7 +26,7 @@ import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalink
 import ResizeNotifier from "../../../../src/utils/ResizeNotifier";
 import { createTestClient, getRoomContext, mkRoom, mockPlatformPeg, stubClient } from "../../../test-utils";
 import { mkThread } from "../../../test-utils/threads";
-import { IRoomState } from "../../../../src/components/structures/RoomView";
+import { type IRoomState } from "../../../../src/components/structures/RoomView";
 import { ScopedRoomContextProvider } from "../../../../src/contexts/ScopedRoomContext.tsx";
 
 jest.mock("../../../../src/utils/Feedback");

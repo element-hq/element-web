@@ -2,12 +2,12 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { Room, ICreateRoomStateEvent, RoomType, EventType, JoinRule } from "matrix-js-sdk/src/matrix";
+import { type Room, type ICreateRoomStateEvent, type RoomType, EventType, JoinRule } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { calculateRoomVia } from "./permalinks/Permalinks";
@@ -25,9 +25,12 @@ import { Action } from "../dispatcher/actions";
 import Spinner from "../components/views/elements/Spinner";
 import { shouldShowComponent } from "../customisations/helpers/UIComponents";
 import { UIComponent } from "../settings/UIFeature";
-import { OpenSpacePreferencesPayload, SpacePreferenceTab } from "../dispatcher/payloads/OpenSpacePreferencesPayload";
-import { OpenSpaceSettingsPayload } from "../dispatcher/payloads/OpenSpaceSettingsPayload";
-import { OpenAddExistingToSpaceDialogPayload } from "../dispatcher/payloads/OpenAddExistingToSpaceDialogPayload";
+import {
+    type OpenSpacePreferencesPayload,
+    type SpacePreferenceTab,
+} from "../dispatcher/payloads/OpenSpacePreferencesPayload";
+import { type OpenSpaceSettingsPayload } from "../dispatcher/payloads/OpenSpaceSettingsPayload";
+import { type OpenAddExistingToSpaceDialogPayload } from "../dispatcher/payloads/OpenAddExistingToSpaceDialogPayload";
 import { SdkContextClass } from "../contexts/SDKContext";
 
 export const shouldShowSpaceSettings = (space: Room): boolean => {

@@ -2,18 +2,18 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, type Room, type RoomMember } from "matrix-js-sdk/src/matrix";
 
-import { ButtonEvent } from "../components/views/elements/AccessibleButton";
+import { type ButtonEvent } from "../components/views/elements/AccessibleButton";
 import { PillType } from "../components/views/elements/Pill";
 import { parsePermalink } from "../utils/permalinks/Permalinks";
 import dis from "../dispatcher/dispatcher";
 import { Action } from "../dispatcher/actions";
-import { PermalinkParts } from "../utils/permalinks/PermalinkConstructor";
+import { type PermalinkParts } from "../utils/permalinks/PermalinkConstructor";
 import { _t } from "../languageHandler";
 import { usePermalinkTargetRoom } from "./usePermalinkTargetRoom";
 import { usePermalinkEvent } from "./usePermalinkEvent";

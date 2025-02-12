@@ -3,12 +3,12 @@ Copyright 2024 New Vector Ltd.
 Copyright 2019 The Matrix.org Foundation C.I.C.
 Copyright 2015, 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import * as linkifyjs from "linkifyjs";
-import { EventListeners, Opts, registerCustomProtocol, registerPlugin } from "linkifyjs";
+import { type EventListeners, type Opts, registerCustomProtocol, registerPlugin } from "linkifyjs";
 import linkifyElement from "linkify-element";
 import linkifyString from "linkify-string";
 import { getHttpUriForMxc, User } from "matrix-js-sdk/src/matrix";
@@ -20,8 +20,8 @@ import {
 } from "./utils/permalinks/Permalinks";
 import dis from "./dispatcher/dispatcher";
 import { Action } from "./dispatcher/actions";
-import { ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
-import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
+import { type ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
+import { type ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import { PERMITTED_URL_SCHEMES } from "./utils/UrlUtils";
 

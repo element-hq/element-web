@@ -5,26 +5,26 @@ Copyright 2017 Vector Creations Ltd
 Copyright 2017 New Vector Ltd
 Copyright 2015, 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    MatrixEvent,
+    type MatrixEvent,
     MatrixEventEvent,
-    Room,
+    type Room,
     RoomEvent,
     ClientEvent,
     MsgType,
     SyncState,
-    SyncStateData,
-    IRoomTimelineData,
+    type SyncStateData,
+    type IRoomTimelineData,
     M_LOCATION,
     EventType,
     TypedEventEmitter,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { PermissionChanged as PermissionChangedEvent } from "@matrix-org/analytics-events/types/typescript/PermissionChanged";
+import { type PermissionChanged as PermissionChangedEvent } from "@matrix-org/analytics-events/types/typescript/PermissionChanged";
 import { MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";
@@ -176,7 +176,7 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
         url: string;
         name: string;
         type: string;
-        size: string;
+        size: number;
     } | null {
         // We do no caching here because the SDK caches setting
         // and the browser will cache the sound.

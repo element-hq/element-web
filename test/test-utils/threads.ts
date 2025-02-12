@@ -2,13 +2,20 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixClient, MatrixEvent, MatrixEventEvent, RelationType, Room, Thread } from "matrix-js-sdk/src/matrix";
+import {
+    type MatrixClient,
+    type MatrixEvent,
+    MatrixEventEvent,
+    RelationType,
+    type Room,
+    type Thread,
+} from "matrix-js-sdk/src/matrix";
 
-import { mkMessage, MessageEventProps } from "./test-utils";
+import { mkMessage, type MessageEventProps } from "./test-utils";
 
 export const makeThreadEvent = ({
     rootEventId,

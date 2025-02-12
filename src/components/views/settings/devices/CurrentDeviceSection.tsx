@@ -2,12 +2,12 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useState } from "react";
-import { LocalNotificationSettings } from "matrix-js-sdk/src/matrix";
+import { type LocalNotificationSettings } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../languageHandler";
 import Spinner from "../../elements/Spinner";
@@ -17,7 +17,7 @@ import DeviceDetails from "./DeviceDetails";
 import { DeviceExpandDetailsButton } from "./DeviceExpandDetailsButton";
 import DeviceTile from "./DeviceTile";
 import { DeviceVerificationStatusCard } from "./DeviceVerificationStatusCard";
-import { ExtendedDevice } from "./types";
+import { type ExtendedDevice } from "./types";
 import { KebabContextMenu } from "../../context_menus/KebabContextMenu";
 import { IconizedContextMenuOption } from "../../context_menus/IconizedContextMenu";
 
@@ -34,6 +34,7 @@ interface Props {
     onSignOutCurrentDevice: () => void;
     signOutAllOtherSessions?: () => void;
     saveDeviceName: (deviceName: string) => Promise<void>;
+    delegatedAuthAccountUrl?: string;
 }
 
 type CurrentDeviceSectionHeadingProps = Pick<
@@ -90,6 +91,7 @@ const CurrentDeviceSection: React.FC<Props> = ({
     onSignOutCurrentDevice,
     signOutAllOtherSessions,
     saveDeviceName,
+    delegatedAuthAccountUrl,
 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
@@ -126,6 +128,8 @@ const CurrentDeviceSection: React.FC<Props> = ({
                             onSignOutDevice={onSignOutCurrentDevice}
                             saveDeviceName={saveDeviceName}
                             className="mx_CurrentDeviceSection_deviceDetails"
+                            delegatedAuthAccountUrl={delegatedAuthAccountUrl}
+                            isCurrentDevice
                         />
                     ) : (
                         <>

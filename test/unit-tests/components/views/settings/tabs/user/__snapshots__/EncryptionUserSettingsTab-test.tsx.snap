@@ -1,0 +1,370 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<EncryptionUserSettingsTab /> should display a verify button when the encryption is not set up 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsTab mx_EncryptionUserSettingsTab"
+    data-testid="encryptionTab"
+  >
+    <div
+      class="mx_SettingsTab_sections"
+    >
+      <div
+        class="mx_SettingsSection mx_SettingsSection_newUi"
+      >
+        <div
+          class="mx_SettingsSection_header"
+        >
+          <h2
+            class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102 mx_SettingsHeader"
+          >
+            Device not verified 
+          </h2>
+          <div
+            class="mx_SettingsSubheader"
+          >
+            <span
+              class="mx_SettingsSubheader_error"
+            >
+              <svg
+                fill="currentColor"
+                height="20px"
+                viewBox="0 0 24 24"
+                width="20px"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 17a.97.97 0 0 0 .713-.288A.968.968 0 0 0 13 16a.968.968 0 0 0-.287-.713A.968.968 0 0 0 12 15a.968.968 0 0 0-.713.287A.968.968 0 0 0 11 16c0 .283.096.52.287.712.192.192.43.288.713.288Zm0-4c.283 0 .52-.096.713-.287A.968.968 0 0 0 13 12V8a.967.967 0 0 0-.287-.713A.968.968 0 0 0 12 7a.968.968 0 0 0-.713.287A.967.967 0 0 0 11 8v4c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 9a9.738 9.738 0 0 1-3.9-.788 10.099 10.099 0 0 1-3.175-2.137c-.9-.9-1.612-1.958-2.137-3.175A9.738 9.738 0 0 1 2 12a9.74 9.74 0 0 1 .788-3.9 10.099 10.099 0 0 1 2.137-3.175c.9-.9 1.958-1.612 3.175-2.137A9.738 9.738 0 0 1 12 2a9.74 9.74 0 0 1 3.9.788 10.098 10.098 0 0 1 3.175 2.137c.9.9 1.613 1.958 2.137 3.175A9.738 9.738 0 0 1 22 12a9.738 9.738 0 0 1-.788 3.9 10.098 10.098 0 0 1-2.137 3.175c-.9.9-1.958 1.613-3.175 2.137A9.738 9.738 0 0 1 12 22Z"
+                />
+              </svg>
+              You need to verify this device in order to view your encryption settings.
+            </span>
+          </div>
+        </div>
+        <button
+          class="_button_i91xf_17 _has-icon_i91xf_66"
+          data-kind="primary"
+          data-size="sm"
+          role="button"
+          tabindex="0"
+        >
+          <svg
+            aria-hidden="true"
+            fill="currentColor"
+            height="20"
+            viewBox="0 0 24 24"
+            width="20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 18c-.55 0-1.02-.196-1.413-.587A1.926 1.926 0 0 1 2 16V5c0-.55.196-1.02.587-1.413A1.926 1.926 0 0 1 4 3h16c.55 0 1.02.196 1.413.587.39.393.587.863.587 1.413v11c0 .55-.196 1.02-.587 1.413A1.926 1.926 0 0 1 20 18H4Zm0-2h16V5H4v11Zm-2 5a.967.967 0 0 1-.712-.288A.968.968 0 0 1 1 20c0-.283.096-.52.288-.712A.967.967 0 0 1 2 19h20c.283 0 .52.096.712.288.192.191.288.429.288.712s-.096.52-.288.712A.968.968 0 0 1 22 21H2Z"
+            />
+          </svg>
+          Verify this device
+        </button>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<EncryptionUserSettingsTab /> should display the change recovery key panel when the user clicks on the change recovery button 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsTab mx_EncryptionUserSettingsTab"
+    data-testid="encryptionTab"
+  >
+    <div
+      class="mx_SettingsTab_sections"
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<EncryptionUserSettingsTab /> should display the recovery out of sync panel when secrets are not cached 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsTab mx_EncryptionUserSettingsTab"
+    data-testid="encryptionTab"
+  >
+    <div
+      class="mx_SettingsTab_sections"
+    >
+      <div
+        class="mx_SettingsSection mx_SettingsSection_newUi"
+        data-testid="recoveryPanel"
+      >
+        <div
+          class="mx_SettingsSection_header"
+        >
+          <h2
+            class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102 mx_SettingsHeader"
+          >
+            Recovery 
+          </h2>
+          <div
+            class="mx_SettingsSubheader"
+          >
+            Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.
+            <span
+              class="mx_SettingsSubheader_error"
+            >
+              <svg
+                fill="currentColor"
+                height="20px"
+                viewBox="0 0 24 24"
+                width="20px"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 17a.97.97 0 0 0 .713-.288A.968.968 0 0 0 13 16a.968.968 0 0 0-.287-.713A.968.968 0 0 0 12 15a.968.968 0 0 0-.713.287A.968.968 0 0 0 11 16c0 .283.096.52.287.712.192.192.43.288.713.288Zm0-4c.283 0 .52-.096.713-.287A.968.968 0 0 0 13 12V8a.967.967 0 0 0-.287-.713A.968.968 0 0 0 12 7a.968.968 0 0 0-.713.287A.967.967 0 0 0 11 8v4c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 9a9.738 9.738 0 0 1-3.9-.788 10.099 10.099 0 0 1-3.175-2.137c-.9-.9-1.612-1.958-2.137-3.175A9.738 9.738 0 0 1 2 12a9.74 9.74 0 0 1 .788-3.9 10.099 10.099 0 0 1 2.137-3.175c.9-.9 1.958-1.612 3.175-2.137A9.738 9.738 0 0 1 12 2a9.74 9.74 0 0 1 3.9.788 10.098 10.098 0 0 1 3.175 2.137c.9.9 1.613 1.958 2.137 3.175A9.738 9.738 0 0 1 22 12a9.738 9.738 0 0 1-.788 3.9 10.098 10.098 0 0 1-2.137 3.175c-.9.9-1.958 1.613-3.175 2.137A9.738 9.738 0 0 1 12 22Z"
+                />
+              </svg>
+              Your key storage is out of sync. Click one of the buttons below to fix the problem.
+            </span>
+          </div>
+        </div>
+        <div
+          class="mx_RecoveryPanelOutOfSync"
+        >
+          <button
+            class="_button_i91xf_17"
+            data-kind="secondary"
+            data-size="sm"
+            role="button"
+            tabindex="0"
+          >
+            Forgot recovery key?
+          </button>
+          <button
+            class="_button_i91xf_17 _has-icon_i91xf_66"
+            data-kind="primary"
+            data-size="sm"
+            role="button"
+            tabindex="0"
+          >
+            <svg
+              aria-hidden="true"
+              fill="currentColor"
+              height="20"
+              viewBox="0 0 24 24"
+              width="20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M7 14c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 5 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 7 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 7 14Zm0 4c-1.667 0-3.083-.583-4.25-1.75C1.583 15.083 1 13.667 1 12c0-1.667.583-3.083 1.75-4.25C3.917 6.583 5.333 6 7 6c1.117 0 2.13.275 3.037.825A6.212 6.212 0 0 1 12.2 9h8.375a1.033 1.033 0 0 1 .725.3l2 2c.1.1.17.208.212.325.042.117.063.242.063.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-3.175 3.175a.946.946 0 0 1-.3.2c-.117.05-.233.083-.35.1a.832.832 0 0 1-.35-.025.884.884 0 0 1-.325-.175L17.5 15l-1.425 1.075a.945.945 0 0 1-.887.15.859.859 0 0 1-.288-.15L13.375 15H12.2a6.212 6.212 0 0 1-2.162 2.175C9.128 17.725 8.117 18 7 18Zm0-2c.933 0 1.754-.283 2.463-.85A4.032 4.032 0 0 0 10.875 13H14l1.45 1.025L17.5 12.5l1.775 1.375L21.15 12l-1-1h-9.275a4.032 4.032 0 0 0-1.412-2.15C8.754 8.283 7.933 8 7 8c-1.1 0-2.042.392-2.825 1.175C3.392 9.958 3 10.9 3 12s.392 2.042 1.175 2.825C4.958 15.608 5.9 16 7 16Z"
+              />
+            </svg>
+            Enter recovery key
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<EncryptionUserSettingsTab /> should display the reset identity panel when the user clicks on the reset cryptographic identity panel 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsTab mx_EncryptionUserSettingsTab"
+    data-testid="encryptionTab"
+  >
+    <div
+      class="mx_SettingsTab_sections"
+    >
+      <nav
+        class="_breadcrumb_ikpbb_17"
+      >
+        <button
+          aria-label="Back"
+          class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
+          role="button"
+          style="--cpd-icon-button-size: 28px;"
+          tabindex="0"
+        >
+          <div
+            class="_indicator-icon_133tf_26"
+            style="--cpd-icon-button-size: 100%;"
+          >
+            <svg
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="m13.3 17.3-4.6-4.6a.877.877 0 0 1-.213-.325A1.106 1.106 0 0 1 8.425 12c0-.133.02-.258.062-.375A.878.878 0 0 1 8.7 11.3l4.6-4.6a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275.948.948 0 0 1 .275.7.948.948 0 0 1-.275.7L10.8 12l3.9 3.9a.949.949 0 0 1 .275.7.948.948 0 0 1-.275.7.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+              />
+            </svg>
+          </div>
+        </button>
+        <ol
+          class="_pages_ikpbb_26"
+        >
+          <li>
+            <a
+              class="_link_ue21z_17"
+              data-kind="primary"
+              data-size="small"
+              rel="noreferrer noopener"
+              role="button"
+              tabindex="0"
+            >
+              Encryption
+            </a>
+          </li>
+          <li>
+            <span
+              aria-current="page"
+              class="_last-page_ikpbb_39"
+            >
+              Reset encryption
+            </span>
+          </li>
+        </ol>
+      </nav>
+      <div
+        class="mx_EncryptionCard mx_ResetIdentityPanel"
+      >
+        <div
+          class="mx_EncryptionCard_header"
+        >
+          <div
+            class="_content_md016_17 _destructive_md016_43"
+            data-size="large"
+          >
+            <svg
+              fill="currentColor"
+              height="1em"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 17a.97.97 0 0 0 .713-.288A.968.968 0 0 0 13 16a.968.968 0 0 0-.287-.713A.968.968 0 0 0 12 15a.968.968 0 0 0-.713.287A.968.968 0 0 0 11 16c0 .283.096.52.287.712.192.192.43.288.713.288Zm0-4c.283 0 .52-.096.713-.287A.968.968 0 0 0 13 12V8a.967.967 0 0 0-.287-.713A.968.968 0 0 0 12 7a.968.968 0 0 0-.713.287A.967.967 0 0 0 11 8v4c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 9a9.738 9.738 0 0 1-3.9-.788 10.099 10.099 0 0 1-3.175-2.137c-.9-.9-1.612-1.958-2.137-3.175A9.738 9.738 0 0 1 2 12a9.74 9.74 0 0 1 .788-3.9 10.099 10.099 0 0 1 2.137-3.175c.9-.9 1.958-1.612 3.175-2.137A9.738 9.738 0 0 1 12 2a9.74 9.74 0 0 1 3.9.788 10.098 10.098 0 0 1 3.175 2.137c.9.9 1.613 1.958 2.137 3.175A9.738 9.738 0 0 1 22 12a9.738 9.738 0 0 1-.788 3.9 10.098 10.098 0 0 1-2.137 3.175c-.9.9-1.958 1.613-3.175 2.137A9.738 9.738 0 0 1 12 22Z"
+              />
+            </svg>
+          </div>
+          <h2
+            class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+          >
+            Are you sure you want to reset your identity?
+          </h2>
+        </div>
+        <div
+          class="mx_ResetIdentityPanel_content"
+        >
+          <ul
+            class="_visual-list_4dcf8_17"
+          >
+            <li
+              class="_visual-list-item_bqeu7_17"
+            >
+              <svg
+                aria-hidden="true"
+                class="_visual-list-item-icon_bqeu7_26 _visual-list-item-icon-success_bqeu7_31"
+                fill="currentColor"
+                height="24px"
+                viewBox="0 0 24 24"
+                width="24px"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M9.55 17.575c-.133 0-.258-.02-.375-.063a.876.876 0 0 1-.325-.212L4.55 13c-.183-.183-.27-.42-.263-.713.009-.291.105-.529.288-.712a.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275L9.55 15.15l8.475-8.475c.183-.183.42-.275.713-.275.291 0 .529.092.712.275.183.183.275.42.275.713 0 .291-.092.529-.275.712l-9.2 9.2c-.1.1-.208.17-.325.212a1.106 1.106 0 0 1-.375.063Z"
+                />
+              </svg>
+              Your account details, contacts, preferences, and chat list will be kept
+            </li>
+            <li
+              class="_visual-list-item_bqeu7_17"
+            >
+              <svg
+                aria-hidden="true"
+                class="_visual-list-item-icon_bqeu7_26"
+                fill="currentColor"
+                height="24px"
+                viewBox="0 0 24 24"
+                width="24px"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M11.287 7.287A.968.968 0 0 1 12 7c.283 0 .52.096.713.287.191.192.287.43.287.713s-.096.52-.287.713A.968.968 0 0 1 12 9a.968.968 0 0 1-.713-.287A.967.967 0 0 1 11 8c0-.283.096-.52.287-.713Zm0 4A.968.968 0 0 1 12 11c.283 0 .52.096.713.287.191.192.287.43.287.713v4a.97.97 0 0 1-.287.712A.968.968 0 0 1 12 17a.968.968 0 0 1-.713-.288A.968.968 0 0 1 11 16v-4c0-.283.096-.52.287-.713Z"
+                />
+                <path
+                  clip-rule="evenodd"
+                  d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10Zm-2 0a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"
+                  fill-rule="evenodd"
+                />
+              </svg>
+              You will lose any message history that’s stored only on the server
+            </li>
+            <li
+              class="_visual-list-item_bqeu7_17"
+            >
+              <svg
+                aria-hidden="true"
+                class="_visual-list-item-icon_bqeu7_26"
+                fill="currentColor"
+                height="24px"
+                viewBox="0 0 24 24"
+                width="24px"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M11.287 7.287A.968.968 0 0 1 12 7c.283 0 .52.096.713.287.191.192.287.43.287.713s-.096.52-.287.713A.968.968 0 0 1 12 9a.968.968 0 0 1-.713-.287A.967.967 0 0 1 11 8c0-.283.096-.52.287-.713Zm0 4A.968.968 0 0 1 12 11c.283 0 .52.096.713.287.191.192.287.43.287.713v4a.97.97 0 0 1-.287.712A.968.968 0 0 1 12 17a.968.968 0 0 1-.713-.288A.968.968 0 0 1 11 16v-4c0-.283.096-.52.287-.713Z"
+                />
+                <path
+                  clip-rule="evenodd"
+                  d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10Zm-2 0a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"
+                  fill-rule="evenodd"
+                />
+              </svg>
+              You will need to verify all your existing devices and contacts again
+            </li>
+          </ul>
+          <span>
+            Only do this if you believe your account has been compromised.
+          </span>
+        </div>
+        <div
+          class="mx_ResetIdentityPanel_footer"
+        >
+          <button
+            class="_button_i91xf_17 _destructive_i91xf_116"
+            data-kind="primary"
+            data-size="lg"
+            role="button"
+            tabindex="0"
+          >
+            Continue
+          </button>
+          <button
+            class="_button_i91xf_17"
+            data-kind="tertiary"
+            data-size="lg"
+            role="button"
+            tabindex="0"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<EncryptionUserSettingsTab /> should display the set up recovery key when the user clicks on the set up recovery key button 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsTab mx_EncryptionUserSettingsTab"
+    data-testid="encryptionTab"
+  >
+    <div
+      class="mx_SettingsTab_sections"
+    />
+  </div>
+</DocumentFragment>
+`;

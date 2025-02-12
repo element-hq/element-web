@@ -2,15 +2,15 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { EventEmitter } from "events";
 
-import { EchoContext } from "./EchoContext";
-import { EchoTransaction, RunFn, TransactionStatus } from "./EchoTransaction";
+import { type EchoContext } from "./EchoContext";
+import { type EchoTransaction, type RunFn, TransactionStatus } from "./EchoTransaction";
 
 export async function implicitlyReverted(): Promise<void> {
     // do nothing :D

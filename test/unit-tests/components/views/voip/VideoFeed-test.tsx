@@ -2,20 +2,20 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import { render, screen } from "jest-matrix-react";
-import { CallFeed } from "matrix-js-sdk/src/webrtc/callFeed";
-import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
-import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { type CallFeed } from "matrix-js-sdk/src/webrtc/callFeed";
+import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 
 import * as AvatarModule from "../../../../../src/Avatar";
 import VideoFeed from "../../../../../src/components/views/voip/VideoFeed";
 import { stubClient, useMockedCalls } from "../../../../test-utils";
-import LegacyCallHandler from "../../../../../src/LegacyCallHandler";
+import type LegacyCallHandler from "../../../../../src/LegacyCallHandler";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 
 const FAKE_AVATAR_URL = "http://fakeurl.dummy/fake.png";

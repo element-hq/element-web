@@ -4,13 +4,13 @@ Copyright 2019 The Matrix.org Foundation C.I.C.
 Copyright 2018 New Vector Ltd
 Copyright 2015, 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { forwardRef, Ref } from "react";
+import React, { forwardRef, type Ref } from "react";
 
-import AccessibleButton, { ButtonProps } from "../../components/views/elements/AccessibleButton";
+import AccessibleButton, { type ButtonProps } from "../../components/views/elements/AccessibleButton";
 
 type Props<T extends keyof HTMLElementTagNameMap> = ButtonProps<T> & {
     label?: string;

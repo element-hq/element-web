@@ -3,19 +3,19 @@ Copyright 2024 New Vector Ltd.
 Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 Copyright 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { AuthType, IAuthData } from "matrix-js-sdk/src/interactive-auth";
+import { type AuthType, type IAuthData } from "matrix-js-sdk/src/interactive-auth";
 import { logger } from "matrix-js-sdk/src/logger";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";
-import InteractiveAuth, { ERROR_USER_CANCELLED, InteractiveAuthCallback } from "../../structures/InteractiveAuth";
-import { ContinueKind, SSOAuthEntry } from "../auth/InteractiveAuthEntryComponents";
+import InteractiveAuth, { ERROR_USER_CANCELLED, type InteractiveAuthCallback } from "../../structures/InteractiveAuth";
+import { type ContinueKind, SSOAuthEntry } from "../auth/InteractiveAuthEntryComponents";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import BaseDialog from "./BaseDialog";
 import defaultDispatcher from "../../../dispatcher/dispatcher";

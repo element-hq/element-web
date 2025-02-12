@@ -332,7 +332,6 @@
             "one": "ועוד אחד אחר...",
             "other": "ו %(count)s אחרים..."
         },
-        "android": "אנדרויד",
         "appearance": "מראה",
         "are_you_sure": "האם אתם בטוחים?",
         "attachment": "נספחים",
@@ -405,7 +404,6 @@
         "room_name": "שם חדר",
         "rooms": "חדרים",
         "secure_backup": "גיבוי מאובטח",
-        "security": "אבטחה",
         "select_all": "בחר הכל",
         "server": "שרת",
         "settings": "הגדרות",
@@ -424,7 +422,6 @@
         "thread": "שרשורים",
         "threads": "שרשורים",
         "timeline": "קו זמן",
-        "trusted": "אמין",
         "unencrypted": "לא מוצפן",
         "unmute": "בטל השתקה",
         "unnamed_room": "חדר ללא שם",
@@ -641,7 +638,6 @@
             "title": "לא אמין"
         },
         "unable_to_setup_keys_error": "לא ניתן להגדיר מקשים",
-        "unsupported": "לקוח זה אינו תומך בהצפנה מקצה לקצה.",
         "verification": {
             "accepting": "מקבל…",
             "after_new_login": {
@@ -1069,7 +1065,6 @@
     },
     "member_list": {
         "filter_placeholder": "סינון חברי חדר",
-        "invited_list_heading": "מוזמן",
         "power_label": "%(userName)s (רמת הרשאה %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "חברי החדר",
@@ -1114,7 +1109,6 @@
         "intro_welcome": "ברוכים הבאים אל %(appName)s",
         "no_avatar_label": "הוסף תמונה כדי שאנשים יידעו שאתה זה.",
         "send_dm": "שלח הודעה ישירה",
-        "use_case_personal_messaging": "חברים ומשפחה",
         "welcome_detail": "עכשיו, בואו נעזור לכם להתחיל",
         "welcome_user": "ברוכים הבאים %(name)s"
     },
@@ -1152,7 +1146,6 @@
         "custom_level": "דרגה מותאמת",
         "default": "ברירת מחדל",
         "label": "דרגת מנהל",
-        "mod": "ממתן",
         "moderator": "מנהל",
         "restricted": "מחוץ לתחום"
     },
@@ -1973,7 +1966,6 @@
         "incompatible_server_hierarchy": "השרת שלכם אינו תומך בהצגת היררכית חללי עבודה.",
         "invite": "הזמן אנשים",
         "invite_link": "שתף קישור להזמנה",
-        "invite_this_space": "הזמינו למרחב עבודה זה",
         "landing_welcome": "ברוכים הבאים אל <name/>",
         "no_search_result_hint": "אולי תרצו לנסות חיפוש אחר או לבדוק אם יש שגיאות הקלדה.",
         "search_children": "חיפוש %(spaceName)s",
@@ -2207,7 +2199,9 @@
             "sent": "%(senderName)s שלח הזמנה ל%(targetDisplayName)s להצטרף אל החדר."
         },
         "m.room.tombstone": "%(senderDisplayName)s שידרג את החדר הזה.",
-        "m.room.topic": "%(senderDisplayName)s שינה את שם הנושא ל-\"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s שינה את שם הנושא ל-\"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s שלח מדבקה",
         "m.video": {
             "error_decrypting": "שגיאה בפענוח וידאו"
@@ -2416,14 +2410,6 @@
     "user_info": {
         "admin_tools_section": "כלי מנהל",
         "ban_button_space": "חסום ממרחב העבודה",
-        "count_of_sessions": {
-            "one": "%(count)s מושבים",
-            "other": "%(count)s מושבים"
-        },
-        "count_of_verified_sessions": {
-            "one": "1 מושב מאומת",
-            "other": "%(count)s מושבים מאומתים"
-        },
         "deactivate_confirm_action": "השבת משתמש",
         "deactivate_confirm_description": "השבתת משתמש זה תנתק אותו וימנע ממנו להתחבר חזרה. בנוסף, הם יעזבו את כל החדרים בהם הם נמצאים. לא ניתן לבטל פעולה זו. האם אתה בטוח שברצונך להשבית משתמש זה?",
         "deactivate_confirm_title": "השבת משתמש?",
@@ -2432,15 +2418,12 @@
         "demote_self_confirm_room": "לא תוכל לבטל את השינוי הזה מכיוון שאתה מוריד את עצמך בדרגה, אם אתה המשתמש המיועד האחרון בחדר, אי אפשר יהיה להחזיר לו הרשאות.",
         "demote_self_confirm_title": "להוריד את עצמך?",
         "disinvite_button_space": "בטל הזמנה ממרחב העבודה",
-        "edit_own_devices": "הגדרת מכשירים",
         "error_ban_user": "כשלון בחסימת משתמש",
         "error_deactivate": "השבתת משתמש נכשלה",
         "error_kicking_user": "הסרת המשתמש נכשלה",
         "error_mute_user": "כשלון בהשתקת משתמש",
         "error_revoke_3pid_invite_description": "לא ניתן היה לבטל את ההזמנה. ייתכן שהשרת נתקל בבעיה זמנית או שאין לך הרשאות מספיקות לבטל את ההזמנה.",
         "error_revoke_3pid_invite_title": "ביטול ההזמנה נכשל",
-        "hide_sessions": "הסתר מושבים",
-        "hide_verified_sessions": "הסתר מושבים מאומתים",
         "invited_by": "הוזמנו על ידי %(sender)s",
         "jump_to_rr_button": "קפצו לקבלת קריאה",
         "kick_button_space": "הסר ממרחב העבודה",

@@ -2,14 +2,14 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import { mocked } from "jest-mock";
 import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "jest-matrix-react";
-import { HierarchyRoom, JoinRule, MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { type HierarchyRoom, JoinRule, type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
 

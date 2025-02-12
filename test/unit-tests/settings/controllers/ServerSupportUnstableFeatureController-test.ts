@@ -2,24 +2,24 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { defer } from "matrix-js-sdk/src/utils";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import ServerSupportUnstableFeatureController from "../../../../src/settings/controllers/ServerSupportUnstableFeatureController";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
-import { LabGroup, SETTINGS } from "../../../../src/settings/Settings";
+import { type FeatureSettingKey, LabGroup, SETTINGS } from "../../../../src/settings/Settings";
 import { stubClient } from "../../../test-utils";
 import { WatchManager } from "../../../../src/settings/WatchManager";
 import MatrixClientBackedController from "../../../../src/settings/controllers/MatrixClientBackedController";
-import { TranslationKey } from "../../../../src/languageHandler";
+import { type TranslationKey } from "../../../../src/languageHandler";
 
 describe("ServerSupportUnstableFeatureController", () => {
     const watchers = new WatchManager();
-    const setting = "setting_name";
+    const setting = "setting_name" as FeatureSettingKey;
 
     async function prepareSetting(
         cli: MatrixClient,

@@ -2,12 +2,12 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021, 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk/src/matrix";
 import React, { Fragment, useState } from "react";
 
 import { ContextMenuTooltipButton } from "../../../../accessibility/context_menu/ContextMenuTooltipButton";
@@ -17,7 +17,7 @@ import { RoomNotifState } from "../../../../RoomNotifs";
 import { RoomGeneralContextMenu } from "../../context_menus/RoomGeneralContextMenu";
 import { RoomNotificationContextMenu } from "../../context_menus/RoomNotificationContextMenu";
 import SpaceContextMenu from "../../context_menus/SpaceContextMenu";
-import { ButtonEvent } from "../../elements/AccessibleButton";
+import { type ButtonEvent } from "../../elements/AccessibleButton";
 import { contextMenuBelow } from "../../rooms/RoomTile";
 import { shouldShowComponent } from "../../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../settings/UIFeature";

@@ -89,7 +89,7 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
               <div
                 class="mx_SettingsSubsection_text"
               >
-                Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.
+                Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Recovery Key.
               </div>
               <div
                 class="mx_Spinner"
@@ -386,6 +386,89 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
                   />
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_SettingsSection"
+      >
+        <h2
+          class="mx_Heading_h3"
+        >
+          Privacy
+        </h2>
+        <div
+          class="mx_SettingsSection_subSections"
+        >
+          <div
+            class="mx_SettingsSubsection"
+            data-testid="discoverySection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+              >
+                How to find you
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content mx_SettingsSubsection_contentStretch"
+            >
+              <fieldset
+                class="mx_SettingsFieldset"
+              >
+                <legend
+                  class="mx_SettingsFieldset_legend"
+                >
+                  Identity server
+                </legend>
+                <div
+                  class="mx_SettingsFieldset_description"
+                >
+                  <div
+                    class="mx_SettingsSubsection_text"
+                  >
+                    You are not currently using an identity server. To discover and be discoverable by existing contacts you know, add one below.
+                  </div>
+                </div>
+                <div
+                  class="mx_SettingsFieldset_content"
+                >
+                  <form
+                    class="mx_SetIdServer"
+                  >
+                    <div
+                      class="mx_Field mx_Field_input"
+                    >
+                      <input
+                        autocomplete="off"
+                        id="mx_Field_1"
+                        label="Enter a new identity server"
+                        placeholder=""
+                        type="text"
+                        value=""
+                      />
+                      <label
+                        for="mx_Field_1"
+                      >
+                        Enter a new identity server
+                      </label>
+                    </div>
+                    <div
+                      aria-disabled="true"
+                      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_sm mx_AccessibleButton_disabled"
+                      disabled=""
+                      role="button"
+                      tabindex="0"
+                    >
+                      Change
+                    </div>
+                  </form>
+                </div>
+              </fieldset>
             </div>
           </div>
         </div>

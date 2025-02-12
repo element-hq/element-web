@@ -2,18 +2,19 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { SlidingSync } from "matrix-js-sdk/src/sliding-sync";
 import { mocked } from "jest-mock";
-import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import fetchMockJest from "fetch-mock-jest";
 
 import { SlidingSyncManager } from "../../src/SlidingSyncManager";
 import { stubClient } from "../test-utils";
 import SlidingSyncController from "../../src/settings/controllers/SlidingSyncController";
+import SettingsStore from "../../src/settings/SettingsStore";
 
 jest.mock("matrix-js-sdk/src/sliding-sync");
 const MockSlidingSync = <jest.Mock<SlidingSync>>(<unknown>SlidingSync);
@@ -202,15 +203,18 @@ describe("SlidingSyncManager", () => {
         });
     });
     describe("setup", () => {
+        let untypedManager: any;
+
         beforeEach(() => {
-            jest.spyOn(manager as any, "configure");
-            jest.spyOn(manager as any, "startSpidering");
+            untypedManager = manager;
+            jest.spyOn(untypedManager, "configure");
+            jest.spyOn(untypedManager, "startSpidering");
         });
         it("uses the baseUrl", async () => {
             await manager.setup(client);
-            expect((manager as any).configure).toHaveBeenCalled();
-            expect((manager as any).configure).toHaveBeenCalledWith(client, client.baseUrl);
-            expect((manager as any).startSpidering).toHaveBeenCalled();
+            expect(untypedManager.configure).toHaveBeenCalled();
+            expect(untypedManager.configure).toHaveBeenCalledWith(client, client.baseUrl);
+            expect(untypedManager.startSpidering).toHaveBeenCalled();
         });
     });
 });

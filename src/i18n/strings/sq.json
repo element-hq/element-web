@@ -484,7 +484,6 @@
         "rooms": "Dhoma",
         "saving": "Po ruhet…",
         "secure_backup": "Kopjeruajtje e Sigurt",
-        "security": "Siguri",
         "select_all": "Përzgjidhi krejt",
         "server": "Shërbyes",
         "settings": "Rregullime",
@@ -502,7 +501,6 @@
         "thread": "Rrjedhë",
         "threads": "Rrjedha",
         "timeline": "Rrjedhë Kohore",
-        "trusted": "E besuar",
         "unencrypted": "Të pafshehtëzuara",
         "unmute": "Ktheji zërin",
         "unnamed_room": "Dhomë e Paemërtuar",
@@ -515,8 +513,7 @@
         "verified": "I verifikuar",
         "video_room": "Dhomë me video",
         "view_message": "Shihni mesazh",
-        "warning": "Sinjalizim",
-        "welcome": "Mirë se vini"
+        "warning": "Sinjalizim"
     },
     "composer": {
         "autocomplete": {
@@ -842,7 +839,6 @@
             "title": "Jo e Besuar"
         },
         "unable_to_setup_keys_error": "S’arrihet të ujdisen kyçe",
-        "unsupported": "Ky klient nuk mbulon fshehtëzim skaj-më-skaj.",
         "verification": {
             "accepting": "Po pranohet…",
             "after_new_login": {
@@ -1415,7 +1411,6 @@
     "member_list": {
         "filter_placeholder": "Filtroni anëtarë dhome",
         "invite_button_no_perms_tooltip": "S’keni leje të ftoni përdorues",
-        "invited_list_heading": "I ftuar",
         "power_label": "%(userName)s (pushtet %(powerLevelNumber)si)"
     },
     "member_list_back_action_label": "Anëtarë dhome",
@@ -1455,61 +1450,15 @@
         "m.key.verification.request": "%(name)s po kërkon verifikim"
     },
     "onboarding": {
-        "apple_trademarks": "App Store® dhee Apple logo® janë shenja tregtare të Apple Inc.",
-        "community_messaging_action": "Gjeni njerëzit tuaj",
-        "community_messaging_description": "Ruani pronësinë dhe kontrollin e diskutimit në bashkësi.\nPërshkallëzojeni për të mbuluar miliona, me moderim dhe ndërveprueshmëri të fuqishme.",
-        "community_messaging_title": "Pronësi e bashkësisë",
-        "complete_these": "Plotësoni këto, që të përfitoni maksimumin prej %(brand)s",
         "create_room": "Krijoni një Fjalosje Grupi",
-        "download_app": "Shkarko %(brand)s",
-        "download_app_action": "Shkarko aplikacione",
-        "download_app_description": "Mos humbni asgjë, duke e marrë %(brand)s-in me vete",
-        "download_app_store": "Shkarkoje nga App Store",
-        "download_brand": "Shkarko %(brand)s",
-        "download_brand_desktop": "Shkarko %(brand)s Desktop",
-        "download_f_droid": "Merreni në F-Droid",
-        "download_google_play": "Merreni nga Google Play",
-        "enable_notifications": "Aktivizo njoftimet",
-        "enable_notifications_action": "Aktivizo njoftimet",
-        "enable_notifications_description": "Mos humbni përgjigje apo mesazh të rëndësishëm",
         "explore_rooms": "Eksploroni Dhoma Publike",
-        "find_community_members": "Gjeni dhe ftoni anëtarë të bashkësisë tuaj",
-        "find_coworkers": "Gjeni dhe ftoni kolegë tuajt",
-        "find_friends": "Gjeni dhe ftoni shokët tuaj",
-        "find_friends_action": "Gjeni shokë",
-        "find_friends_description": "Kjo është ajo pse erdhët, ndaj ta bëjmë",
-        "find_people": "Gjeni persona",
-        "free_e2ee_messaging_unlimited_voip": "Me shkëmbim mesazhesh të fshehtëzuar skaj-më-skaj dhe thirrje pa kufi me zë dhe video, %(brand)s është një rrugë e fuqishme për të mbajtur lidhjet.",
-        "get_stuff_done": "Kryeni punët, duke gjetur kolegët e ekipit",
-        "google_trademarks": "Google Play dhe stema Google Play janë shenja tregtare të Google LLC.",
         "has_avatar_label": "Bukur, kjo do t’i ndihmojë njerëzit ta dinë se jeni ju",
         "intro_byline": "Jini zot i bisedave tuaja.",
         "intro_welcome": "Mirë se vini te %(appName)s",
         "no_avatar_label": "Shtoni një foto, që njerëzit ta dinë se jeni ju.",
-        "only_n_steps_to_go": {
-            "one": "Vetëm %(count)s hap për t’u bërë",
-            "other": "Vetëm %(count)s hapa për t’u bërë"
-        },
-        "personal_messaging_action": "Filloni fjalosjen tuaj të parë",
-        "personal_messaging_title": "Shkëmbim i sigurt mesazhesh për shokë dhe familje",
-        "qr_or_app_links": "%(qrCode)s ose %(appLinks)s",
         "send_dm": "Dërgoni Mesazh të Drejtpërdrejtë",
-        "set_up_profile": "Ujdisni profilin tuaj",
-        "set_up_profile_action": "Profili juaj",
-        "set_up_profile_description": "Bëni të mundur që njerëzit ta dinë se vërtet jeni ju",
-        "use_case_community_messaging": "Anëtarë bashkësie internetore",
-        "use_case_heading1": "Kaq qe",
-        "use_case_heading2": "Me kë do të bisedoni më të shumtën?",
-        "use_case_heading3": "Do t’ju ndihmojmë të lidheni.",
-        "use_case_personal_messaging": "Shokë dhe familje",
-        "use_case_work_messaging": "Kolegë dhe ekipe",
         "welcome_detail": "Tani, le t’ju ndihmojmë për t’ia filluar",
-        "welcome_to_brand": "Mirë se vini te %(brand)s",
-        "welcome_user": "Mirë se vini %(name)s",
-        "work_messaging_action": "Gjeni kolegë tuajt",
-        "work_messaging_title": "Shkëmbim i sigurt mesazhesh për në punë",
-        "you_did_it": "Ia dolët!",
-        "you_made_it": "E bëtë!"
+        "welcome_user": "Mirë se vini %(name)s"
     },
     "pill": {
         "permalink_other_room": "Mesazh në %(room)s",
@@ -1561,7 +1510,6 @@
         "custom_level": "Nivel vetjak",
         "default": "Parazgjedhje",
         "label": "Shkallë pushteti",
-        "mod": "Moderator",
         "restricted": "E kufizuar"
     },
     "powered_by_matrix": "Bazuar në Matrix",
@@ -2356,7 +2304,6 @@
             "room_directory_heading": "Drejtori dhomash",
             "room_list_heading": "Listë dhomash",
             "show_avatars_pills": "Shfaq avatarë në përmendje përdoruesish, dhomash dhe aktesh",
-            "show_checklist_shortcuts": "Shhkurtoren e listës së hapave të mirëseardhjes shfaqe mbi listën e dhomave",
             "show_polls_button": "Shfaq buton pyetësorësh",
             "surround_text": "Rrethoje tekstin e përzgjedhur, kur shtypen shenja speciale",
             "time_heading": "Kohë shfaqjeje"
@@ -2703,7 +2650,6 @@
         "invite": "Ftoni njerëz",
         "invite_description": "Ftoni përmes email-i ose emri përdoruesi",
         "invite_link": "Jepuni lidhje ftese",
-        "invite_this_space": "Ftoni në këtë hapësirë",
         "joining_space": "Po hyhet",
         "landing_welcome": "Mirë se vini te <name/>",
         "leave_dialog_action": "Braktiseni hapësirën",
@@ -3046,7 +2992,9 @@
             "sent": "%(senderName)s dërgoi një ftesë për %(targetDisplayName)s që të marrë pjesë në dhomë."
         },
         "m.room.tombstone": "%(senderDisplayName)s e përmirësoi këtë dhomë.",
-        "m.room.topic": "%(senderDisplayName)s ndryshoi temën në \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s ndryshoi temën në \"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s dërgoi një ngjitës.",
         "m.video": {
             "error_decrypting": "Gabim në shfshehtëzim videoje"
@@ -3309,14 +3257,6 @@
         "ban_room_confirm_title": "Dëboje prej %(roomName)s",
         "ban_space_everything": "Dëboji prej gjithçkaje ku mundem ta bëj këtë",
         "ban_space_specific": "Dëboji prej gjërash të caktuara ku mundem ta bëj këtë",
-        "count_of_sessions": {
-            "other": "%(count)s sesione",
-            "one": "%(count)s sesion"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s sesione të verifikuar",
-            "one": "1 sesion i verifikuar"
-        },
         "deactivate_confirm_action": "Çaktivizoje përdoruesin",
         "deactivate_confirm_description": "Çaktivizimi i këtij përdoruesi do të sjellë nxjerrjen e tij nga llogaria përkatëse dhe do të pengojë rihyrjen e tij. Veç kësaj, do të braktisë krejt dhomat ku ndodhet. Ky veprim s’mund të prapësohet. Jeni i sigurt se doni të çaktivizohet ky përdorues?",
         "deactivate_confirm_title": "Të çaktivizohet përdoruesi?",
@@ -3327,15 +3267,12 @@
         "disinvite_button_room": "Hiqi ftesën për këtë dhomë",
         "disinvite_button_room_name": "Hiqja ftesën për %(roomName)s",
         "disinvite_button_space": "Hiqi ftesën për këtë hapësirë",
-        "edit_own_devices": "Përpunoni pajisje",
         "error_ban_user": "S’u arrit të dëbohej përdoruesi",
         "error_deactivate": "S’u arrit të çaktivizohet përdorues",
         "error_kicking_user": "S’u arrit të hiqej përdoruesi",
         "error_mute_user": "S’u arrit t’i hiqej zëri përdoruesit",
         "error_revoke_3pid_invite_description": "S’u shfuqizua dot ftesa. Shërbyesi mund të jetë duke kaluar një problem të përkohshëm ose s’keni leje të mjaftueshme për të shfuqizuar ftesën.",
         "error_revoke_3pid_invite_title": "S’u arrit të shfuqizohej ftesa",
-        "hide_sessions": "Fshih sesione",
-        "hide_verified_sessions": "Fshih sesione të verifikuar",
         "ignore_confirm_description": "Krejt mesazhet dhe ftesat prej këtij përdoruesi do të fshihen. Jeni i sigurt se doni të shpërfillet?",
         "ignore_confirm_title": "Shpërfille %(user)s",
         "invited_by": "Ftuar nga %(sender)s",

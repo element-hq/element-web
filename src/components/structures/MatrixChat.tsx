@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2015-2024 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -12,17 +12,17 @@ import {
     createClient,
     EventType,
     HttpApiEvent,
-    MatrixClient,
-    MatrixEvent,
-    RoomType,
+    type MatrixClient,
+    type MatrixEvent,
+    type RoomType,
     SyncState,
-    SyncStateData,
-    TimelineEvents,
+    type SyncStateData,
+    type TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
-import { defer, IDeferred, QueryDict } from "matrix-js-sdk/src/utils";
+import { defer, type IDeferred, type QueryDict } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 import { throttle } from "lodash";
-import { CryptoEvent, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
+import { CryptoEvent, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 import { TooltipProvider } from "@vector-im/compound-web";
 
 // what-input helps improve keyboard accessibility
@@ -30,9 +30,9 @@ import "what-input";
 
 import PosthogTrackers from "../../PosthogTrackers";
 import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
-import { IMatrixClientCreds, MatrixClientPeg } from "../../MatrixClientPeg";
+import { type IMatrixClientCreds, MatrixClientPeg } from "../../MatrixClientPeg";
 import PlatformPeg from "../../PlatformPeg";
-import SdkConfig, { ConfigOptions } from "../../SdkConfig";
+import SdkConfig, { type ConfigOptions } from "../../SdkConfig";
 import dis from "../../dispatcher/dispatcher";
 import Notifier from "../../Notifier";
 import Modal from "../../Modal";
@@ -43,32 +43,34 @@ import * as Lifecycle from "../../Lifecycle";
 import "../../stores/LifecycleStore";
 import "../../stores/AutoRageshakeStore";
 import PageType from "../../PageTypes";
-import createRoom, { IOpts } from "../../createRoom";
+import createRoom, { type IOpts } from "../../createRoom";
 import { _t, _td } from "../../languageHandler";
 import SettingsStore from "../../settings/SettingsStore";
 import ThemeController from "../../settings/controllers/ThemeController";
 import { startAnyRegistrationFlow } from "../../Registration";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import AutoDiscoveryUtils from "../../utils/AutoDiscoveryUtils";
-import ThemeWatcher from "../../settings/watchers/ThemeWatcher";
+import ThemeWatcher, { ThemeWatcherEvent } from "../../settings/watchers/ThemeWatcher";
 import { FontWatcher } from "../../settings/watchers/FontWatcher";
 import { storeRoomAliasInCache } from "../../RoomAliasCache";
 import ToastStore from "../../stores/ToastStore";
 import * as StorageManager from "../../utils/StorageManager";
-import { UseCase } from "../../settings/enums/UseCase";
 import type LoggedInViewType from "./LoggedInView";
 import LoggedInView from "./LoggedInView";
 import { Action } from "../../dispatcher/actions";
 import { hideToast as hideAnalyticsToast, showToast as showAnalyticsToast } from "../../toasts/AnalyticsToast";
 import { showToast as showNotificationsToast } from "../../toasts/DesktopNotificationsToast";
-import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
+import { type OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
 import {
     RoomNotificationStateStore,
     UPDATE_STATUS_INDICATOR,
 } from "../../stores/notifications/RoomNotificationStateStore";
 import { SettingLevel } from "../../settings/SettingLevel";
-import ThreepidInviteStore, { IThreepidInvite, IThreepidInviteWireFormat } from "../../stores/ThreepidInviteStore";
+import ThreepidInviteStore, {
+    type IThreepidInvite,
+    type IThreepidInviteWireFormat,
+} from "../../stores/ThreepidInviteStore";
 import { UIFeature } from "../../settings/UIFeature";
 import DialPadModal from "../views/voip/DialPadModal";
 import { showToast as showMobileGuideToast } from "../../toasts/MobileGuideToast";
@@ -98,24 +100,23 @@ import { PosthogAnalytics } from "../../PosthogAnalytics";
 import { initSentry } from "../../sentry";
 import LegacyCallHandler from "../../LegacyCallHandler";
 import { showSpaceInvite } from "../../utils/space";
-import { ButtonEvent } from "../views/elements/AccessibleButton";
-import { ActionPayload } from "../../dispatcher/payloads";
-import { SummarizedNotificationState } from "../../stores/notifications/SummarizedNotificationState";
+import { type ButtonEvent } from "../views/elements/AccessibleButton";
+import { type ActionPayload } from "../../dispatcher/payloads";
+import { type SummarizedNotificationState } from "../../stores/notifications/SummarizedNotificationState";
 import Views from "../../Views";
-import { FocusNextType, ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
-import { ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePayload";
-import { AfterLeaveRoomPayload } from "../../dispatcher/payloads/AfterLeaveRoomPayload";
-import { DoAfterSyncPreparedPayload } from "../../dispatcher/payloads/DoAfterSyncPreparedPayload";
-import { ViewStartChatOrReusePayload } from "../../dispatcher/payloads/ViewStartChatOrReusePayload";
+import { type FocusNextType, type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePayload";
+import { type AfterLeaveRoomPayload } from "../../dispatcher/payloads/AfterLeaveRoomPayload";
+import { type DoAfterSyncPreparedPayload } from "../../dispatcher/payloads/DoAfterSyncPreparedPayload";
+import { type ViewStartChatOrReusePayload } from "../../dispatcher/payloads/ViewStartChatOrReusePayload";
 import { leaveRoomBehaviour } from "../../utils/leave-behaviour";
 import { CallStore } from "../../stores/CallStore";
-import { IRoomStateEventsActionPayload } from "../../actions/MatrixActionCreators";
-import { ShowThreadPayload } from "../../dispatcher/payloads/ShowThreadPayload";
+import { type IRoomStateEventsActionPayload } from "../../actions/MatrixActionCreators";
+import { type ShowThreadPayload } from "../../dispatcher/payloads/ShowThreadPayload";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { TimelineRenderingType } from "../../contexts/RoomContext";
-import { UseCaseSelection } from "../views/elements/UseCaseSelection";
-import { ValidatedServerConfig } from "../../utils/ValidatedServerConfig";
+import { type ValidatedServerConfig } from "../../utils/ValidatedServerConfig";
 import { isLocalRoom } from "../../utils/localRoom/isLocalRoom";
 import { SDKContext, SdkContextClass } from "../../contexts/SDKContext";
 import { viewUserDeviceSettings } from "../../actions/handlers/viewUserDeviceSettings";
@@ -124,7 +125,7 @@ import RovingSpotlightDialog from "../views/dialogs/spotlight/SpotlightDialog";
 import { findDMForUser } from "../../utils/dm/findDMForUser";
 import { Linkify } from "../../HtmlUtils";
 import { NotificationLevel } from "../../stores/notifications/NotificationLevel";
-import { UserTab } from "../views/dialogs/UserTab";
+import { type UserTab } from "../views/dialogs/UserTab";
 import { shouldSkipSetupEncryption } from "../../utils/crypto/shouldSkipSetupEncryption";
 import { Filter } from "../views/dialogs/spotlight/Filter";
 import { checkSessionLockFree, getSessionLock } from "../../utils/SessionLock";
@@ -133,6 +134,7 @@ import { ConfirmSessionLockTheftView } from "./auth/ConfirmSessionLockTheftView"
 import { LoginSplashView } from "./auth/LoginSplashView";
 import { cleanUpDraftsIfRequired } from "../../DraftCleaner";
 import { InitialCryptoSetupStore } from "../../stores/InitialCryptoSetupStore";
+import { setTheme } from "../../theme";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -431,8 +433,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // if cross-signing is not yet set up, do so now if possible.
             InitialCryptoSetupStore.sharedInstance().startInitialCryptoSetup(
                 cli,
-                Boolean(this.tokenLogin),
-                this.stores,
                 this.onCompleteSecurityE2eSetupFinished,
             );
             this.setStateForNewView({ view: Views.E2E_SETUP });
@@ -467,6 +467,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.themeWatcher = new ThemeWatcher();
         this.fontWatcher = new FontWatcher();
         this.themeWatcher.start();
+        this.themeWatcher.on(ThemeWatcherEvent.Change, setTheme);
         this.fontWatcher.start();
 
         initSentry(SdkConfig.get("sentry"));
@@ -499,13 +500,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     public componentWillUnmount(): void {
         Lifecycle.stopMatrixClient();
         dis.unregister(this.dispatcherRef);
+        this.themeWatcher?.off(ThemeWatcherEvent.Change, setTheme);
         this.themeWatcher?.stop();
         this.fontWatcher?.stop();
         UIStore.destroy();
         this.state.resizeNotifier.removeListener("middlePanelResized", this.dispatchTimelineResize);
         window.removeEventListener("resize", this.onWindowResized);
-
-        this.stores.accountPasswordStore.clearPassword();
     }
 
     private onWindowResized = (): void => {
@@ -870,8 +870,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     this.state.view !== Views.LOGIN &&
                     this.state.view !== Views.REGISTER &&
                     this.state.view !== Views.COMPLETE_SECURITY &&
-                    this.state.view !== Views.E2E_SETUP &&
-                    this.state.view !== Views.USE_CASE_SELECTION
+                    this.state.view !== Views.E2E_SETUP
                 ) {
                     this.onLoggedIn();
                 }
@@ -1363,12 +1362,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         await this.onShowPostLoginScreen();
     }
 
-    private async onShowPostLoginScreen(useCase?: UseCase): Promise<void> {
-        if (useCase) {
-            PosthogAnalytics.instance.setProperty("ftueUseCaseSelection", useCase);
-            SettingsStore.setValue("FTUE.useCaseSelection", null, SettingLevel.ACCOUNT, useCase);
-        }
-
+    private async onShowPostLoginScreen(): Promise<void> {
         this.setStateForNewView({ view: Views.LOGGED_IN });
         // If a specific screen is set to be shown after login, show that above
         // all else, as it probably means the user clicked on something already.
@@ -1707,13 +1701,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         if (crypto) {
             const blacklistEnabled = SettingsStore.getValueAt(SettingLevel.DEVICE, "blacklistUnverifiedDevices");
             crypto.globalBlacklistUnverifiedDevices = blacklistEnabled;
-
-            // With cross-signing enabled, we send to unknown devices
-            // without prompting. Any bad-device status the user should
-            // be aware of will be signalled through the room shield
-            // changing colour. More advanced behaviour will come once
-            // we implement more settings.
-            cli.setGlobalErrorOnUnknownDevices(false);
         }
 
         // Cannot be done in OnLoggedIn as at that point the AccountSettingsHandler doesn't yet have a client
@@ -1935,8 +1922,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.showScreen("forgot_password");
     };
 
-    private onRegisterFlowComplete = (credentials: IMatrixClientCreds, password: string): Promise<void> => {
-        return this.onUserCompletedLoginFlow(credentials, password);
+    private onRegisterFlowComplete = (credentials: IMatrixClientCreds): Promise<void> => {
+        return this.onUserCompletedLoginFlow(credentials);
     };
 
     // returns a promise which resolves to the new MatrixClient
@@ -2003,9 +1990,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      * Note: SSO users (and any others using token login) currently do not pass through
      * this, as they instead jump straight into the app after `attemptTokenLogin`.
      */
-    private onUserCompletedLoginFlow = async (credentials: IMatrixClientCreds, password: string): Promise<void> => {
-        this.stores.accountPasswordStore.setPassword(password);
-
+    private onUserCompletedLoginFlow = async (credentials: IMatrixClientCreds): Promise<void> => {
         // Create and start the client
         await Lifecycle.setLoggedIn(credentials);
         await this.postLoginSetup();
@@ -2016,33 +2001,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     // complete security / e2e setup has finished
     private onCompleteSecurityE2eSetupFinished = (): void => {
-        if (MatrixClientPeg.currentUserIsJustRegistered() && SettingsStore.getValue("FTUE.useCaseSelection") === null) {
-            this.setStateForNewView({ view: Views.USE_CASE_SELECTION });
-
-            // Listen to changes in settings and hide the use case screen if appropriate - this is necessary because
-            // account settings can still be changing at this point in app init (due to the initial sync being cached,
-            // then subsequent syncs being received from the server)
-            //
-            // This seems unlikely for something that should happen directly after registration, but if a user does
-            // their initial login on another device/browser than they registered on, we want to avoid asking this
-            // question twice
-            //
-            // initPosthogAnalyticsToast pioneered this technique, we’re just reusing it here.
-            SettingsStore.watchSetting(
-                "FTUE.useCaseSelection",
-                null,
-                (originalSettingName, changedInRoomId, atLevel, newValueAtLevel, newValue) => {
-                    if (newValue !== null && this.state.view === Views.USE_CASE_SELECTION) {
-                        this.onShowPostLoginScreen();
-                    }
-                },
-            );
-        } else {
-            // This is async but we makign this function async to wait for it isn't useful
-            this.onShowPostLoginScreen().catch((e) => {
-                logger.error("Exception showing post-login screen", e);
-            });
-        }
+        // This is async but we making this function async to wait for it isn't useful
+        this.onShowPostLoginScreen().catch((e) => {
+            logger.error("Exception showing post-login screen", e);
+        });
     };
 
     private getFragmentAfterLogin(): string {
@@ -2162,8 +2124,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     fragmentAfterLogin={fragmentAfterLogin}
                 />
             );
-        } else if (this.state.view === Views.USE_CASE_SELECTION) {
-            view = <UseCaseSelection onFinished={(useCase): Promise<void> => this.onShowPostLoginScreen(useCase)} />;
         } else if (this.state.view === Views.LOCK_STOLEN) {
             view = <SessionLockStolenView />;
         } else {

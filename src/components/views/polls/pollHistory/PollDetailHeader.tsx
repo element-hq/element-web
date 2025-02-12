@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -11,7 +11,7 @@ import LeftCaretIcon from "@vector-im/compound-design-tokens/assets/web/icons/ch
 
 import { _t } from "../../../../languageHandler";
 import AccessibleButton from "../../elements/AccessibleButton";
-import { PollHistoryFilter } from "./types";
+import { type PollHistoryFilter } from "./types";
 
 interface Props {
     filter: PollHistoryFilter;

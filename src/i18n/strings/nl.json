@@ -381,7 +381,6 @@
             "other": "en %(count)s anderen…",
             "one": "en één andere…"
         },
-        "android": "Android",
         "appearance": "Weergave",
         "application": "Toepassing",
         "are_you_sure": "Weet je het zeker?",
@@ -419,7 +418,6 @@
         "identity_server": "Identiteitsserver",
         "image": "Afbeelding",
         "integration_manager": "Integratiebeheerder",
-        "ios": "iOS",
         "joined": "Toegetreden",
         "labs": "Labs",
         "legal": "Juridisch",
@@ -472,7 +470,6 @@
         "room_name": "Kamernaam",
         "rooms": "Kamers",
         "secure_backup": "Beveiligde back-up",
-        "security": "Beveiliging",
         "select_all": "Allemaal selecteren",
         "server": "Server",
         "settings": "Instellingen",
@@ -490,7 +487,6 @@
         "thread": "Draad",
         "threads": "Onderwerpen",
         "timeline": "Tijdslijn",
-        "trusted": "Vertrouwd",
         "unencrypted": "Onversleuteld",
         "unmute": "Niet dempen",
         "unnamed_room": "Naamloze Kamer",
@@ -505,8 +501,7 @@
         "video": "Video",
         "video_room": "Video kamer",
         "view_message": "Bericht bekijken",
-        "warning": "Let op",
-        "welcome": "Welkom"
+        "warning": "Let op"
     },
     "composer": {
         "autocomplete": {
@@ -781,7 +776,6 @@
             "title": "Niet vertrouwd"
         },
         "unable_to_setup_keys_error": "Kan geen sleutels instellen",
-        "unsupported": "Deze cliënt biedt geen ondersteuning voor eind-tot-eind-versleuteling.",
         "verification": {
             "accepting": "Toestaan…",
             "after_new_login": {
@@ -1300,7 +1294,6 @@
     },
     "member_list": {
         "filter_placeholder": "Kamerleden filteren",
-        "invited_list_heading": "Uitgenodigd",
         "power_label": "%(userName)s (macht %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Kamerleden",
@@ -1341,61 +1334,15 @@
         "m.key.verification.request": "%(name)s verzoekt om verificatie"
     },
     "onboarding": {
-        "apple_trademarks": "App Store® en het Apple logo® zijn handelsmerken van Apple Inc.",
-        "community_messaging_action": "Vind je mensen",
-        "community_messaging_description": "Houd het eigendom en de controle over de discussie in de gemeenschap.\nSchaal om miljoenen te ondersteunen, met krachtige beheersbaarheid en interoperabiliteit.",
-        "community_messaging_title": "Gemeenschapseigendom",
-        "complete_these": "Voltooi deze om het meeste uit %(brand)s te halen",
         "create_room": "Maak een groepsgesprek",
-        "download_app": "%(brand)s downloaden",
-        "download_app_action": "Apps downloaden",
-        "download_app_description": "Mis niets door %(brand)s mee te nemen",
-        "download_app_store": "Te downloaden in de App Store",
-        "download_brand": "%(brand)s downloaden",
-        "download_brand_desktop": "%(brand)s Desktop downloaden",
-        "download_f_droid": "Download het op F-Droid",
-        "download_google_play": "Verkrijg het via Google Play",
-        "enable_notifications": "Meldingen aanzetten",
-        "enable_notifications_action": "Meldingen inschakelen",
-        "enable_notifications_description": "Mis geen antwoord of belangrijk bericht",
         "explore_rooms": "Publieke kamers ontdekken",
-        "find_community_members": "Vind en nodig je communityleden uit",
-        "find_coworkers": "Vind en nodig je collega's uit",
-        "find_friends": "Zoek je vrienden en nodig ze uit",
-        "find_friends_action": "Zoek vrienden",
-        "find_friends_description": "Daar ben je voor, dus laten we beginnen",
-        "find_people": "Zoek mensen",
-        "free_e2ee_messaging_unlimited_voip": "Met gratis eind-tot-eind versleutelde berichten en onbeperkte spraak- en video-oproepen, is %(brand)s een geweldige manier om in contact te blijven.",
-        "get_stuff_done": "Krijg dingen gedaan door je teamgenoten te vinden",
-        "google_trademarks": "Google Play en het Google Play-logo zijn handelsmerken van Google LLC.",
         "has_avatar_label": "Geweldig, dan zullen personen weten dat jij het bent",
         "intro_byline": "Gesprekken die helemaal van jou zijn.",
         "intro_welcome": "Welkom bij %(appName)s",
         "no_avatar_label": "Voeg een foto toe zodat personen weten dat jij het bent.",
-        "only_n_steps_to_go": {
-            "one": "Nog maar %(count)s stap te gaan",
-            "other": "Nog maar %(count)s stappen te gaan"
-        },
-        "personal_messaging_action": "Start je eerste chat",
-        "personal_messaging_title": "Veilig berichten versturen voor vrienden en familie",
-        "qr_or_app_links": "%(qrCode)s of %(appLinks)s",
         "send_dm": "Start een direct gesprek",
-        "set_up_profile": "Stel je profiel in",
-        "set_up_profile_action": "Jouw profiel",
-        "set_up_profile_description": "Zorg ervoor dat mensen weten dat je het echt bent",
-        "use_case_community_messaging": "Leden van online gemeenschap",
-        "use_case_heading1": "Je bent binnen",
-        "use_case_heading2": "Met wie ga je het meest chatten?",
-        "use_case_heading3": "We helpen je om verbinding te maken.",
-        "use_case_personal_messaging": "Vrienden en familie",
-        "use_case_work_messaging": "Collega's en teams",
         "welcome_detail": "Laten we je helpen om te beginnen",
-        "welcome_to_brand": "Welkom bij %(brand)s",
-        "welcome_user": "Welkom %(name)s",
-        "work_messaging_action": "Vind je collega's",
-        "work_messaging_title": "Veilig berichten versturen voor werk",
-        "you_did_it": "Het is je gelukt!",
-        "you_made_it": "Het is je gelukt!"
+        "welcome_user": "Welkom %(name)s"
     },
     "poll": {
         "create_poll_action": "Poll aanmaken",
@@ -2161,7 +2108,6 @@
             "rm_lifetime": "Levensduur van leesbevestigingen (ms)",
             "rm_lifetime_offscreen": "Levensduur van levensbevestigingen, niet op scherm (ms)",
             "room_list_heading": "Kamerslijst",
-            "show_checklist_shortcuts": "Toon snelkoppeling naar welkomstchecklist boven de kamer gids",
             "show_polls_button": "Toon polls-knop",
             "surround_text": "Geselecteerde tekst omsluiten bij het typen van speciale tekens",
             "time_heading": "Tijdsweergave"
@@ -2469,7 +2415,6 @@
         "invite": "Personen uitnodigen",
         "invite_description": "Uitnodigen per e-mail of inlognaam",
         "invite_link": "Deel uitnodigingskoppeling",
-        "invite_this_space": "Voor deze Space uitnodigen",
         "joining_space": "Toetreden",
         "landing_welcome": "Welkom in <name/>",
         "leave_dialog_action": "Space verlaten",
@@ -2808,7 +2753,9 @@
             "sent": "%(senderName)s heeft %(targetDisplayName)s in deze kamer uitgenodigd."
         },
         "m.room.tombstone": "%(senderDisplayName)s heeft deze kamer geüpgraded.",
-        "m.room.topic": "%(senderDisplayName)s heeft het onderwerp gewijzigd naar ‘%(topic)s’.",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s heeft het onderwerp gewijzigd naar ‘%(topic)s’."
+        },
         "m.sticker": "%(senderDisplayName)s Verstuurde een sticker.",
         "m.video": {
             "error_decrypting": "Fout bij het ontsleutelen van de video"
@@ -3066,14 +3013,6 @@
         "ban_room_confirm_title": "Verban van %(roomName)s",
         "ban_space_everything": "Verban ze van alles waar ik dit kan",
         "ban_space_specific": "Ban ze van specifieke plekken waar ik dit kan",
-        "count_of_sessions": {
-            "other": "%(count)s sessies",
-            "one": "%(count)s sessie"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s geverifieerde sessies",
-            "one": "1 geverifieerde sessie"
-        },
         "deactivate_confirm_action": "Persoon deactiveren",
         "deactivate_confirm_description": "Deze persoon deactiveren zal deze persoon uitloggen en verhinderen dat de persoon weer inlogt. Bovendien zal de persoon alle kamers waaraan de persoon deelneemt verlaten. Deze actie is niet terug te draaien. Weet je zeker dat je deze persoon wilt deactiveren?",
         "deactivate_confirm_title": "Persoon deactiveren?",
@@ -3084,15 +3023,12 @@
         "disinvite_button_room": "Uitnodiging van kamer afwijzen",
         "disinvite_button_room_name": "Uitnodiging intrekken voor %(roomName)s",
         "disinvite_button_space": "Uitnodiging van space afwijzen",
-        "edit_own_devices": "Apparaten bewerken",
         "error_ban_user": "Verbannen van persoon is mislukt",
         "error_deactivate": "Deactiveren van persoon is mislukt",
         "error_kicking_user": "Kan persoon niet verwijderen",
         "error_mute_user": "Dempen van persoon is mislukt",
         "error_revoke_3pid_invite_description": "Kon de uitnodiging niet intrekken. De server ondervindt mogelijk een tijdelijk probleem, of je hebt niet het recht de uitnodiging in te trekken.",
         "error_revoke_3pid_invite_title": "Intrekken van uitnodiging is mislukt",
-        "hide_sessions": "Sessies verbergen",
-        "hide_verified_sessions": "Geverifieerde sessies verbergen",
         "invited_by": "Uitgenodigd door %(sender)s",
         "jump_to_rr_button": "Naar het laatst gelezen bericht gaan",
         "kick_button_room": "Verwijderen uit kamer",

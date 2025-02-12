@@ -235,7 +235,6 @@
         "oidc": {
             "error_title": "Non abbiamo potuto farti accedere",
             "generic_auth_error": "Qualcosa è andato storto durante l'autenticazione. Vai alla pagina di accesso e riprova.",
-            "logout_redirect_warning": "Verrai reindirizzato al fornitore di autenticazione del tuo server per completare la disconnessione.",
             "missing_or_invalid_stored_state": "Abbiamo chiesto al browser di ricordare quale homeserver usi per farti accedere, ma sfortunatamente l'ha dimenticato. Vai alla pagina di accesso e riprova."
         },
         "password_field_keep_going_prompt": "Continua…",
@@ -419,7 +418,6 @@
             "other": "e altri %(count)s ...",
             "one": "e un altro..."
         },
-        "android": "Android",
         "appearance": "Aspetto",
         "application": "Applicazione",
         "are_you_sure": "Sei sicuro?",
@@ -458,7 +456,6 @@
         "identity_server": "Server di identità",
         "image": "Immagine",
         "integration_manager": "Gestore di integrazioni",
-        "ios": "iOS",
         "joined": "Entrato/a",
         "labs": "Laboratori",
         "legal": "Informazioni legali",
@@ -513,7 +510,6 @@
         "rooms": "Stanze",
         "saving": "Salvataggio…",
         "secure_backup": "Backup Sicuro",
-        "security": "Sicurezza",
         "select_all": "Seleziona tutti",
         "server": "Server",
         "settings": "Impostazioni",
@@ -532,7 +528,6 @@
         "thread": "Conversazione",
         "threads": "Conversazioni",
         "timeline": "Linea temporale",
-        "trusted": "Fidato",
         "unavailable": "non disponibile",
         "unencrypted": "Non crittografato",
         "unmute": "Togli silenzio",
@@ -548,8 +543,7 @@
         "video": "Video",
         "video_room": "Stanza video",
         "view_message": "Vedi messaggio",
-        "warning": "Attenzione",
-        "welcome": "Benvenuti"
+        "warning": "Attenzione"
     },
     "composer": {
         "autocomplete": {
@@ -888,7 +882,6 @@
             "title": "Non fidato"
         },
         "unable_to_setup_keys_error": "Impossibile impostare le chiavi",
-        "unsupported": "Questo client non supporta la crittografia end-to-end.",
         "verification": {
             "accepting": "Accettazione…",
             "after_new_login": {
@@ -1390,8 +1383,6 @@
         "notification_settings_beta_caption": "Ti presentiamo un modo più semplice per modificare le impostazioni delle notifiche. Personalizza il tuo %(brand)s, proprio come piace a te.",
         "notification_settings_beta_title": "Impostazioni di notifica",
         "notifications": "Attiva il pannello delle notifiche nell'intestazione della stanza",
-        "oidc_native_flow": "Autenticazione nativa OIDC",
-        "oidc_native_flow_description": "⚠ ATTENZIONE: sperimentale. Usa l'autenticazione nativa OIDC se supportata dal server.",
         "render_reaction_images": "Mostra immagini personalizzate nelle reazioni",
         "render_reaction_images_description": "A volte chiamati \"emoji personalizzati\".",
         "report_to_moderators": "Segnala ai moderatori",
@@ -1510,7 +1501,6 @@
     "member_list": {
         "filter_placeholder": "Filtra membri della stanza",
         "invite_button_no_perms_tooltip": "Non hai l'autorizzazione per invitare utenti",
-        "invited_list_heading": "Invitato/a",
         "power_label": "%(userName)s (poteri %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Membri stanza",
@@ -1557,61 +1547,15 @@
         "m.key.verification.request": "%(name)s sta richiedendo la verifica"
     },
     "onboarding": {
-        "apple_trademarks": "App Store® e il logo Apple® sono marchi registrati di Apple Inc.",
-        "community_messaging_action": "Trova la tua gente",
-        "community_messaging_description": "Mantieni il possesso e il controllo delle discussioni nella comunità.\nScalabile per supportarne milioni, con solida moderazione e interoperabilità.",
-        "community_messaging_title": "Possesso della comunità",
-        "complete_these": "Completa questi per ottenere il meglio da %(brand)s",
         "create_room": "Crea una chat di gruppo",
-        "download_app": "Scarica %(brand)s",
-        "download_app_action": "Scarica app",
-        "download_app_description": "Non perderti niente portando %(brand)s con te",
-        "download_app_store": "Scarica dall'App Store",
-        "download_brand": "Scarica %(brand)s",
-        "download_brand_desktop": "Scarica %(brand)s Desktop",
-        "download_f_droid": "Ottienilo su F-Droid",
-        "download_google_play": "Ottienilo su Google Play",
-        "enable_notifications": "Attiva le notifiche",
-        "enable_notifications_action": "Attiva le notifiche",
-        "enable_notifications_description": "Non perderti una risposta o un messaggio importante",
         "explore_rooms": "Esplora le stanze pubbliche",
-        "find_community_members": "Trova e invita i membri della tua comunità",
-        "find_coworkers": "Trova e invita i tuoi colleghi",
-        "find_friends": "Trova e invita i tuoi amici",
-        "find_friends_action": "Trova amici",
-        "find_friends_description": "Sei qui per questo, quindi facciamolo",
-        "find_people": "Trova persone",
-        "free_e2ee_messaging_unlimited_voip": "Con messaggi gratis cifrati end-to-end e chiamate voce e video illimitate, %(brand)s è un ottimo modo per restare in contatto.",
-        "get_stuff_done": "Porta a termine il lavoro trovando i tuoi colleghi",
-        "google_trademarks": "Google Play e il logo Google Play sono marchi registrati di Google LLC.",
         "has_avatar_label": "Ottimo, ciò aiuterà le persone a capire che sei tu",
         "intro_byline": "Prendi il controllo delle tue conversazioni.",
         "intro_welcome": "Benvenuti su %(appName)s",
         "no_avatar_label": "Aggiungi una foto in modo che le persone ti riconoscano.",
-        "only_n_steps_to_go": {
-            "one": "Solo %(count)s passo per iniziare",
-            "other": "Solo %(count)s passi per iniziare"
-        },
-        "personal_messaging_action": "Inizia la prima conversazione",
-        "personal_messaging_title": "Messaggi sicuri per amici e famiglia",
-        "qr_or_app_links": "%(qrCode)s o %(appLinks)s",
         "send_dm": "Invia un messaggio diretto",
-        "set_up_profile": "Imposta il tuo profilo",
-        "set_up_profile_action": "Il tuo profilo",
-        "set_up_profile_description": "Assicurati che le persone sappiano che sei veramente tu",
-        "use_case_community_messaging": "Membri di comunità online",
-        "use_case_heading1": "Sei dentro",
-        "use_case_heading2": "Con chi parlerai di più?",
-        "use_case_heading3": "Vi aiuteremo a connettervi.",
-        "use_case_personal_messaging": "Amici e famiglia",
-        "use_case_work_messaging": "Colleghi e squadre",
         "welcome_detail": "Alcuni consigli per iniziare",
-        "welcome_to_brand": "Benvenuti in %(brand)s",
-        "welcome_user": "Benvenuto/a %(name)s",
-        "work_messaging_action": "Trova i tuoi colleghi",
-        "work_messaging_title": "Messaggi sicuri per il lavoro",
-        "you_did_it": "Ce l'hai fatta!",
-        "you_made_it": "Ce l'hai fatta!"
+        "welcome_user": "Benvenuto/a %(name)s"
     },
     "pill": {
         "permalink_other_room": "Messaggio in %(room)s",
@@ -1663,7 +1607,6 @@
         "custom_level": "Livello personalizzato",
         "default": "Predefinito",
         "label": "Livello poteri",
-        "mod": "Moderatore",
         "moderator": "Moderatore",
         "restricted": "Limitato"
     },
@@ -2531,7 +2474,6 @@
             "room_directory_heading": "Elenco delle stanze",
             "room_list_heading": "Elenco stanze",
             "show_avatars_pills": "Mostra gli avatar nelle citazioni di utenti, stanze ed eventi",
-            "show_checklist_shortcuts": "Mostra scorciatoia per l'elenco di benvenuto sopra la lista stanze",
             "show_polls_button": "Mostra pulsante sondaggi",
             "surround_text": "Circonda il testo selezionato quando si digitano caratteri speciali",
             "time_heading": "Visualizzazione dell'ora"
@@ -2893,7 +2835,6 @@
         "invite": "Invita persone",
         "invite_description": "Invita con email o nome utente",
         "invite_link": "Condividi collegamento di invito",
-        "invite_this_space": "Invita in questo spazio",
         "joining_space": "Entrata in corso",
         "landing_welcome": "Ti diamo il benvenuto in <name/>",
         "leave_dialog_action": "Esci dallo spazio",
@@ -3254,7 +3195,9 @@
             "sent": "%(senderName)s ha mandato un invito a %(targetDisplayName)s per unirsi alla stanza."
         },
         "m.room.tombstone": "%(senderDisplayName)s ha aggiornato questa stanza.",
-        "m.room.topic": "%(senderDisplayName)s ha modificato l'argomento in \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s ha modificato l'argomento in \"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s ha inviato uno sticker.",
         "m.video": {
             "error_decrypting": "Errore decifratura video"
@@ -3531,14 +3474,6 @@
         "ban_room_confirm_title": "Bandisci da %(roomName)s",
         "ban_space_everything": "Bandiscilo ovunque io possa farlo",
         "ban_space_specific": "Bandiscilo da cose specifiche dove posso farlo",
-        "count_of_sessions": {
-            "other": "%(count)s sessioni",
-            "one": "%(count)s sessione"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s sessioni verificate",
-            "one": "1 sessione verificata"
-        },
         "deactivate_confirm_action": "Disattiva utente",
         "deactivate_confirm_description": "Disattivare questo utente lo disconnetterà e ne impedirà nuovi accessi. In aggiunta, abbandonerà tutte le stanze in cui è presente. Questa azione non può essere annullata. Sei sicuro di volere disattivare questo utente?",
         "deactivate_confirm_title": "Disattivare l'utente?",
@@ -3549,15 +3484,12 @@
         "disinvite_button_room": "Disinvita dalla stanza",
         "disinvite_button_room_name": "Annulla l'invito da %(roomName)s",
         "disinvite_button_space": "Disinvita dallo spazio",
-        "edit_own_devices": "Modifica dispositivi",
         "error_ban_user": "Ban utente fallito",
         "error_deactivate": "Disattivazione utente fallita",
         "error_kicking_user": "Rimozione utente fallita",
         "error_mute_user": "Impossibile silenziare l'utente",
         "error_revoke_3pid_invite_description": "Impossibile revocare l'invito. Il server potrebbe avere un problema temporaneo o non si dispone di autorizzazioni sufficienti per revocare l'invito.",
         "error_revoke_3pid_invite_title": "Revoca dell'invito fallita",
-        "hide_sessions": "Nascondi sessione",
-        "hide_verified_sessions": "Nascondi sessioni verificate",
         "ignore_confirm_description": "Tutti i messaggi e gli inviti da questo utente verranno nascosti. Vuoi davvero ignorarli?",
         "ignore_confirm_title": "Ignora %(user)s",
         "invited_by": "Invitato/a da %(sender)s",

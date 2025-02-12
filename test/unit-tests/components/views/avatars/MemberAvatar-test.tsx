@@ -2,14 +2,14 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { getByTestId, render, waitFor } from "jest-matrix-react";
 import { mocked } from "jest-mock";
-import { MatrixClient, PendingEventOrdering, Room, RoomMember } from "matrix-js-sdk/src/matrix";
-import React, { ComponentProps } from "react";
+import { type MatrixClient, PendingEventOrdering, Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import React, { type ComponentProps } from "react";
 
 import MemberAvatar from "../../../../../src/components/views/avatars/MemberAvatar";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";

@@ -2,18 +2,18 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import { mocked } from "jest-mock";
-import { render, RenderResult, screen, waitFor, cleanup } from "jest-matrix-react";
+import { render, type RenderResult, screen, waitFor, cleanup } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { MatrixClient, createClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, createClient } from "matrix-js-sdk/src/matrix";
 
 import ForgotPassword from "../../../../../src/components/structures/auth/ForgotPassword";
-import { ValidatedServerConfig } from "../../../../../src/utils/ValidatedServerConfig";
+import { type ValidatedServerConfig } from "../../../../../src/utils/ValidatedServerConfig";
 import { clearAllModals, filterConsole, stubClient, waitEnoughCyclesForModal } from "../../../../test-utils";
 import AutoDiscoveryUtils from "../../../../../src/utils/AutoDiscoveryUtils";
 

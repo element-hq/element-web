@@ -442,7 +442,6 @@
         "room_name": "Nome da sala",
         "rooms": "Salas",
         "secure_backup": "Copia Segura",
-        "security": "Seguridade",
         "select_all": "Seleccionar todos",
         "server": "Servidor",
         "settings": "Axustes",
@@ -461,7 +460,6 @@
         "thread": "Tema",
         "threads": "Conversas",
         "timeline": "Cronoloxía",
-        "trusted": "Confiable",
         "unencrypted": "Non cifrada",
         "unmute": "Non acalar",
         "unnamed_room": "Sala sen nome",
@@ -474,8 +472,7 @@
         "video": "Vídeo",
         "video_room": "Sala de vídeo",
         "view_message": "Ver mensaxe",
-        "warning": "Aviso",
-        "welcome": "Benvida"
+        "warning": "Aviso"
     },
     "composer": {
         "autocomplete": {
@@ -756,7 +753,6 @@
             "title": "Non confiable"
         },
         "unable_to_setup_keys_error": "Non se puideron configurar as chaves",
-        "unsupported": "Este cliente non soporta o cifrado extremo-a-extremo.",
         "verification": {
             "accepting": "Aceptando…",
             "after_new_login": {
@@ -1287,7 +1283,6 @@
     },
     "member_list": {
         "filter_placeholder": "Filtrar os participantes da conversa",
-        "invited_list_heading": "Convidada",
         "power_label": "%(userName)s (permiso %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Membros da sala",
@@ -1327,61 +1322,15 @@
         "m.key.verification.request": "%(name)s está pedindo a verificación"
     },
     "onboarding": {
-        "apple_trademarks": "App Store® e o Apple logo® son marcas de Apple Inc.",
-        "community_messaging_action": "Atopa a persoas",
-        "community_messaging_description": "Mantén o control e a propiedade sobre as conversas da comunidade.\nPodendo xestionar millóns de contas, con ferramentas para a moderación e a interoperabilidade.",
-        "community_messaging_title": "Propiedade da comunidade",
-        "complete_these": "Completa esto para sacarlle partido a %(brand)s",
         "create_room": "Crear unha Conversa en Grupo",
-        "download_app": "Descargar %(brand)s",
-        "download_app_action": "Descargar apps",
-        "download_app_description": "Non perdas nada e leva %(brand)s contigo",
-        "download_app_store": "Descargar na App Store",
-        "download_brand": "Descargar %(brand)s",
-        "download_brand_desktop": "Descargar %(brand)s Desktop",
-        "download_f_droid": "Descargar desde F-Droid",
-        "download_google_play": "Descargar desde Google Play",
-        "enable_notifications": "Activa as notificacións",
-        "enable_notifications_action": "Activa as notificacións",
-        "enable_notifications_description": "Non perdas as respostas e mensaxes importantes",
         "explore_rooms": "Explorar Salas Públicas",
-        "find_community_members": "Atopar e convidar a persoas da túa comunidade",
-        "find_coworkers": "Atopa e convida a colegas de traballo",
-        "find_friends": "Atopa e convida ás túas amizades",
-        "find_friends_action": "Atopar amizades",
-        "find_friends_description": "É a razón de que estés aquí, asi que imos",
-        "find_people": "Atopar persoas",
-        "free_e2ee_messaging_unlimited_voip": "%(brand)s é xenial para estar en contacto con amizades e familia, con mensaxes gratuítas cifradas de extremo-a-extremo e chamadas ilimintadas de voz e vídeo.",
-        "get_stuff_done": "Ponte ao choio e atopa a colegas de traballo",
-        "google_trademarks": "Google Play e o logo de Google Play son marcas de Google LLC.",
         "has_avatar_label": "Moi ben, así axudarás a que outras persoas te recoñezan",
         "intro_byline": "As túas conversas son túas.",
         "intro_welcome": "Benvida a %(appName)s",
         "no_avatar_label": "Engade unha foto así a xente recoñecerate.",
-        "only_n_steps_to_go": {
-            "one": "A só %(count)s paso de comezar",
-            "other": "Só %(count)s para comezar"
-        },
-        "personal_messaging_action": "Inicia o teu primeiro chat",
-        "personal_messaging_title": "Mensaxería segura para amizades e familia",
-        "qr_or_app_links": "%(qrCode)s ou %(appLinks)s",
         "send_dm": "Envía unha Mensaxe Directa",
-        "set_up_profile": "Configura o perfil",
-        "set_up_profile_action": "O teu perfil",
-        "set_up_profile_description": "Facilita que a xente saiba que es ti",
-        "use_case_community_messaging": "Membros de comunidades en liña",
-        "use_case_heading1": "Estás dentro",
-        "use_case_heading2": "Con quen vas falar máis a miúdo?",
-        "use_case_heading3": "Axudarémosche a atopalos.",
-        "use_case_personal_messaging": "Amizades e familia",
-        "use_case_work_messaging": "Persoas e equipos do traballo",
         "welcome_detail": "Ímosche axudar neste comezo",
-        "welcome_to_brand": "Benvida a %(brand)s",
-        "welcome_user": "Benvida %(name)s",
-        "work_messaging_action": "Atopa aos teus colegas",
-        "work_messaging_title": "Mensaxería segura para o traballo",
-        "you_did_it": "Xa está!",
-        "you_made_it": "Conseguíchelo!"
+        "welcome_user": "Benvida %(name)s"
     },
     "poll": {
         "create_poll_action": "Crear Enquisa",
@@ -2139,7 +2088,6 @@
             "rm_lifetime": "Duración do marcador de lectura (ms)",
             "rm_lifetime_offscreen": "Duración do marcador de lectura fóra de pantall (ms)",
             "room_list_heading": "Listaxe de Salas",
-            "show_checklist_shortcuts": "Mostrar atallo á lista de comprobacións de benvida sobre a lista de salas",
             "show_polls_button": "Mostrar botón de enquisas",
             "surround_text": "Rodea o texto seleccionado ao escribir caracteres especiais",
             "time_heading": "Mostrar hora"
@@ -2422,7 +2370,6 @@
         "invite": "Convidar persoas",
         "invite_description": "Convida con email ou nome de usuaria",
         "invite_link": "Compartir ligazón do convite",
-        "invite_this_space": "Convidar a este espazo",
         "joining_space": "Uníndote",
         "landing_welcome": "Benvida a <name/>",
         "leave_dialog_action": "Saír do espazo",
@@ -2755,7 +2702,9 @@
             "sent": "%(senderName)s enviou un convite a %(targetDisplayName)s para unirse a sala."
         },
         "m.room.tombstone": "%(senderDisplayName)s actualizou esta sala.",
-        "m.room.topic": "%(senderDisplayName)s cambiou o asunto a \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s cambiou o asunto a \"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s enviou un adhesivo.",
         "m.video": {
             "error_decrypting": "Fallo descifrando vídeo"
@@ -3013,14 +2962,6 @@
         "ban_room_confirm_title": "Vetar en %(roomName)s",
         "ban_space_everything": "Vetalos en tódolos sitios nos que eu poida",
         "ban_space_specific": "Vetalos en lugares específicos nos que eu poida",
-        "count_of_sessions": {
-            "other": "%(count)s sesións",
-            "one": "%(count)s sesión"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s sesións verificadas",
-            "one": "1 sesión verificada"
-        },
         "deactivate_confirm_action": "Desactivar usuaria",
         "deactivate_confirm_description": "Ao desactivar esta usuaria ficará desconectada e non poderá volver a acceder. Ademáis deixará todas as salas nas que estivese. Esta acción non ten volta, ¿desexas desactivar esta usuaria?",
         "deactivate_confirm_title": "¿Desactivar usuaria?",
@@ -3031,15 +2972,12 @@
         "disinvite_button_room": "Retirar convite á sala",
         "disinvite_button_room_name": "Retirar o convite para %(roomName)s",
         "disinvite_button_space": "Retirar convite ao espazo",
-        "edit_own_devices": "Editar dispositivos",
         "error_ban_user": "Fallo ao bloquear usuaria",
         "error_deactivate": "Fallo ao desactivar a usuaria",
         "error_kicking_user": "Fallou a eliminación da usuaria",
         "error_mute_user": "Fallo ó silenciar usuaria",
         "error_revoke_3pid_invite_description": "Non se revogou o convite. O servidor podería estar experimentando un problema temporal ou non tes permisos suficientes para revogar o convite.",
         "error_revoke_3pid_invite_title": "Fallo ao revogar o convite",
-        "hide_sessions": "Agochar sesións",
-        "hide_verified_sessions": "Agochar sesións verificadas",
         "invited_by": "Convidada por %(sender)s",
         "jump_to_rr_button": "Ir ao resgardo de lectura",
         "kick_button_room": "Eliminar da sala",

@@ -2,15 +2,15 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ComponentProps, useContext } from "react";
-import { ClientWidgetApi, IWidget, MatrixCapabilities } from "matrix-widget-api";
+import React, { type ComponentProps, useContext } from "react";
+import { type ClientWidgetApi, type IWidget, MatrixCapabilities } from "matrix-widget-api";
 import { logger } from "matrix-js-sdk/src/logger";
-import { ApprovalOpts, WidgetLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
-import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { type ApprovalOpts, WidgetLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
+import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 
 import IconizedContextMenu, { IconizedContextMenuOption, IconizedContextMenuOptionList } from "./IconizedContextMenu";
 import { ChevronFace } from "../../structures/ContextMenu";
@@ -71,7 +71,7 @@ const showDeleteButton = (canModify: boolean, onDeleteClick: undefined | (() => 
 
 const showSnapshotButton = (widgetMessaging: ClientWidgetApi | undefined): boolean => {
     return (
-        SettingsStore.getValue<boolean>("enableWidgetScreenshots") &&
+        SettingsStore.getValue("enableWidgetScreenshots") &&
         !!widgetMessaging?.hasCapability(MatrixCapabilities.Screenshots)
     );
 };

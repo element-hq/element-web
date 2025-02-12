@@ -2,13 +2,14 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2015-2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, SyntheticEvent, MouseEvent, StrictMode } from "react";
-import { MsgType } from "matrix-js-sdk/src/matrix";
+import React, { createRef, type SyntheticEvent, type MouseEvent, StrictMode } from "react";
+import { MsgType, PushRuleKind } from "matrix-js-sdk/src/matrix";
 import { TooltipProvider } from "@vector-im/compound-web";
+import { globToRegexp } from "matrix-js-sdk/src/utils";
 
 import * as HtmlUtils from "../../../HtmlUtils";
 import { formatDate } from "../../../DateUtils";
@@ -26,15 +27,16 @@ import QuestionDialog from "../dialogs/QuestionDialog";
 import MessageEditHistoryDialog from "../dialogs/MessageEditHistoryDialog";
 import EditMessageComposer from "../rooms/EditMessageComposer";
 import LinkPreviewGroup from "../rooms/LinkPreviewGroup";
-import { IBodyProps } from "./IBodyProps";
+import { type IBodyProps } from "./IBodyProps";
 import RoomContext from "../../../contexts/RoomContext";
 import AccessibleButton from "../elements/AccessibleButton";
 import { options as linkifyOpts } from "../../../linkify-matrix";
 import { getParentEventId } from "../../../utils/Reply";
 import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
-import { IEventTileOps } from "../rooms/EventTile";
+import { type IEventTileOps } from "../rooms/EventTile";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import CodeBlock from "./CodeBlock";
+import { Pill, PillType } from "../elements/Pill";
 import { ReactRootManager } from "../../../utils/react";
 
 interface IState {
@@ -100,6 +102,16 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                 }
             }
         }
+
+        // Highlight notification keywords using pills
+        const pushDetails = this.props.mxEvent.getPushDetails();
+        if (
+            pushDetails.rule?.enabled &&
+            pushDetails.rule.kind === PushRuleKind.ContentSpecific &&
+            pushDetails.rule.pattern
+        ) {
+            this.pillifyNotificationKeywords([content], this.regExpForKeywordPattern(pushDetails.rule.pattern));
+        }
     }
 
     private addCodeElement(pre: HTMLPreElement): void {
@@ -128,7 +140,8 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         if (!this.props.editState) {
             const stoppedEditing = prevProps.editState && !this.props.editState;
             const messageWasEdited = prevProps.replacingEventId !== this.props.replacingEventId;
-            if (messageWasEdited || stoppedEditing) {
+            const urlPreviewChanged = prevProps.showUrlPreview !== this.props.showUrlPreview;
+            if (messageWasEdited || stoppedEditing || urlPreviewChanged) {
                 this.applyFormatting();
             }
         }
@@ -207,6 +220,55 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
             node = node.nextSibling as Element;
         }
+    }
+
+    /**
+     * Marks the text that activated a push-notification keyword pattern.
+     */
+    private pillifyNotificationKeywords(nodes: ArrayLike<Element>, exp: RegExp): void {
+        let node: Node | null = nodes[0];
+        while (node) {
+            if (node.nodeType === Node.TEXT_NODE) {
+                const text = node.nodeValue;
+                if (!text) {
+                    node = node.nextSibling;
+                    continue;
+                }
+                const match = text.match(exp);
+                if (!match || match.length < 3) {
+                    node = node.nextSibling;
+                    continue;
+                }
+                const keywordText = match[2];
+                const idx = match.index! + match[1].length;
+                const before = text.substring(0, idx);
+                const after = text.substring(idx + keywordText.length);
+
+                const container = document.createElement("span");
+                const newContent = (
+                    <>
+                        {before}
+                        <TooltipProvider>
+                            <Pill text={keywordText} type={PillType.Keyword} />
+                        </TooltipProvider>
+                        {after}
+                    </>
+                );
+                this.reactRoots.render(newContent, container, node);
+
+                node.parentNode?.replaceChild(container, node);
+            } else if (node.childNodes && node.childNodes.length) {
+                this.pillifyNotificationKeywords(node.childNodes as NodeListOf<Element>, exp);
+            }
+
+            node = node.nextSibling;
+        }
+    }
+
+    private regExpForKeywordPattern(pattern: string): RegExp {
+        // Reflects the push notification pattern-matching implementation at
+        // https://github.com/matrix-org/matrix-js-sdk/blob/dbd7d26968b94700827bac525c39afff2c198e61/src/pushprocessor.ts#L570
+        return new RegExp("(^|\\W)(" + globToRegexp(pattern) + ")(\\W|$)", "i");
     }
 
     private findLinks(nodes: ArrayLike<Element>): string[] {
@@ -425,7 +487,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         const stripReply = !mxEvent.replacingEvent() && !!getParentEventId(mxEvent);
 
         const htmlOpts = {
-            disableBigEmoji: isEmote || !SettingsStore.getValue<boolean>("TextualBody.enableBigEmoji"),
+            disableBigEmoji: isEmote || !SettingsStore.getValue("TextualBody.enableBigEmoji"),
             // Part of Replies fallback support
             stripReplyFallback: stripReply,
         };

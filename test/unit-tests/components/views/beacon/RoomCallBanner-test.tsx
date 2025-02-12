@@ -2,15 +2,21 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { Room, PendingEventOrdering, MatrixClient, RoomMember, RoomStateEvent } from "matrix-js-sdk/src/matrix";
-import { ClientWidgetApi, Widget } from "matrix-widget-api";
+import {
+    Room,
+    PendingEventOrdering,
+    type MatrixClient,
+    type RoomMember,
+    RoomStateEvent,
+} from "matrix-js-sdk/src/matrix";
+import { type ClientWidgetApi, Widget } from "matrix-widget-api";
 import { act, cleanup, render, screen } from "jest-matrix-react";
-import { mocked, Mocked } from "jest-mock";
+import { mocked, type Mocked } from "jest-mock";
 
 import {
     mkRoomMember,

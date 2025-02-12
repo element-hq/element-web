@@ -419,7 +419,6 @@
         "room_name": "Nomo de ĉambro",
         "rooms": "Ĉambroj",
         "secure_backup": "Sekura savkopiado",
-        "security": "Sekureco",
         "settings": "Agordoj",
         "setup_secure_messages": "Agordi Sekurajn mesaĝojn",
         "show_more": "Montri pli",
@@ -436,7 +435,6 @@
         "thread": "Fadeno",
         "threads": "Fadenoj",
         "timeline": "Historio",
-        "trusted": "Fidata",
         "unencrypted": "Neĉifrita",
         "unmute": "Malsilentigi",
         "unnamed_room": "Sennoma Ĉambro",
@@ -677,7 +675,6 @@
             "title": "Nefidata"
         },
         "unable_to_setup_keys_error": "Ne povas agordi ŝlosilojn",
-        "unsupported": "Ĉi tiu kliento ne subtenas tutvojan ĉifradon.",
         "verification": {
             "accepting": "Akceptante…",
             "cancelled": "Vi nuligis kontrolon.",
@@ -1125,7 +1122,6 @@
     },
     "member_list": {
         "filter_placeholder": "Filtri ĉambranojn",
-        "invited_list_heading": "Invititaj",
         "power_label": "%(userName)s (povnivelo je %(powerLevelNumber)s)"
     },
     "message_edit_dialog_title": "Redaktoj de mesaĝoj",
@@ -1193,7 +1189,6 @@
         "custom_level": "Propra nivelo",
         "default": "Ordinara",
         "label": "Povnivelo",
-        "mod": "Reguligisto",
         "moderator": "Ĉambrestro",
         "restricted": "Limigita"
     },
@@ -2070,7 +2065,6 @@
         "invite": "Inviti personojn",
         "invite_description": "Inviti per retpoŝtadreso aŭ uzantonomo",
         "invite_link": "Diskonigi invitan ligilon",
-        "invite_this_space": "Inviti al ĉi tiu aro",
         "landing_welcome": "Bonvenu al <name/>",
         "leave_dialog_action": "Forlasi aron",
         "leave_dialog_description": "Vi foriros de <spaceName/>.",
@@ -2346,7 +2340,9 @@
             "sent": "%(senderName)s sendis ĉambran inviton al %(targetDisplayName)s."
         },
         "m.room.tombstone": "%(senderDisplayName)s gradaltigis ĉi tiun ĉambron.",
-        "m.room.topic": "%(senderDisplayName)s ŝanĝis la temon al « %(topic)s ».",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s ŝanĝis la temon al « %(topic)s »."
+        },
         "m.sticker": "%(senderDisplayName)s sendis glumarkon.",
         "m.video": {
             "error_decrypting": "Malĉifro de filmo eraris"
@@ -2552,14 +2548,6 @@
     },
     "user_info": {
         "admin_tools_section": "Estriloj",
-        "count_of_sessions": {
-            "other": "%(count)s salutaĵoj",
-            "one": "%(count)s salutaĵo"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s kontrolitaj salutaĵoj",
-            "one": "1 kontrolita salutaĵo"
-        },
         "deactivate_confirm_action": "Malaktivigi uzanton",
         "deactivate_confirm_description": "Malaktivigo de ĉi tiu uzanto adiaŭigos ĝin, kaj malebligos, ke ĝi resalutu. Plie, ĝi foriros de ĉiuj enataj ĉambroj. Tiu ago ne povas malfariĝi. Ĉu vi certe volas malaktivigi ĉi tiun uzanton?",
         "deactivate_confirm_title": "Ĉu malaktivigi uzanton?",
@@ -2567,14 +2555,11 @@
         "demote_self_confirm_description_space": "Vi ne povos malfari ĉi tiun ŝanĝon, ĉar vi malrangaltigas vin mem; se vi estas la lasta altranga uzanto de la aro, vi ne plu povos rehavi viajn rajtojn.",
         "demote_self_confirm_room": "Vi ne povos malfari tiun ŝanĝon, ĉar vi malrangaltigas vin mem; se vi estas la lasta povohava uzanto en la ĉambro, estos neeble vian povon rehavi.",
         "demote_self_confirm_title": "Ĉu malrangaltigi vin mem?",
-        "edit_own_devices": "Redakti aparatojn",
         "error_ban_user": "Malsukcesis forbari uzanton",
         "error_deactivate": "Malsukcesis malaktivigi uzanton",
         "error_mute_user": "Malsukcesis silentigi uzanton",
         "error_revoke_3pid_invite_description": "Ne povis senvalidigi inviton. Aŭ la servilo nun trairas problemon, aŭ vi ne havas sufiĉajn permesojn.",
         "error_revoke_3pid_invite_title": "Malsukcesis senvalidigi inviton",
-        "hide_sessions": "Kaŝi salutaĵojn",
-        "hide_verified_sessions": "Kaŝi kontrolitajn salutaĵojn",
         "invited_by": "Invitita de %(sender)s",
         "jump_to_rr_button": "Salti al legokonfirmo",
         "promote_warning": "Tiun ĉi ŝanĝon vi ne povos malfari, ĉar vi donas al la uzanto la saman povnivelon, kiun havas vi mem.",

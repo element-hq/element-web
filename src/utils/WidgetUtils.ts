@@ -3,18 +3,19 @@ Copyright 2024 New Vector Ltd.
 Copyright 2017-2020 The Matrix.org Foundation C.I.C.
 Copyright 2019 Travis Ralston
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { useCallback, useEffect, useState } from "react";
 import { base32 } from "rfc4648";
-import { IWidget, IWidgetData } from "matrix-widget-api";
-import { Room, ClientEvent, MatrixClient, RoomStateEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { capitalize } from "lodash";
+import { type IWidget, type IWidgetData } from "matrix-widget-api";
+import { type Room, ClientEvent, type MatrixClient, RoomStateEvent, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
-import { randomString, randomLowercaseString, randomUppercaseString } from "matrix-js-sdk/src/randomstring";
+import { LOWERCASE, secureRandomString, secureRandomStringFrom } from "matrix-js-sdk/src/randomstring";
 
 import PlatformPeg from "../PlatformPeg";
 import SdkConfig from "../SdkConfig";
@@ -25,27 +26,17 @@ import { WidgetType } from "../widgets/WidgetType";
 import { Jitsi } from "../widgets/Jitsi";
 import { objectClone } from "./objects";
 import { _t } from "../languageHandler";
-import WidgetStore, { IApp, isAppWidget } from "../stores/WidgetStore";
+import WidgetStore, { type IApp, isAppWidget } from "../stores/WidgetStore";
 import { parseUrl } from "./UrlUtils";
 import { useEventEmitter } from "../hooks/useEventEmitter";
 import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
+import { type IWidgetEvent, type UserWidget } from "./WidgetUtils-types";
 
 // How long we wait for the state event echo to come back from the server
 // before waitFor[Room/User]Widget rejects its promise
 const WIDGET_WAIT_TIME = 20000;
 
-export interface IWidgetEvent {
-    id: string;
-    type: string;
-    sender: string;
-    // eslint-disable-next-line camelcase
-    state_key: string;
-    content: IApp;
-}
-
-export interface UserWidget extends Omit<IWidgetEvent, "content"> {
-    content: IWidget & Partial<IApp>;
-}
+export type { IWidgetEvent, UserWidget };
 
 export default class WidgetUtils {
     /**
@@ -437,7 +428,10 @@ export default class WidgetUtils {
     ): Promise<void> {
         const domain = Jitsi.getInstance().preferredDomain;
         const auth = (await Jitsi.getInstance().getJitsiAuth()) ?? undefined;
-        const widgetId = randomString(24); // Must be globally unique
+
+        // Must be globally unique, although predicatablity is not important, the js-sdk has functions to generate
+        // secure ranom strings, and speed is not important here.
+        const widgetId = secureRandomString(24);
 
         let confId: string;
         if (auth === "openidtoken-jwt") {
@@ -447,8 +441,8 @@ export default class WidgetUtils {
             // https://github.com/matrix-org/prosody-mod-auth-matrix-user-verification
             confId = base32.stringify(new TextEncoder().encode(roomId), { pad: false });
         } else {
-            // Create a random conference ID
-            confId = `Jitsi${randomUppercaseString(1)}${randomLowercaseString(23)}`;
+            // Create a random conference ID (capitalised so the name looks sensible in Jitsi)
+            confId = `Jitsi${capitalize(secureRandomStringFrom(24, LOWERCASE))}`;
         }
 
         // TODO: Remove URL hacks when the mobile clients eventually support v2 widgets

@@ -2,15 +2,15 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { mocked, MockedObject } from "jest-mock";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
-import { CryptoApi, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
-import { fireEvent, render, RenderResult, screen } from "jest-matrix-react";
+import { mocked, type MockedObject } from "jest-mock";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type CryptoApi, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
+import { fireEvent, render, type RenderResult, screen } from "jest-matrix-react";
 
 import { filterConsole, getMockClientWithEventEmitter, mockClientMethodsCrypto } from "../../../../test-utils";
 import LogoutDialog from "../../../../../src/components/views/dialogs/LogoutDialog";
@@ -42,10 +42,18 @@ describe("LogoutDialog", () => {
         expect(rendered.container).toMatchSnapshot();
     });
 
-    it("shows a regular dialog if backups are working", async () => {
+    it("shows a regular dialog if backups and recovery are working", async () => {
         mockCrypto.getActiveSessionBackupVersion.mockResolvedValue("1");
+        mockCrypto.isSecretStorageReady.mockResolvedValue(true);
         const rendered = renderComponent();
         await rendered.findByText("Are you sure you want to sign out?");
+    });
+
+    it("prompts user to set up recovery if backups are enabled but recovery isn't", async () => {
+        mockCrypto.getActiveSessionBackupVersion.mockResolvedValue("1");
+        mockCrypto.isSecretStorageReady.mockResolvedValue(false);
+        const rendered = renderComponent();
+        await rendered.findByText("You'll lose access to your encrypted messages");
     });
 
     it("Prompts user to connect backup if there is a backup on the server", async () => {

@@ -2,11 +2,11 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2015, 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { RoomMember, User, Room, ResizeMethod } from "matrix-js-sdk/src/matrix";
+import { type RoomMember, type User, type Room, type ResizeMethod } from "matrix-js-sdk/src/matrix";
 import { useIdColorHash } from "@vector-im/compound-web";
 
 import DMRoomMap from "./utils/DMRoomMap";

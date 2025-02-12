@@ -2,23 +2,22 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { createContext } from "react";
 
 import defaultDispatcher from "../dispatcher/dispatcher";
 import LegacyCallHandler from "../LegacyCallHandler";
 import { PosthogAnalytics } from "../PosthogAnalytics";
 import { SlidingSyncManager } from "../SlidingSyncManager";
-import { AccountPasswordStore } from "../stores/AccountPasswordStore";
 import { MemberListStore } from "../stores/MemberListStore";
 import { RoomNotificationStateStore } from "../stores/notifications/RoomNotificationStateStore";
 import RightPanelStore from "../stores/right-panel/RightPanelStore";
 import { RoomViewStore } from "../stores/RoomViewStore";
-import SpaceStore, { SpaceStoreClass } from "../stores/spaces/SpaceStore";
+import SpaceStore, { type SpaceStoreClass } from "../stores/spaces/SpaceStore";
 import TypingStore from "../stores/TypingStore";
 import { UserProfilesStore } from "../stores/UserProfilesStore";
 import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
@@ -63,7 +62,6 @@ export class SdkContextClass {
     protected _SpaceStore?: SpaceStoreClass;
     protected _LegacyCallHandler?: LegacyCallHandler;
     protected _TypingStore?: TypingStore;
-    protected _AccountPasswordStore?: AccountPasswordStore;
     protected _UserProfilesStore?: UserProfilesStore;
     protected _OidcClientStore?: OidcClientStore;
 
@@ -147,13 +145,6 @@ export class SdkContextClass {
             window.mxTypingStore = this._TypingStore;
         }
         return this._TypingStore;
-    }
-
-    public get accountPasswordStore(): AccountPasswordStore {
-        if (!this._AccountPasswordStore) {
-            this._AccountPasswordStore = new AccountPasswordStore();
-        }
-        return this._AccountPasswordStore;
     }
 
     public get userProfilesStore(): UserProfilesStore {

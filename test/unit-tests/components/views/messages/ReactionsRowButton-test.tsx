@@ -2,17 +2,17 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 Beeper
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { IContent, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { type IContent, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { render } from "jest-matrix-react";
 
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { getMockClientWithEventEmitter } from "../../../../test-utils";
-import ReactionsRowButton, { IProps } from "../../../../../src/components/views/messages/ReactionsRowButton";
+import ReactionsRowButton, { type IProps } from "../../../../../src/components/views/messages/ReactionsRowButton";
 
 describe("ReactionsRowButton", () => {
     const userId = "@alice:server";

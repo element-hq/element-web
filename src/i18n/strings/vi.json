@@ -377,7 +377,6 @@
             "one": "và một cái khác…",
             "other": "và %(count)s khác…"
         },
-        "android": "Android",
         "appearance": "Giao diện",
         "application": "Ứng dụng",
         "are_you_sure": "Bạn có chắc không?",
@@ -414,7 +413,6 @@
         "identity_server": "Máy chủ định danh",
         "image": "Hình ảnh",
         "integration_manager": "Quản lý tích hợp",
-        "ios": "iOS",
         "joined": "Đã tham gia",
         "labs": "Chức năng thí nghiệm",
         "legal": "Pháp lý",
@@ -468,7 +466,6 @@
         "rooms": "Phòng",
         "saving": "Đang lưu…",
         "secure_backup": "Sao lưu bảo mật",
-        "security": "Bảo mật",
         "select_all": "Chọn tất cả",
         "server": "Máy chủ",
         "settings": "Cài đặt",
@@ -487,7 +484,6 @@
         "thread": "Chủ đề",
         "threads": "Chủ đề",
         "timeline": "Dòng thời gian",
-        "trusted": "Tin cậy",
         "unavailable": "không có sẵn",
         "unencrypted": "Không được mã hóa",
         "unmute": "Bật tiếng",
@@ -503,8 +499,7 @@
         "video": "Truyền hình",
         "video_room": "Phòng truyền hình",
         "view_message": "Xem tin nhăn",
-        "warning": "Cảnh báo",
-        "welcome": "Chào mừng"
+        "warning": "Cảnh báo"
     },
     "composer": {
         "autocomplete": {
@@ -799,7 +794,6 @@
             "title": "Không tin cậy"
         },
         "unable_to_setup_keys_error": "Không thể thiết lập khóa",
-        "unsupported": "Ứng dụng khách này không hỗ trợ mã hóa đầu cuối.",
         "verification": {
             "accepting": "Đang chấp nhận…",
             "after_new_login": {
@@ -1349,7 +1343,6 @@
     "member_list": {
         "filter_placeholder": "Lọc thành viên phòng",
         "invite_button_no_perms_tooltip": "Bạn không có quyền mời người khác",
-        "invited_list_heading": "Đã mời",
         "power_label": "%(userName)s (chỉ số %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Thành viên phòng",
@@ -1391,53 +1384,15 @@
         "m.key.verification.request": "%(name)s đang yêu cầu xác thực"
     },
     "onboarding": {
-        "community_messaging_action": "Tìm người thân",
-        "community_messaging_description": "Giữ quyền sở hữu và kiểm soát thảo luận cộng đồng.\nMở rộng quy mô để hỗ trợ hàng triệu người, bằng khả năng kiểm duyệt và tương tác mạnh mẽ.",
-        "community_messaging_title": "Làm chủ cộng đồng",
-        "complete_these": "Hoàn thành những việc sau để tận dụng tất cả của %(brand)s",
         "create_room": "Tạo một cuộc trò chuyện nhóm",
-        "download_app": "Tải xuống %(brand)s",
-        "download_app_action": "Tải ứng dụng",
-        "download_app_description": "Không bỏ lỡ gì bằng cách mang %(brand)s bên bạn",
-        "download_app_store": "Tải trên App Store",
-        "download_brand": "Tải xuống %(brand)s",
-        "download_f_droid": "Tải trên F-Droid",
-        "download_google_play": "Tải trên CH Play",
-        "enable_notifications": "Bật thông báo",
-        "enable_notifications_action": "Kích hoạt thông báo",
-        "enable_notifications_description": "Đừng bỏ lỡ một tin nhắn trả lời hay tin nhắn quan trọng",
         "explore_rooms": "Khám phá các phòng chung",
-        "find_community_members": "Tìm và mời các thành viên của cộng đồng bạn",
-        "find_coworkers": "Tìm và mời các đồng nghiệp của bạn",
-        "find_friends": "Tìm và mời bạn bè",
-        "find_friends_action": "Tìm bạn bè",
-        "find_friends_description": "Đó là lí do bạn ở đây, vậy nên hãy bắt đầu nào",
-        "find_people": "Tìm mọi người",
-        "free_e2ee_messaging_unlimited_voip": "Với mã hóa đầu cuối miễn phí, cuộc gọi thoại và truyền hình không giới hạn, %(brand)s là cách tuyệt vời để giữ liên lạc.",
         "has_avatar_label": "Tuyệt vời, điều đó sẽ giúp mọi người biết đó là bạn",
         "intro_byline": "Sở hữu các cuộc trò chuyện của bạn.",
         "intro_welcome": "Chào mừng bạn đến với %(appName)s",
         "no_avatar_label": "Thêm ảnh để mọi người biết đó là bạn.",
-        "only_n_steps_to_go": {
-            "one": "Chỉ %(count)s bước nữa thôi",
-            "other": "Chỉ %(count)s bước nữa thôi"
-        },
-        "personal_messaging_action": "Bắt đầu cuộc trò chuyện đầu tiên",
-        "personal_messaging_title": "Tin nhắn bảo mật cho bạn bè và gia đình",
         "send_dm": "Gửi tin nhắn trực tiếp",
-        "set_up_profile": "Thiết lập hồ sơ của bạn",
-        "set_up_profile_action": "Hồ sơ",
-        "set_up_profile_description": "Đảm bảo mọi người nhận ra bạn",
-        "use_case_community_messaging": "Thành viên cộng đồng trực tuyến",
-        "use_case_personal_messaging": "Bạn bè và gia đình",
-        "use_case_work_messaging": "Đồng nghiệp và nhóm",
         "welcome_detail": "Bây giờ, hãy giúp bạn bắt đầu",
-        "welcome_to_brand": "Chào mừng bạn tới %(brand)s",
-        "welcome_user": "Chào mừng %(name)s",
-        "work_messaging_action": "Tìm các đồng nghiệp của bạn",
-        "work_messaging_title": "Tin nhắn bảo mật cho công việc",
-        "you_did_it": "Hoàn thành rồi!",
-        "you_made_it": "Bạn làm rồi!"
+        "welcome_user": "Chào mừng %(name)s"
     },
     "pill": {
         "permalink_other_room": "Tin nhắn trong %(room)s",
@@ -1482,7 +1437,6 @@
         "custom_level": "Cấp độ tùy chọn",
         "default": "Mặc định",
         "label": "Cấp độ sức mạnh",
-        "mod": "Người quản trị",
         "moderator": "Điều phối viên",
         "restricted": "Bị hạn chế"
     },
@@ -2603,7 +2557,6 @@
         "invite": "Mời mọi người",
         "invite_description": "Mời bằng thư điện tử hoặc tên người dùng",
         "invite_link": "Chia sẻ liên kết mời",
-        "invite_this_space": "Mời vào space này",
         "joining_space": "Đang tham gia",
         "landing_welcome": "Chào mừng đến với <name />",
         "leave_dialog_action": "Rời space",
@@ -2933,7 +2886,9 @@
             "sent": "%(senderName)s đã mời %(targetDisplayName)s tham gia phòng."
         },
         "m.room.tombstone": "%(senderDisplayName)s đã nâng cấp phòng này.",
-        "m.room.topic": "%(senderDisplayName)s đổi chủ đề thành \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s đổi chủ đề thành \"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s đã gửi một sticker.",
         "m.video": {
             "error_decrypting": "Lỗi khi giải mã video"
@@ -3185,14 +3140,6 @@
         "ban_room_confirm_title": "Cấm từ %(roomName)s",
         "ban_space_everything": "Cấm họ khỏi mọi thứ mà tôi có thể",
         "ban_space_specific": "Cấm họ khỏi những thứ cụ thể mà tôi có thể",
-        "count_of_sessions": {
-            "one": "%(count)s phiên",
-            "other": "%(count)s phiên"
-        },
-        "count_of_verified_sessions": {
-            "one": "1 phiên đã xác thực",
-            "other": "%(count)s phiên đã xác thực"
-        },
         "deactivate_confirm_action": "Hủy kích hoạt người dùng",
         "deactivate_confirm_description": "Việc hủy kích hoạt người dùng này sẽ đăng xuất họ và ngăn họ đăng nhập lại. Ngoài ra, họ sẽ rời khỏi tất cả các phòng mà họ đang ở. Không thể hoàn tác hành động này. Bạn có chắc chắn muốn hủy kích hoạt người dùng này không?",
         "deactivate_confirm_title": "Hủy kích hoạt người dùng?",
@@ -3203,15 +3150,12 @@
         "disinvite_button_room": "Không mời vào phòng nữa",
         "disinvite_button_room_name": "Hủy mời từ %(roomName)s",
         "disinvite_button_space": "Hủy lời mời vào space",
-        "edit_own_devices": "Chỉnh sửa thiết bị",
         "error_ban_user": "Đã có lỗi khi chặn người dùng",
         "error_deactivate": "Không thể hủy kích hoạt người dùng",
         "error_kicking_user": "Không thể loại bỏ người dùng",
         "error_mute_user": "Không thể tắt tiếng người dùng",
         "error_revoke_3pid_invite_description": "Không thể thu hồi lời mời. Máy chủ có thể đang gặp sự cố tạm thời hoặc bạn không có đủ quyền để thu hồi lời mời.",
         "error_revoke_3pid_invite_title": "Không thể thu hồi lời mời",
-        "hide_sessions": "Ẩn các phiên",
-        "hide_verified_sessions": "Ẩn các phiên đã xác thực",
         "ignore_confirm_description": "Toàn bộ tin nhắn và lời mời từ người dùng này sẽ bị ẩn. Bạn có muốn tảng lờ người dùng?",
         "ignore_confirm_title": "Tảng lờ %(user)s",
         "invited_by": "Được %(sender)s mời",

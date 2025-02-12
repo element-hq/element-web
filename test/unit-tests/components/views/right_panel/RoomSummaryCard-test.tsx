@@ -2,15 +2,15 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import { render, fireEvent, screen, waitFor } from "jest-matrix-react";
-import { EventType, MatrixEvent, Room, MatrixClient, JoinRule } from "matrix-js-sdk/src/matrix";
+import { EventType, MatrixEvent, Room, type MatrixClient, JoinRule } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { mocked, MockedObject } from "jest-mock";
+import { mocked, type MockedObject } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
@@ -338,19 +338,18 @@ describe("<RoomSummaryCard />", () => {
         });
 
         it("does not show public room label for a DM", async () => {
-            mockClient.getAccountData.mockImplementation(
-                (eventType) =>
-                    ({
-                        [EventType.Direct]: new MatrixEvent({
-                            type: EventType.Direct,
-                            content: {
-                                "@bob:sesame.st": ["some-room-id"],
-                                // this room is a DM with ernie
-                                "@ernie:sesame.st": ["some-other-room-id", room.roomId],
-                            },
-                        }),
-                    })[eventType],
-            );
+            mockClient.getAccountData.mockImplementation((eventType) => {
+                if (eventType === EventType.Direct) {
+                    return new MatrixEvent({
+                        type: EventType.Direct,
+                        content: {
+                            "@bob:sesame.st": ["some-room-id"],
+                            // this room is a DM with ernie
+                            "@ernie:sesame.st": ["some-other-room-id", room.roomId],
+                        },
+                    });
+                }
+            });
             getComponent();
 
             await flushPromises();

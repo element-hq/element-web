@@ -2,13 +2,13 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import { fireEvent, render, waitFor } from "jest-matrix-react";
-import { IContent, MatrixClient, MsgType } from "matrix-js-sdk/src/matrix";
+import { type IContent, type MatrixClient, MsgType } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 
@@ -26,7 +26,7 @@ import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import DocumentOffset from "../../../../../src/editor/offset";
 import { Layout } from "../../../../../src/settings/enums/Layout";
-import { IRoomState, MainSplitContentType } from "../../../../../src/components/structures/RoomView";
+import { type IRoomState, MainSplitContentType } from "../../../../../src/components/structures/RoomView";
 import { mockPlatformPeg } from "../../../../test-utils/platform";
 import { doMaybeLocalRoomAction } from "../../../../../src/utils/local-room";
 import { addTextToComposer } from "../../../../test-utils/composer";

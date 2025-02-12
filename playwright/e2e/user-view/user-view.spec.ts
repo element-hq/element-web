@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -19,7 +19,6 @@ test.describe("UserView", () => {
 
         const rightPanel = page.locator("#mx_RightPanel");
         await expect(rightPanel.getByRole("heading", { name: bot.credentials.displayName, exact: true })).toBeVisible();
-        await expect(rightPanel.getByText("1 session")).toBeVisible();
         await expect(rightPanel).toMatchScreenshot("user-info.png", {
             mask: [page.locator(".mx_UserInfo_profile_mxid")],
             css: `

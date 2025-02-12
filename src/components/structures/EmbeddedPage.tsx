@@ -3,7 +3,7 @@ Copyright 2019-2024 New Vector Ltd.
 Copyright 2017 Vector Creations Ltd
 Copyright 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -12,12 +12,12 @@ import sanitizeHtml from "sanitize-html";
 import classnames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _t, TranslationKey } from "../../languageHandler";
+import { _t, type TranslationKey } from "../../languageHandler";
 import dis from "../../dispatcher/dispatcher";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import AutoHideScrollbar from "./AutoHideScrollbar";
-import { ActionPayload } from "../../dispatcher/payloads";
+import { type ActionPayload } from "../../dispatcher/payloads";
 
 interface IProps {
     // URL to request embedded page content from

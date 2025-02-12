@@ -4,21 +4,21 @@ Copyright 2019 The Matrix.org Foundation C.I.C.
 Copyright 2018, 2019 New Vector Ltd
 Copyright 2017 Vector Creations Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import FocusLock from "react-focus-lock";
 import classNames from "classnames";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import AccessibleButton from "../elements/AccessibleButton";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import Heading from "../typography/Heading";
-import { PosthogScreenTracker, ScreenName } from "../../../PosthogTrackers";
+import { PosthogScreenTracker, type ScreenName } from "../../../PosthogTrackers";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 

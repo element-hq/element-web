@@ -3,14 +3,14 @@ Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 Copyright 2019 New Vector Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "jest-matrix-react";
-import { createClient, MatrixClient, MatrixError, OidcClientConfig } from "matrix-js-sdk/src/matrix";
-import { mocked, MockedObject } from "jest-mock";
+import { createClient, type MatrixClient, MatrixError, type OidcClientConfig } from "matrix-js-sdk/src/matrix";
+import { mocked, type MockedObject } from "jest-mock";
 import fetchMock from "fetch-mock-jest";
 
 import SdkConfig, { DEFAULTS } from "../../../../../src/SdkConfig";
@@ -22,8 +22,6 @@ import {
 } from "../../../../test-utils";
 import Registration from "../../../../../src/components/structures/auth/Registration";
 import { makeDelegatedAuthConfig } from "../../../../test-utils/oidc";
-import SettingsStore from "../../../../../src/settings/SettingsStore";
-import { Features } from "../../../../../src/settings/Settings";
 import { startOidcLogin } from "../../../../../src/utils/oidc/authorize";
 
 jest.mock("../../../../../src/utils/oidc/authorize", () => ({
@@ -160,69 +158,51 @@ describe("Registration", function () {
     describe("when delegated authentication is configured and enabled", () => {
         const authConfig = makeDelegatedAuthConfig();
         const clientId = "test-client-id";
-        // @ts-ignore
-        authConfig.metadata["prompt_values_supported"] = ["create"];
+        authConfig.prompt_values_supported = ["create"];
 
         beforeEach(() => {
             // mock a statically registered client to avoid dynamic registration
             SdkConfig.put({
                 oidc_static_clients: {
-                    [authConfig.metadata.issuer]: {
+                    [authConfig.issuer]: {
                         client_id: clientId,
                     },
                 },
             });
 
             fetchMock.get(`${defaultHsUrl}/_matrix/client/unstable/org.matrix.msc2965/auth_issuer`, {
-                issuer: authConfig.metadata.issuer,
+                issuer: authConfig.issuer,
             });
-            fetchMock.get("https://auth.org/.well-known/openid-configuration", authConfig.metadata);
-            fetchMock.get(authConfig.metadata.jwks_uri!, { keys: [] });
+            fetchMock.get("https://auth.org/.well-known/openid-configuration", {
+                ...authConfig,
+                signingKeys: undefined,
+            });
+            fetchMock.get(authConfig.jwks_uri!, { keys: [] });
         });
 
-        describe("when oidc native flow is not enabled in settings", () => {
-            beforeEach(() => {
-                jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-            });
+        it("should display oidc-native continue button", async () => {
+            const { container } = getComponent(defaultHsUrl, defaultIsUrl, authConfig);
+            await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
+            // no form
+            expect(container.querySelector("form")).toBeFalsy();
 
-            it("should display user/pass registration form", async () => {
-                const { container } = getComponent(defaultHsUrl, defaultIsUrl, authConfig);
-                await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
-                expect(container.querySelector("form")).toBeTruthy();
-                expect(mockClient.loginFlows).toHaveBeenCalled();
-                expect(mockClient.registerRequest).toHaveBeenCalled();
-            });
+            expect(await screen.findByText("Continue")).toBeTruthy();
         });
 
-        describe("when oidc native flow is enabled in settings", () => {
-            beforeEach(() => {
-                jest.spyOn(SettingsStore, "getValue").mockImplementation((key) => key === Features.OidcNativeFlow);
-            });
+        it("should start OIDC login flow as registration on button click", async () => {
+            getComponent(defaultHsUrl, defaultIsUrl, authConfig);
+            await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
 
-            it("should display oidc-native continue button", async () => {
-                const { container } = getComponent(defaultHsUrl, defaultIsUrl, authConfig);
-                await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
-                // no form
-                expect(container.querySelector("form")).toBeFalsy();
+            fireEvent.click(await screen.findByText("Continue"));
 
-                expect(await screen.findByText("Continue")).toBeTruthy();
-            });
-
-            it("should start OIDC login flow as registration on button click", async () => {
-                getComponent(defaultHsUrl, defaultIsUrl, authConfig);
-                await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
-
-                fireEvent.click(await screen.findByText("Continue"));
-
-                expect(startOidcLogin).toHaveBeenCalledWith(
-                    authConfig,
-                    clientId,
-                    defaultHsUrl,
-                    defaultIsUrl,
-                    // isRegistration
-                    true,
-                );
-            });
+            expect(startOidcLogin).toHaveBeenCalledWith(
+                authConfig,
+                clientId,
+                defaultHsUrl,
+                defaultIsUrl,
+                // isRegistration
+                true,
+            );
         });
 
         describe("when is mobile registeration", () => {

@@ -2,14 +2,14 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import { mocked } from "jest-mock";
 import { act, fireEvent, render } from "jest-matrix-react";
-import { Beacon, BeaconIdentifier } from "matrix-js-sdk/src/matrix";
+import { Beacon, type BeaconIdentifier } from "matrix-js-sdk/src/matrix";
 
 import LeftPanelLiveShareWarning from "../../../../../src/components/views/beacon/LeftPanelLiveShareWarning";
 import { OwnBeaconStore, OwnBeaconStoreEvent } from "../../../../../src/stores/OwnBeaconStore";

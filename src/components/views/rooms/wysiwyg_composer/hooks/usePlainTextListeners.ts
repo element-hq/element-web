@@ -2,17 +2,17 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { KeyboardEvent, RefObject, SyntheticEvent, useCallback, useRef, useState } from "react";
-import { AllowedMentionAttributes, MappedSuggestion } from "@vector-im/matrix-wysiwyg";
-import { IEventRelation } from "matrix-js-sdk/src/matrix";
+import { type KeyboardEvent, type RefObject, type SyntheticEvent, useCallback, useRef, useState } from "react";
+import { type AllowedMentionAttributes, type MappedSuggestion } from "@vector-im/matrix-wysiwyg";
+import { type IEventRelation } from "matrix-js-sdk/src/matrix";
 
 import { useSettingValue } from "../../../../../hooks/useSettings";
 import { IS_MAC, Key } from "../../../../../Keyboard";
-import Autocomplete from "../../Autocomplete";
+import type Autocomplete from "../../Autocomplete";
 import { handleClipboardEvent, handleEventWithAutocomplete, isEventToHandleAsClipboardEvent } from "./utils";
 import { useSuggestion } from "./useSuggestion";
 import { isNotNull, isNotUndefined } from "../../../../../Typeguards";
@@ -128,7 +128,7 @@ export function usePlainTextListeners(
         [eventRelation, mxClient, onInput, roomContext],
     );
 
-    const enterShouldSend = !useSettingValue<boolean>("MessageComposerInput.ctrlEnterToSend");
+    const enterShouldSend = !useSettingValue("MessageComposerInput.ctrlEnterToSend");
     const onKeyDown = useCallback(
         (event: KeyboardEvent<HTMLDivElement>) => {
             // we need autocomplete to take priority when it is open for using enter to select

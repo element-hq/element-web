@@ -2,16 +2,16 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2017 Aviral Dasgupta
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { clamp } from "lodash";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { SerializedPart } from "./editor/parts";
-import EditorModel from "./editor/model";
+import { type SerializedPart } from "./editor/parts";
+import type EditorModel from "./editor/model";
 
 interface IHistoryItem {
     parts: SerializedPart[];

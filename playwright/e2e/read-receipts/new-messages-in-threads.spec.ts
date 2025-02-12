@@ -2,15 +2,18 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 /* See readme.md for tips on writing these tests. */
 
 import { many, test } from ".";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 test.describe("Read receipts", { tag: "@mergequeue" }, () => {
+    test.skip(isDendrite, "due to Dendrite bug https://github.com/element-hq/dendrite/issues/2970");
+
     test.describe("new messages", () => {
         test.describe("in threads", () => {
             test("Receiving a message makes a room unread", async ({
@@ -101,7 +104,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
                 await util.goTo(room1);
 
                 // When I read an older message in the thread
-                await msg.jumpTo(room2.name, "InThread0000", true);
+                await msg.jumpTo(room2, "InThread0000", true);
 
                 // Then the thread is still marked as unread
                 await util.backToThreadsList();

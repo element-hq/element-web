@@ -2,16 +2,16 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked } from "jest-mock";
-import { UploadOpts, MatrixClient } from "matrix-js-sdk/src/matrix";
-import { EncryptedFile } from "matrix-js-sdk/src/types";
+import { type UploadOpts, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type EncryptedFile } from "matrix-js-sdk/src/types";
 
 import { createVoiceMessageRecording, VoiceMessageRecording } from "../../../src/audio/VoiceMessageRecording";
-import { RecordingState, VoiceRecording } from "../../../src/audio/VoiceRecording";
+import { RecordingState, type VoiceRecording } from "../../../src/audio/VoiceRecording";
 import { uploadFile } from "../../../src/ContentMessages";
 import { stubClient } from "../../test-utils";
 import { Playback } from "../../../src/audio/Playback";

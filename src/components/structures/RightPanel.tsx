@@ -3,12 +3,12 @@ Copyright 2024 New Vector Ltd.
 Copyright 2015-2022 The Matrix.org Foundation C.I.C.
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent } from "react";
-import { Room, RoomState, RoomStateEvent, RoomMember, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import React, { type ChangeEvent } from "react";
+import { type Room, type RoomState, RoomStateEvent, RoomMember, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { throttle } from "lodash";
 
 import dis from "../../dispatcher/dispatcher";
@@ -17,23 +17,23 @@ import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import RoomSummaryCard from "../views/right_panel/RoomSummaryCard";
 import WidgetCard from "../views/right_panel/WidgetCard";
-import MemberList from "../views/rooms/MemberList";
 import UserInfo from "../views/right_panel/UserInfo";
 import ThirdPartyMemberInfo from "../views/rooms/ThirdPartyMemberInfo";
 import FilePanel from "./FilePanel";
 import ThreadView from "./ThreadView";
 import ThreadPanel from "./ThreadPanel";
 import NotificationPanel from "./NotificationPanel";
-import ResizeNotifier from "../../utils/ResizeNotifier";
+import type ResizeNotifier from "../../utils/ResizeNotifier";
 import { PinnedMessagesCard } from "../views/right_panel/PinnedMessagesCard";
-import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
-import { E2EStatus } from "../../utils/ShieldUtils";
+import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
+import { type E2EStatus } from "../../utils/ShieldUtils";
 import TimelineCard from "../views/right_panel/TimelineCard";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
-import { IRightPanelCard, IRightPanelCardState } from "../../stores/right-panel/RightPanelStoreIPanelState";
+import { type IRightPanelCard, type IRightPanelCardState } from "../../stores/right-panel/RightPanelStoreIPanelState";
 import { Action } from "../../dispatcher/actions";
-import { XOR } from "../../@types/common";
+import { type XOR } from "../../@types/common";
 import ExtensionsCard from "../views/right_panel/ExtensionsCard";
+import MemberListView from "../views/rooms/MemberList/MemberListView";
 
 interface BaseProps {
     overwriteCard?: IRightPanelCard; // used to display a custom card and ignoring the RightPanelStore (used for UserView)
@@ -57,7 +57,6 @@ type Props = XOR<RoomlessProps, RoomProps>;
 
 interface IState {
     phase?: RightPanelPhases;
-    searchQuery: string;
     cardState?: IRightPanelCardState;
 }
 
@@ -67,10 +66,6 @@ export default class RightPanel extends React.Component<Props, IState> {
 
     public constructor(props: Props, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
-
-        this.state = {
-            searchQuery: "",
-        };
     }
 
     private readonly delayedUpdate = throttle(
@@ -147,10 +142,6 @@ export default class RightPanel extends React.Component<Props, IState> {
         }
     };
 
-    private onSearchQueryChanged = (searchQuery: string): void => {
-        this.setState({ searchQuery });
-    };
-
     public render(): React.ReactNode {
         let card = <div />;
         const roomId = this.props.room?.roomId;
@@ -159,15 +150,7 @@ export default class RightPanel extends React.Component<Props, IState> {
         switch (phase) {
             case RightPanelPhases.MemberList:
                 if (!!roomId) {
-                    card = (
-                        <MemberList
-                            roomId={roomId}
-                            key={roomId}
-                            onClose={this.onClose}
-                            searchQuery={this.state.searchQuery}
-                            onSearchQueryChanged={this.onSearchQueryChanged}
-                        />
-                    );
+                    card = <MemberListView roomId={roomId} onClose={this.onClose} />;
                 }
                 break;
 

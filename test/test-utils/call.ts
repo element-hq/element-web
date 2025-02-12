@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -10,7 +10,7 @@ import { MatrixWidgetType } from "matrix-widget-api";
 
 import type { GroupCall, Room, RoomMember, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { mkEvent } from "./test-utils";
-import { Call, ConnectionState, ElementCall, JitsiCall } from "../../src/models/Call";
+import { Call, type ConnectionState, ElementCall, JitsiCall } from "../../src/models/Call";
 import { CallStore } from "../../src/stores/CallStore";
 
 export class MockedCall extends Call {

@@ -2,15 +2,15 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ComponentProps } from "react";
-import { mocked, Mocked } from "jest-mock";
-import { render, RenderResult } from "jest-matrix-react";
-import { TypedEventEmitter, IMyDevice, MatrixClient, Device } from "matrix-js-sdk/src/matrix";
-import { VerificationRequest, VerificationRequestEvent } from "matrix-js-sdk/src/crypto-api";
+import React, { type ComponentProps } from "react";
+import { mocked, type Mocked } from "jest-mock";
+import { render, type RenderResult } from "jest-matrix-react";
+import { TypedEventEmitter, type IMyDevice, type MatrixClient, Device } from "matrix-js-sdk/src/matrix";
+import { type VerificationRequest, VerificationRequestEvent } from "matrix-js-sdk/src/crypto-api";
 
 import VerificationRequestToast from "../../../../../src/components/views/toasts/VerificationRequestToast";
 import {

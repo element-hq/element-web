@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -13,8 +13,8 @@ import AccessibleButton from "../../elements/AccessibleButton";
 import { SettingsSubsection } from "../shared/SettingsSubsection";
 import DeviceSecurityCard from "./DeviceSecurityCard";
 import { DeviceSecurityLearnMore } from "./DeviceSecurityLearnMore";
-import { filterDevicesBySecurityRecommendation, FilterVariation, INACTIVE_DEVICE_AGE_DAYS } from "./filter";
-import { DeviceSecurityVariation, ExtendedDevice, DevicesDictionary } from "./types";
+import { filterDevicesBySecurityRecommendation, type FilterVariation, INACTIVE_DEVICE_AGE_DAYS } from "./filter";
+import { DeviceSecurityVariation, type ExtendedDevice, type DevicesDictionary } from "./types";
 
 interface Props {
     devices: DevicesDictionary;

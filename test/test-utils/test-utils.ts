@@ -2,48 +2,48 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022, 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import EventEmitter from "events";
-import { mocked, MockedObject } from "jest-mock";
+import { mocked, type MockedObject } from "jest-mock";
 import {
     MatrixEvent,
-    Room,
-    User,
-    IContent,
-    IEvent,
-    RoomMember,
-    MatrixClient,
-    EventTimeline,
-    RoomState,
+    type Room,
+    type User,
+    type IContent,
+    type IEvent,
+    type RoomMember,
+    type MatrixClient,
+    type EventTimeline,
+    type RoomState,
     EventType,
-    IEventRelation,
-    IUnsigned,
-    IPusher,
+    type IEventRelation,
+    type IUnsigned,
+    type IPusher,
     RoomType,
     KNOWN_SAFE_ROOM_VERSION,
     ConditionKind,
-    IPushRules,
+    type IPushRules,
     RelationType,
     JoinRule,
-    OidcClientConfig,
+    type OidcClientConfig,
+    type GroupCall,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { normalize } from "matrix-js-sdk/src/utils";
 import { ReEmitter } from "matrix-js-sdk/src/ReEmitter";
-import { MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
+import { type MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
 import { Feature, ServerSupport } from "matrix-js-sdk/src/feature";
-import { MapperOpts } from "matrix-js-sdk/src/event-mapper";
-import { MatrixRTCSessionManager, MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
+import { type MapperOpts } from "matrix-js-sdk/src/event-mapper";
+import { type MatrixRTCSessionManager, type MatrixRTCSession } from "matrix-js-sdk/src/matrixrtc";
 
-import type { GroupCall } from "matrix-js-sdk/src/matrix";
 import type { Membership } from "matrix-js-sdk/src/types";
 import { MatrixClientPeg as peg } from "../../src/MatrixClientPeg";
-import { ValidatedServerConfig } from "../../src/utils/ValidatedServerConfig";
+import { type ValidatedServerConfig } from "../../src/utils/ValidatedServerConfig";
 import { EnhancedMap } from "../../src/utils/maps";
-import { AsyncStoreWithClient } from "../../src/stores/AsyncStoreWithClient";
+import { type AsyncStoreWithClient } from "../../src/stores/AsyncStoreWithClient";
 import MatrixClientBackedSettingsHandler from "../../src/settings/handlers/MatrixClientBackedSettingsHandler";
 
 /**
@@ -105,6 +105,7 @@ export function createTestClient(): MatrixClient {
             isStored: jest.fn().mockReturnValue(false),
             checkKey: jest.fn().mockResolvedValue(false),
             hasKey: jest.fn().mockReturnValue(false),
+            getDefaultKeyId: jest.fn().mockResolvedValue(null),
         },
 
         store: {
@@ -115,7 +116,7 @@ export function createTestClient(): MatrixClient {
         },
 
         getCrypto: jest.fn().mockReturnValue({
-            getOwnDeviceKeys: jest.fn(),
+            getOwnDeviceKeys: jest.fn().mockResolvedValue({ ed25519: "ed25519", curve25519: "curve25519" }),
             getUserDeviceInfo: jest.fn().mockResolvedValue(new Map()),
             getUserVerificationStatus: jest.fn(),
             getDeviceVerificationStatus: jest.fn(),
@@ -127,15 +128,32 @@ export function createTestClient(): MatrixClient {
             bootstrapCrossSigning: jest.fn(),
             getActiveSessionBackupVersion: jest.fn().mockResolvedValue(null),
             isKeyBackupTrusted: jest.fn().mockResolvedValue({}),
-            createRecoveryKeyFromPassphrase: jest.fn().mockResolvedValue({}),
+            createRecoveryKeyFromPassphrase: jest.fn().mockResolvedValue({
+                privateKey: new Uint8Array(32),
+                encodedPrivateKey: "encoded private key",
+            }),
             bootstrapSecretStorage: jest.fn(),
             isDehydrationSupported: jest.fn().mockResolvedValue(false),
             restoreKeyBackup: jest.fn(),
             restoreKeyBackupWithPassphrase: jest.fn(),
             loadSessionBackupPrivateKeyFromSecretStorage: jest.fn(),
             storeSessionBackupPrivateKey: jest.fn(),
+            checkKeyBackupAndEnable: jest.fn().mockResolvedValue(null),
             getKeyBackupInfo: jest.fn().mockResolvedValue(null),
             getEncryptionInfoForEvent: jest.fn().mockResolvedValue(null),
+            getCrossSigningStatus: jest.fn().mockResolvedValue({
+                publicKeysOnDevice: false,
+                privateKeysInSecretStorage: false,
+                privateKeysCachedLocally: {
+                    masterKey: false,
+                    selfSigningKey: false,
+                    userSigningKey: false,
+                },
+            }),
+            isCrossSigningReady: jest.fn().mockResolvedValue(false),
+            resetEncryption: jest.fn(),
+            getSessionBackupPrivateKey: jest.fn().mockResolvedValue(null),
+            isSecretStorageReady: jest.fn().mockResolvedValue(false),
         }),
 
         getPushActionsForEvent: jest.fn(),
@@ -199,6 +217,7 @@ export function createTestClient(): MatrixClient {
         registerWithIdentityServer: jest.fn().mockResolvedValue({}),
         getIdentityAccount: jest.fn().mockResolvedValue({}),
         getTerms: jest.fn().mockResolvedValue({ policies: [] }),
+        agreeToTerms: jest.fn(),
         doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(undefined),
         isVersionSupported: jest.fn().mockResolvedValue(undefined),
         getPushRules: jest.fn().mockResolvedValue(undefined),
@@ -799,6 +818,8 @@ export const mkThirdPartyInviteEvent = (user: string, displayName: string, room:
         type: EventType.RoomThirdPartyInvite,
         content: {
             display_name: displayName,
+            public_key: "foo",
+            key_validity_url: "bar",
         },
         skey: "test" + Math.random(),
         user,

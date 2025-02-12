@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 Robin Townsend <robin@robin.town>
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -16,7 +16,7 @@ import {
     M_TIMESTAMP,
     M_TEXT,
 } from "matrix-js-sdk/src/matrix";
-import { act, fireEvent, getByTestId, render, RenderResult, screen, waitFor } from "jest-matrix-react";
+import { act, fireEvent, getByTestId, render, type RenderResult, screen, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { sleep } from "matrix-js-sdk/src/utils";
 

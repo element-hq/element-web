@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -10,7 +10,7 @@ import React, { Fragment } from "react";
 
 import { Icon as InactiveIcon } from "../../../../../res/img/element-icons/settings/inactive.svg";
 import { INACTIVE_DEVICE_AGE_DAYS, isDeviceInactive } from "../../../../components/views/settings/devices/filter";
-import { ExtendedDevice } from "../../../../components/views/settings/devices/types";
+import { type ExtendedDevice } from "../../../../components/views/settings/devices/types";
 import { formatDate, formatRelativeTime } from "../../../../DateUtils";
 import { _t } from "../../../../languageHandler";
 

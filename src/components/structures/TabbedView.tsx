@@ -4,17 +4,17 @@ Copyright 2019, 2020 , 2024 The Matrix.org Foundation C.I.C.
 Copyright 2019 New Vector Ltd
 Copyright 2017 Travis Ralston
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import * as React from "react";
 import classNames from "classnames";
 
-import { _t, TranslationKey } from "../../languageHandler";
+import { _t, type TranslationKey } from "../../languageHandler";
 import AutoHideScrollbar from "./AutoHideScrollbar";
-import { PosthogScreenTracker, ScreenName } from "../../PosthogTrackers";
-import { NonEmptyArray } from "../../@types/common";
+import { PosthogScreenTracker, type ScreenName } from "../../PosthogTrackers";
+import { type NonEmptyArray } from "../../@types/common";
 import { RovingAccessibleButton, RovingTabIndexProvider } from "../../accessibility/RovingTabIndex";
 import { useWindowWidth } from "../../hooks/useWindowWidth";
 

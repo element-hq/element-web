@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022, 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -11,8 +11,8 @@ import { act, fireEvent, render, screen, waitFor } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 import {
     EventType,
-    IEventDecryptionResult,
-    MatrixClient,
+    type IEventDecryptionResult,
+    type MatrixClient,
     MatrixEvent,
     NotificationCountType,
     PendingEventOrdering,
@@ -20,15 +20,15 @@ import {
     TweakName,
 } from "matrix-js-sdk/src/matrix";
 import {
-    CryptoApi,
+    type CryptoApi,
     DecryptionFailureCode,
-    EventEncryptionInfo,
+    type EventEncryptionInfo,
     EventShieldColour,
     EventShieldReason,
 } from "matrix-js-sdk/src/crypto-api";
 import { mkEncryptedMatrixEvent } from "matrix-js-sdk/src/testing";
 
-import EventTile, { EventTileProps } from "../../../../../src/components/views/rooms/EventTile";
+import EventTile, { type EventTileProps } from "../../../../../src/components/views/rooms/EventTile";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
@@ -37,7 +37,7 @@ import { mkThread } from "../../../../test-utils/threads";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import dis from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
-import { IRoomState } from "../../../../../src/components/structures/RoomView";
+import { type IRoomState } from "../../../../../src/components/structures/RoomView";
 import PinningUtils from "../../../../../src/utils/PinningUtils";
 import { Layout } from "../../../../../src/settings/enums/Layout";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";

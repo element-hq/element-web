@@ -3,14 +3,14 @@ Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 Copyright 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import BasePlatform from "./BasePlatform";
+import type BasePlatform from "./BasePlatform";
 import defaultDispatcher from "./dispatcher/dispatcher";
 import { Action } from "./dispatcher/actions";
-import { PlatformSetPayload } from "./dispatcher/payloads/PlatformSetPayload";
+import { type PlatformSetPayload } from "./dispatcher/payloads/PlatformSetPayload";
 
 /*
  * Holds the current instance of the `Platform` to use across the codebase.

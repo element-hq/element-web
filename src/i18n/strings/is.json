@@ -447,7 +447,6 @@
         "room_name": "Heiti spjallrásar",
         "rooms": "Spjallrásir",
         "secure_backup": "Varið öryggisafrit",
-        "security": "Öryggi",
         "select_all": "Velja allt",
         "server": "Netþjónn",
         "settings": "Stillingar",
@@ -466,7 +465,6 @@
         "thread": "Spjallþráður",
         "threads": "Spjallþræðir",
         "timeline": "Tímalína",
-        "trusted": "Treyst",
         "unencrypted": "Ódulritað",
         "unmute": "Ekki þagga",
         "unnamed_room": "Nafnlaus spjallrás",
@@ -480,8 +478,7 @@
         "video": "Myndskeið",
         "video_room": "Myndspjallrás",
         "view_message": "Sjá skilaboð",
-        "warning": "Aðvörun",
-        "welcome": "Velkomin/n"
+        "warning": "Aðvörun"
     },
     "composer": {
         "autocomplete": {
@@ -743,7 +740,6 @@
             "title": "Ekki treyst"
         },
         "unable_to_setup_keys_error": "Tókst ekki að setja upp lykla",
-        "unsupported": "Þetta forrit styður ekki enda-í-enda dulritun.",
         "verification": {
             "accepting": "Samþykki…",
             "after_new_login": {
@@ -1237,7 +1233,6 @@
     },
     "member_list": {
         "filter_placeholder": "Sía meðlimi spjallrásar",
-        "invited_list_heading": "Boðið",
         "power_label": "%(userName)s (með völd sem %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Meðlimir spjallrásar",
@@ -1277,59 +1272,15 @@
         "m.key.verification.request": "%(name)s biður um sannvottun"
     },
     "onboarding": {
-        "apple_trademarks": "App Store® og Apple logo® eru vörumerki í eigu Apple Inc.",
-        "community_messaging_action": "Finndu fólkið þitt",
-        "community_messaging_title": "Samfélagslegt eignarhald",
-        "complete_these": "Kláraðu þetta til að fá sem mest út úr %(brand)s",
         "create_room": "Búa til hópspjall",
-        "download_app": "Sækja %(brand)s",
-        "download_app_action": "Sækja forrit",
-        "download_app_description": "Ekki missa af neinu og taktu %(brand)s með þér",
-        "download_app_store": "Sækja á App Store forritasafni",
-        "download_brand": "Sækja %(brand)s",
-        "download_brand_desktop": "Sækja %(brand)s Desktop fyrir vinnutölvur",
-        "download_f_droid": "Ná í á F-Droid",
-        "download_google_play": "Ná í á Google Play",
-        "enable_notifications": "Kveikja á tilkynningum",
-        "enable_notifications_action": "Virkja tilkynningar",
-        "enable_notifications_description": "Ekki missa af svari eða áríðandi skilaboðum",
         "explore_rooms": "Kanna almenningsspjallrásir",
-        "find_community_members": "Finndu og bjóddu meðlimum í samfélaginu þínu",
-        "find_coworkers": "Finndu og bjóddu samstarfsaðilum þínum",
-        "find_friends": "Finndu og bjóddu vinum þínum",
-        "find_friends_action": "Finna vini",
-        "find_friends_description": "Það er nú einusinni það sem þú komst hingað til að gera, þannug að við skulum skella okkur í málið",
-        "find_people": "Finna fólk",
-        "get_stuff_done": "Komdu hlutum í verk með því að finna félaga í teyminu þínu",
-        "google_trademarks": "Google Play og Google Play táknmerkið eru vörumerki í eigu Google LLC.",
         "has_avatar_label": "Frábært, það mun hjálpa fólki að vita að þetta sért þú",
         "intro_byline": "Eigðu samtölin þín.",
         "intro_welcome": "Velkomin í %(appName)s",
         "no_avatar_label": "Bættu við mynd, svo fólk viti að þetta sért þú.",
-        "only_n_steps_to_go": {
-            "one": "Aðeins %(count)s skref í viðbót",
-            "other": "Aðeins %(count)s skref í viðbót"
-        },
-        "personal_messaging_action": "Byrjaðu fyrsta spjallið þitt",
-        "personal_messaging_title": "Örugg skilaboð fyrir vini og fjölskyldu",
-        "qr_or_app_links": "%(qrCode)s eða %(appLinks)s",
         "send_dm": "Senda bein skilaboð",
-        "set_up_profile": "Settu upp notandasniðið þitt",
-        "set_up_profile_action": "Notandasnið þitt",
-        "set_up_profile_description": "Láttu fólk vita að þetta sért þú",
-        "use_case_community_messaging": "Meðlimi samfélags á netinu",
-        "use_case_heading1": "Þú ert inni",
-        "use_case_heading2": "Við hverja muntu helst spjalla?",
-        "use_case_heading3": "Við munum hjálpa þér að tengjast.",
-        "use_case_personal_messaging": "Vinir og fjölskylda",
-        "use_case_work_messaging": "Samstarfsmenn og teymi",
         "welcome_detail": "Hefjumst handa við að koma þér í gang",
-        "welcome_to_brand": "Velkomin í %(brand)s",
-        "welcome_user": "Velkomin/n %(name)s",
-        "work_messaging_action": "Finndu samstarfsaðilana þína",
-        "work_messaging_title": "Örugg skilaboð í vinnunni",
-        "you_did_it": "Þú kláraðir þetta!",
-        "you_made_it": "Þú hafðir það!"
+        "welcome_user": "Velkomin/n %(name)s"
     },
     "poll": {
         "create_poll_action": "Búa til könnun",
@@ -1375,7 +1326,6 @@
         "custom_level": "Sérsniðið stig",
         "default": "Sjálfgefið",
         "label": "Stig valda",
-        "mod": "Umsjón",
         "moderator": "Umsjónarmaður",
         "restricted": "Takmarkað"
     },
@@ -2341,7 +2291,6 @@
         "invite": "Bjóða fólki",
         "invite_description": "Bjóða með tölvupóstfangi eða notandanafni",
         "invite_link": "Deila boðstengli",
-        "invite_this_space": "Bjóða inn á þetta svæði",
         "joining_space": "Geng í hópinn",
         "landing_welcome": "Velkomin í <name/>",
         "leave_dialog_action": "Yfirgefa svæði",
@@ -2673,7 +2622,9 @@
             "sent": "%(senderName)s sendi boð til %(targetDisplayName)s um þátttöku í spjallrásinni."
         },
         "m.room.tombstone": "%(senderDisplayName)s uppfærði þessa spjallrás.",
-        "m.room.topic": "%(senderDisplayName)s breytti umræðuefninu í \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s breytti umræðuefninu í \"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s sendi límmerki.",
         "m.video": {
             "error_decrypting": "Villa við afkóðun myndskeiðs"
@@ -2910,14 +2861,6 @@
         "ban_room_confirm_title": "Banna í %(roomName)s",
         "ban_space_everything": "Banna viðkomandi frá því að gera allt það sem ég get gert",
         "ban_space_specific": "Banna viðkomandi frá því að gera tiltekna hluti sem ég get gert",
-        "count_of_sessions": {
-            "one": "%(count)s seta",
-            "other": "%(count)s setur"
-        },
-        "count_of_verified_sessions": {
-            "one": "1 sannreynd seta",
-            "other": "%(count)s sannreyndar setur"
-        },
         "deactivate_confirm_action": "Gera notanda óvirkan",
         "deactivate_confirm_title": "Gera notanda óvirkan?",
         "demote_button": "Leggja til baka",
@@ -2927,14 +2870,11 @@
         "disinvite_button_room": "Afbjóða úr herbergi",
         "disinvite_button_room_name": "Afturkalla boð á %(roomName)s",
         "disinvite_button_space": "Afbjóða frá stað",
-        "edit_own_devices": "Breyta tækjum",
         "error_ban_user": "Mistókst að banna notanda",
         "error_deactivate": "Mistókst að gera þennan notanda óvirkan",
         "error_kicking_user": "Mistókst að fjarlægja notanda",
         "error_mute_user": "Mistókst að þagga niður í notanda",
         "error_revoke_3pid_invite_title": "Mistókst að afturkalla boð",
-        "hide_sessions": "Fela setur",
-        "hide_verified_sessions": "Fela sannreyndar setur",
         "invited_by": "Boðið af %(sender)s",
         "jump_to_rr_button": "Fara í fyrstu leskvittun",
         "kick_button_room": "Fjarlægja úr spjallrás",

@@ -3,7 +3,7 @@ Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 Copyright 2022 Michael Telatynski <7t3chguy@gmail.com>
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -11,7 +11,7 @@ import React, { useContext, useMemo } from "react";
 import { EventType } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
-import BaseTool, { DevtoolsContext, IDevtoolsProps } from "./BaseTool";
+import BaseTool, { DevtoolsContext, type IDevtoolsProps } from "./BaseTool";
 import { _t } from "../../../../languageHandler";
 
 const ServersInRoom: React.FC<IDevtoolsProps> = ({ onBack }) => {

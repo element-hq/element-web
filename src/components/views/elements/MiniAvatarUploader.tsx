@@ -2,13 +2,13 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
 import { EventType } from "matrix-js-sdk/src/matrix";
-import React, { useContext, useRef, useState, MouseEvent, ReactNode } from "react";
+import React, { useContext, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import { Tooltip } from "@vector-im/compound-web";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";

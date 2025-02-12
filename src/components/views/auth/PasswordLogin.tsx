@@ -2,22 +2,22 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2015, 2016 , 2017, 2019 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { SyntheticEvent } from "react";
+import React, { type SyntheticEvent } from "react";
 import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
-import { ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
-import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
+import { type ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
+import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
+import withValidation, { type IFieldState, type IValidationResult } from "../elements/Validation";
 import Field from "../elements/Field";
 import CountryDropdown from "./CountryDropdown";
 import EmailField from "./EmailField";
-import { PhoneNumberCountryDefinition } from "../../../phonenumber";
+import { type PhoneNumberCountryDefinition } from "../../../phonenumber";
 
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;

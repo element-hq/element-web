@@ -2,16 +2,17 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Locator, Page } from "@playwright/test";
+import { type Locator, type Page } from "@playwright/test";
 
 import type { EventType, IContent, ISendEventResponse, MsgType, Visibility } from "matrix-js-sdk/src/matrix";
 import { expect, test } from "../../element-web-test";
-import { ElementAppPage } from "../../pages/ElementAppPage";
+import { type ElementAppPage } from "../../pages/ElementAppPage";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 async function sendEvent(app: ElementAppPage, roomId: string): Promise<ISendEventResponse> {
     return app.client.sendEvent(roomId, null, "m.room.message" as EventType, {
@@ -31,6 +32,8 @@ function mkPadding(n: number): IContent {
 }
 
 test.describe("Editing", () => {
+    test.skip(isDendrite, "due to a Dendrite bug https://github.com/element-hq/dendrite/issues/3488");
+
     // Edit "Message"
     const editLastMessage = async (page: Page, edit: string) => {
         const eventTile = page.locator(".mx_RoomView_MessageList .mx_EventTile_last");

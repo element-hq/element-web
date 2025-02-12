@@ -401,7 +401,6 @@
         "room_name": "نام اتاق",
         "rooms": "اتاق‌ها",
         "secure_backup": "پشتیبان‌گیری امن",
-        "security": "امنیت",
         "settings": "تنظیمات",
         "setup_secure_messages": "پیام‌رسانی امن را تنظیم کنید",
         "show_more": "نمایش بیشتر",
@@ -417,7 +416,6 @@
         "theme": "پوسته",
         "threads": "موضوعات",
         "timeline": "سیر زمان گفتگو‌ها",
-        "trusted": "قابل اعتماد",
         "unencrypted": "رمزگذاری نشده",
         "unmute": "صدادار",
         "unnamed_room": "اتاق بدون نام",
@@ -428,8 +426,7 @@
         "verification_cancelled": "تأیید هویت لغو شد",
         "video": "ویدئو",
         "view_message": "مشاهده پیام",
-        "warning": "هشدار",
-        "welcome": "خوش آمدید"
+        "warning": "هشدار"
     },
     "composer": {
         "autocomplete": {
@@ -638,7 +635,6 @@
             "title": "قابل اعتماد نیست"
         },
         "unable_to_setup_keys_error": "تنظیم کلیدها امکان پذیر نیست",
-        "unsupported": "این کلاینت از رمزگذاری سرتاسر پشتیبانی نمی کند.",
         "verification": {
             "accepting": "پذیرش…",
             "cancelled": "شما تأیید هویت را لغو کردید.",
@@ -1037,7 +1033,6 @@
     },
     "member_list": {
         "filter_placeholder": "فیلتر کردن اعضای اتاق",
-        "invited_list_heading": "دعوت شد",
         "power_label": "%(userName)s (سطح قدرت %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "اعضای اتاق",
@@ -1091,7 +1086,6 @@
         "custom_level": "سطح دلخواه",
         "default": "پیشفرض",
         "label": "سطح قدرت",
-        "mod": "معاون",
         "moderator": "معاون",
         "restricted": "ممنوع"
     },
@@ -1823,7 +1817,6 @@
         "invite": "دعوت کاربران",
         "invite_description": "دعوت با ایمیل یا نام‌کاربری",
         "invite_link": "به اشتراک‌گذاری لینک دعوت",
-        "invite_this_space": "به این فضای کاری دعوت کنید",
         "landing_welcome": "به <name/> خوش‌آمدید",
         "leave_dialog_action": "ترک محیط",
         "mark_suggested": "علامت‌گذاری به عنوان پیشنهاد‌شده",
@@ -2053,7 +2046,9 @@
             "sent": "%(senderName)s %(targetDisplayName)s را به اتاق دعوت کرد."
         },
         "m.room.tombstone": "%(senderDisplayName)s این اتاق را ارتقا داد.",
-        "m.room.topic": "%(senderDisplayName)s موضوع را به %(topic)s تغییر داد.",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s موضوع را به %(topic)s تغییر داد."
+        },
         "m.sticker": "%(senderDisplayName)s یک برچسب فرستاد.",
         "m.video": {
             "error_decrypting": "خطا در رمزگشایی ویدیو"
@@ -2247,14 +2242,6 @@
     },
     "user_info": {
         "admin_tools_section": "ابزارهای مدیریت",
-        "count_of_sessions": {
-            "one": "%(count)s نشست",
-            "other": "%(count)s نشست"
-        },
-        "count_of_verified_sessions": {
-            "one": "1 نشست تأیید شده",
-            "other": "%(count)s نشست تایید شده"
-        },
         "deactivate_confirm_action": "غیرفعال کردن کاربر",
         "deactivate_confirm_description": "با غیرفعال کردن این کاربر، او از سیستم خارج شده و از ورود مجدد وی جلوگیری می‌شود. علاوه بر این، او تمام اتاق هایی را که در آن هست ترک می کند. این عمل قابل برگشت نیست. آیا مطمئن هستید که می خواهید این کاربر را غیرفعال کنید؟",
         "deactivate_confirm_title": "کاربر غیرفعال شود؟",
@@ -2262,14 +2249,11 @@
         "demote_self_confirm_description_space": "شما نمی توانید این تغییر را لغو کنید زیرا در حال تنزل خود هستید، اگر آخرین کاربر ممتاز در فضای کاری باشید، بازپس گیری امتیازات غیرممکن است.",
         "demote_self_confirm_room": "شما نمی توانید این تغییر را لغو کنید زیرا در حال تنزل خود هستید، اگر آخرین کاربر ممتاز در اتاق باشید بازپس گیری امتیازات غیرممکن است.",
         "demote_self_confirm_title": "خودتان را تنزل می‌دهید؟",
-        "edit_own_devices": "ویرایش دستگاه‌ها",
         "error_ban_user": "کاربر مسدود نشد",
         "error_deactivate": "غیرفعال کردن کاربر انجام نشد",
         "error_mute_user": "کاربر بی صدا نشد",
         "error_revoke_3pid_invite_description": "دعوت لغو نشد. ممکن است سرور با یک مشکل موقتی روبرو شده باشد و یا اینکه شما مجوز کافی برای لغو دعوت را نداشته باشید.",
         "error_revoke_3pid_invite_title": "دعوت لغو نشد",
-        "hide_sessions": "مخفی کردن نشست‌ها",
-        "hide_verified_sessions": "مخفی کردن نشست‌های تأیید شده",
         "invited_by": "دعوت شده توسط %(sender)s",
         "jump_to_rr_button": "پرش به آخرین پیام خوانده شده",
         "promote_warning": "شما نمی توانید این تغییر را باطل کنید زیرا در حال ارتقا سطح قدرت یک کاربر به سطح قدرت خود هستید.",

@@ -4,11 +4,11 @@ Copyright 2019 The Matrix.org Foundation C.I.C.
 Copyright 2017, 2018 , 2019 New Vector Ltd
 Copyright 2015, 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { LockSolidIcon, CheckIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
@@ -23,11 +23,11 @@ import AuthHeader from "../../views/auth/AuthHeader";
 import AuthBody from "../../views/auth/AuthBody";
 import PassphraseConfirmField from "../../views/auth/PassphraseConfirmField";
 import StyledCheckbox from "../../views/elements/StyledCheckbox";
-import { ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
+import { type ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
 import QuestionDialog from "../../views/dialogs/QuestionDialog";
 import { EnterEmail } from "./forgot-password/EnterEmail";
 import { CheckEmail } from "./forgot-password/CheckEmail";
-import Field from "../../views/elements/Field";
+import type Field from "../../views/elements/Field";
 import { ErrorMessage } from "../ErrorMessage";
 import { VerifyEmailModal } from "./forgot-password/VerifyEmailModal";
 import Spinner from "../../views/elements/Spinner";

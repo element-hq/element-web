@@ -2,30 +2,30 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { useCallback, useContext, useEffect, useState } from "react";
 import {
     ClientEvent,
-    IMyDevice,
-    IPusher,
+    type IMyDevice,
+    type IPusher,
     LOCAL_NOTIFICATION_SETTINGS_PREFIX,
-    MatrixClient,
-    MatrixEvent,
+    type MatrixClient,
+    type MatrixEvent,
     PUSHER_DEVICE_ID,
     PUSHER_ENABLED,
     UNSTABLE_MSC3852_LAST_SEEN_UA,
-    MatrixError,
-    LocalNotificationSettings,
+    type MatrixError,
+    type LocalNotificationSettings,
 } from "matrix-js-sdk/src/matrix";
-import { VerificationRequest, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
+import { type VerificationRequest, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../../languageHandler";
 import { getDeviceClientInformation, pruneClientInformation } from "../../../../utils/device/clientInformation";
-import { DevicesDictionary, ExtendedDevice, ExtendedDeviceAppInfo } from "./types";
+import { type DevicesDictionary, type ExtendedDevice, type ExtendedDeviceAppInfo } from "./types";
 import { useEventEmitter } from "../../../../hooks/useEventEmitter";
 import { parseUserAgent } from "../../../../utils/device/parseUserAgent";
 import { isDeviceVerified } from "../../../../utils/device/isDeviceVerified";
@@ -116,7 +116,7 @@ export const useOwnDevices = (): DevicesState => {
 
             const notificationSettings = new Map<string, LocalNotificationSettings>();
             Object.keys(devices).forEach((deviceId) => {
-                const eventType = `${LOCAL_NOTIFICATION_SETTINGS_PREFIX.name}.${deviceId}`;
+                const eventType = `${LOCAL_NOTIFICATION_SETTINGS_PREFIX.name}.${deviceId}` as const;
                 const event = matrixClient.getAccountData(eventType);
                 if (event) {
                     notificationSettings.set(deviceId, event.getContent());

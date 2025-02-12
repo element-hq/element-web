@@ -230,7 +230,6 @@
         "oidc": {
             "error_title": "Нам не удалось войти в систему",
             "generic_auth_error": "Во время аутентификации что-то пошло не так. Перейдите на страницу входа и попробуйте еще раз.",
-            "logout_redirect_warning": "Вы будете перенаправлены к поставщику аутентификации вашего сервера для завершения выхода из системы.",
             "missing_or_invalid_stored_state": "Мы попросили браузер запомнить, какой домашний сервер вы используете для входа в систему, но, к сожалению, ваш браузер забыл об этом. Перейдите на страницу входа и попробуйте ещё раз."
         },
         "password_field_keep_going_prompt": "Продолжить",
@@ -413,7 +412,6 @@
             "other": "и %(count)s других...",
             "one": "и ещё кто-то..."
         },
-        "android": "Android",
         "appearance": "Внешний вид",
         "application": "Приложение",
         "are_you_sure": "Вы уверены?",
@@ -452,7 +450,6 @@
         "identity_server": "Идентификационный сервер",
         "image": "Изображение",
         "integration_manager": "Менеджер интеграции",
-        "ios": "iOS",
         "joined": "Присоединился",
         "labs": "Лаборатория",
         "legal": "Правовая информация",
@@ -506,7 +503,6 @@
         "rooms": "Комнаты",
         "saving": "Сохранение…",
         "secure_backup": "Безопасное резервное копирование",
-        "security": "Безопасность",
         "select_all": "Выбрать все",
         "server": "Сервер",
         "settings": "Настройки",
@@ -525,7 +521,6 @@
         "thread": "Обсуждение",
         "threads": "Обсуждения",
         "timeline": "Лента сообщений",
-        "trusted": "Заверенный",
         "unavailable": "недоступен",
         "unencrypted": "Не зашифровано",
         "unmute": "Вернуть право речи",
@@ -541,8 +536,7 @@
         "video": "Видео",
         "video_room": "Видеокомната",
         "view_message": "Посмотреть сообщение",
-        "warning": "Внимание",
-        "welcome": "Добро пожаловать"
+        "warning": "Внимание"
     },
     "composer": {
         "autocomplete": {
@@ -884,7 +878,6 @@
             "title": "Недоверенное"
         },
         "unable_to_setup_keys_error": "Невозможно настроить ключи",
-        "unsupported": "Этот клиент не поддерживает сквозное шифрование.",
         "verification": {
             "accepting": "Принятие…",
             "after_new_login": {
@@ -1380,8 +1373,6 @@
         "notification_settings_beta_caption": "Представляем вам более простой способ изменения настроек уведомлений. Настройте свои настройки так %(brand)s, как вам удобно.",
         "notification_settings_beta_title": "Настройки уведомлений",
         "notifications": "Включить панель уведомлений в заголовке комнаты",
-        "oidc_native_flow": "Встроенная аутентификация OIDC",
-        "oidc_native_flow_description": "⚠ ВНИМАНИЕ: Экспериментально. Используйте встроенную аутентификацию OIDC, если она поддерживается сервером.",
         "render_reaction_images": "Обработка пользовательских изображений в реакциях",
         "render_reaction_images_description": "Иногда их называют \"пользовательскими эмодзи\".",
         "report_to_moderators": "Пожаловаться модераторам",
@@ -1500,7 +1491,6 @@
     "member_list": {
         "filter_placeholder": "Поиск по участникам",
         "invite_button_no_perms_tooltip": "У вас нет разрешения приглашать пользователей",
-        "invited_list_heading": "Приглашены",
         "power_label": "%(userName)s (уровень прав %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Участники комнаты",
@@ -1540,61 +1530,15 @@
         "m.key.verification.request": "%(name)s запрашивает проверку"
     },
     "onboarding": {
-        "apple_trademarks": "App Store® и Логотип Apple® являются товарными знаками Apple Inc.",
-        "community_messaging_action": "Найдите людей",
-        "community_messaging_description": "Сохраняйте право над владением и контроль над обсуждением в сообществе.\nМасштабируйте, чтобы поддерживать миллионы, с мощной модерацией и функциональной совместимостью.",
-        "community_messaging_title": "Владение сообществом",
-        "complete_these": "Выполните их, чтобы получить максимальную отдачу от %(brand)s",
         "create_room": "Создать комнату",
-        "download_app": "Скачать %(brand)s",
-        "download_app_action": "Скачать приложения",
-        "download_app_description": "Не пропустите ничего, взяв %(brand)s с тобой",
-        "download_app_store": "Скачать в App Store",
-        "download_brand": "Скачать %(brand)s",
-        "download_brand_desktop": "Скачать %(brand)s Desktop",
-        "download_f_droid": "Скачать на F-Droid",
-        "download_google_play": "Скачать в Google Play",
-        "enable_notifications": "Включить уведомления",
-        "enable_notifications_action": "Включить уведомления",
-        "enable_notifications_description": "Не пропустите ответ или важное сообщение",
         "explore_rooms": "Просмотреть публичные комнаты",
-        "find_community_members": "Найдите и пригласите участников сообщества",
-        "find_coworkers": "Найдите и пригласите своих коллег",
-        "find_friends": "Найдите и пригласите своих друзей",
-        "find_friends_action": "Найти друзей",
-        "find_friends_description": "Это то, для чего вы здесь, так что давайте приступим к делу",
-        "find_people": "Найти людей",
-        "free_e2ee_messaging_unlimited_voip": "Благодаря бесплатному сквозному шифрованному обмену сообщениями и неограниченным голосовым и видеозвонкам, %(brand)s это отличный способ оставаться на связи.",
-        "get_stuff_done": "Добейтесь успеха, найдя своих товарищей по команде",
-        "google_trademarks": "Google Play и Логотип Google Play являются торговыми знаками Google LLC.",
         "has_avatar_label": "Отлично, это поможет людям узнать, что это ты",
         "intro_byline": "Владейте своими разговорами.",
         "intro_welcome": "Добро пожаловать в %(appName)s",
         "no_avatar_label": "Добавьте фото, чтобы люди знали, что это вы.",
-        "only_n_steps_to_go": {
-            "one": "Осталось всего %(count)s шагов до конца",
-            "other": "Осталось всего %(count)s шагов"
-        },
-        "personal_messaging_action": "Начните свою первую беседу",
-        "personal_messaging_title": "Безопасный обмен сообщениями для друзей и семьи",
-        "qr_or_app_links": "%(qrCode)s или %(appLinks)s",
         "send_dm": "Отправить личное сообщение",
-        "set_up_profile": "Настройте свой профиль",
-        "set_up_profile_action": "Ваш профиль",
-        "set_up_profile_description": "Убедитесь, что люди знают, что это действительно вы",
-        "use_case_community_messaging": "Участники сообщества в сети",
-        "use_case_heading1": "Вы в",
-        "use_case_heading2": "С кем вы будете общаться чаще всего?",
-        "use_case_heading3": "Мы поможем вам подключиться.",
-        "use_case_personal_messaging": "Друзья и семья",
-        "use_case_work_messaging": "Коллеги и команды",
         "welcome_detail": "Теперь давайте поможем вам начать",
-        "welcome_to_brand": "Добро пожаловать в %(brand)s",
-        "welcome_user": "Добро пожаловать, %(name)s",
-        "work_messaging_action": "Найдите коллег",
-        "work_messaging_title": "Безопасный обмен сообщениями для работы",
-        "you_did_it": "Вы сделали это!",
-        "you_made_it": "Вы сделали это!"
+        "welcome_user": "Добро пожаловать, %(name)s"
     },
     "pill": {
         "permalink_other_room": "Сообщение в %(room)s",
@@ -1646,7 +1590,6 @@
         "custom_level": "Специальные права",
         "default": "По умолчанию",
         "label": "Уровень прав",
-        "mod": "Модератор",
         "moderator": "Модератор",
         "restricted": "Ограниченный пользователь"
     },
@@ -2516,7 +2459,6 @@
             "room_directory_heading": "Каталог комнат",
             "room_list_heading": "Список комнат",
             "show_avatars_pills": "Показывать аватары в упоминаниях пользователей, комнатах и событиях",
-            "show_checklist_shortcuts": "Показывать ярлык приветственного проверенного списка над списком комнат",
             "show_polls_button": "Показывать кнопку опроса",
             "surround_text": "Обводить выделенный текст при вводе специальных символов",
             "time_heading": "Отображение времени"
@@ -2879,7 +2821,6 @@
         "invite": "Пригласить людей",
         "invite_description": "Пригласить по электронной почте или имени пользователя",
         "invite_link": "Поделиться ссылкой на приглашение",
-        "invite_this_space": "Пригласить в это пространство",
         "joining_space": "Присоединение",
         "landing_welcome": "Добро пожаловать в <name/>",
         "leave_dialog_action": "Покинуть пространство",
@@ -3237,7 +3178,9 @@
             "sent": "%(senderName)s пригласил(а) %(targetDisplayName)s в комнату."
         },
         "m.room.tombstone": "%(senderDisplayName)s обновил(а) эту комнату.",
-        "m.room.topic": "%(senderDisplayName)s изменил(а) тему комнаты на \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s изменил(а) тему комнаты на \"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s отправил(а) наклейку.",
         "m.video": {
             "error_decrypting": "Ошибка расшифровки видео"
@@ -3516,14 +3459,6 @@
         "ban_room_confirm_title": "Заблокировать в %(roomName)s",
         "ban_space_everything": "Заблокировать их везде, где я могу это сделать",
         "ban_space_specific": "Заблокировать их в определённых местах, где я могу это сделать",
-        "count_of_sessions": {
-            "other": "Сеансов: %(count)s",
-            "one": "%(count)s сеанс"
-        },
-        "count_of_verified_sessions": {
-            "other": "Заверенных сеансов: %(count)s",
-            "one": "1 заверенный сеанс"
-        },
         "deactivate_confirm_action": "Деактивировать пользователя",
         "deactivate_confirm_description": "Деактивация этого пользователя приведет к его выходу из системы и запрету повторного входа. Кроме того, они оставит все комнаты, в которых он участник. Это действие безповоротно. Вы уверены, что хотите деактивировать этого пользователя?",
         "deactivate_confirm_title": "Деактивировать пользователя?",
@@ -3534,15 +3469,12 @@
         "disinvite_button_room": "Отозвать приглашение в комнату",
         "disinvite_button_room_name": "Отменить приглашение из %(roomName)s",
         "disinvite_button_space": "Отозвать приглашение в пространство",
-        "edit_own_devices": "Редактировать сеансы",
         "error_ban_user": "Не удалось заблокировать пользователя",
         "error_deactivate": "Не удалось деактивировать пользователя",
         "error_kicking_user": "Не удалось удалить пользователя",
         "error_mute_user": "Не удалось заглушить пользователя",
         "error_revoke_3pid_invite_description": "Не удалось отозвать приглашение. Возможно, на сервере возникла вре́менная проблема или у вас недостаточно прав для отзыва приглашения.",
         "error_revoke_3pid_invite_title": "Не удалось отменить приглашение",
-        "hide_sessions": "Свернуть сеансы",
-        "hide_verified_sessions": "Свернуть заверенные сеансы",
         "ignore_confirm_description": "Все сообщения и приглашения от этого пользователя будут скрыты. Вы действительно хотите их игнорировать?",
         "ignore_confirm_title": "Игнорировать %(user)s",
         "invited_by": "Приглашен %(sender)s",

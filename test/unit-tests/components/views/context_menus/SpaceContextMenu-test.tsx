@@ -2,14 +2,14 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
-import { Mocked, mocked } from "jest-mock";
-import { prettyDOM, render, RenderResult, screen } from "jest-matrix-react";
+import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
+import { type Mocked, mocked } from "jest-mock";
+import { prettyDOM, render, type RenderResult, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
 import SpaceContextMenu from "../../../../../src/components/views/context_menus/SpaceContextMenu";

@@ -2,14 +2,15 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import type { Locator, Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
 import type { Preset, ICreateRoomOpts } from "matrix-js-sdk/src/matrix";
-import { ElementAppPage } from "../../pages/ElementAppPage";
+import { type ElementAppPage } from "../../pages/ElementAppPage";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 async function openSpaceCreateMenu(page: Page): Promise<Locator> {
     await page.getByRole("button", { name: "Create a space" }).click();
@@ -50,43 +51,50 @@ function spaceChildInitialState(roomId: string): ICreateRoomOpts["initial_state"
 }
 
 test.describe("Spaces", () => {
+    test.skip(isDendrite, "due to a Dendrite bug https://github.com/element-hq/dendrite/issues/3488");
     test.use({
         displayName: "Sue",
         botCreateOpts: { displayName: "BotBob" },
     });
 
-    test("should allow user to create public space", { tag: "@screenshot" }, async ({ page, app, user }) => {
-        const contextMenu = await openSpaceCreateMenu(page);
-        await expect(contextMenu).toMatchScreenshot("space-create-menu.png");
+    test(
+        "should allow user to create public space",
+        { tag: ["@screenshot", "@no-webkit"] },
+        async ({ page, app, user }) => {
+            const contextMenu = await openSpaceCreateMenu(page);
+            await expect(contextMenu).toMatchScreenshot("space-create-menu.png");
 
-        await contextMenu.getByRole("button", { name: /Public/ }).click();
+            await contextMenu.getByRole("button", { name: /Public/ }).click();
 
-        await contextMenu
-            .locator('.mx_SpaceBasicSettings_avatarContainer input[type="file"]')
-            .setInputFiles("playwright/sample-files/riot.png");
-        await contextMenu.getByRole("textbox", { name: "Name" }).fill("Let's have a Riot");
-        await expect(contextMenu.getByRole("textbox", { name: "Address" })).toHaveValue("lets-have-a-riot");
-        await contextMenu.getByRole("textbox", { name: "Description" }).fill("This is a space to reminisce Riot.im!");
-        await contextMenu.getByRole("button", { name: "Create" }).click();
+            await contextMenu
+                .locator('.mx_SpaceBasicSettings_avatarContainer input[type="file"]')
+                .setInputFiles("playwright/sample-files/riot.png");
+            await contextMenu.getByRole("textbox", { name: "Name" }).fill("Let's have a Riot");
+            await expect(contextMenu.getByRole("textbox", { name: "Address" })).toHaveValue("lets-have-a-riot");
+            await contextMenu
+                .getByRole("textbox", { name: "Description" })
+                .fill("This is a space to reminisce Riot.im!");
+            await contextMenu.getByRole("button", { name: "Create" }).click();
 
-        // Create the default General & Random rooms, as well as a custom "Jokes" room
-        await expect(page.getByPlaceholder("General")).toBeVisible();
-        await expect(page.getByPlaceholder("Random")).toBeVisible();
-        await page.getByPlaceholder("Support").fill("Jokes");
-        await page.getByRole("button", { name: "Continue" }).click();
+            // Create the default General & Random rooms, as well as a custom "Jokes" room
+            await expect(page.getByPlaceholder("General")).toBeVisible();
+            await expect(page.getByPlaceholder("Random")).toBeVisible();
+            await page.getByPlaceholder("Support").fill("Jokes");
+            await page.getByRole("button", { name: "Continue" }).click();
 
-        // Copy matrix.to link
-        await page.getByRole("button", { name: "Share invite link" }).click();
-        expect(await app.getClipboardText()).toEqual("https://matrix.to/#/#lets-have-a-riot:localhost");
+            // Copy matrix.to link
+            await page.getByRole("button", { name: "Share invite link" }).click();
+            expect(await app.getClipboard()).toEqual(`https://matrix.to/#/#lets-have-a-riot:${user.homeServer}`);
 
-        // Go to space home
-        await page.getByRole("button", { name: "Go to my first room" }).click();
+            // Go to space home
+            await page.getByRole("button", { name: "Go to my first room" }).click();
 
-        // Assert rooms exist in the room list
-        await expect(page.getByRole("treeitem", { name: "General" })).toBeVisible();
-        await expect(page.getByRole("treeitem", { name: "Random" })).toBeVisible();
-        await expect(page.getByRole("treeitem", { name: "Jokes" })).toBeVisible();
-    });
+            // Assert rooms exist in the room list
+            await expect(page.getByRole("treeitem", { name: "General" })).toBeVisible();
+            await expect(page.getByRole("treeitem", { name: "Random" })).toBeVisible();
+            await expect(page.getByRole("treeitem", { name: "Jokes" })).toBeVisible();
+        },
+    );
 
     test("should allow user to create private space", { tag: "@screenshot" }, async ({ page, app, user }) => {
         const menu = await openSpaceCreateMenu(page);
@@ -157,19 +165,19 @@ test.describe("Spaces", () => {
         ).toBeVisible();
     });
 
-    test("should allow user to invite another to a space", async ({ page, app, user, bot }) => {
+    test("should allow user to invite another to a space", { tag: "@no-webkit" }, async ({ page, app, user, bot }) => {
         await app.client.createSpace({
             visibility: "public" as any,
             room_alias_name: "space",
         });
 
-        const menu = await openSpaceContextMenu(page, app, "#space:localhost");
+        const menu = await openSpaceContextMenu(page, app, `#space:${user.homeServer}`);
         await menu.getByRole("menuitem", { name: "Invite" }).click();
 
         const shareDialog = page.locator(".mx_SpacePublicShare");
         // Copy link first
         await shareDialog.getByRole("button", { name: "Share invite link" }).click();
-        expect(await app.getClipboardText()).toEqual("https://matrix.to/#/#space:localhost");
+        expect(await app.getClipboard()).toEqual(`https://matrix.to/#/#space:${user.homeServer}`);
         // Start Matrix invite flow
         await shareDialog.getByRole("button", { name: "Invite people" }).click();
 

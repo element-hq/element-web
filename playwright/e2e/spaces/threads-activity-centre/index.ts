@@ -2,17 +2,20 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2024 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { JSHandle, Locator, Page } from "@playwright/test";
+import { type JSHandle, type Locator, type Page } from "@playwright/test";
 
 import type { MatrixEvent, IContent, Room } from "matrix-js-sdk/src/matrix";
 import { test as base, expect } from "../../../element-web-test";
-import { Bot } from "../../../pages/bot";
-import { Client } from "../../../pages/client";
-import { ElementAppPage } from "../../../pages/ElementAppPage";
+import { type Bot } from "../../../pages/bot";
+import { type Client } from "../../../pages/client";
+import { type ElementAppPage } from "../../../pages/ElementAppPage";
+import { type Credentials } from "../../../plugins/homeserver";
+
+type RoomRef = { name: string; roomId: string };
 
 /**
  * Set up for a read receipt test:
@@ -35,11 +38,13 @@ export const test = base.extend<{
     room1Name: "Room 1",
     room1: async ({ room1Name: name, app, user, bot }, use) => {
         const roomId = await app.client.createRoom({ name, invite: [bot.credentials.userId] });
+        await bot.awaitRoomMembership(roomId);
         await use({ name, roomId });
     },
     room2Name: "Room 2",
     room2: async ({ room2Name: name, app, user, bot }, use) => {
         const roomId = await app.client.createRoom({ name, invite: [bot.credentials.userId] });
+        await bot.awaitRoomMembership(roomId);
         await use({ name, roomId });
     },
     msg: async ({ page, app, util }, use) => {
@@ -181,9 +186,10 @@ export class Helpers {
      * Use the supplied client to send messages or perform actions as specified by
      * the supplied {@link Message} items.
      */
-    async sendMessageAsClient(cli: Client, roomName: string | { name: string }, messages: Message[]) {
-        const room = await this.findRoomByName(typeof roomName === "string" ? roomName : roomName.name);
-        const roomId = await room.evaluate((room) => room.roomId);
+    async sendMessageAsClient(cli: Client, roomRef: RoomRef, messages: Message[]) {
+        const roomId = roomRef.roomId;
+        const room = await this.findRoomById(roomId);
+        expect(room).toBeTruthy();
 
         for (const message of messages) {
             if (typeof message === "string") {
@@ -205,7 +211,7 @@ export class Helpers {
     /**
      * Open the room with the supplied name.
      */
-    async goTo(room: string | { name: string }) {
+    async goTo(room: RoomRef) {
         await this.app.viewRoomByName(typeof room === "string" ? room : room.name);
     }
 
@@ -220,10 +226,10 @@ export class Helpers {
         await expect(this.page.locator(".mx_ThreadView_timelinePanelWrapper")).toBeVisible();
     }
 
-    async findRoomByName(roomName: string): Promise<JSHandle<Room>> {
-        return this.app.client.evaluateHandle((cli, roomName) => {
-            return cli.getRooms().find((r) => r.name === roomName);
-        }, roomName);
+    async findRoomById(roomId: string): Promise<JSHandle<Room | undefined>> {
+        return this.app.client.evaluateHandle((cli, roomId) => {
+            return cli.getRooms().find((r) => r.roomId === roomId);
+        }, roomId);
     }
 
     /**
@@ -231,7 +237,7 @@ export class Helpers {
      * @param room - the name of the room to send messages into
      * @param messages - the list of messages to send, these can be strings or implementations of MessageSpec like `editOf`
      */
-    async receiveMessages(room: string | { name: string }, messages: Message[]) {
+    async receiveMessages(room: RoomRef, messages: Message[]) {
         await this.sendMessageAsClient(this.bot, room, messages);
     }
 
@@ -333,12 +339,14 @@ export class Helpers {
      * @param room1
      * @param room2
      * @param msg - MessageBuilder
+     * @param user - the user to mention in the first message
      * @param hasMention - whether to include a mention in the first message
      */
     async populateThreads(
         room1: { name: string; roomId: string },
         room2: { name: string; roomId: string },
         msg: MessageBuilder,
+        user: Credentials,
         hasMention = true,
     ) {
         if (hasMention) {
@@ -347,9 +355,9 @@ export class Helpers {
                 msg.threadedOff("Msg1", {
                     "body": "User",
                     "format": "org.matrix.custom.html",
-                    "formatted_body": "<a href='https://matrix.to/#/@user:localhost'>User</a>",
+                    "formatted_body": `<a href="https://matrix.to/#/${user.userId}">User</a>`,
                     "m.mentions": {
-                        user_ids: ["@user:localhost"],
+                        user_ids: [user.userId],
                     },
                 }),
             ]);

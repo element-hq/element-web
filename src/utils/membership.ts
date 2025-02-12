@@ -2,12 +2,19 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020-2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room, RoomMember, RoomState, RoomStateEvent, MatrixEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
-import { KnownMembership, Membership } from "matrix-js-sdk/src/types";
+import {
+    type Room,
+    type RoomMember,
+    type RoomState,
+    RoomStateEvent,
+    type MatrixEvent,
+    type MatrixClient,
+} from "matrix-js-sdk/src/matrix";
+import { KnownMembership, type Membership } from "matrix-js-sdk/src/types";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import SettingsStore from "../settings/SettingsStore";

@@ -2,15 +2,15 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { FormEvent, useCallback, useContext, useRef, useState } from "react";
-import { Room, EventType } from "matrix-js-sdk/src/matrix";
+import React, { type FormEvent, useCallback, useContext, useRef, useState } from "react";
+import { type Room, EventType } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
-import { ICompletion } from "../../../autocomplete/Autocompleter";
+import { type ICompletion } from "../../../autocomplete/Autocompleter";
 import UserProvider from "../../../autocomplete/UserProvider";
 import { AutocompleteInput } from "../../structures/AutocompleteInput";
 import PowerSelector from "../elements/PowerSelector";

@@ -443,7 +443,6 @@
         "room_name": "ຊື່ຫ້ອງ",
         "rooms": "ຫ້ອງ",
         "secure_backup": "ການສໍາຮອງທີ່ປອດໄພ",
-        "security": "ຄວາມປອດໄພ",
         "select_all": "ເລືອກທັງຫມົດ",
         "server": "ເຊີບເວີ",
         "settings": "ການຕັ້ງຄ່າ",
@@ -462,7 +461,6 @@
         "thread": "ກະທູ້",
         "threads": "ກະທູ້",
         "timeline": "ທາມລາຍ",
-        "trusted": "ເຊື່ອຖືໄດ້",
         "unencrypted": "ບໍ່ໄດ້ເຂົ້າລະຫັດ",
         "unmute": "ຍົກເລີກປິດສຽງ",
         "unnamed_room": "ບໍ່ມີຊື່ຫ້ອງ",
@@ -745,7 +743,6 @@
             "title": "ເຊື່ອຖືບໍ່ໄດ້"
         },
         "unable_to_setup_keys_error": "ບໍ່ສາມາດຕັ້ງຄ່າກະແຈໄດ້",
-        "unsupported": "ລູກຄ້ານີ້ບໍ່ຮອງຮັບການເຂົ້າລະຫັດແບບຕົ້ນທາງເຖິງປາຍທາງ.",
         "verification": {
             "accepting": "ກຳລັງຍອມຮັບ…",
             "after_new_login": {
@@ -1249,8 +1246,7 @@
         "share_type_prompt": "ທ່ານຕ້ອງການແບ່ງປັນສະຖານທີ່ປະເພດໃດ?"
     },
     "member_list": {
-        "filter_placeholder": "ການກັ່ນຕອງສະມາຊິກຫ້ອງ",
-        "invited_list_heading": "ເຊີນ"
+        "filter_placeholder": "ການກັ່ນຕອງສະມາຊິກຫ້ອງ"
     },
     "member_list_back_action_label": "ສະມາຊິກຫ້ອງ",
     "message_edit_dialog_title": "ແກ້ໄຂຂໍ້ຄວາມ",
@@ -1345,7 +1341,6 @@
         "custom_level": "ລະດັບທີ່ກໍາຫນົດເອງ",
         "default": "ຄ່າເລີ່ມຕົ້ນ",
         "label": "ລະດັບພະລັງງານ",
-        "mod": "ກາປັບປ່ຽນ",
         "moderator": "ຜູ້ດຳເນິນລາຍການ",
         "restricted": "ຖືກຈຳກັດ"
     },
@@ -2301,7 +2296,6 @@
         "invite": "ເຊີນຜູ້ຄົນ",
         "invite_description": "ເຊີນດ້ວຍອີເມລ໌ ຫຼື ຊື່ຜູ້ໃຊ້",
         "invite_link": "ແບ່ງປັນລິ້ງເຊີນ",
-        "invite_this_space": "ເຊີນໄປບ່ອນນີ້",
         "joining_space": "ເຂົ້າຮ່ວມ",
         "landing_welcome": "ຍິນດີຕ້ອນຮັບສູ່ <name/>",
         "leave_dialog_action": "ອອກຈາກພື້ນທີ່",
@@ -2609,7 +2603,9 @@
             "sent": "%(senderName)s ສົ່ງຄຳເຊີນໄປຫາ %(targetDisplayName)s ເພື່ອເຂົ້າຮ່ວມຫ້ອງ."
         },
         "m.room.tombstone": "%(senderDisplayName)s ຍົກລະດັບຫ້ອງນີ້ແລ້ວ.",
-        "m.room.topic": "%(senderDisplayName)s ໄດ້ປ່ຽນຫົວຂໍ້ເປັນ \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s ໄດ້ປ່ຽນຫົວຂໍ້ເປັນ \"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s ສົ່ງສະຕິກເກີ.",
         "m.video": {
             "error_decrypting": "ການຖອດລະຫັດວິດີໂອຜິດພາດ"
@@ -2868,14 +2864,6 @@
         "ban_room_confirm_title": "ຫ້າມອອຈາກ %(roomName)s",
         "ban_space_everything": "ຫ້າມພວກເຂົາຈາກທຸກສິ່ງທີ່ຂ້ອຍສາມາດເຮັດໄດ້",
         "ban_space_specific": "ຫ້າມພວກເຂົາອອຈາກສິ່ງທີ່ສະເພາະທີ່ຂ້ອຍສາມາດເຮັດໄດ້",
-        "count_of_sessions": {
-            "one": "%(count)s ລະບົບ",
-            "other": "%(count)ssessions"
-        },
-        "count_of_verified_sessions": {
-            "one": "ຢືນຢັນ 1 session ແລ້ວ",
-            "other": "%(count)sລະບົບຢືນຢັນແລ້ວ"
-        },
         "deactivate_confirm_action": "ປິດໃຊ້ງານຜູ້ໃຊ້",
         "deactivate_confirm_description": "ການປິດໃຊ້ງານຜູ້ໃຊ້ນີ້ຈະອອກຈາກລະບົບ ແລະປ້ອງກັນບໍ່ໃຫ້ເຂົາເຈົ້າເຂົ້າສູ່ລະບົບຄືນອີກ. ນອກຈາກນັ້ນ, ເຂົາເຈົ້າຈະອອກຈາກຫ້ອງທັງໝົດທີ່ເຂົາເຈົ້າຢູ່ໃນ. ຄຳສັ່ງນີ້ບໍ່ສາມາດຍົກເລີກໄດ້. ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການປິດກາໃຊ້ງານຜູ້ໃຊ້ນີ້?",
         "deactivate_confirm_title": "ປິດໃຊ້ງານຜູ້ໃຊ້ບໍ?",
@@ -2886,15 +2874,12 @@
         "disinvite_button_room": "ຕັດຂາດອອກຈາກຫ້ອງ",
         "disinvite_button_room_name": "ຍົກເລີກເຊີນຈາກ %(roomName)s",
         "disinvite_button_space": "ຕັດຂາດຈາກ ພື້ນທີ່ຈັດເກັບ",
-        "edit_own_devices": "ແກ້ໄຂອຸປະກອນ",
         "error_ban_user": "ຫ້າມຜູ້ໃຊ້ບໍ່ສຳເລັດ",
         "error_deactivate": "ປິດໃຊ້ງານຜູ້ໃຊ້ບໍ່ສຳເລັດ",
         "error_kicking_user": "ລຶບຜູ້ໃຊ້ອອກບໍ່ສຳເລັດ",
         "error_mute_user": "ປິດສຽງຜູ້ໃຊ້ບໍ່ສຳເລັດ",
         "error_revoke_3pid_invite_description": "ບໍ່ສາມາດຖອນຄຳເຊີນໄດ້. ເຊີບເວີອາດຈະປະສົບບັນຫາຊົ່ວຄາວ ຫຼື ທ່ານບໍ່ມີສິດພຽງພໍໃນການຖອນຄຳເຊີນ.",
         "error_revoke_3pid_invite_title": "ຍົກເລີກການເຊີນບໍ່ສຳເລັດ",
-        "hide_sessions": "ເຊື່ອງsessions",
-        "hide_verified_sessions": "ເຊື່ອງ sessionsທີ່ຢືນຢັນແລ້ວ",
         "invited_by": "ເຊີນໂດຍ%(sender)s",
         "jump_to_rr_button": "ຂ້າມເພື່ອອ່ານໃບຮັບເງິນ",
         "kick_button_room": "ຍ້າຍອອກຈາກຫ້ອງ",

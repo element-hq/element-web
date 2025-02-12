@@ -2,15 +2,15 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { type Room, type RoomMember } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import SettingsStore from "../settings/SettingsStore";
-import { SdkContextClass } from "../contexts/SDKContext";
+import { type SdkContextClass } from "../contexts/SDKContext";
 import SdkConfig from "../SdkConfig";
 
 // Regex applied to filter our punctuation in member names before applying sort, to fuzzy it a little

@@ -1,26 +1,26 @@
 /*
 Copyright 2019-2024 New Vector Ltd.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React, {
-    InputHTMLAttributes,
-    SelectHTMLAttributes,
-    TextareaHTMLAttributes,
-    RefObject,
+    type InputHTMLAttributes,
+    type SelectHTMLAttributes,
+    type TextareaHTMLAttributes,
+    type RefObject,
     createRef,
-    ComponentProps,
-    MutableRefObject,
-    RefCallback,
-    Ref,
+    type ComponentProps,
+    type MutableRefObject,
+    type RefCallback,
+    type Ref,
 } from "react";
 import classNames from "classnames";
 import { debounce } from "lodash";
 import { Tooltip } from "@vector-im/compound-web";
 
-import { IFieldState, IValidationResult } from "./Validation";
+import { type IFieldState, type IValidationResult } from "./Validation";
 
 // Invoke validation from user input (when typing, etc.) at most once every N ms.
 const VALIDATION_THROTTLE_MS = 200;

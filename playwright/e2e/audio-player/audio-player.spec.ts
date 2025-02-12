@@ -3,7 +3,7 @@ Copyright 2024 New Vector Ltd.
 Copyright 2023 Suguru Hirahara
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -11,9 +11,17 @@ import type { Locator, Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { Layout } from "../../../src/settings/enums/Layout";
-import { ElementAppPage } from "../../pages/ElementAppPage";
+import { type ElementAppPage } from "../../pages/ElementAppPage";
 
-test.describe("Audio player", () => {
+// Find and click "Reply" button
+const clickButtonReply = async (tile: Locator) => {
+    await expect(async () => {
+        await tile.hover();
+        await tile.getByRole("button", { name: "Reply", exact: true }).click();
+    }).toPass();
+};
+
+test.describe("Audio player", { tag: ["@no-firefox", "@no-webkit"] }, () => {
     test.use({
         displayName: "Hanako",
     });
@@ -222,8 +230,7 @@ test.describe("Audio player", () => {
 
             // Find and click "Reply" button on MessageActionBar
             const tile = page.locator(".mx_EventTile_last");
-            await tile.hover();
-            await tile.getByRole("button", { name: "Reply", exact: true }).click();
+            await clickButtonReply(tile);
 
             // Reply to the player with another audio file
             await uploadFile(page, "playwright/sample-files/1sec.ogg");
@@ -251,19 +258,12 @@ test.describe("Audio player", () => {
 
             const tile = page.locator(".mx_EventTile_last");
 
-            // Find and click "Reply" button
-            const clickButtonReply = async () => {
-                await tile.scrollIntoViewIfNeeded();
-                await tile.hover();
-                await tile.getByRole("button", { name: "Reply", exact: true }).click();
-            };
-
             await uploadFile(page, "playwright/sample-files/upload-first.ogg");
 
             // Assert that the audio player is rendered
             await expect(page.locator(".mx_EventTile_last .mx_AudioPlayer_container")).toBeVisible();
 
-            await clickButtonReply();
+            await clickButtonReply(tile);
 
             // Reply to the player with another audio file
             await uploadFile(page, "playwright/sample-files/upload-second.ogg");
@@ -271,7 +271,7 @@ test.describe("Audio player", () => {
             // Assert that the audio player is rendered
             await expect(page.locator(".mx_EventTile_last .mx_AudioPlayer_container")).toBeVisible();
 
-            await clickButtonReply();
+            await clickButtonReply(tile);
 
             // Reply to the player with yet another audio file to create a reply chain
             await uploadFile(page, "playwright/sample-files/upload-third.ogg");

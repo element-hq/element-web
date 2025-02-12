@@ -4,28 +4,28 @@ Copyright 2020 The Matrix.org Foundation C.I.C.
 Copyright 2019 New Vector Ltd
 Copyright 2015, 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    MatrixClient,
+    type MatrixClient,
     MsgType,
     HTTPError,
-    IEventRelation,
-    ISendEventResponse,
-    MatrixEvent,
-    UploadOpts,
-    UploadProgress,
+    type IEventRelation,
+    type ISendEventResponse,
+    type MatrixEvent,
+    type UploadOpts,
+    type UploadProgress,
     THREAD_RELATION_TYPE,
 } from "matrix-js-sdk/src/matrix";
 import {
-    ImageInfo,
-    AudioInfo,
-    VideoInfo,
-    EncryptedFile,
-    MediaEventContent,
-    MediaEventInfo,
+    type ImageInfo,
+    type AudioInfo,
+    type VideoInfo,
+    type EncryptedFile,
+    type MediaEventContent,
+    type MediaEventInfo,
 } from "matrix-js-sdk/src/types";
 import encrypt from "matrix-encrypt-attachment";
 import extractPngChunks from "png-chunks-extract";
@@ -38,11 +38,11 @@ import Modal from "./Modal";
 import Spinner from "./components/views/elements/Spinner";
 import { Action } from "./dispatcher/actions";
 import {
-    UploadCanceledPayload,
-    UploadErrorPayload,
-    UploadFinishedPayload,
-    UploadProgressPayload,
-    UploadStartedPayload,
+    type UploadCanceledPayload,
+    type UploadErrorPayload,
+    type UploadFinishedPayload,
+    type UploadProgressPayload,
+    type UploadStartedPayload,
 } from "./dispatcher/payloads/UploadPayload";
 import { RoomUpload } from "./models/RoomUpload";
 import SettingsStore from "./settings/SettingsStore";

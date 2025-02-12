@@ -3,22 +3,25 @@ Copyright 2024 New Vector Ltd.
 Copyright 2023 Ahmad Kadri
 Copyright 2023 Nordeck IT + Consulting GmbH.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { test as base, expect } from "../../element-web-test";
-import { Credentials } from "../../plugins/homeserver";
+import { type Credentials } from "../../plugins/homeserver";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 const test = base.extend<{
     user2?: Credentials;
 }>({});
 
 test.describe("1:1 chat room", () => {
+    test.skip(isDendrite, "due to a Dendrite bug https://github.com/element-hq/dendrite/issues/3492");
+
     test.use({
         displayName: "Jeff",
-        user2: async ({ homeserver }, use) => {
-            const credentials = await homeserver.registerUser("user1234", "p4s5W0rD", "Timmy");
+        user2: async ({ homeserver }, use, testInfo) => {
+            const credentials = await homeserver.registerUser(`user2_${testInfo.testId}`, "p4s5W0rD", "Timmy");
             await use(credentials);
         },
     });

@@ -2,16 +2,16 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021, 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room, IEvent, MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
+import { type Room, type IEvent, type MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import Exporter from "./Exporter";
 import { formatFullDateNoDayNoTime } from "../../DateUtils";
-import { ExportType, IExportOptions } from "./exportUtils";
+import { type ExportType, type IExportOptions } from "./exportUtils";
 import { _t } from "../../languageHandler";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
 

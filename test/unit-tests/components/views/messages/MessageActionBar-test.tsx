@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022, 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -30,7 +30,7 @@ import {
 } from "../../../../test-utils";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import RoomContext, { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
-import { IRoomState } from "../../../../../src/components/structures/RoomView";
+import { type IRoomState } from "../../../../../src/components/structures/RoomView";
 import dispatcher from "../../../../../src/dispatcher/dispatcher";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { Action } from "../../../../../src/dispatcher/actions";

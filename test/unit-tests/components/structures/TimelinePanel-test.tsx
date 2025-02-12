@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022, 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -11,7 +11,7 @@ import {
     ReceiptType,
     EventTimelineSet,
     EventType,
-    MatrixClient,
+    type MatrixClient,
     MatrixEvent,
     PendingEventOrdering,
     RelationType,
@@ -29,7 +29,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import React from "react";
-import { Mocked, mocked } from "jest-mock";
+import { type Mocked, mocked } from "jest-mock";
 import { forEachRight } from "lodash";
 
 import TimelinePanel from "../../../../src/components/structures/TimelinePanel";
@@ -303,8 +303,8 @@ describe("TimelinePanel", () => {
                     client.isVersionSupported.mockResolvedValue(true);
                     client.doesServerSupportUnstableFeature.mockResolvedValue(true);
 
-                    jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string) => {
-                        if (setting === "sendReadReceipt") return false;
+                    jest.spyOn(SettingsStore, "getValue").mockImplementation((setting: string): any => {
+                        if (setting === "sendReadReceipts") return false;
 
                         return undefined;
                     });

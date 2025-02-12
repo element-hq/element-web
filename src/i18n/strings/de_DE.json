@@ -129,7 +129,7 @@
         "try_again": "Erneut versuchen",
         "unban": "Verbannung aufheben",
         "unignore": "Freigeben",
-        "unpin": "Nicht mehr anheften",
+        "unpin": "Loslösen",
         "unsubscribe": "Deabonnieren",
         "update": "Aktualisieren",
         "upgrade": "Aktualisieren",
@@ -238,7 +238,6 @@
         "oidc": {
             "error_title": "Wir konnten dich nicht anmelden",
             "generic_auth_error": "Etwas ist während der Authentifizierung schiefgelaufen. Geh zurück zur Anmeldeseite und probiere es erneut.",
-            "logout_redirect_warning": "Sie werden zum Server Authentifizierungsanbieter weitergeleitet, um die Abmeldung abzuschließen.",
             "missing_or_invalid_stored_state": "Wir haben deinen Browser gebeten, sich zu merken, bei welchem Heim-Server du dich anmeldest, aber dein Browser hat dies leider vergessen. Gehe zur Anmeldeseite und versuche es erneut."
         },
         "password_field_keep_going_prompt": "Fortfahren …",
@@ -452,7 +451,6 @@
             "other": "und %(count)s weitere …",
             "one": "und ein weiterer …"
         },
-        "android": "Android",
         "appearance": "Erscheinungsbild",
         "application": "Anwendung",
         "are_you_sure": "Bist du sicher?",
@@ -492,7 +490,6 @@
         "identity_server": "Identitäts-Server",
         "image": "Bild",
         "integration_manager": "Integrationsverwaltung",
-        "ios": "iOS",
         "joined": "Beigetreten",
         "labs": "Labor",
         "legal": "Rechtliches",
@@ -542,6 +539,7 @@
         "qr_code": "QR-Code",
         "random": "Ohne Thema",
         "reactions": "Reaktionen",
+        "recommended": "Empfohlen",
         "report_a_bug": "Einen Fehler melden",
         "room": "Raum",
         "room_name": "Raumname",
@@ -550,7 +548,6 @@
         "saved": "Gespeichert",
         "saving": "Speichere …",
         "secure_backup": "Verschlüsselte Sicherung",
-        "security": "Sicherheit",
         "select_all": "Alle auswählen",
         "server": "Server",
         "settings": "Einstellungen",
@@ -567,9 +564,8 @@
         "system_alerts": "Systembenachrichtigung",
         "theme": "Design",
         "thread": "Thema",
-        "threads": "Themen",
+        "threads": "Threads",
         "timeline": "Verlauf",
-        "trusted": "Vertrauenswürdig",
         "unavailable": "Nicht verfügbar",
         "unencrypted": "Unverschlüsselt",
         "unmute": "Stummschalten aufheben",
@@ -586,8 +582,7 @@
         "video": "Video",
         "video_room": "Videoraum",
         "view_message": "Nachricht anzeigen",
-        "warning": "Warnung",
-        "welcome": "Willkommen"
+        "warning": "Warnung"
     },
     "composer": {
         "autocomplete": {
@@ -737,6 +732,44 @@
         "category_room": "Raum",
         "caution_colon": "Vorsicht:",
         "client_versions": "Anwendungsversionen",
+        "crypto": {
+            "4s_public_key_in_account_data": "in den Kontodaten",
+            "4s_public_key_not_in_account_data": "nicht gefunden",
+            "4s_public_key_status": "Öffentlicher Schlüssel des geheimen Speichers:",
+            "backup_key_cached": "lokal zwischengespeichert",
+            "backup_key_cached_status": "Backup-Schlüssel zwischengespeichert:",
+            "backup_key_not_stored": "nicht gespeichert",
+            "backup_key_stored": "im geheimen Speicher",
+            "backup_key_stored_status": "Backup-Schlüssel gespeichert:",
+            "backup_key_unexpected_type": "unerwarteter Typ",
+            "backup_key_well_formed": "wohlgeformt",
+            "cross_signing": "Kreuzsignatur",
+            "cross_signing_cached": "lokal zwischengespeichert",
+            "cross_signing_not_ready": "Kreuzsignatur ist nicht eingerichtet.",
+            "cross_signing_private_keys_in_storage": "im geheimen Speicher",
+            "cross_signing_private_keys_in_storage_status": "Überkreuzsignierung privater Schlüssel:",
+            "cross_signing_private_keys_not_in_storage": "nicht gefunden im Speicher",
+            "cross_signing_public_keys_on_device": "im Speicher",
+            "cross_signing_public_keys_on_device_status": "Überkreuzsignierung öffentlicher Schlüssel:",
+            "cross_signing_ready": "Kreuzsignatur ist einsatzbereit.",
+            "cross_signing_status": "Status der Kreuzsignatur",
+            "cross_signing_untrusted": "Ihr Konto verfügt über eine Cross-Signing-Identität im geheimen Speicher, diese wird von dieser Sitzung jedoch noch nicht als vertrauenswürdig eingestuft.",
+            "crypto_not_available": "Das kryptografische Modul ist nicht verfügbar",
+            "key_backup_active_version": "Aktive Backup Version:",
+            "key_backup_active_version_none": "Keine",
+            "key_backup_inactive_warning": "Für die Schlüssel dieser Session gibt es kein Backup",
+            "key_backup_latest_version": "Aktuelle Backup-Version auf dem Server:",
+            "key_storage": "Schlüsselspeicher",
+            "master_private_key_cached_status": "Privater Hauptschlüssel:",
+            "not_found": "nicht gefunden",
+            "not_found_locally": "nicht lokal gefunden",
+            "secret_storage_not_ready": "nicht bereit",
+            "secret_storage_ready": "bereit",
+            "secret_storage_status": "Geheimer Speicher:",
+            "self_signing_private_key_cached_status": "Selbstsignierender privater Schlüssel:",
+            "title": "Ende-zu-Ende Verschlüsselung",
+            "user_signing_private_key_cached_status": "Privater Schlüssel zur Benutzersignatur:"
+        },
         "developer_mode": "Entwicklungsmodus",
         "developer_tools": "Entwicklungswerkzeuge",
         "edit_setting": "Einstellung bearbeiten",
@@ -882,14 +915,18 @@
             "title": "Cross-Signing-Schlüssel zerstören?",
             "warning": "Das Löschen von Quersignierungsschlüsseln ist dauerhaft. Alle, mit dem du dich verifiziert hast, werden Sicherheitswarnungen angezeigt bekommen. Du möchtest dies mit ziemlicher Sicherheit nicht tun, es sei denn, du hast jedes Gerät verloren, von dem aus du quersignieren kannst."
         },
+        "enter_recovery_key": "Geben Sie den Wiederherstellungsschlüssel ein",
         "event_shield_reason_authenticity_not_guaranteed": "Die Echtheit dieser verschlüsselten Nachricht kann auf diesem Gerät nicht garantiert werden.",
         "event_shield_reason_mismatched_sender_key": "Von einer nicht verifizierten Sitzung verschlüsselt",
         "event_shield_reason_unknown_device": "Durch ein unbekanntes oder gelöschtes Gerät verschlüsselt.",
         "event_shield_reason_unsigned_device": "Durch ein von Besitzer nicht verifiziertes Gerät verschlüsselt.",
         "event_shield_reason_unverified_identity": "Durch einen nicht verifizierten Benutzer verschlüsselt.",
         "export_unsupported": "Dein Browser unterstützt die benötigten Verschlüsselungserweiterungen nicht",
+        "forgot_recovery_key": "Wiederherstellungsschlüssel vergessen?",
         "import_invalid_keyfile": "Keine gültige %(brand)s-Schlüsseldatei",
         "import_invalid_passphrase": "Authentifizierung fehlgeschlagen: Falsches Passwort?",
+        "key_storage_out_of_sync": "Ihr Schlüsselspeicher ist nicht synchronisiert.",
+        "key_storage_out_of_sync_description": "Bestätigen Sie Ihren Wiederherstellungsschlüssel, um weiterhin auf Ihren Schlüsselspeicher und den Nachrichtenverlauf zugreifen zu können.",
         "messages_not_secure": {
             "cause_1": "Dein Heim-Server",
             "cause_2": "Der Heim-Server der Person, die du verifizierst",
@@ -914,6 +951,9 @@
             "warning": "Wenn du die Wiederherstellungsmethode nicht gelöscht hast, kann ein Angreifer versuchen, Zugang zu deinem Konto zu bekommen. Ändere dein Passwort und richte sofort eine neue Wiederherstellungsmethode in den Einstellungen ein."
         },
         "reset_all_button": "Hast du alle Wiederherstellungsmethoden vergessen? <a>Setze sie hier zurück</a>",
+        "set_up_recovery": "Wiederherstellung einrichten",
+        "set_up_recovery_later": "Nicht jetzt",
+        "set_up_recovery_toast_description": "Generieren Sie einen Wiederherstellungsschlüssel, damit Sie Ihren verschlüsselten Nachrichtenverlauf wiederherstellen können, falls Sie den Zugriff auf Ihre Geräte verlieren.",
         "set_up_toast_description": "Schütze dich vor dem Verlust verschlüsselter Nachrichten und Daten",
         "set_up_toast_title": "Schlüsselsicherung einrichten",
         "setup_secure_backup": {
@@ -929,7 +969,6 @@
             "title": "Nicht vertraut"
         },
         "unable_to_setup_keys_error": "Schlüssel können nicht eingerichtet werden",
-        "unsupported": "Diese Anwendung unterstützt keine Ende-zu-Ende-Verschlüsselung.",
         "verification": {
             "accepting": "Annehmen…",
             "after_new_login": {
@@ -1016,8 +1055,11 @@
             "waiting_other_user": "Warte darauf, dass %(displayName)s bestätigt…"
         },
         "verification_requested_toast_title": "Verifizierung angefragt",
+        "verified_identity_changed": "Die verifizierte Identität von %(displayName)s (<b>%(userId)s</b>) hat sich geändert. <a>Weitere Informationen</a>",
+        "verified_identity_changed_no_displayname": "Die Identität von <b>%(userId)</b> hat sich geändert. <a>Weitere Informationen</a>",
         "verify_toast_description": "Andere Benutzer vertrauen ihr vielleicht nicht",
-        "verify_toast_title": "Sitzung verifizieren"
+        "verify_toast_title": "Sitzung verifizieren",
+        "withdraw_verification_action": "Verifizierung zurückziehen"
     },
     "error": {
         "admin_contact": "Bitte <a>kontaktiere deinen Systemadministrator</a> um diesen Dienst weiter zu nutzen.",
@@ -1274,7 +1316,7 @@
         "error_already_invited_space": "Die Person wurde bereits eingeladen",
         "error_already_joined_room": "Die Person ist bereits im Raum",
         "error_already_joined_space": "Die Person ist bereits im Space",
-        "error_bad_state": "Verbannte Nutzer können nicht eingeladen werden.",
+        "error_bad_state": "Gesperrte Benutzer können nicht eingeladen werden.",
         "error_dm": "Wir konnten deine Direktnachricht nicht erstellen.",
         "error_find_room": "Beim Einladen der Nutzer lief etwas schief.",
         "error_find_user_description": "Folgende Nutzer konnten nicht eingeladen werden, da sie nicht existieren oder ungültig sind: %(csvNames)s",
@@ -1315,7 +1357,7 @@
         "unable_find_profiles_invite_label_default": "Dennoch einladen",
         "unable_find_profiles_invite_never_warn_label_default": "Trotzdem einladen und mich nicht mehr warnen",
         "unable_find_profiles_title": "Eventuell existieren folgende Benutzer nicht",
-        "unban_first_title": "Benutzer kann nicht eingeladen werden, solange er nicht entbannt ist"
+        "unban_first_title": "Benutzer kann nicht eingeladen werden, solange die Sperre nicht aufgehoben worden ist."
     },
     "inviting_user1_and_user2": "Lade %(user1)s und %(user2)s ein",
     "inviting_user_and_n_others": {
@@ -1391,7 +1433,7 @@
         "space": "Leertaste",
         "switch_to_space": "Mit Nummer zu Leerzeichen springen",
         "toggle_hidden_events": "Sichtbarkeit versteckter Ereignisse umschalten",
-        "toggle_microphone_mute": "Mikrofon an-/ausschalten",
+        "toggle_microphone_mute": "Mikrofon ein-/ausschalten",
         "toggle_right_panel": "Rechtes Panel ein-/ausblenden",
         "toggle_space_panel": "Space-Panel ein/aus",
         "toggle_top_left_menu": "Menü oben links ein-/ausblenden",
@@ -1458,8 +1500,6 @@
         "notification_settings_beta_caption": "Einen einfacheren Weg um die Einstellungen für Benachrichtigungen zu ändern vorstellen. Passe Deine %(brand)s so an wie Du willst.",
         "notification_settings_beta_title": "Benachrichtigungseinstellungen",
         "notifications": "Benachrichtigungen in der Kopfleiste des Raums anschalten",
-        "oidc_native_flow": "Native OIDC Authentifizierung",
-        "oidc_native_flow_description": "⚠ Warnung: Experimentell. Nutze OIDC native Authentifizierung wenn dies vom Server unterstützt wird.",
         "release_announcement": "Release Ankündigung",
         "render_reaction_images": "Benutzerdefinierte Bilder in Reaktionen anzeigen",
         "render_reaction_images_description": "Werden manchmal auch als „benutzerdefinierte Emojis“ bezeichnet.",
@@ -1579,9 +1619,14 @@
         "toggle_attribution": "Info ein-/ausblenden"
     },
     "member_list": {
+        "count": {
+            "one": "%(count)s Mitglied",
+            "other": "%(count)s Mitglieder"
+        },
         "filter_placeholder": "Raummitglieder filtern",
         "invite_button_no_perms_tooltip": "Du bist nicht berechtigt, Benutzer einzuladen",
-        "invited_list_heading": "Eingeladen",
+        "invited_label": "Eingeladen",
+        "no_matches": "Keine Treffer",
         "power_label": "%(userName)s (Berechtigungslevel %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Raummitglieder",
@@ -1628,61 +1673,15 @@
         "m.key.verification.request": "%(name)s fordert eine Verifizierung an"
     },
     "onboarding": {
-        "apple_trademarks": "App Store® und das Apple Logo® sind eingetragene Markenzeichen von Apple Inc.",
-        "community_messaging_action": "Finde deine Leute",
-        "community_messaging_description": "Verfüge und behalte die Kontrolle über Gespräche deiner Gemeinschaft.\nSkalierbar für Millionen von Nutzenden, mit mächtigen Moderationswerkzeugen und Interoperabilität.",
-        "community_messaging_title": "In gemeinschaftlicher Hand",
-        "complete_these": "Vervollständige sie für die beste %(brand)s-Erfahrung",
         "create_room": "Gruppenraum erstellen",
-        "download_app": "%(brand)s herunterladen",
-        "download_app_action": "Apps herunterladen",
-        "download_app_description": "Nimm %(brand)s mit, um nichts mehr zu verpassen",
-        "download_app_store": "Im App Store herunterladen",
-        "download_brand": "%(brand)s herunterladen",
-        "download_brand_desktop": "%(brand)s Desktop herunterladen",
-        "download_f_droid": "In F-Droid erhältlich",
-        "download_google_play": "In Google Play erhältlich",
-        "enable_notifications": "Desktopbenachrichtigungen einschalten",
-        "enable_notifications_action": "Einstellungen öffnen",
-        "enable_notifications_description": "Verpasse keine Antworten oder wichtigen Nachrichten",
         "explore_rooms": "Öffentliche Räume erkunden",
-        "find_community_members": "Finde deine Community-Mitglieder und lade sie ein",
-        "find_coworkers": "Finde deine Kollegen und lade sie ein",
-        "find_friends": "Finde deine Freunde und lade sie ein",
-        "find_friends_action": "Freunde finden",
-        "find_friends_description": "Dafür bist du hier, also dann mal los",
-        "find_people": "Finde Personen",
-        "free_e2ee_messaging_unlimited_voip": "Dank freien, Ende-zu-Ende verschlüsselter Kommunikation und unbegrenzten Sprach- und Videoanrufen ist %(brand)s eine großartige Möglichkeit, um in Kontakt zu bleiben.",
-        "get_stuff_done": "Finde dein Team und werdet produktiv",
-        "google_trademarks": "Google Play und das Google Play Logo sind eingetragene Markenzeichen von Google LLC.",
         "has_avatar_label": "Großartig, das wird anderen helfen, dich zu erkennen",
         "intro_byline": "Besitze deine Unterhaltungen.",
         "intro_welcome": "Willkommen bei %(appName)s",
         "no_avatar_label": "Füge ein Bild hinzu, damit andere dich erkennen können.",
-        "only_n_steps_to_go": {
-            "one": "Nur noch %(count)s Schritt",
-            "other": "Nur noch %(count)s Schritte"
-        },
-        "personal_messaging_action": "Beginne eine Unterhaltung",
-        "personal_messaging_title": "Sichere Kommunikation für Freunde und Familie",
-        "qr_or_app_links": "%(qrCode)s oder %(appLinks)s",
         "send_dm": "Direkt­­nachricht senden",
-        "set_up_profile": "Richte dein Profil ein",
-        "set_up_profile_action": "Dein Profil",
-        "set_up_profile_description": "Lass andere wissen, dass du es wirklich bist",
-        "use_case_community_messaging": "Online Community-Mitglieder",
-        "use_case_heading1": "Los gehts",
-        "use_case_heading2": "Mit wem wirst du am meisten schreiben?",
-        "use_case_heading3": "Wir helfen dir, dich zu vernetzen.",
-        "use_case_personal_messaging": "Freunde und Familie",
-        "use_case_work_messaging": "Kollegen und Gruppen",
         "welcome_detail": "Nun, lassen Sie uns Ihnen den Einstieg erleichtern",
-        "welcome_to_brand": "Willkommen bei %(brand)s",
-        "welcome_user": "Willkommen %(name)s",
-        "work_messaging_action": "Finde deine Kollegen",
-        "work_messaging_title": "Sichere Kommunikation für die Arbeit",
-        "you_did_it": "Geschafft!",
-        "you_made_it": "Geschafft!"
+        "welcome_user": "Willkommen %(name)s"
     },
     "pill": {
         "permalink_other_room": "Nachricht in %(room)s",
@@ -1734,7 +1733,6 @@
         "custom_level": "Selbstdefiniertes Berechtigungslevel",
         "default": "Standard",
         "label": "Berechtigungsstufe",
-        "mod": "Moderator",
         "moderator": "Moderator",
         "restricted": "Eingeschränkt"
     },
@@ -1846,9 +1844,9 @@
             },
             "reply_thread": "Auf <link>Nachricht im Thread</link> antworten",
             "unpin_all": {
-                "button": "Alle Nachrichten lösen",
+                "button": "Alle Nachrichten loslösen",
                 "content": "Stellen Sie sicher, dass Sie wirklich alle angehefteten Nachrichten entfernen möchten. Diese Aktion kann nicht rückgängig gemacht werden.",
-                "title": "Alle Nachrichten lösen?"
+                "title": "Alle Nachrichten loslösen?"
             },
             "view": "Im Nachrichtenverlauf ansehen"
         },
@@ -2032,7 +2030,7 @@
             "button_view_all": "Alle anzeigen",
             "description": "In diesem Raum sind Nachrichten angeheftet. Klicken Sie hier, um sie anzusehen.",
             "go_to_message": "Fixierte Nachrichten im Nachrichtenverlauf anzeigen.",
-            "title": "<bold>%(index)s of %(length)s</bold> Angeheftete Nachrichten"
+            "title": "<bold>%(index)s of %(length)s</bold> Fixierte Nachrichten"
         },
         "read_topic": "Klicke, um das Thema zu lesen",
         "rejecting": "Lehne Einladung ab …",
@@ -2417,14 +2415,14 @@
     },
     "settings": {
         "account": {
-            "dialog_title": "<strong>Einstellunge:</strong> Konto",
+            "dialog_title": "<strong>Einstellungen:</strong> Konto",
             "title": "Konto"
         },
         "all_rooms_home": "Alle Räume auf Startseite anzeigen",
         "all_rooms_home_description": "Alle Räume, denen du beigetreten bist, werden auf der Startseite erscheinen.",
         "always_show_message_timestamps": "Nachrichtenzeitstempel immer anzeigen",
         "appearance": {
-            "bundled_emoji_font": "Verwenden Sie den mitgelieferten Emoji Font.",
+            "bundled_emoji_font": "Mitgelieferte Emoji-Schriftart verwenden",
             "compact_layout": "Kompakten Text und Nachrichten anzeigen",
             "compact_layout_description": "Um diese Funktion nutzen zu können, muss das moderne Nachrichtenlayout ausgewählt sein.",
             "custom_font": "Systemschriftart verwenden",
@@ -2460,6 +2458,55 @@
         "emoji_autocomplete": "Emoji-Vorschläge während Eingabe",
         "enable_markdown": "Markdown aktivieren",
         "enable_markdown_description": "Beginne Nachrichten mit <code>/plain</code>, um sie ohne Markdown zu senden.",
+        "encryption": {
+            "advanced": {
+                "breadcrumb_first_description": "Ihre Kontodaten, Kontakte, Einstellungen und Chat-Liste werden gespeichert",
+                "breadcrumb_page": "Verschlüsselung zurücksetzen",
+                "breadcrumb_second_description": "Sie verlieren jeglichen Nachrichtenverlauf, der nur auf dem Server gespeichert ist",
+                "breadcrumb_third_description": "Sie müssen alle Ihre vorhandenen Geräte und Kontakte erneut verifizieren",
+                "breadcrumb_title": "Sind Sie sicher, dass Sie Ihre Identität zurücksetzen möchten?",
+                "breadcrumb_title_forgot": "Haben Sie Ihren Wiederherstellungsschlüssel vergessen? Sie müssen Ihre Identität zurücksetzen.",
+                "breadcrumb_warning": "Tun Sie dies nur, wenn Sie glauben, dass Ihr Konto kompromittiert wurde.",
+                "details_title": "Angaben zur Verschlüsselung",
+                "export_keys": "Schlüssel exportieren",
+                "import_keys": "Schlüssel importieren",
+                "other_people_device_description": "Senden Sie in verschlüsselten Räumen standardmäßig keine verschlüsselten Nachrichten an Dritte, bis Sie diese verifiziert haben",
+                "other_people_device_label": "Senden Sie niemals verschlüsselte Nachrichten an nicht verifizierte Geräte",
+                "other_people_device_title": "Geräte anderer Personen",
+                "reset_identity": "Kryptografische Identität zurücksetzen",
+                "session_id": "Sitzungs-ID:",
+                "session_key": "Sitzungsschlüssel:",
+                "title": "Advanced"
+            },
+            "device_not_verified_button": "Dieses Gerät verifizieren",
+            "device_not_verified_description": "Sie müssen dieses Gerät verifizieren, um Ihre Verschlüsselungseinstellungen einsehen zu können.",
+            "device_not_verified_title": "Gerät nicht verifiziert",
+            "dialog_title": "<strong>Einstellungen:</strong> Verschlüsselung",
+            "recovery": {
+                "change_recovery_confirm_button": "Bestätigen Sie den neuen Wiederherstellungsschlüssel",
+                "change_recovery_confirm_description": "Geben Sie unten Ihren neuen Wiederherstellungsschlüssel ein, um den Vorgang abzuschließen. Ihr alter Wiederherstellungsschlüssel funktioniert nicht mehr.",
+                "change_recovery_confirm_title": "Geben Sie Ihren neuen Wiederherstellungsschlüssel ein",
+                "change_recovery_key": "Wiederherstellungsschlüssel ändern",
+                "change_recovery_key_description": "Notieren Sie sich diesen neuen Wiederherstellungsschlüssel an einem sicheren Ort. Klicken Sie anschließend auf Weiter, um die Änderung zu bestätigen.",
+                "change_recovery_key_title": "Wiederherstellungsschlüssel ändern?",
+                "description": "Falls Sie alle Ihre Geräte verloren haben. stellen Sie Ihre kryptografische Identität und Ihren Nachrichtenverlauf mit einem Wiederherstellungsschlüssel wieder her.",
+                "enter_key_error": "Der eingegebene Wiederherstellungsschlüssel ist nicht korrekt.",
+                "enter_recovery_key": "Geben Sie den Wiederherstellungsschlüssel ein",
+                "key_storage_warning": "Ihr Schlüsselspeicher ist nicht synchronisiert. Klicken Sie auf die Schaltfläche unten, um das Problem zu beheben.",
+                "save_key_description": "Teilen Sie dies mit niemandem!",
+                "save_key_title": "Wiederherstellungsschlüssel",
+                "set_up_recovery": "Wiederherstellung einrichten",
+                "set_up_recovery_confirm_button": "Einrichtung abschließen",
+                "set_up_recovery_confirm_description": "Geben Sie den auf dem vorherigen Bildschirm angezeigten Wiederherstellungsschlüssel ein, um die Einrichtung der Wiederherstellung abzuschließen.",
+                "set_up_recovery_confirm_title": "Geben Sie zur Bestätigung Ihren Wiederherstellungsschlüssel ein",
+                "set_up_recovery_description": "Ihr Schlüsselspeicher ist durch einen Wiederherstellungsschlüssel geschützt. Wenn Sie nach der Installation einen neuen Wiederherstellungsschlüssel benötigen, können Sie ihn neu erstellen, indem Sie '%(changeRecoveryKeyButton)s' auswählen.",
+                "set_up_recovery_save_key_description": "Notieren Sie sich diesen Wiederherstellungsschlüssel an einem sicheren Ort, z. B. in einem Passwort-Manager, einer verschlüsselten Notiz oder einem Safe.",
+                "set_up_recovery_save_key_title": "Bewahren Sie Ihren Wiederherstellungsschlüssel an einem sicheren Ort auf",
+                "set_up_recovery_secondary_description": "Nachdem Sie auf Weiter geklickt haben, generieren wir einen Wiederherstellungsschlüssel für Sie.",
+                "title": "Wiederherstellung"
+            },
+            "title": "Verschlüsselung"
+        },
         "general": {
             "account_management_section": "Benutzerkontenverwaltung",
             "account_section": "Benutzerkonto",
@@ -2603,7 +2650,7 @@
             "title": "Tastatur"
         },
         "labs": {
-            "dialog_title": "<strong>Einstellungen:</strong> Labore"
+            "dialog_title": "<strong>Einstellungen:</strong> Labor"
         },
         "labs_mjolnir": {
             "dialog_title": "<strong>Einstellungen:</strong> Blockierte Benutzer"
@@ -2685,7 +2732,6 @@
             "room_directory_heading": "Raumverzeichnis",
             "room_list_heading": "Raumliste",
             "show_avatars_pills": "Profilbilder in Benutzer-, Raum- und Ereigniserwähnungen anzeigen",
-            "show_checklist_shortcuts": "Verknüpfung zu ersten Schritten (Willkommen) anzeigen",
             "show_polls_button": "Zeige Pol button",
             "surround_text": "Sonderzeichen automatisch vor und hinter Textauswahl setzen",
             "time_heading": "Zeitanzeige",
@@ -2819,6 +2865,7 @@
             "inactive_sessions_list_description": "Erwäge, dich aus alten (%(inactiveAgeDays)s Tage oder mehr), nicht mehr verwendeten Sitzungen abzumelden.",
             "ip": "IP-Adresse",
             "last_activity": "Neueste Aktivität",
+            "manage": "Diese Sitzung verwalten",
             "mobile_session": "Mobil-Sitzung",
             "n_sessions_selected": {
                 "one": "%(count)s Sitzung ausgewählt",
@@ -3014,7 +3061,7 @@
         "topic_room_error": "Thema des Raums konnte nicht ermittelt werden: Raum kann nicht gefunden werden (%(roomId)s",
         "tovirtual": "Zum virtuellen Raum dieses Raums wechseln, sofern vorhanden",
         "tovirtual_not_found": "Kein virtueller Raum für diesen Raum",
-        "unban": "Entbannt den Benutzer mit der angegebenen ID",
+        "unban": "Entsperrt den Benutzer mit der angegebenen ID",
         "unflip": "Stellt ┬──┬ ノ( ゜-゜ノ) einer Klartextnachricht voran",
         "unholdcall": "Beendet das Halten des Anrufs",
         "unignore": "Benutzer freigeben und ihre neuen Nachrichten wieder anzeigen",
@@ -3064,7 +3111,6 @@
         "invite": "Personen einladen",
         "invite_description": "Personen mit E-Mail oder Benutzernamen einladen",
         "invite_link": "Einladungslink teilen",
-        "invite_this_space": "In diesen Space einladen",
         "joining_space": "Trete bei",
         "landing_welcome": "Willkommen bei <name/>",
         "leave_dialog_action": "Space verlassen",
@@ -3413,7 +3459,7 @@
             "remove_name": "%(senderName)s hat den alten Anzeigenamen %(oldDisplayName)s entfernt",
             "set_avatar": "%(senderName)s hat das Profilbild gesetzt",
             "set_name": "%(senderName)s hat den Anzeigenamen zu %(displayName)s geändert",
-            "unban": "%(senderName)s hat %(targetName)s entbannt",
+            "unban": "%(senderName)s hat die Verbannung von %(targetName)s aufgehoben",
             "withdrew_invite": "%(senderName)s hat die Einladung für %(targetName)s zurückgezogen",
             "withdrew_invite_reason": "%(senderName)s hat die Einladung für %(targetName)s zurückgezogen: %(reason)s"
         },
@@ -3444,7 +3490,10 @@
             "sent": "%(senderName)s hat %(targetDisplayName)s in diesen Raum eingeladen."
         },
         "m.room.tombstone": "%(senderDisplayName)s hat diesen Raum aktualisiert.",
-        "m.room.topic": "%(senderDisplayName)s hat das Thema geändert in \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s hat das Thema geändert in \"%(topic)s\".",
+            "removed": "%(senderDisplayName)shat das Thema entfernt."
+        },
         "m.sticker": "%(senderDisplayName)s hat einen Sticker gesendet.",
         "m.video": {
             "error_decrypting": "Videoentschlüsselung fehlgeschlagen"
@@ -3731,20 +3780,11 @@
         "ban_button_room": "Bannen",
         "ban_button_space": "Bannen",
         "ban_room_confirm_title": "Aus %(roomName)s verbannen",
-        "ban_space_everything": "Überall wo ich die Rechte dazu habe bannen",
-        "ban_space_specific": "In ausgewählten Räumen und Spaces bannen",
-        "count_of_sessions": {
-            "other": "%(count)s Sitzungen",
-            "one": "%(count)s Sitzung"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s verifizierte Sitzungen",
-            "one": "Eine verifizierte Sitzung"
-        },
+        "ban_space_everything": "Überall sperren, wo ich die Rechte dazu habe",
+        "ban_space_specific": "Sperre sie in ausgewählten Chatrooms und Spaces",
         "deactivate_confirm_action": "Konto deaktivieren",
         "deactivate_confirm_description": "Beim Deaktivieren wirst du abgemeldet und ein erneutes Anmelden verhindert. Zusätzlich wirst du aus allen Räumen entfernt. Diese Aktion kann nicht rückgängig gemacht werden. Bist du sicher, dass du dieses Konto deaktivieren willst?",
         "deactivate_confirm_title": "Konto deaktivieren?",
-        "dehydrated_device_enabled": "Offline-Gerät aktiviert",
         "demote_button": "Zurückstufen",
         "demote_self_confirm_description_space": "Das Entfernen von Rechten kann nicht rückgängig gemacht werden. Falls sie dir niemand anderer zurückgeben kann, kannst du sie nie wieder erhalten.",
         "demote_self_confirm_room": "Du wirst nicht in der Lage sein, die Änderung zurückzusetzen, da du dich degradierst. Wenn du der letze Nutzer mit Berechtigungen bist, wird es unmöglich sein die Privilegien zurückzubekommen.",
@@ -3752,15 +3792,12 @@
         "disinvite_button_room": "Einladung zurückziehen",
         "disinvite_button_room_name": "Einladung für %(roomName)s zurückziehen",
         "disinvite_button_space": "Einladung zurückziehen",
-        "edit_own_devices": "Sitzungen anzeigen",
         "error_ban_user": "Verbannen des Benutzers fehlgeschlagen",
         "error_deactivate": "Benutzer konnte nicht deaktiviert werden",
         "error_kicking_user": "Fehler beim entfernen des Nutzers",
         "error_mute_user": "Stummschalten des Nutzers fehlgeschlagen",
         "error_revoke_3pid_invite_description": "Die Einladung konnte nicht zurückgezogen werden. Der Server hat möglicherweise ein vorübergehendes Problem oder du hast nicht ausreichende Berechtigungen, um die Einladung zurückzuziehen.",
         "error_revoke_3pid_invite_title": "Einladung konnte nicht zurückgezogen werden",
-        "hide_sessions": "Sitzungen ausblenden",
-        "hide_verified_sessions": "Verifizierte Sitzungen ausblenden",
         "ignore_button": "Blockieren",
         "ignore_confirm_description": "Alle Nachrichten und Einladungen der Person werden verborgen. Bist du sicher, dass du sie ignorieren möchtest?",
         "ignore_confirm_title": "%(user)s ignorieren",
@@ -3797,11 +3834,11 @@
         "room_unencrypted_detail": "Nachrichten in verschlüsselten Räumen können nur von dir und vom Empfänger gelesen werden.",
         "send_message": "Nachricht senden",
         "share_button": "Profil teilen",
-        "unban_button_room": "Entbannen",
-        "unban_button_space": "Entbannen",
-        "unban_room_confirm_title": "Von %(roomName)s entbannen",
-        "unban_space_everything": "Überall wo ich die Rechte dazu habe, entbannen",
-        "unban_space_specific": "In ausgewählten Räumen und Spaces entbannen",
+        "unban_button_room": "Sperrung für den Chatroom aufheben",
+        "unban_button_space": "Sperrung aus Space aufheben",
+        "unban_room_confirm_title": "Sperrung für %(roomName)s aufheben",
+        "unban_space_everything": "Die Verbannung überall aufheben wo ich die Rechte dazu habe",
+        "unban_space_specific": "In ausgewählten Chatrooms und Spaces die Sperrung für sie aufheben",
         "unban_space_warning": "Die Person wird keinen Zutritt zu Bereichen haben, in denen du nicht administrierst.",
         "unignore_button": "Nicht mehr ignorieren",
         "verify_button": "Nutzer verifizieren",

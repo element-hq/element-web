@@ -2,15 +2,15 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import RoomListStore from "../../stores/room-list/RoomListStore";
-import { DefaultTagID, TagID } from "../../stores/room-list/models";
+import { DefaultTagID, type TagID } from "../../stores/room-list/models";
 import RoomListActions from "../../actions/RoomListActions";
 import dis from "../../dispatcher/dispatcher";
 

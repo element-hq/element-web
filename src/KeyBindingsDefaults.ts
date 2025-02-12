@@ -3,14 +3,14 @@ Copyright 2024 New Vector Ltd.
 Copyright 2022 Šimon Brandner <simon.bra.ag@gmail.com>
 Copyright 2021 Clemens Zeidler
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { IS_MAC, Key } from "./Keyboard";
 import SettingsStore from "./settings/SettingsStore";
 import SdkConfig from "./SdkConfig";
-import { IKeyBindingsProvider, KeyBinding } from "./KeyBindingsManager";
+import { type IKeyBindingsProvider, type KeyBinding } from "./KeyBindingsManager";
 import { CATEGORIES, CategoryName, KeyBindingAction } from "./accessibility/KeyboardShortcuts";
 import { getKeyboardShortcuts } from "./accessibility/KeyboardShortcutUtils";
 

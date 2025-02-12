@@ -3,17 +3,22 @@
 /package.json             @element-hq/element-web-team
 /yarn.lock                @element-hq/element-web-team
 
-/src/SecurityManager.ts                           @element-hq/element-crypto-web-reviewers
-/test/SecurityManager-test.ts                     @element-hq/element-crypto-web-reviewers
-/src/async-components/views/dialogs/security/     @element-hq/element-crypto-web-reviewers
-/src/components/views/dialogs/security/           @element-hq/element-crypto-web-reviewers
-/test/components/views/dialogs/security/          @element-hq/element-crypto-web-reviewers
-/src/stores/SetupEncryptionStore.ts               @element-hq/element-crypto-web-reviewers
-/test/stores/SetupEncryptionStore-test.ts         @element-hq/element-crypto-web-reviewers
+/src/SecurityManager.ts                                                 @element-hq/element-crypto-web-reviewers
+/test/SecurityManager-test.ts                                           @element-hq/element-crypto-web-reviewers
+/src/async-components/views/dialogs/security/                           @element-hq/element-crypto-web-reviewers
+/src/components/views/dialogs/security/                                 @element-hq/element-crypto-web-reviewers
+/test/components/views/dialogs/security/                                @element-hq/element-crypto-web-reviewers
+/src/stores/SetupEncryptionStore.ts                                     @element-hq/element-crypto-web-reviewers
+/test/stores/SetupEncryptionStore-test.ts                               @element-hq/element-crypto-web-reviewers
+/src/components/views/settings/tabs/user/EncryptionUserSettingsTab.tsx  @element-hq/element-crypto-web-reviewers
+/src/src/components/views/settings/encryption/                          @element-hq/element-crypto-web-reviewers
+/test/unit-tests/components/views/settings/encryption/                  @element-hq/element-crypto-web-reviewers
+/playwright/e2e/settings/encryption-user-tab/                           @element-hq/element-crypto-web-reviewers
+/src/components/views/dialogs/devtools/Crypto.tsx                       @element-hq/element-crypto-web-reviewers
 
 # Ignore translations as those will be updated by GHA for Localazy download
 /src/i18n/strings
 /src/i18n/strings/en_EN.json  @element-hq/element-web-reviewers
 # Ignore the synapse plugin as this is updated by GHA for docker image updating
-/playwright/plugins/homeserver/synapse/index.ts
+/playwright/testcontainers/synapse.ts
 

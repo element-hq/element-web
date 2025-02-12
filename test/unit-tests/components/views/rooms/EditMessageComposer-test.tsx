@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -10,7 +10,7 @@ import React from "react";
 import { fireEvent, render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { Room } from "matrix-js-sdk/src/matrix";
-import { ReplacementEvent, RoomMessageEventContent } from "matrix-js-sdk/src/types";
+import { type ReplacementEvent, type RoomMessageEventContent } from "matrix-js-sdk/src/types";
 
 import EditMessageComposerWithMatrixClient, {
     createEditContent,
@@ -27,9 +27,9 @@ import {
 import DocumentOffset from "../../../../../src/editor/offset";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import EditorStateTransfer from "../../../../../src/utils/EditorStateTransfer";
-import { IRoomState } from "../../../../../src/components/structures/RoomView";
+import { type IRoomState } from "../../../../../src/components/structures/RoomView";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import Autocompleter, { IProviderCompletions } from "../../../../../src/autocomplete/Autocompleter";
+import Autocompleter, { type IProviderCompletions } from "../../../../../src/autocomplete/Autocompleter";
 import NotifProvider from "../../../../../src/autocomplete/NotifProvider";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";

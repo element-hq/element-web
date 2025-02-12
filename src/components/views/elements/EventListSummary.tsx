@@ -4,13 +4,14 @@ Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 Copyright 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ComponentProps, ReactNode } from "react";
-import { MatrixEvent, RoomMember, EventType } from "matrix-js-sdk/src/matrix";
+import React, { type ComponentProps, type ReactNode } from "react";
+import { EventType, type MatrixEvent, MatrixEventEvent, type RoomMember } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+import { throttle } from "lodash";
 
 import { _t } from "../../../languageHandler";
 import { formatList } from "../../../utils/FormattingUtils";
@@ -22,6 +23,8 @@ import { Layout } from "../../../settings/enums/Layout";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import AccessibleButton from "./AccessibleButton";
 import RoomContext from "../../../contexts/RoomContext";
+import { arrayHasDiff } from "../../../utils/arrays.ts";
+import { objectHasDiff } from "../../../utils/objects.ts";
 
 const onPinnedMessagesClick = (): void => {
     RightPanelStore.instance.setCard({ phase: RightPanelPhases.PinnedMessages }, false);
@@ -69,9 +72,14 @@ enum TransitionType {
 
 const SEP = ",";
 
-export default class EventListSummary extends React.Component<
-    IProps & Required<Pick<IProps, "summaryLength" | "threshold" | "avatarsMaxLength" | "layout">>
-> {
+type Props = IProps & Required<Pick<IProps, "summaryLength" | "threshold" | "avatarsMaxLength" | "layout">>;
+
+interface State {
+    userEvents: Record<string, IUserEvents[]>;
+    summaryMembers: RoomMember[];
+}
+
+export default class EventListSummary extends React.Component<Props, State> {
     public static contextType = RoomContext;
     declare public context: React.ContextType<typeof RoomContext>;
 
@@ -82,15 +90,122 @@ export default class EventListSummary extends React.Component<
         layout: Layout.Group,
     };
 
-    public shouldComponentUpdate(nextProps: IProps): boolean {
+    public constructor(props: Props) {
+        super(props);
+
+        this.state = this.generateState();
+    }
+
+    private generateState(): State {
+        const eventsToRender = this.props.events;
+
+        // Map user IDs to latest Avatar Member. ES6 Maps are ordered by when the key was created,
+        // so this works perfectly for us to match event order whilst storing the latest Avatar Member
+        const latestUserAvatarMember = new Map<string, RoomMember>();
+
+        // Object mapping user IDs to an array of IUserEvents
+        const userEvents: Record<string, IUserEvents[]> = {};
+        eventsToRender.forEach((e, index) => {
+            const type = e.getType();
+
+            let userKey = e.getSender()!;
+            if (e.isState() && type === EventType.RoomThirdPartyInvite) {
+                userKey = e.getContent().display_name;
+            } else if (e.isState() && type === EventType.RoomMember) {
+                userKey = e.getStateKey()!;
+            } else if (e.isRedacted() && e.getUnsigned()?.redacted_because) {
+                userKey = e.getUnsigned().redacted_because!.sender;
+            }
+
+            // Initialise a user's events
+            if (!userEvents[userKey]) {
+                userEvents[userKey] = [];
+            }
+
+            let displayName = userKey;
+            if (e.isRedacted()) {
+                const sender = this.context?.room?.getMember(userKey);
+                if (sender) {
+                    displayName = sender.name;
+                    latestUserAvatarMember.set(userKey, sender);
+                }
+            } else if (e.target && TARGET_AS_DISPLAY_NAME_EVENTS.includes(type as EventType)) {
+                displayName = e.target.name;
+                latestUserAvatarMember.set(userKey, e.target);
+            } else if (e.sender && type !== EventType.RoomThirdPartyInvite) {
+                displayName = e.sender.name;
+                latestUserAvatarMember.set(userKey, e.sender);
+            }
+
+            userEvents[userKey].push({
+                mxEvent: e,
+                displayName,
+                index: index,
+            });
+        });
+
+        return {
+            userEvents,
+            summaryMembers: Array.from(latestUserAvatarMember.values()),
+        };
+    }
+
+    public componentDidMount(): void {
+        this.bindSentinelListeners(this.props.events);
+    }
+
+    public componentDidUpdate(prevProps: Readonly<Props>): void {
+        if (prevProps.events !== this.props.events) {
+            this.unbindSentinelListeners(prevProps.events);
+            this.bindSentinelListeners(this.props.events);
+            this.setState(this.generateState());
+        }
+    }
+
+    public componentWillUnmount(): void {
+        this.unbindSentinelListeners(this.props.events);
+    }
+
+    private bindSentinelListeners(events: MatrixEvent[]): void {
+        for (const event of events) {
+            event.on(MatrixEventEvent.SentinelUpdated, this.onEventSentinelUpdated);
+        }
+    }
+
+    private unbindSentinelListeners(events: MatrixEvent[]): void {
+        for (const event of events) {
+            event.on(MatrixEventEvent.SentinelUpdated, this.onEventSentinelUpdated);
+        }
+    }
+
+    private onEventSentinelUpdated = throttle(
+        (): void => {
+            console.log("@@ SENTINEL UPDATED");
+            this.setState(this.generateState());
+        },
+        500,
+        { leading: true, trailing: true },
+    );
+
+    public shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
         // Update if
         //  - The number of summarised events has changed
         //  - or if the summary is about to toggle to become collapsed
         //  - or if there are fewEvents, meaning the child eventTiles are shown as-is
+        //  - or if the summary members have changed
+        //  - or if the one of IUserEvents within userEvents have changed
         return (
             nextProps.events.length !== this.props.events.length ||
             nextProps.events.length < this.props.threshold ||
-            nextProps.layout !== this.props.layout
+            nextProps.layout !== this.props.layout ||
+            arrayHasDiff(nextState.summaryMembers, this.state.summaryMembers) ||
+            arrayHasDiff(Object.values(nextState.userEvents), Object.values(this.state.userEvents)) ||
+            Object.keys(nextState.userEvents).length !== Object.keys(this.state.userEvents).length ||
+            Object.keys(nextState.userEvents).some((userId) =>
+                nextState.userEvents[userId].some((event, i) =>
+                    objectHasDiff(event, this.state.userEvents[userId]?.[i] ?? {}),
+                ),
+            )
         );
     }
 
@@ -492,54 +607,7 @@ export default class EventListSummary extends React.Component<
     }
 
     public render(): React.ReactNode {
-        const eventsToRender = this.props.events;
-
-        // Map user IDs to latest Avatar Member. ES6 Maps are ordered by when the key was created,
-        // so this works perfectly for us to match event order whilst storing the latest Avatar Member
-        const latestUserAvatarMember = new Map<string, RoomMember>();
-
-        // Object mapping user IDs to an array of IUserEvents
-        const userEvents: Record<string, IUserEvents[]> = {};
-        eventsToRender.forEach((e, index) => {
-            const type = e.getType();
-
-            let userKey = e.getSender()!;
-            if (e.isState() && type === EventType.RoomThirdPartyInvite) {
-                userKey = e.getContent().display_name;
-            } else if (e.isState() && type === EventType.RoomMember) {
-                userKey = e.getStateKey()!;
-            } else if (e.isRedacted() && e.getUnsigned()?.redacted_because) {
-                userKey = e.getUnsigned().redacted_because!.sender;
-            }
-
-            // Initialise a user's events
-            if (!userEvents[userKey]) {
-                userEvents[userKey] = [];
-            }
-
-            let displayName = userKey;
-            if (e.isRedacted()) {
-                const sender = this.context?.room?.getMember(userKey);
-                if (sender) {
-                    displayName = sender.name;
-                    latestUserAvatarMember.set(userKey, sender);
-                }
-            } else if (e.target && TARGET_AS_DISPLAY_NAME_EVENTS.includes(type as EventType)) {
-                displayName = e.target.name;
-                latestUserAvatarMember.set(userKey, e.target);
-            } else if (e.sender && type !== EventType.RoomThirdPartyInvite) {
-                displayName = e.sender.name;
-                latestUserAvatarMember.set(userKey, e.sender);
-            }
-
-            userEvents[userKey].push({
-                mxEvent: e,
-                displayName,
-                index: index,
-            });
-        });
-
-        const aggregate = this.getAggregate(userEvents);
+        const aggregate = this.getAggregate(this.state.userEvents);
 
         // Sort types by order of lowest event index within sequence
         const orderedTransitionSequences = Object.keys(aggregate.names).sort(
@@ -554,7 +622,7 @@ export default class EventListSummary extends React.Component<
                 onToggle={this.props.onToggle}
                 startExpanded={this.props.startExpanded}
                 children={this.props.children}
-                summaryMembers={[...latestUserAvatarMember.values()]}
+                summaryMembers={this.state.summaryMembers}
                 layout={this.props.layout}
                 summaryText={this.generateSummary(aggregate.names, orderedTransitionSequences)}
             />

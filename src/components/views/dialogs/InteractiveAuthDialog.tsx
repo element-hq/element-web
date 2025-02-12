@@ -4,22 +4,22 @@ Copyright 2020 The Matrix.org Foundation C.I.C.
 Copyright 2017 Vector Creations Ltd
 Copyright 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { MatrixClient, UIAResponse } from "matrix-js-sdk/src/matrix";
-import { AuthType } from "matrix-js-sdk/src/interactive-auth";
+import { type MatrixClient, type UIAResponse } from "matrix-js-sdk/src/matrix";
+import { type AuthType } from "matrix-js-sdk/src/interactive-auth";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import InteractiveAuth, {
     ERROR_USER_CANCELLED,
-    InteractiveAuthCallback,
-    InteractiveAuthProps,
+    type InteractiveAuthCallback,
+    type InteractiveAuthProps,
 } from "../../structures/InteractiveAuth";
-import { ContinueKind, SSOAuthEntry } from "../auth/InteractiveAuthEntryComponents";
+import { type ContinueKind, SSOAuthEntry } from "../auth/InteractiveAuthEntryComponents";
 import BaseDialog from "./BaseDialog";
 import { Linkify } from "../../../Linkify";
 
