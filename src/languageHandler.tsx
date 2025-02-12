@@ -529,8 +529,7 @@ export async function getAllLanguagesWithLabels(): Promise<Language[]> {
 
 export function getLanguagesFromBrowser(): readonly string[] {
     if (navigator.languages && navigator.languages.length) return navigator.languages;
-    if (navigator.language) return [navigator.language];
-    return [navigator.userLanguage || "en"];
+    return [navigator.language ?? "en"];
 }
 
 export function getLanguageFromBrowser(): string {
