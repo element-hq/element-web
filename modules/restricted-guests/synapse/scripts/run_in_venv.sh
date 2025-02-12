@@ -19,7 +19,7 @@ venv_path=${repo_root:-./}.venv
 
 if [ ! -d "$venv_path" ]; then
     "python${PYTHON_VERSION:-3}" -m venv "$venv_path"
-    "$venv_path/bin/pip" install -e ."[dev]"
+    "$venv_path/bin/pip" install -e '.[dev]'
 fi
 
 [ $# -gt 1 ] && . "$venv_path/bin/activate" && "$@"
