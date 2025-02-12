@@ -296,10 +296,16 @@ export async function doTwoWaySasVerification(page: Page, verifier: JSHandle<Ver
  * Returns the recovery key
  */
 export async function enableKeyBackup(app: ElementAppPage): Promise<string> {
-    await app.settings.openUserSettings("Security & Privacy");
-    await app.page.getByRole("button", { name: "Set up Secure Backup" }).click();
+    const encryptionTab = await app.settings.openUserSettings("Encryption");
+    await encryptionTab.getByRole("button", { name: "Set up recovery" }).click();
+    await encryptionTab.getByRole("button", { name: "Continue" }).click();
 
-    return await completeCreateSecretStorageDialog(app.page);
+    const recoveryKey = await encryptionTab.getByTestId("recoveryKey").innerText();
+    await encryptionTab.getByRole("button", { name: "Continue" }).click();
+    await encryptionTab.getByRole("textbox").fill(recoveryKey);
+    await encryptionTab.getByRole("button", { name: "Finish set up" }).click();
+    await app.settings.closeDialog();
+    return recoveryKey;
 }
 
 /**
