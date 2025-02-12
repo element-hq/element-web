@@ -7,8 +7,23 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 
-type IProps = unknown;
+import { shouldShowComponent } from "../../../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../../../settings/UIFeature";
+import { RoomListSearch } from "./RoomListSearch";
 
-export const RoomListView: React.FC<IProps> = (props: IProps) => {
-    return <div className="mx_RoomListView">New Room List</div>;
+type RoomListViewProps = {
+    /**
+     * Current active space
+     * See {@link RoomListSearch}
+     */
+    activeSpace: string;
+};
+
+/**
+ * A view component for the room list.
+ */
+export const RoomListView: React.FC<RoomListViewProps> = ({ activeSpace }) => {
+    const displayRoomSearch = shouldShowComponent(UIComponent.FilterContainer);
+
+    return <div className="mx_RoomListView">{displayRoomSearch && <RoomListSearch activeSpace={activeSpace} />}</div>;
 };
