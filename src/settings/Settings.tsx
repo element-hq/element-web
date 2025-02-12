@@ -209,7 +209,6 @@ export interface Settings {
     "feature_ask_to_join": IFeature;
     "feature_notifications": IFeature;
     // These are in the feature namespace but aren't actually features
-    "feature_sliding_sync_proxy_url": IBaseSetting<string>;
     "feature_hidebold": IBaseSetting<boolean>;
 
     "useOnlyCurrentProfiles": IBaseSetting<boolean>;
@@ -544,11 +543,6 @@ export const SETTINGS: Settings = {
         shouldWarn: true,
         default: false,
         controller: new SlidingSyncController(),
-    },
-    "feature_sliding_sync_proxy_url": {
-        // This is not a distinct feature, it is a legacy setting for feature_sliding_sync above
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        default: "",
     },
     "feature_element_call_video_rooms": {
         isFeature: true,

@@ -329,12 +329,6 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     };
 
     private onShowAllClick = async (): Promise<void> => {
-        if (this.slidingSyncMode) {
-            const count = RoomListStore.instance.getCount(this.props.tagId);
-            await SlidingSyncManager.instance.ensureListRegistered(this.props.tagId, {
-                ranges: [[0, count]],
-            });
-        }
         // read number of visible tiles before we mutate it
         const numVisibleTiles = this.numVisibleTiles;
         const newHeight = this.layout.tilesToPixelsWithPadding(this.numTiles, this.padding);
