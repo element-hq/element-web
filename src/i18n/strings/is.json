@@ -447,7 +447,6 @@
         "room_name": "Heiti spjallrásar",
         "rooms": "Spjallrásir",
         "secure_backup": "Varið öryggisafrit",
-        "security": "Öryggi",
         "select_all": "Velja allt",
         "server": "Netþjónn",
         "settings": "Stillingar",
@@ -466,7 +465,6 @@
         "thread": "Spjallþráður",
         "threads": "Spjallþræðir",
         "timeline": "Tímalína",
-        "trusted": "Treyst",
         "unencrypted": "Ódulritað",
         "unmute": "Ekki þagga",
         "unnamed_room": "Nafnlaus spjallrás",
@@ -742,7 +740,6 @@
             "title": "Ekki treyst"
         },
         "unable_to_setup_keys_error": "Tókst ekki að setja upp lykla",
-        "unsupported": "Þetta forrit styður ekki enda-í-enda dulritun.",
         "verification": {
             "accepting": "Samþykki…",
             "after_new_login": {
@@ -2864,14 +2861,6 @@
         "ban_room_confirm_title": "Banna í %(roomName)s",
         "ban_space_everything": "Banna viðkomandi frá því að gera allt það sem ég get gert",
         "ban_space_specific": "Banna viðkomandi frá því að gera tiltekna hluti sem ég get gert",
-        "count_of_sessions": {
-            "one": "%(count)s seta",
-            "other": "%(count)s setur"
-        },
-        "count_of_verified_sessions": {
-            "one": "1 sannreynd seta",
-            "other": "%(count)s sannreyndar setur"
-        },
         "deactivate_confirm_action": "Gera notanda óvirkan",
         "deactivate_confirm_title": "Gera notanda óvirkan?",
         "demote_button": "Leggja til baka",
@@ -2881,14 +2870,11 @@
         "disinvite_button_room": "Afbjóða úr herbergi",
         "disinvite_button_room_name": "Afturkalla boð á %(roomName)s",
         "disinvite_button_space": "Afbjóða frá stað",
-        "edit_own_devices": "Breyta tækjum",
         "error_ban_user": "Mistókst að banna notanda",
         "error_deactivate": "Mistókst að gera þennan notanda óvirkan",
         "error_kicking_user": "Mistókst að fjarlægja notanda",
         "error_mute_user": "Mistókst að þagga niður í notanda",
         "error_revoke_3pid_invite_title": "Mistókst að afturkalla boð",
-        "hide_sessions": "Fela setur",
-        "hide_verified_sessions": "Fela sannreyndar setur",
         "invited_by": "Boðið af %(sender)s",
         "jump_to_rr_button": "Fara í fyrstu leskvittun",
         "kick_button_room": "Fjarlægja úr spjallrás",

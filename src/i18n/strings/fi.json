@@ -529,7 +529,6 @@
         "saved": "Tallennettu",
         "saving": "Tallennetaan…",
         "secure_backup": "Turvallinen varmuuskopio",
-        "security": "Tietoturva",
         "select_all": "Valitse kaikki",
         "server": "Palvelin",
         "settings": "Asetukset",
@@ -548,7 +547,6 @@
         "thread": "Ketju",
         "threads": "Ketjut",
         "timeline": "Aikajana",
-        "trusted": "Luotettu",
         "unavailable": "ei saatavilla",
         "unencrypted": "Suojaamaton",
         "unmute": "Poista mykistys",
@@ -854,7 +852,6 @@
             "own_new_session_text": "Olet kirjautunut uuteen istuntoon varmentamatta sitä:",
             "title": "Ei luotettu"
         },
-        "unsupported": "Tämä asiakasohjelma ei tue päästä päähän -salausta.",
         "verification": {
             "accepting": "Hyväksytään…",
             "after_new_login": {
@@ -3308,14 +3305,6 @@
         "ban_button_room": "Anna porttikielto huoneeseen",
         "ban_room_confirm_title": "Anna porttikielto huoneeseen %(roomName)s",
         "ban_space_everything": "Anna porttikielto kaikkeen, mihin pystyn",
-        "count_of_sessions": {
-            "other": "%(count)s istuntoa",
-            "one": "%(count)s istunto"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s varmennettua istuntoa",
-            "one": "1 varmennettu istunto"
-        },
         "deactivate_confirm_action": "Poista käyttäjä pysyvästi",
         "deactivate_confirm_description": "Käyttäjän poistaminen kirjaa hänet ulos ja estää häntä kirjautumasta takaisin sisään. Lisäksi hän poistuu kaikista huoneista, joissa hän on. Tätä toimintoa ei voi kumota. Oletko varma, että haluat pysyvästi poistaa tämän käyttäjän?",
         "deactivate_confirm_title": "Poista käyttäjä pysyvästi?",
@@ -3323,15 +3312,12 @@
         "demote_self_confirm_description_space": "Et voi perua tätä muutosta, koska olet alentamassa itseäsi. Jos olet viimeinen oikeutettu henkilö tässä avaruudessa, oikeuksia ei voi enää saada takaisin.",
         "demote_self_confirm_room": "Et voi perua tätä muutosta, koska olet alentamassa itseäsi. Jos olet viimeinen oikeutettu henkilö tässä huoneessa, oikeuksia ei voi enää saada takaisin.",
         "demote_self_confirm_title": "Alenna itsesi?",
-        "edit_own_devices": "Muokkaa laitteita",
         "error_ban_user": "Porttikiellon antaminen epäonnistui",
         "error_deactivate": "Käyttäjän poistaminen epäonnistui",
         "error_kicking_user": "Käyttäjän poistaminen epäonnistui",
         "error_mute_user": "Käyttäjän mykistäminen epäonnistui",
         "error_revoke_3pid_invite_description": "Kutsun kumoaminen epäonnistui. Kyseessä saattaa olla väliaikainen ongelma tai sinulla ei ole tarvittavia oikeuksia kutsun kumoamiseen.",
         "error_revoke_3pid_invite_title": "Kutsun kumoaminen epäonnistui",
-        "hide_sessions": "Piilota istunnot",
-        "hide_verified_sessions": "Piilota varmennetut istunnot",
         "ignore_confirm_description": "Kaikki tämän käyttäjän lähettämät viestit ja kutsut sivuutetaan. Haluatko varmasti sivuuttaa hänet?",
         "ignore_confirm_title": "Sivuuta %(user)s",
         "invited_by": "Kutsuttu henkilön %(sender)s toimesta",

@@ -485,7 +485,6 @@
         "room_name": "房间名称",
         "rooms": "房间",
         "secure_backup": "安全备份",
-        "security": "安全",
         "select_all": "全选",
         "server": "服务器",
         "settings": "设置",
@@ -504,7 +503,6 @@
         "thread": "消息列",
         "threads": "消息列",
         "timeline": "时间线",
-        "trusted": "受信任的",
         "unencrypted": "未加密",
         "unmute": "取消静音",
         "unnamed_room": "未命名的房间",
@@ -812,7 +810,6 @@
             "title": "不可信任"
         },
         "unable_to_setup_keys_error": "无法设置密钥",
-        "unsupported": "此客户端不支持端到端加密。",
         "verification": {
             "accepting": "正在接受……",
             "after_new_login": {
@@ -3123,14 +3120,6 @@
         "ban_room_confirm_title": "禁止进入 %(roomName)s",
         "ban_space_everything": "禁止这些人做任何我有权决定的事",
         "ban_space_specific": "禁止这些人做某些我有权决定的事",
-        "count_of_sessions": {
-            "other": "%(count)s 个会话",
-            "one": "%(count)s 个会话"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s 个已验证的会话",
-            "one": "1 个已验证的会话"
-        },
         "deactivate_confirm_action": "停用用户",
         "deactivate_confirm_description": "停用此用户将会使其登出并阻止其再次登入。而且此用户也会离开其所在的所有房间。此操作不可逆。你确定要停用此用户吗？",
         "deactivate_confirm_title": "停用用户吗？",
@@ -3141,15 +3130,12 @@
         "disinvite_button_room": "从房间取消邀请",
         "disinvite_button_room_name": "取消邀请加入 %(roomName)s",
         "disinvite_button_space": "从空间取消邀请",
-        "edit_own_devices": "编辑设备",
         "error_ban_user": "封禁失败",
         "error_deactivate": "停用用户失败",
         "error_kicking_user": "移除用户失败",
         "error_mute_user": "禁言用户失败",
         "error_revoke_3pid_invite_description": "无法撤销邀请。此服务器可能出现了临时错误，或者你没有足够的权限来撤销邀请。",
         "error_revoke_3pid_invite_title": "撤销邀请失败",
-        "hide_sessions": "隐藏会话",
-        "hide_verified_sessions": "隐藏已验证的会话",
         "invited_by": "被 %(sender)s 邀请",
         "jump_to_rr_button": "跳到阅读回执",
         "kick_button_room": "从房间移除",

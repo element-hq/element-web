@@ -466,7 +466,6 @@
         "rooms": "Phòng",
         "saving": "Đang lưu…",
         "secure_backup": "Sao lưu bảo mật",
-        "security": "Bảo mật",
         "select_all": "Chọn tất cả",
         "server": "Máy chủ",
         "settings": "Cài đặt",
@@ -485,7 +484,6 @@
         "thread": "Chủ đề",
         "threads": "Chủ đề",
         "timeline": "Dòng thời gian",
-        "trusted": "Tin cậy",
         "unavailable": "không có sẵn",
         "unencrypted": "Không được mã hóa",
         "unmute": "Bật tiếng",
@@ -796,7 +794,6 @@
             "title": "Không tin cậy"
         },
         "unable_to_setup_keys_error": "Không thể thiết lập khóa",
-        "unsupported": "Ứng dụng khách này không hỗ trợ mã hóa đầu cuối.",
         "verification": {
             "accepting": "Đang chấp nhận…",
             "after_new_login": {
@@ -3143,14 +3140,6 @@
         "ban_room_confirm_title": "Cấm từ %(roomName)s",
         "ban_space_everything": "Cấm họ khỏi mọi thứ mà tôi có thể",
         "ban_space_specific": "Cấm họ khỏi những thứ cụ thể mà tôi có thể",
-        "count_of_sessions": {
-            "one": "%(count)s phiên",
-            "other": "%(count)s phiên"
-        },
-        "count_of_verified_sessions": {
-            "one": "1 phiên đã xác thực",
-            "other": "%(count)s phiên đã xác thực"
-        },
         "deactivate_confirm_action": "Hủy kích hoạt người dùng",
         "deactivate_confirm_description": "Việc hủy kích hoạt người dùng này sẽ đăng xuất họ và ngăn họ đăng nhập lại. Ngoài ra, họ sẽ rời khỏi tất cả các phòng mà họ đang ở. Không thể hoàn tác hành động này. Bạn có chắc chắn muốn hủy kích hoạt người dùng này không?",
         "deactivate_confirm_title": "Hủy kích hoạt người dùng?",
@@ -3161,15 +3150,12 @@
         "disinvite_button_room": "Không mời vào phòng nữa",
         "disinvite_button_room_name": "Hủy mời từ %(roomName)s",
         "disinvite_button_space": "Hủy lời mời vào space",
-        "edit_own_devices": "Chỉnh sửa thiết bị",
         "error_ban_user": "Đã có lỗi khi chặn người dùng",
         "error_deactivate": "Không thể hủy kích hoạt người dùng",
         "error_kicking_user": "Không thể loại bỏ người dùng",
         "error_mute_user": "Không thể tắt tiếng người dùng",
         "error_revoke_3pid_invite_description": "Không thể thu hồi lời mời. Máy chủ có thể đang gặp sự cố tạm thời hoặc bạn không có đủ quyền để thu hồi lời mời.",
         "error_revoke_3pid_invite_title": "Không thể thu hồi lời mời",
-        "hide_sessions": "Ẩn các phiên",
-        "hide_verified_sessions": "Ẩn các phiên đã xác thực",
         "ignore_confirm_description": "Toàn bộ tin nhắn và lời mời từ người dùng này sẽ bị ẩn. Bạn có muốn tảng lờ người dùng?",
         "ignore_confirm_title": "Tảng lờ %(user)s",
         "invited_by": "Được %(sender)s mời",

@@ -470,7 +470,6 @@
         "room_name": "Kamernaam",
         "rooms": "Kamers",
         "secure_backup": "Beveiligde back-up",
-        "security": "Beveiliging",
         "select_all": "Allemaal selecteren",
         "server": "Server",
         "settings": "Instellingen",
@@ -488,7 +487,6 @@
         "thread": "Draad",
         "threads": "Onderwerpen",
         "timeline": "Tijdslijn",
-        "trusted": "Vertrouwd",
         "unencrypted": "Onversleuteld",
         "unmute": "Niet dempen",
         "unnamed_room": "Naamloze Kamer",
@@ -778,7 +776,6 @@
             "title": "Niet vertrouwd"
         },
         "unable_to_setup_keys_error": "Kan geen sleutels instellen",
-        "unsupported": "Deze cliënt biedt geen ondersteuning voor eind-tot-eind-versleuteling.",
         "verification": {
             "accepting": "Toestaan…",
             "after_new_login": {
@@ -3016,14 +3013,6 @@
         "ban_room_confirm_title": "Verban van %(roomName)s",
         "ban_space_everything": "Verban ze van alles waar ik dit kan",
         "ban_space_specific": "Ban ze van specifieke plekken waar ik dit kan",
-        "count_of_sessions": {
-            "other": "%(count)s sessies",
-            "one": "%(count)s sessie"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s geverifieerde sessies",
-            "one": "1 geverifieerde sessie"
-        },
         "deactivate_confirm_action": "Persoon deactiveren",
         "deactivate_confirm_description": "Deze persoon deactiveren zal deze persoon uitloggen en verhinderen dat de persoon weer inlogt. Bovendien zal de persoon alle kamers waaraan de persoon deelneemt verlaten. Deze actie is niet terug te draaien. Weet je zeker dat je deze persoon wilt deactiveren?",
         "deactivate_confirm_title": "Persoon deactiveren?",
@@ -3034,15 +3023,12 @@
         "disinvite_button_room": "Uitnodiging van kamer afwijzen",
         "disinvite_button_room_name": "Uitnodiging intrekken voor %(roomName)s",
         "disinvite_button_space": "Uitnodiging van space afwijzen",
-        "edit_own_devices": "Apparaten bewerken",
         "error_ban_user": "Verbannen van persoon is mislukt",
         "error_deactivate": "Deactiveren van persoon is mislukt",
         "error_kicking_user": "Kan persoon niet verwijderen",
         "error_mute_user": "Dempen van persoon is mislukt",
         "error_revoke_3pid_invite_description": "Kon de uitnodiging niet intrekken. De server ondervindt mogelijk een tijdelijk probleem, of je hebt niet het recht de uitnodiging in te trekken.",
         "error_revoke_3pid_invite_title": "Intrekken van uitnodiging is mislukt",
-        "hide_sessions": "Sessies verbergen",
-        "hide_verified_sessions": "Geverifieerde sessies verbergen",
         "invited_by": "Uitgenodigd door %(sender)s",
         "jump_to_rr_button": "Naar het laatst gelezen bericht gaan",
         "kick_button_room": "Verwijderen uit kamer",
