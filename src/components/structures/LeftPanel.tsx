@@ -12,7 +12,7 @@ import classNames from "classnames";
 
 import dis from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
-import RoomList from "../views/rooms/RoomList";
+import LegacyRoomList from "../views/rooms/LegacyRoomList";
 import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
 import { HEADER_HEIGHT } from "../views/rooms/RoomSublist";
 import { Action } from "../../dispatcher/actions";
@@ -37,7 +37,7 @@ import PosthogTrackers from "../../PosthogTrackers";
 import type PageType from "../../PageTypes";
 import { Landmark, LandmarkNavigation } from "../../accessibility/LandmarkNavigation";
 import SettingsStore from "../../settings/SettingsStore";
-import { NewRoomListView } from "../views/rooms/NewRoomListView";
+import { RoomListView } from "../views/rooms/RoomListView";
 
 interface IProps {
     isMinimized: boolean;
@@ -58,7 +58,7 @@ interface IState {
 
 export default class LeftPanel extends React.Component<IProps, IState> {
     private listContainerRef = createRef<HTMLDivElement>();
-    private roomListRef = createRef<RoomList>();
+    private roomListRef = createRef<LegacyRoomList>();
     private focusedElement: Element | null = null;
     private isDoingStickyHeaders = false;
 
@@ -390,14 +390,14 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             return (
                 <div className={containerClasses}>
                     <div className="mx_LeftPanel_roomListContainer">
-                        <NewRoomListView />
+                        <RoomListView />
                     </div>
                 </div>
             );
         }
 
         const roomList = (
-            <RoomList
+            <LegacyRoomList
                 onKeyDown={this.onKeyDown}
                 resizeNotifier={this.props.resizeNotifier}
                 onFocus={this.onFocus}

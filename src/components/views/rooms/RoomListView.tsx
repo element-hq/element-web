@@ -9,6 +9,6 @@ import React from "react";
 
 type IProps = unknown;
 
-export const NewRoomListView: React.FC<IProps> = (props: IProps) => {
+export const RoomListView: React.FC<IProps> = (props: IProps) => {
     return <div>New Room List</div>;
 };

@@ -9,26 +9,26 @@ Please see LICENSE files in the repository root for full details.
 import { EventType, type Room, RoomType } from "matrix-js-sdk/src/matrix";
 import React, { type ComponentType, createRef, type ReactComponentElement, type SyntheticEvent } from "react";
 
-import { type IState as IRovingTabIndexState, RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex";
-import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
-import { Action } from "../../../dispatcher/actions";
-import defaultDispatcher from "../../../dispatcher/dispatcher";
-import { type ActionPayload } from "../../../dispatcher/payloads";
-import { type ViewRoomDeltaPayload } from "../../../dispatcher/payloads/ViewRoomDeltaPayload";
-import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import { useEventEmitterState } from "../../../hooks/useEventEmitter";
-import { _t, _td, type TranslationKey } from "../../../languageHandler";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import PosthogTrackers from "../../../PosthogTrackers";
-import SettingsStore from "../../../settings/SettingsStore";
-import { useFeatureEnabled } from "../../../hooks/useSettings";
-import { UIComponent } from "../../../settings/UIFeature";
-import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
-import { type ITagMap } from "../../../stores/room-list/algorithms/models";
-import { DefaultTagID, type TagID } from "../../../stores/room-list/models";
-import { UPDATE_EVENT } from "../../../stores/AsyncStore";
-import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
+import { type IState as IRovingTabIndexState, RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex.tsx";
+import MatrixClientContext from "../../../contexts/MatrixClientContext.tsx";
+import { shouldShowComponent } from "../../../customisations/helpers/UIComponents.ts";
+import { Action } from "../../../dispatcher/actions.ts";
+import defaultDispatcher from "../../../dispatcher/dispatcher.ts";
+import { type ActionPayload } from "../../../dispatcher/payloads.ts";
+import { type ViewRoomDeltaPayload } from "../../../dispatcher/payloads/ViewRoomDeltaPayload.ts";
+import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload.ts";
+import { useEventEmitterState } from "../../../hooks/useEventEmitter.ts";
+import { _t, _td, type TranslationKey } from "../../../languageHandler.tsx";
+import { MatrixClientPeg } from "../../../MatrixClientPeg.ts";
+import PosthogTrackers from "../../../PosthogTrackers.ts";
+import SettingsStore from "../../../settings/SettingsStore.ts";
+import { useFeatureEnabled } from "../../../hooks/useSettings.ts";
+import { UIComponent } from "../../../settings/UIFeature.ts";
+import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore.ts";
+import { type ITagMap } from "../../../stores/room-list/algorithms/models.ts";
+import { DefaultTagID, type TagID } from "../../../stores/room-list/models.ts";
+import { UPDATE_EVENT } from "../../../stores/AsyncStore.ts";
+import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore.ts";
 import {
     isMetaSpace,
     type ISuggestedRoom,
@@ -36,26 +36,36 @@ import {
     type SpaceKey,
     UPDATE_SELECTED_SPACE,
     UPDATE_SUGGESTED_ROOMS,
-} from "../../../stores/spaces";
-import SpaceStore from "../../../stores/spaces/SpaceStore";
-import { arrayFastClone, arrayHasDiff } from "../../../utils/arrays";
-import { objectShallowClone, objectWithOnly } from "../../../utils/objects";
-import type ResizeNotifier from "../../../utils/ResizeNotifier";
-import { shouldShowSpaceInvite, showAddExistingRooms, showCreateNewRoom, showSpaceInvite } from "../../../utils/space";
-import { ChevronFace, ContextMenuTooltipButton, type MenuProps, useContextMenu } from "../../structures/ContextMenu";
-import RoomAvatar from "../avatars/RoomAvatar";
-import { BetaPill } from "../beta/BetaCard";
+} from "../../../stores/spaces/index.ts";
+import SpaceStore from "../../../stores/spaces/SpaceStore.ts";
+import { arrayFastClone, arrayHasDiff } from "../../../utils/arrays.ts";
+import { objectShallowClone, objectWithOnly } from "../../../utils/objects.ts";
+import type ResizeNotifier from "../../../utils/ResizeNotifier.ts";
+import {
+    shouldShowSpaceInvite,
+    showAddExistingRooms,
+    showCreateNewRoom,
+    showSpaceInvite,
+} from "../../../utils/space.tsx";
+import {
+    ChevronFace,
+    ContextMenuTooltipButton,
+    type MenuProps,
+    useContextMenu,
+} from "../../structures/ContextMenu.tsx";
+import RoomAvatar from "../avatars/RoomAvatar.tsx";
+import { BetaPill } from "../beta/BetaCard.tsx";
 import IconizedContextMenu, {
     IconizedContextMenuOption,
     IconizedContextMenuOptionList,
-} from "../context_menus/IconizedContextMenu";
-import ExtraTile from "./ExtraTile";
-import RoomSublist, { type IAuxButtonProps } from "./RoomSublist";
-import { SdkContextClass } from "../../../contexts/SDKContext";
-import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
-import { getKeyBindingsManager } from "../../../KeyBindingsManager";
-import AccessibleButton from "../elements/AccessibleButton";
-import { Landmark, LandmarkNavigation } from "../../../accessibility/LandmarkNavigation";
+} from "../context_menus/IconizedContextMenu.tsx";
+import ExtraTile from "./ExtraTile.tsx";
+import RoomSublist, { type IAuxButtonProps } from "./RoomSublist.tsx";
+import { SdkContextClass } from "../../../contexts/SDKContext.ts";
+import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts.ts";
+import { getKeyBindingsManager } from "../../../KeyBindingsManager.ts";
+import AccessibleButton from "../elements/AccessibleButton.tsx";
+import { Landmark, LandmarkNavigation } from "../../../accessibility/LandmarkNavigation.ts";
 import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../../LegacyCallHandler.tsx";
 
 interface IProps {
@@ -420,7 +430,7 @@ const TAG_AESTHETICS: TagAestheticsMap = {
     },
 };
 
-export default class RoomList extends React.PureComponent<IProps, IState> {
+export default class LegacyRoomList extends React.PureComponent<IProps, IState> {
     private dispatcherRef?: string;
     private treeRef = createRef<HTMLDivElement>();
 
