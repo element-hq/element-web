@@ -548,7 +548,6 @@
         "saved": "Uloženo",
         "saving": "Ukládání…",
         "secure_backup": "Zabezpečená záloha",
-        "security": "Zabezpečení",
         "select_all": "Vybrat všechny",
         "server": "Server",
         "settings": "Nastavení",
@@ -567,7 +566,6 @@
         "thread": "Vlákno",
         "threads": "Vlákna",
         "timeline": "Časová osa",
-        "trusted": "Důvěryhodné",
         "unavailable": "nedostupný",
         "unencrypted": "Nezašifrované",
         "unmute": "Povolit",
@@ -972,7 +970,6 @@
             "title": "Nedůvěryhodné"
         },
         "unable_to_setup_keys_error": "Nepovedlo se nastavit klíče",
-        "unsupported": "Tento klient nepodporuje koncové šifrování.",
         "verification": {
             "accepting": "Přijímání…",
             "after_new_login": {
@@ -2474,6 +2471,7 @@
                 "breadcrumb_second_description": "Ztratíte veškerou historii zpráv, která je uložena pouze na serveru",
                 "breadcrumb_third_description": "Budete muset znovu ověřit všechna svá stávající zařízení a kontakty",
                 "breadcrumb_title": "Opravdu chcete obnovit svou identitu?",
+                "breadcrumb_title_forgot": "Zapomněli jste klíč pro obnovení? Budete muset obnovit svou identitu.",
                 "breadcrumb_warning": "Udělejte to pouze v případě, že se domníváte, že váš účet byl napaden.",
                 "details_title": "Podrobnosti o šifrování",
                 "export_keys": "Exportovat klíče",
@@ -2500,7 +2498,8 @@
                 "description": "Pokud jste ztratili všechna stávající zařízení, obnovte kryptografickou identitu a historii zpráv pomocí klíče pro obnovení.",
                 "enter_key_error": "Zadaný klíč pro obnovení není správný.",
                 "enter_recovery_key": "Zadejte klíč pro obnovení",
-                "key_storage_warning": "Vaše úložiště klíčů není synchronizováno. Kliknutím na tlačítko níže problém vyřešte.",
+                "forgot_recovery_key": "Zapomněli jste klíč pro obnovení?",
+                "key_storage_warning": "Vaše úložiště klíčů není synchronizováno. Kliknutím na jedno z níže uvedených tlačítek problém vyřešte.",
                 "save_key_description": "Nesdílejte ho s nikým!",
                 "save_key_title": "Klíč pro obnovení",
                 "set_up_recovery": "Nastavení obnovy",
@@ -3499,7 +3498,8 @@
         },
         "m.room.tombstone": "%(senderDisplayName)s aktualizoval(a) místnost.",
         "m.room.topic": {
-            "changed": "%(senderDisplayName)s změnil(a) téma na „%(topic)s“."
+            "changed": "%(senderDisplayName)s změnil(a) téma na „%(topic)s“.",
+            "removed": "%(senderDisplayName)s odstranil(a) téma."
         },
         "m.sticker": "%(senderDisplayName)s poslal(a) nálepku.",
         "m.video": {
@@ -3789,18 +3789,9 @@
         "ban_room_confirm_title": "Vykázat z %(roomName)s",
         "ban_space_everything": "Vykázat je všude, kde mohu",
         "ban_space_specific": "Vykázat je z konkrétních míst, ze kterých jsem schopen",
-        "count_of_sessions": {
-            "other": "%(count)s relací",
-            "one": "%(count)s relace"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s ověřených relací",
-            "one": "1 ověřená relace"
-        },
         "deactivate_confirm_action": "Deaktivovat uživatele",
         "deactivate_confirm_description": "Deaktivování uživatele ho odhlásí a zabrání mu v opětovném přihlášení. Navíc bude odstraněn ze všech místností. Akci nelze vzít zpět. Opravdu chcete uživatele deaktivovat?",
         "deactivate_confirm_title": "Deaktivovat uživatele?",
-        "dehydrated_device_enabled": "Offline zařízení povoleno",
         "demote_button": "Degradovat",
         "demote_self_confirm_description_space": "Tuto změnu nebudete moci vrátit zpět, protože budete degradováni, pokud jste posledním privilegovaným uživatelem v daném prostoru, nebude možné znovu získat oprávnění.",
         "demote_self_confirm_room": "Tuto změnu nebudete moci vzít zpět, protože snižujete svoji vlastní hodnost, jste-li poslední privilegovaný uživatel v místnosti, bude nemožné vaši současnou hodnost získat zpět.",
@@ -3808,15 +3799,12 @@
         "disinvite_button_room": "Zrušit pozvánku do místnosti",
         "disinvite_button_room_name": "Zrušit pozvánku do %(roomName)s",
         "disinvite_button_space": "Zrušit pozvánku do prostoru",
-        "edit_own_devices": "Upravit zařízení",
         "error_ban_user": "Nepodařilo se vykázat uživatele",
         "error_deactivate": "Deaktivace uživatele se nezdařila",
         "error_kicking_user": "Nepodařilo se odebrat uživatele",
         "error_mute_user": "Ztlumení uživatele se nezdařilo",
         "error_revoke_3pid_invite_description": "Pozvání se nepovedlo zrušit. Mohlo dojít k dočasnému problému nebo na to nemáte dostatečná práva.",
         "error_revoke_3pid_invite_title": "Pozvání se nepovedlo zrušit",
-        "hide_sessions": "Skrýt relace",
-        "hide_verified_sessions": "Skrýt ověřené relace",
         "ignore_button": "Ignorovat",
         "ignore_confirm_description": "Všechny zprávy a pozvánky od tohoto uživatele budou skryty. Opravdu je chcete ignorovat?",
         "ignore_confirm_title": "Ignorovat %(user)s",

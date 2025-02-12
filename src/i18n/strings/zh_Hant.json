@@ -499,7 +499,6 @@
         "rooms": "聊天室",
         "saving": "正在儲存…",
         "secure_backup": "安全備份",
-        "security": "安全性",
         "select_all": "全部選取",
         "server": "伺服器",
         "settings": "設定",
@@ -518,7 +517,6 @@
         "thread": "討論串",
         "threads": "討論串",
         "timeline": "時間軸",
-        "trusted": "受信任",
         "unavailable": "無法使用",
         "unencrypted": "未加密",
         "unmute": "解除靜音",
@@ -869,7 +867,6 @@
             "title": "未受信任"
         },
         "unable_to_setup_keys_error": "無法設定金鑰",
-        "unsupported": "此客戶端不支援端對端加密。",
         "verification": {
             "accepting": "正在接受…",
             "after_new_login": {
@@ -3382,14 +3379,6 @@
         "ban_room_confirm_title": "從 %(roomName)s 封鎖",
         "ban_space_everything": "從我有權限的所有地方封鎖他們",
         "ban_space_specific": "從我有權限的特定地方封鎖他們",
-        "count_of_sessions": {
-            "other": "%(count)s 個工作階段",
-            "one": "%(count)s 個工作階段"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s 個已驗證的工作階段",
-            "one": "1 個已驗證的工作階段"
-        },
         "deactivate_confirm_action": "停用使用者",
         "deactivate_confirm_description": "停用此使用者將會把他們登出並防止他們再次登入。另外，他們也將會離開所有加入的聊天室。此動作不可逆。您確定您想要停用此使用者嗎？",
         "deactivate_confirm_title": "停用使用者？",
@@ -3400,15 +3389,12 @@
         "disinvite_button_room": "從聊天室取消邀請",
         "disinvite_button_room_name": "拒絕來自 %(roomName)s 的邀請",
         "disinvite_button_space": "從聊天空間取消邀請",
-        "edit_own_devices": "編輯裝置",
         "error_ban_user": "無法封鎖使用者",
         "error_deactivate": "無法停用使用者",
         "error_kicking_user": "無法移除使用者",
         "error_mute_user": "無法將使用者設為靜音",
         "error_revoke_3pid_invite_description": "無法撤銷邀請。伺服器可能暫時發生問題，或您沒有足夠的權限來撤銷邀請。",
         "error_revoke_3pid_invite_title": "無法撤銷邀請",
-        "hide_sessions": "隱藏工作階段",
-        "hide_verified_sessions": "隱藏已驗證的工作階段",
         "ignore_confirm_description": "來自該使用者的所有訊息與邀請都將被隱藏。您確定要忽略它們嗎？",
         "ignore_confirm_title": "忽略 %(user)s",
         "invited_by": "由 %(sender)s 邀請",

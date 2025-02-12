@@ -502,7 +502,6 @@
         "rooms": "Szobák",
         "saving": "Mentés…",
         "secure_backup": "Biztonsági mentés",
-        "security": "Biztonság",
         "select_all": "Mindet kijelöli",
         "server": "Kiszolgáló",
         "settings": "Beállítások",
@@ -521,7 +520,6 @@
         "thread": "Üzenetszál",
         "threads": "Üzenetszálak",
         "timeline": "Idővonal",
-        "trusted": "Megbízható",
         "unavailable": "nem érhető el",
         "unencrypted": "Titkosítatlan",
         "unmute": "Némítás visszavonása",
@@ -875,7 +873,6 @@
             "title": "Nem megbízható"
         },
         "unable_to_setup_keys_error": "Nem sikerült a kulcsok beállítása",
-        "unsupported": "A kliens nem támogatja a végponttól végpontig való titkosítást.",
         "verification": {
             "accepting": "Elfogadás…",
             "after_new_login": {
@@ -3397,14 +3394,6 @@
         "ban_room_confirm_title": "Kitiltás innen: %(roomName)s",
         "ban_space_everything": "Kitiltani őket mindenhonnan ahonnan joga van hozzá",
         "ban_space_specific": "Kitiltani őket bizonyos helyekről ahonnan joga van hozzá",
-        "count_of_sessions": {
-            "other": "%(count)s munkamenet",
-            "one": "%(count)s munkamenet"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s ellenőrzött munkamenet",
-            "one": "1 ellenőrzött munkamenet"
-        },
         "deactivate_confirm_action": "Felhasználó felfüggesztése",
         "deactivate_confirm_description": "A felhasználó deaktiválása a felhasználót kijelentkezteti és megakadályozza, hogy vissza tudjon lépni. Továbbá kilépteti minden szobából, amelynek tagja volt. Ezt nem lehet visszavonni. Biztos, hogy deaktiválja ezt a felhasználót?",
         "deactivate_confirm_title": "Felhasználó felfüggesztése?",
@@ -3415,15 +3404,12 @@
         "disinvite_button_room": "Meghívó visszavonása a szobából",
         "disinvite_button_room_name": "Meghívó visszavonása innen: %(roomName)s",
         "disinvite_button_space": "Meghívó visszavonása a térről",
-        "edit_own_devices": "Eszközök szerkesztése",
         "error_ban_user": "A felhasználót nem sikerült kizárni",
         "error_deactivate": "A felhasználó felfüggesztése nem sikerült",
         "error_kicking_user": "A felhasználó eltávolítása nem sikerült",
         "error_mute_user": "A felhasználót némítása sikertelen",
         "error_revoke_3pid_invite_description": "A meghívót nem lehet visszavonni. Vagy a szervernek átmenetileg problémái vannak vagy nincs megfelelő jogosultságod a meghívó visszavonásához.",
         "error_revoke_3pid_invite_title": "A meghívó visszavonása sikertelen",
-        "hide_sessions": "Munkamenetek elrejtése",
-        "hide_verified_sessions": "Ellenőrzött munkamenetek eltakarása",
         "ignore_confirm_description": "Minden üzenet és meghívó ettől a felhasználótól rejtve marad. Biztos, hogy figyelmen kívül hagyja?",
         "ignore_confirm_title": "%(user)s figyelmen kívül hagyása",
         "invited_by": "Meghívta: %(sender)s",
