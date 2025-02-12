@@ -1,0 +1,79 @@
+/*
+ * Copyright 2025 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+import React, { type JSX, useCallback, useEffect } from "react";
+import { Button } from "@vector-im/compound-web";
+import ExploreIcon from "@vector-im/compound-design-tokens/assets/web/icons/explore";
+import SearchIcon from "@vector-im/compound-design-tokens/assets/web/icons/search";
+
+import { IS_MAC, Key } from "../../../../Keyboard";
+import { _t } from "../../../../languageHandler";
+import { ALTERNATE_KEY_NAME } from "../../../../accessibility/KeyboardShortcuts";
+import { shouldShowComponent } from "../../../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../../../settings/UIFeature";
+import { MetaSpace } from "../../../../stores/spaces";
+import { Action } from "../../../../dispatcher/actions";
+import PosthogTrackers from "../../../../PosthogTrackers";
+import defaultDispatcher from "../../../../dispatcher/dispatcher";
+
+type RoomListSearchProps = {
+    /**
+     * Current active space
+     * The explore button is only displayed in the Home meta space
+     */
+    activeSpace: string;
+};
+
+/**
+ * A search component to be displayed at the top of the room list
+ * This component listen to the "focus_room_filter" action and opens the spotlight when fired.
+ *
+ * The `Explore` button is displayed only in the Home meta space and when UIComponent.ExploreRooms is enabled.
+ */
+export function RoomListSearch({ activeSpace }: RoomListSearchProps): JSX.Element {
+    const displayExploreButton = activeSpace === MetaSpace.Home && shouldShowComponent(UIComponent.ExploreRooms);
+
+    const openSpotlight = useCallback(() => defaultDispatcher.fire(Action.OpenSpotlight), []);
+    // Open the spotlight when the "focus_room_filter" action is dispatched
+    useEffect(() => {
+        const registerId = defaultDispatcher.register(
+            (payload) => payload.action === "focus_room_filter" && openSpotlight(),
+        );
+        return () => defaultDispatcher.unregister(registerId);
+    }, [openSpotlight]);
+
+    return (
+        <div className="mx_RoomListSearch" role="search">
+            <Button
+                className="mx_RoomListSearch_search"
+                kind="secondary"
+                size="sm"
+                Icon={SearchIcon}
+                onClick={() => openSpotlight()}
+            >
+                <span>
+                    {_t("action|search")}
+                    <kbd>{IS_MAC ? "⌘ K" : _t(ALTERNATE_KEY_NAME[Key.CONTROL]) + " K"}</kbd>
+                </span>
+            </Button>
+            {displayExploreButton && (
+                <Button
+                    className="mx_RoomListSearch_explore"
+                    kind="secondary"
+                    size="sm"
+                    Icon={ExploreIcon}
+                    iconOnly={true}
+                    aria-label={_t("action|explore_rooms")}
+                    onClick={(ev) => {
+                        defaultDispatcher.fire(Action.ViewRoomDirectory);
+                        PosthogTrackers.trackInteraction("WebLeftPanelExploreRoomsButton", ev);
+                    }}
+                />
+            )}
+        </div>
+    );
+}
