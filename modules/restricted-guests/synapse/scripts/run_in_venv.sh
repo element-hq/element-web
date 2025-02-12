@@ -2,7 +2,7 @@
 # Copyright 2025 New Vector Ltd.
 #
 # SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
-# Please see LICENSE files in the repository root for full details.
+# Please see LICENSE files in the project root for full details.
 
 # A script to run a command in a python virtual environment that is stored in
 # `<repo-root>/.venv`. If the virtual environment doesn't exist yet, it will
