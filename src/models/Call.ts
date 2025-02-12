@@ -740,7 +740,7 @@ export class ElementCall extends Call {
         // To use Element Call without touching room state, we create a virtual
         // widget (one that doesn't have a corresponding state event)
         const url = ElementCall.generateWidgetUrl(client, roomId);
-        return WidgetStore.instance.addVirtualWidget(
+        const createdWidget = WidgetStore.instance.addVirtualWidget(
             {
                 id: secureRandomString(24), // So that it's globally unique
                 creatorUserId: client.getUserId()!,
@@ -761,6 +761,8 @@ export class ElementCall extends Call {
             },
             roomId,
         );
+        WidgetStore.instance.emit(UPDATE_EVENT, null);
+        return createdWidget;
     }
 
     private static getWidgetData(
@@ -829,7 +831,6 @@ export class ElementCall extends Call {
 
     public static async create(room: Room, skipLobby = false): Promise<void> {
         ElementCall.createOrGetCallWidget(room.roomId, room.client, skipLobby, false, isVideoRoom(room));
-        WidgetStore.instance.emit(UPDATE_EVENT, null);
     }
 
     protected async sendCallNotify(): Promise<void> {
