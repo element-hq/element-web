@@ -17,13 +17,10 @@ import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import dis from "../../../../../dispatcher/dispatcher";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
-import SecureBackupPanel from "../../SecureBackupPanel";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { UIFeature } from "../../../../../settings/UIFeature";
 import { type ActionPayload } from "../../../../../dispatcher/payloads";
-import CryptographyPanel from "../../CryptographyPanel";
 import SettingsFlag from "../../../elements/SettingsFlag";
-import CrossSigningPanel from "../../CrossSigningPanel";
 import EventIndexPanel from "../../EventIndexPanel";
 import InlineSpinner from "../../../elements/InlineSpinner";
 import { PosthogAnalytics } from "../../../../../PosthogAnalytics";
@@ -32,7 +29,6 @@ import { privateShouldBeEncrypted } from "../../../../../utils/rooms";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { SettingsSubsection, SettingsSubsectionText } from "../../shared/SettingsSubsection";
-import { useOwnDevices } from "../../devices/useOwnDevices";
 import { DiscoverySettings } from "../../discovery/DiscoverySettings";
 import SetIntegrationManager from "../../SetIntegrationManager";
 
@@ -41,23 +37,6 @@ interface IIgnoredUserProps {
     onUnignored: (userId: string) => void;
     inProgress: boolean;
 }
-
-const DehydratedDeviceStatus: React.FC = () => {
-    const { dehydratedDeviceId } = useOwnDevices();
-
-    if (dehydratedDeviceId) {
-        return (
-            <div className="mx_SettingsSubsection_content">
-                <div className="mx_SettingsFlag_label">{_t("settings|security|dehydrated_device_enabled")}</div>
-                <div className="mx_SettingsSubsection_text">
-                    {_t("settings|security|dehydrated_device_description")}
-                </div>
-            </div>
-        );
-    } else {
-        return null;
-    }
-};
 
 export class IgnoredUser extends React.Component<IIgnoredUserProps> {
     private onUnignoreClicked = (): void => {
@@ -286,26 +265,9 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
     }
 
     public render(): React.ReactNode {
-        const secureBackup = (
-            <SettingsSubsection heading={_t("common|secure_backup")}>
-                <SecureBackupPanel />
-                <DehydratedDeviceStatus />
-            </SettingsSubsection>
-        );
-
         const eventIndex = (
             <SettingsSubsection heading={_t("settings|security|message_search_section")}>
                 <EventIndexPanel />
-            </SettingsSubsection>
-        );
-
-        // XXX: There's no such panel in the current cross-signing designs, but
-        // it's useful to have for testing the feature. If there's no interest
-        // in having advanced details here once all flows are implemented, we
-        // can remove this.
-        const crossSigning = (
-            <SettingsSubsection heading={_t("common|cross_signing")}>
-                <CrossSigningPanel />
             </SettingsSubsection>
         );
 
@@ -365,12 +327,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
             <SettingsTab>
                 {warning}
                 <SetIntegrationManager />
-                <SettingsSection heading={_t("settings|security|encryption_section")}>
-                    {secureBackup}
-                    {eventIndex}
-                    {crossSigning}
-                    <CryptographyPanel />
-                </SettingsSection>
+                <SettingsSection heading={_t("settings|security|encryption_section")}>{eventIndex}</SettingsSection>
                 <SettingsSection heading={_t("common|privacy")}>
                     <DiscoverySettings />
                     {posthogSection}

@@ -56,17 +56,6 @@ export function formatBytes(bytes: number, decimals = 2): string {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
 }
 
-/**
- * format a key into groups of 4 characters, for easier visual inspection
- *
- * @param {string} key key to format
- *
- * @return {string}
- */
-export function formatCryptoKey(key: string): string {
-    return key.match(/.{1,4}/g)!.join(" ");
-}
-
 export function getUserNameColorClass(userId: string): string {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const number = useIdColorHash(userId);
