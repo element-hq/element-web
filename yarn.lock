@@ -10181,13 +10181,13 @@ postcss-value-parser@^4.0.0, postcss-value-parser@^4.1.0, postcss-value-parser@^
   resolved "https://registry.yarnpkg.com/postcss-value-parser/-/postcss-value-parser-4.2.0.tgz#723c09920836ba6d3e5af019f92bc0971c02e514"
   integrity sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==
 
-postcss@8.4.46:
-  version "8.4.46"
-  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.46.tgz#d526f2126b6ace463e9b3c1cbdad040fb040ea22"
-  integrity sha512-73x4XLhY0QNN+87/u6F7TRq+yl3xPAjlbRRvhly1mAKJgNO4q5fiqegez/Yi3u+ez8wbBXXqY9N1+RAJAVCzEw==
+postcss@8.5.1, postcss@^8.5.1:
+  version "8.5.1"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.5.1.tgz#e2272a1f8a807fafa413218245630b5db10a3214"
+  integrity sha512-6oz2beyjc5VMn/KV1pPw8fliQkhBXrVn1Z3TVyqZxU8kZpzEKhBdmCFqI6ZbmGtamQvQGuU1sgPTk8ZrXDD7jQ==
   dependencies:
-    nanoid "^3.3.7"
-    picocolors "^1.1.0"
+    nanoid "^3.3.8"
+    picocolors "^1.1.1"
     source-map-js "^1.2.1"
 
 postcss@^8.3.11, postcss@^8.4.33, postcss@^8.4.38:
@@ -10197,15 +10197,6 @@ postcss@^8.3.11, postcss@^8.4.33, postcss@^8.4.38:
   dependencies:
     nanoid "^3.3.7"
     picocolors "^1.1.0"
-    source-map-js "^1.2.1"
-
-postcss@^8.5.1:
-  version "8.5.1"
-  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.5.1.tgz#e2272a1f8a807fafa413218245630b5db10a3214"
-  integrity sha512-6oz2beyjc5VMn/KV1pPw8fliQkhBXrVn1Z3TVyqZxU8kZpzEKhBdmCFqI6ZbmGtamQvQGuU1sgPTk8ZrXDD7jQ==
-  dependencies:
-    nanoid "^3.3.8"
-    picocolors "^1.1.1"
     source-map-js "^1.2.1"
 
 posthog-js@1.157.2:
