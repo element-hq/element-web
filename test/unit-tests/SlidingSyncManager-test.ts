@@ -6,17 +6,34 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { SlidingSync } from "matrix-js-sdk/src/sliding-sync";
+import { type SlidingSync, SlidingSyncEvent, SlidingSyncState } from "matrix-js-sdk/src/sliding-sync";
 import { mocked } from "jest-mock";
 import { type MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import fetchMockJest from "fetch-mock-jest";
+import EventEmitter from "events";
+import { waitFor } from "jest-matrix-react";
 
 import { SlidingSyncManager } from "../../src/SlidingSyncManager";
-import { stubClient } from "../test-utils";
+import { mkStubRoom, stubClient } from "../test-utils";
 import SlidingSyncController from "../../src/settings/controllers/SlidingSyncController";
 
-jest.mock("matrix-js-sdk/src/sliding-sync");
-const MockSlidingSync = <jest.Mock<SlidingSync>>(<unknown>SlidingSync);
+//jest.mock("matrix-js-sdk/src/sliding-sync");
+//const MockSlidingSync = <jest.Mock<SlidingSync>>(<unknown>SlidingSync);
+class MockSlidingSync extends EventEmitter {
+    lists = {};
+    listModifiedCount = 0;
+    terminated = false;
+    needsResend = false;
+    modifyRoomSubscriptions = jest.fn();
+    getRoomSubscriptions = jest.fn();
+    useCustomSubscription = jest.fn();
+    getListParams = jest.fn();
+    setList = jest.fn();
+    setListRanges = jest.fn();
+    getListData = jest.fn();
+    extensions = jest.fn();
+    desiredRoomSubscriptions = jest.fn();
+}
 
 describe("SlidingSyncManager", () => {
     let manager: SlidingSyncManager;
@@ -24,7 +41,7 @@ describe("SlidingSyncManager", () => {
     let client: MatrixClient;
 
     beforeEach(() => {
-        slidingSync = new MockSlidingSync();
+        slidingSync = new MockSlidingSync() as unknown as SlidingSync;
         manager = new SlidingSyncManager();
         client = stubClient();
         // by default the client has no rooms: stubClient magically makes rooms annoyingly.
@@ -38,6 +55,7 @@ describe("SlidingSyncManager", () => {
     describe("setRoomVisible", () => {
         it("adds a subscription for the room", async () => {
             const roomId = "!room:id";
+            mocked(client.getRoom).mockReturnValue(mkStubRoom(roomId, "foo", client));
             const subs = new Set<string>();
             mocked(slidingSync.getRoomSubscriptions).mockReturnValue(subs);
             await manager.setRoomVisible(roomId, true);
@@ -141,7 +159,8 @@ describe("SlidingSyncManager", () => {
                     roomIndexToRoomId: {},
                 };
             });
-            await (manager as any).startSpidering(batchSize, gapMs);
+            await (manager as any).startSpidering(slidingSync, batchSize, gapMs);
+
             // we expect calls for 10,19 -> 20,29 -> 30,39 -> 40,49 -> 50,59 -> 60,69
             const wantWindows = [
                 [0, 10],
@@ -152,23 +171,15 @@ describe("SlidingSyncManager", () => {
                 [0, 60],
                 [0, 70],
             ];
-            expect(slidingSync.getListData).toHaveBeenCalledTimes(wantWindows.length);
-            expect(slidingSync.setList).toHaveBeenCalledTimes(1);
-            expect(slidingSync.setListRanges).toHaveBeenCalledTimes(wantWindows.length - 1);
-            wantWindows.forEach((range, i) => {
-                if (i === 0) {
-                    // eslint-disable-next-line jest/no-conditional-expect
-                    expect(slidingSync.setList).toHaveBeenCalledWith(
-                        SlidingSyncManager.ListSearch,
-                        // eslint-disable-next-line jest/no-conditional-expect
-                        expect.objectContaining({
-                            ranges: [range],
-                        }),
-                    );
-                    return;
-                }
-                expect(slidingSync.setListRanges).toHaveBeenCalledWith(SlidingSyncManager.ListSearch, [range]);
-            });
+
+            for (let i = 1; i < wantWindows.length; ++i) {
+                // each time we emit, it should expand the range of all 5 lists by 10 until
+                // they all include all the rooms (64), which is 6 emits.
+                slidingSync.emit(SlidingSyncEvent.Lifecycle, SlidingSyncState.Complete, null, undefined);
+                await waitFor(() => expect(slidingSync.getListData).toHaveBeenCalledTimes(i * 5));
+                expect(slidingSync.setListRanges).toHaveBeenCalledTimes(i * 5);
+                expect(slidingSync.setListRanges).toHaveBeenCalledWith("spaces", [wantWindows[i]]);
+            }
         });
         it("handles accounts with zero rooms", async () => {
             const gapMs = 1;
@@ -179,15 +190,11 @@ describe("SlidingSyncManager", () => {
                     roomIndexToRoomId: {},
                 };
             });
-            await (manager as any).startSpidering(batchSize, gapMs);
-            expect(slidingSync.getListData).toHaveBeenCalledTimes(1);
-            expect(slidingSync.setList).toHaveBeenCalledTimes(1);
-            expect(slidingSync.setList).toHaveBeenCalledWith(
-                SlidingSyncManager.ListSearch,
-                expect.objectContaining({
-                    ranges: [[0, batchSize]],
-                }),
-            );
+            await (manager as any).startSpidering(slidingSync, batchSize, gapMs);
+            slidingSync.emit(SlidingSyncEvent.Lifecycle, SlidingSyncState.Complete, null, undefined);
+            await waitFor(() => expect(slidingSync.getListData).toHaveBeenCalledTimes(5));
+            // should not have needed to expand the range
+            expect(slidingSync.setListRanges).not.toHaveBeenCalled();
         });
     });
     describe("checkSupport", () => {

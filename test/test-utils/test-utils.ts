@@ -658,6 +658,7 @@ export function mkStubRoom(
         getUnreadNotificationCount: jest.fn(() => 0),
         getRoomUnreadNotificationCount: jest.fn().mockReturnValue(0),
         getVersion: jest.fn().mockReturnValue("1"),
+        getBumpStamp: jest.fn().mockReturnValue(0),
         hasMembershipState: () => false,
         isElementVideoRoom: jest.fn().mockReturnValue(false),
         isSpaceRoom: jest.fn().mockReturnValue(false),
