@@ -39,4 +39,4 @@ RUN rm -rf /usr/share/nginx/html \
 USER nginx
 
 # HTTP listen port
-ENV ELEMENT_WEB_PORT=80
+ENV ELEMENT_WEB_PORT=8080
