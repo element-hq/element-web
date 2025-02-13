@@ -17,7 +17,6 @@
         "lint:py": "./scripts/run_in_venv.sh tox -e check_codestyle",
         "lint:fix": "./scripts/run_in_venv.sh tox -e fix_codestyle",
         "test": "./scripts/run_in_venv.sh tox -e py",
-        "vitest": "echo \"Nothing to vitest\"",
         "depcheck": "echo \"Nothing to check\"",
         "package": "yarn docker:build"
     }
