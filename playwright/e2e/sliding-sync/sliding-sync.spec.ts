@@ -188,8 +188,24 @@ test.describe("Sliding Sync", () => {
         ).not.toBeAttached();
     });
 
-    test("should not show unread indicators", async ({ page, app, joinedBot: bot, testRoom }) => {
+    test("should not show unread indicators when the room is muted", async ({
+        page,
+        app,
+        joinedBot: bot,
+        testRoom,
+    }) => {
+        // XXX Dave - I've edited the name of this test to reflect what I think it was trying to testm
+        // but then the comment below makes zero sense. I'll leave it in case I'm wrong...
         // TODO: for now. Later we should.
+
+        // Turn message previews on so we can see when the message has arrived
+        const sublistHeaderLocator = page
+            .getByRole("group", { name: "Rooms" })
+            .locator(".mx_RoomSublist_headerContainer");
+        await sublistHeaderLocator.hover();
+        await sublistHeaderLocator.getByRole("button", { name: "List options" }).click();
+        await page.getByRole("menuitemcheckbox", { name: "Show previews of messages" }).dispatchEvent("click");
+        await page.locator(".mx_ContextualMenu_background").click();
 
         // disable notifs in this room (TODO: CS API call?)
         const locator = page.getByRole("treeitem", { name: "Test Room" });
@@ -204,8 +220,7 @@ test.describe("Sliding Sync", () => {
 
         await bot.sendMessage(testRoom.roomId, "Do you read me?");
 
-        // wait for this message to arrive, tell by the room list resorting
-        await checkOrder(["Test Room", "Dummy"], page);
+        await expect(page.locator(".mx_RoomTile_subtitle_text")).toHaveText("@bot_0002:localhost: Do you read me?");
 
         await expect(
             page.getByRole("treeitem", { name: "Test Room" }).locator(".mx_NotificationBadge"),
