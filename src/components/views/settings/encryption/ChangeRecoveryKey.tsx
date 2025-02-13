@@ -19,7 +19,6 @@ import {
 } from "@vector-im/compound-web";
 import CopyIcon from "@vector-im/compound-design-tokens/assets/web/icons/copy";
 import KeyIcon from "@vector-im/compound-design-tokens/assets/web/icons/key-solid";
-import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../../languageHandler";
 import { EncryptionCard } from "./EncryptionCard";
@@ -27,6 +26,7 @@ import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext
 import { useAsyncMemo } from "../../../../hooks/useAsyncMemo";
 import { copyPlaintext } from "../../../../utils/strings";
 import { withSecretStorageKeyCache } from "../../../../SecurityManager";
+import { logErrorAndShowErrorDialog } from "../../../../utils/ErrorUtils.tsx";
 
 /**
  * The possible states of the component.
@@ -130,7 +130,7 @@ export function ChangeRecoveryKey({
                             );
                             onFinish();
                         } catch (e) {
-                            logger.error("Failed to bootstrap secret storage", e);
+                            logErrorAndShowErrorDialog("Failed to set up secret storage", e);
                         }
                     }}
                     submitButtonLabel={
