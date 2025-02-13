@@ -38,8 +38,8 @@ async function deviceDehydrationEnabled(client: MatrixClient, crypto: CryptoApi 
  * the configuration), rehydrate a device (if available) and create
  * a new dehydrated device.
  *
- * @param createNewKey: force a new dehydration key to be created, even if one
- *   already exists.  This is used when we reset secret storage.
+ * @param opts - options for the startDehydration operation, if one is performed.
+ * @param client - MatrixClient to use for the operation
  */
 export async function initialiseDehydration(opts: StartDehydrationOpts = {}, client?: MatrixClient): Promise<void> {
     client = client || MatrixClientPeg.safeGet();
