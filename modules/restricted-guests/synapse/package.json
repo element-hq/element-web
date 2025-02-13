@@ -1,0 +1,23 @@
+{
+    "name": "@element-hq/synapse-guest-module",
+    "version": "1.0.0",
+    "private": true,
+    "description": "A synapse module to restrict the actions of guests",
+    "author": "New Vector Ltd.",
+    "license": "SEE LICENSE IN README.md",
+    "scripts": {
+        "prepare": "echo \"Nothing to prepare\"",
+        "clean": "echo \"Nothing to clean\"",
+        "build": "echo \"Nothing to build\"",
+        "docker:build": "docker build -t element-hq/synapse-guest-module -f Dockerfile .",
+        "tsc": "echo \"Nothing to tsc\"",
+        "lint": "echo \"Nothing to lint\"",
+        "lint:ts": "echo \"Nothing to lint:ts\"",
+        "types:py": "./scripts/run_in_venv.sh tox -e check_types",
+        "lint:py": "./scripts/run_in_venv.sh tox -e check_codestyle",
+        "lint:fix": "./scripts/run_in_venv.sh tox -e fix_codestyle",
+        "test": "./scripts/run_in_venv.sh tox -e py",
+        "depcheck": "echo \"Nothing to check\"",
+        "package": "yarn docker:build"
+    }
+}
