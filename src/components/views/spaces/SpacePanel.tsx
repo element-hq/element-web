@@ -362,6 +362,8 @@ const SpacePanel: React.FC = () => {
         }
     });
 
+    const newRoomListEnabled = useSettingValue("feature_new_room_list");
+
     return (
         <RovingTabIndexProvider handleHomeEnd handleUpDown={!dragging}>
             {({ onKeyDownHandler, onDragEndHandler }) => (
@@ -377,7 +379,10 @@ const SpacePanel: React.FC = () => {
                     }}
                 >
                     <nav
-                        className={classNames("mx_SpacePanel", { collapsed: isPanelCollapsed })}
+                        className={classNames("mx_SpacePanel", {
+                            collapsed: isPanelCollapsed,
+                            newUi: newRoomListEnabled,
+                        })}
                         onKeyDown={(ev) => {
                             const navAction = getKeyBindingsManager().getNavigationAction(ev);
                             if (
