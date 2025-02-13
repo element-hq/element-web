@@ -3455,6 +3455,7 @@
             "left_reason": "%(targetName)s left the room: %(reason)s",
             "no_change": "%(senderName)s made no change",
             "reject_invite": "%(targetName)s rejected the invitation",
+            "reject_invite_reason": "%(targetName)s rejected the invitation: %(reason)s",
             "remove_avatar": "%(senderName)s removed their profile picture",
             "remove_name": "%(senderName)s removed their display name (%(oldDisplayName)s)",
             "set_avatar": "%(senderName)s set a profile picture",
