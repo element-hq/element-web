@@ -298,16 +298,12 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         opts.clientWellKnownPollPeriod = 2 * 60 * 60; // 2 hours
         opts.threadSupport = true;
 
-        /* TODO: Uncomment before PR lands
+        // If the user has enabled the labs feature for sliding sync, set it up
+        // otherwise check if the feature is supported
         if (SettingsStore.getValue("feature_sliding_sync")) {
             opts.slidingSync = await SlidingSyncManager.instance.setup(this.matrixClient);
         } else {
             SlidingSyncManager.instance.checkSupport(this.matrixClient);
-        } */
-        // TODO: remove before PR lands. Defaults to SSS if the server entered supports it.
-        await SlidingSyncManager.instance.checkSupport(this.matrixClient);
-        if (SlidingSyncManager.serverSupportsSlidingSync) {
-            opts.slidingSync = await SlidingSyncManager.instance.setup(this.matrixClient);
         }
 
         // Connect the matrix client to the dispatcher and setting handlers
