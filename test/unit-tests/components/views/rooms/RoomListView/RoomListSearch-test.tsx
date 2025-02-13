@@ -6,7 +6,7 @@
  */
 
 import React from "react";
-import { render, screen, waitFor } from "jest-matrix-react";
+import { render, screen } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 
@@ -68,16 +68,6 @@ describe("<RoomListSearch />", () => {
 
         // The spotlight should be opened
         expect(fireSpy).toHaveBeenCalledWith(Action.OpenSpotlight);
-    });
-
-    it("should open the spotlight when the action focus_room_filter is fired", async () => {
-        const fireSpy = jest.spyOn(defaultDispatcher, "fire");
-        renderComponent();
-
-        defaultDispatcher.dispatch({ action: "focus_room_filter" });
-
-        // The spotlight should be opened
-        await waitFor(() => expect(fireSpy).toHaveBeenCalledWith(Action.OpenSpotlight));
     });
 
     it("should open the room directory when the explore button is clicked", async () => {

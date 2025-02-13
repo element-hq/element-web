@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type JSX, useCallback, useEffect } from "react";
+import React, { type JSX } from "react";
 import { Button } from "@vector-im/compound-web";
 import ExploreIcon from "@vector-im/compound-design-tokens/assets/web/icons/explore";
 import SearchIcon from "@vector-im/compound-design-tokens/assets/web/icons/search";
@@ -31,21 +31,10 @@ type RoomListSearchProps = {
 
 /**
  * A search component to be displayed at the top of the room list
- * This component listen to the "focus_room_filter" action and opens the spotlight when fired.
- *
  * The `Explore` button is displayed only in the Home meta space and when UIComponent.ExploreRooms is enabled.
  */
 export function RoomListSearch({ activeSpace }: RoomListSearchProps): JSX.Element {
     const displayExploreButton = activeSpace === MetaSpace.Home && shouldShowComponent(UIComponent.ExploreRooms);
-
-    const openSpotlight = useCallback(() => defaultDispatcher.fire(Action.OpenSpotlight), []);
-    // Open the spotlight when the "focus_room_filter" action is dispatched
-    useEffect(() => {
-        const registerId = defaultDispatcher.register(
-            (payload) => payload.action === "focus_room_filter" && openSpotlight(),
-        );
-        return () => defaultDispatcher.unregister(registerId);
-    }, [openSpotlight]);
 
     return (
         <Flex className="mx_RoomListSearch" role="search" gap="var(--cpd-space-2x)" align="center">
@@ -54,7 +43,7 @@ export function RoomListSearch({ activeSpace }: RoomListSearchProps): JSX.Elemen
                 kind="secondary"
                 size="sm"
                 Icon={SearchIcon}
-                onClick={() => openSpotlight()}
+                onClick={() => defaultDispatcher.fire(Action.OpenSpotlight)}
             >
                 <Flex as="span" justify="space-between">
                     {_t("action|search")}
