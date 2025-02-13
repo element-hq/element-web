@@ -501,9 +501,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                 handled = true;
                 break;
             case KeyBindingAction.FilterRooms:
-                dis.dispatch({
-                    action: "focus_room_filter",
-                });
+                dis.fire(Action.OpenSpotlight);
                 handled = true;
                 break;
             case KeyBindingAction.ToggleUserMenu:
