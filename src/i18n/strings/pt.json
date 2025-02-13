@@ -538,7 +538,6 @@
         "saved": "Guardado",
         "saving": "A guardar…",
         "secure_backup": "Cópia de segurança segura",
-        "security": "Segurança",
         "select_all": "Selecionar tudo",
         "server": "Servidor",
         "settings": "Configurações",
@@ -557,7 +556,6 @@
         "thread": "Tópico",
         "threads": "Tópicos",
         "timeline": "Cronologia",
-        "trusted": "Confiável",
         "unavailable": "indisponível",
         "unencrypted": "Não encriptado",
         "unmute": "Tirar do mudo",
@@ -912,7 +910,6 @@
             "title": "Não é confiável"
         },
         "unable_to_setup_keys_error": "Não é possível configurar as chaves",
-        "unsupported": "Este cliente não suporta encriptação de ponta a ponta.",
         "verification": {
             "accepting": "Aceitando...",
             "after_new_login": {
@@ -3602,18 +3599,9 @@
         "ban_room_confirm_title": "Banir de %(roomName)s",
         "ban_space_everything": "Baní-los de tudo que eu estiver autorizado",
         "ban_space_specific": "Bani-los de coisas específicas que estou autorizado",
-        "count_of_sessions": {
-            "one": "%(count)s sessão",
-            "other": "%(count)s sessões"
-        },
-        "count_of_verified_sessions": {
-            "one": "1 sessão verificada",
-            "other": "%(count)s sessões verificadas"
-        },
         "deactivate_confirm_action": "Desativar utilizador",
         "deactivate_confirm_description": "Se desactivares este utilizador, ele sairá da tua conta e não poderá voltar a entrar. Além disso, sai de todas as salas em que se encontra. Esta ação não pode ser revertida. Tens a certeza de que queres desativar este utilizador?",
         "deactivate_confirm_title": "Desativar utilizador?",
-        "dehydrated_device_enabled": "Dispositivo offline ativado",
         "demote_button": "Despromove",
         "demote_self_confirm_description_space": "Não poderás desfazer esta alteração, uma vez que te estás a despromover. Se fores o último utilizador privilegiado no espaço, será impossível recuperar os privilégios.",
         "demote_self_confirm_room": "Não poderás desfazer esta alteração, uma vez que te estás a despromover. Se fores o último utilizador privilegiado na sala, será impossível recuperar os privilégios.",
@@ -3621,15 +3609,12 @@
         "disinvite_button_room": "Desconvidar da sala",
         "disinvite_button_room_name": "Desconvidar de %(roomName)s",
         "disinvite_button_space": "Desconvidar do espaço",
-        "edit_own_devices": "Editar dispositivos",
         "error_ban_user": "Não foi possível banir o/a usuário/a",
         "error_deactivate": "Falha ao desativar o utilizador",
         "error_kicking_user": "Falha ao remover o utilizador",
         "error_mute_user": "Não foi possível remover notificações da/do usuária/o",
         "error_revoke_3pid_invite_description": "Não foi possível revogar o convite. O servidor pode estar com um problema temporário ou não tens permissões suficientes para revogar o convite.",
         "error_revoke_3pid_invite_title": "Falha ao revogar o convite",
-        "hide_sessions": "Ocultar sessões",
-        "hide_verified_sessions": "Ocultar sessões verificadas",
         "ignore_button": "Ignorar",
         "ignore_confirm_description": "Todas as mensagens e convites deste utilizador serão ocultados. Tens a certeza de que queres ignorá-los?",
         "ignore_confirm_title": "Ignora %(user)s",

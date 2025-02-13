@@ -484,7 +484,6 @@
         "rooms": "Dhoma",
         "saving": "Po ruhet…",
         "secure_backup": "Kopjeruajtje e Sigurt",
-        "security": "Siguri",
         "select_all": "Përzgjidhi krejt",
         "server": "Shërbyes",
         "settings": "Rregullime",
@@ -502,7 +501,6 @@
         "thread": "Rrjedhë",
         "threads": "Rrjedha",
         "timeline": "Rrjedhë Kohore",
-        "trusted": "E besuar",
         "unencrypted": "Të pafshehtëzuara",
         "unmute": "Ktheji zërin",
         "unnamed_room": "Dhomë e Paemërtuar",
@@ -841,7 +839,6 @@
             "title": "Jo e Besuar"
         },
         "unable_to_setup_keys_error": "S’arrihet të ujdisen kyçe",
-        "unsupported": "Ky klient nuk mbulon fshehtëzim skaj-më-skaj.",
         "verification": {
             "accepting": "Po pranohet…",
             "after_new_login": {
@@ -3260,14 +3257,6 @@
         "ban_room_confirm_title": "Dëboje prej %(roomName)s",
         "ban_space_everything": "Dëboji prej gjithçkaje ku mundem ta bëj këtë",
         "ban_space_specific": "Dëboji prej gjërash të caktuara ku mundem ta bëj këtë",
-        "count_of_sessions": {
-            "other": "%(count)s sesione",
-            "one": "%(count)s sesion"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s sesione të verifikuar",
-            "one": "1 sesion i verifikuar"
-        },
         "deactivate_confirm_action": "Çaktivizoje përdoruesin",
         "deactivate_confirm_description": "Çaktivizimi i këtij përdoruesi do të sjellë nxjerrjen e tij nga llogaria përkatëse dhe do të pengojë rihyrjen e tij. Veç kësaj, do të braktisë krejt dhomat ku ndodhet. Ky veprim s’mund të prapësohet. Jeni i sigurt se doni të çaktivizohet ky përdorues?",
         "deactivate_confirm_title": "Të çaktivizohet përdoruesi?",
@@ -3278,15 +3267,12 @@
         "disinvite_button_room": "Hiqi ftesën për këtë dhomë",
         "disinvite_button_room_name": "Hiqja ftesën për %(roomName)s",
         "disinvite_button_space": "Hiqi ftesën për këtë hapësirë",
-        "edit_own_devices": "Përpunoni pajisje",
         "error_ban_user": "S’u arrit të dëbohej përdoruesi",
         "error_deactivate": "S’u arrit të çaktivizohet përdorues",
         "error_kicking_user": "S’u arrit të hiqej përdoruesi",
         "error_mute_user": "S’u arrit t’i hiqej zëri përdoruesit",
         "error_revoke_3pid_invite_description": "S’u shfuqizua dot ftesa. Shërbyesi mund të jetë duke kaluar një problem të përkohshëm ose s’keni leje të mjaftueshme për të shfuqizuar ftesën.",
         "error_revoke_3pid_invite_title": "S’u arrit të shfuqizohej ftesa",
-        "hide_sessions": "Fshih sesione",
-        "hide_verified_sessions": "Fshih sesione të verifikuar",
         "ignore_confirm_description": "Krejt mesazhet dhe ftesat prej këtij përdoruesi do të fshihen. Jeni i sigurt se doni të shpërfillet?",
         "ignore_confirm_title": "Shpërfille %(user)s",
         "invited_by": "Ftuar nga %(sender)s",

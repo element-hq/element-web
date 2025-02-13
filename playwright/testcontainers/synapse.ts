@@ -25,7 +25,7 @@ import { type HomeserverContainer, type StartedHomeserverContainer } from "./Hom
 import { type StartedMatrixAuthenticationServiceContainer } from "./mas.ts";
 import { Api, ClientServerApi, type Verb } from "../plugins/utils/api.ts";
 
-const TAG = "develop@sha256:73803f5af0ff70926d54cccabdb4a6e3abf6a7f96297955e72a2652ceb5c00c3";
+const TAG = "develop@sha256:56456456f52cb3b9d23a3e5e889e5a2e908784f0459d4bf759835be87e7e5888";
 
 const DEFAULT_CONFIG = {
     server_name: "localhost",

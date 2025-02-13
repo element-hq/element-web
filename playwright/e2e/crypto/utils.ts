@@ -145,11 +145,13 @@ export async function checkDeviceIsCrossSigned(app: ElementAppPage): Promise<voi
  * @param app -` ElementAppPage` wrapper for the playwright `Page`.
  * @param expectedBackupVersion - the version of the backup we expect to be connected to.
  * @param checkBackupPrivateKeyInCache - whether to check that the backup decryption key is cached locally
+ * @param checkBackupKeyIn4S - whether to check that the backup key is stored in 4S
  */
 export async function checkDeviceIsConnectedKeyBackup(
     app: ElementAppPage,
     expectedBackupVersion: string,
     checkBackupPrivateKeyInCache: boolean,
+    checkBackupKeyIn4S: boolean = true,
 ): Promise<void> {
     // Sanity check the given backup version: if it's null, something went wrong earlier in the test.
     if (!expectedBackupVersion) {
@@ -192,7 +194,7 @@ export async function checkDeviceIsConnectedKeyBackup(
     // The active backup version is as expected
     expect(activeBackupVersion).toBe(expectedBackupVersion);
     // The backup key is stored in 4S
-    expect(backupKeyIn4S).toBe(true);
+    if (checkBackupKeyIn4S) expect(backupKeyIn4S).toBe(true);
 
     if (checkBackupPrivateKeyInCache) {
         // The backup key is available locally
@@ -216,13 +218,13 @@ export async function logIntoElement(page: Page, credentials: Credentials, secur
 
     // if a securityKey was given, verify the new device
     if (securityKey !== undefined) {
-        await page.locator(".mx_AuthPage").getByRole("button", { name: "Verify with Security Key" }).click();
+        await page.locator(".mx_AuthPage").getByRole("button", { name: "Verify with Recovery Key" }).click();
 
-        const useSecurityKey = page.locator(".mx_Dialog").getByRole("button", { name: "use your Security Key" });
+        const useSecurityKey = page.locator(".mx_Dialog").getByRole("button", { name: "use your Recovery Key" });
         if (await useSecurityKey.isVisible()) {
             await useSecurityKey.click();
         }
-        // Fill in the security key
+        // Fill in the recovery key
         await page.locator(".mx_Dialog").locator('input[type="password"]').fill(securityKey);
         await page.locator(".mx_Dialog_primary:not([disabled])", { hasText: "Continue" }).click();
         await page.getByRole("button", { name: "Done" }).click();
@@ -249,15 +251,15 @@ export async function logOutOfElement(page: Page, discardKeys: boolean = false) 
 }
 
 /**
- * Open the encryption settings, and verify the current session using the security key.
+ * Open the encryption settings, and verify the current session using the recovery key.
  *
  * @param app - `ElementAppPage` wrapper for the playwright `Page`.
- * @param securityKey - The security key (i.e., 4S key), set up during a previous session.
+ * @param securityKey - The recovery key (i.e., 4S key), set up during a previous session.
  */
 export async function verifySession(app: ElementAppPage, securityKey: string) {
     const settings = await app.settings.openUserSettings("Encryption");
     await settings.getByRole("button", { name: "Verify this device" }).click();
-    await app.page.getByRole("button", { name: "Verify with Security Key" }).click();
+    await app.page.getByRole("button", { name: "Verify with Recovery Key" }).click();
     await app.page.locator(".mx_Dialog").locator('input[type="password"]').fill(securityKey);
     await app.page.getByRole("button", { name: "Continue", disabled: false }).click();
     await app.page.getByRole("button", { name: "Done" }).click();
@@ -291,7 +293,7 @@ export async function doTwoWaySasVerification(page: Page, verifier: JSHandle<Ver
  *
  * Assumes that the current device has been cross-signed (which means that we skip a step where we set it up).
  *
- * Returns the security key
+ * Returns the recovery key
  */
 export async function enableKeyBackup(app: ElementAppPage): Promise<string> {
     await app.settings.openUserSettings("Security & Privacy");
@@ -319,9 +321,9 @@ export async function completeCreateSecretStorageDialog(
     const currentDialogLocator = page.locator(".mx_Dialog");
 
     await expect(currentDialogLocator.getByRole("heading", { name: "Set up Secure Backup" })).toBeVisible();
-    // "Generate a Security Key" is selected by default
+    // "Generate a Recovery Key" is selected by default
     await currentDialogLocator.getByRole("button", { name: "Continue", exact: true }).click();
-    await expect(currentDialogLocator.getByRole("heading", { name: "Save your Security Key" })).toBeVisible();
+    await expect(currentDialogLocator.getByRole("heading", { name: "Save your Recovery Key" })).toBeVisible();
     await currentDialogLocator.getByRole("button", { name: "Copy", exact: true }).click();
     // copy the recovery key to use it later
     const recoveryKey = await page.evaluate(() => navigator.clipboard.readText());
@@ -345,7 +347,7 @@ export async function completeCreateSecretStorageDialog(
 }
 
 /**
- * Click on copy and continue buttons to dismiss the security key dialog
+ * Click on copy and continue buttons to dismiss the recovery key dialog
  */
 export async function copyAndContinue(page: Page) {
     await page.getByRole("button", { name: "Copy" }).click();
@@ -501,4 +503,32 @@ export async function deleteCachedSecrets(page: Page) {
         await removeCachedSecrets;
     });
     await page.reload();
+}
+
+/**
+ * Wait until the given user has a given number of devices.
+ * This function will check the device keys ten times and if
+ * the expected number of devices were not found by then, an
+ * error is thrown.
+ */
+export async function waitForDevices(
+    app: ElementAppPage,
+    userId: string,
+    expectedNumberOfDevices: number,
+): Promise<void> {
+    const result = await app.client.evaluate(
+        async (cli, { userId, expectedNumberOfDevices }) => {
+            for (let i = 0; i < 10; ++i) {
+                const userDeviceMap = await cli.getCrypto()?.getUserDeviceInfo([userId], true);
+                const deviceMap = userDeviceMap?.get(userId);
+                if (deviceMap.size === expectedNumberOfDevices) return true;
+                await new Promise((r) => setTimeout(r, 500));
+            }
+            return false;
+        },
+        { userId, expectedNumberOfDevices },
+    );
+    if (!result) {
+        throw new Error(`User ${userId} did not have ${expectedNumberOfDevices} devices within ten iterations!`);
+    }
 }

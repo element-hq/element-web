@@ -503,7 +503,6 @@
         "rooms": "Miestnosti",
         "saving": "Ukladanie…",
         "secure_backup": "Bezpečné zálohovanie",
-        "security": "Zabezpečenie",
         "select_all": "Vybrať všetky",
         "server": "Server",
         "settings": "Nastavenia",
@@ -522,7 +521,6 @@
         "thread": "Vlákno",
         "threads": "Vlákna",
         "timeline": "Časová os",
-        "trusted": "Dôveryhodné",
         "unavailable": "nedostupný",
         "unencrypted": "Nešifrované",
         "unmute": "Zrušiť stlmenie",
@@ -880,7 +878,6 @@
             "title": "Nedôveryhodné"
         },
         "unable_to_setup_keys_error": "Nie je možné nastaviť kľúče",
-        "unsupported": "Tento klient nepodporuje end-to-end šifrovanie.",
         "verification": {
             "accepting": "Akceptovanie…",
             "after_new_login": {
@@ -3490,14 +3487,6 @@
         "ban_room_confirm_title": "Zakázať vstup do %(roomName)s",
         "ban_space_everything": "Zakázať im všetko, na čo mám oprávnenie",
         "ban_space_specific": "Zakázať im konkrétne právomoci, na ktoré mám oprávnenie",
-        "count_of_sessions": {
-            "one": "%(count)s relácia",
-            "other": "%(count)s relácie"
-        },
-        "count_of_verified_sessions": {
-            "one": "1 overená relácia",
-            "other": "%(count)s overených relácií"
-        },
         "deactivate_confirm_action": "Deaktivovať používateľa",
         "deactivate_confirm_description": "Deaktivácia tohto používateľa ho odhlási a zabráni mu v opätovnom prihlásení. Okrem toho opustí všetky miestnosti, v ktorých sa nachádza. Túto akciu nie je možné vrátiť späť. Ste si istí, že chcete tohto používateľa deaktivovať?",
         "deactivate_confirm_title": "Deaktivovať používateľa?",
@@ -3508,15 +3497,12 @@
         "disinvite_button_room": "Zrušiť pozvánku z miestnosti",
         "disinvite_button_room_name": "Zrušenie pozvania z %(roomName)s",
         "disinvite_button_space": "Zrušiť pozvánku z priestoru",
-        "edit_own_devices": "Upraviť zariadenia",
         "error_ban_user": "Nepodarilo sa zakázať používateľa",
         "error_deactivate": "Nepodarilo sa deaktivovať používateľa",
         "error_kicking_user": "Nepodarilo sa odstrániť používateľa",
         "error_mute_user": "Nepodarilo sa umlčať používateľa",
         "error_revoke_3pid_invite_description": "Pozvánku nebolo možné odvolať. Na serveri môže byť dočasný problém alebo nemáte dostatočné oprávnenia na odvolanie pozvánky.",
         "error_revoke_3pid_invite_title": "Nepodarilo sa odvolať pozvánku",
-        "hide_sessions": "Skryť relácie",
-        "hide_verified_sessions": "Skryť overené relácie",
         "ignore_confirm_description": "Všetky správy a pozvánky od tohto používateľa budú skryté. Ste si istí, že ich chcete ignorovať?",
         "ignore_confirm_title": "Ignorovať %(user)s",
         "invited_by": "Pozvaný používateľom %(sender)s",

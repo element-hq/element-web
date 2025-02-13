@@ -510,7 +510,6 @@
         "rooms": "Stanze",
         "saving": "Salvataggio…",
         "secure_backup": "Backup Sicuro",
-        "security": "Sicurezza",
         "select_all": "Seleziona tutti",
         "server": "Server",
         "settings": "Impostazioni",
@@ -529,7 +528,6 @@
         "thread": "Conversazione",
         "threads": "Conversazioni",
         "timeline": "Linea temporale",
-        "trusted": "Fidato",
         "unavailable": "non disponibile",
         "unencrypted": "Non crittografato",
         "unmute": "Togli silenzio",
@@ -884,7 +882,6 @@
             "title": "Non fidato"
         },
         "unable_to_setup_keys_error": "Impossibile impostare le chiavi",
-        "unsupported": "Questo client non supporta la crittografia end-to-end.",
         "verification": {
             "accepting": "Accettazione…",
             "after_new_login": {
@@ -3477,14 +3474,6 @@
         "ban_room_confirm_title": "Bandisci da %(roomName)s",
         "ban_space_everything": "Bandiscilo ovunque io possa farlo",
         "ban_space_specific": "Bandiscilo da cose specifiche dove posso farlo",
-        "count_of_sessions": {
-            "other": "%(count)s sessioni",
-            "one": "%(count)s sessione"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s sessioni verificate",
-            "one": "1 sessione verificata"
-        },
         "deactivate_confirm_action": "Disattiva utente",
         "deactivate_confirm_description": "Disattivare questo utente lo disconnetterà e ne impedirà nuovi accessi. In aggiunta, abbandonerà tutte le stanze in cui è presente. Questa azione non può essere annullata. Sei sicuro di volere disattivare questo utente?",
         "deactivate_confirm_title": "Disattivare l'utente?",
@@ -3495,15 +3484,12 @@
         "disinvite_button_room": "Disinvita dalla stanza",
         "disinvite_button_room_name": "Annulla l'invito da %(roomName)s",
         "disinvite_button_space": "Disinvita dallo spazio",
-        "edit_own_devices": "Modifica dispositivi",
         "error_ban_user": "Ban utente fallito",
         "error_deactivate": "Disattivazione utente fallita",
         "error_kicking_user": "Rimozione utente fallita",
         "error_mute_user": "Impossibile silenziare l'utente",
         "error_revoke_3pid_invite_description": "Impossibile revocare l'invito. Il server potrebbe avere un problema temporaneo o non si dispone di autorizzazioni sufficienti per revocare l'invito.",
         "error_revoke_3pid_invite_title": "Revoca dell'invito fallita",
-        "hide_sessions": "Nascondi sessione",
-        "hide_verified_sessions": "Nascondi sessioni verificate",
         "ignore_confirm_description": "Tutti i messaggi e gli inviti da questo utente verranno nascosti. Vuoi davvero ignorarli?",
         "ignore_confirm_title": "Ignora %(user)s",
         "invited_by": "Invitato/a da %(sender)s",

@@ -548,7 +548,6 @@
         "saved": "Salvestatud",
         "saving": "Salvestame…",
         "secure_backup": "Turvaline varundus",
-        "security": "Turvalisus",
         "select_all": "Vali kõik",
         "server": "Server",
         "settings": "Seadistused",
@@ -567,7 +566,6 @@
         "thread": "Jutulõng",
         "threads": "Jutulõngad",
         "timeline": "Ajajoon",
-        "trusted": "Usaldusväärne",
         "unavailable": "pole saadaval",
         "unencrypted": "Krüptimata",
         "unmute": "Eemalda summutamine",
@@ -971,7 +969,6 @@
             "title": "Ei ole usaldusväärne"
         },
         "unable_to_setup_keys_error": "Krüptovõtmete kasutuselevõtmine ei õnnestu",
-        "unsupported": "See klient ei toeta läbivat krüptimist.",
         "verification": {
             "accepting": "Nõustun …",
             "after_new_login": {
@@ -3781,18 +3778,9 @@
         "ban_room_confirm_title": "Määra suhtluskeeld %(roomName)s jututoas",
         "ban_space_everything": "Määra kasutajale suhtluskeeld kõikjal, kus ma saan",
         "ban_space_specific": "Määra kasutajale suhtluskeeld valitud kohtades, kust ma saan",
-        "count_of_sessions": {
-            "other": "%(count)s sessiooni",
-            "one": "%(count)s sessioon"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s verifitseeritud sessiooni",
-            "one": "1 verifitseeritud sessioon"
-        },
         "deactivate_confirm_action": "Deaktiveeri kasutaja",
         "deactivate_confirm_description": "Kasutaja deaktiveerimisel logitakse ta automaatselt välja ning ei lubata enam sisse logida. Lisaks lahkub ta kõikidest jututubadest, mille liige ta parasjagu on. Seda tegevust ei saa tagasi pöörata. Kas sa oled ikka kindel, et soovid selle kasutaja kõijkalt eemaldada?",
         "deactivate_confirm_title": "Kas deaktiveerime kasutajakonto?",
-        "dehydrated_device_enabled": "Võrguühenduseta seadme funktsionaalsus on sisse lülitatud",
         "demote_button": "Vähenda enda õigusi",
         "demote_self_confirm_description_space": "Kuna sa vähendad enda õigusi, siis sul ei pruugi hiljem olla võimalik seda muutust tagasi pöörata. Kui sa juhtumisi oled viimane haldusõigustega kasutaja kogukonnakeskuses, siis hiljem on võimatu samu õigusi tagasi saada.",
         "demote_self_confirm_room": "Kuna sa vähendad enda õigusi, siis sul ei pruugi hiljem olla võimalik seda muutust tagasi pöörata. Kui sa juhtumisi oled viimane haldusõigustega kasutaja jututoas, siis hiljem on võimatu samu õigusi tagasi saada.",
@@ -3800,15 +3788,12 @@
         "disinvite_button_room": "Eemalda kutse jututuppa",
         "disinvite_button_room_name": "Võta tagasi %(roomName)s jututoa kutse",
         "disinvite_button_space": "Eemalda kutse kogukonda",
-        "edit_own_devices": "Muuda seadmeid",
         "error_ban_user": "Kasutaja ligipääsu keelamine ei õnnestunud",
         "error_deactivate": "Kasutaja deaktiveerimine ei õnnestunud",
         "error_kicking_user": "Kasutaja eemaldamine ebaõnnestus",
         "error_mute_user": "Kasutaja summutamine ebaõnnestus",
         "error_revoke_3pid_invite_description": "Kutse tühistamine ei õnnestunud. Serveri töös võib olla ajutine tõrge või sul pole piisavalt õigusi kutse tühistamiseks.",
         "error_revoke_3pid_invite_title": "Kutse tühistamine ei õnnestunud",
-        "hide_sessions": "Peida sessioonid",
-        "hide_verified_sessions": "Peida verifitseeritud sessioonid",
         "ignore_button": "Eira",
         "ignore_confirm_description": "Kõik selle kasutaja sõnumid ja kutsed saava olema peidetud. Kas sa oled kindel, et soovid teda eirata?",
         "ignore_confirm_title": "Eira kasutajat %(user)s",

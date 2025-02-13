@@ -1151,13 +1151,14 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 break;
             case "MatrixActions.sync":
                 if (!this.state.matrixClientIsReady) {
+                    const isReadyNow = Boolean(this.context.client?.isInitialSyncComplete());
                     this.setState(
                         {
-                            matrixClientIsReady: !!this.context.client?.isInitialSyncComplete(),
+                            matrixClientIsReady: isReadyNow,
                         },
                         () => {
                             // send another "initial" RVS update to trigger peeking if needed
-                            this.onRoomViewStoreUpdate(true);
+                            if (isReadyNow) this.onRoomViewStoreUpdate(true);
                         },
                     );
                 }

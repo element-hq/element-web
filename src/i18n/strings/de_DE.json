@@ -548,7 +548,6 @@
         "saved": "Gespeichert",
         "saving": "Speichere …",
         "secure_backup": "Verschlüsselte Sicherung",
-        "security": "Sicherheit",
         "select_all": "Alle auswählen",
         "server": "Server",
         "settings": "Einstellungen",
@@ -567,7 +566,6 @@
         "thread": "Thema",
         "threads": "Threads",
         "timeline": "Verlauf",
-        "trusted": "Vertrauenswürdig",
         "unavailable": "Nicht verfügbar",
         "unencrypted": "Unverschlüsselt",
         "unmute": "Stummschalten aufheben",
@@ -971,7 +969,6 @@
             "title": "Nicht vertraut"
         },
         "unable_to_setup_keys_error": "Schlüssel können nicht eingerichtet werden",
-        "unsupported": "Diese Anwendung unterstützt keine Ende-zu-Ende-Verschlüsselung.",
         "verification": {
             "accepting": "Annehmen…",
             "after_new_login": {
@@ -3785,18 +3782,9 @@
         "ban_room_confirm_title": "Aus %(roomName)s verbannen",
         "ban_space_everything": "Überall sperren, wo ich die Rechte dazu habe",
         "ban_space_specific": "Sperre sie in ausgewählten Chatrooms und Spaces",
-        "count_of_sessions": {
-            "other": "%(count)s Sitzungen",
-            "one": "%(count)s Sitzung"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s verifizierte Sitzungen",
-            "one": "Eine verifizierte Sitzung"
-        },
         "deactivate_confirm_action": "Konto deaktivieren",
         "deactivate_confirm_description": "Beim Deaktivieren wirst du abgemeldet und ein erneutes Anmelden verhindert. Zusätzlich wirst du aus allen Räumen entfernt. Diese Aktion kann nicht rückgängig gemacht werden. Bist du sicher, dass du dieses Konto deaktivieren willst?",
         "deactivate_confirm_title": "Konto deaktivieren?",
-        "dehydrated_device_enabled": "Offline-Gerät aktiviert",
         "demote_button": "Zurückstufen",
         "demote_self_confirm_description_space": "Das Entfernen von Rechten kann nicht rückgängig gemacht werden. Falls sie dir niemand anderer zurückgeben kann, kannst du sie nie wieder erhalten.",
         "demote_self_confirm_room": "Du wirst nicht in der Lage sein, die Änderung zurückzusetzen, da du dich degradierst. Wenn du der letze Nutzer mit Berechtigungen bist, wird es unmöglich sein die Privilegien zurückzubekommen.",
@@ -3804,15 +3792,12 @@
         "disinvite_button_room": "Einladung zurückziehen",
         "disinvite_button_room_name": "Einladung für %(roomName)s zurückziehen",
         "disinvite_button_space": "Einladung zurückziehen",
-        "edit_own_devices": "Sitzungen anzeigen",
         "error_ban_user": "Verbannen des Benutzers fehlgeschlagen",
         "error_deactivate": "Benutzer konnte nicht deaktiviert werden",
         "error_kicking_user": "Fehler beim entfernen des Nutzers",
         "error_mute_user": "Stummschalten des Nutzers fehlgeschlagen",
         "error_revoke_3pid_invite_description": "Die Einladung konnte nicht zurückgezogen werden. Der Server hat möglicherweise ein vorübergehendes Problem oder du hast nicht ausreichende Berechtigungen, um die Einladung zurückzuziehen.",
         "error_revoke_3pid_invite_title": "Einladung konnte nicht zurückgezogen werden",
-        "hide_sessions": "Sitzungen ausblenden",
-        "hide_verified_sessions": "Verifizierte Sitzungen ausblenden",
         "ignore_button": "Blockieren",
         "ignore_confirm_description": "Alle Nachrichten und Einladungen der Person werden verborgen. Bist du sicher, dass du sie ignorieren möchtest?",
         "ignore_confirm_title": "%(user)s ignorieren",

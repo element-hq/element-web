@@ -368,7 +368,6 @@
         "room": "Kambarys",
         "rooms": "Kambariai",
         "secure_backup": "Saugi Atsarginė Kopija",
-        "security": "Saugumas",
         "select_all": "Pasirinkti viską",
         "settings": "Nustatymai",
         "show_more": "Rodyti daugiau",
@@ -382,7 +381,6 @@
         "theme": "Tema",
         "threads": "Temos",
         "timeline": "Laiko juosta",
-        "trusted": "Patikimas",
         "unencrypted": "Neužšifruota",
         "unmute": "Atšaukti nutildymą",
         "unnamed_room": "Bevardis Kambarys",
@@ -579,7 +577,6 @@
             "title": "Nepatikimas"
         },
         "unable_to_setup_keys_error": "Nepavyksta nustatyti raktų",
-        "unsupported": "Šis klientas nepalaiko visapusio šifravimo.",
         "verification": {
             "accepting": "Priimama…",
             "cancelled": "Jūs atšaukėte patvirtinimą.",
@@ -2273,14 +2270,6 @@
         "ban_room_confirm_title": "Atblokuoti už %(roomName)s",
         "ban_space_everything": "Užblokuoti juos iš visko, kur galiu",
         "ban_space_specific": "Užblokuoti juos konkrečiuose dalykuose, kuriuose galiu",
-        "count_of_sessions": {
-            "other": "%(count)s seansai(-ų)",
-            "one": "%(count)s seansas"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s patvirtintų seansų",
-            "one": "1 patvirtintas seansas"
-        },
         "deactivate_confirm_action": "Deaktyvuoti vartotoją",
         "deactivate_confirm_description": "Šio vartotojo deaktyvavimas atjungs juos ir neleis jiems vėl prisijungti atgal. Taip pat jie išeis iš visų kambarių, kuriuose jie yra. Šis veiksmas negali būti atšauktas. Ar tikrai norite deaktyvuoti šį vartotoją?",
         "deactivate_confirm_title": "Deaktyvuoti vartotoją?",
@@ -2291,15 +2280,12 @@
         "disinvite_button_room": "Atšaukti kvietimą iš kambario",
         "disinvite_button_room_name": "Atšaukti kvietimą iš %(roomName)s",
         "disinvite_button_space": "Atšaukti kvietimą iš erdvės",
-        "edit_own_devices": "Redaguoti įrenginius",
         "error_ban_user": "Nepavyko užblokuoti vartotojo",
         "error_deactivate": "Nepavyko deaktyvuoti vartotojo",
         "error_kicking_user": "Nepavyko pašalinti naudotojo",
         "error_mute_user": "Nepavyko nutildyti vartotojo",
         "error_revoke_3pid_invite_description": "Kvietimo atšaukti nepavyko. Gali būti, kad serveryje kilo laikina problema arba neturite pakankamų leidimų atšaukti kvietimą.",
         "error_revoke_3pid_invite_title": "Nepavyko atšaukti kvietimo",
-        "hide_sessions": "Slėpti seansus",
-        "hide_verified_sessions": "Slėpti patvirtintus seansus",
         "invited_by": "Pakvietė %(sender)s",
         "jump_to_rr_button": "Nušokti iki perskaitytų žinučių",
         "kick_button_room": "Pašalinti iš kambario",
