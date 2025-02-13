@@ -273,7 +273,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                     setupNewKeyBackup: !backupInfo,
                 });
             }
-            await initialiseDehydrationIfEnabled({ createNewKey: true });
+            await initialiseDehydrationIfEnabled(cli, { createNewKey: true });
 
             this.setState({
                 phase: Phase.Stored,

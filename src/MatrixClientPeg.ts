@@ -347,7 +347,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         // is a new login, we will start dehydration after Secret Storage is
         // unlocked.
         try {
-            await initialiseDehydrationIfEnabled({ onlyIfKeyCached: true, rehydrate: false }, this.matrixClient);
+            await initialiseDehydrationIfEnabled(this.matrixClient, { onlyIfKeyCached: true, rehydrate: false });
         } catch (e) {
             // We may get an error dehydrating, such as if cross-signing and
             // SSSS are not set up yet.  Just log the error and continue.

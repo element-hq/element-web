@@ -10,7 +10,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { type CryptoApi, type StartDehydrationOpts } from "matrix-js-sdk/src/crypto-api";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
-import { MatrixClientPeg } from "../../MatrixClientPeg";
 
 /**
  * Check if device dehydration is enabled.
@@ -38,14 +37,13 @@ async function deviceDehydrationEnabled(client: MatrixClient, crypto: CryptoApi 
  * the configuration), rehydrate a device (if available) and create
  * a new dehydrated device.
  *
- * @param opts - options for the startDehydration operation, if one is performed.
  * @param client - MatrixClient to use for the operation
+ * @param opts - options for the startDehydration operation, if one is performed.
  */
 export async function initialiseDehydrationIfEnabled(
+    client: MatrixClient,
     opts: StartDehydrationOpts = {},
-    client?: MatrixClient,
 ): Promise<void> {
-    client = client || MatrixClientPeg.safeGet();
     const crypto = client.getCrypto();
     if (await deviceDehydrationEnabled(client, crypto)) {
         logger.log("Device dehydration enabled");
