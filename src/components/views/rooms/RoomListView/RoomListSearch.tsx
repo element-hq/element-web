@@ -19,6 +19,7 @@ import { MetaSpace } from "../../../../stores/spaces";
 import { Action } from "../../../../dispatcher/actions";
 import PosthogTrackers from "../../../../PosthogTrackers";
 import defaultDispatcher from "../../../../dispatcher/dispatcher";
+import { Flex } from "../../../utils/Flex";
 
 type RoomListSearchProps = {
     /**
@@ -47,7 +48,7 @@ export function RoomListSearch({ activeSpace }: RoomListSearchProps): JSX.Elemen
     }, [openSpotlight]);
 
     return (
-        <div className="mx_RoomListSearch" role="search">
+        <Flex className="mx_RoomListSearch" role="search" gap="var(--cpd-space-2x)" align="center">
             <Button
                 className="mx_RoomListSearch_search"
                 kind="secondary"
@@ -55,10 +56,10 @@ export function RoomListSearch({ activeSpace }: RoomListSearchProps): JSX.Elemen
                 Icon={SearchIcon}
                 onClick={() => openSpotlight()}
             >
-                <span>
+                <Flex as="span" justify="space-between">
                     {_t("action|search")}
                     <kbd>{IS_MAC ? "⌘ K" : _t(ALTERNATE_KEY_NAME[Key.CONTROL]) + " K"}</kbd>
-                </span>
+                </Flex>
             </Button>
             {displayExploreButton && (
                 <Button
@@ -74,6 +75,6 @@ export function RoomListSearch({ activeSpace }: RoomListSearchProps): JSX.Elemen
                     }}
                 />
             )}
-        </div>
+        </Flex>
     );
 }

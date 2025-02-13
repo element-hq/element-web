@@ -3,8 +3,9 @@
 exports[`<RoomListSearch /> should display all the buttons 1`] = `
 <DocumentFragment>
   <div
-    class="mx_RoomListSearch"
+    class="mx_Flex mx_RoomListSearch"
     role="search"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x);"
   >
     <button
       class="_button_i91xf_17 mx_RoomListSearch_search _has-icon_i91xf_66"
@@ -25,7 +26,10 @@ exports[`<RoomListSearch /> should display all the buttons 1`] = `
           d="M15.05 16.463a7.5 7.5 0 1 1 1.414-1.414l3.243 3.244a1 1 0 0 1-1.414 1.414l-3.244-3.244ZM16 10.5a5.5 5.5 0 1 0-11 0 5.5 5.5 0 0 0 11 0Z"
         />
       </svg>
-      <span>
+      <span
+        class="mx_Flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: 0;"
+      >
         Search
         <kbd>
           Ctrl K
@@ -60,8 +64,9 @@ exports[`<RoomListSearch /> should display all the buttons 1`] = `
 exports[`<RoomListSearch /> should hide the explore button when UIComponent.ExploreRooms is disabled 1`] = `
 <DocumentFragment>
   <div
-    class="mx_RoomListSearch"
+    class="mx_Flex mx_RoomListSearch"
     role="search"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x);"
   >
     <button
       class="_button_i91xf_17 mx_RoomListSearch_search _has-icon_i91xf_66"
@@ -82,7 +87,10 @@ exports[`<RoomListSearch /> should hide the explore button when UIComponent.Expl
           d="M15.05 16.463a7.5 7.5 0 1 1 1.414-1.414l3.243 3.244a1 1 0 0 1-1.414 1.414l-3.244-3.244ZM16 10.5a5.5 5.5 0 1 0-11 0 5.5 5.5 0 0 0 11 0Z"
         />
       </svg>
-      <span>
+      <span
+        class="mx_Flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: 0;"
+      >
         Search
         <kbd>
           Ctrl K
@@ -96,8 +104,9 @@ exports[`<RoomListSearch /> should hide the explore button when UIComponent.Expl
 exports[`<RoomListSearch /> should hide the explore button when the active space is not MetaSpace.Home 1`] = `
 <DocumentFragment>
   <div
-    class="mx_RoomListSearch"
+    class="mx_Flex mx_RoomListSearch"
     role="search"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x);"
   >
     <button
       class="_button_i91xf_17 mx_RoomListSearch_search _has-icon_i91xf_66"
@@ -118,7 +127,10 @@ exports[`<RoomListSearch /> should hide the explore button when the active space
           d="M15.05 16.463a7.5 7.5 0 1 1 1.414-1.414l3.243 3.244a1 1 0 0 1-1.414 1.414l-3.244-3.244ZM16 10.5a5.5 5.5 0 1 0-11 0 5.5 5.5 0 0 0 11 0Z"
         />
       </svg>
-      <span>
+      <span
+        class="mx_Flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: 0;"
+      >
         Search
         <kbd>
           Ctrl K
