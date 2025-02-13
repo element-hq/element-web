@@ -80,7 +80,6 @@ export function getRoomContext(room: Room, override: Partial<IRoomState>): IRoom
         canSelfRedact: false,
         resizing: false,
         narrow: false,
-        activeCall: null,
         msc3946ProcessDynamicPredecessor: false,
         canAskToJoin: false,
         promptAskToJoin: false,

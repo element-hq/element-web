@@ -2006,6 +2006,41 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
             </div>
           </div>
         </header>
+        <div
+          class="mx_CallView"
+          role="main"
+        >
+          <div
+            class="mx_AppTile"
+            id="vY7Q4uEh9K38QgU2PomxwKpa"
+          >
+            <div
+              class="mx_AppTileBody mx_AppTileBody--large mx_AppTileBody--loading mx_AppTileBody--call"
+            >
+              <div
+                class="mx_AppTileBody_fadeInSpinner"
+              >
+                <div
+                  class="mx_Spinner"
+                >
+                  <div
+                    class="mx_Spinner_Msg"
+                  >
+                    Loading…
+                  </div>
+                   
+                  <div
+                    aria-label="Loading…"
+                    class="mx_Spinner_icon"
+                    data-testid="spinner"
+                    role="progressbar"
+                    style="width: 32px; height: 32px;"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div
         class="mx_RightPanel_ResizeWrapper"

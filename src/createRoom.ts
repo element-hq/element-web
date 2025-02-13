@@ -343,7 +343,7 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
                 await client.setPowerLevel(roomId, client.getUserId()!, 100);
             } else if (opts.roomType === RoomType.UnstableCall) {
                 // Set up this video room with an Element call
-                await ElementCall.create(await room);
+                ElementCall.create(await room);
 
                 // Reset our power level back to admin so that the call becomes immutable
                 await client.setPowerLevel(roomId, client.getUserId()!, 100);

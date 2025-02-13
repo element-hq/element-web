@@ -43,7 +43,8 @@ exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
       </div>
     </button>
     <button
-      aria-labelledby=":r16c:"
+      aria-disabled="true"
+      aria-label="There's no one here to call"
       class="_icon-button_bh2qc_17"
       role="button"
       style="--cpd-icon-button-size: 32px;"
@@ -51,9 +52,10 @@ exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
     >
       <div
         class="_indicator-icon_133tf_26"
-        style="--cpd-icon-button-size: 100%;"
+        style="--cpd-icon-button-size: 100%; --cpd-color-icon-tertiary: var(--cpd-color-icon-disabled);"
       >
         <svg
+          aria-labelledby=":r166:"
           fill="currentColor"
           height="1em"
           viewBox="0 0 24 24"
@@ -61,7 +63,7 @@ exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+            d="M6 4h10a2 2 0 0 1 2 2v4.286l3.35-2.871a1 1 0 0 1 1.65.76v7.65a1 1 0 0 1-1.65.76L18 13.715V18a2 2 0 0 1-2 2H6a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4Z"
           />
         </svg>
       </div>
@@ -69,7 +71,7 @@ exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
     <button
       aria-disabled="true"
       aria-label="There's no one here to call"
-      aria-labelledby=":r16h:"
+      aria-labelledby=":r16b:"
       class="_icon-button_bh2qc_17"
       role="button"
       style="--cpd-icon-button-size: 32px;"
@@ -94,7 +96,7 @@ exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
     </button>
     <button
       aria-label="Threads"
-      aria-labelledby=":r16m:"
+      aria-labelledby=":r16g:"
       class="_icon-button_bh2qc_17"
       role="button"
       style="--cpd-icon-button-size: 32px;"
@@ -120,7 +122,7 @@ exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
     </button>
     <button
       aria-label="Room info"
-      aria-labelledby=":r16r:"
+      aria-labelledby=":r16l:"
       class="_icon-button_bh2qc_17"
       role="button"
       style="--cpd-icon-button-size: 32px;"
