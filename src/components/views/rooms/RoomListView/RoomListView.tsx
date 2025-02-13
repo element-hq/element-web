@@ -25,5 +25,9 @@ type RoomListViewProps = {
 export const RoomListView: React.FC<RoomListViewProps> = ({ activeSpace }) => {
     const displayRoomSearch = shouldShowComponent(UIComponent.FilterContainer);
 
-    return <div className="mx_RoomListView">{displayRoomSearch && <RoomListSearch activeSpace={activeSpace} />}</div>;
+    return (
+        <div className="mx_RoomListView" data-testid="room-list-view">
+            {displayRoomSearch && <RoomListSearch activeSpace={activeSpace} />}
+        </div>
+    );
 };
