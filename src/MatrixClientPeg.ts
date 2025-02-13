@@ -41,7 +41,6 @@ import PlatformPeg from "./PlatformPeg";
 import { formatList } from "./utils/FormattingUtils";
 import SdkConfig from "./SdkConfig";
 import { setDeviceIsolationMode } from "./settings/controllers/DeviceIsolationModeController.ts";
-import SlidingSyncController from "./settings/controllers/SlidingSyncController";
 import { initialiseDehydration } from "./utils/device/dehydration";
 
 export interface IMatrixClientCreds {
@@ -307,7 +306,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         } */
         // TODO: remove before PR lands. Defaults to SSS if the server entered supports it.
         await SlidingSyncManager.instance.checkSupport(this.matrixClient);
-        if (SlidingSyncController.serverSupportsSlidingSync) {
+        if (SlidingSyncManager.serverSupportsSlidingSync) {
             opts.slidingSync = await SlidingSyncManager.instance.setup(this.matrixClient);
         }
 

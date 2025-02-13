@@ -15,10 +15,7 @@ import { waitFor } from "jest-matrix-react";
 
 import { SlidingSyncManager } from "../../src/SlidingSyncManager";
 import { mkStubRoom, stubClient } from "../test-utils";
-import SlidingSyncController from "../../src/settings/controllers/SlidingSyncController";
 
-//jest.mock("matrix-js-sdk/src/sliding-sync");
-//const MockSlidingSync = <jest.Mock<SlidingSync>>(<unknown>SlidingSync);
 class MockSlidingSync extends EventEmitter {
     lists = {};
     listModifiedCount = 0;
@@ -199,13 +196,13 @@ describe("SlidingSyncManager", () => {
     });
     describe("checkSupport", () => {
         beforeEach(() => {
-            SlidingSyncController.serverSupportsSlidingSync = false;
+            SlidingSyncManager.serverSupportsSlidingSync = false;
         });
         it("shorts out if the server has 'native' sliding sync support", async () => {
             jest.spyOn(manager, "nativeSlidingSyncSupport").mockResolvedValue(true);
-            expect(SlidingSyncController.serverSupportsSlidingSync).toBeFalsy();
+            expect(SlidingSyncManager.serverSupportsSlidingSync).toBeFalsy();
             await manager.checkSupport(client);
-            expect(SlidingSyncController.serverSupportsSlidingSync).toBeTruthy();
+            expect(SlidingSyncManager.serverSupportsSlidingSync).toBeTruthy();
         });
     });
     describe("setup", () => {

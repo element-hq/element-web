@@ -51,8 +51,6 @@ import {
 import { logger } from "matrix-js-sdk/src/logger";
 import { defer, sleep } from "matrix-js-sdk/src/utils";
 
-import SlidingSyncController from "./settings/controllers/SlidingSyncController";
-
 // how long to long poll for
 const SLIDING_SYNC_TIMEOUT_MS = 20 * 1000;
 
@@ -177,6 +175,8 @@ export type PartialSlidingSyncRequest = {
  * sync options and code.
  */
 export class SlidingSyncManager {
+    public static serverSupportsSlidingSync: boolean;
+
     public static readonly ListSpaces = "space_list";
     public static readonly ListSearch = "search_list";
     private static readonly internalInstance = new SlidingSyncManager();
@@ -408,9 +408,9 @@ export class SlidingSyncManager {
      */
     public async checkSupport(client: MatrixClient): Promise<void> {
         if (await this.nativeSlidingSyncSupport(client)) {
-            SlidingSyncController.serverSupportsSlidingSync = true;
+            SlidingSyncManager.serverSupportsSlidingSync = true;
             return;
         }
-        SlidingSyncController.serverSupportsSlidingSync = false;
+        SlidingSyncManager.serverSupportsSlidingSync = false;
     }
 }
