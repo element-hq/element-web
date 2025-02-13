@@ -10,13 +10,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { createRef } from "react";
 import FileSaver from "file-saver";
 import { logger } from "matrix-js-sdk/src/logger";
-import {
-    type AuthDict,
-    type CrossSigningKeys,
-    MatrixError,
-    type UIAFlow,
-    type UIAResponse,
-} from "matrix-js-sdk/src/matrix";
+import { type AuthDict, type CrossSigningKeys, MatrixError, type UIAFlow } from "matrix-js-sdk/src/matrix";
 import { type GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
 import classNames from "classnames";
 import CheckmarkIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
@@ -231,9 +225,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         });
     };
 
-    private doBootstrapUIAuth = async (
-        makeRequest: (authData: AuthDict) => Promise<UIAResponse<void>>,
-    ): Promise<void> => {
+    private doBootstrapUIAuth = async (makeRequest: (authData: AuthDict) => Promise<void>): Promise<void> => {
         if (this.state.canUploadKeysWithPasswordOnly && this.state.accountPassword) {
             await makeRequest({
                 type: "m.login.password",
