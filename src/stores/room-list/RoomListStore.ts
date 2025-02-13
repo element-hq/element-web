@@ -405,6 +405,9 @@ export class RoomListStoreClass extends AsyncStoreWithClient<EmptyObject> implem
 
     public setTagSorting(tagId: TagID, sort: SortAlgorithm): void {
         this.setAndPersistTagSorting(tagId, sort);
+        // We'll always need an update after changing the sort order, so mark for update and trigger
+        // immediately.
+        this.updateFn.mark();
         this.updateFn.trigger();
     }
 
