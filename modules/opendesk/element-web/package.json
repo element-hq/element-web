@@ -8,7 +8,7 @@
     ],
     "scripts": {
         "prepare": "vite build",
-        "lint:ts": "tsc --noEmit",
+        "lint": "tsc --noEmit",
         "test": "echo no tests yet"
     },
     "devDependencies": {
