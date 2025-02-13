@@ -20,7 +20,7 @@
     "scripts": {
         "prepare": "vite build && api-extractor run",
         "lint:ts": "tsc --noEmit",
-        "test": "vitest"
+        "test": "vitest --coverage"
     },
     "devDependencies": {
         "@matrix-org/react-sdk-module-api": "^2.5.0",
