@@ -41,7 +41,10 @@ async function deviceDehydrationEnabled(client: MatrixClient, crypto: CryptoApi 
  * @param opts - options for the startDehydration operation, if one is performed.
  * @param client - MatrixClient to use for the operation
  */
-export async function initialiseDehydration(opts: StartDehydrationOpts = {}, client?: MatrixClient): Promise<void> {
+export async function initialiseDehydrationIfEnabled(
+    opts: StartDehydrationOpts = {},
+    client?: MatrixClient,
+): Promise<void> {
     client = client || MatrixClientPeg.safeGet();
     const crypto = client.getCrypto();
     if (await deviceDehydrationEnabled(client, crypto)) {

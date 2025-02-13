@@ -37,7 +37,7 @@ import Spinner from "../../../../components/views/elements/Spinner";
 import InteractiveAuthDialog from "../../../../components/views/dialogs/InteractiveAuthDialog";
 import { type IValidationResult } from "../../../../components/views/elements/Validation";
 import PassphraseConfirmField from "../../../../components/views/auth/PassphraseConfirmField";
-import { initialiseDehydration } from "../../../../utils/device/dehydration";
+import { initialiseDehydrationIfEnabled } from "../../../../utils/device/dehydration";
 
 // I made a mistake while converting this and it has to be fixed!
 enum Phase {
@@ -273,7 +273,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                     setupNewKeyBackup: !backupInfo,
                 });
             }
-            await initialiseDehydration({ createNewKey: true });
+            await initialiseDehydrationIfEnabled({ createNewKey: true });
 
             this.setState({
                 phase: Phase.Stored,

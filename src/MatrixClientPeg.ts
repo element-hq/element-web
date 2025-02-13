@@ -41,7 +41,7 @@ import PlatformPeg from "./PlatformPeg";
 import { formatList } from "./utils/FormattingUtils";
 import SdkConfig from "./SdkConfig";
 import { setDeviceIsolationMode } from "./settings/controllers/DeviceIsolationModeController.ts";
-import { initialiseDehydration } from "./utils/device/dehydration";
+import { initialiseDehydrationIfEnabled } from "./utils/device/dehydration";
 
 export interface IMatrixClientCreds {
     homeserverUrl: string;
@@ -347,7 +347,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         // is a new login, we will start dehydration after Secret Storage is
         // unlocked.
         try {
-            await initialiseDehydration({ onlyIfKeyCached: true, rehydrate: false }, this.matrixClient);
+            await initialiseDehydrationIfEnabled({ onlyIfKeyCached: true, rehydrate: false }, this.matrixClient);
         } catch (e) {
             // We may get an error dehydrating, such as if cross-signing and
             // SSSS are not set up yet.  Just log the error and continue.

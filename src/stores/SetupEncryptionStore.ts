@@ -20,7 +20,7 @@ import { type Device, type SecretStorage } from "matrix-js-sdk/src/matrix";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { AccessCancelledError, accessSecretStorage } from "../SecurityManager";
 import { asyncSome } from "../utils/arrays";
-import { initialiseDehydration } from "../utils/device/dehydration";
+import { initialiseDehydrationIfEnabled } from "../utils/device/dehydration";
 
 export enum Phase {
     Loading = 0,
@@ -149,7 +149,7 @@ export class SetupEncryptionStore extends EventEmitter {
                     );
                     resolve();
 
-                    await initialiseDehydration();
+                    await initialiseDehydrationIfEnabled();
 
                     if (backupInfo) {
                         await cli.getCrypto()?.loadSessionBackupPrivateKeyFromSecretStorage();
