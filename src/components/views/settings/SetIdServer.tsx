@@ -117,7 +117,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
     private onIdentityServerChanged = (ev: React.ChangeEvent<HTMLInputElement>): void => {
         const u = ev.target.value;
 
-        this.setState({ idServer: u });
+        this.setState({ idServer: u, error: undefined });
     };
 
     private getTooltip = (): JSX.Element | undefined => {
@@ -175,7 +175,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                 // Double check that the identity server even has terms of service.
                 const hasTerms = await doesIdentityServerHaveTerms(MatrixClientPeg.safeGet(), fullUrl);
                 if (!hasTerms) {
-                    const [confirmed] = await this.showNoTermsWarning(fullUrl);
+                    const [confirmed] = await this.showNoTermsWarning();
                     save = !!confirmed;
                 }
 
@@ -213,7 +213,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         });
     };
 
-    private showNoTermsWarning(fullUrl: string): Promise<[ok?: boolean]> {
+    private showNoTermsWarning(): Promise<[ok?: boolean]> {
         const { finished } = Modal.createDialog(QuestionDialog, {
             title: _t("terms|identity_server_no_terms_title"),
             description: (
@@ -402,6 +402,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                         value={this.state.idServer}
                         onChange={this.onIdentityServerChanged}
                         tooltipContent={this.getTooltip()}
+                        forceTooltipVisible={this.state.error ? true : undefined}
                         tooltipClassName="mx_SetIdServer_tooltip"
                         disabled={this.state.busy}
                         forceValidity={this.state.error ? false : undefined}
