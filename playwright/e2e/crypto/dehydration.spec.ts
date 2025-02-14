@@ -59,6 +59,33 @@ test.describe("Dehydration", () => {
         await expect(sessionsTab.getByText("Dehydrated device")).not.toBeVisible();
     });
 
+    test("'Set up recovery' creates dehydrated device", async ({ app, credentials, page }) => {
+        await logIntoElement(page, credentials);
+
+        const settingsDialogLocator = await app.settings.openUserSettings("Encryption");
+        await settingsDialogLocator.getByRole("button", { name: "Set up recovery" }).click();
+
+        // First it displays an informative panel about the recovery key
+        await expect(settingsDialogLocator.getByRole("heading", { name: "Set up recovery" })).toBeVisible();
+        await settingsDialogLocator.getByRole("button", { name: "Continue" }).click();
+
+        // Next, it displays the new recovery key. We click on the copy button.
+        await expect(settingsDialogLocator.getByText("Save your recovery key somewhere safe")).toBeVisible();
+        await settingsDialogLocator.getByRole("button", { name: "Copy" }).click();
+        const recoveryKey = await app.getClipboard();
+        await settingsDialogLocator.getByRole("button", { name: "Continue" }).click();
+
+        await expect(
+            settingsDialogLocator.getByText("Enter your recovery key to confirm", { exact: true }),
+        ).toBeVisible();
+        await settingsDialogLocator.getByRole("textbox").fill(recoveryKey);
+        await settingsDialogLocator.getByRole("button", { name: "Finish set up" }).click();
+
+        await app.settings.closeDialog();
+
+        await expectDehydratedDeviceEnabled(app);
+    });
+
     test("Reset recovery key during login re-creates dehydrated device", async ({
         page,
         homeserver,
