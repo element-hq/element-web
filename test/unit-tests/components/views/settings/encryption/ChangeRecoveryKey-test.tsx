@@ -36,7 +36,7 @@ describe("<ChangeRecoveryKey />", () => {
         );
     }
 
-    describe("flow to setup a recovery key", () => {
+    describe("flow to set up a recovery key", () => {
         it("should display information about the recovery key", async () => {
             const user = userEvent.setup();
 
