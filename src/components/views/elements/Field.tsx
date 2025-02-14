@@ -283,8 +283,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         const tooltipProps: Pick<React.ComponentProps<typeof Tooltip>, "aria-live" | "aria-atomic"> = {};
         let tooltipOpen = false;
         if (tooltipContent || this.state.feedback) {
-            tooltipOpen = (this.state.focused && forceTooltipVisible) || this.state.feedbackVisible;
-
+            tooltipOpen = forceTooltipVisible || this.state.feedbackVisible;
             if (!tooltipContent) {
                 tooltipProps["aria-atomic"] = "true";
                 tooltipProps["aria-live"] = this.state.valid ? "polite" : "assertive";
