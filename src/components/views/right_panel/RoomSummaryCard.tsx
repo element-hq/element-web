@@ -441,6 +441,7 @@ const RoomSummaryCard: React.FC<IProps> = ({
                 <Separator />
 
                 <MenuItem
+                    className="mx_RoomSummaryCard_leave"
                     Icon={LeaveIcon}
                     kind="critical"
                     label={_t("action|leave_room")}
