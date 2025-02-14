@@ -6,11 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent } from "react";
+import React, { type ChangeEvent } from "react";
 
 import { _t } from "../../../languageHandler";
 import Field from "./Field";
-import AccessibleButton, { ButtonEvent } from "./AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "./AccessibleButton";
 
 interface IItemProps {
     index: number;
@@ -101,7 +101,7 @@ interface IProps {
     onNewItemChanged?(item: string): void;
 }
 
-export default class EditableItemList<P = {}> extends React.PureComponent<IProps & P> {
+export default class EditableItemList<P extends object> extends React.PureComponent<IProps & P> {
     protected onItemAdded = (e: ButtonEvent): void => {
         e.stopPropagation();
         e.preventDefault();

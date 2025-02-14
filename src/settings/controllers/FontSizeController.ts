@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import SettingController from "./SettingController";
 import dis from "../../dispatcher/dispatcher";
-import { UpdateFontSizeDeltaPayload } from "../../dispatcher/payloads/UpdateFontSizeDeltaPayload";
+import { type UpdateFontSizeDeltaPayload } from "../../dispatcher/payloads/UpdateFontSizeDeltaPayload";
 import { Action } from "../../dispatcher/actions";
 import { SettingLevel } from "../SettingLevel";
 

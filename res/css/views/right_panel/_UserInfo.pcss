@@ -34,12 +34,8 @@ Please see LICENSE files in the repository root for full details.
     }
 
     .mx_UserInfo_container {
-        padding: var(--cpd-space-4x) 0;
+        padding: var(--cpd-space-2x) 0 var(--cpd-space-4x);
         margin: 0 var(--cpd-space-4x);
-
-        .mx_UserInfo_container_verifyButton {
-            margin-top: $spacing-8;
-        }
 
         & + .mx_UserInfo_container {
             border-top: 1px solid $separator;
@@ -65,7 +61,7 @@ Please see LICENSE files in the repository root for full details.
     }
 
     .mx_UserInfo_avatar {
-        margin: $spacing-24 $spacing-32 0 $spacing-32;
+        margin: var(--cpd-space-12x) var(--cpd-space-4x) 0 var(--cpd-space-4x);
 
         .mx_UserInfo_avatar_transition {
             max-width: 120px;
@@ -98,8 +94,18 @@ Please see LICENSE files in the repository root for full details.
         margin: 5px 0;
     }
 
+    .mx_UserInfo_header {
+        margin-bottom: var(--cpd-space-8x);
+        padding-bottom: 0;
+    }
+
     .mx_UserInfo_profile {
+        display: flex;
+        flex-direction: column;
+        gap: var(--cpd-space-1x);
+
         h1 {
+            margin: 0;
             font-size: $font-20px;
             line-height: $font-25px;
 
@@ -119,8 +125,45 @@ Please see LICENSE files in the repository root for full details.
             }
         }
 
+        .mx_UserInfo_profile_name {
+            height: 30px;
+        }
+
+        .mx_UserInfo_profile_mxid {
+            color: var(--cpd-color-text-secondary);
+            height: 28px;
+        }
+
         .mx_UserInfo_profileStatus {
-            margin: var(--cpd-space-1x) 0;
+            height: 20px;
+        }
+
+        .mx_UserInfo_timezone {
+            height: 20px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        /** Overrides for the copy to clipboard button **/
+        .mx_CopyableText {
+            align-items: center;
+        }
+
+        .mx_CopyableText_copyButton {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: unset;
+            padding-left: var(--cpd-space-2x);
+        }
+
+        .mx_CopyableText_copyButton::before {
+            width: 20px;
+            height: 20px;
+            background-color: var(--cpd-color-icon-secondary-alpha);
         }
     }
 
@@ -131,6 +174,28 @@ Please see LICENSE files in the repository root for full details.
     .mx_PresenceLabel {
         font: var(--cpd-font-body-sm-regular);
         opacity: 1;
+    }
+
+    .mx_UserInfo_verification {
+        margin-top: var(--cpd-space-4x);
+        height: 36px;
+
+        .mx_UserInfo_verified_badge {
+            min-width: 68px;
+            height: 20px;
+
+            .mx_UserInfo_verified_icon {
+                flex-shrink: 0;
+            }
+
+            .mx_UserInfo_verified_label {
+                margin: 0;
+            }
+        }
+
+        .mx_UserInfo_verification_unavailable {
+            color: var(--cpd-color-text-secondary);
+        }
     }
 
     .mx_UserInfo_memberDetails {
@@ -177,45 +242,6 @@ Please see LICENSE files in the repository root for full details.
 
     .mx_AutoHideScrollbar {
         flex: 1 1 0;
-    }
-
-    .mx_UserInfo_devices {
-        .mx_UserInfo_device {
-            display: flex;
-            margin: $spacing-8 0;
-
-            &.mx_UserInfo_device_verified {
-                .mx_UserInfo_device_trusted {
-                    color: $accent;
-                }
-            }
-            &.mx_UserInfo_device_unverified {
-                .mx_UserInfo_device_trusted {
-                    color: $alert;
-                }
-            }
-
-            .mx_UserInfo_device_name {
-                flex: 1;
-                margin: 0 5px;
-                word-break: break-word;
-            }
-        }
-
-        /* both for icon in expand button and device item */
-        .mx_E2EIcon {
-            /* don't squeeze */
-            flex: 0 0 auto;
-            margin: 0;
-            width: 12px;
-            height: 12px;
-        }
-
-        .mx_UserInfo_expand {
-            column-gap: 5px; /* cf: mx_UserInfo_device_name */
-            margin-bottom: 11px;
-            align-items: initial; /* Cancel the default property */
-        }
     }
 
     &.mx_UserInfo_smallAvatar {

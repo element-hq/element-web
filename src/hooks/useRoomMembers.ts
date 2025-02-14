@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useMemo, useState } from "react";
-import { Room, RoomEvent, RoomMember, RoomStateEvent } from "matrix-js-sdk/src/matrix";
-import { Membership } from "matrix-js-sdk/src/types";
+import { type Room, RoomEvent, type RoomMember, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { type Membership } from "matrix-js-sdk/src/types";
 import { throttle } from "lodash";
 
 import { useTypedEventEmitter } from "./useEventEmitter";

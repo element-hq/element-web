@@ -8,9 +8,10 @@ Please see LICENSE files in the repository root for full details.
 
 import { needsCaretNodeBefore, needsCaretNodeAfter } from "./render";
 import Range from "./range";
-import EditorModel from "./model";
-import DocumentPosition, { IPosition } from "./position";
-import { Part, Type } from "./parts";
+import type EditorModel from "./model";
+import { type IPosition } from "./position";
+import type DocumentPosition from "./position";
+import { type Part, Type } from "./parts";
 
 export type Caret = Range | DocumentPosition;
 

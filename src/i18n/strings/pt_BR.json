@@ -400,7 +400,6 @@
         "room_name": "Nome da sala",
         "rooms": "Salas",
         "secure_backup": "Backup online",
-        "security": "Segurança",
         "select_all": "Selecionar tudo",
         "settings": "Configurações",
         "setup_secure_messages": "Configurar mensagens seguras",
@@ -417,7 +416,6 @@
         "theme": "Tema",
         "threads": "Tópicos",
         "timeline": "Conversas",
-        "trusted": "Confiável",
         "unencrypted": "Descriptografada",
         "unmute": "Tirar do mudo",
         "unnamed_room": "Sala sem nome",
@@ -657,7 +655,6 @@
             "title": "Não confiável"
         },
         "unable_to_setup_keys_error": "Não foi possível configurar as chaves",
-        "unsupported": "A sua versão do aplicativo não suporta a criptografia de ponta a ponta.",
         "verification": {
             "accepting": "Aceitando…",
             "cancelled": "Você cancelou a confirmação.",
@@ -2233,7 +2230,9 @@
             "sent": "%(senderName)s enviou um convite para %(targetDisplayName)s entrar na sala."
         },
         "m.room.tombstone": "%(senderDisplayName)s atualizou esta sala.",
-        "m.room.topic": "%(senderDisplayName)s alterou a descrição para \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s alterou a descrição para \"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s enviou uma figurinha.",
         "m.video": {
             "error_decrypting": "Erro ao descriptografar o vídeo"
@@ -2449,14 +2448,6 @@
         "ban_room_confirm_title": "Banir de %(roomName)s",
         "ban_space_everything": "Bani-los de tudo que eu faço",
         "ban_space_specific": "Bani-los de coisas específicas que faço",
-        "count_of_sessions": {
-            "other": "%(count)s sessões",
-            "one": "%(count)s sessão"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s sessões confirmadas",
-            "one": "1 sessão confirmada"
-        },
         "deactivate_confirm_action": "Desativar usuário",
         "deactivate_confirm_description": "Desativar este usuário irá desconectá-lo e impedi-lo de fazer o login novamente. Além disso, ele sairá de todas as salas em que estiver. Esta ação não pode ser revertida. Tem certeza de que deseja desativar este usuário?",
         "deactivate_confirm_title": "Desativar usuário?",
@@ -2465,14 +2456,11 @@
         "demote_self_confirm_room": "Você não poderá desfazer essa alteração, já que está rebaixando sua própria permissão. Se você for a última pessoa nesta sala, será impossível recuperar a permissão atual.",
         "demote_self_confirm_title": "Reduzir seu próprio privilégio?",
         "disinvite_button_room_name": "Cancelar convite de %(roomName)s",
-        "edit_own_devices": "Editar dispositivos",
         "error_ban_user": "Não foi possível banir o usuário",
         "error_deactivate": "Falha ao desativar o usuário",
         "error_mute_user": "Não foi possível remover notificações da/do usuária/o",
         "error_revoke_3pid_invite_description": "Não foi possível revogar o convite. O servidor pode estar com um problema temporário ou você não tem permissões suficientes para revogar o convite.",
         "error_revoke_3pid_invite_title": "Falha ao revogar o convite",
-        "hide_sessions": "Esconder sessões",
-        "hide_verified_sessions": "Esconder sessões confirmadas",
         "invited_by": "Convidado por %(sender)s",
         "jump_to_rr_button": "Ir para a confirmação de leitura",
         "kick_space_warning": "Eles ainda poderão acessar tudo o que você não for administrador.",

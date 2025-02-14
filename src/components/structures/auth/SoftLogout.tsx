@@ -6,16 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent, SyntheticEvent } from "react";
+import React, { type ChangeEvent, type SyntheticEvent } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { Optional } from "matrix-events-sdk";
-import { LoginFlow, MatrixError, SSOAction, SSOFlow } from "matrix-js-sdk/src/matrix";
+import { type Optional } from "matrix-events-sdk";
+import { type LoginFlow, MatrixError, SSOAction, type SSOFlow } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import * as Lifecycle from "../../../Lifecycle";
 import Modal from "../../../Modal";
-import { IMatrixClientCreds, MatrixClientPeg } from "../../../MatrixClientPeg";
+import { type IMatrixClientCreds, MatrixClientPeg } from "../../../MatrixClientPeg";
 import { sendLoginRequest } from "../../../Login";
 import AuthPage from "../../views/auth/AuthPage";
 import { SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY } from "../../../BasePlatform";

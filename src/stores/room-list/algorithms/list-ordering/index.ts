@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { ImportanceAlgorithm } from "./ImportanceAlgorithm";
-import { ListAlgorithm, SortAlgorithm } from "../models";
+import { ListAlgorithm, type SortAlgorithm } from "../models";
 import { NaturalAlgorithm } from "./NaturalAlgorithm";
-import { TagID } from "../../models";
-import { OrderingAlgorithm } from "./OrderingAlgorithm";
+import { type TagID } from "../../models";
+import { type OrderingAlgorithm } from "./OrderingAlgorithm";
 
 interface AlgorithmFactory {
     (tagId: TagID, initialSortingAlgorithm: SortAlgorithm): OrderingAlgorithm;

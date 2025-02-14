@@ -9,7 +9,7 @@ import { Breadcrumb, Button, VisualList, VisualListItem } from "@vector-im/compo
 import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 import InfoIcon from "@vector-im/compound-design-tokens/assets/web/icons/info";
 import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
-import React, { MouseEventHandler } from "react";
+import React, { type MouseEventHandler } from "react";
 
 import { _t } from "../../../../languageHandler";
 import { EncryptionCard } from "./EncryptionCard";
@@ -25,12 +25,21 @@ interface ResetIdentityPanelProps {
      * Called when the cancel button is clicked or when we go back in the breadcrumbs.
      */
     onCancelClick: () => void;
+
+    /**
+     * The variant of the panel to show. We show more warnings in the 'compromised' variant (no use in showing a user this
+     * warning if they have to reset because they no longer have their key)
+     * "compromised" is shown when the user chooses 'reset' explicitly in settings, usually because they believe their
+     * identity has been compromised.
+     * "forgot" is shown when the user has just forgotten their passphrase.
+     */
+    variant: "compromised" | "forgot";
 }
 
 /**
  * The panel for resetting the identity of the current user.
  */
-export function ResetIdentityPanel({ onCancelClick, onFinish }: ResetIdentityPanelProps): JSX.Element {
+export function ResetIdentityPanel({ onCancelClick, onFinish, variant }: ResetIdentityPanelProps): JSX.Element {
     const matrixClient = useMatrixClientContext();
 
     return (
@@ -44,7 +53,11 @@ export function ResetIdentityPanel({ onCancelClick, onFinish }: ResetIdentityPan
             <EncryptionCard
                 Icon={ErrorIcon}
                 destructive={true}
-                title={_t("settings|encryption|advanced|breadcrumb_title")}
+                title={
+                    variant === "forgot"
+                        ? _t("settings|encryption|advanced|breadcrumb_title_forgot")
+                        : _t("settings|encryption|advanced|breadcrumb_title")
+                }
                 className="mx_ResetIdentityPanel"
             >
                 <div className="mx_ResetIdentityPanel_content">
@@ -59,7 +72,7 @@ export function ResetIdentityPanel({ onCancelClick, onFinish }: ResetIdentityPan
                             {_t("settings|encryption|advanced|breadcrumb_third_description")}
                         </VisualListItem>
                     </VisualList>
-                    <span>{_t("settings|encryption|advanced|breadcrumb_warning")}</span>
+                    {variant === "compromised" && <span>{_t("settings|encryption|advanced|breadcrumb_warning")}</span>}
                 </div>
                 <div className="mx_ResetIdentityPanel_footer">
                     <Button

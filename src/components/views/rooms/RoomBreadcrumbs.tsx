@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef } from "react";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { type EmptyObject, type Room } from "matrix-js-sdk/src/matrix";
 import { CSSTransition } from "react-transition-group";
 
 import { BreadcrumbsStore } from "../../../stores/BreadcrumbsStore";
@@ -18,10 +18,8 @@ import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { useRovingTabIndex } from "../../../accessibility/RovingTabIndex";
 import Toolbar from "../../../accessibility/Toolbar";
 import { Action } from "../../../dispatcher/actions";
-import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
-
-interface IProps {}
+import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 
 interface IState {
     // Both of these control the animation for the breadcrumbs. For details on the
@@ -59,11 +57,11 @@ const RoomBreadcrumbTile: React.FC<{ room: Room; onClick: (ev: ButtonEvent) => v
     );
 };
 
-export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState> {
+export default class RoomBreadcrumbs extends React.PureComponent<EmptyObject, IState> {
     private unmounted = false;
     private toolbar = createRef<HTMLDivElement>();
 
-    public constructor(props: IProps) {
+    public constructor(props: EmptyObject) {
         super(props);
 
         this.state = {

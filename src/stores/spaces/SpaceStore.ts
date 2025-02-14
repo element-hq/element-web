@@ -6,17 +6,18 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ListIteratee, Many, sortBy } from "lodash";
+import { type ListIteratee, type Many, sortBy } from "lodash";
 import {
     EventType,
     RoomType,
-    Room,
+    type Room,
     RoomEvent,
-    RoomMember,
+    type RoomMember,
     RoomStateEvent,
-    MatrixEvent,
+    type MatrixEvent,
     ClientEvent,
-    ISendEventResponse,
+    type ISendEventResponse,
+    type EmptyObject,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -26,7 +27,7 @@ import defaultDispatcher from "../../dispatcher/dispatcher";
 import RoomListStore from "../room-list/RoomListStore";
 import SettingsStore from "../../settings/SettingsStore";
 import DMRoomMap from "../../utils/DMRoomMap";
-import { FetchRoomFn } from "../notifications/ListNotificationState";
+import { type FetchRoomFn } from "../notifications/ListNotificationState";
 import { SpaceNotificationState } from "../notifications/SpaceNotificationState";
 import { RoomNotificationStateStore } from "../notifications/RoomNotificationStateStore";
 import { DefaultTagID } from "../room-list/models";
@@ -35,13 +36,13 @@ import { setDiff, setHasDiff } from "../../utils/sets";
 import { Action } from "../../dispatcher/actions";
 import { arrayHasDiff, arrayHasOrderChange, filterBoolean } from "../../utils/arrays";
 import { reorderLexicographically } from "../../utils/stringOrderField";
-import { TAG_ORDER } from "../../components/views/rooms/RoomList";
-import { SettingUpdatedPayload } from "../../dispatcher/payloads/SettingUpdatedPayload";
+import { TAG_ORDER } from "../../components/views/rooms/LegacyRoomList";
+import { type SettingUpdatedPayload } from "../../dispatcher/payloads/SettingUpdatedPayload";
 import {
     isMetaSpace,
-    ISuggestedRoom,
+    type ISuggestedRoom,
     MetaSpace,
-    SpaceKey,
+    type SpaceKey,
     UPDATE_HOME_BEHAVIOUR,
     UPDATE_INVITED_SPACES,
     UPDATE_SELECTED_SPACE,
@@ -52,18 +53,16 @@ import { getCachedRoomIDForAlias } from "../../RoomAliasCache";
 import { EffectiveMembership, getEffectiveMembership } from "../../utils/membership";
 import {
     flattenSpaceHierarchyWithCache,
-    SpaceEntityMap,
-    SpaceDescendantMap,
+    type SpaceEntityMap,
+    type SpaceDescendantMap,
     flattenSpaceHierarchy,
 } from "./flattenSpaceHierarchy";
 import { PosthogAnalytics } from "../../PosthogAnalytics";
-import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
-import { ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePayload";
-import { SwitchSpacePayload } from "../../dispatcher/payloads/SwitchSpacePayload";
-import { AfterLeaveRoomPayload } from "../../dispatcher/payloads/AfterLeaveRoomPayload";
+import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePayload";
+import { type SwitchSpacePayload } from "../../dispatcher/payloads/SwitchSpacePayload";
+import { type AfterLeaveRoomPayload } from "../../dispatcher/payloads/AfterLeaveRoomPayload";
 import { SdkContextClass } from "../../contexts/SDKContext";
-
-interface IState {}
 
 const ACTIVE_SPACE_LS_KEY = "mx_active_space";
 
@@ -123,7 +122,7 @@ type SpaceStoreActions =
     | SwitchSpacePayload
     | AfterLeaveRoomPayload;
 
-export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
+export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
     // The spaces representing the roots of the various tree-like hierarchies
     private rootSpaces: Room[] = [];
     // Map from room/space ID to set of spaces which list it as a child
@@ -161,6 +160,20 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         SettingsStore.monitorSetting("Spaces.enabledMetaSpaces", null);
         SettingsStore.monitorSetting("Spaces.showPeopleInSpace", null);
         SettingsStore.monitorSetting("feature_dynamic_room_predecessors", null);
+    }
+
+    /**
+     * Get the order of meta spaces to display in the space panel.
+     *
+     * This accessor should be removed when the "feature_new_room_list" labs flag is removed.
+     * "People" and "Favourites" will be removed from the "metaSpaceOrder" array and this filter will no longer be needed.
+     * @private
+     */
+    private get metaSpaceOrder(): MetaSpace[] {
+        if (!SettingsStore.getValue("feature_new_room_list")) return metaSpaceOrder;
+
+        // People and Favourites are not shown when the new room list is enabled
+        return metaSpaceOrder.filter((space) => space !== MetaSpace.People && space !== MetaSpace.Favourites);
     }
 
     public get invitedSpaces(): Room[] {
@@ -1165,7 +1178,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
         const oldMetaSpaces = this._enabledMetaSpaces;
         const enabledMetaSpaces = SettingsStore.getValue("Spaces.enabledMetaSpaces");
-        this._enabledMetaSpaces = metaSpaceOrder.filter((k) => enabledMetaSpaces[k]);
+        this._enabledMetaSpaces = this.metaSpaceOrder.filter((k) => enabledMetaSpaces[k]);
 
         this._allRoomsInHome = SettingsStore.getValue("Spaces.allRoomsInHome");
         this.sendUserProperties();
@@ -1279,7 +1292,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
                     case "Spaces.enabledMetaSpaces": {
                         const newValue = SettingsStore.getValue("Spaces.enabledMetaSpaces");
-                        const enabledMetaSpaces = metaSpaceOrder.filter((k) => newValue[k]);
+                        const enabledMetaSpaces = this.metaSpaceOrder.filter((k) => newValue[k]);
                         if (arrayHasDiff(this._enabledMetaSpaces, enabledMetaSpaces)) {
                             const hadPeopleOrHomeEnabled = this.enabledMetaSpaces.some((s) => {
                                 return s === MetaSpace.Home || s === MetaSpace.People;

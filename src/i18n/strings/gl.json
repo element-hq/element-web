@@ -442,7 +442,6 @@
         "room_name": "Nome da sala",
         "rooms": "Salas",
         "secure_backup": "Copia Segura",
-        "security": "Seguridade",
         "select_all": "Seleccionar todos",
         "server": "Servidor",
         "settings": "Axustes",
@@ -461,7 +460,6 @@
         "thread": "Tema",
         "threads": "Conversas",
         "timeline": "Cronoloxía",
-        "trusted": "Confiable",
         "unencrypted": "Non cifrada",
         "unmute": "Non acalar",
         "unnamed_room": "Sala sen nome",
@@ -755,7 +753,6 @@
             "title": "Non confiable"
         },
         "unable_to_setup_keys_error": "Non se puideron configurar as chaves",
-        "unsupported": "Este cliente non soporta o cifrado extremo-a-extremo.",
         "verification": {
             "accepting": "Aceptando…",
             "after_new_login": {
@@ -2705,7 +2702,9 @@
             "sent": "%(senderName)s enviou un convite a %(targetDisplayName)s para unirse a sala."
         },
         "m.room.tombstone": "%(senderDisplayName)s actualizou esta sala.",
-        "m.room.topic": "%(senderDisplayName)s cambiou o asunto a \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s cambiou o asunto a \"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s enviou un adhesivo.",
         "m.video": {
             "error_decrypting": "Fallo descifrando vídeo"
@@ -2963,14 +2962,6 @@
         "ban_room_confirm_title": "Vetar en %(roomName)s",
         "ban_space_everything": "Vetalos en tódolos sitios nos que eu poida",
         "ban_space_specific": "Vetalos en lugares específicos nos que eu poida",
-        "count_of_sessions": {
-            "other": "%(count)s sesións",
-            "one": "%(count)s sesión"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s sesións verificadas",
-            "one": "1 sesión verificada"
-        },
         "deactivate_confirm_action": "Desactivar usuaria",
         "deactivate_confirm_description": "Ao desactivar esta usuaria ficará desconectada e non poderá volver a acceder. Ademáis deixará todas as salas nas que estivese. Esta acción non ten volta, ¿desexas desactivar esta usuaria?",
         "deactivate_confirm_title": "¿Desactivar usuaria?",
@@ -2981,15 +2972,12 @@
         "disinvite_button_room": "Retirar convite á sala",
         "disinvite_button_room_name": "Retirar o convite para %(roomName)s",
         "disinvite_button_space": "Retirar convite ao espazo",
-        "edit_own_devices": "Editar dispositivos",
         "error_ban_user": "Fallo ao bloquear usuaria",
         "error_deactivate": "Fallo ao desactivar a usuaria",
         "error_kicking_user": "Fallou a eliminación da usuaria",
         "error_mute_user": "Fallo ó silenciar usuaria",
         "error_revoke_3pid_invite_description": "Non se revogou o convite. O servidor podería estar experimentando un problema temporal ou non tes permisos suficientes para revogar o convite.",
         "error_revoke_3pid_invite_title": "Fallo ao revogar o convite",
-        "hide_sessions": "Agochar sesións",
-        "hide_verified_sessions": "Agochar sesións verificadas",
         "invited_by": "Convidada por %(sender)s",
         "jump_to_rr_button": "Ir ao resgardo de lectura",
         "kick_button_room": "Eliminar da sala",

@@ -8,20 +8,20 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import {
-    MatrixEvent,
+    type MatrixEvent,
     EventType,
     MsgType,
     RelationType,
-    MatrixClient,
+    type MatrixClient,
     GroupCallIntent,
     M_POLL_END,
     M_POLL_START,
 } from "matrix-js-sdk/src/matrix";
-import { Optional } from "matrix-events-sdk";
+import { type Optional } from "matrix-events-sdk";
 
 import SettingsStore from "../settings/SettingsStore";
-import LegacyCallEventGrouper from "../components/structures/LegacyCallEventGrouper";
-import { EventTileProps } from "../components/views/rooms/EventTile";
+import type LegacyCallEventGrouper from "../components/structures/LegacyCallEventGrouper";
+import { type EventTileProps } from "../components/views/rooms/EventTile";
 import { TimelineRenderingType } from "../contexts/RoomContext";
 import MessageEvent from "../components/views/messages/MessageEvent";
 import LegacyCallEvent from "../components/views/messages/LegacyCallEvent";

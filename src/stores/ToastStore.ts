@@ -7,9 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import EventEmitter from "events";
-import React from "react";
+import { logger } from "matrix-js-sdk/src/logger";
 
-import { ComponentClass } from "../@types/common";
+import type React from "react";
+import { type ComponentClass } from "../@types/common";
 
 export interface IToast<C extends ComponentClass> {
     key: string;
@@ -54,10 +55,12 @@ export default class ToastStore extends EventEmitter {
     public addOrReplaceToast<C extends ComponentClass>(newToast: IToast<C>): void {
         const oldIndex = this.toasts.findIndex((t) => t.key === newToast.key);
         if (oldIndex === -1) {
+            logger.info(`Opening toast with key '${newToast.key}': title '${newToast.title}'`);
             let newIndex = this.toasts.length;
             while (newIndex > 0 && this.toasts[newIndex - 1].priority < newToast.priority) --newIndex;
             this.toasts.splice(newIndex, 0, newToast);
         } else {
+            logger.info(`Replacing existing toast with key '${newToast.key}': title now '${newToast.title}'`);
             this.toasts[oldIndex] = newToast;
         }
         this.emit("update");
@@ -71,6 +74,7 @@ export default class ToastStore extends EventEmitter {
         const length = this.toasts.length;
         this.toasts = this.toasts.filter((t) => t.key !== key);
         if (length !== this.toasts.length) {
+            logger.info(`Removed toast with key '${key}'`);
             if (this.toasts.length === 0) {
                 this.countSeen = 0;
             }

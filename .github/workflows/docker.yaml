@@ -1,4 +1,4 @@
-name: Dockerhub
+name: Docker
 on:
     workflow_dispatch: {}
     push:
@@ -15,6 +15,7 @@ jobs:
         environment: dockerhub
         permissions:
             id-token: write # needed for signing the images with GitHub OIDC Token
+            packages: write # needed for publishing packages to GHCR
         steps:
             - uses: actions/checkout@v4
               with:
@@ -37,12 +38,20 @@ jobs:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+            - name: Login to GitHub Container Registry
+              uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3
+              with:
+                  registry: ghcr.io
+                  username: ${{ github.repository_owner }}
+                  password: ${{ secrets.GITHUB_TOKEN }}
+
             - name: Docker meta
               id: meta
               uses: docker/metadata-action@369eb591f429131d6889c46b94e711f089e6ca96 # v5
               with:
                   images: |
                       vectorim/element-web
+                      ghcr.io/element-hq/element-web
                   tags: |
                       type=ref,event=branch
                       type=ref,event=tag
@@ -51,7 +60,7 @@ jobs:
 
             - name: Build and push
               id: build-and-push
-              uses: docker/build-push-action@67a2d409c0a876cbe6b11854e3e25193efe4e62d # v6
+              uses: docker/build-push-action@ca877d9245402d1537745e0e356eab47c3520991 # v6
               with:
                   context: .
                   push: true

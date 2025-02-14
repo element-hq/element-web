@@ -8,9 +8,9 @@ Please see LICENSE files in the repository root for full details.
 
 import { logger } from "matrix-js-sdk/src/logger";
 import { GroupCallEventHandlerEvent } from "matrix-js-sdk/src/webrtc/groupCallEventHandler";
-import { MatrixRTCSession, MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc";
+import { type MatrixRTCSession, MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc";
 
-import type { GroupCall, Room } from "matrix-js-sdk/src/matrix";
+import type { EmptyObject, GroupCall, Room } from "matrix-js-sdk/src/matrix";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { UPDATE_EVENT } from "./AsyncStore";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
@@ -26,7 +26,7 @@ export enum CallStoreEvent {
     ConnectedCalls = "connected_calls",
 }
 
-export class CallStore extends AsyncStoreWithClient<{}> {
+export class CallStore extends AsyncStoreWithClient<EmptyObject> {
     private static _instance: CallStore;
     public static get instance(): CallStore {
         if (!this._instance) {

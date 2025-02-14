@@ -7,18 +7,17 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
+import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 
 import EventTilePreview from "../elements/EventTilePreview";
 import SettingsStore from "../../../settings/SettingsStore";
-import { Layout } from "../../../settings/enums/Layout";
+import { type Layout } from "../../../settings/enums/Layout";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import { _t } from "../../../languageHandler";
 import { SettingsSubsection } from "./shared/SettingsSubsection";
 import Field from "../elements/Field";
 import { FontWatcher } from "../../../settings/watchers/FontWatcher";
-
-interface IProps {}
 
 interface IState {
     browserFontSize: number;
@@ -34,7 +33,7 @@ interface IState {
     avatarUrl?: string;
 }
 
-export default class FontScalingPanel extends React.Component<IProps, IState> {
+export default class FontScalingPanel extends React.Component<EmptyObject, IState> {
     private readonly MESSAGE_PREVIEW_TEXT = _t("common|preview_message");
     /**
      * Font sizes available (in px)
@@ -43,7 +42,7 @@ export default class FontScalingPanel extends React.Component<IProps, IState> {
     private layoutWatcherRef?: string;
     private unmounted = false;
 
-    public constructor(props: IProps) {
+    public constructor(props: EmptyObject) {
         super(props);
 
         this.state = {

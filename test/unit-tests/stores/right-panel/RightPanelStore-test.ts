@@ -6,15 +6,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked, MockedObject } from "jest-mock";
-import { MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
+import { mocked, type MockedObject } from "jest-mock";
+import { type MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
 
 import { stubClient } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { Action } from "../../../../src/dispatcher/actions";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
-import { ActiveRoomChangedPayload } from "../../../../src/dispatcher/payloads/ActiveRoomChangedPayload";
+import { type ActiveRoomChangedPayload } from "../../../../src/dispatcher/payloads/ActiveRoomChangedPayload";
 import RightPanelStore from "../../../../src/stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../../src/stores/right-panel/RightPanelStorePhases";
 import SettingsStore from "../../../../src/settings/SettingsStore";
@@ -114,11 +114,14 @@ describe("RightPanelStore", () => {
             expect(store.isOpenForRoom("!1:example.org")).toEqual(true);
             expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.RoomSummary);
         });
-        it("overwrites history if changing the phase", async () => {
+        it("history is generated for certain phases", async () => {
             await viewRoom("!1:example.org");
-            store.setCard({ phase: RightPanelPhases.RoomSummary }, true, "!1:example.org");
+            // Setting the memberlist card should also generate a history with room summary card
             store.setCard({ phase: RightPanelPhases.MemberList }, true, "!1:example.org");
-            expect(store.roomPhaseHistory).toEqual([{ phase: RightPanelPhases.MemberList, state: {} }]);
+            expect(store.roomPhaseHistory).toEqual([
+                { phase: RightPanelPhases.RoomSummary, state: {} },
+                { phase: RightPanelPhases.MemberList, state: {} },
+            ]);
         });
     });
 

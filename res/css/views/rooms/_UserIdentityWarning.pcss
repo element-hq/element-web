@@ -20,7 +20,13 @@ Please see LICENSE files in the repository root for full details.
             margin-left: var(--cpd-space-6x);
             flex-grow: 1;
         }
+        .mx_UserIdentityWarning_main.critical {
+            color: var(--cpd-color-text-critical-primary);
+        }
     }
+}
+.mx_UserIdentityWarning.critical {
+    background: linear-gradient(180deg, var(--cpd-color-red-100) 0%, var(--cpd-color-theme-bg) 100%);
 }
 
 .mx_MessageComposer.mx_MessageComposer--compact > .mx_UserIdentityWarning {

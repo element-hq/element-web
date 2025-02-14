@@ -6,9 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixEvent, EventType, SERVICE_TYPES } from "matrix-js-sdk/src/matrix";
+import { EventType, MatrixEvent, type Policy, SERVICE_TYPES, type Terms } from "matrix-js-sdk/src/matrix";
+import { screen, within } from "jest-matrix-react";
 
-import { startTermsFlow, Service } from "../../src/Terms";
+import { dialogTermsInteractionCallback, Service, startTermsFlow } from "../../src/Terms";
 import { getMockClientWithEventEmitter } from "../test-utils";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 
@@ -18,7 +19,7 @@ const POLICY_ONE = {
         name: "The first policy",
         url: "http://example.com/one",
     },
-};
+} satisfies Policy;
 
 const POLICY_TWO = {
     version: "IX",
@@ -26,7 +27,7 @@ const POLICY_TWO = {
         name: "The second policy",
         url: "http://example.com/two",
     },
-};
+} satisfies Policy;
 
 const IM_SERVICE_ONE = new Service(SERVICE_TYPES.IM, "https://imone.test", "a token token");
 const IM_SERVICE_TWO = new Service(SERVICE_TYPES.IM, "https://imtwo.test", "a token token");
@@ -42,7 +43,7 @@ describe("Terms", function () {
     beforeEach(function () {
         jest.clearAllMocks();
         mockClient.getAccountData.mockReturnValue(undefined);
-        mockClient.getTerms.mockResolvedValue(null);
+        mockClient.getTerms.mockResolvedValue({ policies: {} });
         mockClient.setAccountData.mockResolvedValue({});
     });
 
@@ -141,22 +142,25 @@ describe("Terms", function () {
         });
         mockClient.getAccountData.mockReturnValue(directEvent);
 
-        mockClient.getTerms.mockImplementation(async (_serviceTypes: SERVICE_TYPES, baseUrl: string) => {
-            switch (baseUrl) {
-                case "https://imone.test":
-                    return {
-                        policies: {
-                            policy_the_first: POLICY_ONE,
-                        },
-                    };
-                case "https://imtwo.test":
-                    return {
-                        policies: {
-                            policy_the_second: POLICY_TWO,
-                        },
-                    };
-            }
-        });
+        mockClient.getTerms.mockImplementation(
+            async (_serviceTypes: SERVICE_TYPES, baseUrl: string): Promise<Terms> => {
+                switch (baseUrl) {
+                    case "https://imone.test":
+                        return {
+                            policies: {
+                                policy_the_first: POLICY_ONE,
+                            },
+                        };
+                    case "https://imtwo.test":
+                        return {
+                            policies: {
+                                policy_the_second: POLICY_TWO,
+                            },
+                        };
+                }
+                return { policies: {} };
+            },
+        );
 
         const interactionCallback = jest.fn().mockResolvedValue(["http://example.com/one", "http://example.com/two"]);
         await startTermsFlow(mockClient, [IM_SERVICE_ONE, IM_SERVICE_TWO], interactionCallback);
@@ -178,5 +182,31 @@ describe("Terms", function () {
         expect(mockClient.agreeToTerms).toHaveBeenCalledWith(SERVICE_TYPES.IM, "https://imtwo.test", "a token token", [
             "http://example.com/two",
         ]);
+    });
+});
+
+describe("dialogTermsInteractionCallback", () => {
+    it("should render a dialog with the expected terms", async () => {
+        dialogTermsInteractionCallback(
+            [
+                {
+                    service: new Service(SERVICE_TYPES.IS, "http://base_url", "access_token"),
+                    policies: {
+                        sample: {
+                            version: "VERSION",
+                            en: {
+                                name: "Terms",
+                                url: "http://base_url/terms",
+                            },
+                        },
+                    },
+                },
+            ],
+            [],
+        );
+
+        const dialog = await screen.findByRole("dialog");
+        expect(within(dialog).getByRole("link")).toHaveAttribute("href", "http://base_url/terms");
+        expect(dialog).toMatchSnapshot();
     });
 });

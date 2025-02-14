@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { ChangeEvent, FormEvent } from "react";
+import React, { type ChangeEvent, type FormEvent } from "react";
 
 import Field from "./Field";
 import { _t } from "../../../languageHandler";

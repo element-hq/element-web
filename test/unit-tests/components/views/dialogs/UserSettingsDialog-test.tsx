@@ -6,12 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactElement } from "react";
+import React, { type ReactElement } from "react";
 import { render, screen } from "jest-matrix-react";
-import { mocked, MockedObject } from "jest-mock";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { mocked, type MockedObject } from "jest-mock";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import SettingsStore, { CallbackFn } from "../../../../../src/settings/SettingsStore";
+import SettingsStore, { type CallbackFn } from "../../../../../src/settings/SettingsStore";
 import SdkConfig from "../../../../../src/SdkConfig";
 import { UserTab } from "../../../../../src/components/views/dialogs/UserTab";
 import UserSettingsDialog from "../../../../../src/components/views/dialogs/UserSettingsDialog";
@@ -27,7 +27,7 @@ import {
 import { UIFeature } from "../../../../../src/settings/UIFeature";
 import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
-import { FeatureSettingKey } from "../../../../../src/settings/Settings.tsx";
+import { type FeatureSettingKey } from "../../../../../src/settings/Settings.tsx";
 
 mockPlatformPeg({
     supportsSpellCheckSettings: jest.fn().mockReturnValue(false),
@@ -57,9 +57,9 @@ describe("<UserSettingsDialog />", () => {
 
     let sdkContext: SdkContextClass;
     const defaultProps = { onFinished: jest.fn() };
-    const getComponent = (props: Partial<typeof defaultProps & { initialTabId?: UserTab }> = {}): ReactElement => (
-        <UserSettingsDialog sdkContext={sdkContext} {...defaultProps} {...props} />
-    );
+    const getComponent = (
+        props: Partial<typeof defaultProps & { initialTabId?: UserTab; props: Record<string, any> }> = {},
+    ): ReactElement => <UserSettingsDialog sdkContext={sdkContext} {...defaultProps} {...props} />;
 
     beforeEach(() => {
         jest.clearAllMocks();

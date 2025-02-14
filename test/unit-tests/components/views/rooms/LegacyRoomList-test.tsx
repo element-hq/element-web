@@ -11,9 +11,9 @@ import React from "react";
 import { cleanup, queryByRole, render, screen, within } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk/src/matrix";
 
-import RoomList from "../../../../../src/components/views/rooms/RoomList";
+import LegacyRoomList from "../../../../../src/components/views/rooms/LegacyRoomList";
 import ResizeNotifier from "../../../../../src/utils/ResizeNotifier";
 import { MetaSpace } from "../../../../../src/stores/spaces";
 import { shouldShowComponent } from "../../../../../src/customisations/helpers/UIComponents";
@@ -26,7 +26,7 @@ import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import RoomListStore from "../../../../../src/stores/room-list/RoomListStore";
-import { ITagMap } from "../../../../../src/stores/room-list/algorithms/models";
+import { type ITagMap } from "../../../../../src/stores/room-list/algorithms/models";
 import { DefaultTagID } from "../../../../../src/stores/room-list/models";
 
 jest.mock("../../../../../src/customisations/helpers/UIComponents", () => ({
@@ -40,14 +40,14 @@ const getDMRoomsForUserId = jest.fn();
 // @ts-ignore
 DMRoomMap.sharedInstance = { getUserIdForRoomId, getDMRoomsForUserId };
 
-describe("RoomList", () => {
+describe("LegacyRoomList", () => {
     stubClient();
     const client = MatrixClientPeg.safeGet();
     const store = SpaceStore.instance;
 
-    function getComponent(props: Partial<RoomList["props"]> = {}): JSX.Element {
+    function getComponent(props: Partial<LegacyRoomList["props"]> = {}): JSX.Element {
         return (
-            <RoomList
+            <LegacyRoomList
                 onKeyDown={jest.fn()}
                 onFocus={jest.fn()}
                 onBlur={jest.fn()}

@@ -6,15 +6,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MutableRefObject, useCallback, useRef } from "react";
+import { type MutableRefObject, useCallback, useRef } from "react";
 
 import defaultDispatcher from "../../../../../dispatcher/dispatcher";
 import { Action } from "../../../../../dispatcher/actions";
-import { ActionPayload } from "../../../../../dispatcher/payloads";
+import { type ActionPayload } from "../../../../../dispatcher/payloads";
 import { TimelineRenderingType } from "../../../../../contexts/RoomContext";
 import { useDispatcher } from "../../../../../hooks/useDispatcher";
 import { focusComposer } from "./utils";
-import { ComposerFunctions } from "../types";
+import { type ComposerFunctions } from "../types";
 import { ComposerType } from "../../../../../dispatcher/payloads/ComposerInsertPayload";
 import { useComposerContext } from "../ComposerContext";
 import { setSelection } from "../utils/selection";

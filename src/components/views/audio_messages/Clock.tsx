@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { HTMLProps } from "react";
+import React, { type HTMLProps } from "react";
 import { Temporal } from "temporal-polyfill";
 
 import { formatSeconds } from "../../../DateUtils";

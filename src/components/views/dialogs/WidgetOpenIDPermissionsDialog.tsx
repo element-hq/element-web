@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { Widget, WidgetKind } from "matrix-widget-api";
+import { type Widget, type WidgetKind } from "matrix-widget-api";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";

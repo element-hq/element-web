@@ -8,10 +8,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { _td, TranslationKey } from "../languageHandler";
+import { _td, type TranslationKey } from "../languageHandler";
 import { IS_MAC, IS_ELECTRON, Key } from "../Keyboard";
-import { IBaseSetting } from "../settings/Settings";
-import { KeyCombo } from "../KeyBindingsManager";
+import { type IBaseSetting } from "../settings/Settings";
+import { type KeyCombo } from "../KeyBindingsManager";
 
 export enum KeyBindingAction {
     /** Send a message */
@@ -520,7 +520,7 @@ export const KEYBOARD_SHORTCUTS: IKeyboardShortcuts = {
     },
     [KeyBindingAction.GoToHome]: {
         default: {
-            ctrlOrCmdKey: true,
+            ctrlKey: true,
             altKey: !IS_MAC,
             shiftKey: IS_MAC,
             key: Key.H,

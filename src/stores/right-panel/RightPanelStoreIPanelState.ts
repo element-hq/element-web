@@ -6,10 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixEvent, Room, RoomMember, User } from "matrix-js-sdk/src/matrix";
-import { VerificationRequest } from "matrix-js-sdk/src/crypto-api";
+import { type MatrixEvent, type Room, type RoomMember, type User } from "matrix-js-sdk/src/matrix";
+import { type VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 
-import { RightPanelPhases } from "./RightPanelStorePhases";
+import { type RightPanelPhases } from "./RightPanelStorePhases";
 
 export interface IRightPanelCardState {
     member?: RoomMember | User;
@@ -38,8 +38,6 @@ export interface IRightPanelCardStateStored {
     initialEventId?: string;
     isInitialEventHighlighted?: boolean;
     initialEventScrollIntoView?: boolean;
-    // room summary card
-    focusRoomSearch?: boolean;
 }
 
 export interface IRightPanelCard {
@@ -84,7 +82,6 @@ export function convertCardToStore(panelState: IRightPanelCard): IRightPanelCard
         memberInfoEventId: !!state?.memberInfoEvent?.getId() ? state.memberInfoEvent.getId() : undefined,
         initialEventId: !!state?.initialEvent?.getId() ? state.initialEvent.getId() : undefined,
         memberId: !!state?.member?.userId ? state.member.userId : undefined,
-        focusRoomSearch: state.focusRoomSearch,
     };
 
     return { state: stateStored, phase: panelState.phase };
@@ -104,7 +101,6 @@ function convertStoreToCard(panelStateStore: IRightPanelCardStored, room: Room):
             : undefined,
         initialEvent: !!stateStored?.initialEventId ? room.findEventById(stateStored.initialEventId) : undefined,
         member: (!!stateStored?.memberId && room.getMember(stateStored.memberId)) || undefined,
-        focusRoomSearch: stateStored?.focusRoomSearch,
     };
 
     return { state: state, phase: panelStateStore.phase };

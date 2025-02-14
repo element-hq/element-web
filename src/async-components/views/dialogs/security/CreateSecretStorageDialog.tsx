@@ -10,8 +10,8 @@ Please see LICENSE files in the repository root for full details.
 import React, { createRef } from "react";
 import FileSaver from "file-saver";
 import { logger } from "matrix-js-sdk/src/logger";
-import { AuthDict, CrossSigningKeys, MatrixError, UIAFlow, UIAResponse } from "matrix-js-sdk/src/matrix";
-import { GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
+import { type AuthDict, type UIAResponse } from "matrix-js-sdk/src/matrix";
+import { type GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
 import classNames from "classnames";
 import CheckmarkIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 
@@ -31,11 +31,11 @@ import {
     SecureBackupSetupMethod,
 } from "../../../../utils/WellKnownUtils";
 import { ModuleRunner } from "../../../../modules/ModuleRunner";
-import Field from "../../../../components/views/elements/Field";
+import type Field from "../../../../components/views/elements/Field";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
 import Spinner from "../../../../components/views/elements/Spinner";
 import InteractiveAuthDialog from "../../../../components/views/dialogs/InteractiveAuthDialog";
-import { IValidationResult } from "../../../../components/views/elements/Validation";
+import { type IValidationResult } from "../../../../components/views/elements/Validation";
 import PassphraseConfirmField from "../../../../components/views/auth/PassphraseConfirmField";
 import { initialiseDehydration } from "../../../../utils/device/dehydration";
 
@@ -55,8 +55,6 @@ enum Phase {
 const PASSWORD_MIN_SCORE = 4; // So secure, many characters, much complex, wow, etc, etc.
 
 interface IProps {
-    hasCancel?: boolean;
-    accountPassword?: string;
     forceReset?: boolean;
     resetCrossSigning?: boolean;
     onFinished(ok?: boolean): void;
@@ -71,11 +69,6 @@ interface IState {
     downloaded: boolean;
     setPassphrase: boolean;
 
-    // does the server offer a UI auth flow with just m.login.password
-    // for /keys/device_signing/upload?
-    canUploadKeysWithPasswordOnly: boolean | null;
-    accountPassword: string;
-    accountPasswordCorrect: boolean | null;
     canSkip: boolean;
     passPhraseKeySelected: string;
     error?: boolean;
@@ -90,7 +83,6 @@ interface IState {
  */
 export default class CreateSecretStorageDialog extends React.PureComponent<IProps, IState> {
     public static defaultProps: Partial<IProps> = {
-        hasCancel: true,
         forceReset: false,
         resetCrossSigning: false,
     };
@@ -111,16 +103,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             passPhraseKeySelected = SecureBackupSetupMethod.Passphrase;
         }
 
-        const accountPassword = props.accountPassword || "";
-        let canUploadKeysWithPasswordOnly: boolean | null = null;
-        if (accountPassword) {
-            // If we have an account password in memory, let's simplify and
-            // assume it means password auth is also supported for device
-            // signing key upload as well. This avoids hitting the server to
-            // test auth flows, which may be slow under high load.
-            canUploadKeysWithPasswordOnly = true;
-        }
-
         const keyFromCustomisations = ModuleRunner.instance.extensions.cryptoSetup.createSecretStorageKey();
         const phase = keyFromCustomisations ? Phase.Loading : Phase.ChooseKeyPassphrase;
 
@@ -132,23 +114,14 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             copied: false,
             downloaded: false,
             setPassphrase: false,
-            // does the server offer a UI auth flow with just m.login.password
-            // for /keys/device_signing/upload?
-            accountPasswordCorrect: null,
             canSkip: !isSecureBackupRequired(cli),
-            canUploadKeysWithPasswordOnly,
             passPhraseKeySelected,
-            accountPassword,
         };
     }
 
     public componentDidMount(): void {
         const keyFromCustomisations = ModuleRunner.instance.extensions.cryptoSetup.createSecretStorageKey();
         if (keyFromCustomisations) this.initExtension(keyFromCustomisations);
-
-        if (this.state.canUploadKeysWithPasswordOnly === null) {
-            this.queryKeyUploadAuth();
-        }
     }
 
     private initExtension(keyFromCustomisations: Uint8Array): void {
@@ -157,27 +130,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             privateKey: keyFromCustomisations,
         };
         this.bootstrapSecretStorage();
-    }
-
-    private async queryKeyUploadAuth(): Promise<void> {
-        try {
-            await MatrixClientPeg.safeGet().uploadDeviceSigningKeys(undefined, {} as CrossSigningKeys);
-            // We should never get here: the server should always require
-            // UI auth to upload device signing keys. If we do, we upload
-            // no keys which would be a no-op.
-            logger.log("uploadDeviceSigningKeys unexpectedly succeeded without UI auth!");
-        } catch (error) {
-            if (!(error instanceof MatrixError) || !error.data || !error.data.flows) {
-                logger.log("uploadDeviceSigningKeys advertised no flows!");
-                return;
-            }
-            const canUploadKeysWithPasswordOnly = error.data.flows.some((f: UIAFlow) => {
-                return f.stages.length === 1 && f.stages[0] === "m.login.password";
-            });
-            this.setState({
-                canUploadKeysWithPasswordOnly,
-            });
-        }
     }
 
     private onKeyPassphraseChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -228,44 +180,33 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
     private doBootstrapUIAuth = async (
         makeRequest: (authData: AuthDict) => Promise<UIAResponse<void>>,
     ): Promise<void> => {
-        if (this.state.canUploadKeysWithPasswordOnly && this.state.accountPassword) {
-            await makeRequest({
-                type: "m.login.password",
-                identifier: {
-                    type: "m.id.user",
-                    user: MatrixClientPeg.safeGet().getSafeUserId(),
-                },
-                password: this.state.accountPassword,
-            });
-        } else {
-            const dialogAesthetics = {
-                [SSOAuthEntry.PHASE_PREAUTH]: {
-                    title: _t("auth|uia|sso_title"),
-                    body: _t("auth|uia|sso_preauth_body"),
-                    continueText: _t("auth|sso"),
-                    continueKind: "primary",
-                },
-                [SSOAuthEntry.PHASE_POSTAUTH]: {
-                    title: _t("encryption|confirm_encryption_setup_title"),
-                    body: _t("encryption|confirm_encryption_setup_body"),
-                    continueText: _t("action|confirm"),
-                    continueKind: "primary",
-                },
-            };
+        const dialogAesthetics = {
+            [SSOAuthEntry.PHASE_PREAUTH]: {
+                title: _t("auth|uia|sso_title"),
+                body: _t("auth|uia|sso_preauth_body"),
+                continueText: _t("auth|sso"),
+                continueKind: "primary",
+            },
+            [SSOAuthEntry.PHASE_POSTAUTH]: {
+                title: _t("encryption|confirm_encryption_setup_title"),
+                body: _t("encryption|confirm_encryption_setup_body"),
+                continueText: _t("action|confirm"),
+                continueKind: "primary",
+            },
+        };
 
-            const { finished } = Modal.createDialog(InteractiveAuthDialog, {
-                title: _t("encryption|bootstrap_title"),
-                matrixClient: MatrixClientPeg.safeGet(),
-                makeRequest,
-                aestheticsForStagePhases: {
-                    [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
-                    [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
-                },
-            });
-            const [confirmed] = await finished;
-            if (!confirmed) {
-                throw new Error("Cross-signing key upload auth canceled");
-            }
+        const { finished } = Modal.createDialog(InteractiveAuthDialog, {
+            title: _t("encryption|bootstrap_title"),
+            matrixClient: MatrixClientPeg.safeGet(),
+            makeRequest,
+            aestheticsForStagePhases: {
+                [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
+                [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
+            },
+        });
+        const [confirmed] = await finished;
+        if (!confirmed) {
+            throw new Error("Cross-signing key upload auth canceled");
         }
     };
 
@@ -332,7 +273,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                     setupNewKeyBackup: !backupInfo,
                 });
             }
-            await initialiseDehydration(true);
+            await initialiseDehydration({ createNewKey: true });
 
             this.setState({
                 phase: Phase.Stored,
@@ -805,7 +746,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                 top={this.topComponent}
                 title={this.titleForPhase(this.state.phase)}
                 titleClass={titleClass}
-                hasCancel={this.props.hasCancel && [Phase.Passphrase].includes(this.state.phase)}
+                hasCancel={false}
                 fixedWidth={false}
             >
                 <div>{content}</div>

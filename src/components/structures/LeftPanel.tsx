@@ -12,17 +12,17 @@ import classNames from "classnames";
 
 import dis from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
-import RoomList from "../views/rooms/RoomList";
+import LegacyRoomList from "../views/rooms/LegacyRoomList";
 import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
 import { HEADER_HEIGHT } from "../views/rooms/RoomSublist";
 import { Action } from "../../dispatcher/actions";
 import RoomSearch from "./RoomSearch";
-import ResizeNotifier from "../../utils/ResizeNotifier";
+import type ResizeNotifier from "../../utils/ResizeNotifier";
 import SpaceStore from "../../stores/spaces/SpaceStore";
-import { MetaSpace, SpaceKey, UPDATE_SELECTED_SPACE } from "../../stores/spaces";
+import { MetaSpace, type SpaceKey, UPDATE_SELECTED_SPACE } from "../../stores/spaces";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import UIStore from "../../stores/UIStore";
-import { IState as IRovingTabIndexState } from "../../accessibility/RovingTabIndex";
+import { type IState as IRovingTabIndexState } from "../../accessibility/RovingTabIndex";
 import RoomListHeader from "../views/rooms/RoomListHeader";
 import { BreadcrumbsStore } from "../../stores/BreadcrumbsStore";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../stores/room-list/RoomListStore";
@@ -32,10 +32,12 @@ import RoomBreadcrumbs from "../views/rooms/RoomBreadcrumbs";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../settings/UIFeature";
-import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../views/elements/AccessibleButton";
 import PosthogTrackers from "../../PosthogTrackers";
-import PageType from "../../PageTypes";
+import type PageType from "../../PageTypes";
 import { Landmark, LandmarkNavigation } from "../../accessibility/LandmarkNavigation";
+import SettingsStore from "../../settings/SettingsStore";
+import { RoomListView } from "../views/rooms/RoomListView";
 
 interface IProps {
     isMinimized: boolean;
@@ -56,7 +58,7 @@ interface IState {
 
 export default class LeftPanel extends React.Component<IProps, IState> {
     private listContainerRef = createRef<HTMLDivElement>();
-    private roomListRef = createRef<RoomList>();
+    private roomListRef = createRef<LegacyRoomList>();
     private focusedElement: Element | null = null;
     private isDoingStickyHeaders = false;
 
@@ -377,8 +379,25 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     }
 
     public render(): React.ReactNode {
+        const containerClasses = classNames({
+            mx_LeftPanel: true,
+            mx_LeftPanel_minimized: this.props.isMinimized,
+        });
+
+        const roomListClasses = classNames("mx_LeftPanel_actualRoomListContainer", "mx_AutoHideScrollbar");
+        const useNewRoomList = SettingsStore.getValue("feature_new_room_list");
+        if (useNewRoomList) {
+            return (
+                <div className={containerClasses}>
+                    <div className="mx_LeftPanel_roomListContainer">
+                        <RoomListView activeSpace={this.state.activeSpace} />
+                    </div>
+                </div>
+            );
+        }
+
         const roomList = (
-            <RoomList
+            <LegacyRoomList
                 onKeyDown={this.onKeyDown}
                 resizeNotifier={this.props.resizeNotifier}
                 onFocus={this.onFocus}
@@ -390,13 +409,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                 ref={this.roomListRef}
             />
         );
-
-        const containerClasses = classNames({
-            mx_LeftPanel: true,
-            mx_LeftPanel_minimized: this.props.isMinimized,
-        });
-
-        const roomListClasses = classNames("mx_LeftPanel_actualRoomListContainer", "mx_AutoHideScrollbar");
 
         return (
             <div className={containerClasses}>

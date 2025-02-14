@@ -11,10 +11,10 @@ Please see LICENSE files in the repository root for full details.
 import { at, uniq } from "lodash";
 import { removeHiddenChars } from "matrix-js-sdk/src/utils";
 
-import { TimelineRenderingType } from "../contexts/RoomContext";
-import { Leaves } from "../@types/common";
+import { type TimelineRenderingType } from "../contexts/RoomContext";
+import { type Leaves } from "../@types/common";
 
-interface IOptions<T extends {}> {
+interface IOptions<T extends object> {
     keys: Array<Leaves<T>>;
     funcs?: Array<(o: T) => string | string[]>;
     shouldMatchWordsOnly?: boolean;
@@ -37,7 +37,7 @@ interface IOptions<T extends {}> {
  * @param {function[]} options.funcs List of functions that when called with the
  *     object as an arg will return a string to use as an index
  */
-export default class QueryMatcher<T extends {}> {
+export default class QueryMatcher<T extends object> {
     private _options: IOptions<T>;
     private _items = new Map<string, { object: T; keyWeight: number }[]>();
 

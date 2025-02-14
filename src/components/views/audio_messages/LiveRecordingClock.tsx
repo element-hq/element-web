@@ -8,10 +8,10 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 
-import { IRecordingUpdate } from "../../../audio/VoiceRecording";
+import { type IRecordingUpdate } from "../../../audio/VoiceRecording";
 import Clock from "./Clock";
 import { MarkedExecution } from "../../../utils/MarkedExecution";
-import { VoiceMessageRecording } from "../../../audio/VoiceMessageRecording";
+import { type VoiceMessageRecording } from "../../../audio/VoiceMessageRecording";
 
 interface IProps {
     recorder: VoiceMessageRecording;

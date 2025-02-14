@@ -6,26 +6,22 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room } from "matrix-js-sdk/src/matrix";
+import { type EmptyObject, type Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { MSC3575Filter, SlidingSyncEvent } from "matrix-js-sdk/src/sliding-sync";
-import { Optional } from "matrix-events-sdk";
+import { type MSC3575Filter, SlidingSyncEvent } from "matrix-js-sdk/src/sliding-sync";
+import { type Optional } from "matrix-events-sdk";
 
-import { RoomUpdateCause, TagID, OrderedDefaultTagIDs, DefaultTagID } from "./models";
-import { ITagMap, ListAlgorithm, SortAlgorithm } from "./algorithms/models";
-import { ActionPayload } from "../../dispatcher/payloads";
-import { MatrixDispatcher } from "../../dispatcher/dispatcher";
-import { IFilterCondition } from "./filters/IFilterCondition";
+import { type RoomUpdateCause, type TagID, OrderedDefaultTagIDs, DefaultTagID } from "./models";
+import { type ITagMap, ListAlgorithm, SortAlgorithm } from "./algorithms/models";
+import { type ActionPayload } from "../../dispatcher/payloads";
+import { type MatrixDispatcher } from "../../dispatcher/dispatcher";
+import { type IFilterCondition } from "./filters/IFilterCondition";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
-import { RoomListStore as Interface, RoomListStoreEvent } from "./Interface";
-import { MetaSpace, SpaceKey, UPDATE_SELECTED_SPACE } from "../spaces";
+import { type RoomListStore as Interface, RoomListStoreEvent } from "./Interface";
+import { MetaSpace, type SpaceKey, UPDATE_SELECTED_SPACE } from "../spaces";
 import { LISTS_LOADING_EVENT } from "./RoomListStore";
 import { UPDATE_EVENT } from "../AsyncStore";
-import { SdkContextClass } from "../../contexts/SDKContext";
-
-interface IState {
-    // state is tracked in underlying classes
-}
+import { type SdkContextClass } from "../../contexts/SDKContext";
 
 export const SlidingSyncSortToFilter: Record<SortAlgorithm, string[]> = {
     [SortAlgorithm.Alphabetic]: ["by_name", "by_recency"],
@@ -66,7 +62,7 @@ const filterConditions: Record<TagID, MSC3575Filter> = {
 
 export const LISTS_UPDATE_EVENT = RoomListStoreEvent.ListsUpdate;
 
-export class SlidingRoomListStoreClass extends AsyncStoreWithClient<IState> implements Interface {
+export class SlidingRoomListStoreClass extends AsyncStoreWithClient<EmptyObject> implements Interface {
     private tagIdToSortAlgo: Record<TagID, SortAlgorithm> = {};
     private tagMap: ITagMap = {};
     private counts: Record<TagID, number> = {};

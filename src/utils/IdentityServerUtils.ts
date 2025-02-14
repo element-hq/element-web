@@ -6,11 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { SERVICE_TYPES, HTTPError, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { SERVICE_TYPES, HTTPError, type MatrixClient, type Terms } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import SdkConfig from "../SdkConfig";
-import { Policies } from "../Terms";
 
 export function getDefaultIdentityServerUrl(): string | undefined {
     return SdkConfig.get("validated_server_config")?.isUrl;
@@ -25,7 +24,7 @@ export function setToDefaultIdentityServer(matrixClient: MatrixClient): void {
 }
 
 export async function doesIdentityServerHaveTerms(matrixClient: MatrixClient, fullUrl: string): Promise<boolean> {
-    let terms: { policies?: Policies } | null;
+    let terms: Partial<Terms> | null;
     try {
         terms = await matrixClient.getTerms(SERVICE_TYPES.IS, fullUrl);
     } catch (e) {

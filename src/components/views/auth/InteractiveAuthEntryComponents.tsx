@@ -7,23 +7,22 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
-import { AuthType, AuthDict, IInputs, IStageStatus } from "matrix-js-sdk/src/interactive-auth";
+import { type InternationalisedPolicy, type Terms, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { AuthType, type AuthDict, type IInputs, type IStageStatus } from "matrix-js-sdk/src/interactive-auth";
 import { logger } from "matrix-js-sdk/src/logger";
-import React, { ChangeEvent, createRef, FormEvent, Fragment } from "react";
+import React, { type ChangeEvent, createRef, type FormEvent, Fragment } from "react";
 import { Button, Text } from "@vector-im/compound-web";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
 
 import EmailPromptIcon from "../../../../res/img/element-icons/email-prompt.svg";
 import { _t } from "../../../languageHandler";
-import SettingsStore from "../../../settings/SettingsStore";
-import { LocalisedPolicy, Policies } from "../../../Terms";
 import { AuthHeaderModifier } from "../../structures/auth/header/AuthHeaderModifier";
-import AccessibleButton, { AccessibleButtonKind, ButtonEvent } from "../elements/AccessibleButton";
+import AccessibleButton, { type AccessibleButtonKind, type ButtonEvent } from "../elements/AccessibleButton";
 import Field from "../elements/Field";
 import Spinner from "../elements/Spinner";
 import CaptchaForm from "./CaptchaForm";
 import { Flex } from "../../utils/Flex";
+import { pickBestPolicyLanguage } from "../../../Terms.ts";
 
 /* This file contains a collection of components which are used by the
  * InteractiveAuth to prompt the user to enter the information needed
@@ -235,12 +234,10 @@ export class RecaptchaAuthEntry extends React.Component<IRecaptchaAuthEntryProps
 }
 
 interface ITermsAuthEntryProps extends IAuthEntryProps {
-    stageParams?: {
-        policies?: Policies;
-    };
+    stageParams?: Partial<Terms>;
 }
 
-interface LocalisedPolicyWithId extends LocalisedPolicy {
+interface LocalisedPolicyWithId extends InternationalisedPolicy {
     id: string;
 }
 
@@ -278,7 +275,6 @@ export class TermsAuthEntry extends React.Component<ITermsAuthEntryProps, ITerms
         // }
 
         const allPolicies = this.props.stageParams?.policies || {};
-        const prefLang = SettingsStore.getValue("language");
         const initToggles: Record<string, boolean> = {};
         const pickedPolicies: {
             id: string;
@@ -287,17 +283,7 @@ export class TermsAuthEntry extends React.Component<ITermsAuthEntryProps, ITerms
         }[] = [];
         for (const policyId of Object.keys(allPolicies)) {
             const policy = allPolicies[policyId];
-
-            // Pick a language based on the user's language, falling back to english,
-            // and finally to the first language available. If there's still no policy
-            // available then the homeserver isn't respecting the spec.
-            let langPolicy: LocalisedPolicy | undefined = policy[prefLang];
-            if (!langPolicy) langPolicy = policy["en"];
-            if (!langPolicy) {
-                // last resort
-                const firstLang = Object.keys(policy).find((e) => e !== "version");
-                langPolicy = firstLang ? policy[firstLang] : undefined;
-            }
+            const langPolicy = pickBestPolicyLanguage(policy);
             if (!langPolicy) throw new Error("Failed to find a policy to show the user");
 
             initToggles[policyId] = false;
@@ -908,7 +894,7 @@ export class SSOAuthEntry extends React.Component<ISSOAuthEntryProps, ISSOAuthEn
     }
 }
 
-export class FallbackAuthEntry<T = {}> extends React.Component<IAuthEntryProps & T> {
+export class FallbackAuthEntry<T extends object> extends React.Component<IAuthEntryProps & T> {
     protected popupWindow: Window | null;
     protected fallbackButton = createRef<HTMLDivElement>();
 

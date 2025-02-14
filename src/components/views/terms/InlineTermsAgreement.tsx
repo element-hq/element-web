@@ -8,11 +8,11 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 
-import { _t, pickBestLanguage } from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import { objectClone } from "../../../utils/objects";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import AccessibleButton from "../elements/AccessibleButton";
-import { ServicePolicyPair } from "../../../Terms";
+import { pickBestPolicyLanguage, type ServicePolicyPair } from "../../../Terms";
 
 interface IProps {
     policiesAndServicePairs: ServicePolicyPair[];
@@ -47,11 +47,12 @@ export default class InlineTermsAgreement extends React.Component<IProps, IState
         for (const servicePolicies of this.props.policiesAndServicePairs) {
             const availablePolicies = Object.values(servicePolicies.policies);
             for (const policy of availablePolicies) {
-                const language = pickBestLanguage(Object.keys(policy).filter((p) => p !== "version"));
+                const internationalisedPolicy = pickBestPolicyLanguage(policy);
+                if (!internationalisedPolicy) continue;
                 const renderablePolicy: Policy = {
                     checked: false,
-                    url: policy[language].url,
-                    name: policy[language].name,
+                    url: internationalisedPolicy.url,
+                    name: internationalisedPolicy.name,
                 };
                 policies.push(renderablePolicy);
             }

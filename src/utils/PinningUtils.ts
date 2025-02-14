@@ -6,7 +6,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixEvent, EventType, M_POLL_START, MatrixClient, EventTimeline, Room } from "matrix-js-sdk/src/matrix";
+import {
+    type MatrixEvent,
+    EventType,
+    M_POLL_START,
+    type MatrixClient,
+    EventTimeline,
+    type Room,
+    type EmptyObject,
+} from "matrix-js-sdk/src/matrix";
 
 import { isContentActionable } from "./EventUtils";
 import { ReadPinsEventId } from "../components/views/right_panel/types";
@@ -123,7 +131,7 @@ export default class PinningUtils {
                 ?.getStateEvents(EventType.RoomPinnedEvents, "")
                 ?.getContent().pinned || [];
 
-        let roomAccountDataPromise: Promise<{} | void> = Promise.resolve();
+        let roomAccountDataPromise: Promise<EmptyObject | void> = Promise.resolve();
         // If the event is already pinned, unpin it
         if (pinnedIds.includes(eventId)) {
             pinnedIds.splice(pinnedIds.indexOf(eventId), 1);

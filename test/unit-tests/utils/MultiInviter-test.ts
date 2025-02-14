@@ -7,15 +7,15 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked } from "jest-mock";
-import { EventType, MatrixClient, MatrixError, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { EventType, type MatrixClient, MatrixError, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
-import Modal, { ComponentType, ComponentProps } from "../../../src/Modal";
+import Modal, { type ComponentType, type ComponentProps } from "../../../src/Modal";
 import SettingsStore from "../../../src/settings/SettingsStore";
-import MultiInviter, { CompletionStates } from "../../../src/utils/MultiInviter";
+import MultiInviter, { type CompletionStates } from "../../../src/utils/MultiInviter";
 import * as TestUtilsMatrix from "../../test-utils";
-import AskInviteAnywayDialog from "../../../src/components/views/dialogs/AskInviteAnywayDialog";
+import type AskInviteAnywayDialog from "../../../src/components/views/dialogs/AskInviteAnywayDialog";
 import ConfirmUserActionDialog from "../../../src/components/views/dialogs/ConfirmUserActionDialog";
 
 const ROOMID = "!room:server";

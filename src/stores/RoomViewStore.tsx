@@ -8,18 +8,21 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import * as utils from "matrix-js-sdk/src/utils";
-import { MatrixError, JoinRule, Room, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { MatrixError, JoinRule, type Room, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
-import { ViewRoom as ViewRoomEvent } from "@matrix-org/analytics-events/types/typescript/ViewRoom";
-import { JoinedRoom as JoinedRoomEvent } from "@matrix-org/analytics-events/types/typescript/JoinedRoom";
-import { Optional } from "matrix-events-sdk";
+import { type ViewRoom as ViewRoomEvent } from "@matrix-org/analytics-events/types/typescript/ViewRoom";
+import { type JoinedRoom as JoinedRoomEvent } from "@matrix-org/analytics-events/types/typescript/JoinedRoom";
+import { type Optional } from "matrix-events-sdk";
 import EventEmitter from "events";
-import { RoomViewLifecycle, ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
+import {
+    RoomViewLifecycle,
+    type ViewRoomOpts,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 
-import { MatrixDispatcher } from "../dispatcher/dispatcher";
+import { type MatrixDispatcher } from "../dispatcher/dispatcher";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import Modal from "../Modal";
 import { _t } from "../languageHandler";
@@ -27,24 +30,24 @@ import { getCachedRoomIDForAlias, storeRoomAliasInCache } from "../RoomAliasCach
 import { Action } from "../dispatcher/actions";
 import { retry } from "../utils/promise";
 import { TimelineRenderingType } from "../contexts/RoomContext";
-import { ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
 import DMRoomMap from "../utils/DMRoomMap";
 import { isMetaSpace, MetaSpace } from "./spaces";
-import { JoinRoomPayload } from "../dispatcher/payloads/JoinRoomPayload";
-import { JoinRoomReadyPayload } from "../dispatcher/payloads/JoinRoomReadyPayload";
-import { JoinRoomErrorPayload } from "../dispatcher/payloads/JoinRoomErrorPayload";
-import { ViewRoomErrorPayload } from "../dispatcher/payloads/ViewRoomErrorPayload";
+import { type JoinRoomPayload } from "../dispatcher/payloads/JoinRoomPayload";
+import { type JoinRoomReadyPayload } from "../dispatcher/payloads/JoinRoomReadyPayload";
+import { type JoinRoomErrorPayload } from "../dispatcher/payloads/JoinRoomErrorPayload";
+import { type ViewRoomErrorPayload } from "../dispatcher/payloads/ViewRoomErrorPayload";
 import ErrorDialog from "../components/views/dialogs/ErrorDialog";
-import { ActiveRoomChangedPayload } from "../dispatcher/payloads/ActiveRoomChangedPayload";
+import { type ActiveRoomChangedPayload } from "../dispatcher/payloads/ActiveRoomChangedPayload";
 import SettingsStore from "../settings/SettingsStore";
 import { awaitRoomDownSync } from "../utils/RoomUpgrade";
 import { UPDATE_EVENT } from "./AsyncStore";
-import { SdkContextClass } from "../contexts/SDKContext";
+import { type SdkContextClass } from "../contexts/SDKContext";
 import { CallStore } from "./CallStore";
-import { ThreadPayload } from "../dispatcher/payloads/ThreadPayload";
-import { ActionPayload } from "../dispatcher/payloads";
-import { CancelAskToJoinPayload } from "../dispatcher/payloads/CancelAskToJoinPayload";
-import { SubmitAskToJoinPayload } from "../dispatcher/payloads/SubmitAskToJoinPayload";
+import { type ThreadPayload } from "../dispatcher/payloads/ThreadPayload";
+import { type ActionPayload } from "../dispatcher/payloads";
+import { type CancelAskToJoinPayload } from "../dispatcher/payloads/CancelAskToJoinPayload";
+import { type SubmitAskToJoinPayload } from "../dispatcher/payloads/SubmitAskToJoinPayload";
 import { ModuleRunner } from "../modules/ModuleRunner";
 import { setMarkedUnreadState } from "../utils/notifications";
 

@@ -547,7 +547,6 @@
         "saved": "Sauvegardé",
         "saving": "Enregistrement…",
         "secure_backup": "Sauvegarde sécurisée",
-        "security": "Sécurité",
         "select_all": "Tout sélectionner",
         "server": "Serveur",
         "settings": "Paramètres",
@@ -566,7 +565,6 @@
         "thread": "Discussion",
         "threads": "Fils de discussion",
         "timeline": "Fil de discussion",
-        "trusted": "Fiable",
         "unavailable": "indisponible",
         "unencrypted": "Non chiffré",
         "unmute": "Activer le son",
@@ -901,7 +899,7 @@
             "warning": "Si vous n’avez pas activé de nouvelle méthode de récupération, un attaquant essaye peut-être d’accéder à votre compte. Changez immédiatement le mot de passe de votre compte et configurez une nouvelle méthode de récupération dans les paramètres."
         },
         "not_supported": "<non pris en charge>",
-        "pinned_identity_changed": "L'identité de %(displayName)s (<b>%(userId)s</b>) semble avoir changé. <a>En savoir plus</a>",
+        "pinned_identity_changed": "L'identité de %(displayName)s(<b>%(userId)s</b>) semble avoir changé. <a>En savoir plus </a>",
         "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>semble avoir changé d'identité. <a>En savoir plus</a>",
         "recovery_method_removed": {
             "description_1": "Cette session a détecté que votre phrase secrète et clé de sécurité pour les messages sécurisés ont été supprimées.",
@@ -910,6 +908,9 @@
             "warning": "Si vous n’avez pas supprimé la méthode de récupération, un attaquant peut être en train d’essayer d’accéder à votre compte. Modifiez le mot de passe de votre compte et configurez une nouvelle méthode de récupération dans les réglages."
         },
         "reset_all_button": "Vous avez perdu ou oublié tous vos moyens de récupération ? <a>Tout réinitialiser</a>",
+        "set_up_recovery": "Configurer la récupération",
+        "set_up_recovery_later": "Pas maintenant",
+        "set_up_recovery_toast_description": "Générez une clé de récupération qui peut être utilisée pour restaurer l'historique de vos messages chiffrés au cas où vous perdriez l'accès à vos appareils.",
         "set_up_toast_description": "Sécurité contre la perte d’accès aux messages et données chiffrées",
         "set_up_toast_title": "Configurer la sauvegarde sécurisée",
         "setup_secure_backup": {
@@ -925,7 +926,6 @@
             "title": "Non fiable"
         },
         "unable_to_setup_keys_error": "Impossible de configurer les clés",
-        "unsupported": "Ce client ne prend pas en charge le chiffrement de bout en bout.",
         "verification": {
             "accepting": "Acceptation…",
             "after_new_login": {
@@ -2764,6 +2764,7 @@
             "inactive_sessions_list_description": "Pensez à déconnecter les anciennes sessions (%(inactiveAgeDays)s jours ou plus) que vous n’utilisez plus.",
             "ip": "Adresse IP",
             "last_activity": "Dernière activité",
+            "manage": "Gérer cette session",
             "mobile_session": "Session de téléphone portable",
             "n_sessions_selected": {
                 "one": "%(count)s session sélectionnée",
@@ -3388,7 +3389,9 @@
             "sent": "%(senderName)s a invité %(targetDisplayName)s à rejoindre le salon."
         },
         "m.room.tombstone": "%(senderDisplayName)s a mis à niveau ce salon.",
-        "m.room.topic": "%(senderDisplayName)s a changé le sujet du salon en « %(topic)s ».",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s a changé le sujet du salon en « %(topic)s »."
+        },
         "m.sticker": "%(senderDisplayName)s a envoyé un autocollant.",
         "m.video": {
             "error_decrypting": "Erreur lors du déchiffrement de la vidéo"
@@ -3627,7 +3630,7 @@
     },
     "unsupported_browser": {
         "description": "Si vous continuez, certaines fonctionnalités risquent de cesser de fonctionner et vous risquez de perdre des données à l'avenir. Mettez à jour votre navigateur pour continuer à utiliser%(brand)s .",
-        "title": "%(brand)sne prend pas en charge ce navigateur"
+        "title": "%(brand)s ne prend pas en charge ce navigateur"
     },
     "unsupported_server_description": "Ce serveur utilise une ancienne version de Matrix. Mettez-le à jour vers Matrix %(version)s pour utiliser %(brand)s sans erreurs.",
     "unsupported_server_title": "Votre serveur n’est pas pris en charge",
@@ -3677,18 +3680,9 @@
         "ban_room_confirm_title": "Bannir de %(roomName)s",
         "ban_space_everything": "Les bannir de partout où j’ai le droit de le faire",
         "ban_space_specific": "Les bannir de certains endroits où j’ai le droit de le faire",
-        "count_of_sessions": {
-            "one": "%(count)s session",
-            "other": "%(count)s sessions"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s sessions vérifiées",
-            "one": "1 session vérifiée"
-        },
         "deactivate_confirm_action": "Désactiver l’utilisateur",
         "deactivate_confirm_description": "Désactiver cet utilisateur le déconnectera et l’empêchera de se reconnecter. De plus, il quittera tous les salons qu’il a rejoints. Cette action ne peut pas être annulée. Voulez-vous vraiment désactiver cet utilisateur ?",
         "deactivate_confirm_title": "Désactiver l’utilisateur ?",
-        "dehydrated_device_enabled": "Appareil hors ligne activé",
         "demote_button": "Rétrograder",
         "demote_self_confirm_description_space": "Vous ne pourrez pas annuler ce changement puisque vous vous rétrogradez. Si vous êtes le dernier utilisateur a privilèges de cet espace, il deviendra impossible d’en reprendre contrôle.",
         "demote_self_confirm_room": "Vous ne pourrez pas annuler cette modification car vous vous rétrogradez. Si vous êtes le dernier utilisateur privilégié de ce salon, il sera impossible de récupérer les privilèges.",
@@ -3696,17 +3690,14 @@
         "disinvite_button_room": "Désinviter du salon",
         "disinvite_button_room_name": "Annuler l’invitation à %(roomName)s",
         "disinvite_button_space": "Désinviter de l’espace",
-        "edit_own_devices": "Modifier les appareils",
         "error_ban_user": "Échec du bannissement de l’utilisateur",
         "error_deactivate": "Échec de la désactivation de l’utilisateur",
         "error_kicking_user": "Échec de l’expulsion de l’utilisateur",
         "error_mute_user": "Échec de la mise en sourdine de l’utilisateur",
         "error_revoke_3pid_invite_description": "Impossible de révoquer l’invitation. Le serveur subit peut-être un problème temporaire ou vous n’avez pas la permission de révoquer l’invitation.",
         "error_revoke_3pid_invite_title": "Échec de la révocation de l’invitation",
-        "hide_sessions": "Masquer les sessions",
-        "hide_verified_sessions": "Masquer les sessions vérifiées",
         "ignore_button": "Ignorer",
-        "ignore_confirm_description": "Tous les messages et invitations de cette utilisateur seront cachés. Êtes-vous sûr de vouloir les ignorer ?",
+        "ignore_confirm_description": "Tous les messages et invitations de cet utilisateur seront masqués. Êtes-vous sûr de vouloir les ignorer ?",
         "ignore_confirm_title": "Ignorer %(user)s",
         "invited_by": "Invité par %(sender)s",
         "jump_to_rr_button": "Aller à l’accusé de lecture",

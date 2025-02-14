@@ -10,7 +10,7 @@ import React from "react";
 
 import MAudioBody from "./MAudioBody";
 import MVoiceMessageBody from "./MVoiceMessageBody";
-import { IBodyProps } from "./IBodyProps";
+import { type IBodyProps } from "./IBodyProps";
 import { isVoiceMessage } from "../../../utils/EventUtils";
 
 export default class MVoiceOrAudioBody extends React.PureComponent<IBodyProps> {

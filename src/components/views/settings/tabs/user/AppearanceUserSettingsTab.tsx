@@ -7,7 +7,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent, ReactNode } from "react";
+import React, { type ChangeEvent, type ReactNode } from "react";
+import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../../languageHandler";
 import SdkConfig from "../../../../../SdkConfig";
@@ -25,8 +26,6 @@ import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { SettingsSubsection } from "../../shared/SettingsSubsection";
 
-interface IProps {}
-
 interface IState {
     useBundledEmojiFont: boolean;
     useSystemFont: boolean;
@@ -34,8 +33,8 @@ interface IState {
     showAdvanced: boolean;
 }
 
-export default class AppearanceUserSettingsTab extends React.Component<IProps, IState> {
-    public constructor(props: IProps) {
+export default class AppearanceUserSettingsTab extends React.Component<EmptyObject, IState> {
+    public constructor(props: EmptyObject) {
         super(props);
 
         this.state = {

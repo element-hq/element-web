@@ -6,12 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { KeyboardEvent } from "react";
-
-import { Part, CommandPartCreator, PartCreator } from "./parts";
-import DocumentPosition from "./position";
-import { ICompletion, ISelectionRange } from "../autocomplete/Autocompleter";
-import Autocomplete from "../components/views/rooms/Autocomplete";
+import type React from "react";
+import { type Part, type CommandPartCreator, type PartCreator } from "./parts";
+import type DocumentPosition from "./position";
+import { type ICompletion, type ISelectionRange } from "../autocomplete/Autocompleter";
+import type Autocomplete from "../components/views/rooms/Autocomplete";
 
 export interface ICallback {
     replaceParts?: Part[];
@@ -33,7 +32,7 @@ export default class AutocompleteWrapperModel {
         private partCreator: PartCreator | CommandPartCreator,
     ) {}
 
-    public onEscape(e: KeyboardEvent): void {
+    public onEscape(e: KeyboardEvent | React.KeyboardEvent): void {
         this.getAutocompleterComponent()?.onEscape(e);
     }
 

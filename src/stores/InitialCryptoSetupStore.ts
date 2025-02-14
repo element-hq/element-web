@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import EventEmitter from "events";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { useEffect, useState } from "react";
 

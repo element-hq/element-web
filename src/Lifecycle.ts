@@ -9,13 +9,19 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ReactNode } from "react";
-import { createClient, MatrixClient, SSOAction, OidcTokenRefresher, decodeBase64 } from "matrix-js-sdk/src/matrix";
-import { AESEncryptedSecretStoragePayload } from "matrix-js-sdk/src/types";
-import { QueryDict } from "matrix-js-sdk/src/utils";
+import { type ReactNode } from "react";
+import {
+    createClient,
+    type MatrixClient,
+    SSOAction,
+    type OidcTokenRefresher,
+    decodeBase64,
+} from "matrix-js-sdk/src/matrix";
+import { type AESEncryptedSecretStoragePayload } from "matrix-js-sdk/src/types";
+import { type QueryDict } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { IMatrixClientCreds, MatrixClientPeg, MatrixClientPegAssignOpts } from "./MatrixClientPeg";
+import { type IMatrixClientCreds, MatrixClientPeg, type MatrixClientPegAssignOpts } from "./MatrixClientPeg";
 import { ModuleRunner } from "./modules/ModuleRunner";
 import EventIndexPeg from "./indexing/EventIndexPeg";
 import createMatrixClient from "./utils/createMatrixClient";
@@ -50,12 +56,12 @@ import { setSentryUser } from "./sentry";
 import SdkConfig from "./SdkConfig";
 import { DialogOpener } from "./utils/DialogOpener";
 import { Action } from "./dispatcher/actions";
-import { OverwriteLoginPayload } from "./dispatcher/payloads/OverwriteLoginPayload";
+import { type OverwriteLoginPayload } from "./dispatcher/payloads/OverwriteLoginPayload";
 import { SdkContextClass } from "./contexts/SDKContext";
 import { messageForLoginError } from "./utils/ErrorUtils";
 import { completeOidcLogin } from "./utils/oidc/authorize";
 import { getOidcErrorMessage } from "./utils/oidc/error";
-import { OidcClientStore } from "./stores/oidc/OidcClientStore";
+import { type OidcClientStore } from "./stores/oidc/OidcClientStore";
 import {
     getStoredOidcClientId,
     getStoredOidcIdTokenClaims,

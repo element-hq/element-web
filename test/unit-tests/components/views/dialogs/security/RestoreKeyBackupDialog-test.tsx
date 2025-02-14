@@ -8,8 +8,8 @@
 import React from "react";
 import { screen, render, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
-import { KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 // Needed to be able to mock decodeRecoveryKey
 // eslint-disable-next-line no-restricted-imports
 import * as recoveryKeyModule from "matrix-js-sdk/src/crypto-api/recovery-key";
@@ -32,7 +32,7 @@ describe("<RestoreKeyBackupDialog />", () => {
 
     it("should render", async () => {
         const { asFragment } = render(<RestoreKeyBackupDialog onFinished={jest.fn()} />);
-        await waitFor(() => expect(screen.getByText("Enter Security Key")).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText("Enter Recovery Key")).toBeInTheDocument());
         expect(asFragment()).toMatchSnapshot();
     });
 
@@ -41,19 +41,19 @@ describe("<RestoreKeyBackupDialog />", () => {
             throw new Error("Invalid recovery key");
         });
         const { asFragment } = render(<RestoreKeyBackupDialog onFinished={jest.fn()} />);
-        await waitFor(() => expect(screen.getByText("Enter Security Key")).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText("Enter Recovery Key")).toBeInTheDocument());
 
         await userEvent.type(screen.getByRole("textbox"), "invalid key");
-        await waitFor(() => expect(screen.getByText("👎 Not a valid Security Key")).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText("👎 Not a valid Recovery Key")).toBeInTheDocument());
         expect(asFragment()).toMatchSnapshot();
     });
 
     it("should not raise an error when recovery is valid", async () => {
         const { asFragment } = render(<RestoreKeyBackupDialog onFinished={jest.fn()} />);
-        await waitFor(() => expect(screen.getByText("Enter Security Key")).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText("Enter Recovery Key")).toBeInTheDocument());
 
         await userEvent.type(screen.getByRole("textbox"), "valid key");
-        await waitFor(() => expect(screen.getByText("👍 This looks like a valid Security Key!")).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText("👍 This looks like a valid Recovery Key!")).toBeInTheDocument());
         expect(asFragment()).toMatchSnapshot();
     });
 
@@ -79,7 +79,7 @@ describe("<RestoreKeyBackupDialog />", () => {
         expect(asFragment()).toMatchSnapshot();
     });
 
-    it("should restore key backup when security key is filled by user", async () => {
+    it("should restore key backup when Recovery key is filled by user", async () => {
         jest.spyOn(matrixClient.getCrypto()!, "restoreKeyBackup")
             // Reject when trying to restore from cache
             .mockRejectedValueOnce(new Error("key backup not found"))
@@ -87,9 +87,9 @@ describe("<RestoreKeyBackupDialog />", () => {
             .mockResolvedValue(keyBackupRestoreResult);
 
         const { asFragment } = render(<RestoreKeyBackupDialog onFinished={jest.fn()} />);
-        await waitFor(() => expect(screen.getByText("Enter Security Key")).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText("Enter Recovery Key")).toBeInTheDocument());
 
-        await userEvent.type(screen.getByRole("textbox"), "my security key");
+        await userEvent.type(screen.getByRole("textbox"), "my recovery key");
         await userEvent.click(screen.getByRole("button", { name: "Next" }));
 
         await waitFor(() => expect(screen.getByText("Successfully restored 1 keys")).toBeInTheDocument());

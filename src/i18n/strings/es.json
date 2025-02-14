@@ -482,7 +482,6 @@
         "rooms": "Salas",
         "saving": "Guardando…",
         "secure_backup": "Copia de seguridad segura",
-        "security": "Seguridad",
         "select_all": "Seleccionar todo",
         "server": "Servidor",
         "settings": "Ajustes",
@@ -501,7 +500,6 @@
         "thread": "Hilo",
         "threads": "Hilos",
         "timeline": "Línea de tiempo",
-        "trusted": "De confianza",
         "unavailable": "no disponible",
         "unencrypted": "Sin cifrar",
         "unmute": "Dejar de silenciar",
@@ -827,7 +825,6 @@
             "title": "No es de confianza"
         },
         "unable_to_setup_keys_error": "No se han podido configurar las claves",
-        "unsupported": "Este cliente no es compatible con el cifrado de extremo a extremo.",
         "verification": {
             "accepting": "Aceptando…",
             "after_new_login": {
@@ -2950,7 +2947,9 @@
             "sent": "%(senderName)s invitó a %(targetDisplayName)s a unirse a la sala."
         },
         "m.room.tombstone": "%(senderDisplayName)s actualizó esta sala.",
-        "m.room.topic": "%(senderDisplayName)s cambió el asunto a «%(topic)s».",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s cambió el asunto a «%(topic)s»."
+        },
         "m.sticker": "%(senderDisplayName)s envió una pegatina.",
         "m.video": {
             "error_decrypting": "Error al descifrar el vídeo"
@@ -3213,14 +3212,6 @@
         "ban_room_confirm_title": "Vetar de %(roomName)s",
         "ban_space_everything": "Vetar de todos los sitios donde tenga los permisos suficientes",
         "ban_space_specific": "Vetar de algunos sitios donde tenga los permisos suficientes",
-        "count_of_sessions": {
-            "other": "%(count)s sesiones",
-            "one": "%(count)s sesión"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s sesiones verificadas",
-            "one": "1 sesión verificada"
-        },
         "deactivate_confirm_action": "Desactivar usuario",
         "deactivate_confirm_description": "Desactivar este usuario le cerrará la sesión y desconectará. No podrá volver a iniciar sesión. Además, saldrá de todas las salas a que se había unido. Esta acción no puede deshacerse. ¿Desactivar este usuario?",
         "deactivate_confirm_title": "¿Desactivar usuario?",
@@ -3231,15 +3222,12 @@
         "disinvite_button_room": "Retirar la invitación a la sala",
         "disinvite_button_room_name": "Anular la invitación a %(roomName)s",
         "disinvite_button_space": "Retirar la invitación al espacio",
-        "edit_own_devices": "Gestionar dispositivos",
         "error_ban_user": "Bloqueo del usuario falló",
         "error_deactivate": "Error en desactivar usuario",
         "error_kicking_user": "No se ha podido sacar al usuario",
         "error_mute_user": "No se pudo silenciar al usuario",
         "error_revoke_3pid_invite_description": "No se logró revocar la invitación. El servidor puede sufrir un problema temporal o usted no tiene los permisos suficientes para revocar la invitación.",
         "error_revoke_3pid_invite_title": "Error al revocar la invitación",
-        "hide_sessions": "Ocultar sesiones",
-        "hide_verified_sessions": "Ocultar sesiones verificadas",
         "ignore_confirm_title": "Ignorar a %(user)s",
         "invited_by": "Invitado por %(sender)s",
         "jump_to_rr_button": "Saltar al último mensaje sin leer",

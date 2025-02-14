@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import isIp from "is-ip";
 import * as utils from "matrix-js-sdk/src/utils";
-import { Room, MatrixClient, RoomStateEvent, EventType } from "matrix-js-sdk/src/matrix";
+import { type Room, type MatrixClient, RoomStateEvent, EventType } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -16,7 +16,8 @@ import MatrixToPermalinkConstructor, {
     baseUrl as matrixtoBaseUrl,
     baseUrlPattern as matrixToBaseUrlPattern,
 } from "./MatrixToPermalinkConstructor";
-import PermalinkConstructor, { PermalinkParts } from "./PermalinkConstructor";
+import { type PermalinkParts } from "./PermalinkConstructor";
+import type PermalinkConstructor from "./PermalinkConstructor";
 import ElementPermalinkConstructor from "./ElementPermalinkConstructor";
 import SdkConfig from "../../SdkConfig";
 import { ELEMENT_URL_PATTERN } from "../../linkify-matrix";

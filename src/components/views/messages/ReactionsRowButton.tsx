@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import classNames from "classnames";
-import { EventType, MatrixEvent, RelationType } from "matrix-js-sdk/src/matrix";
+import { EventType, type MatrixEvent, RelationType } from "matrix-js-sdk/src/matrix";
 
 import { mediaFromMxc } from "../../../customisations/Media";
 import { _t } from "../../../languageHandler";

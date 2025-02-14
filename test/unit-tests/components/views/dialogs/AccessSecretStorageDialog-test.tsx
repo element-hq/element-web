@@ -6,15 +6,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ComponentProps } from "react";
-import { SecretStorage, MatrixClient } from "matrix-js-sdk/src/matrix";
+import React, { type ComponentProps } from "react";
+import { type SecretStorage, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { act, fireEvent, render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
 import { mockPlatformPeg, stubClient } from "../../../../test-utils";
 import AccessSecretStorageDialog from "../../../../../src/components/views/dialogs/security/AccessSecretStorageDialog";
 
-const securityKey = "EsTc WKmb ivvk jLS7 Y1NH 5CcQ mP1E JJwj B3Fd pFWm t4Dp dbyu";
+const recoveryKey = "EsTc WKmb ivvk jLS7 Y1NH 5CcQ mP1E JJwj B3Fd pFWm t4Dp dbyu";
 
 describe("AccessSecretStorageDialog", () => {
     let mockClient: MatrixClient;
@@ -29,11 +29,11 @@ describe("AccessSecretStorageDialog", () => {
         render(<AccessSecretStorageDialog {...defaultProps} {...props} />);
     };
 
-    const enterSecurityKey = (placeholder = "Security Key"): void => {
+    const enterRecoveryKey = (placeholder = "Recovery Key"): void => {
         act(() => {
             fireEvent.change(screen.getByPlaceholderText(placeholder), {
                 target: {
-                    value: securityKey,
+                    value: recoveryKey,
                 },
             });
             // wait for debounce
@@ -67,17 +67,17 @@ describe("AccessSecretStorageDialog", () => {
         renderComponent({ onFinished, checkPrivateKey });
 
         // check that the input field is focused
-        expect(screen.getByPlaceholderText("Security Key")).toHaveFocus();
+        expect(screen.getByPlaceholderText("Recovery Key")).toHaveFocus();
 
-        await enterSecurityKey();
+        await enterRecoveryKey();
         await submitDialog();
 
         expect(screen.getByText("Looks good!")).toBeInTheDocument();
-        expect(checkPrivateKey).toHaveBeenCalledWith({ recoveryKey: securityKey });
-        expect(onFinished).toHaveBeenCalledWith({ recoveryKey: securityKey });
+        expect(checkPrivateKey).toHaveBeenCalledWith({ recoveryKey });
+        expect(onFinished).toHaveBeenCalledWith({ recoveryKey });
     });
 
-    it("Notifies the user if they input an invalid Security Key", async () => {
+    it("Notifies the user if they input an invalid Recovery Key", async () => {
         const onFinished = jest.fn();
         const checkPrivateKey = jest.fn().mockResolvedValue(true);
         renderComponent({ onFinished, checkPrivateKey });
@@ -86,11 +86,11 @@ describe("AccessSecretStorageDialog", () => {
             throw new Error("invalid key");
         });
 
-        await enterSecurityKey();
+        await enterRecoveryKey();
         await submitDialog();
 
         expect(screen.getByText("Continue")).toBeDisabled();
-        expect(screen.getByText("Invalid Security Key")).toBeInTheDocument();
+        expect(screen.getByText("Invalid Recovery Key")).toBeInTheDocument();
     });
 
     it("Notifies the user if they input an invalid passphrase", async function () {
@@ -110,8 +110,8 @@ describe("AccessSecretStorageDialog", () => {
         const checkPrivateKey = jest.fn().mockResolvedValue(false);
         renderComponent({ checkPrivateKey, keyInfo });
 
-        await enterSecurityKey("Security Phrase");
-        expect(screen.getByPlaceholderText("Security Phrase")).toHaveValue(securityKey);
+        await enterRecoveryKey("Security Phrase");
+        expect(screen.getByPlaceholderText("Security Phrase")).toHaveValue(recoveryKey);
         await submitDialog();
 
         await expect(
@@ -141,11 +141,11 @@ describe("AccessSecretStorageDialog", () => {
         document.execCommand = jest.fn().mockReturnValue(true);
         jest.spyOn(mockClient.getCrypto()!, "createRecoveryKeyFromPassphrase").mockResolvedValue({
             privateKey: new Uint8Array(),
-            encodedPrivateKey: securityKey,
+            encodedPrivateKey: recoveryKey,
         });
         screen.getByRole("button", { name: "Continue" }).click();
 
-        await screen.findByText(/Save your Security Key/);
+        await screen.findByText(/Save your Recovery Key/);
         screen.getByRole("button", { name: "Copy" }).click();
         await screen.findByText("Copied!");
         screen.getByRole("button", { name: "Continue" }).click();

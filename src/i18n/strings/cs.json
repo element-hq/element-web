@@ -110,6 +110,7 @@
         "save": "Uložit",
         "search": "Hledání",
         "send_report": "Nahlásit",
+        "set_avatar": "Nastavit profilový obrázek",
         "share": "Sdílet",
         "show": "Zobrazit",
         "show_advanced": "Zobrazit pokročilé možnosti",
@@ -133,6 +134,7 @@
         "update": "Aktualizovat",
         "upgrade": "Aktualizovat",
         "upload": "Nahrát",
+        "upload_file": "Nahrát soubor",
         "verify": "Ověřit",
         "view": "Zobrazit",
         "view_all": "Zobrazit všechny",
@@ -227,6 +229,7 @@
         },
         "misconfigured_body": "Požádejte správce vašeho %(brand)su, aby zkontroloval <a>vaši konfiguraci</a>. Pravděpodobně obsahuje chyby nebo duplicity.",
         "misconfigured_title": "%(brand)s je špatně nakonfigurován",
+        "mobile_create_account_title": "Chystáte se vytvořit účet na%(hsName)s",
         "msisdn_field_description": "Ostatní uživatelé vás můžou pozvat do místností podle kontaktních údajů",
         "msisdn_field_label": "Telefon",
         "msisdn_field_number_invalid": "Toto telefonní číslo nevypadá úplně správně, zkontrolujte ho a zkuste to znovu",
@@ -244,12 +247,40 @@
         "phone_label": "Telefon",
         "phone_optional_label": "Telefonní číslo (nepovinné)",
         "qr_code_login": {
+            "check_code_explainer": "Tím ověříte, zda je připojení k druhému zařízení bezpečné.",
+            "check_code_heading": "Zadejte číslo zobrazené na druhém zařízení",
+            "check_code_input_label": "2místný kód",
+            "check_code_mismatch": "Čísla se neshodují",
             "completing_setup": "Dokončování nastavení nového zařízení",
+            "error_etag_missing": "Došlo k neočekávané chybě. Příčinou může být rozšíření prohlížeče, proxy server nebo chybná konfigurace serveru.",
+            "error_expired": "Přihlášení vypršelo. Zkuste to prosím znovu.",
+            "error_expired_title": "Přihlášení nebylo dokončeno včas",
+            "error_insecure_channel_detected": "K novému zařízení se nepodařilo navázat bezpečné připojení. Vaše stávající zařízení jsou stále v bezpečí a nemusíte se o ně obávat.",
+            "error_insecure_channel_detected_instructions": "Co teď?",
+            "error_insecure_channel_detected_instructions_1": "Zkuste se znovu přihlásit k druhému zařízení pomocí kódu QR pro případ, že by se jednalo o problém se sítí.",
+            "error_insecure_channel_detected_instructions_2": "Pokud se setkáte se stejným problémem, zkuste použít jinou síť wifi nebo místo wifi použijte mobilní data.",
+            "error_insecure_channel_detected_instructions_3": "Pokud to nefunguje, přihlaste se ručně",
+            "error_insecure_channel_detected_title": "Připojení není zabezpečené",
+            "error_other_device_already_signed_in": "Nemusíte dělat nic jiného.",
+            "error_other_device_already_signed_in_title": "Vaše druhé zařízení je již přihlášeno",
             "error_rate_limited": "Příliš mnoho pokusů v krátkém čase. Počkejte chvíli, než to zkusíte znovu.",
-            "error_unexpected": "Došlo k neočekávané chybě.",
-            "scan_code_instruction": "Níže uvedený QR kód naskenujte pomocí přihlašovaného zařízení.",
-            "scan_qr_code": "Skenovat QR kód",
-            "select_qr_code": "Vybrat '%(scanQRCode)s'",
+            "error_unexpected": "Vyskytla se neočekávaná chyba. Požadavek na připojení vašeho druhého zařízení byl zrušen.",
+            "error_unsupported_protocol": "Toto zařízení nepodporuje přihlášení k jinému zařízení pomocí kódu QR.",
+            "error_unsupported_protocol_title": "Jiné zařízení není kompatibilní",
+            "error_user_cancelled": "Přihlášení na druhém zařízení bylo zrušeno.",
+            "error_user_cancelled_title": "Žádost o přihlášení byla zrušena",
+            "error_user_declined": "Vy nebo poskytovatel účtu jste odmítli žádost o přihlášení.",
+            "error_user_declined_title": "Přihlášení bylo odmítnuto",
+            "follow_remaining_instructions": "Postupujte podle zbývajících pokynů",
+            "open_element_other_device": "Otevřete %(brand)s na druhém zařízení",
+            "point_the_camera": "Naskenujte zde zobrazený QR kód",
+            "scan_code_instruction": "Naskenujte QR kód jiným zařízením",
+            "scan_qr_code": "Přihlaste se pomocí QR kódu",
+            "security_code": "Bezpečnostní kód",
+            "security_code_prompt": "Pokud budete vyzváni, zadejte na druhém zařízení níže uvedený kód.",
+            "select_qr_code": "Vyberte \"%(scanQRCode)s\"",
+            "unsupported_explainer": "Váš poskytovatel účtu nepodporuje přihlášení do nového zařízení pomocí QR kódu.",
+            "unsupported_heading": "QR kód není podporován",
             "waiting_for_device": "Čekání na přihlášení zařízení"
         },
         "register_action": "Vytvořit účet",
@@ -338,6 +369,8 @@
             "email_resend_prompt": "Nedostali jste ho? <a>Poslat znovu</a>",
             "email_resent": "Přeposláno!",
             "fallback_button": "Zahájit autentizaci",
+            "mas_cross_signing_reset_cta": "Přejděte na svůj účet",
+            "mas_cross_signing_reset_description": "Resetujte svou identitu prostřednictvím svého poskytovatele účtu a poté se vraťte a klikněte na \"Opakovat\".",
             "msisdn": "Na číslo %(msisdn)s byla odeslána textová zpráva",
             "msisdn_token_incorrect": "Neplatný token",
             "msisdn_token_prompt": "Prosím zadejte kód z této zprávy:",
@@ -427,6 +460,7 @@
         "beta": "Beta",
         "camera": "Kamera",
         "cameras": "Kamery",
+        "cancel": "Zrušit",
         "capabilities": "Schopnosti",
         "copied": "Zkopírováno!",
         "credits": "Poděkování",
@@ -467,6 +501,7 @@
         "matrix": "Matrix",
         "message": "Zpráva",
         "message_layout": "Zobrazení zpráv",
+        "message_timestamp_invalid": "Neplatné časové razítko",
         "microphone": "Mikrofon",
         "model": "Model",
         "modern": "Moderní",
@@ -504,13 +539,15 @@
         "qr_code": "QR kód",
         "random": "Náhodný",
         "reactions": "Reakce",
+        "recommended": "Doporučeno",
         "report_a_bug": "Nahlásit chybu",
         "room": "Místnost",
         "room_name": "Název místnosti",
         "rooms": "Místnosti",
+        "save": "Uložit",
+        "saved": "Uloženo",
         "saving": "Ukládání…",
         "secure_backup": "Zabezpečená záloha",
-        "security": "Zabezpečení",
         "select_all": "Vybrat všechny",
         "server": "Server",
         "settings": "Nastavení",
@@ -529,13 +566,13 @@
         "thread": "Vlákno",
         "threads": "Vlákna",
         "timeline": "Časová osa",
-        "trusted": "Důvěryhodné",
         "unavailable": "nedostupný",
         "unencrypted": "Nezašifrované",
         "unmute": "Povolit",
         "unnamed_room": "Nepojmenovaná místnost",
         "unnamed_space": "Nejmenovaný prostor",
         "unverified": "Neověřeno",
+        "updating": "Aktualizace...",
         "user": "Uživatel",
         "user_avatar": "Profilový obrázek",
         "username": "Uživatelské jméno",
@@ -688,12 +725,51 @@
         "twemoji": "<twemoji>Twemoji</twemoji> emoji grafika je © <author>Twitter, Inc a další přispěvatelé</author> používána za podmínek <terms>CC-BY 4.0</terms>.",
         "twemoji_colr": "Písmo <colr>twemoji-colr</colr> je © <author>Mozilla Foundation</author> používané za podmínek <terms>Apache 2.0</terms>."
     },
+    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "devtools": {
         "active_widgets": "Aktivní widgety",
         "category_other": "Další možnosti",
         "category_room": "Místnost",
         "caution_colon": "Pozor:",
         "client_versions": "Verze klienta",
+        "crypto": {
+            "4s_public_key_in_account_data": "v datech účtu",
+            "4s_public_key_not_in_account_data": "nenalezeno",
+            "4s_public_key_status": "Veřejný klíč bezpečného úložiště:",
+            "backup_key_cached": "uložen lokálně",
+            "backup_key_cached_status": "Klíč zálohy v mezipaměti:",
+            "backup_key_not_stored": "není uložen",
+            "backup_key_stored": "v bezpečném úložišti",
+            "backup_key_stored_status": "Klíč zálohy uložen:",
+            "backup_key_unexpected_type": "neočekávaný typ",
+            "backup_key_well_formed": "ve správném tvaru",
+            "cross_signing": "Křížové podepisování",
+            "cross_signing_cached": "uložen lokálně",
+            "cross_signing_not_ready": "Křížové podepisování není nastaveno.",
+            "cross_signing_private_keys_in_storage": "v bezpečném úložišti",
+            "cross_signing_private_keys_in_storage_status": "Soukromé klíče pro křížový podpis:",
+            "cross_signing_private_keys_not_in_storage": "nebylo nalezeno v úložišti",
+            "cross_signing_public_keys_on_device": "v paměti",
+            "cross_signing_public_keys_on_device_status": "Veřejné klíče pro křížový podpis:",
+            "cross_signing_ready": "Křížové podepisování je připraveno k použití.",
+            "cross_signing_status": "Stav křížového podepisování:",
+            "cross_signing_untrusted": "Váš účet má v bezpečném úložišti identitu pro křížový podpis, ale v této relaci jí zatím nevěříte.",
+            "crypto_not_available": "Kryptografický modul není k dispozici",
+            "key_backup_active_version": "Verze aktivní zálohy:",
+            "key_backup_active_version_none": "Žádné",
+            "key_backup_inactive_warning": "Vaše klíče nejsou z této relace zálohovány.",
+            "key_backup_latest_version": "Nejnovější verze zálohy na serveru:",
+            "key_storage": "Úložiště klíčů",
+            "master_private_key_cached_status": "Hlavní soukromý klíč:",
+            "not_found": "nenalezeno",
+            "not_found_locally": "nenalezen lolálně",
+            "secret_storage_not_ready": "nepřipraveno",
+            "secret_storage_ready": "připraveno",
+            "secret_storage_status": "Bezpečné úložiště:",
+            "self_signing_private_key_cached_status": "Soukromý klíč s vlastním podpisem:",
+            "title": "Koncové šifrování",
+            "user_signing_private_key_cached_status": "Podpisový soukromý klíč uživatele:"
+        },
         "developer_mode": "Vývojářský režim",
         "developer_tools": "Nástroje pro vývojáře",
         "edit_setting": "Upravit nastavení",
@@ -840,14 +916,18 @@
             "title": "Nenávratně smazat klíče pro křížové podepisování?",
             "warning": "Smazání klíčů pro křížové podepisování je definitivní. Každý, kdo vás ověřil, teď uvidí bezpečnostní varování. Pokud jste zrovna neztratili všechna zařízení, ze kterých se můžete ověřit, tak to asi nechcete udělat."
         },
+        "enter_recovery_key": "Zadejte klíč pro obnovení",
         "event_shield_reason_authenticity_not_guaranteed": "Pravost této šifrované zprávy nelze na tomto zařízení ověřit.",
         "event_shield_reason_mismatched_sender_key": "Šifrované neověřenou relací",
         "event_shield_reason_unknown_device": "Šifrováno neznámým nebo smazaným zařízením.",
         "event_shield_reason_unsigned_device": "Šifrováno zařízením, které nebylo ověřeno jeho vlastníkem.",
         "event_shield_reason_unverified_identity": "Šifrováno neověřeným uživatelem.",
         "export_unsupported": "Váš prohlížeč nepodporuje požadovaná kryptografická rozšíření",
+        "forgot_recovery_key": "Zapomněli jste klíč pro obnovení?",
         "import_invalid_keyfile": "Neplatný soubor s klíčem %(brand)s",
         "import_invalid_passphrase": "Kontrola ověření selhala: špatné heslo?",
+        "key_storage_out_of_sync": "Vaše úložiště klíčů není synchronizováno.",
+        "key_storage_out_of_sync_description": "Potvrďte klíč pro obnovení, abyste zachovali přístup k úložišti klíčů a historii zpráv.",
         "messages_not_secure": {
             "cause_1": "Váš domovský server",
             "cause_2": "Domovský server, ke kterému je ověřovaný uživatel připojen",
@@ -863,6 +943,8 @@
             "warning": "Pokud jste nenastavili nový způsob obnovy vy, mohou se pokoušet k vašemu účtu dostat útočníci. Změňte si raději ihned heslo a nastavte nový způsob obnovy v Nastavení."
         },
         "not_supported": "<nepodporováno>",
+        "pinned_identity_changed": "%(displayName)s(<b>%(userId)s</b>) se zřejmě změnil. <a>Více informací</a>",
+        "pinned_identity_changed_no_displayname": "Identita <b>%(userId)s</b> se zřejmě změnila. <a>Další informace</a>",
         "recovery_method_removed": {
             "description_1": "Tato relace zjistila, že byla odstraněna vaše bezpečnostní fráze a klíč pro zabezpečené zprávy.",
             "description_2": "Pokud se vám to stalo neúmyslně, můžete znovu nastavit zálohu zpráv pro tuto relaci. To znovu zašifruje historii zpráv novým způsobem.",
@@ -870,6 +952,9 @@
             "warning": "Pokud jste způsob obnovy neodstranili vy, mohou se pokoušet k vašemu účtu dostat útočníci. Změňte si raději ihned heslo a nastavte nový způsob obnovy v Nastavení."
         },
         "reset_all_button": "Zapomněli nebo ztratili jste všechny metody obnovy? <a>Resetovat vše</a>",
+        "set_up_recovery": "Nastavení obnovení",
+        "set_up_recovery_later": "Teď ne",
+        "set_up_recovery_toast_description": "Vygenerujte klíč pro obnovení, který lze použít k obnovení historie šifrovaných zpráv v případě, že ztratíte přístup k zařízením.",
         "set_up_toast_description": "Zabezpečení proti ztrátě přístupu k šifrovaným zprávám a datům",
         "set_up_toast_title": "Nastavení zabezpečené zálohy",
         "setup_secure_backup": {
@@ -885,7 +970,6 @@
             "title": "Nedůvěryhodné"
         },
         "unable_to_setup_keys_error": "Nepovedlo se nastavit klíče",
-        "unsupported": "Tento klient nepodporuje koncové šifrování.",
         "verification": {
             "accepting": "Přijímání…",
             "after_new_login": {
@@ -925,6 +1009,7 @@
             "qr_reciprocate_same_shield_device": "Už to skoro je! Zobrazuje vaše druhé zařízení stejný štít?",
             "qr_reciprocate_same_shield_user": "Téměř hotovo! Je relace %(displayName)s také ověřená?",
             "request_toast_accept": "Ověřit relaci",
+            "request_toast_accept_user": "Ověřit uživatele",
             "request_toast_decline_counter": "Ignorovat (%(counter)s)",
             "request_toast_detail": "%(deviceId)s z %(ip)s",
             "reset_proceed_prompt": "Pokračovat v resetování",
@@ -950,7 +1035,7 @@
             "unverified_sessions_toast_description": "Zkontrolujte, zda je váš účet v bezpečí",
             "unverified_sessions_toast_reject": "Později",
             "unverified_sessions_toast_title": "Máte neověřené relace",
-            "verification_description": "Ověřte svou identitu, abyste získali přístup k šifrovaným zprávám a prokázali svou identitu ostatním.",
+            "verification_description": "Ověřte svou identitu, abyste získali přístup k šifrovaným zprávám a prokázali svou totožnost ostatním. Pokud používáte také mobilní zařízení, před pokračováním otevřete aplikaci.",
             "verification_dialog_title_device": "Ověřit jiné zařízení",
             "verification_dialog_title_user": "Požadavek na ověření",
             "verification_skip_warning": "Bez ověření nebudete mít přístup ke všem svým zprávám a můžete se ostatním jevit jako nedůvěryhodní.",
@@ -971,8 +1056,11 @@
             "waiting_other_user": "Čekám až nás %(displayName)s ověří…"
         },
         "verification_requested_toast_title": "Žádost ověření",
+        "verified_identity_changed": "Ověřená identita %(displayName)s (<b>%(userId)s</b>) se změnila. <a>Další informace</a>",
+        "verified_identity_changed_no_displayname": "Ověřená identita uživatele <b>%(userId)s</b> se změnila. <a>Další informace</a>",
         "verify_toast_description": "Ostatní uživatelé této relaci nemusí věřit",
-        "verify_toast_title": "Ověřit tuto relaci"
+        "verify_toast_title": "Ověřit tuto relaci",
+        "withdraw_verification_action": "Zrušit ověření"
     },
     "error": {
         "admin_contact": "Pro pokračování využívání této služby prosím kontaktujte jejího <a>správce</a>.",
@@ -1056,7 +1144,15 @@
             "you": "Reagovali jste %(reaction)s na %(message)s"
         },
         "m.sticker": "%(senderName)s: %(stickerName)s",
-        "m.text": "%(senderName)s: %(message)s"
+        "m.text": "%(senderName)s: %(message)s",
+        "prefix": {
+            "audio": "Zvuk",
+            "file": "Soubor",
+            "image": "Obrázek",
+            "poll": "Anketa",
+            "video": "Video"
+        },
+        "preview": "<bold>%(prefix)s: </bold> %(preview)s"
     },
     "export_chat": {
         "cancelled": "Export zrušen",
@@ -1179,7 +1275,19 @@
         "other": "V %(spaceName)s a %(count)s ostatních prostorech."
     },
     "incompatible_browser": {
-        "title": "Nepodporovaný prohlížeč"
+        "continue": "Přesto pokračovat",
+        "description": "%(brand)s používá některé funkce prohlížeče, které nejsou k dispozici ve vašem aktuálním prohlížeči. %(detail)s",
+        "detail_can_continue": "Pokud budete pokračovat, některé funkce mohou přestat fungovat a existuje riziko, že v budoucnu můžete ztratit data.",
+        "detail_no_continue": "Zkuste tento prohlížeč aktualizovat, pokud nepoužíváte nejnovější verzi, a zkuste to znovu.",
+        "learn_more": "Zjistěte více",
+        "linux": "Linux",
+        "macos": "Mac",
+        "supported_browsers": "Pro nejlepší zážitek použijte <Chrome>Chrome</Chrome>, <Firefox>Firefox</Firefox>, <Edge>Edge</Edge> nebo <Safari>Safari</Safari>.",
+        "title": "Nepodporovaný prohlížeč",
+        "use_desktop_heading": "Místo toho použijte %(brand)s Desktop",
+        "use_mobile_heading": "Místo toho použijte %(brand)s na mobilu",
+        "use_mobile_heading_after_desktop": "Nebo použijte naši mobilní aplikaci",
+        "windows": "Windows (%(bits)s-bit)"
     },
     "info_tooltip_title": "Informace",
     "integration_manager": {
@@ -1303,12 +1411,14 @@
         "navigate_next_message_edit": "Přejít na následující zprávu, kterou chcete upravit",
         "navigate_prev_history": "Předchozí nedávno navštívená místnost nebo prostor",
         "navigate_prev_message_edit": "Přejít na předchozí zprávu, kterou chcete upravit",
+        "next_landmark": "Přejít na další orientační bod",
         "next_room": "Následující místnost nebo přímá zpráva",
         "next_unread_room": "Následující nepřečtená místnost nebo přímá zpráva",
         "number": "[číslo]",
         "open_user_settings": "Otevřít nastavení uživatele",
         "page_down": "O stránku dolů",
         "page_up": "Stránka nahoru",
+        "prev_landmark": "Přejít na předchozí orientační bod",
         "prev_room": "Předchozí místnost nebo přímá zpráva",
         "prev_unread_room": "Předchozí nepřečtená místnost nebo přímá zpráva",
         "room_list_collapse_section": "Sbalit seznam místností",
@@ -1353,8 +1463,11 @@
         "dynamic_room_predecessors": "Předchůdci dynamické místnosti",
         "dynamic_room_predecessors_description": "Povolit MSC3946 (podpora pozdních archivů místností)",
         "element_call_video_rooms": "Element Call video místnosti",
+        "exclude_insecure_devices": "Vyloučit nezabezpečená zařízení při odesílání/přijímání zpráv",
+        "exclude_insecure_devices_description": "Pokud je tento režim povolen, šifrované zprávy nebudou sdíleny s neověřenými zařízeními a zprávy z neověřených zařízení se zobrazí jako chyba. Upozorňujeme, že pokud tento režim povolíte, může se stát, že nebudete moci komunikovat s uživateli, kteří svá zařízení neověřili.",
         "experimental_description": "Rádi experimentujete? Vyzkoušejte naše nejnovější nápady ve vývoji. Tyto funkce nejsou dokončeny; mohou být nestabilní, mohou se změnit nebo mohou být zcela vypuštěny. <a>Zjistěte více</a>.",
         "experimental_section": "Předběžné ukázky",
+        "extended_profiles_msc_support": "Vyžaduje, aby váš server podporoval MSC4133",
         "feature_disable_call_per_sender_encryption": "Zakázat šifrování podle odesílatele pro Element Call",
         "feature_wysiwyg_composer_description": "V editoru zpráv použít formátovaný text namísto Markdown.",
         "group_calls": "Nový zážitek ze skupinových hovorů",
@@ -1368,6 +1481,7 @@
         "group_spaces": "Prostory",
         "group_themes": "Motivy vzhledu",
         "group_threads": "Vlákna",
+        "group_ui": "Uživatelské rozhraní",
         "group_voip": "Zvuk a video",
         "group_widgets": "Widgety",
         "hidebold": "Skrýt tečku oznámení (zobrazit pouze odznaky čítačů)",
@@ -1387,6 +1501,7 @@
         "notification_settings_beta_caption": "Představujeme jednodušší způsob, jak změnit nastavení oznámení. Přizpůsobte svůj %(brand)s přesně tak, jak se vám líbí.",
         "notification_settings_beta_title": "Nastavení oznámení",
         "notifications": "Zapnout panel oznámení v záhlaví místnosti",
+        "release_announcement": "Oznámení o vydání",
         "render_reaction_images": "Vykreslování vlastních obrázků v reakcích",
         "render_reaction_images_description": "Někdy se označují jako \"vlastní emoji\".",
         "report_to_moderators": "Nahlásit moderátorům",
@@ -1394,7 +1509,7 @@
         "sliding_sync": "Režim klouzavé synchronizace",
         "sliding_sync_description": "V aktivním vývoji, nelze zakázat.",
         "sliding_sync_disabled_notice": "Pro vypnutí se odhlaste a znovu přihlaste",
-        "sliding_sync_server_no_support": "Váš server nemá nativní podporu",
+        "sliding_sync_server_no_support": "Váš server nemá podporu",
         "under_active_development": "V aktivním vývoji.",
         "unrealiable_e2e": "Nespolehlivé v šifrovaných místnostech",
         "video_rooms": "Video místnosti",
@@ -1446,6 +1561,8 @@
         "last_person_warning": "Jste zde jediná osoba. Pokud odejdete, nikdo se v budoucnu nebude moci připojit, včetně vás.",
         "leave_room_question": "Opravdu chcete opustit místnost '%(roomName)s'?",
         "leave_space_question": "Opravdu chcete opustit prostor '%(spaceName)s'?",
+        "room_leave_admin_warning": "V této místnosti jste jediný správce. Pokud odejdete, nikdo nebude moci měnit nastavení místnosti ani provádět jiné důležité akce.",
+        "room_leave_mod_warning": "V této místnosti jste jediný moderátor. Pokud odejdete, nikdo nebude moci měnit nastavení místnosti ani provádět jiné důležité akce.",
         "room_rejoin_warning": "Tato místnost není veřejná. Bez pozvánky nebudete moci znovu vstoupit.",
         "space_rejoin_warning": "Tento prostor není veřejný. Bez pozvánky se nebudete moci znovu připojit."
     },
@@ -1503,8 +1620,15 @@
         "toggle_attribution": "Přepnout atribut"
     },
     "member_list": {
+        "count": {
+            "one": "%(count)s člen",
+            "few": "%(count)s členové",
+            "other": "%(count)s členů"
+        },
         "filter_placeholder": "Najít člena místnosti",
         "invite_button_no_perms_tooltip": "Nemáte oprávnění zvát uživatele",
+        "invited_label": "Pozván",
+        "no_matches": "Žádné shody",
         "power_label": "%(userName)s (oprávnění %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Členové místnosti",
@@ -1698,14 +1822,38 @@
         "restore_failed_error": "Nepovedlo se obnovit ze zálohy"
     },
     "right_panel": {
-        "add_integrations": "Přidat widgety, propojení a boty",
+        "add_integrations": "Přidejte rozšíření",
+        "add_topic": "Přidat téma",
+        "extensions_button": "Rozšíření",
+        "extensions_empty_description": "Vyberte \"%(addIntegrations)s\" pro procházení a přidávání rozšíření do této místnosti",
+        "extensions_empty_title": "Zvyšte produktivitu pomocí více nástrojů, widgetů a robotů",
         "files_button": "Soubory",
         "pinned_messages": {
+            "empty_description": "Vyberte zprávu a zvolte \"%(pinAction)s\", abyste ji sem zahrnuli.",
+            "empty_title": "Připněte důležité zprávy, aby je bylo možné snadno najít",
+            "header": {
+                "one": "1 Připnutá zpráva",
+                "few": "%(count)s Připnuté zprávy",
+                "other": "%(count)s Připnutých zpráv"
+            },
             "limits": {
                 "other": "Můžete připnout až %(count)s widgetů"
-            }
+            },
+            "menu": "Otevřít menu",
+            "release_announcement": {
+                "close": "OK",
+                "description": "Všechny připnuté zprávy najdete zde. Přejděte na libovolnou zprávu a výběrem možnosti \"Připnout\" ji přidejte.",
+                "title": "Všechny nové připnuté zprávy"
+            },
+            "reply_thread": "Odpověď na <link>vlákno zprávy</link>",
+            "unpin_all": {
+                "button": "Odepnout všechny zprávy",
+                "content": "Ujistěte se, že opravdu chcete odstranit všechny připnuté zprávy. Tuto akci nelze vrátit zpět.",
+                "title": "Odepnout všechny zprávy?"
+            },
+            "view": "Zobrazit na časové ose"
         },
-        "pinned_messages_button": "Připnuto",
+        "pinned_messages_button": "Připnuté zprávy",
         "poll": {
             "active_heading": "Aktivní hlasování",
             "empty_active": "V této místnosti nejsou žádná aktivní hlasování",
@@ -1730,7 +1878,7 @@
             "view_in_timeline": "Zobrazit hlasování na časové ose",
             "view_poll": "Zobrazit hlasování"
         },
-        "polls_button": "Historie hlasování",
+        "polls_button": "Ankety",
         "room_summary_card": {
             "title": "Informace o místnosti"
         },
@@ -1763,7 +1911,7 @@
             "notifications_default": "Odpovídá výchozímu nastavení",
             "notifications_mute": "Ztlumit místnost",
             "title": "Možnosti místnosti",
-            "unfavourite": "Oblíbená"
+            "unfavourite": "Oblíbené"
         },
         "creating_room_text": "Vytváříme místnost s %(names)s",
         "dm_invite_action": "Zahájit konverzaci",
@@ -1809,7 +1957,8 @@
             },
             "room_is_public": "Tato místnost je veřejná"
         },
-        "header_face_pile_tooltip": "Přepnout seznam členů",
+        "header_avatar_open_settings_label": "Otevřít nastavení místnosti",
+        "header_face_pile_tooltip": "Lidé",
         "header_untrusted_label": "Nedůvěryhodné",
         "inaccessible": "Tato místnost nebo prostor není v tuto chvíli přístupná.",
         "inaccessible_name": "Místnost %(roomName)s není v tuto chvíli dostupná.",
@@ -1836,7 +1985,7 @@
         "invite_reject_ignore": "Odmítnout a ignorovat uživatele",
         "invite_sent_to_email": "Tato pozvánka byla odeslána na adresu %(email)s",
         "invite_sent_to_email_room": "Pozvánka do %(roomName)s byla odeslána na adresu %(email)s",
-        "invite_subtitle": "<userName/> vás pozval(a)",
+        "invite_subtitle": "Pozván od <userName/>",
         "invite_this_room": "Pozvat do této místnosti",
         "invite_title": "Chcete vstoupit do místnosti %(roomName)s?",
         "inviter_unknown": "Neznámý",
@@ -1879,11 +2028,25 @@
         "not_found_title": "Tato místnost nebo prostor neexistuje.",
         "not_found_title_name": "%(roomName)s neexistuje.",
         "peek_join_prompt": "Nahlížíte do místnosti %(roomName)s. Chcete do ní vstoupit?",
+        "pinned_message_badge": "Připnutá zpráva",
+        "pinned_message_banner": {
+            "button_close_list": "Zavřít seznam",
+            "button_view_all": "Zobrazit vše",
+            "description": "Tato místnost má připnuté zprávy. Kliknutím je zobrazíte.",
+            "go_to_message": "Zobrazit připnutou zprávu na časové ose.",
+            "title": "<bold>%(index)sz%(length)s</bold> Připnuté zprávy"
+        },
         "read_topic": "Klikněte pro přečtení tématu",
         "rejecting": "Odmítání pozvánky…",
         "rejoin_button": "Znovu vstoupit",
         "search": {
             "all_rooms_button": "Vyhledávat ve všech místnostech",
+            "placeholder": "Hledat zprávy…",
+            "summary": {
+                "one": "1 výsledek nalezen pro “<query/>”",
+                "few": "%(count)s výsledky nalezeny pro “<query/>”",
+                "other": "%(count)s výsledků nalezeno pro “<query/>”"
+            },
             "this_room_button": "Vyhledávat v této místnosti"
         },
         "status_bar": {
@@ -2020,6 +2183,8 @@
             "error_deleting_alias_description": "Při odstraňování adresy došlo k chybě. Adresa již nemusí ekzistovat, nebo mohlo dojít k dočasné chybě.",
             "error_deleting_alias_description_forbidden": "Nemáte oprávnění adresu smazat.",
             "error_deleting_alias_title": "Chyba při odstraňování adresy",
+            "error_publishing": "Místnost nelze publikovat",
+            "error_publishing_detail": "Při publikování této místnosti došlo k chybě",
             "error_save_space_settings": "Nastavení prostoru se nepodařilo uložit.",
             "error_updating_alias_description": "Nepovedlo se změnit alternativní adresy místnosti. Možná to server neumožňuje a nebo je to dočasná chyba.",
             "error_updating_canonical_alias_description": "Nastala chyba při pokusu o nastavení hlavní adresy místnosti. Mohl to zakázat server, nebo to může být dočasná chyba.",
@@ -2246,6 +2411,7 @@
             "brand_version": "Verze %(brand)s:",
             "clear_cache_reload": "Smazat mezipaměť a načíst znovu",
             "crypto_version": "Verze kryptografie:",
+            "dialog_title": "<strong>Nastavení:</strong> Nápověda a informace",
             "help_link": "Pro pomoc s používáním %(brand)su klepněte <a>sem</a>.",
             "homeserver": "Domovský server je <code>%(homeserverUrl)s</code>",
             "identity_server": "Server identit je <code>%(identityServerUrl)s</code>",
@@ -2254,19 +2420,30 @@
         }
     },
     "settings": {
+        "account": {
+            "dialog_title": "<strong>Nastavení:</strong> Účet",
+            "title": "Účet"
+        },
         "all_rooms_home": "Zobrazit všechny místnosti v Domovu",
         "all_rooms_home_description": "Všechny místnosti, ve kterých se nacházíte, se zobrazí v Domovu.",
         "always_show_message_timestamps": "Vždy zobrazovat časové značky zpráv",
         "appearance": {
             "bundled_emoji_font": "Použít přibalené písmo emodži",
+            "compact_layout": "Zobrazení kompaktního textu a zpráv",
+            "compact_layout_description": "Pro použití této funkce je nutné zvolit moderní rozložení.",
             "custom_font": "Používat systémové nastavení písma",
             "custom_font_description": "Zadejte jméno písma, které máte naistalované v systému, a %(brand)s se jej pokusí použít.",
             "custom_font_name": "Jméno systémového písma",
             "custom_font_size": "Použít vlastní velikost",
-            "custom_theme_error_downloading": "Nepovedlo se stáhnout informace o vzhledu.",
+            "custom_theme_add": "Přidat vlastní motiv",
+            "custom_theme_downloading": "Stahování vlastního motivu…",
+            "custom_theme_error_downloading": "Chyba při stahování motivu",
+            "custom_theme_help": "Zadejte adresu URL vlastního motivu, který chcete použít.",
             "custom_theme_invalid": "Neplatné schéma vzhledu.",
+            "dialog_title": "<strong>Nastavení:</strong> Vzhled",
             "font_size": "Velikost písma",
             "font_size_default": "%(fontSize)s (výchozí)",
+            "high_contrast": "Vysoký kontrast",
             "image_size_default": "Výchozí",
             "image_size_large": "Velký",
             "layout_bubbles": "Bubliny zpráv",
@@ -2281,9 +2458,62 @@
         "code_block_expand_default": "Ve výchozím nastavení rozbalit bloky kódu",
         "code_block_line_numbers": "Zobrazit čísla řádků v blocích kódu",
         "disable_historical_profile": "Zobrazit aktuální profilové obrázky a jména uživatelů v historii zpráv",
+        "discovery": {
+            "title": "Jak vás najít"
+        },
         "emoji_autocomplete": "Napovídat emoji",
         "enable_markdown": "Povolit Markdown",
         "enable_markdown_description": "Začněte zprávy s <code>/plain</code> pro odeslání bez markdown.",
+        "encryption": {
+            "advanced": {
+                "breadcrumb_first_description": "Podrobnosti o vašem účtu, kontakty, předvolby a seznam chatů budou zachovány",
+                "breadcrumb_page": "Obnovit šifrování",
+                "breadcrumb_second_description": "Ztratíte veškerou historii zpráv, která je uložena pouze na serveru",
+                "breadcrumb_third_description": "Budete muset znovu ověřit všechna svá stávající zařízení a kontakty",
+                "breadcrumb_title": "Opravdu chcete obnovit svou identitu?",
+                "breadcrumb_title_forgot": "Zapomněli jste klíč pro obnovení? Budete muset obnovit svou identitu.",
+                "breadcrumb_warning": "Udělejte to pouze v případě, že se domníváte, že váš účet byl napaden.",
+                "details_title": "Podrobnosti o šifrování",
+                "export_keys": "Exportovat klíče",
+                "import_keys": "Importovat klíče",
+                "other_people_device_description": "Ve výchozím nastavení v šifrovaných místnostech nikomu neposílat šifrované zprávy, dokud je neověříte",
+                "other_people_device_label": "Nikdy neposílejte šifrované zprávy na neověřená zařízení",
+                "other_people_device_title": "Zařízení ostatních uživatelů",
+                "reset_identity": "Obnovit kryptografickou identitu",
+                "session_id": "ID relace:",
+                "session_key": "Klíč relace:",
+                "title": "Rozšířené"
+            },
+            "device_not_verified_button": "Ověřte toto zařízení",
+            "device_not_verified_description": "Abyste mohli zobrazit nastavení šifrování, musíte toto zařízení ověřit.",
+            "device_not_verified_title": "Zařízení nebylo ověřeno",
+            "dialog_title": "<strong>Nastavení: </strong> Šifrování",
+            "recovery": {
+                "change_recovery_confirm_button": "Potvrďte nový klíč pro obnovení",
+                "change_recovery_confirm_description": "Pro dokončení zadejte svůj nový klíč pro obnovení níže. Váš starý klíč již nebude fungovat.",
+                "change_recovery_confirm_title": "Zadejte nový klíč pro obnovení",
+                "change_recovery_key": "Změnit klíč pro obnovení",
+                "change_recovery_key_description": "Zapište si tento nový klíč pro obnovení na bezpečné místo. Poté klikněte na tlačítko Pokračovat a potvrďte změnu.",
+                "change_recovery_key_title": "Změnit klíč pro obnovení?",
+                "description": "Pokud jste ztratili všechna stávající zařízení, obnovte kryptografickou identitu a historii zpráv pomocí klíče pro obnovení.",
+                "enter_key_error": "Zadaný klíč pro obnovení není správný.",
+                "enter_recovery_key": "Zadejte klíč pro obnovení",
+                "forgot_recovery_key": "Zapomněli jste klíč pro obnovení?",
+                "key_storage_warning": "Vaše úložiště klíčů není synchronizováno. Kliknutím na jedno z níže uvedených tlačítek problém vyřešte.",
+                "save_key_description": "Nesdílejte ho s nikým!",
+                "save_key_title": "Klíč pro obnovení",
+                "set_up_recovery": "Nastavení obnovy",
+                "set_up_recovery_confirm_button": "Dokončete nastavení",
+                "set_up_recovery_confirm_description": "Zadejte obnovovací klíč zobrazený na předchozí obrazovce a dokončete nastavení obnovy.",
+                "set_up_recovery_confirm_title": "Pro potvrzení zadejte klíč pro obnovení",
+                "set_up_recovery_description": "Vaše úložiště klíčů je chráněno klíčem pro obnovení. Pokud potřebujete nový klíč pro obnovení po nastavení, můžete jej znovu vytvořit výběrem '%(changeRecoveryKeyButton)s'.",
+                "set_up_recovery_save_key_description": "Tento klíč pro obnovení si zapište na bezpečné místo, jako je správce hesel, šifrovaná poznámka nebo fyzický trezor.",
+                "set_up_recovery_save_key_title": "Uložte si klíč pro obnovení na bezpečném místě",
+                "set_up_recovery_secondary_description": "Po kliknutí na Pokračovat vám vygenerujeme obnovovací klíč.",
+                "title": "Obnovení"
+            },
+            "title": "Šifrování"
+        },
         "general": {
             "account_management_section": "Správa účtu",
             "account_section": "Účet",
@@ -2296,6 +2526,14 @@
             "add_msisdn_dialog_title": "Přidat telefonní číslo",
             "add_msisdn_instructions": "SMS zpráva byla odeslána na +%(msisdn)s. Zadejte prosím ověřovací kód, který obsahuje.",
             "add_msisdn_misconfigured": "Přidání/připojení s MSISDN je nesprávně nakonfigurováno",
+            "allow_spellcheck": "Povolit kontrolu pravopisu",
+            "application_language": "Jazyk aplikace",
+            "application_language_reload_hint": "Po výběru jiného jazyka se aplikace znovu načte.",
+            "avatar_remove_progress": "Odstranění obrázku...",
+            "avatar_save_progress": "Nahrávání obrázku...",
+            "avatar_upload_error_text": "Formát souboru není podporován nebo je obrázek větší než %(size)s.",
+            "avatar_upload_error_text_generic": "Formát souboru nemusí být podporován.",
+            "avatar_upload_error_title": "Obrázek avatara nelze nahrát",
             "confirm_adding_email_body": "Kliknutím na tlačítko potvrdíte přidání emailové adresy.",
             "confirm_adding_email_title": "Potvrdit přidání emailu",
             "deactivate_confirm_body": "Opravdu chcete deaktivovat účet? Je to nevratné.",
@@ -2311,10 +2549,13 @@
             "deactivate_confirm_erase_label": "Skrýt mé zprávy před novými uživateli",
             "deactivate_section": "Deaktivovat účet",
             "deactivate_warning": "Deaktivace účtu je trvalá akce - buďte opatrní!",
-            "discovery_email_empty": "Možnosti nastavení veřejného profilu se objeví po přidání e-mailové adresy výše.",
+            "discovery_email_empty": "Po přidání e-mailu se zobrazí možnosti zjišťování.",
             "discovery_email_verification_instructions": "Ověřte odkaz v e-mailové schránce",
-            "discovery_msisdn_empty": "Možnosti nastavení veřejného profilu se objeví po přidání telefonního čísla výše.",
+            "discovery_msisdn_empty": "Možnosti vyhledávání se zobrazí, jakmile přidáte telefonní číslo.",
             "discovery_needs_terms": "Pro zapsáním do registru e-mailových adres a telefonních čísel odsouhlaste podmínky používání serveru (%(serverName)s).",
+            "discovery_needs_terms_title": "Umožněte lidem, aby vás našli",
+            "display_name": "Zobrazovaný název",
+            "display_name_error": "Nelze nastavit zobrazovaný název",
             "email_address_in_use": "Tato e-mailová adresa je již používána",
             "email_address_label": "E-mailová adresa",
             "email_not_verified": "Vaše e-mailová adresa ještě nebyla ověřena",
@@ -2339,7 +2580,7 @@
             "error_share_msisdn_discovery": "Nepovedlo se nasdílet telefonní číslo",
             "identity_server_no_token": "Nebyl nalezen žádný přístupový token identity",
             "identity_server_not_set": "Server identit není nastaven",
-            "language_section": "Jazyk a region",
+            "language_section": "Jazyk",
             "msisdn_in_use": "Toto telefonní číslo je již používáno",
             "msisdn_label": "Telefonní číslo",
             "msisdn_verification_field_label": "Ověřovací kód",
@@ -2348,9 +2589,15 @@
             "oidc_manage_button": "Spravovat účet",
             "password_change_section": "Nastavení nového hesla k účtu…",
             "password_change_success": "Vaše heslo bylo úspěšně změněno.",
+            "personal_info": "Osobní informace",
+            "profile_subtitle": "Takto se v aplikaci zobrazujete ostatním.",
+            "profile_subtitle_oidc": "Váš účet je spravován samostatně poskytovatelem identit, a proto zde nelze některé vaše osobní údaje měnit.",
             "remove_email_prompt": "Odstranit adresu %(email)s?",
             "remove_msisdn_prompt": "Odstranit %(phone)s?",
-            "spell_check_locale_placeholder": "Zvolte jazyk"
+            "spell_check_locale_placeholder": "Zvolte jazyk",
+            "unable_to_load_emails": "Nelze načíst e-mailové adresy",
+            "unable_to_load_msisdns": "Nelze načíst telefonní čísla",
+            "username": "Uživatelské jméno"
         },
         "image_thumbnails": "Zobrazovat náhledy obrázků",
         "inline_url_previews_default": "Nastavit povolení náhledů URL adres jako výchozí",
@@ -2406,12 +2653,20 @@
             "phrase_strong_enough": "Skvělé! Tato bezpečnostní fráze vypadá dostatečně silná"
         },
         "keyboard": {
+            "dialog_title": "<strong>Nastavení:</strong> Klávesnice",
             "title": "Klávesnice"
+        },
+        "labs": {
+            "dialog_title": "<strong>Nastavení:</strong> Labs"
+        },
+        "labs_mjolnir": {
+            "dialog_title": "<strong>Nastavení:</strong> Ignorovaní uživatelé"
         },
         "notifications": {
             "default_setting_description": "Toto nastavení se ve výchozím stavu použije pro všechny vaše místnosti.",
             "default_setting_section": "Chci být upozorňován na (Výchozí nastavení)",
             "desktop_notification_message_preview": "Zobrazit náhled zprávy v oznámení na ploše",
+            "dialog_title": "<strong>Nastavení:</strong> Oznámení",
             "email_description": "Přijímat e-mailový souhrn zmeškaných oznámení",
             "email_section": "E-mailový souhrn",
             "email_select": "Vyberte e-maily, na které chcete zasílat souhrny. E-maily můžete spravovat v nastavení <button>Obecné</button>.",
@@ -2470,12 +2725,15 @@
             "code_blocks_heading": "Bloky kódu",
             "compact_modern": "Použít kompaktnější \"moderní\" rozložení",
             "composer_heading": "Editor zpráv",
+            "default_timezone": "Výchozí nastavení prohlížeče (%(timezone)s )",
+            "dialog_title": "<strong>Nastavení:</strong> Předvolby",
             "enable_hardware_acceleration": "Povolit hardwarovou akceleraci",
             "enable_tray_icon": "Zobrazit ikonu v oznamovací oblasti a minimalizivat při zavření okna",
             "keyboard_heading": "Klávesové zkratky",
             "keyboard_view_shortcuts_button": "Pro zobrazení všech klávesových zkratek, <a>klikněte zde</a>.",
             "media_heading": "Obrázky, GIFy a videa",
             "presence_description": "Sdílejte své aktivity a stav s ostatními.",
+            "publish_timezone": "Zveřejnit časové pásmo na veřejném profilu",
             "rm_lifetime": "Platnost značky přečteno (ms)",
             "rm_lifetime_offscreen": "Platnost značky přečteno mimo obrazovku (ms)",
             "room_directory_heading": "Adresář místností",
@@ -2483,7 +2741,8 @@
             "show_avatars_pills": "Zobrazovat avatary ve zmínkách o uživatelích, místnostech a událostech",
             "show_polls_button": "Zobrazit tlačítko hlasování",
             "surround_text": "Ohraničit označený text při psaní speciálních znaků",
-            "time_heading": "Zobrazování času"
+            "time_heading": "Zobrazování času",
+            "user_timezone": "Nastavit časové pásmo"
         },
         "prompt_invite": "Potvrdit odeslání pozvánky potenciálně neplatným Matrix ID",
         "replace_plain_emoji": "Automaticky nahrazovat textové emoji",
@@ -2514,8 +2773,11 @@
             "cross_signing_self_signing_private_key": "Vlastní podpisový klíč:",
             "cross_signing_user_signing_private_key": "Podpisový klíč uživatele:",
             "cryptography_section": "Šifrování",
+            "dehydrated_device_description": "Funkce offline zařízení umožňuje přijímat šifrované zprávy, i když nejste přihlášeni k žádnému zařízení.",
+            "dehydrated_device_enabled": "Offline zařízení povoleno",
             "delete_backup": "Smazat zálohu",
             "delete_backup_confirm_description": "Opravdu? Pokud klíče nejsou správně zálohované můžete přijít o šifrované zprávy.",
+            "dialog_title": "<strong>Nastavení:</strong> Zabezpečení a soukromí",
             "e2ee_default_disabled_warning": "Správce vašeho serveru vypnul ve výchozím nastavení koncové šifrování v soukromých místnostech a přímých zprávách.",
             "enable_message_search": "Povolit vyhledávání v šifrovaných místnostech",
             "encryption_section": "Šifrování",
@@ -2593,6 +2855,7 @@
             "device_unverified_description_current": "Ověřte svou aktuální relaci pro vylepšené zabezpečené zasílání zpráv.",
             "device_verified_description": "Tato relace je připravena na bezpečné zasílání zpráv.",
             "device_verified_description_current": "Vaše aktuální relace je připravena pro bezpečné zasílání zpráv.",
+            "dialog_title": "<strong>Nastavení:</strong> Relace",
             "error_pusher_state": "Nepodařilo se nastavit stav push oznámení",
             "error_set_name": "Nepodařilo se nastavit název relace",
             "filter_all": "Všechny",
@@ -2609,6 +2872,7 @@
             "inactive_sessions_list_description": "Zvažte odhlášení ze starých relací (%(inactiveAgeDays)s dní nebo starších), které již nepoužíváte.",
             "ip": "IP adresa",
             "last_activity": "Poslední aktivita",
+            "manage": "Spravovat tuto relaci",
             "mobile_session": "Relace mobilního zařízení",
             "n_sessions_selected": {
                 "one": "%(count)s vybraná relace",
@@ -2632,9 +2896,10 @@
             "security_recommendations_description": "Zlepšete zabezpečení svého účtu dodržováním těchto doporučení.",
             "session_id": "ID sezení",
             "show_details": "Zobrazit podrobnosti",
-            "sign_in_with_qr": "Přihlásit se pomocí QR kódu",
+            "sign_in_with_qr": "Připojit nové zařízení",
             "sign_in_with_qr_button": "Zobrazit QR kód",
-            "sign_in_with_qr_description": "Toto zařízení můžete použít k přihlášení nového zařízení pomocí QR kódu. QR kód zobrazený na tomto zařízení musíte naskenovat pomocí odhlášeného zařízení.",
+            "sign_in_with_qr_description": "Pomocí QR kódu se přihlaste do jiného zařízení a nastavte zabezpečené zasílání zpráv.",
+            "sign_in_with_qr_unsupported": "Není podporováno vaším poskytovatelem účtu",
             "sign_out": "Odhlásit se z této relace",
             "sign_out_all_other_sessions": "Odhlásit se ze všech ostatních relací (%(otherSessionsCount)s)",
             "sign_out_confirm_description": {
@@ -2674,7 +2939,9 @@
         "show_redaction_placeholder": "Zobrazovat smazané zprávy",
         "show_stickers_button": "Tlačítko Zobrazit nálepky",
         "show_typing_notifications": "Zobrazovat oznámení „... právě píše...“",
+        "showbold": "Zobrazit veškerou aktivitu v seznamu místnosti (body nebo počet nepřečtených zpráv).",
         "sidebar": {
+            "dialog_title": "<strong>Nastavení:</strong> Postranní panel",
             "metaspaces_favourites_description": "Seskupte všechny své oblíbené místnosti a osoby na jednom místě.",
             "metaspaces_home_all_rooms": "Zobrazit všechny místnosti",
             "metaspaces_home_all_rooms_description": "Zobrazit všechny místnosti v Domovu, i když jsou v prostoru.",
@@ -2683,10 +2950,14 @@
             "metaspaces_orphans_description": "Seskupte všechny místnosti, které nejsou součástí prostoru, na jednom místě.",
             "metaspaces_people_description": "Seskupte všechny své kontakty na jednom místě.",
             "metaspaces_subsection": "Prostory pro zobrazení",
+            "metaspaces_video_rooms": "Video místnosti a konference",
+            "metaspaces_video_rooms_description": "Seskupte všechny soukromé videomístnosti a konference.",
+            "metaspaces_video_rooms_description_invite_extension": "Na konference můžete pozvat i lidi mimo matrix.",
             "spaces_explainer": "Prostory jsou způsoby, jak seskupit místnosti a lidi. Kromě prostor, ve kterých se nacházíte, můžete použít i některé předem vytvořené.",
             "title": "Postranní panel"
         },
         "start_automatically": "Zahájit automaticky po přihlášení do systému",
+        "tac_only_notifications": "Zobrazení oznámení pouze v centru aktivity vlákna",
         "use_12_hour_format": "Zobrazovat čas v 12hodinovém formátu (např. 2:30 odp.)",
         "use_command_enter_send_message": "K odeslání zprávy použijte Command + Enter",
         "use_command_f_search": "Stiskněte Command + F k vyhledávání v časové ose",
@@ -2700,6 +2971,7 @@
             "audio_output_empty": "Nebyly rozpoznány žádné zvukové výstupy",
             "auto_gain_control": "Automatická úprava zesílení",
             "connection_section": "Připojení",
+            "dialog_title": "<strong>Nastavení:</strong> Hlas a video",
             "echo_cancellation": "Potlačení ozvěny",
             "enable_fallback_ice_server": "Povolit záložní asistenční server hovorů (%(server)s)",
             "enable_fallback_ice_server_description": "Platí pouze v případě, že váš domovský server tuto možnost nenabízí. Vaše IP adresa bude během hovoru sdílena.",
@@ -2718,6 +2990,7 @@
         "warning": "<w>UPOZORNĚNÍ:</w> <description/>"
     },
     "share": {
+        "link_copied": "Odkaz zkopírován",
         "permalink_message": "Odkaz na vybranou zprávu",
         "permalink_most_recent": "Odkaz na nejnovější zprávu",
         "share_call": "Odkaz na pozvánku na konferenci",
@@ -2963,14 +3236,21 @@
             "one": "%(count)s odpověď",
             "other": "%(count)s odpovědí"
         },
+        "empty_description": "Při najetí na zprávu použijte \"%(replyInThread)s\".",
+        "empty_title": "Vlákna pomáhají udržovat konverzace k tématu a snadno je sledovat.",
         "error_start_thread_existing_relation": "Nelze založit vlákno ve vlákně",
+        "mark_all_read": "Označit vše jako přečtené",
         "my_threads": "Moje vlákna",
         "my_threads_description": "Zobrazit všechna vlákna, kterých jste se zúčastnili",
         "open_thread": "Otevřít vlákno",
         "show_thread_filter": "Zobrazit:"
     },
     "threads_activity_centre": {
-        "header": "Aktivita vláken"
+        "header": "Aktivita vláken",
+        "no_rooms_with_threads_notifs": "Zatím nemáte k dispozici místnosti s upozorněními na vlákna.",
+        "no_rooms_with_unread_threads": "Zatím nemáte místnosti s nepřečtenými vlákny.",
+        "release_announcement_description": "Oznámení o vláknech se přesunula, od nynějška je najdete zde.",
+        "release_announcement_header": "Centrum aktivity vláken"
     },
     "time": {
         "about_day_ago": "před jedním dnem",
@@ -3013,9 +3293,21 @@
         },
         "creation_summary_dm": "%(creator)s vytvořil(a) tuto přímou zprávu.",
         "creation_summary_room": "%(creator)s vytvořil(a) a nakonfiguroval(a) místnost.",
+        "decryption_failure": {
+            "blocked": "Odesílatel vám zablokoval příjem této zprávy, protože vaše zařízení není ověřeno.",
+            "historical_event_no_key_backup": "Historické zprávy nejsou v tomto zařízení k dispozici",
+            "historical_event_unverified_device": "Pro přístup k historickým zprávám je třeba toto zařízení ověřit.",
+            "historical_event_user_not_joined": "K této zprávě nemáte přístup",
+            "sender_identity_previously_verified": "Ověřená identita se změnila",
+            "sender_unsigned_device": "Šifrováno zařízením, které nebylo ověřeno jeho majitelem.",
+            "unable_to_decrypt": "Zprávu nelze dešifrovat"
+        },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
         "download_action_decrypting": "Dešifrování",
         "download_action_downloading": "Stahování",
+        "download_failed": "Stažení se nezdařilo",
+        "download_failed_description": "Při stahování tohoto souboru došlo k chybě",
+        "e2e_state": "Stav šifrování mezi koncovými body",
         "edits": {
             "tooltip_label": "Upraveno v %(date)s. Klinutím zobrazíte změny.",
             "tooltip_sub": "Klikněte pro zobrazení úprav",
@@ -3069,7 +3361,7 @@
         },
         "m.file": {
             "error_decrypting": "Chyba při dešifrování přílohy",
-            "error_invalid": "Neplatný soubor%(extra)s"
+            "error_invalid": "Neplatný soubor"
         },
         "m.image": {
             "error": "Obrázek nelze zobrazit kvůli chybě",
@@ -3140,7 +3432,7 @@
             "unknown": "%(senderDisplayName)s změnil(a) pravidlo pro přístup hostů na %(rule)s"
         },
         "m.room.history_visibility": {
-            "invited": "%(senderName)s nastavil(a) viditelnost budoucích zpráv v této místnosti pro všechny její členy, a to od chvíle jejich pozvání.",
+            "invited": "%(senderName)s nastavil(a) viditelnost budoucích zpráv v této místnosti pro všechny její členy od chvíle jejich pozvání.",
             "joined": "%(senderName)s nastavil(a) viditelnost budoucích zpráv v této místnosti pro všechny její členy od chvíle jejich vstupu.",
             "shared": "%(senderName)s nastavil(a) viditelnost budoucích zpráv v této místnosti pro všechny její členy.",
             "unknown": "%(senderName)s nastavil viditelnost budoucí zpráv v místnosti neznámým (%(visibility)s).",
@@ -3205,7 +3497,10 @@
             "sent": "%(senderName)s pozval(a) uživatele %(targetDisplayName)s ke vstupu do místnosti."
         },
         "m.room.tombstone": "%(senderDisplayName)s aktualizoval(a) místnost.",
-        "m.room.topic": "%(senderDisplayName)s změnil(a) téma na „%(topic)s“.",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s změnil(a) téma na „%(topic)s“.",
+            "removed": "%(senderDisplayName)s odstranil(a) téma."
+        },
         "m.sticker": "%(senderDisplayName)s poslal(a) nálepku.",
         "m.video": {
             "error_decrypting": "Chyba při dešifrování videa"
@@ -3256,7 +3551,8 @@
         "reactions": {
             "add_reaction_prompt": "Přidat reakci",
             "custom_reaction_fallback_label": "Vlastní reakce",
-            "label": "%(reactors)s reagoval(a) na %(content)s"
+            "label": "%(reactors)s reagoval(a) na %(content)s",
+            "tooltip_caption": "reagoval s%(shortName)s"
         },
         "read_receipt_title": {
             "one": "Viděl %(count)s člověk",
@@ -3441,6 +3737,10 @@
     "truncated_list_n_more": {
         "other": "A %(count)s dalších..."
     },
+    "unsupported_browser": {
+        "description": "Pokud budete pokračovat, mohou některé funkce přestat fungovat a hrozí, že v budoucnu přijdete o data. Chcete-li pokračovat v používání %(brand)s, aktualizujte svůj prohlížeč.",
+        "title": "%(brand)s nepodporuje tento prohlížeč"
+    },
     "unsupported_server_description": "Tento server používá starší verzi Matrix. Chcete-li používat %(brand)s bez možných problémů, aktualizujte Matrixu na %(version)s .",
     "unsupported_server_title": "Váš server není podporován",
     "update": {
@@ -3458,6 +3758,12 @@
         "toast_title": "Aktualizovat %(brand)s",
         "unavailable": "Nedostupné"
     },
+    "update_room_access_modal": {
+        "description": "Chcete-li vytvořit sdílený odkaz, musíte hostům povolit, aby se k této místnosti připojili. Může se tak stát, že místnost bude méně bezpečná. Po dokončení hovoru můžete místnost opět učinit soukromou.",
+        "dont_change_description": "Případně můžete hovor uskutečnit v oddělené místnosti.",
+        "no_change": "Nechci měnit úroveň přístupu.",
+        "title": "Změna úrovně přístupu do místnosti"
+    },
     "upload_failed_generic": "Soubor '%(fileName)s' se nepodařilo nahrát.",
     "upload_failed_size": "Soubor '%(fileName)s' je větší než povoluje limit domovského serveru",
     "upload_failed_title": "Nahrávání selhalo",
@@ -3467,6 +3773,7 @@
         "error_files_too_large": "Tyto soubory jsou <b>příliš velké</b>. Limit je %(limit)s.",
         "error_some_files_too_large": "Některé soubory <b>jsou příliš velké</b>. Limit je %(limit)s.",
         "error_title": "Chyba při nahrávání",
+        "not_image": "Soubor, který jste vybrali, není platný soubor obrázku.",
         "title": "Nahrát soubory",
         "title_progress": "Nahrát soubory (%(current)s z %(total)s)",
         "upload_all_button": "Nahrát vše",
@@ -3482,14 +3789,6 @@
         "ban_room_confirm_title": "Vykázat z %(roomName)s",
         "ban_space_everything": "Vykázat je všude, kde mohu",
         "ban_space_specific": "Vykázat je z konkrétních míst, ze kterých jsem schopen",
-        "count_of_sessions": {
-            "other": "%(count)s relací",
-            "one": "%(count)s relace"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s ověřených relací",
-            "one": "1 ověřená relace"
-        },
         "deactivate_confirm_action": "Deaktivovat uživatele",
         "deactivate_confirm_description": "Deaktivování uživatele ho odhlásí a zabrání mu v opětovném přihlášení. Navíc bude odstraněn ze všech místností. Akci nelze vzít zpět. Opravdu chcete uživatele deaktivovat?",
         "deactivate_confirm_title": "Deaktivovat uživatele?",
@@ -3500,15 +3799,13 @@
         "disinvite_button_room": "Zrušit pozvánku do místnosti",
         "disinvite_button_room_name": "Zrušit pozvánku do %(roomName)s",
         "disinvite_button_space": "Zrušit pozvánku do prostoru",
-        "edit_own_devices": "Upravit zařízení",
         "error_ban_user": "Nepodařilo se vykázat uživatele",
         "error_deactivate": "Deaktivace uživatele se nezdařila",
         "error_kicking_user": "Nepodařilo se odebrat uživatele",
         "error_mute_user": "Ztlumení uživatele se nezdařilo",
         "error_revoke_3pid_invite_description": "Pozvání se nepovedlo zrušit. Mohlo dojít k dočasnému problému nebo na to nemáte dostatečná práva.",
         "error_revoke_3pid_invite_title": "Pozvání se nepovedlo zrušit",
-        "hide_sessions": "Skrýt relace",
-        "hide_verified_sessions": "Skrýt ověřené relace",
+        "ignore_button": "Ignorovat",
         "ignore_confirm_description": "Všechny zprávy a pozvánky od tohoto uživatele budou skryty. Opravdu je chcete ignorovat?",
         "ignore_confirm_title": "Ignorovat %(user)s",
         "invited_by": "Pozván od uživatele %(sender)s",
@@ -3536,23 +3833,26 @@
             "no_recent_messages_description": "Zkuste posunout časovou osu nahoru, jestli tam nejsou nějaké dřívější.",
             "no_recent_messages_title": "Nebyly nalezeny žádné nedávné zprávy od uživatele %(user)s"
         },
-        "redact_button": "Odstranit nedávné zprávy",
+        "redact_button": "Odebrat zprávy",
         "revoke_invite": "Zrušit pozvání",
         "room_encrypted": "Zprávy jsou v této místnosti koncově šifrované.",
         "room_encrypted_detail": "Vaše zprávy jsou zabezpečené - pouze vy a jejich příjemci máte klíče potřebné k jejich přečtení.",
         "room_unencrypted": "Zprávy nejsou koncově šifrované.",
         "room_unencrypted_detail": "V šifrovaných místnostech jsou vaše zprávy bezpečné a pouze vy a příjemce má klíče k jejich rozšifrování.",
-        "share_button": "Sdílet odkaz na uživatele",
+        "send_message": "Poslat zprávu",
+        "share_button": "Sdílet profil",
         "unban_button_room": "Zrušit vykázání z místnosti",
         "unban_button_space": "Zrušit vykázání z prostoru",
         "unban_room_confirm_title": "Zrušit vykázání z %(roomName)s",
         "unban_space_everything": "Zrušit jejich vykázání všude, kde mám oprávnění",
         "unban_space_specific": "Zrušit jejich vykázání z konkrétních míst, kde mám oprávnění",
         "unban_space_warning": "Nebudou mít přístup ke všemu, čeho nejste správcem.",
+        "unignore_button": "Zrušit ignorování",
         "verify_button": "Ověřit uživatele",
         "verify_explainer": "Pro lepší bezpečnost, ověřte uživatele zkontrolováním jednorázového kódu na vašich zařízeních."
     },
     "user_menu": {
+        "link_new_device": "Připojit nové zařízení",
         "settings": "Všechna nastavení",
         "switch_theme_dark": "Přepnout do tmavého režimu",
         "switch_theme_light": "Přepnout do světlého režimu"
@@ -3604,6 +3904,9 @@
         "legacy_call": "Zastaralý způsob hovoru",
         "maximise": "Vyplnit obrazovku",
         "maximise_call": "Maximalizovat hovor",
+        "metaspace_video_rooms": {
+            "conference_room_section": "Konference"
+        },
         "minimise_call": "Minimalizovat hovor",
         "misconfigured_server": "Volání selhalo, protože je rozbitá konfigurace serveru",
         "misconfigured_server_description": "Požádejte správce svého domovského serveru (<code>%(homeserverDomain)s</code>) jestli by nemohl nakonfigurovat TURN server, aby volání fungovala spolehlivě.",
@@ -3761,7 +4064,7 @@
             "title": "Povolte tomuto widgetu ověřit vaši identitu"
         },
         "popout": "Otevřít widget v novém okně",
-        "set_room_layout": "Nastavit všem rozložení mé místnosti",
+        "set_room_layout": "Nastavte rozložení pro každého",
         "shared_data_avatar": "URL vašeho profilového obrázku",
         "shared_data_device_id": "ID vašeho zařízení",
         "shared_data_lang": "Váš jazyk",

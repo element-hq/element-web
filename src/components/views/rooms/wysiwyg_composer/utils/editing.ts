@@ -6,12 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EventStatus, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { EventStatus, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { IRoomState } from "../../../../structures/RoomView";
+import { type IRoomState } from "../../../../structures/RoomView";
 import dis from "../../../../../dispatcher/dispatcher";
 import { Action } from "../../../../../dispatcher/actions";
-import EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
+import type EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
 
 export function endEditing(roomContext: Pick<IRoomState, "timelineRenderingType">): void {
     // todo local storage

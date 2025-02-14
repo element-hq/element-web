@@ -10,21 +10,21 @@ import React from "react";
 import { act, fireEvent, render } from "jest-matrix-react";
 
 import TabbedView, { Tab, TabLocation } from "../../../../src/components/structures/TabbedView";
-import { NonEmptyArray } from "../../../../src/@types/common";
+import { type NonEmptyArray } from "../../../../src/@types/common";
 import { _t } from "../../../../src/languageHandler";
 
 describe("<TabbedView />", () => {
     const generalTab = new Tab("GENERAL", "common|general", "general", <div>general</div>);
     const labsTab = new Tab("LABS", "common|labs", "labs", <div>labs</div>);
-    const securityTab = new Tab("SECURITY", "common|security", "security", <div>security</div>);
+    const appearanceTab = new Tab("APPEARANCE", "common|appearance", "appearance", <div>appearance</div>);
     const defaultProps = {
         tabLocation: TabLocation.LEFT,
-        tabs: [generalTab, labsTab, securityTab] as NonEmptyArray<Tab<any>>,
+        tabs: [generalTab, labsTab, appearanceTab] as NonEmptyArray<Tab<any>>,
         onChange: () => {},
     };
     const getComponent = (
         props: {
-            activeTabId: "GENERAL" | "LABS" | "SECURITY";
+            activeTabId: "GENERAL" | "LABS" | "APPEARANCE";
             onChange?: () => any;
             tabs?: NonEmptyArray<Tab<any>>;
         } = {
@@ -44,9 +44,9 @@ describe("<TabbedView />", () => {
     });
 
     it("renders activeTabId tab as active when valid", () => {
-        const { container } = render(getComponent({ activeTabId: securityTab.id }));
-        expect(getActiveTab(container)?.textContent).toEqual(_t(securityTab.label));
-        expect(getActiveTabBody(container)?.textContent).toEqual("security");
+        const { container } = render(getComponent({ activeTabId: appearanceTab.id }));
+        expect(getActiveTab(container)?.textContent).toEqual(_t(appearanceTab.label));
+        expect(getActiveTabBody(container)?.textContent).toEqual("appearance");
     });
 
     it("calls onchange on on tab click", () => {
@@ -54,10 +54,10 @@ describe("<TabbedView />", () => {
         const { getByTestId } = render(getComponent({ activeTabId: "GENERAL", onChange }));
 
         act(() => {
-            fireEvent.click(getByTestId(getTabTestId(securityTab)));
+            fireEvent.click(getByTestId(getTabTestId(appearanceTab)));
         });
 
-        expect(onChange).toHaveBeenCalledWith(securityTab.id);
+        expect(onChange).toHaveBeenCalledWith(appearanceTab.id);
     });
 
     it("keeps same tab active when order of tabs changes", () => {
@@ -66,7 +66,7 @@ describe("<TabbedView />", () => {
 
         expect(getActiveTab(container)?.textContent).toEqual(_t(labsTab.label));
 
-        rerender(getComponent({ tabs: [labsTab, generalTab, securityTab], activeTabId: labsTab.id }));
+        rerender(getComponent({ tabs: [labsTab, generalTab, appearanceTab], activeTabId: labsTab.id }));
 
         // labs tab still active
         expect(getActiveTab(container)?.textContent).toEqual(_t(labsTab.label));

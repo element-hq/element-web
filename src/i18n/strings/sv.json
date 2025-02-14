@@ -547,7 +547,6 @@
         "saved": "Sparat",
         "saving": "Sparar …",
         "secure_backup": "Säker säkerhetskopiering",
-        "security": "Säkerhet",
         "select_all": "Välj alla",
         "server": "Server",
         "settings": "Inställningar",
@@ -566,7 +565,6 @@
         "thread": "Tråd",
         "threads": "Trådar",
         "timeline": "Tidslinje",
-        "trusted": "Betrodd",
         "unavailable": "otillgänglig",
         "unencrypted": "Okrypterat",
         "unmute": "Avtysta",
@@ -925,7 +923,6 @@
             "title": "Inte betrodd"
         },
         "unable_to_setup_keys_error": "Kunde inte ställa in nycklar",
-        "unsupported": "Den här klienten stöder inte totalsträckskryptering.",
         "verification": {
             "accepting": "Accepterar…",
             "after_new_login": {
@@ -3388,7 +3385,9 @@
             "sent": "%(senderName)s bjöd in %(targetDisplayName)s att gå med i rummet."
         },
         "m.room.tombstone": "%(senderDisplayName)s uppgraderade det här rummet.",
-        "m.room.topic": "%(senderDisplayName)s bytte rummets ämne till \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s bytte rummets ämne till \"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s skickade en dekal.",
         "m.video": {
             "error_decrypting": "Fel vid avkryptering av video"
@@ -3677,18 +3676,9 @@
         "ban_room_confirm_title": "Banna från %(roomName)s",
         "ban_space_everything": "Banna dem från allt jag kan",
         "ban_space_specific": "Banna dem från specifika saker jag kan",
-        "count_of_sessions": {
-            "other": "%(count)s sessioner",
-            "one": "%(count)s session"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s verifierade sessioner",
-            "one": "1 verifierad session"
-        },
         "deactivate_confirm_action": "Inaktivera användaren",
         "deactivate_confirm_description": "Vid inaktivering av användare loggas den ut och förhindras från att logga in igen. Den kommer dessutom att lämna alla rum den befinner sig i. Den här åtgärden kan inte ångras. Är du säker på att du vill inaktivera den här användaren?",
         "deactivate_confirm_title": "Inaktivera användare?",
-        "dehydrated_device_enabled": "Offlineenhet aktiverad",
         "demote_button": "Degradera",
         "demote_self_confirm_description_space": "Du kommer inte kunna ångra den här ändringen eftersom du degraderar dig själv, och om du är den sista privilegierade användaren i utrymmet så kommer det att vara omöjligt att återfå utrymmet.",
         "demote_self_confirm_room": "Du kommer inte att kunna ångra den här ändringen eftersom du degraderar dig själv. Om du är den sista privilegierade användaren i rummet blir det omöjligt att återfå behörigheter.",
@@ -3696,15 +3686,12 @@
         "disinvite_button_room": "Ta bort från rum",
         "disinvite_button_room_name": "Häv inbjudan från %(roomName)s",
         "disinvite_button_space": "Ta bort inbjudan från utrymme",
-        "edit_own_devices": "Redigera enheter",
         "error_ban_user": "Misslyckades att banna användaren",
         "error_deactivate": "Misslyckades att inaktivera användaren",
         "error_kicking_user": "Misslyckades att ta bort användare",
         "error_mute_user": "Misslyckades att tysta användaren",
         "error_revoke_3pid_invite_description": "Kunde inte återkalla inbjudan. Servern kan ha ett tillfälligt problem eller så har du inte tillräckliga behörigheter för att återkalla inbjudan.",
         "error_revoke_3pid_invite_title": "Misslyckades att återkalla inbjudan",
-        "hide_sessions": "Dölj sessioner",
-        "hide_verified_sessions": "Dölj verifierade sessioner",
         "ignore_button": "Ignorera",
         "ignore_confirm_description": "Alla meddelanden och inbjudningar från den här användaren kommer att döljas. Är du säker på att du vill ignorera denne?",
         "ignore_confirm_title": "Ignorera %(user)s",

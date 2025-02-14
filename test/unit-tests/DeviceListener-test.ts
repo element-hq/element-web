@@ -6,17 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Mocked, mocked } from "jest-mock";
-import { MatrixEvent, Room, MatrixClient, Device, ClientStoppedError } from "matrix-js-sdk/src/matrix";
-import { logger } from "matrix-js-sdk/src/logger";
+import { type Mocked, mocked } from "jest-mock";
+import { MatrixEvent, type Room, type MatrixClient, Device, ClientStoppedError } from "matrix-js-sdk/src/matrix";
 import {
     CryptoEvent,
-    CrossSigningStatus,
-    CryptoApi,
+    type CrossSigningStatus,
+    type CryptoApi,
     DeviceVerificationStatus,
-    KeyBackupInfo,
+    type KeyBackupInfo,
 } from "matrix-js-sdk/src/crypto-api";
-import { CryptoSessionStateChange } from "@matrix-org/analytics-events/types/typescript/CryptoSessionStateChange";
+import { type CryptoSessionStateChange } from "@matrix-org/analytics-events/types/typescript/CryptoSessionStateChange";
 
 import DeviceListener from "../../src/DeviceListener";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
@@ -32,9 +31,6 @@ import { getMockClientWithEventEmitter, mockPlatformPeg } from "../test-utils";
 import { UIFeature } from "../../src/settings/UIFeature";
 import { isBulkUnverifiedDeviceReminderSnoozed } from "../../src/utils/device/snoozeBulkUnverifiedDeviceReminder";
 import { PosthogAnalytics } from "../../src/PosthogAnalytics";
-
-// don't litter test console with logs
-jest.mock("matrix-js-sdk/src/logger");
 
 jest.mock("../../src/dispatcher/dispatcher", () => ({
     dispatch: jest.fn(),
@@ -62,6 +58,12 @@ describe("DeviceListener", () => {
 
     beforeEach(() => {
         jest.resetAllMocks();
+
+        // don't litter the console with logs
+        jest.spyOn(console, "debug").mockImplementation(() => {});
+        jest.spyOn(console, "info").mockImplementation(() => {});
+        jest.spyOn(console, "warn").mockImplementation(() => {});
+        jest.spyOn(console, "error").mockImplementation(() => {});
 
         // spy on various toasts' hide and show functions
         // easier than mocking
@@ -158,14 +160,17 @@ describe("DeviceListener", () => {
             });
 
             it("catches error and logs when saving client information fails", async () => {
-                const errorLogSpy = jest.spyOn(logger, "error");
                 const error = new Error("oups");
                 mockClient!.setAccountData.mockRejectedValue(error);
 
                 // doesn't throw
                 await createAndStart();
 
-                expect(errorLogSpy).toHaveBeenCalledWith("Failed to update client information", error);
+                expect(console.error).toHaveBeenCalledWith(
+                    "DeviceListener:",
+                    "Failed to update client information",
+                    error,
+                );
             });
 
             it("saves client information on logged in action", async () => {
@@ -275,14 +280,14 @@ describe("DeviceListener", () => {
                 throw new ClientStoppedError();
             });
             await createAndStart();
-            expect(logger.error).not.toHaveBeenCalled();
+            expect(console.error).not.toHaveBeenCalled();
         });
         it("correctly handles other errors", async () => {
             mockCrypto!.isCrossSigningReady.mockImplementation(() => {
                 throw new Error("blah");
             });
             await createAndStart();
-            expect(logger.error).toHaveBeenCalledTimes(1);
+            expect(console.error).toHaveBeenCalledTimes(1);
         });
 
         describe("set up encryption", () => {

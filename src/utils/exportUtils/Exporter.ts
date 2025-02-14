@@ -6,13 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Direction, MatrixEvent, Relations, Room } from "matrix-js-sdk/src/matrix";
-import { EventType, MediaEventContent, RelationType } from "matrix-js-sdk/src/types";
+import { Direction, type MatrixEvent, type Relations, type Room } from "matrix-js-sdk/src/matrix";
+import { type EventType, type MediaEventContent, type RelationType } from "matrix-js-sdk/src/types";
 import { saveAs } from "file-saver";
 import { logger } from "matrix-js-sdk/src/logger";
 import sanitizeFilename from "sanitize-filename";
 
-import { ExportType, IExportOptions } from "./exportUtils";
+import { ExportType, type IExportOptions } from "./exportUtils";
 import { decryptFile } from "../DecryptFile";
 import { mediaFromContent } from "../../customisations/Media";
 import { formatFullDateNoDay, formatFullDateNoDayISO } from "../../DateUtils";

@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { MsgType } from "matrix-js-sdk/src/matrix";
-import { EncryptedFile, RoomMessageEventContent } from "matrix-js-sdk/src/types";
+import { type EncryptedFile, type RoomMessageEventContent } from "matrix-js-sdk/src/types";
 
 /**
  * @param {string} mxc MXC URL of the file

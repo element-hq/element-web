@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { PropsWithChildren } from "react";
+import React, { type PropsWithChildren } from "react";
 
 interface Props {
     className?: string;

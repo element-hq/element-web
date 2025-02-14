@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { uniq } from "lodash";
-import { Room, MatrixEvent, EventType, ClientEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type Room, type MatrixEvent, EventType, ClientEvent, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
-import { Optional } from "matrix-events-sdk";
+import { type Optional } from "matrix-events-sdk";
 
 import { filterValidMDirect } from "./dm/filterValidMDirect";
 

@@ -16,8 +16,8 @@ import {
     enableKeyBackup,
     verify,
 } from "./utils";
-import { Bot } from "../../pages/bot";
-import { ElementAppPage } from "../../pages/ElementAppPage";
+import { type Bot } from "../../pages/bot";
+import { type ElementAppPage } from "../../pages/ElementAppPage";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 const checkDMRoom = async (page: Page) => {
@@ -186,7 +186,7 @@ test.describe("Cryptography", function () {
         await page.getByRole("button", { name: "Clear cross-signing keys" }).click();
 
         // Enter the 4S key
-        await page.getByPlaceholder("Security Key").fill(secretStorageKey);
+        await page.getByPlaceholder("Recovery Key").fill(secretStorageKey);
         await page.getByRole("button", { name: "Continue" }).click();
 
         // Enter the password

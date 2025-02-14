@@ -6,16 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ForwardRefExoticComponent, useCallback, useContext, useEffect, useState } from "react";
+import React, { type ForwardRefExoticComponent, useCallback, useContext, useEffect, useState } from "react";
 import {
-    Beacon,
+    type Beacon,
     BeaconEvent,
-    MatrixEvent,
+    type MatrixEvent,
     MatrixEventEvent,
-    MatrixClient,
+    type MatrixClient,
     RelationType,
-    IRedactOpts,
-    ContentHelpers,
+    type IRedactOpts,
+    type ContentHelpers,
     M_BEACON,
 } from "matrix-js-sdk/src/matrix";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
@@ -33,9 +33,9 @@ import OwnBeaconStatus from "../beacon/OwnBeaconStatus";
 import { Map, SmartMarker } from "../location";
 import { MapError } from "../location/MapError";
 import MapFallback from "../location/MapFallback";
-import { GetRelationsForEvent } from "../rooms/EventTile";
+import { type GetRelationsForEvent } from "../rooms/EventTile";
 import { BeaconViewDialog } from "../beacon";
-import { IBodyProps } from "./IBodyProps";
+import { type IBodyProps } from "./IBodyProps";
 
 const useBeaconState = (
     beaconInfoEvent: MatrixEvent,

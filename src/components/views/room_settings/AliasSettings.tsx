@@ -6,10 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent, ContextType, createRef, SyntheticEvent } from "react";
-import { MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
+import React, { type ChangeEvent, type ContextType, createRef, type SyntheticEvent } from "react";
+import { type MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { RoomCanonicalAliasEventContent } from "matrix-js-sdk/src/types";
+import { type RoomCanonicalAliasEventContent } from "matrix-js-sdk/src/types";
 
 import EditableItemList from "../elements/EditableItemList";
 import { _t } from "../../../languageHandler";

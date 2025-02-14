@@ -6,14 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { canEncryptToAllUsers } from "../createRoom";
 import { Action } from "../dispatcher/actions";
-import { ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
 import dis from "../dispatcher/dispatcher";
-import { LocalRoom, LocalRoomState } from "../models/LocalRoom";
+import { type LocalRoom, LocalRoomState } from "../models/LocalRoom";
 import { waitForRoomReadyAndApplyAfterCreateCallbacks } from "./local-room";
 import { findDMRoom } from "./dm/findDMRoom";
 import { privateShouldBeEncrypted } from "./rooms";

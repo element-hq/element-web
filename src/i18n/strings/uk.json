@@ -500,7 +500,6 @@
         "rooms": "Кімнати",
         "saving": "Збереження…",
         "secure_backup": "Безпечне резервне копіювання",
-        "security": "Безпека",
         "select_all": "Вибрати всі",
         "server": "Сервер",
         "settings": "Налаштування",
@@ -519,7 +518,6 @@
         "thread": "Гілка",
         "threads": "Гілки",
         "timeline": "Стрічка",
-        "trusted": "Довірений",
         "unavailable": "недоступний",
         "unencrypted": "Не зашифроване",
         "unmute": "Розтишити",
@@ -869,7 +867,6 @@
             "title": "Не довірений"
         },
         "unable_to_setup_keys_error": "Не вдалося налаштувати ключі",
-        "unsupported": "Цей клієнт не підтримує наскрізного шифрування.",
         "verification": {
             "accepting": "Прийняття…",
             "after_new_login": {
@@ -3117,7 +3114,9 @@
             "sent": "%(senderName)s надсилає запрошення %(targetDisplayName)s приєднатися до кімнати."
         },
         "m.room.tombstone": "%(senderDisplayName)s поліпшує цю кімнату.",
-        "m.room.topic": "%(senderDisplayName)s змінює тему на %(topic)s.",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s змінює тему на %(topic)s."
+        },
         "m.sticker": "%(senderDisplayName)s надсилає наліпку.",
         "m.video": {
             "error_decrypting": "Помилка розшифрування відео"
@@ -3390,14 +3389,6 @@
         "ban_room_confirm_title": "Заблокувати в %(roomName)s",
         "ban_space_everything": "Заблокувати скрізь, де маю доступ",
         "ban_space_specific": "Заблокувати в частині того, куди маю доступ",
-        "count_of_sessions": {
-            "one": "%(count)s сеанс",
-            "other": "Сеансів: %(count)s"
-        },
-        "count_of_verified_sessions": {
-            "one": "1 звірений сеанс",
-            "other": "Довірених сеансів: %(count)s"
-        },
         "deactivate_confirm_action": "Деактивувати користувача",
         "deactivate_confirm_description": "Деактивація цього користувача виведе їх з системи й унеможливить вхід у майбутньому. До того ж вони вийдуть з усіх кімнат, у яких перебувають. Ця дія безповоротна. Ви впевнені, що хочете деактивувати цього користувача?",
         "deactivate_confirm_title": "Деактивувати користувача?",
@@ -3408,15 +3399,12 @@
         "disinvite_button_room": "Відкликати запрошення до кімнати",
         "disinvite_button_room_name": "Скасувати запрошення до %(roomName)s",
         "disinvite_button_space": "Відкликати запрошення до простору",
-        "edit_own_devices": "Керувати пристроями",
         "error_ban_user": "Не вдалося заблокувати користувача",
         "error_deactivate": "Не вдалося деактивувати користувача",
         "error_kicking_user": "Не вдалося вилучити користувача",
         "error_mute_user": "Не вдалося заглушити користувача",
         "error_revoke_3pid_invite_description": "Не вдалось відкликати запрошення. Сервер може мати тимчасові збої або у вас немає достатніх дозволів щоб відкликати запрошення.",
         "error_revoke_3pid_invite_title": "Не вдалось відкликати запрошення",
-        "hide_sessions": "Сховати сеанси",
-        "hide_verified_sessions": "Сховати звірені сеанси",
         "ignore_confirm_description": "Усі повідомлення та запрошення від цього користувача будуть приховані. Ви впевнені, що хочете їх нехтувати?",
         "ignore_confirm_title": "Нехтувати %(user)s",
         "invited_by": "Запрошення від %(sender)s",

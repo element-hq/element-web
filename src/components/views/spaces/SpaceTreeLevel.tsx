@@ -7,22 +7,22 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, {
-    MouseEvent,
-    ComponentProps,
-    ComponentType,
+    type MouseEvent,
+    type ComponentProps,
+    type ComponentType,
     createRef,
-    InputHTMLAttributes,
-    LegacyRef,
-    RefObject,
+    type InputHTMLAttributes,
+    type LegacyRef,
+    type RefObject,
 } from "react";
 import classNames from "classnames";
-import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
+import { type DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 
 import RoomAvatar from "../avatars/RoomAvatar";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
-import { SpaceKey } from "../../../stores/spaces";
+import { type SpaceKey } from "../../../stores/spaces";
 import SpaceTreeLevelLayoutStore from "../../../stores/spaces/SpaceTreeLevelLayoutStore";
 import NotificationBadge from "../rooms/NotificationBadge";
 import { _t } from "../../../languageHandler";
@@ -30,11 +30,14 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { ContextMenuTooltipButton } from "../../../accessibility/context_menu/ContextMenuTooltipButton";
 import { toRightOf, useContextMenu } from "../../structures/ContextMenu";
-import AccessibleButton, { ButtonEvent, ButtonProps as AccessibleButtonProps } from "../elements/AccessibleButton";
+import AccessibleButton, {
+    type ButtonEvent,
+    type ButtonProps as AccessibleButtonProps,
+} from "../elements/AccessibleButton";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
 import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
-import { NotificationState } from "../../../stores/notifications/NotificationState";
+import { type NotificationState } from "../../../stores/notifications/NotificationState";
 import SpaceContextMenu from "../context_menus/SpaceContextMenu";
 import { useRovingTabIndex } from "../../../accessibility/RovingTabIndex";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";

@@ -6,10 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { PureComponent, SyntheticEvent } from "react";
-import { WebScreen as ScreenEvent } from "@matrix-org/analytics-events/types/typescript/WebScreen";
-import { Interaction as InteractionEvent } from "@matrix-org/analytics-events/types/typescript/Interaction";
-import { PinUnpinAction } from "@matrix-org/analytics-events/types/typescript/PinUnpinAction";
+import { PureComponent, type SyntheticEvent } from "react";
+import { type WebScreen as ScreenEvent } from "@matrix-org/analytics-events/types/typescript/WebScreen";
+import { type Interaction as InteractionEvent } from "@matrix-org/analytics-events/types/typescript/Interaction";
+import { type PinUnpinAction } from "@matrix-org/analytics-events/types/typescript/PinUnpinAction";
 
 import PageType from "./PageTypes";
 import Views from "./Views";

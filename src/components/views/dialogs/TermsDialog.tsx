@@ -9,10 +9,10 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { SERVICE_TYPES } from "matrix-js-sdk/src/matrix";
 
-import { _t, pickBestLanguage } from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import DialogButtons from "../elements/DialogButtons";
 import BaseDialog from "./BaseDialog";
-import { ServicePolicyPair } from "../../../Terms";
+import { pickBestPolicyLanguage, type ServicePolicyPair } from "../../../Terms";
 import ExternalLink from "../elements/ExternalLink";
 import { parseUrl } from "../../../utils/UrlUtils";
 
@@ -126,8 +126,8 @@ export default class TermsDialog extends React.PureComponent<ITermsDialogProps, 
 
             const policyValues = Object.values(policiesAndService.policies);
             for (let i = 0; i < policyValues.length; ++i) {
-                const termDoc = policyValues[i];
-                const termsLang = pickBestLanguage(Object.keys(termDoc).filter((k) => k !== "version"));
+                const internationalisedPolicy = pickBestPolicyLanguage(policyValues[i]);
+                if (!internationalisedPolicy) continue;
                 let serviceName: JSX.Element | undefined;
                 let summary: JSX.Element | undefined;
                 if (i === 0) {
@@ -136,19 +136,19 @@ export default class TermsDialog extends React.PureComponent<ITermsDialogProps, 
                 }
 
                 rows.push(
-                    <tr key={termDoc[termsLang].url}>
+                    <tr key={internationalisedPolicy.url}>
                         <td className="mx_TermsDialog_service">{serviceName}</td>
                         <td className="mx_TermsDialog_summary">{summary}</td>
                         <td>
-                            <ExternalLink rel="noreferrer noopener" target="_blank" href={termDoc[termsLang].url}>
-                                {termDoc[termsLang].name}
+                            <ExternalLink rel="noreferrer noopener" target="_blank" href={internationalisedPolicy.url}>
+                                {internationalisedPolicy.name}
                             </ExternalLink>
                         </td>
                         <td>
                             <TermsCheckbox
-                                url={termDoc[termsLang].url}
+                                url={internationalisedPolicy.url}
                                 onChange={this.onTermsCheckboxChange}
-                                checked={Boolean(this.state.agreedUrls[termDoc[termsLang].url])}
+                                checked={Boolean(this.state.agreedUrls[internationalisedPolicy.url])}
                             />
                         </td>
                     </tr>,
@@ -164,7 +164,7 @@ export default class TermsDialog extends React.PureComponent<ITermsDialogProps, 
             for (const terms of Object.values(policiesAndService.policies)) {
                 let docAgreed = false;
                 for (const lang of Object.keys(terms)) {
-                    if (lang === "version") continue;
+                    if (lang === "version" || typeof terms[lang] === "string") continue;
                     if (this.state.agreedUrls[terms[lang].url]) {
                         docAgreed = true;
                         break;

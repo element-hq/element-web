@@ -6,9 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { NotificationCountType, Room, Thread, ReceiptType } from "matrix-js-sdk/src/matrix";
+import { NotificationCountType, type Room, type Thread, ReceiptType } from "matrix-js-sdk/src/matrix";
 import React, { useContext } from "react";
-import { ReadReceipt } from "matrix-js-sdk/src/models/read-receipt";
+import { type ReadReceipt } from "matrix-js-sdk/src/models/read-receipt";
 
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import { useNotificationState } from "../../../../hooks/useRoomNotificationState";
@@ -16,7 +16,7 @@ import { _t, _td } from "../../../../languageHandler";
 import { determineUnreadState } from "../../../../RoomNotifs";
 import { humanReadableNotificationLevel } from "../../../../stores/notifications/NotificationLevel";
 import { doesRoomOrThreadHaveUnreadMessages } from "../../../../Unread";
-import BaseTool, { DevtoolsContext, IDevtoolsProps } from "./BaseTool";
+import BaseTool, { DevtoolsContext, type IDevtoolsProps } from "./BaseTool";
 import { useIsEncrypted } from "../../../../hooks/useIsEncrypted.ts";
 
 function UserReadUpTo({ target }: { target: ReadReceipt<any, any> }): JSX.Element {

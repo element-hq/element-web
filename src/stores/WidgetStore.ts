@@ -6,20 +6,18 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room, RoomStateEvent, MatrixEvent, ClientEvent } from "matrix-js-sdk/src/matrix";
-import { IWidget } from "matrix-widget-api";
+import { type Room, RoomStateEvent, type MatrixEvent, ClientEvent, type EmptyObject } from "matrix-js-sdk/src/matrix";
+import { type IWidget } from "matrix-widget-api";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { ActionPayload } from "../dispatcher/payloads";
+import { type ActionPayload } from "../dispatcher/payloads";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import WidgetEchoStore from "../stores/WidgetEchoStore";
 import ActiveWidgetStore from "../stores/ActiveWidgetStore";
 import WidgetUtils from "../utils/WidgetUtils";
 import { UPDATE_EVENT } from "./AsyncStore";
-import { IApp } from "../utils/WidgetUtils-types";
-
-interface IState {}
+import { type IApp } from "../utils/WidgetUtils-types";
 
 export type { IApp };
 
@@ -36,7 +34,7 @@ interface IRoomWidgets {
 
 // TODO consolidate WidgetEchoStore into this
 // TODO consolidate ActiveWidgetStore into this
-export default class WidgetStore extends AsyncStoreWithClient<IState> {
+export default class WidgetStore extends AsyncStoreWithClient<EmptyObject> {
     private static readonly internalInstance = (() => {
         const instance = new WidgetStore();
         instance.start();

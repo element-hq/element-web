@@ -548,7 +548,6 @@
         "saved": "Saved",
         "saving": "Saving…",
         "secure_backup": "Secure Backup",
-        "security": "Security",
         "select_all": "Select all",
         "server": "Server",
         "settings": "Settings",
@@ -567,7 +566,6 @@
         "thread": "Thread",
         "threads": "Threads",
         "timeline": "Timeline",
-        "trusted": "Trusted",
         "unavailable": "unavailable",
         "unencrypted": "Not encrypted",
         "unmute": "Unmute",
@@ -879,22 +877,22 @@
     "empty_room_was_name": "Empty room (was %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Enter your Security Phrase or <button>use your Security Key</button> to continue.",
+            "enter_phrase_or_key_prompt": "Enter your Security Phrase or <button>use your Recovery Key</button> to continue.",
             "key_validation_text": {
-                "invalid_security_key": "Invalid Security Key",
+                "invalid_security_key": "Invalid Recovery Key",
                 "recovery_key_is_correct": "Looks good!",
                 "wrong_file_type": "Wrong file type",
-                "wrong_security_key": "Wrong Security Key"
+                "wrong_security_key": "Wrong Recovery Key"
             },
             "reset_title": "Reset everything",
             "reset_warning_1": "Only do this if you have no other device to complete verification with.",
             "reset_warning_2": "If you reset everything, you will restart with no trusted sessions, no trusted users, and might not be able to see past messages.",
             "restoring": "Restoring keys from backup",
-            "security_key_title": "Security Key",
+            "security_key_title": "Recovery Key",
             "security_phrase_incorrect_error": "Unable to access secret storage. Please verify that you entered the correct Security Phrase.",
             "security_phrase_title": "Security Phrase",
             "separator": "%(securityKey)s or %(recoveryFile)s",
-            "use_security_key_prompt": "Use your Security Key to continue."
+            "use_security_key_prompt": "Use your Recovery Key to continue."
         },
         "bootstrap_title": "Setting up keys",
         "cancel_entering_passphrase_description": "Are you sure you want to cancel entering passphrase?",
@@ -971,7 +969,6 @@
             "title": "Not Trusted"
         },
         "unable_to_setup_keys_error": "Unable to set up keys",
-        "unsupported": "This client does not support end-to-end encryption.",
         "verification": {
             "accepting": "Accepting…",
             "after_new_login": {
@@ -998,7 +995,7 @@
             "incoming_sas_dialog_waiting": "Waiting for partner to confirm…",
             "incoming_sas_user_dialog_text_1": "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.",
             "incoming_sas_user_dialog_text_2": "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.",
-            "no_key_or_device": "It looks like you don't have a Security Key or any other devices you can verify against.  This device will not be able to access old encrypted messages. In order to verify your identity on this device, you'll need to reset your verification keys.",
+            "no_key_or_device": "It looks like you don't have a Recovery Key or any other devices you can verify against.  This device will not be able to access old encrypted messages. In order to verify your identity on this device, you'll need to reset your verification keys.",
             "no_support_qr_emoji": "The device you are trying to verify doesn't support scanning a QR code or emoji verification, which is what %(brand)s supports. Try with a different client.",
             "other_party_cancelled": "The other party cancelled the verification.",
             "prompt_encrypted": "Verify all users in a room to ensure it's secure.",
@@ -1048,18 +1045,21 @@
             "verify_emoji_prompt_qr": "If you can't scan the code above, verify by comparing unique emoji.",
             "verify_later": "I'll verify later",
             "verify_reset_warning_1": "Resetting your verification keys cannot be undone. After resetting, you won't have access to old encrypted messages, and any friends who have previously verified you will see security warnings until you re-verify with them.",
-            "verify_reset_warning_2": "Please only proceed if you're sure you've lost all of your other devices and your Security Key.",
+            "verify_reset_warning_2": "Please only proceed if you're sure you've lost all of your other devices and your Recovery Key.",
             "verify_using_device": "Verify with another device",
-            "verify_using_key": "Verify with Security Key",
-            "verify_using_key_or_phrase": "Verify with Security Key or Phrase",
+            "verify_using_key": "Verify with Recovery Key",
+            "verify_using_key_or_phrase": "Verify with Recovery Key or Phrase",
             "waiting_for_user_accept": "Waiting for %(displayName)s to accept…",
             "waiting_other_device": "Waiting for you to verify on your other device…",
             "waiting_other_device_details": "Waiting for you to verify on your other device, %(deviceName)s (%(deviceId)s)…",
             "waiting_other_user": "Waiting for %(displayName)s to verify…"
         },
         "verification_requested_toast_title": "Verification requested",
+        "verified_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) verified identity has changed. <a>Learn more</a>",
+        "verified_identity_changed_no_displayname": "<b>%(userId)s</b>'s verified identity has changed. <a>Learn more</a>",
         "verify_toast_description": "Other users may not trust it",
-        "verify_toast_title": "Verify this session"
+        "verify_toast_title": "Verify this session",
+        "withdraw_verification_action": "Withdraw verification"
     },
     "error": {
         "admin_contact": "Please <a>contact your service administrator</a> to continue using this service.",
@@ -1496,6 +1496,7 @@
         "location_share_live_description": "Temporary implementation. Locations persist in room history.",
         "mjolnir": "New ways to ignore people",
         "msc3531_hide_messages_pending_moderation": "Let moderators hide messages pending moderation.",
+        "new_room_list": "Enable new room list",
         "notification_settings": "New Notification Settings",
         "notification_settings_beta_caption": "Introducing a simpler way to change your notification settings. Customize your %(brand)s, just the way you like.",
         "notification_settings_beta_title": "Notification Settings",
@@ -1623,7 +1624,7 @@
             "one": "%(count)s Member",
             "other": "%(count)s Members"
         },
-        "filter_placeholder": "Filter room members",
+        "filter_placeholder": "Search room members",
         "invite_button_no_perms_tooltip": "You do not have permission to invite users",
         "invited_label": "Invited",
         "no_matches": "No matches",
@@ -1799,24 +1800,24 @@
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Failed to decrypt %(failedCount)s sessions!",
         "count_of_successfully_restored_keys": "Successfully restored %(sessionCount)s keys",
-        "enter_key_description": "Access your secure message history and set up secure messaging by entering your Security Key.",
-        "enter_key_title": "Enter Security Key",
+        "enter_key_description": "Access your secure message history and set up secure messaging by entering your Recovery Key.",
+        "enter_key_title": "Enter Recovery Key",
         "enter_phrase_description": "Access your secure message history and set up secure messaging by entering your Security Phrase.",
         "enter_phrase_title": "Enter Security Phrase",
         "incorrect_security_phrase_dialog": "Backup could not be decrypted with this Security Phrase: please verify that you entered the correct Security Phrase.",
         "incorrect_security_phrase_title": "Incorrect Security Phrase",
         "key_backup_warning": "<b>Warning</b>: you should only set up key backup from a trusted computer.",
         "key_fetch_in_progress": "Fetching keys from server…",
-        "key_forgotten_text": "If you've forgotten your Security Key you can <button>set up new recovery options</button>",
-        "key_is_invalid": "Not a valid Security Key",
-        "key_is_valid": "This looks like a valid Security Key!",
+        "key_forgotten_text": "If you've forgotten your Recovery Key you can <button>set up new recovery options</button>",
+        "key_is_invalid": "Not a valid Recovery Key",
+        "key_is_valid": "This looks like a valid Recovery Key!",
         "keys_restored_title": "Keys restored",
         "load_error_content": "Unable to load backup status",
         "load_keys_progress": "%(completed)s of %(total)s keys restored",
         "no_backup_error": "No backup found!",
-        "phrase_forgotten_text": "If you've forgotten your Security Phrase you can <button1>use your Security Key</button1> or <button2>set up new recovery options</button2>",
-        "recovery_key_mismatch_description": "Backup could not be decrypted with this Security Key: please verify that you entered the correct Security Key.",
-        "recovery_key_mismatch_title": "Security Key mismatch",
+        "phrase_forgotten_text": "If you've forgotten your Security Phrase you can <button1>use your Recovery Key</button1> or <button2>set up new recovery options</button2>",
+        "recovery_key_mismatch_description": "Backup could not be decrypted with this Recovery Key: please verify that you entered the correct Recovery Key.",
+        "recovery_key_mismatch_title": "Recovery Key mismatch",
         "restore_failed_error": "Unable to restore backup"
     },
     "right_panel": {
@@ -2360,7 +2361,7 @@
             "enable_element_call_no_permissions_tooltip": "You do not have sufficient permissions to change this."
         }
     },
-    "room_summary_card_back_action_label": "Room information",
+    "room_summary_card_back_action_label": "Room info",
     "scalar": {
         "error_create": "Unable to create widget.",
         "error_membership": "You are not in this room.",
@@ -2466,6 +2467,7 @@
                 "breadcrumb_second_description": "You will lose any message history that’s stored only on the server",
                 "breadcrumb_third_description": "You will need to verify all your existing devices and contacts again",
                 "breadcrumb_title": "Are you sure you want to reset your identity?",
+                "breadcrumb_title_forgot": "Forgot your recovery key? You’ll need to reset your identity.",
                 "breadcrumb_warning": "Only do this if you believe your account has been compromised.",
                 "details_title": "Encryption details",
                 "export_keys": "Export keys",
@@ -2492,7 +2494,8 @@
                 "description": "Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.",
                 "enter_key_error": "The recovery key you entered is not correct.",
                 "enter_recovery_key": "Enter recovery key",
-                "key_storage_warning": "Your key storage is out of sync. Click the button below to fix the problem.",
+                "forgot_recovery_key": "Forgot recovery key?",
+                "key_storage_warning": "Your key storage is out of sync. Click one of the buttons below to fix the problem.",
                 "save_key_description": "Do not share this with anyone!",
                 "save_key_title": "Recovery key",
                 "set_up_recovery": "Set up recovery",
@@ -2614,21 +2617,21 @@
                 "enter_phrase_description": "Enter a Security Phrase only you know, as it's used to safeguard your data. To be secure, you shouldn't re-use your account password.",
                 "enter_phrase_title": "Enter a Security Phrase",
                 "enter_phrase_to_confirm": "Enter your Security Phrase a second time to confirm it.",
-                "generate_security_key_description": "We'll generate a Security Key for you to store somewhere safe, like a password manager or a safe.",
-                "generate_security_key_title": "Generate a Security Key",
+                "generate_security_key_description": "We'll generate a Recovery Key for you to store somewhere safe, like a password manager or a safe.",
+                "generate_security_key_title": "Generate a Recovery Key",
                 "pass_phrase_match_failed": "That doesn't match.",
                 "pass_phrase_match_success": "That matches!",
                 "phrase_strong_enough": "Great! This Security Phrase looks strong enough.",
                 "secret_storage_query_failure": "Unable to query secret storage status",
-                "security_key_safety_reminder": "Store your Security Key somewhere safe, like a password manager or a safe, as it's used to safeguard your encrypted data.",
+                "security_key_safety_reminder": "Store your Recovery Key somewhere safe, like a password manager or a safe, as it's used to safeguard your encrypted data.",
                 "set_phrase_again": "Go back to set it again.",
                 "settings_reminder": "You can also set up Secure Backup & manage your keys in Settings.",
                 "title_confirm_phrase": "Confirm Security Phrase",
-                "title_save_key": "Save your Security Key",
+                "title_save_key": "Save your Recovery Key",
                 "title_set_phrase": "Set a Security Phrase",
                 "unable_to_setup": "Unable to set up secret storage",
                 "use_different_passphrase": "Use a different passphrase?",
-                "use_phrase_only_you_know": "Use a secret phrase only you know, and optionally save a Security Key to use for backup."
+                "use_phrase_only_you_know": "Use a secret phrase only you know, and optionally save a Recovery Key to use for backup."
             }
         },
         "key_export_import": {
@@ -2747,7 +2750,7 @@
             "backup_key_stored_status": "Backup key stored:",
             "backup_key_unexpected_type": "unexpected type",
             "backup_key_well_formed": "well formed",
-            "backup_keys_description": "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.",
+            "backup_keys_description": "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Recovery Key.",
             "bulk_options_accept_all_invites": "Accept all %(invitedRooms)s invites",
             "bulk_options_reject_all_invites": "Reject all %(invitedRooms)s invites",
             "bulk_options_section": "Bulk options",
@@ -3491,7 +3494,10 @@
             "sent": "%(senderName)s sent an invitation to %(targetDisplayName)s to join the room."
         },
         "m.room.tombstone": "%(senderDisplayName)s upgraded this room.",
-        "m.room.topic": "%(senderDisplayName)s changed the topic to \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s changed the topic to \"%(topic)s\".",
+            "removed": "%(senderDisplayName)s removed the topic."
+        },
         "m.sticker": "%(senderDisplayName)s sent a sticker.",
         "m.video": {
             "error_decrypting": "Error decrypting video"
@@ -3780,18 +3786,9 @@
         "ban_room_confirm_title": "Ban from %(roomName)s",
         "ban_space_everything": "Ban them from everything I'm able to",
         "ban_space_specific": "Ban them from specific things I'm able to",
-        "count_of_sessions": {
-            "one": "%(count)s session",
-            "other": "%(count)s sessions"
-        },
-        "count_of_verified_sessions": {
-            "one": "1 verified session",
-            "other": "%(count)s verified sessions"
-        },
         "deactivate_confirm_action": "Deactivate user",
         "deactivate_confirm_description": "Deactivating this user will log them out and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?",
         "deactivate_confirm_title": "Deactivate user?",
-        "dehydrated_device_enabled": "Offline device enabled",
         "demote_button": "Demote",
         "demote_self_confirm_description_space": "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the space it will be impossible to regain privileges.",
         "demote_self_confirm_room": "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.",
@@ -3799,15 +3796,12 @@
         "disinvite_button_room": "Disinvite from room",
         "disinvite_button_room_name": "Disinvite from %(roomName)s",
         "disinvite_button_space": "Disinvite from space",
-        "edit_own_devices": "Edit devices",
         "error_ban_user": "Failed to ban user",
         "error_deactivate": "Failed to deactivate user",
         "error_kicking_user": "Failed to remove user",
         "error_mute_user": "Failed to mute user",
         "error_revoke_3pid_invite_description": "Could not revoke the invite. The server may be experiencing a temporary problem or you do not have sufficient permissions to revoke the invite.",
         "error_revoke_3pid_invite_title": "Failed to revoke invite",
-        "hide_sessions": "Hide sessions",
-        "hide_verified_sessions": "Hide verified sessions",
         "ignore_button": "Ignore",
         "ignore_confirm_description": "All messages and invites from this user will be hidden. Are you sure you want to ignore them?",
         "ignore_confirm_title": "Ignore %(user)s",
@@ -3851,6 +3845,7 @@
         "unban_space_specific": "Unban them from specific things I'm able to",
         "unban_space_warning": "They won't be able to access whatever you're not an admin of.",
         "unignore_button": "Unignore",
+        "verification_unavailable": "User verification unavailable",
         "verify_button": "Verify User",
         "verify_explainer": "For extra security, verify this user by checking a one-time code on both of your devices."
     },

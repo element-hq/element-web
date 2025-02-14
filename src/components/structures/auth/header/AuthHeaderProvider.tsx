@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { isEqual } from "lodash";
-import React, { ComponentProps, PropsWithChildren, Reducer, useReducer } from "react";
+import React, { type ComponentProps, type PropsWithChildren, type Reducer, useReducer } from "react";
 
 import { AuthHeaderContext } from "./AuthHeaderContext";
-import { AuthHeaderModifier } from "./AuthHeaderModifier";
+import { type AuthHeaderModifier } from "./AuthHeaderModifier";
 
 export enum AuthHeaderActionType {
     Add,
@@ -24,7 +24,7 @@ interface AuthHeaderAction {
 
 export type AuthHeaderReducer = Reducer<ComponentProps<typeof AuthHeaderModifier>[], AuthHeaderAction>;
 
-export function AuthHeaderProvider({ children }: PropsWithChildren<{}>): JSX.Element {
+export function AuthHeaderProvider({ children }: PropsWithChildren): JSX.Element {
     const [state, dispatch] = useReducer<AuthHeaderReducer>(
         (state: ComponentProps<typeof AuthHeaderModifier>[], action: AuthHeaderAction) => {
             switch (action.type) {

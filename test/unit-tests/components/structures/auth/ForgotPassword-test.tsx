@@ -8,12 +8,12 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { mocked } from "jest-mock";
-import { render, RenderResult, screen, waitFor, cleanup } from "jest-matrix-react";
+import { render, type RenderResult, screen, waitFor, cleanup } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { MatrixClient, createClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, createClient } from "matrix-js-sdk/src/matrix";
 
 import ForgotPassword from "../../../../../src/components/structures/auth/ForgotPassword";
-import { ValidatedServerConfig } from "../../../../../src/utils/ValidatedServerConfig";
+import { type ValidatedServerConfig } from "../../../../../src/utils/ValidatedServerConfig";
 import { clearAllModals, filterConsole, stubClient, waitEnoughCyclesForModal } from "../../../../test-utils";
 import AutoDiscoveryUtils from "../../../../../src/utils/AutoDiscoveryUtils";
 

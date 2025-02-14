@@ -9,11 +9,16 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { zip } from "lodash";
 import { render, screen, act, fireEvent, waitFor, cleanup } from "jest-matrix-react";
-import { mocked, Mocked } from "jest-mock";
-import { MatrixClient, PendingEventOrdering, Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { mocked, type Mocked } from "jest-mock";
+import {
+    type MatrixClient,
+    PendingEventOrdering,
+    Room,
+    RoomStateEvent,
+    type RoomMember,
+} from "matrix-js-sdk/src/matrix";
 import { Widget } from "matrix-widget-api";
 
-import type { RoomMember } from "matrix-js-sdk/src/matrix";
 import type { ClientWidgetApi } from "matrix-widget-api";
 import {
     stubClient,
@@ -64,8 +69,8 @@ describe("CallView", () => {
         client.reEmitter.stopReEmitting(room, [RoomStateEvent.Events]);
     });
 
-    const renderView = async (skipLobby = false): Promise<void> => {
-        render(<CallView room={room} resizing={false} waitForCall={false} skipLobby={skipLobby} />);
+    const renderView = async (skipLobby = false, role: string | undefined = undefined): Promise<void> => {
+        render(<CallView room={room} resizing={false} waitForCall={false} skipLobby={skipLobby} role={role} />);
         await act(() => Promise.resolve()); // Let effects settle
     };
 
@@ -89,6 +94,11 @@ describe("CallView", () => {
             cleanup(); // Unmount before we do any cleanup that might update the component
             call.destroy();
             WidgetMessagingStore.instance.stopMessaging(widget, room.roomId);
+        });
+
+        it("accepts an accessibility role", async () => {
+            await renderView(undefined, "main");
+            screen.getByRole("main");
         });
 
         it("calls clean on mount", async () => {

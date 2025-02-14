@@ -6,15 +6,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, RefObject } from "react";
-import { mocked, MockedObject } from "jest-mock";
+import React, { createRef, type RefObject } from "react";
+import { mocked, type MockedObject } from "jest-mock";
 import {
     ClientEvent,
     EventTimeline,
     EventType,
-    IEvent,
+    type IEvent,
     JoinRule,
-    MatrixClient,
+    type MatrixClient,
     MatrixError,
     MatrixEvent,
     Room,
@@ -22,13 +22,13 @@ import {
     RoomStateEvent,
     SearchResult,
 } from "matrix-js-sdk/src/matrix";
-import { CryptoApi, UserVerificationStatus, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
+import { type CryptoApi, UserVerificationStatus, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import {
     fireEvent,
     render,
     screen,
-    RenderResult,
+    type RenderResult,
     waitForElementToBeRemoved,
     waitFor,
     act,
@@ -54,7 +54,7 @@ import {
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { Action } from "../../../../src/dispatcher/actions";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
-import { ViewRoomPayload } from "../../../../src/dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../../../src/dispatcher/payloads/ViewRoomPayload";
 import { RoomView } from "../../../../src/components/structures/RoomView";
 import ResizeNotifier from "../../../../src/utils/ResizeNotifier";
 import SettingsStore from "../../../../src/settings/SettingsStore";
@@ -62,7 +62,7 @@ import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { NotificationState } from "../../../../src/stores/notifications/NotificationState";
 import { RightPanelPhases } from "../../../../src/stores/right-panel/RightPanelStorePhases";
-import { LocalRoom, LocalRoomState } from "../../../../src/models/LocalRoom";
+import { type LocalRoom, LocalRoomState } from "../../../../src/models/LocalRoom";
 import { DirectoryMember } from "../../../../src/utils/direct-messages";
 import { createDmLocalRoom } from "../../../../src/utils/dm/createDmLocalRoom";
 import { UPDATE_EVENT } from "../../../../src/stores/AsyncStore";
@@ -71,11 +71,11 @@ import VoipUserMapper from "../../../../src/VoipUserMapper";
 import WidgetUtils from "../../../../src/utils/WidgetUtils";
 import { WidgetType } from "../../../../src/widgets/WidgetType";
 import WidgetStore from "../../../../src/stores/WidgetStore";
-import { ViewRoomErrorPayload } from "../../../../src/dispatcher/payloads/ViewRoomErrorPayload";
+import { type ViewRoomErrorPayload } from "../../../../src/dispatcher/payloads/ViewRoomErrorPayload";
 import { SearchScope } from "../../../../src/Searching";
 import { MEGOLM_ENCRYPTION_ALGORITHM } from "../../../../src/utils/crypto";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
-import { ViewUserPayload } from "../../../../src/dispatcher/payloads/ViewUserPayload.ts";
+import { type ViewUserPayload } from "../../../../src/dispatcher/payloads/ViewUserPayload.ts";
 
 describe("RoomView", () => {
     let cli: MockedObject<MatrixClient>;
@@ -424,7 +424,7 @@ describe("RoomView", () => {
                     jest.spyOn(cli, "getCrypto").mockReturnValue(crypto);
                     jest.spyOn(cli.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
                     jest.spyOn(cli.getCrypto()!, "getUserVerificationStatus").mockResolvedValue(
-                        new UserVerificationStatus(false, true, false),
+                        new UserVerificationStatus(false, false, false),
                     );
                     localRoom.encrypted = true;
                     localRoom.currentState.setStateEvents([
@@ -691,6 +691,31 @@ describe("RoomView", () => {
         jest.spyOn(defaultDispatcher, "dispatch");
         await mountRoomView();
         expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: Action.RoomLoaded });
+    });
+
+    // Regression test for https://github.com/element-hq/element-web/issues/29072
+    it("does not force a reload on sync unless the client is coming back online", async () => {
+        cli.isInitialSyncComplete.mockReturnValue(false);
+
+        const instance = await getRoomViewInstance();
+        const onRoomViewUpdateMock = jest.fn();
+        (instance as any).onRoomViewStoreUpdate = onRoomViewUpdateMock;
+
+        act(() => {
+            // As if a connectivity check happened (we are still offline)
+            defaultDispatcher.dispatch({ action: "MatrixActions.sync" }, true);
+            // ...so it still should not force a reload
+            expect(onRoomViewUpdateMock).not.toHaveBeenCalledWith(true);
+        });
+
+        act(() => {
+            // set us to online again
+            cli.isInitialSyncComplete.mockReturnValue(true);
+            defaultDispatcher.dispatch({ action: "MatrixActions.sync" }, true);
+        });
+
+        // It should now force a reload
+        expect(onRoomViewUpdateMock).toHaveBeenCalledWith(true);
     });
 
     describe("when there is a RoomView", () => {

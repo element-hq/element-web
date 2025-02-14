@@ -6,18 +6,18 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { test as base } from "@playwright/test";
-import { MailpitClient } from "mailpit-api";
-import { Network, StartedNetwork } from "testcontainers";
-import { PostgreSqlContainer, StartedPostgreSqlContainer } from "@testcontainers/postgresql";
+import { type MailpitClient } from "mailpit-api";
+import { Network, type StartedNetwork } from "testcontainers";
+import { PostgreSqlContainer, type StartedPostgreSqlContainer } from "@testcontainers/postgresql";
 
-import { SynapseConfig, SynapseContainer } from "./testcontainers/synapse.ts";
+import { type SynapseConfig, SynapseContainer } from "./testcontainers/synapse.ts";
 import { Logger } from "./logger.ts";
-import { StartedMatrixAuthenticationServiceContainer } from "./testcontainers/mas.ts";
-import { HomeserverContainer, StartedHomeserverContainer } from "./testcontainers/HomeserverContainer.ts";
-import { MailhogContainer, StartedMailhogContainer } from "./testcontainers/mailpit.ts";
-import { OAuthServer } from "./plugins/oauth_server";
+import { type StartedMatrixAuthenticationServiceContainer } from "./testcontainers/mas.ts";
+import { type HomeserverContainer, type StartedHomeserverContainer } from "./testcontainers/HomeserverContainer.ts";
+import { MailhogContainer, type StartedMailhogContainer } from "./testcontainers/mailpit.ts";
+import { type OAuthServer } from "./plugins/oauth_server";
 import { DendriteContainer, PineconeContainer } from "./testcontainers/dendrite.ts";
-import { HomeserverType } from "./plugins/homeserver";
+import { type HomeserverType } from "./plugins/homeserver";
 
 export interface TestFixtures {
     mailpitClient: MailpitClient;

@@ -7,9 +7,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { IClientWellKnown } from "matrix-js-sdk/src/matrix";
+import { type IClientWellKnown } from "matrix-js-sdk/src/matrix";
 
-import { ValidatedServerConfig } from "./utils/ValidatedServerConfig";
+import { type ValidatedServerConfig } from "./utils/ValidatedServerConfig";
 
 // Convention decision: All config options are lower_snake_case
 // We use an isolated file for the interface so we can mess around with the eslint options.
@@ -206,6 +206,8 @@ export interface IConfigOptions {
         policy_uri?: string;
         contacts?: string[];
     };
+
+    modules?: string[];
 }
 
 export interface ISsoRedirectOptions {
