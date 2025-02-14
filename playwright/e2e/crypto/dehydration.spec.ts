@@ -10,6 +10,7 @@ import { test, expect } from "../../element-web-test";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 import { completeCreateSecretStorageDialog, createBot, logIntoElement } from "./utils.ts";
 import { type Client } from "../../pages/client.ts";
+import { type ElementAppPage } from "../../pages/ElementAppPage.ts";
 
 const NAME = "Alice";
 
@@ -49,13 +50,7 @@ test.describe("Dehydration", () => {
 
         await completeCreateSecretStorageDialog(page);
 
-        // Open the settings again
-        await app.settings.openUserSettings("Security & Privacy");
-
-        // The Security tab should indicate that there is a dehydrated device present
-        await expect(securityTab.getByText("Offline device enabled")).toBeVisible();
-
-        await app.settings.closeDialog();
+        await expectDehydratedDeviceEnabled(app);
 
         // the dehydrated device gets created with the name "Dehydrated
         // device".  We want to make sure that it is not visible as a normal
@@ -108,4 +103,17 @@ async function getDehydratedDeviceIds(client: Client): Promise<string[]> {
                 .map((d) => d.deviceId),
         );
     });
+}
+
+/** Wait for our user to have a dehydrated device */
+async function expectDehydratedDeviceEnabled(app: ElementAppPage): Promise<void> {
+    // It might be nice to do this via the UI, but currently this info is not exposed via the UI.
+    //
+    // Note we might have to wait for the device list to be refreshed, so we wrap in `expect.poll`.
+    await expect
+        .poll(async () => {
+            const dehydratedDeviceIds = await getDehydratedDeviceIds(app.client);
+            return dehydratedDeviceIds.length;
+        })
+        .toEqual(1);
 }
