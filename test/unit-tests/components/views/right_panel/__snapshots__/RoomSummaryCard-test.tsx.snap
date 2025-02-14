@@ -610,7 +610,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
           role="separator"
         />
         <button
-          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          class="mx_RoomSummaryCard_leave _item_8j2l6_17 _interactive_8j2l6_35"
           data-kind="critical"
           role="menuitem"
         >
@@ -1228,7 +1228,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           role="separator"
         />
         <button
-          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          class="mx_RoomSummaryCard_leave _item_8j2l6_17 _interactive_8j2l6_35"
           data-kind="critical"
           role="menuitem"
         >
@@ -1883,7 +1883,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
           role="separator"
         />
         <button
-          class="_item_8j2l6_17 _interactive_8j2l6_35"
+          class="mx_RoomSummaryCard_leave _item_8j2l6_17 _interactive_8j2l6_35"
           data-kind="critical"
           role="menuitem"
         >
