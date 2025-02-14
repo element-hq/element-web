@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ReactNode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type IThreepid } from "matrix-js-sdk/src/matrix";
+import { EditInPlace, ErrorMessage, TooltipProvider } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -22,7 +23,6 @@ import { timeout } from "../../../utils/promise";
 import { type ActionPayload } from "../../../dispatcher/payloads";
 import InlineSpinner from "../elements/InlineSpinner";
 import AccessibleButton from "../elements/AccessibleButton";
-import Field from "../elements/Field";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import SettingsFieldset from "./SettingsFieldset";
 import { SettingsSubsectionText } from "./shared/SettingsSubsection";
@@ -118,25 +118,6 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         const u = ev.target.value;
 
         this.setState({ idServer: u, error: undefined });
-    };
-
-    private getTooltip = (): JSX.Element | undefined => {
-        if (this.state.checking) {
-            return (
-                <div>
-                    <InlineSpinner />
-                    {_t("identity_server|checking")}
-                </div>
-            );
-        } else if (this.state.error) {
-            return <strong className="warning">{this.state.error}</strong>;
-        } else {
-            return undefined;
-        }
-    };
-
-    private idServerChangeEnabled = (): boolean => {
-        return !!this.state.idServer && !this.state.busy;
     };
 
     private saveIdServer = (fullUrl: string): void => {
@@ -393,29 +374,27 @@ export default class SetIdServer extends React.Component<IProps, IState> {
 
         return (
             <SettingsFieldset legend={sectionTitle} description={bodyText}>
-                <form className="mx_SetIdServer" onSubmit={this.checkIdServer}>
-                    <Field
+                <TooltipProvider>
+                    <EditInPlace
+                        cancelButtonLabel={_t("action|reset")}
                         label={_t("identity_server|url_field_label")}
-                        type="text"
-                        autoComplete="off"
+                        onChange={this.onIdentityServerChanged}
+                        onCancel={() => this.setState((s) => ({ idServer: s.currentClientIdServer ?? "" }))}
+                        onClearServerErrors={() => this.setState({ error: undefined })}
+                        onSave={this.checkIdServer}
+                        size={48}
+                        saveButtonLabel={_t("action|change")}
+                        savedLabel={this.state.error ? undefined : _t("identity_server|changed")}
+                        savingLabel={_t("identity_server|checking")}
                         placeholder={this.state.defaultIdServer}
                         value={this.state.idServer}
-                        onChange={this.onIdentityServerChanged}
-                        tooltipContent={this.getTooltip()}
-                        forceTooltipVisible={this.state.error ? true : undefined}
-                        tooltipClassName="mx_SetIdServer_tooltip"
                         disabled={this.state.busy}
-                        forceValidity={this.state.error ? false : undefined}
-                    />
-                    <AccessibleButton
-                        kind="primary_sm"
-                        onClick={this.checkIdServer}
-                        disabled={!this.idServerChangeEnabled()}
+                        serverInvalid={!!this.state.error}
                     >
-                        {_t("action|change")}
-                    </AccessibleButton>
+                        {this.state.error && <ErrorMessage>{this.state.error}</ErrorMessage>}
+                    </EditInPlace>
                     {discoSection}
-                </form>
+                </TooltipProvider>
             </SettingsFieldset>
         );
     }

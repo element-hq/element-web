@@ -60,8 +60,6 @@ interface IProps {
     // If specified, contents will appear as a tooltip on the element and
     // validation feedback tooltips will be suppressed.
     tooltipContent?: JSX.Element | string;
-    // If specified the tooltip will be shown regardless of feedback
-    forceTooltipVisible?: boolean;
     // If specified, the tooltip with be aligned accorindly with the field, defaults to Right.
     tooltipAlignment?: ComponentProps<typeof Tooltip>["placement"];
     // If specified alongside tooltipContent, the class name to apply to the
@@ -274,7 +272,6 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
             validateOnChange,
             validateOnFocus,
             usePlaceholderAsHint,
-            forceTooltipVisible,
             tooltipAlignment,
             ...inputProps
         } = this.props;
@@ -283,7 +280,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         const tooltipProps: Pick<React.ComponentProps<typeof Tooltip>, "aria-live" | "aria-atomic"> = {};
         let tooltipOpen = false;
         if (tooltipContent || this.state.feedback) {
-            tooltipOpen = forceTooltipVisible || this.state.feedbackVisible;
+            tooltipOpen = this.state.feedbackVisible;
             if (!tooltipContent) {
                 tooltipProps["aria-atomic"] = "true";
                 tooltipProps["aria-live"] = this.state.valid ? "polite" : "assertive";
