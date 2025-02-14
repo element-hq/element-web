@@ -58,3 +58,7 @@ export function EncryptionCard({
         </div>
     );
 }
+
+export function EncryptionCardButtons({ children }: PropsWithChildren): JSX.Element {
+    return <div className="mx_EncryptionCard_buttons">{children}</div>;
+}
