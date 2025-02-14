@@ -160,7 +160,7 @@ exports[`<ChangeRecoveryKey /> flow to change the recovery key should display th
 </DocumentFragment>
 `;
 
-exports[`<ChangeRecoveryKey /> flow to setup a recovery key should ask the user to enter the recovery key 1`] = `
+exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user to enter the recovery key 1`] = `
 <DocumentFragment>
   <nav
     class="_breadcrumb_ikpbb_17"
@@ -293,7 +293,7 @@ exports[`<ChangeRecoveryKey /> flow to setup a recovery key should ask the user 
 </DocumentFragment>
 `;
 
-exports[`<ChangeRecoveryKey /> flow to setup a recovery key should ask the user to enter the recovery key 2`] = `
+exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user to enter the recovery key 2`] = `
 <DocumentFragment>
   <nav
     class="_breadcrumb_ikpbb_17"
@@ -448,7 +448,7 @@ exports[`<ChangeRecoveryKey /> flow to setup a recovery key should ask the user 
 </DocumentFragment>
 `;
 
-exports[`<ChangeRecoveryKey /> flow to setup a recovery key should display information about the recovery key 1`] = `
+exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display information about the recovery key 1`] = `
 <DocumentFragment>
   <nav
     class="_breadcrumb_ikpbb_17"
@@ -564,7 +564,7 @@ exports[`<ChangeRecoveryKey /> flow to setup a recovery key should display infor
 </DocumentFragment>
 `;
 
-exports[`<ChangeRecoveryKey /> flow to setup a recovery key should display the recovery key 1`] = `
+exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display the recovery key 1`] = `
 <DocumentFragment>
   <nav
     class="_breadcrumb_ikpbb_17"
