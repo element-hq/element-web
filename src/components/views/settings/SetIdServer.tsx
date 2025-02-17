@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ReactNode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { type IThreepid } from "matrix-js-sdk/src/matrix";
-import { EditInPlace, ErrorMessage, TooltipProvider } from "@vector-im/compound-web";
+import { EditInPlace, ErrorMessage } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
