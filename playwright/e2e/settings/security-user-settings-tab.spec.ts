@@ -25,14 +25,14 @@ test.describe("Security user settings tab", () => {
             },
         });
 
-        test.beforeEach(async ({ page, app }) => {
+        test.beforeEach(async ({ page, app, user }) => {
             // Dismiss "Notification" toast
             await app.closeNotificationToast();
             await page.locator(".mx_Toast_buttons").getByRole("button", { name: "Yes" }).click(); // Allow analytics
         });
 
         test.describe("AnalyticsLearnMoreDialog", () => {
-            test("should be rendered properly", { tag: "@screenshot" }, async ({ app, page }) => {
+            test("should be rendered properly", { tag: "@screenshot" }, async ({ app, page, user }) => {
                 const tab = await app.settings.openUserSettings("Security");
                 await tab.getByRole("button", { name: "Learn more" }).click();
                 await expect(page.locator(".mx_AnalyticsLearnMoreDialog_wrapper .mx_Dialog")).toMatchScreenshot(
@@ -91,7 +91,7 @@ test.describe("Security user settings tab", () => {
             await expect(tab.getByText(`Identity server (identity.example.org)`, { exact: true })).toBeVisible();
         });
 
-        test("should enable show integrations as enabled", async ({ app, page }) => {
+        test("should enable show integrations as enabled", async ({ app, page, user }) => {
             const tab = await app.settings.openUserSettings("Security");
 
             const setIntegrationManager = tab.locator(".mx_SetIntegrationManager");
