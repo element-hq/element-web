@@ -205,6 +205,7 @@ export interface Settings {
     "feature_location_share_live": IFeature;
     "feature_dynamic_room_predecessors": IFeature;
     "feature_render_reaction_images": IFeature;
+    "feature_new_room_list": IFeature;
     "feature_ask_to_join": IFeature;
     "feature_notifications": IFeature;
     // These are in the feature namespace but aren't actually features
@@ -616,6 +617,15 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         default: false,
+    },
+    "feature_new_room_list": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        labsGroup: LabGroup.Ui,
+        displayName: _td("labs|new_room_list"),
+        description: _td("labs|under_active_development"),
+        isFeature: true,
+        default: false,
+        controller: new ReloadOnChangeController(),
     },
     /**
      * With the transition to Compound we are moving to a base font size

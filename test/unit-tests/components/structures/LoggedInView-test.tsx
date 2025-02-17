@@ -421,6 +421,14 @@ describe("<LoggedInView />", () => {
         expect(defaultDispatcher.dispatch).not.toHaveBeenCalledWith({ action: Action.ViewHomePage });
     });
 
+    it("should open spotlight when Ctrl+k is fired", async () => {
+        jest.spyOn(defaultDispatcher, "fire");
+
+        getComponent();
+        await userEvent.keyboard("{Control>}k{/Control}");
+        expect(defaultDispatcher.fire).toHaveBeenCalledWith(Action.OpenSpotlight);
+    });
+
     describe("timezone updates", () => {
         const userTimezone = "Europe/London";
         const originalController = SETTINGS["userTimezonePublish"].controller;

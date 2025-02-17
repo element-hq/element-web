@@ -1,0 +1,39 @@
+/*
+ * Copyright 2025 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.mx_RoomListSearch {
+    /* From figma, this should be aligned with the room header */
+    height: 64px;
+    box-sizing: border-box;
+    border-bottom: 1px solid var(--cpd-color-bg-subtle-primary);
+    padding: 0 var(--cpd-space-3x);
+
+    svg {
+        fill: var(--cpd-color-icon-secondary);
+    }
+
+    .mx_RoomListSearch_search {
+        /* The search button should take all the remaining space */
+        flex: 1;
+        font: var(--cpd-font-body-md-regular);
+        color: var(--cpd-color-text-secondary);
+
+        span {
+            flex: 1;
+
+            kbd {
+                font-family: inherit;
+            }
+        }
+    }
+
+    .mx_RoomListSearch_explore:hover {
+        svg {
+            fill: var(--cpd-color-icon-primary);
+        }
+    }
+}

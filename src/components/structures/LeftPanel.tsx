@@ -12,7 +12,7 @@ import classNames from "classnames";
 
 import dis from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
-import RoomList from "../views/rooms/RoomList";
+import LegacyRoomList from "../views/rooms/LegacyRoomList";
 import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
 import { HEADER_HEIGHT } from "../views/rooms/RoomSublist";
 import { Action } from "../../dispatcher/actions";
@@ -36,6 +36,8 @@ import AccessibleButton, { type ButtonEvent } from "../views/elements/Accessible
 import PosthogTrackers from "../../PosthogTrackers";
 import type PageType from "../../PageTypes";
 import { Landmark, LandmarkNavigation } from "../../accessibility/LandmarkNavigation";
+import SettingsStore from "../../settings/SettingsStore";
+import { RoomListView } from "../views/rooms/RoomListView";
 
 interface IProps {
     isMinimized: boolean;
@@ -56,7 +58,7 @@ interface IState {
 
 export default class LeftPanel extends React.Component<IProps, IState> {
     private listContainerRef = createRef<HTMLDivElement>();
-    private roomListRef = createRef<RoomList>();
+    private roomListRef = createRef<LegacyRoomList>();
     private focusedElement: Element | null = null;
     private isDoingStickyHeaders = false;
 
@@ -377,8 +379,25 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     }
 
     public render(): React.ReactNode {
+        const containerClasses = classNames({
+            mx_LeftPanel: true,
+            mx_LeftPanel_minimized: this.props.isMinimized,
+        });
+
+        const roomListClasses = classNames("mx_LeftPanel_actualRoomListContainer", "mx_AutoHideScrollbar");
+        const useNewRoomList = SettingsStore.getValue("feature_new_room_list");
+        if (useNewRoomList) {
+            return (
+                <div className={containerClasses}>
+                    <div className="mx_LeftPanel_roomListContainer">
+                        <RoomListView activeSpace={this.state.activeSpace} />
+                    </div>
+                </div>
+            );
+        }
+
         const roomList = (
-            <RoomList
+            <LegacyRoomList
                 onKeyDown={this.onKeyDown}
                 resizeNotifier={this.props.resizeNotifier}
                 onFocus={this.onFocus}
@@ -390,13 +409,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                 ref={this.roomListRef}
             />
         );
-
-        const containerClasses = classNames({
-            mx_LeftPanel: true,
-            mx_LeftPanel_minimized: this.props.isMinimized,
-        });
-
-        const roomListClasses = classNames("mx_LeftPanel_actualRoomListContainer", "mx_AutoHideScrollbar");
 
         return (
             <div className={containerClasses}>

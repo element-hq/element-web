@@ -13,7 +13,7 @@ import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
 import { type Room } from "matrix-js-sdk/src/matrix";
 
-import RoomList from "../../../../../src/components/views/rooms/RoomList";
+import LegacyRoomList from "../../../../../src/components/views/rooms/LegacyRoomList";
 import ResizeNotifier from "../../../../../src/utils/ResizeNotifier";
 import { MetaSpace } from "../../../../../src/stores/spaces";
 import { shouldShowComponent } from "../../../../../src/customisations/helpers/UIComponents";
@@ -40,14 +40,14 @@ const getDMRoomsForUserId = jest.fn();
 // @ts-ignore
 DMRoomMap.sharedInstance = { getUserIdForRoomId, getDMRoomsForUserId };
 
-describe("RoomList", () => {
+describe("LegacyRoomList", () => {
     stubClient();
     const client = MatrixClientPeg.safeGet();
     const store = SpaceStore.instance;
 
-    function getComponent(props: Partial<RoomList["props"]> = {}): JSX.Element {
+    function getComponent(props: Partial<LegacyRoomList["props"]> = {}): JSX.Element {
         return (
-            <RoomList
+            <LegacyRoomList
                 onKeyDown={jest.fn()}
                 onFocus={jest.fn()}
                 onBlur={jest.fn()}
