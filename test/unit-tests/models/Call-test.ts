@@ -353,10 +353,8 @@ describe("JitsiCall", () => {
 
             call.on(CallEvent.ConnectionState, callback);
 
-            messaging.emit(
-                `action:${ElementWidgetActions.HangupCall}`,
-                new CustomEvent("widgetapirequest", { detail: { data: { cause: "user" } } }),
-            );
+            messaging.emit(`action:${ElementWidgetActions.HangupCall}`, new CustomEvent("widgetapirequest", {}));
+            messaging.emit(`action:${ElementWidgetActions.Close}`, new CustomEvent("widgetapirequest", {}));
             await waitFor(() => {
                 expect(callback).toHaveBeenNthCalledWith(1, ConnectionState.Disconnected, ConnectionState.Connected);
             });
@@ -887,10 +885,8 @@ describe("ElementCall", () => {
             await callConnectProcedure(call);
             expect(call.connectionState).toBe(ConnectionState.Connected);
 
-            messaging.emit(
-                `action:${ElementWidgetActions.HangupCall}`,
-                new CustomEvent("widgetapirequest", { detail: { data: { cause: "user" } } }),
-            );
+            messaging.emit(`action:${ElementWidgetActions.HangupCall}`, new CustomEvent("widgetapirequest", {}));
+            messaging.emit(`action:${ElementWidgetActions.Close}`, new CustomEvent("widgetapirequest", {}));
             await waitFor(() => expect(call.connectionState).toBe(ConnectionState.Disconnected), { interval: 5 });
         });
 
@@ -1145,10 +1141,8 @@ describe("ElementCall", () => {
             await callConnectProcedure(call);
             expect(call.connectionState).toBe(ConnectionState.Connected);
 
-            messaging.emit(
-                `action:${ElementWidgetActions.HangupCall}`,
-                new CustomEvent("widgetapirequest", { detail: { data: { cause: "user" } } }),
-            );
+            messaging.emit(`action:${ElementWidgetActions.HangupCall}`, new CustomEvent("widgetapirequest", {}));
+            messaging.emit(`action:${ElementWidgetActions.Close}`, new CustomEvent("widgetapirequest", {}));
             // We should now be able to reconnect without manually starting the widget
             expect(call.connectionState).toBe(ConnectionState.Disconnected);
             await callConnectProcedure(call, false);

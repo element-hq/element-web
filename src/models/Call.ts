@@ -184,6 +184,7 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
         super();
         this.widgetUid = WidgetUtils.getWidgetUid(this.widget);
         this.room = this.client.getRoom(this.roomId)!;
+        WidgetMessagingStore.instance.on(WidgetMessagingStoreEvent.StopMessaging, this.onStopMessaging);
     }
 
     /**
@@ -265,7 +266,6 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
         await this.performConnection(audioInput, videoInput);
 
         this.room.on(RoomEvent.MyMembership, this.onMyMembership);
-        WidgetMessagingStore.instance.on(WidgetMessagingStoreEvent.StopMessaging, this.onStopMessaging);
         window.addEventListener("beforeunload", this.beforeUnload);
         this.connectionState = ConnectionState.Connected;
     }
@@ -279,24 +279,35 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
         this.connectionState = ConnectionState.Disconnecting;
         await this.performDisconnection();
         this.setDisconnected();
+        this.close();
     }
 
     /**
-     * Manually marks the call as disconnected and cleans up.
+     * Manually marks the call as disconnected.
      */
     public setDisconnected(): void {
         this.room.off(RoomEvent.MyMembership, this.onMyMembership);
-        WidgetMessagingStore.instance.off(WidgetMessagingStoreEvent.StopMessaging, this.onStopMessaging);
         window.removeEventListener("beforeunload", this.beforeUnload);
-        this.messaging = null;
         this.connectionState = ConnectionState.Disconnected;
+    }
+
+    /**
+     * Stops further communication with the widget and tells the UI to close.
+     */
+    protected close(): void {
+        this.messaging = null;
+        this.emit(CallEvent.Close);
     }
 
     /**
      * Stops all internal timers and tasks to prepare for garbage collection.
      */
     public destroy(): void {
-        if (this.connected) this.setDisconnected();
+        if (this.connected) {
+            this.setDisconnected();
+            this.close();
+        }
+        WidgetMessagingStore.instance.off(WidgetMessagingStoreEvent.StopMessaging, this.onStopMessaging);
         this.emit(CallEvent.Destroy);
     }
 
@@ -304,14 +315,18 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
         if (membership !== KnownMembership.Join) this.setDisconnected();
     };
 
-    private onStopMessaging = (uid: string): void => {
-        if (uid === this.widgetUid) {
+    private readonly onStopMessaging = (uid: string): void => {
+        if (uid === this.widgetUid && this.connected) {
             logger.log("The widget died; treating this as a user hangup");
             this.setDisconnected();
+            this.close();
         }
     };
 
-    private beforeUnload = (): void => this.setDisconnected();
+    private beforeUnload = (): void => {
+        this.setDisconnected();
+        this.close();
+    };
 }
 
 export type { JitsiCallMemberContent };
@@ -621,13 +636,11 @@ export class JitsiCall extends Call {
 
         this.messaging!.transport.reply(ev.detail, {}); // ack
         this.setDisconnected();
+        this.close();
         // In video rooms we immediately want to restart the call after hangup
         // The lobby will be shown again and it connects to all signals from Jitsi.
         if (isVideoRoom(this.room)) {
             this.start();
-        } else {
-            // User is done with the call; tell the UI to close it
-            this.emit(CallEvent.Close);
         }
     };
 }
@@ -885,6 +898,7 @@ export class ElementCall extends Call {
         this.messaging!.on(`action:${ElementWidgetActions.TileLayout}`, this.onTileLayout);
         this.messaging!.on(`action:${ElementWidgetActions.SpotlightLayout}`, this.onSpotlightLayout);
         this.messaging!.on(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
+        this.messaging!.once(`action:${ElementWidgetActions.Close}`, this.onClose);
         this.messaging!.on(`action:${ElementWidgetActions.DeviceMute}`, this.onDeviceMute);
 
         // TODO: if the widget informs us when the join button is clicked (widget action), so we can
@@ -990,13 +1004,18 @@ export class ElementCall extends Call {
         ev.preventDefault();
         this.messaging!.transport.reply(ev.detail, {}); // ack
         this.setDisconnected();
+    };
+
+    private readonly onClose = async (ev: CustomEvent<IWidgetApiRequest>): Promise<void> => {
+        ev.preventDefault();
+        this.messaging!.transport.reply(ev.detail, {}); // ack
         // In video rooms we immediately want to reconnect after hangup
         // This starts the lobby again and connects to all signals from EC.
         if (isVideoRoom(this.room)) {
             this.start();
         } else {
             // User is done with the call; tell the UI to close it
-            this.emit(CallEvent.Close);
+            this.close();
         }
     };
 
