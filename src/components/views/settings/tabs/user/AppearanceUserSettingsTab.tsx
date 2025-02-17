@@ -11,7 +11,6 @@ import React, { type ChangeEvent, type ReactNode } from "react";
 import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../../languageHandler";
-import SdkConfig from "../../../../../SdkConfig";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import SettingsFlag from "../../../elements/SettingsFlag";
 import Field from "../../../elements/Field";
