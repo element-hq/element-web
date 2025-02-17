@@ -85,7 +85,6 @@ interface IAuthEntryProps {
     requestEmailToken?: () => Promise<void>;
     fail: (error: Error) => void;
     clientSecret: string;
-    showContinue: boolean;
 }
 
 interface IPasswordAuthEntryState {
@@ -361,9 +360,11 @@ export class TermsAuthEntry extends React.Component<ITermsAuthEntryProps, ITerms
             );
         }
 
-        let submitButton: JSX.Element | undefined;
-        if (this.props.showContinue !== false) {
-            submitButton = (
+        return (
+            <div className="mx_InteractiveAuthEntryComponents">
+                <p>{_t("auth|uia|terms")}</p>
+                {checkboxes}
+                {errorSection}
                 <AccessibleButton
                     kind="primary"
                     className="mx_InteractiveAuthEntryComponents_termsSubmit"
@@ -372,15 +373,6 @@ export class TermsAuthEntry extends React.Component<ITermsAuthEntryProps, ITerms
                 >
                     {_t("action|accept")}
                 </AccessibleButton>
-            );
-        }
-
-        return (
-            <div className="mx_InteractiveAuthEntryComponents">
-                <p>{_t("auth|uia|terms")}</p>
-                {checkboxes}
-                {errorSection}
-                {submitButton}
             </div>
         );
     }
