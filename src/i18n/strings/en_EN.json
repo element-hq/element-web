@@ -1247,6 +1247,7 @@
         "change_server_prompt": "If you don't want to use <server /> to discover and be discoverable by existing contacts you know, enter another identity server below.",
         "changed": "Your identity server has been changed",
         "checking": "Checking server",
+        "changed": "Your identity server has been changed",
         "description_connected": "You are currently using <server></server> to discover and be discoverable by existing contacts you know. You can change your identity server below.",
         "description_disconnected": "You are not currently using an identity server. To discover and be discoverable by existing contacts you know, add one below.",
         "description_optional": "Using an identity server is optional. If you choose not to use an identity server, you won't be discoverable by other users and you won't be able to invite others by email or phone.",
