@@ -25,7 +25,7 @@ test.describe("Security user settings tab", () => {
             },
         });
 
-        test.beforeEach(async ({ page, app }) => {
+        test.beforeEach(async ({ page, app, user }) => {
             // Dismiss "Notification" toast
             await app.closeNotificationToast();
             await page.locator(".mx_Toast_buttons").getByRole("button", { name: "Yes" }).click(); // Allow analytics
