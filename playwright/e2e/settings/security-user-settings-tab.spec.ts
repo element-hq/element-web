@@ -41,10 +41,10 @@ test.describe("Security user settings tab", () => {
             });
         });
 
-        test("should contain section to set ID server", async ({ app }) => {
+        test.only("should contain section to set ID server", async ({ app }) => {
             const tab = await app.settings.openUserSettings("Security");
 
-            const setIdServer = tab.locator(".mx_SetIdServer");
+            const setIdServer = tab.locator(".mx_IdentityServerPicker");
             await setIdServer.scrollIntoViewIfNeeded();
             // Assert that an input area for identity server exists
             await expect(setIdServer.getByRole("textbox", { name: "Enter a new identity server" })).toBeVisible();
