@@ -906,6 +906,10 @@ export const SETTINGS: Settings = {
         default: false,
         displayName: _td("settings|appearance|custom_font"),
         controller: new SystemFontController(),
+        description: () =>
+            _t("settings|appearance|custom_font_description", {
+                brand: SdkConfig.get().brand,
+            }),
     },
     "systemFont": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
