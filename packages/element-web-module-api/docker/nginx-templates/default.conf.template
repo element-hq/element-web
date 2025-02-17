@@ -1,0 +1,24 @@
+server {
+    listen       8080;
+    server_name  localhost;
+
+    root   /app;
+    index  index.html;
+
+    location = /index.html {
+        add_header Cache-Control "no-cache";
+    }
+    location = /version {
+        add_header Cache-Control "no-cache";
+    }
+    # covers config.json and config.hostname.json requests as it is prefix.
+    location /config {
+        root /tmp/element-web-config;
+        add_header Cache-Control "no-cache";
+    }
+    location /modules {
+        root /tmp/element-web-modules;
+    }
+    error_page   500 502 503 504  /50x.html;
+}
+
