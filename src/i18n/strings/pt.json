@@ -43,6 +43,7 @@
         "copy_link": "Copiar Link",
         "create": "Criar",
         "create_a_room": "Criar uma sala",
+        "create_account": "Criar uma conta",
         "decline": "Recusar",
         "delete": "Apagar",
         "deny": "Negar",
@@ -84,6 +85,7 @@
         "next": "Próximo",
         "no": "Não",
         "ok": "OK",
+        "open": "Abrir",
         "pause": "Pausar",
         "pin": "Fixar",
         "play": "Reproduzir",
@@ -227,6 +229,7 @@
         },
         "misconfigured_body": "Pede ao teu administrador %(brand)s para verificar <a>a tua configuração</a> para ver se há entradas incorretas ou duplicadas.",
         "misconfigured_title": "O teu %(brand)s está mal configurado",
+        "mobile_create_account_title": "Estás prestes a criar uma conta no %(hsName)s",
         "msisdn_field_description": "Outros utilizadores podem convidar-te para salas utilizando os teus dados de contacto",
         "msisdn_field_label": "Telefone",
         "msisdn_field_number_invalid": "Este número de telefone não parece estar correto, por favor verifica e tenta novamente",
@@ -276,6 +279,8 @@
             "security_code": "Código de segurança",
             "security_code_prompt": "Se solicitado, insira o código abaixo no seu outro dispositivo.",
             "select_qr_code": "Seleciona \"%(scanQRCode)s\"",
+            "unsupported_explainer": "O teu fornecedor de conta não suporta o início de sessão num novo dispositivo com um código QR.",
+            "unsupported_heading": "Código QR não suportado",
             "waiting_for_device": "A aguardar que o dispositivo inicie sessão"
         },
         "register_action": "Criar conta",
@@ -352,6 +357,7 @@
         "soft_logout_subheading": "Limpar dados pessoais",
         "soft_logout_warning": "Aviso: os teus dados pessoais (incluindo chaves de encriptação) ainda estão armazenados nesta sessão. Limpa-a se já tiveres terminado de utilizar esta sessão ou se quiseres iniciar sessão noutra conta.",
         "sso": "Registo único",
+        "sso_complete_in_browser_dialog_title": "Vai para o teu browser para concluir o início de sessão",
         "sso_failed_missing_storage": "Pedimos ao navegador que se lembrasse do homeserver que usa para permitir o início de sessão, mas infelizmente o seu navegador esqueceu. Aceda à página de início de sessão e tente novamente.",
         "sso_or_username_password": "%(ssoButtons)s Ou %(usernamePassword)s",
         "sync_footer_subtitle": "Se já te juntaste a muitas salas, isto pode demorar um pouco",
@@ -363,6 +369,8 @@
             "email_resend_prompt": "Não o recebeste? <a>Reenvia-o</a>",
             "email_resent": "Reenviado!",
             "fallback_button": "Iniciar autenticação",
+            "mas_cross_signing_reset_cta": "Ir para a tua conta",
+            "mas_cross_signing_reset_description": "Repõe a tua identidade através do teu fornecedor de conta e, em seguida, volta a clicar em \"Repetir\".",
             "msisdn": "Foi enviada uma mensagem de texto para %(msisdn)s",
             "msisdn_token_incorrect": "Token incorreto",
             "msisdn_token_prompt": "Por favor, entre com o código que está na mensagem:",
@@ -493,6 +501,7 @@
         "matrix": "Matrix",
         "message": "Mensagem",
         "message_layout": "Disposição da mensagem",
+        "message_timestamp_invalid": "Carimbo de data/hora inválido",
         "microphone": "Microfone",
         "model": "Modelo",
         "modern": "Moderno",
@@ -530,6 +539,7 @@
         "qr_code": "Código QR",
         "random": "Aleatório",
         "reactions": "Reações",
+        "recommended": "Recomendado",
         "report_a_bug": "Comunicar falha",
         "room": "Sala",
         "room_name": "Nome da sala",
@@ -715,12 +725,51 @@
         "twemoji": "A arte do emoji <twemoji>Twemoji</twemoji> é © <author>Twitter, Inc e outros colaboradores</author> utilizada ao abrigo dos termos de <terms>CC-BY 4.0</terms>.",
         "twemoji_colr": "O tipo de letra <colr>twemoji-colr</colr> é © <author>Mozilla Foundation</author> utilizado nos termos de <terms>Apache 2.0</terms>."
     },
+    "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "devtools": {
         "active_widgets": "Widgets ativos",
         "category_other": "Outros",
         "category_room": "Sala",
         "caution_colon": "Atenção:",
         "client_versions": "Versões de cliente",
+        "crypto": {
+            "4s_public_key_in_account_data": "nos dados da conta",
+            "4s_public_key_not_in_account_data": "não encontrado",
+            "4s_public_key_status": "Chave pública de armazenamento secreto:",
+            "backup_key_cached": "armazenado em cache localmente",
+            "backup_key_cached_status": "Chave de backup armazenada em cache:",
+            "backup_key_not_stored": "não armazenado",
+            "backup_key_stored": "em armazenamento secreto",
+            "backup_key_stored_status": "Chave de backup armazenada:",
+            "backup_key_unexpected_type": "tipo inesperado",
+            "backup_key_well_formed": "bem formado",
+            "cross_signing": "Assinatura cruzada",
+            "cross_signing_cached": "armazenados em cache localmente",
+            "cross_signing_not_ready": "A assinatura cruzada não está configurada.",
+            "cross_signing_private_keys_in_storage": "em armazenamento secreto",
+            "cross_signing_private_keys_in_storage_status": "Assinatura cruzada de chaves privadas:",
+            "cross_signing_private_keys_not_in_storage": "não encontrado no armazenamento",
+            "cross_signing_public_keys_on_device": "na memória",
+            "cross_signing_public_keys_on_device_status": "Assinatura cruzada de chaves públicas:",
+            "cross_signing_ready": "A assinatura cruzada está pronta para uso.",
+            "cross_signing_status": "Status da assinatura cruzada:",
+            "cross_signing_untrusted": "Sua conta tem uma identidade de assinatura cruzada no armazenamento secreto, mas ainda não é confiável para esta sessão.",
+            "crypto_not_available": "O módulo criptográfico não está disponível",
+            "key_backup_active_version": "Versão de backup ativo:",
+            "key_backup_active_version_none": "Nenhum",
+            "key_backup_inactive_warning": "Não está a ser feito o backup das suas chaves a partir desta sessão.",
+            "key_backup_latest_version": "Versão de backup mais recente no servidor:",
+            "key_storage": "Armazenamento de chaves",
+            "master_private_key_cached_status": "Chave mestra privada:",
+            "not_found": "não encontrado",
+            "not_found_locally": "não encontrado localmente",
+            "secret_storage_not_ready": "não está pronto",
+            "secret_storage_ready": "pronto",
+            "secret_storage_status": "Armazenamento secreto:",
+            "self_signing_private_key_cached_status": "Chave privada de auto-assinatura:",
+            "title": "Criptografia de ponta a ponta",
+            "user_signing_private_key_cached_status": "Chave privada de assinatura do usuário:"
+        },
         "developer_mode": "Modo de desenvolvedor",
         "developer_tools": "Ferramentas de desenvolvedor",
         "edit_setting": "Editar configuração",
@@ -807,6 +856,7 @@
         "widget_screenshots": "Ativar capturas de ecrã de widgets em widgets suportados"
     },
     "dialog_close_label": "Fechar diálogo",
+    "download_completed": "Download Concluído",
     "emoji": {
         "categories": "Categorias",
         "category_activities": "Atividades",
@@ -827,22 +877,22 @@
     "empty_room_was_name": "Sala vazia (era %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Introduz a tua frase de segurança ou <button>utiliza a tua chave de segurança</button> para continuar.",
+            "enter_phrase_or_key_prompt": "Introduz a tua frase de segurança ou <button>utiliza a tua chave de recuperação</button> para continuar.",
             "key_validation_text": {
-                "invalid_security_key": "Chave de segurança inválida",
+                "invalid_security_key": "Chave de recuperação inválida",
                 "recovery_key_is_correct": "Parece bom!",
                 "wrong_file_type": "Tipo de ficheiro errado",
-                "wrong_security_key": "Chave de segurança errada"
+                "wrong_security_key": "Chave de recuperação errada"
             },
             "reset_title": "Repor tudo",
             "reset_warning_1": "Faz isto apenas se não tiveres outro dispositivo para completar a verificação.",
             "reset_warning_2": "Se reiniciares tudo, irás reiniciar sem sessões de confiança, sem utilizadores de confiança e poderás não conseguir ver mensagens anteriores.",
             "restoring": "Restaurar chaves a partir de uma cópia de segurança",
-            "security_key_title": "Chave de segurança",
+            "security_key_title": "Chave de recuperação",
             "security_phrase_incorrect_error": "Não é possível aceder ao armazenamento secreto. Verifica se introduziste a frase de segurança correcta.",
             "security_phrase_title": "Frase de segurança",
             "separator": "%(securityKey)s ou %(recoveryFile)s",
-            "use_security_key_prompt": "Utiliza a tua chave de segurança para continuar."
+            "use_security_key_prompt": "Utiliza a tua chave de recuperação para continuar."
         },
         "bootstrap_title": "A configurar chaves",
         "cancel_entering_passphrase_description": "Tem a certeza que quer cancelar a introdução da frase-passe?",
@@ -865,14 +915,18 @@
             "title": "Destrói as chaves de assinatura cruzada?",
             "warning": "A eliminação das chaves de assinatura cruzada é permanente. Qualquer pessoa com quem tenhas feito a verificação verá alertas de segurança. É quase certo que não vais querer fazer isto, a menos que tenhas perdido todos os dispositivos a partir dos quais podes fazer a assinatura cruzada."
         },
+        "enter_recovery_key": "Introduzir a chave de recuperação",
         "event_shield_reason_authenticity_not_guaranteed": "A autenticidade desta mensagem encriptada não pode ser garantida neste dispositivo.",
         "event_shield_reason_mismatched_sender_key": "Encriptado por uma sessão não verificada",
         "event_shield_reason_unknown_device": "Encriptado por um dispositivo desconhecido ou apagado.",
         "event_shield_reason_unsigned_device": "Encriptado por um dispositivo não verificado pelo seu proprietário.",
         "event_shield_reason_unverified_identity": "Encriptado por um utilizador não verificado.",
         "export_unsupported": "O seu navegador não suporta as extensões de criptografia necessárias",
+        "forgot_recovery_key": "Esqueceste-te da chave de recuperação?",
         "import_invalid_keyfile": "Não é um ficheiro de chaves %(brand)s válido",
         "import_invalid_passphrase": "Erro de autenticação: palavra-passe incorreta?",
+        "key_storage_out_of_sync": "O teu armazenamento de chaves está dessincronizado.",
+        "key_storage_out_of_sync_description": "Confirma a tua chave de recuperação para manteres o acesso ao teu armazenamento de chaves e ao histórico de mensagens.",
         "messages_not_secure": {
             "cause_1": "O teu servidor doméstico",
             "cause_2": "O servidor doméstico ao qual o utilizador que estás a verificar está ligado",
@@ -888,6 +942,8 @@
             "warning": "Se não tiveres definido o novo método de recuperação, um atacante pode estar a tentar aceder à tua conta. Altera a palavra-passe da tua conta e define imediatamente um novo método de recuperação nas Definições."
         },
         "not_supported": "<não suportado>",
+        "pinned_identity_changed": "A identidade de %(displayName)s (<b>%(userId)s</b> ) parece ter mudado.<a> Saber mais</a>",
+        "pinned_identity_changed_no_displayname": "A identidade de <b>%(userId)s</b> parece ter mudado. <a>Saiba mais</a>",
         "recovery_method_removed": {
             "description_1": "Esta sessão detectou que a tua frase de segurança e a chave para as mensagens seguras foram removidas.",
             "description_2": "Se o fizeste acidentalmente, podes configurar as Mensagens seguras nesta sessão, o que criptografará novamente o histórico de mensagens desta sessão com um novo método de recuperação.",
@@ -895,6 +951,9 @@
             "warning": "Se não tiveres removido o método de recuperação, um atacante pode estar a tentar aceder à tua conta. Altera a palavra-passe da tua conta e define imediatamente um novo método de recuperação nas Definições."
         },
         "reset_all_button": "Esqueceste-te ou perdeste todos os métodos de recuperação? <a>Repor tudo</a>",
+        "set_up_recovery": "Configurar a recuperação",
+        "set_up_recovery_later": "Agora não",
+        "set_up_recovery_toast_description": "Gera uma chave de recuperação que pode ser utilizada para restaurar o teu histórico de mensagens encriptadas, caso percas o acesso aos teus dispositivos.",
         "set_up_toast_description": "Protege-te contra a perda de acesso a mensagens e dados encriptados",
         "set_up_toast_title": "Configura uma cópia de segurança segura",
         "setup_secure_backup": {
@@ -936,7 +995,7 @@
             "incoming_sas_dialog_waiting": "Aguarda a confirmação do parceiro...",
             "incoming_sas_user_dialog_text_1": "Verifica este utilizador para o marcar como fiável. A confiança nos utilizadores dá-te uma tranquilidade extra quando utilizas mensagens encriptadas de ponta a ponta.",
             "incoming_sas_user_dialog_text_2": "A verificação deste utilizador marcará a sua sessão como sendo de confiança e também marcará a tua sessão como sendo de confiança para ele.",
-            "no_key_or_device": "Parece que não tens uma chave de segurança ou quaisquer outros dispositivos que possam ser verificados.  Este dispositivo não poderá aceder a mensagens encriptadas antigas. Para verificares a tua identidade neste dispositivo, terás de repor as tuas chaves de verificação.",
+            "no_key_or_device": "Parece que não tens uma chave de recuperação ou qualquer outro dispositivo com o qual possas fazer a verificação.  Este dispositivo não poderá aceder a mensagens encriptadas antigas. Para verificares a tua identidade neste dispositivo, terás de repor as tuas chaves de verificação.",
             "no_support_qr_emoji": "O dispositivo que estás a tentar verificar não suporta a leitura de um código QR nem a verificação de emoji, os dois métodos suportados pela %(brand)s. Tenta com um cliente diferente.",
             "other_party_cancelled": "A outra parte cancelou a verificação.",
             "prompt_encrypted": "Verifica todos os utilizadores de uma sala para garantir a sua segurança.",
@@ -986,29 +1045,40 @@
             "verify_emoji_prompt_qr": "Se não conseguires ler o código acima, verifica-o comparando emojis.",
             "verify_later": "Verificarei mais tarde",
             "verify_reset_warning_1": "A reposição das tuas chaves de verificação não pode ser anulada. Após a reposição, não terás acesso a mensagens encriptadas antigas e todos os amigos que te tenham verificado anteriormente verão avisos de segurança até voltares a verificar com eles.",
-            "verify_reset_warning_2": "Só avances se tiveres a certeza de que perdeste todos os teus outros dispositivos e a tua chave de segurança.",
+            "verify_reset_warning_2": "Só avances se tiveres a certeza de que perdeste todos os teus outros dispositivos e a tua chave de recuperação.",
             "verify_using_device": "Verifica com outro dispositivo",
-            "verify_using_key": "Verifica com a chave de segurança",
-            "verify_using_key_or_phrase": "Verifica com a chave ou frase de segurança",
+            "verify_using_key": "Verifica com a chave de recuperação",
+            "verify_using_key_or_phrase": "Verifica com a chave ou frase de recuperação",
             "waiting_for_user_accept": "À espera de %(displayName)s para aceitar...",
             "waiting_other_device": "À espera que verifiques no teu outro dispositivo...",
             "waiting_other_device_details": "À espera que verifiques no teu outro dispositivo, %(deviceName)s (%(deviceId)s)...",
             "waiting_other_user": "À espera de %(displayName)s para verificar..."
         },
         "verification_requested_toast_title": "Verificação solicitada",
+        "verified_identity_changed": "%(displayName)s(<b>%(userId)s</b>) mudou a tua identidade verificada. <a>Saber mais</a>",
+        "verified_identity_changed_no_displayname": "A identidade verificada de <b>%(userId)s</b> foi alterada. <a>Saber mais</a>",
         "verify_toast_description": "Outros utilizadores podem não confiar nisto",
-        "verify_toast_title": "Verifica esta sessão"
+        "verify_toast_title": "Verifica esta sessão",
+        "withdraw_verification_action": "Retirar verificação"
     },
     "error": {
         "admin_contact": "Por favor, <a>contacta o teu administrador de serviços</a> para continuares a utilizar este serviço.",
         "admin_contact_short": "Contacta o teu administrador do servidor <a></a> .",
+        "app_launch_unexpected_error": "Erro inesperado ao preparar a aplicação. Consulta a consola para mais detalhes.",
+        "cannot_load_config": "Não foi possível carregar o ficheiro de configuração: actualiza a página para tentares novamente.",
         "connection": "Houve um problema de comunicação com o servidor doméstico, por favor tenta novamente mais tarde.",
         "dialog_description_default": "Ocorreu um erro.",
         "download_media": "Falha ao transferir o media de origem, não foi encontrado nenhum url de origem",
         "edit_history_unsupported": "O teu servidor doméstico não parece suportar esta funcionalidade.",
         "failed_copy": "Falha ao copiar",
         "hs_blocked": "Este servidor doméstico foi bloqueado pelo seu administrador.",
+        "invalid_configuration_mixed_server": "Configuração inválida: não pode ser especificado um default_hs_url juntamente com default_server_name ou default_server_config",
+        "invalid_configuration_no_server": "Configuração inválida: não especificaste o servidor predefinido.",
+        "invalid_json": "A tua configuração do Element contém um JSON inválido. Corrige o problema e volta a carregar a página.",
+        "invalid_json_detail": "A mensagem do analisador é: %(message)s",
+        "invalid_json_generic": "JSON inválido",
         "mau": "Este servidor doméstico atingiu o seu limite mensal de utilizadores activos.",
+        "misconfigured": "O teu Element está mal configurado",
         "mixed_content": "Não consigo conectar ao servidor padrão através de HTTP quando uma URL HTTPS está na barra de endereços do seu navegador. Use HTTPS ou então <a>habilite scripts não seguros no seu navegador</a>.",
         "non_urgent_echo_failure_toast": "O teu servidor não está a responder a alguns pedidos <a></a> .",
         "resource_limits": "Este servidor doméstico excedeu um dos seus limites de recursos.",
@@ -1037,7 +1107,7 @@
         "for_desktop": "O teu disco pode estar cheio. Limpa algum espaço e volta a carregar.",
         "for_web": "Se limpaste os dados de navegação, esta mensagem é esperada. %(brand)s também pode estar aberto noutro separador ou o teu disco está cheio. Limpa algum espaço e volta a carregar"
     },
-    "error_database_closed_title": "Base de dados fechada inesperadamente",
+    "error_database_closed_title": "%(brand)s parou de funcionar",
     "error_dialog": {
         "copy_room_link_failed": {
             "description": "Não é possível copiar uma ligação à sala para a área de transferência.",
@@ -1073,7 +1143,15 @@
             "you": "Reagiste %(reaction)s a %(message)s"
         },
         "m.sticker": "%(senderName)s: %(stickerName)s",
-        "m.text": "%(senderName)s: %(message)s"
+        "m.text": "%(senderName)s: %(message)s",
+        "prefix": {
+            "audio": "Áudio",
+            "file": "Ficheiro",
+            "image": "Imagem",
+            "poll": "Sondagem",
+            "video": "Vídeo"
+        },
+        "preview": "<bold>%(prefix)s:</bold> %(preview)s"
     },
     "export_chat": {
         "cancelled": "Exportação cancelada",
@@ -1194,6 +1272,21 @@
     "in_space_and_n_other_spaces": {
         "one": "Em %(spaceName)s e noutro espaço.",
         "other": "Em %(spaceName)s e %(count)s outros espaços."
+    },
+    "incompatible_browser": {
+        "continue": "Continuar assim mesmo",
+        "description": "%(brand)s usa alguns recursos do navegador que não estão disponíveis no seu navegador atual. %(detail)s",
+        "detail_can_continue": "Se continuares, algumas funcionalidades podem deixar de funcionar e existe o risco de perderes dados no futuro.",
+        "detail_no_continue": "Tenta atualizar este browser se não estiveres a utilizar a versão mais recente e tenta novamente.",
+        "learn_more": "Saber mais",
+        "linux": "Linux",
+        "macos": "Mac",
+        "supported_browsers": "Para uma melhor experiência, utiliza <Chrome>Chrome</Chrome>, <Firefox>Firefox</Firefox>, <Edge>Edge</Edge>, ou <Safari>Safari</Safari>.",
+        "title": "%(brand)s não suporta este browser",
+        "use_desktop_heading": "Utiliza antes o %(brand)s Desktop",
+        "use_mobile_heading": "Utiliza antes o %(brand)s no telemóvel",
+        "use_mobile_heading_after_desktop": "Ou utiliza a nossa aplicação móvel",
+        "windows": "Windows (%(bits)s-bit)"
     },
     "info_tooltip_title": "Informação",
     "integration_manager": {
@@ -1369,8 +1462,11 @@
         "dynamic_room_predecessors": "Antecessores de sala dinâmica",
         "dynamic_room_predecessors_description": "Ativar MSC3946 (para suportar arquivos de salas que chegam tarde)",
         "element_call_video_rooms": "Salas de Chamada de vídeo Element",
+        "exclude_insecure_devices": "Exclui dispositivos inseguros ao enviar/receber mensagens",
+        "exclude_insecure_devices_description": "Quando este modo está ativado, as mensagens encriptadas não serão partilhadas com dispositivos não verificados e as mensagens de dispositivos não verificados serão apresentadas como um erro. Tem em atenção que, se activares este modo, poderás não conseguir comunicar com utilizadores que não tenham verificado os seus dispositivos.",
         "experimental_description": "Estás a sentir-te experimental? Experimenta as nossas ideias mais recentes em desenvolvimento. Estas funcionalidades não estão finalizadas; podem ser instáveis, podem ser alteradas ou podem ser completamente abandonadas. <a>Sabe mais em</a>.",
         "experimental_section": "Pré-visualizações antecipadas",
+        "extended_profiles_msc_support": "Requer que o teu servidor suporte MSC4133",
         "feature_disable_call_per_sender_encryption": "Desativar a cifragem por remetente na Element Call",
         "feature_wysiwyg_composer_description": "Utiliza texto rico em vez de Markdown no compositor de mensagens.",
         "group_calls": "Nova experiência de chamada de grupo",
@@ -1400,6 +1496,7 @@
         "location_share_live_description": "Implementação temporária. As localizações permanecem no histórico da sala.",
         "mjolnir": "Novas formas de ignorar pessoas",
         "msc3531_hide_messages_pending_moderation": "Permitir que os moderadores ocultem mensagens pendentes de moderação.",
+        "new_room_list": "Ativar nova lista de salas",
         "notification_settings": "Novas Definições de Notificação",
         "notification_settings_beta_caption": "Apresentamos uma forma mais simples de alterar as tuas definições de notificação. Personaliza o teu %(brand)s, tal como gostas.",
         "notification_settings_beta_title": "Definições de Notificação",
@@ -1523,8 +1620,14 @@
         "toggle_attribution": "Alterna a atribuição"
     },
     "member_list": {
+        "count": {
+            "one": "%(count)s Membro",
+            "other": "%(count)s Membros"
+        },
         "filter_placeholder": "Filtrar integrantes da sala",
         "invite_button_no_perms_tooltip": "Não tens permissão para convidar utilizadores",
+        "invited_label": "Convidado",
+        "no_matches": "Sem correspondências",
         "power_label": "%(userName)s (nível de permissão %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Membros da sala",
@@ -1634,6 +1737,8 @@
         "moderator": "Moderador/a",
         "restricted": "Restrito"
     },
+    "powered_by_matrix": "Fornecido por Matrix",
+    "powered_by_matrix_with_logo": "Conversa e colaboração descentralizadas e encriptadas com a tecnologia $matrixLogo",
     "presence": {
         "away": "Ausente",
         "busy": "Ocupado",
@@ -1695,29 +1800,30 @@
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Falha ao descriptografar%(failedCount)s sessões!",
         "count_of_successfully_restored_keys": "%(sessionCount)s Chaves restauradas com sucesso",
-        "enter_key_description": "Acede ao teu histórico de mensagens seguras e configura o envio seguro de mensagens introduzindo a tua chave de segurança.",
-        "enter_key_title": "Introduzir chave de segurança",
+        "enter_key_description": "Acede ao teu histórico de mensagens seguras e configura o envio de mensagens seguras introduzindo a tua chave de recuperação.",
+        "enter_key_title": "Introduzir a chave de recuperação",
         "enter_phrase_description": "Acede ao teu histórico de mensagens seguras e configura o envio de mensagens seguras introduzindo a tua frase de segurança.",
         "enter_phrase_title": "Introduzir frase de segurança",
         "incorrect_security_phrase_dialog": "Não foi possível desencriptar a cópia de segurança com esta frase de segurança: verifica se introduziste a frase de segurança correcta.",
         "incorrect_security_phrase_title": "Frase de segurança incorreta",
         "key_backup_warning": "<b>Aviso</b>: só deves configurar a cópia de segurança das chaves a partir de um computador de confiança.",
         "key_fetch_in_progress": "A obter chaves do servidor…",
-        "key_forgotten_text": "Se te esqueceste da tua chave de segurança, podes <button>configurar novas opções de recuperação</button>",
-        "key_is_invalid": "Não é uma chave de segurança válida",
-        "key_is_valid": "Isto parece ser uma chave de segurança válida!",
+        "key_forgotten_text": "Se te esqueceste da tua chave de recuperação, podes <button>configurar novas opções de recuperação</button>",
+        "key_is_invalid": "Não é uma chave de recuperação válida",
+        "key_is_valid": "Esta parece ser uma chave de recuperação válida!",
         "keys_restored_title": "Chaves restauradas",
         "load_error_content": "Não foi possível carregar o estado da cópia de segurança",
         "load_keys_progress": "%(completed)s de %(total)s chaves restauradas",
         "no_backup_error": "Nenhuma cópia de segurança encontrada!",
-        "phrase_forgotten_text": "Se te esqueceste da tua Frase de Segurança, podes <button1>utilizar a tua Chave de Segurança</button1> ou <button2>definir novas opções de recuperação</button2>",
-        "recovery_key_mismatch_description": "A cópia de segurança não pôde ser desencriptada com esta chave de segurança: verifica se introduziste a chave de segurança correcta.",
-        "recovery_key_mismatch_title": "Incompatibilidade da chave de segurança",
+        "phrase_forgotten_text": "Se te esqueceste da tua Frase de Segurança, podes <button1>utilizar a tua Chave de Recuperação</button1> ou <button2>definir novas opções de recuperação</button2>",
+        "recovery_key_mismatch_description": "Não foi possível desencriptar a cópia de segurança com esta chave de recuperação: verifica se introduziste a chave de recuperação correta.",
+        "recovery_key_mismatch_title": "Chave de recuperação não coincide",
         "restore_failed_error": "Não foi possível restaurar a cópia de segurança"
     },
     "right_panel": {
         "add_integrations": "Adiciona widgets, pontes e bots",
         "add_topic": "Adicionar descrição",
+        "extensions_button": "Extensões",
         "extensions_empty_description": "Seleciona \"%(addIntegrations)s\" para procurar e adicionar extensões a esta sala",
         "extensions_empty_title": "Aumenta a produtividade com mais ferramentas, widgets e bots",
         "files_button": "Ficheiros",
@@ -1733,9 +1839,18 @@
                 "other": "Só podes fixar até %(count)s widgets"
             },
             "menu": "Abrir o menu",
+            "release_announcement": {
+                "close": "Ok",
+                "description": "Encontra todas as mensagens fixadas aqui. Passa o cursor sobre qualquer mensagem e seleciona \"Fixar\" para a adicionar.",
+                "title": "Todas as novas mensagens afixadas"
+            },
+            "reply_thread": "Responde a uma <link> mensagem do tópico</link>",
             "unpin_all": {
-                "button": "Desafixa todas as mensagens"
-            }
+                "button": "Desafixa todas as mensagens",
+                "content": "Certifica-te de que queres mesmo remover todas as mensagens fixadas. Esta ação não pode ser anulada.",
+                "title": "Desfixar todas as mensagens?"
+            },
+            "view": "Ver na linha do tempo"
         },
         "pinned_messages_button": "Fixado",
         "poll": {
@@ -1840,6 +1955,7 @@
             },
             "room_is_public": "Esta sala é pública"
         },
+        "header_avatar_open_settings_label": "Abre as definições da sala",
         "header_face_pile_tooltip": "Alternar lista de membros",
         "header_untrusted_label": "Não confiável",
         "inaccessible": "De momento, esta sala ou espaço não está acessível.",
@@ -1867,7 +1983,7 @@
         "invite_reject_ignore": "Rejeitar e ignorar o utilizador",
         "invite_sent_to_email": "Este convite foi enviado para %(email)s",
         "invite_sent_to_email_room": "Este convite para %(roomName)s foi enviado para %(email)s",
-        "invite_subtitle": "<userName/> convidou-o",
+        "invite_subtitle": "Convidado por <userName/>",
         "invite_this_room": "Convidar para esta sala",
         "invite_title": "Queres juntar-te a %(roomName)s?",
         "inviter_unknown": "Desconhecido",
@@ -1910,6 +2026,14 @@
         "not_found_title": "Esta sala ou espaço não existe.",
         "not_found_title_name": "%(roomName)s não existe.",
         "peek_join_prompt": "Estás a visualizar %(roomName)s. Queres juntar-te a ele?",
+        "pinned_message_badge": "Mensagem fixada",
+        "pinned_message_banner": {
+            "button_close_list": "Fechar lista",
+            "button_view_all": "Ver tudo",
+            "description": "Esta sala tem mensagens afixadas. Clica para as veres.",
+            "go_to_message": "Visualiza a mensagem fixada na linha do tempo.",
+            "title": "<bold>%(index)s de %(length)s</bold> Mensagens fixadas"
+        },
         "read_topic": "Clica para ler o tópico",
         "rejecting": "Rejeitando o convite...",
         "rejoin_button": "Junta-te novamente",
@@ -2055,6 +2179,8 @@
             "error_deleting_alias_description": "Ocorreu um erro ao removeres esse endereço. Pode já não existir ou ocorreu um erro temporário.",
             "error_deleting_alias_description_forbidden": "Não tens autorização para apagar o endereço.",
             "error_deleting_alias_title": "Erro ao remover o endereço",
+            "error_publishing": "Não é possível publicar a sala",
+            "error_publishing_detail": "Houve um erro ao publicar este sala",
             "error_save_space_settings": "Não conseguiste guardar as definições de espaço.",
             "error_updating_alias_description": "Ocorreu um erro ao atualizar os endereços alternativos da sala. Pode não ser permitido pelo servidor ou ocorreu uma falha temporária.",
             "error_updating_canonical_alias_description": "Ocorreu um erro ao atualizar o endereço principal da sala. Pode não ser permitido pelo servidor ou ocorreu uma falha temporária.",
@@ -2334,6 +2460,56 @@
         "emoji_autocomplete": "Permitir sugestões de Emoji durante a escrita",
         "enable_markdown": "Ativar Markdown",
         "enable_markdown_description": "Inicia as mensagens com <code>/plain</code> para enviar sem marcação.",
+        "encryption": {
+            "advanced": {
+                "breadcrumb_first_description": "Os detalhes da sua conta, contactos, preferências e lista de conversação serão mantidos",
+                "breadcrumb_page": "Repor a encriptação",
+                "breadcrumb_second_description": "Perderás qualquer histórico de mensagens que esteja armazenado apenas no servidor",
+                "breadcrumb_third_description": "Terá de verificar novamente todos os seus dispositivos e contactos existentes",
+                "breadcrumb_title": "Tens a certeza de que queres redefinir a tua identidade?",
+                "breadcrumb_title_forgot": "Esqueceu-se da sua chave de recuperação? Terá de repor a sua identidade.",
+                "breadcrumb_warning": "Faz isto apenas se acreditares que a tua conta foi comprometida.",
+                "details_title": "Detalhes da encriptação",
+                "export_keys": "Exportar chaves",
+                "import_keys": "Importar chaves",
+                "other_people_device_description": "Por predefinição, nas salas encriptadas, não envies mensagens encriptadas a ninguém até as teres verificado",
+                "other_people_device_label": "Nunca enviar mensagens encriptadas para dispositivos não verificados",
+                "other_people_device_title": "Dispositivos de outras pessoas",
+                "reset_identity": "Redefinir identidade criptográfica",
+                "session_id": "ID da sessão:",
+                "session_key": "Chave da sessão:",
+                "title": "Avançadas"
+            },
+            "device_not_verified_button": "Verificar este dispositivo",
+            "device_not_verified_description": "Você precisa verificar este dispositivo para visualizar suas configurações de criptografia.",
+            "device_not_verified_title": "Dispositivo não verificado",
+            "dialog_title": "<strong>Configurações:</strong> Encriptação",
+            "recovery": {
+                "change_recovery_confirm_button": "Confirmar nova chave de recuperação",
+                "change_recovery_confirm_description": "Introduz a tua nova chave de recuperação abaixo para terminar. A tua chave antiga deixará de funcionar.",
+                "change_recovery_confirm_title": "Introduz a tua nova chave de recuperação",
+                "change_recovery_key": "Altera a chave de recuperação",
+                "change_recovery_key_description": "Anota esta nova chave de recuperação num local seguro. Em seguida, clica em Continuar para confirmar a alteração.",
+                "change_recovery_key_title": "Alterar a chave de recuperação?",
+                "description": "Recupera a tua identidade criptográfica e o histórico de mensagens com uma chave de recuperação, caso tenhas perdido todos os teus dispositivos existentes.",
+                "enter_key_error": "A chave de recuperação inserida não está correta.",
+                "enter_recovery_key": "Insira a chave de recuperação",
+                "forgot_recovery_key": "Esqueceu-se da chave de recuperação?",
+                "key_storage_warning": "O teu armazenamento de chaves não está sincronizado. Clica num dos botões abaixo para resolveres o problema.",
+                "save_key_description": "Não partilhes isto com ninguém!",
+                "save_key_title": "Chave de recuperação",
+                "set_up_recovery": "Configurar a recuperação",
+                "set_up_recovery_confirm_button": "Concluir configuração",
+                "set_up_recovery_confirm_description": "Digite a chave de recuperação mostrada na tela anterior para concluir a configuração da recuperação.",
+                "set_up_recovery_confirm_title": "Introduza a sua chave de recuperação para confirmar",
+                "set_up_recovery_description": "O armazenamento da sua chave está protegido por uma chave de recuperação. Se precisar de uma nova chave de recuperação após a configuração, pode recriá-la selecionando '%(changeRecoveryKeyButton)s'.",
+                "set_up_recovery_save_key_description": "Anote essa chave de recuperação em algum lugar seguro, como um gerenciador de senhas, uma nota criptografada ou um cofre físico.",
+                "set_up_recovery_save_key_title": "Guarda a tua chave de recuperação num local seguro",
+                "set_up_recovery_secondary_description": "Depois de clicares em continuar, iremos gerar uma chave de recuperação para ti.",
+                "title": "Recuperação"
+            },
+            "title": "Encriptação"
+        },
         "general": {
             "account_management_section": "Gestão de conta",
             "account_section": "Conta",
@@ -2369,7 +2545,7 @@
             "deactivate_confirm_erase_label": "Esconde as minhas mensagens dos novos aderentes",
             "deactivate_section": "Desativar conta",
             "deactivate_warning": "A desativação da tua conta é uma ação permanente - tem cuidado!",
-            "discovery_email_empty": "As opções de descoberta vão aparecer assim que adicione um e-mail acima.",
+            "discovery_email_empty": "As opções de descoberta serão apresentadas quando adicionares um e-mail.",
             "discovery_email_verification_instructions": "Verifica o link na tua caixa de entrada",
             "discovery_msisdn_empty": "As opções de descoberta aparecerão quando tiveres adicionado um número de telefone acima.",
             "discovery_needs_terms": "Concorda com os Termos de Serviço do servidor de identidade (%(serverName)s) para que possas ser descoberto através do teu endereço de e-mail ou número de telefone.",
@@ -2441,21 +2617,21 @@
                 "enter_phrase_description": "Introduz uma frase de segurança que só tu conheças, pois é utilizada para proteger os teus dados. Para estares seguro, não deves reutilizar a palavra-passe da tua conta.",
                 "enter_phrase_title": "Introduzir uma frase de segurança",
                 "enter_phrase_to_confirm": "Introduz a tua frase de segurança uma segunda vez para a confirmar.",
-                "generate_security_key_description": "Iremos gerar uma chave de segurança para guardares num local seguro, como um gestor de palavras-passe ou um cofre.",
-                "generate_security_key_title": "Gera uma chave de segurança",
+                "generate_security_key_description": "Iremos gerar uma chave de recuperação para guardares num local seguro, como um gestor de palavras-passe ou um cofre.",
+                "generate_security_key_title": "Gerar uma chave de recuperação",
                 "pass_phrase_match_failed": "Isso não combina.",
                 "pass_phrase_match_success": "Isso combina!",
                 "phrase_strong_enough": "Ótimo! Esta frase de segurança parece suficientemente forte.",
                 "secret_storage_query_failure": "Não é possível consultar o estado do armazenamento secreto",
-                "security_key_safety_reminder": "Guarda a tua chave de segurança num local seguro, como um gestor de palavras-passe ou um cofre, uma vez que é utilizada para proteger os teus dados encriptados.",
+                "security_key_safety_reminder": "Guarda a tua chave de recuperação num local seguro, como um gestor de palavras-passe ou um cofre, uma vez que é utilizada para proteger os teus dados encriptados.",
                 "set_phrase_again": "Volta atrás para o definir novamente.",
                 "settings_reminder": "Também podes configurar a Cópia de segurança segura e gerir as tuas chaves nas Definições.",
                 "title_confirm_phrase": "Confirma a frase de segurança",
-                "title_save_key": "Guarda a tua chave de segurança",
+                "title_save_key": "Guarda a tua chave de recuperação",
                 "title_set_phrase": "Define uma frase de segurança",
                 "unable_to_setup": "Não é possível configurar o armazenamento secreto",
                 "use_different_passphrase": "Utiliza uma frase-chave diferente?",
-                "use_phrase_only_you_know": "Utiliza uma frase secreta que só tu sabes e, opcionalmente, guarda uma chave de segurança para utilizar como cópia de segurança."
+                "use_phrase_only_you_know": "Utiliza uma frase secreta que só tu sabes e, opcionalmente, guarda uma chave de recuperação para utilizar como cópia de segurança."
             }
         },
         "key_export_import": {
@@ -2545,6 +2721,7 @@
             "code_blocks_heading": "Blocos de código",
             "compact_modern": "Utiliza um layout \"moderno\" mais compacto",
             "composer_heading": "Compositor",
+            "default_timezone": "Predefinição do browser (%(timezone)s)",
             "dialog_title": "<strong>Definições:</strong> Preferências",
             "enable_hardware_acceleration": "Ativar a aceleração de hardware",
             "enable_tray_icon": "Mostra o ícone do tabuleiro e minimiza a janela ao fechar",
@@ -2552,6 +2729,7 @@
             "keyboard_view_shortcuts_button": "Para ver todos os atalhos de teclado, <a>clica aqui</a>.",
             "media_heading": "Imagens, GIFs e vídeos",
             "presence_description": "Partilha a tua atividade e o teu estado com outros.",
+            "publish_timezone": "Publica o fuso horário no perfil público",
             "rm_lifetime": "Vida útil do marcador de leitura (ms)",
             "rm_lifetime_offscreen": "Vida útil do marcador de leitura fora do ecrã (ms)",
             "room_directory_heading": "Diretório de salas",
@@ -2559,7 +2737,8 @@
             "show_avatars_pills": "Mostra os avatares nas menções de utilizadores, salas e eventos",
             "show_polls_button": "Mostrar botão de sondagens",
             "surround_text": "Rodeia o texto selecionado ao escrever caracteres especiais",
-            "time_heading": "Mostra a hora"
+            "time_heading": "Mostra a hora",
+            "user_timezone": "Define o fuso horário"
         },
         "prompt_invite": "Avisa antes de enviar convites para IDs de matrix potencialmente inválidos",
         "replace_plain_emoji": "Substituir Emoji de texto automaticamente",
@@ -2571,7 +2750,7 @@
             "backup_key_stored_status": "Chave de backup armazenada:",
             "backup_key_unexpected_type": "tipo inesperado",
             "backup_key_well_formed": "bem formado",
-            "backup_keys_description": "Faz uma cópia de segurança das tuas chaves de encriptação com os dados da tua conta para o caso de perderes o acesso às tuas sessões. As tuas chaves serão protegidas com uma chave de segurança única.",
+            "backup_keys_description": "Faça backup de suas chaves de criptografia com os dados da sua conta para o caso de perder o acesso às suas sessões. As suas chaves serão protegidas com uma chave de recuperação exclusiva.",
             "bulk_options_accept_all_invites": "Aceita todos os convites de %(invitedRooms)s ",
             "bulk_options_reject_all_invites": "Rejeitar todos os %(invitedRooms)s convites",
             "bulk_options_section": "Opções em massa",
@@ -2689,6 +2868,7 @@
             "inactive_sessions_list_description": "Considera a possibilidade de sair de sessões antigas (%(inactiveAgeDays)s dias ou mais) que já não utilizas.",
             "ip": "Endereço IP",
             "last_activity": "Última atividade",
+            "manage": "Gerir esta sessão",
             "mobile_session": "Sessão móvel",
             "n_sessions_selected": {
                 "one": "%(count)s sessão selecionada",
@@ -2715,6 +2895,7 @@
             "sign_in_with_qr": "Ligar novo dispositivo",
             "sign_in_with_qr_button": "Mostrar código QR",
             "sign_in_with_qr_description": "Utiliza um código QR para iniciar sessão noutro dispositivo e configurar as mensagens seguras.",
+            "sign_in_with_qr_unsupported": "Não suportado pelo teu fornecedor de conta",
             "sign_out": "Sair desta sessão",
             "sign_out_all_other_sessions": "Sair de todas as outras sessões (%(otherSessionsCount)s)",
             "sign_out_confirm_description": {
@@ -2805,6 +2986,7 @@
         "warning": "<w>AVISO:</w><description/>"
     },
     "share": {
+        "link_copied": "Link copiado",
         "permalink_message": "Link para a mensagem selecionada",
         "permalink_most_recent": "Link para a mensagem mais recente",
         "share_call": "Link de convite para conferência",
@@ -3112,6 +3294,8 @@
             "historical_event_no_key_backup": "As mensagens históricas não estão disponíveis neste dispositivo",
             "historical_event_unverified_device": "Tens de verificar este dispositivo para acederes às mensagens históricas",
             "historical_event_user_not_joined": "Não tens acesso a esta mensagem",
+            "sender_identity_previously_verified": "A identidade verificada do remetente foi alterada",
+            "sender_unsigned_device": "Enviado de um dispositivo inseguro.",
             "unable_to_decrypt": "Não é possível desencriptar a mensagem"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
@@ -3119,6 +3303,7 @@
         "download_action_downloading": "A transferir…",
         "download_failed": "A transferência falhou",
         "download_failed_description": "Ocorreu um erro ao transferir este ficheiro",
+        "e2e_state": "Estado da encriptação de ponta a ponta",
         "edits": {
             "tooltip_label": "Editado em %(date)s. Clica para ver as edições.",
             "tooltip_sub": "Clica para ver as edições",
@@ -3172,7 +3357,7 @@
         },
         "m.file": {
             "error_decrypting": "Erro ao descriptografar o anexo",
-            "error_invalid": "Arquivo inválido %(extra)s"
+            "error_invalid": "Ficheiro inválido"
         },
         "m.image": {
             "error": "Não é possível mostrar a imagem devido a um erro",
@@ -3309,7 +3494,8 @@
         },
         "m.room.tombstone": "%(senderDisplayName)s atualizou a sala.",
         "m.room.topic": {
-            "changed": "%(senderDisplayName)s mudou o tópico para \"%(topic)s\"."
+            "changed": "%(senderDisplayName)s mudou o tópico para \"%(topic)s\".",
+            "removed": "%(senderDisplayName)s removeu o tópico."
         },
         "m.sticker": "%(senderDisplayName)s enviou um sticker.",
         "m.video": {
@@ -3584,6 +3770,7 @@
         "error_files_too_large": "Estes ficheiros são <b>demasiado grandes</b> para serem carregados. O limite de tamanho do ficheiro é %(limit)s.",
         "error_some_files_too_large": "Alguns ficheiros são <b>demasiado grandes</b> para serem carregados. O limite de tamanho dos ficheiros é %(limit)s.",
         "error_title": "Erro de carregamento",
+        "not_image": "O ficheiro que escolheu não é um ficheiro de imagem válido.",
         "title": "Carregar ficheiros",
         "title_progress": "Carrega ficheiros (%(current)s de %(total)s)",
         "upload_all_button": "Carregar tudo",
@@ -3658,6 +3845,7 @@
         "unban_space_specific": "Desbani-los de coisas específicas que estou autorizado",
         "unban_space_warning": "Não poderão aceder a nada que não seja administrado por ti.",
         "unignore_button": "Designorar",
+        "verification_unavailable": "Verificação do usuário indisponível",
         "verify_button": "Verificar utilizador",
         "verify_explainer": "Para maior segurança, verifica este utilizador através de um código de utilização única em ambos os dispositivos."
     },
@@ -3769,6 +3957,8 @@
         "voice_call": "Chamada de voz",
         "you_are_presenting": "Estás a apresentar"
     },
+    "web_default_device_name": "%(appName)s: %(browserName)s em %(osName)s",
+    "welcome_to_element": "Bem-vindo ao Element",
     "widget": {
         "added_by": "Widget adicionado por",
         "capabilities_dialog": {
