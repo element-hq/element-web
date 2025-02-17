@@ -22,11 +22,12 @@ import KeyIcon from "@vector-im/compound-design-tokens/assets/web/icons/key-soli
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../../languageHandler";
-import { EncryptionCard, EncryptionCardButtons } from "./EncryptionCard";
+import { EncryptionCard } from "./EncryptionCard";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import { useAsyncMemo } from "../../../../hooks/useAsyncMemo";
 import { copyPlaintext } from "../../../../utils/strings";
 import { withSecretStorageKeyCache } from "../../../../SecurityManager";
+import { EncryptionCardButtons } from "./EncryptionCardButtons";
 
 /**
  * The possible states of the component.

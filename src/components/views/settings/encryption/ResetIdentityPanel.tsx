@@ -12,9 +12,10 @@ import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error"
 import React, { type MouseEventHandler } from "react";
 
 import { _t } from "../../../../languageHandler";
-import { EncryptionCard, EncryptionCardButtons } from "./EncryptionCard";
+import { EncryptionCard } from "./EncryptionCard";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import { uiAuthCallback } from "../../../../CreateCrossSigning";
+import { EncryptionCardButtons } from "./EncryptionCardButtons";
 
 interface ResetIdentityPanelProps {
     /**
