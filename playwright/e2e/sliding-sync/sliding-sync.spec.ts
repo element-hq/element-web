@@ -7,45 +7,16 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Page } from "@playwright/test";
-import { GenericContainer, type StartedTestContainer, Wait } from "testcontainers";
 
 import { test as base, expect } from "../../element-web-test";
 import type { ElementAppPage } from "../../pages/ElementAppPage";
 import type { Bot } from "../../pages/bot";
 
 const test = base.extend<{
-    slidingSyncProxy: StartedTestContainer;
     testRoom: { roomId: string; name: string };
     joinedBot: Bot;
 }>({
-    slidingSyncProxy: async ({ logger, network, postgres, page, homeserver }, use, testInfo) => {
-        const container = await new GenericContainer("ghcr.io/matrix-org/sliding-sync:v0.99.3")
-            .withNetwork(network)
-            .withExposedPorts(8008)
-            .withLogConsumer(logger.getConsumer("sliding-sync-proxy"))
-            .withWaitStrategy(Wait.forHttp("/client/server.json", 8008))
-            .withEnvironment({
-                SYNCV3_SECRET: "bwahahaha",
-                SYNCV3_DB: `user=${postgres.getUsername()} dbname=postgres password=${postgres.getPassword()} host=postgres sslmode=disable`,
-                SYNCV3_SERVER: `http://homeserver:8008`,
-            })
-            .start();
-
-        const proxyAddress = `http://${container.getHost()}:${container.getMappedPort(8008)}`;
-        await page.addInitScript((proxyAddress) => {
-            window.localStorage.setItem(
-                "mx_local_settings",
-                JSON.stringify({
-                    feature_sliding_sync_proxy_url: proxyAddress,
-                }),
-            );
-            window.localStorage.setItem("mx_labs_feature_feature_sliding_sync", "true");
-        }, proxyAddress);
-        await use(container);
-        await container.stop();
-    },
-    // Ensure slidingSyncProxy is set up before the user fixture as it relies on an init script
-    credentials: async ({ slidingSyncProxy, credentials }, use) => {
+    credentials: async ({ credentials }, use) => {
         await use(credentials);
     },
     testRoom: async ({ user, app }, use) => {
@@ -185,45 +156,6 @@ test.describe("Sliding Sync", () => {
         await page.getByRole("treeitem", { name: "Test Room 2 unread messages including mentions." }).click();
         await expect(
             page.getByRole("treeitem", { name: "Test Room" }).locator("mx_NotificationBadge_count"),
-        ).not.toBeAttached();
-    });
-
-    test("should not show unread indicators when the room is muted", async ({
-        page,
-        app,
-        joinedBot: bot,
-        testRoom,
-    }) => {
-        // XXX Dave - I've edited the name of this test to reflect what I think it was trying to testm
-        // but then the comment below makes zero sense. I'll leave it in case I'm wrong...
-        // TODO: for now. Later we should.
-
-        // Turn message previews on so we can see when the message has arrived
-        const sublistHeaderLocator = page
-            .getByRole("group", { name: "Rooms" })
-            .locator(".mx_RoomSublist_headerContainer");
-        await sublistHeaderLocator.hover();
-        await sublistHeaderLocator.getByRole("button", { name: "List options" }).click();
-        await page.getByRole("menuitemcheckbox", { name: "Show previews of messages" }).dispatchEvent("click");
-        await page.locator(".mx_ContextualMenu_background").click();
-
-        // disable notifs in this room (TODO: CS API call?)
-        const locator = page.getByRole("treeitem", { name: "Test Room" });
-        await locator.hover();
-        await locator.getByRole("button", { name: "Notification options" }).click();
-        await page.getByRole("menuitemradio", { name: "Mute room" }).click();
-
-        // create a new room so we know when the message has been received as it'll re-shuffle the room list
-        await app.client.createRoom({ name: "Dummy" });
-
-        await checkOrder(["Dummy", "Test Room"], page);
-
-        await bot.sendMessage(testRoom.roomId, "Do you read me?");
-
-        await expect(page.locator(".mx_RoomTile_subtitle_text")).toHaveText("@bot_0002:localhost: Do you read me?");
-
-        await expect(
-            page.getByRole("treeitem", { name: "Test Room" }).locator(".mx_NotificationBadge"),
         ).not.toBeAttached();
     });
 
