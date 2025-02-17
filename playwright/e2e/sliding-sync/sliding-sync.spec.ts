@@ -16,9 +16,6 @@ const test = base.extend<{
     testRoom: { roomId: string; name: string };
     joinedBot: Bot;
 }>({
-    credentials: async ({ credentials }, use) => {
-        await use(credentials);
-    },
     testRoom: async ({ user, app }, use) => {
         const name = "Test Room";
         const roomId = await app.client.createRoom({ name });
