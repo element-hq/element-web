@@ -41,7 +41,7 @@ test.describe("Security user settings tab", () => {
             });
         });
 
-        test.only("should contain section to set ID server", async ({ app }) => {
+        test("should contain section to set ID server", async ({ app }) => {
             const tab = await app.settings.openUserSettings("Security");
 
             const setIdServer = tab.locator(".mx_IdentityServerPicker");
