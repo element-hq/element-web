@@ -102,15 +102,13 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
                         <div className="mx_SettingsFlag_microcopy">
                             {shouldWarn
                                 ? _t(
-                                        "settings|warning",
-                                        {},
-                                        {
-                                            w: (sub) => (
-                                                <span className="mx_SettingsTab_microcopy_warning">{sub}</span>
-                                            ),
-                                            description,
-                                        },
-                                    )
+                                      "settings|warning",
+                                      {},
+                                      {
+                                          w: (sub) => <span className="mx_SettingsTab_microcopy_warning">{sub}</span>,
+                                          description,
+                                      },
+                                  )
                                 : description}
                         </div>
                     )}
