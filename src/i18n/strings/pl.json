@@ -1506,6 +1506,7 @@
         "location_share_live_description": "Implementacja tymczasowa. Lokalizacje są zapisywane w historii pokoju.",
         "mjolnir": "Nowe sposoby na ignorowanie osób",
         "msc3531_hide_messages_pending_moderation": "Daj moderatorom ukrycie wiadomości które są sprawdzane.",
+        "new_room_list": "Włącz nową listę pokojów",
         "notification_settings": "Ustawienia nowych powiadomień",
         "notification_settings_beta_caption": "Przedstawiamy prostszy sposób zmiany ustawień powiadomień. Dostosuj %(brand)s wedle swojego upodobania.",
         "notification_settings_beta_title": "Ustawienia powiadomień",

@@ -202,4 +202,15 @@ export class ElementAppPage {
         }
         return this.page.locator(`id=${labelledById ?? describedById}`);
     }
+
+    /**
+     * Close the notification toast
+     */
+    public closeNotificationToast(): Promise<void> {
+        // Dismiss "Notification" toast
+        return this.page
+            .locator(".mx_Toast_toast", { hasText: "Notifications" })
+            .getByRole("button", { name: "Dismiss" })
+            .click();
+    }
 }

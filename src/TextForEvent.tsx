@@ -191,7 +191,10 @@ function textForMemberEvent(
         case KnownMembership.Leave:
             if (ev.getSender() === ev.getStateKey()) {
                 if (prevContent.membership === KnownMembership.Invite) {
-                    return () => _t("timeline|m.room.member|reject_invite", { targetName });
+                    return () =>
+                        reason
+                            ? _t("timeline|m.room.member|reject_invite_reason", { targetName, reason })
+                            : _t("timeline|m.room.member|reject_invite", { targetName });
                 } else {
                     return () =>
                         reason
