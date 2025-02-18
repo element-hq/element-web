@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024-2025 New Vector Ltd.
 Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -330,6 +330,9 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         });
     };
 
+    private onInputCancel = (): void => this.setState((s) => ({ idServer: s.currentClientIdServer ?? "" }));
+    private onClearServerErrors = (): void => this.setState({ error: undefined });
+
     public render(): React.ReactNode {
         const idServerUrl = this.state.currentClientIdServer;
         let sectionTitle;
@@ -339,13 +342,13 @@ export default class SetIdServer extends React.Component<IProps, IState> {
             bodyText = _t(
                 "identity_server|description_connected",
                 {},
-                { server: (sub) => <strong>{abbreviateUrl(idServerUrl)}</strong> },
+                { server: () => <strong>{abbreviateUrl(idServerUrl)}</strong> },
             );
             if (this.props.missingTerms) {
                 bodyText = _t(
                     "identity_server|change_server_prompt",
                     {},
-                    { server: (sub) => <strong>{abbreviateUrl(idServerUrl)}</strong> },
+                    { server: () => <strong>{abbreviateUrl(idServerUrl)}</strong> },
                 );
             }
         } else {
@@ -381,9 +384,9 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                     cancelButtonLabel={_t("action|reset")}
                     disabled={!!this.state.busy}
                     label={_t("identity_server|url_field_label")}
-                    onCancel={() => this.setState((s) => ({ idServer: s.currentClientIdServer ?? "" }))}
+                    onCancel={this.onInputCancel}
                     onChange={this.onIdentityServerChanged}
-                    onClearServerErrors={() => this.setState({ error: undefined })}
+                    onClearServerErrors={this.onClearServerErrors}
                     onSave={this.checkIdServer}
                     placeholder={this.state.defaultIdServer}
                     saveButtonLabel={_t("action|change")}
