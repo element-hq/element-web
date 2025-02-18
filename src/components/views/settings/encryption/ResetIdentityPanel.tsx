@@ -59,9 +59,8 @@ export function ResetIdentityPanel({ onCancelClick, onFinish, variant }: ResetId
                         ? _t("settings|encryption|advanced|breadcrumb_title_forgot")
                         : _t("settings|encryption|advanced|breadcrumb_title")
                 }
-                className="mx_DestructiveComponent"
             >
-                <div className="mx_DestructiveComponent_content">
+                <div>
                     <VisualList>
                         <VisualListItem Icon={CheckIcon} success={true}>
                             {_t("settings|encryption|advanced|breadcrumb_first_description")}
