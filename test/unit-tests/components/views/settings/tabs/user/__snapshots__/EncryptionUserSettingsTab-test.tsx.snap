@@ -253,7 +253,9 @@ exports[`<EncryptionUserSettingsTab /> should display the reset identity panel w
             Are you sure you want to reset your identity?
           </h2>
         </div>
-        <div>
+        <div
+          class="mx_EncryptionCard_emphasisedContent"
+        >
           <ul
             class="_visual-list_4dcf8_17"
           >
