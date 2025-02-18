@@ -39,6 +39,8 @@ export default {
         // Used by webpack
         "process",
         "util",
+        // Embedded into webapp
+        "@hughns/element-call-embedded",
     ],
     ignoreBinaries: [
         // Used in scripts & workflows
