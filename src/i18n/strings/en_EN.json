@@ -853,7 +853,10 @@
         "view_servers_in_room": "View servers in room",
         "view_source_decrypted_event_source": "Decrypted event source",
         "view_source_decrypted_event_source_unavailable": "Decrypted source unavailable",
-        "widget_screenshots": "Enable widget screenshots on supported widgets"
+        "widget_screenshots": "Enable widget screenshots on supported widgets",
+        "settings": {
+            "elementCallUrl": "Element Call URL"
+        }
     },
     "dialog_close_label": "Close dialog",
     "download_completed": "Download Completed",

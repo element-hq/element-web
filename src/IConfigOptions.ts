@@ -117,7 +117,6 @@ export interface IConfigOptions {
         obey_asserted_identity?: boolean; // MSC3086
     };
     element_call: {
-        url?: string;
         guest_spa_url?: string;
         use_exclusively?: boolean;
         participant_limit?: number;
