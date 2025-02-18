@@ -51,6 +51,7 @@ jobs:
                 error|invalid_json
                 error|misconfigured
                 welcome_to_element
+                devtools|settings|elementCallUrl
 
     rethemendex_lint:
         name: "Rethemendex Check"
