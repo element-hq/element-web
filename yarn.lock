@@ -2733,11 +2733,11 @@
     "@svgr/plugin-svgo" "8.1.0"
 
 "@testcontainers/postgresql@^10.16.0":
-  version "10.17.2"
-  resolved "https://registry.yarnpkg.com/@testcontainers/postgresql/-/postgresql-10.17.2.tgz#23ed687ad6ed5bcb1e01d883ab2681baef2d5bea"
-  integrity sha512-W0G2DXU9u7kbhEFDCzReL119iyGOYuLJicn8k7zb/Wl15lq0A4FRurysKxz0pNfi00qBgzacHJiOKQWtonvYig==
+  version "10.18.0"
+  resolved "https://registry.yarnpkg.com/@testcontainers/postgresql/-/postgresql-10.18.0.tgz#87d3acb3a4bc2196bd8e9b7496fe6e3146b59f2b"
+  integrity sha512-WxkE/tBlBpoKvqDEqL3i/mL6BOBWnXb8FXKtLhEeZ3lSt0zlldkTozMmewNsKJtFTBZdv7uFwMzWyXP12t0sxQ==
   dependencies:
-    testcontainers "^10.17.2"
+    testcontainers "^10.18.0"
 
 "@testing-library/dom@^10.4.0":
   version "10.4.0"
@@ -3149,9 +3149,9 @@
     "@types/node" "*"
 
 "@types/node@*":
-  version "22.13.1"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.13.1.tgz#a2a3fefbdeb7ba6b89f40371842162fac0934f33"
-  integrity sha512-jK8uzQlrvXqEU91UxiK5J7pKHyzgnI1Qnl0QDHIgVGuolJhRb9EEl28Cj9b3rGR8B2lhFCtvIm5os8lFnO/1Ew==
+  version "22.13.4"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.13.4.tgz#3fe454d77cd4a2d73c214008b3e331bfaaf5038a"
+  integrity sha512-ywP2X0DYtX3y08eFVx5fNIw7/uIv8hYUKgXoK8oayJlLnKcRfEYCxWMVE1XagUdVtCJlZT1AU4LXEABW+L1Peg==
   dependencies:
     undici-types "~6.20.0"
 
@@ -11961,10 +11961,10 @@ test-exclude@^6.0.0:
     glob "^7.1.4"
     minimatch "^3.0.4"
 
-testcontainers@^10.16.0, testcontainers@^10.17.2:
-  version "10.17.2"
-  resolved "https://registry.yarnpkg.com/testcontainers/-/testcontainers-10.17.2.tgz#28dc80aad830b1efbcde72641627d131520250b5"
-  integrity sha512-tnvXQsqwnOUjNENWLllfFmDLQUm24Q0MNL6kbVH35bIKPujEhyG6dOcpU8N5vwA4mD/ZdtwfHel++Z1Tw084uQ==
+testcontainers@^10.16.0, testcontainers@^10.18.0:
+  version "10.18.0"
+  resolved "https://registry.yarnpkg.com/testcontainers/-/testcontainers-10.18.0.tgz#dbd74e1d6e5de431414a06fb2c2ed9d82971739e"
+  integrity sha512-MnwWsPjsN5QVe+lSU1LwLZVOyjgwSwv1INzkw8FekdwgvOtvJ7FThQEkbmzRcguQootgwmA9FG54NoTChZDRvA==
   dependencies:
     "@balena/dockerignore" "^1.0.2"
     "@types/dockerode" "^3.3.29"
