@@ -19,7 +19,7 @@
     ],
     "scripts": {
         "prepare": "vite build && api-extractor run",
-        "lint:ts": "tsc --noEmit",
+        "lint": "tsc --noEmit",
         "test": "vitest --coverage"
     },
     "devDependencies": {
