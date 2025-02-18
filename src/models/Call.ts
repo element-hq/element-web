@@ -48,6 +48,7 @@ import { getJoinedNonFunctionalMembers } from "../utils/room/getJoinedNonFunctio
 import { isVideoRoom } from "../utils/video-rooms";
 import { FontWatcher } from "../settings/watchers/FontWatcher";
 import { type JitsiCallMemberContent, JitsiCallMemberEventType } from "../call-types";
+import SdkConfig from "../SdkConfig.ts";
 
 const TIMEOUT_MS = 16000;
 
@@ -684,6 +685,8 @@ export class ElementCall extends Call {
             fontScale: (FontWatcher.getRootFontSize() / FontWatcher.getBrowserDefaultFontSize()).toString(),
             theme: "$org.matrix.msc2873.client_theme",
             analyticsID,
+            rageshakeSubmitUrl: SdkConfig.get("bug_report_endpoint_url") ?? "",
+            posthogApiHost: SdkConfig.get("posthog")?.api_host ?? "",
         });
 
         if (SettingsStore.getValue("fallbackICEServerAllowed")) params.append("allowIceFallback", "true");
