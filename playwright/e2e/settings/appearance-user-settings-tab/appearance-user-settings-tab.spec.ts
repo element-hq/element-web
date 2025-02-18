@@ -50,8 +50,8 @@ test.describe("Appearance user settings tab", () => {
         // Click "Show advanced" link button
         await tab.getByRole("button", { name: "Show advanced" }).click();
 
-        await tab.locator(".mx_Checkbox", { hasText: "Use bundled emoji font" }).click();
-        await tab.locator(".mx_Checkbox", { hasText: "Use a system font" }).click();
+        await tab.getByRole("switch", { name: "Use bundled emoji font" }).click();
+        await tab.getByRole("switch", { name: "Use a system font" }).click();
 
         // Assert that the font-family value was removed
         await expect(page.locator("body")).toHaveCSS("font-family", '""');
