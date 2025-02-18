@@ -14,7 +14,7 @@ exports[`UnverifiedSessionToast when rendering the toast should render as expect
           class="mx_Toast_title"
         >
           <h2
-            class="_typography_yh5dq_162 _font-body-lg-semibold_yh5dq_83"
+            class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74"
           >
             New login. Was this you?
           </h2>
@@ -50,7 +50,7 @@ exports[`UnverifiedSessionToast when rendering the toast should render as expect
               class="mx_Toast_buttons"
             >
               <button
-                class="_button_i91xf_17 _destructive_i91xf_116"
+                class="_button_vczzf_8 _destructive_vczzf_107"
                 data-kind="secondary"
                 data-size="sm"
                 role="button"
@@ -59,7 +59,7 @@ exports[`UnverifiedSessionToast when rendering the toast should render as expect
                 No
               </button>
               <button
-                class="_button_i91xf_17"
+                class="_button_vczzf_8"
                 data-kind="primary"
                 data-size="sm"
                 role="button"

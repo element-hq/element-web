@@ -216,7 +216,7 @@ exports[`UrlPreviewSettings should display the correct preview when the setting 
       class="mx_SettingsFieldset_content"
     >
       <svg
-        class="_icon_1ye7b_27"
+        class="_icon_11k6c_18"
         fill="currentColor"
         height="1em"
         style="width: 20px; height: 20px;"
@@ -226,7 +226,7 @@ exports[`UrlPreviewSettings should display the correct preview when the setting 
       >
         <path
           clip-rule="evenodd"
-          d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2Z"
+          d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
           fill-rule="evenodd"
         />
       </svg>

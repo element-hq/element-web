@@ -2,7 +2,7 @@
 
 exports[`ReadReceiptGroup <ReadReceiptPerson /> should display a tooltip 1`] = `
 <div
-  class="_tooltip_1pslb_17"
+  class="_tooltip_6ode6_8"
   data-floating-ui-focusable=""
   id=":r6:"
   role="tooltip"
@@ -11,7 +11,7 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should display a tooltip 1`] = `
 >
   <svg
     aria-hidden="true"
-    class="_arrow_1pslb_42"
+    class="_arrow_6ode6_33"
     height="10"
     style="position: absolute; pointer-events: none; top: 100%;"
     viewBox="0 0 10 10"
@@ -38,7 +38,7 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should display a tooltip 1`] = `
     Alice
   </span>
   <span
-    class="_caption_1pslb_37 cpd-theme-dark"
+    class="_caption_6ode6_28 cpd-theme-dark"
     id=":r5:"
   >
     @alice:example.org
@@ -58,7 +58,7 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should render 1`] = `
         aria-hidden="true"
         aria-label="Profile picture"
         aria-live="off"
-        class="_avatar_mcap2_17 mx_BaseAvatar"
+        class="_avatar_1qbcf_8 mx_BaseAvatar"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
@@ -66,7 +66,7 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should render 1`] = `
       >
         <img
           alt=""
-          class="_image_mcap2_50"
+          class="_image_1qbcf_41"
           data-type="round"
           height="24px"
           loading="lazy"
