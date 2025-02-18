@@ -329,7 +329,7 @@ exports[`<EncryptionUserSettingsTab /> should display the reset identity panel w
           </span>
         </div>
         <div
-          class="mx_ResetIdentityPanel_footer"
+          class="mx_EncryptionCard_buttons"
         >
           <button
             class="_button_i91xf_17 _destructive_i91xf_116"

@@ -15,6 +15,7 @@ import { _t } from "../../../../languageHandler";
 import { EncryptionCard } from "./EncryptionCard";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import { uiAuthCallback } from "../../../../CreateCrossSigning";
+import { EncryptionCardButtons } from "./EncryptionCardButtons";
 
 interface ResetIdentityPanelProps {
     /**
@@ -74,7 +75,7 @@ export function ResetIdentityPanel({ onCancelClick, onFinish, variant }: ResetId
                     </VisualList>
                     {variant === "compromised" && <span>{_t("settings|encryption|advanced|breadcrumb_warning")}</span>}
                 </div>
-                <div className="mx_ResetIdentityPanel_footer">
+                <EncryptionCardButtons>
                     <Button
                         destructive={true}
                         onClick={async (evt) => {
@@ -89,7 +90,7 @@ export function ResetIdentityPanel({ onCancelClick, onFinish, variant }: ResetId
                     <Button kind="tertiary" onClick={onCancelClick}>
                         {_t("action|cancel")}
                     </Button>
-                </div>
+                </EncryptionCardButtons>
             </EncryptionCard>
         </>
     );

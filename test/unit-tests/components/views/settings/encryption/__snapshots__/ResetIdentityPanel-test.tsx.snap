@@ -155,7 +155,7 @@ exports[`<ResetIdentityPanel /> should display the 'forgot recovery key' variant
       </ul>
     </div>
     <div
-      class="mx_ResetIdentityPanel_footer"
+      class="mx_EncryptionCard_buttons"
     >
       <button
         class="_button_i91xf_17 _destructive_i91xf_116"
@@ -338,7 +338,7 @@ exports[`<ResetIdentityPanel /> should reset the encryption when the continue bu
       </span>
     </div>
     <div
-      class="mx_ResetIdentityPanel_footer"
+      class="mx_EncryptionCard_buttons"
     >
       <button
         class="_button_i91xf_17 _destructive_i91xf_116"
