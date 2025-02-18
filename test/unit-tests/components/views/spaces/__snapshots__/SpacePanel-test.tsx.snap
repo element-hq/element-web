@@ -22,7 +22,7 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
           class="mx_UserMenu_userAvatar"
         >
           <span
-            class="_avatar_mcap2_17 mx_BaseAvatar mx_UserMenu_userAvatar_BaseAvatar _avatar-imageless_mcap2_61"
+            class="_avatar_1qbcf_8 mx_BaseAvatar mx_UserMenu_userAvatar_BaseAvatar _avatar-imageless_1qbcf_52"
             data-color="5"
             data-testid="avatar-img"
             data-type="round"
@@ -237,14 +237,14 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
         aria-haspopup="dialog"
         aria-label="Threads"
         aria-labelledby=":r14:"
-        class="_icon-button_bh2qc_17 mx_ThreadsActivityCentreButton"
+        class="_icon-button_m2erp_8 mx_ThreadsActivityCentreButton"
         data-floating-ui-inert=""
         role="button"
         style="--cpd-icon-button-size: 32px;"
         tabindex="0"
       >
         <div
-          class="_indicator-icon_133tf_26"
+          class="_indicator-icon_zr2a0_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -256,7 +256,7 @@ exports[`<SpacePanel /> should show all activated MetaSpaces in the correct orde
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              d="M4 3h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2Zm3 7h10a.97.97 0 0 0 .712-.287A.967.967 0 0 0 18 9a.967.967 0 0 0-.288-.713A.968.968 0 0 0 17 8H7a.968.968 0 0 0-.713.287A.968.968 0 0 0 6 9c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 4h6c.283 0 .52-.096.713-.287A.968.968 0 0 0 14 13a.968.968 0 0 0-.287-.713A.968.968 0 0 0 13 12H7a.967.967 0 0 0-.713.287A.968.968 0 0 0 6 13c0 .283.096.52.287.713.192.191.43.287.713.287Z"
+              d="M4 3h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2m3 7h10q.424 0 .712-.287A.97.97 0 0 0 18 9a.97.97 0 0 0-.288-.713A.97.97 0 0 0 17 8H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 9q0 .424.287.713Q6.576 10 7 10m0 4h6q.424 0 .713-.287A.97.97 0 0 0 14 13a.97.97 0 0 0-.287-.713A.97.97 0 0 0 13 12H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 13q0 .424.287.713Q6.576 14 7 14"
             />
           </svg>
         </div>

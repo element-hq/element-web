@@ -16,7 +16,7 @@ exports[`<RoomListHeaderView /> should display the compose menu 1`] = `
       aria-expanded="false"
       aria-haspopup="menu"
       aria-label="Add"
-      class="_icon-button_bh2qc_17"
+      class="_icon-button_m2erp_8"
       data-state="closed"
       id="radix-:r0:"
       role="button"
@@ -25,7 +25,7 @@ exports[`<RoomListHeaderView /> should display the compose menu 1`] = `
       type="button"
     >
       <div
-        class="_indicator-icon_133tf_26"
+        class="_indicator-icon_zr2a0_17"
         style="--cpd-icon-button-size: 100%;"
       >
         <svg
@@ -37,16 +37,11 @@ exports[`<RoomListHeaderView /> should display the compose menu 1`] = `
         >
           <path
             clip-rule="evenodd"
-            d="M3 5a2 2 0 0 1 2-2h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5Z"
+            d="M16.937 2.82a2 2 0 0 1 2.828 0l1.415 1.414a2 2 0 0 1 0 2.829l-7.071 7.07c-.195.196-.42.342-.66.44a1 1 0 0 1-.168.072l-3.993 1.331a1 1 0 0 1-1.265-1.265l1.331-3.992q.03-.09.073-.168m10.338-4.903-6.717 6.718-1.414-1.414 6.717-6.718z"
             fill-rule="evenodd"
           />
           <path
-            d="m8.023 14.711 1.331-3.992a1 1 0 0 1 1.656-.391l2.662 2.662a1 1 0 0 1-.391 1.655l-3.993 1.331a1 1 0 0 1-1.265-1.265Z"
-          />
-          <path
-            clip-rule="evenodd"
-            d="M19.765 2.82a2 2 0 0 0-2.828 0L9.866 9.89c-.195.195-.341.42-.439.66a1.024 1.024 0 0 0-.073.168l-1.33 3.992a1 1 0 0 0 1.264 1.265l3.993-1.33c.059-.02.115-.045.167-.074.24-.097.466-.243.66-.438l7.072-7.071a2 2 0 0 0 0-2.829L19.765 2.82Zm-6.717 9.546 6.717-6.718-1.414-1.414-6.717 6.718 1.414 1.414Z"
-            fill-rule="evenodd"
+            d="M3 5a2 2 0 0 1 2-2h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
           />
         </svg>
       </div>
