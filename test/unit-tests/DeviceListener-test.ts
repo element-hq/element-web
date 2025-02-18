@@ -921,5 +921,62 @@ describe("DeviceListener", () => {
                 });
             });
         });
+
+        describe("set up recovery", () => {
+            const rooms = [{ roomId: "!room1" }] as unknown as Room[];
+
+            beforeEach(() => {
+                mockCrypto!.getDeviceVerificationStatus.mockResolvedValue(
+                    new DeviceVerificationStatus({
+                        trustCrossSignedDevices: true,
+                        crossSigningVerified: true,
+                    }),
+                );
+                mockCrypto!.isCrossSigningReady.mockResolvedValue(true);
+                mockCrypto!.isSecretStorageReady.mockResolvedValue(false);
+                mockClient.secretStorage.getDefaultKeyId.mockResolvedValue(null);
+                mockClient!.getRooms.mockReturnValue(rooms);
+                jest.spyOn(mockClient.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
+            });
+
+            it("shows the 'set up recovery' toast if user has not set up 4S", async () => {
+                await createAndStart();
+
+                expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(SetupEncryptionToast.Kind.SET_UP_RECOVERY);
+            });
+
+            it("does not show the 'set up recovery' toast if secret storage is set up", async () => {
+                mockCrypto!.isSecretStorageReady.mockResolvedValue(true);
+                mockClient.secretStorage.getDefaultKeyId.mockResolvedValue("thiskey");
+                await createAndStart();
+
+                expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith(
+                    SetupEncryptionToast.Kind.SET_UP_RECOVERY,
+                );
+            });
+
+            it("does not show the 'set up recovery' toast if user has no encrypted rooms", async () => {
+                jest.spyOn(mockClient.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(false);
+                await createAndStart();
+
+                expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith(
+                    SetupEncryptionToast.Kind.SET_UP_RECOVERY,
+                );
+            });
+
+            it("does not show the 'set up recovery' toast if the user has chosen to disable key storage", async () => {
+                mockClient!.getAccountData.mockImplementation((k: string) => {
+                    if (k === "m.org.matrix.custom.backup_disabled") {
+                        return new MatrixEvent({ content: { disabled: true } });
+                    }
+                    return undefined;
+                });
+                await createAndStart();
+
+                expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith(
+                    SetupEncryptionToast.Kind.SET_UP_RECOVERY,
+                );
+            });
+        });
     });
 });
