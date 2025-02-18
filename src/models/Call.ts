@@ -687,6 +687,7 @@ export class ElementCall extends Call {
             analyticsID,
             rageshakeSubmitUrl: SdkConfig.get("bug_report_endpoint_url") ?? "",
             posthogApiHost: SdkConfig.get("posthog")?.api_host ?? "",
+            posthogApiKey: SdkConfig.get("posthog")?.project_api_key ?? "",
         });
 
         if (SettingsStore.getValue("fallbackICEServerAllowed")) params.append("allowIceFallback", "true");
