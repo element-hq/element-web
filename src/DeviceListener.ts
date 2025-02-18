@@ -48,6 +48,11 @@ import { asyncSomeParallel } from "./utils/arrays.ts";
 
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
 
+// Unfortunately named account data key used by Element X to indicate that the user
+// has chosen to disable server side key backups. We need to set and honour this
+// to prevent Element X from automatically turning key backup back on.
+const BACKUP_DISABLED_ACCOUNT_DATA_KEY = "m.org.matrix.custom.backup_disabled";
+
 const logger = baseLogger.getChild("DeviceListener:");
 
 export default class DeviceListener {
@@ -323,9 +328,11 @@ export default class DeviceListener {
                 logger.info("Some secrets not cached: showing KEY_STORAGE_OUT_OF_SYNC toast");
                 showSetupEncryptionToast(SetupKind.KEY_STORAGE_OUT_OF_SYNC);
             } else if (defaultKeyId === null) {
-                // the user just hasn't set up 4S yet: prompt them to do so
-                logger.info("No default 4S key: showing SET_UP_RECOVERY toast");
-                showSetupEncryptionToast(SetupKind.SET_UP_RECOVERY);
+                // the user just hasn't set up 4S yet: prompt them to do so (unless they've explicitly said no to key storage)
+                const disabledEvent = cli.getAccountData(BACKUP_DISABLED_ACCOUNT_DATA_KEY);
+                if (!disabledEvent || !disabledEvent.getContent()?.disabled) {
+                    showSetupEncryptionToast(SetupKind.SET_UP_RECOVERY);
+                }
             } else {
                 // some other condition... yikes! Show the 'set up encryption' toast: this is what we previously did
                 // in 'other' situations. Possibly we should consider prompting for a full reset in this case?
