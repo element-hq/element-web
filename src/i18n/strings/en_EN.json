@@ -2480,10 +2480,23 @@
                 "session_key": "Session key:",
                 "title": "Advanced"
             },
+            "delete_key_storage": {
+                "breadcrumb_page": "Delete key storage",
+                "confirm": "Delete key storage",
+                "description": "Deleting key storage will remove your cryptographic identity and message keys from the server and turn off the following security features:",
+                "list_first": "You will not have encrypted message history on new devices",
+                "list_second": "You will lose access to your encrypted messages if you are signed out of %(brand)s everywhere",
+                "title": "Are you sure you want to turn off key storage and delete it?"
+            },
             "device_not_verified_button": "Verify this device",
             "device_not_verified_description": "You need to verify this device in order to view your encryption settings.",
             "device_not_verified_title": "Device not verified",
             "dialog_title": "<strong>Settings:</strong> Encryption",
+            "key_storage": {
+                "allow_key_storage": "Allow key storage",
+                "description": "Store your cryptographic identity and message keys securely on the server. This will allow you to view your message history on any new devices. <a>Learn more</a>",
+                "title": "Key storage"
+            },
             "recovery": {
                 "change_recovery_confirm_button": "Confirm new recovery key",
                 "change_recovery_confirm_description": "Enter your new recovery key below to finish. Your old one will no longer work.",
