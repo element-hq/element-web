@@ -84,7 +84,7 @@ exports[`<ResetIdentityPanel /> should display the 'forgot recovery key' variant
     </div>
     <div
       class="mx_Flex mx_EncryptionCard_emphasisedContent"
-      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: normal; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
     >
       <ul
         class="_visual-list_4dcf8_17"
@@ -265,7 +265,7 @@ exports[`<ResetIdentityPanel /> should reset the encryption when the continue bu
     </div>
     <div
       class="mx_Flex mx_EncryptionCard_emphasisedContent"
-      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: normal; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
     >
       <ul
         class="_visual-list_4dcf8_17"

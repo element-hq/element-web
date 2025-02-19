@@ -33,7 +33,7 @@ type FlexProps<T extends keyof JSX.IntrinsicElements | JSXElementConstructor<any
      * The alignment of the flex children
      * @default start
      */
-    align?: "start" | "center" | "end" | "baseline" | "stretch";
+    align?: "start" | "center" | "end" | "baseline" | "stretch" | "normal";
     /**
      * The justification of the flex children
      * @default start

@@ -18,7 +18,7 @@ export function EncryptionCardEmphasisedContent({ children }: PropsWithChildren)
         <Flex
             direction="column"
             gap="var(--cpd-space-3x)"
-            align="center"
+            align="normal"
             className="mx_EncryptionCard_emphasisedContent"
         >
             {children}
