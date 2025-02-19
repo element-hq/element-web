@@ -108,7 +108,7 @@ interface IProps {
     onVisibilityChange?(): void;
 }
 
-const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
+const LegacyRoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
     const cli = useContext(MatrixClientContext);
     const [mainMenuDisplayed, mainMenuHandle, openMainMenu, closeMainMenu] = useContextMenu<HTMLDivElement>();
     const [plusMenuDisplayed, plusMenuHandle, openPlusMenu, closePlusMenu] = useContextMenu<HTMLDivElement>();
@@ -178,7 +178,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
             inviteOption = (
                 <IconizedContextMenuOption
                     label={_t("action|invite")}
-                    iconClassName="mx_RoomListHeader_iconInvite"
+                    iconClassName="mx_LegacyRoomListHeader_iconInvite"
                     onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
@@ -194,7 +194,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
             newRoomOptions = (
                 <>
                     <IconizedContextMenuOption
-                        iconClassName="mx_RoomListHeader_iconNewRoom"
+                        iconClassName="mx_LegacyRoomListHeader_iconNewRoom"
                         label={_t("action|new_room")}
                         onClick={(e) => {
                             e.preventDefault();
@@ -206,7 +206,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                     />
                     {videoRoomsEnabled && (
                         <IconizedContextMenuOption
-                            iconClassName="mx_RoomListHeader_iconNewVideoRoom"
+                            iconClassName="mx_LegacyRoomListHeader_iconNewVideoRoom"
                             label={_t("action|new_video_room")}
                             onClick={(e) => {
                                 e.preventDefault();
@@ -236,7 +236,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                     {newRoomOptions}
                     <IconizedContextMenuOption
                         label={_t("action|explore_rooms")}
-                        iconClassName="mx_RoomListHeader_iconExplore"
+                        iconClassName="mx_LegacyRoomListHeader_iconExplore"
                         onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
@@ -251,7 +251,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                     />
                     <IconizedContextMenuOption
                         label={_t("action|add_existing_room")}
-                        iconClassName="mx_RoomListHeader_iconPlus"
+                        iconClassName="mx_LegacyRoomListHeader_iconPlus"
                         onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
@@ -264,7 +264,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                     {canCreateSpaces && (
                         <IconizedContextMenuOption
                             label={_t("room_list|add_space_label")}
-                            iconClassName="mx_RoomListHeader_iconPlus"
+                            iconClassName="mx_LegacyRoomListHeader_iconPlus"
                             onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -289,7 +289,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                 <>
                     <IconizedContextMenuOption
                         label={_t("action|start_new_chat")}
-                        iconClassName="mx_RoomListHeader_iconStartChat"
+                        iconClassName="mx_LegacyRoomListHeader_iconStartChat"
                         onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
@@ -300,7 +300,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                     />
                     <IconizedContextMenuOption
                         label={_t("action|new_room")}
-                        iconClassName="mx_RoomListHeader_iconNewRoom"
+                        iconClassName="mx_LegacyRoomListHeader_iconNewRoom"
                         onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
@@ -312,7 +312,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                     {videoRoomsEnabled && (
                         <IconizedContextMenuOption
                             label={_t("action|new_video_room")}
-                            iconClassName="mx_RoomListHeader_iconNewVideoRoom"
+                            iconClassName="mx_LegacyRoomListHeader_iconNewVideoRoom"
                             onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -333,7 +333,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
             joinRoomOpt = (
                 <IconizedContextMenuOption
                     label={_t("room_list|join_public_room_label")}
-                    iconClassName="mx_RoomListHeader_iconExplore"
+                    iconClassName="mx_LegacyRoomListHeader_iconExplore"
                     onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
@@ -378,13 +378,13 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
         })
         .join("\n");
 
-    let contextMenuButton: JSX.Element = <div className="mx_RoomListHeader_contextLessTitle">{title}</div>;
+    let contextMenuButton: JSX.Element = <div className="mx_LegacyRoomListHeader_contextLessTitle">{title}</div>;
     if (canShowMainMenu) {
         const commonProps = {
             ref: mainMenuHandle,
             onClick: openMainMenu,
             isExpanded: mainMenuDisplayed,
-            className: "mx_RoomListHeader_contextMenuButton",
+            className: "mx_LegacyRoomListHeader_contextMenuButton",
             children: title,
         };
 
@@ -401,7 +401,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
     }
 
     return (
-        <aside className="mx_RoomListHeader" aria-label={_t("room|context_menu|title")}>
+        <aside className="mx_LegacyRoomListHeader" aria-label={_t("room|context_menu|title")}>
             {contextMenuButton}
             {pendingActionSummary ? (
                 <Tooltip label={pendingActionSummary} isTriggerInteractive={false}>
@@ -413,7 +413,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                     ref={plusMenuHandle}
                     onClick={openPlusMenu}
                     isExpanded={plusMenuDisplayed}
-                    className="mx_RoomListHeader_plusButton"
+                    className="mx_LegacyRoomListHeader_plusButton"
                     title={_t("action|add")}
                 />
             )}
@@ -423,4 +423,4 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
     );
 };
 
-export default RoomListHeader;
+export default LegacyRoomListHeader;
