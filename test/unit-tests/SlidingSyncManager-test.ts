@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { type SlidingSync, SlidingSyncEvent, SlidingSyncState } from "matrix-js-sdk/src/sliding-sync";
 import { mocked } from "jest-mock";
-import { type MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, type MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import fetchMockJest from "fetch-mock-jest";
 import EventEmitter from "events";
 import { waitFor } from "jest-matrix-react";
@@ -58,6 +58,7 @@ describe("SlidingSyncManager", () => {
             await manager.setRoomVisible(roomId);
             expect(slidingSync.modifyRoomSubscriptions).toHaveBeenCalledWith(new Set<string>([roomId]));
         });
+
         it("adds a custom subscription for a lazy-loadable room", async () => {
             const roomId = "!lazy:id";
             const room = new Room(roomId, client, client.getUserId()!);
@@ -84,6 +85,26 @@ describe("SlidingSyncManager", () => {
             expect(slidingSync.modifyRoomSubscriptions).toHaveBeenCalledWith(new Set<string>([roomId]));
             // we aren't prescriptive about what the sub name is.
             expect(slidingSync.useCustomSubscription).toHaveBeenCalledWith(roomId, expect.anything());
+        });
+
+        it("waits if the room is not yet known", async () => {
+            const roomId = "!room:id";
+            mocked(client.getRoom).mockReturnValue(null);
+            const subs = new Set<string>();
+            mocked(slidingSync.getRoomSubscriptions).mockReturnValue(subs);
+
+            const setVisibleDone = jest.fn();
+            manager.setRoomVisible(roomId).then(setVisibleDone);
+
+            await waitFor(() => expect(client.getRoom).toHaveBeenCalledWith(roomId));
+
+            expect(setVisibleDone).not.toHaveBeenCalled();
+
+            const stubRoom = mkStubRoom(roomId, "foo", client);
+            mocked(client.getRoom).mockReturnValue(stubRoom);
+            client.emit(ClientEvent.Room, stubRoom);
+
+            await waitFor(() => expect(setVisibleDone).toHaveBeenCalled());
         });
     });
 
