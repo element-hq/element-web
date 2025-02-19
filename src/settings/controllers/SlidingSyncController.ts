@@ -24,7 +24,7 @@ export default class SlidingSyncController extends SettingController {
 
     public get settingDisabled(): boolean | string {
         // Cannot be disabled once enabled, user has been warned and must log out and back in.
-        if (SettingsStore.getValue("feature_sliding_sync")) {
+        if (SettingsStore.getValue("feature_simplified_sliding_sync")) {
             return _t("labs|sliding_sync_disabled_notice");
         }
         if (!SlidingSyncManager.serverSupportsSlidingSync) {

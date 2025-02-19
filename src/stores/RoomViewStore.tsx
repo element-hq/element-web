@@ -353,7 +353,7 @@ export class RoomViewStore extends EventEmitter {
                 });
             }
 
-            if (SettingsStore.getValue("feature_sliding_sync") && this.state.roomId !== payload.room_id) {
+            if (SettingsStore.getValue("feature_simplified_sliding_sync") && this.state.roomId !== payload.room_id) {
                 this.setState({
                     subscribingRoomId: payload.room_id,
                     roomId: payload.room_id,
