@@ -844,6 +844,17 @@ describe("ElementCall", () => {
             const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
             expect(urlParams.get("analyticsID")).toBe("");
         });
+
+        it("should use element call URL from developer settings if present", async () => {
+            mocked(SettingsStore.getValue).mockImplementation((name): any => {
+                if (name === "Developer.elementCallUrl") {
+                    return "https://call.element.dev";
+                }
+            });
+            await ElementCall.create(room);
+            const call = Call.get(room);
+            expect(call?.widget.url.startsWith("https://call.element.dev")).toBeTruthy();
+        });
     });
 
     describe("instance in a non-video room", () => {
