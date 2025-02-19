@@ -11,7 +11,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import shouldHideEvent from "./shouldHideEvent";
 import { haveRendererForEvent } from "./events/EventTileFactory";
-import SettingsStore from "./settings/SettingsStore";
 import { RoomNotifState, getRoomNotifsState } from "./RoomNotifs";
 
 /**
