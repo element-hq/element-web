@@ -107,14 +107,8 @@ export default class SpellCheckLanguagesDropdown extends React.Component<
 
         // default value here too, otherwise we need to handle null / undefined;
         // values between mounting and the initial value propagating
-        let language = SettingsStore.getValue("language", null, /*excludeDefault:*/ true);
-        let value: string | undefined;
-        if (language) {
-            value = this.props.value || language;
-        } else {
-            language = navigator.language || navigator.userLanguage;
-            value = this.props.value || language;
-        }
+        const language = SettingsStore.getValue("language", null, /*excludeDefault:*/ true);
+        const value = this.props.value ?? language ?? navigator.language;
 
         return (
             <Dropdown
