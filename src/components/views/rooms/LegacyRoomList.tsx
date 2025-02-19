@@ -147,7 +147,7 @@ const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = default
                                     e.preventDefault();
                                     e.stopPropagation();
                                     closeMenu();
-                                    defaultDispatcher.dispatch({ action: "view_create_chat" });
+                                    defaultDispatcher.dispatch({ action: Action.CreateChat });
                                     PosthogTrackers.trackInteraction(
                                         "WebRoomListRoomsSublistPlusMenuCreateChatItem",
                                         e,
@@ -194,7 +194,7 @@ const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = default
             <AccessibleButton
                 tabIndex={tabIndex}
                 onClick={(e) => {
-                    dispatcher.dispatch({ action: "view_create_chat" });
+                    dispatcher.dispatch({ action: Action.CreateChat });
                     PosthogTrackers.trackInteraction("WebRoomListRoomsSublistPlusMenuCreateChatItem", e);
                 }}
                 className="mx_RoomSublist_auxButton"
@@ -305,7 +305,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                                 e.preventDefault();
                                 e.stopPropagation();
                                 closeMenu();
-                                defaultDispatcher.dispatch({ action: "view_create_room" });
+                                defaultDispatcher.dispatch({ action: Action.CreateRoom });
                                 PosthogTrackers.trackInteraction("WebRoomListRoomsSublistPlusMenuCreateRoomItem", e);
                             }}
                         />
@@ -318,7 +318,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                                     e.stopPropagation();
                                     closeMenu();
                                     defaultDispatcher.dispatch({
-                                        action: "view_create_room",
+                                        action: Action.CreateRoom,
                                         type: elementCallVideoRoomsEnabled
                                             ? RoomType.UnstableCall
                                             : RoomType.ElementVideo,
