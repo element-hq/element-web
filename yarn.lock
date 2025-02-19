@@ -1655,10 +1655,10 @@
     "@formatjs/intl-localematcher" "0.5.10"
     tslib "2"
 
-"@hughns/element-call-embedded@^1.1.34-rc.1":
-  version "1.1.34-rc.1"
-  resolved "https://registry.yarnpkg.com/@hughns/element-call-embedded/-/element-call-embedded-1.1.34-rc.1.tgz#6730bd429628bfe894cd6848f81d4e802e52c048"
-  integrity sha512-KRfYI9nnziQWZ3xIRJ/BNalgzlrsL71MwMcWxJA+jcpSCVvd94IKllCIC/Sa1c4DO7MXLn8TOg7d3/lwqPjXbQ==
+"@hughns/element-call-embedded@^1.1.37-rc.1":
+  version "1.1.37-rc.1"
+  resolved "https://registry.yarnpkg.com/@hughns/element-call-embedded/-/element-call-embedded-1.1.37-rc.1.tgz#b6929e4cf045f45332e1d7302ac2abf5c5fe9607"
+  integrity sha512-VIIHPKtaaBhTDqKVS0uSuv07JXSQgCUW4lftrfkKlvUW01NnPKW4x9oCT/h9AJsXXPQTt7UwA8Y7w4/mRqOvzA==
 
 "@humanwhocodes/config-array@^0.13.0":
   version "0.13.0"
@@ -3536,7 +3536,7 @@
   resolved "https://registry.yarnpkg.com/@vector-im/matrix-wysiwyg/-/matrix-wysiwyg-2.38.0.tgz#af862ffd231dc0a6b8d6f2cb3601e68456c0ff24"
   integrity sha512-cMEVicFYVzFxuSyWON0aVGjAJMcgJZ+LxuLTEp8EGuu8cRacuh0RN5rapb11YVZygzFvE7X1cMedJ/fKd5vRLA==
   dependencies:
-    "@vector-im/matrix-wysiwyg-wasm" "link:../../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.0-af862ffd231dc0a6b8d6f2cb3601e68456c0ff24-integrity/node_modules/bindings/wysiwyg-wasm"
+    "@vector-im/matrix-wysiwyg-wasm" "link:../../Library/Caches/Yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.0-af862ffd231dc0a6b8d6f2cb3601e68456c0ff24-integrity/node_modules/bindings/wysiwyg-wasm"
 
 "@webassemblyjs/ast@1.14.1", "@webassemblyjs/ast@^1.14.1":
   version "1.14.1"

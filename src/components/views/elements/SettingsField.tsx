@@ -19,7 +19,6 @@ interface Props {
     roomId?: string; // for per-room settings
     label?: string;
     isExplicit?: boolean;
-    hideIfCannotSet?: boolean;
     onChange?(value: string): void;
 }
 
