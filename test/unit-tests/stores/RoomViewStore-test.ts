@@ -351,10 +351,12 @@ describe("RoomViewStore", function () {
             dis.dispatch({ action: Action.ViewRoom, room_id: subscribedRoomId });
             await untilDispatch(Action.ActiveRoomChanged, dis);
             expect(roomViewStore.getRoomId()).toBe(subscribedRoomId);
-            expect(setRoomVisible).toHaveBeenCalledWith(subscribedRoomId, true);
+            expect(setRoomVisible).toHaveBeenCalledWith(subscribedRoomId);
         });
 
-        // Regression test for an in-the-wild bug where rooms would rapidly switch forever in sliding sync mode
+        // Previously a regression test for an in-the-wild bug where rooms would rapidly switch forever in sliding sync mode
+        // although that was before the complexity was removed with similified mode. I've removed the complexity but kept the
+        // test anyway.
         it("doesn't get stuck in a loop if you view rooms quickly", async () => {
             const setRoomVisible = jest.spyOn(slidingSyncManager, "setRoomVisible").mockReturnValue(Promise.resolve());
             const subscribedRoomId = "!sub1:localhost";
@@ -362,8 +364,8 @@ describe("RoomViewStore", function () {
             dis.dispatch({ action: Action.ViewRoom, room_id: subscribedRoomId }, true);
             dis.dispatch({ action: Action.ViewRoom, room_id: subscribedRoomId2 }, true);
             await untilDispatch(Action.ActiveRoomChanged, dis);
-            // sub(1) then unsub(1) sub(2), unsub(1)
-            const wantCalls = [[subscribedRoomId], [subscribedRoomId], [subscribedRoomId2], [subscribedRoomId]];
+            // should view 1, then 2
+            const wantCalls = [[subscribedRoomId], [subscribedRoomId2]];
             expect(setRoomVisible).toHaveBeenCalledTimes(wantCalls.length);
             wantCalls.forEach((v, i) => {
                 try {
