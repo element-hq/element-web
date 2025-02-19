@@ -341,7 +341,7 @@ describe("RoomViewStore", function () {
     describe("Sliding Sync", function () {
         beforeEach(() => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName, roomId, value) => {
-                return settingName === "feature_sliding_sync"; // this is enabled, everything else is disabled.
+                return settingName === "feature_simplified_sliding_sync"; // this is enabled, everything else is disabled.
             });
         });
 
