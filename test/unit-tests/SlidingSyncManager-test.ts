@@ -55,7 +55,7 @@ describe("SlidingSyncManager", () => {
             mocked(client.getRoom).mockReturnValue(mkStubRoom(roomId, "foo", client));
             const subs = new Set<string>();
             mocked(slidingSync.getRoomSubscriptions).mockReturnValue(subs);
-            await manager.setRoomVisible(roomId, true);
+            await manager.setRoomVisible(roomId);
             expect(slidingSync.modifyRoomSubscriptions).toHaveBeenCalledWith(new Set<string>([roomId]));
         });
         it("adds a custom subscription for a lazy-loadable room", async () => {
@@ -80,7 +80,7 @@ describe("SlidingSyncManager", () => {
             });
             const subs = new Set<string>();
             mocked(slidingSync.getRoomSubscriptions).mockReturnValue(subs);
-            await manager.setRoomVisible(roomId, true);
+            await manager.setRoomVisible(roomId);
             expect(slidingSync.modifyRoomSubscriptions).toHaveBeenCalledWith(new Set<string>([roomId]));
             // we aren't prescriptive about what the sub name is.
             expect(slidingSync.useCustomSubscription).toHaveBeenCalledWith(roomId, expect.anything());

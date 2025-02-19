@@ -346,9 +346,7 @@ describe("RoomViewStore", function () {
         });
 
         it("subscribes to the room", async () => {
-            const setRoomVisible = jest
-                .spyOn(slidingSyncManager, "setRoomVisible")
-                .mockReturnValue(Promise.resolve(""));
+            const setRoomVisible = jest.spyOn(slidingSyncManager, "setRoomVisible").mockReturnValue(Promise.resolve());
             const subscribedRoomId = "!sub1:localhost";
             dis.dispatch({ action: Action.ViewRoom, room_id: subscribedRoomId });
             await untilDispatch(Action.ActiveRoomChanged, dis);
@@ -358,26 +356,18 @@ describe("RoomViewStore", function () {
 
         // Regression test for an in-the-wild bug where rooms would rapidly switch forever in sliding sync mode
         it("doesn't get stuck in a loop if you view rooms quickly", async () => {
-            const setRoomVisible = jest
-                .spyOn(slidingSyncManager, "setRoomVisible")
-                .mockReturnValue(Promise.resolve(""));
+            const setRoomVisible = jest.spyOn(slidingSyncManager, "setRoomVisible").mockReturnValue(Promise.resolve());
             const subscribedRoomId = "!sub1:localhost";
             const subscribedRoomId2 = "!sub2:localhost";
             dis.dispatch({ action: Action.ViewRoom, room_id: subscribedRoomId }, true);
             dis.dispatch({ action: Action.ViewRoom, room_id: subscribedRoomId2 }, true);
             await untilDispatch(Action.ActiveRoomChanged, dis);
             // sub(1) then unsub(1) sub(2), unsub(1)
-            const wantCalls = [
-                [subscribedRoomId, true],
-                [subscribedRoomId, false],
-                [subscribedRoomId2, true],
-                [subscribedRoomId, false],
-            ];
+            const wantCalls = [[subscribedRoomId], [subscribedRoomId], [subscribedRoomId2], [subscribedRoomId]];
             expect(setRoomVisible).toHaveBeenCalledTimes(wantCalls.length);
             wantCalls.forEach((v, i) => {
                 try {
                     expect(setRoomVisible.mock.calls[i][0]).toEqual(v[0]);
-                    expect(setRoomVisible.mock.calls[i][1]).toEqual(v[1]);
                 } catch {
                     throw new Error(`i=${i} got ${setRoomVisible.mock.calls[i]} want ${v}`);
                 }

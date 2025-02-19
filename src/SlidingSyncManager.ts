@@ -263,14 +263,18 @@ export class SlidingSyncManager {
         return this.slidingSync!.getListParams(listKey)!;
     }
 
-    public async setRoomVisible(roomId: string, visible: boolean): Promise<string> {
+    /**
+     * Announces that the user has chosen to view the given room and that room will now
+     * be displayed, so it should have more state loaded.
+     * @param roomId The room to set visible
+     */
+    public async setRoomVisible(roomId: string): Promise<void> {
         await this.configureDefer.promise;
         const subscriptions = this.slidingSync!.getRoomSubscriptions();
-        if (visible) {
-            subscriptions.add(roomId);
-        } else {
-            subscriptions.delete(roomId);
-        }
+        if (subscriptions.has(roomId)) return;
+
+        subscriptions.add(roomId);
+
         const room = this.client?.getRoom(roomId);
         // default to safety: request all state if we can't work it out. This can happen if you
         // refresh the app whilst viewing a room: we call setRoomVisible before we know anything
@@ -280,14 +284,14 @@ export class SlidingSyncManager {
             // do not lazy load encrypted rooms as we need the entire member list.
             shouldLazyLoad = !(await this.client?.getCrypto()?.isEncryptionEnabledInRoom(roomId));
         }
-        logger.log("SlidingSync setRoomVisible:", roomId, visible, "shouldLazyLoad:", shouldLazyLoad);
+        logger.log("SlidingSync setRoomVisible:", roomId, "shouldLazyLoad:", shouldLazyLoad);
         if (shouldLazyLoad) {
             // lazy load this room
             this.slidingSync!.useCustomSubscription(roomId, UNENCRYPTED_SUBSCRIPTION_NAME);
         }
         this.slidingSync!.modifyRoomSubscriptions(subscriptions);
         if (room) {
-            return roomId; // we have data already for this room, show immediately e.g it's in a list
+            return; // we have data already for this room, show immediately e.g it's in a list
         }
         // wait until we know about this room. This may take a little while.
         return new Promise((resolve) => {
@@ -296,7 +300,7 @@ export class SlidingSyncManager {
                 if (r.roomId === roomId) {
                     this.client?.off(ClientEvent.Room, waitForRoom);
                     logger.log(`SlidingSync room ${roomId} found, resolving setRoomVisible`);
-                    resolve(roomId);
+                    resolve();
                 }
             };
             this.client?.on(ClientEvent.Room, waitForRoom);
