@@ -15,7 +15,12 @@ import { Flex } from "../../../utils/Flex";
  */
 export function EncryptionCardEmphasisedContent({ children }: PropsWithChildren): JSX.Element {
     return (
-        <Flex direction="column" gap="var(--cpd-space-3x)" className="mx_EncryptionCard_emphasisedContent">
+        <Flex
+            direction="column"
+            gap="var(--cpd-space-3x)"
+            align="center"
+            className="mx_EncryptionCard_emphasisedContent"
+        >
             {children}
         </Flex>
     );
