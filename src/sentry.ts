@@ -213,7 +213,6 @@ export async function initSentry(sentryConfig: IConfigOptions["sentry"]): Promis
         release: process.env.VERSION,
         environment: sentryConfig.environment,
         defaultIntegrations: false,
-        autoSessionTracking: false,
         integrations,
         // Set to 1.0 which is reasonable if we're only submitting Rageshakes; will need to be set < 1.0
         // if we collect more frequently.
