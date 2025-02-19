@@ -7,10 +7,16 @@
 
 import React, { type PropsWithChildren } from "react";
 
+import { Flex } from "../../../utils/Flex";
+
 /**
  * A component for emphasised text within an {@link EncryptionCard}
  * (mostly as somewhere for the common CSS to live).
  */
 export function EncryptionCardEmphasisedContent({ children }: PropsWithChildren): JSX.Element {
-    return <div className="mx_EncryptionCard_emphasisedContent">{children}</div>;
+    return (
+        <Flex direction="column" className="mx_EncryptionCard_emphasisedContent">
+            {children}
+        </Flex>
+    );
 }
