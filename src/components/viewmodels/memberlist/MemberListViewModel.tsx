@@ -39,6 +39,8 @@ import { type ThreePIDInvite } from "../../../models/rooms/ThreePIDInvite";
 import { type XOR } from "../../../@types/common";
 import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 
+// Trigger PR
+
 type Member = XOR<{ member: RoomMember }, { threePidInvite: ThreePIDInvite }>;
 
 export function getPending3PidInvites(room: Room, searchQuery?: string): Member[] {
