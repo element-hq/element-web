@@ -370,4 +370,9 @@ export enum Action {
      * Open the direct message dialog
      */
     CreateChat = "view_create_chat",
+
+    /**
+     * Open the create room dialog
+     */
+    CreateRoom = "view_create_room",
 }

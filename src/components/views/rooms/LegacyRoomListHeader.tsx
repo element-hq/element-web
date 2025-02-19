@@ -304,7 +304,7 @@ const LegacyRoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                         onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            defaultDispatcher.dispatch({ action: "view_create_room" });
+                            defaultDispatcher.dispatch({ action: Action.CreateRoom });
                             PosthogTrackers.trackInteraction("WebRoomListHeaderPlusMenuCreateRoomItem", e);
                             closePlusMenu();
                         }}
@@ -317,7 +317,7 @@ const LegacyRoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                                 e.preventDefault();
                                 e.stopPropagation();
                                 defaultDispatcher.dispatch({
-                                    action: "view_create_room",
+                                    action: Action.CreateRoom,
                                     type: elementCallVideoRoomsEnabled ? RoomType.UnstableCall : RoomType.ElementVideo,
                                 });
                                 closePlusMenu();

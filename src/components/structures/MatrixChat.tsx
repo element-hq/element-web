@@ -144,7 +144,7 @@ const AUTH_SCREENS = ["register", "mobile_register", "login", "forgot_password",
 // Actions that are redirected through the onboarding process prior to being
 // re-dispatched. NOTE: some actions are non-trivial and would require
 // re-factoring to be included in this list in future.
-const ONBOARDING_FLOW_STARTERS = [Action.ViewUserSettings, Action.CreateChat, "view_create_room"];
+const ONBOARDING_FLOW_STARTERS = [Action.ViewUserSettings, Action.CreateChat, Action.CreateRoom];
 
 interface IScreen {
     screen: string;
@@ -616,7 +616,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
 
         // Start the onboarding process for certain actions
-        if (MatrixClientPeg.get()?.isGuest() && ONBOARDING_FLOW_STARTERS.includes(payload.action)) {
+        if (
+            MatrixClientPeg.get()?.isGuest() &&
+            ONBOARDING_FLOW_STARTERS.includes(payload.action as unknown as Action)
+        ) {
             // This will cause `payload` to be dispatched later, once a
             // sync has reached the "prepared" state. Setting a matrix ID
             // will cause a full login and sync and finally the deferred
@@ -785,7 +788,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 this.viewSomethingBehindModal();
                 break;
             }
-            case "view_create_room":
+            case Action.CreateRoom:
                 this.createRoom(payload.public, payload.defaultName, payload.type);
 
                 // View the welcome or home page if we need something to look at
@@ -1758,7 +1761,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             }
         } else if (screen === "new") {
             dis.dispatch({
-                action: "view_create_room",
+                action: Action.CreateRoom,
             });
         } else if (screen === "dm") {
             dis.dispatch({

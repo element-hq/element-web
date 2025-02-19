@@ -305,7 +305,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                                 e.preventDefault();
                                 e.stopPropagation();
                                 closeMenu();
-                                defaultDispatcher.dispatch({ action: "view_create_room" });
+                                defaultDispatcher.dispatch({ action: Action.CreateRoom });
                                 PosthogTrackers.trackInteraction("WebRoomListRoomsSublistPlusMenuCreateRoomItem", e);
                             }}
                         />
@@ -318,7 +318,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
                                     e.stopPropagation();
                                     closeMenu();
                                     defaultDispatcher.dispatch({
-                                        action: "view_create_room",
+                                        action: Action.CreateRoom,
                                         type: elementCallVideoRoomsEnabled
                                             ? RoomType.UnstableCall
                                             : RoomType.ElementVideo,
