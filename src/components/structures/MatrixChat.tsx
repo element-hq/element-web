@@ -144,7 +144,7 @@ const AUTH_SCREENS = ["register", "mobile_register", "login", "forgot_password",
 // Actions that are redirected through the onboarding process prior to being
 // re-dispatched. NOTE: some actions are non-trivial and would require
 // re-factoring to be included in this list in future.
-const ONBOARDING_FLOW_STARTERS = [Action.ViewUserSettings, "view_create_chat", "view_create_room"];
+const ONBOARDING_FLOW_STARTERS = [Action.ViewUserSettings, Action.CreateChat, "view_create_room"];
 
 interface IScreen {
     screen: string;
@@ -816,7 +816,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             case Action.ViewStartChatOrReuse:
                 this.chatCreateOrReuse(payload.user_id);
                 break;
-            case "view_create_chat":
+            case Action.CreateChat:
                 showStartChatInviteDialog(payload.initialText || "");
 
                 // View the welcome or home page if we need something to look at
@@ -1762,7 +1762,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             });
         } else if (screen === "dm") {
             dis.dispatch({
-                action: "view_create_chat",
+                action: Action.CreateChat,
             });
         } else if (screen === "settings") {
             dis.fire(Action.ViewUserSettings);

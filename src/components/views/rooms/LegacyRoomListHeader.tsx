@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EventType, RoomType, type Room, RoomEvent, ClientEvent } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, EventType, type Room, RoomEvent, RoomType } from "matrix-js-sdk/src/matrix";
 import React, { useContext, useEffect, useState } from "react";
 import { Tooltip } from "@vector-im/compound-web";
 
@@ -38,10 +38,10 @@ import {
 } from "../../../utils/space";
 import {
     ChevronFace,
-    ContextMenuTooltipButton,
-    useContextMenu,
-    type MenuProps,
     ContextMenuButton,
+    ContextMenuTooltipButton,
+    type MenuProps,
+    useContextMenu,
 } from "../../structures/ContextMenu";
 import { BetaPill } from "../beta/BetaCard";
 import IconizedContextMenu, {
@@ -293,7 +293,7 @@ const LegacyRoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                         onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            defaultDispatcher.dispatch({ action: "view_create_chat" });
+                            defaultDispatcher.dispatch({ action: Action.CreateChat });
                             PosthogTrackers.trackInteraction("WebRoomListHeaderPlusMenuCreateChatItem", e);
                             closePlusMenu();
                         }}

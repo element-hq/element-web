@@ -27,7 +27,7 @@ import EmbeddedPage from "./EmbeddedPage";
 
 const onClickSendDm = (ev: ButtonEvent): void => {
     PosthogTrackers.trackInteraction("WebHomeCreateChatButton", ev);
-    dis.dispatch({ action: "view_create_chat" });
+    dis.dispatch({ action: Action.CreateChat });
 };
 
 const onClickExplore = (ev: ButtonEvent): void => {

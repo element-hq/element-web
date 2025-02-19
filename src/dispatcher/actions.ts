@@ -365,4 +365,9 @@ export enum Action {
      * Opens right panel room summary and focuses the search input
      */
     FocusMessageSearch = "focus_search",
+
+    /**
+     * Open the direct message dialog
+     */
+    CreateChat = "view_create_chat",
 }
