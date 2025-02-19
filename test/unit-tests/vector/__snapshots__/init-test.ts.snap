@@ -189,7 +189,7 @@ exports[`showIncompatibleBrowser should match snapshot 1`] = `
         class="_button_i91xf_17 _has-icon_i91xf_66"
         data-kind="secondary"
         data-size="lg"
-        href="https://packages.element.io/desktop/install/win32/ia32/Element%20Setup.exe"
+        href="https://packages.element.io/desktop/install/win32/arm64/Element%20Setup.exe"
         role="link"
         tabindex="0"
       >
@@ -198,7 +198,7 @@ exports[`showIncompatibleBrowser should match snapshot 1`] = `
           height="20"
           width="20"
         />
-        Windows (32-bit)
+        Windows (ARM 64-bit)
       </a>
       <a
         class="_button_i91xf_17 _has-icon_i91xf_66"

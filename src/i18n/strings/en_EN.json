@@ -1286,7 +1286,8 @@
         "use_desktop_heading": "Use %(brand)s Desktop instead",
         "use_mobile_heading": "Use %(brand)s on mobile instead",
         "use_mobile_heading_after_desktop": "Or use our mobile app",
-        "windows": "Windows (%(bits)s-bit)"
+        "windows_64bit": "Windows (64-bit)",
+        "windows_arm_64bit": "Windows (ARM 64-bit)"
     },
     "info_tooltip_title": "Information",
     "integration_manager": {
