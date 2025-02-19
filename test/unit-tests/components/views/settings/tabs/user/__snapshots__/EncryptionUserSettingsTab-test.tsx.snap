@@ -254,7 +254,8 @@ exports[`<EncryptionUserSettingsTab /> should display the reset identity panel w
           </h2>
         </div>
         <div
-          class="mx_EncryptionCard_emphasisedContent"
+          class="mx_Flex mx_EncryptionCard_emphasisedContent"
+          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
         >
           <ul
             class="_visual-list_4dcf8_17"
