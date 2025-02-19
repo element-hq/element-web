@@ -540,8 +540,6 @@ export const SETTINGS: Settings = {
         labsGroup: LabGroup.Developer,
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
-        displayName: _td("labs|sliding_sync"),
-        description: _td("labs|sliding_sync_description"),
         shouldWarn: true,
         default: false,
     },
