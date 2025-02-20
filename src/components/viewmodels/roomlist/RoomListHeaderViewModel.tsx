@@ -34,9 +34,11 @@ function useSpace(): { activeSpace: Room | null; title: string } {
         () => [SpaceStore.instance.activeSpace, SpaceStore.instance.activeSpaceRoom],
     );
     const spaceName = useTypedEventEmitterState(activeSpace ?? undefined, RoomEvent.Name, () => activeSpace?.name);
-    const allRoomsInHome = useEventEmitterState(SpaceStore.instance, UPDATE_HOME_BEHAVIOUR, () => {
-        return SpaceStore.instance.allRoomsInHome;
-    });
+    const allRoomsInHome = useEventEmitterState(
+        SpaceStore.instance,
+        UPDATE_HOME_BEHAVIOUR,
+        () => SpaceStore.instance.allRoomsInHome,
+    );
 
     const title = spaceName ?? getMetaSpaceName(spaceKey as MetaSpace, allRoomsInHome);
 
