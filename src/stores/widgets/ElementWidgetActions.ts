@@ -12,6 +12,7 @@ export enum ElementWidgetActions {
     // All of these actions are currently specific to Jitsi and Element Call
     JoinCall = "io.element.join",
     HangupCall = "im.vector.hangup",
+    Close = "io.element.close",
     CallParticipants = "io.element.participants",
     StartLiveStream = "im.vector.start_live_stream",
 

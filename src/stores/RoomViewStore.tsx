@@ -50,6 +50,8 @@ import { type CancelAskToJoinPayload } from "../dispatcher/payloads/CancelAskToJ
 import { type SubmitAskToJoinPayload } from "../dispatcher/payloads/SubmitAskToJoinPayload";
 import { ModuleRunner } from "../modules/ModuleRunner";
 import { setMarkedUnreadState } from "../utils/notifications";
+import { ConnectionState, ElementCall } from "../models/Call";
+import { isVideoRoom } from "../utils/video-rooms";
 
 const NUM_JOIN_RETRY = 5;
 
@@ -352,6 +354,23 @@ export class RoomViewStore extends EventEmitter {
                     activeSpace,
                 });
             }
+
+            if (room && (payload.view_call || isVideoRoom(room))) {
+                let call = CallStore.instance.getCall(payload.room_id);
+                // Start a call if not already there
+                if (call === null) {
+                    ElementCall.create(room, false);
+                    call = CallStore.instance.getCall(payload.room_id)!;
+                }
+                call.presented = true;
+                // Immediately start the call. This will connect to all required widget events
+                // and allow the widget to show the lobby.
+                if (call.connectionState === ConnectionState.Disconnected) call.start();
+            }
+            // If we switch to a different room from the call, we are no longer presenting it
+            const prevRoomCall = this.state.roomId ? CallStore.instance.getCall(this.state.roomId) : null;
+            if (prevRoomCall !== null && (!payload.view_call || payload.room_id !== this.state.roomId))
+                prevRoomCall.presented = false;
 
             if (SettingsStore.getValue("feature_sliding_sync") && this.state.roomId !== payload.room_id) {
                 if (this.state.subscribingRoomId && this.state.subscribingRoomId !== payload.room_id) {
