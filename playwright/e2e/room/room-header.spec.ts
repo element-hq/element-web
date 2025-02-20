@@ -10,7 +10,7 @@ import { type Page } from "@playwright/test";
 
 import { test, expect } from "../../element-web-test";
 import { type ElementAppPage } from "../../pages/ElementAppPage";
-import { Visibility } from "matrix-js-sdk/src/matrix";
+import { type Visibility } from "matrix-js-sdk/src/matrix";
 
 test.describe("Room Header", () => {
     test.use({
