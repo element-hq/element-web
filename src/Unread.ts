@@ -11,7 +11,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import shouldHideEvent from "./shouldHideEvent";
 import { haveRendererForEvent } from "./events/EventTileFactory";
-import SettingsStore from "./settings/SettingsStore";
 import { RoomNotifState, getRoomNotifsState } from "./RoomNotifs";
 
 /**
@@ -44,12 +43,6 @@ export function eventTriggersUnreadCount(client: MatrixClient, ev: MatrixEvent):
 }
 
 export function doesRoomHaveUnreadMessages(room: Room, includeThreads: boolean): boolean {
-    if (SettingsStore.getValue("feature_sliding_sync")) {
-        // TODO: https://github.com/vector-im/element-web/issues/23207
-        // Sliding Sync doesn't support unread indicator dots (yet...)
-        return false;
-    }
-
     const toCheck: Array<Room | Thread> = [room];
     if (includeThreads) {
         toCheck.push(...room.getThreads());
