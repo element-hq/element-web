@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { Tooltip } from "@vector-im/compound-web";
 import VerifiedIcon from "@vector-im/compound-design-tokens/assets/web/icons/verified";
-import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
+import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
 
 import { _t } from "../../../../../../languageHandler";
 import { E2EStatus } from "../../../../../../utils/ShieldUtils";

@@ -80,7 +80,7 @@ type Props<T extends ElementType = "div"> = {
     /**
      * The tooltip to show on hover or focus.
      */
-    title?: TooltipProps["label"];
+    title?: string;
     /**
      * The caption is a secondary text displayed under the `title` of the tooltip.
      * Only valid when used in conjunction with `title`.

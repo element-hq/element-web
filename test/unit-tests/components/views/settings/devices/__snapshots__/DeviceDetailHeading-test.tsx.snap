@@ -19,7 +19,6 @@ exports[`<DeviceDetailHeading /> displays name edit form on rename button click 
           class="mx_Field mx_Field_input mx_DeviceDetailHeading_renameFormInput"
         >
           <input
-            aria-describedby="device-rename-description-123"
             aria-labelledby="device-rename-123"
             autocomplete="off"
             data-testid="device-rename-input"
