@@ -88,7 +88,7 @@ test.describe("Room Header", () => {
         );
 
         test("should render room header icon correctly", { tag: "@screenshot" }, async ({ page, app, user }) => {
-            await app.client.createRoom({ name: "Test Room", visibility: Visibility.Public });
+            await app.client.createRoom({ name: "Test Room", visibility: "public" as Visibility });
             await app.viewRoomByName("Test Room");
 
             const header = page.locator(".mx_RoomHeader");
