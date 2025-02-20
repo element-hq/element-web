@@ -1328,10 +1328,10 @@
     "@csstools/utilities" "^2.0.0"
     postcss-value-parser "^4.2.0"
 
-"@csstools/postcss-initial@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@csstools/postcss-initial/-/postcss-initial-2.0.0.tgz#a86f5fc59ab9f16f1422dade4c58bd941af5df22"
-  integrity sha512-dv2lNUKR+JV+OOhZm9paWzYBXOCi+rJPqJ2cJuhh9xd8USVrd0cBEPczla81HNOyThMQWeCcdln3gZkQV2kYxA==
+"@csstools/postcss-initial@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@csstools/postcss-initial/-/postcss-initial-2.0.1.tgz#c385bd9d8ad31ad159edd7992069e97ceea4d09a"
+  integrity sha512-L1wLVMSAZ4wovznquK0xmC7QSctzO4D0Is590bxpGqhqjboLXYA16dWZpfwImkdOgACdQ9PqXsuRroW6qPlEsg==
 
 "@csstools/postcss-is-pseudo-class@^5.0.1":
   version "5.0.1"
@@ -4421,7 +4421,7 @@ braces@^3.0.3, braces@~3.0.2:
   dependencies:
     fill-range "^7.1.1"
 
-browserslist@^4.0.0, browserslist@^4.23.1, browserslist@^4.23.2, browserslist@^4.23.3, browserslist@^4.24.0, browserslist@^4.24.3:
+browserslist@^4.0.0, browserslist@^4.23.2, browserslist@^4.23.3, browserslist@^4.24.0, browserslist@^4.24.3, browserslist@^4.24.4:
   version "4.24.4"
   resolved "https://registry.yarnpkg.com/browserslist/-/browserslist-4.24.4.tgz#c6b2865a3f08bcb860a0e827389003b9fe686e4b"
   integrity sha512-KDi1Ny1gSePi1vm0q4oxSF8b4DR44GF4BbmS2YdhPLOEqd8pDviZOGH/GsmRwoWJ2+5Lr085X7naowMwKHDG1A==
@@ -10035,9 +10035,9 @@ postcss-place@^10.0.0:
     postcss-value-parser "^4.2.0"
 
 postcss-preset-env@^10.0.0:
-  version "10.1.3"
-  resolved "https://registry.yarnpkg.com/postcss-preset-env/-/postcss-preset-env-10.1.3.tgz#7d07adef2237a643162e751b00eb1e339aa3b82e"
-  integrity sha512-9qzVhcMFU/MnwYHyYpJz4JhGku/4+xEiPTmhn0hj3IxnUYlEF9vbh7OC1KoLAnenS6Fgg43TKNp9xcuMeAi4Zw==
+  version "10.1.4"
+  resolved "https://registry.yarnpkg.com/postcss-preset-env/-/postcss-preset-env-10.1.4.tgz#bb7847e5b9a99849221bb0b9c17d825f4d096a21"
+  integrity sha512-awWKS3CwyY7I4Eb3YSWOZisbj3qXyuQCrylYiu2vSHxnSZAj3LHStN6jOcpCrc6EjYunLwbeNto3M5/JBtXpzg==
   dependencies:
     "@csstools/postcss-cascade-layers" "^5.0.1"
     "@csstools/postcss-color-function" "^4.0.7"
@@ -10049,7 +10049,7 @@ postcss-preset-env@^10.0.0:
     "@csstools/postcss-gradients-interpolation-method" "^5.0.7"
     "@csstools/postcss-hwb-function" "^4.0.7"
     "@csstools/postcss-ic-unit" "^4.0.0"
-    "@csstools/postcss-initial" "^2.0.0"
+    "@csstools/postcss-initial" "^2.0.1"
     "@csstools/postcss-is-pseudo-class" "^5.0.1"
     "@csstools/postcss-light-dark-function" "^2.0.7"
     "@csstools/postcss-logical-float-and-clear" "^3.0.0"
@@ -10072,7 +10072,7 @@ postcss-preset-env@^10.0.0:
     "@csstools/postcss-trigonometric-functions" "^4.0.6"
     "@csstools/postcss-unset-value" "^4.0.0"
     autoprefixer "^10.4.19"
-    browserslist "^4.23.1"
+    browserslist "^4.24.4"
     css-blank-pseudo "^7.0.1"
     css-has-pseudo "^7.0.2"
     css-prefers-color-scheme "^10.0.0"
@@ -10161,9 +10161,9 @@ postcss-selector-parser@^6.0.2, postcss-selector-parser@^6.0.4, postcss-selector
     util-deprecate "^1.0.2"
 
 postcss-selector-parser@^7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/postcss-selector-parser/-/postcss-selector-parser-7.0.0.tgz#41bd8b56f177c093ca49435f65731befe25d6b9c"
-  integrity sha512-9RbEr1Y7FFfptd/1eEdntyjMwLeghW1bHX9GWjXo19vx4ytPQhANltvVxDggzJl7mnWM+dX28kb6cyS/4iQjlQ==
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/postcss-selector-parser/-/postcss-selector-parser-7.1.0.tgz#4d6af97eba65d73bc4d84bcb343e865d7dd16262"
+  integrity sha512-8sLjZwK0R+JlxlYcTuVnyT2v+htpdrjDOKuMcOVdYjt52Lh8hWRYpxBPoKx/Zg+bcjc3wx6fmQevMmUztS/ccA==
   dependencies:
     cssesc "^3.0.0"
     util-deprecate "^1.0.2"
@@ -10193,13 +10193,13 @@ postcss-value-parser@^4.0.0, postcss-value-parser@^4.1.0, postcss-value-parser@^
   resolved "https://registry.yarnpkg.com/postcss-value-parser/-/postcss-value-parser-4.2.0.tgz#723c09920836ba6d3e5af019f92bc0971c02e514"
   integrity sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==
 
-postcss@8.4.46:
-  version "8.4.46"
-  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.46.tgz#d526f2126b6ace463e9b3c1cbdad040fb040ea22"
-  integrity sha512-73x4XLhY0QNN+87/u6F7TRq+yl3xPAjlbRRvhly1mAKJgNO4q5fiqegez/Yi3u+ez8wbBXXqY9N1+RAJAVCzEw==
+postcss@8.5.2:
+  version "8.5.2"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.5.2.tgz#e7b99cb9d2ec3e8dd424002e7c16517cb2b846bd"
+  integrity sha512-MjOadfU3Ys9KYoX0AdkBlFEF1Vx37uCCeN4ZHnmwm9FfpbsGWMZeBLMmmpY+6Ocqod7mkdZ0DT31OlbsFrLlkA==
   dependencies:
-    nanoid "^3.3.7"
-    picocolors "^1.1.0"
+    nanoid "^3.3.8"
+    picocolors "^1.1.1"
     source-map-js "^1.2.1"
 
 postcss@^8.3.11, postcss@^8.4.33, postcss@^8.4.38:
