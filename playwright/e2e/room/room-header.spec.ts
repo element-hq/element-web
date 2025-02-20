@@ -10,6 +10,7 @@ import { type Page } from "@playwright/test";
 
 import { test, expect } from "../../element-web-test";
 import { type ElementAppPage } from "../../pages/ElementAppPage";
+import { Visibility } from "matrix-js-sdk/src/matrix";
 
 test.describe("Room Header", () => {
     test.use({
@@ -85,6 +86,15 @@ test.describe("Room Header", () => {
                 await expect(header).toMatchScreenshot("room-header-long-name.png");
             },
         );
+
+        test("should render room header icon correctly", { tag: "@screenshot" }, async ({ page, app, user }) => {
+            await app.client.createRoom({ name: "Test Room", visibility: Visibility.Public });
+            await app.viewRoomByName("Test Room");
+
+            const header = page.locator(".mx_RoomHeader");
+
+            await expect(header).toMatchScreenshot("room-header-with-icon.png");
+        });
     });
 
     test.describe("with a video room", () => {
