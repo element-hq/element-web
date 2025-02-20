@@ -95,16 +95,9 @@ export function attachMentions(
     const userMentions = new Set<string>();
     let roomMention = false;
 
-    // If there's a reply, initialize the mentioned users as the sender of that
-    // event + any mentioned users in that event.
+    // If there's a reply, initialize the mentioned users as the sender of that event.
     if (replyToEvent) {
         userMentions.add(replyToEvent.sender!.userId);
-        // TODO What do we do if the reply event *doeesn't* have this property?
-        // Try to fish out replies from the contents?
-        const userIds = replyToEvent.getContent()["m.mentions"]?.user_ids;
-        if (Array.isArray(userIds)) {
-            userIds.forEach((userId) => userMentions.add(userId));
-        }
     }
 
     // If user provided content is available, check to see if any users are mentioned.
