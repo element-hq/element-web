@@ -28,7 +28,7 @@ describe("recordClientInformation()", () => {
     const sdkConfig: DeepReadonly<IConfigOptions> = {
         ...DEFAULTS,
         brand: "Test Brand",
-        element_call: { url: "", use_exclusively: false, brand: "Element Call" },
+        element_call: { use_exclusively: false, brand: "Element Call" },
     };
 
     const platform = {

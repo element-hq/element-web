@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { mocked } from "jest-mock";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { MatrixWidgetType, Widget, WidgetKind } from "matrix-widget-api";
+import { Widget, WidgetKind } from "matrix-widget-api";
 
 import { OIDCState, WidgetPermissionStore } from "../../../../src/stores/widgets/WidgetPermissionStore";
 import SettingsStore from "../../../../src/settings/SettingsStore";
@@ -17,6 +17,7 @@ import { type SettingLevel } from "../../../../src/settings/SettingLevel";
 import { SdkContextClass } from "../../../../src/contexts/SDKContext";
 import { stubClient } from "../../../test-utils";
 import { StopGapWidgetDriver } from "../../../../src/stores/widgets/StopGapWidgetDriver";
+import { WidgetType } from "../../../../src/widgets/WidgetType.ts";
 
 jest.mock("../../../../src/settings/SettingsStore");
 
@@ -34,7 +35,7 @@ describe("WidgetPermissionStore", () => {
     const elementCallWidget = new Widget({
         id: "group_call",
         creatorUserId: "@alice:example.org",
-        type: MatrixWidgetType.Custom,
+        type: WidgetType.CALL.preferred,
         url: "https://call.element.io",
     });
     let settings: Record<string, any> = {}; // key value store
