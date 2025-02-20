@@ -10,6 +10,7 @@ import React from "react";
 import { shouldShowComponent } from "../../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../settings/UIFeature";
 import { RoomListSearch } from "./RoomListSearch";
+import { RoomListHeaderView } from "./RoomListHeaderView";
 
 type RoomListViewProps = {
     /**
@@ -26,8 +27,9 @@ export const RoomListView: React.FC<RoomListViewProps> = ({ activeSpace }) => {
     const displayRoomSearch = shouldShowComponent(UIComponent.FilterContainer);
 
     return (
-        <div className="mx_RoomListView" data-testid="room-list-view">
+        <section className="mx_RoomListView" data-testid="room-list-view">
             {displayRoomSearch && <RoomListSearch activeSpace={activeSpace} />}
-        </div>
+            <RoomListHeaderView />
+        </section>
     );
 };
