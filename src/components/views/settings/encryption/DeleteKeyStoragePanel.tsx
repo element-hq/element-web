@@ -15,6 +15,7 @@ import { EncryptionCard } from "./EncryptionCard";
 import { useKeyStoragePanelViewModel } from "../../../viewmodels/settings/encryption/KeyStoragePanelViewModel";
 import SdkConfig from "../../../../SdkConfig";
 import { EncryptionCardButtons } from "./EncryptionCardButtons";
+import { EncryptionCardEmphasisedContent } from "./EncryptionCardEmphasisedContent";
 
 interface Props {
     /**
@@ -53,7 +54,7 @@ export function DeleteKeyStoragePanel({ onFinish }: Props): JSX.Element {
                 destructive={true}
                 title={_t("settings|encryption|delete_key_storage|title")}
             >
-                <div>
+                <EncryptionCardEmphasisedContent>
                     {_t("settings|encryption|delete_key_storage|description")}
                     <VisualList>
                         <VisualListItem Icon={CrossIcon} destructive={true}>
@@ -63,7 +64,7 @@ export function DeleteKeyStoragePanel({ onFinish }: Props): JSX.Element {
                             {_t("settings|encryption|delete_key_storage|list_second", { brand: SdkConfig.get().brand })}
                         </VisualListItem>
                     </VisualList>
-                </div>
+                </EncryptionCardEmphasisedContent>
                 <EncryptionCardButtons>
                     <Button destructive={true} onClick={onDeleteClick} disabled={busy}>
                         {_t("settings|encryption|delete_key_storage|confirm")}
