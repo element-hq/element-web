@@ -589,18 +589,21 @@ legend {
  * in the app look the same by being AccessibleButtons, or possibly by having explict button classes.
  * We should go through and have one consistent set of styles for buttons throughout the app.
  * For now, I am duplicating the selectors here for mx_Dialog and mx_DialogButtons.
- *
- * Elements that should not be styled like a dialog button are mentioned in a :not() pseudo-class.
- * For the widest browser support, we use multiple :not pseudo-classes instead of :not(.a, .b).
  */
 .mx_Dialog
-    button:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]):not(.mx_AccessibleButton):not(
-        .mx_UserProfileSettings button
-    ):not(.mx_ThemeChoicePanel_CustomTheme button):not(.mx_UnpinAllDialog button):not(.mx_ShareDialog button):not(
-        .mx_EncryptionUserSettingsTab button
+    button:not(
+        .mx_EncryptionUserSettingsTab button,
+        .mx_UserProfileSettings button,
+        .mx_ShareDialog button,
+        .mx_UnpinAllDialog button,
+        .mx_ThemeChoicePanel_CustomTheme button,
+        .mx_Dialog_nonDialogButton,
+        .mx_AccessibleButton,
+        .mx_IdentityServerPicker button,
+        [class|="maplibregl"]
     ),
+.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton, .mx_AccessibleButton),
 .mx_Dialog input[type="submit"],
-.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton),
 .mx_Dialog_buttons input[type="submit"] {
     @mixin mx_DialogButton;
     margin-left: 0px;
@@ -616,32 +619,46 @@ legend {
 }
 
 .mx_Dialog
-    button:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]):not(.mx_AccessibleButton):not(
-        .mx_UserProfileSettings button
-    ):not(.mx_ThemeChoicePanel_CustomTheme button):not(.mx_UnpinAllDialog button):not(.mx_ShareDialog button):not(
+    button:not(
+        .mx_Dialog_nonDialogButton,
+        [class|="maplibregl"],
+        .mx_AccessibleButton,
+        .mx_UserProfileSettings button,
+        .mx_ThemeChoicePanel_CustomTheme button,
+        .mx_UnpinAllDialog button,
+        .mx_ShareDialog button,
         .mx_EncryptionUserSettingsTab button
     ):last-child {
     margin-right: 0px;
 }
 
 .mx_Dialog
-    button:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]):not(.mx_AccessibleButton):not(
-        .mx_UserProfileSettings button
-    ):not(.mx_ThemeChoicePanel_CustomTheme button):not(.mx_UnpinAllDialog button):not(.mx_ShareDialog button):not(
+    button:not(
+        .mx_Dialog_nonDialogButton,
+        [class|="maplibregl"],
+        .mx_AccessibleButton,
+        .mx_UserProfileSettings button,
+        .mx_ThemeChoicePanel_CustomTheme button,
+        .mx_UnpinAllDialog button,
+        .mx_ShareDialog button,
         .mx_EncryptionUserSettingsTab button
     ):focus,
 .mx_Dialog input[type="submit"]:focus,
-.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):focus,
+.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton, .mx_AccessibleButton):focus,
 .mx_Dialog_buttons input[type="submit"]:focus {
     filter: brightness($focus-brightness);
 }
 
-.mx_Dialog button.mx_Dialog_primary:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]),
+.mx_Dialog button.mx_Dialog_primary:not(.mx_Dialog_nonDialogButton, [class|="maplibregl"]),
 .mx_Dialog input[type="submit"].mx_Dialog_primary,
 .mx_Dialog_buttons
-    button.mx_Dialog_primary:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):not(
-        .mx_UserProfileSettings button
-    ):not(.mx_ThemeChoicePanel_CustomTheme button):not(.mx_UnpinAllDialog button):not(.mx_ShareDialog button):not(
+    button:not(
+        .mx_Dialog_nonDialogButton,
+        .mx_AccessibleButton,
+        .mx_UserProfileSettings button,
+        .mx_ThemeChoicePanel_CustomTheme button,
+        .mx_UnpinAllDialog button,
+        .mx_ShareDialog button,
         .mx_EncryptionUserSettingsTab button
     ),
 .mx_Dialog_buttons input[type="submit"].mx_Dialog_primary {
@@ -651,32 +668,43 @@ legend {
     min-width: 156px;
 }
 
-.mx_Dialog button.danger:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]),
+.mx_Dialog button.danger:not(.mx_Dialog_nonDialogButton, [class|="maplibregl"]),
 .mx_Dialog input[type="submit"].danger,
 .mx_Dialog_buttons
-    button.danger:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):not(.mx_UserProfileSettings button):not(
-        .mx_ThemeChoicePanel_CustomTheme button
-    ):not(.mx_UnpinAllDialog button):not(.mx_ShareDialog button):not(.mx_EncryptionUserSettingsTab button),
+    button.danger:not(
+        .mx_Dialog_nonDialogButton,
+        .mx_AccessibleButton,
+        .mx_UserProfileSettings button,
+        .mx_ThemeChoicePanel_CustomTheme button,
+        .mx_UnpinAllDialog button,
+        .mx_ShareDialog button,
+        .mx_EncryptionUserSettingsTab button
+    ),
 .mx_Dialog_buttons input[type="submit"].danger {
     background-color: var(--cpd-color-bg-critical-primary);
     border: solid 1px var(--cpd-color-bg-critical-primary);
     color: var(--cpd-color-text-on-solid-primary);
 }
 
-.mx_Dialog button.warning:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]),
+.mx_Dialog button.warning:not(.mx_Dialog_nonDialogButton, [class|="maplibregl"]),
 .mx_Dialog input[type="submit"].warning {
     border: solid 1px var(--cpd-color-border-critical-subtle);
     color: var(--cpd-color-text-critical-primary);
 }
 
 .mx_Dialog
-    button:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]):not(.mx_AccessibleButton):not(
-        .mx_UserProfileSettings button
-    ):not(.mx_ThemeChoicePanel_CustomTheme button):not(.mx_UnpinAllDialog button):not(.mx_ShareDialog button):not(
+    button:not(
+        .mx_Dialog_nonDialogButton,
+        [class|="maplibregl"],
+        .mx_AccessibleButton,
+        .mx_UserProfileSettings button,
+        .mx_ThemeChoicePanel_CustomTheme button,
+        .mx_UnpinAllDialog button,
+        .mx_ShareDialog button,
         .mx_EncryptionUserSettingsTab button
     ):disabled,
 .mx_Dialog input[type="submit"]:disabled,
-.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):disabled,
+.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton, .mx_AccessibleButton):disabled,
 .mx_Dialog_buttons input[type="submit"]:disabled {
     background-color: $light-fg-color;
     border: solid 1px $light-fg-color;
