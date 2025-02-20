@@ -6,12 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-.mx_RoomListHeader {
+.mx_LegacyRoomListHeader {
     display: flex;
     align-items: center;
 
-    .mx_RoomListHeader_contextLessTitle,
-    .mx_RoomListHeader_contextMenuButton {
+    .mx_LegacyRoomListHeader_contextLessTitle,
+    .mx_LegacyRoomListHeader_contextMenuButton {
         font: var(--cpd-font-heading-sm-semibold);
         font-weight: var(--cpd-font-weight-semibold);
         padding: 1px 24px 1px 4px;
@@ -24,7 +24,7 @@ Please see LICENSE files in the repository root for full details.
         user-select: none;
     }
 
-    .mx_RoomListHeader_contextMenuButton {
+    .mx_LegacyRoomListHeader_contextMenuButton {
         border-radius: 6px;
 
         &:hover {
@@ -54,7 +54,7 @@ Please see LICENSE files in the repository root for full details.
         }
     }
 
-    .mx_RoomListHeader_plusButton {
+    .mx_LegacyRoomListHeader_plusButton {
         width: 32px;
         height: 32px;
         border-radius: 8px;
@@ -88,21 +88,21 @@ Please see LICENSE files in the repository root for full details.
     }
 }
 
-.mx_RoomListHeader_iconInvite::before {
+.mx_LegacyRoomListHeader_iconInvite::before {
     mask-image: url("$(res)/img/element-icons/room/invite.svg");
 }
-.mx_RoomListHeader_iconStartChat::before {
+.mx_LegacyRoomListHeader_iconStartChat::before {
     mask-image: url("@vector-im/compound-design-tokens/icons/user-add-solid.svg");
 }
-.mx_RoomListHeader_iconNewRoom::before {
+.mx_LegacyRoomListHeader_iconNewRoom::before {
     mask-image: url("$(res)/img/element-icons/roomlist/hash-plus.svg");
 }
-.mx_RoomListHeader_iconNewVideoRoom::before {
+.mx_LegacyRoomListHeader_iconNewVideoRoom::before {
     mask-image: url("$(res)/img/element-icons/roomlist/hash-video.svg");
 }
-.mx_RoomListHeader_iconExplore::before {
+.mx_LegacyRoomListHeader_iconExplore::before {
     mask-image: url("$(res)/img/element-icons/roomlist/hash-search.svg");
 }
-.mx_RoomListHeader_iconPlus::before {
+.mx_LegacyRoomListHeader_iconPlus::before {
     mask-image: url("@vector-im/compound-design-tokens/icons/plus.svg");
 }
