@@ -327,21 +327,21 @@ describe("DeviceListener", () => {
                 expect(SetupEncryptionToast.showToast).not.toHaveBeenCalled();
             });
 
-            describe("when user does not have a cross signing id on this device", () => {
-                it("shows verify session toast when account has cross signing", async () => {
-                    mockCrypto!.isCrossSigningReady.mockResolvedValue(true);
-                    await createAndStart();
+            it("shows verify session toast when account has cross signing", async () => {
+                mockCrypto!.isCrossSigningReady.mockResolvedValue(true);
+                await createAndStart();
 
-                    expect(mockCrypto!.getUserDeviceInfo).toHaveBeenCalled();
-                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(
-                        SetupEncryptionToast.Kind.VERIFY_THIS_SESSION,
-                    );
-                });
+                expect(mockCrypto!.getUserDeviceInfo).toHaveBeenCalled();
+                expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(
+                    SetupEncryptionToast.Kind.VERIFY_THIS_SESSION,
+                );
             });
 
-            describe("when user does have a cross signing id on this device", () => {
+            describe("when current device is verified", () => {
                 beforeEach(() => {
                     mockCrypto!.isCrossSigningReady.mockResolvedValue(true);
+
+                    // current device is verified
                     mockCrypto!.getDeviceVerificationStatus.mockResolvedValue(
                         new DeviceVerificationStatus({
                             trustCrossSignedDevices: true,
