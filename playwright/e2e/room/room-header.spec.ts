@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Page } from "@playwright/test";
+import { type Visibility } from "matrix-js-sdk/src/matrix";
 
 import { test, expect } from "../../element-web-test";
 import { type ElementAppPage } from "../../pages/ElementAppPage";
@@ -85,6 +86,15 @@ test.describe("Room Header", () => {
                 await expect(header).toMatchScreenshot("room-header-long-name.png");
             },
         );
+
+        test("should render room header icon correctly", { tag: "@screenshot" }, async ({ page, app, user }) => {
+            await app.client.createRoom({ name: "Test Room", visibility: "public" as Visibility });
+            await app.viewRoomByName("Test Room");
+
+            const header = page.locator(".mx_RoomHeader");
+
+            await expect(header).toMatchScreenshot("room-header-with-icon.png");
+        });
     });
 
     test.describe("with a video room", () => {
