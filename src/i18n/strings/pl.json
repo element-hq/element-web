@@ -1294,8 +1294,7 @@
         "title": "%(brand)s nie wspiera tej przeglądarki",
         "use_desktop_heading": "Zamiast tego użyj %(brand)s Desktop",
         "use_mobile_heading": "Zamiast tego użyj %(brand)s Mobile",
-        "use_mobile_heading_after_desktop": "lub skorzystaj z naszej aplikacji mobilnej",
-        "windows": "Windows (%(bits)s-bity)"
+        "use_mobile_heading_after_desktop": "lub skorzystaj z naszej aplikacji mobilnej"
     },
     "info_tooltip_title": "Informacje",
     "integration_manager": {

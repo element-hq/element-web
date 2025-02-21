@@ -1286,8 +1286,7 @@
         "title": "Непідтримуваний браузер",
         "use_desktop_heading": "Натомість використовуйте %(brand)s для комп'ютерів",
         "use_mobile_heading": "Натомість використовуйте %(brand)s для мобільних",
-        "use_mobile_heading_after_desktop": "Або скористайтеся нашим мобільним застосунком",
-        "windows": "Windows (%(bits)s-біт)"
+        "use_mobile_heading_after_desktop": "Або скористайтеся нашим мобільним застосунком"
     },
     "info_tooltip_title": "Відомості",
     "integration_manager": {

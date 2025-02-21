@@ -80,12 +80,14 @@
         "maximise": "Maximiser",
         "mention": "Mentionner",
         "minimise": "Minimiser",
+        "new_message": "Nouveau message",
         "new_room": "Nouveau salon",
         "new_video_room": "Nouveau salon visio",
         "next": "Suivant",
         "no": "Non",
         "ok": "OK",
         "open": "Ouvrir",
+        "open_menu": "Ouvrir le menu",
         "pause": "Pause",
         "pin": "Épingler",
         "play": "Lecture",
@@ -1286,7 +1288,8 @@
         "use_desktop_heading": "Utilisez plutôt %(brand)s Desktop",
         "use_mobile_heading": "Utilisez plutôt %(brand)s sur votre appareil mobile",
         "use_mobile_heading_after_desktop": "Ou utilisez notre application mobile",
-        "windows": "Windows (%(bits)s-bit)"
+        "windows_64bit": "Windows (64 bits)",
+        "windows_arm_64bit": "Windows (ARM 64 bits)"
     },
     "info_tooltip_title": "Informations",
     "integration_manager": {

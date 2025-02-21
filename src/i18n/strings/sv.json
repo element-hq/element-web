@@ -1236,8 +1236,7 @@
         "title": "Webbläsaren stöds ej",
         "use_desktop_heading": "Använd %(brand)s skrivbord istället",
         "use_mobile_heading": "Använd %(brand)s på mobilen istället",
-        "use_mobile_heading_after_desktop": "Eller använd vår mobilapp",
-        "windows": "Windows (%(bits)s -bit)"
+        "use_mobile_heading_after_desktop": "Eller använd vår mobilapp"
     },
     "info_tooltip_title": "Information",
     "integration_manager": {

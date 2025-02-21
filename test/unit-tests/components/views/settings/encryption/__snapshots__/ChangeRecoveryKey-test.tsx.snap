@@ -135,7 +135,7 @@ exports[`<ChangeRecoveryKey /> flow to change the recovery key should display th
       </button>
     </div>
     <div
-      class="mx_ChangeRecoveryKey_footer"
+      class="mx_EncryptionCard_buttons"
     >
       <button
         class="_button_i91xf_17"
@@ -266,7 +266,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
         />
       </div>
       <div
-        class="mx_ChangeRecoveryKey_footer"
+        class="mx_EncryptionCard_buttons"
       >
         <button
           aria-disabled="true"
@@ -421,7 +421,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should ask the user
         </span>
       </div>
       <div
-        class="mx_ChangeRecoveryKey_footer"
+        class="mx_EncryptionCard_buttons"
       >
         <button
           aria-disabled="true"
@@ -539,7 +539,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display info
       After clicking continue, we’ll generate a recovery key for you.
     </span>
     <div
-      class="mx_ChangeRecoveryKey_footer"
+      class="mx_EncryptionCard_buttons"
     >
       <button
         class="_button_i91xf_17"
@@ -699,7 +699,7 @@ exports[`<ChangeRecoveryKey /> flow to set up a recovery key should display the 
       </button>
     </div>
     <div
-      class="mx_ChangeRecoveryKey_footer"
+      class="mx_EncryptionCard_buttons"
     >
       <button
         class="_button_i91xf_17"

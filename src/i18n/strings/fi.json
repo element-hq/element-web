@@ -1125,8 +1125,7 @@
         "linux": "Linux",
         "macos": "Mac",
         "supported_browsers": "Saat parhaan käyttökokemuksen käyttämällä <Chrome>Chromea</Chrome>, <Firefox>Firefoxia</Firefox>, <Edge>Edgeä</Edge> tai <Safari>Safaria</Safari>.",
-        "title": "Selainta ei tueta",
-        "windows": "Windows (%(bits)s-bit)"
+        "title": "Selainta ei tueta"
     },
     "info_tooltip_title": "Tiedot",
     "integration_manager": {
