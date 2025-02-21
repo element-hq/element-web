@@ -1277,8 +1277,7 @@
         "title": "Nem támogatott böngésző",
         "use_desktop_heading": "Használjon inkább %(brand)s asztali alkalmazást",
         "use_mobile_heading": "%(brand)s mobil alkalmazás használata",
-        "use_mobile_heading_after_desktop": "Vagy használja mobilalkalmazásunkat",
-        "windows": "Windows (%(bits)s-bit)"
+        "use_mobile_heading_after_desktop": "Vagy használja mobilalkalmazásunkat"
     },
     "info_tooltip_title": "Információ",
     "integration_manager": {
