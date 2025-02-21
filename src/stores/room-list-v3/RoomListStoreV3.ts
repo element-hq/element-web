@@ -18,12 +18,15 @@ import { LISTS_UPDATE_EVENT } from "../room-list/RoomListStore";
 import { AllRoomsFilter } from "./filters/AllRoomsFilter";
 import { FavouriteFilter } from "./filters/FavouriteFilter";
 import { RecencySorter } from "./sorters/RecencySorter";
+import { RoomSkipList } from "./RoomSkipList";
 
 export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     /**
      * This is the unsorted, unfiltered raw list of rooms from the js-sdk.
      */
     private rooms: Room[] = [];
+
+    private roomSkipList?: RoomSkipList;
 
     private readonly msc3946ProcessDynamicPredecessor: boolean;
 
@@ -113,6 +116,12 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         let rooms = this.matrixClient.getVisibleRooms(this.msc3946ProcessDynamicPredecessor);
         rooms = rooms.filter((r) => VisibilityProvider.instance.isRoomVisible(r));
         return rooms;
+    }
+
+    public createSkipList(): void {
+        const rooms = this.fetchRoomsFromSdk();
+        this.roomSkipList = new RoomSkipList();
+        this.roomSkipList.create(rooms!);
     }
 }
 
