@@ -81,7 +81,6 @@ describe("DeviceListener", () => {
             getDeviceVerificationStatus: jest.fn().mockResolvedValue({
                 crossSigningVerified: false,
             }),
-            getCrossSigningKeyId: jest.fn(),
             getUserDeviceInfo: jest.fn().mockResolvedValue(new Map()),
             isCrossSigningReady: jest.fn().mockResolvedValue(true),
             isSecretStorageReady: jest.fn().mockResolvedValue(true),
@@ -329,10 +328,6 @@ describe("DeviceListener", () => {
             });
 
             describe("when user does not have a cross signing id on this device", () => {
-                beforeEach(() => {
-                    mockCrypto!.getCrossSigningKeyId.mockResolvedValue(null);
-                });
-
                 it("shows verify session toast when account has cross signing", async () => {
                     mockCrypto!.isCrossSigningReady.mockResolvedValue(true);
                     await createAndStart();
@@ -347,7 +342,6 @@ describe("DeviceListener", () => {
             describe("when user does have a cross signing id on this device", () => {
                 beforeEach(() => {
                     mockCrypto!.isCrossSigningReady.mockResolvedValue(true);
-                    mockCrypto!.getCrossSigningKeyId.mockResolvedValue("abc");
                     mockCrypto!.getDeviceVerificationStatus.mockResolvedValue(
                         new DeviceVerificationStatus({
                             trustCrossSignedDevices: true,
