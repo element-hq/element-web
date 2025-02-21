@@ -27,17 +27,17 @@ describe("usePublicRoomDirectory", () => {
         cli.getDomain = () => "matrix.org";
         cli.getThirdpartyProtocols = () => Promise.resolve({});
         cli.publicRooms = ({ filter }: IRoomDirectoryOptions) => {
-            const chunk = filter?.generic_search_term
-                ? [
-                      {
-                          room_id: "hello world!",
-                          name: filter.generic_search_term,
-                          world_readable: true,
-                          guest_can_join: true,
-                          num_joined_members: 1,
-                      },
-                  ]
-                : [];
+            console.log("filter 123");
+            console.log(filter);
+            const chunk = [
+                {
+                    room_id: "hello world!",
+                    name: filter?.generic_search_term ?? "",
+                    world_readable: true,
+                    guest_can_join: true,
+                    num_joined_members: 1,
+                },
+            ];
             return Promise.resolve({
                 chunk,
                 total_room_count_estimate: 1,
@@ -64,6 +64,26 @@ describe("usePublicRoomDirectory", () => {
         });
 
         expect(result.current.publicRooms[0].name).toBe(query);
+    });
+
+    it("should work with empty queries", async () => {
+        const query = "";
+        const { result } = render();
+
+        act(() => {
+            result.current.search({
+                limit: 1,
+                query,
+            });
+        });
+
+        await waitFor(() => {
+            expect(result.current.ready).toBe(true);
+        });
+
+        console.log(result.current.publicRooms);
+
+        expect(result.current.publicRooms[0].name).toEqual(query);
     });
 
     it("should recover from a server exception", async () => {
