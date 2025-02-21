@@ -27,12 +27,10 @@ describe("usePublicRoomDirectory", () => {
         cli.getDomain = () => "matrix.org";
         cli.getThirdpartyProtocols = () => Promise.resolve({});
         cli.publicRooms = ({ filter }: IRoomDirectoryOptions) => {
-            console.log("filter 123");
-            console.log(filter);
             const chunk = [
                 {
                     room_id: "hello world!",
-                    name: filter?.generic_search_term ?? "",
+                    name: filter?.generic_search_term ?? "", // If the query is "" no filter is applied(an is undefined here), in keeping with the pattern let's call the room ""
                     world_readable: true,
                     guest_can_join: true,
                     num_joined_members: 1,
@@ -80,8 +78,6 @@ describe("usePublicRoomDirectory", () => {
         await waitFor(() => {
             expect(result.current.ready).toBe(true);
         });
-
-        console.log(result.current.publicRooms);
 
         expect(result.current.publicRooms[0].name).toEqual(query);
     });
