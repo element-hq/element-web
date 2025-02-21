@@ -21,6 +21,7 @@ import {
     waitForVerificationRequest,
 } from "./utils";
 import { type Bot } from "../../pages/bot";
+import { Toasts } from "../../pages/toasts.ts";
 
 test.describe("Device verification", { tag: "@no-webkit" }, () => {
     let aliceBotClient: Bot;
@@ -70,6 +71,51 @@ test.describe("Device verification", { tag: "@no-webkit" }, () => {
         // For now we don't check that the backup key is in cache because it's a bit flaky,
         // as we need to wait for the secret gossiping to happen.
         await checkDeviceIsConnectedKeyBackup(app, expectedBackupVersion, false);
+    });
+
+    // Regression test for https://github.com/element-hq/element-web/issues/29110
+    test("No toast after verification, even if the secrets take a while to arrive", async ({ page, credentials }) => {
+        // Before we log in, the bot creates an encrypted room, so that we can test the toast behaviour that only happens
+        // when we are in an encrypted room.
+        await aliceBotClient.createRoom({
+            initial_state: [
+                {
+                    type: "m.room.encryption",
+                    state_key: "",
+                    content: { algorithm: "m.megolm.v1.aes-sha2" },
+                },
+            ],
+        });
+
+        // In order to simulate a real environment more accurately, we need to slow down the arrival of the
+        // `m.secret.send` to-device messages. That's slightly tricky to do directly, so instead we delay the *outgoing*
+        // `m.secret.request` messages.
+        await page.route("**/_matrix/client/v3/sendToDevice/m.secret.request/**", async (route) => {
+            await route.fulfill({ json: {} });
+            await new Promise((f) => setTimeout(f, 1000));
+            await route.fetch();
+        });
+
+        await logIntoElement(page, credentials);
+
+        // Launch the verification request between alice and the bot
+        const verificationRequest = await initiateAliceVerificationRequest(page);
+
+        // Handle emoji SAS verification
+        const infoDialog = page.locator(".mx_InfoDialog");
+        // the bot chooses to do an emoji verification
+        const verifier = await verificationRequest.evaluateHandle((request) => request.startVerification("m.sas.v1"));
+
+        // Handle emoji request and check that emojis are matching
+        await doTwoWaySasVerification(page, verifier);
+
+        await infoDialog.getByRole("button", { name: "They match" }).click();
+        await infoDialog.getByRole("button", { name: "Got it" }).click();
+
+        // There should be no toast (other than the notifications one)
+        const toasts = new Toasts(page);
+        await toasts.rejectToast("Notifications");
+        await toasts.assertNoToasts();
     });
 
     test("Verify device with QR code during login", async ({ page, app, credentials, homeserver }) => {
