@@ -1285,8 +1285,7 @@
         "title": "%(brand)s não suporta este browser",
         "use_desktop_heading": "Utiliza antes o %(brand)s Desktop",
         "use_mobile_heading": "Utiliza antes o %(brand)s no telemóvel",
-        "use_mobile_heading_after_desktop": "Ou utiliza a nossa aplicação móvel",
-        "windows": "Windows (%(bits)s-bit)"
+        "use_mobile_heading_after_desktop": "Ou utiliza a nossa aplicação móvel"
     },
     "info_tooltip_title": "Informação",
     "integration_manager": {
