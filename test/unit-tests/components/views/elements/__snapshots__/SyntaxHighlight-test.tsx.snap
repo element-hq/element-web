@@ -3,17 +3,17 @@
 exports[`<SyntaxHighlight /> renders 1`] = `
 <div>
   <pre
-    class="mx_SyntaxHighlight hljs language-arcade"
+    class="mx_SyntaxHighlight hljs language-javascript"
   >
     <code>
       <span
-        class="hljs-built_in"
+        class="hljs-variable language_"
       >
         console
       </span>
       .
       <span
-        class="hljs-built_in"
+        class="hljs-title function_"
       >
         log
       </span>
