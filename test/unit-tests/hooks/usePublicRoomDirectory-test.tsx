@@ -27,17 +27,15 @@ describe("usePublicRoomDirectory", () => {
         cli.getDomain = () => "matrix.org";
         cli.getThirdpartyProtocols = () => Promise.resolve({});
         cli.publicRooms = ({ filter }: IRoomDirectoryOptions) => {
-            const chunk = filter?.generic_search_term
-                ? [
-                      {
-                          room_id: "hello world!",
-                          name: filter.generic_search_term,
-                          world_readable: true,
-                          guest_can_join: true,
-                          num_joined_members: 1,
-                      },
-                  ]
-                : [];
+            const chunk = [
+                {
+                    room_id: "hello world!",
+                    name: filter?.generic_search_term ?? "", // If the query is "" no filter is applied(an is undefined here), in keeping with the pattern let's call the room ""
+                    world_readable: true,
+                    guest_can_join: true,
+                    num_joined_members: 1,
+                },
+            ];
             return Promise.resolve({
                 chunk,
                 total_room_count_estimate: 1,
@@ -67,7 +65,7 @@ describe("usePublicRoomDirectory", () => {
     });
 
     it("should work with empty queries", async () => {
-        const query = "ROOM NAME";
+        const query = "";
         const { result } = render();
 
         act(() => {
