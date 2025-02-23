@@ -2,13 +2,6 @@ import React, { ReactNode, useState } from "react";
 import classNames from "classnames";
 import LocationIcon from "@vector-im/compound-design-tokens/assets/web/icons/location-pin-solid";
 
-
-
-
-/**
- * Wrap with tooltip handlers when
- * tooltip is truthy
- */
 const OptionalTooltip: React.FC<{
     tooltip?: React.ReactNode;
     annotationKey: string;

@@ -1,23 +1,24 @@
-import { EventTimeline, EventType, MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixEvent, Room, StateEvents, TimelineEvents } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import Annotation from "./Annotation";
-import { RoomAnnotationEventContent } from "matrix-js-sdk/src/@types/state_events";
 
-import * as MegolmExportEncryptionExport from "../../../../src/utils/MegolmExportEncryption"
+enum CustomEventType {
+    MapAnnotation = "m.map.annotation"
+}
 
-export const fetchPinnedEvent = async (roomId: string, matrixClient: MatrixClient): Promise<MatrixEvent | null> => {
+export const fetchAnnotationEvent = async (roomId: string, matrixClient: MatrixClient): Promise<MatrixEvent | null> => {
     try {
         const room = matrixClient.getRoom(roomId);
         if (!room) {
             console.error("Room not found");
             return null;
         }
-        const readPinsEventId = getPinnedEventIds(room)[0];
-        if (!readPinsEventId) {
+        const annotationEventId = getAnnotationEventId(room);
+        if (!annotationEventId) {
             console.error("Read pins event ID not found");
             return null;
         }
-        let localEvent =  room.findEventById(readPinsEventId);
+        let localEvent =  room.findEventById(annotationEventId);
 
         // Decrypt if necessary
         if (localEvent?.isEncrypted()) {
@@ -35,20 +36,19 @@ export const fetchPinnedEvent = async (roomId: string, matrixClient: MatrixClien
     return null;
 };
 
-function getPinnedEventIds(room?: Room): string[] {
-    const eventIds: string[] =
-        room
-            ?.getLiveTimeline()
-            .getState(EventTimeline.FORWARDS)
-            ?.getStateEvents(EventType.RoomPinnedEvents, "")
-            ?.getContent()?.pinned ?? [];
-    // Limit the number of pinned events to 100
-    return eventIds.slice(0, 1);
+function getAnnotationEventId(room?: Room): string {
+    const events = room?.currentState.getStateEvents(CustomEventType.MapAnnotation);
+    if (!events || events.length === 0) {
+        return ""; // Return an empty array if no events are found
+    }
+    const content = events[0].getContent(); // Get content from the event
+    const annotationEventId = content.event_id || "";
+    return annotationEventId;
 }
 
-export async function extractAnnotationsPassphrase(roomId: string, matrixClient: MatrixClient): Promise<string | null> {
+export async function extractAnnotations(roomId: string, matrixClient: MatrixClient): Promise<string | null> {
     try {
-        const pinEvent = await fetchPinnedEvent(roomId, matrixClient);
+        const pinEvent = await fetchAnnotationEvent(roomId, matrixClient);
         if(!pinEvent) {
             return null;
         }
@@ -60,14 +60,15 @@ export async function extractAnnotationsPassphrase(roomId: string, matrixClient:
         console.error("Error retrieving content from pinned event:", error);
         return null; 
     }
-    return null;
 }
 
 
 // Function to update annotations on the server
-export const sendAnnotations = async (roomId: string, content: RoomAnnotationEventContent, matrixClient: MatrixClient) => {
+export const sendAnnotations = async (roomId: string, content:  TimelineEvents[keyof TimelineEvents], matrixClient: MatrixClient) => {
     try {
-        await matrixClient.sendStateEvent(roomId, EventType.RoomAnnotation, content);
+
+        let eventid =  await matrixClient.sendEvent(roomId, (CustomEventType.MapAnnotation as unknown) as keyof TimelineEvents, content);
+        await matrixClient.sendStateEvent(roomId,  (CustomEventType.MapAnnotation as unknown) as keyof StateEvents, eventid);
         console.log("Annotations updated successfully!");
     } catch (error) {
         console.error("Failed to update annotations:", error);
@@ -80,14 +81,14 @@ export const sendAnnotations = async (roomId: string, content: RoomAnnotationEve
 // Function to save an annotation
 export const saveAnnotation = async (roomId: string, matrixClient: MatrixClient, annotations: Annotation[]) => {
     try {
-
-        const base64EncryptedAnnotations = await encryptAnnotations(roomId, matrixClient, annotations);
-        if(!base64EncryptedAnnotations) {
+        // Convert annotations to a string
+        const stringifiedAnnotations = JSON.stringify(annotations);
+        if (!stringifiedAnnotations) {
             return [];
         }
         const content = {
-            annotations: base64EncryptedAnnotations, // Use the base64 string
-        };
+            annotations: stringifiedAnnotations, // Use the stringified annotations
+        } as unknown as TimelineEvents[keyof TimelineEvents];
 
         await sendAnnotations(roomId, content, matrixClient);
     } catch (error) {
@@ -100,19 +101,18 @@ export const saveAnnotation = async (roomId: string, matrixClient: MatrixClient,
 // Function to delete an annotation
 export const deleteAnnotation = async (roomId: string, matrixClient: MatrixClient, geoUri: string, annotations: Annotation[]) => {
     try {
-        // Prepare content for the server
-        const base64EncryptedAnnotations = await encryptAnnotations(roomId, matrixClient, annotations);
-        if(!base64EncryptedAnnotations) {
+        // Convert annotations to a string
+        const stringifiedAnnotations = JSON.stringify(annotations);
+        if (!stringifiedAnnotations) {
             return [];
         }
         const content = {
-            annotations: base64EncryptedAnnotations, // Use the base64 string
-        };
+            annotations: stringifiedAnnotations, // Use the stringified annotations
+        } as unknown as TimelineEvents[keyof TimelineEvents];
 
         await sendAnnotations(roomId, content, matrixClient);
     } catch (error) {
         console.error("Failed to delete annotation:", error);
-        // Handle the error appropriately (e.g., notify the user)
         throw error; // Optionally rethrow the error for further handling
     }
 };
@@ -121,27 +121,32 @@ export const deleteAnnotation = async (roomId: string, matrixClient: MatrixClien
 export const loadAnnotations = async (roomId: string, matrixClient: MatrixClient): Promise<Annotation[]> => {
     try {
         const room = matrixClient.getRoom(roomId); // Get the room object
-        const events = room?.currentState.getStateEvents(EventType.RoomAnnotation);
+        const events = room?.currentState.getStateEvents("m.map.annotation");
         
         if (!events || events.length === 0) {
             return []; // Return an empty array if no events are found
         }
-        const password = await extractAnnotationsPassphrase(roomId, matrixClient);
-        if(!password) {
+
+        const event = await fetchAnnotationEvent(roomId, matrixClient);
+        if (!event) {
             return [];
         }
-        const event = events[0];
+
         const content = event.getContent(); // Get content from the event
-        const encryptedAnnotations = content.annotations || [];
-        if (typeof encryptedAnnotations !== 'string') {
+        const stringifiedAnnotations = content.annotations || [];
+        if (typeof stringifiedAnnotations !== 'string') {
             console.warn("Content is not a string. Returning early.");
             return []; // or handle accordingly
         }
-        const decryptedArray: Annotation[] = await decryptAnnotations(encryptedAnnotations, password);
-        if (Object.keys(content.annotations).length === 0) {
-            return [];
+
+        // Parse the JSON string back to an array of annotations
+        const annotationsArray: Annotation[] = JSON.parse(stringifiedAnnotations);
+        
+        if (!Array.isArray(annotationsArray) || annotationsArray.length === 0) {
+            return []; // Return an empty array if parsing fails or array is empty
         }
-        return decryptedArray.map((annotation: { geoUri: string; body: string; color?: string; }) => ({
+        
+        return annotationsArray.map((annotation: { geoUri: string; body: string; color?: string; }) => ({
             geoUri: annotation.geoUri,
             body: annotation.body,
             color: annotation.color,
@@ -152,37 +157,3 @@ export const loadAnnotations = async (roomId: string, matrixClient: MatrixClient
         return []; // Return an empty array in case of an error
     }
 };
-
-export const decryptAnnotations = async (encryptedAnnotations: string, password: string): Promise<Annotation[]> => {
-    try {
-        // Convert from base64 string to ArrayBuffer
-        const binaryString = atob(encryptedAnnotations);
-        const charCodeArray = new Uint8Array(binaryString.length);
-        for (let i = 0; i < binaryString.length; i++) {
-            charCodeArray[i] = binaryString.charCodeAt(i);
-        }
-        const arrayBuffer = charCodeArray.buffer;
-
-        // Decrypt the annotations
-        const decryptedAnnotations = await MegolmExportEncryptionExport.decryptMegolmKeyFile(arrayBuffer, password);
-        return JSON.parse(decryptedAnnotations); // Convert decrypted string back to JSON
-    } catch (error) {
-        console.error("Decryption failed:", error);
-        throw error; // Rethrow the error for further handling
-    }
-};
-
-export const encryptAnnotations = async (roomId: string, matrixClient: MatrixClient, annotations: Annotation[]):  Promise<string | null> => {
-    const jsonAnnotations = JSON.stringify(annotations);
-    const password = await extractAnnotationsPassphrase(roomId, matrixClient);
-    
-    if (!password) {
-        return null;
-    }
-
-    const encryptedAnnotations = await MegolmExportEncryptionExport.encryptMegolmKeyFile(jsonAnnotations, password, { kdf_rounds: 1000 });
-    const encryptedAnnotationsArray = new Uint8Array(encryptedAnnotations);
-    const base64EncryptedAnnotations = btoa(String.fromCharCode(...encryptedAnnotationsArray));
-
-    return base64EncryptedAnnotations; // Return the base64 encoded encrypted annotations
-}
