@@ -76,6 +76,15 @@ import { SearchScope } from "../../../../src/Searching";
 import { MEGOLM_ENCRYPTION_ALGORITHM } from "../../../../src/utils/crypto";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { type ViewUserPayload } from "../../../../src/dispatcher/payloads/ViewUserPayload.ts";
+import { CallStore } from "../../../../src/stores/CallStore.ts";
+import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../../src/MediaDeviceHandler.ts";
+
+// Used by group calls
+jest.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
+    [MediaDeviceKindEnum.AudioInput]: [],
+    [MediaDeviceKindEnum.VideoInput]: [],
+    [MediaDeviceKindEnum.AudioOutput]: [],
+});
 
 describe("RoomView", () => {
     let cli: MockedObject<MatrixClient>;
@@ -98,6 +107,7 @@ describe("RoomView", () => {
         rooms = new Map();
         rooms.set(room.roomId, room);
         cli.getRoom.mockImplementation((roomId: string | undefined) => rooms.get(roomId || "") || null);
+        cli.getRooms.mockImplementation(() => [...rooms.values()]);
         // Re-emit certain events on the mocked client
         room.on(RoomEvent.Timeline, (...args) => cli.emit(RoomEvent.Timeline, ...args));
         room.on(RoomEvent.TimelineReset, (...args) => cli.emit(RoomEvent.TimelineReset, ...args));
@@ -371,6 +381,7 @@ describe("RoomView", () => {
 
     describe("video rooms", () => {
         beforeEach(async () => {
+            await setupAsyncStoreWithClient(CallStore.instance, MatrixClientPeg.safeGet());
             // Make it a video room
             room.isElementVideoRoom = () => true;
             await SettingsStore.setValue("feature_video_rooms", null, SettingLevel.DEVICE, true);

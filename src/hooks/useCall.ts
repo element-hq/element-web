@@ -75,9 +75,5 @@ export const useFull = (call: Call | null): boolean => {
 
 export const useJoinCallButtonDisabledTooltip = (call: Call | null): string | null => {
     const isFull = useFull(call);
-    const state = useConnectionState(call);
-
-    if (state === ConnectionState.Connecting) return _t("voip|join_button_tooltip_connecting");
-    if (isFull) return _t("voip|join_button_tooltip_call_full");
-    return null;
+    return isFull ? _t("voip|join_button_tooltip_call_full") : null;
 };
