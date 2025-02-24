@@ -69,7 +69,7 @@ jobs:
 
                   # Spin up a container of the image
                   ELEMENT_WEB_PORT=8181
-                  CONTAINER_ID=$(docker run --rm -dp 8181:8181 -v $(pwd)/modules:/tmp/element-web-modules "$IMAGEID"
+                  CONTAINER_ID=$(docker run --rm -dp "$ELEMENT_WEB_PORT:$ELEMENT_WEB_PORT" -v $(pwd)/modules:/tmp/element-web-modules "$IMAGEID")
 
                   # Run some smoke tests
                   wget --retry-connrefused --tries=5 -q --wait=3 --spider "http://localhost:$ELEMENT_WEB_PORT/modules/module_name/index.js"
