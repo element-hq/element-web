@@ -72,7 +72,7 @@ jobs:
                   CONTAINER_ID=$(
                       docker run \
                           --rm \
-                          -e ELEMENT_WEB_PORT \
+                          -e "ELEMENT_WEB_PORT=$ELEMENT_WEB_PORT" \
                           -dp "$ELEMENT_WEB_PORT:$ELEMENT_WEB_PORT" \
                           -v $(pwd)/modules:/tmp/element-web-modules \
                           "$IMAGEID" \
