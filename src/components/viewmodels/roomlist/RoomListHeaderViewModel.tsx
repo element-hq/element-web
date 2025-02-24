@@ -23,6 +23,7 @@ import {
     UPDATE_SELECTED_SPACE,
 } from "../../../stores/spaces";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
+import { showCreateNewRoom } from "../../../utils/space";
 
 /**
  * Hook to get the active space and its title.
@@ -55,7 +56,7 @@ export interface RoomListHeaderViewState {
     title: string;
     /**
      * Whether to display the compose menu
-     * True if the user can create rooms and is not in a Space
+     * True if the user can create rooms
      */
     displayComposeMenu: boolean;
     /**
@@ -84,15 +85,13 @@ export interface RoomListHeaderViewState {
 
 /**
  * View model for the RoomListHeader.
- * The actions don't work when called in a space yet.
  */
 export function useRoomListHeaderViewModel(): RoomListHeaderViewState {
     const { activeSpace, title } = useSpace();
 
     const canCreateRoom = shouldShowComponent(UIComponent.CreateRooms);
     const canCreateVideoRoom = useFeatureEnabled("feature_video_rooms");
-    // Temporary: don't display the compose menu when in a Space
-    const displayComposeMenu = canCreateRoom && !activeSpace;
+    const displayComposeMenu = canCreateRoom;
 
     /* Actions */
 
@@ -101,20 +100,30 @@ export function useRoomListHeaderViewModel(): RoomListHeaderViewState {
         PosthogTrackers.trackInteraction("WebRoomListHeaderPlusMenuCreateChatItem", e);
     }, []);
 
-    const createRoom = useCallback((e: Event) => {
-        defaultDispatcher.fire(Action.CreateRoom);
-        PosthogTrackers.trackInteraction("WebRoomListHeaderPlusMenuCreateRoomItem", e);
-    }, []);
+    const createRoom = useCallback(
+        (e: Event) => {
+            if (activeSpace) {
+                showCreateNewRoom(activeSpace);
+            } else {
+                defaultDispatcher.fire(Action.CreateRoom);
+            }
+            PosthogTrackers.trackInteraction("WebRoomListHeaderPlusMenuCreateRoomItem", e);
+        },
+        [activeSpace],
+    );
 
     const elementCallVideoRoomsEnabled = useFeatureEnabled("feature_element_call_video_rooms");
-    const createVideoRoom = useCallback(
-        () =>
+    const createVideoRoom = useCallback(() => {
+        const type = elementCallVideoRoomsEnabled ? RoomType.UnstableCall : RoomType.ElementVideo;
+        if (activeSpace) {
+            showCreateNewRoom(activeSpace, type);
+        } else {
             defaultDispatcher.dispatch({
                 action: Action.CreateRoom,
-                type: elementCallVideoRoomsEnabled ? RoomType.UnstableCall : RoomType.ElementVideo,
-            }),
-        [elementCallVideoRoomsEnabled],
-    );
+                type,
+            });
+        }
+    }, [activeSpace, elementCallVideoRoomsEnabled]);
 
     return {
         title,

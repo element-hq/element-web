@@ -6,7 +6,7 @@
  */
 
 import { renderHook } from "jest-matrix-react";
-import { type MatrixClient, RoomType } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type Room, RoomType } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 
 import { useRoomListHeaderViewModel } from "../../../../../src/components/viewmodels/roomlist/RoomListHeaderViewModel";
@@ -16,16 +16,23 @@ import { shouldShowComponent } from "../../../../../src/customisations/helpers/U
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
+import { showCreateNewRoom } from "../../../../../src/utils/space";
 
 jest.mock("../../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
 }));
 
+jest.mock("../../../../../src/utils/space", () => ({
+    showCreateNewRoom: jest.fn(),
+}));
+
 describe("useRoomListHeaderViewModel", () => {
     let matrixClient: MatrixClient;
+    let space: Room;
 
     beforeEach(() => {
         matrixClient = stubClient();
+        space = mkStubRoom("spaceId", "spaceName", matrixClient);
     });
 
     afterEach(() => {
@@ -39,8 +46,7 @@ describe("useRoomListHeaderViewModel", () => {
         });
 
         it("should return the current space name as title", () => {
-            const room = mkStubRoom("spaceId", "spaceName", matrixClient);
-            jest.spyOn(SpaceStore.instance, "activeSpaceRoom", "get").mockReturnValue(room);
+            jest.spyOn(SpaceStore.instance, "activeSpaceRoom", "get").mockReturnValue(space);
             const { result } = renderHook(() => useRoomListHeaderViewModel());
 
             expect(result.current.title).toStrictEqual("spaceName");
@@ -81,6 +87,14 @@ describe("useRoomListHeaderViewModel", () => {
         expect(spy).toHaveBeenCalledWith(Action.CreateRoom);
     });
 
+    it("should call showCreateNewRoom when createRoom is called in a space", () => {
+        jest.spyOn(SpaceStore.instance, "activeSpaceRoom", "get").mockReturnValue(space);
+        const { result } = renderHook(() => useRoomListHeaderViewModel());
+        result.current.createRoom(new Event("click"));
+
+        expect(showCreateNewRoom).toHaveBeenCalledWith(space);
+    });
+
     it("should fire Action.CreateRoom with RoomType.UnstableCall when createVideoRoom is called and feature_element_call_video_rooms is enabled", () => {
         jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
         const spy = jest.spyOn(defaultDispatcher, "dispatch");
@@ -97,5 +111,13 @@ describe("useRoomListHeaderViewModel", () => {
         result.current.createVideoRoom();
 
         expect(spy).toHaveBeenCalledWith({ action: Action.CreateRoom, type: RoomType.ElementVideo });
+    });
+
+    it("should call showCreateNewRoom when createVideoRoom is called in a space", () => {
+        jest.spyOn(SpaceStore.instance, "activeSpaceRoom", "get").mockReturnValue(space);
+        const { result } = renderHook(() => useRoomListHeaderViewModel());
+        result.current.createVideoRoom();
+
+        expect(showCreateNewRoom).toHaveBeenCalledWith(space, RoomType.ElementVideo);
     });
 });
