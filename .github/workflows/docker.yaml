@@ -17,8 +17,6 @@ jobs:
         permissions:
             id-token: write # needed for signing the images with GitHub OIDC Token
             packages: write # needed for publishing packages to GHCR
-        env:
-            TEST_TAG: vectorim/element-web:test
         steps:
             - uses: actions/checkout@v4
               with:
@@ -52,14 +50,18 @@ jobs:
                   password: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Build and load
+              id: test-build
               uses: docker/build-push-action@ca877d9245402d1537745e0e356eab47c3520991 # v6
               with:
                   context: .
                   load: true
-                  tags: ${{ env.TEST_TAG }}
 
             - name: Test the image
+              env:
+                  IMAGEID: ${{ steps.test-build.outputs.imageid }}
               run: |
+                  set -x
+
                   # Make a fake module to test the image
                   MODULE_PATH="modules/module_name/index.js"
                   mkdir -p $(dirname $MODULE_PATH)
@@ -67,12 +69,12 @@ jobs:
 
                   # Spin up a container of the image
                   ELEMENT_WEB_PORT=8181
-                  CONTAINER_ID=$(docker run --rm -dp 8181:8181 -v $(pwd)/modules:/tmp/element-web-modules ${{ env.TEST_TAG }})
+                  CONTAINER_ID=$(docker run --rm -dp 8181:8181 -v $(pwd)/modules:/tmp/element-web-modules "$IMAGEID"
 
                   # Run some smoke tests
-                  wget --retry-connrefused --tries=5 -q --wait=3 --spider http://localhost:8181/modules/module_name/index.js
-                  MODULE_1=$(curl http://localhost:8181/config.json | jq -r .modules[0])
-                  test "$MODULE_1" = "/${MODULE_PATH}"
+                  wget --retry-connrefused --tries=5 -q --wait=3 --spider "http://localhost:$ELEMENT_WEB_PORT/modules/module_name/index.js"
+                  MODULE_0=$(curl "http://localhost:$ELEMENT_WEB_PORT/config.json" | jq -r .modules[0])
+                  test "$MODULE_0" = "/${MODULE_PATH}"
 
                   # Check healthcheck
                   test "$(docker inspect -f {{.State.Running}} $CONTAINER_ID)" == "true"
