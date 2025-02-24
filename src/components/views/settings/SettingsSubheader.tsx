@@ -7,7 +7,7 @@
 
 import React, { type JSX } from "react";
 import CheckCircleIcon from "@vector-im/compound-design-tokens/assets/web/icons/check-circle-solid";
-import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
+import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
 import classNames from "classnames";
 
 interface SettingsSubheaderProps {

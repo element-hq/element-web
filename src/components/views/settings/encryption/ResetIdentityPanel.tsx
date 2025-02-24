@@ -8,7 +8,7 @@
 import { Breadcrumb, Button, VisualList, VisualListItem } from "@vector-im/compound-web";
 import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 import InfoIcon from "@vector-im/compound-design-tokens/assets/web/icons/info";
-import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
+import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
 import React, { type MouseEventHandler } from "react";
 
 import { _t } from "../../../../languageHandler";

@@ -10,7 +10,7 @@ import React, { createRef, type ReactNode } from "react";
 import { ClientRendezvousFailureReason, MSC4108FailureReason } from "matrix-js-sdk/src/rendezvous";
 import ChevronLeftIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-left";
 import CheckCircleSolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/check-circle-solid";
-import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
+import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
 import { Heading, MFAInput, Text } from "@vector-im/compound-web";
 import classNames from "classnames";
 import { QrCodeIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
