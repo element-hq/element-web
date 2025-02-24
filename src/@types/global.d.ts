@@ -47,6 +47,7 @@ import { type DeepReadonly } from "./common";
 import type MatrixChat from "../components/structures/MatrixChat";
 import { type InitialCryptoSetupStore } from "../stores/InitialCryptoSetupStore";
 import { type ModuleApiType } from "../modules/Api.ts";
+import type RoomListStoreV3 from "../stores/room-list-v3/RoomListStoreV3.ts";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -99,6 +100,7 @@ declare global {
         mxToastStore: ToastStore;
         mxDeviceListener: DeviceListener;
         mxRoomListStore: RoomListStore;
+        mxRoomListStoreV3: RoomListStoreV3;
         mxRoomListLayoutStore: RoomListLayoutStore;
         mxPlatformPeg: PlatformPeg;
         mxIntegrationManagers: typeof IntegrationManagers;
