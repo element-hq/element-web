@@ -36,7 +36,7 @@ USER nginx
 RUN ["nginx", "-t"]
 
 # App
-FROM gcr.io/distroless/base-nossl-debian${DEBIAN_VERSION_NUMERIC}:debug-nonroot
+FROM gcr.io/distroless/base-nossl-debian${DEBIAN_VERSION_NUMERIC}:nonroot
 
 ARG TARGETARCH
 ARG LIBARCH=${TARGETARCH}
