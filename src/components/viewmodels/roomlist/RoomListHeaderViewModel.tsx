@@ -102,8 +102,11 @@ export function useRoomListHeaderViewModel(): RoomListHeaderViewState {
 
     const createRoom = useCallback(
         (e: Event) => {
-            if (activeSpace) showCreateNewRoom(activeSpace);
-            else defaultDispatcher.fire(Action.CreateRoom);
+            if (activeSpace) {
+                showCreateNewRoom(activeSpace);
+            } else {
+                defaultDispatcher.fire(Action.CreateRoom);
+            }
             PosthogTrackers.trackInteraction("WebRoomListHeaderPlusMenuCreateRoomItem", e);
         },
         [activeSpace],
@@ -112,12 +115,14 @@ export function useRoomListHeaderViewModel(): RoomListHeaderViewState {
     const elementCallVideoRoomsEnabled = useFeatureEnabled("feature_element_call_video_rooms");
     const createVideoRoom = useCallback(() => {
         const type = elementCallVideoRoomsEnabled ? RoomType.UnstableCall : RoomType.ElementVideo;
-        if (activeSpace) showCreateNewRoom(activeSpace, type);
-        else
+        if (activeSpace) {
+            showCreateNewRoom(activeSpace, type);
+        } else {
             defaultDispatcher.dispatch({
                 action: Action.CreateRoom,
-                type: elementCallVideoRoomsEnabled ? RoomType.UnstableCall : RoomType.ElementVideo,
+                type,
             });
+        }
     }, [activeSpace, elementCallVideoRoomsEnabled]);
 
     return {
