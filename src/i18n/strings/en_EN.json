@@ -2098,6 +2098,7 @@
             "other": "Currently joining %(count)s rooms"
         },
         "notification_options": "Notification options",
+        "open_space_menu": "Open space menu",
         "redacting_messages_status": {
             "one": "Currently removing messages in %(count)s room",
             "other": "Currently removing messages in %(count)s rooms"
@@ -2112,6 +2113,10 @@
         "sort_by_activity": "Activity",
         "sort_by_alphabet": "A-Z",
         "sort_unread_first": "Show rooms with unread messages first",
+        "space_menu": {
+            "home": "Space home",
+            "space_settings": "Space Settings"
+        },
         "space_menu_label": "%(spaceName)s menu",
         "sublist_options": "List options",
         "suggested_rooms_heading": "Suggested Rooms"
