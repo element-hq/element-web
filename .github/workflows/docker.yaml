@@ -66,12 +66,16 @@ jobs:
                   echo 'alert("Testing");' > $MODULE_PATH
 
                   # Spin up a container of the image
-                  CONTAINER_ID=$(docker run --rm -dp 80:80 -v $(pwd)/modules:/tmp/element-web-modules ${{ env.TEST_TAG }})
+                  ELEMENT_WEB_PORT=8181
+                  CONTAINER_ID=$(docker run --rm -dp 8181:8181 -v $(pwd)/modules:/tmp/element-web-modules ${{ env.TEST_TAG }})
 
                   # Run some smoke tests
-                  wget --retry-connrefused --tries=5 -q --wait=3 --spider http://localhost:80/modules/module_name/index.js
-                  MODULE_1=$(curl http://localhost:80/config.json | jq -r .modules[0])
+                  wget --retry-connrefused --tries=5 -q --wait=3 --spider http://localhost:8181/modules/module_name/index.js
+                  MODULE_1=$(curl http://localhost:8181/config.json | jq -r .modules[0])
                   test "$MODULE_1" = "/${MODULE_PATH}"
+
+                  # Check healthcheck
+                  test "$(docker inspect -f {{.State.Running}} $CONTAINER_ID)" == "true"
 
                   # Clean up
                   docker stop "$CONTAINER_ID"
