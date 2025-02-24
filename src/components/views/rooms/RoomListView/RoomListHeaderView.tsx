@@ -8,7 +8,11 @@ import React, { type JSX, useState } from "react";
 import { IconButton, Menu, MenuItem } from "@vector-im/compound-web";
 import ComposeIcon from "@vector-im/compound-design-tokens/assets/web/icons/compose";
 import UserAddIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-add";
+import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 import RoomIcon from "@vector-im/compound-design-tokens/assets/web/icons/room";
+import HomeIcon from "@vector-im/compound-design-tokens/assets/web/icons/home";
+import PreferencesIcon from "@vector-im/compound-design-tokens/assets/web/icons/preferences";
+import SettingsIcon from "@vector-im/compound-design-tokens/assets/web/icons/settings";
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call";
 
 import { _t } from "../../../../languageHandler";
@@ -34,9 +38,54 @@ export function RoomListHeaderView(): JSX.Element {
             align="center"
             data-testid="room-list-header"
         >
-            <h1>{vm.title}</h1>
+            <Flex align="center" gap="var(--cpd-space-1x)">
+                <h1>{vm.title}</h1>
+                {vm.displaySpaceMenu && <SpaceMenu vm={vm} />}
+            </Flex>
             {vm.displayComposeMenu && <ComposeMenu vm={vm} />}
         </Flex>
+    );
+}
+
+interface SpaceMenuProps {
+    /**
+     * The view model for the room list header
+     */
+    vm: RoomListHeaderViewState;
+}
+
+/**
+ * The space menu for the room list header
+ */
+function SpaceMenu({ vm }: SpaceMenuProps): JSX.Element {
+    const [open, setOpen] = useState(false);
+
+    return (
+        <Menu
+            open={open}
+            onOpenChange={setOpen}
+            title={vm.title}
+            side="right"
+            align="start"
+            trigger={
+                <IconButton className="mx_SpaceMenu_button" aria-label={_t("room_list|open_space_menu")} size="20px">
+                    <ChevronDownIcon />
+                </IconButton>
+            }
+        >
+            <MenuItem Icon={HomeIcon} label={_t("room_list|space_menu|home")} onSelect={vm.openSpaceHome} />
+            {vm.canInviteInSpace && (
+                <MenuItem Icon={UserAddIcon} label={_t("action|invite")} onSelect={vm.inviteInSpace} />
+            )}
+            <MenuItem Icon={PreferencesIcon} label={_t("common|preferences")} onSelect={vm.openSpacePreferences} />
+            {vm.canAccessSpaceSettings && (
+                <MenuItem
+                    Icon={SettingsIcon}
+                    label={_t("room_list|space_menu|space_settings")}
+                    onSelect={vm.openSpaceSettings}
+                />
+            )}
+        </Menu>
     );
 }
 
