@@ -19,11 +19,15 @@ RUN cp /src/config.sample.json /src/webapp/config.json
 # App
 FROM nginx:alpine-slim
 
+# Install jq and moreutils for sponge, both used by our entrypoints
+RUN apk add jq moreutils
+
 COPY --from=builder /src/webapp /app
 
 # Override default nginx config. Templates in `/etc/nginx/templates` are passed
 # through `envsubst` by the nginx docker image entry point.
 COPY /docker/nginx-templates/* /etc/nginx/templates/
+COPY /docker/docker-entrypoint.d/* /docker-entrypoint.d/
 
 # Tell nginx to put its pidfile elsewhere, so it can run as non-root
 RUN sed -i -e 's,/var/run/nginx.pid,/tmp/nginx.pid,' /etc/nginx/nginx.conf
