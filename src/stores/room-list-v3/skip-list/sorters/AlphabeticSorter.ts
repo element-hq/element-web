@@ -9,10 +9,15 @@ import type { Room } from "matrix-js-sdk/src/matrix";
 import type { Sorter } from ".";
 
 export class AlphabeticSorter implements Sorter {
+    private readonly collator = new Intl.Collator();
+
     public sort(rooms: Room[]): Room[] {
-        const collator = new Intl.Collator();
         return rooms.sort((a, b) => {
-            return collator.compare(a.name, b.name);
+            return this.comparator(a, b);
         });
+    }
+
+    public comparator(roomA: Room, roomB: Room): number {
+        return this.collator.compare(roomA.name, roomB.name);
     }
 }
