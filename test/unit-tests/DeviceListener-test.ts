@@ -7,7 +7,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Mocked, mocked } from "jest-mock";
-import { MatrixEvent, type Room, type MatrixClient, Device, ClientStoppedError } from "matrix-js-sdk/src/matrix";
+import {
+    MatrixEvent,
+    type Room,
+    type MatrixClient,
+    Device,
+    ClientStoppedError,
+    ClientEvent,
+} from "matrix-js-sdk/src/matrix";
 import {
     CryptoEvent,
     type CrossSigningStatus,
@@ -348,6 +355,60 @@ describe("DeviceListener", () => {
                             crossSigningVerified: true,
                         }),
                     );
+                });
+
+                it("shows an out-of-sync toast when one of the secrets is missing", async () => {
+                    mockCrypto!.getCrossSigningStatus.mockResolvedValue({
+                        publicKeysOnDevice: true,
+                        privateKeysInSecretStorage: true,
+                        privateKeysCachedLocally: {
+                            masterKey: false,
+                            selfSigningKey: true,
+                            userSigningKey: true,
+                        },
+                    });
+
+                    await createAndStart();
+
+                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(
+                        SetupEncryptionToast.Kind.KEY_STORAGE_OUT_OF_SYNC,
+                    );
+                });
+
+                it("hides the out-of-sync toast when one of the secrets is missing", async () => {
+                    mockCrypto!.isSecretStorageReady.mockResolvedValue(true);
+
+                    // First show the toast
+                    mockCrypto!.getCrossSigningStatus.mockResolvedValue({
+                        publicKeysOnDevice: true,
+                        privateKeysInSecretStorage: true,
+                        privateKeysCachedLocally: {
+                            masterKey: false,
+                            selfSigningKey: true,
+                            userSigningKey: true,
+                        },
+                    });
+
+                    await createAndStart();
+
+                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(
+                        SetupEncryptionToast.Kind.KEY_STORAGE_OUT_OF_SYNC,
+                    );
+
+                    // Then, when we receive the secret, it should be hidden.
+                    mockCrypto!.getCrossSigningStatus.mockResolvedValue({
+                        publicKeysOnDevice: true,
+                        privateKeysInSecretStorage: true,
+                        privateKeysCachedLocally: {
+                            masterKey: true,
+                            selfSigningKey: true,
+                            userSigningKey: true,
+                        },
+                    });
+
+                    mockClient.emit(ClientEvent.ToDeviceEvent, new MatrixEvent({ type: "m.secret.send" }));
+                    await flushPromises();
+                    expect(SetupEncryptionToast.hideToast).toHaveBeenCalled();
                 });
 
                 it("shows set up recovery toast when user has a key backup available", async () => {

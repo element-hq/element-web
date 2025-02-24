@@ -97,6 +97,7 @@ export default class DeviceListener {
         this.client.on(ClientEvent.AccountData, this.onAccountData);
         this.client.on(ClientEvent.Sync, this.onSync);
         this.client.on(RoomStateEvent.Events, this.onRoomStateEvents);
+        this.client.on(ClientEvent.ToDeviceEvent, this.onToDeviceEvent);
         this.shouldRecordClientInformation = SettingsStore.getValue("deviceClientInformationOptIn");
         // only configurable in config, so we don't need to watch the value
         this.enableBulkUnverifiedSessionsReminder = SettingsStore.getValue(UIFeature.BulkUnverifiedSessionsReminder);
@@ -119,6 +120,7 @@ export default class DeviceListener {
             this.client.removeListener(ClientEvent.AccountData, this.onAccountData);
             this.client.removeListener(ClientEvent.Sync, this.onSync);
             this.client.removeListener(RoomStateEvent.Events, this.onRoomStateEvents);
+            this.client.removeListener(ClientEvent.ToDeviceEvent, this.onToDeviceEvent);
         }
         SettingsStore.unwatchSetting(this.deviceClientInformationSettingWatcherRef);
         dis.unregister(this.dispatcherRef);
@@ -224,6 +226,11 @@ export default class DeviceListener {
         if (action !== Action.OnLoggedIn) return;
         this.recheck();
         this.updateClientInformation();
+    };
+
+    private onToDeviceEvent = (event: MatrixEvent): void => {
+        // Receiving a 4S secret can mean we are in sync where we were not before.
+        if (event.getType() === EventType.SecretSend) this.recheck();
     };
 
     /**
