@@ -11,6 +11,7 @@ entrypoint_log() {
 }
 
 # Copy these config files as a base
+mkdir /tmp/element-web-config
 cp /app/config*.json /tmp/element-web-config/
 
 # If there are modules to be loaded

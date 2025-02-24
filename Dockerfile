@@ -1,3 +1,5 @@
+# syntax=docker.io/docker/dockerfile:1.7-labs
+
 # Builder
 FROM --platform=$BUILDPLATFORM node:22-bullseye AS builder
 
@@ -8,7 +10,7 @@ ARG JS_SDK_BRANCH="master"
 
 WORKDIR /src
 
-COPY . /src
+COPY --exclude=docker . /src
 RUN /src/scripts/docker-link-repos.sh
 RUN yarn --network-timeout=200000 install
 RUN /src/scripts/docker-package.sh
