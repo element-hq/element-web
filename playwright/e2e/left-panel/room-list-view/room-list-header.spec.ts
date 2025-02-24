@@ -53,6 +53,6 @@ test.describe("Header section of the room list", () => {
 
         const roomListHeader = getHeaderSection(page);
         await expect(roomListHeader.getByRole("heading", { name: "MySpace" })).toBeVisible();
-        await expect(roomListHeader.getByRole("button", { name: "Add" })).not.toBeVisible();
+        await expect(roomListHeader.getByRole("button", { name: "Add" })).toBeVisible();
     });
 });
