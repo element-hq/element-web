@@ -12,7 +12,7 @@ export class AlphabeticSorter implements Sorter {
     private readonly collator = new Intl.Collator();
 
     public sort(rooms: Room[]): Room[] {
-        return rooms.sort((a, b) => {
+        return [...rooms].sort((a, b) => {
             return this.comparator(a, b);
         });
     }

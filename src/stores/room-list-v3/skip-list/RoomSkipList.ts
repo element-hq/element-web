@@ -16,11 +16,16 @@ import { Level } from "./Level";
  * See See https://en.wikipedia.org/wiki/Skip_list
  */
 export class RoomSkipList implements Iterable<Room> {
-    private readonly levels: Level[] = [new Level(0)];
-    private readonly roomNodeMap: Map<string, RoomNode> = new Map();
+    private levels: Level[] = [new Level(0)];
+    private roomNodeMap: Map<string, RoomNode> = new Map();
     public initialized: boolean = false;
 
-    public constructor(private readonly sorter: Sorter) {}
+    public constructor(private sorter: Sorter) {}
+
+    private reset(): void {
+        this.levels = [new Level(0)];
+        this.roomNodeMap = new Map();
+    }
 
     /**
      * Seed the list with an initial list of rooms.
@@ -40,6 +45,16 @@ export class RoomSkipList implements Iterable<Room> {
             currentLevel = currentLevel.generateNextLevel();
         } while (currentLevel.size > 1);
         this.initialized = true;
+    }
+
+    /**
+     * Change the sorting algorithm used by the skip list.
+     * This will reset the list and will rebuild from scratch.
+     */
+    public useNewSorter(sorter: Sorter, rooms: Room[]): void {
+        this.reset();
+        this.sorter = sorter;
+        this.seed(rooms);
     }
 
     /**

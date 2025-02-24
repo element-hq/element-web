@@ -8,9 +8,11 @@ Please see LICENSE files in the repository root for full details.
 import { shuffle } from "lodash";
 
 import type { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import type { Sorter } from "../../../../../src/stores/room-list-v3/skip-list/sorters";
 import { mkMessage, mkStubRoom, stubClient } from "../../../../test-utils";
 import { RoomSkipList } from "../../../../../src/stores/room-list-v3/skip-list/RoomSkipList";
 import { RecencySorter } from "../../../../../src/stores/room-list-v3/skip-list/sorters/RecencySorter";
+import { AlphabeticSorter } from "../../../../../src/stores/room-list-v3/skip-list/sorters/AlphabeticSorter";
 
 describe("RoomSkipList", () => {
     function getMockedRooms(client: MatrixClient, roomCount: number = 100): Room[] {
@@ -25,13 +27,18 @@ describe("RoomSkipList", () => {
         return rooms;
     }
 
-    function generateSkipList(roomCount?: number): { skipList: RoomSkipList; rooms: Room[]; totalRooms: number } {
+    function generateSkipList(roomCount?: number): {
+        skipList: RoomSkipList;
+        rooms: Room[];
+        totalRooms: number;
+        sorter: Sorter;
+    } {
         const client = stubClient();
         const sorter = new RecencySorter(client.getSafeUserId());
         const skipList = new RoomSkipList(sorter);
         const rooms = getMockedRooms(client, roomCount);
         skipList.seed(rooms);
-        return { skipList, rooms, totalRooms: rooms.length };
+        return { skipList, rooms, totalRooms: rooms.length, sorter };
     }
 
     it("Rooms are in sorted order after initial seed", () => {
@@ -79,6 +86,17 @@ describe("RoomSkipList", () => {
         for (let i = 0; i < totalRooms; ++i) {
             expect(sortedRooms[i].roomId).toEqual(`!foo${i}:matrix.org`);
         }
+    });
+
+    it("Re-sort works when sorter is swapped", () => {
+        const { skipList, rooms, sorter } = generateSkipList();
+        const sortedByRecency = [...rooms].sort((a, b) => sorter.comparator(a, b));
+        expect(sortedByRecency).toEqual([...skipList]);
+        // Now switch over to alphabetic sorter
+        const newSorter = new AlphabeticSorter();
+        skipList.useNewSorter(newSorter, rooms);
+        const sortedByAlphabet = [...rooms].sort((a, b) => newSorter.comparator(a, b));
+        expect(sortedByAlphabet).toEqual([...skipList]);
     });
 
     describe("Empty skip list functionality", () => {

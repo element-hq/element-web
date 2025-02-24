@@ -15,6 +15,7 @@ import defaultDispatcher from "../../dispatcher/dispatcher";
 import { LISTS_UPDATE_EVENT } from "../room-list/RoomListStore";
 import { RoomSkipList } from "./skip-list/RoomSkipList";
 import { RecencySorter } from "./skip-list/sorters/RecencySorter";
+import { AlphabeticSorter } from "./skip-list/sorters/AlphabeticSorter";
 
 export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     private roomSkipList?: RoomSkipList;
@@ -25,30 +26,42 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         this.msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
     }
 
+    public getRooms(): Room[] {
+        let rooms = this.matrixClient?.getVisibleRooms(this.msc3946ProcessDynamicPredecessor) ?? [];
+        rooms = rooms.filter((r) => VisibilityProvider.instance.isRoomVisible(r));
+        return rooms;
+    }
+
     public getSortedRooms(): Room[] {
         if (this.roomSkipList?.initialized) return Array.from(this.roomSkipList);
         else return [];
     }
 
+    public useAlphabeticSorting(): void {
+        if (this.roomSkipList) {
+            const sorter = new AlphabeticSorter();
+            this.roomSkipList.useNewSorter(sorter, this.getRooms());
+        }
+    }
+
+    public useRecencySorting(): void {
+        if (this.roomSkipList && this.matrixClient) {
+            const sorter = new RecencySorter(this.matrixClient?.getSafeUserId() ?? "");
+            this.roomSkipList.useNewSorter(sorter, this.getRooms());
+        }
+    }
+
     protected async onReady(): Promise<any> {
         if (this.roomSkipList?.initialized || !this.matrixClient) return;
-        const sorter = new RecencySorter(this.matrixClient.getSafeUserId() ?? "");
+        const sorter = new RecencySorter(this.matrixClient.getSafeUserId());
         this.roomSkipList = new RoomSkipList(sorter);
-        const rooms = this.fetchRoomsFromSdk();
-        if (!rooms) return;
+        const rooms = this.getRooms();
         this.roomSkipList.seed(rooms);
         this.emit(LISTS_UPDATE_EVENT);
     }
 
     protected async onAction(payload: ActionPayload): Promise<void> {
         return;
-    }
-
-    private fetchRoomsFromSdk(): Room[] | null {
-        if (!this.matrixClient) return null;
-        let rooms = this.matrixClient.getVisibleRooms(this.msc3946ProcessDynamicPredecessor);
-        rooms = rooms.filter((r) => VisibilityProvider.instance.isRoomVisible(r));
-        return rooms;
     }
 }
 
