@@ -9,6 +9,7 @@ import React, { type JSX } from "react";
 import { Button } from "@vector-im/compound-web";
 import ExploreIcon from "@vector-im/compound-design-tokens/assets/web/icons/explore";
 import SearchIcon from "@vector-im/compound-design-tokens/assets/web/icons/search";
+import DialPadIcon from "@vector-im/compound-design-tokens/assets/web/icons/dial-pad";
 
 import { IS_MAC, Key } from "../../../../Keyboard";
 import { _t } from "../../../../languageHandler";
@@ -20,6 +21,8 @@ import { Action } from "../../../../dispatcher/actions";
 import PosthogTrackers from "../../../../PosthogTrackers";
 import defaultDispatcher from "../../../../dispatcher/dispatcher";
 import { Flex } from "../../../utils/Flex";
+import { useTypedEventEmitterState } from "../../../../hooks/useEventEmitter";
+import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../../../LegacyCallHandler";
 
 type RoomListSearchProps = {
     /**
@@ -35,6 +38,12 @@ type RoomListSearchProps = {
  */
 export function RoomListSearch({ activeSpace }: RoomListSearchProps): JSX.Element {
     const displayExploreButton = activeSpace === MetaSpace.Home && shouldShowComponent(UIComponent.ExploreRooms);
+    // We only display the dial button if the user is can make PSTN calls
+    const displayDialButton = useTypedEventEmitterState(
+        LegacyCallHandler.instance,
+        LegacyCallHandlerEvent.ProtocolSupport,
+        () => LegacyCallHandler.instance.getSupportsPstnProtocol(),
+    );
 
     return (
         <Flex className="mx_RoomListSearch" role="search" gap="var(--cpd-space-2x)" align="center">
@@ -50,9 +59,22 @@ export function RoomListSearch({ activeSpace }: RoomListSearchProps): JSX.Elemen
                     <kbd>{IS_MAC ? "⌘ K" : _t(ALTERNATE_KEY_NAME[Key.CONTROL]) + " K"}</kbd>
                 </Flex>
             </Button>
+            {displayDialButton && (
+                <Button
+                    className="mx_RoomListSearch_button"
+                    kind="secondary"
+                    size="sm"
+                    Icon={DialPadIcon}
+                    iconOnly={true}
+                    aria-label={_t("left_panel|open_dial_pad")}
+                    onClick={(ev) => {
+                        defaultDispatcher.fire(Action.OpenDialPad);
+                    }}
+                />
+            )}
             {displayExploreButton && (
                 <Button
-                    className="mx_RoomListSearch_explore"
+                    className="mx_RoomListSearch_button"
                     kind="secondary"
                     size="sm"
                     Icon={ExploreIcon}
