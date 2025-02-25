@@ -6,7 +6,7 @@
  */
 
 import { useCallback } from "react";
-import { type Room, RoomEvent, RoomType } from "matrix-js-sdk/src/matrix";
+import { JoinRule, type Room, RoomEvent, RoomType } from "matrix-js-sdk/src/matrix";
 
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
@@ -23,7 +23,15 @@ import {
     UPDATE_SELECTED_SPACE,
 } from "../../../stores/spaces";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
-import { showCreateNewRoom } from "../../../utils/space";
+import {
+    shouldShowSpaceSettings,
+    showCreateNewRoom,
+    showSpaceInvite,
+    showSpacePreferences,
+    showSpaceSettings,
+} from "../../../utils/space";
+import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
+import type { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 
 /**
  * Hook to get the active space and its title.
@@ -60,6 +68,11 @@ export interface RoomListHeaderViewState {
      */
     displayComposeMenu: boolean;
     /**
+     * Whether to display the space menu
+     * True if there is an active space
+     */
+    displaySpaceMenu: boolean;
+    /**
      * Whether the user can create rooms
      */
     canCreateRoom: boolean;
@@ -67,6 +80,14 @@ export interface RoomListHeaderViewState {
      * Whether the user can create video rooms
      */
     canCreateVideoRoom: boolean;
+    /**
+     * Whether the user can invite in the active space
+     */
+    canInviteInSpace: boolean;
+    /**
+     * Whether the user can access space settings
+     */
+    canAccessSpaceSettings: boolean;
     /**
      * Create a chat room
      * @param e - The click event
@@ -81,17 +102,39 @@ export interface RoomListHeaderViewState {
      * Create a video room
      */
     createVideoRoom: () => void;
+    /**
+     * Open the active space home
+     */
+    openSpaceHome: () => void;
+    /**
+     * Display the space invite dialog
+     */
+    inviteInSpace: () => void;
+    /**
+     * Open the space preferences
+     */
+    openSpacePreferences: () => void;
+    /**
+     * Open the space settings
+     */
+    openSpaceSettings: () => void;
 }
 
 /**
  * View model for the RoomListHeader.
  */
 export function useRoomListHeaderViewModel(): RoomListHeaderViewState {
+    const matrixClient = useMatrixClientContext();
     const { activeSpace, title } = useSpace();
 
     const canCreateRoom = shouldShowComponent(UIComponent.CreateRooms);
     const canCreateVideoRoom = useFeatureEnabled("feature_video_rooms");
     const displayComposeMenu = canCreateRoom;
+    const displaySpaceMenu = Boolean(activeSpace);
+    const canInviteInSpace = Boolean(
+        activeSpace?.getJoinRule() === JoinRule.Public || activeSpace?.canInvite(matrixClient.getSafeUserId()),
+    );
+    const canAccessSpaceSettings = Boolean(activeSpace && shouldShowSpaceSettings(activeSpace));
 
     /* Actions */
 
@@ -125,13 +168,48 @@ export function useRoomListHeaderViewModel(): RoomListHeaderViewState {
         }
     }, [activeSpace, elementCallVideoRoomsEnabled]);
 
+    const openSpaceHome = useCallback(() => {
+        // openSpaceHome is only available when there is an active space
+        if (!activeSpace) return;
+        defaultDispatcher.dispatch<ViewRoomPayload>({
+            action: Action.ViewRoom,
+            room_id: activeSpace.roomId,
+            metricsTrigger: undefined,
+        });
+    }, [activeSpace]);
+
+    const inviteInSpace = useCallback(() => {
+        // inviteInSpace is only available when there is an active space
+        if (!activeSpace) return;
+        showSpaceInvite(activeSpace);
+    }, [activeSpace]);
+
+    const openSpacePreferences = useCallback(() => {
+        // openSpacePreferences is only available when there is an active space
+        if (!activeSpace) return;
+        showSpacePreferences(activeSpace);
+    }, [activeSpace]);
+
+    const openSpaceSettings = useCallback(() => {
+        // openSpaceSettings is only available when there is an active space
+        if (!activeSpace) return;
+        showSpaceSettings(activeSpace);
+    }, [activeSpace]);
+
     return {
         title,
         displayComposeMenu,
+        displaySpaceMenu,
         canCreateRoom,
         canCreateVideoRoom,
+        canInviteInSpace,
+        canAccessSpaceSettings,
         createChatRoom,
         createRoom,
         createVideoRoom,
+        openSpaceHome,
+        inviteInSpace,
+        openSpacePreferences,
+        openSpaceSettings,
     };
 }

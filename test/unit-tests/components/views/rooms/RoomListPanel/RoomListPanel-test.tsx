@@ -9,7 +9,7 @@ import React from "react";
 import { render, screen } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 
-import { RoomListView } from "../../../../../../src/components/views/rooms/RoomListView";
+import { RoomListPanel } from "../../../../../../src/components/views/rooms/RoomListPanel";
 import { shouldShowComponent } from "../../../../../../src/customisations/helpers/UIComponents";
 import { MetaSpace } from "../../../../../../src/stores/spaces";
 
@@ -17,9 +17,9 @@ jest.mock("../../../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
 }));
 
-describe("<RoomListView />", () => {
+describe("<RoomListPanel />", () => {
     function renderComponent() {
-        return render(<RoomListView activeSpace={MetaSpace.Home} />);
+        return render(<RoomListPanel activeSpace={MetaSpace.Home} />);
     }
 
     beforeEach(() => {

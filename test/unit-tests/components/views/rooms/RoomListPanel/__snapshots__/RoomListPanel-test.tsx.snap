@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<RoomListView /> should not render the RoomListSearch component when UIComponent.FilterContainer is at false 1`] = `
+exports[`<RoomListPanel /> should not render the RoomListSearch component when UIComponent.FilterContainer is at false 1`] = `
 <DocumentFragment>
   <section
-    class="mx_RoomListView"
-    data-testid="room-list-view"
+    class="mx_RoomListPanel"
+    data-testid="room-list-panel"
   >
     <header
       aria-label="Room options"
@@ -12,9 +12,14 @@ exports[`<RoomListView /> should not render the RoomListSearch component when UI
       data-testid="room-list-header"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0;"
     >
-      <h1>
-        Home
-      </h1>
+      <div
+        class="mx_Flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x);"
+      >
+        <h1>
+          Home
+        </h1>
+      </div>
     </header>
     <div
       style="overflow: visible; height: 0px; width: 0px;"
@@ -46,11 +51,11 @@ exports[`<RoomListView /> should not render the RoomListSearch component when UI
 </DocumentFragment>
 `;
 
-exports[`<RoomListView /> should render the RoomListSearch component when UIComponent.FilterContainer is at true 1`] = `
+exports[`<RoomListPanel /> should render the RoomListSearch component when UIComponent.FilterContainer is at true 1`] = `
 <DocumentFragment>
   <section
-    class="mx_RoomListView"
-    data-testid="room-list-view"
+    class="mx_RoomListPanel"
+    data-testid="room-list-panel"
   >
     <div
       class="mx_Flex mx_RoomListSearch"
@@ -88,7 +93,7 @@ exports[`<RoomListView /> should render the RoomListSearch component when UIComp
       </button>
       <button
         aria-label="Explore rooms"
-        class="_button_vczzf_8 mx_RoomListSearch_explore _has-icon_vczzf_57 _icon-only_vczzf_50"
+        class="_button_vczzf_8 mx_RoomListSearch_button _has-icon_vczzf_57 _icon-only_vczzf_50"
         data-kind="secondary"
         data-size="sm"
         role="button"
@@ -114,9 +119,14 @@ exports[`<RoomListView /> should render the RoomListSearch component when UIComp
       data-testid="room-list-header"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0;"
     >
-      <h1>
-        Home
-      </h1>
+      <div
+        class="mx_Flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x);"
+      >
+        <h1>
+          Home
+        </h1>
+      </div>
       <button
         aria-disabled="false"
         aria-expanded="false"

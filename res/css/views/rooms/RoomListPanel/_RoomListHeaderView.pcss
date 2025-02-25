@@ -17,4 +17,16 @@
     button {
         color: var(--cpd-color-icon-secondary);
     }
+
+    .mx_SpaceMenu_button {
+        svg {
+            transition: transform 0.1s linear;
+        }
+    }
+
+    .mx_SpaceMenu_button[aria-expanded="true"] {
+        svg {
+            transform: rotate(180deg);
+        }
+    }
 }
