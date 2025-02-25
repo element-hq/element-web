@@ -188,6 +188,7 @@ const AvatarSetting: React.FC<IProps> = ({
             <AccessibleButton
                 element="img"
                 className="mx_AvatarSetting_avatarDisplay"
+                aria-labelledby={disabled ? undefined : a11yId}
                 src={avatarURL}
                 alt={avatarAltText}
                 onClick={uploadAvatar}
@@ -211,7 +212,7 @@ const AvatarSetting: React.FC<IProps> = ({
     }
 
     const content = (
-        <div className="mx_AvatarSetting_avatar" role="group" aria-label={avatarAltText}>
+        <div className="mx_AvatarSetting_avatar" role="group" id={a11yId} aria-label={avatarAltText}>
             {avatarElement}
             {uploadAvatarBtn}
         </div>
