@@ -1,19 +1,23 @@
 ARG ELEMENT_VERSION=latest
-FROM vectorim/element-web:${ELEMENT_VERSION}
-ARG ELEMENT_WEB_MODULES=""
 
-# Override default nginx config. Templates in `/etc/nginx/templates` are passed
-# through `envsubst` by the nginx docker image entry point.
-COPY /docker/nginx-templates/* /etc/nginx/templates/
-COPY /docker/docker-entrypoint.d/* /docker-entrypoint.d/
+FROM --platform=$BUILDPLATFORM node:lts-alpine AS builder
 
-# Create directories before we gain privileges
-RUN mkdir -p /tmp/element-web-config /tmp/element-web-modules
+ARG BUILD_CONTEXT
 
-# Escalate privileges to install jq and moreutils and run the fetch modules script
-USER root
-RUN apk add jq moreutils
-RUN ELEMENT_WEB_MODULES=${ELEMENT_WEB_MODULES} /docker-entrypoint.d/17-fetch-element-modules.sh
+RUN apk add --no-cache jq
 
-# Drop privileges back to nginx
-USER nginx
+WORKDIR /app
+COPY package.json yarn.lock ./
+COPY ./$BUILD_CONTEXT/package.json ./$BUILD_CONTEXT/
+RUN yarn install --frozen-lockfile --ignore-scripts
+COPY tsconfig.json ./
+COPY ./$BUILD_CONTEXT ./$BUILD_CONTEXT
+RUN cd $BUILD_CONTEXT && yarn vite build
+RUN mkdir /modules
+RUN cp -r ./$BUILD_CONTEXT/lib/ /modules/$(jq -r '"\(.name)-v\(.version)"' ./$BUILD_CONTEXT/package.json)
+
+FROM ghcr.io/element-hq/element-web:${ELEMENT_VERSION}
+ARG ELEMENT_VERSION=latest
+ARG BUILD_CONTEXT
+
+COPY --from=builder /modules/* /tmp/element-web-modules/

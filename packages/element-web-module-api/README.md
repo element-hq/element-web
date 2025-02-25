@@ -4,28 +4,6 @@ API surface for extending Element Web in a safe & predictable way.
 
 This project is still in early development but aims to replace matrix-react-sdk-module-api and Element Web deprecated customisations.
 
-## Using the Docker image
-
-The docker image specified by the Dockerfile in this directory can be used in one of four ways.
-
-You can specify `ELEMENT_WEB_MODULES` as a build-arg or as a runtime environment variable to fetch & load a module
-from a remote URL at runtime or to bundle it into the docker image for easier deployment respectively.
-The format this variable should take is a comma-delimited list of URLs followed by the optional tarball hash after a `#` character, e.g.
-`ELEMENT_WEB_MODULES=https://example.com/module.tgz#abc123,https://example.com/another-module.tgz#`.
-
-You can also use it as a base image and add your desired modules into `/tmp/element-web-modules` each in their own directory.
-Finally, you can bind mount modules into the `/tmp/element-web-modules` directory at runtime.
-The default entrypoint will be index.js in that directory but can be overriden if a package.json file is found with a `main` directive.
-
-The container expects a config.json file to be bind mounted or copied into the `/app/config.json` path.
-The container runs an nginx web server in rootless mode on port 8080.
-If you wish to use docker in read-only mode, you should follow the [upstream instructions](https://hub.docker.com/_/nginx#:~:text=Running%20nginx%20in%20read%2Donly%20mode)
-but additionally include the following directories:
-
-- /tmp/element-web-modules/
-- /tmp/element-web-config/
-- /etc/nginx/conf.d/
-
 ## Using the API
 
 Modules are loaded by Element Web at runtime via a dynamic ecmascript import, but can be bundled into a webapp for deployment convenience.
@@ -73,6 +51,10 @@ class ExampleModule implements Module {
 }
 // ...
 ```
+
+## Releases
+
+The API is versioned using semver, with the major version incremented for breaking changes.
 
 ## Copyright & License
 
