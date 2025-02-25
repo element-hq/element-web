@@ -23,7 +23,7 @@ export class RoomNode {
 
     /**
      * This array holds references to the previous node in a given level.
-     * eg: previous[i] gives the next room node from this room node in level i.
+     * eg: previous[i] gives the previous room node from this room node in level i.
      */
     public previous: RoomNode[] = [];
 }
