@@ -80,12 +80,14 @@
         "maximise": "Maksimer",
         "mention": "Nevn",
         "minimise": "Minimer",
+        "new_message": "Ny melding",
         "new_room": "Nytt rom",
         "new_video_room": "Nytt videorom",
         "next": "Neste",
         "no": "Nei",
         "ok": "OK",
         "open": "Åpne",
+        "open_menu": "Åpne meny",
         "pause": "Pause",
         "pin": "Fest",
         "play": "Spill av",
@@ -1242,6 +1244,7 @@
         "change": "Bytt ut identitetstjener",
         "change_prompt": "Koble fra identitetsserveren <current /> og koble til <new /> i stedet?",
         "change_server_prompt": "Hvis du ikke ønsker å bruke <server /> til å oppdage og bli oppdaget av eksisterende kontakter som du kjenner, skriv inn en annen identitetstjener nedenfor.",
+        "changed": "Identitetsserveren din har blitt endret",
         "checking": "Sjekker tjeneren",
         "description_connected": "Du bruker for øyeblikket <server></server> til å oppdage og bli oppdaget av eksisterende kontakter du kjenner. Du kan endre identitetsserveren din nedenfor.",
         "description_disconnected": "Du bruker for øyeblikket ikke en identitetsserver. For å oppdage og bli oppdaget av eksisterende kontakter du kjenner, legg til en nedenfor.",
@@ -3621,18 +3624,19 @@
                 "ble invitert %(count)s ganger": "other"
             },
             "joined": {
-                "%(oneUser)s ble med %(count)s ganger": "other",
-                "%(oneUser)s ble med": "one"
+                "one": "%(oneUser)sble med",
+                "other": "%(oneUser)sble med %(count)s ganger"
             },
             "joined_and_left": {
                 "%(oneUser)sble med og forlot igjen": "one"
             },
             "joined_and_left_multiple": {
-                "%(severalUsers)sble med og forlot igjen": "one"
+                "one": "%(severalUsers)sble med og forlot",
+                "other": "%(severalUsers)sble med og forlot %(count)s ganger"
             },
             "joined_multiple": {
-                "%(severalUsers)s ble med %(count)s ganger": "other",
-                "%(severalUsers)s ble med": "one"
+                "one": "%(severalUsers)sble med",
+                "other": "%(severalUsers)sble med %(count)s ganger"
             },
             "kicked": {
                 "one": "ble fjernet",
@@ -3675,7 +3679,8 @@
                 "other": "%(severalUsers)sfjernet %(count)s meldinger"
             },
             "rejected_invite": {
-                "%(oneUser)savslo invitasjonen sin": "one"
+                "one": "%(oneUser)savviste invitasjonen",
+                "other": "%(oneUser)savviste invitasjonen deres %(count)s ganger"
             },
             "rejected_invite_multiple": {
                 "one": "%(severalUsers)savviste invitasjonene deres",

@@ -4,7 +4,7 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
 <div
   aria-labelledby="radix-:r33:"
   aria-orientation="vertical"
-  class="_menu_1x5h1_17"
+  class="_menu_19sse_8"
   data-align="start"
   data-orientation="vertical"
   data-radix-menu-content=""
@@ -17,7 +17,7 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
   tabindex="-1"
 >
   <h3
-    class="_typography_yh5dq_162 _font-body-sm-semibold_yh5dq_45 _title_1x5h1_83"
+    class="_typography_6v6n8_153 _font-body-sm-semibold_6v6n8_36 _menu-title_1sgvx_8 _title_19sse_74"
     id=":r3b:"
   >
     Threads activity
@@ -26,7 +26,7 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
     class="mx_ThreadsActivityCentre_rows"
   >
     <button
-      class="mx_ThreadsActivityCentreRow _item_8j2l6_17 _interactive_8j2l6_35"
+      class="mx_ThreadsActivityCentreRow _item_1x5l4_8 _interactive_1x5l4_26"
       data-kind="primary"
       data-orientation="vertical"
       data-radix-collection-item=""
@@ -34,10 +34,10 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
       tabindex="-1"
     >
       <div
-        class="_icon_8j2l6_43"
+        class="_icon_1x5l4_34"
       >
         <span
-          class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+          class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
           data-color="3"
           data-testid="avatar-img"
           data-type="round"
@@ -48,13 +48,13 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
         </span>
       </div>
       <span
-        class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
       >
         This is a real highlight
       </span>
       <svg
         aria-hidden="true"
-        class="_nav-hint_8j2l6_59"
+        class="_nav-hint_1x5l4_50"
         fill="currentColor"
         height="24"
         viewBox="8 0 8 24"
@@ -62,7 +62,7 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+          d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
         />
       </svg>
       <div
@@ -74,7 +74,7 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
       </div>
     </button>
     <button
-      class="mx_ThreadsActivityCentreRow _item_8j2l6_17 _interactive_8j2l6_35"
+      class="mx_ThreadsActivityCentreRow _item_1x5l4_8 _interactive_1x5l4_26"
       data-kind="primary"
       data-orientation="vertical"
       data-radix-collection-item=""
@@ -82,10 +82,10 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
       tabindex="-1"
     >
       <div
-        class="_icon_8j2l6_43"
+        class="_icon_1x5l4_34"
       >
         <span
-          class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+          class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
           data-color="2"
           data-testid="avatar-img"
           data-type="round"
@@ -96,13 +96,13 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
         </span>
       </div>
       <span
-        class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
       >
         A notification
       </span>
       <svg
         aria-hidden="true"
-        class="_nav-hint_8j2l6_59"
+        class="_nav-hint_1x5l4_50"
         fill="currentColor"
         height="24"
         viewBox="8 0 8 24"
@@ -110,7 +110,7 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+          d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
         />
       </svg>
       <div
@@ -151,7 +151,7 @@ exports[`ThreadsActivityCentre should close the release announcement when the TA
         aria-haspopup="menu"
         aria-label="Threads"
         aria-labelledby=":r1e:"
-        class="_icon-button_bh2qc_17 mx_ThreadsActivityCentreButton"
+        class="_icon-button_m2erp_8 mx_ThreadsActivityCentreButton"
         data-state="open"
         id="radix-:r1c:"
         role="button"
@@ -160,7 +160,7 @@ exports[`ThreadsActivityCentre should close the release announcement when the TA
         type="button"
       >
         <div
-          class="_indicator-icon_133tf_26"
+          class="_indicator-icon_zr2a0_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -172,7 +172,7 @@ exports[`ThreadsActivityCentre should close the release announcement when the TA
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              d="M4 3h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2Zm3 7h10a.97.97 0 0 0 .712-.287A.967.967 0 0 0 18 9a.967.967 0 0 0-.288-.713A.968.968 0 0 0 17 8H7a.968.968 0 0 0-.713.287A.968.968 0 0 0 6 9c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 4h6c.283 0 .52-.096.713-.287A.968.968 0 0 0 14 13a.968.968 0 0 0-.287-.713A.968.968 0 0 0 13 12H7a.967.967 0 0 0-.713.287A.968.968 0 0 0 6 13c0 .283.096.52.287.713.192.191.43.287.713.287Z"
+              d="M4 3h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2m3 7h10q.424 0 .712-.287A.97.97 0 0 0 18 9a.97.97 0 0 0-.288-.713A.97.97 0 0 0 17 8H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 9q0 .424.287.713Q6.576 10 7 10m0 4h6q.424 0 .713-.287A.97.97 0 0 0 14 13a.97.97 0 0 0-.287-.713A.97.97 0 0 0 13 12H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 13q0 .424.287.713Q6.576 14 7 14"
             />
           </svg>
         </div>
@@ -186,14 +186,14 @@ exports[`ThreadsActivityCentre should close the release announcement when the TA
     id=":r1i:"
   >
     <div
-      class="_tooltip_1pslb_17 _invisible_1pslb_30"
+      class="_tooltip_6ode6_8 _invisible_6ode6_21"
       data-floating-ui-focusable=""
       style="position: absolute; left: 0px; top: 0px; transform: translate(6px, 5px);"
       tabindex="-1"
     >
       <svg
         aria-hidden="true"
-        class="_arrow_1pslb_42"
+        class="_arrow_6ode6_33"
         height="10"
         style="position: absolute; pointer-events: none; right: calc(100% - 0px); transform: rotate(90deg); top: -1px;"
         viewBox="0 0 10 10"
@@ -229,7 +229,7 @@ exports[`ThreadsActivityCentre should close the release announcement when the TA
     <div
       aria-labelledby="radix-:r1c:"
       aria-orientation="vertical"
-      class="_menu_1x5h1_17"
+      class="_menu_19sse_8"
       data-align="start"
       data-orientation="vertical"
       data-radix-menu-content=""
@@ -242,7 +242,7 @@ exports[`ThreadsActivityCentre should close the release announcement when the TA
       tabindex="-1"
     >
       <h3
-        class="_typography_yh5dq_162 _font-body-sm-semibold_yh5dq_45 _title_1x5h1_83"
+        class="_typography_6v6n8_153 _font-body-sm-semibold_6v6n8_36 _menu-title_1sgvx_8 _title_19sse_74"
         id=":r1k:"
       >
         Threads activity
@@ -272,7 +272,7 @@ exports[`ThreadsActivityCentre should match snapshot when empty 1`] = `
 <div
   aria-labelledby="radix-:r3n:"
   aria-orientation="vertical"
-  class="_menu_1x5h1_17"
+  class="_menu_19sse_8"
   data-align="start"
   data-orientation="vertical"
   data-radix-menu-content=""
@@ -285,7 +285,7 @@ exports[`ThreadsActivityCentre should match snapshot when empty 1`] = `
   tabindex="-1"
 >
   <h3
-    class="_typography_yh5dq_162 _font-body-sm-semibold_yh5dq_45 _title_1x5h1_83"
+    class="_typography_6v6n8_153 _font-body-sm-semibold_6v6n8_36 _menu-title_1sgvx_8 _title_19sse_74"
     id=":r3v:"
   >
     Threads activity
@@ -306,7 +306,7 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
 <div
   aria-labelledby="radix-:r40:"
   aria-orientation="vertical"
-  class="_menu_1x5h1_17"
+  class="_menu_19sse_8"
   data-align="start"
   data-orientation="vertical"
   data-radix-menu-content=""
@@ -319,7 +319,7 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
   tabindex="-1"
 >
   <h3
-    class="_typography_yh5dq_162 _font-body-sm-semibold_yh5dq_45 _title_1x5h1_83"
+    class="_typography_6v6n8_153 _font-body-sm-semibold_6v6n8_36 _menu-title_1sgvx_8 _title_19sse_74"
     id=":r48:"
   >
     Threads activity
@@ -328,7 +328,7 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
     class="mx_ThreadsActivityCentre_rows"
   >
     <button
-      class="mx_ThreadsActivityCentreRow _item_8j2l6_17 _interactive_8j2l6_35"
+      class="mx_ThreadsActivityCentreRow _item_1x5l4_8 _interactive_1x5l4_26"
       data-kind="primary"
       data-orientation="vertical"
       data-radix-collection-item=""
@@ -336,10 +336,10 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
       tabindex="-1"
     >
       <div
-        class="_icon_8j2l6_43"
+        class="_icon_1x5l4_34"
       >
         <span
-          class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+          class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
           data-color="5"
           data-testid="avatar-img"
           data-type="round"
@@ -350,13 +350,13 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
         </span>
       </div>
       <span
-        class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
       >
         This is a third real highlight
       </span>
       <svg
         aria-hidden="true"
-        class="_nav-hint_8j2l6_59"
+        class="_nav-hint_1x5l4_50"
         fill="currentColor"
         height="24"
         viewBox="8 0 8 24"
@@ -364,7 +364,7 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+          d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
         />
       </svg>
       <div
@@ -376,7 +376,7 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
       </div>
     </button>
     <button
-      class="mx_ThreadsActivityCentreRow _item_8j2l6_17 _interactive_8j2l6_35"
+      class="mx_ThreadsActivityCentreRow _item_1x5l4_8 _interactive_1x5l4_26"
       data-kind="primary"
       data-orientation="vertical"
       data-radix-collection-item=""
@@ -384,10 +384,10 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
       tabindex="-1"
     >
       <div
-        class="_icon_8j2l6_43"
+        class="_icon_1x5l4_34"
       >
         <span
-          class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+          class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
           data-color="3"
           data-testid="avatar-img"
           data-type="round"
@@ -398,13 +398,13 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
         </span>
       </div>
       <span
-        class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
       >
         This is a real highlight
       </span>
       <svg
         aria-hidden="true"
-        class="_nav-hint_8j2l6_59"
+        class="_nav-hint_1x5l4_50"
         fill="currentColor"
         height="24"
         viewBox="8 0 8 24"
@@ -412,7 +412,7 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+          d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
         />
       </svg>
       <div
@@ -424,7 +424,7 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
       </div>
     </button>
     <button
-      class="mx_ThreadsActivityCentreRow _item_8j2l6_17 _interactive_8j2l6_35"
+      class="mx_ThreadsActivityCentreRow _item_1x5l4_8 _interactive_1x5l4_26"
       data-kind="primary"
       data-orientation="vertical"
       data-radix-collection-item=""
@@ -432,10 +432,10 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
       tabindex="-1"
     >
       <div
-        class="_icon_8j2l6_43"
+        class="_icon_1x5l4_34"
       >
         <span
-          class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+          class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
           data-color="4"
           data-testid="avatar-img"
           data-type="round"
@@ -446,13 +446,13 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
         </span>
       </div>
       <span
-        class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 _label_8j2l6_52"
+        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
       >
         This is a second real highlight
       </span>
       <svg
         aria-hidden="true"
-        class="_nav-hint_8j2l6_59"
+        class="_nav-hint_1x5l4_50"
         fill="currentColor"
         height="24"
         viewBox="8 0 8 24"
@@ -460,7 +460,7 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          d="M8.7 17.3a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7l3.9-3.9-3.9-3.9a.948.948 0 0 1-.275-.7.95.95 0 0 1 .275-.7.948.948 0 0 1 .7-.275.95.95 0 0 1 .7.275l4.6 4.6c.1.1.17.208.213.325.041.117.062.242.062.375s-.02.258-.063.375a.877.877 0 0 1-.212.325l-4.6 4.6a.948.948 0 0 1-.7.275.948.948 0 0 1-.7-.275Z"
+          d="M8.7 17.3a.95.95 0 0 1-.275-.7q0-.425.275-.7l3.9-3.9-3.9-3.9a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l4.6 4.6q.15.15.213.325.062.175.062.375t-.062.375a.9.9 0 0 1-.213.325l-4.6 4.6a.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
         />
       </svg>
       <div
@@ -488,14 +488,14 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
         aria-haspopup="dialog"
         aria-label="Threads"
         aria-labelledby=":rc:"
-        class="_icon-button_bh2qc_17 mx_ThreadsActivityCentreButton"
+        class="_icon-button_m2erp_8 mx_ThreadsActivityCentreButton"
         data-floating-ui-inert=""
         role="button"
         style="--cpd-icon-button-size: 32px;"
         tabindex="0"
       >
         <div
-          class="_indicator-icon_133tf_26"
+          class="_indicator-icon_zr2a0_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -507,7 +507,7 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              d="M4 3h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2Zm3 7h10a.97.97 0 0 0 .712-.287A.967.967 0 0 0 18 9a.967.967 0 0 0-.288-.713A.968.968 0 0 0 17 8H7a.968.968 0 0 0-.713.287A.968.968 0 0 0 6 9c0 .283.096.52.287.713.192.191.43.287.713.287Zm0 4h6c.283 0 .52-.096.713-.287A.968.968 0 0 0 14 13a.968.968 0 0 0-.287-.713A.968.968 0 0 0 13 12H7a.967.967 0 0 0-.713.287A.968.968 0 0 0 6 13c0 .283.096.52.287.713.192.191.43.287.713.287Z"
+              d="M4 3h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6l-2.293 2.293c-.63.63-1.707.184-1.707-.707V5a2 2 0 0 1 2-2m3 7h10q.424 0 .712-.287A.97.97 0 0 0 18 9a.97.97 0 0 0-.288-.713A.97.97 0 0 0 17 8H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 9q0 .424.287.713Q6.576 10 7 10m0 4h6q.424 0 .713-.287A.97.97 0 0 0 14 13a.97.97 0 0 0-.287-.713A.97.97 0 0 0 13 12H7a.97.97 0 0 0-.713.287A.97.97 0 0 0 6 13q0 .424.287.713Q6.576 14 7 14"
             />
           </svg>
         </div>
@@ -545,14 +545,14 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
     id=":rg:"
   >
     <div
-      class="_tooltip_1pslb_17 _invisible_1pslb_30"
+      class="_tooltip_6ode6_8 _invisible_6ode6_21"
       data-floating-ui-focusable=""
       style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);"
       tabindex="-1"
     >
       <svg
         aria-hidden="true"
-        class="_arrow_1pslb_42"
+        class="_arrow_6ode6_33"
         height="10"
         style="position: absolute; pointer-events: none; right: calc(100% - 0px); transform: rotate(90deg);"
         viewBox="0 0 10 10"
@@ -594,7 +594,7 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
     <div
       aria-describedby=":r9:"
       aria-labelledby=":r8:"
-      class="_content_1oa1y_17"
+      class="_content_3xq91_8"
       data-floating-ui-focusable=""
       id=":ra:"
       role="dialog"
@@ -603,7 +603,7 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
     >
       <svg
         aria-hidden="true"
-        class="_arrow_1oa1y_62"
+        class="_arrow_3xq91_53"
         height="20"
         style="position: absolute; pointer-events: none; right: calc(100% - 0px); transform: rotate(90deg);"
         viewBox="0 0 20 20"
@@ -625,19 +625,19 @@ exports[`ThreadsActivityCentre should render the release announcement 1`] = `
         </clippath>
       </svg>
       <h3
-        class="_typography_yh5dq_162 _font-body-lg-semibold_yh5dq_83 _header_1oa1y_46"
+        class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74 _header_3xq91_37"
         id=":r8:"
       >
         Threads Activity Centre
       </h3>
       <span
-        class="_typography_yh5dq_162 _font-body-sm-regular_yh5dq_40 _description_1oa1y_52"
+        class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 _description_3xq91_43"
         id=":r9:"
       >
         Threads notifications have moved, find them here from now on.
       </span>
       <button
-        class="_button_i91xf_17 _button_1oa1y_57"
+        class="_button_vczzf_8 _button_3xq91_48"
         data-kind="secondary"
         data-size="sm"
         role="button"
