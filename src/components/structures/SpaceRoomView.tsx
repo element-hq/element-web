@@ -117,7 +117,7 @@ const SpaceLandingAddButton: React.FC<{ space: Room }> = ({ space }) => {
                         <>
                             <IconizedContextMenuOption
                                 label={_t("action|new_room")}
-                                iconClassName="mx_RoomList_iconNewRoom"
+                                iconClassName="mx_LegacyRoomList_iconNewRoom"
                                 onClick={async (e): Promise<void> => {
                                     e.preventDefault();
                                     e.stopPropagation();
@@ -132,7 +132,7 @@ const SpaceLandingAddButton: React.FC<{ space: Room }> = ({ space }) => {
                             {videoRoomsEnabled && (
                                 <IconizedContextMenuOption
                                     label={_t("action|new_video_room")}
-                                    iconClassName="mx_RoomList_iconNewVideoRoom"
+                                    iconClassName="mx_LegacyRoomList_iconNewVideoRoom"
                                     onClick={async (e): Promise<void> => {
                                         e.preventDefault();
                                         e.stopPropagation();
@@ -157,7 +157,7 @@ const SpaceLandingAddButton: React.FC<{ space: Room }> = ({ space }) => {
                     )}
                     <IconizedContextMenuOption
                         label={_t("action|add_existing_room")}
-                        iconClassName="mx_RoomList_iconAddExistingRoom"
+                        iconClassName="mx_LegacyRoomList_iconAddExistingRoom"
                         onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
@@ -168,7 +168,7 @@ const SpaceLandingAddButton: React.FC<{ space: Room }> = ({ space }) => {
                     {canCreateSpace && (
                         <IconizedContextMenuOption
                             label={_t("room_list|add_space_label")}
-                            iconClassName="mx_RoomList_iconPlus"
+                            iconClassName="mx_LegacyRoomList_iconPlus"
                             onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
