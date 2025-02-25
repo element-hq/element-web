@@ -78,4 +78,3 @@ export default class RoomListStoreV3 {
         return this.internalInstance;
     }
 }
-
