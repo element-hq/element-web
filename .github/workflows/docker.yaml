@@ -17,6 +17,8 @@ jobs:
         permissions:
             id-token: write # needed for signing the images with GitHub OIDC Token
             packages: write # needed for publishing packages to GHCR
+        env:
+            TEST_TAG: vectorim/element-web:test
         steps:
             - uses: actions/checkout@v4
               with:
