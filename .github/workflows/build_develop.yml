@@ -26,12 +26,6 @@ jobs:
             R2_URL: ${{ vars.CF_R2_S3_API }}
             R2_PUBLIC_URL: "https://element-web-develop.element.io"
         steps:
-            # Workaround for https://www.cloudflarestatus.com/incidents/t5nrjmpxc1cj
-            - uses: unfor19/install-aws-cli-action@v1
-              with:
-                  version: 2.22.35
-                  verbose: false
-                  arch: amd64
             - uses: actions/checkout@v4
 
             - uses: actions/setup-node@v4
@@ -88,7 +82,8 @@ jobs:
                       echo "/develop.tar.gz $R2_PUBLIC_URL/develop.tar.gz 301"
                       aws s3api --region auto --endpoint-url $R2_URL list-objects-v2 --bucket $R2_BUCKET \
                           --query "sort_by(Contents[?ends_with(Key, '/bundle.css')], &LastModified)[-100:].Key" \
-                          --prefix "bundles/" | jq -r '.[]' | grep -oE '[^\"].*\/\s*' | while read -r path ; do
+                          --prefix "bundles/" \
+                          --checksum-algorithm CRC32 | jq -r '.[]' | grep -oE '[^\"].*\/\s*' | while read -r path ; do
                           echo "/${path}* $R2_PUBLIC_URL/${path}:splat 301"
                       done
                   } | tee _deploy/_redirects
@@ -117,8 +112,8 @@ jobs:
             # Element Desktop's fetch script uses this tarball to fetch latest develop to build Nightlies.
             - name: Deploy to R2
               run: |
-                  aws s3 cp dist/develop.tar.gz s3://$R2_BUCKET/develop.tar.gz --endpoint-url $R2_URL --region=auto
-                  aws s3 cp _deploy/ s3://$R2_BUCKET/ --recursive --endpoint-url $R2_URL --region=auto
+                  aws s3 cp dist/develop.tar.gz s3://$R2_BUCKET/develop.tar.gz --endpoint-url $R2_URL --region=auto --checksum-algorithm CRC32
+                  aws s3 cp _deploy/ s3://$R2_BUCKET/ --recursive --endpoint-url $R2_URL --region=auto --checksum-algorithm CRC32
               env:
                   AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
