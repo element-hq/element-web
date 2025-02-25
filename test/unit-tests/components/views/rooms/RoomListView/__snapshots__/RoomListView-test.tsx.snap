@@ -12,9 +12,14 @@ exports[`<RoomListView /> should not render the RoomListSearch component when UI
       data-testid="room-list-header"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0;"
     >
-      <h1>
-        Home
-      </h1>
+      <div
+        class="mx_Flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x);"
+      >
+        <h1>
+          Home
+        </h1>
+      </div>
     </header>
   </section>
 </DocumentFragment>
@@ -88,9 +93,14 @@ exports[`<RoomListView /> should render the RoomListSearch component when UIComp
       data-testid="room-list-header"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0;"
     >
-      <h1>
-        Home
-      </h1>
+      <div
+        class="mx_Flex"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x);"
+      >
+        <h1>
+          Home
+        </h1>
+      </div>
       <button
         aria-disabled="false"
         aria-expanded="false"
