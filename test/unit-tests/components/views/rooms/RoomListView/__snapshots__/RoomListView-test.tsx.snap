@@ -62,7 +62,7 @@ exports[`<RoomListView /> should render the RoomListSearch component when UIComp
       </button>
       <button
         aria-label="Explore rooms"
-        class="_button_vczzf_8 mx_RoomListSearch_explore _has-icon_vczzf_57 _icon-only_vczzf_50"
+        class="_button_vczzf_8 mx_RoomListSearch_button _has-icon_vczzf_57 _icon-only_vczzf_50"
         data-kind="secondary"
         data-size="sm"
         role="button"
