@@ -3,6 +3,7 @@ on:
     workflow_dispatch: {}
     push:
         tags: [v*]
+    pull_request: {}
     schedule:
         # This job can take a while, and we have usage limits, so just publish develop only twice a day
         - cron: "0 7/12 * * *"
@@ -12,42 +13,73 @@ jobs:
     buildx:
         name: Docker Buildx
         runs-on: ubuntu-24.04
-        environment: dockerhub
+        environment: ${{ github.event_name != 'pull_request' && 'dockerhub' || '' }}
         permissions:
             id-token: write # needed for signing the images with GitHub OIDC Token
             packages: write # needed for publishing packages to GHCR
+        env:
+            TEST_TAG: vectorim/element-web:test
         steps:
             - uses: actions/checkout@v4
               with:
                   fetch-depth: 0 # needed for docker-package to be able to calculate the version
 
             - name: Install Cosign
-              uses: sigstore/cosign-installer@dc72c7d5c4d10cd6bcb8cf6e3fd625a9e5e537da # v3
+              uses: sigstore/cosign-installer@c56c2d3e59e4281cc41dea2217323ba5694b171e # v3
+              if: github.event_name != 'pull_request'
 
             - name: Set up QEMU
-              uses: docker/setup-qemu-action@53851d14592bedcffcf25ea515637cff71ef929a # v3
+              uses: docker/setup-qemu-action@4574d27a4764455b42196d70a065bc6853246a25 # v3
 
             - name: Set up Docker Buildx
-              uses: docker/setup-buildx-action@6524bf65af31da8d45b59e8c27de4bd072b392f5 # v3
+              uses: docker/setup-buildx-action@f7ce87c1d6bead3e36075b2ce75da1f6cc28aaca # v3
               with:
                   install: true
 
             - name: Login to Docker Hub
               uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3
+              if: github.event_name != 'pull_request'
               with:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
 
             - name: Login to GitHub Container Registry
               uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3
+              if: github.event_name != 'pull_request'
               with:
                   registry: ghcr.io
                   username: ${{ github.repository_owner }}
                   password: ${{ secrets.GITHUB_TOKEN }}
 
+            - name: Build and load
+              uses: docker/build-push-action@ca877d9245402d1537745e0e356eab47c3520991 # v6
+              with:
+                  context: .
+                  load: true
+                  tags: ${{ env.TEST_TAG }}
+
+            - name: Test the image
+              run: |
+                  # Make a fake module to test the image
+                  MODULE_PATH="modules/module_name/index.js"
+                  mkdir -p $(dirname $MODULE_PATH)
+                  echo 'alert("Testing");' > $MODULE_PATH
+
+                  # Spin up a container of the image
+                  CONTAINER_ID=$(docker run --rm -dp 80:80 -v $(pwd)/modules:/tmp/element-web-modules ${{ env.TEST_TAG }})
+
+                  # Run some smoke tests
+                  wget --retry-connrefused --tries=5 -q --wait=3 --spider http://localhost:80/modules/module_name/index.js
+                  MODULE_1=$(curl http://localhost:80/config.json | jq -r .modules[0])
+                  test "$MODULE_1" = "/${MODULE_PATH}"
+
+                  # Clean up
+                  docker stop "$CONTAINER_ID"
+
             - name: Docker meta
               id: meta
               uses: docker/metadata-action@369eb591f429131d6889c46b94e711f089e6ca96 # v5
+              if: github.event_name != 'pull_request'
               with:
                   images: |
                       vectorim/element-web
@@ -61,6 +93,7 @@ jobs:
             - name: Build and push
               id: build-and-push
               uses: docker/build-push-action@ca877d9245402d1537745e0e356eab47c3520991 # v6
+              if: github.event_name != 'pull_request'
               with:
                   context: .
                   push: true
@@ -72,6 +105,7 @@ jobs:
               env:
                   DIGEST: ${{ steps.build-and-push.outputs.digest }}
                   TAGS: ${{ steps.meta.outputs.tags }}
+              if: github.event_name != 'pull_request'
               run: |
                   images=""
                   for tag in ${TAGS}; do
@@ -81,6 +115,7 @@ jobs:
 
             - name: Update repo description
               uses: peter-evans/dockerhub-description@e98e4d1628a5f3be2be7c231e50981aee98723ae # v4
+              if: github.event_name != 'pull_request'
               continue-on-error: true
               with:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}

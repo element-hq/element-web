@@ -7,13 +7,13 @@ exports[`ThreadPanel Header expect that All filter for ThreadPanelHeader properl
   >
     <button
       aria-labelledby=":r0:"
-      class="_icon-button_bh2qc_17"
+      class="_icon-button_m2erp_8"
       role="button"
       style="--cpd-icon-button-size: 28px;"
       tabindex="0"
     >
       <div
-        class="_indicator-icon_133tf_26"
+        class="_indicator-icon_zr2a0_17"
         style="--cpd-icon-button-size: 100%;"
       >
         <div
@@ -45,13 +45,13 @@ exports[`ThreadPanel Header expect that My filter for ThreadPanelHeader properly
   >
     <button
       aria-labelledby=":r6:"
-      class="_icon-button_bh2qc_17"
+      class="_icon-button_m2erp_8"
       role="button"
       style="--cpd-icon-button-size: 28px;"
       tabindex="0"
     >
       <div
-        class="_indicator-icon_133tf_26"
+        class="_indicator-icon_zr2a0_17"
         style="--cpd-icon-button-size: 100%;"
       >
         <div

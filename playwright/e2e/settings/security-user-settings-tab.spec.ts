@@ -25,18 +25,14 @@ test.describe("Security user settings tab", () => {
             },
         });
 
-        test.beforeEach(async ({ page, user }) => {
+        test.beforeEach(async ({ page, app, user }) => {
             // Dismiss "Notification" toast
-            await page
-                .locator(".mx_Toast_toast", { hasText: "Notifications" })
-                .getByRole("button", { name: "Dismiss" })
-                .click();
-
+            await app.closeNotificationToast();
             await page.locator(".mx_Toast_buttons").getByRole("button", { name: "Yes" }).click(); // Allow analytics
         });
 
         test.describe("AnalyticsLearnMoreDialog", () => {
-            test("should be rendered properly", { tag: "@screenshot" }, async ({ app, page }) => {
+            test("should be rendered properly", { tag: "@screenshot" }, async ({ app, page, user }) => {
                 const tab = await app.settings.openUserSettings("Security");
                 await tab.getByRole("button", { name: "Learn more" }).click();
                 await expect(page.locator(".mx_AnalyticsLearnMoreDialog_wrapper .mx_Dialog")).toMatchScreenshot(
@@ -45,16 +41,57 @@ test.describe("Security user settings tab", () => {
             });
         });
 
-        test("should contain section to set ID server", async ({ app }) => {
+        test("should be able to set an ID server", async ({ app, context, user, page }) => {
             const tab = await app.settings.openUserSettings("Security");
 
-            const setIdServer = tab.locator(".mx_SetIdServer");
+            await context.route("https://identity.example.org/_matrix/identity/v2", async (route) => {
+                await route.fulfill({
+                    status: 200,
+                    json: {},
+                });
+            });
+            await context.route("https://identity.example.org/_matrix/identity/v2/account/register", async (route) => {
+                await route.fulfill({
+                    status: 200,
+                    json: {
+                        token: "AToken",
+                    },
+                });
+            });
+            await context.route("https://identity.example.org/_matrix/identity/v2/account", async (route) => {
+                await route.fulfill({
+                    status: 200,
+                    json: {
+                        user_id: user.userId,
+                    },
+                });
+            });
+            await context.route("https://identity.example.org/_matrix/identity/v2/terms", async (route) => {
+                await route.fulfill({
+                    status: 200,
+                    json: {
+                        policies: {},
+                    },
+                });
+            });
+            const setIdServer = tab.locator(".mx_IdentityServerPicker");
             await setIdServer.scrollIntoViewIfNeeded();
-            // Assert that an input area for identity server exists
-            await expect(setIdServer.getByRole("textbox", { name: "Enter a new identity server" })).toBeVisible();
+
+            const textElement = setIdServer.getByRole("textbox", { name: "Enter a new identity server" });
+            await textElement.click();
+            await textElement.fill("https://identity.example.org");
+            await setIdServer.getByRole("button", { name: "Change" }).click();
+
+            await expect(setIdServer.getByText("Checking server")).toBeVisible();
+            // Accept terms
+            await page.getByTestId("dialog-primary-button").click();
+            // Check identity has changed.
+            await expect(setIdServer.getByText("Your identity server has been changed")).toBeVisible();
+            // Ensure section title is updated.
+            await expect(tab.getByText(`Identity server (identity.example.org)`, { exact: true })).toBeVisible();
         });
 
-        test("should enable show integrations as enabled", async ({ app, page }) => {
+        test("should enable show integrations as enabled", async ({ app, page, user }) => {
             const tab = await app.settings.openUserSettings("Security");
 
             const setIntegrationManager = tab.locator(".mx_SetIntegrationManager");

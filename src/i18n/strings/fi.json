@@ -812,7 +812,6 @@
             "title": "Tuhoa ristiinvarmennuksen avaimet?",
             "warning": "Ristiinvarmennuksen avainten tuhoamista ei voi kumota. Jokainen, jonka olet varmentanut, tulee näkemään turvallisuushälytyksiä. Et todennäköisesti halua tehdä tätä, ellet ole hukannut kaikkia laitteitasi, joista pystyit ristiinvarmentamaan."
         },
-        "enter_recovery_key": "Kirjoita palautusavain",
         "event_shield_reason_authenticity_not_guaranteed": "Tämän salatun viestin aitoutta ei voida taata tällä laitteella.",
         "event_shield_reason_mismatched_sender_key": "Salattu varmentamattoman istunnon toimesta",
         "export_unsupported": "Selaimesi ei tue vaadittuja kryptografisia laajennuksia",
@@ -1126,8 +1125,7 @@
         "linux": "Linux",
         "macos": "Mac",
         "supported_browsers": "Saat parhaan käyttökokemuksen käyttämällä <Chrome>Chromea</Chrome>, <Firefox>Firefoxia</Firefox>, <Edge>Edgeä</Edge> tai <Safari>Safaria</Safari>.",
-        "title": "Selainta ei tueta",
-        "windows": "Windows (%(bits)s-bit)"
+        "title": "Selainta ei tueta"
     },
     "info_tooltip_title": "Tiedot",
     "integration_manager": {
@@ -2154,16 +2152,11 @@
             "device_not_verified_title": "Laitetta ei ole vahvistettu",
             "dialog_title": "<strong>Asetukset:</strong> Salaus",
             "recovery": {
-                "change_recovery_confirm_button": "Vahvista uusi palautusavain",
-                "change_recovery_key": "Vaihda palautusavain",
                 "change_recovery_key_title": "Vaihdetaanko palautusavain?",
                 "description": "Palauta kryptografinen identiteettisi ja viestihistoriasi palautusavaimella, jos olet kadottanut kaikki olemassa olevat laitteesi.",
                 "enter_key_error": "Kirjoittamasi palautusavain ei ole oikein.",
-                "enter_recovery_key": "Kirjoita palautusavain",
                 "forgot_recovery_key": "Unohditko palautusavaimen?",
                 "save_key_description": "Älä jaa tätä kenenkään kanssa!",
-                "save_key_title": "Palautusavain",
-                "set_up_recovery_save_key_title": "Tallenna palautusavain turvalliseen paikkaan",
                 "title": "Palautuminen"
             },
             "title": "Salaus"

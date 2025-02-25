@@ -10,6 +10,7 @@ import { test, expect } from "../../element-web-test";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
 import { completeCreateSecretStorageDialog, createBot, logIntoElement } from "./utils.ts";
 import { type Client } from "../../pages/client.ts";
+import { type ElementAppPage } from "../../pages/ElementAppPage.ts";
 
 const NAME = "Alice";
 
@@ -49,19 +50,40 @@ test.describe("Dehydration", () => {
 
         await completeCreateSecretStorageDialog(page);
 
-        // Open the settings again
-        await app.settings.openUserSettings("Security & Privacy");
-
-        // The Security tab should indicate that there is a dehydrated device present
-        await expect(securityTab.getByText("Offline device enabled")).toBeVisible();
-
-        await app.settings.closeDialog();
+        await expectDehydratedDeviceEnabled(app);
 
         // the dehydrated device gets created with the name "Dehydrated
         // device".  We want to make sure that it is not visible as a normal
         // device.
         const sessionsTab = await app.settings.openUserSettings("Sessions");
         await expect(sessionsTab.getByText("Dehydrated device")).not.toBeVisible();
+    });
+
+    test("'Set up recovery' creates dehydrated device", async ({ app, credentials, page }) => {
+        await logIntoElement(page, credentials);
+
+        const settingsDialogLocator = await app.settings.openUserSettings("Encryption");
+        await settingsDialogLocator.getByRole("button", { name: "Set up recovery" }).click();
+
+        // First it displays an informative panel about the recovery key
+        await expect(settingsDialogLocator.getByRole("heading", { name: "Set up recovery" })).toBeVisible();
+        await settingsDialogLocator.getByRole("button", { name: "Continue" }).click();
+
+        // Next, it displays the new recovery key. We click on the copy button.
+        await expect(settingsDialogLocator.getByText("Save your recovery key somewhere safe")).toBeVisible();
+        await settingsDialogLocator.getByRole("button", { name: "Copy" }).click();
+        const recoveryKey = await app.getClipboard();
+        await settingsDialogLocator.getByRole("button", { name: "Continue" }).click();
+
+        await expect(
+            settingsDialogLocator.getByText("Enter your recovery key to confirm", { exact: true }),
+        ).toBeVisible();
+        await settingsDialogLocator.getByRole("textbox").fill(recoveryKey);
+        await settingsDialogLocator.getByRole("button", { name: "Finish set up" }).click();
+
+        await app.settings.closeDialog();
+
+        await expectDehydratedDeviceEnabled(app);
     });
 
     test("Reset recovery key during login re-creates dehydrated device", async ({
@@ -108,4 +130,17 @@ async function getDehydratedDeviceIds(client: Client): Promise<string[]> {
                 .map((d) => d.deviceId),
         );
     });
+}
+
+/** Wait for our user to have a dehydrated device */
+async function expectDehydratedDeviceEnabled(app: ElementAppPage): Promise<void> {
+    // It might be nice to do this via the UI, but currently this info is not exposed via the UI.
+    //
+    // Note we might have to wait for the device list to be refreshed, so we wrap in `expect.poll`.
+    await expect
+        .poll(async () => {
+            const dehydratedDeviceIds = await getDehydratedDeviceIds(app.client);
+            return dehydratedDeviceIds.length;
+        })
+        .toEqual(1);
 }

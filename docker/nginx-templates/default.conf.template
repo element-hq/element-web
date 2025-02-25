@@ -18,7 +18,11 @@ server {
     }
     # covers config.json and config.hostname.json requests as it is prefix.
     location /config {
+        root /tmp/element-web-config;
         add_header Cache-Control "no-cache";
+    }
+    location /modules {
+        alias /tmp/element-web-modules;
     }
     # redirect server error pages to the static page /50x.html
     #
