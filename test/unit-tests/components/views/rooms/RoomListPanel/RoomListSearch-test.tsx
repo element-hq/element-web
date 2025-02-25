@@ -10,7 +10,7 @@ import { render, screen } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 
-import { RoomListSearch } from "../../../../../../src/components/views/rooms/RoomListView/RoomListSearch";
+import { RoomListSearch } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomListSearch";
 import { MetaSpace } from "../../../../../../src/stores/spaces";
 import { shouldShowComponent } from "../../../../../../src/customisations/helpers/UIComponents";
 import defaultDispatcher from "../../../../../../src/dispatcher/dispatcher";

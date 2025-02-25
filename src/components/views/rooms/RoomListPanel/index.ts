@@ -5,8 +5,4 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-.mx_RoomListView {
-    background-color: var(--cpd-color-bg-canvas-default);
-    height: 100%;
-    border-right: 1px solid var(--cpd-color-bg-subtle-primary);
-}
+export { RoomListPanel } from "./RoomListPanel";

@@ -12,7 +12,7 @@ import { UIComponent } from "../../../../settings/UIFeature";
 import { RoomListSearch } from "./RoomListSearch";
 import { RoomListHeaderView } from "./RoomListHeaderView";
 
-type RoomListViewProps = {
+type RoomListPanelProps = {
     /**
      * Current active space
      * See {@link RoomListSearch}
@@ -21,13 +21,13 @@ type RoomListViewProps = {
 };
 
 /**
- * A view component for the room list.
+ * The panel of the room list
  */
-export const RoomListView: React.FC<RoomListViewProps> = ({ activeSpace }) => {
+export const RoomListPanel: React.FC<RoomListPanelProps> = ({ activeSpace }) => {
     const displayRoomSearch = shouldShowComponent(UIComponent.FilterContainer);
 
     return (
-        <section className="mx_RoomListView" data-testid="room-list-view">
+        <section className="mx_RoomListPanel" data-testid="room-list-panel">
             {displayRoomSearch && <RoomListSearch activeSpace={activeSpace} />}
             <RoomListHeaderView />
         </section>
