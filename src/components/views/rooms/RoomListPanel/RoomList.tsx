@@ -7,6 +7,7 @@
 
 import React, { useCallback, type JSX } from "react";
 import { AutoSizer, List, type ListRowProps } from "react-virtualized";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import type { Room } from "../../../../../../matrix-js-sdk/src";
 import { type RoomListViewState } from "../../../viewmodels/roomlist/RoomListViewModel";
@@ -23,6 +24,8 @@ export function RoomList({ vm: { rooms } }: RoomListProps): JSX.Element {
         (listRowProps: ListRowProps) => roomRenderer(rooms, listRowProps),
         [rooms],
     );
+
+    logger.error("RoomList", "Rendering room list with %s rooms", rooms.length);
 
     return (
         <AutoSizer>
