@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<RoomListView /> should not render the RoomListSearch component when UIComponent.FilterContainer is at false 1`] = `
+exports[`<RoomListPanel /> should not render the RoomListSearch component when UIComponent.FilterContainer is at false 1`] = `
 <DocumentFragment>
   <section
-    class="mx_RoomListView"
-    data-testid="room-list-view"
+    class="mx_RoomListPanel"
+    data-testid="room-list-panel"
   >
     <header
       aria-label="Room options"
@@ -25,11 +25,11 @@ exports[`<RoomListView /> should not render the RoomListSearch component when UI
 </DocumentFragment>
 `;
 
-exports[`<RoomListView /> should render the RoomListSearch component when UIComponent.FilterContainer is at true 1`] = `
+exports[`<RoomListPanel /> should render the RoomListSearch component when UIComponent.FilterContainer is at true 1`] = `
 <DocumentFragment>
   <section
-    class="mx_RoomListView"
-    data-testid="room-list-view"
+    class="mx_RoomListPanel"
+    data-testid="room-list-panel"
   >
     <div
       class="mx_Flex mx_RoomListSearch"

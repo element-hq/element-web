@@ -14,7 +14,7 @@ import {
     type RoomListHeaderViewState,
     useRoomListHeaderViewModel,
 } from "../../../../../../src/components/viewmodels/roomlist/RoomListHeaderViewModel";
-import { RoomListHeaderView } from "../../../../../../src/components/views/rooms/RoomListView/RoomListHeaderView";
+import { RoomListHeaderView } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomListHeaderView";
 
 jest.mock("../../../../../../src/components/viewmodels/roomlist/RoomListHeaderViewModel", () => ({
     useRoomListHeaderViewModel: jest.fn(),

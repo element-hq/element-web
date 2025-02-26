@@ -9,7 +9,7 @@ import { type Page } from "@playwright/test";
 
 import { test, expect } from "../../../element-web-test";
 
-test.describe("Search section of the room list", () => {
+test.describe("Room list panel", () => {
     test.use({
         labsFlags: ["feature_new_room_list"],
     });
@@ -19,7 +19,7 @@ test.describe("Search section of the room list", () => {
      * @param page
      */
     function getRoomListView(page: Page) {
-        return page.getByTestId("room-list-view");
+        return page.getByTestId("room-list-panel");
     }
 
     test.beforeEach(async ({ page, app, user }) => {
@@ -27,8 +27,8 @@ test.describe("Search section of the room list", () => {
         await app.closeNotificationToast();
     });
 
-    test("should render the room list view", { tag: "@screenshot" }, async ({ page, app, user }) => {
+    test("should render the room list panel", { tag: "@screenshot" }, async ({ page, app, user }) => {
         const roomListView = getRoomListView(page);
-        await expect(roomListView).toMatchScreenshot("room-list-view.png");
+        await expect(roomListView).toMatchScreenshot("room-list-panel.png");
     });
 });
