@@ -12,7 +12,8 @@ import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext
 
 interface KeyStoragePanelState {
     /**
-     * Whether key storage is enabled, or 'undefined' if the state is still loading.
+     * Whether the app's "key storage" option should show as enabled to the user,
+     * or 'undefined' if the state is still loading.
      */
     isEnabled: boolean | undefined;
 
@@ -121,10 +122,5 @@ export function useKeyStoragePanelViewModel(): KeyStoragePanelState {
         [setPendingValue, checkStatus, matrixClient],
     );
 
-    return {
-        isEnabled: pendingValue ?? isEnabled,
-        setEnabled,
-        loading,
-        busy: pendingValue !== undefined,
-    };
+    return { isEnabled: pendingValue ?? isEnabled, setEnabled, loading, busy: pendingValue !== undefined };
 }
