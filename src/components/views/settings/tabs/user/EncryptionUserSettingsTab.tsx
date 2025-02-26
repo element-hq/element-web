@@ -94,6 +94,7 @@ export function EncryptionUserSettingsTab({ initialState = "loading" }: Encrypti
                 <>
                     <KeyStoragePanel onKeyStorageDisableClick={() => setState("key_storage_delete")} />
                     <Separator kind="section" />
+                    {/* We only show the "Recovery" panel if key storage is enabled.*/}
                     {state === "main" && (
                         <>
                             <RecoveryPanel
