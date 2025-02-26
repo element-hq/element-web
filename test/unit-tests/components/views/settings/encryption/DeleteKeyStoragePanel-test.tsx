@@ -17,12 +17,9 @@ import { DeleteKeyStoragePanel } from "../../../../../../src/components/views/se
 import { useKeyStoragePanelViewModel } from "../../../../../../src/components/viewmodels/settings/encryption/KeyStoragePanelViewModel";
 
 jest.mock("../../../../../../src/components/viewmodels/settings/encryption/KeyStoragePanelViewModel", () => ({
-    useKeyStoragePanelViewModel: jest.fn().mockReturnValue({
-        setEnabled: jest.fn(),
-        isEnabled: true,
-        loading: false,
-        busy: false,
-    }),
+    useKeyStoragePanelViewModel: jest
+        .fn()
+        .mockReturnValue({ setEnabled: jest.fn(), isEnabled: true, loading: false, busy: false }),
 }));
 
 describe("<DeleteKeyStoragePanel />", () => {
@@ -30,6 +27,10 @@ describe("<DeleteKeyStoragePanel />", () => {
 
     beforeEach(() => {
         matrixClient = createTestClient();
+    });
+
+    afterEach(() => {
+        jest.restoreAllMocks();
     });
 
     it("should match snapshot", async () => {

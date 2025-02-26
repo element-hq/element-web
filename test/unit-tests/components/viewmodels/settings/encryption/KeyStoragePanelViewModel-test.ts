@@ -21,6 +21,10 @@ describe("KeyStoragePanelViewModel", () => {
         matrixClient = createTestClient();
     });
 
+    afterEach(() => {
+        jest.restoreAllMocks();
+    });
+
     it("should update the pending value immediately", async () => {
         const { result } = renderHook(
             () => useKeyStoragePanelViewModel(),
