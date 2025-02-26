@@ -59,7 +59,7 @@ export const KeyStoragePanel: React.FC<Props> = ({ onKeyStorageDisableClick }) =
                 ),
             })}
         >
-            <Root className="mx_KeyBackupPanel_toggleRow">
+            <Root className="mx_KeyStoragePanel_toggleRow">
                 <InlineField
                     name="keyStorage"
                     control={<ToggleControl name="keyStorage" checked={isEnabled} onChange={onKeyBackupChange} />}
