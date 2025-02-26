@@ -38,8 +38,8 @@ export function RoomListHeaderView(): JSX.Element {
             align="center"
             data-testid="room-list-header"
         >
-            <Flex align="center" gap="var(--cpd-space-1x)">
-                <h1>{vm.title}</h1>
+            <Flex className="mx_RoomListHeaderView_title" align="center" gap="var(--cpd-space-1x)">
+                <h1 title={vm.title}>{vm.title}</h1>
                 {vm.displaySpaceMenu && <SpaceMenu vm={vm} />}
             </Flex>
             {vm.displayComposeMenu && <ComposeMenu vm={vm} />}

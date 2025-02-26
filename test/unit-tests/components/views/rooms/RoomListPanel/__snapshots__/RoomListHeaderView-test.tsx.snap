@@ -9,10 +9,12 @@ exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`]
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0;"
   >
     <div
-      class="mx_Flex"
+      class="mx_Flex mx_RoomListHeaderView_title"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x);"
     >
-      <h1>
+      <h1
+        title="title"
+      >
         title
       </h1>
       <button
@@ -94,10 +96,12 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0;"
   >
     <div
-      class="mx_Flex"
+      class="mx_Flex mx_RoomListHeaderView_title"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x);"
     >
-      <h1>
+      <h1
+        title="title"
+      >
         title
       </h1>
       <button
@@ -144,10 +148,12 @@ exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0;"
   >
     <div
-      class="mx_Flex"
+      class="mx_Flex mx_RoomListHeaderView_title"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x);"
     >
-      <h1>
+      <h1
+        title="title"
+      >
         title
       </h1>
       <button
@@ -229,10 +235,12 @@ exports[`<RoomListHeaderView /> space menu should not display the space menu 1`]
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0;"
   >
     <div
-      class="mx_Flex"
+      class="mx_Flex mx_RoomListHeaderView_title"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x);"
     >
-      <h1>
+      <h1
+        title="title"
+      >
         title
       </h1>
     </div>
