@@ -32,19 +32,19 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
               class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
             >
               <form
-                class="_root_ssths_24 mx_ThemeChoicePanel_ThemeSelectors"
+                class="_root_19upo_16 mx_ThemeChoicePanel_ThemeSelectors"
               >
                 <div
-                  class="_inline-field_ssths_40 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_disabled cpd-theme-light"
+                  class="_inline-field_19upo_32 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_disabled cpd-theme-light"
                 >
                   <div
-                    class="_inline-field-control_ssths_52"
+                    class="_inline-field-control_19upo_44"
                   >
                     <div
-                      class="_container_1vw5h_18"
+                      class="_container_1e0uz_10"
                     >
                       <input
-                        class="_input_1vw5h_26"
+                        class="_input_1e0uz_18"
                         disabled=""
                         id="radix-:r0:"
                         name="themeSelector"
@@ -53,15 +53,15 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         value="light"
                       />
                       <div
-                        class="_ui_1vw5h_27"
+                        class="_ui_1e0uz_19"
                       />
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_ssths_46"
+                    class="_inline-field-body_19upo_38"
                   >
                     <label
-                      class="_label_ssths_67 mx_ThemeChoicePanel_themeSelector_Label"
+                      class="_label_19upo_59 mx_ThemeChoicePanel_themeSelector_Label"
                       for="radix-:r0:"
                     >
                       Light
@@ -69,16 +69,16 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field_ssths_40 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_disabled cpd-theme-dark"
+                  class="_inline-field_19upo_32 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_disabled cpd-theme-dark"
                 >
                   <div
-                    class="_inline-field-control_ssths_52"
+                    class="_inline-field-control_19upo_44"
                   >
                     <div
-                      class="_container_1vw5h_18"
+                      class="_container_1e0uz_10"
                     >
                       <input
-                        class="_input_1vw5h_26"
+                        class="_input_1e0uz_18"
                         disabled=""
                         id="radix-:r1:"
                         name="themeSelector"
@@ -87,15 +87,15 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         value="dark"
                       />
                       <div
-                        class="_ui_1vw5h_27"
+                        class="_ui_1e0uz_19"
                       />
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_ssths_46"
+                    class="_inline-field-body_19upo_38"
                   >
                     <label
-                      class="_label_ssths_67 mx_ThemeChoicePanel_themeSelector_Label"
+                      class="_label_19upo_59 mx_ThemeChoicePanel_themeSelector_Label"
                       for="radix-:r1:"
                     >
                       Dark
@@ -103,16 +103,16 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   </div>
                 </div>
                 <div
-                  class="_inline-field_ssths_40 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_disabled cpd-theme-light"
+                  class="_inline-field_19upo_32 mx_ThemeChoicePanel_themeSelector mx_ThemeChoicePanel_themeSelector_disabled cpd-theme-light"
                 >
                   <div
-                    class="_inline-field-control_ssths_52"
+                    class="_inline-field-control_19upo_44"
                   >
                     <div
-                      class="_container_1vw5h_18"
+                      class="_container_1e0uz_10"
                     >
                       <input
-                        class="_input_1vw5h_26"
+                        class="_input_1e0uz_18"
                         disabled=""
                         id="radix-:r2:"
                         name="themeSelector"
@@ -121,15 +121,15 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                         value="light-high-contrast"
                       />
                       <div
-                        class="_ui_1vw5h_27"
+                        class="_ui_1e0uz_19"
                       />
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_ssths_46"
+                    class="_inline-field-body_19upo_38"
                   >
                     <label
-                      class="_label_ssths_67 mx_ThemeChoicePanel_themeSelector_Label"
+                      class="_label_19upo_59 mx_ThemeChoicePanel_themeSelector_Label"
                       for="radix-:r2:"
                     >
                       High contrast
@@ -139,7 +139,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
               </form>
             </div>
             <div
-              class="_separator_144s5_17"
+              class="_separator_7ckbw_8"
               data-kind="primary"
               data-orientation="horizontal"
               role="separator"
@@ -162,25 +162,25 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
               class="mx_SettingsSubsection_content mx_SettingsSubsection_content_newUi"
             >
               <form
-                class="_root_ssths_24 mx_LayoutSwitcher_LayoutSelector"
+                class="_root_19upo_16 mx_LayoutSwitcher_LayoutSelector"
               >
                 <div
-                  class="_field_ssths_34 mxLayoutSwitcher_LayoutSelector_LayoutRadio"
+                  class="_field_19upo_26 mxLayoutSwitcher_LayoutSelector_LayoutRadio"
                 >
                   <label
                     aria-label="Modern"
-                    class="_label_ssths_67"
+                    class="_label_19upo_59"
                     for="radix-:r3:"
                   >
                     <div
                       class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
                     >
                       <div
-                        class="_container_1vw5h_18"
+                        class="_container_1e0uz_10"
                       >
                         <input
                           checked=""
-                          class="_input_1vw5h_26"
+                          class="_input_1e0uz_18"
                           id="radix-:r3:"
                           name="layout"
                           title=""
@@ -188,7 +188,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           value="group"
                         />
                         <div
-                          class="_ui_1vw5h_27"
+                          class="_ui_1e0uz_19"
                         />
                       </div>
                       <span>
@@ -227,7 +227,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           class="mx_EventTile_avatar"
                         >
                           <span
-                            class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+                            class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
                             data-color="2"
                             data-testid="avatar-img"
                             data-type="round"
@@ -281,7 +281,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                                 xmlns="http://www.w3.org/2000/svg"
                               >
                                 <path
-                                  d="M6 14c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 4 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 6 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 6 14Zm6 0c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 10 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 12 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 12 14Zm6 0c-.55 0-1.02-.196-1.413-.588A1.926 1.926 0 0 1 16 12c0-.55.196-1.02.587-1.412A1.926 1.926 0 0 1 18 10c.55 0 1.02.196 1.413.588.391.391.587.862.587 1.412 0 .55-.196 1.02-.587 1.412A1.926 1.926 0 0 1 18 14Z"
+                                  d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
                                 />
                               </svg>
                             </div>
@@ -292,21 +292,21 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   </label>
                 </div>
                 <div
-                  class="_field_ssths_34 mxLayoutSwitcher_LayoutSelector_LayoutRadio"
+                  class="_field_19upo_26 mxLayoutSwitcher_LayoutSelector_LayoutRadio"
                 >
                   <label
                     aria-label="Message bubbles"
-                    class="_label_ssths_67"
+                    class="_label_19upo_59"
                     for="radix-:rc:"
                   >
                     <div
                       class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
                     >
                       <div
-                        class="_container_1vw5h_18"
+                        class="_container_1e0uz_10"
                       >
                         <input
-                          class="_input_1vw5h_26"
+                          class="_input_1e0uz_18"
                           id="radix-:rc:"
                           name="layout"
                           title=""
@@ -314,7 +314,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           value="bubble"
                         />
                         <div
-                          class="_ui_1vw5h_27"
+                          class="_ui_1e0uz_19"
                         />
                       </div>
                       <span>
@@ -353,7 +353,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           class="mx_EventTile_avatar"
                         >
                           <span
-                            class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+                            class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
                             data-color="2"
                             data-testid="avatar-img"
                             data-type="round"
@@ -407,7 +407,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                                 xmlns="http://www.w3.org/2000/svg"
                               >
                                 <path
-                                  d="M6 14c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 4 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 6 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 6 14Zm6 0c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 10 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 12 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 12 14Zm6 0c-.55 0-1.02-.196-1.413-.588A1.926 1.926 0 0 1 16 12c0-.55.196-1.02.587-1.412A1.926 1.926 0 0 1 18 10c.55 0 1.02.196 1.413.588.391.391.587.862.587 1.412 0 .55-.196 1.02-.587 1.412A1.926 1.926 0 0 1 18 14Z"
+                                  d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
                                 />
                               </svg>
                             </div>
@@ -418,21 +418,21 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                   </label>
                 </div>
                 <div
-                  class="_field_ssths_34 mxLayoutSwitcher_LayoutSelector_LayoutRadio"
+                  class="_field_19upo_26 mxLayoutSwitcher_LayoutSelector_LayoutRadio"
                 >
                   <label
                     aria-label="IRC (experimental)"
-                    class="_label_ssths_67"
+                    class="_label_19upo_59"
                     for="radix-:rl:"
                   >
                     <div
                       class="mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline"
                     >
                       <div
-                        class="_container_1vw5h_18"
+                        class="_container_1e0uz_10"
                       >
                         <input
-                          class="_input_1vw5h_26"
+                          class="_input_1e0uz_18"
                           id="radix-:rl:"
                           name="layout"
                           title=""
@@ -440,7 +440,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           value="irc"
                         />
                         <div
-                          class="_ui_1vw5h_27"
+                          class="_ui_1e0uz_19"
                         />
                       </div>
                       <span>
@@ -479,7 +479,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                           class="mx_EventTile_avatar"
                         >
                           <span
-                            class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+                            class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
                             data-color="2"
                             data-testid="avatar-img"
                             data-type="round"
@@ -533,7 +533,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                                 xmlns="http://www.w3.org/2000/svg"
                               >
                                 <path
-                                  d="M6 14c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 4 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 6 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 6 14Zm6 0c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 10 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 12 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 12 14Zm6 0c-.55 0-1.02-.196-1.413-.588A1.926 1.926 0 0 1 16 12c0-.55.196-1.02.587-1.412A1.926 1.926 0 0 1 18 10c.55 0 1.02.196 1.413.588.391.391.587.862.587 1.412 0 .55-.196 1.02-.587 1.412A1.926 1.926 0 0 1 18 14Z"
+                                  d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
                                 />
                               </svg>
                             </div>
@@ -545,41 +545,41 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
                 </div>
               </form>
               <form
-                class="_root_ssths_24"
+                class="_root_19upo_16"
               >
                 <div
-                  class="_inline-field_ssths_40"
+                  class="_inline-field_19upo_32"
                 >
                   <div
-                    class="_inline-field-control_ssths_52"
+                    class="_inline-field-control_19upo_44"
                   >
                     <div
-                      class="_container_qnvru_18"
+                      class="_container_19o42_10"
                     >
                       <input
                         aria-describedby="radix-:rv:"
-                        class="_input_qnvru_32"
+                        class="_input_19o42_24"
                         id="radix-:ru:"
                         name="compactLayout"
                         title=""
                         type="checkbox"
                       />
                       <div
-                        class="_ui_qnvru_42"
+                        class="_ui_19o42_34"
                       />
                     </div>
                   </div>
                   <div
-                    class="_inline-field-body_ssths_46"
+                    class="_inline-field-body_19upo_38"
                   >
                     <label
-                      class="_label_ssths_67"
+                      class="_label_19upo_59"
                       for="radix-:ru:"
                     >
                       Show compact text and messages
                     </label>
                     <span
-                      class="_message_ssths_93 _help-message_ssths_99"
+                      class="_message_19upo_85 _help-message_19upo_91"
                       id="radix-:rv:"
                     >
                       Modern layout must be selected to use this feature.
@@ -589,7 +589,7 @@ exports[`AppearanceUserSettingsTab should render 1`] = `
               </form>
             </div>
             <div
-              class="_separator_144s5_17"
+              class="_separator_7ckbw_8"
               data-kind="primary"
               data-orientation="horizontal"
               role="separator"

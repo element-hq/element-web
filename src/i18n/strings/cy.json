@@ -1237,8 +1237,7 @@
         "title": "Nid yw %(brand)s yn cefnogi'r porwr hwn",
         "use_desktop_heading": "Defnyddiwch %(brand)s Penbwrdd yn lle hynny",
         "use_mobile_heading": "Defnyddiwch %(brand)s ar ffôn symudol yn lle hynny",
-        "use_mobile_heading_after_desktop": "Neu defnyddiwch ein app symudol",
-        "windows": "Windows (%(bits)s-bit)"
+        "use_mobile_heading_after_desktop": "Neu defnyddiwch ein app symudol"
     },
     "info_tooltip_title": "Gwybodaeth",
     "integration_manager": {

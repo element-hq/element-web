@@ -80,12 +80,14 @@
         "maximise": "Maximise",
         "mention": "Mention",
         "minimise": "Minimise",
+        "new_message": "New message",
         "new_room": "New room",
         "new_video_room": "New video room",
         "next": "Next",
         "no": "No",
         "ok": "OK",
         "open": "Open",
+        "open_menu": "Open menu",
         "pause": "Pause",
         "pin": "Pin",
         "play": "Play",
@@ -1243,6 +1245,7 @@
         "change": "Change identity server",
         "change_prompt": "Disconnect from the identity server <current /> and connect to <new /> instead?",
         "change_server_prompt": "If you don't want to use <server /> to discover and be discoverable by existing contacts you know, enter another identity server below.",
+        "changed": "Your identity server has been changed",
         "checking": "Checking server",
         "description_connected": "You are currently using <server></server> to discover and be discoverable by existing contacts you know. You can change your identity server below.",
         "description_disconnected": "You are not currently using an identity server. To discover and be discoverable by existing contacts you know, add one below.",
@@ -2095,6 +2098,7 @@
             "other": "Currently joining %(count)s rooms"
         },
         "notification_options": "Notification options",
+        "open_space_menu": "Open space menu",
         "redacting_messages_status": {
             "one": "Currently removing messages in %(count)s room",
             "other": "Currently removing messages in %(count)s rooms"
@@ -2109,6 +2113,10 @@
         "sort_by_activity": "Activity",
         "sort_by_alphabet": "A-Z",
         "sort_unread_first": "Show rooms with unread messages first",
+        "space_menu": {
+            "home": "Space home",
+            "space_settings": "Space Settings"
+        },
         "space_menu_label": "%(spaceName)s menu",
         "sublist_options": "List options",
         "suggested_rooms_heading": "Suggested Rooms"

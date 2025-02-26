@@ -1286,8 +1286,7 @@
         "title": "Nepodporovaný prohlížeč",
         "use_desktop_heading": "Místo toho použijte %(brand)s Desktop",
         "use_mobile_heading": "Místo toho použijte %(brand)s na mobilu",
-        "use_mobile_heading_after_desktop": "Nebo použijte naši mobilní aplikaci",
-        "windows": "Windows (%(bits)s-bit)"
+        "use_mobile_heading_after_desktop": "Nebo použijte naši mobilní aplikaci"
     },
     "info_tooltip_title": "Informace",
     "integration_manager": {

@@ -4,12 +4,12 @@
         "jump_first_invite": "Hopp til den første invitasjonen.",
         "message_composer": "Meldingsfelt",
         "n_unread_messages": {
-            "1 ulest melding.": "one",
-            "%(count)s uleste meldinger.": "other"
+            "one": "1 ulest melding.",
+            "other": "%(count)s uleste meldinger."
         },
         "n_unread_messages_mentions": {
-            "1 ulest nevnelse.": "one",
-            "%(count)s uleste meldinger inkludert der du nevnes.": "other"
+            "one": "1 ulest omtale.",
+            "other": "%(count)s uleste meldinger, inkludert omtaler."
         },
         "recent_rooms": "Nylige rom",
         "room_name": "Rom %(name)s",
@@ -80,12 +80,14 @@
         "maximise": "Maksimer",
         "mention": "Nevn",
         "minimise": "Minimer",
+        "new_message": "Ny melding",
         "new_room": "Nytt rom",
         "new_video_room": "Nytt videorom",
         "next": "Neste",
         "no": "Nei",
         "ok": "OK",
         "open": "Åpne",
+        "open_menu": "Åpne meny",
         "pause": "Pause",
         "pin": "Fest",
         "play": "Spill av",
@@ -507,11 +509,12 @@
         "modern": "Moderne",
         "mute": "Demp",
         "n_members": {
-            "%(count)s medlem": "one",
-            "%(count)s medlemmer": "other"
+            "one": "%(count)s medlem",
+            "other": "%(count)s medlemmer"
         },
         "n_rooms": {
-            "%(count)s rom": "one"
+            "one": "%(count)s rom",
+            "other": "%(count)s rom"
         },
         "name": "Navn",
         "no_results": "Ingen treff",
@@ -732,26 +735,34 @@
         "caution_colon": "Advarsel:",
         "client_versions": "Klientversjoner",
         "crypto": {
+            "4s_public_key_in_account_data": "i kontodata",
             "4s_public_key_not_in_account_data": "ikke funnet",
+            "4s_public_key_status": "Offentlig nøkkel for hemmelig lagring:",
             "backup_key_cached": "bufret lokalt",
+            "backup_key_cached_status": "Sikkerhetskopieringsnøkkel bufret:",
             "backup_key_not_stored": "ikke lagret",
             "backup_key_stored": "i hemmelig lagring",
+            "backup_key_stored_status": "Sikkerhetskopinøkkel lagret:",
             "backup_key_unexpected_type": "uventet type",
+            "backup_key_well_formed": "godt utformet",
             "cross_signing": "Krysssignering",
             "cross_signing_cached": "bufret lokalt",
             "cross_signing_not_ready": "Krysssignering er ikke satt opp.",
             "cross_signing_private_keys_in_storage": "i hemmelig lagring",
             "cross_signing_private_keys_in_storage_status": "Krysssignering av private nøkler:",
+            "cross_signing_private_keys_not_in_storage": "ikke funnet lagret",
             "cross_signing_public_keys_on_device": "i minnet",
             "cross_signing_public_keys_on_device_status": "Krysssignering av offentlige nøkler:",
             "cross_signing_ready": "Krysssignering er klar til bruk.",
             "cross_signing_status": "Status for krysssignering:",
+            "cross_signing_untrusted": "Kontoen din har en krysssigneringsidentitet i hemmelig lagring, men den er ennå ikke klarert av denne sesjonen.",
             "crypto_not_available": "Kryptografisk modul er ikke tilgjengelig",
             "key_backup_active_version": "Aktiv sikkerhetskopiversion:",
             "key_backup_active_version_none": "Ingen",
             "key_backup_inactive_warning": "Nøklene dine blir ikke sikkerhetskopiert fra denne sesjonen.",
             "key_backup_latest_version": "Siste sikkerhetskopi på serveren:",
             "key_storage": "Oppbevaring av nøkler",
+            "master_private_key_cached_status": "Master privat nøkkel:",
             "not_found": "ikke funnet",
             "not_found_locally": "ikke funnet lokalt",
             "secret_storage_not_ready": "ikke klar",
@@ -820,7 +831,7 @@
         "show_hidden_events": "Vis skjulte hendelser i tidslinjen",
         "spaces": {
             "one": "<space>",
-            "other": "<%(count)s spaces>"
+            "other": "<%(count)s områder>"
         },
         "state_key": "Tilstandsnøkkel",
         "thread_root_id": "Trådens rot-ID: %(threadRootId)s",
@@ -870,16 +881,16 @@
         "access_secret_storage_dialog": {
             "enter_phrase_or_key_prompt": "Skriv inn sikkerhetsfrasen eller <button> bruk sikkerhetsnøkkelen </button> for å fortsette.",
             "key_validation_text": {
-                "invalid_security_key": "Ugyldig sikkerhetsnøkkel",
+                "invalid_security_key": "Ugyldig gjenopprettingsnøkkel",
                 "recovery_key_is_correct": "Ser bra ut!",
                 "wrong_file_type": "Feil filtype",
-                "wrong_security_key": "Feil sikkerhetsnøkkel"
+                "wrong_security_key": "Feil gjenopprettingsnøkkel"
             },
             "reset_title": "Tilbakestill alt",
             "reset_warning_1": "Gjør dette bare hvis du ikke har noen annen enhet å fullføre verifiseringen med.",
             "reset_warning_2": "Hvis du tilbakestiller alt, starter du på nytt uten klarerte økter, ingen klarerte brukere, og du kan kanskje ikke se tidligere meldinger.",
             "restoring": "Gjenoppretter nøkler fra sikkerhetskopi",
-            "security_key_title": "Sikkerhetsnøkkel",
+            "security_key_title": "Gjenopprettingsnøkkel",
             "security_phrase_incorrect_error": "Får ikke tilgang til hemmelig lagring. Kontroller at du har skrevet inn riktig sikkerhetsfrase.",
             "security_phrase_title": "Sikkerhetsfrase",
             "separator": "%(securityKey)s eller %(recoveryFile)s",
@@ -917,6 +928,7 @@
         "import_invalid_keyfile": "Ikke en gyldig %(brand)s-nøkkelfil",
         "import_invalid_passphrase": "Autentiseringssjekk mislyktes: Feil passord?",
         "key_storage_out_of_sync": "Nøkkeloppbevaringen din er ikke synkronisert.",
+        "key_storage_out_of_sync_description": "Bekreft gjenopprettingsnøkkelen for å opprettholde tilgang til nøkkellagring og meldingshistorikk.",
         "messages_not_secure": {
             "cause_1": "Hjemmeserveren din",
             "cause_2": "Hjemmeserveren brukeren du bekrefter er koblet til",
@@ -931,7 +943,7 @@
             "title": "Ny gjenopprettingsmetode",
             "warning": "Hvis du ikke har angitt den nye gjenopprettingsmetoden, kan det hende at en hacker prøver å få tilgang til kontoen din. Du må øyeblikkelig endre passordet for kontoen din og angi en ny gjenopprettingsmetode i Innstillinger."
         },
-        "not_supported": "<ikke støttet>",
+        "not_supported": "<not supported>",
         "pinned_identity_changed": "%(displayName)ss (<b>%(userId)s</b>) identitet ser ut til å ha endret seg. <a>Finn ut mer</a>",
         "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>s identitet ser ut til å ha endret seg. <a>Finn ut mer</a>",
         "recovery_method_removed": {
@@ -985,7 +997,7 @@
             "incoming_sas_dialog_waiting": "Venter på at partneren skal bekrefte...",
             "incoming_sas_user_dialog_text_1": "Bekreft denne brukeren for å markere dem som klarerte. Tillit til brukere gir deg ekstra trygghet når du bruker ende-til-ende-krypterte meldinger.",
             "incoming_sas_user_dialog_text_2": "Bekreftelse av denne brukeren vil markere økten som klarert, og også merke økten din som klarert for dem.",
-            "no_key_or_device": "Det ser ut til at du ikke har en sikkerhetsnøkkel eller andre enheter du kan bekrefte mot. Denne enheten vil ikke kunne få tilgang til gamle krypterte meldinger. For å bekrefte identiteten din på denne enheten, må du tilbakestille bekreftelsesnøklene.",
+            "no_key_or_device": "Det ser ut til at du ikke har en gjenopprettingsnøkkel eller andre enheter du kan verifisere mot.  Denne enheten vil ikke kunne få tilgang til gamle krypterte meldinger. For å bekrefte identiteten din på denne enheten, må du tilbakestille verifiseringsnøklene dine.",
             "no_support_qr_emoji": "Enheten du prøver å bekrefte støtter ikke skanning av en QR-kode eller emoji-verifikasjon, som er det som %(brand)s støtter. Prøv med en annen klient.",
             "other_party_cancelled": "Den andre parten kansellerte verifiseringen.",
             "prompt_encrypted": "Bekreft alle brukere i et rom for å sikre at det er sikkert.",
@@ -1037,8 +1049,8 @@
             "verify_reset_warning_1": "Tilbakestilling av bekreftelsesnøklene kan ikke angres. Etter tilbakestilling har du ikke tilgang til gamle krypterte meldinger, og eventuelle venner som tidligere har bekreftet deg, vil se sikkerhetsadvarsler til du bekrefter med dem på nytt.",
             "verify_reset_warning_2": "Fortsett bare hvis du er sikker på at du har mistet alle de andre enhetene og sikkerhetsnøkkelen din.",
             "verify_using_device": "Bekreft med en annen enhet",
-            "verify_using_key": "Bekreft med sikkerhetsnøkkel",
-            "verify_using_key_or_phrase": "Bekreft med sikkerhetsnøkkel eller frase",
+            "verify_using_key": "Bekreft med gjenopprettingsnøkkel",
+            "verify_using_key_or_phrase": "Bekreft med gjenopprettingsnøkkel eller -frase",
             "waiting_for_user_accept": "Venter på at %(displayName)s skal akseptere …",
             "waiting_other_device": "Venter på at du skal bekrefte på den andre enheten din...",
             "waiting_other_device_details": "Venter på at du skal bekrefte på den andre enheten din, %(deviceName)s (%(deviceId)s)...",
@@ -1233,6 +1245,7 @@
         "change": "Bytt ut identitetstjener",
         "change_prompt": "Koble fra identitetsserveren <current /> og koble til <new /> i stedet?",
         "change_server_prompt": "Hvis du ikke ønsker å bruke <server /> til å oppdage og bli oppdaget av eksisterende kontakter som du kjenner, skriv inn en annen identitetstjener nedenfor.",
+        "changed": "Identitetsserveren din har blitt endret",
         "checking": "Sjekker tjeneren",
         "description_connected": "Du bruker for øyeblikket <server></server> til å oppdage og bli oppdaget av eksisterende kontakter du kjenner. Du kan endre identitetsserveren din nedenfor.",
         "description_disconnected": "Du bruker for øyeblikket ikke en identitetsserver. For å oppdage og bli oppdaget av eksisterende kontakter du kjenner, legg til en nedenfor.",
@@ -1276,7 +1289,8 @@
         "use_desktop_heading": "Bruk %(brand)s Desktop i stedet",
         "use_mobile_heading": "Bruk %(brand)s på mobilen i stedet",
         "use_mobile_heading_after_desktop": "Eller bruk mobilappen vår",
-        "windows": "Windows (%(bits)s-bit)"
+        "windows_64bit": "Windows (64-bit)",
+        "windows_arm_64bit": "Windows (ARM 64-bit)"
     },
     "info_tooltip_title": "Informasjon",
     "integration_manager": {
@@ -1486,6 +1500,7 @@
         "location_share_live_description": "Midlertidig implementering. Plasseringer beholdes i romhistorikken.",
         "mjolnir": "Nye måter å ignorere folk på",
         "msc3531_hide_messages_pending_moderation": "La moderatorer skjule meldinger i påvente av moderering.",
+        "new_room_list": "Aktiver ny romliste",
         "notification_settings": "Nye varslingsinnstillinger",
         "notification_settings_beta_caption": "Vi introduserer en enklere måte å endre varslingsinnstillingene dine på. Tilpass %(brand)s, akkurat slik du vil.",
         "notification_settings_beta_title": "Innstillinger for varsler",
@@ -1790,7 +1805,7 @@
         "count_of_decryption_failures": "Kunne ikke dekryptere %(failedCount)s økter!",
         "count_of_successfully_restored_keys": "Vellykket gjenoppretting av %(sessionCount)s nøkler",
         "enter_key_description": "Få tilgang til den sikre meldingsloggen din og konfigurer sikker melding ved å skrive inn sikkerhetsnøkkelen.",
-        "enter_key_title": "Skriv inn sikkerhetsnøkkel",
+        "enter_key_title": "Skriv inn gjenopprettingsnøkkel",
         "enter_phrase_description": "Få tilgang til den sikre meldingsloggen din og sett opp sikre meldinger ved å skrive inn sikkerhetsfrasen.",
         "enter_phrase_title": "Skriv inn sikkerhetsfrase",
         "incorrect_security_phrase_dialog": "Sikkerhetskopiering kunne ikke dekrypteres med denne sikkerhetsfrasen: Kontroller at du skrev inn riktig sikkerhetsfrase.",
@@ -1798,15 +1813,15 @@
         "key_backup_warning": "<b>Advarsel</b>: Du bør bare konfigurere sikkerhetskopiering av nøkler fra en pålitelig datamaskin.",
         "key_fetch_in_progress": "Henter nøkler fra serveren...",
         "key_forgotten_text": "Hvis du har glemt sikkerhetsnøkkelen, kan du <button> konfigurere nye gjenopprettingsalternativer </button>",
-        "key_is_invalid": "Ikke en gyldig sikkerhetsnøkkel",
+        "key_is_invalid": "Ikke en gyldig gjenopprettingsnøkkel",
         "key_is_valid": "Dette ser ut som en gyldig sikkerhetsnøkkel!",
         "keys_restored_title": "Nøklene ble gjenopprettet",
         "load_error_content": "Klarte ikke å laste sikkerhetskopi-status",
         "load_keys_progress": "%(completed)s av %(total)s nøkler gjenopprettet",
         "no_backup_error": "Ingen sikkerhetskopier ble funnet!",
         "phrase_forgotten_text": "Hvis du har glemt sikkerhetsfrasen, kan du <button1>bruke sikkerhetsnøkkelen</button1> eller <button2>konfigurere nye gjenopprettingsalternativer</button2>",
-        "recovery_key_mismatch_description": "Sikkerhetskopien kunne ikke dekrypteres med denne sikkerhetsnøkkelen: Vennligst verifiser at du tastet korrekt sikkerhetsnøkkel.",
-        "recovery_key_mismatch_title": "Sikkerhetsnøkkel uoverensstemmelse",
+        "recovery_key_mismatch_description": "Sikkerhetskopien kunne ikke dekrypteres med denne gjenopprettingsnøkkelen: Kontroller at du har angitt riktig gjenopprettingsnøkkel.",
+        "recovery_key_mismatch_title": "Manglende samsvar mellom gjenopprettingsnøkler",
         "restore_failed_error": "Kan ikke gjenopprette sikkerhetskopien"
     },
     "right_panel": {
@@ -1925,7 +1940,8 @@
         "error_jump_to_date_send_logs_prompt": "Send inn <debugLogsLink> feilsøkingslogger </debugLogsLink> for å hjelpe oss med å spore opp problemet.",
         "error_jump_to_date_title": "Kan ikke finne hendelsen på den datoen",
         "face_pile_summary": {
-            "%(count)s personer du kjenner har allerede blitt med": "other"
+            "one": "%(count)s person du kjenner har allerede blitt med",
+            "other": "%(count)s personer du kjenner har allerede blitt med"
         },
         "face_pile_tooltip_label": {
             "one": "Vis 1 medlem",
@@ -2082,19 +2098,25 @@
             "other": "Blir for øyeblikket med i %(count)s rom"
         },
         "notification_options": "Varselsinnstillinger",
+        "open_space_menu": "Åpne Område-meny",
         "redacting_messages_status": {
             "one": "Fjerner for øyeblikket meldinger i %(count)s rom",
             "other": "Fjerner for øyeblikket meldinger i %(count)s rom"
         },
         "show_less": "Vis mindre",
         "show_n_more": {
-            "Vis %(count)s til": "one"
+            "one": "Vis %(count)s mer",
+            "other": "Vis %(count)s mer"
         },
         "show_previews": "Vis forhåndsvisninger av meldinger",
         "sort_by": "Sorter etter",
         "sort_by_activity": "Aktivitet",
         "sort_by_alphabet": "A-Å",
         "sort_unread_first": "Vis rom med uleste meldinger først",
+        "space_menu": {
+            "home": "Område hjem",
+            "space_settings": "Område innstillinger"
+        },
         "space_menu_label": "",
         "sublist_options": "Liste alternativer",
         "suggested_rooms_heading": "Foreslåtte rom"
@@ -2605,7 +2627,7 @@
                 "enter_phrase_title": "Skriv inn en sikkerhetsfrase",
                 "enter_phrase_to_confirm": "Skriv inn sikkerhetsfrasen en gang til for å bekrefte den.",
                 "generate_security_key_description": "Vi genererer en sikkerhetsnøkkel som du kan lagre et trygt sted, for eksempel en passordbehandling eller en safe.",
-                "generate_security_key_title": "Generer en sikkerhetsnøkkel",
+                "generate_security_key_title": "Generer en gjenopprettingsnøkkel",
                 "pass_phrase_match_failed": "Det samsvarer ikke.",
                 "pass_phrase_match_success": "Det samsvarer!",
                 "phrase_strong_enough": "Flott! Denne sikkerhetsfrasen ser sterk nok ut.",
@@ -2614,7 +2636,7 @@
                 "set_phrase_again": "Gå tilbake for å velge på nytt.",
                 "settings_reminder": "Du kan også konfigurere Sikker sikkerhetskopiering og administrere nøklene dine i Innstillinger.",
                 "title_confirm_phrase": "Bekreft sikkerhetsfrasen",
-                "title_save_key": "Lagre sikkerhetsnøkkelen din",
+                "title_save_key": "Lagre gjenopprettingsnøkkelen din",
                 "title_set_phrase": "Angi en sikkerhetsfrase",
                 "unable_to_setup": "Kan ikke sette opp hemmelig lagring",
                 "use_different_passphrase": "Vil du bruke en annen passfrase?",
@@ -3236,9 +3258,9 @@
         "release_announcement_header": "Aktivitetssenter for tråder"
     },
     "time": {
-        "about_day_ago": "cirka 1 dag siden",
-        "about_hour_ago": "cirka 1 time siden",
-        "about_minute_ago": "cirka 1 minutt siden",
+        "about_day_ago": "for omtrent et døgn siden",
+        "about_hour_ago": "omtrent en time siden",
+        "about_minute_ago": "for omtrent et minutt siden",
         "date_at_time": "%(date)s klokken %(time)s",
         "few_seconds_ago": "noen sekunder siden",
         "hours_minutes_seconds_left": "%(hours)st%(minutes)s m%(seconds)s s igjen",
@@ -3445,6 +3467,7 @@
             "left_reason": "%(targetName)s forlot rommet: %(reason)s",
             "no_change": "%(senderName)s gjorde ingen endringer",
             "reject_invite": "%(targetName)s avslo invitasjonen",
+            "reject_invite_reason": "%(targetName)savviste invitasjonen:%(reason)s",
             "remove_avatar": "%(senderName)s fjernet profilbildet sitt",
             "remove_name": "%(senderName)s fjernet visningsnavnet sitt (%(oldDisplayName)s)",
             "set_avatar": "%(senderName)s valgte seg et profilbilde",
@@ -3608,18 +3631,19 @@
                 "ble invitert %(count)s ganger": "other"
             },
             "joined": {
-                "%(oneUser)s ble med %(count)s ganger": "other",
-                "%(oneUser)s ble med": "one"
+                "one": "%(oneUser)sble med",
+                "other": "%(oneUser)sble med %(count)s ganger"
             },
             "joined_and_left": {
                 "%(oneUser)sble med og forlot igjen": "one"
             },
             "joined_and_left_multiple": {
-                "%(severalUsers)sble med og forlot igjen": "one"
+                "one": "%(severalUsers)sble med og forlot",
+                "other": "%(severalUsers)sble med og forlot %(count)s ganger"
             },
             "joined_multiple": {
-                "%(severalUsers)s ble med %(count)s ganger": "other",
-                "%(severalUsers)s ble med": "one"
+                "one": "%(severalUsers)sble med",
+                "other": "%(severalUsers)sble med %(count)s ganger"
             },
             "kicked": {
                 "one": "ble fjernet",
@@ -3662,7 +3686,8 @@
                 "other": "%(severalUsers)sfjernet %(count)s meldinger"
             },
             "rejected_invite": {
-                "%(oneUser)savslo invitasjonen sin": "one"
+                "one": "%(oneUser)savviste invitasjonen",
+                "other": "%(oneUser)savviste invitasjonen deres %(count)s ganger"
             },
             "rejected_invite_multiple": {
                 "one": "%(severalUsers)savviste invitasjonene deres",
@@ -3753,8 +3778,8 @@
         "title_progress": "Last opp filer (%(current)s av %(total)s)",
         "upload_all_button": "Last opp alle",
         "upload_n_others_button": {
-            "Last opp %(count)s andre filer": "other",
-            "Last opp %(count)s annen fil": "one"
+            "one": "Last opp %(count)s en annen fil",
+            "other": "Last opp %(count)s andre filer"
         }
     },
     "user_info": {
@@ -3794,8 +3819,8 @@
         "promote_warning": "Du vil ikke kunne angre denne endringen ettersom du promoterer brukeren til å ha samme tilgangsnivå som deg selv.",
         "redact": {
             "confirm_button": {
-                "Slett %(count)s meldinger": "other",
-                "Slett 1 melding": "one"
+                "one": "Fjern 1 melding",
+                "other": "Fjern %(count)s meldinger"
             },
             "confirm_description_1": {
                 "one": "Du er i ferd med å fjerne %(count)s melding fra %(user)s. Dette vil fjerne dem permanent for alle i samtalen. Ønsker du å fortsette?",

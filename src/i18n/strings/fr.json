@@ -80,12 +80,14 @@
         "maximise": "Maximiser",
         "mention": "Mentionner",
         "minimise": "Minimiser",
+        "new_message": "Nouveau message",
         "new_room": "Nouveau salon",
         "new_video_room": "Nouveau salon visio",
         "next": "Suivant",
         "no": "Non",
         "ok": "OK",
         "open": "Ouvrir",
+        "open_menu": "Ouvrir le menu",
         "pause": "Pause",
         "pin": "Épingler",
         "play": "Lecture",
@@ -1243,6 +1245,7 @@
         "change": "Changer le serveur d’identité",
         "change_prompt": "Se déconnecter du serveur d’identité <current /> et se connecter à <new /> à la place ?",
         "change_server_prompt": "Si vous ne voulez pas utiliser <server /> pour découvrir et être découvrable par les contacts que vous connaissez, saisissez un autre serveur d’identité ci-dessous.",
+        "changed": "Votre serveur d’identité a été changé",
         "checking": "Vérification du serveur",
         "description_connected": "Vous utilisez actuellement <server></server> pour découvrir et être découvert par des contacts existants que vous connaissez. Vous pouvez changer votre serveur d’identité ci-dessous.",
         "description_disconnected": "Vous n’utilisez actuellement aucun serveur d’identité. Pour découvrir et être découvert par les contacts existants que vous connaissez, ajoutez-en un ci-dessous.",
@@ -1286,7 +1289,8 @@
         "use_desktop_heading": "Utilisez plutôt %(brand)s Desktop",
         "use_mobile_heading": "Utilisez plutôt %(brand)s sur votre appareil mobile",
         "use_mobile_heading_after_desktop": "Ou utilisez notre application mobile",
-        "windows": "Windows (%(bits)s-bit)"
+        "windows_64bit": "Windows (64 bits)",
+        "windows_arm_64bit": "Windows (ARM 64 bits)"
     },
     "info_tooltip_title": "Informations",
     "integration_manager": {
@@ -2093,6 +2097,7 @@
             "other": "Vous êtes en train de rejoindre %(count)s salons"
         },
         "notification_options": "Paramètres de notifications",
+        "open_space_menu": "Ouvrir le menu de l’espace",
         "redacting_messages_status": {
             "one": "Actuellement en train de supprimer les messages dans %(count)s salon",
             "other": "Actuellement en train de supprimer les messages dans %(count)s salons"
@@ -2107,6 +2112,10 @@
         "sort_by_activity": "Activité",
         "sort_by_alphabet": "A-Z",
         "sort_unread_first": "Afficher les salons non lus en premier",
+        "space_menu": {
+            "home": "Accueil de l’espace",
+            "space_settings": "Paramètres de l'espace"
+        },
         "space_menu_label": "Menu %(spaceName)s",
         "sublist_options": "Options de liste",
         "suggested_rooms_heading": "Salons recommandés"
