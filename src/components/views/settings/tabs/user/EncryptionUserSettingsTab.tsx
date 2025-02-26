@@ -149,9 +149,10 @@ export function EncryptionUserSettingsTab({ initialState = "loading" }: Encrypti
  * we don't so much care about the value of the account data, "m.org.matrix.custom.backup_disabled"
  * flag here: what's important is whether key backup is actually happening or not).
  *
- * If the user needs to set up the encryption, the state will be set to "set_up_encryption".
- * If the user secrets are not cached, the state will be set to "secrets_not_cached".
- * Otherwise, the state will be set to "main".
+ * If cross signing is set up, key backup is enabled and the secrets are cached, the state will be set to "main".
+ * If cross signing is not set up, the state will be set to "set_up_encryption".
+ * If key backup is not enabled, the state will be set to "key_storage_disabled".
+ * If secrets are missing, the state will be set to "secrets_not_cached".
  *
  * The state is set once when the component is first mounted.
  * Also returns a callback function which can be called to re-run the logic.
