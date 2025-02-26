@@ -2102,6 +2102,7 @@
             "other": "Приєднання до %(count)s кімнат"
         },
         "notification_options": "Параметри сповіщень",
+        "open_space_menu": "Відкрити меню простору",
         "redacting_messages_status": {
             "one": "Триває видалення повідомлень в %(count)s кімнаті",
             "other": "Триває видалення повідомлень у %(count)s кімнатах"
@@ -2116,6 +2117,10 @@
         "sort_by_activity": "Активністю",
         "sort_by_alphabet": "А-Я",
         "sort_unread_first": "Спочатку показувати кімнати з непрочитаними повідомленнями",
+        "space_menu": {
+            "home": "Домівка простору",
+            "space_settings": "Налаштування простору"
+        },
         "space_menu_label": "%(spaceName)s — меню",
         "sublist_options": "Параметри переліку",
         "suggested_rooms_heading": "Пропоновані кімнати"
