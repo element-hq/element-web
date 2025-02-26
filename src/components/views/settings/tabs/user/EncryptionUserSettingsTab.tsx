@@ -145,7 +145,9 @@ export function EncryptionUserSettingsTab({ initialState = "loading" }: Encrypti
  * Hook to check if the user needs:
  * - to go through the SetupEncryption flow.
  * - to enter their recovery key, if the secrets are not cached locally.
- * ...and also whether key backup is enabled.
+ * ...and also whether megolm key backup is enabled (which we use to set the state of the button:
+ * we don't so much care about the value of the account data, "m.org.matrix.custom.backup_disabled"
+ * flag here: what's important is whether key backup is actually happening or not).
  *
  * If the user needs to set up the encryption, the state will be set to "set_up_encryption".
  * If the user secrets are not cached, the state will be set to "secrets_not_cached".
