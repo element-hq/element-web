@@ -299,6 +299,14 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         opts.threadSupport = true;
 
         if (SettingsStore.getValue("feature_sliding_sync")) {
+            throw new Error(
+                "Legacy sliding sync is no longer supported: please log out and back in to enable the new sliding sync flag",
+            );
+        }
+
+        // If the user has enabled the labs feature for sliding sync, set it up
+        // otherwise check if the feature is supported
+        if (SettingsStore.getValue("feature_simplified_sliding_sync")) {
             opts.slidingSync = await SlidingSyncManager.instance.setup(this.matrixClient);
         } else {
             SlidingSyncManager.instance.checkSupport(this.matrixClient);
