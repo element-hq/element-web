@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import type { Room } from "matrix-js-sdk/src/matrix";
 import type { Sorter } from "./sorters";
+import type { Filter, Filters } from "./filters";
 import { RoomNode } from "./RoomNode";
 import { shouldPromote } from "./utils";
 import { Level } from "./Level";
@@ -20,7 +21,10 @@ export class RoomSkipList implements Iterable<Room> {
     private roomNodeMap: Map<string, RoomNode> = new Map();
     public initialized: boolean = false;
 
-    public constructor(private sorter: Sorter) {}
+    public constructor(
+        private sorter: Sorter,
+        private filters: Filter[] = [],
+    ) {}
 
     private reset(): void {
         this.levels = [new Level(0)];
@@ -35,6 +39,7 @@ export class RoomSkipList implements Iterable<Room> {
         const sortedRoomNodes = this.sorter.sort(rooms).map((room) => new RoomNode(room));
         let currentLevel = this.levels[0];
         for (const node of sortedRoomNodes) {
+            node.calculateFilters(this.filters);
             currentLevel.setNext(node);
             this.roomNodeMap.set(node.room.roomId, node);
         }
@@ -81,6 +86,7 @@ export class RoomSkipList implements Iterable<Room> {
         this.removeRoom(room);
 
         const newNode = new RoomNode(room);
+        newNode.calculateFilters(this.filters);
         this.roomNodeMap.set(room.roomId, newNode);
 
         /**
@@ -159,6 +165,10 @@ export class RoomSkipList implements Iterable<Room> {
         return new SortedRoomIterator(this.levels[0].head!);
     }
 
+    public getFiltered(filterKeys: Filters[]): SortedFilteredIterator {
+        return new SortedFilteredIterator(this.levels[0].head!, filterKeys);
+    }
+
     /**
      * The number of rooms currently in the skip list.
      */
@@ -172,6 +182,29 @@ class SortedRoomIterator implements Iterator<Room> {
 
     public next(): IteratorResult<Room> {
         const current = this.current;
+        if (!current) return { value: undefined, done: true };
+        this.current = current.next[0];
+        return {
+            value: current.room,
+        };
+    }
+}
+
+class SortedFilteredIterator implements Iterator<Room> {
+    public constructor(
+        private current: RoomNode,
+        private filterKeys: Filters[],
+    ) {}
+
+    public [Symbol.iterator](): SortedFilteredIterator {
+        return this;
+    }
+
+    public next(): IteratorResult<Room> {
+        let current = this.current;
+        while (current && this.filterKeys.some((key) => !current.filters.get(key))) {
+            current = current.next[0];
+        }
         if (!current) return { value: undefined, done: true };
         this.current = current.next[0];
         return {
