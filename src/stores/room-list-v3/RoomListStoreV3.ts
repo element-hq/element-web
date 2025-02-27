@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import type { EmptyObject, Room } from "matrix-js-sdk/src/matrix";
 import type { MatrixDispatcher } from "../../dispatcher/dispatcher";
 import type { ActionPayload } from "../../dispatcher/payloads";
+import type { Filter } from "./skip-list/filters";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import SettingsStore from "../../settings/SettingsStore";
 import { VisibilityProvider } from "../room-list/filters/VisibilityProvider";
@@ -16,10 +17,12 @@ import { LISTS_UPDATE_EVENT } from "../room-list/RoomListStore";
 import { RoomSkipList } from "./skip-list/RoomSkipList";
 import { RecencySorter } from "./skip-list/sorters/RecencySorter";
 import { AlphabeticSorter } from "./skip-list/sorters/AlphabeticSorter";
+import { FavouriteFilter } from "./skip-list/filters/FavouriteFilter";
 
 export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     private roomSkipList?: RoomSkipList;
     private readonly msc3946ProcessDynamicPredecessor: boolean;
+    private filters: Filter[] = [new FavouriteFilter()];
 
     public constructor(dispatcher: MatrixDispatcher) {
         super(dispatcher);
@@ -54,7 +57,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     protected async onReady(): Promise<any> {
         if (this.roomSkipList?.initialized || !this.matrixClient) return;
         const sorter = new RecencySorter(this.matrixClient.getSafeUserId());
-        this.roomSkipList = new RoomSkipList(sorter);
+        this.roomSkipList = new RoomSkipList(sorter, this.filters);
         const rooms = this.getRooms();
         this.roomSkipList.seed(rooms);
         this.emit(LISTS_UPDATE_EVENT);
