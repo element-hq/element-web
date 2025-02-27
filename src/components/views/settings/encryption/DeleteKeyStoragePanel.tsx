@@ -7,7 +7,7 @@
 
 import { Breadcrumb, Button, VisualList, VisualListItem } from "@vector-im/compound-web";
 import CrossIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
-import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
+import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
 import React, { useCallback, useState } from "react";
 
 import { _t } from "../../../../languageHandler";
