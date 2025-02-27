@@ -410,7 +410,7 @@
         "failed_send_logs": "Failed to send logs. Could not contact the rageshake server.",
         "failed_send_logs_causes": {
             "disallowed_app": "Your bug report was rejected. The rageshake server does not support this application.",
-            "rejected_generic": "Your bug report was rejected. <p>%(errorEN)s</p>",
+            "rejected_generic": "Your bug report was rejected. The rageshake server rejected the contents of the report due to a policy.",
             "rejected_recovery_key": "Your bug report was rejected for safety reasons, as it contained a recovery key.",
             "rejected_version": "Your bug report was rejected as the version you are running is too old.",
             "unknown_error": "The rageshake server encountered an unknown error and could not handle the report."

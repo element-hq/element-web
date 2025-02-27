@@ -25,6 +25,7 @@ import { sendSentryReport } from "../../../sentry";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { getBrowserSupport } from "../../../SupportedBrowser";
+import { Link } from "@vector-im/compound-web";
 
 interface IProps {
     onFinished: (success: boolean) => void;
@@ -91,30 +92,35 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
 
     private getErrorText(error: Error|RageshakeError): ReactNode {
         if (error instanceof RageshakeError) {
+            let errorText;
             switch (error.errorcode) {
                 case "RS_DISALLOWED_APP":
-                    return _t("bug_reporting|failed_send_logs_causes|disallowed_app");
+                    errorText = _t("bug_reporting|failed_send_logs_causes|disallowed_app");
+                    break;
                 case "RS_REJECTED_BAD_VERSION":
-                    return _t("bug_reporting|failed_send_logs_causes|rejected_version");
+                    errorText = _t("bug_reporting|failed_send_logs_causes|rejected_version");
+                    break;
                 case "RS_REJECTED_UNEXPECTED_RECOVERY_KEY":
-                    return _t("bug_reporting|failed_send_logs_causes|rejected_recovery_key");
+                    errorText = _t("bug_reporting|failed_send_logs_causes|rejected_recovery_key");
+                    break;
                 default:
                     if (error.errorcode?.startsWith('RS_REJECTED')) {
-                        return _t("bug_reporting|failed_send_logs_causes|rejected_generic",
-                            {errorEN: error.error},
-                            {
-                                p: (sub) => (
-                                    <p>
-                                        {sub}
-                                    </p>
-                                ),
-                            }
-                        );
+                        errorText = _t("bug_reporting|failed_send_logs_causes|rejected_generic");
+                    } else {
+                        errorText = _t("bug_reporting|failed_send_logs_causes|unknown_error");
                     }
-                    return _t("bug_reporting|failed_send_logs_causes|unknown_error");
+                    break;
             }
+            return <>
+                <p>{errorText}</p>
+                {error.policyURL && <Link size="medium"
+                    target="_blank"
+                    href={error.policyURL}
+                >{_t("action|learn_more")}</Link>}
+            </>
+        } else {
+            return <p>{_t("bug_reporting|failed_send_logs")}</p>;
         }
-        return _t("bug_reporting|failed_send_logs");
     }
 
     private onSubmit = (): void => {
