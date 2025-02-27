@@ -18,7 +18,6 @@ module.exports = {
     ],
     plugins: [
         "@babel/plugin-proposal-export-default-from",
-        ["@babel/plugin-proposal-decorators", { version: "2023-11" }],
         "@babel/plugin-transform-numeric-separator",
         "@babel/plugin-transform-object-rest-spread",
         "@babel/plugin-transform-optional-chaining",
@@ -32,5 +31,7 @@ module.exports = {
 
         "@babel/plugin-syntax-dynamic-import",
         "@babel/plugin-transform-runtime",
+        ["@babel/plugin-proposal-decorators", { version: "2023-11" }], // only needed by the js-sdk
+        "@babel/plugin-transform-class-static-block", // only needed by the js-sdk for decorators
     ],
 };
