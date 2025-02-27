@@ -13,6 +13,9 @@ import { mkMessage, mkStubRoom, stubClient } from "../../../../test-utils";
 import { RoomSkipList } from "../../../../../src/stores/room-list-v3/skip-list/RoomSkipList";
 import { RecencySorter } from "../../../../../src/stores/room-list-v3/skip-list/sorters/RecencySorter";
 import { AlphabeticSorter } from "../../../../../src/stores/room-list-v3/skip-list/sorters/AlphabeticSorter";
+import { DefaultTagID } from "../../../../../src/stores/room-list/models";
+import { FavouriteFilter } from "../../../../../src/stores/room-list-v3/skip-list/filters/FavouriteFilter";
+import { Filters } from "../../../../../src/stores/room-list-v3/skip-list/filters";
 
 describe("RoomSkipList", () => {
     function getMockedRooms(client: MatrixClient, roomCount: number = 100): Room[] {
@@ -41,100 +44,120 @@ describe("RoomSkipList", () => {
         return { skipList, rooms, totalRooms: rooms.length, sorter };
     }
 
-    it("Rooms are in sorted order after initial seed", () => {
-        const { skipList, totalRooms } = generateSkipList();
-        expect(skipList.size).toEqual(totalRooms);
-        const sortedRooms = [...skipList];
-        for (let i = 0; i < totalRooms; ++i) {
-            expect(sortedRooms[i].roomId).toEqual(`!foo${totalRooms - i - 1}:matrix.org`);
-        }
-    });
-
-    it("Tolerates multiple, repeated inserts of existing rooms", () => {
-        const { skipList, rooms, totalRooms } = generateSkipList();
-        // Let's choose 5 rooms from the list
-        const toInsert = [23, 76, 2, 90, 66].map((i) => rooms[i]);
-        for (const room of toInsert) {
-            // Insert this room 10 times
-            for (let i = 0; i < 10; ++i) {
-                skipList.addRoom(room);
-            }
-        }
-        // Sorting order should be the same as before
-        const sortedRooms = [...skipList];
-        for (let i = 0; i < totalRooms; ++i) {
-            expect(sortedRooms[i].roomId).toEqual(`!foo${totalRooms - i - 1}:matrix.org`);
-        }
-    });
-
-    it("Sorting order is maintained when rooms are inserted", () => {
-        const { skipList, rooms, totalRooms } = generateSkipList();
-        // To simulate the worst case, let's say the order gets reversed one by one
-        for (let i = 0; i < rooms.length; ++i) {
-            const room = rooms[i];
-            const event = mkMessage({
-                room: room.roomId,
-                user: `@foo${i}:matrix.org`,
-                ts: totalRooms - i,
-                event: true,
-            });
-            room.timeline.push(event);
-            skipList.addRoom(room);
-            expect(skipList.size).toEqual(rooms.length);
-        }
-        const sortedRooms = [...skipList];
-        for (let i = 0; i < totalRooms; ++i) {
-            expect(sortedRooms[i].roomId).toEqual(`!foo${i}:matrix.org`);
-        }
-    });
-
-    it("Re-sort works when sorter is swapped", () => {
-        const { skipList, rooms, sorter } = generateSkipList();
-        const sortedByRecency = [...rooms].sort((a, b) => sorter.comparator(a, b));
-        expect(sortedByRecency).toEqual([...skipList]);
-        // Now switch over to alphabetic sorter
-        const newSorter = new AlphabeticSorter();
-        skipList.useNewSorter(newSorter, rooms);
-        const sortedByAlphabet = [...rooms].sort((a, b) => newSorter.comparator(a, b));
-        expect(sortedByAlphabet).toEqual([...skipList]);
-    });
-
-    describe("Empty skip list functionality", () => {
-        it("Insertions into empty skip list works", () => {
-            // Create an empty skip list
-            const client = stubClient();
-            const sorter = new RecencySorter(client.getSafeUserId());
-            const roomSkipList = new RoomSkipList(sorter);
-            expect(roomSkipList.size).toEqual(0);
-            roomSkipList.seed([]);
-            expect(roomSkipList.size).toEqual(0);
-
-            // Create some rooms
-            const totalRooms = 10;
-            const rooms = getMockedRooms(client, totalRooms);
-
-            // Shuffle and insert the rooms
-            for (const room of shuffle(rooms)) {
-                roomSkipList.addRoom(room);
-            }
-
-            expect(roomSkipList.size).toEqual(totalRooms);
-            const sortedRooms = [...roomSkipList];
+    describe("Sorting", () => {
+        it("Rooms are in sorted order after initial seed", () => {
+            const { skipList, totalRooms } = generateSkipList();
+            expect(skipList.size).toEqual(totalRooms);
+            const sortedRooms = [...skipList];
             for (let i = 0; i < totalRooms; ++i) {
                 expect(sortedRooms[i].roomId).toEqual(`!foo${totalRooms - i - 1}:matrix.org`);
             }
         });
 
-        it("Tolerates deletions until skip list is empty", () => {
-            const { skipList, rooms } = generateSkipList(10);
-            const sorted = [...skipList];
-            for (const room of shuffle(rooms)) {
-                skipList.removeRoom(room);
-                const i = sorted.findIndex((r) => r.roomId === room.roomId);
-                sorted.splice(i, 1);
-                expect([...skipList]).toEqual(sorted);
+        it("Tolerates multiple, repeated inserts of existing rooms", () => {
+            const { skipList, rooms, totalRooms } = generateSkipList();
+            // Let's choose 5 rooms from the list
+            const toInsert = [23, 76, 2, 90, 66].map((i) => rooms[i]);
+            for (const room of toInsert) {
+                // Insert this room 10 times
+                for (let i = 0; i < 10; ++i) {
+                    skipList.addRoom(room);
+                }
             }
-            expect(skipList.size).toEqual(0);
+            // Sorting order should be the same as before
+            const sortedRooms = [...skipList];
+            for (let i = 0; i < totalRooms; ++i) {
+                expect(sortedRooms[i].roomId).toEqual(`!foo${totalRooms - i - 1}:matrix.org`);
+            }
+        });
+
+        it("Sorting order is maintained when rooms are inserted", () => {
+            const { skipList, rooms, totalRooms } = generateSkipList();
+            // To simulate the worst case, let's say the order gets reversed one by one
+            for (let i = 0; i < rooms.length; ++i) {
+                const room = rooms[i];
+                const event = mkMessage({
+                    room: room.roomId,
+                    user: `@foo${i}:matrix.org`,
+                    ts: totalRooms - i,
+                    event: true,
+                });
+                room.timeline.push(event);
+                skipList.addRoom(room);
+                expect(skipList.size).toEqual(rooms.length);
+            }
+            const sortedRooms = [...skipList];
+            for (let i = 0; i < totalRooms; ++i) {
+                expect(sortedRooms[i].roomId).toEqual(`!foo${i}:matrix.org`);
+            }
+        });
+
+        it("Re-sort works when sorter is swapped", () => {
+            const { skipList, rooms, sorter } = generateSkipList();
+            const sortedByRecency = [...rooms].sort((a, b) => sorter.comparator(a, b));
+            expect(sortedByRecency).toEqual([...skipList]);
+            // Now switch over to alphabetic sorter
+            const newSorter = new AlphabeticSorter();
+            skipList.useNewSorter(newSorter, rooms);
+            const sortedByAlphabet = [...rooms].sort((a, b) => newSorter.comparator(a, b));
+            expect(sortedByAlphabet).toEqual([...skipList]);
+        });
+
+        describe("Empty skip list functionality", () => {
+            it("Insertions into empty skip list works", () => {
+                // Create an empty skip list
+                const client = stubClient();
+                const sorter = new RecencySorter(client.getSafeUserId());
+                const roomSkipList = new RoomSkipList(sorter);
+                expect(roomSkipList.size).toEqual(0);
+                roomSkipList.seed([]);
+                expect(roomSkipList.size).toEqual(0);
+
+                // Create some rooms
+                const totalRooms = 10;
+                const rooms = getMockedRooms(client, totalRooms);
+
+                // Shuffle and insert the rooms
+                for (const room of shuffle(rooms)) {
+                    roomSkipList.addRoom(room);
+                }
+
+                expect(roomSkipList.size).toEqual(totalRooms);
+                const sortedRooms = [...roomSkipList];
+                for (let i = 0; i < totalRooms; ++i) {
+                    expect(sortedRooms[i].roomId).toEqual(`!foo${totalRooms - i - 1}:matrix.org`);
+                }
+            });
+
+            it("Tolerates deletions until skip list is empty", () => {
+                const { skipList, rooms } = generateSkipList(10);
+                const sorted = [...skipList];
+                for (const room of shuffle(rooms)) {
+                    skipList.removeRoom(room);
+                    const i = sorted.findIndex((r) => r.roomId === room.roomId);
+                    sorted.splice(i, 1);
+                    expect([...skipList]).toEqual(sorted);
+                }
+                expect(skipList.size).toEqual(0);
+            });
+        });
+    });
+
+    describe("Filtering", () => {
+        it("Skiplist produces filtered output", () => {
+            const client = stubClient();
+            const sorter = new RecencySorter(client.getSafeUserId());
+            const skipList = new RoomSkipList(sorter, [new FavouriteFilter()]);
+            const rooms = getMockedRooms(client);
+            // Let's say that every other room is a favourite room
+            for (const [i, room] of rooms.entries()) {
+                if (i % 2 === 0) room.tags[DefaultTagID.Favourite] = {};
+            }
+            skipList.seed(rooms);
+
+            const expected = sorter.sort(rooms).filter((_, i) => i % 2 === 0);
+            const result = Array.from(skipList.getFiltered([Filters.FavouriteFilter]));
+            expect(result).toEqual(expected);
         });
     });
 });
