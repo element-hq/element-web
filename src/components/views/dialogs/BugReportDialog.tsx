@@ -10,6 +10,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ReactNode } from "react";
+import { Link } from "@vector-im/compound-web";
 
 import SdkConfig from "../../../SdkConfig";
 import Modal from "../../../Modal";
@@ -25,7 +26,6 @@ import { sendSentryReport } from "../../../sentry";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { getBrowserSupport } from "../../../SupportedBrowser";
-import { Link } from "@vector-im/compound-web";
 
 interface IProps {
     onFinished: (success: boolean) => void;
