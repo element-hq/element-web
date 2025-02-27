@@ -149,13 +149,15 @@ describe("RoomSkipList", () => {
             const sorter = new RecencySorter(client.getSafeUserId());
             const skipList = new RoomSkipList(sorter, [new FavouriteFilter()]);
             const rooms = getMockedRooms(client);
+
             // Let's say that every other room is a favourite room
-            for (const [i, room] of rooms.entries()) {
+            const sortedRooms = sorter.sort(rooms);
+            for (const [i, room] of sortedRooms.entries()) {
                 if (i % 2 === 0) room.tags[DefaultTagID.Favourite] = {};
             }
             skipList.seed(rooms);
 
-            const expected = sorter.sort(rooms).filter((_, i) => i % 2 === 0);
+            const expected = sortedRooms.filter((_, i) => i % 2 === 0);
             const result = Array.from(skipList.getFiltered([Filters.FavouriteFilter]));
             expect(result).toEqual(expected);
         });
