@@ -521,8 +521,7 @@ export const KEYBOARD_SHORTCUTS: IKeyboardShortcuts = {
     [KeyBindingAction.GoToHome]: {
         default: {
             ctrlKey: true,
-            altKey: !IS_MAC,
-            shiftKey: IS_MAC,
+            altKey: true,
             key: Key.H,
         },
         displayName: _td("keyboard|go_home_view"),
@@ -585,7 +584,7 @@ export const KEYBOARD_SHORTCUTS: IKeyboardShortcuts = {
     },
     [KeyBindingAction.ToggleHiddenEventVisibility]: {
         default: {
-            ctrlOrCmdKey: true,
+            ctrlKey: true,
             shiftKey: true,
             key: Key.H,
         },
