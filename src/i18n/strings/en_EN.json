@@ -2479,6 +2479,7 @@
                 "breadcrumb_title_forgot": "Forgot your recovery key? You’ll need to reset your identity.",
                 "breadcrumb_warning": "Only do this if you believe your account has been compromised.",
                 "details_title": "Encryption details",
+                "do_not_close_warning": "Do not close this window until the reset is finished",
                 "export_keys": "Export keys",
                 "import_keys": "Import keys",
                 "other_people_device_description": "By default in encrypted rooms, do not send encrypted messages to anyone until you’ve verified them",
