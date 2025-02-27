@@ -9,12 +9,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type ReactNode } from "react";
 
 import SdkConfig from "../../../SdkConfig";
 import Modal from "../../../Modal";
 import { _t } from "../../../languageHandler";
-import sendBugReport, { downloadBugReport } from "../../../rageshake/submit-rageshake";
+import sendBugReport, { downloadBugReport, RageshakeError } from "../../../rageshake/submit-rageshake";
 import AccessibleButton from "../elements/AccessibleButton";
 import QuestionDialog from "./QuestionDialog";
 import BaseDialog from "./BaseDialog";
@@ -25,6 +25,7 @@ import { sendSentryReport } from "../../../sentry";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { getBrowserSupport } from "../../../SupportedBrowser";
+import { Link } from "@vector-im/compound-web";
 
 interface IProps {
     onFinished: (success: boolean) => void;
@@ -36,7 +37,7 @@ interface IProps {
 interface IState {
     sendLogs: boolean;
     busy: boolean;
-    err: string | null;
+    err: ReactNode | null;
     issueUrl: string;
     text: string;
     progress: string | null;
@@ -89,6 +90,39 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
         this.props.onFinished(false);
     };
 
+    private getErrorText(error: Error|RageshakeError): ReactNode {
+        if (error instanceof RageshakeError) {
+            let errorText;
+            switch (error.errorcode) {
+                case "RS_DISALLOWED_APP":
+                    errorText = _t("bug_reporting|failed_send_logs_causes|disallowed_app");
+                    break;
+                case "RS_REJECTED_BAD_VERSION":
+                    errorText = _t("bug_reporting|failed_send_logs_causes|rejected_version");
+                    break;
+                case "RS_REJECTED_UNEXPECTED_RECOVERY_KEY":
+                    errorText = _t("bug_reporting|failed_send_logs_causes|rejected_recovery_key");
+                    break;
+                default:
+                    if (error.errorcode?.startsWith('RS_REJECTED')) {
+                        errorText = _t("bug_reporting|failed_send_logs_causes|rejected_generic");
+                    } else {
+                        errorText = _t("bug_reporting|failed_send_logs_causes|unknown_error");
+                    }
+                    break;
+            }
+            return <>
+                <p>{errorText}</p>
+                {error.policyURL && <Link size="medium"
+                    target="_blank"
+                    href={error.policyURL}
+                >{_t("action|learn_more")}</Link>}
+            </>
+        } else {
+            return <p>{_t("bug_reporting|failed_send_logs")}</p>;
+        }
+    }
+
     private onSubmit = (): void => {
         if ((!this.state.text || !this.state.text.trim()) && (!this.state.issueUrl || !this.state.issueUrl.trim())) {
             this.setState({
@@ -126,7 +160,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
                     this.setState({
                         busy: false,
                         progress: null,
-                        err: _t("bug_reporting|failed_send_logs") + `${err.message}`,
+                        err: this.getErrorText(err),
                     });
                 }
             },
