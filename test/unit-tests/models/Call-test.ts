@@ -698,6 +698,23 @@ describe("ElementCall", () => {
             Call.get(room)?.destroy();
         });
 
+        it("should use element call URL from developer settings if present", async () => {
+            const originalGetValue = SettingsStore.getValue;
+            SettingsStore.getValue = (name: SettingKey, roomId: string | null = null, excludeDefault = false): any => {
+                if (name === "Developer.elementCallUrl") {
+                    return "https://call.element.dev";
+                }
+                return excludeDefault
+                    ? originalGetValue(name, roomId, excludeDefault)
+                    : originalGetValue(name, roomId, excludeDefault);
+            };
+            await ElementCall.create(room);
+            const call = ElementCall.get(room);
+            expect(call?.widget.url.startsWith("https://call.element.dev/")).toBeTruthy();
+            SettingsStore.getValue = originalGetValue;
+            call?.destroy();
+        });
+
         it("finds ongoing calls that are created by the session manager", async () => {
             // There is an existing session created by another user in this room.
             client.matrixRTC.getRoomSession.mockReturnValue({

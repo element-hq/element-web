@@ -1679,6 +1679,11 @@
     "@formatjs/intl-localematcher" "0.6.0"
     tslib "2"
 
+"@hughns/element-call-embedded@^1.1.37-rc.1":
+  version "1.1.37-rc.1"
+  resolved "https://registry.yarnpkg.com/@hughns/element-call-embedded/-/element-call-embedded-1.1.37-rc.1.tgz#b6929e4cf045f45332e1d7302ac2abf5c5fe9607"
+  integrity sha512-VIIHPKtaaBhTDqKVS0uSuv07JXSQgCUW4lftrfkKlvUW01NnPKW4x9oCT/h9AJsXXPQTt7UwA8Y7w4/mRqOvzA==
+
 "@humanwhocodes/config-array@^0.13.0":
   version "0.13.0"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.13.0.tgz#fb907624df3256d04b9aa2df50d7aa97ec648748"
