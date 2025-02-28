@@ -17,6 +17,11 @@ import { RoomSkipList } from "./skip-list/RoomSkipList";
 import { RecencySorter } from "./skip-list/sorters/RecencySorter";
 import { AlphabeticSorter } from "./skip-list/sorters/AlphabeticSorter";
 
+/**
+ * This store allows for fast retrieval of the room list in a sorted and filtered manner.
+ * This is the third such implementation hence the "V3".
+ * This store is being actively developed so expect the methods to change in future.
+ */
 export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     private roomSkipList?: RoomSkipList;
     private readonly msc3946ProcessDynamicPredecessor: boolean;
