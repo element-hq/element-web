@@ -31,7 +31,7 @@ import { DeleteKeyStoragePanel } from "../../encryption/DeleteKeyStoragePanel";
  * The state in the encryption settings tab.
  *  - "loading": We are checking if the device is verified.
  *  - "main": The main panel with all the sections (Key storage, recovery, advanced).
- * - "key_storage_disabled": The user has chosen to disable key storage and options are unavailable as a result.
+ *  - "key_storage_disabled": The user has chosen to disable key storage and options are unavailable as a result.
  *  - "set_up_encryption": The panel to show when the user is setting up their encryption.
  *                         This happens when the user doesn't have cross-signing enabled, or their current device is not verified.
  *  - "change_recovery_key": The panel to show when the user is changing their recovery key.
@@ -39,22 +39,22 @@ import { DeleteKeyStoragePanel } from "../../encryption/DeleteKeyStoragePanel";
  *  - "set_recovery_key": The panel to show when the user is setting up their recovery key.
  *                        This happens when the user doesn't have a key a recovery key and the user clicks on "Set up recovery key" button of the RecoveryPanel.
  *  - "reset_identity_compromised": The panel to show when the user is resetting their identity, in te case where their key is compromised.
- * - "reset_identity_forgot": The panel to show when the user is resetting their identity, in the case where they forgot their recovery key.
- * - "secrets_not_cached": The secrets are not cached locally. This can happen if we verified another device and secret-gossiping failed, or the other device itself lacked the secrets.
+ *  - "reset_identity_forgot": The panel to show when the user is resetting their identity, in the case where they forgot their recovery key.
+ *  - "secrets_not_cached": The secrets are not cached locally. This can happen if we verified another device and secret-gossiping failed, or the other device itself lacked the secrets.
  *                          If the "set_up_encryption" and "secrets_not_cached" conditions are both filled, "set_up_encryption" prevails.
- * - "key_storage_delete": The confirmation page asking if the user really wants to turn off key storage.
+ *  - "key_storage_delete": The confirmation page asking if the user really wants to turn off key storage.
  */
 export type State =
     | "loading"
     | "main"
+    | "key_storage_disabled"
     | "set_up_encryption"
     | "change_recovery_key"
     | "set_recovery_key"
     | "reset_identity_compromised"
     | "reset_identity_forgot"
     | "secrets_not_cached"
-    | "key_storage_delete"
-    | "key_storage_disabled";
+    | "key_storage_delete";
 
 interface EncryptionUserSettingsTabProps {
     /**
