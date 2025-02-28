@@ -144,6 +144,9 @@ const DEFAULT_CONFIG = {
         enabled: true,
         include_offline_users_on_sync: true,
     },
+    room_list_publication_rules: [
+        { action: "allow" },
+    ],
 };
 
 export type SynapseConfig = Partial<typeof DEFAULT_CONFIG>;
