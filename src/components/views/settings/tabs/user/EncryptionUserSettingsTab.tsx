@@ -146,7 +146,8 @@ export function EncryptionUserSettingsTab({ initialState = "loading" }: Encrypti
  * - to go through the SetupEncryption flow.
  * - to enter their recovery key, if the secrets are not cached locally.
  * ...and also whether megolm key backup is enabled (which we use to set the state of the 'allow key storage' toggle):
- * we don't so much care about the value of the account data, "m.org.matrix.custom.backup_disabled"
+ * we don't so much care about the value of the account data, "m.org.matrix.custom.backup_disabled" although we do use it
+ * as a trigger to update as there's no event emitted for megolm key backup enabled state changing.
  * flag here: what's important is whether key backup is actually happening or not).
  *
  * If cross signing is set up, key backup is enabled and the secrets are cached, the state will be set to "main".
@@ -189,7 +190,9 @@ function useCheckEncryptionState(state: State, setState: (state: State) => void)
 
     useTypedEventEmitter(matrixClient, ClientEvent.AccountData, (event: MatrixEvent): void => {
         const type = event.getType();
-        // Recheck the status if this account data has been updated as this implies it has changed
+        // Recheck the status if this account data has been updated as this implies the status
+        // of megolm key backup has changed on the user's account (there's no event emitted for megolm
+        // key backup enabled state changing, so we use this instead).
         if (type === "m.org.matrix.custom.backup_disabled") {
             checkEncryptionState();
         }
