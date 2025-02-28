@@ -11,6 +11,7 @@ import { AsyncStoreWithClient } from "../../../../src/stores/AsyncStoreWithClien
 import { RecencySorter } from "../../../../src/stores/room-list-v3/skip-list/sorters/RecencySorter";
 import { stubClient } from "../../../test-utils";
 import { getMockedRooms } from "./skip-list/getMockedRooms";
+import { AlphabeticSorter } from "../../../../src/stores/room-list-v3/skip-list/sorters/AlphabeticSorter";
 
 describe("RoomListStoreV3", () => {
     async function getRoomListStore() {
@@ -33,6 +34,20 @@ describe("RoomListStoreV3", () => {
         const { store, rooms, client } = await getRoomListStore();
         const sorter = new RecencySorter(client.getSafeUserId());
         const sortedRooms = sorter.sort(rooms);
+        expect(store.getSortedRooms()).toEqual(sortedRooms);
+    });
+
+    it("Provides a way to resort", async () => {
+        const { store, rooms, client } = await getRoomListStore();
+
+        // List is sorted by recency, sort by alphabetical now
+        store.useAlphabeticSorting();
+        let sortedRooms = new AlphabeticSorter().sort(rooms);
+        expect(store.getSortedRooms()).toEqual(sortedRooms);
+
+        // Go back to recency sorting
+        store.useRecencySorting();
+        sortedRooms = new RecencySorter(client.getSafeUserId()).sort(rooms);
         expect(store.getSortedRooms()).toEqual(sortedRooms);
     });
 });
