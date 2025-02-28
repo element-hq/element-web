@@ -26,17 +26,26 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         this.msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
     }
 
+    /**
+     * Get a list of unsorted, unfiltered rooms.
+     */
     public getRooms(): Room[] {
         let rooms = this.matrixClient?.getVisibleRooms(this.msc3946ProcessDynamicPredecessor) ?? [];
         rooms = rooms.filter((r) => VisibilityProvider.instance.isRoomVisible(r));
         return rooms;
     }
 
+    /**
+     * Get a list of sorted rooms.
+     */
     public getSortedRooms(): Room[] {
         if (this.roomSkipList?.initialized) return Array.from(this.roomSkipList);
         else return [];
     }
 
+    /**
+     * Re-sort the list of rooms by alphabetic order.
+     */
     public useAlphabeticSorting(): void {
         if (this.roomSkipList) {
             const sorter = new AlphabeticSorter();
@@ -44,6 +53,9 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         }
     }
 
+    /**
+     * Re-sort the list of rooms by recency.
+     */
     public useRecencySorting(): void {
         if (this.roomSkipList && this.matrixClient) {
             const sorter = new RecencySorter(this.matrixClient?.getSafeUserId() ?? "");
