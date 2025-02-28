@@ -105,7 +105,7 @@ export function EncryptionUserSettingsTab({ initialState = "loading" }: Encrypti
                             <Separator kind="section" />
                         </>
                     )}
-                    <AdvancedPanel onResetIdentityClick={() => setState("reset_identity_compromised")} />{" "}
+                    <AdvancedPanel onResetIdentityClick={() => setState("reset_identity_compromised")} />
                 </>
             );
             break;
