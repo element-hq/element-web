@@ -193,6 +193,10 @@ function useCheckEncryptionState(state: State, setState: (state: State) => void)
         // Recheck the status if this account data has been updated as this implies the status
         // of megolm key backup has changed on the user's account (there's no event emitted for megolm
         // key backup enabled state changing, so we use this instead).
+        // Note that this could potentially update the UI while the user is trying to do something, although
+        // if their account data is changing then it implies that they're changing encryption related things
+        // on another device. This code is written with the assumption that it's better for the UI to refresh
+        // and be up to date with whatever changes they've made.
         if (type === "m.org.matrix.custom.backup_disabled") {
             checkEncryptionState();
         }
