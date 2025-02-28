@@ -15,10 +15,10 @@ import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import { type IntegrationManagerInstance } from "../../../integrations/IntegrationManagerInstance";
 import SettingsStore from "../../../settings/SettingsStore";
 import { SettingLevel } from "../../../settings/SettingLevel";
-import ToggleSwitch from "../elements/ToggleSwitch";
 import Heading from "../typography/Heading";
 import { SettingsSubsectionText } from "./shared/SettingsSubsection";
 import { UIFeature } from "../../../settings/UIFeature";
+import { Root, InlineField, Label, ToggleInput } from "@vector-im/compound-web";
 
 interface IState {
     currentManager: IntegrationManagerInstance | null;
@@ -66,26 +66,24 @@ export default class SetIntegrationManager extends React.Component<EmptyObject, 
         if (!SettingsStore.getValue(UIFeature.Widgets)) return null;
 
         return (
-            <label
+            <div
                 className="mx_SetIntegrationManager"
                 data-testid="mx_SetIntegrationManager"
-                htmlFor="toggle_integration"
             >
                 <div className="mx_SettingsFlag">
                     <div className="mx_SetIntegrationManager_heading_manager">
                         <Heading size="3">{_t("integration_manager|manage_title")}</Heading>
                         <Heading size="4">{managerName}</Heading>
                     </div>
-                    <ToggleSwitch
-                        id="toggle_integration"
-                        checked={this.state.provisioningEnabled}
-                        disabled={false}
-                        onChange={this.onProvisioningToggled}
-                    />
                 </div>
                 <SettingsSubsectionText>{bodyText}</SettingsSubsectionText>
                 <SettingsSubsectionText>{_t("integration_manager|explainer")}</SettingsSubsectionText>
-            </label>
+                <Root>
+                    <InlineField name="enable_im" control={<ToggleInput id={"mx_SetIntegrationManager_Toggle"} checked={this.state.provisioningEnabled} onChange={this.onProvisioningToggled}></ToggleInput>}>
+                        <Label htmlFor={"mx_SetIntegrationManager_Toggle"}>{_t("integration_manager|toggle_label")}</Label>
+                    </InlineField>
+                </Root>
+            </div>
         );
     }
 }
