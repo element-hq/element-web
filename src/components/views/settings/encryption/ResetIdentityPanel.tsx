@@ -91,8 +91,13 @@ export function ResetIdentityPanel({ onCancelClick, onFinish, variant }: ResetId
                             onFinish(evt);
                         }}
                     >
-                        {inProgress && <InlineSpinner />}
-                        {_t("action|continue")}
+                        {inProgress ? (
+                            <>
+                                <InlineSpinner /> {_t("settings|encryption|advanced|reset_in_progress")}
+                            </>
+                        ) : (
+                            _t("action|continue")
+                        )}
                     </Button>
                     {inProgress ? (
                         <EncryptionCardEmphasisedContent>

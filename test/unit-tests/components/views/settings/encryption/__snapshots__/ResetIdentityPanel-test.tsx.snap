@@ -551,7 +551,7 @@ exports[`<ResetIdentityPanel /> should reset the encryption when the continue bu
             fill-rule="evenodd"
           />
         </svg>
-        Continue
+         Reset in progress...
       </button>
       <div
         class="mx_Flex mx_EncryptionCard_emphasisedContent"
