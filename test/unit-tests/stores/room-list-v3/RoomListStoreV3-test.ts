@@ -154,5 +154,35 @@ describe("RoomListStoreV3", () => {
                 "!newroom5:matrix.org",
             ].forEach((id) => expect(roomIds).toContain(id));
         });
+
+        it("Room is re-inserted on tag change", async () => {
+            const { store, rooms, dispatcher } = await getRoomListStore();
+            const fn = jest.fn();
+            store.on(LISTS_UPDATE_EVENT, fn);
+            dispatcher.dispatch(
+                {
+                    action: "MatrixActions.Room.tags",
+                    room: rooms[10],
+                },
+                true,
+            );
+            expect(fn).toHaveBeenCalled();
+        });
+
+        it("Room is re-inserted on decryption", async () => {
+            const { store, rooms, client, dispatcher } = await getRoomListStore();
+            jest.spyOn(client, "getRoom").mockImplementation(() => rooms[10]);
+
+            const fn = jest.fn();
+            store.on(LISTS_UPDATE_EVENT, fn);
+            dispatcher.dispatch(
+                {
+                    action: "MatrixActions.Event.decrypted",
+                    event: { getRoomId: () => rooms[10].roomId },
+                },
+                true,
+            );
+            expect(fn).toHaveBeenCalled();
+        });
     });
 });
