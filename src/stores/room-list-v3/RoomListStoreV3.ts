@@ -97,11 +97,13 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                 }
                 break;
             }
+
             case "MatrixActions.Room.tags": {
                 const room = payload.room;
                 this.addRoomAndEmit(room);
                 break;
             }
+
             case "MatrixActions.Event.decrypted": {
                 const roomId = payload.event.getRoomId();
                 if (!roomId) return;
@@ -113,6 +115,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                 this.addRoomAndEmit(room);
                 break;
             }
+
             case "MatrixActions.accountData": {
                 if (payload.event_type !== EventType.Direct) return;
                 const dmMap = payload.event.getContent();
@@ -129,6 +132,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                 }
                 break;
             }
+
             case "MatrixActions.Room.timeline": {
                 // Ignore non-live events (backfill) and notification timeline set events (without a room)
                 if (!payload.isLiveEvent || !payload.isLiveUnfilteredRoomTimelineEvent || !payload.room) return;
@@ -142,6 +146,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                 if (!tryAdd()) setTimeout(tryAdd, 100);
                 break;
             }
+
             case "MatrixActions.Room.myMembership": {
                 const oldMembership = getEffectiveMembership(payload.oldMembership);
                 const newMembership = getEffectiveMembershipTag(payload.room, payload.membership);
