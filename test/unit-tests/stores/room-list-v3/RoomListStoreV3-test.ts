@@ -237,6 +237,5 @@ describe("RoomListStoreV3", () => {
                 expect(fn).not.toHaveBeenCalled();
             });
         });
-
     });
 });
