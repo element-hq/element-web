@@ -9,9 +9,16 @@ import type { Room } from "matrix-js-sdk/src/matrix";
 import RoomListStoreV3 from "../../../stores/room-list-v3/RoomListStoreV3";
 
 export interface RoomListViewState {
+    /**
+     * A list of rooms to be displayed in the left panel.
+     */
     rooms: Room[];
 }
 
+/**
+ * View model for the new room list
+ * @see {@link RoomListViewState} for more information about what this view model returns.
+ */
 export function useRoomListViewModel(): RoomListViewState {
     const rooms = RoomListStoreV3.instance.getSortedRooms();
     return { rooms };
