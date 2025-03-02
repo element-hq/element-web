@@ -138,18 +138,9 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                 if (!payload.isLiveEvent || !payload.isLiveUnfilteredRoomTimelineEvent || !payload.room) return;
 
                 const roomId = payload.event.getRoomId();
-                const findAndAddRoom = (): boolean => {
-                    const room = this.matrixClient?.getRoom(roomId);
-                    if (room) this.addRoomAndEmit(room);
-                    return !!room;
-                };
-                // We'll try finding the room associated with this event.
-                // If we can't find the room, we'll try again after 100ms.
-                if (!findAndAddRoom()) {
-                    logger.warn(`Live timeline event ${payload.event.getId()} received without associated room`);
-                    logger.warn(`Queuing failed room update for retry as a result.`);
-                    setTimeout(findAndAddRoom, 100);
-                }
+                const room = this.matrixClient?.getRoom(roomId);
+                if (room) this.addRoomAndEmit(room);
+                else logger.warn(`Live timeline event ${payload.event.getId()} received without associated room`);
                 break;
             }
 
@@ -165,7 +156,6 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                         const prevRoom = this.matrixClient?.getRoom(predecessor.roomId);
                         if (prevRoom) this.roomSkipList.removeRoom(prevRoom);
                         else logger.warn(`Unable to find predecessor room with id ${predecessor.roomId}`);
-
                     }
                 }
                 this.addRoomAndEmit(payload.room);
