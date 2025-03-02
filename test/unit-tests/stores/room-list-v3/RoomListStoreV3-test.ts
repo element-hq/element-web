@@ -184,5 +184,59 @@ describe("RoomListStoreV3", () => {
             );
             expect(fn).toHaveBeenCalled();
         });
+
+        describe("Update from read receipt", () => {
+            function getReadReceiptEvent(userId: string) {
+                const content = {
+                    some_id: {
+                        "m.read": {
+                            [userId]: {
+                                ts: 5000,
+                            },
+                        },
+                    },
+                };
+                const event = mkEvent({
+                    event: true,
+                    content,
+                    user: "@foo:matrix.org",
+                    type: EventType.Receipt,
+                });
+                return event;
+            }
+
+            it("Room is re-inserted on read receipt from our user", async () => {
+                const { store, rooms, client, dispatcher } = await getRoomListStore();
+                const event = getReadReceiptEvent(client.getSafeUserId());
+                const fn = jest.fn();
+                store.on(LISTS_UPDATE_EVENT, fn);
+                dispatcher.dispatch(
+                    {
+                        action: "MatrixActions.Room.receipt",
+                        room: rooms[10],
+                        event,
+                    },
+                    true,
+                );
+                expect(fn).toHaveBeenCalled();
+            });
+
+            it("Read receipt from other users do not cause room to be re-inserted", async () => {
+                const { store, rooms, dispatcher } = await getRoomListStore();
+                const event = getReadReceiptEvent("@foobar:matrix.org");
+                const fn = jest.fn();
+                store.on(LISTS_UPDATE_EVENT, fn);
+                dispatcher.dispatch(
+                    {
+                        action: "MatrixActions.Room.receipt",
+                        room: rooms[10],
+                        event,
+                    },
+                    true,
+                );
+                expect(fn).not.toHaveBeenCalled();
+            });
+        });
+
     });
 });
