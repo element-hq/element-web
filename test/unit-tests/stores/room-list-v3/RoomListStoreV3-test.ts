@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { EventType, KnownMembership, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { RoomListStoreV3Class } from "../../../../src/stores/room-list-v3/RoomListStoreV3";
 import { AsyncStoreWithClient } from "../../../../src/stores/AsyncStoreWithClient";
@@ -13,8 +14,8 @@ import { RecencySorter } from "../../../../src/stores/room-list-v3/skip-list/sor
 import { mkEvent, mkMessage, stubClient, upsertRoomStateEvents } from "../../../test-utils";
 import { getMockedRooms } from "./skip-list/getMockedRooms";
 import { AlphabeticSorter } from "../../../../src/stores/room-list-v3/skip-list/sorters/AlphabeticSorter";
-import dispatcher from "../../../../src/dispatcher/dispatcher";
 import { LISTS_UPDATE_EVENT } from "../../../../src/stores/room-list/RoomListStore";
+import dispatcher from "../../../../src/dispatcher/dispatcher";
 
 describe("RoomListStoreV3", () => {
     async function getRoomListStore() {
@@ -183,6 +184,30 @@ describe("RoomListStoreV3", () => {
                 true,
             );
             expect(fn).toHaveBeenCalled();
+        });
+
+        it("Logs a warning if room couldn't be found from room-id on decryption action", async () => {
+            const { store, client, dispatcher } = await getRoomListStore();
+            jest.spyOn(client, "getRoom").mockImplementation(() => null);
+            const warnSpy = jest.spyOn(logger, "warn");
+
+            const fn = jest.fn();
+            store.on(LISTS_UPDATE_EVENT, fn);
+
+            // Dispatch a decrypted action but the room does not exist.
+            dispatcher.dispatch(
+                {
+                    action: "MatrixActions.Event.decrypted",
+                    event: {
+                        getRoomId: () => "!doesnotexist:matrix.org",
+                        getId: () => "some-id",
+                    },
+                },
+                true,
+            );
+
+            expect(warnSpy).toHaveBeenCalled();
+            expect(fn).not.toHaveBeenCalled();
         });
 
         describe("Update from read receipt", () => {
