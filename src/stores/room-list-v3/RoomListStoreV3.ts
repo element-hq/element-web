@@ -136,11 +136,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
             case "MatrixActions.Room.timeline": {
                 // Ignore non-live events (backfill) and notification timeline set events (without a room)
                 if (!payload.isLiveEvent || !payload.isLiveUnfilteredRoomTimelineEvent || !payload.room) return;
-
-                const roomId = payload.event.getRoomId();
-                const room = this.matrixClient?.getRoom(roomId);
-                if (room) this.addRoomAndEmit(room);
-                else logger.warn(`Live timeline event ${payload.event.getId()} received without associated room`);
+                this.addRoomAndEmit(payload.room);
                 break;
             }
 
