@@ -22,18 +22,6 @@ test.use({
             msc3814_enabled: true,
         },
     },
-    config: async ({ config, context }, use) => {
-        const wellKnown = {
-            ...config.default_server_config,
-            "org.matrix.msc3814": true,
-        };
-
-        await context.route("https://localhost/.well-known/matrix/client", async (route) => {
-            await route.fulfill({ json: wellKnown });
-        });
-
-        await use(config);
-    },
 });
 
 test.describe("Dehydration", () => {
