@@ -44,7 +44,20 @@ export class RoomSkipList implements Iterable<Room> {
             this.levels[currentLevel.level] = currentLevel;
             currentLevel = currentLevel.generateNextLevel();
         } while (currentLevel.size > 1);
+
+        // 3. Go through the list of rooms and mark nodes in active space
+        this.calculateActiveSpaceForNodes();
+
         this.initialized = true;
+    }
+
+    /**
+     * Go through all the room nodes and check if they belong to the active space.
+     */
+    public calculateActiveSpaceForNodes(): void {
+        for (const node of this.roomNodeMap.values()) {
+            node.checkIfRoomBelongsToActiveSpace();
+        }
     }
 
     /**
@@ -81,6 +94,7 @@ export class RoomSkipList implements Iterable<Room> {
         this.removeRoom(room);
 
         const newNode = new RoomNode(room);
+        newNode.checkIfRoomBelongsToActiveSpace();
         this.roomNodeMap.set(room.roomId, newNode);
 
         /**
@@ -159,6 +173,10 @@ export class RoomSkipList implements Iterable<Room> {
         return new SortedRoomIterator(this.levels[0].head!);
     }
 
+    public getRoomsInActiveSpace(): SortedSpaceFilteredIterator {
+        return new SortedSpaceFilteredIterator(this.levels[0].head!);
+    }
+
     /**
      * The number of rooms currently in the skip list.
      */
@@ -172,6 +190,26 @@ class SortedRoomIterator implements Iterator<Room> {
 
     public next(): IteratorResult<Room> {
         const current = this.current;
+        if (!current) return { value: undefined, done: true };
+        this.current = current.next[0];
+        return {
+            value: current.room,
+        };
+    }
+}
+
+class SortedSpaceFilteredIterator implements Iterator<Room> {
+    public constructor(private current: RoomNode) {}
+
+    public [Symbol.iterator](): SortedSpaceFilteredIterator {
+        return this;
+    }
+
+    public next(): IteratorResult<Room> {
+        let current = this.current;
+        while (current && !current.isInActiveSpace) {
+            current = current.next[0];
+        }
         if (!current) return { value: undefined, done: true };
         this.current = current.next[0];
         return {
