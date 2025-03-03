@@ -1,6 +1,5 @@
 /*
-Copyright 2025 New Vector Ltd.
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2019 The Matrix.org Foundation C.I.C.
 Copyright 2018 New Vector Ltd
 Copyright 2017 OpenMarket Ltd
@@ -466,7 +465,7 @@ async function submitReport(
     const req = fetch(endpoint, {
         method: "POST",
         body,
-        signal: AbortSignal.timeout ? AbortSignal.timeout(5 * 60 * 1000) : undefined,
+        signal: AbortSignal.timeout?.(5 * 60 * 1000),
     });
     progressCallback(_t("bug_reporting|waiting_for_server"));
     const response = await req;
