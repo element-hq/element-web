@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { sleep, defer } from "matrix-js-sdk/src/utils";
+import { sleep } from "matrix-js-sdk/src/utils";
 import {
     EventType,
     type MatrixClient,
