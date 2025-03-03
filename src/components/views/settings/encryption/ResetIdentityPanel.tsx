@@ -101,7 +101,7 @@ export function ResetIdentityPanel({ onCancelClick, onFinish, variant }: ResetId
                     </Button>
                     {inProgress ? (
                         <EncryptionCardEmphasisedContent>
-                            <span className="text-warning">
+                            <span className="mx_ResetIdentityPanel_warning">
                                 {_t("settings|encryption|advanced|do_not_close_warning")}
                             </span>
                         </EncryptionCardEmphasisedContent>
