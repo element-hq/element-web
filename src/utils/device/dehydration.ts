@@ -25,6 +25,6 @@ export async function initialiseDehydrationIfEnabled(
     const crypto = client.getCrypto();
     if (crypto && (await crypto.isDehydrationSupported())) {
         logger.debug("Starting device dehydration");
-        await crypto!.startDehydration(opts);
+        await crypto.startDehydration(opts);
     }
 }
