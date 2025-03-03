@@ -20,4 +20,4 @@ FROM ghcr.io/element-hq/element-web:${ELEMENT_VERSION}
 ARG ELEMENT_VERSION=latest
 ARG BUILD_CONTEXT
 
-COPY --from=builder /modules/* /tmp/element-web-modules/
+COPY --from=builder /modules /tmp/element-web-modules/
