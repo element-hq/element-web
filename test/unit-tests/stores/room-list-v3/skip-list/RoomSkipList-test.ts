@@ -14,6 +14,8 @@ import { RoomSkipList } from "../../../../../src/stores/room-list-v3/skip-list/R
 import { RecencySorter } from "../../../../../src/stores/room-list-v3/skip-list/sorters/RecencySorter";
 import { AlphabeticSorter } from "../../../../../src/stores/room-list-v3/skip-list/sorters/AlphabeticSorter";
 import { getMockedRooms } from "./getMockedRooms";
+import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
+import { MetaSpace } from "../../../../../src/stores/spaces";
 
 describe("RoomSkipList", () => {
     function generateSkipList(roomCount?: number): {
@@ -29,6 +31,12 @@ describe("RoomSkipList", () => {
         skipList.seed(rooms);
         return { skipList, rooms, totalRooms: rooms.length, sorter };
     }
+
+    beforeEach(() => {
+        jest.spyOn(SpaceStore.instance, "isRoomInSpace").mockImplementation((space) => space === MetaSpace.Home);
+        jest.spyOn(SpaceStore.instance, "activeSpace", "get").mockImplementation(() => MetaSpace.Home);
+        jest.spyOn(SpaceStore.instance, "isReady", "get").mockImplementation(() => Promise.resolve());
+    });
 
     it("Rooms are in sorted order after initial seed", () => {
         const { skipList, totalRooms } = generateSkipList();
