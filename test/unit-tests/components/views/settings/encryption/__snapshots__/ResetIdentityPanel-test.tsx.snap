@@ -558,7 +558,7 @@ exports[`<ResetIdentityPanel /> should reset the encryption when the continue bu
         style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: normal; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
       >
         <span
-          class="text-warning"
+          class="mx_ResetIdentityPanel_warning"
         >
           Do not close this window until the reset is finished
         </span>
