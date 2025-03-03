@@ -142,10 +142,12 @@ describe("RoomListStoreV3", () => {
                 true,
             );
 
+            // Ensure only one emit occurs
+            expect(fn).toHaveBeenCalledTimes(1);
+
             // Each of these rooms should now appear in the store
             // We don't need to mock the rooms themselves since our mocked
             // client will create the rooms on getRoom() call.
-            expect(fn).toHaveBeenCalledTimes(5);
             const roomIds = store.getSortedRooms().map((r) => r.roomId);
             [
                 "!newroom1:matrix.org",

@@ -125,6 +125,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
             case "MatrixActions.accountData": {
                 if (payload.event_type !== EventType.Direct) return;
                 const dmMap = payload.event.getContent();
+                let needsEmit = false;
                 for (const userId of Object.keys(dmMap)) {
                     const roomIds = dmMap[userId];
                     for (const roomId of roomIds) {
@@ -133,9 +134,11 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                             logger.warn(`${roomId} was found in DMs but the room is not in the store`);
                             continue;
                         }
-                        this.addRoomAndEmit(room);
+                        this.roomSkipList.addRoom(room);
+                        needsEmit = true;
                     }
                 }
+                if (needsEmit) this.emit(LISTS_UPDATE_EVENT);
                 break;
             }
 
