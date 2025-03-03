@@ -407,7 +407,7 @@
         "download_logs": "Download logs",
         "downloading_logs": "Downloading logs",
         "error_empty": "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.",
-        "failed_send_logs": "Failed to send logs. Could not contact the rageshake server.",
+        "failed_send_logs": "Failed to send logs.",
         "failed_send_logs_causes": {
             "disallowed_app": "Your bug report was rejected. The rageshake server does not support this application.",
             "rejected_generic": "Your bug report was rejected. The rageshake server rejected the contents of the report due to a policy.",
