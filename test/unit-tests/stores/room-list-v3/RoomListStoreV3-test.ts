@@ -26,9 +26,15 @@ describe("RoomListStoreV3", () => {
         client.getVisibleRooms = jest.fn().mockReturnValue(rooms);
         jest.spyOn(AsyncStoreWithClient.prototype, "matrixClient", "get").mockReturnValue(client);
         const store = new RoomListStoreV3Class(dispatcher);
-        store.start();
+        await store.start();
         return { client, rooms, store, dispatcher };
     }
+
+    beforeEach(() => {
+        jest.spyOn(SpaceStore.instance, "isRoomInSpace").mockImplementation((space) => space === MetaSpace.Home);
+        jest.spyOn(SpaceStore.instance, "activeSpace", "get").mockImplementation(() => MetaSpace.Home);
+        jest.spyOn(SpaceStore.instance, "isReady", "get").mockImplementation(() => Promise.resolve());
+    });
 
     it("Provides an unsorted list of rooms", async () => {
         const { store, rooms } = await getRoomListStore();
@@ -282,7 +288,6 @@ describe("RoomListStoreV3", () => {
                 jest.spyOn(AsyncStoreWithClient.prototype, "matrixClient", "get").mockReturnValue(client);
 
                 // Mock the space store
-                jest.spyOn(SpaceStore.instance, "isReady", "get").mockImplementation(() => Promise.resolve());
                 jest.spyOn(SpaceStore.instance, "isRoomInSpace").mockImplementation((space, id) => {
                     if (space === MetaSpace.Home && !roomIds.includes(id)) return true;
                     if (space === spaceRoom.roomId && roomIds.includes(id)) return true;
