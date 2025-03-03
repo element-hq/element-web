@@ -300,7 +300,7 @@ describe("RoomListStoreV3", () => {
                 store.on(LISTS_UPDATE_EVENT, fn);
 
                 // The rooms which belong to the space should not be shown
-                const result = store.getSortedRoomInActiveSpace().map((r) => r.roomId);
+                const result = store.getSortedRoomsInActiveSpace().map((r) => r.roomId);
                 for (const id of roomIds) {
                     expect(result).not.toContain(id);
                 }
@@ -309,7 +309,7 @@ describe("RoomListStoreV3", () => {
                 jest.spyOn(SpaceStore.instance, "activeSpace", "get").mockImplementation(() => spaceRoom.roomId);
                 SpaceStore.instance.emit(UPDATE_SELECTED_SPACE);
                 expect(fn).toHaveBeenCalled();
-                const result2 = store.getSortedRoomInActiveSpace().map((r) => r.roomId);
+                const result2 = store.getSortedRoomsInActiveSpace().map((r) => r.roomId);
                 for (const id of roomIds) {
                     expect(result2).toContain(id);
                 }

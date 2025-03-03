@@ -62,7 +62,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     /**
      * Get a list of sorted rooms that belong to the currently active space.
      */
-    public getSortedRoomInActiveSpace(): Room[] {
+    public getSortedRoomsInActiveSpace(): Room[] {
         if (this.roomSkipList?.initialized) return Array.from(this.roomSkipList.getRoomsInActiveSpace());
         else return [];
     }
