@@ -85,6 +85,12 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     protected async onAction(payload: ActionPayload): Promise<void> {
         if (!this.matrixClient || !this.roomSkipList?.initialized) return;
 
+        /**
+         * For the kind of updates that we care about (represented by the cases below),
+         * we try to find the associated room and simply re-insert it into the
+         * skiplist. If the position of said room in the sorted list changed, re-inserting
+         * would put it in the correct place.
+         */
         switch (payload.action) {
             case "MatrixActions.Room.receipt": {
                 if (readReceiptChangeIsFor(payload.event, this.matrixClient)) {
