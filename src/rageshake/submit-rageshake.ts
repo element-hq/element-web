@@ -33,13 +33,18 @@ interface IOpts {
 
 export class RageshakeError extends Error {
     /**
-     * 
+     * This error is thrown when the rageshake server cannot process the request.
      * @param errorcode Machine-readable error code. See https://github.com/matrix-org/rageshake/blob/main/docs/api.md
-     * @param error 
-     * @param statusCode 
-     * @param policyURL 
+     * @param error A human-readable error.
+     * @param statusCode The HTTP status code.
+     * @param policyURL Optional policy URL that can be presented to the user.
      */
-    public constructor(public readonly errorcode: string, public readonly error: string, public readonly statusCode: number, public readonly policyURL?: string) {
+    public constructor(
+        public readonly errorcode: string,
+        public readonly error: string,
+        public readonly statusCode: number,
+        public readonly policyURL?: string,
+    ) {
         super(`The rageshake server responded with an error ${errorcode} (${statusCode}): ${error}`);
     }
 }
@@ -337,7 +342,7 @@ async function collectLogs(
  * @param {function(string)} opts.progressCallback Callback to call with progress updates
  *
  * @return {Promise<string>} URL returned by the rageshake server
- * 
+ *
  * @throws A RageshakeError when the rageshake server responds with an error. This will be `RS_UNKNOWN` if the
  *         the server does not respond with an expected body format.
  */
@@ -445,7 +450,7 @@ export async function submitFeedback(
 
 /**
  * Submit a rageshake report to the rageshake server.
- * 
+ *
  * @param endpoint The endpoint to call.
  * @param body The report body.
  * @param progressCallback A callback that will be called when the upload process has begun.
@@ -453,20 +458,24 @@ export async function submitFeedback(
  * @throws A RageshakeError when the rageshake server responds with an error. This will be `RS_UNKNOWN` if the
  *         the server does not respond with an expected body format.
  */
-async function submitReport(endpoint: string, body: FormData, progressCallback: (str: string) => void): Promise<string> {
+async function submitReport(
+    endpoint: string,
+    body: FormData,
+    progressCallback: (str: string) => void,
+): Promise<string> {
     const req = fetch(endpoint, {
         method: "POST",
         body,
-        signal: AbortSignal.timeout(5 * 60 * 1000)
+        signal: AbortSignal.timeout ? AbortSignal.timeout(5 * 60 * 1000) : undefined,
     });
     progressCallback(_t("bug_reporting|waiting_for_server"));
     const response = await req;
-    if (response.headers.get('Content-Type') !== 'application/json') {
+    if (response.headers.get("Content-Type") !== "application/json") {
         throw new RageshakeError("RS_UNKNOWN", "Rageshake server responded with unexpected type", response.status);
     }
     const data = await response.json();
     if (response.status < 200 || response.status >= 400) {
-        if ('errcode' in data) {
+        if ("errcode" in data) {
             throw new RageshakeError(data.errcode, data.error, response.status, data.policy_url);
         }
         throw new RageshakeError("RS_UNKNOWN", "Rageshake server responded with unexpected type", response.status);

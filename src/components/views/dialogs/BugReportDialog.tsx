@@ -27,7 +27,7 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { getBrowserSupport } from "../../../SupportedBrowser";
 
-interface IProps {
+export interface BugReportDialogProps {
     onFinished: (success: boolean) => void;
     initialText?: string;
     label?: string;
@@ -45,11 +45,11 @@ interface IState {
     downloadProgress: string | null;
 }
 
-export default class BugReportDialog extends React.Component<IProps, IState> {
+export default class BugReportDialog extends React.Component<BugReportDialogProps, IState> {
     private unmounted: boolean;
     private issueRef: React.RefObject<Field>;
 
-    public constructor(props: IProps) {
+    public constructor(props: BugReportDialogProps) {
         super(props);
 
         this.state = {
@@ -90,7 +90,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
         this.props.onFinished(false);
     };
 
-    private getErrorText(error: Error|RageshakeError): ReactNode {
+    private getErrorText(error: Error | RageshakeError): ReactNode {
         if (error instanceof RageshakeError) {
             let errorText;
             switch (error.errorcode) {
@@ -104,20 +104,23 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
                     errorText = _t("bug_reporting|failed_send_logs_causes|rejected_recovery_key");
                     break;
                 default:
-                    if (error.errorcode?.startsWith('RS_REJECTED')) {
+                    if (error.errorcode?.startsWith("RS_REJECTED")) {
                         errorText = _t("bug_reporting|failed_send_logs_causes|rejected_generic");
                     } else {
                         errorText = _t("bug_reporting|failed_send_logs_causes|unknown_error");
                     }
                     break;
             }
-            return <>
-                <p>{errorText}</p>
-                {error.policyURL && <Link size="medium"
-                    target="_blank"
-                    href={error.policyURL}
-                >{_t("action|learn_more")}</Link>}
-            </>
+            return (
+                <>
+                    <p>{errorText}</p>
+                    {error.policyURL && (
+                        <Link size="medium" target="_blank" href={error.policyURL}>
+                            {_t("action|learn_more")}
+                        </Link>
+                    )}
+                </>
+            );
         } else {
             return <p>{_t("bug_reporting|failed_send_logs")}</p>;
         }
