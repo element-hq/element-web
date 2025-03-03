@@ -17,7 +17,5 @@ RUN mkdir /modules
 RUN cp -r ./$BUILD_CONTEXT/lib/ /modules/$(jq -r '"\(.name)-v\(.version)"' ./$BUILD_CONTEXT/package.json)
 
 FROM ghcr.io/element-hq/element-web:${ELEMENT_VERSION}
-ARG ELEMENT_VERSION=latest
-ARG BUILD_CONTEXT
 
 COPY --from=builder /modules /tmp/element-web-modules/
