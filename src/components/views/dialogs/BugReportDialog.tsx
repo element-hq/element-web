@@ -94,17 +94,17 @@ export default class BugReportDialog extends React.Component<BugReportDialogProp
         if (error instanceof RageshakeError) {
             let errorText;
             switch (error.errorcode) {
-                case "RS_DISALLOWED_APP":
+                case "DISALLOWED_APP":
                     errorText = _t("bug_reporting|failed_send_logs_causes|disallowed_app");
                     break;
-                case "RS_REJECTED_BAD_VERSION":
+                case "REJECTED_BAD_VERSION":
                     errorText = _t("bug_reporting|failed_send_logs_causes|rejected_version");
                     break;
-                case "RS_REJECTED_UNEXPECTED_RECOVERY_KEY":
+                case "REJECTED_UNEXPECTED_RECOVERY_KEY":
                     errorText = _t("bug_reporting|failed_send_logs_causes|rejected_recovery_key");
                     break;
                 default:
-                    if (error.errorcode?.startsWith("RS_REJECTED")) {
+                    if (error.errorcode?.startsWith("REJECTED")) {
                         errorText = _t("bug_reporting|failed_send_logs_causes|rejected_generic");
                     } else {
                         errorText = _t("bug_reporting|failed_send_logs_causes|unknown_error");

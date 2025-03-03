@@ -471,14 +471,14 @@ async function submitReport(
     progressCallback(_t("bug_reporting|waiting_for_server"));
     const response = await req;
     if (response.headers.get("Content-Type") !== "application/json") {
-        throw new RageshakeError("RS_UNKNOWN", "Rageshake server responded with unexpected type", response.status);
+        throw new RageshakeError("UNKNOWN", "Rageshake server responded with unexpected type", response.status);
     }
     const data = await response.json();
     if (response.status < 200 || response.status >= 400) {
         if ("errcode" in data) {
             throw new RageshakeError(data.errcode, data.error, response.status, data.policy_url);
         }
-        throw new RageshakeError("RS_UNKNOWN", "Rageshake server responded with unexpected type", response.status);
+        throw new RageshakeError("UNKNOWN", "Rageshake server responded with unexpected type", response.status);
     }
     return data.report_url;
 }

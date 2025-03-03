@@ -86,19 +86,19 @@ describe("BugReportDialog", () => {
             text: "The rageshake server encountered an unknown error and could not handle the report.",
         },
         {
-            errcode: "RS_DISALLOWED_APP",
+            errcode: "DISALLOWED_APP",
             text: "Your bug report was rejected. The rageshake server does not support this application.",
         },
         {
-            errcode: "RS_REJECTED_BAD_VERSION",
+            errcode: "REJECTED_BAD_VERSION",
             text: "Your bug report was rejected as the version you are running is too old.",
         },
         {
-            errcode: "RS_REJECTED_UNEXPECTED_RECOVERY_KEY",
+            errcode: "REJECTED_UNEXPECTED_RECOVERY_KEY",
             text: "Your bug report was rejected for safety reasons, as it contained a recovery key.",
         },
         {
-            errcode: "RS_REJECTED_CUSTOM_REASON",
+            errcode: "REJECTED_CUSTOM_REASON",
             text: "Your bug report was rejected. The rageshake server rejected the contents of the report due to a policy.",
         },
     ])("handles bug report upload errors ($errcode)", async ({ errcode, text }) => {
@@ -116,7 +116,7 @@ describe("BugReportDialog", () => {
         const { getByLabelText, getByText } = renderComponent();
         fetchMock.postOnce(BUG_REPORT_URL, {
             status: 404,
-            body: { errcode: "RS_REJECTED_CUSTOM_REASON", error: "blah", policy_url: "https://example.org/policyurl" },
+            body: { errcode: "REJECTED_CUSTOM_REASON", error: "blah", policy_url: "https://example.org/policyurl" },
         });
         await userEvent.type(getByLabelText("GitHub issue"), "https://example.org/some/issue");
         await userEvent.type(getByLabelText("Notes"), "Additional text");
