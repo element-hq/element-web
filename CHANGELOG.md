@@ -1,3 +1,10 @@
+Changes in [1.11.94](https://github.com/element-hq/element-web/releases/tag/v1.11.94) (2025-02-27)
+==================================================================================================
+## 🐛 Bug Fixes
+
+* [Backport staging] fix: /tmp/element-web-config may already exist preventing the container from booting up ([#29377](https://github.com/element-hq/element-web/pull/29377)). Contributed by @RiotRobot.
+
+
 Changes in [1.11.93](https://github.com/element-hq/element-web/releases/tag/v1.11.93) (2025-02-25)
 ==================================================================================================
 ## ✨ Features
