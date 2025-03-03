@@ -21,6 +21,8 @@ import { RecencySorter } from "./skip-list/sorters/RecencySorter";
 import { AlphabeticSorter } from "./skip-list/sorters/AlphabeticSorter";
 import { readReceiptChangeIsFor } from "../../utils/read-receipts";
 import { EffectiveMembership, getEffectiveMembership, getEffectiveMembershipTag } from "../../utils/membership";
+import SpaceStore from "../spaces/SpaceStore";
+import { UPDATE_HOME_BEHAVIOUR, UPDATE_SELECTED_SPACE } from "../spaces";
 
 /**
  * This store allows for fast retrieval of the room list in a sorted and filtered manner.
@@ -34,6 +36,10 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     public constructor(dispatcher: MatrixDispatcher) {
         super(dispatcher);
         this.msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
+        SpaceStore.instance.on(UPDATE_SELECTED_SPACE, () => {
+            this.onActiveSpaceChanged();
+        });
+        SpaceStore.instance.on(UPDATE_HOME_BEHAVIOUR, () => this.onActiveSpaceChanged());
     }
 
     /**
@@ -50,6 +56,14 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
      */
     public getSortedRooms(): Room[] {
         if (this.roomSkipList?.initialized) return Array.from(this.roomSkipList);
+        else return [];
+    }
+
+    /**
+     * Get a list of sorted rooms that belong to the currently active space.
+     */
+    public getSortedRoomInActiveSpace(): Room[] {
+        if (this.roomSkipList?.initialized) return Array.from(this.roomSkipList.getRoomsInActiveSpace());
         else return [];
     }
 
@@ -78,6 +92,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         const sorter = new RecencySorter(this.matrixClient.getSafeUserId());
         this.roomSkipList = new RoomSkipList(sorter);
         const rooms = this.getRooms();
+        await SpaceStore.instance.isReady;
         this.roomSkipList.seed(rooms);
         this.emit(LISTS_UPDATE_EVENT);
     }
@@ -176,6 +191,12 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     private addRoomAndEmit(room: Room): void {
         if (!this.roomSkipList) throw new Error("roomSkipList hasn't been created yet!");
         this.roomSkipList.addRoom(room);
+        this.emit(LISTS_UPDATE_EVENT);
+    }
+
+    private onActiveSpaceChanged(): void {
+        if (!this.roomSkipList) return;
+        this.roomSkipList.calculateActiveSpaceForNodes();
         this.emit(LISTS_UPDATE_EVENT);
     }
 }
