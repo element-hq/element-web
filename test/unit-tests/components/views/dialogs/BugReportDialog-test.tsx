@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { render, type RenderResult } from "jest-matrix-react";
+import { render, waitFor, type RenderResult } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import fetchMock from "fetch-mock-jest";
@@ -71,8 +71,8 @@ describe("BugReportDialog", () => {
         await userEvent.type(getByLabelText("GitHub issue"), "https://example.org/some/issue");
         await userEvent.type(getByLabelText("Notes"), "Additional text");
         await userEvent.click(getByText("Send logs"));
+        await waitFor(() => expect(getByText("Thank you!")).toBeInTheDocument());
         expect(onFinished).toHaveBeenCalledWith(false);
-        expect(getByText("Thank you!")).toBeInTheDocument();
         expect(fetchMock).toHaveFetched(BUG_REPORT_URL);
     });
 
@@ -109,7 +109,7 @@ describe("BugReportDialog", () => {
         await userEvent.click(getByText("Send logs"));
         expect(onFinished).not.toHaveBeenCalled();
         expect(fetchMock).toHaveFetched(BUG_REPORT_URL);
-        expect(getByText(text)).toBeInTheDocument();
+        await waitFor(() => getByText(text));
     });
 
     it("should show a policy link when provided", async () => {
@@ -123,8 +123,10 @@ describe("BugReportDialog", () => {
         await userEvent.click(getByText("Send logs"));
         expect(onFinished).not.toHaveBeenCalled();
         expect(fetchMock).toHaveFetched(BUG_REPORT_URL);
-        const learnMoreLink = getByText("Learn more");
-        expect(learnMoreLink).toBeInTheDocument();
-        expect(learnMoreLink.getAttribute("href")).toEqual("https://example.org/policyurl");
+        await waitFor(() => {
+            const learnMoreLink = getByText("Learn more");
+            expect(learnMoreLink).toBeInTheDocument()
+            expect(learnMoreLink.getAttribute("href")).toEqual("https://example.org/policyurl");
+        });
     });
 });
