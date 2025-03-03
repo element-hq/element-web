@@ -125,7 +125,7 @@ describe("BugReportDialog", () => {
         expect(fetchMock).toHaveFetched(BUG_REPORT_URL);
         await waitFor(() => {
             const learnMoreLink = getByText("Learn more");
-            expect(learnMoreLink).toBeInTheDocument()
+            expect(learnMoreLink).toBeInTheDocument();
             expect(learnMoreLink.getAttribute("href")).toEqual("https://example.org/policyurl");
         });
     });
