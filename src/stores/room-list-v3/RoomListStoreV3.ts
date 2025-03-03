@@ -169,6 +169,10 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         }
     }
 
+    /**
+     * Add a room to the skiplist and emit an update.
+     * @param room The room to add to the skiplist
+     */
     private addRoomAndEmit(room: Room): void {
         if (!this.roomSkipList) throw new Error("roomSkipList hasn't been created yet!");
         this.roomSkipList.addRoom(room);
