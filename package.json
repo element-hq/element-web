@@ -225,7 +225,7 @@
         "blob-polyfill": "^9.0.0",
         "chokidar": "^4.0.0",
         "concurrently": "^9.0.0",
-        "copy-webpack-plugin": "^12.0.0",
+        "copy-webpack-plugin": "^13.0.0",
         "core-js": "^3.38.1",
         "cronstrue": "^2.41.0",
         "css-loader": "^7.0.0",
