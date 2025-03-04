@@ -1285,8 +1285,7 @@
         "title": "Nicht unterstützter Browser",
         "use_desktop_heading": "Verwende stattdessen %(brand)s Desktop",
         "use_mobile_heading": "Stattdessen %(brand)s am Smartphone benutzen",
-        "use_mobile_heading_after_desktop": "Oder verwende die mobile App",
-        "windows": "Windows (%(bits)s-bit)"
+        "use_mobile_heading_after_desktop": "Oder verwende die mobile App"
     },
     "info_tooltip_title": "Information",
     "integration_manager": {

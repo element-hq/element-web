@@ -1281,8 +1281,7 @@
         "title": "Sellele brauserile puudub tugi",
         "use_desktop_heading": "Selle asemel kasuta %(brand)s töölauaversiooni",
         "use_mobile_heading": "Selle asemel kasuta %(brand)s nutiseadmeversiooni",
-        "use_mobile_heading_after_desktop": "Või kasuta meie rakendust nutiseadmetele",
-        "windows": "Windows (%(bits)s-bit)"
+        "use_mobile_heading_after_desktop": "Või kasuta meie rakendust nutiseadmetele"
     },
     "info_tooltip_title": "Teave",
     "integration_manager": {

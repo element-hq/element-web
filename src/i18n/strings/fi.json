@@ -2,6 +2,7 @@
     "a11y": {
         "emoji_picker": "Emoji-valitsin",
         "jump_first_invite": "Siirry ensimmäiseen kutsuun.",
+        "message_composer": "Viestin kirjoitusikkuna",
         "n_unread_messages": {
             "other": "%(count)s lukematonta viestiä.",
             "one": "Yksi lukematon viesti."
@@ -12,6 +13,8 @@
         },
         "recent_rooms": "Viimeisimmät huoneet",
         "room_name": "Huone %(name)s",
+        "room_status_bar": "Huoneen tilapalkki",
+        "seek_bar_label": "Äänen siirtymispalkki",
         "unread_messages": "Lukemattomat viestit.",
         "user_menu": "Käyttäjän valikko"
     },
@@ -77,12 +80,14 @@
         "maximise": "Suurenna",
         "mention": "Mainitse",
         "minimise": "Pienennä",
+        "new_message": "Uusi viesti",
         "new_room": "Uusi huone",
         "new_video_room": "Uusi videohuone",
         "next": "Seuraava",
         "no": "Ei",
         "ok": "OK",
         "open": "Avaa",
+        "open_menu": "Avaa valikko",
         "pause": "Keskeytä",
         "pin": "Nuppineula",
         "play": "Toista",
@@ -836,6 +841,7 @@
             "warning": "Jos et poistanut palautustapaa, hyökkääjä saattaa yrittää käyttää tiliäsi. Vaihda tilisi salasana ja aseta uusi palautustapa asetuksissa välittömästi."
         },
         "reset_all_button": "Unohtanut tai kadottanut kaikki palautustavat? <a>Nollaa kaikki</a>",
+        "set_up_recovery": "Määritä palautus",
         "set_up_recovery_later": "Ei nyt",
         "set_up_toast_description": "Suojaudu salattuihin viesteihin ja tietoihin pääsyn menettämiseltä",
         "set_up_toast_title": "Määritä turvallinen varmuuskopio",
@@ -1126,7 +1132,8 @@
         "macos": "Mac",
         "supported_browsers": "Saat parhaan käyttökokemuksen käyttämällä <Chrome>Chromea</Chrome>, <Firefox>Firefoxia</Firefox>, <Edge>Edgeä</Edge> tai <Safari>Safaria</Safari>.",
         "title": "Selainta ei tueta",
-        "windows": "Windows (%(bits)s-bit)"
+        "windows_64bit": "Windows (64-bittinen)",
+        "windows_arm_64bit": "Windows (ARM 64-bittinen)"
     },
     "info_tooltip_title": "Tiedot",
     "integration_manager": {
@@ -1200,6 +1207,7 @@
     },
     "keyboard": {
         "activate_button": "Aktivoi valittu painike",
+        "alt": "Alt",
         "autocomplete_cancel": "Peruuta automaattinen täydennys",
         "autocomplete_force": "Pakota täydennys",
         "autocomplete_navigate_next": "Seuraava automaattitäydennyksen ehdotus",
@@ -1223,7 +1231,10 @@
         "composer_toggle_link": "Linkki päälle/pois",
         "composer_toggle_quote": "Lainaus päälle/pois",
         "composer_undo": "Kumoa muokkaus",
+        "control": "Ctrl",
         "dismiss_read_marker_and_jump_bottom": "Hylkää lukumerkki ja hyppää pohjaan",
+        "enter": "Enter",
+        "escape": "Esc",
         "go_home_view": "Siirry kotinäkymään",
         "home": "Etusivu",
         "jump_first_message": "Siirry ensimmäiseen viestiin",
@@ -1557,13 +1568,13 @@
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "%(failedCount)s istunnon purkaminen epäonnistui!",
         "count_of_successfully_restored_keys": "%(sessionCount)s avaimen palautus onnistui",
-        "enter_key_title": "Anna turva-avain",
+        "enter_key_title": "Anna palautusavain",
         "enter_phrase_title": "Kirjoita turvalause",
         "incorrect_security_phrase_title": "Virheellinen turvalause",
         "key_backup_warning": "<b>Varoitus</b>: sinun pitäisi ottaa avainvarmuuskopio käyttöön vain luotetulla tietokoneella.",
         "key_fetch_in_progress": "Noudetaan avaimia palvelimelta…",
-        "key_is_invalid": "Ei kelvollinen turva-avain",
-        "key_is_valid": "Tämä vaikuttaa kelvolliselta turva-avaimelta!",
+        "key_is_invalid": "Ei kelvollinen palautusavain",
+        "key_is_valid": "Tämä näyttää kelvolliselta palautusavaimelta!",
         "keys_restored_title": "Avaimet palautettu",
         "load_error_content": "Varmuuskopioinnin tilan lataaminen epäonnistui",
         "load_keys_progress": "%(completed)s / %(total)s avainta palautettu",
@@ -1590,7 +1601,8 @@
                 "close": "OK",
                 "description": "Kiinnitetyt viestit löytyvät täältä. Mene minkä tahansa viestin päälle ja valitse \"Kiinnitä\" lisätäksesi viestin tänne.",
                 "title": "Kiinnitetyt viestit"
-            }
+            },
+            "view": "Näytä aikajanalla"
         },
         "pinned_messages_button": "Kiinnitetyt viestit",
         "poll": {
@@ -1753,11 +1765,13 @@
         "rejecting": "Hylätään kutsua…",
         "rejoin_button": "Liity uudelleen",
         "search": {
+            "all_rooms_button": "Etsi kaikista huoneista",
             "placeholder": "Etsi viestejä...",
             "summary": {
                 "one": "1 tulos haulle “<query/>”",
                 "other": "%(count)s tulosta haulle “<query/>”"
-            }
+            },
+            "this_room_button": "Etsi tästä huoneesta"
         },
         "status_bar": {
             "delete_all": "Poista kaikki",
@@ -1852,6 +1866,7 @@
             "upgrade_warning_dialog_footer": "Olat päivittämässä tätä huonetta versiosta <oldVersion/> versioon <newVersion/>.",
             "upgrade_warning_dialog_invite_label": "Kutsu jäsenet tästä huoneesta automaattisesti uuteen huoneeseen",
             "upgrade_warning_dialog_report_bug_prompt_link": "Tämä yleensä vaikuttaa siihen, miten huonetta käsitellään palvelimella. Jos sinulla on ongelmia %(brand)stisi kanssa, <a>ilmoita virheestä</a>.",
+            "upgrade_warning_dialog_title": "Päivitä huone",
             "upgrade_warning_dialog_title_private": "Päivitä yksityinen huone"
         },
         "alias_not_specified": "ei määritetty",
@@ -2119,7 +2134,7 @@
             "custom_font_size": "Käytä mukautettua kokoa",
             "custom_theme_add": "Lisää mukautettu teema",
             "custom_theme_downloading": "Ladataan mukautettua teemaa...",
-            "custom_theme_error_downloading": "Virhe ladattaessa teematietoa.",
+            "custom_theme_error_downloading": "Virhe ladattaessa teemaa",
             "custom_theme_invalid": "Epäkelpo teeman skeema.",
             "dialog_title": "<strong>Asetukset:</strong> Ulkoasu",
             "font_size": "Fontin koko",
@@ -2153,11 +2168,13 @@
             "device_not_verified_title": "Laitetta ei ole vahvistettu",
             "dialog_title": "<strong>Asetukset:</strong> Salaus",
             "recovery": {
+                "change_recovery_confirm_title": "Anna uusi palautusavain",
                 "change_recovery_key_title": "Vaihdetaanko palautusavain?",
                 "description": "Palauta kryptografinen identiteettisi ja viestihistoriasi palautusavaimella, jos olet kadottanut kaikki olemassa olevat laitteesi.",
                 "enter_key_error": "Kirjoittamasi palautusavain ei ole oikein.",
                 "forgot_recovery_key": "Unohditko palautusavaimen?",
                 "save_key_description": "Älä jaa tätä kenenkään kanssa!",
+                "set_up_recovery_confirm_title": "Anna palautusavain vahvistaaksesi",
                 "title": "Palautuminen"
             },
             "title": "Salaus"
@@ -2260,7 +2277,7 @@
                 "enter_phrase_title": "Kirjoita turvalause",
                 "enter_phrase_to_confirm": "Kirjoita turvalause toistamiseen vahvistaaksesi sen.",
                 "generate_security_key_description": "Luomme sinulle turva-vaimen talletettavaksi jonnekin turvalliseen paikkaan, kuten salasanojen hallintasovellukseen tai kassakaappiin.",
-                "generate_security_key_title": "Luo turva-avain",
+                "generate_security_key_title": "Luo palautusavain",
                 "pass_phrase_match_failed": "Ei täsmää.",
                 "pass_phrase_match_success": "Täsmää!",
                 "phrase_strong_enough": "Hienoa! Tämä turvalause vaikuttaa riittävän vahvalta.",
@@ -2269,7 +2286,7 @@
                 "set_phrase_again": "Palaa asettamaan se uudelleen.",
                 "settings_reminder": "Voit myös ottaa käyttöön suojatun varmuuskopioinnin ja hallita avaimia asetuksista.",
                 "title_confirm_phrase": "Vahvista turvalause",
-                "title_save_key": "Tallenna turva-avain",
+                "title_save_key": "Tallenna palautusavain",
                 "title_set_phrase": "Aseta turvalause",
                 "unable_to_setup": "Salavaraston käyttöönotto epäonnistui",
                 "use_different_passphrase": "Käytä eri salalausetta?"
@@ -2315,6 +2332,7 @@
             "messages_containing_keywords": "Viestit, jotka sisältävät avainsanoja",
             "noisy": "Äänekäs",
             "push_targets": "Ilmoituksen kohteet",
+            "quick_actions_mark_all_read": "Merkitse kaikki viestit luetuiksi",
             "quick_actions_reset": "Palauta oletusasetukset",
             "quick_actions_section": "Pikatoiminnot",
             "rule_call": "Puhelukutsu",
@@ -2359,6 +2377,7 @@
         "security": {
             "4s_public_key_in_account_data": "tilin tiedoissa",
             "4s_public_key_status": "Salavaraston julkinen avain:",
+            "analytics_description": "Jaa nimettömiä tietoja auttaaksesi meitä tunnistamaan ongelmia. Ei mitään henkilökohtaista. Ei kolmansia osapuolia.",
             "backup_key_cached_status": "Välimuistissa oleva varmuuskopioavain:",
             "backup_key_stored_status": "Varmuuskopioavain tallennettu:",
             "backup_key_unexpected_type": "odottamaton tyyppi",
@@ -2600,7 +2619,9 @@
         "devtools": "Avaa kehitystyökalujen dialogin",
         "discardsession": "Pakottaa hylkäämään nykyisen ulospäin suuntautuvan ryhmäistunnon salatussa huoneessa",
         "error_invalid_rendering_type": "Komentovirhe: Renderöintityyppiä (%(renderingType)s) ei löydy",
+        "error_invalid_room": "Komento epäonnistui: Huonetta ei löytynyt (%(roomId)s)",
         "error_invalid_runfn": "Määräys virhe: Ei voitu käsitellä / komentoa",
+        "error_invalid_user_in_room": "Käyttäjää ei löytynyt huoneesta",
         "help": "Näyttää luettelon komennoista käyttötavoin ja kuvauksin",
         "help_dialog_title": "Komento-ohje",
         "holdcall": "Asettaa nykyisen huoneen puhelun pitoon",
@@ -3004,6 +3025,7 @@
             "left_reason": "%(targetName)s poistui huoneesta: %(reason)s",
             "no_change": "%(senderName)s ei tehnyt muutosta",
             "reject_invite": "%(targetName)s hylkäsi kutsun",
+            "reject_invite_reason": "%(targetName)s hylkäsi kutsun: %(reason)s",
             "remove_avatar": "%(senderName)s poisti profiilikuvansa",
             "remove_name": "%(senderName)s poisti näyttönimensä (%(oldDisplayName)s)",
             "set_avatar": "%(senderName)s asetti profiilikuvan",
@@ -3040,7 +3062,8 @@
         },
         "m.room.tombstone": "%(senderDisplayName)s päivitti tämän huoneen.",
         "m.room.topic": {
-            "changed": "%(senderDisplayName)s vaihtoi aiheeksi \"%(topic)s\"."
+            "changed": "%(senderDisplayName)s vaihtoi aiheeksi \"%(topic)s\".",
+            "removed": "%(senderDisplayName)s poisti aiheen."
         },
         "m.sticker": "%(senderDisplayName)s lähetti tarran.",
         "m.video": {
@@ -3405,6 +3428,7 @@
         "minimise_call": "Pienennä puhelu",
         "misconfigured_server": "Puhelu epäonnistui palvelimen väärien asetusten takia",
         "misconfigured_server_description": "Pyydä kotipalvelimesi (<code>%(homeserverDomain)s</code>) ylläpitäjää asentamaan TURN-palvelin, jotta puhelut toimisivat luotettavasti.",
+        "misconfigured_server_fallback_accept": "Yritä käyttäen palvelinta %(server)s",
         "more_button": "Lisää",
         "msisdn_lookup_failed": "Puhelinnumeroa ei voi hakea",
         "msisdn_lookup_failed_description": "Puhelinnumeron haussa tapahtui virhe",

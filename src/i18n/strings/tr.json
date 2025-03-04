@@ -1285,8 +1285,7 @@
         "title": "%(brand)s bu tarayıcıyı desteklemiyor",
         "use_desktop_heading": "Bunun yerine %(brand)s Masaüstü kullanın",
         "use_mobile_heading": "Bunun yerine mobil cihazlarda %(brand)s kullanın",
-        "use_mobile_heading_after_desktop": "Veya mobil uygulamamızı kullanın",
-        "windows": "Windows (%(bits)s-bit)"
+        "use_mobile_heading_after_desktop": "Veya mobil uygulamamızı kullanın"
     },
     "info_tooltip_title": "Bilgi",
     "integration_manager": {

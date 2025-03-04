@@ -80,12 +80,14 @@
         "maximise": "Maximalizovat",
         "mention": "Zmínit",
         "minimise": "Minimalizovat",
+        "new_message": "Nová zpráva",
         "new_room": "Nová místnost",
         "new_video_room": "Nová video místnost",
         "next": "Další",
         "no": "Ne",
         "ok": "OK",
         "open": "Otevřít",
+        "open_menu": "Otevřít nabídku",
         "pause": "Pozastavit",
         "pin": "Připnout",
         "play": "Přehrát",
@@ -1244,6 +1246,7 @@
         "change": "Změnit server identit",
         "change_prompt": "Odpojit se ze serveru <current /> a připojit na <new />?",
         "change_server_prompt": "Pokud nechcete na hledání existujících kontaktů používat server <server />, zvolte si jiný server.",
+        "changed": "Váš server identit byl změněn",
         "checking": "Kontrolování serveru",
         "description_connected": "Pro hledání existujících kontaktů používáte server identit <server></server>. Níže ho můžete změnit.",
         "description_disconnected": "Pro hledání existujících kontaktů nepoužíváte žádný server identit <server></server>. Abyste mohli hledat kontakty, nějaký níže nastavte.",
@@ -1287,7 +1290,8 @@
         "use_desktop_heading": "Místo toho použijte %(brand)s Desktop",
         "use_mobile_heading": "Místo toho použijte %(brand)s na mobilu",
         "use_mobile_heading_after_desktop": "Nebo použijte naši mobilní aplikaci",
-        "windows": "Windows (%(bits)s-bit)"
+        "windows_64bit": "Windows (64-bit)",
+        "windows_arm_64bit": "Windows (ARM 64-bit)"
     },
     "info_tooltip_title": "Informace",
     "integration_manager": {
@@ -2099,6 +2103,7 @@
             "other": "Momentálně se připojuje %(count)s místností"
         },
         "notification_options": "Možnosti oznámení",
+        "open_space_menu": "Otevřít nabídku prostoru",
         "redacting_messages_status": {
             "one": "Momentálně se odstraňují zprávy v %(count)s místnosti",
             "other": "Momentálně se odstraňují zprávy v %(count)s místnostech"
@@ -2113,6 +2118,10 @@
         "sort_by_activity": "Aktivity",
         "sort_by_alphabet": "A–Z",
         "sort_unread_first": "Zobrazovat místnosti s nepřečtenými zprávami jako první",
+        "space_menu": {
+            "home": "Domov prostoru",
+            "space_settings": "Nastavení prostoru"
+        },
         "space_menu_label": "Nabídka pro %(spaceName)s",
         "sublist_options": "Možnosti seznamu",
         "suggested_rooms_heading": "Doporučené místnosti"
