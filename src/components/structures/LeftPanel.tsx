@@ -37,7 +37,7 @@ import PosthogTrackers from "../../PosthogTrackers";
 import type PageType from "../../PageTypes";
 import { Landmark, LandmarkNavigation } from "../../accessibility/LandmarkNavigation";
 import SettingsStore from "../../settings/SettingsStore";
-import { RoomListView } from "../views/rooms/RoomListView";
+import { RoomListPanel } from "../views/rooms/RoomListPanel";
 
 interface IProps {
     isMinimized: boolean;
@@ -390,7 +390,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             return (
                 <div className={containerClasses}>
                     <div className="mx_LeftPanel_roomListContainer">
-                        <RoomListView activeSpace={this.state.activeSpace} />
+                        <RoomListPanel activeSpace={this.state.activeSpace} />
                     </div>
                 </div>
             );

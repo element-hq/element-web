@@ -4,12 +4,12 @@
         "jump_first_invite": "Hopp til den første invitasjonen.",
         "message_composer": "Meldingsfelt",
         "n_unread_messages": {
-            "1 ulest melding.": "one",
-            "%(count)s uleste meldinger.": "other"
+            "one": "1 ulest melding.",
+            "other": "%(count)s uleste meldinger."
         },
         "n_unread_messages_mentions": {
-            "1 ulest nevnelse.": "one",
-            "%(count)s uleste meldinger inkludert der du nevnes.": "other"
+            "one": "1 ulest omtale.",
+            "other": "%(count)s uleste meldinger, inkludert omtaler."
         },
         "recent_rooms": "Nylige rom",
         "room_name": "Rom %(name)s",
@@ -509,11 +509,12 @@
         "modern": "Moderne",
         "mute": "Demp",
         "n_members": {
-            "%(count)s medlem": "one",
-            "%(count)s medlemmer": "other"
+            "one": "%(count)s medlem",
+            "other": "%(count)s medlemmer"
         },
         "n_rooms": {
-            "%(count)s rom": "one"
+            "one": "%(count)s rom",
+            "other": "%(count)s rom"
         },
         "name": "Navn",
         "no_results": "Ingen treff",
@@ -942,7 +943,7 @@
             "title": "Ny gjenopprettingsmetode",
             "warning": "Hvis du ikke har angitt den nye gjenopprettingsmetoden, kan det hende at en hacker prøver å få tilgang til kontoen din. Du må øyeblikkelig endre passordet for kontoen din og angi en ny gjenopprettingsmetode i Innstillinger."
         },
-        "not_supported": "<ikke støttet>",
+        "not_supported": "<not supported>",
         "pinned_identity_changed": "%(displayName)ss (<b>%(userId)s</b>) identitet ser ut til å ha endret seg. <a>Finn ut mer</a>",
         "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>s identitet ser ut til å ha endret seg. <a>Finn ut mer</a>",
         "recovery_method_removed": {
@@ -2097,19 +2098,25 @@
             "other": "Blir for øyeblikket med i %(count)s rom"
         },
         "notification_options": "Varselsinnstillinger",
+        "open_space_menu": "Åpne Område-meny",
         "redacting_messages_status": {
             "one": "Fjerner for øyeblikket meldinger i %(count)s rom",
             "other": "Fjerner for øyeblikket meldinger i %(count)s rom"
         },
         "show_less": "Vis mindre",
         "show_n_more": {
-            "Vis %(count)s til": "one"
+            "one": "Vis %(count)s mer",
+            "other": "Vis %(count)s mer"
         },
         "show_previews": "Vis forhåndsvisninger av meldinger",
         "sort_by": "Sorter etter",
         "sort_by_activity": "Aktivitet",
         "sort_by_alphabet": "A-Å",
         "sort_unread_first": "Vis rom med uleste meldinger først",
+        "space_menu": {
+            "home": "Område hjem",
+            "space_settings": "Område innstillinger"
+        },
         "space_menu_label": "",
         "sublist_options": "Liste alternativer",
         "suggested_rooms_heading": "Foreslåtte rom"
@@ -3771,8 +3778,8 @@
         "title_progress": "Last opp filer (%(current)s av %(total)s)",
         "upload_all_button": "Last opp alle",
         "upload_n_others_button": {
-            "Last opp %(count)s andre filer": "other",
-            "Last opp %(count)s annen fil": "one"
+            "one": "Last opp %(count)s en annen fil",
+            "other": "Last opp %(count)s andre filer"
         }
     },
     "user_info": {
@@ -3812,8 +3819,8 @@
         "promote_warning": "Du vil ikke kunne angre denne endringen ettersom du promoterer brukeren til å ha samme tilgangsnivå som deg selv.",
         "redact": {
             "confirm_button": {
-                "Slett %(count)s meldinger": "other",
-                "Slett 1 melding": "one"
+                "one": "Fjern 1 melding",
+                "other": "Fjern %(count)s meldinger"
             },
             "confirm_description_1": {
                 "one": "Du er i ferd med å fjerne %(count)s melding fra %(user)s. Dette vil fjerne dem permanent for alle i samtalen. Ønsker du å fortsette?",
