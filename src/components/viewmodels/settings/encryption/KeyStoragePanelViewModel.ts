@@ -48,8 +48,10 @@ export function useKeyStoragePanelViewModel(): KeyStoragePanelState {
             logger.error("Can't check key backup status: no crypto module available");
             return;
         }
-        const info = await crypto.getKeyBackupInfo();
-        setIsEnabled(Boolean(info?.version));
+        // The toggle is enabled only if this device will upload megolm keys to the backup.
+        // This is consistent with EX.
+        const activeBackupVersion = await crypto.getActiveSessionBackupVersion();
+        setIsEnabled(activeBackupVersion !== null);
     }, [matrixClient]);
 
     useEffect(() => {
