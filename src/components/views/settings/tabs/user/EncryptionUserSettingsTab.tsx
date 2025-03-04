@@ -26,6 +26,7 @@ import { RecoveryPanelOutOfSync } from "../../encryption/RecoveryPanelOutOfSync"
 import { useTypedEventEmitter } from "../../../../../hooks/useEventEmitter";
 import { KeyStoragePanel } from "../../encryption/KeyStoragePanel";
 import { DeleteKeyStoragePanel } from "../../encryption/DeleteKeyStoragePanel";
+import { BACKUP_DISABLED_ACCOUNT_DATA_KEY } from "../../../../../DeviceListener";
 
 /**
  * The state in the encryption settings tab.
@@ -197,7 +198,7 @@ function useCheckEncryptionState(state: State, setState: (state: State) => void)
         // if their account data is changing then it implies that they're changing encryption related things
         // on another device. This code is written with the assumption that it's better for the UI to refresh
         // and be up to date with whatever changes they've made.
-        if (type === "m.org.matrix.custom.backup_disabled") {
+        if (type === BACKUP_DISABLED_ACCOUNT_DATA_KEY) {
             checkEncryptionState();
         }
     });

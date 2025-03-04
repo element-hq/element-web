@@ -9,6 +9,7 @@ import { useCallback, useEffect, useState } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
+import { BACKUP_DISABLED_ACCOUNT_DATA_KEY } from "../../../../DeviceListener";
 
 interface KeyStoragePanelState {
     /**
@@ -82,7 +83,7 @@ export function useKeyStoragePanelViewModel(): KeyStoragePanelState {
                     await crypto.checkKeyBackupAndEnable();
 
                     // Set the flag so that EX no longer thinks the user wants backup disabled
-                    await matrixClient.setAccountData("m.org.matrix.custom.backup_disabled", { disabled: false });
+                    await matrixClient.setAccountData(BACKUP_DISABLED_ACCOUNT_DATA_KEY, { disabled: false });
                 } else {
                     // Get the key backup version we're using
                     const info = await crypto.getKeyBackupInfo();
@@ -114,7 +115,7 @@ export function useKeyStoragePanelViewModel(): KeyStoragePanelState {
                     // finally, set a flag to say that the user doesn't want key backup.
                     // Element X uses this to determine whether to set up automatically,
                     // so this will stop EX turning it back on spontaneously.
-                    await matrixClient.setAccountData("m.org.matrix.custom.backup_disabled", { disabled: true });
+                    await matrixClient.setAccountData(BACKUP_DISABLED_ACCOUNT_DATA_KEY, { disabled: true });
                 }
 
                 await checkStatus();

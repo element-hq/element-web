@@ -52,7 +52,7 @@ const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
 // Unfortunately named account data key used by Element X to indicate that the user
 // has chosen to disable server side key backups. We need to set and honour this
 // to prevent Element X from automatically turning key backup back on.
-const BACKUP_DISABLED_ACCOUNT_DATA_KEY = "m.org.matrix.custom.backup_disabled";
+export const BACKUP_DISABLED_ACCOUNT_DATA_KEY = "m.org.matrix.custom.backup_disabled";
 
 const logger = baseLogger.getChild("DeviceListener:");
 
