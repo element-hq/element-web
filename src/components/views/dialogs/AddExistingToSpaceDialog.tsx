@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ReactElement, type ReactNode, useContext, useMemo, useRef, useState } from "react";
+import React, { type ReactElement, type ReactNode, useContext, useId, useMemo, useRef, useState } from "react";
 import classNames from "classnames";
 import { type Room, EventType } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
@@ -53,8 +53,9 @@ export const Entry: React.FC<{
     checked: boolean;
     onChange?(value: boolean): void;
 }> = ({ room, checked, onChange }) => {
+    const id = useId();
     return (
-        <label className="mx_AddExistingToSpace_entry">
+        <label id={id} className="mx_AddExistingToSpace_entry">
             {room?.isSpaceRoom() ? (
                 <RoomAvatar room={room} size="32px" />
             ) : (
@@ -65,7 +66,8 @@ export const Entry: React.FC<{
                 onChange={onChange ? (e) => onChange(e.currentTarget.checked) : undefined}
                 checked={checked}
                 disabled={!onChange}
-            />
+                aria-labelledby={id}
+            ></StyledCheckbox>
         </label>
     );
 };

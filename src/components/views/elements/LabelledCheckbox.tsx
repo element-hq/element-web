@@ -29,11 +29,10 @@ interface IProps {
 const LabelledCheckbox: React.FC<IProps> = ({ value, label, byline, disabled, onChange, className }) => {
     return (
         <label className={classnames("mx_LabelledCheckbox", className)}>
-            <StyledCheckbox disabled={disabled} checked={value} onChange={(e) => onChange(e.target.checked)} />
-            <div className="mx_LabelledCheckbox_labels">
+                        {/* hs-a11y-todo */}
+            <StyledCheckbox description={byline} disabled={disabled} checked={value} onChange={(e) => onChange(e.target.checked)}>
                 <span className="mx_LabelledCheckbox_label">{label}</span>
-                {byline ? <span className="mx_LabelledCheckbox_byline">{byline}</span> : null}
-            </div>
+            </StyledCheckbox>
         </label>
     );
 };

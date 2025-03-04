@@ -45,20 +45,17 @@ const Entry: React.FC<{
 
     return (
         <label className="mx_ManageRestrictedJoinRuleDialog_entry">
-            <div>
-                <div>
-                    {localRoom ? <RoomAvatar room={room} size="20px" /> : <RoomAvatar oobData={room} size="20px" />}
-                    <span className="mx_ManageRestrictedJoinRuleDialog_entry_name">{room.name}</span>
-                </div>
-                {description && (
-                    <div className="mx_ManageRestrictedJoinRuleDialog_entry_description">{description}</div>
-                )}
-            </div>
             <StyledCheckbox
                 onChange={onChange ? (e) => onChange(e.target.checked) : undefined}
                 checked={checked}
                 disabled={!onChange}
-            />
+                description={description}
+            >
+            <div>
+                {localRoom ? <RoomAvatar role="none" room={room} size="20px" /> : <RoomAvatar oobData={room} size="20px" />}
+                <span className="mx_ManageRestrictedJoinRuleDialog_entry_name">{room.name}</span>
+            </div>
+            </StyledCheckbox>
         </label>
     );
 };

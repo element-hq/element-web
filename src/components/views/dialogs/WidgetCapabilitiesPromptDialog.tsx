@@ -100,16 +100,12 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
         });
         const checkboxRows = orderedCapabilities.map(([cap, isChecked], i) => {
             const text = CapabilityText.for(cap, this.props.widgetKind);
-            const byline = text.byline ? (
-                <span className="mx_WidgetCapabilitiesPromptDialog_byline">{text.byline}</span>
-            ) : null;
 
             return (
                 <div className="mx_WidgetCapabilitiesPromptDialog_cap" key={cap + i}>
-                    <StyledCheckbox checked={isChecked} onChange={() => this.onToggle(cap)}>
+                    <StyledCheckbox checked={isChecked} onChange={() => this.onToggle(cap)} description={text.byline}>
                         {text.primary}
                     </StyledCheckbox>
-                    {byline}
                 </div>
             );
         });

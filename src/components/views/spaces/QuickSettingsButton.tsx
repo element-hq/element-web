@@ -92,6 +92,7 @@ const QuickSettingsButton: React.FC<{
                             {_t("quick_settings|metaspace_section")}
                         </h4>
 
+                        {/* hs-a11y-todo */}
                         <StyledCheckbox
                             className="mx_QuickSettingsButton_favouritesCheckbox"
                             checked={!!favouritesEnabled}

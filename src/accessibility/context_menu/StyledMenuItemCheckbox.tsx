@@ -63,7 +63,6 @@ export const StyledMenuItemCheckbox: React.FC<IProps> = ({ children, label, onCh
         <StyledCheckbox
             {...props}
             role="menuitemcheckbox"
-            aria-label={label}
             onChange={onChange}
             onKeyDown={onKeyDown}
             onKeyUp={onKeyUp}

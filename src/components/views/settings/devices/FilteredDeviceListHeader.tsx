@@ -10,7 +10,7 @@ import React, { type HTMLProps } from "react";
 import { Tooltip } from "@vector-im/compound-web";
 
 import { _t } from "../../../../languageHandler";
-import StyledCheckbox, { CheckboxStyle } from "../../elements/StyledCheckbox";
+import StyledCheckbox from "../../elements/StyledCheckbox";
 
 interface Props extends Omit<HTMLProps<HTMLDivElement>, "className"> {
     selectedDeviceCount: number;
@@ -34,7 +34,6 @@ const FilteredDeviceListHeader: React.FC<Props> = ({
             {!isSelectDisabled && (
                 <Tooltip label={checkboxLabel} placement="top" isTriggerInteractive={false}>
                     <StyledCheckbox
-                        kind={CheckboxStyle.Solid}
                         checked={isAllSelected}
                         onChange={toggleSelectAll}
                         id="device-select-all-checkbox"

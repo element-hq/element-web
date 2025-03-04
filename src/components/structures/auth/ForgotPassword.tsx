@@ -442,27 +442,28 @@ export default class ForgotPassword extends React.Component<Props, State> {
         let resetPasswordJsx: JSX.Element;
 
         switch (this.state.phase) {
-            case Phase.EnterEmail:
-            case Phase.SendingEmail:
-                resetPasswordJsx = this.renderEnterEmail();
-                break;
-            case Phase.EmailSent:
-                resetPasswordJsx = this.renderCheckEmail();
-                break;
-            case Phase.PasswordInput:
-            case Phase.ResettingPassword:
+            default:
+            // case Phase.EnterEmail:
+            // case Phase.SendingEmail:
+            //     resetPasswordJsx = this.renderEnterEmail();
+            //     break;
+            // case Phase.EmailSent:
+            //     resetPasswordJsx = this.renderCheckEmail();
+            //     break;
+            // case Phase.PasswordInput:
+            // case Phase.ResettingPassword:
                 resetPasswordJsx = this.renderSetPassword();
                 break;
-            case Phase.Done:
-                resetPasswordJsx = this.renderDone();
-                break;
-            default:
-                // This should not happen. However, it is logged and the user is sent to the start.
-                logger.warn(`unknown forgot password phase ${this.state.phase}`);
-                this.setState({
-                    phase: Phase.EnterEmail,
-                });
-                return;
+            // case Phase.Done:
+            //     resetPasswordJsx = this.renderDone();
+            //     break;
+            // default:
+            //     // This should not happen. However, it is logged and the user is sent to the start.
+            //     logger.warn(`unknown forgot password phase ${this.state.phase}`);
+            //     this.setState({
+            //         phase: Phase.EnterEmail,
+            //     });
+            //     return;
         }
 
         return (

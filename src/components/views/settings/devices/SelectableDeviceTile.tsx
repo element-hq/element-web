@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 
-import StyledCheckbox, { CheckboxStyle } from "../../elements/StyledCheckbox";
+import StyledCheckbox from "../../elements/StyledCheckbox";
 import DeviceTile, { type DeviceTileProps } from "./DeviceTile";
 
 interface Props extends DeviceTileProps {
@@ -20,8 +20,8 @@ interface Props extends DeviceTileProps {
 const SelectableDeviceTile: React.FC<Props> = ({ children, device, isSelected, onSelect, onClick }) => {
     return (
         <div className="mx_SelectableDeviceTile">
+                        {/* hs-a11y-todo */}
             <StyledCheckbox
-                kind={CheckboxStyle.Solid}
                 checked={isSelected}
                 onChange={onSelect}
                 className="mx_SelectableDeviceTile_checkbox"

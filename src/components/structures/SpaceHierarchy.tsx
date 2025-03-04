@@ -16,6 +16,7 @@ import React, {
     useCallback,
     useContext,
     useEffect,
+    useId,
     useMemo,
     useRef,
     useState,
@@ -116,6 +117,7 @@ const Tile: React.FC<ITileProps> = ({
     const [showChildren, toggleShowChildren] = useStateToggle(true);
     const [onFocus, isActive, ref, nodeRef] = useRovingTabIndex();
     const [busy, setBusy] = useState(false);
+    const checkboxLabelId = useId();
 
     const onPreviewClick = (ev: ButtonEvent): void => {
         ev.preventDefault();
@@ -172,7 +174,7 @@ const Tile: React.FC<ITileProps> = ({
     let checkbox: ReactElement | undefined;
     if (onToggleClick) {
         if (hasPermissions) {
-            checkbox = <StyledCheckbox checked={!!selected} onChange={onToggleClick} tabIndex={isActive ? 0 : -1} />;
+            checkbox = <StyledCheckbox role="presentation" aria-labelledby={checkboxLabelId} checked={!!selected} tabIndex={-1} />;
         } else {
             checkbox = (
                 <TextWithTooltip
@@ -181,7 +183,7 @@ const Tile: React.FC<ITileProps> = ({
                         ev.stopPropagation();
                     }}
                 >
-                    <StyledCheckbox disabled={true} tabIndex={isActive ? 0 : -1} />
+                    <StyledCheckbox role="presentation" aria-labelledby={checkboxLabelId} disabled={true} tabIndex={-1} />
                 </TextWithTooltip>
             );
         }
@@ -248,7 +250,7 @@ const Tile: React.FC<ITileProps> = ({
             <div className="mx_SpaceHierarchy_roomTile_item">
                 <div className="mx_SpaceHierarchy_roomTile_avatar">{avatar}</div>
                 <div className="mx_SpaceHierarchy_roomTile_name">
-                    {name}
+                    <span id={checkboxLabelId}>{name}</span>
                     {joinedSection}
                     {suggestedSection}
                 </div>
@@ -330,11 +332,14 @@ const Tile: React.FC<ITileProps> = ({
         };
     }
 
+    const shouldToggle = hasPermissions && onToggleClick;
+
     return (
         <li
             className="mx_SpaceHierarchy_roomTileWrapper"
             role="treeitem"
             aria-selected={selected}
+            aria-labelledby={checkboxLabelId}
             aria-expanded={children ? showChildren : undefined}
         >
             <AccessibleButton
@@ -342,7 +347,7 @@ const Tile: React.FC<ITileProps> = ({
                     mx_SpaceHierarchy_subspace: room.room_type === RoomType.Space,
                     mx_SpaceHierarchy_joining: busy,
                 })}
-                onClick={hasPermissions && onToggleClick ? onToggleClick : onPreviewClick}
+                onClick={shouldToggle ? onToggleClick : onPreviewClick}
                 onKeyDown={onKeyDown}
                 ref={ref}
                 onFocus={onFocus}
