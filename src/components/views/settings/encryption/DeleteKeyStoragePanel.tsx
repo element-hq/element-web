@@ -25,7 +25,7 @@ interface Props {
 }
 
 /**
- * Confirms that the user really wants to turn off and delete their key storage
+ * Confirms that the user really wants to turn off and delete their key storage.  Part of the "Encryption" settings tab.
  */
 export function DeleteKeyStoragePanel({ onFinish }: Props): JSX.Element {
     const { setEnabled } = useKeyStoragePanelViewModel();
