@@ -34,9 +34,7 @@ describe("<ResetIdentityPanel />", () => {
         // We need to pause the reset so that we can check that it's providing
         // feedback to the user that something is happening.
         const { promise: resetEncryptionPromise, resolve: resolveResetEncryption } = defer();
-        jest.spyOn(matrixClient.getCrypto()!, "resetEncryption").mockImplementation(() => {
-            return resetEncryptionPromise;
-        });
+        jest.spyOn(matrixClient.getCrypto()!, "resetEncryption").mockReturnValue(resetEncryptionPromise);
 
         const continueButton = screen.getByRole("button", { name: "Continue" });
         await user.click(continueButton);
