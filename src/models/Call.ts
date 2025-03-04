@@ -1004,19 +1004,18 @@ export class ElementCall extends Call {
         ev.preventDefault();
         this.messaging!.transport.reply(ev.detail, {}); // ack
         this.setDisconnected();
+        // In video rooms we immediately want to reconnect after hangup
+        // This starts the lobby again and connects to all signals from EC.
+        if (isVideoRoom(this.room)) {
+            this.start();
+        }
     };
 
     private readonly onClose = async (ev: CustomEvent<IWidgetApiRequest>): Promise<void> => {
         ev.preventDefault();
         this.messaging!.transport.reply(ev.detail, {}); // ack
-        // In video rooms we immediately want to reconnect after hangup
-        // This starts the lobby again and connects to all signals from EC.
-        if (isVideoRoom(this.room)) {
-            this.start();
-        } else {
-            // User is done with the call; tell the UI to close it
-            this.close();
-        }
+        // User is done with the call; tell the UI to close it
+        this.close();
     };
 
     private readonly onTileLayout = async (ev: CustomEvent<IWidgetApiRequest>): Promise<void> => {
