@@ -52,6 +52,10 @@ class ExampleModule implements Module {
 // ...
 ```
 
+## Releases
+
+The API is versioned using semver, with the major version incremented for breaking changes.
+
 ## Copyright & License
 
 Copyright (c) 2025 New Vector Ltd
