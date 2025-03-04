@@ -25,7 +25,7 @@ import { type HomeserverContainer, type StartedHomeserverContainer } from "./Hom
 import { type StartedMatrixAuthenticationServiceContainer } from "./mas.ts";
 import { Api, ClientServerApi, type Verb } from "../plugins/utils/api.ts";
 
-const TAG = "develop@sha256:8d1c531cf6010b63142a04e1b138a60720946fa131ad404813232f02db4ce7ba";
+const TAG = "develop@sha256:edf6d9f7fa0b5cbc7f68a5e87ad8ba7289f941473d1e1a440e61dbccde9636ff";
 
 const DEFAULT_CONFIG = {
     server_name: "localhost",
@@ -144,6 +144,7 @@ const DEFAULT_CONFIG = {
         enabled: true,
         include_offline_users_on_sync: true,
     },
+    room_list_publication_rules: [{ action: "allow" }],
 };
 
 export type SynapseConfig = Partial<typeof DEFAULT_CONFIG>;
