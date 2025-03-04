@@ -34,6 +34,7 @@ interface KeyStoragePanelState {
     busy: boolean;
 }
 
+/** Returns a ViewModel for use in {@link KeyStoragePanel} and {@link DeleteKeyStoragePanel}. */
 export function useKeyStoragePanelViewModel(): KeyStoragePanelState {
     const [isEnabled, setIsEnabled] = useState<boolean | undefined>(undefined);
     const [loading, setLoading] = useState(true);
