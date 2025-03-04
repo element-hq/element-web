@@ -85,15 +85,9 @@ export enum ConnectionState {
 export const isConnected = (state: ConnectionState): boolean =>
     state === ConnectionState.Connected || state === ConnectionState.Disconnecting;
 
-export enum Layout {
-    Tile = "tile",
-    Spotlight = "spotlight",
-}
-
 export enum CallEvent {
     ConnectionState = "connection_state",
     Participants = "participants",
-    Layout = "layout",
     Close = "close",
     Destroy = "destroy",
 }
@@ -104,7 +98,6 @@ interface CallEventHandlerMap {
         participants: Map<RoomMember, Set<string>>,
         prevParticipants: Map<RoomMember, Set<string>>,
     ) => void;
-    [CallEvent.Layout]: (layout: Layout) => void;
     [CallEvent.Close]: () => void;
     [CallEvent.Destroy]: () => void;
 }
@@ -658,14 +651,6 @@ export class ElementCall extends Call {
 
     private settingsStoreCallEncryptionWatcher?: string;
     private terminationTimer?: number;
-    private _layout = Layout.Tile;
-    public get layout(): Layout {
-        return this._layout;
-    }
-    protected set layout(value: Layout) {
-        this._layout = value;
-        this.emit(CallEvent.Layout, value);
-    }
 
     public get presented(): boolean {
         return super.presented;
@@ -902,8 +887,6 @@ export class ElementCall extends Call {
         audioInput: MediaDeviceInfo | null,
         videoInput: MediaDeviceInfo | null,
     ): Promise<void> {
-        this.messaging!.on(`action:${ElementWidgetActions.TileLayout}`, this.onTileLayout);
-        this.messaging!.on(`action:${ElementWidgetActions.SpotlightLayout}`, this.onSpotlightLayout);
         this.messaging!.on(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
         this.messaging!.once(`action:${ElementWidgetActions.Close}`, this.onClose);
         this.messaging!.on(`action:${ElementWidgetActions.DeviceMute}`, this.onDeviceMute);
@@ -947,8 +930,6 @@ export class ElementCall extends Call {
     }
 
     public setDisconnected(): void {
-        this.messaging!.off(`action:${ElementWidgetActions.TileLayout}`, this.onTileLayout);
-        this.messaging!.off(`action:${ElementWidgetActions.SpotlightLayout}`, this.onSpotlightLayout);
         this.messaging!.off(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
         this.messaging!.off(`action:${ElementWidgetActions.DeviceMute}`, this.onDeviceMute);
         super.setDisconnected();
@@ -972,15 +953,6 @@ export class ElementCall extends Call {
         // user isn't looking at it (for example, waiting in an empty lobby)
         if (this.session.memberships.length === 0 && !this.presented && !this.room.isCallRoom()) this.destroy();
     };
-
-    /**
-     * Sets the call's layout.
-     * @param layout The layout to switch to.
-     */
-    public async setLayout(layout: Layout): Promise<void> {
-        const action = layout === Layout.Tile ? ElementWidgetActions.TileLayout : ElementWidgetActions.SpotlightLayout;
-        await this.messaging!.transport.send(action, {});
-    }
 
     private readonly onMembershipChanged = (): void => this.updateParticipants();
 
@@ -1023,18 +995,6 @@ export class ElementCall extends Call {
         this.messaging!.transport.reply(ev.detail, {}); // ack
         // User is done with the call; tell the UI to close it
         this.close();
-    };
-
-    private readonly onTileLayout = async (ev: CustomEvent<IWidgetApiRequest>): Promise<void> => {
-        ev.preventDefault();
-        this.layout = Layout.Tile;
-        this.messaging!.transport.reply(ev.detail, {}); // ack
-    };
-
-    private readonly onSpotlightLayout = async (ev: CustomEvent<IWidgetApiRequest>): Promise<void> => {
-        ev.preventDefault();
-        this.layout = Layout.Spotlight;
-        this.messaging!.transport.reply(ev.detail, {}); // ack
     };
 
     public clean(): Promise<void> {
