@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import type { Room } from "matrix-js-sdk/src/matrix";
 import type { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
@@ -25,6 +25,8 @@ export interface RoomListViewState {
      * Open the room having given roomId.
      */
     openRoom: (roomId: string) => void;
+    filter: "test" | "without test" | undefined;
+    setFilter: (filter: "test" | "without test" | undefined) => void;
 }
 
 /**
@@ -33,6 +35,19 @@ export interface RoomListViewState {
  */
 export function useRoomListViewModel(): RoomListViewState {
     const [rooms, setRooms] = useState(RoomListStoreV3.instance.getSortedRoomInActiveSpace());
+    const [filter, setFilter] = useState<"test" | "without test" | undefined>();
+
+    const filterRooms = useMemo(() => {
+        return rooms.filter((room) => {
+            if (!filter) return true;
+
+            if (filter === "test") {
+                return room.name.toLowerCase().includes("test");
+            } else if (filter === "without test") {
+                return !room.name.toLowerCase().includes("test");
+            }
+        });
+    }, [rooms, filter]);
 
     useEventEmitter(RoomListStoreV3.instance, LISTS_UPDATE_EVENT, () => {
         const newRooms = RoomListStoreV3.instance.getSortedRoomInActiveSpace();
@@ -47,5 +62,5 @@ export function useRoomListViewModel(): RoomListViewState {
         });
     }, []);
 
-    return { rooms, openRoom };
+    return { rooms: filterRooms, openRoom, filter, setFilter };
 }
