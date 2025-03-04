@@ -145,7 +145,7 @@ export function EncryptionUserSettingsTab({ initialState = "loading" }: Encrypti
  * Hook to check if the user needs:
  * - to go through the SetupEncryption flow.
  * - to enter their recovery key, if the secrets are not cached locally.
- * ...and also whether megolm key backup is enabled (which we use to set the state of the 'allow key storage' toggle):
+ * ...and also whether megolm key backup is enabled on this device (which we use to set the state of the 'allow key storage' toggle):
  * we don't so much care about the value of the account data, "m.org.matrix.custom.backup_disabled" although we do use it
  * as a trigger to update as there's no event emitted for megolm key backup enabled state changing.
  * flag here: what's important is whether key backup is actually happening or not).
@@ -173,9 +173,9 @@ function useCheckEncryptionState(state: State, setState: (state: State) => void)
         const secretsOk = cachedSecrets.masterKey && cachedSecrets.selfSigningKey && cachedSecrets.userSigningKey;
 
         // Also check the key backup status
-        const backupInfo = await crypto.getKeyBackupInfo();
+        const activeBackupVersion = await crypto.getActiveSessionBackupVersion();
 
-        const keyStorageEnabled = Boolean(backupInfo?.version);
+        const keyStorageEnabled = activeBackupVersion !== null;
 
         if (isCrossSigningReady && keyStorageEnabled && secretsOk) setState("main");
         else if (!isCrossSigningReady) setState("set_up_encryption");
