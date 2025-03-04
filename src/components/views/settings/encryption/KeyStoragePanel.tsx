@@ -23,6 +23,8 @@ interface Props {
 
 /**
  * This component allows the user to set up or change their recovery key.
+ *
+ * It is used within the "Encryption" settings tab.
  */
 export const KeyStoragePanel: React.FC<Props> = ({ onKeyStorageDisableClick }) => {
     const { isEnabled, setEnabled, loading, busy } = useKeyStoragePanelViewModel();
