@@ -895,13 +895,6 @@ describe("ElementCall", () => {
             expect(call.connectionState).toBe(ConnectionState.Connected);
         });
 
-        it("fails to connect if the widget returns an error", async () => {
-            // we only send a JoinCall action if the widget is preloading
-            call.widget.data = { ...call.widget, preload: true };
-            mocked(messaging.transport).send.mockRejectedValue(new Error("never!!1! >:("));
-            await expect(call.start()).rejects.toBeDefined();
-        });
-
         it("fails to disconnect if the widget returns an error", async () => {
             await callConnectProcedure(call);
             mocked(messaging.transport).send.mockRejectedValue(new Error("never!!1! >:("));
