@@ -22,7 +22,7 @@ interface EditorProps {
 }
 
 export const Editor = memo(
-    forwardRef<HTMLDivElement, EditorProps>(function Editor(
+    forwardRef<HTMLDivElement | null, EditorProps>(function Editor(
         { disabled, placeholder, leftComponent, rightComponent }: EditorProps,
         ref,
     ) {
