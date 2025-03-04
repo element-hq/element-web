@@ -107,7 +107,7 @@ export default class BugReportDialog extends React.Component<BugReportDialogProp
                     if (error.errorcode?.startsWith("REJECTED")) {
                         errorText = _t("bug_reporting|failed_send_logs_causes|rejected_generic");
                     } else {
-                        errorText = _t("bug_reporting|failed_send_logs_causes|unknown_error");
+                        errorText = _t("bug_reporting|failed_send_logs_causes|server_unknown_error");
                     }
                     break;
             }
@@ -122,7 +122,7 @@ export default class BugReportDialog extends React.Component<BugReportDialogProp
                 </>
             );
         } else {
-            return <p>{_t("bug_reporting|failed_send_logs")}</p>;
+            return <p>{_t("bug_reporting|failed_send_logs_causes|unknown_error")}</p>;
         }
     }
 
@@ -192,7 +192,7 @@ export default class BugReportDialog extends React.Component<BugReportDialogProp
                 this.setState({
                     downloadBusy: false,
                     downloadProgress:
-                        _t("bug_reporting|failed_send_logs") + `${err instanceof Error ? err.message : ""}`,
+                        _t("bug_reporting|failed_download_logs") + `${err instanceof Error ? err.message : ""}`,
                 });
             }
         }
