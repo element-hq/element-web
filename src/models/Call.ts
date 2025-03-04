@@ -686,7 +686,6 @@ export class ElementCall extends Call {
         const params = new URLSearchParams({
             embed: "true", // We're embedding EC within another application
             // Template variables are used, so that this can be configured using the widget data.
-            preload: "$preload", // We want it to load in the background.
             skipLobby: "$skipLobby", // Skip the lobby in case we show a lobby component of our own.
             returnToLobby: "$returnToLobby", // Returns to the lobby (instead of blank screen) when the call ends. (For video rooms)
             perParticipantE2EE: "$perParticipantE2EE",
@@ -756,17 +755,13 @@ export class ElementCall extends Call {
     }
 
     // Creates a new widget if there isn't any widget of typ Call in this room.
-    // Defaults for creating a new widget are: skipLobby = false, preload = false
+    // Defaults for creating a new widget are: skipLobby = false
     // When there is already a widget the current widget configuration will be used or can be overwritten
-    // by passing the according parameters (skipLobby, preload).
-    //
-    // `preload` is deprecated. We used it for optimizing EC by using a custom EW call lobby and preloading the iframe.
-    // now it should always be false.
+    // by passing the according parameters (skipLobby).
     private static createOrGetCallWidget(
         roomId: string,
         client: MatrixClient,
         skipLobby: boolean | undefined,
-        preload: boolean | undefined,
         returnToLobby: boolean | undefined,
     ): IApp {
         const ecWidget = WidgetStore.instance.getApps(roomId).find((app) => WidgetType.CALL.matches(app.type));
@@ -776,9 +771,6 @@ export class ElementCall extends Call {
             const overwrites: IWidgetData = {};
             if (skipLobby !== undefined) {
                 overwrites.skipLobby = skipLobby;
-            }
-            if (preload !== undefined) {
-                overwrites.preload = preload;
             }
             if (returnToLobby !== undefined) {
                 overwrites.returnToLobby = returnToLobby;
@@ -804,7 +796,6 @@ export class ElementCall extends Call {
                     {},
                     {
                         skipLobby: skipLobby ?? false,
-                        preload: preload ?? false,
                         returnToLobby: returnToLobby ?? false,
                     },
                 ),
@@ -870,7 +861,6 @@ export class ElementCall extends Call {
                 room.roomId,
                 room.client,
                 undefined,
-                undefined,
                 isVideoRoom(room),
             );
             return new ElementCall(session, availableOrCreatedWidget, room.client);
@@ -880,7 +870,7 @@ export class ElementCall extends Call {
     }
 
     public static create(room: Room, skipLobby = false): void {
-        ElementCall.createOrGetCallWidget(room.roomId, room.client, skipLobby, false, isVideoRoom(room));
+        ElementCall.createOrGetCallWidget(room.roomId, room.client, skipLobby, isVideoRoom(room));
     }
 
     protected async sendCallNotify(): Promise<void> {
@@ -912,17 +902,6 @@ export class ElementCall extends Call {
         audioInput: MediaDeviceInfo | null,
         videoInput: MediaDeviceInfo | null,
     ): Promise<void> {
-        // The JoinCall action is only send if the widget is waiting for it.
-        if (this.widget.data?.preload) {
-            try {
-                await this.messaging!.transport.send(ElementWidgetActions.JoinCall, {
-                    audioInput: audioInput?.label ?? null,
-                    videoInput: videoInput?.label ?? null,
-                });
-            } catch (e) {
-                throw new Error(`Failed to join call in room ${this.roomId}: ${e}`);
-            }
-        }
         this.messaging!.on(`action:${ElementWidgetActions.TileLayout}`, this.onTileLayout);
         this.messaging!.on(`action:${ElementWidgetActions.SpotlightLayout}`, this.onSpotlightLayout);
         this.messaging!.on(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
