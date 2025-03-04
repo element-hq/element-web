@@ -92,7 +92,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         const sorter = new RecencySorter(this.matrixClient.getSafeUserId());
         this.roomSkipList = new RoomSkipList(sorter);
         const rooms = this.getRooms();
-        await SpaceStore.instance.isReady;
+        await SpaceStore.instance.storeReadyPromise;
         this.roomSkipList.seed(rooms);
         this.emit(LISTS_UPDATE_EVENT);
     }

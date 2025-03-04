@@ -153,7 +153,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
     private _enabledMetaSpaces: MetaSpace[] = [];
     /** Whether the feature flag is set for MSC3946 */
     private _msc3946ProcessDynamicPredecessor: boolean = SettingsStore.getValue("feature_dynamic_room_predecessors");
-    private _isReady = defer();
+    private _storeReadyDeferred = defer();
 
     public constructor() {
         super(defaultDispatcher, {});
@@ -165,11 +165,11 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
     }
 
     /**
-     * Returns a promise that resolves when the space store is ready.
+     * A promise that resolves when the space store is ready.
      * This happens after an initial hierarchy of spaces and rooms has been computed.
      */
-    public get isReady(): Promise<void> {
-        return this._isReady.promise;
+    public get storeReadyPromise(): Promise<void> {
+        return this._storeReadyDeferred.promise;
     }
 
     /**
@@ -1211,7 +1211,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
         } else {
             this.switchSpaceIfNeeded();
         }
-        this._isReady.resolve();
+        this._storeReadyDeferred.resolve();
     }
 
     private sendUserProperties(): void {
