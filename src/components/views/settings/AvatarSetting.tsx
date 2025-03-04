@@ -170,33 +170,33 @@ const AvatarSetting: React.FC<IProps> = ({
         setMenuOpen(newOpen);
     }, []);
 
-    let avatarElement = (
-        <AccessibleButton
-            element="div"
-            onClick={uploadAvatar}
-            className="mx_AvatarSetting_avatarPlaceholder mx_AvatarSetting_avatarDisplay"
-            aria-labelledby={disabled ? undefined : a11yId}
-            // Inhibit tab stop as we have explicit upload/remove buttons
-            tabIndex={-1}
-            disabled={disabled}
-        >
-            <BaseAvatar idName={placeholderId} name={placeholderName} size="90px" />
-        </AccessibleButton>
-    );
+    let avatarElement;
     if (avatarURL) {
         avatarElement = (
             <AccessibleButton
                 element="img"
                 className="mx_AvatarSetting_avatarDisplay"
-                aria-labelledby={disabled ? undefined : a11yId}
                 src={avatarURL}
                 alt={avatarAltText}
                 onClick={uploadAvatar}
                 // Inhibit tab stop as we have explicit upload/remove buttons
                 tabIndex={-1}
                 disabled={disabled}
+                aria-labelledby={disabled ? undefined : a11yId}
             />
         );
+    } else {
+        avatarElement = <AccessibleButton
+                element="div"
+                onClick={uploadAvatar}
+                className="mx_AvatarSetting_avatarPlaceholder mx_AvatarSetting_avatarDisplay"
+                aria-labelledby={disabled ? undefined : a11yId}
+                // Inhibit tab stop as we have explicit upload/remove buttons
+                tabIndex={-1}
+                disabled={disabled}
+            >
+                <BaseAvatar idName={placeholderId} name={placeholderName} size="90px" />
+            </AccessibleButton>;
     }
 
     let uploadAvatarBtn: JSX.Element | undefined;
@@ -212,7 +212,7 @@ const AvatarSetting: React.FC<IProps> = ({
     }
 
     const content = (
-        <div className="mx_AvatarSetting_avatar" role="group" id={a11yId} aria-label={avatarAltText}>
+        <div className="mx_AvatarSetting_avatar" role="group" aria-label={avatarAltText}>
             {avatarElement}
             {uploadAvatarBtn}
         </div>
