@@ -26,7 +26,7 @@ export default defineConfig({
         target: "esnext",
         sourcemap: true,
         rollupOptions: {
-            external: ["react", "@matrix-org/react-sdk-module-api"],
+            external: ["react"],
         },
     },
     plugins: [
