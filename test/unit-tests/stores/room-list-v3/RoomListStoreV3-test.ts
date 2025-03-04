@@ -33,7 +33,7 @@ describe("RoomListStoreV3", () => {
     beforeEach(() => {
         jest.spyOn(SpaceStore.instance, "isRoomInSpace").mockImplementation((space) => space === MetaSpace.Home);
         jest.spyOn(SpaceStore.instance, "activeSpace", "get").mockImplementation(() => MetaSpace.Home);
-        jest.spyOn(SpaceStore.instance, "isReady", "get").mockImplementation(() => Promise.resolve());
+        jest.spyOn(SpaceStore.instance, "storeReadyPromise", "get").mockImplementation(() => Promise.resolve());
     });
 
     it("Provides an unsorted list of rooms", async () => {
