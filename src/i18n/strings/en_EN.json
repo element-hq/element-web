@@ -2097,6 +2097,7 @@
             "one": "Currently joining %(count)s room",
             "other": "Currently joining %(count)s rooms"
         },
+        "list_title": "Room list",
         "notification_options": "Notification options",
         "open_space_menu": "Open space menu",
         "redacting_messages_status": {
