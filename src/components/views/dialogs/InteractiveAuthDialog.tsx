@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { type MatrixClient, type UIAResponse } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { type AuthType } from "matrix-js-sdk/src/interactive-auth";
 
 import { _t } from "../../../languageHandler";
@@ -63,7 +63,7 @@ export interface InteractiveAuthDialogProps<T = unknown>
     // Default is defined in _getDefaultDialogAesthetics()
     aestheticsForStagePhases?: DialogAesthetics;
 
-    onFinished(success?: boolean, result?: UIAResponse<T> | Error | null): void;
+    onFinished(success?: boolean, result?: T | Error | null): void;
 }
 
 interface IState {
@@ -111,7 +111,7 @@ export default class InteractiveAuthDialog<T> extends React.Component<Interactiv
 
     private onAuthFinished: InteractiveAuthCallback<T> = async (success, result): Promise<void> => {
         if (success) {
-            this.props.onFinished(true, result);
+            this.props.onFinished(true, result as T);
         } else {
             if (result === ERROR_USER_CANCELLED) {
                 this.props.onFinished(false, null);

@@ -875,6 +875,40 @@ test.describe("Timeline", () => {
                 );
             });
         });
+
+        test("should render a code block", { tag: "@screenshot" }, async ({ page, app, room }) => {
+            await page.goto(`/#/room/${room.roomId}`);
+            await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
+
+            // Wait until configuration is finished
+            await expect(
+                page
+                    .locator(".mx_GenericEventListSummary_summary")
+                    .getByText(`${OLD_NAME} created and configured the room.`),
+            ).toBeVisible();
+
+            // Send a code block
+            const composer = app.getComposerField();
+            await composer.fill("```\nconsole.log('Hello, world!');\n```");
+            await composer.press("Enter");
+
+            const tile = page.locator(".mx_EventTile");
+            await expect(tile).toBeVisible();
+            await expect(tile).toMatchScreenshot("code-block.png", { mask: [page.locator(".mx_MessageTimestamp")] });
+
+            // Edit a code block and assert the edited code block has been correctly rendered
+            await tile.hover();
+            await page.getByRole("toolbar", { name: "Message Actions" }).getByRole("button", { name: "Edit" }).click();
+            await page
+                .getByRole("textbox", { name: "Edit message" })
+                .fill("```\nconsole.log('Edited: Hello, world!');\n```");
+            await page.getByRole("textbox", { name: "Edit message" }).press("Enter");
+
+            const newTile = page.locator(".mx_EventTile");
+            await expect(newTile).toMatchScreenshot("edited-code-block.png", {
+                mask: [page.locator(".mx_MessageTimestamp")],
+            });
+        });
     });
 
     test.describe("message sending", { tag: ["@no-firefox", "@no-webkit"] }, () => {

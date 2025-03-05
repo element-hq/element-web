@@ -6,22 +6,21 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { expect, test as base } from "../../element-web-test";
+import { type CredentialsWithDisplayName, expect, test as base } from "../../element-web-test";
 import { selectHomeserver } from "../utils";
 import { emailHomeserver } from "../../plugins/homeserver/synapse/emailHomeserver.ts";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
-import { type Credentials } from "../../plugins/homeserver";
 
 const email = "user@nowhere.dummy";
 
-const test = base.extend<{ credentials: Pick<Credentials, "username" | "password"> }>({
+const test = base.extend({
     // eslint-disable-next-line no-empty-pattern
     credentials: async ({}, use, testInfo) => {
         await use({
             username: `user_${testInfo.testId}`,
             // this has to be password-like enough to please zxcvbn. Needless to say it's just from pwgen.
             password: "oETo7MPf0o",
-        });
+        } as CredentialsWithDisplayName);
     },
 });
 

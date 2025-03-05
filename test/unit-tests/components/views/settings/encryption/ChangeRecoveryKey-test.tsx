@@ -9,6 +9,7 @@ import React from "react";
 import { render, screen, waitFor } from "jest-matrix-react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import userEvent from "@testing-library/user-event";
+import { mocked } from "jest-mock";
 
 import { ChangeRecoveryKey } from "../../../../../../src/components/views/settings/encryption/ChangeRecoveryKey";
 import { createTestClient, withClientContextRenderOptions } from "../../../../../test-utils";
@@ -17,6 +18,10 @@ import { copyPlaintext } from "../../../../../../src/utils/strings";
 jest.mock("../../../../../../src/utils/strings", () => ({
     copyPlaintext: jest.fn(),
 }));
+
+afterEach(() => {
+    jest.restoreAllMocks();
+});
 
 describe("<ChangeRecoveryKey />", () => {
     let matrixClient: MatrixClient;
@@ -36,7 +41,7 @@ describe("<ChangeRecoveryKey />", () => {
         );
     }
 
-    describe("flow to setup a recovery key", () => {
+    describe("flow to set up a recovery key", () => {
         it("should display information about the recovery key", async () => {
             const user = userEvent.setup();
 
@@ -106,6 +111,33 @@ describe("<ChangeRecoveryKey />", () => {
 
             await user.click(finishButton);
             expect(onFinish).toHaveBeenCalledWith();
+        });
+
+        it("should display errors from bootstrapSecretStorage", async () => {
+            const consoleErrorSpy = jest.spyOn(console, "error").mockReturnValue(undefined);
+            mocked(matrixClient.getCrypto()!).bootstrapSecretStorage.mockRejectedValue(new Error("can't bootstrap"));
+
+            const user = userEvent.setup();
+            renderComponent(false);
+
+            // Display the recovery key to save
+            await waitFor(() => user.click(screen.getByRole("button", { name: "Continue" })));
+            // Display the form to confirm the recovery key
+            await waitFor(() => user.click(screen.getByRole("button", { name: "Continue" })));
+
+            await waitFor(() => expect(screen.getByText("Enter your recovery key to confirm")).toBeInTheDocument());
+
+            const finishButton = screen.getByRole("button", { name: "Finish set up" });
+            const input = screen.getByRole("textbox");
+            await userEvent.type(input, "encoded private key");
+            await user.click(finishButton);
+
+            await screen.findByText("Failed to set up secret storage");
+            await screen.findByText("Error: can't bootstrap");
+            expect(consoleErrorSpy).toHaveBeenCalledWith(
+                "Failed to set up secret storage:",
+                new Error("can't bootstrap"),
+            );
         });
     });
 

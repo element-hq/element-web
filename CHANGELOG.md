@@ -1,3 +1,40 @@
+Changes in [1.11.94](https://github.com/element-hq/element-web/releases/tag/v1.11.94) (2025-02-27)
+==================================================================================================
+## 🐛 Bug Fixes
+
+* [Backport staging] fix: /tmp/element-web-config may already exist preventing the container from booting up ([#29377](https://github.com/element-hq/element-web/pull/29377)). Contributed by @RiotRobot.
+
+
+Changes in [1.11.93](https://github.com/element-hq/element-web/releases/tag/v1.11.93) (2025-02-25)
+==================================================================================================
+## ✨ Features
+
+* [backport] Dynamically load Element Web modules in Docker entrypoint ([#29358](https://github.com/element-hq/element-web/pull/29358)). Contributed by @t3chguy.
+* ChangeRecoveryKey: error handling ([#29262](https://github.com/element-hq/element-web/pull/29262)). Contributed by @richvdh.
+* Dehydration: enable dehydrated device on "Set up recovery" ([#29265](https://github.com/element-hq/element-web/pull/29265)). Contributed by @richvdh.
+* Render reason for invite rejection. ([#29257](https://github.com/element-hq/element-web/pull/29257)). Contributed by @Half-Shot.
+* New room list: add search section ([#29251](https://github.com/element-hq/element-web/pull/29251)). Contributed by @florianduros.
+* New room list: hide favourites and people meta spaces ([#29241](https://github.com/element-hq/element-web/pull/29241)). Contributed by @florianduros.
+* New Room List: Create new labs flag ([#29239](https://github.com/element-hq/element-web/pull/29239)). Contributed by @MidhunSureshR.
+* Stop URl preview from covering message box ([#29215](https://github.com/element-hq/element-web/pull/29215)). Contributed by @edent.
+* Rename "security key" into "recovery key" ([#29217](https://github.com/element-hq/element-web/pull/29217)). Contributed by @florianduros.
+* Add new verification section to user profile ([#29200](https://github.com/element-hq/element-web/pull/29200)). Contributed by @MidhunSureshR.
+* Initial support for runtime modules ([#29104](https://github.com/element-hq/element-web/pull/29104)). Contributed by @t3chguy.
+* Add `Forgot recovery key?` button to encryption tab ([#29202](https://github.com/element-hq/element-web/pull/29202)). Contributed by @florianduros.
+* Add KeyIcon to key storage out of sync toast ([#29201](https://github.com/element-hq/element-web/pull/29201)). Contributed by @florianduros.
+* Improve rendering of empty topics in the timeline  ([#29152](https://github.com/element-hq/element-web/pull/29152)). Contributed by @Half-Shot.
+
+## 🐛 Bug Fixes
+
+* Fix font scaling in member list ([#29285](https://github.com/element-hq/element-web/pull/29285)). Contributed by @florianduros.
+* Grow member list search field when resizing the right panel ([#29267](https://github.com/element-hq/element-web/pull/29267)). Contributed by @langleyd.
+* Don't reload roomview on offline connectivity check ([#29243](https://github.com/element-hq/element-web/pull/29243)). Contributed by @dbkr.
+* Respect user's 12/24 hour preference consistently ([#29237](https://github.com/element-hq/element-web/pull/29237)). Contributed by @t3chguy.
+* Restore the accessibility role on call views ([#29225](https://github.com/element-hq/element-web/pull/29225)). Contributed by @robintown.
+* Revert `GoToHome` keyboard shortcut to `Ctrl`–`Shift`–`H` on macOS ([#28577](https://github.com/element-hq/element-web/pull/28577)). Contributed by @gy-mate.
+* Encryption tab: display correct encryption panel when user cancels the reset identity flow ([#29216](https://github.com/element-hq/element-web/pull/29216)). Contributed by @florianduros.
+
+
 Changes in [1.11.92](https://github.com/element-hq/element-web/releases/tag/v1.11.92) (2025-02-11)
 ==================================================================================================
 ## ✨ Features

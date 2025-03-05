@@ -80,9 +80,9 @@ const MobileAppLinks: React.FC<{
 const DesktopAppLinks: React.FC<{
     macOsUrl?: string;
     win64Url?: string;
-    win32Url?: string;
+    win64ArmUrl?: string;
     linuxUrl?: string;
-}> = ({ macOsUrl, win64Url, win32Url, linuxUrl }) => {
+}> = ({ macOsUrl, win64Url, win64ArmUrl, linuxUrl }) => {
     return (
         <Flex gap="var(--cpd-space-4x)">
             {macOsUrl && (
@@ -92,12 +92,12 @@ const DesktopAppLinks: React.FC<{
             )}
             {win64Url && (
                 <Button as="a" href={win64Url} kind="secondary" Icon={MicrosoftIcon}>
-                    {_t("incompatible_browser|windows", { bits: "64" })}
+                    {_t("incompatible_browser|windows_64bit")}
                 </Button>
             )}
-            {win32Url && (
-                <Button as="a" href={win32Url} kind="secondary" Icon={MicrosoftIcon}>
-                    {_t("incompatible_browser|windows", { bits: "32" })}
+            {win64ArmUrl && (
+                <Button as="a" href={win64ArmUrl} kind="secondary" Icon={MicrosoftIcon}>
+                    {_t("incompatible_browser|windows_arm_64bit")}
                 </Button>
             )}
             {linuxUrl && (
@@ -127,7 +127,7 @@ export const UnsupportedBrowserView: React.FC<{
         config.desktop_builds?.available &&
         (config.desktop_builds?.url_macos ||
             config.desktop_builds?.url_win64 ||
-            config.desktop_builds?.url_win32 ||
+            config.desktop_builds?.url_win64arm ||
             config.desktop_builds?.url_linux);
     const hasMobileBuilds = Boolean(
         config.mobile_builds?.ios || config.mobile_builds?.android || config.mobile_builds?.fdroid,
@@ -157,7 +157,7 @@ export const UnsupportedBrowserView: React.FC<{
                             <DesktopAppLinks
                                 macOsUrl={config.desktop_builds?.url_macos}
                                 win64Url={config.desktop_builds?.url_win64}
-                                win32Url={config.desktop_builds?.url_win32}
+                                win64ArmUrl={config.desktop_builds?.url_win64arm}
                                 linuxUrl={config.desktop_builds?.url_linux}
                             />
                         </>

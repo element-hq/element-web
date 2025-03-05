@@ -19,7 +19,6 @@ import {
 } from "@vector-im/compound-web";
 import CopyIcon from "@vector-im/compound-design-tokens/assets/web/icons/copy";
 import KeyIcon from "@vector-im/compound-design-tokens/assets/web/icons/key-solid";
-import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../../languageHandler";
 import { EncryptionCard } from "./EncryptionCard";
@@ -28,6 +27,8 @@ import { useAsyncMemo } from "../../../../hooks/useAsyncMemo";
 import { copyPlaintext } from "../../../../utils/strings";
 import { initialiseDehydrationIfEnabled } from "../../../../utils/device/dehydration.ts";
 import { withSecretStorageKeyCache } from "../../../../SecurityManager";
+import { EncryptionCardButtons } from "./EncryptionCardButtons";
+import { logErrorAndShowErrorDialog } from "../../../../utils/ErrorUtils.tsx";
 
 /**
  * The possible states of the component.
@@ -132,7 +133,7 @@ export function ChangeRecoveryKey({
                             });
                             onFinish();
                         } catch (e) {
-                            logger.error("Failed to bootstrap secret storage", e);
+                            logErrorAndShowErrorDialog("Failed to set up secret storage", e);
                         }
                     }}
                     submitButtonLabel={
@@ -239,12 +240,12 @@ function InformationPanel({ onContinueClick, onCancelClick }: InformationPanelPr
             <Text as="span" weight="medium" className="mx_InformationPanel_description">
                 {_t("settings|encryption|recovery|set_up_recovery_secondary_description")}
             </Text>
-            <div className="mx_ChangeRecoveryKey_footer">
+            <EncryptionCardButtons>
                 <Button onClick={onContinueClick}>{_t("action|continue")}</Button>
                 <Button kind="tertiary" onClick={onCancelClick}>
                     {_t("action|cancel")}
                 </Button>
-            </div>
+            </EncryptionCardButtons>
         </>
     );
 }
@@ -286,12 +287,12 @@ function KeyPanel({ recoveryKey, onConfirmClick, onCancelClick }: KeyPanelProps)
                     <CopyIcon />
                 </IconButton>
             </div>
-            <div className="mx_ChangeRecoveryKey_footer">
+            <EncryptionCardButtons>
                 <Button onClick={onConfirmClick}>{_t("action|continue")}</Button>
                 <Button kind="tertiary" onClick={onCancelClick}>
                     {_t("action|cancel")}
                 </Button>
-            </div>
+            </EncryptionCardButtons>
         </>
     );
 }
@@ -349,12 +350,12 @@ function KeyForm({ onCancelClick, onSubmit, recoveryKey, submitButtonLabel }: Ke
                     <ErrorMessage>{_t("settings|encryption|recovery|enter_key_error")}</ErrorMessage>
                 )}
             </Field>
-            <div className="mx_ChangeRecoveryKey_footer">
+            <EncryptionCardButtons>
                 <Button disabled={!isKeyValid}>{submitButtonLabel}</Button>
                 <Button kind="tertiary" onClick={onCancelClick}>
                     {_t("action|cancel")}
                 </Button>
-            </div>
+            </EncryptionCardButtons>
         </Root>
     );
 }
