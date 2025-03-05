@@ -15,17 +15,17 @@ exports[`<ErrorView /> should match snapshot 1`] = `
       class="mx_ErrorView_container"
     >
       <h1
-        class="_typography_yh5dq_162 _font-heading-md-semibold_yh5dq_121"
+        class="_typography_6v6n8_153 _font-heading-md-semibold_6v6n8_112"
       >
         TITLE
       </h1>
       <p
-        class="_typography_yh5dq_162 _font-body-lg-regular_yh5dq_78"
+        class="_typography_6v6n8_153 _font-body-lg-regular_6v6n8_69"
       >
         MSG1
       </p>
       <p
-        class="_typography_yh5dq_162 _font-body-lg-regular_yh5dq_78"
+        class="_typography_6v6n8_153 _font-body-lg-regular_6v6n8_69"
       >
         MSG2
       </p>
@@ -49,17 +49,17 @@ exports[`<UnsupportedBrowserView /> should match snapshot 1`] = `
       class="mx_ErrorView_container"
     >
       <h1
-        class="_typography_yh5dq_162 _font-heading-md-semibold_yh5dq_121"
+        class="_typography_6v6n8_153 _font-heading-md-semibold_6v6n8_112"
       >
         Element does not support this browser
       </h1>
       <p
-        class="_typography_yh5dq_162 _font-body-lg-regular_yh5dq_78"
+        class="_typography_6v6n8_153 _font-body-lg-regular_6v6n8_69"
       >
         Element uses some browser features which are not available in your current browser. Try updating this browser if you're not using the latest version and try again.
       </p>
       <p
-        class="_typography_yh5dq_162 _font-body-lg-regular_yh5dq_78"
+        class="_typography_6v6n8_153 _font-body-lg-regular_6v6n8_69"
       >
         <span>
           For the best experience, use 
@@ -102,7 +102,7 @@ exports[`<UnsupportedBrowserView /> should match snapshot 1`] = `
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x);"
       >
         <button
-          class="_button_i91xf_17 _has-icon_i91xf_66"
+          class="_button_vczzf_8 _has-icon_vczzf_57"
           data-kind="secondary"
           data-size="sm"
           role="button"
@@ -117,10 +117,10 @@ exports[`<UnsupportedBrowserView /> should match snapshot 1`] = `
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              d="M5 3h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"
+              d="M5 3h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2"
             />
             <path
-              d="M15 3h5a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V6.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L17.586 5H15a1 1 0 1 1 0-2Z"
+              d="M15 3h5a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V6.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L17.586 5H15a1 1 0 1 1 0-2"
             />
           </svg>
           Learn more
@@ -128,13 +128,13 @@ exports[`<UnsupportedBrowserView /> should match snapshot 1`] = `
       </div>
     </div>
     <div
-      class="_separator_144s5_17"
+      class="_separator_7ckbw_8"
       data-kind="primary"
       data-orientation="horizontal"
       role="separator"
     />
     <h2
-      class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+      class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
     >
       Use Element Desktop instead
     </h2>
@@ -143,7 +143,7 @@ exports[`<UnsupportedBrowserView /> should match snapshot 1`] = `
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x);"
     >
       <a
-        class="_button_i91xf_17 _has-icon_i91xf_66"
+        class="_button_vczzf_8 _has-icon_vczzf_57"
         data-kind="secondary"
         data-size="lg"
         href="https://packages.element.io/desktop/install/macos/Element.dmg"
@@ -158,7 +158,7 @@ exports[`<UnsupportedBrowserView /> should match snapshot 1`] = `
         Mac
       </a>
       <a
-        class="_button_i91xf_17 _has-icon_i91xf_66"
+        class="_button_vczzf_8 _has-icon_vczzf_57"
         data-kind="secondary"
         data-size="lg"
         href="https://packages.element.io/desktop/install/win32/x64/Element%20Setup.exe"
@@ -173,10 +173,10 @@ exports[`<UnsupportedBrowserView /> should match snapshot 1`] = `
         Windows (64-bit)
       </a>
       <a
-        class="_button_i91xf_17 _has-icon_i91xf_66"
+        class="_button_vczzf_8 _has-icon_vczzf_57"
         data-kind="secondary"
         data-size="lg"
-        href="https://packages.element.io/desktop/install/win32/ia32/Element%20Setup.exe"
+        href="https://packages.element.io/desktop/install/win32/arm64/Element%20Setup.exe"
         role="link"
         tabindex="0"
       >
@@ -185,10 +185,10 @@ exports[`<UnsupportedBrowserView /> should match snapshot 1`] = `
           height="20"
           width="20"
         />
-        Windows (32-bit)
+        Windows (ARM 64-bit)
       </a>
       <a
-        class="_button_i91xf_17 _has-icon_i91xf_66"
+        class="_button_vczzf_8 _has-icon_vczzf_57"
         data-kind="secondary"
         data-size="lg"
         href="https://element.io/download#linux"
@@ -204,7 +204,7 @@ exports[`<UnsupportedBrowserView /> should match snapshot 1`] = `
       </a>
     </div>
     <h2
-      class="_typography_yh5dq_162 _font-heading-sm-semibold_yh5dq_102"
+      class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
     >
       Or use our mobile app
     </h2>

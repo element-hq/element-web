@@ -19,6 +19,7 @@ jobs:
             contents: write
             issues: write
             pull-requests: read
+            id-token: write
         secrets:
             ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
             GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}

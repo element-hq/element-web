@@ -59,7 +59,7 @@ export const DEFAULTS: DeepReadonly<IConfigOptions> = {
         url: "https://element.io/download",
         url_macos: "https://packages.element.io/desktop/install/macos/Element.dmg",
         url_win64: "https://packages.element.io/desktop/install/win32/x64/Element%20Setup.exe",
-        url_win32: "https://packages.element.io/desktop/install/win32/ia32/Element%20Setup.exe",
+        url_win64arm: "https://packages.element.io/desktop/install/win32/arm64/Element%20Setup.exe",
         url_linux: "https://element.io/download#linux",
     },
     mobile_builds: {

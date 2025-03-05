@@ -5,16 +5,18 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { Breadcrumb, Button, VisualList, VisualListItem } from "@vector-im/compound-web";
+import { Breadcrumb, Button, InlineSpinner, VisualList, VisualListItem } from "@vector-im/compound-web";
 import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 import InfoIcon from "@vector-im/compound-design-tokens/assets/web/icons/info";
-import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
-import React, { type MouseEventHandler } from "react";
+import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
+import React, { useState, type MouseEventHandler } from "react";
 
 import { _t } from "../../../../languageHandler";
 import { EncryptionCard } from "./EncryptionCard";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import { uiAuthCallback } from "../../../../CreateCrossSigning";
+import { EncryptionCardButtons } from "./EncryptionCardButtons";
+import { EncryptionCardEmphasisedContent } from "./EncryptionCardEmphasisedContent";
 
 interface ResetIdentityPanelProps {
     /**
@@ -42,6 +44,10 @@ interface ResetIdentityPanelProps {
 export function ResetIdentityPanel({ onCancelClick, onFinish, variant }: ResetIdentityPanelProps): JSX.Element {
     const matrixClient = useMatrixClientContext();
 
+    // After the user clicks "Continue", we disable the button so it can't be
+    // clicked again, and warn the user not to close the window.
+    const [inProgress, setInProgress] = useState(false);
+
     return (
         <>
             <Breadcrumb
@@ -58,9 +64,8 @@ export function ResetIdentityPanel({ onCancelClick, onFinish, variant }: ResetId
                         ? _t("settings|encryption|advanced|breadcrumb_title_forgot")
                         : _t("settings|encryption|advanced|breadcrumb_title")
                 }
-                className="mx_ResetIdentityPanel"
             >
-                <div className="mx_ResetIdentityPanel_content">
+                <EncryptionCardEmphasisedContent>
                     <VisualList>
                         <VisualListItem Icon={CheckIcon} success={true}>
                             {_t("settings|encryption|advanced|breadcrumb_first_description")}
@@ -73,23 +78,39 @@ export function ResetIdentityPanel({ onCancelClick, onFinish, variant }: ResetId
                         </VisualListItem>
                     </VisualList>
                     {variant === "compromised" && <span>{_t("settings|encryption|advanced|breadcrumb_warning")}</span>}
-                </div>
-                <div className="mx_ResetIdentityPanel_footer">
+                </EncryptionCardEmphasisedContent>
+                <EncryptionCardButtons>
                     <Button
                         destructive={true}
+                        disabled={inProgress}
                         onClick={async (evt) => {
+                            setInProgress(true);
                             await matrixClient
                                 .getCrypto()
                                 ?.resetEncryption((makeRequest) => uiAuthCallback(matrixClient, makeRequest));
                             onFinish(evt);
                         }}
                     >
-                        {_t("action|continue")}
+                        {inProgress ? (
+                            <>
+                                <InlineSpinner /> {_t("settings|encryption|advanced|reset_in_progress")}
+                            </>
+                        ) : (
+                            _t("action|continue")
+                        )}
                     </Button>
-                    <Button kind="tertiary" onClick={onCancelClick}>
-                        {_t("action|cancel")}
-                    </Button>
-                </div>
+                    {inProgress ? (
+                        <EncryptionCardEmphasisedContent>
+                            <span className="mx_ResetIdentityPanel_warning">
+                                {_t("settings|encryption|advanced|do_not_close_warning")}
+                            </span>
+                        </EncryptionCardEmphasisedContent>
+                    ) : (
+                        <Button kind="tertiary" onClick={onCancelClick}>
+                            {_t("action|cancel")}
+                        </Button>
+                    )}
+                </EncryptionCardButtons>
             </EncryptionCard>
         </>
     );

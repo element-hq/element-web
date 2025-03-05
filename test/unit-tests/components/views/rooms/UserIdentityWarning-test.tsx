@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { sleep, defer } from "matrix-js-sdk/src/utils";
+import { sleep } from "matrix-js-sdk/src/utils";
 import {
     EventType,
     type MatrixClient,
@@ -578,50 +578,5 @@ describe("UserIdentityWarning", () => {
         await waitFor(() =>
             expect(getWarningByText("@bob:example.org's identity appears to have changed.")).toBeInTheDocument(),
         );
-    });
-
-    // If we get an update for a user's verification status while we're fetching
-    // that user's verification status, we should display based on the updated
-    // value.
-    describe("handles races between fetching verification status and receiving updates", () => {
-        // First case: check that if the update says that the user identity
-        // needs approval, but the fetch says it doesn't, we show the warning.
-        it("update says identity needs approval", async () => {
-            jest.spyOn(room, "getEncryptionTargetMembers").mockResolvedValue([
-                mockRoomMember("@alice:example.org", "Alice"),
-            ]);
-            jest.spyOn(room, "getMember").mockReturnValue(mockRoomMember("@alice:example.org", "Alice"));
-            const crypto = client.getCrypto()!;
-
-            const firstStatusPromise = defer();
-            let callNumber = 0;
-            jest.spyOn(crypto, "getUserVerificationStatus").mockImplementation(async () => {
-                await firstStatusPromise.promise;
-                callNumber++;
-                if (callNumber == 1) {
-                    await sleep(40);
-                    return new UserVerificationStatus(false, false, false, false);
-                } else {
-                    return new UserVerificationStatus(false, false, false, true);
-                }
-            });
-
-            renderComponent(client, room);
-            await sleep(10); // give it some time to finish initialising
-
-            act(() => {
-                client.emit(
-                    CryptoEvent.UserTrustStatusChanged,
-                    "@alice:example.org",
-                    new UserVerificationStatus(false, false, false, true),
-                );
-                firstStatusPromise.resolve(undefined);
-            });
-            await waitFor(() =>
-                expect(
-                    getWarningByText("Alice's (@alice:example.org) identity appears to have changed."),
-                ).toBeInTheDocument(),
-            );
-        });
     });
 });
