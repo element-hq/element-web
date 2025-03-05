@@ -2479,12 +2479,14 @@
                 "breadcrumb_title_forgot": "Har du glemt gjenopprettingsnøkkelen din? Du må tilbakestille identiteten din.",
                 "breadcrumb_warning": "Gjør dette bare hvis du tror at kontoen din har blitt kompromittert.",
                 "details_title": "Krypteringsdetaljer",
+                "do_not_close_warning": "Ikke lukk dette vinduet før tilbakestillingen er fullført",
                 "export_keys": "Eksporter nøkler",
                 "import_keys": "Importer nøkler",
                 "other_people_device_description": "I krypterte rom, må du ikke sende krypterte meldinger til noen før du har verifisert dem",
                 "other_people_device_label": "Send aldri krypterte meldinger til ubekreftede enheter",
                 "other_people_device_title": "Andre personers enheter",
                 "reset_identity": "Tilbakestill kryptografisk identitet",
+                "reset_in_progress": "Tilbakestilling pågår...",
                 "session_id": "Sesjons-ID:",
                 "session_key": "Sesjonsnøkkel:",
                 "title": "Avansert"
@@ -3617,18 +3619,19 @@
                 "other": "%(severalUsers)ssendte %(count)s skjulte meldinger"
             },
             "invite_withdrawn": {
-                "%(oneUser)sfikk sin invitasjon trukket tilbake": "one"
+                "one": "%(oneUser)sfikk invitasjonen trukket tilbake",
+                "other": "%(oneUser)sfikk invitasjonen trukket tilbake %(count)s ganger"
             },
             "invite_withdrawn_multiple": {
                 "%(severalUsers)sfikk sine invitasjoner trukket tilbake": "one"
             },
             "invited": {
-                "ble invitert": "one",
-                "ble invitert %(count)s ganger": "other"
+                "one": "ble invitert",
+                "other": "ble invitert %(count)s ganger"
             },
             "invited_multiple": {
-                "ble invitert": "one",
-                "ble invitert %(count)s ganger": "other"
+                "one": "ble invitert",
+                "other": "ble invitert %(count)s ganger"
             },
             "joined": {
                 "one": "%(oneUser)sble med",
@@ -3694,10 +3697,12 @@
                 "other": "%(severalUsers)savviste invitasjonene deres %(count)s ganger"
             },
             "rejoined": {
-                "%(oneUser)sforlot og ble med igjen": "one"
+                "one": "%(oneUser)sforlot og ble med igjen",
+                "other": "%(oneUser)sforlot og ble med igjen %(count)s ganger"
             },
             "rejoined_multiple": {
-                "%(severalUsers)sforlot og ble med igjen": "one"
+                "one": "%(severalUsers)sforlot og ble med igjen",
+                "other": "%(severalUsers)sforlot og ble med igjen%(count)s ganger"
             },
             "server_acls": {
                 "one": "%(oneUser)sendret serverens ACLer",

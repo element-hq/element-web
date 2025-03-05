@@ -1,4 +1,4 @@
-# syntax=docker.io/docker/dockerfile:1.7-labs
+# syntax=docker.io/docker/dockerfile:1.14-labs
 
 # Builder
 FROM --platform=$BUILDPLATFORM node:22-bullseye AS builder
