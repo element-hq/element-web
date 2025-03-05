@@ -29,6 +29,8 @@ export function RoomListCell({ room, ...props }: RoomListCellProps): JSX.Element
             type="button"
             aria-label={_t("room_list|room|open_room", { roomName: room.name })}
             {...props}
+            role="option"
+            aria-selected={false}
         >
             {/* We need this extra div between the button and the content in order to add a padding which is not messing with the virtualized list */}
             <Flex className="mx_RoomListCell_container" gap="var(--cpd-space-3x)" align="center">
