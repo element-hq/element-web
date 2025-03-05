@@ -2103,6 +2103,9 @@
             "one": "Currently removing messages in %(count)s room",
             "other": "Currently removing messages in %(count)s rooms"
         },
+        "room": {
+            "open_room": "Open room %(roomName)s"
+        },
         "show_less": "Show less",
         "show_n_more": {
             "one": "Show %(count)s more",
