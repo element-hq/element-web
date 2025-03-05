@@ -9,7 +9,7 @@ import { useCallback, useEffect, useState } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
-import { BACKUP_DISABLED_ACCOUNT_DATA_KEY } from "../../../../DeviceListener";
+import DeviceListener, { BACKUP_DISABLED_ACCOUNT_DATA_KEY } from "../../../../DeviceListener";
 
 interface KeyStoragePanelState {
     /**
@@ -67,6 +67,12 @@ export function useKeyStoragePanelViewModel(): KeyStoragePanelState {
         async (enable: boolean) => {
             setPendingValue(enable);
             try {
+                // stop the device listener since enabling or (especially) disabling key storage must be
+                // done with a sequence of API calls that will put the account in a slightly different
+                // state each time, so suppress any warning toasts until the process is finished (when
+                // we'll turn it back on again.)
+                DeviceListener.sharedInstance().stop();
+
                 const crypto = matrixClient.getCrypto();
                 if (!crypto) {
                     logger.error("Can't change key backup status: no crypto module available");
@@ -85,34 +91,11 @@ export function useKeyStoragePanelViewModel(): KeyStoragePanelState {
                     // Set the flag so that EX no longer thinks the user wants backup disabled
                     await matrixClient.setAccountData(BACKUP_DISABLED_ACCOUNT_DATA_KEY, { disabled: false });
                 } else {
-                    // Get the key backup version we're using
-                    const info = await crypto.getKeyBackupInfo();
-                    if (!info?.version) {
-                        logger.error("Can't delete key backup version: no version available");
-                        return;
-                    }
+                    // This method will delete the key backup as well as server side recovery keys and other
+                    // server-side crypto data.
+                    await crypto.disableKeyStorage();
 
-                    // Bye bye backup
-                    await crypto.deleteKeyBackupVersion(info.version);
-
-                    // also turn off 4S, since this is also storing keys on the server.
-                    // Delete the cross signing keys from secret storage
-                    await matrixClient.deleteAccountData("m.cross_signing.master");
-                    await matrixClient.deleteAccountData("m.cross_signing.self_signing");
-                    await matrixClient.deleteAccountData("m.cross_signing.user_signing");
-                    // and the key backup key (we just turned it off anyway)
-                    await matrixClient.deleteAccountData("m.megolm_backup.v1");
-
-                    // Delete the key information
-                    const defaultKey = await matrixClient.secretStorage.getDefaultKeyId();
-                    if (defaultKey) {
-                        await matrixClient.deleteAccountData(`m.secret_storage.key.${defaultKey}`);
-
-                        // ...and the default key pointer
-                        await matrixClient.deleteAccountData("m.secret_storage.default_key");
-                    }
-
-                    // finally, set a flag to say that the user doesn't want key backup.
+                    // Set a flag to say that the user doesn't want key backup.
                     // Element X uses this to determine whether to set up automatically,
                     // so this will stop EX turning it back on spontaneously.
                     await matrixClient.setAccountData(BACKUP_DISABLED_ACCOUNT_DATA_KEY, { disabled: true });
@@ -121,6 +104,7 @@ export function useKeyStoragePanelViewModel(): KeyStoragePanelState {
                 await checkStatus();
             } finally {
                 setPendingValue(undefined);
+                DeviceListener.sharedInstance().start(matrixClient);
             }
         },
         [setPendingValue, checkStatus, matrixClient],
