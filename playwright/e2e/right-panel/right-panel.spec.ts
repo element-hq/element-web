@@ -67,10 +67,12 @@ test.describe("RightPanel", () => {
             },
         );
 
-        test("should handle clicking add widgets", async ({ page, app }) => {
+        test("should handle clicking add widgets", { tag: "@screenshot" }, async ({ page, app }) => {
             await viewRoomSummaryByName(page, app, ROOM_NAME);
 
             await page.getByRole("menuitem", { name: "Extensions" }).click();
+            await expect(page.locator(".mx_RightPanel")).toMatchScreenshot("with-extensions.png");
+
             await page.getByRole("button", { name: "Add extensions" }).click();
             await expect(page.locator(".mx_IntegrationManager")).toBeVisible();
         });
