@@ -44,7 +44,7 @@ const Entry: React.FC<{
     }
 
     return (
-        <label className="mx_ManageRestrictedJoinRuleDialog_entry">
+        <div className="mx_ManageRestrictedJoinRuleDialog_entry">
             <StyledCheckbox
                 onChange={onChange ? (e) => onChange(e.target.checked) : undefined}
                 checked={checked}
@@ -56,7 +56,7 @@ const Entry: React.FC<{
                 <span className="mx_ManageRestrictedJoinRuleDialog_entry_name">{room.name}</span>
             </div>
             </StyledCheckbox>
-        </label>
+        </div>
     );
 };
 

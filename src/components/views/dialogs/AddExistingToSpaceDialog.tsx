@@ -67,7 +67,7 @@ export const Entry: React.FC<{
                 checked={checked}
                 disabled={!onChange}
                 aria-labelledby={id}
-            ></StyledCheckbox>
+            />
         </label>
     );
 };
