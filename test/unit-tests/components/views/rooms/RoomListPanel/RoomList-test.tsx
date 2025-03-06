@@ -34,19 +34,38 @@ describe("<RoomList />", () => {
         jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(null);
     });
 
-    it("should render a room list", () => {
-        const { asFragment } = render(<RoomList vm={vm} />);
+    async function renderList() {
+        const renderResult = render(<RoomList vm={vm} />);
+        // Wait for the row role to be removed
+        await waitFor(() => expect(screen.queryByRole("row")).toBeNull());
+        return renderResult;
+    }
+
+    it("should render a room list", async () => {
+        const { asFragment } = await renderList();
         expect(asFragment()).toMatchSnapshot();
+
+        expect(screen.getByRole("listbox").getAttribute("aria-setsize")).toBe(`${vm.rooms.length}`);
     });
 
     it("should open the room", async () => {
         const user = userEvent.setup();
 
-        render(<RoomList vm={vm} />);
+        await renderList();
         await waitFor(async () => {
-            expect(screen.getByRole("gridcell", { name: "Open room room9" })).toBeVisible();
-            await user.click(screen.getByRole("gridcell", { name: "Open room room9" }));
+            expect(screen.getByRole("option", { name: "Open room room9" })).toBeVisible();
+            await user.click(screen.getByRole("option", { name: "Open room room9" }));
         });
         expect(vm.openRoom).toHaveBeenCalledWith(vm.rooms[9].roomId);
+    });
+
+    it("should remove the role attribute", async () => {
+        await renderList();
+
+        const rowElement = screen.getByRole("listbox").children.item(0)!;
+        expect(rowElement).not.toHaveAttribute("role");
+
+        rowElement.setAttribute("role", "row");
+        await waitFor(() => expect(rowElement).not.toHaveAttribute("role"));
     });
 });
