@@ -35,7 +35,7 @@ import PinIcon from "@vector-im/compound-design-tokens/assets/web/icons/pin";
 import LockIcon from "@vector-im/compound-design-tokens/assets/web/icons/lock-solid";
 import LockOffIcon from "@vector-im/compound-design-tokens/assets/web/icons/lock-off";
 import PublicIcon from "@vector-im/compound-design-tokens/assets/web/icons/public";
-import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
+import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 import { EventType, JoinRule, type Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 
@@ -441,6 +441,7 @@ const RoomSummaryCard: React.FC<IProps> = ({
                 <Separator />
 
                 <MenuItem
+                    className="mx_RoomSummaryCard_leave"
                     Icon={LeaveIcon}
                     kind="critical"
                     label={_t("action|leave_room")}

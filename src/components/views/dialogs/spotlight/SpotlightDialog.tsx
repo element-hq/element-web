@@ -954,7 +954,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         className="mx_SpotlightDialog_createRoom"
                         onClick={() =>
                             defaultDispatcher.dispatch({
-                                action: "view_create_room",
+                                action: Action.CreateRoom,
                                 public: true,
                                 defaultName: capitalize(trimmedQuery),
                             })

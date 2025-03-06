@@ -19,6 +19,7 @@ export default {
     ignore: [
         // Keep for now
         "src/hooks/useLocalStorageState.ts",
+        "src/hooks/useTimeout.ts",
         "src/components/views/elements/InfoTooltip.tsx",
         "src/components/views/elements/StyledCheckbox.tsx",
     ],

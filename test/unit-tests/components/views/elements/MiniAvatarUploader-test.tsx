@@ -26,12 +26,12 @@ describe("<MiniAvatarUploader />", () => {
         const setAvatarUrl = jest.fn();
         const user = userEvent.setup();
 
-        const { container, findByText } = render(
+        const { container, findByLabelText } = render(
             <MiniAvatarUploader hasAvatar={false} noAvatarLabel="Upload" setAvatarUrl={setAvatarUrl} isUserAvatar />,
             withClientContextRenderOptions(cli),
         );
 
-        await findByText("Upload");
+        await findByLabelText("Upload");
         await user.upload(container.querySelector("input")!, AVATAR_FILE);
 
         expect(cli.uploadContent).toHaveBeenCalledWith(AVATAR_FILE);

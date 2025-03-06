@@ -7,7 +7,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Mocked, mocked } from "jest-mock";
-import { MatrixEvent, type Room, type MatrixClient, Device, ClientStoppedError } from "matrix-js-sdk/src/matrix";
+import {
+    MatrixEvent,
+    type Room,
+    type MatrixClient,
+    Device,
+    ClientStoppedError,
+    ClientEvent,
+} from "matrix-js-sdk/src/matrix";
 import {
     CryptoEvent,
     type CrossSigningStatus,
@@ -81,7 +88,6 @@ describe("DeviceListener", () => {
             getDeviceVerificationStatus: jest.fn().mockResolvedValue({
                 crossSigningVerified: false,
             }),
-            getCrossSigningKeyId: jest.fn(),
             getUserDeviceInfo: jest.fn().mockResolvedValue(new Map()),
             isCrossSigningReady: jest.fn().mockResolvedValue(true),
             isSecretStorageReady: jest.fn().mockResolvedValue(true),
@@ -328,32 +334,81 @@ describe("DeviceListener", () => {
                 expect(SetupEncryptionToast.showToast).not.toHaveBeenCalled();
             });
 
-            describe("when user does not have a cross signing id on this device", () => {
-                beforeEach(() => {
-                    mockCrypto!.getCrossSigningKeyId.mockResolvedValue(null);
-                });
+            it("shows verify session toast when account has cross signing", async () => {
+                mockCrypto!.isCrossSigningReady.mockResolvedValue(true);
+                await createAndStart();
 
-                it("shows verify session toast when account has cross signing", async () => {
-                    mockCrypto!.isCrossSigningReady.mockResolvedValue(true);
-                    await createAndStart();
-
-                    expect(mockCrypto!.getUserDeviceInfo).toHaveBeenCalled();
-                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(
-                        SetupEncryptionToast.Kind.VERIFY_THIS_SESSION,
-                    );
-                });
+                expect(mockCrypto!.getUserDeviceInfo).toHaveBeenCalled();
+                expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(
+                    SetupEncryptionToast.Kind.VERIFY_THIS_SESSION,
+                );
             });
 
-            describe("when user does have a cross signing id on this device", () => {
+            describe("when current device is verified", () => {
                 beforeEach(() => {
                     mockCrypto!.isCrossSigningReady.mockResolvedValue(true);
-                    mockCrypto!.getCrossSigningKeyId.mockResolvedValue("abc");
+
+                    // current device is verified
                     mockCrypto!.getDeviceVerificationStatus.mockResolvedValue(
                         new DeviceVerificationStatus({
                             trustCrossSignedDevices: true,
                             crossSigningVerified: true,
                         }),
                     );
+                });
+
+                it("shows an out-of-sync toast when one of the secrets is missing", async () => {
+                    mockCrypto!.getCrossSigningStatus.mockResolvedValue({
+                        publicKeysOnDevice: true,
+                        privateKeysInSecretStorage: true,
+                        privateKeysCachedLocally: {
+                            masterKey: false,
+                            selfSigningKey: true,
+                            userSigningKey: true,
+                        },
+                    });
+
+                    await createAndStart();
+
+                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(
+                        SetupEncryptionToast.Kind.KEY_STORAGE_OUT_OF_SYNC,
+                    );
+                });
+
+                it("hides the out-of-sync toast when one of the secrets is missing", async () => {
+                    mockCrypto!.isSecretStorageReady.mockResolvedValue(true);
+
+                    // First show the toast
+                    mockCrypto!.getCrossSigningStatus.mockResolvedValue({
+                        publicKeysOnDevice: true,
+                        privateKeysInSecretStorage: true,
+                        privateKeysCachedLocally: {
+                            masterKey: false,
+                            selfSigningKey: true,
+                            userSigningKey: true,
+                        },
+                    });
+
+                    await createAndStart();
+
+                    expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(
+                        SetupEncryptionToast.Kind.KEY_STORAGE_OUT_OF_SYNC,
+                    );
+
+                    // Then, when we receive the secret, it should be hidden.
+                    mockCrypto!.getCrossSigningStatus.mockResolvedValue({
+                        publicKeysOnDevice: true,
+                        privateKeysInSecretStorage: true,
+                        privateKeysCachedLocally: {
+                            masterKey: true,
+                            selfSigningKey: true,
+                            userSigningKey: true,
+                        },
+                    });
+
+                    mockClient.emit(ClientEvent.ToDeviceEvent, new MatrixEvent({ type: "m.secret.send" }));
+                    await flushPromises();
+                    expect(SetupEncryptionToast.hideToast).toHaveBeenCalled();
                 });
 
                 it("shows set up recovery toast when user has a key backup available", async () => {
@@ -919,6 +974,63 @@ describe("DeviceListener", () => {
                         expect(trackEventSpy).toHaveBeenCalledWith(expectedTrackedEvent);
                     });
                 });
+            });
+        });
+
+        describe("set up recovery", () => {
+            const rooms = [{ roomId: "!room1" }] as unknown as Room[];
+
+            beforeEach(() => {
+                mockCrypto!.getDeviceVerificationStatus.mockResolvedValue(
+                    new DeviceVerificationStatus({
+                        trustCrossSignedDevices: true,
+                        crossSigningVerified: true,
+                    }),
+                );
+                mockCrypto!.isCrossSigningReady.mockResolvedValue(true);
+                mockCrypto!.isSecretStorageReady.mockResolvedValue(false);
+                mockClient.secretStorage.getDefaultKeyId.mockResolvedValue(null);
+                mockClient!.getRooms.mockReturnValue(rooms);
+                jest.spyOn(mockClient.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(true);
+            });
+
+            it("shows the 'set up recovery' toast if user has not set up 4S", async () => {
+                await createAndStart();
+
+                expect(SetupEncryptionToast.showToast).toHaveBeenCalledWith(SetupEncryptionToast.Kind.SET_UP_RECOVERY);
+            });
+
+            it("does not show the 'set up recovery' toast if secret storage is set up", async () => {
+                mockCrypto!.isSecretStorageReady.mockResolvedValue(true);
+                mockClient.secretStorage.getDefaultKeyId.mockResolvedValue("thiskey");
+                await createAndStart();
+
+                expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith(
+                    SetupEncryptionToast.Kind.SET_UP_RECOVERY,
+                );
+            });
+
+            it("does not show the 'set up recovery' toast if user has no encrypted rooms", async () => {
+                jest.spyOn(mockClient.getCrypto()!, "isEncryptionEnabledInRoom").mockResolvedValue(false);
+                await createAndStart();
+
+                expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith(
+                    SetupEncryptionToast.Kind.SET_UP_RECOVERY,
+                );
+            });
+
+            it("does not show the 'set up recovery' toast if the user has chosen to disable key storage", async () => {
+                mockClient!.getAccountData.mockImplementation((k: string) => {
+                    if (k === "m.org.matrix.custom.backup_disabled") {
+                        return new MatrixEvent({ content: { disabled: true } });
+                    }
+                    return undefined;
+                });
+                await createAndStart();
+
+                expect(SetupEncryptionToast.showToast).not.toHaveBeenCalledWith(
+                    SetupEncryptionToast.Kind.SET_UP_RECOVERY,
+                );
             });
         });
     });

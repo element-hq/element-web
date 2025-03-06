@@ -80,12 +80,14 @@
         "maximise": "Maximise",
         "mention": "Mention",
         "minimise": "Minimise",
+        "new_message": "New message",
         "new_room": "New room",
         "new_video_room": "New video room",
         "next": "Next",
         "no": "No",
         "ok": "OK",
         "open": "Open",
+        "open_menu": "Open menu",
         "pause": "Pause",
         "pin": "Pin",
         "play": "Play",
@@ -405,7 +407,15 @@
         "download_logs": "Download logs",
         "downloading_logs": "Downloading logs",
         "error_empty": "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.",
-        "failed_send_logs": "Failed to send logs: ",
+        "failed_download_logs": "Failed to download debug logs: ",
+        "failed_send_logs_causes": {
+            "disallowed_app": "Your bug report was rejected. The rageshake server does not support this application.",
+            "rejected_generic": "Your bug report was rejected. The rageshake server rejected the contents of the report due to a policy.",
+            "rejected_recovery_key": "Your bug report was rejected for safety reasons, as it contained a recovery key.",
+            "rejected_version": "Your bug report was rejected as the version you are running is too old.",
+            "server_unknown_error": "The rageshake server encountered an unknown error and could not handle the report.",
+            "unknown_error": "Failed to send logs."
+        },
         "github_issue": "GitHub issue",
         "introduction": "If you've submitted a bug via GitHub, debug logs can help us track down the problem. ",
         "log_request": "To help us prevent this in future, please <a>send us logs</a>.",
@@ -495,7 +505,6 @@
         "legal": "Legal",
         "light": "Light",
         "loading": "Loading…",
-        "lobby": "Lobby",
         "location": "Location",
         "low_priority": "Low priority",
         "matrix": "Matrix",
@@ -1246,6 +1255,7 @@
         "change": "Change identity server",
         "change_prompt": "Disconnect from the identity server <current /> and connect to <new /> instead?",
         "change_server_prompt": "If you don't want to use <server /> to discover and be discoverable by existing contacts you know, enter another identity server below.",
+        "changed": "Your identity server has been changed",
         "checking": "Checking server",
         "description_connected": "You are currently using <server></server> to discover and be discoverable by existing contacts you know. You can change your identity server below.",
         "description_disconnected": "You are not currently using an identity server. To discover and be discoverable by existing contacts you know, add one below.",
@@ -1289,7 +1299,8 @@
         "use_desktop_heading": "Use %(brand)s Desktop instead",
         "use_mobile_heading": "Use %(brand)s on mobile instead",
         "use_mobile_heading_after_desktop": "Or use our mobile app",
-        "windows": "Windows (%(bits)s-bit)"
+        "windows_64bit": "Windows (64-bit)",
+        "windows_arm_64bit": "Windows (ARM 64-bit)"
     },
     "info_tooltip_title": "Information",
     "integration_manager": {
@@ -2097,6 +2108,7 @@
             "other": "Currently joining %(count)s rooms"
         },
         "notification_options": "Notification options",
+        "open_space_menu": "Open space menu",
         "redacting_messages_status": {
             "one": "Currently removing messages in %(count)s room",
             "other": "Currently removing messages in %(count)s rooms"
@@ -2111,6 +2123,10 @@
         "sort_by_activity": "Activity",
         "sort_by_alphabet": "A-Z",
         "sort_unread_first": "Show rooms with unread messages first",
+        "space_menu": {
+            "home": "Space home",
+            "space_settings": "Space Settings"
+        },
         "space_menu_label": "%(spaceName)s menu",
         "sublist_options": "List options",
         "suggested_rooms_heading": "Suggested Rooms"
@@ -2473,12 +2489,14 @@
                 "breadcrumb_title_forgot": "Forgot your recovery key? You’ll need to reset your identity.",
                 "breadcrumb_warning": "Only do this if you believe your account has been compromised.",
                 "details_title": "Encryption details",
+                "do_not_close_warning": "Do not close this window until the reset is finished",
                 "export_keys": "Export keys",
                 "import_keys": "Import keys",
                 "other_people_device_description": "By default in encrypted rooms, do not send encrypted messages to anyone until you’ve verified them",
                 "other_people_device_label": "Never send encrypted messages to unverified devices",
                 "other_people_device_title": "Other people’s devices",
                 "reset_identity": "Reset cryptographic identity",
+                "reset_in_progress": "Reset in progress...",
                 "session_id": "Session ID:",
                 "session_key": "Session key:",
                 "title": "Advanced"
@@ -3901,7 +3919,6 @@
         "input_devices": "Input devices",
         "jitsi_call": "Jitsi Conference",
         "join_button_tooltip_call_full": "Sorry — this call is currently full",
-        "join_button_tooltip_connecting": "Connecting",
         "legacy_call": "Legacy Call",
         "maximise": "Fill screen",
         "maximise_call": "Maximise call",

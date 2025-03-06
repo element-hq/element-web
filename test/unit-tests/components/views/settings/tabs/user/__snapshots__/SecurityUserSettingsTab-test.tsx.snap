@@ -438,33 +438,29 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
                   class="mx_SettingsFieldset_content"
                 >
                   <form
-                    class="mx_SetIdServer"
+                    class="_root_19upo_16 mx_IdentityServerPicker"
                   >
                     <div
-                      class="mx_Field mx_Field_input"
+                      class="_field_19upo_26"
                     >
-                      <input
-                        autocomplete="off"
-                        id="mx_Field_1"
-                        label="Enter a new identity server"
-                        placeholder=""
-                        type="text"
-                        value=""
-                      />
                       <label
-                        for="mx_Field_1"
+                        class="_label_19upo_59"
+                        for="radix-:r0:"
                       >
                         Enter a new identity server
                       </label>
-                    </div>
-                    <div
-                      aria-disabled="true"
-                      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_sm mx_AccessibleButton_disabled"
-                      disabled=""
-                      role="button"
-                      tabindex="0"
-                    >
-                      Change
+                      <div
+                        class="_controls_17lij_8"
+                      >
+                        <input
+                          class="_control_sqdq4_10"
+                          id="radix-:r0:"
+                          name="input"
+                          placeholder=""
+                          title=""
+                          value=""
+                        />
+                      </div>
                     </div>
                   </form>
                 </div>
