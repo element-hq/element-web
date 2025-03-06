@@ -407,7 +407,15 @@
         "download_logs": "Download logs",
         "downloading_logs": "Downloading logs",
         "error_empty": "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.",
-        "failed_send_logs": "Failed to send logs: ",
+        "failed_download_logs": "Failed to download debug logs: ",
+        "failed_send_logs_causes": {
+            "disallowed_app": "Your bug report was rejected. The rageshake server does not support this application.",
+            "rejected_generic": "Your bug report was rejected. The rageshake server rejected the contents of the report due to a policy.",
+            "rejected_recovery_key": "Your bug report was rejected for safety reasons, as it contained a recovery key.",
+            "rejected_version": "Your bug report was rejected as the version you are running is too old.",
+            "server_unknown_error": "The rageshake server encountered an unknown error and could not handle the report.",
+            "unknown_error": "Failed to send logs."
+        },
         "github_issue": "GitHub issue",
         "introduction": "If you've submitted a bug via GitHub, debug logs can help us track down the problem. ",
         "log_request": "To help us prevent this in future, please <a>send us logs</a>.",
@@ -497,7 +505,6 @@
         "legal": "Legal",
         "light": "Light",
         "loading": "Loading…",
-        "lobby": "Lobby",
         "location": "Location",
         "low_priority": "Low priority",
         "matrix": "Matrix",
@@ -1299,7 +1306,6 @@
         "error_connecting_heading": "Cannot connect to integration manager",
         "explainer": "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.",
         "manage_title": "Manage integrations",
-        "toggle_label": "Enable the integration manager",
         "use_im": "Use an integration manager to manage bots, widgets, and sticker packs.",
         "use_im_default": "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs."
     },
@@ -2098,11 +2104,15 @@
             "one": "Currently joining %(count)s room",
             "other": "Currently joining %(count)s rooms"
         },
+        "list_title": "Room list",
         "notification_options": "Notification options",
         "open_space_menu": "Open space menu",
         "redacting_messages_status": {
             "one": "Currently removing messages in %(count)s room",
             "other": "Currently removing messages in %(count)s rooms"
+        },
+        "room": {
+            "open_room": "Open room %(roomName)s"
         },
         "show_less": "Show less",
         "show_n_more": {
@@ -2480,12 +2490,14 @@
                 "breadcrumb_title_forgot": "Forgot your recovery key? You’ll need to reset your identity.",
                 "breadcrumb_warning": "Only do this if you believe your account has been compromised.",
                 "details_title": "Encryption details",
+                "do_not_close_warning": "Do not close this window until the reset is finished",
                 "export_keys": "Export keys",
                 "import_keys": "Import keys",
                 "other_people_device_description": "By default in encrypted rooms, do not send encrypted messages to anyone until you’ve verified them",
                 "other_people_device_label": "Never send encrypted messages to unverified devices",
                 "other_people_device_title": "Other people’s devices",
                 "reset_identity": "Reset cryptographic identity",
+                "reset_in_progress": "Reset in progress...",
                 "session_id": "Session ID:",
                 "session_key": "Session key:",
                 "title": "Advanced"
@@ -3908,7 +3920,6 @@
         "input_devices": "Input devices",
         "jitsi_call": "Jitsi Conference",
         "join_button_tooltip_call_full": "Sorry — this call is currently full",
-        "join_button_tooltip_connecting": "Connecting",
         "legacy_call": "Legacy Call",
         "maximise": "Fill screen",
         "maximise_call": "Maximise call",

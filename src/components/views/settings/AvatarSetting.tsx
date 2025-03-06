@@ -170,7 +170,19 @@ const AvatarSetting: React.FC<IProps> = ({
         setMenuOpen(newOpen);
     }, []);
 
-    let avatarElement;
+    let avatarElement = (
+        <AccessibleButton
+            element="div"
+            onClick={uploadAvatar}
+            className="mx_AvatarSetting_avatarPlaceholder mx_AvatarSetting_avatarDisplay"
+            aria-labelledby={disabled ? undefined : a11yId}
+            // Inhibit tab stop as we have explicit upload/remove buttons
+            tabIndex={-1}
+            disabled={disabled}
+        >
+            <BaseAvatar idName={placeholderId} name={placeholderName} size="90px" />
+        </AccessibleButton>
+    );
     if (avatarURL) {
         avatarElement = (
             <AccessibleButton
@@ -182,21 +194,8 @@ const AvatarSetting: React.FC<IProps> = ({
                 // Inhibit tab stop as we have explicit upload/remove buttons
                 tabIndex={-1}
                 disabled={disabled}
-                aria-labelledby={disabled ? undefined : a11yId}
             />
         );
-    } else {
-        avatarElement = <AccessibleButton
-                element="div"
-                onClick={uploadAvatar}
-                className="mx_AvatarSetting_avatarPlaceholder mx_AvatarSetting_avatarDisplay"
-                aria-labelledby={disabled ? undefined : a11yId}
-                // Inhibit tab stop as we have explicit upload/remove buttons
-                tabIndex={-1}
-                disabled={disabled}
-            >
-                <BaseAvatar idName={placeholderId} name={placeholderName} size="90px" />
-            </AccessibleButton>;
     }
 
     let uploadAvatarBtn: JSX.Element | undefined;
