@@ -40,7 +40,7 @@ const labelActivityBots = "Messages sent by bots";
 const labelMentionUser = "Notify when someone mentions using @displayname or @mxid";
 const labelMentionRoom = "Notify when someone mentions using @room";
 const labelMentionKeyword =
-    "Notify when someone uses a keyword" + "Enter keywords here, or use for spelling variations or nicknames";
+    "Notify when someone uses a keyword";
 const labelResetDefault = "Reset to default settings";
 
 const keywords = ["justjann3", "justj4nn3", "justj4nne", "Janne", "J4nne", "Jann3", "jann3", "j4nne", "janne"];
