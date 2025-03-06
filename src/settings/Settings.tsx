@@ -197,7 +197,7 @@ export interface Settings {
     "feature_html_topic": IFeature;
     "feature_bridge_state": IFeature;
     "feature_jump_to_date": IFeature;
-    "feature_sliding_sync": IFeature;
+    "feature_sliding_sync": IBaseSetting<boolean>;
     "feature_simplified_sliding_sync": IFeature;
     "feature_element_call_video_rooms": IFeature;
     "feature_group_calls": IFeature;
@@ -536,8 +536,6 @@ export const SETTINGS: Settings = {
     },
     // legacy sliding sync flag: no longer works, will error for anyone who's still using it
     "feature_sliding_sync": {
-        isFeature: true,
-        labsGroup: LabGroup.Developer,
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         shouldWarn: true,
