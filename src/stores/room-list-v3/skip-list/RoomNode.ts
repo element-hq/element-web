@@ -52,9 +52,9 @@ export class RoomNode {
 
     /**
      * Aggregates all the filter keys that apply to this room.
-     * eg: if filterKeysMap.get(Filter.FavouriteFilter) is true, then this room is a favourite room.
+     * eg: if filterKeysSet.has(Filter.FavouriteFilter) is true, then this room is a favourite room.
      */
-    private filterKeysMap: Map<FilterKey, boolean> = new Map();
+    private filterKeysSet: Set<FilterKey> = new Set();
 
     /**
      * Returns true if the associated room matches all the provided filters.
@@ -62,18 +62,18 @@ export class RoomNode {
      * @param filterKeys An array of filter keys to check against.
      */
     public doesRoomMatchFilters(filterKeys: FilterKey[]): boolean {
-        return !filterKeys.some((key) => !this.filterKeysMap.get(key));
+        return !filterKeys.some((key) => !this.filterKeysSet.has(key));
     }
 
     /**
-     * Populates {@link RoomNode#filterKeysMap} by checking if the associated room
+     * Populates {@link RoomNode#filterKeysSet} by checking if the associated room
      * satisfies the given filters.
      * @param filters A list of filters
      */
     public applyFilters(filters: Filter[]): void {
+        this.filterKeysSet = new Set();
         for (const filter of filters) {
-            const matchesFilter = filter.matches(this.room);
-            this.filterKeysMap.set(filter.key, matchesFilter);
+            if (filter.matches(this.room)) this.filterKeysSet.add(filter.key);
         }
     }
 }
