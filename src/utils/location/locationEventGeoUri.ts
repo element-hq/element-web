@@ -18,5 +18,5 @@ export const locationEventGeoUri = (mxEvent: MatrixEvent): string => {
     // https://github.com/matrix-org/matrix-doc/issues/3516
     const content = mxEvent.getContent();
     const loc = M_LOCATION.findIn(content) as { uri?: string };
-    return loc ? loc.uri : content["geo_uri"];
+    return loc?.uri ?? content["geo_uri"];
 };

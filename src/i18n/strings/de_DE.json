@@ -80,12 +80,14 @@
         "maximise": "Maximieren",
         "mention": "Erwähnen",
         "minimise": "Minimieren",
+        "new_message": "Neue Nachricht",
         "new_room": "Neuer Raum",
         "new_video_room": "Neuer Videoraum",
         "next": "Weiter",
         "no": "Nein",
         "ok": "Ok",
         "open": "Öffnen",
+        "open_menu": "Menu öffnen",
         "pause": "Pausieren",
         "pin": "Anheften",
         "play": "Abspielen",
@@ -1243,6 +1245,7 @@
         "change": "Identitäts-Server wechseln",
         "change_prompt": "Vom Identitäts-Server <current /> trennen, und stattdessen mit <new /> verbinden?",
         "change_server_prompt": "Wenn du <server /> nicht verwenden willst, um Kontakte zu finden und von anderen gefunden zu werden, trage unten einen anderen Identitäts-Server ein.",
+        "changed": "Ihr Identitätsserver wurde geändert",
         "checking": "Überprüfe Server",
         "description_connected": "Zurzeit verwendest du <server></server>, um Kontakte zu finden und von anderen gefunden zu werden. Du kannst deinen Identitäts-Server nachfolgend wechseln.",
         "description_disconnected": "Zurzeit benutzt du keinen Identitäts-Server. Trage unten einen Server ein, um Kontakte zu finden und von anderen gefunden zu werden.",
@@ -1285,7 +1288,9 @@
         "title": "Nicht unterstützter Browser",
         "use_desktop_heading": "Verwende stattdessen %(brand)s Desktop",
         "use_mobile_heading": "Stattdessen %(brand)s am Smartphone benutzen",
-        "use_mobile_heading_after_desktop": "Oder verwende die mobile App"
+        "use_mobile_heading_after_desktop": "Oder verwende die mobile App",
+        "windows_64bit": "Windows (64-Bit)",
+        "windows_arm_64bit": "Windows (ARM 64-Bit)"
     },
     "info_tooltip_title": "Information",
     "integration_manager": {
@@ -2092,6 +2097,7 @@
             "other": "Betrete %(count)s Räume"
         },
         "notification_options": "Benachrichtigungsoptionen",
+        "open_space_menu": "Menü „Raum öffnen“",
         "redacting_messages_status": {
             "one": "Entferne Nachrichten in %(count)s Raum",
             "other": "Entferne Nachrichten in %(count)s Räumen"
@@ -2106,6 +2112,10 @@
         "sort_by_activity": "Aktivität",
         "sort_by_alphabet": "A–Z",
         "sort_unread_first": "Räume mit ungelesenen Nachrichten zuerst zeigen",
+        "space_menu": {
+            "home": "Space-Übersicht",
+            "space_settings": "Raumeinstellungen"
+        },
         "space_menu_label": "%(spaceName)s-Menü",
         "sublist_options": "Optionen anzeigen",
         "suggested_rooms_heading": "Vorgeschlagene Räume"

@@ -25,10 +25,17 @@ test.describe("Room list panel", () => {
     test.beforeEach(async ({ page, app, user }) => {
         // The notification toast is displayed above the search section
         await app.closeNotificationToast();
+
+        // Populate the room list
+        for (let i = 0; i < 20; i++) {
+            await app.client.createRoom({ name: `room${i}` });
+        }
     });
 
     test("should render the room list panel", { tag: "@screenshot" }, async ({ page, app, user }) => {
         const roomListView = getRoomListView(page);
+        // Wait for the last room to be visible
+        await expect(roomListView.getByRole("gridcell", { name: "Open room room19" })).toBeVisible();
         await expect(roomListView).toMatchScreenshot("room-list-panel.png");
     });
 });

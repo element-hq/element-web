@@ -11,11 +11,13 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { RoomListStoreV3Class } from "../../../../src/stores/room-list-v3/RoomListStoreV3";
 import { AsyncStoreWithClient } from "../../../../src/stores/AsyncStoreWithClient";
 import { RecencySorter } from "../../../../src/stores/room-list-v3/skip-list/sorters/RecencySorter";
-import { mkEvent, mkMessage, stubClient, upsertRoomStateEvents } from "../../../test-utils";
+import { mkEvent, mkMessage, mkSpace, stubClient, upsertRoomStateEvents } from "../../../test-utils";
 import { getMockedRooms } from "./skip-list/getMockedRooms";
 import { AlphabeticSorter } from "../../../../src/stores/room-list-v3/skip-list/sorters/AlphabeticSorter";
 import { LISTS_UPDATE_EVENT } from "../../../../src/stores/room-list/RoomListStore";
 import dispatcher from "../../../../src/dispatcher/dispatcher";
+import SpaceStore from "../../../../src/stores/spaces/SpaceStore";
+import { MetaSpace, UPDATE_SELECTED_SPACE } from "../../../../src/stores/spaces";
 
 describe("RoomListStoreV3", () => {
     async function getRoomListStore() {
@@ -24,9 +26,15 @@ describe("RoomListStoreV3", () => {
         client.getVisibleRooms = jest.fn().mockReturnValue(rooms);
         jest.spyOn(AsyncStoreWithClient.prototype, "matrixClient", "get").mockReturnValue(client);
         const store = new RoomListStoreV3Class(dispatcher);
-        store.start();
+        await store.start();
         return { client, rooms, store, dispatcher };
     }
+
+    beforeEach(() => {
+        jest.spyOn(SpaceStore.instance, "isRoomInSpace").mockImplementation((space) => space === MetaSpace.Home);
+        jest.spyOn(SpaceStore.instance, "activeSpace", "get").mockImplementation(() => MetaSpace.Home);
+        jest.spyOn(SpaceStore.instance, "storeReadyPromise", "get").mockImplementation(() => Promise.resolve());
+    });
 
     it("Provides an unsorted list of rooms", async () => {
         const { store, rooms } = await getRoomListStore();
@@ -262,6 +270,49 @@ describe("RoomListStoreV3", () => {
                     true,
                 );
                 expect(fn).not.toHaveBeenCalled();
+            });
+        });
+
+        describe("Spaces", () => {
+            it("Filtering by spaces work", async () => {
+                const client = stubClient();
+                const rooms = getMockedRooms(client);
+
+                // Let's choose 5 rooms to put in space
+                const indexes = [6, 8, 13, 27, 75];
+                const roomIds = indexes.map((i) => rooms[i].roomId);
+                const spaceRoom = mkSpace(client, "!space1:matrix.org", [], roomIds);
+                rooms.push(spaceRoom);
+
+                client.getVisibleRooms = jest.fn().mockReturnValue(rooms);
+                jest.spyOn(AsyncStoreWithClient.prototype, "matrixClient", "get").mockReturnValue(client);
+
+                // Mock the space store
+                jest.spyOn(SpaceStore.instance, "isRoomInSpace").mockImplementation((space, id) => {
+                    if (space === MetaSpace.Home && !roomIds.includes(id)) return true;
+                    if (space === spaceRoom.roomId && roomIds.includes(id)) return true;
+                    return false;
+                });
+
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+                const fn = jest.fn();
+                store.on(LISTS_UPDATE_EVENT, fn);
+
+                // The rooms which belong to the space should not be shown
+                const result = store.getSortedRoomsInActiveSpace().map((r) => r.roomId);
+                for (const id of roomIds) {
+                    expect(result).not.toContain(id);
+                }
+
+                // Lets switch to the space
+                jest.spyOn(SpaceStore.instance, "activeSpace", "get").mockImplementation(() => spaceRoom.roomId);
+                SpaceStore.instance.emit(UPDATE_SELECTED_SPACE);
+                expect(fn).toHaveBeenCalled();
+                const result2 = store.getSortedRoomsInActiveSpace().map((r) => r.roomId);
+                for (const id of roomIds) {
+                    expect(result2).toContain(id);
+                }
             });
         });
     });
