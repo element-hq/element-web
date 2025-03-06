@@ -75,6 +75,7 @@ export interface DropdownProps {
     id: string;
     // ARIA label
     label: string;
+    role?: string;
     value?: string;
     className?: string;
     autoComplete?: string;
@@ -346,7 +347,7 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
                         className="mx_Dropdown_option"
                         onChange={this.onInputChange}
                         value={this.state.searchQuery}
-                        role="combobox"
+                        role={this.props.role ?? "combobox"}
                         aria-autocomplete="list"
                         aria-activedescendant={`${this.props.id}__${this.state.highlightedOption}`}
                         aria-expanded={this.state.expanded}

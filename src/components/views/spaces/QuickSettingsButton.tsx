@@ -51,11 +51,11 @@ const QuickSettingsButton: React.FC<{
                 wrapperClassName={classNames("mx_QuickSettingsButton_ContextMenuWrapper", {
                     mx_QuickSettingsButton_ContextMenuWrapper_new_room_list: newRoomListEnabled,
                 })}
+                aria-labelledby="mx_QuickSettings_heading"
                 onFinished={closeMenu}
-                managed={false}
                 focusLock={true}
             >
-                <h2>{_t("quick_settings|title")}</h2>
+                <h2 id="mx_QuickSettings_heading">{_t("quick_settings|title")}</h2>
 
                 <AccessibleButton
                     onClick={() => {
@@ -63,6 +63,7 @@ const QuickSettingsButton: React.FC<{
                         defaultDispatcher.dispatch({ action: Action.ViewUserSettings });
                     }}
                     kind="primary_outline"
+                    role="menuitem button"
                 >
                     {_t("quick_settings|all_settings")}
                 </AccessibleButton>
@@ -80,6 +81,7 @@ const QuickSettingsButton: React.FC<{
                             );
                         }}
                         kind="danger_outline"
+                        role="menuitem button"
                     >
                         {_t("devtools|title")}
                     </AccessibleButton>
@@ -95,6 +97,7 @@ const QuickSettingsButton: React.FC<{
                         <StyledCheckbox
                             className="mx_QuickSettingsButton_favouritesCheckbox"
                             checked={!!favouritesEnabled}
+                            role="menuitem checkbox"
                             onChange={onMetaSpaceChangeFactory(
                                 MetaSpace.Favourites,
                                 "WebQuickSettingsPinToSidebarCheckbox",
@@ -110,6 +113,7 @@ const QuickSettingsButton: React.FC<{
                                 MetaSpace.People,
                                 "WebQuickSettingsPinToSidebarCheckbox",
                             )}
+                            role="menuitem checkbox"
                         >
                             <UserProfileSolidIcon className="mx_QuickSettingsButton_icon" />
                             {_t("common|people")}
@@ -123,6 +127,7 @@ const QuickSettingsButton: React.FC<{
                                     initialTabId: UserTab.Sidebar,
                                 });
                             }}
+                            role="menuitem checkbox"
                         >
                             <OverflowHorizontalIcon className="mx_QuickSettingsButton_icon" />
                             {_t("quick_settings|sidebar_settings")}

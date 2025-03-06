@@ -76,6 +76,7 @@ export interface IProps extends MenuProps {
     hasBackground?: boolean;
     // whether this context menu should be focus managed. If false it must handle itself
     managed?: boolean;
+    'aria-labelledby'?: string;
     wrapperClassName?: string;
     menuClassName?: string;
 
