@@ -51,10 +51,14 @@ const Entry: React.FC<{
                 disabled={!onChange}
                 description={description}
             >
-            <div>
-                {localRoom ? <RoomAvatar role="none" room={room} size="20px" /> : <RoomAvatar oobData={room} size="20px" />}
-                <span className="mx_ManageRestrictedJoinRuleDialog_entry_name">{room.name}</span>
-            </div>
+                <div>
+                    {localRoom ? (
+                        <RoomAvatar role="none" room={room} size="20px" />
+                    ) : (
+                        <RoomAvatar oobData={room} size="20px" />
+                    )}
+                    <span className="mx_ManageRestrictedJoinRuleDialog_entry_name">{room.name}</span>
+                </div>
             </StyledCheckbox>
         </div>
     );

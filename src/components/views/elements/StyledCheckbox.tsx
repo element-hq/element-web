@@ -6,27 +6,47 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { PropsWithChildren, useId, type ReactNode, type Ref } from "react";
+import React, { useId, type ReactNode, type Ref } from "react";
 import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import { CheckboxInput, Form, HelpMessage, InlineField, Label } from "@vector-im/compound-web";
 
 interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
     inputRef?: Ref<HTMLInputElement>;
     id?: string;
-    description?: ReactNode,
+    description?: ReactNode;
 }
 
 /* eslint @typescript-eslint/no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
-export default function StyledCheckbox({id: initialId, children: label, className, inputRef, description, ...otherProps}: PropsWithChildren<IProps>) {
-        const id = initialId || "checkbox_" + secureRandomString(10);
-        const name = useId();
-        const descriptionId = useId();
-        return <Form.Root>
-            <InlineField className={className} name={name} control={
-                    <CheckboxInput ref={inputRef} aria-describedby={description ? descriptionId : undefined} id={id} {...otherProps}/>
-                }>
+const StyledCheckbox: React.FC<IProps> = ({
+    id: initialId,
+    children: label,
+    className,
+    inputRef,
+    description,
+    ...otherProps
+}) => {
+    const id = initialId || "checkbox_" + secureRandomString(10);
+    const name = useId();
+    const descriptionId = useId();
+    return (
+        <Form.Root>
+            <InlineField
+                className={className}
+                name={name}
+                control={
+                    <CheckboxInput
+                        ref={inputRef}
+                        aria-describedby={description ? descriptionId : undefined}
+                        id={id}
+                        {...otherProps}
+                    />
+                }
+            >
                 {label && <Label htmlFor={id}>{label}</Label>}
                 {description && <HelpMessage id={descriptionId}>{description}</HelpMessage>}
             </InlineField>
-        </Form.Root>;
-}
+        </Form.Root>
+    );
+};
+
+export default StyledCheckbox;

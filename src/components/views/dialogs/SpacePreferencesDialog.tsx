@@ -45,15 +45,13 @@ const SpacePreferencesAppearanceTab: React.FC<Pick<IProps, "space">> = ({ space 
                                 !showPeople,
                             );
                         }}
-                        description={
-                            _t("space|preferences|show_people_in_space", {
-                                spaceName: space.name,
-                            })}
+                        description={_t("space|preferences|show_people_in_space", {
+                            spaceName: space.name,
+                        })}
                     >
                         {_t("common|people")}
                     </StyledCheckbox>
-                    <SettingsSubsectionText>
-                    </SettingsSubsectionText>
+                    <SettingsSubsectionText />
                 </SettingsSubsection>
             </SettingsSection>
         </SettingsTab>

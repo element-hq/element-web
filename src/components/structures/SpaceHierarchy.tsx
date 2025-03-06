@@ -174,7 +174,14 @@ const Tile: React.FC<ITileProps> = ({
     let checkbox: ReactElement | undefined;
     if (onToggleClick) {
         if (hasPermissions) {
-            checkbox = <StyledCheckbox role="presentation" aria-labelledby={checkboxLabelId} checked={!!selected} tabIndex={-1} />;
+            checkbox = (
+                <StyledCheckbox
+                    role="presentation"
+                    aria-labelledby={checkboxLabelId}
+                    checked={!!selected}
+                    tabIndex={-1}
+                />
+            );
         } else {
             checkbox = (
                 <TextWithTooltip
@@ -183,7 +190,12 @@ const Tile: React.FC<ITileProps> = ({
                         ev.stopPropagation();
                     }}
                 >
-                    <StyledCheckbox role="presentation" aria-labelledby={checkboxLabelId} disabled={true} tabIndex={-1} />
+                    <StyledCheckbox
+                        role="presentation"
+                        aria-labelledby={checkboxLabelId}
+                        disabled={true}
+                        tabIndex={-1}
+                    />
                 </TextWithTooltip>
             );
         }

@@ -113,7 +113,11 @@ const BulkRedactDialog: React.FC<Props> = (props) => {
                 <div className="mx_Dialog_content" id="mx_Dialog_content">
                     <p>{_t("user_info|redact|confirm_description_1", { count, user })}</p>
                     <p>{_t("user_info|redact|confirm_description_2")}</p>
-                    <StyledCheckbox description={_t("user_info|redact|confirm_keep_state_explainer")} checked={keepStateEvents} onChange={(e) => setKeepStateEvents(e.target.checked)}>
+                    <StyledCheckbox
+                        description={_t("user_info|redact|confirm_keep_state_explainer")}
+                        checked={keepStateEvents}
+                        onChange={(e) => setKeepStateEvents(e.target.checked)}
+                    >
                         {_t("user_info|redact|confirm_keep_state_label")}
                     </StyledCheckbox>
                 </div>

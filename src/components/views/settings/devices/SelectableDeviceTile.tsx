@@ -20,7 +20,7 @@ interface Props extends DeviceTileProps {
 const SelectableDeviceTile: React.FC<Props> = ({ children, device, isSelected, onSelect, onClick }) => {
     return (
         <div className="mx_SelectableDeviceTile">
-                        {/* hs-a11y-todo */}
+            {/* hs-a11y-todo */}
             <StyledCheckbox
                 checked={isSelected}
                 onChange={onSelect}

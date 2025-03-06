@@ -139,7 +139,7 @@ const SidebarUserSettingsTab: React.FC = () => {
                         className="mx_SidebarUserSettingsTab_checkbox"
                         description={_t("settings|sidebar|metaspaces_orphans_description")}
                     >
-                            {_t("settings|sidebar|metaspaces_orphans")}
+                        {_t("settings|sidebar|metaspaces_orphans")}
                     </StyledCheckbox>
                     {SettingsStore.getValue("feature_video_rooms") && (
                         <StyledCheckbox
