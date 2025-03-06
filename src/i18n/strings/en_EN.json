@@ -2105,11 +2105,15 @@
             "one": "Currently joining %(count)s room",
             "other": "Currently joining %(count)s rooms"
         },
+        "list_title": "Room list",
         "notification_options": "Notification options",
         "open_space_menu": "Open space menu",
         "redacting_messages_status": {
             "one": "Currently removing messages in %(count)s room",
             "other": "Currently removing messages in %(count)s rooms"
+        },
+        "room": {
+            "open_room": "Open room %(roomName)s"
         },
         "show_less": "Show less",
         "show_n_more": {
