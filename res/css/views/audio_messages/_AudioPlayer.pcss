@@ -37,6 +37,29 @@ Please see LICENSE files in the repository root for full details.
             .mx_AudioPlayer_byline {
                 font-size: $font-12px;
                 line-height: $font-12px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+
+                .mx_AudioPlayer_transcribeButton {
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 50%;
+                    border: 1px solid $primary-content;
+                    background: transparent;
+                    color: $primary-content;
+                    font-size: $font-12px;
+                    cursor: pointer;
+                    padding: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    &:hover {
+                        background: $primary-content;
+                        color: $background;
+                    }
+                }
             }
         }
     }
@@ -54,6 +77,33 @@ Please see LICENSE files in the repository root for full details.
             padding-left: $spacing-4; /* isolate from seek bar */
             text-align: justify;
             white-space: nowrap;
+        }
+    }
+}
+
+.mx_RecordingPlayback_clockContainer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .mx_AudioPlayer_transcribeButton {
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
+        position: relative;
+        padding: 4px;
+        background-color: $panel-actions;
+        box-sizing: border-box;
+        color: $primary-content;
+        font-size: $font-15px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+            background-color: $tertiary-content;
+            color: $background;
         }
     }
 }

@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type ReactNode } from "react";
 
 import PlayPauseButton from "./PlayPauseButton";
+import AccessibleButton from "../elements/AccessibleButton";
 import PlaybackClock from "./PlaybackClock";
 import AudioPlayerBase, { type IProps as IAudioPlayerBaseProps } from "./AudioPlayerBase";
 import SeekBar from "./SeekBar";
@@ -38,7 +39,10 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps> {
     private renderComposerLook(): ReactNode {
         return (
             <>
-                <PlaybackClock playback={this.props.playback} />
+                <div className="mx_RecordingPlayback_clockContainer">
+                    <PlaybackClock playback={this.props.playback} />
+                    <AccessibleButton className="mx_AudioPlayer_transcribeButton mx_AccessibleButton">T</AccessibleButton>
+                </div>
                 <PlaybackWaveform playback={this.props.playback} />
             </>
         );
@@ -56,7 +60,10 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps> {
                         ref={this.seekRef}
                     />
                 </div>
-                <PlaybackClock playback={this.props.playback} />
+                <div className="mx_RecordingPlayback_clockContainer">
+                    <PlaybackClock playback={this.props.playback} />
+                    <AccessibleButton className="mx_AudioPlayer_transcribeButton mx_AccessibleButton">T</AccessibleButton>
+                </div>
             </>
         );
     }
