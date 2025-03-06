@@ -4,7 +4,9 @@ exports[`<RoomListCell /> should render a room cell 1`] = `
 <DocumentFragment>
   <button
     aria-label="Open room room1"
+    aria-selected="false"
     class="mx_RoomListCell"
+    role="option"
     type="button"
   >
     <div

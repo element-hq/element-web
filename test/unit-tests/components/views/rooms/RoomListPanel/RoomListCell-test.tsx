@@ -38,7 +38,7 @@ describe("<RoomListCell />", () => {
         const onClick = jest.fn();
         render(<RoomListCell room={room} onClick={onClick} />);
 
-        await user.click(screen.getByRole("button", { name: `Open room ${room.name}` }));
+        await user.click(screen.getByRole("option", { name: `Open room ${room.name}` }));
         expect(onClick).toHaveBeenCalled();
     });
 });
