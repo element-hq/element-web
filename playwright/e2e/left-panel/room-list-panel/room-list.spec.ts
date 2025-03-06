@@ -32,19 +32,19 @@ test.describe("Room list", () => {
 
     test("should render the room list", { tag: "@screenshot" }, async ({ page, app, user }) => {
         const roomListView = getRoomList(page);
-        await expect(roomListView.getByRole("gridcell", { name: "Open room room29" })).toBeVisible();
+        await expect(roomListView.getByRole("option", { name: "Open room room29" })).toBeVisible();
         await expect(roomListView).toMatchScreenshot("room-list.png");
 
         await roomListView.hover();
         // Scroll to the end of the room list
         await page.mouse.wheel(0, 1000);
-        await expect(roomListView.getByRole("gridcell", { name: "Open room room0" })).toBeVisible();
+        await expect(roomListView.getByRole("option", { name: "Open room room0" })).toBeVisible();
         await expect(roomListView).toMatchScreenshot("room-list-scrolled.png");
     });
 
     test("should open the room when it is clicked", async ({ page, app, user }) => {
         const roomListView = getRoomList(page);
-        await roomListView.getByRole("gridcell", { name: "Open room room29" }).click();
+        await roomListView.getByRole("option", { name: "Open room room29" }).click();
         await expect(page.getByRole("heading", { name: "room29", level: 1 })).toBeVisible();
     });
 });
