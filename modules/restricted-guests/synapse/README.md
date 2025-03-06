@@ -94,7 +94,7 @@ The module is not published to a python registry, but we provide a docker contai
 
 ## Copyright & License
 
-Copyright 2023 Nordeck IT + Consulting GmbH
+Copyright 2023 Nordeck IT + Consulting GmbH  
 Copyright (c) 2025 New Vector Ltd
 
 This software is multi licensed by New Vector Ltd (Element). It can be used either:
