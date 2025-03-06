@@ -75,7 +75,7 @@ describe("KeyStoragePanelViewModel", () => {
         });
     });
 
-    it("should delete backup when disabling", async () => {
+    it("should delete key storage when disabling", async () => {
         mocked(matrixClient.getCrypto()!.checkKeyBackupAndEnable).mockResolvedValue({} as KeyBackupCheck);
         mocked(matrixClient.getCrypto()!.getKeyBackupInfo).mockResolvedValue({ version: "99" } as KeyBackupInfo);
 
@@ -86,26 +86,6 @@ describe("KeyStoragePanelViewModel", () => {
 
         await result.current.setEnabled(false);
 
-        expect(mocked(matrixClient.getCrypto()!.deleteKeyBackupVersion)).toHaveBeenCalled();
-    });
-
-    it("should delete data stored in 4s when disabling", async () => {
-        mocked(matrixClient.getCrypto()!.checkKeyBackupAndEnable).mockResolvedValue({} as KeyBackupCheck);
-        mocked(matrixClient.getCrypto()!.getKeyBackupInfo).mockResolvedValue({ version: "99" } as KeyBackupInfo);
-        mocked(matrixClient.secretStorage.getDefaultKeyId).mockResolvedValue("thekey");
-
-        const { result } = renderHook(
-            () => useKeyStoragePanelViewModel(),
-            withClientContextRenderOptions(matrixClient),
-        );
-
-        await result.current.setEnabled(false);
-
-        expect(mocked(matrixClient.deleteAccountData)).toHaveBeenCalledWith("m.cross_signing.master");
-        expect(mocked(matrixClient.deleteAccountData)).toHaveBeenCalledWith("m.cross_signing.self_signing");
-        expect(mocked(matrixClient.deleteAccountData)).toHaveBeenCalledWith("m.cross_signing.user_signing");
-        expect(mocked(matrixClient.deleteAccountData)).toHaveBeenCalledWith("m.megolm_backup.v1");
-        expect(mocked(matrixClient.deleteAccountData)).toHaveBeenCalledWith("m.secret_storage.default_key");
-        expect(mocked(matrixClient.deleteAccountData)).toHaveBeenCalledWith("m.secret_storage.key.thekey");
+        expect(mocked(matrixClient.getCrypto()!.disableKeyStorage)).toHaveBeenCalled();
     });
 });
