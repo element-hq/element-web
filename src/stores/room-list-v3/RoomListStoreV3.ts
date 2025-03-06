@@ -11,6 +11,7 @@ import { EventType } from "matrix-js-sdk/src/matrix";
 import type { EmptyObject, Room, RoomState } from "matrix-js-sdk/src/matrix";
 import type { MatrixDispatcher } from "../../dispatcher/dispatcher";
 import type { ActionPayload } from "../../dispatcher/payloads";
+import type { FilterKey } from "./skip-list/filters";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import SettingsStore from "../../settings/SettingsStore";
 import { VisibilityProvider } from "../room-list/filters/VisibilityProvider";
@@ -23,6 +24,7 @@ import { readReceiptChangeIsFor } from "../../utils/read-receipts";
 import { EffectiveMembership, getEffectiveMembership, getEffectiveMembershipTag } from "../../utils/membership";
 import SpaceStore from "../spaces/SpaceStore";
 import { UPDATE_HOME_BEHAVIOUR, UPDATE_SELECTED_SPACE } from "../spaces";
+import { FavouriteFilter } from "./skip-list/filters/FavouriteFilter";
 
 /**
  * This store allows for fast retrieval of the room list in a sorted and filtered manner.
@@ -61,9 +63,13 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
 
     /**
      * Get a list of sorted rooms that belong to the currently active space.
+     * If filterKeys is passed, only the rooms that match the given filters are
+     * returned.
+
+     * @param filterKeys Optional array of filters that the rooms must match against.
      */
-    public getSortedRoomsInActiveSpace(): Room[] {
-        if (this.roomSkipList?.initialized) return Array.from(this.roomSkipList.getRoomsInActiveSpace());
+    public getSortedRoomsInActiveSpace(filterKeys?: FilterKey[]): Room[] {
+        if (this.roomSkipList?.initialized) return Array.from(this.roomSkipList.getRoomsInActiveSpace(filterKeys));
         else return [];
     }
 
@@ -90,7 +96,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     protected async onReady(): Promise<any> {
         if (this.roomSkipList?.initialized || !this.matrixClient) return;
         const sorter = new RecencySorter(this.matrixClient.getSafeUserId());
-        this.roomSkipList = new RoomSkipList(sorter);
+        this.roomSkipList = new RoomSkipList(sorter, [new FavouriteFilter()]);
         const rooms = this.getRooms();
         await SpaceStore.instance.storeReadyPromise;
         this.roomSkipList.seed(rooms);

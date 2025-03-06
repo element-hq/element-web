@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { EventType, KnownMembership, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
+import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { RoomListStoreV3Class } from "../../../../src/stores/room-list-v3/RoomListStoreV3";
 import { AsyncStoreWithClient } from "../../../../src/stores/AsyncStoreWithClient";
 import { RecencySorter } from "../../../../src/stores/room-list-v3/skip-list/sorters/RecencySorter";
@@ -18,6 +19,8 @@ import { LISTS_UPDATE_EVENT } from "../../../../src/stores/room-list/RoomListSto
 import dispatcher from "../../../../src/dispatcher/dispatcher";
 import SpaceStore from "../../../../src/stores/spaces/SpaceStore";
 import { MetaSpace, UPDATE_SELECTED_SPACE } from "../../../../src/stores/spaces";
+import { DefaultTagID } from "../../../../src/stores/room-list/models";
+import { FilterKey } from "../../../../src/stores/room-list-v3/skip-list/filters";
 
 describe("RoomListStoreV3", () => {
     async function getRoomListStore() {
@@ -273,19 +276,40 @@ describe("RoomListStoreV3", () => {
             });
         });
 
+        /**
+         * Create a space and add it to rooms
+         * @param rooms An array of rooms to which the new space is added.
+         * @param inSpaceIndices  A list of indices from which rooms are added to the space.
+         */
+        function createSpace(rooms: Room[], inSpaceIndices: number[], client: MatrixClient) {
+            const roomIds = inSpaceIndices.map((i) => rooms[i].roomId);
+            const spaceRoom = mkSpace(client, "!space1:matrix.org", [], roomIds);
+            rooms.push(spaceRoom);
+            return { spaceRoom, roomIds };
+        }
+
+        function setupMocks(spaceRoom: Room, roomIds: string[]) {
+            jest.spyOn(SpaceStore.instance, "isRoomInSpace").mockImplementation((space, id) => {
+                if (space === MetaSpace.Home && !roomIds.includes(id)) return true;
+                if (space === spaceRoom.roomId && roomIds.includes(id)) return true;
+                return false;
+            });
+            jest.spyOn(SpaceStore.instance, "activeSpace", "get").mockImplementation(() => spaceRoom.roomId);
+        }
+
+        function getClientAndRooms() {
+            const client = stubClient();
+            const rooms = getMockedRooms(client);
+            client.getVisibleRooms = jest.fn().mockReturnValue(rooms);
+            jest.spyOn(AsyncStoreWithClient.prototype, "matrixClient", "get").mockReturnValue(client);
+            return { client, rooms };
+        }
+
         describe("Spaces", () => {
             it("Filtering by spaces work", async () => {
-                const client = stubClient();
-                const rooms = getMockedRooms(client);
-
+                const { client, rooms } = getClientAndRooms();
                 // Let's choose 5 rooms to put in space
-                const indexes = [6, 8, 13, 27, 75];
-                const roomIds = indexes.map((i) => rooms[i].roomId);
-                const spaceRoom = mkSpace(client, "!space1:matrix.org", [], roomIds);
-                rooms.push(spaceRoom);
-
-                client.getVisibleRooms = jest.fn().mockReturnValue(rooms);
-                jest.spyOn(AsyncStoreWithClient.prototype, "matrixClient", "get").mockReturnValue(client);
+                const { spaceRoom, roomIds } = createSpace(rooms, [6, 8, 13, 27, 75], client);
 
                 // Mock the space store
                 jest.spyOn(SpaceStore.instance, "isRoomInSpace").mockImplementation((space, id) => {
@@ -312,6 +336,65 @@ describe("RoomListStoreV3", () => {
                 const result2 = store.getSortedRoomsInActiveSpace().map((r) => r.roomId);
                 for (const id of roomIds) {
                     expect(result2).toContain(id);
+                }
+            });
+        });
+
+        describe("Filters", () => {
+            it("filters by both space and favourite", async () => {
+                const { client, rooms } = getClientAndRooms();
+                // Let's choose 5 rooms to put in space
+                const { spaceRoom, roomIds } = createSpace(rooms, [6, 8, 13, 27, 75], client);
+
+                // Let's say that 8, 27 an 75 are favourite rooms
+                [8, 27, 75].forEach((i) => {
+                    rooms[i].tags[DefaultTagID.Favourite] = {};
+                });
+
+                setupMocks(spaceRoom, roomIds);
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+
+                // Sorted, filtered rooms should be 8, 27 and 75
+                const result = store.getSortedRoomsInActiveSpace([FilterKey.FavouriteFilter]);
+                expect(result).toHaveLength(3);
+                for (const i of [8, 27, 75]) {
+                    expect(result).toContain(rooms[i]);
+                }
+            });
+
+            it("filters are recalculated on room update", async () => {
+                const { client, rooms } = getClientAndRooms();
+                // Let's choose 5 rooms to put in space
+                const { spaceRoom, roomIds } = createSpace(rooms, [6, 8, 13, 27, 75], client);
+
+                // Let's say that 8, 27 an 75 are favourite rooms
+                [8, 27, 75].forEach((i) => {
+                    rooms[i].tags[DefaultTagID.Favourite] = {};
+                });
+
+                setupMocks(spaceRoom, roomIds);
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+
+                // Let's say 27 got unfavourited
+                const fn = jest.fn();
+                store.on(LISTS_UPDATE_EVENT, fn);
+                rooms[27].tags = {};
+                dispatcher.dispatch(
+                    {
+                        action: "MatrixActions.Room.tags",
+                        room: rooms[27],
+                    },
+                    true,
+                );
+                expect(fn).toHaveBeenCalled();
+
+                // Sorted, filtered rooms should be 27 and 75
+                const result = store.getSortedRoomsInActiveSpace([FilterKey.FavouriteFilter]);
+                expect(result).toHaveLength(2);
+                for (const i of [8, 75]) {
+                    expect(result).toContain(rooms[i]);
                 }
             });
         });
