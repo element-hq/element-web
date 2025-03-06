@@ -84,7 +84,7 @@ export default class SetIntegrationManager extends React.Component<EmptyObject, 
                                 id="mx_SetIntegrationManager_Toggle"
                                 checked={this.state.provisioningEnabled}
                                 onChange={this.onProvisioningToggled}
-                             />
+                            />
                         }
                     >
                         <Label htmlFor="mx_SetIntegrationManager_Toggle">
