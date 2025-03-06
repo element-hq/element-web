@@ -7,19 +7,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 .mx_SetIntegrationManager {
-    .mx_SettingsFlag {
+    .mx_SetIntegrationManager_heading_manager {
+        display: flex;
         align-items: center;
-
-        .mx_SetIntegrationManager_heading_manager {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            column-gap: $spacing-4;
-        }
-
-        .mx_ToggleSwitch {
-            align-self: flex-start;
-            min-width: var(--ToggleSwitch-min-width); /* avoid compression */
-        }
+        flex-wrap: wrap;
+        column-gap: $spacing-4;
+    }
+    form {
+        margin-top: var(--cpd-space-3x);
     }
 }
