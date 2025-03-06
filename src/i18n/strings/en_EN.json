@@ -407,7 +407,15 @@
         "download_logs": "Download logs",
         "downloading_logs": "Downloading logs",
         "error_empty": "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.",
-        "failed_send_logs": "Failed to send logs: ",
+        "failed_download_logs": "Failed to download debug logs: ",
+        "failed_send_logs_causes": {
+            "disallowed_app": "Your bug report was rejected. The rageshake server does not support this application.",
+            "rejected_generic": "Your bug report was rejected. The rageshake server rejected the contents of the report due to a policy.",
+            "rejected_recovery_key": "Your bug report was rejected for safety reasons, as it contained a recovery key.",
+            "rejected_version": "Your bug report was rejected as the version you are running is too old.",
+            "server_unknown_error": "The rageshake server encountered an unknown error and could not handle the report.",
+            "unknown_error": "Failed to send logs."
+        },
         "github_issue": "GitHub issue",
         "introduction": "If you've submitted a bug via GitHub, debug logs can help us track down the problem. ",
         "log_request": "To help us prevent this in future, please <a>send us logs</a>.",
