@@ -36,7 +36,7 @@ export class SortedSpaceFilteredIterator implements Iterator<Room> {
         let current = this.current;
         while (current) {
             if (current.isInActiveSpace && current.doesRoomMatchFilters(this.filters)) break;
-            else current = current.next[0];
+            current = current.next[0];
         }
         if (!current) return { value: undefined, done: true };
         this.current = current.next[0];
