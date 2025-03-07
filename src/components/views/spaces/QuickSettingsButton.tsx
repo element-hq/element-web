@@ -54,6 +54,7 @@ const QuickSettingsButton: React.FC<{
                 // Eventually replace with a properly aria-labelled menu
                 data-testid="quick-settings-menu"
                 onFinished={closeMenu}
+                managed={false}
                 focusLock={true}
             >
                 <h2>{_t("quick_settings|title")}</h2>
