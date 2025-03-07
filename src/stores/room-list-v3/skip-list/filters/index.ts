@@ -8,6 +8,9 @@ import type { Room } from "matrix-js-sdk/src/matrix";
 
 export const enum FilterKey {
     FavouriteFilter,
+    UnreadFilter,
+    PeopleFilter,
+    RoomsFilter,
 }
 
 export interface Filter {
