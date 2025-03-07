@@ -404,7 +404,6 @@
         "download_logs": "Lejupielādēt žurnālus",
         "downloading_logs": "Žurnālu lejupielāde",
         "error_empty": "Lūdzu, pastāstiet mums, kas nogāja greizi, vai reģistrējiet GitHub problēmu ar tās detalizētu aprakstu.",
-        "failed_send_logs": "Neizdevās nosūtīt logfailus: ",
         "github_issue": "GitHub problēma",
         "introduction": "Ja esat iesniedzis kļūdu, izmantojot GitHub, atkļūdošanas žurnāli var mums palīdzēt izsekot problēmai. ",
         "log_request": "Lai palīdzētu mums to novērst nākotnē, lūdzu, <a>nosūtiet mums žurnālus</a>.",
@@ -494,7 +493,6 @@
         "legal": "Juridiskā informācija",
         "light": "Gaiša",
         "loading": "Notiek ielāde…",
-        "lobby": "Vestibils",
         "location": "Atrašanās vieta",
         "low_priority": "Zems svarīgums",
         "matrix": "Matrix",
@@ -3522,7 +3520,6 @@
         "hide_sidebar_button": "Paslēpt sānjoslu",
         "input_devices": "Ievades ierīces",
         "join_button_tooltip_call_full": "Atvainojiet, šis zvans pašlaik ir pilns",
-        "join_button_tooltip_connecting": "Savieno",
         "maximise": "Aizpildīt ekrānu",
         "metaspace_video_rooms": {
             "conference_room_section": "Konferences"
