@@ -34,7 +34,6 @@ exports[`<RoomListPanel /> should not render the RoomListSearch component when U
         <div
           aria-label="Room list"
           aria-readonly="true"
-          aria-setsize="0"
           class="ReactVirtualized__Grid ReactVirtualized__List mx_RoomList_List"
           role="listbox"
           style="box-sizing: border-box; direction: ltr; height: 0px; position: relative; width: 0px; will-change: transform; overflow-x: hidden; overflow-y: hidden;"
@@ -185,7 +184,6 @@ exports[`<RoomListPanel /> should render the RoomListSearch component when UICom
         <div
           aria-label="Room list"
           aria-readonly="true"
-          aria-setsize="0"
           class="ReactVirtualized__Grid ReactVirtualized__List mx_RoomList_List"
           role="listbox"
           style="box-sizing: border-box; direction: ltr; height: 0px; position: relative; width: 0px; will-change: transform; overflow-x: hidden; overflow-y: hidden;"

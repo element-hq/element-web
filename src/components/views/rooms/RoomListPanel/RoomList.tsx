@@ -26,7 +26,14 @@ interface RoomListProps {
 export function RoomList({ vm: { rooms, openRoom } }: RoomListProps): JSX.Element {
     const roomRendererMemoized = useCallback(
         ({ key, index, style }: ListRowProps) => (
-            <RoomListCell room={rooms[index]} key={key} style={style} onClick={() => openRoom(rooms[index].roomId)} />
+            <RoomListCell
+                room={rooms[index]}
+                key={key}
+                style={style}
+                aria-setsize={rooms.length}
+                aria-posinset={index + 1}
+                onClick={() => openRoom(rooms[index].roomId)}
+            />
         ),
         [rooms, openRoom],
     );
@@ -72,9 +79,6 @@ function useAccessibleList(rooms: Room[]): RefObject<HTMLDivElement> {
     useEffect(() => {
         const list = ref.current?.querySelector('[role="listbox"]');
         if (!list) return;
-
-        // The list is virtualized so the number of items in the dom is not the same as the number of rooms
-        list.setAttribute("aria-setsize", `${rooms.length}`);
 
         // Determine if a node is a row node
         const isRowNode = (node: HTMLElement): boolean => node.getAttribute("role") === "row";

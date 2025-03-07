@@ -44,8 +44,6 @@ describe("<RoomList />", () => {
     it("should render a room list", async () => {
         const { asFragment } = await renderList();
         expect(asFragment()).toMatchSnapshot();
-
-        expect(screen.getByRole("listbox").getAttribute("aria-setsize")).toBe(`${vm.rooms.length}`);
     });
 
     it("should open the room", async () => {
