@@ -11,7 +11,7 @@ test.describe("Quick settings menu", () => {
     test("should be rendered properly", { tag: "@screenshot" }, async ({ app, page, user }) => {
         await page.getByRole('button', { name: 'Quick settings'}).click();
         // Assert that the top heading is renderedc
-        const settings = page.getByRole("menu", { name: "Quick settings" });
+        const settings = page.getByTestId("quick-settings-menu");
         await expect(settings).toBeVisible();
         await expect(settings).toMatchScreenshot("quick-settings.png");
     });

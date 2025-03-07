@@ -51,11 +51,12 @@ const QuickSettingsButton: React.FC<{
                 wrapperClassName={classNames("mx_QuickSettingsButton_ContextMenuWrapper", {
                     mx_QuickSettingsButton_ContextMenuWrapper_new_room_list: newRoomListEnabled,
                 })}
-                aria-labelledby="mx_QuickSettings_heading"
+                // Eventually replace with a properly aria-labelled menu
+                data-testid="quick-settings-menu"
                 onFinished={closeMenu}
                 focusLock={true}
             >
-                <h2 id="mx_QuickSettings_heading">{_t("quick_settings|title")}</h2>
+                <h2>{_t("quick_settings|title")}</h2>
 
                 <AccessibleButton
                     onClick={() => {
