@@ -78,7 +78,6 @@ const QuickThemeSwitcher: React.FC<Props> = ({ requestClose }) => {
                 onOptionChange={onOptionChange}
                 value={selectedTheme}
                 label={_t("common|theme")}
-                role="menuitem combobox"
             >
                 {
                     themeOptions.map((theme) => <div key={theme.id}>{theme.name}</div>) as NonEmptyArray<
