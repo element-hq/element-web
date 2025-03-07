@@ -394,7 +394,6 @@
         "download_logs": "Lataa lokit",
         "downloading_logs": "Ladataan lokeja",
         "error_empty": "Kerro mikä meni pieleen, tai, mikä parempaa, luo GitHub-issue joka kuvailee ongelman.",
-        "failed_send_logs": "Lokien lähettäminen epäonnistui: ",
         "github_issue": "GitHub-issue",
         "introduction": "Jos olet tehnyt ilmoituksen ohjelmistovirheestä GitHubiin, vianjäljityslokit voivat auttaa ongelman selvittämisessä. ",
         "log_request": "Voit auttaa meitä estämään tämän toistumisen <a>lähettämällä meille lokeja</a>.",
@@ -481,7 +480,6 @@
         "legal": "Lakitekstit",
         "light": "Vaalea",
         "loading": "Ladataan…",
-        "lobby": "Aula",
         "location": "Sijainti",
         "low_priority": "Matala prioriteetti",
         "matrix": "Matrix",
@@ -3420,7 +3418,6 @@
         "input_devices": "Sisääntulolaitteet",
         "jitsi_call": "Jitsi-konferenssi",
         "join_button_tooltip_call_full": "Pahoittelut — tämä puhelu on täynnä",
-        "join_button_tooltip_connecting": "Yhdistetään",
         "maximise_call": "Suurenna puhelu",
         "metaspace_video_rooms": {
             "conference_room_section": "Konferenssit"
