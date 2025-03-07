@@ -73,23 +73,23 @@ export interface MenuProps extends IPosition {
 
 export interface IProps extends MenuProps {
     // If true, insert an invisible screen-sized element behind the menu that when clicked will close it.
-    hasBackground?: boolean;
+    "hasBackground"?: boolean;
     // whether this context menu should be focus managed. If false it must handle itself
-    managed?: boolean;
-    'aria-labelledby'?: string;
-    wrapperClassName?: string;
-    menuClassName?: string;
+    "managed"?: boolean;
+    "aria-labelledby"?: string;
+    "wrapperClassName"?: string;
+    "menuClassName"?: string;
 
     // If true, this context menu will be mounted as a child to the parent container. Otherwise
     // it will be mounted to a container at the root of the DOM.
-    mountAsChild?: boolean;
+    "mountAsChild"?: boolean;
 
     // If specified, contents will be wrapped in a FocusLock, this is only needed if the context menu is being rendered
     // within an existing FocusLock e.g inside a modal.
-    focusLock?: boolean;
+    "focusLock"?: boolean;
 
     // call onFinished on any interaction with the menu
-    closeOnInteraction?: boolean;
+    "closeOnInteraction"?: boolean;
 
     // Function to be called on menu close
     onFinished(): void;

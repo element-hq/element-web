@@ -9,7 +9,7 @@ import { test, expect } from "../../element-web-test";
 
 test.describe("Quick settings menu", () => {
     test("should be rendered properly", { tag: "@screenshot" }, async ({ app, page, user }) => {
-        await page.getByRole('button', { name: 'Quick settings'}).click();
+        await page.getByRole("button", { name: "Quick settings" }).click();
         // Assert that the top heading is renderedc
         const settings = page.getByTestId("quick-settings-menu");
         await expect(settings).toBeVisible();
