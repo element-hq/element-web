@@ -9,6 +9,7 @@ import { EventType, KnownMembership, MatrixEvent, Room } from "matrix-js-sdk/src
 import { logger } from "matrix-js-sdk/src/logger";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
+import type { RoomNotificationState } from "../../../../src/stores/notifications/RoomNotificationState";
 import { RoomListStoreV3Class } from "../../../../src/stores/room-list-v3/RoomListStoreV3";
 import { AsyncStoreWithClient } from "../../../../src/stores/AsyncStoreWithClient";
 import { RecencySorter } from "../../../../src/stores/room-list-v3/skip-list/sorters/RecencySorter";
@@ -21,6 +22,8 @@ import SpaceStore from "../../../../src/stores/spaces/SpaceStore";
 import { MetaSpace, UPDATE_SELECTED_SPACE } from "../../../../src/stores/spaces";
 import { DefaultTagID } from "../../../../src/stores/room-list/models";
 import { FilterKey } from "../../../../src/stores/room-list-v3/skip-list/filters";
+import { RoomNotificationStateStore } from "../../../../src/stores/notifications/RoomNotificationStateStore";
+import DMRoomMap from "../../../../src/utils/DMRoomMap";
 
 describe("RoomListStoreV3", () => {
     async function getRoomListStore() {
@@ -37,6 +40,17 @@ describe("RoomListStoreV3", () => {
         jest.spyOn(SpaceStore.instance, "isRoomInSpace").mockImplementation((space) => space === MetaSpace.Home);
         jest.spyOn(SpaceStore.instance, "activeSpace", "get").mockImplementation(() => MetaSpace.Home);
         jest.spyOn(SpaceStore.instance, "storeReadyPromise", "get").mockImplementation(() => Promise.resolve());
+        jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation((room) => {
+            const state = {
+                isUnread: false,
+            } as unknown as RoomNotificationState;
+            return state;
+        });
+        jest.spyOn(DMRoomMap, "shared").mockImplementation((() => {
+            return {
+                getUserIdForRoomId: (id) => "",
+            };
+        }) as () => DMRoomMap);
     });
 
     it("Provides an unsorted list of rooms", async () => {
@@ -396,6 +410,89 @@ describe("RoomListStoreV3", () => {
                 for (const i of [8, 75]) {
                     expect(result).toContain(rooms[i]);
                 }
+            });
+
+            it("supports filtering unread rooms", async () => {
+                const { client, rooms } = getClientAndRooms();
+                // Let's choose 5 rooms to put in space
+                const { spaceRoom, roomIds } = createSpace(rooms, [6, 8, 13, 27, 75], client);
+
+                // Let's say 8, 27 are unread
+                jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation((room) => {
+                    const state = {
+                        isUnread: [rooms[8], rooms[27]].includes(room),
+                    } as unknown as RoomNotificationState;
+                    return state;
+                });
+
+                setupMocks(spaceRoom, roomIds);
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+
+                // Should only give us rooms at index 8 and 27
+                const result = store.getSortedRoomsInActiveSpace([FilterKey.UnreadFilter]);
+                expect(result).toHaveLength(2);
+                for (const i of [8, 27]) {
+                    expect(result).toContain(rooms[i]);
+                }
+            });
+
+            it("supports filtering by people and rooms", async () => {
+                const { client, rooms } = getClientAndRooms();
+                // Let's choose 5 rooms to put in space
+                const { spaceRoom, roomIds } = createSpace(rooms, [6, 8, 13, 27, 75], client);
+
+                // Let's say 8, 27 are dms
+                const ids = [8, 27].map((i) => rooms[i].roomId);
+                jest.spyOn(DMRoomMap, "shared").mockImplementation((() => {
+                    return {
+                        getUserIdForRoomId: (id) => (ids.includes(id) ? "@myuser:matrix.org" : ""),
+                    };
+                }) as () => DMRoomMap);
+
+                setupMocks(spaceRoom, roomIds);
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+
+                // Should only give us rooms at index 8 and 27
+                const peopleRooms = store.getSortedRoomsInActiveSpace([FilterKey.PeopleFilter]);
+                expect(peopleRooms).toHaveLength(2);
+                for (const i of [8, 27]) {
+                    expect(peopleRooms).toContain(rooms[i]);
+                }
+
+                // Rest are normal rooms
+                const nonDms = store.getSortedRoomsInActiveSpace([FilterKey.RoomsFilter]);
+                expect(nonDms).toHaveLength(3);
+                for (const i of [6, 13, 75]) {
+                    expect(nonDms).toContain(rooms[i]);
+                }
+            });
+
+            it("supports multiple filters", async () => {
+                const { client, rooms } = getClientAndRooms();
+                // Let's choose 5 rooms to put in space
+                const { spaceRoom, roomIds } = createSpace(rooms, [6, 8, 13, 27, 75], client);
+
+                // Let's say that 8 is a favourite room
+                rooms[8].tags[DefaultTagID.Favourite] = {};
+
+                // Let's say 8, 27 are unread
+                jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation((room) => {
+                    const state = {
+                        isUnread: [rooms[8], rooms[27]].includes(room),
+                    } as unknown as RoomNotificationState;
+                    return state;
+                });
+
+                setupMocks(spaceRoom, roomIds);
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+
+                // Should give us only room at 8 since that's the only room which matches both filters
+                const result = store.getSortedRoomsInActiveSpace([FilterKey.UnreadFilter, FilterKey.FavouriteFilter]);
+                expect(result).toHaveLength(1);
+                expect(result).toContain(rooms[8]);
             });
         });
     });
