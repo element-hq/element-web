@@ -84,7 +84,7 @@ Please see LICENSE files in the repository root for full details.
 .mx_RecordingPlayback_clockContainer {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 4px;
 
     .mx_AudioPlayer_transcribeButton {
         width: 24px;
@@ -103,6 +103,9 @@ Please see LICENSE files in the repository root for full details.
             font-size: 12px;
             line-height: 12px;
             font-weight: 600;
+        }
+
+        &:not(.mx_AudioPlayer_secondButton) .mx_AudioPlayer_transcribeLetter {
             margin-left: -3px;
         }
 
