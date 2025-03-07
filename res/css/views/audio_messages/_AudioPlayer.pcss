@@ -91,15 +91,28 @@ Please see LICENSE files in the repository root for full details.
         height: 24px;
         border-radius: 6px;
         position: relative;
-        padding: 4px;
+        padding: 3px 5px;
         background-color: $panel-actions;
         box-sizing: border-box;
         color: $primary-content;
-        font-size: $font-15px;
-        font-weight: 600;
         display: flex;
         align-items: center;
         justify-content: center;
+
+        .mx_AudioPlayer_transcribeLetter {
+            font-size: 12px;
+            line-height: 12px;
+            font-weight: 600;
+            margin-left: -3px;
+        }
+
+        .mx_AudioPlayer_transcribeArrow {
+            position: absolute;
+            right: 5px;
+            bottom: 0px;
+            font-size: 9px;
+            line-height: 18px;
+        }
 
         &:hover {
             background-color: $tertiary-content;

@@ -41,7 +41,10 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps> {
             <>
                 <div className="mx_RecordingPlayback_clockContainer">
                     <PlaybackClock playback={this.props.playback} />
-                    <AccessibleButton className="mx_AudioPlayer_transcribeButton mx_AccessibleButton">T</AccessibleButton>
+                    <AccessibleButton className="mx_AudioPlayer_transcribeButton mx_AccessibleButton">
+                        <span className="mx_AudioPlayer_transcribeArrow">T</span>
+                        <span className="mx_AudioPlayer_transcribeLetter">T</span>
+                    </AccessibleButton>
                 </div>
                 <PlaybackWaveform playback={this.props.playback} />
             </>
@@ -62,7 +65,10 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps> {
                 </div>
                 <div className="mx_RecordingPlayback_clockContainer">
                     <PlaybackClock playback={this.props.playback} />
-                    <AccessibleButton className="mx_AudioPlayer_transcribeButton mx_AccessibleButton">T</AccessibleButton>
+                    <AccessibleButton className="mx_AudioPlayer_transcribeButton mx_AccessibleButton">
+                        <span className="mx_AudioPlayer_transcribeArrow">T</span>
+                        <span className="mx_AudioPlayer_transcribeLetter">T</span>
+                    </AccessibleButton>
                 </div>
             </>
         );
