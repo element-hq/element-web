@@ -25,6 +25,14 @@ import { EffectiveMembership, getEffectiveMembership, getEffectiveMembershipTag 
 import SpaceStore from "../spaces/SpaceStore";
 import { UPDATE_HOME_BEHAVIOUR, UPDATE_SELECTED_SPACE } from "../spaces";
 import { FavouriteFilter } from "./skip-list/filters/FavouriteFilter";
+import { UnreadFilter } from "./skip-list/filters/UnreadFilter";
+import { PeopleFilter } from "./skip-list/filters/PeopleFilter";
+import { RoomsFilter } from "./skip-list/filters/RoomsFilter";
+
+/**
+ * These are the filters passed to the room skip list.
+ */
+const FILTERS = [new FavouriteFilter(), new UnreadFilter(), new PeopleFilter(), new RoomsFilter()];
 
 /**
  * This store allows for fast retrieval of the room list in a sorted and filtered manner.
@@ -96,7 +104,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     protected async onReady(): Promise<any> {
         if (this.roomSkipList?.initialized || !this.matrixClient) return;
         const sorter = new RecencySorter(this.matrixClient.getSafeUserId());
-        this.roomSkipList = new RoomSkipList(sorter, [new FavouriteFilter()]);
+        this.roomSkipList = new RoomSkipList(sorter, FILTERS);
         const rooms = this.getRooms();
         await SpaceStore.instance.storeReadyPromise;
         this.roomSkipList.seed(rooms);
