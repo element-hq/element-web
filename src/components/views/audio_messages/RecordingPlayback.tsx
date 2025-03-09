@@ -75,36 +75,7 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps, State> {
                     />
                     <PlaybackWaveform playback={this.props.playback} />
                     <PlaybackClock playback={this.props.playback} />
-                    <div className="mx_AudioPlayer_buttonContainer">
-                        <AccessibleButton 
-                            className={classnames("mx_AudioPlayer_transcribeButton mx_AccessibleButton", {
-                                "mx_AudioPlayer_transcribeButton_active": this.state.showTranscript
-                            })}
-                            onClick={this.handleTranscriptToggle}
-                        >
-                            <span className="mx_AudioPlayer_transcribeArrow">T</span>
-                            <span className="mx_AudioPlayer_transcribeLetter">T</span>
-                        </AccessibleButton>
-                        <AccessibleButton 
-                            className={classnames("mx_AudioPlayer_transcribeButton mx_AudioPlayer_secondButton mx_AccessibleButton", {
-                                "mx_AudioPlayer_transcribeButton_active": this.state.showSummary
-                            })}
-                            onClick={this.handleSummaryToggle}
-                        >
-                            <span className="mx_AudioPlayer_transcribeLetter">S</span>
-                        </AccessibleButton>
-                    </div>
                 </div>
-                {this.state.showSummary && (
-                    <div className="mx_AudioPlayer_summary">
-                        Here we will show the Summary of the voice message
-                    </div>
-                )}
-                {this.state.showTranscript && (
-                    <div className="mx_AudioPlayer_summary">
-                        Here we will show the Transcript of the voice message
-                    </div>
-                )}
             </div>
         );
     }
