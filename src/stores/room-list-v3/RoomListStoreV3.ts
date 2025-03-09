@@ -228,3 +228,5 @@ export default class RoomListStoreV3 {
         return this.internalInstance;
     }
 }
+
+window.mxRoomListStoreV3 = RoomListStoreV3.instance;
