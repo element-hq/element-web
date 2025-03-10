@@ -12,7 +12,7 @@ exports[`<PinnedMessagesCard /> should show the empty state when there are no pi
         class="mx_BaseCard_header_title"
       >
         <p
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_BaseCard_header_title_heading"
+          class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 mx_BaseCard_header_title_heading"
           role="heading"
         >
           Pinned messages
@@ -20,14 +20,14 @@ exports[`<PinnedMessagesCard /> should show the empty state when there are no pi
       </div>
       <button
         aria-labelledby=":re:"
-        class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
+        class="_icon-button_m2erp_8 _subtle-bg_m2erp_29"
         data-testid="base-card-close-button"
         role="button"
         style="--cpd-icon-button-size: 28px;"
         tabindex="0"
       >
         <div
-          class="_indicator-icon_133tf_26"
+          class="_indicator-icon_zr2a0_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -38,7 +38,7 @@ exports[`<PinnedMessagesCard /> should show the empty state when there are no pi
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
             />
           </svg>
         </div>
@@ -61,17 +61,17 @@ exports[`<PinnedMessagesCard /> should show the empty state when there are no pi
         >
           <path
             clip-rule="evenodd"
-            d="M6.119 2a.5.5 0 0 0-.35.857L7.85 4.9a.5.5 0 0 1 .15.357v4.487a.5.5 0 0 1-.15.356l-3.7 3.644A.5.5 0 0 0 4 14.1v1.4a.5.5 0 0 0 .5.5H11v6a1 1 0 1 0 2 0v-6h6.5a.5.5 0 0 0 .5-.5v-1.4a.5.5 0 0 0-.15-.356l-3.7-3.644a.5.5 0 0 1-.15-.356V5.257a.5.5 0 0 1 .15-.357l2.081-2.043a.5.5 0 0 0-.35-.857H6.119ZM10 4h4v5.744a2.5 2.5 0 0 0 .746 1.781L17.26 14H6.74l2.514-2.475A2.5 2.5 0 0 0 10 9.744V4Z"
+            d="M6.119 2a.5.5 0 0 0-.35.857L7.85 4.9a.5.5 0 0 1 .15.357v4.487a.5.5 0 0 1-.15.356l-3.7 3.644A.5.5 0 0 0 4 14.1v1.4a.5.5 0 0 0 .5.5H11v6a1 1 0 1 0 2 0v-6h6.5a.5.5 0 0 0 .5-.5v-1.4a.5.5 0 0 0-.15-.356l-3.7-3.644a.5.5 0 0 1-.15-.356V5.257a.5.5 0 0 1 .15-.357l2.081-2.043a.5.5 0 0 0-.35-.857zM10 4h4v5.744a2.5 2.5 0 0 0 .746 1.781L17.26 14H6.74l2.514-2.475A2.5 2.5 0 0 0 10 9.744z"
             fill-rule="evenodd"
           />
         </svg>
         <p
-          class="_typography_yh5dq_162 _font-body-lg-semibold_yh5dq_83"
+          class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74"
         >
           Pin important messages so that they can be easily discovered
         </p>
         <p
-          class="_typography_yh5dq_162 _font-body-md-regular_yh5dq_59"
+          class="_typography_6v6n8_153 _font-body-md-regular_6v6n8_50"
         >
           Select a message and choose “Pin” to it include here.
         </p>
@@ -93,7 +93,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
         class="mx_BaseCard_header_title"
       >
         <p
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_BaseCard_header_title_heading"
+          class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 mx_BaseCard_header_title_heading"
           role="heading"
         >
           2 Pinned messages
@@ -101,14 +101,14 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
       </div>
       <button
         aria-labelledby=":rk:"
-        class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
+        class="_icon-button_m2erp_8 _subtle-bg_m2erp_29"
         data-testid="base-card-close-button"
         role="button"
         style="--cpd-icon-button-size: 28px;"
         tabindex="0"
       >
         <div
-          class="_indicator-icon_133tf_26"
+          class="_indicator-icon_zr2a0_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -119,7 +119,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
             />
           </svg>
         </div>
@@ -139,7 +139,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
         >
           <div>
             <span
-              class="_avatar_mcap2_17 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_mcap2_61"
+              class="_avatar_1qbcf_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_1qbcf_52"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
@@ -167,7 +167,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
                 aria-expanded="false"
                 aria-haspopup="menu"
                 aria-label="Open menu"
-                class="_icon-button_bh2qc_17"
+                class="_icon-button_m2erp_8"
                 data-state="closed"
                 id="radix-:rv:"
                 role="button"
@@ -176,7 +176,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
                 type="button"
               >
                 <div
-                  class="_indicator-icon_133tf_26"
+                  class="_indicator-icon_zr2a0_17"
                   style="--cpd-icon-button-size: 100%;"
                 >
                   <svg
@@ -187,7 +187,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      d="M6 14c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 4 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 6 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 6 14Zm6 0c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 10 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 12 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 12 14Zm6 0c-.55 0-1.02-.196-1.413-.588A1.926 1.926 0 0 1 16 12c0-.55.196-1.02.587-1.412A1.926 1.926 0 0 1 18 10c.55 0 1.02.196 1.413.588.391.391.587.862.587 1.412 0 .55-.196 1.02-.587 1.412A1.926 1.926 0 0 1 18 14Z"
+                      d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
                     />
                   </svg>
                 </div>
@@ -206,7 +206,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
           </div>
         </div>
         <div
-          class="_separator_144s5_17 mx_PinnedMessagesCard_Separator"
+          class="_separator_7ckbw_8 mx_PinnedMessagesCard_Separator"
           data-kind="primary"
           data-orientation="horizontal"
           role="separator"
@@ -217,7 +217,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
         >
           <div>
             <span
-              class="_avatar_mcap2_17 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_mcap2_61"
+              class="_avatar_1qbcf_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_1qbcf_52"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
@@ -245,7 +245,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
                 aria-expanded="false"
                 aria-haspopup="menu"
                 aria-label="Open menu"
-                class="_icon-button_bh2qc_17"
+                class="_icon-button_m2erp_8"
                 data-state="closed"
                 id="radix-:r16:"
                 role="button"
@@ -254,7 +254,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
                 type="button"
               >
                 <div
-                  class="_indicator-icon_133tf_26"
+                  class="_indicator-icon_zr2a0_17"
                   style="--cpd-icon-button-size: 100%;"
                 >
                   <svg
@@ -265,7 +265,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      d="M6 14c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 4 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 6 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 6 14Zm6 0c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 10 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 12 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 12 14Zm6 0c-.55 0-1.02-.196-1.413-.588A1.926 1.926 0 0 1 16 12c0-.55.196-1.02.587-1.412A1.926 1.926 0 0 1 18 10c.55 0 1.02.196 1.413.588.391.391.587.862.587 1.412 0 .55-.196 1.02-.587 1.412A1.926 1.926 0 0 1 18 14Z"
+                      d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
                     />
                   </svg>
                 </div>
@@ -288,7 +288,7 @@ exports[`<PinnedMessagesCard /> should show two pinned messages 1`] = `
         class="mx_PinnedMessagesCard_unpin"
       >
         <button
-          class="_button_i91xf_17"
+          class="_button_vczzf_8"
           data-kind="tertiary"
           data-size="lg"
           role="button"
@@ -314,7 +314,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
         class="mx_BaseCard_header_title"
       >
         <p
-          class="_typography_yh5dq_162 _font-body-md-medium_yh5dq_69 mx_BaseCard_header_title_heading"
+          class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 mx_BaseCard_header_title_heading"
           role="heading"
         >
           2 Pinned messages
@@ -322,14 +322,14 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
       </div>
       <button
         aria-labelledby=":rt2:"
-        class="_icon-button_bh2qc_17 _subtle-bg_bh2qc_38"
+        class="_icon-button_m2erp_8 _subtle-bg_m2erp_29"
         data-testid="base-card-close-button"
         role="button"
         style="--cpd-icon-button-size: 28px;"
         tabindex="0"
       >
         <div
-          class="_indicator-icon_133tf_26"
+          class="_indicator-icon_zr2a0_17"
           style="--cpd-icon-button-size: 100%;"
         >
           <svg
@@ -340,7 +340,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
             />
           </svg>
         </div>
@@ -360,7 +360,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
         >
           <div>
             <span
-              class="_avatar_mcap2_17 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_mcap2_61"
+              class="_avatar_1qbcf_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_1qbcf_52"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
@@ -388,7 +388,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
                 aria-expanded="false"
                 aria-haspopup="menu"
                 aria-label="Open menu"
-                class="_icon-button_bh2qc_17"
+                class="_icon-button_m2erp_8"
                 data-state="closed"
                 id="radix-:rtd:"
                 role="button"
@@ -397,7 +397,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
                 type="button"
               >
                 <div
-                  class="_indicator-icon_133tf_26"
+                  class="_indicator-icon_zr2a0_17"
                   style="--cpd-icon-button-size: 100%;"
                 >
                   <svg
@@ -408,7 +408,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      d="M6 14c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 4 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 6 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 6 14Zm6 0c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 10 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 12 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 12 14Zm6 0c-.55 0-1.02-.196-1.413-.588A1.926 1.926 0 0 1 16 12c0-.55.196-1.02.587-1.412A1.926 1.926 0 0 1 18 10c.55 0 1.02.196 1.413.588.391.391.587.862.587 1.412 0 .55-.196 1.02-.587 1.412A1.926 1.926 0 0 1 18 14Z"
+                      d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
                     />
                   </svg>
                 </div>
@@ -427,7 +427,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
           </div>
         </div>
         <div
-          class="_separator_144s5_17 mx_PinnedMessagesCard_Separator"
+          class="_separator_7ckbw_8 mx_PinnedMessagesCard_Separator"
           data-kind="primary"
           data-orientation="horizontal"
           role="separator"
@@ -438,7 +438,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
         >
           <div>
             <span
-              class="_avatar_mcap2_17 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_mcap2_61"
+              class="_avatar_1qbcf_8 mx_BaseAvatar mx_PinnedEventTile_senderAvatar _avatar-imageless_1qbcf_52"
               data-color="3"
               data-testid="avatar-img"
               data-type="round"
@@ -466,7 +466,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
                 aria-expanded="false"
                 aria-haspopup="menu"
                 aria-label="Open menu"
-                class="_icon-button_bh2qc_17"
+                class="_icon-button_m2erp_8"
                 data-state="closed"
                 id="radix-:rtk:"
                 role="button"
@@ -475,7 +475,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
                 type="button"
               >
                 <div
-                  class="_indicator-icon_133tf_26"
+                  class="_indicator-icon_zr2a0_17"
                   style="--cpd-icon-button-size: 100%;"
                 >
                   <svg
@@ -486,7 +486,7 @@ exports[`<PinnedMessagesCard /> unpin all should not allow to unpinall 1`] = `
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      d="M6 14c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 4 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 6 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 6 14Zm6 0c-.55 0-1.02-.196-1.412-.588A1.926 1.926 0 0 1 10 12c0-.55.196-1.02.588-1.412A1.926 1.926 0 0 1 12 10c.55 0 1.02.196 1.412.588.392.391.588.862.588 1.412 0 .55-.196 1.02-.588 1.412A1.926 1.926 0 0 1 12 14Zm6 0c-.55 0-1.02-.196-1.413-.588A1.926 1.926 0 0 1 16 12c0-.55.196-1.02.587-1.412A1.926 1.926 0 0 1 18 10c.55 0 1.02.196 1.413.588.391.391.587.862.587 1.412 0 .55-.196 1.02-.587 1.412A1.926 1.926 0 0 1 18 14Z"
+                      d="M6 14q-.824 0-1.412-.588A1.93 1.93 0 0 1 4 12q0-.825.588-1.412A1.93 1.93 0 0 1 6 10q.824 0 1.412.588Q8 11.175 8 12t-.588 1.412A1.93 1.93 0 0 1 6 14m6 0q-.825 0-1.412-.588A1.93 1.93 0 0 1 10 12q0-.825.588-1.412A1.93 1.93 0 0 1 12 10q.825 0 1.412.588Q14 11.175 14 12t-.588 1.412A1.93 1.93 0 0 1 12 14m6 0q-.824 0-1.413-.588A1.93 1.93 0 0 1 16 12q0-.825.587-1.412A1.93 1.93 0 0 1 18 10q.824 0 1.413.588Q20 11.175 20 12t-.587 1.412A1.93 1.93 0 0 1 18 14"
                     />
                   </svg>
                 </div>

@@ -405,7 +405,6 @@
         "download_logs": "Günlükleri indir",
         "downloading_logs": "Günlükler indiriliyor",
         "error_empty": "Lütfen neyin yanlış gittiğini bize bildirin ya da en güzeli problemi tanımlayan bir GitHub talebi oluşturun.",
-        "failed_send_logs": "Logların gönderilmesi başarısız: ",
         "github_issue": "GitHub sorunu",
         "introduction": "GitHub aracılığıyla bir hata bildirdiyseniz, hata ayıklama günlükleri sorunu bulmamızda yardımcı olabilir. ",
         "log_request": "Bunun gelecekte de olmasının önüne geçmek için lütfen <a>günceleri bize gönderin</a>.",
@@ -495,7 +494,6 @@
         "legal": "Yasal",
         "light": "Aydınlık",
         "loading": "Yükleniyor...",
-        "lobby": "Lobi",
         "location": "Konum",
         "low_priority": "Düşük öncelik",
         "matrix": "Matrix",
@@ -1285,8 +1283,7 @@
         "title": "%(brand)s bu tarayıcıyı desteklemiyor",
         "use_desktop_heading": "Bunun yerine %(brand)s Masaüstü kullanın",
         "use_mobile_heading": "Bunun yerine mobil cihazlarda %(brand)s kullanın",
-        "use_mobile_heading_after_desktop": "Veya mobil uygulamamızı kullanın",
-        "windows": "Windows (%(bits)s-bit)"
+        "use_mobile_heading_after_desktop": "Veya mobil uygulamamızı kullanın"
     },
     "info_tooltip_title": "Bilgi",
     "integration_manager": {
@@ -3891,7 +3888,6 @@
         "input_devices": "Giriş aygıtları",
         "jitsi_call": "Jitsi Konferansı",
         "join_button_tooltip_call_full": "Üzgünüz - bu çağrı şu anda dolu",
-        "join_button_tooltip_connecting": "Bağlanıyor",
         "legacy_call": "Eski Tip Çağrı",
         "maximise": "Ekranı kapla",
         "maximise_call": "Arama ekranı kapla",

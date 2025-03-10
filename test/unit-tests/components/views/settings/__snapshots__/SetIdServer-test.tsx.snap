@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SetIdServer /> renders expected fields 1`] = `
+<DocumentFragment>
+  <fieldset
+    class="mx_SettingsFieldset"
+  >
+    <legend
+      class="mx_SettingsFieldset_legend"
+    >
+      Identity server
+    </legend>
+    <div
+      class="mx_SettingsFieldset_description"
+    >
+      <div
+        class="mx_SettingsSubsection_text"
+      >
+        You are not currently using an identity server. To discover and be discoverable by existing contacts you know, add one below.
+      </div>
+    </div>
+    <div
+      class="mx_SettingsFieldset_content"
+    >
+      <form
+        class="_root_19upo_16 mx_IdentityServerPicker"
+      >
+        <div
+          class="_field_19upo_26"
+        >
+          <label
+            class="_label_19upo_59"
+            for="radix-:r0:"
+          >
+            Enter a new identity server
+          </label>
+          <div
+            class="_controls_17lij_8"
+          >
+            <input
+              class="_control_sqdq4_10"
+              id="radix-:r0:"
+              name="input"
+              placeholder=""
+              title=""
+              value=""
+            />
+          </div>
+        </div>
+      </form>
+    </div>
+  </fieldset>
+</DocumentFragment>
+`;

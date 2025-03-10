@@ -8,10 +8,9 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
     <div
       class="mx_SettingsTab_sections"
     >
-      <label
+      <div
         class="mx_SetIntegrationManager"
         data-testid="mx_SetIntegrationManager"
-        for="toggle_integration"
       >
         <div
           class="mx_SettingsFlag"
@@ -30,18 +29,6 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
               (scalar.vector.im)
             </h4>
           </div>
-          <div
-            aria-checked="true"
-            aria-disabled="false"
-            class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
-            id="toggle_integration"
-            role="switch"
-            tabindex="0"
-          >
-            <div
-              class="mx_ToggleSwitch_ball"
-            />
-          </div>
         </div>
         <div
           class="mx_SettingsSubsection_text"
@@ -59,7 +46,43 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
         >
           Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.
         </div>
-      </label>
+        <form
+          class="_root_19upo_16"
+        >
+          <div
+            class="_inline-field_19upo_32"
+          >
+            <div
+              class="_inline-field-control_19upo_44"
+            >
+              <div
+                class="_container_19o42_10"
+              >
+                <input
+                  checked=""
+                  class="_input_19o42_24"
+                  id="mx_SetIntegrationManager_Toggle"
+                  role="switch"
+                  type="checkbox"
+                />
+                <div
+                  class="_ui_19o42_34"
+                />
+              </div>
+            </div>
+            <div
+              class="_inline-field-body_19upo_38"
+            >
+              <label
+                class="_label_19upo_59"
+                for="mx_SetIntegrationManager_Toggle"
+              >
+                Enable the integration manager
+              </label>
+            </div>
+          </div>
+        </form>
+      </div>
       <div
         class="mx_SettingsSection"
       >
@@ -438,33 +461,29 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
                   class="mx_SettingsFieldset_content"
                 >
                   <form
-                    class="mx_SetIdServer"
+                    class="_root_19upo_16 mx_IdentityServerPicker"
                   >
                     <div
-                      class="mx_Field mx_Field_input"
+                      class="_field_19upo_26"
                     >
-                      <input
-                        autocomplete="off"
-                        id="mx_Field_1"
-                        label="Enter a new identity server"
-                        placeholder=""
-                        type="text"
-                        value=""
-                      />
                       <label
-                        for="mx_Field_1"
+                        class="_label_19upo_59"
+                        for="radix-:r1:"
                       >
                         Enter a new identity server
                       </label>
-                    </div>
-                    <div
-                      aria-disabled="true"
-                      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_sm mx_AccessibleButton_disabled"
-                      disabled=""
-                      role="button"
-                      tabindex="0"
-                    >
-                      Change
+                      <div
+                        class="_controls_17lij_8"
+                      >
+                        <input
+                          class="_control_sqdq4_10"
+                          id="radix-:r1:"
+                          name="input"
+                          placeholder=""
+                          title=""
+                          value=""
+                        />
+                      </div>
                     </div>
                   </form>
                 </div>

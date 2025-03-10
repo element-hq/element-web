@@ -10,7 +10,7 @@ import { type RefObject, useEffect } from "react";
 
 import { setCursorPositionAtTheEnd } from "./utils";
 
-export function useSetCursorPosition(disabled: boolean, ref: RefObject<HTMLElement>): void {
+export function useSetCursorPosition(disabled: boolean, ref: RefObject<HTMLDivElement | null>): void {
     useEffect(() => {
         if (ref.current && !disabled) {
             setCursorPositionAtTheEnd(ref.current);

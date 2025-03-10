@@ -405,7 +405,6 @@
         "download_logs": "Ladda ner loggar",
         "downloading_logs": "Laddar ner loggar",
         "error_empty": "Berätta vad som gick fel, eller skapa ännu hellre ett GitHub-ärende som beskriver problemet.",
-        "failed_send_logs": "Misslyckades att skicka loggar: ",
         "github_issue": "GitHub-ärende",
         "introduction": "Om du har rapporterat en bugg via GitHub så kan felsökningsloggar hjälpa oss att hitta problemet. ",
         "log_request": "För att hjälpa oss att förhindra detta i framtiden, vänligen <a>skicka oss loggar</a>.",
@@ -495,7 +494,6 @@
         "legal": "Juridiskt",
         "light": "Ljust",
         "loading": "Laddar …",
-        "lobby": "Lobby",
         "location": "Plats",
         "low_priority": "Låg prioritet",
         "matrix": "Matrix",
@@ -1236,8 +1234,7 @@
         "title": "Webbläsaren stöds ej",
         "use_desktop_heading": "Använd %(brand)s skrivbord istället",
         "use_mobile_heading": "Använd %(brand)s på mobilen istället",
-        "use_mobile_heading_after_desktop": "Eller använd vår mobilapp",
-        "windows": "Windows (%(bits)s -bit)"
+        "use_mobile_heading_after_desktop": "Eller använd vår mobilapp"
     },
     "info_tooltip_title": "Information",
     "integration_manager": {
@@ -3787,7 +3784,6 @@
         "input_devices": "Ingångsenheter",
         "jitsi_call": "Jitsi-gruppsamtal",
         "join_button_tooltip_call_full": "Tyvärr - det här samtalet är för närvarande fullt",
-        "join_button_tooltip_connecting": "Ansluter",
         "legacy_call": "Standardsamtal",
         "maximise": "Fyll skärmen",
         "maximise_call": "Maximera samtal",

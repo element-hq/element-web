@@ -405,7 +405,6 @@
         "download_logs": "Laadi logikirjed alla",
         "downloading_logs": "Laadin logisid alla",
         "error_empty": "Palun kirjelda seda, mis läks valesti ja loo GitHub'is veateade.",
-        "failed_send_logs": "Logikirjete saatmine ei õnnestunud: ",
         "github_issue": "Veateade GitHub'is",
         "introduction": "Kui sa oled GitHub'is teinud meile veateate, siis silumislogid võivad aidata vea lahendamisel. ",
         "log_request": "Tagamaks et sama ei juhtuks tulevikus, palun <a>saada meile salvestatud logid</a>.",
@@ -495,7 +494,6 @@
         "legal": "Juriidiline teave",
         "light": "Hele",
         "loading": "Laadime…",
-        "lobby": "Ooteruum",
         "location": "Asukoht",
         "low_priority": "Vähetähtis",
         "matrix": "Matrix",
@@ -1281,8 +1279,7 @@
         "title": "Sellele brauserile puudub tugi",
         "use_desktop_heading": "Selle asemel kasuta %(brand)s töölauaversiooni",
         "use_mobile_heading": "Selle asemel kasuta %(brand)s nutiseadmeversiooni",
-        "use_mobile_heading_after_desktop": "Või kasuta meie rakendust nutiseadmetele",
-        "windows": "Windows (%(bits)s-bit)"
+        "use_mobile_heading_after_desktop": "Või kasuta meie rakendust nutiseadmetele"
     },
     "info_tooltip_title": "Teave",
     "integration_manager": {
@@ -3881,7 +3878,6 @@
         "input_devices": "Sisendseadmed",
         "jitsi_call": "Jitsi-põhine kõne",
         "join_button_tooltip_call_full": "Vabandust, selles kõnes ei saa rohkem osalejaid olla",
-        "join_button_tooltip_connecting": "Kõne on ühendamisel",
         "legacy_call": "Vana lahendusega kõne",
         "maximise": "Täida ekraan",
         "maximise_call": "Tee kõneaken suureks",

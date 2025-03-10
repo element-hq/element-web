@@ -29,7 +29,7 @@ exports[`<DialogSidebar /> renders sidebar correctly with beacons 1`] = `
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+            d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
           />
         </svg>
       </div>
@@ -41,7 +41,7 @@ exports[`<DialogSidebar /> renders sidebar correctly with beacons 1`] = `
         class="mx_BeaconListItem"
       >
         <span
-          class="_avatar_mcap2_17 mx_BaseAvatar mx_BeaconListItem_avatar _avatar-imageless_mcap2_61"
+          class="_avatar_1qbcf_8 mx_BaseAvatar mx_BeaconListItem_avatar _avatar-imageless_1qbcf_52"
           data-color="1"
           data-testid="avatar-img"
           data-type="round"
@@ -135,7 +135,7 @@ exports[`<DialogSidebar /> renders sidebar correctly without beacons 1`] = `
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414Z"
+            d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
           />
         </svg>
       </div>
