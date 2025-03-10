@@ -16,7 +16,7 @@ import { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
 import dispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { FilterKey } from "../../../stores/room-list-v3/skip-list/filters";
-import { _t } from "../../../languageHandler";
+import { _t, _td } from "../../../languageHandler";
 
 export interface RoomListViewState {
     /**
@@ -73,10 +73,10 @@ interface FilteredRooms {
 }
 
 const filterKeyToNameMap: Map<FilterKey, TranslationKey> = new Map([
-    [FilterKey.UnreadFilter, "room_list|filters|unread"],
-    [FilterKey.FavouriteFilter, "room_list|filters|favourite"],
-    [FilterKey.PeopleFilter, "room_list|filters|people"],
-    [FilterKey.RoomsFilter, "room_list|filters|rooms"],
+    [FilterKey.UnreadFilter, _td("room_list|filters|unread")],
+    [FilterKey.FavouriteFilter, _td("room_list|filters|favourite")],
+    [FilterKey.PeopleFilter, _td("room_list|filters|people")],
+    [FilterKey.RoomsFilter, _td("room_list|filters|rooms")],
 ]);
 
 /**
