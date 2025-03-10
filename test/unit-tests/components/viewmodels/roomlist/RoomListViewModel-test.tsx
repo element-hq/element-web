@@ -14,6 +14,7 @@ import { useRoomListViewModel } from "../../../../../src/components/viewmodels/r
 import dispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { FilterKey } from "../../../../../src/stores/room-list-v3/skip-list/filters";
+import { LISTS_UPDATE_EVENT } from "../../../../../src/stores/room-list/RoomListStore";
 
 describe("RoomListViewModel", () => {
     function mockAndCreateRooms() {
