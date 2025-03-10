@@ -104,6 +104,27 @@ describe("RoomListStoreV3", () => {
             expect(store.getSortedRooms()[0].roomId).toEqual(room.roomId);
         });
 
+        it("Room is removed when membership changes from join to leave", async () => {
+            const { store, rooms, dispatcher } = await getRoomListStore();
+
+            // Let's say the user leaves room at index 37
+            const room = rooms[37];
+
+            const payload = {
+                action: "MatrixActions.Room.myMembership",
+                oldMembership: KnownMembership.Join,
+                membership: KnownMembership.Leave,
+                room,
+            };
+
+            const fn = jest.fn();
+            store.on(LISTS_UPDATE_EVENT, fn);
+            dispatcher.dispatch(payload, true);
+
+            expect(fn).toHaveBeenCalled();
+            expect(store.getSortedRooms()).not.toContain(room);
+        });
+
         it("Predecessor room is removed on room upgrade", async () => {
             const { store, rooms, client, dispatcher } = await getRoomListStore();
             // Let's say that !foo32:matrix.org is being upgraded
