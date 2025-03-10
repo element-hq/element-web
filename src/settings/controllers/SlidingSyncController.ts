@@ -14,10 +14,6 @@ import { _t } from "../../languageHandler";
 import { SlidingSyncManager } from "../../SlidingSyncManager";
 
 export default class SlidingSyncController extends SettingController {
-    public constructor() {
-        super();
-    }
-
     public async onChange(): Promise<void> {
         PlatformPeg.get()?.reload();
     }
