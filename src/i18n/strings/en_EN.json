@@ -2112,6 +2112,14 @@
             "other": "Currently joining %(count)s rooms"
         },
         "list_title": "Room list",
+        "more_options": {
+            "copy_link": "Copy room link",
+            "favourited": "Favourited",
+            "leave_room": "Leave room",
+            "low_priority": "Low priority",
+            "mark_read": "Mark as read",
+            "mark_unread": "Mark as unread"
+        },
         "notification_options": "Notification options",
         "open_space_menu": "Open space menu",
         "primary_filters": "Room list filters",
@@ -2120,6 +2128,7 @@
             "other": "Currently removing messages in %(count)s rooms"
         },
         "room": {
+            "more_options": "More Options",
             "open_room": "Open room %(roomName)s"
         },
         "show_less": "Show less",
