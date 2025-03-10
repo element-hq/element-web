@@ -27,7 +27,7 @@ describe("<RoomList />", () => {
 
         matrixClient = stubClient();
         const rooms = Array.from({ length: 10 }, (_, i) => mkRoom(matrixClient, `room${i}`));
-        vm = { rooms, openRoom: jest.fn() };
+        vm = { rooms, openRoom: jest.fn(), primaryFilters: [] };
 
         // Needed to render a room list cell
         DMRoomMap.makeShared(matrixClient);
