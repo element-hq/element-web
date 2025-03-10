@@ -58,6 +58,12 @@ export function useRoomListViewModel(): RoomListViewState {
     };
 }
 
+/**
+ * Provides information about a primary filter.
+ * A primary filter is a commonly used filter that is given
+ * more precedence in the UI. For eg, primary filters may be
+ * rendered as pills above the room list.
+ */
 interface PrimaryFilter {
     // A function to toggle this filter on and off.
     toggle: () => void;
