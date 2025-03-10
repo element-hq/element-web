@@ -156,6 +156,20 @@ test.describe("Sliding Sync", () => {
         ).not.toBeAttached();
     });
 
+    test("should show unread indicators", async ({ page, app, joinedBot: bot, testRoom }) => {
+        // create a new room so we know when the message has been received as it'll re-shuffle the room list
+        await app.client.createRoom({ name: "Dummy" });
+
+        await checkOrder(["Dummy", "Test Room"], page);
+
+        await bot.sendMessage(testRoom.roomId, "Do you read me?");
+
+        // wait for this message to arrive, tell by the room list resorting
+        await checkOrder(["Test Room", "Dummy"], page);
+
+        await expect(page.getByRole("treeitem", { name: "Test Room" }).locator(".mx_NotificationBadge")).toBeAttached();
+    });
+
     test("should update user settings promptly", async ({ page, app }) => {
         await app.settings.openUserSettings("Preferences");
         const locator = page.locator(".mx_SettingsFlag").filter({ hasText: "Show timestamps in 12 hour format" });
