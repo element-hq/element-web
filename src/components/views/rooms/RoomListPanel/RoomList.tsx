@@ -10,7 +10,7 @@ import { AutoSizer, List, type ListRowProps } from "react-virtualized";
 
 import { type RoomListViewState } from "../../../viewmodels/roomlist/RoomListViewModel";
 import { _t } from "../../../../languageHandler";
-import { RoomListCell } from "./RoomListCell";
+import { RoomListItemView } from "./RoomListItemView";
 
 interface RoomListProps {
     /**
@@ -25,7 +25,12 @@ interface RoomListProps {
 export function RoomList({ vm: { rooms, openRoom } }: RoomListProps): JSX.Element {
     const roomRendererMemoized = useCallback(
         ({ key, index, style }: ListRowProps) => (
-            <RoomListCell room={rooms[index]} key={key} style={style} onClick={() => openRoom(rooms[index].roomId)} />
+            <RoomListItemView
+                room={rooms[index]}
+                key={key}
+                style={style}
+                onClick={() => openRoom(rooms[index].roomId)}
+            />
         ),
         [rooms, openRoom],
     );

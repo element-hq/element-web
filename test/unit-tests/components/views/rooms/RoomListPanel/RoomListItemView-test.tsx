@@ -11,10 +11,10 @@ import { render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 
 import { mkRoom, stubClient } from "../../../../../test-utils";
-import { RoomListCell } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomListCell";
+import { RoomListItemView } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomListItemView";
 import DMRoomMap from "../../../../../../src/utils/DMRoomMap";
 
-describe("<RoomListCell />", () => {
+describe("<RoomListItemView />", () => {
     let matrixClient: MatrixClient;
     let room: Room;
 
@@ -26,9 +26,9 @@ describe("<RoomListCell />", () => {
         jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(null);
     });
 
-    test("should render a room cell", () => {
+    test("should render a room item", () => {
         const onClick = jest.fn();
-        const { asFragment } = render(<RoomListCell room={room} onClick={onClick} />);
+        const { asFragment } = render(<RoomListItemView room={room} onClick={onClick} />);
         expect(asFragment()).toMatchSnapshot();
     });
 
@@ -36,7 +36,7 @@ describe("<RoomListCell />", () => {
         const user = userEvent.setup();
 
         const onClick = jest.fn();
-        render(<RoomListCell room={room} onClick={onClick} />);
+        render(<RoomListItemView room={room} onClick={onClick} />);
 
         await user.click(screen.getByRole("button", { name: `Open room ${room.name}` }));
         expect(onClick).toHaveBeenCalled();
