@@ -28,11 +28,22 @@ import { FavouriteFilter } from "./skip-list/filters/FavouriteFilter";
 import { UnreadFilter } from "./skip-list/filters/UnreadFilter";
 import { PeopleFilter } from "./skip-list/filters/PeopleFilter";
 import { RoomsFilter } from "./skip-list/filters/RoomsFilter";
+import { InvitesFilter } from "./skip-list/filters/InvitesFilter";
+import { MentionsFilter } from "./skip-list/filters/MentionsFilter";
+import { LowPriorityFilter } from "./skip-list/filters/LowPriorityFilter";
 
 /**
  * These are the filters passed to the room skip list.
  */
-const FILTERS = [new FavouriteFilter(), new UnreadFilter(), new PeopleFilter(), new RoomsFilter()];
+const FILTERS = [
+    new FavouriteFilter(),
+    new UnreadFilter(),
+    new PeopleFilter(),
+    new RoomsFilter(),
+    new InvitesFilter(),
+    new MentionsFilter(),
+    new LowPriorityFilter(),
+];
 
 /**
  * This store allows for fast retrieval of the room list in a sorted and filtered manner.
