@@ -7,11 +7,17 @@
 
 import { renderHook } from "jest-matrix-react";
 import { type Room } from "matrix-js-sdk/src/matrix";
+import { mocked } from "jest-mock";
 
 import dispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { useRoomListItemViewModel } from "../../../../../src/components/viewmodels/roomlist/RoomListItemViewModel";
 import { createTestClient, mkStubRoom } from "../../../../test-utils";
+import { hasAccessToOptionsMenu } from "../../../../../src/components/viewmodels/roomlist/utils";
+
+jest.mock("../../../../../src/components/viewmodels/roomlist/utils", () => ({
+    hasAccessToOptionsMenu: jest.fn().mockReturnValue(false),
+}));
 
 describe("RoomListItemViewModel", () => {
     let room: Room;
@@ -22,10 +28,10 @@ describe("RoomListItemViewModel", () => {
     });
 
     it("should dispatch view room action on openRoom", async () => {
-        const { result: vm } = renderHook(() => useRoomListItemViewModel());
+        const { result: vm } = renderHook(() => useRoomListItemViewModel(room));
 
         const fn = jest.spyOn(dispatcher, "dispatch");
-        vm.current.openRoom(room.roomId);
+        vm.current.openRoom();
         expect(fn).toHaveBeenCalledWith(
             expect.objectContaining({
                 action: Action.ViewRoom,
@@ -33,5 +39,11 @@ describe("RoomListItemViewModel", () => {
                 metricsTrigger: "RoomList",
             }),
         );
+    });
+
+    it("should show hover menu if user has access to options menu", async () => {
+        mocked(hasAccessToOptionsMenu).mockReturnValue(true);
+        const { result: vm } = renderHook(() => useRoomListItemViewModel(room));
+        expect(vm.current.showHoverMenu).toBe(true);
     });
 });
