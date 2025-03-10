@@ -116,8 +116,8 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         if (this.roomSkipList?.initialized || !this.matrixClient) return;
         const sorter = new RecencySorter(this.matrixClient.getSafeUserId());
         this.roomSkipList = new RoomSkipList(sorter, FILTERS);
-        const rooms = this.getRooms();
         await SpaceStore.instance.storeReadyPromise;
+        const rooms = this.getRooms();
         this.roomSkipList.seed(rooms);
         this.emit(LISTS_UPDATE_EVENT);
     }
@@ -244,3 +244,5 @@ export default class RoomListStoreV3 {
         return this.internalInstance;
     }
 }
+
+window.mxRoomListStoreV3 = RoomListStoreV3.instance;
