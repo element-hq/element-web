@@ -291,4 +291,36 @@ test.describe("Spaces", () => {
         // Assert we get shown the new room intro, and thus not the soft crash screen
         await expect(page.locator(".mx_NewRoomIntro")).toBeVisible();
     });
+
+    test(
+        "should render spaces view",
+        { tag: "@screenshot" },
+        async ({ page, app, user, axe, checkA11y }) => {
+            axe.disableRules([
+                // Disable this check as it triggers on nested roving tab index elements which are in practice fine
+                "nested-interactive",
+                // XXX: We have some known contrast issues here
+                "color-contrast",
+            ]);
+
+            const childSpaceId1 = await app.client.createSpace({
+                name: "Child Space 1",
+                initial_state: [],
+            });
+            const childSpaceId2 = await app.client.createSpace({
+                name: "Child Space 2",
+                initial_state: [],
+            });
+            const childSpaceId3 = await app.client.createSpace({
+                name: "Child Space 3",
+                initial_state: [],
+            });
+            await app.client.createSpace({
+                name: "Root Space",
+                initial_state: [spaceChildInitialState(childSpaceId1), spaceChildInitialState(childSpaceId2), spaceChildInitialState(childSpaceId3)],
+            });
+            await app.viewSpaceByName("Root Space");
+            await expect(page.locator(".mx_SpaceRoomView")).toMatchScreenshot("space-room-view.png");
+        },
+    );
 });
