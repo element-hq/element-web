@@ -10,7 +10,6 @@ import { act, renderHook, waitFor } from "jest-matrix-react";
 
 import RoomListStoreV3 from "../../../../../src/stores/room-list-v3/RoomListStoreV3";
 import { mkStubRoom } from "../../../../test-utils";
-import { LISTS_UPDATE_EVENT } from "../../../../../src/stores/room-list/SlidingRoomListStore";
 import { useRoomListViewModel } from "../../../../../src/components/viewmodels/roomlist/RoomListViewModel";
 import dispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
