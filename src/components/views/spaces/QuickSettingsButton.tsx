@@ -89,14 +89,12 @@ const QuickSettingsButton: React.FC<{
 
                 {!newRoomListEnabled && (
                     <>
-                        <h4 className="mx_QuickSettingsButton_pinToSidebarHeading">
+                        <h4>
                             <PinUprightIcon className="mx_QuickSettingsButton_icon" />
                             {_t("quick_settings|metaspace_section")}
                         </h4>
-
-                        {/* hs-a11y-todo */}
                         <StyledCheckbox
-                            className="mx_QuickSettingsButton_favouritesCheckbox"
+                            className="mx_QuickSettingsButton_favouritesCheckbox mx_QuickSettingsButton_option"
                             checked={!!favouritesEnabled}
                             onChange={onMetaSpaceChangeFactory(
                                 MetaSpace.Favourites,
@@ -104,10 +102,10 @@ const QuickSettingsButton: React.FC<{
                             )}
                         >
                             <FavouriteSolidIcon className="mx_QuickSettingsButton_icon" />
-                            {_t("common|favourites")}
+                            <span>{_t("common|favourites")}</span>
                         </StyledCheckbox>
                         <StyledCheckbox
-                            className="mx_QuickSettingsButton_peopleCheckbox"
+                            className="mx_QuickSettingsButton_peopleCheckbox mx_QuickSettingsButton_option"
                             checked={!!peopleEnabled}
                             onChange={onMetaSpaceChangeFactory(
                                 MetaSpace.People,
@@ -118,7 +116,7 @@ const QuickSettingsButton: React.FC<{
                             {_t("common|people")}
                         </StyledCheckbox>
                         <AccessibleButton
-                            className="mx_QuickSettingsButton_moreOptionsButton"
+                            className="mx_QuickSettingsButton_moreOptionsButton mx_QuickSettingsButton_option"
                             onClick={() => {
                                 closeMenu();
                                 defaultDispatcher.dispatch({

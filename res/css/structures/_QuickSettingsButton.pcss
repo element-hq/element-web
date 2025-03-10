@@ -70,25 +70,25 @@ Please see LICENSE files in the repository root for full details.
         text-transform: uppercase;
         color: var(--cpd-color-text-secondary);
         margin: 20px 0 12px;
-    }
-
-    .mx_QuickSettingsButton_pinToSidebarHeading {
-        padding-left: 24px;
         position: relative;
-    }
-
-    .mx_Checkbox {
-        margin-bottom: 8px;
+        display: flex;
     }
 
     .mx_QuickSettingsButton_moreOptionsButton {
-        padding-left: 22px;
-        margin-left: 22px;
+        margin-left: var(--cpd-space-7x);
         font-size: $font-15px;
         line-height: $font-24px;
         color: var(--cpd-color-text-primary);
         position: relative;
         margin-bottom: 16px;
+    }
+
+    .mx_QuickSettingsButton_option {
+        margin-bottom: var(--cpd-space-3x);
+        label {
+            // Correctly line up icons and text
+            display: flex;
+        }
     }
 }
 
@@ -103,7 +103,8 @@ Please see LICENSE files in the repository root for full details.
     * {
         fill: $secondary-content;
     }
+    margin-right: var(--cpd-space-1x);
     color: $secondary-content;
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
 }

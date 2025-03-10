@@ -16,7 +16,6 @@ interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
     description?: ReactNode;
 }
 
-/* eslint @typescript-eslint/no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
 const StyledCheckbox: React.FC<IProps> = ({
     id: initialId,
     children: label,
