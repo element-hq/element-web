@@ -469,6 +469,77 @@ describe("RoomListStoreV3", () => {
                 }
             });
 
+            it("supports filtering invited rooms", async () => {
+                const { client, rooms } = getClientAndRooms();
+
+                // Let's add 5 rooms that we are invited to
+                const invitedRooms = getMockedRooms(client, 5);
+                for (const room of invitedRooms) {
+                    room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Invite);
+                }
+
+                rooms.push(...invitedRooms);
+
+                // Let's choose 5 rooms to put in space
+                const { spaceRoom, roomIds } = createSpace(rooms, [6, 8, 100, 101, 102, 103, 104], client);
+                setupMocks(spaceRoom, roomIds);
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+
+                const result = store.getSortedRoomsInActiveSpace([FilterKey.InvitesFilter]);
+                expect(result).toHaveLength(5);
+                for (const room of invitedRooms) {
+                    expect(result).toContain(room);
+                }
+            });
+
+            it("supports filtering by mentions", async () => {
+                const { client, rooms } = getClientAndRooms();
+                // Let's choose 5 rooms to put in space
+                const { spaceRoom, roomIds } = createSpace(rooms, [6, 8, 13, 27, 75], client);
+
+                // Let's say 8, 27 have mentions
+                jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation((room) => {
+                    const state = {
+                        hasMentions: [rooms[8], rooms[27]].includes(room),
+                    } as unknown as RoomNotificationState;
+                    return state;
+                });
+
+                setupMocks(spaceRoom, roomIds);
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+
+                // Should only give us rooms at index 8 and 27
+                const result = store.getSortedRoomsInActiveSpace([FilterKey.MentionsFilter]);
+                expect(result).toHaveLength(2);
+                for (const i of [8, 27]) {
+                    expect(result).toContain(rooms[i]);
+                }
+            });
+
+            it("supports filtering low priority rooms", async () => {
+                const { client, rooms } = getClientAndRooms();
+                // Let's choose 5 rooms to put in space
+                const { spaceRoom, roomIds } = createSpace(rooms, [6, 8, 13, 27, 75], client);
+
+                // Let's say that 8, 27 an 75 are low priority rooms
+                [8, 27, 75].forEach((i) => {
+                    rooms[i].tags[DefaultTagID.LowPriority] = {};
+                });
+
+                setupMocks(spaceRoom, roomIds);
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+
+                // Sorted, filtered rooms should be 8, 27 and 75
+                const result = store.getSortedRoomsInActiveSpace([FilterKey.LowPriorityFilter]);
+                expect(result).toHaveLength(3);
+                for (const i of [8, 27, 75]) {
+                    expect(result).toContain(rooms[i]);
+                }
+            });
+
             it("supports multiple filters", async () => {
                 const { client, rooms } = getClientAndRooms();
                 // Let's choose 5 rooms to put in space
