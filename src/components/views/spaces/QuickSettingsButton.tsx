@@ -94,7 +94,7 @@ const QuickSettingsButton: React.FC<{
                             {_t("quick_settings|metaspace_section")}
                         </h4>
                         <StyledCheckbox
-                            className="mx_QuickSettingsButton_favouritesCheckbox mx_QuickSettingsButton_option"
+                            className="mx_QuickSettingsButton_option"
                             checked={!!favouritesEnabled}
                             onChange={onMetaSpaceChangeFactory(
                                 MetaSpace.Favourites,
@@ -102,10 +102,10 @@ const QuickSettingsButton: React.FC<{
                             )}
                         >
                             <FavouriteSolidIcon className="mx_QuickSettingsButton_icon" />
-                            <span>{_t("common|favourites")}</span>
+                            {_t("common|favourites")}
                         </StyledCheckbox>
                         <StyledCheckbox
-                            className="mx_QuickSettingsButton_peopleCheckbox mx_QuickSettingsButton_option"
+                            className="mx_QuickSettingsButton_option"
                             checked={!!peopleEnabled}
                             onChange={onMetaSpaceChangeFactory(
                                 MetaSpace.People,
