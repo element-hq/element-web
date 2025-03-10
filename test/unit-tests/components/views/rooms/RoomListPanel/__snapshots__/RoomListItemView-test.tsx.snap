@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<RoomListCell /> should render a room item 1`] = `
+exports[`<RoomListItemView /> should render a room item 1`] = `
 <DocumentFragment>
   <button
     aria-label="Open room room1"
@@ -36,7 +36,7 @@ exports[`<RoomListCell /> should render a room item 1`] = `
       </div>
       <div
         class="mx_Flex mx_RoomListItemView_content"
-        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x);"
       >
         <span
           title="room1"

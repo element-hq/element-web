@@ -12,8 +12,6 @@ import RoomListStoreV3 from "../../../../../src/stores/room-list-v3/RoomListStor
 import { mkStubRoom } from "../../../../test-utils";
 import { LISTS_UPDATE_EVENT } from "../../../../../src/stores/room-list/SlidingRoomListStore";
 import { useRoomListViewModel } from "../../../../../src/components/viewmodels/roomlist/RoomListViewModel";
-import dispatcher from "../../../../../src/dispatcher/dispatcher";
-import { Action } from "../../../../../src/dispatcher/actions";
 import { FilterKey } from "../../../../../src/stores/room-list-v3/skip-list/filters";
 import { SecondaryFilters } from "../../../../../src/components/viewmodels/roomlist/useFilteredRooms";
 
@@ -47,21 +45,6 @@ describe("RoomListViewModel", () => {
         await waitFor(() => {
             expect(vm.current.rooms).toContain(newRoom);
         });
-    });
-
-    it("should dispatch view room action on openRoom", async () => {
-        const { rooms } = mockAndCreateRooms();
-        const { result: vm } = renderHook(() => useRoomListViewModel());
-
-        const fn = jest.spyOn(dispatcher, "dispatch");
-        act(() => vm.current.openRoom(rooms[7].roomId));
-        expect(fn).toHaveBeenCalledWith(
-            expect.objectContaining({
-                action: Action.ViewRoom,
-                room_id: rooms[7].roomId,
-                metricsTrigger: "RoomList",
-            }),
-        );
     });
 
     describe("Filters", () => {

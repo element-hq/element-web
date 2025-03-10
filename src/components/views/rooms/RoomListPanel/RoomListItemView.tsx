@@ -11,6 +11,7 @@ import { type Room } from "matrix-js-sdk/src/matrix";
 import { _t } from "../../../../languageHandler";
 import { Flex } from "../../../utils/Flex";
 import DecoratedRoomAvatar from "../../avatars/DecoratedRoomAvatar";
+import { useRoomListItemViewModel } from "../../../viewmodels/roomlist/RoomListItemViewModel";
 
 interface RoomListItemViewPropsProps extends React.HTMLAttributes<HTMLButtonElement> {
     /**
@@ -23,11 +24,14 @@ interface RoomListItemViewPropsProps extends React.HTMLAttributes<HTMLButtonElem
  * An item in the room list
  */
 export function RoomListItemView({ room, ...props }: RoomListItemViewPropsProps): JSX.Element {
+    const vm = useRoomListItemViewModel();
+
     return (
         <button
             className="mx_RoomListItemView"
             type="button"
             aria-label={_t("room_list|room|open_room", { roomName: room.name })}
+            onClick={() => vm.openRoom(room.roomId)}
             {...props}
         >
             {/* We need this extra div between the button and the content in order to add a padding which is not messing with the virtualized list */}

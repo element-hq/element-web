@@ -9,16 +9,29 @@ import React from "react";
 import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { render, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
+import { mocked } from "jest-mock";
 
 import { mkRoom, stubClient } from "../../../../../test-utils";
 import { RoomListItemView } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomListItemView";
 import DMRoomMap from "../../../../../../src/utils/DMRoomMap";
+import {
+    type RoomListItemViewState,
+    useRoomListItemViewModel,
+} from "../../../../../../src/components/viewmodels/roomlist/RoomListItemViewModel";
+
+jest.mock("../../../../../../src/components/viewmodels/roomlist/RoomListItemViewModel", () => ({
+    useRoomListItemViewModel: jest.fn(),
+}));
 
 describe("<RoomListItemView />", () => {
+    const defaultValue: RoomListItemViewState = {
+        openRoom: jest.fn(),
+    };
     let matrixClient: MatrixClient;
     let room: Room;
 
     beforeEach(() => {
+        mocked(useRoomListItemViewModel).mockReturnValue(defaultValue);
         matrixClient = stubClient();
         room = mkRoom(matrixClient, "room1");
 
@@ -32,13 +45,11 @@ describe("<RoomListItemView />", () => {
         expect(asFragment()).toMatchSnapshot();
     });
 
-    test("should call onClick when clicked", async () => {
+    test("should call openRoom when clicked", async () => {
         const user = userEvent.setup();
-
-        const onClick = jest.fn();
-        render(<RoomListItemView room={room} onClick={onClick} />);
+        render(<RoomListItemView room={room} />);
 
         await user.click(screen.getByRole("button", { name: `Open room ${room.name}` }));
-        expect(onClick).toHaveBeenCalled();
+        expect(defaultValue.openRoom).toHaveBeenCalled();
     });
 });

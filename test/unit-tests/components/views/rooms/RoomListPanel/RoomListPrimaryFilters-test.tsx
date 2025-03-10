@@ -19,7 +19,6 @@ describe("<RoomListPrimaryFilters />", () => {
     beforeEach(() => {
         vm = {
             rooms: [],
-            openRoom: jest.fn(),
             primaryFilters: [
                 { name: "People", active: false, toggle: jest.fn() },
                 { name: "Rooms", active: true, toggle: jest.fn() },
