@@ -57,6 +57,7 @@ describe("<MImageBody/>", () => {
         },
     );
     const encryptedMediaEvent = new MatrixEvent({
+        event_id: "$foo:bar",
         room_id: "!room:server",
         sender: userId,
         type: EventType.RoomMessage,

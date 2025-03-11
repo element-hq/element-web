@@ -697,7 +697,6 @@ export default class SettingsStore {
         client.on(ClientEvent.Sync, onSync);
     }
 
-
     /**
      * Migrate the setting for visible images to a setting.
      */
@@ -706,7 +705,11 @@ export default class SettingsStore {
         if (localStorage.getItem(MIGRATION_DONE_FLAG)) return;
 
         logger.info("Performing one-time settings migration of shown images to settings store");
-        const newValue = Object.fromEntries(Object.keys(localStorage).filter(k => k.startsWith("mx_ShowImage_")).map(k => [k.slice("mx_ShowImage_".length), true]));
+        const newValue = Object.fromEntries(
+            Object.keys(localStorage)
+                .filter((k) => k.startsWith("mx_ShowImage_"))
+                .map((k) => [k.slice("mx_ShowImage_".length), true]),
+        );
         this.setValue("showMediaEventIds", null, SettingLevel.DEVICE, newValue);
 
         localStorage.setItem(MIGRATION_DONE_FLAG, "true");

@@ -34,6 +34,7 @@ import { createReconnectedListener } from "../../../utils/connection";
 import MediaProcessingError from "./shared/MediaProcessingError";
 import { DecryptError, DownloadError } from "../../../utils/DecryptFile";
 import { SettingLevel } from "../../../settings/SettingLevel";
+import { type Settings } from "../../../settings/Settings";
 
 enum Placeholder {
     NoImage,
@@ -350,9 +351,10 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         }
     }
 
-    public calculateVisible() {
-        const mediaEventIdSetting = SettingsStore.getValue("showMediaEventIds")[this.props.mxEvent.getId()!];
-        const showImage = mediaEventIdSetting === true || (SettingsStore.getValue("showImages") && mediaEventIdSetting !== false);
+    public calculateVisible(setting: Settings["showMediaEventIds"]["default"]): void {
+        const mediaEventIdSetting = setting[this.props.mxEvent.getId()!];
+        const showImage =
+            mediaEventIdSetting === true || (SettingsStore.getValue("showImages") && mediaEventIdSetting !== false);
         this.setState({ showImage });
         if (showImage) {
             // noinspection JSIgnoredPromiseFromCall
@@ -363,7 +365,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     public componentDidMount(): void {
         this.unmounted = false;
 
-        this.calculateVisible();
+        this.calculateVisible(SettingsStore.getValue("showMediaEventIds"));
 
         // Add a 150ms timer for blurhash to first appear.
         if (this.props.mxEvent.getContent().info?.[BLURHASH_FIELD]) {
@@ -380,8 +382,8 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         this.sizeWatcher = SettingsStore.watchSetting("Images.size", null, () => {
             this.forceUpdate(); // we don't really have a reliable thing to update, so just update the whole thing
         });
-        this.showWatcher = SettingsStore.watchSetting("showMediaEventIds", null, () => {
-            this.calculateVisible();
+        this.showWatcher = SettingsStore.watchSetting("showMediaEventIds", null, (_name, _rId, _level, value) => {
+            this.calculateVisible(value);
         });
     }
 

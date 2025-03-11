@@ -10,8 +10,9 @@ import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import React, { useCallback } from "react";
 import classNames from "classnames";
 import { VisibilityOffIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+
 import { RovingAccessibleButton } from "../../../accessibility/RovingTabIndex";
-import { _t, _td } from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import { useSettingsValueWithSetter } from "../../../hooks/useSettings";
 
@@ -19,7 +20,7 @@ interface IProps {
     mxEvent: MatrixEvent;
 }
 
-const HideActionButton: React.FC<IProps> = ({mxEvent}) => {
+const HideActionButton: React.FC<IProps> = ({ mxEvent }) => {
     const eventId = mxEvent.getId();
     let spinner: JSX.Element | undefined;
     const [events, setEventIds] = useSettingsValueWithSetter("showMediaEventIds", SettingLevel.DEVICE);
@@ -31,7 +32,7 @@ const HideActionButton: React.FC<IProps> = ({mxEvent}) => {
             ...events,
             [eventId]: false,
         });
-    }, [eventId, events]);
+    }, [setEventIds, eventId, events]);
 
     const classes = classNames({
         mx_MessageActionBar_iconButton: true,
@@ -55,6 +56,6 @@ const HideActionButton: React.FC<IProps> = ({mxEvent}) => {
             {spinner}
         </RovingAccessibleButton>
     );
-}
+};
 
 export default HideActionButton;

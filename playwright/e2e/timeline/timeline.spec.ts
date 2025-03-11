@@ -909,6 +909,19 @@ test.describe("Timeline", () => {
                 mask: [page.locator(".mx_MessageTimestamp")],
             });
         });
+
+        test("should be able to hide an image", { tag: "@screenshot" }, async ({ page, app, room, context }) => {
+            await app.viewRoomById(room.roomId);
+            await sendImage(app.client, room.roomId, NEW_AVATAR);
+            await app.timeline.scrollToBottom();
+            const imgTile = page.locator(".mx_MImageBody").first();
+            await expect(imgTile).toBeVisible();
+            await imgTile.hover();
+            await page.getByRole("button", { name: "Hide" }).click();
+
+            // Check that the image is now hidden.
+            await expect(page.getByRole("link", { name: "Show image" })).toBeVisible();
+        });
     });
 
     test.describe("message sending", { tag: ["@no-firefox", "@no-webkit"] }, () => {
