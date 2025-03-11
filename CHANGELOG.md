@@ -1,3 +1,28 @@
+Changes in [1.11.95](https://github.com/element-hq/element-web/releases/tag/v1.11.95) (2025-03-11)
+==================================================================================================
+## ✨ Features
+
+* Room List Store: Filter rooms by active space ([#29399](https://github.com/element-hq/element-web/pull/29399)). Contributed by @MidhunSureshR.
+* Room List - Update the room list store on actions from the dispatcher ([#29397](https://github.com/element-hq/element-web/pull/29397)). Contributed by @MidhunSureshR.
+* Room List  - Implement a minimal view model ([#29357](https://github.com/element-hq/element-web/pull/29357)). Contributed by @MidhunSureshR.
+* New room list: add space menu in room header ([#29352](https://github.com/element-hq/element-web/pull/29352)). Contributed by @florianduros.
+* Room List - Store sorted rooms in skip list ([#29345](https://github.com/element-hq/element-web/pull/29345)). Contributed by @MidhunSureshR.
+* New room list: add dial to search section ([#29359](https://github.com/element-hq/element-web/pull/29359)). Contributed by @florianduros.
+* New room list: add compose menu for spaces in header ([#29347](https://github.com/element-hq/element-web/pull/29347)). Contributed by @florianduros.
+* Use EditInPlace control for Identity Server picker to improve a11y ([#29280](https://github.com/element-hq/element-web/pull/29280)). Contributed by @Half-Shot.
+* First step to add header to new room list ([#29320](https://github.com/element-hq/element-web/pull/29320)). Contributed by @florianduros.
+* Add Windows 64-bit arm link and remove 32-bit link on compatibility page ([#29312](https://github.com/element-hq/element-web/pull/29312)). Contributed by @t3chguy.
+* Honour the backup disable flag from Element X ([#29290](https://github.com/element-hq/element-web/pull/29290)). Contributed by @dbkr.
+
+## 🐛 Bug Fixes
+
+* Fix edited code block width ([#29394](https://github.com/element-hq/element-web/pull/29394)). Contributed by @florianduros.
+* new room list: keep space name in one line in header ([#29369](https://github.com/element-hq/element-web/pull/29369)). Contributed by @florianduros.
+* Dismiss "Key storage out of sync" toast when secrets received ([#29348](https://github.com/element-hq/element-web/pull/29348)). Contributed by @richvdh.
+* Minor CSS fixes for the new room list ([#29334](https://github.com/element-hq/element-web/pull/29334)). Contributed by @florianduros.
+* Add padding to room header icon ([#29271](https://github.com/element-hq/element-web/pull/29271)). Contributed by @langleyd.
+
+
 Changes in [1.11.94](https://github.com/element-hq/element-web/releases/tag/v1.11.94) (2025-02-27)
 ==================================================================================================
 ## 🐛 Bug Fixes
