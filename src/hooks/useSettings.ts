@@ -101,6 +101,14 @@ export const useFeatureEnabled = (featureName: FeatureSettingKey, roomId: string
     return enabled;
 };
 
+/**
+ * Retrieve a setting value, and listen for changes. This hook
+ * also returns a function that can update the setting with a new value.
+ * @param settingName
+ * @param level
+ * @param roomId 
+ * @param excludeDefault 
+ */
 export function useSettingsValueWithSetter<S extends SettingKey>(
     settingName: S,
     level: SettingLevel,

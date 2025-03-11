@@ -970,7 +970,7 @@ export const SETTINGS: Settings = {
     "showMediaEventIds": {
         // not really a setting
         supportedLevels: [SettingLevel.DEVICE],
-        default: {}, // List of events => hidden status
+        default: {}, // List of events => is visible
     },
     "SpotlightSearch.showNsfwPublicRooms": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
