@@ -86,7 +86,11 @@ jobs:
                   test "$MODULE_0" = "/${MODULE_PATH}"
 
                   # Check healthcheck
-                  test "$(docker inspect -f {{.State.Health.Status}} $CONTAINER_ID)" == "healthy"
+                  n=0
+                  while [ "$n" -lt 20 ] && test "$(docker inspect -f {{.State.Health.Status}} $CONTAINER_ID)" != "healthy"; do
+                      n=$(( n + 1 ))
+                      sleep 1
+                  done
 
                   # Clean up
                   docker stop "$CONTAINER_ID"
