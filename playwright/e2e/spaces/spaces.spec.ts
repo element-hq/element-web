@@ -120,9 +120,8 @@ test.describe("Spaces", () => {
         await expect(page.locator(".mx_SpaceRoomView")).toMatchScreenshot("invite-teammates-dialog.png");
         await page.getByRole("button", { name: "Skip for now" }).click();
 
-
         // Assert rooms exist in the room list
-        const roomList = page.getByRole('tree', { name: 'Rooms' });
+        const roomList = page.getByRole("tree", { name: "Rooms" });
         await expect(roomList.getByRole("treeitem", { name: "General", exact: true })).toBeVisible();
         await expect(roomList.getByRole("treeitem", { name: "Random", exact: true })).toBeVisible();
         await expect(roomList.getByRole("treeitem", { name: "Projects", exact: true })).toBeVisible();
