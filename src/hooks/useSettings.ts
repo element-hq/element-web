@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import SettingsStore from "../settings/SettingsStore";
 import { type SettingLevel } from "../settings/SettingLevel";
@@ -100,3 +100,53 @@ export const useFeatureEnabled = (featureName: FeatureSettingKey, roomId: string
 
     return enabled;
 };
+
+export function useSettingsValueWithSetter<S extends SettingKey>(
+    settingName: S,
+    level: SettingLevel,
+    roomId: string | null,
+    excludeDefault: true,
+): [Settings[S]["default"] | undefined, (value: Settings[S]["default"]) => Promise<void>];
+export function useSettingsValueWithSetter<S extends SettingKey>(
+    settingName: S,
+    level: SettingLevel,
+    roomId?: string | null,
+    excludeDefault?: false,
+): [Settings[S]["default"], (value: Settings[S]["default"]) => Promise<void>];
+export function useSettingsValueWithSetter<S extends SettingKey>(
+    settingName: S,
+    level: SettingLevel,
+    roomId: string | null = null,
+    excludeDefault = false,
+): [Settings[S]["default"] | undefined, (value: Settings[S]["default"]) => Promise<void>] {
+    const [value, setValue] = useState(
+        // XXX: This seems naff but is needed to convince TypeScript that the overload is fine
+        excludeDefault
+            ? SettingsStore.getValue(settingName, roomId, excludeDefault)
+            : SettingsStore.getValue(settingName, roomId, excludeDefault),
+    );
+    const setter = useCallback(
+        async (value: Settings[S]["default"]): Promise<void> => {
+            setValue(value);
+            SettingsStore.setValue(settingName, roomId, level, value);
+        },
+        [level, roomId, settingName],
+    );
+
+    useEffect(() => {
+        const ref = SettingsStore.watchSetting(settingName, roomId, () => {
+            setValue(
+                // XXX: This seems naff but is needed to convince TypeScript that the overload is fine
+                excludeDefault
+                    ? SettingsStore.getValue(settingName, roomId, excludeDefault)
+                    : SettingsStore.getValue(settingName, roomId, excludeDefault),
+            );
+        });
+        // clean-up
+        return () => {
+            SettingsStore.unwatchSetting(ref);
+        };
+    }, [settingName, roomId, excludeDefault]);
+
+    return [value, setter];
+}
