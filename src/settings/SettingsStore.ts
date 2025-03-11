@@ -700,7 +700,7 @@ export default class SettingsStore {
     /**
      * Migrate the setting for visible images to a setting.
      */
-    private static async migrateShowImagesToSettings() {
+    private static async migrateShowImagesToSettings(): void {
         const MIGRATION_DONE_FLAG = "mx_show_images_migration_done";
         if (localStorage.getItem(MIGRATION_DONE_FLAG)) return;
 
