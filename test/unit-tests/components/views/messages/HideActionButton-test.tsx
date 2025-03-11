@@ -13,7 +13,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import HideActionButton from "../../../../../src/components/views/messages/HideActionButton";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../../src/settings/SettingLevel";
-import { Settings } from "../../../../../src/settings/Settings";
+import type { Settings } from "../../../../../src/settings/Settings";
 
 function mockSetting(
     showImages: Settings["showImages"]["default"],
