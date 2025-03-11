@@ -11,6 +11,9 @@ export const enum FilterKey {
     UnreadFilter,
     PeopleFilter,
     RoomsFilter,
+    LowPriorityFilter,
+    MentionsFilter,
+    InvitesFilter,
 }
 
 export interface Filter {

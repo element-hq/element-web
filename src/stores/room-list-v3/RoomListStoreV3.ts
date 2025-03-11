@@ -28,11 +28,22 @@ import { FavouriteFilter } from "./skip-list/filters/FavouriteFilter";
 import { UnreadFilter } from "./skip-list/filters/UnreadFilter";
 import { PeopleFilter } from "./skip-list/filters/PeopleFilter";
 import { RoomsFilter } from "./skip-list/filters/RoomsFilter";
+import { InvitesFilter } from "./skip-list/filters/InvitesFilter";
+import { MentionsFilter } from "./skip-list/filters/MentionsFilter";
+import { LowPriorityFilter } from "./skip-list/filters/LowPriorityFilter";
 
 /**
  * These are the filters passed to the room skip list.
  */
-const FILTERS = [new FavouriteFilter(), new UnreadFilter(), new PeopleFilter(), new RoomsFilter()];
+const FILTERS = [
+    new FavouriteFilter(),
+    new UnreadFilter(),
+    new PeopleFilter(),
+    new RoomsFilter(),
+    new InvitesFilter(),
+    new MentionsFilter(),
+    new LowPriorityFilter(),
+];
 
 /**
  * This store allows for fast retrieval of the room list in a sorted and filtered manner.
@@ -105,8 +116,8 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
         if (this.roomSkipList?.initialized || !this.matrixClient) return;
         const sorter = new RecencySorter(this.matrixClient.getSafeUserId());
         this.roomSkipList = new RoomSkipList(sorter, FILTERS);
-        const rooms = this.getRooms();
         await SpaceStore.instance.storeReadyPromise;
+        const rooms = this.getRooms();
         this.roomSkipList.seed(rooms);
         this.emit(LISTS_UPDATE_EVENT);
     }
@@ -181,6 +192,11 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
             case "MatrixActions.Room.myMembership": {
                 const oldMembership = getEffectiveMembership(payload.oldMembership);
                 const newMembership = getEffectiveMembershipTag(payload.room, payload.membership);
+                if (oldMembership === EffectiveMembership.Join && newMembership === EffectiveMembership.Leave) {
+                    this.roomSkipList.removeRoom(payload.room);
+                    this.emit(LISTS_UPDATE_EVENT);
+                    return;
+                }
                 if (oldMembership !== EffectiveMembership.Join && newMembership === EffectiveMembership.Join) {
                     // If we're joining an upgraded room, we'll want to make sure we don't proliferate
                     // the dead room in the list.
@@ -228,3 +244,5 @@ export default class RoomListStoreV3 {
         return this.internalInstance;
     }
 }
+
+window.mxRoomListStoreV3 = RoomListStoreV3.instance;

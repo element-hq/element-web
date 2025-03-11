@@ -51,6 +51,8 @@ const QuickSettingsButton: React.FC<{
                 wrapperClassName={classNames("mx_QuickSettingsButton_ContextMenuWrapper", {
                     mx_QuickSettingsButton_ContextMenuWrapper_new_room_list: newRoomListEnabled,
                 })}
+                // Eventually replace with a properly aria-labelled menu
+                data-testid="quick-settings-menu"
                 onFinished={closeMenu}
                 managed={false}
                 focusLock={true}
