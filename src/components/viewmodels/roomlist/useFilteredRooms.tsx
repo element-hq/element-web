@@ -89,7 +89,15 @@ function isPrimaryFilterCompatible(primary: FilterKey, secondary: FilterKey): bo
  * Track available filters and provide a filtered list of rooms.
  */
 export function useFilteredRooms(): FilteredRooms {
+    /**
+     * Primary filter refers to the pill based filters
+     * rendered above the room list.
+     */
     const [primaryFilter, setPrimaryFilter] = useState<FilterKey | undefined>();
+    /**
+     * Secondary filters are also filters but they are hidden
+     * away in a popup menu.
+     */
     const [activeSecondaryFilter, setActiveSecondaryFilter] = useState<SecondaryFilters>(SecondaryFilters.AllActivity);
 
     const secondaryFilter = useMemo(
@@ -116,6 +124,12 @@ export function useFilteredRooms(): FilteredRooms {
         updateRoomsFromStore(filters);
     });
 
+    /**
+     * Secondary filters are activated using this function.
+     * This is different to how primary filters work because the secondary
+     * filters are static i.e they are always available and don't need to be
+     * hidden.
+     */
     const activateSecondaryFilter = useCallback(
         (filter: SecondaryFilters): void => {
             // If the filter is already active, just return.
@@ -144,7 +158,7 @@ export function useFilteredRooms(): FilteredRooms {
 
     /**
      * This tells the view which primary filters are available, how to toggle them
-     * and whether a given primary filter is active.
+     * and whether a given primary filter is active. @see {@link PrimaryFilter}
      */
     const primaryFilters = useMemo(() => {
         const createPrimaryFilter = (key: FilterKey, name: string): PrimaryFilter => {
