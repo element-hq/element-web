@@ -700,7 +700,7 @@ export default class SettingsStore {
     /**
      * Migrate the setting for visible images to a setting.
      */
-    private static async migrateShowImagesToSettings(): void {
+    private static migrateShowImagesToSettings(): void {
         const MIGRATION_DONE_FLAG = "mx_show_images_migration_done";
         if (localStorage.getItem(MIGRATION_DONE_FLAG)) return;
 
@@ -727,7 +727,7 @@ export default class SettingsStore {
         SettingsStore.migrateURLPreviewsE2EE(isFreshLogin);
 
         // This can be removed once enough users have run a version of Element with
-        // this migration. 
+        // this migration.
         // The consequences of missing the migration are that previously shown images
         // will now be hidden again, so this fails safely.
         SettingsStore.migrateShowImagesToSettings();
