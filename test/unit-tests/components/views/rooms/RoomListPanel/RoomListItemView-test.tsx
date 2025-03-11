@@ -7,11 +7,11 @@
 
 import React from "react";
 import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
-import { render, screen } from "jest-matrix-react";
+import { render, screen, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
 
-import { mkRoom, stubClient } from "../../../../../test-utils";
+import { mkRoom, stubClient, withClientContextRenderOptions } from "../../../../../test-utils";
 import { RoomListItemView } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomListItemView";
 import DMRoomMap from "../../../../../../src/utils/DMRoomMap";
 import {
@@ -26,6 +26,7 @@ jest.mock("../../../../../../src/components/viewmodels/roomlist/RoomListItemView
 describe("<RoomListItemView />", () => {
     const defaultValue: RoomListItemViewState = {
         openRoom: jest.fn(),
+        showHoverMenu: false,
     };
     let matrixClient: MatrixClient;
     let room: Room;
@@ -51,5 +52,17 @@ describe("<RoomListItemView />", () => {
 
         await user.click(screen.getByRole("button", { name: `Open room ${room.name}` }));
         expect(defaultValue.openRoom).toHaveBeenCalled();
+    });
+
+    test("should hover decoration if hovered", async () => {
+        mocked(useRoomListItemViewModel).mockReturnValue({ ...defaultValue, showHoverMenu: true });
+
+        const user = userEvent.setup();
+        render(<RoomListItemView room={room} />, withClientContextRenderOptions(matrixClient));
+        const listItem = screen.getByRole("button", { name: `Open room ${room.name}` });
+        expect(screen.queryByRole("button", { name: "More Options" })).toBeNull();
+
+        await user.hover(listItem);
+        await waitFor(() => expect(screen.getByRole("button", { name: "More Options" })).toBeInTheDocument());
     });
 });
