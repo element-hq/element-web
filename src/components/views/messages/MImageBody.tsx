@@ -33,6 +33,7 @@ import { presentableTextForFile } from "../../../utils/FileUtils";
 import { createReconnectedListener } from "../../../utils/connection";
 import MediaProcessingError from "./shared/MediaProcessingError";
 import { DecryptError, DownloadError } from "../../../utils/DecryptFile";
+import { SettingLevel } from "../../../settings/SettingLevel";
 
 enum Placeholder {
     NoImage,
@@ -65,10 +66,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     private placeholder = createRef<HTMLDivElement>();
     private timeout?: number;
     private sizeWatcher?: string;
-
-    private get localStorageKey() {
-        return "mx_ShowImage_" + this.props.mxEvent.getId();
-    }
+    private showWatcher?: string;
 
     public state: IState = {
         contentUrl: null,
@@ -82,15 +80,14 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     };
 
     protected showImage(): void {
-        localStorage.setItem(this.localStorageKey, "true");
-        this.setState({ showImage: true });
-        this.downloadImage();
-    }
-
-    protected hideImage(): void {
-        // Explictly hide this image
-        localStorage.setItem(this.localStorageKey, "false");
-        this.setState({ showImage: false });
+        const eventId = this.props.mxEvent.getId();
+        if (!eventId) {
+            return;
+        }
+        SettingsStore.setValue("showMediaEventIds", null, SettingLevel.DEVICE, {
+            ...SettingsStore.getValue("showMediaEventIds"),
+            [eventId]: true,
+        });
     }
 
     protected onClick = (ev: React.MouseEvent): void => {
@@ -353,17 +350,20 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         }
     }
 
-    public componentDidMount(): void {
-        this.unmounted = false;
-        const storageValue = localStorage.getItem(this.localStorageKey);
-
-        const showImage = storageValue === null ? this.state.showImage : Boolean(storageValue);
-
+    public calculateVisible() {
+        const mediaEventIdSetting = SettingsStore.getValue("showMediaEventIds")[this.props.mxEvent.getId()!];
+        const showImage = mediaEventIdSetting === true || (SettingsStore.getValue("showImages") && mediaEventIdSetting !== false);
+        this.setState({ showImage });
         if (showImage) {
             // noinspection JSIgnoredPromiseFromCall
             this.downloadImage();
-            this.setState({ showImage: true });
-        } // else don't download anything because we don't want to display anything.
+        }
+    }
+
+    public componentDidMount(): void {
+        this.unmounted = false;
+
+        this.calculateVisible();
 
         // Add a 150ms timer for blurhash to first appear.
         if (this.props.mxEvent.getContent().info?.[BLURHASH_FIELD]) {
@@ -380,9 +380,13 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         this.sizeWatcher = SettingsStore.watchSetting("Images.size", null, () => {
             this.forceUpdate(); // we don't really have a reliable thing to update, so just update the whole thing
         });
+        this.showWatcher = SettingsStore.watchSetting("showMediaEventIds", null, () => {
+            this.calculateVisible();
+        });
     }
 
     public componentWillUnmount(): void {
+        SettingsStore.unwatchSetting(this.showWatcher);
         this.unmounted = true;
         MatrixClientPeg.get()?.off(ClientEvent.Sync, this.reconnectedListener);
         this.clearBlurhashTimeout();
