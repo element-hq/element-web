@@ -41,7 +41,8 @@ const HideActionButton: React.FC<IProps> = ({ mxEvent }) => {
         mx_MessageActionBar_downloadSpinnerButton: !!spinner,
     });
 
-    const imgIsVisible = eventVisibility[eventId] === true || (defaultShowImages && eventVisibility[eventId] === undefined);
+    const imgIsVisible =
+        eventVisibility[eventId] === true || (defaultShowImages && eventVisibility[eventId] === undefined);
 
     if (!imgIsVisible) {
         return;
