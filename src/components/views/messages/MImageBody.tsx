@@ -66,6 +66,10 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     private timeout?: number;
     private sizeWatcher?: string;
 
+    private get localStorageKey() {
+        return "mx_ShowImage_" + this.props.mxEvent.getId();
+    }
+
     public state: IState = {
         contentUrl: null,
         thumbUrl: null,
@@ -78,9 +82,15 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     };
 
     protected showImage(): void {
-        localStorage.setItem("mx_ShowImage_" + this.props.mxEvent.getId(), "true");
+        localStorage.setItem(this.localStorageKey, "true");
         this.setState({ showImage: true });
         this.downloadImage();
+    }
+
+    protected hideImage(): void {
+        // Explictly hide this image
+        localStorage.setItem(this.localStorageKey, "false");
+        this.setState({ showImage: false });
     }
 
     protected onClick = (ev: React.MouseEvent): void => {
@@ -345,9 +355,9 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
 
     public componentDidMount(): void {
         this.unmounted = false;
+        const storageValue = localStorage.getItem(this.localStorageKey);
 
-        const showImage =
-            this.state.showImage || localStorage.getItem("mx_ShowImage_" + this.props.mxEvent.getId()) === "true";
+        const showImage = storageValue === null ? this.state.showImage : Boolean(storageValue);
 
         if (showImage) {
             // noinspection JSIgnoredPromiseFromCall
