@@ -164,7 +164,6 @@ describe("<MImageBody/>", () => {
 
             fireEvent.click(screen.getByRole("button"));
 
-            // image fetched after clicking show image
             expect(fetchMock).toHaveFetched(url);
 
             // spinner while downloading image
