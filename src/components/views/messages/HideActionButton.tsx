@@ -14,25 +14,26 @@ import { VisibilityOffIcon } from "@vector-im/compound-design-tokens/assets/web/
 import { RovingAccessibleButton } from "../../../accessibility/RovingTabIndex";
 import { _t } from "../../../languageHandler";
 import { SettingLevel } from "../../../settings/SettingLevel";
-import { useSettingsValueWithSetter } from "../../../hooks/useSettings";
+import { useSettingsValueWithSetter, useSettingValue } from "../../../hooks/useSettings";
 
 interface IProps {
     mxEvent: MatrixEvent;
 }
 
 const HideActionButton: React.FC<IProps> = ({ mxEvent }) => {
-    const eventId = mxEvent.getId();
+    const eventId = mxEvent.getId()!;
     let spinner: JSX.Element | undefined;
-    const [events, setEventIds] = useSettingsValueWithSetter("showMediaEventIds", SettingLevel.DEVICE);
+    const defaultShowImages = useSettingValue("showImages", SettingLevel.DEVICE);
+    const [eventVisibility, setEventIds] = useSettingsValueWithSetter("showMediaEventIds", SettingLevel.DEVICE);
     const onClick = useCallback(() => {
         if (!eventId) {
             return;
         }
         setEventIds({
-            ...events,
+            ...eventVisibility,
             [eventId]: false,
         });
-    }, [setEventIds, eventId, events]);
+    }, [setEventIds, eventId, eventVisibility]);
 
     const classes = classNames({
         mx_MessageActionBar_iconButton: true,
@@ -40,7 +41,9 @@ const HideActionButton: React.FC<IProps> = ({ mxEvent }) => {
         mx_MessageActionBar_downloadSpinnerButton: !!spinner,
     });
 
-    if (!eventId || events[eventId] === false) {
+    const imgIsVisible = eventVisibility[eventId] === true || (defaultShowImages && eventVisibility[eventId] === undefined);
+
+    if (!imgIsVisible) {
         return;
     }
 
