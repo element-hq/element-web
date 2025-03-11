@@ -86,7 +86,7 @@ jobs:
                   test "$MODULE_0" = "/${MODULE_PATH}"
 
                   # Check healthcheck
-                  test "$(docker inspect -f {{.State.Running}} $CONTAINER_ID)" == "true"
+                  test "$(docker inspect -f {{.State.Health.Status}} $CONTAINER_ID)" == "healthy"
 
                   # Clean up
                   docker stop "$CONTAINER_ID"
