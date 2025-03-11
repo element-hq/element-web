@@ -14,6 +14,7 @@ import { mkRoom, stubClient } from "../../../../../test-utils";
 import { type RoomListViewState } from "../../../../../../src/components/viewmodels/roomlist/RoomListViewModel";
 import { RoomList } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomList";
 import DMRoomMap from "../../../../../../src/utils/DMRoomMap";
+import { SecondaryFilters } from "../../../../../../src/components/viewmodels/roomlist/useFilteredRooms";
 
 describe("<RoomList />", () => {
     let matrixClient: MatrixClient;
@@ -27,7 +28,13 @@ describe("<RoomList />", () => {
 
         matrixClient = stubClient();
         const rooms = Array.from({ length: 10 }, (_, i) => mkRoom(matrixClient, `room${i}`));
-        vm = { rooms, openRoom: jest.fn(), primaryFilters: [] };
+        vm = {
+            rooms,
+            openRoom: jest.fn(),
+            primaryFilters: [],
+            activateSecondaryFilter: () => {},
+            activeSecondaryFilter: SecondaryFilters.AllActivity,
+        };
 
         // Needed to render a room list cell
         DMRoomMap.makeShared(matrixClient);
