@@ -24,13 +24,13 @@ exports[`<RoomList /> should render a room list 1`] = `
         >
           <button
             aria-label="Open room room0"
-            class="mx_RoomListCell"
+            class="mx_RoomListItemView"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 0px; width: 100%;"
             type="button"
           >
             <div
-              class="mx_Flex mx_RoomListCell_container"
+              class="mx_Flex mx_RoomListItemView_container"
               style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
             >
               <div
@@ -57,8 +57,8 @@ exports[`<RoomList /> should render a room list 1`] = `
                 </span>
               </div>
               <div
-                class="mx_Flex mx_RoomListCell_content"
-                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+                class="mx_Flex mx_RoomListItemView_content"
+                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
                 <span
                   title="room0"
@@ -70,13 +70,13 @@ exports[`<RoomList /> should render a room list 1`] = `
           </button>
           <button
             aria-label="Open room room1"
-            class="mx_RoomListCell"
+            class="mx_RoomListItemView"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 48px; width: 100%;"
             type="button"
           >
             <div
-              class="mx_Flex mx_RoomListCell_container"
+              class="mx_Flex mx_RoomListItemView_container"
               style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
             >
               <div
@@ -103,8 +103,8 @@ exports[`<RoomList /> should render a room list 1`] = `
                 </span>
               </div>
               <div
-                class="mx_Flex mx_RoomListCell_content"
-                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+                class="mx_Flex mx_RoomListItemView_content"
+                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
                 <span
                   title="room1"
@@ -116,13 +116,13 @@ exports[`<RoomList /> should render a room list 1`] = `
           </button>
           <button
             aria-label="Open room room2"
-            class="mx_RoomListCell"
+            class="mx_RoomListItemView"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 96px; width: 100%;"
             type="button"
           >
             <div
-              class="mx_Flex mx_RoomListCell_container"
+              class="mx_Flex mx_RoomListItemView_container"
               style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
             >
               <div
@@ -149,8 +149,8 @@ exports[`<RoomList /> should render a room list 1`] = `
                 </span>
               </div>
               <div
-                class="mx_Flex mx_RoomListCell_content"
-                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+                class="mx_Flex mx_RoomListItemView_content"
+                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
                 <span
                   title="room2"
@@ -162,13 +162,13 @@ exports[`<RoomList /> should render a room list 1`] = `
           </button>
           <button
             aria-label="Open room room3"
-            class="mx_RoomListCell"
+            class="mx_RoomListItemView"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 144px; width: 100%;"
             type="button"
           >
             <div
-              class="mx_Flex mx_RoomListCell_container"
+              class="mx_Flex mx_RoomListItemView_container"
               style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
             >
               <div
@@ -195,8 +195,8 @@ exports[`<RoomList /> should render a room list 1`] = `
                 </span>
               </div>
               <div
-                class="mx_Flex mx_RoomListCell_content"
-                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+                class="mx_Flex mx_RoomListItemView_content"
+                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
                 <span
                   title="room3"
@@ -208,13 +208,13 @@ exports[`<RoomList /> should render a room list 1`] = `
           </button>
           <button
             aria-label="Open room room4"
-            class="mx_RoomListCell"
+            class="mx_RoomListItemView"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 192px; width: 100%;"
             type="button"
           >
             <div
-              class="mx_Flex mx_RoomListCell_container"
+              class="mx_Flex mx_RoomListItemView_container"
               style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
             >
               <div
@@ -241,8 +241,8 @@ exports[`<RoomList /> should render a room list 1`] = `
                 </span>
               </div>
               <div
-                class="mx_Flex mx_RoomListCell_content"
-                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+                class="mx_Flex mx_RoomListItemView_content"
+                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
                 <span
                   title="room4"
@@ -254,13 +254,13 @@ exports[`<RoomList /> should render a room list 1`] = `
           </button>
           <button
             aria-label="Open room room5"
-            class="mx_RoomListCell"
+            class="mx_RoomListItemView"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 240px; width: 100%;"
             type="button"
           >
             <div
-              class="mx_Flex mx_RoomListCell_container"
+              class="mx_Flex mx_RoomListItemView_container"
               style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
             >
               <div
@@ -287,8 +287,8 @@ exports[`<RoomList /> should render a room list 1`] = `
                 </span>
               </div>
               <div
-                class="mx_Flex mx_RoomListCell_content"
-                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+                class="mx_Flex mx_RoomListItemView_content"
+                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
                 <span
                   title="room5"
@@ -300,13 +300,13 @@ exports[`<RoomList /> should render a room list 1`] = `
           </button>
           <button
             aria-label="Open room room6"
-            class="mx_RoomListCell"
+            class="mx_RoomListItemView"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 288px; width: 100%;"
             type="button"
           >
             <div
-              class="mx_Flex mx_RoomListCell_container"
+              class="mx_Flex mx_RoomListItemView_container"
               style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
             >
               <div
@@ -333,8 +333,8 @@ exports[`<RoomList /> should render a room list 1`] = `
                 </span>
               </div>
               <div
-                class="mx_Flex mx_RoomListCell_content"
-                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+                class="mx_Flex mx_RoomListItemView_content"
+                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
                 <span
                   title="room6"
@@ -346,13 +346,13 @@ exports[`<RoomList /> should render a room list 1`] = `
           </button>
           <button
             aria-label="Open room room7"
-            class="mx_RoomListCell"
+            class="mx_RoomListItemView"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 336px; width: 100%;"
             type="button"
           >
             <div
-              class="mx_Flex mx_RoomListCell_container"
+              class="mx_Flex mx_RoomListItemView_container"
               style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
             >
               <div
@@ -379,8 +379,8 @@ exports[`<RoomList /> should render a room list 1`] = `
                 </span>
               </div>
               <div
-                class="mx_Flex mx_RoomListCell_content"
-                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+                class="mx_Flex mx_RoomListItemView_content"
+                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
                 <span
                   title="room7"
@@ -392,13 +392,13 @@ exports[`<RoomList /> should render a room list 1`] = `
           </button>
           <button
             aria-label="Open room room8"
-            class="mx_RoomListCell"
+            class="mx_RoomListItemView"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 384px; width: 100%;"
             type="button"
           >
             <div
-              class="mx_Flex mx_RoomListCell_container"
+              class="mx_Flex mx_RoomListItemView_container"
               style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
             >
               <div
@@ -425,8 +425,8 @@ exports[`<RoomList /> should render a room list 1`] = `
                 </span>
               </div>
               <div
-                class="mx_Flex mx_RoomListCell_content"
-                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+                class="mx_Flex mx_RoomListItemView_content"
+                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
                 <span
                   title="room8"
@@ -438,13 +438,13 @@ exports[`<RoomList /> should render a room list 1`] = `
           </button>
           <button
             aria-label="Open room room9"
-            class="mx_RoomListCell"
+            class="mx_RoomListItemView"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 432px; width: 100%;"
             type="button"
           >
             <div
-              class="mx_Flex mx_RoomListCell_container"
+              class="mx_Flex mx_RoomListItemView_container"
               style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
             >
               <div
@@ -471,8 +471,8 @@ exports[`<RoomList /> should render a room list 1`] = `
                 </span>
               </div>
               <div
-                class="mx_Flex mx_RoomListCell_content"
-                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+                class="mx_Flex mx_RoomListItemView_content"
+                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
               >
                 <span
                   title="room9"
