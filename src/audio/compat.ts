@@ -33,7 +33,9 @@ export function decodeOgg(audioBuffer: ArrayBuffer): Promise<ArrayBuffer> {
     return new Promise((resolve) => {
         // no reject because the workers don't seem to have a fail path
         logger.log("Decoder WASM path: " + decoderWasmPath); // so we use the variable (avoid tree shake)
-        const typedArray = new Uint8Array(audioBuffer);
+        // Clone the buffer to avoid detaching the original
+        const clonedBuffer = audioBuffer.slice(0);
+        const typedArray = new Uint8Array(clonedBuffer);
         const decoderWorker = new Worker(decoderPath);
         const wavWorker = new Worker(wavEncoderPath);
 
