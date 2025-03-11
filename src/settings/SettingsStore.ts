@@ -697,6 +697,21 @@ export default class SettingsStore {
         client.on(ClientEvent.Sync, onSync);
     }
 
+
+    /**
+     * Migrate the setting for visible images to a setting.
+     */
+    private static async migrateShowImagesToSettings(): Promise<void> {
+        const MIGRATION_DONE_FLAG = "mx_show_images_migration_done";
+        if (localStorage.getItem(MIGRATION_DONE_FLAG)) return;
+
+        logger.info("Performing one-time settings migration of shown images to settings store");
+        const newValue = Object.fromEntries(Object.keys(localStorage).filter(k => k.startsWith("mx_ShowImage_")).map(k => [k.slice("mx_ShowImage_".length), true]));
+        this.setValue("showMediaEventIds", null, SettingLevel.DEVICE, newValue);
+
+        localStorage.setItem(MIGRATION_DONE_FLAG, "true");
+    }
+
     /**
      * Runs or queues any setting migrations needed.
      */
@@ -707,6 +722,7 @@ export default class SettingsStore {
         // The consequences of missing the migration are only that URL previews will
         // be disabled in E2EE rooms.
         SettingsStore.migrateURLPreviewsE2EE(isFreshLogin);
+        SettingsStore.migrateShowImagesToSettings();
 
         // Dev notes: to add your migration, just add a new `migrateMyFeature` function, call it, and
         // add a comment to note when it can be removed.
