@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { TestContainers } from "testcontainers";
 
 import { OAuthServer } from "../../oauth_server";
-import { type Fixtures } from "../../../element-web-test.ts";
+import { type Fixtures } from "../../../element-web-test";
 
 export const legacyOAuthHomeserver: Fixtures = {
     oAuthServer: [
