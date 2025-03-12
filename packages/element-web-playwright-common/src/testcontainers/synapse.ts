@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024-2025 New Vector Ltd.
 
 SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
@@ -24,8 +24,6 @@ import { type HomeserverContainer, type StartedHomeserverContainer } from "./Hom
 import { type StartedMatrixAuthenticationServiceContainer } from "./mas.js";
 import { Api, ClientServerApi, type Verb, type Credentials } from "../utils/api.js";
 import { StartedMailpitContainer } from "./mailpit.js";
-
-const TAG = "develop@sha256:8d0049e8e0524ad6817cf7737453fe47de1ed3b8d04704f0c2fd6c136414c9d7";
 
 const DEFAULT_CONFIG = {
     server_name: "localhost",
@@ -193,8 +191,8 @@ export class SynapseContainer extends GenericContainer implements HomeserverCont
     private config: SynapseConfig;
     private mas?: StartedMatrixAuthenticationServiceContainer;
 
-    public constructor() {
-        super(`ghcr.io/element-hq/synapse:${TAG}`);
+    public constructor(image = "ghcr.io/element-hq/synapse:develop") {
+        super(image);
 
         this.config = deepCopy(DEFAULT_CONFIG);
         this.config.registration_shared_secret = randB64Bytes(16);

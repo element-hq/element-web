@@ -1,7 +1,7 @@
 {
     "name": "@element-hq/element-web-playwright-common",
     "type": "module",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "license": "SEE LICENSE IN README.md",
     "main": "lib/index.js",
     "bin": {
