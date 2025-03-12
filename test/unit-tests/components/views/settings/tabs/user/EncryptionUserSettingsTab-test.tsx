@@ -10,7 +10,7 @@ import { act, render, screen } from "jest-matrix-react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
-import { ClientEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 
 import {
     EncryptionUserSettingsTab,
@@ -163,7 +163,7 @@ describe("<EncryptionUserSettingsTab />", () => {
         ).toBeVisible();
     });
 
-    it("should update when backup_disabled account data is changed", async () => {
+    it("should update when key backup status event is fired", async () => {
         jest.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("1");
 
         renderComponent();
@@ -173,8 +173,7 @@ describe("<EncryptionUserSettingsTab />", () => {
         jest.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue(null);
 
         act(() => {
-            const accountDataEvent = new MatrixEvent({ type: "m.org.matrix.custom.backup_disabled" });
-            matrixClient.emit(ClientEvent.AccountData, accountDataEvent);
+            matrixClient.emit(CryptoEvent.KeyBackupStatus, false);
         });
 
         await waitFor(() => {

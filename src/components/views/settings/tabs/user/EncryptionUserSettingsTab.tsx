@@ -8,9 +8,8 @@
 import React, { type JSX, useCallback, useEffect, useState } from "react";
 import { Button, InlineSpinner, Separator } from "@vector-im/compound-web";
 import ComputerIcon from "@vector-im/compound-design-tokens/assets/web/icons/computer";
-import { ClientEvent } from "matrix-js-sdk/src/matrix";
+import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 
-import type { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import SettingsTab from "../SettingsTab";
 import { RecoveryPanel } from "../../encryption/RecoveryPanel";
 import { ChangeRecoveryKey } from "../../encryption/ChangeRecoveryKey";
@@ -26,7 +25,6 @@ import { RecoveryPanelOutOfSync } from "../../encryption/RecoveryPanelOutOfSync"
 import { useTypedEventEmitter } from "../../../../../hooks/useEventEmitter";
 import { KeyStoragePanel } from "../../encryption/KeyStoragePanel";
 import { DeleteKeyStoragePanel } from "../../encryption/DeleteKeyStoragePanel";
-import { BACKUP_DISABLED_ACCOUNT_DATA_KEY } from "../../../../../DeviceListener";
 
 /**
  * The state in the encryption settings tab.
@@ -131,7 +129,7 @@ export function EncryptionUserSettingsTab({ initialState = "loading" }: Encrypti
             );
             break;
         case "key_storage_delete":
-            content = <DeleteKeyStoragePanel onFinish={() => setState("main")} />;
+            content = <DeleteKeyStoragePanel onFinish={checkEncryptionState} />;
             break;
     }
 
@@ -189,18 +187,13 @@ function useCheckEncryptionState(state: State, setState: (state: State) => void)
         if (state === "loading") checkEncryptionState();
     }, [checkEncryptionState, state]);
 
-    useTypedEventEmitter(matrixClient, ClientEvent.AccountData, (event: MatrixEvent): void => {
-        const type = event.getType();
-        // Recheck the status if this account data has been updated as this implies the status
-        // of megolm key backup has changed on the user's account (there's no event emitted for megolm
-        // key backup enabled state changing, so we use this instead).
+    useTypedEventEmitter(matrixClient, CryptoEvent.KeyBackupStatus, (): void => {
+        // Recheck the status if the key backup status has changed so we can keep the page up to date.
         // Note that this could potentially update the UI while the user is trying to do something, although
         // if their account data is changing then it implies that they're changing encryption related things
         // on another device. This code is written with the assumption that it's better for the UI to refresh
         // and be up to date with whatever changes they've made.
-        if (type === BACKUP_DISABLED_ACCOUNT_DATA_KEY) {
-            checkEncryptionState();
-        }
+        checkEncryptionState();
     });
 
     // Also return the callback so that the component can re-run the logic.
