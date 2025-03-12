@@ -34,6 +34,7 @@ import { addReplyToMessageContent } from "../../../utils/Reply";
 import RoomContext from "../../../contexts/RoomContext";
 import { type IUpload, type VoiceMessageRecording } from "../../../audio/VoiceMessageRecording";
 import { createVoiceMessageContent } from "../../../utils/createVoiceMessageContent";
+import { createRawSttMessageContent } from "../../../utils/createRawSttMessageContent";
 import AccessibleButton from "../elements/AccessibleButton";
 
 interface IProps {
@@ -132,11 +133,28 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
                 });
             }
 
-            doMaybeLocalRoomAction(
+            // Send the voice message first
+            const voiceMessageResult = await doMaybeLocalRoomAction(
                 this.props.room.roomId,
                 (actualRoomId: string) => MatrixClientPeg.safeGet().sendMessage(actualRoomId, content),
                 this.props.room.client,
             );
+            // TODO: remove
+            logger.info("Voice message sent with event ID:", voiceMessageResult?.event_id);
+
+            // Send the raw STT message for processing
+            const sttContent = createRawSttMessageContent(
+                "dummy_content", // This will be replaced by actual content from the server
+                "en-US", // Default to English, can be made configurable
+            );
+
+            const sttResult = await doMaybeLocalRoomAction(
+                this.props.room.roomId,
+                (actualRoomId: string) => MatrixClientPeg.safeGet().sendMessage(actualRoomId, sttContent),
+                this.props.room.client,
+            );
+            // TODO: remove
+            logger.info("STT message sent with event ID:", sttResult?.event_id);
         } catch (e) {
             logger.error("Error sending voice message:", e);
 
