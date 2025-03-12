@@ -10,14 +10,12 @@ import {
     type Services as BaseServices,
     type WorkerOptions as BaseWorkerOptions,
 } from "@element-hq/element-web-playwright-common/lib/fixtures";
-import {
-    SynapseContainer,
-    type HomeserverContainer,
-} from "@element-hq/element-web-playwright-common/lib/testcontainers";
+import { type HomeserverContainer } from "@element-hq/element-web-playwright-common/lib/testcontainers";
 
 import { type OAuthServer } from "./plugins/oauth_server";
 import { DendriteContainer, PineconeContainer } from "./testcontainers/dendrite";
 import { type HomeserverType } from "./plugins/homeserver";
+import { SynapseContainer } from "./testcontainers/synapse";
 
 export interface Services extends BaseServices {
     // Set in legacyOAuthHomeserver only

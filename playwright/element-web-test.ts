@@ -16,7 +16,6 @@ import {
 } from "@playwright/test";
 import {
     type TestFixtures as BaseTestFixtures,
-    CONFIG_JSON,
     expect as baseExpect,
     type ToMatchScreenshotOptions,
 } from "@element-hq/element-web-playwright-common";
@@ -58,7 +57,6 @@ export interface TestFixtures extends BaseTestFixtures {
     botCreateOpts: CreateBotOpts;
     bot: Bot;
     webserver: Webserver;
-    disablePresence: boolean;
 }
 
 type CombinedTestFixtures = PlaywrightTestArgs & TestFixtures;
@@ -71,37 +69,6 @@ export const test = base.extend<TestFixtures>({
             `Test does not work on ${testInfo.project.name}`,
         );
         await use(context);
-    },
-    disablePresence: false,
-    // TODO
-    page: async ({ homeserver, context, page, config, labsFlags, disablePresence }, use) => {
-        await context.route(`http://localhost:8080/config.json*`, async (route) => {
-            const json = {
-                ...CONFIG_JSON,
-                ...config,
-                default_server_config: {
-                    "m.homeserver": {
-                        base_url: homeserver.baseUrl,
-                    },
-                    ...config.default_server_config,
-                },
-            };
-            json["features"] = {
-                ...json["features"],
-                // Enable the lab features
-                ...labsFlags.reduce((obj, flag) => {
-                    obj[flag] = true;
-                    return obj;
-                }, {}),
-            };
-            if (disablePresence) {
-                json["enable_presence_by_hs_url"] = {
-                    [homeserver.baseUrl]: false,
-                };
-            }
-            await route.fulfill({ json });
-        });
-        await use(page);
     },
 
     axe: async ({ axe }, use) => {
