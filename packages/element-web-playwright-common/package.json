@@ -7,6 +7,10 @@
     "bin": {
         "playwright-screenshots": "./playwright-screenshots.sh"
     },
+    "scripts": {
+        "prepare": "tsc",
+        "test": "echo No tests for @element-hq/element-web-playwright-common"
+    },
     "devDependencies": {
         "@types/lodash-es": "^4.17.12",
         "typescript": "^5.8.2"
@@ -24,8 +28,5 @@
         "@element-hq/element-web-module-api": "*",
         "@playwright/test": "^1.51.0",
         "playwright-core": "^1.51.0"
-    },
-    "scripts": {
-        "prepare": "tsc"
     }
 }
