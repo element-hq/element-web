@@ -2099,6 +2099,12 @@
         "failed_add_tag": "Failed to add tag %(tagName)s to room",
         "failed_remove_tag": "Failed to remove tag %(tagName)s from room",
         "failed_set_dm_tag": "Failed to set direct message tag",
+        "filters": {
+            "favourite": "Favourites",
+            "people": "People",
+            "rooms": "Rooms",
+            "unread": "Unread"
+        },
         "home_menu_label": "Home options",
         "join_public_room_label": "Join public room",
         "joining_rooms_status": {
