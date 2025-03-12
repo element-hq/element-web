@@ -27,6 +27,7 @@ export interface Config extends BaseConfig {
             server_name?: string;
         };
     };
+    enable_presence_by_hs_url?: Record<string, boolean>;
     setting_defaults: Record<string, unknown>;
     map_style_url?: string;
     features: Record<string, boolean>;
@@ -58,12 +59,15 @@ export interface TestFixtures {
     config: Partial<typeof CONFIG_JSON>;
 
     labsFlags: string[];
+    disablePresence: boolean;
 }
 
 export const test = base.extend<TestFixtures>({
-    config: {}, // We merge this atop the default CONFIG_JSON in the page fixture to make extending it easier
-    labsFlags: [],
-    page: async ({ homeserver, context, page, config, labsFlags }, use) => {
+    // We merge this atop the default CONFIG_JSON in the page fixture to make extending it easier
+    config: async ({}, use) => use({}),
+    labsFlags: async ({}, use) => use([]),
+    disablePresence: async ({}, use) => use(false),
+    page: async ({ homeserver, context, page, config, labsFlags, disablePresence }, use) => {
         await context.route(`http://localhost:8080/config.json*`, async (route) => {
             const json = {
                 ...CONFIG_JSON,
@@ -83,6 +87,11 @@ export const test = base.extend<TestFixtures>({
                     return obj;
                 }, {}),
             };
+            if (disablePresence) {
+                json["enable_presence_by_hs_url"] = {
+                    [homeserver.baseUrl]: false,
+                };
+            }
             await route.fulfill({ json });
         });
         await use(page);
