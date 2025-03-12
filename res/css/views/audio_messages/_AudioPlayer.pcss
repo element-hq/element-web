@@ -37,6 +37,50 @@ Please see LICENSE files in the repository root for full details.
             .mx_AudioPlayer_byline {
                 font-size: $font-12px;
                 line-height: $font-12px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+
+                .mx_AudioPlayer_transcribeButton {
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 50%;
+                    border: 1px solid $primary-content;
+                    background: transparent;
+                    color: $primary-content;
+                    font-size: $font-12px;
+                    cursor: pointer;
+                    padding: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin-left: 4px;
+
+                    &:hover {
+                        background: $primary-content;
+                        color: $background;
+                    }
+                }
+
+                .mx_AudioPlayer_transcribeButton {
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 50%;
+                    border: 1px solid $primary-content;
+                    background: transparent;
+                    color: $primary-content;
+                    font-size: $font-12px;
+                    cursor: pointer;
+                    padding: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    &:hover {
+                        background: $primary-content;
+                        color: $background;
+                    }
+                }
             }
         }
     }
@@ -56,4 +100,85 @@ Please see LICENSE files in the repository root for full details.
             white-space: nowrap;
         }
     }
+}
+
+.mx_RecordingPlayback_container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    position: relative;
+    min-height: 40px; /* Set a minimum height to ensure consistent spacing */
+}
+
+.mx_RecordingPlayback_mainContent {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 40px;
+    margin-bottom: 0;
+}
+
+.mx_RecordingPlayback_timelineLayoutMiddle {
+    flex: 1;
+    min-width: 0;
+    margin-right: 12px;
+}
+
+.mx_AudioPlayer_buttonContainer {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.mx_AudioPlayer_transcribeButton {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    position: relative;
+    padding: 3px 5px;
+    background-color: $panel-actions;
+    box-sizing: border-box;
+    color: $primary-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .mx_AudioPlayer_transcribeLetter {
+        font-size: 12px;
+        line-height: 12px;
+        font-weight: 600;
+    }
+
+    &:not(.mx_AudioPlayer_secondButton) .mx_AudioPlayer_transcribeLetter {
+        margin-left: -3px;
+    }
+
+    .mx_AudioPlayer_transcribeArrow {
+        position: absolute;
+        right: 5px;
+        bottom: 0px;
+        font-size: 9px;
+        line-height: 18px;
+    }
+
+    &:hover,
+    &.mx_AudioPlayer_transcribeButton_active {
+        background-color: $tertiary-content;
+        color: $background;
+    }
+}
+
+.mx_AudioPlayer_summary {
+    margin-top: 12px;
+    margin-bottom: 5px;
+    padding: 8px 12px;
+    background-color: $system;
+    border-radius: 8px;
+    width: 80%;
+    transition: all 0.3s ease;
+    color: $primary-content;
+    font-size: $font-14px;
+    line-height: 1.4;
+    order: 2;
 }

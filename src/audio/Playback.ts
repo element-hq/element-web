@@ -161,13 +161,17 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
             const deferred = defer<unknown>();
             this.element.onloadeddata = deferred.resolve;
             this.element.onerror = deferred.reject;
-            this.element.src = URL.createObjectURL(new Blob([this.buf]));
+            // Clone the buffer before creating the Blob
+            const bufferClone = this.buf.slice(0);
+            this.element.src = URL.createObjectURL(new Blob([this.buf.slice(0)]));
             await deferred.promise; // make sure the audio element is ready for us
         } else {
             // Safari compat: promise API not supported on this function
             this.audioBuf = await new Promise((resolve, reject) => {
+                // Clone buffer before decoding to prevent detachment
+                const audioBuffer = this.buf.slice(0);
                 this.context.decodeAudioData(
-                    this.buf,
+                    audioBuffer,
                     (b) => resolve(b),
                     async (e): Promise<void> => {
                         try {
@@ -176,7 +180,9 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
                             logger.error("Error decoding recording: ", e);
                             logger.warn("Trying to re-encode to WAV instead...");
 
-                            const wav = await decodeOgg(this.buf);
+                            // Clone buffer before decoding Ogg
+                            const oggBuffer = this.buf.slice(0);
+                            const wav = await decodeOgg(oggBuffer);
 
                             // noinspection ES6MissingAwait - not needed when using callbacks
                             this.context.decodeAudioData(
