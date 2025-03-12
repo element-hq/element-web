@@ -14,8 +14,8 @@ import {
     type Locator,
     type Page,
     type PageAssertionsToHaveScreenshotOptions,
+    type MatcherReturnType,
 } from "@playwright/test";
-import { type MatcherReturnType } from "playwright/types/test";
 import { sanitizeForFilePath } from "playwright-core/lib/utils";
 import { extname } from "node:path";
 
