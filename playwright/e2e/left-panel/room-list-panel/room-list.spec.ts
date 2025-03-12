@@ -11,6 +11,7 @@ import { test, expect } from "../../../element-web-test";
 
 test.describe("Room list", () => {
     test.use({
+        displayName: "Alice",
         labsFlags: ["feature_new_room_list"],
     });
 
@@ -46,5 +47,34 @@ test.describe("Room list", () => {
         const roomListView = getRoomList(page);
         await roomListView.getByRole("gridcell", { name: "Open room room29" }).click();
         await expect(page.getByRole("heading", { name: "room29", level: 1 })).toBeVisible();
+    });
+
+    test("should open the more options menu", { tag: "@screenshot" }, async ({ page, app, user }) => {
+        const roomListView = getRoomList(page);
+        const roomItem = roomListView.getByRole("gridcell", { name: "Open room room29" });
+        await roomItem.hover();
+
+        await expect(roomItem).toMatchScreenshot("room-list-item-hover.png");
+        const roomItemMenu = roomItem.getByRole("button", { name: "More Options" });
+        await roomItemMenu.click();
+        await expect(page).toMatchScreenshot("room-list-item-open-more-options.png");
+
+        // It should make the room favourited
+        await page.getByRole("menuitemcheckbox", { name: "Favourited" }).click();
+
+        // Check that the room is favourited
+        await roomItem.hover();
+        await roomItemMenu.click();
+        await expect(page.getByRole("menuitemcheckbox", { name: "Favourited" })).toBeChecked();
+        // It should the invite dialog
+        await page.getByRole("menuitem", { name: "invite" }).click();
+        await expect(page.getByRole("heading", { name: "Invite to room29" })).toBeVisible();
+        await app.closeDialog();
+
+        // It should leave the room
+        await roomItem.hover();
+        await roomItemMenu.click();
+        await page.getByRole("menuitem", { name: "leave room" }).click();
+        await expect(roomItem).not.toBeVisible();
     });
 });
