@@ -407,6 +407,15 @@
         "download_logs": "Stáhnout záznamy",
         "downloading_logs": "Stahování záznamů",
         "error_empty": "Dejte nám vědět, prosím, co se pokazilo nebo vytvořte issue na GitHubu, kde problém popište.",
+        "failed_download_logs": "Stažení ladících protokolů se nezdařilo: ",
+        "failed_send_logs_causes": {
+            "disallowed_app": "Vaše hlášení o chybě bylo zamítnuto. Rageshake server tuto aplikaci nepodporuje.",
+            "rejected_generic": "Vaše hlášení o chybě bylo zamítnuto. Rageshake server odmítl obsah zprávy kvůli zásadám.",
+            "rejected_recovery_key": "Vaše hlášení o chybě bylo z bezpečnostních důvodů odmítnuto, protože obsahovalo klíč pro obnovení.",
+            "rejected_version": "Vaše hlášení o chybě bylo zamítnuto, protože verze, kterou používáte, je příliš stará.",
+            "server_unknown_error": "Rageshake server narazil na neznámou chybu a nemohl zpracovat zprávu.",
+            "unknown_error": "Odeslání protokolů se nezdařilo."
+        },
         "github_issue": "issue na GitHubu",
         "introduction": "Pokud jste odeslali chybu prostřednictvím GitHubu, ladící protokoly nám mohou pomoci problém vysledovat. ",
         "log_request": "Abychom tomu mohli pro příště předejít, <a>pošlete nám prosím záznamy</a>.",
@@ -1298,6 +1307,7 @@
         "error_connecting_heading": "Nepovedlo se připojení ke správci integrací",
         "explainer": "Správci integrace přijímají konfigurační data a mohou vaším jménem upravovat widgety, odesílat pozvánky do místností a nastavovat úrovně oprávnění.",
         "manage_title": "Správa integrací",
+        "toggle_label": "Povolit správce integrací",
         "use_im": "Použít správce integrací na správu botů, widgetů a nálepek.",
         "use_im_default": "Použít správce integrací <b>(%(serverName)s)</b> na správu botů, widgetů a nálepek."
     },
@@ -2100,11 +2110,15 @@
             "one": "Momentálně se připojuje %(count)s místnost",
             "other": "Momentálně se připojuje %(count)s místností"
         },
+        "list_title": "Seznam místností",
         "notification_options": "Možnosti oznámení",
         "open_space_menu": "Otevřít nabídku prostoru",
         "redacting_messages_status": {
             "one": "Momentálně se odstraňují zprávy v %(count)s místnosti",
             "other": "Momentálně se odstraňují zprávy v %(count)s místnostech"
+        },
+        "room": {
+            "open_room": "Otevřít místnost %(roomName)s"
         },
         "show_less": "Zobrazit méně",
         "show_n_more": {

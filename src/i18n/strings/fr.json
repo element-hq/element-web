@@ -1306,6 +1306,7 @@
         "error_connecting_heading": "Impossible de se connecter au gestionnaire d’intégrations",
         "explainer": "Les gestionnaires d’intégrations reçoivent les données de configuration et peuvent modifier les widgets, envoyer des invitations aux salons et définir les rangs à votre place.",
         "manage_title": "Gérer les intégrations",
+        "toggle_label": "Activer le gestionnaire d'intégration",
         "use_im": "Utilisez un gestionnaire d’intégrations pour gérer les robots, les widgets et les jeux d’autocollants.",
         "use_im_default": "Utilisez un gestionnaire d’intégrations <b>(%(serverName)s)</b> pour gérer les robots, les widgets et les jeux d’autocollants."
     },
@@ -2097,6 +2098,12 @@
         "failed_add_tag": "Échec de l’ajout de l’étiquette %(tagName)s au salon",
         "failed_remove_tag": "Échec de la suppression de l’étiquette %(tagName)s du salon",
         "failed_set_dm_tag": "Échec de l’ajout de l’étiquette de conversation privée",
+        "filters": {
+            "favourite": "Favoris",
+            "people": "Personnes",
+            "rooms": "Salons",
+            "unread": "Non lu"
+        },
         "home_menu_label": "Options de l’accueil",
         "join_public_room_label": "Rejoindre le salon public",
         "joining_rooms_status": {

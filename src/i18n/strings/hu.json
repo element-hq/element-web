@@ -80,12 +80,14 @@
         "maximise": "Teljes méret",
         "mention": "Megemlítés",
         "minimise": "Lecsukás",
+        "new_message": "Új üzenet",
         "new_room": "Új szoba",
         "new_video_room": "Új videószoba",
         "next": "Következő",
         "no": "Nem",
         "ok": "Rendben",
         "open": "Megnyitás",
+        "open_menu": "Menü megnyitása",
         "pause": "Szünet",
         "pin": "Kitűzés",
         "play": "Lejátszás",
@@ -1275,7 +1277,9 @@
         "title": "Nem támogatott böngésző",
         "use_desktop_heading": "Használjon inkább %(brand)s asztali alkalmazást",
         "use_mobile_heading": "%(brand)s mobil alkalmazás használata",
-        "use_mobile_heading_after_desktop": "Vagy használja mobilalkalmazásunkat"
+        "use_mobile_heading_after_desktop": "Vagy használja mobilalkalmazásunkat",
+        "windows_64bit": "Windows (64 bites)",
+        "windows_arm_64bit": "Windows (64 bites ARM)"
     },
     "info_tooltip_title": "Információ",
     "integration_manager": {
@@ -2068,6 +2072,12 @@
         "failed_add_tag": "Nem sikerült hozzáadni a szobához ezt: %(tagName)s",
         "failed_remove_tag": "Nem sikerült a szobáról eltávolítani ezt: %(tagName)s",
         "failed_set_dm_tag": "Nem sikerült a közvetlen beszélgetés címkét beállítani",
+        "filters": {
+            "favourite": "Kedvencek",
+            "people": "Emberek",
+            "rooms": "Szobák",
+            "unread": "Olvasatlan"
+        },
         "home_menu_label": "Kezdőlap beállítások",
         "join_public_room_label": "Belépés nyilvános szobába",
         "joining_rooms_status": {
