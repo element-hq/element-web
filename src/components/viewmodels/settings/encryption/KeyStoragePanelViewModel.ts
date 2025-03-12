@@ -79,6 +79,8 @@ export function useKeyStoragePanelViewModel(): KeyStoragePanelState {
                     return;
                 }
                 if (enable) {
+                    // If there is no existing key backup on the server, create one.
+                    // `resetKeyBackup` will delete any existing backup, so we only do this if there is no existing backup.
                     const currentKeyBackup = await crypto.checkKeyBackupAndEnable();
                     if (currentKeyBackup === null) {
                         await crypto.resetKeyBackup();
