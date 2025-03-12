@@ -2103,6 +2103,12 @@
         "failed_add_tag": "Не вдалось додати до кімнати мітку %(tagName)s",
         "failed_remove_tag": "Не вдалося прибрати з кімнати мітку %(tagName)s",
         "failed_set_dm_tag": "Не вдалося встановити мітку особистого повідомлення",
+        "filters": {
+            "favourite": "Обрані",
+            "people": "Люди",
+            "rooms": "Кімнати",
+            "unread": "Непрочитані"
+        },
         "home_menu_label": "Параметри домівки",
         "join_public_room_label": "Приєднатись до загальнодоступної кімнати",
         "joining_rooms_status": {
