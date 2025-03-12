@@ -1,0 +1,15 @@
+- list:
+      - listitem:
+            - text: Category 1
+            - list:
+                  - listitem:
+                        - link "App 1"
+                  - listitem:
+                        - link "App 2"
+      - listitem:
+            - text: Category 2
+            - list:
+                  - listitem:
+                        - link "App 3"
+                  - listitem:
+                        - link "App 4"

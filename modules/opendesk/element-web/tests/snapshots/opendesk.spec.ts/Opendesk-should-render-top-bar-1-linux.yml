@@ -1,0 +1,5 @@
+- navigation:
+      - link "Show portal":
+            - img "Portal logo"
+      - button "Show menu":
+            - img

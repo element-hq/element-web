@@ -1,0 +1,52 @@
+<!--Based on https://github.com/nordeck/element-web-modules/blob/main/e2e/src/deploy/widgets/widget.html-->
+<html lang="en">
+    <head>
+        <title>Demo Widget</title>
+        <script>
+            let sendEventCount = 0;
+            window.onmessage = async (ev) => {
+                if (ev.data.action === "capabilities") {
+                    // Return the capabilities for this widget
+                    window.parent.postMessage(
+                        Object.assign(
+                            {
+                                response: {
+                                    capabilities: ["org.matrix.msc2762.receive.state_event:m.room.topic"],
+                                },
+                            },
+                            ev.data,
+                        ),
+                        "*",
+                    );
+                } else if (ev.data.action === "notify_capabilities") {
+                    // Ask for an openid token
+                    window.parent.postMessage(
+                        {
+                            api: "fromWidget",
+                            widgetId: ev.data.widgetId,
+                            requestId: "widget-" + sendEventCount,
+                            action: "get_openid",
+                            data: {},
+                        },
+                        "*",
+                    );
+                } else if (ev.data.action === "get_openid" && ev.data.response?.state === "allowed") {
+                    // Add the userid to the heading
+                    const { access_token } = ev.data.response;
+
+                    const hsUrl = new URLSearchParams(window.location.search).get("hsUrl");
+                    const response = await fetch(
+                        `${hsUrl}/_matrix/federation/v1/openid/userinfo?access_token=${access_token}`,
+                    );
+                    const { sub } = await response.json();
+
+                    const titleElement = document.getElementById("title");
+                    titleElement.innerText = `Hello ${sub}!`;
+                }
+            };
+        </script>
+    </head>
+    <body>
+        <h1 id="title">Hello unknown!</h1>
+    </body>
+</html>
