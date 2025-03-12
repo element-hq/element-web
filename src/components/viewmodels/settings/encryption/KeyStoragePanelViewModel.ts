@@ -82,11 +82,11 @@ export function useKeyStoragePanelViewModel(): KeyStoragePanelState {
                     const currentKeyBackup = await crypto.checkKeyBackupAndEnable();
                     if (currentKeyBackup === null) {
                         await crypto.resetKeyBackup();
-                    }
 
-                    // resetKeyBackup fires this off in the background without waiting, so we need to do it
-                    // explicitly and wait for it, otherwise it won't be enabled yet when we check again.
-                    await crypto.checkKeyBackupAndEnable();
+                        // resetKeyBackup fires this off in the background without waiting, so we need to do it
+                        // explicitly and wait for it, otherwise it won't be enabled yet when we check again.
+                        await crypto.checkKeyBackupAndEnable();
+                    }
 
                     // Set the flag so that EX no longer thinks the user wants backup disabled
                     await matrixClient.setAccountData(BACKUP_DISABLED_ACCOUNT_DATA_KEY, { disabled: false });
