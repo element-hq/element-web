@@ -31,7 +31,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           >
             <div
               class="mx_Flex mx_RoomListCell_container"
-              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
             >
               <div
                 class="mx_DecoratedRoomAvatar"
@@ -58,7 +58,7 @@ exports[`<RoomList /> should render a room list 1`] = `
               </div>
               <div
                 class="mx_Flex mx_RoomListCell_content"
-                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
+                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
               >
                 <span
                   title="room0"
@@ -77,7 +77,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           >
             <div
               class="mx_Flex mx_RoomListCell_container"
-              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
             >
               <div
                 class="mx_DecoratedRoomAvatar"
@@ -104,7 +104,7 @@ exports[`<RoomList /> should render a room list 1`] = `
               </div>
               <div
                 class="mx_Flex mx_RoomListCell_content"
-                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
+                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
               >
                 <span
                   title="room1"
@@ -123,7 +123,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           >
             <div
               class="mx_Flex mx_RoomListCell_container"
-              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
             >
               <div
                 class="mx_DecoratedRoomAvatar"
@@ -150,7 +150,7 @@ exports[`<RoomList /> should render a room list 1`] = `
               </div>
               <div
                 class="mx_Flex mx_RoomListCell_content"
-                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
+                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
               >
                 <span
                   title="room2"
@@ -169,7 +169,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           >
             <div
               class="mx_Flex mx_RoomListCell_container"
-              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
             >
               <div
                 class="mx_DecoratedRoomAvatar"
@@ -196,7 +196,7 @@ exports[`<RoomList /> should render a room list 1`] = `
               </div>
               <div
                 class="mx_Flex mx_RoomListCell_content"
-                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
+                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
               >
                 <span
                   title="room3"
@@ -215,7 +215,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           >
             <div
               class="mx_Flex mx_RoomListCell_container"
-              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
             >
               <div
                 class="mx_DecoratedRoomAvatar"
@@ -242,7 +242,7 @@ exports[`<RoomList /> should render a room list 1`] = `
               </div>
               <div
                 class="mx_Flex mx_RoomListCell_content"
-                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
+                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
               >
                 <span
                   title="room4"
@@ -261,7 +261,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           >
             <div
               class="mx_Flex mx_RoomListCell_container"
-              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
             >
               <div
                 class="mx_DecoratedRoomAvatar"
@@ -288,7 +288,7 @@ exports[`<RoomList /> should render a room list 1`] = `
               </div>
               <div
                 class="mx_Flex mx_RoomListCell_content"
-                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
+                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
               >
                 <span
                   title="room5"
@@ -307,7 +307,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           >
             <div
               class="mx_Flex mx_RoomListCell_container"
-              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
             >
               <div
                 class="mx_DecoratedRoomAvatar"
@@ -334,7 +334,7 @@ exports[`<RoomList /> should render a room list 1`] = `
               </div>
               <div
                 class="mx_Flex mx_RoomListCell_content"
-                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
+                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
               >
                 <span
                   title="room6"
@@ -353,7 +353,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           >
             <div
               class="mx_Flex mx_RoomListCell_container"
-              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
             >
               <div
                 class="mx_DecoratedRoomAvatar"
@@ -380,7 +380,7 @@ exports[`<RoomList /> should render a room list 1`] = `
               </div>
               <div
                 class="mx_Flex mx_RoomListCell_content"
-                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
+                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
               >
                 <span
                   title="room7"
@@ -399,7 +399,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           >
             <div
               class="mx_Flex mx_RoomListCell_container"
-              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
             >
               <div
                 class="mx_DecoratedRoomAvatar"
@@ -426,7 +426,7 @@ exports[`<RoomList /> should render a room list 1`] = `
               </div>
               <div
                 class="mx_Flex mx_RoomListCell_content"
-                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
+                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
               >
                 <span
                   title="room8"
@@ -445,7 +445,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           >
             <div
               class="mx_Flex mx_RoomListCell_container"
-              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+              style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
             >
               <div
                 class="mx_DecoratedRoomAvatar"
@@ -472,7 +472,7 @@ exports[`<RoomList /> should render a room list 1`] = `
               </div>
               <div
                 class="mx_Flex mx_RoomListCell_content"
-                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
+                style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
               >
                 <span
                   title="room9"

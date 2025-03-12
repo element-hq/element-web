@@ -5,17 +5,17 @@ exports[`<RoomListPanel /> should not render the RoomListSearch component when U
   <section
     class="mx_Flex mx_RoomListPanel"
     data-testid="room-list-panel"
-    style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: 0;"
+    style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <header
       aria-label="Room options"
       class="mx_Flex mx_RoomListHeaderView"
       data-testid="room-list-header"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0;"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
     >
       <div
         class="mx_Flex mx_RoomListHeaderView_title"
-        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x);"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
       >
         <h1
           title="Home"
@@ -64,12 +64,12 @@ exports[`<RoomListPanel /> should render the RoomListSearch component when UICom
   <section
     class="mx_Flex mx_RoomListPanel"
     data-testid="room-list-panel"
-    style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: 0;"
+    style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <div
       class="mx_Flex mx_RoomListSearch"
       role="search"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x);"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
     >
       <button
         class="_button_vczzf_8 mx_RoomListSearch_search _has-icon_vczzf_57"
@@ -92,7 +92,7 @@ exports[`<RoomListPanel /> should render the RoomListSearch component when UICom
         </svg>
         <span
           class="mx_Flex"
-          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: 0;"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
         >
           Search
           <kbd>
@@ -126,11 +126,11 @@ exports[`<RoomListPanel /> should render the RoomListSearch component when UICom
       aria-label="Room options"
       class="mx_Flex mx_RoomListHeaderView"
       data-testid="room-list-header"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0;"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
     >
       <div
         class="mx_Flex mx_RoomListHeaderView_title"
-        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x);"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
       >
         <h1
           title="Home"
