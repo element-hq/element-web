@@ -24,6 +24,65 @@ exports[`<RoomListPanel /> should not render the RoomListSearch component when U
         </h1>
       </div>
     </header>
+    <ul
+      aria-label="Room list filters"
+      class="mx_Flex mx_RoomListPrimaryFilters"
+      role="listbox"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
+    >
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Unread
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Favourites
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          People
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Rooms
+        </button>
+      </li>
+    </ul>
     <div
       class="mx_RoomList"
       data-testid="room-list"
@@ -174,6 +233,65 @@ exports[`<RoomListPanel /> should render the RoomListSearch component when UICom
         </div>
       </button>
     </header>
+    <ul
+      aria-label="Room list filters"
+      class="mx_Flex mx_RoomListPrimaryFilters"
+      role="listbox"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
+    >
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Unread
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Favourites
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          People
+        </button>
+      </li>
+      <li
+        aria-selected="false"
+        role="option"
+      >
+        <button
+          aria-selected="false"
+          class="_chat-filter_5qdp0_8"
+          role="button"
+          tabindex="0"
+        >
+          Rooms
+        </button>
+      </li>
+    </ul>
     <div
       class="mx_RoomList"
       data-testid="room-list"

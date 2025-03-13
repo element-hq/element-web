@@ -2114,6 +2114,7 @@
         "list_title": "Room list",
         "notification_options": "Notification options",
         "open_space_menu": "Open space menu",
+        "primary_filters": "Room list filters",
         "redacting_messages_status": {
             "one": "Currently removing messages in %(count)s room",
             "other": "Currently removing messages in %(count)s rooms"
