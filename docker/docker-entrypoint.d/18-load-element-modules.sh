@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Loads modules from `/tmp/element-web-modules` into config.json's `modules` field
+# Loads modules from `/modules` into config.json's `modules` field
 
 set -e
 
@@ -15,15 +15,15 @@ mkdir -p /tmp/element-web-config
 cp /app/config*.json /tmp/element-web-config/
 
 # If there are modules to be loaded
-if [ -d "/tmp/element-web-modules" ]; then
-    cd /tmp/element-web-modules
+if [ -d "/modules" ]; then
+    cd /modules
 
     for MODULE in *
     do
         # If the module has a package.json, use its main field as the entrypoint
         ENTRYPOINT="index.js"
-        if [ -f "/tmp/element-web-modules/$MODULE/package.json" ]; then
-            ENTRYPOINT=$(jq -r '.main' "/tmp/element-web-modules/$MODULE/package.json")
+        if [ -f "/modules/$MODULE/package.json" ]; then
+            ENTRYPOINT=$(jq -r '.main' "/modules/$MODULE/package.json")
         fi
 
         entrypoint_log "Loading module $MODULE with entrypoint $ENTRYPOINT"
