@@ -1,10 +1,10 @@
 {
     "name": "@element-hq/element-web-module-api",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "description": "Module API surface for element-web",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/element-hq/element-web-modules.git",
+        "url": "https://github.com/element-hq/element-web-modules",
         "directory": "packages/element-web-module-api"
     },
     "author": "element-hq",
