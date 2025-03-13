@@ -12,6 +12,7 @@ import {
     OverflowHorizontalIcon,
     UserProfileSolidIcon,
     FavouriteSolidIcon,
+    PinSolidIcon,
 } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
@@ -25,7 +26,6 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { UserTab } from "../dialogs/UserTab";
 import QuickThemeSwitcher from "./QuickThemeSwitcher";
-import { Icon as PinUprightIcon } from "../../../../res/img/element-icons/room/pin-upright.svg";
 import Modal from "../../../Modal";
 import DevtoolsDialog from "../dialogs/DevtoolsDialog";
 import { SdkContextClass } from "../../../contexts/SDKContext";
@@ -90,7 +90,7 @@ const QuickSettingsButton: React.FC<{
                 {!newRoomListEnabled && (
                     <>
                         <h4>
-                            <PinUprightIcon className="mx_QuickSettingsButton_icon" />
+                            <PinSolidIcon className="mx_QuickSettingsButton_icon" />
                             {_t("quick_settings|metaspace_section")}
                         </h4>
                         <StyledCheckbox
