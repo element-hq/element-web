@@ -176,7 +176,7 @@
         "@babel/preset-typescript": "^7.12.7",
         "@babel/runtime": "^7.12.5",
         "@casualbot/jest-sonar-reporter": "2.2.7",
-        "@element-hq/element-web-playwright-common": "^1.0.0",
+        "@element-hq/element-web-playwright-common": "^1.1.5",
         "@peculiar/webcrypto": "^1.4.3",
         "@playwright/test": "^1.50.1",
         "@principalstudio/html-webpack-inject-preload": "^1.2.7",
