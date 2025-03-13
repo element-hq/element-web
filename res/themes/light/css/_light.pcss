@@ -10,11 +10,13 @@
 /* Noto Color Emoji contains digits, in fixed-width, therefore causing
    digits in flowed text to stand out.
    TODO: Consider putting all emoji fonts to the end rather than the front. */
-$font-family: "Inter", var(--emoji-font-family), "Apple Color Emoji", "Segoe UI Emoji", "Arial", "Helvetica", sans-serif,
+$font-family:
+    "Inter", var(--emoji-font-family), "Apple Color Emoji", "Segoe UI Emoji", "Arial", "Helvetica", sans-serif,
     "Noto Color Emoji";
 
-$monospace-font-family: "Inconsolata", var(--emoji-font-family), "Apple Color Emoji", "Segoe UI Emoji", "Courier",
-    monospace, "Noto Color Emoji";
+$monospace-font-family:
+    "Inconsolata", var(--emoji-font-family), "Apple Color Emoji", "Segoe UI Emoji", "Courier", monospace,
+    "Noto Color Emoji";
 
 /* Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=559%3A120 */
 /* ******************** */
@@ -184,7 +186,7 @@ $input-darker-fg-color: #9fa9ba;
 $input-lighter-bg-color: $secondary-accent-color;
 $input-underline-color: rgba(151, 151, 151, 0.5);
 $input-fg-color: rgba(74, 74, 74, 0.9);
-$input-placeholder: var(--cpd-color-text-placeholder);
+$input-placeholder: var(--cpd-color-text-secondary);
 /* ******************** */
 
 /* Dialog */
@@ -353,11 +355,6 @@ $copy-button-url: "@vector-im/compound-design-tokens/icons/copy.svg";
 $location-marker-color: var(--cpd-color-icon-on-solid-primary);
 $location-live-color: var(--cpd-color-purple-900);
 $location-live-secondary-color: var(--cpd-color-purple-600);
-/* ******************** */
-
-/* Voice Broadcast */
-/* ******************** */
-$live-badge-color: var(--cpd-color-icon-on-solid-primary);
 /* ******************** */
 
 body {

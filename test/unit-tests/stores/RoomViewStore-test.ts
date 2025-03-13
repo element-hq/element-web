@@ -2,41 +2,47 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2017-2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked } from "jest-mock";
 import { MatrixError, Room } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
-import { RoomViewLifecycle, ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
+import {
+    RoomViewLifecycle,
+    type ViewRoomOpts,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
+import EventEmitter from "events";
 
 import { RoomViewStore } from "../../../src/stores/RoomViewStore";
 import { Action } from "../../../src/dispatcher/actions";
-import { getMockClientWithEventEmitter, untilDispatch, untilEmission } from "../../test-utils";
+import {
+    getMockClientWithEventEmitter,
+    setupAsyncStoreWithClient,
+    untilDispatch,
+    untilEmission,
+} from "../../test-utils";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { SlidingSyncManager } from "../../../src/SlidingSyncManager";
 import { PosthogAnalytics } from "../../../src/PosthogAnalytics";
 import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
 import { MatrixDispatcher } from "../../../src/dispatcher/dispatcher";
 import { UPDATE_EVENT } from "../../../src/stores/AsyncStore";
-import { ActiveRoomChangedPayload } from "../../../src/dispatcher/payloads/ActiveRoomChangedPayload";
+import { type ActiveRoomChangedPayload } from "../../../src/dispatcher/payloads/ActiveRoomChangedPayload";
 import { SpaceStoreClass } from "../../../src/stores/spaces/SpaceStore";
 import { TestSdkContext } from "../TestSdkContext";
-import { ViewRoomPayload } from "../../../src/dispatcher/payloads/ViewRoomPayload";
-import {
-    VoiceBroadcastInfoState,
-    VoiceBroadcastPlayback,
-    VoiceBroadcastPlaybacksStore,
-    VoiceBroadcastRecording,
-} from "../../../src/voice-broadcast";
-import { mkVoiceBroadcastInfoStateEvent } from "../voice-broadcast/utils/test-utils";
+import { type ViewRoomPayload } from "../../../src/dispatcher/payloads/ViewRoomPayload";
 import Modal from "../../../src/Modal";
 import ErrorDialog from "../../../src/components/views/dialogs/ErrorDialog";
-import { CancelAskToJoinPayload } from "../../../src/dispatcher/payloads/CancelAskToJoinPayload";
-import { JoinRoomErrorPayload } from "../../../src/dispatcher/payloads/JoinRoomErrorPayload";
-import { SubmitAskToJoinPayload } from "../../../src/dispatcher/payloads/SubmitAskToJoinPayload";
+import { type CancelAskToJoinPayload } from "../../../src/dispatcher/payloads/CancelAskToJoinPayload";
+import { type JoinRoomErrorPayload } from "../../../src/dispatcher/payloads/JoinRoomErrorPayload";
+import { type SubmitAskToJoinPayload } from "../../../src/dispatcher/payloads/SubmitAskToJoinPayload";
 import { ModuleRunner } from "../../../src/modules/ModuleRunner";
+import { type IApp } from "../../../src/utils/WidgetUtils-types";
+import { CallStore } from "../../../src/stores/CallStore";
+import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
+import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../src/MediaDeviceHandler";
 
 jest.mock("../../../src/Modal");
 
@@ -64,6 +70,12 @@ jest.mock("../../../src/audio/VoiceRecording", () => ({
     }),
 }));
 
+jest.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
+    [MediaDeviceKindEnum.AudioInput]: [],
+    [MediaDeviceKindEnum.VideoInput]: [],
+    [MediaDeviceKindEnum.AudioOutput]: [],
+});
+
 jest.mock("../../../src/utils/DMRoomMap", () => {
     const mock = {
         getUserIdForRoomId: jest.fn(),
@@ -76,7 +88,21 @@ jest.mock("../../../src/utils/DMRoomMap", () => {
     };
 });
 
-jest.mock("../../../src/stores/WidgetStore");
+jest.mock("../../../src/stores/WidgetStore", () => {
+    // This mock needs to use a real EventEmitter; require is the only way to import that in a hoisted block
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const EventEmitter = require("events");
+    const apps: IApp[] = [];
+    const instance = new (class extends EventEmitter {
+        getApps() {
+            return apps;
+        }
+        addVirtualWidget(app: IApp) {
+            apps.push(app);
+        }
+    })();
+    return { instance };
+});
 jest.mock("../../../src/stores/widgets/WidgetLayoutStore");
 
 describe("RoomViewStore", function () {
@@ -86,10 +112,12 @@ describe("RoomViewStore", function () {
     // we need to change the alias to ensure cache misses as the cache exists
     // through all tests.
     let alias = "#somealias2:aser.ver";
+    const getRooms = jest.fn();
     const mockClient = getMockClientWithEventEmitter({
         joinRoom: jest.fn(),
         getRoom: jest.fn(),
         getRoomIdForAlias: jest.fn(),
+        getRooms,
         isGuest: jest.fn(),
         getUserId: jest.fn().mockReturnValue(userId),
         getSafeUserId: jest.fn().mockReturnValue(userId),
@@ -101,9 +129,18 @@ describe("RoomViewStore", function () {
         knockRoom: jest.fn(),
         leave: jest.fn(),
         setRoomAccountData: jest.fn(),
+        getAccountData: jest.fn(),
+        matrixRTC: new (class extends EventEmitter {
+            getRoomSession() {
+                return new (class extends EventEmitter {
+                    memberships = [];
+                })();
+            }
+        })(),
     });
     const room = new Room(roomId, mockClient, userId);
     const room2 = new Room(roomId2, mockClient, userId);
+    getRooms.mockReturnValue([room, room2]);
 
     const viewCall = async (): Promise<void> => {
         dis.dispatch<ViewRoomPayload>({
@@ -160,7 +197,6 @@ describe("RoomViewStore", function () {
         stores._SlidingSyncManager = slidingSyncManager;
         stores._PosthogAnalytics = new MockPosthogAnalytics();
         stores._SpaceStore = new MockSpaceStore();
-        stores._VoiceBroadcastPlaybacksStore = new VoiceBroadcastPlaybacksStore(stores.voiceBroadcastRecordingsStore);
         roomViewStore = new RoomViewStore(dis, stores);
         stores._RoomViewStore = roomViewStore;
     });
@@ -306,6 +342,7 @@ describe("RoomViewStore", function () {
     });
 
     it("when viewing a call without a broadcast, it should not raise an error", async () => {
+        await setupAsyncStoreWithClient(CallStore.instance, MatrixClientPeg.safeGet());
         await viewCall();
     });
 
@@ -338,90 +375,8 @@ describe("RoomViewStore", function () {
         });
         dis.dispatch({ action: Action.ViewRoom, room_id: roomId });
         await untilDispatch(Action.ActiveRoomChanged, dis);
-        expect(mockClient.setRoomAccountData).toHaveBeenCalledWith(roomId, "com.famedly.marked_unread", {
+        expect(mockClient.setRoomAccountData).toHaveBeenCalledWith(roomId, "m.marked_unread", {
             unread: false,
-        });
-    });
-
-    describe("when listening to a voice broadcast", () => {
-        let voiceBroadcastPlayback: VoiceBroadcastPlayback;
-
-        beforeEach(() => {
-            voiceBroadcastPlayback = new VoiceBroadcastPlayback(
-                mkVoiceBroadcastInfoStateEvent(
-                    roomId,
-                    VoiceBroadcastInfoState.Started,
-                    mockClient.getSafeUserId(),
-                    "d42",
-                ),
-                mockClient,
-                stores.voiceBroadcastRecordingsStore,
-            );
-            stores.voiceBroadcastPlaybacksStore.setCurrent(voiceBroadcastPlayback);
-            jest.spyOn(voiceBroadcastPlayback, "pause").mockImplementation();
-        });
-
-        it("and viewing a call it should pause the current broadcast", async () => {
-            await viewCall();
-            expect(voiceBroadcastPlayback.pause).toHaveBeenCalled();
-            expect(roomViewStore.isViewingCall()).toBe(true);
-        });
-    });
-
-    describe("when recording a voice broadcast", () => {
-        beforeEach(() => {
-            stores.voiceBroadcastRecordingsStore.setCurrent(
-                new VoiceBroadcastRecording(
-                    mkVoiceBroadcastInfoStateEvent(
-                        roomId,
-                        VoiceBroadcastInfoState.Started,
-                        mockClient.getSafeUserId(),
-                        "d42",
-                    ),
-                    mockClient,
-                ),
-            );
-        });
-
-        it("and trying to view a call, it should not actually view it and show the info dialog", async () => {
-            await viewCall();
-            expect(Modal.createDialog).toMatchSnapshot();
-            expect(roomViewStore.isViewingCall()).toBe(false);
-        });
-
-        describe("and viewing a room with a broadcast", () => {
-            beforeEach(async () => {
-                const broadcastEvent = mkVoiceBroadcastInfoStateEvent(
-                    roomId2,
-                    VoiceBroadcastInfoState.Started,
-                    mockClient.getSafeUserId(),
-                    "ABC123",
-                );
-                room2.addLiveEvents([broadcastEvent]);
-
-                stores.voiceBroadcastPlaybacksStore.getByInfoEvent(broadcastEvent, mockClient);
-                dis.dispatch({ action: Action.ViewRoom, room_id: roomId2 });
-                await untilDispatch(Action.ActiveRoomChanged, dis);
-            });
-
-            it("should continue recording", () => {
-                expect(stores.voiceBroadcastPlaybacksStore.getCurrent()).toBeNull();
-                expect(stores.voiceBroadcastRecordingsStore.getCurrent()?.getState()).toBe(
-                    VoiceBroadcastInfoState.Started,
-                );
-            });
-
-            describe("and stopping the recording", () => {
-                beforeEach(async () => {
-                    await stores.voiceBroadcastRecordingsStore.getCurrent()?.stop();
-                    // check test precondition
-                    expect(stores.voiceBroadcastRecordingsStore.getCurrent()).toBeNull();
-                });
-
-                it("should view the broadcast", () => {
-                    expect(stores.voiceBroadcastPlaybacksStore.getCurrent()?.infoEvent.getRoomId()).toBe(roomId2);
-                });
-            });
         });
     });
 
@@ -465,7 +420,7 @@ describe("RoomViewStore", function () {
                 try {
                     expect(setRoomVisible.mock.calls[i][0]).toEqual(v[0]);
                     expect(setRoomVisible.mock.calls[i][1]).toEqual(v[1]);
-                } catch (err) {
+                } catch {
                     throw new Error(`i=${i} got ${setRoomVisible.mock.calls[i]} want ${v}`);
                 }
             });

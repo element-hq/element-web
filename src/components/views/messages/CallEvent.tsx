@@ -2,14 +2,14 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React, { forwardRef, useCallback, useContext, useMemo } from "react";
 
 import type { MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
-import { ConnectionState, ElementCall } from "../../../models/Call";
+import { ConnectionState, type ElementCall } from "../../../models/Call";
 import { _t } from "../../../languageHandler";
 import {
     useCall,
@@ -20,7 +20,7 @@ import {
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import type { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../../dispatcher/actions";
-import AccessibleButton, { AccessibleButtonKind, ButtonEvent } from "../elements/AccessibleButton";
+import AccessibleButton, { type AccessibleButtonKind, type ButtonEvent } from "../elements/AccessibleButton";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { LiveContentSummary, LiveContentType } from "../rooms/LiveContentSummary";
 import FacePile from "../elements/FacePile";
@@ -126,10 +126,6 @@ const ActiveLoadedCallEvent = forwardRef<any, ActiveLoadedCallEventProps>(({ mxE
                 return [_t("action|leave"), "danger", disconnect];
             case ConnectionState.Disconnecting:
                 return [_t("action|leave"), "danger", null];
-            case ConnectionState.Connecting:
-            case ConnectionState.Lobby:
-            case ConnectionState.WidgetLoading:
-                return [_t("action|join"), "primary", null];
         }
     }, [connectionState, connect, disconnect]);
 

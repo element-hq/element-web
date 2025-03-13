@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -113,7 +113,7 @@ Please see LICENSE files in the repository root for full details.
             display: flex;
             align-items: center;
 
-            & + .mx_RoomListHeader {
+            & + .mx_LegacyRoomListHeader {
                 margin-top: 12px;
             }
 
@@ -176,11 +176,11 @@ Please see LICENSE files in the repository root for full details.
             }
 
             .mx_LeftPanel_recentsButton::before {
-                mask-image: url("$(res)/img/element-icons/clock.svg");
+                mask-image: url("@vector-im/compound-design-tokens/icons/time.svg");
             }
         }
 
-        .mx_RoomListHeader:first-child {
+        .mx_LegacyRoomListHeader:first-child {
             margin-top: 12px;
         }
 

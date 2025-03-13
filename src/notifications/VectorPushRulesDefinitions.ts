@@ -2,14 +2,14 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2016-2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { IAnnotatedPushRule, PushRuleAction, RuleId } from "matrix-js-sdk/src/matrix";
+import { type IAnnotatedPushRule, type PushRuleAction, RuleId } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _td, TranslationKey } from "../languageHandler";
+import { _td, type TranslationKey } from "../languageHandler";
 import { StandardActions } from "./StandardActions";
 import { PushRuleVectorState, VectorState } from "./PushRuleVectorState";
 import { NotificationUtils } from "./NotificationUtils";

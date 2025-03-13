@@ -2,35 +2,35 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021-2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, KeyboardEvent } from "react";
+import React, { createRef, type KeyboardEvent } from "react";
 import {
-    Thread,
+    type Thread,
     THREAD_RELATION_TYPE,
     ThreadEvent,
-    Room,
+    type Room,
     RoomEvent,
-    IEventRelation,
-    MatrixEvent,
+    type IEventRelation,
+    type MatrixEvent,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import classNames from "classnames";
 
 import BaseCard from "../views/right_panel/BaseCard";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
-import ResizeNotifier from "../../utils/ResizeNotifier";
+import type ResizeNotifier from "../../utils/ResizeNotifier";
 import MessageComposer from "../views/rooms/MessageComposer";
-import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
+import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import { Layout } from "../../settings/enums/Layout";
 import TimelinePanel from "./TimelinePanel";
 import dis from "../../dispatcher/dispatcher";
-import { ActionPayload } from "../../dispatcher/payloads";
+import { type ActionPayload } from "../../dispatcher/payloads";
 import { Action } from "../../dispatcher/actions";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-import { E2EStatus } from "../../utils/ShieldUtils";
+import { type E2EStatus } from "../../utils/ShieldUtils";
 import EditorStateTransfer from "../../utils/EditorStateTransfer";
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 import ContentMessages from "../../ContentMessages";
@@ -39,18 +39,19 @@ import { _t } from "../../languageHandler";
 import ThreadListContextMenu from "../views/context_menus/ThreadListContextMenu";
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import SettingsStore from "../../settings/SettingsStore";
-import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import FileDropTarget from "./FileDropTarget";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import Measured from "../views/elements/Measured";
 import PosthogTrackers from "../../PosthogTrackers";
-import { ButtonEvent } from "../views/elements/AccessibleButton";
+import { type ButtonEvent } from "../views/elements/AccessibleButton";
 import Spinner from "../views/elements/Spinner";
-import { ComposerInsertPayload, ComposerType } from "../../dispatcher/payloads/ComposerInsertPayload";
+import { type ComposerInsertPayload, ComposerType } from "../../dispatcher/payloads/ComposerInsertPayload";
 import Heading from "../views/typography/Heading";
 import { SdkContextClass } from "../../contexts/SDKContext";
-import { ThreadPayload } from "../../dispatcher/payloads/ThreadPayload";
+import { type ThreadPayload } from "../../dispatcher/payloads/ThreadPayload";
+import { ScopedRoomContextProvider } from "../../contexts/ScopedRoomContext.tsx";
 
 interface IProps {
     room: Room;
@@ -75,10 +76,10 @@ interface IState {
 
 export default class ThreadView extends React.Component<IProps, IState> {
     public static contextType = RoomContext;
-    public declare context: React.ContextType<typeof RoomContext>;
+    declare public context: React.ContextType<typeof RoomContext>;
 
-    private dispatcherRef: string | null = null;
-    private readonly layoutWatcherRef: string;
+    private dispatcherRef?: string;
+    private layoutWatcherRef?: string;
     private timelinePanel = createRef<TimelinePanel>();
     private card = createRef<HTMLDivElement>();
 
@@ -91,7 +92,6 @@ export default class ThreadView extends React.Component<IProps, IState> {
         this.setEventId(this.props.mxEvent);
         const thread = this.props.room.getThread(this.eventId) ?? undefined;
 
-        this.setupThreadListeners(thread);
         this.state = {
             layout: SettingsStore.getValue("layout"),
             narrow: false,
@@ -100,13 +100,15 @@ export default class ThreadView extends React.Component<IProps, IState> {
                 return ev.isRelation(THREAD_RELATION_TYPE.name) && !ev.status;
             }),
         };
+    }
+
+    public componentDidMount(): void {
+        this.setupThreadListeners(this.state.thread);
 
         this.layoutWatcherRef = SettingsStore.watchSetting("layout", null, (...[, , , value]) =>
             this.setState({ layout: value as Layout }),
         );
-    }
 
-    public componentDidMount(): void {
         if (this.state.thread) {
             this.postThreadUpdate(this.state.thread);
         }
@@ -118,7 +120,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
     }
 
     public componentWillUnmount(): void {
-        if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
+        dis.unregister(this.dispatcherRef);
         const roomId = this.props.mxEvent.getRoomId();
         SettingsStore.unwatchSetting(this.layoutWatcherRef);
 
@@ -421,14 +423,12 @@ export default class ThreadView extends React.Component<IProps, IState> {
         }
 
         return (
-            <RoomContext.Provider
-                value={{
-                    ...this.context,
-                    timelineRenderingType: TimelineRenderingType.Thread,
-                    threadId: this.state.thread?.id,
-                    liveTimeline: this.state?.thread?.timelineSet?.getLiveTimeline(),
-                    narrow: this.state.narrow,
-                }}
+            <ScopedRoomContextProvider
+                {...this.context}
+                timelineRenderingType={TimelineRenderingType.Thread}
+                threadId={this.state.thread?.id}
+                liveTimeline={this.state?.thread?.timelineSet?.getLiveTimeline()}
+                narrow={this.state.narrow}
             >
                 <BaseCard
                     className={classNames("mx_ThreadView mx_ThreadPanel", {
@@ -443,7 +443,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
                         PosthogTrackers.trackInteraction("WebThreadViewBackButton", ev);
                     }}
                 >
-                    {this.card.current && <Measured sensor={this.card.current} onMeasurement={this.onMeasurement} />}
+                    <Measured sensor={this.card} onMeasurement={this.onMeasurement} />
                     <div className="mx_ThreadView_timelinePanelWrapper">{timeline}</div>
 
                     {ContentMessages.sharedInstance().getCurrentUploads(threadRelation).length > 0 && (
@@ -462,7 +462,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
                         />
                     )}
                 </BaseCard>
-            </RoomContext.Provider>
+            </ScopedRoomContextProvider>
         );
     }
 }

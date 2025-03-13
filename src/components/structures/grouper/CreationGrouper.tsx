@@ -2,17 +2,17 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode } from "react";
-import { EventType, M_BEACON_INFO, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import React, { type ReactNode } from "react";
+import { EventType, M_BEACON_INFO, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { BaseGrouper } from "./BaseGrouper";
-import MessagePanel, { WrappedEvent } from "../MessagePanel";
-import { VoiceBroadcastInfoEventType } from "../../../voice-broadcast";
+import { type WrappedEvent } from "../MessagePanel";
+import type MessagePanel from "../MessagePanel";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { _t } from "../../../languageHandler";
 import DateSeparator from "../../views/messages/DateSeparator";
@@ -50,11 +50,6 @@ export class CreationGrouper extends BaseGrouper {
         // beacons are not part of room creation configuration
         // should be shown in timeline
         if (M_BEACON_INFO.matches(eventType)) {
-            return false;
-        }
-
-        if (VoiceBroadcastInfoEventType === eventType) {
-            // always show voice broadcast info events in timeline
             return false;
         }
 

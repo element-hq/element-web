@@ -2,19 +2,18 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019 Vector Creations Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { Device } from "matrix-js-sdk/src/matrix";
-import { GeneratedSas, EmojiMapping } from "matrix-js-sdk/src/crypto-api";
+import { type Device } from "matrix-js-sdk/src/matrix";
+import { type GeneratedSas, type EmojiMapping } from "matrix-js-sdk/src/crypto-api";
 import SasEmoji from "@matrix-org/spec/sas-emoji.json";
 
 import { _t, getNormalizedLanguageKeys, getUserLanguage } from "../../../languageHandler";
 import { PendingActionSpinner } from "../right_panel/EncryptionInfo";
 import AccessibleButton from "../elements/AccessibleButton";
-import { fixupColorFonts } from "../../../utils/FontManager";
 
 interface IProps {
     pending?: boolean;
@@ -88,11 +87,6 @@ export default class VerificationShowSas extends React.Component<IProps, IState>
         this.state = {
             pending: false,
         };
-
-        // As this component is also used before login (during complete security),
-        // also make sure we have a working emoji font to display the SAS emojis here.
-        // This is also done from LoggedInView.
-        fixupColorFonts();
     }
 
     private onMatchClick = (): void => {
@@ -171,11 +165,11 @@ export default class VerificationShowSas extends React.Component<IProps, IState>
         } else {
             confirm = (
                 <div className="mx_VerificationShowSas_buttonRow">
-                    <AccessibleButton onClick={this.onDontMatchClick} kind="danger">
-                        {_t("encryption|verification|sas_no_match")}
-                    </AccessibleButton>
                     <AccessibleButton onClick={this.onMatchClick} kind="primary">
                         {_t("encryption|verification|sas_match")}
+                    </AccessibleButton>
+                    <AccessibleButton onClick={this.onDontMatchClick} kind="secondary">
+                        {_t("encryption|verification|sas_no_match")}
                     </AccessibleButton>
                 </div>
             );

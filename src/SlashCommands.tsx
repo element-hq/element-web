@@ -5,14 +5,21 @@ Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 Copyright 2018 New Vector Ltd
 Copyright 2015, 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import * as React from "react";
-import { ContentHelpers, Direction, EventType, IContent, MRoomTopicEventContent, User } from "matrix-js-sdk/src/matrix";
+import {
+    ContentHelpers,
+    Direction,
+    EventType,
+    type IContent,
+    type MRoomTopicEventContent,
+    type User,
+} from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { KnownMembership, RoomMemberEventContent } from "matrix-js-sdk/src/types";
+import { KnownMembership, type RoomMemberEventContent } from "matrix-js-sdk/src/types";
 
 import dis from "./dispatcher/dispatcher";
 import { _t, _td, UserFriendlyError } from "./languageHandler";
@@ -29,7 +36,7 @@ import { WidgetType } from "./widgets/WidgetType";
 import { Jitsi } from "./widgets/Jitsi";
 import BugReportDialog from "./components/views/dialogs/BugReportDialog";
 import { ensureDMExists } from "./createRoom";
-import { ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
+import { type ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
 import { Action } from "./dispatcher/actions";
 import SdkConfig from "./SdkConfig";
 import SettingsStore from "./settings/SettingsStore";
@@ -44,12 +51,11 @@ import InfoDialog from "./components/views/dialogs/InfoDialog";
 import SlashCommandHelpDialog from "./components/views/dialogs/SlashCommandHelpDialog";
 import { shouldShowComponent } from "./customisations/helpers/UIComponents";
 import { TimelineRenderingType } from "./contexts/RoomContext";
-import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
 import VoipUserMapper from "./VoipUserMapper";
 import { htmlSerializeFromMdIfNeeded } from "./editor/serialize";
 import { leaveRoomBehaviour } from "./utils/leave-behaviour";
 import { MatrixClientPeg } from "./MatrixClientPeg";
-import { getDeviceCryptoInfo } from "./utils/crypto/deviceInfo";
 import { isCurrentLocalRoom, reject, singleMxcUpload, success, successSync } from "./slash-commands/utils";
 import { deop, op } from "./slash-commands/op";
 import { CommandCategories } from "./slash-commands/interface";
@@ -450,7 +456,7 @@ export const Commands = [
                 const matches = args.match(/^(\S+)$/);
                 if (matches) {
                     let roomAlias = matches[1];
-                    if (roomAlias[0] !== "#") return reject(this.getUsage());
+                    if (!roomAlias.startsWith("#")) return reject(this.getUsage());
 
                     if (!roomAlias.includes(":")) {
                         roomAlias += ":" + cli.getDomain();
@@ -659,75 +665,12 @@ export const Commands = [
         renderingTypes: [TimelineRenderingType.Room],
     }),
     new Command({
-        command: "verify",
-        args: "<user-id> <device-id> <device-signing-key>",
-        description: _td("slash_command|verify"),
-        runFn: function (cli, roomId, threadId, args) {
-            if (args) {
-                const matches = args.match(/^(\S+) +(\S+) +(\S+)$/);
-                if (matches) {
-                    const userId = matches[1];
-                    const deviceId = matches[2];
-                    const fingerprint = matches[3];
-
-                    return success(
-                        (async (): Promise<void> => {
-                            const device = await getDeviceCryptoInfo(cli, userId, deviceId);
-                            if (!device) {
-                                throw new UserFriendlyError("slash_command|verify_unknown_pair", {
-                                    userId,
-                                    deviceId,
-                                    cause: undefined,
-                                });
-                            }
-                            const deviceTrust = await cli.getCrypto()?.getDeviceVerificationStatus(userId, deviceId);
-
-                            if (deviceTrust?.isVerified()) {
-                                if (device.getFingerprint() === fingerprint) {
-                                    throw new UserFriendlyError("slash_command|verify_nop");
-                                } else {
-                                    throw new UserFriendlyError("slash_command|verify_nop_warning_mismatch");
-                                }
-                            }
-
-                            if (device.getFingerprint() !== fingerprint) {
-                                const fprint = device.getFingerprint();
-                                throw new UserFriendlyError("slash_command|verify_mismatch", {
-                                    fprint,
-                                    userId,
-                                    deviceId,
-                                    fingerprint,
-                                    cause: undefined,
-                                });
-                            }
-
-                            await cli.setDeviceVerified(userId, deviceId, true);
-
-                            // Tell the user we verified everything
-                            Modal.createDialog(InfoDialog, {
-                                title: _t("slash_command|verify_success_title"),
-                                description: (
-                                    <div>
-                                        <p>{_t("slash_command|verify_success_description", { userId, deviceId })}</p>
-                                    </div>
-                                ),
-                            });
-                        })(),
-                    );
-                }
-            }
-            return reject(this.getUsage());
-        },
-        category: CommandCategories.advanced,
-        renderingTypes: [TimelineRenderingType.Room],
-    }),
-    new Command({
         command: "discardsession",
         description: _td("slash_command|discardsession"),
         isEnabled: (cli) => !isCurrentLocalRoom(cli),
         runFn: function (cli, roomId) {
             try {
-                cli.forceDiscardSession(roomId);
+                cli.getCrypto()?.forceDiscardSession(roomId);
             } catch (e) {
                 return reject(e instanceof Error ? e.message : e);
             }
@@ -994,7 +937,7 @@ Commands.forEach((cmd) => {
 export function parseCommandString(input: string): { cmd?: string; args?: string } {
     // trim any trailing whitespace, as it can confuse the parser for IRC-style commands
     input = input.trimEnd();
-    if (input[0] !== "/") return {}; // not a command
+    if (!input.startsWith("/")) return {}; // not a command
 
     const bits = input.match(/^(\S+?)(?:[ \n]+((.|\n)*))?$/);
     let cmd: string;

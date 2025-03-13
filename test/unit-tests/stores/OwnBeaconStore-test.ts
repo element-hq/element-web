@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -11,7 +11,7 @@ import {
     Beacon,
     BeaconEvent,
     getBeaconInfoIdentifier,
-    MatrixEvent,
+    type MatrixEvent,
     RoomStateEvent,
     RoomMember,
     ContentHelpers,
@@ -19,7 +19,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
-import { Mocked } from "jest-mock";
+import { type Mocked } from "jest-mock";
 
 import { OwnBeaconStore, OwnBeaconStoreEvent } from "../../../src/stores/OwnBeaconStore";
 import {

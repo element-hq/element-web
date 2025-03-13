@@ -1,7 +1,7 @@
 /*
 Copyright 2024 New Vector Ltd.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -11,6 +11,7 @@ import { bootstrapCrossSigningForClient } from "../../pages/client.ts";
 
 /** Tests for the "invisible crypto" behaviour -- i.e., when the "exclude insecure devices" setting is enabled */
 test.describe("Invisible cryptography", () => {
+    test.slow();
     test.use({
         displayName: "Alice",
         botCreateOpts: { displayName: "Bob" },
@@ -51,6 +52,6 @@ test.describe("Invisible cryptography", () => {
         /* should show an error for a message from a previously verified device */
         await bobSecondDevice.sendMessage(testRoomId, "test encrypted from user that was previously verified");
         const lastTile = page.locator(".mx_EventTile_last");
-        await expect(lastTile).toContainText("Verified identity has changed");
+        await expect(lastTile).toContainText("Sender's verified identity has changed");
     });
 });

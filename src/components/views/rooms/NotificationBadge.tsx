@@ -2,16 +2,16 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import { Tooltip } from "@vector-im/compound-web";
 
 import SettingsStore from "../../../settings/SettingsStore";
-import { XOR } from "../../../@types/common";
-import { NotificationState, NotificationStateEvents } from "../../../stores/notifications/NotificationState";
+import { type XOR } from "../../../@types/common";
+import { type NotificationState, NotificationStateEvents } from "../../../stores/notifications/NotificationState";
 import { _t } from "../../../languageHandler";
 import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
 import { StatelessNotificationBadge } from "./NotificationBadge/StatelessNotificationBadge";
@@ -44,26 +44,29 @@ interface IState {
 }
 
 export default class NotificationBadge extends React.PureComponent<XOR<IProps, IClickableProps>, IState> {
-    private countWatcherRef: string;
+    private countWatcherRef?: string;
 
     public constructor(props: IProps) {
         super(props);
-        this.props.notification.on(NotificationStateEvents.Update, this.onNotificationUpdate);
 
         this.state = {
             showCounts: SettingsStore.getValue("Notifications.alwaysShowBadgeCounts", this.roomId),
         };
+    }
+
+    private get roomId(): string | null {
+        // We should convert this to null for safety with the SettingsStore
+        return this.props.roomId || null;
+    }
+
+    public componentDidMount(): void {
+        this.props.notification.on(NotificationStateEvents.Update, this.onNotificationUpdate);
 
         this.countWatcherRef = SettingsStore.watchSetting(
             "Notifications.alwaysShowBadgeCounts",
             this.roomId,
             this.countPreferenceChanged,
         );
-    }
-
-    private get roomId(): string | null {
-        // We should convert this to null for safety with the SettingsStore
-        return this.props.roomId || null;
     }
 
     public componentWillUnmount(): void {

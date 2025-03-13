@@ -2,14 +2,14 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import fetchMock from "fetch-mock-jest";
-import { Translation } from "matrix-web-i18n";
-import { TranslationStringsObject } from "@matrix-org/react-sdk-module-api";
+import { type Translation } from "matrix-web-i18n";
+import { type TranslationStringsObject } from "@matrix-org/react-sdk-module-api";
 
 import SdkConfig from "../../src/SdkConfig";
 import {
@@ -21,11 +21,11 @@ import {
     setLanguage,
     setMissingEntryGenerator,
     substitute,
-    TranslatedString,
+    type TranslatedString,
     UserFriendlyError,
-    TranslationKey,
-    IVariables,
-    Tags,
+    type TranslationKey,
+    type IVariables,
+    type Tags,
 } from "../../src/languageHandler";
 import { stubClient } from "../test-utils";
 import { setupLanguageMock } from "../setup/setupLanguage";

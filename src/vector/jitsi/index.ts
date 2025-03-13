@@ -1,19 +1,19 @@
 /*
 Copyright 2020-2024 New Vector Ltd.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { KJUR } from "jsrsasign";
 import {
-    IOpenIDCredentials,
-    IWidgetApiRequest,
-    IWidgetApiRequestData,
-    IWidgetApiResponseData,
+    type IOpenIDCredentials,
+    type IWidgetApiRequest,
+    type IWidgetApiRequestData,
+    type IWidgetApiResponseData,
     VideoConferenceCapabilities,
     WidgetApi,
-    WidgetApiAction,
+    type WidgetApiAction,
 } from "matrix-widget-api";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -28,7 +28,7 @@ import type {
     InterfaceConfig as _InterfaceConfig,
 } from "jitsi-meet";
 import { ElementWidgetActions } from "../../stores/widgets/ElementWidgetActions";
-import { IConfigOptions } from "../../IConfigOptions";
+import { type IConfigOptions } from "../../IConfigOptions";
 import { SnakedObject } from "../../utils/SnakedObject";
 import { ElementWidgetCapabilities } from "../../stores/widgets/ElementWidgetCapabilities";
 import { getVectorConfig } from "../getconfig";
@@ -62,6 +62,7 @@ interface ExternalAPIOptions extends _ExternalAPIOptions {
 }
 
 // We have to trick webpack into loading our CSS for us.
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 require("./index.pcss");
 
 const JITSI_OPENIDTOKEN_JWT_AUTH = "openidtoken-jwt";

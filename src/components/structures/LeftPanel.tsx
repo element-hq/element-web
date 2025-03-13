@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -12,18 +12,18 @@ import classNames from "classnames";
 
 import dis from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
-import RoomList from "../views/rooms/RoomList";
-import LegacyCallHandler from "../../LegacyCallHandler";
+import LegacyRoomList from "../views/rooms/LegacyRoomList";
+import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
 import { HEADER_HEIGHT } from "../views/rooms/RoomSublist";
 import { Action } from "../../dispatcher/actions";
 import RoomSearch from "./RoomSearch";
-import ResizeNotifier from "../../utils/ResizeNotifier";
+import type ResizeNotifier from "../../utils/ResizeNotifier";
 import SpaceStore from "../../stores/spaces/SpaceStore";
-import { MetaSpace, SpaceKey, UPDATE_SELECTED_SPACE } from "../../stores/spaces";
+import { MetaSpace, type SpaceKey, UPDATE_SELECTED_SPACE } from "../../stores/spaces";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import UIStore from "../../stores/UIStore";
-import { IState as IRovingTabIndexState } from "../../accessibility/RovingTabIndex";
-import RoomListHeader from "../views/rooms/RoomListHeader";
+import { type IState as IRovingTabIndexState } from "../../accessibility/RovingTabIndex";
+import LegacyRoomListHeader from "../views/rooms/LegacyRoomListHeader";
 import { BreadcrumbsStore } from "../../stores/BreadcrumbsStore";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../stores/room-list/RoomListStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
@@ -32,11 +32,12 @@ import RoomBreadcrumbs from "../views/rooms/RoomBreadcrumbs";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../settings/UIFeature";
-import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../views/elements/AccessibleButton";
 import PosthogTrackers from "../../PosthogTrackers";
-import PageType from "../../PageTypes";
-import { UserOnboardingButton } from "../views/user-onboarding/UserOnboardingButton";
+import type PageType from "../../PageTypes";
 import { Landmark, LandmarkNavigation } from "../../accessibility/LandmarkNavigation";
+import SettingsStore from "../../settings/SettingsStore";
+import { RoomListPanel } from "../views/rooms/RoomListPanel";
 
 interface IProps {
     isMinimized: boolean;
@@ -52,11 +53,12 @@ enum BreadcrumbsMode {
 interface IState {
     showBreadcrumbs: BreadcrumbsMode;
     activeSpace: SpaceKey;
+    supportsPstnProtocol: boolean;
 }
 
 export default class LeftPanel extends React.Component<IProps, IState> {
     private listContainerRef = createRef<HTMLDivElement>();
-    private roomListRef = createRef<RoomList>();
+    private roomListRef = createRef<LegacyRoomList>();
     private focusedElement: Element | null = null;
     private isDoingStickyHeaders = false;
 
@@ -66,11 +68,8 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         this.state = {
             activeSpace: SpaceStore.instance.activeSpace,
             showBreadcrumbs: LeftPanel.breadcrumbsMode,
+            supportsPstnProtocol: LegacyCallHandler.instance.getSupportsPstnProtocol(),
         };
-
-        BreadcrumbsStore.instance.on(UPDATE_EVENT, this.onBreadcrumbsUpdate);
-        RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.onBreadcrumbsUpdate);
-        SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
     }
 
     private static get breadcrumbsMode(): BreadcrumbsMode {
@@ -78,6 +77,11 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     }
 
     public componentDidMount(): void {
+        BreadcrumbsStore.instance.on(UPDATE_EVENT, this.onBreadcrumbsUpdate);
+        RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.onBreadcrumbsUpdate);
+        SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
+        LegacyCallHandler.instance.on(LegacyCallHandlerEvent.ProtocolSupport, this.updateProtocolSupport);
+
         if (this.listContainerRef.current) {
             UIStore.instance.trackElementDimensions("ListContainer", this.listContainerRef.current);
             // Using the passive option to not block the main thread
@@ -91,6 +95,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         BreadcrumbsStore.instance.off(UPDATE_EVENT, this.onBreadcrumbsUpdate);
         RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.onBreadcrumbsUpdate);
         SpaceStore.instance.off(UPDATE_SELECTED_SPACE, this.updateActiveSpace);
+        LegacyCallHandler.instance.off(LegacyCallHandlerEvent.ProtocolSupport, this.updateProtocolSupport);
         UIStore.instance.stopTrackingElementDimensions("ListContainer");
         UIStore.instance.removeListener("ListContainer", this.refreshStickyHeaders);
         this.listContainerRef.current?.removeEventListener("scroll", this.onScroll);
@@ -101,6 +106,10 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             this.refreshStickyHeaders();
         }
     }
+
+    private updateProtocolSupport = (): void => {
+        this.setState({ supportsPstnProtocol: LegacyCallHandler.instance.getSupportsPstnProtocol() });
+    };
 
     private updateActiveSpace = (activeSpace: SpaceKey): void => {
         this.setState({ activeSpace });
@@ -331,9 +340,8 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     private renderSearchDialExplore(): React.ReactNode {
         let dialPadButton: JSX.Element | undefined;
 
-        // If we have dialer support, show a button to bring up the dial pad
-        // to start a new call
-        if (LegacyCallHandler.instance.getSupportsPstnProtocol()) {
+        // If we have dialer support, show a button to bring up the dial pad to start a new call
+        if (this.state.supportsPstnProtocol) {
             dialPadButton = (
                 <AccessibleButton
                     className={classNames("mx_LeftPanel_dialPadButton", {})}
@@ -371,8 +379,25 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     }
 
     public render(): React.ReactNode {
+        const containerClasses = classNames({
+            mx_LeftPanel: true,
+            mx_LeftPanel_minimized: this.props.isMinimized,
+        });
+
+        const roomListClasses = classNames("mx_LeftPanel_actualRoomListContainer", "mx_AutoHideScrollbar");
+        const useNewRoomList = SettingsStore.getValue("feature_new_room_list");
+        if (useNewRoomList) {
+            return (
+                <div className={containerClasses}>
+                    <div className="mx_LeftPanel_roomListContainer">
+                        <RoomListPanel activeSpace={this.state.activeSpace} />
+                    </div>
+                </div>
+            );
+        }
+
         const roomList = (
-            <RoomList
+            <LegacyRoomList
                 onKeyDown={this.onKeyDown}
                 resizeNotifier={this.props.resizeNotifier}
                 onFocus={this.onFocus}
@@ -385,23 +410,12 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             />
         );
 
-        const containerClasses = classNames({
-            mx_LeftPanel: true,
-            mx_LeftPanel_minimized: this.props.isMinimized,
-        });
-
-        const roomListClasses = classNames("mx_LeftPanel_actualRoomListContainer", "mx_AutoHideScrollbar");
-
         return (
             <div className={containerClasses}>
                 <div className="mx_LeftPanel_roomListContainer">
                     {shouldShowComponent(UIComponent.FilterContainer) && this.renderSearchDialExplore()}
                     {this.renderBreadcrumbs()}
-                    {!this.props.isMinimized && <RoomListHeader onVisibilityChange={this.refreshStickyHeaders} />}
-                    <UserOnboardingButton
-                        selected={this.props.pageType === PageType.HomePage}
-                        minimized={this.props.isMinimized}
-                    />
+                    {!this.props.isMinimized && <LegacyRoomListHeader onVisibilityChange={this.refreshStickyHeaders} />}
                     <nav className="mx_LeftPanel_roomListWrapper" aria-label={_t("common|rooms")}>
                         <div
                             className={roomListClasses}

@@ -5,32 +5,34 @@ Copyright 2018 New Vector Ltd
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    MatrixClient,
-    MatrixEvent,
-    Room,
-    SSOAction,
+    type MatrixClient,
+    type MatrixEvent,
+    type Room,
+    type SSOAction,
     encodeUnpaddedBase64,
-    OidcRegistrationClientMetadata,
+    type OidcRegistrationClientMetadata,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import dis from "./dispatcher/dispatcher";
-import BaseEventIndexManager from "./indexing/BaseEventIndexManager";
-import { ActionPayload } from "./dispatcher/payloads";
-import { CheckUpdatesPayload } from "./dispatcher/payloads/CheckUpdatesPayload";
+import type BaseEventIndexManager from "./indexing/BaseEventIndexManager";
+import { type ActionPayload } from "./dispatcher/payloads";
+import { type CheckUpdatesPayload } from "./dispatcher/payloads/CheckUpdatesPayload";
 import { Action } from "./dispatcher/actions";
 import { hideToast as hideUpdateToast } from "./toasts/UpdateToast";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import { idbLoad, idbSave, idbDelete } from "./utils/StorageAccess";
-import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
-import { IConfigOptions } from "./IConfigOptions";
+import { type ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
+import { type IConfigOptions } from "./IConfigOptions";
 import SdkConfig from "./SdkConfig";
 import { buildAndEncodePickleKey, encryptPickleKey } from "./utils/tokens/pickling";
+import Favicon from "./favicon.ts";
+import { getVectorConfig } from "./vector/getconfig.ts";
 
 export const SSO_HOMESERVER_URL_KEY = "mx_sso_hs_url";
 export const SSO_ID_SERVER_URL_KEY = "mx_sso_is_url";
@@ -66,14 +68,20 @@ const UPDATE_DEFER_KEY = "mx_defer_update";
 export default abstract class BasePlatform {
     protected notificationCount = 0;
     protected errorDidOccur = false;
+    protected _favicon?: Favicon;
 
     protected constructor() {
         dis.register(this.onAction);
         this.startUpdateCheck = this.startUpdateCheck.bind(this);
     }
 
-    public abstract getConfig(): Promise<IConfigOptions | undefined>;
+    public async getConfig(): Promise<IConfigOptions | undefined> {
+        return getVectorConfig();
+    }
 
+    /**
+     * Get a sensible default display name for the device Element is running on
+     */
     public abstract getDefaultDeviceDisplayName(): string;
 
     protected onAction = (payload: ActionPayload): void => {
@@ -89,11 +97,15 @@ export default abstract class BasePlatform {
     public abstract getHumanReadableName(): string;
 
     public setNotificationCount(count: number): void {
+        if (this.notificationCount === count) return;
         this.notificationCount = count;
+        this.updateFavicon();
     }
 
     public setErrorStatus(errorDidOccur: boolean): void {
+        if (this.errorDidOccur === errorDidOccur) return;
         this.errorDidOccur = errorDidOccur;
+        this.updateFavicon();
     }
 
     /**
@@ -129,7 +141,7 @@ export default abstract class BasePlatform {
         try {
             const [version, deferUntil] = JSON.parse(localStorage.getItem(UPDATE_DEFER_KEY)!);
             return newVersion !== version || Date.now() > deferUntil;
-        } catch (e) {
+        } catch {
             return true;
         }
     }
@@ -380,7 +392,7 @@ export default abstract class BasePlatform {
 
         try {
             await idbSave("pickleKey", [userId, deviceId], data);
-        } catch (e) {
+        } catch {
             return null;
         }
         return encodeUnpaddedBase64(randomArray);
@@ -456,4 +468,34 @@ export default abstract class BasePlatform {
         url.hash = "";
         return url;
     }
+
+    /**
+     * Delay creating the `Favicon` instance until first use (on the first notification) as
+     * it uses canvas, which can trigger a permission prompt in Firefox's resist fingerprinting mode.
+     * See https://github.com/element-hq/element-web/issues/9605.
+     */
+    public get favicon(): Favicon {
+        if (this._favicon) {
+            return this._favicon;
+        }
+        this._favicon = new Favicon();
+        return this._favicon;
+    }
+
+    private updateFavicon(): void {
+        let bgColor = "#d00";
+        let notif: string | number = this.notificationCount;
+
+        if (this.errorDidOccur) {
+            notif = notif || "×";
+            bgColor = "#f00";
+        }
+
+        this.favicon.badge(notif, { bgColor });
+    }
+
+    /**
+     * Begin update polling, if applicable
+     */
+    public startUpdater(): void {}
 }

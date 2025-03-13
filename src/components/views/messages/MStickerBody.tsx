@@ -1,16 +1,17 @@
 /*
 Copyright 2018-2024 New Vector Ltd.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ComponentProps, ReactNode } from "react";
-import { Tooltip } from "@vector-im/compound-web";
-import { MediaEventContent } from "matrix-js-sdk/src/types";
+import React, { type ComponentProps, type ReactNode } from "react";
+import { type Tooltip } from "@vector-im/compound-web";
+import { type MediaEventContent } from "matrix-js-sdk/src/types";
 
 import MImageBody from "./MImageBody";
 import { BLURHASH_FIELD } from "../../../utils/image-media";
+import IconsShowStickersSvg from "../../../../res/img/icons-show-stickers.svg";
 
 export default class MStickerBody extends MImageBody {
     // Mostly empty to prevent default behaviour of MImageBody
@@ -44,7 +45,7 @@ export default class MStickerBody extends MImageBody {
                 aria-hidden
                 alt=""
                 className="mx_MStickerBody_placeholder"
-                src={require("../../../../res/img/icons-show-stickers.svg").default}
+                src={IconsShowStickersSvg}
                 width="80"
                 height="80"
                 onMouseEnter={this.onImageEnter}

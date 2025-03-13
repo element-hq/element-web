@@ -573,7 +573,10 @@ components.forEach((graph) => {
 
                     let variations = cartesianProduct(
                         Object.keys(job.strategy.matrix)
-                            .filter((key) => key !== "include" && key !== "exclude")
+                            .filter(
+                                (key) =>
+                                    key !== "include" && key !== "exclude" && Array.isArray(job.strategy!.matrix[key]),
+                            )
                             .map((matrixKey) => {
                                 return job.strategy!.matrix[matrixKey].map((value) => ({ [matrixKey]: value }));
                             }),

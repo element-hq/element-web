@@ -2,30 +2,29 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2016-2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, ReactNode } from "react";
-import ReactDOM from "react-dom";
+import React, { createRef, type ReactNode } from "react";
 import {
-    Room,
+    type Room,
     RoomEvent,
-    RoomMember,
+    type RoomMember,
     RoomMemberEvent,
-    MatrixEvent,
+    type MatrixEvent,
     MatrixEventEvent,
-    EventTimelineSet,
-    IRoomTimelineData,
+    type EventTimelineSet,
+    type IRoomTimelineData,
     Direction,
     EventTimeline,
     EventType,
-    RelationType,
+    type RelationType,
     ClientEvent,
-    MatrixClient,
-    Relations,
-    MatrixError,
-    SyncState,
+    type MatrixClient,
+    type Relations,
+    type MatrixError,
+    type SyncState,
     TimelineWindow,
     Thread,
     ThreadEvent,
@@ -35,7 +34,7 @@ import { debounce, findLastIndex } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import SettingsStore from "../../settings/SettingsStore";
-import { Layout } from "../../settings/enums/Layout";
+import { type Layout } from "../../settings/enums/Layout";
 import { _t } from "../../languageHandler";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
@@ -46,15 +45,16 @@ import { Action } from "../../dispatcher/actions";
 import Timer from "../../utils/Timer";
 import shouldHideEvent from "../../shouldHideEvent";
 import MessagePanel from "./MessagePanel";
-import { IScrollState } from "./ScrollPanel";
-import { ActionPayload } from "../../dispatcher/payloads";
-import ResizeNotifier from "../../utils/ResizeNotifier";
-import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
+import { type IScrollState } from "./ScrollPanel";
+import { type ActionPayload } from "../../dispatcher/payloads";
+import type ResizeNotifier from "../../utils/ResizeNotifier";
+import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import Spinner from "../views/elements/Spinner";
-import EditorStateTransfer from "../../utils/EditorStateTransfer";
+import type EditorStateTransfer from "../../utils/EditorStateTransfer";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
-import LegacyCallEventGrouper, { buildLegacyCallEventGroupers } from "./LegacyCallEventGrouper";
-import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import type LegacyCallEventGrouper from "./LegacyCallEventGrouper";
+import { buildLegacyCallEventGroupers } from "./LegacyCallEventGrouper";
+import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
@@ -66,9 +66,6 @@ const INITIAL_SIZE = 30;
 const READ_RECEIPT_INTERVAL_MS = 500;
 
 const READ_MARKER_DEBOUNCE_MS = 100;
-
-// How far off-screen a decryption failure can be for it to still count as "visible"
-const VISIBLE_DECRYPTION_FAILURE_MARGIN = 100;
 
 const debuglog = (...args: any[]): void => {
     if (SettingsStore.getValue("debug_timeline_panel")) {
@@ -233,7 +230,7 @@ interface IEventIndexOpts {
  */
 class TimelinePanel extends React.Component<IProps, IState> {
     public static contextType = RoomContext;
-    public declare context: React.ContextType<typeof RoomContext>;
+    declare public context: React.ContextType<typeof RoomContext>;
 
     // a map from room id to read marker event timestamp
     public static roomReadMarkerTsMap: Record<string, number> = {};
@@ -252,7 +249,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
     private lastRMSentEventId: string | null | undefined = undefined;
 
     private readonly messagePanel = createRef<MessagePanel>();
-    private readonly dispatcherRef: string;
+    private dispatcherRef?: string;
     private timelineWindow?: TimelineWindow;
     private overlayTimelineWindow?: TimelineWindow;
     private unmounted = false;
@@ -295,6 +292,10 @@ class TimelinePanel extends React.Component<IProps, IState> {
             readMarkerInViewThresholdMs: SettingsStore.getValue("readMarkerInViewThresholdMs"),
             readMarkerOutOfViewThresholdMs: SettingsStore.getValue("readMarkerOutOfViewThresholdMs"),
         };
+    }
+
+    public componentDidMount(): void {
+        this.unmounted = false;
 
         this.dispatcherRef = dis.register(this.onAction);
         const cli = MatrixClientPeg.safeGet();
@@ -316,9 +317,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         cli.on(ClientEvent.Sync, this.onSync);
 
         this.props.timelineSet.room?.on(ThreadEvent.Update, this.onThreadUpdate);
-    }
 
-    public componentDidMount(): void {
         if (this.props.manageReadReceipts) {
             this.updateReadReceiptOnUserActivity();
         }
@@ -398,6 +397,10 @@ class TimelinePanel extends React.Component<IProps, IState> {
         }
     }
 
+    private get messagePanelDiv(): HTMLDivElement | null {
+        return this.messagePanel.current?.scrollPanel.current?.divScroll ?? null;
+    }
+
     /**
      * Logs out debug info to describe the state of the TimelinePanel and the
      * events in the room according to the matrix-js-sdk. This is useful when
@@ -418,15 +421,12 @@ class TimelinePanel extends React.Component<IProps, IState> {
         // And we can suss out any corrupted React `key` problems.
         let renderedEventIds: string[] | undefined;
         try {
-            const messagePanel = this.messagePanel.current;
-            if (messagePanel) {
-                const messagePanelNode = ReactDOM.findDOMNode(messagePanel) as Element;
-                if (messagePanelNode) {
-                    const actuallyRenderedEvents = messagePanelNode.querySelectorAll("[data-event-id]");
-                    renderedEventIds = [...actuallyRenderedEvents].map((renderedEvent) => {
-                        return renderedEvent.getAttribute("data-event-id")!;
-                    });
-                }
+            const messagePanelNode = this.messagePanelDiv;
+            if (messagePanelNode) {
+                const actuallyRenderedEvents = messagePanelNode.querySelectorAll("[data-event-id]");
+                renderedEventIds = [...actuallyRenderedEvents].map((renderedEvent) => {
+                    return renderedEvent.getAttribute("data-event-id")!;
+                });
             }
         } catch (err) {
             logger.error(`onDumpDebugLogs: Failed to get the actual event ID's in the DOM`, err);
@@ -973,7 +973,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             UserActivity.sharedInstance().timeWhileActiveRecently(this.readMarkerActivityTimer);
             try {
                 await this.readMarkerActivityTimer.finished();
-            } catch (e) {
+            } catch {
                 continue; /* aborted */
             }
             // outside of try/catch to not swallow errors
@@ -988,7 +988,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             UserActivity.sharedInstance().timeWhileActiveNow(this.readReceiptActivityTimer);
             try {
                 await this.readReceiptActivityTimer.finished();
-            } catch (e) {
+            } catch {
                 continue; /* aborted */
             }
             // outside of try/catch to not swallow errors
@@ -1218,7 +1218,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             return;
         }
         const lastDisplayedEvent = this.state.events[lastDisplayedIndex];
-        this.setReadMarker(lastDisplayedEvent.getId()!, lastDisplayedEvent.getTs());
+        await this.setReadMarker(lastDisplayedEvent.getId()!, lastDisplayedEvent.getTs());
 
         // the read-marker should become invisible, so that if the user scrolls
         // down, they don't see it.
@@ -1336,7 +1336,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         }
 
         // Update the read marker to the values we found
-        this.setReadMarker(rmId, rmTs);
+        await this.setReadMarker(rmId, rmTs);
 
         // Send the receipts to the server immediately (don't wait for activity)
         await this.sendReadReceipts();
@@ -1766,45 +1766,6 @@ class TimelinePanel extends React.Component<IProps, IState> {
         return index > -1 ? index : null;
     }
 
-    /**
-     * Get a list of undecryptable events currently visible on-screen.
-     *
-     * @param {boolean} addMargin Whether to add an extra margin beyond the viewport
-     * where events are still considered "visible"
-     *
-     * @returns {MatrixEvent[] | null} A list of undecryptable events, or null if
-     *     the list of events could not be determined.
-     */
-    public getVisibleDecryptionFailures(addMargin?: boolean): MatrixEvent[] | null {
-        const messagePanel = this.messagePanel.current;
-        if (!messagePanel) return null;
-
-        const messagePanelNode = ReactDOM.findDOMNode(messagePanel) as Element;
-        if (!messagePanelNode) return null; // sometimes this happens for fresh rooms/post-sync
-        const wrapperRect = messagePanelNode.getBoundingClientRect();
-        const margin = addMargin ? VISIBLE_DECRYPTION_FAILURE_MARGIN : 0;
-        const screenTop = wrapperRect.top - margin;
-        const screenBottom = wrapperRect.bottom + margin;
-
-        const result: MatrixEvent[] = [];
-        for (const ev of this.state.liveEvents) {
-            const eventId = ev.getId();
-            if (!eventId) continue;
-            const node = messagePanel.getNodeForEventId(eventId);
-            if (!node) continue;
-
-            const boundingRect = node.getBoundingClientRect();
-            if (boundingRect.top > screenBottom) {
-                // we have gone past the visible section of timeline
-                break;
-            } else if (boundingRect.bottom >= screenTop) {
-                // the tile for this event is in the visible part of the screen (or just above/below it).
-                if (ev.isDecryptionFailure()) result.push(ev);
-            }
-        }
-        return result;
-    }
-
     private getLastDisplayedEventIndex(opts: IEventIndexOpts = {}): number | null {
         const ignoreOwn = opts.ignoreOwn || false;
         const allowPartial = opts.allowPartial || false;
@@ -1812,7 +1773,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         const messagePanel = this.messagePanel.current;
         if (!messagePanel) return null;
 
-        const messagePanelNode = ReactDOM.findDOMNode(messagePanel) as Element;
+        const messagePanelNode = this.messagePanelDiv;
         if (!messagePanelNode) return null; // sometimes this happens for fresh rooms/post-sync
         const wrapperRect = messagePanelNode.getBoundingClientRect();
         const myUserId = MatrixClientPeg.safeGet().credentials.userId;
@@ -1906,7 +1867,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         return receiptStore?.getEventReadUpTo(myUserId, ignoreSynthesized) ?? null;
     }
 
-    private setReadMarker(eventId: string | null, eventTs?: number, inhibitSetState = false): void {
+    private async setReadMarker(eventId: string | null, eventTs?: number, inhibitSetState = false): Promise<void> {
         const roomId = this.props.timelineSet.room?.roomId;
 
         // don't update the state (and cause a re-render) if there is
@@ -1930,12 +1891,17 @@ class TimelinePanel extends React.Component<IProps, IState> {
         // Do the local echo of the RM
         // run the render cycle before calling the callback, so that
         // getReadMarkerPosition() returns the right thing.
-        this.setState(
-            {
-                readMarkerEventId: eventId,
-            },
-            this.props.onReadMarkerUpdated,
-        );
+        await new Promise<void>((resolve) => {
+            this.setState(
+                {
+                    readMarkerEventId: eventId,
+                },
+                () => {
+                    this.props.onReadMarkerUpdated?.();
+                    resolve();
+                },
+            );
+        });
     }
 
     private shouldPaginate(): boolean {

@@ -2,17 +2,17 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021, 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Direction, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
-import { MediaEventContent } from "matrix-js-sdk/src/types";
+import { Direction, type MatrixEvent, type Relations, type Room } from "matrix-js-sdk/src/matrix";
+import { type EventType, type MediaEventContent, type RelationType } from "matrix-js-sdk/src/types";
 import { saveAs } from "file-saver";
 import { logger } from "matrix-js-sdk/src/logger";
 import sanitizeFilename from "sanitize-filename";
 
-import { ExportType, IExportOptions } from "./exportUtils";
+import { ExportType, type IExportOptions } from "./exportUtils";
 import { decryptFile } from "../DecryptFile";
 import { mediaFromContent } from "../../customisations/Media";
 import { formatFullDateNoDay, formatFullDateNoDayISO } from "../../DateUtils";
@@ -110,12 +110,7 @@ export default abstract class Exporter {
     }
 
     protected setEventMetadata(event: MatrixEvent): MatrixEvent {
-        const roomState = this.room.currentState;
-        const sender = event.getSender();
-        event.sender = (!!sender && roomState?.getSentinelMember(sender)) || null;
-        if (event.getType() === "m.room.member") {
-            event.target = roomState?.getSentinelMember(event.getStateKey()!) ?? null;
-        }
+        event.setMetadata(this.room.currentState, false);
         return event;
     }
 
@@ -229,7 +224,7 @@ export default abstract class Exporter {
                 const image = await fetch(media.srcHttp);
                 blob = await image.blob();
             }
-        } catch (err) {
+        } catch {
             logger.log("Error decrypting media");
         }
         if (!blob) {
@@ -283,6 +278,14 @@ export default abstract class Exporter {
         const attachmentTypes = ["m.sticker", "m.image", "m.file", "m.video", "m.audio"];
         return mxEv.getType() === attachmentTypes[0] || attachmentTypes.includes(mxEv.getContent().msgtype!);
     }
+
+    protected getRelationsForEvent = (
+        eventId: string,
+        relationType: RelationType | string,
+        eventType: EventType | string,
+    ): Relations | undefined => {
+        return this.room.getUnfilteredTimelineSet().relations.getChildEventsForEvent(eventId, relationType, eventType);
+    };
 
     public abstract export(): Promise<void>;
 }

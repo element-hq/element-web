@@ -2,15 +2,17 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022, 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { test, expect } from "../../element-web-test";
 import { waitForRoom } from "../utils";
 import { Filter } from "../../pages/Spotlight";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 test.describe("Create Knock Room", () => {
+    test.skip(isDendrite, "Dendrite does not have support for knocking");
     test.use({
         displayName: "Alice",
         labsFlags: ["feature_ask_to_join"],
@@ -79,6 +81,7 @@ test.describe("Create Knock Room", () => {
 
         const spotlightDialog = await app.openSpotlight();
         await spotlightDialog.filter(Filter.PublicRooms);
+        await spotlightDialog.search("Cyber");
         await expect(spotlightDialog.results.nth(0)).toContainText("Cybersecurity");
     });
 });

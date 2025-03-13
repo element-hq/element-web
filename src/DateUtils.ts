@@ -4,11 +4,11 @@ Copyright 2022 The Matrix.org Foundation C.I.C.
 Copyright 2017 Vector Creations Ltd
 Copyright 2015, 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Optional } from "matrix-events-sdk";
+import { type Optional } from "matrix-events-sdk";
 
 import { _t, getUserLanguage } from "./languageHandler";
 import { getUserTimezone } from "./TimezoneHandler";
@@ -38,7 +38,7 @@ export function getMonthsArray(month: Intl.DateTimeFormatOptions["month"] = "sho
 
 // XXX: Ideally we could just specify `hour12: boolean` but it has issues on Chrome in the `en` locale
 // https://support.google.com/chrome/thread/29828561?hl=en
-function getTwelveHourOptions(showTwelveHour: boolean): Intl.DateTimeFormatOptions {
+export function getTwelveHourOptions(showTwelveHour: boolean): Intl.DateTimeFormatOptions {
     return {
         hourCycle: showTwelveHour ? "h12" : "h23",
     };

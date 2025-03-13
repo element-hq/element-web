@@ -2,11 +2,11 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useState, FormEvent } from "react";
+import React, { useState, type FormEvent } from "react";
 
 import { _t } from "../../../languageHandler";
 import Field from "../elements/Field";
@@ -23,7 +23,7 @@ const JumpToDatePicker: React.FC<IProps> = ({ ts, onDatePicked }: IProps) => {
     const dateInputDefaultValue = formatDateForInput(date);
 
     const [dateValue, setDateValue] = useState(dateInputDefaultValue);
-    const [onFocus, isActive, ref] = useRovingTabIndex<HTMLInputElement>();
+    const [onFocus, isActive, refCallback] = useRovingTabIndex<HTMLInputElement>();
 
     const onDateValueInput = (ev: React.ChangeEvent<HTMLInputElement>): void => setDateValue(ev.target.value);
     const onJumpToDateSubmit = (ev: FormEvent): void => {
@@ -45,7 +45,7 @@ const JumpToDatePicker: React.FC<IProps> = ({ ts, onDatePicked }: IProps) => {
                 className="mx_JumpToDatePicker_datePicker"
                 label={_t("room|jump_to_date_prompt")}
                 onFocus={onFocus}
-                inputRef={ref}
+                inputRef={refCallback}
                 tabIndex={isActive ? 0 : -1}
             />
             <RovingAccessibleButton

@@ -2,13 +2,13 @@
  * Copyright 2024 New Vector Ltd.
  * Copyright 2024 The Matrix.org Foundation C.I.C.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { Locator, Page } from "@playwright/test";
+import { type Locator, type Page } from "@playwright/test";
 
-import { ElementAppPage } from "../../../pages/ElementAppPage";
+import { type ElementAppPage } from "../../../pages/ElementAppPage";
 import { test as base, expect } from "../../../element-web-test";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import { Layout } from "../../../../src/settings/enums/Layout";

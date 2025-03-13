@@ -2,23 +2,23 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2015-2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import {
     ClientEvent,
     EventStatus,
-    MatrixError,
-    MatrixEvent,
-    Room,
+    type MatrixError,
+    type MatrixEvent,
+    type Room,
     RoomEvent,
-    SyncState,
-    SyncStateData,
+    type SyncState,
+    type SyncStateData,
 } from "matrix-js-sdk/src/matrix";
+import { WarningIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { Icon as WarningIcon } from "../../../res/img/feather-customised/warning-triangle.svg";
 import { _t, _td } from "../../languageHandler";
 import Resend from "../../Resend";
 import dis from "../../dispatcher/dispatcher";
@@ -89,7 +89,7 @@ interface IState {
 export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
     private unmounted = false;
     public static contextType = MatrixClientContext;
-    public declare context: React.ContextType<typeof MatrixClientContext>;
+    declare public context: React.ContextType<typeof MatrixClientContext>;
 
     public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
@@ -103,6 +103,8 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
     }
 
     public componentDidMount(): void {
+        this.unmounted = false;
+
         const client = this.context;
         client.on(ClientEvent.Sync, this.onSyncStateChange);
         client.on(RoomEvent.LocalEchoUpdated, this.onRoomLocalEchoUpdated);

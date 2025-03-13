@@ -2,13 +2,13 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixClient, Room, PendingEventOrdering } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, Room, PendingEventOrdering } from "matrix-js-sdk/src/matrix";
 
-import { Member } from "../utils/direct-messages";
+import { type Member } from "../utils/direct-messages";
 
 export const LOCAL_ROOM_ID_PREFIX = "local+";
 
@@ -31,7 +31,7 @@ export class LocalRoom extends Room {
     /** DM chat partner */
     public targets: Member[] = [];
     /** Callbacks that should be invoked after the actual room has been created. */
-    public afterCreateCallbacks: Function[] = [];
+    public afterCreateCallbacks: ((roomId: string) => void)[] = [];
     public state: LocalRoomState = LocalRoomState.NEW;
 
     public constructor(roomId: string, client: MatrixClient, myUserId: string) {

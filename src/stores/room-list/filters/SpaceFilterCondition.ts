@@ -2,17 +2,17 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { EventEmitter } from "events";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk/src/matrix";
 
-import { FILTER_CHANGED, IFilterCondition } from "./IFilterCondition";
-import { IDestroyable } from "../../../utils/IDestroyable";
+import { FILTER_CHANGED, type IFilterCondition } from "./IFilterCondition";
+import { type IDestroyable } from "../../../utils/IDestroyable";
 import SpaceStore from "../../spaces/SpaceStore";
-import { isMetaSpace, MetaSpace, SpaceKey } from "../../spaces";
+import { isMetaSpace, MetaSpace, type SpaceKey } from "../../spaces";
 import { setHasDiff } from "../../../utils/sets";
 import SettingsStore from "../../../settings/SettingsStore";
 

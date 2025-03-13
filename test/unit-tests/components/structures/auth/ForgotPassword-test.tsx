@@ -2,25 +2,19 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import { mocked } from "jest-mock";
-import { act, render, RenderResult, screen } from "jest-matrix-react";
+import { render, type RenderResult, screen, waitFor, cleanup } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { MatrixClient, createClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, createClient } from "matrix-js-sdk/src/matrix";
 
 import ForgotPassword from "../../../../../src/components/structures/auth/ForgotPassword";
-import { ValidatedServerConfig } from "../../../../../src/utils/ValidatedServerConfig";
-import {
-    clearAllModals,
-    filterConsole,
-    flushPromisesWithFakeTimers,
-    stubClient,
-    waitEnoughCyclesForModal,
-} from "../../../../test-utils";
+import { type ValidatedServerConfig } from "../../../../../src/utils/ValidatedServerConfig";
+import { clearAllModals, filterConsole, stubClient, waitEnoughCyclesForModal } from "../../../../test-utils";
 import AutoDiscoveryUtils from "../../../../../src/utils/AutoDiscoveryUtils";
 
 jest.mock("matrix-js-sdk/src/matrix", () => ({
@@ -39,22 +33,16 @@ describe("<ForgotPassword>", () => {
     let renderResult: RenderResult;
 
     const typeIntoField = async (label: string, value: string): Promise<void> => {
-        await act(async () => {
-            await userEvent.type(screen.getByLabelText(label), value, { delay: null });
-            // the message is shown after some time
-            jest.advanceTimersByTime(500);
-        });
+        await userEvent.type(screen.getByLabelText(label), value, { delay: null });
     };
 
     const click = async (element: Element): Promise<void> => {
-        await act(async () => {
-            await userEvent.click(element, { delay: null });
-        });
+        await userEvent.click(element, { delay: null });
     };
 
     const itShouldCloseTheDialogAndShowThePasswordInput = (): void => {
-        it("should close the dialog and show the password input", () => {
-            expect(screen.queryByText("Verify your email to continue")).not.toBeInTheDocument();
+        it("should close the dialog and show the password input", async () => {
+            await waitFor(() => expect(screen.queryByText("Verify your email to continue")).not.toBeInTheDocument());
             expect(screen.getByText("Reset your password")).toBeInTheDocument();
         });
     };
@@ -80,14 +68,7 @@ describe("<ForgotPassword>", () => {
     afterEach(async () => {
         // clean up modals
         await clearAllModals();
-    });
-
-    beforeAll(() => {
-        jest.useFakeTimers();
-    });
-
-    afterAll(() => {
-        jest.useRealTimers();
+        cleanup();
     });
 
     describe("when starting a password reset flow", () => {
@@ -130,13 +111,16 @@ describe("<ForgotPassword>", () => {
                 await typeIntoField("Email address", "not en email");
             });
 
-            it("should show a message about the wrong format", () => {
-                expect(screen.getByText("The email address doesn't appear to be valid.")).toBeInTheDocument();
+            it("should show a message about the wrong format", async () => {
+                await expect(
+                    screen.findByText("The email address doesn't appear to be valid."),
+                ).resolves.toBeInTheDocument();
             });
         });
 
         describe("and submitting an unknown email", () => {
             beforeEach(async () => {
+                mocked(AutoDiscoveryUtils.validateServerConfigWithStaticUrls).mockResolvedValue(serverConfig);
                 await typeIntoField("Email address", testEmail);
                 mocked(client).requestPasswordEmailToken.mockRejectedValue({
                     errcode: "M_THREEPID_NOT_FOUND",
@@ -144,8 +128,8 @@ describe("<ForgotPassword>", () => {
                 await click(screen.getByText("Send email"));
             });
 
-            it("should show an email not found message", () => {
-                expect(screen.getByText("This email address was not found")).toBeInTheDocument();
+            it("should show an email not found message", async () => {
+                await expect(screen.findByText("This email address was not found")).resolves.toBeInTheDocument();
             });
         });
 
@@ -158,13 +142,12 @@ describe("<ForgotPassword>", () => {
                 await click(screen.getByText("Send email"));
             });
 
-            it("should show an info about that", () => {
-                expect(
-                    screen.getByText(
-                        "Cannot reach homeserver: " +
-                            "Ensure you have a stable internet connection, or get in touch with the server admin",
+            it("should show an info about that", async () => {
+                await expect(
+                    screen.findByText(
+                        "Cannot reach homeserver: Ensure you have a stable internet connection, or get in touch with the server admin",
                     ),
-                ).toBeInTheDocument();
+                ).resolves.toBeInTheDocument();
             });
         });
 
@@ -180,8 +163,8 @@ describe("<ForgotPassword>", () => {
                 await click(screen.getByText("Send email"));
             });
 
-            it("should show the server error", () => {
-                expect(screen.queryByText("server down")).toBeInTheDocument();
+            it("should show the server error", async () => {
+                await expect(screen.findByText("server down")).resolves.toBeInTheDocument();
             });
         });
 
@@ -217,8 +200,6 @@ describe("<ForgotPassword>", () => {
             describe("and clicking »Resend«", () => {
                 beforeEach(async () => {
                     await click(screen.getByText("Resend"));
-                    // the message is shown after some time
-                    jest.advanceTimersByTime(500);
                 });
 
                 it("should should resend the mail and show the tooltip", () => {
@@ -248,8 +229,10 @@ describe("<ForgotPassword>", () => {
                         await typeIntoField("Confirm new password", testPassword + "asd");
                     });
 
-                    it("should show an info about that", () => {
-                        expect(screen.getByText("New passwords must match each other.")).toBeInTheDocument();
+                    it("should show an info about that", async () => {
+                        await expect(
+                            screen.findByText("New passwords must match each other."),
+                        ).resolves.toBeInTheDocument();
                     });
                 });
 
@@ -286,7 +269,7 @@ describe("<ForgotPassword>", () => {
                             await click(screen.getByText("Reset password"));
                         });
 
-                        it("should send the new password (once)", () => {
+                        it("should send the new password (once)", async () => {
                             expect(client.setPassword).toHaveBeenCalledWith(
                                 {
                                     type: "m.login.email.identity",
@@ -299,22 +282,18 @@ describe("<ForgotPassword>", () => {
                                 false,
                             );
 
-                            // be sure that the next attempt to set the password would have been sent
-                            jest.advanceTimersByTime(3000);
                             // it should not retry to set the password
-                            expect(client.setPassword).toHaveBeenCalledTimes(1);
+                            await waitFor(() => expect(client.setPassword).toHaveBeenCalledTimes(1));
                         });
                     });
 
                     describe("and submitting it", () => {
                         beforeEach(async () => {
                             await click(screen.getByText("Reset password"));
-                            await waitEnoughCyclesForModal({
-                                useFakeTimers: true,
-                            });
+                            await waitEnoughCyclesForModal();
                         });
 
-                        it("should send the new password and show the click validation link dialog", () => {
+                        it("should send the new password and show the click validation link dialog", async () => {
                             expect(client.setPassword).toHaveBeenCalledWith(
                                 {
                                     type: "m.login.email.identity",
@@ -326,15 +305,15 @@ describe("<ForgotPassword>", () => {
                                 testPassword,
                                 false,
                             );
-                            expect(screen.getByText("Verify your email to continue")).toBeInTheDocument();
+                            await expect(
+                                screen.findByText("Verify your email to continue"),
+                            ).resolves.toBeInTheDocument();
                             expect(screen.getByText(testEmail)).toBeInTheDocument();
                         });
 
                         describe("and dismissing the dialog by clicking the background", () => {
                             beforeEach(async () => {
-                                await act(async () => {
-                                    await userEvent.click(screen.getByTestId("dialog-background"), { delay: null });
-                                });
+                                await userEvent.click(await screen.findByTestId("dialog-background"), { delay: null });
                                 await waitEnoughCyclesForModal({
                                     useFakeTimers: true,
                                 });
@@ -345,7 +324,7 @@ describe("<ForgotPassword>", () => {
 
                         describe("and dismissing the dialog", () => {
                             beforeEach(async () => {
-                                await click(screen.getByLabelText("Close dialog"));
+                                await click(await screen.findByLabelText("Close dialog"));
                                 await waitEnoughCyclesForModal({
                                     useFakeTimers: true,
                                 });
@@ -356,34 +335,35 @@ describe("<ForgotPassword>", () => {
 
                         describe("and clicking »Re-enter email address«", () => {
                             beforeEach(async () => {
-                                await click(screen.getByText("Re-enter email address"));
+                                await click(await screen.findByText("Re-enter email address"));
                                 await waitEnoughCyclesForModal({
                                     useFakeTimers: true,
                                 });
                             });
 
-                            it("should close the dialog and go back to the email input", () => {
-                                expect(screen.queryByText("Verify your email to continue")).not.toBeInTheDocument();
+                            it("should close the dialog and go back to the email input", async () => {
+                                await waitFor(() =>
+                                    expect(screen.queryByText("Verify your email to continue")).not.toBeInTheDocument(),
+                                );
                                 expect(screen.queryByText("Enter your email to reset password")).toBeInTheDocument();
                             });
                         });
+                    });
 
-                        describe("and validating the link from the mail", () => {
-                            beforeEach(async () => {
-                                mocked(client.setPassword).mockResolvedValue({});
-                                // be sure the next set password attempt was sent
-                                jest.advanceTimersByTime(3000);
-                                // quad flush promises for the modal to disappear
-                                await flushPromisesWithFakeTimers();
-                                await flushPromisesWithFakeTimers();
-                                await flushPromisesWithFakeTimers();
-                                await flushPromisesWithFakeTimers();
-                            });
+                    describe("and validating the link from the mail", () => {
+                        beforeEach(async () => {
+                            mocked(client.setPassword).mockResolvedValue({});
+                            await click(screen.getByText("Reset password"));
+                            // flush promises for the modal to disappear
+                            await waitEnoughCyclesForModal();
+                            await waitEnoughCyclesForModal();
+                        });
 
-                            it("should display the confirm reset view and now show the dialog", () => {
-                                expect(screen.queryByText("Your password has been reset.")).toBeInTheDocument();
-                                expect(screen.queryByText("Verify your email to continue")).not.toBeInTheDocument();
-                            });
+                        it("should display the confirm reset view and now show the dialog", async () => {
+                            await expect(
+                                screen.findByText("Your password has been reset."),
+                            ).resolves.toBeInTheDocument();
+                            expect(screen.queryByText("Verify your email to continue")).not.toBeInTheDocument();
                         });
                     });
 
@@ -391,17 +371,14 @@ describe("<ForgotPassword>", () => {
                         beforeEach(async () => {
                             await click(screen.getByText("Sign out of all devices"));
                             await click(screen.getByText("Reset password"));
-                            await waitEnoughCyclesForModal({
-                                useFakeTimers: true,
-                            });
                         });
 
                         it("should show the sign out warning dialog", async () => {
-                            expect(
-                                screen.getByText(
+                            await expect(
+                                screen.findByText(
                                     "Signing out your devices will delete the message encryption keys stored on them, making encrypted chat history unreadable.",
                                 ),
-                            ).toBeInTheDocument();
+                            ).resolves.toBeInTheDocument();
 
                             // confirm dialog
                             await click(screen.getByText("Continue"));

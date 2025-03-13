@@ -2,13 +2,14 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022, 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import type { Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
 import { openIntegrationManager } from "./utils";
+import type { UserWidget } from "../../../src/utils/WidgetUtils-types.ts";
 
 const ROOM_NAME = "Integration Manager Test";
 
@@ -113,7 +114,7 @@ test.describe("Integration Manager: Send Event", () => {
                     },
                 },
                 id: "integration-manager",
-            },
+            } as unknown as UserWidget,
         });
 
         // Succeed when checking the token is valid

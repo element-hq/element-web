@@ -2,26 +2,26 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019-2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, KeyboardEvent, SyntheticEvent } from "react";
+import React, { createRef, type KeyboardEvent, type SyntheticEvent } from "react";
 import {
-    IContent,
-    MatrixEvent,
-    IEventRelation,
-    IMentions,
-    Room,
+    type IContent,
+    type MatrixEvent,
+    type IEventRelation,
+    type IMentions,
+    type Room,
     EventType,
     MsgType,
     RelationType,
     THREAD_RELATION_TYPE,
 } from "matrix-js-sdk/src/matrix";
-import { DebouncedFunc, throttle } from "lodash";
+import { type DebouncedFunc, throttle } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
-import { Composer as ComposerEvent } from "@matrix-org/analytics-events/types/typescript/Composer";
-import { RoomMessageEventContent } from "matrix-js-sdk/src/types";
+import { type Composer as ComposerEvent } from "@matrix-org/analytics-events/types/typescript/Composer";
+import { type RoomMessageEventContent } from "matrix-js-sdk/src/types";
 
 import dis from "../../../dispatcher/dispatcher";
 import EditorModel from "../../../editor/model";
@@ -35,20 +35,19 @@ import {
     unescapeMessage,
 } from "../../../editor/serialize";
 import BasicMessageComposer, { REGEX_EMOTICON } from "./BasicMessageComposer";
-import { CommandPartCreator, Part, PartCreator, SerializedPart, Type } from "../../../editor/parts";
+import { CommandPartCreator, type Part, type PartCreator, type SerializedPart, Type } from "../../../editor/parts";
 import { findEditableEvent } from "../../../utils/EventUtils";
 import SendHistoryManager from "../../../SendHistoryManager";
 import { CommandCategories } from "../../../SlashCommands";
 import ContentMessages from "../../../ContentMessages";
-import { withMatrixClientHOC, MatrixClientProps } from "../../../contexts/MatrixClientContext";
+import { withMatrixClientHOC, type MatrixClientProps } from "../../../contexts/MatrixClientContext";
 import { Action } from "../../../dispatcher/actions";
 import { containsEmoji } from "../../../effects/utils";
 import { CHAT_EFFECTS } from "../../../effects";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import SettingsStore from "../../../settings/SettingsStore";
-import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
-import { ActionPayload } from "../../../dispatcher/payloads";
+import { type ActionPayload } from "../../../dispatcher/payloads";
 import { decorateStartSendingTime, sendRoundTripMetric } from "../../../sendTimePerformanceMetrics";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import DocumentPosition from "../../../editor/position";
@@ -58,8 +57,8 @@ import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { PosthogAnalytics } from "../../../PosthogAnalytics";
 import { addReplyToMessageContent } from "../../../utils/Reply";
 import { doMaybeLocalRoomAction } from "../../../utils/local-room";
-import { Caret } from "../../../editor/caret";
-import { IDiff } from "../../../editor/diff";
+import { type Caret } from "../../../editor/caret";
+import { type IDiff } from "../../../editor/diff";
 import { getBlobSafeMimeType } from "../../../utils/blobs";
 import { EMOJI_REGEX } from "../../../HtmlUtils";
 
@@ -170,8 +169,6 @@ export function createMessageContent(
     model: EditorModel,
     replyToEvent: MatrixEvent | undefined,
     relation: IEventRelation | undefined,
-    permalinkCreator?: RoomPermalinkCreator,
-    includeReplyLegacyFallback = true,
 ): RoomMessageEventContent {
     const isEmote = containsEmote(model);
     if (isEmote) {
@@ -189,7 +186,6 @@ export function createMessageContent(
         body: body,
     };
     const formattedBody = htmlSerializeIfNeeded(model, {
-        forceHTML: !!replyToEvent,
         useMarkdown: SettingsStore.getValue("MessageComposerInput.useMarkdown"),
     });
     if (formattedBody) {
@@ -202,10 +198,7 @@ export function createMessageContent(
 
     attachRelation(content, relation);
     if (replyToEvent) {
-        addReplyToMessageContent(content, replyToEvent, {
-            permalinkCreator,
-            includeLegacyFallback: includeReplyLegacyFallback,
-        });
+        addReplyToMessageContent(content, replyToEvent);
     }
 
     return content;
@@ -231,29 +224,23 @@ export function isQuickReaction(model: EditorModel): boolean {
 interface ISendMessageComposerProps extends MatrixClientProps {
     room: Room;
     placeholder?: string;
-    permalinkCreator?: RoomPermalinkCreator;
     relation?: IEventRelation;
     replyToEvent?: MatrixEvent;
     disabled?: boolean;
     onChange?(model: EditorModel): void;
-    includeReplyLegacyFallback?: boolean;
     toggleStickerPickerOpen: () => void;
 }
 
 export class SendMessageComposer extends React.Component<ISendMessageComposerProps> {
     public static contextType = RoomContext;
-    public declare context: React.ContextType<typeof RoomContext>;
+    declare public context: React.ContextType<typeof RoomContext>;
 
     private readonly prepareToEncrypt?: DebouncedFunc<() => void>;
     private readonly editorRef = createRef<BasicMessageComposer>();
     private model: EditorModel;
     private currentlyComposedEditorState: SerializedPart[] | null = null;
-    private dispatcherRef: string;
+    private dispatcherRef?: string;
     private sendHistoryManager: SendHistoryManager;
-
-    public static defaultProps = {
-        includeReplyLegacyFallback: true,
-    };
 
     public constructor(props: ISendMessageComposerProps, context: React.ContextType<typeof RoomContext>) {
         super(props, context);
@@ -268,13 +255,15 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
             );
         }
 
-        window.addEventListener("beforeunload", this.saveStoredEditorState);
-
         const partCreator = new CommandPartCreator(this.props.room, this.props.mxClient);
         const parts = this.restoreStoredEditorState(partCreator) || [];
         this.model = new EditorModel(parts, partCreator);
-        this.dispatcherRef = dis.register(this.onAction);
         this.sendHistoryManager = new SendHistoryManager(this.props.room.roomId, "mx_cider_history_");
+    }
+
+    public componentDidMount(): void {
+        window.addEventListener("beforeunload", this.saveStoredEditorState);
+        this.dispatcherRef = dis.register(this.onAction);
     }
 
     public componentDidUpdate(prevProps: ISendMessageComposerProps): void {
@@ -491,11 +480,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                     attachMentions(this.props.mxClient.getSafeUserId(), content, model, replyToEvent);
                     attachRelation(content, this.props.relation);
                     if (replyToEvent) {
-                        addReplyToMessageContent(content, replyToEvent, {
-                            permalinkCreator: this.props.permalinkCreator,
-                            // Exclude the legacy fallback for custom event types such as those used by /fireworks
-                            includeLegacyFallback: content.msgtype?.startsWith("m.") ?? true,
-                        });
+                        addReplyToMessageContent(content, replyToEvent);
                     }
                 } else {
                     shouldSend = false;
@@ -525,8 +510,6 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                     model,
                     replyToEvent,
                     this.props.relation,
-                    this.props.permalinkCreator,
-                    this.props.includeReplyLegacyFallback,
                 );
             }
             // don't bother sending an empty message

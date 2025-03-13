@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -20,9 +20,9 @@ import {
 } from "../../../../../src/components/views/messages/RoomPredecessorTile";
 import { stubClient, upsertRoomStateEvents } from "../../../../test-utils/test-utils";
 import { Action } from "../../../../../src/dispatcher/actions";
-import RoomContext from "../../../../../src/contexts/RoomContext";
 import { filterConsole, getRoomContext } from "../../../../test-utils";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
+import { ScopedRoomContextProvider } from "../../../../../src/contexts/ScopedRoomContext.tsx";
 
 jest.mock("../../../../../src/dispatcher/dispatcher");
 
@@ -99,9 +99,9 @@ describe("<RoomPredecessorTile />", () => {
         expect(createEvent).toBeTruthy();
 
         return render(
-            <RoomContext.Provider value={getRoomContext(room, {})}>
+            <ScopedRoomContextProvider {...getRoomContext(room, {})}>
                 <RoomPredecessorTile mxEvent={createEvent} />
-            </RoomContext.Provider>,
+            </ScopedRoomContextProvider>,
         );
     }
 

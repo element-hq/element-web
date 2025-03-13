@@ -2,12 +2,12 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import EditorModel from "./model";
-import DocumentPosition from "./position";
+import type EditorModel from "./model";
+import type DocumentPosition from "./position";
 
 export default class DocumentOffset {
     public constructor(

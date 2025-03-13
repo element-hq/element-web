@@ -1,7 +1,7 @@
 /*
 Copyright 2019-2024 New Vector Ltd.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -51,12 +51,15 @@ Please see LICENSE files in the repository root for full details.
 .mx_Field_select::before {
     content: "";
     position: absolute;
-    top: 15px;
-    right: 10px;
-    width: 10px;
-    height: 6px;
-    mask: url("$(res)/img/feather-customised/dropdown-arrow.svg");
+    top: 50%;
+    transform: translateY(-50%);
+    right: 4px;
+    width: 18px;
+    height: 18px;
+    mask: url("@vector-im/compound-design-tokens/icons/chevron-down.svg");
     mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
     background-color: $primary-content;
     z-index: 1;
     pointer-events: none;
@@ -162,14 +165,6 @@ Please see LICENSE files in the repository root for full details.
     &.mx_Field:focus-within label {
         color: $alert;
     }
-}
-
-.mx_Field_tooltip {
-    width: 200px;
-}
-
-.mx_Field_tooltip.mx_Field_valid {
-    animation: mx_fadeout 1s 2s forwards;
 }
 
 /* Customise other components when placed inside a Field */

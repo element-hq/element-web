@@ -2,31 +2,33 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021, 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ListIteratee, Many, sortBy } from "lodash";
+import { type ListIteratee, type Many, sortBy } from "lodash";
 import {
     EventType,
     RoomType,
-    Room,
+    type Room,
     RoomEvent,
-    RoomMember,
+    type RoomMember,
     RoomStateEvent,
-    MatrixEvent,
+    type MatrixEvent,
     ClientEvent,
-    ISendEventResponse,
+    type ISendEventResponse,
+    type EmptyObject,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
+import { defer } from "matrix-js-sdk/src/utils";
 
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import RoomListStore from "../room-list/RoomListStore";
 import SettingsStore from "../../settings/SettingsStore";
 import DMRoomMap from "../../utils/DMRoomMap";
-import { FetchRoomFn } from "../notifications/ListNotificationState";
+import { type FetchRoomFn } from "../notifications/ListNotificationState";
 import { SpaceNotificationState } from "../notifications/SpaceNotificationState";
 import { RoomNotificationStateStore } from "../notifications/RoomNotificationStateStore";
 import { DefaultTagID } from "../room-list/models";
@@ -35,13 +37,13 @@ import { setDiff, setHasDiff } from "../../utils/sets";
 import { Action } from "../../dispatcher/actions";
 import { arrayHasDiff, arrayHasOrderChange, filterBoolean } from "../../utils/arrays";
 import { reorderLexicographically } from "../../utils/stringOrderField";
-import { TAG_ORDER } from "../../components/views/rooms/RoomList";
-import { SettingUpdatedPayload } from "../../dispatcher/payloads/SettingUpdatedPayload";
+import { TAG_ORDER } from "../../components/views/rooms/LegacyRoomList";
+import { type SettingUpdatedPayload } from "../../dispatcher/payloads/SettingUpdatedPayload";
 import {
     isMetaSpace,
-    ISuggestedRoom,
+    type ISuggestedRoom,
     MetaSpace,
-    SpaceKey,
+    type SpaceKey,
     UPDATE_HOME_BEHAVIOUR,
     UPDATE_INVITED_SPACES,
     UPDATE_SELECTED_SPACE,
@@ -52,18 +54,16 @@ import { getCachedRoomIDForAlias } from "../../RoomAliasCache";
 import { EffectiveMembership, getEffectiveMembership } from "../../utils/membership";
 import {
     flattenSpaceHierarchyWithCache,
-    SpaceEntityMap,
-    SpaceDescendantMap,
+    type SpaceEntityMap,
+    type SpaceDescendantMap,
     flattenSpaceHierarchy,
 } from "./flattenSpaceHierarchy";
 import { PosthogAnalytics } from "../../PosthogAnalytics";
-import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
-import { ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePayload";
-import { SwitchSpacePayload } from "../../dispatcher/payloads/SwitchSpacePayload";
-import { AfterLeaveRoomPayload } from "../../dispatcher/payloads/AfterLeaveRoomPayload";
+import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePayload";
+import { type SwitchSpacePayload } from "../../dispatcher/payloads/SwitchSpacePayload";
+import { type AfterLeaveRoomPayload } from "../../dispatcher/payloads/AfterLeaveRoomPayload";
 import { SdkContextClass } from "../../contexts/SDKContext";
-
-interface IState {}
 
 const ACTIVE_SPACE_LS_KEY = "mx_active_space";
 
@@ -123,7 +123,7 @@ type SpaceStoreActions =
     | SwitchSpacePayload
     | AfterLeaveRoomPayload;
 
-export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
+export class SpaceStoreClass extends AsyncStoreWithClient<EmptyObject> {
     // The spaces representing the roots of the various tree-like hierarchies
     private rootSpaces: Room[] = [];
     // Map from room/space ID to set of spaces which list it as a child
@@ -153,6 +153,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     private _enabledMetaSpaces: MetaSpace[] = [];
     /** Whether the feature flag is set for MSC3946 */
     private _msc3946ProcessDynamicPredecessor: boolean = SettingsStore.getValue("feature_dynamic_room_predecessors");
+    private _storeReadyDeferred = defer();
 
     public constructor() {
         super(defaultDispatcher, {});
@@ -161,6 +162,28 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         SettingsStore.monitorSetting("Spaces.enabledMetaSpaces", null);
         SettingsStore.monitorSetting("Spaces.showPeopleInSpace", null);
         SettingsStore.monitorSetting("feature_dynamic_room_predecessors", null);
+    }
+
+    /**
+     * A promise that resolves when the space store is ready.
+     * This happens after an initial hierarchy of spaces and rooms has been computed.
+     */
+    public get storeReadyPromise(): Promise<void> {
+        return this._storeReadyDeferred.promise;
+    }
+
+    /**
+     * Get the order of meta spaces to display in the space panel.
+     *
+     * This accessor should be removed when the "feature_new_room_list" labs flag is removed.
+     * "People" and "Favourites" will be removed from the "metaSpaceOrder" array and this filter will no longer be needed.
+     * @private
+     */
+    private get metaSpaceOrder(): MetaSpace[] {
+        if (!SettingsStore.getValue("feature_new_room_list")) return metaSpaceOrder;
+
+        // People and Favourites are not shown when the new room list is enabled
+        return metaSpaceOrder.filter((space) => space !== MetaSpace.People && space !== MetaSpace.Favourites);
     }
 
     public get invitedSpaces(): Room[] {
@@ -239,7 +262,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         if (!isMetaSpace(space)) {
             cliSpace = this.matrixClient.getRoom(space);
             if (!cliSpace?.isSpaceRoom()) return;
-        } else if (!this.enabledMetaSpaces.includes(space as MetaSpace)) {
+        } else if (!this.enabledMetaSpaces.includes(space)) {
             return;
         }
 
@@ -1165,7 +1188,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
         const oldMetaSpaces = this._enabledMetaSpaces;
         const enabledMetaSpaces = SettingsStore.getValue("Spaces.enabledMetaSpaces");
-        this._enabledMetaSpaces = metaSpaceOrder.filter((k) => enabledMetaSpaces[k]);
+        this._enabledMetaSpaces = this.metaSpaceOrder.filter((k) => enabledMetaSpaces[k]);
 
         this._allRoomsInHome = SettingsStore.getValue("Spaces.allRoomsInHome");
         this.sendUserProperties();
@@ -1178,7 +1201,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         }
 
         // restore selected state from last session if any and still valid
-        const lastSpaceId = window.localStorage.getItem(ACTIVE_SPACE_LS_KEY);
+        const lastSpaceId = window.localStorage.getItem(ACTIVE_SPACE_LS_KEY) as MetaSpace;
         const valid =
             lastSpaceId &&
             (!isMetaSpace(lastSpaceId) ? this.matrixClient.getRoom(lastSpaceId) : enabledMetaSpaces[lastSpaceId]);
@@ -1188,6 +1211,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         } else {
             this.switchSpaceIfNeeded();
         }
+        this._storeReadyDeferred.resolve();
     }
 
     private sendUserProperties(): void {
@@ -1279,7 +1303,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
                     case "Spaces.enabledMetaSpaces": {
                         const newValue = SettingsStore.getValue("Spaces.enabledMetaSpaces");
-                        const enabledMetaSpaces = metaSpaceOrder.filter((k) => newValue[k]);
+                        const enabledMetaSpaces = this.metaSpaceOrder.filter((k) => newValue[k]);
                         if (arrayHasDiff(this._enabledMetaSpaces, enabledMetaSpaces)) {
                             const hadPeopleOrHomeEnabled = this.enabledMetaSpaces.some((s) => {
                                 return s === MetaSpace.Home || s === MetaSpace.People;

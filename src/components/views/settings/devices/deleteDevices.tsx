@@ -2,16 +2,16 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
-import { AuthDict, IAuthData } from "matrix-js-sdk/src/interactive-auth";
+import { type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
+import { type AuthDict, type IAuthData } from "matrix-js-sdk/src/interactive-auth";
 
 import { _t } from "../../../../languageHandler";
 import Modal from "../../../../Modal";
-import { InteractiveAuthCallback } from "../../../structures/InteractiveAuth";
+import { type InteractiveAuthCallback } from "../../../structures/InteractiveAuth";
 import { SSOAuthEntry } from "../../auth/InteractiveAuthEntryComponents";
 import InteractiveAuthDialog from "../../dialogs/InteractiveAuthDialog";
 

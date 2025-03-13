@@ -4,6 +4,7 @@
 on:
     issues:
         types: [closed]
+permissions: {} # We use ELEMENT_BOT_TOKEN instead
 jobs:
     tidy:
         name: Tidy closed issues

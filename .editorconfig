@@ -18,7 +18,7 @@ trim_trailing_whitespace = true
 indent_size = 4
 
 [package.json]
-indent_size = 2
+indent_size = 4
 
 [*.tsx.snap]
 trim_trailing_whitespace = false

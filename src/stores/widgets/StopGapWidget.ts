@@ -2,31 +2,37 @@
  * Copyright 2024 New Vector Ltd.
  * Copyright 2020-2022 The Matrix.org Foundation C.I.C.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { Room, MatrixEvent, MatrixEventEvent, MatrixClient, ClientEvent } from "matrix-js-sdk/src/matrix";
+import {
+    type Room,
+    type MatrixEvent,
+    MatrixEventEvent,
+    type MatrixClient,
+    ClientEvent,
+    RoomStateEvent,
+} from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import {
     ClientWidgetApi,
-    IModalWidgetOpenRequest,
-    IRoomEvent,
-    IStickerActionRequest,
-    IStickyActionRequest,
-    ITemplateParams,
-    IWidget,
-    IWidgetApiErrorResponseData,
-    IWidgetApiRequest,
-    IWidgetApiRequestEmptyData,
-    IWidgetData,
+    type IModalWidgetOpenRequest,
+    type IRoomEvent,
+    type IStickerActionRequest,
+    type IStickyActionRequest,
+    type ITemplateParams,
+    type IWidget,
+    type IWidgetApiErrorResponseData,
+    type IWidgetApiRequest,
+    type IWidgetApiRequestEmptyData,
+    type IWidgetData,
     MatrixCapabilities,
     runTemplate,
     Widget,
     WidgetApiFromWidgetAction,
     WidgetKind,
 } from "matrix-widget-api";
-import { Optional } from "matrix-events-sdk";
 import { EventEmitter } from "events";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -37,25 +43,25 @@ import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { OwnProfileStore } from "../OwnProfileStore";
 import WidgetUtils from "../../utils/WidgetUtils";
 import { IntegrationManagers } from "../../integrations/IntegrationManagers";
-import SettingsStore from "../../settings/SettingsStore";
 import { WidgetType } from "../../widgets/WidgetType";
 import ActiveWidgetStore from "../ActiveWidgetStore";
 import { objectShallowClone } from "../../utils/objects";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
-import { ElementWidgetActions, IHangupCallApiRequest, IViewRoomApiRequest } from "./ElementWidgetActions";
+import { ElementWidgetActions, type IHangupCallApiRequest, type IViewRoomApiRequest } from "./ElementWidgetActions";
 import { ModalWidgetStore } from "../ModalWidgetStore";
-import { IApp, isAppWidget } from "../WidgetStore";
-import ThemeWatcher from "../../settings/watchers/ThemeWatcher";
+import { type IApp, isAppWidget } from "../WidgetStore";
+import ThemeWatcher, { ThemeWatcherEvent } from "../../settings/watchers/ThemeWatcher";
 import { getCustomTheme } from "../../theme";
 import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
 import { ELEMENT_CLIENT_ID } from "../../identifiers";
 import { WidgetVariableCustomisations } from "../../customisations/WidgetVariables";
 import { arrayFastClone } from "../../utils/arrays";
-import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import Modal from "../../Modal";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
 import { SdkContextClass } from "../../contexts/SDKContext";
+import { UPDATE_EVENT } from "../AsyncStore";
 
 // TODO: Destroy all of this code
 
@@ -151,10 +157,17 @@ export class StopGapWidget extends EventEmitter {
     private mockWidget: ElementWidget;
     private scalarToken?: string;
     private roomId?: string;
+    // The room that we're currently allowing the widget to interact with. Only
+    // used for account widgets, which may follow the user to different rooms.
+    private viewedRoomId: string | null = null;
     private kind: WidgetKind;
     private readonly virtual: boolean;
+    private readonly themeWatcher = new ThemeWatcher();
     private readUpToMap: { [roomId: string]: string } = {}; // room ID to event ID
-    private stickyPromise?: () => Promise<void>; // This promise will be called and needs to resolve before the widget will actually become sticky.
+    // This promise will be called and needs to resolve before the widget will actually become sticky.
+    private stickyPromise?: () => Promise<void>;
+    // Holds events that should be fed to the widget once they finish decrypting
+    private readonly eventsToFeed = new WeakSet<MatrixEvent>();
 
     public constructor(private appTileProps: IAppTileProps) {
         super();
@@ -172,17 +185,6 @@ export class StopGapWidget extends EventEmitter {
         this.kind = appTileProps.userWidget ? WidgetKind.Account : WidgetKind.Room; // probably
         this.virtual = isAppWidget(app) && app.eventId === undefined;
         this.stickyPromise = appTileProps.stickyPromise;
-    }
-
-    private get eventListenerRoomId(): Optional<string> {
-        // When widgets are listening to events, we need to make sure they're only
-        // receiving events for the right room. In particular, room widgets get locked
-        // to the room they were added in while account widgets listen to the currently
-        // active room.
-
-        if (this.roomId) return this.roomId;
-
-        return SdkContextClass.instance.roomViewStore.getRoomId();
     }
 
     public get widgetApi(): ClientWidgetApi | null {
@@ -211,7 +213,7 @@ export class StopGapWidget extends EventEmitter {
             userDisplayName: OwnProfileStore.instance.displayName ?? undefined,
             userHttpAvatarUrl: OwnProfileStore.instance.getHttpAvatarUrl() ?? undefined,
             clientId: ELEMENT_CLIENT_ID,
-            clientTheme: SettingsStore.getValue("theme"),
+            clientTheme: this.themeWatcher.getEffectiveTheme(),
             clientLanguage: getUserLanguage(),
             deviceId: this.client.getDeviceId() ?? undefined,
             baseUrl: this.client.baseUrl,
@@ -243,6 +245,10 @@ export class StopGapWidget extends EventEmitter {
         return !!this.messaging;
     }
 
+    private onThemeChange = (theme: string): void => {
+        this.messaging?.updateTheme({ name: theme });
+    };
+
     private onOpenModal = async (ev: CustomEvent<IModalWidgetOpenRequest>): Promise<void> => {
         ev.preventDefault();
         if (ModalWidgetStore.instance.canOpenModalWidget()) {
@@ -256,6 +262,17 @@ export class StopGapWidget extends EventEmitter {
             });
         }
     };
+
+    // This listener is only active for account widgets, which may follow the
+    // user to different rooms
+    private onRoomViewStoreUpdate = (): void => {
+        const roomId = SdkContextClass.instance.roomViewStore.getRoomId() ?? null;
+        if (roomId !== this.viewedRoomId) {
+            this.messaging!.setViewedRoomId(roomId);
+            this.viewedRoomId = roomId;
+        }
+    };
+
     /**
      * This starts the messaging for the widget if it is not in the state `started` yet.
      * @param iframe the iframe the widget should use
@@ -275,16 +292,28 @@ export class StopGapWidget extends EventEmitter {
         this.messaging = new ClientWidgetApi(this.mockWidget, iframe, driver);
         this.messaging.on("preparing", () => this.emit("preparing"));
         this.messaging.on("error:preparing", (err: unknown) => this.emit("error:preparing", err));
-        this.messaging.on("ready", () => {
+        this.messaging.once("ready", () => {
             WidgetMessagingStore.instance.storeMessaging(this.mockWidget, this.roomId, this.messaging!);
             this.emit("ready");
+
+            this.themeWatcher.start();
+            this.themeWatcher.on(ThemeWatcherEvent.Change, this.onThemeChange);
+            // Theme may have changed while messaging was starting
+            this.onThemeChange(this.themeWatcher.getEffectiveTheme());
         });
         this.messaging.on("capabilitiesNotified", () => this.emit("capabilitiesNotified"));
         this.messaging.on(`action:${WidgetApiFromWidgetAction.OpenModalWidget}`, this.onOpenModal);
-        this.messaging.on(`action:${ElementWidgetActions.JoinCall}`, () => {
-            // pause voice broadcast recording when any widget sends a "join"
-            SdkContextClass.instance.voiceBroadcastRecordingsStore.getCurrent()?.pause();
-        });
+
+        // When widgets are listening to events, we need to make sure they're only
+        // receiving events for the right room
+        if (this.roomId === undefined) {
+            // Account widgets listen to the currently active room
+            this.messaging.setViewedRoomId(SdkContextClass.instance.roomViewStore.getRoomId() ?? null);
+            SdkContextClass.instance.roomViewStore.on(UPDATE_EVENT, this.onRoomViewStoreUpdate);
+        } else {
+            // Room widgets get locked to the room they were added in
+            this.messaging.setViewedRoomId(this.roomId);
+        }
 
         // Always attach a handler for ViewRoom, but permission check it internally
         this.messaging.on(`action:${ElementWidgetActions.ViewRoom}`, (ev: CustomEvent<IViewRoomApiRequest>) => {
@@ -330,6 +359,7 @@ export class StopGapWidget extends EventEmitter {
         // Attach listeners for feeding events - the underlying widget classes handle permissions for us
         this.client.on(ClientEvent.Event, this.onEvent);
         this.client.on(MatrixEventEvent.Decrypted, this.onEventDecrypted);
+        this.client.on(RoomStateEvent.Events, this.onStateUpdate);
         this.client.on(ClientEvent.ToDeviceEvent, this.onToDeviceEvent);
 
         this.messaging.on(
@@ -458,20 +488,29 @@ export class StopGapWidget extends EventEmitter {
         WidgetMessagingStore.instance.stopMessaging(this.mockWidget, this.roomId);
         this.messaging = null;
 
+        SdkContextClass.instance.roomViewStore.off(UPDATE_EVENT, this.onRoomViewStoreUpdate);
+
         this.client.off(ClientEvent.Event, this.onEvent);
         this.client.off(MatrixEventEvent.Decrypted, this.onEventDecrypted);
+        this.client.off(RoomStateEvent.Events, this.onStateUpdate);
         this.client.off(ClientEvent.ToDeviceEvent, this.onToDeviceEvent);
     }
 
     private onEvent = (ev: MatrixEvent): void => {
         this.client.decryptEventIfNeeded(ev);
-        if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) return;
         this.feedEvent(ev);
     };
 
     private onEventDecrypted = (ev: MatrixEvent): void => {
-        if (ev.isDecryptionFailure()) return;
         this.feedEvent(ev);
+    };
+
+    private onStateUpdate = (ev: MatrixEvent): void => {
+        if (this.messaging === null) return;
+        const raw = ev.getEffectiveEvent();
+        this.messaging.feedStateUpdate(raw as IRoomEvent).catch((e) => {
+            logger.error("Error sending state update to widget: ", e);
+        });
     };
 
     private onToDeviceEvent = async (ev: MatrixEvent): Promise<void> => {
@@ -480,72 +519,103 @@ export class StopGapWidget extends EventEmitter {
         await this.messaging?.feedToDevice(ev.getEffectiveEvent() as IRoomEvent, ev.isEncrypted());
     };
 
-    private feedEvent(ev: MatrixEvent): void {
-        if (!this.messaging) return;
+    /**
+     * Determines whether the event has a relation to an unknown parent.
+     */
+    private relatesToUnknown(ev: MatrixEvent): boolean {
+        // Replies to unknown events don't count
+        if (!ev.relationEventId || ev.replyEventId) return false;
+        const room = this.client.getRoom(ev.getRoomId());
+        return room === null || !room.findEventById(ev.relationEventId);
+    }
 
-        // Check to see if this event would be before or after our "read up to" marker. If it's
-        // before, or we can't decide, then we assume the widget will have already seen the event.
-        // If the event is after, or we don't have a marker for the room, then we'll send it through.
-        //
-        // This approach of "read up to" prevents widgets receiving decryption spam from startup or
-        // receiving out-of-order events from backfill and such.
-        //
-        // Skip marker timeline check for events with relations to unknown parent because these
-        // events are not added to the timeline here and will be ignored otherwise:
-        // https://github.com/matrix-org/matrix-js-sdk/blob/d3dfcd924201d71b434af3d77343b5229b6ed75e/src/models/room.ts#L2207-L2213
-        let isRelationToUnknown: boolean | undefined = undefined;
-        const upToEventId = this.readUpToMap[ev.getRoomId()!];
-        if (upToEventId) {
-            // Small optimization for exact match (prevent search)
-            if (upToEventId === ev.getId()) {
-                return;
-            }
+    /**
+     * Determines whether the event comes from a room that we've been invited to
+     * (in which case we likely don't have the full timeline).
+     */
+    private isFromInvite(ev: MatrixEvent): boolean {
+        const room = this.client.getRoom(ev.getRoomId());
+        return room?.getMyMembership() === KnownMembership.Invite;
+    }
 
-            // should be true to forward the event to the widget
-            let shouldForward = false;
-
-            const room = this.client.getRoom(ev.getRoomId()!);
-            if (!room) return;
-            // Timelines are most recent last, so reverse the order and limit ourselves to 100 events
-            // to avoid overusing the CPU.
-            const timeline = room.getLiveTimeline();
-            const events = arrayFastClone(timeline.getEvents()).reverse().slice(0, 100);
-
-            for (const timelineEvent of events) {
-                if (timelineEvent.getId() === upToEventId) {
-                    break;
-                } else if (timelineEvent.getId() === ev.getId()) {
-                    shouldForward = true;
-                    break;
-                }
-            }
-
-            if (!shouldForward) {
-                // checks that the event has a relation to unknown event
-                isRelationToUnknown =
-                    !ev.replyEventId && !!ev.relationEventId && !room.findEventById(ev.relationEventId);
-                if (!isRelationToUnknown) {
-                    // Ignore the event: it is before our interest.
-                    return;
-                }
-            }
-        }
-
-        // Skip marker assignment if membership is 'invite', otherwise 'm.room.member' from
-        // invitation room will assign it and new state events will be not forwarded to the widget
-        // because of empty timeline for invitation room and assigned marker.
-        const evRoomId = ev.getRoomId();
+    /**
+     * Advances the "read up to" marker for a room to a certain event. No-ops if
+     * the event is before the marker.
+     * @returns Whether the "read up to" marker was advanced.
+     */
+    private advanceReadUpToMarker(ev: MatrixEvent): boolean {
         const evId = ev.getId();
-        if (evRoomId && evId) {
-            const room = this.client.getRoom(evRoomId);
-            if (room && room.getMyMembership() === KnownMembership.Join && !isRelationToUnknown) {
-                this.readUpToMap[evRoomId] = evId;
+        if (evId === undefined) return false;
+        const roomId = ev.getRoomId();
+        if (roomId === undefined) return false;
+        const room = this.client.getRoom(roomId);
+        if (room === null) return false;
+
+        const upToEventId = this.readUpToMap[ev.getRoomId()!];
+        if (!upToEventId) {
+            // There's no marker yet; start it at this event
+            this.readUpToMap[roomId] = evId;
+            return true;
+        }
+
+        // Small optimization for exact match (skip the search)
+        if (upToEventId === evId) return false;
+
+        // Timelines are most recent last, so reverse the order and limit ourselves to 100 events
+        // to avoid overusing the CPU.
+        const timeline = room.getLiveTimeline();
+        const events = arrayFastClone(timeline.getEvents()).reverse().slice(0, 100);
+
+        for (const timelineEvent of events) {
+            if (timelineEvent.getId() === upToEventId) {
+                // The event must be somewhere before the "read up to" marker
+                return false;
+            } else if (timelineEvent.getId() === ev.getId()) {
+                // The event is after the marker; advance it
+                this.readUpToMap[roomId] = evId;
+                return true;
             }
         }
 
-        const raw = ev.getEffectiveEvent();
-        this.messaging.feedEvent(raw as IRoomEvent, this.eventListenerRoomId!).catch((e) => {
-            logger.error("Error sending event to widget: ", e);
-        });
+        // We can't say for sure whether the widget has seen the event; let's
+        // just assume that it has
+        return false;
+    }
+
+    private feedEvent(ev: MatrixEvent): void {
+        if (this.messaging === null) return;
+        if (
+            // If we had decided earlier to feed this event to the widget, but
+            // it just wasn't ready, give it another try
+            this.eventsToFeed.delete(ev) ||
+            // Skip marker timeline check for events with relations to unknown parent because these
+            // events are not added to the timeline here and will be ignored otherwise:
+            // https://github.com/matrix-org/matrix-js-sdk/blob/d3dfcd924201d71b434af3d77343b5229b6ed75e/src/models/room.ts#L2207-L2213
+            this.relatesToUnknown(ev) ||
+            // Skip marker timeline check for rooms where membership is
+            // 'invite', otherwise the membership event from the invitation room
+            // will advance the marker and new state events will not be
+            // forwarded to the widget.
+            this.isFromInvite(ev) ||
+            // Check whether this event would be before or after our "read up to" marker. If it's
+            // before, or we can't decide, then we assume the widget will have already seen the event.
+            // If the event is after, or we don't have a marker for the room, then the marker will advance and we'll
+            // send it through.
+            // This approach of "read up to" prevents widgets receiving decryption spam from startup or
+            // receiving ancient events from backfill and such.
+            this.advanceReadUpToMarker(ev)
+        ) {
+            // If the event is still being decrypted, remember that we want to
+            // feed it to the widget (even if not strictly in the order given by
+            // the timeline) and get back to it later
+            if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) {
+                this.eventsToFeed.add(ev);
+            } else {
+                const raw = ev.getEffectiveEvent();
+                this.messaging.feedEvent(raw as IRoomEvent).catch((e) => {
+                    logger.error("Error sending event to widget: ", e);
+                });
+            }
+        }
     }
 }

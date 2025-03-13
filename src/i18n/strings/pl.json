@@ -80,12 +80,14 @@
         "maximise": "Maksymalizuj",
         "mention": "Wzmianka",
         "minimise": "Minimalizuj",
+        "new_message": "Nowa wiadomość",
         "new_room": "Nowy pokój",
         "new_video_room": "Nowy pokój wideo",
         "next": "Dalej",
         "no": "Nie",
         "ok": "OK",
         "open": "Otwórz",
+        "open_menu": "Otwórz menu",
         "pause": "Wstrzymaj",
         "pin": "Przypnij",
         "play": "Odtwórz",
@@ -103,7 +105,6 @@
         "report_content": "Zgłoś treść",
         "resend": "Wyślij jeszcze raz",
         "reset": "Resetuj",
-        "restore": "Przywróć",
         "resume": "Wznów",
         "retry": "Ponów",
         "review": "Przejrzyj",
@@ -210,7 +211,6 @@
         "failed_query_registration_methods": "Nie można uzyskać wspieranych metod rejestracji.",
         "failed_soft_logout_auth": "Nie udało się uwierzytelnić ponownie",
         "failed_soft_logout_homeserver": "Nie udało się uwierzytelnić ponownie z powodu błędu serwera domowego",
-        "footer_powered_by_matrix": "napędzany przez Matrix",
         "forgot_password_email_invalid": "Adres e-mail nie wygląda na prawidłowy.",
         "forgot_password_email_required": "Musisz wpisać adres e-mail połączony z twoim kontem.",
         "forgot_password_prompt": "Nie pamiętasz hasła?",
@@ -240,7 +240,6 @@
         "oidc": {
             "error_title": "Nie mogliśmy Cię zalogować",
             "generic_auth_error": "Coś poszło nie tak podczas uwierzytelniania. Przejdź do strony logowania i spróbuj ponownie.",
-            "logout_redirect_warning": "Zostaniesz przekierowany do dostawcy uwierzytelniania Twojego serwera w celu zakończenia wylogowania.",
             "missing_or_invalid_stored_state": "Poprosiliśmy przeglądarkę, aby zapamiętała za pomocą jakiego serwera domowego się logujesz, lecz niestety go zapomniała. Przejdź do strony logowania i spróbuj ponownie."
         },
         "password_field_keep_going_prompt": "Kontynuuj…",
@@ -250,13 +249,11 @@
         "phone_label": "Telefon",
         "phone_optional_label": "Telefon (opcjonalny)",
         "qr_code_login": {
-            "approve_access_warning": "Akceptując dostęp temu urządzeniu, będzie miał on pełny dostęp do Twojego konta.",
             "check_code_explainer": "Bezpieczeństwo połączenia z urządzeniem zostanie sprawdzone.",
             "check_code_heading": "Wprowadź numer wyświetlany na drugim urządzeniu",
             "check_code_input_label": "2-cyfrowy kod",
             "check_code_mismatch": "Liczby się nie zgadzają",
             "completing_setup": "Kończenie konfiguracji nowego urządzenia",
-            "confirm_code_match": "Potwierdź, że kod poniżej pasuje z Twoim drugim urządzeniem:",
             "error_etag_missing": "Wystąpił nieoczekiwany błąd. Może to być spowodowane rozszerzeniem przeglądarki, serwerem proxy lub błędną konfiguracją serwera.",
             "error_expired": "Logowanie wygasło. Spróbuj ponownie.",
             "error_expired_title": "Logowanie nie zostało zakończone na czas",
@@ -284,7 +281,8 @@
             "security_code": "Kod bezpieczeństwa",
             "security_code_prompt": "Jeśli zostaniesz poproszony, wprowadź poniższy kod na drugim urządzeniu.",
             "select_qr_code": "Wybierz \"%(scanQRCode)s\"",
-            "sign_in_new_device": "Zaloguj nowe urządzenie",
+            "unsupported_explainer": "Twój dostawca konta nie obsługuje logowania nowego urządzenia za pomocą kodu QR.",
+            "unsupported_heading": "Kod QR nie jest wspierany",
             "waiting_for_device": "Oczekiwanie na logowanie urządzenia"
         },
         "register_action": "Utwórz konto",
@@ -343,7 +341,7 @@
         "set_email_prompt": "Czy chcesz ustawić adres e-mail?",
         "sign_in_description": "Użyj swojego konta, aby kontynuować.",
         "sign_in_instead": "Zamiast tego zaloguj się",
-        "sign_in_instead_prompt": "Zamiast tego zaloguj się",
+        "sign_in_instead_prompt": "Masz już konto? <a>Zaloguj się tutaj</a>",
         "sign_in_or_register": "Zaloguj się lub utwórz konto",
         "sign_in_or_register_description": "Użyj konta lub utwórz nowe, aby kontynuować.",
         "sign_in_prompt": "Posiadasz już konto? <a>Zaloguj się</a>",
@@ -409,7 +407,6 @@
         "download_logs": "Pobierz dzienniki",
         "downloading_logs": "Pobieranie logów",
         "error_empty": "Powiedz nam, co poszło nie tak, lub nawet lepiej - utwórz zgłoszenie na platformie GitHub, które opisuje problem.",
-        "failed_send_logs": "Nie udało się wysłać dzienników: ",
         "github_issue": "Zgłoszenie GitHub",
         "introduction": "Jeśli zgłosiłeś błąd za pomocą serwisu GitHub, dzienniki debugowania mogą pomóc nam w namierzeniu problemu. ",
         "log_request": "Aby uniknąć tego problemu w przyszłości, <a>wyślij nam dzienniki</a>.",
@@ -452,10 +449,10 @@
         "all_rooms": "Wszystkie pokoje",
         "analytics": "Analityka",
         "and_n_others": {
-            "other": "i %(count)s innych...",
-            "one": "i jeden inny..."
+            "one": "i jeden inny...",
+            "few": "i %(count)s innych...",
+            "many": "i %(count)s innych..."
         },
-        "android": "Android",
         "appearance": "Wygląd",
         "application": "Aplikacja",
         "are_you_sure": "Czy jesteś pewien?",
@@ -495,18 +492,17 @@
         "identity_server": "Serwer tożsamości",
         "image": "Obraz",
         "integration_manager": "Menedżer integracji",
-        "ios": "iOS",
         "joined": "Dołączono",
         "labs": "Laboratoria",
         "legal": "Zasoby prawne",
         "light": "Jasny",
         "loading": "Wczytywanie…",
-        "lobby": "Poczekalnia",
         "location": "Lokalizacja",
         "low_priority": "Niski priorytet",
         "matrix": "Matrix",
         "message": "Wiadomość",
         "message_layout": "Wygląd wiadomości",
+        "message_timestamp_invalid": "Nieprawidłowy znacznik czasu",
         "microphone": "Mikrofon",
         "model": "Model",
         "modern": "Współczesny",
@@ -545,6 +541,7 @@
         "qr_code": "Kod QR",
         "random": "Losowe",
         "reactions": "Reakcje",
+        "recommended": "Polecane",
         "report_a_bug": "Zgłoś błąd",
         "room": "Pokój",
         "room_name": "Nazwa pokoju",
@@ -553,7 +550,6 @@
         "saved": "Zapisano",
         "saving": "Zapisywanie…",
         "secure_backup": "Bezpieczna kopia zapasowa",
-        "security": "Bezpieczeństwo",
         "select_all": "Zaznacz wszystkie",
         "server": "Serwer",
         "settings": "Ustawienia",
@@ -572,13 +568,11 @@
         "thread": "Wątek",
         "threads": "Wątki",
         "timeline": "Oś czasu",
-        "trusted": "Zaufane",
         "unavailable": "niedostępne",
         "unencrypted": "Nieszyfrowany",
         "unmute": "Wyłącz wyciszenie",
         "unnamed_room": "Pokój bez nazwy",
         "unnamed_space": "Przestrzeń bez nazwy",
-        "unsent": "Niewysłane",
         "unverified": "Niezweryfikowane",
         "updating": "Aktualizowanie...",
         "user": "Użytkownik",
@@ -590,8 +584,7 @@
         "video": "Wideo",
         "video_room": "Pokój wideo",
         "view_message": "Wyświetl wiadomość",
-        "warning": "Ostrzeżenie",
-        "welcome": "Witaj"
+        "warning": "Ostrzeżenie"
     },
     "composer": {
         "autocomplete": {
@@ -741,11 +734,49 @@
         "category_room": "Pokój",
         "caution_colon": "Ostrzeżenie:",
         "client_versions": "Wersje klientów",
+        "crypto": {
+            "4s_public_key_in_account_data": "w danych konta",
+            "4s_public_key_not_in_account_data": "nie znaleziono",
+            "4s_public_key_status": "Klucz publiczny sekretnego magazynu:",
+            "backup_key_cached": "w lokalnej pamięci podręcznej",
+            "backup_key_cached_status": "Klucz zapasowy zapisany w pamięci podręcznej:",
+            "backup_key_not_stored": "nie przechowywany",
+            "backup_key_stored": "w sekretnym magazynie",
+            "backup_key_stored_status": "Magazyn klucza kopii zapasowej:",
+            "backup_key_unexpected_type": "nieoczekiwany typ",
+            "backup_key_well_formed": "dobrze ukształtowany",
+            "cross_signing": "Weryfikacja krzyżowa",
+            "cross_signing_cached": "w lokalnej pamięci podręcznej",
+            "cross_signing_not_ready": "Weryfikacja krzyżowa nie jest ustawiona.",
+            "cross_signing_private_keys_in_storage": "w sekretnym magazynie",
+            "cross_signing_private_keys_in_storage_status": "Klucze prywatne weryfikacji krzyżowej:",
+            "cross_signing_private_keys_not_in_storage": "nie odnaleziono w pamięci",
+            "cross_signing_public_keys_on_device": "w pamięci",
+            "cross_signing_public_keys_on_device_status": "Weryfikacja krzyżowa kluczy publicznych:",
+            "cross_signing_ready": "Weryfikacja krzyżowa jest gotowa do użycia.",
+            "cross_signing_status": "Status weryfikacji krzyżowej:",
+            "cross_signing_untrusted": "Twoje konto ma tożsamość weryfikacji krzyżowej w sekretnym magazynie, ale nie jest jeszcze zaufane przez tę sesję.",
+            "crypto_not_available": "Moduł kryptograficzny nie jest dostępny",
+            "key_backup_active_version": "Aktywna wersja kopii zapasowej:",
+            "key_backup_active_version_none": "Brak",
+            "key_backup_inactive_warning": "Twoje klucze nie są przywracane na tej sesji.",
+            "key_backup_latest_version": "Najnowsza wersja kopii zapasowej na serwerze:",
+            "key_storage": "Magazyn kluczy",
+            "master_private_key_cached_status": "Główny klucz prywatny:",
+            "not_found": "nie znaleziono",
+            "not_found_locally": "nie znaleziono lokalnie",
+            "secret_storage_not_ready": "niegotowe",
+            "secret_storage_ready": "gotowe",
+            "secret_storage_status": "Sekretny magazyn:",
+            "self_signing_private_key_cached_status": "Samopodpisujący klucz prywatny:",
+            "title": "Szyfrowanie end-to-end",
+            "user_signing_private_key_cached_status": "Podpisany przez użytkownika klucz prywatny:"
+        },
         "developer_mode": "Tryb programisty",
         "developer_tools": "Narzędzia programistyczne",
         "edit_setting": "Edytuj ustawienie",
         "edit_values": "Edytuj wartości",
-        "empty_string": "<empty​•​string>",
+        "empty_string": "<empty string>",
         "event_content": "Zawartość wydarzenia",
         "event_id": "ID wydarzenia: %(eventId)s",
         "event_sent": "Wydarzenie wysłane!",
@@ -763,20 +794,11 @@
         "low_bandwidth_mode": "Tryb niskiej przepustowości",
         "low_bandwidth_mode_description": "Wymaga kompatybilnego serwera domowego.",
         "main_timeline": "Główna oś czasu",
-        "methods": "Metody",
         "no_receipt_found": "Nie znaleziono potwierdzenia",
-        "no_verification_requests_found": "Nie znaleziono żądań weryfikacji",
         "notification_state": "Status powiadomień <strong>%(notificationState)s</strong>",
         "notifications_debug": "Debug powiadomień",
         "number_of_users": "Liczba użytkowników",
         "original_event_source": "Oryginalne źródło wydarzenia",
-        "other_user": "Inny użytkownik",
-        "phase": "Etap",
-        "phase_cancelled": "Anulowano",
-        "phase_ready": "Gotowe",
-        "phase_requested": "Żądane",
-        "phase_started": "Rozpoczęto",
-        "phase_transaction": "Transakcja",
         "room_encrypted": "Pokój jest <strong>szyfrowany ✅</strong>",
         "room_id": "ID pokoju: %(roomId)s",
         "room_not_encrypted": "Pokój nie jest <strong>szyfrowany 🚨</strong>",
@@ -810,13 +832,12 @@
         "show_hidden_events": "Pokaż ukryte wydarzenia na linii czasowej",
         "spaces": {
             "one": "<space>",
-            "other": "<%(count)s spacji>"
+            "few": "<%(count)s spacje>",
+            "many": "<%(count)s spacji>"
         },
         "state_key": "Klucz stanu",
         "thread_root_id": "ID Root Wątku:%(threadRootId)s",
         "threads_timeline": "Oś czasu wątków",
-        "timeout": "Czas oczekiwania",
-        "timeout_none": "Brak",
         "title": "Ustawienia deweloperskie",
         "toggle_event": "przełącz wydarzenie",
         "toolbox": "Przybornik",
@@ -833,7 +854,6 @@
         "values_explicit_colon": "Wartości w ścisłych poziomach:",
         "values_explicit_room": "Wartości w ścisłych poziomach w tym pokoju",
         "values_explicit_this_room_colon": "Wartości w ścisłych poziomach w tym pokoju:",
-        "verification_explorer": "Eksplorator weryfikacji",
         "view_servers_in_room": "Wyświetl serwery w pokoju",
         "view_source_decrypted_event_source": "Rozszyfrowane wydarzenie źródłowe",
         "view_source_decrypted_event_source_unavailable": "Rozszyfrowane źródło niedostępne",
@@ -861,22 +881,22 @@
     "empty_room_was_name": "Pusty pokój (poprzednio %(oldName)s)",
     "encryption": {
         "access_secret_storage_dialog": {
-            "enter_phrase_or_key_prompt": "Wprowadź swoją frazę zabezpieczającą lub <button>użyj klucza zabezpieczającego</button>, aby kontynuować.",
+            "enter_phrase_or_key_prompt": "Wprowadź swoją frazę bezpieczeństwa lub <button>użyj klucza przywracania</button>, aby kontynuować.",
             "key_validation_text": {
-                "invalid_security_key": "Nieprawidłowy klucz bezpieczeństwa",
+                "invalid_security_key": "Błędny klucz przywracania",
                 "recovery_key_is_correct": "Wygląda dobrze!",
                 "wrong_file_type": "Błędny typ pliku",
-                "wrong_security_key": "Niewłaściwy klucz bezpieczeństwa"
+                "wrong_security_key": "Błędny klucz przywracania"
             },
             "reset_title": "Resetuj wszystko",
             "reset_warning_1": "Zrób to tylko wtedy, gdy nie masz innego urządzenia, za pomocą którego mógłbyś zakończyć weryfikację.",
             "reset_warning_2": "Jeśli zresetujesz wszystko, stracisz wszystkie sesje zaufane, użytkowników zaufanych i możliwe, że nie będziesz w stanie przeglądać historii czatu.",
             "restoring": "Przywracanie kluczy z kopii zapasowej",
-            "security_key_title": "Klucz bezpieczeństwa",
+            "security_key_title": "Klucz przywracania",
             "security_phrase_incorrect_error": "Nie można uzyskać dostępu do sekretnego magazynu. Upewnij się, że wprowadzono poprawne Hasło bezpieczeństwa.",
             "security_phrase_title": "Hasło bezpieczeństwa",
             "separator": "%(securityKey)s lub %(recoveryFile)s",
-            "use_security_key_prompt": "Użyj swojego klucza bezpieczeństwa, aby kontynuować."
+            "use_security_key_prompt": "Użyj klucza przywracania, aby kontynuować."
         },
         "bootstrap_title": "Konfigurowanie kluczy",
         "cancel_entering_passphrase_description": "Czy na pewno chcesz anulować wpisywanie hasła?",
@@ -890,7 +910,7 @@
         "cross_signing_room_verified": "Wszyscy w tym pokoju są zweryfikowani",
         "cross_signing_room_warning": "Ktoś używa nieznanej sesji",
         "cross_signing_unsupported": "Twój serwer domowy nie obsługuje weryfikacji krzyżowej.",
-        "cross_signing_untrusted": "Twoje konto ma tożsamość weryfikacji krzyżowej w sekretnej pamięci, ale nie jest jeszcze zaufane przez tę sesję.",
+        "cross_signing_untrusted": "Twoje konto ma tożsamość weryfikacji krzyżowej w sekretnym magazynie, ale nie jest jeszcze zaufane przez tę sesję.",
         "cross_signing_user_normal": "Nie zweryfikowałeś tego użytkownika.",
         "cross_signing_user_verified": "Zweryfikowałeś tego użytkownika. Użytkownik zweryfikował wszystkie swoje sesje.",
         "cross_signing_user_warning": "Ten użytkownik nie zweryfikował wszystkich swoich sesji.",
@@ -899,18 +919,18 @@
             "title": "Zniszczyć klucze weryfikacji krzyżowej?",
             "warning": "Usunięcie kluczy weryfikacji krzyżowej jest trwałe. Każdy, z kim dokonano weryfikacji, zobaczy alerty bezpieczeństwa. Prawie na pewno nie chcesz tego robić, chyba że straciłeś każde urządzenie, z którego możesz weryfikować."
         },
+        "enter_recovery_key": "Wprowadź klucz przywracania",
         "event_shield_reason_authenticity_not_guaranteed": "Autentyczność tej wiadomości szyfrowanej nie jest gwarantowana na tym urządzeniu.",
         "event_shield_reason_mismatched_sender_key": "Zaszyfrowano przez sesję niezweryfikowaną",
         "event_shield_reason_unknown_device": "Zaszyfrowano przez nieznane lub usunięte urządzenie.",
         "event_shield_reason_unsigned_device": "Zaszyfrowano przez urządzenie niezweryfikowane przez właściciela.",
         "event_shield_reason_unverified_identity": "Zaszyfrowano przez niezweryfikowanego użytkownika",
         "export_unsupported": "Twoja przeglądarka nie wspiera wymaganych rozszerzeń kryptograficznych",
+        "forgot_recovery_key": "Nie pamiętasz klucza przywracania?",
         "import_invalid_keyfile": "Niepoprawny plik klucza %(brand)s",
         "import_invalid_passphrase": "Próba autentykacji nieudana: nieprawidłowe hasło?",
-        "incompatible_database_description": "Użyłeś wcześniej nowszej wersji %(brand)s na tej sesji. Aby korzystać z tej wersji z szyfrowaniem end-to-end, będziesz musiał zalogować się ponownie.",
-        "incompatible_database_disable": "Kontynuuj Z Wyłączonym Szyfrowaniem",
-        "incompatible_database_sign_out_description": "Aby uniknąć utraty historii czatu, eksportuj swoje klucze pokoju przed wylogowaniem. Musisz powrócić do nowszej wersji %(brand)s, aby do zrobić",
-        "incompatible_database_title": "Niekompatybilna baza danych",
+        "key_storage_out_of_sync": "Twój magazyn kluczy nie jest zsynchronizowany.",
+        "key_storage_out_of_sync_description": "Potwierdź klucz przywracania, aby zachować dostęp do magazynu kluczy i historii wiadomości.",
         "messages_not_secure": {
             "cause_1": "Twój serwer domowy",
             "cause_2": "Użytkownik, którego weryfikujesz jest połączony z serwerem domowym",
@@ -926,6 +946,8 @@
             "warning": "Jeżeli nie ustawiłeś nowej metody odzyskiwania, atakujący może uzyskać dostęp do Twojego konta. Zmień hasło konta i natychmiast ustaw nową metodę odzyskiwania w Ustawieniach."
         },
         "not_supported": "<niewspierany>",
+        "pinned_identity_changed": "Tożsamość użytkownika %(displayName)s (<b>%(userId)s</b>) uległa zmianie. <a>Dowiedz się więcej</a>",
+        "pinned_identity_changed_no_displayname": "Tożsamość użytkownika <b>%(userId)s</b> uległa zmianie <a>Dowiedz się więcej</a>",
         "recovery_method_removed": {
             "description_1": "Ta sesja wykryła, że Twoja fraza bezpieczeństwa i klucz dla bezpiecznych wiadomości zostały usunięte.",
             "description_2": "Jeśli zrobiłeś to przez pomyłkę, możesz ustawić bezpieczne wiadomości w tej sesji, co zaszyfruje ponownie historię wiadomości za pomocą nowej metody odzyskiwania.",
@@ -933,6 +955,9 @@
             "warning": "Jeśli nie usunąłeś metody odzyskiwania, atakujący może próbować dostać się na Twoje konto. Zmień hasło konta i natychmiast ustaw nową metodę odzyskiwania w Ustawieniach."
         },
         "reset_all_button": "Zapomniałeś lub straciłeś wszystkie opcje odzyskiwania? <a>Resetuj wszystko</a>",
+        "set_up_recovery": "Skonfiguruj przywracanie",
+        "set_up_recovery_later": "Nie teraz",
+        "set_up_recovery_toast_description": "Wygeneruj klucz przywracania, którego można użyć do przywrócenia zaszyfrowanej historii wiadomości w przypadku utraty dostępu do swoich urządzeń.",
         "set_up_toast_description": "Zabezpiecz się przed utratą dostępu do szyfrowanych wiadomości i danych",
         "set_up_toast_title": "Skonfiguruj bezpieczną kopię zapasową",
         "setup_secure_backup": {
@@ -941,7 +966,6 @@
         },
         "udd": {
             "interactive_verification_button": "Zweryfikuj interaktywnie za pomocą emoji",
-            "manual_verification_button": "Zweryfikuj ręcznie za pomocą tekstu",
             "other_ask_verify_text": "Poproś go/ją o zweryfikowanie tej sesji bądź zweryfikuj ją osobiście poniżej.",
             "other_new_session_text": "%(name)s%(userId)s zalogował się do nowej sesji bez zweryfikowania jej:",
             "own_ask_verify_text": "Zweryfikuj swoje pozostałe sesje używając jednej z opcji poniżej.",
@@ -949,8 +973,6 @@
             "title": "Niezaufany"
         },
         "unable_to_setup_keys_error": "Nie można ustawić kluczy",
-        "unsupported": "Ten klient nie obsługuje szyfrowania end-to-end.",
-        "upgrade_toast_title": "Dostępne ulepszenie szyfrowania",
         "verification": {
             "accepting": "Akceptowanie…",
             "after_new_login": {
@@ -977,13 +999,7 @@
             "incoming_sas_dialog_waiting": "Oczekiwanie na potwierdzenie partnera…",
             "incoming_sas_user_dialog_text_1": "Zweryfikuj tego użytkownika, aby oznaczyć go jako zaufanego. Użytkownicy zaufani dodają większej pewności, gdy korzystasz z wiadomości szyfrowanych end-to-end.",
             "incoming_sas_user_dialog_text_2": "Weryfikacja tego użytkownika oznaczy Twoją i jego sesję jako zaufaną.",
-            "manual_device_verification_device_id_label": "Identyfikator sesji",
-            "manual_device_verification_device_key_label": "Klucz sesji",
-            "manual_device_verification_device_name_label": "Nazwa sesji",
-            "manual_device_verification_footer": "Jeśli nie pasują, bezpieczeństwo twojego konta mogło zostać zdradzone.",
-            "manual_device_verification_self_text": "Potwierdź porównując następujące elementy w ustawieniach użytkownika w drugiej sesji:",
-            "manual_device_verification_user_text": "Potwierdź sesję tego użytkownika, porównując następujące elementy w jego ustawieniach użytkownika:",
-            "no_key_or_device": "Wygląda na to, że nie masz klucza bezpieczeństwa ani żadnych innych urządzeń, które mogą weryfikować Twoją tożsamość.  To urządzenie nie będzie mogło uzyskać dostępu do wcześniejszych zaszyfrowanych wiadomości. Aby zweryfikować swoją tożsamość na tym urządzeniu, należy zresetować klucze weryfikacyjne.",
+            "no_key_or_device": "Wygląda na to, że nie masz klucza przywracania ani żadnych innych urządzeń, które mogłyby zweryfikować Twoją tożsamość.  To urządzenie nie będzie mogło odczytać wcześniej zaszyfrowanych wiadomości. Aby zweryfikować swoją tożsamość na tym urządzeniu, musisz zresetować klucze weryfikacyjne.",
             "no_support_qr_emoji": "Urządzenie, które próbujesz zweryfikować nie wspiera skanowania kodu QR lub weryfikacji emoji, czyli tego co obsługuje %(brand)s. Spróbuj użyć innego klienta.",
             "other_party_cancelled": "Druga strona anulowała weryfikację.",
             "prompt_encrypted": "Zweryfikuj wszystkich użytkowników w pokoju, aby upewnić się, że jest bezpieczny.",
@@ -1022,7 +1038,7 @@
             "unverified_sessions_toast_description": "Sprawdź, by upewnić się że Twoje konto jest bezpieczne",
             "unverified_sessions_toast_reject": "Później",
             "unverified_sessions_toast_title": "Masz niezweryfikowane sesje",
-            "verification_description": "Zweryfikuj swoją tożsamość, aby uzyskać dostęp do wiadomości szyfrowanych i potwierdzić swoją tożsamość innym.",
+            "verification_description": "Zweryfikuj swoją tożsamość, aby uzyskać dostęp do wiadomości szyfrowanych i potwierdzić swoją tożsamość innym. Jeśli korzystasz z urządzenia mobilnego, otwórz na niej aplikację.",
             "verification_dialog_title_device": "Zweryfikuj drugie urządzenie",
             "verification_dialog_title_user": "Żądanie weryfikacji",
             "verification_skip_warning": "Bez weryfikacji, nie będziesz posiadać dostępu do wszystkich swoich wiadomości, a inni będą Cię widzieć jako niezaufanego.",
@@ -1033,18 +1049,21 @@
             "verify_emoji_prompt_qr": "Jeśli nie jesteś w stanie skanować kodu powyżej, zweryfikuj porównując emoji.",
             "verify_later": "Zweryfikuję później",
             "verify_reset_warning_1": "Zresetowanie kluczy weryfikacyjnych nie może być cofnięte. Po zresetowaniu, nie będziesz mieć dostępu do starych wiadomości szyfrowanych, a wszyscy znajomi, którzy wcześniej Cię zweryfikowali, będą widzieć ostrzeżenia do czasu ponownej weryfikacji.",
-            "verify_reset_warning_2": "Kontynuuj tylko wtedy, gdy jesteś pewien, że straciłeś wszystkie inne urządzenia i swój klucz bezpieczeństwa.",
+            "verify_reset_warning_2": "Kontynuuj tylko wtedy, gdy masz pewność, że utraciłeś wszystkie inne urządzenia i swój klucz przywracania.",
             "verify_using_device": "Zweryfikuj innym urządzeniem",
-            "verify_using_key": "Weryfikacja za pomocą klucza bezpieczeństwa",
-            "verify_using_key_or_phrase": "Weryfikacja za pomocą klucza lub frazy bezpieczeństwa",
+            "verify_using_key": "Zweryfikuj kluczem przywracania",
+            "verify_using_key_or_phrase": "Zweryfikuj kluczem przywracania lub frazą",
             "waiting_for_user_accept": "Oczekiwanie na akceptację przez %(displayName)s…",
             "waiting_other_device": "Oczekiwanie na zweryfikowanie przez ciebie twojego innego urządzenia…",
             "waiting_other_device_details": "Oczekiwanie na zweryfikowanie przez ciebie twojego innego urządzenia, %(deviceName)s (%(deviceId)s)…",
             "waiting_other_user": "Oczekiwanie na weryfikację przez %(displayName)s…"
         },
         "verification_requested_toast_title": "Zażądano weryfikacji",
+        "verified_identity_changed": "Zweryfikowana tożsamość %(displayName)s (<b>%(userId)s</b>) uległa zmianie. <a>Dowiedz się więcej</a>",
+        "verified_identity_changed_no_displayname": "Zweryfikowana tożsamość <b>%(userId)s</b> uległa zmianie. <a>Dowiedz się więcej</a>",
         "verify_toast_description": "Inni użytkownicy mogą temu nie ufać",
-        "verify_toast_title": "Zweryfikuj tę sesję"
+        "verify_toast_title": "Zweryfikuj tę sesję",
+        "withdraw_verification_action": "Wycofaj weryfikację"
     },
     "error": {
         "admin_contact": "Proszę, <a>skontaktuj się z administratorem</a> aby korzystać dalej z funkcji.",
@@ -1107,10 +1126,6 @@
     },
     "error_user_not_logged_in": "Użytkownik nie jest zalogowany",
     "event_preview": {
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s zakończył transmisję głosową",
-            "you": "Zakończyłeś transmisje na żywo"
-        },
         "m.call.answer": {
             "dm": "Połączenie w trakcie",
             "user": "%(senderName)s dołączył do połączenia",
@@ -1132,7 +1147,15 @@
             "you": "Dodano reakcję %(reaction)s do %(message)s"
         },
         "m.sticker": "%(senderName)s: %(stickerName)s",
-        "m.text": "%(senderName)s: %(message)s"
+        "m.text": "%(senderName)s: %(message)s",
+        "prefix": {
+            "audio": "Audio",
+            "file": "Plik",
+            "image": "Obraz",
+            "poll": "Ankieta",
+            "video": "Wideo"
+        },
+        "preview": "<bold>%(prefix)s:</bold> %(preview)s"
     },
     "export_chat": {
         "cancelled": "Eksport został anulowany",
@@ -1148,20 +1171,24 @@
         "export_successful": "Eksport zakończony pomyślnie!",
         "exported_n_events_in_time": {
             "one": "Wyeksportowano %(count)s wydarzenie w %(seconds)s sekund",
-            "other": "Wyeksportowano %(count)s wydarzeń w %(seconds)s sekund"
+            "few": "Wyeksportowano %(count)s wydarzenia w %(seconds)s sekund",
+            "many": "Wyeksportowano %(count)s wydarzeń w %(seconds)s sekund"
         },
         "exporting_your_data": "Eksportowanie Twoich danych",
         "fetched_n_events": {
-            "one": "Pobrano %(count)s wydarzenie",
-            "other": "Pobrano %(count)s wydarzeń"
+            "one": "Pobrano %(count)s wydarzenie do tej pory",
+            "few": "Pobrano %(count)s wydarzenia do tej pory",
+            "many": "Pobrano %(count)s wydarzeń do tej pory"
         },
         "fetched_n_events_in_time": {
             "one": "Pobrano %(count)s wydarzenie w %(seconds)ss",
-            "other": "Pobrano %(count)s wydarzeń w %(seconds)ss"
+            "few": "Pobrano %(count)s wydarzenia w %(seconds)ss",
+            "many": "Pobrano %(count)s wydarzeń w %(seconds)ss"
         },
         "fetched_n_events_with_total": {
             "one": "Pobrano %(count)s wydarzenie z %(total)s",
-            "other": "Pobrano %(count)s wydarzeń z %(total)s"
+            "few": "Pobrano %(count)s wydarzenia z %(total)s",
+            "many": "Pobrano %(count)s wydarzeń z %(total)s"
         },
         "fetching_events": "Pobieranie wydarzeń…",
         "file_attached": "Plik załączony",
@@ -1224,6 +1251,7 @@
         "change": "Zmień serwer tożsamości",
         "change_prompt": "Rozłączyć się z bieżącym serwerem tożsamości <current /> i połączyć się z <new />?",
         "change_server_prompt": "Jeżeli nie chcesz używać <server /> do odnajdywania i bycia odnajdywanym przez osoby, które znasz, wpisz inny serwer tożsamości poniżej.",
+        "changed": "Twój serwer tożsamości został zmieniony",
         "checking": "Sprawdzanie serwera",
         "description_connected": "Używasz <server></server>﻿, aby odnajdywać i móc być odnajdywanym przez istniejące kontakty, które znasz. Możesz zmienić serwer tożsamości poniżej.",
         "description_disconnected": "Nie używasz serwera tożsamości. Aby odkrywać i być odkrywanym przez istniejące kontakty które znasz, dodaj jeden poniżej.",
@@ -1251,8 +1279,9 @@
     "in_space": "W przestrzeni %(spaceName)s.",
     "in_space1_and_space2": "W przestrzeniach %(space1Name)s i %(space2Name)s.",
     "in_space_and_n_other_spaces": {
-        "one": "W %(spaceName)s i %(count)s innej przestrzeni.",
-        "other": "W %(spaceName)s i %(count)s innych przestrzeniach."
+        "one": "W %(spaceName)s i jednej innej przestrzeni.",
+        "few": "W %(spaceName)s i %(count)s innych przestrzeniach.",
+        "many": "W %(spaceName)s i %(count)s innych przestrzeniach."
     },
     "incompatible_browser": {
         "continue": "Kontynuuj mimo to",
@@ -1260,11 +1289,15 @@
         "detail_can_continue": "Jeśli kontynuujesz, niektóre funkcje mogą przestać działać, jak i istnieje ryzyko utraty danych w przyszłości.",
         "detail_no_continue": "Zaktualizuj przeglądarkę, jeśli jeszcze tego nie zrobiłeś i spróbuj ponownie.",
         "learn_more": "Dowiedz się więcej",
+        "linux": "Linux",
+        "macos": "Mac",
         "supported_browsers": "Dla najlepszego doświadczenia korzystaj z <Chrome>Chrome</Chrome>, <Firefox>Firefox</Firefox>, <Edge>Edge</Edge> lub <Safari>Safari</Safari>.",
         "title": "%(brand)s nie wspiera tej przeglądarki",
         "use_desktop_heading": "Zamiast tego użyj %(brand)s Desktop",
         "use_mobile_heading": "Zamiast tego użyj %(brand)s Mobile",
-        "use_mobile_heading_after_desktop": "lub skorzystaj z naszej aplikacji mobilnej"
+        "use_mobile_heading_after_desktop": "lub skorzystaj z naszej aplikacji mobilnej",
+        "windows_64bit": "Windows (64-bit)",
+        "windows_arm_64bit": "Windows (ARM 64-bit)"
     },
     "info_tooltip_title": "Informacje",
     "integration_manager": {
@@ -1339,8 +1372,9 @@
     },
     "inviting_user1_and_user2": "Zapraszanie %(user1)s i %(user2)s",
     "inviting_user_and_n_others": {
-        "one": "Zapraszanie %(user)s i 1 więcej",
-        "other": "Zapraszanie %(user)s i %(count)s innych"
+        "one": "Zapraszanie %(user)s i jedną inną osobę",
+        "few": "Zapraszanie %(user)s i %(count)s inne",
+        "many": "Zapraszanie %(user)s i %(count)s innych"
     },
     "items_and_n_others": {
         "other": "<Items/> i %(count)s innych",
@@ -1474,12 +1508,11 @@
         "location_share_live_description": "Implementacja tymczasowa. Lokalizacje są zapisywane w historii pokoju.",
         "mjolnir": "Nowe sposoby na ignorowanie osób",
         "msc3531_hide_messages_pending_moderation": "Daj moderatorom ukrycie wiadomości które są sprawdzane.",
+        "new_room_list": "Włącz nową listę pokojów",
         "notification_settings": "Ustawienia nowych powiadomień",
         "notification_settings_beta_caption": "Przedstawiamy prostszy sposób zmiany ustawień powiadomień. Dostosuj %(brand)s wedle swojego upodobania.",
         "notification_settings_beta_title": "Ustawienia powiadomień",
         "notifications": "Włącz panel powiadomień w nagłówku pokoju.",
-        "oidc_native_flow": "Uwierzytelnianie natywne OIDC",
-        "oidc_native_flow_description": "⚠ OSTRZEŻENIE: Funkcja eksperymentalna. Użyj uwierzytelniania natywnego OIDC, gdy jest wspierane przez serwer.",
         "release_announcement": "Ogłoszenie o wydaniu",
         "render_reaction_images": "Renderuj niestandardowe obrazy w reakcjach",
         "render_reaction_images_description": "Czasami określane jako \"emoji niestandardowe\".",
@@ -1500,8 +1533,6 @@
         "video_rooms_faq2_answer": "Tak, oś czasu czatu jest wyświetlana wraz z wideo.",
         "video_rooms_faq2_question": "Czy mogę używać kanału tekstowego jednocześnie rozmawiając na kanale wideo?",
         "video_rooms_feedbackSubheading": "Dziękujemy za wypróbowanie wersji beta, opisz wnikliwie swoje doświadczenia i pomóż nam ulepszyć nasz produkt.",
-        "voice_broadcast": "Transmisja głosowa",
-        "voice_broadcast_force_small_chunks": "Wymuś 15s długość kawałków dla transmisji głosowej",
         "wysiwyg_composer": "Bogaty edytor tekstu"
     },
     "labs_mjolnir": {
@@ -1534,7 +1565,7 @@
         "rules_title": "Zbanuj listę zasad - %(roomName)s",
         "rules_user": "Zasady użytkownika",
         "something_went_wrong": "Coś poszło nie tak. Spróbuj ponownie lub sprawdź konsolę przeglądarki dla wskazówek.",
-        "title": "Zignorowani użytkownicy",
+        "title": "Ignorowani użytkownicy",
         "view_rules": "Zobacz zasady"
     },
     "language_dropdown_label": "Rozwiń języki",
@@ -1601,9 +1632,15 @@
         "toggle_attribution": "Przełącz atrybucje"
     },
     "member_list": {
+        "count": {
+            "one": "%(count)s Członek",
+            "few": "%(count)s Członki",
+            "many": "%(count)s Członków"
+        },
         "filter_placeholder": "Filtruj członków pokoju",
         "invite_button_no_perms_tooltip": "Nie posiadasz uprawnień, aby zapraszać użytkowników",
-        "invited_list_heading": "Zaproszeni",
+        "invited_label": "Zaproszono",
+        "no_matches": "Brak wyników",
         "power_label": "%(userName)s (moc uprawnień administratorskich %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Członkowie pokoju",
@@ -1647,65 +1684,18 @@
         "mute_description": "Nie otrzymasz żadnych powiadomień"
     },
     "notifier": {
-        "io.element.voice_broadcast_chunk": "%(senderName)s rozpoczął transmisję głosową",
         "m.key.verification.request": "%(name)s prosi o weryfikację"
     },
     "onboarding": {
-        "apple_trademarks": "App Store® i logo Apple® są znakami towarowymi Apple Inc.",
-        "community_messaging_action": "Znajdź swoich ludzi",
-        "community_messaging_description": "Zatrzymaj własność i kontroluj dyskusję społeczności.\nRozwijaj się, aby wspierać miliony za pomocą potężnych narzędzi moderatorskich i interoperacyjnością.",
-        "community_messaging_title": "Własność społeczności",
-        "complete_these": "Wykonaj je, aby jak najlepiej wykorzystać %(brand)s",
         "create_room": "Utwórz czat grupowy",
-        "download_app": "Pobierz %(brand)s",
-        "download_app_action": "Pobierz aplikacje",
-        "download_app_description": "Nie przegap niczego zabierając %(brand)s ze sobą",
-        "download_app_store": "Pobierz w App Store",
-        "download_brand": "Pobierz %(brand)s",
-        "download_brand_desktop": "Pobierz %(brand)s Desktop",
-        "download_f_droid": "Pobierz w F-Droid",
-        "download_google_play": "Pobierz w Google Play",
-        "enable_notifications": "Włącz powiadomienia na pulpicie",
-        "enable_notifications_action": "Otwórz ustawienia",
-        "enable_notifications_description": "Nie przegap odpowiedzi lub ważnej wiadomości",
         "explore_rooms": "Przeglądaj pokoje publiczne",
-        "find_community_members": "Znajdź i zaproś członków swojej społeczności",
-        "find_coworkers": "Znajdź i zaproś swoich współpracowników",
-        "find_friends": "Znajdź i zaproś swoich znajomych",
-        "find_friends_action": "Znajdź znajomych",
-        "find_friends_description": "Po to tu jesteś, więc bierzmy się do roboty",
-        "find_people": "Znajdź osoby",
-        "free_e2ee_messaging_unlimited_voip": "Za pomocą darmowych wiadomości szyfrowanych end-to-end i nielimitowanymi rozmowami głosowymi i wideo, %(brand)s jest świetnym sposobem, aby pozostać w kontakcie.",
-        "get_stuff_done": "Załatwiaj sprawy znajdując swoich znajomych",
-        "google_trademarks": "Google Play i logo Google Play są znakami towarowymi Google LLC.",
         "has_avatar_label": "Świetnie, pomoże to innym Cię rozpoznać",
         "intro_byline": "Bądź właścicielem swoich konwersacji.",
         "intro_welcome": "Witamy w %(appName)s",
         "no_avatar_label": "Dodaj zdjęcie, aby inni mogli Cię rozpoznać.",
-        "only_n_steps_to_go": {
-            "one": "Jeszcze tylko %(count)s krok",
-            "other": "Jeszcze tylko %(count)s kroki"
-        },
-        "personal_messaging_action": "Zacznij swoją pierwszą rozmowę",
-        "personal_messaging_title": "Bezpieczna komunikacja dla znajomych i rodziny",
-        "qr_or_app_links": "%(qrCode)s lub %(appLinks)s",
         "send_dm": "Wyślij wiadomość prywatną",
-        "set_up_profile": "Utwórz swój profil",
-        "set_up_profile_action": "Twój profil",
-        "set_up_profile_description": "Upewnij się, że osoby wiedzą, że to naprawdę ty",
-        "use_case_community_messaging": "Członkowie społeczności online",
-        "use_case_heading1": "Wszedłeś",
-        "use_case_heading2": "Z kim będziesz najczęściej rozmawiał?",
-        "use_case_heading3": "Pomożemy Ci pozostać w kontakcie.",
-        "use_case_personal_messaging": "Przyjaciele i rodzina",
-        "use_case_work_messaging": "Współpracownicy i drużyny",
         "welcome_detail": "Teraz pomożemy Ci zacząć",
-        "welcome_to_brand": "Witaj w %(brand)s",
-        "welcome_user": "Witaj, %(name)s",
-        "work_messaging_action": "Znajdź swoich współpracowników",
-        "work_messaging_title": "Bezpieczna komunikacja w pracy",
-        "you_did_it": "Udało ci się!",
-        "you_made_it": "Udało ci się!"
+        "welcome_user": "Witaj, %(name)s"
     },
     "pill": {
         "permalink_other_room": "Wiadomość w %(room)s",
@@ -1757,7 +1747,6 @@
         "custom_level": "Własny poziom",
         "default": "Domyślne",
         "label": "Poziom uprawnień",
-        "mod": "Moderator",
         "moderator": "Moderator",
         "restricted": "Ograniczony"
     },
@@ -1824,24 +1813,24 @@
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Nie udało się odszyfrować %(failedCount)s sesji!",
         "count_of_successfully_restored_keys": "Przywrócono pomyślnie %(sessionCount)s kluczy",
-        "enter_key_description": "Uzyskaj dostęp do historii bezpiecznych wiadomości i skonfiguruj bezpieczne wiadomości, wprowadzając swój klucz bezpieczeństwa.",
-        "enter_key_title": "Wprowadź klucz bezpieczeństwa",
+        "enter_key_description": "Uzyskaj dostęp do zabezpieczonej historii wiadomości i ustaw bezpieczną komunikację wprowadzając swój klucz przywracania.",
+        "enter_key_title": "Wprowadź klucz przywracania",
         "enter_phrase_description": "Uzyskaj dostęp do swojej bezpiecznej historii wiadomości i skonfiguruj bezpieczne wiadomości, wprowadzając Hasło bezpieczeństwa.",
         "enter_phrase_title": "Wprowadź hasło bezpieczeństwa",
         "incorrect_security_phrase_dialog": "Kopia zapasowa nie mogła zostać rozszyfrowana za pomocą tego Hasła bezpieczeństwa: upewnij się, że wprowadzono prawidłowe Hasło bezpieczeństwa.",
         "incorrect_security_phrase_title": "Nieprawidłowe hasło bezpieczeństwa",
         "key_backup_warning": "<b>Ostrzeżenie</b>: kopia zapasowa klucza powinna być konfigurowana tylko z zaufanego komputera.",
         "key_fetch_in_progress": "Pobieranie kluczy z serwera…",
-        "key_forgotten_text": "Jeśli zapomniałeś swojego klucza bezpieczeństwa, możesz <button>skonfigurować nowe opcje odzyskiwania</button>",
-        "key_is_invalid": "Nieprawidłowy klucz bezpieczeństwa",
-        "key_is_valid": "Wygląda to na prawidłowy klucz bezpieczeństwa!",
+        "key_forgotten_text": "Jeśli zapomniałeś swojego klucza przywracania, możesz <button>skonfigurować nowe opcje odzyskiwania</button>",
+        "key_is_invalid": "Nieprawidłowy klucz przywracania",
+        "key_is_valid": "Wygląda to na prawidłowy klucz przywracania!",
         "keys_restored_title": "Klucze przywrócone",
         "load_error_content": "Nie udało się załadować stanu kopii zapasowej",
         "load_keys_progress": "%(completed)s z %(total)s kluczy przywrócono",
         "no_backup_error": "Nie znaleziono kopii zapasowej!",
-        "phrase_forgotten_text": "Jeśli zapomniałeś(aś) swojej frazy bezpieczeństwa, możesz <button1>wykorzystać swój klucz bezpieczeństwa</button1> lub <button2>skonfigurować nowe opcje odzyskiwania</button2>",
-        "recovery_key_mismatch_description": "Kopia zapasowa nie mogła zostać rozszyfrowana za pomocą tego Klucza: upewnij się, że wprowadzono prawidłowy Klucz bezpieczeństwa.",
-        "recovery_key_mismatch_title": "Klucze bezpieczeństwa nie pasują do siebie",
+        "phrase_forgotten_text": "Jeśli zapomniałeś swojej frazy bezpieczeństwa, możesz <button1>użyć swojego klucza przywracania</button1>lub<button2>ustawić nowe opcje odzyskiwania</button2>",
+        "recovery_key_mismatch_description": "Nie udało się odszyfrować kopii zapasowej za pomocą podanego klucza: upewnij się, że wprowadzono prawidłowy klucz przywracania.",
+        "recovery_key_mismatch_title": "Klucze przywracania nie pasują do siebie",
         "restore_failed_error": "Przywrócenie kopii zapasowej jest niemożliwe"
     },
     "right_panel": {
@@ -2057,14 +2046,6 @@
             "button_view_all": "Pokaż wszystkie",
             "description": "Ten pokój ma przypięte wiadomości. Kliknij, aby je wyświetlić.",
             "go_to_message": "Wyświetl przypiętą wiadomość na osi czasu.",
-            "prefix": {
-                "audio": "Audio",
-                "file": "Plik",
-                "image": "Obraz",
-                "poll": "Ankieta",
-                "video": "Wideo"
-            },
-            "preview": "<bold>%(prefix)s:</bold> %(preview)s",
             "title": "<bold>%(index)s z %(length)s</bold> przypiętych wiadomości"
         },
         "read_topic": "Kliknij, aby przeczytać temat",
@@ -2135,7 +2116,8 @@
         "show_less": "Pokaż mniej",
         "show_n_more": {
             "one": "Pokaż %(count)s więcej",
-            "other": "Pokaż %(count)s więcej"
+            "few": "Pokaż %(count)s więcej",
+            "many": "Pokaż %(count)s więcej"
         },
         "show_previews": "Pokazuj podgląd wiadomości",
         "sort_by": "Sortuj według",
@@ -2272,7 +2254,6 @@
             "error_unbanning": "Nie udało się odbanować",
             "events_default": "Wysyłanie wiadomości",
             "invite": "Zapraszanie użytkowników",
-            "io.element.voice_broadcast_info": "Transmisje głosowe",
             "kick": "Usuń użytkowników",
             "m.call": "Rozpocznij połączenie %(brand)s",
             "m.call.member": "Dołącz do połączeń %(brand)s",
@@ -2327,7 +2308,7 @@
             "history_visibility_shared": "Tylko członkowie (od momentu włączenia tej opcji)",
             "history_visibility_warning": "Zmiany tego, kto może przeglądać historię wyszukiwania dotyczą tylko przyszłych wiadomości w pokoju. Widoczność wcześniejszej historii nie zmieni się.",
             "history_visibility_world_readable": "Każdy",
-            "join_rule_description": "Decyduj kto może dołączyć %(roomName)s.",
+            "join_rule_description": "Decyduj kto może dołączyć do %(roomName)s.",
             "join_rule_invite": "Prywatny (tylko na zaproszenie)",
             "join_rule_invite_description": "Tylko zaproszone osoby mogą dołączyć",
             "join_rule_knock": "Poproś o dołączenie",
@@ -2495,6 +2476,56 @@
         "emoji_autocomplete": "Włącz podpowiedzi Emoji podczas pisania",
         "enable_markdown": "Włącz Markdown",
         "enable_markdown_description": "Rozpocznij wiadomość z <code>/plain</code>, aby była bez markdownu.",
+        "encryption": {
+            "advanced": {
+                "breadcrumb_first_description": "Dane konta, kontakty, preferencje i lista czatów zostaną zachowane",
+                "breadcrumb_page": "Resetuj szyfrowanie",
+                "breadcrumb_second_description": "Stracisz całą historię wiadomości przechowywaną na serwerze",
+                "breadcrumb_third_description": "Konieczne będzie ponowne zweryfikowanie wszystkich istniejących urządzeń i kontaktów",
+                "breadcrumb_title": "Czy na pewno chcesz zresetować swoją tożsamość?",
+                "breadcrumb_title_forgot": "Nie pamiętasz klucza przywracania? Musisz zresetować swoją tożsamość.",
+                "breadcrumb_warning": "Zrób to tylko wtedy, gdy uważasz, że Twoje konto zostało naruszone.",
+                "details_title": "Szczegóły szyfrowania",
+                "export_keys": "Eksportuj klucze",
+                "import_keys": "Importuj klucze",
+                "other_people_device_description": "Domyślnie w pokojach szyfrowanych nie będziesz mógł wysyłać wiadomości, jeśli nie zweryfikujesz członków w pokoju",
+                "other_people_device_label": "Nigdy nie wysyłaj wiadomości szyfrowanych do niezweryfikowanych urządzeń",
+                "other_people_device_title": "Urządzenia innych osób",
+                "reset_identity": "Zresetuj tożsamość kryptograficzną",
+                "session_id": "ID sesji:",
+                "session_key": "Klucz sesji:",
+                "title": "Zaawansowane"
+            },
+            "device_not_verified_button": "Zweryfikuj to urządzenie",
+            "device_not_verified_description": "Aby wyświetlić ustawienia szyfrowania, musisz zweryfikować to urządzenie.",
+            "device_not_verified_title": "Urządzenie niezweryfikowane",
+            "dialog_title": "<strong>Ustawienia:</strong> Szyfrowanie",
+            "recovery": {
+                "change_recovery_confirm_button": "Potwierdź nowy klucz przywracania",
+                "change_recovery_confirm_description": "Wprowadź poniżej nowy klucz przywracania, aby zakończyć. Stary klucz przestanie działać.",
+                "change_recovery_confirm_title": "Wprowadź nowy klucz przywracania",
+                "change_recovery_key": "Zmień klucz przywracania",
+                "change_recovery_key_description": "Zapisz nowy klucz przywracania w bezpiecznym miejscu. Następnie kliknij Kontynuuj, aby zastosować zmiany.",
+                "change_recovery_key_title": "Zmień klucz przywracania?",
+                "description": "Odzyskaj swoją tożsamość kryptograficzną i historię wiadomości za pomocą klucza przywracania, jeśli stracisz dostęp do swoich urządzeń.",
+                "enter_key_error": "Wprowadzony klucz przywracania nie jest poprawny.",
+                "enter_recovery_key": "Wprowadź klucz przywracania",
+                "forgot_recovery_key": "Zapomniałeś klucza przywracania?",
+                "key_storage_warning": "Magazyn kluczy nie jest zsynchronizowany. Kliknij jeden z przycisków poniżej, aby rozwiązać problem.",
+                "save_key_description": "Nie udostępniaj go nikomu!",
+                "save_key_title": "Klucz przywracania",
+                "set_up_recovery": "Skonfiguruj przywracanie",
+                "set_up_recovery_confirm_button": "Zakończ konfigurację",
+                "set_up_recovery_confirm_description": "Wprowadź klucz przywracania pokazany na poprzednim ekranie, aby zakończyć konfigurowanie przywracania.",
+                "set_up_recovery_confirm_title": "Wprowadź klucz przywracania, aby potwierdzić",
+                "set_up_recovery_description": "Magazyn kluczy jest chroniony przez klucz przywracania. Jeśli po skonfigurowaniu potrzebujesz klucza przywracania, wygeneruj go zaznaczając ‘%(changeRecoveryKeyButton)s’.",
+                "set_up_recovery_save_key_description": "Zapisz ten klucz przywracania w bezpiecznym miejscu, takim jak menedżer haseł, notatka szyfrowana lub sejf.",
+                "set_up_recovery_save_key_title": "Zapisz klucz przywracania w bezpiecznym miejscu",
+                "set_up_recovery_secondary_description": "Klikając przycisk Kontynuuj, wygenerujemy dla Ciebie klucz przywracania.",
+                "title": "Przywracanie"
+            },
+            "title": "Szyfrowanie"
+        },
         "general": {
             "account_management_section": "Zarządzanie kontem",
             "account_section": "Konto",
@@ -2533,8 +2564,8 @@
             "discovery_email_empty": "Opcje odkrywania pojawią się, gdy dodasz adres e-mail.",
             "discovery_email_verification_instructions": "Zweryfikuj link w swojej skrzynce odbiorczej",
             "discovery_msisdn_empty": "Opcje odkrywania pojawią się, gdy dodasz numer telefonu.",
-            "discovery_needs_terms": "Wyrażasz zgodę na warunki użytkowania serwera%(serverName)s aby pozwolić na odkrywanie Ciebie za pomocą adresu e-mail oraz numeru telefonu.",
-            "discovery_needs_terms_title": "Pozwól ludziom Cię znaleźć",
+            "discovery_needs_terms": "Musisz wyrazić zgodę na warunki świadczenia usług serwera (%(serverName)s), aby umożliwić odkrywanie Cię za pomocą adresu e-mail oraz numeru telefonu.",
+            "discovery_needs_terms_title": "Zezwól ludziom na znalezienie Cię",
             "display_name": "Wyświetlana nazwa",
             "display_name_error": "Nie można ustawić wyświetlanej nazwy",
             "email_address_in_use": "Podany adres e-mail jest już w użyciu",
@@ -2567,7 +2598,6 @@
             "msisdn_verification_field_label": "Kod weryfikacyjny",
             "msisdn_verification_instructions": "Wprowadź kod weryfikacyjny wysłany wiadomością tekstową.",
             "msisdns_heading": "Numery telefonów",
-            "name_placeholder": "Brak nazwy ekranowej",
             "oidc_manage_button": "Zarządzaj kontem",
             "password_change_section": "Ustaw nowe hasło użytkownika…",
             "password_change_success": "Twoje hasło zostało pomyślnie zmienione.",
@@ -2603,26 +2633,21 @@
                 "enter_phrase_description": "Wprowadź hasło bezpieczeństwa, które znasz tylko Ty, ponieważ będzie użyte do ochrony Twoich danych. Ze względów bezpieczeństwa, nie wprowadzaj hasła Twojego konta.",
                 "enter_phrase_title": "Wprowadź hasło bezpieczeństwa",
                 "enter_phrase_to_confirm": "Wprowadź hasło bezpieczeństwa ponownie, aby potwierdzić.",
-                "generate_security_key_description": "Wygenerujemy dla Ciebie klucz bezpieczeństwa, który możesz przechowywać w bezpiecznym miejscu, np. w menedżerze haseł lub w sejfie.",
-                "generate_security_key_title": "Wygeneruj klucz bezpieczeństwa",
+                "generate_security_key_description": "Wygenerujemy dla Ciebie klucz przywracania, który możesz przechowywać w bezpiecznym miejscu, np. w menedżerze haseł lub sejfie.",
+                "generate_security_key_title": "Wygeneruj klucz przywracania",
                 "pass_phrase_match_failed": "To się nie zgadza.",
                 "pass_phrase_match_success": "Zgadza się!",
                 "phrase_strong_enough": "Wspaniale! Hasło bezpieczeństwa wygląda na silne.",
-                "requires_key_restore": "Przywróć kopię zapasową klucza, aby ulepszyć szyfrowanie",
-                "requires_password_confirmation": "Wprowadź hasło do konta, aby potwierdzić aktualizację:",
-                "requires_server_authentication": "Wymagane jest uwierzytelnienie z serwerem, aby potwierdzić ulepszenie.",
                 "secret_storage_query_failure": "Nie udało się uzyskać statusu sekretnego magazynu",
-                "security_key_safety_reminder": "Przechowuj swój klucz bezpieczeństwa w bezpiecznym miejscu, takim jak menedżer haseł lub sejf, ponieważ jest on używany do ochrony zaszyfrowanych danych.",
-                "session_upgrade_description": "Ulepsz tę sesję, aby zezwolić jej na weryfikację innych sesji, dając im dostęp do wiadomości szyfrowanych i oznaczenie ich jako zaufane.",
+                "security_key_safety_reminder": "Przechowuj swój klucz przywracania w bezpiecznym miejscu, takim jak menedżer haseł lub sejf, ponieważ jest on używany do ochrony zaszyfrowanych danych.",
                 "set_phrase_again": "Wróć, aby skonfigurować to ponownie.",
                 "settings_reminder": "W ustawieniach możesz również skonfigurować bezpieczną kopię zapasową i zarządzać swoimi kluczami.",
                 "title_confirm_phrase": "Potwierdź hasło bezpieczeństwa",
-                "title_save_key": "Zapisz swój klucz bezpieczeństwa",
+                "title_save_key": "Zapisz klucz przywracania",
                 "title_set_phrase": "Ustaw hasło bezpieczeństwa",
-                "title_upgrade_encryption": "Ulepsz swoje szyfrowanie",
                 "unable_to_setup": "Nie można ustawić sekretnego magazynu",
                 "use_different_passphrase": "Użyć innego hasła?",
-                "use_phrase_only_you_know": "Użyj sekretnej frazy, którą znasz tylko Ty, i opcjonalnie zapisz klucz bezpieczeństwa, który będzie używany do tworzenia kopii zapasowych."
+                "use_phrase_only_you_know": "Użyj sekretnej frazy, którą znasz tylko Ty, i opcjonalnie zapisz klucz przywracania do tworzenia kopii zapasowych."
             }
         },
         "key_export_import": {
@@ -2726,7 +2751,6 @@
             "room_directory_heading": "Katalog pokoju",
             "room_list_heading": "Lista pokojów",
             "show_avatars_pills": "Pokaż awatary w wzmiankach użytkownika, pokoju i wydarzenia",
-            "show_checklist_shortcuts": "Pokaż skrót do listy powitalnej nad listą pokojów",
             "show_polls_button": "Pokaż przycisk ankiet",
             "surround_text": "Otocz zaznaczony tekst podczas wpisywania specjalnych znaków",
             "time_heading": "Wyświetlanie czasu",
@@ -2736,20 +2760,20 @@
         "replace_plain_emoji": "Automatycznie zastępuj tekstowe emotikony",
         "security": {
             "4s_public_key_in_account_data": "w danych konta",
-            "4s_public_key_status": "Publiczny klucz sekretnego magazynu:",
+            "4s_public_key_status": "Klucz publiczny sekretnego magazynu:",
             "analytics_description": "Udostępnij anonimowe dane, aby pomóc nam zidentyfikować problemy. Nic osobistego. Żadnych stron trzecich.",
             "backup_key_cached_status": "Klucz zapasowy zapisany w pamięci podręcznej:",
             "backup_key_stored_status": "Klucz zapasowy zapisany:",
             "backup_key_unexpected_type": "niespodziewany typ",
             "backup_key_well_formed": "dobrze ukształtowany",
-            "backup_keys_description": "Utwórz kopię zapasową kluczy szyfrujących wraz z danymi konta na wypadek utraty dostępu do sesji. Twoje klucze będą zabezpieczone unikalnym kluczem bezpieczeństwa.",
+            "backup_keys_description": "Utwórz kopię zapasową kluczy szyfrujących wraz z danymi konta na wypadek utraty dostępu do sesji. Klucze będą zabezpieczone unikalnym kluczem przywracania.",
             "bulk_options_accept_all_invites": "Zaakceptuj wszystkie zaproszenia do %(invitedRooms)s",
             "bulk_options_reject_all_invites": "Odrzuć wszystkie zaproszenia do %(invitedRooms)s",
             "bulk_options_section": "Masowe działania",
             "cross_signing_cached": "w lokalnej pamięci podręcznej",
             "cross_signing_homeserver_support": "Wsparcie funkcji serwera domowego:",
             "cross_signing_homeserver_support_exists": "istnieje",
-            "cross_signing_in_4s": "w tajnej pamięci",
+            "cross_signing_in_4s": "w sekretnym magazynie",
             "cross_signing_in_memory": "w pamięci",
             "cross_signing_master_private_Key": "Główny klucz prywatny:",
             "cross_signing_not_cached": "nie odnaleziono lokalnie",
@@ -2772,7 +2796,7 @@
             "error_loading_key_backup_status": "Nie można załadować stanu kopii zapasowej klucza",
             "export_megolm_keys": "Eksportuj klucze E2E pokojów",
             "ignore_users_empty": "Nie posiadasz ignorowanych użytkowników.",
-            "ignore_users_section": "Zignorowani użytkownicy",
+            "ignore_users_section": "Ignorowani użytkownicy",
             "import_megolm_keys": "Importuj klucze pokoju E2E",
             "key_backup_active": "Ta sesja tworzy kopię zapasową kluczy.",
             "key_backup_active_version": "Aktywna wersja kopii zapasowej:",
@@ -2806,7 +2830,7 @@
             "message_search_unsupported_web": "%(brand)s nie jest w stanie bezpiecznie przechowywać wiadomości szyfrowanych lokalnie, gdy działa w przeglądarce. Użyj <desktopLink> Desktop</desktopLink>, aby wiadomości pojawiły się w wynikach wyszukiwania.",
             "record_session_details": "Zapisz nazwę klienta, wersję i URL, aby łatwiej rozpoznawać sesje w menedżerze sesji",
             "restore_key_backup": "Przywróć z kopii zapasowej",
-            "secret_storage_not_ready": "nie gotowe",
+            "secret_storage_not_ready": "niegotowe",
             "secret_storage_ready": "gotowy",
             "secret_storage_status": "Sekretny magazyn:",
             "send_analytics": "Wysyłaj dane analityczne",
@@ -2847,7 +2871,7 @@
             "error_pusher_state": "Nie udało się ustawić stanu pushera",
             "error_set_name": "Nie udało się ustawić nazwy sesji",
             "filter_all": "Wszystkie",
-            "filter_inactive": "Nieaktywny",
+            "filter_inactive": "Nieaktywne",
             "filter_inactive_description": "Nieaktywne przez %(inactiveAgeDays)s dni lub dłużej",
             "filter_label": "Filtruj urządzenia",
             "filter_unverified_description": "Nieprzygotowane do bezpiecznej komunikacji",
@@ -2856,10 +2880,11 @@
             "inactive_days": "Nieaktywne przez %(inactiveAgeDays)s+ dni",
             "inactive_sessions": "Sesje nieaktywne",
             "inactive_sessions_explainer_1": "Sesje nieaktywne to sesje, które nie były używane przez dłuższy czas, ale wciąż otrzymują klucze szyfrujące.",
-            "inactive_sessions_explainer_2": "Regularne usuwanie sesji nieaktywnych poprawia bezpieczeństwo, wydajność i upraszcza Tobie detekcje podejrzanych sesji.",
+            "inactive_sessions_explainer_2": "Regularne usuwanie sesji nieaktywnych poprawia bezpieczeństwo, wydajność i upraszcza Tobie wykrywanie podejrzanych sesji.",
             "inactive_sessions_list_description": "Rozważ wylogowanie się ze starych sesji (%(inactiveAgeDays)s dni lub starsze), jeśli już z nich nie korzystasz.",
             "ip": "Adres IP",
             "last_activity": "Ostatnia aktywność",
+            "manage": "Zarządzaj tą sesją",
             "mobile_session": "Sesja mobilna",
             "n_sessions_selected": {
                 "one": "Zaznaczono %(count)s sesję",
@@ -2886,6 +2911,7 @@
             "sign_in_with_qr": "Połącz nowe urządzenie",
             "sign_in_with_qr_button": "Pokaż kod QR",
             "sign_in_with_qr_description": "Użyj kodu QR, aby zalogować się na innym urządzeniu i skonfigurować bezpieczne przesyłanie wiadomości.",
+            "sign_in_with_qr_unsupported": "Nieobsługiwane przez dostawcę konta",
             "sign_out": "Wyloguj się z tej sesji",
             "sign_out_all_other_sessions": "Wyloguj się z wszystkich pozostałych sesji (%(otherSessionsCount)s)",
             "sign_out_confirm_description": {
@@ -2931,7 +2957,7 @@
             "metaspaces_favourites_description": "Pogrupuj wszystkie swoje ulubione pokoje i osoby w jednym miejscu.",
             "metaspaces_home_all_rooms": "Pokaż wszystkie pokoje",
             "metaspaces_home_all_rooms_description": "Pokaż wszystkie swoje pokoje na głównej, nawet jeśli znajdują się w przestrzeni.",
-            "metaspaces_home_description": "Główna to przydatne miejsce, gdzie znajdziesz przegląd wszystkiego.",
+            "metaspaces_home_description": "Główna to przydatne miejsce, gdzie znajdziesz przegląd wszystkich pokoi.",
             "metaspaces_orphans": "Pokoje poza przestrzenią",
             "metaspaces_orphans_description": "Pogrupuj wszystkie pokoje, które nie są częścią przestrzeni, w jednym miejscu.",
             "metaspaces_people_description": "Pogrupuj wszystkie osoby w jednym miejscu.",
@@ -2976,7 +3002,7 @@
         "warning": "<w>OSTRZEŻENIE:</w> <description/>"
     },
     "share": {
-        "link_title": "Link do pokoju",
+        "link_copied": "Skopiowano link",
         "permalink_message": "Link do zaznaczonej wiadomości",
         "permalink_most_recent": "Link do najnowszej wiadomości",
         "share_call": "Link zaproszenia do konferencji",
@@ -3041,7 +3067,6 @@
         "rageshake": "Wyślij raport błędu z logami",
         "rainbow": "Wysyła podaną wiadomość w kolorach tęczy",
         "rainbowme": "Wysyła podaną emotkę w kolorach tęczy",
-        "remakeolm": "Komenda programisty: Odrzuca bieżącą sesję grupową i tworzy nowe sesje Olm",
         "remove": "Usuwa użytkowników z danym id z tego pokoju",
         "roomavatar": "Zmienia awatar dla obecnego pokoju",
         "roomname": "Ustawia nazwę pokoju",
@@ -3069,13 +3094,6 @@
         "upgraderoom": "Ulepsza pokój do nowej wersji",
         "upgraderoom_permission_error": "Nie posiadasz wymaganych uprawnień do użycia tego polecenia.",
         "usage": "Użycie",
-        "verify": "Weryfikuje użytkownika, sesję oraz klucz publiczny",
-        "verify_mismatch": "OSTRZEŻENIE: WERYFIKACJA KLUCZY NIE POWIODŁA SIĘ! Klucz podpisujący dla %(userId)s oraz sesji %(deviceId)s to \"%(fprint)s\", nie pasuje on do podanego klucza \"%(fingerprint)s\". To może oznaczać że Twoja komunikacja jest przechwytywana!",
-        "verify_nop": "Sesja już zweryfikowana!",
-        "verify_nop_warning_mismatch": "OSTRZEŻENIE: sesja została już zweryfikowana, ale klucze NIE PASUJĄ!",
-        "verify_success_description": "Klucz podpisujący, który podano jest taki sam jak klucz podpisujący otrzymany od %(userId)s oraz sesji %(deviceId)s. Sesja została oznaczona jako zweryfikowana.",
-        "verify_success_title": "Zweryfikowany klucz",
-        "verify_unknown_pair": "Nieznana para (użytkownik, sesja): (%(userId)s, %(deviceId)s)",
         "view": "Przegląda pokój z podanym adresem",
         "whois": "Pokazuje informacje na temat użytkownika"
     },
@@ -3112,7 +3130,6 @@
         "invite": "Zaproś osoby",
         "invite_description": "Zaproś przy użyciu adresu email lub nazwy użytkownika",
         "invite_link": "Udostępnij link zaproszenia",
-        "invite_this_space": "Zaproś do tej przestrzeni",
         "joining_space": "Dołączanie",
         "landing_welcome": "Witamy w <name/>",
         "leave_dialog_action": "Opuść przestrzeń",
@@ -3209,7 +3226,7 @@
         "identity_server_no_terms_description_1": "Ta czynność wymaga dostępu do domyślnego serwera tożsamości <server /> do walidacji adresu e-mail, czy numeru telefonu, ale serwer nie określa warunków korzystania z usługi.",
         "identity_server_no_terms_description_2": "Kontynuj tylko wtedy, gdy ufasz właścicielowi serwera.",
         "identity_server_no_terms_title": "Serwer tożsamości nie posiada warunków użytkowania",
-        "inline_intro_text": "Zaakceptuj <policyLink /> aby kontynuować:",
+        "inline_intro_text": "Zaakceptuj <policyLink />, aby kontynuować:",
         "integration_manager": "Używaj botów, mostków, widżetów i zestawów naklejek",
         "intro": "Aby kontynuować, musisz zaakceptować zasady użytkowania.",
         "summary_identity_server_1": "Odnajdź innych z użyciem numeru telefonu lub adresu e-mail",
@@ -3293,8 +3310,8 @@
             "historical_event_no_key_backup": "Historia wiadomości nie jest dostępna na tym urządzeniu",
             "historical_event_unverified_device": "Musisz zweryfikować to urządzenie, aby wyświetlić historię wiadomości",
             "historical_event_user_not_joined": "Nie masz dostępu do tej wiadomości",
-            "sender_identity_previously_verified": "Zweryfikowana tożsamość uległa zmianie",
-            "sender_unsigned_device": "Zaszyfrowano przez urządzenie niezweryfikowane przez właściciela.",
+            "sender_identity_previously_verified": "Zweryfikowana tożsamość nadawcy uległa zmianie",
+            "sender_unsigned_device": "Wysłano z niezabezpieczonego urządzenia.",
             "unable_to_decrypt": "Nie można rozszyfrować wiadomości"
         },
         "disambiguated_profile": "%(displayName)s (%(matrixId)s)",
@@ -3312,10 +3329,6 @@
         "error_rendering_message": "Nie można wczytać tej wiadomości",
         "historical_messages_unavailable": "Nie możesz widzieć poprzednich wiadomości",
         "in_room_name": " w <strong>%(room)s</strong>",
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s zakończył <a>transmisję głosową</a>",
-            "you": "Zakończyłeś <a>transmisje głosową</a>"
-        },
         "io.element.widgets.layout": "%(senderName)s zmienił układ pokoju",
         "late_event_separator": "Pierwotnie wysłano %(dateTime)s",
         "load_error": {
@@ -3360,7 +3373,7 @@
         },
         "m.file": {
             "error_decrypting": "Błąd odszyfrowywania załącznika",
-            "error_invalid": "Nieprawidłowy plik %(extra)s"
+            "error_invalid": "Nieprawidłowy plik"
         },
         "m.image": {
             "error": "Nie można pokazać zdjęcia z powodu błędu",
@@ -3461,6 +3474,7 @@
             "left_reason": "%(targetName)s opuścił pokój: %(reason)s",
             "no_change": "%(senderName)s nie dokonał żadnych zmian",
             "reject_invite": "%(targetName)s odrzucił zaproszenie",
+            "reject_invite_reason": "%(targetName)s odrzucił zaproszenie: %(reason)s",
             "remove_avatar": "%(senderName)s usunął swoje zdjęcie profilowe",
             "remove_name": "%(senderName)s usunął swoją widoczną nazwę (%(oldDisplayName)s)",
             "set_avatar": "%(senderName)s ustawił zdjęcie profilowe",
@@ -3496,7 +3510,10 @@
             "sent": "%(senderName)s wysłał zaproszenie do %(targetDisplayName)s do dołączenia do pokoju."
         },
         "m.room.tombstone": "%(senderDisplayName)s ulepszył ten pokój.",
-        "m.room.topic": "%(senderDisplayName)s zmienił temat na \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s zmienił temat na \"%(topic)s\".",
+            "removed": "%(senderDisplayName)s usunął temat."
+        },
         "m.sticker": "%(senderDisplayName)s wysłał naklejkę.",
         "m.video": {
             "error_decrypting": "Błąd deszyfrowania wideo"
@@ -3635,8 +3652,9 @@
                 "other": "%(severalUsers)s dołączyło i wyszło %(count)s razy"
             },
             "joined_multiple": {
-                "one": "%(severalUsers)sdołączyło",
-                "other": "%(severalUsers)s dołączyło %(count)s razy"
+                "one": "%(severalUsers)s dołączył",
+                "few": "%(severalUsers)s dołączyli %(count)s razy",
+                "many": "%(severalUsers)s dołączyło %(count)s razy"
             },
             "kicked": {
                 "one": "zostało usunięte",
@@ -3714,8 +3732,9 @@
         "thread_info_basic": "Z wątku",
         "typing_indicator": {
             "more_users": {
-                "other": "%(names)s i %(count)s innych piszą…",
-                "one": "%(names)s i jedna osoba pisze…"
+                "one": "%(names)s i jedna inna pisze ...",
+                "few": "%(names)s i %(count)s inne piszą ...",
+                "many": "%(names)s i %(count)s innych pisze ..."
             },
             "one_user": "%(displayName)s pisze…",
             "two_users": "%(names)s i %(lastPerson)s piszą…"
@@ -3725,14 +3744,14 @@
             "close": "Zamknij podgląd",
             "show_n_more": {
                 "one": "Pokaż %(count)s inny podgląd",
-                "other": "Pokaż %(count)s innych podglądów"
+                "few": "Pokaż %(count)s inne podglądy",
+                "many": "Pokaż %(count)s innych podglądów"
             }
         }
     },
     "truncated_list_n_more": {
         "other": "I %(count)s więcej…"
     },
-    "unknown_device": "Nieznane urządzenie",
     "unsupported_browser": {
         "description": "Jeśli kontynuujesz, niektóre funkcje mogą przestać działać, jak i istnieje ryzyko utraty danych w przyszłości. Zaktualizuj przeglądarkę, aby nadal używać %(brand)s.",
         "title": "%(brand)s nie wspiera tej przeglądarki"
@@ -3769,6 +3788,7 @@
         "error_files_too_large": "Te pliki są <b>zbyt duże</b> do wysłania. Ograniczenie wielkości plików to %(limit)s.",
         "error_some_files_too_large": "Niektóre pliki są <b>zbyt duże</b> do wysłania. Ograniczenie wielkości plików to %(limit)s.",
         "error_title": "Błąd wysyłania",
+        "not_image": "Wybrany plik nie jest prawidłowym plikiem obrazu.",
         "title": "Prześlij pliki",
         "title_progress": "Prześlij pliki (%(current)s z %(total)s)",
         "upload_all_button": "Prześlij wszystko",
@@ -3784,18 +3804,9 @@
         "ban_room_confirm_title": "Zbanuj z %(roomName)s",
         "ban_space_everything": "Zbanuj ich z wszystkiego co mogę",
         "ban_space_specific": "Zbanuj ich z określonych rzeczy, które mogę",
-        "count_of_sessions": {
-            "other": "%(count)s sesji",
-            "one": "%(count)s sesja"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s zweryfikowanych sesji",
-            "one": "1 zweryfikowana sesja"
-        },
         "deactivate_confirm_action": "Dezaktywuj użytkownika",
         "deactivate_confirm_description": "Dezaktywacja tego użytkownika, wyloguje go i uniemożliwi logowanie ponowne. Dodatkowo, opuści wszystkie pokoje, w których się znajdują. Tej akcji nie można cofnąć. Czy na pewno chcesz dezaktywować tego użytkownika?",
         "deactivate_confirm_title": "Dezaktywować użytkownika?",
-        "dehydrated_device_enabled": "Urządzenie offline włączone",
         "demote_button": "Degraduj",
         "demote_self_confirm_description_space": "Nie będziesz mógł cofnąć tej zmiany, ponieważ degradujesz swoje uprawnienia. Jeśli jesteś ostatnim użytkownikiem uprzywilejowanym w tej przestrzeni, nie będziesz mógł ich odzyskać.",
         "demote_self_confirm_room": "Nie będziesz mógł cofnąć tej zmiany, ponieważ degradujesz swoje uprawnienia. Jeśli jesteś ostatnim użytkownikiem uprzywilejowanym w tym pokoju, nie będziesz mógł ich odzyskać.",
@@ -3803,15 +3814,12 @@
         "disinvite_button_room": "Cofnij zaproszenie do pokoju",
         "disinvite_button_room_name": "Cofnij zaproszenia z %(roomName)s",
         "disinvite_button_space": "Cofnij zaproszenie do przestrzeni",
-        "edit_own_devices": "Edytuj urządzenia",
         "error_ban_user": "Nie udało się zbanować użytkownika",
         "error_deactivate": "Nie udało się zdezaktywować użytkownika",
         "error_kicking_user": "Nie udało się usunąć użytkownika",
         "error_mute_user": "Nie udało się wyciszyć użytkownika",
         "error_revoke_3pid_invite_description": "Nie udało się odwołać zaproszenia. Serwer może posiadać tymczasowy problem lub nie masz wystarczających uprawnień, aby odwołać zaproszenie.",
         "error_revoke_3pid_invite_title": "Nie udało się odwołać zaproszenia",
-        "hide_sessions": "Ukryj sesje",
-        "hide_verified_sessions": "Ukryj zweryfikowane sesje",
         "ignore_button": "Ignoruj",
         "ignore_confirm_description": "Wszystkie wiadomości i zaproszenia od tego użytkownika zostaną ukryte. Czy na pewno chcesz zignorować?",
         "ignore_confirm_title": "Ignoruj %(user)s",
@@ -3855,6 +3863,7 @@
         "unban_space_specific": "Odbanuj ich z określonych rzeczy, które mogę",
         "unban_space_warning": "Nie będą w stanie uzyskać dostępu gdziekolwiek, gdzie nie jesteś administratorem.",
         "unignore_button": "Przestań ignorować",
+        "verification_unavailable": "Weryfikacja użytkownika jest niedostępna",
         "verify_button": "Weryfikuj użytkownika",
         "verify_explainer": "Dla dodatkowego bezpieczeństwa, zweryfikuj tego użytkownika za pomocą jednorazowego kodu na obu waszych urządzeniach."
     },
@@ -3863,38 +3872,6 @@
         "settings": "Wszystkie ustawienia",
         "switch_theme_dark": "Przełącz na tryb ciemny",
         "switch_theme_light": "Przełącz na tryb jasny"
-    },
-    "voice_broadcast": {
-        "30s_backward": "30s do tyłu",
-        "30s_forward": "30s do przodu",
-        "action": "Transmisja głosowa",
-        "buffering": "Buforowanie…",
-        "confirm_listen_affirm": "Tak, zakończ moje nagranie",
-        "confirm_listen_description": "Jeśli zaczniesz słuchać tej transmisji na żywo, twoja bieżąca transmisja na żywo zostanie zakończona.",
-        "confirm_listen_title": "Zacząć słuchać transmisji na żywo?",
-        "confirm_stop_affirm": "Tak, zakończ transmisję",
-        "confirm_stop_description": "Czy na pewno chcesz zakończyć transmisję na żywo? Transmisja zostanie zakończona, a całe nagranie będzie dostępne w pokoju.",
-        "confirm_stop_title": "Zakończyć transmisję na żywo?",
-        "connection_error": "Błąd połączenia - Nagrywanie wstrzymane",
-        "failed_already_recording_description": "Już nagrywasz transmisję głosową. Zakończ bieżącą transmisję głosową, aby rozpocząć nową.",
-        "failed_already_recording_title": "Nie można rozpocząć nowej transmisji głosowej",
-        "failed_decrypt": "Nie można rozszyfrować transmisji głosowej",
-        "failed_generic": "Nie można odtworzyć tej transmisji głosowej",
-        "failed_insufficient_permission_description": "Nie posiadasz wymaganych uprawnień, aby rozpocząć transmisję głosową w tym pokoju. Skontaktuj się z administratorem pokoju, aby zwiększyć swoje uprawnienia.",
-        "failed_insufficient_permission_title": "Nie można rozpocząć nowej transmisji głosowej",
-        "failed_no_connection_description": "Niestety, nie jesteśmy w stanie rozpocząć nowego nagrania. Spróbuj ponownie później.",
-        "failed_no_connection_title": "Błąd połączenia",
-        "failed_others_already_recording_description": "Ktoś już nagrywa transmisję głosową. Aby rozpocząć nową, poczekaj aż bieżąca się skończy.",
-        "failed_others_already_recording_title": "Nie można rozpocząć nowej transmisji głosowej",
-        "go_live": "Rozpocznij transmisję",
-        "live": "Na żywo",
-        "pause": "wstrzymaj transmisję głosową",
-        "play": "odtwórz transmisję głosową",
-        "resume": "wznów transmisję głosową"
-    },
-    "voice_message": {
-        "cant_start_broadcast_description": "Nie możesz rozpocząć wiadomości głosowej, ponieważ już nagrywasz transmisję na żywo. Zakończ transmisję na żywo, aby rozpocząć nagrywanie wiadomości głosowej.",
-        "cant_start_broadcast_title": "Nie można rozpocząć wiadomości głosowej"
     },
     "voip": {
         "already_in_call": "Już dzwoni",
@@ -3915,7 +3892,6 @@
         "camera_disabled": "Twoja kamera jest wyłączona",
         "camera_enabled": "Twoja kamera jest nadal włączona",
         "cannot_call_yourself_description": "Nie możesz wykonać połączenia do siebie.",
-        "change_input_device": "Zmień urządzenie wejściowe",
         "close_lobby": "Zamknij poczekalnię",
         "connecting": "Łączenie",
         "connection_lost": "Połączenie z serwerem zostało przerwane",
@@ -3934,15 +3910,12 @@
         "enable_camera": "Włącz kamerę",
         "enable_microphone": "Wyłącz wyciszenie mikrofonu",
         "expand": "Wróć do połączenia",
-        "failed_call_live_broadcast_description": "Nie możesz rozpocząć połączenia, ponieważ już nagrywasz transmisję na żywo. Zakończ transmisję na żywo, aby rozpocząć połączenie.",
-        "failed_call_live_broadcast_title": "Nie można rozpocząć połączenia",
         "get_call_link": "Udostępnij link do połączenia",
         "hangup": "Rozłącz",
         "hide_sidebar_button": "Ukryj pasek boczny",
         "input_devices": "Urządzenia wejściowe",
         "jitsi_call": "Konferencja Jitsi",
         "join_button_tooltip_call_full": "Przepraszamy — to połączenie jest już zapełnione",
-        "join_button_tooltip_connecting": "Łączenie",
         "legacy_call": "Połączenie Legacy",
         "maximise": "Wypełnij ekran",
         "maximise_call": "Maksymalizuj połączenie",

@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -15,8 +15,10 @@ import { SetupEncryptionStore, Phase } from "../../../../stores/SetupEncryptionS
 
 function iconFromPhase(phase?: Phase): string {
     if (phase === Phase.Done) {
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
         return require("../../../../../res/img/e2e/verified-deprecated.svg").default;
     } else {
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
         return require("../../../../../res/img/e2e/warning-deprecated.svg").default;
     }
 }

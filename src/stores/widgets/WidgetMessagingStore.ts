@@ -2,15 +2,16 @@
  * Copyright 2024 New Vector Ltd.
  * Copyright 2020 The Matrix.org Foundation C.I.C.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { ClientWidgetApi, Widget } from "matrix-widget-api";
+import { type ClientWidgetApi, type Widget } from "matrix-widget-api";
+import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import { ActionPayload } from "../../dispatcher/payloads";
+import { type ActionPayload } from "../../dispatcher/payloads";
 import { EnhancedMap } from "../../utils/maps";
 import WidgetUtils from "../../utils/WidgetUtils";
 
@@ -24,7 +25,7 @@ export enum WidgetMessagingStoreEvent {
  * going to be merged with a more complete WidgetStore, but for now it's
  * easiest to split this into a single place.
  */
-export class WidgetMessagingStore extends AsyncStoreWithClient<{}> {
+export class WidgetMessagingStore extends AsyncStoreWithClient<EmptyObject> {
     private static readonly internalInstance = (() => {
         const instance = new WidgetMessagingStore();
         instance.start();
@@ -71,8 +72,11 @@ export class WidgetMessagingStore extends AsyncStoreWithClient<{}> {
      * @param {string} widgetUid The widget UID.
      */
     public stopMessagingByUid(widgetUid: string): void {
-        this.widgetMap.remove(widgetUid)?.stop();
-        this.emit(WidgetMessagingStoreEvent.StopMessaging, widgetUid);
+        const messaging = this.widgetMap.remove(widgetUid);
+        if (messaging !== undefined) {
+            messaging.stop();
+            this.emit(WidgetMessagingStoreEvent.StopMessaging, widgetUid);
+        }
     }
 
     /**

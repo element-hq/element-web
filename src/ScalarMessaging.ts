@@ -3,7 +3,7 @@ Copyright 2018-2024 New Vector Ltd.
 Copyright 2017 Vector Creations Ltd
 Copyright 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -282,7 +282,7 @@ Response:
 
 */
 
-import { IContent, MatrixEvent, IEvent, StateEvents } from "matrix-js-sdk/src/matrix";
+import { type IContent, type MatrixEvent, type IEvent, type StateEvents } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -514,7 +514,7 @@ function getWidgets(event: MessageEvent<any>, roomId: string | null): void {
     sendResponse(event, widgetStateEvents);
 }
 
-function getRoomEncState(event: MessageEvent<any>, roomId: string): void {
+async function getRoomEncState(event: MessageEvent<any>, roomId: string): Promise<void> {
     const client = MatrixClientPeg.get();
     if (!client) {
         sendError(event, _t("widget|error_need_to_be_logged_in"));
@@ -525,7 +525,7 @@ function getRoomEncState(event: MessageEvent<any>, roomId: string): void {
         sendError(event, _t("scalar|error_room_unknown"));
         return;
     }
-    const roomIsEncrypted = MatrixClientPeg.safeGet().isRoomEncrypted(roomId);
+    const roomIsEncrypted = Boolean(await client.getCrypto()?.isEncryptionEnabledInRoom(roomId));
 
     sendResponse(event, roomIsEncrypted);
 }
@@ -855,14 +855,14 @@ const onMessage = function (event: MessageEvent<any>): void {
     try {
         if (!openManagerUrl) openManagerUrl = IntegrationManagers.sharedInstance().getPrimaryManager()?.uiUrl;
         configUrl = new URL(openManagerUrl!);
-    } catch (e) {
+    } catch {
         // No integrations UI URL, ignore silently.
         return;
     }
     let eventOriginUrl: URL;
     try {
         eventOriginUrl = new URL(event.origin);
-    } catch (e) {
+    } catch {
         return;
     }
     // TODO -- Scalar postMessage API should be namespaced with event.data.api field

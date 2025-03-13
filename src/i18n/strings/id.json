@@ -98,7 +98,6 @@
         "report_content": "Laporkan Konten",
         "resend": "Kirim Ulang",
         "reset": "Atur Ulang",
-        "restore": "Pulihkan",
         "resume": "Lanjutkan",
         "retry": "Coba Ulang",
         "review": "Lihat",
@@ -203,7 +202,6 @@
         "failed_query_registration_methods": "Tidak dapat menanyakan metode pendaftaran yang didukung.",
         "failed_soft_logout_auth": "Gagal untuk mengautentikasi ulang",
         "failed_soft_logout_homeserver": "Gagal untuk mengautentikasi ulang karena masalah homeserver",
-        "footer_powered_by_matrix": "diberdayakan oleh Matrix",
         "forgot_password_email_invalid": "Alamat email ini tidak terlihat absah.",
         "forgot_password_email_required": "Alamat email yang tertaut ke akun Anda harus dimasukkan.",
         "forgot_password_prompt": "Lupa kata sandi Anda?",
@@ -231,7 +229,6 @@
         "no_hs_url_provided": "Tidak ada URL homeserver yang disediakan",
         "oidc": {
             "error_title": "Kami tidak dapat memasukkan Anda",
-            "logout_redirect_warning": "Anda akan diarahkan ke penyedia autentikasi server Anda untuk menyelesaikan proses keluar.",
             "missing_or_invalid_stored_state": "Kami menanyakan browser ini untuk mengingat homeserver apa yang Anda gunakan untuk membantu Anda masuk, tetapi sayangnya browser ini melupakannya. Pergi ke halaman masuk dan coba lagi."
         },
         "password_field_keep_going_prompt": "Lanjutkan…",
@@ -241,14 +238,11 @@
         "phone_label": "Ponsel",
         "phone_optional_label": "Nomor telepon (opsional)",
         "qr_code_login": {
-            "approve_access_warning": "Dengan menerima akses untuk perangkat ini, itu akan memiliki akses penuh ke akun Anda.",
             "completing_setup": "Menyelesaikan penyiapan perangkat baru Anda",
-            "confirm_code_match": "Periksa bahwa kode di bawah cocok dengan perangkat Anda yang lain:",
             "error_unexpected": "Sebuah kesalahan terjadi secara tidak terduga.",
             "scan_code_instruction": "Pindai kode QR di bawah dengan perangkat Anda yang sudah keluar dari akun.",
             "scan_qr_code": "Pindai kode QR",
             "select_qr_code": "Pilih '%(scanQRCode)s'",
-            "sign_in_new_device": "Masuk perangkat baru",
             "waiting_for_device": "Menunggu perangkat untuk masuk"
         },
         "register_action": "Buat Akun",
@@ -371,7 +365,6 @@
         "download_logs": "Unduh catatan",
         "downloading_logs": "Mengunduh catatan",
         "error_empty": "Mohon beri tahu kami apa saja yang salah atau, lebih baik, buat sebuah issue GitHub yang menjelaskan masalahnya.",
-        "failed_send_logs": "Gagal untuk mengirimkan catatan: ",
         "github_issue": "Masalah GitHub",
         "introduction": "Jika Anda mengirim sebuah kutu via GitHub, catatan pengawakutu dapat membantu kami melacak masalahnya. ",
         "log_request": "Untuk membantu kami mencegahnya di masa mendatang, silakan <a>kirimkan kami catatan</a>.",
@@ -417,7 +410,6 @@
             "one": "dan satu lainnya...",
             "other": "dan %(count)s lainnya..."
         },
-        "android": "Android",
         "appearance": "Tampilan",
         "application": "Aplikasi",
         "are_you_sure": "Apakah Anda yakin?",
@@ -456,7 +448,6 @@
         "identity_server": "Server identitas",
         "image": "Gambar",
         "integration_manager": "Manajer integrasi",
-        "ios": "iOS",
         "joined": "Tergabung",
         "labs": "Uji Coba",
         "legal": "Hukum",
@@ -510,7 +501,6 @@
         "rooms": "Ruangan",
         "saving": "Menyimpan…",
         "secure_backup": "Cadangan Aman",
-        "security": "Keamanan",
         "select_all": "Pilih semua",
         "server": "Server",
         "settings": "Pengaturan",
@@ -529,13 +519,11 @@
         "thread": "Utasan",
         "threads": "Utasan",
         "timeline": "Lini Masa",
-        "trusted": "Dipercayai",
         "unavailable": "tidak tersedia",
         "unencrypted": "Tidak Dienkripsi",
         "unmute": "Suarakan",
         "unnamed_room": "Ruangan Tanpa Nama",
         "unnamed_space": "Space Tidak Dinamai",
-        "unsent": "Belum dikirim",
         "unverified": "Belum diverifikasi",
         "user": "Pengguna",
         "user_avatar": "Gambar profil",
@@ -546,8 +534,7 @@
         "video": "Video",
         "video_room": "Ruangan video",
         "view_message": "Tampilkan pesan",
-        "warning": "Peringatan",
-        "welcome": "Selamat datang"
+        "warning": "Peringatan"
     },
     "composer": {
         "autocomplete": {
@@ -716,19 +703,11 @@
         "low_bandwidth_mode": "Mode bandwidth rendah",
         "low_bandwidth_mode_description": "Membutuhkan homeserver yang kompatibel.",
         "main_timeline": "Lini masa utama",
-        "methods": "Metode",
         "no_receipt_found": "Tidak ada laporan yang ditemukan",
-        "no_verification_requests_found": "Tidak ada permintaan verifikasi yang ditemukan",
         "notification_state": "Keadaan notifikasi adalah <strong>%(notificationState)s</strong>",
         "notifications_debug": "Pengawakutuan notifikasi",
         "number_of_users": "Jumlah pengguna",
         "original_event_source": "Sumber peristiwa asli",
-        "phase": "Masa",
-        "phase_cancelled": "Dibatalkan",
-        "phase_ready": "Siap",
-        "phase_requested": "Diminta",
-        "phase_started": "Dimulai",
-        "phase_transaction": "Transaksi",
         "room_encrypted": "Ruangan <strong>terenkripsi ✅</strong>",
         "room_id": "ID ruangan: %(roomId)s",
         "room_not_encrypted": "Ruangan <strong>tidak terenkripsi 🚨</strong>",
@@ -765,7 +744,6 @@
         "state_key": "Kunci Status",
         "thread_root_id": "ID Akar Utas: %(threadRootId)s",
         "threads_timeline": "Lini masa utasan",
-        "timeout": "Waktu habis",
         "title": "Alat pengembang",
         "toggle_event": "alih peristiwa",
         "toolbox": "Kotak Peralatan",
@@ -782,7 +760,6 @@
         "values_explicit_colon": "Nilai-nilai di tingkat eksplisit:",
         "values_explicit_room": "Nilai-nilai di tingkat eksplisit di ruangan ini",
         "values_explicit_this_room_colon": "Nilai-nilai di tingkat ekspliksi di ruangan ini:",
-        "verification_explorer": "Penelusur verifikasi",
         "view_servers_in_room": "Tampilkan server-server di ruangan",
         "view_source_decrypted_event_source": "Sumber peristiwa terdekripsi",
         "view_source_decrypted_event_source_unavailable": "Sumber terdekripsi tidak tersedia",
@@ -856,10 +833,6 @@
         "export_unsupported": "Browser Anda tidak mendukung ekstensi kriptografi yang dibutuhkan",
         "import_invalid_keyfile": "Bukan keyfile %(brand)s yang absah",
         "import_invalid_passphrase": "Pemeriksaan autentikasi gagal: kata sandi salah?",
-        "incompatible_database_description": "Anda sebelumnya menggunakan sebuah versi %(brand)s yang baru dengan sesi ini. Untuk menggunakan versi ini lagi dengan enkripsi ujung ke ujung, Anda harus keluar dan masuk lagi.",
-        "incompatible_database_disable": "Lanjutkan Dengan Enkripsi Dinonaktifkan",
-        "incompatible_database_sign_out_description": "Untuk menghindari kehilangan riwayat obrolan, Anda harus mengekspor kunci ruangan Anda sebelum keluar. Anda harus kembali ke versi %(brand)s yang baru untuk melakukannya",
-        "incompatible_database_title": "Databasis Tidak Kompatibel",
         "messages_not_secure": {
             "cause_1": "Homeserver Anda",
             "cause_2": "Homeserver pengguna yang Anda memverifikasi",
@@ -890,7 +863,6 @@
         },
         "udd": {
             "interactive_verification_button": "Verifikasi secara interaktif sengan emoji",
-            "manual_verification_button": "Verifikasi secara manual dengan teks",
             "other_ask_verify_text": "Tanyakan pengguna ini untuk memverifikasi sesinya, atau verifikasi secara manual di bawah.",
             "other_new_session_text": "%(name)s (%(userId)s) masuk ke sesi yang baru tanpa memverifikasinya:",
             "own_ask_verify_text": "Verifikasi sesi Anda lainnya dengan menggunakan salah satu pilihan di bawah.",
@@ -898,8 +870,6 @@
             "title": "Tidak Dipercayai"
         },
         "unable_to_setup_keys_error": "Tidak dapat mengatur kunci-kunci",
-        "unsupported": "Klien ini tidak mendukung enkripsi ujung ke ujung.",
-        "upgrade_toast_title": "Tersedia peningkatan enkripsi",
         "verification": {
             "accepting": "Menerima…",
             "after_new_login": {
@@ -926,12 +896,6 @@
             "incoming_sas_dialog_waiting": "Menunggu pengguna untuk konfirmasi…",
             "incoming_sas_user_dialog_text_1": "Verifikasi pengguna ini untuk menandainya sebagai terpercaya. Mempercayai pengguna memberikan Anda ketenangan saat menggunakan pesan terenkripsi secara ujung ke ujung.",
             "incoming_sas_user_dialog_text_2": "Memverifikasi pengguna ini akan menandai sesinya sebagai terpercaya, dan juga menandai sesi Anda sebagai terpercaya kepadanya.",
-            "manual_device_verification_device_id_label": "ID Sesi",
-            "manual_device_verification_device_key_label": "Kunci sesi",
-            "manual_device_verification_device_name_label": "Nama sesi",
-            "manual_device_verification_footer": "Jika mereka tidak cocok, keamanan komunikasi Anda mungkin dikompromikan.",
-            "manual_device_verification_self_text": "Konfirmasi dengan membandingkan berikut ini dengan Pengaturan Pengguna di sesi Anda yang lain:",
-            "manual_device_verification_user_text": "Konfirmasi sesi pengguna ini dengan membandingkan berikut ini dengan Pengaturan Pengguna:",
             "no_key_or_device": "Sepertinya Anda tidak memiliki Kunci Keamanan atau perangkat lainnya yang Anda dapat gunakan untuk memverifikasi.  Perangkat ini tidak dapat mengakses ke pesan terenkripsi lama. Untuk membuktikan identitas Anda, kunci verifikasi harus diatur ulang.",
             "no_support_qr_emoji": "Perangkat yang Anda sedang verifikasi tidak mendukung pemindaian kode QR atau verifikasi emoji, yang didukung oleh %(brand)s. Coba menggunakan klien yang lain.",
             "other_party_cancelled": "Pengguna yang lain membatalkan proses verifikasi ini.",
@@ -1048,10 +1012,6 @@
     },
     "error_user_not_logged_in": "Pengguna belum masuk",
     "event_preview": {
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s mdngakhiri sebuah siaran suara",
-            "you": "Anda mengakhiri sebuah siaran suara"
-        },
         "m.call.answer": {
             "dm": "Panggilan sedang berjalan",
             "user": "%(senderName)s bergabung dengan panggilan saat ini",
@@ -1400,7 +1360,6 @@
         "notification_settings_beta_caption": "Perkenalkan cara yang lebih sederhana untuk mengubah pengaturan notifikasi Anda. Sesuaikan %(brand)s Anda, sesuai keinginan Anda.",
         "notification_settings_beta_title": "Pengaturan Notifikasi",
         "notifications": "Aktifkan panel notifikasi di tajuk ruangan",
-        "oidc_native_flow": "Autentikasi asli OIDC",
         "render_reaction_images": "Render gambar khusus dalam reaksi",
         "render_reaction_images_description": "Terkadang disebut sebagai \"emoji khusus\".",
         "report_to_moderators": "Laporkan ke moderator",
@@ -1420,8 +1379,6 @@
         "video_rooms_faq2_answer": "Ya, lini masa obrolan akan ditampilkan di sebelah videonya.",
         "video_rooms_faq2_question": "Bisakah saya mengobrol dengan teks saat ada panggilan video?",
         "video_rooms_feedbackSubheading": "Terima kasih telah mencoba fitur beta, mohon berikan masukan sedetail mungkin supaya kami dapat menyempurnakannya.",
-        "voice_broadcast": "Siaran suara",
-        "voice_broadcast_force_small_chunks": "Paksakan panjang bagian siaran suara 15d",
         "wysiwyg_composer": "Editor teks kaya"
     },
     "labs_mjolnir": {
@@ -1521,7 +1478,6 @@
     "member_list": {
         "filter_placeholder": "Saring anggota ruangan",
         "invite_button_no_perms_tooltip": "Anda tidak memiliki izin untuk mengundang pengguna",
-        "invited_list_heading": "Diundang",
         "power_label": "%(userName)s (tingkat daya %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Anggota ruangan",
@@ -1558,65 +1514,18 @@
         "mute_description": "Anda tidak akan mendapatkan notifikasi apa pun"
     },
     "notifier": {
-        "io.element.voice_broadcast_chunk": "%(senderName)s memulai sebuah siaran suara",
         "m.key.verification.request": "%(name)s meminta verifikasi"
     },
     "onboarding": {
-        "apple_trademarks": "App Store® dan logo Apple® adalah merek dagang Apple Inc.",
-        "community_messaging_action": "Temukan orang-orang Anda",
-        "community_messaging_description": "Tetap miliki kemilikan dan kendali atas diskusi komunitas.\nBesar untuk mendukung jutaan anggota, dengan moderasi dan interoperabilitas berdaya.",
-        "community_messaging_title": "Kemilikan komunitas",
-        "complete_these": "Selesaikan untuk mendapatkan hasil yang maksimal dari %(brand)s",
         "create_room": "Buat sebuah Obrolan Grup",
-        "download_app": "Unduh %(brand)s",
-        "download_app_action": "Unduh aplikasi",
-        "download_app_description": "Jangan lewatkan hal-hal dengan membawa %(brand)s dengan Anda",
-        "download_app_store": "Unduh di App Store",
-        "download_brand": "Unduh %(brand)s",
-        "download_brand_desktop": "Unduh %(brand)s Desktop",
-        "download_f_droid": "Dapatkan di F-Droid",
-        "download_google_play": "Dapatkan di Google Play",
-        "enable_notifications": "Nyalakan notifikasi",
-        "enable_notifications_action": "Nyalakan notifikasi",
-        "enable_notifications_description": "Jangan lewatkan sebuah balasan atau pesan yang penting",
         "explore_rooms": "Jelajahi Ruangan Publik",
-        "find_community_members": "Temukan dan undang anggota komunitas Anda",
-        "find_coworkers": "Temukan dan undang rekan kerja Anda",
-        "find_friends": "Temukan dan undang teman Anda",
-        "find_friends_action": "Temukan teman-teman",
-        "find_friends_description": "Untuk itulah Anda di sini, jadi mari kita lakukan",
-        "find_people": "Temukan orang-orang",
-        "free_e2ee_messaging_unlimited_voip": "Dengan perpesanan terenkripsi ujung ke ujung gratis, dan panggilan suara & video tidak terbatas, %(brand)s adalah cara yang baik untuk tetap terhubung.",
-        "get_stuff_done": "Selesaikan hal-hal dengan menemukan rekan setim Anda",
-        "google_trademarks": "Google Play dan logo Google Play adalah merek dagang Google LLC.",
         "has_avatar_label": "Hebat, itu akan membantu orang-orang tahu bahwa itu Anda",
         "intro_byline": "Miliki percakapan Anda.",
         "intro_welcome": "Selamat datang di %(appName)s",
         "no_avatar_label": "Tambahkan sebuah foto supaya orang-orang tahu bahwa itu Anda.",
-        "only_n_steps_to_go": {
-            "one": "Hanya %(count)s langkah lagi untuk dilalui",
-            "other": "Hanya %(count)s langkah lagi untuk dilalui"
-        },
-        "personal_messaging_action": "Mulai obrolan pertama Anda",
-        "personal_messaging_title": "Perpesanan aman untuk teman dan keluarga",
-        "qr_or_app_links": "%(qrCode)s atau %(appLinks)s",
         "send_dm": "Kirim sebuah Pesan Langsung",
-        "set_up_profile": "Siapkan profil Anda",
-        "set_up_profile_action": "Profil Anda",
-        "set_up_profile_description": "Pastikan orang-orang tahu bahwa itu memang Anda",
-        "use_case_community_messaging": "Anggota komunitas daring",
-        "use_case_heading1": "Anda telah masuk",
-        "use_case_heading2": "Siapa saja yang sering Anda obrol?",
-        "use_case_heading3": "Kami akan membantu Anda untuk terhubung.",
-        "use_case_personal_messaging": "Teman dan keluarga",
-        "use_case_work_messaging": "Teman kerja dan tim",
         "welcome_detail": "Sekarang, mari bantu Anda memulai",
-        "welcome_to_brand": "Selamat datang di %(brand)s",
-        "welcome_user": "Selamat datang %(name)s",
-        "work_messaging_action": "Temukan rekan kerja Anda",
-        "work_messaging_title": "Perpesanan aman untuk berkerja",
-        "you_did_it": "Anda berhasil!",
-        "you_made_it": "Anda berhasil!"
+        "welcome_user": "Selamat datang %(name)s"
     },
     "pill": {
         "permalink_other_room": "Pesan dalam %(room)s",
@@ -1668,7 +1577,6 @@
         "custom_level": "Tingkat kustom",
         "default": "Bawaan",
         "label": "Tingkat daya",
-        "mod": "Mod",
         "moderator": "Moderator",
         "restricted": "Dibatasi"
     },
@@ -2125,7 +2033,6 @@
             "error_unbanning": "Gagal untuk menghapus cekalan",
             "events_default": "Kirim pesan",
             "invite": "Undang pengguna",
-            "io.element.voice_broadcast_info": "Siaran suara",
             "kick": "Keluarkan pengguna",
             "m.call": "Mulai panggilan %(brand)s",
             "m.call.member": "Bergabung panggilan %(brand)s",
@@ -2390,7 +2297,6 @@
             "msisdn_verification_field_label": "Kode verifikasi",
             "msisdn_verification_instructions": "Silakan masukkan kode verifikasi yang terkirim melalui teks.",
             "msisdns_heading": "Nomor telepon",
-            "name_placeholder": "Tidak ada nama tampilan",
             "oidc_manage_button": "Kelola akun",
             "password_change_section": "Atur kata sandi akun baru…",
             "password_change_success": "Kata sandi Anda berhasil diubah.",
@@ -2425,18 +2331,13 @@
                 "pass_phrase_match_failed": "Itu tidak cocok.",
                 "pass_phrase_match_success": "Mereka cocok!",
                 "phrase_strong_enough": "Hebat! Frasa Keamanan ini kelihatannya kuat.",
-                "requires_key_restore": "Pulihkan cadangan kunci Anda untuk meningkatkan enkripsi Anda",
-                "requires_password_confirmation": "Masukkan kata sandi akun Anda untuk mengkonfirmasi peningkatannya:",
-                "requires_server_authentication": "Anda harus mengautentikasi dengan servernya untuk mengkonfirmasi peningkatannya.",
                 "secret_storage_query_failure": "Tidak dapat menanyakan status penyimpanan rahasia",
                 "security_key_safety_reminder": "Simpan Kunci Keamanan Anda di tempat yang aman, seperti manajer sandi atau sebuah brankas, yang digunakan untuk mengamankan data terenkripsi Anda.",
-                "session_upgrade_description": "Tingkatkan sesi ini untuk mengizinkan memverifikasi sesi lainnya, memberikan akses ke pesan terenkripsi dan menandainya sebagai terpercaya untuk pengguna lain.",
                 "set_phrase_again": "Pergi kembali untuk menyiapkannya lagi.",
                 "settings_reminder": "Anda juga dapat menyiapkan Cadangan Aman & kelola kunci Anda di Pengaturan.",
                 "title_confirm_phrase": "Konfirmasi Frasa Keamanan",
                 "title_save_key": "Simpan Kunci Keamanan Anda",
                 "title_set_phrase": "Atur sebuah Frasa Keamanan",
-                "title_upgrade_encryption": "Tingkatkan enkripsi Anda",
                 "unable_to_setup": "Tidak dapat menyiapkan penyimpanan rahasia",
                 "use_different_passphrase": "Gunakan frasa sandi yang berbeda?",
                 "use_phrase_only_you_know": "Gunakan frasa rahasia yang hanya Anda tahu, dan simpan sebuah Kunci Keamanan untuk menggunakannya untuk cadangan secara opsional."
@@ -2532,7 +2433,6 @@
             "room_directory_heading": "Direktori ruangan",
             "room_list_heading": "Daftar ruangan",
             "show_avatars_pills": "Tampilkan avatar di sebutan pengguna, ruangan, dan peristiwa",
-            "show_checklist_shortcuts": "Tampilkan pintasan ke daftar centang selamat datang di atas daftar ruangan",
             "show_polls_button": "Tampilkan tombol pemungutan suara",
             "surround_text": "Kelilingi teks yang dipilih saat mengetik karakter khusus",
             "time_heading": "Tampilkan waktu"
@@ -2770,7 +2670,6 @@
         "warning": "<w>PERINGATAN:</w> <description/>"
     },
     "share": {
-        "link_title": "Tautan ke ruangan",
         "permalink_message": "Tautan ke pesan yang dipilih",
         "permalink_most_recent": "Tautan ke pesan terkini",
         "title_message": "Bagikan Pesan Ruangan",
@@ -2832,7 +2731,6 @@
         "rageshake": "Kirim laporan kutu dengan catatan",
         "rainbow": "Mengirim pesan dengan warna pelangi",
         "rainbowme": "Mengirim emote dengan warna pelangi",
-        "remakeolm": "Perintah pengembang: Membuang sesi grup keluar saat ini dan menyiapkan sesi Olm baru",
         "remove": "Mengeluarkan pengguna dengan id yang dicantumkan dari ruangan ini",
         "roomavatar": "Mengubah avatar ruangan saat ini",
         "roomname": "Mengatur nama ruangan",
@@ -2860,13 +2758,6 @@
         "upgraderoom": "Meningkatkan ruangan ke versi yang baru",
         "upgraderoom_permission_error": "Anda tidak memiliki izin yang dibutuhkan untuk menggunakan perintah ini.",
         "usage": "Penggunaan",
-        "verify": "Memverifikasi sebuah pengguna, sesi, dan tupel pubkey",
-        "verify_mismatch": "PERINGATAN: VERIFIKASI KUNCI GAGAL! Kunci penandatanganan untuk %(userId)s dan sesi %(deviceId)s adalah \"%(fprint)s\" yang tidak cocok dengan kunci \"%(fingerprint)s\" yang disediakan. Ini bisa saja berarti komunikasi Anda sedang disadap!",
-        "verify_nop": "Sesi telah diverifikasi!",
-        "verify_nop_warning_mismatch": "PERINGATAN: sesi telah diverifikasi, tetapi kuncinya TIDAK COCOK!",
-        "verify_success_description": "Kunci penandatanganan yang Anda sediakan cocok dengan kunci penandatanganan yang Anda terima dari sesi %(userId)s %(deviceId)s. Sesi ditandai sebagai terverifikasi.",
-        "verify_success_title": "Kunci terverifikasi",
-        "verify_unknown_pair": "Pasangan tidak diketahui (pengguna, sesi): (%(userId)s, %(deviceId)s)",
         "view": "Menampilkan ruangan dengan alamat yang ditentukan",
         "whois": "Menampilkan informasi tentang sebuah pengguna"
     },
@@ -2903,7 +2794,6 @@
         "invite": "Undang pengguna",
         "invite_description": "Undang dengan email atau nama pengguna",
         "invite_link": "Bagikan tautan undangan",
-        "invite_this_space": "Undang ke space ini",
         "joining_space": "Bergabung",
         "landing_welcome": "Selamat datang di <name/>",
         "leave_dialog_action": "Tinggalkan space",
@@ -3079,10 +2969,6 @@
         "error_rendering_message": "Tidak dapat memuat pesan ini",
         "historical_messages_unavailable": "Anda tidak dapat melihat pesan-pesan awal",
         "in_room_name": " di <strong>%(room)s</strong>",
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s mengakhiri sebuah <a>siaran suara</a>",
-            "you": "Anda mengakhiri sebuah <a>siaran suara</a>"
-        },
         "io.element.widgets.layout": "%(senderName)s telah memperbarui tata letak ruangan",
         "load_error": {
             "no_permission": "Mencoba memuat titik spesifik di lini masa ruangan ini, tetapi Anda tidak memiliki izin untuk menampilkan pesannya.",
@@ -3262,7 +3148,9 @@
             "sent": "%(senderName)s mengirim sebuah undangan ke %(targetDisplayName)s untuk bergabung dengan ruangan ini."
         },
         "m.room.tombstone": "%(senderDisplayName)s meningkatkan ruangan ini.",
-        "m.room.topic": "%(senderDisplayName)s telah mengubah topik menjadi \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s telah mengubah topik menjadi \"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s mengirim sebuah stiker.",
         "m.video": {
             "error_decrypting": "Terjadi kesalahan mendekripsi video"
@@ -3496,7 +3384,6 @@
     "truncated_list_n_more": {
         "other": "Dan %(count)s lagi..."
     },
-    "unknown_device": "Perangkat tidak diketahui",
     "unsupported_server_description": "Server ini menjalankan sebuah versi Matrix yang lama. Tingkatkan ke Matrix %(version)s untuk menggunakan %(brand)s tanpa eror.",
     "unsupported_server_title": "Server Anda tidak didukung",
     "update": {
@@ -3538,14 +3425,6 @@
         "ban_room_confirm_title": "Cekal dari %(roomName)s",
         "ban_space_everything": "Cekal dari semuanya yang saya dapat melakukan",
         "ban_space_specific": "Cekal dari beberapa hal yang saya dapat melakukan",
-        "count_of_sessions": {
-            "one": "%(count)s sesi",
-            "other": "%(count)s sesi"
-        },
-        "count_of_verified_sessions": {
-            "one": "1 sesi terverifikasi",
-            "other": "%(count)s sesi terverifikasi"
-        },
         "deactivate_confirm_action": "Nonaktifkan pengguna",
         "deactivate_confirm_description": "Menonaktifkan pengguna ini akan mengeluarkan dan mencegahnya masuk ke akun lagi. Pengguna itu juga akan meninggalkan semua ruangan yang pengguna itu berada. Aksi ini tidak dapat dibatalkan. Apakah Anda yakin Anda ingin menonaktifkan pengguna ini?",
         "deactivate_confirm_title": "Nonaktifkan pengguna?",
@@ -3556,15 +3435,12 @@
         "disinvite_button_room": "Batalkan undangan dari ruangan",
         "disinvite_button_room_name": "Batalkan pengundangan dari %(roomName)s",
         "disinvite_button_space": "Batalkan undangan dari space",
-        "edit_own_devices": "Edit perangkat",
         "error_ban_user": "Gagal untuk mencekal pengguna",
         "error_deactivate": "Gagal untuk menonaktifkan pengguna",
         "error_kicking_user": "Gagal untuk mengeluarkan pengguna",
         "error_mute_user": "Gagal untuk membisukan pengguna",
         "error_revoke_3pid_invite_description": "Tidak dapat menghapus undangan. Server ini mungkin mengalami masalah sementara atau Anda tidak memiliki izin yang dibutuhkan untuk menghapus undangannya.",
         "error_revoke_3pid_invite_title": "Gagal untuk menghapus undangan",
-        "hide_sessions": "Sembunyikan sesi",
-        "hide_verified_sessions": "Sembunyikan sesi terverifikasi",
         "ignore_confirm_description": "Semua pesan dan undangan dari pengguna ini akan disembunyikan. Apakah Anda yakin ingin mengabaikan?",
         "ignore_confirm_title": "Abaikan %(user)s",
         "invited_by": "Diundang oleh %(sender)s",
@@ -3613,38 +3489,6 @@
         "switch_theme_dark": "Ubah ke mode gelap",
         "switch_theme_light": "Ubah ke mode terang"
     },
-    "voice_broadcast": {
-        "30s_backward": "30d sebelumnya",
-        "30s_forward": "30d selanjutnya",
-        "action": "Siaran suara",
-        "buffering": "Memuat…",
-        "confirm_listen_affirm": "Ya, hentikan rekaman saya",
-        "confirm_listen_description": "Jika Anda mendengarkan siaran langsung ini, rekaman siaran langsung Anda saat ini akan dihentikan.",
-        "confirm_listen_title": "Dengarkan siaran langsung?",
-        "confirm_stop_affirm": "Iya, hentikan siaran",
-        "confirm_stop_description": "Apakah Anda ingin menghentikan siaran langsung Anda? Ini akan mengakhiri siarannya, dan rekamanan lengkap akan tersedia dalam ruangan.",
-        "confirm_stop_title": "Hentikan siaran langsung?",
-        "connection_error": "Kesalahan koneksi - Perekaman dijeda",
-        "failed_already_recording_description": "Anda saat ini merekam sebuah siaran suara. Mohon akhiri siaran suara Anda saat ini untuk memulai yang baru.",
-        "failed_already_recording_title": "Tidak dapat memulai sebuah siaran suara baru",
-        "failed_decrypt": "Tidak dapat mendekripsi siaran suara",
-        "failed_generic": "Tidak dapat memutar siaran suara ini",
-        "failed_insufficient_permission_description": "Anda tidak memiliki izin untuk memulai sebuah siaran suara di ruangan ini. Hubungi sebuah administrator ruangan untuk meningkatkan izin Anda.",
-        "failed_insufficient_permission_title": "Tidak dapat memulai sebuah siaran suara baru",
-        "failed_no_connection_description": "Sayangnya kami saat ini tidak dapat memulai sebuah rekaman. Silakan mencoba lagi nanti.",
-        "failed_no_connection_title": "Terjadi kesalahan koneksi",
-        "failed_others_already_recording_description": "Ada orang lain yang saat ini merekam sebuah siaran suara. Tunggu siaran suaranya berakhir untuk memulai yang baru.",
-        "failed_others_already_recording_title": "Tidak dapat memulai sebuah siaran suara baru",
-        "go_live": "Mulai siaran langsung",
-        "live": "Langsung",
-        "pause": "jeda siaran suara",
-        "play": "mainkan siaran suara",
-        "resume": "lanjutkan siaran suara"
-    },
-    "voice_message": {
-        "cant_start_broadcast_description": "Anda tidak dapat memulai sebuah pesan suara karena Anda saat ini merekam sebuah siaran langsung. Silakan mengakhiri siaran langsung Anda untuk memulai merekam sebuah pesan suara.",
-        "cant_start_broadcast_title": "Tidak dapat memulai pesan suara"
-    },
     "voip": {
         "already_in_call": "Sudah ada di panggilan",
         "already_in_call_person": "Anda sudah ada di panggilan dengan orang itu.",
@@ -3664,7 +3508,6 @@
         "camera_disabled": "Kamera Anda dimatikan",
         "camera_enabled": "Kamera Anda masih nyala",
         "cannot_call_yourself_description": "Anda tidak dapat melakukan panggilan dengan diri sendiri.",
-        "change_input_device": "Ubah perangkat masukan",
         "connecting": "Menghubungkan",
         "connection_lost": "Koneksi ke server telah hilang",
         "connection_lost_description": "Anda tidak dapat membuat panggilan tanpa terhubung ke server.",
@@ -3681,13 +3524,10 @@
         "enable_camera": "Nyalakan kamera",
         "enable_microphone": "Suarakan mikrofon",
         "expand": "Kembali ke panggilan",
-        "failed_call_live_broadcast_description": "Anda tidak dapat memulai sebuah panggilan karena Anda saat ini merekam sebuah siaran langsung. Mohon akhiri siaran langsung Anda untuk memulai sebuah panggilan.",
-        "failed_call_live_broadcast_title": "Tidak dapat memulai panggilan",
         "hangup": "Akhiri",
         "hide_sidebar_button": "Sembunyikan sisi bilah",
         "input_devices": "Perangkat masukan",
         "join_button_tooltip_call_full": "Maaf — panggilan ini saat ini penuh",
-        "join_button_tooltip_connecting": "Menghubungkan",
         "maximise": "Penuhi layar",
         "misconfigured_server": "Panggilan gagal karena servernya tidak dikonfigurasi dengan benar",
         "misconfigured_server_description": "Mohon tanyakan ke administrator homeserver Anda (<code>%(homeserverDomain)s</code>) untuk mengkonfigurasikan server TURN supaya panggilan dapat bekerja dengan benar.",

@@ -1,15 +1,15 @@
 /*
 Copyright 2020-2024 New Vector Ltd.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 
 import { _t } from "../../../languageHandler";
-import ContextMenu, { IProps as IContextMenuProps, MenuItem } from "../../structures/ContextMenu";
+import ContextMenu, { type IProps as IContextMenuProps, MenuItem } from "../../structures/ContextMenu";
 import LegacyCallHandler from "../../../LegacyCallHandler";
 
 interface IProps extends IContextMenuProps {
@@ -17,10 +17,6 @@ interface IProps extends IContextMenuProps {
 }
 
 export default class LegacyCallContextMenu extends React.Component<IProps> {
-    public constructor(props: IProps) {
-        super(props);
-    }
-
     public onHoldClick = (): void => {
         this.props.call.setRemoteOnHold(true);
         this.props.onFinished();

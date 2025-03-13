@@ -2,18 +2,23 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { RoomType, IProtocol, IPublicRoomsChunkRoom, IRoomDirectoryOptions } from "matrix-js-sdk/src/matrix";
+import {
+    type RoomType,
+    type IProtocol,
+    type IPublicRoomsChunkRoom,
+    type IRoomDirectoryOptions,
+} from "matrix-js-sdk/src/matrix";
 import { useCallback, useEffect, useState } from "react";
 
-import { IPublicRoomDirectoryConfig } from "../components/views/directory/NetworkDropdown";
+import { type IPublicRoomDirectoryConfig } from "../components/views/directory/NetworkDropdown";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import SdkConfig from "../SdkConfig";
 import SettingsStore from "../settings/SettingsStore";
-import { Protocols } from "../utils/DirectoryUtils";
+import { type Protocols } from "../utils/DirectoryUtils";
 import { useLatestResult } from "./useLatestResult";
 import { useSettingValue } from "./useSettings";
 
@@ -55,7 +60,7 @@ export const usePublicRoomDirectory = (): {
 
     const [updateQuery, updateResult] = useLatestResult<IRoomDirectoryOptions, IPublicRoomsChunkRoom[]>(setPublicRooms);
 
-    const showNsfwPublicRooms = useSettingValue<boolean>("SpotlightSearch.showNsfwPublicRooms");
+    const showNsfwPublicRooms = useSettingValue("SpotlightSearch.showNsfwPublicRooms");
 
     async function initProtocols(): Promise<void> {
         if (!MatrixClientPeg.get()) {

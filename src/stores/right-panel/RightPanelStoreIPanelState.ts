@@ -2,21 +2,20 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixEvent, Room, RoomMember, User } from "matrix-js-sdk/src/matrix";
-import { VerificationRequest } from "matrix-js-sdk/src/crypto-api";
+import { type MatrixEvent, type Room, type RoomMember, type User } from "matrix-js-sdk/src/matrix";
+import { type VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 
-import { RightPanelPhases } from "./RightPanelStorePhases";
+import { type RightPanelPhases } from "./RightPanelStorePhases";
 
 export interface IRightPanelCardState {
     member?: RoomMember | User;
     verificationRequest?: VerificationRequest;
     verificationRequestPromise?: Promise<VerificationRequest>;
     widgetId?: string;
-    spaceId?: string;
     // Room3pidMemberInfo, Space3pidMemberInfo,
     memberInfoEvent?: MatrixEvent;
     // threads
@@ -32,7 +31,6 @@ export interface IRightPanelCardStateStored {
     memberId?: string;
     // we do not store the things associated with verification
     widgetId?: string;
-    spaceId?: string;
     // 3pidMemberInfo
     memberInfoEventId?: string;
     // threads
@@ -57,10 +55,10 @@ export interface IRightPanelForRoom {
     history: Array<IRightPanelCard>;
 }
 
-interface IRightPanelForRoomStored {
+export type IRightPanelForRoomStored = {
     isOpen: boolean;
     history: Array<IRightPanelCardStored>;
-}
+};
 
 export function convertToStorePanel(cacheRoom?: IRightPanelForRoom): IRightPanelForRoomStored | undefined {
     if (!cacheRoom) return undefined;
@@ -68,7 +66,7 @@ export function convertToStorePanel(cacheRoom?: IRightPanelForRoom): IRightPanel
     return { isOpen: cacheRoom.isOpen, history: storeHistory };
 }
 
-export function convertToStatePanel(storeRoom: IRightPanelForRoomStored, room: Room): IRightPanelForRoom {
+export function convertToStatePanel(storeRoom: IRightPanelForRoomStored | null, room: Room): IRightPanelForRoom | null {
     if (!storeRoom) return storeRoom;
     const stateHistory = [...storeRoom.history].map((panelStateStore) => convertStoreToCard(panelStateStore, room));
     return { history: stateHistory, isOpen: storeRoom.isOpen };
@@ -78,7 +76,6 @@ export function convertCardToStore(panelState: IRightPanelCard): IRightPanelCard
     const state = panelState.state ?? {};
     const stateStored: IRightPanelCardStateStored = {
         widgetId: state.widgetId,
-        spaceId: state.spaceId,
         isInitialEventHighlighted: state.isInitialEventHighlighted,
         initialEventScrollIntoView: state.initialEventScrollIntoView,
         threadHeadEventId: !!state?.threadHeadEvent?.getId() ? state.threadHeadEvent.getId() : undefined,
@@ -94,7 +91,6 @@ function convertStoreToCard(panelStateStore: IRightPanelCardStored, room: Room):
     const stateStored = panelStateStore.state ?? {};
     const state: IRightPanelCardState = {
         widgetId: stateStored.widgetId,
-        spaceId: stateStored.spaceId,
         isInitialEventHighlighted: stateStored.isInitialEventHighlighted,
         initialEventScrollIntoView: stateStored.initialEventScrollIntoView,
         threadHeadEvent: !!stateStored?.threadHeadEventId

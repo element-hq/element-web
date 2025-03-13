@@ -5,10 +5,10 @@ flexibility and control over when and where those features are enabled.
 
 For example, flags make the following things possible:
 
--   Extended testing of a feature via labs on develop
--   Enabling features when ready instead of the first moment the code is released
--   Testing a feature with a specific set of users (by enabling only on a specific
-    Element instance)
+- Extended testing of a feature via labs on develop
+- Enabling features when ready instead of the first moment the code is released
+- Testing a feature with a specific set of users (by enabling only on a specific
+  Element instance)
 
 The size of the feature controlled by a feature flag may vary widely: it could
 be a large project like reactions or a smaller change to an existing algorithm.

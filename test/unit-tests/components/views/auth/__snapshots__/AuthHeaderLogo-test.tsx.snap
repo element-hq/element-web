@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<AuthHeaderLogo /> should match snapshot 1`] = `
+<DocumentFragment>
+  <aside
+    class="mx_AuthHeaderLogo"
+  >
+    <img
+      alt="Element"
+      src="themes/element/img/logos/element-logo.svg"
+    />
+  </aside>
+</DocumentFragment>
+`;

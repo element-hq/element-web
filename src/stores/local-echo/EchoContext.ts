@@ -2,13 +2,13 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EchoTransaction, RunFn, TransactionStatus } from "./EchoTransaction";
+import { EchoTransaction, type RunFn, TransactionStatus } from "./EchoTransaction";
 import { arrayFastClone } from "../../utils/arrays";
-import { IDestroyable } from "../../utils/IDestroyable";
+import { type IDestroyable } from "../../utils/IDestroyable";
 import { Whenable } from "../../utils/Whenable";
 
 export enum ContextTransactionState {

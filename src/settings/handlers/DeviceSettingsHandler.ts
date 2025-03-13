@@ -4,12 +4,12 @@ Copyright 2019-2022 The Matrix.org Foundation C.I.C.
 Copyright 2019 New Vector Ltd.
 Copyright 2017 Travis Ralston
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { SettingLevel } from "../SettingLevel";
-import { CallbackFn, WatchManager } from "../WatchManager";
+import { type CallbackFn, type WatchManager } from "../WatchManager";
 import AbstractLocalStorageSettingsHandler from "./AbstractLocalStorageSettingsHandler";
 
 /**

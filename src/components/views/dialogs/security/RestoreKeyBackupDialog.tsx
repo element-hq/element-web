@@ -3,14 +3,13 @@ Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 Copyright 2018, 2019 New Vector Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent } from "react";
-import { MatrixClient, MatrixError, SecretStorage } from "matrix-js-sdk/src/matrix";
-import { decodeRecoveryKey, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
-import { IKeyBackupRestoreResult } from "matrix-js-sdk/src/crypto/keybackup";
+import React, { type ChangeEvent } from "react";
+import { MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
+import { decodeRecoveryKey, type KeyBackupInfo, type KeyBackupRestoreResult } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
@@ -37,20 +36,16 @@ interface IProps {
     // if false, will close the dialog as soon as the restore completes successfully
     // default: true
     showSummary?: boolean;
-    // If specified, gather the key from the user but then call the function with the backup
-    // key rather than actually (necessarily) restoring the backup.
-    keyCallback?: (key: Uint8Array) => void;
     onFinished(done?: boolean): void;
 }
 
 interface IState {
     backupInfo: KeyBackupInfo | null;
-    backupKeyStored: Record<string, SecretStorage.SecretStorageKeyDescription> | null;
     loading: boolean;
     loadError: boolean | null;
     restoreError: unknown | null;
     recoveryKey: string;
-    recoverInfo: IKeyBackupRestoreResult | null;
+    recoverInfo: KeyBackupRestoreResult | null;
     recoveryKeyValid: boolean;
     forceRecoveryKey: boolean;
     passPhrase: string;
@@ -75,7 +70,6 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
         super(props);
         this.state = {
             backupInfo: null,
-            backupKeyStored: null,
             loading: false,
             loadError: null,
             restoreError: null,
@@ -115,7 +109,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
 
     private onResetRecoveryClick = (): void => {
         this.props.onFinished(false);
-        accessSecretStorage(async (): Promise<void> => {}, /* forceReset = */ true);
+        accessSecretStorage(async (): Promise<void> => {}, { forceReset: true });
     };
 
     /**
@@ -127,7 +121,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
         try {
             decodeRecoveryKey(recoveryKey);
             return true;
-        } catch (e) {
+        } catch {
             return false;
         }
     }
@@ -140,7 +134,8 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
     };
 
     private onPassPhraseNext = async (): Promise<void> => {
-        if (!this.state.backupInfo) return;
+        const crypto = MatrixClientPeg.safeGet().getCrypto();
+        if (!crypto) return;
         this.setState({
             loading: true,
             restoreError: null,
@@ -149,20 +144,9 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
         try {
             // We do still restore the key backup: we must ensure that the key backup key
             // is the right one and restoring it is currently the only way we can do this.
-            const recoverInfo = await MatrixClientPeg.safeGet().restoreKeyBackupWithPassword(
-                this.state.passPhrase,
-                undefined,
-                undefined,
-                this.state.backupInfo,
-                { progressCallback: this.progressCallback },
-            );
-            if (this.props.keyCallback) {
-                const key = await MatrixClientPeg.safeGet().keyBackupKeyFromPassword(
-                    this.state.passPhrase,
-                    this.state.backupInfo,
-                );
-                this.props.keyCallback(key);
-            }
+            const recoverInfo = await crypto.restoreKeyBackupWithPassphrase(this.state.passPhrase, {
+                progressCallback: this.progressCallback,
+            });
 
             if (!this.props.showSummary) {
                 this.props.onFinished(true);
@@ -182,7 +166,8 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
     };
 
     private onRecoveryKeyNext = async (): Promise<void> => {
-        if (!this.state.recoveryKeyValid || !this.state.backupInfo) return;
+        const crypto = MatrixClientPeg.safeGet().getCrypto();
+        if (!this.state.recoveryKeyValid || !this.state.backupInfo?.version || !crypto) return;
 
         this.setState({
             loading: true,
@@ -190,17 +175,14 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
             restoreType: RestoreType.RecoveryKey,
         });
         try {
-            const recoverInfo = await MatrixClientPeg.safeGet().restoreKeyBackupWithRecoveryKey(
-                this.state.recoveryKey,
-                undefined,
-                undefined,
-                this.state.backupInfo,
-                { progressCallback: this.progressCallback },
+            await crypto.storeSessionBackupPrivateKey(
+                decodeRecoveryKey(this.state.recoveryKey),
+                this.state.backupInfo.version,
             );
-            if (this.props.keyCallback) {
-                const key = decodeRecoveryKey(this.state.recoveryKey);
-                this.props.keyCallback(key);
-            }
+            const recoverInfo = await crypto.restoreKeyBackup({
+                progressCallback: this.progressCallback,
+            });
+
             if (!this.props.showSummary) {
                 this.props.onFinished(true);
                 return;
@@ -224,44 +206,41 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
         });
     };
 
-    private async restoreWithSecretStorage(): Promise<void> {
+    private async restoreWithSecretStorage(): Promise<boolean> {
+        const crypto = MatrixClientPeg.safeGet().getCrypto();
+        if (!crypto) return false;
+
         this.setState({
-            loading: true,
             restoreError: null,
             restoreType: RestoreType.SecretStorage,
         });
         try {
+            let recoverInfo: KeyBackupRestoreResult | null = null;
             // `accessSecretStorage` may prompt for storage access as needed.
             await accessSecretStorage(async (): Promise<void> => {
-                if (!this.state.backupInfo) return;
-                await MatrixClientPeg.safeGet().restoreKeyBackupWithSecretStorage(
-                    this.state.backupInfo,
-                    undefined,
-                    undefined,
-                    { progressCallback: this.progressCallback },
-                );
+                await crypto.loadSessionBackupPrivateKeyFromSecretStorage();
+                recoverInfo = await crypto.restoreKeyBackup({ progressCallback: this.progressCallback });
             });
             this.setState({
                 loading: false,
+                recoverInfo,
             });
+            return true;
         } catch (e) {
-            logger.log("Error restoring backup", e);
+            logger.log("restoreWithSecretStorage failed:", e);
             this.setState({
                 restoreError: e,
                 loading: false,
             });
+            return false;
         }
     }
 
     private async restoreWithCachedKey(backupInfo: KeyBackupInfo | null): Promise<boolean> {
-        if (!backupInfo) return false;
+        const crypto = MatrixClientPeg.safeGet().getCrypto();
+        if (!crypto) return false;
         try {
-            const recoverInfo = await MatrixClientPeg.safeGet().restoreKeyBackupWithCache(
-                undefined /* targetRoomId */,
-                undefined /* targetSessionId */,
-                backupInfo,
-                { progressCallback: this.progressCallback },
-            );
+            const recoverInfo = await crypto.restoreKeyBackup({ progressCallback: this.progressCallback });
             this.setState({
                 recoverInfo,
             });
@@ -279,12 +258,11 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
         });
         try {
             const cli = MatrixClientPeg.safeGet();
-            const backupInfo = await cli.getKeyBackupVersion();
-            const has4S = await cli.hasSecretStorageKey();
+            const backupInfo = (await cli.getCrypto()?.getKeyBackupInfo()) ?? null;
+            const has4S = await cli.secretStorage.hasKey();
             const backupKeyStored = has4S ? await cli.isKeyBackupKeyStored() : null;
             this.setState({
                 backupInfo,
-                backupKeyStored,
             });
 
             const gotCache = await this.restoreWithCachedKey(backupInfo);
@@ -296,9 +274,13 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
                 return;
             }
 
-            // If the backup key is stored, we can proceed directly to restore.
-            if (backupKeyStored) {
-                return this.restoreWithSecretStorage();
+            const hasBackupFromSS = backupKeyStored && (await this.restoreWithSecretStorage());
+            if (hasBackupFromSS) {
+                logger.log("RestoreKeyBackupDialog: found backup key in secret storage");
+                this.setState({
+                    loading: false,
+                });
+                return;
             }
 
             this.setState({
@@ -412,6 +394,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
 
                     <form className="mx_RestoreKeyBackupDialog_primaryContainer">
                         <input
+                            data-testid="passphraseInput"
                             type="password"
                             className="mx_RestoreKeyBackupDialog_passPhraseInput"
                             onChange={this.onPassPhraseChange}

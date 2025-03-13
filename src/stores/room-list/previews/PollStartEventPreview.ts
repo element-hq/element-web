@@ -2,23 +2,23 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixEvent, PollStartEventContent } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, type PollStartEventContent } from "matrix-js-sdk/src/matrix";
 import { InvalidEventError } from "matrix-js-sdk/src/extensible_events_v1/InvalidEventError";
 import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
 
-import { IPreview } from "./IPreview";
-import { TagID } from "../models";
+import { type IPreview } from "./IPreview";
+import { type TagID } from "../models";
 import { _t, sanitizeForTranslation } from "../../../languageHandler";
 import { getSenderName, isSelf, shouldPrefixMessagesIn } from "./utils";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 export class PollStartEventPreview implements IPreview {
     public static contextType = MatrixClientContext;
-    public declare context: React.ContextType<typeof MatrixClientContext>;
+    declare public context: React.ContextType<typeof MatrixClientContext>;
 
     public getTextFor(event: MatrixEvent, tagId?: TagID, isThread?: boolean): string | null {
         let eventContent = event.getContent();

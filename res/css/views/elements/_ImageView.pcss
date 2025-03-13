@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2015, 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -125,11 +125,12 @@ $button-gap: 24px;
 }
 
 .mx_ImageView_button_download::before {
-    mask-image: url("$(res)/img/image-view/download.svg");
+    mask-image: url("@vector-im/compound-design-tokens/icons/download.svg");
 }
 
 .mx_ImageView_button_more::before {
-    mask-image: url("$(res)/img/image-view/more.svg");
+    mask-image: url("@vector-im/compound-design-tokens/icons/overflow-horizontal.svg");
+    mask-size: 28px;
 }
 
 .mx_ImageView_button_close {

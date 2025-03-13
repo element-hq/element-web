@@ -47,21 +47,21 @@ exports[`<TabbedView /> renders tabs 1`] = `
         </span>
       </li>
       <li
-        aria-controls="mx_tabpanel_SECURITY"
+        aria-controls="mx_tabpanel_APPEARANCE"
         aria-selected="false"
         class="mx_AccessibleButton mx_TabbedView_tabLabel"
-        data-testid="settings-tab-SECURITY"
+        data-testid="settings-tab-APPEARANCE"
         role="tab"
         tabindex="-1"
       >
         <span
-          class="mx_TabbedView_maskedIcon security"
+          class="mx_TabbedView_maskedIcon appearance"
         />
         <span
           class="mx_TabbedView_tabLabel_text"
-          id="mx_tabpanel_SECURITY_label"
+          id="mx_tabpanel_APPEARANCE_label"
         >
-          Security
+          Appearance
         </span>
       </li>
     </ul>

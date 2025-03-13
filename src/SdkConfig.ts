@@ -3,17 +3,17 @@ Copyright 2024 New Vector Ltd.
 Copyright 2019-2022 The Matrix.org Foundation C.I.C.
 Copyright 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Optional } from "matrix-events-sdk";
+import { type Optional } from "matrix-events-sdk";
 import { mergeWith } from "lodash";
 
 import { SnakedObject } from "./utils/SnakedObject";
-import { IConfigOptions, ISsoRedirectOptions } from "./IConfigOptions";
+import { type IConfigOptions, type ISsoRedirectOptions } from "./IConfigOptions";
 import { isObject, objectClone } from "./utils/objects";
-import { DeepReadonly, Defaultize } from "./@types/common";
+import { type DeepReadonly, type Defaultize } from "./@types/common";
 
 // see element-web config.md for docs, or the IConfigOptions interface for dev docs
 export const DEFAULTS: DeepReadonly<IConfigOptions> = {
@@ -42,12 +42,9 @@ export const DEFAULTS: DeepReadonly<IConfigOptions> = {
     // be preferred over their config.
     desktopBuilds: {
         available: true,
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
         logo: require("../res/img/element-desktop-logo.svg").default,
         url: "https://element.io/get-started",
-    },
-    voice_broadcast: {
-        chunk_length: 2 * 60, // two minutes
-        max_length: 4 * 60 * 60, // four hours
     },
 
     feedback: {
@@ -62,7 +59,7 @@ export const DEFAULTS: DeepReadonly<IConfigOptions> = {
         url: "https://element.io/download",
         url_macos: "https://packages.element.io/desktop/install/macos/Element.dmg",
         url_win64: "https://packages.element.io/desktop/install/win32/x64/Element%20Setup.exe",
-        url_win32: "https://packages.element.io/desktop/install/win32/ia32/Element%20Setup.exe",
+        url_win64arm: "https://packages.element.io/desktop/install/win32/arm64/Element%20Setup.exe",
         url_linux: "https://element.io/download#linux",
     },
     mobile_builds: {

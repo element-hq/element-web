@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -13,20 +13,11 @@ import SdkConfig from "../SdkConfig";
 import GenericToast from "../components/views/toasts/GenericToast";
 import ToastStore from "../stores/ToastStore";
 import QuestionDialog from "../components/views/dialogs/QuestionDialog";
-import ChangelogDialog from "../components/views/dialogs/ChangelogDialog";
+import ChangelogDialog, { checkVersion } from "../components/views/dialogs/ChangelogDialog";
 import PlatformPeg from "../PlatformPeg";
 import Modal from "../Modal";
 
 const TOAST_KEY = "update";
-
-/*
- * Check a version string is compatible with the Changelog
- * dialog ([element-version]-react-[react-sdk-version]-js-[js-sdk-version])
- */
-function checkVersion(ver: string): boolean {
-    const parts = ver.split("-");
-    return parts.length === 5 && parts[1] === "react" && parts[3] === "js";
-}
 
 function installUpdate(): void {
     PlatformPeg.get()?.installUpdate();

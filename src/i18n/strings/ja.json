@@ -93,7 +93,6 @@
         "report_content": "コンテンツを報告",
         "resend": "再送信",
         "reset": "リセット",
-        "restore": "復元",
         "resume": "再開",
         "retry": "再試行",
         "review": "確認",
@@ -231,15 +230,12 @@
         "phone_label": "電話",
         "phone_optional_label": "電話番号（任意）",
         "qr_code_login": {
-            "approve_access_warning": "この端末へのアクセスを許可すると、あなたのアカウントに完全にアクセスできるようになります。",
             "completing_setup": "新しい端末の設定を完了しています",
-            "confirm_code_match": "以下のコードが他の端末と一致していることを確認してください：",
             "error_rate_limited": "再試行の数が多すぎます。少し待ってから再度試してください。",
             "error_unexpected": "予期しないエラーが発生しました。",
             "scan_code_instruction": "サインアウトした端末で以下のQRコードをスキャンしてください。",
             "scan_qr_code": "QRコードをスキャン",
             "select_qr_code": "「%(scanQRCode)s」を選択",
-            "sign_in_new_device": "新しい端末でサインイン",
             "waiting_for_device": "端末のサインインを待機しています"
         },
         "register_action": "アカウントを作成",
@@ -359,7 +355,6 @@
         "download_logs": "ログのダウンロード",
         "downloading_logs": "ログをダウンロードしています",
         "error_empty": "発生した問題を教えてください。または、問題を説明するGitHub issueを作成してください。",
-        "failed_send_logs": "ログの送信に失敗しました： ",
         "introduction": "もしGitHubで不具合を報告した場合は、デバッグログが問題の解決に役立ちます。 ",
         "log_request": "今後これが起こらないようにするために、<a>ログを送信</a>してください。",
         "logs_sent": "ログが送信されました",
@@ -493,7 +488,6 @@
         "rooms": "ルーム",
         "saving": "保存しています…",
         "secure_backup": "セキュアバックアップ",
-        "security": "セキュリティー",
         "select_all": "全て選択",
         "server": "サーバー",
         "settings": "設定",
@@ -512,12 +506,10 @@
         "thread": "スレッド",
         "threads": "スレッド",
         "timeline": "タイムライン",
-        "trusted": "信頼済",
         "unencrypted": "暗号化されていません",
         "unmute": "ミュート解除",
         "unnamed_room": "名前のないルーム",
         "unnamed_space": "名前のないスペース",
-        "unsent": "未送信",
         "unverified": "未認証",
         "user_avatar": "プロフィール画像",
         "username": "ユーザー名",
@@ -527,8 +519,7 @@
         "video": "動画",
         "video_room": "ビデオ通話ルーム",
         "view_message": "メッセージを表示",
-        "warning": "警告",
-        "welcome": "ようこそ"
+        "warning": "警告"
     },
     "composer": {
         "autocomplete": {
@@ -692,18 +683,10 @@
         "low_bandwidth_mode": "低速モード",
         "low_bandwidth_mode_description": "対応するホームサーバーが必要。",
         "main_timeline": "メインのタイムライン",
-        "methods": "方法",
         "no_receipt_found": "開封確認が見つかりません",
-        "no_verification_requests_found": "認証リクエストがありません",
         "notifications_debug": "通知のデバッグ",
         "number_of_users": "ユーザー数",
         "original_event_source": "元のイベントのソースコード",
-        "phase": "フェーズ",
-        "phase_cancelled": "キャンセル済",
-        "phase_ready": "準備ができました",
-        "phase_requested": "要求済",
-        "phase_started": "開始済",
-        "phase_transaction": "トランザクション",
         "room_id": "ルームID：%(roomId)s",
         "room_notifications_dot": "ドット： ",
         "room_notifications_highlight": "ハイライト： ",
@@ -733,7 +716,6 @@
         },
         "state_key": "ステートキー",
         "threads_timeline": "スレッドのタイムライン",
-        "timeout": "タイムアウト",
         "title": "開発者ツール",
         "toggle_event": "イベントを切り替える",
         "toolbox": "ツールボックス",
@@ -747,7 +729,6 @@
         "values_explicit_colon": "明示的なレベルでの値：",
         "values_explicit_room": "このルーム内の明示的なレベルでの値",
         "values_explicit_this_room_colon": "このルーム内の明示的なレベルでの値：",
-        "verification_explorer": "認証の調査",
         "view_servers_in_room": "ルームでサーバーを表示",
         "view_source_decrypted_event_source": "復号化したイベントのソースコード",
         "view_source_decrypted_event_source_unavailable": "復号化したソースコードが利用できません",
@@ -818,10 +799,6 @@
         "export_unsupported": "お使いのブラウザーは、必要な暗号化拡張機能をサポートしていません",
         "import_invalid_keyfile": "有効な%(brand)sキーファイルではありません",
         "import_invalid_passphrase": "認証に失敗しました：間違ったパスワード？",
-        "incompatible_database_description": "以前このセッションで、より新しい%(brand)sのバージョンを使用していました。エンドツーエンド暗号化を有効にしてこのバージョンを再び使用するには、サインアウトして、再びサインインする必要があります。",
-        "incompatible_database_disable": "暗号化を無効にして続行",
-        "incompatible_database_sign_out_description": "チャットの履歴の消去を防ぐには、ログアウトする前にルームの鍵をエクスポートする必要があります。そのためには%(brand)sの新しいバージョンへと戻る必要があります",
-        "incompatible_database_title": "互換性のないデータベース",
         "messages_not_secure": {
             "cause_1": "あなたのホームサーバー",
             "cause_2": "認証しようとしているユーザーが接続しているホームサーバー",
@@ -852,7 +829,6 @@
         },
         "udd": {
             "interactive_verification_button": "絵文字で認証",
-            "manual_verification_button": "テキストを使って手動で認証",
             "other_ask_verify_text": "このユーザーにセッションを認証するよう依頼するか、以下から手動で認証してください。",
             "other_new_session_text": "%(name)s（%(userId)s）は未認証のセッションにサインインしました：",
             "own_ask_verify_text": "以下のどれか一つを使って他のセッションを認証します。",
@@ -860,8 +836,6 @@
             "title": "信頼されていません"
         },
         "unable_to_setup_keys_error": "鍵を設定できません",
-        "unsupported": "このクライアントはエンドツーエンド暗号化に対応していません。",
-        "upgrade_toast_title": "暗号化のアップグレードが利用できます",
         "verification": {
             "accepting": "承認しています…",
             "after_new_login": {
@@ -888,12 +862,6 @@
             "incoming_sas_dialog_waiting": "相手の承認を待機しています…",
             "incoming_sas_user_dialog_text_1": "このユーザーを認証すると、信頼済として表示します。ユーザーを信頼すると、より一層安心してエンドツーエンド暗号化を使用することができます。",
             "incoming_sas_user_dialog_text_2": "このユーザーを認証すると、相手のセッションと自分のセッションを信頼済として表示します。",
-            "manual_device_verification_device_id_label": "セッションID",
-            "manual_device_verification_device_key_label": "セッションキー",
-            "manual_device_verification_device_name_label": "セッション名",
-            "manual_device_verification_footer": "一致していない場合は、コミュニケーションのセキュリティーが損なわれている可能性があります。",
-            "manual_device_verification_self_text": "他のセッションのユーザー設定で、以下を比較して承認してください：",
-            "manual_device_verification_user_text": "ユーザー設定画面で以下を比較し、このユーザーのセッションを承認してください：",
             "no_key_or_device": "セキュリティーキーもしくは認証可能な端末が設定されていません。この端末では、以前暗号化されたメッセージにアクセスすることができません。この端末で本人確認を行うには、認証用の鍵を再設定する必要があります。",
             "no_support_qr_emoji": "認証しようとしている端末は、QRコードのスキャンや絵文字による認証をサポートしていませんが、%(brand)sではサポートされています。異なるクライアントで試してください。",
             "other_party_cancelled": "相手が認証をキャンセルしました。",
@@ -1003,10 +971,6 @@
         }
     },
     "event_preview": {
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)sが音声配信を終了しました",
-            "you": "音声配信を終了しました"
-        },
         "m.call.answer": {
             "dm": "通話しています",
             "user": "%(senderName)sが通話に参加しました",
@@ -1338,8 +1302,6 @@
         "video_rooms_faq1_question": "ビデオ通話ルームの作成方法",
         "video_rooms_faq2_answer": "はい、会話のタイムラインが動画と並んで表示されます。",
         "video_rooms_faq2_question": "テキストによる会話も行えますか？",
-        "voice_broadcast": "音声配信",
-        "voice_broadcast_force_small_chunks": "音声配信のチャンク長を15秒に強制",
         "wysiwyg_composer": "リッチテキストエディター"
     },
     "labs_mjolnir": {
@@ -1436,7 +1398,6 @@
     },
     "member_list": {
         "filter_placeholder": "ルームのメンバーを絞り込む",
-        "invited_list_heading": "招待済",
         "power_label": "%(userName)s（権限レベル：%(powerLevelNumber)s）"
     },
     "member_list_back_action_label": "ルームのメンバー",
@@ -1475,65 +1436,18 @@
         "mute_description": "通知を送信しません"
     },
     "notifier": {
-        "io.element.voice_broadcast_chunk": "%(senderName)sが音声配信を開始しました",
         "m.key.verification.request": "%(name)sは認証を要求しています"
     },
     "onboarding": {
-        "apple_trademarks": "App Store®とAppleロゴ®はApple Incの商標です。",
-        "community_messaging_action": "知人を見つける",
-        "community_messaging_description": "コミュニティーの会話の所有権とコントロールを維持しましょう。\n強力なモデレートと相互運用性で、数百万人のユーザーまでサポートできます。",
-        "community_messaging_title": "コミュニティーの手に",
-        "complete_these": "以下を完了し、%(brand)sを最大限に活用しましょう",
         "create_room": "グループチャットを作成",
-        "download_app": "%(brand)sをダウンロード",
-        "download_app_action": "アプリをダウンロード",
-        "download_app_description": "%(brand)sを持ち歩いて、情報を見逃さないようにしましょう",
-        "download_app_store": "App Storeでダウンロード",
-        "download_brand": "%(brand)sをダウンロード",
-        "download_brand_desktop": "%(brand)sデスクトップをダウンロード",
-        "download_f_droid": "F-Droidで入手",
-        "download_google_play": "Google Playで入手",
-        "enable_notifications": "通知を有効にする",
-        "enable_notifications_action": "通知を有効にする",
-        "enable_notifications_description": "返信または重要なメッセージを見逃さないようにしましょう",
         "explore_rooms": "公開ルームを探す",
-        "find_community_members": "コミュニティの参加者を探して招待しましょう",
-        "find_coworkers": "同僚を探して招待しましょう",
-        "find_friends": "友達を探して招待しましょう",
-        "find_friends_action": "友達を見つける",
-        "find_friends_description": "友達を見つけて、チャットを開始しましょう",
-        "find_people": "知人を見つける",
-        "free_e2ee_messaging_unlimited_voip": "自由なエンドツーエンド暗号化のメッセージのやり取りと音声・ビデオ通話で、%(brand)sは連絡を取るのに最適な手段です。",
-        "get_stuff_done": "同僚を見つけて、仕事を片付けましょう",
-        "google_trademarks": "Google PlayとGoogle PlayロゴはGoogle LLC.の商標です。",
         "has_avatar_label": "すばらしい、他の人があなただと気づく助けになるでしょう",
         "intro_byline": "自分の会話は、自分のもの。",
         "intro_welcome": "%(appName)sにようこそ",
         "no_avatar_label": "写真を追加して、あなただとわかるようにしましょう。",
-        "only_n_steps_to_go": {
-            "one": "あと%(count)sつのステップです",
-            "other": "あと%(count)sつのステップです"
-        },
-        "personal_messaging_action": "最初のチャットを始めましょう",
-        "personal_messaging_title": "友達や家族と安全なメッセージングを",
-        "qr_or_app_links": "%(qrCode)sまたは%(appLinks)s",
         "send_dm": "ダイレクトメッセージを送信",
-        "set_up_profile": "プロフィールの設定",
-        "set_up_profile_action": "あなたのプロフィール",
-        "set_up_profile_description": "相手に自分だと分かるようにしましょう",
-        "use_case_community_messaging": "オンラインコミュニティーのメンバー",
-        "use_case_heading1": "始めましょう",
-        "use_case_heading2": "誰と最もよく会話しますか？",
-        "use_case_heading3": "みんなと繋がる手助けをいたします。",
-        "use_case_personal_messaging": "友達と家族",
-        "use_case_work_messaging": "同僚とチーム",
         "welcome_detail": "何をしたいですか？",
-        "welcome_to_brand": "%(brand)sにようこそ",
-        "welcome_user": "ようこそ、%(name)s",
-        "work_messaging_action": "同僚を見つける",
-        "work_messaging_title": "仕事で安全なメッセージングを",
-        "you_did_it": "完了しました！",
-        "you_made_it": "完了しました！"
+        "welcome_user": "ようこそ、%(name)s"
     },
     "poll": {
         "create_poll_action": "アンケートを作成",
@@ -1580,7 +1494,6 @@
         "custom_level": "ユーザー定義のレベル",
         "default": "既定値",
         "label": "権限レベル",
-        "mod": "モデレーター",
         "moderator": "モデレーター",
         "restricted": "制限"
     },
@@ -1973,7 +1886,6 @@
             "error_unbanning": "ブロック解除に失敗しました",
             "events_default": "メッセージの送信",
             "invite": "ユーザーの招待",
-            "io.element.voice_broadcast_info": "音声配信",
             "kick": "ユーザーの追放",
             "m.call": "%(brand)s通話を開始",
             "m.call.member": "%(brand)s通話に参加",
@@ -2219,7 +2131,6 @@
             "msisdn_verification_field_label": "認証コード",
             "msisdn_verification_instructions": "テキストで送信された確認コードを入力してください。",
             "msisdns_heading": "電話番号",
-            "name_placeholder": "表示名がありません",
             "oidc_manage_button": "アカウントを管理",
             "password_change_section": "アカウントの新しいパスワードを設定…",
             "password_change_success": "パスワードを変更しました。",
@@ -2254,18 +2165,13 @@
                 "pass_phrase_match_failed": "合致しません。",
                 "pass_phrase_match_success": "合致します！",
                 "phrase_strong_enough": "すばらしい！ このセキュリティーフレーズは十分に強力なようです。",
-                "requires_key_restore": "鍵のバックアップを復元し、暗号化をアップグレードしてください",
-                "requires_password_confirmation": "アップグレードを承認するには、アカウントのパスワードを入力してください：",
-                "requires_server_authentication": "サーバーをアップグレードするには認証が必要です。",
                 "secret_storage_query_failure": "機密ストレージの状態を読み込めません",
                 "security_key_safety_reminder": "セキュリティーキーは、暗号化されたデータを保護するために使用されます。パスワードマネージャーもしくは金庫のような安全な場所で保管してください。",
-                "session_upgrade_description": "このセッションをアップグレードすると、他のセッションを認証できるようになります。また、暗号化されたメッセージへのアクセスが可能となり、メッセージを信頼済として相手に表示できるようになります。",
                 "set_phrase_again": "戻って、改めて設定してください。",
                 "settings_reminder": "セキュアバックアップを設定し、設定画面から鍵を管理することもできます。",
                 "title_confirm_phrase": "セキュリティーフレーズを確認",
                 "title_save_key": "セキュリティーキーを保存",
                 "title_set_phrase": "セキュリティーフレーズを設定",
-                "title_upgrade_encryption": "暗号化をアップグレード",
                 "unable_to_setup": "機密ストレージを設定できません",
                 "use_different_passphrase": "異なるパスフレーズを使用しますか？",
                 "use_phrase_only_you_know": "あなただけが知っている秘密のパスワードを使用してください。また、バックアップ用にセキュリティーキーを保存することができます（任意）。"
@@ -2331,7 +2237,6 @@
             "rm_lifetime_offscreen": "既読マーカーを動かすまでの時間（画面オフ時）（ミリ秒）",
             "room_list_heading": "ルーム一覧",
             "show_avatars_pills": "アバターをユーザー、ルーム、イベントのメンションに表示",
-            "show_checklist_shortcuts": "ルームの一覧の上に、最初に設定すべき項目のチェックリストのショートカットを表示",
             "show_polls_button": "アンケートのボタンを表示",
             "surround_text": "特殊な文字の入力中に、選択した文章を囲む",
             "time_heading": "表示時刻"
@@ -2558,7 +2463,6 @@
         "warning": "<w>警告：</w><description/>"
     },
     "share": {
-        "link_title": "ルームへのリンク",
         "permalink_message": "選択したメッセージにリンク",
         "permalink_most_recent": "最新のメッセージにリンク",
         "title_message": "ルームのメッセージを共有",
@@ -2613,7 +2517,6 @@
         "rageshake": "ログ付きのバグレポートを送信",
         "rainbow": "指定したメッセージを虹色で送信",
         "rainbowme": "指定したエモートを虹色で送信",
-        "remakeolm": "管理者コマンド：現在のアウトバウンドグループセッションを破棄して、新しいOlmセッションを設定",
         "remove": "指定したIDのユーザーをこのルームから追放",
         "roomavatar": "現在のルームのアバターを変更",
         "roomname": "ルーム名を設定",
@@ -2641,13 +2544,6 @@
         "upgraderoom": "ルームを新しいバージョンにアップグレード",
         "upgraderoom_permission_error": "このコマンドを実行するのに必要な権限がありません。",
         "usage": "用法",
-        "verify": "ユーザー、セッション、およびpubkeyタプルを認証",
-        "verify_mismatch": "警告：鍵の認証に失敗しました！提供された鍵「%(fingerprint)s」は、%(userId)sおよびセッション %(deviceId)s の署名鍵「%(fprint)s」と一致しません。通信が傍受されているおそれがあります！",
-        "verify_nop": "このセッションは認証済です！",
-        "verify_nop_warning_mismatch": "警告：このセッションは認証済ですが、鍵が一致しません！",
-        "verify_success_description": "指定された署名鍵は%(userId)sのセッション %(deviceId)s から受け取った鍵と一致します。セッションは認証済です。",
-        "verify_success_title": "認証済の鍵",
-        "verify_unknown_pair": "不明な（ユーザー、セッション）ペア：（%(userId)s、%(deviceId)s）",
         "whois": "ユーザーの情報を表示"
     },
     "space": {
@@ -2683,7 +2579,6 @@
         "invite": "連絡先を招待",
         "invite_description": "メールアドレスまたはユーザー名で招待",
         "invite_link": "招待リンクを共有",
-        "invite_this_space": "このスペースに招待",
         "joining_space": "参加しています",
         "landing_welcome": "<name/>にようこそ",
         "leave_dialog_action": "スペースから退出",
@@ -2858,10 +2753,6 @@
         "error_rendering_message": "このメッセージを読み込めません",
         "historical_messages_unavailable": "以前のメッセージは表示できません",
         "in_room_name": " <strong>%(room)s</strong>内で",
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)sが<a>音声配信</a>を終了しました",
-            "you": "<a>音声配信</a>を終了しました"
-        },
         "io.element.widgets.layout": "%(senderName)sがルームのレイアウトを更新しました",
         "load_error": {
             "no_permission": "このルームのタイムラインの特定の地点を読み込もうとしましたが、問題のメッセージを閲覧する権限がありません。",
@@ -3033,7 +2924,9 @@
             "sent": "%(senderName)sが%(targetDisplayName)sをこのルームに招待しました。"
         },
         "m.room.tombstone": "%(senderDisplayName)sがこのルームをアップグレードしました。",
-        "m.room.topic": "%(senderDisplayName)sがトピックを\"%(topic)s\"に変更しました。",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)sがトピックを\"%(topic)s\"に変更しました。"
+        },
         "m.sticker": "%(senderDisplayName)sがステッカーを送信しました。",
         "m.video": {
             "error_decrypting": "動画を復号化する際にエラーが発生しました"
@@ -3258,7 +3151,6 @@
     "truncated_list_n_more": {
         "other": "他%(count)s人以上…"
     },
-    "unknown_device": "不明な端末",
     "update": {
         "changelog": "更新履歴",
         "check_action": "更新を確認",
@@ -3298,14 +3190,6 @@
         "ban_room_confirm_title": "%(roomName)sからブロック",
         "ban_space_everything": "自分に可能な範囲で、全てのものからブロック",
         "ban_space_specific": "自分に可能な範囲で、特定のものからブロック",
-        "count_of_sessions": {
-            "other": "%(count)s個のセッション",
-            "one": "%(count)s個のセッション"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s件の認証済のセッション",
-            "one": "1件の認証済のセッション"
-        },
         "deactivate_confirm_action": "ユーザーを無効化",
         "deactivate_confirm_description": "このユーザーを無効化すると、このユーザーはログアウトし、再度ログインすることはできなくなります。また、現在参加している全てのルームから退出します。このアクションを元に戻すことはできません。このユーザーを無効化してもよろしいですか？",
         "deactivate_confirm_title": "ユーザーを無効化しますか？",
@@ -3316,15 +3200,12 @@
         "disinvite_button_room": "ルームへの招待を取り消す",
         "disinvite_button_room_name": "%(roomName)sへの招待を取り消す",
         "disinvite_button_space": "スペースへの招待を取り消す",
-        "edit_own_devices": "端末を編集",
         "error_ban_user": "ユーザーをブロックできませんでした",
         "error_deactivate": "ユーザーの無効化に失敗しました",
         "error_kicking_user": "ユーザーの追放に失敗しました",
         "error_mute_user": "ユーザーのミュートに失敗しました",
         "error_revoke_3pid_invite_description": "招待を取り消すことができませんでした。サーバーで一時的な問題が発生しているか、招待を取り消すための十分な権限がありません。",
         "error_revoke_3pid_invite_title": "招待を取り消せませんでした",
-        "hide_sessions": "セッションを隠す",
-        "hide_verified_sessions": "認証済のセッションを隠す",
         "ignore_confirm_description": "このユーザーのメッセージと招待を非表示にします。無視してよろしいですか？",
         "ignore_confirm_title": "%(user)sを無視",
         "invited_by": "%(sender)sからの招待",
@@ -3373,38 +3254,6 @@
         "switch_theme_dark": "ダークテーマに切り替える",
         "switch_theme_light": "ライトテーマに切り替える"
     },
-    "voice_broadcast": {
-        "30s_backward": "30秒戻す",
-        "30s_forward": "30秒進める",
-        "action": "音声配信",
-        "buffering": "バッファリングしています…",
-        "confirm_listen_affirm": "はい、録音を終了してください",
-        "confirm_listen_description": "このライブ配信の視聴を開始すると、現在のライブ配信の録音は終了します。",
-        "confirm_listen_title": "ライブ配信を視聴しますか？",
-        "confirm_stop_affirm": "はい、配信を停止します",
-        "confirm_stop_description": "ライブ配信を終了してよろしいですか？配信を終了し、録音をこのルームで利用できるよう設定します。",
-        "confirm_stop_title": "ライブ配信を停止しますか？",
-        "connection_error": "接続エラー - 録音を停止しました",
-        "failed_already_recording_description": "既に音声配信を録音しています。新しく始めるには現在の音声配信を終了してください。",
-        "failed_already_recording_title": "新しい音声配信を開始できません",
-        "failed_decrypt": "音声配信を復号化できません",
-        "failed_generic": "この音声配信を再生できません",
-        "failed_insufficient_permission_description": "このルームで音声配信を開始する権限がありません。ルームの管理者に連絡して権限の付与を依頼してください。",
-        "failed_insufficient_permission_title": "新しい音声配信を開始できません",
-        "failed_no_connection_description": "録音を開始できません。後でもう一度やり直してください。",
-        "failed_no_connection_title": "接続エラー",
-        "failed_others_already_recording_description": "他の人が既に音声配信を録音しています。新しく始めるには音声配信が終わるまで待機してください。",
-        "failed_others_already_recording_title": "新しい音声配信を開始できません",
-        "go_live": "ライブ配信",
-        "live": "ライブ",
-        "pause": "音声配信を一時停止",
-        "play": "音声配信を再生",
-        "resume": "音声配信を再開"
-    },
-    "voice_message": {
-        "cant_start_broadcast_description": "ライブ配信を録音しているため、音声メッセージを開始できません。音声メッセージの録音を開始するには、ライブ配信を終了してください。",
-        "cant_start_broadcast_title": "音声メッセージを開始できません"
-    },
     "voip": {
         "already_in_call": "既に通話中です",
         "already_in_call_person": "既にこの人と通話中です。",
@@ -3424,7 +3273,6 @@
         "camera_disabled": "カメラが無効です",
         "camera_enabled": "カメラがまだ有効です",
         "cannot_call_yourself_description": "自分自身に通話を発信することはできません。",
-        "change_input_device": "入力端末を変更",
         "connecting": "接続しています",
         "connection_lost": "サーバーとの接続が失われました",
         "connection_lost_description": "サーバーに接続していないため、通話を発信できません。",
@@ -3441,13 +3289,10 @@
         "enable_camera": "カメラを有効にする",
         "enable_microphone": "マイクのミュートを解除",
         "expand": "通話に戻る",
-        "failed_call_live_broadcast_description": "ライブ配信を録音しているため、通話を開始できません。通話を開始するには、ライブ配信を終了してください。",
-        "failed_call_live_broadcast_title": "通話を開始できません",
         "hangup": "電話を切る",
         "hide_sidebar_button": "サイドバーを表示しない",
         "input_devices": "入力装置",
         "join_button_tooltip_call_full": "すみません ― この通話は現在満員です",
-        "join_button_tooltip_connecting": "接続しています",
         "maximise": "全画面",
         "misconfigured_server": "サーバーの不正な設定のため通話に失敗しました",
         "misconfigured_server_description": "安定した通話のために、ホームサーバー（<code>%(homeserverDomain)s</code>）の管理者にTURNサーバーの設定を依頼してください。",

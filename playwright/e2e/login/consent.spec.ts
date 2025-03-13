@@ -2,18 +2,19 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { test, expect } from "../../element-web-test";
+import { consentHomeserver } from "../../plugins/homeserver/synapse/consentHomeserver.ts";
+
+test.use(consentHomeserver);
+test.use({
+    displayName: "Bob",
+});
 
 test.describe("Consent", () => {
-    test.use({
-        startHomeserverOpts: "consent",
-        displayName: "Bob",
-    });
-
     test("should prompt the user to consent to terms when server deems it necessary", async ({
         context,
         page,

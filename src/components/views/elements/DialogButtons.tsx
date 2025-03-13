@@ -4,11 +4,11 @@ Copyright 2019 The Matrix.org Foundation C.I.C.
 Copyright 2018 New Vector Ltd.
 Copyright 2017 Aidan Gauland
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 
 import { _t } from "../../../languageHandler";
 

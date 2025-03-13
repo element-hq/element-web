@@ -2,15 +2,15 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { type Preset, type Visibility } from "matrix-js-sdk/src/matrix";
 
 import { test, expect } from "../../element-web-test";
-import { doTwoWaySasVerification, awaitVerifier } from "./utils";
-import { Client } from "../../pages/client";
+import { doTwoWaySasVerification, awaitVerifier, waitForDevices } from "./utils";
+import { type Client } from "../../pages/client";
 
 test.describe("User verification", () => {
     // note that there are other tests that check user verification works in `crypto.spec.ts`.
@@ -32,12 +32,18 @@ test.describe("User verification", () => {
     });
 
     test("can receive a verification request when there is no existing DM", async ({
+        app,
         page,
         bot: bob,
         user: aliceCredentials,
         toasts,
         room: { roomId: dmRoomId },
     }) => {
+        await waitForDevices(app, bob.credentials.userId, 1);
+        await expect(page.getByRole("button", { name: "Avatar" })).toBeVisible();
+        const avatar = page.getByRole("button", { name: "Avatar" });
+        await avatar.click();
+
         // once Alice has joined, Bob starts the verification
         const bobVerificationRequest = await bob.evaluateHandle(
             async (client, { dmRoomId, aliceCredentials }) => {
@@ -60,13 +66,18 @@ test.describe("User verification", () => {
         // Accept
         await toast.getByRole("button", { name: "Verify User" }).click();
 
+        // Wait for the QR code to be rendered. If we don't do this, then the QR code can be rendered just as
+        // Playwright tries to click the "Verify by emoji" button, which seems to make it miss the button.
+        // (richvdh: I thought Playwright was supposed to be resilient to such things, but empirically not.)
+        await expect(page.getByAltText("QR Code")).toBeVisible();
+
         // request verification by emoji
         await page.locator("#mx_RightPanel").getByRole("button", { name: "Verify by emoji" }).click();
 
         /* on the bot side, wait for the verifier to exist ... */
         const botVerifier = await awaitVerifier(bobVerificationRequest);
         // ... confirm ...
-        botVerifier.evaluate((verifier) => verifier.verify());
+        void botVerifier.evaluate((verifier) => verifier.verify());
         // ... and then check the emoji match
         await doTwoWaySasVerification(page, botVerifier);
 
@@ -76,12 +87,18 @@ test.describe("User verification", () => {
     });
 
     test("can abort emoji verification when emoji mismatch", async ({
+        app,
         page,
         bot: bob,
         user: aliceCredentials,
         toasts,
         room: { roomId: dmRoomId },
     }) => {
+        await waitForDevices(app, bob.credentials.userId, 1);
+        await expect(page.getByRole("button", { name: "Avatar" })).toBeVisible();
+        const avatar = page.getByRole("button", { name: "Avatar" });
+        await avatar.click();
+
         // once Alice has joined, Bob starts the verification
         const bobVerificationRequest = await bob.evaluateHandle(
             async (client, { dmRoomId, aliceCredentials }) => {
@@ -101,13 +118,20 @@ test.describe("User verification", () => {
         const toast = await toasts.getToast("Verification requested");
         await toast.getByRole("button", { name: "Verify User" }).click();
 
+        // Wait for the QR code to be rendered. If we don't do this, then the QR code can be rendered just as
+        // Playwright tries to click the "Verify by emoji" button, which seems to make it miss the button.
+        // (richvdh: I thought Playwright was supposed to be resilient to such things, but empirically not.)
+        await expect(page.getByAltText("QR Code")).toBeVisible();
+
         // request verification by emoji
         await page.locator("#mx_RightPanel").getByRole("button", { name: "Verify by emoji" }).click();
 
         /* on the bot side, wait for the verifier to exist ... */
         const botVerifier = await awaitVerifier(bobVerificationRequest);
-        // ... confirm ...
-        botVerifier.evaluate((verifier) => verifier.verify()).catch(() => {});
+        // ... and confirm. We expect the verification to fail; we catch the error on the DOM side
+        // to stop playwright marking the evaluate as failing in the UI.
+        const botVerification = botVerifier.evaluate((verifier) => verifier.verify().catch(() => {}));
+
         // ... and abort the verification
         await page.getByRole("button", { name: "They don't match" }).click();
 
@@ -115,6 +139,8 @@ test.describe("User verification", () => {
         await expect(dialog.getByText("Your messages are not secure")).toBeVisible();
         await dialog.getByRole("button", { name: "OK" }).click();
         await expect(dialog).not.toBeVisible();
+
+        await botVerification;
     });
 });
 

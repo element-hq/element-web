@@ -5,18 +5,18 @@ Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 Copyright 2018 New Vector Ltd
 Copyright 2015, 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
-import { SlashCommand as SlashCommandEvent } from "@matrix-org/analytics-events/types/typescript/SlashCommand";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type SlashCommand as SlashCommandEvent } from "@matrix-org/analytics-events/types/typescript/SlashCommand";
 
 import { TimelineRenderingType } from "../contexts/RoomContext";
 import { reject } from "./utils";
-import { _t, TranslationKey, UserFriendlyError } from "../languageHandler";
+import { _t, type TranslationKey, UserFriendlyError } from "../languageHandler";
 import { PosthogAnalytics } from "../PosthogAnalytics";
-import { CommandCategories, RunResult } from "./interface";
+import { CommandCategories, type RunResult } from "./interface";
 
 type RunFn = (
     this: Command,

@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -11,13 +11,13 @@ import { useContext, useState } from "react";
 
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import { getHomePageUrl } from "../../utils/pages";
-import { _tDom } from "../../languageHandler";
+import { _t, _tDom } from "../../languageHandler";
 import SdkConfig from "../../SdkConfig";
 import dis from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import BaseAvatar from "../views/avatars/BaseAvatar";
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
-import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../views/elements/AccessibleButton";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { useEventEmitter } from "../../hooks/useEventEmitter";
 import MatrixClientContext, { useMatrixClientContext } from "../../contexts/MatrixClientContext";
@@ -27,7 +27,7 @@ import EmbeddedPage from "./EmbeddedPage";
 
 const onClickSendDm = (ev: ButtonEvent): void => {
     PosthogTrackers.trackInteraction("WebHomeCreateChatButton", ev);
-    dis.dispatch({ action: "view_create_chat" });
+    dis.dispatch({ action: Action.CreateChat });
 };
 
 const onClickExplore = (ev: ButtonEvent): void => {
@@ -37,7 +37,7 @@ const onClickExplore = (ev: ButtonEvent): void => {
 
 const onClickNewRoom = (ev: ButtonEvent): void => {
     PosthogTrackers.trackInteraction("WebHomeCreateRoomButton", ev);
-    dis.dispatch({ action: "view_create_room" });
+    dis.dispatch({ action: Action.CreateRoom });
 };
 
 interface IProps {
@@ -66,8 +66,8 @@ const UserWelcomeTop: React.FC = () => {
         <div>
             <MiniAvatarUploader
                 hasAvatar={!!ownProfile.avatarUrl}
-                hasAvatarLabel={_tDom("onboarding|has_avatar_label")}
-                noAvatarLabel={_tDom("onboarding|no_avatar_label")}
+                hasAvatarLabel={_t("onboarding|has_avatar_label")}
+                noAvatarLabel={_t("onboarding|no_avatar_label")}
                 setAvatarUrl={(url) => cli.setAvatarUrl(url)}
                 isUserAvatar
                 onClick={(ev) => PosthogTrackers.trackInteraction("WebHomeMiniAvatarUploadButton", ev)}

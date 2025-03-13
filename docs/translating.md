@@ -2,9 +2,9 @@
 
 ## Requirements
 
--   Web Browser
--   Be able to understand English
--   Be able to understand the language you want to translate Element into
+- Web Browser
+- Be able to understand English
+- Be able to understand the language you want to translate Element into
 
 ## Join #element-translations:matrix.org
 

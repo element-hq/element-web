@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -10,14 +10,14 @@ import React from "react";
 import { chunk } from "lodash";
 import classNames from "classnames";
 import {
-    MatrixClient,
+    type MatrixClient,
     IdentityProviderBrand,
-    SSOFlow,
-    SSOAction,
-    IIdentityProvider,
+    type SSOFlow,
+    type SSOAction,
+    type IIdentityProvider,
     DELEGATED_OIDC_COMPATIBILITY,
 } from "matrix-js-sdk/src/matrix";
-import { Signup } from "@matrix-org/analytics-events/types/typescript/Signup";
+import { type Signup } from "@matrix-org/analytics-events/types/typescript/Signup";
 
 import PlatformPeg from "../../../PlatformPeg";
 import AccessibleButton from "./AccessibleButton";
@@ -33,6 +33,7 @@ interface ISSOButtonProps extends IProps {
 
 const getIcon = (brand: IdentityProviderBrand | string): string | null => {
     switch (brand) {
+        /* eslint-disable @typescript-eslint/no-require-imports */
         case IdentityProviderBrand.Apple:
             return require(`../../../../res/img/element-icons/brands/apple.svg`).default;
         case IdentityProviderBrand.Facebook:
@@ -47,6 +48,7 @@ const getIcon = (brand: IdentityProviderBrand | string): string | null => {
             return require(`../../../../res/img/element-icons/brands/twitter.svg`).default;
         default:
             return null;
+        /* eslint-enable @typescript-eslint/no-require-imports */
     }
 };
 

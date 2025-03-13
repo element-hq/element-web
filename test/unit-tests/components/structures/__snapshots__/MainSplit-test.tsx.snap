@@ -14,7 +14,7 @@ exports[`<MainSplit/> renders 1`] = `
     </div>
     <div
       class="mx_RightPanel_ResizeWrapper"
-      style="position: relative; user-select: auto; width: 320px; height: 100%; max-width: 50%; min-width: 264px; box-sizing: border-box; flex-shrink: 0;"
+      style="position: relative; user-select: auto; width: 320px; height: 100%; max-width: 50%; min-width: 320px; box-sizing: border-box; flex-shrink: 0;"
     >
       <div>
         Right panel
@@ -44,7 +44,7 @@ exports[`<MainSplit/> respects defaultSize prop 1`] = `
     </div>
     <div
       class="mx_RightPanel_ResizeWrapper"
-      style="position: relative; user-select: auto; width: 500px; height: 100%; max-width: 50%; min-width: 264px; box-sizing: border-box; flex-shrink: 0;"
+      style="position: relative; user-select: auto; width: 500px; height: 100%; max-width: 50%; min-width: 320px; box-sizing: border-box; flex-shrink: 0;"
     >
       <div>
         Right panel

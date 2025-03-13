@@ -2,23 +2,23 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { act, render, waitFor } from "jest-matrix-react";
-import React, { ComponentProps } from "react";
-import { User, TypedEventEmitter, Device, MatrixClient } from "matrix-js-sdk/src/matrix";
-import { mocked, Mocked } from "jest-mock";
+import React, { type ComponentProps } from "react";
+import { User, TypedEventEmitter, Device, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { mocked, type Mocked } from "jest-mock";
 import {
-    EmojiMapping,
-    ShowSasCallbacks,
+    type EmojiMapping,
+    type ShowSasCallbacks,
     VerificationPhase as Phase,
-    VerificationRequest,
-    VerificationRequestEvent,
-    Verifier,
+    type VerificationRequest,
+    type VerificationRequestEvent,
+    type Verifier,
     VerifierEvent,
-    VerifierEventHandlerMap,
+    type VerifierEventHandlerMap,
 } from "matrix-js-sdk/src/crypto-api";
 
 import VerificationPanel from "../../../../../src/components/views/right_panel/VerificationPanel";
@@ -46,7 +46,7 @@ describe("<VerificationPanel />", () => {
             const request = makeMockVerificationRequest({
                 phase: Phase.Ready,
             });
-            request.generateQRCode.mockResolvedValue(Buffer.from("test", "utf-8"));
+            request.generateQRCode.mockResolvedValue(new Uint8ClampedArray(Buffer.from("test", "utf-8")));
             const container = renderComponent({
                 request: request,
                 layout: "dialog",
@@ -71,7 +71,7 @@ describe("<VerificationPanel />", () => {
             const request = makeMockVerificationRequest({
                 phase: Phase.Ready,
             });
-            request.generateQRCode.mockResolvedValue(Buffer.from("test", "utf-8"));
+            request.generateQRCode.mockResolvedValue(new Uint8ClampedArray(Buffer.from("test", "utf-8")));
             const container = renderComponent({
                 request: request,
                 member: new User("@other:user"),

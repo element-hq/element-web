@@ -5,21 +5,20 @@ Copyright 2019 The Matrix.org Foundation C.I.C.
 Copyright 2017, 2018 New Vector Ltd
 Copyright 2015, 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { LegacyRef, ReactNode } from "react";
-import sanitizeHtml from "sanitize-html";
+import React, { type LegacyRef, type ReactNode } from "react";
+import sanitizeHtml, { type IOptions } from "sanitize-html";
 import classNames from "classnames";
 import katex from "katex";
 import { decode } from "html-entities";
-import { IContent } from "matrix-js-sdk/src/matrix";
-import { Optional } from "matrix-events-sdk";
+import { type IContent } from "matrix-js-sdk/src/matrix";
+import { type Optional } from "matrix-events-sdk";
 import escapeHtml from "escape-html";
 import { getEmojiFromUnicode } from "@matrix-org/emojibase-bindings";
 
-import { IExtendedSanitizeOptions } from "./@types/sanitize-html";
 import SettingsStore from "./settings/SettingsStore";
 import { stripHTMLReply, stripPlainReply } from "./utils/Reply";
 import { PERMITTED_URL_SCHEMES } from "./utils/UrlUtils";
@@ -52,7 +51,7 @@ export const EMOJI_REGEX = (() => {
         // want the app to completely crash on older platforms. We use the
         // constructor here to avoid a syntax error on such platforms.
         return new RegExp("\\p{RGI_Emoji}(?!\\uFE0E)(?:(?<!\\uFE0F)\\uFE0F)?|[\\u{1f1e6}-\\u{1f1ff}]", "v");
-    } catch (_e) {
+    } catch {
         // v mode not supported; fall back to matching nothing
         return /(?!)/;
     }
@@ -61,7 +60,7 @@ export const EMOJI_REGEX = (() => {
 const BIGEMOJI_REGEX = (() => {
     try {
         return new RegExp(`^(${EMOJI_REGEX.source})+$`, "iv");
-    } catch (_e) {
+    } catch {
         // Fall back, just like for EMOJI_REGEX
         return /(?!)/;
     }
@@ -120,13 +119,13 @@ export function isUrlPermitted(inputUrl: string): boolean {
     try {
         // URL parser protocol includes the trailing colon
         return PERMITTED_URL_SCHEMES.includes(new URL(inputUrl).protocol.slice(0, -1));
-    } catch (e) {
+    } catch {
         return false;
     }
 }
 
 // this is the same as the above except with less rewriting
-const composerSanitizeHtmlParams: IExtendedSanitizeOptions = {
+const composerSanitizeHtmlParams: IOptions = {
     ...sanitizeHtmlParams,
     transformTags: {
         "code": transformTags["code"],
@@ -135,7 +134,7 @@ const composerSanitizeHtmlParams: IExtendedSanitizeOptions = {
 };
 
 // reduced set of allowed tags to avoid turning topics into Myspace
-const topicSanitizeHtmlParams: IExtendedSanitizeOptions = {
+const topicSanitizeHtmlParams: IOptions = {
     ...sanitizeHtmlParams,
     allowedTags: [
         "font", // custom to matrix for IRC-style font coloring

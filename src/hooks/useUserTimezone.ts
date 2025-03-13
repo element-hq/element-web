@@ -1,20 +1,14 @@
 /*
-Copyright 2024 New Vector Ltd
+Copyright 2024 New Vector Ltd.
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
 */
 import { useEffect, useState } from "react";
-import { MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
+
+import { getTwelveHourOptions } from "../DateUtils.ts";
+import { useSettingValue } from "./useSettings.ts";
 
 /**
  * Fetch a user's delclared timezone through their profile, and return
@@ -32,6 +26,7 @@ export const useUserTimezone = (cli: MatrixClient, userId: string): { timezone: 
     const [updateInterval, setUpdateInterval] = useState<ReturnType<typeof setTimeout>>();
     const [friendly, setFriendly] = useState<string>();
     const [supported, setSupported] = useState<boolean>();
+    const showTwelveHour = useSettingValue("showTwelveHourTimestamps");
 
     useEffect(() => {
         if (!cli || supported !== undefined) {
@@ -71,8 +66,8 @@ export const useUserTimezone = (cli: MatrixClient, userId: string): { timezone: 
                 const updateTime = (): void => {
                     const currentTime = new Date();
                     const friendly = currentTime.toLocaleString(undefined, {
+                        ...getTwelveHourOptions(showTwelveHour),
                         timeZone: tz,
-                        hour12: true,
                         hour: "2-digit",
                         minute: "2-digit",
                         timeZoneName: "shortOffset",
@@ -93,7 +88,7 @@ export const useUserTimezone = (cli: MatrixClient, userId: string): { timezone: 
                 console.error("Could not render current timezone for user", ex);
             }
         })();
-    }, [supported, userId, cli]);
+    }, [supported, userId, cli, showTwelveHour]);
 
     if (!timezone || !friendly) {
         return null;

@@ -2,12 +2,12 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useMemo } from "react";
-import { Room, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { _t, _td } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
@@ -21,7 +21,7 @@ import { UIFeature } from "../../../settings/UIFeature";
 import AdvancedRoomSettingsTab from "../settings/tabs/room/AdvancedRoomSettingsTab";
 import RolesRoomSettingsTab from "../settings/tabs/room/RolesRoomSettingsTab";
 import { Action } from "../../../dispatcher/actions";
-import { NonEmptyArray } from "../../../@types/common";
+import { type NonEmptyArray } from "../../../@types/common";
 
 export enum SpaceSettingsTab {
     General = "SPACE_GENERAL_TAB",

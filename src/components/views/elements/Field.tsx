@@ -1,24 +1,26 @@
 /*
 Copyright 2019-2024 New Vector Ltd.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React, {
-    InputHTMLAttributes,
-    SelectHTMLAttributes,
-    TextareaHTMLAttributes,
-    RefObject,
+    type InputHTMLAttributes,
+    type SelectHTMLAttributes,
+    type TextareaHTMLAttributes,
+    type RefObject,
     createRef,
-    KeyboardEvent,
+    type ComponentProps,
+    type MutableRefObject,
+    type RefCallback,
+    type Ref,
 } from "react";
 import classNames from "classnames";
 import { debounce } from "lodash";
+import { Tooltip } from "@vector-im/compound-web";
 
-import { IFieldState, IValidationResult } from "./Validation";
-import Tooltip, { Alignment } from "./Tooltip";
-import { Key } from "../../../Keyboard";
+import { type IFieldState, type IValidationResult } from "./Validation";
 
 // Invoke validation from user input (when typing, etc.) at most once every N ms.
 const VALIDATION_THROTTLE_MS = 200;
@@ -57,11 +59,11 @@ interface IProps {
     forceValidity?: boolean;
     // If specified, contents will appear as a tooltip on the element and
     // validation feedback tooltips will be suppressed.
-    tooltipContent?: React.ReactNode;
+    tooltipContent?: JSX.Element | string;
     // If specified the tooltip will be shown regardless of feedback
     forceTooltipVisible?: boolean;
     // If specified, the tooltip with be aligned accorindly with the field, defaults to Right.
-    tooltipAlignment?: Alignment;
+    tooltipAlignment?: ComponentProps<typeof Tooltip>["placement"];
     // If specified alongside tooltipContent, the class name to apply to the
     // tooltip itself.
     tooltipClassName?: string;
@@ -76,7 +78,7 @@ interface IProps {
 
 export interface IInputProps extends IProps, InputHTMLAttributes<HTMLInputElement> {
     // The ref pass through to the input
-    inputRef?: RefObject<HTMLInputElement>;
+    inputRef?: Ref<HTMLInputElement>;
     // The element to create. Defaults to "input".
     element: "input";
     // The input's value. This is a controlled component, so the value is required.
@@ -85,7 +87,7 @@ export interface IInputProps extends IProps, InputHTMLAttributes<HTMLInputElemen
 
 interface ISelectProps extends IProps, SelectHTMLAttributes<HTMLSelectElement> {
     // The ref pass through to the select
-    inputRef?: RefObject<HTMLSelectElement>;
+    inputRef?: Ref<HTMLSelectElement>;
     // To define options for a select, use <Field><option ... /></Field>
     element: "select";
     // The select's value. This is a controlled component, so the value is required.
@@ -94,7 +96,7 @@ interface ISelectProps extends IProps, SelectHTMLAttributes<HTMLSelectElement> {
 
 interface ITextareaProps extends IProps, TextareaHTMLAttributes<HTMLTextAreaElement> {
     // The ref pass through to the textarea
-    inputRef?: RefObject<HTMLTextAreaElement>;
+    inputRef?: Ref<HTMLTextAreaElement>;
     element: "textarea";
     // The textarea's value. This is a controlled component, so the value is required.
     value: string;
@@ -102,7 +104,7 @@ interface ITextareaProps extends IProps, TextareaHTMLAttributes<HTMLTextAreaElem
 
 export interface INativeOnChangeInputProps extends IProps, InputHTMLAttributes<HTMLInputElement> {
     // The ref pass through to the input
-    inputRef?: RefObject<HTMLInputElement>;
+    inputRef?: Ref<HTMLInputElement>;
     element: "input";
     // The input's value. This is a controlled component, so the value is required.
     value: string;
@@ -112,14 +114,24 @@ type PropShapes = IInputProps | ISelectProps | ITextareaProps | INativeOnChangeI
 
 interface IState {
     valid?: boolean;
-    feedback?: React.ReactNode;
+    feedback?: JSX.Element | string;
     feedbackVisible: boolean;
     focused: boolean;
 }
 
 export default class Field extends React.PureComponent<PropShapes, IState> {
     private readonly id: string;
-    private readonly _inputRef = createRef<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>();
+    private readonly _inputRef: MutableRefObject<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | null> =
+        createRef();
+
+    /**
+     * When props.inputRef is a callback ref, we will pass callbackRef to the DOM element.
+     * This is so that other methods here can still access the DOM element via this._inputRef.
+     */
+    private readonly callbackRef: RefCallback<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> = (node) => {
+        this._inputRef.current = node;
+        (this.props.inputRef as RefCallback<unknown>)(node);
+    };
 
     public static readonly defaultProps = {
         element: "input",
@@ -127,6 +139,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         validateOnFocus: true,
         validateOnBlur: true,
         validateOnChange: true,
+        tooltipAlignment: "right",
     };
 
     /*
@@ -230,19 +243,18 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
     }
 
     private get inputRef(): RefObject<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> {
-        return this.props.inputRef ?? this._inputRef;
+        const inputRef = this.props.inputRef;
+        if (typeof inputRef === "function") {
+            // This is a callback ref, so return _inputRef which will point to the actual DOM element.
+            return this._inputRef;
+        }
+        return (inputRef ?? this._inputRef) as RefObject<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>;
     }
 
-    private onKeyDown = (evt: KeyboardEvent<HTMLDivElement>): void => {
-        // If the tooltip is displayed to show a feedback and Escape is pressed
-        // The tooltip is hided
-        if (this.state.feedbackVisible && evt.key === Key.ESCAPE) {
-            evt.preventDefault();
-            evt.stopPropagation();
-            this.setState({
-                feedbackVisible: false,
-            });
-        }
+    private onTooltipOpenChange = (open: boolean): void => {
+        this.setState({
+            feedbackVisible: open,
+        });
     };
 
     public render(): React.ReactNode {
@@ -268,31 +280,15 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         } = this.props;
 
         // Handle displaying feedback on validity
-        let fieldTooltip: JSX.Element | undefined;
+        const tooltipProps: Pick<React.ComponentProps<typeof Tooltip>, "aria-live" | "aria-atomic"> = {};
+        let tooltipOpen = false;
         if (tooltipContent || this.state.feedback) {
-            const tooltipId = `${this.id}_tooltip`;
-            const visible = (this.state.focused && forceTooltipVisible) || this.state.feedbackVisible;
-            if (visible) {
-                inputProps["aria-describedby"] = tooltipId;
-            }
+            tooltipOpen = (this.state.focused && forceTooltipVisible) || this.state.feedbackVisible;
 
-            let role: React.AriaRole;
-            if (tooltipContent) {
-                role = "tooltip";
-            } else {
-                role = this.state.valid ? "status" : "alert";
+            if (!tooltipContent) {
+                tooltipProps["aria-atomic"] = "true";
+                tooltipProps["aria-live"] = this.state.valid ? "polite" : "assertive";
             }
-
-            fieldTooltip = (
-                <Tooltip
-                    id={tooltipId}
-                    tooltipClassName={classNames("mx_Field_tooltip", "mx_Tooltip_noMargin", tooltipClassName)}
-                    visible={visible}
-                    label={tooltipContent || this.state.feedback}
-                    alignment={tooltipAlignment || Alignment.Right}
-                    role={role}
-                />
-            );
         }
 
         inputProps.placeholder = inputProps.placeholder ?? inputProps.label;
@@ -306,7 +302,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         const inputProps_: React.HTMLAttributes<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement> &
             React.ClassAttributes<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement> = {
             ...inputProps,
-            ref: this.inputRef,
+            ref: typeof this.props.inputRef === "function" ? this.callbackRef : this.inputRef,
         };
 
         const fieldInput = React.createElement(this.props.element, inputProps_, children);
@@ -332,12 +328,20 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         });
 
         return (
-            <div className={fieldClasses} onKeyDown={this.onKeyDown}>
+            <div className={fieldClasses}>
                 {prefixContainer}
-                {fieldInput}
+                <Tooltip
+                    {...tooltipProps}
+                    placement={tooltipAlignment}
+                    description=""
+                    caption={tooltipContent || this.state.feedback}
+                    open={tooltipOpen}
+                    onOpenChange={this.onTooltipOpenChange}
+                >
+                    {fieldInput}
+                </Tooltip>
                 <label htmlFor={this.id}>{this.props.label}</label>
                 {postfixContainer}
-                {fieldTooltip}
             </div>
         );
     }

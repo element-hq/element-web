@@ -2,7 +2,7 @@
  * Copyright 2024 New Vector Ltd.
  * Copyright 2024 The Matrix.org Foundation C.I.C.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -10,10 +10,12 @@ import React from "react";
 import { render, screen, waitFor, act, fireEvent } from "jest-matrix-react";
 import { AuthType } from "matrix-js-sdk/src/interactive-auth";
 import userEvent from "@testing-library/user-event";
+import { type Policy } from "matrix-js-sdk/src/matrix";
 
 import {
     EmailIdentityAuthEntry,
     MasUnlockCrossSigningAuthEntry,
+    TermsAuthEntry,
 } from "../../../../../src/components/views/auth/InteractiveAuthEntryComponents";
 import { createTestClient } from "../../../../test-utils";
 
@@ -29,7 +31,6 @@ describe("<EmailIdentityAuthEntry/>", () => {
                 submitAuthDict={jest.fn()}
                 fail={jest.fn()}
                 clientSecret="my secret"
-                showContinue={true}
                 inputs={{ emailAddress: "alice@example.xyz" }}
             />,
         );
@@ -71,7 +72,6 @@ describe("<MasUnlockCrossSigningAuthEntry/>", () => {
                 submitAuthDict={jest.fn()}
                 fail={jest.fn()}
                 clientSecret="my secret"
-                showContinue={true}
                 stageParams={{ url: "https://example.com" }}
                 {...props}
             />,
@@ -97,5 +97,39 @@ describe("<MasUnlockCrossSigningAuthEntry/>", () => {
 
         fireEvent.click(screen.getByRole("button", { name: "Retry" }));
         expect(submitAuthDict).toHaveBeenCalledWith({});
+    });
+});
+
+describe("<TermsAuthEntry/>", () => {
+    const renderAuth = (policy: Policy, props = {}) => {
+        const matrixClient = createTestClient();
+
+        return render(
+            <TermsAuthEntry
+                matrixClient={matrixClient}
+                loginType={AuthType.Email}
+                onPhaseChange={jest.fn()}
+                submitAuthDict={jest.fn()}
+                fail={jest.fn()}
+                clientSecret="my secret"
+                stageParams={{
+                    policies: {
+                        test_policy: policy,
+                    },
+                }}
+                {...props}
+            />,
+        );
+    };
+
+    test("should render", () => {
+        const { container } = renderAuth({
+            version: "alpha",
+            en: {
+                name: "Test Policy",
+                url: "https://example.com/en",
+            },
+        });
+        expect(container).toMatchSnapshot();
     });
 });

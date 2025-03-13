@@ -11,14 +11,14 @@ exports[`AddRemoveThreepids should handle no email addresses 1`] = `
     >
       <input
         autocomplete="email"
-        id="mx_Field_3"
+        id="mx_Field_1"
         label="Email Address"
         placeholder="Email Address"
         type="text"
         value=""
       />
       <label
-        for="mx_Field_3"
+        for="mx_Field_1"
       >
         Email Address
       </label>
@@ -61,14 +61,14 @@ exports[`AddRemoveThreepids should render email addresses 1`] = `
     >
       <input
         autocomplete="email"
-        id="mx_Field_1"
+        id="mx_Field_14"
         label="Email Address"
         placeholder="Email Address"
         type="text"
         value=""
       />
       <label
-        for="mx_Field_1"
+        for="mx_Field_14"
       >
         Email Address
       </label>
@@ -148,14 +148,14 @@ exports[`AddRemoveThreepids should render phone numbers 1`] = `
       </span>
       <input
         autocomplete="tel-national"
-        id="mx_Field_2"
+        id="mx_Field_15"
         label="Phone Number"
         placeholder="Phone Number"
         type="text"
         value=""
       />
       <label
-        for="mx_Field_2"
+        for="mx_Field_15"
       >
         Phone Number
       </label>

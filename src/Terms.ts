@@ -2,16 +2,23 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import { SERVICE_TYPES, MatrixClient } from "matrix-js-sdk/src/matrix";
+import {
+    type SERVICE_TYPES,
+    type MatrixClient,
+    type Terms,
+    type Policy,
+    type InternationalisedPolicy,
+} from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import Modal from "./Modal";
 import TermsDialog from "./components/views/dialogs/TermsDialog";
+import { pickBestLanguage } from "./languageHandler.tsx";
 
 export class TermsNotSignedError extends Error {}
 
@@ -32,23 +39,8 @@ export class Service {
     ) {}
 }
 
-export interface LocalisedPolicy {
-    name: string;
-    url: string;
-}
-
-export interface Policy {
-    // @ts-ignore: No great way to express indexed types together with other keys
-    version: string;
-    [lang: string]: LocalisedPolicy;
-}
-
-export type Policies = {
-    [policy: string]: Policy;
-};
-
 export type ServicePolicyPair = {
-    policies: Policies;
+    policies: Terms["policies"];
     service: Service;
 };
 
@@ -57,6 +49,11 @@ export type TermsInteractionCallback = (
     agreedUrls: string[],
     extraClassNames?: string,
 ) => Promise<string[]>;
+
+export function pickBestPolicyLanguage(policy: Policy): InternationalisedPolicy | undefined {
+    const termsLang = pickBestLanguage(Object.keys(policy).filter((k) => k !== "version"));
+    return <InternationalisedPolicy>policy[termsLang];
+}
 
 /**
  * Start a flow where the user is presented with terms & conditions for some services
@@ -96,19 +93,14 @@ export async function startTermsFlow(
      * }
      */
 
-    const terms: { policies: Policies }[] = await Promise.all(termsPromises);
+    const terms: Terms[] = await Promise.all(termsPromises);
     const policiesAndServicePairs = terms.map((t, i) => {
         return { service: services[i], policies: t.policies };
     });
 
     // fetch the set of agreed policy URLs from account data
-    const currentAcceptedTerms = await client.getAccountData("m.accepted_terms");
-    let agreedUrlSet: Set<string>;
-    if (!currentAcceptedTerms || !currentAcceptedTerms.getContent() || !currentAcceptedTerms.getContent().accepted) {
-        agreedUrlSet = new Set();
-    } else {
-        agreedUrlSet = new Set(currentAcceptedTerms.getContent().accepted);
-    }
+    const currentAcceptedTerms = client.getAccountData("m.accepted_terms")?.getContent();
+    const agreedUrlSet = new Set<string>(currentAcceptedTerms?.accepted || []);
 
     // remove any policies the user has already agreed to and any services where
     // they've already agreed to all the policies
@@ -118,11 +110,11 @@ export async function startTermsFlow(
     // things they've not agreed to yet.
     const unagreedPoliciesAndServicePairs: ServicePolicyPair[] = [];
     for (const { service, policies } of policiesAndServicePairs) {
-        const unagreedPolicies: Policies = {};
+        const unagreedPolicies: Terms["policies"] = {};
         for (const [policyName, policy] of Object.entries(policies)) {
             let policyAgreed = false;
             for (const lang of Object.keys(policy)) {
-                if (lang === "version") continue;
+                if (lang === "version" || typeof policy[lang] === "string") continue;
                 if (agreedUrlSet.has(policy[lang].url)) {
                     policyAgreed = true;
                     break;
@@ -159,7 +151,7 @@ export async function startTermsFlow(
         const urlsForService = Array.from(agreedUrlSet).filter((url) => {
             for (const policy of Object.values(policiesAndService.policies)) {
                 for (const lang of Object.keys(policy)) {
-                    if (lang === "version") continue;
+                    if (lang === "version" || typeof policy[lang] === "string") continue;
                     if (policy[lang].url === url) return true;
                 }
             }

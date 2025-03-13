@@ -2,15 +2,18 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 /* See readme.md for tips on writing these tests. */
 
 import { test } from ".";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
-test.describe("Read receipts", () => {
+test.describe("Read receipts", { tag: "@mergequeue" }, () => {
+    test.skip(isDendrite, "due to Dendrite bug https://github.com/element-hq/dendrite/issues/2970");
+
     test.describe("editing messages", () => {
         test.describe("in threads", () => {
             test("An edit of a threaded message makes the room unread", async ({

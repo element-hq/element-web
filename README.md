@@ -16,28 +16,28 @@ JS SDK](https://github.com/matrix-org/matrix-js-sdk).
 
 Element has several tiers of support for different environments:
 
--   Supported
-    -   Definition:
-        -   Issues **actively triaged**, regressions **block** the release
-    -   Last 2 major versions of Chrome, Firefox, and Edge on desktop OSes
-    -   Last 2 versions of Safari
-    -   Latest release of official Element Desktop app on desktop OSes
-    -   Desktop OSes means macOS, Windows, and Linux versions for desktop devices
-        that are actively supported by the OS vendor and receive security updates
--   Best effort
-    -   Definition:
-        -   Issues **accepted**, regressions **do not block** the release
-        -   The wider Element Products(including Element Call and the Enterprise Server Suite) do still not officially support these browsers.
-        -   The element web project and its contributors should keep the client functioning and gracefully degrade where other sibling features (E.g. Element Call) may not function.
-    -   Last major release of Firefox ESR and Chrome/Edge Extended Stable
--   Community Supported
-    -   Definition:
-        -   Issues **accepted**, regressions **do not block** the release
-        -   Community contributions are welcome to support these issues
-    -   Mobile web for current stable version of Chrome, Firefox, and Safari on Android, iOS, and iPadOS
--   Not supported
-    -   Definition: Issues only affecting unsupported environments are **closed**
-    -   Everything else
+- Supported
+    - Definition:
+        - Issues **actively triaged**, regressions **block** the release
+    - Last 2 major versions of Chrome, Firefox, and Edge on desktop OSes
+    - Last 2 versions of Safari
+    - Latest release of official Element Desktop app on desktop OSes
+    - Desktop OSes means macOS, Windows, and Linux versions for desktop devices
+      that are actively supported by the OS vendor and receive security updates
+- Best effort
+    - Definition:
+        - Issues **accepted**, regressions **do not block** the release
+        - The wider Element Products(including Element Call and the Enterprise Server Suite) do still not officially support these browsers.
+        - The element web project and its contributors should keep the client functioning and gracefully degrade where other sibling features (E.g. Element Call) may not function.
+    - Last major release of Firefox ESR and Chrome/Edge Extended Stable
+- Community Supported
+    - Definition:
+        - Issues **accepted**, regressions **do not block** the release
+        - Community contributions are welcome to support these issues
+    - Mobile web for current stable version of Chrome, Firefox, and Safari on Android, iOS, and iPadOS
+- Not supported
+    - Definition: Issues only affecting unsupported environments are **closed**
+    - Everything else
 
 The period of support for these tiers should last until the releases specified above, plus 1 app release cycle(2 weeks). In the case of Firefox ESR this is extended further to allow it land in Debian Stable.
 
@@ -74,16 +74,16 @@ situation, but it's still not good practice to do it in the first place. See
 Unless you have special requirements, you will want to add the following to
 your web server configuration when hosting Element Web:
 
--   The `X-Frame-Options: SAMEORIGIN` header, to prevent Element Web from being
-    framed and protect from [clickjacking][owasp-clickjacking].
--   The `frame-ancestors 'self'` directive to your `Content-Security-Policy`
-    header, as the modern replacement for `X-Frame-Options` (though both should be
-    included since not all browsers support it yet, see
-    [this][owasp-clickjacking-csp]).
--   The `X-Content-Type-Options: nosniff` header, to [disable MIME
-    sniffing][mime-sniffing].
--   The `X-XSS-Protection: 1; mode=block;` header, for basic XSS protection in
-    legacy browsers.
+- The `X-Frame-Options: SAMEORIGIN` header, to prevent Element Web from being
+  framed and protect from [clickjacking][owasp-clickjacking].
+- The `frame-ancestors 'self'` directive to your `Content-Security-Policy`
+  header, as the modern replacement for `X-Frame-Options` (though both should be
+  included since not all browsers support it yet, see
+  [this][owasp-clickjacking-csp]).
+- The `X-Content-Type-Options: nosniff` header, to [disable MIME
+  sniffing][mime-sniffing].
+- The `X-XSS-Protection: 1; mode=block;` header, for basic XSS protection in
+  legacy browsers.
 
 [mime-sniffing]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types#mime_sniffing
 [owasp-clickjacking-csp]: https://cheatsheetseries.owasp.org/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html#content-security-policy-frame-ancestors-examples
@@ -182,123 +182,11 @@ Dockerfile.
 
 # Development
 
-Before attempting to develop on Element you **must** read the [developer guide
-for `matrix-react-sdk`](https://github.com/matrix-org/matrix-react-sdk#developer-guide), which
-also defines the design, architecture and style for Element too.
+Please read through the following:
 
-Read the [Choosing an issue](docs/choosing-an-issue.md) page for some guidance
-about where to start. Before starting work on a feature, it's best to ensure
-your plan aligns well with our vision for Element. Please chat with the team in
-[#element-dev:matrix.org](https://matrix.to/#/#element-dev:matrix.org) before
-you start so we can ensure it's something we'd be willing to merge.
-
-You should also familiarise yourself with the ["Here be Dragons" guide
-](https://docs.google.com/document/d/12jYzvkidrp1h7liEuLIe6BMdU0NUjndUYI971O06ooM)
-to the tame & not-so-tame dragons (gotchas) which exist in the codebase.
-
-The idea of Element is to be a relatively lightweight "skin" of customisations on
-top of the underlying `matrix-react-sdk`. `matrix-react-sdk` provides both the
-higher and lower level React components useful for building Matrix communication
-apps using React.
-
-Please note that Element is intended to run correctly without access to the public
-internet. So please don't depend on resources (JS libs, CSS, images, fonts)
-hosted by external CDNs or servers but instead please package all dependencies
-into Element itself.
-
-# Setting up a dev environment
-
-Much of the functionality in Element is actually in the `matrix-js-sdk` module.
-It is possible to set these up in a way that makes it easy to track the `develop` branches
-in git and to make local changes without having to manually rebuild each time.
-
-First clone and build `matrix-js-sdk`:
-
-```bash
-git clone https://github.com/matrix-org/matrix-js-sdk.git
-pushd matrix-js-sdk
-yarn link
-yarn install
-popd
-```
-
-Clone the repo and switch to the `element-web` directory:
-
-```bash
-git clone https://github.com/element-hq/element-web.git
-cd element-web
-```
-
-Configure the app by copying `config.sample.json` to `config.json` and
-modifying it. See the [configuration docs](docs/config.md) for details.
-
-Finally, build and start Element itself:
-
-```bash
-yarn link matrix-js-sdk
-yarn install
-yarn start
-```
-
-Wait a few seconds for the initial build to finish; you should see something like:
-
-```
-[element-js] <s> [webpack.Progress] 100%
-[element-js]
-[element-js] ℹ ｢wdm｣:    1840 modules
-[element-js] ℹ ｢wdm｣: Compiled successfully.
-```
-
-Remember, the command will not terminate since it runs the web server
-and rebuilds source files when they change. This development server also
-disables caching, so do NOT use it in production.
-
-Open <http://127.0.0.1:8080/> in your browser to see your newly built Element.
-
-**Note**: The build script uses inotify by default on Linux to monitor directories
-for changes. If the inotify limits are too low your build will fail silently or with
-`Error: EMFILE: too many open files`. To avoid these issues, we recommend a watch limit
-of at least `128M` and instance limit around `512`.
-
-You may be interested in issues [#15750](https://github.com/element-hq/element-web/issues/15750) and
-[#15774](https://github.com/element-hq/element-web/issues/15774) for further details.
-
-To set a new inotify watch and instance limit, execute:
-
-```
-sudo sysctl fs.inotify.max_user_watches=131072
-sudo sysctl fs.inotify.max_user_instances=512
-sudo sysctl -p
-```
-
-If you wish, you can make the new limits permanent, by executing:
-
-```
-echo fs.inotify.max_user_watches=131072 | sudo tee -a /etc/sysctl.conf
-echo fs.inotify.max_user_instances=512 | sudo tee -a /etc/sysctl.conf
-sudo sysctl -p
-```
-
----
-
-When you make changes to `matrix-js-sdk` they should be automatically picked up by webpack and built.
-
-If any of these steps error with, `file table overflow`, you are probably on a mac
-which has a very low limit on max open files. Run `ulimit -Sn 1024` and try again.
-You'll need to do this in each new terminal you open before building Element.
-
-## Running the tests
-
-There are a number of application-level tests in the `tests` directory; these
-are designed to run with Jest and JSDOM. To run them
-
-```
-yarn test
-```
-
-### End-to-End tests
-
-See [matrix-react-sdk](https://github.com/matrix-org/matrix-react-sdk/#end-to-end-tests) for how to run the end-to-end tests.
+1. [Developer guide](./developer_guide.md)
+2. [Code style](./code_style.md)
+3. [Contribution guide](./CONTRIBUTING.md)
 
 # Translations
 
@@ -311,3 +199,18 @@ For a developer guide, see the [translating dev doc](docs/translating-dev.md).
 Issues are triaged by community members and the Web App Team, following the [triage process](https://github.com/element-hq/element-meta/wiki/Triage-process).
 
 We use [issue labels](https://github.com/element-hq/element-meta/wiki/Issue-labelling) to sort all incoming issues.
+
+## Copyright & License
+
+Copyright (c) 2014-2017 OpenMarket Ltd
+Copyright (c) 2017 Vector Creations Ltd
+Copyright (c) 2017-2025 New Vector Ltd
+
+This software is multi licensed by New Vector Ltd (Element). It can be used either:
+
+(1) for free under the terms of the GNU Affero General Public License (as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version); OR
+
+(2) for free under the terms of the GNU General Public License (as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version); OR
+
+(3) under the terms of a paid-for Element Commercial License agreement between you and Element (the terms of which may vary depending on what you and Element have agreed to).
+Unless required by applicable law or agreed to in writing, software distributed under the Licenses is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the Licenses for the specific language governing permissions and limitations under the Licenses.

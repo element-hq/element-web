@@ -2,13 +2,13 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import isIp from "is-ip";
 import * as utils from "matrix-js-sdk/src/utils";
-import { Room, MatrixClient, RoomStateEvent, EventType } from "matrix-js-sdk/src/matrix";
+import { type Room, type MatrixClient, RoomStateEvent, EventType } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -16,7 +16,8 @@ import MatrixToPermalinkConstructor, {
     baseUrl as matrixtoBaseUrl,
     baseUrlPattern as matrixToBaseUrlPattern,
 } from "./MatrixToPermalinkConstructor";
-import PermalinkConstructor, { PermalinkParts } from "./PermalinkConstructor";
+import { type PermalinkParts } from "./PermalinkConstructor";
+import type PermalinkConstructor from "./PermalinkConstructor";
 import ElementPermalinkConstructor from "./ElementPermalinkConstructor";
 import SdkConfig from "../../SdkConfig";
 import { ELEMENT_URL_PATTERN } from "../../linkify-matrix";
@@ -377,7 +378,7 @@ export function tryTransformPermalinkToLocalHref(permalink: string): string {
         if (m) {
             return m[1];
         }
-    } catch (e) {
+    } catch {
         // Not a valid URI
         return permalink;
     }
@@ -396,7 +397,7 @@ export function tryTransformPermalinkToLocalHref(permalink: string): string {
                 permalink = `#/user/${permalinkParts.userId}`;
             } // else not a valid permalink for our purposes - do not handle
         }
-    } catch (e) {
+    } catch {
         // Not an href we need to care about
     }
 
@@ -421,7 +422,7 @@ export function getPrimaryPermalinkEntity(permalink: string): string | null {
         if (!permalinkParts) return null; // not processable
         if (permalinkParts.userId) return permalinkParts.userId;
         if (permalinkParts.roomIdOrAlias) return permalinkParts.roomIdOrAlias;
-    } catch (e) {
+    } catch {
         // no entity - not a permalink
     }
 

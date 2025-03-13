@@ -2,13 +2,13 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useEffect, useState } from "react";
-import { PollAnswerSubevent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
-import { MatrixEvent, Poll, PollEvent, Relations } from "matrix-js-sdk/src/matrix";
+import { type PollAnswerSubevent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
+import { type MatrixEvent, type Poll, PollEvent, type Relations } from "matrix-js-sdk/src/matrix";
 import { Tooltip } from "@vector-im/compound-web";
 
 import { Icon as PollIcon } from "../../../../../res/img/element-icons/room/composer/poll.svg";

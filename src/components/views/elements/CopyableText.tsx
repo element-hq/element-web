@@ -3,7 +3,7 @@ Copyright 2024 New Vector Ltd.
 Copyright 2022 Šimon Brandner <simon.bra.ag@gmail.com>
 Copyright 2019-2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -12,7 +12,7 @@ import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
 import { copyPlaintext } from "../../../utils/strings";
-import AccessibleButton, { ButtonEvent } from "./AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "./AccessibleButton";
 
 interface IProps extends React.HTMLAttributes<HTMLDivElement> {
     children?: React.ReactNode;
@@ -21,7 +21,7 @@ interface IProps extends React.HTMLAttributes<HTMLDivElement> {
     className?: string;
 }
 
-const CopyableText: React.FC<IProps> = ({ children, getTextToCopy, border = true, className, ...props }) => {
+export const CopyTextButton: React.FC<Pick<IProps, "getTextToCopy" | "className">> = ({ getTextToCopy, className }) => {
     const [tooltip, setTooltip] = useState<string | undefined>(undefined);
 
     const onCopyClickInternal = async (e: ButtonEvent): Promise<void> => {
@@ -37,6 +37,19 @@ const CopyableText: React.FC<IProps> = ({ children, getTextToCopy, border = true
         }
     };
 
+    return (
+        <AccessibleButton
+            title={tooltip ?? _t("action|copy")}
+            onClick={onCopyClickInternal}
+            className={className}
+            onTooltipOpenChange={(open) => {
+                if (!open) onHideTooltip();
+            }}
+        />
+    );
+};
+
+const CopyableText: React.FC<IProps> = ({ children, getTextToCopy, border = true, className, ...props }) => {
     const combinedClassName = classNames("mx_CopyableText", className, {
         mx_CopyableText_border: border,
     });
@@ -44,14 +57,7 @@ const CopyableText: React.FC<IProps> = ({ children, getTextToCopy, border = true
     return (
         <div className={combinedClassName} {...props}>
             {children}
-            <AccessibleButton
-                title={tooltip ?? _t("action|copy")}
-                onClick={onCopyClickInternal}
-                className="mx_CopyableText_copyButton"
-                onTooltipOpenChange={(open) => {
-                    if (!open) onHideTooltip();
-                }}
-            />
+            <CopyTextButton getTextToCopy={getTextToCopy} className="mx_CopyableText_copyButton" />
         </div>
     );
 };

@@ -1,17 +1,22 @@
 /*
 Copyright 2018-2024 New Vector Ltd.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked, Mocked, MockedObject } from "jest-mock";
-import { HttpApiEvent, MatrixClient, MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
+import { mocked, type Mocked, type MockedObject } from "jest-mock";
+import { HttpApiEvent, type MatrixClient, type MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
 import { decryptExistingEvent, mkDecryptionFailureMatrixEvent } from "matrix-js-sdk/src/testing";
-import { CryptoApi, DecryptionFailureCode, UserVerificationStatus, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
+import {
+    type CryptoApi,
+    DecryptionFailureCode,
+    UserVerificationStatus,
+    CryptoEvent,
+} from "matrix-js-sdk/src/crypto-api";
 import { sleep } from "matrix-js-sdk/src/utils";
 
-import { DecryptionFailureTracker, ErrorProperties } from "../../src/DecryptionFailureTracker";
+import { DecryptionFailureTracker, type ErrorProperties } from "../../src/DecryptionFailureTracker";
 import { stubClient } from "../test-utils";
 import * as Lifecycle from "../../src/Lifecycle";
 
@@ -496,6 +501,8 @@ describe("DecryptionFailureTracker", function () {
         await createAndTrackEventWithError(DecryptionFailureCode.HISTORICAL_MESSAGE_USER_NOT_JOINED);
         await createAndTrackEventWithError(DecryptionFailureCode.MEGOLM_KEY_WITHHELD);
         await createAndTrackEventWithError(DecryptionFailureCode.MEGOLM_KEY_WITHHELD_FOR_UNVERIFIED_DEVICE);
+        await createAndTrackEventWithError(DecryptionFailureCode.SENDER_IDENTITY_PREVIOUSLY_VERIFIED);
+        await createAndTrackEventWithError(DecryptionFailureCode.UNSIGNED_SENDER_DEVICE);
         await createAndTrackEventWithError(DecryptionFailureCode.UNKNOWN_ERROR);
 
         // Pretend "now" is Infinity
@@ -510,6 +517,8 @@ describe("DecryptionFailureTracker", function () {
             "ExpectedDueToMembership",
             "OlmKeysNotSentError",
             "RoomKeysWithheldForUnverifiedDevice",
+            "ExpectedVerificationViolation",
+            "ExpectedSentByInsecureDevice",
             "UnknownError",
         ]);
     });

@@ -20,26 +20,26 @@ Definitely don't use the GitHub default of "Update file.ts".
 
 As for your PR description, it should include these things:
 
--   References to any bugs fixed by the change (in GitHub's `Fixes` notation)
--   Describe the why and what is changing in the PR description so it's easy for
-    onlookers and reviewers to onboard and context switch. This information is
-    also helpful when we come back to look at this in 6 months and ask "why did
-    we do it like that?" we have a chance of finding out.
-    -   Why didn't it work before? Why does it work now? What use cases does it
-        unlock?
-    -   If you find yourself adding information on how the code works or why you
-        chose to do it the way you did, make sure this information is instead
-        written as comments in the code itself.
-    -   Sometimes a PR can change considerably as it is developed. In this case,
-        the description should be updated to reflect the most recent state of
-        the PR. (It can be helpful to retain the old content under a suitable
-        heading, for additional context.)
--   Include both **before** and **after** screenshots to easily compare and discuss
-    what's changing.
--   Include a step-by-step testing strategy so that a reviewer can check out the
-    code locally and easily get to the point of testing your change.
--   Add comments to the diff for the reviewer that might help them to understand
-    why the change is necessary or how they might better understand and review it.
+- References to any bugs fixed by the change (in GitHub's `Fixes` notation)
+- Describe the why and what is changing in the PR description so it's easy for
+  onlookers and reviewers to onboard and context switch. This information is
+  also helpful when we come back to look at this in 6 months and ask "why did
+  we do it like that?" we have a chance of finding out.
+    - Why didn't it work before? Why does it work now? What use cases does it
+      unlock?
+    - If you find yourself adding information on how the code works or why you
+      chose to do it the way you did, make sure this information is instead
+      written as comments in the code itself.
+    - Sometimes a PR can change considerably as it is developed. In this case,
+      the description should be updated to reflect the most recent state of
+      the PR. (It can be helpful to retain the old content under a suitable
+      heading, for additional context.)
+- Include both **before** and **after** screenshots to easily compare and discuss
+  what's changing.
+- Include a step-by-step testing strategy so that a reviewer can check out the
+  code locally and easily get to the point of testing your change.
+- Add comments to the diff for the reviewer that might help them to understand
+  why the change is necessary or how they might better understand and review it.
 
 ### Changelogs
 
@@ -79,8 +79,8 @@ element-web notes: Fix a bug where the 'Herd' button only worked on Tuesdays
 
 This example is for Element Web. You can specify:
 
--   element-web
--   element-desktop
+- element-web
+- element-desktop
 
 If your PR introduces a breaking change, use the `Notes` section in the same
 way, additionally adding the `X-Breaking-Change` label (see below). There's no need
@@ -96,10 +96,10 @@ Notes: Remove legacy `Camelopard` class. `Giraffe` should be used instead.
 
 Other metadata can be added using labels.
 
--   `X-Breaking-Change`: A breaking change - adding this label will mean the change causes a _major_ version bump.
--   `T-Enhancement`: A new feature - adding this label will mean the change causes a _minor_ version bump.
--   `T-Defect`: A bug fix (in either code or docs).
--   `T-Task`: No user-facing changes, eg. code comments, CI fixes, refactors or tests. Won't have a changelog entry unless you specify one.
+- `X-Breaking-Change`: A breaking change - adding this label will mean the change causes a _major_ version bump.
+- `T-Enhancement`: A new feature - adding this label will mean the change causes a _minor_ version bump.
+- `T-Defect`: A bug fix (in either code or docs).
+- `T-Task`: No user-facing changes, eg. code comments, CI fixes, refactors or tests. Won't have a changelog entry unless you specify one.
 
 If you don't have permission to add labels, your PR reviewer(s) can work with you
 to add them: ask in the PR description or comments.
@@ -188,89 +188,6 @@ description of the area(s) you've worked on. Also, we sometimes have swag to
 give away to contributors - if you feel that Matrix-branded apparel is missing
 from your life, please mail us your shipping address to matrix at matrix.org
 and we'll try to fix it :)
-
-## Sign off
-
-In order to have a concrete record that your contribution is intentional
-and you agree to license it under the same terms as the project's license, we've
-adopted the same lightweight approach that the Linux Kernel
-(https://www.kernel.org/doc/html/latest/process/submitting-patches.html), Docker
-(https://github.com/docker/docker/blob/master/CONTRIBUTING.md), and many other
-projects use: the DCO (Developer Certificate of Origin:
-http://developercertificate.org/). This is a simple declaration that you wrote
-the contribution or otherwise have the right to contribute it to Matrix:
-
-```
-Developer Certificate of Origin
-Version 1.1
-
-Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
-660 York Street, Suite 102,
-San Francisco, CA 94110 USA
-
-Everyone is permitted to copy and distribute verbatim copies of this
-license document, but changing it is not allowed.
-
-Developer's Certificate of Origin 1.1
-
-By making a contribution to this project, I certify that:
-
-(a) The contribution was created in whole or in part by me and I
-    have the right to submit it under the open source license
-    indicated in the file; or
-
-(b) The contribution is based upon previous work that, to the best
-    of my knowledge, is covered under an appropriate open source
-    license and I have the right under that license to submit that
-    work with modifications, whether created in whole or in part
-    by me, under the same open source license (unless I am
-    permitted to submit under a different license), as indicated
-    in the file; or
-
-(c) The contribution was provided directly to me by some other
-    person who certified (a), (b) or (c) and I have not modified
-    it.
-
-(d) I understand and agree that this project and the contribution
-    are public and that a record of the contribution (including all
-    personal information I submit with it, including my sign-off) is
-    maintained indefinitely and may be redistributed consistent with
-    this project or the open source license(s) involved.
-```
-
-If you agree to this for your contribution, then all that's needed is to
-include the line in your commit or pull request comment:
-
-```
-Signed-off-by: Your Name <your@email.example.org>
-```
-
-We accept contributions under a legally identifiable name, such as your name on
-government documentation or common-law names (names claimed by legitimate usage
-or repute). Unfortunately, we cannot accept anonymous contributions at this
-time.
-
-Git allows you to add this signoff automatically when using the `-s` flag to
-`git commit`, which uses the name and email set in your `user.name` and
-`user.email` git configs.
-
-If you forgot to sign off your commits before making your pull request and are
-on Git 2.17+ you can mass signoff using rebase:
-
-```
-git rebase --signoff origin/develop
-```
-
-## Private sign off
-
-If you would like to provide your legal name privately to the Matrix.org
-Foundation (instead of in a public commit or comment), you can do so by emailing
-your legal name and a link to the pull request to dco@matrix.org. It helps to
-include "sign off" or similar in the subject line. You will then be instructed
-further.
-
-Once private sign off is complete, doing so for future contributions will not
-be required.
 
 # Review expectations
 

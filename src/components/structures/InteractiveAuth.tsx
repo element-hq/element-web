@@ -2,38 +2,35 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2017-2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef } from "react";
 import {
     AuthType,
-    IAuthData,
-    AuthDict,
-    IInputs,
+    type IAuthData,
+    type AuthDict,
+    type IInputs,
     InteractiveAuth,
-    IStageStatus,
+    type IStageStatus,
 } from "matrix-js-sdk/src/interactive-auth";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import getEntryComponentForLoginType, {
-    ContinueKind,
-    CustomAuthType,
-    IStageComponent,
+    type ContinueKind,
+    type CustomAuthType,
+    type IStageComponent,
 } from "../views/auth/InteractiveAuthEntryComponents";
 import Spinner from "../views/elements/Spinner";
 
 export const ERROR_USER_CANCELLED = new Error("User cancelled auth session");
 
-type InteractiveAuthCallbackSuccess<T> = (
-    success: true,
-    response: T,
-    extra?: { emailSid?: string; clientSecret?: string },
-) => Promise<void>;
-type InteractiveAuthCallbackFailure = (success: false, response: IAuthData | Error) => Promise<void>;
-export type InteractiveAuthCallback<T> = InteractiveAuthCallbackSuccess<T> & InteractiveAuthCallbackFailure;
+export type InteractiveAuthCallback<T> = {
+    (success: true, response: T, extra?: { emailSid?: string; clientSecret?: string }): Promise<void>;
+    (success: false, response: IAuthData | Error): Promise<void>;
+};
 
 export interface InteractiveAuthProps<T> {
     // matrix client to use for UI auth requests
@@ -49,10 +46,6 @@ export interface InteractiveAuthProps<T> {
     emailSid?: string;
     // If true, poll to see if the auth flow has been completed out-of-band
     poll?: boolean;
-    // If true, components will be told that the 'Continue' button
-    // is managed by some other party and should not be managed by
-    // the component itself.
-    continueIsManaged?: boolean;
     // continueText and continueKind are passed straight through to the AuthEntryComponent.
     continueText?: string;
     continueKind?: ContinueKind;
@@ -90,8 +83,8 @@ interface IState {
 
 export default class InteractiveAuthComponent<T> extends React.Component<InteractiveAuthProps<T>, IState> {
     private readonly authLogic: InteractiveAuth<T>;
-    private readonly intervalId: number | null = null;
     private readonly stageComponent = createRef<IStageComponent>();
+    private intervalId: number | null = null;
 
     private unmounted = false;
 
@@ -126,15 +119,17 @@ export default class InteractiveAuthComponent<T> extends React.Component<Interac
                 AuthType.SsoUnstable,
             ],
         });
+    }
+
+    public componentDidMount(): void {
+        this.unmounted = false;
 
         if (this.props.poll) {
             this.intervalId = window.setInterval(() => {
                 this.authLogic.poll();
             }, 2000);
         }
-    }
 
-    public componentDidMount(): void {
         this.authLogic
             .attemptAuth()
             .then(async (result) => {
@@ -286,7 +281,6 @@ export default class InteractiveAuthComponent<T> extends React.Component<Interac
                 stageState={this.state.stageState}
                 fail={this.onAuthStageFailed}
                 setEmailSid={this.setEmailSid}
-                showContinue={!this.props.continueIsManaged}
                 onPhaseChange={this.onPhaseChange}
                 requestEmailToken={this.authLogic.requestEmailToken}
                 continueText={this.props.continueText}

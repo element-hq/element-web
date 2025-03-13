@@ -40,7 +40,7 @@ exports[`<Pill> should render the expected pill for @room 1`] = `
         >
           <span
             aria-hidden="true"
-            class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+            class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
             data-color="1"
             data-testid="avatar-img"
             data-type="round"
@@ -71,7 +71,7 @@ exports[`<Pill> should render the expected pill for a known user not in the room
       >
         <span
           aria-hidden="true"
-          class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+          class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
           data-color="5"
           data-testid="avatar-img"
           data-type="round"
@@ -101,7 +101,7 @@ exports[`<Pill> should render the expected pill for a message in another room 1`
       >
         <span
           aria-hidden="true"
-          class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+          class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
           data-color="1"
           data-testid="avatar-img"
           data-type="round"
@@ -131,7 +131,7 @@ exports[`<Pill> should render the expected pill for a message in the same room 1
       >
         <span
           aria-hidden="true"
-          class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+          class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
           data-color="4"
           data-testid="avatar-img"
           data-type="round"
@@ -161,7 +161,7 @@ exports[`<Pill> should render the expected pill for a room alias 1`] = `
       >
         <span
           aria-hidden="true"
-          class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+          class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
           data-color="1"
           data-testid="avatar-img"
           data-type="round"
@@ -191,7 +191,7 @@ exports[`<Pill> should render the expected pill for a space 1`] = `
       >
         <span
           aria-hidden="true"
-          class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+          class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
           data-color="2"
           data-testid="avatar-img"
           data-type="round"
@@ -219,9 +219,18 @@ exports[`<Pill> should render the expected pill for an uknown user not in the ro
         class="mx_Pill mx_UserPill"
         href="https://matrix.to/#/@user3:example.com"
       >
-        <div
+        <svg
           class="mx_Pill_UserIcon mx_BaseAvatar"
-        />
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 12q-1.65 0-2.825-1.175T8 8t1.175-2.825T12 4t2.825 1.175T16 8t-1.175 2.825T12 12m-8 6v-.8q0-.85.438-1.562.437-.713 1.162-1.088a14.8 14.8 0 0 1 3.15-1.163A13.8 13.8 0 0 1 12 13q1.65 0 3.25.387 1.6.388 3.15 1.163.724.375 1.163 1.087Q20 16.35 20 17.2v.8q0 .824-.587 1.413A1.93 1.93 0 0 1 18 20H6q-.824 0-1.412-.587A1.93 1.93 0 0 1 4 18"
+          />
+        </svg>
         <span
           class="mx_Pill_text"
         >
@@ -243,7 +252,7 @@ exports[`<Pill> when rendering a pill for a room should render the expected pill
       >
         <span
           aria-hidden="true"
-          class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+          class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
           data-color="1"
           data-testid="avatar-img"
           data-type="round"
@@ -273,7 +282,7 @@ exports[`<Pill> when rendering a pill for a user in the room should render as ex
       >
         <span
           aria-hidden="true"
-          class="_avatar_mcap2_17 mx_BaseAvatar _avatar-imageless_mcap2_61"
+          class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
           data-color="4"
           data-testid="avatar-img"
           data-type="round"

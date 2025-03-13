@@ -98,7 +98,6 @@
         "report_content": "Nahlásiť obsah",
         "resend": "Poslať znovu",
         "reset": "Obnoviť predvolené",
-        "restore": "Obnoviť",
         "resume": "Pokračovať",
         "retry": "Skúsiť znovu",
         "review": "Skontrolovať",
@@ -203,7 +202,6 @@
         "failed_query_registration_methods": "Nie je možné požiadať o podporované metódy registrácie.",
         "failed_soft_logout_auth": "Nepodarilo sa opätovne overiť",
         "failed_soft_logout_homeserver": "Opätovná autentifikácia zlyhala kvôli problému domovského servera",
-        "footer_powered_by_matrix": "používa protokol Matrix",
         "forgot_password_email_invalid": "Zdá sa, že e-mailová adresa nie je platná.",
         "forgot_password_email_required": "Musíte zadať emailovú adresu prepojenú s vašim účtom.",
         "forgot_password_prompt": "Zabudli ste heslo?",
@@ -232,7 +230,6 @@
         "oidc": {
             "error_title": "Nemohli sme vás prihlásiť",
             "generic_auth_error": "Počas overenia sa niečo pokazilo. Prejdite na stránku prihlásenia a skúste to znova.",
-            "logout_redirect_warning": "Na dokončenie odhlásenia budete presmerovaní na vášho poskytovateľa autentifikácie servera.",
             "missing_or_invalid_stored_state": "Požiadali sme prehliadač, aby si zapamätal, ktorý domovský server používate na prihlásenie, ale bohužiaľ váš prehliadač to zabudol. Prejdite na stránku prihlásenia a skúste to znova."
         },
         "password_field_keep_going_prompt": "Pokračujte…",
@@ -242,14 +239,11 @@
         "phone_label": "Telefón",
         "phone_optional_label": "Telefón (nepovinné)",
         "qr_code_login": {
-            "approve_access_warning": "Schválením prístupu pre toto zariadenie bude mať plný prístup k vášmu účtu.",
             "completing_setup": "Dokončenie nastavenia nového zariadenia",
-            "confirm_code_match": "Skontrolujte, či sa nižšie uvedený kód zhoduje s vaším druhým zariadením:",
             "error_unexpected": "Vyskytla sa neočakávaná chyba.",
             "scan_code_instruction": "Naskenujte nižšie uvedený QR kód pomocou zariadenia, ktoré je odhlásené.",
             "scan_qr_code": "Skenovať QR kód",
             "select_qr_code": "Vyberte '%(scanQRCode)s'",
-            "sign_in_new_device": "Prihlásiť nové zariadenie",
             "waiting_for_device": "Čaká sa na prihlásenie zariadenia"
         },
         "register_action": "Vytvoriť účet",
@@ -372,7 +366,6 @@
         "download_logs": "Stiahnuť záznamy",
         "downloading_logs": "Sťahovanie záznamov",
         "error_empty": "Povedzte nám prosím, čo sa pokazilo, alebo radšej vytvorte príspevok v službe GitHub, v ktorom problém popíšete.",
-        "failed_send_logs": "Nepodarilo sa odoslať záznamy: ",
         "github_issue": "Správa o probléme na GitHub",
         "introduction": "Ak ste odoslali chybu prostredníctvom služby GitHub, záznamy o ladení nám môžu pomôcť nájsť problém. ",
         "log_request": "Aby ste nám pomohli tomuto v budúcnosti zabrániť, pošlite nám prosím <a>záznamy o chybe</a>.",
@@ -418,7 +411,6 @@
             "other": "a ďalších %(count)s…",
             "one": "a jeden ďalší…"
         },
-        "android": "Android",
         "appearance": "Vzhľad",
         "application": "Aplikácia",
         "are_you_sure": "Ste si istí?",
@@ -457,7 +449,6 @@
         "identity_server": "Server totožností",
         "image": "Obrázok",
         "integration_manager": "Správca integrácie",
-        "ios": "iOS",
         "joined": "Ste pripojený",
         "labs": "Experimenty",
         "legal": "Právne informácie",
@@ -511,7 +502,6 @@
         "rooms": "Miestnosti",
         "saving": "Ukladanie…",
         "secure_backup": "Bezpečné zálohovanie",
-        "security": "Zabezpečenie",
         "select_all": "Vybrať všetky",
         "server": "Server",
         "settings": "Nastavenia",
@@ -530,13 +520,11 @@
         "thread": "Vlákno",
         "threads": "Vlákna",
         "timeline": "Časová os",
-        "trusted": "Dôveryhodné",
         "unavailable": "nedostupný",
         "unencrypted": "Nešifrované",
         "unmute": "Zrušiť stlmenie",
         "unnamed_room": "Nepomenovaná miestnosť",
         "unnamed_space": "Nepomenovaný priestor",
-        "unsent": "Neodoslané",
         "unverified": "Neoverené",
         "user": "Používateľ",
         "user_avatar": "Obrázok v profile",
@@ -547,8 +535,7 @@
         "video": "Video",
         "video_room": "Video miestnosť",
         "view_message": "Zobraziť správu",
-        "warning": "Upozornenie",
-        "welcome": "Vitajte"
+        "warning": "Upozornenie"
     },
     "composer": {
         "autocomplete": {
@@ -720,19 +707,11 @@
         "low_bandwidth_mode": "Režim nízkej šírky pásma",
         "low_bandwidth_mode_description": "Vyžaduje kompatibilný domovský server.",
         "main_timeline": "Hlavná časová os",
-        "methods": "Metódy",
         "no_receipt_found": "Nenašlo sa žiadne potvrdenie",
-        "no_verification_requests_found": "Nenašli sa žiadne žiadosti o overenie",
         "notification_state": "Stav oznámenia je <strong>%(notificationState)s</strong>",
         "notifications_debug": "Ladenie oznámení",
         "number_of_users": "Počet používateľov",
         "original_event_source": "Pôvodný zdroj udalosti",
-        "phase": "Fáza",
-        "phase_cancelled": "Zrušené",
-        "phase_ready": "Pripravené",
-        "phase_requested": "Vyžiadané",
-        "phase_started": "Spustené",
-        "phase_transaction": "Transakcia",
         "room_encrypted": "Miestnosť je <strong>šifrovaná ✅</strong>",
         "room_id": "ID miestnosti: %(roomId)s",
         "room_not_encrypted": "Miestnosť <strong>nie je šifrovaná 🚨</strong>",
@@ -772,7 +751,6 @@
         "state_key": "Stavový kľúč",
         "thread_root_id": "ID koreňového vlákna: %(threadRootId)s",
         "threads_timeline": "Časová os vlákien",
-        "timeout": "Časový limit",
         "title": "Vývojárske nástroje",
         "toggle_event": "prepnúť udalosť",
         "toolbox": "Nástroje",
@@ -789,7 +767,6 @@
         "values_explicit_colon": "Hodnoty na explicitných úrovniach:",
         "values_explicit_room": "Hodnoty na explicitných úrovniach v tejto miestnosti",
         "values_explicit_this_room_colon": "Hodnoty na explicitných úrovniach v tejto miestnosti:",
-        "verification_explorer": "Prieskumník overenia",
         "view_servers_in_room": "Zobraziť servery v miestnosti",
         "view_source_decrypted_event_source": "Zdroj dešifrovanej udalosti",
         "view_source_decrypted_event_source_unavailable": "Dešifrovaný zdroj nie je dostupný",
@@ -863,10 +840,6 @@
         "export_unsupported": "Váš prehliadač nepodporuje požadované kryptografické rozšírenia",
         "import_invalid_keyfile": "Toto nie je správny súbor s kľúčmi %(brand)s",
         "import_invalid_passphrase": "Kontrola overenia zlyhala: Nesprávne heslo?",
-        "incompatible_database_description": "Pri tejto relácii ste už predtým použili novšiu verziu %(brand)s. Ak chcete túto verziu znovu používať s end-to-end šifrovaním, budete sa musieť odhlásiť a znova prihlásiť.",
-        "incompatible_database_disable": "Pokračovať s vypnutým šifrovaním",
-        "incompatible_database_sign_out_description": "Aby ste po odhlásení neprišli o možnosť čítať históriu šifrovaných konverzácií, mali by ste si ešte pred odhlásením exportovať šifrovacie kľúče miestností. Prosím vráťte sa k novšej verzii %(brand)s a exportujte si kľúče",
-        "incompatible_database_title": "Nekompatibilná databáza",
         "messages_not_secure": {
             "cause_1": "Váš domovský server",
             "cause_2": "Domovský server, ku ktorému je pripojený používateľ, ktorého overujete",
@@ -897,7 +870,6 @@
         },
         "udd": {
             "interactive_verification_button": "Interaktívne overte pomocou emotikonov",
-            "manual_verification_button": "Manuálne overte pomocou textu",
             "other_ask_verify_text": "Poproste tohto používateľa, aby si overil svoju reláciu alebo ju nižšie manuálne overte.",
             "other_new_session_text": "%(name)s (%(userId)s) sa prihlásil do novej relácie bez jej overenia:",
             "own_ask_verify_text": "Overte svoje ostatné relácie pomocou jednej z nižšie uvedených možností.",
@@ -905,8 +877,6 @@
             "title": "Nedôveryhodné"
         },
         "unable_to_setup_keys_error": "Nie je možné nastaviť kľúče",
-        "unsupported": "Tento klient nepodporuje end-to-end šifrovanie.",
-        "upgrade_toast_title": "Je dostupná aktualizácia šifrovania",
         "verification": {
             "accepting": "Akceptovanie…",
             "after_new_login": {
@@ -933,12 +903,6 @@
             "incoming_sas_dialog_waiting": "Čakanie na potvrdenie od partnera…",
             "incoming_sas_user_dialog_text_1": "Overte tohto používateľa a označte ho ako dôveryhodného. Dôveryhodní používatelia vám poskytujú dodatočný pokoj na duši pri používaní end-to-end šifrovaných správ.",
             "incoming_sas_user_dialog_text_2": "Overenie tohto používateľa označí jeho reláciu ako dôveryhodnú a zároveň označí vašu reláciu ako dôveryhodnú pre neho.",
-            "manual_device_verification_device_id_label": "ID relácie",
-            "manual_device_verification_device_key_label": "Kľúč relácie",
-            "manual_device_verification_device_name_label": "Názov relácie",
-            "manual_device_verification_footer": "Ak sa nezhodujú, môže byť ohrozená bezpečnosť vašej komunikácie.",
-            "manual_device_verification_self_text": "Potvrďte to porovnaním nasledujúcich údajov s nastaveniami používateľa v inej vašej relácii:",
-            "manual_device_verification_user_text": "Potvrďte reláciu tohto používateľa porovnaním nasledujúcich údajov s jeho nastaveniami používateľa:",
             "no_key_or_device": "Vyzerá to, že nemáte bezpečnostný kľúč ani žiadne iné zariadenie, pomocou ktorého by ste to mohli overiť.  Toto zariadenie nebude mať prístup k starým zašifrovaným správam. Ak chcete overiť svoju totožnosť na tomto zariadení, budete musieť obnoviť svoje overovacie kľúče.",
             "no_support_qr_emoji": "Zariadenie, ktoré sa snažíte overiť, nepodporuje overenie skenovaním QR kódu ani overenie pomocou emotikonov, ktoré podporuje aplikácia %(brand)s. Skúste použiť iného klienta.",
             "other_party_cancelled": "Proti strana zrušila overovanie.",
@@ -1058,10 +1022,6 @@
     },
     "error_user_not_logged_in": "Používateľ nie je prihlásený",
     "event_preview": {
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s ukončil/a hlasové vysielanie",
-            "you": "Ukončili ste hlasové vysielanie"
-        },
         "m.call.answer": {
             "dm": "Práve prebieha hovor",
             "user": "%(senderName)s sa pridal/a do hovoru",
@@ -1417,8 +1377,6 @@
         "notification_settings_beta_caption": "Predstavujeme jednoduchší spôsob zmeny nastavení oznámení. Prispôsobte si svoju aplikáciu %(brand)s, presne podľa svojich predstáv.",
         "notification_settings_beta_title": "Nastavenia oznámení",
         "notifications": "Povolenie panelu oznámení v záhlaví miestnosti",
-        "oidc_native_flow": "Povoliť nové natívne toky OIDC (v štádiu aktívneho vývoja)",
-        "oidc_native_flow_description": "⚠ VAROVANIE: Experimentálne. Použite natívne overenie OIDC, ak je podporované serverom.",
         "render_reaction_images": "Vykresľovať vlastné obrázky v reakciách",
         "render_reaction_images_description": "Niekedy sa označujú ako „vlastné emotikony“.",
         "report_to_moderators": "Nahlásiť moderátorom",
@@ -1438,8 +1396,6 @@
         "video_rooms_faq2_answer": "Áno, časová os konverzácie sa zobrazuje spolu s videom.",
         "video_rooms_faq2_question": "Môžem popri videohovore používať aj textovú konverzáciu?",
         "video_rooms_feedbackSubheading": "Ďakujeme, že ste vyskúšali beta verziu, prosím, uveďte čo najviac podrobností, aby sme ju mohli vylepšiť.",
-        "voice_broadcast": "Hlasové vysielanie",
-        "voice_broadcast_force_small_chunks": "Vynútiť 15s dĺžku sekcie hlasového vysielania",
         "wysiwyg_composer": "Rozšírený textový editor"
     },
     "labs_mjolnir": {
@@ -1539,7 +1495,6 @@
     "member_list": {
         "filter_placeholder": "Filtrovať členov v miestnosti",
         "invite_button_no_perms_tooltip": "Nemáte oprávnenie pozývať používateľov",
-        "invited_list_heading": "Pozvaní",
         "power_label": "%(userName)s (oprávnenie %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Členovia miestnosti",
@@ -1576,66 +1531,18 @@
         "mute_description": "Nebudete dostávať žiadne oznámenia"
     },
     "notifier": {
-        "io.element.voice_broadcast_chunk": "%(senderName)s začal/a hlasové vysielanie",
         "m.key.verification.request": "%(name)s žiada o overenie"
     },
     "onboarding": {
-        "apple_trademarks": "App Store® a logo Apple® sú ochranné známky spoločnosti Apple Inc.",
-        "community_messaging_action": "Nájdite svojich ľudí",
-        "community_messaging_description": "Zachovajte si vlastníctvo a kontrolu nad komunitnou diskusiou.\nPodpora pre milióny ľudí s výkonným moderovaním a interoperabilitou.",
-        "community_messaging_title": "Vlastníctvo komunity",
-        "complete_these": "Dokončite to, aby ste získali čo najviac z aplikácie %(brand)s",
         "create_room": "Vytvoriť skupinovú konverzáciu",
-        "download_app": "Stiahnuť %(brand)s",
-        "download_app_action": "Stiahnite si aplikácie",
-        "download_app_description": "Nezmeškáte nič, ak so sebou vezmete %(brand)s",
-        "download_app_store": "Stiahnuť v obchode App Store",
-        "download_brand": "Stiahnuť %(brand)s",
-        "download_brand_desktop": "Stiahnuť %(brand)s Desktop",
-        "download_f_droid": "Získajte ho v službe F-Droid",
-        "download_google_play": "Získajte ho v službe Google Play",
-        "enable_notifications": "Zapnúť oznámenia",
-        "enable_notifications_action": "Povoliť oznámenia",
-        "enable_notifications_description": "Nezmeškajte odpoveď alebo dôležitú správu",
         "explore_rooms": "Preskúmať verejné miestnosti",
-        "find_community_members": "Nájdite a pozvite členov vašej komunity",
-        "find_coworkers": "Vyhľadajte a pozvite svojich spolupracovníkov",
-        "find_friends": "Nájdite a pozvite svojich priateľov",
-        "find_friends_action": "Nájsť priateľov",
-        "find_friends_description": "Kvôli tomu ste tu, tak sa do toho pustite",
-        "find_people": "Nájsť ľudí",
-        "free_e2ee_messaging_unlimited_voip": "Vďaka bezplatnému end-to-end šifrovaniu správ a neobmedzenými hlasovými a video hovormi je aplikácia %(brand)s skvelým spôsobom, ako zostať v kontakte.",
-        "get_stuff_done": "Vyriešte veci tým, že nájdete svojich tímových kolegov",
-        "google_trademarks": "Google Play a logo Google Play sú ochranné známky spoločnosti Google LLC.",
         "has_avatar_label": "Skvelé, to pomôže ľuďom zistiť, že ste to vy",
         "intro_byline": "Vlastnite svoje konverzácie.",
         "intro_welcome": "Vitajte v %(appName)s",
         "no_avatar_label": "Pridajte fotografiu, aby ľudia vedeli, že ste to vy.",
-        "only_n_steps_to_go": {
-            "one": "Zostáva už len %(count)s krok",
-            "few": "Zostávajú už len %(count)s kroky",
-            "other": "Zostáva už len %(count)s krokov"
-        },
-        "personal_messaging_action": "Spustite svoju prvú konverzáciu",
-        "personal_messaging_title": "Zabezpečené zasielanie správ pre priateľov a rodinu",
-        "qr_or_app_links": "%(qrCode)s alebo %(appLinks)s",
         "send_dm": "Poslať priamu správu",
-        "set_up_profile": "Nastavte si svoj profil",
-        "set_up_profile_action": "Váš profil",
-        "set_up_profile_description": "Uistite sa, že ľudia vedia, že ste to naozaj vy",
-        "use_case_community_messaging": "Členovia online komunity",
-        "use_case_heading1": "Ste v",
-        "use_case_heading2": "S kým budete komunikovať najčastejšie?",
-        "use_case_heading3": "Pomôžeme vám nadviazať kontakty.",
-        "use_case_personal_messaging": "Priatelia a rodina",
-        "use_case_work_messaging": "Spolupracovníci a tímy",
         "welcome_detail": "Teraz vám pomôžeme začať",
-        "welcome_to_brand": "Vitajte v aplikácii %(brand)s",
-        "welcome_user": "Vitajte %(name)s",
-        "work_messaging_action": "Nájdite svojich spolupracovníkov",
-        "work_messaging_title": "Zabezpečené posielanie správ pre prácu",
-        "you_did_it": "Dokázali ste to!",
-        "you_made_it": "Zvládli ste to!"
+        "welcome_user": "Vitajte %(name)s"
     },
     "pill": {
         "permalink_other_room": "Správa v %(room)s",
@@ -1687,7 +1594,6 @@
         "custom_level": "Vlastná úroveň",
         "default": "Predvolené",
         "label": "Úroveň oprávnenia",
-        "mod": "Moderátor",
         "moderator": "Moderátor",
         "restricted": "Obmedzené"
     },
@@ -2151,7 +2057,6 @@
             "error_unbanning": "Nepodarilo sa povoliť vstup",
             "events_default": "Odoslať správy",
             "invite": "Pozvať používateľov",
-            "io.element.voice_broadcast_info": "Hlasové vysielania",
             "kick": "Odstrániť používateľov",
             "m.call": "Spustiť %(brand)s hovory",
             "m.call.member": "Pripojiť sa k %(brand)s hovorom",
@@ -2419,7 +2324,6 @@
             "msisdn_verification_field_label": "Overovací kód",
             "msisdn_verification_instructions": "Zadajte prosím overovací kód zaslaný prostredníctvom SMS.",
             "msisdns_heading": "Telefónne čísla",
-            "name_placeholder": "Žiadne zobrazované meno",
             "oidc_manage_button": "Spravovať účet",
             "password_change_section": "Nastaviť nové heslo k účtu…",
             "password_change_success": "Vaše heslo bolo úspešne zmenené.",
@@ -2454,18 +2358,13 @@
                 "pass_phrase_match_failed": "To sa nezhoduje.",
                 "pass_phrase_match_success": "Zhoda!",
                 "phrase_strong_enough": "Skvelé! Táto bezpečnostná fráza vyzerá dostatočne silná.",
-                "requires_key_restore": "Obnovte zálohu kľúča a aktualizujte šifrovanie",
-                "requires_password_confirmation": "Na potvrdenie aktualizácie zadajte heslo svojho účtu:",
-                "requires_server_authentication": "Na potvrdenie aktualizácie sa budete musieť overiť na serveri.",
                 "secret_storage_query_failure": "Nie je možné vykonať dopyt na stav tajného úložiska",
                 "security_key_safety_reminder": "Bezpečnostný kľúč uložte na bezpečné miesto, napríklad do správcu hesiel alebo trezora, pretože slúži na ochranu zašifrovaných údajov.",
-                "session_upgrade_description": "Aktualizujte túto reláciu, aby mohla overovať ostatné relácie, udeľovať im prístup k zašifrovaným správam a označovať ich ako dôveryhodné pre ostatných používateľov.",
                 "set_phrase_again": "Vráťte sa späť a nastavte to znovu.",
                 "settings_reminder": "Bezpečné zálohovanie a správu kľúčov môžete nastaviť aj v Nastaveniach.",
                 "title_confirm_phrase": "Potvrdiť bezpečnostnú frázu",
                 "title_save_key": "Uložte svoj bezpečnostný kľúč",
                 "title_set_phrase": "Nastaviť bezpečnostnú frázu",
-                "title_upgrade_encryption": "Aktualizujte svoje šifrovanie",
                 "unable_to_setup": "Nie je možné nastaviť tajné úložisko",
                 "use_different_passphrase": "Použiť inú prístupovú frázu?",
                 "use_phrase_only_you_know": "Použite tajnú frázu, ktorú poznáte len vy, a prípadne uložte si bezpečnostný kľúč, ktorý môžete použiť na zálohovanie."
@@ -2561,7 +2460,6 @@
             "room_directory_heading": "Adresár miestností",
             "room_list_heading": "Zoznam miestností",
             "show_avatars_pills": "Zobraziť obrázky profilov v zmienkach o používateľoch, miestnostiach a udalostiach",
-            "show_checklist_shortcuts": "Zobraziť skratku na uvítací kontrolný zoznam nad zoznamom miestností",
             "show_polls_button": "Zobraziť tlačidlo ankiet",
             "surround_text": "Obklopiť vybraný text pri písaní špeciálnych znakov",
             "time_heading": "Zobrazovanie času"
@@ -2799,7 +2697,6 @@
         "warning": "<w>UPOZORNENIE:</w> <description/>"
     },
     "share": {
-        "link_title": "Odkaz na miestnosť",
         "permalink_message": "Odkaz na vybratú správu",
         "permalink_most_recent": "Odkaz na najnovšiu správu",
         "title_message": "Zdieľať správu z miestnosti",
@@ -2861,7 +2758,6 @@
         "rageshake": "Zaslať chybové hlásenie so záznamami",
         "rainbow": "Odošle danú správu vo farbe dúhy",
         "rainbowme": "Odošle daný emotív sfarbený ako dúha",
-        "remakeolm": "Príkaz pre vývojárov: Zruší aktuálnu reláciu odchádzajúcej skupiny a vytvorí nové relácie Olm",
         "remove": "Odstráni používateľa s daným ID z tejto miestnosti",
         "roomavatar": "Zmení obrázok aktuálnej miestnosti",
         "roomname": "Nastaví názov miestnosti",
@@ -2889,13 +2785,6 @@
         "upgraderoom": "Aktualizuje miestnosť na novšiu verziu",
         "upgraderoom_permission_error": "Na použitie tohoto príkazu nemáte dostatočné povolenia.",
         "usage": "Použitie",
-        "verify": "Overí používateľa, reláciu a verejné kľúče",
-        "verify_mismatch": "VAROVANIE: OVERENIE KĽÚČOV ZLYHALO! Podpisový kľúč používateľa %(userId)s a relácia %(deviceId)s je \"%(fprint)s\" čo nezodpovedá zadanému kľúču \"%(fingerprint)s\". Môže to znamenať, že vaša komunikácia je odpočúvaná!",
-        "verify_nop": "Relácia je už overená!",
-        "verify_nop_warning_mismatch": "VAROVANIE: Relácia je už overená, ale kľúče sa NEZHODUJÚ!",
-        "verify_success_description": "Zadaný podpisový kľúč sa zhoduje s podpisovým kľúčom, ktorý ste dostali z relácie používateľa %(userId)s %(deviceId)s. Relácia označená ako overená.",
-        "verify_success_title": "Kľúč overený",
-        "verify_unknown_pair": "Neznámy pár (používateľ, relácia): (%(userId)s, %(deviceId)s)",
         "view": "Zobrazí miestnosti s danou adresou",
         "whois": "Zobrazuje informácie o používateľovi"
     },
@@ -2932,7 +2821,6 @@
         "invite": "Pozvať ľudí",
         "invite_description": "Pozvať pomocou e-mailu alebo používateľského mena",
         "invite_link": "Zdieľať odkaz na pozvánku",
-        "invite_this_space": "Pozvať do tohto priestoru",
         "joining_space": "Pripájanie sa",
         "landing_welcome": "Vitajte v <name/>",
         "leave_dialog_action": "Opustiť priestor",
@@ -3110,10 +2998,6 @@
         "error_rendering_message": "Nemožno načítať túto správu",
         "historical_messages_unavailable": "Nemôžete vidieť predchádzajúce správy",
         "in_room_name": " v <strong>%(room)s</strong>",
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s ukončil/a <a>hlasové vysielanie</a>",
-            "you": "Ukončili ste <a>hlasové vysielanie</a>"
-        },
         "io.element.widgets.layout": "%(senderName)s aktualizoval usporiadanie miestnosti",
         "late_event_separator": "Pôvodne odoslané %(dateTime)s",
         "load_error": {
@@ -3294,7 +3178,9 @@
             "sent": "%(senderName)s pozval %(targetDisplayName)s vstúpiť do miestnosti."
         },
         "m.room.tombstone": "%(senderDisplayName)s aktualizoval túto miestnosť.",
-        "m.room.topic": "%(senderDisplayName)s zmenil tému na \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s zmenil tému na \"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s poslal nálepku.",
         "m.video": {
             "error_decrypting": "Chyba pri dešifrovaní videa"
@@ -3559,7 +3445,6 @@
     "truncated_list_n_more": {
         "other": "A %(count)s ďalších…"
     },
-    "unknown_device": "Neznáme zariadenie",
     "unsupported_server_description": "Tento server používa staršiu verziu systému Matrix. Ak chcete používať %(brand)s bez chýb, aktualizujte na Matrix %(version)s.",
     "unsupported_server_title": "Váš server nie je podporovaný",
     "update": {
@@ -3601,14 +3486,6 @@
         "ban_room_confirm_title": "Zakázať vstup do %(roomName)s",
         "ban_space_everything": "Zakázať im všetko, na čo mám oprávnenie",
         "ban_space_specific": "Zakázať im konkrétne právomoci, na ktoré mám oprávnenie",
-        "count_of_sessions": {
-            "one": "%(count)s relácia",
-            "other": "%(count)s relácie"
-        },
-        "count_of_verified_sessions": {
-            "one": "1 overená relácia",
-            "other": "%(count)s overených relácií"
-        },
         "deactivate_confirm_action": "Deaktivovať používateľa",
         "deactivate_confirm_description": "Deaktivácia tohto používateľa ho odhlási a zabráni mu v opätovnom prihlásení. Okrem toho opustí všetky miestnosti, v ktorých sa nachádza. Túto akciu nie je možné vrátiť späť. Ste si istí, že chcete tohto používateľa deaktivovať?",
         "deactivate_confirm_title": "Deaktivovať používateľa?",
@@ -3619,15 +3496,12 @@
         "disinvite_button_room": "Zrušiť pozvánku z miestnosti",
         "disinvite_button_room_name": "Zrušenie pozvania z %(roomName)s",
         "disinvite_button_space": "Zrušiť pozvánku z priestoru",
-        "edit_own_devices": "Upraviť zariadenia",
         "error_ban_user": "Nepodarilo sa zakázať používateľa",
         "error_deactivate": "Nepodarilo sa deaktivovať používateľa",
         "error_kicking_user": "Nepodarilo sa odstrániť používateľa",
         "error_mute_user": "Nepodarilo sa umlčať používateľa",
         "error_revoke_3pid_invite_description": "Pozvánku nebolo možné odvolať. Na serveri môže byť dočasný problém alebo nemáte dostatočné oprávnenia na odvolanie pozvánky.",
         "error_revoke_3pid_invite_title": "Nepodarilo sa odvolať pozvánku",
-        "hide_sessions": "Skryť relácie",
-        "hide_verified_sessions": "Skryť overené relácie",
         "ignore_confirm_description": "Všetky správy a pozvánky od tohto používateľa budú skryté. Ste si istí, že ich chcete ignorovať?",
         "ignore_confirm_title": "Ignorovať %(user)s",
         "invited_by": "Pozvaný používateľom %(sender)s",
@@ -3676,38 +3550,6 @@
         "switch_theme_dark": "Prepnúť na tmavý režim",
         "switch_theme_light": "Prepnúť na svetlý režim"
     },
-    "voice_broadcast": {
-        "30s_backward": "30s späť",
-        "30s_forward": "30s dopredu",
-        "action": "Hlasové vysielanie",
-        "buffering": "Načítavanie do vyrovnávacej pamäte…",
-        "confirm_listen_affirm": "Áno, ukončiť moje nahrávanie",
-        "confirm_listen_description": "Ak začnete počúvať toto živé vysielanie, váš aktuálny záznam živého vysielania sa ukončí.",
-        "confirm_listen_title": "Počúvať živé vysielanie?",
-        "confirm_stop_affirm": "Áno, zastaviť vysielanie",
-        "confirm_stop_description": "Určite chcete zastaviť vysielanie naživo? Tým sa vysielanie ukončí a v miestnosti bude k dispozícii celý záznam.",
-        "confirm_stop_title": "Zastaviť vysielanie naživo?",
-        "connection_error": "Chyba pripojenia - nahrávanie pozastavené",
-        "failed_already_recording_description": "Už nahrávate hlasové vysielanie. Ukončite aktuálne hlasové vysielanie a spustite nové.",
-        "failed_already_recording_title": "Nemôžete spustiť nové hlasové vysielanie",
-        "failed_decrypt": "Hlasové vysielanie sa nedá dešifrovať",
-        "failed_generic": "Toto hlasové vysielanie nie je možné prehrať",
-        "failed_insufficient_permission_description": "Nemáte požadované oprávnenia na spustenie hlasového vysielania v tejto miestnosti. Obráťte sa na správcu miestnosti, aby vám rozšíril oprávnenia.",
-        "failed_insufficient_permission_title": "Nemôžete spustiť nové hlasové vysielanie",
-        "failed_no_connection_description": "Bohužiaľ teraz nemôžeme spustiť nahrávanie. Skúste to prosím neskôr.",
-        "failed_no_connection_title": "Chyba pripojenia",
-        "failed_others_already_recording_description": "Niekto iný už nahráva hlasové vysielanie. Počkajte, kým sa skončí jeho hlasové vysielanie, a potom spustite nové.",
-        "failed_others_already_recording_title": "Nemôžete spustiť nové hlasové vysielanie",
-        "go_live": "Prejsť naživo",
-        "live": "Naživo",
-        "pause": "pozastaviť hlasové vysielanie",
-        "play": "spustiť hlasové vysielanie",
-        "resume": "obnoviť hlasové vysielanie"
-    },
-    "voice_message": {
-        "cant_start_broadcast_description": "Nemôžete spustiť hlasovú správu, pretože práve nahrávate živé vysielanie. Ukončite prosím živé vysielanie, aby ste mohli začať nahrávať hlasovú správu.",
-        "cant_start_broadcast_title": "Nemožno spustiť hlasovú správu"
-    },
     "voip": {
         "already_in_call": "Hovor už prebieha",
         "already_in_call_person": "S touto osobou už hovor prebieha.",
@@ -3727,7 +3569,6 @@
         "camera_disabled": "Váš fotoaparát je vypnutý",
         "camera_enabled": "Fotoaparát je stále zapnutý",
         "cannot_call_yourself_description": "Nemôžete zavolať samému sebe.",
-        "change_input_device": "Zmeniť vstupné zariadenie",
         "connecting": "Pripájanie",
         "connection_lost": "Spojenie so serverom bolo prerušené",
         "connection_lost_description": "Bez pripojenia k serveru nie je možné uskutočňovať hovory.",
@@ -3744,13 +3585,10 @@
         "enable_camera": "Zapnúť kameru",
         "enable_microphone": "Zrušiť stlmenie mikrofónu",
         "expand": "Návrat k hovoru",
-        "failed_call_live_broadcast_description": "Nemôžete spustiť hovor, pretože práve nahrávate živé vysielanie. Ukončite živé vysielanie, aby ste mohli začať hovor.",
-        "failed_call_live_broadcast_title": "Nie je možné začať hovor",
         "hangup": "Zavesiť",
         "hide_sidebar_button": "Skryť bočný panel",
         "input_devices": "Vstupné zariadenia",
         "join_button_tooltip_call_full": "Prepáčte — tento hovor je momentálne obsadený",
-        "join_button_tooltip_connecting": "Pripájanie",
         "maximise": "Vyplniť obrazovku",
         "misconfigured_server": "Hovor zlyhal z dôvodu nesprávne nastaveného servera",
         "misconfigured_server_description": "Prosím, požiadajte správcu vášho domovského servera (<code>%(homeserverDomain)s</code>) aby nakonfiguroval Turn server, čo zlepší spoľahlivosť audio / video hovorov.",

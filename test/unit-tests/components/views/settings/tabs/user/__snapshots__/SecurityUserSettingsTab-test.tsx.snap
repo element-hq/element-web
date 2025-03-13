@@ -8,10 +8,9 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
     <div
       class="mx_SettingsTab_sections"
     >
-      <label
+      <div
         class="mx_SetIntegrationManager"
         data-testid="mx_SetIntegrationManager"
-        for="toggle_integration"
       >
         <div
           class="mx_SettingsFlag"
@@ -30,18 +29,6 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
               (scalar.vector.im)
             </h4>
           </div>
-          <div
-            aria-checked="true"
-            aria-disabled="false"
-            class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
-            id="toggle_integration"
-            role="switch"
-            tabindex="0"
-          >
-            <div
-              class="mx_ToggleSwitch_ball"
-            />
-          </div>
         </div>
         <div
           class="mx_SettingsSubsection_text"
@@ -59,7 +46,43 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
         >
           Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.
         </div>
-      </label>
+        <form
+          class="_root_19upo_16"
+        >
+          <div
+            class="_inline-field_19upo_32"
+          >
+            <div
+              class="_inline-field-control_19upo_44"
+            >
+              <div
+                class="_container_19o42_10"
+              >
+                <input
+                  checked=""
+                  class="_input_19o42_24"
+                  id="mx_SetIntegrationManager_Toggle"
+                  role="switch"
+                  type="checkbox"
+                />
+                <div
+                  class="_ui_19o42_34"
+                />
+              </div>
+            </div>
+            <div
+              class="_inline-field-body_19upo_38"
+            >
+              <label
+                class="_label_19upo_59"
+                for="mx_SetIntegrationManager_Toggle"
+              >
+                Enable the integration manager
+              </label>
+            </div>
+          </div>
+        </form>
+      </div>
       <div
         class="mx_SettingsSection"
       >
@@ -89,7 +112,7 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
               <div
                 class="mx_SettingsSubsection_text"
               >
-                Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.
+                Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Recovery Key.
               </div>
               <div
                 class="mx_Spinner"
@@ -129,7 +152,6 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
                     </th>
                     <td>
                       not found locally
-                      
                     </td>
                   </tr>
                   <tr>
@@ -387,6 +409,85 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
                   />
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_SettingsSection"
+      >
+        <h2
+          class="mx_Heading_h3"
+        >
+          Privacy
+        </h2>
+        <div
+          class="mx_SettingsSection_subSections"
+        >
+          <div
+            class="mx_SettingsSubsection"
+            data-testid="discoverySection"
+          >
+            <div
+              class="mx_SettingsSubsectionHeading"
+            >
+              <h3
+                class="mx_Heading_h4 mx_SettingsSubsectionHeading_heading"
+              >
+                How to find you
+              </h3>
+            </div>
+            <div
+              class="mx_SettingsSubsection_content mx_SettingsSubsection_contentStretch"
+            >
+              <fieldset
+                class="mx_SettingsFieldset"
+              >
+                <legend
+                  class="mx_SettingsFieldset_legend"
+                >
+                  Identity server
+                </legend>
+                <div
+                  class="mx_SettingsFieldset_description"
+                >
+                  <div
+                    class="mx_SettingsSubsection_text"
+                  >
+                    You are not currently using an identity server. To discover and be discoverable by existing contacts you know, add one below.
+                  </div>
+                </div>
+                <div
+                  class="mx_SettingsFieldset_content"
+                >
+                  <form
+                    class="_root_19upo_16 mx_IdentityServerPicker"
+                  >
+                    <div
+                      class="_field_19upo_26"
+                    >
+                      <label
+                        class="_label_19upo_59"
+                        for="radix-:r1:"
+                      >
+                        Enter a new identity server
+                      </label>
+                      <div
+                        class="_controls_17lij_8"
+                      >
+                        <input
+                          class="_control_sqdq4_10"
+                          id="radix-:r1:"
+                          name="input"
+                          placeholder=""
+                          title=""
+                          value=""
+                        />
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </fieldset>
             </div>
           </div>
         </div>

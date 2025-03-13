@@ -2,16 +2,18 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2024 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { test, expect } from "../../element-web-test";
 import { createRoom, enableKeyBackup, logIntoElement, sendMessageInCurrentRoom } from "./utils";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 test.describe("Logout tests", () => {
+    test.skip(isDendrite, "Dendrite lacks support for MSC3967 so requires additional auth here");
     test.beforeEach(async ({ page, homeserver, credentials }) => {
-        await logIntoElement(page, homeserver, credentials);
+        await logIntoElement(page, credentials);
     });
 
     test("Ask to set up recovery on logout if not setup", async ({ page, app }) => {

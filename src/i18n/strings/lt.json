@@ -83,7 +83,6 @@
         "report_content": "Pranešti",
         "resend": "Siųsti iš naujo",
         "reset": "Iš naujo nustatyti",
-        "restore": "Atkurti",
         "resume": "Tęsti",
         "retry": "Bandyti dar kartą",
         "review": "Peržiūrėti",
@@ -153,7 +152,6 @@
         "failed_connect_identity_server_register": "Jūs galite registruotis, tačiau kai kurios funkcijos bus nepasiekiamos, kol tapatybės serveris prisijungs. Jei ir toliau matote šį įspėjimą, patikrinkite savo konfigūraciją arba susisiekite su serverio administratoriumi.",
         "failed_connect_identity_server_reset_password": "Jūs galite iš naujo nustatyti savo slaptažodį, tačiau kai kurios funkcijos bus nepasiekiamos, kol tapatybės serveris prisijungs. Jei ir toliau matote šį įspėjimą, patikrinkite savo konfigūraciją arba susisiekite su serverio administratoriumi.",
         "failed_homeserver_discovery": "Nepavyko atlikti serverio radimo",
-        "footer_powered_by_matrix": "veikia su Matrix",
         "forgot_password_email_required": "Privalo būti įvestas su jūsų paskyra susietas el. pašto adresas.",
         "forgot_password_prompt": "Pamiršote savo slaptažodį?",
         "identifier_label": "Prisijungti naudojant",
@@ -255,7 +253,6 @@
         "download_logs": "Parsisiųsti žurnalus",
         "downloading_logs": "Parsiunčiami žurnalai",
         "error_empty": "Pasakyite mums kas nutiko, arba, dar geriau, sukurkite GitHub problemą su jos apibūdinimu.",
-        "failed_send_logs": "Nepavyko išsiųsti žurnalų: ",
         "github_issue": "GitHub problema",
         "introduction": "Jei per GitHub pateikėte klaidą, derinimo žurnalai gali padėti mums nustatyti problemą. ",
         "log_request": "Norėdami padėti mums išvengti to ateityje, <a>atsiųskite mums žurnalus</a>.",
@@ -370,7 +367,6 @@
         "room": "Kambarys",
         "rooms": "Kambariai",
         "secure_backup": "Saugi Atsarginė Kopija",
-        "security": "Saugumas",
         "select_all": "Pasirinkti viską",
         "settings": "Nustatymai",
         "show_more": "Rodyti daugiau",
@@ -384,7 +380,6 @@
         "theme": "Tema",
         "threads": "Temos",
         "timeline": "Laiko juosta",
-        "trusted": "Patikimas",
         "unencrypted": "Neužšifruota",
         "unmute": "Atšaukti nutildymą",
         "unnamed_room": "Bevardis Kambarys",
@@ -396,8 +391,7 @@
         "video": "Vaizdo įrašas",
         "video_room": "Vaizdo kambarys",
         "view_message": "Žiūrėti žinutę",
-        "warning": "Įspėjimas",
-        "welcome": "Sveiki atvykę"
+        "warning": "Įspėjimas"
     },
     "composer": {
         "autocomplete": {
@@ -548,10 +542,6 @@
         "export_unsupported": "Jūsų naršyklė nepalaiko reikalingų kriptografijos plėtinių",
         "import_invalid_keyfile": "Negaliojantis %(brand)s rakto failas",
         "import_invalid_passphrase": "Autentifikavimo patikra nepavyko: neteisingas slaptažodis?",
-        "incompatible_database_description": "Anksčiau šiame seanse naudojote naujesnę %(brand)s versiją. Norėdami vėl naudoti šią versiją su visapusiu šifravimu, turėsite atsijungti ir prisijungti iš naujo.",
-        "incompatible_database_disable": "Tęsti išjungus šifravimą",
-        "incompatible_database_sign_out_description": "Tam, kad neprarastumėte savo pokalbių istorijos, prieš atsijungdami turite eksportuoti kambario raktus. Norėdami tai padaryti, turėsite grįžti į naujesnę %(brand)s versiją",
-        "incompatible_database_title": "Nesuderinama duomenų bazė",
         "messages_not_secure": {
             "cause_1": "Jūsų serveris",
             "cause_2": "Namų serveris, prie kurio yra prisijungęs patvirtinamas naudotojas",
@@ -586,8 +576,6 @@
             "title": "Nepatikimas"
         },
         "unable_to_setup_keys_error": "Nepavyksta nustatyti raktų",
-        "unsupported": "Šis klientas nepalaiko visapusio šifravimo.",
-        "upgrade_toast_title": "Galimas šifravimo atnaujinimas",
         "verification": {
             "accepting": "Priimama…",
             "cancelled": "Jūs atšaukėte patvirtinimą.",
@@ -604,12 +592,6 @@
             "incoming_sas_dialog_title": "Įeinantis Patikrinimo Prašymas",
             "incoming_sas_user_dialog_text_1": "Patvirtinkite šį vartotoją, kad pažymėtumėte jį kaip patikimą. Vartotojų pažymėjimas patikimais suteikia jums papildomos ramybės naudojant visapusiškai užšifruotas žinutes.",
             "incoming_sas_user_dialog_text_2": "Patvirtinant šį vartotoją, jo seansas bus pažymėtas kaip patikimas, taip pat jūsų seansas bus pažymėtas kaip patikimas jam.",
-            "manual_device_verification_device_id_label": "Seanso ID",
-            "manual_device_verification_device_key_label": "Seanso raktas",
-            "manual_device_verification_device_name_label": "Seanso pavadinimas",
-            "manual_device_verification_footer": "Jei jie nesutampa, gali būti pažeistas jūsų komunikacijos saugumas.",
-            "manual_device_verification_self_text": "Patvirtinkite, palygindami tai, kas nurodyta toliau, su Vartotojo Nustatymais kitame jūsų seanse:",
-            "manual_device_verification_user_text": "Patvirtinkite šio vartotojo seansą, palygindami tai, kas nurodyta toliau, su jo Vartotojo Nustatymais:",
             "no_support_qr_emoji": "Įrenginys, kurį bandote patvirtinti, nepalaiko QR kodo nuskaitymo arba jaustukų patikrinimo, kurį palaiko %(brand)s. Pabandykite naudoti kitą klientą.",
             "other_party_cancelled": "Kita šalis atšaukė patvirtinimą.",
             "prompt_encrypted": "Patvirtinkite visus vartotojus kambaryje, kad užtikrintumėte jo saugumą.",
@@ -893,8 +875,7 @@
         "video_rooms_faq1_answer": "Kairiajame skydelyje esančioje kambarių skiltyje naudokite mygtuką “+”.",
         "video_rooms_faq1_question": "Kaip galiu sukurti vaizdo kambarį?",
         "video_rooms_faq2_answer": "Taip, pokalbių laiko juosta rodoma kartu su vaizdu.",
-        "video_rooms_faq2_question": "Ar galiu naudoti teksto pokalbius kartu su vaizdo skambučiu?",
-        "voice_broadcast": "Balso transliacija"
+        "video_rooms_faq2_question": "Ar galiu naudoti teksto pokalbius kartu su vaizdo skambučiu?"
     },
     "labs_mjolnir": {
         "advanced_warning": "⚠ Šie nustatymai yra skirti pažengusiems vartotojams.",
@@ -937,7 +918,6 @@
     },
     "member_list": {
         "filter_placeholder": "Filtruoti kambario dalyvius",
-        "invited_list_heading": "Pakviesta",
         "power_label": "%(userName)s (galia %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Kambario nariai",
@@ -973,43 +953,10 @@
         "m.key.verification.request": "%(name)s prašo patvirtinimo"
     },
     "onboarding": {
-        "community_messaging_action": "Rasti savo žmones",
-        "community_messaging_description": "Išlaikykite bendruomenės diskusijų nuosavybę ir kontrolę.\nPlėskitės ir palaikykite milijonus žmonių, naudodami galingą moderavimą ir sąveiką.",
-        "community_messaging_title": "Bendruomenės nuosavybė",
-        "complete_these": "Užbaikite šiuos žingsnius, kad gautumėte daugiausiai iš %(brand)s",
         "create_room": "Sukurti grupės pokalbį",
-        "download_app": "Atsisiųsti %(brand)s",
-        "download_app_action": "Atsisiųsti programėles",
-        "download_app_description": "Nepraleiskite nieko, jei su savimi pasiimsite %(brand)s",
-        "download_brand": "Atsisiųsti %(brand)s",
-        "enable_notifications": "Įjungti pranešimus",
-        "enable_notifications_action": "Įjungti pranešimus",
-        "enable_notifications_description": "Nepraleiskite atsakymo ar svarbios žinutės",
         "explore_rooms": "Žvalgyti viešus kambarius",
-        "find_community_members": "Rasti ir pakviesti savo bendruomenės narius",
-        "find_coworkers": "Rasti ir pakviesti bendradarbius",
-        "find_friends": "Rasti ir pakviesti draugus",
-        "find_friends_action": "Rasti draugus",
-        "find_friends_description": "Dėl to čia ir esate, todėl imkimės to",
-        "find_people": "Rasti žmones",
-        "free_e2ee_messaging_unlimited_voip": "%(brand)s - tai puikus būdas palaikyti ryšį: nemokamos visapusiškai šifruotos žinutės ir neriboti balso bei vaizdo skambučiai.",
-        "get_stuff_done": "Atlikite darbus suradę komandos draugus",
         "intro_welcome": "Sveiki prisijungę į %(appName)s",
-        "only_n_steps_to_go": {
-            "one": "Liko tik %(count)s žingsnis",
-            "other": "Liko tik %(count)s žingsniai"
-        },
-        "personal_messaging_action": "Pradėkite pirmąjį pokalbį",
-        "personal_messaging_title": "Saugūs pokalbiai draugams ir šeimai",
-        "send_dm": "Siųsti tiesioginę žinutę",
-        "set_up_profile": "Nustatykite savo profilį",
-        "set_up_profile_action": "Jūsų profilis",
-        "set_up_profile_description": "Įsitikinkite, kad žmonės žino, jog tai tikrai jūs",
-        "welcome_to_brand": "Sveiki atvykę į %(brand)s",
-        "work_messaging_action": "Rasti savo bendradarbius",
-        "work_messaging_title": "Saugūs pokalbiai darbui",
-        "you_did_it": "Jums pavyko!",
-        "you_made_it": "Jums pavyko!"
+        "send_dm": "Siųsti tiesioginę žinutę"
     },
     "power_level": {
         "admin": "Administratorius",
@@ -1017,7 +964,6 @@
         "custom_level": "Pritaikytas lygis",
         "default": "Numatytas",
         "label": "Galios lygis",
-        "mod": "Moderatorius",
         "moderator": "Moderatorius",
         "restricted": "Apribotas"
     },
@@ -1559,7 +1505,6 @@
             "msisdn_verification_field_label": "Patvirtinimo kodas",
             "msisdn_verification_instructions": "Įveskite patvirtinimo kodą išsiųstą teksto žinute.",
             "msisdns_heading": "Telefono numeriai",
-            "name_placeholder": "Nėra rodomo vardo",
             "password_change_success": "Jūsų slaptažodis sėkmingai pakeistas.",
             "remove_email_prompt": "Pašalinti %(email)s?",
             "remove_msisdn_prompt": "Pašalinti %(phone)s?"
@@ -1581,15 +1526,12 @@
                 "pass_phrase_match_failed": "Tai nesutampa.",
                 "pass_phrase_match_success": "Tai sutampa!",
                 "phrase_strong_enough": "Puiku! Ši Saugumo Frazė atrodo pakankamai stipri.",
-                "requires_key_restore": "Atkurkite savo atsarginę raktų kopiją, kad atnaujintumėte šifravimą",
                 "secret_storage_query_failure": "Slaptos saugyklos būsenos užklausa neįmanoma",
-                "session_upgrade_description": "Atnaujinkite šį seansą, kad jam būtų leista patvirtinti kitus seansus, suteikiant jiems prieigą prie šifruotų žinučių ir juos pažymint kaip patikimus kitiems vartotojams.",
                 "set_phrase_again": "Grįžti atgal, kad nustatyti iš naujo.",
                 "settings_reminder": "Jūs taip pat galite nustatyti Saugią Atsarginę Kopiją ir tvarkyti savo raktus Nustatymuose.",
                 "title_confirm_phrase": "Patvirtinkite Slaptafrazę",
                 "title_save_key": "Išsaugoti savo Saugumo Raktą",
                 "title_set_phrase": "Nustatyti Slaptafrazę",
-                "title_upgrade_encryption": "Atnaujinkite savo šifravimą",
                 "unable_to_setup": "Neįmanoma nustatyti slaptos saugyklos",
                 "use_different_passphrase": "Naudoti kitą slaptafrazę?",
                 "use_phrase_only_you_know": "Naudokite slaptafrazę, kurią žinote tik jūs ir pasirinktinai išsaugokite Apsaugos Raktą, naudoti kaip atsarginę kopiją."
@@ -1870,11 +1812,6 @@
         "upgraderoom": "Atnaujina kambarį į naują versiją",
         "upgraderoom_permission_error": "Jūs neturite reikalingų leidimų naudoti šią komandą.",
         "usage": "Naudojimas",
-        "verify": "Patvirtina vartotojo, seanso ir pubkey daugiadalę duomenų struktūrą",
-        "verify_mismatch": "ĮSPĖJIMAS: RAKTŲ PATIKRINIMAS NEPAVYKO! Pasirašymo raktas vartotojui %(userId)s ir seansui %(deviceId)s yra \"%(fprint)s\", kuris nesutampa su pateiktu raktu \"%(fingerprint)s\". Tai gali reikšti, kad jūsų komunikacijos yra perimamos!",
-        "verify_nop": "Seansas jau patvirtintas!",
-        "verify_success_description": "Jūsų pateiktas pasirašymo raktas sutampa su pasirašymo raktu, gautu iš vartotojo %(userId)s seanso %(deviceId)s. Seansas pažymėtas kaip patikrintas.",
-        "verify_success_title": "Patvirtintas raktas",
         "whois": "Parodo informaciją apie vartotoją"
     },
     "space": {
@@ -1890,7 +1827,6 @@
         "invite": "Pakviesti žmonių",
         "invite_description": "Pakviesti su el. paštu arba naudotojo vardu",
         "invite_link": "Bendrinti pakvietimo nuorodą",
-        "invite_this_space": "Pakviesti į šią erdvę",
         "search_children": "Ieškoti %(spaceName)s"
     },
     "spaces": {
@@ -2122,7 +2058,9 @@
             "sent": "%(senderName)s išsiuntė pakvietimą %(targetDisplayName)s prisijungti prie kambario."
         },
         "m.room.tombstone": "%(senderDisplayName)s atnaujino šį kambarį.",
-        "m.room.topic": "%(senderDisplayName)s pakeitė temą į \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s pakeitė temą į \"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s nusiuntė lipduką.",
         "m.video": {
             "error_decrypting": "Klaida iššifruojant vaizdo įrašą"
@@ -2295,7 +2233,6 @@
     "truncated_list_n_more": {
         "other": "Ir dar %(count)s..."
     },
-    "unknown_device": "Nežinomas įrenginys",
     "update": {
         "changelog": "Keitinių žurnalas",
         "check_action": "Tikrinti, ar yra atnaujinimų",
@@ -2332,14 +2269,6 @@
         "ban_room_confirm_title": "Atblokuoti už %(roomName)s",
         "ban_space_everything": "Užblokuoti juos iš visko, kur galiu",
         "ban_space_specific": "Užblokuoti juos konkrečiuose dalykuose, kuriuose galiu",
-        "count_of_sessions": {
-            "other": "%(count)s seansai(-ų)",
-            "one": "%(count)s seansas"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s patvirtintų seansų",
-            "one": "1 patvirtintas seansas"
-        },
         "deactivate_confirm_action": "Deaktyvuoti vartotoją",
         "deactivate_confirm_description": "Šio vartotojo deaktyvavimas atjungs juos ir neleis jiems vėl prisijungti atgal. Taip pat jie išeis iš visų kambarių, kuriuose jie yra. Šis veiksmas negali būti atšauktas. Ar tikrai norite deaktyvuoti šį vartotoją?",
         "deactivate_confirm_title": "Deaktyvuoti vartotoją?",
@@ -2350,15 +2279,12 @@
         "disinvite_button_room": "Atšaukti kvietimą iš kambario",
         "disinvite_button_room_name": "Atšaukti kvietimą iš %(roomName)s",
         "disinvite_button_space": "Atšaukti kvietimą iš erdvės",
-        "edit_own_devices": "Redaguoti įrenginius",
         "error_ban_user": "Nepavyko užblokuoti vartotojo",
         "error_deactivate": "Nepavyko deaktyvuoti vartotojo",
         "error_kicking_user": "Nepavyko pašalinti naudotojo",
         "error_mute_user": "Nepavyko nutildyti vartotojo",
         "error_revoke_3pid_invite_description": "Kvietimo atšaukti nepavyko. Gali būti, kad serveryje kilo laikina problema arba neturite pakankamų leidimų atšaukti kvietimą.",
         "error_revoke_3pid_invite_title": "Nepavyko atšaukti kvietimo",
-        "hide_sessions": "Slėpti seansus",
-        "hide_verified_sessions": "Slėpti patvirtintus seansus",
         "invited_by": "Pakvietė %(sender)s",
         "jump_to_rr_button": "Nušokti iki perskaitytų žinučių",
         "kick_button_room": "Pašalinti iš kambario",
@@ -2397,15 +2323,6 @@
     "user_menu": {
         "settings": "Visi nustatymai"
     },
-    "voice_broadcast": {
-        "action": "Balso transliacija",
-        "confirm_stop_affirm": "Taip, sustabdyti transliaciją",
-        "confirm_stop_title": "Sustabdyti transliaciją gyvai?",
-        "live": "Gyvai",
-        "pause": "pristabdyti balso transliaciją",
-        "play": "paleisti balso transliaciją",
-        "resume": "tęsti balso transliaciją"
-    },
     "voip": {
         "already_in_call": "Jau pokalbyje",
         "already_in_call_person": "Jūs jau esate pokalbyje su šiuo asmeniu.",
@@ -2437,7 +2354,6 @@
         "expand": "Grįžti prie skambučio",
         "hangup": "Padėti ragelį",
         "hide_sidebar_button": "Slėpti šoninę juostą",
-        "join_button_tooltip_connecting": "Jungiamasi",
         "misconfigured_server": "Skambutis nepavyko dėl neteisingai sukonfigūruoto serverio",
         "misconfigured_server_description": "Paprašykite savo serverio administratoriaus (<code>%(homeserverDomain)s</code>) sukonfiguruoti TURN serverį, kad skambučiai veiktų patikimai.",
         "more_button": "Daugiau",

@@ -2,12 +2,12 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { MatrixEvent, MatrixClient, TimelineEvents } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, type MatrixClient, type TimelineEvents } from "matrix-js-sdk/src/matrix";
 import { PollEndEvent } from "matrix-js-sdk/src/extensible_events_v1/PollEndEvent";
 
 import { _t } from "../../../languageHandler";
@@ -15,7 +15,7 @@ import QuestionDialog from "./QuestionDialog";
 import { findTopAnswer } from "../messages/MPollBody";
 import Modal from "../../../Modal";
 import ErrorDialog from "./ErrorDialog";
-import { GetRelationsForEvent } from "../rooms/EventTile";
+import { type GetRelationsForEvent } from "../rooms/EventTile";
 
 interface IProps {
     matrixClient: MatrixClient;

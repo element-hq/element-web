@@ -6,6 +6,7 @@ on:
     #schedule:
     #    - cron: "*/10 * * * *"
 concurrency: ${{ github.workflow }}
+permissions: {} # We use ELEMENT_BOT_TOKEN instead
 jobs:
     bot:
         name: Pending reviews bot

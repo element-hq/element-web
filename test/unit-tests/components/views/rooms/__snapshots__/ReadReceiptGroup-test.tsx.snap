@@ -2,15 +2,16 @@
 
 exports[`ReadReceiptGroup <ReadReceiptPerson /> should display a tooltip 1`] = `
 <div
-  class="_tooltip_1pslb_17"
-  id="floating-ui-6"
+  class="_tooltip_6ode6_8"
+  data-floating-ui-focusable=""
+  id=":r6:"
   role="tooltip"
   style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);"
   tabindex="-1"
 >
   <svg
     aria-hidden="true"
-    class="_arrow_1pslb_42"
+    class="_arrow_6ode6_33"
     height="10"
     style="position: absolute; pointer-events: none; top: 100%;"
     viewBox="0 0 10 10"
@@ -21,7 +22,7 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should display a tooltip 1`] = `
       stroke="none"
     />
     <clippath
-      id="floating-ui-9"
+      id=":r9:"
     >
       <rect
         height="10"
@@ -32,13 +33,13 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should display a tooltip 1`] = `
     </clippath>
   </svg>
   <span
-    id="floating-ui-4"
+    id=":r4:"
   >
     Alice
   </span>
   <span
-    class="_caption_1pslb_37 cpd-theme-dark"
-    id="floating-ui-5"
+    class="_caption_6ode6_28 cpd-theme-dark"
+    id=":r5:"
   >
     @alice:example.org
   </span>
@@ -57,7 +58,7 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should render 1`] = `
         aria-hidden="true"
         aria-label="Profile picture"
         aria-live="off"
-        class="_avatar_mcap2_17 mx_BaseAvatar"
+        class="_avatar_1qbcf_8 mx_BaseAvatar"
         data-color="3"
         data-testid="avatar-img"
         data-type="round"
@@ -65,7 +66,7 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should render 1`] = `
       >
         <img
           alt=""
-          class="_image_mcap2_50"
+          class="_image_1qbcf_41"
           data-type="round"
           height="24px"
           loading="lazy"
@@ -83,7 +84,7 @@ exports[`ReadReceiptGroup <ReadReceiptPerson /> should render 1`] = `
         <p
           class="mx_ReadReceiptGroup_secondary"
         >
-          Wed, 15 May, 0:00
+          ==MOCK FORMATTED DATE==
         </p>
       </div>
     </div>

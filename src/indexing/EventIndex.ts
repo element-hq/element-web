@@ -2,33 +2,33 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { EventEmitter } from "events";
 import {
     RoomMember,
-    Room,
+    type Room,
     RoomEvent,
-    RoomState,
+    type RoomState,
     RoomStateEvent,
-    MatrixEvent,
+    type MatrixEvent,
     Direction,
     EventTimeline,
-    EventTimelineSet,
-    IRoomTimelineData,
+    type EventTimelineSet,
+    type IRoomTimelineData,
     EventType,
     ClientEvent,
-    MatrixClient,
+    type MatrixClient,
     HTTPError,
-    IEventWithRoomId,
-    IMatrixProfile,
-    IResultRoomEvents,
-    SyncStateData,
-    SyncState,
-    TimelineIndex,
-    TimelineWindow,
+    type IEventWithRoomId,
+    type IMatrixProfile,
+    type IResultRoomEvents,
+    type SyncStateData,
+    type SyncState,
+    type TimelineIndex,
+    type TimelineWindow,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { sleep } from "matrix-js-sdk/src/utils";
@@ -38,7 +38,14 @@ import PlatformPeg from "../PlatformPeg";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import SettingsStore from "../settings/SettingsStore";
 import { SettingLevel } from "../settings/SettingLevel";
-import { ICrawlerCheckpoint, IEventAndProfile, IIndexStats, ILoadArgs, ISearchArgs } from "./BaseEventIndexManager";
+import {
+    type ICrawlerCheckpoint,
+    type IEventAndProfile,
+    type IIndexStats,
+    type ILoadArgs,
+    type ISearchArgs,
+} from "./BaseEventIndexManager";
+import { asyncFilter } from "../utils/arrays.ts";
 
 // The time in ms that the crawler will wait loop iterations if there
 // have not been any checkpoints to consume in the last iteration.
@@ -103,13 +110,11 @@ export default class EventIndex extends EventEmitter {
         const client = MatrixClientPeg.safeGet();
         const rooms = client.getRooms();
 
-        const isRoomEncrypted = (room: Room): boolean => {
-            return client.isRoomEncrypted(room.roomId);
-        };
-
         // We only care to crawl the encrypted rooms, non-encrypted
         // rooms can use the search provided by the homeserver.
-        const encryptedRooms = rooms.filter(isRoomEncrypted);
+        const encryptedRooms = await asyncFilter(rooms, async (room) =>
+            Boolean(await client.getCrypto()?.isEncryptionEnabledInRoom(room.roomId)),
+        );
 
         logger.log("EventIndex: Adding initial crawler checkpoints");
 
@@ -820,7 +825,11 @@ export default class EventIndex extends EventEmitter {
         // Add the events to the timeline of the file panel.
         matrixEvents.forEach((e) => {
             if (!timelineSet.eventIdToTimeline(e.getId()!)) {
-                timelineSet.addEventToTimeline(e, timeline, direction == EventTimeline.BACKWARDS);
+                timelineSet.addEventToTimeline(e, timeline, {
+                    toStartOfTimeline: direction == EventTimeline.BACKWARDS,
+                    fromCache: false,
+                    addToState: false,
+                });
             }
         });
 

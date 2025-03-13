@@ -2,12 +2,12 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room } from "matrix-js-sdk/src/matrix";
-import { EventEmitter } from "events";
+import { type Room } from "matrix-js-sdk/src/matrix";
+import { type EventEmitter } from "events";
 
 export const FILTER_CHANGED = "filter_changed";
 

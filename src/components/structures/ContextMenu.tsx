@@ -4,17 +4,16 @@ Copyright 2019 The Matrix.org Foundation C.I.C.
 Copyright 2018 New Vector Ltd
 Copyright 2015, 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { CSSProperties, RefObject, SyntheticEvent, useRef, useState } from "react";
+import React, { type CSSProperties, type RefObject, type SyntheticEvent, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import classNames from "classnames";
 import FocusLock from "react-focus-lock";
-import { TooltipProvider } from "@vector-im/compound-web";
 
-import { Writeable } from "../../@types/common";
+import { type Writeable } from "../../@types/common";
 import UIStore from "../../stores/UIStore";
 import { checkInputableElement, RovingTabIndexProvider } from "../../accessibility/RovingTabIndex";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
@@ -608,37 +607,9 @@ export const useContextMenu = <T extends any = HTMLElement>(inputRef?: RefObject
         setIsOpen(false);
     };
 
+    // eslint-disable-next-line react-compiler/react-compiler
     return [button.current ? isOpen : false, button, open, close, setIsOpen];
 };
-
-// XXX: Deprecated, used only for dynamic Tooltips. Avoid using at all costs.
-export function createMenu(
-    ElementClass: typeof React.Component,
-    props: Record<string, any>,
-): { close: (...args: any[]) => void } {
-    const onFinished = function (...args: any[]): void {
-        ReactDOM.unmountComponentAtNode(getOrCreateContainer());
-        props?.onFinished?.apply(null, args);
-    };
-
-    const menu = (
-        <TooltipProvider>
-            <ContextMenu
-                {...props}
-                mountAsChild={true}
-                hasBackground={false}
-                onFinished={onFinished} // eslint-disable-line react/jsx-no-bind
-                windowResize={onFinished} // eslint-disable-line react/jsx-no-bind
-            >
-                <ElementClass {...props} onFinished={onFinished} />
-            </ContextMenu>
-        </TooltipProvider>
-    );
-
-    ReactDOM.render(menu, getOrCreateContainer());
-
-    return { close: onFinished };
-}
 
 // re-export the semantic helper components for simplicity
 export { ContextMenuButton } from "../../accessibility/context_menu/ContextMenuButton";

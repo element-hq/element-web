@@ -2,11 +2,11 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 
 /**
  * Joins an array into one value with a joiner. E.g. join(["hello", "world"], " ") -> <span>hello world</span>

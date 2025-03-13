@@ -2,25 +2,25 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019-2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { EventType, Room } from "matrix-js-sdk/src/matrix";
+import { EventType, type Room } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../../languageHandler";
-import AccessibleButton, { ButtonEvent } from "../../../elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../../../elements/AccessibleButton";
 import RoomUpgradeDialog from "../../../dialogs/RoomUpgradeDialog";
 import Modal from "../../../../../Modal";
 import dis from "../../../../../dispatcher/dispatcher";
 import { Action } from "../../../../../dispatcher/actions";
 import CopyableText from "../../../elements/CopyableText";
-import { ViewRoomPayload } from "../../../../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../../../../dispatcher/payloads/ViewRoomPayload";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
-import SettingsSubsection from "../../shared/SettingsSubsection";
+import { SettingsSubsection } from "../../shared/SettingsSubsection";
 
 interface IProps {
     room: Room;
@@ -53,9 +53,11 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
     public constructor(props: IProps) {
         super(props);
 
-        const msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
-
         this.state = {};
+    }
+
+    public componentDidMount(): void {
+        const msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
 
         // we handle lack of this object gracefully later, so don't worry about it failing here.
         const room = this.props.room;

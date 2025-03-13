@@ -3,14 +3,14 @@ Copyright 2024 New Vector Ltd.
 Copyright 2021, 2022 Šimon Brandner <simon.bra.ag@gmail.com>
 Copyright 2015, 2016 , 2019, 2020, 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import classnames from "classnames";
-import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import React from "react";
-import { CallFeed, CallFeedEvent } from "matrix-js-sdk/src/webrtc/callFeed";
+import { type CallFeed, CallFeedEvent } from "matrix-js-sdk/src/webrtc/callFeed";
 import { logger } from "matrix-js-sdk/src/logger";
 import { SDPStreamMetadataPurpose } from "matrix-js-sdk/src/webrtc/callEventTypes";
 

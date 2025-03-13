@@ -2,21 +2,22 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019-2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import {
     GuestAccess,
     HistoryVisibility,
     JoinRule,
-    MatrixEvent,
+    type MatrixEvent,
     RoomStateEvent,
-    Room,
+    type Room,
     EventType,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
+import { InlineSpinner } from "@vector-im/compound-web";
 
 import { Icon as WarningIcon } from "../../../../../../res/img/warning.svg";
 import { _t } from "../../../../../languageHandler";
@@ -53,13 +54,13 @@ interface IState {
     guestAccess: GuestAccess;
     history: HistoryVisibility;
     hasAliases: boolean;
-    encrypted: boolean;
+    encrypted: boolean | null;
     showAdvancedSection: boolean;
 }
 
 export default class SecurityRoomSettingsTab extends React.Component<IProps, IState> {
     public static contextType = MatrixClientContext;
-    public declare context: React.ContextType<typeof MatrixClientContext>;
+    declare public context: React.ContextType<typeof MatrixClientContext>;
 
     public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
@@ -78,14 +79,18 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                 HistoryVisibility.Shared,
             ),
             hasAliases: false, // async loaded in componentDidMount
-            encrypted: context.isRoomEncrypted(this.props.room.roomId),
+            encrypted: null, // async loaded in componentDidMount
             showAdvancedSection: false,
         };
     }
 
-    public componentDidMount(): void {
+    public async componentDidMount(): Promise<void> {
         this.context.on(RoomStateEvent.Events, this.onStateEvent);
-        this.hasAliases().then((hasAliases) => this.setState({ hasAliases }));
+
+        this.setState({
+            hasAliases: await this.hasAliases(),
+            encrypted: Boolean(await this.context.getCrypto()?.isEncryptionEnabledInRoom(this.props.room.roomId)),
+        });
     }
 
     private pullContentPropertyFromEvent<T>(event: MatrixEvent | null | undefined, key: string, defaultValue: T): T {
@@ -415,6 +420,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         const client = this.context;
         const room = this.props.room;
         const isEncrypted = this.state.encrypted;
+        const isEncryptionLoading = isEncrypted === null;
         const hasEncryptionPermission = room.currentState.mayClientSendStateEvent(EventType.RoomEncryption, client);
         const isEncryptionForceDisabled = shouldForceDisableEncryption(client);
         const canEnableEncryption = !isEncrypted && !isEncryptionForceDisabled && hasEncryptionPermission;
@@ -447,18 +453,23 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                                 : _t("room_settings|security|encryption_permanent")
                         }
                     >
-                        <LabelledToggleSwitch
-                            value={isEncrypted}
-                            onChange={this.onEncryptionChange}
-                            label={_t("common|encrypted")}
-                            disabled={!canEnableEncryption}
-                        />
-                        {isEncryptionForceDisabled && !isEncrypted && (
-                            <Caption>{_t("room_settings|security|encryption_forced")}</Caption>
+                        {isEncryptionLoading ? (
+                            <InlineSpinner />
+                        ) : (
+                            <>
+                                <LabelledToggleSwitch
+                                    value={isEncrypted}
+                                    onChange={this.onEncryptionChange}
+                                    label={_t("common|encrypted")}
+                                    disabled={!canEnableEncryption}
+                                />
+                                {isEncryptionForceDisabled && !isEncrypted && (
+                                    <Caption>{_t("room_settings|security|encryption_forced")}</Caption>
+                                )}
+                                {encryptionSettings}
+                            </>
                         )}
-                        {encryptionSettings}
                     </SettingsFieldset>
-
                     {this.renderJoinRule()}
                     {historySection}
                 </SettingsSection>

@@ -4,26 +4,27 @@ Copyright 2019 The Matrix.org Foundation C.I.C.
 Copyright 2017 Vector Creations Ltd
 Copyright 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    IAddThreePidOnlyBody,
-    IAuthData,
-    IRequestMsisdnTokenResponse,
-    IRequestTokenResponse,
-    MatrixClient,
+    type IAddThreePidOnlyBody,
+    type IRequestMsisdnTokenResponse,
+    type IRequestTokenResponse,
+    type MatrixClient,
     MatrixError,
     HTTPError,
-    IThreepid,
+    type IThreepid,
 } from "matrix-js-sdk/src/matrix";
 
 import Modal from "./Modal";
 import { _t, UserFriendlyError } from "./languageHandler";
 import IdentityAuthClient from "./IdentityAuthClient";
 import { SSOAuthEntry } from "./components/views/auth/InteractiveAuthEntryComponents";
-import InteractiveAuthDialog, { InteractiveAuthDialogProps } from "./components/views/dialogs/InteractiveAuthDialog";
+import InteractiveAuthDialog, {
+    type InteractiveAuthDialogProps,
+} from "./components/views/dialogs/InteractiveAuthDialog";
 
 function getIdServerDomain(matrixClient: MatrixClient): string {
     const idBaseUrl = matrixClient.getIdentityServerUrl(true);
@@ -179,7 +180,7 @@ export default class AddThreepid {
      * with a "message" property which contains a human-readable message detailing why
      * the request failed.
      */
-    public async checkEmailLinkClicked(): Promise<[success?: boolean, result?: IAuthData | Error | null]> {
+    public async checkEmailLinkClicked(): Promise<[success?: boolean, result?: IAddThreePidOnlyBody | Error | null]> {
         try {
             if (this.bind) {
                 const authClient = new IdentityAuthClient();
@@ -201,7 +202,7 @@ export default class AddThreepid {
                     // implemented it without, so this may just succeed and that's OK.
                     return [true];
                 } catch (err) {
-                    if (!(err instanceof MatrixError) || err.httpStatus !== 401 || !err.data || !err.data.flows) {
+                    if (!(err instanceof MatrixError) || err.httpStatus !== 401 || !err.data?.flows) {
                         // doesn't look like an interactive-auth failure
                         throw err;
                     }
@@ -220,7 +221,7 @@ export default class AddThreepid {
                             continueKind: "primary",
                         },
                     };
-                    const { finished } = Modal.createDialog(InteractiveAuthDialog<{}>, {
+                    const { finished } = Modal.createDialog(InteractiveAuthDialog<IAddThreePidOnlyBody>, {
                         title: _t("settings|general|add_email_dialog_title"),
                         matrixClient: this.matrixClient,
                         authData: err.data,
@@ -247,6 +248,7 @@ export default class AddThreepid {
      * @param {{type: string, session?: string}} auth UI auth object
      * @return {Promise<Object>} Response from /3pid/add call (in current spec, an empty object)
      */
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     private makeAddThreepidOnlyRequest = (auth?: IAddThreePidOnlyBody["auth"] | null): Promise<{}> => {
         return this.matrixClient.addThreePidOnly({
             sid: this.sessionId!,
@@ -263,7 +265,9 @@ export default class AddThreepid {
      * with a "message" property which contains a human-readable message detailing why
      * the request failed.
      */
-    public async haveMsisdnToken(msisdnToken: string): Promise<[success?: boolean, result?: IAuthData | Error | null]> {
+    public async haveMsisdnToken(
+        msisdnToken: string,
+    ): Promise<[success?: boolean, result?: IAddThreePidOnlyBody | Error | null]> {
         const authClient = new IdentityAuthClient();
 
         if (this.submitUrl) {
@@ -300,7 +304,7 @@ export default class AddThreepid {
                 // implemented it without, so this may just succeed and that's OK.
                 return [true];
             } catch (err) {
-                if (!(err instanceof MatrixError) || err.httpStatus !== 401 || !err.data || !err.data.flows) {
+                if (!(err instanceof MatrixError) || err.httpStatus !== 401 || !err.data?.flows) {
                     // doesn't look like an interactive-auth failure
                     throw err;
                 }
@@ -319,7 +323,7 @@ export default class AddThreepid {
                         continueKind: "primary",
                     },
                 };
-                const { finished } = Modal.createDialog(InteractiveAuthDialog<{}>, {
+                const { finished } = Modal.createDialog(InteractiveAuthDialog<IAddThreePidOnlyBody>, {
                     title: _t("settings|general|add_msisdn_dialog_title"),
                     matrixClient: this.matrixClient,
                     authData: err.data,

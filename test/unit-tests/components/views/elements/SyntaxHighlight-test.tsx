@@ -1,8 +1,7 @@
-/* eslint @typescript-eslint/no-unused-vars: ["error", { "varsIgnorePattern": "^_" }] */
 // Copyright 2024 New Vector Ltd.
 // Copyright 2023 The Matrix.org Foundation C.I.C.
 //
-// SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+// SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 // Please see LICENSE files in the repository root for full details.
 
 import { render, waitFor } from "jest-matrix-react";
@@ -13,8 +12,10 @@ import SyntaxHighlight from "../../../../../src/components/views/elements/Syntax
 
 describe("<SyntaxHighlight />", () => {
     it("renders", async () => {
-        const { container } = render(<SyntaxHighlight>console.log("Hello, World!");</SyntaxHighlight>);
-        await waitFor(() => expect(container.querySelector(".language-arcade")).toBeTruthy());
+        const { container } = render(
+            <SyntaxHighlight language="javascript">console.log("Hello, World!");</SyntaxHighlight>,
+        );
+        await waitFor(() => expect(container.querySelector(".language-javascript")).toBeTruthy());
         expect(container).toMatchSnapshot();
     });
 
@@ -24,7 +25,7 @@ describe("<SyntaxHighlight />", () => {
         const { container } = render(<SyntaxHighlight language={lang}>// Hello, World</SyntaxHighlight>);
         await waitFor(() => expect(container.querySelector(`.language-${lang}`)).toBeTruthy());
 
-        const [_lang, opts] = mock.mock.lastCall!;
+        const [, opts] = mock.mock.lastCall!;
         expect((opts as unknown as HighlightOptions)["language"]).toBe(lang);
     });
 });

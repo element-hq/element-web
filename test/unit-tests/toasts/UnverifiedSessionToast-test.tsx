@@ -2,17 +2,16 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, RenderResult, screen } from "jest-matrix-react";
+import { render, type RenderResult, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
-import { mocked, Mocked } from "jest-mock";
-import { IMyDevice, MatrixClient } from "matrix-js-sdk/src/matrix";
-import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
-import { CryptoApi, DeviceVerificationStatus } from "matrix-js-sdk/src/crypto-api";
+import { mocked, type Mocked } from "jest-mock";
+import { type IMyDevice, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type CryptoApi, DeviceVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
 import dis from "../../../src/dispatcher/dispatcher";
 import { showToast } from "../../../src/toasts/UnverifiedSessionToast";
@@ -25,7 +24,6 @@ describe("UnverifiedSessionToast", () => {
     const otherDevice: IMyDevice = {
         device_id: "ABC123",
     };
-    const otherDeviceInfo = new DeviceInfo(otherDevice.device_id);
     let client: Mocked<MatrixClient>;
     let renderResult: RenderResult;
 
@@ -39,13 +37,6 @@ describe("UnverifiedSessionToast", () => {
             }
 
             throw new Error(`Unknown device ${deviceId}`);
-        });
-        client.getStoredDevice.mockImplementation((userId: string, deviceId: string) => {
-            if (deviceId === otherDevice.device_id) {
-                return otherDeviceInfo;
-            }
-
-            return null;
         });
         client.getCrypto.mockReturnValue({
             getDeviceVerificationStatus: jest
@@ -74,7 +65,8 @@ describe("UnverifiedSessionToast", () => {
             });
         };
 
-        it("should render as expected", () => {
+        it("should render as expected", async () => {
+            await expect(screen.findByText("New login. Was this you?")).resolves.toBeInTheDocument();
             expect(renderResult.baseElement).toMatchSnapshot();
         });
 

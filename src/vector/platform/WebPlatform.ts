@@ -3,7 +3,7 @@ Copyright 2017-2024 New Vector Ltd.
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -11,12 +11,11 @@ import UAParser from "ua-parser-js";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-import { UpdateCheckStatus, UpdateStatus } from "../../BasePlatform";
+import BasePlatform, { UpdateCheckStatus, type UpdateStatus } from "../../BasePlatform";
 import dis from "../../dispatcher/dispatcher";
 import { hideToast as hideUpdateToast, showToast as showUpdateToast } from "../../toasts/UpdateToast";
 import { Action } from "../../dispatcher/actions";
-import { CheckUpdatesPayload } from "../../dispatcher/payloads/CheckUpdatesPayload";
-import VectorBasePlatform from "./VectorBasePlatform";
+import { type CheckUpdatesPayload } from "../../dispatcher/payloads/CheckUpdatesPayload";
 import { parseQs } from "../url_utils";
 import { _t } from "../../languageHandler";
 
@@ -31,7 +30,7 @@ function getNormalizedAppVersion(version: string): string {
     return version;
 }
 
-export default class WebPlatform extends VectorBasePlatform {
+export default class WebPlatform extends BasePlatform {
     private static readonly VERSION = process.env.VERSION!; // baked in by Webpack
 
     public constructor() {
@@ -54,8 +53,8 @@ export default class WebPlatform extends VectorBasePlatform {
             return;
         }
 
-        await registration.update();
         navigator.serviceWorker.addEventListener("message", this.onServiceWorkerPostMessage.bind(this));
+        await registration.update();
     }
 
     private onServiceWorkerPostMessage(event: MessageEvent): void {

@@ -2,12 +2,12 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { OidcTokenRefresher, AccessTokens } from "matrix-js-sdk/src/matrix";
-import { IdTokenClaims } from "oidc-client-ts";
+import { OidcTokenRefresher, type AccessTokens } from "matrix-js-sdk/src/matrix";
+import { type IdTokenClaims } from "oidc-client-ts";
 
 import PlatformPeg from "../../PlatformPeg";
 import { persistAccessTokenInStorage, persistRefreshTokenInStorage } from "../tokens/tokens";

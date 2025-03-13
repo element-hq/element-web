@@ -4,7 +4,7 @@ Copyright 2019 The Matrix.org Foundation C.I.C.
 Copyright 2018 New Vector Ltd
 Copyright 2015, 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -14,15 +14,15 @@ import { SetPresence } from "matrix-js-sdk/src/matrix";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import dis from "./dispatcher/dispatcher";
 import Timer from "./utils/Timer";
-import { ActionPayload } from "./dispatcher/payloads";
+import { type ActionPayload } from "./dispatcher/payloads";
 
 // Time in ms after that a user is considered as unavailable/away
 const UNAVAILABLE_TIME_MS = 3 * 60 * 1000; // 3 mins
 
 class Presence {
-    private unavailableTimer: Timer | null = null;
-    private dispatcherRef: string | null = null;
-    private state: SetPresence | null = null;
+    private unavailableTimer?: Timer;
+    private dispatcherRef?: string;
+    private state?: SetPresence;
 
     /**
      * Start listening the user activity to evaluate his presence state.
@@ -36,7 +36,7 @@ class Presence {
             try {
                 await this.unavailableTimer.finished();
                 this.setState(SetPresence.Unavailable);
-            } catch (e) {
+            } catch {
                 /* aborted, stop got called */
             }
         }
@@ -46,14 +46,10 @@ class Presence {
      * Stop tracking user activity
      */
     public stop(): void {
-        if (this.dispatcherRef) {
-            dis.unregister(this.dispatcherRef);
-            this.dispatcherRef = null;
-        }
-        if (this.unavailableTimer) {
-            this.unavailableTimer.abort();
-            this.unavailableTimer = null;
-        }
+        dis.unregister(this.dispatcherRef);
+        this.dispatcherRef = undefined;
+        this.unavailableTimer?.abort();
+        this.unavailableTimer = undefined;
     }
 
     /**
@@ -61,7 +57,7 @@ class Presence {
      * @returns {string} the presence state (see PRESENCE enum)
      */
     public getState(): SetPresence | null {
-        return this.state;
+        return this.state ?? null;
     }
 
     private onAction = (payload: ActionPayload): void => {

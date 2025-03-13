@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2024 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -12,9 +12,9 @@ import { Alert } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
 import InlineSpinner from "../elements/InlineSpinner";
-import SettingsSubsection from "./shared/SettingsSubsection";
+import { SettingsSubsection } from "./shared/SettingsSubsection";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
-import { ThirdPartyIdentifier } from "../../../AddThreepid";
+import { type ThirdPartyIdentifier } from "../../../AddThreepid";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import { AddRemoveThreepids } from "./AddRemoveThreepids";
@@ -61,7 +61,7 @@ export const UserPersonalInfoSettings: React.FC<UserPersonalInfoSettingsProps> =
             setEmails(threepids.threepids.filter((a) => a.medium === ThreepidMedium.Email));
             setPhoneNumbers(threepids.threepids.filter((a) => a.medium === ThreepidMedium.Phone));
             setLoadingState("loaded");
-        } catch (e) {
+        } catch {
             setLoadingState("error");
         }
     }, [client]);
@@ -125,5 +125,3 @@ export const UserPersonalInfoSettings: React.FC<UserPersonalInfoSettingsProps> =
         </div>
     );
 };
-
-export default UserPersonalInfoSettings;

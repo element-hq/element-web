@@ -1,28 +1,28 @@
 /*
 Copyright 2018-2024 New Vector Ltd.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { Room, ClientEvent } from "matrix-js-sdk/src/matrix";
+import { type Room, ClientEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { IWidget } from "matrix-widget-api";
+import { type IWidget } from "matrix-widget-api";
 
-import { _t, _td, TranslationKey } from "../../../languageHandler";
+import { _t, _td, type TranslationKey } from "../../../languageHandler";
 import AppTile from "../elements/AppTile";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
 import AccessibleButton from "../elements/AccessibleButton";
-import WidgetUtils, { UserWidget } from "../../../utils/WidgetUtils";
+import WidgetUtils, { type UserWidget } from "../../../utils/WidgetUtils";
 import PersistedElement from "../elements/PersistedElement";
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import ContextMenu, { ChevronFace } from "../../structures/ContextMenu";
 import { WidgetType } from "../../../widgets/WidgetType";
 import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
-import { ActionPayload } from "../../../dispatcher/payloads";
-import ScalarAuthClient from "../../../ScalarAuthClient";
+import { type ActionPayload } from "../../../dispatcher/payloads";
+import type ScalarAuthClient from "../../../ScalarAuthClient";
 import GenericElementContextMenu from "../context_menus/GenericElementContextMenu";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
@@ -141,9 +141,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         if (client) client.removeListener(ClientEvent.AccountData, this.updateWidget);
         RightPanelStore.instance.off(UPDATE_EVENT, this.onRightPanelStoreUpdate);
         window.removeEventListener("resize", this.onResize);
-        if (this.dispatcherRef) {
-            dis.unregister(this.dispatcherRef);
-        }
+        dis.unregister(this.dispatcherRef);
     }
 
     public componentDidUpdate(): void {
@@ -202,11 +200,13 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
     };
 
     private defaultStickerpickerContent(): JSX.Element {
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        const imgSrc = require("../../../../res/img/stickerpack-placeholder.png");
         return (
             <AccessibleButton onClick={this.launchManageIntegrations} className="mx_Stickers_contentPlaceholder">
                 <p>{_t("stickers|empty")}</p>
                 <p className="mx_Stickers_addLink">{_t("stickers|empty_add_prompt")}</p>
-                <img src={require("../../../../res/img/stickerpack-placeholder.png")} alt="" />
+                <img src={imgSrc} alt="" />
             </AccessibleButton>
         );
     }

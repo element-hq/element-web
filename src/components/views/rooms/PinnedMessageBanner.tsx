@@ -2,14 +2,14 @@
  * Copyright 2024 New Vector Ltd.
  * Copyright 2024 The Matrix.org Foundation C.I.C.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { JSX, useEffect, useMemo, useState } from "react";
+import React, { type JSX, useEffect, useRef, useState } from "react";
 import PinIcon from "@vector-im/compound-design-tokens/assets/web/icons/pin-solid";
 import { Button } from "@vector-im/compound-web";
-import { M_POLL_START, MatrixEvent, MsgType, Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
 import { usePinnedEvents, useSortedFetchedPinnedEvents } from "../../../hooks/usePinnedEvents";
@@ -18,13 +18,14 @@ import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import { useEventEmitter } from "../../../hooks/useEventEmitter";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
-import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
-import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
+import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import dis from "../../../dispatcher/dispatcher";
-import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../../dispatcher/actions";
 import MessageEvent from "../messages/MessageEvent";
 import PosthogTrackers from "../../../PosthogTrackers.ts";
+import { EventPreview } from "./EventPreview.tsx";
+import type ResizeNotifier from "../../../utils/ResizeNotifier";
 
 /**
  * The props for the {@link PinnedMessageBanner} component.
@@ -38,12 +39,20 @@ interface PinnedMessageBannerProps {
      * The room where the banner is displayed
      */
     room: Room;
+    /**
+     * The resize notifier to notify the timeline to resize itself when the banner is displayed or hidden.
+     */
+    resizeNotifier: ResizeNotifier;
 }
 
 /**
  * A banner that displays the pinned messages in a room.
  */
-export function PinnedMessageBanner({ room, permalinkCreator }: PinnedMessageBannerProps): JSX.Element | null {
+export function PinnedMessageBanner({
+    room,
+    permalinkCreator,
+    resizeNotifier,
+}: PinnedMessageBannerProps): JSX.Element | null {
     const pinnedEventIds = usePinnedEvents(room);
     const pinnedEvents = useSortedFetchedPinnedEvents(room, pinnedEventIds);
     const eventCount = pinnedEvents.length;
@@ -56,6 +65,8 @@ export function PinnedMessageBanner({ room, permalinkCreator }: PinnedMessageBan
     }, [eventCount]);
 
     const pinnedEvent = pinnedEvents[currentEventIndex];
+    useNotifyTimeline(pinnedEvent, resizeNotifier);
+
     if (!pinnedEvent) return null;
 
     const shouldUseMessageEvent = pinnedEvent.isRedacted() || pinnedEvent.isDecryptionFailure();
@@ -105,7 +116,11 @@ export function PinnedMessageBanner({ room, permalinkCreator }: PinnedMessageBan
                             )}
                         </div>
                     )}
-                    <EventPreview pinnedEvent={pinnedEvent} />
+                    <EventPreview
+                        mxEvent={pinnedEvent}
+                        className="mx_PinnedMessageBanner_message"
+                        data-testid="banner-message"
+                    />
                     {/* In case of redacted event, we want to display the nice sentence of the message event like in the timeline or in the pinned message list */}
                     {shouldUseMessageEvent && (
                         <div className="mx_PinnedMessageBanner_redactedMessage">
@@ -125,81 +140,20 @@ export function PinnedMessageBanner({ room, permalinkCreator }: PinnedMessageBan
 }
 
 /**
- * The props for the {@link EventPreview} component.
- */
-interface EventPreviewProps {
-    /**
-     * The pinned event to display the preview for
-     */
-    pinnedEvent: MatrixEvent;
-}
-
-/**
- * A component that displays a preview for the pinned event.
- */
-function EventPreview({ pinnedEvent }: EventPreviewProps): JSX.Element | null {
-    const preview = useEventPreview(pinnedEvent);
-    if (!preview) return null;
-
-    const prefix = getPreviewPrefix(pinnedEvent.getType(), pinnedEvent.getContent().msgtype as MsgType);
-    if (!prefix)
-        return (
-            <span className="mx_PinnedMessageBanner_message" data-testid="banner-message">
-                {preview}
-            </span>
-        );
-
-    return (
-        <span className="mx_PinnedMessageBanner_message" data-testid="banner-message">
-            {_t(
-                "room|pinned_message_banner|preview",
-                {
-                    prefix,
-                    preview,
-                },
-                {
-                    bold: (sub) => <span className="mx_PinnedMessageBanner_prefix">{sub}</span>,
-                },
-            )}
-        </span>
-    );
-}
-
-/**
- * Hooks to generate a preview for the pinned event.
+ * When the banner is displayed or hidden, we want to notify the timeline to resize itself.
  * @param pinnedEvent
+ * @param resizeNotifier
  */
-function useEventPreview(pinnedEvent: MatrixEvent | null): string | null {
-    return useMemo(() => {
-        if (!pinnedEvent || pinnedEvent.isRedacted() || pinnedEvent.isDecryptionFailure()) return null;
-        return MessagePreviewStore.instance.generatePreviewForEvent(pinnedEvent);
-    }, [pinnedEvent]);
-}
+function useNotifyTimeline(pinnedEvent: MatrixEvent | null, resizeNotifier: ResizeNotifier): void {
+    const previousEvent = useRef<MatrixEvent | null>(null);
+    useEffect(() => {
+        // If we switch from a pinned message to no pinned message or the opposite, we want to resize the timeline
+        if ((previousEvent.current && !pinnedEvent) || (!previousEvent.current && pinnedEvent)) {
+            resizeNotifier.notifyTimelineHeightChanged();
+        }
 
-/**
- * Get the prefix for the preview based on the type and the message type.
- * @param type
- * @param msgType
- */
-function getPreviewPrefix(type: string, msgType: MsgType): string | null {
-    switch (type) {
-        case M_POLL_START.name:
-            return _t("room|pinned_message_banner|prefix|poll");
-        default:
-    }
-
-    switch (msgType) {
-        case MsgType.Audio:
-            return _t("room|pinned_message_banner|prefix|audio");
-        case MsgType.Image:
-            return _t("room|pinned_message_banner|prefix|image");
-        case MsgType.Video:
-            return _t("room|pinned_message_banner|prefix|video");
-        case MsgType.File:
-            return _t("room|pinned_message_banner|prefix|file");
-        default:
-            return null;
-    }
+        previousEvent.current = pinnedEvent;
+    }, [pinnedEvent, resizeNotifier]);
 }
 
 const MAX_INDICATORS = 3;

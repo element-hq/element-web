@@ -10,13 +10,13 @@ of dealing with the different levels and exposes easy to use getters and setters
 Granular Settings rely on a series of known levels in order to use the correct value for the scenario. These levels, in
 order of priority, are:
 
--   `device` - The current user's device
--   `room-device` - The current user's device, but only when in a specific room
--   `room-account` - The current user's account, but only when in a specific room
--   `account` - The current user's account
--   `room` - A specific room (setting for all members of the room)
--   `config` - Values are defined by the `setting_defaults` key (usually) in `config.json`
--   `default` - The hardcoded default for the settings
+- `device` - The current user's device
+- `room-device` - The current user's device, but only when in a specific room
+- `room-account` - The current user's account, but only when in a specific room
+- `account` - The current user's account
+- `room` - A specific room (setting for all members of the room)
+- `config` - Values are defined by the `setting_defaults` key (usually) in `config.json`
+- `default` - The hardcoded default for the settings
 
 Individual settings may control which levels are appropriate for them as part of the defaults. This is often to ensure
 that room administrators cannot force account-only settings upon participants.

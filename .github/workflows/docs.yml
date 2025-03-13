@@ -5,10 +5,7 @@ on:
         branches: [develop]
     workflow_dispatch: {}
 
-permissions:
-    contents: read
-    pages: write
-    id-token: write
+permissions: {}
 
 concurrency:
     group: "pages"
@@ -100,6 +97,9 @@ jobs:
             name: github-pages
             url: ${{ steps.deployment.outputs.page_url }}
         runs-on: ubuntu-24.04
+        permissions:
+            pages: write
+            id-token: write
         needs: build
         steps:
             - name: Deploy to GitHub Pages

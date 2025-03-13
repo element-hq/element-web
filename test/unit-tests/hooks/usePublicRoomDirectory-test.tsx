@@ -2,13 +2,12 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { waitFor } from "jest-matrix-react";
-import { renderHook, act } from "@testing-library/react-hooks/dom";
-import { IRoomDirectoryOptions, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { waitFor, renderHook, act } from "jest-matrix-react";
+import { type IRoomDirectoryOptions, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { usePublicRoomDirectory } from "../../../src/hooks/usePublicRoomDirectory";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
@@ -28,17 +27,15 @@ describe("usePublicRoomDirectory", () => {
         cli.getDomain = () => "matrix.org";
         cli.getThirdpartyProtocols = () => Promise.resolve({});
         cli.publicRooms = ({ filter }: IRoomDirectoryOptions) => {
-            const chunk = filter?.generic_search_term
-                ? [
-                      {
-                          room_id: "hello world!",
-                          name: filter.generic_search_term,
-                          world_readable: true,
-                          guest_can_join: true,
-                          num_joined_members: 1,
-                      },
-                  ]
-                : [];
+            const chunk = [
+                {
+                    room_id: "hello world!",
+                    name: filter?.generic_search_term ?? "", // If the query is "" no filter is applied(an is undefined here), in keeping with the pattern let's call the room ""
+                    world_readable: true,
+                    guest_can_join: true,
+                    num_joined_members: 1,
+                },
+            ];
             return Promise.resolve({
                 chunk,
                 total_room_count_estimate: 1,
@@ -68,7 +65,7 @@ describe("usePublicRoomDirectory", () => {
     });
 
     it("should work with empty queries", async () => {
-        const query = "ROOM NAME";
+        const query = "";
         const { result } = render();
 
         act(() => {

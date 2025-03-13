@@ -2,18 +2,19 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef } from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { CallErrorCode, CallState } from "matrix-js-sdk/src/webrtc/call";
 import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
 import MemberAvatar from "../avatars/MemberAvatar";
-import LegacyCallEventGrouper, { LegacyCallEventGrouperEvent } from "../../structures/LegacyCallEventGrouper";
+import type LegacyCallEventGrouper from "../../structures/LegacyCallEventGrouper";
+import { LegacyCallEventGrouperEvent } from "../../structures/LegacyCallEventGrouper";
 import AccessibleButton from "../elements/AccessibleButton";
 import InfoTooltip, { InfoTooltipKind } from "../elements/InfoTooltip";
 import { formatPreciseDuration } from "../../../DateUtils";
@@ -55,7 +56,7 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
         this.props.callEventGrouper.addListener(LegacyCallEventGrouperEvent.LengthChanged, this.onLengthChanged);
 
         this.resizeObserver = new ResizeObserver(this.resizeObserverCallback);
-        this.wrapperElement.current && this.resizeObserver.observe(this.wrapperElement.current);
+        if (this.wrapperElement.current) this.resizeObserver.observe(this.wrapperElement.current);
     }
 
     public componentWillUnmount(): void {

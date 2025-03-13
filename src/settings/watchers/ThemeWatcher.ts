@@ -3,24 +3,33 @@ Copyright 2024 New Vector Ltd.
 Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
+import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 
 import SettingsStore from "../SettingsStore";
 import dis from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import ThemeController from "../controllers/ThemeController";
-import { findHighContrastTheme, setTheme } from "../../theme";
-import { ActionPayload } from "../../dispatcher/payloads";
+import { findHighContrastTheme } from "../../theme";
+import { type ActionPayload } from "../../dispatcher/payloads";
 import { SettingLevel } from "../SettingLevel";
 
-export default class ThemeWatcher {
-    private themeWatchRef: string | null;
-    private systemThemeWatchRef: string | null;
-    private dispatcherRef: string | null;
+export enum ThemeWatcherEvent {
+    Change = "change",
+}
+
+interface ThemeWatcherEventHandlerMap {
+    [ThemeWatcherEvent.Change]: (theme: string) => void;
+}
+
+export default class ThemeWatcher extends TypedEventEmitter<ThemeWatcherEvent, ThemeWatcherEventHandlerMap> {
+    private themeWatchRef?: string;
+    private systemThemeWatchRef?: string;
+    private dispatcherRef?: string;
 
     private preferDark: MediaQueryList;
     private preferLight: MediaQueryList;
@@ -29,10 +38,7 @@ export default class ThemeWatcher {
     private currentTheme: string;
 
     public constructor() {
-        this.themeWatchRef = null;
-        this.systemThemeWatchRef = null;
-        this.dispatcherRef = null;
-
+        super();
         // we have both here as each may either match or not match, so by having both
         // we can get the tristate of dark/light/unsupported
         this.preferDark = (<any>global).matchMedia("(prefers-color-scheme: dark)");
@@ -55,9 +61,9 @@ export default class ThemeWatcher {
         this.preferDark.removeEventListener("change", this.onChange);
         this.preferLight.removeEventListener("change", this.onChange);
         this.preferHighContrast.removeEventListener("change", this.onChange);
-        if (this.systemThemeWatchRef) SettingsStore.unwatchSetting(this.systemThemeWatchRef);
-        if (this.themeWatchRef) SettingsStore.unwatchSetting(this.themeWatchRef);
-        if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
+        SettingsStore.unwatchSetting(this.systemThemeWatchRef);
+        SettingsStore.unwatchSetting(this.themeWatchRef);
+        dis.unregister(this.dispatcherRef);
     }
 
     private onChange = (): void => {
@@ -76,9 +82,7 @@ export default class ThemeWatcher {
     public recheck(forceTheme?: string): void {
         const oldTheme = this.currentTheme;
         this.currentTheme = forceTheme === undefined ? this.getEffectiveTheme() : forceTheme;
-        if (oldTheme !== this.currentTheme) {
-            setTheme(this.currentTheme);
-        }
+        if (oldTheme !== this.currentTheme) this.emit(ThemeWatcherEvent.Change, this.currentTheme);
     }
 
     public getEffectiveTheme(): string {

@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -24,14 +24,14 @@ test.describe("permalinks", () => {
         displayName: "Alice",
     });
 
-    test("shoud render permalinks as expected", async ({ page, app, user, homeserver }) => {
+    test("shoud render permalinks as expected", { tag: "@screenshot" }, async ({ page, app, user, homeserver }) => {
         const bob = new Bot(page, homeserver, { displayName: "Bob" });
         const charlotte = new Bot(page, homeserver, { displayName: "Charlotte" });
         await bob.prepareClient();
         await charlotte.prepareClient();
 
         // We don't use a bot for danielle as we want a stable MXID.
-        const danielleId = "@danielle:localhost";
+        const danielleId = `@danielle:${user.homeServer}`;
 
         const room1Id = await app.client.createRoom({ name: room1Name });
         const room2Id = await app.client.createRoom({ name: room2Name });

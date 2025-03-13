@@ -2,16 +2,21 @@
 Copyright 2017-2024 New Vector Ltd.
 Copyright 2016 Aviral Dasgupta
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, KeyboardEvent } from "react";
+import React, { createRef, type RefObject } from "react";
 import classNames from "classnames";
 import { flatMap } from "lodash";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk/src/matrix";
+import { defer } from "matrix-js-sdk/src/utils";
 
-import Autocompleter, { ICompletion, ISelectionRange, IProviderCompletions } from "../../../autocomplete/Autocompleter";
+import Autocompleter, {
+    type ICompletion,
+    type ISelectionRange,
+    type IProviderCompletions,
+} from "../../../autocomplete/Autocompleter";
 import SettingsStore from "../../../settings/SettingsStore";
 import RoomContext from "../../../contexts/RoomContext";
 
@@ -45,9 +50,10 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
     public queryRequested?: string;
     public debounceCompletionsRequest?: number;
     private containerRef = createRef<HTMLDivElement>();
+    private completionRefs: Record<string, RefObject<HTMLElement>> = {};
 
     public static contextType = RoomContext;
-    public declare context: React.ContextType<typeof RoomContext>;
+    declare public context: React.ContextType<typeof RoomContext>;
 
     public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
         super(props, context);
@@ -126,18 +132,21 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
     }
 
     private async processQuery(query: string, selection: ISelectionRange): Promise<void> {
-        return this.autocompleter
-            ?.getCompletions(query, selection, this.state.forceComplete, MAX_PROVIDER_MATCHES)
-            .then((completions) => {
-                // Only ever process the completions for the most recent query being processed
-                if (query !== this.queryRequested) {
-                    return;
-                }
-                this.processCompletions(completions);
-            });
+        if (!this.autocompleter) return;
+        const completions = await this.autocompleter.getCompletions(
+            query,
+            selection,
+            this.state.forceComplete,
+            MAX_PROVIDER_MATCHES,
+        );
+        // Only ever process the completions for the most recent query being processed
+        if (query !== this.queryRequested) {
+            return;
+        }
+        await this.processCompletions(completions);
     }
 
-    private processCompletions(completions: IProviderCompletions[]): void {
+    private async processCompletions(completions: IProviderCompletions[]): Promise<void> {
         const completionList = flatMap(completions, (provider) => provider.completions);
 
         // Reset selection when completion list becomes empty.
@@ -168,14 +177,19 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
             }
         }
 
-        this.setState({
-            completions,
-            completionList,
-            selectionOffset,
-            hide,
-            // Force complete is turned off each time since we can't edit the query in that case
-            forceComplete: false,
-        });
+        const deferred = defer<void>();
+        this.setState(
+            {
+                completions,
+                completionList,
+                selectionOffset,
+                hide,
+                // Force complete is turned off each time since we can't edit the query in that case
+                forceComplete: false,
+            },
+            deferred.resolve,
+        );
+        await deferred.promise;
     }
 
     public hasSelection(): boolean {
@@ -196,7 +210,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         this.setSelection(1 + index);
     }
 
-    public onEscape(e: KeyboardEvent): boolean | undefined {
+    public onEscape(e: KeyboardEvent | React.KeyboardEvent): boolean | undefined {
         const completionCount = this.countCompletions();
         if (completionCount === 0) {
             // autocomplete is already empty, so don't preventDefault
@@ -260,7 +274,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
     public componentDidUpdate(prevProps: IProps): void {
         this.applyNewProps(prevProps.query, prevProps.room);
         // this is the selected completion, so scroll it into view if needed
-        const selectedCompletion = this.refs[`completion${this.state.selectionOffset}`] as HTMLElement;
+        const selectedCompletion = this.completionRefs[`completion${this.state.selectionOffset}`]?.current;
 
         if (selectedCompletion) {
             selectedCompletion.scrollIntoView({
@@ -286,9 +300,13 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
                         this.onCompletionClicked(componentPosition);
                     };
 
+                    const refId = `completion${componentPosition}`;
+                    if (!this.completionRefs[refId]) {
+                        this.completionRefs[refId] = createRef();
+                    }
                     return React.cloneElement(completion.component, {
                         "key": j,
-                        "ref": `completion${componentPosition}`,
+                        "ref": this.completionRefs[refId],
                         "id": generateCompletionDomId(componentPosition - 1), // 0 index the completion IDs
                         className,
                         onClick,

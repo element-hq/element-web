@@ -2,20 +2,20 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { createRef, ClipboardEvent, SyntheticEvent } from "react";
-import { Room, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import React, { createRef, type ClipboardEvent, type SyntheticEvent } from "react";
+import { type Room, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import EMOTICON_REGEX from "emojibase-regex/emoticon";
 import { logger } from "matrix-js-sdk/src/logger";
 import { EMOTICON_TO_EMOJI } from "@matrix-org/emojibase-bindings";
 
-import EditorModel from "../../../editor/model";
+import type EditorModel from "../../../editor/model";
 import HistoryManager from "../../../editor/history";
-import { Caret, setSelection } from "../../../editor/caret";
+import { type Caret, setSelection } from "../../../editor/caret";
 import {
     formatRange,
     formatRangeAsLink,
@@ -24,7 +24,7 @@ import {
 } from "../../../editor/operations";
 import { getCaretOffsetAndText, getRangeForSelection } from "../../../editor/dom";
 import Autocomplete, { generateCompletionDomId } from "../rooms/Autocomplete";
-import { getAutoCompleteCreator, Part, SerializedPart, Type } from "../../../editor/parts";
+import { getAutoCompleteCreator, type Part, type SerializedPart, Type } from "../../../editor/parts";
 import { parseEvent, parsePlainTextMessage } from "../../../editor/deserialize";
 import { renderModel } from "../../../editor/render";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -32,11 +32,11 @@ import { IS_MAC, Key } from "../../../Keyboard";
 import { CommandCategories, CommandMap, parseCommandString } from "../../../SlashCommands";
 import Range from "../../../editor/range";
 import MessageComposerFormatBar, { Formatting } from "./MessageComposerFormatBar";
-import DocumentOffset from "../../../editor/offset";
-import { IDiff } from "../../../editor/diff";
-import AutocompleteWrapperModel from "../../../editor/autocomplete";
-import DocumentPosition from "../../../editor/position";
-import { ICompletion } from "../../../autocomplete/Autocompleter";
+import type DocumentOffset from "../../../editor/offset";
+import { type IDiff } from "../../../editor/diff";
+import type AutocompleteWrapperModel from "../../../editor/autocomplete";
+import type DocumentPosition from "../../../editor/position";
+import { type ICompletion } from "../../../autocomplete/Autocompleter";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { ALTERNATE_KEY_NAME, KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { _t } from "../../../languageHandler";
@@ -128,10 +128,10 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     private lastCaret!: DocumentOffset;
     private lastSelection: ReturnType<typeof cloneSelection> | null = null;
 
-    private readonly useMarkdownHandle: string;
-    private readonly emoticonSettingHandle: string;
-    private readonly shouldShowPillAvatarSettingHandle: string;
-    private readonly surroundWithHandle: string;
+    private useMarkdownHandle?: string;
+    private emoticonSettingHandle?: string;
+    private shouldShowPillAvatarSettingHandle?: string;
+    private surroundWithHandle?: string;
     private readonly historyManager = new HistoryManager();
 
     public constructor(props: IProps) {
@@ -145,28 +145,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
         const ua = navigator.userAgent.toLowerCase();
         this.isSafari = ua.includes("safari/") && !ua.includes("chrome/");
-
-        this.useMarkdownHandle = SettingsStore.watchSetting(
-            "MessageComposerInput.useMarkdown",
-            null,
-            this.configureUseMarkdown,
-        );
-        this.emoticonSettingHandle = SettingsStore.watchSetting(
-            "MessageComposerInput.autoReplaceEmoji",
-            null,
-            this.configureEmoticonAutoReplace,
-        );
         this.configureEmoticonAutoReplace();
-        this.shouldShowPillAvatarSettingHandle = SettingsStore.watchSetting(
-            "Pill.shouldShowPillAvatar",
-            null,
-            this.configureShouldShowPillAvatar,
-        );
-        this.surroundWithHandle = SettingsStore.watchSetting(
-            "MessageComposerInput.surroundWith",
-            null,
-            this.surroundWithSettingChanged,
-        );
     }
 
     public componentDidUpdate(prevProps: IProps): void {
@@ -737,6 +716,27 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     }
 
     public componentDidMount(): void {
+        this.useMarkdownHandle = SettingsStore.watchSetting(
+            "MessageComposerInput.useMarkdown",
+            null,
+            this.configureUseMarkdown,
+        );
+        this.emoticonSettingHandle = SettingsStore.watchSetting(
+            "MessageComposerInput.autoReplaceEmoji",
+            null,
+            this.configureEmoticonAutoReplace,
+        );
+        this.shouldShowPillAvatarSettingHandle = SettingsStore.watchSetting(
+            "Pill.shouldShowPillAvatar",
+            null,
+            this.configureShouldShowPillAvatar,
+        );
+        this.surroundWithHandle = SettingsStore.watchSetting(
+            "MessageComposerInput.surroundWith",
+            null,
+            this.surroundWithSettingChanged,
+        );
+
         const model = this.props.model;
         model.setUpdateCallback(this.updateEditorState);
         const partCreator = model.partCreator;

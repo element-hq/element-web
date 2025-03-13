@@ -3,12 +3,12 @@ Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 Copyright 2019 Tulir Asokan <tulir@maunium.net>
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { Dispatch } from "react";
-import { DATA_BY_CATEGORY, getEmojiFromUnicode, Emoji as IEmoji } from "@matrix-org/emojibase-bindings";
+import React, { type Dispatch } from "react";
+import { DATA_BY_CATEGORY, getEmojiFromUnicode, type Emoji as IEmoji } from "@matrix-org/emojibase-bindings";
 
 import { _t } from "../../../languageHandler";
 import * as recent from "../../../emojipicker/recent";
@@ -17,18 +17,17 @@ import Header from "./Header";
 import Search from "./Search";
 import Preview from "./Preview";
 import QuickReactions from "./QuickReactions";
-import Category, { CategoryKey, ICategory } from "./Category";
+import Category, { type CategoryKey, type ICategory } from "./Category";
 import { filterBoolean } from "../../../utils/arrays";
 import {
-    IAction as RovingAction,
-    IState as RovingState,
+    type IAction as RovingAction,
+    type IState as RovingState,
     RovingTabIndexProvider,
     Type,
 } from "../../../accessibility/RovingTabIndex";
 import { Key } from "../../../Keyboard";
 import { clamp } from "../../../utils/numbers";
-import { ButtonEvent } from "../elements/AccessibleButton";
-import { Ref } from "../../../accessibility/roving/types";
+import { type ButtonEvent } from "../elements/AccessibleButton";
 
 export const CATEGORY_HEADER_HEIGHT = 20;
 export const EMOJI_HEIGHT = 35;
@@ -154,47 +153,47 @@ class EmojiPicker extends React.Component<IProps, IState> {
     };
 
     private keyboardNavigation(ev: React.KeyboardEvent, state: RovingState, dispatch: Dispatch<RovingAction>): void {
-        const node = state.activeRef?.current;
+        const node = state.activeNode;
         const parent = node?.parentElement;
-        if (!parent || !state.activeRef) return;
+        if (!parent || !state.activeNode) return;
         const rowIndex = Array.from(parent.children).indexOf(node);
-        const refIndex = state.refs.indexOf(state.activeRef);
+        const refIndex = state.nodes.indexOf(state.activeNode);
 
-        let focusRef: Ref | undefined;
+        let focusNode: HTMLElement | undefined;
         let newParent: HTMLElement | undefined;
         switch (ev.key) {
             case Key.ARROW_LEFT:
-                focusRef = state.refs[refIndex - 1];
-                newParent = focusRef?.current?.parentElement ?? undefined;
+                focusNode = state.nodes[refIndex - 1];
+                newParent = focusNode?.parentElement ?? undefined;
                 break;
 
             case Key.ARROW_RIGHT:
-                focusRef = state.refs[refIndex + 1];
-                newParent = focusRef?.current?.parentElement ?? undefined;
+                focusNode = state.nodes[refIndex + 1];
+                newParent = focusNode?.parentElement ?? undefined;
                 break;
 
             case Key.ARROW_UP:
             case Key.ARROW_DOWN: {
                 // For up/down we find the prev/next parent by inspecting the refs either side of our row
-                const ref =
+                const node =
                     ev.key === Key.ARROW_UP
-                        ? state.refs[refIndex - rowIndex - 1]
-                        : state.refs[refIndex - rowIndex + EMOJIS_PER_ROW];
-                newParent = ref?.current?.parentElement ?? undefined;
+                        ? state.nodes[refIndex - rowIndex - 1]
+                        : state.nodes[refIndex - rowIndex + EMOJIS_PER_ROW];
+                newParent = node?.parentElement ?? undefined;
                 const newTarget = newParent?.children[clamp(rowIndex, 0, newParent.children.length - 1)];
-                focusRef = state.refs.find((r) => r.current === newTarget);
+                focusNode = state.nodes.find((r) => r === newTarget);
                 break;
             }
         }
 
-        if (focusRef) {
+        if (focusNode) {
             dispatch({
                 type: Type.SetFocus,
-                payload: { ref: focusRef },
+                payload: { node: focusNode },
             });
 
             if (parent !== newParent) {
-                focusRef.current?.scrollIntoView({
+                focusNode?.scrollIntoView({
                     behavior: "auto",
                     block: "center",
                     inline: "center",
@@ -207,10 +206,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
     }
 
     private onKeyDown = (ev: React.KeyboardEvent, state: RovingState, dispatch: Dispatch<RovingAction>): void => {
-        if (
-            state.activeRef?.current &&
-            [Key.ARROW_DOWN, Key.ARROW_RIGHT, Key.ARROW_LEFT, Key.ARROW_UP].includes(ev.key)
-        ) {
+        if (state.activeNode && [Key.ARROW_DOWN, Key.ARROW_RIGHT, Key.ARROW_LEFT, Key.ARROW_UP].includes(ev.key)) {
             this.keyboardNavigation(ev, state, dispatch);
         }
     };

@@ -2,15 +2,15 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2016-2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ComponentProps } from "react";
-import { Room, MatrixEvent, MatrixClient, User, EventType } from "matrix-js-sdk/src/matrix";
+import React, { type ComponentProps } from "react";
+import { type Room, type MatrixEvent, type MatrixClient, type User, EventType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import MultiInviter, { CompletionStates } from "./utils/MultiInviter";
+import MultiInviter, { type CompletionStates } from "./utils/MultiInviter";
 import Modal from "./Modal";
 import { _t } from "./languageHandler";
 import InviteDialog from "./components/views/dialogs/InviteDialog";
@@ -18,7 +18,7 @@ import BaseAvatar from "./components/views/avatars/BaseAvatar";
 import { mediaFromMxc } from "./customisations/Media";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import { InviteKind } from "./components/views/dialogs/InviteDialogTypes";
-import { Member } from "./utils/direct-messages";
+import { type Member } from "./utils/direct-messages";
 
 export interface IInviteResult {
     states: CompletionStates;
@@ -35,14 +35,14 @@ export interface IInviteResult {
  * @param {function} progressCallback optional callback, fired after each invite.
  * @returns {Promise} Promise
  */
-export function inviteMultipleToRoom(
+export async function inviteMultipleToRoom(
     client: MatrixClient,
     roomId: string,
     addresses: string[],
     progressCallback?: () => void,
 ): Promise<IInviteResult> {
     const inviter = new MultiInviter(client, roomId, progressCallback);
-    return inviter.invite(addresses, undefined).then((states) => Promise.resolve({ states, inviter }));
+    return { states: await inviter.invite(addresses), inviter };
 }
 
 export function showStartChatInviteDialog(initialText = ""): void {
@@ -104,7 +104,7 @@ export function inviteUsersToRoom(
             logger.error(err.stack);
             Modal.createDialog(ErrorDialog, {
                 title: _t("invite|failed_title"),
-                description: err && err.message ? err.message : _t("invite|failed_generic"),
+                description: err?.message ?? _t("invite|failed_generic"),
             });
         });
 }

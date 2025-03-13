@@ -2,34 +2,34 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import * as React from "react";
 import classNames from "classnames";
 import { Text } from "@vector-im/compound-web";
+import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 
-import ToastStore, { IToast } from "../../stores/ToastStore";
+import ToastStore, { type IToast } from "../../stores/ToastStore";
 
 interface IState {
     toasts: IToast<any>[];
     countSeen: number;
 }
 
-export default class ToastContainer extends React.Component<{}, IState> {
-    public constructor(props: {}) {
+export default class ToastContainer extends React.Component<EmptyObject, IState> {
+    public constructor(props: EmptyObject) {
         super(props);
         this.state = {
             toasts: ToastStore.sharedInstance().getToasts(),
             countSeen: ToastStore.sharedInstance().getCountSeen(),
         };
+    }
 
-        // Start listening here rather than in componentDidMount because
-        // toasts may dismiss themselves in their didMount if they find
-        // they're already irrelevant by the time they're mounted, and
-        // our own componentDidMount is too late.
+    public componentDidMount(): void {
         ToastStore.sharedInstance().on("update", this.onToastStoreUpdate);
+        this.onToastStoreUpdate();
     }
 
     public componentWillUnmount(): void {

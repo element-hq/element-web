@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021, 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -28,10 +28,11 @@ Please see LICENSE files in the repository root for full details.
 
     /* Waveforms are present in live recording only */
     .mx_Waveform {
+        /* default, overridden in JS */
+        --barHeight: 1;
         .mx_Waveform_bar {
             background-color: $quaternary-content;
             height: 100%;
-            /* Variable set by a JS component */
             transform: scaleY(max(0.05, var(--barHeight)));
 
             &.mx_Waveform_bar_100pct {

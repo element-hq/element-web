@@ -2,20 +2,20 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import { render, waitFor } from "jest-matrix-react";
-import { EventTimeline, MatrixEvent, Room, M_TEXT } from "matrix-js-sdk/src/matrix";
+import { type EventTimeline, type MatrixEvent, Room, M_TEXT } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { IBodyProps } from "../../../../../src/components/views/messages/IBodyProps";
+import { type IBodyProps } from "../../../../../src/components/views/messages/IBodyProps";
 import { MPollEndBody } from "../../../../../src/components/views/messages/MPollEndBody";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
-import { MediaEventHelper } from "../../../../../src/utils/MediaEventHelper";
+import { type RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
+import { type MediaEventHelper } from "../../../../../src/utils/MediaEventHelper";
 import {
     flushPromises,
     getMockClientWithEventEmitter,
@@ -121,12 +121,13 @@ describe("<MPollEndBody />", () => {
     describe("when poll start event does not exist in current timeline", () => {
         it("fetches the related poll start event and displays a poll tile", async () => {
             await setupRoomWithEventsTimeline(pollEndEvent);
-            const { container, getByTestId, getByRole } = getComponent();
+            const { container, getByTestId, getByRole, queryByRole } = getComponent();
 
             // while fetching event, only icon is shown
             expect(container).toMatchSnapshot();
 
             await waitFor(() => expect(getByRole("progressbar")).toBeInTheDocument());
+            await waitFor(() => expect(queryByRole("progressbar")).not.toBeInTheDocument());
 
             expect(mockClient.fetchRoomEvent).toHaveBeenCalledWith(roomId, pollStartEvent.getId());
 

@@ -2,12 +2,12 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    Capability,
+    type Capability,
     EventDirection,
     EventKind,
     getTimelineRoomIDFromCapability,
@@ -21,7 +21,7 @@ import {
 import { EventType, MsgType } from "matrix-js-sdk/src/matrix";
 import React from "react";
 
-import { _t, _td, TranslatedString, TranslationKey } from "../languageHandler";
+import { _t, _td, type TranslatedString, type TranslationKey } from "../languageHandler";
 import { ElementWidgetCapabilities } from "../stores/widgets/ElementWidgetCapabilities";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import TextWithTooltip from "../components/views/elements/TextWithTooltip";

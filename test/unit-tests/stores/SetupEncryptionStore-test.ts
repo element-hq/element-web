@@ -2,18 +2,15 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked, Mocked } from "jest-mock";
-import { IBootstrapCrossSigningOpts } from "matrix-js-sdk/src/crypto";
-import { MatrixClient, Device } from "matrix-js-sdk/src/matrix";
-import { SecretStorageKeyDescriptionAesV1, ServerSideSecretStorage } from "matrix-js-sdk/src/secret-storage";
-import { IDehydratedDevice } from "matrix-js-sdk/src/crypto/dehydration";
-import { CryptoApi, DeviceVerificationStatus } from "matrix-js-sdk/src/crypto-api";
+import { mocked, type Mocked } from "jest-mock";
+import { type MatrixClient, Device } from "matrix-js-sdk/src/matrix";
+import { type SecretStorageKeyDescriptionAesV1, type ServerSideSecretStorage } from "matrix-js-sdk/src/secret-storage";
+import { type BootstrapCrossSigningOpts, type CryptoApi, DeviceVerificationStatus } from "matrix-js-sdk/src/crypto-api";
 
-import { SdkContextClass } from "../../../src/contexts/SDKContext";
 import { accessSecretStorage } from "../../../src/SecurityManager";
 import { SetupEncryptionStore } from "../../../src/stores/SetupEncryptionStore";
 import { emitPromise, stubClient } from "../../test-utils";
@@ -23,7 +20,6 @@ jest.mock("../../../src/SecurityManager", () => ({
 }));
 
 describe("SetupEncryptionStore", () => {
-    const cachedPassword = "p4assword";
     let client: Mocked<MatrixClient>;
     let mockCrypto: Mocked<CryptoApi>;
     let mockSecretStorage: Mocked<ServerSideSecretStorage>;
@@ -39,6 +35,7 @@ describe("SetupEncryptionStore", () => {
             getDeviceVerificationStatus: jest.fn(),
             isDehydrationSupported: jest.fn().mockResolvedValue(false),
             startDehydration: jest.fn(),
+            getKeyBackupInfo: jest.fn().mockResolvedValue(null),
         } as unknown as Mocked<CryptoApi>;
         client.getCrypto.mockReturnValue(mockCrypto);
 
@@ -48,11 +45,6 @@ describe("SetupEncryptionStore", () => {
         Object.defineProperty(client, "secretStorage", { value: mockSecretStorage });
 
         setupEncryptionStore = new SetupEncryptionStore();
-        SdkContextClass.instance.accountPasswordStore.setPassword(cachedPassword);
-    });
-
-    afterEach(() => {
-        SdkContextClass.instance.accountPasswordStore.clearPassword();
     });
 
     describe("start", () => {
@@ -95,28 +87,6 @@ describe("SetupEncryptionStore", () => {
             await emitPromise(setupEncryptionStore, "update");
 
             expect(setupEncryptionStore.hasDevicesToVerifyAgainst).toBe(true);
-        });
-
-        it("should ignore the MSC2697 dehydrated device", async () => {
-            mockSecretStorage.isStored.mockResolvedValue({ sskeyid: {} as SecretStorageKeyDescriptionAesV1 });
-
-            client.getDehydratedDevice.mockResolvedValue({ device_id: "dehydrated" } as IDehydratedDevice);
-
-            const fakeDevice = new Device({
-                deviceId: "dehydrated",
-                userId: "",
-                algorithms: [],
-                keys: new Map([["curve25519:dehydrated", "identityKey"]]),
-            });
-            mockCrypto.getUserDeviceInfo.mockResolvedValue(
-                new Map([[client.getSafeUserId(), new Map([[fakeDevice.deviceId, fakeDevice]])]]),
-            );
-
-            setupEncryptionStore.start();
-            await emitPromise(setupEncryptionStore, "update");
-
-            expect(setupEncryptionStore.hasDevicesToVerifyAgainst).toBe(false);
-            expect(mockCrypto.getDeviceVerificationStatus).not.toHaveBeenCalled();
         });
 
         it("should ignore the MSC3812 dehydrated device", async () => {
@@ -185,7 +155,7 @@ describe("SetupEncryptionStore", () => {
 
     it("resetConfirm should work with a cached account password", async () => {
         const makeRequest = jest.fn();
-        mockCrypto.bootstrapCrossSigning.mockImplementation(async (opts: IBootstrapCrossSigningOpts) => {
+        mockCrypto.bootstrapCrossSigning.mockImplementation(async (opts: BootstrapCrossSigningOpts) => {
             await opts?.authUploadDeviceSigningKeys?.(makeRequest);
         });
         mocked(accessSecretStorage).mockImplementation(async (func?: () => Promise<void>) => {
@@ -194,15 +164,9 @@ describe("SetupEncryptionStore", () => {
 
         await setupEncryptionStore.resetConfirm();
 
-        expect(mocked(accessSecretStorage)).toHaveBeenCalledWith(expect.any(Function), true);
-        expect(makeRequest).toHaveBeenCalledWith({
-            identifier: {
-                type: "m.id.user",
-                user: "@userId:matrix.org",
-            },
-            password: cachedPassword,
-            type: "m.login.password",
-            user: "@userId:matrix.org",
+        expect(mocked(accessSecretStorage)).toHaveBeenCalledWith(expect.any(Function), {
+            forceReset: true,
+            resetCrossSigning: true,
         });
     });
 });

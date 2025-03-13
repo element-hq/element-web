@@ -2,14 +2,14 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode, useContext, useEffect, useState } from "react";
+import React, { type ReactNode, useContext, useEffect, useState } from "react";
 import classNames from "classnames";
 import * as maplibregl from "maplibre-gl";
-import { ClientEvent, IClientWellKnown } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, type IClientWellKnown } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -17,7 +17,7 @@ import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import { parseGeoUri, positionFailureMessage } from "../../../utils/location";
 import { tileServerFromWellKnown } from "../../../utils/WellKnownUtils";
 import { useMap } from "../../../utils/location/useMap";
-import { Bounds } from "../../../utils/beacon/bounds";
+import { type Bounds } from "../../../utils/beacon/bounds";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import { _t } from "../../../languageHandler";
@@ -66,8 +66,8 @@ const useMapWithStyle = ({
                     throw new Error("Invalid geo URI");
                 }
                 map.setCenter({ lon: coords.longitude, lat: coords.latitude });
-            } catch (_error) {
-                logger.error("Could not set map center");
+            } catch (e) {
+                logger.error("Could not set map center", e);
             }
         }
     }, [map, centerGeoUri]);
@@ -80,8 +80,8 @@ const useMapWithStyle = ({
                     [bounds.east, bounds.north],
                 );
                 map.fitBounds(lngLatBounds, { padding: 100, maxZoom: 15 });
-            } catch (_error) {
-                logger.error("Invalid map bounds");
+            } catch (e) {
+                logger.error("Invalid map bounds", e);
             }
         }
     }, [map, bounds]);
@@ -170,7 +170,7 @@ const MapComponent: React.FC<MapProps> = ({
             return;
         }
 
-        onClick && onClick();
+        onClick?.();
     };
 
     return (

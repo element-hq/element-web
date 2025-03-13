@@ -2,19 +2,18 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, RenderResult } from "jest-matrix-react";
-import { MatrixClient, MatrixEvent, EventType, Room, MsgType } from "matrix-js-sdk/src/matrix";
+import { render, type RenderResult } from "jest-matrix-react";
+import { type MatrixClient, type MatrixEvent, EventType, type Room, MsgType } from "matrix-js-sdk/src/matrix";
 import fetchMock from "fetch-mock-jest";
 import fs from "fs";
 import path from "path";
 
 import SettingsStore from "../../../../../src/settings/SettingsStore";
-import { VoiceBroadcastInfoEventType, VoiceBroadcastInfoState } from "../../../../../src/voice-broadcast";
 import { mkEvent, mkRoom, stubClient } from "../../../../test-utils";
 import MessageEvent from "../../../../../src/components/views/messages/MessageEvent";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
@@ -24,13 +23,19 @@ jest.mock("../../../../../src/components/views/messages/UnknownBody", () => ({
     default: () => <div data-testid="unknown-body" />,
 }));
 
-jest.mock("../../../../../src/voice-broadcast/components/VoiceBroadcastBody", () => ({
-    VoiceBroadcastBody: () => <div data-testid="voice-broadcast-body" />,
-}));
-
 jest.mock("../../../../../src/components/views/messages/MImageBody", () => ({
     __esModule: true,
     default: () => <div data-testid="image-body" />,
+}));
+
+jest.mock("../../../../../src/components/views/messages/MVideoBody", () => ({
+    __esModule: true,
+    default: () => <div data-testid="video-body" />,
+}));
+
+jest.mock("../../../../../src/components/views/messages/MFileBody", () => ({
+    __esModule: true,
+    default: () => <div data-testid="file-body" />,
 }));
 
 jest.mock("../../../../../src/components/views/messages/MImageReplyBody", () => ({
@@ -71,32 +76,11 @@ describe("MessageEvent", () => {
         jest.spyOn(SettingsStore, "unwatchSetting").mockImplementation(jest.fn());
     });
 
-    describe("when a voice broadcast start event occurs", () => {
-        let result: RenderResult;
-
-        beforeEach(() => {
-            event = mkEvent({
-                event: true,
-                type: VoiceBroadcastInfoEventType,
-                user: client.getUserId()!,
-                room: room.roomId,
-                content: {
-                    state: VoiceBroadcastInfoState.Started,
-                },
-            });
-            result = renderMessageEvent();
-        });
-
-        it("should render a VoiceBroadcast component", () => {
-            result.getByTestId("voice-broadcast-body");
-        });
-    });
-
     describe("when an image with a caption is sent", () => {
         let result: RenderResult;
 
-        beforeEach(() => {
-            event = mkEvent({
+        function createEvent(mimetype: string, filename: string, msgtype: string) {
+            return mkEvent({
                 event: true,
                 type: EventType.RoomMessage,
                 user: client.getUserId()!,
@@ -105,19 +89,19 @@ describe("MessageEvent", () => {
                     body: "caption for a test image",
                     format: "org.matrix.custom.html",
                     formatted_body: "<strong>caption for a test image</strong>",
-                    msgtype: MsgType.Image,
-                    filename: "image.webp",
+                    msgtype: msgtype,
+                    filename: filename,
                     info: {
                         w: 40,
                         h: 50,
+                        mimetype: mimetype,
                     },
                     url: "mxc://server/image",
                 },
             });
-            result = renderMessageEvent();
-        });
+        }
 
-        it("should render a TextualBody and an ImageBody", () => {
+        function mockMedia() {
             fetchMock.getOnce(
                 "https://server/_matrix/media/v3/download/server/image",
                 {
@@ -125,7 +109,37 @@ describe("MessageEvent", () => {
                 },
                 { sendAsJson: false },
             );
+        }
+
+        it("should render a TextualBody and an ImageBody", () => {
+            event = createEvent("image/webp", "image.webp", MsgType.Image);
+            result = renderMessageEvent();
+            mockMedia();
             result.getByTestId("image-body");
+            result.getByTestId("textual-body");
+        });
+
+        it("should render a TextualBody and a FileBody for mismatched extension", () => {
+            event = createEvent("image/webp", "image.exe", MsgType.Image);
+            result = renderMessageEvent();
+            mockMedia();
+            result.getByTestId("file-body");
+            result.getByTestId("textual-body");
+        });
+
+        it("should render a TextualBody and an VideoBody", () => {
+            event = createEvent("video/mp4", "video.mp4", MsgType.Video);
+            result = renderMessageEvent();
+            mockMedia();
+            result.getByTestId("video-body");
+            result.getByTestId("textual-body");
+        });
+
+        it("should render a TextualBody and a FileBody for non-video mimetype", () => {
+            event = createEvent("application/octet-stream", "video.mp4", MsgType.Video);
+            result = renderMessageEvent();
+            mockMedia();
+            result.getByTestId("file-body");
             result.getByTestId("textual-body");
         });
     });

@@ -90,7 +90,6 @@
         "report_content": "ລາຍງານເນື້ອຫາ",
         "resend": "ສົ່ງຄືນ",
         "reset": "ຕັ້ງຄ່າຄືນ",
-        "restore": "ກູ້ຄືນ",
         "resume": "ປະຫວັດຫຍໍ້",
         "retry": "ລອງໃໝ່",
         "review": "ທົບທວນຄືນ",
@@ -182,7 +181,6 @@
         "failed_query_registration_methods": "ບໍ່ສາມາດສອບຖາມວິທີການລົງທະບຽນໄດ້.",
         "failed_soft_logout_auth": "ການພິສູດຢືນຢັນຄືນໃໝ່ບໍ່ສຳເລັດ",
         "failed_soft_logout_homeserver": "ການພິສູດຢືນຢັນຄືນໃໝ່ເນື່ອງຈາກບັນຫາ homeserver ບໍ່ສຳເລັດ",
-        "footer_powered_by_matrix": "ຂັບເຄື່ອນໂດຍ Matrix",
         "forgot_password_email_invalid": "ທີ່ຢູ່ອີເມວບໍ່ຖືກຕ້ອງ.",
         "forgot_password_email_required": "ຕ້ອງໃສ່ທີ່ຢູ່ອີເມວທີ່ເຊື່ອມຕໍ່ກັບບັນຊີຂອງທ່ານ.",
         "forgot_password_prompt": "ລືມລະຫັດຜ່ານຂອງທ່ານບໍ?",
@@ -317,7 +315,6 @@
         "download_logs": "ບັນທຶກການດາວໂຫຼດ",
         "downloading_logs": "ບັນທຶກການດາວໂຫຼດ",
         "error_empty": "ກະລຸນາບອກພວກເຮົາວ່າມີຫຍັງຜິດພາດ ຫຼື, ດີກວ່າ, ສ້າງບັນຫາ GitHub ເພື່ອອະທິບາຍບັນຫາ.",
-        "failed_send_logs": "ສົ່ງບັນທຶກບໍ່ສຳເລັດ: ",
         "github_issue": "ບັນຫາ GitHub",
         "introduction": "ຖ້າທ່ານໄດ້ສົ່ງຂໍ້ບົກພ່ອງຜ່ານ GitHub, ບັນທຶກການຂໍ້ຜິດພາດສາມາດຊ່ວຍພວກເຮົາຕິດຕາມບັນຫາໄດ້. ",
         "log_request": "ເພື່ອຊ່ວຍພວກເຮົາປ້ອງກັນສິ່ງນີ້ໃນອະນາຄົດ, ກະລຸນາ <a>ສົ່ງບັນທຶກໃຫ້ພວກເຮົາ</a>.",
@@ -445,7 +442,6 @@
         "room_name": "ຊື່ຫ້ອງ",
         "rooms": "ຫ້ອງ",
         "secure_backup": "ການສໍາຮອງທີ່ປອດໄພ",
-        "security": "ຄວາມປອດໄພ",
         "select_all": "ເລືອກທັງຫມົດ",
         "server": "ເຊີບເວີ",
         "settings": "ການຕັ້ງຄ່າ",
@@ -464,12 +460,10 @@
         "thread": "ກະທູ້",
         "threads": "ກະທູ້",
         "timeline": "ທາມລາຍ",
-        "trusted": "ເຊື່ອຖືໄດ້",
         "unencrypted": "ບໍ່ໄດ້ເຂົ້າລະຫັດ",
         "unmute": "ຍົກເລີກປິດສຽງ",
         "unnamed_room": "ບໍ່ມີຊື່ຫ້ອງ",
         "unnamed_space": "ພື້ນທີ່ບໍ່ລະບຸຊື່",
-        "unsent": "ຍັງບໍ່ໄດ້ສົ່ງ",
         "user_avatar": "ຮູບໂປຣໄຟລ໌",
         "username": "ຊື່ຜູ້ໃຊ້",
         "verification_cancelled": "ຍົກເລີກການຢັ້ງຢືນແລ້ວ",
@@ -615,16 +609,8 @@
         "failed_to_send": "ສົ່ງນັດໝາຍບໍ່ສຳເລັດ!",
         "invalid_json": "ເບິ່ງຄືວ່າ JSON ບໍ່ຖືກຕ້ອງ.",
         "level": "ລະດັບ",
-        "methods": "ວິທີການ",
-        "no_verification_requests_found": "ບໍ່ພົບການຮ້ອງຂໍການຢັ້ງຢືນ",
         "number_of_users": "ຈໍານວນຜູ້ໃຊ້",
         "original_event_source": "ແຫຼ່ງຕົ້ນສະບັບ",
-        "phase": "ໄລຍະ",
-        "phase_cancelled": "ຍົກເລີກ",
-        "phase_ready": "ຄວາມພ້ອມ/ພ້ອມ",
-        "phase_requested": "ຮ້ອງຂໍ",
-        "phase_started": "ໄດ້ເລີ່ມແລ້ວ",
-        "phase_transaction": "ທຸລະກໍາ",
         "room_id": "ID ຫ້ອງ: %(roomId)s",
         "save_setting_values": "ບັນທຶກຄ່າການຕັ້ງຄ່າ",
         "send_custom_account_data_event": "ສົ່ງຂໍ້ມູນບັນຊີແບບກຳນົດເອງທຸກເຫດການ",
@@ -641,7 +627,6 @@
         "settings_explorer": "ການຕັ້ງຄ່າຕົວສຳຫຼວດ",
         "show_hidden_events": "ສະແດງເຫດການທີ່ເຊື່ອງໄວ້ໃນທາມລາຍ",
         "state_key": "ປຸມລັດ",
-        "timeout": "ຫມົດເວລາ",
         "title": "ເຄື່ອງມືພັດທະນາ",
         "toggle_event": "ສະຫຼັບກິດຈະກຳ",
         "toolbox": "ກ່ອງເຄື່ອງມື",
@@ -654,7 +639,6 @@
         "values_explicit_colon": "ຄ່າໃນລະດັບທີ່ຊັດເຈນ:",
         "values_explicit_room": "ປະເມີນຄ່າໃນລະດັບທີ່ຊັດເຈນຢູ່ໃນຫ້ອງນີ້",
         "values_explicit_this_room_colon": "ຄ່າໃນລະດັບທີ່ຊັດເຈນຢູ່ໃນຫ້ອງນີ້:",
-        "verification_explorer": "ຕົວສຳຫຼວດການຢັ້ງຢືນ",
         "view_servers_in_room": "ເບິ່ງເຊີບເວີໃນຫ້ອງ",
         "view_source_decrypted_event_source": "ບ່ອນທີ່ຖືກຖອດລະຫັດໄວ້",
         "widget_screenshots": "ເປີດໃຊ້ widget ຖ່າຍໜ້າຈໍໃນ widget ທີ່ຮອງຮັບ"
@@ -722,10 +706,6 @@
         "export_unsupported": "ບຣາວເຊີຂອງທ່ານບໍ່ຮອງຮັບການເພິ່ມເຂົ້າລະຫັດລັບທີ່ຕ້ອງການ",
         "import_invalid_keyfile": "ບໍ່ແມ່ນ %(brand)s ຟຮາຍຫຼັກ ທີ່ຖືກຕ້ອງ",
         "import_invalid_passphrase": "ການກວດສອບຄວາມຖືກຕ້ອງບໍ່ສຳເລັດ: ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ?",
-        "incompatible_database_description": "ກ່ອນໜ້ານີ້ທ່ານເຄີຍໃຊ້%(brand)sເວີຊັ້ນໃໝ່ກວ່າໃນລະບົບນີ້. ເພື່ອໃຊ້ເວີຊັ້ນນີ້ອີກເທື່ອໜຶ່ງດ້ວຍການເຂົ້າລະຫັດແບບຕົ້ນທາງເຖິງປາຍທາງ, ທ່ານຈະຕ້ອງອອກຈາກລະບົບ ແລະ ກັບຄືນເຂົ້າລະຫັດໃໝ່ອີກຄັ້ງ.",
-        "incompatible_database_disable": "ສືບຕໍ່ດ້ວຍການປິດການເຂົ້າລະຫັດ",
-        "incompatible_database_sign_out_description": "ເພື່ອຫຼີກເວັ້ນການສູນເສຍປະຫວັດການສົນທະນາຂອງທ່ານ, ທ່ານຕ້ອງອອກກະແຈຫ້ອງຂອງທ່ານກ່ອນທີ່ຈະອອກຈາກລະບົບ. ທ່ານຈະຕ້ອງໄດ້ກັບຄືນໄປຫາເວີຊັ້ນໃຫມ່ຂອງ %(brand)s ເພື່ອເຮັດສິ່ງນີ້",
-        "incompatible_database_title": "ຖານຂໍ້ມູນບໍ່ສອດຄ່ອງກັນ",
         "messages_not_secure": {
             "cause_1": "homeserver ຂອງທ່ານ",
             "cause_2": "homeserver ຜູ້ໃຊ້ທີ່ທ່ານກໍາລັງຢືນຢັນແມ່ນເຊື່ອມຕໍ່ກັບ",
@@ -762,8 +742,6 @@
             "title": "ເຊື່ອຖືບໍ່ໄດ້"
         },
         "unable_to_setup_keys_error": "ບໍ່ສາມາດຕັ້ງຄ່າກະແຈໄດ້",
-        "unsupported": "ລູກຄ້ານີ້ບໍ່ຮອງຮັບການເຂົ້າລະຫັດແບບຕົ້ນທາງເຖິງປາຍທາງ.",
-        "upgrade_toast_title": "ມີການຍົກລະດັບການເຂົ້າລະຫັດ",
         "verification": {
             "accepting": "ກຳລັງຍອມຮັບ…",
             "after_new_login": {
@@ -787,12 +765,6 @@
             "incoming_sas_dialog_title": "ການຮ້ອງຂໍການຢັ້ງຢືນຂາເຂົ້າ",
             "incoming_sas_user_dialog_text_1": "ຢັ້ງຢືນຜູ້ໃຊ້ນີ້ເພື່ອສ້າງເຄື່ອງທີ່ເຊື່ອຖືໄດ້. ຜູ້ໃຊ້ທີ່ເຊື່ອຖືໄດ້ ເຮັດໃຫ້ທ່ານອຸ່ນໃຈຂື້ນເມື່ຶຶອເຂົ້າລະຫັດຂໍ້ຄວາມແຕ່ຕົ້ນທາງເຖິງປາຍທາງ.",
             "incoming_sas_user_dialog_text_2": "ການຢືນຢັນຜູ້ໃຊ້ນີ້ຈະເປັນເຄື່ອງໝາຍໃນລະບົບຂອງເຂົາເຈົ້າໜ້າເຊື່ອຖືໄດ້ ແລະ ເປັນເຄື່ອງໝາຍເຖິງລະບົບຂອງທ່ານ ເປັນທີ່ເຊື່ອຖືໄດ້ຕໍ່ກັບເຂົາເຈົ້າ.",
-            "manual_device_verification_device_id_label": "ID ລະບົບ",
-            "manual_device_verification_device_key_label": "ລະຫັດລະບົບ",
-            "manual_device_verification_device_name_label": "ຊື່ລະບົບ",
-            "manual_device_verification_footer": "ຖ້າລະຫັດບໍ່ກົງກັນ, ຄວາມປອດໄພຂອງການສື່ສານຂອງທ່ານອາດຈະຖືກທໍາລາຍ.",
-            "manual_device_verification_self_text": "ຢືນຢັນໂດຍການປຽບທຽບສິ່ງຕໍ່ໄປນີ້ກັບການຕັ້ງຄ່າຜູ້ໃຊ້ໃນລະບົບອື່ນຂອງທ່ານ:",
-            "manual_device_verification_user_text": "ຢືນຢັນລະບົບຂອງຜູ້ໃຊ້ນີ້ໂດຍການປຽບທຽບສິ່ງຕໍ່ໄປນີ້ກັບການຕັ້ງຄ່າຜູ້ໃຊ້ຂອງເຂົາເຈົ້າ:",
             "no_key_or_device": "ເບິ່ງຄືວ່າທ່ານບໍ່ມີກະແຈຄວາມປອດໄພ ຫຼື ອຸປະກອນອື່ນໆທີ່ທ່ານສາມາດຢືນຢັນໄດ້. ອຸປະກອນນີ້ຈະບໍ່ສາມາດເຂົ້າເຖິງຂໍ້ຄວາມທີ່ເຂົ້າລະຫັດເກົ່າໄດ້. ເພື່ອຢືນຢັນຕົວຕົນຂອງທ່ານໃນອຸປະກອນນີ້, ທ່ານຈຳເປັນຕ້ອງຕັ້ງລະຫັດຢືນຢັນຂອງທ່ານ.",
             "no_support_qr_emoji": "ອຸປະກອນທີ່ທ່ານພະຍາຍາມກວດສອບບໍ່ຮອງຮັບການສະແກນລະຫັດ QR ຫຼື ການຢັ້ງຢືນ emoji, ຊຶ່ງເປັນສິ່ງທີ່%(brand)sສະຫນັບສະຫນູນ. ລອງໃຊ້ກັບລູກຄ້າອື່ນ.",
             "other_party_cancelled": "ອີກຝ່າຍໄດ້ຍົກເລີກການຢັ້ງຢືນ.",
@@ -1273,8 +1245,7 @@
         "share_type_prompt": "ທ່ານຕ້ອງການແບ່ງປັນສະຖານທີ່ປະເພດໃດ?"
     },
     "member_list": {
-        "filter_placeholder": "ການກັ່ນຕອງສະມາຊິກຫ້ອງ",
-        "invited_list_heading": "ເຊີນ"
+        "filter_placeholder": "ການກັ່ນຕອງສະມາຊິກຫ້ອງ"
     },
     "member_list_back_action_label": "ສະມາຊິກຫ້ອງ",
     "message_edit_dialog_title": "ແກ້ໄຂຂໍ້ຄວາມ",
@@ -1369,7 +1340,6 @@
         "custom_level": "ລະດັບທີ່ກໍາຫນົດເອງ",
         "default": "ຄ່າເລີ່ມຕົ້ນ",
         "label": "ລະດັບພະລັງງານ",
-        "mod": "ກາປັບປ່ຽນ",
         "moderator": "ຜູ້ດຳເນິນລາຍການ",
         "restricted": "ຖືກຈຳກັດ"
     },
@@ -1982,7 +1952,6 @@
             "msisdn_verification_field_label": "ລະຫັດຢືນຢັນ",
             "msisdn_verification_instructions": "ກະລຸນາໃສ່ລະຫັດຢືນຢັນທີ່ສົ່ງຜ່ານຂໍ້ຄວາມ.",
             "msisdns_heading": "ເບີໂທລະສັບ",
-            "name_placeholder": "ບໍ່ມີຊື່ສະແດງຜົນ",
             "password_change_success": "ລະຫັດຜ່ານຂອງທ່ານຖືກປ່ຽນສຳເລັດແລ້ວ.",
             "remove_email_prompt": "ລຶບ %(email)s ອອກບໍ?",
             "remove_msisdn_prompt": "ລຶບ %(phone)sອອກບໍ?"
@@ -2009,18 +1978,13 @@
                 "pass_phrase_match_failed": "ບໍ່ກົງກັນ.",
                 "pass_phrase_match_success": "ກົງກັນ!",
                 "phrase_strong_enough": "ດີເລີດ! ປະໂຫຍກຄວາມປອດໄພນີ້ເບິ່ງຄືວ່າເຂັ້ມແຂງພຽງພໍ.",
-                "requires_key_restore": "ກູ້ຄືນການສຳຮອງຂໍ້ມູນກະແຈຂອງທ່ານເພື່ອຍົກລະດັບການເຂົ້າລະຫັດຂອງທ່ານ",
-                "requires_password_confirmation": "ໃສ່ລະຫັດຜ່ານບັນຊີຂອງທ່ານເພື່ອຢືນຢັນການຍົກລະດັບ:",
-                "requires_server_authentication": "ທ່ານຈະຕ້ອງພິສູດຢືນຢັນກັບເຊີບເວີເພື່ອຢືນຢັນການປັບປຸງ.",
                 "secret_storage_query_failure": "ບໍ່ສາມາດຄົ້ນຫາສະຖານະການເກັບຮັກສາຄວາມລັບໄດ້",
                 "security_key_safety_reminder": "ການເກັບຮັກສາກະແຈຄວາມປອດໄພຂອງທ່ານໄວ້ບ່ອນໃດບ່ອນໜຶ່ງທີ່ປອດໄພ ເຊັ່ນ: ຕົວຈັດການລະຫັດຜ່ານ ຫຼືບ່ອນປອດໄພ ເພາະຈະຖືກໃຊ້ເພື່ອປົກປ້ອງຂໍ້ມູນທີ່ເຂົ້າລະຫັດໄວ້ຂອງທ່ານ.",
-                "session_upgrade_description": "ປັບປຸງລະບົບນີ້ເພື່ອໃຫ້ມັນກວດສອບລະບົບອື່ນ, ອະນຸຍາດໃຫ້ພວກເຂົາເຂົ້າເຖິງຂໍ້ຄວາມທີ່ຖືກເຂົ້າລະຫັດ ແລະເປັນເຄື່ອງໝາຍໃຫ້ເປັນທີ່ເຊື່ອຖືໄດ້ສໍາລັບຜູ້ໃຊ້ອື່ນ.",
                 "set_phrase_again": "ກັບຄືນໄປຕັ້ງໃໝ່ອີກຄັ້ງ.",
                 "settings_reminder": "ນອກນັ້ນທ່ານຍັງສາມາດຕັ້ງຄ່າການສໍາຮອງຂໍ້ມູນທີ່ປອດໄພ & ຈັດການກະແຈຂອງທ່ານໃນການຕັ້ງຄ່າ.",
                 "title_confirm_phrase": "ຢືນຢັນປະໂຫຍກຄວາມປອດໄພ",
                 "title_save_key": "ບັນທຶກກະແຈຄວາມປອດໄພຂອງທ່ານ",
                 "title_set_phrase": "ຕັ້ງຄ່າປະໂຫຍກຄວາມປອດໄພ",
-                "title_upgrade_encryption": "ປັບປຸງການເຂົ້າລະຫັດຂອງທ່ານ",
                 "unable_to_setup": "ບໍ່ສາມາດກຳນົດບ່ອນເກັບຂໍ້ມູນລັບໄດ້",
                 "use_different_passphrase": "ໃຊ້ຂໍ້ຄວາມລະຫັດຜ່ານອື່ນບໍ?",
                 "use_phrase_only_you_know": "ໃຊ້ປະໂຫຍກລັບທີ່ທ່ານຮູ້ເທົ່ານັ້ນ, ແລະ ເປັນທາງເລືອກທີ່ຈະບັນທຶກກະແຈຄວາມປອດໄພເພື່ອໃຊ້ສຳລັບການສຳຮອງຂໍ້ມູນ."
@@ -2215,7 +2179,6 @@
         "warn_quit": "ເຕືອນກ່ອນຢຸດຕິ"
     },
     "share": {
-        "link_title": "ເຊື່ອມຕໍ່ທີ່ຫ້ອງ",
         "permalink_message": "ເຊື່ອມຕໍ່ກັບຂໍ້ຄວາມທີ່ເລືອກ",
         "permalink_most_recent": "ເຊື່ອມຕໍ່ກັບຂໍ້ຄວາມຫຼ້າສຸດ",
         "title_message": "ແບ່ງປັນຂໍ້ຄວາມໃນຫ້ອງ",
@@ -2297,12 +2260,6 @@
         "upgraderoom": "ຍົກລະດັບຫ້ອງເປັນລຸ້ນໃໝ່",
         "upgraderoom_permission_error": "ທ່ານບໍ່ມີສິດໃຊ້ຄໍາສັ່ງນີ້.",
         "usage": "ການນໍາໃຊ້",
-        "verify": "ຢືນຢັນຜູ້ໃຊ້, ລະບົບ, ແລະ pubkey tuple",
-        "verify_mismatch": "ຄຳເຕືອນ: ການຢືນຢັນບໍ່ສຳເລັັດ! ປຸ່ມເຊັນຊື່ສຳລັບ %(userId)s ແລະ ລະບົບ %(deviceId)s ແມ່ນ \"%(fprint)s\" ບໍ່ກົງກັບລະຫັດທີ່ລະບຸໄວ້ \"%(fingerprint)s\". ນີ້ອາດຈະຫມາຍຄວາມວ່າການສື່ສານຂອງທ່ານຖືກຂັດຂວາງ!",
-        "verify_nop": "ການຢັ້ງຢືນລະບົບແລ້ວ!",
-        "verify_success_description": "ກະແຈໄຂລະຫັດທີ່ທ່ານໃຊ້ກົງກັບກະແຈໄຂລະຫັດທີ່ທ່ານໄດ້ຮັບຈາກ %(userId)s ເທິງອຸປະກອນ %(deviceId)s. ລະບົບຢັ້ງຢືນສຳເລັດແລ້ວ.",
-        "verify_success_title": "ກະແຈທີ່ຢືນຢັນແລ້ວ",
-        "verify_unknown_pair": "ບໍ່ຮູ້ຈັກ (ຜູ້ໃຊ້, ລະບົບ) ຄູ່: (%(userId)s, %(deviceId)s)",
         "whois": "ສະແດງຂໍ້ມູນກ່ຽວກັບຜູ້ໃຊ້"
     },
     "space": {
@@ -2338,7 +2295,6 @@
         "invite": "ເຊີນຜູ້ຄົນ",
         "invite_description": "ເຊີນດ້ວຍອີເມລ໌ ຫຼື ຊື່ຜູ້ໃຊ້",
         "invite_link": "ແບ່ງປັນລິ້ງເຊີນ",
-        "invite_this_space": "ເຊີນໄປບ່ອນນີ້",
         "joining_space": "ເຂົ້າຮ່ວມ",
         "landing_welcome": "ຍິນດີຕ້ອນຮັບສູ່ <name/>",
         "leave_dialog_action": "ອອກຈາກພື້ນທີ່",
@@ -2646,7 +2602,9 @@
             "sent": "%(senderName)s ສົ່ງຄຳເຊີນໄປຫາ %(targetDisplayName)s ເພື່ອເຂົ້າຮ່ວມຫ້ອງ."
         },
         "m.room.tombstone": "%(senderDisplayName)s ຍົກລະດັບຫ້ອງນີ້ແລ້ວ.",
-        "m.room.topic": "%(senderDisplayName)s ໄດ້ປ່ຽນຫົວຂໍ້ເປັນ \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s ໄດ້ປ່ຽນຫົວຂໍ້ເປັນ \"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s ສົ່ງສະຕິກເກີ.",
         "m.video": {
             "error_decrypting": "ການຖອດລະຫັດວິດີໂອຜິດພາດ"
@@ -2868,7 +2826,6 @@
     "truncated_list_n_more": {
         "other": "ແລະ %(count)sອີກ..."
     },
-    "unknown_device": "ທີ່ບໍ່ຮູ້ຈັກອຸປະກອນນີ້",
     "update": {
         "changelog": "ບັນທຶກການປ່ຽນແປງ",
         "check_action": "ກວດເບິ່ງເພຶ່ອອັບເດດ",
@@ -2906,14 +2863,6 @@
         "ban_room_confirm_title": "ຫ້າມອອຈາກ %(roomName)s",
         "ban_space_everything": "ຫ້າມພວກເຂົາຈາກທຸກສິ່ງທີ່ຂ້ອຍສາມາດເຮັດໄດ້",
         "ban_space_specific": "ຫ້າມພວກເຂົາອອຈາກສິ່ງທີ່ສະເພາະທີ່ຂ້ອຍສາມາດເຮັດໄດ້",
-        "count_of_sessions": {
-            "one": "%(count)s ລະບົບ",
-            "other": "%(count)ssessions"
-        },
-        "count_of_verified_sessions": {
-            "one": "ຢືນຢັນ 1 session ແລ້ວ",
-            "other": "%(count)sລະບົບຢືນຢັນແລ້ວ"
-        },
         "deactivate_confirm_action": "ປິດໃຊ້ງານຜູ້ໃຊ້",
         "deactivate_confirm_description": "ການປິດໃຊ້ງານຜູ້ໃຊ້ນີ້ຈະອອກຈາກລະບົບ ແລະປ້ອງກັນບໍ່ໃຫ້ເຂົາເຈົ້າເຂົ້າສູ່ລະບົບຄືນອີກ. ນອກຈາກນັ້ນ, ເຂົາເຈົ້າຈະອອກຈາກຫ້ອງທັງໝົດທີ່ເຂົາເຈົ້າຢູ່ໃນ. ຄຳສັ່ງນີ້ບໍ່ສາມາດຍົກເລີກໄດ້. ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການປິດກາໃຊ້ງານຜູ້ໃຊ້ນີ້?",
         "deactivate_confirm_title": "ປິດໃຊ້ງານຜູ້ໃຊ້ບໍ?",
@@ -2924,15 +2873,12 @@
         "disinvite_button_room": "ຕັດຂາດອອກຈາກຫ້ອງ",
         "disinvite_button_room_name": "ຍົກເລີກເຊີນຈາກ %(roomName)s",
         "disinvite_button_space": "ຕັດຂາດຈາກ ພື້ນທີ່ຈັດເກັບ",
-        "edit_own_devices": "ແກ້ໄຂອຸປະກອນ",
         "error_ban_user": "ຫ້າມຜູ້ໃຊ້ບໍ່ສຳເລັດ",
         "error_deactivate": "ປິດໃຊ້ງານຜູ້ໃຊ້ບໍ່ສຳເລັດ",
         "error_kicking_user": "ລຶບຜູ້ໃຊ້ອອກບໍ່ສຳເລັດ",
         "error_mute_user": "ປິດສຽງຜູ້ໃຊ້ບໍ່ສຳເລັດ",
         "error_revoke_3pid_invite_description": "ບໍ່ສາມາດຖອນຄຳເຊີນໄດ້. ເຊີບເວີອາດຈະປະສົບບັນຫາຊົ່ວຄາວ ຫຼື ທ່ານບໍ່ມີສິດພຽງພໍໃນການຖອນຄຳເຊີນ.",
         "error_revoke_3pid_invite_title": "ຍົກເລີກການເຊີນບໍ່ສຳເລັດ",
-        "hide_sessions": "ເຊື່ອງsessions",
-        "hide_verified_sessions": "ເຊື່ອງ sessionsທີ່ຢືນຢັນແລ້ວ",
         "invited_by": "ເຊີນໂດຍ%(sender)s",
         "jump_to_rr_button": "ຂ້າມເພື່ອອ່ານໃບຮັບເງິນ",
         "kick_button_room": "ຍ້າຍອອກຈາກຫ້ອງ",
@@ -3012,7 +2958,6 @@
         "hangup": "ວາງສາຍ",
         "hide_sidebar_button": "ເຊື່ອງແຖບດ້ານຂ້າງ",
         "input_devices": "ອຸປະກອນຂາເຂົ້າ",
-        "join_button_tooltip_connecting": "ກຳລັງເຊື່ອມຕໍ່",
         "misconfigured_server": "ການໂທບໍ່ສຳເລັດເນື່ອງຈາກເຊີບເວີຕັ້ງຄ່າຜິດພາດ",
         "misconfigured_server_description": "ກະລຸນາຕິດຕໍ່ຜູ້ຄຸ້ມຄອງສະຖານີຂອງທ່ານ (<code>%(homeserverDomain)s</code>) ເພື່ອກໍານົດຄ່າຂອງ TURN Server ເພື່ອໃຫ້ການໂທເຮັດວຽກໄດ້ຢ່າງສະຖຽນ.",
         "more_button": "ເພີ່ມເຕີມ",

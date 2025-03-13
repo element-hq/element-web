@@ -8,6 +8,8 @@ on:
             ELEMENT_BOT_TOKEN:
                 required: true
 
+permissions: {} # We use ELEMENT_BOT_TOKEN instead
+
 jobs:
     apply_Z-Labs_label:
         name: Add Z-Labs label for features behind labs flags

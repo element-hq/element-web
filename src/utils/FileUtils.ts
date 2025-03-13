@@ -3,21 +3,21 @@ Copyright 2024 New Vector Ltd.
 Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
 Copyright 2015-2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import {
     filesize,
-    FileSizeOptionsArray,
-    FileSizeOptionsBase,
-    FileSizeOptionsExponent,
-    FileSizeOptionsObject,
-    FileSizeOptionsString,
-    FileSizeReturnArray,
-    FileSizeReturnObject,
+    type FileSizeOptionsArray,
+    type FileSizeOptionsBase,
+    type FileSizeOptionsExponent,
+    type FileSizeOptionsObject,
+    type FileSizeOptionsString,
+    type FileSizeReturnArray,
+    type FileSizeReturnObject,
 } from "filesize";
-import { MediaEventContent } from "matrix-js-sdk/src/types";
+import { type MediaEventContent } from "matrix-js-sdk/src/types";
 
 import { _t } from "../languageHandler";
 

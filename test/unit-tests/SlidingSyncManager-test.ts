@@ -2,13 +2,13 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { SlidingSync } from "matrix-js-sdk/src/sliding-sync";
 import { mocked } from "jest-mock";
-import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import fetchMockJest from "fetch-mock-jest";
 
 import { SlidingSyncManager } from "../../src/SlidingSyncManager";
@@ -309,7 +309,7 @@ describe("SlidingSyncManager", () => {
         });
         it("uses the legacy `feature_sliding_sync_proxy_url` if it was set", async () => {
             jest.spyOn(manager, "getProxyFromWellKnown").mockResolvedValue("https://proxy/");
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string): any => {
                 if (name === "feature_sliding_sync_proxy_url") return "legacy-proxy";
             });
             await manager.setup(client);

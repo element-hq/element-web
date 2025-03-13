@@ -5,17 +5,17 @@ Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 Copyright 2017 MTRNord and Cooperative EITA
 Copyright 2017 Vector Creations Ltd.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import counterpart from "counterpart";
 import React from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { Optional } from "matrix-events-sdk";
+import { type Optional } from "matrix-events-sdk";
 import { MapWithDefault } from "matrix-js-sdk/src/utils";
-import { normalizeLanguageKey, TranslationKey as _TranslationKey, KEY_SEPARATOR } from "matrix-web-i18n";
-import { TranslationStringsObject } from "@matrix-org/react-sdk-module-api";
+import { normalizeLanguageKey, type TranslationKey as _TranslationKey, KEY_SEPARATOR } from "matrix-web-i18n";
+import { type TranslationStringsObject } from "@matrix-org/react-sdk-module-api";
 import _ from "lodash";
 
 import type Translations from "./i18n/strings/en_EN.json";
@@ -376,7 +376,7 @@ export function replaceByRegexes(text: string, mapping: IVariables | Tags): stri
                 let replaced: SubstitutionValue;
                 // If substitution is a function, call it
                 if (mapping[regexpString] instanceof Function) {
-                    replaced = ((mapping as Tags)[regexpString] as Function)(...capturedGroups);
+                    replaced = ((mapping as Tags)[regexpString] as (...subs: string[]) => string)(...capturedGroups);
                 } else {
                     replaced = mapping[regexpString];
                 }
@@ -436,8 +436,9 @@ export function replaceByRegexes(text: string, mapping: IVariables | Tags): stri
     }
 
     if (shouldWrapInSpan) {
-        return React.createElement("span", null, ...output);
+        return React.createElement("span", null, ...(output as Array<number | string | React.ReactNode>));
     } else {
+        // eslint-disable-next-line @typescript-eslint/no-base-to-string
         return output.join("");
     }
 }

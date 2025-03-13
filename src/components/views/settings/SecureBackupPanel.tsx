@@ -3,15 +3,15 @@ Copyright 2024 New Vector Ltd.
 Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 Copyright 2018 New Vector Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode } from "react";
-import { CryptoEvent, BackupTrustInfo, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
+import React, { lazy, type ReactNode } from "react";
+import { CryptoEvent, type BackupTrustInfo, type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
+import { type EmptyObject } from "matrix-js-sdk/src/matrix";
 
-import type CreateKeyBackupDialog from "../../../async-components/views/dialogs/security/CreateKeyBackupDialog";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
@@ -61,10 +61,10 @@ interface IState {
     sessionsRemaining: number | null;
 }
 
-export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
+export default class SecureBackupPanel extends React.PureComponent<EmptyObject, IState> {
     private unmounted = false;
 
-    public constructor(props: {}) {
+    public constructor(props: EmptyObject) {
         super(props);
 
         this.state = {
@@ -83,6 +83,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
     }
 
     public componentDidMount(): void {
+        this.unmounted = false;
         this.loadBackupStatus();
 
         MatrixClientPeg.safeGet().on(CryptoEvent.KeyBackupStatus, this.onKeyBackupStatus);
@@ -118,7 +119,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
         this.getUpdatedDiagnostics();
         try {
             const cli = MatrixClientPeg.safeGet();
-            const backupInfo = await cli.getKeyBackupVersion();
+            const backupInfo = (await cli.getCrypto()?.getKeyBackupInfo()) ?? null;
             const backupTrustInfo = backupInfo ? await cli.getCrypto()?.isKeyBackupTrusted(backupInfo) : undefined;
 
             const activeBackupVersion = (await cli.getCrypto()?.getActiveSessionBackupVersion()) ?? null;
@@ -169,10 +170,8 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
     }
 
     private startNewBackup = (): void => {
-        Modal.createDialogAsync(
-            import("../../../async-components/views/dialogs/security/CreateKeyBackupDialog") as unknown as Promise<
-                typeof CreateKeyBackupDialog
-            >,
+        Modal.createDialog(
+            lazy(() => import("../../../async-components/views/dialogs/security/CreateKeyBackupDialog")),
             {
                 onFinished: () => {
                     this.loadBackupStatus();
@@ -194,12 +193,9 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
                 if (!proceed) return;
                 this.setState({ loading: true });
                 const versionToDelete = this.state.backupInfo!.version!;
-                MatrixClientPeg.safeGet()
-                    .getCrypto()
-                    ?.deleteKeyBackupVersion(versionToDelete)
-                    .then(() => {
-                        this.loadBackupStatus();
-                    });
+                // deleteKeyBackupVersion fires a key backup status event
+                // which will update the UI
+                MatrixClientPeg.safeGet().getCrypto()?.deleteKeyBackupVersion(versionToDelete);
             },
         });
     };
@@ -211,7 +207,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
     private resetSecretStorage = async (): Promise<void> => {
         this.setState({ error: false });
         try {
-            await accessSecretStorage(async (): Promise<void> => {}, /* forceReset = */ true);
+            await accessSecretStorage(async (): Promise<void> => {}, { forceReset: true });
         } catch (e) {
             logger.error("Error resetting secret storage", e);
             if (this.unmounted) return;

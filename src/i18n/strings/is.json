@@ -94,7 +94,6 @@
         "report_content": "Kæra efni",
         "resend": "Endursenda",
         "reset": "Endursetja",
-        "restore": "Endurheimta",
         "resume": "Halda áfram",
         "retry": "Reyna aftur",
         "review": "Yfirfara",
@@ -185,7 +184,6 @@
         "failed_connect_identity_server": "Næ ekki sambandi við auðkennisþjón",
         "failed_soft_logout_auth": "Tókst ekki að endurauðkenna",
         "failed_soft_logout_homeserver": "Tókst ekki að endurauðkenna vegna vandamála með heimaþjón",
-        "footer_powered_by_matrix": "keyrt með Matrix",
         "forgot_password_email_invalid": "Tölvupóstfangið lítur ekki út fyrir að vera í lagi.",
         "forgot_password_email_required": "Það þarf að setja inn tölvupóstfangið sem tengt er notandaaðgangnum þínum.",
         "forgot_password_prompt": "Gleymdirðu lykilorðinu þínu?",
@@ -220,7 +218,6 @@
         "phone_label": "Sími",
         "phone_optional_label": "Sími (valfrjálst)",
         "qr_code_login": {
-            "sign_in_new_device": "Skrá inn nýtt tæki",
             "waiting_for_device": "Bíð eftir að tækið skráist inn"
         },
         "register_action": "Búa til notandaaðgang",
@@ -319,7 +316,6 @@
         "description": "Atvikaskrár innihalda gögn varðandi virkni hugbúnaðarins en líka notandanafn þitt, auðkenni eða samnefni spjallrása sem þú hefur skoðað, hvaða viðmótshluta þú hefur átt við, auk notendanafna annarra notenda. Atvikaskrár innihalda ekki skilaboð.",
         "download_logs": "Niðurhal atvikaskrá",
         "downloading_logs": "Sæki atvikaskrá",
-        "failed_send_logs": "Mistókst að senda atvikaskrár: ",
         "github_issue": "Villutilkynning á GitHub",
         "introduction": "Ef þú hefur tilkynnt vandamál í gegnum GitHub, þá geta atvikaskrár hjálpað okkur við að finna ástæður vandamálanna. ",
         "logs_sent": "Sendi atvikaskrár",
@@ -450,7 +446,6 @@
         "room_name": "Heiti spjallrásar",
         "rooms": "Spjallrásir",
         "secure_backup": "Varið öryggisafrit",
-        "security": "Öryggi",
         "select_all": "Velja allt",
         "server": "Netþjónn",
         "settings": "Stillingar",
@@ -469,12 +464,10 @@
         "thread": "Spjallþráður",
         "threads": "Spjallþræðir",
         "timeline": "Tímalína",
-        "trusted": "Treyst",
         "unencrypted": "Ódulritað",
         "unmute": "Ekki þagga",
         "unnamed_room": "Nafnlaus spjallrás",
         "unnamed_space": "Nafnlaust svæði",
-        "unsent": "Ósent",
         "unverified": "Óstaðfest",
         "user_avatar": "Notandamynd",
         "username": "Notandanafn",
@@ -484,8 +477,7 @@
         "video": "Myndskeið",
         "video_room": "Myndspjallrás",
         "view_message": "Sjá skilaboð",
-        "warning": "Aðvörun",
-        "welcome": "Velkomin/n"
+        "warning": "Aðvörun"
     },
     "composer": {
         "autocomplete": {
@@ -628,15 +620,7 @@
         "level": "Stig",
         "low_bandwidth_mode": "Hamur fyrir litla bandbreidd",
         "low_bandwidth_mode_description": "Krefst samhæfðs heimaþjóns.",
-        "methods": "Aðferðir",
-        "no_verification_requests_found": "Engar staðfestingarbeiðnir fundust",
         "number_of_users": "Fjöldi notenda",
-        "phase": "Fasi",
-        "phase_cancelled": "Hætt við",
-        "phase_ready": "Tilbúið",
-        "phase_requested": "Umbeðið",
-        "phase_started": "Hafið",
-        "phase_transaction": "Færsluaðgerð",
         "room_id": "Auðkenni spjallrásar: %(roomId)s",
         "save_setting_values": "Vista gildi valkosta",
         "send_custom_state_event": "Senda sérsniðinn stöðuatburð",
@@ -654,7 +638,6 @@
             "other": "<%(count)s svæði>"
         },
         "state_key": "Stöðulykill",
-        "timeout": "Tímamörk",
         "title": "Forritunartól",
         "toggle_event": "víxla atburði af/á",
         "toolbox": "Verkfærakassi",
@@ -729,8 +712,6 @@
         "export_unsupported": "Vafrinn þinn styður ekki nauðsynlegar dulritunarviðbætur",
         "import_invalid_keyfile": "Er ekki gild %(brand)s lykilskrá",
         "import_invalid_passphrase": "Sannvottun auðkenningar mistókst: er lykilorðið rangt?",
-        "incompatible_database_disable": "Halda áfram með dulritun óvirka",
-        "incompatible_database_title": "Ósamhæfður gagnagrunnur",
         "messages_not_secure": {
             "cause_1": "Heimaþjónninn þinn",
             "heading": "Eitt af eftirfarandi gæti verið berskjaldað:",
@@ -752,15 +733,12 @@
         },
         "udd": {
             "interactive_verification_button": "Sannprófa gagnvirkt með táknmyndum",
-            "manual_verification_button": "Sannreyna handvirkt með texta",
             "other_ask_verify_text": "Biddu þennan notanda að sannreyna setuna sína, eða sannreyndu hana handvirkt hér fyrir neðan.",
             "other_new_session_text": "%(name)s (%(userId)s) skráði sig inn í nýja setu án þess að sannvotta hana:",
             "own_new_session_text": "Þú skráðir inn í nýja setu án þess að sannvotta hana:",
             "title": "Ekki treyst"
         },
         "unable_to_setup_keys_error": "Tókst ekki að setja upp lykla",
-        "unsupported": "Þetta forrit styður ekki enda-í-enda dulritun.",
-        "upgrade_toast_title": "Uppfærsla dulritunar tiltæk",
         "verification": {
             "accepting": "Samþykki…",
             "after_new_login": {
@@ -780,11 +758,6 @@
             "explainer": "Örugg skilaboð við þennan notanda eru enda-í-enda dulrituð þannig að enginn annar getur lesið þau.",
             "in_person": "Til öryggis, gerðu þetta í eigin persónu eða notaðu einhverja samskiptaleið sem þú treystir.",
             "incoming_sas_dialog_title": "Innkomin beiðni um sannvottun",
-            "manual_device_verification_device_id_label": "Auðkenni setu",
-            "manual_device_verification_device_key_label": "Dulritunarlykill setu",
-            "manual_device_verification_device_name_label": "Nafn á setu",
-            "manual_device_verification_footer": "Ef þetta samsvarar ekki, getur verið að samskiptin þín séu berskjölduð.",
-            "manual_device_verification_self_text": "Staðfestu með því að bera eftirfarandi saman við 'Stillingar notanda' í hinni setunni þinni:",
             "other_party_cancelled": "Hinn aðilinn hætti við sannvottunina.",
             "prompt_encrypted": "Sannreyndu alla notendur á spjallrás til að tryggja að hún sé örugg.",
             "prompt_self": "Hefja sannvottun aftur úr tilkynningunni.",
@@ -878,10 +851,6 @@
         }
     },
     "event_preview": {
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s endaði talútsendingu",
-            "you": "Þú endaðir talútsendingu"
-        },
         "m.call.answer": {
             "dm": "Símtal í gangi",
             "user": "%(senderName)s kom inn í símtalið",
@@ -1180,7 +1149,6 @@
         "video_rooms_faq1_question": "Hvernig bý ég til myndspjallrás?",
         "video_rooms_faq2_answer": "Já, tímalína spjallsins birtist við hlið myndmerkisins.",
         "video_rooms_faq2_question": "Get ég notað textaspjall samhliða myndsímtali?",
-        "voice_broadcast": "Útvörpun tals",
         "wysiwyg_composer": "Þróaður textaritill"
     },
     "labs_mjolnir": {
@@ -1264,7 +1232,6 @@
     },
     "member_list": {
         "filter_placeholder": "Sía meðlimi spjallrásar",
-        "invited_list_heading": "Boðið",
         "power_label": "%(userName)s (með völd sem %(powerLevelNumber)s)"
     },
     "member_list_back_action_label": "Meðlimir spjallrásar",
@@ -1301,63 +1268,18 @@
         "mute_description": "Þú munt ekki fá neinar tilkynningar"
     },
     "notifier": {
-        "io.element.voice_broadcast_chunk": "%(senderName)s hóf talútsendingu",
         "m.key.verification.request": "%(name)s biður um sannvottun"
     },
     "onboarding": {
-        "apple_trademarks": "App Store® og Apple logo® eru vörumerki í eigu Apple Inc.",
-        "community_messaging_action": "Finndu fólkið þitt",
-        "community_messaging_title": "Samfélagslegt eignarhald",
-        "complete_these": "Kláraðu þetta til að fá sem mest út úr %(brand)s",
         "create_room": "Búa til hópspjall",
-        "download_app": "Sækja %(brand)s",
-        "download_app_action": "Sækja forrit",
-        "download_app_description": "Ekki missa af neinu og taktu %(brand)s með þér",
-        "download_app_store": "Sækja á App Store forritasafni",
-        "download_brand": "Sækja %(brand)s",
-        "download_brand_desktop": "Sækja %(brand)s Desktop fyrir vinnutölvur",
-        "download_f_droid": "Ná í á F-Droid",
-        "download_google_play": "Ná í á Google Play",
-        "enable_notifications": "Kveikja á tilkynningum",
-        "enable_notifications_action": "Virkja tilkynningar",
-        "enable_notifications_description": "Ekki missa af svari eða áríðandi skilaboðum",
         "explore_rooms": "Kanna almenningsspjallrásir",
-        "find_community_members": "Finndu og bjóddu meðlimum í samfélaginu þínu",
-        "find_coworkers": "Finndu og bjóddu samstarfsaðilum þínum",
-        "find_friends": "Finndu og bjóddu vinum þínum",
-        "find_friends_action": "Finna vini",
-        "find_friends_description": "Það er nú einusinni það sem þú komst hingað til að gera, þannug að við skulum skella okkur í málið",
-        "find_people": "Finna fólk",
-        "get_stuff_done": "Komdu hlutum í verk með því að finna félaga í teyminu þínu",
-        "google_trademarks": "Google Play og Google Play táknmerkið eru vörumerki í eigu Google LLC.",
         "has_avatar_label": "Frábært, það mun hjálpa fólki að vita að þetta sért þú",
         "intro_byline": "Eigðu samtölin þín.",
         "intro_welcome": "Velkomin í %(appName)s",
         "no_avatar_label": "Bættu við mynd, svo fólk viti að þetta sért þú.",
-        "only_n_steps_to_go": {
-            "one": "Aðeins %(count)s skref í viðbót",
-            "other": "Aðeins %(count)s skref í viðbót"
-        },
-        "personal_messaging_action": "Byrjaðu fyrsta spjallið þitt",
-        "personal_messaging_title": "Örugg skilaboð fyrir vini og fjölskyldu",
-        "qr_or_app_links": "%(qrCode)s eða %(appLinks)s",
         "send_dm": "Senda bein skilaboð",
-        "set_up_profile": "Settu upp notandasniðið þitt",
-        "set_up_profile_action": "Notandasnið þitt",
-        "set_up_profile_description": "Láttu fólk vita að þetta sért þú",
-        "use_case_community_messaging": "Meðlimi samfélags á netinu",
-        "use_case_heading1": "Þú ert inni",
-        "use_case_heading2": "Við hverja muntu helst spjalla?",
-        "use_case_heading3": "Við munum hjálpa þér að tengjast.",
-        "use_case_personal_messaging": "Vinir og fjölskylda",
-        "use_case_work_messaging": "Samstarfsmenn og teymi",
         "welcome_detail": "Hefjumst handa við að koma þér í gang",
-        "welcome_to_brand": "Velkomin í %(brand)s",
-        "welcome_user": "Velkomin/n %(name)s",
-        "work_messaging_action": "Finndu samstarfsaðilana þína",
-        "work_messaging_title": "Örugg skilaboð í vinnunni",
-        "you_did_it": "Þú kláraðir þetta!",
-        "you_made_it": "Þú hafðir það!"
+        "welcome_user": "Velkomin/n %(name)s"
     },
     "poll": {
         "create_poll_action": "Búa til könnun",
@@ -1403,7 +1325,6 @@
         "custom_level": "Sérsniðið stig",
         "default": "Sjálfgefið",
         "label": "Stig valda",
-        "mod": "Umsjón",
         "moderator": "Umsjónarmaður",
         "restricted": "Takmarkað"
     },
@@ -1746,7 +1667,6 @@
             "error_unbanning": "Tókst ekki að taka úr banni",
             "events_default": "Senda skilaboð",
             "invite": "Bjóða notendum",
-            "io.element.voice_broadcast_info": "Útsendingar tals",
             "kick": "Fjarlægja notendur",
             "m.call": "Byrja %(brand)s samtal",
             "m.call.member": "Taka þátt í %(brand)s samtali",
@@ -1960,7 +1880,6 @@
             "msisdn_verification_field_label": "Sannvottunarkóði",
             "msisdn_verification_instructions": "Settu inn staðfestingarkóða sem sendur var með SMS.",
             "msisdns_heading": "Símanúmer",
-            "name_placeholder": "Ekkert birtingarnafn",
             "password_change_success": "Það tókst að breyta lykilorðinu þínu.",
             "remove_email_prompt": "Fjarlægja %(email)s?",
             "remove_msisdn_prompt": "Fjarlægja %(phone)s?",
@@ -1989,7 +1908,6 @@
                 "pass_phrase_match_failed": "Þetta stemmir ekki.",
                 "pass_phrase_match_success": "Þetta passar!",
                 "phrase_strong_enough": "Frábært! Þessi öryggisfrasi virðist vera nógu sterkur.",
-                "requires_password_confirmation": "Sláðu inn lykilorðið þitt til að staðfesta uppfærsluna:",
                 "secret_storage_query_failure": "Tókst ekki að finna stöðu á leynigeymslu",
                 "security_key_safety_reminder": "Geymdu öryggislykilinn þinn á öruggum stað, eins og í lykilorðastýringu eða jafnvel í peningaskáp, þar sem hann er notaður til að verja gögnin þín.",
                 "set_phrase_again": "Farðu til baka til að setja hann aftur.",
@@ -1997,7 +1915,6 @@
                 "title_confirm_phrase": "Staðfestu öryggisfrasa",
                 "title_save_key": "Vista öryggislykilinn þinn",
                 "title_set_phrase": "Setja öryggisfrasa",
-                "title_upgrade_encryption": "Uppfærðu dulritunina þína",
                 "unable_to_setup": "Tókst ekki að setja upp leynigeymslu",
                 "use_different_passphrase": "Nota annan lykilfrasa?",
                 "use_phrase_only_you_know": "Notaðu leynilegan frasa eða setningu sem aðeins þú þekkir, og útbúðu öryggislykil fyrir öryggisafrit."
@@ -2259,7 +2176,6 @@
         "warning": "<w>AÐVÖRUN:</w> <description/>"
     },
     "share": {
-        "link_title": "Tengill á spjallrás",
         "permalink_message": "Tengill í valin skilaboð",
         "permalink_most_recent": "Tengill í nýjustu skilaboðin",
         "title_message": "Deila skilaboðum spjallrásar",
@@ -2340,12 +2256,6 @@
         "upgraderoom": "Uppfærir spjallrás í nýja útgáfu",
         "upgraderoom_permission_error": "Þú hefur ekki nauðsynlegar heimildir til að nota þessa skipun.",
         "usage": "Notkun",
-        "verify": "Sannreynir auðkenni notanda, setu og dreifilykils",
-        "verify_mismatch": "AÐVÖRUN: SANNVOTTUN LYKILS MISTÓKST! Undirritunarlykillinn fyrir %(userId)s og setuna %(deviceId)s er \"%(fprint)s\" sem samsvarar ekki uppgefna lyklinum \"%(fingerprint)s\". Þetta gæti þýtt að einhver hafi komist inn í samskiptin þín!",
-        "verify_nop": "Seta er þegar sannreynd!",
-        "verify_success_description": "Undirritunarlykillinn sem þú gafst upp samsvarar lyklinum sem þú fékkst frá %(userId)s og setunni %(deviceId)s. Setan er því merkt sem sannreynd.",
-        "verify_success_title": "Staðfestur dulritunarlykill",
-        "verify_unknown_pair": "Óþekkt pörun (notandi, seta): (%(userId)s, %(deviceId)s)",
         "whois": "Birtir upplýsingar um notanda"
     },
     "space": {
@@ -2380,7 +2290,6 @@
         "invite": "Bjóða fólki",
         "invite_description": "Bjóða með tölvupóstfangi eða notandanafni",
         "invite_link": "Deila boðstengli",
-        "invite_this_space": "Bjóða inn á þetta svæði",
         "joining_space": "Geng í hópinn",
         "landing_welcome": "Velkomin í <name/>",
         "leave_dialog_action": "Yfirgefa svæði",
@@ -2542,10 +2451,6 @@
         "error_rendering_message": "Gat ekki hlaðið inn þessum skilaboðum",
         "historical_messages_unavailable": "Þú getur ekki séð eldri skilaboð",
         "in_room_name": " í <strong>%(room)s</strong>",
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s endaði <a>talútsendingu</a>",
-            "you": "Þú endaðir <a>talútsendingu</a>"
-        },
         "io.element.widgets.layout": "%(senderName)s hefur uppfært framsetningu spjallrásarinnar",
         "load_error": {
             "no_permission": "Reyndi að hlaða inn tilteknum punkti úr tímalínu þessarar spjallrásar, en þú ert ekki með heimild til að skoða tilteknu skilaboðin.",
@@ -2716,7 +2621,9 @@
             "sent": "%(senderName)s sendi boð til %(targetDisplayName)s um þátttöku í spjallrásinni."
         },
         "m.room.tombstone": "%(senderDisplayName)s uppfærði þessa spjallrás.",
-        "m.room.topic": "%(senderDisplayName)s breytti umræðuefninu í \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s breytti umræðuefninu í \"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s sendi límmerki.",
         "m.video": {
             "error_decrypting": "Villa við afkóðun myndskeiðs"
@@ -2920,7 +2827,6 @@
     "truncated_list_n_more": {
         "other": "Og %(count)s til viðbótar..."
     },
-    "unknown_device": "Óþekkt tæki",
     "update": {
         "changelog": "Breytingaskrá",
         "check_action": "Athuga með uppfærslu",
@@ -2954,14 +2860,6 @@
         "ban_room_confirm_title": "Banna í %(roomName)s",
         "ban_space_everything": "Banna viðkomandi frá því að gera allt það sem ég get gert",
         "ban_space_specific": "Banna viðkomandi frá því að gera tiltekna hluti sem ég get gert",
-        "count_of_sessions": {
-            "one": "%(count)s seta",
-            "other": "%(count)s setur"
-        },
-        "count_of_verified_sessions": {
-            "one": "1 sannreynd seta",
-            "other": "%(count)s sannreyndar setur"
-        },
         "deactivate_confirm_action": "Gera notanda óvirkan",
         "deactivate_confirm_title": "Gera notanda óvirkan?",
         "demote_button": "Leggja til baka",
@@ -2971,14 +2869,11 @@
         "disinvite_button_room": "Afbjóða úr herbergi",
         "disinvite_button_room_name": "Afturkalla boð á %(roomName)s",
         "disinvite_button_space": "Afbjóða frá stað",
-        "edit_own_devices": "Breyta tækjum",
         "error_ban_user": "Mistókst að banna notanda",
         "error_deactivate": "Mistókst að gera þennan notanda óvirkan",
         "error_kicking_user": "Mistókst að fjarlægja notanda",
         "error_mute_user": "Mistókst að þagga niður í notanda",
         "error_revoke_3pid_invite_title": "Mistókst að afturkalla boð",
-        "hide_sessions": "Fela setur",
-        "hide_verified_sessions": "Fela sannreyndar setur",
         "invited_by": "Boðið af %(sender)s",
         "jump_to_rr_button": "Fara í fyrstu leskvittun",
         "kick_button_room": "Fjarlægja úr spjallrás",
@@ -3018,27 +2913,6 @@
         "switch_theme_dark": "Skiptu yfir í dökkan ham",
         "switch_theme_light": "Skiptu yfir í ljósan ham"
     },
-    "voice_broadcast": {
-        "30s_backward": "30s afturábak",
-        "30s_forward": "30s áfram",
-        "action": "Útvörpun tals",
-        "buffering": "Hleð í biðminni…",
-        "confirm_listen_affirm": "Já, stöðva upptökuna mína",
-        "confirm_listen_title": "Hlusta á beina útsendingu?",
-        "confirm_stop_affirm": "Já, stöðva útsendingu",
-        "confirm_stop_title": "Stöðva beina útsendingu?",
-        "connection_error": "Villa í tengingu - Upptaka í bið",
-        "failed_already_recording_title": "Get ekki byrjað nýja talútsendingu",
-        "failed_insufficient_permission_title": "Get ekki byrjað nýja talútsendingu",
-        "failed_no_connection_description": "Því miður tókst ekki að setja aðra upptöku í gang. Reyndu aftur síðar.",
-        "failed_no_connection_title": "Villa í tengingu",
-        "failed_others_already_recording_title": "Get ekki byrjað nýja talútsendingu",
-        "go_live": "Fara í beina útsendingu",
-        "live": "Beint",
-        "pause": "setja talútsendingu í bið",
-        "play": "spila talútsendingu",
-        "resume": "halda áfram með talútsendingu"
-    },
     "voip": {
         "already_in_call": "Nú þegar í símtali",
         "already_in_call_person": "Þú ert nú þegar í símtali við þennan aðila.",
@@ -3058,7 +2932,6 @@
         "camera_disabled": "Slökkt er á myndavélinni þinni",
         "camera_enabled": "Enn er kveikt á myndavélinni þinni",
         "cannot_call_yourself_description": "Þú getur ekki byrjað símtal með sjálfum þér.",
-        "change_input_device": "skipta um inntakstæki",
         "connecting": "Tengist",
         "connection_lost": "Tenging við vefþjón hefur rofnað",
         "connection_lost_description": "Þú getur ekki hringt símtöl án tengingar við netþjóninn.",
@@ -3075,12 +2948,10 @@
         "enable_camera": "Kveikja á myndavél",
         "enable_microphone": "Kveikja á hljóðnema",
         "expand": "Fara til baka í símtal",
-        "failed_call_live_broadcast_title": "Get ekki hafið símtal",
         "hangup": "Leggja á",
         "hide_sidebar_button": "Fela hliðarspjald",
         "input_devices": "Inntakstæki",
         "join_button_tooltip_call_full": "Því miður - þetta símtal er fullt í augnablikinu",
-        "join_button_tooltip_connecting": "Tengist",
         "maximise": "Fylla skjá",
         "misconfigured_server": "Símtal mistókst vegna vanstillingar netþjóns",
         "misconfigured_server_description": "Spurðu kerfisstjóra (<code>%(homeserverDomain)s</code>) heimaþjónsins þíns um að setja upp TURN-þjón til að tryggja að símtöl virki eðlilega.",

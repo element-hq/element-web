@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -178,22 +178,26 @@ describe("formatDate", () => {
 
     it("should return time string if date is within same day", () => {
         const date = new Date(REPEATABLE_DATE.getTime() + 2 * HOUR_MS + 12 * MINUTE_MS);
-        expect(formatDate(date, false, "en-GB")).toMatchInlineSnapshot(`"19:10"`);
+        // We use en-US for these tests because there was a change in Node 22.12 which removed
+        // the comma after the weekday for en-GB which makes the test output different things
+        // on different node versions. I'm not sure what a better fix would be, so let's just use
+        // a locale that happens to have a more stable formatting right now.
+        expect(formatDate(date, false, "en-US")).toMatchInlineSnapshot(`"19:10"`);
     });
 
     it("should return time string with weekday if date is within last 6 days", () => {
         const date = new Date(REPEATABLE_DATE.getTime() - 6 * DAY_MS + 2 * HOUR_MS + 12 * MINUTE_MS);
-        expect(formatDate(date, false, "en-GB")).toMatchInlineSnapshot(`"Fri 19:10"`);
+        expect(formatDate(date, false, "en-US")).toMatchInlineSnapshot(`"Fri 19:10"`);
     });
 
     it("should return time & date string without year if it is within the same year", () => {
         const date = new Date(REPEATABLE_DATE.getTime() - 66 * DAY_MS + 2 * HOUR_MS + 12 * MINUTE_MS);
-        expect(formatDate(date, false, "en-GB")).toMatchInlineSnapshot(`"Mon, 12 Sept, 19:10"`);
+        expect(formatDate(date, false, "en-US")).toMatchInlineSnapshot(`"Mon, Sep 12, 19:10"`);
     });
 
     it("should return full time & date string otherwise", () => {
         const date = new Date(REPEATABLE_DATE.getTime() - 666 * DAY_MS + 2 * HOUR_MS + 12 * MINUTE_MS);
-        expect(formatDate(date, false, "en-GB")).toMatchInlineSnapshot(`"Wed, 20 Jan 2021, 19:10"`);
+        expect(formatDate(date, false, "en-US")).toMatchInlineSnapshot(`"Wed, Jan 20, 2021, 19:10"`);
     });
 });
 

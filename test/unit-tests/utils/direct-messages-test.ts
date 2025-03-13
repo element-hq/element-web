@@ -2,12 +2,12 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked } from "jest-mock";
-import { ClientEvent, MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, type MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -22,7 +22,7 @@ import { waitForRoomReadyAndApplyAfterCreateCallbacks } from "../../../src/utils
 import { findDMRoom } from "../../../src/utils/dm/findDMRoom";
 import { createDmLocalRoom } from "../../../src/utils/dm/createDmLocalRoom";
 import { startDm } from "../../../src/utils/dm/startDm";
-import { Member } from "../../../src/utils/direct-messages";
+import { type Member } from "../../../src/utils/direct-messages";
 import { resolveThreePids } from "../../../src/utils/threepids";
 
 jest.mock("../../../src/utils/rooms", () => ({

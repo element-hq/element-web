@@ -29,7 +29,7 @@ default theme, you would use `default_theme: "custom-Electric Blue"`.
 
 e.g. in config.json:
 
-```
+```json5
 "setting_defaults": {
         "custom_themes": [
             {
@@ -59,6 +59,10 @@ e.g. in config.json:
                     "timeline-text-color": "#2e2f32",
                     "timeline-text-secondary-color": "#61708b",
                     "timeline-highlights-color": "#f3f8fd",
+
+                    // These should both be 8 values long
+                    "username-colors": ["#ff0000", /*...*/],
+                    "avatar-background-colors": ["#cc0000", /*...*/]
                 },
                 "compound": {
                     "--cpd-color-icon-accent-tertiary": "var(--cpd-color-blue-800)",

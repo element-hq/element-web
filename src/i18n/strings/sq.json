@@ -94,7 +94,6 @@
         "report_content": "Raportoni Lëndë",
         "resend": "Ridërgoje",
         "reset": "Rikthe te parazgjedhjet",
-        "restore": "Riktheje",
         "resume": "Rimerre",
         "retry": "Riprovo",
         "review": "Shqyrtojeni",
@@ -196,7 +195,6 @@
         "failed_query_registration_methods": "S’arrihet të kërkohet për metoda regjistrimi që mbulohen.",
         "failed_soft_logout_auth": "S’u arrit të ribëhej mirëfilltësimi",
         "failed_soft_logout_homeserver": "S’u arrit të ribëhej mirëfilltësimi, për shkak të një problemi me shërbyesin Home",
-        "footer_powered_by_matrix": "bazuar në Matrix",
         "forgot_password_email_invalid": "Adresa email s’duket të jetë e vlefshme.",
         "forgot_password_email_required": "Duhet dhënë adresa email e lidhur me llogarinë tuaj.",
         "forgot_password_prompt": "Harruat fjalëkalimin tuaj?",
@@ -233,15 +231,12 @@
         "phone_label": "Telefon",
         "phone_optional_label": "Telefoni (në daçi)",
         "qr_code_login": {
-            "approve_access_warning": "Duke miratuar hyrje për këtë pajisje, ajo do të ketë hyrje të plotë në llogarinë tuaj.",
             "completing_setup": "Po plotësohet ujdisja e pajisjes tuaj të re",
-            "confirm_code_match": "Kontrolloni se kodi më poshtë përkon me atë në pajisjen tuaj tjetër:",
             "error_rate_limited": "Shumë përpjekje në një kohë të shkurtër. Prisni ca, para se të riprovoni.",
             "error_unexpected": "Ndodhi një gabim të papritur.",
             "scan_code_instruction": "Skanoni kodin QR më poshtë me pajisjen ku është bërë dalja.",
             "scan_qr_code": "Skanoni kodin QR",
             "select_qr_code": "Përzgjidhni “%(scanQRCode)s”",
-            "sign_in_new_device": "Hyni në pajisje të re",
             "waiting_for_device": "Po pritet që të bëhet hyrja te pajisja"
         },
         "register_action": "Krijoni Llogari",
@@ -362,7 +357,6 @@
         "download_logs": "Shkarko regjistra",
         "downloading_logs": "Po shkarkohen regjistra",
         "error_empty": "Ju lutemi, na tregoni ç’shkoi keq ose, akoma më mirë, krijoni në GitHub një çështje që përshkruan problemin.",
-        "failed_send_logs": "S’u arrit të dërgoheshin regjistra: ",
         "github_issue": "Çështje në GitHub",
         "introduction": "Nëse keni parashtruar një të metë përmes GitHub-i, regjistrat e diagnostikimit na ndihmojnë të kapim problemin. ",
         "log_request": "Për të na ndihmuar ta parandalojmë këtë në të ardhmen, ju lutemi, <a>dërgonani regjistra</a>.",
@@ -489,7 +483,6 @@
         "rooms": "Dhoma",
         "saving": "Po ruhet…",
         "secure_backup": "Kopjeruajtje e Sigurt",
-        "security": "Siguri",
         "select_all": "Përzgjidhi krejt",
         "server": "Shërbyes",
         "settings": "Rregullime",
@@ -507,12 +500,10 @@
         "thread": "Rrjedhë",
         "threads": "Rrjedha",
         "timeline": "Rrjedhë Kohore",
-        "trusted": "E besuar",
         "unencrypted": "Të pafshehtëzuara",
         "unmute": "Ktheji zërin",
         "unnamed_room": "Dhomë e Paemërtuar",
         "unnamed_space": "Hapësirë e Paemërtuar",
-        "unsent": "Të padërguar",
         "unverified": "I paverifikuar",
         "user": "Përdorues",
         "user_avatar": "Foto profili",
@@ -521,8 +512,7 @@
         "verified": "I verifikuar",
         "video_room": "Dhomë me video",
         "view_message": "Shihni mesazh",
-        "warning": "Sinjalizim",
-        "welcome": "Mirë se vini"
+        "warning": "Sinjalizim"
     },
     "composer": {
         "autocomplete": {
@@ -691,19 +681,11 @@
         "low_bandwidth_mode": "Mënyra gjerësi e ulët bande",
         "low_bandwidth_mode_description": "Lyp shërbyes Home të përputhshëm.",
         "main_timeline": "Rrjedhë kohore kryesore",
-        "methods": "Metoda",
         "no_receipt_found": "S’u gjet dëftesë",
-        "no_verification_requests_found": "S’u gjetën kërkesa verifikimi",
         "notification_state": "Gjendje njoftimi është <strong>%(notificationState)s</strong>",
         "notifications_debug": "Diagnostikim njoftimesh",
         "number_of_users": "Numër përdoruesish",
         "original_event_source": "Burim i veprimtarisë origjinale",
-        "phase": "Fazë",
-        "phase_cancelled": "Anuluar",
-        "phase_ready": "Gati",
-        "phase_requested": "E kërkuar",
-        "phase_started": "Nisur më",
-        "phase_transaction": "Transaksion",
         "room_encrypted": "Dhoma është <strong>e fshehtëzuar ✅</strong>",
         "room_id": "ID Dhome: %(roomId)s",
         "room_not_encrypted": "Dhoma është <strong>e pafshehtëzuar 🚨</strong>",
@@ -737,7 +719,6 @@
         },
         "state_key": "Kyç Gjendjesh",
         "threads_timeline": "Rrjedhë kohore rrjedhash",
-        "timeout": "Mbarim kohe",
         "title": "Mjete zhvilluesi",
         "toggle_event": "shfaqe/fshihe aktin",
         "toolbox": "Grup mjetesh",
@@ -750,7 +731,6 @@
         "values_explicit_colon": "Vlera në nivele shprehimisht:",
         "values_explicit_room": "Vlera në nivele shprehimisht në këtë dhomë",
         "values_explicit_this_room_colon": "Vlera në nivele shprehimisht në këtë dhomë:",
-        "verification_explorer": "Eksplorues verifikimi",
         "view_servers_in_room": "Shihni shërbyes në dhomë",
         "view_source_decrypted_event_source": "U shfshehtëzua burim veprimtarie",
         "view_source_decrypted_event_source_unavailable": "Burim i shfshehtëzuar jo i passhëm",
@@ -821,10 +801,6 @@
         "export_unsupported": "Shfletuesi juaj nuk mbulon zgjerimet kriptografike të domosdoshme",
         "import_invalid_keyfile": "S’është kartelë kyçesh %(brand)s e vlefshme",
         "import_invalid_passphrase": "Dështoi kontrolli i mirëfilltësimit: fjalëkalim i pasaktë?",
-        "incompatible_database_description": "Me këtë sesion, keni përdorur më herët një version më të ri të %(brand)s-it. Që të ripërdorni këtë version me fshehtëzim skaj më skaj, do t’ju duhet të bëni daljen dhe të rihyni.",
-        "incompatible_database_disable": "Vazhdo Me Fshehtëzimin të Çaktivizuar",
-        "incompatible_database_sign_out_description": "Që të shmanget humbja e historikut të fjalosjes tuaj, duhet të eksportoni kyçet e dhomës tuaj përpara se të dilni nga llogari. Që ta bëni këtë, duhe të riktheheni te versioni më i ri i %(brand)s-it",
-        "incompatible_database_title": "Bazë të dhënash e Papërputhshme",
         "messages_not_secure": {
             "cause_1": "Shërbyesi juaj Home",
             "cause_2": "Shërbyesi Home te i cili është lidhur përdoruesi që po verifikoni",
@@ -855,7 +831,6 @@
         },
         "udd": {
             "interactive_verification_button": "Verifikojeni në mënyrë ndërvepruese përmes emoji-sh",
-            "manual_verification_button": "Verifikojeni dorazi përmes teksti",
             "other_ask_verify_text": "Kërkojini këtij përdoruesi të verifikojë sesionin e vet, ose ta verifikojë më poshtë dorazi.",
             "other_new_session_text": "%(name)s (%(userId)s) bëri hyrjen në një sesion të ri pa e verifikuar:",
             "own_ask_verify_text": "Verifikoni sesionit tuaj tjetër duke përdorur një nga mundësitë më poshtë.",
@@ -863,8 +838,6 @@
             "title": "Jo e Besuar"
         },
         "unable_to_setup_keys_error": "S’arrihet të ujdisen kyçe",
-        "unsupported": "Ky klient nuk mbulon fshehtëzim skaj-më-skaj.",
-        "upgrade_toast_title": "Ka të gatshëm përmirësim fshehtëzimi",
         "verification": {
             "accepting": "Po pranohet…",
             "after_new_login": {
@@ -891,12 +864,6 @@
             "incoming_sas_dialog_waiting": "Po pritet ripohimi nga partneri…",
             "incoming_sas_user_dialog_text_1": "Verifikojeni këtë përdorues që t’i vihet shenjë si i besuar. Përdoruesit e besuar ju më tepër siguri kur përdorni mesazhe të fshehtëzuar skaj-më-skaj.",
             "incoming_sas_user_dialog_text_2": "Verifikimi i këtij përdoruesi do t’i vërë shenjë sesionit të tij si të besuar dhe sesionit tuaj si të besuar për ta.",
-            "manual_device_verification_device_id_label": "ID sesioni",
-            "manual_device_verification_device_key_label": "Kyç sesioni",
-            "manual_device_verification_device_name_label": "Emër sesioni",
-            "manual_device_verification_footer": "Nëse s’përputhen, siguria e komunikimeve tuaja mund të jetë komprometuar.",
-            "manual_device_verification_self_text": "Ripohojeni duke krahasuar sa vijon me Rregullimet e Përdoruesit te sesioni juaj tjetër:",
-            "manual_device_verification_user_text": "Ripohojeni këtë sesion përdoruesi duke krahasuar sa vijon me Rregullimet e tij të Përdoruesit:",
             "no_key_or_device": "Duket sikur s’keni Kyç Sigurie ose ndonjë pajisje tjetër nga e cila mund të bëni verifikimin. Kjo pajisje s’do të jetë në gjendje të hyjë te mesazhe të dikurshëm të fshehtëzuar. Që të mund të verifikohet identiteti juaj në këtë pajisje, ju duhet të riujdisni kyçet tuaj të verifikimit.",
             "no_support_qr_emoji": "Pajisja që po provoni të verifikoni nuk mbulon skanim të një kodi QR, apo verifikim me emoji, çka janë ato që mbulohen prej %(brand)s. Provoni me një klient tjetër.",
             "other_party_cancelled": "Pala tjetër e anuloi verifikimin.",
@@ -1012,10 +979,6 @@
         }
     },
     "event_preview": {
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s përfundoi një transmetim zanor",
-            "you": "Përfunduat një transmetim zanor"
-        },
         "m.call.answer": {
             "dm": "Thirrje në ecuri e sipër",
             "user": "%(senderName)s u bë pjesë e thirrjes",
@@ -1350,8 +1313,6 @@
         "video_rooms_faq1_question": "Si mund të krijoj një dhomë me video?",
         "video_rooms_faq2_answer": "Po, rrjedha kohore e fjalosjes shfaqet tok me videon.",
         "video_rooms_faq2_question": "A mund të përdor fjalosje me tekst në krah të thirrjes video?",
-        "voice_broadcast": "Transmetim zanor",
-        "voice_broadcast_force_small_chunks": "Detyro gjatësi copëzash transmetimi zanor prej 15s",
         "wysiwyg_composer": "Përpunues teksti të pasur"
     },
     "labs_mjolnir": {
@@ -1449,7 +1410,6 @@
     "member_list": {
         "filter_placeholder": "Filtroni anëtarë dhome",
         "invite_button_no_perms_tooltip": "S’keni leje të ftoni përdorues",
-        "invited_list_heading": "I ftuar",
         "power_label": "%(userName)s (pushtet %(powerLevelNumber)si)"
     },
     "member_list_back_action_label": "Anëtarë dhome",
@@ -1486,65 +1446,18 @@
         "mute_description": "S’do të merrni ndonjë njoftim"
     },
     "notifier": {
-        "io.element.voice_broadcast_chunk": "%(senderName)s nisi një transmetim zanor",
         "m.key.verification.request": "%(name)s po kërkon verifikim"
     },
     "onboarding": {
-        "apple_trademarks": "App Store® dhee Apple logo® janë shenja tregtare të Apple Inc.",
-        "community_messaging_action": "Gjeni njerëzit tuaj",
-        "community_messaging_description": "Ruani pronësinë dhe kontrollin e diskutimit në bashkësi.\nPërshkallëzojeni për të mbuluar miliona, me moderim dhe ndërveprueshmëri të fuqishme.",
-        "community_messaging_title": "Pronësi e bashkësisë",
-        "complete_these": "Plotësoni këto, që të përfitoni maksimumin prej %(brand)s",
         "create_room": "Krijoni një Fjalosje Grupi",
-        "download_app": "Shkarko %(brand)s",
-        "download_app_action": "Shkarko aplikacione",
-        "download_app_description": "Mos humbni asgjë, duke e marrë %(brand)s-in me vete",
-        "download_app_store": "Shkarkoje nga App Store",
-        "download_brand": "Shkarko %(brand)s",
-        "download_brand_desktop": "Shkarko %(brand)s Desktop",
-        "download_f_droid": "Merreni në F-Droid",
-        "download_google_play": "Merreni nga Google Play",
-        "enable_notifications": "Aktivizo njoftimet",
-        "enable_notifications_action": "Aktivizo njoftimet",
-        "enable_notifications_description": "Mos humbni përgjigje apo mesazh të rëndësishëm",
         "explore_rooms": "Eksploroni Dhoma Publike",
-        "find_community_members": "Gjeni dhe ftoni anëtarë të bashkësisë tuaj",
-        "find_coworkers": "Gjeni dhe ftoni kolegë tuajt",
-        "find_friends": "Gjeni dhe ftoni shokët tuaj",
-        "find_friends_action": "Gjeni shokë",
-        "find_friends_description": "Kjo është ajo pse erdhët, ndaj ta bëjmë",
-        "find_people": "Gjeni persona",
-        "free_e2ee_messaging_unlimited_voip": "Me shkëmbim mesazhesh të fshehtëzuar skaj-më-skaj dhe thirrje pa kufi me zë dhe video, %(brand)s është një rrugë e fuqishme për të mbajtur lidhjet.",
-        "get_stuff_done": "Kryeni punët, duke gjetur kolegët e ekipit",
-        "google_trademarks": "Google Play dhe stema Google Play janë shenja tregtare të Google LLC.",
         "has_avatar_label": "Bukur, kjo do t’i ndihmojë njerëzit ta dinë se jeni ju",
         "intro_byline": "Jini zot i bisedave tuaja.",
         "intro_welcome": "Mirë se vini te %(appName)s",
         "no_avatar_label": "Shtoni një foto, që njerëzit ta dinë se jeni ju.",
-        "only_n_steps_to_go": {
-            "one": "Vetëm %(count)s hap për t’u bërë",
-            "other": "Vetëm %(count)s hapa për t’u bërë"
-        },
-        "personal_messaging_action": "Filloni fjalosjen tuaj të parë",
-        "personal_messaging_title": "Shkëmbim i sigurt mesazhesh për shokë dhe familje",
-        "qr_or_app_links": "%(qrCode)s ose %(appLinks)s",
         "send_dm": "Dërgoni Mesazh të Drejtpërdrejtë",
-        "set_up_profile": "Ujdisni profilin tuaj",
-        "set_up_profile_action": "Profili juaj",
-        "set_up_profile_description": "Bëni të mundur që njerëzit ta dinë se vërtet jeni ju",
-        "use_case_community_messaging": "Anëtarë bashkësie internetore",
-        "use_case_heading1": "Kaq qe",
-        "use_case_heading2": "Me kë do të bisedoni më të shumtën?",
-        "use_case_heading3": "Do t’ju ndihmojmë të lidheni.",
-        "use_case_personal_messaging": "Shokë dhe familje",
-        "use_case_work_messaging": "Kolegë dhe ekipe",
         "welcome_detail": "Tani, le t’ju ndihmojmë për t’ia filluar",
-        "welcome_to_brand": "Mirë se vini te %(brand)s",
-        "welcome_user": "Mirë se vini %(name)s",
-        "work_messaging_action": "Gjeni kolegë tuajt",
-        "work_messaging_title": "Shkëmbim i sigurt mesazhesh për në punë",
-        "you_did_it": "Ia dolët!",
-        "you_made_it": "E bëtë!"
+        "welcome_user": "Mirë se vini %(name)s"
     },
     "pill": {
         "permalink_other_room": "Mesazh në %(room)s",
@@ -1596,7 +1509,6 @@
         "custom_level": "Nivel vetjak",
         "default": "Parazgjedhje",
         "label": "Shkallë pushteti",
-        "mod": "Moderator",
         "restricted": "E kufizuar"
     },
     "powered_by_matrix": "Bazuar në Matrix",
@@ -2026,7 +1938,6 @@
             "error_unbanning": "S’u arrit t’i hiqej dëbimi",
             "events_default": "Dërgoni mesazhe",
             "invite": "Ftoni përdorues",
-            "io.element.voice_broadcast_info": "Transmetime zanore",
             "kick": "Hiqni përdorues",
             "m.call": "Nisni thirrje %(brand)s",
             "m.call.member": "Merrni pjesë në thirrje %(brand)s",
@@ -2284,7 +2195,6 @@
             "msisdn_verification_field_label": "Kod verifikimi",
             "msisdn_verification_instructions": "Ju lutemi, jepni kod verifikimi të dërguar përmes teksti.",
             "msisdns_heading": "Numra telefonash",
-            "name_placeholder": "S’ka emër shfaqjeje",
             "oidc_manage_button": "Administroni llogari",
             "password_change_section": "Caktoni një fjalëkalim të ri llogarie…",
             "password_change_success": "Fjalëkalimi juaj u ndryshua me sukses.",
@@ -2319,18 +2229,13 @@
                 "pass_phrase_match_failed": "S’përputhen.",
                 "pass_phrase_match_success": "U përputhën!",
                 "phrase_strong_enough": "Bukur! Kjo Frazë Sigurie duket goxha e fuqishme.",
-                "requires_key_restore": "Që të përmirësoni fshehtëzimin tuaj, riktheni kopjeruajtjen e kyçeve tuaj",
-                "requires_password_confirmation": "Që të ripohohet përmirësimi, jepni fjalëkalimin e llogarisë tuaj:",
-                "requires_server_authentication": "Do t’ju duhet të bëni mirëfilltësimin me shërbyesin që të ripohohet përmirësimi.",
                 "secret_storage_query_failure": "S’u arrit të merret gjendje depozite të fshehtë",
                 "security_key_safety_reminder": "Depozitojeni Kyçin tuaj të Sigurisë diku të parrezik, bie fjala në një përgjegjës fjalëkalimesh, ose në një kasafortë, ngaqë përdoret për të mbrojtur të dhënat tuaja të fshehtëzuara.",
-                "session_upgrade_description": "Përmirësojeni këtë sesion për ta lejuar të verifikojë sesione të tjerë, duke u akorduar hyrje te mesazhe të fshehtëzuar dhe duke u vënë shenjë si të besuar për përdorues të tjerë.",
                 "set_phrase_again": "Shkoni mbrapsht që ta ricaktoni.",
                 "settings_reminder": "Mundeni edhe të ujdisni Kopjeruajtje të Sigurt & administroni kyçet tuaj që nga Rregullimet.",
                 "title_confirm_phrase": "Ripohoni Frazë Sigurie",
                 "title_save_key": "Ruani Kyçin tuaj të Sigurisë",
                 "title_set_phrase": "Caktoni një Frazë Sigurie",
-                "title_upgrade_encryption": "Përmirësoni fshehtëzimin tuaj",
                 "unable_to_setup": "S’u arrit të ujdiset depozitë e fshehtë",
                 "use_different_passphrase": "Të përdoret një frazëkalim tjetër?",
                 "use_phrase_only_you_know": "Jepni një frazë të fshehtë që e dini vetëm ju, dhe, në daçi, ruani një Kyç Sigurie për ta përdorur për kopjeruajtje."
@@ -2398,7 +2303,6 @@
             "room_directory_heading": "Drejtori dhomash",
             "room_list_heading": "Listë dhomash",
             "show_avatars_pills": "Shfaq avatarë në përmendje përdoruesish, dhomash dhe aktesh",
-            "show_checklist_shortcuts": "Shhkurtoren e listës së hapave të mirëseardhjes shfaqe mbi listën e dhomave",
             "show_polls_button": "Shfaq buton pyetësorësh",
             "surround_text": "Rrethoje tekstin e përzgjedhur, kur shtypen shenja speciale",
             "time_heading": "Kohë shfaqjeje"
@@ -2626,7 +2530,6 @@
         "warning": "<w>KUJDES:</w> <description/>"
     },
     "share": {
-        "link_title": "Lidhje për te dhoma",
         "permalink_message": "Lidhje për te mesazhi i përzgjedhur",
         "permalink_most_recent": "Lidhje për te mesazhet më të freskët",
         "title_message": "Ndani Me të Tjerë Mesazh Dhome",
@@ -2684,7 +2587,6 @@
         "rageshake": "Dërgoni një njoftim të metash me regjistra",
         "rainbow": "E dërgon mesazhin e dhënë të ngjyrosur si ylber",
         "rainbowme": "E dërgon emote-n e dhënë të ngjyrosur si ylber",
-        "remakeolm": "Urdhër zhvilluesish: Hedh tej sesionin e tanishëm të grupit me dikë dhe ujdis sesione të rinj Olm",
         "remove": "Heq prej kësaj dhome përdoruesin me ID-në e dhënë",
         "roomavatar": "Ndryshon avatarin e dhomës së atëçastshme",
         "roomname": "Cakton emrin e dhomës",
@@ -2712,13 +2614,6 @@
         "upgraderoom": "E kalon një dhomë te një version i ri i përmirësuar",
         "upgraderoom_permission_error": "S’keni lejet e domosdoshme për përdorimin e këtij urdhri.",
         "usage": "Përdorim",
-        "verify": "Verifikon një përdorues, sesion dhe një set kyçesh publikë",
-        "verify_mismatch": "KUJDES: VERIFIKIMI I KYÇIT DËSHTOI! Kyçi i nënshkrimit për %(userId)s dhe sesionin %(deviceId)s është \"%(fprint)s\", që nuk përputhet me kyçin e dhënë \"%(fingerprint)s\". Kjo mund të jetë shenjë se komunikimet tuaja po përgjohen!",
-        "verify_nop": "Sesion i tashmë i verifikuar!",
-        "verify_nop_warning_mismatch": "KUJDES: sesion tashmë i verifikuar, por kyçet NUK PËRPUTHEN!",
-        "verify_success_description": "Kyçi i nënshkrimit që dhatë përputhet me kyçin e nënshkrimit që morët nga sesioni i %(userId)s %(deviceId)s. Sesionit iu vu shenjë si i verifikuar.",
-        "verify_success_title": "Kyç i verifikuar",
-        "verify_unknown_pair": "Çift (përdorues, sesion) i pavlefshëm: (%(userId)s, %(deviceId)s)",
         "whois": "Shfaq të dhëna rreth një përdoruesi"
     },
     "space": {
@@ -2754,7 +2649,6 @@
         "invite": "Ftoni njerëz",
         "invite_description": "Ftoni përmes email-i ose emri përdoruesi",
         "invite_link": "Jepuni lidhje ftese",
-        "invite_this_space": "Ftoni në këtë hapësirë",
         "joining_space": "Po hyhet",
         "landing_welcome": "Mirë se vini te <name/>",
         "leave_dialog_action": "Braktiseni hapësirën",
@@ -2921,10 +2815,6 @@
         "error_rendering_message": "S’ngarkohet dot ky mesazh",
         "historical_messages_unavailable": "S’mund të shihni mesazhe më të hershëm",
         "in_room_name": " në <strong>%(room)s</strong>",
-        "io.element.voice_broadcast_info": {
-            "user": "%(senderName)s përfundoi një <a>transmetim zanor</a>",
-            "you": "Përfunduat një <a>transmetim zanor</a>"
-        },
         "io.element.widgets.layout": "%(senderName)s ka përditësuar skemën e dhomës",
         "load_error": {
             "no_permission": "U provua të ngarkohej një pikë e caktuar në kronologjinë e kësaj dhome, por nuk keni leje për ta parë mesazhin në fjalë.",
@@ -3101,7 +2991,9 @@
             "sent": "%(senderName)s dërgoi një ftesë për %(targetDisplayName)s që të marrë pjesë në dhomë."
         },
         "m.room.tombstone": "%(senderDisplayName)s e përmirësoi këtë dhomë.",
-        "m.room.topic": "%(senderDisplayName)s ndryshoi temën në \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s ndryshoi temën në \"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s dërgoi një ngjitës.",
         "m.video": {
             "error_decrypting": "Gabim në shfshehtëzim videoje"
@@ -3325,7 +3217,6 @@
     "truncated_list_n_more": {
         "other": "Dhe %(count)s të tjerë…"
     },
-    "unknown_device": "Pajisje e panjohur",
     "update": {
         "changelog": "Regjistër ndryshimesh",
         "check_action": "Kontrollo për përditësime",
@@ -3365,14 +3256,6 @@
         "ban_room_confirm_title": "Dëboje prej %(roomName)s",
         "ban_space_everything": "Dëboji prej gjithçkaje ku mundem ta bëj këtë",
         "ban_space_specific": "Dëboji prej gjërash të caktuara ku mundem ta bëj këtë",
-        "count_of_sessions": {
-            "other": "%(count)s sesione",
-            "one": "%(count)s sesion"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s sesione të verifikuar",
-            "one": "1 sesion i verifikuar"
-        },
         "deactivate_confirm_action": "Çaktivizoje përdoruesin",
         "deactivate_confirm_description": "Çaktivizimi i këtij përdoruesi do të sjellë nxjerrjen e tij nga llogaria përkatëse dhe do të pengojë rihyrjen e tij. Veç kësaj, do të braktisë krejt dhomat ku ndodhet. Ky veprim s’mund të prapësohet. Jeni i sigurt se doni të çaktivizohet ky përdorues?",
         "deactivate_confirm_title": "Të çaktivizohet përdoruesi?",
@@ -3383,15 +3266,12 @@
         "disinvite_button_room": "Hiqi ftesën për këtë dhomë",
         "disinvite_button_room_name": "Hiqja ftesën për %(roomName)s",
         "disinvite_button_space": "Hiqi ftesën për këtë hapësirë",
-        "edit_own_devices": "Përpunoni pajisje",
         "error_ban_user": "S’u arrit të dëbohej përdoruesi",
         "error_deactivate": "S’u arrit të çaktivizohet përdorues",
         "error_kicking_user": "S’u arrit të hiqej përdoruesi",
         "error_mute_user": "S’u arrit t’i hiqej zëri përdoruesit",
         "error_revoke_3pid_invite_description": "S’u shfuqizua dot ftesa. Shërbyesi mund të jetë duke kaluar një problem të përkohshëm ose s’keni leje të mjaftueshme për të shfuqizuar ftesën.",
         "error_revoke_3pid_invite_title": "S’u arrit të shfuqizohej ftesa",
-        "hide_sessions": "Fshih sesione",
-        "hide_verified_sessions": "Fshih sesione të verifikuar",
         "ignore_confirm_description": "Krejt mesazhet dhe ftesat prej këtij përdoruesi do të fshihen. Jeni i sigurt se doni të shpërfillet?",
         "ignore_confirm_title": "Shpërfille %(user)s",
         "invited_by": "Ftuar nga %(sender)s",
@@ -3440,36 +3320,6 @@
         "switch_theme_dark": "Kalo nën mënyrën e errët",
         "switch_theme_light": "Kalo nën mënyrën e çelët"
     },
-    "voice_broadcast": {
-        "30s_backward": "30s mbrapsht",
-        "30s_forward": "30s përpara",
-        "action": "Transmetim zanor",
-        "confirm_listen_affirm": "Po, përfundoje regjistrimin tim",
-        "confirm_listen_description": "Nëse filloni të dëgjoni te ky transmetim i drejtpërdrejtë, regjistrimi juaj i tanishëm i një transmetimi të drejtpërdrejtë do të përfundojë.",
-        "confirm_listen_title": "Të dëgjohet te transmetimi i drejtpërdrejtë?",
-        "confirm_stop_affirm": "Po, ndale transmetimin zanor",
-        "confirm_stop_description": "Jeni i sigurt se doni të ndalet transmetimi juaj i drejtpërdrejtë? Kjo do të përfundojë transmetimin dhe regjistrimi i plotë do të jetë i passhëm te dhoma.",
-        "confirm_stop_title": "Të ndalet transmetimi i drejtpërdrejtë?",
-        "connection_error": "Gabim lidhjeje - Regjistrimi u ndal",
-        "failed_already_recording_description": "Po incizoni tashmë një transmetim zanor. Ju lutemi, që të nisni një të ri, përfundoni transmetimin tuaj zanor të tanishëm.",
-        "failed_already_recording_title": "S’niset dot një transmetim zanor i ri",
-        "failed_decrypt": "S’arrihet të shfshehtëzohet transmetim zanor",
-        "failed_generic": "S’arrihet të luhet ky transmetim zanor",
-        "failed_insufficient_permission_description": "S’keni lejet e domosdoshme që të nisni një transmetim zanor në këtë dhomë. Lidhuni me një përgjegjës dhome që të përmirësoni lejet tuaja.",
-        "failed_insufficient_permission_title": "S’niset dot një transmetim zanor i ri",
-        "failed_no_connection_description": "Mjerisht, s’qemë në gjendje të nisnim tani një regjistrim. Ju lutemi, riprovoni më vonë.",
-        "failed_no_connection_title": "Gabim lidhjeje",
-        "failed_others_already_recording_description": "Dikush tjetër është duke incizuar një transmetim zanor. Që të nisni një të ri, prisni të përfundojë incizimi zanor i tij.",
-        "failed_others_already_recording_title": "S’niset dot një transmetim zanor i ri",
-        "live": "Drejtpërdrejt",
-        "pause": "ndal transmetim zanor",
-        "play": "luaj transmetim zanor",
-        "resume": "vazhdo transmetim zanor"
-    },
-    "voice_message": {
-        "cant_start_broadcast_description": "S’mund të niset mesazh zanor, ngaqë aktualisht po incizoni një transmetim të drejtpërdrejtë. Ju lutemi, përfundoni transmetimin e drejtpërdrejtë, që të mund të nisni incizimin e një mesazhi zanor.",
-        "cant_start_broadcast_title": "S’niset dot mesazh zanor"
-    },
     "voip": {
         "already_in_call": "Tashmë në thirrje",
         "already_in_call_person": "Gjendeni tashmë në thirrje me këtë person.",
@@ -3489,7 +3339,6 @@
         "camera_disabled": "Kamera juaj është e fikur",
         "camera_enabled": "Kamera juaj është ende e aktivizuar",
         "cannot_call_yourself_description": "S’mund të bëni thirrje me vetveten.",
-        "change_input_device": "Ndryshoni pajisje dhëniesh",
         "connecting": "Po lidhet",
         "connection_lost": "Humbi lidhja me shërbyesin",
         "connection_lost_description": "S’mund të bëni thirrje pa një lidhje te shërbyesi.",
@@ -3505,13 +3354,10 @@
         "enable_camera": "Aktivizo kamerën",
         "enable_microphone": "Çheshto mikrofonin",
         "expand": "Kthehu te thirrja",
-        "failed_call_live_broadcast_description": "S’mund të nisni një thirrje, ngaqë aktualisht jeni duke regjistruar një transmetim të drejtpërdrejtë. Që të mund të nisni një thirrje, ju lutemi, përfundoni transmetimin tuaj të drejtpërdrejtë.",
-        "failed_call_live_broadcast_title": "S’fillohet dot thirrje",
         "hangup": "Mbylle Thirrjen",
         "hide_sidebar_button": "Fshihe anështyllën",
         "input_devices": "Pajisje input-i",
         "join_button_tooltip_call_full": "Na ndjeni — aktualisht kjo thirrje është plot",
-        "join_button_tooltip_connecting": "Po lidhet",
         "maximise": "Mbushe ekranin",
         "misconfigured_server": "Thirrja dështoi për shkak shërbyesi të keqformësuar",
         "misconfigured_server_description": "Që thirrjet të funksionojnë pa probleme, ju lutemi, kërkojini përgjegjësit të shërbyesit tuaj Home (<code>%(homeserverDomain)s</code>) të formësojë një shërbyes TURN.",

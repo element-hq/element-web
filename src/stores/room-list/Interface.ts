@@ -2,15 +2,15 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import type { Room } from "matrix-js-sdk/src/matrix";
 import type { EventEmitter } from "events";
-import { ITagMap, ListAlgorithm, SortAlgorithm } from "./algorithms/models";
-import { RoomUpdateCause, TagID } from "./models";
-import { IFilterCondition } from "./filters/IFilterCondition";
+import { type ITagMap, type ListAlgorithm, type SortAlgorithm } from "./algorithms/models";
+import { type RoomUpdateCause, type TagID } from "./models";
+import { type IFilterCondition } from "./filters/IFilterCondition";
 
 export enum RoomListStoreEvent {
     // The event/channel which is called when the room lists have been changed.

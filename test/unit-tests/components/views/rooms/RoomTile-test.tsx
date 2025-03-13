@@ -2,25 +2,24 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, screen, act, RenderResult } from "jest-matrix-react";
-import { mocked, Mocked } from "jest-mock";
+import { render, screen, act, type RenderResult } from "jest-matrix-react";
+import { mocked, type Mocked } from "jest-mock";
 import {
-    MatrixClient,
+    type MatrixClient,
     PendingEventOrdering,
     Room,
-    MatrixEvent,
     RoomStateEvent,
-    Thread,
+    type Thread,
+    type RoomMember,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { Widget } from "matrix-widget-api";
 
-import type { RoomMember } from "matrix-js-sdk/src/matrix";
 import type { ClientWidgetApi } from "matrix-widget-api";
 import {
     stubClient,
@@ -38,10 +37,8 @@ import RoomTile from "../../../../../src/components/views/rooms/RoomTile";
 import { DefaultTagID } from "../../../../../src/stores/room-list/models";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import PlatformPeg from "../../../../../src/PlatformPeg";
-import BasePlatform from "../../../../../src/BasePlatform";
+import type BasePlatform from "../../../../../src/BasePlatform";
 import { WidgetMessagingStore } from "../../../../../src/stores/widgets/WidgetMessagingStore";
-import { VoiceBroadcastInfoState } from "../../../../../src/voice-broadcast";
-import { mkVoiceBroadcastInfoStateEvent } from "../../../voice-broadcast/utils/test-utils";
 import { TestSdkContext } from "../../../TestSdkContext";
 import { SDKContext } from "../../../../../src/contexts/SDKContext";
 import { shouldShowComponent } from "../../../../../src/customisations/helpers/UIComponents";
@@ -49,7 +46,6 @@ import { UIComponent } from "../../../../../src/settings/UIFeature";
 import { MessagePreviewStore } from "../../../../../src/stores/room-list/MessagePreviewStore";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
-import { ConnectionState } from "../../../../../src/models/Call";
 
 jest.mock("../../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
@@ -60,20 +56,6 @@ describe("RoomTile", () => {
         overrideBrowserShortcuts: () => false,
     } as unknown as BasePlatform);
     useMockedCalls();
-
-    const setUpVoiceBroadcast = async (state: VoiceBroadcastInfoState): Promise<void> => {
-        voiceBroadcastInfoEvent = mkVoiceBroadcastInfoStateEvent(
-            room.roomId,
-            state,
-            client.getSafeUserId(),
-            client.getDeviceId()!,
-        );
-
-        await act(async () => {
-            room.currentState.setStateEvents([voiceBroadcastInfoEvent]);
-            await flushPromises();
-        });
-    };
 
     const renderRoomTile = (): RenderResult => {
         return render(
@@ -89,7 +71,6 @@ describe("RoomTile", () => {
     };
 
     let client: Mocked<MatrixClient>;
-    let voiceBroadcastInfoEvent: MatrixEvent;
     let room: Room;
     let sdkContext: TestSdkContext;
     let showMessagePreview = false;
@@ -234,41 +215,10 @@ describe("RoomTile", () => {
             it("tracks connection state", async () => {
                 renderRoomTile();
                 screen.getByText("Video");
-
-                let completeWidgetLoading: () => void = () => {};
-                const widgetLoadingCompleted = new Promise<void>((resolve) => (completeWidgetLoading = resolve));
-
-                // Insert an await point in the connection method so we can inspect
-                // the intermediate connecting state
-                let completeConnection: () => void = () => {};
-                const connectionCompleted = new Promise<void>((resolve) => (completeConnection = resolve));
-
-                let completeLobby: () => void = () => {};
-                const lobbyCompleted = new Promise<void>((resolve) => (completeLobby = resolve));
-
-                jest.spyOn(call, "performConnection").mockImplementation(async () => {
-                    call.setConnectionState(ConnectionState.WidgetLoading);
-                    await widgetLoadingCompleted;
-                    call.setConnectionState(ConnectionState.Lobby);
-                    await lobbyCompleted;
-                    call.setConnectionState(ConnectionState.Connecting);
-                    await connectionCompleted;
-                });
-
-                await Promise.all([
-                    (async () => {
-                        await screen.findByText("Loading…");
-                        completeWidgetLoading();
-                        await screen.findByText("Lobby");
-                        completeLobby();
-                        await screen.findByText("Joining…");
-                        completeConnection();
-                        await screen.findByText("Joined");
-                    })(),
-                    call.start(),
-                ]);
-
-                await Promise.all([screen.findByText("Video"), call.disconnect()]);
+                await act(() => call.start());
+                screen.getByText("Joined");
+                await act(() => call.disconnect());
+                screen.getByText("Video");
             });
 
             it("tracks participants", () => {
@@ -302,49 +252,6 @@ describe("RoomTile", () => {
                     call.participants = new Map();
                 });
                 expect(screen.queryByLabelText(/participant/)).toBe(null);
-            });
-
-            describe("and a live broadcast starts", () => {
-                beforeEach(async () => {
-                    renderRoomTile();
-                    await setUpVoiceBroadcast(VoiceBroadcastInfoState.Started);
-                });
-
-                it("should still render the call subtitle", () => {
-                    expect(screen.queryByText("Video")).toBeInTheDocument();
-                    expect(screen.queryByText("Live")).not.toBeInTheDocument();
-                });
-            });
-        });
-
-        describe("when a live voice broadcast starts", () => {
-            beforeEach(async () => {
-                renderRoomTile();
-                await setUpVoiceBroadcast(VoiceBroadcastInfoState.Started);
-            });
-
-            it("should render the »Live« subtitle", () => {
-                expect(screen.queryByText("Live")).toBeInTheDocument();
-            });
-
-            describe("and the broadcast stops", () => {
-                beforeEach(async () => {
-                    const stopEvent = mkVoiceBroadcastInfoStateEvent(
-                        room.roomId,
-                        VoiceBroadcastInfoState.Stopped,
-                        client.getSafeUserId(),
-                        client.getDeviceId()!,
-                        voiceBroadcastInfoEvent,
-                    );
-                    await act(async () => {
-                        room.currentState.setStateEvents([stopEvent]);
-                        await flushPromises();
-                    });
-                });
-
-                it("should not render the »Live« subtitle", () => {
-                    expect(screen.queryByText("Live")).not.toBeInTheDocument();
-                });
             });
         });
     });

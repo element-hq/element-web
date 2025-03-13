@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -17,7 +17,9 @@ describe("<VerificationQRCode />", () => {
     });
 
     it("renders a QR code", async () => {
-        const { container, getAllByAltText } = render(<VerificationQRCode qrCodeBytes={Buffer.from("asd")} />);
+        const { container, getAllByAltText } = render(
+            <VerificationQRCode qrCodeBytes={new Uint8ClampedArray(Buffer.from("asd"))} />,
+        );
         // wait for the spinner to go away
         await waitFor(() => getAllByAltText("QR Code").length === 1);
         expect(container).toMatchSnapshot();

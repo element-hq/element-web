@@ -1,15 +1,16 @@
 /*
 Copyright 2024 New Vector Ltd.
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { AllDevicesIsolationMode, OnlySignedDevicesIsolationMode } from "matrix-js-sdk/src/crypto-api";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import SettingController from "./SettingController";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-import { SettingLevel } from "../SettingLevel";
+import { type SettingLevel } from "../SettingLevel";
 
 /**
  * A controller for the "exclude_insecure_devices" setting, which will

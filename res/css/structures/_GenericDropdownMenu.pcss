@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -25,7 +25,7 @@ Please see LICENSE files in the repository root for full details.
     width: 18px;
     height: 18px;
     background: currentColor;
-    mask-image: url("$(res)/img/feather-customised/chevron-down.svg");
+    mask-image: url("@vector-im/compound-design-tokens/icons/chevron-down.svg");
     mask-size: 100%;
     mask-repeat: no-repeat;
     float: right;
@@ -99,11 +99,11 @@ Please see LICENSE files in the repository root for full details.
 
             &[aria-checked="true"]::before {
                 content: "";
-                width: 12px;
-                height: 12px;
-                margin-left: -20px;
-                margin-right: 8px;
-                mask-image: url("$(res)/img/feather-customised/check.svg");
+                width: 16px;
+                height: 16px;
+                margin-left: -22px;
+                margin-right: 6px;
+                mask-image: url("@vector-im/compound-design-tokens/icons/check.svg");
                 mask-size: 100%;
                 mask-repeat: no-repeat;
                 background-color: $primary-content;

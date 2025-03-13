@@ -3,15 +3,15 @@ Copyright 2024 New Vector Ltd.
 Copyright 2019, 2020 , 2023 The Matrix.org Foundation C.I.C.
 Copyright 2018, 2019 New Vector Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef } from "react";
 import FileSaver from "file-saver";
 import { logger } from "matrix-js-sdk/src/logger";
-import { AuthDict, CrossSigningKeys, MatrixError, UIAFlow, UIAResponse } from "matrix-js-sdk/src/matrix";
-import { CryptoEvent, BackupTrustInfo, GeneratedSecretStorageKey, KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
+import { type AuthDict } from "matrix-js-sdk/src/matrix";
+import { type GeneratedSecretStorageKey } from "matrix-js-sdk/src/crypto-api";
 import classNames from "classnames";
 import CheckmarkIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 
@@ -25,27 +25,25 @@ import StyledRadioButton from "../../../../components/views/elements/StyledRadio
 import AccessibleButton from "../../../../components/views/elements/AccessibleButton";
 import DialogButtons from "../../../../components/views/elements/DialogButtons";
 import InlineSpinner from "../../../../components/views/elements/InlineSpinner";
-import RestoreKeyBackupDialog from "../../../../components/views/dialogs/security/RestoreKeyBackupDialog";
 import {
     getSecureBackupSetupMethods,
     isSecureBackupRequired,
     SecureBackupSetupMethod,
 } from "../../../../utils/WellKnownUtils";
 import { ModuleRunner } from "../../../../modules/ModuleRunner";
-import Field from "../../../../components/views/elements/Field";
+import type Field from "../../../../components/views/elements/Field";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
 import Spinner from "../../../../components/views/elements/Spinner";
 import InteractiveAuthDialog from "../../../../components/views/dialogs/InteractiveAuthDialog";
-import { IValidationResult } from "../../../../components/views/elements/Validation";
+import { type IValidationResult } from "../../../../components/views/elements/Validation";
 import PassphraseConfirmField from "../../../../components/views/auth/PassphraseConfirmField";
-import { initialiseDehydration } from "../../../../utils/device/dehydration";
+import { initialiseDehydrationIfEnabled } from "../../../../utils/device/dehydration";
 
 // I made a mistake while converting this and it has to be fixed!
 enum Phase {
     Loading = "loading",
     LoadError = "load_error",
     ChooseKeyPassphrase = "choose_key_passphrase",
-    Migrate = "migrate",
     Passphrase = "passphrase",
     PassphraseConfirm = "passphrase_confirm",
     ShowKey = "show_key",
@@ -57,9 +55,8 @@ enum Phase {
 const PASSWORD_MIN_SCORE = 4; // So secure, many characters, much complex, wow, etc, etc.
 
 interface IProps {
-    hasCancel?: boolean;
-    accountPassword?: string;
     forceReset?: boolean;
+    resetCrossSigning?: boolean;
     onFinished(ok?: boolean): void;
 }
 
@@ -72,29 +69,6 @@ interface IState {
     downloaded: boolean;
     setPassphrase: boolean;
 
-    /** Information on the current key backup version, as returned by the server.
-     *
-     * `null` could mean any of:
-     *    * we haven't yet requested the data from the server.
-     *    * we were unable to reach the server.
-     *    * the server returned key backup version data we didn't understand or was malformed.
-     *    * there is actually no backup on the server.
-     */
-    backupInfo: KeyBackupInfo | null;
-
-    /**
-     * Information on whether the backup in `backupInfo` is correctly signed, and whether we have the right key to
-     * decrypt it.
-     *
-     * `undefined` if `backupInfo` is null, or if crypto is not enabled in the client.
-     */
-    backupTrustInfo: BackupTrustInfo | undefined;
-
-    // does the server offer a UI auth flow with just m.login.password
-    // for /keys/device_signing/upload?
-    canUploadKeysWithPasswordOnly: boolean | null;
-    accountPassword: string;
-    accountPasswordCorrect: boolean | null;
     canSkip: boolean;
     passPhraseKeySelected: string;
     error?: boolean;
@@ -109,8 +83,8 @@ interface IState {
  */
 export default class CreateSecretStorageDialog extends React.PureComponent<IProps, IState> {
     public static defaultProps: Partial<IProps> = {
-        hasCancel: true,
         forceReset: false,
+        resetCrossSigning: false,
     };
     private recoveryKey?: GeneratedSecretStorageKey;
     private recoveryKeyNode = createRef<HTMLElement>();
@@ -129,117 +103,34 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             passPhraseKeySelected = SecureBackupSetupMethod.Passphrase;
         }
 
-        const accountPassword = props.accountPassword || "";
-        let canUploadKeysWithPasswordOnly: boolean | null = null;
-        if (accountPassword) {
-            // If we have an account password in memory, let's simplify and
-            // assume it means password auth is also supported for device
-            // signing key upload as well. This avoids hitting the server to
-            // test auth flows, which may be slow under high load.
-            canUploadKeysWithPasswordOnly = true;
-        } else {
-            this.queryKeyUploadAuth();
-        }
+        const keyFromCustomisations = ModuleRunner.instance.extensions.cryptoSetup.createSecretStorageKey();
+        const phase = keyFromCustomisations ? Phase.Loading : Phase.ChooseKeyPassphrase;
 
         this.state = {
-            phase: Phase.Loading,
+            phase,
             passPhrase: "",
             passPhraseValid: false,
             passPhraseConfirm: "",
             copied: false,
             downloaded: false,
             setPassphrase: false,
-            backupInfo: null,
-            backupTrustInfo: undefined,
-            // does the server offer a UI auth flow with just m.login.password
-            // for /keys/device_signing/upload?
-            accountPasswordCorrect: null,
             canSkip: !isSecureBackupRequired(cli),
-            canUploadKeysWithPasswordOnly,
             passPhraseKeySelected,
-            accountPassword,
         };
-
-        cli.on(CryptoEvent.KeyBackupStatus, this.onKeyBackupStatusChange);
-
-        this.getInitialPhase();
     }
 
-    public componentWillUnmount(): void {
-        MatrixClientPeg.get()?.removeListener(CryptoEvent.KeyBackupStatus, this.onKeyBackupStatusChange);
-    }
-
-    private getInitialPhase(): void {
+    public componentDidMount(): void {
         const keyFromCustomisations = ModuleRunner.instance.extensions.cryptoSetup.createSecretStorageKey();
-        if (keyFromCustomisations) {
-            logger.log("CryptoSetupExtension: Created key via extension, jumping to bootstrap step");
-            this.recoveryKey = {
-                privateKey: keyFromCustomisations,
-            };
-            this.bootstrapSecretStorage();
-            return;
-        }
-
-        this.fetchBackupInfo();
+        if (keyFromCustomisations) this.initExtension(keyFromCustomisations);
     }
 
-    /**
-     * Attempt to get information on the current backup from the server, and update the state.
-     *
-     * Updates {@link IState.backupInfo} and {@link IState.backupTrustInfo}, and picks an appropriate phase for
-     * {@link IState.phase}.
-     *
-     * @returns If the backup data was retrieved successfully, the trust info for the backup. Otherwise, undefined.
-     */
-    private async fetchBackupInfo(): Promise<BackupTrustInfo | undefined> {
-        try {
-            const cli = MatrixClientPeg.safeGet();
-            const backupInfo = await cli.getKeyBackupVersion();
-            const backupTrustInfo =
-                // we may not have started crypto yet, in which case we definitely don't trust the backup
-                backupInfo ? await cli.getCrypto()?.isKeyBackupTrusted(backupInfo) : undefined;
-
-            const { forceReset } = this.props;
-            const phase = backupInfo && !forceReset ? Phase.Migrate : Phase.ChooseKeyPassphrase;
-
-            this.setState({
-                phase,
-                backupInfo,
-                backupTrustInfo,
-            });
-
-            return backupTrustInfo;
-        } catch (e) {
-            console.error("Error fetching backup data from server", e);
-            this.setState({ phase: Phase.LoadError });
-            return undefined;
-        }
+    private initExtension(keyFromCustomisations: Uint8Array): void {
+        logger.log("CryptoSetupExtension: Created key via extension, jumping to bootstrap step");
+        this.recoveryKey = {
+            privateKey: keyFromCustomisations,
+        };
+        this.bootstrapSecretStorage();
     }
-
-    private async queryKeyUploadAuth(): Promise<void> {
-        try {
-            await MatrixClientPeg.safeGet().uploadDeviceSigningKeys(undefined, {} as CrossSigningKeys);
-            // We should never get here: the server should always require
-            // UI auth to upload device signing keys. If we do, we upload
-            // no keys which would be a no-op.
-            logger.log("uploadDeviceSigningKeys unexpectedly succeeded without UI auth!");
-        } catch (error) {
-            if (!(error instanceof MatrixError) || !error.data || !error.data.flows) {
-                logger.log("uploadDeviceSigningKeys advertised no flows!");
-                return;
-            }
-            const canUploadKeysWithPasswordOnly = error.data.flows.some((f: UIAFlow) => {
-                return f.stages.length === 1 && f.stages[0] === "m.login.password";
-            });
-            this.setState({
-                canUploadKeysWithPasswordOnly,
-            });
-        }
-    }
-
-    private onKeyBackupStatusChange = (): void => {
-        if (this.state.phase === Phase.Migrate) this.fetchBackupInfo();
-    };
 
     private onKeyPassphraseChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
@@ -265,15 +156,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         }
     };
 
-    private onMigrateFormSubmit = (e: React.FormEvent): void => {
-        e.preventDefault();
-        if (this.state.backupTrustInfo?.trusted) {
-            this.bootstrapSecretStorage();
-        } else {
-            this.restoreBackup();
-        }
-    };
-
     private onCopyClick = (): void => {
         const successful = copyNode(this.recoveryKeyNode.current);
         if (successful) {
@@ -295,69 +177,84 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         });
     };
 
-    private doBootstrapUIAuth = async (
-        makeRequest: (authData: AuthDict) => Promise<UIAResponse<void>>,
-    ): Promise<void> => {
-        if (this.state.canUploadKeysWithPasswordOnly && this.state.accountPassword) {
-            await makeRequest({
-                type: "m.login.password",
-                identifier: {
-                    type: "m.id.user",
-                    user: MatrixClientPeg.safeGet().getSafeUserId(),
-                },
-                password: this.state.accountPassword,
-            });
-        } else {
-            const dialogAesthetics = {
-                [SSOAuthEntry.PHASE_PREAUTH]: {
-                    title: _t("auth|uia|sso_title"),
-                    body: _t("auth|uia|sso_preauth_body"),
-                    continueText: _t("auth|sso"),
-                    continueKind: "primary",
-                },
-                [SSOAuthEntry.PHASE_POSTAUTH]: {
-                    title: _t("encryption|confirm_encryption_setup_title"),
-                    body: _t("encryption|confirm_encryption_setup_body"),
-                    continueText: _t("action|confirm"),
-                    continueKind: "primary",
-                },
-            };
+    private doBootstrapUIAuth = async (makeRequest: (authData: AuthDict) => Promise<void>): Promise<void> => {
+        const dialogAesthetics = {
+            [SSOAuthEntry.PHASE_PREAUTH]: {
+                title: _t("auth|uia|sso_title"),
+                body: _t("auth|uia|sso_preauth_body"),
+                continueText: _t("auth|sso"),
+                continueKind: "primary",
+            },
+            [SSOAuthEntry.PHASE_POSTAUTH]: {
+                title: _t("encryption|confirm_encryption_setup_title"),
+                body: _t("encryption|confirm_encryption_setup_body"),
+                continueText: _t("action|confirm"),
+                continueKind: "primary",
+            },
+        };
 
-            const { finished } = Modal.createDialog(InteractiveAuthDialog, {
-                title: _t("encryption|bootstrap_title"),
-                matrixClient: MatrixClientPeg.safeGet(),
-                makeRequest,
-                aestheticsForStagePhases: {
-                    [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
-                    [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
-                },
-            });
-            const [confirmed] = await finished;
-            if (!confirmed) {
-                throw new Error("Cross-signing key upload auth canceled");
-            }
+        const { finished } = Modal.createDialog(InteractiveAuthDialog, {
+            title: _t("encryption|bootstrap_title"),
+            matrixClient: MatrixClientPeg.safeGet(),
+            makeRequest,
+            aestheticsForStagePhases: {
+                [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
+                [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
+            },
+        });
+        const [confirmed] = await finished;
+        if (!confirmed) {
+            throw new Error("Cross-signing key upload auth canceled");
         }
     };
 
     private bootstrapSecretStorage = async (): Promise<void> => {
+        const cli = MatrixClientPeg.safeGet();
+        const crypto = cli.getCrypto()!;
+        const { forceReset, resetCrossSigning } = this.props;
+
+        let backupInfo;
+        // First, unless we know we want to do a reset, we see if there is an existing key backup
+        if (!forceReset) {
+            try {
+                this.setState({ phase: Phase.Loading });
+                backupInfo = await crypto.getKeyBackupInfo();
+            } catch (e) {
+                logger.error("Error fetching backup data from server", e);
+                this.setState({ phase: Phase.LoadError });
+                return;
+            }
+        }
+
         this.setState({
             phase: Phase.Storing,
             error: undefined,
         });
 
-        const cli = MatrixClientPeg.safeGet();
-        const crypto = cli.getCrypto()!;
-
-        const { forceReset } = this.props;
-
         try {
             if (forceReset) {
+                /* Resetting cross-signing requires secret storage to be reset
+                 * (otherwise it will try to store the cross-signing keys in the
+                 * old secret storage, and may prompt for the old key, which is
+                 * probably not available), and resetting key backup requires
+                 * cross-signing to be reset (so that the new backup can be
+                 * signed by the new cross-signing key).  So we reset secret
+                 * storage first, then cross-signing, then key backup.
+                 */
                 logger.log("Forcing secret storage reset");
                 await crypto.bootstrapSecretStorage({
                     createSecretStorageKey: async () => this.recoveryKey!,
-                    setupNewKeyBackup: true,
                     setupNewSecretStorage: true,
                 });
+                if (resetCrossSigning) {
+                    logger.log("Resetting cross signing");
+                    await crypto.bootstrapCrossSigning({
+                        authUploadDeviceSigningKeys: this.doBootstrapUIAuth,
+                        setupNewCrossSigning: true,
+                    });
+                }
+                logger.log("Resetting key backup");
+                await crypto.resetKeyBackup();
             } else {
                 // For password authentication users after 2020-09, this cross-signing
                 // step will be a no-op since it is now setup during registration or login
@@ -371,30 +268,16 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                 });
                 await crypto.bootstrapSecretStorage({
                     createSecretStorageKey: async () => this.recoveryKey!,
-                    keyBackupInfo: this.state.backupInfo!,
-                    setupNewKeyBackup: !this.state.backupInfo,
+                    setupNewKeyBackup: !backupInfo,
                 });
             }
-            await initialiseDehydration(true);
+            await initialiseDehydrationIfEnabled(cli, { createNewKey: true });
 
             this.setState({
                 phase: Phase.Stored,
             });
         } catch (e) {
-            if (
-                this.state.canUploadKeysWithPasswordOnly &&
-                e instanceof MatrixError &&
-                e.httpStatus === 401 &&
-                e.data.flows
-            ) {
-                this.setState({
-                    accountPassword: "",
-                    accountPasswordCorrect: false,
-                    phase: Phase.Migrate,
-                });
-            } else {
-                this.setState({ error: true });
-            }
+            this.setState({ error: true });
             logger.error("Error bootstrapping secret storage", e);
         }
     };
@@ -403,30 +286,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         this.props.onFinished(false);
     };
 
-    private restoreBackup = async (): Promise<void> => {
-        const keyCallback = (k: Uint8Array): void => {};
-
-        const { finished } = Modal.createDialog(
-            RestoreKeyBackupDialog,
-            {
-                showSummary: false,
-                keyCallback,
-            },
-            undefined,
-            /* priority = */ false,
-            /* static = */ false,
-        );
-
-        await finished;
-        const backupTrustInfo = await this.fetchBackupInfo();
-        if (backupTrustInfo?.trusted && this.state.canUploadKeysWithPasswordOnly && this.state.accountPassword) {
-            this.bootstrapSecretStorage();
-        }
-    };
-
     private onLoadRetryClick = (): void => {
-        this.setState({ phase: Phase.Loading });
-        this.fetchBackupInfo();
+        this.bootstrapSecretStorage();
     };
 
     private onShowKeyContinueClick = (): void => {
@@ -498,12 +359,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         });
     };
 
-    private onAccountPasswordChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        this.setState({
-            accountPassword: e.target.value,
-        });
-    };
-
     private renderOptionKey(): JSX.Element {
         return (
             <StyledRadioButton
@@ -564,55 +419,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                     onCancel={this.onCancelClick}
                     hasCancel={this.state.canSkip}
                 />
-            </form>
-        );
-    }
-
-    private renderPhaseMigrate(): JSX.Element {
-        let authPrompt;
-        let nextCaption = _t("action|next");
-        if (this.state.canUploadKeysWithPasswordOnly) {
-            authPrompt = (
-                <div>
-                    <div>{_t("settings|key_backup|setup_secure_backup|requires_password_confirmation")}</div>
-                    <div>
-                        <Field
-                            id="mx_CreateSecretStorageDialog_password"
-                            type="password"
-                            label={_t("common|password")}
-                            value={this.state.accountPassword}
-                            onChange={this.onAccountPasswordChange}
-                            forceValidity={this.state.accountPasswordCorrect === false ? false : undefined}
-                            autoFocus={true}
-                        />
-                    </div>
-                </div>
-            );
-        } else if (!this.state.backupTrustInfo?.trusted) {
-            authPrompt = (
-                <div>
-                    <div>{_t("settings|key_backup|setup_secure_backup|requires_key_restore")}</div>
-                </div>
-            );
-            nextCaption = _t("action|restore");
-        } else {
-            authPrompt = <p>{_t("settings|key_backup|setup_secure_backup|requires_server_authentication")}</p>;
-        }
-
-        return (
-            <form onSubmit={this.onMigrateFormSubmit}>
-                <p>{_t("settings|key_backup|setup_secure_backup|session_upgrade_description")}</p>
-                <div>{authPrompt}</div>
-                <DialogButtons
-                    primaryButton={nextCaption}
-                    onPrimaryButtonClick={this.onMigrateFormSubmit}
-                    hasCancel={false}
-                    primaryDisabled={!!this.state.canUploadKeysWithPasswordOnly && !this.state.accountPassword}
-                >
-                    <button type="button" className="danger" onClick={this.onCancelClick}>
-                        {_t("action|skip")}
-                    </button>
-                </DialogButtons>
             </form>
         );
     }
@@ -832,8 +638,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         switch (phase) {
             case Phase.ChooseKeyPassphrase:
                 return _t("encryption|set_up_toast_title");
-            case Phase.Migrate:
-                return _t("settings|key_backup|setup_secure_backup|title_upgrade_encryption");
             case Phase.Passphrase:
                 return _t("settings|key_backup|setup_secure_backup|title_set_phrase");
             case Phase.PassphraseConfirm:
@@ -892,9 +696,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                 case Phase.ChooseKeyPassphrase:
                     content = this.renderPhaseChooseKeyPassphrase();
                     break;
-                case Phase.Migrate:
-                    content = this.renderPhaseMigrate();
-                    break;
                 case Phase.Passphrase:
                     content = this.renderPhasePassPhrase();
                     break;
@@ -943,7 +744,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                 top={this.topComponent}
                 title={this.titleForPhase(this.state.phase)}
                 titleClass={titleClass}
-                hasCancel={this.props.hasCancel && [Phase.Passphrase].includes(this.state.phase)}
+                hasCancel={false}
                 fixedWidth={false}
             >
                 <div>{content}</div>

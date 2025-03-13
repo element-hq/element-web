@@ -2,15 +2,15 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { type Room, type RoomMember } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import SettingsStore from "../settings/SettingsStore";
-import { SdkContextClass } from "../contexts/SDKContext";
+import { type SdkContextClass } from "../contexts/SDKContext";
 import SdkConfig from "../SdkConfig";
 
 // Regex applied to filter our punctuation in member names before applying sort, to fuzzy it a little
@@ -70,7 +70,7 @@ export class MemberListStore {
             return [];
         }
 
-        if (!this.isLazyLoadingEnabled(roomId) || this.loadedRooms.has(roomId)) {
+        if (this.loadedRooms.has(roomId) || !(await this.isLazyLoadingEnabled(roomId))) {
             // nice and easy, we must already have all the members so just return them.
             return this.loadMembersInRoom(room);
         }
@@ -90,7 +90,7 @@ export class MemberListStore {
             // load using traditional lazy loading
             try {
                 await room.loadMembersIfNeeded();
-            } catch (ex) {
+            } catch {
                 /* already logged in RoomView */
             }
         }
@@ -121,10 +121,10 @@ export class MemberListStore {
      * @param roomId The room to check if lazy loading is enabled
      * @returns True if enabled
      */
-    private isLazyLoadingEnabled(roomId: string): boolean {
+    private async isLazyLoadingEnabled(roomId: string): Promise<boolean> {
         if (SettingsStore.getValue("feature_sliding_sync")) {
             // only unencrypted rooms use lazy loading
-            return !this.stores.client!.isRoomEncrypted(roomId);
+            return !(await this.stores.client?.getCrypto()?.isEncryptionEnabledInRoom(roomId));
         }
         return this.stores.client!.hasLazyLoadMembersEnabled();
     }

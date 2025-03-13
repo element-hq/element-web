@@ -1,0 +1,236 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UrlPreviewSettings should display the correct preview when the room is encrypted and the url preview is enabled 1`] = `
+<DocumentFragment>
+  <fieldset
+    class="mx_SettingsFieldset"
+  >
+    <legend
+      class="mx_SettingsFieldset_legend"
+    >
+      URL Previews
+    </legend>
+    <div
+      class="mx_SettingsFieldset_description"
+    >
+      <div
+        class="mx_SettingsSubsection_text"
+      >
+        <p>
+          When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.
+        </p>
+        <p>
+          In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.
+        </p>
+      </div>
+    </div>
+    <div
+      class="mx_SettingsFieldset_content"
+    >
+      <div
+        class="mx_SettingsFlag"
+      >
+        <label
+          class="mx_SettingsFlag_label"
+          for="mx_SettingsFlag_vY7Q4uEh9K38"
+        >
+          <span
+            class="mx_SettingsFlag_labelText"
+          />
+        </label>
+        <div
+          aria-checked="true"
+          aria-disabled="false"
+          class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
+          id="mx_SettingsFlag_vY7Q4uEh9K38"
+          role="switch"
+          tabindex="0"
+        >
+          <div
+            class="mx_ToggleSwitch_ball"
+          />
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</DocumentFragment>
+`;
+
+exports[`UrlPreviewSettings should display the correct preview when the room is unencrypted and the url preview is disabled 1`] = `
+<DocumentFragment>
+  <fieldset
+    class="mx_SettingsFieldset"
+  >
+    <legend
+      class="mx_SettingsFieldset_legend"
+    >
+      URL Previews
+    </legend>
+    <div
+      class="mx_SettingsFieldset_description"
+    >
+      <div
+        class="mx_SettingsSubsection_text"
+      >
+        <p>
+          When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.
+        </p>
+        <p>
+          <span>
+            You have 
+          </span>
+        </p>
+        <div
+          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+          role="button"
+          tabindex="0"
+        >
+          disabled
+        </div>
+         URL previews by default.
+        <p />
+      </div>
+    </div>
+    <div
+      class="mx_SettingsFieldset_content"
+    >
+      <div>
+        URL previews are disabled by default for participants in this room.
+      </div>
+      <div
+        class="mx_SettingsFlag"
+      >
+        <label
+          class="mx_SettingsFlag_label"
+          for="mx_SettingsFlag_vY7Q4uEh9K38"
+        >
+          <span
+            class="mx_SettingsFlag_labelText"
+          >
+            Enable inline URL previews by default
+          </span>
+        </label>
+        <div
+          aria-checked="false"
+          aria-disabled="true"
+          aria-label="Enable inline URL previews by default"
+          class="mx_AccessibleButton mx_ToggleSwitch"
+          id="mx_SettingsFlag_vY7Q4uEh9K38"
+          role="switch"
+          tabindex="0"
+        >
+          <div
+            class="mx_ToggleSwitch_ball"
+          />
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</DocumentFragment>
+`;
+
+exports[`UrlPreviewSettings should display the correct preview when the room is unencrypted and the url preview is enabled 1`] = `
+<DocumentFragment>
+  <fieldset
+    class="mx_SettingsFieldset"
+  >
+    <legend
+      class="mx_SettingsFieldset_legend"
+    >
+      URL Previews
+    </legend>
+    <div
+      class="mx_SettingsFieldset_description"
+    >
+      <div
+        class="mx_SettingsSubsection_text"
+      >
+        <p>
+          When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.
+        </p>
+        <p>
+          <span>
+            You have 
+          </span>
+        </p>
+        <div
+          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+          role="button"
+          tabindex="0"
+        >
+          enabled
+        </div>
+         URL previews by default.
+        <p />
+      </div>
+    </div>
+    <div
+      class="mx_SettingsFieldset_content"
+    >
+      <div>
+        URL previews are enabled by default for participants in this room.
+      </div>
+      <div
+        class="mx_SettingsFlag"
+      >
+        <label
+          class="mx_SettingsFlag_label"
+          for="mx_SettingsFlag_vY7Q4uEh9K38"
+        >
+          <span
+            class="mx_SettingsFlag_labelText"
+          >
+            Enable inline URL previews by default
+          </span>
+        </label>
+        <div
+          aria-checked="true"
+          aria-disabled="false"
+          aria-label="Enable inline URL previews by default"
+          class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
+          id="mx_SettingsFlag_vY7Q4uEh9K38"
+          role="switch"
+          tabindex="0"
+        >
+          <div
+            class="mx_ToggleSwitch_ball"
+          />
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</DocumentFragment>
+`;
+
+exports[`UrlPreviewSettings should display the correct preview when the setting is in a loading state 1`] = `
+<DocumentFragment>
+  <fieldset
+    class="mx_SettingsFieldset"
+  >
+    <legend
+      class="mx_SettingsFieldset_legend"
+    >
+      URL Previews
+    </legend>
+    <div
+      class="mx_SettingsFieldset_content"
+    >
+      <svg
+        class="_icon_11k6c_18"
+        fill="currentColor"
+        height="1em"
+        style="width: 20px; height: 20px;"
+        viewBox="0 0 24 24"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          clip-rule="evenodd"
+          d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
+          fill-rule="evenodd"
+        />
+      </svg>
+    </div>
+  </fieldset>
+</DocumentFragment>
+`;

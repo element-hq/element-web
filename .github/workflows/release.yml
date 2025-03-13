@@ -11,9 +11,15 @@ on:
                     - rc
                     - final
 concurrency: ${{ github.workflow }}
+permissions: {}
 jobs:
     release:
         uses: matrix-org/matrix-js-sdk/.github/workflows/release-make.yml@develop
+        permissions:
+            contents: write
+            issues: write
+            pull-requests: read
+            id-token: write
         secrets:
             ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
             GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
@@ -42,14 +48,16 @@ jobs:
         name: Post release checks
         needs: release
         runs-on: ubuntu-24.04
+        permissions:
+            checks: read
         steps:
-            - name: Wait for dockerhub
+            - name: Wait for docker build
               uses: t3chguy/wait-on-check-action@18541021811b56544d90e0f073401c2b99e249d6 # fork
               with:
                   ref: master
                   repo-token: ${{ secrets.GITHUB_TOKEN }}
                   wait-interval: 10
-                  check-name: "Docker Buildx (vanilla)"
+                  check-name: "Docker Buildx"
                   allowed-conclusions: success
 
             - name: Wait for debian package

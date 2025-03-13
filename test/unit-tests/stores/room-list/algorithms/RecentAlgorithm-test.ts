@@ -2,11 +2,11 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
 import { mkMessage, mkRoom, stubClient } from "../../../../test-utils";
@@ -47,11 +47,11 @@ describe("RecentAlgorithm", () => {
 
             room.getMyMembership = () => KnownMembership.Join;
 
-            room.addLiveEvents([event1]);
+            room.addLiveEvents([event1], { addToState: true });
             expect(algorithm.getLastTs(room, "@jane:matrix.org")).toBe(5);
             expect(algorithm.getLastTs(room, "@john:matrix.org")).toBe(5);
 
-            room.addLiveEvents([event2]);
+            room.addLiveEvents([event2], { addToState: true });
 
             expect(algorithm.getLastTs(room, "@jane:matrix.org")).toBe(10);
             expect(algorithm.getLastTs(room, "@john:matrix.org")).toBe(10);
@@ -94,8 +94,8 @@ describe("RecentAlgorithm", () => {
                 event: true,
             });
 
-            room1.addLiveEvents([evt]);
-            room2.addLiveEvents([evt2]);
+            room1.addLiveEvents([evt], { addToState: true });
+            room2.addLiveEvents([evt2], { addToState: true });
 
             expect(algorithm.sortRooms([room2, room1], DefaultTagID.Untagged)).toEqual([room1, room2]);
         });
@@ -115,7 +115,7 @@ describe("RecentAlgorithm", () => {
                 event: true,
             });
 
-            room1.addLiveEvents([evt]);
+            room1.addLiveEvents([evt], { addToState: true });
 
             expect(algorithm.sortRooms([room2, room1], DefaultTagID.Untagged)).toEqual([room2, room1]);
 
@@ -127,7 +127,7 @@ describe("RecentAlgorithm", () => {
                 ts: 12,
             });
 
-            room1.addLiveEvents(events);
+            room1.addLiveEvents(events, { addToState: true });
         });
 
         it("orders rooms based on thread replies too", () => {
@@ -145,7 +145,7 @@ describe("RecentAlgorithm", () => {
                 ts: 12,
                 length: 5,
             });
-            room1.addLiveEvents(events1);
+            room1.addLiveEvents(events1, { addToState: true });
 
             const { events: events2 } = mkThread({
                 room: room2,
@@ -155,7 +155,7 @@ describe("RecentAlgorithm", () => {
                 ts: 14,
                 length: 10,
             });
-            room2.addLiveEvents(events2);
+            room2.addLiveEvents(events2, { addToState: true });
 
             expect(algorithm.sortRooms([room1, room2], DefaultTagID.Untagged)).toEqual([room2, room1]);
 
@@ -169,7 +169,7 @@ describe("RecentAlgorithm", () => {
                 // replies are 1ms after each other
                 ts: 50,
             });
-            room1.addLiveEvents([threadReply]);
+            room1.addLiveEvents([threadReply], { addToState: true });
 
             expect(algorithm.sortRooms([room1, room2], DefaultTagID.Untagged)).toEqual([room1, room2]);
         });

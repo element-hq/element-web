@@ -2,12 +2,12 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useRef, useState, Dispatch, SetStateAction } from "react";
-import { Room } from "matrix-js-sdk/src/matrix";
+import React, { useRef, useState, type Dispatch, type SetStateAction } from "react";
+import { type Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";
@@ -18,18 +18,18 @@ import StyledRadioGroup from "../elements/StyledRadioGroup";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import {
     ExportFormat,
-    ExportFormatKey,
+    type ExportFormatKey,
     ExportType,
-    ExportTypeKey,
+    type ExportTypeKey,
     textForFormat,
     textForType,
 } from "../../../utils/exportUtils/exportUtils";
-import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
+import withValidation, { type IFieldState, type IValidationResult } from "../elements/Validation";
 import HTMLExporter from "../../../utils/exportUtils/HtmlExport";
 import JSONExporter from "../../../utils/exportUtils/JSONExport";
 import PlainTextExporter from "../../../utils/exportUtils/PlainTextExport";
 import { useStateCallback } from "../../../hooks/useStateCallback";
-import Exporter from "../../../utils/exportUtils/Exporter";
+import type Exporter from "../../../utils/exportUtils/Exporter";
 import Spinner from "../elements/Spinner";
 import InfoDialog from "./InfoDialog";
 import ChatExport from "../../../customisations/ChatExport";

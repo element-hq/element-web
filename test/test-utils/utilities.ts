@@ -2,15 +2,16 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import EventEmitter from "events";
+import { act } from "jest-matrix-react";
 
-import { ActionPayload } from "../../src/dispatcher/payloads";
+import type EventEmitter from "events";
+import { type ActionPayload } from "../../src/dispatcher/payloads";
 import defaultDispatcher from "../../src/dispatcher/dispatcher";
-import { DispatcherAction } from "../../src/dispatcher/actions";
+import { type DispatcherAction } from "../../src/dispatcher/actions";
 import Modal from "../../src/Modal";
 
 export const emitPromise = (e: EventEmitter, k: string | symbol) => new Promise((r) => e.once(k, r));
@@ -119,7 +120,7 @@ export function untilEmission(
     });
 }
 
-export const flushPromises = async () => await new Promise<void>((resolve) => window.setTimeout(resolve));
+export const flushPromises = () => act(async () => await new Promise<void>((resolve) => window.setTimeout(resolve)));
 
 // with jest's modern fake timers process.nextTick is also mocked,
 // flushing promises in the normal way then waits for some advancement
@@ -196,7 +197,7 @@ export const clearAllModals = async (): Promise<void> => {
     // Prevent modals from leaking and polluting other tests
     let keepClosingModals = true;
     while (keepClosingModals) {
-        keepClosingModals = Modal.closeCurrentModal();
+        keepClosingModals = await act(() => Modal.closeCurrentModal());
 
         // Then wait for the screen to update (probably React rerender and async/await).
         // Important for tests using Jest fake timers to not get into an infinite loop

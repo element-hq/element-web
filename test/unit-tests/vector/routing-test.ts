@@ -2,11 +2,12 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { getInitialScreenAfterLogin, onNewScreen } from "../../../src/vector/routing";
+import { getInitialScreenAfterLogin, init, onNewScreen } from "../../../src/vector/routing";
+import type MatrixChat from "../../../src/components/structures/MatrixChat.tsx";
 
 describe("onNewScreen", () => {
     it("should replace history if stripping via fields", () => {
@@ -93,5 +94,29 @@ describe("getInitialScreenAfterLogin", () => {
                 }),
             );
         });
+    });
+});
+
+describe("init", () => {
+    afterAll(() => {
+        // @ts-ignore
+        delete window.matrixChat;
+    });
+
+    it("should call showScreen on MatrixChat on hashchange", () => {
+        Object.defineProperty(window, "location", {
+            value: {
+                hash: "#/room/!room:server?via=abc",
+            },
+        });
+
+        window.matrixChat = {
+            showScreen: jest.fn(),
+        } as unknown as MatrixChat;
+
+        init();
+        window.dispatchEvent(new HashChangeEvent("hashchange"));
+
+        expect(window.matrixChat.showScreen).toHaveBeenCalledWith("room/!room:server", { via: "abc" });
     });
 });

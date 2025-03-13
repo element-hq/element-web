@@ -2,14 +2,15 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 Suguru Hirahara
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Download, type Page } from "@playwright/test";
+import { type Download, type Page } from "@playwright/test";
 
 import { test, expect } from "../../element-web-test";
 import { viewRoomSummaryByName } from "./utils";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 const ROOM_NAME = "Test room";
 const NAME = "Alice";
@@ -39,8 +40,8 @@ test.describe("FilePanel", () => {
         await expect(page.locator(".mx_FilePanel")).toBeVisible();
     });
 
-    test.describe("render", () => {
-        test("should render empty state", async ({ page }) => {
+    test.describe("render", { tag: ["@no-firefox", "@no-webkit"] }, () => {
+        test("should render empty state", { tag: "@screenshot" }, async ({ page }) => {
             // Wait until the information about the empty state is rendered
             await expect(page.locator(".mx_EmptyState")).toBeVisible();
 
@@ -48,7 +49,7 @@ test.describe("FilePanel", () => {
             await expect(page.locator(".mx_RightPanel")).toMatchScreenshot("empty.png");
         });
 
-        test("should list tiles on the panel", async ({ page }) => {
+        test("should list tiles on the panel", { tag: "@screenshot" }, async ({ page }) => {
             // Upload multiple files
             await uploadFile(page, "playwright/sample-files/riot.png"); // Image
             await uploadFile(page, "playwright/sample-files/1sec.ogg"); // Audio
@@ -181,6 +182,8 @@ test.describe("FilePanel", () => {
     });
 
     test.describe("download", () => {
+        test.skip(isDendrite, "due to a Dendrite sending Content-Disposition inline");
+
         test("should download an image via the link on the panel", async ({ page, context }) => {
             // Upload an image file
             await uploadFile(page, "playwright/sample-files/riot.png");

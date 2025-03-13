@@ -2,22 +2,25 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { mocked, MockedObject } from "jest-mock";
-import { MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
+import { mocked, type MockedObject } from "jest-mock";
+import { type MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
 
 import { stubClient } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { Action } from "../../../../src/dispatcher/actions";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
-import { ActiveRoomChangedPayload } from "../../../../src/dispatcher/payloads/ActiveRoomChangedPayload";
+import { type ActiveRoomChangedPayload } from "../../../../src/dispatcher/payloads/ActiveRoomChangedPayload";
 import RightPanelStore from "../../../../src/stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../../src/stores/right-panel/RightPanelStorePhases";
 import SettingsStore from "../../../../src/settings/SettingsStore";
+import { pendingVerificationRequestForUser } from "../../../../src/verification.ts";
+
+jest.mock("../../../../src/verification");
 
 describe("RightPanelStore", () => {
     // Mock out the settings store so the right panel store can't persist values between tests
@@ -97,7 +100,7 @@ describe("RightPanelStore", () => {
         it("does nothing if given an invalid state", async () => {
             await viewRoom("!1:example.org");
             // Needs a member specified to be valid
-            store.setCard({ phase: RightPanelPhases.RoomMemberInfo }, true, "!1:example.org");
+            store.setCard({ phase: RightPanelPhases.MemberInfo }, true, "!1:example.org");
             expect(store.roomPhaseHistory).toEqual([]);
         });
         it("only creates a single history entry if given the same card twice", async () => {
@@ -111,18 +114,21 @@ describe("RightPanelStore", () => {
             expect(store.isOpenForRoom("!1:example.org")).toEqual(true);
             expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.RoomSummary);
         });
-        it("overwrites history if changing the phase", async () => {
+        it("history is generated for certain phases", async () => {
             await viewRoom("!1:example.org");
-            store.setCard({ phase: RightPanelPhases.RoomSummary }, true, "!1:example.org");
-            store.setCard({ phase: RightPanelPhases.RoomMemberList }, true, "!1:example.org");
-            expect(store.roomPhaseHistory).toEqual([{ phase: RightPanelPhases.RoomMemberList, state: {} }]);
+            // Setting the memberlist card should also generate a history with room summary card
+            store.setCard({ phase: RightPanelPhases.MemberList }, true, "!1:example.org");
+            expect(store.roomPhaseHistory).toEqual([
+                { phase: RightPanelPhases.RoomSummary, state: {} },
+                { phase: RightPanelPhases.MemberList, state: {} },
+            ]);
         });
     });
 
     describe("setCards", () => {
         it("overwrites history", async () => {
             await viewRoom("!1:example.org");
-            store.setCard({ phase: RightPanelPhases.RoomMemberList }, true, "!1:example.org");
+            store.setCard({ phase: RightPanelPhases.MemberList }, true, "!1:example.org");
             store.setCards(
                 [{ phase: RightPanelPhases.RoomSummary }, { phase: RightPanelPhases.PinnedMessages }],
                 true,
@@ -200,21 +206,40 @@ describe("RightPanelStore", () => {
         store.setCards(
             [
                 {
-                    phase: RightPanelPhases.RoomMemberList,
+                    phase: RightPanelPhases.MemberList,
                 },
                 {
-                    phase: RightPanelPhases.RoomMemberInfo,
+                    phase: RightPanelPhases.MemberInfo,
                     state: { member: new RoomMember("!1:example.org", "@alice:example.org") },
                 },
             ],
             true,
             "!1:example.org",
         );
-        expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.RoomMemberInfo);
+        expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.MemberInfo);
 
         // Switch away and back
         await viewRoom("!2:example.org");
         await viewRoom("!1:example.org");
-        expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.RoomMemberList);
+        expect(store.currentCardForRoom("!1:example.org").phase).toEqual(RightPanelPhases.MemberList);
+    });
+
+    it("should redirect to verification if set to phase MemberInfo for a user with a pending verification", async () => {
+        const member = new RoomMember("!1:example.org", "@alice:example.org");
+        const verificationRequest = { mockVerificationRequest: true } as any;
+        mocked(pendingVerificationRequestForUser).mockReturnValue(verificationRequest);
+        await viewRoom("!1:example.org");
+        store.setCard(
+            {
+                phase: RightPanelPhases.MemberInfo,
+                state: { member },
+            },
+            true,
+            "!1:example.org",
+        );
+        expect(store.currentCard).toEqual({
+            phase: RightPanelPhases.EncryptionPanel,
+            state: { member, verificationRequest },
+        });
     });
 });

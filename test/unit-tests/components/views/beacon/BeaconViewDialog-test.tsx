@@ -2,13 +2,19 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { act, fireEvent, render, RenderResult, waitFor } from "jest-matrix-react";
-import { MatrixClient, MatrixEvent, Room, RoomMember, getBeaconInfoIdentifier } from "matrix-js-sdk/src/matrix";
+import { act, fireEvent, render, type RenderResult, waitFor } from "jest-matrix-react";
+import {
+    type MatrixClient,
+    type MatrixEvent,
+    type Room,
+    RoomMember,
+    getBeaconInfoIdentifier,
+} from "matrix-js-sdk/src/matrix";
 import * as maplibregl from "maplibre-gl";
 import { mocked } from "jest-mock";
 

@@ -2,18 +2,18 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022-2024 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { forwardRef, ForwardRefExoticComponent, useContext } from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import React, { forwardRef, type ForwardRefExoticComponent, useContext } from "react";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { DecryptionFailureCode } from "matrix-js-sdk/src/crypto-api";
-import { WarningIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { BlockIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
-import { IBodyProps } from "./IBodyProps";
+import { type IBodyProps } from "./IBodyProps";
 import { LocalDeviceVerificationStateContext } from "../../../contexts/LocalDeviceVerificationStateContext";
 
 function getErrorMessage(mxEvent: MatrixEvent, isVerified: boolean | undefined): string | React.JSX.Element {
@@ -41,7 +41,7 @@ function getErrorMessage(mxEvent: MatrixEvent, isVerified: boolean | undefined):
         case DecryptionFailureCode.SENDER_IDENTITY_PREVIOUSLY_VERIFIED:
             return (
                 <span>
-                    <WarningIcon className="mx_Icon mx_Icon_16" />
+                    <BlockIcon className="mx_Icon mx_Icon_16" />
                     {_t("timeline|decryption_failure|sender_identity_previously_verified")}
                 </span>
             );
@@ -49,7 +49,12 @@ function getErrorMessage(mxEvent: MatrixEvent, isVerified: boolean | undefined):
         case DecryptionFailureCode.UNSIGNED_SENDER_DEVICE:
             // TODO: event should be hidden instead of showing this error.
             //   To be revisited as part of https://github.com/element-hq/element-meta/issues/2449
-            return _t("timeline|decryption_failure|sender_unsigned_device");
+            return (
+                <span>
+                    <BlockIcon className="mx_Icon mx_Icon_16" />
+                    {_t("timeline|decryption_failure|sender_unsigned_device")}
+                </span>
+            );
     }
     return _t("timeline|decryption_failure|unable_to_decrypt");
 }
@@ -58,7 +63,8 @@ function getErrorMessage(mxEvent: MatrixEvent, isVerified: boolean | undefined):
 function errorClassName(mxEvent: MatrixEvent): string | null {
     switch (mxEvent.decryptionFailureReason) {
         case DecryptionFailureCode.SENDER_IDENTITY_PREVIOUSLY_VERIFIED:
-            return "mx_DecryptionFailureVerifiedIdentityChanged";
+        case DecryptionFailureCode.UNSIGNED_SENDER_DEVICE:
+            return "mx_DecryptionFailureSenderTrustRequirement";
 
         default:
             return null;

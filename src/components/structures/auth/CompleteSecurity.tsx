@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -29,9 +29,13 @@ export default class CompleteSecurity extends React.Component<IProps, IState> {
     public constructor(props: IProps) {
         super(props);
         const store = SetupEncryptionStore.sharedInstance();
-        store.on("update", this.onStoreUpdate);
         store.start();
         this.state = { phase: store.phase, lostKeys: store.lostKeys() };
+    }
+
+    public componentDidMount(): void {
+        const store = SetupEncryptionStore.sharedInstance();
+        store.on("update", this.onStoreUpdate);
     }
 
     private onStoreUpdate = (): void => {

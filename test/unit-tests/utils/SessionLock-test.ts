@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -218,7 +218,9 @@ describe("SessionLock", () => {
         const window2 = createWindow();
 
         // import the dependencies of getSessionLock into the new context
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
         window2._uuid = require("uuid");
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
         window2._logger = require("matrix-js-sdk/src/logger");
         window2.SESSION_LOCK_CONSTANTS = SESSION_LOCK_CONSTANTS;
 

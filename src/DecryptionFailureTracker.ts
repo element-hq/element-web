@@ -2,13 +2,13 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2018-2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ScalableBloomFilter } from "bloom-filters";
-import { HttpApiEvent, MatrixClient, MatrixEventEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { Error as ErrorEvent } from "@matrix-org/analytics-events/types/typescript/Error";
+import ScalableBloomFilter from "bloom-filters/dist/bloom/scalable-bloom-filter";
+import { HttpApiEvent, type MatrixClient, MatrixEventEvent, type MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type Error as ErrorEvent } from "@matrix-org/analytics-events/types/typescript/Error";
 import { DecryptionFailureCode, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 
 import { PosthogAnalytics } from "./PosthogAnalytics";
@@ -82,6 +82,10 @@ export class DecryptionFailureTracker {
                     return "HistoricalMessage";
                 case DecryptionFailureCode.HISTORICAL_MESSAGE_USER_NOT_JOINED:
                     return "ExpectedDueToMembership";
+                case DecryptionFailureCode.SENDER_IDENTITY_PREVIOUSLY_VERIFIED:
+                    return "ExpectedVerificationViolation";
+                case DecryptionFailureCode.UNSIGNED_SENDER_DEVICE:
+                    return "ExpectedSentByInsecureDevice";
                 default:
                     return "UnknownError";
             }

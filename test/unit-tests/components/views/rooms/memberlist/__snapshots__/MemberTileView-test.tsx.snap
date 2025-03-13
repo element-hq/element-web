@@ -1,0 +1,253 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MemberTileView RoomMemberTileView should display an verified E2EIcon when the e2E status = Verified 1`] = `
+<div>
+  <div>
+    <div
+      aria-label="@userId:matrix.org (power 0)"
+      class="mx_AccessibleButton mx_MemberTileView"
+      role="button"
+      tabindex="-1"
+    >
+      <div
+        class="mx_MemberTileView_left"
+      >
+        <div
+          class="mx_MemberTileView_avatar"
+        >
+          <span
+            class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+            data-color="2"
+            data-testid="avatar-img"
+            data-type="round"
+            role="presentation"
+            style="--cpd-avatar-size: 32px;"
+            title="@userId:matrix.org"
+          >
+            u
+          </span>
+           
+        </div>
+        <div
+          class="mx_MemberTileView_name"
+        >
+          <div
+            class="mx_DisambiguatedProfile"
+          >
+            <span
+              class=""
+              dir="auto"
+            >
+              @userId:matrix.org
+            </span>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_MemberTileView_right"
+      >
+        <div
+          aria-labelledby=":ri:"
+          class="mx_E2EIconView"
+        >
+          <svg
+            class="mx_E2EIconView_verified"
+            fill="currentColor"
+            height="16px"
+            viewBox="0 0 24 24"
+            width="16px"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.15 21.75 6.7 19.3l-2.75-.6a.94.94 0 0 1-.6-.387.93.93 0 0 1-.175-.688L3.45 14.8l-1.875-2.15a.93.93 0 0 1-.25-.65q0-.375.25-.65L3.45 9.2l-.275-2.825a.93.93 0 0 1 .175-.687.94.94 0 0 1 .6-.388l2.75-.6 1.45-2.45a.98.98 0 0 1 .55-.437.97.97 0 0 1 .7.037l2.6 1.1 2.6-1.1a.97.97 0 0 1 .7-.038q.35.112.55.438L17.3 4.7l2.75.6q.375.075.6.388.225.312.175.687L20.55 9.2l1.875 2.15q.25.275.25.65t-.25.65L20.55 14.8l.275 2.825a.93.93 0 0 1-.175.688.94.94 0 0 1-.6.387l-2.75.6-1.45 2.45a.98.98 0 0 1-.55.438.97.97 0 0 1-.7-.038l-2.6-1.1-2.6 1.1a.97.97 0 0 1-.7.038.98.98 0 0 1-.55-.438m2.8-9.05L9.5 11.275A.93.93 0 0 0 8.812 11q-.412 0-.712.3a.95.95 0 0 0-.275.7q0 .425.275.7l2.15 2.15q.3.3.7.3t.7-.3l4.25-4.25q.3-.3.287-.7a1.06 1.06 0 0 0-.287-.7 1.02 1.02 0 0 0-.713-.312.93.93 0 0 0-.712.287z"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`MemberTileView RoomMemberTileView should display an warning E2EIcon when the e2E status = Warning 1`] = `
+<div>
+  <div>
+    <div
+      aria-label="@userId:matrix.org (power 0)"
+      class="mx_AccessibleButton mx_MemberTileView"
+      role="button"
+      tabindex="-1"
+    >
+      <div
+        class="mx_MemberTileView_left"
+      >
+        <div
+          class="mx_MemberTileView_avatar"
+        >
+          <span
+            class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+            data-color="2"
+            data-testid="avatar-img"
+            data-type="round"
+            role="presentation"
+            style="--cpd-avatar-size: 32px;"
+            title="@userId:matrix.org"
+          >
+            u
+          </span>
+           
+        </div>
+        <div
+          class="mx_MemberTileView_name"
+        >
+          <div
+            class="mx_DisambiguatedProfile"
+          >
+            <span
+              class=""
+              dir="auto"
+            >
+              @userId:matrix.org
+            </span>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_MemberTileView_right"
+      >
+        <div
+          aria-labelledby=":r8:"
+          class="mx_E2EIconView"
+        >
+          <svg
+            class="mx_E2EIconView_warning"
+            fill="currentColor"
+            height="16px"
+            viewBox="0 0 24 24"
+            width="16px"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`MemberTileView RoomMemberTileView should not display an E2EIcon when the e2E status = normal 1`] = `
+<div>
+  <div>
+    <div
+      aria-label="@userId:matrix.org (power 0)"
+      class="mx_AccessibleButton mx_MemberTileView"
+      role="button"
+      tabindex="-1"
+    >
+      <div
+        class="mx_MemberTileView_left"
+      >
+        <div
+          class="mx_MemberTileView_avatar"
+        >
+          <span
+            class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+            data-color="2"
+            data-testid="avatar-img"
+            data-type="round"
+            role="presentation"
+            style="--cpd-avatar-size: 32px;"
+            title="@userId:matrix.org"
+          >
+            u
+          </span>
+           
+        </div>
+        <div
+          class="mx_MemberTileView_name"
+        >
+          <div
+            class="mx_DisambiguatedProfile"
+          >
+            <span
+              class=""
+              dir="auto"
+            >
+              @userId:matrix.org
+            </span>
+          </div>
+        </div>
+      </div>
+      <div
+        class="mx_MemberTileView_right"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`MemberTileView ThreePidInviteTileView renders ThreePidInvite correctly 1`] = `
+<div>
+  <div>
+    <div
+      class="mx_AccessibleButton mx_MemberTileView"
+      role="button"
+      tabindex="-1"
+    >
+      <div
+        class="mx_MemberTileView_left"
+      >
+        <div
+          class="mx_MemberTileView_avatar"
+        >
+          <span
+            aria-hidden="true"
+            class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+            data-color="1"
+            data-testid="avatar-img"
+            data-type="round"
+            role="presentation"
+            style="--cpd-avatar-size: 32px;"
+          >
+            F
+          </span>
+           
+        </div>
+        <div
+          class="mx_MemberTileView_name"
+        >
+          Foobar
+        </div>
+      </div>
+      <div
+        class="mx_MemberTileView_right"
+      >
+        <div
+          class="mx_MemberTileView_userLabel"
+        >
+          Invited
+        </div>
+        <div
+          class="mx_Flex mx_InvitedIconView"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+        >
+          <svg
+            fill="currentColor"
+            height="16px"
+            viewBox="0 0 24 24"
+            width="16px"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 5.111a1 1 0 0 0 .514.874l7 3.89a1 1 0 0 0 .972 0l7-3.89a1 1 0 1 0-.972-1.748L12 11.856 5.486 8.237A1 1 0 0 0 4 9.111"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

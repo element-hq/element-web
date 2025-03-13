@@ -2,23 +2,23 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2015, 2016 , 2019, 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { Room, IEventRelation } from "matrix-js-sdk/src/matrix";
-import { Optional } from "matrix-events-sdk";
+import { type Room, type IEventRelation } from "matrix-js-sdk/src/matrix";
+import { type Optional } from "matrix-events-sdk";
 
 import ContentMessages from "../../ContentMessages";
 import dis from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
 import { Action } from "../../dispatcher/actions";
 import ProgressBar from "../views/elements/ProgressBar";
-import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
-import { RoomUpload } from "../../models/RoomUpload";
-import { ActionPayload } from "../../dispatcher/payloads";
-import { UploadPayload } from "../../dispatcher/payloads/UploadPayload";
+import AccessibleButton, { type ButtonEvent } from "../views/elements/AccessibleButton";
+import { type RoomUpload } from "../../models/RoomUpload";
+import { type ActionPayload } from "../../dispatcher/payloads";
+import { type UploadPayload } from "../../dispatcher/payloads/UploadPayload";
 import { fileSize } from "../../utils/FileUtils";
 
 interface IProps {
@@ -46,7 +46,7 @@ function isUploadPayload(payload: ActionPayload): payload is UploadPayload {
 
 export default class UploadBar extends React.PureComponent<IProps, IState> {
     private dispatcherRef: Optional<string>;
-    private mounted = false;
+    private unmounted = false;
 
     public constructor(props: IProps) {
         super(props);
@@ -57,12 +57,12 @@ export default class UploadBar extends React.PureComponent<IProps, IState> {
     }
 
     public componentDidMount(): void {
+        this.unmounted = false;
         this.dispatcherRef = dis.register(this.onAction);
-        this.mounted = true;
     }
 
     public componentWillUnmount(): void {
-        this.mounted = false;
+        this.unmounted = true;
         dis.unregister(this.dispatcherRef!);
     }
 
@@ -83,7 +83,7 @@ export default class UploadBar extends React.PureComponent<IProps, IState> {
     }
 
     private onAction = (payload: ActionPayload): void => {
-        if (!this.mounted) return;
+        if (this.unmounted) return;
         if (isUploadPayload(payload)) {
             this.setState(this.calculateState());
         }

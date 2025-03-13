@@ -6,28 +6,33 @@ Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixClient, Room, MatrixEvent, OidcRegistrationClientMetadata } from "matrix-js-sdk/src/matrix";
+import {
+    type MatrixClient,
+    type Room,
+    type MatrixEvent,
+    type OidcRegistrationClientMetadata,
+} from "matrix-js-sdk/src/matrix";
 import React from "react";
-import { randomString } from "matrix-js-sdk/src/randomstring";
+import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { UpdateCheckStatus, UpdateStatus } from "../../BasePlatform";
-import BaseEventIndexManager from "../../indexing/BaseEventIndexManager";
+import BasePlatform, { UpdateCheckStatus, type UpdateStatus } from "../../BasePlatform";
+import type BaseEventIndexManager from "../../indexing/BaseEventIndexManager";
 import dis from "../../dispatcher/dispatcher";
 import SdkConfig from "../../SdkConfig";
-import { IConfigOptions } from "../../IConfigOptions";
+import { type IConfigOptions } from "../../IConfigOptions";
 import * as rageshake from "../../rageshake/rageshake";
 import Modal from "../../Modal";
 import InfoDialog from "../../components/views/dialogs/InfoDialog";
 import Spinner from "../../components/views/elements/Spinner";
 import { Action } from "../../dispatcher/actions";
-import { ActionPayload } from "../../dispatcher/payloads";
+import { type ActionPayload } from "../../dispatcher/payloads";
 import { showToast as showUpdateToast } from "../../toasts/UpdateToast";
-import { CheckUpdatesPayload } from "../../dispatcher/payloads/CheckUpdatesPayload";
+import { type CheckUpdatesPayload } from "../../dispatcher/payloads/CheckUpdatesPayload";
 import ToastStore from "../../stores/ToastStore";
 import GenericExpiringToast from "../../components/views/toasts/GenericExpiringToast";
 import { BreadcrumbsStore } from "../../stores/BreadcrumbsStore";
@@ -35,7 +40,6 @@ import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { avatarUrlForRoom, getInitialLetter } from "../../Avatar";
 import DesktopCapturerSourcePicker from "../../components/views/elements/DesktopCapturerSourcePicker";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-import VectorBasePlatform from "./VectorBasePlatform";
 import { SeshatIndexManager } from "./SeshatIndexManager";
 import { IPCManager } from "./IPCManager";
 import { _t } from "../../languageHandler";
@@ -90,11 +94,11 @@ function getUpdateCheckStatus(status: boolean | string): UpdateStatus {
     }
 }
 
-export default class ElectronPlatform extends VectorBasePlatform {
+export default class ElectronPlatform extends BasePlatform {
     private readonly ipc = new IPCManager("ipcCall", "ipcReply");
     private readonly eventIndexManager: BaseEventIndexManager = new SeshatIndexManager();
     // this is the opaque token we pass to the HS which when we get it in our callback we can resolve to a profile
-    private readonly ssoID: string = randomString(32);
+    private readonly ssoID: string = secureRandomString(32);
 
     public constructor() {
         super();
@@ -265,7 +269,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
         const notification = super.displayNotification(title, msg, avatarUrl, room, ev);
 
-        const handler = notification.onclick as Function;
+        const handler = notification.onclick as () => void;
         notification.onclick = (): void => {
             handler?.();
             void this.ipc.call("focusWindow");
@@ -416,7 +420,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     public async getPickleKey(userId: string, deviceId: string): Promise<string | null> {
         try {
             return await this.ipc.call("getPickleKey", userId, deviceId);
-        } catch (e) {
+        } catch {
             // if we can't connect to the password storage, assume there's no
             // pickle key
             return null;
@@ -426,7 +430,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     public async createPickleKey(userId: string, deviceId: string): Promise<string | null> {
         try {
             return await this.ipc.call("createPickleKey", userId, deviceId);
-        } catch (e) {
+        } catch {
             // if we can't connect to the password storage, assume there's no
             // pickle key
             return null;
@@ -436,14 +440,14 @@ export default class ElectronPlatform extends VectorBasePlatform {
     public async destroyPickleKey(userId: string, deviceId: string): Promise<void> {
         try {
             await this.ipc.call("destroyPickleKey", userId, deviceId);
-        } catch (e) {}
+        } catch {}
     }
 
     public async clearStorage(): Promise<void> {
         try {
             await super.clearStorage();
             await this.ipc.call("clearStorage");
-        } catch (e) {}
+        } catch {}
     }
 
     public get baseUrl(): string {
@@ -475,10 +479,8 @@ export default class ElectronPlatform extends VectorBasePlatform {
         const url = super.getOidcCallbackUrl();
         url.protocol = "io.element.desktop";
         // Trim the double slash into a single slash to comply with https://datatracker.ietf.org/doc/html/rfc8252#section-7.1
-        // Chrome seems to have a strange issue where non-standard protocols prevent URL object mutations on pathname
-        // field, so we cannot mutate `pathname` reliably and instead have to rewrite the href manually.
-        if (url.pathname.startsWith("//")) {
-            url.href = url.href.replace(url.pathname, url.pathname.slice(1));
+        if (url.href.startsWith(`${url.protocol}://`)) {
+            url.href = url.href.replace("://", ":/");
         }
         return url;
     }

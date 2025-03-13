@@ -3,14 +3,14 @@ Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 Copyright 2019 Tulir Asokan <tulir@maunium.net>
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { Emoji as IEmoji } from "@matrix-org/emojibase-bindings";
+import { type Emoji as IEmoji } from "@matrix-org/emojibase-bindings";
 
-import { ButtonEvent } from "../elements/AccessibleButton";
+import { type ButtonEvent } from "../elements/AccessibleButton";
 import { RovingAccessibleButton } from "../../../accessibility/RovingTabIndex";
 
 interface IProps {
@@ -31,7 +31,7 @@ class Emoji extends React.PureComponent<IProps> {
         return (
             <RovingAccessibleButton
                 id={this.props.id}
-                onClick={(ev) => onClick(ev, emoji)}
+                onClick={(ev: ButtonEvent) => onClick(ev, emoji)}
                 onMouseEnter={() => onMouseEnter(emoji)}
                 onMouseLeave={() => onMouseLeave(emoji)}
                 className="mx_EmojiPicker_item_wrapper"

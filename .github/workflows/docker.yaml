@@ -1,0 +1,141 @@
+name: Docker
+on:
+    workflow_dispatch: {}
+    push:
+        tags: [v*]
+    pull_request: {}
+    schedule:
+        # This job can take a while, and we have usage limits, so just publish develop only twice a day
+        - cron: "0 7/12 * * *"
+concurrency: ${{ github.workflow }}-${{ github.ref_name }}
+permissions: {}
+jobs:
+    buildx:
+        name: Docker Buildx
+        runs-on: ubuntu-24.04
+        environment: ${{ github.event_name != 'pull_request' && 'dockerhub' || '' }}
+        permissions:
+            id-token: write # needed for signing the images with GitHub OIDC Token
+            packages: write # needed for publishing packages to GHCR
+        env:
+            TEST_TAG: vectorim/element-web:test
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0 # needed for docker-package to be able to calculate the version
+
+            - name: Install Cosign
+              uses: sigstore/cosign-installer@d7d6bc7722e3daa8354c50bcb52f4837da5e9b6a # v3
+              if: github.event_name != 'pull_request'
+
+            - name: Set up QEMU
+              uses: docker/setup-qemu-action@29109295f81e9208d7d86ff1c6c12d2833863392 # v3
+
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # v3
+              with:
+                  install: true
+
+            - name: Login to Docker Hub
+              uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3
+              if: github.event_name != 'pull_request'
+              with:
+                  username: ${{ secrets.DOCKERHUB_USERNAME }}
+                  password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+            - name: Login to GitHub Container Registry
+              uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3
+              if: github.event_name != 'pull_request'
+              with:
+                  registry: ghcr.io
+                  username: ${{ github.repository_owner }}
+                  password: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Build and load
+              id: test-build
+              uses: docker/build-push-action@471d1dc4e07e5cdedd4c2171150001c434f0b7a4 # v6
+              with:
+                  context: .
+                  load: true
+
+            - name: Test the image
+              env:
+                  IMAGEID: ${{ steps.test-build.outputs.imageid }}
+              timeout-minutes: 2
+              run: |
+                  set -x
+
+                  # Make a fake module to test the image
+                  MODULE_PATH="modules/module_name/index.js"
+                  mkdir -p $(dirname $MODULE_PATH)
+                  echo 'alert("Testing");' > $MODULE_PATH
+
+                  # Spin up a container of the image
+                  ELEMENT_WEB_PORT=8181
+                  CONTAINER_ID=$(
+                      docker run \
+                          --rm \
+                          -e "ELEMENT_WEB_PORT=$ELEMENT_WEB_PORT" \
+                          -dp "$ELEMENT_WEB_PORT:$ELEMENT_WEB_PORT" \
+                          -v $(pwd)/modules:/modules \
+                          "$IMAGEID" \
+                  )
+
+                  # Run some smoke tests
+                  wget --retry-connrefused --tries=5 -q --wait=3 --spider "http://localhost:$ELEMENT_WEB_PORT/modules/module_name/index.js"
+                  MODULE_0=$(curl "http://localhost:$ELEMENT_WEB_PORT/config.json" | jq -r .modules[0])
+                  test "$MODULE_0" = "/${MODULE_PATH}"
+
+                  # Check healthcheck
+                  until test "$(docker inspect -f {{.State.Health.Status}} $CONTAINER_ID)" == "healthy"; do
+                      sleep 1
+                  done
+
+                  # Clean up
+                  docker stop "$CONTAINER_ID"
+
+            - name: Docker meta
+              id: meta
+              uses: docker/metadata-action@902fa8ec7d6ecbf8d84d538b9b233a880e428804 # v5
+              if: github.event_name != 'pull_request'
+              with:
+                  images: |
+                      vectorim/element-web
+                      ghcr.io/element-hq/element-web
+                  tags: |
+                      type=ref,event=branch
+                      type=ref,event=tag
+                  flavor: |
+                      latest=${{ contains(github.ref_name, '-rc.') && 'false' || 'auto' }}
+
+            - name: Build and push
+              id: build-and-push
+              uses: docker/build-push-action@471d1dc4e07e5cdedd4c2171150001c434f0b7a4 # v6
+              if: github.event_name != 'pull_request'
+              with:
+                  context: .
+                  push: true
+                  platforms: linux/amd64,linux/arm64
+                  tags: ${{ steps.meta.outputs.tags }}
+                  labels: ${{ steps.meta.outputs.labels }}
+
+            - name: Sign the images with GitHub OIDC Token
+              env:
+                  DIGEST: ${{ steps.build-and-push.outputs.digest }}
+                  TAGS: ${{ steps.meta.outputs.tags }}
+              if: github.event_name != 'pull_request'
+              run: |
+                  images=""
+                  for tag in ${TAGS}; do
+                      images+="${tag}@${DIGEST} "
+                  done
+                  cosign sign --yes ${images}
+
+            - name: Update repo description
+              uses: peter-evans/dockerhub-description@e98e4d1628a5f3be2be7c231e50981aee98723ae # v4
+              if: github.event_name != 'pull_request'
+              continue-on-error: true
+              with:
+                  username: ${{ secrets.DOCKERHUB_USERNAME }}
+                  password: ${{ secrets.DOCKERHUB_TOKEN }}
+                  repository: vectorim/element-web

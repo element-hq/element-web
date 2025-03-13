@@ -4,28 +4,28 @@ Copyright 2020 The Matrix.org Foundation C.I.C.
 Copyright 2019 New Vector Ltd
 Copyright 2015, 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    MatrixClient,
+    type MatrixClient,
     MsgType,
     HTTPError,
-    IEventRelation,
-    ISendEventResponse,
-    MatrixEvent,
-    UploadOpts,
-    UploadProgress,
+    type IEventRelation,
+    type ISendEventResponse,
+    type MatrixEvent,
+    type UploadOpts,
+    type UploadProgress,
     THREAD_RELATION_TYPE,
 } from "matrix-js-sdk/src/matrix";
 import {
-    ImageInfo,
-    AudioInfo,
-    VideoInfo,
-    EncryptedFile,
-    MediaEventContent,
-    MediaEventInfo,
+    type ImageInfo,
+    type AudioInfo,
+    type VideoInfo,
+    type EncryptedFile,
+    type MediaEventContent,
+    type MediaEventInfo,
 } from "matrix-js-sdk/src/types";
 import encrypt from "matrix-encrypt-attachment";
 import extractPngChunks from "png-chunks-extract";
@@ -38,11 +38,11 @@ import Modal from "./Modal";
 import Spinner from "./components/views/elements/Spinner";
 import { Action } from "./dispatcher/actions";
 import {
-    UploadCanceledPayload,
-    UploadErrorPayload,
-    UploadFinishedPayload,
-    UploadProgressPayload,
-    UploadStartedPayload,
+    type UploadCanceledPayload,
+    type UploadErrorPayload,
+    type UploadFinishedPayload,
+    type UploadProgressPayload,
+    type UploadStartedPayload,
 } from "./dispatcher/payloads/UploadPayload";
 import { RoomUpload } from "./models/RoomUpload";
 import SettingsStore from "./settings/SettingsStore";
@@ -56,6 +56,7 @@ import { createThumbnail } from "./utils/image-media";
 import { attachMentions, attachRelation } from "./components/views/rooms/SendMessageComposer";
 import { doMaybeLocalRoomAction } from "./utils/local-room";
 import { SdkContextClass } from "./contexts/SDKContext";
+import { blobIsAnimated } from "./utils/Image.ts";
 
 // scraped out of a macOS hidpi (5660ppm) screenshot png
 //                  5669 px (x-axis)      , 5669 px (y-axis)      , per metre
@@ -150,15 +151,20 @@ async function infoForImageFile(matrixClient: MatrixClient, roomId: string, imag
         thumbnailType = "image/jpeg";
     }
 
+    // We don't await this immediately so it can happen in the background
+    const isAnimatedPromise = blobIsAnimated(imageFile.type, imageFile);
+
     const imageElement = await loadImageElement(imageFile);
 
     const result = await createThumbnail(imageElement.img, imageElement.width, imageElement.height, thumbnailType);
     const imageInfo = result.info;
 
+    imageInfo["org.matrix.msc4230.is_animated"] = await isAnimatedPromise;
+
     // For lesser supported image types, always include the thumbnail even if it is larger
     if (!ALWAYS_INCLUDE_THUMBNAIL.includes(imageFile.type)) {
         // we do all sizing checks here because we still rely on thumbnail generation for making a blurhash from.
-        const sizeDifference = imageFile.size - imageInfo.thumbnail_info!.size;
+        const sizeDifference = imageFile.size - imageInfo.thumbnail_info!.size!;
         if (
             // image is small enough already
             imageFile.size <= IMAGE_SIZE_THRESHOLD_THUMBNAIL ||
@@ -337,7 +343,7 @@ export async function uploadFile(
     const abortController = controller ?? new AbortController();
 
     // If the room is encrypted then encrypt the file before uploading it.
-    if (matrixClient.isRoomEncrypted(roomId)) {
+    if (await matrixClient.getCrypto()?.isEncryptionEnabledInRoom(roomId)) {
         // First read the file into memory.
         const data = await readFileAsArrayBuffer(file);
         if (abortController.signal.aborted) throw new UploadCanceledError();
@@ -396,11 +402,7 @@ export default class ContentMessages {
     }
 
     public getUploadLimit(): number | null {
-        if (this.mediaConfig !== null && this.mediaConfig["m.upload.size"] !== undefined) {
-            return this.mediaConfig["m.upload.size"];
-        } else {
-            return null;
-        }
+        return this.mediaConfig?.["m.upload.size"] ?? null;
     }
 
     public async sendContentListToRoom(
@@ -540,9 +542,7 @@ export default class ContentMessages {
         attachMentions(matrixClient.getSafeUserId(), content, null, replyToEvent);
         attachRelation(content, relation);
         if (replyToEvent) {
-            addReplyToMessageContent(content, replyToEvent, {
-                includeLegacyFallback: false,
-            });
+            addReplyToMessageContent(content, replyToEvent);
         }
 
         if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
@@ -578,7 +578,7 @@ export default class ContentMessages {
                     logger.error(e);
                     content.msgtype = MsgType.File;
                 }
-            } else if (file.type.indexOf("audio/") === 0) {
+            } else if (file.type.startsWith("audio/")) {
                 content.msgtype = MsgType.Audio;
                 try {
                     const audioInfo = await infoForAudioFile(file);
@@ -588,7 +588,7 @@ export default class ContentMessages {
                     logger.error(e);
                     content.msgtype = MsgType.File;
                 }
-            } else if (file.type.indexOf("video/") === 0) {
+            } else if (file.type.startsWith("video/")) {
                 content.msgtype = MsgType.Video;
                 try {
                     const videoInfo = await infoForVideoFile(matrixClient, roomId, file);
@@ -648,11 +648,7 @@ export default class ContentMessages {
     }
 
     private isFileSizeAcceptable(file: File): boolean {
-        if (
-            this.mediaConfig !== null &&
-            this.mediaConfig["m.upload.size"] !== undefined &&
-            file.size > this.mediaConfig["m.upload.size"]
-        ) {
+        if (this.mediaConfig?.["m.upload.size"] !== undefined && file.size > this.mediaConfig["m.upload.size"]) {
             return false;
         }
         return true;

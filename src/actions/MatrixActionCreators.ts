@@ -2,24 +2,24 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2017-2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import {
     ClientEvent,
-    MatrixClient,
-    MatrixEvent,
+    type MatrixClient,
+    type MatrixEvent,
     MatrixEventEvent,
-    Room,
+    type Room,
     RoomEvent,
-    IRoomTimelineData,
-    RoomState,
+    type IRoomTimelineData,
+    type RoomState,
     RoomStateEvent,
 } from "matrix-js-sdk/src/matrix";
 
 import dis from "../dispatcher/dispatcher";
-import { ActionPayload } from "../dispatcher/payloads";
+import { type ActionPayload } from "../dispatcher/payloads";
 
 /**
  * Create a MatrixActions.sync action that represents a MatrixClient `sync` event,

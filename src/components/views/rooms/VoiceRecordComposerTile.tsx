@@ -2,14 +2,14 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021, 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode } from "react";
-import { Room, IEventRelation, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import React, { type ReactNode } from "react";
+import { type Room, type IEventRelation, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { Optional } from "matrix-events-sdk";
+import { type Optional } from "matrix-events-sdk";
 
 import { _t } from "../../../languageHandler";
 import { RecordingState } from "../../../audio/VoiceRecording";
@@ -31,15 +31,13 @@ import { doMaybeLocalRoomAction } from "../../../utils/local-room";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { attachMentions, attachRelation } from "./SendMessageComposer";
 import { addReplyToMessageContent } from "../../../utils/Reply";
-import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import RoomContext from "../../../contexts/RoomContext";
-import { IUpload, VoiceMessageRecording } from "../../../audio/VoiceMessageRecording";
+import { type IUpload, type VoiceMessageRecording } from "../../../audio/VoiceMessageRecording";
 import { createVoiceMessageContent } from "../../../utils/createVoiceMessageContent";
 import AccessibleButton from "../elements/AccessibleButton";
 
 interface IProps {
     room: Room;
-    permalinkCreator?: RoomPermalinkCreator;
     relation?: IEventRelation;
     replyToEvent?: MatrixEvent;
 }
@@ -55,7 +53,7 @@ interface IState {
  */
 export default class VoiceRecordComposerTile extends React.PureComponent<IProps, IState> {
     public static contextType = RoomContext;
-    public declare context: React.ContextType<typeof RoomContext>;
+    declare public context: React.ContextType<typeof RoomContext>;
     private voiceRecordingId: string;
 
     public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
@@ -93,7 +91,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             throw new Error("No recording started - cannot send anything");
         }
 
-        const { replyToEvent, relation, permalinkCreator } = this.props;
+        const { replyToEvent, relation } = this.props;
 
         await this.state.recorder.stop();
 
@@ -124,10 +122,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             attachMentions(MatrixClientPeg.safeGet().getSafeUserId(), content, null, replyToEvent);
             attachRelation(content, relation);
             if (replyToEvent) {
-                addReplyToMessageContent(content, replyToEvent, {
-                    permalinkCreator,
-                    includeLegacyFallback: true,
-                });
+                addReplyToMessageContent(content, replyToEvent);
                 // Clear reply_to_event as we put the message into the queue
                 // if the send fails, retry will handle resending.
                 defaultDispatcher.dispatch({

@@ -2,14 +2,14 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import EditorModel from "./model";
-import { IDiff } from "./diff";
-import { SerializedPart } from "./parts";
-import { Caret } from "./caret";
+import type EditorModel from "./model";
+import { type IDiff } from "./diff";
+import { type SerializedPart } from "./parts";
+import { type Caret } from "./caret";
 
 export interface IHistory {
     parts: SerializedPart[];

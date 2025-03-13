@@ -2,14 +2,14 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
 import decryptAESSecretStorageItem from "matrix-js-sdk/src/utils/decryptAESSecretStorageItem";
 import encryptAESSecretStorageItem from "matrix-js-sdk/src/utils/encryptAESSecretStorageItem";
-import { AESEncryptedSecretStoragePayload } from "matrix-js-sdk/src/types";
+import { type AESEncryptedSecretStoragePayload } from "matrix-js-sdk/src/types";
 
 import * as StorageAccess from "../StorageAccess";
 
@@ -150,7 +150,7 @@ export async function persistTokenInStorage(
             // token if there is no token or we were unable to encrypt (e.g. if the browser doesn't
             // have WebCrypto).
             await StorageAccess.idbSave("account", storageKey, encryptedToken || token);
-        } catch (e) {
+        } catch {
             // if we couldn't save to indexedDB, fall back to localStorage.  We
             // store the access token unencrypted since localStorage only saves
             // strings.
@@ -163,7 +163,7 @@ export async function persistTokenInStorage(
     } else {
         try {
             await StorageAccess.idbSave("account", storageKey, token);
-        } catch (e) {
+        } catch {
             if (!!token) {
                 localStorage.setItem(storageKey, token);
             } else {

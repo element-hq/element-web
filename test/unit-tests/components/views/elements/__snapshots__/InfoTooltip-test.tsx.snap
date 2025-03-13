@@ -3,7 +3,7 @@
 exports[`InfoTooltip should show tooltip on hover 1`] = `
 <DocumentFragment>
   <div
-    aria-describedby="floating-ui-2"
+    aria-describedby=":r2:"
     class="mx_InfoTooltip"
     tabindex="0"
   >

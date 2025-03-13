@@ -3,21 +3,21 @@ Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 Copyright 2018 New Vector Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { asyncAction } from "./actionCreators";
 import Modal from "../Modal";
 import * as Rooms from "../Rooms";
 import { _t } from "../languageHandler";
-import { AsyncActionPayload } from "../dispatcher/payloads";
+import { type AsyncActionPayload } from "../dispatcher/payloads";
 import RoomListStore from "../stores/room-list/RoomListStore";
 import { SortAlgorithm } from "../stores/room-list/algorithms/models";
-import { DefaultTagID, TagID } from "../stores/room-list/models";
+import { DefaultTagID, type TagID } from "../stores/room-list/models";
 import ErrorDialog from "../components/views/dialogs/ErrorDialog";
 
 export default class RoomListActions {
@@ -79,7 +79,7 @@ export default class RoomListActions {
                         logger.error("Failed to set DM tag " + err);
                         Modal.createDialog(ErrorDialog, {
                             title: _t("room_list|failed_set_dm_tag"),
-                            description: err && err.message ? err.message : _t("invite|failed_generic"),
+                            description: err?.message ?? _t("invite|failed_generic"),
                         });
                     });
                 }
@@ -95,7 +95,7 @@ export default class RoomListActions {
                         logger.error("Failed to remove tag " + oldTag + " from room: " + err);
                         Modal.createDialog(ErrorDialog, {
                             title: _t("room_list|failed_remove_tag", { tagName: oldTag }),
-                            description: err && err.message ? err.message : _t("invite|failed_generic"),
+                            description: err?.message ?? _t("invite|failed_generic"),
                         });
                     });
 
@@ -108,7 +108,7 @@ export default class RoomListActions {
                         logger.error("Failed to add tag " + newTag + " to room: " + err);
                         Modal.createDialog(ErrorDialog, {
                             title: _t("room_list|failed_add_tag", { tagName: newTag }),
-                            description: err && err.message ? err.message : _t("invite|failed_generic"),
+                            description: err?.message ?? _t("invite|failed_generic"),
                         });
 
                         throw err;

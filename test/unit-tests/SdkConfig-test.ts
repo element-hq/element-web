@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -18,10 +18,6 @@ describe("SdkConfig", () => {
     describe("with custom values", () => {
         beforeEach(() => {
             SdkConfig.put({
-                voice_broadcast: {
-                    chunk_length: 42,
-                    max_length: 1337,
-                },
                 feedback: {
                     existing_issues_url: "https://existing",
                 } as any,
@@ -30,8 +26,6 @@ describe("SdkConfig", () => {
 
         it("should return the custom config", () => {
             const customConfig = JSON.parse(JSON.stringify(DEFAULTS));
-            customConfig.voice_broadcast.chunk_length = 42;
-            customConfig.voice_broadcast.max_length = 1337;
             customConfig.feedback.existing_issues_url = "https://existing";
             expect(SdkConfig.get()).toEqual(customConfig);
         });

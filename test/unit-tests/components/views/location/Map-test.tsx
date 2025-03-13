@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -102,7 +102,7 @@ describe("<Map />", () => {
             const logSpy = jest.spyOn(logger, "error").mockImplementation();
             getComponent({ centerGeoUri: "123 Sesame Street" });
             expect(mockMap.setCenter).not.toHaveBeenCalled();
-            expect(logSpy).toHaveBeenCalledWith("Could not set map center");
+            expect(logSpy).toHaveBeenCalledWith("Could not set map center", expect.any(Error));
         });
 
         it("updates map center when centerGeoUri prop changes", () => {
@@ -136,7 +136,7 @@ describe("<Map />", () => {
             const bounds = { north: "a", south: "b", east: 42, west: 41 };
             getComponent({ bounds });
             expect(mockMap.fitBounds).not.toHaveBeenCalled();
-            expect(logSpy).toHaveBeenCalledWith("Invalid map bounds");
+            expect(logSpy).toHaveBeenCalledWith("Invalid map bounds", expect.any(Error));
         });
 
         it("updates map bounds when bounds prop changes", () => {

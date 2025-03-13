@@ -3,14 +3,14 @@ Copyright 2024 New Vector Ltd.
 Copyright 2023 Mikhail Aheichyk
 Copyright 2023 Nordeck IT + Consulting GmbH.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import fetchMock from "fetch-mock-jest";
-import { render, RenderResult, screen } from "jest-matrix-react";
-import { WrapperLifecycle, WrapperOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WrapperLifecycle";
+import { render, type RenderResult, screen } from "jest-matrix-react";
+import { WrapperLifecycle, type WrapperOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WrapperLifecycle";
 
 import SdkConfig from "../../src/SdkConfig";
 import PlatformPeg from "../../src/PlatformPeg";

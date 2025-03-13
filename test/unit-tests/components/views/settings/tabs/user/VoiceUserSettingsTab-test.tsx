@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -12,7 +12,10 @@ import { fireEvent, render, screen } from "jest-matrix-react";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import VoiceUserSettingsTab from "../../../../../../../src/components/views/settings/tabs/user/VoiceUserSettingsTab";
-import MediaDeviceHandler, { IMediaDevices, MediaDeviceKindEnum } from "../../../../../../../src/MediaDeviceHandler";
+import MediaDeviceHandler, {
+    type IMediaDevices,
+    MediaDeviceKindEnum,
+} from "../../../../../../../src/MediaDeviceHandler";
 import { flushPromises } from "../../../../../../test-utils";
 
 jest.mock("../../../../../../../src/MediaDeviceHandler");
@@ -58,17 +61,16 @@ describe("<VoiceUserSettingsTab />", () => {
     describe("devices", () => {
         it("renders dropdowns for input devices", async () => {
             render(getComponent());
-            await flushPromises();
 
-            expect(screen.getByLabelText("Microphone")).toHaveDisplayValue(audioIn1.label);
-            expect(screen.getByLabelText("Camera")).toHaveDisplayValue(videoIn1.label);
+            await expect(screen.findByLabelText("Microphone")).resolves.toHaveDisplayValue(audioIn1.label);
+            await expect(screen.findByLabelText("Camera")).resolves.toHaveDisplayValue(videoIn1.label);
         });
 
         it("updates device", async () => {
             render(getComponent());
             await flushPromises();
 
-            fireEvent.change(screen.getByLabelText("Camera"), { target: { value: videoIn2.deviceId } });
+            fireEvent.change(await screen.findByLabelText("Camera"), { target: { value: videoIn2.deviceId } });
 
             expect(MediaDeviceHandlerMock.instance.setDevice).toHaveBeenCalledWith(
                 videoIn2.deviceId,

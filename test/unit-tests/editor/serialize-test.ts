@@ -2,16 +2,16 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked } from "jest-mock";
 
 import EditorModel from "../../../src/editor/model";
-import { htmlSerializeIfNeeded } from "../../../src/editor/serialize";
+import { htmlSerializeFromMdIfNeeded, htmlSerializeIfNeeded } from "../../../src/editor/serialize";
 import { createPartCreator } from "./mock";
-import { IConfigOptions } from "../../../src/IConfigOptions";
+import { type IConfigOptions } from "../../../src/IConfigOptions";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import SdkConfig from "../../../src/SdkConfig";
 
@@ -70,6 +70,12 @@ describe("editor/serialize", function () {
             const model = new EditorModel([pc.plain("\\*hello\\* world")], pc);
             const html = htmlSerializeIfNeeded(model, {});
             expect(html).toBe("*hello* world");
+        });
+        it("escaped markdown should not retain backslashes around other markdown", function () {
+            const pc = createPartCreator();
+            const model = new EditorModel([pc.plain("\\*hello\\* **world**")], pc);
+            const html = htmlSerializeIfNeeded(model, {});
+            expect(html).toBe("*hello* <strong>world</strong>");
         });
         it("escaped markdown should convert HTML entities", function () {
             const pc = createPartCreator();
@@ -152,6 +158,14 @@ describe("editor/serialize", function () {
             const model = new EditorModel([pc.plain("hello world")], pc);
             const html = htmlSerializeIfNeeded(model, { forceHTML: true, useMarkdown: false });
             expect(html).toBe("hello world");
+        });
+        it("should treat tags not in allowlist as plaintext", () => {
+            const html = htmlSerializeFromMdIfNeeded("<b>test</b>", {});
+            expect(html).toBeUndefined();
+        });
+        it("should treat tags not in allowlist as plaintext even if escaped", () => {
+            const html = htmlSerializeFromMdIfNeeded("\\<b>test</b>", {});
+            expect(html).toBe("&lt;b&gt;test&lt;/b&gt;");
         });
     });
 

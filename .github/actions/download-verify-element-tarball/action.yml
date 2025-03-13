@@ -1,0 +1,38 @@
+name: Upload release assets
+description: Uploads assets to an existing release and optionally signs them
+inputs:
+    tag:
+        description: GitHub release tag to fetch assets from.
+        required: true
+    out-file-path:
+        description: Path to where the webapp should be extracted to.
+        required: true
+runs:
+    using: composite
+    steps:
+        - name: Download release tarball
+          uses: robinraju/release-downloader@a96f54c1b5f5e09e47d9504526e96febd949d4c2 # v1
+          with:
+              tag: ${{ inputs.tag }}
+              fileName: element-*.tar.gz*
+              out-file-path: ${{ runner.temp }}/download-verify-element-tarball
+
+        - name: Verify tarball
+          shell: bash
+          run: gpg --verify element-*.tar.gz.asc element-*.tar.gz
+          working-directory: ${{ runner.temp }}/download-verify-element-tarball
+
+        - name: Extract tarball
+          shell: bash
+          run: |
+              mkdir webapp
+              tar xvzf element-*.tar.gz -C webapp --strip-components=1
+          working-directory: ${{ runner.temp }}/download-verify-element-tarball
+
+        - name: Move webapp to out-file-path
+          shell: bash
+          run: mv ${{ runner.temp }}/download-verify-element-tarball/webapp ${{ inputs.out-file-path }}
+
+        - name: Clean up temp directory
+          shell: bash
+          run: rm -R ${{ runner.temp }}/download-verify-element-tarball

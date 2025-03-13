@@ -3,16 +3,16 @@ Copyright 2024 New Vector Ltd.
 Copyright 2019 The Matrix.org Foundation C.I.C.
 Copyright 2018 New Vector Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode } from "react";
-import { NumberSize, Resizable } from "re-resizable";
-import { Direction } from "re-resizable/lib/resizer";
-import { WebPanelResize } from "@matrix-org/analytics-events/types/typescript/WebPanelResize";
+import React, { type ReactNode } from "react";
+import { type NumberSize, Resizable } from "re-resizable";
+import { type Direction } from "re-resizable/lib/resizer";
+import { type WebPanelResize } from "@matrix-org/analytics-events/types/typescript/WebPanelResize";
 
-import ResizeNotifier from "../../utils/ResizeNotifier";
+import type ResizeNotifier from "../../utils/ResizeNotifier";
 import { PosthogAnalytics } from "../../PosthogAnalytics.ts";
 
 interface IProps {
@@ -99,7 +99,7 @@ export default class MainSplit extends React.Component<IProps> {
                 <Resizable
                     key={this.props.sizeKey}
                     defaultSize={this.loadSidePanelSize()}
-                    minWidth={264}
+                    minWidth={320}
                     maxWidth="50%"
                     enable={{
                         top: false,

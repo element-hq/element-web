@@ -4,12 +4,12 @@ Copyright 2020 The Matrix.org Foundation C.I.C.
 Copyright 2017 New Vector Ltd
 Copyright 2015, 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Action } from "./actions";
-import { ActionPayload, AsyncActionPayload } from "./payloads";
+import { type Action } from "./actions";
+import { type ActionPayload, AsyncActionPayload } from "./payloads";
 
 type DispatchToken = string;
 
@@ -45,8 +45,11 @@ export class MatrixDispatcher {
 
     /**
      * Removes a callback based on its token.
+     * @param id The token that was returned by `register`.
+     * Can be undefined to avoid needing an if around every caller.
      */
-    public unregister(id: DispatchToken): void {
+    public unregister(id: DispatchToken | undefined): void {
+        if (!id) return;
         invariant(this.callbacks.has(id), `Dispatcher.unregister(...): '${id}' does not map to a registered callback.`);
         this.callbacks.delete(id);
     }
@@ -175,7 +178,7 @@ export class MatrixDispatcher {
     }
 }
 
-export const defaultDispatcher = new MatrixDispatcher();
+const defaultDispatcher = new MatrixDispatcher();
 
 if (!window.mxDispatcher) {
     window.mxDispatcher = defaultDispatcher;

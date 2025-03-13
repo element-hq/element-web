@@ -2,12 +2,12 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021, 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { FC, HTMLAttributes, useContext } from "react";
-import { Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import React, { type FC, type HTMLAttributes, useContext } from "react";
+import { type Room, type RoomMember } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { sortBy } from "lodash";
 
@@ -16,7 +16,7 @@ import DMRoomMap from "../../../utils/DMRoomMap";
 import FacePile from "./FacePile";
 import { useRoomMembers } from "../../../hooks/useRoomMembers";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import { ButtonEvent } from "./AccessibleButton";
+import { type ButtonEvent } from "./AccessibleButton";
 
 const DEFAULT_NUM_FACES = 5;
 

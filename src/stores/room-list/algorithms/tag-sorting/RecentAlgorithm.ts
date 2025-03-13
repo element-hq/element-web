@@ -2,14 +2,14 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room, MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
+import { type Room, type MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
 
-import { TagID } from "../../models";
-import { IAlgorithm } from "./IAlgorithm";
+import { type TagID } from "../../models";
+import { type IAlgorithm } from "./IAlgorithm";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import * as Unread from "../../../../Unread";
 import { EffectiveMembership, getEffectiveMembership } from "../../../../utils/membership";
@@ -62,7 +62,7 @@ export const sortRooms = (rooms: Room[]): Room[] => {
     });
 };
 
-const getLastTs = (r: Room, userId: string): number => {
+export const getLastTs = (r: Room, userId: string): number => {
     const mainTimelineLastTs = ((): number => {
         // Apparently we can have rooms without timelines, at least under testing
         // environments. Just return MAX_INT when this happens.

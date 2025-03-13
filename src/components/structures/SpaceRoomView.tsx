@@ -2,22 +2,22 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021, 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EventType, RoomType, JoinRule, Preset, Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import { EventType, RoomType, JoinRule, Preset, type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 import React, { useCallback, useContext, useRef, useState } from "react";
 
 import MatrixClientContext from "../../contexts/MatrixClientContext";
-import createRoom, { IOpts } from "../../createRoom";
+import createRoom, { type IOpts } from "../../createRoom";
 import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
 import { Action } from "../../dispatcher/actions";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import { ActionPayload } from "../../dispatcher/payloads";
-import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import { type ActionPayload } from "../../dispatcher/payloads";
+import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import * as Email from "../../email";
 import { useEventEmitterState } from "../../hooks/useEventEmitter";
 import { useMyRoomMembership } from "../../hooks/useRoomMembers";
@@ -30,7 +30,7 @@ import { UIComponent } from "../../settings/UIFeature";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
-import ResizeNotifier from "../../utils/ResizeNotifier";
+import type ResizeNotifier from "../../utils/ResizeNotifier";
 import {
     shouldShowSpaceInvite,
     shouldShowSpaceSettings,
@@ -51,7 +51,7 @@ import {
     defaultDmsRenderer,
     defaultRoomsRenderer,
 } from "../views/dialogs/AddExistingToSpaceDialog";
-import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../views/elements/AccessibleButton";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
 import Field from "../views/elements/Field";
 import RoomFacePile from "../views/elements/RoomFacePile";
@@ -65,7 +65,7 @@ import { ChevronFace, ContextMenuButton, useContextMenu } from "./ContextMenu";
 import MainSplit from "./MainSplit";
 import RightPanel from "./RightPanel";
 import SpaceHierarchy, { showRoom } from "./SpaceHierarchy";
-import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
+import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 
 interface IProps {
     space: Room;
@@ -117,7 +117,7 @@ const SpaceLandingAddButton: React.FC<{ space: Room }> = ({ space }) => {
                         <>
                             <IconizedContextMenuOption
                                 label={_t("action|new_room")}
-                                iconClassName="mx_RoomList_iconNewRoom"
+                                iconClassName="mx_LegacyRoomList_iconNewRoom"
                                 onClick={async (e): Promise<void> => {
                                     e.preventDefault();
                                     e.stopPropagation();
@@ -132,7 +132,7 @@ const SpaceLandingAddButton: React.FC<{ space: Room }> = ({ space }) => {
                             {videoRoomsEnabled && (
                                 <IconizedContextMenuOption
                                     label={_t("action|new_video_room")}
-                                    iconClassName="mx_RoomList_iconNewVideoRoom"
+                                    iconClassName="mx_LegacyRoomList_iconNewVideoRoom"
                                     onClick={async (e): Promise<void> => {
                                         e.preventDefault();
                                         e.stopPropagation();
@@ -157,7 +157,7 @@ const SpaceLandingAddButton: React.FC<{ space: Room }> = ({ space }) => {
                     )}
                     <IconizedContextMenuOption
                         label={_t("action|add_existing_room")}
-                        iconClassName="mx_RoomList_iconAddExistingRoom"
+                        iconClassName="mx_LegacyRoomList_iconAddExistingRoom"
                         onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
@@ -168,7 +168,7 @@ const SpaceLandingAddButton: React.FC<{ space: Room }> = ({ space }) => {
                     {canCreateSpace && (
                         <IconizedContextMenuOption
                             label={_t("room_list|add_space_label")}
-                            iconClassName="mx_RoomList_iconPlus"
+                            iconClassName="mx_LegacyRoomList_iconPlus"
                             onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -208,7 +208,7 @@ const SpaceLanding: React.FC<{ space: Room }> = ({ space }) => {
     const storeIsShowingSpaceMembers = useCallback(
         () =>
             RightPanelStore.instance.isOpenForRoom(space.roomId) &&
-            RightPanelStore.instance.currentCardForRoom(space.roomId)?.phase === RightPanelPhases.SpaceMemberList,
+            RightPanelStore.instance.currentCardForRoom(space.roomId)?.phase === RightPanelPhases.MemberList,
         [space.roomId],
     );
     const isShowingMembers = useEventEmitterState(RightPanelStore.instance, UPDATE_EVENT, storeIsShowingSpaceMembers);
@@ -251,7 +251,7 @@ const SpaceLanding: React.FC<{ space: Room }> = ({ space }) => {
     }
 
     const onMembersClick = (): void => {
-        RightPanelStore.instance.setCard({ phase: RightPanelPhases.SpaceMemberList });
+        RightPanelStore.instance.setCard({ phase: RightPanelPhases.MemberList });
     };
 
     return (
@@ -597,9 +597,9 @@ const SpaceSetupPrivateInvite: React.FC<{
 
 export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
     public static contextType = MatrixClientContext;
-    public declare context: React.ContextType<typeof MatrixClientContext>;
+    declare public context: React.ContextType<typeof MatrixClientContext>;
 
-    private readonly dispatcherRef: string;
+    private dispatcherRef?: string;
 
     public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
@@ -621,12 +621,11 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
             showRightPanel: RightPanelStore.instance.isOpenForRoom(this.props.space.roomId),
             myMembership: this.props.space.getMyMembership(),
         };
-
-        this.dispatcherRef = defaultDispatcher.register(this.onAction);
-        RightPanelStore.instance.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
     }
 
     public componentDidMount(): void {
+        this.dispatcherRef = defaultDispatcher.register(this.onAction);
+        RightPanelStore.instance.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
         this.context.on(RoomEvent.MyMembership, this.onMyMembership);
     }
 

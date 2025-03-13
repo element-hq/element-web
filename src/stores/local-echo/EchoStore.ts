@@ -2,20 +2,20 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk/src/matrix";
 
-import { GenericEchoChamber } from "./GenericEchoChamber";
+import { type GenericEchoChamber } from "./GenericEchoChamber";
 import { RoomEchoChamber } from "./RoomEchoChamber";
 import { RoomEchoContext } from "./RoomEchoContext";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import { ActionPayload } from "../../dispatcher/payloads";
-import { ContextTransactionState, EchoContext } from "./EchoContext";
-import NonUrgentToastStore, { ToastReference } from "../NonUrgentToastStore";
+import { type ActionPayload } from "../../dispatcher/payloads";
+import { ContextTransactionState, type EchoContext } from "./EchoContext";
+import NonUrgentToastStore, { type ToastReference } from "../NonUrgentToastStore";
 import NonUrgentEchoFailureToast from "../../components/views/toasts/NonUrgentEchoFailureToast";
 
 interface IState {

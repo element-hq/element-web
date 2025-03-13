@@ -2,29 +2,29 @@
 Copyright 2018-2024 New Vector Ltd.
 Copyright 2017 Vector Creations Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { AriaRole } from "react";
+import React, { type AriaRole } from "react";
 import classNames from "classnames";
-import { Resizable, Size } from "re-resizable";
-import { Room } from "matrix-js-sdk/src/matrix";
-import { IWidget } from "matrix-widget-api";
+import { Resizable, type Size } from "re-resizable";
+import { type Room } from "matrix-js-sdk/src/matrix";
+import { type IWidget } from "matrix-widget-api";
 
 import AppTile from "../elements/AppTile";
 import dis from "../../../dispatcher/dispatcher";
 import * as ScalarMessaging from "../../../ScalarMessaging";
 import WidgetUtils from "../../../utils/WidgetUtils";
 import WidgetEchoStore from "../../../stores/WidgetEchoStore";
-import ResizeNotifier from "../../../utils/ResizeNotifier";
+import type ResizeNotifier from "../../../utils/ResizeNotifier";
 import ResizeHandle from "../elements/ResizeHandle";
-import Resizer, { IConfig } from "../../../resizer/resizer";
+import Resizer, { type IConfig } from "../../../resizer/resizer";
 import PercentageDistributor from "../../../resizer/distributors/percentage";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import { clamp, percentageOf, percentageWithin } from "../../../utils/numbers";
 import UIStore from "../../../stores/UIStore";
-import { ActionPayload } from "../../../dispatcher/payloads";
+import { type ActionPayload } from "../../../dispatcher/payloads";
 import Spinner from "../elements/Spinner";
 import SdkConfig from "../../../SdkConfig";
 
@@ -68,11 +68,13 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
         };
 
         this.resizer = this.createResizer();
-
-        this.props.resizeNotifier.on("isResizing", this.onIsResizing);
     }
 
     public componentDidMount(): void {
+        this.unmounted = false;
+
+        this.props.resizeNotifier.on("isResizing", this.onIsResizing);
+
         ScalarMessaging.startListening();
         WidgetLayoutStore.instance.on(WidgetLayoutStore.emissionForRoom(this.props.room), this.updateApps);
         this.dispatcherRef = dis.register(this.onAction);
@@ -82,7 +84,7 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
         this.unmounted = true;
         ScalarMessaging.stopListening();
         WidgetLayoutStore.instance.off(WidgetLayoutStore.emissionForRoom(this.props.room), this.updateApps);
-        if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
+        dis.unregister(this.dispatcherRef);
         if (this.resizeContainer) {
             this.resizer.detach();
         }

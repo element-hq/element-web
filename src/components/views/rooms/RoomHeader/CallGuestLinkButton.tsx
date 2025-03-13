@@ -2,17 +2,17 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2024 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 import ExternalLinkIcon from "@vector-im/compound-design-tokens/assets/web/icons/link";
 import { Button, IconButton, Tooltip } from "@vector-im/compound-web";
 import React, { useCallback } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { EventType, JoinRule, Room } from "matrix-js-sdk/src/matrix";
+import { EventType, JoinRule, type Room } from "matrix-js-sdk/src/matrix";
 
 import Modal from "../../../../Modal";
-import ShareDialog from "../../dialogs/ShareDialog";
+import { ShareDialog } from "../../dialogs/ShareDialog";
 import { _t } from "../../../../languageHandler";
 import SettingsStore from "../../../../settings/SettingsStore";
 import { calculateRoomVia } from "../../../../utils/permalinks/Permalinks";

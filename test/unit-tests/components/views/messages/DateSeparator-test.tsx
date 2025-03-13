@@ -2,18 +2,18 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import { mocked } from "jest-mock";
-import { fireEvent, render, screen } from "jest-matrix-react";
-import { TimestampToEventResponse, ConnectionError, HTTPError, MatrixError } from "matrix-js-sdk/src/matrix";
+import { fireEvent, render, screen, waitFor } from "jest-matrix-react";
+import { type TimestampToEventResponse, ConnectionError, HTTPError, MatrixError } from "matrix-js-sdk/src/matrix";
 
 import dispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
-import { ViewRoomPayload } from "../../../../../src/dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../../../../src/dispatcher/payloads/ViewRoomPayload";
 import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
 import { formatFullDateNoTime } from "../../../../../src/DateUtils";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
@@ -89,6 +89,12 @@ describe("DateSeparator", () => {
 
     it.each(testCases)("formats date correctly when current time is %s", (_d, ts, result) => {
         expect(getComponent({ ts, forExport: false }).container.textContent).toEqual(result);
+    });
+
+    it("renders invalid date separator correctly", () => {
+        const ts = new Date(-8640000000000004).getTime();
+        const { asFragment } = getComponent({ ts });
+        expect(asFragment()).toMatchSnapshot();
     });
 
     describe("when forExport is true", () => {
@@ -258,10 +264,12 @@ describe("DateSeparator", () => {
             fireEvent.click(jumpToLastWeekButton);
 
             // Expect error to be shown. We have to wait for the UI to transition.
-            expect(await screen.findByTestId("jump-to-date-error-content")).toBeInTheDocument();
+            await expect(screen.findByTestId("jump-to-date-error-content")).resolves.toBeInTheDocument();
 
             // Expect an option to submit debug logs to be shown when a non-network error occurs
-            expect(await screen.findByTestId("jump-to-date-error-submit-debug-logs-button")).toBeInTheDocument();
+            await expect(
+                screen.findByTestId("jump-to-date-error-submit-debug-logs-button"),
+            ).resolves.toBeInTheDocument();
         });
 
         [
@@ -274,24 +282,27 @@ describe("DateSeparator", () => {
             ),
         ].forEach((fakeError) => {
             it(`should show error dialog without submit debug logs option when networking error (${fakeError.name}) occurs`, async () => {
+                // Try to jump to "last week" but we want a network error to occur
+                mockClient.timestampToEvent.mockRejectedValue(fakeError);
+
                 // Render the component
                 getComponent();
 
                 // Open the jump to date context menu
                 fireEvent.click(screen.getByTestId("jump-to-date-separator-button"));
 
-                // Try to jump to "last week" but we want a network error to occur
-                mockClient.timestampToEvent.mockRejectedValue(fakeError);
                 const jumpToLastWeekButton = await screen.findByTestId("jump-to-date-last-week");
                 fireEvent.click(jumpToLastWeekButton);
 
                 // Expect error to be shown. We have to wait for the UI to transition.
-                expect(await screen.findByTestId("jump-to-date-error-content")).toBeInTheDocument();
+                await expect(screen.findByTestId("jump-to-date-error-content")).resolves.toBeInTheDocument();
 
                 // The submit debug logs option should *NOT* be shown for network errors.
                 //
                 // We have to use `queryBy` so that it can return `null` for something that does not exist.
-                expect(screen.queryByTestId("jump-to-date-error-submit-debug-logs-button")).not.toBeInTheDocument();
+                await waitFor(() =>
+                    expect(screen.queryByTestId("jump-to-date-error-submit-debug-logs-button")).not.toBeInTheDocument(),
+                );
             });
         });
     });

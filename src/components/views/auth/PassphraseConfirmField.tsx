@@ -2,16 +2,15 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { PureComponent, RefCallback, RefObject } from "react";
+import React, { type ComponentProps, PureComponent, type RefCallback, type RefObject } from "react";
 
-import Field, { IInputProps } from "../elements/Field";
-import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
-import { _t, _td, TranslationKey } from "../../../languageHandler";
-import { Alignment } from "../elements/Tooltip";
+import Field, { type IInputProps } from "../elements/Field";
+import withValidation, { type IFieldState, type IValidationResult } from "../elements/Validation";
+import { _t, _td, type TranslationKey } from "../../../languageHandler";
 
 interface IProps extends Omit<IInputProps, "onValidate" | "label" | "element"> {
     id?: string;
@@ -23,7 +22,7 @@ interface IProps extends Omit<IInputProps, "onValidate" | "label" | "element"> {
     label: TranslationKey;
     labelRequired: TranslationKey;
     labelInvalid: TranslationKey;
-    tooltipAlignment?: Alignment;
+    tooltipAlignment?: ComponentProps<typeof Field>["tooltipAlignment"];
     onChange(ev: React.FormEvent<HTMLElement>): void;
     onValidate?(result: IValidationResult): void;
 }

@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -10,6 +10,7 @@ import "@testing-library/jest-dom";
 import React from "react";
 import { act, fireEvent, render, screen, waitFor } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
+import { initOnce } from "@vector-im/matrix-wysiwyg";
 
 import { WysiwygComposer } from "../../../../../../../src/components/views/rooms/wysiwyg_composer/components/WysiwygComposer";
 import SettingsStore from "../../../../../../../src/settings/SettingsStore";
@@ -18,34 +19,36 @@ import defaultDispatcher from "../../../../../../../src/dispatcher/dispatcher";
 import * as EventUtils from "../../../../../../../src/utils/EventUtils";
 import { Action } from "../../../../../../../src/dispatcher/actions";
 import MatrixClientContext from "../../../../../../../src/contexts/MatrixClientContext";
-import RoomContext from "../../../../../../../src/contexts/RoomContext";
 import {
     ComposerContext,
     getDefaultContextValue,
 } from "../../../../../../../src/components/views/rooms/wysiwyg_composer/ComposerContext";
 import { createMocks } from "../utils";
-import EditorStateTransfer from "../../../../../../../src/utils/EditorStateTransfer";
-import { SubSelection } from "../../../../../../../src/components/views/rooms/wysiwyg_composer/types";
+import type EditorStateTransfer from "../../../../../../../src/utils/EditorStateTransfer";
+import { type SubSelection } from "../../../../../../../src/components/views/rooms/wysiwyg_composer/types";
 import { setSelection } from "../../../../../../../src/components/views/rooms/wysiwyg_composer/utils/selection";
 import { parseEditorStateTransfer } from "../../../../../../../src/components/views/rooms/wysiwyg_composer/hooks/useInitialContent";
-import Autocompleter, { ICompletion } from "../../../../../../../src/autocomplete/Autocompleter";
-import AutocompleteProvider from "../../../../../../../src/autocomplete/AutocompleteProvider";
+import Autocompleter, { type ICompletion } from "../../../../../../../src/autocomplete/Autocompleter";
+import type AutocompleteProvider from "../../../../../../../src/autocomplete/AutocompleteProvider";
 import * as Permalinks from "../../../../../../../src/utils/permalinks/Permalinks";
-import { PermalinkParts } from "../../../../../../../src/utils/permalinks/PermalinkConstructor";
+import { type PermalinkParts } from "../../../../../../../src/utils/permalinks/PermalinkConstructor";
+import { ScopedRoomContextProvider } from "../../../../../../../src/contexts/ScopedRoomContext.tsx";
+
+beforeAll(initOnce, 10000);
 
 describe("WysiwygComposer", () => {
     const customRender = (onChange = jest.fn(), onSend = jest.fn(), disabled = false, initialContent?: string) => {
         const { mockClient, defaultRoomContext } = createMocks();
         return render(
             <MatrixClientContext.Provider value={mockClient}>
-                <RoomContext.Provider value={defaultRoomContext}>
+                <ScopedRoomContextProvider {...defaultRoomContext}>
                     <WysiwygComposer
                         onChange={onChange}
                         onSend={onSend}
                         disabled={disabled}
                         initialContent={initialContent}
                     />
-                </RoomContext.Provider>
+                </ScopedRoomContextProvider>
             </MatrixClientContext.Provider>,
         );
     };
@@ -419,7 +422,7 @@ describe("WysiwygComposer", () => {
         const onChange = jest.fn();
         const onSend = jest.fn();
         beforeEach(async () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string): any => {
                 if (name === "MessageComposerInput.autoReplaceEmoji") return true;
             });
             customRender(onChange, onSend);
@@ -455,7 +458,7 @@ describe("WysiwygComposer", () => {
         const onChange = jest.fn();
         const onSend = jest.fn();
         beforeEach(async () => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name): any => {
                 if (name === "MessageComposerInput.ctrlEnterToSend") return true;
             });
             customRender(onChange, onSend);
@@ -523,7 +526,7 @@ describe("WysiwygComposer", () => {
         ) => {
             return render(
                 <MatrixClientContext.Provider value={client}>
-                    <RoomContext.Provider value={roomContext}>
+                    <ScopedRoomContextProvider {...roomContext}>
                         <ComposerContext.Provider
                             value={getDefaultContextValue({ editorStateTransfer: _editorStateTransfer })}
                         >
@@ -537,7 +540,7 @@ describe("WysiwygComposer", () => {
                                 }
                             />
                         </ComposerContext.Provider>
-                    </RoomContext.Provider>
+                    </ScopedRoomContextProvider>
                 </MatrixClientContext.Provider>,
             );
         };

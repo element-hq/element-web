@@ -2,15 +2,15 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
 import { GroupCallEventHandlerEvent } from "matrix-js-sdk/src/webrtc/groupCallEventHandler";
-import { MatrixRTCSession, MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc";
+import { type MatrixRTCSession, MatrixRTCSessionManagerEvents } from "matrix-js-sdk/src/matrixrtc";
 
-import type { GroupCall, Room } from "matrix-js-sdk/src/matrix";
+import type { EmptyObject, GroupCall, Room } from "matrix-js-sdk/src/matrix";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { UPDATE_EVENT } from "./AsyncStore";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
@@ -26,7 +26,7 @@ export enum CallStoreEvent {
     ConnectedCalls = "connected_calls",
 }
 
-export class CallStore extends AsyncStoreWithClient<{}> {
+export class CallStore extends AsyncStoreWithClient<EmptyObject> {
     private static _instance: CallStore;
     public static get instance(): CallStore {
         if (!this._instance) {
@@ -61,7 +61,7 @@ export class CallStore extends AsyncStoreWithClient<{}> {
         // If the room ID of a previously connected call is still in settings at
         // this time, that's a sign that we failed to disconnect from it
         // properly, and need to clean up after ourselves
-        const uncleanlyDisconnectedRoomIds = SettingsStore.getValue<string[]>("activeCallRoomIds");
+        const uncleanlyDisconnectedRoomIds = SettingsStore.getValue("activeCallRoomIds");
         if (uncleanlyDisconnectedRoomIds.length) {
             await Promise.all([
                 ...uncleanlyDisconnectedRoomIds.map(async (uncleanlyDisconnectedRoomId): Promise<void> => {

@@ -3,19 +3,19 @@ Copyright 2024 New Vector Ltd.
 Copyright 2017-2023 The Matrix.org Foundation C.I.C.
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import classNames from "classnames";
-import { MatrixEvent, Room, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, type Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
-import { makeUserPermalink, RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import { makeUserPermalink, type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import SettingsStore from "../../../settings/SettingsStore";
-import { Layout } from "../../../settings/enums/Layout";
+import { type Layout } from "../../../settings/enums/Layout";
 import { getUserNameColorClass } from "../../../utils/FormattingUtils";
 import { Action } from "../../../dispatcher/actions";
 import Spinner from "./Spinner";
@@ -25,7 +25,7 @@ import AccessibleButton from "./AccessibleButton";
 import { getParentEventId, shouldDisplayReply } from "../../../utils/Reply";
 import RoomContext from "../../../contexts/RoomContext";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { GetRelationsForEvent } from "../rooms/EventTile";
+import { type GetRelationsForEvent } from "../rooms/EventTile";
 
 /**
  * This number is based on the previous behavior - if we have message of height
@@ -65,7 +65,7 @@ interface IState {
 // be low as each event being loaded (after the first) is triggered by an explicit user action.
 export default class ReplyChain extends React.Component<IProps, IState> {
     public static contextType = RoomContext;
-    public declare context: React.ContextType<typeof RoomContext>;
+    declare public context: React.ContextType<typeof RoomContext>;
 
     private unmounted = false;
     private room: Room;
@@ -89,6 +89,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
     }
 
     public componentDidMount(): void {
+        this.unmounted = false;
         this.initialize();
         this.trySetExpandableQuotes();
     }
@@ -140,7 +141,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
             const inReplyToEventId = getParentEventId(ev);
             if (!inReplyToEventId) return null;
             return await this.getEvent(inReplyToEventId);
-        } catch (e) {
+        } catch {
             return null;
         }
     }
@@ -154,7 +155,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
             // ask the client to fetch the event we want using the context API, only interface to do so is to ask
             // for a timeline with that event, but once it is loaded we can use findEventById to look up the ev map
             await this.matrixClient.getEventTimeline(this.room.getUnfilteredTimelineSet(), eventId);
-        } catch (e) {
+        } catch {
             // if it fails catch the error and return early, there's no point trying to find the event in this case.
             // Return null as it is falsy and thus should be treated as an error (as the event cannot be resolved).
             return null;

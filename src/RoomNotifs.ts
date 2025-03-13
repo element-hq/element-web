@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2016-2019 , 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -44,7 +44,7 @@ export function getRoomNotifsState(client: MatrixClient, roomId: string): RoomNo
     let roomRule: IPushRule | undefined;
     try {
         roomRule = client.getRoomPushRule("global", roomId);
-    } catch (err) {
+    } catch {
         // Possible that the client doesn't have pushRules yet. If so, it
         // hasn't started either, so indicate that this room is not notifying.
         return null;

@@ -2,16 +2,17 @@
  * Copyright 2024 New Vector Ltd.
  * Copyright 2020-2022 The Matrix.org Foundation C.I.C.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { IWidgetApiRequest } from "matrix-widget-api";
+import { type IWidgetApiRequest } from "matrix-widget-api";
 
 export enum ElementWidgetActions {
     // All of these actions are currently specific to Jitsi and Element Call
     JoinCall = "io.element.join",
     HangupCall = "im.vector.hangup",
+    Close = "io.element.close",
     CallParticipants = "io.element.participants",
     StartLiveStream = "im.vector.start_live_stream",
 

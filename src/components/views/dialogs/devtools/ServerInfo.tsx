@@ -2,14 +2,14 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 Michael Telatynski <7t3chguy@gmail.com>
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useContext } from "react";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import BaseTool, { IDevtoolsProps } from "./BaseTool";
+import BaseTool, { type IDevtoolsProps } from "./BaseTool";
 import { _t } from "../../../../languageHandler";
 import { useAsyncMemo } from "../../../../hooks/useAsyncMemo";
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";

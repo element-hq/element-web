@@ -2,11 +2,11 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2016-2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { IAnnotatedPushRule, IPushRules, PushRuleKind, PushRuleSet } from "matrix-js-sdk/src/matrix";
+import { type IAnnotatedPushRule, type IPushRules, PushRuleKind, type PushRuleSet } from "matrix-js-sdk/src/matrix";
 
 import { PushRuleVectorState, VectorState } from "./PushRuleVectorState";
 

@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -11,7 +11,6 @@ import * as React from "react";
 
 import { ALTERNATE_KEY_NAME } from "../../accessibility/KeyboardShortcuts";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import { ActionPayload } from "../../dispatcher/payloads";
 import { IS_MAC, Key } from "../../Keyboard";
 import { _t } from "../../languageHandler";
 import AccessibleButton from "../views/elements/AccessibleButton";
@@ -22,27 +21,9 @@ interface IProps {
 }
 
 export default class RoomSearch extends React.PureComponent<IProps> {
-    private readonly dispatcherRef: string;
-
-    public constructor(props: IProps) {
-        super(props);
-
-        this.dispatcherRef = defaultDispatcher.register(this.onAction);
-    }
-
-    public componentWillUnmount(): void {
-        defaultDispatcher.unregister(this.dispatcherRef);
-    }
-
     private openSpotlight(): void {
         defaultDispatcher.fire(Action.OpenSpotlight);
     }
-
-    private onAction = (payload: ActionPayload): void => {
-        if (payload.action === "focus_room_filter") {
-            this.openSpotlight();
-        }
-    };
 
     public render(): React.ReactNode {
         const classes = classNames(

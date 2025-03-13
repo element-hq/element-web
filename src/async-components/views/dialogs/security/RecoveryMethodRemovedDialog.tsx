@@ -3,15 +3,15 @@ Copyright 2024 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 Copyright 2019 New Vector Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { lazy } from "react";
 
 import dis from "../../../../dispatcher/dispatcher";
 import { _t } from "../../../../languageHandler";
-import Modal, { ComponentType } from "../../../../Modal";
+import Modal from "../../../../Modal";
 import { Action } from "../../../../dispatcher/actions";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
 import DialogButtons from "../../../../components/views/elements/DialogButtons";
@@ -28,8 +28,8 @@ export default class RecoveryMethodRemovedDialog extends React.PureComponent<IPr
 
     private onSetupClick = (): void => {
         this.props.onFinished();
-        Modal.createDialogAsync(
-            import("./CreateKeyBackupDialog") as unknown as Promise<ComponentType>,
+        Modal.createDialog(
+            lazy(() => import("./CreateKeyBackupDialog")),
             undefined,
             undefined,
             /* priority = */ false,

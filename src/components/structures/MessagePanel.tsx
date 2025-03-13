@@ -2,14 +2,20 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2016-2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, ReactNode, TransitionEvent } from "react";
-import ReactDOM from "react-dom";
+import React, { createRef, type ReactNode, type TransitionEvent } from "react";
 import classNames from "classnames";
-import { Room, MatrixClient, RoomStateEvent, EventStatus, MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
+import {
+    type Room,
+    type MatrixClient,
+    RoomStateEvent,
+    EventStatus,
+    type MatrixEvent,
+    EventType,
+} from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { isSupportedReceiptType } from "matrix-js-sdk/src/utils";
 
@@ -20,30 +26,30 @@ import SettingsStore from "../../settings/SettingsStore";
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 import { Layout } from "../../settings/enums/Layout";
 import EventTile, {
-    GetRelationsForEvent,
-    IReadReceiptProps,
+    type GetRelationsForEvent,
+    type IReadReceiptProps,
     isEligibleForSpecialReceipt,
-    UnwrappedEventTile,
+    type UnwrappedEventTile,
 } from "../views/rooms/EventTile";
 import IRCTimelineProfileResizer from "../views/elements/IRCTimelineProfileResizer";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import LegacyCallEventGrouper from "./LegacyCallEventGrouper";
+import type LegacyCallEventGrouper from "./LegacyCallEventGrouper";
 import WhoIsTypingTile from "../views/rooms/WhoIsTypingTile";
-import ScrollPanel, { IScrollState } from "./ScrollPanel";
+import ScrollPanel, { type IScrollState } from "./ScrollPanel";
 import DateSeparator from "../views/messages/DateSeparator";
 import TimelineSeparator, { SeparatorKind } from "../views/messages/TimelineSeparator";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
-import ResizeNotifier from "../../utils/ResizeNotifier";
+import type ResizeNotifier from "../../utils/ResizeNotifier";
 import Spinner from "../views/elements/Spinner";
-import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
-import EditorStateTransfer from "../../utils/EditorStateTransfer";
+import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
+import type EditorStateTransfer from "../../utils/EditorStateTransfer";
 import { Action } from "../../dispatcher/actions";
 import { getEventDisplayInfo } from "../../utils/EventRenderingUtils";
-import { IReadReceiptPosition } from "../views/rooms/ReadReceiptMarker";
+import { type IReadReceiptPosition } from "../views/rooms/ReadReceiptMarker";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
 import { editorRoomKey } from "../../Editing";
 import { hasThreadSummary } from "../../utils/EventUtils";
-import { BaseGrouper } from "./grouper/BaseGrouper";
+import { type BaseGrouper } from "./grouper/BaseGrouper";
 import { MainGrouper } from "./grouper/MainGrouper";
 import { CreationGrouper } from "./grouper/CreationGrouper";
 import { _t } from "../../languageHandler";
@@ -197,7 +203,7 @@ interface IReadReceiptForUser {
  */
 export default class MessagePanel extends React.Component<IProps, IState> {
     public static contextType = RoomContext;
-    public declare context: React.ContextType<typeof RoomContext>;
+    declare public context: React.ContextType<typeof RoomContext>;
 
     public static defaultProps = {
         disableGrouping: false,
@@ -241,13 +247,13 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     private readReceiptsByUserId: Map<string, IReadReceiptForUser> = new Map();
 
     private readonly _showHiddenEvents: boolean;
-    private isMounted = false;
+    private unmounted = false;
 
     private readMarkerNode = createRef<HTMLLIElement>();
     private whoIsTyping = createRef<WhoIsTypingTile>();
-    private scrollPanel = createRef<ScrollPanel>();
+    public scrollPanel = createRef<ScrollPanel>();
 
-    private readonly showTypingNotificationsWatcherRef: string;
+    private showTypingNotificationsWatcherRef?: string;
     private eventTiles: Record<string, UnwrappedEventTile> = {};
 
     // A map to allow groupers to maintain consistent keys even if their first event is uprooted due to back-pagination.
@@ -268,22 +274,21 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         // and we check this in a hot code path. This is also cached in our
         // RoomContext, however we still need a fallback for roomless MessagePanels.
         this._showHiddenEvents = SettingsStore.getValue("showHiddenEventsInTimeline");
+    }
 
+    public componentDidMount(): void {
+        this.unmounted = false;
         this.showTypingNotificationsWatcherRef = SettingsStore.watchSetting(
             "showTypingNotifications",
             null,
             this.onShowTypingNotificationsChange,
         );
-    }
-
-    public componentDidMount(): void {
         this.calculateRoomMembersCount();
         this.props.room?.currentState.on(RoomStateEvent.Update, this.calculateRoomMembersCount);
-        this.isMounted = true;
     }
 
     public componentWillUnmount(): void {
-        this.isMounted = false;
+        this.unmounted = true;
         this.props.room?.currentState.off(RoomStateEvent.Update, this.calculateRoomMembersCount);
         SettingsStore.unwatchSetting(this.showTypingNotificationsWatcherRef);
         this.readReceiptMap = {};
@@ -376,13 +381,13 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     //  +1: read marker is below the window
     public getReadMarkerPosition(): number | null {
         const readMarker = this.readMarkerNode.current;
-        const messageWrapper = this.scrollPanel.current;
+        const messageWrapper = this.scrollPanel.current?.divScroll;
 
         if (!readMarker || !messageWrapper) {
             return null;
         }
 
-        const wrapperRect = (ReactDOM.findDOMNode(messageWrapper) as HTMLElement).getBoundingClientRect();
+        const wrapperRect = messageWrapper.getBoundingClientRect();
         const readMarkerRect = readMarker.getBoundingClientRect();
 
         // the read-marker pretends to have zero height when it is actually
@@ -442,7 +447,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     }
 
     private isUnmounting = (): boolean => {
-        return !this.isMounted;
+        return this.unmounted;
     };
 
     public get showHiddenEvents(): boolean {

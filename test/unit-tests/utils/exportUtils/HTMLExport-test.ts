@@ -2,25 +2,30 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022, 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import {
+    EventTimeline,
+    type EventTimelineSet,
     EventType,
-    IRoomEvent,
-    MatrixClient,
+    type IRoomEvent,
+    type MatrixClient,
     MatrixEvent,
     MsgType,
+    Relations,
+    RelationType,
     Room,
     RoomMember,
     RoomState,
 } from "matrix-js-sdk/src/matrix";
 import fetchMock from "fetch-mock-jest";
 import escapeHtml from "escape-html";
+import { type RelationsContainer } from "matrix-js-sdk/src/models/relations-container";
 
-import { filterConsole, mkStubRoom, REPEATABLE_DATE, stubClient } from "../../../test-utils";
-import { ExportType, IExportOptions } from "../../../../src/utils/exportUtils/exportUtils";
+import { filterConsole, mkReaction, mkStubRoom, REPEATABLE_DATE, stubClient } from "../../../test-utils";
+import { ExportType, type IExportOptions } from "../../../../src/utils/exportUtils/exportUtils";
 import SdkConfig from "../../../../src/SdkConfig";
 import HTMLExporter from "../../../../src/utils/exportUtils/HtmlExport";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
@@ -123,6 +128,35 @@ describe("HTMLExport", () => {
         fetchMock.get(media.srcHttp!, body);
     }
 
+    function mockReactionForMessage(message: IRoomEvent): MatrixEvent {
+        const firstMessage = new MatrixEvent(message);
+        const reaction = mkReaction(firstMessage);
+
+        const relationsContainer = {
+            getRelations: jest.fn(),
+            getChildEventsForEvent: jest.fn(),
+        } as unknown as RelationsContainer;
+        const relations = new Relations(RelationType.Annotation, EventType.Reaction, client);
+        relations.addEvent(reaction);
+        relationsContainer.getChildEventsForEvent = jest
+            .fn()
+            .mockImplementation(
+                (eventId: string, relationType: RelationType | string, eventType: EventType | string) => {
+                    if (eventId === firstMessage.getId()) {
+                        return relations;
+                    }
+                },
+            );
+
+        const timelineSet = {
+            relations: relationsContainer,
+            getLiveTimeline: () => timeline,
+        } as unknown as EventTimelineSet;
+        const timeline = new EventTimeline(timelineSet);
+        room.getUnfilteredTimelineSet = jest.fn().mockReturnValue(timelineSet);
+        return reaction;
+    }
+
     it("should throw when created with invalid config for LastNMessages", async () => {
         expect(
             () =>
@@ -167,6 +201,7 @@ describe("HTMLExport", () => {
                 body: `Message #${i}`,
             },
         }));
+        mockReactionForMessage(events[0]);
         mockMessages(...events);
 
         const exporter = new HTMLExporter(
@@ -558,18 +593,21 @@ describe("HTMLExport", () => {
 
     it("should not make /messages requests when exporting 'Current Timeline'", async () => {
         client.createMessagesRequest.mockRejectedValue(new Error("Should never be called"));
-        room.addLiveEvents([
-            new MatrixEvent({
-                event_id: `$eventId`,
-                type: EventType.RoomMessage,
-                sender: client.getSafeUserId(),
-                origin_server_ts: 123456789,
-                content: {
-                    msgtype: "m.text",
-                    body: `testing testing`,
-                },
-            }),
-        ]);
+        room.addLiveEvents(
+            [
+                new MatrixEvent({
+                    event_id: `$eventId`,
+                    type: EventType.RoomMessage,
+                    sender: client.getSafeUserId(),
+                    origin_server_ts: 123456789,
+                    content: {
+                        msgtype: "m.text",
+                        body: `testing testing`,
+                    },
+                }),
+            ],
+            { addToState: true },
+        );
 
         const exporter = new HTMLExporter(
             room,
@@ -586,5 +624,25 @@ describe("HTMLExport", () => {
         const file = getMessageFile(exporter);
         expect(await file.text()).toContain("testing testing");
         expect(client.createMessagesRequest).not.toHaveBeenCalled();
+    });
+
+    it("should include reactions", async () => {
+        const reaction = mockReactionForMessage(EVENT_MESSAGE);
+        mockMessages(EVENT_MESSAGE);
+        const exporter = new HTMLExporter(
+            room,
+            ExportType.LastNMessages,
+            {
+                attachmentsIncluded: false,
+                maxSize: 1_024 * 1_024,
+                numberOfMessages: 40,
+            },
+            () => {},
+        );
+
+        await exporter.export();
+
+        const file = getMessageFile(exporter);
+        expect(await file.text()).toContain(reaction.getContent()["m.relates_to"]?.key);
     });
 });

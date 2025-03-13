@@ -2,16 +2,16 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { fireEvent, render, screen, within } from "jest-matrix-react";
 import React from "react";
-import { MatrixClient, ThreepidMedium } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, ThreepidMedium } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import userEvent from "@testing-library/user-event";
-import { MockedObject } from "jest-mock";
+import { type MockedObject } from "jest-mock";
 
 import AccountUserSettingsTab from "../../../../../../../src/components/views/settings/tabs/user/AccountUserSettingsTab";
 import { SdkContextClass, SDKContext } from "../../../../../../../src/contexts/SDKContext";
@@ -24,7 +24,7 @@ import {
     flushPromises,
 } from "../../../../../../test-utils";
 import { UIFeature } from "../../../../../../../src/settings/UIFeature";
-import { OidcClientStore } from "../../../../../../../src/stores/oidc/OidcClientStore";
+import { type OidcClientStore } from "../../../../../../../src/stores/oidc/OidcClientStore";
 import MatrixClientContext from "../../../../../../../src/contexts/MatrixClientContext";
 import Modal from "../../../../../../../src/Modal";
 
@@ -114,7 +114,7 @@ describe("<AccountUserSettingsTab />", () => {
         expect(manageAccountLink.getAttribute("href")).toMatch(accountManagementLink);
     });
 
-    describe("deactive account", () => {
+    describe("deactivate account", () => {
         it("should not render section when account deactivation feature is disabled", () => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation(
                 (settingName) => settingName !== UIFeature.Deactivate,
@@ -198,6 +198,11 @@ describe("<AccountUserSettingsTab />", () => {
 
     describe("3pids", () => {
         beforeEach(() => {
+            const mockOidcClientStore = {
+                accountManagementEndpoint: undefined,
+            } as unknown as OidcClientStore;
+            jest.spyOn(stores, "oidcClientStore", "get").mockReturnValue(mockOidcClientStore);
+
             mockClient.getCapabilities.mockResolvedValue({
                 "m.3pid_changes": {
                     enabled: true,

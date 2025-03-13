@@ -1,5 +1,32 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`DateSeparator renders invalid date separator correctly 1`] = `
+<DocumentFragment>
+  <div
+    aria-label="Invalid timestamp"
+    class="mx_TimelineSeparator"
+    role="separator"
+  >
+    <hr
+      role="none"
+    />
+    <div
+      class="mx_DateSeparator_dateContent"
+    >
+      <h2
+        aria-hidden="true"
+        class="mx_DateSeparator_dateHeading"
+      >
+        Invalid timestamp
+      </h2>
+    </div>
+    <hr
+      role="none"
+    />
+  </div>
+</DocumentFragment>
+`;
+
 exports[`DateSeparator renders the date separator correctly 1`] = `
 <DocumentFragment>
   <div

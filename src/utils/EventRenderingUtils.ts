@@ -2,14 +2,14 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    MatrixEvent,
-    IContent,
-    MatrixClient,
+    type MatrixEvent,
+    type IContent,
+    type MatrixClient,
     EventType,
     MsgType,
     M_POLL_END,
@@ -21,7 +21,6 @@ import SettingsStore from "../settings/SettingsStore";
 import { haveRendererForEvent, JitsiEventFactory, JSONEventFactory, pickFactory } from "../events/EventTileFactory";
 import { getMessageModerationState, isLocationEvent, MessageModerationState } from "./EventUtils";
 import { ElementCall } from "../models/Call";
-import { VoiceBroadcastInfoEventType, VoiceBroadcastInfoState } from "../voice-broadcast";
 
 const calcIsInfoMessage = (
     eventType: EventType | string,
@@ -38,8 +37,7 @@ const calcIsInfoMessage = (
         eventType !== EventType.RoomCreate &&
         !M_POLL_START.matches(eventType) &&
         !M_POLL_END.matches(eventType) &&
-        !M_BEACON_INFO.matches(eventType) &&
-        !(eventType === VoiceBroadcastInfoEventType && content?.state === VoiceBroadcastInfoState.Started)
+        !M_BEACON_INFO.matches(eventType)
     );
 };
 
@@ -91,8 +89,7 @@ export function getEventDisplayInfo(
         (eventType === EventType.RoomMessage && msgtype === MsgType.Emote) ||
         M_POLL_START.matches(eventType) ||
         M_BEACON_INFO.matches(eventType) ||
-        isLocationEvent(mxEvent) ||
-        eventType === VoiceBroadcastInfoEventType;
+        isLocationEvent(mxEvent);
 
     // If we're showing hidden events in the timeline, we should use the
     // source tile when there's no regular tile for an event and also for

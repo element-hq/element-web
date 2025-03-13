@@ -19,9 +19,9 @@ const argv = parseArgs(process.argv.slice(2), {});
 const watch = argv.w;
 const verbose = argv.v;
 
-function errCheck(err?: Error): void {
+function errCheck(err: unknown): void {
     if (err) {
-        console.error(err.message);
+        console.error(err instanceof Error ? err.message : err);
         process.exit(1);
     }
 }

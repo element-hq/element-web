@@ -5,16 +5,17 @@ Copyright 2019 The Matrix.org Foundation C.I.C.
 Copyright 2018 New Vector Ltd
 Copyright 2017 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type ReactNode } from "react";
+import { Link } from "@vector-im/compound-web";
 
 import SdkConfig from "../../../SdkConfig";
 import Modal from "../../../Modal";
 import { _t } from "../../../languageHandler";
-import sendBugReport, { downloadBugReport } from "../../../rageshake/submit-rageshake";
+import sendBugReport, { downloadBugReport, RageshakeError } from "../../../rageshake/submit-rageshake";
 import AccessibleButton from "../elements/AccessibleButton";
 import QuestionDialog from "./QuestionDialog";
 import BaseDialog from "./BaseDialog";
@@ -26,7 +27,7 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { getBrowserSupport } from "../../../SupportedBrowser";
 
-interface IProps {
+export interface BugReportDialogProps {
     onFinished: (success: boolean) => void;
     initialText?: string;
     label?: string;
@@ -36,7 +37,7 @@ interface IProps {
 interface IState {
     sendLogs: boolean;
     busy: boolean;
-    err: string | null;
+    err: ReactNode | null;
     issueUrl: string;
     text: string;
     progress: string | null;
@@ -44,11 +45,11 @@ interface IState {
     downloadProgress: string | null;
 }
 
-export default class BugReportDialog extends React.Component<IProps, IState> {
+export default class BugReportDialog extends React.Component<BugReportDialogProps, IState> {
     private unmounted: boolean;
     private issueRef: React.RefObject<Field>;
 
-    public constructor(props: IProps) {
+    public constructor(props: BugReportDialogProps) {
         super(props);
 
         this.state = {
@@ -64,6 +65,11 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
 
         this.unmounted = false;
         this.issueRef = React.createRef();
+    }
+
+    public componentDidMount(): void {
+        this.unmounted = false;
+        this.issueRef.current?.focus();
 
         // Get all of the extra info dumped to the console when someone is about
         // to send debug logs. Since this is a fire and forget action, we do
@@ -76,10 +82,6 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
         });
     }
 
-    public componentDidMount(): void {
-        this.issueRef.current?.focus();
-    }
-
     public componentWillUnmount(): void {
         this.unmounted = true;
     }
@@ -87,6 +89,42 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
     private onCancel = (): void => {
         this.props.onFinished(false);
     };
+
+    private getErrorText(error: Error | RageshakeError): ReactNode {
+        if (error instanceof RageshakeError) {
+            let errorText;
+            switch (error.errorcode) {
+                case "DISALLOWED_APP":
+                    errorText = _t("bug_reporting|failed_send_logs_causes|disallowed_app");
+                    break;
+                case "REJECTED_BAD_VERSION":
+                    errorText = _t("bug_reporting|failed_send_logs_causes|rejected_version");
+                    break;
+                case "REJECTED_UNEXPECTED_RECOVERY_KEY":
+                    errorText = _t("bug_reporting|failed_send_logs_causes|rejected_recovery_key");
+                    break;
+                default:
+                    if (error.errorcode?.startsWith("REJECTED")) {
+                        errorText = _t("bug_reporting|failed_send_logs_causes|rejected_generic");
+                    } else {
+                        errorText = _t("bug_reporting|failed_send_logs_causes|server_unknown_error");
+                    }
+                    break;
+            }
+            return (
+                <>
+                    <p>{errorText}</p>
+                    {error.policyURL && (
+                        <Link size="medium" target="_blank" href={error.policyURL}>
+                            {_t("action|learn_more")}
+                        </Link>
+                    )}
+                </>
+            );
+        } else {
+            return <p>{_t("bug_reporting|failed_send_logs_causes|unknown_error")}</p>;
+        }
+    }
 
     private onSubmit = (): void => {
         if ((!this.state.text || !this.state.text.trim()) && (!this.state.issueUrl || !this.state.issueUrl.trim())) {
@@ -125,7 +163,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
                     this.setState({
                         busy: false,
                         progress: null,
-                        err: _t("bug_reporting|failed_send_logs") + `${err.message}`,
+                        err: this.getErrorText(err),
                     });
                 }
             },
@@ -154,7 +192,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
                 this.setState({
                     downloadBusy: false,
                     downloadProgress:
-                        _t("bug_reporting|failed_send_logs") + `${err instanceof Error ? err.message : ""}`,
+                        _t("bug_reporting|failed_download_logs") + `${err instanceof Error ? err.message : ""}`,
                 });
             }
         }

@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 Suguru Hirahara
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -23,7 +23,7 @@ test.describe("Account user settings tab", () => {
         },
     });
 
-    test("should be rendered properly", async ({ uut, user }) => {
+    test("should be rendered properly", { tag: "@screenshot" }, async ({ uut, user }) => {
         await expect(uut).toMatchScreenshot("account.png");
 
         // Assert that the top heading is rendered
@@ -34,14 +34,14 @@ test.describe("Account user settings tab", () => {
         await expect(profile.getByRole("textbox", { name: "Display Name" })).toHaveValue(USER_NAME);
 
         // Assert that a userId is rendered
-        expect(uut.getByLabel("Username")).toHaveText(user.userId);
+        await expect(uut.getByLabel("Username")).toHaveText(user.userId);
 
         // Wait until spinners disappear
         await expect(uut.getByTestId("accountSection").locator(".mx_Spinner")).not.toBeVisible();
         await expect(uut.getByTestId("discoverySection").locator(".mx_Spinner")).not.toBeVisible();
 
         const accountSection = uut.getByTestId("accountSection");
-        accountSection.scrollIntoViewIfNeeded();
+        await accountSection.scrollIntoViewIfNeeded();
         // Assert that input areas for changing a password exists
         await expect(accountSection.getByLabel("Current password")).toBeVisible();
         await expect(accountSection.getByLabel("New Password")).toBeVisible();
@@ -71,7 +71,7 @@ test.describe("Account user settings tab", () => {
         );
     });
 
-    test("should respond to small screen sizes", async ({ page, uut }) => {
+    test("should respond to small screen sizes", { tag: "@screenshot" }, async ({ page, uut }) => {
         await page.setViewportSize({ width: 700, height: 600 });
         await expect(uut).toMatchScreenshot("account-smallscreen.png");
     });
@@ -139,5 +139,52 @@ test.describe("Account user settings tab", () => {
         // Assert the avatar's initial characters are set
         await expect(page.locator(".mx_UserMenu .mx_BaseAvatar").getByText("A")).toBeVisible(); // Alice
         await expect(page.locator(".mx_RoomView_wrapper .mx_BaseAvatar").getByText("A")).toBeVisible(); // Alice
+    });
+
+    // ported to a playwright test because the jest test was very flakey for no obvious reason
+    test("should display an error if the code is incorrect when adding a phone number", async ({ uut, page }) => {
+        const dummyUrl = "https://nowhere.dummy/_matrix/client/unstable/add_threepid/msisdn/submit_token";
+
+        await page.route(
+            `**/_matrix/client/v3/account/3pid/msisdn/requestToken`,
+            async (route) => {
+                await route.fulfill({
+                    json: {
+                        success: true,
+                        sid: "1",
+                        msisdn: "447700900000",
+                        intl_fmt: "+44 7700 900000",
+                        submit_url: dummyUrl,
+                    },
+                });
+            },
+            { times: 1 },
+        );
+
+        await page.route(
+            dummyUrl,
+            async (route) => {
+                await route.fulfill({
+                    status: 400,
+                    json: {
+                        errcode: "M_THREEPID_AUTH_FAILED",
+                        error: "That code is definitely wrong",
+                    },
+                });
+            },
+            { times: 1 },
+        );
+
+        const phoneSection = page.getByTestId("mx_AccountPhoneNumbers");
+        await phoneSection.getByRole("textbox", { name: "Phone Number" }).fill("07700900000");
+        await phoneSection.getByRole("button", { name: "Add" }).click();
+
+        await phoneSection
+            .getByRole("textbox", { name: "Verification code" })
+            .fill("A small eurasian field mouse dancing the paso doble");
+
+        await phoneSection.getByRole("button", { name: "Continue" }).click();
+
+        await expect(page.getByRole("heading", { name: "Unable to verify phone number." })).toBeVisible();
     });
 });

@@ -2,18 +2,17 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import * as Sentry from "@sentry/browser";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
-import { type Integration } from "@sentry/types/build/types/integration";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import SdkConfig from "./SdkConfig";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import SettingsStore from "./settings/SettingsStore";
-import { IConfigOptions } from "./IConfigOptions";
+import { type IConfigOptions } from "./IConfigOptions";
 
 /* eslint-disable camelcase */
 
@@ -68,12 +67,12 @@ async function getStorageContext(): Promise<StorageContext> {
     if (navigator.storage && navigator.storage.persisted) {
         try {
             result["storageManager_persisted"] = String(await navigator.storage.persisted());
-        } catch (e) {}
+        } catch {}
     } else if (document.hasStorageAccess) {
         // Safari
         try {
             result["storageManager_persisted"] = String(await document.hasStorageAccess());
-        } catch (e) {}
+        } catch {}
     }
     if (navigator.storage && navigator.storage.estimate) {
         try {
@@ -87,7 +86,7 @@ async function getStorageContext(): Promise<StorageContext> {
                 });
                 result[`storageManager_usage`] = usageDetails.join(", ");
             }
-        } catch (e) {}
+        } catch {}
     }
 
     return result;
@@ -196,7 +195,7 @@ export function setSentryUser(mxid: string): void {
 export async function initSentry(sentryConfig: IConfigOptions["sentry"]): Promise<void> {
     if (!sentryConfig) return;
     // Only enable Integrations.GlobalHandlers, which hooks uncaught exceptions, if automaticErrorReporting is true
-    const integrations: Integration[] = [
+    const integrations = [
         Sentry.inboundFiltersIntegration(),
         Sentry.functionToStringIntegration(),
         Sentry.breadcrumbsIntegration(),
@@ -214,7 +213,6 @@ export async function initSentry(sentryConfig: IConfigOptions["sentry"]): Promis
         release: process.env.VERSION,
         environment: sentryConfig.environment,
         defaultIntegrations: false,
-        autoSessionTracking: false,
         integrations,
         // Set to 1.0 which is reasonable if we're only submitting Rageshakes; will need to be set < 1.0
         // if we collect more frequently.

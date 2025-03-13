@@ -2,13 +2,13 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Wysiwyg, WysiwygEvent } from "@vector-im/matrix-wysiwyg";
+import { type Wysiwyg, type WysiwygEvent } from "@vector-im/matrix-wysiwyg";
 import { useCallback } from "react";
-import { IEventRelation, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type IEventRelation, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { useSettingValue } from "../../../../../hooks/useSettings";
 import { getKeyBindingsManager } from "../../../../../KeyBindingsManager";
@@ -16,16 +16,16 @@ import { KeyBindingAction } from "../../../../../accessibility/KeyboardShortcuts
 import { findEditableEvent } from "../../../../../utils/EventUtils";
 import dis from "../../../../../dispatcher/dispatcher";
 import { Action } from "../../../../../dispatcher/actions";
-import { useRoomContext } from "../../../../../contexts/RoomContext";
-import { IRoomState } from "../../../../structures/RoomView";
-import { ComposerContextState, useComposerContext } from "../ComposerContext";
-import EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
+import { type IRoomState } from "../../../../structures/RoomView";
+import { type ComposerContextState, useComposerContext } from "../ComposerContext";
+import type EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
 import { useMatrixClientContext } from "../../../../../contexts/MatrixClientContext";
 import { isCaretAtEnd, isCaretAtStart } from "../utils/selection";
 import { getEventsFromEditorStateTransfer, getEventsFromRoom } from "../utils/event";
 import { endEditing } from "../utils/editing";
-import Autocomplete from "../../Autocomplete";
+import type Autocomplete from "../../Autocomplete";
 import { handleClipboardEvent, handleEventWithAutocomplete, isEventToHandleAsClipboardEvent } from "./utils";
+import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.tsx";
 
 export function useInputEventProcessor(
     onSend: () => void,
@@ -33,10 +33,10 @@ export function useInputEventProcessor(
     initialContent?: string,
     eventRelation?: IEventRelation,
 ): (event: WysiwygEvent, composer: Wysiwyg, editor: HTMLElement) => WysiwygEvent | null {
-    const roomContext = useRoomContext();
+    const roomContext = useScopedRoomContext("liveTimeline", "room", "replyToEvent", "timelineRenderingType");
     const composerContext = useComposerContext();
     const mxClient = useMatrixClientContext();
-    const isCtrlEnterToSend = useSettingValue<boolean>("MessageComposerInput.ctrlEnterToSend");
+    const isCtrlEnterToSend = useSettingValue("MessageComposerInput.ctrlEnterToSend");
 
     return useCallback(
         (event: WysiwygEvent, composer: Wysiwyg, editor: HTMLElement) => {
@@ -94,7 +94,7 @@ function handleKeyboardEvent(
     initialContent: string | undefined,
     composer: Wysiwyg,
     editor: HTMLElement,
-    roomContext: IRoomState,
+    roomContext: Pick<IRoomState, "liveTimeline" | "timelineRenderingType" | "room">,
     composerContext: ComposerContextState,
     mxClient: MatrixClient | undefined,
     autocompleteRef: React.RefObject<Autocomplete>,
@@ -175,7 +175,7 @@ function dispatchEditEvent(
     isForward: boolean,
     editorStateTransfer: EditorStateTransfer | undefined,
     composerContext: ComposerContextState,
-    roomContext: IRoomState,
+    roomContext: Pick<IRoomState, "liveTimeline" | "timelineRenderingType" | "room">,
     mxClient: MatrixClient,
 ): boolean {
     const foundEvents = editorStateTransfer

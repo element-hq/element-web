@@ -2,25 +2,25 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021-2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { WebSearch as WebSearchEvent } from "@matrix-org/analytics-events/types/typescript/WebSearch";
+import { type WebSearch as WebSearchEvent } from "@matrix-org/analytics-events/types/typescript/WebSearch";
 import classNames from "classnames";
 import { capitalize, sum } from "lodash";
 import {
-    IPublicRoomsChunkRoom,
-    MatrixClient,
+    type IPublicRoomsChunkRoom,
+    type MatrixClient,
     RoomMember,
     RoomType,
-    Room,
-    HierarchyRoom,
+    type Room,
+    type HierarchyRoom,
     JoinRule,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { normalize } from "matrix-js-sdk/src/utils";
-import React, { ChangeEvent, RefObject, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import React, { type ChangeEvent, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import sanitizeHtml from "sanitize-html";
 
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
@@ -33,7 +33,7 @@ import {
 import { mediaFromMxc } from "../../../../customisations/Media";
 import { Action } from "../../../../dispatcher/actions";
 import defaultDispatcher from "../../../../dispatcher/dispatcher";
-import { ViewRoomPayload } from "../../../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../../../dispatcher/payloads/ViewRoomPayload";
 import { useDebouncedCallback } from "../../../../hooks/spotlight/useDebouncedCallback";
 import { useRecentSearches } from "../../../../hooks/spotlight/useRecentSearches";
 import { useProfileInfo } from "../../../../hooks/useProfileInfo";
@@ -49,13 +49,13 @@ import { showStartChatInviteDialog } from "../../../../RoomInvite";
 import { SettingLevel } from "../../../../settings/SettingLevel";
 import SettingsStore from "../../../../settings/SettingsStore";
 import { BreadcrumbsStore } from "../../../../stores/BreadcrumbsStore";
-import { RoomNotificationState } from "../../../../stores/notifications/RoomNotificationState";
+import { type RoomNotificationState } from "../../../../stores/notifications/RoomNotificationState";
 import { RoomNotificationStateStore } from "../../../../stores/notifications/RoomNotificationStateStore";
 import { RecentAlgorithm } from "../../../../stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
 import { SdkContextClass } from "../../../../contexts/SDKContext";
 import { getMetaSpaceName } from "../../../../stores/spaces";
 import SpaceStore from "../../../../stores/spaces/SpaceStore";
-import { DirectoryMember, Member, startDmOnFirstMessage } from "../../../../utils/direct-messages";
+import { DirectoryMember, type Member, startDmOnFirstMessage } from "../../../../utils/direct-messages";
 import DMRoomMap from "../../../../utils/DMRoomMap";
 import { makeUserPermalink } from "../../../../utils/permalinks/Permalinks";
 import { buildActivityScores, buildMemberScores, compareMembers } from "../../../../utils/SortMembers";
@@ -64,7 +64,7 @@ import BaseAvatar from "../../avatars/BaseAvatar";
 import DecoratedRoomAvatar from "../../avatars/DecoratedRoomAvatar";
 import { SearchResultAvatar } from "../../avatars/SearchResultAvatar";
 import { NetworkDropdown } from "../../directory/NetworkDropdown";
-import AccessibleButton, { ButtonEvent } from "../../elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../../elements/AccessibleButton";
 import Spinner from "../../elements/Spinner";
 import NotificationBadge from "../../rooms/NotificationBadge";
 import BaseDialog from "../BaseDialog";
@@ -90,8 +90,8 @@ interface IProps {
     onFinished(): void;
 }
 
-function refIsForRecentlyViewed(ref?: RefObject<HTMLElement>): boolean {
-    return ref?.current?.id?.startsWith("mx_SpotlightDialog_button_recentlyViewed_") === true;
+function nodeIsForRecentlyViewed(node?: HTMLElement): boolean {
+    return node?.id?.startsWith("mx_SpotlightDialog_button_recentlyViewed_") === true;
 }
 
 function getRoomTypes(filter: Filter | null): Set<RoomType | null> {
@@ -498,13 +498,13 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
     };
     useEffect(() => {
         setTimeout(() => {
-            const ref = rovingContext.state.refs[0];
-            if (ref) {
+            const node = rovingContext.state.nodes[0];
+            if (node) {
                 rovingContext.dispatch({
                     type: Type.SetFocus,
-                    payload: { ref },
+                    payload: { node },
                 });
-                ref.current?.scrollIntoView?.({
+                node?.scrollIntoView?.({
                     block: "nearest",
                 });
             }
@@ -954,7 +954,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         className="mx_SpotlightDialog_createRoom"
                         onClick={() =>
                             defaultDispatcher.dispatch({
-                                action: "view_create_room",
+                                action: Action.CreateRoom,
                                 public: true,
                                 defaultName: capitalize(trimmedQuery),
                             })
@@ -1128,7 +1128,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                 break;
         }
 
-        let ref: RefObject<HTMLElement> | undefined;
+        let node: HTMLElement | undefined;
         const accessibilityAction = getKeyBindingsManager().getAccessibilityAction(ev);
         switch (accessibilityAction) {
             case KeyBindingAction.Escape:
@@ -1141,20 +1141,20 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                 ev.stopPropagation();
                 ev.preventDefault();
 
-                if (rovingContext.state.activeRef && rovingContext.state.refs.length > 0) {
-                    let refs = rovingContext.state.refs;
+                if (rovingContext.state.activeNode && rovingContext.state.nodes.length > 0) {
+                    let nodes = rovingContext.state.nodes;
                     if (!query && !filter !== null) {
                         // If the current selection is not in the recently viewed row then only include the
                         // first recently viewed so that is the target when the user is switching into recently viewed.
-                        const keptRecentlyViewedRef = refIsForRecentlyViewed(rovingContext.state.activeRef)
-                            ? rovingContext.state.activeRef
-                            : refs.find(refIsForRecentlyViewed);
+                        const keptRecentlyViewedRef = nodeIsForRecentlyViewed(rovingContext.state.activeNode)
+                            ? rovingContext.state.activeNode
+                            : nodes.find(nodeIsForRecentlyViewed);
                         // exclude all other recently viewed items from the list so up/down arrows skip them
-                        refs = refs.filter((ref) => ref === keptRecentlyViewedRef || !refIsForRecentlyViewed(ref));
+                        nodes = nodes.filter((ref) => ref === keptRecentlyViewedRef || !nodeIsForRecentlyViewed(ref));
                     }
 
-                    const idx = refs.indexOf(rovingContext.state.activeRef);
-                    ref = findSiblingElement(refs, idx + (accessibilityAction === KeyBindingAction.ArrowUp ? -1 : 1));
+                    const idx = nodes.indexOf(rovingContext.state.activeNode);
+                    node = findSiblingElement(nodes, idx + (accessibilityAction === KeyBindingAction.ArrowUp ? -1 : 1));
                 }
                 break;
 
@@ -1164,27 +1164,30 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                 if (
                     !query &&
                     !filter !== null &&
-                    rovingContext.state.activeRef &&
-                    rovingContext.state.refs.length > 0 &&
-                    refIsForRecentlyViewed(rovingContext.state.activeRef)
+                    rovingContext.state.activeNode &&
+                    rovingContext.state.nodes.length > 0 &&
+                    nodeIsForRecentlyViewed(rovingContext.state.activeNode)
                 ) {
                     // we only intercept left/right arrows when the field is empty, and they'd do nothing anyway
                     ev.stopPropagation();
                     ev.preventDefault();
 
-                    const refs = rovingContext.state.refs.filter(refIsForRecentlyViewed);
-                    const idx = refs.indexOf(rovingContext.state.activeRef);
-                    ref = findSiblingElement(refs, idx + (accessibilityAction === KeyBindingAction.ArrowLeft ? -1 : 1));
+                    const nodes = rovingContext.state.nodes.filter(nodeIsForRecentlyViewed);
+                    const idx = nodes.indexOf(rovingContext.state.activeNode);
+                    node = findSiblingElement(
+                        nodes,
+                        idx + (accessibilityAction === KeyBindingAction.ArrowLeft ? -1 : 1),
+                    );
                 }
                 break;
         }
 
-        if (ref) {
+        if (node) {
             rovingContext.dispatch({
                 type: Type.SetFocus,
-                payload: { ref },
+                payload: { node },
             });
-            ref.current?.scrollIntoView({
+            node?.scrollIntoView({
                 block: "nearest",
             });
         }
@@ -1204,12 +1207,12 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             case KeyBindingAction.Enter:
                 ev.stopPropagation();
                 ev.preventDefault();
-                rovingContext.state.activeRef?.current?.click();
+                rovingContext.state.activeNode?.click();
                 break;
         }
     };
 
-    const activeDescendant = rovingContext.state.activeRef?.current?.id;
+    const activeDescendant = rovingContext.state.activeNode?.id;
 
     return (
         <>
@@ -1250,7 +1253,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                             <span>{filterToLabel(filter)}</span>
                             <AccessibleButton
                                 tabIndex={-1}
-                                alt={_t("spotlight_dialog|remove_filter", {
+                                title={_t("spotlight_dialog|remove_filter", {
                                     filter: filterToLabel(filter),
                                 })}
                                 className="mx_SpotlightDialog_filter--close"

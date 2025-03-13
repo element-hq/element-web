@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -36,10 +36,10 @@ Please see LICENSE files in the repository root for full details.
  *                      list ops)
  */
 
-import { MatrixClient, EventType, AutoDiscovery, Method, timeoutSignal } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, EventType, AutoDiscovery, Method, timeoutSignal } from "matrix-js-sdk/src/matrix";
 import {
-    MSC3575Filter,
-    MSC3575List,
+    type MSC3575Filter,
+    type MSC3575List,
     MSC3575_STATE_KEY_LAZY,
     MSC3575_STATE_KEY_ME,
     MSC3575_WILDCARD,
@@ -72,27 +72,23 @@ const DEFAULT_ROOM_SUBSCRIPTION_INFO = {
 };
 // lazy load room members so rooms like Matrix HQ don't take forever to load
 const UNENCRYPTED_SUBSCRIPTION_NAME = "unencrypted";
-const UNENCRYPTED_SUBSCRIPTION = Object.assign(
-    {
-        required_state: [
-            [MSC3575_WILDCARD, MSC3575_WILDCARD], // all events
-            [EventType.RoomMember, MSC3575_STATE_KEY_ME], // except for m.room.members, get our own membership
-            [EventType.RoomMember, MSC3575_STATE_KEY_LAZY], // ...and lazy load the rest.
-        ],
-    },
-    DEFAULT_ROOM_SUBSCRIPTION_INFO,
-);
+const UNENCRYPTED_SUBSCRIPTION = {
+    required_state: [
+        [MSC3575_WILDCARD, MSC3575_WILDCARD], // all events
+        [EventType.RoomMember, MSC3575_STATE_KEY_ME], // except for m.room.members, get our own membership
+        [EventType.RoomMember, MSC3575_STATE_KEY_LAZY], // ...and lazy load the rest.
+    ],
+    ...DEFAULT_ROOM_SUBSCRIPTION_INFO,
+};
 
 // we need all the room members in encrypted rooms because we need to know which users to encrypt
 // messages for.
-const ENCRYPTED_SUBSCRIPTION = Object.assign(
-    {
-        required_state: [
-            [MSC3575_WILDCARD, MSC3575_WILDCARD], // all events
-        ],
-    },
-    DEFAULT_ROOM_SUBSCRIPTION_INFO,
-);
+const ENCRYPTED_SUBSCRIPTION = {
+    required_state: [
+        [MSC3575_WILDCARD, MSC3575_WILDCARD], // all events
+    ],
+    ...DEFAULT_ROOM_SUBSCRIPTION_INFO,
+};
 
 export type PartialSlidingSyncRequest = {
     filters?: MSC3575Filter;
@@ -199,10 +195,10 @@ export class SlidingSyncManager {
                         [EventType.RoomMember, MSC3575_STATE_KEY_ME], // lets the client calculate that we are in fact in the room
                     ],
                 },
+                ...updateArgs,
             };
-            list = Object.assign(list, updateArgs);
         } else {
-            const updatedList = Object.assign({}, list, updateArgs);
+            const updatedList = { ...list, ...updateArgs };
             // cannot use objectHasDiff as we need to do deep diff checking
             if (JSON.stringify(list) === JSON.stringify(updatedList)) {
                 logger.debug("list matches, not sending, update => ", updateArgs);
@@ -233,7 +229,7 @@ export class SlidingSyncManager {
             subscriptions.delete(roomId);
         }
         const room = this.client?.getRoom(roomId);
-        let shouldLazyLoad = !this.client?.isRoomEncrypted(roomId);
+        let shouldLazyLoad = !(await this.client?.getCrypto()?.isEncryptionEnabledInRoom(roomId));
         if (!room) {
             // default to safety: request all state if we can't work it out. This can happen if you
             // refresh the app whilst viewing a room: we call setRoomVisible before we know anything
@@ -252,7 +248,7 @@ export class SlidingSyncManager {
         try {
             // wait until the next sync before returning as RoomView may need to know the current state
             await p;
-        } catch (err) {
+        } catch {
             logger.warn("SlidingSync setRoomVisible:", roomId, visible, "failed to confirm transaction");
         }
         return roomId;
@@ -305,7 +301,7 @@ export class SlidingSyncManager {
                 } else {
                     await this.slidingSync!.setListRanges(SlidingSyncManager.ListSearch, ranges);
                 }
-            } catch (err) {
+            } catch {
                 // do nothing, as we reject only when we get interrupted but that's fine as the next
                 // request will include our data
             } finally {
@@ -357,7 +353,7 @@ export class SlidingSyncManager {
             }
             const clientWellKnown = await AutoDiscovery.findClientConfig(clientDomain);
             proxyUrl = clientWellKnown?.["org.matrix.msc3575.proxy"]?.url;
-        } catch (e) {
+        } catch {
             // Either client.getDomain() is null so we've shorted out, or is invalid so `AutoDiscovery.findClientConfig` has thrown
         }
 

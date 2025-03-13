@@ -2,13 +2,17 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021-2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import classNames from "classnames";
-import EllipsisIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
+import {
+    OverflowHorizontalIcon,
+    UserProfileSolidIcon,
+    FavouriteSolidIcon,
+} from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { _t } from "../../../languageHandler";
 import ContextMenu, { alwaysAboveRightOf, ChevronFace, useContextMenu } from "../../structures/ContextMenu";
@@ -22,8 +26,6 @@ import { Action } from "../../../dispatcher/actions";
 import { UserTab } from "../dialogs/UserTab";
 import QuickThemeSwitcher from "./QuickThemeSwitcher";
 import { Icon as PinUprightIcon } from "../../../../res/img/element-icons/room/pin-upright.svg";
-import { Icon as MembersIcon } from "../../../../res/img/element-icons/room/members.svg";
-import { Icon as FavoriteIcon } from "../../../../res/img/element-icons/roomlist/favorite.svg";
 import Modal from "../../../Modal";
 import DevtoolsDialog from "../dialogs/DevtoolsDialog";
 import { SdkContextClass } from "../../../contexts/SDKContext";
@@ -34,17 +36,23 @@ const QuickSettingsButton: React.FC<{
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
 
     const { [MetaSpace.Favourites]: favouritesEnabled, [MetaSpace.People]: peopleEnabled } =
-        useSettingValue<Record<MetaSpace, boolean>>("Spaces.enabledMetaSpaces");
+        useSettingValue("Spaces.enabledMetaSpaces");
 
     const currentRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
-    const developerModeEnabled = useSettingValue<boolean>("developerMode");
+    const developerModeEnabled = useSettingValue("developerMode");
+    // "Favourites" and "People" meta spaces are not available in the new room list
+    const newRoomListEnabled = useSettingValue("feature_new_room_list");
 
     let contextMenu: JSX.Element | undefined;
     if (menuDisplayed && handle.current) {
         contextMenu = (
             <ContextMenu
                 {...alwaysAboveRightOf(handle.current.getBoundingClientRect(), ChevronFace.None, 16)}
-                wrapperClassName="mx_QuickSettingsButton_ContextMenuWrapper"
+                wrapperClassName={classNames("mx_QuickSettingsButton_ContextMenuWrapper", {
+                    mx_QuickSettingsButton_ContextMenuWrapper_new_room_list: newRoomListEnabled,
+                })}
+                // Eventually replace with a properly aria-labelled menu
+                data-testid="quick-settings-menu"
                 onFinished={closeMenu}
                 managed={false}
                 focusLock={true}
@@ -79,41 +87,50 @@ const QuickSettingsButton: React.FC<{
                     </AccessibleButton>
                 )}
 
-                <h4 className="mx_QuickSettingsButton_pinToSidebarHeading">
-                    <PinUprightIcon className="mx_QuickSettingsButton_icon" />
-                    {_t("quick_settings|metaspace_section")}
-                </h4>
+                {!newRoomListEnabled && (
+                    <>
+                        <h4 className="mx_QuickSettingsButton_pinToSidebarHeading">
+                            <PinUprightIcon className="mx_QuickSettingsButton_icon" />
+                            {_t("quick_settings|metaspace_section")}
+                        </h4>
 
-                <StyledCheckbox
-                    className="mx_QuickSettingsButton_favouritesCheckbox"
-                    checked={!!favouritesEnabled}
-                    onChange={onMetaSpaceChangeFactory(MetaSpace.Favourites, "WebQuickSettingsPinToSidebarCheckbox")}
-                >
-                    <FavoriteIcon className="mx_QuickSettingsButton_icon" />
-                    {_t("common|favourites")}
-                </StyledCheckbox>
-                <StyledCheckbox
-                    className="mx_QuickSettingsButton_peopleCheckbox"
-                    checked={!!peopleEnabled}
-                    onChange={onMetaSpaceChangeFactory(MetaSpace.People, "WebQuickSettingsPinToSidebarCheckbox")}
-                >
-                    <MembersIcon className="mx_QuickSettingsButton_icon" />
-                    {_t("common|people")}
-                </StyledCheckbox>
-                <AccessibleButton
-                    className="mx_QuickSettingsButton_moreOptionsButton"
-                    onClick={() => {
-                        closeMenu();
-                        defaultDispatcher.dispatch({
-                            action: Action.ViewUserSettings,
-                            initialTabId: UserTab.Sidebar,
-                        });
-                    }}
-                >
-                    <EllipsisIcon className="mx_QuickSettingsButton_icon" />
-                    {_t("quick_settings|sidebar_settings")}
-                </AccessibleButton>
-
+                        <StyledCheckbox
+                            className="mx_QuickSettingsButton_favouritesCheckbox"
+                            checked={!!favouritesEnabled}
+                            onChange={onMetaSpaceChangeFactory(
+                                MetaSpace.Favourites,
+                                "WebQuickSettingsPinToSidebarCheckbox",
+                            )}
+                        >
+                            <FavouriteSolidIcon className="mx_QuickSettingsButton_icon" />
+                            {_t("common|favourites")}
+                        </StyledCheckbox>
+                        <StyledCheckbox
+                            className="mx_QuickSettingsButton_peopleCheckbox"
+                            checked={!!peopleEnabled}
+                            onChange={onMetaSpaceChangeFactory(
+                                MetaSpace.People,
+                                "WebQuickSettingsPinToSidebarCheckbox",
+                            )}
+                        >
+                            <UserProfileSolidIcon className="mx_QuickSettingsButton_icon" />
+                            {_t("common|people")}
+                        </StyledCheckbox>
+                        <AccessibleButton
+                            className="mx_QuickSettingsButton_moreOptionsButton"
+                            onClick={() => {
+                                closeMenu();
+                                defaultDispatcher.dispatch({
+                                    action: Action.ViewUserSettings,
+                                    initialTabId: UserTab.Sidebar,
+                                });
+                            }}
+                        >
+                            <OverflowHorizontalIcon className="mx_QuickSettingsButton_icon" />
+                            {_t("quick_settings|sidebar_settings")}
+                        </AccessibleButton>
+                    </>
+                )}
                 <QuickThemeSwitcher requestClose={closeMenu} />
             </ContextMenu>
         );

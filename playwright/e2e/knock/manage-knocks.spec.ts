@@ -4,14 +4,16 @@ Copyright 2023 Mikhail Aheichyk
 Copyright 2023 Nordeck IT + Consulting GmbH.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { test, expect } from "../../element-web-test";
 import { waitForRoom } from "../utils";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 test.describe("Manage Knocks", () => {
+    test.skip(isDendrite, "Dendrite does not have support for knocking");
     test.use({
         displayName: "Alice",
         labsFlags: ["feature_ask_to_join"],
@@ -50,7 +52,7 @@ test.describe("Manage Knocks", () => {
     });
 
     test("should deny knock using bar", async ({ page, app, bot, room }) => {
-        bot.knockRoom(room.roomId);
+        await bot.knockRoom(room.roomId);
 
         const roomKnocksBar = page.locator(".mx_RoomKnocksBar");
         await expect(roomKnocksBar.getByRole("heading", { name: "Asking to join" })).toBeVisible();

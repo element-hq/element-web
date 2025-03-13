@@ -6,11 +6,11 @@ It's so complicated it needs its own README.
 
 Legend:
 
--   Orange = External event.
--   Purple = Deterministic flow.
--   Green = Algorithm definition.
--   Red = Exit condition/point.
--   Blue = Process definition.
+- Orange = External event.
+- Purple = Deterministic flow.
+- Green = Algorithm definition.
+- Red = Exit condition/point.
+- Blue = Process definition.
 
 ## Algorithms involved
 
@@ -68,14 +68,14 @@ simply get the manual sorting algorithm applied to them with no further involvem
 algorithm. There are 4 categories: Red, Grey, Bold, and Idle. Each has their own definition based off
 relative (perceived) importance to the user:
 
--   **Red**: The room has unread mentions waiting for the user.
--   **Grey**: The room has unread notifications waiting for the user. Notifications are simply unread
-    messages which cause a push notification or badge count. Typically, this is the default as rooms get
-    set to 'All Messages'.
--   **Bold**: The room has unread messages waiting for the user. Essentially this is a grey room without
-    a badge/notification count (or 'Mentions Only'/'Muted').
--   **Idle**: No useful (see definition of useful above) activity has occurred in the room since the user
-    last read it.
+- **Red**: The room has unread mentions waiting for the user.
+- **Grey**: The room has unread notifications waiting for the user. Notifications are simply unread
+  messages which cause a push notification or badge count. Typically, this is the default as rooms get
+  set to 'All Messages'.
+- **Bold**: The room has unread messages waiting for the user. Essentially this is a grey room without
+  a badge/notification count (or 'Mentions Only'/'Muted').
+- **Idle**: No useful (see definition of useful above) activity has occurred in the room since the user
+  last read it.
 
 Conveniently, each tag gets ordered by those categories as presented: red rooms appear above grey, grey
 above bold, etc.

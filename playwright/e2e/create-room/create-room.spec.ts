@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022, 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -27,7 +27,7 @@ test.describe("Create Room", () => {
         // Submit
         await dialog.getByRole("button", { name: "Create room" }).click();
 
-        await expect(page).toHaveURL(/\/#\/room\/#test-room-1:localhost/);
+        await expect(page).toHaveURL(new RegExp(`/#/room/#test-room-1:${user.homeServer}`));
         const header = page.locator(".mx_RoomHeader");
         await expect(header).toContainText(name);
     });

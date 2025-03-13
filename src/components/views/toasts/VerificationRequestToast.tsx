@@ -2,18 +2,18 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019-2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
 import {
     canAcceptVerificationRequest,
-    VerificationRequest,
+    type VerificationRequest,
     VerificationRequestEvent,
 } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
-import { Device } from "matrix-js-sdk/src/matrix";
+import { type Device } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -26,7 +26,7 @@ import GenericToast from "./GenericToast";
 import { Action } from "../../../dispatcher/actions";
 import VerificationRequestDialog from "../dialogs/VerificationRequestDialog";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
-import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { getDeviceCryptoInfo } from "../../../utils/crypto/deviceInfo";
 
 interface IProps {
@@ -117,7 +117,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
                 RightPanelStore.instance.setCards(
                     [
                         { phase: RightPanelPhases.RoomSummary },
-                        { phase: RightPanelPhases.RoomMemberInfo, state: { member } },
+                        { phase: RightPanelPhases.MemberInfo, state: { member } },
                         { phase: RightPanelPhases.EncryptionPanel, state: { verificationRequest: request, member } },
                     ],
                     undefined,

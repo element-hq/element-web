@@ -3,22 +3,26 @@ Copyright 2024 New Vector Ltd.
 Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 Copyright 2017 Travis Ralston
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixClient, MatrixEvent, RoomState, RoomStateEvent, StateEvents } from "matrix-js-sdk/src/matrix";
+import {
+    type MatrixClient,
+    type MatrixEvent,
+    type RoomState,
+    RoomStateEvent,
+    type StateEvents,
+} from "matrix-js-sdk/src/matrix";
 import { defer } from "matrix-js-sdk/src/utils";
 
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
 import { objectClone, objectKeyChanges } from "../../utils/objects";
 import { SettingLevel } from "../SettingLevel";
-import { WatchManager } from "../WatchManager";
+import { type WatchManager } from "../WatchManager";
 
 const DEFAULT_SETTINGS_EVENT_TYPE = "im.vector.web.settings";
-const PREVIEW_URLS_EVENT_TYPE = "org.matrix.room.preview_urls";
-
-type RoomSettingsEventType = typeof DEFAULT_SETTINGS_EVENT_TYPE | typeof PREVIEW_URLS_EVENT_TYPE;
+type RoomSettingsEventType = typeof DEFAULT_SETTINGS_EVENT_TYPE | "org.matrix.room.preview_urls";
 
 /**
  * Gets and sets settings at the "room" level.

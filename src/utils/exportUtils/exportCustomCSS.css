@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -128,6 +128,14 @@ a.mx_reply_anchor:hover {
     50% {
         background: #e3e2df;
     }
+}
+
+.mx_RoomHeader {
+    --mx-flex-display: flex;
+    --mx-flex-direction: row;
+    --mx-flex-align: center;
+    --mx-flex-justify: start;
+    --mx-flex-gap: var(--cpd-space-3x);
 }
 
 .mx_ReplyChain_Export {

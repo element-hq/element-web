@@ -2,15 +2,15 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { defer, IDeferred } from "matrix-js-sdk/src/utils";
+import { defer, type IDeferred } from "matrix-js-sdk/src/utils";
 
-import { WorkerPayload } from "./workers/worker";
+import { type WorkerPayload } from "./workers/worker";
 
-export class WorkerManager<Request extends {}, Response> {
+export class WorkerManager<Request extends object, Response> {
     private readonly worker: Worker;
     private seq = 0;
     private pendingDeferredMap = new Map<number, IDeferred<Response>>();

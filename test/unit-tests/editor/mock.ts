@@ -2,15 +2,16 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2019-2022 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room, MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
+import { type Room, type MatrixClient, type RoomMember } from "matrix-js-sdk/src/matrix";
 
-import AutocompleteWrapperModel, { UpdateCallback } from "../../../src/editor/autocomplete";
-import { Caret } from "../../../src/editor/caret";
-import { PillPart, Part, PartCreator } from "../../../src/editor/parts";
+import { type UpdateCallback } from "../../../src/editor/autocomplete";
+import type AutocompleteWrapperModel from "../../../src/editor/autocomplete";
+import { type Caret } from "../../../src/editor/caret";
+import { type PillPart, type Part, PartCreator } from "../../../src/editor/parts";
 import DocumentPosition from "../../../src/editor/position";
 
 export class MockAutoComplete {

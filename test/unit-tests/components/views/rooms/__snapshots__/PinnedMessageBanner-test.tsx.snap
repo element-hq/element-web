@@ -33,16 +33,16 @@ exports[`<PinnedMessageBanner /> should display display a poll event 1`] = `
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357L5.77 2.857Z"
+            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357z"
           />
         </svg>
         <span
-          class="mx_PinnedMessageBanner_message"
+          class="mx_EventPreview mx_PinnedMessageBanner_message"
           data-testid="banner-message"
         >
           <span>
             <span
-              class="mx_PinnedMessageBanner_prefix"
+              class="mx_EventPreview_prefix"
             >
               Poll:
             </span>
@@ -96,7 +96,7 @@ exports[`<PinnedMessageBanner /> should display the last message when the pinned
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357L5.77 2.857Z"
+            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357z"
           />
         </svg>
         <div
@@ -113,15 +113,16 @@ exports[`<PinnedMessageBanner /> should display the last message when the pinned
           </span>
         </div>
         <span
-          class="mx_PinnedMessageBanner_message"
+          class="mx_EventPreview mx_PinnedMessageBanner_message"
           data-testid="banner-message"
+          title="Third pinned message"
         >
           Third pinned message
         </span>
       </div>
     </button>
     <button
-      class="_button_i91xf_17 mx_PinnedMessageBanner_actions"
+      class="_button_vczzf_8 mx_PinnedMessageBanner_actions"
       data-kind="tertiary"
       data-size="lg"
       role="button"
@@ -166,16 +167,16 @@ exports[`<PinnedMessageBanner /> should display the m.audio event type 1`] = `
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357L5.77 2.857Z"
+            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357z"
           />
         </svg>
         <span
-          class="mx_PinnedMessageBanner_message"
+          class="mx_EventPreview mx_PinnedMessageBanner_message"
           data-testid="banner-message"
         >
           <span>
             <span
-              class="mx_PinnedMessageBanner_prefix"
+              class="mx_EventPreview_prefix"
             >
               Audio:
             </span>
@@ -221,16 +222,16 @@ exports[`<PinnedMessageBanner /> should display the m.file event type 1`] = `
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357L5.77 2.857Z"
+            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357z"
           />
         </svg>
         <span
-          class="mx_PinnedMessageBanner_message"
+          class="mx_EventPreview mx_PinnedMessageBanner_message"
           data-testid="banner-message"
         >
           <span>
             <span
-              class="mx_PinnedMessageBanner_prefix"
+              class="mx_EventPreview_prefix"
             >
               File:
             </span>
@@ -276,16 +277,16 @@ exports[`<PinnedMessageBanner /> should display the m.image event type 1`] = `
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357L5.77 2.857Z"
+            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357z"
           />
         </svg>
         <span
-          class="mx_PinnedMessageBanner_message"
+          class="mx_EventPreview mx_PinnedMessageBanner_message"
           data-testid="banner-message"
         >
           <span>
             <span
-              class="mx_PinnedMessageBanner_prefix"
+              class="mx_EventPreview_prefix"
             >
               Image:
             </span>
@@ -331,16 +332,16 @@ exports[`<PinnedMessageBanner /> should display the m.video event type 1`] = `
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357L5.77 2.857Z"
+            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357z"
           />
         </svg>
         <span
-          class="mx_PinnedMessageBanner_message"
+          class="mx_EventPreview mx_PinnedMessageBanner_message"
           data-testid="banner-message"
         >
           <span>
             <span
-              class="mx_PinnedMessageBanner_prefix"
+              class="mx_EventPreview_prefix"
             >
               Video:
             </span>
@@ -390,7 +391,7 @@ exports[`<PinnedMessageBanner /> should render 2 pinned event 1`] = `
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357L5.77 2.857Z"
+            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357z"
           />
         </svg>
         <div
@@ -407,15 +408,16 @@ exports[`<PinnedMessageBanner /> should render 2 pinned event 1`] = `
           </span>
         </div>
         <span
-          class="mx_PinnedMessageBanner_message"
+          class="mx_EventPreview mx_PinnedMessageBanner_message"
           data-testid="banner-message"
+          title="Second pinned message"
         >
           Second pinned message
         </span>
       </div>
     </button>
     <button
-      class="_button_i91xf_17 mx_PinnedMessageBanner_actions"
+      class="_button_vczzf_8 mx_PinnedMessageBanner_actions"
       data-kind="tertiary"
       data-size="lg"
       role="button"
@@ -468,7 +470,7 @@ exports[`<PinnedMessageBanner /> should render 4 pinned event 1`] = `
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357L5.77 2.857Z"
+            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357z"
           />
         </svg>
         <div
@@ -485,15 +487,16 @@ exports[`<PinnedMessageBanner /> should render 4 pinned event 1`] = `
           </span>
         </div>
         <span
-          class="mx_PinnedMessageBanner_message"
+          class="mx_EventPreview mx_PinnedMessageBanner_message"
           data-testid="banner-message"
+          title="Fourth pinned message"
         >
           Fourth pinned message
         </span>
       </div>
     </button>
     <button
-      class="_button_i91xf_17 mx_PinnedMessageBanner_actions"
+      class="_button_vczzf_8 mx_PinnedMessageBanner_actions"
       data-kind="tertiary"
       data-size="lg"
       role="button"
@@ -538,12 +541,13 @@ exports[`<PinnedMessageBanner /> should render a single pinned event 1`] = `
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357L5.77 2.857Z"
+            d="M5.769 2.857A.5.5 0 0 1 6.119 2h11.762a.5.5 0 0 1 .35.857L16.15 4.9a.5.5 0 0 0-.15.357v4.487a.5.5 0 0 0 .15.356l3.7 3.644a.5.5 0 0 1 .15.356v1.4a.5.5 0 0 1-.5.5H13v6a1 1 0 1 1-2 0v-6H4.5a.5.5 0 0 1-.5-.5v-1.4a.5.5 0 0 1 .15-.356l3.7-3.644A.5.5 0 0 0 8 9.744V5.257a.5.5 0 0 0-.15-.357z"
           />
         </svg>
         <span
-          class="mx_PinnedMessageBanner_message"
+          class="mx_EventPreview mx_PinnedMessageBanner_message"
           data-testid="banner-message"
+          title="First pinned message"
         >
           First pinned message
         </span>

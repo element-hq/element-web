@@ -2,13 +2,13 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2023 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { EMOTICON_TO_EMOJI } from "@matrix-org/emojibase-bindings";
-import { AllowedMentionAttributes, MappedSuggestion } from "@vector-im/matrix-wysiwyg";
-import { SyntheticEvent, useState, SetStateAction } from "react";
+import { type AllowedMentionAttributes, type MappedSuggestion } from "@vector-im/matrix-wysiwyg";
+import { type SyntheticEvent, useState, type SetStateAction } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { isNotNull } from "../../../../../Typeguards";

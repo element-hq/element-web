@@ -1,15 +1,16 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2019 The Matrix.org Foundation C.I.C.
 Copyright 2018 New Vector Ltd
 Copyright 2017 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { Method, MatrixClient, Crypto } from "matrix-js-sdk/src/matrix";
+import { Method, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type CryptoApi } from "matrix-js-sdk/src/crypto-api";
 
 import type * as Pako from "pako";
 import { MatrixClientPeg } from "../MatrixClientPeg";
@@ -27,6 +28,24 @@ interface IOpts {
     progressCallback?: (s: string) => void;
     customApp?: string;
     customFields?: Record<string, string>;
+}
+
+export class RageshakeError extends Error {
+    /**
+     * This error is thrown when the rageshake server cannot process the request.
+     * @param errorcode Machine-readable error code. See https://github.com/matrix-org/rageshake/blob/main/docs/api.md
+     * @param error A human-readable error.
+     * @param statusCode The HTTP status code.
+     * @param policyURL Optional policy URL that can be presented to the user.
+     */
+    public constructor(
+        public readonly errorcode: string,
+        public readonly error: string,
+        public readonly statusCode: number,
+        public readonly policyURL?: string,
+    ) {
+        super(`The rageshake server responded with an error ${errorcode} (${statusCode}): ${error}`);
+    }
 }
 
 /**
@@ -68,7 +87,7 @@ export async function collectBugReport(opts: IOpts = {}, gzipLogs = true): Promi
 async function getAppVersion(): Promise<string | undefined> {
     try {
         return await PlatformPeg.get()?.getAppVersion();
-    } catch (err) {
+    } catch {
         // this happens if no version is set i.e. in dev
     }
 }
@@ -76,7 +95,7 @@ async function getAppVersion(): Promise<string | undefined> {
 function matchesMediaQuery(query: string): string {
     try {
         return String(window.matchMedia(query).matches);
-    } catch (err) {
+    } catch {
         // if not supported in browser
     }
     return "UNKNOWN";
@@ -169,7 +188,7 @@ async function collectSynapseSpecific(client: MatrixClient, body: FormData): Pro
 /**
  * Collects crypto related information.
  */
-async function collectCryptoInfo(cryptoApi: Crypto.CryptoApi, body: FormData): Promise<void> {
+async function collectCryptoInfo(cryptoApi: CryptoApi, body: FormData): Promise<void> {
     body.append("crypto_version", cryptoApi.getVersion());
 
     const ownDeviceKeys = await cryptoApi.getOwnDeviceKeys();
@@ -198,7 +217,7 @@ async function collectCryptoInfo(cryptoApi: Crypto.CryptoApi, body: FormData): P
 /**
  * Collects information about secret storage and backup.
  */
-async function collectRecoveryInfo(client: MatrixClient, cryptoApi: Crypto.CryptoApi, body: FormData): Promise<void> {
+async function collectRecoveryInfo(client: MatrixClient, cryptoApi: CryptoApi, body: FormData): Promise<void> {
     const secretStorage = client.secretStorage;
     body.append("secret_storage_ready", String(await cryptoApi.isSecretStorageReady()));
     body.append("secret_storage_key_in_account", String(await secretStorage.hasKey()));
@@ -249,12 +268,12 @@ async function collectStorageStatInfo(body: FormData): Promise<void> {
     if (navigator.storage && navigator.storage.persisted) {
         try {
             body.append("storageManager_persisted", String(await navigator.storage.persisted()));
-        } catch (e) {}
+        } catch {}
     } else if (document.hasStorageAccess) {
         // Safari
         try {
             body.append("storageManager_persisted", String(await document.hasStorageAccess()));
-        } catch (e) {}
+        } catch {}
     }
     if (navigator.storage && navigator.storage.estimate) {
         try {
@@ -266,7 +285,7 @@ async function collectStorageStatInfo(body: FormData): Promise<void> {
                     body.append(`storageManager_usage_${k}`, String(estimate.usageDetails![k]));
                 });
             }
-        } catch (e) {}
+        } catch {}
     }
 }
 
@@ -322,6 +341,9 @@ async function collectLogs(
  * @param {function(string)} opts.progressCallback Callback to call with progress updates
  *
  * @return {Promise<string>} URL returned by the rageshake server
+ *
+ * @throws A RageshakeError when the rageshake server responds with an error. This will be `RS_UNKNOWN` if the
+ *         the server does not respond with an expected body format.
  */
 export default async function sendBugReport(bugReportEndpoint?: string, opts: IOpts = {}): Promise<string> {
     if (!bugReportEndpoint) {
@@ -402,7 +424,7 @@ export async function submitFeedback(
     let version: string | undefined;
     try {
         version = await PlatformPeg.get()?.getAppVersion();
-    } catch (err) {} // PlatformPeg already logs this.
+    } catch {} // PlatformPeg already logs this.
 
     const body = new FormData();
     if (label) body.append("label", label);
@@ -425,24 +447,37 @@ export async function submitFeedback(
     }
 }
 
-function submitReport(endpoint: string, body: FormData, progressCallback: (str: string) => void): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
-        const req = new XMLHttpRequest();
-        req.open("POST", endpoint);
-        req.responseType = "json";
-        req.timeout = 5 * 60 * 1000;
-        req.onreadystatechange = function (): void {
-            if (req.readyState === XMLHttpRequest.LOADING) {
-                progressCallback(_t("bug_reporting|waiting_for_server"));
-            } else if (req.readyState === XMLHttpRequest.DONE) {
-                // on done
-                if (req.status < 200 || req.status >= 400) {
-                    reject(new Error(`HTTP ${req.status}`));
-                    return;
-                }
-                resolve(req.response.report_url || "");
-            }
-        };
-        req.send(body);
+/**
+ * Submit a rageshake report to the rageshake server.
+ *
+ * @param endpoint The endpoint to call.
+ * @param body The report body.
+ * @param progressCallback A callback that will be called when the upload process has begun.
+ * @returns The URL to the public report.
+ * @throws A RageshakeError when the rageshake server responds with an error. This will be `RS_UNKNOWN` if the
+ *         the server does not respond with an expected body format.
+ */
+async function submitReport(
+    endpoint: string,
+    body: FormData,
+    progressCallback: (str: string) => void,
+): Promise<string> {
+    const req = fetch(endpoint, {
+        method: "POST",
+        body,
+        signal: AbortSignal.timeout?.(5 * 60 * 1000),
     });
+    progressCallback(_t("bug_reporting|waiting_for_server"));
+    const response = await req;
+    if (response.headers.get("Content-Type") !== "application/json") {
+        throw new RageshakeError("UNKNOWN", "Rageshake server responded with unexpected type", response.status);
+    }
+    const data = await response.json();
+    if (response.status < 200 || response.status >= 400) {
+        if ("errcode" in data) {
+            throw new RageshakeError(data.errcode, data.error, response.status, data.policy_url);
+        }
+        throw new RageshakeError("UNKNOWN", "Rageshake server responded with unexpected type", response.status);
+    }
+    return data.report_url;
 }

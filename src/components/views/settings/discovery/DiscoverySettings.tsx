@@ -2,7 +2,7 @@
 Copyright 2024 New Vector Ltd.
 Copyright 2024 The Matrix.org Foundation C.I.C.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -13,19 +13,19 @@ import { Alert } from "@vector-im/compound-web";
 
 import { getThreepidsWithBindStatus } from "../../../../boundThreepids";
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
-import { ThirdPartyIdentifier } from "../../../../AddThreepid";
+import { type ThirdPartyIdentifier } from "../../../../AddThreepid";
 import SettingsStore from "../../../../settings/SettingsStore";
 import { UIFeature } from "../../../../settings/UIFeature";
 import { _t } from "../../../../languageHandler";
 import SetIdServer from "../SetIdServer";
-import SettingsSubsection from "../shared/SettingsSubsection";
+import { SettingsSubsection } from "../shared/SettingsSubsection";
 import InlineTermsAgreement from "../../terms/InlineTermsAgreement";
-import { Service, ServicePolicyPair, startTermsFlow } from "../../../../Terms";
+import { Service, type ServicePolicyPair, startTermsFlow } from "../../../../Terms";
 import IdentityAuthClient from "../../../../IdentityAuthClient";
 import { abbreviateUrl } from "../../../../utils/UrlUtils";
 import { useDispatcher } from "../../../../hooks/useDispatcher";
 import defaultDispatcher from "../../../../dispatcher/dispatcher";
-import { ActionPayload } from "../../../../dispatcher/payloads";
+import { type ActionPayload } from "../../../../dispatcher/payloads";
 import { AddRemoveThreepids } from "../AddRemoveThreepids";
 
 type RequiredPolicyInfo =
@@ -51,7 +51,6 @@ export const DiscoverySettings: React.FC = () => {
     const [emails, setEmails] = useState<ThirdPartyIdentifier[]>([]);
     const [phoneNumbers, setPhoneNumbers] = useState<ThirdPartyIdentifier[]>([]);
     const [idServerName, setIdServerName] = useState<string | undefined>(abbreviateUrl(client.getIdentityServerUrl()));
-    const [canMake3pidChanges, setCanMake3pidChanges] = useState<boolean>(false);
 
     const [requiredPolicyInfo, setRequiredPolicyInfo] = useState<RequiredPolicyInfo>({
         // This object is passed along to a component for handling
@@ -59,7 +58,7 @@ export const DiscoverySettings: React.FC = () => {
         agreedUrls: null, // From the startTermsFlow callback
         resolve: null, // Promise resolve function for startTermsFlow callback
     });
-    const [hasTerms, setHasTerms] = useState<boolean>(false);
+    const [mustAgreeToTerms, setMustAgreeToTerms] = useState<boolean>(false);
 
     const getThreepidState = useCallback(async () => {
         setIsLoadingThreepids(true);
@@ -88,11 +87,6 @@ export const DiscoverySettings: React.FC = () => {
             try {
                 await getThreepidState();
 
-                const capabilities = await client.getCapabilities();
-                setCanMake3pidChanges(
-                    !capabilities["m.3pid_changes"] || capabilities["m.3pid_changes"].enabled === true,
-                );
-
                 // By starting the terms flow we get the logic for checking which terms the user has signed
                 // for free. So we might as well use that for our own purposes.
                 const idServerUrl = client.getIdentityServerUrl();
@@ -109,7 +103,7 @@ export const DiscoverySettings: React.FC = () => {
                         (policiesAndServices, agreedUrls, extraClassNames) => {
                             return new Promise((resolve) => {
                                 setIdServerName(abbreviateUrl(idServerUrl));
-                                setHasTerms(true);
+                                setMustAgreeToTerms(true);
                                 setRequiredPolicyInfo({
                                     policiesAndServices,
                                     agreedUrls,
@@ -119,20 +113,20 @@ export const DiscoverySettings: React.FC = () => {
                         },
                     );
                     // User accepted all terms
-                    setHasTerms(false);
+                    setMustAgreeToTerms(false);
                 } catch (e) {
                     logger.warn(
                         `Unable to reach identity server at ${idServerUrl} to check ` + `for terms in Settings`,
                     );
                     logger.warn(e);
                 }
-            } catch (e) {}
+            } catch {}
         })();
     }, [client, getThreepidState]);
 
     if (!SettingsStore.getValue(UIFeature.ThirdPartyID)) return null;
 
-    if (hasTerms && requiredPolicyInfo.policiesAndServices) {
+    if (mustAgreeToTerms && requiredPolicyInfo.policiesAndServices) {
         const intro = (
             <Alert type="info" title={_t("settings|general|discovery_needs_terms_title")}>
                 {_t("settings|general|discovery_needs_terms", { serverName: idServerName })}
@@ -166,7 +160,7 @@ export const DiscoverySettings: React.FC = () => {
                         medium={ThreepidMedium.Email}
                         threepids={emails}
                         onChange={getThreepidState}
-                        disabled={!canMake3pidChanges}
+                        disabled={mustAgreeToTerms}
                         isLoading={isLoadingThreepids}
                     />
                 </SettingsSubsection>
@@ -180,7 +174,7 @@ export const DiscoverySettings: React.FC = () => {
                         medium={ThreepidMedium.Phone}
                         threepids={phoneNumbers}
                         onChange={getThreepidState}
-                        disabled={!canMake3pidChanges}
+                        disabled={mustAgreeToTerms}
                         isLoading={isLoadingThreepids}
                     />
                 </SettingsSubsection>
@@ -196,5 +190,3 @@ export const DiscoverySettings: React.FC = () => {
         </SettingsSubsection>
     );
 };
-
-export default DiscoverySettings;

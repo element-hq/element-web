@@ -3,7 +3,7 @@ Copyright 2024 New Vector Ltd.
 Copyright 2015-2021 The Matrix.org Foundation C.I.C.
 Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -22,7 +22,7 @@ import { UIFeature } from "../../../settings/UIFeature";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import BugReportDialog from "../dialogs/BugReportDialog";
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import { contextMenuBelow } from "../rooms/RoomTile";
 import { ContextMenuTooltipButton } from "../../structures/ContextMenu";
 import IconizedContextMenu, {
@@ -30,7 +30,7 @@ import IconizedContextMenu, {
     IconizedContextMenuOptionList,
 } from "../context_menus/IconizedContextMenu";
 import JumpToDatePicker from "./JumpToDatePicker";
-import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { SdkContextClass } from "../../../contexts/SDKContext";
 import TimelineSeparator from "./TimelineSeparator";
 
@@ -58,7 +58,9 @@ export default class DateSeparator extends React.Component<IProps, IState> {
         this.state = {
             jumpToDateEnabled: SettingsStore.getValue("feature_jump_to_date"),
         };
+    }
 
+    public componentDidMount(): void {
         // We're using a watcher so the date headers in the timeline are updated
         // when the lab setting is toggled.
         this.settingWatcherRef = SettingsStore.watchSetting(
@@ -71,7 +73,7 @@ export default class DateSeparator extends React.Component<IProps, IState> {
     }
 
     public componentWillUnmount(): void {
-        if (this.settingWatcherRef) SettingsStore.unwatchSetting(this.settingWatcherRef);
+        SettingsStore.unwatchSetting(this.settingWatcherRef);
     }
 
     private onContextMenuOpenClick = (e: ButtonEvent): void => {
@@ -96,25 +98,29 @@ export default class DateSeparator extends React.Component<IProps, IState> {
     }
 
     private getLabel(): string {
-        const date = new Date(this.props.ts);
-        const disableRelativeTimestamps = !SettingsStore.getValue(UIFeature.TimelineEnableRelativeDates);
+        try {
+            const date = new Date(this.props.ts);
+            const disableRelativeTimestamps = !SettingsStore.getValue(UIFeature.TimelineEnableRelativeDates);
 
-        // During the time the archive is being viewed, a specific day might not make sense, so we return the full date
-        if (this.props.forExport || disableRelativeTimestamps) return formatFullDateNoTime(date);
+            // During the time the archive is being viewed, a specific day might not make sense, so we return the full date
+            if (this.props.forExport || disableRelativeTimestamps) return formatFullDateNoTime(date);
 
-        const today = new Date();
-        const yesterday = new Date();
-        const days = getDaysArray("long");
-        yesterday.setDate(today.getDate() - 1);
+            const today = new Date();
+            const yesterday = new Date();
+            const days = getDaysArray("long");
+            yesterday.setDate(today.getDate() - 1);
 
-        if (date.toDateString() === today.toDateString()) {
-            return this.relativeTimeFormat.format(0, "day"); // Today
-        } else if (date.toDateString() === yesterday.toDateString()) {
-            return this.relativeTimeFormat.format(-1, "day"); // Yesterday
-        } else if (today.getTime() - date.getTime() < 6 * 24 * 60 * 60 * 1000) {
-            return days[date.getDay()]; // Sunday-Saturday
-        } else {
-            return formatFullDateNoTime(date);
+            if (date.toDateString() === today.toDateString()) {
+                return this.relativeTimeFormat.format(0, "day"); // Today
+            } else if (date.toDateString() === yesterday.toDateString()) {
+                return this.relativeTimeFormat.format(-1, "day"); // Yesterday
+            } else if (today.getTime() - date.getTime() < 6 * 24 * 60 * 60 * 1000) {
+                return days[date.getDay()]; // Sunday-Saturday
+            } else {
+                return formatFullDateNoTime(date);
+            }
+        } catch {
+            return _t("common|message_timestamp_invalid");
         }
     }
 

@@ -3,7 +3,7 @@ Copyright 2024 New Vector Ltd.
 Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
 Copyright 2015, 2016 OpenMarket Ltd
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
@@ -133,12 +133,6 @@ $left-gutter: 64px;
         &.mx_EventTile_contextual {
             opacity: 0.4;
         }
-    }
-
-    &.mx_EventTile_highlight,
-    &.mx_EventTile_highlight .markdown-body,
-    &.mx_EventTile_highlight .mx_EventTile_edited {
-        color: $alert;
     }
 
     &.mx_EventTile_bubbleContainer {
@@ -689,6 +683,7 @@ $left-gutter: 64px;
         line-height: inherit !important;
         background-color: inherit;
         color: inherit; /* inherit the colour from the dark or light theme by default (but not for code blocks) */
+        flex: 1;
 
         pre,
         code {
@@ -982,11 +977,11 @@ $left-gutter: 64px;
 }
 
 .mx_EventTile_collapseButton {
-    mask-image: url("$(res)/img/element-icons/minimise-collapse.svg");
+    mask-image: url("@vector-im/compound-design-tokens/icons/collapse.svg");
 }
 
 .mx_EventTile_expandButton {
-    mask-image: url("$(res)/img/element-icons/maximise-expand.svg");
+    mask-image: url("@vector-im/compound-design-tokens/icons/expand.svg");
 }
 
 .mx_EventTile_tileError {
@@ -1015,16 +1010,6 @@ $left-gutter: 64px;
 [data-whatinput="keyboard"] .mx_EventTile:focus-within .mx_MessageActionBar,
 .mx_EventTile:focus-visible:focus-within .mx_MessageActionBar {
     visibility: visible;
-}
-
-/* Inverse of the above to *disable* the animation on any indicators. This approach */
-/* is less pretty, but is easier to target because otherwise we need to define the */
-/* animation for when it's shown which means duplicating the style definition in */
-/* multiple places. */
-.mx_EventTile:not(:hover):not(.mx_EventTile_actionBarFocused):not([data-whatinput="keyboard"] :focus-within) {
-    &:not(:focus-visible:focus-within) .mx_MessageActionBar .mx_Indicator {
-        animation: none;
-    }
 }
 
 .mx_EventTile[data-shape="ThreadsList"],

@@ -3,23 +3,23 @@ Copyright 2024 New Vector Ltd.
 Copyright 2019 The Matrix.org Foundation C.I.C.
 Copyright 2017 Travis Ralston
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { randomString } from "matrix-js-sdk/src/randomstring";
+import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from "../../../languageHandler";
 import ToggleSwitch from "./ToggleSwitch";
 import StyledCheckbox from "./StyledCheckbox";
-import { SettingLevel } from "../../../settings/SettingLevel";
-import { defaultWatchManager } from "../../../settings/Settings";
+import { type SettingLevel } from "../../../settings/SettingLevel";
+import { type BooleanSettingKey, defaultWatchManager } from "../../../settings/Settings";
 
 interface IProps {
     // The setting must be a boolean
-    name: string;
+    name: BooleanSettingKey;
     level: SettingLevel;
     roomId?: string; // for per-room settings
     label?: string;
@@ -35,7 +35,7 @@ interface IState {
 }
 
 export default class SettingsFlag extends React.Component<IProps, IState> {
-    private readonly id = `mx_SettingsFlag_${randomString(12)}`;
+    private readonly id = `mx_SettingsFlag_${secureRandomString(12)}`;
 
     public constructor(props: IProps) {
         super(props);

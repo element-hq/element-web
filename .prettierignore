@@ -17,6 +17,7 @@ electron/pub
 /coverage
 # Auto-generated file
 /src/modules.ts
+/src/modules.js
 /src/i18n/strings
 /build_config.yaml
 # Raises an error because it contains a template var breaking the script tag
@@ -37,5 +38,10 @@ package-lock.json
 
 # Downloaded and already minified
 res/jitsi_external_api.min.js
+
 # This file is also machine-generated
 /playwright/e2e/crypto/test_indexeddb_cryptostore_dump/dump.json
+/playwright/test-results/
+/playwright/html-report/
+/playwright/logs/
+/playwright/snapshots/
