@@ -95,21 +95,12 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     /**
      * Re-sort the list of rooms by alphabetic order.
      */
-    public useAlphabeticSorting(): void {
-        if (this.roomSkipList) {
-            const sorter = new AlphabeticSorter();
-            this.roomSkipList.useNewSorter(sorter, this.getRooms());
-        }
-    }
 
     /**
-     * Re-sort the list of rooms by recency.
+     * Currently active sorting algorithm if the store is ready or undefined otherwise.
      */
-    public useRecencySorting(): void {
-        if (this.roomSkipList && this.matrixClient) {
-            const sorter = new RecencySorter(this.matrixClient?.getSafeUserId() ?? "");
-            this.roomSkipList.useNewSorter(sorter, this.getRooms());
-        }
+    public get activeSortAlgorithm(): SortingAlgorithm | undefined {
+        return this.roomSkipList?.activeSortAlgorithm;
     }
 
     protected async onReady(): Promise<any> {
