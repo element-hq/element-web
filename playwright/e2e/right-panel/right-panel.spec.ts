@@ -67,6 +67,15 @@ test.describe("RightPanel", () => {
             },
         );
 
+        test("should have padding under leave room", { tag: "@screenshot" }, async ({ page, app }) => {
+            await viewRoomSummaryByName(page, app, ROOM_NAME);
+
+            const leaveButton = await page.getByRole("menuitem", { name: "Leave Room" });
+            await leaveButton.scrollIntoViewIfNeeded();
+
+            await expect(page.locator(".mx_RightPanel")).toMatchScreenshot("with-leave-room.png");
+        });
+
         test("should handle clicking add widgets", async ({ page, app }) => {
             await viewRoomSummaryByName(page, app, ROOM_NAME);
 

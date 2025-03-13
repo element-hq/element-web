@@ -61,6 +61,7 @@ jobs:
             - name: Test the image
               env:
                   IMAGEID: ${{ steps.test-build.outputs.imageid }}
+              timeout-minutes: 2
               run: |
                   set -x
 
@@ -86,7 +87,9 @@ jobs:
                   test "$MODULE_0" = "/${MODULE_PATH}"
 
                   # Check healthcheck
-                  test "$(docker inspect -f {{.State.Running}} $CONTAINER_ID)" == "true"
+                  until test "$(docker inspect -f {{.State.Health.Status}} $CONTAINER_ID)" == "healthy"; do
+                      sleep 1
+                  done
 
                   # Clean up
                   docker stop "$CONTAINER_ID"

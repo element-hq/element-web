@@ -109,5 +109,5 @@ export class MockedCall extends Call {
 export const useMockedCalls = () => {
     Call.get = (room) => MockedCall.get(room);
     JitsiCall.create = async (room) => MockedCall.create(room, "1");
-    ElementCall.create = async (room) => MockedCall.create(room, "1");
+    ElementCall.create = (room) => MockedCall.create(room, "1");
 };
