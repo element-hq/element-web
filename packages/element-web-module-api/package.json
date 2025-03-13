@@ -1,15 +1,18 @@
 {
     "name": "@element-hq/element-web-module-api",
-    "version": "0.1.3",
+    "type": "module",
+    "version": "0.1.4",
     "description": "Module API surface for element-web",
     "repository": {
         "type": "git",
-        "url": "https://github.com/element-hq/element-web-modules",
+        "url": "git+https://github.com/element-hq/element-web-modules.git",
         "directory": "packages/element-web-module-api"
     },
     "author": "element-hq",
     "license": "SEE LICENSE IN README.md",
-    "type": "module",
+    "engines": {
+        "node": ">=20.0.0"
+    },
     "types": "./lib/element-web-module-api-alpha.d.ts",
     "exports": {
         ".": {
