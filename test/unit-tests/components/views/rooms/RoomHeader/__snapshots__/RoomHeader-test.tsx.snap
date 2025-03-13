@@ -4,7 +4,7 @@ exports[`RoomHeader dm does not show the face pile for DMs 1`] = `
 <DocumentFragment>
   <header
     class="mx_Flex mx_RoomHeader light-panel"
-    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
   >
     <button
       aria-label="Open room settings"

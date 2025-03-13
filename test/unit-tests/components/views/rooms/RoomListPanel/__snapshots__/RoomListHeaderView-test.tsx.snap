@@ -6,11 +6,11 @@ exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`]
     aria-label="Room options"
     class="mx_Flex mx_RoomListHeaderView"
     data-testid="room-list-header"
-    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0;"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <div
       class="mx_Flex mx_RoomListHeaderView_title"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x);"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
     >
       <h1
         title="title"
@@ -93,11 +93,11 @@ exports[`<RoomListHeaderView /> compose menu should not display the compose menu
     aria-label="Room options"
     class="mx_Flex mx_RoomListHeaderView"
     data-testid="room-list-header"
-    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0;"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <div
       class="mx_Flex mx_RoomListHeaderView_title"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x);"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
     >
       <h1
         title="title"
@@ -145,11 +145,11 @@ exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
     aria-label="Room options"
     class="mx_Flex mx_RoomListHeaderView"
     data-testid="room-list-header"
-    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0;"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <div
       class="mx_Flex mx_RoomListHeaderView_title"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x);"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
     >
       <h1
         title="title"
@@ -232,11 +232,11 @@ exports[`<RoomListHeaderView /> space menu should not display the space menu 1`]
     aria-label="Room options"
     class="mx_Flex mx_RoomListHeaderView"
     data-testid="room-list-header"
-    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0;"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
   >
     <div
       class="mx_Flex mx_RoomListHeaderView_title"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x);"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
     >
       <h1
         title="title"
