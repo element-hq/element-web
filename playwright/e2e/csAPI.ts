@@ -5,11 +5,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type APIRequestContext } from "playwright-core";
+import { type APIRequestContext } from "@playwright/test";
 import { type KeyBackupInfo } from "matrix-js-sdk/src/crypto-api";
+import { ClientServerApi } from "@element-hq/element-web-playwright-common/lib/utils/api.js";
 
 import { type HomeserverInstance } from "../plugins/homeserver";
-import { ClientServerApi } from "../plugins/utils/api.ts";
 
 /**
  * A small subset of the Client-Server API used to manipulate the state of the

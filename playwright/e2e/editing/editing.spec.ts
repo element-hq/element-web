@@ -267,7 +267,6 @@ test.describe("Editing", () => {
         app,
         room,
         axe,
-        checkA11y,
     }) => {
         axe.disableRules("color-contrast"); // XXX: We have some known contrast issues here
 
@@ -282,7 +281,7 @@ test.describe("Editing", () => {
             const line = tile.locator(".mx_EventTile_line");
             await line.hover();
             await line.getByRole("button", { name: "Edit" }).click();
-            await checkA11y();
+            await expect(axe).toHaveNoViolations();
             const editComposer = page.getByRole("textbox", { name: "Edit message" });
             await editComposer.pressSequentially("Foo");
             await editComposer.press("Backspace");
@@ -290,7 +289,7 @@ test.describe("Editing", () => {
             await editComposer.press("Backspace");
             await editComposer.press("Enter");
             await app.getComposerField().hover(); // XXX: move the hover to get rid of the "Edit" tooltip
-            await checkA11y();
+            await expect(axe).toHaveNoViolations();
         }
         await expect(
             page.locator(".mx_RoomView_body .mx_EventTile[data-scroll-tokens]", { hasText: "Message" }),
@@ -305,7 +304,6 @@ test.describe("Editing", () => {
         user,
         app,
         axe,
-        checkA11y,
         bot: bob,
     }) => {
         // This tests the behaviour when a message has been edited some time after it has been sent, and we
