@@ -48,6 +48,12 @@ export class BackgroundAudio {
         source.buffer = this.sounds[url];
         source.loop = loop;
         source.connect(this.audioContext.destination);
+
+        await this.audioContext.resume();
+        source.onended = () => {
+            this.audioContext.suspend();
+        };
+
         source.start();
         return source;
     }
