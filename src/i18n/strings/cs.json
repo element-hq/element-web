@@ -80,12 +80,14 @@
         "maximise": "Maximalizovat",
         "mention": "Zmínit",
         "minimise": "Minimalizovat",
+        "new_message": "Nová zpráva",
         "new_room": "Nová místnost",
         "new_video_room": "Nová video místnost",
         "next": "Další",
         "no": "Ne",
         "ok": "OK",
         "open": "Otevřít",
+        "open_menu": "Otevřít nabídku",
         "pause": "Pozastavit",
         "pin": "Připnout",
         "play": "Přehrát",
@@ -405,7 +407,15 @@
         "download_logs": "Stáhnout záznamy",
         "downloading_logs": "Stahování záznamů",
         "error_empty": "Dejte nám vědět, prosím, co se pokazilo nebo vytvořte issue na GitHubu, kde problém popište.",
-        "failed_send_logs": "Nepodařilo se odeslat záznamy: ",
+        "failed_download_logs": "Stažení ladících protokolů se nezdařilo: ",
+        "failed_send_logs_causes": {
+            "disallowed_app": "Vaše hlášení o chybě bylo zamítnuto. Rageshake server tuto aplikaci nepodporuje.",
+            "rejected_generic": "Vaše hlášení o chybě bylo zamítnuto. Rageshake server odmítl obsah zprávy kvůli zásadám.",
+            "rejected_recovery_key": "Vaše hlášení o chybě bylo z bezpečnostních důvodů odmítnuto, protože obsahovalo klíč pro obnovení.",
+            "rejected_version": "Vaše hlášení o chybě bylo zamítnuto, protože verze, kterou používáte, je příliš stará.",
+            "server_unknown_error": "Rageshake server narazil na neznámou chybu a nemohl zpracovat zprávu.",
+            "unknown_error": "Odeslání protokolů se nezdařilo."
+        },
         "github_issue": "issue na GitHubu",
         "introduction": "Pokud jste odeslali chybu prostřednictvím GitHubu, ladící protokoly nám mohou pomoci problém vysledovat. ",
         "log_request": "Abychom tomu mohli pro příště předejít, <a>pošlete nám prosím záznamy</a>.",
@@ -495,7 +505,6 @@
         "legal": "Právní informace",
         "light": "Světlý",
         "loading": "Načítání…",
-        "lobby": "Předsálí",
         "location": "Poloha",
         "low_priority": "Nízká priorita",
         "matrix": "Matrix",
@@ -1244,6 +1253,7 @@
         "change": "Změnit server identit",
         "change_prompt": "Odpojit se ze serveru <current /> a připojit na <new />?",
         "change_server_prompt": "Pokud nechcete na hledání existujících kontaktů používat server <server />, zvolte si jiný server.",
+        "changed": "Váš server identit byl změněn",
         "checking": "Kontrolování serveru",
         "description_connected": "Pro hledání existujících kontaktů používáte server identit <server></server>. Níže ho můžete změnit.",
         "description_disconnected": "Pro hledání existujících kontaktů nepoužíváte žádný server identit <server></server>. Abyste mohli hledat kontakty, nějaký níže nastavte.",
@@ -1286,7 +1296,9 @@
         "title": "Nepodporovaný prohlížeč",
         "use_desktop_heading": "Místo toho použijte %(brand)s Desktop",
         "use_mobile_heading": "Místo toho použijte %(brand)s na mobilu",
-        "use_mobile_heading_after_desktop": "Nebo použijte naši mobilní aplikaci"
+        "use_mobile_heading_after_desktop": "Nebo použijte naši mobilní aplikaci",
+        "windows_64bit": "Windows (64-bit)",
+        "windows_arm_64bit": "Windows (ARM 64-bit)"
     },
     "info_tooltip_title": "Informace",
     "integration_manager": {
@@ -1295,6 +1307,7 @@
         "error_connecting_heading": "Nepovedlo se připojení ke správci integrací",
         "explainer": "Správci integrace přijímají konfigurační data a mohou vaším jménem upravovat widgety, odesílat pozvánky do místností a nastavovat úrovně oprávnění.",
         "manage_title": "Správa integrací",
+        "toggle_label": "Povolit správce integrací",
         "use_im": "Použít správce integrací na správu botů, widgetů a nálepek.",
         "use_im_default": "Použít správce integrací <b>(%(serverName)s)</b> na správu botů, widgetů a nálepek."
     },
@@ -2097,10 +2110,15 @@
             "one": "Momentálně se připojuje %(count)s místnost",
             "other": "Momentálně se připojuje %(count)s místností"
         },
+        "list_title": "Seznam místností",
         "notification_options": "Možnosti oznámení",
+        "open_space_menu": "Otevřít nabídku prostoru",
         "redacting_messages_status": {
             "one": "Momentálně se odstraňují zprávy v %(count)s místnosti",
             "other": "Momentálně se odstraňují zprávy v %(count)s místnostech"
+        },
+        "room": {
+            "open_room": "Otevřít místnost %(roomName)s"
         },
         "show_less": "Zobrazit méně",
         "show_n_more": {
@@ -2112,6 +2130,10 @@
         "sort_by_activity": "Aktivity",
         "sort_by_alphabet": "A–Z",
         "sort_unread_first": "Zobrazovat místnosti s nepřečtenými zprávami jako první",
+        "space_menu": {
+            "home": "Domov prostoru",
+            "space_settings": "Nastavení prostoru"
+        },
         "space_menu_label": "Nabídka pro %(spaceName)s",
         "sublist_options": "Možnosti seznamu",
         "suggested_rooms_heading": "Doporučené místnosti"
@@ -2474,12 +2496,14 @@
                 "breadcrumb_title_forgot": "Zapomněli jste klíč pro obnovení? Budete muset obnovit svou identitu.",
                 "breadcrumb_warning": "Udělejte to pouze v případě, že se domníváte, že váš účet byl napaden.",
                 "details_title": "Podrobnosti o šifrování",
+                "do_not_close_warning": "Nezavírejte toto okno, dokud není resetování dokončeno",
                 "export_keys": "Exportovat klíče",
                 "import_keys": "Importovat klíče",
                 "other_people_device_description": "Ve výchozím nastavení v šifrovaných místnostech nikomu neposílat šifrované zprávy, dokud je neověříte",
                 "other_people_device_label": "Nikdy neposílejte šifrované zprávy na neověřená zařízení",
                 "other_people_device_title": "Zařízení ostatních uživatelů",
                 "reset_identity": "Obnovit kryptografickou identitu",
+                "reset_in_progress": "Probíhá resetování...",
                 "session_id": "ID relace:",
                 "session_key": "Klíč relace:",
                 "title": "Rozšířené"
@@ -3902,7 +3926,6 @@
         "input_devices": "Vstupní zařízení",
         "jitsi_call": "Jitsi konference",
         "join_button_tooltip_call_full": "Omlouváme se — tento hovor je v současné době plný",
-        "join_button_tooltip_connecting": "Spojování",
         "legacy_call": "Zastaralý způsob hovoru",
         "maximise": "Vyplnit obrazovku",
         "maximise_call": "Maximalizovat hovor",

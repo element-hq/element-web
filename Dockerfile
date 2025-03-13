@@ -1,4 +1,4 @@
-# syntax=docker.io/docker/dockerfile:1.7-labs
+# syntax=docker.io/docker/dockerfile:1.14-labs
 
 # Builder
 FROM --platform=$BUILDPLATFORM node:22-bullseye AS builder
@@ -47,4 +47,4 @@ USER nginx
 # HTTP listen port
 ENV ELEMENT_WEB_PORT=80
 
-HEALTHCHECK --start-period=5s CMD wget --retry-connrefused --tries=5 -q --wait=3 --spider http://localhost:$ELEMENT_WEB_PORT/config.json
+HEALTHCHECK --start-period=5s CMD wget -q --spider http://localhost:$ELEMENT_WEB_PORT/config.json

@@ -3,8 +3,9 @@
 exports[`<RoomListPanel /> should not render the RoomListSearch component when UIComponent.FilterContainer is at false 1`] = `
 <DocumentFragment>
   <section
-    class="mx_RoomListPanel"
+    class="mx_Flex mx_RoomListPanel"
     data-testid="room-list-panel"
+    style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: 0;"
   >
     <header
       aria-label="Room options"
@@ -13,14 +14,47 @@ exports[`<RoomListPanel /> should not render the RoomListSearch component when U
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0;"
     >
       <div
-        class="mx_Flex"
+        class="mx_Flex mx_RoomListHeaderView_title"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x);"
       >
-        <h1>
+        <h1
+          title="Home"
+        >
           Home
         </h1>
       </div>
     </header>
+    <div
+      class="mx_RoomList"
+      data-testid="room-list"
+    >
+      <div
+        style="overflow: visible; height: 0px; width: 0px;"
+      >
+        <div
+          aria-label="Room list"
+          aria-readonly="true"
+          class="ReactVirtualized__Grid ReactVirtualized__List mx_RoomList_List"
+          role="grid"
+          style="box-sizing: border-box; direction: ltr; height: 0px; position: relative; width: 0px; will-change: transform; overflow-x: hidden; overflow-y: hidden;"
+          tabindex="0"
+        />
+      </div>
+      <div
+        class="resize-triggers"
+      >
+        <div
+          class="expand-trigger"
+        >
+          <div
+            style="width: 1px; height: 1px;"
+          />
+        </div>
+        <div
+          class="contract-trigger"
+        />
+      </div>
+    </div>
   </section>
 </DocumentFragment>
 `;
@@ -28,8 +62,9 @@ exports[`<RoomListPanel /> should not render the RoomListSearch component when U
 exports[`<RoomListPanel /> should render the RoomListSearch component when UIComponent.FilterContainer is at true 1`] = `
 <DocumentFragment>
   <section
-    class="mx_RoomListPanel"
+    class="mx_Flex mx_RoomListPanel"
     data-testid="room-list-panel"
+    style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: stretch; --mx-flex-justify: start; --mx-flex-gap: 0;"
   >
     <div
       class="mx_Flex mx_RoomListSearch"
@@ -94,10 +129,12 @@ exports[`<RoomListPanel /> should render the RoomListSearch component when UICom
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0;"
     >
       <div
-        class="mx_Flex"
+        class="mx_Flex mx_RoomListHeaderView_title"
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x);"
       >
-        <h1>
+        <h1
+          title="Home"
+        >
           Home
         </h1>
       </div>
@@ -137,6 +174,37 @@ exports[`<RoomListPanel /> should render the RoomListSearch component when UICom
         </div>
       </button>
     </header>
+    <div
+      class="mx_RoomList"
+      data-testid="room-list"
+    >
+      <div
+        style="overflow: visible; height: 0px; width: 0px;"
+      >
+        <div
+          aria-label="Room list"
+          aria-readonly="true"
+          class="ReactVirtualized__Grid ReactVirtualized__List mx_RoomList_List"
+          role="grid"
+          style="box-sizing: border-box; direction: ltr; height: 0px; position: relative; width: 0px; will-change: transform; overflow-x: hidden; overflow-y: hidden;"
+          tabindex="0"
+        />
+      </div>
+      <div
+        class="resize-triggers"
+      >
+        <div
+          class="expand-trigger"
+        >
+          <div
+            style="width: 1px; height: 1px;"
+          />
+        </div>
+        <div
+          class="contract-trigger"
+        />
+      </div>
+    </div>
   </section>
 </DocumentFragment>
 `;

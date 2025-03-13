@@ -118,8 +118,6 @@ import { RoomStatusBarUnsentMessages } from "./RoomStatusBarUnsentMessages";
 import { LargeLoader } from "./LargeLoader";
 import { isVideoRoom } from "../../utils/video-rooms";
 import { SDKContext } from "../../contexts/SDKContext";
-import { CallStore, CallStoreEvent } from "../../stores/CallStore";
-import { type Call } from "../../models/Call";
 import { RoomSearchView } from "./RoomSearchView";
 import eventSearch, { type SearchInfo, SearchScope } from "../../Searching";
 import VoipUserMapper from "../../VoipUserMapper";
@@ -190,7 +188,6 @@ export interface IRoomState {
      */
     search?: SearchInfo;
     callState?: CallState;
-    activeCall: Call | null;
     canPeek: boolean;
     canSelfRedact: boolean;
     showApps: boolean;
@@ -401,7 +398,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             membersLoaded: !llMembers,
             numUnreadMessages: 0,
             callState: undefined,
-            activeCall: null,
             canPeek: false,
             canSelfRedact: false,
             showApps: false,
@@ -577,7 +573,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             mainSplitContentType: room ? this.getMainSplitContentType(room) : undefined,
             initialEventId: undefined, // default to clearing this, will get set later in the method if needed
             showRightPanel: roomId ? this.context.rightPanelStore.isOpenForRoom(roomId) : false,
-            activeCall: roomId ? CallStore.instance.getActiveCall(roomId) : null,
             promptAskToJoin: this.context.roomViewStore.promptAskToJoin(),
             viewRoomOpts: this.context.roomViewStore.getViewRoomOpts(),
         };
@@ -727,23 +722,17 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         });
     };
 
-    private onConnectedCalls = (): void => {
-        if (this.state.roomId === undefined) return;
-        const activeCall = CallStore.instance.getActiveCall(this.state.roomId);
-        if (activeCall === null) {
-            // We disconnected from the call, so stop viewing it
-            defaultDispatcher.dispatch<ViewRoomPayload>(
-                {
-                    action: Action.ViewRoom,
-                    room_id: this.state.roomId,
-                    view_call: false,
-                    metricsTrigger: undefined,
-                },
-                true,
-            ); // Synchronous so that CallView disappears immediately
-        }
-
-        this.setState({ activeCall });
+    private onCallClose = (): void => {
+        // Stop viewing the call
+        defaultDispatcher.dispatch<ViewRoomPayload>(
+            {
+                action: Action.ViewRoom,
+                room_id: this.state.roomId,
+                view_call: false,
+                metricsTrigger: undefined,
+            },
+            true,
+        ); // Synchronous so that CallView disappears immediately
     };
 
     private getRoomId = (): string | undefined => {
@@ -900,8 +889,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         WidgetEchoStore.on(UPDATE_EVENT, this.onWidgetEchoStoreUpdate);
         this.context.widgetStore.on(UPDATE_EVENT, this.onWidgetStoreUpdate);
 
-        CallStore.instance.on(CallStoreEvent.ConnectedCalls, this.onConnectedCalls);
-
         this.props.resizeNotifier.on("isResizing", this.onIsResizing);
 
         this.settingWatchers = [
@@ -1027,7 +1014,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             );
         }
 
-        CallStore.instance.off(CallStoreEvent.ConnectedCalls, this.onConnectedCalls);
         this.context.legacyCallHandler.off(LegacyCallHandlerEvent.CallState, this.onCallState);
 
         // cancel any pending calls to the throttled updated
@@ -2562,9 +2548,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         <CallView
                             room={this.state.room}
                             resizing={this.state.resizing}
-                            waitForCall={isVideoRoom(this.state.room)}
                             skipLobby={this.context.roomViewStore.skipCallLobby() ?? false}
                             role="main"
+                            onClose={this.onCallClose}
                         />
                         {previewBar}
                     </>

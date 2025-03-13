@@ -407,7 +407,7 @@
         "download_logs": "Last ned logger",
         "downloading_logs": "Laster ned logger",
         "error_empty": "Fortell oss hva som gikk galt, eller bedre, opprett et GitHub-problem som beskriver problemet.",
-        "failed_send_logs": "Mislyktes i å sende loggbøker: ",
+        "failed_download_logs": "Kunne ikke laste ned feilsøkingslogger: ",
         "github_issue": "Github-saksrapport",
         "introduction": "Hvis du har sendt inn en feil via GitHub, kan feilsøkingslogger hjelpe oss med å spore opp problemet. ",
         "log_request": "For å hjelpe oss med å forhindre dette i fremtiden, vennligst <a>send oss loggfiler</a>.",
@@ -497,7 +497,6 @@
         "legal": "Juridisk",
         "light": "Lys",
         "loading": "Laster inn …",
-        "lobby": "Lobby",
         "location": "Lokasjon",
         "low_priority": "Lavprioritet",
         "matrix": "Matrix",
@@ -2479,12 +2478,14 @@
                 "breadcrumb_title_forgot": "Har du glemt gjenopprettingsnøkkelen din? Du må tilbakestille identiteten din.",
                 "breadcrumb_warning": "Gjør dette bare hvis du tror at kontoen din har blitt kompromittert.",
                 "details_title": "Krypteringsdetaljer",
+                "do_not_close_warning": "Ikke lukk dette vinduet før tilbakestillingen er fullført",
                 "export_keys": "Eksporter nøkler",
                 "import_keys": "Importer nøkler",
                 "other_people_device_description": "I krypterte rom, må du ikke sende krypterte meldinger til noen før du har verifisert dem",
                 "other_people_device_label": "Send aldri krypterte meldinger til ubekreftede enheter",
                 "other_people_device_title": "Andre personers enheter",
                 "reset_identity": "Tilbakestill kryptografisk identitet",
+                "reset_in_progress": "Tilbakestilling pågår...",
                 "session_id": "Sesjons-ID:",
                 "session_key": "Sesjonsnøkkel:",
                 "title": "Avansert"
@@ -3617,18 +3618,19 @@
                 "other": "%(severalUsers)ssendte %(count)s skjulte meldinger"
             },
             "invite_withdrawn": {
-                "%(oneUser)sfikk sin invitasjon trukket tilbake": "one"
+                "one": "%(oneUser)sfikk invitasjonen trukket tilbake",
+                "other": "%(oneUser)sfikk invitasjonen trukket tilbake %(count)s ganger"
             },
             "invite_withdrawn_multiple": {
                 "%(severalUsers)sfikk sine invitasjoner trukket tilbake": "one"
             },
             "invited": {
-                "ble invitert": "one",
-                "ble invitert %(count)s ganger": "other"
+                "one": "ble invitert",
+                "other": "ble invitert %(count)s ganger"
             },
             "invited_multiple": {
-                "ble invitert": "one",
-                "ble invitert %(count)s ganger": "other"
+                "one": "ble invitert",
+                "other": "ble invitert %(count)s ganger"
             },
             "joined": {
                 "one": "%(oneUser)sble med",
@@ -3694,10 +3696,12 @@
                 "other": "%(severalUsers)savviste invitasjonene deres %(count)s ganger"
             },
             "rejoined": {
-                "%(oneUser)sforlot og ble med igjen": "one"
+                "one": "%(oneUser)sforlot og ble med igjen",
+                "other": "%(oneUser)sforlot og ble med igjen %(count)s ganger"
             },
             "rejoined_multiple": {
-                "%(severalUsers)sforlot og ble med igjen": "one"
+                "one": "%(severalUsers)sforlot og ble med igjen",
+                "other": "%(severalUsers)sforlot og ble med igjen%(count)s ganger"
             },
             "server_acls": {
                 "one": "%(oneUser)sendret serverens ACLer",
@@ -3901,7 +3905,6 @@
         "input_devices": "Inndataenheter",
         "jitsi_call": "Jitsi Conference",
         "join_button_tooltip_call_full": "Beklager - denne samtalen er for øyeblikket full",
-        "join_button_tooltip_connecting": "Kobler til",
         "legacy_call": "Eldre samtale",
         "maximise": "Fyll skjermen",
         "maximise_call": "Maksimer samtalen",

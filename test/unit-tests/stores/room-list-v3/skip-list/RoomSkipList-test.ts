@@ -7,26 +7,17 @@ Please see LICENSE files in the repository root for full details.
 
 import { shuffle } from "lodash";
 
-import type { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import type { Room } from "matrix-js-sdk/src/matrix";
 import type { Sorter } from "../../../../../src/stores/room-list-v3/skip-list/sorters";
-import { mkMessage, mkStubRoom, stubClient } from "../../../../test-utils";
+import { mkMessage, stubClient } from "../../../../test-utils";
 import { RoomSkipList } from "../../../../../src/stores/room-list-v3/skip-list/RoomSkipList";
 import { RecencySorter } from "../../../../../src/stores/room-list-v3/skip-list/sorters/RecencySorter";
 import { AlphabeticSorter } from "../../../../../src/stores/room-list-v3/skip-list/sorters/AlphabeticSorter";
+import { getMockedRooms } from "./getMockedRooms";
+import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
+import { MetaSpace } from "../../../../../src/stores/spaces";
 
 describe("RoomSkipList", () => {
-    function getMockedRooms(client: MatrixClient, roomCount: number = 100): Room[] {
-        const rooms: Room[] = [];
-        for (let i = 0; i < roomCount; ++i) {
-            const roomId = `!foo${i}:matrix.org`;
-            const room = mkStubRoom(roomId, `Foo Room ${i}`, client);
-            const event = mkMessage({ room: roomId, user: `@foo${i}:matrix.org`, ts: i + 1, event: true });
-            room.timeline.push(event);
-            rooms.push(room);
-        }
-        return rooms;
-    }
-
     function generateSkipList(roomCount?: number): {
         skipList: RoomSkipList;
         rooms: Room[];
@@ -40,6 +31,12 @@ describe("RoomSkipList", () => {
         skipList.seed(rooms);
         return { skipList, rooms, totalRooms: rooms.length, sorter };
     }
+
+    beforeEach(() => {
+        jest.spyOn(SpaceStore.instance, "isRoomInSpace").mockImplementation((space) => space === MetaSpace.Home);
+        jest.spyOn(SpaceStore.instance, "activeSpace", "get").mockImplementation(() => MetaSpace.Home);
+        jest.spyOn(SpaceStore.instance, "storeReadyPromise", "get").mockImplementation(() => Promise.resolve());
+    });
 
     it("Rooms are in sorted order after initial seed", () => {
         const { skipList, totalRooms } = generateSkipList();

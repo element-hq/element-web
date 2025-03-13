@@ -407,7 +407,15 @@
         "download_logs": "Télécharger les journaux",
         "downloading_logs": "Téléchargement des journaux",
         "error_empty": "Dites-nous ce qui s’est mal passé ou, encore mieux, créez un rapport d’erreur sur GitHub qui décrit le problème.",
-        "failed_send_logs": "Échec lors de l’envoi des journaux : ",
+        "failed_download_logs": "Impossible de télécharger les journaux de débogage : ",
+        "failed_send_logs_causes": {
+            "disallowed_app": "Votre rapport de bogue a été rejeté. Le serveur Rageshake ne prend pas en charge cette application.",
+            "rejected_generic": "Votre rapport de bogue a été rejeté. Le serveur rageshake a rejeté le contenu du rapport en raison de règles internes.",
+            "rejected_recovery_key": "Votre rapport de bogue a été rejeté pour des raisons de sécurité, car il contenait une clé de récupération.",
+            "rejected_version": "Votre rapport de bogue a été rejeté car la version que vous utilisez est trop ancienne.",
+            "server_unknown_error": "Le serveur rageshake a rencontré une erreur inconnue et n'a pas pu gérer le rapport.",
+            "unknown_error": "Impossible d'envoyer les journaux de débogages."
+        },
         "github_issue": "Rapport GitHub",
         "introduction": "Si vous avez soumis une anomalie via GitHub, les journaux de débogage peuvent nous aider à cibler le problème. ",
         "log_request": "Pour nous aider à éviter cela dans le futur, veuillez <a>nous envoyer les journaux</a>.",
@@ -497,7 +505,6 @@
         "legal": "Légal",
         "light": "Clair",
         "loading": "Chargement…",
-        "lobby": "Salle d'attente",
         "location": "Position",
         "low_priority": "Priorité basse",
         "matrix": "Matrix",
@@ -1299,6 +1306,7 @@
         "error_connecting_heading": "Impossible de se connecter au gestionnaire d’intégrations",
         "explainer": "Les gestionnaires d’intégrations reçoivent les données de configuration et peuvent modifier les widgets, envoyer des invitations aux salons et définir les rangs à votre place.",
         "manage_title": "Gérer les intégrations",
+        "toggle_label": "Activer le gestionnaire d'intégration",
         "use_im": "Utilisez un gestionnaire d’intégrations pour gérer les robots, les widgets et les jeux d’autocollants.",
         "use_im_default": "Utilisez un gestionnaire d’intégrations <b>(%(serverName)s)</b> pour gérer les robots, les widgets et les jeux d’autocollants."
     },
@@ -2090,17 +2098,27 @@
         "failed_add_tag": "Échec de l’ajout de l’étiquette %(tagName)s au salon",
         "failed_remove_tag": "Échec de la suppression de l’étiquette %(tagName)s du salon",
         "failed_set_dm_tag": "Échec de l’ajout de l’étiquette de conversation privée",
+        "filters": {
+            "favourite": "Favoris",
+            "people": "Personnes",
+            "rooms": "Salons",
+            "unread": "Non lu"
+        },
         "home_menu_label": "Options de l’accueil",
         "join_public_room_label": "Rejoindre le salon public",
         "joining_rooms_status": {
             "one": "Vous êtes en train de rejoindre %(count)s salon",
             "other": "Vous êtes en train de rejoindre %(count)s salons"
         },
+        "list_title": "Liste de salons",
         "notification_options": "Paramètres de notifications",
         "open_space_menu": "Ouvrir le menu de l’espace",
         "redacting_messages_status": {
             "one": "Actuellement en train de supprimer les messages dans %(count)s salon",
             "other": "Actuellement en train de supprimer les messages dans %(count)s salons"
+        },
+        "room": {
+            "open_room": "Ouvrir salon %(roomName)s"
         },
         "show_less": "En voir moins",
         "show_n_more": {
@@ -2478,12 +2496,14 @@
                 "breadcrumb_title_forgot": "Vous avez oublié votre clé de récupération ? Vous devez réinitialiser votre identité.",
                 "breadcrumb_warning": "Ne faites cela que si vous pensez que votre compte a été compromis.",
                 "details_title": "Détails du chiffrement",
+                "do_not_close_warning": "Ne fermez pas cette fenêtre tant que la réinitialisation n'est pas terminée",
                 "export_keys": "Exporter les clés",
                 "import_keys": "Importer les clés",
                 "other_people_device_description": "Par défaut, dans les salons chiffrées, n'envoyez pas de messages chiffrés à qui que ce soit avant de les avoir vérifiés",
                 "other_people_device_label": "N'envoyez jamais de messages chiffrés à des appareils non vérifiés",
                 "other_people_device_title": "Appareils d'autres personnes",
                 "reset_identity": "Réinitialiser l'identité cryptographique",
+                "reset_in_progress": "Réinitialisation en cours...",
                 "session_id": "Identifiant de session :",
                 "session_key": "Clé de session :",
                 "title": "Avancé"
@@ -3906,7 +3926,6 @@
         "input_devices": "Périphériques d’entrée",
         "jitsi_call": "Conférence Jitsi",
         "join_button_tooltip_call_full": "Désolé — Cet appel est actuellement complet",
-        "join_button_tooltip_connecting": "Connexion",
         "legacy_call": "Appel vidéo",
         "maximise": "Remplir l’écran",
         "maximise_call": "Plein écran",

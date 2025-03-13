@@ -86,7 +86,7 @@ describe("<MainSplit/>", () => {
 
         const handle = container.querySelector(".mx_ResizeHandle--horizontal")!;
         fireEvent.mouseDown(handle);
-        fireEvent.mouseMove(handle, { clientX: 0 });
+        fireEvent.resize(handle, { clientX: 0 });
         fireEvent.mouseUp(handle);
 
         expect(spy).toHaveBeenCalledWith({
