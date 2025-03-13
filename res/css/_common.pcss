@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2019-2023 The Matrix.org Foundation C.I.C
 Copyright 2017-2019 New Vector Ltd
 Copyright 2017 Vector Creations Ltd
@@ -217,7 +217,7 @@ textarea {
 }
 
 input[type="text"]:focus,
-input[type="password"]:focus,
+:not(.mx_ChangePasswordForm input) > input[type="password"],
 textarea:focus {
     outline: none;
     box-shadow: none;
@@ -592,6 +592,7 @@ legend {
  */
 .mx_Dialog
     button:not(
+        .mx_ChangePasswordForm button,
         .mx_EncryptionUserSettingsTab button,
         .mx_UserProfileSettings button,
         .mx_ShareDialog button,
@@ -620,6 +621,7 @@ legend {
 
 .mx_Dialog
     button:not(
+        .mx_ChangePasswordForm button,
         .mx_Dialog_nonDialogButton,
         [class|="maplibregl"],
         .mx_AccessibleButton,
@@ -634,6 +636,7 @@ legend {
 
 .mx_Dialog
     button:not(
+        .mx_ChangePasswordForm button,
         .mx_Dialog_nonDialogButton,
         [class|="maplibregl"],
         .mx_AccessibleButton,
@@ -653,6 +656,7 @@ legend {
 .mx_Dialog input[type="submit"].mx_Dialog_primary,
 .mx_Dialog_buttons
     button:not(
+        .mx_ChangePasswordForm button,
         .mx_Dialog_nonDialogButton,
         .mx_AccessibleButton,
         .mx_UserProfileSettings button,
@@ -672,6 +676,7 @@ legend {
 .mx_Dialog input[type="submit"].danger,
 .mx_Dialog_buttons
     button.danger:not(
+        .mx_ChangePasswordForm button,
         .mx_Dialog_nonDialogButton,
         .mx_AccessibleButton,
         .mx_UserProfileSettings button,
@@ -694,6 +699,7 @@ legend {
 
 .mx_Dialog
     button:not(
+        .mx_ChangePasswordForm button,
         .mx_Dialog_nonDialogButton,
         [class|="maplibregl"],
         .mx_AccessibleButton,

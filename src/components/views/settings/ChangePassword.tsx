@@ -9,16 +9,13 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import Field from "../elements/Field";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import AccessibleButton, { type AccessibleButtonKind } from "../elements/AccessibleButton";
-import Spinner from "../elements/Spinner";
 import withValidation, { type IFieldState, type IValidationResult } from "../elements/Validation";
 import { UserFriendlyError, _t, _td } from "../../../languageHandler";
-import Modal from "../../../Modal";
-import PassphraseField from "../auth/PassphraseField";
 import { PASSWORD_MIN_SCORE } from "../auth/RegistrationForm";
-import SetEmailDialog from "../dialogs/SetEmailDialog";
+import { Root, Field as CpdField, PasswordInput, Label, InlineSpinner, HelpMessage } from "@vector-im/compound-web";
+import PassphraseField from "../auth/PassphraseField";
 
 const FIELD_OLD_PASSWORD = "field_old_password";
 const FIELD_NEW_PASSWORD = "field_new_password";
@@ -34,19 +31,13 @@ enum Phase {
 interface IProps {
     onFinished: (outcome: { didSetEmail?: boolean }) => void;
     onError: (error: Error) => void;
-    rowClassName?: string;
     buttonClassName?: string;
     buttonKind?: AccessibleButtonKind;
     buttonLabel?: string;
-    confirm?: boolean;
-    // Whether to autoFocus the new password input
-    autoFocusNewPasswordInput?: boolean;
-    className?: string;
-    shouldAskForEmail?: boolean;
 }
 
 interface IState {
-    fieldValid: Partial<Record<FieldType, boolean>>;
+    fieldValid: Partial<Record<FieldType, IValidationResult>>;
     phase: Phase;
     oldPassword: string;
     newPassword: string;
@@ -54,15 +45,13 @@ interface IState {
 }
 
 export default class ChangePassword extends React.Component<IProps, IState> {
-    private [FIELD_OLD_PASSWORD]: Field | null = null;
-    private [FIELD_NEW_PASSWORD]: Field | null = null;
-    private [FIELD_NEW_PASSWORD_CONFIRM]: Field | null = null;
+    private [FIELD_OLD_PASSWORD]: HTMLInputElement | null = null;
+    private [FIELD_NEW_PASSWORD]: HTMLInputElement | null = null;
+    private [FIELD_NEW_PASSWORD_CONFIRM]: HTMLInputElement | null = null;
 
     public static defaultProps: Partial<IProps> = {
         onFinished() {},
         onError() {},
-
-        confirm: true,
     };
 
     public constructor(props: IProps) {
@@ -100,15 +89,7 @@ export default class ChangePassword extends React.Component<IProps, IState> {
         cli.setPassword(authDict, newPassword, false)
             .then(
                 () => {
-                    if (this.props.shouldAskForEmail) {
-                        return this.optionallySetEmail().then((confirmed) => {
-                            this.props.onFinished({
-                                didSetEmail: confirmed,
-                            });
-                        });
-                    } else {
-                        this.props.onFinished({});
-                    }
+                    this.props.onFinished({});
                 },
                 (err) => {
                     if (err instanceof Error) {
@@ -149,17 +130,9 @@ export default class ChangePassword extends React.Component<IProps, IState> {
         }
     }
 
-    private optionallySetEmail(): Promise<boolean> {
-        // Ask for an email otherwise the user has no way to reset their password
-        const modal = Modal.createDialog(SetEmailDialog, {
-            title: _t("auth|set_email_prompt"),
-        });
-        return modal.finished.then(([confirmed]) => !!confirmed);
-    }
-
-    private markFieldValid(fieldID: FieldType, valid?: boolean): void {
+    private markFieldValid(fieldID: FieldType, result: IValidationResult): void {
         const { fieldValid } = this.state;
-        fieldValid[fieldID] = valid;
+        fieldValid[fieldID] = result;
         this.setState({
             fieldValid,
         });
@@ -169,11 +142,16 @@ export default class ChangePassword extends React.Component<IProps, IState> {
         this.setState({
             oldPassword: ev.target.value,
         });
+        this.onOldPasswordValidate({
+            value: ev.target.value,
+            focused: true,
+            allowEmpty: true,
+        });
     };
 
     private onOldPasswordValidate = async (fieldState: IFieldState): Promise<IValidationResult> => {
         const result = await this.validateOldPasswordRules(fieldState);
-        this.markFieldValid(FIELD_OLD_PASSWORD, result.valid);
+        this.markFieldValid(FIELD_OLD_PASSWORD, result);
         return result;
     };
 
@@ -194,18 +172,24 @@ export default class ChangePassword extends React.Component<IProps, IState> {
     };
 
     private onNewPasswordValidate = (result: IValidationResult): void => {
-        this.markFieldValid(FIELD_NEW_PASSWORD, result.valid);
+        this.markFieldValid(FIELD_NEW_PASSWORD, result);
     };
 
     private onChangeNewPasswordConfirm = (ev: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             newPasswordConfirm: ev.target.value,
         });
+
+        this.onNewPasswordConfirmValidate({
+            value: ev.target.value,
+            focused: true,
+            allowEmpty: true,
+        });
     };
 
     private onNewPasswordConfirmValidate = async (fieldState: IFieldState): Promise<IValidationResult> => {
         const result = await this.validatePasswordConfirmRules(fieldState);
-        this.markFieldValid(FIELD_NEW_PASSWORD_CONFIRM, result.valid);
+        this.markFieldValid(FIELD_NEW_PASSWORD_CONFIRM, result);
         return result;
     };
 
@@ -308,10 +292,10 @@ export default class ChangePassword extends React.Component<IProps, IState> {
     }
 
     private allFieldsValid(): boolean {
-        return Object.values(this.state.fieldValid).every(Boolean);
+        return Object.values(this.state.fieldValid).map(v => v.valid).every(Boolean);
     }
 
-    private findFirstInvalidField(fieldIDs: FieldType[]): Field | null {
+    private findFirstInvalidField(fieldIDs: FieldType[]): HTMLInputElement | null {
         for (const fieldID of fieldIDs) {
             if (!this.state.fieldValid[fieldID] && this[fieldID]) {
                 return this[fieldID];
@@ -321,47 +305,43 @@ export default class ChangePassword extends React.Component<IProps, IState> {
     }
 
     public render(): React.ReactNode {
-        const rowClassName = this.props.rowClassName;
         const buttonClassName = this.props.buttonClassName;
 
-        switch (this.state.phase) {
+        const { fieldValid, phase } = this.state;
+
+        switch (phase) {
             case Phase.Edit:
                 return (
-                    <form className={this.props.className} onSubmit={this.onClickChange}>
-                        <div className={rowClassName}>
-                            <Field
-                                ref={(field) => (this[FIELD_OLD_PASSWORD] = field)}
-                                type="password"
-                                label={_t("auth|change_password_current_label")}
-                                value={this.state.oldPassword}
-                                onChange={this.onChangeOldPassword}
-                                onValidate={this.onOldPasswordValidate}
-                            />
-                        </div>
-                        <div className={rowClassName}>
-                            <PassphraseField
-                                fieldRef={(field) => (this[FIELD_NEW_PASSWORD] = field)}
-                                type="password"
-                                label={_td("auth|change_password_new_label")}
-                                minScore={PASSWORD_MIN_SCORE}
-                                value={this.state.newPassword}
-                                autoFocus={this.props.autoFocusNewPasswordInput}
-                                onChange={this.onChangeNewPassword}
-                                onValidate={this.onNewPasswordValidate}
-                                autoComplete="new-password"
-                            />
-                        </div>
-                        <div className={rowClassName}>
-                            <Field
-                                ref={(field) => (this[FIELD_NEW_PASSWORD_CONFIRM] = field)}
-                                type="password"
-                                label={_t("auth|change_password_confirm_label")}
-                                value={this.state.newPasswordConfirm}
-                                onChange={this.onChangeNewPasswordConfirm}
-                                onValidate={this.onNewPasswordConfirmValidate}
-                                autoComplete="new-password"
-                            />
-                        </div>
+                    <Root className={"mx_ChangePasswordForm"} onSubmit={this.onClickChange}>
+                        <CpdField name={FIELD_OLD_PASSWORD}> 
+                            <Label>
+                                {_t("auth|change_password_current_label")}
+                            </Label>
+                            <PasswordInput ref={(field) => (this[FIELD_OLD_PASSWORD] = field)} data-invalid={fieldValid[FIELD_OLD_PASSWORD]?.valid} value={this.state.oldPassword} onChange={this.onChangeOldPassword} />
+                            {fieldValid[FIELD_OLD_PASSWORD]?.feedback && <HelpMessage>
+                                {fieldValid[FIELD_OLD_PASSWORD]?.feedback}
+                            </HelpMessage>}
+                        </CpdField>
+                        { /* This is a compound field. */}
+                        <PassphraseField
+                            fieldRef={(field) => (this[FIELD_NEW_PASSWORD] = field)}
+                            type="password"
+                            label={_td("auth|change_password_new_label")}
+                            minScore={PASSWORD_MIN_SCORE}
+                            value={this.state.newPassword}
+                            onChange={this.onChangeNewPassword}
+                            onValidate={this.onNewPasswordValidate}
+                            autoComplete="new-password"
+                        />
+                        <CpdField name={FIELD_NEW_PASSWORD_CONFIRM}> 
+                            <Label>
+                                {_t("auth|change_password_confirm_label")}
+                            </Label>
+                            <PasswordInput autoComplete="new-password" ref={(field) => (this[FIELD_NEW_PASSWORD_CONFIRM] = field)} data-invalid={fieldValid[FIELD_NEW_PASSWORD_CONFIRM]} value={this.state.newPasswordConfirm} onChange={this.onChangeNewPasswordConfirm} />
+                            {fieldValid[FIELD_NEW_PASSWORD_CONFIRM]?.feedback && <HelpMessage>
+                                {fieldValid[FIELD_NEW_PASSWORD_CONFIRM]?.feedback}
+                            </HelpMessage>}
+                        </CpdField>
                         <AccessibleButton
                             className={buttonClassName}
                             kind={this.props.buttonKind}
@@ -369,12 +349,12 @@ export default class ChangePassword extends React.Component<IProps, IState> {
                         >
                             {this.props.buttonLabel || _t("auth|change_password_action")}
                         </AccessibleButton>
-                    </form>
+                    </Root>
                 );
             case Phase.Uploading:
                 return (
                     <div className="mx_Dialog_content">
-                        <Spinner />
+                        <InlineSpinner />
                     </div>
                 );
         }
