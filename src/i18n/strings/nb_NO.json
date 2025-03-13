@@ -407,6 +407,7 @@
         "download_logs": "Last ned logger",
         "downloading_logs": "Laster ned logger",
         "error_empty": "Fortell oss hva som gikk galt, eller bedre, opprett et GitHub-problem som beskriver problemet.",
+        "failed_download_logs": "Kunne ikke laste ned feilsøkingslogger: ",
         "github_issue": "Github-saksrapport",
         "introduction": "Hvis du har sendt inn en feil via GitHub, kan feilsøkingslogger hjelpe oss med å spore opp problemet. ",
         "log_request": "For å hjelpe oss med å forhindre dette i fremtiden, vennligst <a>send oss loggfiler</a>.",
