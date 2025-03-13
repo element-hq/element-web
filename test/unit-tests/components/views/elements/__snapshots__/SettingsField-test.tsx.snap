@@ -3,22 +3,22 @@
 exports[`<SettingsField /> should render with the default label 1`] = `
 <DocumentFragment>
   <form
-    class="_root_ssths_24"
+    class="_root_19upo_16"
   >
     <div
-      class="_field_ssths_34"
+      class="_field_19upo_26"
     >
       <label
-        class="_label_ssths_67"
+        class="_label_19upo_59"
         for="radix-:r0:"
       >
         Element Call URL
       </label>
       <div
-        class="_controls_1h4nb_17"
+        class="_controls_17lij_8"
       >
         <input
-          class="_control_9gon8_18"
+          class="_control_sqdq4_10"
           id="radix-:r0:"
           name="input"
           title=""
