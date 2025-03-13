@@ -407,7 +407,15 @@
         "download_logs": "Download logs",
         "downloading_logs": "Downloading logs",
         "error_empty": "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.",
-        "failed_send_logs": "Failed to send logs: ",
+        "failed_download_logs": "Failed to download debug logs: ",
+        "failed_send_logs_causes": {
+            "disallowed_app": "Your bug report was rejected. The rageshake server does not support this application.",
+            "rejected_generic": "Your bug report was rejected. The rageshake server rejected the contents of the report due to a policy.",
+            "rejected_recovery_key": "Your bug report was rejected for safety reasons, as it contained a recovery key.",
+            "rejected_version": "Your bug report was rejected as the version you are running is too old.",
+            "server_unknown_error": "The rageshake server encountered an unknown error and could not handle the report.",
+            "unknown_error": "Failed to send logs."
+        },
         "github_issue": "GitHub issue",
         "introduction": "If you've submitted a bug via GitHub, debug logs can help us track down the problem. ",
         "log_request": "To help us prevent this in future, please <a>send us logs</a>.",
@@ -497,7 +505,6 @@
         "legal": "Legal",
         "light": "Light",
         "loading": "Loading…",
-        "lobby": "Lobby",
         "location": "Location",
         "low_priority": "Low priority",
         "matrix": "Matrix",
@@ -1299,6 +1306,7 @@
         "error_connecting_heading": "Cannot connect to integration manager",
         "explainer": "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.",
         "manage_title": "Manage integrations",
+        "toggle_label": "Enable the integration manager",
         "use_im": "Use an integration manager to manage bots, widgets, and sticker packs.",
         "use_im_default": "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs."
     },
@@ -2091,17 +2099,27 @@
         "failed_add_tag": "Failed to add tag %(tagName)s to room",
         "failed_remove_tag": "Failed to remove tag %(tagName)s from room",
         "failed_set_dm_tag": "Failed to set direct message tag",
+        "filters": {
+            "favourite": "Favourites",
+            "people": "People",
+            "rooms": "Rooms",
+            "unread": "Unread"
+        },
         "home_menu_label": "Home options",
         "join_public_room_label": "Join public room",
         "joining_rooms_status": {
             "one": "Currently joining %(count)s room",
             "other": "Currently joining %(count)s rooms"
         },
+        "list_title": "Room list",
         "notification_options": "Notification options",
         "open_space_menu": "Open space menu",
         "redacting_messages_status": {
             "one": "Currently removing messages in %(count)s room",
             "other": "Currently removing messages in %(count)s rooms"
+        },
+        "room": {
+            "open_room": "Open room %(roomName)s"
         },
         "show_less": "Show less",
         "show_n_more": {
@@ -3909,7 +3927,6 @@
         "input_devices": "Input devices",
         "jitsi_call": "Jitsi Conference",
         "join_button_tooltip_call_full": "Sorry — this call is currently full",
-        "join_button_tooltip_connecting": "Connecting",
         "legacy_call": "Legacy Call",
         "maximise": "Fill screen",
         "maximise_call": "Maximise call",
