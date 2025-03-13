@@ -79,7 +79,6 @@ export class MockedCall extends Call {
     // No action needed for any of the following methods since this is just a mock
     public async clean(): Promise<void> {}
     // Public to allow spying
-    public async performConnection(): Promise<void> {}
     public async performDisconnection(): Promise<void> {}
 
     public destroy() {
