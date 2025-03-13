@@ -1,10 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`SetIntegrationManager should render manage integrations sections 1`] = `
-<label
+<div
   class="mx_SetIntegrationManager"
   data-testid="mx_SetIntegrationManager"
-  for="toggle_integration"
 >
   <div
     class="mx_SettingsFlag"
@@ -23,18 +22,6 @@ exports[`SetIntegrationManager should render manage integrations sections 1`] = 
         (scalar.vector.im)
       </h4>
     </div>
-    <div
-      aria-checked="false"
-      aria-disabled="false"
-      class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
-      id="toggle_integration"
-      role="switch"
-      tabindex="0"
-    >
-      <div
-        class="mx_ToggleSwitch_ball"
-      />
-    </div>
   </div>
   <div
     class="mx_SettingsSubsection_text"
@@ -52,5 +39,40 @@ exports[`SetIntegrationManager should render manage integrations sections 1`] = 
   >
     Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.
   </div>
-</label>
+  <form
+    class="_root_19upo_16"
+  >
+    <div
+      class="_inline-field_19upo_32"
+    >
+      <div
+        class="_inline-field-control_19upo_44"
+      >
+        <div
+          class="_container_19o42_10"
+        >
+          <input
+            class="_input_19o42_24"
+            id="mx_SetIntegrationManager_Toggle"
+            role="switch"
+            type="checkbox"
+          />
+          <div
+            class="_ui_19o42_34"
+          />
+        </div>
+      </div>
+      <div
+        class="_inline-field-body_19upo_38"
+      >
+        <label
+          class="_label_19upo_59"
+          for="mx_SetIntegrationManager_Toggle"
+        >
+          Enable the integration manager
+        </label>
+      </div>
+    </div>
+  </form>
+</div>
 `;
