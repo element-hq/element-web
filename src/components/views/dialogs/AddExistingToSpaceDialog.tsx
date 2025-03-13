@@ -55,7 +55,7 @@ export const Entry: React.FC<{
 }> = ({ room, checked, onChange }) => {
     const id = useId();
     return (
-        <label id={id} className="mx_AddExistingToSpace_entry">
+        <li id={id} className="mx_AddExistingToSpace_entry" aria-label={room.name}>
             {room?.isSpaceRoom() ? (
                 <RoomAvatar room={room} size="32px" />
             ) : (
@@ -63,12 +63,12 @@ export const Entry: React.FC<{
             )}
             <span className="mx_AddExistingToSpace_entry_name">{room.name}</span>
             <StyledCheckbox
+                aria-labelledby={id}
                 onChange={onChange ? (e) => onChange(e.currentTarget.checked) : undefined}
                 checked={checked}
                 disabled={!onChange}
-                aria-labelledby={id}
             />
-        </label>
+        </li>
     );
 };
 
@@ -359,6 +359,7 @@ const defaultRendererFactory =
         <div className="mx_AddExistingToSpace_section">
             <h3>{_t(title)}</h3>
             <LazyRenderList
+                element="ul"
                 itemHeight={ROW_HEIGHT}
                 items={rooms}
                 scrollTop={scrollTop}

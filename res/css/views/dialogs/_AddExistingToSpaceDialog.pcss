@@ -32,6 +32,11 @@ Please see LICENSE files in the repository root for full details.
     .mx_AddExistingToSpace_section {
         margin-right: 12px;
 
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
         // provides space for scrollbar so that checkbox and scrollbar do not collide
 
         &:not(:first-child) {
@@ -213,6 +218,12 @@ Please see LICENSE files in the repository root for full details.
 .mx_AddExistingToSpace_entry {
     display: flex;
     margin-top: 12px;
+
+    form {
+        /* Align checkboxes. */
+        margin-top: auto;
+        margin-bottom: auto;
+    }
 
     .mx_DecoratedRoomAvatar, /* we can't target .mx_BaseAvatar here as it'll break the decorated avatar styling */ {
         margin-right: 12px;
