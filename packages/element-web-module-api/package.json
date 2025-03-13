@@ -1,7 +1,7 @@
 {
     "name": "@element-hq/element-web-module-api",
     "type": "module",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "description": "Module API surface for element-web",
     "repository": {
         "type": "git",
