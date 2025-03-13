@@ -187,7 +187,7 @@ function useCheckEncryptionState(state: State, setState: (state: State) => void)
     useTypedEventEmitter(matrixClient, CryptoEvent.KeyBackupStatus, (): void => {
         // Recheck the status if the key backup status has changed so we can keep the page up to date.
         // Note that this could potentially update the UI while the user is trying to do something, although
-        // if their account data is changing then it implies that they're changing encryption related things
+        // if their key backup status is changing then they're changing encryption related things
         // on another device. This code is written with the assumption that it's better for the UI to refresh
         // and be up to date with whatever changes they've made.
         checkEncryptionState();
