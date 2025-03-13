@@ -25,7 +25,7 @@ exports[`<RoomListPanel /> should not render the RoomListSearch component when U
       </div>
     </header>
     <ul
-      aria-label="Room list primary filters"
+      aria-label="Room list filters"
       class="mx_Flex mx_RoomListPrimaryFilters"
       role="listbox"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
@@ -234,7 +234,7 @@ exports[`<RoomListPanel /> should render the RoomListSearch component when UICom
       </button>
     </header>
     <ul
-      aria-label="Room list primary filters"
+      aria-label="Room list filters"
       class="mx_Flex mx_RoomListPrimaryFilters"
       role="listbox"
       style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"

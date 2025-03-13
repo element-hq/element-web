@@ -27,7 +27,7 @@ test.describe("Room list filters and sort", () => {
     }
 
     function getPrimaryFilters(page: Page) {
-        return page.getByRole("listbox", { name: "Room list primary filters" });
+        return page.getByRole("listbox", { name: "Room list filters" });
     }
 
     test.beforeEach(async ({ page, app, bot, user }) => {

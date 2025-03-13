@@ -3,7 +3,7 @@
 exports[`<RoomListPrimaryFilters /> should render primary filters 1`] = `
 <DocumentFragment>
   <ul
-    aria-label="Room list primary filters"
+    aria-label="Room list filters"
     class="mx_Flex mx_RoomListPrimaryFilters"
     role="listbox"
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
