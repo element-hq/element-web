@@ -5,7 +5,7 @@
     "license": "SEE LICENSE IN README.md",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/element-hq/element-web-modules.git",
+        "url": "git+https://github.com/element-hq/element-modules.git",
         "directory": "packages/element-web-playwright-common"
     },
     "author": "element-hq",
