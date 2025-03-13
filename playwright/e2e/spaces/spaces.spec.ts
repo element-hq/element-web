@@ -156,7 +156,7 @@ test.describe("Spaces", () => {
 
         await page.getByRole("button", { name: "Just me" }).click();
 
-        await page.getByText("Sample Room").click({ force: true }); // force click as checkbox size is zero
+        await page.getByRole("checkbox", { name: "Sample Room" }).click();
 
         // Temporal implementation as multiple elements with the role "button" and name "Add" are found
         await page.locator(".mx_AddExistingToSpace_footer").getByRole("button", { name: "Add" }).click();
@@ -165,6 +165,50 @@ test.describe("Spaces", () => {
             page.locator(".mx_SpaceHierarchy_list").getByRole("treeitem", { name: "Sample Room" }),
         ).toBeVisible();
     });
+
+    test(
+        "should allow user to add an existing room to a space after creation",
+        { tag: "@screenshot" },
+        async ({ page, app, user }) => {
+            await app.client.createRoom({
+                name: "Sample Room",
+            });
+            await app.client.createRoom({
+                name: "A Room that will not be selected",
+            });
+
+            const menu = await openSpaceCreateMenu(page);
+            await menu.getByRole("button", { name: "Private" }).click();
+
+            await menu
+                .locator('.mx_SpaceBasicSettings_avatarContainer input[type="file"]')
+                .setInputFiles("playwright/sample-files/riot.png");
+            await expect(menu.getByRole("textbox", { name: "Address" })).not.toBeVisible();
+            await menu
+                .getByRole("textbox", { name: "Description" })
+                .fill("This is a personal space to mourn Riot.im...");
+            await menu.getByRole("textbox", { name: "Name" }).fill("This is my Riot");
+            await menu.getByRole("textbox", { name: "Name" }).press("Enter");
+
+            await page.getByRole("button", { name: "Just me" }).click();
+
+            await page.getByRole("button", { name: "Skip for now" }).click();
+
+            await page.getByRole("button", { name: "Add room" }).click();
+            await page.getByRole("menuitem", { name: "Add existing room" }).click();
+
+            await page.getByRole("checkbox", { name: "Sample Room" }).click();
+
+            await expect(page.getByRole("dialog", { name: "Avatar Add existing rooms" })).toMatchScreenshot(
+                "add-existing-rooms-dialog.png",
+            );
+
+            await page.getByRole("button", { name: "Add" }).click();
+            await expect(
+                page.locator(".mx_SpaceHierarchy_list").getByRole("treeitem", { name: "Sample Room" }),
+            ).toBeVisible();
+        },
+    );
 
     test("should allow user to invite another to a space", { tag: "@no-webkit" }, async ({ page, app, user, bot }) => {
         await app.client.createSpace({
