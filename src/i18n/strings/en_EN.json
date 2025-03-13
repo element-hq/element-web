@@ -1306,6 +1306,7 @@
         "error_connecting_heading": "Cannot connect to integration manager",
         "explainer": "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.",
         "manage_title": "Manage integrations",
+        "toggle_label": "Enable the integration manager",
         "use_im": "Use an integration manager to manage bots, widgets, and sticker packs.",
         "use_im_default": "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs."
     },
@@ -2098,6 +2099,12 @@
         "failed_add_tag": "Failed to add tag %(tagName)s to room",
         "failed_remove_tag": "Failed to remove tag %(tagName)s from room",
         "failed_set_dm_tag": "Failed to set direct message tag",
+        "filters": {
+            "favourite": "Favourites",
+            "people": "People",
+            "rooms": "Rooms",
+            "unread": "Unread"
+        },
         "home_menu_label": "Home options",
         "join_public_room_label": "Join public room",
         "joining_rooms_status": {

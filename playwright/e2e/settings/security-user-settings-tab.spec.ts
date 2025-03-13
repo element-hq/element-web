@@ -91,7 +91,7 @@ test.describe("Security user settings tab", () => {
             await expect(tab.getByText(`Identity server (identity.example.org)`, { exact: true })).toBeVisible();
         });
 
-        test("should enable show integrations as enabled", async ({ app, page, user }) => {
+        test("should show integrations as enabled", async ({ app, page, user }) => {
             const tab = await app.settings.openUserSettings("Security");
 
             const setIntegrationManager = tab.locator(".mx_SetIntegrationManager");
@@ -102,7 +102,9 @@ test.describe("Security user settings tab", () => {
                 }),
             ).toBeVisible();
             // Make sure integration manager's toggle switch is enabled
-            await expect(setIntegrationManager.locator(".mx_ToggleSwitch_enabled")).toBeVisible();
+            const toggleswitch = setIntegrationManager.getByLabel("Enable the integration manager");
+            await expect(toggleswitch).toBeVisible();
+            await expect(toggleswitch).toBeChecked();
             await expect(setIntegrationManager.locator(".mx_SetIntegrationManager_heading_manager")).toHaveText(
                 "Manage integrations(scalar.vector.im)",
             );

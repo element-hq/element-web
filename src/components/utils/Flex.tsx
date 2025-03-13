@@ -40,6 +40,11 @@ type FlexProps<T extends keyof JSX.IntrinsicElements | JSXElementConstructor<any
      */
     justify?: "start" | "center" | "end" | "space-between";
     /**
+     * The wrapping of the flex children
+     * @default nowrap
+     */
+    wrap?: "wrap" | "nowrap" | "wrap-reverse";
+    /**
      * The spacing between the flex children, expressed with the CSS unit
      * @default 0
      */
@@ -60,6 +65,7 @@ export function Flex<T extends keyof JSX.IntrinsicElements | JSXElementConstruct
     align = "start",
     justify = "start",
     gap = "0",
+    wrap = "nowrap",
     className,
     children,
     ...props
@@ -71,8 +77,9 @@ export function Flex<T extends keyof JSX.IntrinsicElements | JSXElementConstruct
             "--mx-flex-align": align,
             "--mx-flex-justify": justify,
             "--mx-flex-gap": gap,
+            "--mx-flex-wrap": wrap,
         }),
-        [align, direction, display, gap, justify],
+        [align, direction, display, gap, justify, wrap],
     );
 
     return React.createElement(as, { ...props, className: classNames("mx_Flex", className), style }, children);

@@ -77,7 +77,7 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
       >
         <div
           class="mx_Flex mx_UserInfo_profile"
-          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
+          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
         >
           <h1
             class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
@@ -85,7 +85,7 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
           >
             <div
               class="mx_Flex mx_UserInfo_profile_name"
-              style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
+              style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
             >
               @user:example.com
             </div>
@@ -113,7 +113,7 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
         </div>
         <div
           class="mx_Flex mx_UserInfo_verification"
-          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0;"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
         >
           <p
             class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 mx_UserInfo_verification_unavailable"
@@ -363,7 +363,7 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
       >
         <div
           class="mx_Flex mx_UserInfo_profile"
-          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
+          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
         >
           <h1
             class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
@@ -371,7 +371,7 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
           >
             <div
               class="mx_Flex mx_UserInfo_profile_name"
-              style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
+              style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
             >
               @user:example.com
             </div>
@@ -399,7 +399,7 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
         </div>
         <div
           class="mx_Flex mx_UserInfo_verification"
-          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0;"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
         >
           <svg
             class="_icon_11k6c_18"
@@ -653,7 +653,7 @@ exports[`<UserInfoHeader /> renders verification unavailable message 1`] = `
   >
     <div
       class="mx_Flex mx_UserInfo_profile"
-      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
     >
       <h1
         class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
@@ -661,7 +661,7 @@ exports[`<UserInfoHeader /> renders verification unavailable message 1`] = `
       >
         <div
           class="mx_Flex mx_UserInfo_profile_name"
-          style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
+          style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
         >
           @user:example.com
         </div>
@@ -689,7 +689,7 @@ exports[`<UserInfoHeader /> renders verification unavailable message 1`] = `
     </div>
     <div
       class="mx_Flex mx_UserInfo_verification"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0;"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
     >
       <p
         class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 mx_UserInfo_verification_unavailable"
@@ -735,7 +735,7 @@ exports[`<UserInfoHeader /> renders verified badge when user is verified 1`] = `
   >
     <div
       class="mx_Flex mx_UserInfo_profile"
-      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
     >
       <h1
         class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
@@ -743,7 +743,7 @@ exports[`<UserInfoHeader /> renders verified badge when user is verified 1`] = `
       >
         <div
           class="mx_Flex mx_UserInfo_profile_name"
-          style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
+          style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
         >
           @user:example.com
         </div>
@@ -771,7 +771,7 @@ exports[`<UserInfoHeader /> renders verified badge when user is verified 1`] = `
     </div>
     <div
       class="mx_Flex mx_UserInfo_verification"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0;"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
     >
       <span
         class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_1t12g_8 mx_UserInfo_verified_badge"
@@ -832,7 +832,7 @@ exports[`<UserInfoHeader /> renders verify button 1`] = `
   >
     <div
       class="mx_Flex mx_UserInfo_profile"
-      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
     >
       <h1
         class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
@@ -840,7 +840,7 @@ exports[`<UserInfoHeader /> renders verify button 1`] = `
       >
         <div
           class="mx_Flex mx_UserInfo_profile_name"
-          style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
+          style="--mx-flex-display: flex; --mx-flex-direction: row-reverse; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
         >
           @user:example.com
         </div>
@@ -868,7 +868,7 @@ exports[`<UserInfoHeader /> renders verify button 1`] = `
     </div>
     <div
       class="mx_Flex mx_UserInfo_verification"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0;"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
     >
       <div
         class="mx_UserInfo_container_verifyButton"

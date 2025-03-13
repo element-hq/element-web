@@ -232,7 +232,7 @@ exports[`MemberTileView ThreePidInviteTileView renders ThreePidInvite correctly 
         </div>
         <div
           class="mx_Flex mx_InvitedIconView"
-          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
         >
           <svg
             fill="currentColor"
