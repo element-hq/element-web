@@ -43,7 +43,7 @@ exports[`<MasUnlockCrossSigningAuthEntry/> should render 1`] = `
     </p>
     <div
       class="mx_Flex"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x);"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
     >
       <button
         class="_button_vczzf_8 mx_Dialog_nonDialogButton _has-icon_vczzf_57"

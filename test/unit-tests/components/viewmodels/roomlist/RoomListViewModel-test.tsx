@@ -15,6 +15,7 @@ import { useRoomListViewModel } from "../../../../../src/components/viewmodels/r
 import dispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { FilterKey } from "../../../../../src/stores/room-list-v3/skip-list/filters";
+import { SecondaryFilters } from "../../../../../src/components/viewmodels/roomlist/useFilteredRooms";
 
 describe("RoomListViewModel", () => {
     function mockAndCreateRooms() {
@@ -106,6 +107,101 @@ describe("RoomListViewModel", () => {
             });
             expect(vm.current.primaryFilters[i].active).toEqual(false);
             expect(vm.current.primaryFilters[j].active).toEqual(true);
+        });
+
+        it("should select all activity as default secondary filter", () => {
+            mockAndCreateRooms();
+            const { result: vm } = renderHook(() => useRoomListViewModel());
+
+            // By default, all activity should be the active secondary filter
+            expect(vm.current.activeSecondaryFilter).toEqual(SecondaryFilters.AllActivity);
+        });
+
+        it("should be able to filter using secondary filters", () => {
+            const { fn } = mockAndCreateRooms();
+            const { result: vm } = renderHook(() => useRoomListViewModel());
+
+            // Let's say we toggle the mentions secondary filter
+            act(() => {
+                vm.current.activateSecondaryFilter(SecondaryFilters.MentionsOnly);
+            });
+            expect(fn).toHaveBeenCalledWith([FilterKey.MentionsFilter]);
+        });
+
+        it("primary filters are applied on top of secondary filers", () => {
+            const { fn } = mockAndCreateRooms();
+            const { result: vm } = renderHook(() => useRoomListViewModel());
+
+            // Let's say we toggle the mentions secondary filter
+            act(() => {
+                vm.current.activateSecondaryFilter(SecondaryFilters.MentionsOnly);
+            });
+
+            // Let's say we toggle the People filter
+            const i = vm.current.primaryFilters.findIndex((f) => f.name === "People");
+            act(() => {
+                vm.current.primaryFilters[i].toggle();
+            });
+
+            // RLS call must include both these filters
+            expect(fn).toHaveBeenLastCalledWith(
+                expect.arrayContaining([FilterKey.PeopleFilter, FilterKey.MentionsFilter]),
+            );
+        });
+
+        const testcases: Array<[string, { secondary: SecondaryFilters; filterKey: FilterKey }, string]> = [
+            [
+                "Mentions only",
+                { secondary: SecondaryFilters.MentionsOnly, filterKey: FilterKey.MentionsFilter },
+                "Unread",
+            ],
+            ["Invites only", { secondary: SecondaryFilters.InvitesOnly, filterKey: FilterKey.InvitesFilter }, "Unread"],
+            [
+                "Invites only",
+                { secondary: SecondaryFilters.InvitesOnly, filterKey: FilterKey.InvitesFilter },
+                "Favourites",
+            ],
+            [
+                "Low priority",
+                { secondary: SecondaryFilters.LowPriority, filterKey: FilterKey.LowPriorityFilter },
+                "Favourites",
+            ],
+        ];
+
+        describe.each(testcases)("For secondary filter: %s", (secondaryFilterName, secondary, primaryFilterName) => {
+            it(`should unapply incompatible primary filter that is already active: ${primaryFilterName}`, () => {
+                const { fn } = mockAndCreateRooms();
+                const { result: vm } = renderHook(() => useRoomListViewModel());
+
+                // Apply the primary filter
+                const i = vm.current.primaryFilters.findIndex((f) => f.name === primaryFilterName);
+                act(() => {
+                    vm.current.primaryFilters[i].toggle();
+                });
+
+                // Apply the secondary filter
+                act(() => {
+                    vm.current.activateSecondaryFilter(secondary.secondary);
+                });
+
+                // RLS call should only include the secondary filter
+                expect(fn).toHaveBeenLastCalledWith([secondary.filterKey]);
+                // Primary filter should have been unapplied
+                expect(vm.current.primaryFilters[i].active).toEqual(false);
+            });
+
+            it(`should hide incompatible primary filter: ${primaryFilterName}`, () => {
+                mockAndCreateRooms();
+                const { result: vm } = renderHook(() => useRoomListViewModel());
+
+                // Apply the secondary filter
+                act(() => {
+                    vm.current.activateSecondaryFilter(secondary.secondary);
+                });
+
+                // Incompatible primary filter must be hidden
+                expect(vm.current.primaryFilters.find((f) => f.name === primaryFilterName)).toBeUndefined();
+            });
         });
     });
 });

@@ -165,11 +165,11 @@ export default class VerificationShowSas extends React.Component<IProps, IState>
         } else {
             confirm = (
                 <div className="mx_VerificationShowSas_buttonRow">
-                    <AccessibleButton onClick={this.onDontMatchClick} kind="danger">
-                        {_t("encryption|verification|sas_no_match")}
-                    </AccessibleButton>
                     <AccessibleButton onClick={this.onMatchClick} kind="primary">
                         {_t("encryption|verification|sas_match")}
+                    </AccessibleButton>
+                    <AccessibleButton onClick={this.onDontMatchClick} kind="secondary">
+                        {_t("encryption|verification|sas_no_match")}
                     </AccessibleButton>
                 </div>
             );
