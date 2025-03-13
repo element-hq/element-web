@@ -13,6 +13,7 @@ import { selectHomeserver } from "../utils";
 import { type Credentials, type HomeserverInstance } from "../../plugins/homeserver";
 import { consentHomeserver } from "../../plugins/homeserver/synapse/consentHomeserver.ts";
 import { isDendrite } from "../../plugins/homeserver/dendrite";
+import { createBot } from "../crypto/utils.ts";
 
 // This test requires fixed credentials for the device signing keys below to work
 const username = "user1234";
@@ -257,6 +258,34 @@ test.describe("Login", () => {
                     await expect(h1).toBeVisible();
 
                     await expect(h1.locator(".mx_CompleteSecurity_skip")).toHaveCount(0);
+                });
+
+                test("Continues to show verification prompt after cancelling device verification", async ({
+                    page,
+                    homeserver,
+                    credentials,
+                }) => {
+                    // Create a different device which is cross-signed, meaning we need to verify this device
+                    await createBot(page, homeserver, credentials, true);
+
+                    // Wait to avoid homeserver rate limit on logins
+                    await page.waitForTimeout(100);
+
+                    // Load the page and see that we are asked to verify
+                    await page.goto("/#/welcome");
+                    await login(page, homeserver, credentials);
+                    let h1 = page.getByRole("heading", { name: "Verify this device", level: 1 });
+                    await expect(h1).toBeVisible();
+
+                    // Click "Verify with another device"
+                    await page.getByRole("button", { name: "Verify with another device" }).click();
+
+                    // Cancel the new dialog
+                    await page.getByRole("button", { name: "Close dialog" }).click();
+
+                    // Check that we are still being asked to verify
+                    h1 = page.getByRole("heading", { name: "Verify this device", level: 1 });
+                    await expect(h1).toBeVisible();
                 });
             });
         });
