@@ -1019,31 +1019,6 @@ describe("ElementCall", () => {
             roomSpy.mockRestore();
             addWidgetSpy.mockRestore();
         });
-
-        it("sends notify event on connect in a room with more than two members", async () => {
-            const sendEventSpy = jest.spyOn(room.client, "sendEvent");
-            ElementCall.create(room);
-            await callConnectProcedure(Call.get(room) as ElementCall);
-            expect(sendEventSpy).toHaveBeenCalledWith("!1:example.org", "org.matrix.msc4075.call.notify", {
-                "application": "m.call",
-                "call_id": "",
-                "m.mentions": { room: true, user_ids: [] },
-                "notify_type": "notify",
-            });
-        });
-        it("sends ring on create in a DM (two participants) room", async () => {
-            setRoomMembers(["@user:example.com", "@user2:example.com"]);
-
-            const sendEventSpy = jest.spyOn(room.client, "sendEvent");
-            ElementCall.create(room);
-            await callConnectProcedure(Call.get(room) as ElementCall);
-            expect(sendEventSpy).toHaveBeenCalledWith("!1:example.org", "org.matrix.msc4075.call.notify", {
-                "application": "m.call",
-                "call_id": "",
-                "m.mentions": { room: true, user_ids: [] },
-                "notify_type": "ring",
-            });
-        });
     });
 
     describe("instance in a video room", () => {

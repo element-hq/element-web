@@ -23,11 +23,9 @@ import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { NamespacedValue } from "matrix-js-sdk/src/NamespacedValue";
 import { type IWidgetApiRequest, type ClientWidgetApi, type IWidgetData } from "matrix-widget-api";
 import {
-    MatrixRTCSession,
+    type MatrixRTCSession,
     MatrixRTCSessionEvent,
-    type CallMembership,
     MatrixRTCSessionManagerEvents,
-    type ICallNotifyContent,
 } from "matrix-js-sdk/src/matrixrtc";
 
 import type EventEmitter from "events";
@@ -44,7 +42,6 @@ import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../stores/ActiveWidge
 import { getCurrentLanguage } from "../languageHandler";
 import { Anonymity, PosthogAnalytics } from "../PosthogAnalytics";
 import { UPDATE_EVENT } from "../stores/AsyncStore";
-import { getJoinedNonFunctionalMembers } from "../utils/room/getJoinedNonFunctionalMembers";
 import { isVideoRoom } from "../utils/video-rooms";
 import { FontWatcher } from "../settings/watchers/FontWatcher";
 import { type JitsiCallMemberContent, JitsiCallMemberEventType } from "../call-types";
@@ -858,31 +855,6 @@ export class ElementCall extends Call {
         ElementCall.createOrGetCallWidget(room.roomId, room.client, skipLobby, isVideoRoom(room));
     }
 
-    protected async sendCallNotify(): Promise<void> {
-        const room = this.room;
-        const existingOtherRoomCallMembers = MatrixRTCSession.callMembershipsForRoom(room).filter(
-            // filter all memberships where the application is m.call and the call_id is ""
-            (m) => {
-                const isRoomCallMember = m.application === "m.call" && m.callId === "";
-                const isThisDevice = m.deviceId === this.client.deviceId;
-                return isRoomCallMember && !isThisDevice;
-            },
-        );
-
-        const memberCount = getJoinedNonFunctionalMembers(room).length;
-        if (!isVideoRoom(room) && existingOtherRoomCallMembers.length === 0) {
-            // send ringing event
-            const content: ICallNotifyContent = {
-                "application": "m.call",
-                "m.mentions": { user_ids: [], room: true },
-                "notify_type": memberCount == 2 ? "ring" : "notify",
-                "call_id": "",
-            };
-
-            await room.client.sendEvent(room.roomId, EventType.CallNotify, content);
-        }
-    }
-
     protected async performConnection(
         audioInput: MediaDeviceInfo | null,
         videoInput: MediaDeviceInfo | null,
@@ -912,7 +884,6 @@ export class ElementCall extends Call {
                 false, // allow user to wait as long as they want (no timeout)
             );
         }
-        this.sendCallNotify();
     }
 
     protected async performDisconnection(): Promise<void> {
