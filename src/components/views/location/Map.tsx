@@ -6,10 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ReactNode, useContext, useEffect, useState } from "react";
+import React, { ReactNode, useContext, useEffect, useState } from "react";
 import classNames from "classnames";
 import * as maplibregl from "maplibre-gl";
-import { ClientEvent, type IClientWellKnown } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, IClientWellKnown } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -21,6 +21,11 @@ import { type Bounds } from "../../../utils/beacon/bounds";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import { _t } from "../../../languageHandler";
+import AnnotationSmartMarker from './AnnotationSmartMarker';
+import Annotation from './Annotation';
+import AnnotationDialog from "./AnnotationDialog";
+import { loadAnnotations, saveAnnotation, deleteAnnotation } from "../location/AnnotationPin";
+import { SdkContextClass } from "../../../contexts/SDKContext";
 
 const useMapWithStyle = ({
     id,
@@ -131,6 +136,14 @@ const onGeolocateError = (e: GeolocationPositionError): void => {
     });
 };
 
+interface ClickEvent {
+    point: {
+        x: number;
+        y: number;
+    };
+    originalEvent: MouseEvent; // Adjust based on your event structure
+}
+
 export interface MapProps {
     id: string;
     interactive?: boolean;
@@ -162,6 +175,77 @@ const MapComponent: React.FC<MapProps> = ({
     onClick,
 }) => {
     const { map, bodyId } = useMapWithStyle({ centerGeoUri, onError, id, interactive, bounds, allowGeolocate });
+    const [annotations, setAnnotations] = useState<Annotation[]>([]);  // Manage annotations state
+    const matrixClient = useContext(MatrixClientContext);
+    const roomId = SdkContextClass.instance.roomViewStore.getRoomId();
+
+    useEffect(() => {
+        console.log("Updated annotations:", annotations);
+    }, [annotations]);
+
+    useEffect(() => {
+        console.log("Current roomId:", roomId);
+        const fetchAnnotations = async () => {
+            if (!roomId || !matrixClient) {
+                return;
+            }
+            const annotations = await loadAnnotations(roomId, matrixClient);
+            setAnnotations(annotations);
+        };
+        fetchAnnotations(); 
+    }, [roomId, matrixClient]);
+
+    const handleSaveAnnotation = (annotation: Annotation) => {
+        setAnnotations(prevAnnotations => {
+            const updatedAnnotations = [...prevAnnotations, annotation];
+    
+            if (!roomId || !matrixClient) {
+                return prevAnnotations;
+            }
+            // Send the updated annotations to the server without awaiting
+            saveAnnotation(roomId, matrixClient, updatedAnnotations);
+            console.log("Annotation saved successfully!");
+    
+            return updatedAnnotations; // Return the updated state
+        });
+    };
+
+    const handleDeleteAnnotation = (geoUri: string) => {
+        setAnnotations(prevAnnotations => {
+            // Create a new array with the annotation removed
+            const updatedAnnotations = prevAnnotations.filter(annotation => annotation.geoUri !== geoUri);
+    
+            if (!roomId || !matrixClient) {
+                return prevAnnotations;
+            }
+            // Send the updated annotations to the server without awaiting
+            deleteAnnotation(roomId, matrixClient, geoUri, updatedAnnotations);
+            console.log("Annotation deleted successfully!");
+    
+            return updatedAnnotations; // Return the updated state
+        });
+    };
+
+    useEffect(() => {
+        if (map) {
+            const handleMapClick = (event: any) => {
+                const isAltClick = event.originalEvent.altKey; // Check if Alt key is pressed
+
+                if (isAltClick) {
+                    openDialog(event);
+                }
+
+                onClick?.();
+            };
+
+            map.on('click', handleMapClick);
+
+            // Cleanup the event listener on component unmount
+            return () => {
+                map.off('click', handleMapClick);
+            };
+        }
+    }, [map, onClick]);
 
     const onMapClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
         // Eat click events when clicking the attribution button
@@ -173,9 +257,50 @@ const MapComponent: React.FC<MapProps> = ({
         onClick?.();
     };
 
+    const openDialog = (event: ClickEvent) => {
+        Modal.createDialog<React.FC<any>>(AnnotationDialog, {
+            onSubmit: (title: string, color: string) => {
+                handleDialogSubmit(title, color, event);
+            },
+            onFinished: () => {
+                // Handle dialog close if necessary
+            },
+        });
+    };
+
+    const handleDialogSubmit = (title: string, color: string, clickEvent: ClickEvent) => {
+        if (clickEvent && map) {
+            const { lng, lat } = map.unproject([clickEvent.point.x, clickEvent.point.y]);
+
+            const newAnnotation = {
+                geoUri: `geo:${lat},${lng}`, // Format Geo URI
+                body: title,
+                color: color, // Include color in the annotation
+            };
+
+            handleSaveAnnotation?.(newAnnotation);
+        }
+    };
+
+    const onDelete = (key: string) => {
+        handleDeleteAnnotation?.(key);
+    };
+
     return (
         <div className={classNames("mx_Map", className)} id={bodyId} onClick={onMapClick}>
             {!!children && !!map && children({ map })}
+
+            {map && annotations && annotations.map((annotation) => (
+                <AnnotationSmartMarker
+                    id={annotation.geoUri}
+                    key={annotation.geoUri}
+                    map={map}
+                    useColor={annotation.color}
+                    geoUri={annotation.geoUri} // Format Geo URI
+                    tooltip={annotation.body || "."} // Pass the title as a tooltip
+                    onDelete={onDelete}
+                />
+            ))}
         </div>
     );
 };
