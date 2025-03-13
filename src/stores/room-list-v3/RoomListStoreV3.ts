@@ -93,8 +93,21 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     }
 
     /**
-     * Re-sort the list of rooms by alphabetic order.
+     * Resort the list of rooms using a different algorithm.
+     * @param algorithm The sorting algorithm to use.
      */
+    public resort(algorithm: SortingAlgorithm): void {
+        if (!this.roomSkipList) throw new Error("Cannot resort room list before skip list is created.");
+        if (!this.matrixClient) throw new Error("Cannot resort room list without matrix client.");
+        if (this.roomSkipList.activeSortAlgorithm === algorithm) return;
+        const sorter =
+            algorithm === SortingAlgorithm.Alphabetic
+                ? new AlphabeticSorter()
+                : new RecencySorter(this.matrixClient.getSafeUserId());
+        this.roomSkipList.useNewSorter(sorter, this.getRooms());
+        this.emit(LISTS_UPDATE_EVENT);
+        SettingsStore.setValue("RoomList.preferredSorting", null, SettingLevel.DEVICE, algorithm);
+    }
 
     /**
      * Currently active sorting algorithm if the store is ready or undefined otherwise.
