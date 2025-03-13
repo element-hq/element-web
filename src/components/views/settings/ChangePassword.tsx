@@ -10,11 +10,10 @@ import React from "react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import AccessibleButton, { type AccessibleButtonKind } from "../elements/AccessibleButton";
 import withValidation, { type IFieldState, type IValidationResult } from "../elements/Validation";
 import { UserFriendlyError, _t, _td } from "../../../languageHandler";
 import { PASSWORD_MIN_SCORE } from "../auth/RegistrationForm";
-import { Root, Field as CpdField, PasswordInput, Label, InlineSpinner, HelpMessage } from "@vector-im/compound-web";
+import { Root, Field as CpdField, PasswordInput, Label, InlineSpinner, HelpMessage, Button } from "@vector-im/compound-web";
 import PassphraseField from "../auth/PassphraseField";
 
 const FIELD_OLD_PASSWORD = "field_old_password";
@@ -31,8 +30,6 @@ enum Phase {
 interface IProps {
     onFinished: (outcome: { didSetEmail?: boolean }) => void;
     onError: (error: Error) => void;
-    buttonClassName?: string;
-    buttonKind?: AccessibleButtonKind;
     buttonLabel?: string;
 }
 
@@ -250,25 +247,24 @@ export default class ChangePassword extends React.Component<IProps, IState> {
             activeElement.blur();
         }
 
+        // Run all fields with stricter validation that no longer allows empty
+        // values for required fields.
+        await this.onOldPasswordValidate({
+            value: this[FIELD_OLD_PASSWORD]?.value ?? null,
+            allowEmpty: false,
+            focused: true,
+        });
+        await this.onNewPasswordConfirmValidate({
+            value: this[FIELD_NEW_PASSWORD_CONFIRM]?.value ?? null,
+            allowEmpty: false,
+            focused: true,
+        });
+
         const fieldIDsInDisplayOrder: FieldType[] = [
             FIELD_OLD_PASSWORD,
             FIELD_NEW_PASSWORD,
             FIELD_NEW_PASSWORD_CONFIRM,
         ];
-
-        // Run all fields with stricter validation that no longer allows empty
-        // values for required fields.
-        for (const fieldID of fieldIDsInDisplayOrder) {
-            const field = this[fieldID];
-            if (!field) {
-                continue;
-            }
-            // We must wait for these validations to finish before queueing
-            // up the setState below so our setState goes in the queue after
-            // all the setStates from these validate calls (that's how we
-            // know they've finished).
-            await field.validate({ allowEmpty: false });
-        }
 
         // Validation and state updates are async, so we need to wait for them to complete
         // first. Queue a `setState` callback and wait for it to resolve.
@@ -287,7 +283,8 @@ export default class ChangePassword extends React.Component<IProps, IState> {
         // Focus the first invalid field and show feedback in the stricter mode
         // that no longer allows empty values for required fields.
         invalidField.focus();
-        invalidField.validate({ allowEmpty: false, focused: true });
+        // TODO: HMM
+        // invalidField.validate({ allowEmpty: false, focused: true });
         return false;
     }
 
@@ -305,8 +302,6 @@ export default class ChangePassword extends React.Component<IProps, IState> {
     }
 
     public render(): React.ReactNode {
-        const buttonClassName = this.props.buttonClassName;
-
         const { fieldValid, phase } = this.state;
 
         switch (phase) {
@@ -317,7 +312,7 @@ export default class ChangePassword extends React.Component<IProps, IState> {
                             <Label>
                                 {_t("auth|change_password_current_label")}
                             </Label>
-                            <PasswordInput ref={(field) => (this[FIELD_OLD_PASSWORD] = field)} data-invalid={fieldValid[FIELD_OLD_PASSWORD]?.valid} value={this.state.oldPassword} onChange={this.onChangeOldPassword} />
+                            <PasswordInput ref={(field) => (this[FIELD_OLD_PASSWORD] = field)} data-invalid={fieldValid[FIELD_OLD_PASSWORD]?.valid === false ? true : undefined} value={this.state.oldPassword} onChange={this.onChangeOldPassword} />
                             {fieldValid[FIELD_OLD_PASSWORD]?.feedback && <HelpMessage>
                                 {fieldValid[FIELD_OLD_PASSWORD]?.feedback}
                             </HelpMessage>}
@@ -337,18 +332,20 @@ export default class ChangePassword extends React.Component<IProps, IState> {
                             <Label>
                                 {_t("auth|change_password_confirm_label")}
                             </Label>
-                            <PasswordInput autoComplete="new-password" ref={(field) => (this[FIELD_NEW_PASSWORD_CONFIRM] = field)} data-invalid={fieldValid[FIELD_NEW_PASSWORD_CONFIRM]} value={this.state.newPasswordConfirm} onChange={this.onChangeNewPasswordConfirm} />
+                            <PasswordInput autoComplete="new-password" ref={(field) => (this[FIELD_NEW_PASSWORD_CONFIRM] = field)} data-invalid={fieldValid[FIELD_NEW_PASSWORD_CONFIRM]?.valid === false ? true : undefined} value={this.state.newPasswordConfirm} onChange={this.onChangeNewPasswordConfirm} />
                             {fieldValid[FIELD_NEW_PASSWORD_CONFIRM]?.feedback && <HelpMessage>
                                 {fieldValid[FIELD_NEW_PASSWORD_CONFIRM]?.feedback}
                             </HelpMessage>}
                         </CpdField>
-                        <AccessibleButton
-                            className={buttonClassName}
-                            kind={this.props.buttonKind}
+                        <Button
+                            disabled={!this.allFieldsValid()}
+                            style={{width: "fit-content"}}
                             onClick={this.onClickChange}
+                            kind="primary"
+                            size="sm"
                         >
                             {this.props.buttonLabel || _t("auth|change_password_action")}
-                        </AccessibleButton>
+                        </Button>
                     </Root>
                 );
             case Phase.Uploading:

@@ -52,8 +52,8 @@ const DEFAULT_PROPS = {
     labelAllowedButUnsafe: _td("auth|password_field_weak_label"),
 };
 
-const NewPassphraseField: React.FC<IProps> = (props) => {
-    const { labelEnterPassword, userInputs, minScore, label, labelStrongPassword, labelAllowedButUnsafe, className, id, fieldRef, autoFocus} = {...DEFAULT_PROPS, ...props};
+const PassphraseField: React.FC<IProps> = (props) => {
+    const { labelEnterPassword, userInputs, minScore, label, labelStrongPassword, labelAllowedButUnsafe, className, id, fieldRef, autoFocus, onChange, onValidate} = {...DEFAULT_PROPS, ...props};
     const validateFn = useMemo(() => withValidation<{}, ZxcvbnResult | null>({
         description: function (complexity) {
             const score = complexity ? complexity.score : 0;
@@ -103,12 +103,14 @@ const NewPassphraseField: React.FC<IProps> = (props) => {
     const [feedback, setFeedback]= useState<string|JSX.Element>();
 
     const onInputChange = useCallback<React.ChangeEventHandler<HTMLInputElement>>((ev) => {
+        onChange(ev);
         validateFn({
             value: ev.target.value,
             focused: true,
         }).then((v) => {
             setFeedback(v.feedback);
-        })
+            onValidate?.(v);
+        });
     }, [validateFn]);
 
 
@@ -119,4 +121,4 @@ const NewPassphraseField: React.FC<IProps> = (props) => {
     </Field>
 }
 
-export default NewPassphraseField;
+export default PassphraseField;
