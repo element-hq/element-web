@@ -31,6 +31,8 @@ import { RoomsFilter } from "./skip-list/filters/RoomsFilter";
 import { InvitesFilter } from "./skip-list/filters/InvitesFilter";
 import { MentionsFilter } from "./skip-list/filters/MentionsFilter";
 import { LowPriorityFilter } from "./skip-list/filters/LowPriorityFilter";
+import { type Sorter, SortingAlgorithm } from "./skip-list/sorters";
+import { SettingLevel } from "../../settings/SettingLevel";
 
 /**
  * These are the filters passed to the room skip list.
@@ -118,7 +120,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
 
     protected async onReady(): Promise<any> {
         if (this.roomSkipList?.initialized || !this.matrixClient) return;
-        const sorter = new RecencySorter(this.matrixClient.getSafeUserId());
+        const sorter = this.getPreferredSorter(this.matrixClient.getSafeUserId());
         this.roomSkipList = new RoomSkipList(sorter, FILTERS);
         await SpaceStore.instance.storeReadyPromise;
         const rooms = this.getRooms();
@@ -215,6 +217,23 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                 this.addRoomAndEmit(payload.room);
                 break;
             }
+        }
+    }
+
+    /**
+     * Create the correct sorter depending on the persisted user preference.
+     * @param myUserId The user-id of our user.
+     * @returns Sorter object that can be passed to the skip list.
+     */
+    private getPreferredSorter(myUserId: string): Sorter {
+        const preferred = SettingsStore.getValue("RoomList.preferredSorting");
+        switch (preferred) {
+            case SortingAlgorithm.Alphabetic:
+                return new AlphabeticSorter();
+            case SortingAlgorithm.Recency:
+                return new RecencySorter(myUserId);
+            default:
+                throw new Error(`Got unknown sort preference from RoomList.preferredSorting setting`);
         }
     }
 
