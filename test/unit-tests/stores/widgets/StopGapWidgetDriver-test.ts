@@ -21,7 +21,6 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import {
     Widget,
-    MatrixWidgetType,
     WidgetKind,
     type WidgetDriver,
     type ITurnServer,
@@ -44,6 +43,7 @@ import { ModuleRunner } from "../../../../src/modules/ModuleRunner";
 import dis from "../../../../src/dispatcher/dispatcher";
 import Modal from "../../../../src/Modal";
 import SettingsStore from "../../../../src/settings/SettingsStore";
+import { WidgetType } from "../../../../src/widgets/WidgetType.ts";
 
 describe("StopGapWidgetDriver", () => {
     let client: MockedObject<MatrixClient>;
@@ -79,7 +79,7 @@ describe("StopGapWidgetDriver", () => {
             new Widget({
                 id: "group_call",
                 creatorUserId: "@alice:example.org",
-                type: MatrixWidgetType.Custom,
+                type: WidgetType.CALL.preferred,
                 url: "https://call.element.io",
             }),
             WidgetKind.Room,

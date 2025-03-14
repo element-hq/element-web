@@ -32,7 +32,6 @@ import {
 
 import type EventEmitter from "events";
 import type { IApp } from "../stores/WidgetStore";
-import SdkConfig, { DEFAULTS } from "../SdkConfig";
 import SettingsStore from "../settings/SettingsStore";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../MediaDeviceHandler";
 import { timeout } from "../utils/promise";
@@ -49,6 +48,7 @@ import { getJoinedNonFunctionalMembers } from "../utils/room/getJoinedNonFunctio
 import { isVideoRoom } from "../utils/video-rooms";
 import { FontWatcher } from "../settings/watchers/FontWatcher";
 import { type JitsiCallMemberContent, JitsiCallMemberEventType } from "../call-types";
+import SdkConfig from "../SdkConfig.ts";
 
 const TIMEOUT_MS = 16000;
 
@@ -676,6 +676,12 @@ export class ElementCall extends Call {
     }
 
     private static generateWidgetUrl(client: MatrixClient, roomId: string): URL {
+        const baseUrl = window.location.href;
+        let url = new URL("./widgets/element-call/index.html#", baseUrl); // this strips hash fragment from baseUrl
+
+        const elementCallUrl = SettingsStore.getValue("Developer.elementCallUrl");
+        if (elementCallUrl) url = new URL(elementCallUrl);
+
         const accountAnalyticsData = client.getAccountData(PosthogAnalytics.ANALYTICS_EVENT_TYPE);
         // The analyticsID is passed directly to element call (EC) since this codepath is only for EC and no other widget.
         // We really don't want the same analyticID's for the EC and EW posthog instances (Data on posthog should be limited/anonymized as much as possible).
@@ -701,6 +707,9 @@ export class ElementCall extends Call {
             fontScale: (FontWatcher.getRootFontSize() / FontWatcher.getBrowserDefaultFontSize()).toString(),
             theme: "$org.matrix.msc2873.client_theme",
             analyticsID,
+            rageshakeSubmitUrl: SdkConfig.get("bug_report_endpoint_url") ?? "",
+            posthogApiHost: SdkConfig.get("posthog")?.api_host ?? "",
+            posthogApiKey: SdkConfig.get("posthog")?.project_api_key ?? "",
         });
 
         if (SettingsStore.getValue("fallbackICEServerAllowed")) params.append("allowIceFallback", "true");
@@ -720,8 +729,6 @@ export class ElementCall extends Call {
                 .forEach((font) => params.append("font", font));
         }
 
-        const url = new URL(SdkConfig.get("element_call").url ?? DEFAULTS.element_call.url!);
-        url.pathname = "/room";
         const replacedUrl = params.toString().replace(/%24/g, "$");
         url.hash = `#?${replacedUrl}`;
         return url;
