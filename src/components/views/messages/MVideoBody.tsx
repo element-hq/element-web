@@ -21,6 +21,9 @@ import MFileBody from "./MFileBody";
 import { type ImageSize, suggestedSize as suggestedVideoSize } from "../../../settings/enums/ImageSize";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import MediaProcessingError from "./shared/MediaProcessingError";
+import { SettingLevel } from "../../../settings/SettingLevel";
+import HiddenMediaPlaceholder from "./HiddenMediaPlaceholder";
+import { Settings } from "../../../settings/Settings";
 
 interface IState {
     decryptedUrl: string | null;
@@ -30,6 +33,7 @@ interface IState {
     fetchingData: boolean;
     posterLoading: boolean;
     blurhashUrl: string | null;
+    showPreview: boolean;
 }
 
 export default class MVideoBody extends React.PureComponent<IBodyProps, IState> {
@@ -38,6 +42,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
 
     private videoRef = React.createRef<HTMLVideoElement>();
     private sizeWatcher?: string;
+    private showWatcher?: string;
 
     public state = {
         fetchingData: false,
@@ -47,7 +52,21 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
         error: null,
         posterLoading: false,
         blurhashUrl: null,
+        // This setting is for images but we also use it for video previews.
+        showPreview: SettingsStore.getValue("showImages"),
     };
+
+    private show = (): void => {
+        const eventId = this.props.mxEvent.getId();
+        if (!eventId) {
+            return;
+        }
+        SettingsStore.setValue("showMediaEventIds", null, SettingLevel.DEVICE, {
+            ...SettingsStore.getValue("showMediaEventIds"),
+            [eventId]: true,
+        });
+    }
+    
 
     private getContentUrl(): string | undefined {
         const content = this.props.mxEvent.getContent<MediaEventContent>();
@@ -120,11 +139,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
         }
     }
 
-    public async componentDidMount(): Promise<void> {
-        this.sizeWatcher = SettingsStore.watchSetting("Images.size", null, () => {
-            this.forceUpdate(); // we don't really have a reliable thing to update, so just update the whole thing
-        });
-
+    private async downloadVideo() {
         try {
             this.loadBlurhash();
         } catch (e) {
@@ -174,8 +189,38 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
         }
     }
 
+    public calculateVisible(setting: Settings["showMediaEventIds"]["default"]): void {
+        const mediaEventIdSetting = setting[this.props.mxEvent.getId()!];
+        const showPreview =
+            mediaEventIdSetting === true || (SettingsStore.getValue("showImages") && mediaEventIdSetting !== false);
+        this.setState({ showPreview });
+        if (showPreview) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.downloadVideo();
+        }
+    }
+
+    public async componentDidMount(): Promise<void> {
+        this.calculateVisible(SettingsStore.getValue("showMediaEventIds"));
+        this.sizeWatcher = SettingsStore.watchSetting("Images.size", null, () => {
+            this.forceUpdate(); // we don't really have a reliable thing to update, so just update the whole thing
+        });
+        this.showWatcher = SettingsStore.watchSetting("showMediaEventIds", null, (_name, _rId, _level, value) => {
+            this.calculateVisible(value);
+        });
+
+
+        if (!this.state.showPreview) {
+            // Do not attempt to load the media if we do not want to show previews here.
+            return;
+        }
+
+        await this.downloadVideo();
+    }
+
     public componentWillUnmount(): void {
         SettingsStore.unwatchSetting(this.sizeWatcher);
+        SettingsStore.unwatchSetting(this.showWatcher);
     }
 
     private videoOnPlay = async (): Promise<void> => {
@@ -241,6 +286,17 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
                 <MediaProcessingError className="mx_MVideoBody">
                     {_t("timeline|m.video|error_decrypting")}
                 </MediaProcessingError>
+            );
+        }
+
+        // Users may not even want to show a poster, so instead show a preview button.
+        if (!this.state.showPreview) {
+            return (
+                <span className="mx_MVideoBody">
+                    <div className="mx_MVideoBody_container" style={{ width: maxWidth, height: maxHeight, aspectRatio }}>
+                        <HiddenMediaPlaceholder onClick={() => this.show()} kind="m.video" maxWidth={maxWidth} />
+                    </div>
+                </span>
             );
         }
 

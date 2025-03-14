@@ -35,6 +35,7 @@ import MediaProcessingError from "./shared/MediaProcessingError";
 import { DecryptError, DownloadError } from "../../../utils/DecryptFile";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import { type Settings } from "../../../settings/Settings";
+import HiddenMediaPlaceholder from "./HiddenMediaPlaceholder";
 
 enum Placeholder {
     NoImage,
@@ -80,7 +81,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         placeholder: Placeholder.NoImage,
     };
 
-    protected showImage(): void {
+    protected showImage = (): void => {
         const eventId = this.props.mxEvent.getId();
         if (!eventId) {
             return;
@@ -442,7 +443,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
             if (!this.state.loadedImageDimensions) {
                 let imageElement: JSX.Element;
                 if (!this.state.showImage) {
-                    imageElement = <HiddenImagePlaceholder />;
+                    imageElement = <HiddenMediaPlaceholder onClick={this.showImage} kind="m.image"/>;
                 } else {
                     imageElement = (
                         <img
@@ -512,7 +513,9 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         }
 
         if (!this.state.showImage) {
-            img = <HiddenImagePlaceholder maxWidth={maxWidth} />;
+            img = <div style={{width: maxWidth, height: maxHeight}}>
+                <HiddenMediaPlaceholder onClick={this.showImage} kind="m.image" />;
+            </div>;
             showPlaceholder = false; // because we're hiding the image, so don't show the placeholder.
         }
 
@@ -568,7 +571,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
                 </div>
 
                 {/* HACK: This div fills out space while the image loads, to prevent scroll jumps */}
-                {!this.props.forExport && !this.state.imgLoaded && (
+                {!this.props.forExport && !this.state.imgLoaded && !placeholder && (
                     <div style={{ height: maxHeight, width: maxWidth }} />
                 )}
             </div>
@@ -600,12 +603,6 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
                 >
                     {children}
                 </a>
-            );
-        } else if (!this.state.showImage) {
-            return (
-                <div role="button" onClick={this.onClick}>
-                    {children}
-                </div>
             );
         }
         return children;
@@ -680,24 +677,6 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
             <div className="mx_MImageBody">
                 {thumbnail}
                 {fileBody}
-            </div>
-        );
-    }
-}
-
-interface PlaceholderIProps {
-    maxWidth?: number;
-}
-
-export class HiddenImagePlaceholder extends React.PureComponent<PlaceholderIProps> {
-    public render(): React.ReactNode {
-        const maxWidth = this.props.maxWidth ? this.props.maxWidth + "px" : null;
-        return (
-            <div className="mx_HiddenImagePlaceholder" style={{ maxWidth: `min(100%, ${maxWidth}px)` }}>
-                <div className="mx_HiddenImagePlaceholder_button">
-                    <span className="mx_HiddenImagePlaceholder_eye" />
-                    <span>{_t("timeline|m.image|show_image")}</span>
-                </div>
             </div>
         );
     }
