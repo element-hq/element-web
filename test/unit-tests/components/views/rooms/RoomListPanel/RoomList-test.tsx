@@ -7,8 +7,7 @@
 
 import React from "react";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { render, screen, waitFor } from "jest-matrix-react";
-import userEvent from "@testing-library/user-event";
+import { render } from "jest-matrix-react";
 
 import { mkRoom, stubClient } from "../../../../../test-utils";
 import { type RoomListViewState } from "../../../../../../src/components/viewmodels/roomlist/RoomListViewModel";
@@ -31,7 +30,6 @@ describe("<RoomList />", () => {
         const rooms = Array.from({ length: 10 }, (_, i) => mkRoom(matrixClient, `room${i}`));
         vm = {
             rooms,
-            openRoom: jest.fn(),
             primaryFilters: [],
             activateSecondaryFilter: () => {},
             activeSecondaryFilter: SecondaryFilters.AllActivity,
@@ -47,16 +45,5 @@ describe("<RoomList />", () => {
     it("should render a room list", () => {
         const { asFragment } = render(<RoomList vm={vm} />);
         expect(asFragment()).toMatchSnapshot();
-    });
-
-    it("should open the room", async () => {
-        const user = userEvent.setup();
-
-        render(<RoomList vm={vm} />);
-        await waitFor(async () => {
-            expect(screen.getByRole("gridcell", { name: "Open room room9" })).toBeVisible();
-            await user.click(screen.getByRole("gridcell", { name: "Open room room9" }));
-        });
-        expect(vm.openRoom).toHaveBeenCalledWith(vm.rooms[9].roomId);
     });
 });

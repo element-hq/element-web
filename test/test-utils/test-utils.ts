@@ -606,7 +606,7 @@ export function mkStubRoom(
         getState: (): RoomState | undefined => undefined,
     } as unknown as EventTimeline;
     return {
-        canInvite: jest.fn(),
+        canInvite: jest.fn().mockReturnValue(false),
         client,
         findThreadForEvent: jest.fn(),
         createThreadsTimelineSets: jest.fn().mockReturnValue(new Promise(() => {})),
