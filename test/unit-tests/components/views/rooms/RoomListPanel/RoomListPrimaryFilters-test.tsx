@@ -12,6 +12,7 @@ import userEvent from "@testing-library/user-event";
 import { type RoomListViewState } from "../../../../../../src/components/viewmodels/roomlist/RoomListViewModel";
 import { SecondaryFilters } from "../../../../../../src/components/viewmodels/roomlist/useFilteredRooms";
 import { RoomListPrimaryFilters } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomListPrimaryFilters";
+import { SortOption } from "../../../../../../src/components/viewmodels/roomlist/useSorter";
 
 describe("<RoomListPrimaryFilters />", () => {
     let vm: RoomListViewState;
@@ -26,6 +27,8 @@ describe("<RoomListPrimaryFilters />", () => {
             ],
             activateSecondaryFilter: () => {},
             activeSecondaryFilter: SecondaryFilters.AllActivity,
+            sort: jest.fn(),
+            activeSortOption: SortOption.Activity,
         };
     });
 

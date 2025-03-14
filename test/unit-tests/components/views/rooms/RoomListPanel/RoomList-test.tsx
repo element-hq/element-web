@@ -15,6 +15,7 @@ import { type RoomListViewState } from "../../../../../../src/components/viewmod
 import { RoomList } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomList";
 import DMRoomMap from "../../../../../../src/utils/DMRoomMap";
 import { SecondaryFilters } from "../../../../../../src/components/viewmodels/roomlist/useFilteredRooms";
+import { SortOption } from "../../../../../../src/components/viewmodels/roomlist/useSorter";
 
 describe("<RoomList />", () => {
     let matrixClient: MatrixClient;
@@ -34,6 +35,8 @@ describe("<RoomList />", () => {
             primaryFilters: [],
             activateSecondaryFilter: () => {},
             activeSecondaryFilter: SecondaryFilters.AllActivity,
+            sort: jest.fn(),
+            activeSortOption: SortOption.Activity,
         };
 
         // Needed to render a room list cell
