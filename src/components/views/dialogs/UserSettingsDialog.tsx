@@ -52,6 +52,7 @@ interface IProps {
     showMsc4108QrCode?: boolean;
     /**
      * If true, the flow for a user to reset their encryption will be shown. initialTabId must be UserTab.Encryption.
+     * If false or undefined, show the tab as normal.
      */
     showResetIdentity?: boolean;
     sdkContext: SdkContextClass;
