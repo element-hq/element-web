@@ -57,6 +57,7 @@ describe("<MImageBody/>", () => {
         },
     );
     const encryptedMediaEvent = new MatrixEvent({
+        event_id: "$foo:bar",
         room_id: "!room:server",
         sender: userId,
         type: EventType.RoomMessage,
@@ -163,7 +164,6 @@ describe("<MImageBody/>", () => {
 
             fireEvent.click(screen.getByRole("button"));
 
-            // image fetched after clicking show image
             expect(fetchMock).toHaveFetched(url);
 
             // spinner while downloading image

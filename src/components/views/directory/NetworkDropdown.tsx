@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { without } from "lodash";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback } from "react";
 import { MatrixError } from "matrix-js-sdk/src/matrix";
 
 import { MenuItemRadio } from "../../../accessibility/context_menu/MenuItemRadio";
@@ -16,7 +16,6 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Modal from "../../../Modal";
 import SdkConfig from "../../../SdkConfig";
 import { SettingLevel } from "../../../settings/SettingLevel";
-import SettingsStore from "../../../settings/SettingsStore";
 import { type Protocols } from "../../../utils/DirectoryUtils";
 import {
     type AdditionalOptionsProps,
@@ -26,7 +25,7 @@ import {
 import TextInputDialog from "../dialogs/TextInputDialog";
 import AccessibleButton from "../elements/AccessibleButton";
 import withValidation from "../elements/Validation";
-import { type SettingKey, type Settings } from "../../../settings/Settings.tsx";
+import { useSettingsValueWithSetter } from "../../../hooks/useSettings.ts";
 
 const SETTING_NAME = "room_directory_servers";
 
@@ -67,56 +66,6 @@ const validServer = withValidation<undefined, { error?: unknown }>({
     ],
     memoize: true,
 });
-
-function useSettingsValueWithSetter<S extends SettingKey>(
-    settingName: S,
-    level: SettingLevel,
-    roomId: string | null,
-    excludeDefault: true,
-): [Settings[S]["default"] | undefined, (value: Settings[S]["default"]) => Promise<void>];
-function useSettingsValueWithSetter<S extends SettingKey>(
-    settingName: S,
-    level: SettingLevel,
-    roomId?: string | null,
-    excludeDefault?: false,
-): [Settings[S]["default"], (value: Settings[S]["default"]) => Promise<void>];
-function useSettingsValueWithSetter<S extends SettingKey>(
-    settingName: S,
-    level: SettingLevel,
-    roomId: string | null = null,
-    excludeDefault = false,
-): [Settings[S]["default"] | undefined, (value: Settings[S]["default"]) => Promise<void>] {
-    const [value, setValue] = useState(
-        // XXX: This seems naff but is needed to convince TypeScript that the overload is fine
-        excludeDefault
-            ? SettingsStore.getValue(settingName, roomId, excludeDefault)
-            : SettingsStore.getValue(settingName, roomId, excludeDefault),
-    );
-    const setter = useCallback(
-        async (value: Settings[S]["default"]): Promise<void> => {
-            setValue(value);
-            SettingsStore.setValue(settingName, roomId, level, value);
-        },
-        [level, roomId, settingName],
-    );
-
-    useEffect(() => {
-        const ref = SettingsStore.watchSetting(settingName, roomId, () => {
-            setValue(
-                // XXX: This seems naff but is needed to convince TypeScript that the overload is fine
-                excludeDefault
-                    ? SettingsStore.getValue(settingName, roomId, excludeDefault)
-                    : SettingsStore.getValue(settingName, roomId, excludeDefault),
-            );
-        });
-        // clean-up
-        return () => {
-            SettingsStore.unwatchSetting(ref);
-        };
-    }, [settingName, roomId, excludeDefault]);
-
-    return [value, setter];
-}
 
 interface ServerList {
     allServers: string[];
