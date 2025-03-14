@@ -42,7 +42,14 @@ export function RoomListHeaderView(): JSX.Element {
                 <h1 title={vm.title}>{vm.title}</h1>
                 {vm.displaySpaceMenu && <SpaceMenu vm={vm} />}
             </Flex>
-            {vm.displayComposeMenu && <ComposeMenu vm={vm} />}
+            {/* If we don't display the compose menu, it means that the user can only send DM */}
+            {vm.displayComposeMenu ? (
+                <ComposeMenu vm={vm} />
+            ) : (
+                <IconButton aria-label={_t("action|new_message")} onClick={(e) => vm.createChatRoom(e.nativeEvent)}>
+                    <ComposeIcon />
+                </IconButton>
+            )}
         </Flex>
     );
 }
