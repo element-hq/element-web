@@ -4060,7 +4060,7 @@
         "error_need_to_be_logged_in": "Du musst angemeldet sein.",
         "error_unable_start_audio_stream_description": "Audiostream kann nicht gestartet werden.",
         "error_unable_start_audio_stream_title": "Livestream konnte nicht gestartet werden",
-        "modal_data_warning": "Daten auf diesem Bildschirm werden mit %(widgetDomain)s geteilt",
+        "modal_data_warning": "Die unten aufgeführten Daten werden mit %(widgetDomain)s geteilt.",
         "modal_title_default": "Modales Widget",
         "no_name": "Unbekannte App",
         "open_id_permissions_dialog": {

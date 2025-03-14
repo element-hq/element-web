@@ -408,6 +408,9 @@
         "downloading_logs": "Laster ned logger",
         "error_empty": "Fortell oss hva som gikk galt, eller bedre, opprett et GitHub-problem som beskriver problemet.",
         "failed_download_logs": "Kunne ikke laste ned feilsøkingslogger: ",
+        "failed_send_logs_causes": {
+            "disallowed_app": "Feilrapporten din ble avvist. Rageshake-serveren støtter ikke denne applikasjonen."
+        },
         "github_issue": "Github-saksrapport",
         "introduction": "Hvis du har sendt inn en feil via GitHub, kan feilsøkingslogger hjelpe oss med å spore opp problemet. ",
         "log_request": "For å hjelpe oss med å forhindre dette i fremtiden, vennligst <a>send oss loggfiler</a>.",
@@ -4059,7 +4062,7 @@
         "error_need_to_be_logged_in": "Du må være logget inn.",
         "error_unable_start_audio_stream_description": "Kan ikke starte lydstrømming.",
         "error_unable_start_audio_stream_title": "Kan ikke starte livestream",
-        "modal_data_warning": "Data på denne skjermen deles med %(widgetDomain)s",
+        "modal_data_warning": "Dataene nedenfor deles med %(widgetDomain)s",
         "modal_title_default": "Modal Widget",
         "no_name": "Ukjent app",
         "open_id_permissions_dialog": {

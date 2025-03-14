@@ -4095,7 +4095,7 @@
         "error_need_to_be_logged_in": "You need to be logged in.",
         "error_unable_start_audio_stream_description": "Unable to start audio streaming.",
         "error_unable_start_audio_stream_title": "Failed to start livestream",
-        "modal_data_warning": "Data on this screen is shared with %(widgetDomain)s",
+        "modal_data_warning": "The data below is shared with %(widgetDomain)s",
         "modal_title_default": "Modal Widget",
         "no_name": "Unknown App",
         "open_id_permissions_dialog": {
