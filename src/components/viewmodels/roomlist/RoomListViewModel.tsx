@@ -12,6 +12,7 @@ import type { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPaylo
 import dispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { type PrimaryFilter, type SecondaryFilters, useFilteredRooms } from "./useFilteredRooms";
+import { type SortOption, useSorter } from "./useSorter";
 
 export interface RoomListViewState {
     /**
@@ -39,6 +40,16 @@ export interface RoomListViewState {
      * The currently active secondary filter.
      */
     activeSecondaryFilter: SecondaryFilters;
+
+    /**
+     * Change the sort order of the room-list.
+     */
+    sort: (option: SortOption) => void;
+
+    /**
+     * The currently active sort option.
+     */
+    activeSortOption: SortOption;
 }
 
 /**
@@ -47,6 +58,7 @@ export interface RoomListViewState {
  */
 export function useRoomListViewModel(): RoomListViewState {
     const { primaryFilters, rooms, activateSecondaryFilter, activeSecondaryFilter } = useFilteredRooms();
+    const { activeSortOption, sort } = useSorter();
 
     const openRoom = useCallback((roomId: string): void => {
         dispatcher.dispatch<ViewRoomPayload>({
@@ -62,5 +74,7 @@ export function useRoomListViewModel(): RoomListViewState {
         primaryFilters,
         activateSecondaryFilter,
         activeSecondaryFilter,
+        activeSortOption,
+        sort,
     };
 }
