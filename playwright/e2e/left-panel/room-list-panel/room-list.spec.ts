@@ -66,7 +66,7 @@ test.describe("Room list", () => {
         await roomItem.hover();
         await roomItemMenu.click();
         await expect(page.getByRole("menuitemcheckbox", { name: "Favourited" })).toBeChecked();
-        // It should the invite dialog
+        // It should show the invite dialog
         await page.getByRole("menuitem", { name: "invite" }).click();
         await expect(page.getByRole("heading", { name: "Invite to room29" })).toBeVisible();
         await app.closeDialog();
