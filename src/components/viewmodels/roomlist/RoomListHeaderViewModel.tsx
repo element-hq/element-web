@@ -6,7 +6,7 @@
  */
 
 import { useCallback } from "react";
-import { JoinRule, type Room, RoomEvent, RoomType } from "matrix-js-sdk/src/matrix";
+import { EventTimeline, EventType, JoinRule, type Room, RoomEvent, RoomType } from "matrix-js-sdk/src/matrix";
 
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
@@ -126,11 +126,19 @@ export interface RoomListHeaderViewState {
 export function useRoomListHeaderViewModel(): RoomListHeaderViewState {
     const matrixClient = useMatrixClientContext();
     const { activeSpace, title } = useSpace();
+    const isSpaceRoom = Boolean(activeSpace);
 
-    const canCreateRoom = shouldShowComponent(UIComponent.CreateRooms);
+    const canCreateRoomInSpace = Boolean(
+        activeSpace
+            ?.getLiveTimeline()
+            .getState(EventTimeline.FORWARDS)
+            ?.maySendStateEvent(EventType.RoomAvatar, matrixClient.getSafeUserId()),
+    );
+    // If we are in a space, we check canCreateRoomInSpace
+    const canCreateRoom = shouldShowComponent(UIComponent.CreateRooms) && (!isSpaceRoom || canCreateRoomInSpace);
     const canCreateVideoRoom = useFeatureEnabled("feature_video_rooms");
-    const displayComposeMenu = canCreateRoom;
-    const displaySpaceMenu = Boolean(activeSpace);
+    const displayComposeMenu = canCreateRoom || canCreateVideoRoom;
+    const displaySpaceMenu = isSpaceRoom;
     const canInviteInSpace = Boolean(
         activeSpace?.getJoinRule() === JoinRule.Public || activeSpace?.canInvite(matrixClient.getSafeUserId()),
     );
