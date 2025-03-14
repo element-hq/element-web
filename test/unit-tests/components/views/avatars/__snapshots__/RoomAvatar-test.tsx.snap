@@ -15,7 +15,7 @@ exports[`RoomAvatar should not render an invite avatar if the user has disabled 
 </div>
 `;
 
-exports[`RoomAvatar should render an invite avatar if the user has enabled it 1`] = `
+exports[`RoomAvatar should render an avatar for a room the user is invited to 1`] = `
 <div>
   <span
     aria-label="Avatar"
