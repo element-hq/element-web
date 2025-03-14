@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024,2025 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -78,7 +78,6 @@ const GenericFeatureFeedbackDialog: React.FC<IProps> = ({
                         }}
                         autoFocus={true}
                     />
-
                     <StyledCheckbox
                         checked={canContact}
                         onChange={(e) => setCanContact((e.target as HTMLInputElement).checked)}

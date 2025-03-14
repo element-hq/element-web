@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024,2025 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -45,14 +45,13 @@ const SpacePreferencesAppearanceTab: React.FC<Pick<IProps, "space">> = ({ space 
                                 !showPeople,
                             );
                         }}
+                        description={_t("space|preferences|show_people_in_space", {
+                            spaceName: space.name,
+                        })}
                     >
                         {_t("common|people")}
                     </StyledCheckbox>
-                    <SettingsSubsectionText>
-                        {_t("space|preferences|show_people_in_space", {
-                            spaceName: space.name,
-                        })}
-                    </SettingsSubsectionText>
+                    <SettingsSubsectionText />
                 </SettingsSubsection>
             </SettingsSection>
         </SettingsTab>
