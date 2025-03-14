@@ -51,12 +51,16 @@ describe("<RoomListHeaderView />", () => {
             expect(asFragment()).toMatchSnapshot();
         });
 
-        it("should not display the compose menu", () => {
+        it("should not display the compose menu", async () => {
+            const user = userEvent.setup();
             mocked(useRoomListHeaderViewModel).mockReturnValue({ ...defaultValue, displayComposeMenu: false });
 
             const { asFragment } = render(<RoomListHeaderView />);
             expect(screen.queryByRole("button", { name: "Add" })).toBeNull();
             expect(asFragment()).toMatchSnapshot();
+
+            await user.click(screen.getByRole("button", { name: "New message" }));
+            expect(defaultValue.createChatRoom).toHaveBeenCalled();
         });
 
         it("should display all the buttons when the menu is opened", async () => {
