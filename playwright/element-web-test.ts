@@ -46,6 +46,7 @@ const CONFIG_JSON: Partial<IConfigOptions> = {
     features: {
         // We don't want to go through the feature announcement during the e2e test
         feature_release_announcement: false,
+        feature_simplified_sliding_sync: false,
     },
 };
 
