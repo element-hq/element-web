@@ -46,6 +46,7 @@ import { UIComponent } from "../../../../../src/settings/UIFeature";
 import { MessagePreviewStore } from "../../../../../src/stores/room-list/MessagePreviewStore";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
+import { ConnectionState } from "../../../../../src/models/Call";
 
 jest.mock("../../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
@@ -215,7 +216,7 @@ describe("RoomTile", () => {
             it("tracks connection state", async () => {
                 renderRoomTile();
                 screen.getByText("Video");
-                await act(() => call.start());
+                act(() => call.setConnectionState(ConnectionState.Connected));
                 screen.getByText("Joined");
                 await act(() => call.disconnect());
                 screen.getByText("Video");
