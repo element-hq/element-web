@@ -161,6 +161,7 @@ export const showToast = (kind: Kind): void => {
 
     const onSecondaryClick = (): void => {
         if (kind === Kind.KEY_STORAGE_OUT_OF_SYNC) {
+            // Open the user settings dialog to the encryption tab and start the flow to reset encryption
             const payload: OpenToTabPayload = {
                 action: Action.ViewUserSettings,
                 initialTabId: UserTab.Encryption,

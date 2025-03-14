@@ -31,8 +31,10 @@ interface ResetIdentityPanelProps {
     /**
      * The variant of the panel to show. We show more warnings in the 'compromised' variant (no use in showing a user this
      * warning if they have to reset because they no longer have their key)
+     *
      * "compromised" is shown when the user chooses 'reset' explicitly in settings, usually because they believe their
      * identity has been compromised.
+     *
      * "forgot" is shown when the user has just forgotten their passphrase.
      */
     variant: "compromised" | "forgot";
