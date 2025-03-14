@@ -55,9 +55,9 @@ export type State =
     | "secrets_not_cached"
     | "key_storage_delete";
 
-interface EncryptionUserSettingsTabProps {
+interface Props {
     /**
-     * If the tab should start in a state other than the deasult
+     * If the tab should start in a state other than the deafult
      */
     initialState?: State;
 }
@@ -65,7 +65,7 @@ interface EncryptionUserSettingsTabProps {
 /**
  * The encryption settings tab.
  */
-export function EncryptionUserSettingsTab({ initialState = "loading" }: EncryptionUserSettingsTabProps): JSX.Element {
+export function EncryptionUserSettingsTab({ initialState = "loading" }: Props): JSX.Element {
     const [state, setState] = useState<State>(initialState);
 
     const checkEncryptionState = useCheckEncryptionState(state, setState);
