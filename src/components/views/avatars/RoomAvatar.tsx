@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ComponentProps } from "react";
-import { type Room, RoomStateEvent, type MatrixEvent, EventType, RoomType } from "matrix-js-sdk/src/matrix";
+import { type Room, RoomStateEvent, type MatrixEvent, EventType, RoomType, KnownMembership } from "matrix-js-sdk/src/matrix";
 
 import BaseAvatar from "./BaseAvatar";
 import ImageView from "../elements/ImageView";
@@ -88,9 +88,9 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
 
     private static getImageUrls(props: IProps): string[] {
         const myMembership = props.room?.getMyMembership();
-        if (myMembership === "invite" || !myMembership) {
+        if (myMembership === KnownMembership.Invite || !myMembership) {
             if (SettingsStore.getValue("showAvatarsOnInvites") === false) {
-                // The user has opted out of showing avatars, so return no urlshere.
+                // The user has opted out of showing avatars, so return no urls here.
                 return [];
             }
         }
