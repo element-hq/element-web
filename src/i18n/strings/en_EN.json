@@ -2638,6 +2638,7 @@
             "unable_to_load_msisdns": "Unable to load phone numbers",
             "username": "Username"
         },
+        "invite_avatars": "Show avatars of rooms you have been invited to",
         "image_thumbnails": "Show previews/thumbnails for images",
         "inline_url_previews_default": "Enable inline URL previews by default",
         "inline_url_previews_room": "Enable URL previews by default for participants in this room",

@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2015, 2016 OpenMarket Ltd
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -19,6 +19,7 @@ import { mediaFromMxc } from "../../../customisations/Media";
 import { type IOOBData } from "../../../stores/ThreepidInviteStore";
 import { LocalRoom } from "../../../models/LocalRoom";
 import { filterBoolean } from "../../../utils/arrays";
+import SettingsStore from "../../../settings/SettingsStore";
 
 interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url" | "onClick"> {
     // Room may be left unset here, but if it is,
@@ -86,6 +87,12 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
     };
 
     private static getImageUrls(props: IProps): string[] {
+        const myMembership = props.room?.getMyMembership();
+        if (myMembership === "invite" || !myMembership) {
+            if (SettingsStore.getValue("showAvatarsOnInvites"))
+                // The user has opted out of showing avatars, so return no urlshere.
+                return [];
+        }
         let oobAvatar: string | null = null;
         if (props.oobData.avatarUrl) {
             oobAvatar = mediaFromMxc(props.oobData.avatarUrl).getThumbnailOfSourceHttp(

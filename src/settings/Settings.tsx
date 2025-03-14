@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2018-2024 The Matrix.org Foundation C.I.C.
 Copyright 2017 Travis Ralston
 
@@ -312,6 +312,7 @@ export interface Settings {
     "lowBandwidth": IBaseSetting<boolean>;
     "fallbackICEServerAllowed": IBaseSetting<boolean | null>;
     "showImages": IBaseSetting<boolean>;
+    "showAvatarsOnInvites": IBaseSetting<boolean>;
     "RoomList.preferredSorting": IBaseSetting<SortingAlgorithm>;
     "RightPanel.phasesGlobal": IBaseSetting<IRightPanelForRoomStored | null>;
     "RightPanel.phases": IBaseSetting<IRightPanelForRoomStored | null>;
@@ -1114,6 +1115,11 @@ export const SETTINGS: Settings = {
     "showImages": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("settings|image_thumbnails"),
+        default: true,
+    },
+    "showAvatarsOnInvites": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("settings|invite_avatars"),
         default: true,
     },
     "RoomList.preferredSorting": {
