@@ -1057,8 +1057,8 @@
             "verify_reset_warning_1": "Resetování ověřovacích klíčů nelze vrátit zpět. Po jejich resetování nebudete mít přístup ke starým zašifrovaným zprávám a všem přátelům, kteří vás dříve ověřili, se zobrazí bezpečnostní varování, dokud se u nich znovu neověříte.",
             "verify_reset_warning_2": "Pokračujte pouze v případě, že jste si jisti, že jste ztratili všechna ostatní zařízení a klíč pro obnovení.",
             "verify_using_device": "Ověřit pomocí jiného zařízení",
-            "verify_using_key": "Ověření pomocí klíče pro obnovení",
-            "verify_using_key_or_phrase": "Ověření pomocí klíče pro obnovení nebo fráze",
+            "verify_using_key": "Ověřit pomocí klíče pro obnovení",
+            "verify_using_key_or_phrase": "Ověřit pomocí klíče pro obnovení nebo fráze",
             "waiting_for_user_accept": "Čekáme, než %(displayName)s výzvu přijme…",
             "waiting_other_device": "Čekáme na ověření na jiném zařízení…",
             "waiting_other_device_details": "Čekáme na ověření na vašem dalším zařízení, %(deviceName)s (%(deviceId)s)…",
@@ -2104,6 +2104,12 @@
         "failed_add_tag": "Nepodařilo se přidat štítek %(tagName)s k místnosti",
         "failed_remove_tag": "Nepodařilo se odstranit štítek %(tagName)s z místnosti",
         "failed_set_dm_tag": "Nepodařilo se nastavit značku přímé zprávy",
+        "filters": {
+            "favourite": "Oblíbené",
+            "people": "Lidé",
+            "rooms": "Místnosti",
+            "unread": "Nepřečtené"
+        },
         "home_menu_label": "Možnosti domovské obrazovky",
         "join_public_room_label": "Připojit se k veřejné místnosti",
         "joining_rooms_status": {

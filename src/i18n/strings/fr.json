@@ -951,7 +951,7 @@
             "warning": "Si vous n’avez pas activé de nouvelle méthode de récupération, un attaquant essaye peut-être d’accéder à votre compte. Changez immédiatement le mot de passe de votre compte et configurez une nouvelle méthode de récupération dans les paramètres."
         },
         "not_supported": "<non pris en charge>",
-        "pinned_identity_changed": "L'identité de %(displayName)s(<b>%(userId)s</b>) semble avoir changé. <a>En savoir plus </a>",
+        "pinned_identity_changed": "L'identité de %(displayName)s (<b>%(userId)s</b>) semble avoir changé. <a>En savoir plus</a>",
         "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>semble avoir changé d'identité. <a>En savoir plus</a>",
         "recovery_method_removed": {
             "description_1": "Cette session a détecté que votre phrase de sécurité et clé de sécurité pour les messages sécurisés ont été supprimées.",
@@ -4080,7 +4080,7 @@
         "error_need_to_be_logged_in": "Vous devez être identifié.",
         "error_unable_start_audio_stream_description": "Impossible de démarrer la diffusion audio.",
         "error_unable_start_audio_stream_title": "Échec lors du démarrage de la diffusion en direct",
-        "modal_data_warning": "Les données sur cet écran sont partagées avec %(widgetDomain)s",
+        "modal_data_warning": "Les données ci-dessous sont partagées avec %(widgetDomain)s",
         "modal_title_default": "Fenêtre de widget",
         "no_name": "Application inconnue",
         "open_id_permissions_dialog": {
