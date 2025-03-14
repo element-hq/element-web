@@ -113,4 +113,12 @@ export class MediaEventHelper implements IDestroyable {
         // Finally, it's probably not media
         return false;
     }
+    public static canHide(event: MatrixEvent): boolean {
+        if (!event) return false;
+        if (event.isRedacted()) return false;
+        const content = event.getContent();
+        const hideTypes: string[] = [MsgType.Video, MsgType.Image];
+        if (hideTypes.includes(content.msgtype!)) return true;
+        return false;
+    }
 }

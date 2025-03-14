@@ -28,6 +28,8 @@ const NEW_AVATAR = fs.readFileSync("playwright/sample-files/element.png");
 const OLD_NAME = "Alan";
 const NEW_NAME = "Alan (away)";
 
+const VIDEO_FILE = fs.readFileSync("playwright/sample-files/5secvid.webm");
+
 const getEventTilesWithBodies = (page: Page): Locator => {
     return page.locator(".mx_EventTile").filter({ has: page.locator(".mx_EventTile_body") });
 };
@@ -920,7 +922,26 @@ test.describe("Timeline", () => {
             await page.getByRole("button", { name: "Hide" }).click();
 
             // Check that the image is now hidden.
-            await expect(page.getByRole("link", { name: "Show image" })).toBeVisible();
+            await expect(page.getByRole("button", { name: "Show image" })).toBeVisible();
+        });
+
+        test("should be able to hide a video", { tag: "@screenshot" }, async ({ page, app, room, context }) => {
+            await app.viewRoomById(room.roomId);
+            const upload = await app.client.uploadContent(VIDEO_FILE, { name: "bbb.webm", type: "video/webm" });
+            await app.client.sendEvent(room.roomId, null, "m.room.message" as EventType, {
+                msgtype: "m.video" as MsgType,
+                body: "bbb.webm",
+                url: upload.content_uri,
+            });
+
+            await app.timeline.scrollToBottom();
+            const imgTile = page.locator(".mx_MVideoBody").first();
+            await expect(imgTile).toBeVisible();
+            await imgTile.hover();
+            await page.getByRole("button", { name: "Hide" }).click();
+
+            // Check that the image is now hidden.
+            await expect(page.getByRole("button", { name: "Show video" })).toBeVisible();
         });
     });
 

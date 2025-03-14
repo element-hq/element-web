@@ -3530,7 +3530,8 @@
         },
         "m.sticker": "%(senderDisplayName)s sent a sticker.",
         "m.video": {
-            "error_decrypting": "Error decrypting video"
+            "error_decrypting": "Error decrypting video",
+            "show_video": "Show video"
         },
         "m.widget": {
             "added": "%(widgetName)s widget added by %(senderName)s",
