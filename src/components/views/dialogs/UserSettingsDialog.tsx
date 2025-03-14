@@ -50,6 +50,9 @@ import { EncryptionUserSettingsTab } from "../settings/tabs/user/EncryptionUserS
 interface IProps {
     initialTabId?: UserTab;
     showMsc4108QrCode?: boolean;
+    /**
+     * If true, the flow for a user to reset their encryption will be shown. initialTabId must be UserTab.Encryption.
+     */
     showResetIdentity?: boolean;
     sdkContext: SdkContextClass;
     onFinished(): void;
