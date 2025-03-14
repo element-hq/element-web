@@ -191,6 +191,7 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
                 _td("settings|encryption|title"),
                 <KeyIcon />,
                 <EncryptionUserSettingsTab initialState={showResetIdentity ? "reset_identity_forgot" : undefined} />,
+                "UserSettingsEncryption",
             ),
         );
 
