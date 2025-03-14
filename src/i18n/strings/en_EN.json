@@ -2643,6 +2643,7 @@
         "inline_url_previews_room": "Enable URL previews by default for participants in this room",
         "inline_url_previews_room_account": "Enable URL previews for this room (only affects you)",
         "insert_trailing_colon_mentions": "Insert a trailing colon after user mentions at the start of a message",
+        "invite_avatars": "Show avatars of rooms you have been invited to",
         "jump_to_bottom_on_send": "Jump to the bottom of the timeline when you send a message",
         "key_backup": {
             "backup_in_progress": "Your keys are being backed up (the first backup could take a few minutes).",
