@@ -539,11 +539,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                     );
                 }
                 if (MediaEventHelper.canHide(this.props.mxEvent)) {
-                    toolbarOpts.splice(
-                        0,
-                        0,
-                        <HideActionButton mxEvent={this.props.mxEvent} key="hide" />,
-                    );
+                    toolbarOpts.splice(0, 0, <HideActionButton mxEvent={this.props.mxEvent} key="hide" />);
                 }
             } else if (
                 // Show thread icon even for deleted messages, but only within main timeline

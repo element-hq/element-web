@@ -23,7 +23,7 @@ import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContex
 import MediaProcessingError from "./shared/MediaProcessingError";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import HiddenMediaPlaceholder from "./HiddenMediaPlaceholder";
-import { Settings } from "../../../settings/Settings";
+import { type Settings } from "../../../settings/Settings";
 
 interface IState {
     decryptedUrl: string | null;
@@ -65,8 +65,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
             ...SettingsStore.getValue("showMediaEventIds"),
             [eventId]: true,
         });
-    }
-    
+    };
 
     private getContentUrl(): string | undefined {
         const content = this.props.mxEvent.getContent<MediaEventContent>();
@@ -139,7 +138,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
         }
     }
 
-    private async downloadVideo() {
+    private async downloadVideo(): Promise<void> {
         try {
             this.loadBlurhash();
         } catch (e) {
@@ -208,7 +207,6 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
         this.showWatcher = SettingsStore.watchSetting("showMediaEventIds", null, (_name, _rId, _level, value) => {
             this.calculateVisible(value);
         });
-
 
         if (!this.state.showPreview) {
             // Do not attempt to load the media if we do not want to show previews here.
@@ -293,8 +291,11 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
         if (!this.state.showPreview) {
             return (
                 <span className="mx_MVideoBody">
-                    <div className="mx_MVideoBody_container" style={{ width: maxWidth, height: maxHeight, aspectRatio }}>
-                        <HiddenMediaPlaceholder onClick={() => this.show()} kind="m.video" maxWidth={maxWidth} />
+                    <div
+                        className="mx_MVideoBody_container"
+                        style={{ width: maxWidth, height: maxHeight, aspectRatio }}
+                    >
+                        <HiddenMediaPlaceholder onClick={() => this.show()} kind="m.video" />
                     </div>
                 </span>
             );

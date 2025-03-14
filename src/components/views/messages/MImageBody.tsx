@@ -90,7 +90,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
             ...SettingsStore.getValue("showMediaEventIds"),
             [eventId]: true,
         });
-    }
+    };
 
     protected onClick = (ev: React.MouseEvent): void => {
         if (ev.button === 0 && !ev.metaKey) {
@@ -443,7 +443,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
             if (!this.state.loadedImageDimensions) {
                 let imageElement: JSX.Element;
                 if (!this.state.showImage) {
-                    imageElement = <HiddenMediaPlaceholder onClick={this.showImage} kind="m.image"/>;
+                    imageElement = <HiddenMediaPlaceholder onClick={this.showImage} kind="m.image" />;
                 } else {
                     imageElement = (
                         <img
@@ -513,9 +513,11 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         }
 
         if (!this.state.showImage) {
-            img = <div style={{width: maxWidth, height: maxHeight}}>
-                <HiddenMediaPlaceholder onClick={this.showImage} kind="m.image" />;
-            </div>;
+            img = (
+                <div style={{ width: maxWidth, height: maxHeight }}>
+                    <HiddenMediaPlaceholder onClick={this.showImage} kind="m.image" />;
+                </div>
+            );
             showPlaceholder = false; // because we're hiding the image, so don't show the placeholder.
         }
 
