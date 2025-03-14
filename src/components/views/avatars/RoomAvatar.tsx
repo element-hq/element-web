@@ -89,9 +89,10 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
     private static getImageUrls(props: IProps): string[] {
         const myMembership = props.room?.getMyMembership();
         if (myMembership === "invite" || !myMembership) {
-            if (SettingsStore.getValue("showAvatarsOnInvites"))
+            if (SettingsStore.getValue("showAvatarsOnInvites") === false) {
                 // The user has opted out of showing avatars, so return no urlshere.
                 return [];
+            }
         }
         let oobAvatar: string | null = null;
         if (props.oobData.avatarUrl) {
