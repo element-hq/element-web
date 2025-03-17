@@ -29,7 +29,7 @@ export function useMediaVisible(eventId: string): [boolean, (visible: boolean) =
         [eventId, eventVisibility],
     );
 
+    // Always prefer the explicit per-event user preference here.
     const imgIsVisible = eventVisibility[eventId] ?? defaultShowImages;
-
     return [imgIsVisible, setMediaVisible];
 }

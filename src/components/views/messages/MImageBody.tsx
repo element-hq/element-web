@@ -364,6 +364,13 @@ export class MImageBodyInner extends React.Component<IBodyProps, IState> {
         });
     }
 
+    public componentDidUpdate(prevProps: Readonly<IBodyProps>): void {
+        if (!prevProps.mediaVisible && this.props.mediaVisible) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.downloadImage();
+        }
+    }
+
     public componentWillUnmount(): void {
         this.unmounted = true;
         MatrixClientPeg.get()?.off(ClientEvent.Sync, this.reconnectedListener);
