@@ -138,8 +138,8 @@ test.describe("RightPanel", () => {
             test.skip(isDendrite, "Dendrite does not implement room reporting");
             test("should handle reporting a room", async ({ page, app }) => {
                 await viewRoomSummaryByName(page, app, ROOM_NAME);
-                await page.getByRole("menuitem", { name: "Report Room" }).click();
-                const dialog = await page.getByRole("dialog", { name: "Report room to Your Homeserver Administrator" });
+                await page.getByRole("menuitem", { name: "Report room" }).click();
+                const dialog = await page.getByRole("dialog", { name: "Report Room" });
                 await dialog.getByLabel("reason").fill("This room should be reported");
                 await dialog.getByRole("button", { name: "Send report" }).click();
                 await expect(page.getByText("Your report was sent.")).toBeVisible();
