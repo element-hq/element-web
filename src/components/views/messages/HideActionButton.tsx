@@ -7,59 +7,38 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
-import React, { useCallback } from "react";
-import classNames from "classnames";
+import React from "react";
 import { VisibilityOffIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { RovingAccessibleButton } from "../../../accessibility/RovingTabIndex";
 import { _t } from "../../../languageHandler";
-import { SettingLevel } from "../../../settings/SettingLevel";
-import { useSettingsValueWithSetter, useSettingValue } from "../../../hooks/useSettings";
+import { useMediaVisible } from "../../../hooks/useMediaVisible";
 
 interface IProps {
+    /**
+     * Matrix event that this action applies to.
+     */
     mxEvent: MatrixEvent;
 }
 
-const HideActionButton: React.FC<IProps> = ({ mxEvent }) => {
-    const eventId = mxEvent.getId()!;
-    let spinner: JSX.Element | undefined;
-    const defaultShowImages = useSettingValue("showImages", SettingLevel.DEVICE);
-    const [eventVisibility, setEventIds] = useSettingsValueWithSetter("showMediaEventIds", SettingLevel.DEVICE);
-    const onClick = useCallback(() => {
-        if (!eventId) {
-            return;
-        }
-        setEventIds({
-            ...eventVisibility,
-            [eventId]: false,
-        });
-    }, [setEventIds, eventId, eventVisibility]);
+/**
+ * Quick action button for marking a media event as hidden.
+ */
+export const HideActionButton: React.FC<IProps> = ({ mxEvent }) => {
+    const [mediaIsVisible, setVisible] = useMediaVisible(mxEvent.getId()!);
 
-    const classes = classNames({
-        mx_MessageActionBar_iconButton: true,
-        mx_MessageActionBar_downloadButton: true,
-        mx_MessageActionBar_downloadSpinnerButton: !!spinner,
-    });
-
-    const imgIsVisible =
-        eventVisibility[eventId] === true || (defaultShowImages && eventVisibility[eventId] === undefined);
-
-    if (!imgIsVisible) {
+    if (!mediaIsVisible) {
         return;
     }
 
     return (
         <RovingAccessibleButton
-            className={classes}
+            className="mx_MessageActionBar_iconButton "
             title={_t("action|hide")}
-            onClick={onClick}
-            disabled={!!spinner}
+            onClick={() => setVisible(false)}
             placement="left"
         >
             <VisibilityOffIcon />
-            {spinner}
         </RovingAccessibleButton>
     );
 };
-
-export default HideActionButton;
