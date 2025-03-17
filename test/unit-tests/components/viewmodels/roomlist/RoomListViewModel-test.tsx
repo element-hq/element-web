@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { range } from "lodash";
 import { act, renderHook, waitFor } from "jest-matrix-react";
+import { mocked } from "jest-mock";
 
 import RoomListStoreV3 from "../../../../../src/stores/room-list-v3/RoomListStoreV3";
 import { mkStubRoom } from "../../../../test-utils";
@@ -17,6 +18,14 @@ import { SecondaryFilters } from "../../../../../src/components/viewmodels/rooml
 import { SortingAlgorithm } from "../../../../../src/stores/room-list-v3/skip-list/sorters";
 import { SortOption } from "../../../../../src/components/viewmodels/roomlist/useSorter";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
+import { hasCreateRoomRights, createRoom } from "../../../../../src/components/viewmodels/roomlist/utils";
+import dispatcher from "../../../../../src/dispatcher/dispatcher";
+import { Action } from "../../../../../src/dispatcher/actions";
+
+jest.mock("../../../../../src/components/viewmodels/roomlist/utils", () => ({
+    hasCreateRoomRights: jest.fn().mockReturnValue(false),
+    createRoom: jest.fn(),
+}));
 
 describe("RoomListViewModel", () => {
     function mockAndCreateRooms() {
@@ -251,6 +260,33 @@ describe("RoomListViewModel", () => {
             });
             expect(vm.current.shouldShowMessagePreview).toEqual(false);
             expect(fn).toHaveBeenCalled();
+        });
+    });
+
+    describe("Create room and chat", () => {
+        it("should be canCreateRoom=false if hasCreateRoomRights=false", () => {
+            mocked(hasCreateRoomRights).mockReturnValue(false);
+            const { result } = renderHook(() => useRoomListViewModel());
+            expect(result.current.canCreateRoom).toBe(false);
+        });
+
+        it("should be canCreateRoom=true if hasCreateRoomRights=true", () => {
+            mocked(hasCreateRoomRights).mockReturnValue(true);
+            const { result } = renderHook(() => useRoomListViewModel());
+            expect(result.current.canCreateRoom).toBe(true);
+        });
+
+        it("should call createRoom", () => {
+            const { result } = renderHook(() => useRoomListViewModel());
+            result.current.createRoom();
+            expect(mocked(createRoom)).toHaveBeenCalled();
+        });
+
+        it("should dispatch Action.CreateChat", () => {
+            const spy = jest.spyOn(dispatcher, "fire");
+            const { result } = renderHook(() => useRoomListViewModel());
+            result.current.createChatRoom();
+            expect(spy).toHaveBeenCalledWith(Action.CreateChat);
         });
     });
 });
