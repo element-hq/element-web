@@ -221,9 +221,9 @@ export async function logIntoElement(page: Page, credentials: Credentials, secur
         await page.locator(".mx_AuthPage").getByRole("button", { name: "Verify with Recovery Key" }).click();
 
         const useSecurityKey = page.locator(".mx_Dialog").getByRole("button", { name: "use your Recovery Key" });
-        // If the user has set a security passphrase, they'll be prompted for that first and have to click
-        // through. If they haven't, they'll be prompted for a recovery key straight away. We click the button
-        // if it's there so this works in both cases.
+        // If the user has set a recovery *passphrase*, they'll be prompted for that first and have to click
+        // through to enter the recovery key which is what we hae here. If they haven't, they'll be prompted
+        // for a recovery key straight away. We click the button if it's there so this works in both cases.
         if (await useSecurityKey.isVisible()) {
             await useSecurityKey.click();
         }
