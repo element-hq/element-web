@@ -41,7 +41,7 @@ export default {
         "process",
         "util",
         // Embedded into webapp
-        "@hughns/element-call-embedded",
+        "@vector-im/element-call-embedded",
     ],
     ignoreBinaries: [
         // Used in scripts & workflows

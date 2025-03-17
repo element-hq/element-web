@@ -178,7 +178,7 @@
         "@babel/preset-typescript": "^7.12.7",
         "@babel/runtime": "^7.12.5",
         "@casualbot/jest-sonar-reporter": "2.2.7",
-        "@hughns/element-call-embedded": "^1.1.37-rc.1",
+        "@vector-im/element-call-embedded": "^0.9.0-release-test.3",
         "@peculiar/webcrypto": "^1.4.3",
         "@playwright/test": "^1.40.1",
         "@principalstudio/html-webpack-inject-preload": "^1.2.7",
