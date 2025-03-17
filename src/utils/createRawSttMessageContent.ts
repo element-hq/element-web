@@ -18,13 +18,20 @@ import { type RoomMessageEventContent } from "matrix-js-sdk/src/types";
  * @param {string} language The language code (e.g. "en-US", "es-ES")
  * @returns {RoomMessageEventContent} The message content ready to be sent
  */
+import { MsgType, RelationType } from "matrix-js-sdk/src/@types/event";
+
 export const createRawSttMessageContent = (
     body: string,
     language: string,
+    audioEventId: string,
 ): RoomMessageEventContent => {
     return {
-        "msgtype": "m.voyzme.raw_stt",
+        "msgtype": MsgType.RawSTT,
         "body": body,
         "language": language,
+        "m.relates_to": {
+            event_id: audioEventId,
+            rel_type: RelationType.Reference,
+        },
     };
 };

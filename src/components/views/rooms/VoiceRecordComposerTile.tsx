@@ -144,8 +144,9 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
 
             // Send the raw STT message for processing
             const sttContent = createRawSttMessageContent(
-                "dummy_content", // This will be replaced by actual content from the server
+                "Here is some dummy content to be summarized this is not barelz coming from the STT but rather a mocked dummy content we expect to be able to fix and summarize. For these reason it also contains some errors and typos. errors", // This will be replaced by actual content from the server
                 "en-US", // Default to English, can be made configurable
+                voiceMessageResult.event_id, // Reference to the original voice message
             );
 
             const sttResult = await doMaybeLocalRoomAction(
