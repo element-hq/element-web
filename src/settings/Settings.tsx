@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2018-2024 The Matrix.org Foundation C.I.C.
 Copyright 2017 Travis Ralston
 
@@ -44,6 +44,7 @@ import { type ReleaseAnnouncementData } from "../stores/ReleaseAnnouncementStore
 import { type Json, type JsonValue } from "../@types/json.ts";
 import { type RecentEmojiData } from "../emojipicker/recent.ts";
 import { type Assignable } from "../@types/common.ts";
+import { SortingAlgorithm } from "../stores/room-list-v3/skip-list/sorters/index.ts";
 
 export const defaultWatchManager = new WatchManager();
 
@@ -311,6 +312,8 @@ export interface Settings {
     "lowBandwidth": IBaseSetting<boolean>;
     "fallbackICEServerAllowed": IBaseSetting<boolean | null>;
     "showImages": IBaseSetting<boolean>;
+    "showAvatarsOnInvites": IBaseSetting<boolean>;
+    "RoomList.preferredSorting": IBaseSetting<SortingAlgorithm>;
     "RightPanel.phasesGlobal": IBaseSetting<IRightPanelForRoomStored | null>;
     "RightPanel.phases": IBaseSetting<IRightPanelForRoomStored | null>;
     "enableEventIndexing": IBaseSetting<boolean>;
@@ -1113,6 +1116,15 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("settings|image_thumbnails"),
         default: true,
+    },
+    "showAvatarsOnInvites": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("settings|invite_avatars"),
+        default: true,
+    },
+    "RoomList.preferredSorting": {
+        supportedLevels: [SettingLevel.DEVICE],
+        default: SortingAlgorithm.Recency,
     },
     "RightPanel.phasesGlobal": {
         supportedLevels: [SettingLevel.DEVICE],

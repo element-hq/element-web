@@ -289,7 +289,6 @@
     "common": {
         "access_token": "Prieigos žetonas",
         "advanced": "Išplėstiniai",
-        "all_rooms": "Visi kambariai",
         "analytics": "Analitika",
         "and_n_others": {
             "other": "ir %(count)s kitų...",

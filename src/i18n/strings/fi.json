@@ -431,7 +431,6 @@
         "access_token": "Käyttöpoletti",
         "accessibility": "Saavutettavuus",
         "advanced": "Lisäasetukset",
-        "all_rooms": "Kaikki huoneet",
         "analytics": "Analytiikka",
         "and_n_others": {
             "other": "ja %(count)s muuta...",
