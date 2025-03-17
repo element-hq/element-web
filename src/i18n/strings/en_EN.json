@@ -1811,9 +1811,10 @@
         "toxic_behaviour": "Toxic Behaviour"
     },
     "report_room": {
-        "description": "Reporting this room will send its unique 'room ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.",
+        "description": "Report this room to your homeserver admin. This will send the room's unique ID, but if messages are encrypted, the administrator won't be able to read them or view shared files.",
+        "reason_placeholder": " Reason for reporting...",
         "sent": "Your report was sent.",
-        "title": "Report room to Your Homeserver Administrator"
+        "title": "Report Room"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Failed to decrypt %(failedCount)s sessions!",

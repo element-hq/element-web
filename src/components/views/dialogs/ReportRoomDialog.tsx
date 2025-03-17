@@ -72,6 +72,7 @@ export const ReportRoomDialog: React.FC<IProps> = function ({ roomId, onFinished
                         <Label htmlFor="mx_ReportRoomDialog_reason">{_t("room_settings|permissions|ban_reason")}</Label>
                         <textarea
                             id="mx_ReportRoomDialog_reason"
+                            placeholder="reason_placeholder"
                             rows={5}
                             onChange={onReasonChange}
                             value={reason}
