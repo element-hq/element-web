@@ -131,16 +131,13 @@ describe("<MImageBody/>", () => {
     });
 
     describe("with image previews/thumbnails disabled", () => {
-        beforeEach(() => {
-            jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-        });
-
         it("should not download image", async () => {
             fetchMock.getOnce(url, { status: 200 });
 
             render(
                 <MImageBody
                     {...props}
+                    mediaVisible={false}
                     mxEvent={encryptedMediaEvent}
                     mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
                 />,
@@ -155,6 +152,7 @@ describe("<MImageBody/>", () => {
             render(
                 <MImageBody
                     {...props}
+                    mediaVisible={false}
                     mxEvent={encryptedMediaEvent}
                     mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
                 />,
