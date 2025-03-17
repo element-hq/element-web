@@ -6,7 +6,7 @@
  */
 
 /**
- * The RoomCell has the following structure:
+ * The RoomListItemView has the following structure:
  * button----------------------------------------|
  * | <-12px-> container--------------------------|
  * |          | room avatar <-12px-> content-----|
@@ -14,19 +14,20 @@
  * |          |                      | ----------| <-- border
  * |---------------------------------------------|
  */
-.mx_RoomListCell {
+.mx_RoomListItemView {
     all: unset;
 
     &:hover {
         background-color: var(--cpd-color-bg-action-secondary-hovered);
     }
 
-    .mx_RoomListCell_container {
+    .mx_RoomListItemView_container {
         padding-left: var(--cpd-space-3x);
         font: var(--cpd-font-body-md-regular);
         height: 100%;
 
-        .mx_RoomListCell_content {
+        .mx_RoomListItemView_content {
+            padding-right: var(--cpd-space-3x);
             height: 100%;
             flex: 1;
             /* The border is only under the room name and the future hover menu  */
@@ -41,4 +42,8 @@
             }
         }
     }
+}
+
+.mx_RoomListItemView_menu_open {
+    background-color: var(--cpd-color-bg-action-secondary-hovered);
 }

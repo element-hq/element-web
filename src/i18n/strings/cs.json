@@ -455,7 +455,7 @@
         "access_token": "Přístupový token",
         "accessibility": "Přístupnost",
         "advanced": "Rozšířené",
-        "all_rooms": "Všechny místnosti",
+        "all_chats": "Všechny chaty",
         "analytics": "Analytické údaje",
         "and_n_others": {
             "other": "a %(count)s další...",
@@ -1057,8 +1057,8 @@
             "verify_reset_warning_1": "Resetování ověřovacích klíčů nelze vrátit zpět. Po jejich resetování nebudete mít přístup ke starým zašifrovaným zprávám a všem přátelům, kteří vás dříve ověřili, se zobrazí bezpečnostní varování, dokud se u nich znovu neověříte.",
             "verify_reset_warning_2": "Pokračujte pouze v případě, že jste si jisti, že jste ztratili všechna ostatní zařízení a klíč pro obnovení.",
             "verify_using_device": "Ověřit pomocí jiného zařízení",
-            "verify_using_key": "Ověření pomocí klíče pro obnovení",
-            "verify_using_key_or_phrase": "Ověření pomocí klíče pro obnovení nebo fráze",
+            "verify_using_key": "Ověřit pomocí klíče pro obnovení",
+            "verify_using_key_or_phrase": "Ověřit pomocí klíče pro obnovení nebo fráze",
             "waiting_for_user_accept": "Čekáme, než %(displayName)s výzvu přijme…",
             "waiting_other_device": "Čekáme na ověření na jiném zařízení…",
             "waiting_other_device_details": "Čekáme na ověření na vašem dalším zařízení, %(deviceName)s (%(deviceId)s)…",
@@ -2104,6 +2104,12 @@
         "failed_add_tag": "Nepodařilo se přidat štítek %(tagName)s k místnosti",
         "failed_remove_tag": "Nepodařilo se odstranit štítek %(tagName)s z místnosti",
         "failed_set_dm_tag": "Nepodařilo se nastavit značku přímé zprávy",
+        "filters": {
+            "favourite": "Oblíbené",
+            "people": "Lidé",
+            "rooms": "Místnosti",
+            "unread": "Nepřečtené"
+        },
         "home_menu_label": "Možnosti domovské obrazovky",
         "join_public_room_label": "Připojit se k veřejné místnosti",
         "joining_rooms_status": {
@@ -2111,13 +2117,23 @@
             "other": "Momentálně se připojuje %(count)s místností"
         },
         "list_title": "Seznam místností",
+        "more_options": {
+            "copy_link": "Kopírovat odkaz na místnost",
+            "favourited": "Oblíbené",
+            "leave_room": "Opustit místnost",
+            "low_priority": "Nízká priorita",
+            "mark_read": "Označit jako přečtené",
+            "mark_unread": "Označit jako nepřečtené"
+        },
         "notification_options": "Možnosti oznámení",
         "open_space_menu": "Otevřít nabídku prostoru",
+        "primary_filters": "Filtry seznamu místností",
         "redacting_messages_status": {
             "one": "Momentálně se odstraňují zprávy v %(count)s místnosti",
             "other": "Momentálně se odstraňují zprávy v %(count)s místnostech"
         },
         "room": {
+            "more_options": "Více možností",
             "open_room": "Otevřít místnost %(roomName)s"
         },
         "show_less": "Zobrazit méně",
@@ -2508,10 +2524,23 @@
                 "session_key": "Klíč relace:",
                 "title": "Rozšířené"
             },
+            "delete_key_storage": {
+                "breadcrumb_page": "Smazat úložiště klíčů",
+                "confirm": "Smazat úložiště klíčů",
+                "description": "Smazáním úložiště klíčů odstraníte ze serveru vaši kryptografickou identitu a klíče zpráv a vypnete následující funkce zabezpečení:",
+                "list_first": "Na nových zařízeních nebudete mít šifrovanou historii zpráv",
+                "list_second": "Pokud se všude odhlásíte z %(brand)s, ztratíte přístup ke svým zašifrovaným zprávám",
+                "title": "Opravdu chcete vypnout úložiště klíčů a smazat jej?"
+            },
             "device_not_verified_button": "Ověřte toto zařízení",
             "device_not_verified_description": "Abyste mohli zobrazit nastavení šifrování, musíte toto zařízení ověřit.",
             "device_not_verified_title": "Zařízení nebylo ověřeno",
             "dialog_title": "<strong>Nastavení: </strong> Šifrování",
+            "key_storage": {
+                "allow_key_storage": "Povolit úložiště klíčů",
+                "description": "Uložte svou kryptografickou identitu a klíče zpráv bezpečně na serveru. To vám umožní zobrazit historii zpráv na všech nových zařízeních. <a>Další informace</a>",
+                "title": "Úložiště klíčů"
+            },
             "recovery": {
                 "change_recovery_confirm_button": "Potvrďte nový klíč pro obnovení",
                 "change_recovery_confirm_description": "Pro dokončení zadejte svůj nový klíč pro obnovení níže. Váš starý klíč již nebude fungovat.",
@@ -2628,6 +2657,7 @@
         "inline_url_previews_room": "Povolit náhledy URL adres pro členy této místnosti jako výchozí",
         "inline_url_previews_room_account": "Povolit náhledy URL adres pro tuto místnost (ovlivňuje pouze vás)",
         "insert_trailing_colon_mentions": "Vložit dvojtečku za zmínku o uživateli na začátku zprávy",
+        "invite_avatars": "Zobrazit avatary místností, do kterých jste byli pozváni",
         "jump_to_bottom_on_send": "Po odeslání zprávy přejít na konec časové osy",
         "key_backup": {
             "backup_in_progress": "Klíče se zálohují (první záloha může trvat pár minut).",
@@ -4080,7 +4110,7 @@
         "error_need_to_be_logged_in": "Musíte být přihlášeni.",
         "error_unable_start_audio_stream_description": "Nelze spustit streamování zvuku.",
         "error_unable_start_audio_stream_title": "Nepodařilo spustit živý přenos",
-        "modal_data_warning": "Data na této obrazovce jsou sdílena s %(widgetDomain)s",
+        "modal_data_warning": "Níže uvedené údaje jsou sdíleny s %(widgetDomain)s",
         "modal_title_default": "Modální widget",
         "no_name": "Neznámá aplikace",
         "open_id_permissions_dialog": {

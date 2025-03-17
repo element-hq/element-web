@@ -12,10 +12,11 @@ import RoomListStoreV3 from "../../../../../src/stores/room-list-v3/RoomListStor
 import { mkStubRoom } from "../../../../test-utils";
 import { LISTS_UPDATE_EVENT } from "../../../../../src/stores/room-list/SlidingRoomListStore";
 import { useRoomListViewModel } from "../../../../../src/components/viewmodels/roomlist/RoomListViewModel";
-import dispatcher from "../../../../../src/dispatcher/dispatcher";
-import { Action } from "../../../../../src/dispatcher/actions";
 import { FilterKey } from "../../../../../src/stores/room-list-v3/skip-list/filters";
 import { SecondaryFilters } from "../../../../../src/components/viewmodels/roomlist/useFilteredRooms";
+import { SortingAlgorithm } from "../../../../../src/stores/room-list-v3/skip-list/sorters";
+import { SortOption } from "../../../../../src/components/viewmodels/roomlist/useSorter";
+import SettingsStore from "../../../../../src/settings/SettingsStore";
 
 describe("RoomListViewModel", () => {
     function mockAndCreateRooms() {
@@ -25,6 +26,10 @@ describe("RoomListViewModel", () => {
             .mockImplementation(() => [...rooms]);
         return { rooms, fn };
     }
+
+    afterEach(() => {
+        jest.restoreAllMocks();
+    });
 
     it("should return a list of rooms", async () => {
         const { rooms } = mockAndCreateRooms();
@@ -47,21 +52,6 @@ describe("RoomListViewModel", () => {
         await waitFor(() => {
             expect(vm.current.rooms).toContain(newRoom);
         });
-    });
-
-    it("should dispatch view room action on openRoom", async () => {
-        const { rooms } = mockAndCreateRooms();
-        const { result: vm } = renderHook(() => useRoomListViewModel());
-
-        const fn = jest.spyOn(dispatcher, "dispatch");
-        act(() => vm.current.openRoom(rooms[7].roomId));
-        expect(fn).toHaveBeenCalledWith(
-            expect.objectContaining({
-                action: Action.ViewRoom,
-                room_id: rooms[7].roomId,
-                metricsTrigger: "RoomList",
-            }),
-        );
     });
 
     describe("Filters", () => {
@@ -202,6 +192,30 @@ describe("RoomListViewModel", () => {
                 // Incompatible primary filter must be hidden
                 expect(vm.current.primaryFilters.find((f) => f.name === primaryFilterName)).toBeUndefined();
             });
+        });
+
+        it("should change sort order", () => {
+            mockAndCreateRooms();
+            const { result: vm } = renderHook(() => useRoomListViewModel());
+
+            const resort = jest.spyOn(RoomListStoreV3.instance, "resort").mockImplementation(() => {});
+
+            // Change the sort option
+            act(() => {
+                vm.current.sort(SortOption.AToZ);
+            });
+
+            // Resort method in RLS must have been called
+            expect(resort).toHaveBeenCalledWith(SortingAlgorithm.Alphabetic);
+        });
+
+        it("should set activeSortOption based on value from settings", () => {
+            // Let's say that the user's preferred sorting is alphabetic
+            jest.spyOn(SettingsStore, "getValue").mockImplementation(() => SortingAlgorithm.Alphabetic);
+
+            mockAndCreateRooms();
+            const { result: vm } = renderHook(() => useRoomListViewModel());
+            expect(vm.current.activeSortOption).toEqual(SortOption.AToZ);
         });
     });
 });

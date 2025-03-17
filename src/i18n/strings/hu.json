@@ -446,7 +446,6 @@
         "access_token": "Hozzáférési kulcs",
         "accessibility": "Akadálymentesség",
         "advanced": "Speciális",
-        "all_rooms": "Összes szoba",
         "analytics": "Analitika",
         "and_n_others": {
             "és még: %(count)s ...": "other",

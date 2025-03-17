@@ -403,7 +403,6 @@
         "access_token": "存取權杖",
         "accessibility": "可近用性",
         "advanced": "進階",
-        "all_rooms": "所有聊天室",
         "analytics": "分析",
         "and_n_others": {
             "other": "與另 %(count)s 個人…",

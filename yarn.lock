@@ -2051,10 +2051,10 @@
     rw "^1.3.3"
     tinyqueue "^3.0.0"
 
-"@matrix-org/analytics-events@^0.29.0":
-  version "0.29.1"
-  resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.29.1.tgz#b812b932d82de1409fa47199260c9a4d4f8349e8"
-  integrity sha512-EyN6TMG4fCeNoQEa0uYTNnMLT4M/F3eCU/usjLDHkVgIcwevvBCHxw2379IbOm4kJBbhSW/pcNkGRKntWu0J9g==
+"@matrix-org/analytics-events@^0.29.2":
+  version "0.29.2"
+  resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.29.2.tgz#20d9877f11d5e411f1610f396f9e490673d6da50"
+  integrity sha512-kpCdf6DBxgE7MbBbYr7FvahrktHHtiph3QN10I6nBAAPQ+hmR3aZHBECxjxLQ9RxvtBF9nlKK4bgy2YrNp6j3A==
 
 "@matrix-org/emojibase-bindings@^1.3.4":
   version "1.3.4"
@@ -3577,10 +3577,10 @@
   resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-4.0.0.tgz#4922404f355f09fb753e6a91cc7efe4e661c9ff1"
   integrity sha512-hFfLSKrGc58rPRp9JH1mkgw3moFEgpL8RQzyDESHErq7P1lUmlIuwKFTVfK5SbdFM5GvHp7nQaFpVmxUQ3Xp+w==
 
-"@vector-im/compound-web@^7.6.4":
-  version "7.6.4"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-7.6.4.tgz#fa09587786befe873371173912a4b8ad82e5ca59"
-  integrity sha512-5jn7EeDej9Rz2cTA2MoYiPVoS/zRSNcjEF1d+LBv+Xo7OGik/uOIBQZcy2fGayVLRVm7L+kf8h3oT0Am4g7X9A==
+"@vector-im/compound-web@^7.7.2":
+  version "7.7.2"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-web/-/compound-web-7.7.2.tgz#07e04a546b86e568b13263092b324efc76398487"
+  integrity sha512-RhPyKzfPo1HRyFi3wy8oc25IXbLLzTmw6A5QvPJgRlMW+LidwqCCYqmFeZrvWxK3pZPqE7hTJbHgUhGe7kxznw==
   dependencies:
     "@floating-ui/react" "^0.27.0"
     "@radix-ui/react-context-menu" "^2.2.1"

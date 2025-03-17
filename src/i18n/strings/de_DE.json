@@ -407,6 +407,15 @@
         "download_logs": "Protokolle herunterladen",
         "downloading_logs": "Lade Protokolle herunter",
         "error_empty": "Bitte teile uns mit, was schief lief - oder besser, beschreibe das Problem auf GitHub in einem \"Issue\".",
+        "failed_download_logs": "Debug-Protokolle konnten nicht heruntergeladen werden: ",
+        "failed_send_logs_causes": {
+            "disallowed_app": "Der Fehlerbericht wurde abgelehnt. Der Rageshake-Server unterstützt diese Anwendung nicht.",
+            "rejected_generic": "Der Bugreport wurde abgelehnt. Der Rageshake-Server hat den Inhalt des Berichts aufgrund einer Richtlinie abgelehnt.",
+            "rejected_recovery_key": "Der Fehlerbericht wurde aus Sicherheitsgründen abgelehnt, da er einen Wiederherstellungsschlüssel enthielt.",
+            "rejected_version": "Dein Fehlerbericht wurde abgelehnt, da die verwendete Version veraltet ist.",
+            "server_unknown_error": "Der Rageshake-Server hat einen unbekannten Fehler festgestellt und konnte den Bericht nicht verarbeiten.",
+            "unknown_error": "Protokolle konnten nicht gesendet werden."
+        },
         "github_issue": "GitHub-Problem",
         "introduction": "Wenn du uns einen Bug auf GitHub gemeldet hast, können uns Debug-Logs helfen, das Problem zu finden. ",
         "log_request": "Um uns zu helfen, dies in Zukunft zu vermeiden, <a>sende uns bitte die Protokolldateien</a>.",
@@ -446,7 +455,6 @@
         "access_token": "Zugriffstoken",
         "accessibility": "Barrierefreiheit",
         "advanced": "Erweitert",
-        "all_rooms": "Alle Räume",
         "analytics": "Analysedaten",
         "and_n_others": {
             "other": "und %(count)s weitere …",
@@ -1297,6 +1305,7 @@
         "error_connecting_heading": "Verbindung zum Integrationsassistenten fehlgeschlagen",
         "explainer": "Integrationsassistenten erhalten Konfigurationsdaten und können Widgets modifizieren, Raumeinladungen verschicken und in deinem Namen Berechtigungslevel setzen.",
         "manage_title": "Integrationen verwalten",
+        "toggle_label": "Aktivieren Sie den Integrationsmanager",
         "use_im": "Verwende einen Integrations-Server, um Bots, Widgets und Sticker-Pakete zu verwalten.",
         "use_im_default": "Nutze einen Integrations-Server <b>(%(serverName)s)</b>, um Bots, Widgets und Sticker-Pakete zu verwalten."
     },
@@ -2088,17 +2097,28 @@
         "failed_add_tag": "Fehler beim Hinzufügen des \"%(tagName)s\"-Tags an dem Raum",
         "failed_remove_tag": "Entfernen der Raum-Kennzeichnung %(tagName)s fehlgeschlagen",
         "failed_set_dm_tag": "Fehler beim Setzen der Nachrichtenmarkierung",
+        "filters": {
+            "favourite": "Favoriten",
+            "people": "Personen",
+            "rooms": "Räume",
+            "unread": "Ungelesen"
+        },
         "home_menu_label": "Startseiteneinstellungen",
         "join_public_room_label": "Öffentlichen Raum betreten",
         "joining_rooms_status": {
             "one": "Betrete %(count)s Raum",
             "other": "Betrete %(count)s Räume"
         },
+        "list_title": "Raumliste",
         "notification_options": "Benachrichtigungsoptionen",
         "open_space_menu": "Menü „Raum öffnen“",
+        "primary_filters": "Filter für die Raumliste",
         "redacting_messages_status": {
             "one": "Entferne Nachrichten in %(count)s Raum",
             "other": "Entferne Nachrichten in %(count)s Räumen"
+        },
+        "room": {
+            "open_room": "Raum öffnen %(roomName)s"
         },
         "show_less": "Weniger anzeigen",
         "show_n_more": {
@@ -2488,10 +2508,23 @@
                 "session_key": "Sitzungsschlüssel:",
                 "title": "Advanced"
             },
+            "delete_key_storage": {
+                "breadcrumb_page": "Schlüsselspeicher löschen",
+                "confirm": "Schlüsselspeicher löschen",
+                "description": "Durch das Löschen des Schlüsselspeichers werden Ihre kryptografische Identität und Ihre Nachrichtenschlüssel vom Server entfernt und die folgenden Sicherheitsfunktionen werden deaktiviert:",
+                "list_first": "Sie werden auf neuen Geräten keinen verschlüsselten Nachrichtenverlauf haben",
+                "list_second": "Sie verlieren den Zugriff auf Ihre verschlüsselten Nachrichten, wenn Sie von %(brand)s überall abgemeldet sind",
+                "title": "Möchten Sie den Schlüsselspeicher wirklich ausschalten und löschen?"
+            },
             "device_not_verified_button": "Dieses Gerät verifizieren",
             "device_not_verified_description": "Sie müssen dieses Gerät verifizieren, um Ihre Verschlüsselungseinstellungen einsehen zu können.",
             "device_not_verified_title": "Gerät nicht verifiziert",
             "dialog_title": "<strong>Einstellungen:</strong> Verschlüsselung",
+            "key_storage": {
+                "allow_key_storage": "Schlüsselspeicherung zulassen",
+                "description": "Speichern Sie Ihre kryptografische Identität und Ihre Nachrichtenschlüssel sicher auf dem Server. Auf diese Weise können Sie Ihren Nachrichtenverlauf auf allen neuen Geräten einsehen. <a>Erfahre mehr </a>",
+                "title": "Schlüsselspeicher"
+            },
             "recovery": {
                 "change_recovery_confirm_button": "Bestätigen Sie den neuen Wiederherstellungsschlüssel",
                 "change_recovery_confirm_description": "Geben Sie unten Ihren neuen Wiederherstellungsschlüssel ein, um den Vorgang abzuschließen. Ihr alter Wiederherstellungsschlüssel funktioniert nicht mehr.",
@@ -2608,6 +2641,7 @@
         "inline_url_previews_room": "URL-Vorschau für Raummitglieder",
         "inline_url_previews_room_account": "URL-Vorschau für dich in diesem Raum",
         "insert_trailing_colon_mentions": "Doppelpunkt nach Erwähnungen einfügen",
+        "invite_avatars": "Zeigen Sie Avatare von Chatrooms an, zu denen Sie eingeladen wurden",
         "jump_to_bottom_on_send": "Nach Senden einer Nachricht im Verlauf nach unten springen",
         "key_backup": {
             "backup_in_progress": "Deine Schlüssel werden gesichert (Das erste Backup könnte ein paar Minuten in Anspruch nehmen).",
@@ -4060,7 +4094,7 @@
         "error_need_to_be_logged_in": "Du musst angemeldet sein.",
         "error_unable_start_audio_stream_description": "Audiostream kann nicht gestartet werden.",
         "error_unable_start_audio_stream_title": "Livestream konnte nicht gestartet werden",
-        "modal_data_warning": "Daten auf diesem Bildschirm werden mit %(widgetDomain)s geteilt",
+        "modal_data_warning": "Die unten aufgeführten Daten werden mit %(widgetDomain)s geteilt.",
         "modal_title_default": "Modales Widget",
         "no_name": "Unbekannte App",
         "open_id_permissions_dialog": {
