@@ -30,7 +30,7 @@ test.describe("Key storage out of sync toast", () => {
 
     test("should prompt for recovery key if 'enter recovery key' pressed", { tag: "@screenshot" }, async ({ page }) => {
         // We need to wait for there to be two toasts as the wait below won't work in isolation:
-        // playwright only evaluates the 'first()' call the initially, not subsequent times it checks, so
+        // playwright only evaluates the 'first()' call initially, not subsequent times it checks, so
         // it would always be checking the same toast, even if another one is now the first.
         await expect(page.getByRole("alert")).toHaveCount(2);
         await expect(page.getByRole("alert").first()).toMatchScreenshot("key-storage-out-of-sync-toast.png");
