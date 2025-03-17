@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import type { Room } from "matrix-js-sdk/src/matrix";
 import { type PrimaryFilter, type SecondaryFilters, useFilteredRooms } from "./useFilteredRooms";
 import { type SortOption, useSorter } from "./useSorter";
+import { useMessagePreviewToggle } from "./useMessagePreviewToggle";
 
 export interface RoomListViewState {
     /**
@@ -39,6 +40,16 @@ export interface RoomListViewState {
      * The currently active sort option.
      */
     activeSortOption: SortOption;
+
+    /**
+     * Whether message previews must be shown or not.
+     */
+    shouldShowMessagePreview: boolean;
+
+    /**
+     * A function to turn on/off message previews.
+     */
+    toggleMessagePreview: () => void;
 }
 
 /**
@@ -48,6 +59,7 @@ export interface RoomListViewState {
 export function useRoomListViewModel(): RoomListViewState {
     const { primaryFilters, rooms, activateSecondaryFilter, activeSecondaryFilter } = useFilteredRooms();
     const { activeSortOption, sort } = useSorter();
+    const { shouldShowMessagePreview, toggleMessagePreview } = useMessagePreviewToggle();
 
     return {
         rooms,
@@ -56,5 +68,7 @@ export function useRoomListViewModel(): RoomListViewState {
         activeSecondaryFilter,
         activeSortOption,
         sort,
+        shouldShowMessagePreview,
+        toggleMessagePreview,
     };
 }
