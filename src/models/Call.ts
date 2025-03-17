@@ -42,7 +42,7 @@ import WidgetStore from "../stores/WidgetStore";
 import { WidgetMessagingStore, WidgetMessagingStoreEvent } from "../stores/widgets/WidgetMessagingStore";
 import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../stores/ActiveWidgetStore";
 import { getCurrentLanguage } from "../languageHandler";
-import { PosthogAnalytics } from "../PosthogAnalytics";
+import { Anonymity, PosthogAnalytics } from "../PosthogAnalytics";
 import { UPDATE_EVENT } from "../stores/AsyncStore";
 import { getJoinedNonFunctionalMembers } from "../utils/room/getJoinedNonFunctionalMembers";
 import { isVideoRoom } from "../utils/video-rooms";
@@ -690,6 +690,10 @@ export class ElementCall extends Call {
         const analyticsID: string = accountAnalyticsData?.getContent().pseudonymousAnalyticsOptIn
             ? accountAnalyticsData?.getContent().id
             : "";
+
+        const posthog =
+            PosthogAnalytics.instance.getAnonymity() !== Anonymity.Disabled ? SdkConfig.get("posthog") : undefined;
+
         // Splice together the Element Call URL for this call
         const params = new URLSearchParams({
             embed: "true", // We're embedding EC within another application
@@ -708,8 +712,8 @@ export class ElementCall extends Call {
             theme: "$org.matrix.msc2873.client_theme",
             analyticsID,
             rageshakeSubmitUrl: SdkConfig.get("bug_report_endpoint_url") ?? "",
-            posthogApiHost: SdkConfig.get("posthog")?.api_host ?? "",
-            posthogApiKey: SdkConfig.get("posthog")?.project_api_key ?? "",
+            posthogApiHost: posthog?.api_host ?? "",
+            posthogApiKey: posthog?.project_api_key ?? "",
         });
 
         if (SettingsStore.getValue("fallbackICEServerAllowed")) params.append("allowIceFallback", "true");
