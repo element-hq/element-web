@@ -21,8 +21,8 @@ describe("<RoomListPrimaryFilters />", () => {
         vm = {
             rooms: [],
             primaryFilters: [
-                { name: "People", active: false, toggle: jest.fn() },
-                { name: "Rooms", active: true, toggle: jest.fn() },
+                { name: "People", active: false, toggle: jest.fn(), key: FilterKey.PeopleFilter },
+                { name: "Rooms", active: true, toggle: jest.fn(), key: FilterKey.RoomsFilter },
             ],
             activateSecondaryFilter: () => {},
             activeSecondaryFilter: SecondaryFilters.AllActivity,

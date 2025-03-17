@@ -27,6 +27,8 @@ export interface PrimaryFilter {
     active: boolean;
     // Text that can be used in the UI to represent this filter.
     name: string;
+    // The key of the filter
+    key: FilterKey;
 }
 
 interface FilteredRooms {
@@ -172,6 +174,7 @@ export function useFilteredRooms(): FilteredRooms {
                 },
                 active: primaryFilter === key,
                 name,
+                key,
             };
         };
         const filters: PrimaryFilter[] = [];
@@ -184,5 +187,7 @@ export function useFilteredRooms(): FilteredRooms {
         return filters;
     }, [primaryFilter, updateRoomsFromStore, secondaryFilter]);
 
-    return { primaryFilters, rooms, activateSecondaryFilter, activeSecondaryFilter };
+    const activePrimaryFilter = useMemo(() => primaryFilters.find((filter) => filter.active), [primaryFilters]);
+
+    return { primaryFilters, activePrimaryFilter, rooms, activateSecondaryFilter, activeSecondaryFilter };
 }
