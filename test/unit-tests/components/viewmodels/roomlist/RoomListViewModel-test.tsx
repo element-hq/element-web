@@ -240,5 +240,4 @@ describe("RoomListViewModel", () => {
             expect(fn).toHaveBeenCalled();
         });
     });
-
 });
