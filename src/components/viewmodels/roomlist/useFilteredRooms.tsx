@@ -36,6 +36,11 @@ interface FilteredRooms {
     rooms: Room[];
     activateSecondaryFilter: (filter: SecondaryFilters) => void;
     activeSecondaryFilter: SecondaryFilters;
+    /**
+     * The currently active primary filter.
+     * If no primary filter is active, this will be undefined.
+     */
+    activePrimaryFilter?: PrimaryFilter;
 }
 
 const filterKeyToNameMap: Map<FilterKey, TranslationKey> = new Map([

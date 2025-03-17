@@ -139,6 +139,19 @@ describe("RoomListViewModel", () => {
             );
         });
 
+        it("should return the current active primary filter", async () => {
+            // Let's say that the user's preferred sorting is alphabetic
+            mockAndCreateRooms();
+            const { result: vm } = renderHook(() => useRoomListViewModel());
+            // Toggle people filter
+            const i = vm.current.primaryFilters.findIndex((f) => f.name === "People");
+            expect(vm.current.primaryFilters[i].active).toEqual(false);
+            act(() => vm.current.primaryFilters[i].toggle());
+
+            // The active primary filter should be the People filter
+            expect(vm.current.activePrimaryFilter).toEqual(vm.current.primaryFilters[i]);
+        });
+
         const testcases: Array<[string, { secondary: SecondaryFilters; filterKey: FilterKey }, string]> = [
             [
                 "Mentions only",

@@ -22,6 +22,12 @@ export interface RoomListViewState {
     primaryFilters: PrimaryFilter[];
 
     /**
+     * The currently active primary filter.
+     * If no primary filter is active, this will be undefined.
+     */
+    activePrimaryFilter?: PrimaryFilter;
+
+    /**
      * A function to activate a given secondary filter.
      */
     activateSecondaryFilter: (filter: SecondaryFilters) => void;
@@ -58,12 +64,15 @@ export interface RoomListViewState {
  */
 export function useRoomListViewModel(): RoomListViewState {
     const { primaryFilters, rooms, activateSecondaryFilter, activeSecondaryFilter } = useFilteredRooms();
+    const { primaryFilters, activePrimaryFilter, rooms, activateSecondaryFilter, activeSecondaryFilter } =
+        useFilteredRooms();
     const { activeSortOption, sort } = useSorter();
     const { shouldShowMessagePreview, toggleMessagePreview } = useMessagePreviewToggle();
 
     return {
         rooms,
         primaryFilters,
+        activePrimaryFilter,
         activateSecondaryFilter,
         activeSecondaryFilter,
         activeSortOption,
