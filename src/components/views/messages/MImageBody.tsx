@@ -33,9 +33,8 @@ import { presentableTextForFile } from "../../../utils/FileUtils";
 import { createReconnectedListener } from "../../../utils/connection";
 import MediaProcessingError from "./shared/MediaProcessingError";
 import { DecryptError, DownloadError } from "../../../utils/DecryptFile";
-import { SettingLevel } from "../../../settings/SettingLevel";
-import { type Settings } from "../../../settings/Settings";
 import HiddenMediaPlaceholder from "./HiddenMediaPlaceholder";
+import { useMediaVisible } from "../../../hooks/useMediaVisible";
 
 enum Placeholder {
     NoImage,
@@ -55,11 +54,25 @@ interface IState {
     };
     hover: boolean;
     focus: boolean;
-    showImage: boolean;
     placeholder: Placeholder;
 }
 
-export default class MImageBody extends React.Component<IBodyProps, IState> {
+interface IProps extends IBodyProps {
+    /**
+     * Should the media be behind a preview.
+     */
+    mediaVisible: boolean;
+    /**
+     * Set the visibility of the media event.
+     * @param visible Should the event be visible.
+     */
+    setMediaVisible: (visible: boolean) => void;
+}
+
+/**
+ * @private Only use for inheritance. Use the default export for presentation.
+ */
+export class MImageBodyInner extends React.Component<IProps, IState> {
     public static contextType = RoomContext;
     declare public context: React.ContextType<typeof RoomContext>;
 
@@ -68,7 +81,6 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     private placeholder = createRef<HTMLDivElement>();
     private timeout?: number;
     private sizeWatcher?: string;
-    private showWatcher?: string;
 
     public state: IState = {
         contentUrl: null,
@@ -77,26 +89,14 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         imgLoaded: false,
         hover: false,
         focus: false,
-        showImage: SettingsStore.getValue("showImages"),
         placeholder: Placeholder.NoImage,
-    };
-
-    protected showImage = (): void => {
-        const eventId = this.props.mxEvent.getId();
-        if (!eventId) {
-            return;
-        }
-        SettingsStore.setValue("showMediaEventIds", null, SettingLevel.DEVICE, {
-            ...SettingsStore.getValue("showMediaEventIds"),
-            [eventId]: true,
-        });
     };
 
     protected onClick = (ev: React.MouseEvent): void => {
         if (ev.button === 0 && !ev.metaKey) {
             ev.preventDefault();
-            if (!this.state.showImage) {
-                this.showImage();
+            if (!this.props.mediaVisible) {
+                this.props.setMediaVisible(true);
                 return;
             }
 
@@ -134,7 +134,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     private get shouldAutoplay(): boolean {
         return !(
             !this.state.contentUrl ||
-            !this.state.showImage ||
+            !this.props.mediaVisible ||
             !this.state.isAnimated ||
             SettingsStore.getValue("autoplayGifs")
         );
@@ -352,21 +352,13 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         }
     }
 
-    public calculateVisible(setting: Settings["showMediaEventIds"]["default"]): void {
-        const mediaEventIdSetting = setting[this.props.mxEvent.getId()!];
-        const showImage =
-            mediaEventIdSetting === true || (SettingsStore.getValue("showImages") && mediaEventIdSetting !== false);
-        this.setState({ showImage });
-        if (showImage) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.downloadImage();
-        }
-    }
-
     public componentDidMount(): void {
         this.unmounted = false;
 
-        this.calculateVisible(SettingsStore.getValue("showMediaEventIds"));
+        if (this.props.mediaVisible) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.downloadImage();
+        }
 
         // Add a 150ms timer for blurhash to first appear.
         if (this.props.mxEvent.getContent().info?.[BLURHASH_FIELD]) {
@@ -383,13 +375,16 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         this.sizeWatcher = SettingsStore.watchSetting("Images.size", null, () => {
             this.forceUpdate(); // we don't really have a reliable thing to update, so just update the whole thing
         });
-        this.showWatcher = SettingsStore.watchSetting("showMediaEventIds", null, (_name, _rId, _level, value) => {
-            this.calculateVisible(value);
-        });
+    }
+
+    public componentDidUpdate(prevProps: Readonly<IProps>): void {
+        if (!prevProps.mediaVisible && this.props.mediaVisible) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.downloadImage();
+        }
     }
 
     public componentWillUnmount(): void {
-        SettingsStore.unwatchSetting(this.showWatcher);
         this.unmounted = true;
         MatrixClientPeg.get()?.off(ClientEvent.Sync, this.reconnectedListener);
         this.clearBlurhashTimeout();
@@ -442,8 +437,8 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
             // by the same width and height logic below.
             if (!this.state.loadedImageDimensions) {
                 let imageElement: JSX.Element;
-                if (!this.state.showImage) {
-                    imageElement = <HiddenMediaPlaceholder onClick={this.showImage} kind="m.image" />;
+                if (!this.props.mediaVisible) {
+                    imageElement = <HiddenMediaPlaceholder kind="m.image" onClick={this.onClick} />;
                 } else {
                     imageElement = (
                         <img
@@ -512,10 +507,10 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
             );
         }
 
-        if (!this.state.showImage) {
+        if (!this.props.mediaVisible) {
             img = (
                 <div style={{ width: maxWidth, height: maxHeight }}>
-                    <HiddenMediaPlaceholder onClick={this.showImage} kind="m.image" />;
+                    <HiddenMediaPlaceholder  kind="m.image" onClick={this.onClick}  />;
                 </div>
             );
             showPlaceholder = false; // because we're hiding the image, so don't show the placeholder.
@@ -527,7 +522,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         }
 
         let banner: ReactNode | undefined;
-        if (this.state.showImage && hoverOrFocus) {
+        if (this.props.mediaVisible && hoverOrFocus) {
             banner = this.getBanner(content);
         }
 
@@ -683,3 +678,10 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         );
     }
 }
+
+const MImageBody: React.FC<IBodyProps> = (props) => {
+    const [mediaVisible, setVisible] = useMediaVisible(props.mxEvent.getId()!);
+    return <MImageBodyInner mediaVisible={mediaVisible} setMediaVisible={setVisible} {...props} />;
+};
+
+export default MImageBody;

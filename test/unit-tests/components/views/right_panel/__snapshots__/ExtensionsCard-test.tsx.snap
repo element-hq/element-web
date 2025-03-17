@@ -71,7 +71,7 @@ exports[`<ExtensionsCard /> should render empty state 1`] = `
       </button>
       <div
         class="mx_Flex mx_EmptyState"
-        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-4x);"
+        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
       >
         <svg
           fill="currentColor"

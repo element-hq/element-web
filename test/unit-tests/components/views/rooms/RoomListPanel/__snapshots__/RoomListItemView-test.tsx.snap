@@ -1,15 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<RoomListCell /> should render a room cell 1`] = `
+exports[`<RoomListItemView /> should render a room item 1`] = `
 <DocumentFragment>
   <button
     aria-label="Open room room1"
-    class="mx_RoomListCell"
+    class="mx_RoomListItemView"
     type="button"
   >
     <div
-      class="mx_Flex mx_RoomListCell_container"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+      class="mx_Flex mx_RoomListItemView_container"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       <div
         class="mx_DecoratedRoomAvatar"
@@ -35,8 +35,8 @@ exports[`<RoomListCell /> should render a room cell 1`] = `
         </span>
       </div>
       <div
-        class="mx_Flex mx_RoomListCell_content"
-        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: 0;"
+        class="mx_Flex mx_RoomListItemView_content"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
       >
         <span
           title="room1"

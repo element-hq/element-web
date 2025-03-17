@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { act } from "react";
 import { fireEvent, render, screen, waitForElementToBeRemoved } from "jest-matrix-react";
 import { EventType, getHttpUriForMxc, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import fetchMock from "fetch-mock-jest";
@@ -27,6 +27,7 @@ import {
 } from "../../../../test-utils";
 import { MediaEventHelper } from "../../../../../src/utils/MediaEventHelper";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
+import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 
 jest.mock("matrix-encrypt-attachment", () => ({
     decryptAttachment: jest.fn(),
@@ -132,7 +133,26 @@ describe("<MImageBody/>", () => {
 
     describe("with image previews/thumbnails disabled", () => {
         beforeEach(() => {
-            jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+            act(() => {
+                SettingsStore.setValue("showImages", null, SettingLevel.DEVICE, false);
+            });
+        });
+
+        afterEach(() => {
+            act(() => {
+                SettingsStore.setValue(
+                    "showImages",
+                    null,
+                    SettingLevel.DEVICE,
+                    SettingsStore.getDefaultValue("showImages"),
+                );
+                SettingsStore.setValue(
+                    "showMediaEventIds",
+                    null,
+                    SettingLevel.DEVICE,
+                    SettingsStore.getDefaultValue("showMediaEventIds"),
+                );
+            });
         });
 
         it("should not download image", async () => {

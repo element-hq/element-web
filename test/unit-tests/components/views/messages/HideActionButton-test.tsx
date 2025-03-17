@@ -10,7 +10,7 @@ import React from "react";
 import { fireEvent, render, screen } from "jest-matrix-react";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
-import HideActionButton from "../../../../../src/components/views/messages/HideActionButton";
+import { HideActionButton } from "../../../../../src/components/views/messages/HideActionButton";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 import type { Settings } from "../../../../../src/settings/Settings";

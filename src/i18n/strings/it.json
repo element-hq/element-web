@@ -411,7 +411,6 @@
         "access_token": "Token di accesso",
         "accessibility": "Accessibilità",
         "advanced": "Avanzato",
-        "all_rooms": "Tutte le stanze",
         "analytics": "Statistiche",
         "and_n_others": {
             "other": "e altri %(count)s ...",

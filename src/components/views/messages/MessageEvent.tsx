@@ -45,8 +45,8 @@ import { type GetRelationsForEvent, type IEventTileOps } from "../rooms/EventTil
 // onMessageAllowed is handled internally
 interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper"> {
     /* overrides for the msgtype-specific components, used by ReplyTile to override file rendering */
-    overrideBodyTypes?: Record<string, typeof React.Component>;
-    overrideEventTypes?: Record<string, typeof React.Component>;
+    overrideBodyTypes?: Record<string, React.ComponentType<IBodyProps>>;
+    overrideEventTypes?: Record<string, React.ComponentType<IBodyProps>>;
 
     // helper function to access relations for this event
     getRelationsForEvent?: GetRelationsForEvent;
@@ -58,7 +58,7 @@ export interface IOperableEventTile {
     getEventTileOps(): IEventTileOps | null;
 }
 
-const baseBodyTypes = new Map<string, typeof React.Component>([
+const baseBodyTypes = new Map<string, React.ComponentType<IBodyProps>>([
     [MsgType.Text, TextualBody],
     [MsgType.Notice, TextualBody],
     [MsgType.Emote, TextualBody],
@@ -80,7 +80,7 @@ const baseEvTypes = new Map<string, React.ComponentType<IBodyProps>>([
 export default class MessageEvent extends React.Component<IProps> implements IMediaBody, IOperableEventTile {
     private body: React.RefObject<React.Component | IOperableEventTile> = createRef();
     private mediaHelper?: MediaEventHelper;
-    private bodyTypes = new Map<string, typeof React.Component>(baseBodyTypes.entries());
+    private bodyTypes = new Map<string, React.ComponentType<IBodyProps>>(baseBodyTypes.entries());
     private evTypes = new Map<string, React.ComponentType<IBodyProps>>(baseEvTypes.entries());
 
     public static contextType = MatrixClientContext;
@@ -115,7 +115,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
     }
 
     private updateComponentMaps(): void {
-        this.bodyTypes = new Map<string, typeof React.Component>(baseBodyTypes.entries());
+        this.bodyTypes = new Map<string, React.ComponentType<IBodyProps>>(baseBodyTypes.entries());
         for (const [bodyType, bodyComponent] of Object.entries(this.props.overrideBodyTypes ?? {})) {
             this.bodyTypes.set(bodyType, bodyComponent);
         }

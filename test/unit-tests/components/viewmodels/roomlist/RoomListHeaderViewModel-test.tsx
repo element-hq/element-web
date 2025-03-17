@@ -6,7 +6,7 @@
  */
 
 import { renderHook } from "jest-matrix-react";
-import { JoinRule, type MatrixClient, type Room, RoomType } from "matrix-js-sdk/src/matrix";
+import { JoinRule, type MatrixClient, type Room, type RoomState, RoomType } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 
 import { useRoomListHeaderViewModel } from "../../../../../src/components/viewmodels/roomlist/RoomListHeaderViewModel";
@@ -79,10 +79,37 @@ describe("useRoomListHeaderViewModel", () => {
         expect(result.current.canCreateRoom).toBe(true);
     });
 
+    it("should be displayComposeMenu=true if the user can creates video room", () => {
+        mocked(shouldShowComponent).mockReturnValue(false);
+        jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
+
+        const { result } = render();
+        expect(result.current.displayComposeMenu).toBe(true);
+    });
+
     it("should be displaySpaceMenu=true if the user is in a space", () => {
         jest.spyOn(SpaceStore.instance, "activeSpaceRoom", "get").mockReturnValue(space);
         const { result } = render();
         expect(result.current.displaySpaceMenu).toBe(true);
+    });
+
+    it("should be canCreateRoom=false if the user has not the right to create a room in a space", () => {
+        mocked(shouldShowComponent).mockReturnValue(true);
+        jest.spyOn(SpaceStore.instance, "activeSpaceRoom", "get").mockReturnValue(space);
+
+        const { result } = render();
+        expect(result.current.canCreateRoom).toBe(false);
+    });
+
+    it("should be canCreateRoom=true if the user has the right to create a room in a space", () => {
+        mocked(shouldShowComponent).mockReturnValue(true);
+        jest.spyOn(SpaceStore.instance, "activeSpaceRoom", "get").mockReturnValue(space);
+        jest.spyOn(space.getLiveTimeline(), "getState").mockReturnValue({
+            maySendStateEvent: jest.fn().mockReturnValue(true),
+        } as unknown as RoomState);
+
+        const { result } = render();
+        expect(result.current.canCreateRoom).toBe(true);
     });
 
     it("should be canInviteInSpace=true if the space join rule is public", () => {

@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { Room } from "matrix-js-sdk/src/matrix";
-import type { Sorter } from "./sorters";
+import type { Sorter, SortingAlgorithm } from "./sorters";
 import type { Filter, FilterKey } from "./filters";
 import { RoomNode } from "./RoomNode";
 import { shouldPromote } from "./utils";
@@ -203,5 +203,12 @@ export class RoomSkipList implements Iterable<Room> {
      */
     public get size(): number {
         return this.levels[0].size;
+    }
+
+    /**
+     * The currently active sorting algorithm.
+     */
+    public get activeSortAlgorithm(): SortingAlgorithm {
+        return this.sorter.type;
     }
 }

@@ -151,9 +151,11 @@ export function createTestClient(): MatrixClient {
                 },
             }),
             isCrossSigningReady: jest.fn().mockResolvedValue(false),
+            disableKeyStorage: jest.fn(),
             resetEncryption: jest.fn(),
             getSessionBackupPrivateKey: jest.fn().mockResolvedValue(null),
             isSecretStorageReady: jest.fn().mockResolvedValue(false),
+            deleteKeyBackupVersion: jest.fn(),
         }),
 
         getPushActionsForEvent: jest.fn(),
@@ -192,6 +194,7 @@ export function createTestClient(): MatrixClient {
         }),
         mxcUrlToHttp: jest.fn().mockImplementation((mxc: string) => `http://this.is.a.url/${mxc.substring(6)}`),
         setAccountData: jest.fn(),
+        deleteAccountData: jest.fn(),
         setRoomAccountData: jest.fn(),
         setRoomTopic: jest.fn(),
         setRoomReadMarkers: jest.fn().mockResolvedValue({}),
@@ -603,7 +606,7 @@ export function mkStubRoom(
         getState: (): RoomState | undefined => undefined,
     } as unknown as EventTimeline;
     return {
-        canInvite: jest.fn(),
+        canInvite: jest.fn().mockReturnValue(false),
         client,
         findThreadForEvent: jest.fn(),
         createThreadsTimelineSets: jest.fn().mockReturnValue(new Promise(() => {})),

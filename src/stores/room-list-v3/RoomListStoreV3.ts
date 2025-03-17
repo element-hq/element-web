@@ -31,6 +31,8 @@ import { RoomsFilter } from "./skip-list/filters/RoomsFilter";
 import { InvitesFilter } from "./skip-list/filters/InvitesFilter";
 import { MentionsFilter } from "./skip-list/filters/MentionsFilter";
 import { LowPriorityFilter } from "./skip-list/filters/LowPriorityFilter";
+import { type Sorter, SortingAlgorithm } from "./skip-list/sorters";
+import { SettingLevel } from "../../settings/SettingLevel";
 
 /**
  * These are the filters passed to the room skip list.
@@ -93,28 +95,32 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
     }
 
     /**
-     * Re-sort the list of rooms by alphabetic order.
+     * Resort the list of rooms using a different algorithm.
+     * @param algorithm The sorting algorithm to use.
      */
-    public useAlphabeticSorting(): void {
-        if (this.roomSkipList) {
-            const sorter = new AlphabeticSorter();
-            this.roomSkipList.useNewSorter(sorter, this.getRooms());
-        }
+    public resort(algorithm: SortingAlgorithm): void {
+        if (!this.roomSkipList) throw new Error("Cannot resort room list before skip list is created.");
+        if (!this.matrixClient) throw new Error("Cannot resort room list without matrix client.");
+        if (this.roomSkipList.activeSortAlgorithm === algorithm) return;
+        const sorter =
+            algorithm === SortingAlgorithm.Alphabetic
+                ? new AlphabeticSorter()
+                : new RecencySorter(this.matrixClient.getSafeUserId());
+        this.roomSkipList.useNewSorter(sorter, this.getRooms());
+        this.emit(LISTS_UPDATE_EVENT);
+        SettingsStore.setValue("RoomList.preferredSorting", null, SettingLevel.DEVICE, algorithm);
     }
 
     /**
-     * Re-sort the list of rooms by recency.
+     * Currently active sorting algorithm if the store is ready or undefined otherwise.
      */
-    public useRecencySorting(): void {
-        if (this.roomSkipList && this.matrixClient) {
-            const sorter = new RecencySorter(this.matrixClient?.getSafeUserId() ?? "");
-            this.roomSkipList.useNewSorter(sorter, this.getRooms());
-        }
+    public get activeSortAlgorithm(): SortingAlgorithm | undefined {
+        return this.roomSkipList?.activeSortAlgorithm;
     }
 
     protected async onReady(): Promise<any> {
         if (this.roomSkipList?.initialized || !this.matrixClient) return;
-        const sorter = new RecencySorter(this.matrixClient.getSafeUserId());
+        const sorter = this.getPreferredSorter(this.matrixClient.getSafeUserId());
         this.roomSkipList = new RoomSkipList(sorter, FILTERS);
         await SpaceStore.instance.storeReadyPromise;
         const rooms = this.getRooms();
@@ -211,6 +217,23 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                 this.addRoomAndEmit(payload.room);
                 break;
             }
+        }
+    }
+
+    /**
+     * Create the correct sorter depending on the persisted user preference.
+     * @param myUserId The user-id of our user.
+     * @returns Sorter object that can be passed to the skip list.
+     */
+    private getPreferredSorter(myUserId: string): Sorter {
+        const preferred = SettingsStore.getValue("RoomList.preferredSorting");
+        switch (preferred) {
+            case SortingAlgorithm.Alphabetic:
+                return new AlphabeticSorter();
+            case SortingAlgorithm.Recency:
+                return new RecencySorter(myUserId);
+            default:
+                throw new Error(`Got unknown sort preference from RoomList.preferredSorting setting`);
         }
     }
 
