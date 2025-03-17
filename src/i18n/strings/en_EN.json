@@ -103,6 +103,7 @@
         "reply": "Reply",
         "reply_in_thread": "Reply in thread",
         "report_content": "Report Content",
+        "report_room": "Report room",
         "resend": "Resend",
         "reset": "Reset",
         "resume": "Resume",
@@ -1808,6 +1809,11 @@
         "report_entire_room": "Report the entire room",
         "spam_or_propaganda": "Spam or propaganda",
         "toxic_behaviour": "Toxic Behaviour"
+    },
+    "report_room": {
+        "description": "Reporting this room will send its unique 'room ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.",
+        "sent": "Your report was sent.",
+        "title": "Report room to Your Homeserver Administrator"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Failed to decrypt %(failedCount)s sessions!",
