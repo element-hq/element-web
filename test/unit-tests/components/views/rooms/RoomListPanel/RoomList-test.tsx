@@ -35,6 +35,8 @@ describe("<RoomList />", () => {
             activeSecondaryFilter: SecondaryFilters.AllActivity,
             sort: jest.fn(),
             activeSortOption: SortOption.Activity,
+            shouldShowMessagePreview: false,
+            toggleMessagePreview: jest.fn(),
         };
 
         // Needed to render a room list cell

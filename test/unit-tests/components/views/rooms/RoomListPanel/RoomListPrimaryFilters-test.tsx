@@ -28,6 +28,8 @@ describe("<RoomListPrimaryFilters />", () => {
             activeSecondaryFilter: SecondaryFilters.AllActivity,
             sort: jest.fn(),
             activeSortOption: SortOption.Activity,
+            shouldShowMessagePreview: false,
+            toggleMessagePreview: jest.fn(),
         };
     });
 
