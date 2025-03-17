@@ -218,4 +218,26 @@ describe("RoomListViewModel", () => {
             expect(vm.current.activeSortOption).toEqual(SortOption.AToZ);
         });
     });
+
+    describe("message preview toggle", () => {
+        it("should return shouldShowMessagePreview based on setting", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation(() => true);
+            mockAndCreateRooms();
+            const { result: vm } = renderHook(() => useRoomListViewModel());
+            expect(vm.current.shouldShowMessagePreview).toEqual(true);
+        });
+
+        it("should change setting on toggle", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation(() => true);
+            const fn = jest.spyOn(SettingsStore, "setValue").mockImplementation(async () => {});
+            mockAndCreateRooms();
+            const { result: vm } = renderHook(() => useRoomListViewModel());
+            expect(vm.current.shouldShowMessagePreview).toEqual(true);
+            act(() => {
+                vm.current.toggleMessagePreview();
+            });
+            expect(vm.current.shouldShowMessagePreview).toEqual(false);
+            expect(fn).toHaveBeenCalled();
+        });
+    });
 });
