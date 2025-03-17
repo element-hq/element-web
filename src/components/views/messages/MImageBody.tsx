@@ -510,7 +510,7 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
         if (!this.props.mediaVisible) {
             img = (
                 <div style={{ width: maxWidth, height: maxHeight }}>
-                    <HiddenMediaPlaceholder  kind="m.image" onClick={this.onClick}  />;
+                    <HiddenMediaPlaceholder kind="m.image" onClick={this.onClick} />;
                 </div>
             );
             showPlaceholder = false; // because we're hiding the image, so don't show the placeholder.
