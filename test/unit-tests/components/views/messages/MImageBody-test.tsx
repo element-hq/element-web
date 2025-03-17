@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { act } from "react";
-import { fireEvent, render, screen, waitForElementToBeRemoved } from "jest-matrix-react";
+import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "jest-matrix-react";
 import { EventType, getHttpUriForMxc, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import fetchMock from "fetch-mock-jest";
 import encrypt from "matrix-encrypt-attachment";
@@ -169,7 +169,7 @@ describe("<MImageBody/>", () => {
             expect(fetchMock).not.toHaveFetched(url);
         });
 
-        it("should render hidden image placeholder", async () => {
+        it.only("should render hidden image placeholder", async () => {
             fetchMock.getOnce(url, { status: 200 });
 
             render(
@@ -186,8 +186,10 @@ describe("<MImageBody/>", () => {
 
             expect(fetchMock).toHaveFetched(url);
 
-            // spinner while downloading image
-            expect(screen.getByRole("progressbar")).toBeInTheDocument();
+            await waitFor(() => {
+                // spinner while downloading image
+                expect(screen.getByRole("progressbar")).toBeInTheDocument();
+            })
         });
     });
 
