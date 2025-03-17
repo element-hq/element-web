@@ -189,7 +189,7 @@ describe("<MImageBody/>", () => {
             await waitFor(() => {
                 // spinner while downloading image
                 expect(screen.getByRole("progressbar")).toBeInTheDocument();
-            })
+            });
         });
     });
 
