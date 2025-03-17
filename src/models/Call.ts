@@ -702,7 +702,7 @@ export class ElementCall extends Call {
 
         const rageshakeSubmitUrl = SdkConfig.get("bug_report_endpoint_url");
         if (rageshakeSubmitUrl) {
-            params.set("rageshakeSubmitUrl", rageshakeSubmitUrl);
+            params.append("rageshakeSubmitUrl", rageshakeSubmitUrl);
         }
 
         const posthogConfig = SdkConfig.get("posthog");
@@ -716,21 +716,24 @@ export class ElementCall extends Call {
                 ? accountAnalyticsData?.id
                 : "";
 
-            params.set("analyticsID", analyticsID); // Legacy, deprecated in favour of posthogUserId
-            params.set("posthogUserId", analyticsID);
-            params.set("posthogApiHost", posthogConfig.api_host);
-            params.set("posthogApiKey", posthogConfig.project_api_key);
+            params.append("analyticsID", analyticsID); // Legacy, deprecated in favour of posthogUserId
+            params.append("posthogUserId", analyticsID);
+            params.append("posthogApiHost", posthogConfig.api_host);
+            params.append("posthogApiKey", posthogConfig.project_api_key);
         }
 
         const sentryConfig = SdkConfig.get("sentry");
         if (sentryConfig) {
-            params.set("sentryDsn", sentryConfig.dsn);
-            params.set("sentryEnvironment", sentryConfig.environment ?? "");
+            params.append("sentryDsn", sentryConfig.dsn);
+            params.append("sentryEnvironment", sentryConfig.environment ?? "");
         }
 
-        if (SettingsStore.getValue("fallbackICEServerAllowed")) params.append("allowIceFallback", "true");
-        if (SettingsStore.getValue("feature_allow_screen_share_only_mode"))
+        if (SettingsStore.getValue("fallbackICEServerAllowed")) {
+            params.append("allowIceFallback", "true");
+        }
+        if (SettingsStore.getValue("feature_allow_screen_share_only_mode")) {
             params.append("allowVoipWithNoMedia", "true");
+        }
 
         // Set custom fonts
         if (SettingsStore.getValue("useSystemFont")) {
