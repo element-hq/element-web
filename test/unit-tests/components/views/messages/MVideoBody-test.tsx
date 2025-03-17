@@ -22,6 +22,7 @@ import {
     mockClientMethodsUser,
 } from "../../../../test-utils";
 import MVideoBody from "../../../../../src/components/views/messages/MVideoBody";
+import { IBodyProps } from "../../../../../src/components/views/messages/IBodyProps";
 
 describe("MVideoBody", () => {
     it("does not crash when given a portrait image", () => {
@@ -109,7 +110,7 @@ function makeMVideoBody(w: number, h: number): RenderResult {
         content,
     });
 
-    const defaultProps: MVideoBody["props"] = {
+    const defaultProps: IBodyProps = {
         mxEvent: event,
         highlights: [],
         highlightLink: "",

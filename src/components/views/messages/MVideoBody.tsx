@@ -46,7 +46,7 @@ interface IProps extends IBodyProps {
     setMediaVisible: (visible: boolean) => void;
 }
 
-export class MVideoBodyInner extends React.PureComponent<IProps, IState> {
+class MVideoBodyInner extends React.PureComponent<IProps, IState> {
     public static contextType = RoomContext;
     declare public context: React.ContextType<typeof RoomContext>;
 
