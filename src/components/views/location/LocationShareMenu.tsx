@@ -6,12 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { SyntheticEvent, useContext, useState } from "react";
-import { Room, IEventRelation } from "matrix-js-sdk/src/matrix";
+import React, { type SyntheticEvent, useContext, useState } from "react";
+import { type Room, type IEventRelation } from "matrix-js-sdk/src/matrix";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import ContextMenu, { MenuProps } from "../../structures/ContextMenu";
-import LocationPicker, { ILocationPickerProps } from "./LocationPicker";
+import ContextMenu, { type MenuProps } from "../../structures/ContextMenu";
+import LocationPicker, { type ILocationPickerProps } from "./LocationPicker";
 import { shareLiveLocation, shareLocation, LocationShareType } from "./shareLocation";
 import SettingsStore from "../../../settings/SettingsStore";
 import ShareDialogButtons from "./ShareDialogButtons";

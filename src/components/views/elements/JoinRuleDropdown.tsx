@@ -6,11 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactElement } from "react";
+import React, { type ReactElement } from "react";
 import { JoinRule } from "matrix-js-sdk/src/matrix";
 
 import Dropdown from "./Dropdown";
-import { NonEmptyArray } from "../../../@types/common";
+import { type NonEmptyArray } from "../../../@types/common";
 import { Icon as AskToJoinIcon } from "../../../../res/img/element-icons/ask-to-join.svg";
 
 interface IProps {

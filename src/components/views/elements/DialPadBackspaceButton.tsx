@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import * as React from "react";
 
 import { _t } from "../../../languageHandler";
-import AccessibleButton, { ButtonEvent } from "./AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "./AccessibleButton";
 
 interface IProps {
     // Callback for when the button is pressed

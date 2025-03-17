@@ -7,46 +7,44 @@
  */
 
 import {
-    Capability,
+    type Capability,
     EventDirection,
-    IOpenIDCredentials,
-    IOpenIDUpdate,
-    ISendDelayedEventDetails,
-    ISendEventDetails,
-    ITurnServer,
-    IReadEventRelationsResult,
-    IRoomEvent,
+    type IOpenIDCredentials,
+    type IOpenIDUpdate,
+    type ISendDelayedEventDetails,
+    type ISendEventDetails,
+    type ITurnServer,
+    type IReadEventRelationsResult,
+    type IRoomEvent,
     MatrixCapabilities,
     OpenIDRequestState,
-    SimpleObservable,
-    Symbols,
-    Widget,
+    type SimpleObservable,
+    type Widget,
     WidgetDriver,
     WidgetEventCapability,
     WidgetKind,
-    IWidgetApiErrorResponseDataDetails,
-    ISearchUserDirectoryResult,
-    IGetMediaConfigResult,
-    UpdateDelayedEventAction,
+    type IWidgetApiErrorResponseDataDetails,
+    type ISearchUserDirectoryResult,
+    type IGetMediaConfigResult,
+    type UpdateDelayedEventAction,
 } from "matrix-widget-api";
 import {
     ClientEvent,
-    ITurnServer as IClientTurnServer,
+    type ITurnServer as IClientTurnServer,
     EventType,
-    IContent,
+    type IContent,
     MatrixError,
-    MatrixEvent,
-    Room,
+    type MatrixEvent,
     Direction,
     THREAD_RELATION_TYPE,
-    SendDelayedEventResponse,
-    StateEvents,
-    TimelineEvents,
+    type SendDelayedEventResponse,
+    type StateEvents,
+    type TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import {
-    ApprovalOpts,
-    CapabilitiesOpts,
+    type ApprovalOpts,
+    type CapabilitiesOpts,
     WidgetLifecycle,
 } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
 
@@ -67,7 +65,7 @@ import { navigateToPermalink } from "../../utils/permalinks/navigator";
 import { SdkContextClass } from "../../contexts/SDKContext";
 import { ModuleRunner } from "../../modules/ModuleRunner";
 import SettingsStore from "../../settings/SettingsStore";
-import { Media } from "../../customisations/Media";
+import { mediaFromMxc } from "../../customisations/Media";
 
 // TODO: Purge this from the universe
 
@@ -469,70 +467,69 @@ export class StopGapWidgetDriver extends WidgetDriver {
         }
     }
 
-    private pickRooms(roomIds?: (string | Symbols.AnyRoom)[]): Room[] {
-        const client = MatrixClientPeg.get();
-        if (!client) throw new Error("Not attached to a client");
-
-        const targetRooms = roomIds
-            ? roomIds.includes(Symbols.AnyRoom)
-                ? client.getVisibleRooms(SettingsStore.getValue("feature_dynamic_room_predecessors"))
-                : roomIds.map((r) => client.getRoom(r))
-            : [client.getRoom(SdkContextClass.instance.roomViewStore.getRoomId()!)];
-        return targetRooms.filter((r) => !!r) as Room[];
-    }
-
-    public async readRoomEvents(
+    /**
+     * Reads all events of the given type, and optionally `msgtype` (if applicable/defined),
+     * the user has access to. The widget API will have already verified that the widget is
+     * capable of receiving the events. Less events than the limit are allowed to be returned,
+     * but not more.
+     * @param roomId The ID of the room to look within.
+     * @param eventType The event type to be read.
+     * @param msgtype The msgtype of the events to be read, if applicable/defined.
+     * @param stateKey The state key of the events to be read, if applicable/defined.
+     * @param limit The maximum number of events to retrieve. Will be zero to denote "as many as
+     * possible".
+     * @param since When null, retrieves the number of events specified by the "limit" parameter.
+     * Otherwise, the event ID at which only subsequent events will be returned, as many as specified
+     * in "limit".
+     * @returns {Promise<IRoomEvent[]>} Resolves to the room events, or an empty array.
+     */
+    public async readRoomTimeline(
+        roomId: string,
         eventType: string,
         msgtype: string | undefined,
-        limitPerRoom: number,
-        roomIds?: (string | Symbols.AnyRoom)[],
+        stateKey: string | undefined,
+        limit: number,
+        since: string | undefined,
     ): Promise<IRoomEvent[]> {
-        limitPerRoom = limitPerRoom > 0 ? Math.min(limitPerRoom, Number.MAX_SAFE_INTEGER) : Number.MAX_SAFE_INTEGER; // relatively arbitrary
+        limit = limit > 0 ? Math.min(limit, Number.MAX_SAFE_INTEGER) : Number.MAX_SAFE_INTEGER; // relatively arbitrary
 
-        const rooms = this.pickRooms(roomIds);
-        const allResults: IRoomEvent[] = [];
-        for (const room of rooms) {
-            const results: MatrixEvent[] = [];
-            const events = room.getLiveTimeline().getEvents(); // timelines are most recent last
-            for (let i = events.length - 1; i > 0; i--) {
-                if (results.length >= limitPerRoom) break;
+        const room = MatrixClientPeg.safeGet().getRoom(roomId);
+        if (room === null) return [];
+        const results: MatrixEvent[] = [];
+        const events = room.getLiveTimeline().getEvents(); // timelines are most recent last
+        for (let i = events.length - 1; i >= 0; i--) {
+            const ev = events[i];
+            if (results.length >= limit) break;
+            if (since !== undefined && ev.getId() === since) break;
 
-                const ev = events[i];
-                if (ev.getType() !== eventType || ev.isState()) continue;
-                if (eventType === EventType.RoomMessage && msgtype && msgtype !== ev.getContent()["msgtype"]) continue;
-                results.push(ev);
-            }
-
-            results.forEach((e) => allResults.push(e.getEffectiveEvent() as IRoomEvent));
+            if (ev.getType() !== eventType || ev.isState()) continue;
+            if (eventType === EventType.RoomMessage && msgtype && msgtype !== ev.getContent()["msgtype"]) continue;
+            if (ev.getStateKey() !== undefined && stateKey !== undefined && ev.getStateKey() !== stateKey) continue;
+            results.push(ev);
         }
-        return allResults;
+
+        return results.map((e) => e.getEffectiveEvent() as IRoomEvent);
     }
 
-    public async readStateEvents(
-        eventType: string,
-        stateKey: string | undefined,
-        limitPerRoom: number,
-        roomIds?: (string | Symbols.AnyRoom)[],
-    ): Promise<IRoomEvent[]> {
-        limitPerRoom = limitPerRoom > 0 ? Math.min(limitPerRoom, Number.MAX_SAFE_INTEGER) : Number.MAX_SAFE_INTEGER; // relatively arbitrary
+    /**
+     * Reads the current values of all matching room state entries.
+     * @param roomId The ID of the room.
+     * @param eventType The event type of the entries to be read.
+     * @param stateKey The state key of the entry to be read. If undefined,
+     * all room state entries with a matching event type should be returned.
+     * @returns {Promise<IRoomEvent[]>} Resolves to the events representing the
+     * current values of the room state entries.
+     */
+    public async readRoomState(roomId: string, eventType: string, stateKey: string | undefined): Promise<IRoomEvent[]> {
+        const room = MatrixClientPeg.safeGet().getRoom(roomId);
+        if (room === null) return [];
+        const state = room.getLiveTimeline().getState(Direction.Forward);
+        if (state === undefined) return [];
 
-        const rooms = this.pickRooms(roomIds);
-        const allResults: IRoomEvent[] = [];
-        for (const room of rooms) {
-            const results: MatrixEvent[] = [];
-            const state = room.currentState.events.get(eventType);
-            if (state) {
-                if (stateKey === "" || !!stateKey) {
-                    const forKey = state.get(stateKey);
-                    if (forKey) results.push(forKey);
-                } else {
-                    results.push(...Array.from(state.values()));
-                }
-            }
-
-            results.slice(0, limitPerRoom).forEach((e) => allResults.push(e.getEffectiveEvent() as IRoomEvent));
-        }
-        return allResults;
+        if (stateKey === undefined)
+            return state.getStateEvents(eventType).map((e) => e.getEffectiveEvent() as IRoomEvent);
+        const event = state.getStateEvents(eventType, stateKey);
+        return event === null ? [] : [event.getEffectiveEvent() as IRoomEvent];
     }
 
     public async askOpenID(observer: SimpleObservable<IOpenIDUpdate>): Promise<void> {
@@ -687,10 +684,21 @@ export class StopGapWidgetDriver extends WidgetDriver {
      */
     public async downloadFile(contentUri: string): Promise<{ file: XMLHttpRequestBodyInit }> {
         const client = MatrixClientPeg.safeGet();
-        const media = new Media({ mxc: contentUri }, client);
+        const media = mediaFromMxc(contentUri, client);
         const response = await media.downloadSource();
         const blob = await response.blob();
         return { file: blob };
+    }
+
+    /**
+     * Gets the IDs of all joined or invited rooms currently known to the
+     * client.
+     * @returns The room IDs.
+     */
+    public getKnownRooms(): string[] {
+        return MatrixClientPeg.safeGet()
+            .getVisibleRooms(SettingsStore.getValue("feature_dynamic_room_predecessors"))
+            .map((r) => r.roomId);
     }
 
     /**

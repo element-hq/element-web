@@ -11,7 +11,6 @@ import * as React from "react";
 
 import { ALTERNATE_KEY_NAME } from "../../accessibility/KeyboardShortcuts";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import { ActionPayload } from "../../dispatcher/payloads";
 import { IS_MAC, Key } from "../../Keyboard";
 import { _t } from "../../languageHandler";
 import AccessibleButton from "../views/elements/AccessibleButton";
@@ -22,25 +21,9 @@ interface IProps {
 }
 
 export default class RoomSearch extends React.PureComponent<IProps> {
-    private dispatcherRef?: string;
-
-    public componentDidMount(): void {
-        this.dispatcherRef = defaultDispatcher.register(this.onAction);
-    }
-
-    public componentWillUnmount(): void {
-        defaultDispatcher.unregister(this.dispatcherRef);
-    }
-
     private openSpotlight(): void {
         defaultDispatcher.fire(Action.OpenSpotlight);
     }
-
-    private onAction = (payload: ActionPayload): void => {
-        if (payload.action === "focus_room_filter") {
-            this.openSpotlight();
-        }
-    };
 
     public render(): React.ReactNode {
         const classes = classNames(

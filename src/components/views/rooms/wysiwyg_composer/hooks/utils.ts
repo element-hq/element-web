@@ -6,13 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MutableRefObject, RefObject } from "react";
-import { IEventRelation, MatrixClient } from "matrix-js-sdk/src/matrix";
-import { WysiwygEvent } from "@vector-im/matrix-wysiwyg";
+import { type MutableRefObject, type RefObject } from "react";
+import { type IEventRelation, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type WysiwygEvent } from "@vector-im/matrix-wysiwyg";
 
-import { TimelineRenderingType } from "../../../../../contexts/RoomContext";
-import { IRoomState } from "../../../../structures/RoomView";
-import Autocomplete from "../../Autocomplete";
+import { type TimelineRenderingType } from "../../../../../contexts/RoomContext";
+import { type IRoomState } from "../../../../structures/RoomView";
+import type Autocomplete from "../../Autocomplete";
 import { getKeyBindingsManager } from "../../../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../../../accessibility/KeyboardShortcuts";
 import { getBlobSafeMimeType } from "../../../../../utils/blobs";
@@ -92,7 +92,7 @@ export function handleEventWithAutocomplete(
                 handled = true;
                 break;
             case KeyBindingAction.CancelAutocomplete:
-                autocompleteRef.current.onEscape(event as {} as React.KeyboardEvent);
+                autocompleteRef.current.onEscape(event);
                 handled = true;
                 break;
             default:

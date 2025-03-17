@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 
 import { NotificationLevel } from "./NotificationLevel";
-import { IDestroyable } from "../../utils/IDestroyable";
+import { type IDestroyable } from "../../utils/IDestroyable";
 import SettingsStore from "../../settings/SettingsStore";
 
 export interface INotificationStateSnapshotParams {

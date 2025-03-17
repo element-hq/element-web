@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { completeAuthorizationCodeGrant, generateOidcAuthorizationUrl } from "matrix-js-sdk/src/oidc/authorize";
-import { QueryDict } from "matrix-js-sdk/src/utils";
-import { OidcClientConfig } from "matrix-js-sdk/src/matrix";
-import { randomString } from "matrix-js-sdk/src/randomstring";
-import { IdTokenClaims } from "oidc-client-ts";
+import { type QueryDict } from "matrix-js-sdk/src/utils";
+import { type OidcClientConfig } from "matrix-js-sdk/src/matrix";
+import { secureRandomString } from "matrix-js-sdk/src/randomstring";
+import { type IdTokenClaims } from "oidc-client-ts";
 
 import { OidcClientError } from "./error";
 import PlatformPeg from "../../PlatformPeg";
@@ -34,12 +34,12 @@ export const startOidcLogin = async (
 ): Promise<void> => {
     const redirectUri = PlatformPeg.get()!.getOidcCallbackUrl().href;
 
-    const nonce = randomString(10);
+    const nonce = secureRandomString(10);
 
     const prompt = isRegistration ? "create" : undefined;
 
     const authorizationUrl = await generateOidcAuthorizationUrl({
-        metadata: delegatedAuthConfig.metadata,
+        metadata: delegatedAuthConfig,
         redirectUri,
         clientId,
         homeserverUrl,

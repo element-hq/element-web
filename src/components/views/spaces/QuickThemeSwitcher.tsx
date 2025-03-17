@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactElement, useMemo } from "react";
+import React, { type ReactElement, useMemo } from "react";
 
 import { _t } from "../../../languageHandler";
 import { Action } from "../../../dispatcher/actions";
@@ -15,9 +15,9 @@ import Dropdown from "../elements/Dropdown";
 import SettingsStore from "../../../settings/SettingsStore";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import dis from "../../../dispatcher/dispatcher";
-import { RecheckThemePayload } from "../../../dispatcher/payloads/RecheckThemePayload";
+import { type RecheckThemePayload } from "../../../dispatcher/payloads/RecheckThemePayload";
 import PosthogTrackers from "../../../PosthogTrackers";
-import { NonEmptyArray } from "../../../@types/common";
+import { type NonEmptyArray } from "../../../@types/common";
 import { useTheme } from "../../../hooks/useTheme";
 
 type Props = {
@@ -27,7 +27,7 @@ type Props = {
 const MATCH_SYSTEM_THEME_ID = "MATCH_SYSTEM_THEME_ID";
 
 const QuickThemeSwitcher: React.FC<Props> = ({ requestClose }) => {
-    const orderedThemes = useMemo(getOrderedThemes, []);
+    const orderedThemes = useMemo(() => getOrderedThemes(), []);
 
     const themeState = useTheme();
     const nonHighContrast = findNonHighContrastTheme(themeState.theme);

@@ -12,27 +12,24 @@ Please see LICENSE files in the repository root for full details.
 
 // To ensure we load the browser-matrix version first
 import "matrix-js-sdk/src/browser-index";
-import React, { ReactElement, StrictMode } from "react";
+import React, { type ReactElement, StrictMode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { createClient, AutoDiscovery, ClientConfig } from "matrix-js-sdk/src/matrix";
-import { WrapperLifecycle, WrapperOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WrapperLifecycle";
+import { createClient, AutoDiscovery, type ClientConfig } from "matrix-js-sdk/src/matrix";
+import { WrapperLifecycle, type WrapperOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WrapperLifecycle";
 
+import type { QueryDict } from "matrix-js-sdk/src/utils";
 import PlatformPeg from "../PlatformPeg";
 import AutoDiscoveryUtils from "../utils/AutoDiscoveryUtils";
 import * as Lifecycle from "../Lifecycle";
 import SdkConfig, { parseSsoRedirectOptions } from "../SdkConfig";
-import { IConfigOptions } from "../IConfigOptions";
+import { type IConfigOptions } from "../IConfigOptions";
 import { SnakedObject } from "../utils/SnakedObject";
 import MatrixChat from "../components/structures/MatrixChat";
-import { ValidatedServerConfig } from "../utils/ValidatedServerConfig";
+import { type ValidatedServerConfig } from "../utils/ValidatedServerConfig";
 import { ModuleRunner } from "../modules/ModuleRunner";
 import { parseQs } from "./url_utils";
 import { getInitialScreenAfterLogin, getScreenFromLocation, init as initRouting, onNewScreen } from "./routing";
 import { UserFriendlyError } from "../languageHandler";
-
-// add React and ReactPerf to the global namespace, to make them easier to access via the console
-// this incidentally means we can forget our React imports in JSX files without penalty.
-window.React = React;
 
 logger.log(`Application is running in ${process.env.NODE_ENV} mode`);
 
@@ -54,7 +51,7 @@ function onTokenLoginCompleted(): void {
     window.history.replaceState(null, "", url.href);
 }
 
-export async function loadApp(fragParams: {}, matrixChatRef: React.Ref<MatrixChat>): Promise<ReactElement> {
+export async function loadApp(fragParams: QueryDict, matrixChatRef: React.Ref<MatrixChat>): Promise<ReactElement> {
     initRouting();
     const platform = PlatformPeg.get();
 

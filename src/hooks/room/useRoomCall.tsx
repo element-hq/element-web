@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room } from "matrix-js-sdk/src/matrix";
-import React, { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import { type Room } from "matrix-js-sdk/src/matrix";
+import React, { type ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
 import { useFeatureEnabled } from "../useSettings";
@@ -24,11 +24,11 @@ import { Container, WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutS
 import { useRoomState } from "../useRoomState";
 import { _t } from "../../languageHandler";
 import { isManagedHybridWidget, isManagedHybridWidgetEnabled } from "../../widgets/ManagedHybrid";
-import { IApp } from "../../stores/WidgetStore";
+import { type IApp } from "../../stores/WidgetStore";
 import { SdkContextClass } from "../../contexts/SDKContext";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../dispatcher/actions";
 import { CallStore, CallStoreEvent } from "../../stores/CallStore";
 import { isVideoRoom } from "../../utils/video-rooms";
@@ -36,7 +36,7 @@ import { useGuestAccessInformation } from "./useGuestAccessInformation";
 import SettingsStore from "../../settings/SettingsStore";
 import { UIFeature } from "../../settings/UIFeature";
 import { BetaPill } from "../../components/views/beta/BetaCard";
-import { InteractionName } from "../../PosthogTrackers";
+import { type InteractionName } from "../../PosthogTrackers";
 
 export enum PlatformCallType {
     ElementCall,

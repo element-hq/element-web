@@ -6,12 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type RefObject } from "react";
 
 import UIStore, { UI_EVENTS } from "../../../stores/UIStore";
 
 interface IProps {
-    sensor: Element;
+    sensor: RefObject<Element>;
     breakpoint: number;
     onMeasurement(narrow: boolean): void;
 }
@@ -35,14 +35,14 @@ export default class Measured extends React.PureComponent<IProps> {
     }
 
     public componentDidUpdate(prevProps: Readonly<IProps>): void {
-        const previous = prevProps.sensor;
-        const current = this.props.sensor;
+        const previous = prevProps.sensor.current;
+        const current = this.props.sensor.current;
         if (previous === current) return;
         if (previous) {
             UIStore.instance.stopTrackingElementDimensions(`Measured${this.instanceId}`);
         }
         if (current) {
-            UIStore.instance.trackElementDimensions(`Measured${this.instanceId}`, this.props.sensor);
+            UIStore.instance.trackElementDimensions(`Measured${this.instanceId}`, this.props.sensor.current);
         }
     }
 

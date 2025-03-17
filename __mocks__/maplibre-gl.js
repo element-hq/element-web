@@ -17,6 +17,7 @@ class MockMap extends EventEmitter {
     setCenter = jest.fn();
     setStyle = jest.fn();
     fitBounds = jest.fn();
+    remove = jest.fn();
 }
 const MockMapInstance = new MockMap();
 

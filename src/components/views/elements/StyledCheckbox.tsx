@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { Ref } from "react";
-import { randomString } from "matrix-js-sdk/src/randomstring";
+import React, { type Ref } from "react";
+import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import classnames from "classnames";
 
 export enum CheckboxStyle {
@@ -21,9 +21,7 @@ interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
     id?: string;
 }
 
-interface IState {}
-
-export default class StyledCheckbox extends React.PureComponent<IProps, IState> {
+export default class StyledCheckbox extends React.PureComponent<IProps> {
     private id: string;
 
     public static readonly defaultProps = {
@@ -33,7 +31,7 @@ export default class StyledCheckbox extends React.PureComponent<IProps, IState> 
     public constructor(props: IProps) {
         super(props);
         // 56^10 so unlikely chance of collision.
-        this.id = this.props.id || "checkbox_" + randomString(10);
+        this.id = this.props.id || "checkbox_" + secureRandomString(10);
     }
 
     public render(): React.ReactNode {

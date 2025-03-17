@@ -6,10 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Download, type Page } from "@playwright/test";
+import { type Download, type Page } from "@playwright/test";
 
 import { test, expect } from "../../element-web-test";
 import { viewRoomSummaryByName } from "./utils";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 const ROOM_NAME = "Test room";
 const NAME = "Alice";
@@ -181,6 +182,8 @@ test.describe("FilePanel", () => {
     });
 
     test.describe("download", () => {
+        test.skip(isDendrite, "due to a Dendrite sending Content-Disposition inline");
+
         test("should download an image via the link on the panel", async ({ page, context }) => {
             // Upload an image file
             await uploadFile(page, "playwright/sample-files/riot.png");

@@ -7,15 +7,17 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { lazy } from "react";
-import { SecretStorage } from "matrix-js-sdk/src/matrix";
-import { deriveRecoveryKeyFromPassphrase, decodeRecoveryKey, CryptoCallbacks } from "matrix-js-sdk/src/crypto-api";
-import { logger } from "matrix-js-sdk/src/logger";
+import { type SecretStorage } from "matrix-js-sdk/src/matrix";
+import { deriveRecoveryKeyFromPassphrase, decodeRecoveryKey, type CryptoCallbacks } from "matrix-js-sdk/src/crypto-api";
+import { logger as rootLogger } from "matrix-js-sdk/src/logger";
 
 import Modal from "./Modal";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import { _t } from "./languageHandler";
 import { isSecureBackupRequired } from "./utils/WellKnownUtils";
-import AccessSecretStorageDialog, { KeyParams } from "./components/views/dialogs/security/AccessSecretStorageDialog";
+import AccessSecretStorageDialog, {
+    type KeyParams,
+} from "./components/views/dialogs/security/AccessSecretStorageDialog";
 import { ModuleRunner } from "./modules/ModuleRunner";
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import InteractiveAuthDialog from "./components/views/dialogs/InteractiveAuthDialog";
@@ -28,6 +30,8 @@ import InteractiveAuthDialog from "./components/views/dialogs/InteractiveAuthDia
 let secretStorageKeys: Record<string, Uint8Array> = {};
 let secretStorageKeyInfo: Record<string, SecretStorage.SecretStorageKeyDescription> = {};
 let secretStorageBeingAccessed = false;
+
+const logger = rootLogger.getChild("SecurityManager:");
 
 /**
  * This can be used by other components to check if secret storage access is in
@@ -70,33 +74,34 @@ function makeInputToKey(
     };
 }
 
-async function getSecretStorageKey({
-    keys: keyInfos,
-}: {
-    keys: Record<string, SecretStorage.SecretStorageKeyDescription>;
-}): Promise<[string, Uint8Array]> {
+async function getSecretStorageKey(
+    {
+        keys: keyInfos,
+    }: {
+        keys: Record<string, SecretStorage.SecretStorageKeyDescription>;
+    },
+    secretName: string,
+): Promise<[string, Uint8Array]> {
     const cli = MatrixClientPeg.safeGet();
-    let keyId = await cli.secretStorage.getDefaultKeyId();
-    let keyInfo!: SecretStorage.SecretStorageKeyDescription;
-    if (keyId) {
-        // use the default SSSS key if set
-        keyInfo = keyInfos[keyId];
-        if (!keyInfo) {
-            // if the default key is not available, pretend the default key
-            // isn't set
-            keyId = null;
-        }
-    }
-    if (!keyId) {
-        // if no default SSSS key is set, fall back to a heuristic of using the
+    const defaultKeyId = await cli.secretStorage.getDefaultKeyId();
+
+    let keyId: string;
+    // If the defaultKey is useful, use that
+    if (defaultKeyId && keyInfos[defaultKeyId]) {
+        keyId = defaultKeyId;
+    } else {
+        // Fall back to a heuristic of using the
         // only available key, if only one key is set
-        const keyInfoEntries = Object.entries(keyInfos);
-        if (keyInfoEntries.length > 1) {
+        const usefulKeys = Object.keys(keyInfos);
+        if (usefulKeys.length > 1) {
             throw new Error("Multiple storage key requests not implemented");
         }
-        [keyId, keyInfo] = keyInfoEntries[0];
+        keyId = usefulKeys[0];
     }
-    logger.debug(`getSecretStorageKey: request for 4S keys [${Object.keys(keyInfos)}]: looking for key ${keyId}`);
+    const keyInfo = keyInfos[keyId];
+    logger.debug(
+        `getSecretStorageKey: request for 4S keys [${Object.keys(keyInfos)}] for secret \`${secretName}\`: looking for key ${keyId}`,
+    );
 
     // Check the in-memory cache
     if (secretStorageBeingAccessed && secretStorageKeys[keyId]) {
@@ -106,12 +111,18 @@ async function getSecretStorageKey({
 
     const keyFromCustomisations = ModuleRunner.instance.extensions.cryptoSetup.getSecretStorageKey();
     if (keyFromCustomisations) {
-        logger.log("getSecretStorageKey: Using secret storage key from CryptoSetupExtension");
+        logger.debug("getSecretStorageKey: Using secret storage key from CryptoSetupExtension");
         cacheSecretStorageKey(keyId, keyInfo, keyFromCustomisations);
         return [keyId, keyFromCustomisations];
     }
 
-    logger.debug("getSecretStorageKey: prompting user for key");
+    // We only prompt the user for the default key
+    if (keyId !== defaultKeyId) {
+        logger.debug(`getSecretStorageKey: request for non-default key ${keyId}: not prompting user`);
+        throw new Error("Request for non-default 4S key");
+    }
+
+    logger.debug(`getSecretStorageKey: prompting user for key ${keyId}`);
     const inputToKey = makeInputToKey(keyInfo);
     const { finished } = Modal.createDialog(
         AccessSecretStorageDialog,
@@ -139,7 +150,7 @@ async function getSecretStorageKey({
     if (!keyParams) {
         throw new AccessCancelledError();
     }
-    logger.debug("getSecretStorageKey: got key from user");
+    logger.debug(`getSecretStorageKey: got key ${keyId} from user`);
     const key = await inputToKey(keyParams);
 
     // Save to cache to avoid future prompts in the current session
@@ -154,6 +165,7 @@ function cacheSecretStorageKey(
     key: Uint8Array,
 ): void {
     if (secretStorageBeingAccessed) {
+        logger.debug(`Caching 4S key ${keyId}`);
         secretStorageKeys[keyId] = key;
         secretStorageKeyInfo[keyId] = keyInfo;
     }
@@ -173,13 +185,13 @@ export const crossSigningCallbacks: CryptoCallbacks = {
  * @param func - The operation to be wrapped.
  */
 export async function withSecretStorageKeyCache<T>(func: () => Promise<T>): Promise<T> {
-    logger.debug("SecurityManager: enabling 4S key cache");
+    logger.debug("enabling 4S key cache");
     secretStorageBeingAccessed = true;
     try {
         return await func();
     } finally {
         // Clear secret storage key cache now that work is complete
-        logger.debug("SecurityManager: disabling 4S key cache");
+        logger.debug("disabling 4S key cache");
         secretStorageBeingAccessed = false;
         secretStorageKeys = {};
         secretStorageKeyInfo = {};

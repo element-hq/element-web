@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render, screen, waitFor } from "jest-matrix-react";
-import { mocked, MockedObject } from "jest-mock";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { mocked, type MockedObject } from "jest-mock";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import _RightPanel from "../../../../src/components/structures/RightPanel";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";

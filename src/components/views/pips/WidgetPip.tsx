@@ -6,13 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { FC, MutableRefObject, useCallback, useMemo } from "react";
-import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
+import React, { type FC, type MutableRefObject, useCallback, useMemo } from "react";
+import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import BackIcon from "@vector-im/compound-design-tokens/assets/web/icons/arrow-left";
 
 import PersistentApp from "../elements/PersistentApp";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../../dispatcher/actions";
 import { useCallForWidget } from "../../../hooks/useCall";
 import WidgetStore from "../../../stores/WidgetStore";
@@ -26,7 +26,7 @@ import { WidgetType } from "../../../widgets/WidgetType";
 import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
 import WidgetUtils from "../../../utils/WidgetUtils";
 import { ElementWidgetActions } from "../../../stores/widgets/ElementWidgetActions";
-import { ButtonEvent } from "../elements/AccessibleButton";
+import { type ButtonEvent } from "../elements/AccessibleButton";
 
 interface Props {
     widgetId: string;

@@ -6,8 +6,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { useCallback, useEffect, useState } from "react";
-import { ClientEvent, MatrixClient, MatrixEventEvent, Room } from "matrix-js-sdk/src/matrix";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { ClientEvent, type MatrixClient, MatrixEventEvent, type Room } from "matrix-js-sdk/src/matrix";
 import { throttle } from "lodash";
 
 import { doesRoomHaveUnreadThreads } from "../../../../Unread";
@@ -42,14 +42,12 @@ export function useUnreadThreadRooms(forceComputation: boolean): Result {
         setResult(computeUnreadThreadRooms(mxClient, msc3946ProcessDynamicPredecessor, settingTACOnlyNotifs));
     }, [mxClient, msc3946ProcessDynamicPredecessor, settingTACOnlyNotifs]);
 
-    // The exhautive deps lint rule can't compute dependencies here since it's not a plain inline func.
-    // We make this as simple as possible so its only dep is doUpdate itself.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const scheduleUpdate = useCallback(
-        throttle(doUpdate, MIN_UPDATE_INTERVAL_MS, {
-            leading: false,
-            trailing: true,
-        }),
+    const scheduleUpdate = useMemo(
+        () =>
+            throttle(doUpdate, MIN_UPDATE_INTERVAL_MS, {
+                leading: false,
+                trailing: true,
+            }),
         [doUpdate],
     );
 

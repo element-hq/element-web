@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import "@testing-library/jest-dom";
 import "blob-polyfill";
-import { randomString } from "matrix-js-sdk/src/randomstring";
+import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import { mocked } from "jest-mock";
 
 import { PredictableRandom } from "./test-utils/predictableRandom"; // https://github.com/jsdom/jsdom/issues/2555
@@ -25,7 +25,8 @@ jest.mock("matrix-js-sdk/src/randomstring");
 beforeEach(() => {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     const mockRandom = new PredictableRandom();
-    mocked(randomString).mockImplementation((len) => {
+    // needless to say, the mock is not cryptographically secure
+    mocked(secureRandomString).mockImplementation((len) => {
         let ret = "";
         for (let i = 0; i < len; ++i) {
             const v = mockRandom.get() * chars.length;

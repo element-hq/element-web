@@ -5,8 +5,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ReactNode } from "react";
-import { createRoot, Root } from "react-dom/client";
+import { type ReactNode } from "react";
+import { createRoot, type Root } from "react-dom/client";
 
 /**
  * Utility class to render & unmount additional React roots,

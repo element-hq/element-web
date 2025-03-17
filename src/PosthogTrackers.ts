@@ -6,10 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { PureComponent, SyntheticEvent } from "react";
-import { WebScreen as ScreenEvent } from "@matrix-org/analytics-events/types/typescript/WebScreen";
-import { Interaction as InteractionEvent } from "@matrix-org/analytics-events/types/typescript/Interaction";
-import { PinUnpinAction } from "@matrix-org/analytics-events/types/typescript/PinUnpinAction";
+import { PureComponent, type SyntheticEvent } from "react";
+import { type WebScreen as ScreenEvent } from "@matrix-org/analytics-events/types/typescript/WebScreen";
+import { type Interaction as InteractionEvent } from "@matrix-org/analytics-events/types/typescript/Interaction";
+import { type PinUnpinAction } from "@matrix-org/analytics-events/types/typescript/PinUnpinAction";
 
 import PageType from "./PageTypes";
 import Views from "./Views";
@@ -24,7 +24,6 @@ const notLoggedInMap: Record<Exclude<Views, Views.LOGGED_IN>, ScreenName> = {
     [Views.WELCOME]: "Welcome",
     [Views.LOGIN]: "Login",
     [Views.REGISTER]: "Register",
-    [Views.USE_CASE_SELECTION]: "UseCaseSelection",
     [Views.FORGOT_PASSWORD]: "ForgotPassword",
     [Views.COMPLETE_SECURITY]: "CompleteSecurity",
     [Views.E2E_SETUP]: "E2ESetup",

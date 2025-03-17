@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ComponentClass, createContext, forwardRef, useContext } from "react";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import React, { type ComponentClass, createContext, forwardRef, useContext } from "react";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 // This context is available to components under LoggedInView,
 // the context must not be used by components outside a MatrixClientContext tree.
@@ -24,7 +24,7 @@ export function useMatrixClientContext(): MatrixClient {
     return useContext(MatrixClientContext);
 }
 
-const matrixHOC = <ComposedComponentProps extends {}>(
+const matrixHOC = <ComposedComponentProps extends object>(
     ComposedComponent: ComponentClass<ComposedComponentProps>,
 ): ((
     props: Omit<ComposedComponentProps, "mxClient"> & React.RefAttributes<InstanceType<typeof ComposedComponent>>,

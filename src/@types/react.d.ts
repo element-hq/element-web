@@ -6,11 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { PropsWithChildren } from "react";
+import { type PropsWithChildren } from "react";
+
+import type React from "react";
 
 declare module "react" {
     // Fix forwardRef types for Generic components - https://stackoverflow.com/a/58473012
-    function forwardRef<T, P = {}>(
+    function forwardRef<T, P extends object>(
         render: (props: PropsWithChildren<P>, ref: React.ForwardedRef<T>) => React.ReactElement | null,
     ): (props: P & React.RefAttributes<T>) => React.ReactElement | null;
 

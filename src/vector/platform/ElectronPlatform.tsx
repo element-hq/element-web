@@ -10,24 +10,29 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { MatrixClient, Room, MatrixEvent, OidcRegistrationClientMetadata } from "matrix-js-sdk/src/matrix";
+import {
+    type MatrixClient,
+    type Room,
+    type MatrixEvent,
+    type OidcRegistrationClientMetadata,
+} from "matrix-js-sdk/src/matrix";
 import React from "react";
-import { randomString } from "matrix-js-sdk/src/randomstring";
+import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import BasePlatform, { UpdateCheckStatus, UpdateStatus } from "../../BasePlatform";
-import BaseEventIndexManager from "../../indexing/BaseEventIndexManager";
+import BasePlatform, { UpdateCheckStatus, type UpdateStatus } from "../../BasePlatform";
+import type BaseEventIndexManager from "../../indexing/BaseEventIndexManager";
 import dis from "../../dispatcher/dispatcher";
 import SdkConfig from "../../SdkConfig";
-import { IConfigOptions } from "../../IConfigOptions";
+import { type IConfigOptions } from "../../IConfigOptions";
 import * as rageshake from "../../rageshake/rageshake";
 import Modal from "../../Modal";
 import InfoDialog from "../../components/views/dialogs/InfoDialog";
 import Spinner from "../../components/views/elements/Spinner";
 import { Action } from "../../dispatcher/actions";
-import { ActionPayload } from "../../dispatcher/payloads";
+import { type ActionPayload } from "../../dispatcher/payloads";
 import { showToast as showUpdateToast } from "../../toasts/UpdateToast";
-import { CheckUpdatesPayload } from "../../dispatcher/payloads/CheckUpdatesPayload";
+import { type CheckUpdatesPayload } from "../../dispatcher/payloads/CheckUpdatesPayload";
 import ToastStore from "../../stores/ToastStore";
 import GenericExpiringToast from "../../components/views/toasts/GenericExpiringToast";
 import { BreadcrumbsStore } from "../../stores/BreadcrumbsStore";
@@ -93,7 +98,7 @@ export default class ElectronPlatform extends BasePlatform {
     private readonly ipc = new IPCManager("ipcCall", "ipcReply");
     private readonly eventIndexManager: BaseEventIndexManager = new SeshatIndexManager();
     // this is the opaque token we pass to the HS which when we get it in our callback we can resolve to a profile
-    private readonly ssoID: string = randomString(32);
+    private readonly ssoID: string = secureRandomString(32);
 
     public constructor() {
         super();

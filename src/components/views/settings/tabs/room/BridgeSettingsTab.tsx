@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode } from "react";
-import { Room, MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import React, { type ReactNode } from "react";
+import { type Room, type MatrixClient, type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../../languageHandler";
 import BridgeTile from "../../BridgeTile";

@@ -9,19 +9,25 @@ Please see LICENSE files in the repository root for full details.
 import { defineConfig, devices } from "@playwright/test";
 import { splitTests } from "@tenbin/playwright";
 
+import { type WorkerOptions } from "./playwright/services";
+
 const baseURL = process.env["BASE_URL"] ?? "http://localhost:8080";
 
-export default defineConfig({
+const chromeProject = {
+    ...devices["Desktop Chrome"],
+    channel: "chromium",
+    permissions: ["clipboard-write", "clipboard-read", "microphone"],
+    launchOptions: {
+        args: ["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream", "--mute-audio"],
+    },
+};
+
+export default defineConfig<WorkerOptions>({
     projects: [
         {
             name: "Chrome",
             use: {
-                ...devices["Desktop Chrome"],
-                channel: "chromium",
-                permissions: ["clipboard-write", "clipboard-read", "microphone"],
-                launchOptions: {
-                    args: ["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream", "--mute-audio"],
-                },
+                ...chromeProject,
             },
         },
         {
@@ -49,6 +55,22 @@ export default defineConfig({
             },
             ignoreSnapshots: true,
         },
+        {
+            name: "Dendrite",
+            use: {
+                ...chromeProject,
+                homeserverType: "dendrite",
+            },
+            ignoreSnapshots: true,
+        },
+        {
+            name: "Pinecone",
+            use: {
+                ...chromeProject,
+                homeserverType: "pinecone",
+            },
+            ignoreSnapshots: true,
+        },
     ],
     use: {
         viewport: { width: 1280, height: 720 },
@@ -62,6 +84,7 @@ export default defineConfig({
         url: `${baseURL}/config.json`,
         reuseExistingServer: true,
         timeout: (process.env.CI ? 30 : 120) * 1000,
+        stdout: "pipe",
     },
     testDir: "playwright/e2e",
     outputDir: "playwright/test-results",

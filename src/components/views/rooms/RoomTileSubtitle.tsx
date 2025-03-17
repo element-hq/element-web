@@ -10,8 +10,8 @@ import React from "react";
 import classNames from "classnames";
 import { ThreadsIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
-import { MessagePreview } from "../../../stores/room-list/MessagePreviewStore";
-import { Call } from "../../../models/Call";
+import { type MessagePreview } from "../../../stores/room-list/MessagePreviewStore";
+import { type Call } from "../../../models/Call";
 import { RoomTileCallSummary } from "./RoomTileCallSummary";
 
 interface Props {

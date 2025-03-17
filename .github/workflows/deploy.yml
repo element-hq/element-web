@@ -96,3 +96,4 @@ jobs:
                   projectName: ${{ env.SITE == 'staging.element.io' && 'element-web-staging' || 'element-web' }}
                   directory: _deploy
                   gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+                  branch: main

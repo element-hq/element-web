@@ -11,7 +11,7 @@ import React from "react";
 import { ClientRendezvousFailureReason, MSC4108FailureReason } from "matrix-js-sdk/src/rendezvous";
 
 import LoginWithQRFlow from "../../../../../../src/components/views/auth/LoginWithQRFlow";
-import { LoginWithQRFailureReason, FailureReason } from "../../../../../../src/components/views/auth/LoginWithQR";
+import { LoginWithQRFailureReason, type FailureReason } from "../../../../../../src/components/views/auth/LoginWithQR";
 import { Click, Phase } from "../../../../../../src/components/views/auth/LoginWithQR-types";
 
 describe("<LoginWithQRFlow />", () => {

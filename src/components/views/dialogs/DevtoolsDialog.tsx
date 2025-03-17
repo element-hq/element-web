@@ -9,14 +9,14 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { useState } from "react";
 
-import { _t, _td, TranslationKey } from "../../../languageHandler";
+import { _t, _td, type TranslationKey } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import BaseDialog from "./BaseDialog";
 import { TimelineEventEditor } from "./devtools/Event";
 import ServersInRoom from "./devtools/ServersInRoom";
 import SettingExplorer from "./devtools/SettingExplorer";
 import { RoomStateExplorer } from "./devtools/RoomState";
-import BaseTool, { DevtoolsContext, IDevtoolsProps } from "./devtools/BaseTool";
+import BaseTool, { DevtoolsContext, type IDevtoolsProps } from "./devtools/BaseTool";
 import WidgetExplorer from "./devtools/WidgetExplorer";
 import { AccountDataExplorer, RoomAccountDataExplorer } from "./devtools/AccountData";
 import SettingsFlag from "../elements/SettingsFlag";
@@ -24,6 +24,7 @@ import { SettingLevel } from "../../../settings/SettingLevel";
 import ServerInfo from "./devtools/ServerInfo";
 import CopyableText from "../elements/CopyableText";
 import RoomNotifications from "./devtools/RoomNotifications";
+import { Crypto } from "./devtools/Crypto";
 
 enum Category {
     Room,
@@ -49,6 +50,7 @@ const Tools: Record<Category, [label: TranslationKey, tool: Tool][]> = {
         [_td("devtools|explore_account_data"), AccountDataExplorer],
         [_td("devtools|settings_explorer"), SettingExplorer],
         [_td("devtools|server_info"), ServerInfo],
+        [_td("devtools|crypto|title"), Crypto],
     ],
 };
 

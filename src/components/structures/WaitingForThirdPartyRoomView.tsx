@@ -6,12 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { RefObject } from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import React, { type RefObject } from "react";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 
-import ResizeNotifier from "../../utils/ResizeNotifier";
+import type ResizeNotifier from "../../utils/ResizeNotifier";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
-import RoomHeader from "../views/rooms/RoomHeader";
+import RoomHeader from "../views/rooms/RoomHeader/RoomHeader.tsx";
 import ScrollPanel from "./ScrollPanel";
 import EventTileBubble from "../views/messages/EventTileBubble";
 import NewRoomIntro from "../views/rooms/NewRoomIntro";

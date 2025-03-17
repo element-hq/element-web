@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useCallback, useEffect, useState } from "react";
-import { MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, type RoomMember } from "matrix-js-sdk/src/matrix";
 import { Button, Tooltip, TooltipProvider } from "@vector-im/compound-web";
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
 
@@ -15,7 +15,7 @@ import { _t } from "../languageHandler";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import defaultDispatcher from "../dispatcher/dispatcher";
-import { ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../dispatcher/actions";
 import ToastStore from "../stores/ToastStore";
 import {
@@ -24,10 +24,10 @@ import {
     LiveContentType,
 } from "../components/views/rooms/LiveContentSummary";
 import { useCall, useJoinCallButtonDisabledTooltip } from "../hooks/useCall";
-import AccessibleButton, { ButtonEvent } from "../components/views/elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../components/views/elements/AccessibleButton";
 import { useDispatcher } from "../hooks/useDispatcher";
-import { ActionPayload } from "../dispatcher/payloads";
-import { Call, CallEvent } from "../models/Call";
+import { type ActionPayload } from "../dispatcher/payloads";
+import { type Call, CallEvent } from "../models/Call";
 import LegacyCallHandler, { AudioID } from "../LegacyCallHandler";
 import { useEventEmitter } from "../hooks/useEventEmitter";
 import { CallStore, CallStoreEvent } from "../stores/CallStore";

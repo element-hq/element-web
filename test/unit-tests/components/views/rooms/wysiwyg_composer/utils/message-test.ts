@@ -6,9 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EventStatus, IEventRelation, MsgType } from "matrix-js-sdk/src/matrix";
+import { EventStatus, type IEventRelation, MsgType } from "matrix-js-sdk/src/matrix";
 
-import { IRoomState } from "../../../../../../../src/components/structures/RoomView";
+import { type IRoomState } from "../../../../../../../src/components/structures/RoomView";
 import {
     editMessage,
     sendMessage,

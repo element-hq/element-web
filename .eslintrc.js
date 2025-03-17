@@ -1,5 +1,5 @@
 module.exports = {
-    plugins: ["matrix-org"],
+    plugins: ["matrix-org", "eslint-plugin-react-compiler"],
     extends: ["plugin:matrix-org/babel", "plugin:matrix-org/react", "plugin:matrix-org/a11y"],
     parserOptions: {
         project: ["./tsconfig.json"],
@@ -170,6 +170,8 @@ module.exports = {
         "jsx-a11y/role-supports-aria-props": "off",
 
         "matrix-org/require-copyright-header": "error",
+
+        "react-compiler/react-compiler": "error",
     },
     overrides: [
         {
@@ -198,8 +200,13 @@ module.exports = {
                 "@typescript-eslint/ban-ts-comment": "off",
                 // We're okay with assertion errors when we ask for them
                 "@typescript-eslint/no-non-null-assertion": "off",
-                // We do this sometimes to brand interfaces
-                "@typescript-eslint/no-empty-object-type": "off",
+                "@typescript-eslint/no-empty-object-type": [
+                    "error",
+                    {
+                        // We do this sometimes to brand interfaces
+                        allowInterfaces: "with-single-extends",
+                    },
+                ],
             },
         },
         // temporary override for offending icon require files
@@ -245,6 +252,7 @@ module.exports = {
                 // We don't need super strict typing in test utilities
                 "@typescript-eslint/explicit-function-return-type": "off",
                 "@typescript-eslint/explicit-member-accessibility": "off",
+                "@typescript-eslint/no-empty-object-type": "off",
 
                 // Jest/Playwright specific
 
@@ -262,6 +270,7 @@ module.exports = {
 
                 // These are fine in tests
                 "no-restricted-globals": "off",
+                "react-compiler/react-compiler": "off",
             },
         },
         {
@@ -271,6 +280,7 @@ module.exports = {
             },
             rules: {
                 "react-hooks/rules-of-hooks": ["off"],
+                "@typescript-eslint/no-floating-promises": ["error"],
             },
         },
         {

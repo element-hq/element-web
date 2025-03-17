@@ -6,51 +6,51 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, ReactNode } from "react";
+import React, { createRef, type ReactNode } from "react";
 import classNames from "classnames";
 import {
-    IEventRelation,
-    MatrixEvent,
-    Room,
-    RoomMember,
+    type IEventRelation,
+    type MatrixEvent,
+    type Room,
+    type RoomMember,
     EventType,
     THREAD_RELATION_TYPE,
 } from "matrix-js-sdk/src/matrix";
-import { Optional } from "matrix-events-sdk";
+import { type Optional } from "matrix-events-sdk";
 import { Tooltip } from "@vector-im/compound-web";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
-import { ActionPayload } from "../../../dispatcher/payloads";
+import { type ActionPayload } from "../../../dispatcher/payloads";
 import Stickerpicker from "./Stickerpicker";
-import { makeRoomPermalink, RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import { makeRoomPermalink, type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import E2EIcon from "./E2EIcon";
 import SettingsStore from "../../../settings/SettingsStore";
-import { aboveLeftOf, MenuProps } from "../../structures/ContextMenu";
+import { aboveLeftOf, type MenuProps } from "../../structures/ContextMenu";
 import ReplyPreview from "./ReplyPreview";
 import { UserIdentityWarning } from "./UserIdentityWarning";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import VoiceRecordComposerTile from "./VoiceRecordComposerTile";
 import { VoiceRecordingStore } from "../../../stores/VoiceRecordingStore";
 import { RecordingState } from "../../../audio/VoiceRecording";
-import ResizeNotifier from "../../../utils/ResizeNotifier";
-import { E2EStatus } from "../../../utils/ShieldUtils";
-import SendMessageComposer, { SendMessageComposer as SendMessageComposerClass } from "./SendMessageComposer";
-import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
+import type ResizeNotifier from "../../../utils/ResizeNotifier";
+import { type E2EStatus } from "../../../utils/ShieldUtils";
+import SendMessageComposer, { type SendMessageComposer as SendMessageComposerClass } from "./SendMessageComposer";
+import { type ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
 import { Action } from "../../../dispatcher/actions";
-import EditorModel from "../../../editor/model";
+import type EditorModel from "../../../editor/model";
 import UIStore, { UI_EVENTS } from "../../../stores/UIStore";
 import RoomContext from "../../../contexts/RoomContext";
-import { SettingUpdatedPayload } from "../../../dispatcher/payloads/SettingUpdatedPayload";
+import { type SettingUpdatedPayload } from "../../../dispatcher/payloads/SettingUpdatedPayload";
 import MessageComposerButtons from "./MessageComposerButtons";
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
-import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
+import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { isLocalRoom } from "../../../utils/localRoom/isLocalRoom";
-import { VoiceMessageRecording } from "../../../audio/VoiceMessageRecording";
+import { type VoiceMessageRecording } from "../../../audio/VoiceMessageRecording";
 import { SendWysiwygComposer, sendMessage, getConversionFunctions } from "./wysiwyg_composer/";
-import { MatrixClientProps, withMatrixClientHOC } from "../../../contexts/MatrixClientContext";
+import { type MatrixClientProps, withMatrixClientHOC } from "../../../contexts/MatrixClientContext";
 import { UIFeature } from "../../../settings/UIFeature";
 import { formatTimeLeft } from "../../../DateUtils";
 import RoomReplacedSvg from "../../../../res/img/room_replaced.svg";

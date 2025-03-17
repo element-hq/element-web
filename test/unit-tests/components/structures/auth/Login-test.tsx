@@ -7,9 +7,9 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { fireEvent, render, screen, waitForElementToBeRemoved } from "jest-matrix-react";
-import { mocked, MockedObject } from "jest-mock";
+import { mocked, type MockedObject } from "jest-mock";
 import fetchMock from "fetch-mock-jest";
-import { DELEGATED_OIDC_COMPATIBILITY, IdentityProviderBrand, OidcClientConfig } from "matrix-js-sdk/src/matrix";
+import { DELEGATED_OIDC_COMPATIBILITY, IdentityProviderBrand, type OidcClientConfig } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import * as Matrix from "matrix-js-sdk/src/matrix";
 import { OidcError } from "matrix-js-sdk/src/oidc/error";
@@ -17,7 +17,7 @@ import { OidcError } from "matrix-js-sdk/src/oidc/error";
 import SdkConfig from "../../../../../src/SdkConfig";
 import { mkServerConfig, mockPlatformPeg, unmockPlatformPeg } from "../../../../test-utils";
 import Login from "../../../../../src/components/structures/auth/Login";
-import BasePlatform from "../../../../../src/BasePlatform";
+import type BasePlatform from "../../../../../src/BasePlatform";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import * as registerClientUtils from "../../../../../src/utils/oidc/registerClient";
 import { makeDelegatedAuthConfig } from "../../../../test-utils/oidc";
@@ -384,7 +384,7 @@ describe("Login", function () {
             await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
 
             // didn't try to register
-            expect(fetchMock).not.toHaveBeenCalledWith(delegatedAuth.registrationEndpoint);
+            expect(fetchMock).not.toHaveBeenCalledWith(delegatedAuth.registration_endpoint);
             // continued with normal setup
             expect(mockClient.loginFlows).toHaveBeenCalled();
             // normal password login rendered
@@ -394,25 +394,25 @@ describe("Login", function () {
         it("should attempt to register oidc client", async () => {
             // dont mock, spy so we can check config values were correctly passed
             jest.spyOn(registerClientUtils, "getOidcClientId");
-            fetchMock.post(delegatedAuth.registrationEndpoint!, { status: 500 });
+            fetchMock.post(delegatedAuth.registration_endpoint!, { status: 500 });
             getComponent(hsUrl, isUrl, delegatedAuth);
 
             await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
 
             // tried to register
-            expect(fetchMock).toHaveBeenCalledWith(delegatedAuth.registrationEndpoint, expect.any(Object));
+            expect(fetchMock).toHaveBeenCalledWith(delegatedAuth.registration_endpoint, expect.any(Object));
             // called with values from config
             expect(registerClientUtils.getOidcClientId).toHaveBeenCalledWith(delegatedAuth, oidcStaticClientsConfig);
         });
 
         it("should fallback to normal login when client registration fails", async () => {
-            fetchMock.post(delegatedAuth.registrationEndpoint!, { status: 500 });
+            fetchMock.post(delegatedAuth.registration_endpoint!, { status: 500 });
             getComponent(hsUrl, isUrl, delegatedAuth);
 
             await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
 
             // tried to register
-            expect(fetchMock).toHaveBeenCalledWith(delegatedAuth.registrationEndpoint, expect.any(Object));
+            expect(fetchMock).toHaveBeenCalledWith(delegatedAuth.registration_endpoint, expect.any(Object));
             expect(logger.error).toHaveBeenCalledWith(new Error(OidcError.DynamicRegistrationFailed));
 
             // continued with normal setup
@@ -423,7 +423,7 @@ describe("Login", function () {
 
         // short term during active development, UI will be added in next PRs
         it("should show continue button when oidc native flow is correctly configured", async () => {
-            fetchMock.post(delegatedAuth.registrationEndpoint!, { client_id: "abc123" });
+            fetchMock.post(delegatedAuth.registration_endpoint!, { client_id: "abc123" });
             getComponent(hsUrl, isUrl, delegatedAuth);
 
             await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
@@ -455,7 +455,7 @@ describe("Login", function () {
             await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
 
             // didn't try to register
-            expect(fetchMock).not.toHaveBeenCalledWith(delegatedAuth.registrationEndpoint);
+            expect(fetchMock).not.toHaveBeenCalledWith(delegatedAuth.registration_endpoint);
             // continued with normal setup
             expect(mockClient.loginFlows).toHaveBeenCalled();
             // oidc-aware 'continue' button displayed

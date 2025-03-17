@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { EventType, MatrixEvent, Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { EventType, type MatrixEvent, type Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { Button, Text } from "@vector-im/compound-web";
 

@@ -10,11 +10,11 @@ import React from "react";
 import { mocked } from "jest-mock";
 import {
     ConnectionError,
-    IProtocol,
-    IPublicRoomsChunkRoom,
+    type IProtocol,
+    type IPublicRoomsChunkRoom,
     JoinRule,
-    MatrixClient,
-    Room,
+    type MatrixClient,
+    type Room,
     RoomMember,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";

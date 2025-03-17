@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ComponentProps, useMemo, useState } from "react";
-import { Room } from "matrix-js-sdk/src/matrix";
+import React, { type ComponentProps, useMemo, useState } from "react";
+import { type Room } from "matrix-js-sdk/src/matrix";
 
 import ConfirmUserActionDialog from "./ConfirmUserActionDialog";
 import SpaceStore from "../../../stores/spaces/SpaceStore";

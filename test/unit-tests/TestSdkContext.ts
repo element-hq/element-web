@@ -7,15 +7,15 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { SdkContextClass } from "../../src/contexts/SDKContext";
-import { PosthogAnalytics } from "../../src/PosthogAnalytics";
-import { SlidingSyncManager } from "../../src/SlidingSyncManager";
-import { RoomNotificationStateStore } from "../../src/stores/notifications/RoomNotificationStateStore";
-import RightPanelStore from "../../src/stores/right-panel/RightPanelStore";
-import { RoomViewStore } from "../../src/stores/RoomViewStore";
-import { SpaceStoreClass } from "../../src/stores/spaces/SpaceStore";
-import { WidgetLayoutStore } from "../../src/stores/widgets/WidgetLayoutStore";
-import { WidgetPermissionStore } from "../../src/stores/widgets/WidgetPermissionStore";
-import WidgetStore from "../../src/stores/WidgetStore";
+import { type PosthogAnalytics } from "../../src/PosthogAnalytics";
+import { type SlidingSyncManager } from "../../src/SlidingSyncManager";
+import { type RoomNotificationStateStore } from "../../src/stores/notifications/RoomNotificationStateStore";
+import type RightPanelStore from "../../src/stores/right-panel/RightPanelStore";
+import { type RoomViewStore } from "../../src/stores/RoomViewStore";
+import { type SpaceStoreClass } from "../../src/stores/spaces/SpaceStore";
+import { type WidgetLayoutStore } from "../../src/stores/widgets/WidgetLayoutStore";
+import { type WidgetPermissionStore } from "../../src/stores/widgets/WidgetPermissionStore";
+import type WidgetStore from "../../src/stores/WidgetStore";
 
 /**
  * A class which provides the same API as SdkContextClass but adds additional unsafe setters which can

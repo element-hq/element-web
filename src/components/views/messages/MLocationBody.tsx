@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { MatrixEvent, ClientEvent, ClientEventHandlerMap } from "matrix-js-sdk/src/matrix";
-import { randomString } from "matrix-js-sdk/src/randomstring";
+import { type MatrixEvent, ClientEvent, type ClientEventHandlerMap } from "matrix-js-sdk/src/matrix";
+import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 import { Tooltip } from "@vector-im/compound-web";
 
 import { _t } from "../../../languageHandler";
@@ -21,7 +21,7 @@ import {
 } from "../../../utils/location";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { SmartMarker, Map, LocationViewDialog } from "../location";
-import { IBodyProps } from "./IBodyProps";
+import { type IBodyProps } from "./IBodyProps";
 import { createReconnectedListener } from "../../../utils/connection";
 
 interface IState {
@@ -41,7 +41,7 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
 
         // multiple instances of same map might be in document
         // eg thread and main timeline, reply
-        const idSuffix = `${props.mxEvent.getId()}_${randomString(8)}`;
+        const idSuffix = `${props.mxEvent.getId()}_${secureRandomString(8)}`;
         this.mapId = `mx_MLocationBody_${idSuffix}`;
 
         this.reconnectedListener = createReconnectedListener(this.clearError);

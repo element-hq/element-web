@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import EventEmitter from "events";
 import { base32 } from "rfc4648";
-import { RoomType } from "matrix-js-sdk/src/matrix";
+import { type RoomType } from "matrix-js-sdk/src/matrix";
 
 // Dev note: the interface is split in two so we don't have to disable the
 // linter across the whole project.

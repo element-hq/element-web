@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { mocked } from "jest-mock";
-import { MatrixClient, Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 
 import { getFunctionalMembers } from "../../../../src/utils/room/getFunctionalMembers";
 import { getJoinedNonFunctionalMembers } from "../../../../src/utils/room/getJoinedNonFunctionalMembers";

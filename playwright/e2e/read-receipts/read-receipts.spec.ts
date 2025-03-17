@@ -9,11 +9,13 @@ Please see LICENSE files in the repository root for full details.
 import type { JSHandle } from "@playwright/test";
 import type { MatrixEvent, ISendEventResponse, ReceiptType } from "matrix-js-sdk/src/matrix";
 import { expect } from "../../element-web-test";
-import { ElementAppPage } from "../../pages/ElementAppPage";
-import { Bot } from "../../pages/bot";
+import { type ElementAppPage } from "../../pages/ElementAppPage";
+import { type Bot } from "../../pages/bot";
 import { test } from ".";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 test.describe("Read receipts", { tag: "@mergequeue" }, () => {
+    test.skip(isDendrite, "due to Dendrite bug https://github.com/element-hq/dendrite/issues/2970");
     test.use({
         displayName: "Mae",
         botCreateOpts: { displayName: "Other User" },
@@ -100,12 +102,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
         await page.goto(`/#/room/${selectedRoomId}`);
     });
 
-    // Disabled due to flakiness: https://github.com/element-hq/element-web/issues/26895
-    test.skip("With sync accumulator, considers main thread and unthreaded receipts #24629", async ({
-        page,
-        app,
-        bot,
-    }) => {
+    test("With sync accumulator, considers main thread and unthreaded receipts #24629", async ({ page, app, bot }) => {
         // Details are in https://github.com/vector-im/element-web/issues/24629
         // This proves we've fixed one of the "stuck unreads" issues.
 

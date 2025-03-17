@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { MatrixEvent, EventType, RelationType, MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, EventType, RelationType, type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 import { defer } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 

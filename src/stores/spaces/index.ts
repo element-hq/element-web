@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room, HierarchyRoom } from "matrix-js-sdk/src/matrix";
+import { type Room, type HierarchyRoom } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../languageHandler";
 
@@ -30,7 +30,7 @@ export enum MetaSpace {
 export const getMetaSpaceName = (spaceKey: MetaSpace, allRoomsInHome = false): string => {
     switch (spaceKey) {
         case MetaSpace.Home:
-            return allRoomsInHome ? _t("common|all_rooms") : _t("common|home");
+            return allRoomsInHome ? _t("common|all_chats") : _t("common|home");
         case MetaSpace.Favourites:
             return _t("common|favourites");
         case MetaSpace.People:

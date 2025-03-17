@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { waitFor, renderHook, act } from "jest-matrix-react";
 import { mocked } from "jest-mock";
-import { SlidingSync } from "matrix-js-sdk/src/sliding-sync";
+import { type SlidingSync } from "matrix-js-sdk/src/sliding-sync";
 import { Room } from "matrix-js-sdk/src/matrix";
 
 import { useSlidingSyncRoomSearch } from "../../../src/hooks/useSlidingSyncRoomSearch";

@@ -6,16 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Fixtures, PlaywrightTestArgs } from "@playwright/test";
+import { MatrixAuthenticationServiceContainer } from "@element-hq/element-web-playwright-common/lib/testcontainers";
 
-import { Services } from "../../../services.ts";
-import { Fixtures as BaseFixtures } from "../../../element-web-test.ts";
-import { MatrixAuthenticationServiceContainer } from "../../../testcontainers/mas.ts";
+import { type Fixtures } from "../../../element-web-test.ts";
 
-type Fixture = PlaywrightTestArgs & BaseFixtures;
-export const masHomeserver: Fixtures<Fixture, Services, Fixture> = {
+export const masHomeserver: Fixtures = {
     mas: [
-        async ({ _homeserver: homeserver, logger, network, postgres, mailhog }, use) => {
+        async ({ _homeserver: homeserver, logger, network, postgres, mailpit }, use) => {
             const config = {
                 clients: [
                     {
@@ -82,5 +79,10 @@ export const masHomeserver: Fixtures<Fixture, Services, Fixture> = {
         await use({
             default_server_config: wellKnown,
         });
+    },
+
+    context: async ({ homeserverType, context }, use, testInfo) => {
+        testInfo.skip(homeserverType !== "synapse", "does not yet support MAS");
+        await use(context);
     },
 };

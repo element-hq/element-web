@@ -7,13 +7,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 
 import { messageForSyncError } from "../../../utils/ErrorUtils";
 import Spinner from "../../views/elements/Spinner";
 import ProgressBar from "../../views/elements/ProgressBar";
-import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../../views/elements/AccessibleButton";
 import { _t } from "../../../languageHandler";
 import { useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
 import SdkConfig from "../../../SdkConfig";

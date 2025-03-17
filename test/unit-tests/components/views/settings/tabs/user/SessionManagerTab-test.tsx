@@ -11,29 +11,29 @@ import {
     act,
     fireEvent,
     render,
-    RenderResult,
+    type RenderResult,
     screen,
     waitFor,
     waitForElementToBeRemoved,
     within,
 } from "jest-matrix-react";
 import { logger } from "matrix-js-sdk/src/logger";
-import { CryptoApi, DeviceVerificationStatus, VerificationRequest } from "matrix-js-sdk/src/crypto-api";
+import { type CryptoApi, DeviceVerificationStatus, type VerificationRequest } from "matrix-js-sdk/src/crypto-api";
 import { defer, sleep } from "matrix-js-sdk/src/utils";
 import {
     ClientEvent,
     Device,
-    IMyDevice,
+    type IMyDevice,
     LOCAL_NOTIFICATION_SETTINGS_PREFIX,
     MatrixEvent,
     PUSHER_DEVICE_ID,
     PUSHER_ENABLED,
-    IAuthData,
+    type IAuthData,
     GET_LOGIN_TOKEN_CAPABILITY,
     MatrixError,
-    MatrixClient,
+    type MatrixClient,
 } from "matrix-js-sdk/src/matrix";
-import { mocked, MockedObject } from "jest-mock";
+import { mocked, type MockedObject } from "jest-mock";
 import fetchMock from "fetch-mock-jest";
 
 import {
@@ -50,14 +50,14 @@ import Modal from "../../../../../../../src/Modal";
 import LogoutDialog from "../../../../../../../src/components/views/dialogs/LogoutDialog";
 import {
     DeviceSecurityVariation,
-    ExtendedDevice,
+    type ExtendedDevice,
 } from "../../../../../../../src/components/views/settings/devices/types";
 import { INACTIVE_DEVICE_AGE_MS } from "../../../../../../../src/components/views/settings/devices/filter";
 import SettingsStore from "../../../../../../../src/settings/SettingsStore";
 import { getClientInformationEventType } from "../../../../../../../src/utils/device/clientInformation";
 import { SDKContext, SdkContextClass } from "../../../../../../../src/contexts/SDKContext";
-import { OidcClientStore } from "../../../../../../../src/stores/oidc/OidcClientStore";
-import { mockOpenIdConfiguration } from "../../../../../../test-utils/oidc";
+import { type OidcClientStore } from "../../../../../../../src/stores/oidc/OidcClientStore";
+import { makeDelegatedAuthConfig } from "../../../../../../test-utils/oidc";
 import MatrixClientContext from "../../../../../../../src/contexts/MatrixClientContext";
 
 mockPlatformPeg();
@@ -215,7 +215,7 @@ describe("<SessionManagerTab />", () => {
             getPushers: jest.fn(),
             setPusher: jest.fn(),
             setLocalNotificationSettings: jest.fn(),
-            getAuthIssuer: jest.fn().mockReturnValue(new Promise(() => {})),
+            getAuthMetadata: jest.fn().mockRejectedValue(new MatrixError({ errcode: "M_UNRECOGNIZED" }, 404)),
         });
         jest.clearAllMocks();
         jest.spyOn(logger, "error").mockRestore();
@@ -263,6 +263,7 @@ describe("<SessionManagerTab />", () => {
     });
 
     afterAll(() => {
+        // @ts-expect-error
         window.location = realWindowLocation;
     });
 
@@ -1104,8 +1105,9 @@ describe("<SessionManagerTab />", () => {
                 // because promise flushing after the confirm modal is resolving this too
                 // and we want to test the loading state here
                 const resolveDeleteRequest = defer<IAuthData>();
-                mockClient.deleteMultipleDevices.mockImplementation(() => {
-                    return resolveDeleteRequest.promise;
+                mockClient.deleteMultipleDevices.mockImplementation(async () => {
+                    await resolveDeleteRequest.promise;
+                    return {};
                 });
 
                 const { getByTestId } = render(getComponent());
@@ -1615,7 +1617,6 @@ describe("<SessionManagerTab />", () => {
     describe("MSC4108 QR code login", () => {
         const settingsValueSpy = jest.spyOn(SettingsStore, "getValue");
         const issuer = "https://issuer.org";
-        const openIdConfiguration = mockOpenIdConfiguration(issuer);
 
         beforeEach(() => {
             settingsValueSpy.mockClear().mockReturnValue(true);
@@ -1631,16 +1632,16 @@ describe("<SessionManagerTab />", () => {
                     enabled: true,
                 },
             });
-            mockClient.getAuthIssuer.mockResolvedValue({ issuer });
-            mockCrypto.exportSecretsBundle = jest.fn();
-            fetchMock.mock(`${issuer}/.well-known/openid-configuration`, {
-                ...openIdConfiguration,
+            const delegatedAuthConfig = makeDelegatedAuthConfig(issuer);
+            mockClient.getAuthMetadata.mockResolvedValue({
+                ...delegatedAuthConfig,
                 grant_types_supported: [
-                    ...openIdConfiguration.grant_types_supported,
+                    ...delegatedAuthConfig.grant_types_supported,
                     "urn:ietf:params:oauth:grant-type:device_code",
                 ],
             });
-            fetchMock.mock(openIdConfiguration.jwks_uri!, {
+            mockCrypto.exportSecretsBundle = jest.fn();
+            fetchMock.mock(delegatedAuthConfig.jwks_uri!, {
                 status: 200,
                 headers: {
                     "Content-Type": "application/json",

@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { AutoDiscovery, AutoDiscoveryAction, ClientConfig } from "matrix-js-sdk/src/matrix";
+import { AutoDiscovery, AutoDiscoveryAction, type ClientConfig } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import fetchMock from "fetch-mock-jest";
 
@@ -355,21 +355,19 @@ describe("AutoDiscoveryUtils", () => {
                 hsNameIsDifferent: true,
                 hsName: serverName,
                 delegatedAuthentication: expect.objectContaining({
-                    accountManagementActionsSupported: [
+                    issuer,
+                    account_management_actions_supported: [
                         "org.matrix.profile",
                         "org.matrix.sessions_list",
                         "org.matrix.session_view",
                         "org.matrix.session_end",
                         "org.matrix.cross_signing_reset",
                     ],
-                    accountManagementEndpoint: "https://auth.matrix.org/account/",
-                    authorizationEndpoint: "https://auth.matrix.org/auth",
-                    metadata: expect.objectContaining({
-                        issuer,
-                    }),
-                    registrationEndpoint: "https://auth.matrix.org/registration",
+                    account_management_uri: "https://auth.matrix.org/account/",
+                    authorization_endpoint: "https://auth.matrix.org/auth",
+                    registration_endpoint: "https://auth.matrix.org/registration",
                     signingKeys: [],
-                    tokenEndpoint: "https://auth.matrix.org/token",
+                    token_endpoint: "https://auth.matrix.org/token",
                 }),
                 warning: null,
             });

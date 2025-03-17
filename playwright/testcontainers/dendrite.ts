@@ -8,12 +8,13 @@ Please see LICENSE files in the repository root for full details.
 import { GenericContainer, Wait } from "testcontainers";
 import * as YAML from "yaml";
 import { set } from "lodash";
-
-import { randB64Bytes } from "../plugins/utils/rand.ts";
-import { StartedSynapseContainer } from "./synapse.ts";
-import { deepCopy } from "../plugins/utils/object.ts";
-import { HomeserverContainer } from "./HomeserverContainer.ts";
-import { StartedMatrixAuthenticationServiceContainer } from "./mas.ts";
+import { randB64Bytes } from "@element-hq/element-web-playwright-common/lib/utils/rand.js";
+import { deepCopy } from "@element-hq/element-web-playwright-common/lib/utils/object.js";
+import {
+    StartedSynapseContainer,
+    type HomeserverContainer,
+    type StartedMatrixAuthenticationServiceContainer,
+} from "@element-hq/element-web-playwright-common/lib/testcontainers";
 
 const DEFAULT_CONFIG = {
     version: 2,
@@ -223,7 +224,7 @@ export class DendriteContainer extends GenericContainer implements HomeserverCon
             .withWaitStrategy(Wait.forHttp("/_matrix/client/versions", 8008));
     }
 
-    public withConfigField(key: string, value: any): this {
+    public withConfigField(key: string, value: unknown): this {
         set(this.config, key, value);
         return this;
     }
@@ -236,8 +237,14 @@ export class DendriteContainer extends GenericContainer implements HomeserverCon
         return this;
     }
 
+    // Dendrite does not support SMTP at this time - https://github.com/element-hq/dendrite/issues/1298
+    public withSmtpServer(): this {
+        return this;
+    }
+
+    // Dendrite does not support MAS at this time
     public withMatrixAuthenticationService(mas?: StartedMatrixAuthenticationServiceContainer): this {
-        throw new Error("Dendrite does not support MAS.");
+        return this;
     }
 
     public override async start(): Promise<StartedDendriteContainer> {
@@ -264,4 +271,10 @@ export class PineconeContainer extends DendriteContainer {
 }
 
 // Surprisingly, Dendrite implements the same register user Synapse Admin API, so we can just extend it
-export class StartedDendriteContainer extends StartedSynapseContainer {}
+export class StartedDendriteContainer extends StartedSynapseContainer {
+    protected async deletePublicRooms(): Promise<void> {
+        // Dendrite does not support admin users managing the room directory
+        // https://github.com/element-hq/dendrite/blob/main/clientapi/routing/directory.go#L365
+        return;
+    }
+}

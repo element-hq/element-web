@@ -7,15 +7,15 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, RenderResult, screen } from "jest-matrix-react";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { render, type RenderResult, screen } from "jest-matrix-react";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import userEvent from "@testing-library/user-event";
 
 import NotificationSettingsTab from "../../../../../../../src/components/views/settings/tabs/room/NotificationSettingsTab";
 import { mkStubRoom, stubClient } from "../../../../../../test-utils";
 import { MatrixClientPeg } from "../../../../../../../src/MatrixClientPeg";
 import { EchoChamber } from "../../../../../../../src/stores/local-echo/EchoChamber";
-import { RoomEchoChamber } from "../../../../../../../src/stores/local-echo/RoomEchoChamber";
+import { type RoomEchoChamber } from "../../../../../../../src/stores/local-echo/RoomEchoChamber";
 import SettingsStore from "../../../../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../../../../src/settings/SettingLevel";
 

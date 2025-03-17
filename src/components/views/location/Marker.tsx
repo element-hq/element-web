@@ -6,9 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode, useState } from "react";
+import React, { type ReactNode, useState } from "react";
 import classNames from "classnames";
-import { RoomMember } from "matrix-js-sdk/src/matrix";
+import { type RoomMember } from "matrix-js-sdk/src/matrix";
 import LocationIcon from "@vector-im/compound-design-tokens/assets/web/icons/location-pin-solid";
 
 import { getUserNameColorClass } from "../../../utils/FormattingUtils";

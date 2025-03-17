@@ -11,7 +11,7 @@ import PlatformPeg from "../../PlatformPeg";
 import { SETTINGS } from "../Settings";
 import { SettingLevel } from "../SettingLevel";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import { ActionPayload } from "../../dispatcher/payloads";
+import { type ActionPayload } from "../../dispatcher/payloads";
 import { Action } from "../../dispatcher/actions";
 
 /**

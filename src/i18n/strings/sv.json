@@ -405,7 +405,6 @@
         "download_logs": "Ladda ner loggar",
         "downloading_logs": "Laddar ner loggar",
         "error_empty": "Berätta vad som gick fel, eller skapa ännu hellre ett GitHub-ärende som beskriver problemet.",
-        "failed_send_logs": "Misslyckades att skicka loggar: ",
         "github_issue": "GitHub-ärende",
         "introduction": "Om du har rapporterat en bugg via GitHub så kan felsökningsloggar hjälpa oss att hitta problemet. ",
         "log_request": "För att hjälpa oss att förhindra detta i framtiden, vänligen <a>skicka oss loggar</a>.",
@@ -445,13 +444,11 @@
         "access_token": "Åtkomsttoken",
         "accessibility": "Tillgänglighet",
         "advanced": "Avancerat",
-        "all_rooms": "Alla rum",
         "analytics": "Statistik",
         "and_n_others": {
             "other": "och %(count)s andra…",
             "one": "och en annan…"
         },
-        "android": "Android",
         "appearance": "Utseende",
         "application": "Applikation",
         "are_you_sure": "Är du säker?",
@@ -491,13 +488,11 @@
         "identity_server": "Identitetsserver",
         "image": "Bild",
         "integration_manager": "Integrationshanterare",
-        "ios": "iOS",
         "joined": "Gick med",
         "labs": "Experiment",
         "legal": "Juridiskt",
         "light": "Ljust",
         "loading": "Laddar …",
-        "lobby": "Lobby",
         "location": "Plats",
         "low_priority": "Låg prioritet",
         "matrix": "Matrix",
@@ -549,7 +544,6 @@
         "saved": "Sparat",
         "saving": "Sparar …",
         "secure_backup": "Säker säkerhetskopiering",
-        "security": "Säkerhet",
         "select_all": "Välj alla",
         "server": "Server",
         "settings": "Inställningar",
@@ -568,7 +562,6 @@
         "thread": "Tråd",
         "threads": "Trådar",
         "timeline": "Tidslinje",
-        "trusted": "Betrodd",
         "unavailable": "otillgänglig",
         "unencrypted": "Okrypterat",
         "unmute": "Avtysta",
@@ -585,8 +578,7 @@
         "video": "Video",
         "video_room": "Videorum",
         "view_message": "Visa meddelande",
-        "warning": "Varning",
-        "welcome": "Välkommen"
+        "warning": "Varning"
     },
     "composer": {
         "autocomplete": {
@@ -928,7 +920,6 @@
             "title": "Inte betrodd"
         },
         "unable_to_setup_keys_error": "Kunde inte ställa in nycklar",
-        "unsupported": "Den här klienten stöder inte totalsträckskryptering.",
         "verification": {
             "accepting": "Accepterar…",
             "after_new_login": {
@@ -1242,8 +1233,7 @@
         "title": "Webbläsaren stöds ej",
         "use_desktop_heading": "Använd %(brand)s skrivbord istället",
         "use_mobile_heading": "Använd %(brand)s på mobilen istället",
-        "use_mobile_heading_after_desktop": "Eller använd vår mobilapp",
-        "windows": "Windows (%(bits)s -bit)"
+        "use_mobile_heading_after_desktop": "Eller använd vår mobilapp"
     },
     "info_tooltip_title": "Information",
     "integration_manager": {
@@ -1624,61 +1614,15 @@
         "m.key.verification.request": "%(name)s begär verifiering"
     },
     "onboarding": {
-        "apple_trademarks": "App Store® och Apple-loggan® är varumärken som tillhör Apple Inc.",
-        "community_messaging_action": "Hitta ditt folk",
-        "community_messaging_description": "Håll ägandeskap och kontroll över gemenskapsdiskussioner.\nSkala för att stöda miljoner, med kraftfull moderering och interoperabilitet.",
-        "community_messaging_title": "Ägandeskap i gemenskap",
-        "complete_these": "Gör dessa för att få ut så mycket som möjligt av %(brand)s",
         "create_room": "Skapa en gruppchatt",
-        "download_app": "Ladda ner %(brand)s",
-        "download_app_action": "Ladda ner appar",
-        "download_app_description": "Missa inget genom att ta med dig %(brand)s",
-        "download_app_store": "Ladda ner på App Store",
-        "download_brand": "Ladda ner %(brand)s",
-        "download_brand_desktop": "Ladda ner %(brand)s skrivbord",
-        "download_f_droid": "Hämta den på F-Droid",
-        "download_google_play": "Hämta den på Google Play",
-        "enable_notifications": "Aktivera skrivbordsaviseringar",
-        "enable_notifications_action": "Öppna inställningar",
-        "enable_notifications_description": "Missa inget svar eller viktigt meddelande",
         "explore_rooms": "Utforska offentliga rum",
-        "find_community_members": "Hitta och bjud in dina gemenskapsmedlemmar",
-        "find_coworkers": "Hitta och bjud in dina medarbetare",
-        "find_friends": "Hitta och bjud in dina vänner",
-        "find_friends_action": "Hitta vänner",
-        "find_friends_description": "Det är det du är här för, så låt oss komma i gång",
-        "find_people": "Hitta folk",
-        "free_e2ee_messaging_unlimited_voip": "Med gratis totalsträckskrypterade meddelanden och obegränsade röst och videosamtal så är %(brand)s ett jättebra sätt att hålla kontakten.",
-        "get_stuff_done": "Få saker gjorda genom att hitta dina lagkamrater",
-        "google_trademarks": "Google Play och Google Play-loggan är varumärken som tillhör Google LLC.",
         "has_avatar_label": "Fantastiskt, det kommer att hjälpa folk att veta att det är du",
         "intro_byline": "Äg dina konversationer.",
         "intro_welcome": "Välkommen till %(appName)s",
         "no_avatar_label": "Lägg till en bild för att folk ska veta att det är du.",
-        "only_n_steps_to_go": {
-            "one": "Bara %(count)s steg kvar",
-            "other": "Bara %(count)s steg kvar"
-        },
-        "personal_messaging_action": "Starta din första chatt",
-        "personal_messaging_title": "Säkra meddelanden för vänner och familj",
-        "qr_or_app_links": "%(qrCode)s eller %(appLinks)s",
         "send_dm": "Skicka ett direktmeddelande",
-        "set_up_profile": "Ställ in din profil",
-        "set_up_profile_action": "Din profil",
-        "set_up_profile_description": "Se till att folk vet att det verkligen är du",
-        "use_case_community_messaging": "Online-gemenskapsmedlemmar",
-        "use_case_heading1": "Du är inne",
-        "use_case_heading2": "Vem vill du chatta med mest?",
-        "use_case_heading3": "Vi kommer att hjälpa dig få kontakt.",
-        "use_case_personal_messaging": "Vänner och familj",
-        "use_case_work_messaging": "Jobbkamrater och lag",
         "welcome_detail": "Låt oss hjälpa dig komma igång",
-        "welcome_to_brand": "Välkommen till %(brand)s",
-        "welcome_user": "Välkommen %(name)s",
-        "work_messaging_action": "Hitta dina medarbetare",
-        "work_messaging_title": "Säkra meddelanden för jobbet",
-        "you_did_it": "Du klarade det!",
-        "you_made_it": "Du klarade det!"
+        "welcome_user": "Välkommen %(name)s"
     },
     "pill": {
         "permalink_other_room": "Meddelande i rum %(room)s",
@@ -2680,7 +2624,6 @@
             "room_directory_heading": "Rumskatalog",
             "room_list_heading": "Rumslista",
             "show_avatars_pills": "Visa avatarer i användar-, rums- och händelseomnämnanden",
-            "show_checklist_shortcuts": "Visa genväg till välkomstchecklistan ovanför rumslistan",
             "show_polls_button": "Visa omröstningsknapp",
             "surround_text": "Inneslut valt text vid skrivning av specialtecken",
             "time_heading": "Tidvisning",
@@ -3438,7 +3381,9 @@
             "sent": "%(senderName)s bjöd in %(targetDisplayName)s att gå med i rummet."
         },
         "m.room.tombstone": "%(senderDisplayName)s uppgraderade det här rummet.",
-        "m.room.topic": "%(senderDisplayName)s bytte rummets ämne till \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s bytte rummets ämne till \"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s skickade en dekal.",
         "m.video": {
             "error_decrypting": "Fel vid avkryptering av video"
@@ -3727,18 +3672,9 @@
         "ban_room_confirm_title": "Banna från %(roomName)s",
         "ban_space_everything": "Banna dem från allt jag kan",
         "ban_space_specific": "Banna dem från specifika saker jag kan",
-        "count_of_sessions": {
-            "other": "%(count)s sessioner",
-            "one": "%(count)s session"
-        },
-        "count_of_verified_sessions": {
-            "other": "%(count)s verifierade sessioner",
-            "one": "1 verifierad session"
-        },
         "deactivate_confirm_action": "Inaktivera användaren",
         "deactivate_confirm_description": "Vid inaktivering av användare loggas den ut och förhindras från att logga in igen. Den kommer dessutom att lämna alla rum den befinner sig i. Den här åtgärden kan inte ångras. Är du säker på att du vill inaktivera den här användaren?",
         "deactivate_confirm_title": "Inaktivera användare?",
-        "dehydrated_device_enabled": "Offlineenhet aktiverad",
         "demote_button": "Degradera",
         "demote_self_confirm_description_space": "Du kommer inte kunna ångra den här ändringen eftersom du degraderar dig själv, och om du är den sista privilegierade användaren i utrymmet så kommer det att vara omöjligt att återfå utrymmet.",
         "demote_self_confirm_room": "Du kommer inte att kunna ångra den här ändringen eftersom du degraderar dig själv. Om du är den sista privilegierade användaren i rummet blir det omöjligt att återfå behörigheter.",
@@ -3746,15 +3682,12 @@
         "disinvite_button_room": "Ta bort från rum",
         "disinvite_button_room_name": "Häv inbjudan från %(roomName)s",
         "disinvite_button_space": "Ta bort inbjudan från utrymme",
-        "edit_own_devices": "Redigera enheter",
         "error_ban_user": "Misslyckades att banna användaren",
         "error_deactivate": "Misslyckades att inaktivera användaren",
         "error_kicking_user": "Misslyckades att ta bort användare",
         "error_mute_user": "Misslyckades att tysta användaren",
         "error_revoke_3pid_invite_description": "Kunde inte återkalla inbjudan. Servern kan ha ett tillfälligt problem eller så har du inte tillräckliga behörigheter för att återkalla inbjudan.",
         "error_revoke_3pid_invite_title": "Misslyckades att återkalla inbjudan",
-        "hide_sessions": "Dölj sessioner",
-        "hide_verified_sessions": "Dölj verifierade sessioner",
         "ignore_button": "Ignorera",
         "ignore_confirm_description": "Alla meddelanden och inbjudningar från den här användaren kommer att döljas. Är du säker på att du vill ignorera denne?",
         "ignore_confirm_title": "Ignorera %(user)s",
@@ -3850,7 +3783,6 @@
         "input_devices": "Ingångsenheter",
         "jitsi_call": "Jitsi-gruppsamtal",
         "join_button_tooltip_call_full": "Tyvärr - det här samtalet är för närvarande fullt",
-        "join_button_tooltip_connecting": "Ansluter",
         "legacy_call": "Standardsamtal",
         "maximise": "Fyll skärmen",
         "maximise_call": "Maximera samtal",

@@ -7,13 +7,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Optional } from "matrix-events-sdk";
+import { type Optional } from "matrix-events-sdk";
 import { mergeWith } from "lodash";
 
 import { SnakedObject } from "./utils/SnakedObject";
-import { IConfigOptions, ISsoRedirectOptions } from "./IConfigOptions";
+import { type IConfigOptions, type ISsoRedirectOptions } from "./IConfigOptions";
 import { isObject, objectClone } from "./utils/objects";
-import { DeepReadonly, Defaultize } from "./@types/common";
+import { type DeepReadonly, type Defaultize } from "./@types/common";
 
 // see element-web config.md for docs, or the IConfigOptions interface for dev docs
 export const DEFAULTS: DeepReadonly<IConfigOptions> = {
@@ -59,7 +59,7 @@ export const DEFAULTS: DeepReadonly<IConfigOptions> = {
         url: "https://element.io/download",
         url_macos: "https://packages.element.io/desktop/install/macos/Element.dmg",
         url_win64: "https://packages.element.io/desktop/install/win32/x64/Element%20Setup.exe",
-        url_win32: "https://packages.element.io/desktop/install/win32/ia32/Element%20Setup.exe",
+        url_win64arm: "https://packages.element.io/desktop/install/win32/arm64/Element%20Setup.exe",
         url_linux: "https://element.io/download#linux",
     },
     mobile_builds: {

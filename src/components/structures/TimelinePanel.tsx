@@ -6,25 +6,25 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, ReactNode } from "react";
+import React, { createRef, type ReactNode } from "react";
 import {
-    Room,
+    type Room,
     RoomEvent,
-    RoomMember,
+    type RoomMember,
     RoomMemberEvent,
-    MatrixEvent,
+    type MatrixEvent,
     MatrixEventEvent,
-    EventTimelineSet,
-    IRoomTimelineData,
+    type EventTimelineSet,
+    type IRoomTimelineData,
     Direction,
     EventTimeline,
     EventType,
-    RelationType,
+    type RelationType,
     ClientEvent,
-    MatrixClient,
-    Relations,
-    MatrixError,
-    SyncState,
+    type MatrixClient,
+    type Relations,
+    type MatrixError,
+    type SyncState,
     TimelineWindow,
     Thread,
     ThreadEvent,
@@ -34,7 +34,7 @@ import { debounce, findLastIndex } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import SettingsStore from "../../settings/SettingsStore";
-import { Layout } from "../../settings/enums/Layout";
+import { type Layout } from "../../settings/enums/Layout";
 import { _t } from "../../languageHandler";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
@@ -45,15 +45,16 @@ import { Action } from "../../dispatcher/actions";
 import Timer from "../../utils/Timer";
 import shouldHideEvent from "../../shouldHideEvent";
 import MessagePanel from "./MessagePanel";
-import { IScrollState } from "./ScrollPanel";
-import { ActionPayload } from "../../dispatcher/payloads";
-import ResizeNotifier from "../../utils/ResizeNotifier";
-import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
+import { type IScrollState } from "./ScrollPanel";
+import { type ActionPayload } from "../../dispatcher/payloads";
+import type ResizeNotifier from "../../utils/ResizeNotifier";
+import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import Spinner from "../views/elements/Spinner";
-import EditorStateTransfer from "../../utils/EditorStateTransfer";
+import type EditorStateTransfer from "../../utils/EditorStateTransfer";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
-import LegacyCallEventGrouper, { buildLegacyCallEventGroupers } from "./LegacyCallEventGrouper";
-import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import type LegacyCallEventGrouper from "./LegacyCallEventGrouper";
+import { buildLegacyCallEventGroupers } from "./LegacyCallEventGrouper";
+import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { haveRendererForEvent } from "../../events/EventTileFactory";

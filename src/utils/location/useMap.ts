@@ -30,8 +30,10 @@ export const useMap = ({ interactive, bodyId, onError }: UseMapProps): MapLibreM
 
     useEffect(
         () => {
+            let map: MapLibreMap | undefined;
             try {
-                setMap(createMap(cli, !!interactive, bodyId, onError));
+                map = createMap(cli, !!interactive, bodyId, onError);
+                setMap(map);
             } catch (error) {
                 console.error("Error encountered in useMap", error);
                 if (error instanceof Error) {
@@ -46,8 +48,7 @@ export const useMap = ({ interactive, bodyId, onError }: UseMapProps): MapLibreM
             };
         },
         // map is excluded as a dependency
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [interactive, bodyId, onError],
+        [cli, interactive, bodyId, onError],
     );
 
     return map;

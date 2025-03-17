@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SettingsHeader /> should render the component 1`] = `
+<DocumentFragment>
+  <h2
+    class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93 mx_SettingsHeader"
+  >
+    Settings Header 
+  </h2>
+</DocumentFragment>
+`;
+
+exports[`<SettingsHeader /> should render the component with the recommended tag 1`] = `
+<DocumentFragment>
+  <h2
+    class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93 mx_SettingsHeader"
+  >
+    Settings Header 
+    <span>
+      Recommended
+    </span>
+  </h2>
+</DocumentFragment>
+`;

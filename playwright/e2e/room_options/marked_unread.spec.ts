@@ -7,10 +7,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { test, expect } from "../../element-web-test";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 const TEST_ROOM_NAME = "The mark unread test room";
 
 test.describe("Mark as Unread", () => {
+    test.skip(isDendrite, "due to Dendrite bug https://github.com/element-hq/dendrite/issues/2970");
+
     test.use({
         displayName: "Tom",
         botCreateOpts: {
@@ -48,6 +51,6 @@ test.describe("Mark as Unread", () => {
         await roomTile.getByRole("button", { name: "Room options" }).click();
         await page.getByRole("menuitem", { name: "Mark as unread" }).click();
 
-        expect(page.getByLabel(TEST_ROOM_NAME + " Unread messages.")).toBeVisible();
+        await expect(page.getByLabel(TEST_ROOM_NAME + " Unread messages.")).toBeVisible();
     });
 });

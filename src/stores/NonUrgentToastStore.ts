@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import EventEmitter from "events";
 
-import { ComponentClass } from "../@types/common";
+import { type ComponentClass } from "../@types/common";
 import { UPDATE_EVENT } from "./AsyncStore";
 
 export type ToastReference = symbol;

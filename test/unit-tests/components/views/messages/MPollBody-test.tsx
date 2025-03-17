@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { act, fireEvent, render, RenderResult, waitForElementToBeRemoved, waitFor } from "jest-matrix-react";
+import { act, fireEvent, render, type RenderResult, waitForElementToBeRemoved, waitFor } from "jest-matrix-react";
 import {
     MatrixEvent,
     Relations,
@@ -15,8 +15,8 @@ import {
     M_POLL_KIND_UNDISCLOSED,
     M_POLL_RESPONSE,
     M_POLL_START,
-    PollStartEventContent,
-    PollAnswer,
+    type PollStartEventContent,
+    type PollAnswer,
     M_TEXT,
 } from "matrix-js-sdk/src/matrix";
 
@@ -25,7 +25,7 @@ import MPollBody, {
     findTopAnswer,
     isPollEnded,
 } from "../../../../../src/components/views/messages/MPollBody";
-import { IBodyProps } from "../../../../../src/components/views/messages/IBodyProps";
+import { type IBodyProps } from "../../../../../src/components/views/messages/IBodyProps";
 import {
     flushPromises,
     getMockClientWithEventEmitter,
@@ -34,8 +34,8 @@ import {
     setupRoomWithPollEvents,
 } from "../../../../test-utils";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
-import { MediaEventHelper } from "../../../../../src/utils/MediaEventHelper";
+import { type RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
+import { type MediaEventHelper } from "../../../../../src/utils/MediaEventHelper";
 import * as languageHandler from "../../../../../src/languageHandler";
 
 const CHECKED = "mx_PollOption_checked";

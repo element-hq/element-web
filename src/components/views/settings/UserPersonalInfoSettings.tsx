@@ -14,7 +14,7 @@ import { _t } from "../../../languageHandler";
 import InlineSpinner from "../elements/InlineSpinner";
 import { SettingsSubsection } from "./shared/SettingsSubsection";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
-import { ThirdPartyIdentifier } from "../../../AddThreepid";
+import { type ThirdPartyIdentifier } from "../../../AddThreepid";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import { AddRemoveThreepids } from "./AddRemoveThreepids";

@@ -17,16 +17,16 @@ import {
     M_LOCATION,
     M_POLL_END,
     M_POLL_START,
-    IContent,
+    type IContent,
 } from "matrix-js-sdk/src/matrix";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import { Mjolnir } from "../../../mjolnir/Mjolnir";
 import RedactedBody from "./RedactedBody";
 import UnknownBody from "./UnknownBody";
-import { IMediaBody } from "./IMediaBody";
+import { type IMediaBody } from "./IMediaBody";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
-import { IBodyProps } from "./IBodyProps";
+import { type IBodyProps } from "./IBodyProps";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import TextualBody from "./TextualBody";
 import MImageBody from "./MImageBody";
@@ -40,7 +40,7 @@ import MLocationBody from "./MLocationBody";
 import MjolnirBody from "./MjolnirBody";
 import MBeaconBody from "./MBeaconBody";
 import { DecryptionFailureBody } from "./DecryptionFailureBody";
-import { GetRelationsForEvent, IEventTileOps } from "../rooms/EventTile";
+import { type GetRelationsForEvent, type IEventTileOps } from "../rooms/EventTile";
 
 // onMessageAllowed is handled internally
 interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper"> {

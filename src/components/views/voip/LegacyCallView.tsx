@@ -9,9 +9,9 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef } from "react";
-import { CallEvent, CallState, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { CallEvent, CallState, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import classNames from "classnames";
-import { CallFeed } from "matrix-js-sdk/src/webrtc/callFeed";
+import { type CallFeed } from "matrix-js-sdk/src/webrtc/callFeed";
 import { SDPStreamMetadataPurpose } from "matrix-js-sdk/src/webrtc/callEventTypes";
 
 import dis from "../../../dispatcher/dispatcher";
@@ -25,7 +25,7 @@ import { avatarUrlForMember } from "../../../Avatar";
 import LegacyCallViewSidebar from "./LegacyCallViewSidebar";
 import LegacyCallViewHeader from "./LegacyCallView/LegacyCallViewHeader";
 import LegacyCallViewButtons from "./LegacyCallView/LegacyCallViewButtons";
-import { ActionPayload } from "../../../dispatcher/payloads";
+import { type ActionPayload } from "../../../dispatcher/payloads";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 

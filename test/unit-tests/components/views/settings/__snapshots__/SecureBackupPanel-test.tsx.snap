@@ -5,7 +5,7 @@ exports[`<SecureBackupPanel /> handles error fetching backup 1`] = `
   <div
     class="mx_SettingsSubsection_text"
   >
-    Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.
+    Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Recovery Key.
   </div>
   <div
     class="mx_SettingsSubsection_text"
@@ -71,7 +71,7 @@ exports[`<SecureBackupPanel /> suggests connecting session to key backup when ba
   <div
     class="mx_SettingsSubsection_text"
   >
-    Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.
+    Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Recovery Key.
   </div>
   <div
     class="mx_SettingsSubsection_text"

@@ -6,21 +6,21 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { JSX, useState } from "react";
+import React, { type JSX, useState } from "react";
 import { Menu, MenuItem } from "@vector-im/compound-web";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk/src/matrix";
 
 import { ThreadsActivityCentreButton } from "./ThreadsActivityCentreButton";
 import { _t } from "../../../../languageHandler";
 import DecoratedRoomAvatar from "../../avatars/DecoratedRoomAvatar";
 import { Action } from "../../../../dispatcher/actions";
 import defaultDispatcher from "../../../../dispatcher/dispatcher";
-import { ViewRoomPayload } from "../../../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../../../dispatcher/payloads/ViewRoomPayload";
 import RightPanelStore from "../../../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../../stores/right-panel/RightPanelStorePhases";
 import { useUnreadThreadRooms } from "./useUnreadThreadRooms";
 import { StatelessNotificationBadge } from "../../rooms/NotificationBadge/StatelessNotificationBadge";
-import { NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
+import { type NotificationLevel } from "../../../../stores/notifications/NotificationLevel";
 import PosthogTrackers from "../../../../PosthogTrackers";
 import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";

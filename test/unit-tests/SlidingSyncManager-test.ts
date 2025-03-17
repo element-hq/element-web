@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { SlidingSync } from "matrix-js-sdk/src/sliding-sync";
 import { mocked } from "jest-mock";
-import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import fetchMockJest from "fetch-mock-jest";
 
 import { SlidingSyncManager } from "../../src/SlidingSyncManager";

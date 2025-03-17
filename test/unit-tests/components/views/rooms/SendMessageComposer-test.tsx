@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { fireEvent, render, waitFor } from "jest-matrix-react";
-import { IContent, MatrixClient, MsgType } from "matrix-js-sdk/src/matrix";
+import { type IContent, type MatrixClient, MsgType } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 import userEvent from "@testing-library/user-event";
 
@@ -26,7 +26,7 @@ import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import DocumentOffset from "../../../../../src/editor/offset";
 import { Layout } from "../../../../../src/settings/enums/Layout";
-import { IRoomState, MainSplitContentType } from "../../../../../src/components/structures/RoomView";
+import { type IRoomState, MainSplitContentType } from "../../../../../src/components/structures/RoomView";
 import { mockPlatformPeg } from "../../../../test-utils/platform";
 import { doMaybeLocalRoomAction } from "../../../../../src/utils/local-room";
 import { addTextToComposer } from "../../../../test-utils/composer";
@@ -73,7 +73,6 @@ describe("<SendMessageComposer/>", () => {
         canSelfRedact: false,
         resizing: false,
         narrow: false,
-        activeCall: null,
         msc3946ProcessDynamicPredecessor: false,
         canAskToJoin: false,
         promptAskToJoin: false,
@@ -195,7 +194,7 @@ describe("<SendMessageComposer/>", () => {
                 "m.mentions": { user_ids: ["@bob:test"] },
             });
 
-            // It also adds any other mentioned users, but removes yourself.
+            // It no longer adds any other mentioned users
             replyToEvent = mkEvent({
                 type: "m.room.message",
                 user: "@bob:test",
@@ -206,7 +205,7 @@ describe("<SendMessageComposer/>", () => {
             content = {};
             attachMentions("@alice:test", content, model, replyToEvent);
             expect(content).toEqual({
-                "m.mentions": { user_ids: ["@bob:test", "@charlie:test"] },
+                "m.mentions": { user_ids: ["@bob:test"] },
             });
         });
 

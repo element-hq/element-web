@@ -12,7 +12,7 @@ import escapeHtml from "escape-html";
 
 import Markdown from "../Markdown";
 import { makeGenericPermalink } from "../utils/permalinks/Permalinks";
-import EditorModel from "./model";
+import type EditorModel from "./model";
 import SettingsStore from "../settings/SettingsStore";
 import SdkConfig from "../SdkConfig";
 import { Type } from "./parts";

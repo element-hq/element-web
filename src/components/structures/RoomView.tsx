@@ -9,40 +9,48 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent, ComponentProps, createRef, ReactElement, ReactNode, RefObject, JSX } from "react";
+import React, {
+    type ChangeEvent,
+    type ComponentProps,
+    createRef,
+    type ReactElement,
+    type ReactNode,
+    type RefObject,
+    type JSX,
+} from "react";
 import classNames from "classnames";
 import {
-    IRecommendedVersion,
+    type IRecommendedVersion,
     NotificationCountType,
-    Room,
+    type Room,
     RoomEvent,
-    RoomState,
+    type RoomState,
     RoomStateEvent,
-    MatrixEvent,
+    type MatrixEvent,
     MatrixEventEvent,
-    EventTimeline,
-    IRoomTimelineData,
+    type EventTimeline,
+    type IRoomTimelineData,
     EventType,
     HistoryVisibility,
     JoinRule,
     ClientEvent,
-    MatrixError,
-    ISearchResults,
+    type MatrixError,
+    type ISearchResults,
     THREAD_RELATION_TYPE,
-    MatrixClient,
+    type MatrixClient,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
-import { CallState, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { type CallState, type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { debounce, throttle } from "lodash";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto-api";
-import { ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
+import { type ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 
 import shouldHideEvent from "../../shouldHideEvent";
 import { _t } from "../../languageHandler";
 import * as TimezoneHandler from "../../TimezoneHandler";
 import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
-import ResizeNotifier from "../../utils/ResizeNotifier";
+import type ResizeNotifier from "../../utils/ResizeNotifier";
 import ContentMessages from "../../ContentMessages";
 import Modal from "../../Modal";
 import { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
@@ -50,15 +58,15 @@ import defaultDispatcher from "../../dispatcher/dispatcher";
 import * as Rooms from "../../Rooms";
 import MainSplit from "./MainSplit";
 import RightPanel from "./RightPanel";
-import RoomScrollStateStore, { ScrollState } from "../../stores/RoomScrollStateStore";
+import RoomScrollStateStore, { type ScrollState } from "../../stores/RoomScrollStateStore";
 import WidgetEchoStore from "../../stores/WidgetEchoStore";
 import SettingsStore from "../../settings/SettingsStore";
 import { Layout } from "../../settings/enums/Layout";
-import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../views/elements/AccessibleButton";
 import { TimelineRenderingType, MainSplitContentType } from "../../contexts/RoomContext";
 import { E2EStatus, shieldStatusForRoom } from "../../utils/ShieldUtils";
 import { Action } from "../../dispatcher/actions";
-import { IMatrixClientCreds } from "../../MatrixClientPeg";
+import { type IMatrixClientCreds } from "../../MatrixClientPeg";
 import ScrollPanel from "./ScrollPanel";
 import TimelinePanel from "./TimelinePanel";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
@@ -66,8 +74,8 @@ import RoomPreviewBar from "../views/rooms/RoomPreviewBar";
 import RoomPreviewCard from "../views/rooms/RoomPreviewCard";
 import RoomUpgradeWarningBar from "../views/rooms/RoomUpgradeWarningBar";
 import AuxPanel from "../views/rooms/AuxPanel";
-import RoomHeader from "../views/rooms/RoomHeader";
-import { IOOBData, IThreepidInvite } from "../../stores/ThreepidInviteStore";
+import RoomHeader from "../views/rooms/RoomHeader/RoomHeader";
+import { type IOOBData, type IThreepidInvite } from "../../stores/ThreepidInviteStore";
 import EffectsOverlay from "../views/elements/EffectsOverlay";
 import { containsEmoji } from "../../effects/utils";
 import { CHAT_EFFECTS } from "../../effects";
@@ -79,7 +87,7 @@ import { Container, WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutS
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { objectHasDiff } from "../../utils/objects";
 import SpaceRoomView from "./SpaceRoomView";
-import { IOpts } from "../../createRoom";
+import { type IOpts } from "../../createRoom";
 import EditorStateTransfer from "../../utils/EditorStateTransfer";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
 import UploadBar from "./UploadBar";
@@ -88,32 +96,30 @@ import MessageComposer from "../views/rooms/MessageComposer";
 import JumpToBottomButton from "../views/rooms/JumpToBottomButton";
 import TopUnreadMessagesBar from "../views/rooms/TopUnreadMessagesBar";
 import { fetchInitialEvent } from "../../utils/EventUtils";
-import { ComposerInsertPayload, ComposerType } from "../../dispatcher/payloads/ComposerInsertPayload";
+import { type ComposerInsertPayload, ComposerType } from "../../dispatcher/payloads/ComposerInsertPayload";
 import AppsDrawer from "../views/rooms/AppsDrawer";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
-import { ActionPayload } from "../../dispatcher/payloads";
+import { type ActionPayload } from "../../dispatcher/payloads";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
-import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
-import { JoinRoomPayload } from "../../dispatcher/payloads/JoinRoomPayload";
-import { DoAfterSyncPreparedPayload } from "../../dispatcher/payloads/DoAfterSyncPreparedPayload";
+import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import { type JoinRoomPayload } from "../../dispatcher/payloads/JoinRoomPayload";
+import { type DoAfterSyncPreparedPayload } from "../../dispatcher/payloads/DoAfterSyncPreparedPayload";
 import FileDropTarget from "./FileDropTarget";
 import Measured from "../views/elements/Measured";
-import { FocusComposerPayload } from "../../dispatcher/payloads/FocusComposerPayload";
+import { type FocusComposerPayload } from "../../dispatcher/payloads/FocusComposerPayload";
 import { LocalRoom, LocalRoomState } from "../../models/LocalRoom";
 import { createRoomFromLocalRoom } from "../../utils/direct-messages";
 import NewRoomIntro from "../views/rooms/NewRoomIntro";
 import EncryptionEvent from "../views/messages/EncryptionEvent";
 import { StaticNotificationState } from "../../stores/notifications/StaticNotificationState";
 import { isLocalRoom } from "../../utils/localRoom/isLocalRoom";
-import { ShowThreadPayload } from "../../dispatcher/payloads/ShowThreadPayload";
+import { type ShowThreadPayload } from "../../dispatcher/payloads/ShowThreadPayload";
 import { RoomStatusBarUnsentMessages } from "./RoomStatusBarUnsentMessages";
 import { LargeLoader } from "./LargeLoader";
 import { isVideoRoom } from "../../utils/video-rooms";
 import { SDKContext } from "../../contexts/SDKContext";
-import { CallStore, CallStoreEvent } from "../../stores/CallStore";
-import { Call } from "../../models/Call";
 import { RoomSearchView } from "./RoomSearchView";
-import eventSearch, { SearchInfo, SearchScope } from "../../Searching";
+import eventSearch, { type SearchInfo, SearchScope } from "../../Searching";
 import VoipUserMapper from "../../VoipUserMapper";
 import { isCallEvent } from "./LegacyCallEventGrouper";
 import { WidgetType } from "../../widgets/WidgetType";
@@ -121,8 +127,8 @@ import WidgetUtils from "../../utils/WidgetUtils";
 import { shouldEncryptRoomWithSingle3rdPartyInvite } from "../../utils/room/shouldEncryptRoomWithSingle3rdPartyInvite";
 import { WaitingForThirdPartyRoomView } from "./WaitingForThirdPartyRoomView";
 import { isNotUndefined } from "../../Typeguards";
-import { CancelAskToJoinPayload } from "../../dispatcher/payloads/CancelAskToJoinPayload";
-import { SubmitAskToJoinPayload } from "../../dispatcher/payloads/SubmitAskToJoinPayload";
+import { type CancelAskToJoinPayload } from "../../dispatcher/payloads/CancelAskToJoinPayload";
+import { type SubmitAskToJoinPayload } from "../../dispatcher/payloads/SubmitAskToJoinPayload";
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { onView3pidInvite } from "../../stores/right-panel/action-handlers";
 import RoomSearchAuxPanel from "../views/rooms/RoomSearchAuxPanel";
@@ -182,7 +188,6 @@ export interface IRoomState {
      */
     search?: SearchInfo;
     callState?: CallState;
-    activeCall: Call | null;
     canPeek: boolean;
     canSelfRedact: boolean;
     showApps: boolean;
@@ -273,6 +278,7 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
     }
 
     const onRetryClicked = (): void => {
+        // eslint-disable-next-line react-compiler/react-compiler
         room.state = LocalRoomState.NEW;
         defaultDispatcher.dispatch({
             action: "local_room_event",
@@ -392,7 +398,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             membersLoaded: !llMembers,
             numUnreadMessages: 0,
             callState: undefined,
-            activeCall: null,
             canPeek: false,
             canSelfRedact: false,
             showApps: false,
@@ -568,7 +573,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             mainSplitContentType: room ? this.getMainSplitContentType(room) : undefined,
             initialEventId: undefined, // default to clearing this, will get set later in the method if needed
             showRightPanel: roomId ? this.context.rightPanelStore.isOpenForRoom(roomId) : false,
-            activeCall: roomId ? CallStore.instance.getActiveCall(roomId) : null,
             promptAskToJoin: this.context.roomViewStore.promptAskToJoin(),
             viewRoomOpts: this.context.roomViewStore.getViewRoomOpts(),
         };
@@ -718,23 +722,17 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         });
     };
 
-    private onConnectedCalls = (): void => {
-        if (this.state.roomId === undefined) return;
-        const activeCall = CallStore.instance.getActiveCall(this.state.roomId);
-        if (activeCall === null) {
-            // We disconnected from the call, so stop viewing it
-            defaultDispatcher.dispatch<ViewRoomPayload>(
-                {
-                    action: Action.ViewRoom,
-                    room_id: this.state.roomId,
-                    view_call: false,
-                    metricsTrigger: undefined,
-                },
-                true,
-            ); // Synchronous so that CallView disappears immediately
-        }
-
-        this.setState({ activeCall });
+    private onCallClose = (): void => {
+        // Stop viewing the call
+        defaultDispatcher.dispatch<ViewRoomPayload>(
+            {
+                action: Action.ViewRoom,
+                room_id: this.state.roomId,
+                view_call: false,
+                metricsTrigger: undefined,
+            },
+            true,
+        ); // Synchronous so that CallView disappears immediately
     };
 
     private getRoomId = (): string | undefined => {
@@ -891,8 +889,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         WidgetEchoStore.on(UPDATE_EVENT, this.onWidgetEchoStoreUpdate);
         this.context.widgetStore.on(UPDATE_EVENT, this.onWidgetStoreUpdate);
 
-        CallStore.instance.on(CallStoreEvent.ConnectedCalls, this.onConnectedCalls);
-
         this.props.resizeNotifier.on("isResizing", this.onIsResizing);
 
         this.settingWatchers = [
@@ -1018,7 +1014,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             );
         }
 
-        CallStore.instance.off(CallStoreEvent.ConnectedCalls, this.onConnectedCalls);
         this.context.legacyCallHandler.off(LegacyCallHandlerEvent.CallState, this.onCallState);
 
         // cancel any pending calls to the throttled updated
@@ -1082,7 +1077,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
     };
 
-    private onCallState = (roomId: string): void => {
+    private onCallState = (roomId: string | null): void => {
         // don't filter out payloads for room IDs other than props.room because
         // we may be interested in the conf 1:1 room
 
@@ -1142,13 +1137,14 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 break;
             case "MatrixActions.sync":
                 if (!this.state.matrixClientIsReady) {
+                    const isReadyNow = Boolean(this.context.client?.isInitialSyncComplete());
                     this.setState(
                         {
-                            matrixClientIsReady: !!this.context.client?.isInitialSyncComplete(),
+                            matrixClientIsReady: isReadyNow,
                         },
                         () => {
                             // send another "initial" RVS update to trigger peeking if needed
-                            this.onRoomViewStoreUpdate(true);
+                            if (isReadyNow) this.onRoomViewStoreUpdate(true);
                         },
                     );
                 }
@@ -2514,9 +2510,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 mainSplitContentClassName = "mx_MainSplit_timeline";
                 mainSplitBody = (
                     <>
-                        {this.roomViewBody.current && (
-                            <Measured sensor={this.roomViewBody.current} onMeasurement={this.onMeasurement} />
-                        )}
+                        <Measured sensor={this.roomViewBody} onMeasurement={this.onMeasurement} />
                         {auxPanel}
                         {pinnedMessageBanner}
                         <main className={timelineClasses}>
@@ -2554,9 +2548,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         <CallView
                             room={this.state.room}
                             resizing={this.state.resizing}
-                            waitForCall={isVideoRoom(this.state.room)}
                             skipLobby={this.context.roomViewStore.skipCallLobby() ?? false}
                             role="main"
+                            onClose={this.onCallClose}
                         />
                         {previewBar}
                     </>

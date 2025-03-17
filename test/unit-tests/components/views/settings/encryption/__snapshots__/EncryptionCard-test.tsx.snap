@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<EncryptionCard /> should render 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_EncryptionCard"
+  >
+    <div
+      class="mx_EncryptionCard_header"
+    >
+      <div
+        class="_content_o77nw_8"
+        data-size="large"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M10.475 16.9A5.86 5.86 0 0 1 7 18q-2.5 0-4.25-1.75T1 12t1.75-4.25T7 6q2.026 0 3.537 1.15Q12.05 8.3 12.65 10h7.95q.2 0 .387.075.189.075.338.225l1.025 1.025a1 1 0 0 1 .2.288q.075.162.075.362t-.062.375a1.1 1.1 0 0 1-.188.325l-2.25 2.575a.97.97 0 0 1-1.038.313 1 1 0 0 1-.337-.188L17 14l-1.3 1.3q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063q-.2 0-.375-.062a.9.9 0 0 1-.325-.213L13 14h-.35a5.8 5.8 0 0 1-2.175 2.9m-4.887-3.487Q6.175 14 7 14q.824 0 1.412-.588Q9 12.826 9 12t-.588-1.412A1.93 1.93 0 0 0 7 10q-.824 0-1.412.588A1.93 1.93 0 0 0 5 12q0 .825.588 1.412"
+          />
+        </svg>
+      </div>
+      <h2
+        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+      >
+        My title
+      </h2>
+      <span>
+        My description
+      </span>
+    </div>
+    Encryption card children
+  </div>
+</DocumentFragment>
+`;

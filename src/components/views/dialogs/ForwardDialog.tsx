@@ -9,18 +9,18 @@ Please see LICENSE files in the repository root for full details.
 import React, { useEffect, useMemo, useState } from "react";
 import classnames from "classnames";
 import {
-    IContent,
+    type IContent,
     MatrixEvent,
-    Room,
-    RoomMember,
+    type Room,
+    type RoomMember,
     EventType,
-    MatrixClient,
+    type MatrixClient,
     ContentHelpers,
-    ILocationContent,
+    type ILocationContent,
     LocationAssetType,
     M_TIMESTAMP,
     M_BEACON,
-    TimelineEvents,
+    type TimelineEvents,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 
@@ -36,19 +36,19 @@ import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
 import NotificationBadge from "../rooms/NotificationBadge";
-import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { sortRooms } from "../../../stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
 import QueryMatcher from "../../../autocomplete/QueryMatcher";
 import TruncatedList from "../elements/TruncatedList";
 import { Action } from "../../../dispatcher/actions";
-import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
+import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import { isLocationEvent } from "../../../utils/EventUtils";
 import { isSelfLocation, locationEventGeoUri } from "../../../utils/location";
 import { RoomContextDetails } from "../rooms/RoomContextDetails";
 import { filterBoolean } from "../../../utils/arrays";
 import {
-    IState,
+    type IState,
     RovingTabIndexContext,
     RovingTabIndexProvider,
     Type,

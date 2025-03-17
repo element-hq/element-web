@@ -1,13 +1,20 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2015, 2016 OpenMarket Ltd
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ComponentProps } from "react";
-import { Room, RoomStateEvent, MatrixEvent, EventType, RoomType } from "matrix-js-sdk/src/matrix";
+import React, { type ComponentProps } from "react";
+import {
+    type Room,
+    RoomStateEvent,
+    type MatrixEvent,
+    EventType,
+    RoomType,
+    KnownMembership,
+} from "matrix-js-sdk/src/matrix";
 
 import BaseAvatar from "./BaseAvatar";
 import ImageView from "../elements/ImageView";
@@ -16,9 +23,10 @@ import Modal from "../../../Modal";
 import * as Avatar from "../../../Avatar";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { mediaFromMxc } from "../../../customisations/Media";
-import { IOOBData } from "../../../stores/ThreepidInviteStore";
+import { type IOOBData } from "../../../stores/ThreepidInviteStore";
 import { LocalRoom } from "../../../models/LocalRoom";
 import { filterBoolean } from "../../../utils/arrays";
+import SettingsStore from "../../../settings/SettingsStore";
 
 interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url" | "onClick"> {
     // Room may be left unset here, but if it is,
@@ -86,6 +94,13 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
     };
 
     private static getImageUrls(props: IProps): string[] {
+        const myMembership = props.room?.getMyMembership();
+        if (myMembership === KnownMembership.Invite || !myMembership) {
+            if (SettingsStore.getValue("showAvatarsOnInvites") === false) {
+                // The user has opted out of showing avatars, so return no urls here.
+                return [];
+            }
+        }
         let oobAvatar: string | null = null;
         if (props.oobData.avatarUrl) {
             oobAvatar = mediaFromMxc(props.oobData.avatarUrl).getThumbnailOfSourceHttp(

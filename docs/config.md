@@ -155,7 +155,7 @@ complete re-branding/private labeling, a more personalised experience can be ach
     3. `show_once`: Optional. If true then the notice will only be shown once per device.
 18. `help_url`: The URL to point users to for help with the app, defaults to `https://element.io/help`.
 19. `help_encryption_url`: The URL to point users to for help with encryption, defaults to `https://element.io/help#encryption`.
-20. `force_verification`: If true, users must verify new logins (eg. with another device / their security key)
+20. `force_verification`: If true, users must verify new logins (eg. with another device / their recovery key)
 
 ### `desktop_builds` and `mobile_builds`
 
@@ -163,14 +163,14 @@ These two options describe the various availability for the application. When th
 such as trying to get the user to use an Android app or the desktop app for encrypted search, the config options will be looked
 at to see if the link should be to somewhere else.
 
-Starting with `desktop_builds`, the following subproperties are available:
+Starting with `desktop_builds`, the following sub-properties are available:
 
 1. `available`: Required. When `true`, the desktop app can be downloaded from somewhere.
 2. `logo`: Required. A URL to a logo (SVG), intended to be shown at 24x24 pixels.
 3. `url`: Required. The download URL for the app. This is used as a hyperlink.
 4. `url_macos`: Optional. Direct link to download macOS desktop app.
-5. `url_win32`: Optional. Direct link to download Windows 32-bit desktop app.
-6. `url_win64`: Optional. Direct link to download Windows 64-bit desktop app.
+5. `url_win64`: Optional. Direct link to download Windows x86 64-bit desktop app.
+6. `url_win64arm`: Optional. Direct link to download Windows ARM 64-bit desktop app.
 7. `url_linux`: Optional. Direct link to download Linux desktop app.
 
 When `desktop_builds` is not specified at all, the app will assume desktop downloads are available from https://element.io
@@ -592,3 +592,4 @@ The following are undocumented or intended for developer use only.
 2. `sync_timeline_limit`
 3. `dangerously_allow_unsafe_and_insecure_passwords`
 4. `latex_maths_delims`: An optional setting to override the default delimiters used for maths parsing. See https://github.com/matrix-org/matrix-react-sdk/pull/5939 for details. Only used when `feature_latex_maths` is enabled.
+5. `modules`: An optional list of modules to load. This is used for testing and development purposes only.

@@ -5,15 +5,6 @@ adjacent to. As of writing, these are:
 
 - element-desktop
 - element-web
-- matrix-js-sdk
-
-Other projects might extend this code style for increased strictness. For example, matrix-events-sdk
-has stricter code organization to reduce the maintenance burden. These projects will declare their code
-style within their own repos.
-
-Note that some requirements will be layer-specific. Where the requirements don't make sense for the
-project, they are used to the best of their ability, used in spirit, or ignored if not applicable,
-in that order.
 
 ## Guiding principles
 
@@ -234,17 +225,19 @@ Unless otherwise specified, the following applies to all code:
 
 Inheriting all the rules of TypeScript, the following additionally apply:
 
-1. Types for lifecycle functions are not required (render, componentDidMount, and so on).
-2. Class components must always have a `Props` interface declared immediately above them. It can be
+1. Component source files are named with upper camel case (e.g. views/rooms/EventTile.js)
+2. They are organised in a typically two-level hierarchy - first whether the component is a view or a structure, and then a broad functional grouping (e.g. 'rooms' here)
+3. Types for lifecycle functions are not required (render, componentDidMount, and so on).
+4. Class components must always have a `Props` interface declared immediately above them. It can be
    empty if the component accepts no props.
-3. Class components should have an `State` interface declared immediately above them, but after `Props`.
-4. Props and State should not be exported. Use `React.ComponentProps<typeof ComponentNameHere>`
+5. Class components should have an `State` interface declared immediately above them, but after `Props`.
+6. Props and State should not be exported. Use `React.ComponentProps<typeof ComponentNameHere>`
    instead.
-5. One component per file, except when a component is a utility component specifically for the "primary"
+7. One component per file, except when a component is a utility component specifically for the "primary"
    component. The utility component should not be exported.
-6. Exported constants, enums, interfaces, functions, etc must be separate from files containing components
+8. Exported constants, enums, interfaces, functions, etc must be separate from files containing components
    or stores.
-7. Stores should use a singleton pattern with a static instance property:
+9. Stores should use a singleton pattern with a static instance property:
 
     ```typescript
     class FooStore {
@@ -261,44 +254,41 @@ Inheriting all the rules of TypeScript, the following additionally apply:
     }
     ```
 
-8. Stores must support using an alternative MatrixClient and dispatcher instance.
-9. Utilities which require JSX must be split out from utilities which do not. This is to prevent import
-   cycles during runtime where components accidentally include more of the app than they intended.
-10. Interdependence between stores should be kept to a minimum. Break functions and constants out to utilities
+10. Stores must support using an alternative MatrixClient and dispatcher instance.
+11. Utilities which require JSX must be split out from utilities which do not. This is to prevent import
+    cycles during runtime where components accidentally include more of the app than they intended.
+12. Interdependence between stores should be kept to a minimum. Break functions and constants out to utilities
     if at all possible.
-11. A component should only use CSS class names in line with the component name.
+13. A component should only use CSS class names in line with the component name.
 
     1. When knowingly using a class name from another component, document it with a [comment](#comments).
 
-12. Curly braces within JSX should be padded with a space, however properties on those components should not.
+14. Curly braces within JSX should be padded with a space, however properties on those components should not.
     See above code example.
-13. Functions used as properties should either be defined on the class or stored in a variable. They should not
+15. Functions used as properties should either be defined on the class or stored in a variable. They should not
     be inline unless mocking/short-circuiting the value.
-14. Prefer hooks (functional components) over class components. Be consistent with the existing area if unsure
+16. Prefer hooks (functional components) over class components. Be consistent with the existing area if unsure
     which should be used.
     1. Unless the component is considered a "structure", in which case use classes.
-15. Write more views than structures. Structures are chunks of functionality like MatrixChat while views are
+17. Write more views than structures. Structures are chunks of functionality like MatrixChat while views are
     isolated components.
-16. Components should serve a single, or near-single, purpose.
-17. Prefer to derive information from component properties rather than establish state.
-18. Do not use `React.Component::forceUpdate`.
+18. Components should serve a single, or near-single, purpose.
+19. Prefer to derive information from component properties rather than establish state.
+20. Do not use `React.Component::forceUpdate`.
 
 ## Stylesheets (\*.pcss = PostCSS + Plugins)
 
 Note: We use PostCSS + some plugins to process our styles. It looks like SCSS, but actually it is not.
 
-1. Class names must be prefixed with "mx\_".
-2. Class names must denote the component which defines them, followed by any context.
-   The context is not further specified here in terms of meaning or syntax.
-   Use whatever is appropriate for your implementation use case.
-   Some examples:
-    1. `mx_MyFoo`
-    2. `mx_MyFoo_avatar`
-    3. `mx_MyFoo_avatarUser`
-    4. `mx_MyFoo_avatar--user`
-3. Use the `$font` variables instead of manual values.
-4. Keep indentation/nesting to a minimum. Maximum suggested nesting is 5 layers.
-5. Use the whole class name instead of shortcuts:
+1. The view's CSS file MUST have the same name as the component (e.g. `view/rooms/_MessageTile.css` for `MessageTile.tsx` component).
+2. Per-view CSS is optional - it could choose to inherit all its styling from the context of the rest of the app, although this is unusual.
+3. Class names must be prefixed with "mx\_".
+4. Class names must strictly denote the component which defines them.
+   For example: `mx_MyFoo` for `MyFoo` component.
+5. Class names for DOM elements within a view which aren't components are named by appending a lower camel case identifier to the view's class name - e.g. .mx_MyFoo_randomDiv is how you'd name the class of an arbitrary div within the MyFoo view.
+6. Use the `$font` variables instead of manual values.
+7. Keep indentation/nesting to a minimum. Maximum suggested nesting is 5 layers.
+8. Use the whole class name instead of shortcuts:
 
     ```scss
     .mx_MyFoo {
@@ -309,7 +299,7 @@ Note: We use PostCSS + some plugins to process our styles. It looks like SCSS, b
     }
     ```
 
-6. Break multiple selectors over multiple lines this way:
+9. Break multiple selectors over multiple lines this way:
 
     ```scss
     .mx_MyFoo,
@@ -319,9 +309,9 @@ Note: We use PostCSS + some plugins to process our styles. It looks like SCSS, b
     }
     ```
 
-7. Non-shared variables should use $lowerCamelCase. Shared variables use $dashed-naming.
-8. Overrides to Z indexes, adjustments of dimensions/padding with pixels, and so on should all be
-   [documented](#comments) for what the values mean:
+10. Non-shared variables should use $lowerCamelCase. Shared variables use $dashed-naming.
+11. Overrides to Z indexes, adjustments of dimensions/padding with pixels, and so on should all be
+    [documented](#comments) for what the values mean:
 
     ```scss
     .mx_MyFoo {
@@ -331,7 +321,9 @@ Note: We use PostCSS + some plugins to process our styles. It looks like SCSS, b
     }
     ```
 
-9. Avoid the use of `!important`. If `!important` is necessary, add a [comment](#comments) explaining why.
+12. Avoid the use of `!important`. If `!important` is necessary, add a [comment](#comments) explaining why.
+13. The CSS for a component can override the rules for child components. For instance, .mxRoomList .mx_RoomTile {} would be the selector to override styles of RoomTiles when viewed in the context of a RoomList view. Overrides must be scoped to the View's CSS class - i.e. don't just define .mx_RoomTile {} in RoomList.css - only RoomTile.css is allowed to define its own CSS. Instead, say .mx_RoomList .mx_RoomTile {} to scope the override only to the context of RoomList views. N.B. overrides should be relatively rare as in general CSS inheritance should be enough.
+14. Components should render only within the bounding box of their outermost DOM element. Page-absolute positioning and negative CSS margins and similar are generally not cool and stop the component from being reused easily in different places.
 
 ## Tests
 

@@ -9,17 +9,17 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import { render, screen, fireEvent, act, cleanup } from "jest-matrix-react";
 import { mocked } from "jest-mock";
-import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient, type Room } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
-import { MetaSpace, SpaceKey } from "../../../../../src/stores/spaces";
+import { MetaSpace, type SpaceKey } from "../../../../../src/stores/spaces";
 import { shouldShowComponent } from "../../../../../src/customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../../src/settings/UIFeature";
 import { mkStubRoom, wrapInMatrixClientContext, wrapInSdkContext } from "../../../../test-utils";
 import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
 import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
-import { SpaceNotificationState } from "../../../../../src/stores/notifications/SpaceNotificationState";
+import { type SpaceNotificationState } from "../../../../../src/stores/notifications/SpaceNotificationState";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import UnwrappedSpacePanel from "../../../../../src/components/views/spaces/SpacePanel";
 

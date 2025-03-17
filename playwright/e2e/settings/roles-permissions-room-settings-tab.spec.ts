@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { Locator } from "@playwright/test";
+import { type Locator } from "@playwright/test";
 
 import { test, expect } from "../../element-web-test";
 

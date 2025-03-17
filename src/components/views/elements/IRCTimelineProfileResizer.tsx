@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 
 import SettingsStore from "../../../settings/SettingsStore";
-import Draggable, { ILocationState } from "./Draggable";
+import Draggable, { type ILocationState } from "./Draggable";
 import { SettingLevel } from "../../../settings/SettingLevel";
 
 interface IProps {

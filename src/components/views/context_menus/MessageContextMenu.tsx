@@ -11,12 +11,12 @@ Please see LICENSE files in the repository root for full details.
 import React, { createRef, useContext } from "react";
 import {
     EventStatus,
-    MatrixEvent,
+    type MatrixEvent,
     MatrixEventEvent,
     RoomMemberEvent,
     EventType,
     RelationType,
-    Relations,
+    type Relations,
     Thread,
     M_POLL_START,
 } from "matrix-js-sdk/src/matrix";
@@ -31,10 +31,10 @@ import { isUrlPermitted } from "../../../HtmlUtils";
 import { canEditContent, editEvent, isContentActionable } from "../../../utils/EventUtils";
 import IconizedContextMenu, { IconizedContextMenuOption, IconizedContextMenuOptionList } from "./IconizedContextMenu";
 import { Action } from "../../../dispatcher/actions";
-import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
-import { ButtonEvent } from "../elements/AccessibleButton";
+import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import { type ButtonEvent } from "../elements/AccessibleButton";
 import { copyPlaintext, getSelectedText } from "../../../utils/strings";
-import ContextMenu, { toRightOf, MenuProps } from "../../structures/ContextMenu";
+import ContextMenu, { toRightOf, type MenuProps } from "../../structures/ContextMenu";
 import ReactionPicker from "../emojipicker/ReactionPicker";
 import ViewSource from "../../structures/ViewSource";
 import { createRedactEventDialog } from "../dialogs/ConfirmRedactDialog";
@@ -42,14 +42,14 @@ import { ShareDialog } from "../dialogs/ShareDialog";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import EndPollDialog from "../dialogs/EndPollDialog";
 import { isPollEnded } from "../messages/MPollBody";
-import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import { GetRelationsForEvent, IEventTileOps } from "../rooms/EventTile";
-import { OpenForwardDialogPayload } from "../../../dispatcher/payloads/OpenForwardDialogPayload";
-import { OpenReportEventDialogPayload } from "../../../dispatcher/payloads/OpenReportEventDialogPayload";
+import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { type GetRelationsForEvent, type IEventTileOps } from "../rooms/EventTile";
+import { type OpenForwardDialogPayload } from "../../../dispatcher/payloads/OpenForwardDialogPayload";
+import { type OpenReportEventDialogPayload } from "../../../dispatcher/payloads/OpenReportEventDialogPayload";
 import { createMapSiteLinkFromEvent } from "../../../utils/location";
 import { getForwardableEvent } from "../../../events/forward/getForwardableEvent";
 import { getShareableLocationEvent } from "../../../events/location/getShareableLocationEvent";
-import { ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
+import { type ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import { CardContext } from "../right_panel/context";
 import PinningUtils from "../../../utils/PinningUtils";
 import PosthogTrackers from "../../../PosthogTrackers.ts";

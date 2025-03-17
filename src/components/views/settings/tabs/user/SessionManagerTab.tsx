@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { lazy, Suspense, useCallback, useContext, useEffect, useRef, useState } from "react";
-import { discoverAndValidateOIDCIssuerWellKnown, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { defer } from "matrix-js-sdk/src/utils";
 
@@ -21,14 +21,14 @@ import { useOwnDevices } from "../../devices/useOwnDevices";
 import { FilteredDeviceList } from "../../devices/FilteredDeviceList";
 import CurrentDeviceSection from "../../devices/CurrentDeviceSection";
 import SecurityRecommendations from "../../devices/SecurityRecommendations";
-import { ExtendedDevice } from "../../devices/types";
+import { type ExtendedDevice } from "../../devices/types";
 import { deleteDevicesWithInteractiveAuth } from "../../devices/deleteDevices";
 import SettingsTab from "../SettingsTab";
 import LoginWithQRSection from "../../devices/LoginWithQRSection";
 import { Mode } from "../../../auth/LoginWithQR-types";
 import { useAsyncMemo } from "../../../../../hooks/useAsyncMemo";
 import QuestionDialog from "../../../dialogs/QuestionDialog";
-import { FilterVariation } from "../../devices/filter";
+import { type FilterVariation } from "../../devices/filter";
 import { OtherSessionsSectionHeading } from "../../devices/OtherSessionsSectionHeading";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { getManageDeviceUrl } from "../../../../../utils/oidc/urls.ts";
@@ -163,10 +163,7 @@ const SessionManagerTab: React.FC<{
     const clientVersions = useAsyncMemo(() => matrixClient.getVersions(), [matrixClient]);
     const oidcClientConfig = useAsyncMemo(async () => {
         try {
-            const authIssuer = await matrixClient?.getAuthIssuer();
-            if (authIssuer) {
-                return discoverAndValidateOIDCIssuerWellKnown(authIssuer.issuer);
-            }
+            return await matrixClient?.getAuthMetadata();
         } catch (e) {
             logger.error("Failed to discover OIDC metadata", e);
         }

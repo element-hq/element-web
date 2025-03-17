@@ -11,7 +11,7 @@ import InviteIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-
 import { UserAddIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { Flex } from "../../../utils/Flex";
-import { MemberListViewState } from "../../../viewmodels/memberlist/MemberListViewModel";
+import { type MemberListViewState } from "../../../viewmodels/memberlist/MemberListViewModel";
 import { _t } from "../../../../languageHandler";
 
 interface TooltipProps {
@@ -88,12 +88,10 @@ function getHeaderLabelJSX(vm: MemberListViewState): React.ReactNode {
             </Flex>
         );
     }
-
-    const filteredMemberCount = vm.members.length;
-    if (filteredMemberCount === 0) {
+    if (vm.memberCount === 0) {
         return _t("member_list|no_matches");
     }
-    return _t("member_list|count", { count: filteredMemberCount });
+    return _t("member_list|count", { count: vm.memberCount });
 }
 
 export const MemberListHeaderView: React.FC<Props> = (props: Props) => {

@@ -7,15 +7,22 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent, createRef, CSSProperties, ReactElement, ReactNode, Ref } from "react";
+import React, {
+    type ChangeEvent,
+    createRef,
+    type CSSProperties,
+    type ReactElement,
+    type ReactNode,
+    type Ref,
+} from "react";
 import classnames from "classnames";
 
-import AccessibleButton, { ButtonEvent } from "./AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "./AccessibleButton";
 import { _t } from "../../../languageHandler";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { objectHasDiff } from "../../../utils/objects";
-import { NonEmptyArray } from "../../../@types/common";
+import { type NonEmptyArray } from "../../../@types/common";
 
 interface IMenuOptionProps {
     children: ReactElement;

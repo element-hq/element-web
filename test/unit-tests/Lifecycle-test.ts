@@ -11,7 +11,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import * as MatrixJs from "matrix-js-sdk/src/matrix";
 import { decodeBase64, encodeUnpaddedBase64 } from "matrix-js-sdk/src/matrix";
 import * as encryptAESSecretStorageItemModule from "matrix-js-sdk/src/utils/encryptAESSecretStorageItem";
-import { mocked, MockedObject } from "jest-mock";
+import { mocked, type MockedObject } from "jest-mock";
 import fetchMock from "fetch-mock-jest";
 
 import StorageEvictedDialog from "../../src/components/views/dialogs/StorageEvictedDialog";
@@ -142,6 +142,11 @@ describe("Lifecycle", () => {
             .mockImplementation(async (tableKey: string, key: string | string[]) => {
                 const table = mockStore[tableKey];
                 delete table?.[key as string];
+            });
+        jest.spyOn(StorageAccess, "idbClear")
+            .mockClear()
+            .mockImplementation(async (tableKey: string) => {
+                mockStore[tableKey] = {};
             });
     };
 
@@ -613,7 +618,7 @@ describe("Lifecycle", () => {
             it("should clear stores", async () => {
                 await setLoggedIn(credentials);
 
-                expect(StorageAccess.idbDelete).toHaveBeenCalledWith("account", "mx_access_token");
+                expect(StorageAccess.idbClear).toHaveBeenCalledWith("account");
                 expect(sessionStorage.clear).toHaveBeenCalled();
                 expect(mockClient.clearStores).toHaveBeenCalled();
             });
@@ -744,11 +749,8 @@ describe("Lifecycle", () => {
                 "eyJhbGciOiJSUzI1NiIsImtpZCI6Imh4ZEhXb0Y5bW4ifQ.eyJzdWIiOiIwMUhQUDJGU0JZREU5UDlFTU04REQ3V1pIUiIsImlzcyI6Imh0dHBzOi8vYXV0aC1vaWRjLmxhYi5lbGVtZW50LmRldi8iLCJpYXQiOjE3MTUwNzE5ODUsImF1dGhfdGltZSI6MTcwNzk5MDMxMiwiY19oYXNoIjoidGt5R1RhUjU5aTk3YXoyTU4yMGdidyIsImV4cCI6MTcxNTA3NTU4NSwibm9uY2UiOiJxaXhwM0hFMmVaIiwiYXVkIjoiMDFIWDk0Mlg3QTg3REgxRUs2UDRaNjI4WEciLCJhdF9oYXNoIjoiNFlFUjdPRlVKTmRTeEVHV2hJUDlnZyJ9.HxODneXvSTfWB5Vc4cf7b8GiN2gdwUuTiyVqZuupWske2HkZiJZUt5Lsxg9BW3gz28POkE0Ln17snlkmy02B_AD3DQxKOOxQCzIIARHdfFvZxgGWsMdFcVQZDW7rtXcqgj-SpVaUQ_8acsgxSrz_DF2o0O4tto0PT6wVUiw8KlBmgWTscWPeAWe-39T-8EiQ8Wi16h6oSPcz2NzOQ7eOM_S9fDkOorgcBkRGLl1nrahrPSdWJSGAeruk5mX4YxN714YThFDyEA2t9YmKpjaiSQ2tT-Xkd7tgsZqeirNs2ni9mIiFX3bRX6t2AhUNzA7MaX9ZyizKGa6go3BESO_oDg";
 
             beforeAll(() => {
-                fetchMock.get(
-                    `${delegatedAuthConfig.metadata.issuer}.well-known/openid-configuration`,
-                    delegatedAuthConfig.metadata,
-                );
-                fetchMock.get(`${delegatedAuthConfig.metadata.issuer}jwks`, {
+                fetchMock.get(`${delegatedAuthConfig.issuer}.well-known/openid-configuration`, delegatedAuthConfig);
+                fetchMock.get(`${delegatedAuthConfig.issuer}jwks`, {
                     status: 200,
                     headers: {
                         "Content-Type": "application/json",
@@ -767,9 +769,7 @@ describe("Lifecycle", () => {
                 await setLoggedIn(credentials);
 
                 // didn't try to initialise token refresher
-                expect(fetchMock).not.toHaveFetched(
-                    `${delegatedAuthConfig.metadata.issuer}.well-known/openid-configuration`,
-                );
+                expect(fetchMock).not.toHaveFetched(`${delegatedAuthConfig.issuer}.well-known/openid-configuration`);
             });
 
             it("should not try to create a token refresher without a deviceId", async () => {
@@ -780,9 +780,7 @@ describe("Lifecycle", () => {
                 });
 
                 // didn't try to initialise token refresher
-                expect(fetchMock).not.toHaveFetched(
-                    `${delegatedAuthConfig.metadata.issuer}.well-known/openid-configuration`,
-                );
+                expect(fetchMock).not.toHaveFetched(`${delegatedAuthConfig.issuer}.well-known/openid-configuration`);
             });
 
             it("should not try to create a token refresher without an issuer in session storage", async () => {
@@ -798,9 +796,7 @@ describe("Lifecycle", () => {
                 });
 
                 // didn't try to initialise token refresher
-                expect(fetchMock).not.toHaveFetched(
-                    `${delegatedAuthConfig.metadata.issuer}.well-known/openid-configuration`,
-                );
+                expect(fetchMock).not.toHaveFetched(`${delegatedAuthConfig.issuer}.well-known/openid-configuration`);
             });
 
             it("should create a client with a tokenRefreshFunction", async () => {

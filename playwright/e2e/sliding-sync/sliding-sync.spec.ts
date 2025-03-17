@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Page, Request } from "@playwright/test";
-import { GenericContainer, StartedTestContainer, Wait } from "testcontainers";
+import { type Page, type Request } from "@playwright/test";
+import { GenericContainer, type StartedTestContainer, Wait } from "testcontainers";
 
 import { test as base, expect } from "../../element-web-test";
 import type { ElementAppPage } from "../../pages/ElementAppPage";
@@ -275,7 +275,7 @@ test.describe("Sliding Sync", () => {
         // now rescind the invite
         await bot.evaluate(
             async (client, { roomRescind, clientUserId }) => {
-                client.kick(roomRescind, clientUserId);
+                await client.kick(roomRescind, clientUserId);
             },
             { roomRescind, clientUserId },
         );
@@ -294,7 +294,7 @@ test.describe("Sliding Sync", () => {
             is_direct: true,
         });
         await app.client.evaluate(async (client, roomId) => {
-            client.setRoomTag(roomId, "m.favourite", { order: 0.5 });
+            await client.setRoomTag(roomId, "m.favourite", { order: 0.5 });
         }, roomId);
         await expect(page.getByRole("group", { name: "Favourites" }).getByText("Favourite DM")).toBeVisible();
         await expect(page.getByRole("group", { name: "People" }).getByText("Favourite DM")).not.toBeAttached();

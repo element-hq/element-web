@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useEffect, useMemo, useState } from "react";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import StyledRadioGroup from "../elements/StyledRadioGroup";

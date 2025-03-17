@@ -11,7 +11,7 @@ import React from "react";
 import BaseDialog from "./BaseDialog";
 import { _t } from "../../../languageHandler";
 import DialogButtons from "../elements/DialogButtons";
-import Modal, { ComponentProps } from "../../../Modal";
+import Modal, { type ComponentProps } from "../../../Modal";
 import SdkConfig from "../../../SdkConfig";
 import { getPolicyUrl } from "../../../toasts/AnalyticsToast";
 import ExternalLink from "../elements/ExternalLink";

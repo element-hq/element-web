@@ -7,13 +7,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { createRef } from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { CallErrorCode, CallState } from "matrix-js-sdk/src/webrtc/call";
 import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
 import MemberAvatar from "../avatars/MemberAvatar";
-import LegacyCallEventGrouper, { LegacyCallEventGrouperEvent } from "../../structures/LegacyCallEventGrouper";
+import type LegacyCallEventGrouper from "../../structures/LegacyCallEventGrouper";
+import { LegacyCallEventGrouperEvent } from "../../structures/LegacyCallEventGrouper";
 import AccessibleButton from "../elements/AccessibleButton";
 import InfoTooltip, { InfoTooltipKind } from "../elements/InfoTooltip";
 import { formatPreciseDuration } from "../../../DateUtils";

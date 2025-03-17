@@ -11,6 +11,7 @@ import type { BLURHASH_FIELD } from "../utils/image-media";
 import type { JitsiCallMemberEventType, JitsiCallMemberContent } from "../call-types";
 import type { ILayoutStateEvent, WIDGET_LAYOUT_EVENT_TYPE } from "../stores/widgets/types";
 import type { EncryptedFile } from "matrix-js-sdk/src/types";
+import type { EmptyObject } from "matrix-js-sdk/src/matrix";
 import type { DeviceClientInformation } from "../utils/device/types.ts";
 import type { UserWidget } from "../utils/WidgetUtils-types.ts";
 
@@ -35,7 +36,7 @@ declare module "matrix-js-sdk/src/types" {
         [JitsiCallMemberEventType]: JitsiCallMemberContent;
 
         // Unstable widgets state events
-        "im.vector.modular.widgets": IWidget | {};
+        "im.vector.modular.widgets": IWidget | EmptyObject;
         [WIDGET_LAYOUT_EVENT_TYPE]: ILayoutStateEvent;
 
         // Element custom state events
@@ -104,6 +105,6 @@ declare module "matrix-js-sdk/src/types" {
             // https://github.com/matrix-org/matrix-doc/pull/3246
             waveform?: number[];
         };
-        "org.matrix.msc3245.voice"?: {};
+        "org.matrix.msc3245.voice"?: EmptyObject;
     }
 }

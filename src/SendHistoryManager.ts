@@ -7,11 +7,11 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { clamp } from "lodash";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { SerializedPart } from "./editor/parts";
-import EditorModel from "./editor/model";
+import { type SerializedPart } from "./editor/parts";
+import type EditorModel from "./editor/model";
 
 interface IHistoryItem {
     parts: SerializedPart[];

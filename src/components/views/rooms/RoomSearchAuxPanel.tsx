@@ -14,7 +14,7 @@ import { IconButton, Link } from "@vector-im/compound-web";
 import { _t } from "../../../languageHandler";
 import { PosthogScreenTracker } from "../../../PosthogTrackers";
 import SearchWarning, { WarningKind } from "../elements/SearchWarning";
-import { SearchInfo, SearchScope } from "../../../Searching";
+import { type SearchInfo, SearchScope } from "../../../Searching";
 import InlineSpinner from "../elements/InlineSpinner";
 
 interface Props {

@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
  */
 
 import React from "react";
-import { MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
+import { type MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 
 import DisambiguatedProfile from "./DisambiguatedProfile";
 import { useRoomMemberProfile } from "../../../hooks/room/useRoomMemberProfile";

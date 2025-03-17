@@ -8,8 +8,8 @@ Please see LICENSE files in the repository root for full details.
 
 import {
     M_TEXT,
-    ILocationContent,
-    LocationAssetType,
+    type ILocationContent,
+    type LocationAssetType,
     M_ASSET,
     M_LOCATION,
     M_TIMESTAMP,

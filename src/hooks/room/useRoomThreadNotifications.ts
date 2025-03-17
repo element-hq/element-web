@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { NotificationCountType, Room, RoomEvent, ThreadEvent } from "matrix-js-sdk/src/matrix";
+import { NotificationCountType, type Room, RoomEvent, ThreadEvent } from "matrix-js-sdk/src/matrix";
 import { useCallback, useEffect, useState } from "react";
 
 import { NotificationLevel } from "../../stores/notifications/NotificationLevel";

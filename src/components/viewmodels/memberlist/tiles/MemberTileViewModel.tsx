@@ -6,18 +6,18 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useEffect, useMemo, useState } from "react";
-import { RoomStateEvent, MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
-import { UserVerificationStatus, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
+import { RoomStateEvent, type MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
+import { type UserVerificationStatus, CryptoEvent } from "matrix-js-sdk/src/crypto-api";
 
 import dis from "../../../../dispatcher/dispatcher";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import { Action } from "../../../../dispatcher/actions";
 import { asyncSome } from "../../../../utils/arrays";
 import { getUserDeviceIds } from "../../../../utils/crypto/deviceInfo";
-import { RoomMember } from "../../../../models/rooms/RoomMember";
-import { E2EState } from "../../../views/rooms/E2EIcon";
-import { _t, _td, TranslationKey } from "../../../../languageHandler";
+import { type RoomMember } from "../../../../models/rooms/RoomMember";
+import { _t, _td, type TranslationKey } from "../../../../languageHandler";
 import UserIdentifierCustomisations from "../../../../customisations/UserIdentifier";
+import { E2EStatus } from "../../../../utils/ShieldUtils";
 
 interface MemberTileViewModelProps {
     member: RoomMember;
@@ -25,7 +25,7 @@ interface MemberTileViewModelProps {
 }
 
 export interface MemberTileViewState extends MemberTileViewModelProps {
-    e2eStatus?: E2EState;
+    e2eStatus?: E2EStatus;
     name: string;
     onClick: () => void;
     title?: string;
@@ -43,7 +43,7 @@ const PowerLabel: Record<PowerStatus, TranslationKey> = {
 };
 
 export function useMemberTileViewModel(props: MemberTileViewModelProps): MemberTileViewState {
-    const [e2eStatus, setE2eStatus] = useState<E2EState | undefined>();
+    const [e2eStatus, setE2eStatus] = useState<E2EStatus | undefined>();
 
     useEffect(() => {
         const cli = MatrixClientPeg.safeGet();
@@ -53,7 +53,7 @@ export function useMemberTileViewModel(props: MemberTileViewModelProps): MemberT
             const isMe = userId === cli.getUserId();
             const userTrust = await cli.getCrypto()?.getUserVerificationStatus(userId);
             if (!userTrust?.isCrossSigningVerified()) {
-                setE2eStatus(userTrust?.wasCrossSigningVerified() ? E2EState.Warning : E2EState.Normal);
+                setE2eStatus(userTrust?.wasCrossSigningVerified() ? E2EStatus.Warning : E2EStatus.Normal);
                 return;
             }
 
@@ -67,7 +67,7 @@ export function useMemberTileViewModel(props: MemberTileViewModelProps): MemberT
                 const deviceTrust = await cli.getCrypto()?.getDeviceVerificationStatus(userId, deviceId);
                 return !deviceTrust || (isMe ? !deviceTrust.crossSigningVerified : !deviceTrust.isVerified());
             });
-            setE2eStatus(anyDeviceUnverified ? E2EState.Warning : E2EState.Verified);
+            setE2eStatus(anyDeviceUnverified ? E2EStatus.Warning : E2EStatus.Verified);
         };
 
         const onRoomStateEvents = (ev: MatrixEvent): void => {
@@ -145,7 +145,7 @@ export function useMemberTileViewModel(props: MemberTileViewModelProps): MemberT
         userLabel = _t(PowerLabel[powerStatus]);
     }
     if (props.member.isInvite) {
-        userLabel = `(${_t("member_list|invited_label")})`;
+        userLabel = _t("member_list|invited_label");
     }
 
     return {

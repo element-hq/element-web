@@ -9,19 +9,17 @@ Please see LICENSE files in the repository root for full details.
 import { test, expect } from "../../element-web-test.ts";
 import { registerAccountMas } from ".";
 import { ElementAppPage } from "../../pages/ElementAppPage.ts";
-import { isDendrite } from "../../plugins/homeserver/dendrite";
 import { masHomeserver } from "../../plugins/homeserver/synapse/masHomeserver.ts";
 
 test.use(masHomeserver);
 test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
-    test.skip(isDendrite, "does not yet support MAS");
     test.slow(); // trace recording takes a while here
 
     test("can register the oauth2 client and an account", async ({
         context,
         page,
         homeserver,
-        mailhogClient,
+        mailpitClient,
         mas,
     }, testInfo) => {
         await page.clock.install();
@@ -35,7 +33,7 @@ test.describe("OIDC Native", { tag: ["@no-firefox", "@no-webkit"] }, () => {
         await page.getByRole("button", { name: "Continue" }).click();
 
         const userId = `alice_${testInfo.testId}`;
-        await registerAccountMas(page, mailhogClient, userId, "alice@email.com", "Pa$sW0rD!");
+        await registerAccountMas(page, mailpitClient, userId, "alice@email.com", "Pa$sW0rD!");
 
         // Eventually, we should end up at the home screen.
         await expect(page).toHaveURL(/\/#\/home$/, { timeout: 10000 });

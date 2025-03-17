@@ -8,19 +8,27 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import classNames from "classnames";
-import { EventType, JoinRule, MatrixEvent, Room, RoomEvent, User, UserEvent } from "matrix-js-sdk/src/matrix";
+import {
+    EventType,
+    JoinRule,
+    type MatrixEvent,
+    type Room,
+    RoomEvent,
+    type User,
+    UserEvent,
+} from "matrix-js-sdk/src/matrix";
 import { UnstableValue } from "matrix-js-sdk/src/NamespacedValue";
 import { Tooltip } from "@vector-im/compound-web";
 
 import RoomAvatar from "./RoomAvatar";
 import NotificationBadge from "../rooms/NotificationBadge";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
-import { NotificationState } from "../../../stores/notifications/NotificationState";
+import { type NotificationState } from "../../../stores/notifications/NotificationState";
 import { isPresenceEnabled } from "../../../utils/presence";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";
 import DMRoomMap from "../../../utils/DMRoomMap";
-import { IOOBData } from "../../../stores/ThreepidInviteStore";
+import { type IOOBData } from "../../../stores/ThreepidInviteStore";
 import { getJoinedNonFunctionalMembers } from "../../../utils/room/getJoinedNonFunctionalMembers";
 
 interface IProps {

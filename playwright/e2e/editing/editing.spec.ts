@@ -6,12 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Locator, Page } from "@playwright/test";
+import { type Locator, type Page } from "@playwright/test";
 
 import type { EventType, IContent, ISendEventResponse, MsgType, Visibility } from "matrix-js-sdk/src/matrix";
 import { expect, test } from "../../element-web-test";
-import { ElementAppPage } from "../../pages/ElementAppPage";
+import { type ElementAppPage } from "../../pages/ElementAppPage";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 async function sendEvent(app: ElementAppPage, roomId: string): Promise<ISendEventResponse> {
     return app.client.sendEvent(roomId, null, "m.room.message" as EventType, {
@@ -31,6 +32,8 @@ function mkPadding(n: number): IContent {
 }
 
 test.describe("Editing", () => {
+    test.skip(isDendrite, "due to a Dendrite bug https://github.com/element-hq/dendrite/issues/3488");
+
     // Edit "Message"
     const editLastMessage = async (page: Page, edit: string) => {
         const eventTile = page.locator(".mx_RoomView_MessageList .mx_EventTile_last");
@@ -264,7 +267,6 @@ test.describe("Editing", () => {
         app,
         room,
         axe,
-        checkA11y,
     }) => {
         axe.disableRules("color-contrast"); // XXX: We have some known contrast issues here
 
@@ -279,7 +281,7 @@ test.describe("Editing", () => {
             const line = tile.locator(".mx_EventTile_line");
             await line.hover();
             await line.getByRole("button", { name: "Edit" }).click();
-            await checkA11y();
+            await expect(axe).toHaveNoViolations();
             const editComposer = page.getByRole("textbox", { name: "Edit message" });
             await editComposer.pressSequentially("Foo");
             await editComposer.press("Backspace");
@@ -287,7 +289,7 @@ test.describe("Editing", () => {
             await editComposer.press("Backspace");
             await editComposer.press("Enter");
             await app.getComposerField().hover(); // XXX: move the hover to get rid of the "Edit" tooltip
-            await checkA11y();
+            await expect(axe).toHaveNoViolations();
         }
         await expect(
             page.locator(".mx_RoomView_body .mx_EventTile[data-scroll-tokens]", { hasText: "Message" }),
@@ -302,7 +304,6 @@ test.describe("Editing", () => {
         user,
         app,
         axe,
-        checkA11y,
         bot: bob,
     }) => {
         // This tests the behaviour when a message has been edited some time after it has been sent, and we

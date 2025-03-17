@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { RoomMember } from "matrix-js-sdk/src/matrix";
+import { type RoomMember } from "matrix-js-sdk/src/matrix";
 import { Tooltip } from "@vector-im/compound-web";
 import { HelpIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 

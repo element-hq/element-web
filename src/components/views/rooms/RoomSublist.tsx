@@ -8,40 +8,40 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
-import { Enable, Resizable } from "re-resizable";
-import { Direction } from "re-resizable/lib/resizer";
+import { type Enable, Resizable } from "re-resizable";
+import { type Direction } from "re-resizable/lib/resizer";
 import * as React from "react";
-import { ComponentType, createRef, ReactComponentElement, ReactNode } from "react";
+import { type ComponentType, createRef, type ReactComponentElement, type ReactNode } from "react";
 
 import { polyfillTouchEvent } from "../../../@types/polyfill";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { RovingAccessibleButton, RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
 import { Action } from "../../../dispatcher/actions";
-import defaultDispatcher, { MatrixDispatcher } from "../../../dispatcher/dispatcher";
-import { ActionPayload } from "../../../dispatcher/payloads";
-import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import defaultDispatcher, { type MatrixDispatcher } from "../../../dispatcher/dispatcher";
+import { type ActionPayload } from "../../../dispatcher/payloads";
+import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { _t } from "../../../languageHandler";
-import { ListNotificationState } from "../../../stores/notifications/ListNotificationState";
+import { type ListNotificationState } from "../../../stores/notifications/ListNotificationState";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { ListAlgorithm, SortAlgorithm } from "../../../stores/room-list/algorithms/models";
-import { ListLayout } from "../../../stores/room-list/ListLayout";
-import { DefaultTagID, TagID } from "../../../stores/room-list/models";
+import { type ListLayout } from "../../../stores/room-list/ListLayout";
+import { DefaultTagID, type TagID } from "../../../stores/room-list/models";
 import RoomListLayoutStore from "../../../stores/room-list/RoomListLayoutStore";
 import RoomListStore, { LISTS_UPDATE_EVENT, LISTS_LOADING_EVENT } from "../../../stores/room-list/RoomListStore";
 import { arrayFastClone, arrayHasOrderChange } from "../../../utils/arrays";
 import { objectExcluding, objectHasDiff } from "../../../utils/objects";
-import ResizeNotifier from "../../../utils/ResizeNotifier";
+import type ResizeNotifier from "../../../utils/ResizeNotifier";
 import ContextMenu, {
     ChevronFace,
     ContextMenuTooltipButton,
     StyledMenuItemCheckbox,
     StyledMenuItemRadio,
 } from "../../structures/ContextMenu";
-import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleButton";
-import ExtraTile from "./ExtraTile";
+import AccessibleButton, { type ButtonEvent } from "../../views/elements/AccessibleButton";
+import type ExtraTile from "./ExtraTile";
 import SettingsStore from "../../../settings/SettingsStore";
 import { SlidingSyncManager } from "../../../SlidingSyncManager";
 import NotificationBadge from "./NotificationBadge";

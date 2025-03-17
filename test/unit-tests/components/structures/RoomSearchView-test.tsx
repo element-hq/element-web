@@ -11,12 +11,12 @@ import { mocked } from "jest-mock";
 import { render, screen } from "jest-matrix-react";
 import {
     Room,
-    MatrixClient,
-    IEvent,
+    type MatrixClient,
+    type IEvent,
     MatrixEvent,
     EventType,
     SearchResult,
-    ISearchResults,
+    type ISearchResults,
 } from "matrix-js-sdk/src/matrix";
 import { defer } from "matrix-js-sdk/src/utils";
 

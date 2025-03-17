@@ -9,11 +9,11 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import {
     canAcceptVerificationRequest,
-    VerificationRequest,
+    type VerificationRequest,
     VerificationRequestEvent,
 } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
-import { Device } from "matrix-js-sdk/src/matrix";
+import { type Device } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -26,7 +26,7 @@ import GenericToast from "./GenericToast";
 import { Action } from "../../../dispatcher/actions";
 import VerificationRequestDialog from "../dialogs/VerificationRequestDialog";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
-import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { getDeviceCryptoInfo } from "../../../utils/crypto/deviceInfo";
 
 interface IProps {

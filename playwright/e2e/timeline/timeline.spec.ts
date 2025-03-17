@@ -13,8 +13,8 @@ import type { ISendEventResponse, EventType, MsgType } from "matrix-js-sdk/src/m
 import { test, expect } from "../../element-web-test";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { Layout } from "../../../src/settings/enums/Layout";
-import { Client } from "../../pages/client";
-import { ElementAppPage } from "../../pages/ElementAppPage";
+import { type Client } from "../../pages/client";
+import { type ElementAppPage } from "../../pages/ElementAppPage";
 import { Bot } from "../../pages/bot";
 
 // The avatar size used in the timeline
@@ -277,7 +277,7 @@ test.describe("Timeline", () => {
         test(
             "should add inline start margin to an event line on IRC layout",
             { tag: "@screenshot" },
-            async ({ page, app, room, axe, checkA11y }) => {
+            async ({ page, app, room, axe }) => {
                 axe.disableRules("color-contrast");
 
                 await page.goto(`/#/room/${room.roomId}`);
@@ -318,7 +318,7 @@ test.describe("Timeline", () => {
                 `,
                     },
                 );
-                await checkA11y();
+                await expect(axe).toHaveNoViolations();
             },
         );
     });
@@ -590,10 +590,6 @@ test.describe("Timeline", () => {
             "should set inline start padding to a hidden event line",
             { tag: "@screenshot" },
             async ({ page, app, room }) => {
-                test.skip(
-                    true,
-                    "Disabled due to screenshot test being flaky - https://github.com/element-hq/element-web/issues/26890",
-                );
                 await sendEvent(app.client, room.roomId);
                 await page.goto(`/#/room/${room.roomId}`);
                 await app.settings.setValue("showHiddenEventsInTimeline", null, SettingLevel.DEVICE, true);
@@ -607,7 +603,12 @@ test.describe("Timeline", () => {
                 await messageEdit(page);
 
                 // Click timestamp to highlight hidden event line
-                await page.locator(".mx_RoomView_body .mx_EventTile_info .mx_MessageTimestamp").click();
+                const timestamp = page.locator(".mx_RoomView_body .mx_EventTile_info a", {
+                    has: page.locator(".mx_MessageTimestamp"),
+                });
+                // wait for the remote echo otherwise we get an error modal due to a 404 on the /event/ API
+                await expect(timestamp).not.toHaveAttribute("href", /~!/);
+                await timestamp.locator(".mx_MessageTimestamp").click();
 
                 // should not add inline start padding to a hidden event line on IRC layout
                 await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
@@ -742,68 +743,64 @@ test.describe("Timeline", () => {
             ).toBeVisible();
         });
 
-        test(
-            "should render url previews",
-            { tag: "@screenshot" },
-            async ({ page, app, room, axe, checkA11y, context }) => {
-                axe.disableRules("color-contrast");
+        test("should render url previews", { tag: "@screenshot" }, async ({ page, app, room, axe, context }) => {
+            axe.disableRules("color-contrast");
 
-                // Element Web uses a Service Worker to rewrite unauthenticated media requests to authenticated ones, but
-                // the page can't see this happening. We intercept the route at the BrowserContext to ensure we get it
-                // post-worker, but we can't waitForResponse on that, so the page context is still used there. Because
-                // the page doesn't see the rewrite, it waits for the unauthenticated route. This is only confusing until
-                // the js-sdk (and thus the app as a whole) switches to using authenticated endpoints by default, hopefully.
-                await context.route(
-                    "**/_matrix/client/v1/media/thumbnail/matrix.org/2022-08-16_yaiSVSRIsNFfxDnV?*",
-                    async (route) => {
-                        await route.fulfill({
-                            path: "playwright/sample-files/riot.png",
-                        });
-                    },
-                );
-                await page.route(
-                    "**/_matrix/media/v3/preview_url?url=https%3A%2F%2Fcall.element.io%2F&ts=*",
-                    async (route) => {
-                        await route.fulfill({
-                            json: {
-                                "og:title": "Element Call",
-                                "og:description": null,
-                                "og:image:width": 48,
-                                "og:image:height": 48,
-                                "og:image": "mxc://matrix.org/2022-08-16_yaiSVSRIsNFfxDnV",
-                                "og:image:type": "image/png",
-                                "matrix:image:size": 2121,
-                            },
-                        });
-                    },
-                );
+            // Element Web uses a Service Worker to rewrite unauthenticated media requests to authenticated ones, but
+            // the page can't see this happening. We intercept the route at the BrowserContext to ensure we get it
+            // post-worker, but we can't waitForResponse on that, so the page context is still used there. Because
+            // the page doesn't see the rewrite, it waits for the unauthenticated route. This is only confusing until
+            // the js-sdk (and thus the app as a whole) switches to using authenticated endpoints by default, hopefully.
+            await context.route(
+                "**/_matrix/client/v1/media/thumbnail/matrix.org/2022-08-16_yaiSVSRIsNFfxDnV?*",
+                async (route) => {
+                    await route.fulfill({
+                        path: "playwright/sample-files/riot.png",
+                    });
+                },
+            );
+            await page.route(
+                "**/_matrix/media/v3/preview_url?url=https%3A%2F%2Fcall.element.io%2F&ts=*",
+                async (route) => {
+                    await route.fulfill({
+                        json: {
+                            "og:title": "Element Call",
+                            "og:description": null,
+                            "og:image:width": 48,
+                            "og:image:height": 48,
+                            "og:image": "mxc://matrix.org/2022-08-16_yaiSVSRIsNFfxDnV",
+                            "og:image:type": "image/png",
+                            "matrix:image:size": 2121,
+                        },
+                    });
+                },
+            );
 
-                const requestPromises: Promise<any>[] = [
-                    page.waitForResponse("**/_matrix/media/v3/preview_url?url=https%3A%2F%2Fcall.element.io%2F&ts=*"),
-                    // see context.route above for why we listen for the unauthenticated endpoint
-                    page.waitForResponse("**/_matrix/media/v3/thumbnail/matrix.org/2022-08-16_yaiSVSRIsNFfxDnV?*"),
-                ];
+            const requestPromises: Promise<any>[] = [
+                page.waitForResponse("**/_matrix/media/v3/preview_url?url=https%3A%2F%2Fcall.element.io%2F&ts=*"),
+                // see context.route above for why we listen for the unauthenticated endpoint
+                page.waitForResponse("**/_matrix/media/v3/thumbnail/matrix.org/2022-08-16_yaiSVSRIsNFfxDnV?*"),
+            ];
 
-                await app.client.sendMessage(room.roomId, "https://call.element.io/");
-                await page.goto(`/#/room/${room.roomId}`);
+            await app.client.sendMessage(room.roomId, "https://call.element.io/");
+            await page.goto(`/#/room/${room.roomId}`);
 
-                await expect(page.locator(".mx_LinkPreviewWidget").getByText("Element Call")).toBeVisible();
-                await Promise.all(requestPromises);
+            await expect(page.locator(".mx_LinkPreviewWidget").getByText("Element Call")).toBeVisible();
+            await Promise.all(requestPromises);
 
-                await checkA11y();
+            await expect(axe).toHaveNoViolations();
 
-                await app.timeline.scrollToBottom();
-                await expect(page.locator(".mx_EventTile_last")).toMatchScreenshot("url-preview.png", {
-                    // Exclude timestamp and read marker from snapshot
-                    mask: [page.locator(".mx_MessageTimestamp")],
-                    css: `
+            await app.timeline.scrollToBottom();
+            await expect(page.locator(".mx_EventTile_last")).toMatchScreenshot("url-preview.png", {
+                // Exclude timestamp and read marker from snapshot
+                mask: [page.locator(".mx_MessageTimestamp")],
+                css: `
                     .mx_TopUnreadMessagesBar, .mx_MessagePanel_myReadMarker {
                         display: none !important;
                     }
                 `,
-                });
-            },
-        );
+            });
+        });
 
         test.describe("on search results panel", () => {
             test(
@@ -872,6 +869,40 @@ test.describe("Timeline", () => {
                 await expect(page.locator(".mx_RoomView_searchResultsPanel")).toMatchScreenshot(
                     "search-results-with-TextualEvent.png",
                 );
+            });
+        });
+
+        test("should render a code block", { tag: "@screenshot" }, async ({ page, app, room }) => {
+            await page.goto(`/#/room/${room.roomId}`);
+            await app.settings.setValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
+
+            // Wait until configuration is finished
+            await expect(
+                page
+                    .locator(".mx_GenericEventListSummary_summary")
+                    .getByText(`${OLD_NAME} created and configured the room.`),
+            ).toBeVisible();
+
+            // Send a code block
+            const composer = app.getComposerField();
+            await composer.fill("```\nconsole.log('Hello, world!');\n```");
+            await composer.press("Enter");
+
+            const tile = page.locator(".mx_EventTile");
+            await expect(tile).toBeVisible();
+            await expect(tile).toMatchScreenshot("code-block.png", { mask: [page.locator(".mx_MessageTimestamp")] });
+
+            // Edit a code block and assert the edited code block has been correctly rendered
+            await tile.hover();
+            await page.getByRole("toolbar", { name: "Message Actions" }).getByRole("button", { name: "Edit" }).click();
+            await page
+                .getByRole("textbox", { name: "Edit message" })
+                .fill("```\nconsole.log('Edited: Hello, world!');\n```");
+            await page.getByRole("textbox", { name: "Edit message" }).press("Enter");
+
+            const newTile = page.locator(".mx_EventTile");
+            await expect(newTile).toMatchScreenshot("edited-code-block.png", {
+                mask: [page.locator(".mx_MessageTimestamp")],
             });
         });
     });
@@ -1194,6 +1225,7 @@ test.describe("Timeline", () => {
             });
 
             await sendImage(app.client, room.roomId, NEW_AVATAR);
+            await app.timeline.scrollToBottom();
             await expect(page.locator(".mx_MImageBody").first()).toBeVisible();
 
             // Exclude timestamp and read marker from snapshot

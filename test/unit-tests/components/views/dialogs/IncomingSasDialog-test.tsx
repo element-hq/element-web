@@ -8,13 +8,13 @@ Please see LICENSE files in the repository root for full details.
 
 import { act, render } from "jest-matrix-react";
 import React from "react";
-import { Mocked } from "jest-mock";
+import { type Mocked } from "jest-mock";
 import {
-    EmojiMapping,
-    ShowSasCallbacks,
-    Verifier,
+    type EmojiMapping,
+    type ShowSasCallbacks,
+    type Verifier,
     VerifierEvent,
-    VerifierEventHandlerMap,
+    type VerifierEventHandlerMap,
 } from "matrix-js-sdk/src/crypto-api";
 import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 

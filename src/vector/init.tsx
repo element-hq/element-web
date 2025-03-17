@@ -11,18 +11,21 @@ Please see LICENSE files in the repository root for full details.
 import { createRoot } from "react-dom/client";
 import React, { StrictMode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
+import { ModuleLoader } from "@element-hq/element-web-module-api";
 
+import type { QueryDict } from "matrix-js-sdk/src/utils";
 import * as languageHandler from "../languageHandler";
 import SettingsStore from "../settings/SettingsStore";
 import PlatformPeg from "../PlatformPeg";
 import SdkConfig from "../SdkConfig";
 import { setTheme } from "../theme";
 import { ModuleRunner } from "../modules/ModuleRunner";
-import MatrixChat from "../components/structures/MatrixChat";
+import type MatrixChat from "../components/structures/MatrixChat";
 import ElectronPlatform from "./platform/ElectronPlatform";
 import PWAPlatform from "./platform/PWAPlatform";
 import WebPlatform from "./platform/WebPlatform";
 import { initRageshake, initRageshakeStore } from "./rageshakesetup";
+import ModuleApi from "../modules/Api.ts";
 
 export const rageshakePromise = initRageshake();
 
@@ -83,7 +86,7 @@ export async function loadTheme(): Promise<void> {
     return setTheme();
 }
 
-export async function loadApp(fragParams: {}): Promise<void> {
+export async function loadApp(fragParams: QueryDict): Promise<void> {
     // load app.js async so that its code is not executed immediately and we can catch any exceptions
     const module = await import(
         /* webpackChunkName: "element-web-app" */
@@ -124,15 +127,32 @@ export async function showIncompatibleBrowser(onAccept: () => void): Promise<voi
     );
 }
 
+/**
+ * @deprecated in favour of the plugin system
+ */
 export async function loadModules(): Promise<void> {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore - this path is created at runtime and therefore won't exist at typecheck time
-    const { INSTALLED_MODULES } = await import("../modules");
+    const { INSTALLED_MODULES } = await import("../modules.js");
     for (const InstalledModule of INSTALLED_MODULES) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore - we know the constructor exists even if TypeScript can't be convinced of that
         ModuleRunner.instance.registerModule((api) => new InstalledModule(api));
     }
+}
+
+export async function loadPlugins(): Promise<void> {
+    // Add React to the global namespace, this is part of the new Module API contract to avoid needing
+    // every single module to ship its own copy of React. This also makes it easier to access via the console
+    // and incidentally means we can forget our React imports in JSX files without penalty.
+    window.React = React;
+
+    const modules = SdkConfig.get("modules");
+    if (!modules?.length) return;
+    const moduleLoader = new ModuleLoader(ModuleApi);
+    window.mxModuleLoader = moduleLoader;
+    for (const src of modules) {
+        // We need to instruct webpack to not mangle this import as it is not available at compile time
+        const module = await import(/* webpackIgnore: true */ src);
+        await moduleLoader.load(module);
+    }
+    await moduleLoader.start();
 }
 
 export { _t } from "../languageHandler";

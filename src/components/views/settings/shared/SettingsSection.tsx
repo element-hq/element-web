@@ -7,22 +7,27 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classnames from "classnames";
-import React, { HTMLAttributes } from "react";
+import React, { type HTMLAttributes } from "react";
 
 import Heading from "../../typography/Heading";
+import { SettingsHeader } from "../SettingsHeader";
 
 export interface SettingsSectionProps extends HTMLAttributes<HTMLDivElement> {
     heading?: string | React.ReactNode;
+    subHeading?: string | React.ReactNode;
     children?: React.ReactNode;
+    legacy?: boolean;
 }
 
-function renderHeading(heading: string | React.ReactNode | undefined): React.ReactNode | undefined {
+function renderHeading(heading: string | React.ReactNode | undefined, legacy: boolean): React.ReactNode | undefined {
     switch (typeof heading) {
         case "string":
-            return (
+            return legacy ? (
                 <Heading as="h2" size="3">
                     {heading}
                 </Heading>
+            ) : (
+                <SettingsHeader label={heading} />
             );
         case "undefined":
             return undefined;
@@ -48,9 +53,29 @@ function renderHeading(heading: string | React.ReactNode | undefined): React.Rea
  * </SettingsTab>
  * ```
  */
-export const SettingsSection: React.FC<SettingsSectionProps> = ({ className, heading, children, ...rest }) => (
-    <div {...rest} className={classnames("mx_SettingsSection", className)}>
-        {renderHeading(heading)}
-        <div className="mx_SettingsSection_subSections">{children}</div>
+export const SettingsSection: React.FC<SettingsSectionProps> = ({
+    className,
+    heading,
+    subHeading,
+    legacy = true,
+    children,
+    ...rest
+}) => (
+    <div
+        {...rest}
+        className={classnames("mx_SettingsSection", className, {
+            mx_SettingsSection_newUi: !legacy,
+        })}
+    >
+        {heading &&
+            (subHeading ? (
+                <div className="mx_SettingsSection_header">
+                    {renderHeading(heading, legacy)}
+                    {subHeading}
+                </div>
+            ) : (
+                renderHeading(heading, legacy)
+            ))}
+        {legacy ? <div className="mx_SettingsSection_subSections">{children}</div> : children}
     </div>
 );

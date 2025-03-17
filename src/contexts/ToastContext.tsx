@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ReactNode, createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
+import { type ReactNode, createContext, useCallback, useContext, useEffect, useState, useMemo } from "react";
 
 /**
  * A ToastContext helps components display any kind of toast message and can be provided
@@ -33,19 +33,19 @@ export function useToastContext(): ToastRack {
  * the ToastRack object that should be provided to the context
  */
 export function useActiveToast(): [ReactNode | undefined, ToastRack] {
-    const toastRack = useRef(new ToastRack());
+    const toastRack = useMemo(() => new ToastRack(), []);
 
-    const [activeToast, setActiveToast] = useState<ReactNode | undefined>(toastRack.current.getActiveToast());
+    const [activeToast, setActiveToast] = useState<ReactNode | undefined>(toastRack.getActiveToast());
 
     const updateCallback = useCallback(() => {
-        setActiveToast(toastRack.current.getActiveToast());
+        setActiveToast(toastRack.getActiveToast());
     }, [setActiveToast, toastRack]);
 
     useEffect(() => {
-        toastRack.current.setCallback(updateCallback);
+        toastRack.setCallback(updateCallback);
     }, [toastRack, updateCallback]);
 
-    return [activeToast, toastRack.current];
+    return [activeToast, toastRack];
 }
 
 interface DisplayedToast {

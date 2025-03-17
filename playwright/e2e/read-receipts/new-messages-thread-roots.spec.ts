@@ -9,8 +9,11 @@ Please see LICENSE files in the repository root for full details.
 /* See readme.md for tips on writing these tests. */
 
 import { many, test } from ".";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 test.describe("Read receipts", { tag: "@mergequeue" }, () => {
+    test.skip(isDendrite, "due to Dendrite bug https://github.com/element-hq/dendrite/issues/2970");
+
     test.describe("new messages", () => {
         test.describe("thread roots", () => {
             test("Reading a thread root does not mark the thread as read", async ({
@@ -54,8 +57,8 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
                 await util.openThread("ThreadRoot");
 
                 // Then the thread root is marked as read in the main timeline,
-                // 30 remaining messages are unread - 7 messages are displayed under the thread root
-                await util.assertUnread(room2, 30 - 7);
+                // 30 remaining messages are unread - 6 messages are displayed under the thread root
+                await util.assertUnread(room2, 30 - 6);
             });
 
             test("Creating a new thread based on a reply makes the room unread", async ({

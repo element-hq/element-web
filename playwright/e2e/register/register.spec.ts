@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { test, expect } from "../../element-web-test";
 import { consentHomeserver } from "../../plugins/homeserver/synapse/consentHomeserver.ts";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 test.use(consentHomeserver);
 test.use({
@@ -23,6 +24,8 @@ test.use({
 });
 
 test.describe("Registration", () => {
+    test.skip(isDendrite, "Dendrite lacks support for MSC3967 so requires additional auth here");
+
     test.beforeEach(async ({ page }) => {
         await page.goto("/#/register");
     });
@@ -30,12 +33,12 @@ test.describe("Registration", () => {
     test(
         "registers an account and lands on the home screen",
         { tag: "@screenshot" },
-        async ({ homeserver, page, checkA11y, crypto }) => {
+        async ({ homeserver, page, axe, crypto }) => {
             await page.getByRole("button", { name: "Edit", exact: true }).click();
             await expect(page.getByRole("button", { name: "Continue", exact: true })).toBeVisible();
 
             await expect(page.locator(".mx_Dialog")).toMatchScreenshot("server-picker.png");
-            await checkA11y();
+            await expect(axe).toHaveNoViolations();
 
             await page.getByRole("textbox", { name: "Other homeserver" }).fill(homeserver.baseUrl);
             await page.getByRole("button", { name: "Continue", exact: true }).click();
@@ -49,7 +52,7 @@ test.describe("Registration", () => {
                 includeDialogBackground: true,
             };
             await expect(page).toMatchScreenshot("registration.png", screenshotOptions);
-            await checkA11y();
+            await expect(axe).toHaveNoViolations();
 
             await page.getByRole("textbox", { name: "Username", exact: true }).fill("alice");
             await page.getByPlaceholder("Password", { exact: true }).fill("totally a great password");
@@ -59,24 +62,18 @@ test.describe("Registration", () => {
             const dialog = page.getByRole("dialog");
             await expect(dialog).toBeVisible();
             await expect(page).toMatchScreenshot("email-prompt.png", screenshotOptions);
-            await checkA11y();
+            await expect(axe).toHaveNoViolations();
             await dialog.getByRole("button", { name: "Continue", exact: true }).click();
 
             await expect(page.locator(".mx_InteractiveAuthEntryComponents_termsPolicy")).toBeVisible();
             await expect(page).toMatchScreenshot("terms-prompt.png", screenshotOptions);
-            await checkA11y();
+            await expect(axe).toHaveNoViolations();
 
             const termsPolicy = page.locator(".mx_InteractiveAuthEntryComponents_termsPolicy");
             await termsPolicy.getByRole("checkbox").click(); // Click the checkbox before terms of service anchor link
             await expect(termsPolicy.getByLabel("Privacy Policy")).toBeVisible();
 
             await page.getByRole("button", { name: "Accept", exact: true }).click();
-
-            await expect(page.locator(".mx_UseCaseSelection_skip")).toBeVisible();
-            await expect(page).toMatchScreenshot("use-case-selection.png", screenshotOptions);
-            await checkA11y();
-            await page.getByRole("button", { name: "Skip", exact: true }).click();
-
             await expect(page).toHaveURL(/\/#\/home$/);
 
             /*

@@ -6,13 +6,17 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, KeyboardEvent, RefObject } from "react";
+import React, { createRef, type RefObject } from "react";
 import classNames from "classnames";
 import { flatMap } from "lodash";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk/src/matrix";
 import { defer } from "matrix-js-sdk/src/utils";
 
-import Autocompleter, { ICompletion, ISelectionRange, IProviderCompletions } from "../../../autocomplete/Autocompleter";
+import Autocompleter, {
+    type ICompletion,
+    type ISelectionRange,
+    type IProviderCompletions,
+} from "../../../autocomplete/Autocompleter";
 import SettingsStore from "../../../settings/SettingsStore";
 import RoomContext from "../../../contexts/RoomContext";
 
@@ -206,7 +210,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         this.setSelection(1 + index);
     }
 
-    public onEscape(e: KeyboardEvent): boolean | undefined {
+    public onEscape(e: KeyboardEvent | React.KeyboardEvent): boolean | undefined {
         const completionCount = this.countCompletions();
         if (completionCount === 0) {
             // autocomplete is already empty, so don't preventDefault

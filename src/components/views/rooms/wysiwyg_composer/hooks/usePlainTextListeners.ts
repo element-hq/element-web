@@ -6,13 +6,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { KeyboardEvent, RefObject, SyntheticEvent, useCallback, useRef, useState } from "react";
-import { AllowedMentionAttributes, MappedSuggestion } from "@vector-im/matrix-wysiwyg";
-import { IEventRelation } from "matrix-js-sdk/src/matrix";
+import { type KeyboardEvent, type RefObject, type SyntheticEvent, useCallback, useRef, useState } from "react";
+import { type AllowedMentionAttributes, type MappedSuggestion } from "@vector-im/matrix-wysiwyg";
+import { type IEventRelation } from "matrix-js-sdk/src/matrix";
 
 import { useSettingValue } from "../../../../../hooks/useSettings";
 import { IS_MAC, Key } from "../../../../../Keyboard";
-import Autocomplete from "../../Autocomplete";
+import type Autocomplete from "../../Autocomplete";
 import { handleClipboardEvent, handleEventWithAutocomplete, isEventToHandleAsClipboardEvent } from "./utils";
 import { useSuggestion } from "./useSuggestion";
 import { isNotNull, isNotUndefined } from "../../../../../Typeguards";

@@ -6,9 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Page, expect, TestInfo } from "@playwright/test";
+import { type Page, expect, type TestInfo } from "@playwright/test";
 
-import { Credentials, HomeserverInstance } from "../../plugins/homeserver";
+import { type Credentials, type HomeserverInstance } from "../../plugins/homeserver";
 
 /** Visit the login page, choose to log in with "OAuth test", register a new account, and redirect back to Element
  */
@@ -93,7 +93,7 @@ export async function interceptRequestsWithSoftLogout(page: Page, user: Credenti
     // do something to make the active /sync return: create a new room
     await page.evaluate(() => {
         // don't wait for this to complete: it probably won't, because of the broken sync
-        window.mxMatrixClientPeg.get().createRoom({});
+        void window.mxMatrixClientPeg.get().createRoom({});
     });
 
     await promise;

@@ -8,13 +8,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    MatrixClient,
+    type MatrixClient,
     ClientEvent,
-    Room,
+    type Room,
     EventType,
     RoomCreateTypeField,
     RoomType,
-    ICreateRoomOpts,
+    type ICreateRoomOpts,
     HistoryVisibility,
     JoinRule,
     Preset,
@@ -23,7 +23,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import Modal, { IHandle } from "./Modal";
+import Modal, { type IHandle } from "./Modal";
 import { _t, UserFriendlyError } from "./languageHandler";
 import dis from "./dispatcher/dispatcher";
 import * as Rooms from "./Rooms";
@@ -35,7 +35,7 @@ import { JitsiCall, ElementCall } from "./models/Call";
 import { Action } from "./dispatcher/actions";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import Spinner from "./components/views/elements/Spinner";
-import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
 import { findDMForUser } from "./utils/dm/findDMForUser";
 import { privateShouldBeEncrypted } from "./utils/rooms";
 import { shouldForceDisableEncryption } from "./utils/crypto/shouldForceDisableEncryption";
@@ -343,7 +343,7 @@ export default async function createRoom(client: MatrixClient, opts: IOpts): Pro
                 await client.setPowerLevel(roomId, client.getUserId()!, 100);
             } else if (opts.roomType === RoomType.UnstableCall) {
                 // Set up this video room with an Element call
-                await ElementCall.create(await room);
+                ElementCall.create(await room);
 
                 // Reset our power level back to admin so that the call becomes immutable
                 await client.setPowerLevel(roomId, client.getUserId()!, 100);

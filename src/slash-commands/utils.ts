@@ -9,13 +9,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { EventType, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { EventType, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { SdkContextClass } from "../contexts/SDKContext";
 import { isLocalRoom } from "../utils/localRoom/isLocalRoom";
 import Modal from "../Modal";
 import UploadConfirmDialog from "../components/views/dialogs/UploadConfirmDialog";
-import { RunResult } from "./interface";
+import { type RunResult } from "./interface";
 
 export function reject(error?: any): RunResult {
     return { error };

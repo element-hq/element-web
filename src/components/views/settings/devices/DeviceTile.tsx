@@ -10,7 +10,7 @@ import React from "react";
 import classNames from "classnames";
 
 import Heading from "../../typography/Heading";
-import { ExtendedDevice } from "./types";
+import { type ExtendedDevice } from "./types";
 import { DeviceTypeIcon } from "./DeviceTypeIcon";
 import { preventDefaultWrapper } from "../../../../utils/NativeEventUtils";
 import { DeviceMetaData } from "./DeviceMetaData";

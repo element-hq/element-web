@@ -12,7 +12,7 @@ const ROOM_NAME = "Test room";
 const NAME = "Alice";
 
 test.use({
-    synapseConfigOptions: {
+    synapseConfig: {
         presence: {
             enabled: false,
             include_offline_users_on_sync: false,
@@ -42,7 +42,7 @@ test.describe("Memberlist", () => {
         await app.viewRoomByName(ROOM_NAME);
         const memberlist = await app.toggleMemberlistPanel();
         await expect(memberlist.locator(".mx_MemberTileView")).toHaveCount(4);
-        await expect(memberlist.getByText("(Invited)")).toHaveCount(1);
+        await expect(memberlist.getByText("Invited")).toHaveCount(1);
         await expect(page.locator(".mx_MemberListView")).toMatchScreenshot("with-four-members.png");
     });
 });

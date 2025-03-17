@@ -6,21 +6,65 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { expect, JSHandle, type Page } from "@playwright/test";
+import { expect, type JSHandle, type Page } from "@playwright/test";
 
 import type { ICreateRoomOpts, MatrixClient } from "matrix-js-sdk/src/matrix";
 import type {
     CryptoEvent,
     EmojiMapping,
+    GeneratedSecretStorageKey,
     ShowSasCallbacks,
     VerificationRequest,
     Verifier,
     VerifierEvent,
 } from "matrix-js-sdk/src/crypto-api";
-import { Credentials, HomeserverInstance } from "../../plugins/homeserver";
-import { Client } from "../../pages/client";
-import { ElementAppPage } from "../../pages/ElementAppPage";
+import { type Credentials, type HomeserverInstance } from "../../plugins/homeserver";
+import { type Client } from "../../pages/client";
+import { type ElementAppPage } from "../../pages/ElementAppPage";
 import { Bot } from "../../pages/bot";
+
+/**
+ * Create a bot client using the supplied credentials, and wait for the key backup to be ready.
+ * @param page - the playwright `page` fixture
+ * @param homeserver - the homeserver to use
+ * @param credentials - the credentials to use for the bot client
+ * @param usePassphrase - whether to use a passphrase when creating the recovery key
+ */
+export async function createBot(
+    page: Page,
+    homeserver: HomeserverInstance,
+    credentials: Credentials,
+    usePassphrase = false,
+): Promise<{ botClient: Bot; recoveryKey: GeneratedSecretStorageKey; expectedBackupVersion: string }> {
+    // Visit the login page of the app, to load the matrix sdk
+    await page.goto("/#/login");
+
+    // wait for the page to load
+    await page.waitForSelector(".mx_AuthPage", { timeout: 30000 });
+
+    // Create a new bot client
+    const botClient = new Bot(page, homeserver, {
+        bootstrapCrossSigning: true,
+        bootstrapSecretStorage: true,
+        usePassphrase,
+    });
+    botClient.setCredentials(credentials);
+    // Backup is prepared in the background. Poll until it is ready.
+    const botClientHandle = await botClient.prepareClient();
+    let expectedBackupVersion: string;
+    await expect
+        .poll(async () => {
+            expectedBackupVersion = await botClientHandle.evaluate((cli) =>
+                cli.getCrypto()!.getActiveSessionBackupVersion(),
+            );
+            return expectedBackupVersion;
+        })
+        .not.toBe(null);
+
+    const recoveryKey = await botClient.getRecoveryKey();
+
+    return { botClient, recoveryKey, expectedBackupVersion };
+}
 
 /**
  * wait for the given client to receive an incoming verification request, and automatically accept it
@@ -59,7 +103,7 @@ export function handleSasVerification(verifier: JSHandle<Verifier>): Promise<Emo
         return new Promise<EmojiMapping[]>((resolve) => {
             const onShowSas = (event: ShowSasCallbacks) => {
                 verifier.off("show_sas" as VerifierEvent, onShowSas);
-                event.confirm();
+                void event.confirm();
                 resolve(event.sas.emoji);
             };
 
@@ -98,14 +142,16 @@ export async function checkDeviceIsCrossSigned(app: ElementAppPage): Promise<voi
  * Check that the current device is connected to the expected key backup.
  * Also checks that the decryption key is known and cached locally.
  *
- * @param page - the page to check
+ * @param app -` ElementAppPage` wrapper for the playwright `Page`.
  * @param expectedBackupVersion - the version of the backup we expect to be connected to.
- * @param checkBackupKeyInCache - whether to check that the backup key is cached locally.
+ * @param checkBackupPrivateKeyInCache - whether to check that the backup decryption key is cached locally
+ * @param checkBackupKeyIn4S - whether to check that the backup key is stored in 4S
  */
 export async function checkDeviceIsConnectedKeyBackup(
-    page: Page,
+    app: ElementAppPage,
     expectedBackupVersion: string,
-    checkBackupKeyInCache: boolean,
+    checkBackupPrivateKeyInCache: boolean,
+    checkBackupKeyIn4S: boolean = true,
 ): Promise<void> {
     // Sanity check the given backup version: if it's null, something went wrong earlier in the test.
     if (!expectedBackupVersion) {
@@ -114,23 +160,48 @@ export async function checkDeviceIsConnectedKeyBackup(
         );
     }
 
-    await page.getByRole("button", { name: "User menu" }).click();
-    await page.locator(".mx_UserMenu_contextMenu").getByRole("menuitem", { name: "Security & Privacy" }).click();
-    await expect(page.locator(".mx_Dialog").getByRole("button", { name: "Restore from Backup" })).toBeVisible();
+    const backupData = await app.client.evaluate(async (client: MatrixClient) => {
+        const crypto = client.getCrypto();
+        if (!crypto) return;
 
-    // expand the advanced section to see the active version in the reports
-    await page.locator(".mx_SecureBackupPanel_advanced").locator("..").click();
+        const backupInfo = await crypto.getKeyBackupInfo();
+        const backupKeyIn4S = Boolean(await client.isKeyBackupKeyStored());
+        const backupPrivateKeyFromCache = await crypto.getSessionBackupPrivateKey();
+        const hasBackupPrivateKeyFromCache = Boolean(backupPrivateKeyFromCache);
+        const backupPrivateKeyWellFormed = backupPrivateKeyFromCache instanceof Uint8Array;
+        const activeBackupVersion = await crypto.getActiveSessionBackupVersion();
 
-    if (checkBackupKeyInCache) {
-        const cacheDecryptionKeyStatusElement = page.locator(".mx_SecureBackupPanel_statusList tr:nth-child(2) td");
-        await expect(cacheDecryptionKeyStatusElement).toHaveText("cached locally, well formed");
+        return {
+            backupInfo,
+            hasBackupPrivateKeyFromCache,
+            backupPrivateKeyWellFormed,
+            backupKeyIn4S,
+            activeBackupVersion,
+        };
+    });
+
+    if (!backupData) {
+        throw new Error("Crypto module is not available");
     }
 
-    await expect(page.locator(".mx_SecureBackupPanel_statusList tr:nth-child(5) td")).toHaveText(
-        expectedBackupVersion + " (Algorithm: m.megolm_backup.v1.curve25519-aes-sha2)",
-    );
+    const { backupInfo, backupKeyIn4S, hasBackupPrivateKeyFromCache, backupPrivateKeyWellFormed, activeBackupVersion } =
+        backupData;
 
-    await expect(page.locator(".mx_SecureBackupPanel_statusList tr:nth-child(6) td")).toHaveText(expectedBackupVersion);
+    // We have a key backup
+    expect(backupInfo).toBeDefined();
+    // The key backup version is as expected
+    expect(backupInfo.version).toBe(expectedBackupVersion);
+    // The active backup version is as expected
+    expect(activeBackupVersion).toBe(expectedBackupVersion);
+    // The backup key is stored in 4S
+    if (checkBackupKeyIn4S) expect(backupKeyIn4S).toBe(true);
+
+    if (checkBackupPrivateKeyInCache) {
+        // The backup key is available locally
+        expect(hasBackupPrivateKeyFromCache).toBe(true);
+        // The backup key is well-formed
+        expect(backupPrivateKeyWellFormed).toBe(true);
+    }
 }
 
 /**
@@ -147,8 +218,13 @@ export async function logIntoElement(page: Page, credentials: Credentials, secur
 
     // if a securityKey was given, verify the new device
     if (securityKey !== undefined) {
-        await page.locator(".mx_AuthPage").getByRole("button", { name: "Verify with Security Key" }).click();
-        // Fill in the security key
+        await page.locator(".mx_AuthPage").getByRole("button", { name: "Verify with Recovery Key" }).click();
+
+        const useSecurityKey = page.locator(".mx_Dialog").getByRole("button", { name: "use your Recovery Key" });
+        if (await useSecurityKey.isVisible()) {
+            await useSecurityKey.click();
+        }
+        // Fill in the recovery key
         await page.locator(".mx_Dialog").locator('input[type="password"]').fill(securityKey);
         await page.locator(".mx_Dialog_primary:not([disabled])", { hasText: "Continue" }).click();
         await page.getByRole("button", { name: "Done" }).click();
@@ -175,18 +251,19 @@ export async function logOutOfElement(page: Page, discardKeys: boolean = false) 
 }
 
 /**
- * Open the security settings, and verify the current session using the security key.
+ * Open the encryption settings, and verify the current session using the recovery key.
  *
  * @param app - `ElementAppPage` wrapper for the playwright `Page`.
- * @param securityKey - The security key (i.e., 4S key), set up during a previous session.
+ * @param securityKey - The recovery key (i.e., 4S key), set up during a previous session.
  */
 export async function verifySession(app: ElementAppPage, securityKey: string) {
-    const settings = await app.settings.openUserSettings("Security & Privacy");
-    await settings.getByRole("button", { name: "Verify this session" }).click();
-    await app.page.getByRole("button", { name: "Verify with Security Key" }).click();
+    const settings = await app.settings.openUserSettings("Encryption");
+    await settings.getByRole("button", { name: "Verify this device" }).click();
+    await app.page.getByRole("button", { name: "Verify with Recovery Key" }).click();
     await app.page.locator(".mx_Dialog").locator('input[type="password"]').fill(securityKey);
     await app.page.getByRole("button", { name: "Continue", disabled: false }).click();
     await app.page.getByRole("button", { name: "Done" }).click();
+    await app.settings.closeDialog();
 }
 
 /**
@@ -216,28 +293,61 @@ export async function doTwoWaySasVerification(page: Page, verifier: JSHandle<Ver
  *
  * Assumes that the current device has been cross-signed (which means that we skip a step where we set it up).
  *
- * Returns the security key
+ * Returns the recovery key
  */
 export async function enableKeyBackup(app: ElementAppPage): Promise<string> {
     await app.settings.openUserSettings("Security & Privacy");
     await app.page.getByRole("button", { name: "Set up Secure Backup" }).click();
-    const dialog = app.page.locator(".mx_Dialog");
-    // Recovery key is selected by default
-    await dialog.getByRole("button", { name: "Continue" }).click({ timeout: 60000 });
 
-    // copy the text ourselves
-    const securityKey = await dialog.locator(".mx_CreateSecretStorageDialog_recoveryKey code").textContent();
-    await copyAndContinue(app.page);
-
-    await expect(dialog.getByText("Secure Backup successful")).toBeVisible();
-    await dialog.getByRole("button", { name: "Done" }).click();
-    await expect(dialog.getByText("Secure Backup successful")).not.toBeVisible();
-
-    return securityKey;
+    return await completeCreateSecretStorageDialog(app.page);
 }
 
 /**
- * Click on copy and continue buttons to dismiss the security key dialog
+ * Go through the "Set up Secure Backup" dialog (aka the `CreateSecretStorageDialog`).
+ *
+ * Assumes the dialog is already open for some reason (see also {@link enableKeyBackup}).
+ *
+ * @param page - The playwright `Page` fixture.
+ * @param opts - Options object
+ * @param opts.accountPassword - The user's account password. If we are also resetting cross-signing, then we will need
+ *   to upload the public cross-signing keys, which will cause the app to prompt for the password.
+ *
+ * @returns the new recovery key.
+ */
+export async function completeCreateSecretStorageDialog(
+    page: Page,
+    opts?: { accountPassword?: string },
+): Promise<string> {
+    const currentDialogLocator = page.locator(".mx_Dialog");
+
+    await expect(currentDialogLocator.getByRole("heading", { name: "Set up Secure Backup" })).toBeVisible();
+    // "Generate a Recovery Key" is selected by default
+    await currentDialogLocator.getByRole("button", { name: "Continue", exact: true }).click();
+    await expect(currentDialogLocator.getByRole("heading", { name: "Save your Recovery Key" })).toBeVisible();
+    await currentDialogLocator.getByRole("button", { name: "Copy", exact: true }).click();
+    // copy the recovery key to use it later
+    const recoveryKey = await page.evaluate(() => navigator.clipboard.readText());
+    await currentDialogLocator.getByRole("button", { name: "Continue", exact: true }).click();
+
+    // If the device is unverified, there should be a "Setting up keys" step.
+    // If this is not the first time we are setting up cross-signing, the app will prompt for our password; otherwise
+    // the step is quite quick, and playwright can miss it, so we can't test for it.
+    if (opts && Object.hasOwn(opts, "accountPassword")) {
+        await expect(currentDialogLocator.getByRole("heading", { name: "Setting up keys" })).toBeVisible();
+        await page.getByPlaceholder("Password").fill(opts!.accountPassword);
+        await currentDialogLocator.getByRole("button", { name: "Continue" }).click();
+    }
+
+    // Either way, we end up at a success dialog:
+    await expect(currentDialogLocator.getByRole("heading", { name: "Secure Backup successful" })).toBeVisible();
+    await currentDialogLocator.getByRole("button", { name: "Done", exact: true }).click();
+    await expect(currentDialogLocator.getByText("Secure Backup successful")).not.toBeVisible();
+
+    return recoveryKey;
+}
+
+/**
+ * Click on copy and continue buttons to dismiss the recovery key dialog
  */
 export async function copyAndContinue(page: Page) {
     await page.getByRole("button", { name: "Copy" }).click();
@@ -313,7 +423,7 @@ export async function autoJoin(client: Client) {
     await client.evaluate((cli) => {
         cli.on(window.matrixcs.RoomMemberEvent.Membership, (event, member) => {
             if (member.membership === "invite" && member.userId === cli.getUserId()) {
-                cli.joinRoom(member.roomId);
+                void cli.joinRoom(member.roomId);
             }
         });
     });
@@ -371,4 +481,54 @@ export async function createSecondBotDevice(page: Page, homeserver: HomeserverIn
     bobSecondDevice.setCredentials(await homeserver.loginUser(bob.credentials.userId, bob.credentials.password));
     await bobSecondDevice.prepareClient();
     return bobSecondDevice;
+}
+
+/**
+ * Remove the cached secrets from the indexedDB
+ * This is a workaround to simulate the case where the secrets are not cached.
+ */
+export async function deleteCachedSecrets(page: Page) {
+    await page.evaluate(async () => {
+        const removeCachedSecrets = new Promise((resolve) => {
+            const request = window.indexedDB.open("matrix-js-sdk::matrix-sdk-crypto");
+            request.onsuccess = (event: Event & { target: { result: IDBDatabase } }) => {
+                const db = event.target.result;
+                const request = db.transaction("core", "readwrite").objectStore("core").delete("private_identity");
+                request.onsuccess = () => {
+                    db.close();
+                    resolve(undefined);
+                };
+            };
+        });
+        await removeCachedSecrets;
+    });
+    await page.reload();
+}
+
+/**
+ * Wait until the given user has a given number of devices.
+ * This function will check the device keys ten times and if
+ * the expected number of devices were not found by then, an
+ * error is thrown.
+ */
+export async function waitForDevices(
+    app: ElementAppPage,
+    userId: string,
+    expectedNumberOfDevices: number,
+): Promise<void> {
+    const result = await app.client.evaluate(
+        async (cli, { userId, expectedNumberOfDevices }) => {
+            for (let i = 0; i < 10; ++i) {
+                const userDeviceMap = await cli.getCrypto()?.getUserDeviceInfo([userId], true);
+                const deviceMap = userDeviceMap?.get(userId);
+                if (deviceMap.size === expectedNumberOfDevices) return true;
+                await new Promise((r) => setTimeout(r, 500));
+            }
+            return false;
+        },
+        { userId, expectedNumberOfDevices },
+    );
+    if (!result) {
+        throw new Error(`User ${userId} did not have ${expectedNumberOfDevices} devices within ten iterations!`);
+    }
 }

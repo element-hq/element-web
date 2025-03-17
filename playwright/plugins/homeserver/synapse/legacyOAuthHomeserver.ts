@@ -6,17 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { Fixtures, PlaywrightTestArgs } from "@playwright/test";
 import { TestContainers } from "testcontainers";
 
-import { Services, TestFixtures } from "../../../services.ts";
 import { OAuthServer } from "../../oauth_server";
+import { type Fixtures } from "../../../element-web-test.ts";
 
-export const legacyOAuthHomeserver: Fixtures<
-    TestFixtures & PlaywrightTestArgs,
-    Services,
-    TestFixtures & PlaywrightTestArgs
-> = {
+export const legacyOAuthHomeserver: Fixtures = {
     oAuthServer: [
         // eslint-disable-next-line no-empty-pattern
         async ({}, use) => {
@@ -26,7 +21,8 @@ export const legacyOAuthHomeserver: Fixtures<
         },
         { scope: "worker" },
     ],
-    context: async ({ context, oAuthServer }, use, testInfo) => {
+    context: async ({ homeserverType, context, oAuthServer }, use, testInfo) => {
+        testInfo.skip(homeserverType !== "synapse", "does not yet support OIDC");
         oAuthServer.onTestStarted(testInfo);
         await use(context);
     },

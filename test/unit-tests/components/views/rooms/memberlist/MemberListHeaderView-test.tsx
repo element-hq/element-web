@@ -7,15 +7,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
 import { act, fireEvent, screen, waitFor } from "jest-matrix-react";
 import { RoomMember, User, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { mocked } from "jest-mock";
 
+import type React from "react";
 import { shouldShowComponent } from "../../../../../../src/customisations/helpers/UIComponents";
 import defaultDispatcher from "../../../../../../src/dispatcher/dispatcher";
-import { Rendered, renderMemberList } from "./common";
+import { type Rendered, renderMemberList } from "./common";
 
 jest.mock("../../../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
@@ -62,7 +62,7 @@ describe("MemberListHeaderView", () => {
     });
 
     it("Does not show search box when there's less than 20 members", async () => {
-        expect(screen.queryByPlaceholderText("Filter room members")).toBeNull();
+        expect(screen.queryByPlaceholderText("Search room members")).toBeNull();
     });
 
     it("Shows search box when there's more than 20 members", async () => {
@@ -80,7 +80,7 @@ describe("MemberListHeaderView", () => {
             memberListRoom.currentState.members[newMember.userId] = newMember;
         }
         await reRender();
-        expect(screen.queryByPlaceholderText("Filter room members")).toBeVisible();
+        expect(screen.queryByPlaceholderText("Search room members")).toBeVisible();
     });
 
     describe("Invite button functionality", () => {

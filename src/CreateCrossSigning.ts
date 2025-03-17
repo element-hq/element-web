@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { AuthDict, MatrixClient, MatrixError, UIAResponse } from "matrix-js-sdk/src/matrix";
+import { type AuthDict, type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 
 import { SSOAuthEntry } from "./components/views/auth/InteractiveAuthEntryComponents";
 import Modal from "./Modal";
@@ -31,49 +31,50 @@ export async function createCrossSigning(cli: MatrixClient): Promise<void> {
         throw new Error("No crypto API found!");
     }
 
-    const doBootstrapUIAuth = async (
-        makeRequest: (authData: AuthDict) => Promise<UIAResponse<void>>,
-    ): Promise<void> => {
-        try {
-            await makeRequest({});
-        } catch (error) {
-            if (!(error instanceof MatrixError) || !error.data || !error.data.flows) {
-                // Not a UIA response
-                throw error;
-            }
-
-            const dialogAesthetics = {
-                [SSOAuthEntry.PHASE_PREAUTH]: {
-                    title: _t("auth|uia|sso_title"),
-                    body: _t("auth|uia|sso_preauth_body"),
-                    continueText: _t("auth|sso"),
-                    continueKind: "primary",
-                },
-                [SSOAuthEntry.PHASE_POSTAUTH]: {
-                    title: _t("encryption|confirm_encryption_setup_title"),
-                    body: _t("encryption|confirm_encryption_setup_body"),
-                    continueText: _t("action|confirm"),
-                    continueKind: "primary",
-                },
-            };
-
-            const { finished } = Modal.createDialog(InteractiveAuthDialog, {
-                title: _t("encryption|bootstrap_title"),
-                matrixClient: cli,
-                makeRequest,
-                aestheticsForStagePhases: {
-                    [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
-                    [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
-                },
-            });
-            const [confirmed] = await finished;
-            if (!confirmed) {
-                throw new Error("Cross-signing key upload auth canceled");
-            }
-        }
-    };
-
     await cryptoApi.bootstrapCrossSigning({
-        authUploadDeviceSigningKeys: doBootstrapUIAuth,
+        authUploadDeviceSigningKeys: (makeRequest) => uiAuthCallback(cli, makeRequest),
     });
+}
+
+export async function uiAuthCallback(
+    matrixClient: MatrixClient,
+    makeRequest: (authData: AuthDict) => Promise<void>,
+): Promise<void> {
+    try {
+        await makeRequest({});
+    } catch (error) {
+        if (!(error instanceof MatrixError) || !error.data || !error.data.flows) {
+            // Not a UIA response
+            throw error;
+        }
+
+        const dialogAesthetics = {
+            [SSOAuthEntry.PHASE_PREAUTH]: {
+                title: _t("auth|uia|sso_title"),
+                body: _t("auth|uia|sso_preauth_body"),
+                continueText: _t("auth|sso"),
+                continueKind: "primary",
+            },
+            [SSOAuthEntry.PHASE_POSTAUTH]: {
+                title: _t("encryption|confirm_encryption_setup_title"),
+                body: _t("encryption|confirm_encryption_setup_body"),
+                continueText: _t("action|confirm"),
+                continueKind: "primary",
+            },
+        };
+
+        const { finished } = Modal.createDialog(InteractiveAuthDialog, {
+            title: _t("encryption|bootstrap_title"),
+            matrixClient,
+            makeRequest,
+            aestheticsForStagePhases: {
+                [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
+                [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
+            },
+        });
+        const [confirmed] = await finished;
+        if (!confirmed) {
+            throw new Error("Cross-signing key upload auth canceled");
+        }
+    }
 }

@@ -9,21 +9,22 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import {
-    IAddThreePidOnlyBody,
-    IRequestMsisdnTokenResponse,
-    IRequestTokenResponse,
-    MatrixClient,
+    type IAddThreePidOnlyBody,
+    type IRequestMsisdnTokenResponse,
+    type IRequestTokenResponse,
+    type MatrixClient,
     MatrixError,
     HTTPError,
-    IThreepid,
-    UIAResponse,
+    type IThreepid,
 } from "matrix-js-sdk/src/matrix";
 
 import Modal from "./Modal";
 import { _t, UserFriendlyError } from "./languageHandler";
 import IdentityAuthClient from "./IdentityAuthClient";
 import { SSOAuthEntry } from "./components/views/auth/InteractiveAuthEntryComponents";
-import InteractiveAuthDialog, { InteractiveAuthDialogProps } from "./components/views/dialogs/InteractiveAuthDialog";
+import InteractiveAuthDialog, {
+    type InteractiveAuthDialogProps,
+} from "./components/views/dialogs/InteractiveAuthDialog";
 
 function getIdServerDomain(matrixClient: MatrixClient): string {
     const idBaseUrl = matrixClient.getIdentityServerUrl(true);
@@ -179,9 +180,7 @@ export default class AddThreepid {
      * with a "message" property which contains a human-readable message detailing why
      * the request failed.
      */
-    public async checkEmailLinkClicked(): Promise<
-        [success?: boolean, result?: UIAResponse<IAddThreePidOnlyBody> | Error | null]
-    > {
+    public async checkEmailLinkClicked(): Promise<[success?: boolean, result?: IAddThreePidOnlyBody | Error | null]> {
         try {
             if (this.bind) {
                 const authClient = new IdentityAuthClient();
@@ -249,6 +248,7 @@ export default class AddThreepid {
      * @param {{type: string, session?: string}} auth UI auth object
      * @return {Promise<Object>} Response from /3pid/add call (in current spec, an empty object)
      */
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     private makeAddThreepidOnlyRequest = (auth?: IAddThreePidOnlyBody["auth"] | null): Promise<{}> => {
         return this.matrixClient.addThreePidOnly({
             sid: this.sessionId!,
@@ -267,7 +267,7 @@ export default class AddThreepid {
      */
     public async haveMsisdnToken(
         msisdnToken: string,
-    ): Promise<[success?: boolean, result?: UIAResponse<IAddThreePidOnlyBody> | Error | null]> {
+    ): Promise<[success?: boolean, result?: IAddThreePidOnlyBody | Error | null]> {
         const authClient = new IdentityAuthClient();
 
         if (this.submitUrl) {

@@ -10,7 +10,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { createRef, useState, forwardRef } from "react";
 import classNames from "classnames";
-import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { type MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 
 import LegacyCallContextMenu from "../../context_menus/LegacyCallContextMenu";
 import DialpadContextMenu from "../../context_menus/DialpadContextMenu";
@@ -24,7 +24,10 @@ import {
 import { _t } from "../../../../languageHandler";
 import DeviceContextMenu from "../../context_menus/DeviceContextMenu";
 import { MediaDeviceKindEnum } from "../../../../MediaDeviceHandler";
-import AccessibleButton, { ButtonEvent, ButtonProps as AccessibleButtonProps } from "../../elements/AccessibleButton";
+import AccessibleButton, {
+    type ButtonEvent,
+    type ButtonProps as AccessibleButtonProps,
+} from "../../elements/AccessibleButton";
 
 // Height of the header duplicated from CSS because we need to subtract it from our max
 // height to get the max height of the video

@@ -6,31 +6,31 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, KeyboardEvent } from "react";
+import React, { createRef, type KeyboardEvent } from "react";
 import {
-    Thread,
+    type Thread,
     THREAD_RELATION_TYPE,
     ThreadEvent,
-    Room,
+    type Room,
     RoomEvent,
-    IEventRelation,
-    MatrixEvent,
+    type IEventRelation,
+    type MatrixEvent,
 } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import classNames from "classnames";
 
 import BaseCard from "../views/right_panel/BaseCard";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
-import ResizeNotifier from "../../utils/ResizeNotifier";
+import type ResizeNotifier from "../../utils/ResizeNotifier";
 import MessageComposer from "../views/rooms/MessageComposer";
-import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
+import { type RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import { Layout } from "../../settings/enums/Layout";
 import TimelinePanel from "./TimelinePanel";
 import dis from "../../dispatcher/dispatcher";
-import { ActionPayload } from "../../dispatcher/payloads";
+import { type ActionPayload } from "../../dispatcher/payloads";
 import { Action } from "../../dispatcher/actions";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-import { E2EStatus } from "../../utils/ShieldUtils";
+import { type E2EStatus } from "../../utils/ShieldUtils";
 import EditorStateTransfer from "../../utils/EditorStateTransfer";
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 import ContentMessages from "../../ContentMessages";
@@ -39,18 +39,18 @@ import { _t } from "../../languageHandler";
 import ThreadListContextMenu from "../views/context_menus/ThreadListContextMenu";
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import SettingsStore from "../../settings/SettingsStore";
-import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import FileDropTarget from "./FileDropTarget";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import Measured from "../views/elements/Measured";
 import PosthogTrackers from "../../PosthogTrackers";
-import { ButtonEvent } from "../views/elements/AccessibleButton";
+import { type ButtonEvent } from "../views/elements/AccessibleButton";
 import Spinner from "../views/elements/Spinner";
-import { ComposerInsertPayload, ComposerType } from "../../dispatcher/payloads/ComposerInsertPayload";
+import { type ComposerInsertPayload, ComposerType } from "../../dispatcher/payloads/ComposerInsertPayload";
 import Heading from "../views/typography/Heading";
 import { SdkContextClass } from "../../contexts/SDKContext";
-import { ThreadPayload } from "../../dispatcher/payloads/ThreadPayload";
+import { type ThreadPayload } from "../../dispatcher/payloads/ThreadPayload";
 import { ScopedRoomContextProvider } from "../../contexts/ScopedRoomContext.tsx";
 
 interface IProps {
@@ -443,7 +443,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
                         PosthogTrackers.trackInteraction("WebThreadViewBackButton", ev);
                     }}
                 >
-                    {this.card.current && <Measured sensor={this.card.current} onMeasurement={this.onMeasurement} />}
+                    <Measured sensor={this.card} onMeasurement={this.onMeasurement} />
                     <div className="mx_ThreadView_timelinePanelWrapper">{timeline}</div>
 
                     {ContentMessages.sharedInstance().getCurrentUploads(threadRelation).length > 0 && (

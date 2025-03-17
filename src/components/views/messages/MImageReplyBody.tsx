@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { ImageContent } from "matrix-js-sdk/src/types";
+import { type ImageContent } from "matrix-js-sdk/src/types";
 
 import MImageBody from "./MImageBody";
 

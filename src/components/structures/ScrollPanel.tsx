@@ -6,14 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, CSSProperties, ReactNode } from "react";
+import React, { createRef, type CSSProperties, type ReactNode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import SettingsStore from "../../settings/SettingsStore";
 import Timer from "../../utils/Timer";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
-import ResizeNotifier from "../../utils/ResizeNotifier";
+import type ResizeNotifier from "../../utils/ResizeNotifier";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 
 // The amount of extra scroll distance to allow prior to unfilling.

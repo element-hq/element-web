@@ -7,14 +7,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent, createRef, KeyboardEvent, SyntheticEvent } from "react";
-import { Room, RoomType, JoinRule, Preset, Visibility } from "matrix-js-sdk/src/matrix";
+import React, { type ChangeEvent, createRef, type KeyboardEvent, type SyntheticEvent } from "react";
+import { type Room, RoomType, JoinRule, Preset, Visibility } from "matrix-js-sdk/src/matrix";
 
 import SdkConfig from "../../../SdkConfig";
-import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
+import withValidation, { type IFieldState, type IValidationResult } from "../elements/Validation";
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { checkUserIsAllowedToChangeEncryption, IOpts } from "../../../createRoom";
+import { checkUserIsAllowedToChangeEncryption, type IOpts } from "../../../createRoom";
 import Field from "../elements/Field";
 import RoomAliasField from "../elements/RoomAliasField";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";

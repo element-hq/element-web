@@ -8,19 +8,19 @@ Please see LICENSE files in the repository root for full details.
 
 import EventEmitter from "events";
 import {
-    KeyBackupInfo,
+    type KeyBackupInfo,
     VerificationPhase,
-    VerificationRequest,
+    type VerificationRequest,
     VerificationRequestEvent,
     CryptoEvent,
 } from "matrix-js-sdk/src/crypto-api";
 import { logger } from "matrix-js-sdk/src/logger";
-import { Device, SecretStorage } from "matrix-js-sdk/src/matrix";
+import { type Device, type SecretStorage } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { AccessCancelledError, accessSecretStorage } from "../SecurityManager";
 import { asyncSome } from "../utils/arrays";
-import { initialiseDehydration } from "../utils/device/dehydration";
+import { initialiseDehydrationIfEnabled } from "../utils/device/dehydration";
 
 export enum Phase {
     Loading = 0,
@@ -149,7 +149,7 @@ export class SetupEncryptionStore extends EventEmitter {
                     );
                     resolve();
 
-                    await initialiseDehydration();
+                    await initialiseDehydrationIfEnabled(cli);
 
                     if (backupInfo) {
                         await cli.getCrypto()?.loadSessionBackupPrivateKeyFromSecretStorage();

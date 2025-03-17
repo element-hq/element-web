@@ -1,0 +1,77 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SettingsSubheader /> should display a check icon when in success 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsSubheader"
+  >
+    <span
+      class="mx_SettingsSubheader_success"
+    >
+      <svg
+        fill="currentColor"
+        height="20px"
+        viewBox="0 0 24 24"
+        width="20px"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="m10.6 13.8-2.15-2.15a.95.95 0 0 0-.7-.275.95.95 0 0 0-.7.275.95.95 0 0 0-.275.7q0 .425.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65a.95.95 0 0 0 .275-.7.95.95 0 0 0-.275-.7.95.95 0 0 0-.7-.275.95.95 0 0 0-.7.275zM12 22a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+        />
+      </svg>
+      Success!
+    </span>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<SettingsSubheader /> should display a label 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsSubheader"
+  >
+    My label
+    <span
+      class="mx_SettingsSubheader_success"
+    >
+      <svg
+        fill="currentColor"
+        height="20px"
+        viewBox="0 0 24 24"
+        width="20px"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="m10.6 13.8-2.15-2.15a.95.95 0 0 0-.7-.275.95.95 0 0 0-.7.275.95.95 0 0 0-.275.7q0 .425.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65a.95.95 0 0 0 .275-.7.95.95 0 0 0-.275-.7.95.95 0 0 0-.7-.275.95.95 0 0 0-.7.275zM12 22a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+        />
+      </svg>
+      Success!
+    </span>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<SettingsSubheader /> should display an error icon when in error 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsSubheader"
+  >
+    <span
+      class="mx_SettingsSubheader_error"
+    >
+      <svg
+        fill="currentColor"
+        height="20px"
+        viewBox="0 0 24 24"
+        width="20px"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+        />
+      </svg>
+      Error!
+    </span>
+  </div>
+</DocumentFragment>
+`;

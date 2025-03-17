@@ -8,10 +8,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { HTMLAttributes, ReactHTML, ReactNode, WheelEvent } from "react";
+import React, { type HTMLAttributes, type ReactHTML, type ReactNode, type WheelEvent } from "react";
 
 type DynamicHtmlElementProps<T extends keyof JSX.IntrinsicElements> =
-    JSX.IntrinsicElements[T] extends HTMLAttributes<{}> ? DynamicElementProps<T> : DynamicElementProps<"div">;
+    JSX.IntrinsicElements[T] extends HTMLAttributes<object> ? DynamicElementProps<T> : DynamicElementProps<"div">;
 type DynamicElementProps<T extends keyof JSX.IntrinsicElements> = Partial<Omit<JSX.IntrinsicElements[T], "ref">>;
 
 export type IProps<T extends keyof JSX.IntrinsicElements> = Omit<DynamicHtmlElementProps<T>, "onScroll"> & {

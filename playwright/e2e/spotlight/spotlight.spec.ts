@@ -12,6 +12,7 @@ import { Filter } from "../../pages/Spotlight";
 import { Bot } from "../../pages/bot";
 import type { Locator, Page } from "@playwright/test";
 import type { ElementAppPage } from "../../pages/ElementAppPage";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 function roomHeaderName(page: Page): Locator {
     return page.locator(".mx_RoomHeader_heading");
@@ -89,6 +90,7 @@ const test = base.extend<{
 });
 
 test.describe("Spotlight", () => {
+    test.skip(isDendrite, "due to a Dendrite bug https://github.com/element-hq/dendrite/issues/3488");
     test.use({
         displayName: "Jim",
     });

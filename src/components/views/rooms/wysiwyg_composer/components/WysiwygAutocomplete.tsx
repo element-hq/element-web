@@ -6,12 +6,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ForwardedRef, forwardRef, FunctionComponent } from "react";
-import { FormattingFunctions, MappedSuggestion } from "@vector-im/matrix-wysiwyg";
+import React, { type ForwardedRef, forwardRef, type FunctionComponent } from "react";
+import { type FormattingFunctions, type MappedSuggestion } from "@vector-im/matrix-wysiwyg";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import Autocomplete from "../../Autocomplete";
-import { ICompletion } from "../../../../../autocomplete/Autocompleter";
+import { type ICompletion } from "../../../../../autocomplete/Autocompleter";
 import { useMatrixClientContext } from "../../../../../contexts/MatrixClientContext";
 import { getMentionDisplayText, getMentionAttributes, buildQuery } from "../utils/autocomplete";
 import { useScopedRoomContext } from "../../../../../contexts/ScopedRoomContext.tsx";

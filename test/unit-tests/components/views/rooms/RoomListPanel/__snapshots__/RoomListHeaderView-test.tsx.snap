@@ -1,0 +1,313 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<RoomListHeaderView /> compose menu should display the compose menu 1`] = `
+<DocumentFragment>
+  <header
+    aria-label="Room options"
+    class="mx_Flex mx_RoomListHeaderView"
+    data-testid="room-list-header"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+  >
+    <div
+      class="mx_Flex mx_RoomListHeaderView_title"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+    >
+      <h1
+        title="title"
+      >
+        title
+      </h1>
+      <button
+        aria-disabled="false"
+        aria-expanded="false"
+        aria-haspopup="menu"
+        aria-label="Open space menu"
+        class="_icon-button_m2erp_8 mx_SpaceMenu_button"
+        data-state="closed"
+        id="radix-:r0:"
+        role="button"
+        style="--cpd-icon-button-size: 20px;"
+        tabindex="0"
+        type="button"
+      >
+        <div
+          class="_indicator-icon_zr2a0_17"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+            />
+          </svg>
+        </div>
+      </button>
+    </div>
+    <button
+      aria-disabled="false"
+      aria-expanded="false"
+      aria-haspopup="menu"
+      aria-label="Add"
+      class="_icon-button_m2erp_8"
+      data-state="closed"
+      id="radix-:r2:"
+      role="button"
+      style="--cpd-icon-button-size: 32px;"
+      tabindex="0"
+      type="button"
+    >
+      <div
+        class="_indicator-icon_zr2a0_17"
+        style="--cpd-icon-button-size: 100%;"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M16.937 2.82a2 2 0 0 1 2.828 0l1.415 1.414a2 2 0 0 1 0 2.829l-7.071 7.07c-.195.196-.42.342-.66.44a1 1 0 0 1-.168.072l-3.993 1.331a1 1 0 0 1-1.265-1.265l1.331-3.992q.03-.09.073-.168m10.338-4.903-6.717 6.718-1.414-1.414 6.717-6.718z"
+            fill-rule="evenodd"
+          />
+          <path
+            d="M3 5a2 2 0 0 1 2-2h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+          />
+        </svg>
+      </div>
+    </button>
+  </header>
+</DocumentFragment>
+`;
+
+exports[`<RoomListHeaderView /> compose menu should not display the compose menu 1`] = `
+<DocumentFragment>
+  <header
+    aria-label="Room options"
+    class="mx_Flex mx_RoomListHeaderView"
+    data-testid="room-list-header"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+  >
+    <div
+      class="mx_Flex mx_RoomListHeaderView_title"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+    >
+      <h1
+        title="title"
+      >
+        title
+      </h1>
+      <button
+        aria-disabled="false"
+        aria-expanded="false"
+        aria-haspopup="menu"
+        aria-label="Open space menu"
+        class="_icon-button_m2erp_8 mx_SpaceMenu_button"
+        data-state="closed"
+        id="radix-:r4:"
+        role="button"
+        style="--cpd-icon-button-size: 20px;"
+        tabindex="0"
+        type="button"
+      >
+        <div
+          class="_indicator-icon_zr2a0_17"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+            />
+          </svg>
+        </div>
+      </button>
+    </div>
+    <button
+      aria-label="New message"
+      class="_icon-button_m2erp_8"
+      role="button"
+      style="--cpd-icon-button-size: 32px;"
+      tabindex="0"
+    >
+      <div
+        class="_indicator-icon_zr2a0_17"
+        style="--cpd-icon-button-size: 100%;"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M16.937 2.82a2 2 0 0 1 2.828 0l1.415 1.414a2 2 0 0 1 0 2.829l-7.071 7.07c-.195.196-.42.342-.66.44a1 1 0 0 1-.168.072l-3.993 1.331a1 1 0 0 1-1.265-1.265l1.331-3.992q.03-.09.073-.168m10.338-4.903-6.717 6.718-1.414-1.414 6.717-6.718z"
+            fill-rule="evenodd"
+          />
+          <path
+            d="M3 5a2 2 0 0 1 2-2h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+          />
+        </svg>
+      </div>
+    </button>
+  </header>
+</DocumentFragment>
+`;
+
+exports[`<RoomListHeaderView /> space menu should display the space menu 1`] = `
+<DocumentFragment>
+  <header
+    aria-label="Room options"
+    class="mx_Flex mx_RoomListHeaderView"
+    data-testid="room-list-header"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+  >
+    <div
+      class="mx_Flex mx_RoomListHeaderView_title"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+    >
+      <h1
+        title="title"
+      >
+        title
+      </h1>
+      <button
+        aria-disabled="false"
+        aria-expanded="false"
+        aria-haspopup="menu"
+        aria-label="Open space menu"
+        class="_icon-button_m2erp_8 mx_SpaceMenu_button"
+        data-state="closed"
+        id="radix-:rs:"
+        role="button"
+        style="--cpd-icon-button-size: 20px;"
+        tabindex="0"
+        type="button"
+      >
+        <div
+          class="_indicator-icon_zr2a0_17"
+          style="--cpd-icon-button-size: 100%;"
+        >
+          <svg
+            fill="currentColor"
+            height="1em"
+            viewBox="0 0 24 24"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 14.95q-.2 0-.375-.062a.9.9 0 0 1-.325-.213l-4.6-4.6a.95.95 0 0 1-.275-.7q0-.425.275-.7a.95.95 0 0 1 .7-.275q.425 0 .7.275l3.9 3.9 3.9-3.9a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7l-4.6 4.6q-.15.15-.325.212a1.1 1.1 0 0 1-.375.063"
+            />
+          </svg>
+        </div>
+      </button>
+    </div>
+    <button
+      aria-disabled="false"
+      aria-expanded="false"
+      aria-haspopup="menu"
+      aria-label="Add"
+      class="_icon-button_m2erp_8"
+      data-state="closed"
+      id="radix-:ru:"
+      role="button"
+      style="--cpd-icon-button-size: 32px;"
+      tabindex="0"
+      type="button"
+    >
+      <div
+        class="_indicator-icon_zr2a0_17"
+        style="--cpd-icon-button-size: 100%;"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M16.937 2.82a2 2 0 0 1 2.828 0l1.415 1.414a2 2 0 0 1 0 2.829l-7.071 7.07c-.195.196-.42.342-.66.44a1 1 0 0 1-.168.072l-3.993 1.331a1 1 0 0 1-1.265-1.265l1.331-3.992q.03-.09.073-.168m10.338-4.903-6.717 6.718-1.414-1.414 6.717-6.718z"
+            fill-rule="evenodd"
+          />
+          <path
+            d="M3 5a2 2 0 0 1 2-2h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+          />
+        </svg>
+      </div>
+    </button>
+  </header>
+</DocumentFragment>
+`;
+
+exports[`<RoomListHeaderView /> space menu should not display the space menu 1`] = `
+<DocumentFragment>
+  <header
+    aria-label="Room options"
+    class="mx_Flex mx_RoomListHeaderView"
+    data-testid="room-list-header"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
+  >
+    <div
+      class="mx_Flex mx_RoomListHeaderView_title"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+    >
+      <h1
+        title="title"
+      >
+        title
+      </h1>
+    </div>
+    <button
+      aria-disabled="false"
+      aria-expanded="false"
+      aria-haspopup="menu"
+      aria-label="Add"
+      class="_icon-button_m2erp_8"
+      data-state="closed"
+      id="radix-:r10:"
+      role="button"
+      style="--cpd-icon-button-size: 32px;"
+      tabindex="0"
+      type="button"
+    >
+      <div
+        class="_indicator-icon_zr2a0_17"
+        style="--cpd-icon-button-size: 100%;"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M16.937 2.82a2 2 0 0 1 2.828 0l1.415 1.414a2 2 0 0 1 0 2.829l-7.071 7.07c-.195.196-.42.342-.66.44a1 1 0 0 1-.168.072l-3.993 1.331a1 1 0 0 1-1.265-1.265l1.331-3.992q.03-.09.073-.168m10.338-4.903-6.717 6.718-1.414-1.414 6.717-6.718z"
+            fill-rule="evenodd"
+          />
+          <path
+            d="M3 5a2 2 0 0 1 2-2h6a1 1 0 1 1 0 2H5v14h14v-6a1 1 0 1 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+          />
+        </svg>
+      </div>
+    </button>
+  </header>
+</DocumentFragment>
+`;

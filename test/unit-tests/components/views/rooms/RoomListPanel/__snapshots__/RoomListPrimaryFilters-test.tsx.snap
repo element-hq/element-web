@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<RoomListPrimaryFilters /> should render primary filters 1`] = `
+<DocumentFragment>
+  <ul
+    aria-label="Room list filters"
+    class="mx_Flex mx_RoomListPrimaryFilters"
+    role="listbox"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: wrap;"
+  >
+    <li
+      aria-selected="false"
+      role="option"
+    >
+      <button
+        aria-selected="false"
+        class="_chat-filter_5qdp0_8"
+        role="button"
+        tabindex="0"
+      >
+        People
+      </button>
+    </li>
+    <li
+      aria-selected="true"
+      role="option"
+    >
+      <button
+        aria-selected="true"
+        class="_chat-filter_5qdp0_8"
+        role="button"
+        tabindex="0"
+      >
+        Rooms
+      </button>
+    </li>
+  </ul>
+</DocumentFragment>
+`;

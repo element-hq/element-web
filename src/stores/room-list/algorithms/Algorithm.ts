@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { JoinRule, Room } from "matrix-js-sdk/src/matrix";
+import { JoinRule, type Room } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import { EventEmitter } from "events";
@@ -14,14 +14,14 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { arrayDiff, arrayHasDiff } from "../../../utils/arrays";
-import { DefaultTagID, RoomUpdateCause, TagID } from "../models";
+import { DefaultTagID, RoomUpdateCause, type TagID } from "../models";
 import {
-    IListOrderingMap,
-    IOrderingAlgorithmMap,
-    ITagMap,
-    ITagSortingMap,
-    ListAlgorithm,
-    SortAlgorithm,
+    type IListOrderingMap,
+    type IOrderingAlgorithmMap,
+    type ITagMap,
+    type ITagSortingMap,
+    type ListAlgorithm,
+    type SortAlgorithm,
 } from "./models";
 import {
     EffectiveMembership,
@@ -29,7 +29,7 @@ import {
     getEffectiveMembershipTag,
     splitRoomsByMembership,
 } from "../../../utils/membership";
-import { OrderingAlgorithm } from "./list-ordering/OrderingAlgorithm";
+import { type OrderingAlgorithm } from "./list-ordering/OrderingAlgorithm";
 import { getListAlgorithmInstance } from "./list-ordering";
 import { VisibilityProvider } from "../filters/VisibilityProvider";
 import { CallStore, CallStoreEvent } from "../../CallStore";

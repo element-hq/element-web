@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { FunctionComponent, Key, PropsWithChildren, ReactNode } from "react";
+import React, { type FunctionComponent, type Key, type PropsWithChildren, type ReactNode } from "react";
 
 import { MenuItemRadio } from "../../accessibility/context_menu/MenuItemRadio";
-import { ButtonEvent } from "../views/elements/AccessibleButton";
+import { type ButtonEvent } from "../views/elements/AccessibleButton";
 import ContextMenu, { aboveLeftOf, ChevronFace, ContextMenuButton, useContextMenu } from "./ContextMenu";
 
 export type GenericDropdownMenuOption<T> = {

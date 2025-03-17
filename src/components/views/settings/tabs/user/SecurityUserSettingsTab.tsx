@@ -6,10 +6,10 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import { sleep } from "matrix-js-sdk/src/utils";
-import { Room, RoomEvent } from "matrix-js-sdk/src/matrix";
-import { KnownMembership, Membership } from "matrix-js-sdk/src/types";
+import { type Room, RoomEvent, type IServerVersions } from "matrix-js-sdk/src/matrix";
+import { KnownMembership, type Membership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../../../languageHandler";
@@ -20,7 +20,7 @@ import { SettingLevel } from "../../../../../settings/SettingLevel";
 import SecureBackupPanel from "../../SecureBackupPanel";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { UIFeature } from "../../../../../settings/UIFeature";
-import { ActionPayload } from "../../../../../dispatcher/payloads";
+import { type ActionPayload } from "../../../../../dispatcher/payloads";
 import CryptographyPanel from "../../CryptographyPanel";
 import SettingsFlag from "../../../elements/SettingsFlag";
 import CrossSigningPanel from "../../CrossSigningPanel";
@@ -29,7 +29,6 @@ import InlineSpinner from "../../../elements/InlineSpinner";
 import { PosthogAnalytics } from "../../../../../PosthogAnalytics";
 import { showDialog as showAnalyticsLearnMoreDialog } from "../../../dialogs/AnalyticsLearnMoreDialog";
 import { privateShouldBeEncrypted } from "../../../../../utils/rooms";
-import type { IServerVersions } from "matrix-js-sdk/src/matrix";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { SettingsSubsection, SettingsSubsectionText } from "../../shared/SettingsSubsection";
@@ -319,7 +318,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
             );
         }
 
-        let privacySection;
+        let posthogSection;
         if (PosthogAnalytics.instance.isEnabled()) {
             const onClickAnalyticsLearnMore = (): void => {
                 showAnalyticsLearnMoreDialog({
@@ -327,9 +326,8 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                     hasCancel: false,
                 });
             };
-            privacySection = (
-                <SettingsSection heading={_t("common|privacy")}>
-                    <DiscoverySettings />
+            posthogSection = (
+                <>
                     <SettingsSubsection
                         heading={_t("common|analytics")}
                         description={_t("settings|security|analytics_description")}
@@ -344,7 +342,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                     <SettingsSubsection heading={_t("settings|sessions|title")}>
                         <SettingsFlag name="deviceClientInformationOptIn" level={SettingLevel.ACCOUNT} />
                     </SettingsSubsection>
-                </SettingsSection>
+                </>
             );
         }
 
@@ -373,7 +371,10 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                     {crossSigning}
                     <CryptographyPanel />
                 </SettingsSection>
-                {privacySection}
+                <SettingsSection heading={_t("common|privacy")}>
+                    <DiscoverySettings />
+                    {posthogSection}
+                </SettingsSection>
                 {advancedSection}
             </SettingsTab>
         );

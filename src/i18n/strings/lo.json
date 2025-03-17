@@ -315,7 +315,6 @@
         "download_logs": "ບັນທຶກການດາວໂຫຼດ",
         "downloading_logs": "ບັນທຶກການດາວໂຫຼດ",
         "error_empty": "ກະລຸນາບອກພວກເຮົາວ່າມີຫຍັງຜິດພາດ ຫຼື, ດີກວ່າ, ສ້າງບັນຫາ GitHub ເພື່ອອະທິບາຍບັນຫາ.",
-        "failed_send_logs": "ສົ່ງບັນທຶກບໍ່ສຳເລັດ: ",
         "github_issue": "ບັນຫາ GitHub",
         "introduction": "ຖ້າທ່ານໄດ້ສົ່ງຂໍ້ບົກພ່ອງຜ່ານ GitHub, ບັນທຶກການຂໍ້ຜິດພາດສາມາດຊ່ວຍພວກເຮົາຕິດຕາມບັນຫາໄດ້. ",
         "log_request": "ເພື່ອຊ່ວຍພວກເຮົາປ້ອງກັນສິ່ງນີ້ໃນອະນາຄົດ, ກະລຸນາ <a>ສົ່ງບັນທຶກໃຫ້ພວກເຮົາ</a>.",
@@ -354,7 +353,6 @@
         "access_token": "ເຂົ້າເຖິງToken",
         "accessibility": "ການເຂົ້າເຖິງ",
         "advanced": "ຂັ້ນສູງ",
-        "all_rooms": "ຫ້ອງທັງໝົດ",
         "analytics": "ວິເຄາະ",
         "and_n_others": {
             "one": "ແລະ ອີກອັນນຶ່ງ...",
@@ -443,7 +441,6 @@
         "room_name": "ຊື່ຫ້ອງ",
         "rooms": "ຫ້ອງ",
         "secure_backup": "ການສໍາຮອງທີ່ປອດໄພ",
-        "security": "ຄວາມປອດໄພ",
         "select_all": "ເລືອກທັງຫມົດ",
         "server": "ເຊີບເວີ",
         "settings": "ການຕັ້ງຄ່າ",
@@ -462,7 +459,6 @@
         "thread": "ກະທູ້",
         "threads": "ກະທູ້",
         "timeline": "ທາມລາຍ",
-        "trusted": "ເຊື່ອຖືໄດ້",
         "unencrypted": "ບໍ່ໄດ້ເຂົ້າລະຫັດ",
         "unmute": "ຍົກເລີກປິດສຽງ",
         "unnamed_room": "ບໍ່ມີຊື່ຫ້ອງ",
@@ -745,7 +741,6 @@
             "title": "ເຊື່ອຖືບໍ່ໄດ້"
         },
         "unable_to_setup_keys_error": "ບໍ່ສາມາດຕັ້ງຄ່າກະແຈໄດ້",
-        "unsupported": "ລູກຄ້ານີ້ບໍ່ຮອງຮັບການເຂົ້າລະຫັດແບບຕົ້ນທາງເຖິງປາຍທາງ.",
         "verification": {
             "accepting": "ກຳລັງຍອມຮັບ…",
             "after_new_login": {
@@ -2606,7 +2601,9 @@
             "sent": "%(senderName)s ສົ່ງຄຳເຊີນໄປຫາ %(targetDisplayName)s ເພື່ອເຂົ້າຮ່ວມຫ້ອງ."
         },
         "m.room.tombstone": "%(senderDisplayName)s ຍົກລະດັບຫ້ອງນີ້ແລ້ວ.",
-        "m.room.topic": "%(senderDisplayName)s ໄດ້ປ່ຽນຫົວຂໍ້ເປັນ \"%(topic)s\".",
+        "m.room.topic": {
+            "changed": "%(senderDisplayName)s ໄດ້ປ່ຽນຫົວຂໍ້ເປັນ \"%(topic)s\"."
+        },
         "m.sticker": "%(senderDisplayName)s ສົ່ງສະຕິກເກີ.",
         "m.video": {
             "error_decrypting": "ການຖອດລະຫັດວິດີໂອຜິດພາດ"
@@ -2865,14 +2862,6 @@
         "ban_room_confirm_title": "ຫ້າມອອຈາກ %(roomName)s",
         "ban_space_everything": "ຫ້າມພວກເຂົາຈາກທຸກສິ່ງທີ່ຂ້ອຍສາມາດເຮັດໄດ້",
         "ban_space_specific": "ຫ້າມພວກເຂົາອອຈາກສິ່ງທີ່ສະເພາະທີ່ຂ້ອຍສາມາດເຮັດໄດ້",
-        "count_of_sessions": {
-            "one": "%(count)s ລະບົບ",
-            "other": "%(count)ssessions"
-        },
-        "count_of_verified_sessions": {
-            "one": "ຢືນຢັນ 1 session ແລ້ວ",
-            "other": "%(count)sລະບົບຢືນຢັນແລ້ວ"
-        },
         "deactivate_confirm_action": "ປິດໃຊ້ງານຜູ້ໃຊ້",
         "deactivate_confirm_description": "ການປິດໃຊ້ງານຜູ້ໃຊ້ນີ້ຈະອອກຈາກລະບົບ ແລະປ້ອງກັນບໍ່ໃຫ້ເຂົາເຈົ້າເຂົ້າສູ່ລະບົບຄືນອີກ. ນອກຈາກນັ້ນ, ເຂົາເຈົ້າຈະອອກຈາກຫ້ອງທັງໝົດທີ່ເຂົາເຈົ້າຢູ່ໃນ. ຄຳສັ່ງນີ້ບໍ່ສາມາດຍົກເລີກໄດ້. ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການປິດກາໃຊ້ງານຜູ້ໃຊ້ນີ້?",
         "deactivate_confirm_title": "ປິດໃຊ້ງານຜູ້ໃຊ້ບໍ?",
@@ -2883,15 +2872,12 @@
         "disinvite_button_room": "ຕັດຂາດອອກຈາກຫ້ອງ",
         "disinvite_button_room_name": "ຍົກເລີກເຊີນຈາກ %(roomName)s",
         "disinvite_button_space": "ຕັດຂາດຈາກ ພື້ນທີ່ຈັດເກັບ",
-        "edit_own_devices": "ແກ້ໄຂອຸປະກອນ",
         "error_ban_user": "ຫ້າມຜູ້ໃຊ້ບໍ່ສຳເລັດ",
         "error_deactivate": "ປິດໃຊ້ງານຜູ້ໃຊ້ບໍ່ສຳເລັດ",
         "error_kicking_user": "ລຶບຜູ້ໃຊ້ອອກບໍ່ສຳເລັດ",
         "error_mute_user": "ປິດສຽງຜູ້ໃຊ້ບໍ່ສຳເລັດ",
         "error_revoke_3pid_invite_description": "ບໍ່ສາມາດຖອນຄຳເຊີນໄດ້. ເຊີບເວີອາດຈະປະສົບບັນຫາຊົ່ວຄາວ ຫຼື ທ່ານບໍ່ມີສິດພຽງພໍໃນການຖອນຄຳເຊີນ.",
         "error_revoke_3pid_invite_title": "ຍົກເລີກການເຊີນບໍ່ສຳເລັດ",
-        "hide_sessions": "ເຊື່ອງsessions",
-        "hide_verified_sessions": "ເຊື່ອງ sessionsທີ່ຢືນຢັນແລ້ວ",
         "invited_by": "ເຊີນໂດຍ%(sender)s",
         "jump_to_rr_button": "ຂ້າມເພື່ອອ່ານໃບຮັບເງິນ",
         "kick_button_room": "ຍ້າຍອອກຈາກຫ້ອງ",
@@ -2971,7 +2957,6 @@
         "hangup": "ວາງສາຍ",
         "hide_sidebar_button": "ເຊື່ອງແຖບດ້ານຂ້າງ",
         "input_devices": "ອຸປະກອນຂາເຂົ້າ",
-        "join_button_tooltip_connecting": "ກຳລັງເຊື່ອມຕໍ່",
         "misconfigured_server": "ການໂທບໍ່ສຳເລັດເນື່ອງຈາກເຊີບເວີຕັ້ງຄ່າຜິດພາດ",
         "misconfigured_server_description": "ກະລຸນາຕິດຕໍ່ຜູ້ຄຸ້ມຄອງສະຖານີຂອງທ່ານ (<code>%(homeserverDomain)s</code>) ເພື່ອກໍານົດຄ່າຂອງ TURN Server ເພື່ອໃຫ້ການໂທເຮັດວຽກໄດ້ຢ່າງສະຖຽນ.",
         "more_button": "ເພີ່ມເຕີມ",

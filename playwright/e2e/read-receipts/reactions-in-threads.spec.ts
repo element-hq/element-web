@@ -9,8 +9,11 @@ Please see LICENSE files in the repository root for full details.
 /* See readme.md for tips on writing these tests. */
 
 import { test, expect } from ".";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 test.describe("Read receipts", { tag: "@mergequeue" }, () => {
+    test.skip(isDendrite, "due to Dendrite bug https://github.com/element-hq/dendrite/issues/2970");
+
     test.describe("reactions", () => {
         test.describe("in threads", () => {
             test("A reaction to a threaded message does not make the room unread", async ({
@@ -70,11 +73,7 @@ test.describe("Read receipts", { tag: "@mergequeue" }, () => {
                 // Given a thread exists and I have marked it as read
                 await util.goTo(room1);
                 await util.assertRead(room2);
-                await util.receiveMessages(room2, [
-                    "Msg1",
-                    msg.threadedOff("Msg1", "Reply1"),
-                    msg.reactionTo("Reply1", "🪿"),
-                ]);
+                await util.receiveMessages(room2, ["Msg1", msg.threadedOff("Msg1", "Reply1")]);
                 await util.assertUnread(room2, 1);
                 await util.markAsRead(room2);
                 await util.assertRead(room2);

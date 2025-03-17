@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 import { mocked } from "jest-mock";
-import { SlidingSync, SlidingSyncEvent } from "matrix-js-sdk/src/sliding-sync";
+import { type SlidingSync, SlidingSyncEvent } from "matrix-js-sdk/src/sliding-sync";
 import { Room } from "matrix-js-sdk/src/matrix";
 
 import {
@@ -14,14 +14,14 @@ import {
     SlidingRoomListStoreClass,
     SlidingSyncSortToFilter,
 } from "../../../../src/stores/room-list/SlidingRoomListStore";
-import { SpaceStoreClass } from "../../../../src/stores/spaces/SpaceStore";
+import { type SpaceStoreClass } from "../../../../src/stores/spaces/SpaceStore";
 import { MockEventEmitter, stubClient, untilEmission } from "../../../test-utils";
 import { TestSdkContext } from "../../TestSdkContext";
 import { SlidingSyncManager } from "../../../../src/SlidingSyncManager";
-import { RoomViewStore } from "../../../../src/stores/RoomViewStore";
+import { type RoomViewStore } from "../../../../src/stores/RoomViewStore";
 import { MatrixDispatcher } from "../../../../src/dispatcher/dispatcher";
 import { SortAlgorithm } from "../../../../src/stores/room-list/algorithms/models";
-import { DefaultTagID, TagID } from "../../../../src/stores/room-list/models";
+import { DefaultTagID, type TagID } from "../../../../src/stores/room-list/models";
 import { MetaSpace, UPDATE_SELECTED_SPACE } from "../../../../src/stores/spaces";
 import { LISTS_LOADING_EVENT } from "../../../../src/stores/room-list/RoomListStore";
 import { UPDATE_EVENT } from "../../../../src/stores/AsyncStore";

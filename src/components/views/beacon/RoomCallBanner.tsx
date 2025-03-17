@@ -7,15 +7,15 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { useCallback } from "react";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../elements/AccessibleButton";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../../dispatcher/actions";
-import { ConnectionState, ElementCall } from "../../../models/Call";
+import { ConnectionState, type ElementCall } from "../../../models/Call";
 import { useCall } from "../../../hooks/useCall";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import { OwnBeaconStore, OwnBeaconStoreEvent } from "../../../stores/OwnBeaconStore";

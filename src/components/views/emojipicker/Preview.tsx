@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { Emoji } from "@matrix-org/emojibase-bindings";
+import { type Emoji } from "@matrix-org/emojibase-bindings";
 
 interface IProps {
     emoji: Emoji;

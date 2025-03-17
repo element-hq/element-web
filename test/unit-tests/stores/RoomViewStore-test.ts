@@ -9,27 +9,40 @@ Please see LICENSE files in the repository root for full details.
 import { mocked } from "jest-mock";
 import { MatrixError, Room } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
-import { RoomViewLifecycle, ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
+import {
+    RoomViewLifecycle,
+    type ViewRoomOpts,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
+import EventEmitter from "events";
 
 import { RoomViewStore } from "../../../src/stores/RoomViewStore";
 import { Action } from "../../../src/dispatcher/actions";
-import { getMockClientWithEventEmitter, untilDispatch, untilEmission } from "../../test-utils";
+import {
+    getMockClientWithEventEmitter,
+    setupAsyncStoreWithClient,
+    untilDispatch,
+    untilEmission,
+} from "../../test-utils";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { SlidingSyncManager } from "../../../src/SlidingSyncManager";
 import { PosthogAnalytics } from "../../../src/PosthogAnalytics";
 import { TimelineRenderingType } from "../../../src/contexts/RoomContext";
 import { MatrixDispatcher } from "../../../src/dispatcher/dispatcher";
 import { UPDATE_EVENT } from "../../../src/stores/AsyncStore";
-import { ActiveRoomChangedPayload } from "../../../src/dispatcher/payloads/ActiveRoomChangedPayload";
+import { type ActiveRoomChangedPayload } from "../../../src/dispatcher/payloads/ActiveRoomChangedPayload";
 import { SpaceStoreClass } from "../../../src/stores/spaces/SpaceStore";
 import { TestSdkContext } from "../TestSdkContext";
-import { ViewRoomPayload } from "../../../src/dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../../src/dispatcher/payloads/ViewRoomPayload";
 import Modal from "../../../src/Modal";
 import ErrorDialog from "../../../src/components/views/dialogs/ErrorDialog";
-import { CancelAskToJoinPayload } from "../../../src/dispatcher/payloads/CancelAskToJoinPayload";
-import { JoinRoomErrorPayload } from "../../../src/dispatcher/payloads/JoinRoomErrorPayload";
-import { SubmitAskToJoinPayload } from "../../../src/dispatcher/payloads/SubmitAskToJoinPayload";
+import { type CancelAskToJoinPayload } from "../../../src/dispatcher/payloads/CancelAskToJoinPayload";
+import { type JoinRoomErrorPayload } from "../../../src/dispatcher/payloads/JoinRoomErrorPayload";
+import { type SubmitAskToJoinPayload } from "../../../src/dispatcher/payloads/SubmitAskToJoinPayload";
 import { ModuleRunner } from "../../../src/modules/ModuleRunner";
+import { type IApp } from "../../../src/utils/WidgetUtils-types";
+import { CallStore } from "../../../src/stores/CallStore";
+import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
+import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../src/MediaDeviceHandler";
 
 jest.mock("../../../src/Modal");
 
@@ -57,6 +70,12 @@ jest.mock("../../../src/audio/VoiceRecording", () => ({
     }),
 }));
 
+jest.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
+    [MediaDeviceKindEnum.AudioInput]: [],
+    [MediaDeviceKindEnum.VideoInput]: [],
+    [MediaDeviceKindEnum.AudioOutput]: [],
+});
+
 jest.mock("../../../src/utils/DMRoomMap", () => {
     const mock = {
         getUserIdForRoomId: jest.fn(),
@@ -69,7 +88,21 @@ jest.mock("../../../src/utils/DMRoomMap", () => {
     };
 });
 
-jest.mock("../../../src/stores/WidgetStore");
+jest.mock("../../../src/stores/WidgetStore", () => {
+    // This mock needs to use a real EventEmitter; require is the only way to import that in a hoisted block
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const EventEmitter = require("events");
+    const apps: IApp[] = [];
+    const instance = new (class extends EventEmitter {
+        getApps() {
+            return apps;
+        }
+        addVirtualWidget(app: IApp) {
+            apps.push(app);
+        }
+    })();
+    return { instance };
+});
 jest.mock("../../../src/stores/widgets/WidgetLayoutStore");
 
 describe("RoomViewStore", function () {
@@ -79,10 +112,12 @@ describe("RoomViewStore", function () {
     // we need to change the alias to ensure cache misses as the cache exists
     // through all tests.
     let alias = "#somealias2:aser.ver";
+    const getRooms = jest.fn();
     const mockClient = getMockClientWithEventEmitter({
         joinRoom: jest.fn(),
         getRoom: jest.fn(),
         getRoomIdForAlias: jest.fn(),
+        getRooms,
         isGuest: jest.fn(),
         getUserId: jest.fn().mockReturnValue(userId),
         getSafeUserId: jest.fn().mockReturnValue(userId),
@@ -94,9 +129,18 @@ describe("RoomViewStore", function () {
         knockRoom: jest.fn(),
         leave: jest.fn(),
         setRoomAccountData: jest.fn(),
+        getAccountData: jest.fn(),
+        matrixRTC: new (class extends EventEmitter {
+            getRoomSession() {
+                return new (class extends EventEmitter {
+                    memberships = [];
+                })();
+            }
+        })(),
     });
     const room = new Room(roomId, mockClient, userId);
     const room2 = new Room(roomId2, mockClient, userId);
+    getRooms.mockReturnValue([room, room2]);
 
     const viewCall = async (): Promise<void> => {
         dis.dispatch<ViewRoomPayload>({
@@ -298,6 +342,7 @@ describe("RoomViewStore", function () {
     });
 
     it("when viewing a call without a broadcast, it should not raise an error", async () => {
+        await setupAsyncStoreWithClient(CallStore.instance, MatrixClientPeg.safeGet());
         await viewCall();
     });
 

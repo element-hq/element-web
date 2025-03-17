@@ -5,10 +5,15 @@ Copyright 2022 The Matrix.org Foundation C.I.C.
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
-import React, { HTMLAttributes } from "react";
+import React, { type HTMLAttributes } from "react";
+import classNames from "classnames";
 
-export interface SettingsTabProps extends Omit<HTMLAttributes<HTMLDivElement>, "className"> {
+export interface SettingsTabProps extends HTMLAttributes<HTMLDivElement> {
     children?: React.ReactNode;
+    /**
+     * Added to the classList of the root element
+     */
+    className?: string;
 }
 
 /**
@@ -29,8 +34,8 @@ export interface SettingsTabProps extends Omit<HTMLAttributes<HTMLDivElement>, "
  * </SettingsTab>
  * ```
  */
-const SettingsTab: React.FC<SettingsTabProps> = ({ children, ...rest }) => (
-    <div {...rest} className="mx_SettingsTab">
+const SettingsTab: React.FC<SettingsTabProps> = ({ children, className, ...rest }) => (
+    <div {...rest} className={classNames("mx_SettingsTab", className)}>
         <div className="mx_SettingsTab_sections">{children}</div>
     </div>
 );

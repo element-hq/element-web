@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { CSSProperties, forwardRef, memo, MutableRefObject, ReactNode } from "react";
+import React, { type CSSProperties, forwardRef, memo, type MutableRefObject, type ReactNode } from "react";
 
 import { useIsExpanded } from "../hooks/useIsExpanded";
 import { useSelection } from "../hooks/useSelection";
@@ -22,7 +22,7 @@ interface EditorProps {
 }
 
 export const Editor = memo(
-    forwardRef<HTMLDivElement, EditorProps>(function Editor(
+    forwardRef<HTMLDivElement | null, EditorProps>(function Editor(
         { disabled, placeholder, leftComponent, rightComponent }: EditorProps,
         ref,
     ) {

@@ -10,11 +10,11 @@ import {
     MatrixEvent,
     NotificationCountType,
     Room,
-    MatrixClient,
+    type MatrixClient,
     ReceiptType,
-    AccountDataEvents,
+    type AccountDataEvents,
 } from "matrix-js-sdk/src/matrix";
-import { Mocked, mocked } from "jest-mock";
+import { type Mocked, mocked } from "jest-mock";
 
 import {
     localNotificationsAreSilenced,

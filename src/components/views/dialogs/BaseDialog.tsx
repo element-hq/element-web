@@ -11,14 +11,14 @@ Please see LICENSE files in the repository root for full details.
 import React from "react";
 import FocusLock from "react-focus-lock";
 import classNames from "classnames";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import AccessibleButton from "../elements/AccessibleButton";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import Heading from "../typography/Heading";
-import { PosthogScreenTracker, ScreenName } from "../../../PosthogTrackers";
+import { PosthogScreenTracker, type ScreenName } from "../../../PosthogTrackers";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 

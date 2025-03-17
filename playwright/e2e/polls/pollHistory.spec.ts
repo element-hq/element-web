@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { test, expect } from "../../element-web-test";
 import type { Bot } from "../../pages/bot";
 import type { Client } from "../../pages/client";
-import { ElementAppPage } from "../../pages/ElementAppPage";
+import { type ElementAppPage } from "../../pages/ElementAppPage";
 
 test.describe("Poll history", () => {
     type CreatePollOptions = {
@@ -134,7 +134,7 @@ test.describe("Poll history", () => {
 
         await expect(dialog.getByText(pollParams2.title)).toBeAttached();
         await expect(dialog.getByText(pollParams1.title)).toBeAttached();
-        dialog.getByText("Active polls").click();
+        await dialog.getByText("Active polls").click();
 
         // no more active polls
         await expect(page.getByText("There are no active polls in this room")).toBeAttached();

@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { JSHandle, Page } from "@playwright/test";
+import { type JSHandle, type Page } from "@playwright/test";
 import { uniqueId } from "lodash";
 import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
@@ -41,6 +41,10 @@ export interface CreateBotOpts {
      * Whether to bootstrap the secret storage
      */
     bootstrapSecretStorage?: boolean;
+    /**
+     * Whether to use a passphrase when creating the recovery key
+     */
+    usePassphrase?: boolean;
 }
 
 const defaultCreateBotOptions = {
@@ -48,6 +52,7 @@ const defaultCreateBotOptions = {
     autoAcceptInvites: true,
     startClient: true,
     bootstrapCrossSigning: true,
+    usePassphrase: false,
 } satisfies CreateBotOpts;
 
 type ExtendedMatrixClient = MatrixClient & { __playwright_recovery_key: GeneratedSecretStorageKey };
@@ -121,7 +126,7 @@ export class Bot extends Client {
                     return logger as unknown as Logger;
                 }
 
-                const logger = getLogger(`cypress bot ${credentials.userId}`);
+                const logger = getLogger(`bot ${credentials.userId}`);
 
                 const keys = {};
 
@@ -171,7 +176,7 @@ export class Bot extends Client {
                 if (opts.autoAcceptInvites) {
                     cli.on(window.matrixcs.RoomMemberEvent.Membership, (event, member) => {
                         if (member.membership === "invite" && member.userId === cli.getUserId()) {
-                            cli.joinRoom(member.roomId);
+                            void cli.joinRoom(member.roomId);
                         }
                     });
                 }
@@ -192,7 +197,6 @@ export class Bot extends Client {
 
         await clientHandle.evaluate(async (cli) => {
             await cli.initRustCrypto({ useIndexedDB: false });
-            cli.setGlobalErrorOnUnknownDevices(false);
             await cli.startClient();
         });
 
@@ -207,8 +211,8 @@ export class Bot extends Client {
         }
 
         if (this.opts.bootstrapSecretStorage) {
-            await clientHandle.evaluate(async (cli) => {
-                const passphrase = "new passphrase";
+            await clientHandle.evaluate(async (cli, usePassphrase) => {
+                const passphrase = usePassphrase ? "new passphrase" : undefined;
                 const recoveryKey = await cli.getCrypto().createRecoveryKeyFromPassphrase(passphrase);
                 Object.assign(cli, { __playwright_recovery_key: recoveryKey });
 
@@ -217,7 +221,7 @@ export class Bot extends Client {
                     setupNewKeyBackup: true,
                     createSecretStorageKey: () => Promise.resolve(recoveryKey),
                 });
-            });
+            }, this.opts.usePassphrase);
         }
 
         return clientHandle;

@@ -6,11 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent, ReactNode } from "react";
-import { Room, RoomMember, EventType, RoomType, JoinRule, MatrixError } from "matrix-js-sdk/src/matrix";
-import { KnownMembership, RoomJoinRulesEventContent } from "matrix-js-sdk/src/types";
+import React, { type ChangeEvent, type ReactNode } from "react";
+import { type Room, type RoomMember, EventType, RoomType, JoinRule, type MatrixError } from "matrix-js-sdk/src/matrix";
+import { KnownMembership, type RoomJoinRulesEventContent } from "matrix-js-sdk/src/types";
 import classNames from "classnames";
-import { RoomPreviewOpts, RoomViewLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
+import {
+    type RoomPreviewOpts,
+    RoomViewLifecycle,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
@@ -18,7 +21,7 @@ import { _t, UserFriendlyError } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
 import IdentityAuthClient from "../../../IdentityAuthClient";
 import InviteReason from "../elements/InviteReason";
-import { IOOBData } from "../../../stores/ThreepidInviteStore";
+import { type IOOBData } from "../../../stores/ThreepidInviteStore";
 import Spinner from "../elements/Spinner";
 import AccessibleButton from "../elements/AccessibleButton";
 import RoomAvatar from "../avatars/RoomAvatar";

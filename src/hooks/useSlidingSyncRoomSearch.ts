@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useCallback, useState } from "react";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { type Room } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { useLatestResult } from "./useLatestResult";

@@ -8,8 +8,14 @@
 
 import { expect, test } from ".";
 import { CommandOrControl } from "../../utils";
+import { isDendrite } from "../../../plugins/homeserver/dendrite";
 
 test.describe("Threads Activity Centre", { tag: "@no-firefox" }, () => {
+    test.skip(
+        isDendrite,
+        "due to Dendrite lacking full threads support https://github.com/element-hq/dendrite/issues/3283",
+    );
+
     test.use({
         displayName: "Alice",
         botCreateOpts: { displayName: "Other User" },

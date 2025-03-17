@@ -24,13 +24,40 @@ type PaginationLinks = {
     first?: string;
 };
 
+// We see quite a few test flakes which are caused by the app exploding
+// so we have some magic strings we check the logs for to better track the flake with its cause
+const SPECIAL_CASES = {
+    "ChunkLoadError": "ChunkLoadError",
+    "Unreachable code should not be executed": "Rust crypto panic",
+    "Out of bounds memory access": "Rust crypto memory error",
+};
+
 class FlakyReporter implements Reporter {
-    private flakes = new Set<string>();
+    private flakes = new Map<string, TestCase[]>();
 
     public onTestEnd(test: TestCase): void {
-        const title = `${test.location.file.split("playwright/e2e/")[1]}: ${test.title}`;
+        // Ignores flakes on Dendrite and Pinecone as they have their own flakes we do not track
+        if (["Dendrite", "Pinecone"].includes(test.parent.project()?.name)) return;
+        let failures = [`${test.location.file.split("playwright/e2e/")[1]}: ${test.title}`];
         if (test.outcome() === "flaky") {
-            this.flakes.add(title);
+            const timedOutRuns = test.results.filter((result) => result.status === "timedOut");
+            const pageLogs = timedOutRuns.flatMap((result) =>
+                result.attachments.filter((attachment) => attachment.name.startsWith("page-")),
+            );
+            // If a test failed due to a systemic fault then the test is not flaky, the app is, record it as such.
+            const specialCases = Object.keys(SPECIAL_CASES).filter((log) =>
+                pageLogs.some((attachment) => attachment.name.startsWith("page-") && attachment.body.includes(log)),
+            );
+            if (specialCases.length > 0) {
+                failures = specialCases.map((specialCase) => SPECIAL_CASES[specialCase]);
+            }
+
+            for (const title of failures) {
+                if (!this.flakes.has(title)) {
+                    this.flakes.set(title, []);
+                }
+                this.flakes.get(title).push(test);
+            }
         }
     }
 
@@ -97,11 +124,13 @@ class FlakyReporter implements Reporter {
         if (!GITHUB_TOKEN) return;
 
         const issues = await this.getAllIssues();
-        for (const flake of this.flakes) {
+        for (const [flake, results] of this.flakes) {
             const title = ISSUE_TITLE_PREFIX + "`" + flake + "`";
             const existingIssue = issues.find((issue) => issue.title === title);
             const headers = { Authorization: `Bearer ${GITHUB_TOKEN}` };
             const body = `${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}`;
+
+            const labels = [LABEL, ...results.map((test) => `${LABEL}-${test.parent.project()?.name}`)];
 
             if (existingIssue) {
                 console.log(`Found issue ${existingIssue.number} for ${flake}, adding comment...`);
@@ -110,6 +139,11 @@ class FlakyReporter implements Reporter {
                     method: "PATCH",
                     headers,
                     body: JSON.stringify({ state: "open" }),
+                });
+                await fetch(`${existingIssue.url}/labels`, {
+                    method: "POST",
+                    headers,
+                    body: JSON.stringify({ labels }),
                 });
                 await fetch(`${existingIssue.url}/comments`, {
                     method: "POST",
@@ -124,7 +158,7 @@ class FlakyReporter implements Reporter {
                     body: JSON.stringify({
                         title,
                         body,
-                        labels: [LABEL],
+                        labels: [...labels],
                     }),
                 });
             }

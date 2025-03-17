@@ -16,22 +16,24 @@ import {
     MatrixEvent,
     RoomStateEvent,
     PendingEventOrdering,
-    IContent,
+    type IContent,
+    type MatrixClient,
+    type IMyDevice,
+    type RoomMember,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
 import { Widget } from "matrix-widget-api";
 import {
-    CallMembership,
+    type CallMembership,
     MatrixRTCSessionManagerEvents,
     MatrixRTCSession,
     MatrixRTCSessionEvent,
 } from "matrix-js-sdk/src/matrixrtc";
 
 import type { Mocked } from "jest-mock";
-import type { MatrixClient, IMyDevice, RoomMember } from "matrix-js-sdk/src/matrix";
 import type { ClientWidgetApi } from "matrix-widget-api";
 import {
-    JitsiCallMemberContent,
+    type JitsiCallMemberContent,
     Layout,
     Call,
     CallEvent,
@@ -48,7 +50,7 @@ import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../../../src/stores/A
 import { ElementWidgetActions } from "../../../src/stores/widgets/ElementWidgetActions";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { PosthogAnalytics } from "../../../src/PosthogAnalytics";
-import { SettingKey } from "../../../src/settings/Settings.tsx";
+import { type SettingKey } from "../../../src/settings/Settings.tsx";
 
 jest.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
     [MediaDeviceKindEnum.AudioInput]: [
@@ -233,16 +235,16 @@ describe("JitsiCall", () => {
 
             ({ widget, messaging, audioMutedSpy, videoMutedSpy } = setUpWidget(call));
 
-            mocked(messaging.transport).send.mockImplementation(async (action: string): Promise<any> => {
+            mocked(messaging.transport).send.mockImplementation(async (action, data): Promise<any> => {
                 if (action === ElementWidgetActions.JoinCall) {
                     messaging.emit(
                         `action:${ElementWidgetActions.JoinCall}`,
-                        new CustomEvent("widgetapirequest", { detail: {} }),
+                        new CustomEvent("widgetapirequest", { detail: { data } }),
                     );
                 } else if (action === ElementWidgetActions.HangupCall) {
                     messaging.emit(
                         `action:${ElementWidgetActions.HangupCall}`,
-                        new CustomEvent("widgetapirequest", { detail: {} }),
+                        new CustomEvent("widgetapirequest", { detail: { data } }),
                     );
                 }
                 return {};
@@ -284,8 +286,6 @@ describe("JitsiCall", () => {
             expect(call.connectionState).toBe(ConnectionState.Disconnected);
 
             const connect = call.start();
-            expect(call.connectionState).toBe(ConnectionState.WidgetLoading);
-
             WidgetMessagingStore.instance.storeMessaging(widget, room.roomId, messaging);
             await connect;
             expect(call.connectionState).toBe(ConnectionState.Connected);
@@ -308,7 +308,6 @@ describe("JitsiCall", () => {
             expect(call.connectionState).toBe(ConnectionState.Disconnected);
 
             const connect = call.start();
-            expect(call.connectionState).toBe(ConnectionState.WidgetLoading);
             async function runTimers() {
                 jest.advanceTimersByTime(500);
                 jest.advanceTimersByTime(1000);
@@ -354,18 +353,10 @@ describe("JitsiCall", () => {
 
             call.on(CallEvent.ConnectionState, callback);
 
-            messaging.emit(
-                `action:${ElementWidgetActions.HangupCall}`,
-                new CustomEvent("widgetapirequest", { detail: {} }),
-            );
+            messaging.emit(`action:${ElementWidgetActions.HangupCall}`, new CustomEvent("widgetapirequest", {}));
+            messaging.emit(`action:${ElementWidgetActions.Close}`, new CustomEvent("widgetapirequest", {}));
             await waitFor(() => {
                 expect(callback).toHaveBeenNthCalledWith(1, ConnectionState.Disconnected, ConnectionState.Connected);
-                expect(callback).toHaveBeenNthCalledWith(
-                    2,
-                    ConnectionState.WidgetLoading,
-                    ConnectionState.Disconnected,
-                );
-                expect(callback).toHaveBeenNthCalledWith(3, ConnectionState.Connecting, ConnectionState.WidgetLoading);
             });
             // in video rooms we expect the call to immediately reconnect
             call.off(CallEvent.ConnectionState, callback);
@@ -495,10 +486,7 @@ describe("JitsiCall", () => {
             await call.start();
             await call.disconnect();
             expect(onConnectionState.mock.calls).toEqual([
-                [ConnectionState.WidgetLoading, ConnectionState.Disconnected],
-                [ConnectionState.Connecting, ConnectionState.WidgetLoading],
-                [ConnectionState.Lobby, ConnectionState.Connecting],
-                [ConnectionState.Connected, ConnectionState.Lobby],
+                [ConnectionState.Connected, ConnectionState.Disconnected],
                 [ConnectionState.Disconnecting, ConnectionState.Connected],
                 [ConnectionState.Disconnected, ConnectionState.Disconnecting],
             ]);
@@ -632,7 +620,7 @@ describe("ElementCall", () => {
         jest.spyOn(room, "getJoinedMembers").mockReturnValue(memberIds.map((id) => ({ userId: id }) as RoomMember));
     }
 
-    const callConnectProcedure: (call: ElementCall) => Promise<void> = async (call) => {
+    const callConnectProcedure = async (call: ElementCall, startWidget = true): Promise<void> => {
         async function sessionConnect() {
             await new Promise<void>((r) => {
                 setTimeout(() => r(), 400);
@@ -651,9 +639,7 @@ describe("ElementCall", () => {
             jest.advanceTimersByTime(500);
         }
         sessionConnect();
-        const promise = call.start();
-        runTimers();
-        await promise;
+        await Promise.all([...(startWidget ? [call.start()] : []), runTimers()]);
     };
     const callDisconnectionProcedure: (call: ElementCall) => Promise<void> = async (call) => {
         async function sessionDisconnect() {
@@ -681,6 +667,7 @@ describe("ElementCall", () => {
     });
 
     afterEach(() => {
+        jest.runOnlyPendingTimers();
         jest.useRealTimers();
         cleanUpClientRoomAndStores(client, room);
     });
@@ -691,7 +678,7 @@ describe("ElementCall", () => {
         });
 
         it("finds calls", async () => {
-            await ElementCall.create(room);
+            ElementCall.create(room);
             expect(Call.get(room)).toBeInstanceOf(ElementCall);
             Call.get(room)?.destroy();
         });
@@ -726,7 +713,7 @@ describe("ElementCall", () => {
             };
             document.documentElement.style.fontSize = "12px";
 
-            await ElementCall.create(room);
+            ElementCall.create(room);
             const call = Call.get(room);
             if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
 
@@ -739,7 +726,7 @@ describe("ElementCall", () => {
 
         it("passes ICE fallback preference through widget URL", async () => {
             // Test with the preference set to false
-            await ElementCall.create(room);
+            ElementCall.create(room);
             const call1 = Call.get(room);
             if (!(call1 instanceof ElementCall)) throw new Error("Failed to create call");
 
@@ -778,7 +765,7 @@ describe("ElementCall", () => {
                 }
                 return undefined;
             });
-            await ElementCall.create(room);
+            ElementCall.create(room);
             const call = Call.get(room);
             if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
 
@@ -796,7 +783,7 @@ describe("ElementCall", () => {
                 }
                 return undefined;
             });
-            await ElementCall.create(room);
+            ElementCall.create(room);
             const call = Call.get(room);
             if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
 
@@ -818,7 +805,7 @@ describe("ElementCall", () => {
                             : originalGetValue(name, roomId, excludeDefault);
                 }
             };
-            await ElementCall.create(room);
+            ElementCall.create(room);
             const call = Call.get(room);
             if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
 
@@ -835,7 +822,7 @@ describe("ElementCall", () => {
                 }
                 return undefined;
             });
-            await ElementCall.create(room);
+            ElementCall.create(room);
             const call = Call.get(room);
             if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
 
@@ -855,7 +842,7 @@ describe("ElementCall", () => {
             jest.useFakeTimers();
             jest.setSystemTime(0);
 
-            await ElementCall.create(room, true);
+            ElementCall.create(room, true);
             const maybeCall = ElementCall.get(room);
             if (maybeCall === null) throw new Error("Failed to create call");
             call = maybeCall;
@@ -874,9 +861,6 @@ describe("ElementCall", () => {
             expect(call.connectionState).toBe(ConnectionState.Disconnected);
 
             const connect = callConnectProcedure(call);
-
-            expect(call.connectionState).toBe(ConnectionState.WidgetLoading);
-
             WidgetMessagingStore.instance.storeMessaging(widget, room.roomId, messaging);
             await connect;
             expect(call.connectionState).toBe(ConnectionState.Connected);
@@ -901,10 +885,8 @@ describe("ElementCall", () => {
             await callConnectProcedure(call);
             expect(call.connectionState).toBe(ConnectionState.Connected);
 
-            messaging.emit(
-                `action:${ElementWidgetActions.HangupCall}`,
-                new CustomEvent("widgetapirequest", { detail: {} }),
-            );
+            messaging.emit(`action:${ElementWidgetActions.HangupCall}`, new CustomEvent("widgetapirequest", {}));
+            messaging.emit(`action:${ElementWidgetActions.Close}`, new CustomEvent("widgetapirequest", {}));
             await waitFor(() => expect(call.connectionState).toBe(ConnectionState.Disconnected), { interval: 5 });
         });
 
@@ -984,9 +966,7 @@ describe("ElementCall", () => {
             await callConnectProcedure(call);
             await callDisconnectionProcedure(call);
             expect(onConnectionState.mock.calls).toEqual([
-                [ConnectionState.WidgetLoading, ConnectionState.Disconnected],
-                [ConnectionState.Connecting, ConnectionState.WidgetLoading],
-                [ConnectionState.Connected, ConnectionState.Connecting],
+                [ConnectionState.Connected, ConnectionState.Disconnected],
                 [ConnectionState.Disconnecting, ConnectionState.Connected],
                 [ConnectionState.Disconnected, ConnectionState.Disconnecting],
             ]);
@@ -1066,7 +1046,7 @@ describe("ElementCall", () => {
 
         it("sends notify event on connect in a room with more than two members", async () => {
             const sendEventSpy = jest.spyOn(room.client, "sendEvent");
-            await ElementCall.create(room);
+            ElementCall.create(room);
             await callConnectProcedure(Call.get(room) as ElementCall);
             expect(sendEventSpy).toHaveBeenCalledWith("!1:example.org", "org.matrix.msc4075.call.notify", {
                 "application": "m.call",
@@ -1079,7 +1059,7 @@ describe("ElementCall", () => {
             setRoomMembers(["@user:example.com", "@user2:example.com"]);
 
             const sendEventSpy = jest.spyOn(room.client, "sendEvent");
-            await ElementCall.create(room);
+            ElementCall.create(room);
             await callConnectProcedure(Call.get(room) as ElementCall);
             expect(sendEventSpy).toHaveBeenCalledWith("!1:example.org", "org.matrix.msc4075.call.notify", {
                 "application": "m.call",
@@ -1103,7 +1083,7 @@ describe("ElementCall", () => {
 
             jest.spyOn(room, "getType").mockReturnValue(RoomType.UnstableCall);
 
-            await ElementCall.create(room);
+            ElementCall.create(room);
             const maybeCall = ElementCall.get(room);
             if (maybeCall === null) throw new Error("Failed to create call");
             call = maybeCall;
@@ -1142,7 +1122,7 @@ describe("ElementCall", () => {
                 return roomSession;
             });
 
-            await ElementCall.create(room);
+            ElementCall.create(room);
             const call = Call.get(room);
             if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
             expect(call.session).toBe(roomSession);
@@ -1161,12 +1141,12 @@ describe("ElementCall", () => {
             await callConnectProcedure(call);
             expect(call.connectionState).toBe(ConnectionState.Connected);
 
-            messaging.emit(
-                `action:${ElementWidgetActions.HangupCall}`,
-                new CustomEvent("widgetapirequest", { detail: {} }),
-            );
-            // We want the call to be connecting after the hangup.
-            waitFor(() => expect(call.connectionState).toBe(ConnectionState.Connecting), { interval: 5 });
+            messaging.emit(`action:${ElementWidgetActions.HangupCall}`, new CustomEvent("widgetapirequest", {}));
+            messaging.emit(`action:${ElementWidgetActions.Close}`, new CustomEvent("widgetapirequest", {}));
+            // We should now be able to reconnect without manually starting the widget
+            expect(call.connectionState).toBe(ConnectionState.Disconnected);
+            await callConnectProcedure(call, false);
+            await waitFor(() => expect(call.connectionState).toBe(ConnectionState.Connected), { interval: 5 });
         });
     });
     describe("create call", () => {
@@ -1178,7 +1158,7 @@ describe("ElementCall", () => {
                 { application: "m.call", callId: "" } as unknown as CallMembership,
             ]);
             const sendEventSpy = jest.spyOn(room.client, "sendEvent");
-            await ElementCall.create(room);
+            ElementCall.create(room);
             expect(sendEventSpy).not.toHaveBeenCalled();
         });
     });

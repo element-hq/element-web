@@ -11,18 +11,18 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { uniq, sortBy, uniqBy, ListIteratee } from "lodash";
+import { uniq, sortBy, uniqBy, type ListIteratee } from "lodash";
 import EMOTICON_REGEX from "emojibase-regex/emoticon";
-import { Room } from "matrix-js-sdk/src/matrix";
-import { EMOJI, Emoji, getEmojiFromUnicode } from "@matrix-org/emojibase-bindings";
+import { type Room } from "matrix-js-sdk/src/matrix";
+import { EMOJI, type Emoji, getEmojiFromUnicode } from "@matrix-org/emojibase-bindings";
 
 import { _t } from "../languageHandler";
 import AutocompleteProvider from "./AutocompleteProvider";
 import QueryMatcher from "./QueryMatcher";
 import { PillCompletion } from "./Components";
-import { ICompletion, ISelectionRange } from "./Autocompleter";
+import { type ICompletion, type ISelectionRange } from "./Autocompleter";
 import SettingsStore from "../settings/SettingsStore";
-import { TimelineRenderingType } from "../contexts/RoomContext";
+import { type TimelineRenderingType } from "../contexts/RoomContext";
 import * as recent from "../emojipicker/recent";
 import { filterBoolean } from "../utils/arrays";
 

@@ -7,8 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, RenderResult } from "jest-matrix-react";
-import { MatrixClient, MatrixEvent, EventType, Room, MsgType } from "matrix-js-sdk/src/matrix";
+import { render, type RenderResult } from "jest-matrix-react";
+import { type MatrixClient, type MatrixEvent, EventType, type Room, MsgType } from "matrix-js-sdk/src/matrix";
 import fetchMock from "fetch-mock-jest";
 import fs from "fs";
 import path from "path";

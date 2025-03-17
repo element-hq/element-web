@@ -6,25 +6,25 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ReactNode, useEffect, useState } from "react";
-import { JoinRule, RestrictedAllowType, Room, EventType, Visibility } from "matrix-js-sdk/src/matrix";
-import { RoomJoinRulesEventContent } from "matrix-js-sdk/src/types";
+import React, { type ReactNode, useEffect, useState } from "react";
+import { JoinRule, RestrictedAllowType, type Room, EventType, Visibility } from "matrix-js-sdk/src/matrix";
+import { type RoomJoinRulesEventContent } from "matrix-js-sdk/src/types";
 
-import StyledRadioGroup, { IDefinition } from "../elements/StyledRadioGroup";
+import StyledRadioGroup, { type IDefinition } from "../elements/StyledRadioGroup";
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import RoomAvatar from "../avatars/RoomAvatar";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
 import Modal from "../../../Modal";
 import ManageRestrictedJoinRuleDialog from "../dialogs/ManageRestrictedJoinRuleDialog";
-import RoomUpgradeWarningDialog, { IFinishedOpts } from "../dialogs/RoomUpgradeWarningDialog";
+import RoomUpgradeWarningDialog, { type IFinishedOpts } from "../dialogs/RoomUpgradeWarningDialog";
 import { upgradeRoom } from "../../../utils/RoomUpgrade";
 import { arrayHasDiff } from "../../../utils/arrays";
 import { useLocalEcho } from "../../../hooks/useLocalEcho";
 import dis from "../../../dispatcher/dispatcher";
 import { RoomSettingsTab } from "../dialogs/RoomSettingsDialog";
 import { Action } from "../../../dispatcher/actions";
-import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { type ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { doesRoomVersionSupport, PreferredRoomVersions } from "../../../utils/PreferredRoomVersions";
 import SettingsStore from "../../../settings/SettingsStore";
 import LabelledCheckbox from "../elements/LabelledCheckbox";

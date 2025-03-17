@@ -6,12 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, KeyboardEvent } from "react";
+import React, { createRef, type KeyboardEvent } from "react";
 import classNames from "classnames";
-import { EventStatus, MatrixEvent, Room, MsgType } from "matrix-js-sdk/src/matrix";
+import { EventStatus, type MatrixEvent, type Room, MsgType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { Composer as ComposerEvent } from "@matrix-org/analytics-events/types/typescript/Composer";
-import { ReplacementEvent, RoomMessageEventContent, RoomMessageTextEventContent } from "matrix-js-sdk/src/types";
+import { type Composer as ComposerEvent } from "@matrix-org/analytics-events/types/typescript/Composer";
+import {
+    type ReplacementEvent,
+    type RoomMessageEventContent,
+    type RoomMessageTextEventContent,
+} from "matrix-js-sdk/src/types";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
@@ -20,25 +24,25 @@ import { getCaretOffsetAndText } from "../../../editor/dom";
 import { htmlSerializeIfNeeded, textSerialize, containsEmote, stripEmoteCommand } from "../../../editor/serialize";
 import { findEditableEvent } from "../../../utils/EventUtils";
 import { parseEvent } from "../../../editor/deserialize";
-import { CommandPartCreator, Part, PartCreator, SerializedPart } from "../../../editor/parts";
-import EditorStateTransfer from "../../../utils/EditorStateTransfer";
+import { CommandPartCreator, type Part, type PartCreator, type SerializedPart } from "../../../editor/parts";
+import type EditorStateTransfer from "../../../utils/EditorStateTransfer";
 import BasicMessageComposer, { REGEX_EMOTICON } from "./BasicMessageComposer";
 import { CommandCategories } from "../../../SlashCommands";
 import { Action } from "../../../dispatcher/actions";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import SendHistoryManager from "../../../SendHistoryManager";
-import { ActionPayload } from "../../../dispatcher/payloads";
+import { type ActionPayload } from "../../../dispatcher/payloads";
 import AccessibleButton from "../elements/AccessibleButton";
 import { createRedactEventDialog } from "../dialogs/ConfirmRedactDialog";
 import SettingsStore from "../../../settings/SettingsStore";
-import { withMatrixClientHOC, MatrixClientProps } from "../../../contexts/MatrixClientContext";
+import { withMatrixClientHOC, type MatrixClientProps } from "../../../contexts/MatrixClientContext";
 import RoomContext from "../../../contexts/RoomContext";
 import { ComposerType } from "../../../dispatcher/payloads/ComposerInsertPayload";
 import { getSlashCommand, isSlashCommand, runSlashCommand, shouldSendAnyway } from "../../../editor/commands";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { PosthogAnalytics } from "../../../PosthogAnalytics";
 import { editorRoomKey, editorStateKey } from "../../../Editing";
-import DocumentOffset from "../../../editor/offset";
+import type DocumentOffset from "../../../editor/offset";
 import { attachMentions, attachRelation } from "./SendMessageComposer";
 import { filterBoolean } from "../../../utils/arrays";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";

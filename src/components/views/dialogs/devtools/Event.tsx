@@ -7,12 +7,12 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ChangeEvent, ReactNode, useContext, useMemo, useRef, useState } from "react";
-import { IContent, MatrixEvent, TimelineEvents } from "matrix-js-sdk/src/matrix";
+import React, { type ChangeEvent, type ReactNode, useContext, useMemo, useRef, useState } from "react";
+import { type IContent, type MatrixEvent, type TimelineEvents } from "matrix-js-sdk/src/matrix";
 
-import { _t, _td, TranslationKey } from "../../../../languageHandler";
+import { _t, _td, type TranslationKey } from "../../../../languageHandler";
 import Field from "../../elements/Field";
-import BaseTool, { DevtoolsContext, IDevtoolsProps } from "./BaseTool";
+import BaseTool, { DevtoolsContext, type IDevtoolsProps } from "./BaseTool";
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import withValidation from "../../elements/Validation";
 import SyntaxHighlight from "../../elements/SyntaxHighlight";

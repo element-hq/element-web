@@ -10,11 +10,11 @@ import React, { createRef } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../../../languageHandler";
-import AccessibleButton, { ButtonEvent } from "../../../elements/AccessibleButton";
+import AccessibleButton, { type ButtonEvent } from "../../../elements/AccessibleButton";
 import Notifier from "../../../../../Notifier";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
-import { RoomEchoChamber } from "../../../../../stores/local-echo/RoomEchoChamber";
+import { type RoomEchoChamber } from "../../../../../stores/local-echo/RoomEchoChamber";
 import { EchoChamber } from "../../../../../stores/local-echo/EchoChamber";
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 import StyledRadioGroup from "../../../elements/StyledRadioGroup";

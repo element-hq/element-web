@@ -6,11 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { render, RenderResult, screen } from "jest-matrix-react";
+import { render, type RenderResult, screen } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
-import { mocked, MockedObject } from "jest-mock";
-import { MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
+import { mocked, type MockedObject } from "jest-mock";
+import { type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
 
 import { filterConsole, flushPromises, stubClient } from "../../../../../test-utils";
@@ -48,7 +48,7 @@ describe("CreateSecretStorageDialog", () => {
         expect(result.container).toMatchSnapshot();
         await userEvent.click(result.getByRole("button", { name: "Continue" }));
 
-        await screen.findByText("Save your Security Key");
+        await screen.findByText("Save your Recovery Key");
         expect(result.container).toMatchSnapshot();
         // Copy the key to enable the continue button
         await userEvent.click(screen.getByRole("button", { name: "Copy" }));
@@ -66,7 +66,7 @@ describe("CreateSecretStorageDialog", () => {
             "Safeguard against losing access to encrypted messages & data by backing up encryption keys on your server.",
         );
         await userEvent.click(screen.getByRole("button", { name: "Continue" }));
-        await screen.findByText("Save your Security Key");
+        await screen.findByText("Save your Recovery Key");
         await userEvent.click(screen.getByRole("button", { name: "Copy" }));
         await userEvent.click(screen.getByRole("button", { name: "Continue" }));
 
@@ -108,7 +108,7 @@ describe("CreateSecretStorageDialog", () => {
         });
         result.getByRole("button", { name: "Continue" }).click();
 
-        await result.findByText(/Save your Security Key/);
+        await result.findByText(/Save your Recovery Key/);
         result.getByRole("button", { name: "Copy" }).click();
 
         // Resetting should reset secret storage, cross signing, and key

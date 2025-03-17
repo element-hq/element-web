@@ -95,7 +95,7 @@ test.describe("HTML Export", () => {
         async ({ page, app, room }) => {
             // Set a fixed time rather than masking off the line with the time in it: we don't need to worry
             // about the width changing and we can actually test this line looks correct.
-            page.clock.setSystemTime(new Date("2024-01-01T00:00:00Z"));
+            await page.clock.setSystemTime(new Date("2024-01-01T00:00:00Z"));
 
             // Send a bunch of messages to populate the room
             for (let i = 1; i < 10; i++) {

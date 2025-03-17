@@ -6,14 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { ForwardRefExoticComponent, useContext } from "react";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import React, { type ForwardRefExoticComponent, useContext } from "react";
+import { type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { formatFullDate } from "../../../DateUtils";
 import SettingsStore from "../../../settings/SettingsStore";
-import { IBodyProps } from "./IBodyProps";
+import { type IBodyProps } from "./IBodyProps";
 
 const RedactedBody = React.forwardRef<any, IBodyProps>(({ mxEvent }, ref) => {
     const cli: MatrixClient = useContext(MatrixClientContext);

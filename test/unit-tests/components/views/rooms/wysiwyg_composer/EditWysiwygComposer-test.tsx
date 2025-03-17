@@ -19,8 +19,11 @@ import { EditWysiwygComposer } from "../../../../../../src/components/views/room
 import EditorStateTransfer from "../../../../../../src/utils/EditorStateTransfer";
 import { Emoji } from "../../../../../../src/components/views/rooms/wysiwyg_composer/components/Emoji";
 import { ChevronFace } from "../../../../../../src/components/structures/ContextMenu";
-import { ComposerInsertPayload, ComposerType } from "../../../../../../src/dispatcher/payloads/ComposerInsertPayload";
-import { ActionPayload } from "../../../../../../src/dispatcher/payloads";
+import {
+    type ComposerInsertPayload,
+    ComposerType,
+} from "../../../../../../src/dispatcher/payloads/ComposerInsertPayload";
+import { type ActionPayload } from "../../../../../../src/dispatcher/payloads";
 import * as EmojiButton from "../../../../../../src/components/views/rooms/EmojiButton";
 import { createMocks } from "./utils";
 import { ScopedRoomContextProvider } from "../../../../../../src/contexts/ScopedRoomContext.tsx";

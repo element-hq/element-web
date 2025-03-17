@@ -9,7 +9,8 @@ Please see LICENSE files in the repository root for full details.
 import type { Locator, Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
 import type { Preset, ICreateRoomOpts } from "matrix-js-sdk/src/matrix";
-import { ElementAppPage } from "../../pages/ElementAppPage";
+import { type ElementAppPage } from "../../pages/ElementAppPage";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 async function openSpaceCreateMenu(page: Page): Promise<Locator> {
     await page.getByRole("button", { name: "Create a space" }).click();
@@ -50,6 +51,7 @@ function spaceChildInitialState(roomId: string): ICreateRoomOpts["initial_state"
 }
 
 test.describe("Spaces", () => {
+    test.skip(isDendrite, "due to a Dendrite bug https://github.com/element-hq/dendrite/issues/3488");
     test.use({
         displayName: "Sue",
         botCreateOpts: { displayName: "BotBob" },
@@ -82,7 +84,7 @@ test.describe("Spaces", () => {
 
             // Copy matrix.to link
             await page.getByRole("button", { name: "Share invite link" }).click();
-            expect(await app.getClipboardText()).toEqual("https://matrix.to/#/#lets-have-a-riot:localhost");
+            expect(await app.getClipboard()).toEqual(`https://matrix.to/#/#lets-have-a-riot:${user.homeServer}`);
 
             // Go to space home
             await page.getByRole("button", { name: "Go to my first room" }).click();
@@ -169,13 +171,13 @@ test.describe("Spaces", () => {
             room_alias_name: "space",
         });
 
-        const menu = await openSpaceContextMenu(page, app, "#space:localhost");
+        const menu = await openSpaceContextMenu(page, app, `#space:${user.homeServer}`);
         await menu.getByRole("menuitem", { name: "Invite" }).click();
 
         const shareDialog = page.locator(".mx_SpacePublicShare");
         // Copy link first
         await shareDialog.getByRole("button", { name: "Share invite link" }).click();
-        expect(await app.getClipboardText()).toEqual("https://matrix.to/#/#space:localhost");
+        expect(await app.getClipboard()).toEqual(`https://matrix.to/#/#space:${user.homeServer}`);
         // Start Matrix invite flow
         await shareDialog.getByRole("button", { name: "Invite people" }).click();
 
@@ -225,7 +227,7 @@ test.describe("Spaces", () => {
     test(
         "should render subspaces in the space panel only when expanded",
         { tag: "@screenshot" },
-        async ({ page, app, user, axe, checkA11y }) => {
+        async ({ page, app, user, axe }) => {
             axe.disableRules([
                 // Disable this check as it triggers on nested roving tab index elements which are in practice fine
                 "nested-interactive",
@@ -247,7 +249,7 @@ test.describe("Spaces", () => {
             await expect(spaceTree.getByRole("button", { name: "Root Space" })).toBeVisible();
             await expect(spaceTree.getByRole("button", { name: "Child Space" })).not.toBeVisible();
 
-            await checkA11y();
+            await expect(axe).toHaveNoViolations();
             await expect(page.locator(".mx_SpacePanel")).toMatchScreenshot("space-panel-collapsed.png");
 
             // This finds the expand button with the class name "mx_SpaceButton_toggleCollapse". Note there is another
@@ -259,7 +261,7 @@ test.describe("Spaces", () => {
             await expect(item).toBeVisible();
             await expect(item.locator(".mx_SpaceItem", { hasText: "Child Space" })).toBeVisible();
 
-            await checkA11y();
+            await expect(axe).toHaveNoViolations();
             await expect(page.locator(".mx_SpacePanel")).toMatchScreenshot("space-panel-expanded.png");
         },
     );

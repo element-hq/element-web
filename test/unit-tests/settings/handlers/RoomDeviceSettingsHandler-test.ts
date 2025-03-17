@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import RoomDeviceSettingsHandler from "../../../../src/settings/handlers/RoomDeviceSettingsHandler";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
-import { CallbackFn, WatchManager } from "../../../../src/settings/WatchManager";
+import { type CallbackFn, WatchManager } from "../../../../src/settings/WatchManager";
 
 describe("RoomDeviceSettingsHandler", () => {
     const roomId = "!room:example.com";
