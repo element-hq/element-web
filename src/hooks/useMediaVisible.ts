@@ -8,7 +8,8 @@ Please see LICENSE files in the repository root for full details.
 import { useCallback } from "react";
 
 import { SettingLevel } from "../settings/SettingLevel";
-import { useSettingsValueWithSetter, useSettingValue } from "./useSettings";
+import { useSettingValue } from "./useSettings";
+import SettingsStore from "../settings/SettingsStore";
 
 /**
  * Should the media event be visible in the client, or hidden.
@@ -17,15 +18,15 @@ import { useSettingsValueWithSetter, useSettingValue } from "./useSettings";
  */
 export function useMediaVisible(eventId: string): [boolean, (visible: boolean) => void] {
     const defaultShowImages = useSettingValue("showImages", SettingLevel.DEVICE);
-    const [eventVisibility, setEventIds] = useSettingsValueWithSetter("showMediaEventIds", SettingLevel.DEVICE);
+    const eventVisibility = useSettingValue("showMediaEventIds", SettingLevel.DEVICE);
     const setMediaVisible = useCallback(
         (visible: boolean) => {
-            setEventIds({
+            SettingsStore.setValue("showMediaEventIds", null, SettingLevel.DEVICE, {
                 ...eventVisibility,
                 [eventId]: visible,
             });
         },
-        [setEventIds, eventId, eventVisibility],
+        [eventId, eventVisibility],
     );
 
     const imgIsVisible = eventVisibility[eventId] ?? defaultShowImages;
