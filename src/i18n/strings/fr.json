@@ -455,7 +455,7 @@
         "access_token": "Jeton d’accès",
         "accessibility": "Accessibilité",
         "advanced": "Avancé",
-        "all_rooms": "Tous les salons",
+        "all_chats": "Toutes les discussions",
         "analytics": "Collecte de données",
         "and_n_others": {
             "other": "et %(count)s autres…",
@@ -951,7 +951,7 @@
             "warning": "Si vous n’avez pas activé de nouvelle méthode de récupération, un attaquant essaye peut-être d’accéder à votre compte. Changez immédiatement le mot de passe de votre compte et configurez une nouvelle méthode de récupération dans les paramètres."
         },
         "not_supported": "<non pris en charge>",
-        "pinned_identity_changed": "L'identité de %(displayName)s(<b>%(userId)s</b>) semble avoir changé. <a>En savoir plus </a>",
+        "pinned_identity_changed": "L'identité de %(displayName)s (<b>%(userId)s</b>) semble avoir changé. <a>En savoir plus</a>",
         "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>semble avoir changé d'identité. <a>En savoir plus</a>",
         "recovery_method_removed": {
             "description_1": "Cette session a détecté que votre phrase de sécurité et clé de sécurité pour les messages sécurisés ont été supprimées.",
@@ -2113,6 +2113,7 @@
         "list_title": "Liste de salons",
         "notification_options": "Paramètres de notifications",
         "open_space_menu": "Ouvrir le menu de l’espace",
+        "primary_filters": "Filtre de la liste des salons",
         "redacting_messages_status": {
             "one": "Actuellement en train de supprimer les messages dans %(count)s salon",
             "other": "Actuellement en train de supprimer les messages dans %(count)s salons"
@@ -2508,10 +2509,23 @@
                 "session_key": "Clé de session :",
                 "title": "Avancé"
             },
+            "delete_key_storage": {
+                "breadcrumb_page": "Désactiver la sauvegarde",
+                "confirm": "Désactiver la sauvegarde",
+                "description": "Désactiver la sauvegarde supprimera votre clé de récupération actuelle et désactivera d’autres mesures de sécurité. Dans ce cas :",
+                "list_first": "Pas d’accès à l’historique des discussions chiffrées sur vos nouveaux appareils",
+                "list_second": "Vous perdrez l'accès à vos messages chiffrés si vous êtes déconnecté de %(brand)s sur tout vos appareils",
+                "title": "Êtes-vous certain de vouloir désactiver la sauvegarde ?"
+            },
             "device_not_verified_button": "Vérifiez cet appareil",
             "device_not_verified_description": "Vous devez vérifier cet appareil afin de visualiser vos paramètres de chiffrement.",
             "device_not_verified_title": "Appareil non vérifié",
             "dialog_title": "<strong>Paramètres : </strong> Chiffrement",
+            "key_storage": {
+                "allow_key_storage": "Autoriser le stockage des clés",
+                "description": "Stockez votre identité cryptographique et vos clés de message en toute sécurité sur le serveur. Cela vous permettra de consulter l'historique de vos messages sur tous les nouveaux appareils. <a>En savoir plus</a>",
+                "title": "Stockage des clés"
+            },
             "recovery": {
                 "change_recovery_confirm_button": "Confirmez la nouvelle clé de récupération",
                 "change_recovery_confirm_description": "Saisissez votre nouvelle clé de récupération ci-dessous pour terminer. Votre ancienne clé ne fonctionnera plus.",
@@ -2628,6 +2642,7 @@
         "inline_url_previews_room": "Activer l’aperçu des URL par défaut pour les participants de ce salon",
         "inline_url_previews_room_account": "Activer l’aperçu des URL pour ce salon (n’affecte que vous)",
         "insert_trailing_colon_mentions": "Insérer deux-points après les mentions de l'utilisateur au début d'un message",
+        "invite_avatars": "Afficher les avatars des salons dans lesquels vous avez été invité",
         "jump_to_bottom_on_send": "Sauter en bas du fil de discussion lorsque vous envoyez un message",
         "key_backup": {
             "backup_in_progress": "Vous clés sont en cours de sauvegarde (la première sauvegarde peut prendre quelques minutes).",
@@ -4080,7 +4095,7 @@
         "error_need_to_be_logged_in": "Vous devez être identifié.",
         "error_unable_start_audio_stream_description": "Impossible de démarrer la diffusion audio.",
         "error_unable_start_audio_stream_title": "Échec lors du démarrage de la diffusion en direct",
-        "modal_data_warning": "Les données sur cet écran sont partagées avec %(widgetDomain)s",
+        "modal_data_warning": "Les données ci-dessous sont partagées avec %(widgetDomain)s",
         "modal_title_default": "Fenêtre de widget",
         "no_name": "Application inconnue",
         "open_id_permissions_dialog": {

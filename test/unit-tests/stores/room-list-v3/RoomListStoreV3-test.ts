@@ -24,6 +24,8 @@ import { DefaultTagID } from "../../../../src/stores/room-list/models";
 import { FilterKey } from "../../../../src/stores/room-list-v3/skip-list/filters";
 import { RoomNotificationStateStore } from "../../../../src/stores/notifications/RoomNotificationStateStore";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
+import { SortingAlgorithm } from "../../../../src/stores/room-list-v3/skip-list/sorters";
+import SettingsStore from "../../../../src/settings/SettingsStore";
 
 describe("RoomListStoreV3", () => {
     async function getRoomListStore() {
@@ -53,6 +55,10 @@ describe("RoomListStoreV3", () => {
         }) as () => DMRoomMap);
     });
 
+    afterEach(() => {
+        jest.restoreAllMocks();
+    });
+
     it("Provides an unsorted list of rooms", async () => {
         const { store, rooms } = await getRoomListStore();
         expect(store.getRooms()).toEqual(rooms);
@@ -69,14 +75,24 @@ describe("RoomListStoreV3", () => {
         const { store, rooms, client } = await getRoomListStore();
 
         // List is sorted by recency, sort by alphabetical now
-        store.useAlphabeticSorting();
+        store.resort(SortingAlgorithm.Alphabetic);
         let sortedRooms = new AlphabeticSorter().sort(rooms);
         expect(store.getSortedRooms()).toEqual(sortedRooms);
+        expect(store.activeSortAlgorithm).toEqual(SortingAlgorithm.Alphabetic);
 
         // Go back to recency sorting
-        store.useRecencySorting();
+        store.resort(SortingAlgorithm.Recency);
         sortedRooms = new RecencySorter(client.getSafeUserId()).sort(rooms);
         expect(store.getSortedRooms()).toEqual(sortedRooms);
+        expect(store.activeSortAlgorithm).toEqual(SortingAlgorithm.Recency);
+    });
+
+    it("Uses preferred sorter on startup", async () => {
+        jest.spyOn(SettingsStore, "getValue").mockImplementation(() => {
+            return SortingAlgorithm.Alphabetic;
+        });
+        const { store } = await getRoomListStore();
+        expect(store.activeSortAlgorithm).toEqual(SortingAlgorithm.Alphabetic);
     });
 
     describe("Updates", () => {

@@ -69,7 +69,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
         />
         <section
           class="mx_Flex mx_RoomSummaryCard_badges"
-          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x);"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <span
             class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_1t12g_8"
@@ -91,7 +91,7 @@ exports[`<RoomSummaryCard /> has button to edit topic 1`] = `
         </section>
         <section
           class="mx_Flex mx_RoomSummaryCard_topic"
-          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x);"
+          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <div
             class="mx_Box mx_RoomSummaryCard_topic_container mx_Box--flex"
@@ -724,7 +724,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         />
         <section
           class="mx_Flex mx_RoomSummaryCard_badges"
-          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x);"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <span
             class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_1t12g_8"
@@ -746,7 +746,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         </section>
         <section
           class="mx_Flex mx_RoomSummaryCard_topic"
-          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x);"
+          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <div
             class="mx_Box mx_Box--flex"
@@ -1342,7 +1342,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
         />
         <section
           class="mx_Flex mx_RoomSummaryCard_badges"
-          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x);"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <span
             class="_typography_6v6n8_153 _font-body-sm-medium_6v6n8_41 _badge_1t12g_8"
@@ -1364,7 +1364,7 @@ exports[`<RoomSummaryCard /> renders the room topic in the summary 1`] = `
         </section>
         <section
           class="mx_Flex mx_RoomSummaryCard_topic"
-          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x);"
+          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <div
             class="mx_Box mx_RoomSummaryCard_topic_container mx_Box--flex"

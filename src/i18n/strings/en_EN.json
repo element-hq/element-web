@@ -455,7 +455,7 @@
         "access_token": "Access Token",
         "accessibility": "Accessibility",
         "advanced": "Advanced",
-        "all_rooms": "All rooms",
+        "all_chats": "All Chats",
         "analytics": "Analytics",
         "and_n_others": {
             "one": "and one other...",
@@ -2115,13 +2115,23 @@
             "other": "Currently joining %(count)s rooms"
         },
         "list_title": "Room list",
+        "more_options": {
+            "copy_link": "Copy room link",
+            "favourited": "Favourited",
+            "leave_room": "Leave room",
+            "low_priority": "Low priority",
+            "mark_read": "Mark as read",
+            "mark_unread": "Mark as unread"
+        },
         "notification_options": "Notification options",
         "open_space_menu": "Open space menu",
+        "primary_filters": "Room list filters",
         "redacting_messages_status": {
             "one": "Currently removing messages in %(count)s room",
             "other": "Currently removing messages in %(count)s rooms"
         },
         "room": {
+            "more_options": "More Options",
             "open_room": "Open room %(roomName)s"
         },
         "show_less": "Show less",
@@ -2512,10 +2522,23 @@
                 "session_key": "Session key:",
                 "title": "Advanced"
             },
+            "delete_key_storage": {
+                "breadcrumb_page": "Delete key storage",
+                "confirm": "Delete key storage",
+                "description": "Deleting key storage will remove your cryptographic identity and message keys from the server and turn off the following security features:",
+                "list_first": "You will not have encrypted message history on new devices",
+                "list_second": "You will lose access to your encrypted messages if you are signed out of %(brand)s everywhere",
+                "title": "Are you sure you want to turn off key storage and delete it?"
+            },
             "device_not_verified_button": "Verify this device",
             "device_not_verified_description": "You need to verify this device in order to view your encryption settings.",
             "device_not_verified_title": "Device not verified",
             "dialog_title": "<strong>Settings:</strong> Encryption",
+            "key_storage": {
+                "allow_key_storage": "Allow key storage",
+                "description": "Store your cryptographic identity and message keys securely on the server. This will allow you to view your message history on any new devices. <a>Learn more</a>",
+                "title": "Key storage"
+            },
             "recovery": {
                 "change_recovery_confirm_button": "Confirm new recovery key",
                 "change_recovery_confirm_description": "Enter your new recovery key below to finish. Your old one will no longer work.",
@@ -2632,6 +2655,7 @@
         "inline_url_previews_room": "Enable URL previews by default for participants in this room",
         "inline_url_previews_room_account": "Enable URL previews for this room (only affects you)",
         "insert_trailing_colon_mentions": "Insert a trailing colon after user mentions at the start of a message",
+        "invite_avatars": "Show avatars of rooms you have been invited to",
         "jump_to_bottom_on_send": "Jump to the bottom of the timeline when you send a message",
         "key_backup": {
             "backup_in_progress": "Your keys are being backed up (the first backup could take a few minutes).",
@@ -4084,7 +4108,7 @@
         "error_need_to_be_logged_in": "You need to be logged in.",
         "error_unable_start_audio_stream_description": "Unable to start audio streaming.",
         "error_unable_start_audio_stream_title": "Failed to start livestream",
-        "modal_data_warning": "Data on this screen is shared with %(widgetDomain)s",
+        "modal_data_warning": "The data below is shared with %(widgetDomain)s",
         "modal_title_default": "Modal Widget",
         "no_name": "Unknown App",
         "open_id_permissions_dialog": {

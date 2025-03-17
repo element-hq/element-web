@@ -99,7 +99,7 @@ exports[`<UnsupportedBrowserView /> should match snapshot 1`] = `
       </p>
       <div
         class="mx_Flex mx_ErrorView_buttons"
-        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x);"
+        style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
       >
         <button
           class="_button_vczzf_8 _has-icon_vczzf_57"
@@ -140,7 +140,7 @@ exports[`<UnsupportedBrowserView /> should match snapshot 1`] = `
     </h2>
     <div
       class="mx_Flex"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x);"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
     >
       <a
         class="_button_vczzf_8 _has-icon_vczzf_57"
@@ -210,7 +210,7 @@ exports[`<UnsupportedBrowserView /> should match snapshot 1`] = `
     </h2>
     <div
       class="mx_Flex"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-6x);"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-6x); --mx-flex-wrap: nowrap;"
     >
       <a
         href="https://apps.apple.com/app/vector/id1083446067"
