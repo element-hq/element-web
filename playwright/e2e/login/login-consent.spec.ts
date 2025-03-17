@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Page } from "playwright-core";
+import { type Page } from "@playwright/test";
 
 import { expect, test } from "../../element-web-test";
 import { selectHomeserver } from "../utils";
@@ -120,7 +120,7 @@ test.describe("Login", () => {
             credentials,
             page,
             homeserver,
-            checkA11y,
+            axe,
         }) => {
             await page.goto("/");
 
@@ -149,7 +149,7 @@ test.describe("Login", () => {
             await expect(page.getByRole("textbox", { name: "Username" })).toBeVisible();
             // Disabled because flaky - see https://github.com/vector-im/element-web/issues/24688
             // cy.percySnapshot("Login");
-            await checkA11y();
+            await expect(axe).toHaveNoViolations();
 
             await page.getByRole("textbox", { name: "Username" }).fill(credentials.username);
             await page.getByPlaceholder("Password").fill(credentials.password);
