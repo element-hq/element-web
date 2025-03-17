@@ -57,7 +57,7 @@ export type State =
 
 interface Props {
     /**
-     * If the tab should start in a state other than the deafult
+     * If the tab should start in a state other than the default
      */
     initialState?: State;
 }
