@@ -22,7 +22,7 @@ import {
     mockClientMethodsUser,
 } from "../../../../test-utils";
 import MVideoBody from "../../../../../src/components/views/messages/MVideoBody";
-import { IBodyProps } from "../../../../../src/components/views/messages/IBodyProps";
+import type { IBodyProps } from "../../../../../src/components/views/messages/IBodyProps";
 
 describe("MVideoBody", () => {
     it("does not crash when given a portrait image", () => {

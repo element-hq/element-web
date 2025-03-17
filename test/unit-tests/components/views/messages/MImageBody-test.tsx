@@ -169,7 +169,7 @@ describe("<MImageBody/>", () => {
             expect(fetchMock).not.toHaveFetched(url);
         });
 
-        it.only("should render hidden image placeholder", async () => {
+        it("should render hidden image placeholder", async () => {
             fetchMock.getOnce(url, { status: 200 });
 
             render(
