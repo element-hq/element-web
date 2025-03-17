@@ -682,18 +682,6 @@ export class ElementCall extends Call {
         const elementCallUrl = SettingsStore.getValue("Developer.elementCallUrl");
         if (elementCallUrl) url = new URL(elementCallUrl);
 
-        const accountAnalyticsData = client.getAccountData(PosthogAnalytics.ANALYTICS_EVENT_TYPE);
-        // The analyticsID is passed directly to element call (EC) since this codepath is only for EC and no other widget.
-        // We really don't want the same analyticID's for the EC and EW posthog instances (Data on posthog should be limited/anonymized as much as possible).
-        // This is prohibited in EC where a hashed version of the analyticsID is used for the actual posthog identification.
-        // We can pass the raw EW analyticsID here since we need to trust EC with not sending sensitive data to posthog (EC has access to more sensible data than the analyticsID e.g. the username)
-        const analyticsID: string = accountAnalyticsData?.getContent().pseudonymousAnalyticsOptIn
-            ? accountAnalyticsData?.getContent().id
-            : "";
-
-        const posthog =
-            PosthogAnalytics.instance.getAnonymity() !== Anonymity.Disabled ? SdkConfig.get("posthog") : undefined;
-
         // Splice together the Element Call URL for this call
         const params = new URLSearchParams({
             embed: "true", // We're embedding EC within another application
@@ -710,11 +698,35 @@ export class ElementCall extends Call {
             lang: getCurrentLanguage().replace("_", "-"),
             fontScale: (FontWatcher.getRootFontSize() / FontWatcher.getBrowserDefaultFontSize()).toString(),
             theme: "$org.matrix.msc2873.client_theme",
-            analyticsID,
-            rageshakeSubmitUrl: SdkConfig.get("bug_report_endpoint_url") ?? "",
-            posthogApiHost: posthog?.api_host ?? "",
-            posthogApiKey: posthog?.project_api_key ?? "",
         });
+
+        const rageshakeSubmitUrl = SdkConfig.get("bug_report_endpoint_url");
+        if (rageshakeSubmitUrl) {
+            params.set("rageshakeSubmitUrl", rageshakeSubmitUrl);
+        }
+
+        const posthogConfig = SdkConfig.get("posthog");
+        if (posthogConfig && PosthogAnalytics.instance.getAnonymity() !== Anonymity.Disabled) {
+            const accountAnalyticsData = client.getAccountData(PosthogAnalytics.ANALYTICS_EVENT_TYPE)?.getContent();
+            // The analyticsID is passed directly to element call (EC) since this codepath is only for EC and no other widget.
+            // We really don't want the same analyticID's for the EC and EW posthog instances (Data on posthog should be limited/anonymized as much as possible).
+            // This is prohibited in EC where a hashed version of the analyticsID is used for the actual posthog identification.
+            // We can pass the raw EW analyticsID here since we need to trust EC with not sending sensitive data to posthog (EC has access to more sensible data than the analyticsID e.g. the username)
+            const analyticsID: string = accountAnalyticsData?.pseudonymousAnalyticsOptIn
+                ? accountAnalyticsData?.id
+                : "";
+
+            params.set("analyticsID", analyticsID); // Legacy, deprecated in favour of posthogUserId
+            params.set("posthogUserId", analyticsID);
+            params.set("posthogApiHost", posthogConfig.api_host);
+            params.set("posthogApiKey", posthogConfig.project_api_key);
+        }
+
+        const sentryConfig = SdkConfig.get("sentry");
+        if (sentryConfig) {
+            params.set("sentryDsn", sentryConfig.dsn);
+            params.set("sentryEnvironment", sentryConfig.environment ?? "");
+        }
 
         if (SettingsStore.getValue("fallbackICEServerAllowed")) params.append("allowIceFallback", "true");
         if (SettingsStore.getValue("feature_allow_screen_share_only_mode"))
