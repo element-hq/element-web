@@ -56,10 +56,22 @@ interface IState {
     placeholder: Placeholder;
 }
 
+interface IProps extends IBodyProps {
+    /**
+     * Should the media be behind a preview.
+     */
+    mediaVisible: boolean;
+    /**
+     * Set the visibility of the media event.
+     * @param visible Should the event be visible.
+     */
+    setMediaVisible: (visible: boolean) => void;
+}
+
 /**
  * @private Only use for inheritance. Use the default export for presentation.
  */
-export class MImageBodyInner extends React.Component<IBodyProps, IState> {
+export class MImageBodyInner extends React.Component<IProps, IState> {
     public static contextType = RoomContext;
     declare public context: React.ContextType<typeof RoomContext>;
 
@@ -364,7 +376,7 @@ export class MImageBodyInner extends React.Component<IBodyProps, IState> {
         });
     }
 
-    public componentDidUpdate(prevProps: Readonly<IBodyProps>): void {
+    public componentDidUpdate(prevProps: Readonly<IProps>): void {
         if (!prevProps.mediaVisible && this.props.mediaVisible) {
             // noinspection JSIgnoredPromiseFromCall
             this.downloadImage();

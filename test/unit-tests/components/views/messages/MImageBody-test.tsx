@@ -161,7 +161,6 @@ describe("<MImageBody/>", () => {
             render(
                 <MImageBody
                     {...props}
-                    mediaVisible={false}
                     mxEvent={encryptedMediaEvent}
                     mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
                 />,
