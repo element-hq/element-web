@@ -220,7 +220,7 @@ describe("RoomListViewModel", () => {
     });
 
     describe("message preview toggle", () => {
-        it("should return showMessagePreview based on setting", () => {
+        it("should return shouldShowMessagePreview based on setting", () => {
             jest.spyOn(SettingsStore, "getValue").mockImplementation(() => true);
             mockAndCreateRooms();
             const { result: vm } = renderHook(() => useRoomListViewModel());
