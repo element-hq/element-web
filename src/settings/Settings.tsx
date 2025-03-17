@@ -314,6 +314,7 @@ export interface Settings {
     "showImages": IBaseSetting<boolean>;
     "showAvatarsOnInvites": IBaseSetting<boolean>;
     "RoomList.preferredSorting": IBaseSetting<SortingAlgorithm>;
+    "RoomList.showMessagePreview": IBaseSetting<boolean>;
     "RightPanel.phasesGlobal": IBaseSetting<IRightPanelForRoomStored | null>;
     "RightPanel.phases": IBaseSetting<IRightPanelForRoomStored | null>;
     "enableEventIndexing": IBaseSetting<boolean>;
@@ -1125,6 +1126,10 @@ export const SETTINGS: Settings = {
     "RoomList.preferredSorting": {
         supportedLevels: [SettingLevel.DEVICE],
         default: SortingAlgorithm.Recency,
+    },
+    "RoomList.showMessagePreview": {
+        supportedLevels: [SettingLevel.DEVICE],
+        default: false,
     },
     "RightPanel.phasesGlobal": {
         supportedLevels: [SettingLevel.DEVICE],
