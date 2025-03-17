@@ -12001,10 +12001,10 @@ test-exclude@^6.0.0:
     glob "^7.1.4"
     minimatch "^3.0.4"
 
-testcontainers@^10.16.0, testcontainers@^10.19.0:
-  version "10.19.0"
-  resolved "https://registry.yarnpkg.com/testcontainers/-/testcontainers-10.19.0.tgz#007138559c6de68c80334232a259f4e94fa19955"
-  integrity sha512-/mbcCOaj6jj2IPMMmt+YrBi71MZ4BqEzqicjAInsfEox4pVVMnYIW4CkWOdCLiuZ9nVUkoBtxFSJDTqggJNB5A==
+testcontainers@10.20.0, testcontainers@^10.18.0, testcontainers@^10.19.0, testcontainers@^10.20.0:
+  version "10.20.0"
+  resolved "https://registry.yarnpkg.com/testcontainers/-/testcontainers-10.20.0.tgz#45c524ae4be9b1ffe2fb42b701f6c0a04ee2d90a"
+  integrity sha512-pOPm/OUIT41aMijAZ9RsYg5xOq9ciy93+pCf2D9qDI0oV8rwk91XpPoUlizll4qwxmmHsLmfZFHJTpeB+BIfmw==
   dependencies:
     "@balena/dockerignore" "^1.0.2"
     "@types/dockerode" "^3.3.29"
