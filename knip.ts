@@ -41,7 +41,7 @@ export default {
         "process",
         "util",
         // Embedded into webapp
-        "@vector-im/element-call-embedded",
+        "@element-hq/element-call-embedded",
     ],
     ignoreBinaries: [
         // Used in scripts & workflows

@@ -1546,6 +1546,11 @@
   resolved "https://registry.yarnpkg.com/@dual-bundle/import-meta-resolve/-/import-meta-resolve-4.1.0.tgz#519c1549b0e147759e7825701ecffd25e5819f7b"
   integrity sha512-+nxncfwHM5SgAtrVzgpzJOI1ol0PkumhVo469KCf9lUi21IGcY90G98VuHm9VRrUypmAzawAHO9bs6hqeADaVg==
 
+"@element-hq/element-call-embedded@^0.9.0-release-test.8":
+  version "0.9.0-release-test.8"
+  resolved "https://registry.yarnpkg.com/@element-hq/element-call-embedded/-/element-call-embedded-0.9.0-release-test.8.tgz#40a203818e253c7f2f4d1c5962743ec8ea5648d0"
+  integrity sha512-qBF1g10ExIQM4OWynPUBuQWA60357QR2HPpDzzLlPw+VJB318QKN0/yg7LU/dfJzPyuKOSWLcarePX8KdMBwBw==
+
 "@element-hq/element-web-module-api@^0.1.1":
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/@element-hq/element-web-module-api/-/element-web-module-api-0.1.1.tgz#e2b24aa38aa9f7b6af3c4993e6402a8b7e2f3cb5"
@@ -3585,12 +3590,7 @@
     classnames "^2.5.1"
     vaul "^1.0.0"
 
-"@vector-im/element-call-embedded@^0.9.0-release-test.3":
-  version "0.9.0-release-test.3"
-  resolved "https://registry.yarnpkg.com/@vector-im/element-call-embedded/-/element-call-embedded-0.9.0-release-test.3.tgz#74e3b868be5ad49b85e40eab66321a41b30586d2"
-  integrity sha512-TFS+0XwfY8MadgpV2zTcCpMLl0yz+0GL+X8pcp2kMl8rqptIKqzvjgGyuSYDGsYUECOyrTJZxORWWCiY5atlng==
-
-"@vector-im/matrix-wysiwyg-wasm@link:../../../.cache/yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.2-3fa19a2a17fd12d955ef1e14fd63aecbcf3b95e8-integrity/node_modules/bindings/wysiwyg-wasm":
+"@vector-im/matrix-wysiwyg-wasm@link:../../../Library/Caches/Yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.2-3fa19a2a17fd12d955ef1e14fd63aecbcf3b95e8-integrity/node_modules/bindings/wysiwyg-wasm":
   version "0.0.0"
   uid ""
 
@@ -3599,7 +3599,7 @@
   resolved "https://registry.yarnpkg.com/@vector-im/matrix-wysiwyg/-/matrix-wysiwyg-2.38.2.tgz#3fa19a2a17fd12d955ef1e14fd63aecbcf3b95e8"
   integrity sha512-TUnLPgZ8/zGUccQZxjIP3MVHjqybgV4u0r6kXibs35wlXgomXjwcN5gchl3FpgGkiHbi8g3D2ao0oHaqi2GaIw==
   dependencies:
-    "@vector-im/matrix-wysiwyg-wasm" "link:../../../Library/Caches/Yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.2-3fa19a2a17fd12d955ef1e14fd63aecbcf3b95e8-integrity/node_modules/bindings/wysiwyg-wasm"
+    "@vector-im/matrix-wysiwyg-wasm" "link:../../Library/Caches/Yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.2-3fa19a2a17fd12d955ef1e14fd63aecbcf3b95e8-integrity/node_modules/bindings/wysiwyg-wasm"
 
 "@webassemblyjs/ast@1.14.1", "@webassemblyjs/ast@^1.14.1":
   version "1.14.1"

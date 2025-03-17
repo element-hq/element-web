@@ -677,7 +677,7 @@ module.exports = (env, argv) => {
                     // Element Call embedded widget
                     {
                         from: "**",
-                        context: path.resolve(__dirname, "node_modules/@vector-im/element-call-embedded/dist"),
+                        context: path.resolve(__dirname, "node_modules/@element-hq/element-call-embedded/dist"),
                         to: path.join(__dirname, "webapp", "widgets", "element-call"),
                     },
                 ],
