@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2018-2024 The Matrix.org Foundation C.I.C.
 Copyright 2017 Travis Ralston
 
@@ -44,6 +44,7 @@ import { type ReleaseAnnouncementData } from "../stores/ReleaseAnnouncementStore
 import { type Json, type JsonValue } from "../@types/json.ts";
 import { type RecentEmojiData } from "../emojipicker/recent.ts";
 import { type Assignable } from "../@types/common.ts";
+import { SortingAlgorithm } from "../stores/room-list-v3/skip-list/sorters/index.ts";
 
 export const defaultWatchManager = new WatchManager();
 
@@ -272,6 +273,7 @@ export interface Settings {
     "language": IBaseSetting<string>;
     "breadcrumb_rooms": IBaseSetting<string[]>;
     "recent_emoji": IBaseSetting<RecentEmojiData>;
+    "showMediaEventIds": IBaseSetting<{ [eventId: string]: boolean }>;
     "SpotlightSearch.recentSearches": IBaseSetting<string[]>;
     "SpotlightSearch.showNsfwPublicRooms": IBaseSetting<boolean>;
     "room_directory_servers": IBaseSetting<string[]>;
@@ -311,6 +313,9 @@ export interface Settings {
     "lowBandwidth": IBaseSetting<boolean>;
     "fallbackICEServerAllowed": IBaseSetting<boolean | null>;
     "showImages": IBaseSetting<boolean>;
+    "showAvatarsOnInvites": IBaseSetting<boolean>;
+    "RoomList.preferredSorting": IBaseSetting<SortingAlgorithm>;
+    "RoomList.showMessagePreview": IBaseSetting<boolean>;
     "RightPanel.phasesGlobal": IBaseSetting<IRightPanelForRoomStored | null>;
     "RightPanel.phases": IBaseSetting<IRightPanelForRoomStored | null>;
     "enableEventIndexing": IBaseSetting<boolean>;
@@ -968,6 +973,11 @@ export const SETTINGS: Settings = {
         supportedLevels: [SettingLevel.ACCOUNT],
         default: [], // list of room IDs, most recent first
     },
+    "showMediaEventIds": {
+        // not really a setting
+        supportedLevels: [SettingLevel.DEVICE],
+        default: {}, // List of events => is visible
+    },
     "SpotlightSearch.showNsfwPublicRooms": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("settings|show_nsfw_content"),
@@ -1115,6 +1125,19 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("settings|image_thumbnails"),
         default: true,
+    },
+    "showAvatarsOnInvites": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("settings|invite_avatars"),
+        default: true,
+    },
+    "RoomList.preferredSorting": {
+        supportedLevels: [SettingLevel.DEVICE],
+        default: SortingAlgorithm.Recency,
+    },
+    "RoomList.showMessagePreview": {
+        supportedLevels: [SettingLevel.DEVICE],
+        default: false,
     },
     "RightPanel.phasesGlobal": {
         supportedLevels: [SettingLevel.DEVICE],

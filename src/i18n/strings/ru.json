@@ -405,7 +405,6 @@
         "access_token": "Токен доступа",
         "accessibility": "Доступность",
         "advanced": "Подробности",
-        "all_rooms": "Все комнаты",
         "analytics": "Аналитика",
         "and_n_others": {
             "other": "и %(count)s других...",

@@ -7,7 +7,7 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
   >
     <header
       class="mx_Flex mx_RoomHeader light-panel"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       <button
         aria-label="Open room settings"
@@ -222,7 +222,7 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
   >
     <header
       class="mx_Flex mx_RoomHeader light-panel"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       <button
         aria-label="Open room settings"
@@ -522,7 +522,7 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
   >
     <header
       class="mx_Flex mx_RoomHeader light-panel"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       <button
         aria-label="Open room settings"
@@ -899,7 +899,7 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
   >
     <header
       class="mx_Flex mx_RoomHeader light-panel"
-      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+      style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
     >
       <button
         aria-label="Open room settings"
@@ -1284,7 +1284,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
       >
         <header
           class="mx_Flex mx_RoomHeader light-panel"
-          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
         >
           <button
             aria-label="Open room settings"
@@ -1492,7 +1492,7 @@ exports[`RoomView should not display the timeline when the room encryption is lo
       >
         <header
           class="mx_Flex mx_RoomHeader light-panel"
-          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
         >
           <button
             aria-label="Open room settings"
@@ -1873,7 +1873,7 @@ exports[`RoomView video rooms should render joined video room view 1`] = `
       >
         <header
           class="mx_Flex mx_RoomHeader light-panel"
-          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x);"
+          style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
         >
           <button
             aria-label="Open room settings"

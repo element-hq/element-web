@@ -5,18 +5,20 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback } from "react";
 
 import type { Room } from "matrix-js-sdk/src/matrix";
-import type { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import type { TranslationKey } from "../../../languageHandler";
-import RoomListStoreV3 from "../../../stores/room-list-v3/RoomListStoreV3";
-import { useEventEmitter } from "../../../hooks/useEventEmitter";
-import { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
+import { type PrimaryFilter, type SecondaryFilters, useFilteredRooms } from "./useFilteredRooms";
+import { type SortOption, useSorter } from "./useSorter";
+import { useMessagePreviewToggle } from "./useMessagePreviewToggle";
+import { createRoom as createRoomFunc, hasCreateRoomRights } from "./utils";
+import { useEventEmitterState } from "../../../hooks/useEventEmitter";
+import { UPDATE_SELECTED_SPACE } from "../../../stores/spaces";
+import SpaceStore from "../../../stores/spaces/SpaceStore";
 import dispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
-import { FilterKey } from "../../../stores/room-list-v3/skip-list/filters";
-import { _t, _td } from "../../../languageHandler";
+import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
+import { useIndexForActiveRoom } from "./useIndexForActiveRoom";
 
 export interface RoomListViewState {
     /**
@@ -25,15 +27,68 @@ export interface RoomListViewState {
     rooms: Room[];
 
     /**
-     * Open the room having given roomId.
+     * Create a chat room
+     * @param e - The click event
      */
-    openRoom: (roomId: string) => void;
+    createChatRoom: () => void;
+
+    /**
+     * Whether the user can create a room in the current space
+     */
+    canCreateRoom: boolean;
+
+    /**
+     * Create a room
+     * @param e - The click event
+     */
+    createRoom: () => void;
 
     /**
      * A list of objects that provide the view enough information
      * to render primary room filters.
      */
     primaryFilters: PrimaryFilter[];
+
+    /**
+     * The currently active primary filter.
+     * If no primary filter is active, this will be undefined.
+     */
+    activePrimaryFilter?: PrimaryFilter;
+
+    /**
+     * A function to activate a given secondary filter.
+     */
+    activateSecondaryFilter: (filter: SecondaryFilters) => void;
+
+    /**
+     * The currently active secondary filter.
+     */
+    activeSecondaryFilter: SecondaryFilters;
+
+    /**
+     * Change the sort order of the room-list.
+     */
+    sort: (option: SortOption) => void;
+
+    /**
+     * The currently active sort option.
+     */
+    activeSortOption: SortOption;
+
+    /**
+     * Whether message previews must be shown or not.
+     */
+    shouldShowMessagePreview: boolean;
+
+    /**
+     * A function to turn on/off message previews.
+     */
+    toggleMessagePreview: () => void;
+
+    /**
+     * The index of the active room in the room list.
+     */
+    activeIndex: number | undefined;
 }
 
 /**
@@ -41,87 +96,37 @@ export interface RoomListViewState {
  * @see {@link RoomListViewState} for more information about what this view model returns.
  */
 export function useRoomListViewModel(): RoomListViewState {
-    const { primaryFilters, rooms } = useFilteredRooms();
+    const matrixClient = useMatrixClientContext();
+    const { primaryFilters, activePrimaryFilter, rooms, activateSecondaryFilter, activeSecondaryFilter } =
+        useFilteredRooms();
 
-    const openRoom = useCallback((roomId: string): void => {
-        dispatcher.dispatch<ViewRoomPayload>({
-            action: Action.ViewRoom,
-            room_id: roomId,
-            metricsTrigger: "RoomList",
-        });
-    }, []);
+    const currentSpace = useEventEmitterState<Room | null>(
+        SpaceStore.instance,
+        UPDATE_SELECTED_SPACE,
+        () => SpaceStore.instance.activeSpaceRoom,
+    );
+    const canCreateRoom = hasCreateRoomRights(matrixClient, currentSpace);
+
+    const activeIndex = useIndexForActiveRoom(rooms);
+    const { activeSortOption, sort } = useSorter();
+    const { shouldShowMessagePreview, toggleMessagePreview } = useMessagePreviewToggle();
+
+    const createChatRoom = useCallback(() => dispatcher.fire(Action.CreateChat), []);
+    const createRoom = useCallback(() => createRoomFunc(currentSpace), [currentSpace]);
 
     return {
         rooms,
-        openRoom,
+        canCreateRoom,
+        createRoom,
+        createChatRoom,
         primaryFilters,
+        activePrimaryFilter,
+        activateSecondaryFilter,
+        activeSecondaryFilter,
+        activeSortOption,
+        sort,
+        shouldShowMessagePreview,
+        toggleMessagePreview,
+        activeIndex,
     };
-}
-
-/**
- * Provides information about a primary filter.
- * A primary filter is a commonly used filter that is given
- * more precedence in the UI. For eg, primary filters may be
- * rendered as pills above the room list.
- */
-interface PrimaryFilter {
-    // A function to toggle this filter on and off.
-    toggle: () => void;
-    // Whether this filter is currently applied
-    active: boolean;
-    // Text that can be used in the UI to represent this filter.
-    name: string;
-}
-
-interface FilteredRooms {
-    primaryFilters: PrimaryFilter[];
-    rooms: Room[];
-}
-
-const filterKeyToNameMap: Map<FilterKey, TranslationKey> = new Map([
-    [FilterKey.UnreadFilter, _td("room_list|filters|unread")],
-    [FilterKey.FavouriteFilter, _td("room_list|filters|favourite")],
-    [FilterKey.PeopleFilter, _td("room_list|filters|people")],
-    [FilterKey.RoomsFilter, _td("room_list|filters|rooms")],
-]);
-
-/**
- * Track available filters and provide a filtered list of rooms.
- */
-function useFilteredRooms(): FilteredRooms {
-    const [primaryFilter, setPrimaryFilter] = useState<FilterKey | undefined>();
-    const [rooms, setRooms] = useState(() => RoomListStoreV3.instance.getSortedRoomsInActiveSpace());
-
-    const updateRoomsFromStore = useCallback((filter?: FilterKey): void => {
-        const filters = filter !== undefined ? [filter] : [];
-        const newRooms = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(filters);
-        setRooms(newRooms);
-    }, []);
-
-    useEventEmitter(RoomListStoreV3.instance, LISTS_UPDATE_EVENT, () => {
-        updateRoomsFromStore(primaryFilter);
-    });
-
-    const primaryFilters = useMemo(() => {
-        const createPrimaryFilter = (key: FilterKey, name: string): PrimaryFilter => {
-            return {
-                toggle: () => {
-                    setPrimaryFilter((currentFilter) => {
-                        const filter = currentFilter === key ? undefined : key;
-                        updateRoomsFromStore(filter);
-                        return filter;
-                    });
-                },
-                active: primaryFilter === key,
-                name,
-            };
-        };
-        const filters: PrimaryFilter[] = [];
-        for (const [key, name] of filterKeyToNameMap.entries()) {
-            filters.push(createPrimaryFilter(key, _t(name)));
-        }
-        return filters;
-    }, [primaryFilter, updateRoomsFromStore]);
-
-    return { primaryFilters, rooms };
 }
