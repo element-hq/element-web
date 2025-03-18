@@ -68,7 +68,7 @@
         "update:jitsi": "curl -s https://meet.element.io/libs/external_api.min.js > ./res/jitsi_external_api.min.js"
     },
     "resolutions": {
-        "@playwright/test": "1.51.0",
+        "@playwright/test": "1.51.1",
         "@types/react": "18.3.18",
         "@types/react-dom": "18.3.5",
         "oidc-client-ts": "3.2.0",
