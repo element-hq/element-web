@@ -61,6 +61,7 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps, State> {
     private handleSummaryToggle = () => {
         this.setState((prevState) => ({
             showSummary: !prevState.showSummary,
+            showTranscript: false, // Ensure transcript is hidden when summary is toggled
         }));
     };
 
@@ -141,6 +142,7 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps, State> {
     private handleTranscriptToggle = () => {
         this.setState((prevState) => ({
             showTranscript: !prevState.showTranscript,
+            showSummary: false, // Ensure summary is hidden when transcript is toggled
         }));
     };
 
@@ -185,7 +187,7 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps, State> {
                     <div className="mx_AudioPlayer_buttonContainer">
                         <AccessibleButton
                             className={classnames("mx_AudioPlayer_transcribeButton mx_AccessibleButton", {
-                                mx_AudioPlayer_transcribeButton_active: this.state.showTranscript,
+                                mx_AudioPlayer_transcribeButton_active: this.state.showTranscript && !this.state.showSummary,
                             })}
                             onClick={this.handleTranscriptToggle}
                         >
@@ -196,7 +198,7 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps, State> {
                             className={classnames(
                                 "mx_AudioPlayer_transcribeButton mx_AudioPlayer_secondButton mx_AccessibleButton",
                                 {
-                                    mx_AudioPlayer_transcribeButton_active: this.state.showSummary,
+                                    mx_AudioPlayer_transcribeButton_active: this.state.showSummary && !this.state.showTranscript,
                                 },
                             )}
                             onClick={this.handleSummaryToggle}
