@@ -130,8 +130,8 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
 
     private reactButtonRef = createRef<any>(); // XXX Ref to a functional component
 
-    public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         this.state = {
             canRedact: false,

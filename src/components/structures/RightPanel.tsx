@@ -64,10 +64,6 @@ export default class RightPanel extends React.Component<Props, IState> {
     public static contextType = MatrixClientContext;
     declare public context: React.ContextType<typeof MatrixClientContext>;
 
-    public constructor(props: Props, context: React.ContextType<typeof MatrixClientContext>) {
-        super(props, context);
-    }
-
     private readonly delayedUpdate = throttle(
         (): void => {
             this.forceUpdate();

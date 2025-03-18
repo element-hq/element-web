@@ -33,8 +33,8 @@ export default class HelpUserSettingsTab extends React.Component<EmptyObject, IS
     public static contextType = MatrixClientContext;
     declare public context: React.ContextType<typeof MatrixClientContext>;
 
-    public constructor(props: EmptyObject, context: React.ContextType<typeof MatrixClientContext>) {
-        super(props, context);
+    public constructor(props: EmptyObject) {
+        super(props);
 
         this.state = {
             appVersion: null,

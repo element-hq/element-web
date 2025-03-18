@@ -71,8 +71,8 @@ export default class ReplyChain extends React.Component<IProps, IState> {
     private room: Room;
     private blockquoteRef = React.createRef<HTMLQuoteElement>();
 
-    public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         this.state = {
             events: [],
