@@ -3614,7 +3614,6 @@
 
 "@vector-im/matrix-wysiwyg-wasm@link:../../Library/Caches/Yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.2-3fa19a2a17fd12d955ef1e14fd63aecbcf3b95e8-integrity/node_modules/bindings/wysiwyg-wasm":
   version "0.0.0"
-  uid ""
 
 "@vector-im/matrix-wysiwyg@2.38.2":
   version "2.38.2"
@@ -12001,10 +12000,10 @@ test-exclude@^6.0.0:
     glob "^7.1.4"
     minimatch "^3.0.4"
 
-testcontainers@10.20.0, testcontainers@^10.18.0, testcontainers@^10.19.0, testcontainers@^10.20.0:
-  version "10.20.0"
-  resolved "https://registry.yarnpkg.com/testcontainers/-/testcontainers-10.20.0.tgz#45c524ae4be9b1ffe2fb42b701f6c0a04ee2d90a"
-  integrity sha512-pOPm/OUIT41aMijAZ9RsYg5xOq9ciy93+pCf2D9qDI0oV8rwk91XpPoUlizll4qwxmmHsLmfZFHJTpeB+BIfmw==
+testcontainers@10.21.0, testcontainers@^10.18.0, testcontainers@^10.19.0, testcontainers@^10.20.0:
+  version "10.21.0"
+  resolved "https://registry.yarnpkg.com/testcontainers/-/testcontainers-10.21.0.tgz#ee1973d9f783984853965da22035b58627253b81"
+  integrity sha512-avzqNfP0HyHaOPTztHbGnHycZWzWaeUwSPnJGCYin2LB+n/tlGjAzExVrkIaCSBwIjFkMlufEYuKWzGc8mupDQ==
   dependencies:
     "@balena/dockerignore" "^1.0.2"
     "@types/dockerode" "^3.3.29"
