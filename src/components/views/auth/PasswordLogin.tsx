@@ -427,7 +427,9 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                         disabled={this.props.busy}
                         autoFocus={autoFocusPassword}
                         onValidate={this.onPasswordValidate}
-                        ref={(field) => (this[LoginField.Password] = field)}
+                        ref={(field) => {
+                            this[LoginField.Password] = field;
+                        }}
                     />
                     {forgotPasswordJsx}
                     {!this.props.busy && (

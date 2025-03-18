@@ -388,7 +388,9 @@ export default class ForgotPassword extends React.Component<Props, State> {
                                 label={_td("auth|change_password_new_label")}
                                 value={this.state.password}
                                 minScore={PASSWORD_MIN_SCORE}
-                                fieldRef={(field) => (this.fieldPassword = field)}
+                                fieldRef={(field) => {
+                                    this.fieldPassword = field;
+                                }}
                                 onChange={this.onInputChanged.bind(this, "password")}
                                 autoComplete="new-password"
                             />
@@ -399,7 +401,9 @@ export default class ForgotPassword extends React.Component<Props, State> {
                                 labelInvalid={_td("auth|reset_password|passwords_mismatch")}
                                 value={this.state.password2}
                                 password={this.state.password}
-                                fieldRef={(field) => (this.fieldPasswordConfirm = field)}
+                                fieldRef={(field) => {
+                                    this.fieldPasswordConfirm = field;
+                                }}
                                 onChange={this.onInputChanged.bind(this, "password2")}
                                 autoComplete="new-password"
                             />
