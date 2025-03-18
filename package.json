@@ -68,13 +68,13 @@
         "update:jitsi": "curl -s https://meet.element.io/libs/external_api.min.js > ./res/jitsi_external_api.min.js"
     },
     "resolutions": {
-        "@playwright/test": "1.50.1",
+        "@playwright/test": "1.51.0",
         "@types/react": "18.3.18",
         "@types/react-dom": "18.3.5",
         "oidc-client-ts": "3.1.0",
         "jwt-decode": "4.0.0",
         "caniuse-lite": "1.0.30001704",
-        "testcontainers": "10.20.0",
+        "testcontainers": "10.21.0",
         "wrap-ansi-cjs": "npm:wrap-ansi@^7.0.0",
         "wrap-ansi": "npm:wrap-ansi@^7.0.0"
     },

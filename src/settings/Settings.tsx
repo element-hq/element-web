@@ -273,6 +273,7 @@ export interface Settings {
     "language": IBaseSetting<string>;
     "breadcrumb_rooms": IBaseSetting<string[]>;
     "recent_emoji": IBaseSetting<RecentEmojiData>;
+    "showMediaEventIds": IBaseSetting<{ [eventId: string]: boolean }>;
     "SpotlightSearch.recentSearches": IBaseSetting<string[]>;
     "SpotlightSearch.showNsfwPublicRooms": IBaseSetting<boolean>;
     "room_directory_servers": IBaseSetting<string[]>;
@@ -969,6 +970,11 @@ export const SETTINGS: Settings = {
         // not really a setting
         supportedLevels: [SettingLevel.ACCOUNT],
         default: [], // list of room IDs, most recent first
+    },
+    "showMediaEventIds": {
+        // not really a setting
+        supportedLevels: [SettingLevel.DEVICE],
+        default: {}, // List of events => is visible
     },
     "SpotlightSearch.showNsfwPublicRooms": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,

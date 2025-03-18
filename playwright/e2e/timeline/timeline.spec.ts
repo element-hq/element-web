@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2022, 2023 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -904,6 +904,19 @@ test.describe("Timeline", () => {
             await expect(newTile).toMatchScreenshot("edited-code-block.png", {
                 mask: [page.locator(".mx_MessageTimestamp")],
             });
+        });
+
+        test("should be able to hide an image", { tag: "@screenshot" }, async ({ page, app, room, context }) => {
+            await app.viewRoomById(room.roomId);
+            await sendImage(app.client, room.roomId, NEW_AVATAR);
+            await app.timeline.scrollToBottom();
+            const imgTile = page.locator(".mx_MImageBody").first();
+            await expect(imgTile).toBeVisible();
+            await imgTile.hover();
+            await page.getByRole("button", { name: "Hide" }).click();
+
+            // Check that the image is now hidden.
+            await expect(page.getByRole("link", { name: "Show image" })).toBeVisible();
         });
     });
 
