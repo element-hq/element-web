@@ -52,7 +52,7 @@ function memberEventDiff(ev: MatrixEvent): IDiff {
 export default function shouldHideEvent(ev: MatrixEvent, ctx?: IRoomState): boolean {
     // Hide transcript events as they are meant to be shown within the voice message component
     const msgType = ev.getContent().msgtype;
-    if (msgType === MsgType.RawSTT || msgType === MsgType.RefinedSTT) {
+    if (msgType === MsgType.RawSTT || msgType === MsgType.RefinedSTT || msgType === MsgType.Summary) {
         return true;
     }
     // Accessing the settings store directly can be expensive if done frequently,
