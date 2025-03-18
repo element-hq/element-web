@@ -18,6 +18,7 @@ import SpaceStore from "../../../stores/spaces/SpaceStore";
 import dispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
+import { useIndexForActiveRoom } from "./useIndexForActiveRoom";
 
 export interface RoomListViewState {
     /**
@@ -83,6 +84,11 @@ export interface RoomListViewState {
      * A function to turn on/off message previews.
      */
     toggleMessagePreview: () => void;
+
+    /**
+     * The index of the active room in the room list.
+     */
+    activeIndex: number | undefined;
 }
 
 /**
@@ -101,6 +107,7 @@ export function useRoomListViewModel(): RoomListViewState {
     );
     const canCreateRoom = hasCreateRoomRights(matrixClient, currentSpace);
 
+    const activeIndex = useIndexForActiveRoom(rooms);
     const { activeSortOption, sort } = useSorter();
     const { shouldShowMessagePreview, toggleMessagePreview } = useMessagePreviewToggle();
 
@@ -120,5 +127,6 @@ export function useRoomListViewModel(): RoomListViewState {
         sort,
         shouldShowMessagePreview,
         toggleMessagePreview,
+        activeIndex,
     };
 }

@@ -21,6 +21,7 @@ import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { hasCreateRoomRights, createRoom } from "../../../../../src/components/viewmodels/roomlist/utils";
 import dispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
+import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
 
 jest.mock("../../../../../src/components/viewmodels/roomlist/utils", () => ({
     hasCreateRoomRights: jest.fn().mockReturnValue(false),
@@ -287,6 +288,50 @@ describe("RoomListViewModel", () => {
             const { result } = renderHook(() => useRoomListViewModel());
             result.current.createChatRoom();
             expect(spy).toHaveBeenCalledWith(Action.CreateChat);
+        });
+    });
+
+    describe("active index", () => {
+        it("should recalculate active index when list of rooms change", () => {
+            const { rooms } = mockAndCreateRooms();
+            // Let's say that the first room is the active room initially
+            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockImplementation(() => rooms[0].roomId);
+
+            const { result: vm } = renderHook(() => useRoomListViewModel());
+            expect(vm.current.activeIndex).toEqual(0);
+
+            // Let's say that a new room is added and that becomes active
+            const newRoom = mkStubRoom("bar:matrix.org", "Bar", undefined);
+            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockImplementation(() => newRoom.roomId);
+            rooms.push(newRoom);
+            act(() => RoomListStoreV3.instance.emit(LISTS_UPDATE_EVENT));
+
+            // Now the active room should be the last room which we just added
+            expect(vm.current.activeIndex).toEqual(rooms.length - 1);
+        });
+
+        it("should recalculate active index when active room changes", () => {
+            const { rooms } = mockAndCreateRooms();
+            const { result: vm } = renderHook(() => useRoomListViewModel());
+
+            // No active room yet
+            expect(vm.current.activeIndex).toBeUndefined();
+
+            // Let's say that room at index 5 becomes active
+            const room = rooms[5];
+            act(() => {
+                dispatcher.dispatch(
+                    {
+                        action: Action.ActiveRoomChanged,
+                        oldRoomId: null,
+                        newRoomId: room.roomId,
+                    },
+                    true,
+                );
+            });
+
+            // We expect index 5 to be active now
+            expect(vm.current.activeIndex).toEqual(5);
         });
     });
 });

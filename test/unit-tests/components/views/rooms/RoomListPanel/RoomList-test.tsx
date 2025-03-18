@@ -40,6 +40,7 @@ describe("<RoomList />", () => {
             createRoom: jest.fn(),
             createChatRoom: jest.fn(),
             canCreateRoom: true,
+            activeIndex: undefined,
         };
 
         // Needed to render a room list cell

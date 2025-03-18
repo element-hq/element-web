@@ -34,6 +34,7 @@ describe("<RoomListPrimaryFilters />", () => {
             activeSortOption: SortOption.Activity,
             shouldShowMessagePreview: false,
             toggleMessagePreview: jest.fn(),
+            activeIndex: undefined,
         };
     });
 
