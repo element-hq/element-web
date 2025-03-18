@@ -12,7 +12,8 @@ Please see LICENSE files in the repository root for full details.
 .mx_MediaBody {
     background-color: $panels;
     border-radius: 12px;
-    max-width: 243px; /* use max-width instead of width so it fits within right panels */
+    min-width: 243px;
+    max-width: fit-content; /* allow container to grow based on content */
 
     color: $secondary-content;
     font: var(--cpd-font-body-md-regular);
