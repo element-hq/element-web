@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type Room } from "matrix-js-sdk/src/matrix";
-import React from "react";
+import React, { type JSX } from "react";
 
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { useNotificationState } from "../../../hooks/useRoomNotificationState";

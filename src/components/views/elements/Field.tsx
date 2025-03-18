@@ -6,6 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, {
+    type JSX,
     type InputHTMLAttributes,
     type SelectHTMLAttributes,
     type TextareaHTMLAttributes,

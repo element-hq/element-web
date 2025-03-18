@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, type SyntheticEvent, type MouseEvent, StrictMode } from "react";
+import React, { type JSX, createRef, type SyntheticEvent, type MouseEvent, StrictMode } from "react";
 import { MsgType, PushRuleKind } from "matrix-js-sdk/src/matrix";
 import { TooltipProvider } from "@vector-im/compound-web";
 import { globToRegexp } from "matrix-js-sdk/src/utils";

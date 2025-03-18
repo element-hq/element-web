@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { EventType, type Room, RoomType } from "matrix-js-sdk/src/matrix";
-import React, { type ComponentType, createRef, type ReactComponentElement, type SyntheticEvent } from "react";
+import React, { type JSX, type ComponentType, createRef, type ReactComponentElement, type SyntheticEvent } from "react";
 
 import { type IState as IRovingTabIndexState, RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex.tsx";
 import MatrixClientContext from "../../../contexts/MatrixClientContext.tsx";

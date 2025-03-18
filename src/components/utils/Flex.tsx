@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { type ComponentProps, type JSXElementConstructor, useMemo } from "react";
+import React, { type JSX, type ComponentProps, type JSXElementConstructor, useMemo } from "react";
 
 type FlexProps<T extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>> = {
     /**
