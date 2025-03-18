@@ -6,13 +6,12 @@
  */
 
 import { renderHook } from "jest-matrix-react";
-import { JoinRule, type MatrixClient, type Room, type RoomState, RoomType } from "matrix-js-sdk/src/matrix";
+import { JoinRule, type MatrixClient, type Room, RoomType } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 
 import { useRoomListHeaderViewModel } from "../../../../../src/components/viewmodels/roomlist/RoomListHeaderViewModel";
 import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
 import { mkStubRoom, stubClient, withClientContextRenderOptions } from "../../../../test-utils";
-import { shouldShowComponent } from "../../../../../src/customisations/helpers/UIComponents";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
@@ -23,9 +22,11 @@ import {
     showSpacePreferences,
     showSpaceSettings,
 } from "../../../../../src/utils/space";
+import { createRoom, hasCreateRoomRights } from "../../../../../src/components/viewmodels/roomlist/utils";
 
-jest.mock("../../../../../src/customisations/helpers/UIComponents", () => ({
-    shouldShowComponent: jest.fn(),
+jest.mock("../../../../../src/components/viewmodels/roomlist/utils", () => ({
+    hasCreateRoomRights: jest.fn().mockReturnValue(false),
+    createRoom: jest.fn(),
 }));
 
 jest.mock("../../../../../src/utils/space", () => ({
@@ -68,19 +69,19 @@ describe("useRoomListHeaderViewModel", () => {
     });
 
     it("should be displayComposeMenu=true and canCreateRoom=true if the user can creates room", () => {
-        mocked(shouldShowComponent).mockReturnValue(false);
+        mocked(hasCreateRoomRights).mockReturnValue(false);
         const { result, rerender } = render();
         expect(result.current.displayComposeMenu).toBe(false);
         expect(result.current.canCreateRoom).toBe(false);
 
-        mocked(shouldShowComponent).mockReturnValue(true);
+        mocked(hasCreateRoomRights).mockReturnValue(true);
         rerender();
         expect(result.current.displayComposeMenu).toBe(true);
         expect(result.current.canCreateRoom).toBe(true);
     });
 
     it("should be displayComposeMenu=true if the user can creates video room", () => {
-        mocked(shouldShowComponent).mockReturnValue(false);
+        mocked(hasCreateRoomRights).mockReturnValue(false);
         jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
 
         const { result } = render();
@@ -91,25 +92,6 @@ describe("useRoomListHeaderViewModel", () => {
         jest.spyOn(SpaceStore.instance, "activeSpaceRoom", "get").mockReturnValue(space);
         const { result } = render();
         expect(result.current.displaySpaceMenu).toBe(true);
-    });
-
-    it("should be canCreateRoom=false if the user has not the right to create a room in a space", () => {
-        mocked(shouldShowComponent).mockReturnValue(true);
-        jest.spyOn(SpaceStore.instance, "activeSpaceRoom", "get").mockReturnValue(space);
-
-        const { result } = render();
-        expect(result.current.canCreateRoom).toBe(false);
-    });
-
-    it("should be canCreateRoom=true if the user has the right to create a room in a space", () => {
-        mocked(shouldShowComponent).mockReturnValue(true);
-        jest.spyOn(SpaceStore.instance, "activeSpaceRoom", "get").mockReturnValue(space);
-        jest.spyOn(space.getLiveTimeline(), "getState").mockReturnValue({
-            maySendStateEvent: jest.fn().mockReturnValue(true),
-        } as unknown as RoomState);
-
-        const { result } = render();
-        expect(result.current.canCreateRoom).toBe(true);
     });
 
     it("should be canInviteInSpace=true if the space join rule is public", () => {
@@ -150,20 +132,19 @@ describe("useRoomListHeaderViewModel", () => {
         expect(spy).toHaveBeenCalledWith(Action.CreateChat);
     });
 
-    it("should fire Action.CreateRoom when createRoom is called", () => {
-        const spy = jest.spyOn(defaultDispatcher, "fire");
+    it("should call createRoom from utils when createRoom is called", () => {
         const { result } = render();
         result.current.createRoom(new Event("click"));
 
-        expect(spy).toHaveBeenCalledWith(Action.CreateRoom);
+        expect(createRoom).toHaveBeenCalled();
     });
 
-    it("should call showCreateNewRoom when createRoom is called in a space", () => {
+    it("should call createRoom from utils when createRoom is called in a space", () => {
         jest.spyOn(SpaceStore.instance, "activeSpaceRoom", "get").mockReturnValue(space);
         const { result } = render();
         result.current.createRoom(new Event("click"));
 
-        expect(showCreateNewRoom).toHaveBeenCalledWith(space);
+        expect(createRoom).toHaveBeenCalledWith(space);
     });
 
     it("should fire Action.CreateRoom with RoomType.UnstableCall when createVideoRoom is called and feature_element_call_video_rooms is enabled", () => {
