@@ -43,6 +43,7 @@ interface State {
     showSummary: boolean;
     showTranscript: boolean;
     transcript?: string;
+    isRefinedTranscript: boolean;
 }
 
 export default class RecordingPlayback extends AudioPlayerBase<IProps, State> {
@@ -53,6 +54,7 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps, State> {
             showSummary: false,
             showTranscript: false,
             transcript: undefined,
+            isRefinedTranscript: false,
         };
     }
 
@@ -82,10 +84,15 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps, State> {
         const refined = transcripts?.find((e) => e.getContent().msgtype === MsgType.RefinedSTT);
         const raw = transcripts?.find((e) => e.getContent().msgtype === MsgType.RawSTT);
 
-        // Update state with refined if available, otherwise raw, otherwise embedded transcript
-        const newTranscript = refined?.getContent()?.body || raw?.getContent()?.body || mxEvent.getContent()?.transcript;
-        if (this.state.transcript !== newTranscript) {
-            this.setState({ transcript: newTranscript });
+        // Always prefer refined over raw transcript as per MsgType.RefinedSTT vs MsgType.RawSTT precedence
+        const newTranscript =
+            refined?.getContent()?.body || raw?.getContent()?.body || mxEvent.getContent()?.transcript;
+        const isRefined = refined !== undefined;
+        if (this.state.transcript !== newTranscript || this.state.isRefinedTranscript !== isRefined) {
+            this.setState({ 
+                transcript: newTranscript,
+                isRefinedTranscript: isRefined
+            });
         }
     };
 
@@ -119,10 +126,13 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps, State> {
             (event.getContent().msgtype === MsgType.RefinedSTT || event.getContent().msgtype === MsgType.RawSTT)
         ) {
             console.log(
-                '[RecordingPlayback] Timeline update - Transcript event:',
-                'type:', event.getContent().msgtype,
-                'content:', event.getContent().body,
-                'related to:', event.getRelation()?.event_id
+                "[RecordingPlayback] Timeline update - Transcript event:",
+                "type:",
+                event.getContent().msgtype,
+                "content:",
+                event.getContent().body,
+                "related to:",
+                event.getRelation()?.event_id,
             );
             this.updateTranscript();
         }
@@ -202,8 +212,13 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps, State> {
                     <div className="mx_AudioPlayer_summary">
                         {(() => {
                             return this.state.transcript ? (
-                                <div>
+                                <div className="mx_AudioPlayer_transcriptContainer">
                                     <div>{this.state.transcript}</div>
+                                    {this.state.transcript && this.state.isRefinedTranscript && (
+                                        <div className="mx_AudioPlayer_refinedIndicator">
+                                            <span className="mx_AudioPlayer_checkmark">✓</span>
+                                        </div>
+                                    )}
                                 </div>
                             ) : (
                                 <div>No transcript available</div>

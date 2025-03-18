@@ -128,7 +128,34 @@ Please see LICENSE files in the repository root for full details.
 .mx_AudioPlayer_buttonContainer {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
+
+    .mx_AudioPlayer_transcribeWrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .mx_AudioPlayer_refinedIndicator {
+        position: absolute;
+        right: -4px;
+        bottom: -2px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .mx_AudioPlayer_checkmark {
+        color: $accent;
+        font-size: $font-10px;
+        background-color: $system;
+        border-radius: 50%;
+        width: 12px;
+        height: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 }
 
 .mx_AudioPlayer_transcribeButton {
@@ -181,4 +208,32 @@ Please see LICENSE files in the repository root for full details.
     font-size: $font-14px;
     line-height: 1.4;
     order: 2;
+
+    .mx_AudioPlayer_transcriptContainer {
+        position: relative;
+        padding-bottom: 12px;
+        padding-right: 4px;
+    }
+
+    .mx_AudioPlayer_refinedIndicator {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .mx_AudioPlayer_checkmark {
+        color: $accent;
+        font-size: $font-10px;
+        background-color: $system;
+        border-radius: 50%;
+        width: 12px;
+        height: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+    }
 }
