@@ -35,6 +35,7 @@ describe("<RoomListView />", () => {
         canCreateRoom: true,
         toggleMessagePreview: jest.fn(),
         shouldShowMessagePreview: false,
+        activeIndex: undefined,
     };
     const matrixClient = stubClient();
 

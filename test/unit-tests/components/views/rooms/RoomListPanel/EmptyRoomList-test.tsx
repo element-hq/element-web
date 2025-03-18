@@ -31,6 +31,7 @@ describe("<EmptyRoomList />", () => {
             canCreateRoom: true,
             shouldShowMessagePreview: false,
             toggleMessagePreview: jest.fn(),
+            activeIndex: undefined,
         };
     });
 
