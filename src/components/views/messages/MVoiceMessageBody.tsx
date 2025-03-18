@@ -7,6 +7,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
+import { MatrixEvent, MsgType, RelationType } from "matrix-js-sdk/src/matrix";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
 import InlineSpinner from "../elements/InlineSpinner";
 import { _t } from "../../../languageHandler";
@@ -37,7 +39,7 @@ export default class MVoiceMessageBody extends MAudioBody {
         // At this point we should have a playable state
         return (
             <span className="mx_MVoiceMessageBody">
-                <RecordingPlayback playback={this.state.playback} />
+                <RecordingPlayback playback={this.state.playback} mxEvent={this.props.mxEvent} />
                 {this.showFileBody && <MFileBody {...this.props} showGenericPlaceholder={false} />}
             </span>
         );

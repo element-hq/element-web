@@ -8,6 +8,9 @@ Please see LICENSE files in the repository root for full details.
 
 .mx_MediaBody.mx_AudioPlayer_container {
     padding: 16px 12px 12px 12px;
+    width: auto;
+    min-width: 243px;
+    max-width: min(500px, 90vw); /* Match transcript container max width */
 
     .mx_AudioPlayer_primaryContainer {
         display: flex;
@@ -108,6 +111,8 @@ Please see LICENSE files in the repository root for full details.
     width: 100%;
     position: relative;
     min-height: 40px; /* Set a minimum height to ensure consistent spacing */
+    max-width: 100%; /* Ensure container respects parent width */
+    overflow: visible; /* Allow transcript to expand */
 }
 
 .mx_RecordingPlayback_mainContent {
@@ -128,7 +133,34 @@ Please see LICENSE files in the repository root for full details.
 .mx_AudioPlayer_buttonContainer {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
+
+    .mx_AudioPlayer_transcribeWrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .mx_AudioPlayer_refinedIndicator {
+        position: absolute;
+        right: -4px;
+        bottom: -2px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .mx_AudioPlayer_checkmark {
+        color: $accent;
+        font-size: $font-10px;
+        background-color: $system;
+        border-radius: 50%;
+        width: 12px;
+        height: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 }
 
 .mx_AudioPlayer_transcribeButton {
@@ -175,10 +207,50 @@ Please see LICENSE files in the repository root for full details.
     padding: 8px 12px;
     background-color: $system;
     border-radius: 8px;
-    width: 80%;
-    transition: all 0.3s ease;
+    width: fit-content;
+    min-width: 243px;
+    max-width: 500px;
+    transition: width 0.3s ease, max-width 0.3s ease;
+    margin: 0;
+    /* Ensure consistent width handling for both RawSTT and RefinedSTT */
+    box-sizing: border-box;
     color: $primary-content;
     font-size: $font-14px;
     line-height: 1.4;
     order: 2;
+    white-space: pre-wrap;
+    word-break: break-word;
+    box-sizing: border-box;
+
+    .mx_AudioPlayer_transcriptContainer {
+        position: relative;
+        padding-bottom: 12px;
+        padding-right: 4px;
+        width: fit-content;
+        max-width: 500px;
+        /* Ensure consistent spacing for both RawSTT and RefinedSTT types */
+        margin-right: 4px;
+    }
+
+    .mx_AudioPlayer_refinedIndicator {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .mx_AudioPlayer_checkmark {
+        color: $accent;
+        font-size: $font-10px;
+        background-color: $system;
+        border-radius: 50%;
+        width: 12px;
+        height: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+    }
 }

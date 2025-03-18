@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ReactNode } from "react";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import classnames from "classnames";
 
 import PlayPauseButton from "./PlayPauseButton";
@@ -16,6 +17,8 @@ import AudioPlayerBase, { type IProps as IAudioPlayerBaseProps } from "./AudioPl
 import SeekBar from "./SeekBar";
 import PlaybackWaveform from "./PlaybackWaveform";
 import { PlaybackState } from "../../../audio/Playback";
+import { SummaryView } from "./SummaryView";
+import { TranscriptView } from "./TranscriptView";
 
 export enum PlaybackLayout {
     /**
@@ -31,6 +34,7 @@ export enum PlaybackLayout {
 
 interface IProps extends IAudioPlayerBaseProps {
     layout?: PlaybackLayout; // Defaults to Timeline layout
+    mxEvent?: MatrixEvent; // Matrix event containing the voice message
 }
 
 interface State {
@@ -49,15 +53,90 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps, State> {
         };
     }
 
-    private handleSummaryToggle = () => {
-        this.setState(prevState => ({
-            showSummary: !prevState.showSummary
+    private handleSummaryToggle = (): void => {
+        this.setState((prevState) => ({
+            showSummary: !prevState.showSummary,
+            showTranscript: false,
         }));
+    };
+
+    private updateSummary = () => {
+        const { mxEvent } = this.props;
+        if (!mxEvent) return;
+
+        const room = MatrixClientPeg.safeGet().getRoom(mxEvent.getRoomId());
+        const summaryEvents = room
+            ?.getUnfilteredTimelineSet()
+            .getLiveTimeline()
+            .getEvents()
+            .filter(
+                (e) =>
+                    e.getRelation()?.event_id === mxEvent.getId() &&
+                    e.getRelation()?.rel_type === RelationType.Reference &&
+                    e.getContent().msgtype === MsgType.Summary,
+            );
+
+        if (summaryEvents?.length) {
+            // Use the latest summary event
+            const summaryEvent = summaryEvents[summaryEvents.length - 1];
+            const summary = summaryEvent.getContent().body;
+            if (summary && this.state.summary !== summary) {
+                this.setState({ summary });
+            }
+        }
+    };
+
+    private updateTranscript = () => {
+        const { mxEvent } = this.props;
+        if (!mxEvent) return;
+
+        const room = MatrixClientPeg.safeGet().getRoom(mxEvent.getRoomId());
+        const transcripts = room
+            ?.getUnfilteredTimelineSet()
+            .getLiveTimeline()
+            .getEvents()
+            .filter(
+                (e) =>
+                    e.getRelation()?.event_id === mxEvent.getId() &&
+                    e.getRelation()?.rel_type === RelationType.Reference &&
+                    (e.getContent().msgtype === MsgType.RefinedSTT || e.getContent().msgtype === MsgType.RawSTT),
+            );
+
+        // Always prefer refined over raw transcript regardless of timestamp
+        const refined = transcripts?.find((e) => e.getContent().msgtype === MsgType.RefinedSTT);
+        const raw = transcripts?.find((e) => e.getContent().msgtype === MsgType.RawSTT);
+
+        // Always prefer refined over raw transcript as per MsgType.RefinedSTT vs MsgType.RawSTT precedence
+        const newTranscript =
+            refined?.getContent()?.body || raw?.getContent()?.body || mxEvent.getContent()?.transcript;
+        const isRefined = refined !== undefined;
+        const transcriptEventId = (refined || raw)?.getId();
+
+        if (
+            this.state.transcript !== newTranscript ||
+            this.state.isRefinedTranscript !== isRefined ||
+            this.state.transcriptEventId !== transcriptEventId
+        ) {
+            this.setState({
+                transcript: newTranscript,
+                transcriptEventId,
+                isRefinedTranscript: isRefined,
+            });
+        }
+    };
+
+    public componentDidMount(): void {
+        super.componentDidMount?.();
     }
 
-    private handleTranscriptToggle = () => {
-        this.setState(prevState => ({
-            showTranscript: !prevState.showTranscript
+    public componentWillUnmount(): void {
+        super.componentWillUnmount?.();
+    }
+
+    private handleTranscriptToggle = (): void => {
+        this.setState((prevState) => ({
+            showTranscript: !prevState.showTranscript,
+            showSummary: false,
         }));
     };
 
@@ -100,35 +179,38 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps, State> {
                     </div>
                     <PlaybackClock playback={this.props.playback} />
                     <div className="mx_AudioPlayer_buttonContainer">
-                        <AccessibleButton 
+                        <AccessibleButton
                             className={classnames("mx_AudioPlayer_transcribeButton mx_AccessibleButton", {
-                                "mx_AudioPlayer_transcribeButton_active": this.state.showTranscript
+                                mx_AudioPlayer_transcribeButton_active: this.state.showTranscript,
                             })}
                             onClick={this.handleTranscriptToggle}
                         >
                             <span className="mx_AudioPlayer_transcribeArrow">T</span>
                             <span className="mx_AudioPlayer_transcribeLetter">T</span>
                         </AccessibleButton>
-                        <AccessibleButton 
-                            className={classnames("mx_AudioPlayer_transcribeButton mx_AudioPlayer_secondButton mx_AccessibleButton", {
-                                "mx_AudioPlayer_transcribeButton_active": this.state.showSummary
-                            })}
+                        <AccessibleButton
+                            className={classnames(
+                                "mx_AudioPlayer_transcribeButton mx_AudioPlayer_secondButton mx_AccessibleButton",
+                                {
+                                    mx_AudioPlayer_transcribeButton_active: this.state.showSummary,
+                                },
+                            )}
                             onClick={this.handleSummaryToggle}
                         >
                             <span className="mx_AudioPlayer_transcribeLetter">S</span>
                         </AccessibleButton>
                     </div>
                 </div>
-                {this.state.showSummary && (
-                    <div className="mx_AudioPlayer_summary">
-                        Here we will show the Summary of the voice message
-                    </div>
-                )}
-                {this.state.showTranscript && (
-                    <div className="mx_AudioPlayer_summary">
-                        Here we will show the Transcript of the voice message
-                    </div>
-                )}
+                <SummaryView
+                    mxEvent={this.props.mxEvent}
+                    showSummary={this.state.showSummary}
+                    onToggleSummary={this.handleSummaryToggle}
+                />
+                <TranscriptView
+                    mxEvent={this.props.mxEvent}
+                    showTranscript={this.state.showTranscript}
+                    onToggleTranscript={this.handleTranscriptToggle}
+                />
             </div>
         );
     }
