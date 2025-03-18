@@ -3148,6 +3148,7 @@
         "view": "Views room with given address",
         "whois": "Displays information about a user"
     },
+    "sliding_sync_legacy_no_longer_supported": "Legacy sliding sync is no longer supported: please log out and back in to enable the new sliding sync flag",
     "space": {
         "add_existing_room_space": {
             "create": "Want to add a new room instead?",
