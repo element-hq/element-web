@@ -162,9 +162,7 @@ describe("<MatrixChat />", () => {
     let initPromise: Promise<void> | undefined;
     let defaultProps: ComponentProps<typeof MatrixChat>;
     const getComponent = (props: Partial<ComponentProps<typeof MatrixChat>> = {}) => {
-        // MatrixChat does many questionable things which bomb tests in modern React mode,
-        // we'll want to refactor and break up MatrixChat before turning off legacyRoot mode
-        return render(<MatrixChat {...defaultProps} {...props} />, { legacyRoot: true });
+        return render(<MatrixChat {...defaultProps} {...props} />);
     };
 
     // make test results readable

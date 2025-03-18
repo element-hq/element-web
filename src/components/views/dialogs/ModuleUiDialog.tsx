@@ -16,7 +16,7 @@ import ScrollableBaseModal, { type IScrollableBaseState } from "./ScrollableBase
 import { _t } from "../../../languageHandler";
 
 interface IProps<P extends DialogProps, C extends DialogContent<P>> {
-    contentFactory: (props: P, ref: React.RefObject<C>) => React.ReactNode;
+    contentFactory: (props: P, ref: React.RefObject<C | null>) => React.ReactNode;
     additionalContentProps: Omit<P, keyof DialogProps> | undefined;
     initialOptions: ModuleUiDialogOptions;
     moduleApi: ModuleApi;
@@ -27,10 +27,10 @@ interface IState extends IScrollableBaseState {
     // nothing special
 }
 
-export class ModuleUiDialog<P extends DialogProps, C extends DialogContent<P>> extends ScrollableBaseModal<
-    IProps<P, C>,
-    IState
-> {
+export class ModuleUiDialog<
+    P extends DialogProps = DialogProps,
+    C extends DialogContent<P> = DialogContent<P>,
+> extends ScrollableBaseModal<IProps<P, C>, IState> {
     private contentRef = createRef<C>();
 
     public constructor(props: IProps<P, C>) {
