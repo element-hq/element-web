@@ -14,7 +14,7 @@ interface IProps {
     title: string;
     timestamp?: JSX.Element;
     subtitle?: ReactNode;
-    children?: ReactChild;
+    children?: JSX.Element;
 }
 
 const EventTileBubble = forwardRef<HTMLDivElement, IProps>(
