@@ -24,7 +24,7 @@ export interface ICategory {
     name: string;
     enabled: boolean;
     visible: boolean;
-    ref: RefObject<HTMLButtonElement>;
+    ref: RefObject<HTMLButtonElement | null>;
 }
 
 interface IProps {

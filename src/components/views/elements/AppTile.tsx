@@ -14,7 +14,7 @@ import React, {
     type ContextType,
     createRef,
     type CSSProperties,
-    type MutableRefObject,
+    type RefObject,
     type ReactNode,
 } from "react";
 import classNames from "classnames";
@@ -96,7 +96,7 @@ interface IProps {
     widgetPageTitle?: string;
     showLayoutButtons?: boolean;
     // Handle to manually notify the PersistedElement that it needs to move
-    movePersistedElement?: MutableRefObject<(() => void) | undefined>;
+    movePersistedElement?: RefObject<(() => void) | undefined>;
     // An element to render after the iframe as an overlay
     overlay?: ReactNode;
     // If defined this async method will be called when the widget requests to become sticky.

@@ -78,7 +78,7 @@ const baseEvTypes = new Map<string, React.ComponentType<IBodyProps>>([
 ]);
 
 export default class MessageEvent extends React.Component<IProps> implements IMediaBody, IOperableEventTile {
-    private body: React.RefObject<React.Component | IOperableEventTile> = createRef();
+    private body = createRef<React.Component | IOperableEventTile>();
     private mediaHelper?: MediaEventHelper;
     private bodyTypes = new Map<string, React.ComponentType<IBodyProps>>(baseBodyTypes.entries());
     private evTypes = new Map<string, React.ComponentType<IBodyProps>>(baseEvTypes.entries());
