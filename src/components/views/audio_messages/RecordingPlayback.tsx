@@ -8,8 +8,6 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactNode } from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { RelationType, MsgType } from "matrix-js-sdk/src/matrix";
 import classnames from "classnames";
 
 import PlayPauseButton from "./PlayPauseButton";
@@ -19,7 +17,8 @@ import AudioPlayerBase, { type IProps as IAudioPlayerBaseProps } from "./AudioPl
 import SeekBar from "./SeekBar";
 import PlaybackWaveform from "./PlaybackWaveform";
 import { PlaybackState } from "../../../audio/Playback";
-import { _t } from "../../../languageHandler";
+import { SummaryView } from "./SummaryView";
+import { TranscriptView } from "./TranscriptView";
 
 export enum PlaybackLayout {
     /**
@@ -42,10 +41,6 @@ interface State {
     playbackPhase: PlaybackState;
     showSummary: boolean;
     showTranscript: boolean;
-    transcript?: string;
-    transcriptEventId?: string;
-    isRefinedTranscript: boolean;
-    summary?: string;
 }
 
 export default class RecordingPlayback extends AudioPlayerBase<IProps, State> {
@@ -55,84 +50,14 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps, State> {
             playbackPhase: PlaybackState.Stopped,
             showSummary: false,
             showTranscript: false,
-            transcript: undefined,
-            isRefinedTranscript: false,
-            summary: undefined,
         };
     }
 
-    private handleSummaryToggle = async () => {
-        const { mxEvent } = this.props;
-        if (!mxEvent) return;
-
+    private handleSummaryToggle = (): void => {
         this.setState((prevState) => ({
             showSummary: !prevState.showSummary,
-            showTranscript: false, // Hide transcript when showing summary
+            showTranscript: false,
         }));
-
-        if (!this.state.summary) {
-            try {
-                const room = MatrixClientPeg.safeGet().getRoom(mxEvent.getRoomId());
-                if (!room) {
-                    console.error("[RecordingPlayback] Room not found");
-                    this.setState({ summary: "Room not found" });
-                    return;
-                }
-
-                const cli = MatrixClientPeg.safeGet();
-
-                try {
-                    // First check if we already have a summary
-                    this.updateSummary();
-                    
-                    // If no summary found after checking, trigger generation
-                    if (!this.state.summary || this.state.summary === "Generating summary...") {
-                        this.setState({ summary: "Generating summary..." });
-
-                        // Use the room and event IDs to construct our request
-                        const roomId = mxEvent.getRoomId();
-                        
-                        // Prepare the request body with our parameters
-                        const requestBody = {
-                            language: "en",
-                            reference_event_id: mxEvent.getId(),
-                        };
-                        console.log(`[RecordingPlayback] Request body:`, requestBody);
-                        
-                        // When using authedRequest, we leave out the `_synapse` prefix and configure it with options
-                        if (!this.state.transcriptEventId) {
-                            console.error("[RecordingPlayback] No transcript available to summarize");
-                            this.setState({ summary: "No transcript available to summarize" });
-                            return;
-                        }
-                        const path = `/client/v1/rooms/${roomId}/event/${this.state.transcriptEventId}/summarize`;
-                        console.log(`[RecordingPlayback] API path: ${path} (with /_synapse prefix)`);
-                        
-                        // This call will use the client's CORS settings and authentication
-                        const response = await cli.http.authedRequest(
-                            "POST", // Use POST method
-                            path, // Path without _synapse prefix - it's added by the option
-                            undefined, // No query params for POST
-                            requestBody, // Request body with parameters
-                            {
-                                prefix: "/_synapse", // Add _synapse prefix to the path
-                                useAuthorizationHeader: true,
-                            },
-                        );
-                        console.log(`[RecordingPlayback] Summary generation response:`, response);
-                        
-                        // The summary will be delivered as a Matrix event, no need to handle the response
-                    }
-                } catch (error) {
-                    console.error("[RecordingPlayback] Failed to request summary:", error);
-                    this.setState({ summary: "Failed to request summary" });
-                }
-            } catch (error) {
-                console.error("[RecordingPlayback] Failed to fetch summary:", error);
-                const errorMessage = error instanceof Error ? error.message : String(error);
-                this.setState({ summary: `Failed to load summary: ${errorMessage}` });
-            }
-        }
     };
 
     private updateSummary = () => {
@@ -186,10 +111,12 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps, State> {
             refined?.getContent()?.body || raw?.getContent()?.body || mxEvent.getContent()?.transcript;
         const isRefined = refined !== undefined;
         const transcriptEventId = (refined || raw)?.getId();
-        
-        if (this.state.transcript !== newTranscript || 
+
+        if (
+            this.state.transcript !== newTranscript ||
             this.state.isRefinedTranscript !== isRefined ||
-            this.state.transcriptEventId !== transcriptEventId) {
+            this.state.transcriptEventId !== transcriptEventId
+        ) {
             this.setState({
                 transcript: newTranscript,
                 transcriptEventId,
@@ -200,70 +127,16 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps, State> {
 
     public componentDidMount(): void {
         super.componentDidMount?.();
-        const { mxEvent } = this.props;
-        if (mxEvent) {
-            const room = MatrixClientPeg.safeGet().getRoom(mxEvent.getRoomId());
-            room?.on("Room.timeline", this.onTimelineUpdate);
-            this.updateTranscript();
-            this.updateSummary();
-        }
     }
 
     public componentWillUnmount(): void {
         super.componentWillUnmount?.();
-        const { mxEvent } = this.props;
-        if (mxEvent) {
-            const room = MatrixClientPeg.safeGet().getRoom(mxEvent.getRoomId());
-            room?.removeListener("Room.timeline", this.onTimelineUpdate);
-        }
     }
 
-    private onTimelineUpdate = (event: MatrixEvent) => {
-        const { mxEvent } = this.props;
-        if (!mxEvent) return;
-
-        // Log all timeline events for debugging
-        console.log("[RecordingPlayback] Timeline event:", {
-            type: event.getType(),
-            msgtype: event.getContent().msgtype,
-            content: event.getContent(),
-            relation: event.getRelation(),
-        });
-
-        // Update if this is a transcript or summary event related to our voice message
-        if (
-            event.getRelation()?.event_id === mxEvent.getId() &&
-            event.getRelation()?.rel_type === RelationType.Reference
-        ) {
-            const msgType = event.getContent().msgtype;
-            if (msgType === MsgType.RefinedSTT || msgType === MsgType.RawSTT) {
-                console.log(
-                    "[RecordingPlayback] Timeline update - Transcript event:",
-                    "type:",
-                    msgType,
-                    "content:",
-                    event.getContent().body,
-                    "related to:",
-                    event.getRelation()?.event_id,
-                );
-                this.updateTranscript();
-            } else if (msgType === MsgType.Summary) {
-                console.log(
-                    "[RecordingPlayback] Timeline update - Summary event:",
-                    "content:",
-                    event.getContent().body,
-                    "related to:",
-                    event.getRelation()?.event_id,
-                );
-                this.updateSummary();
-            }
-        }
-    };
-
-    private handleTranscriptToggle = () => {
+    private handleTranscriptToggle = (): void => {
         this.setState((prevState) => ({
             showTranscript: !prevState.showTranscript,
-            showSummary: false, // Hide summary when showing transcript
+            showSummary: false,
         }));
     };
 
@@ -328,27 +201,16 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps, State> {
                         </AccessibleButton>
                     </div>
                 </div>
-                {this.state.showSummary && (
-                    <div className="mx_AudioPlayer_summary">{this.state.summary || "Loading summary..."}</div>
-                )}
-                {this.state.showTranscript && (
-                    <div className="mx_AudioPlayer_summary">
-                        {(() => {
-                            return this.state.transcript ? (
-                                <div className="mx_AudioPlayer_transcriptContainer">
-                                    <div>{this.state.transcript}</div>
-                                    {this.state.transcript && this.state.isRefinedTranscript && (
-                                        <div className="mx_AudioPlayer_refinedIndicator">
-                                            <span className="mx_AudioPlayer_checkmark">✓</span>
-                                        </div>
-                                    )}
-                                </div>
-                            ) : (
-                                <div>No transcript available</div>
-                            );
-                        })()}
-                    </div>
-                )}
+                <SummaryView
+                    mxEvent={this.props.mxEvent}
+                    showSummary={this.state.showSummary}
+                    onToggleSummary={this.handleSummaryToggle}
+                />
+                <TranscriptView
+                    mxEvent={this.props.mxEvent}
+                    showTranscript={this.state.showTranscript}
+                    onToggleTranscript={this.handleTranscriptToggle}
+                />
             </div>
         );
     }
