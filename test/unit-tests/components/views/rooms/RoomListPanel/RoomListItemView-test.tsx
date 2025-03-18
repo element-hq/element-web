@@ -42,13 +42,13 @@ describe("<RoomListItemView />", () => {
 
     test("should render a room item", () => {
         const onClick = jest.fn();
-        const { asFragment } = render(<RoomListItemView room={room} onClick={onClick} />);
+        const { asFragment } = render(<RoomListItemView room={room} onClick={onClick} isSelected={false} />);
         expect(asFragment()).toMatchSnapshot();
     });
 
     test("should call openRoom when clicked", async () => {
         const user = userEvent.setup();
-        render(<RoomListItemView room={room} />);
+        render(<RoomListItemView room={room} isSelected={false} />);
 
         await user.click(screen.getByRole("button", { name: `Open room ${room.name}` }));
         expect(defaultValue.openRoom).toHaveBeenCalled();
@@ -58,11 +58,20 @@ describe("<RoomListItemView />", () => {
         mocked(useRoomListItemViewModel).mockReturnValue({ ...defaultValue, showHoverMenu: true });
 
         const user = userEvent.setup();
-        render(<RoomListItemView room={room} />, withClientContextRenderOptions(matrixClient));
+        render(<RoomListItemView room={room} isSelected={false} />, withClientContextRenderOptions(matrixClient));
         const listItem = screen.getByRole("button", { name: `Open room ${room.name}` });
         expect(screen.queryByRole("button", { name: "More Options" })).toBeNull();
 
         await user.hover(listItem);
         await waitFor(() => expect(screen.getByRole("button", { name: "More Options" })).toBeInTheDocument());
+    });
+
+    test("should be selected if isSelected=true", async () => {
+        const { asFragment } = render(<RoomListItemView room={room} isSelected={true} />);
+        expect(screen.queryByRole("button", { name: `Open room ${room.name}` })).toHaveAttribute(
+            "aria-selected",
+            "true",
+        );
+        expect(asFragment()).toMatchSnapshot();
     });
 });
