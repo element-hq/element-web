@@ -3593,9 +3593,9 @@
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
 "@vector-im/compound-design-tokens@^4.0.0":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-4.0.0.tgz#4922404f355f09fb753e6a91cc7efe4e661c9ff1"
-  integrity sha512-hFfLSKrGc58rPRp9JH1mkgw3moFEgpL8RQzyDESHErq7P1lUmlIuwKFTVfK5SbdFM5GvHp7nQaFpVmxUQ3Xp+w==
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@vector-im/compound-design-tokens/-/compound-design-tokens-4.0.1.tgz#5c4ea7ad664d8e6206dc42e41649c80ef060a760"
+  integrity sha512-V4AsK1FVFxZ6DmmCoeAi8FyvE7ODMlXPWjqRGotcnVaoGNrDQrVz2ZGV85DCz5ISxB3iynYASe6OXsDVXT1zFA==
 
 "@vector-im/compound-web@^7.7.2":
   version "7.7.2"
@@ -3614,7 +3614,6 @@
 
 "@vector-im/matrix-wysiwyg-wasm@link:../../Library/Caches/Yarn/v6/npm-@vector-im-matrix-wysiwyg-2.38.2-3fa19a2a17fd12d955ef1e14fd63aecbcf3b95e8-integrity/node_modules/bindings/wysiwyg-wasm":
   version "0.0.0"
-  uid ""
 
 "@vector-im/matrix-wysiwyg@2.38.2":
   version "2.38.2"
