@@ -1388,7 +1388,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 // so show the homepage.
                 dis.dispatch<ViewHomePagePayload>({ action: Action.ViewHomePage, justRegistered: true });
             }
-        } else {
+        } else if (!(await this.shouldForceVerification())) {
             this.showScreenAfterLogin();
         }
 
