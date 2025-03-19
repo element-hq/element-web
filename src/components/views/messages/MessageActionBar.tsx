@@ -536,6 +536,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                             mediaEventHelperGet={() => this.props.getTile()?.getMediaHelper?.()}
                             key="download"
                         />,
+                        <HideActionButton mxEvent={this.props.mxEvent} key="hide" />,
                     );
                 }
                 if (MediaEventHelper.canHide(this.props.mxEvent)) {

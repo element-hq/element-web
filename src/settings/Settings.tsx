@@ -198,7 +198,8 @@ export interface Settings {
     "feature_html_topic": IFeature;
     "feature_bridge_state": IFeature;
     "feature_jump_to_date": IFeature;
-    "feature_sliding_sync": IFeature;
+    "feature_sliding_sync": IBaseSetting<boolean>;
+    "feature_simplified_sliding_sync": IFeature;
     "feature_element_call_video_rooms": IFeature;
     "feature_group_calls": IFeature;
     "feature_disable_call_per_sender_encryption": IFeature;
@@ -210,7 +211,6 @@ export interface Settings {
     "feature_ask_to_join": IFeature;
     "feature_notifications": IFeature;
     // These are in the feature namespace but aren't actually features
-    "feature_sliding_sync_proxy_url": IBaseSetting<string>;
     "feature_hidebold": IBaseSetting<boolean>;
 
     "useOnlyCurrentProfiles": IBaseSetting<boolean>;
@@ -315,6 +315,7 @@ export interface Settings {
     "showImages": IBaseSetting<boolean>;
     "showAvatarsOnInvites": IBaseSetting<boolean>;
     "RoomList.preferredSorting": IBaseSetting<SortingAlgorithm>;
+    "RoomList.showMessagePreview": IBaseSetting<boolean>;
     "RightPanel.phasesGlobal": IBaseSetting<IRightPanelForRoomStored | null>;
     "RightPanel.phases": IBaseSetting<IRightPanelForRoomStored | null>;
     "enableEventIndexing": IBaseSetting<boolean>;
@@ -538,7 +539,14 @@ export const SETTINGS: Settings = {
             true,
         ),
     },
+    // legacy sliding sync flag: no longer works, will error for anyone who's still using it
     "feature_sliding_sync": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+        shouldWarn: true,
+        default: false,
+    },
+    "feature_simplified_sliding_sync": {
         isFeature: true,
         labsGroup: LabGroup.Developer,
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
@@ -548,11 +556,6 @@ export const SETTINGS: Settings = {
         shouldWarn: true,
         default: false,
         controller: new SlidingSyncController(),
-    },
-    "feature_sliding_sync_proxy_url": {
-        // This is not a distinct feature, it is a legacy setting for feature_sliding_sync above
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        default: "",
     },
     "feature_element_call_video_rooms": {
         isFeature: true,
@@ -1131,6 +1134,10 @@ export const SETTINGS: Settings = {
     "RoomList.preferredSorting": {
         supportedLevels: [SettingLevel.DEVICE],
         default: SortingAlgorithm.Recency,
+    },
+    "RoomList.showMessagePreview": {
+        supportedLevels: [SettingLevel.DEVICE],
+        default: false,
     },
     "RightPanel.phasesGlobal": {
         supportedLevels: [SettingLevel.DEVICE],

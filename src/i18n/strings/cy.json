@@ -447,6 +447,7 @@
         "access_token": "Tocyn Mynediad",
         "accessibility": "Hygyrchedd",
         "advanced": "Uwch",
+        "all_chats": "Pob Sgwrs",
         "analytics": "Dadansoddi Gwe",
         "appearance": "Gwedd",
         "application": "Rhaglen",
@@ -1983,6 +1984,19 @@
         "add_space_label": "Ychwanegu gofod",
         "breadcrumbs_empty": "Dim ystafelloedd yr ymwelwyd â nhw yn ddiweddar",
         "breadcrumbs_label": "Ymwelwyd ag ystafelloedd yn ddiweddar",
+        "empty": {
+            "no_chats": "Dim sgyrsiau eto",
+            "no_chats_description": "Dechreuwch drwy anfon neges at rywun neu drwy greu ystafell",
+            "no_chats_description_no_room_rights": "Dechreuwch trwy anfon neges at rywun",
+            "no_favourites": "Nid oes gennych hoff sgwrs eto",
+            "no_favourites_description": "Gallwch ychwanegu sgwrs at eich ffefrynnau yn y gosodiadau sgwrsio",
+            "no_people": "Nid oes gennych chi sgyrsiau uniongyrchol gydag unrhyw un eto",
+            "no_people_description": "Gallwch ddad-ddewis hidlwyr er mwyn gweld eich sgyrsiau eraill",
+            "no_rooms": "Nid ydych mewn unrhyw ystafell eto",
+            "no_rooms_description": "Gallwch ddad-ddewis hidlwyr er mwyn gweld eich sgyrsiau eraill",
+            "no_unread": "Llongyfarchiadau! Nid oes gennych unrhyw negeseuon heb eu darllen",
+            "show_chats": "Dangos pob sgwrs"
+        },
         "failed_add_tag": "Wedi methu ag ychwanegu tag %(tagName)s i'r ystafell",
         "failed_remove_tag": "Wedi methu â thynnu'r tag %(tagName)s o'r ystafell",
         "failed_set_dm_tag": "Wedi methu gosod tag neges uniongyrchol",
@@ -1995,10 +2009,19 @@
         "home_menu_label": "Dewisiadau cartref",
         "join_public_room_label": "Ymuno â'r ystafell gyhoeddus",
         "list_title": "Rhestr ystafelloedd",
+        "more_options": {
+            "copy_link": "Copïo dolen ystafell",
+            "favourited": "Ffafrio",
+            "leave_room": "Gadael yr ystafell",
+            "low_priority": "Blaenoriaeth isel",
+            "mark_read": "Marcio fel wedi'i ddarllen",
+            "mark_unread": "Marcio fel heb ei ddarllen"
+        },
         "notification_options": "Dewisiadau hysbysu",
         "open_space_menu": "Agor dewislen gofod",
         "primary_filters": "Hidlau rhestr ystafelloedd",
         "room": {
+            "more_options": "Rhagor o Ddewisiadau",
             "open_room": "Agor ystafell %(roomName)s"
         },
         "show_less": "Dangos llai",
@@ -2502,6 +2525,7 @@
         "inline_url_previews_room": "Galluogi rhagolygon URL fel rhagosodiad ar gyfer cyfranogwyr yn yr ystafell hon",
         "inline_url_previews_room_account": "Galluogi rhagolygon URL ar gyfer yr ystafell hon (yn effeithio arnoch chi yn unig)",
         "insert_trailing_colon_mentions": "Mewnosod colon sy'n llusgo ar ôl i'r defnyddiwr sôn amdano ar ddechrau neges",
+        "invite_avatars": "Dangos afatarau ystafelloedd y cawsoch eich gwahodd iddynn nhw",
         "jump_to_bottom_on_send": "Neidio i waelod y llinell amser pan fyddwch chi'n anfon neges",
         "key_backup": {
             "backup_in_progress": "Mae copi wrth gefn o'ch allweddi (gallai'r copi wrth gefn cyntaf gymryd ychydig funudau).",

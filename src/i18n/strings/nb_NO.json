@@ -64,6 +64,7 @@
         "go": "Gå",
         "go_back": "Gå tilbake",
         "got_it": "Jeg forstår",
+        "hide": "Skjul",
         "hide_advanced": "Skjul avansert",
         "hold": "Hold",
         "ignore": "Ignorer",
@@ -455,6 +456,7 @@
         "access_token": "Tilgangstoken",
         "accessibility": "Tilgjengelighet",
         "advanced": "Avansert",
+        "all_chats": "Alle chatter",
         "analytics": "Statistikk",
         "and_n_others": {
             "og %(count)s andre …": "other",
@@ -2095,6 +2097,16 @@
         "add_space_label": "Legg til område",
         "breadcrumbs_empty": "Ingen nylig besøkte rom",
         "breadcrumbs_label": "Nylig besøkte rom",
+        "empty": {
+            "no_chats": "Ingen chatter ennå",
+            "no_chats_description": "Kom i gang ved å sende meldinger til noen eller ved å opprette et rom",
+            "no_chats_description_no_room_rights": "Kom i gang med å sende meldinger til noen",
+            "no_favourites_description": "Du kan legge til en chat til dine favoritter i chat-innstillingene",
+            "no_people": "Du har ikke direkte chatter med noen ennå",
+            "no_rooms": "Du er ikke med i noen rom ennå",
+            "no_unread": "Gratulerer! Du har ingen uleste meldinger",
+            "show_chats": "Vis alle chatter"
+        },
         "failed_add_tag": "Kunne ikke legge til tagg %(tagName)s til rom",
         "failed_remove_tag": "Kunne ikke fjerne tagg %(tagName)s fra rommet",
         "failed_set_dm_tag": "Kan ikke sette kode på direktemeldingen",
@@ -2111,6 +2123,14 @@
             "other": "Blir for øyeblikket med i %(count)s rom"
         },
         "list_title": "Romliste",
+        "more_options": {
+            "copy_link": "Kopier romlenke",
+            "favourited": "Favorittmerket",
+            "leave_room": "Forlat rommet",
+            "low_priority": "Lav prioritet",
+            "mark_read": "Marker som lest",
+            "mark_unread": "Marker som ulest"
+        },
         "notification_options": "Varselsinnstillinger",
         "open_space_menu": "Åpne Område-meny",
         "primary_filters": "Filtre for romliste",
@@ -2119,6 +2139,7 @@
             "other": "Fjerner for øyeblikket meldinger i %(count)s rom"
         },
         "room": {
+            "more_options": "Flere alternativer",
             "open_room": "Åpne rom %(roomName)s"
         },
         "show_less": "Vis mindre",

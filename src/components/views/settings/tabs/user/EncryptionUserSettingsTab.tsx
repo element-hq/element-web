@@ -37,7 +37,7 @@ import { DeleteKeyStoragePanel } from "../../encryption/DeleteKeyStoragePanel";
  *                           This happens when the user has a recovery key and the user clicks on "Change recovery key" button of the RecoveryPanel.
  *  - "set_recovery_key": The panel to show when the user is setting up their recovery key.
  *                        This happens when the user doesn't have a key a recovery key and the user clicks on "Set up recovery key" button of the RecoveryPanel.
- *  - "reset_identity_compromised": The panel to show when the user is resetting their identity, in te case where their key is compromised.
+ *  - "reset_identity_compromised": The panel to show when the user is resetting their identity, in the case where their key is compromised.
  *  - "reset_identity_forgot": The panel to show when the user is resetting their identity, in the case where they forgot their recovery key.
  *  - "secrets_not_cached": The secrets are not cached locally. This can happen if we verified another device and secret-gossiping failed, or the other device itself lacked the secrets.
  *                          If the "set_up_encryption" and "secrets_not_cached" conditions are both filled, "set_up_encryption" prevails.
@@ -55,9 +55,9 @@ export type State =
     | "secrets_not_cached"
     | "key_storage_delete";
 
-interface EncryptionUserSettingsTabProps {
+interface Props {
     /**
-     * If the tab should start in a state other than the deasult
+     * If the tab should start in a state other than the default
      */
     initialState?: State;
 }
@@ -65,7 +65,7 @@ interface EncryptionUserSettingsTabProps {
 /**
  * The encryption settings tab.
  */
-export function EncryptionUserSettingsTab({ initialState = "loading" }: EncryptionUserSettingsTabProps): JSX.Element {
+export function EncryptionUserSettingsTab({ initialState = "loading" }: Props): JSX.Element {
     const [state, setState] = useState<State>(initialState);
 
     const checkEncryptionState = useCheckEncryptionState(state, setState);
