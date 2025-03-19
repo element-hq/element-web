@@ -128,7 +128,7 @@ export class TranscriptView extends React.Component<IProps, IState> {
                     <div className="mx_RecordingPlayback_transcript">
                         <div className="mx_RecordingPlayback_transcriptBody">
                             {transcript}
-                            {isRefinedTranscript && <div className="mx_AudioPlayer_checkmark mx_RecordingPlayback_transcriptType">✓</div>}
+                            {isRefinedTranscript && <div className="mx_AudioPlayer_checkmark mx_RecordingPlayback_transcriptType"><span className="mx_RecordingPlayback_refinedLabel">AI refined</span>✓</div>}
                         </div>
                     </div>
                 )}
