@@ -72,22 +72,10 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps, State> {
     private summaryRef = React.createRef<ISummaryViewRef>();
 
     private handleSummaryToggle = async (): Promise<void> => {
-        const { mxEvent } = this.props;
-        if (!mxEvent) return;
-
-        // Get current state to determine if we're showing or hiding
+        if (!this.props.mxEvent) return;
         const willShow = !this.state.showSummary;
-
-        // Toggle the summary panel
-        this.setState({
-            showSummary: willShow,
-            showTranscript: false, // Always hide transcript when toggling summary
-        });
-
-        // Request summary if needed and if we're showing it
-        if (willShow) {
-            await this.summaryRef.current?.requestSummaryIfNeeded();
-        }
+        this.setState({ showSummary: willShow, showTranscript: false });
+        if (willShow) await this.summaryRef.current?.requestSummaryIfNeeded();
     };
 
     // This component is rendered in two ways: the composer and timeline. They have different
@@ -146,7 +134,6 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps, State> {
                                 },
                             )}
                             onClick={() => {
-                                console.log("[Summary] S button clicked in RecordingPlayback");
                                 this.handleSummaryToggle();
                             }}
                         >
