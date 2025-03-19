@@ -18,6 +18,14 @@ interface IState {
 }
 
 export class TranscriptView extends React.Component<IProps, IState> {
+    public componentWillUnmount(): void {
+        // Clean up timeline listener
+        const room = MatrixClientPeg.safeGet().getRoom(this.props.mxEvent?.getRoomId());
+        if (room) {
+            room.removeListener("Room.timeline", this.onTimelineEvent);
+        }
+    }
+
     public constructor(props: IProps) {
         super(props);
         this.state = {
@@ -27,13 +35,44 @@ export class TranscriptView extends React.Component<IProps, IState> {
         };
     }
 
+    private onTimelineEvent = (event: MatrixEvent): void => {
+        const { mxEvent } = this.props;
+        if (!mxEvent) return;
+
+        // Check if this event is a transcript for our audio message
+        if (
+            event.getRelation()?.event_id === mxEvent.getId() &&
+            event.getRelation()?.rel_type === RelationType.Reference &&
+            (event.getContent().msgtype === MsgType.RefinedSTT || event.getContent().msgtype === MsgType.RawSTT)
+        ) {
+            this.updateTranscript();
+        }
+    };
+
     public componentDidMount(): void {
         this.updateTranscript();
+
+        // Add timeline listener
+        const room = MatrixClientPeg.safeGet().getRoom(this.props.mxEvent?.getRoomId());
+        if (room) {
+            room.on("Room.timeline", this.onTimelineEvent);
+        }
     }
 
     public componentDidUpdate(prevProps: IProps): void {
         if (prevProps.mxEvent?.getId() !== this.props.mxEvent?.getId()) {
             this.updateTranscript();
+            
+            // Remove listener from old room and add to new room if needed
+            const oldRoom = MatrixClientPeg.safeGet().getRoom(prevProps.mxEvent?.getRoomId());
+            const newRoom = MatrixClientPeg.safeGet().getRoom(this.props.mxEvent?.getRoomId());
+            
+            if (oldRoom) {
+                oldRoom.removeListener("Room.timeline", this.onTimelineEvent);
+            }
+            if (newRoom) {
+                newRoom.on("Room.timeline", this.onTimelineEvent);
+            }
         }
     }
 
@@ -89,7 +128,7 @@ export class TranscriptView extends React.Component<IProps, IState> {
                     <div className="mx_RecordingPlayback_transcript">
                         <div className="mx_RecordingPlayback_transcriptBody">
                             {transcript}
-                            {isRefinedTranscript && <div className="mx_RecordingPlayback_transcriptType"></div>}
+                            {isRefinedTranscript && <div className="mx_AudioPlayer_checkmark mx_RecordingPlayback_transcriptType"><span className="mx_RecordingPlayback_refinedLabel">AI refined</span>✓</div>}
                         </div>
                     </div>
                 )}

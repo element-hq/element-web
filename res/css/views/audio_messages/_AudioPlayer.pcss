@@ -115,6 +115,35 @@ Please see LICENSE files in the repository root for full details.
     overflow: visible; /* Allow transcript to expand */
 }
 
+.mx_RecordingPlayback_transcript {
+    margin-top: 8px;
+}
+
+.mx_RecordingPlayback_transcriptBody {
+    padding: 8px;
+    background-color: $system;
+    border-radius: 8px;
+    color: $primary-content;
+    font-size: $font-15px;
+    line-height: $font-20px;
+    position: relative;
+    min-height: 36px;
+}
+
+.mx_RecordingPlayback_transcriptType {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.mx_RecordingPlayback_refinedLabel {
+    font-size: 12px;
+    color: $secondary-content;
+}
+
 .mx_RecordingPlayback_mainContent {
     display: flex;
     align-items: center;
