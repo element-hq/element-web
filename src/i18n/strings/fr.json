@@ -64,6 +64,7 @@
         "go": "C’est parti",
         "go_back": "Revenir en arrière",
         "got_it": "Compris",
+        "hide": "Masquer",
         "hide_advanced": "Masquer les paramètres avancés",
         "hold": "Mettre en pause",
         "ignore": "Ignorer",
@@ -2095,6 +2096,19 @@
         "add_space_label": "Ajouter un espace",
         "breadcrumbs_empty": "Aucun salon visité récemment",
         "breadcrumbs_label": "Salons visités récemment",
+        "empty": {
+            "no_chats": "Pas encore de discussions",
+            "no_chats_description": "Commencez par envoyer un message à quelqu'un ou en créant un salon",
+            "no_chats_description_no_room_rights": "Commencez par envoyer un message à quelqu'un",
+            "no_favourites": "Vous n'avez pas encore de discussion favorite",
+            "no_favourites_description": "Vous pouvez ajouter une discussion à vos favoris dans les paramètres de discussion",
+            "no_people": "Vous n'avez encore de discussions",
+            "no_people_description": "Veuillez désélectionner des filtres pour voir vos discussions",
+            "no_rooms": "Vous n’êtes membre d’aucun salon",
+            "no_rooms_description": "Veuillez désélectionner des filtres pour voir vos discussions",
+            "no_unread": "Félicitations ! Vous n'avez aucun message non lu",
+            "show_chats": "Afficher toutes les discussions"
+        },
         "failed_add_tag": "Échec de l’ajout de l’étiquette %(tagName)s au salon",
         "failed_remove_tag": "Échec de la suppression de l’étiquette %(tagName)s du salon",
         "failed_set_dm_tag": "Échec de l’ajout de l’étiquette de conversation privée",
@@ -2111,6 +2125,14 @@
             "other": "Vous êtes en train de rejoindre %(count)s salons"
         },
         "list_title": "Liste de salons",
+        "more_options": {
+            "copy_link": "Copier le lien du salon",
+            "favourited": "Favorisé",
+            "leave_room": "Quitter le salon",
+            "low_priority": "Priorité basse",
+            "mark_read": "Marquer comme lu",
+            "mark_unread": "Marquer comme non lu"
+        },
         "notification_options": "Paramètres de notifications",
         "open_space_menu": "Ouvrir le menu de l’espace",
         "primary_filters": "Filtre de la liste des salons",
@@ -2119,6 +2141,7 @@
             "other": "Actuellement en train de supprimer les messages dans %(count)s salons"
         },
         "room": {
+            "more_options": "Plus d’options",
             "open_room": "Ouvrir salon %(roomName)s"
         },
         "show_less": "En voir moins",
