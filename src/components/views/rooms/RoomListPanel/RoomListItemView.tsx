@@ -20,12 +20,16 @@ interface RoomListItemViewPropsProps extends React.HTMLAttributes<HTMLButtonElem
      * The room to display
      */
     room: Room;
+    /**
+     * Whether the room is selected
+     */
+    isSelected: boolean;
 }
 
 /**
  * An item in the room list
  */
-export function RoomListItemView({ room, ...props }: RoomListItemViewPropsProps): JSX.Element {
+export function RoomListItemView({ room, isSelected, ...props }: RoomListItemViewPropsProps): JSX.Element {
     const vm = useRoomListItemViewModel(room);
 
     const [isHover, setIsHover] = useState(false);
@@ -38,8 +42,10 @@ export function RoomListItemView({ room, ...props }: RoomListItemViewPropsProps)
         <button
             className={classNames("mx_RoomListItemView", {
                 mx_RoomListItemView_menu_open: showHoverDecoration,
+                mx_RoomListItemView_selected: isSelected,
             })}
             type="button"
+            aria-selected={isSelected}
             aria-label={_t("room_list|room|open_room", { roomName: room.name })}
             onClick={() => vm.openRoom()}
             onMouseOver={() => setIsHover(true)}

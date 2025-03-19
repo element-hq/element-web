@@ -77,4 +77,20 @@ test.describe("Room list", () => {
         await page.getByRole("menuitem", { name: "leave room" }).click();
         await expect(roomItem).not.toBeVisible();
     });
+
+    test("should scroll to the current room", async ({ page, app, user }) => {
+        const roomListView = getRoomList(page);
+        await roomListView.hover();
+        // Scroll to the end of the room list
+        await page.mouse.wheel(0, 1000);
+
+        await roomListView.getByRole("gridcell", { name: "Open room room0" }).click();
+
+        const filters = page.getByRole("listbox", { name: "Room list filters" });
+        await filters.getByRole("option", { name: "People" }).click();
+        await expect(roomListView.getByRole("gridcell", { name: "Open room room0" })).not.toBeVisible();
+
+        await filters.getByRole("option", { name: "People" }).click();
+        await expect(roomListView.getByRole("gridcell", { name: "Open room room0" })).toBeVisible();
+    });
 });
