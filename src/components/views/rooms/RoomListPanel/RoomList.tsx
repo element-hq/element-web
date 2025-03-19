@@ -22,10 +22,12 @@ interface RoomListProps {
 /**
  * A virtualized list of rooms.
  */
-export function RoomList({ vm: { rooms } }: RoomListProps): JSX.Element {
+export function RoomList({ vm: { rooms, activeIndex } }: RoomListProps): JSX.Element {
     const roomRendererMemoized = useCallback(
-        ({ key, index, style }: ListRowProps) => <RoomListItemView room={rooms[index]} key={key} style={style} />,
-        [rooms],
+        ({ key, index, style }: ListRowProps) => (
+            <RoomListItemView room={rooms[index]} key={key} style={style} isSelected={activeIndex === index} />
+        ),
+        [rooms, activeIndex],
     );
 
     // The first div is needed to make the virtualized list take all the remaining space and scroll correctly
@@ -41,6 +43,7 @@ export function RoomList({ vm: { rooms } }: RoomListProps): JSX.Element {
                         rowHeight={48}
                         height={height}
                         width={width}
+                        scrollToIndex={activeIndex}
                     />
                 )}
             </AutoSizer>
