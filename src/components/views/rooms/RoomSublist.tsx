@@ -12,8 +12,7 @@ import { type Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 import { type Enable, Resizable } from "re-resizable";
 import { type Direction } from "re-resizable/lib/resizer";
-import React, { type JSX } from "react";
-import { type ComponentType, createRef, type ReactComponentElement, type ReactNode } from "react";
+import React, { type JSX, type ComponentType, createRef, type ReactComponentElement, type ReactNode } from "react";
 
 import { polyfillTouchEvent } from "../../../@types/polyfill";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
