@@ -37,21 +37,10 @@ export class SummaryView extends React.Component<IProps, IState> implements ISum
     }
 
     private onTimelineEvent = (event: MatrixEvent): void => {
-        console.log("[Summary] Timeline event received:", {
-            type: event.getType(),
-            msgtype: event.getContent().msgtype,
-            relationType: event.getRelation()?.rel_type,
-            relatedTo: event.getRelation()?.event_id,
-        });
-
         const { mxEvent } = this.props;
-        if (!mxEvent) {
-            console.log("[Summary] No mxEvent in props");
-            return;
-        }
+        if (!mxEvent) return;
 
         const audioEventId = mxEvent.getId();
-        console.log("[Summary] Audio event ID:", audioEventId);
 
         // Check if this event is a summary for our audio message
         if (
@@ -59,7 +48,6 @@ export class SummaryView extends React.Component<IProps, IState> implements ISum
             event.getRelation()?.rel_type === RelationType.Reference &&
             event.getContent().msgtype === MsgType.Summary
         ) {
-            console.log("[Summary] Found summary event, updating state with:", event.getContent().body);
             this.setState({ summary: event.getContent().body });
         }
     };
@@ -73,7 +61,6 @@ export class SummaryView extends React.Component<IProps, IState> implements ISum
         if (mxEvent) {
             const room = MatrixClientPeg.safeGet().getRoom(mxEvent.getRoomId());
             if (room) {
-                console.log("[Summary] Adding timeline listener for room:", mxEvent.getRoomId());
                 room.on("Room.timeline", this.onTimelineEvent);
                 this.currentRoom = room; // Store room reference for cleanup
             }
@@ -83,7 +70,6 @@ export class SummaryView extends React.Component<IProps, IState> implements ISum
     public componentWillUnmount(): void {
         // Remove timeline listener
         if (this.currentRoom) {
-            console.log("[Summary] Removing timeline listener");
             this.currentRoom.removeListener("Room.timeline", this.onTimelineEvent);
             this.currentRoom = null;
         }
@@ -167,7 +153,6 @@ export class SummaryView extends React.Component<IProps, IState> implements ISum
         const audioEventId = mxEvent.getId();
 
         // No summary exists, check for transcript
-        console.log("[Summary] Looking for transcripts related to audio:", audioEventId);
         const allTranscripts = room
             ?.getUnfilteredTimelineSet()
             .getLiveTimeline()
@@ -178,9 +163,7 @@ export class SummaryView extends React.Component<IProps, IState> implements ISum
                     (e.getContent().msgtype === MsgType.RawSTT || e.getContent().msgtype === MsgType.RefinedSTT),
             );
 
-        console.log("[Summary] Found transcripts:", allTranscripts?.length || 0);
         if (!allTranscripts?.length) {
-            console.log("[Summary] No transcripts found, setting state");
             this.setState({ summary: "No transcript available to summarize" });
             return;
         }
@@ -191,29 +174,20 @@ export class SummaryView extends React.Component<IProps, IState> implements ISum
 
         const transcriptEvent = refinedTranscript || rawTranscript;
         const transcriptId = transcriptEvent.getId();
-        console.log(`[Summary] Using ${refinedTranscript ? "refined" : "raw"} transcript`);
-
-        // Request new summary
-        console.log("[Summary] No existing summary found, requesting new one");
-        console.log(`[Summary] Room ID: ${roomId}, Audio ID: ${audioEventId}, Transcript ID: ${transcriptId}`);
-
         const requestBody = {
             language: "en",
             reference_event_id: audioEventId,
         };
 
         const path = `/_synapse/client/v1/rooms/${roomId}/event/${transcriptId}/summarize`;
-        console.log(`[Summary] Making request to: ${path}`);
 
         try {
             await cli.http.authedRequest("POST", path, undefined, requestBody, {
                 prefix: "",
                 useAuthorizationHeader: true,
             });
-            console.log("[Summary] Request sent successfully");
             this.setState({ summary: "Generating summary..." });
         } catch (error) {
-            console.error("[Summary] Request failed:", error);
             this.setState({ summary: "Failed to request summary" });
         }
     };

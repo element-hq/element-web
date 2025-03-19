@@ -72,16 +72,11 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps, State> {
     private summaryRef = React.createRef<ISummaryViewRef>();
 
     private handleSummaryToggle = async (): Promise<void> => {
-        console.log("[Summary] Toggle clicked in RecordingPlayback");
         const { mxEvent } = this.props;
-        if (!mxEvent) {
-            console.log("[Summary] No mxEvent provided");
-            return;
-        }
+        if (!mxEvent) return;
 
         // Get current state to determine if we're showing or hiding
         const willShow = !this.state.showSummary;
-        console.log("[Summary] Will", willShow ? "show" : "hide", "summary");
 
         // Toggle the summary panel
         this.setState({
