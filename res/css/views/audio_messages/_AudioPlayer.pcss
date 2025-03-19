@@ -125,6 +125,7 @@ Please see LICENSE files in the repository root for full details.
     border-radius: 8px;
     color: $primary-content;
     font-size: $font-15px;
+    max-width: 500px;
     line-height: $font-20px;
     position: relative;
     min-height: 36px;
@@ -227,59 +228,5 @@ Please see LICENSE files in the repository root for full details.
     &.mx_AudioPlayer_transcribeButton_active {
         background-color: $tertiary-content;
         color: $background;
-    }
-}
-
-.mx_AudioPlayer_summary {
-    margin-top: 12px;
-    margin-bottom: 5px;
-    padding: 8px 12px;
-    background-color: $system;
-    border-radius: 8px;
-    width: fit-content;
-    min-width: 243px;
-    max-width: 500px;
-    transition: width 0.3s ease, max-width 0.3s ease;
-    margin: 0;
-    /* Ensure consistent width handling for both RawSTT and RefinedSTT */
-    box-sizing: border-box;
-    color: $primary-content;
-    font-size: $font-14px;
-    line-height: 1.4;
-    order: 2;
-    white-space: pre-wrap;
-    word-break: break-word;
-    box-sizing: border-box;
-
-    .mx_AudioPlayer_transcriptContainer {
-        position: relative;
-        padding-bottom: 12px;
-        padding-right: 4px;
-        width: fit-content;
-        max-width: 500px;
-        /* Ensure consistent spacing for both RawSTT and RefinedSTT types */
-        margin-right: 4px;
-    }
-
-    .mx_AudioPlayer_refinedIndicator {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .mx_AudioPlayer_checkmark {
-        color: $accent;
-        font-size: $font-10px;
-        background-color: $system;
-        border-radius: 50%;
-        width: 12px;
-        height: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        line-height: 1;
     }
 }
