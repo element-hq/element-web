@@ -8,8 +8,9 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactNode } from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import classnames from "classnames";
-
+import { MsgType, RelationType } from "matrix-js-sdk/src/matrix";
 import PlayPauseButton from "./PlayPauseButton";
 import AccessibleButton from "../elements/AccessibleButton";
 import PlaybackClock from "./PlaybackClock";
@@ -17,7 +18,7 @@ import AudioPlayerBase, { type IProps as IAudioPlayerBaseProps } from "./AudioPl
 import SeekBar from "./SeekBar";
 import PlaybackWaveform from "./PlaybackWaveform";
 import { PlaybackState } from "../../../audio/Playback";
-import { SummaryView } from "./SummaryView";
+import { SummaryView, ISummaryViewRef } from "./SummaryView";
 import { TranscriptView } from "./TranscriptView";
 
 export enum PlaybackLayout {
@@ -53,78 +54,6 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps, State> {
         };
     }
 
-    private handleSummaryToggle = (): void => {
-        this.setState((prevState) => ({
-            showSummary: !prevState.showSummary,
-            showTranscript: false,
-        }));
-    };
-
-    private updateSummary = () => {
-        const { mxEvent } = this.props;
-        if (!mxEvent) return;
-
-        const room = MatrixClientPeg.safeGet().getRoom(mxEvent.getRoomId());
-        const summaryEvents = room
-            ?.getUnfilteredTimelineSet()
-            .getLiveTimeline()
-            .getEvents()
-            .filter(
-                (e) =>
-                    e.getRelation()?.event_id === mxEvent.getId() &&
-                    e.getRelation()?.rel_type === RelationType.Reference &&
-                    e.getContent().msgtype === MsgType.Summary,
-            );
-
-        if (summaryEvents?.length) {
-            // Use the latest summary event
-            const summaryEvent = summaryEvents[summaryEvents.length - 1];
-            const summary = summaryEvent.getContent().body;
-            if (summary && this.state.summary !== summary) {
-                this.setState({ summary });
-            }
-        }
-    };
-
-    private updateTranscript = () => {
-        const { mxEvent } = this.props;
-        if (!mxEvent) return;
-
-        const room = MatrixClientPeg.safeGet().getRoom(mxEvent.getRoomId());
-        const transcripts = room
-            ?.getUnfilteredTimelineSet()
-            .getLiveTimeline()
-            .getEvents()
-            .filter(
-                (e) =>
-                    e.getRelation()?.event_id === mxEvent.getId() &&
-                    e.getRelation()?.rel_type === RelationType.Reference &&
-                    (e.getContent().msgtype === MsgType.RefinedSTT || e.getContent().msgtype === MsgType.RawSTT),
-            );
-
-        // Always prefer refined over raw transcript regardless of timestamp
-        const refined = transcripts?.find((e) => e.getContent().msgtype === MsgType.RefinedSTT);
-        const raw = transcripts?.find((e) => e.getContent().msgtype === MsgType.RawSTT);
-
-        // Always prefer refined over raw transcript as per MsgType.RefinedSTT vs MsgType.RawSTT precedence
-        const newTranscript =
-            refined?.getContent()?.body || raw?.getContent()?.body || mxEvent.getContent()?.transcript;
-        const isRefined = refined !== undefined;
-        const transcriptEventId = (refined || raw)?.getId();
-
-        if (
-            this.state.transcript !== newTranscript ||
-            this.state.isRefinedTranscript !== isRefined ||
-            this.state.transcriptEventId !== transcriptEventId
-        ) {
-            this.setState({
-                transcript: newTranscript,
-                transcriptEventId,
-                isRefinedTranscript: isRefined,
-            });
-        }
-    };
-
     public componentDidMount(): void {
         super.componentDidMount?.();
     }
@@ -138,6 +67,32 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps, State> {
             showTranscript: !prevState.showTranscript,
             showSummary: false,
         }));
+    };
+
+    private summaryRef = React.createRef<ISummaryViewRef>();
+
+    private handleSummaryToggle = async (): Promise<void> => {
+        console.log("[Summary] Toggle clicked in RecordingPlayback");
+        const { mxEvent } = this.props;
+        if (!mxEvent) {
+            console.log("[Summary] No mxEvent provided");
+            return;
+        }
+
+        // Get current state to determine if we're showing or hiding
+        const willShow = !this.state.showSummary;
+        console.log("[Summary] Will", willShow ? "show" : "hide", "summary");
+
+        // Toggle the summary panel
+        this.setState({
+            showSummary: willShow,
+            showTranscript: false, // Always hide transcript when toggling summary
+        });
+
+        // Request summary if needed and if we're showing it
+        if (willShow) {
+            await this.summaryRef.current?.requestSummaryIfNeeded();
+        }
     };
 
     // This component is rendered in two ways: the composer and timeline. They have different
@@ -195,13 +150,17 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps, State> {
                                     mx_AudioPlayer_transcribeButton_active: this.state.showSummary,
                                 },
                             )}
-                            onClick={this.handleSummaryToggle}
+                            onClick={() => {
+                                console.log("[Summary] S button clicked in RecordingPlayback");
+                                this.handleSummaryToggle();
+                            }}
                         >
                             <span className="mx_AudioPlayer_transcribeLetter">S</span>
                         </AccessibleButton>
                     </div>
                 </div>
                 <SummaryView
+                    ref={this.summaryRef}
                     mxEvent={this.props.mxEvent}
                     showSummary={this.state.showSummary}
                     onToggleSummary={this.handleSummaryToggle}
