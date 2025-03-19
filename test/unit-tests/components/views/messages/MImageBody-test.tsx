@@ -85,6 +85,11 @@ describe("<MImageBody/>", () => {
         fetchMock.mockReset();
     });
 
+    afterEach(() => {
+        mocked(encrypt.decryptAttachment).mockReset();
+    });
+
+
     it("should show a thumbnail while image is being downloaded", async () => {
         fetchMock.getOnce(url, { status: 200 });
 

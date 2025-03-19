@@ -918,7 +918,7 @@ test.describe("Timeline", () => {
             await page.getByRole("button", { name: "Hide" }).click();
 
             // Check that the image is now hidden.
-            await expect(page.getByRole("link", { name: "Show image" })).toBeVisible();
+            await expect(page.getByRole("button", { name: "Show image" })).toBeVisible();
         });
 
         test("should be able to hide a video", { tag: "@screenshot" }, async ({ page, app, room, context }) => {
@@ -937,7 +937,7 @@ test.describe("Timeline", () => {
             await page.getByRole("button", { name: "Hide" }).click();
 
             // Check that the vudeo is now hidden.
-            await expect(page.getByRole("link", { name: "Show video" })).toBeVisible();
+            await expect(page.getByRole("button", { name: "Show video" })).toBeVisible();
         });
     });
 
