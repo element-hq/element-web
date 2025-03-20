@@ -35,17 +35,18 @@ function spaceCreateOptions(spaceName: string, roomIds: string[] = []): ICreateR
                     name: spaceName,
                 },
             },
-            ...roomIds.map(spaceChildInitialState),
+            ...roomIds.map(r => spaceChildInitialState(r)),
         ],
     };
 }
 
-function spaceChildInitialState(roomId: string): ICreateRoomOpts["initial_state"]["0"] {
+function spaceChildInitialState(roomId: string, order?: string): ICreateRoomOpts["initial_state"]["0"] {
     return {
         type: "m.space.child",
         state_key: roomId,
         content: {
             via: [roomId.split(":")[1]],
+            order,
         },
     };
 }
@@ -337,7 +338,7 @@ test.describe("Spaces", () => {
         await expect(page.locator(".mx_NewRoomIntro")).toBeVisible();
     });
 
-    test("should render spaces view", { tag: "@screenshot" }, async ({ page, app, user, axe, checkA11y }) => {
+    test("should render spaces view", { tag: "@screenshot" }, async ({ page, app, user, axe }) => {
         axe.disableRules([
             // Disable this check as it triggers on nested roving tab index elements which are in practice fine
             "nested-interactive",
@@ -360,9 +361,9 @@ test.describe("Spaces", () => {
         await app.client.createSpace({
             name: "Root Space",
             initial_state: [
-                spaceChildInitialState(childSpaceId1),
-                spaceChildInitialState(childSpaceId2),
-                spaceChildInitialState(childSpaceId3),
+                spaceChildInitialState(childSpaceId1, "a"),
+                spaceChildInitialState(childSpaceId2, "b"),
+                spaceChildInitialState(childSpaceId3, "c"),
             ],
         });
         await app.viewSpaceByName("Root Space");
