@@ -89,7 +89,6 @@ describe("<MImageBody/>", () => {
         mocked(encrypt.decryptAttachment).mockReset();
     });
 
-
     it("should show a thumbnail while image is being downloaded", async () => {
         fetchMock.getOnce(url, { status: 200 });
 
@@ -170,6 +169,8 @@ describe("<MImageBody/>", () => {
                     mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
                 />,
             );
+
+            expect(screen.getByText("Show image")).toBeInTheDocument();
 
             expect(fetchMock).not.toHaveFetched(url);
         });
