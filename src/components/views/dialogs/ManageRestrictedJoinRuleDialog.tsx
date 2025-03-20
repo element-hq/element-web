@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024,2025 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -44,22 +44,23 @@ const Entry: React.FC<{
     }
 
     return (
-        <label className="mx_ManageRestrictedJoinRuleDialog_entry">
-            <div>
-                <div>
-                    {localRoom ? <RoomAvatar room={room} size="20px" /> : <RoomAvatar oobData={room} size="20px" />}
-                    <span className="mx_ManageRestrictedJoinRuleDialog_entry_name">{room.name}</span>
-                </div>
-                {description && (
-                    <div className="mx_ManageRestrictedJoinRuleDialog_entry_description">{description}</div>
-                )}
-            </div>
+        <div className="mx_ManageRestrictedJoinRuleDialog_entry">
             <StyledCheckbox
                 onChange={onChange ? (e) => onChange(e.target.checked) : undefined}
                 checked={checked}
                 disabled={!onChange}
-            />
-        </label>
+                description={description}
+            >
+                <div>
+                    {localRoom ? (
+                        <RoomAvatar role="none" room={room} size="20px" />
+                    ) : (
+                        <RoomAvatar oobData={room} size="20px" />
+                    )}
+                    <span className="mx_ManageRestrictedJoinRuleDialog_entry_name">{room.name}</span>
+                </div>
+            </StyledCheckbox>
+        </div>
     );
 };
 

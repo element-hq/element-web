@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024,2025 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -70,37 +70,25 @@ Please see LICENSE files in the repository root for full details.
         text-transform: uppercase;
         color: var(--cpd-color-text-secondary);
         margin: 20px 0 12px;
-    }
-
-    .mx_QuickSettingsButton_pinToSidebarHeading {
-        padding-left: 24px;
         position: relative;
-    }
-
-    .mx_Checkbox {
-        margin-bottom: 8px;
-    }
-
-    .mx_QuickSettingsButton_favouritesCheckbox,
-    .mx_QuickSettingsButton_peopleCheckbox {
-        .mx_Checkbox_background + div {
-            padding-left: 22px;
-            position: relative;
-            margin-left: 6px;
-            font-size: $font-15px;
-            line-height: $font-24px;
-            color: var(--cpd-color-text-primary);
-        }
+        display: flex;
     }
 
     .mx_QuickSettingsButton_moreOptionsButton {
-        padding-left: 22px;
-        margin-left: 22px;
+        margin-left: var(--cpd-space-7x);
         font-size: $font-15px;
         line-height: $font-24px;
         color: var(--cpd-color-text-primary);
         position: relative;
         margin-bottom: 16px;
+    }
+
+    .mx_QuickSettingsButton_option {
+        margin-bottom: var(--cpd-space-3x);
+        label {
+            /* Correctly line up icons and text. */
+            display: flex;
+        }
     }
 }
 
@@ -111,15 +99,10 @@ Please see LICENSE files in the repository root for full details.
 }
 
 .mx_QuickSettingsButton_icon {
-    // TODO remove when all icons have fill=currentColor
-    * {
-        fill: $secondary-content;
-    }
+    margin-right: var(--cpd-space-1x);
     color: $secondary-content;
-    width: 16px;
-    height: 16px;
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    margin-top: auto;
+    margin-bottom: auto;
 }
