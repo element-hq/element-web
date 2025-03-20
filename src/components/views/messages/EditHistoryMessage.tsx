@@ -13,7 +13,6 @@ import classNames from "classnames";
 import * as HtmlUtils from "../../../HtmlUtils";
 import { editBodyDiffToHtml } from "../../../utils/MessageDiffUtils";
 import { formatTime } from "../../../DateUtils";
-import { tooltipifyLinks } from "../../../utils/tooltipify";
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
 import RedactedBody from "./RedactedBody";
@@ -22,7 +21,6 @@ import ConfirmAndWaitRedactDialog from "../dialogs/ConfirmAndWaitRedactDialog";
 import ViewSource from "../../structures/ViewSource";
 import SettingsStore from "../../../settings/SettingsStore";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import { ReactRootManager } from "../../../utils/react";
 import { pillifyLinksReplacer } from "../../../utils/pillify.tsx";
 
 function getReplacedContent(event: MatrixEvent): IContent {
@@ -48,8 +46,6 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
     declare public context: React.ContextType<typeof MatrixClientContext>;
 
     private content = createRef<HTMLDivElement>();
-    private pills = new ReactRootManager();
-    private tooltips = new ReactRootManager();
 
     public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
@@ -94,26 +90,9 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
         );
     };
 
-    private tooltipifyLinks(): void {
-        // not present for redacted events
-        if (this.content.current) {
-            tooltipifyLinks(this.content.current.children, this.pills.elements, this.tooltips);
-        }
-    }
-
-    public componentDidMount(): void {
-        this.tooltipifyLinks();
-    }
-
     public componentWillUnmount(): void {
-        this.pills.unmount();
-        this.tooltips.unmount();
         const event = this.props.mxEvent;
         event.localRedactionEvent()?.off(MatrixEventEvent.Status, this.onAssociatedStatusChanged);
-    }
-
-    public componentDidUpdate(): void {
-        this.tooltipifyLinks();
     }
 
     private renderActionBar(): React.ReactNode {

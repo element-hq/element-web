@@ -1,5 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`pillify should do nothing for empty element 1`] = `
+<DocumentFragment>
+  <div />
+</DocumentFragment>
+`;
+
 exports[`pillify should pillify @room 1`] = `
 <DocumentFragment>
   <div>

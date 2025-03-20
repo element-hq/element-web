@@ -26,7 +26,7 @@ import { PERMITTED_URL_SCHEMES } from "./utils/UrlUtils";
 import { sanitizeHtmlParams, transformTags } from "./Linkify";
 import { graphemeSegmenter } from "./utils/strings";
 
-export { Linkify, linkifyElement, linkifyAndSanitizeHtml } from "./Linkify";
+export { Linkify, linkifyAndSanitizeHtml } from "./Linkify";
 
 // Anything outside the basic multilingual plane will be a surrogate pair
 const SURROGATE_PAIR_PATTERN = /([\ud800-\udbff])([\udc00-\udfff])/;
@@ -382,6 +382,16 @@ export function applyReplacerOnString(
         }
         return input;
     });
+}
+
+export function combineReplacers(...replacers: HTMLReactParserOptions["replace"][]): HTMLReactParserOptions["replace"] {
+    return (node, index) => {
+        for (const replacer of replacers) {
+            const result = replacer?.(node, index);
+            if (result) return result;
+        }
+        return undefined;
+    };
 }
 
 export function bodyToDiv(

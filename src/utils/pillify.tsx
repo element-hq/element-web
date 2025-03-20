@@ -11,6 +11,7 @@ import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 import { type MatrixEvent, type Room, RuleId } from "matrix-js-sdk/src/matrix";
 import { Element as ParserElement, type DOMNode } from "html-react-parser";
 import { type ParentNode } from "domhandler/lib/node";
+import { textContent } from "domutils";
 
 import { Pill, PillType } from "../components/views/elements/Pill";
 import { parsePermalink } from "./permalinks/Permalinks";
@@ -27,12 +28,12 @@ const shouldBePillified = (node: ParserElement, href: string, parts: PermalinkPa
     // permalink parser didn't return any parts
     if (!parts) return false;
 
-    const textContent = node.children.find((child) => child.type === "text")?.data ?? "";
+    const text = textContent(node);
 
     // event permalink with custom label
-    if (parts.eventId && href !== textContent) return false;
+    if (parts.eventId && href !== text) return false;
 
-    return href.endsWith("/" + textContent);
+    return href.endsWith("/" + text);
 };
 
 const hasParentMatching = (node: ParserElement, matcher: (node: ParentNode | null) => boolean): boolean => {
@@ -94,18 +95,3 @@ export const pillifyLinksReplacer =
             }
         }
     };
-
-/**
- * Recurses depth-first through a DOM tree, converting matrix.to links
- * into pills based on the context of a given room.  Returns a list of
- * the resulting React nodes so they can be unmounted rather than leaking.
- *
- * @param matrixClient the client of the logged-in user
- * @param {Element[]} nodes - a list of sibling DOM nodes to traverse to try
- *   to turn into pills.
- * @param {MatrixEvent} mxEvent - the matrix event which the DOM nodes are
- *   part of representing.
- * @param {ReactRootManager} pills - an accumulator of the DOM nodes which contain
- *   React components which have been mounted as part of this.
- *   The initial caller should pass in an empty array to seed the accumulator.
- */

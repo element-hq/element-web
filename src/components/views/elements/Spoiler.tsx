@@ -6,11 +6,11 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
  */
 
-import React from "react";
+import React, { type ReactNode } from "react";
 
 interface IProps {
     reason?: string;
-    contentHtml: string;
+    children: ReactNode;
 }
 
 interface IState {
@@ -48,10 +48,7 @@ export default class Spoiler extends React.Component<IProps, IState> {
             >
                 {reason}
                 &nbsp;
-                <span
-                    className="mx_EventTile_spoiler_content"
-                    dangerouslySetInnerHTML={{ __html: this.props.contentHtml }}
-                />
+                <span className="mx_EventTile_spoiler_content">{this.props.children}</span>
             </button>
         );
     }

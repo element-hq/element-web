@@ -168,7 +168,6 @@ describe("<MatrixChat />", () => {
         isNameResolvable: true,
         warning: "",
     };
-    let initPromise: Promise<void> | undefined;
     let defaultProps: ComponentProps<typeof MatrixChat>;
     const getComponent = (props: Partial<ComponentProps<typeof MatrixChat>> = {}) => {
         return render(<MatrixChat {...defaultProps} {...props} />);
