@@ -22,7 +22,12 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { OidcError } from "matrix-js-sdk/src/oidc/error";
 import { type BearerTokenResponse } from "matrix-js-sdk/src/oidc/validate";
 import { defer, type IDeferred, sleep } from "matrix-js-sdk/src/utils";
-import { CryptoEvent, UserVerificationStatus } from "matrix-js-sdk/src/crypto-api";
+import {
+    CryptoEvent,
+    type DeviceVerificationStatus,
+    UserVerificationStatus,
+    type CryptoApi,
+} from "matrix-js-sdk/src/crypto-api";
 
 import MatrixChat from "../../../../src/components/structures/MatrixChat";
 import * as StorageAccess from "../../../../src/utils/StorageAccess";
@@ -62,6 +67,7 @@ import { UIFeature } from "../../../../src/settings/UIFeature";
 import AutoDiscoveryUtils from "../../../../src/utils/AutoDiscoveryUtils";
 import { type ValidatedServerConfig } from "../../../../src/utils/ValidatedServerConfig";
 import Modal from "../../../../src/Modal.tsx";
+import { SetupEncryptionStore } from "../../../../src/stores/SetupEncryptionStore.ts";
 
 jest.mock("matrix-js-sdk/src/oidc/authorize", () => ({
     completeAuthorizationCodeGrant: jest.fn(),
@@ -894,13 +900,92 @@ describe("<MatrixChat />", () => {
         });
 
         describe("unskippable verification", () => {
-            it("should show the complete security screen if unskippable verification is enabled", async () => {
+            beforeEach(() => {
+                // Force verification is turned on in settings
                 defaultProps.config.force_verification = true;
+
+                // And this device is being force-verified (because it logged in after
+                // enforcement was turned on).
                 localStorage.setItem("must_verify_device", "true");
+
+                // lostKeys returns false, meaning there are other devices to verify against
+                const realStore = SetupEncryptionStore.sharedInstance();
+                jest.spyOn(realStore, "lostKeys").mockReturnValue(false);
+            });
+
+            afterEach(() => {
+                jest.restoreAllMocks();
+                // Reset things back to how they were before we started
+                defaultProps.config.force_verification = false;
+                localStorage.removeItem("must_verify_device");
+            });
+
+            it("should show the complete security screen if unskippable verification is enabled", async () => {
+                // Given we have force verification on, and an existing logged-in session
+                // that is not verified (see beforeEach())
+
+                // When we render MatrixChat
                 getComponent();
 
-                await screen.findByRole("heading", { name: "Unable to verify this device", level: 1 });
+                // Then we are asked to verify our device
+                await screen.findByRole("heading", { name: "Verify this device", level: 1 });
+
+                // Sanity: we are not racing with another screen update, so this heading stays visible
+                await screen.findByRole("heading", { name: "Verify this device", level: 1 });
             });
+
+            it("should not open app after cancelling device verify if unskippable verification is on", async () => {
+                // See https://github.com/element-hq/element-web/issues/29230
+                // We used to allow bypassing force verification by choosing "Verify with
+                // another device" and not completing the verification.
+
+                // Given we have force verification on, and an existing logged-in session
+                // that is not verified (see beforeEach())
+
+                // And our crypto is set up
+                mockClient.getCrypto.mockReturnValue(createMockCrypto());
+
+                // And MatrixChat is rendered
+                getComponent();
+
+                // When we click "Verify with another device"
+                await screen.findByRole("heading", { name: "Verify this device", level: 1 });
+                const verify = screen.getByRole("button", { name: "Verify with another device" });
+                act(() => verify.click());
+
+                // And close the device verification dialog
+                const closeButton = await screen.findByRole("button", { name: "Close dialog" });
+                act(() => closeButton.click());
+
+                // Then we are not allowed in - we are still being asked to verify
+                await screen.findByRole("heading", { name: "Verify this device", level: 1 });
+            });
+
+            function createMockCrypto(): CryptoApi {
+                return {
+                    getVersion: jest.fn().mockReturnValue("Version 0"),
+                    getVerificationRequestsToDeviceInProgress: jest.fn().mockReturnValue([]),
+                    getUserDeviceInfo: jest.fn().mockReturnValue({
+                        get: jest
+                            .fn()
+                            .mockReturnValue(
+                                new Map([
+                                    ["devid", { dehydrated: false, getIdentityKey: jest.fn().mockReturnValue("k") }],
+                                ]),
+                            ),
+                    }),
+                    getUserVerificationStatus: jest
+                        .fn()
+                        .mockResolvedValue(new UserVerificationStatus(true, true, false)),
+                    setDeviceIsolationMode: jest.fn(),
+                    isDehydrationSupported: jest.fn().mockReturnValue(false),
+                    getDeviceVerificationStatus: jest
+                        .fn()
+                        .mockResolvedValue({ signedByOwner: true } as DeviceVerificationStatus),
+                    isCrossSigningReady: jest.fn().mockReturnValue(false),
+                    requestOwnUserVerification: jest.fn().mockResolvedValue({ cancel: jest.fn() }),
+                } as any;
+            }
         });
     });
 
