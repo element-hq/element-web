@@ -57,7 +57,7 @@ export const SESSION_LOCK_CONSTANTS = {
     /**
      * The number of milliseconds after which we consider a lock claim stale
      */
-    LOCK_EXPIRY_TIME_MS: 30000,
+    LOCK_EXPIRY_TIME_MS: 15000,
 };
 
 /**

@@ -71,15 +71,15 @@ describe("SessionLock", () => {
         jest.advanceTimersByTime(5000);
         expect(checkSessionLockFree()).toBe(false);
 
-        // second instance tries to start. This should block for 25 more seconds
+        // second instance tries to start. This should block for 10 more seconds
         const onNewInstance2 = jest.fn();
         let session2Result: boolean | undefined;
         getSessionLock(onNewInstance2).then((res) => {
             session2Result = res;
         });
 
-        // after another 24.5 seconds, we are still waiting
-        jest.advanceTimersByTime(24500);
+        // after another 9.5 seconds, we are still waiting
+        jest.advanceTimersByTime(9500);
         expect(session2Result).toBe(undefined);
         expect(checkSessionLockFree()).toBe(false);
 
