@@ -11,7 +11,7 @@ runs:
     using: composite
     steps:
         - name: Download release tarball
-          uses: robinraju/release-downloader@a96f54c1b5f5e09e47d9504526e96febd949d4c2 # v1
+          uses: robinraju/release-downloader@daf26c55d821e836577a15f77d86ddc078948b05 # v1
           with:
               tag: ${{ inputs.tag }}
               fileName: element-*.tar.gz*

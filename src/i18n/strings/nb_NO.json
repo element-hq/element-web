@@ -64,6 +64,7 @@
         "go": "Gå",
         "go_back": "Gå tilbake",
         "got_it": "Jeg forstår",
+        "hide": "Skjul",
         "hide_advanced": "Skjul avansert",
         "hold": "Hold",
         "ignore": "Ignorer",
@@ -408,6 +409,14 @@
         "downloading_logs": "Laster ned logger",
         "error_empty": "Fortell oss hva som gikk galt, eller bedre, opprett et GitHub-problem som beskriver problemet.",
         "failed_download_logs": "Kunne ikke laste ned feilsøkingslogger: ",
+        "failed_send_logs_causes": {
+            "disallowed_app": "Feilrapporten din ble avvist. Rageshake-serveren støtter ikke denne applikasjonen.",
+            "rejected_generic": "Feilrapporten din ble avvist. Rageshake-serveren avviste innholdet i rapporten på grunn av en policy.",
+            "rejected_recovery_key": "Feilrapporten din ble avvist av sikkerhetsgrunner, da den inneholdt en gjenopprettingsnøkkel.",
+            "rejected_version": "Feilrapporten din ble avvist fordi versjonen du kjører er for gammel.",
+            "server_unknown_error": "Det oppstod en ukjent feil på rageshake-serveren, og rapporten kunne ikke håndteres.",
+            "unknown_error": "Kunne ikke sende logger."
+        },
         "github_issue": "Github-saksrapport",
         "introduction": "Hvis du har sendt inn en feil via GitHub, kan feilsøkingslogger hjelpe oss med å spore opp problemet. ",
         "log_request": "For å hjelpe oss med å forhindre dette i fremtiden, vennligst <a>send oss loggfiler</a>.",
@@ -447,7 +456,7 @@
         "access_token": "Tilgangstoken",
         "accessibility": "Tilgjengelighet",
         "advanced": "Avansert",
-        "all_rooms": "Alle rom",
+        "all_chats": "Alle chatter",
         "analytics": "Statistikk",
         "and_n_others": {
             "og %(count)s andre …": "other",
@@ -1298,6 +1307,7 @@
         "error_connecting_heading": "Kan ikke koble til integrasjonsadministrator",
         "explainer": "Integreringsbehandlere mottar oppsettsdata, og kan endre på moduler, sende rominvitasjoner, og bestemme tilgangsnivår på dine vegne.",
         "manage_title": "Behandle integreringer",
+        "toggle_label": "Aktiver integrasjonsbehandleren",
         "use_im": "Bruk en integreringsbehandler til å behandle botter, moduler, og klistremerkepakker.",
         "use_im_default": "Bruk en integreringsbehandler <b>(%(serverName)s)</b> til å behandle botter, moduler, og klistremerkepakker."
     },
@@ -2087,20 +2097,50 @@
         "add_space_label": "Legg til område",
         "breadcrumbs_empty": "Ingen nylig besøkte rom",
         "breadcrumbs_label": "Nylig besøkte rom",
+        "empty": {
+            "no_chats": "Ingen chatter ennå",
+            "no_chats_description": "Kom i gang ved å sende meldinger til noen eller ved å opprette et rom",
+            "no_chats_description_no_room_rights": "Kom i gang med å sende meldinger til noen",
+            "no_favourites_description": "Du kan legge til en chat til dine favoritter i chat-innstillingene",
+            "no_people": "Du har ikke direkte chatter med noen ennå",
+            "no_rooms": "Du er ikke med i noen rom ennå",
+            "no_unread": "Gratulerer! Du har ingen uleste meldinger",
+            "show_chats": "Vis alle chatter"
+        },
         "failed_add_tag": "Kunne ikke legge til tagg %(tagName)s til rom",
         "failed_remove_tag": "Kunne ikke fjerne tagg %(tagName)s fra rommet",
         "failed_set_dm_tag": "Kan ikke sette kode på direktemeldingen",
+        "filters": {
+            "favourite": "Favoritter",
+            "people": "Personer",
+            "rooms": "Rom",
+            "unread": "Ulest"
+        },
         "home_menu_label": "Hjem alternativer",
         "join_public_room_label": "Bli med i offentlig rom",
         "joining_rooms_status": {
             "one": "Blir for øyeblikket med i %(count)s rom",
             "other": "Blir for øyeblikket med i %(count)s rom"
         },
+        "list_title": "Romliste",
+        "more_options": {
+            "copy_link": "Kopier romlenke",
+            "favourited": "Favorittmerket",
+            "leave_room": "Forlat rommet",
+            "low_priority": "Lav prioritet",
+            "mark_read": "Marker som lest",
+            "mark_unread": "Marker som ulest"
+        },
         "notification_options": "Varselsinnstillinger",
         "open_space_menu": "Åpne Område-meny",
+        "primary_filters": "Filtre for romliste",
         "redacting_messages_status": {
             "one": "Fjerner for øyeblikket meldinger i %(count)s rom",
             "other": "Fjerner for øyeblikket meldinger i %(count)s rom"
+        },
+        "room": {
+            "more_options": "Flere alternativer",
+            "open_room": "Åpne rom %(roomName)s"
         },
         "show_less": "Vis mindre",
         "show_n_more": {
@@ -2490,10 +2530,19 @@
                 "session_key": "Sesjonsnøkkel:",
                 "title": "Avansert"
             },
+            "delete_key_storage": {
+                "confirm": "Slett nøkkellagring",
+                "list_first": "Du vil ikke ha kryptert meldingshistorikk på nye enheter",
+                "list_second": "Du vil miste tilgangen til de krypterte meldingene dine hvis du logger av %(brand)s overalt",
+                "title": "Er du sikker på at du vil slå av nøkkellagring og slette den?"
+            },
             "device_not_verified_button": "Bekreft denne enheten",
             "device_not_verified_description": "Du må bekrefte denne enheten for å kunne se krypteringsinnstillingene dine.",
             "device_not_verified_title": "Enhet er ikke verifisert",
             "dialog_title": "<strong>Innstillinger:</strong> Kryptering",
+            "key_storage": {
+                "allow_key_storage": "Tillat lagring av nøkler"
+            },
             "recovery": {
                 "change_recovery_confirm_button": "Bekreft ny gjenopprettingsnøkkel",
                 "change_recovery_confirm_description": "Skriv inn den nye gjenopprettingsnøkkelen nedenfor for å fullføre. Den gamle vil ikke lenger fungere.",
@@ -2610,6 +2659,7 @@
         "inline_url_previews_room": "Skru på URL-forhåndsvisninger som standard for deltakerne i dette rommet",
         "inline_url_previews_room_account": "Skru på URL-forhåndsvisninger for dette rommet (Påvirker bare deg)",
         "insert_trailing_colon_mentions": "Sett inn et etterfølgende kolon etter at brukeromtaler i starten av en melding",
+        "invite_avatars": "Vis avatarer til rom du har blitt invitert til",
         "jump_to_bottom_on_send": "Gå til bunnen av tidslinjen når du vil sende en melding",
         "key_backup": {
             "backup_in_progress": "Nøklene dine blir sikkerhetskopiert (den første sikkerhetskopieringen kan ta noen minutter).",
@@ -4059,7 +4109,7 @@
         "error_need_to_be_logged_in": "Du må være logget inn.",
         "error_unable_start_audio_stream_description": "Kan ikke starte lydstrømming.",
         "error_unable_start_audio_stream_title": "Kan ikke starte livestream",
-        "modal_data_warning": "Data på denne skjermen deles med %(widgetDomain)s",
+        "modal_data_warning": "Dataene nedenfor deles med %(widgetDomain)s",
         "modal_title_default": "Modal Widget",
         "no_name": "Ukjent app",
         "open_id_permissions_dialog": {

@@ -37,8 +37,8 @@ export default class RoomAliasField extends React.PureComponent<IProps, IState> 
 
     private fieldRef = createRef<Field>();
 
-    public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         this.state = {
             isValid: true,

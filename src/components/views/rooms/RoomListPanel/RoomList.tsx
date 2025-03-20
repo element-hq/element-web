@@ -10,7 +10,7 @@ import { AutoSizer, List, type ListRowProps } from "react-virtualized";
 
 import { type RoomListViewState } from "../../../viewmodels/roomlist/RoomListViewModel";
 import { _t } from "../../../../languageHandler";
-import { RoomListCell } from "./RoomListCell";
+import { RoomListItemView } from "./RoomListItemView";
 
 interface RoomListProps {
     /**
@@ -22,12 +22,12 @@ interface RoomListProps {
 /**
  * A virtualized list of rooms.
  */
-export function RoomList({ vm: { rooms, openRoom } }: RoomListProps): JSX.Element {
+export function RoomList({ vm: { rooms, activeIndex } }: RoomListProps): JSX.Element {
     const roomRendererMemoized = useCallback(
         ({ key, index, style }: ListRowProps) => (
-            <RoomListCell room={rooms[index]} key={key} style={style} onClick={() => openRoom(rooms[index].roomId)} />
+            <RoomListItemView room={rooms[index]} key={key} style={style} isSelected={activeIndex === index} />
         ),
-        [rooms, openRoom],
+        [rooms, activeIndex],
     );
 
     // The first div is needed to make the virtualized list take all the remaining space and scroll correctly
@@ -43,6 +43,7 @@ export function RoomList({ vm: { rooms, openRoom } }: RoomListProps): JSX.Elemen
                         rowHeight={48}
                         height={height}
                         width={width}
+                        scrollToIndex={activeIndex}
                     />
                 )}
             </AutoSizer>
