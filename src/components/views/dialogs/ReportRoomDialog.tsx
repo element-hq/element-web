@@ -17,7 +17,7 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
 interface IProps {
     roomId: string;
-    onFinished(complete?: boolean): void;
+    onFinished(complete: boolean): void;
 }
 
 /*
@@ -32,7 +32,7 @@ export const ReportRoomDialog: React.FC<IProps> = function ({ roomId, onFinished
     const client = MatrixClientPeg.safeGet();
 
     const onReasonChange = useCallback<ChangeEventHandler<HTMLTextAreaElement>>((e) => setReason(e.target.value), []);
-    const onCancel = useCallback(() => onFinished(false), [onFinished]);
+    const onCancel = useCallback(() => onFinished(sent), [sent, onFinished]);
     const onSubmit = useCallback(async () => {
         setBusy(true);
         try {
@@ -59,7 +59,7 @@ export const ReportRoomDialog: React.FC<IProps> = function ({ roomId, onFinished
     return (
         <BaseDialog
             className="mx_ReportRoomDialog"
-            onFinished={onFinished}
+            onFinished={() => onFinished(sent)}
             title={_t("report_room|title")}
             contentId="mx_ReportEventDialog"
         >
@@ -78,9 +78,9 @@ export const ReportRoomDialog: React.FC<IProps> = function ({ roomId, onFinished
                             value={reason}
                             disabled={busy}
                         />
+                        {error ? <ErrorMessage>{error}</ErrorMessage> : null}
                     </Field>
                     {busy ? <InlineSpinner /> : null}
-                    {error ? <ErrorMessage>{error}</ErrorMessage> : null}
                     <DialogButtons
                         primaryButton={_t("action|send_report")}
                         onPrimaryButtonClick={onSubmit}
