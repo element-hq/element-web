@@ -92,6 +92,40 @@ describe("SessionLock", () => {
         expect(onNewInstance2).not.toHaveBeenCalled();
     });
 
+    it("A second instance starts up when the first terminated uncleanly and the clock was wound back", async () => {
+        // first instance starts...
+        expect(await getSessionLock(() => Promise.resolve())).toBe(true);
+        expect(checkSessionLockFree()).toBe(false);
+
+        // oops, now it dies. We simulate this by forcibly clearing the timers.
+        const time = Date.now();
+        jest.clearAllTimers();
+        expect(checkSessionLockFree()).toBe(false);
+
+        // Now, the clock gets wound back an hour.
+        jest.setSystemTime(time - 3600 * 1000);
+        expect(checkSessionLockFree()).toBe(false);
+
+        // second instance tries to start. This should block for 15 seconds
+        const onNewInstance2 = jest.fn();
+        let session2Result: boolean | undefined;
+        getSessionLock(onNewInstance2).then((res) => {
+            session2Result = res;
+        });
+
+        // after another 14.5 seconds, we are still waiting
+        jest.advanceTimersByTime(14500);
+        expect(session2Result).toBe(undefined);
+        expect(checkSessionLockFree()).toBe(false);
+
+        // another 500ms and we get the lock
+        await jest.advanceTimersByTimeAsync(500);
+        expect(session2Result).toBe(true);
+        expect(checkSessionLockFree()).toBe(false); // still false, because the new session has claimed it
+
+        expect(onNewInstance2).not.toHaveBeenCalled();
+    });
+
     it("A second instance waits for the first to shut down", async () => {
         // first instance starts. Once it gets the shutdown signal, it will wait two seconds and then release the lock.
         await getSessionLock(
