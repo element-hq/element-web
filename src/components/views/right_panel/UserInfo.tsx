@@ -1418,13 +1418,13 @@ export const UserInfoHeader: React.FC<{
                     </Heading>
                     {presenceLabel}
                     {timezoneInfo && (
-                        <Tooltip label={timezoneInfo?.timezone ?? ""}>
-                            <Flex align="center" className="mx_UserInfo_timezone">
-                                <Text size="sm" weight="regular">
-                                    {timezoneInfo?.friendly ?? ""}
-                                </Text>
-                            </Flex>
-                        </Tooltip>
+                        <Flex align="center" className="mx_UserInfo_timezone">
+                            <Text size="sm" weight="regular">
+                                <Tooltip label={timezoneInfo?.timezone ?? ""}>
+                                    <span>{timezoneInfo?.friendly ?? ""}</span>
+                                </Tooltip>
+                            </Text>
+                        </Flex>
                     )}
                     {userIdentifier && (
                         <Text size="sm" weight="semibold" className="mx_UserInfo_profile_mxid">
