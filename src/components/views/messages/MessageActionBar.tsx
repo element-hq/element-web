@@ -61,6 +61,7 @@ import { type GetRelationsForEvent, type IEventTileType } from "../rooms/EventTi
 import { type ButtonEvent } from "../elements/AccessibleButton";
 import PinningUtils from "../../../utils/PinningUtils";
 import PosthogTrackers from "../../../PosthogTrackers.ts";
+import { HideActionButton } from "./HideActionButton.tsx";
 
 interface IOptionsButtonProps {
     mxEvent: MatrixEvent;
@@ -535,6 +536,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                             mediaEventHelperGet={() => this.props.getTile()?.getMediaHelper?.()}
                             key="download"
                         />,
+                        <HideActionButton mxEvent={this.props.mxEvent} key="hide" />,
                     );
                 }
             } else if (

@@ -198,7 +198,8 @@ export interface Settings {
     "feature_html_topic": IFeature;
     "feature_bridge_state": IFeature;
     "feature_jump_to_date": IFeature;
-    "feature_sliding_sync": IFeature;
+    "feature_sliding_sync": IBaseSetting<boolean>;
+    "feature_simplified_sliding_sync": IFeature;
     "feature_element_call_video_rooms": IFeature;
     "feature_group_calls": IFeature;
     "feature_disable_call_per_sender_encryption": IFeature;
@@ -210,7 +211,6 @@ export interface Settings {
     "feature_ask_to_join": IFeature;
     "feature_notifications": IFeature;
     // These are in the feature namespace but aren't actually features
-    "feature_sliding_sync_proxy_url": IBaseSetting<string>;
     "feature_hidebold": IBaseSetting<boolean>;
 
     "useOnlyCurrentProfiles": IBaseSetting<boolean>;
@@ -273,6 +273,7 @@ export interface Settings {
     "language": IBaseSetting<string>;
     "breadcrumb_rooms": IBaseSetting<string[]>;
     "recent_emoji": IBaseSetting<RecentEmojiData>;
+    "showMediaEventIds": IBaseSetting<{ [eventId: string]: boolean }>;
     "SpotlightSearch.recentSearches": IBaseSetting<string[]>;
     "SpotlightSearch.showNsfwPublicRooms": IBaseSetting<boolean>;
     "room_directory_servers": IBaseSetting<string[]>;
@@ -538,7 +539,14 @@ export const SETTINGS: Settings = {
             true,
         ),
     },
+    // legacy sliding sync flag: no longer works, will error for anyone who's still using it
     "feature_sliding_sync": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
+        supportedLevelsAreOrdered: true,
+        shouldWarn: true,
+        default: false,
+    },
+    "feature_simplified_sliding_sync": {
         isFeature: true,
         labsGroup: LabGroup.Developer,
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
@@ -548,11 +556,6 @@ export const SETTINGS: Settings = {
         shouldWarn: true,
         default: false,
         controller: new SlidingSyncController(),
-    },
-    "feature_sliding_sync_proxy_url": {
-        // This is not a distinct feature, it is a legacy setting for feature_sliding_sync above
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        default: "",
     },
     "feature_element_call_video_rooms": {
         isFeature: true,
@@ -969,6 +972,11 @@ export const SETTINGS: Settings = {
         // not really a setting
         supportedLevels: [SettingLevel.ACCOUNT],
         default: [], // list of room IDs, most recent first
+    },
+    "showMediaEventIds": {
+        // not really a setting
+        supportedLevels: [SettingLevel.DEVICE],
+        default: {}, // List of events => is visible
     },
     "SpotlightSearch.showNsfwPublicRooms": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,

@@ -9,6 +9,7 @@ import React, { type JSX } from "react";
 
 import { useRoomListViewModel } from "../../../viewmodels/roomlist/RoomListViewModel";
 import { RoomList } from "./RoomList";
+import { EmptyRoomList } from "./EmptyRoomList";
 import { RoomListPrimaryFilters } from "./RoomListPrimaryFilters";
 
 /**
@@ -16,10 +17,12 @@ import { RoomListPrimaryFilters } from "./RoomListPrimaryFilters";
  */
 export function RoomListView(): JSX.Element {
     const vm = useRoomListViewModel();
+    const isRoomListEmpty = vm.rooms.length === 0;
+
     return (
         <>
             <RoomListPrimaryFilters vm={vm} />
-            <RoomList vm={vm} />
+            {isRoomListEmpty ? <EmptyRoomList vm={vm} /> : <RoomList vm={vm} />}
         </>
     );
 }

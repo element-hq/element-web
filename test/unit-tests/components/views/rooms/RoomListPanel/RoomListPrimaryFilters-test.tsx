@@ -13,6 +13,7 @@ import { type RoomListViewState } from "../../../../../../src/components/viewmod
 import { SecondaryFilters } from "../../../../../../src/components/viewmodels/roomlist/useFilteredRooms";
 import { RoomListPrimaryFilters } from "../../../../../../src/components/views/rooms/RoomListPanel/RoomListPrimaryFilters";
 import { SortOption } from "../../../../../../src/components/viewmodels/roomlist/useSorter";
+import { FilterKey } from "../../../../../../src/stores/room-list-v3/skip-list/filters";
 
 describe("<RoomListPrimaryFilters />", () => {
     let vm: RoomListViewState;
@@ -20,9 +21,12 @@ describe("<RoomListPrimaryFilters />", () => {
     beforeEach(() => {
         vm = {
             rooms: [],
+            canCreateRoom: true,
+            createRoom: jest.fn(),
+            createChatRoom: jest.fn(),
             primaryFilters: [
-                { name: "People", active: false, toggle: jest.fn() },
-                { name: "Rooms", active: true, toggle: jest.fn() },
+                { name: "People", active: false, toggle: jest.fn(), key: FilterKey.PeopleFilter },
+                { name: "Rooms", active: true, toggle: jest.fn(), key: FilterKey.RoomsFilter },
             ],
             activateSecondaryFilter: () => {},
             activeSecondaryFilter: SecondaryFilters.AllActivity,
@@ -30,6 +34,7 @@ describe("<RoomListPrimaryFilters />", () => {
             activeSortOption: SortOption.Activity,
             shouldShowMessagePreview: false,
             toggleMessagePreview: jest.fn(),
+            activeIndex: undefined,
         };
     });
 

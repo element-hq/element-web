@@ -1388,7 +1388,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 // so show the homepage.
                 dis.dispatch<ViewHomePagePayload>({ action: Action.ViewHomePage, justRegistered: true });
             }
-        } else {
+        } else if (!(await this.shouldForceVerification())) {
             this.showScreenAfterLogin();
         }
 
@@ -2003,9 +2003,17 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     };
 
     // complete security / e2e setup has finished
-    private onCompleteSecurityE2eSetupFinished = (): void => {
-        // This is async but we making this function async to wait for it isn't useful
-        this.onShowPostLoginScreen().catch((e) => {
+    private onCompleteSecurityE2eSetupFinished = async (): Promise<void> => {
+        const forceVerify = await this.shouldForceVerification();
+        if (forceVerify) {
+            const isVerified = await MatrixClientPeg.safeGet().getCrypto()?.isCrossSigningReady();
+            if (!isVerified) {
+                // We must verify but we haven't yet verified - don't continue logging in
+                return;
+            }
+        }
+
+        await this.onShowPostLoginScreen().catch((e) => {
             logger.error("Exception showing post-login screen", e);
         });
     };

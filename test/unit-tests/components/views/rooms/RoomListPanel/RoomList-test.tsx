@@ -37,6 +37,10 @@ describe("<RoomList />", () => {
             activeSortOption: SortOption.Activity,
             shouldShowMessagePreview: false,
             toggleMessagePreview: jest.fn(),
+            createRoom: jest.fn(),
+            createChatRoom: jest.fn(),
+            canCreateRoom: true,
+            activeIndex: undefined,
         };
 
         // Needed to render a room list cell

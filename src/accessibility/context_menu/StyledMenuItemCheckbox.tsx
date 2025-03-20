@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024,2025 New Vector Ltd.
 Copyright 2019 The Matrix.org Foundation C.I.C.
 Copyright 2018 New Vector Ltd
 Copyright 2015, 2016 OpenMarket Ltd
@@ -16,13 +16,12 @@ import { KeyBindingAction } from "../KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 
 interface IProps extends React.ComponentProps<typeof StyledCheckbox> {
-    label?: string;
     onChange(): void; // we handle keyup/down ourselves so lose the ChangeEvent
     onClose(): void; // gets called after onChange on KeyBindingAction.ActivateSelectedButton
 }
 
 // Semantic component for representing a styled role=menuitemcheckbox
-export const StyledMenuItemCheckbox: React.FC<IProps> = ({ children, label, onChange, onClose, ...props }) => {
+export const StyledMenuItemCheckbox: React.FC<IProps> = ({ children, onChange, onClose, ...props }) => {
     const [onFocus, isActive, ref] = useRovingTabIndex<HTMLInputElement>();
 
     const onKeyDown = (e: React.KeyboardEvent): void => {
@@ -63,7 +62,6 @@ export const StyledMenuItemCheckbox: React.FC<IProps> = ({ children, label, onCh
         <StyledCheckbox
             {...props}
             role="menuitemcheckbox"
-            aria-label={label}
             onChange={onChange}
             onKeyDown={onKeyDown}
             onKeyUp={onKeyUp}

@@ -64,6 +64,7 @@
         "go": "Przejdź",
         "go_back": "Wróć",
         "got_it": "Rozumiem",
+        "hide": "Ukryj",
         "hide_advanced": "Ukryj zaawansowane",
         "hold": "Wstrzymaj",
         "ignore": "Ignoruj",
@@ -407,6 +408,15 @@
         "download_logs": "Pobierz dzienniki",
         "downloading_logs": "Pobieranie logów",
         "error_empty": "Powiedz nam, co poszło nie tak, lub nawet lepiej - utwórz zgłoszenie na platformie GitHub, które opisuje problem.",
+        "failed_download_logs": "Nie udało się pobrać dzienników debugowania: ",
+        "failed_send_logs_causes": {
+            "disallowed_app": "Twój raport o błędzie został odrzucony. Serwer gniewnego potrząśnięcia nie obsługuje tej aplikacji.",
+            "rejected_generic": "Twój raport o błędzie został odrzucony. Serwer gniewnego potrząśnięcia odrzucił zawartość zgłoszenia ze względu na jej politykę.",
+            "rejected_recovery_key": "Twój raport o błędzie został odrzucony ze względów bezpieczeństwa, ponieważ zawierał on klucz przywracania.",
+            "rejected_version": "Twój raport o błędzie został odrzucony, ponieważ wersja aplikacji jest zbyt stara.",
+            "server_unknown_error": "Serwer gniewnego potrząśnięcia napotkał nieznany błąd i nie mógł obsłużyć raportu.",
+            "unknown_error": "Nie udało się wysłać logów."
+        },
         "github_issue": "Zgłoszenie GitHub",
         "introduction": "Jeśli zgłosiłeś błąd za pomocą serwisu GitHub, dzienniki debugowania mogą pomóc nam w namierzeniu problemu. ",
         "log_request": "Aby uniknąć tego problemu w przyszłości, <a>wyślij nam dzienniki</a>.",
@@ -446,6 +456,7 @@
         "access_token": "Token dostępu",
         "accessibility": "Ułatwienia dostępu",
         "advanced": "Zaawansowane",
+        "all_chats": "Wszystkie czaty",
         "analytics": "Analityka",
         "and_n_others": {
             "one": "i jeden inny...",
@@ -1305,6 +1316,7 @@
         "error_connecting_heading": "Nie udało się połączyć z menedżerem integracji",
         "explainer": "Zarządcy integracji otrzymują dane konfiguracji, mogą modyfikować widżety, wysyłać zaproszenia do pokojów i ustawiać poziom uprawnień w Twoim imieniu.",
         "manage_title": "Zarządzaj integracjami",
+        "toggle_label": "Włącz menedżer integracji",
         "use_im": "Użyj zarządcy integracji aby zarządzać botami, widżetami i pakietami naklejek.",
         "use_im_default": "Użyj zarządcy Integracji <b>%(serverName)s</b> aby zarządzać botami, widżetami i pakietami naklejek."
     },
@@ -2098,19 +2110,53 @@
         "add_space_label": "Dodaj przestrzeń",
         "breadcrumbs_empty": "Brak ostatnio odwiedzonych pokojów",
         "breadcrumbs_label": "Ostatnio odwiedzane pokoje",
+        "empty": {
+            "no_chats": "Nie ma jeszcze czatów",
+            "no_chats_description": "Zacznij od wysłania wiadomości lub utworzenia pokoju",
+            "no_chats_description_no_room_rights": "Wyślij komuś wiadomość, aby rozpocząć.",
+            "no_favourites": "Nie masz jeszcze ulubionego czatu",
+            "no_favourites_description": "Dodaj czat do ulubionych w ustawieniach czatu",
+            "no_people": "Nie prowadzisz jeszcze z nikim czatów prywatnych",
+            "no_people_description": "Wyczyść filtry, aby zobaczyć pozostałe czaty",
+            "no_rooms": "Nie jesteś jeszcze w żadnym pokoju",
+            "no_rooms_description": "Wyczyść filtry, aby zobaczyć pozostałe czaty",
+            "no_unread": "Brawo! Nie masz żadnych nieprzeczytanych wiadomości",
+            "show_chats": "Pokaż wszystkie czaty"
+        },
         "failed_add_tag": "Nie można dodać tagu %(tagName)s do pokoju",
         "failed_remove_tag": "Nie udało się usunąć tagu %(tagName)s z pokoju",
         "failed_set_dm_tag": "Nie udało się ustawić tagu wiadomości prywatnych",
+        "filters": {
+            "favourite": "Ulubione",
+            "people": "Osoby",
+            "rooms": "Pokoje",
+            "unread": "Nieprzeczytane"
+        },
         "home_menu_label": "Opcje głównej",
         "join_public_room_label": "Dołącz do publicznego pokoju",
         "joining_rooms_status": {
             "one": "Aktualnie dołączanie do %(count)s pokoju",
             "other": "Aktualnie dołączanie do %(count)s pokoi"
         },
+        "list_title": "Lista pokoi",
+        "more_options": {
+            "copy_link": "Kopiuj link pokoju",
+            "favourited": "Ulubiony",
+            "leave_room": "Opuść pokój",
+            "low_priority": "Niski priorytet",
+            "mark_read": "Oznacz jako przeczytane",
+            "mark_unread": "Oznacz jako nieprzeczytane"
+        },
         "notification_options": "Opcje powiadomień",
+        "open_space_menu": "Otwórz menu przestrzeni",
+        "primary_filters": "Filtry listy pokoi",
         "redacting_messages_status": {
             "one": "Aktualnie usuwanie wiadomości z %(count)s pokoju",
             "other": "Aktualnie usuwanie wiadomości z %(count)s pokoi"
+        },
+        "room": {
+            "more_options": "Więcej opcji",
+            "open_room": "Pokój otwarty %(roomName)s"
         },
         "show_less": "Pokaż mniej",
         "show_n_more": {
@@ -2123,6 +2169,10 @@
         "sort_by_activity": "Aktywności",
         "sort_by_alphabet": "A-Z",
         "sort_unread_first": "Pokazuj najpierw pokoje z nieprzeczytanymi wiadomościami",
+        "space_menu": {
+            "home": "Główna przestrzeni",
+            "space_settings": "Ustawienia przestrzeni"
+        },
         "space_menu_label": "menu %(spaceName)s",
         "sublist_options": "Ustawienia listy",
         "suggested_rooms_heading": "Sugerowane pokoje"
@@ -2485,20 +2535,35 @@
                 "breadcrumb_title_forgot": "Nie pamiętasz klucza przywracania? Musisz zresetować swoją tożsamość.",
                 "breadcrumb_warning": "Zrób to tylko wtedy, gdy uważasz, że Twoje konto zostało naruszone.",
                 "details_title": "Szczegóły szyfrowania",
+                "do_not_close_warning": "Nie zamykaj tego okna, dopóki reset nie zostanie zakończony",
                 "export_keys": "Eksportuj klucze",
                 "import_keys": "Importuj klucze",
                 "other_people_device_description": "Domyślnie w pokojach szyfrowanych nie będziesz mógł wysyłać wiadomości, jeśli nie zweryfikujesz członków w pokoju",
                 "other_people_device_label": "Nigdy nie wysyłaj wiadomości szyfrowanych do niezweryfikowanych urządzeń",
                 "other_people_device_title": "Urządzenia innych osób",
                 "reset_identity": "Zresetuj tożsamość kryptograficzną",
+                "reset_in_progress": "Resetowanie w toku...",
                 "session_id": "ID sesji:",
                 "session_key": "Klucz sesji:",
                 "title": "Zaawansowane"
+            },
+            "delete_key_storage": {
+                "breadcrumb_page": "Usuń magazyn kluczy",
+                "confirm": "Usuń magazyn kluczy",
+                "description": "Usunięcie magazynu kluczy usunie Twoją tożsamość kryptograficzną, klucze wiadomości z serwera i wyłączy następujące funkcje bezpieczeństwa:",
+                "list_first": "Nowe urządzenia nie będą posiadały Twojej historii wiadomości szyfrowanych",
+                "list_second": "Utracisz dostęp do swoich wiadomości szyfrowanych, jeśli wylogujesz się wszędzie z %(brand)s",
+                "title": "Czy na pewno chcesz wyłączyć magazyn kluczy i go wyłączyć?"
             },
             "device_not_verified_button": "Zweryfikuj to urządzenie",
             "device_not_verified_description": "Aby wyświetlić ustawienia szyfrowania, musisz zweryfikować to urządzenie.",
             "device_not_verified_title": "Urządzenie niezweryfikowane",
             "dialog_title": "<strong>Ustawienia:</strong> Szyfrowanie",
+            "key_storage": {
+                "allow_key_storage": "Zezwól na magazynowanie kluczy",
+                "description": "Przechowuj swoją tożsamość kryptograficzną i klucze wiadomości bezpiecznie na serwerze. Umożliwi Ci to przeglądanie historii wiadomości na wszystkich nowych urządzeniach.<a>Dowiedz się więcej</a>",
+                "title": "Magazyn kluczy"
+            },
             "recovery": {
                 "change_recovery_confirm_button": "Potwierdź nowy klucz przywracania",
                 "change_recovery_confirm_description": "Wprowadź poniżej nowy klucz przywracania, aby zakończyć. Stary klucz przestanie działać.",
@@ -2615,6 +2680,7 @@
         "inline_url_previews_room": "Włącz domyślny podgląd URL dla uczestników w tym pokoju",
         "inline_url_previews_room_account": "Włącz podgląd URL dla tego pokoju (dotyczy tylko Ciebie)",
         "insert_trailing_colon_mentions": "Wstawiaj dwukropek po wzmiance użytkownika na początku wiadomości",
+        "invite_avatars": "Pokaż awatary pokoi, do których zostałeś zaproszony",
         "jump_to_bottom_on_send": "Przejdź na dół osi czasu po wysłaniu wiadomości",
         "key_backup": {
             "backup_in_progress": "Tworzy się kopia zapasowa Twoich kluczy (pierwsza kopia może potrwać kilka minut).",
@@ -3096,6 +3162,7 @@
         "view": "Przegląda pokój z podanym adresem",
         "whois": "Pokazuje informacje na temat użytkownika"
     },
+    "sliding_sync_legacy_no_longer_supported": "Starsza metoda synchronizacji sliding sync nie jest już obsługiwana: zaloguj się ponownie, aby włączyć nową flagę synchronizacji sliding sync",
     "space": {
         "add_existing_room_space": {
             "create": "Chcesz zamiast tego dodać nowy pokój?",
@@ -4069,7 +4136,7 @@
         "error_need_to_be_logged_in": "Musisz być zalogowany.",
         "error_unable_start_audio_stream_description": "Nie można rozpocząć przesyłania strumienia audio.",
         "error_unable_start_audio_stream_title": "Nie udało się rozpocząć transmisji na żywo",
-        "modal_data_warning": "Dane na tym ekranie są współdzielone z %(widgetDomain)s",
+        "modal_data_warning": "Poniższe dane są współdzielone z %(widgetDomain)s",
         "modal_title_default": "Widżet modalny",
         "no_name": "Nieznana aplikacja",
         "open_id_permissions_dialog": {
