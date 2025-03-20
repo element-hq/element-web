@@ -438,7 +438,11 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
             if (!this.state.loadedImageDimensions) {
                 let imageElement: JSX.Element;
                 if (!this.props.mediaVisible) {
-                    imageElement = <HiddenMediaPlaceholder kind="m.image" onClick={this.onClick} />;
+                    imageElement = (
+                        <HiddenMediaPlaceholder onClick={this.onClick}>
+                            {_t("timeline|m.image|show_image")}
+                        </HiddenMediaPlaceholder>
+                    );
                 } else {
                     imageElement = (
                         <img
@@ -510,7 +514,10 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
         if (!this.props.mediaVisible) {
             img = (
                 <div style={{ width: maxWidth, height: maxHeight }}>
-                    <HiddenMediaPlaceholder kind="m.image" onClick={this.onClick} />;
+                    <HiddenMediaPlaceholder onClick={this.onClick}>
+                        {_t("timeline|m.image|show_image")}
+                    </HiddenMediaPlaceholder>
+                    ;
                 </div>
             );
             showPlaceholder = false; // because we're hiding the image, so don't show the placeholder.
@@ -679,6 +686,7 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
     }
 }
 
+// Wrap MImageBody component so we can use a hook here.
 const MImageBody: React.FC<IBodyProps> = (props) => {
     const [mediaVisible, setVisible] = useMediaVisible(props.mxEvent.getId()!);
     return <MImageBodyInner mediaVisible={mediaVisible} setMediaVisible={setVisible} {...props} />;

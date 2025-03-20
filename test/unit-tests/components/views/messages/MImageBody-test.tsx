@@ -192,6 +192,8 @@ describe("<MImageBody/>", () => {
 
             expect(fetchMock).toHaveFetched(url);
 
+            // Show image is asynchronous since it applies through a settings watcher hook, so
+            // be sure to wait here.
             await waitFor(() => {
                 // spinner while downloading image
                 expect(screen.getByRole("progressbar")).toBeInTheDocument();

@@ -63,6 +63,10 @@ class MVideoBodyInner extends React.PureComponent<IProps, IState> {
         blurhashUrl: null,
     };
 
+    private onClick = (): void => {
+        this.props.setMediaVisible(true);
+    };
+
     private getContentUrl(): string | undefined {
         const content = this.props.mxEvent.getContent<MediaEventContent>();
         // During export, the content url will point to the MSC, which will later point to a local url
@@ -189,12 +193,10 @@ class MVideoBodyInner extends React.PureComponent<IProps, IState> {
             this.forceUpdate(); // we don't really have a reliable thing to update, so just update the whole thing
         });
 
-        if (!this.props.mediaVisible) {
-            // Do not attempt to load the media if we do not want to show previews here.
-            return;
+        // Do not attempt to load the media if we do not want to show previews here.
+        if (this.props.mediaVisible) {
+            await this.downloadVideo();
         }
-
-        await this.downloadVideo();
     }
 
     public async componentDidUpdate(prevProps: Readonly<IProps>): Promise<void> {
@@ -281,7 +283,9 @@ class MVideoBodyInner extends React.PureComponent<IProps, IState> {
                         className="mx_MVideoBody_container"
                         style={{ width: maxWidth, height: maxHeight, aspectRatio }}
                     >
-                        <HiddenMediaPlaceholder onClick={() => this.props.setMediaVisible(true)} kind="m.video" />
+                        <HiddenMediaPlaceholder onClick={this.onClick}>
+                            {_t("timeline|m.video|show_video")}
+                        </HiddenMediaPlaceholder>
                     </div>
                 </span>
             );
@@ -338,6 +342,7 @@ class MVideoBodyInner extends React.PureComponent<IProps, IState> {
     }
 }
 
+// Wrap MVideoBody component so we can use a hook here.
 const MVideoBody: React.FC<IBodyProps> = (props) => {
     const [mediaVisible, setVisible] = useMediaVisible(props.mxEvent.getId()!);
     return <MVideoBodyInner mediaVisible={mediaVisible} setMediaVisible={setVisible} {...props} />;

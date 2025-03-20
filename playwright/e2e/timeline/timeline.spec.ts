@@ -936,7 +936,7 @@ test.describe("Timeline", () => {
             await imgTile.hover();
             await page.getByRole("button", { name: "Hide" }).click();
 
-            // Check that the vudeo is now hidden.
+            // Check that the video is now hidden.
             await expect(page.getByRole("button", { name: "Show video" })).toBeVisible();
         });
     });
