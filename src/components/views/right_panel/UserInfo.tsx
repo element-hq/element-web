@@ -1409,7 +1409,11 @@ export const UserInfoHeader: React.FC<{
                 <Flex direction="column" align="center" className="mx_UserInfo_profile">
                     <Heading size="sm" weight="semibold" as="h1" dir="auto">
                         <Flex className="mx_UserInfo_profile_name" direction="row-reverse" align="center">
-                            {displayName}
+                            <Tooltip isTriggerInteractive={true} placement="left" label={displayName}>
+                                <span>
+                                    {displayName}
+                                </span>
+                            </Tooltip>
                         </Flex>
                     </Heading>
                     {presenceLabel}
@@ -1422,11 +1426,13 @@ export const UserInfoHeader: React.FC<{
                             </Flex>
                         </Tooltip>
                     )}
-                    <Text size="sm" weight="semibold" className="mx_UserInfo_profile_mxid">
-                        <CopyableText getTextToCopy={() => userIdentifier} border={false}>
-                            {userIdentifier}
-                        </CopyableText>
-                    </Text>
+                    {userIdentifier && (
+                        <Text size="sm" weight="semibold" className="mx_UserInfo_profile_mxid">
+                            <CopyableText getTextToCopy={() => userIdentifier} border={false}>
+                                {userIdentifier}
+                            </CopyableText>
+                        </Text>
+                    )}
                 </Flex>
                 {!hideVerificationSection && <VerificationSection member={member} devices={devices} />}
             </Container>
