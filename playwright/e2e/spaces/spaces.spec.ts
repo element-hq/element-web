@@ -35,7 +35,7 @@ function spaceCreateOptions(spaceName: string, roomIds: string[] = []): ICreateR
                     name: spaceName,
                 },
             },
-            ...roomIds.map(r => spaceChildInitialState(r)),
+            ...roomIds.map((r) => spaceChildInitialState(r)),
         ],
     };
 }
