@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 import { render } from "jest-matrix-react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
+
 import { ReportRoomDialog } from "../../../../../src/components/views/dialogs/ReportRoomDialog";
 import SdkConfig from "../../../../../src/SdkConfig";
 import { stubClient } from "../../../../test-utils";
