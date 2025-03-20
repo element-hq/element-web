@@ -34,30 +34,33 @@ jest.mock("matrix-encrypt-attachment", () => ({
 describe("MVideoBody", () => {
     const userId = "@user:server";
     const deviceId = "DEADB33F";
-    const cli = getMockClientWithEventEmitter({
-        ...mockClientMethodsUser(userId),
-        ...mockClientMethodsServer(),
-        ...mockClientMethodsDevice(deviceId),
-        ...mockClientMethodsCrypto(),
-        getRooms: jest.fn().mockReturnValue([]),
-        getIgnoredUsers: jest.fn(),
-        getVersions: jest.fn().mockResolvedValue({
-            unstable_features: {
-                "org.matrix.msc3882": true,
-                "org.matrix.msc3886": true,
-            },
-        }),
-    });
+
     const thumbUrl = "https://server/_matrix/media/v3/download/server/encrypted-poster";
 
-    // eslint-disable-next-line no-restricted-properties
-    cli.mxcUrlToHttp.mockImplementation(
-        (mxcUrl: string, width?: number, height?: number, resizeMethod?: string, allowDirectLinks?: boolean) => {
-            const uri = getHttpUriForMxc("https://server", mxcUrl, width, height, resizeMethod, allowDirectLinks);
-            console.log({ uri });
-            return uri;
-        },
-    );
+    beforeEach(() => {
+        const cli = getMockClientWithEventEmitter({
+            ...mockClientMethodsUser(userId),
+            ...mockClientMethodsServer(),
+            ...mockClientMethodsDevice(deviceId),
+            ...mockClientMethodsCrypto(),
+            getRooms: jest.fn().mockReturnValue([]),
+            getIgnoredUsers: jest.fn(),
+            getVersions: jest.fn().mockResolvedValue({
+                unstable_features: {
+                    "org.matrix.msc3882": true,
+                    "org.matrix.msc3886": true,
+                },
+            }),
+        });
+        // eslint-disable-next-line no-restricted-properties
+        cli.mxcUrlToHttp.mockImplementation(
+            (mxcUrl: string, width?: number, height?: number, resizeMethod?: string, allowDirectLinks?: boolean) => {
+                return getHttpUriForMxc("https://server", mxcUrl, width, height, resizeMethod, allowDirectLinks);
+            },
+        );
+        fetchMock.mockReset();
+    });
+
     const encryptedMediaEvent = new MatrixEvent({
         room_id: "!room:server",
         sender: userId,
@@ -134,7 +137,7 @@ describe("MVideoBody", () => {
         });
 
         it("should render video poster after user consent", async () => {
-            fetchMock.getOnce("http://example.com", { status: 200 });
+            fetchMock.getOnce(thumbUrl, { status: 200 });
 
             render(
                 <MVideoBody
