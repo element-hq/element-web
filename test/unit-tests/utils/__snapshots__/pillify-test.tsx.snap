@@ -1,12 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`pillify should do nothing for empty element 1`] = `
+exports[`pillify mentions should do nothing for empty element 1`] = `
 <DocumentFragment>
   <div />
 </DocumentFragment>
 `;
 
-exports[`pillify should pillify @room 1`] = `
+exports[`pillify mentions should pillify @room 1`] = `
 <DocumentFragment>
   <div>
     <bdi>
@@ -39,7 +39,7 @@ exports[`pillify should pillify @room 1`] = `
 </DocumentFragment>
 `;
 
-exports[`pillify should pillify @room in an intentional mentions world 1`] = `
+exports[`pillify mentions should pillify @room in an intentional mentions world 1`] = `
 <DocumentFragment>
   <div>
     <bdi>

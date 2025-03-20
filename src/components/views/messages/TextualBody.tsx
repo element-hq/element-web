@@ -7,21 +7,16 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX, createRef, type SyntheticEvent, type MouseEvent } from "react";
-import { MsgType, PushRuleKind } from "matrix-js-sdk/src/matrix";
-import { globToRegexp } from "matrix-js-sdk/src/utils";
-import { type DOMNode, domToReact, Element as ParserElement } from "html-react-parser";
+import { MsgType } from "matrix-js-sdk/src/matrix";
 
-import * as HtmlUtils from "../../../HtmlUtils";
 import { formatDate } from "../../../DateUtils";
 import Modal from "../../../Modal";
 import dis from "../../../dispatcher/dispatcher";
 import { _t } from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
-import { pillifyLinksReplacer } from "../../../utils/pillify";
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import { isPermalinkHost, tryTransformPermalinkToLocalHref } from "../../../utils/permalinks/Permalinks";
 import { Action } from "../../../dispatcher/actions";
-import Spoiler from "../elements/Spoiler";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import MessageEditHistoryDialog from "../dialogs/MessageEditHistoryDialog";
 import EditMessageComposer from "../rooms/EditMessageComposer";
@@ -30,14 +25,10 @@ import { type IBodyProps } from "./IBodyProps";
 import RoomContext from "../../../contexts/RoomContext";
 import AccessibleButton from "../elements/AccessibleButton";
 import { options as linkifyOpts } from "../../../linkify-matrix";
-import { getParentEventId } from "../../../utils/Reply";
 import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
 import { type IEventTileOps } from "../rooms/EventTile";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import CodeBlock from "./CodeBlock";
-import { Pill, PillType } from "../elements/Pill";
-import { combineReplacers, Linkify } from "../../../HtmlUtils";
-import { tooltipifyLinksReplacer } from "../../../utils/tooltipify.tsx";
+import EventContentBody from "./EventContentBody.tsx";
+import { getParentEventId } from "../../../utils/Reply.ts";
 
 interface IState {
     // the URLs (if any) to be previewed with a LinkPreviewWidget inside this TextualBody.
@@ -66,20 +57,6 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
     private applyFormatting(): void {
         this.calculateUrlPreview();
-    }
-
-    private getPushDetailsKeywordPatternRegexp(): RegExp | null {
-        const pushDetails = this.props.mxEvent.getPushDetails();
-        if (
-            pushDetails.rule?.enabled &&
-            pushDetails.rule.kind === PushRuleKind.ContentSpecific &&
-            pushDetails.rule.pattern
-        ) {
-            // Reflects the push notification pattern-matching implementation at
-            // https://github.com/matrix-org/matrix-js-sdk/blob/dbd7d26968b94700827bac525c39afff2c198e61/src/pushprocessor.ts#L570
-            return new RegExp("(^|\\W)(" + globToRegexp(pushDetails.rule.pattern) + ")(\\W|$)", "i");
-        }
-        return null;
     }
 
     public componentDidUpdate(prevProps: Readonly<IBodyProps>): void {
@@ -343,76 +320,24 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
         const willHaveWrapper =
             this.props.replacingEventId || this.props.isSeeingThroughMessageHiddenForModeration || isEmote;
-
         // only strip reply if this is the original replying event, edits thereafter do not have the fallback
         const stripReply = !mxEvent.replacingEvent() && !!getParentEventId(mxEvent);
-
-        const htmlOpts = {
-            disableBigEmoji: isEmote || !SettingsStore.getValue("TextualBody.enableBigEmoji"),
-            // Part of Replies fallback support
-            stripReplyFallback: stripReply,
-        };
-        const room = MatrixClientPeg.get()?.getRoom(mxEvent.getRoomId()) ?? undefined;
-        const shouldShowPillAvatar = SettingsStore.getValue("Pill.shouldShowPillAvatar");
-        const keywordRegexpPattern = this.getPushDetailsKeywordPatternRegexp();
-        const replacer = combineReplacers(
-            pillifyLinksReplacer(mxEvent, room, shouldShowPillAvatar),
-            tooltipifyLinksReplacer(),
-            (domNode) => {
-                if (
-                    domNode instanceof ParserElement &&
-                    domNode.tagName.toUpperCase() === "SPAN" &&
-                    typeof domNode.attribs["data-mx-spoiler"] === "string"
-                ) {
-                    return (
-                        <Spoiler reason={domNode.attribs["data-mx-spoiler"]}>
-                            {domToReact(domNode.children as DOMNode[])}
-                        </Spoiler>
-                    );
-                }
-            },
-
-            /**
-             * Marks the text that activated a push-notification keyword pattern.
-             */
-            keywordRegexpPattern
-                ? (domNode) => {
-                      if (domNode.nodeType === Node.TEXT_NODE) {
-                          const text = domNode.data;
-                          if (!text) return;
-
-                          const match = text.match(keywordRegexpPattern);
-                          if (!match || match.length < 3) return;
-
-                          const keywordText = match[2];
-                          const idx = match.index! + match[1].length;
-                          const before = text.substring(0, idx);
-                          const after = text.substring(idx + keywordText.length);
-
-                          return (
-                              <>
-                                  {before}
-                                  <Pill text={keywordText} type={PillType.Keyword} />
-                                  {after}
-                              </>
-                          );
-                      }
-                  }
-                : undefined,
-
-            this.props.mxEvent.getContent().format === "org.matrix.custom.html"
-                ? (domNode) => {
-                      if (domNode instanceof ParserElement && domNode.tagName.toUpperCase() === "PRE") {
-                          return <CodeBlock onHeightChanged={this.props.onHeightChanged} preNode={domNode} />;
-                      }
-                  }
-                : undefined,
+        let body = (
+            <EventContentBody
+                as={willHaveWrapper ? "span" : "div"}
+                mxEvent={mxEvent}
+                content={content}
+                stripReply={stripReply}
+                linkify
+                highlights={this.props.highlights}
+                onHeightChanged={this.props.onHeightChanged}
+                ref={this.contentRef}
+                pillifyKeywords
+                pillifyMentions
+                applyCodeBlocks
+                applySpoilers
+            />
         );
-        let body = willHaveWrapper
-            ? HtmlUtils.bodyToSpan(content, this.props.highlights, htmlOpts, this.contentRef, false, replacer)
-            : HtmlUtils.bodyToDiv(content, this.props.highlights, htmlOpts, this.contentRef, replacer);
-
-        body = <Linkify>{body}</Linkify>;
 
         if (this.props.replacingEventId) {
             body = (

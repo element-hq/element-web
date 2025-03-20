@@ -7,10 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { type DOMNode, type HTMLReactParserOptions, Element as ParserElement, domToReact } from "html-react-parser";
+import { type Element as ParserElement, domToReact } from "html-react-parser";
 
-import PlatformPeg from "../PlatformPeg";
 import LinkWithTooltip from "../components/views/elements/LinkWithTooltip";
+import { type ReplacerMap } from "./reactHtmlParser.tsx";
 
 const getSingleTextContentNode = (node: ParserElement): string | null => {
     if (node.childNodes.length === 1 && node.childNodes[0].type === "text") {
@@ -19,22 +19,20 @@ const getSingleTextContentNode = (node: ParserElement): string | null => {
     return null;
 };
 
-export const tooltipifyLinksReplacer = (): HTMLReactParserOptions["replace"] => {
-    if (!PlatformPeg.get()?.needsUrlTooltips()) return;
+export const tooltipifyAmbiguousLinksReplacer: ReplacerMap = {
+    a: (anchor, { tooltipifyAmbiguousUrls, isHtml }) => {
+        // Ambiguous URLs are only possible in HTML content
+        if (!tooltipifyAmbiguousUrls || !isHtml) return;
 
-    return (domNode: DOMNode) => {
-        if (
-            domNode instanceof ParserElement &&
-            domNode.attribs["href"] &&
-            domNode.attribs["href"] !== getSingleTextContentNode(domNode)
-        ) {
-            let tooltip = domNode.attribs["href"] as string;
+        const href = anchor.attribs["href"];
+        if (href && href !== getSingleTextContentNode(anchor)) {
+            let tooltip = href as string;
             try {
-                tooltip = new URL(domNode.attribs["href"], window.location.href).toString();
+                tooltip = new URL(href, window.location.href).toString();
             } catch {
                 // Not all hrefs will be valid URLs
             }
-            return <LinkWithTooltip tooltip={tooltip}>{domToReact([domNode])}</LinkWithTooltip>;
+            return <LinkWithTooltip tooltip={tooltip}>{domToReact([anchor])}</LinkWithTooltip>;
         }
-    };
+    },
 };

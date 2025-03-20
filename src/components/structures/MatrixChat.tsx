@@ -165,12 +165,6 @@ interface IProps {
     initialScreenAfterLogin?: IScreen;
     // displayname, if any, to set on the device when logging in/registering.
     defaultDeviceDisplayName?: string;
-
-    // Used by tests, this function is called when session initialisation starts
-    // with a promise that resolves or rejects once the initialiation process
-    // has finished, so that tests can wait for this to avoid them executing over
-    // each other.
-    initPromiseCallback?: (p: Promise<void>) => void;
 }
 
 interface IState {
@@ -290,9 +284,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      */
     private startInitSession = (): void => {
         const initProm = this.initSession();
-        if (this.props.initPromiseCallback) {
-            this.props.initPromiseCallback(initProm);
-        }
 
         initProm.catch((err) => {
             // TODO: show an error screen, rather than a spinner of doom

@@ -9,7 +9,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX, type LegacyRef, type ReactNode } from "react";
+import React, { type JSX, type Key, type LegacyRef, type ReactNode } from "react";
 import sanitizeHtml, { type IOptions } from "sanitize-html";
 import classNames from "classnames";
 import katex from "katex";
@@ -18,7 +18,6 @@ import { type IContent } from "matrix-js-sdk/src/matrix";
 import { type Optional } from "matrix-events-sdk";
 import escapeHtml from "escape-html";
 import { getEmojiFromUnicode } from "@matrix-org/emojibase-bindings";
-import parse, { type HTMLReactParserOptions, Text } from "html-react-parser";
 
 import SettingsStore from "./settings/SettingsStore";
 import { stripHTMLReply, stripPlainReply } from "./utils/Reply";
@@ -240,7 +239,7 @@ class HtmlHighlighter extends BaseHighlighter<string> {
 
 const emojiToHtmlSpan = (emoji: string): string =>
     `<span class='mx_Emoji' title='${unicodeToShortcode(emoji)}'>${emoji}</span>`;
-const emojiToJsxSpan = (emoji: string, key: number): JSX.Element => (
+const emojiToJsxSpan = (emoji: string, key: Key): JSX.Element => (
     <span key={key} className="mx_Emoji" title={unicodeToShortcode(emoji)}>
         {emoji}
     </span>
@@ -366,79 +365,6 @@ function analyseEvent(content: IContent, highlights: Optional<string[]>, opts: E
     }
 }
 
-/**
- * Passes through any non-string inputs verbatim, as such they should only be used for emoji bodies
- */
-export function applyReplacerOnString(
-    input: string | JSX.Element[],
-    replacer?: HTMLReactParserOptions["replace"],
-): JSX.Element | JSX.Element[] | string {
-    if (!replacer) return input;
-
-    const arr = Array.isArray(input) ? input : [input];
-    return arr.map((input): JSX.Element => {
-        if (typeof input === "string") {
-            return (replacer(new Text(input), 0) as JSX.Element) || input;
-        }
-        return input;
-    });
-}
-
-export function combineReplacers(...replacers: HTMLReactParserOptions["replace"][]): HTMLReactParserOptions["replace"] {
-    return (node, index) => {
-        for (const replacer of replacers) {
-            const result = replacer?.(node, index);
-            if (result) return result;
-        }
-        return undefined;
-    };
-}
-
-export function bodyToDiv(
-    content: IContent,
-    highlights: Optional<string[]>,
-    opts: EventRenderOpts = {},
-    ref?: React.Ref<HTMLDivElement>,
-    replace?: HTMLReactParserOptions["replace"],
-): ReactNode {
-    const { strippedBody, formattedBody, emojiBodyElements, className } = bodyToNode(content, highlights, opts);
-
-    return formattedBody ? (
-        <div key="body" ref={ref} className={className} dir="auto">
-            {parse(formattedBody, {
-                replace,
-            })}
-        </div>
-    ) : (
-        <div key="body" ref={ref} className={className} dir="auto">
-            {applyReplacerOnString(emojiBodyElements || strippedBody, replace)}
-        </div>
-    );
-}
-
-export function bodyToSpan(
-    content: IContent,
-    highlights: Optional<string[]>,
-    opts: EventRenderOpts = {},
-    ref?: React.Ref<HTMLSpanElement>,
-    includeDir = true,
-    replace?: HTMLReactParserOptions["replace"],
-): ReactNode {
-    const { strippedBody, formattedBody, emojiBodyElements, className } = bodyToNode(content, highlights, opts);
-
-    return formattedBody ? (
-        <span key="body" ref={ref} className={className} dir={includeDir ? "auto" : undefined}>
-            {parse(formattedBody, {
-                replace,
-            })}
-        </span>
-    ) : (
-        <span key="body" ref={ref} className={className} dir={includeDir ? "auto" : undefined}>
-            {applyReplacerOnString(emojiBodyElements || strippedBody, replace)}
-        </span>
-    );
-}
-
 interface BodyToNodeReturn {
     strippedBody: string;
     formattedBody?: string;
@@ -446,7 +372,11 @@ interface BodyToNodeReturn {
     className: string;
 }
 
-function bodyToNode(content: IContent, highlights: Optional<string[]>, opts: EventRenderOpts = {}): BodyToNodeReturn {
+export function bodyToNode(
+    content: IContent,
+    highlights: Optional<string[]>,
+    opts: EventRenderOpts = {},
+): BodyToNodeReturn {
     const eventInfo = analyseEvent(content, highlights, opts);
 
     let emojiBody = false;

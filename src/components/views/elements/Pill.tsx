@@ -11,6 +11,7 @@ import classNames from "classnames";
 import { type Room, type RoomMember } from "matrix-js-sdk/src/matrix";
 import { Tooltip } from "@vector-im/compound-web";
 import { LinkIcon, UserSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 
 import { usePermalink } from "../../../hooks/usePermalink";
 import RoomAvatar from "../avatars/RoomAvatar";
@@ -27,13 +28,7 @@ export enum PillType {
     Keyword = "TYPE_KEYWORD", // Used to highlight keywords that triggered a notification rule
 }
 
-export const pillRoomNotifPos = (text: string | null): number => {
-    return text?.indexOf("@room") ?? -1;
-};
-
-export const pillRoomNotifLen = (): number => {
-    return "@room".length;
-};
+export const AT_ROOM_REGEX = PushProcessor.getPushRuleGlobRegex("content.body", "@room", "gmi");
 
 const linkIcon = <LinkIcon className="mx_Pill_LinkIcon mx_BaseAvatar" />;
 

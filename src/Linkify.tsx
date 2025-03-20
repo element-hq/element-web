@@ -15,6 +15,7 @@ import SettingsStore from "./settings/SettingsStore";
 import { tryTransformPermalinkToLocalHref } from "./utils/permalinks/Permalinks";
 import { mediaFromMxc } from "./customisations/Media";
 import { PERMITTED_URL_SCHEMES } from "./utils/UrlUtils";
+import { type Replacer, replacerToRenderFunction } from "./utils/reactHtmlParser.tsx";
 
 const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
 const MEDIA_API_MXC_REGEX = /\/_matrix\/media\/r0\/(?:download|thumbnail)\/(.+?)\/(.+?)(?:[?/]|$)/;
@@ -197,14 +198,19 @@ export const sanitizeHtmlParams: IOptions = {
     nestingLimit: 50,
 };
 
+interface LinkifyProps extends React.ComponentProps<typeof _Linkify> {
+    replacer?: Replacer;
+}
+
 /* Wrapper around linkify-react merging in our default linkify options */
-export function Linkify({ as, options, children }: React.ComponentProps<typeof _Linkify>): ReactElement {
+export function Linkify({ as, options, children, replacer }: LinkifyProps): ReactElement {
     const opts = useMemo(
         () => ({
             ...linkifyMatrixOptions,
+            render: replacerToRenderFunction(replacer),
             ...options,
         }),
-        [options],
+        [options, replacer],
     );
     return (
         <_Linkify as={as} options={opts}>

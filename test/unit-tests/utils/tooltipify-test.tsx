@@ -10,9 +10,10 @@ import React from "react";
 import { screen, fireEvent, render, type RenderResult } from "jest-matrix-react";
 import parse from "html-react-parser";
 
-import { tooltipifyLinksReplacer } from "../../../src/utils/tooltipify";
+import { tooltipifyAmbiguousLinksReplacer } from "../../../src/utils/tooltipify";
 import PlatformPeg from "../../../src/PlatformPeg";
 import type BasePlatform from "../../../src/BasePlatform";
+import { combineReplacers } from "../../../src/utils/reactHtmlParser.tsx";
 
 describe("tooltipify", () => {
     jest.spyOn(PlatformPeg, "get").mockReturnValue({ needsUrlTooltips: () => true } as unknown as BasePlatform);
@@ -21,7 +22,7 @@ describe("tooltipify", () => {
         return render(
             <>
                 {parse(input, {
-                    replace: tooltipifyLinksReplacer(),
+                    replace: combineReplacers(tooltipifyAmbiguousLinksReplacer)({ isHtml: true }),
                 })}
             </>,
         );

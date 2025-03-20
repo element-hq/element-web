@@ -10,7 +10,6 @@ import React, { type JSX, createRef } from "react";
 import { type EventStatus, type IContent, type MatrixEvent, MatrixEventEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
-import * as HtmlUtils from "../../../HtmlUtils";
 import { editBodyDiffToHtml } from "../../../utils/MessageDiffUtils";
 import { formatTime } from "../../../DateUtils";
 import { _t } from "../../../languageHandler";
@@ -21,7 +20,7 @@ import ConfirmAndWaitRedactDialog from "../dialogs/ConfirmAndWaitRedactDialog";
 import ViewSource from "../../structures/ViewSource";
 import SettingsStore from "../../../settings/SettingsStore";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import { pillifyLinksReplacer } from "../../../utils/pillify.tsx";
+import EventContentBody from "./EventContentBody.tsx";
 
 function getReplacedContent(event: MatrixEvent): IContent {
     const originalContent = event.getOriginalContent();
@@ -134,17 +133,18 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
             if (this.props.previousEdit) {
                 contentElements = editBodyDiffToHtml(getReplacedContent(this.props.previousEdit), content);
             } else {
-                const room = this.context.getRoom(mxEvent.getRoomId()) ?? undefined;
-                const shouldShowPillAvatar = SettingsStore.getValue("Pill.shouldShowPillAvatar");
-                contentElements = HtmlUtils.bodyToSpan(
-                    content,
-                    null,
-                    {
-                        stripReplyFallback: true,
-                    },
-                    undefined,
-                    undefined,
-                    pillifyLinksReplacer(mxEvent, room, shouldShowPillAvatar),
+                contentElements = (
+                    <EventContentBody
+                        as="span"
+                        mxEvent={mxEvent}
+                        content={content}
+                        highlights={[]}
+                        stripReply
+                        pillifyMentions
+                        applyCodeBlocks
+                        applySpoilers
+                        linkify
+                    />
                 );
             }
             if (mxEvent.getContent().msgtype === MsgType.Emote) {

@@ -8,14 +8,16 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
-import { type MatrixEvent, type Room, RuleId } from "matrix-js-sdk/src/matrix";
-import { Element as ParserElement, type DOMNode } from "html-react-parser";
+import { RuleId } from "matrix-js-sdk/src/matrix";
+import { type Element as ParserElement } from "html-react-parser";
 import { type ParentNode } from "domhandler/lib/node";
 import { textContent } from "domutils";
 
-import { Pill, PillType } from "../components/views/elements/Pill";
+import { AT_ROOM_REGEX, Pill, PillType } from "../components/views/elements/Pill";
 import { parsePermalink } from "./permalinks/Permalinks";
 import { type PermalinkParts } from "./permalinks/PermalinkConstructor";
+import { jsxJoin } from "./ReactUtils.tsx";
+import { type ReplacerMap } from "./reactHtmlParser.tsx";
 
 /**
  * A node here is an A element with a href attribute tag.
@@ -30,8 +32,10 @@ const shouldBePillified = (node: ParserElement, href: string, parts: PermalinkPa
 
     const text = textContent(node);
 
+    if (href === text) return true;
+
     // event permalink with custom label
-    if (parts.eventId && href !== text) return false;
+    if (parts.eventId) return false;
 
     return href.endsWith("/" + text);
 };
@@ -48,26 +52,27 @@ const hasParentMatching = (node: ParserElement, matcher: (node: ParentNode | nul
 const isPreCode = (domNode: ParentNode | null): boolean =>
     (domNode as ParserElement)?.tagName === "PRE" || (domNode as ParserElement)?.tagName === "CODE";
 
-const AtRoomMention = "@room";
+export const pillifyMentionsReplacer: ReplacerMap = {
+    a: (anchor, { room, shouldShowPillAvatar }) => {
+        if (!room) return;
 
-export const pillifyLinksReplacer =
-    (mxEvent: MatrixEvent, room: Room | undefined, shouldShowPillAvatar: boolean) => (domNode: DOMNode) => {
-        if (
-            domNode instanceof ParserElement &&
-            domNode.tagName.toUpperCase() === "A" &&
-            domNode.attribs["href"] &&
-            !hasParentMatching(domNode, isPreCode) &&
-            shouldBePillified(domNode, domNode.attribs["href"], parsePermalink(domNode.attribs["href"]))
-        ) {
-            return (
-                <Pill
-                    url={domNode.attribs["href"]}
-                    inMessage={true}
-                    room={room}
-                    shouldShowPillAvatar={shouldShowPillAvatar}
-                />
-            );
-        } else if (room && domNode.type === "text" && domNode.data.includes(AtRoomMention)) {
+        const href = anchor.attribs["href"];
+        if (href && !hasParentMatching(anchor, isPreCode) && shouldBePillified(anchor, href, parsePermalink(href))) {
+            return <Pill url={href} inMessage={true} room={room} shouldShowPillAvatar={shouldShowPillAvatar} />;
+        }
+    },
+
+    [Node.TEXT_NODE]: (text, { room, mxEvent, shouldShowPillAvatar }) => {
+        if (!room || !mxEvent) return;
+
+        const atRoomParts = text.data.split(AT_ROOM_REGEX);
+        if (atRoomParts.length <= 1) return;
+
+        const pushProcessor = new PushProcessor(room.client);
+        const atRoomRule = pushProcessor.getPushRuleById(
+            mxEvent.getContent()["m.mentions"] !== undefined ? RuleId.IsRoomMention : RuleId.AtRoomNotification,
+        );
+        if (atRoomRule && pushProcessor.ruleMatchesEvent(atRoomRule, mxEvent)) {
             const pill = (
                 <Pill
                     type={PillType.AtRoomMention}
@@ -76,22 +81,36 @@ export const pillifyLinksReplacer =
                     shouldShowPillAvatar={shouldShowPillAvatar}
                 />
             );
-            const split = domNode.data.split(AtRoomMention);
-            const parts = split.map((part, index) => (
-                <React.Fragment key={index}>
-                    {part}
-                    {index < split.length - 1 ? pill : null}
-                </React.Fragment>
-            ));
 
-            if (parts.length > 0) {
-                const pushProcessor = new PushProcessor(room.client);
-                const atRoomRule = pushProcessor.getPushRuleById(
-                    mxEvent.getContent()["m.mentions"] !== undefined ? RuleId.IsRoomMention : RuleId.AtRoomNotification,
-                );
-                if (atRoomRule && pushProcessor.ruleMatchesEvent(atRoomRule, mxEvent)) {
-                    return <React.Fragment>{parts}</React.Fragment>;
-                }
-            }
+            return jsxJoin(atRoomParts, pill);
         }
-    };
+    },
+};
+
+/**
+ * Marks the text that activated a push-notification keyword pattern.
+ */
+export const pillifyKeywordsReplacer: ReplacerMap = {
+    [Node.TEXT_NODE]: (text, { keywordRegexpPattern }) => {
+        if (!keywordRegexpPattern) return;
+
+        const textContent = text.data;
+        if (!textContent) return;
+
+        const match = textContent.match(keywordRegexpPattern);
+        if (!match || match.length < 3) return;
+
+        const keywordText = match[2];
+        const idx = match.index! + match[1].length;
+        const before = textContent.substring(0, idx);
+        const after = textContent.substring(idx + keywordText.length);
+
+        return (
+            <>
+                {before}
+                <Pill text={keywordText} type={PillType.Keyword} />
+                {after}
+            </>
+        );
+    },
+};

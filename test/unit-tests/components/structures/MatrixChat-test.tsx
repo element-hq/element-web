@@ -235,10 +235,8 @@ describe("<MatrixChat />", () => {
             onNewScreen: jest.fn(),
             onTokenLoginCompleted: jest.fn(),
             realQueryParams: {},
-            initPromiseCallback: (p: Promise<void>) => (initPromise = p),
         };
 
-        initPromise = undefined;
         mockClient = getMockClientWithEventEmitter(getMockClientMethods());
         jest.spyOn(MatrixJs, "createClient").mockReturnValue(mockClient);
 

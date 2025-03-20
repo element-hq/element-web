@@ -9,15 +9,20 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, type ReactNode } from "react";
 
 /**
- * Joins an array into one value with a joiner. E.g. join(["hello", "world"], " ") -> <span>hello world</span>
+ * Joins an array into one value with a joiner. E.g. join(["hello", "world"], " ") -> <>hello world</>
  * @param array the array of element to join
  * @param joiner the string/JSX.Element to join with
  * @returns the joined array
  */
 export function jsxJoin(array: ReactNode[], joiner?: string | JSX.Element): JSX.Element {
-    const newArray: ReactNode[] = [];
-    array.forEach((element, index) => {
-        newArray.push(element, index === array.length - 1 ? null : joiner);
-    });
-    return <span>{newArray}</span>;
+    return (
+        <>
+            {array.map((element, index) => (
+                <React.Fragment key={index}>
+                    {element}
+                    {index === array.length - 1 ? null : joiner}
+                </React.Fragment>
+            ))}
+        </>
+    );
 }
