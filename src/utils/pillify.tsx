@@ -6,37 +6,94 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { StrictMode } from "react";
+import React from "react";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
-import { type MatrixClient, type MatrixEvent, RuleId } from "matrix-js-sdk/src/matrix";
-import { TooltipProvider } from "@vector-im/compound-web";
+import { type MatrixEvent, type Room, RuleId } from "matrix-js-sdk/src/matrix";
+import { Element as ParserElement, type DOMNode } from "html-react-parser";
+import { type ParentNode } from "domhandler/lib/node";
 
-import SettingsStore from "../settings/SettingsStore";
-import { Pill, pillRoomNotifLen, pillRoomNotifPos, PillType } from "../components/views/elements/Pill";
+import { Pill, PillType } from "../components/views/elements/Pill";
 import { parsePermalink } from "./permalinks/Permalinks";
 import { type PermalinkParts } from "./permalinks/PermalinkConstructor";
-import { type ReactRootManager } from "./react";
 
 /**
  * A node here is an A element with a href attribute tag.
  *
  * It should be pillified if the permalink parser returns a result and one of the following conditions match:
  * - Text content equals href. This is the case when sending a plain permalink inside a message.
- * - The link does not have the "linkified" class.
  *   Composer completions already create an A tag.
- *   Linkify will not linkify things again. → There won't be a "linkified" class.
  */
-const shouldBePillified = (node: Element, href: string, parts: PermalinkParts | null): boolean => {
+const shouldBePillified = (node: ParserElement, href: string, parts: PermalinkParts | null): boolean => {
     // permalink parser didn't return any parts
     if (!parts) return false;
 
-    const textContent = node.textContent;
+    const textContent = node.children.find((child) => child.type === "text")?.data ?? "";
 
     // event permalink with custom label
     if (parts.eventId && href !== textContent) return false;
 
-    return href === textContent || !node.classList.contains("linkified");
+    return href.endsWith("/" + textContent);
 };
+
+const hasParentMatching = (node: ParserElement, matcher: (node: ParentNode | null) => boolean): boolean => {
+    let parent = node.parentNode;
+    while (parent) {
+        if (matcher(parent)) return true;
+        parent = parent.parentNode;
+    }
+    return false;
+};
+
+const isPreCode = (domNode: ParentNode | null): boolean =>
+    (domNode as ParserElement)?.tagName === "PRE" || (domNode as ParserElement)?.tagName === "CODE";
+
+const AtRoomMention = "@room";
+
+export const pillifyLinksReplacer =
+    (mxEvent: MatrixEvent, room: Room | undefined, shouldShowPillAvatar: boolean) => (domNode: DOMNode) => {
+        if (
+            domNode instanceof ParserElement &&
+            domNode.tagName.toUpperCase() === "A" &&
+            domNode.attribs["href"] &&
+            !hasParentMatching(domNode, isPreCode) &&
+            shouldBePillified(domNode, domNode.attribs["href"], parsePermalink(domNode.attribs["href"]))
+        ) {
+            return (
+                <Pill
+                    url={domNode.attribs["href"]}
+                    inMessage={true}
+                    room={room}
+                    shouldShowPillAvatar={shouldShowPillAvatar}
+                />
+            );
+        } else if (room && domNode.type === "text" && domNode.data.includes(AtRoomMention)) {
+            const pill = (
+                <Pill
+                    type={PillType.AtRoomMention}
+                    inMessage={true}
+                    room={room}
+                    shouldShowPillAvatar={shouldShowPillAvatar}
+                />
+            );
+            const split = domNode.data.split(AtRoomMention);
+            const parts = split.map((part, index) => (
+                <React.Fragment key={index}>
+                    {part}
+                    {index < split.length - 1 ? pill : null}
+                </React.Fragment>
+            ));
+
+            if (parts.length > 0) {
+                const pushProcessor = new PushProcessor(room.client);
+                const atRoomRule = pushProcessor.getPushRuleById(
+                    mxEvent.getContent()["m.mentions"] !== undefined ? RuleId.IsRoomMention : RuleId.AtRoomNotification,
+                );
+                if (atRoomRule && pushProcessor.ruleMatchesEvent(atRoomRule, mxEvent)) {
+                    return <React.Fragment>{parts}</React.Fragment>;
+                }
+            }
+        }
+    };
 
 /**
  * Recurses depth-first through a DOM tree, converting matrix.to links
@@ -52,114 +109,3 @@ const shouldBePillified = (node: Element, href: string, parts: PermalinkParts | 
  *   React components which have been mounted as part of this.
  *   The initial caller should pass in an empty array to seed the accumulator.
  */
-export function pillifyLinks(
-    matrixClient: MatrixClient,
-    nodes: ArrayLike<Element>,
-    mxEvent: MatrixEvent,
-    pills: ReactRootManager,
-): void {
-    const room = matrixClient.getRoom(mxEvent.getRoomId()) ?? undefined;
-    const shouldShowPillAvatar = SettingsStore.getValue("Pill.shouldShowPillAvatar");
-    let node = nodes[0];
-    while (node) {
-        let pillified = false;
-
-        if (node.tagName === "PRE" || node.tagName === "CODE" || pills.elements.includes(node)) {
-            // Skip code blocks and existing pills
-            node = node.nextSibling as Element;
-            continue;
-        } else if (node.tagName === "A" && node.getAttribute("href")) {
-            const href = node.getAttribute("href")!;
-            const parts = parsePermalink(href);
-
-            if (shouldBePillified(node, href, parts)) {
-                const pillContainer = document.createElement("span");
-
-                const pill = (
-                    <StrictMode>
-                        <TooltipProvider>
-                            <Pill url={href} inMessage={true} room={room} shouldShowPillAvatar={shouldShowPillAvatar} />
-                        </TooltipProvider>
-                    </StrictMode>
-                );
-
-                pills.render(pill, pillContainer, node);
-                node.replaceWith(pillContainer);
-                // Pills within pills aren't going to go well, so move on
-                pillified = true;
-
-                // update the current node with one that's now taken its place
-                node = pillContainer;
-            }
-        } else if (
-            node.nodeType === Node.TEXT_NODE &&
-            // as applying pills happens outside of react, make sure we're not doubly
-            // applying @room pills here, as a rerender with the same content won't touch the DOM
-            // to clear the pills from the last run of pillifyLinks
-            !node.parentElement?.classList.contains("mx_AtRoomPill")
-        ) {
-            let currentTextNode = node as Node as Text | null;
-            const roomNotifTextNodes: Text[] = [];
-
-            // Take a textNode and break it up to make all the instances of @room their
-            // own textNode, adding those nodes to roomNotifTextNodes
-            while (currentTextNode !== null) {
-                const roomNotifPos = pillRoomNotifPos(currentTextNode.textContent);
-                let nextTextNode: Text | null = null;
-                if (roomNotifPos > -1) {
-                    let roomTextNode = currentTextNode;
-
-                    if (roomNotifPos > 0) roomTextNode = roomTextNode.splitText(roomNotifPos);
-                    if (roomTextNode.textContent && roomTextNode.textContent.length > pillRoomNotifLen()) {
-                        nextTextNode = roomTextNode.splitText(pillRoomNotifLen());
-                    }
-                    roomNotifTextNodes.push(roomTextNode);
-                }
-                currentTextNode = nextTextNode;
-            }
-
-            if (roomNotifTextNodes.length > 0) {
-                const pushProcessor = new PushProcessor(matrixClient);
-                const atRoomRule = pushProcessor.getPushRuleById(
-                    mxEvent.getContent()["m.mentions"] !== undefined ? RuleId.IsRoomMention : RuleId.AtRoomNotification,
-                );
-                if (atRoomRule && pushProcessor.ruleMatchesEvent(atRoomRule, mxEvent)) {
-                    // Now replace all those nodes with Pills
-                    for (const roomNotifTextNode of roomNotifTextNodes) {
-                        // Set the next node to be processed to the one after the node
-                        // we're adding now, since we've just inserted nodes into the structure
-                        // we're iterating over.
-                        // Note we've checked roomNotifTextNodes.length > 0 so we'll do this at least once
-                        node = roomNotifTextNode.nextSibling as Element;
-
-                        const pillContainer = document.createElement("span");
-                        const pill = (
-                            <StrictMode>
-                                <TooltipProvider>
-                                    <Pill
-                                        type={PillType.AtRoomMention}
-                                        inMessage={true}
-                                        room={room}
-                                        shouldShowPillAvatar={shouldShowPillAvatar}
-                                    />
-                                </TooltipProvider>
-                            </StrictMode>
-                        );
-
-                        pills.render(pill, pillContainer, roomNotifTextNode);
-                        roomNotifTextNode.replaceWith(pillContainer);
-                    }
-                    // Nothing else to do for a text node (and we don't need to advance
-                    // the loop pointer because we did it above)
-                    continue;
-                }
-            }
-        }
-
-        if (node.childNodes && node.childNodes.length && !pillified) {
-            pillifyLinks(matrixClient, node.childNodes as NodeListOf<Element>, mxEvent, pills);
-        }
-
-        node = node.nextSibling as Element;
-    }
-}

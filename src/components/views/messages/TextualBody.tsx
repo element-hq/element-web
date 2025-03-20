@@ -17,7 +17,7 @@ import Modal from "../../../Modal";
 import dis from "../../../dispatcher/dispatcher";
 import { _t } from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
-import { pillifyLinks } from "../../../utils/pillify";
+import { pillifyLinksReplacer } from "../../../utils/pillify";
 import { tooltipifyLinks } from "../../../utils/tooltipify";
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import { isPermalinkHost, tryTransformPermalinkToLocalHref } from "../../../utils/permalinks/Permalinks";
@@ -75,7 +75,6 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         this.activateSpoilers([content]);
 
         HtmlUtils.linkifyElement(content);
-        pillifyLinks(MatrixClientPeg.safeGet(), [content], this.props.mxEvent, this.pills);
 
         this.calculateUrlPreview();
 
@@ -491,9 +490,12 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
             // Part of Replies fallback support
             stripReplyFallback: stripReply,
         };
+        const room = MatrixClientPeg.get()?.getRoom(mxEvent.getRoomId()) ?? undefined;
+        const shouldShowPillAvatar = SettingsStore.getValue("Pill.shouldShowPillAvatar");
+        const replacer = pillifyLinksReplacer(mxEvent, room, shouldShowPillAvatar);
         let body = willHaveWrapper
-            ? HtmlUtils.bodyToSpan(content, this.props.highlights, htmlOpts, this.contentRef, false)
-            : HtmlUtils.bodyToDiv(content, this.props.highlights, htmlOpts, this.contentRef);
+            ? HtmlUtils.bodyToSpan(content, this.props.highlights, htmlOpts, this.contentRef, false, replacer)
+            : HtmlUtils.bodyToDiv(content, this.props.highlights, htmlOpts, this.contentRef, replacer);
 
         if (this.props.replacingEventId) {
             body = (

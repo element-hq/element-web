@@ -13,7 +13,6 @@ import classNames from "classnames";
 import * as HtmlUtils from "../../../HtmlUtils";
 import { editBodyDiffToHtml } from "../../../utils/MessageDiffUtils";
 import { formatTime } from "../../../DateUtils";
-import { pillifyLinks } from "../../../utils/pillify";
 import { tooltipifyLinks } from "../../../utils/tooltipify";
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
@@ -24,6 +23,7 @@ import ViewSource from "../../structures/ViewSource";
 import SettingsStore from "../../../settings/SettingsStore";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { ReactRootManager } from "../../../utils/react";
+import { pillifyLinksReplacer } from "../../../utils/pillify.tsx";
 
 function getReplacedContent(event: MatrixEvent): IContent {
     const originalContent = event.getOriginalContent();
@@ -94,13 +94,6 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
         );
     };
 
-    private pillifyLinks(): void {
-        // not present for redacted events
-        if (this.content.current) {
-            pillifyLinks(this.context, this.content.current.children, this.props.mxEvent, this.pills);
-        }
-    }
-
     private tooltipifyLinks(): void {
         // not present for redacted events
         if (this.content.current) {
@@ -109,7 +102,6 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
     }
 
     public componentDidMount(): void {
-        this.pillifyLinks();
         this.tooltipifyLinks();
     }
 
@@ -121,7 +113,6 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
     }
 
     public componentDidUpdate(): void {
-        this.pillifyLinks();
         this.tooltipifyLinks();
     }
 
@@ -164,9 +155,18 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
             if (this.props.previousEdit) {
                 contentElements = editBodyDiffToHtml(getReplacedContent(this.props.previousEdit), content);
             } else {
-                contentElements = HtmlUtils.bodyToSpan(content, null, {
-                    stripReplyFallback: true,
-                });
+                const room = this.context.getRoom(mxEvent.getRoomId()) ?? undefined;
+                const shouldShowPillAvatar = SettingsStore.getValue("Pill.shouldShowPillAvatar");
+                contentElements = HtmlUtils.bodyToSpan(
+                    content,
+                    null,
+                    {
+                        stripReplyFallback: true,
+                    },
+                    undefined,
+                    undefined,
+                    pillifyLinksReplacer(mxEvent, room, shouldShowPillAvatar),
+                );
             }
             if (mxEvent.getContent().msgtype === MsgType.Emote) {
                 const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();

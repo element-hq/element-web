@@ -117,6 +117,7 @@
         "glob-to-regexp": "^0.4.1",
         "highlight.js": "^11.3.1",
         "html-entities": "^2.0.0",
+        "html-react-parser": "^5.2.2",
         "is-ip": "^3.1.0",
         "js-xxhash": "^4.0.0",
         "jsrsasign": "^11.0.0",
