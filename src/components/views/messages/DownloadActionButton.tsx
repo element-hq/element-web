@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type MatrixEvent } from "matrix-js-sdk/src/matrix";
-import React from "react";
+import React, { type JSX } from "react";
 import classNames from "classnames";
 import { DownloadIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 

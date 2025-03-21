@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
  */
 
 import React, {
+    type JSX,
     type ComponentProps,
     type ComponentPropsWithoutRef,
     forwardRef,
@@ -134,11 +135,15 @@ const AccessibleButton = forwardRef(function <T extends ElementType = typeof def
         placement = "right",
         onTooltipOpenChange,
         disableTooltip,
+        role = "button",
+        tabIndex = 0,
         ...restProps
     }: ButtonProps<T>,
     ref: Ref<HTMLElementTagNameMap[T]>,
 ): JSX.Element {
     const newProps = restProps as RenderedElementProps<T>;
+    newProps.tabIndex = tabIndex;
+    newProps.role = role;
     newProps["aria-label"] = newProps["aria-label"] ?? title;
     if (disabled) {
         newProps["aria-disabled"] = true;
@@ -221,10 +226,6 @@ const AccessibleButton = forwardRef(function <T extends ElementType = typeof def
 });
 
 // Type assertion required due to forwardRef type workaround in react.d.ts
-(AccessibleButton as FunctionComponent).defaultProps = {
-    role: "button",
-    tabIndex: 0,
-};
 (AccessibleButton as FunctionComponent).displayName = "AccessibleButton";
 
 interface RefProp<T extends ElementType> {

@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, type ReactNode, type RefObject } from "react";
+import React, { createRef, type ReactNode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { type Playback, type PlaybackState } from "../../../audio/Playback";
@@ -31,8 +31,8 @@ interface IState {
 }
 
 export default abstract class AudioPlayerBase<T extends IProps = IProps> extends React.PureComponent<T, IState> {
-    protected seekRef: RefObject<SeekBar> = createRef();
-    protected playPauseRef: RefObject<PlayPauseButton> = createRef();
+    protected seekRef = createRef<SeekBar>();
+    protected playPauseRef = createRef<PlayPauseButton>();
 
     public constructor(props: T) {
         super(props);

@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type BaseSyntheticEvent, type ComponentProps, type ReactNode } from "react";
+import React, { type JSX, type BaseSyntheticEvent, type ComponentProps, type ReactNode } from "react";
 import { type MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -456,7 +456,9 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
             : _td("auth|registration|continue_without_email_field_label");
         return (
             <EmailField
-                fieldRef={(field) => (this[RegistrationField.Email] = field)}
+                fieldRef={(field) => {
+                    this[RegistrationField.Email] = field;
+                }}
                 label={emailLabel}
                 value={this.state.email}
                 validationRules={this.validateEmailRules.bind(this)}
@@ -471,7 +473,9 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         return (
             <PassphraseField
                 id="mx_RegistrationForm_password"
-                fieldRef={(field) => (this[RegistrationField.Password] = field)}
+                fieldRef={(field) => {
+                    this[RegistrationField.Password] = field;
+                }}
                 minScore={PASSWORD_MIN_SCORE}
                 value={this.state.password}
                 onChange={this.onPasswordChange}
@@ -486,7 +490,9 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         return (
             <PassphraseConfirmField
                 id="mx_RegistrationForm_passwordConfirm"
-                fieldRef={(field) => (this[RegistrationField.PasswordConfirm] = field)}
+                fieldRef={(field) => {
+                    this[RegistrationField.PasswordConfirm] = field;
+                }}
                 autoComplete="new-password"
                 value={this.state.passwordConfirm}
                 password={this.state.password}
@@ -514,7 +520,9 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         );
         return (
             <Field
-                ref={(field) => (this[RegistrationField.PhoneNumber] = field)}
+                ref={(field) => {
+                    this[RegistrationField.PhoneNumber] = field;
+                }}
                 type="text"
                 label={phoneLabel}
                 value={this.state.phoneNumber}
@@ -529,7 +537,9 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         return (
             <Field
                 id="mx_RegistrationForm_username"
-                ref={(field) => (this[RegistrationField.Username] = field)}
+                ref={(field) => {
+                    this[RegistrationField.Username] = field;
+                }}
                 type="text"
                 autoFocus={true}
                 label={_t("common|username")}

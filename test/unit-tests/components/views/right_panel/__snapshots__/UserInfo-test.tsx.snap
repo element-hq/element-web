@@ -19,7 +19,7 @@ exports[`<UserInfo /> with crypto enabled renders <BasicUserInfo /> 1`] = `
         </p>
       </div>
       <button
-        aria-labelledby=":r6m:"
+        aria-labelledby=":r6i:"
         class="_icon-button_m2erp_8 _subtle-bg_m2erp_29"
         data-testid="base-card-close-button"
         role="button"
@@ -305,7 +305,7 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
         </p>
       </div>
       <button
-        aria-labelledby=":r70:"
+        aria-labelledby=":r6s:"
         class="_icon-button_m2erp_8 _subtle-bg_m2erp_29"
         data-testid="base-card-close-button"
         role="button"
@@ -401,21 +401,13 @@ exports[`<UserInfo /> with crypto enabled should render a deactivate button for 
           class="mx_Flex mx_UserInfo_verification"
           style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: 0; --mx-flex-wrap: nowrap;"
         >
-          <svg
-            class="_icon_11k6c_18"
-            fill="currentColor"
-            height="1em"
-            style="width: 24px; height: 24px;"
-            viewBox="0 0 24 24"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
+          <p
+            class="_typography_6v6n8_153 _font-body-sm-regular_6v6n8_31 mx_UserInfo_verification_unavailable"
           >
-            <path
-              clip-rule="evenodd"
-              d="M12 4.031a8 8 0 1 0 8 8 1 1 0 0 1 2 0c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10a1 1 0 1 1 0 2"
-              fill-rule="evenodd"
-            />
-          </svg>
+            (
+            User verification unavailable
+            )
+          </p>
         </div>
       </div>
       <div

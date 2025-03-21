@@ -120,8 +120,8 @@ type BProps = Omit<ComponentProps<typeof SpaceBasicSettings>, "nameDisabled" | "
 interface ISpaceCreateFormProps extends BProps {
     busy: boolean;
     alias: string;
-    nameFieldRef: RefObject<Field>;
-    aliasFieldRef: RefObject<RoomAliasField>;
+    nameFieldRef: RefObject<Field | null>;
+    aliasFieldRef: RefObject<RoomAliasField | null>;
     showAliasField?: boolean;
     children?: ReactNode;
     onSubmit(e: SyntheticEvent): void;

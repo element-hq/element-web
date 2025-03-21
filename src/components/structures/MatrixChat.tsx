@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, lazy } from "react";
+import React, { type JSX, createRef, lazy } from "react";
 import {
     ClientEvent,
     createClient,
@@ -165,12 +165,6 @@ interface IProps {
     initialScreenAfterLogin?: IScreen;
     // displayname, if any, to set on the device when logging in/registering.
     defaultDeviceDisplayName?: string;
-
-    // Used by tests, this function is called when session initialisation starts
-    // with a promise that resolves or rejects once the initialiation process
-    // has finished, so that tests can wait for this to avoid them executing over
-    // each other.
-    initPromiseCallback?: (p: Promise<void>) => void;
 }
 
 interface IState {
@@ -290,9 +284,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      */
     private startInitSession = (): void => {
         const initProm = this.initSession();
-        if (this.props.initPromiseCallback) {
-            this.props.initPromiseCallback(initProm);
-        }
 
         initProm.catch((err) => {
             // TODO: show an error screen, rather than a spinner of doom

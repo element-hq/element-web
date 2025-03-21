@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { act, fireEvent, render } from "jest-matrix-react";
-import React from "react";
+import React, { type JSX } from "react";
 
 import { FilterDropdown } from "../../../../../src/components/views/elements/FilterDropdown";
 import { flushPromises, mockPlatformPeg } from "../../../../test-utils";

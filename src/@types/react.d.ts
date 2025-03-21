@@ -18,4 +18,9 @@ declare module "react" {
 
     // Fix lazy types - https://stackoverflow.com/a/71017028
     function lazy<T extends ComponentType<any>>(factory: () => Promise<{ default: T }>): T;
+
+    // Standardize defaultProps for FunctionComponent so we can write generics assuming `defaultProps` exists on ComponentType
+    interface FunctionComponent {
+        defaultProps?: unknown;
+    }
 }

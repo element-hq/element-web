@@ -1,0 +1,22 @@
+diff --git a/node_modules/react-blurhash/dist/index.d.ts b/node_modules/react-blurhash/dist/index.d.ts
+index 3adbd0a..32e8c13 100644
+--- a/node_modules/react-blurhash/dist/index.d.ts
++++ b/node_modules/react-blurhash/dist/index.d.ts
+@@ -19,7 +19,7 @@ declare class Blurhash extends React.PureComponent<Props$1> {
+         resolutionY: number;
+     };
+     componentDidUpdate(): void;
+-    render(): JSX.Element;
++    render(): React.JSX.Element;
+ }
+ 
+ declare type Props = React.CanvasHTMLAttributes<HTMLCanvasElement> & {
+@@ -37,7 +37,7 @@ declare class BlurhashCanvas extends React.PureComponent<Props> {
+     componentDidUpdate(): void;
+     handleRef: (canvas: HTMLCanvasElement) => void;
+     draw: () => void;
+-    render(): JSX.Element;
++    render(): React.JSX.Element;
+ }
+ 
+ export { Blurhash, BlurhashCanvas };

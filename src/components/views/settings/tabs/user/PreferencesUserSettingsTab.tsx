@@ -224,7 +224,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         SettingsStore.setValue("readMarkerOutOfViewThresholdMs", null, SettingLevel.DEVICE, e.target.value);
     };
 
-    private renderGroup(settingIds: BooleanSettingKey[], level = SettingLevel.ACCOUNT): React.ReactNodeArray {
+    private renderGroup(settingIds: BooleanSettingKey[], level = SettingLevel.ACCOUNT): React.ReactNode[] {
         return settingIds.map((i) => <SettingsFlag key={i} name={i} level={level} />);
     }
 

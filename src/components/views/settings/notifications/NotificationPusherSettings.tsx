@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { ThreepidMedium, type IPusher } from "matrix-js-sdk/src/matrix";
-import React, { useCallback, useMemo } from "react";
+import React, { type JSX, useCallback, useMemo } from "react";
 
 import { useMatrixClientContext } from "../../../../contexts/MatrixClientContext";
 import { Action } from "../../../../dispatcher/actions";

@@ -84,12 +84,12 @@ describe("<AddPrivilegedUsers />", () => {
         // Find some suggestions and select them.
         const autocompleteInput = getByTestId("autocomplete-input");
 
-        act(() => {
+        await act(async () => {
             fireEvent.focus(autocompleteInput);
             fireEvent.change(autocompleteInput, { target: { value: "u" } });
+            await waitFor(() => expect(provider.mock.instances[0].getCompletions).toHaveBeenCalledTimes(1));
         });
 
-        await waitFor(() => expect(provider.mock.instances[0].getCompletions).toHaveBeenCalledTimes(1));
         const matchOne = getByTestId("autocomplete-suggestion-item-@user_1:host.local");
         const matchTwo = getByTestId("autocomplete-suggestion-item-@user_2:host.local");
 

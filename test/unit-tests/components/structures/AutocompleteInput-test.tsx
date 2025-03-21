@@ -63,12 +63,12 @@ describe("AutocompleteInput", () => {
 
         const input = getEditorInput();
 
-        act(() => {
+        await act(async () => {
             fireEvent.focus(input);
             fireEvent.change(input, { target: { value: "user" } });
+            await waitFor(() => expect(mockProvider.getCompletions).toHaveBeenCalledTimes(1));
         });
 
-        await waitFor(() => expect(mockProvider.getCompletions).toHaveBeenCalledTimes(1));
         expect(screen.getByTestId("autocomplete-matches").childNodes).toHaveLength(mockCompletion.length);
     });
 
@@ -152,12 +152,12 @@ describe("AutocompleteInput", () => {
 
         const input = getEditorInput();
 
-        act(() => {
+        await act(async () => {
             fireEvent.focus(input);
             fireEvent.change(input, { target: { value: "user" } });
+            await waitFor(() => expect(mockProvider.getCompletions).toHaveBeenCalledTimes(1));
         });
 
-        await waitFor(() => expect(mockProvider.getCompletions).toHaveBeenCalledTimes(1));
         expect(screen.getAllByTestId("custom-suggestion-element")).toHaveLength(mockCompletion.length);
     });
 

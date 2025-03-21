@@ -11,7 +11,16 @@ Please see LICENSE files in the repository root for full details.
 import "core-js/stable/structured-clone";
 import "fake-indexeddb/auto";
 import React, { type ComponentProps } from "react";
-import { fireEvent, render, type RenderResult, screen, waitFor, within, act } from "jest-matrix-react";
+import {
+    fireEvent,
+    render,
+    type RenderResult,
+    screen,
+    waitFor,
+    within,
+    act,
+    waitForElementToBeRemoved,
+} from "jest-matrix-react";
 import fetchMock from "fetch-mock-jest";
 import { type Mocked, mocked } from "jest-mock";
 import { ClientEvent, type MatrixClient, MatrixEvent, Room, SyncState } from "matrix-js-sdk/src/matrix";
@@ -165,12 +174,9 @@ describe("<MatrixChat />", () => {
         isNameResolvable: true,
         warning: "",
     };
-    let initPromise: Promise<void> | undefined;
     let defaultProps: ComponentProps<typeof MatrixChat>;
     const getComponent = (props: Partial<ComponentProps<typeof MatrixChat>> = {}) => {
-        // MatrixChat does many questionable things which bomb tests in modern React mode,
-        // we'll want to refactor and break up MatrixChat before turning off legacyRoot mode
-        return render(<MatrixChat {...defaultProps} {...props} />, { legacyRoot: true });
+        return render(<MatrixChat {...defaultProps} {...props} />);
     };
 
     // make test results readable
@@ -235,10 +241,8 @@ describe("<MatrixChat />", () => {
             onNewScreen: jest.fn(),
             onTokenLoginCompleted: jest.fn(),
             realQueryParams: {},
-            initPromiseCallback: (p: Promise<void>) => (initPromise = p),
         };
 
-        initPromise = undefined;
         mockClient = getMockClientWithEventEmitter(getMockClientMethods());
         jest.spyOn(MatrixJs, "createClient").mockReturnValue(mockClient);
 
@@ -262,7 +266,7 @@ describe("<MatrixChat />", () => {
         // login code abort halfway through once the test finishes testing whatever it
         // needs to test. If we do nothing, the login code will just continue running
         // and interfere with the subsequent tests.
-        await initPromise;
+        // await initPromise;
 
         // @ts-ignore
         DMRoomMap.setShared(null);
@@ -1350,6 +1354,7 @@ describe("<MatrixChat />", () => {
             it("should continue to post login setup when no session is found in local storage", async () => {
                 getComponent({ realQueryParams });
 
+                await waitForElementToBeRemoved(screen.getAllByRole("progressbar"));
                 // logged in but waiting for sync screen
                 await screen.findByText("Logout");
             });

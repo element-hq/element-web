@@ -6,13 +6,13 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, {
+    type JSX,
     type InputHTMLAttributes,
     type SelectHTMLAttributes,
     type TextareaHTMLAttributes,
     type RefObject,
     createRef,
     type ComponentProps,
-    type MutableRefObject,
     type RefCallback,
     type Ref,
 } from "react";
@@ -121,8 +121,7 @@ interface IState {
 
 export default class Field extends React.PureComponent<PropShapes, IState> {
     private readonly id: string;
-    private readonly _inputRef: MutableRefObject<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | null> =
-        createRef();
+    private readonly _inputRef = createRef<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>();
 
     /**
      * When props.inputRef is a callback ref, we will pass callbackRef to the DOM element.
@@ -242,13 +241,13 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         return valid;
     }
 
-    private get inputRef(): RefObject<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> {
+    private get inputRef(): RefObject<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | null> {
         const inputRef = this.props.inputRef;
         if (typeof inputRef === "function") {
             // This is a callback ref, so return _inputRef which will point to the actual DOM element.
             return this._inputRef;
         }
-        return (inputRef ?? this._inputRef) as RefObject<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>;
+        return inputRef ?? this._inputRef;
     }
 
     private onTooltipOpenChange = (open: boolean): void => {

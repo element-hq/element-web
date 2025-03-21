@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { EventTimeline, type MatrixError, type Room, type RoomMember, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import React, { useCallback, useState, type VFC } from "react";
+import React, { useCallback, useState, type FC } from "react";
 import { CloseIcon, CheckIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { formatRelativeTime } from "../../../../../DateUtils";
@@ -22,13 +22,13 @@ import SettingsFieldset from "../../SettingsFieldset";
 import { SettingsSection } from "../../shared/SettingsSection";
 import SettingsTab from "../SettingsTab";
 
-const Timestamp: VFC<{ roomMember: RoomMember }> = ({ roomMember }) => {
+const Timestamp: FC<{ roomMember: RoomMember }> = ({ roomMember }) => {
     const timestamp = roomMember.events.member?.event.origin_server_ts;
     if (!timestamp) return null;
     return <time className="mx_PeopleRoomSettingsTab_timestamp">{formatRelativeTime(new Date(timestamp))}</time>;
 };
 
-const SeeMoreOrLess: VFC<{ roomMember: RoomMember }> = ({ roomMember }) => {
+const SeeMoreOrLess: FC<{ roomMember: RoomMember }> = ({ roomMember }) => {
     const [seeMore, setSeeMore] = useState(false);
     const reason = roomMember.events.member?.getContent().reason;
 
@@ -51,7 +51,7 @@ const SeeMoreOrLess: VFC<{ roomMember: RoomMember }> = ({ roomMember }) => {
     );
 };
 
-const Knock: VFC<{
+const Knock: FC<{
     canInvite: boolean;
     canKick: boolean;
     onApprove: (userId: string) => Promise<void>;
@@ -103,7 +103,7 @@ const Knock: VFC<{
     );
 };
 
-export const PeopleRoomSettingsTab: VFC<{ room: Room }> = ({ room }) => {
+export const PeopleRoomSettingsTab: FC<{ room: Room }> = ({ room }) => {
     const client = room.client;
     const userId = client.getUserId() || "";
     const canInvite = room.canInvite(userId);

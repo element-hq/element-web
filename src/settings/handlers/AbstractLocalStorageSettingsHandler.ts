@@ -97,7 +97,7 @@ export default abstract class AbstractLocalStorageSettingsHandler extends Settin
     }
 
     public isSupported(): boolean {
-        return localStorage !== undefined && localStorage !== null;
+        return window.localStorage !== undefined && window.localStorage !== null;
     }
 
     public reset(): void {

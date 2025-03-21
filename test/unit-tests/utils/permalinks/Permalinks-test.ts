@@ -116,7 +116,7 @@ describe("Permalinks", function () {
 
     it("should gracefully handle invalid MXIDs", () => {
         const roomId = "!fake:example.org";
-        const alice50 = makeMemberWithPL(roomId, "@alice:pl_50:org", 50);
+        const alice50 = makeMemberWithPL(roomId, "@alice:pl-50:org", 50);
         const room = mockRoom(roomId, [alice50]);
         const creator = new RoomPermalinkCreator(room);
         creator.load();

@@ -6,18 +6,18 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ReactElement } from "react";
+import React, { type ReactElement, useContext } from "react";
 import classNames from "classnames";
 import { type Room, type RoomMember } from "matrix-js-sdk/src/matrix";
 import { Tooltip } from "@vector-im/compound-web";
 import { LinkIcon, UserSolidIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
+import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { usePermalink } from "../../../hooks/usePermalink";
 import RoomAvatar from "../avatars/RoomAvatar";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { _t } from "../../../languageHandler";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 export enum PillType {
     UserMention = "TYPE_USER_MENTION",
@@ -28,13 +28,7 @@ export enum PillType {
     Keyword = "TYPE_KEYWORD", // Used to highlight keywords that triggered a notification rule
 }
 
-export const pillRoomNotifPos = (text: string | null): number => {
-    return text?.indexOf("@room") ?? -1;
-};
-
-export const pillRoomNotifLen = (): number => {
-    return "@room".length;
-};
+export const AT_ROOM_REGEX = PushProcessor.getPushRuleGlobRegex("@room", true, "gmi");
 
 const linkIcon = <LinkIcon className="mx_Pill_LinkIcon mx_BaseAvatar" />;
 
@@ -89,6 +83,7 @@ export const Pill: React.FC<PillProps> = ({
     shouldShowPillAvatar = true,
     text: customPillText,
 }) => {
+    const cli = useContext(MatrixClientContext);
     const {
         event,
         member,
@@ -113,7 +108,7 @@ export const Pill: React.FC<PillProps> = ({
         mx_RoomPill: type === PillType.RoomMention,
         mx_SpacePill: type === "space" || targetRoom?.isSpaceRoom(),
         mx_UserPill: type === PillType.UserMention,
-        mx_UserPill_me: resourceId === MatrixClientPeg.safeGet().getUserId(),
+        mx_UserPill_me: resourceId === cli.getUserId(),
         mx_EventPill: type === PillType.EventInOtherRoom || type === PillType.EventInSameRoom,
         mx_KeywordPill: type === PillType.Keyword,
     });
@@ -160,26 +155,24 @@ export const Pill: React.FC<PillProps> = ({
     const isAnchor = !!inMessage && !!url;
     return (
         <bdi>
-            <MatrixClientContext.Provider value={MatrixClientPeg.safeGet()}>
-                <Tooltip
-                    description={resourceId ?? ""}
-                    open={resourceId ? undefined : false}
-                    placement="right"
-                    isTriggerInteractive={isAnchor}
-                >
-                    {isAnchor ? (
-                        <a className={classes} href={url} onClick={onClick}>
-                            {avatar}
-                            <span className="mx_Pill_text">{pillText}</span>
-                        </a>
-                    ) : (
-                        <span className={classes}>
-                            {avatar}
-                            <span className="mx_Pill_text">{pillText}</span>
-                        </span>
-                    )}
-                </Tooltip>
-            </MatrixClientContext.Provider>
+            <Tooltip
+                description={resourceId ?? ""}
+                open={resourceId ? undefined : false}
+                placement="right"
+                isTriggerInteractive={isAnchor}
+            >
+                {isAnchor ? (
+                    <a className={classes} href={url} onClick={onClick}>
+                        {avatar}
+                        <span className="mx_Pill_text">{pillText}</span>
+                    </a>
+                ) : (
+                    <span className={classes}>
+                        {avatar}
+                        <span className="mx_Pill_text">{pillText}</span>
+                    </span>
+                )}
+            </Tooltip>
         </bdi>
     );
 };

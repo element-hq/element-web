@@ -13,7 +13,7 @@ interface IResizeHandleProps {
     vertical?: boolean;
     reverse?: boolean;
     id?: string;
-    passRef?: React.RefObject<HTMLDivElement>;
+    passRef?: React.RefObject<HTMLDivElement | null>;
 }
 
 const ResizeHandle: React.FC<IResizeHandleProps> = ({ vertical, reverse, id, passRef }) => {

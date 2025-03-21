@@ -10,7 +10,7 @@ import classNames from "classnames";
 import { type InternationalisedPolicy, type Terms, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { AuthType, type AuthDict, type IInputs, type IStageStatus } from "matrix-js-sdk/src/interactive-auth";
 import { logger } from "matrix-js-sdk/src/logger";
-import React, { type ChangeEvent, createRef, type FormEvent, Fragment } from "react";
+import React, { type JSX, type ChangeEvent, createRef, type FormEvent, Fragment } from "react";
 import { Button, Text } from "@vector-im/compound-web";
 import PopOutIcon from "@vector-im/compound-design-tokens/assets/web/icons/pop-out";
 
