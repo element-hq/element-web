@@ -585,7 +585,7 @@ export default class ImageView extends React.Component<IProps, IState> {
 function DownloadButton({ url, fileName }: { url: string; fileName?: string }): JSX.Element {
     const downloader = useRef(new FileDownloader()).current;
     const [loading, setLoading] = useState(false);
-    const blobRef = useRef<Blob>();
+    const blobRef = useRef<Blob>(undefined);
 
     function showError(e: unknown): void {
         Modal.createDialog(ErrorDialog, {

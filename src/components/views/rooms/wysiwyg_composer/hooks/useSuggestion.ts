@@ -45,7 +45,7 @@ type SuggestionState = Suggestion | null;
  * this will be an object representing that command or mention, otherwise it is null
  */
 export function useSuggestion(
-    editorRef: React.RefObject<HTMLDivElement>,
+    editorRef: React.RefObject<HTMLDivElement | null>,
     setText: (text?: string) => void,
     isAutoReplaceEmojiEnabled?: boolean,
 ): {
@@ -105,7 +105,7 @@ export function useSuggestion(
  * @param isAutoReplaceEmojiEnabled - whether plain text emoticons should be auto replaced with emojis
  */
 export function processSelectionChange(
-    editorRef: React.RefObject<HTMLDivElement>,
+    editorRef: React.RefObject<HTMLDivElement | null>,
     setSuggestionData: React.Dispatch<React.SetStateAction<SuggestionState>>,
     isAutoReplaceEmojiEnabled?: boolean,
 ): void {

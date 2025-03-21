@@ -582,13 +582,13 @@ export const alwaysAboveRightOf = (
 
 type ContextMenuTuple<T> = [
     boolean,
-    RefObject<T>,
+    RefObject<T | null>,
     (ev?: SyntheticEvent) => void,
     (ev?: SyntheticEvent) => void,
     (val: boolean) => void,
 ];
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint
-export const useContextMenu = <T extends any = HTMLElement>(inputRef?: RefObject<T>): ContextMenuTuple<T> => {
+export const useContextMenu = <T extends any = HTMLElement>(inputRef?: RefObject<T | null>): ContextMenuTuple<T> => {
     let button = useRef<T>(null);
     if (inputRef) {
         // if we are given a ref, use it instead of ours

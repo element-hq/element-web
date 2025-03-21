@@ -143,7 +143,7 @@ const SessionManagerTab: React.FC<{
     const [expandedDeviceIds, setExpandedDeviceIds] = useState<ExtendedDevice["device_id"][]>([]);
     const [selectedDeviceIds, setSelectedDeviceIds] = useState<ExtendedDevice["device_id"][]>([]);
     const filteredDeviceListRef = useRef<HTMLDivElement>(null);
-    const scrollIntoViewTimeoutRef = useRef<number>();
+    const scrollIntoViewTimeoutRef = useRef<number>(undefined);
 
     const sdkContext = useContext(SDKContext);
     const matrixClient = sdkContext.client!;

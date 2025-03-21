@@ -330,7 +330,9 @@ export default class ChangePassword extends React.Component<IProps, IState> {
                     <form className={this.props.className} onSubmit={this.onClickChange}>
                         <div className={rowClassName}>
                             <Field
-                                ref={(field) => (this[FIELD_OLD_PASSWORD] = field)}
+                                ref={(field) => {
+                                    this[FIELD_OLD_PASSWORD] = field;
+                                }}
                                 type="password"
                                 label={_t("auth|change_password_current_label")}
                                 value={this.state.oldPassword}
@@ -340,7 +342,9 @@ export default class ChangePassword extends React.Component<IProps, IState> {
                         </div>
                         <div className={rowClassName}>
                             <PassphraseField
-                                fieldRef={(field) => (this[FIELD_NEW_PASSWORD] = field)}
+                                fieldRef={(field) => {
+                                    this[FIELD_NEW_PASSWORD] = field;
+                                }}
                                 type="password"
                                 label={_td("auth|change_password_new_label")}
                                 minScore={PASSWORD_MIN_SCORE}
@@ -353,7 +357,9 @@ export default class ChangePassword extends React.Component<IProps, IState> {
                         </div>
                         <div className={rowClassName}>
                             <Field
-                                ref={(field) => (this[FIELD_NEW_PASSWORD_CONFIRM] = field)}
+                                ref={(field) => {
+                                    this[FIELD_NEW_PASSWORD_CONFIRM] = field;
+                                }}
                                 type="password"
                                 label={_t("auth|change_password_confirm_label")}
                                 value={this.state.newPasswordConfirm}

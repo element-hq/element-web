@@ -49,8 +49,8 @@ export function usePlainTextListeners(
     eventRelation?: IEventRelation,
     isAutoReplaceEmojiEnabled?: boolean,
 ): {
-    ref: RefObject<HTMLDivElement>;
-    autocompleteRef: React.RefObject<Autocomplete>;
+    ref: RefObject<HTMLDivElement | null>;
+    autocompleteRef: RefObject<Autocomplete | null>;
     content?: string;
     onBeforeInput(event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>): void;
     onInput(event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>): void;
@@ -66,8 +66,8 @@ export function usePlainTextListeners(
     const roomContext = useScopedRoomContext("room", "timelineRenderingType", "replyToEvent");
     const mxClient = useMatrixClientContext();
 
-    const ref = useRef<HTMLDivElement | null>(null);
-    const autocompleteRef = useRef<Autocomplete | null>(null);
+    const ref = useRef<HTMLDivElement>(null);
+    const autocompleteRef = useRef<Autocomplete>(null);
     const [content, setContent] = useState<string | undefined>(initialContent);
 
     const send = useCallback(() => {

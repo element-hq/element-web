@@ -108,6 +108,10 @@ const CodeBlock: React.FC<Props> = ({ children, onHeightChanged }) => {
         }
     }
 
+    function highlightCodeRef(div: HTMLElement | null): void {
+        highlightCode(div);
+    }
+
     return (
         <TooltipProvider>
             <pre
@@ -119,7 +123,7 @@ const CodeBlock: React.FC<Props> = ({ children, onHeightChanged }) => {
                 <div
                     style={{ display: "contents" }}
                     dangerouslySetInnerHTML={{ __html: children.innerHTML }}
-                    ref={highlightCode}
+                    ref={highlightCodeRef}
                 />
             </pre>
             {expandCollapseButton}

@@ -12,7 +12,7 @@ import AccessibleButton, { type ButtonProps } from "../../components/views/eleme
 import { useRovingTabIndex } from "../RovingTabIndex";
 
 type Props<T extends keyof HTMLElementTagNameMap> = Omit<ButtonProps<T>, "tabIndex"> & {
-    inputRef?: RefObject<HTMLElementTagNameMap[T]>;
+    inputRef?: RefObject<HTMLElementTagNameMap[T] | null>;
     focusOnMouseOver?: boolean;
 };
 

@@ -343,7 +343,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
     private debounceTimer: number | null = null; // actually number because we're in the browser
     private editorRef = createRef<HTMLInputElement>();
-    private numberEntryFieldRef: React.RefObject<Field> = createRef();
+    private numberEntryFieldRef = createRef<Field>();
     private unmounted = false;
     private encryptionByDefault = false;
     private profilesStore: UserProfilesStore;

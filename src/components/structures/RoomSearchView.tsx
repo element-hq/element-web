@@ -59,7 +59,7 @@ export const RoomSearchView = forwardRef<ScrollPanel, Props>(
         const aborted = useRef(false);
         // A map from room ID to permalink creator
         const permalinkCreators = useMemo(() => new Map<string, RoomPermalinkCreator>(), []);
-        const innerRef = useRef<ScrollPanel | null>();
+        const innerRef = useRef<ScrollPanel>(null);
 
         useEffect(() => {
             return () => {

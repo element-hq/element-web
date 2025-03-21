@@ -47,7 +47,7 @@ interface IState {
 
 export default class BugReportDialog extends React.Component<BugReportDialogProps, IState> {
     private unmounted: boolean;
-    private issueRef: React.RefObject<Field>;
+    private issueRef: React.RefObject<Field | null>;
 
     public constructor(props: BugReportDialogProps) {
         super(props);

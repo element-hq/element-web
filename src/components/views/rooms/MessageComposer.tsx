@@ -111,7 +111,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
     private dispatcherRef?: string;
     private messageComposerInput = createRef<SendMessageComposerClass>();
     private voiceRecordingButton = createRef<VoiceRecordComposerTile>();
-    private ref: React.RefObject<HTMLDivElement> = createRef();
+    private ref = createRef<HTMLDivElement>();
     private instanceId: number;
 
     private _voiceRecording: Optional<VoiceMessageRecording>;

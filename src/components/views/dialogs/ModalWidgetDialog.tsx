@@ -53,7 +53,7 @@ const MAX_BUTTONS = 3;
 export default class ModalWidgetDialog extends React.PureComponent<IProps, IState> {
     private readonly widget: Widget;
     private readonly possibleButtons: ModalButtonID[];
-    private appFrame: React.RefObject<HTMLIFrameElement> = React.createRef();
+    private appFrame = React.createRef<HTMLIFrameElement>();
     private readonly themeWatcher = new ThemeWatcher();
 
     public state: IState = {

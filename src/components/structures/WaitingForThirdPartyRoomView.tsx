@@ -21,7 +21,7 @@ import SdkConfig from "../../SdkConfig";
 import { useScopedRoomContext } from "../../contexts/ScopedRoomContext.tsx";
 
 interface Props {
-    roomView: RefObject<HTMLElement>;
+    roomView: RefObject<HTMLElement | null>;
     resizeNotifier: ResizeNotifier;
     inviteEvent: MatrixEvent;
 }
