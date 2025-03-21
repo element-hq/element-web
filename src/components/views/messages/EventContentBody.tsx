@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { forwardRef, useContext, useMemo } from "react";
+import React, { memo, forwardRef, useContext, useMemo } from "react";
 import { type IContent, type MatrixEvent, MsgType, PushRuleKind, type Room } from "matrix-js-sdk/src/matrix";
 import parse from "html-react-parser";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
@@ -98,44 +98,46 @@ interface Props extends ReplacerOptions {
     onHeightChanged?: () => void;
 }
 
-const EventContentBody = forwardRef<HTMLElement, Props>(
-    ({ as, mxEvent, stripReply, content, onHeightChanged, linkify, highlights, ...options }, ref) => {
-        const cli = useContext(MatrixClientContext);
-        const room = cli.getRoom(mxEvent?.getRoomId()) ?? undefined;
-        const enableBigEmoji = useSettingValue("TextualBody.enableBigEmoji");
+const EventContentBody = memo(
+    forwardRef<HTMLElement, Props>(
+        ({ as, mxEvent, stripReply, content, onHeightChanged, linkify, highlights, ...options }, ref) => {
+            const cli = useContext(MatrixClientContext);
+            const room = cli.getRoom(mxEvent?.getRoomId()) ?? undefined;
+            const enableBigEmoji = useSettingValue("TextualBody.enableBigEmoji");
 
-        const replacer = useReplacer(content, mxEvent, room, onHeightChanged, options);
+            const replacer = useReplacer(content, mxEvent, room, onHeightChanged, options);
 
-        const isEmote = content.msgtype === MsgType.Emote;
+            const isEmote = content.msgtype === MsgType.Emote;
 
-        const { strippedBody, formattedBody, emojiBodyElements, className } = useMemo(
-            () =>
-                bodyToNode(content, highlights, {
-                    disableBigEmoji: isEmote || !enableBigEmoji,
-                    // Part of Replies fallback support
-                    stripReplyFallback: stripReply,
-                }),
-            [content, enableBigEmoji, highlights, isEmote, stripReply],
-        );
+            const { strippedBody, formattedBody, emojiBodyElements, className } = useMemo(
+                () =>
+                    bodyToNode(content, highlights, {
+                        disableBigEmoji: isEmote || !enableBigEmoji,
+                        // Part of Replies fallback support
+                        stripReplyFallback: stripReply,
+                    }),
+                [content, enableBigEmoji, highlights, isEmote, stripReply],
+            );
 
-        const As = as;
-        const includeDir = As === "div" || 0;
-        const body = formattedBody ? (
-            <As ref={ref as any} className={className} dir={includeDir ? "auto" : undefined}>
-                {parse(formattedBody, {
-                    replace: replacer,
-                })}
-            </As>
-        ) : (
-            <As ref={ref as any} className={className} dir={includeDir ? "auto" : undefined}>
-                {applyReplacerOnString(emojiBodyElements || strippedBody, replacer)}
-            </As>
-        );
+            const As = as;
+            const includeDir = As === "div" || 0;
+            const body = formattedBody ? (
+                <As ref={ref as any} className={className} dir={includeDir ? "auto" : undefined}>
+                    {parse(formattedBody, {
+                        replace: replacer,
+                    })}
+                </As>
+            ) : (
+                <As ref={ref as any} className={className} dir={includeDir ? "auto" : undefined}>
+                    {applyReplacerOnString(emojiBodyElements || strippedBody, replacer)}
+                </As>
+            );
 
-        if (!linkify) return body;
+            if (!linkify) return body;
 
-        return <Linkify>{body}</Linkify>;
-    },
+            return <Linkify>{body}</Linkify>;
+        },
+    ),
 );
 
 export default EventContentBody;
