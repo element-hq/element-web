@@ -8,6 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { TypedEventEmitter } from "matrix-js-sdk/src/matrix";
 import React, {
+    type JSX,
     type ContextType,
     createContext,
     memo,

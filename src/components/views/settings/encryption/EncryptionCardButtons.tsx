@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import React, { type PropsWithChildren } from "react";
+import React, { type JSX, type PropsWithChildren } from "react";
 
 /**
  * A component to present action buttons at the bottom of an {@link EncryptionCard}

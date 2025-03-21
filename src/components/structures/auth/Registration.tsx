@@ -20,7 +20,7 @@ import {
     SSOAction,
     type RegisterResponse,
 } from "matrix-js-sdk/src/matrix";
-import React, { Fragment, type ReactNode } from "react";
+import React, { type JSX, Fragment, type ReactNode } from "react";
 import classNames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
 
