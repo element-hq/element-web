@@ -11,7 +11,7 @@ import { RoomNotificationStateStore } from "../../../notifications/RoomNotificat
 
 export class UnreadFilter implements Filter {
     public matches(room: Room): boolean {
-        return RoomNotificationStateStore.instance.getRoomState(room).isUnread;
+        return RoomNotificationStateStore.instance.getRoomState(room).hasUnreadCount;
     }
 
     public get key(): FilterKey.UnreadFilter {
