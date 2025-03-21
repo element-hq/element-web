@@ -720,12 +720,14 @@ export class ElementCall extends Call {
             params.append("posthogUserId", analyticsID);
             params.append("posthogApiHost", posthogConfig.api_host);
             params.append("posthogApiKey", posthogConfig.project_api_key);
-        }
 
-        const sentryConfig = SdkConfig.get("sentry");
-        if (sentryConfig) {
-            params.append("sentryDsn", sentryConfig.dsn);
-            params.append("sentryEnvironment", sentryConfig.environment ?? "");
+            // We gate passing sentry behind analytics consent as EC shares data automatically without user-consent,
+            // unlike EW where data is shared upon an intentional user action (rageshake).
+            const sentryConfig = SdkConfig.get("sentry");
+            if (sentryConfig) {
+                params.append("sentryDsn", sentryConfig.dsn);
+                params.append("sentryEnvironment", sentryConfig.environment ?? "");
+            }
         }
 
         if (SettingsStore.getValue("fallbackICEServerAllowed")) {
