@@ -162,6 +162,29 @@ describe("RoomListViewModel", () => {
             expect(vm.current.activePrimaryFilter).toEqual(vm.current.primaryFilters[i]);
         });
 
+        it("should remove any active primary filters when secondary filter is changed", async () => {
+            const { fn } = mockAndCreateRooms();
+            const { result: vm } = renderHook(() => useRoomListViewModel());
+
+            // Let's first toggle the People filter
+            const i = vm.current.primaryFilters.findIndex((f) => f.name === "People");
+            act(() => {
+                vm.current.primaryFilters[i].toggle();
+            });
+            expect(vm.current.primaryFilters[i].active).toEqual(true);
+
+            // Let's say we toggle the mentions secondary filter
+            act(() => {
+                vm.current.activateSecondaryFilter(SecondaryFilters.MentionsOnly);
+            });
+
+            // Primary filer should have been unapplied
+            expect(vm.current.primaryFilters[i].active).toEqual(false);
+
+            // RLS call must include only the secondary filter
+            expect(fn).toHaveBeenLastCalledWith(expect.arrayContaining([FilterKey.MentionsFilter]));
+        });
+
         const testcases: Array<[string, { secondary: SecondaryFilters; filterKey: FilterKey }, string]> = [
             [
                 "Mentions only",
