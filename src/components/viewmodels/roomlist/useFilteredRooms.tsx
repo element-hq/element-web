@@ -145,22 +145,14 @@ export function useFilteredRooms(): FilteredRooms {
             // SecondaryFilter is an enum for the UI, let's convert it to something
             // that the store will understand.
             const secondary = secondaryFiltersToFilterKeyMap.get(filter);
-
-            // Active primary filter may need to be toggled off when applying this secondary filer.
-            let primary = primaryFilter;
-            if (
-                primaryFilter !== undefined &&
-                secondary !== undefined &&
-                !isPrimaryFilterCompatible(primaryFilter, secondary)
-            ) {
-                primary = undefined;
-            }
-
             setActiveSecondaryFilter(filter);
-            setPrimaryFilter(primary);
-            updateRoomsFromStore(filterUndefined([primary, secondary]));
+
+            // Reset any active primary filters.
+            setPrimaryFilter(undefined);
+
+            updateRoomsFromStore(filterUndefined([secondary]));
         },
-        [activeSecondaryFilter, primaryFilter, updateRoomsFromStore],
+        [activeSecondaryFilter, updateRoomsFromStore],
     );
 
     /**
