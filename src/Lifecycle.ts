@@ -413,6 +413,17 @@ export function attemptTokenLogin(
  */
 async function onSuccessfulDelegatedAuthLogin(credentials: IMatrixClientCreds): Promise<void> {
     await clearStorage();
+
+    const userId = credentials.userId;
+    const deviceId = credentials.deviceId;
+    let pickleKey: string | undefined = (await PlatformPeg.get()?.getPickleKey(userId, deviceId ?? "")) ?? undefined;
+    if (!pickleKey) {
+        pickleKey = userId && deviceId
+                ? await PlatformPeg.get()?.createPickleKey(userId, deviceId) ?? undefined
+                : undefined;
+    }
+    credentials.pickleKey = pickleKey;
+
     await persistCredentials(credentials);
 
     // remember that we just logged in
