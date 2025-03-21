@@ -47,12 +47,12 @@ export const ConfirmRejectInviteDialog: React.FunctionComponent<IProps> = ({onFi
                 <InlineField name="report-room" control={<Checkbox checked={shouldReport} onChange={shouldReportChanged} />}>
                     <Label>Report room</Label>
                     <HelpMessage>{_t("report_room|description")}</HelpMessage>
+                    <Field name={"report-reason"}>
+                        <Label htmlFor="mx_ConfirmRejectInviteDialog_reason">{_t("room_settings|permissions|ban_reason")}</Label>
+                        <HelpMessage>{_t("reject_invitation_dialog|reason_description")}</HelpMessage>
+                        <TextInput id="mx_ConfirmRejectInviteDialog_reason" disabled={!shouldReport} value={shouldReport ? reportReason : ""} placeholder={_t("report_room|reason_placeholder")} onChange={reportReasonChanged}></TextInput>
+                    </Field>
                 </InlineField>
-                <Field name={"report-reason"}>
-                    <Label htmlFor="mx_ConfirmRejectInviteDialog_reason">{_t("room_settings|permissions|ban_reason")}</Label>
-                    <HelpMessage>{_t("reject_invitation_dialog|reason_description")}</HelpMessage>
-                    <TextInput id="mx_ConfirmRejectInviteDialog_reason" disabled={!shouldReport} value={shouldReport ? reportReason : ""} placeholder={_t("report_room|reason_placeholder")} onChange={reportReasonChanged}></TextInput>
-                </Field>
                 <DialogButtons
                     primaryButton="Reject invite"
                     primaryButtonClass="danger"
