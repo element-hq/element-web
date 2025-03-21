@@ -408,7 +408,11 @@ export function attemptTokenLogin(
 
 /**
  * Load the pickle key inside the credentials or create it if it does not exist for this device.
- * @param credentials Holds the device to load/store the pickle key, result is stored in credentials.pickleKey
+ * 
+ * @param credentials Holds the device to load/store the pickle key
+ *
+ * @returns {Promise} promise which resolves to the loaded or generated pickle key or undefined if
+ *    none was loaded nor generated
  */
 async function loadOrCreatePickleKey(credentials: IMatrixClientCreds): Promise<string | undefined> {
     // Try to load the pickle key
