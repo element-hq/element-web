@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type JSX } from "react";
-import { Element as ParserElement, type HTMLReactParserOptions, Text } from "html-react-parser";
+import { type DOMNode, Element as ParserElement, type HTMLReactParserOptions, Text } from "html-react-parser";
 import { type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
 import { type Opts } from "linkifyjs";
 
@@ -17,7 +17,7 @@ export type Replacer = HTMLReactParserOptions["replace"];
  */
 export function applyReplacerOnString(
     input: string | JSX.Element[],
-    replacer?: HTMLReactParserOptions["replace"],
+    replacer: Replacer,
 ): JSX.Element | JSX.Element[] | string {
     if (!replacer) return input;
 
@@ -53,10 +53,6 @@ export function replacerToRenderFunction(replacer: Replacer): Opts["render"] {
     };
 }
 
-type Replacement = JSX.Element | string | void;
-type TagReplacer = (element: ParserElement, parameters: Parameters, index: number) => Replacement;
-type TextReplacer = (text: Text, parameters: Parameters, index: number) => Replacement;
-
 interface Parameters {
     isHtml: boolean;
     tooltipifyAmbiguousUrls?: boolean;
@@ -69,11 +65,17 @@ interface Parameters {
     shouldShowPillAvatar?: boolean;
 }
 
+type SpecialisedReplacer<T extends DOMNode> = (
+    node: T,
+    parameters: Parameters,
+    index: number,
+) => JSX.Element | string | void;
+
 export type ReplacerMap = Partial<
     {
-        [tagName in keyof HTMLElementTagNameMap]: TagReplacer;
+        [tagName in keyof HTMLElementTagNameMap]: SpecialisedReplacer<ParserElement>;
     } & {
-        [Node.TEXT_NODE]: TextReplacer;
+        [Node.TEXT_NODE]: SpecialisedReplacer<Text>;
     }
 >;
 
@@ -97,15 +99,3 @@ export const combineReplacers =
             }
         }
     };
-
-// export function getReplacer(): PreparedReplacer {
-//     const replacers: ReplacerMap[] = filterBoolean([
-//         pillifyMentionsReplacer,
-//         pillifyKeywordsReplacer,
-//         tooltipifyAmbiguousLinksReplacer,
-//         spoilerifyReplacer,
-//         codeBlockifyReplacer,
-//     ]);
-//
-//     return combineReplacers(...replacers);
-// }

@@ -28,7 +28,7 @@ export enum PillType {
     Keyword = "TYPE_KEYWORD", // Used to highlight keywords that triggered a notification rule
 }
 
-export const AT_ROOM_REGEX = PushProcessor.getPushRuleGlobRegex("content.body", "@room", "gmi");
+export const AT_ROOM_REGEX = PushProcessor.getPushRuleGlobRegex("@room", true, "gmi");
 
 const linkIcon = <LinkIcon className="mx_Pill_LinkIcon mx_BaseAvatar" />;
 

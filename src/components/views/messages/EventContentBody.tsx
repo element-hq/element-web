@@ -33,7 +33,7 @@ const getPushDetailsKeywordPatternRegexp = (mxEvent: MatrixEvent): RegExp | unde
         pushDetails.rule.kind === PushRuleKind.ContentSpecific &&
         pushDetails.rule.pattern
     ) {
-        return PushProcessor.getPushRuleGlobRegex("content.body", pushDetails.rule.pattern);
+        return PushProcessor.getPushRuleGlobRegex(pushDetails.rule.pattern, true, "gi");
     }
     return undefined;
 };

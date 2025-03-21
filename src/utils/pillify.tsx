@@ -7,16 +7,15 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 import { RuleId } from "matrix-js-sdk/src/matrix";
 import { type Element as ParserElement } from "html-react-parser";
 import { type ParentNode } from "domhandler/lib/node";
 import { textContent } from "domutils";
+import reactStringReplace from "react-string-replace";
 
 import { AT_ROOM_REGEX, Pill, PillType } from "../components/views/elements/Pill";
 import { parsePermalink } from "./permalinks/Permalinks";
 import { type PermalinkParts } from "./permalinks/PermalinkConstructor";
-import { jsxJoin } from "./ReactUtils.tsx";
 import { type ReplacerMap } from "./reactHtmlParser.tsx";
 
 /**
@@ -65,24 +64,23 @@ export const pillifyMentionsReplacer: ReplacerMap = {
     [Node.TEXT_NODE]: (text, { room, mxEvent, shouldShowPillAvatar }) => {
         if (!room || !mxEvent) return;
 
-        const atRoomParts = text.data.split(AT_ROOM_REGEX);
-        if (atRoomParts.length <= 1) return;
-
-        const pushProcessor = new PushProcessor(room.client);
-        const atRoomRule = pushProcessor.getPushRuleById(
+        const atRoomRule = room.client.pushProcessor.getPushRuleById(
             mxEvent.getContent()["m.mentions"] !== undefined ? RuleId.IsRoomMention : RuleId.AtRoomNotification,
         );
-        if (atRoomRule && pushProcessor.ruleMatchesEvent(atRoomRule, mxEvent)) {
-            const pill = (
+        if (atRoomRule && room.client.pushProcessor.ruleMatchesEvent(atRoomRule, mxEvent)) {
+            const parts = reactStringReplace(text.data, AT_ROOM_REGEX, (_match, i) => (
                 <Pill
+                    key={i}
                     type={PillType.AtRoomMention}
                     inMessage={true}
                     room={room}
                     shouldShowPillAvatar={shouldShowPillAvatar}
                 />
-            );
+            ));
 
-            return jsxJoin(atRoomParts, pill);
+            if (parts.length <= 1) return; // no matches, skip replacing
+
+            return <>{parts}</>;
         }
     },
 };
@@ -94,23 +92,12 @@ export const pillifyKeywordsReplacer: ReplacerMap = {
     [Node.TEXT_NODE]: (text, { keywordRegexpPattern }) => {
         if (!keywordRegexpPattern) return;
 
-        const textContent = text.data;
-        if (!textContent) return;
+        const parts = reactStringReplace(text.data, keywordRegexpPattern, (match, i) => (
+            <Pill key={i} text={match} type={PillType.Keyword} />
+        ));
 
-        const match = textContent.match(keywordRegexpPattern);
-        if (!match || match.length < 3) return;
+        if (parts.length <= 1) return; // no matches, skip replacing
 
-        const keywordText = match[2];
-        const idx = match.index! + match[1].length;
-        const before = textContent.substring(0, idx);
-        const after = textContent.substring(idx + keywordText.length);
-
-        return (
-            <>
-                {before}
-                <Pill text={keywordText} type={PillType.Keyword} />
-                {after}
-            </>
-        );
+        return <>{parts}</>;
     },
 };

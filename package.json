@@ -147,6 +147,7 @@
         "react-blurhash": "^0.3.0",
         "react-dom": "^19.0.0",
         "react-focus-lock": "^2.5.1",
+        "react-string-replace": "^1.1.1",
         "react-transition-group": "^4.4.1",
         "react-virtualized": "^9.22.5",
         "rfc4648": "^1.4.0",
