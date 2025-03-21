@@ -410,11 +410,11 @@ export function attemptTokenLogin(
  * Load the pickle key inside the credentials or create it if it does not exist for this device.
  * @param credentials Holds the device to load/store the pickle key, result is stored in credentials.pickleKey
  */
-async function loadOrCreatePickleKey(credentials: IMatrixClientCreds): Promise<void> {
+async function loadOrCreatePickleKey(credentials: IMatrixClientCreds): Promise<string | undefined> {
     // Try to load the pickle key
-    const userId: string = credentials.userId;
-    const deviceId: string | undefined = credentials.deviceId;
-    let pickleKey: string | undefined = (await PlatformPeg.get()?.getPickleKey(userId, deviceId ?? "")) ?? undefined;
+    const userId = credentials.userId;
+    const deviceId = credentials.deviceId;
+    let pickleKey = (await PlatformPeg.get()?.getPickleKey(userId, deviceId ?? "")) ?? undefined;
     if (!pickleKey) {
         // Create it if it did not exist
         pickleKey = userId && deviceId
@@ -425,12 +425,11 @@ async function loadOrCreatePickleKey(credentials: IMatrixClientCreds): Promise<v
         } else {
             logger.log("Pickle key not created");
         }
-    }
-    else
-    {
+    } else {
         logger.log(`Pickle key already exists for ${credentials.userId}|${credentials.deviceId} do not create a new one`);
     }
-    credentials.pickleKey = pickleKey;
+
+    return pickleKey;
 }
 
 /**
@@ -441,7 +440,7 @@ async function loadOrCreatePickleKey(credentials: IMatrixClientCreds): Promise<v
 async function onSuccessfulDelegatedAuthLogin(credentials: IMatrixClientCreds): Promise<void> {
     await clearStorage();
     // SSO does not go through setLoggedIn so we need to load/create the pickle key here too
-    await loadOrCreatePickleKey(credentials);
+    credentials.pickleKey = await loadOrCreatePickleKey(credentials);
     await persistCredentials(credentials);
 
     // remember that we just logged in
@@ -684,7 +683,7 @@ async function handleLoadSessionFailure(e: unknown): Promise<boolean> {
 export async function setLoggedIn(credentials: IMatrixClientCreds): Promise<MatrixClient> {
     credentials.freshLogin = true;
     stopMatrixClient();
-    loadOrCreatePickleKey(credentials);
+    credentials.pickleKey = await loadOrCreatePickleKey(credentials);
     return doSetLoggedIn(credentials, true, true);
 }
 
