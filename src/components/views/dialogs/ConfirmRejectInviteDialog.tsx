@@ -11,7 +11,7 @@ import { Room } from "matrix-js-sdk/src/matrix";
 import { _t } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
-import { Checkbox, Field, HelpMessage, InlineField, Label, Root } from "@vector-im/compound-web";
+import { Checkbox, Field, HelpMessage, InlineField, Label, Root, TextInput } from "@vector-im/compound-web";
 
 interface IProps {
     room: Room;
@@ -27,7 +27,7 @@ export const ConfirmRejectInviteDialog: React.FunctionComponent<IProps> = ({onFi
     const shouldIgnoreUserChanged = useCallback<ChangeEventHandler<HTMLInputElement>>((e) => setIgnoreUser(e.target.checked), [setIgnoreUser]);
 
     const [reportReason, setReportReason] = useState<string>("");
-    const reportReasonChanged = useCallback<ChangeEventHandler<HTMLTextAreaElement>>((e) => setReportReason(e.target.value), [setReportReason]);
+    const reportReasonChanged = useCallback<ChangeEventHandler<HTMLInputElement>>((e) => setReportReason(e.target.value), [setReportReason]);
 
     const onCancel = useCallback(() => onFinished(false, false, false), [onFinished]);
     const onOk = useCallback(() => onFinished(true, ignoreUser, shouldReport ? reportReason : false), [onFinished, ignoreUser, shouldReport, reportReason]);
@@ -40,7 +40,7 @@ export const ConfirmRejectInviteDialog: React.FunctionComponent<IProps> = ({onFi
             title={_t("reject_invitation_dialog|title")}
             contentId="mx_Dialog_content"
         >
-            <Root id="mx_ConfirmRejectInviteDialogForm">
+            <Root>
                 <p>{_t("reject_invitation_dialog|confirmation", {  }, {
                     strong: () => (
                         <strong>
@@ -56,17 +56,10 @@ export const ConfirmRejectInviteDialog: React.FunctionComponent<IProps> = ({onFi
                     <Label>Report room</Label>
                     <HelpMessage>{_t("report_room|description")}</HelpMessage>
                 </InlineField>
-                {shouldReport && <Field name="reason">
+                <Field name={"report-reason"}>
                     <Label htmlFor="mx_ConfirmRejectInviteDialog_reason">{_t("room_settings|permissions|ban_reason")}</Label>
-                    <textarea
-                        id="mx_ConfirmRejectInviteDialog_reason"
-                        placeholder={_t("report_room|reason_placeholder")}
-                        rows={2}
-                        onChange={reportReasonChanged}
-                        value={shouldReport ? reportReason : ""}
-                        disabled={!shouldReport}
-                    />
-                </Field>}
+                    <TextInput id="mx_ConfirmRejectInviteDialog_reason" disabled={!shouldReport} value={shouldReport ? reportReason : ""} placeholder={_t("report_room|reason_placeholder")} onChange={reportReasonChanged}></TextInput>
+                </Field>
                 <DialogButtons
                     primaryButton="Reject invite"
                     primaryButtonClass="danger"
