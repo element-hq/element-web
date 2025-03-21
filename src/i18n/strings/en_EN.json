@@ -1786,7 +1786,7 @@
     },
     "reject_invitation_dialog": {
         "confirmation": "Are you sure you want to reject the invitation?",
-        "failed": "Failed to reject invitation",
+        "reason_description": "This reason will only be shared with your homeserver administrator.",
         "title": "Reject invitation"
     },
     "report_content": {
@@ -1813,7 +1813,7 @@
     },
     "report_room": {
         "description": "Report this room to your homeserver admin. This will send the room's unique ID, but if messages are encrypted, the administrator won't be able to read them or view shared files.",
-        "reason_placeholder": " Reason for reporting...",
+        "reason_placeholder": "Reason for reporting...",
         "sent": "Your report was sent.",
         "title": "Report Room"
     },
@@ -2000,7 +2000,6 @@
             "you_created": "You created this room."
         },
         "invite_email_mismatch_suggestion": "Share this email in Settings to receive invites directly in %(brand)s.",
-        "invite_reject_ignore": "Reject & Ignore user",
         "invite_sent_to_email": "This invite was sent to %(email)s",
         "invite_sent_to_email_room": "This invite to %(roomName)s was sent to %(email)s",
         "invite_subtitle": "Invited by <userName/>",
