@@ -408,7 +408,7 @@ export function attemptTokenLogin(
 
 /**
  * Load the pickle key inside the credentials or create it if it does not exist for this device.
- * 
+ *
  * @param credentials Holds the device to load/store the pickle key
  *
  * @returns {Promise} promise which resolves to the loaded or generated pickle key or undefined if
@@ -421,8 +421,9 @@ async function loadOrCreatePickleKey(credentials: IMatrixClientCreds): Promise<s
     let pickleKey = (await PlatformPeg.get()?.getPickleKey(userId, deviceId ?? "")) ?? undefined;
     if (!pickleKey) {
         // Create it if it did not exist
-        pickleKey = userId && deviceId
-                ? await PlatformPeg.get()?.createPickleKey(userId, deviceId) ?? undefined
+        pickleKey =
+            userId && deviceId
+                ? ((await PlatformPeg.get()?.createPickleKey(userId, deviceId)) ?? undefined)
                 : undefined;
         if (pickleKey) {
             logger.log(`Created pickle key for ${credentials.userId}|${credentials.deviceId}`);
@@ -430,7 +431,9 @@ async function loadOrCreatePickleKey(credentials: IMatrixClientCreds): Promise<s
             logger.log("Pickle key not created");
         }
     } else {
-        logger.log(`Pickle key already exists for ${credentials.userId}|${credentials.deviceId} do not create a new one`);
+        logger.log(
+            `Pickle key already exists for ${credentials.userId}|${credentials.deviceId} do not create a new one`,
+        );
     }
 
     return pickleKey;
