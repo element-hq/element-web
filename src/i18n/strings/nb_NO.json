@@ -459,8 +459,8 @@
         "all_chats": "Alle chatter",
         "analytics": "Statistikk",
         "and_n_others": {
-            "og %(count)s andre …": "other",
-            "og én annen …": "one"
+            "one": "og en annen...",
+            "other": "og %(count)s andre..."
         },
         "appearance": "Utseende",
         "application": "Applikasjon",
@@ -1378,8 +1378,8 @@
         "other": "Invitere %(user)s og %(count)s andre"
     },
     "items_and_n_others": {
-        "<Items/> og %(count)s andre": "other",
-        "<Items/> og én annen": "one"
+        "one": "<Items/> og en annen",
+        "other": "<Items/> og %(count)s andre"
     },
     "keyboard": {
         "activate_button": "Aktiver valgt knapp",
@@ -2101,9 +2101,12 @@
             "no_chats": "Ingen chatter ennå",
             "no_chats_description": "Kom i gang ved å sende meldinger til noen eller ved å opprette et rom",
             "no_chats_description_no_room_rights": "Kom i gang med å sende meldinger til noen",
+            "no_favourites": "Du har ikke favorittchat ennå",
             "no_favourites_description": "Du kan legge til en chat til dine favoritter i chat-innstillingene",
             "no_people": "Du har ikke direkte chatter med noen ennå",
+            "no_people_description": "Du kan fjerne merket for filtre for å se de andre chattene dine",
             "no_rooms": "Du er ikke med i noen rom ennå",
+            "no_rooms_description": "Du kan fjerne merket for filtre for å se de andre chattene dine",
             "no_unread": "Gratulerer! Du har ingen uleste meldinger",
             "show_chats": "Vis alle chatter"
         },
@@ -2531,7 +2534,9 @@
                 "title": "Avansert"
             },
             "delete_key_storage": {
+                "breadcrumb_page": "Slett nøkkellagring",
                 "confirm": "Slett nøkkellagring",
+                "description": "Hvis du sletter nøkkellagring, fjernes den kryptografiske identiteten og meldingsnøklene fra serveren og deaktivere følgende sikkerhetsfunksjoner:",
                 "list_first": "Du vil ikke ha kryptert meldingshistorikk på nye enheter",
                 "list_second": "Du vil miste tilgangen til de krypterte meldingene dine hvis du logger av %(brand)s overalt",
                 "title": "Er du sikker på at du vil slå av nøkkellagring og slette den?"
@@ -2541,7 +2546,9 @@
             "device_not_verified_title": "Enhet er ikke verifisert",
             "dialog_title": "<strong>Innstillinger:</strong> Kryptering",
             "key_storage": {
-                "allow_key_storage": "Tillat lagring av nøkler"
+                "allow_key_storage": "Tillat lagring av nøkler",
+                "description": "Lagre din kryptografiske identitet og meldingsnøkler sikkert på serveren. Dette lar deg se meldingsloggen din på alle nye enheter. <a>Lær mer </a>",
+                "title": "Nøkkellager"
             },
             "recovery": {
                 "change_recovery_confirm_button": "Bekreft ny gjenopprettingsnøkkel",
@@ -3636,12 +3643,12 @@
         "send_state_sent": "Meldingen ble sendt",
         "summary": {
             "banned": {
-                "ble bannlyst": "one",
-                "ble bannlyst %(count)s ganger": "other"
+                "one": "ble utestengt",
+                "other": "ble utestengt %(count)s ganger"
             },
             "banned_multiple": {
-                "ble bannlyst": "one",
-                "ble bannlyst %(count)s ganger": "other"
+                "one": "ble utestengt",
+                "other": "ble utestengt %(count)s ganger"
             },
             "changed_avatar": {
                 "one": "%(oneUser)sendret profilbildet deres",
@@ -3652,8 +3659,8 @@
                 "other": "%(severalUsers)sendret profilbildet deres %(count)s ganger"
             },
             "changed_name": {
-                "%(oneUser)s endret navnet sitt": "one",
-                "%(oneUser)sendret navnet sitt %(count)s ganger": "other"
+                "one": "%(oneUser)s endret navn",
+                "other": "%(oneUser)s endret navn %(count)s ganger"
             },
             "changed_name_multiple": {
                 "%(severalUsers)s endret navnene sine": "one"
@@ -3706,12 +3713,12 @@
                 "other": "ble fjernet %(count)s ganger"
             },
             "left": {
-                "%(oneUser)s forlot rommet %(count)s ganger": "other",
-                "%(oneUser)s forlot rommet": "one"
+                "one": "%(oneUser)s forlot",
+                "other": "%(oneUser)s forlot %(count)s ganger"
             },
             "left_multiple": {
-                "%(severalUsers)s forlot rommet %(count)s ganger": "other",
-                "%(severalUsers)s forlot rommet": "one"
+                "one": "%(severalUsers)s forlot",
+                "other": "%(severalUsers)s forlot %(count)s ganger"
             },
             "no_change": {
                 "one": "%(oneUser)sgjorde ingen endringer",
@@ -3762,12 +3769,12 @@
                 "other": "%(severalUsers)sendret serverens ACLer %(count)s ganger"
             },
             "unbanned": {
-                "fikk bannlysningen sin opphevet %(count)s ganger": "other",
-                "fikk bannlysningen sin opphevet": "one"
+                "one": "fikk opphevet forbudet",
+                "other": "fikk opphevet forbudet %(count)s ganger"
             },
             "unbanned_multiple": {
-                "fikk bannlysningene sine opphevet %(count)s ganger": "other",
-                "fikk bannlysningene sine opphevet": "one"
+                "one": "fikk opphevet forbudet",
+                "other": "fikk opphevet forbudet %(count)s ganger"
             }
         },
         "thread_info_basic": "Fra en tråd",

@@ -3147,6 +3147,7 @@
         "view": "Affiche le salon avec cette adresse",
         "whois": "Affiche des informations à propos de l’utilisateur"
     },
+    "sliding_sync_legacy_no_longer_supported": "L'ancienne fonctionnalité Sliding Sync n'est plus prise en charge : veuillez vous déconnecter puis vous reconnecter pour activer la nouvelle fonctionnalité Sliding Sync",
     "space": {
         "add_existing_room_space": {
             "create": "Voulez-vous plutôt ajouter un nouveau salon ?",
