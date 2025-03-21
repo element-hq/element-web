@@ -1735,7 +1735,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     private onRejectButtonClicked = async (): Promise<void> => {
         if (!this.state.room || !this.context.client) return;
-        const [shouldReject, ignoreUser, reportRoom] = await Modal.createDialog(ConfirmRejectInviteDialog, { room: this.state.room } ).finished;
+        const [shouldReject, ignoreUser, reportRoom] = await Modal.createDialog(ConfirmRejectInviteDialog).finished;
         if (!shouldReject) {
             return;
         }

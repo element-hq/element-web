@@ -1786,10 +1786,8 @@
     },
     "reject_invitation_dialog": {
         "confirmation": "Are you sure you want to reject the invitation?",
+        "reason_description": "This reason will only be shared with your homeserver administrator.",
         "title": "Reject invitation"
-    },
-    "reject_invite": {
-        "description": "This will reject the invite for <strong>roomName</strong>. You may take additional actions below."
     },
     "report_content": {
         "description": "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.",
@@ -1815,7 +1813,7 @@
     },
     "report_room": {
         "description": "Report this room to your homeserver admin. This will send the room's unique ID, but if messages are encrypted, the administrator won't be able to read them or view shared files.",
-        "reason_placeholder": " Reason for reporting...",
+        "reason_placeholder": "Reason for reporting...",
         "sent": "Your report was sent.",
         "title": "Report Room"
     },
