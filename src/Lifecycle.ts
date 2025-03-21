@@ -1124,12 +1124,13 @@ window.mxLoginWithAccessToken = async (hsUrl: string, accessToken: string): Prom
         baseUrl: hsUrl,
         accessToken,
     });
-    const { user_id: userId } = await tempClient.whoami();
+    const { user_id: userId, device_id: deviceId } = await tempClient.whoami();
     await doSetLoggedIn(
         {
             homeserverUrl: hsUrl,
             accessToken,
             userId,
+            deviceId,
         },
         true,
         false,
