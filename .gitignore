@@ -15,8 +15,6 @@ electron/pub
 **/.idea
 /certificates/
 /ssh-keys/
-/config.json
-/config.json.*
 /config.local*.json
 # Legacy skinning file that some people might still have
 /src/component-index.js
