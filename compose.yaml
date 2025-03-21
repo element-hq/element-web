@@ -1,0 +1,47 @@
+services:
+    # Node.js App service
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile.app
+        container_name: app-container
+        ports:
+            - "8008:8008"
+        environment:
+            - NODE_ENV=production
+        networks:
+            - web-network
+
+    # Nginx service
+    nginx:
+        build:
+            context: .
+            dockerfile: Dockerfile.nginx
+        container_name: nginx-container
+        ports:
+            - "443:443"
+        depends_on:
+            - app
+        networks:
+            - web-network
+        volumes:
+            - /tmp/nginx/cache
+            - /tmp/nginx/config
+            - ./config.json:/app/config.json
+
+    # Promtail service
+    promtail:
+        image: grafana/promtail:2.9.0
+        container_name: promtail
+        restart: unless-stopped
+        volumes:
+            - ./promtail-config.yaml:/etc/promtail/config.yml
+            - /var/run/docker.sock:/var/run/docker.sock
+            - /var/log/journal:/var/log/journal:ro
+            - /run/log/journal:/run/log/journal:ro
+            - /etc/machine-id:/etc/machine-id:ro
+        command: -config.file=/etc/promtail/config.yml
+
+networks:
+    web-network:
+        driver: bridge
