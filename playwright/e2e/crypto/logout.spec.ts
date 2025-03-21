@@ -60,9 +60,3 @@ test.describe("Logout tests", () => {
         await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
     });
 });
-
-test.describe("Logout via MAS tests", () => {
-    test("it should log out the user & wipe data when logging out via MAS", async ({ page, app }) => {
-        // TODO
-    });
-});

@@ -15,7 +15,7 @@ import { mocked, type MockedObject } from "jest-mock";
 import fetchMock from "fetch-mock-jest";
 
 import StorageEvictedDialog from "../../src/components/views/dialogs/StorageEvictedDialog";
-import { logout, restoreSessionFromStorage, setLoggedIn } from "../../src/Lifecycle";
+import * as Lifecycle from "../../src/Lifecycle";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import Modal from "../../src/Modal";
 import * as StorageAccess from "../../src/utils/StorageAccess";
@@ -28,6 +28,8 @@ import { Action } from "../../src/dispatcher/actions";
 import PlatformPeg from "../../src/PlatformPeg";
 import { persistAccessTokenInStorage, persistRefreshTokenInStorage } from "../../src/utils/tokens/tokens";
 import { encryptPickleKey } from "../../src/utils/tokens/pickling";
+
+const { logout, restoreSessionFromStorage, setLoggedIn } = Lifecycle;
 
 const webCrypto = new Crypto();
 
@@ -951,6 +953,27 @@ describe("Lifecycle", () => {
             );
 
             expect(MatrixClientPeg.unset).not.toHaveBeenCalled();
+        });
+    });
+
+    describe("loadSession", () => {
+        beforeEach(() => {
+            // stub this out
+            jest.spyOn(Modal, "createDialog").mockReturnValue(
+                // @ts-ignore allow bad mock
+                { finished: Promise.resolve([true]) },
+            );
+        });
+
+        it("should not show any error dialog when restoreSessionFromStorage throws but abortSignal has triggered", async () => {
+            jest.spyOn(Lifecycle, "restoreSessionFromStorage").mockRejectedValue(new Error("test error"));
+
+            const abortController = new AbortController();
+            const prom = Lifecycle.loadSession({ abortSignal: abortController.signal });
+            abortController.abort();
+            await expect(prom).resolves.toBeFalsy();
+
+            expect(Modal.createDialog).not.toHaveBeenCalled();
         });
     });
 });
