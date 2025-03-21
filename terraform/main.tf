@@ -108,14 +108,14 @@ resource "aws_security_group" "web" {
   }
 }
 
-# Route53 Hosted Zone
-resource "aws_route53_zone" "existing" {
+# Fetch the existing Route53 Hosted Zone
+data "aws_route53_zone" "existing" {
   name = "voicedropdev.com"
 }
 
-# Route53 Record for web.voicedropdev.com
-resource "aws_route53_record" "web" {
-  zone_id = "Z09985382XFFHQY8KW9G7"
+# Create a DNS Record in the existing Hosted Zone
+resource "aws_route53_record" "existing" {
+  zone_id = data.aws_route53_zone.existing.zone_id
   name    = "web.voicedropdev.com"
   type    = "A"
   ttl     = 300

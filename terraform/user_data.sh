@@ -60,6 +60,6 @@ log_section "Docker Image Deployment"
 log "Pulling Docker image with tag: ${release_tag}"
 docker pull ghcr.io/voyzme/web-client/voicedrop-web:${release_tag}
 log "Running Docker container"
-docker run -d --name web-app -p 8080:8080 ghcr.io/voyzme/web-client/voicedrop-web:${release_tag}
+docker run -d --name web-app -p 443:443 ghcr.io/voyzme/web-client/voicedrop-web:${release_tag}
 
 log "Instance configuration completed successfully"
