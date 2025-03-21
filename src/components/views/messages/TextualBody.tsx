@@ -9,7 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { createRef, type SyntheticEvent, type MouseEvent, StrictMode } from "react";
 import { MsgType, PushRuleKind } from "matrix-js-sdk/src/matrix";
 import { TooltipProvider } from "@vector-im/compound-web";
-import { globToRegexp } from "matrix-js-sdk/src/utils";
+import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 
 import * as HtmlUtils from "../../../HtmlUtils";
 import { formatDate } from "../../../DateUtils";
@@ -110,7 +110,10 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
             pushDetails.rule.kind === PushRuleKind.ContentSpecific &&
             pushDetails.rule.pattern
         ) {
-            this.pillifyNotificationKeywords([content], this.regExpForKeywordPattern(pushDetails.rule.pattern));
+            this.pillifyNotificationKeywords(
+                [content],
+                PushProcessor.getPushRuleGlobRegex(pushDetails.rule.pattern, true),
+            );
         }
     }
 
@@ -235,12 +238,12 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                     continue;
                 }
                 const match = text.match(exp);
-                if (!match || match.length < 3) {
+                if (!match || match.length < 2) {
                     node = node.nextSibling;
                     continue;
                 }
-                const keywordText = match[2];
-                const idx = match.index! + match[1].length;
+                const keywordText = match[1];
+                const idx = match.index!;
                 const before = text.substring(0, idx);
                 const after = text.substring(idx + keywordText.length);
 
@@ -263,12 +266,6 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
             node = node.nextSibling;
         }
-    }
-
-    private regExpForKeywordPattern(pattern: string): RegExp {
-        // Reflects the push notification pattern-matching implementation at
-        // https://github.com/matrix-org/matrix-js-sdk/blob/dbd7d26968b94700827bac525c39afff2c198e61/src/pushprocessor.ts#L570
-        return new RegExp("(^|\\W)(" + globToRegexp(pattern) + ")(\\W|$)", "i");
     }
 
     private findLinks(nodes: ArrayLike<Element>): string[] {
