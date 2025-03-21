@@ -149,6 +149,7 @@ interface ILoadSessionOpts {
     ignoreGuest?: boolean;
     defaultDeviceDisplayName?: string;
     fragmentQueryParams?: QueryDict;
+    abortSignal?: AbortSignal;
 }
 
 /**
@@ -225,6 +226,11 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
         // fall back to welcome screen
         return false;
     } catch (e) {
+        // We may be aborted e.g. because our token expired, so don't show an error here
+        if (opts.abortSignal?.aborted) {
+            return false;
+        }
+
         if (e instanceof AbortLoginAndRebuildStorage) {
             // If we're aborting login because of a storage inconsistency, we don't
             // need to show the general failure dialog. Instead, just go back to welcome.
@@ -236,7 +242,7 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
             return false;
         }
 
-        return handleLoadSessionFailure(e);
+        return handleLoadSessionFailure(e, opts);
     }
 }
 
@@ -656,7 +662,7 @@ export async function restoreSessionFromStorage(opts?: { ignoreGuest?: boolean }
     }
 }
 
-async function handleLoadSessionFailure(e: unknown): Promise<boolean> {
+async function handleLoadSessionFailure(e: unknown, loadSessionOpts?: ILoadSessionOpts): Promise<boolean> {
     logger.error("Unable to load session", e);
 
     const modal = Modal.createDialog(SessionRestoreErrorDialog, {
@@ -671,7 +677,7 @@ async function handleLoadSessionFailure(e: unknown): Promise<boolean> {
     }
 
     // try, try again
-    return loadSession();
+    return loadSession(loadSessionOpts);
 }
 
 /**
