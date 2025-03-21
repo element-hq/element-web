@@ -104,6 +104,7 @@
         "reply": "Reply",
         "reply_in_thread": "Reply in thread",
         "report_content": "Report Content",
+        "report_room": "Report room",
         "resend": "Resend",
         "reset": "Reset",
         "resume": "Resume",
@@ -1809,6 +1810,12 @@
         "report_entire_room": "Report the entire room",
         "spam_or_propaganda": "Spam or propaganda",
         "toxic_behaviour": "Toxic Behaviour"
+    },
+    "report_room": {
+        "description": "Report this room to your homeserver admin. This will send the room's unique ID, but if messages are encrypted, the administrator won't be able to read them or view shared files.",
+        "reason_placeholder": " Reason for reporting...",
+        "sent": "Your report was sent.",
+        "title": "Report Room"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Failed to decrypt %(failedCount)s sessions!",
