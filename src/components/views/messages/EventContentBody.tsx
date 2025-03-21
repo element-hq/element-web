@@ -135,7 +135,7 @@ const EventContentBody = memo(
 
             if (!linkify) return body;
 
-            return <Linkify>{body}</Linkify>;
+            return <Linkify replacer={replacer}>{body}</Linkify>;
         },
     ),
 );

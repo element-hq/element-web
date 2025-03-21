@@ -14,7 +14,7 @@ import Spoiler from "../components/views/elements/Spoiler.tsx";
 export const spoilerifyReplacer: ReplacerMap = {
     span: (span) => {
         const reason = span.attribs["data-mx-spoiler"];
-        if (reason === "string") {
+        if (typeof reason === "string") {
             return <Spoiler reason={reason}>{domToReact(span.children as DOMNode[])}</Spoiler>;
         }
     },
