@@ -61,7 +61,12 @@ describe("PowerLevelSelector", () => {
 
     it("should be able to change the power level of the current user", async () => {
         const onClick = jest.fn();
-        renderPLS({ onClick });
+        const userLevels = {
+            [currentUser]: 100,
+            "@alice:server.org": 100,
+            "@bob:server.org": 0,
+        };
+        renderPLS({ userLevels, onClick });
 
         // Until the power level is changed, the apply button should be disabled
         // compound button is using aria-disabled instead of the disabled attribute, we can't toBeDisabled on it
@@ -106,5 +111,35 @@ describe("PowerLevelSelector", () => {
         renderPLS({ filter: () => false });
 
         expect(screen.getByText("empty label")).toBeInTheDocument();
+    });
+
+    it("should display modal warning if user is last admin", async () => {
+        const onClick = jest.fn();
+
+        renderPLS({ onClick });
+
+        // Until the power level is changed, the apply button should be disabled
+        // compound button is using aria-disabled instead of the disabled attribute, we can't toBeDisabled on it
+        expect(screen.getByRole("button", { name: "Apply" })).toHaveAttribute("aria-disabled", "true");
+
+        const select = screen.getByRole("combobox", { name: currentUser });
+        // Sanity check
+        expect(select).toHaveValue("100");
+
+        // Change current user power level to 50
+        await userEvent.selectOptions(select, "50");
+
+        // modal should appear because only admin in the room
+        expect(screen.findByText("WARNING")).toBeTruthy();
+
+        await userEvent.click(screen.getByRole("button", { name: "Continue" }));
+
+        expect(select).toHaveValue("50");
+        // After the user level changes, the apply button should be enabled
+        expect(screen.getByRole("button", { name: "Apply" })).toHaveAttribute("aria-disabled", "false");
+
+        // Click on Apply should call onClick with the new power level
+        await userEvent.click(screen.getByRole("button", { name: "Apply" }));
+        expect(onClick).toHaveBeenCalledWith(50, currentUser);
     });
 });
