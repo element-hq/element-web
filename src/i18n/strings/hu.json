@@ -1235,6 +1235,7 @@
         "change": "Azonosítási kiszolgáló módosítása",
         "change_prompt": "Bontja a kapcsolatot a(z) <current /> azonosítási kiszolgálóval, és inkább ehhez kapcsolódik: <new />?",
         "change_server_prompt": "Ha nem szeretné a(z) <server /> kiszolgálót használnia kapcsolatok kereséséhez, és hogy megtalálják az ismerősei, akkor adjon meg egy másik azonosítási kiszolgálót.",
+        "changed": "Az azonosítási kiszolgáló megváltozott",
         "checking": "Kiszolgáló ellenőrzése",
         "description_connected": "Jelenleg a(z) <server></server> kiszolgálót használja a kapcsolatok kereséséhez, és hogy megtalálják az ismerősei. A használt azonosítási kiszolgálót alább tudja megváltoztatni.",
         "description_disconnected": "Jelenleg nem használ azonosítási kiszolgálót. A kapcsolatok kereséséhez, és hogy megtalálják az ismerősei, adjon hozzá egy azonosítási kiszolgálót.",
@@ -4027,7 +4028,7 @@
         "error_need_to_be_logged_in": "Be kell jelentkeznie.",
         "error_unable_start_audio_stream_description": "A hangközvetítés indítása sikertelen.",
         "error_unable_start_audio_stream_title": "Az élő adás indítása sikertelen",
-        "modal_data_warning": "Az ezen a képernyőn látható adatok megosztásra kerülnek ezzel: %(widgetDomain)s",
+        "modal_data_warning": "A lenti adatok megosztásra kerülnek ezzel: %(widgetDomain)s",
         "modal_title_default": "Előugró kisalkalmazás",
         "no_name": "Ismeretlen alkalmazás",
         "open_id_permissions_dialog": {
