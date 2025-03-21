@@ -238,12 +238,12 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                     continue;
                 }
                 const match = text.match(exp);
-                if (!match || match.length < 3) {
+                if (!match || match.length < 2) {
                     node = node.nextSibling;
                     continue;
                 }
-                const keywordText = match[2];
-                const idx = match.index! + match[1].length;
+                const keywordText = match[1];
+                const idx = match.index!;
                 const before = text.substring(0, idx);
                 const after = text.substring(idx + keywordText.length);
 
