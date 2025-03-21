@@ -27,13 +27,13 @@ function getRoomsWithStickyRoom(
 ): { newRooms: Room[]; newIndex: number | undefined } {
     const updated = { newIndex, newRooms: rooms };
     if (isRoomChange) {
-        /**
+        /*
          * When opening another room, the index should obviously change.
          */
         return updated;
     }
     if (newIndex === undefined || oldIndex === undefined) {
-        /**
+        /*
          * If oldIndex is undefined, then there was no active room before.
          * So nothing to do in regards to sticky room.
          * Similarly, if newIndex is undefined, there's no active room anymore.
@@ -41,13 +41,13 @@ function getRoomsWithStickyRoom(
         return updated;
     }
     if (newIndex === oldIndex) {
-        /**
+        /*
          * If the index hasn't changed, we have nothing to do.
          */
         return updated;
     }
     if (oldIndex > rooms.length - 1) {
-        /**
+        /*
          * If the old index falls out of the bounds of the rooms array
          * (usually because rooms were removed), we can no longer place
          * the active room in the same old index.
@@ -55,7 +55,7 @@ function getRoomsWithStickyRoom(
         return updated;
     }
 
-    /**
+    /*
      * Making the active room sticky is as simple as removing it from
      * its new index and placing it in the old index.
      */
