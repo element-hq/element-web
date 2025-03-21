@@ -886,7 +886,7 @@ export const SETTINGS: Settings = {
     "VideoView.flipVideoHorizontally": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("settings|voip|mirror_local_feed"),
-        default: false,
+        default: true,
     },
     "theme": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
