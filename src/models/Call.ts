@@ -23,18 +23,15 @@ import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { NamespacedValue } from "matrix-js-sdk/src/NamespacedValue";
 import { type IWidgetApiRequest, type ClientWidgetApi, type IWidgetData } from "matrix-widget-api";
 import {
-    MatrixRTCSession,
+    type MatrixRTCSession,
     MatrixRTCSessionEvent,
-    type CallMembership,
     MatrixRTCSessionManagerEvents,
-    type ICallNotifyContent,
 } from "matrix-js-sdk/src/matrixrtc";
 
 import type EventEmitter from "events";
 import type { IApp } from "../stores/WidgetStore";
 import SdkConfig, { DEFAULTS } from "../SdkConfig";
 import SettingsStore from "../settings/SettingsStore";
-import MediaDeviceHandler, { MediaDeviceKindEnum } from "../MediaDeviceHandler";
 import { timeout } from "../utils/promise";
 import WidgetUtils from "../utils/WidgetUtils";
 import { WidgetType } from "../widgets/WidgetType";
@@ -45,7 +42,6 @@ import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../stores/ActiveWidge
 import { getCurrentLanguage } from "../languageHandler";
 import { PosthogAnalytics } from "../PosthogAnalytics";
 import { UPDATE_EVENT } from "../stores/AsyncStore";
-import { getJoinedNonFunctionalMembers } from "../utils/room/getJoinedNonFunctionalMembers";
 import { isVideoRoom } from "../utils/video-rooms";
 import { FontWatcher } from "../settings/watchers/FontWatcher";
 import { type JitsiCallMemberContent, JitsiCallMemberEventType } from "../call-types";
@@ -85,15 +81,9 @@ export enum ConnectionState {
 export const isConnected = (state: ConnectionState): boolean =>
     state === ConnectionState.Connected || state === ConnectionState.Disconnecting;
 
-export enum Layout {
-    Tile = "tile",
-    Spotlight = "spotlight",
-}
-
 export enum CallEvent {
     ConnectionState = "connection_state",
     Participants = "participants",
-    Layout = "layout",
     Close = "close",
     Destroy = "destroy",
 }
@@ -104,7 +94,6 @@ interface CallEventHandlerMap {
         participants: Map<RoomMember, Set<string>>,
         prevParticipants: Map<RoomMember, Set<string>>,
     ) => void;
-    [CallEvent.Layout]: (layout: Layout) => void;
     [CallEvent.Close]: () => void;
     [CallEvent.Destroy]: () => void;
 }
@@ -203,46 +192,16 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
     public abstract clean(): Promise<void>;
 
     /**
-     * Contacts the widget to connect to the call or prompt the user to connect to the call.
-     * @param {MediaDeviceInfo | null} audioInput The audio input to use, or
-     *   null to start muted.
-     * @param {MediaDeviceInfo | null} audioInput The video input to use, or
-     *   null to start muted.
-     */
-    protected abstract performConnection(
-        audioInput: MediaDeviceInfo | null,
-        videoInput: MediaDeviceInfo | null,
-    ): Promise<void>;
-
-    /**
      * Contacts the widget to disconnect from the call.
      */
     protected abstract performDisconnection(): Promise<void>;
 
     /**
      * Starts the communication between the widget and the call.
-     * The call then waits for the necessary requirements to actually perform the connection
-     * or connects right away depending on the call type. (Jitsi, Legacy, ElementCall...)
-     * It uses the media devices set in MediaDeviceHandler.
-     * The widget associated with the call must be active
-     * for this to succeed.
+     * The widget associated with the call must be active for this to succeed.
      * Only call this if the call state is: ConnectionState.Disconnected.
      */
     public async start(): Promise<void> {
-        const { [MediaDeviceKindEnum.AudioInput]: audioInputs, [MediaDeviceKindEnum.VideoInput]: videoInputs } =
-            (await MediaDeviceHandler.getDevices())!;
-
-        let audioInput: MediaDeviceInfo | null = null;
-        if (!MediaDeviceHandler.startWithAudioMuted) {
-            const deviceId = MediaDeviceHandler.getAudioInput();
-            audioInput = audioInputs.find((d) => d.deviceId === deviceId) ?? audioInputs[0] ?? null;
-        }
-        let videoInput: MediaDeviceInfo | null = null;
-        if (!MediaDeviceHandler.startWithVideoMuted) {
-            const deviceId = MediaDeviceHandler.getVideoInput();
-            videoInput = videoInputs.find((d) => d.deviceId === deviceId) ?? videoInputs[0] ?? null;
-        }
-
         const messagingStore = WidgetMessagingStore.instance;
         this.messaging = messagingStore.getMessagingForUid(this.widgetUid) ?? null;
         if (!this.messaging) {
@@ -263,11 +222,21 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
                 throw new Error(`Failed to bind call widget in room ${this.roomId}: ${e}`);
             }
         }
-        await this.performConnection(audioInput, videoInput);
+    }
 
+    protected setConnected(): void {
         this.room.on(RoomEvent.MyMembership, this.onMyMembership);
         window.addEventListener("beforeunload", this.beforeUnload);
         this.connectionState = ConnectionState.Connected;
+    }
+
+    /**
+     * Manually marks the call as disconnected.
+     */
+    protected setDisconnected(): void {
+        this.room.off(RoomEvent.MyMembership, this.onMyMembership);
+        window.removeEventListener("beforeunload", this.beforeUnload);
+        this.connectionState = ConnectionState.Disconnected;
     }
 
     /**
@@ -280,15 +249,6 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
         await this.performDisconnection();
         this.setDisconnected();
         this.close();
-    }
-
-    /**
-     * Manually marks the call as disconnected.
-     */
-    public setDisconnected(): void {
-        this.room.off(RoomEvent.MyMembership, this.onMyMembership);
-        window.removeEventListener("beforeunload", this.beforeUnload);
-        this.connectionState = ConnectionState.Disconnected;
     }
 
     /**
@@ -476,66 +436,10 @@ export class JitsiCall extends Call {
         });
     }
 
-    protected async performConnection(
-        audioInput: MediaDeviceInfo | null,
-        videoInput: MediaDeviceInfo | null,
-    ): Promise<void> {
-        // Ensure that the messaging doesn't get stopped while we're waiting for responses
-        const dontStopMessaging = new Promise<void>((resolve, reject) => {
-            const messagingStore = WidgetMessagingStore.instance;
-
-            const listener = (uid: string): void => {
-                if (uid === this.widgetUid) {
-                    cleanup();
-                    reject(new Error("Messaging stopped"));
-                }
-            };
-            const done = (): void => {
-                cleanup();
-                resolve();
-            };
-            const cleanup = (): void => {
-                messagingStore.off(WidgetMessagingStoreEvent.StopMessaging, listener);
-                this.off(CallEvent.ConnectionState, done);
-            };
-
-            messagingStore.on(WidgetMessagingStoreEvent.StopMessaging, listener);
-            this.on(CallEvent.ConnectionState, done);
-        });
-
-        // Empirically, it's possible for Jitsi Meet to crash instantly at startup,
-        // sending a hangup event that races with the rest of this method, so we need
-        // to add the hangup listener now rather than later
+    public async start(): Promise<void> {
+        await super.start();
+        this.messaging!.on(`action:${ElementWidgetActions.JoinCall}`, this.onJoin);
         this.messaging!.on(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
-
-        // Actually perform the join
-        const response = waitForEvent(
-            this.messaging!,
-            `action:${ElementWidgetActions.JoinCall}`,
-            (ev: CustomEvent<IWidgetApiRequest>) => {
-                ev.preventDefault();
-                this.messaging!.transport.reply(ev.detail, {}); // ack
-                return true;
-            },
-        );
-        const request = this.messaging!.transport.send(ElementWidgetActions.JoinCall, {
-            audioInput: audioInput?.label ?? null,
-            videoInput: videoInput?.label ?? null,
-        });
-        try {
-            await Promise.race([Promise.all([request, response]), dontStopMessaging]);
-        } catch (e) {
-            // If it timed out, clean up our advance preparations
-            this.messaging!.off(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
-
-            if (this.messaging!.transport.ready) {
-                // The messaging still exists, which means Jitsi might still be going in the background
-                this.messaging!.transport.send(ElementWidgetActions.HangupCall, { force: true });
-            }
-
-            throw new Error(`Failed to join call in room ${this.roomId}: ${e}`);
-        }
-
         ActiveWidgetStore.instance.on(ActiveWidgetStoreEvent.Dock, this.onDock);
         ActiveWidgetStore.instance.on(ActiveWidgetStoreEvent.Undock, this.onUndock);
     }
@@ -558,18 +462,17 @@ export class JitsiCall extends Call {
         }
     }
 
-    public setDisconnected(): void {
-        // During tests this.messaging can be undefined
-        this.messaging?.off(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
+    public close(): void {
+        this.messaging!.off(`action:${ElementWidgetActions.JoinCall}`, this.onJoin);
+        this.messaging!.off(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
         ActiveWidgetStore.instance.off(ActiveWidgetStoreEvent.Dock, this.onDock);
         ActiveWidgetStore.instance.off(ActiveWidgetStoreEvent.Undock, this.onUndock);
-
-        super.setDisconnected();
+        super.close();
     }
 
     public destroy(): void {
         this.room.off(RoomStateEvent.Update, this.onRoomState);
-        this.on(CallEvent.ConnectionState, this.onConnectionState);
+        this.off(CallEvent.ConnectionState, this.onConnectionState);
         if (this.participantsExpirationTimer !== null) {
             clearTimeout(this.participantsExpirationTimer);
             this.participantsExpirationTimer = null;
@@ -621,27 +524,21 @@ export class JitsiCall extends Call {
         await this.messaging!.transport.send(ElementWidgetActions.SpotlightLayout, {});
     };
 
+    private readonly onJoin = (ev: CustomEvent<IWidgetApiRequest>): void => {
+        ev.preventDefault();
+        this.messaging!.transport.reply(ev.detail, {}); // ack
+        this.setConnected();
+    };
+
     private readonly onHangup = async (ev: CustomEvent<IWidgetApiRequest>): Promise<void> => {
         // If we're already in the middle of a client-initiated disconnection,
         // ignore the event
         if (this.connectionState === ConnectionState.Disconnecting) return;
 
         ev.preventDefault();
-
-        // In case this hangup is caused by Jitsi Meet crashing at startup,
-        // wait for the connection event in order to avoid racing
-        if (this.connectionState === ConnectionState.Disconnected) {
-            await waitForEvent(this, CallEvent.ConnectionState);
-        }
-
         this.messaging!.transport.reply(ev.detail, {}); // ack
         this.setDisconnected();
-        this.close();
-        // In video rooms we immediately want to restart the call after hangup
-        // The lobby will be shown again and it connects to all signals from Jitsi.
-        if (isVideoRoom(this.room)) {
-            this.start();
-        }
+        if (!isVideoRoom(this.room)) this.close();
     };
 }
 
@@ -658,14 +555,6 @@ export class ElementCall extends Call {
 
     private settingsStoreCallEncryptionWatcher?: string;
     private terminationTimer?: number;
-    private _layout = Layout.Tile;
-    public get layout(): Layout {
-        return this._layout;
-    }
-    protected set layout(value: Layout) {
-        this._layout = value;
-        this.emit(CallEvent.Layout, value);
-    }
 
     public get presented(): boolean {
         return super.presented;
@@ -688,7 +577,6 @@ export class ElementCall extends Call {
         const params = new URLSearchParams({
             embed: "true", // We're embedding EC within another application
             // Template variables are used, so that this can be configured using the widget data.
-            preload: "$preload", // We want it to load in the background.
             skipLobby: "$skipLobby", // Skip the lobby in case we show a lobby component of our own.
             returnToLobby: "$returnToLobby", // Returns to the lobby (instead of blank screen) when the call ends. (For video rooms)
             perParticipantE2EE: "$perParticipantE2EE",
@@ -728,17 +616,13 @@ export class ElementCall extends Call {
     }
 
     // Creates a new widget if there isn't any widget of typ Call in this room.
-    // Defaults for creating a new widget are: skipLobby = false, preload = false
+    // Defaults for creating a new widget are: skipLobby = false
     // When there is already a widget the current widget configuration will be used or can be overwritten
-    // by passing the according parameters (skipLobby, preload).
-    //
-    // `preload` is deprecated. We used it for optimizing EC by using a custom EW call lobby and preloading the iframe.
-    // now it should always be false.
+    // by passing the according parameters (skipLobby).
     private static createOrGetCallWidget(
         roomId: string,
         client: MatrixClient,
         skipLobby: boolean | undefined,
-        preload: boolean | undefined,
         returnToLobby: boolean | undefined,
     ): IApp {
         const ecWidget = WidgetStore.instance.getApps(roomId).find((app) => WidgetType.CALL.matches(app.type));
@@ -748,9 +632,6 @@ export class ElementCall extends Call {
             const overwrites: IWidgetData = {};
             if (skipLobby !== undefined) {
                 overwrites.skipLobby = skipLobby;
-            }
-            if (preload !== undefined) {
-                overwrites.preload = preload;
             }
             if (returnToLobby !== undefined) {
                 overwrites.returnToLobby = returnToLobby;
@@ -776,7 +657,6 @@ export class ElementCall extends Call {
                     {},
                     {
                         skipLobby: skipLobby ?? false,
-                        preload: preload ?? false,
                         returnToLobby: returnToLobby ?? false,
                     },
                 ),
@@ -842,7 +722,6 @@ export class ElementCall extends Call {
                 room.roomId,
                 room.client,
                 undefined,
-                undefined,
                 isVideoRoom(room),
             );
             return new ElementCall(session, availableOrCreatedWidget, room.client);
@@ -852,99 +731,41 @@ export class ElementCall extends Call {
     }
 
     public static create(room: Room, skipLobby = false): void {
-        ElementCall.createOrGetCallWidget(room.roomId, room.client, skipLobby, false, isVideoRoom(room));
+        ElementCall.createOrGetCallWidget(room.roomId, room.client, skipLobby, isVideoRoom(room));
     }
 
-    protected async sendCallNotify(): Promise<void> {
-        const room = this.room;
-        const existingOtherRoomCallMembers = MatrixRTCSession.callMembershipsForRoom(room).filter(
-            // filter all memberships where the application is m.call and the call_id is ""
-            (m) => {
-                const isRoomCallMember = m.application === "m.call" && m.callId === "";
-                const isThisDevice = m.deviceId === this.client.deviceId;
-                return isRoomCallMember && !isThisDevice;
-            },
-        );
-
-        const memberCount = getJoinedNonFunctionalMembers(room).length;
-        if (!isVideoRoom(room) && existingOtherRoomCallMembers.length === 0) {
-            // send ringing event
-            const content: ICallNotifyContent = {
-                "application": "m.call",
-                "m.mentions": { user_ids: [], room: true },
-                "notify_type": memberCount == 2 ? "ring" : "notify",
-                "call_id": "",
-            };
-
-            await room.client.sendEvent(room.roomId, EventType.CallNotify, content);
-        }
-    }
-
-    protected async performConnection(
-        audioInput: MediaDeviceInfo | null,
-        videoInput: MediaDeviceInfo | null,
-    ): Promise<void> {
-        // The JoinCall action is only send if the widget is waiting for it.
-        if (this.widget.data?.preload) {
-            try {
-                await this.messaging!.transport.send(ElementWidgetActions.JoinCall, {
-                    audioInput: audioInput?.label ?? null,
-                    videoInput: videoInput?.label ?? null,
-                });
-            } catch (e) {
-                throw new Error(`Failed to join call in room ${this.roomId}: ${e}`);
-            }
-        }
-        this.messaging!.on(`action:${ElementWidgetActions.TileLayout}`, this.onTileLayout);
-        this.messaging!.on(`action:${ElementWidgetActions.SpotlightLayout}`, this.onSpotlightLayout);
+    public async start(): Promise<void> {
+        await super.start();
+        this.messaging!.on(`action:${ElementWidgetActions.JoinCall}`, this.onJoin);
         this.messaging!.on(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
-        this.messaging!.once(`action:${ElementWidgetActions.Close}`, this.onClose);
+        this.messaging!.on(`action:${ElementWidgetActions.Close}`, this.onClose);
         this.messaging!.on(`action:${ElementWidgetActions.DeviceMute}`, this.onDeviceMute);
-
-        // TODO: if the widget informs us when the join button is clicked (widget action), so we can
-        // - set state to connecting
-        // - send call notify
-        const session = this.client.matrixRTC.getActiveRoomSession(this.room);
-        if (session) {
-            await waitForEvent(
-                session,
-                MatrixRTCSessionEvent.MembershipsChanged,
-                (_, newMemberships: CallMembership[]) =>
-                    newMemberships.some((m) => m.sender === this.client.getUserId()),
-                false, // allow user to wait as long as they want (no timeout)
-            );
-        } else {
-            await waitForEvent(
-                this.client.matrixRTC,
-                MatrixRTCSessionManagerEvents.SessionStarted,
-                (roomId: string, session: MatrixRTCSession) =>
-                    this.session.callId === session.callId && roomId === this.roomId,
-                false, // allow user to wait as long as they want (no timeout)
-            );
-        }
-        this.sendCallNotify();
     }
 
     protected async performDisconnection(): Promise<void> {
+        const response = waitForEvent(
+            this.messaging!,
+            `action:${ElementWidgetActions.HangupCall}`,
+            (ev: CustomEvent<IWidgetApiRequest>) => {
+                ev.preventDefault();
+                this.messaging!.transport.reply(ev.detail, {}); // ack
+                return true;
+            },
+        );
+        const request = this.messaging!.transport.send(ElementWidgetActions.HangupCall, {});
         try {
-            await this.messaging!.transport.send(ElementWidgetActions.HangupCall, {});
-            await waitForEvent(
-                this.session,
-                MatrixRTCSessionEvent.MembershipsChanged,
-                (_, newMemberships: CallMembership[]) =>
-                    !newMemberships.some((m) => m.sender === this.client.getUserId()),
-            );
+            await Promise.all([request, response]);
         } catch (e) {
             throw new Error(`Failed to hangup call in room ${this.roomId}: ${e}`);
         }
     }
 
-    public setDisconnected(): void {
-        this.messaging!.off(`action:${ElementWidgetActions.TileLayout}`, this.onTileLayout);
-        this.messaging!.off(`action:${ElementWidgetActions.SpotlightLayout}`, this.onSpotlightLayout);
+    public close(): void {
+        this.messaging!.off(`action:${ElementWidgetActions.JoinCall}`, this.onJoin);
         this.messaging!.off(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
+        this.messaging!.off(`action:${ElementWidgetActions.Close}`, this.onClose);
         this.messaging!.off(`action:${ElementWidgetActions.DeviceMute}`, this.onDeviceMute);
-        super.setDisconnected();
+        super.close();
     }
 
     public destroy(): void {
@@ -965,15 +786,6 @@ export class ElementCall extends Call {
         // user isn't looking at it (for example, waiting in an empty lobby)
         if (this.session.memberships.length === 0 && !this.presented && !this.room.isCallRoom()) this.destroy();
     };
-
-    /**
-     * Sets the call's layout.
-     * @param layout The layout to switch to.
-     */
-    public async setLayout(layout: Layout): Promise<void> {
-        const action = layout === Layout.Tile ? ElementWidgetActions.TileLayout : ElementWidgetActions.SpotlightLayout;
-        await this.messaging!.transport.send(action, {});
-    }
 
     private readonly onMembershipChanged = (): void => this.updateParticipants();
 
@@ -1000,15 +812,20 @@ export class ElementCall extends Call {
         this.messaging!.transport.reply(ev.detail, {}); // ack
     };
 
+    private readonly onJoin = (ev: CustomEvent<IWidgetApiRequest>): void => {
+        ev.preventDefault();
+        this.messaging!.transport.reply(ev.detail, {}); // ack
+        this.setConnected();
+    };
+
     private readonly onHangup = async (ev: CustomEvent<IWidgetApiRequest>): Promise<void> => {
+        // If we're already in the middle of a client-initiated disconnection,
+        // ignore the event
+        if (this.connectionState === ConnectionState.Disconnecting) return;
+
         ev.preventDefault();
         this.messaging!.transport.reply(ev.detail, {}); // ack
         this.setDisconnected();
-        // In video rooms we immediately want to reconnect after hangup
-        // This starts the lobby again and connects to all signals from EC.
-        if (isVideoRoom(this.room)) {
-            this.start();
-        }
     };
 
     private readonly onClose = async (ev: CustomEvent<IWidgetApiRequest>): Promise<void> => {
@@ -1016,18 +833,6 @@ export class ElementCall extends Call {
         this.messaging!.transport.reply(ev.detail, {}); // ack
         // User is done with the call; tell the UI to close it
         this.close();
-    };
-
-    private readonly onTileLayout = async (ev: CustomEvent<IWidgetApiRequest>): Promise<void> => {
-        ev.preventDefault();
-        this.layout = Layout.Tile;
-        this.messaging!.transport.reply(ev.detail, {}); // ack
-    };
-
-    private readonly onSpotlightLayout = async (ev: CustomEvent<IWidgetApiRequest>): Promise<void> => {
-        ev.preventDefault();
-        this.layout = Layout.Spotlight;
-        this.messaging!.transport.reply(ev.detail, {}); // ack
     };
 
     public clean(): Promise<void> {
