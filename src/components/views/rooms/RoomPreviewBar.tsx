@@ -91,7 +91,6 @@ interface IProps {
 
     onJoinClick?(): void;
     onRejectClick?(): void;
-    onRejectAndIgnoreClick?(): void;
     onForgetClick?(): void;
 
     canAskToJoinAndMembershipIsLeave?: boolean;
@@ -551,14 +550,6 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                 primaryActionHandler = this.props.onJoinClick;
                 secondaryActionLabel = _t("action|reject");
                 secondaryActionHandler = this.props.onRejectClick;
-
-                if (this.props.onRejectAndIgnoreClick) {
-                    extraComponents.push(
-                        <AccessibleButton kind="secondary" onClick={this.props.onRejectAndIgnoreClick} key="ignore">
-                            {_t("room|invite_reject_ignore")}
-                        </AccessibleButton>,
-                    );
-                }
                 break;
             }
             case MessageCase.ViewingRoom: {
@@ -571,6 +562,8 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                 }
                 primaryActionLabel = _t("room|join_the_discussion");
                 primaryActionHandler = this.props.onJoinClick;
+                secondaryActionLabel = _t("action|reject");
+                secondaryActionHandler = this.props.onRejectClick;
                 break;
             }
             case MessageCase.RoomNotFound: {

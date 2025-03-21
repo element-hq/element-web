@@ -1786,8 +1786,10 @@
     },
     "reject_invitation_dialog": {
         "confirmation": "Are you sure you want to reject the invitation?",
-        "failed": "Failed to reject invitation",
         "title": "Reject invitation"
+    },
+    "reject_invite": {
+        "description": "This will reject the invite for <strong>roomName</strong>. You may take additional actions below."
     },
     "report_content": {
         "description": "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.",
@@ -2000,7 +2002,6 @@
             "you_created": "You created this room."
         },
         "invite_email_mismatch_suggestion": "Share this email in Settings to receive invites directly in %(brand)s.",
-        "invite_reject_ignore": "Reject & Ignore user",
         "invite_sent_to_email": "This invite was sent to %(email)s",
         "invite_sent_to_email_room": "This invite to %(roomName)s was sent to %(email)s",
         "invite_subtitle": "Invited by <userName/>",

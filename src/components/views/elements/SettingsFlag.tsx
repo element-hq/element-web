@@ -12,10 +12,10 @@ import { secureRandomString } from "matrix-js-sdk/src/randomstring";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from "../../../languageHandler";
-import ToggleSwitch from "./ToggleSwitch";
 import StyledCheckbox from "./StyledCheckbox";
 import { type SettingLevel } from "../../../settings/SettingLevel";
 import { type BooleanSettingKey, defaultWatchManager } from "../../../settings/Settings";
+import { Toggle, Tooltip } from "@vector-im/compound-web";
 
 interface IProps {
     // The setting must be a boolean
@@ -74,14 +74,12 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
         });
     };
 
-    private onChange = async (checked: boolean): Promise<void> => {
-        await this.save(checked);
-        this.setState({ value: checked });
-        this.props.onChange?.(checked);
-    };
-
-    private checkBoxOnChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        this.onChange(e.target.checked);
+    private onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        this.save(e.target.checked).catch((ex) => {
+            console.warn("Failed to save setting", ex);
+        });
+        this.setState({ value: e.target.checked });
+        this.props.onChange?.(e.target.checked);
     };
 
     private save = async (val?: boolean): Promise<void> => {
@@ -95,20 +93,36 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
 
     public render(): React.ReactNode {
         const disabled = !SettingsStore.canSetValue(this.props.name, this.props.roomId ?? null, this.props.level);
-
         if (disabled && this.props.hideIfCannotSet) return null;
 
         const label = this.props.label ?? SettingsStore.getDisplayName(this.props.name, this.props.level);
         const description = SettingsStore.getDescription(this.props.name);
         const shouldWarn = SettingsStore.shouldHaveWarning(this.props.name);
 
+        
+
         if (this.props.useCheckbox) {
             return (
-                <StyledCheckbox checked={this.state.value} onChange={this.checkBoxOnChange} disabled={disabled}>
+                <StyledCheckbox checked={this.state.value} onChange={this.onChange} disabled={disabled}>
                     {label}
                 </StyledCheckbox>
             );
         } else {
+            let toggle = <Toggle
+                id={this.id}
+                checked={this.state.value}
+                onChange={this.onChange}
+                disabled={disabled}
+            />;
+
+            const disabledMessage = SettingsStore.disabledMessage(this.props.name);
+            console.log(label, disabled, disabledMessage);
+
+            if (disabled && disabledMessage) {
+                console.log("is disabled", disabled, disabledMessage);
+                toggle = <Tooltip placement="right" label={disabledMessage}>{toggle}</Tooltip>;
+            }
+
             return (
                 <div className="mx_SettingsFlag">
                     <label className="mx_SettingsFlag_label" htmlFor={this.id}>
@@ -130,14 +144,7 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
                             </div>
                         )}
                     </label>
-                    <ToggleSwitch
-                        id={this.id}
-                        checked={this.state.value}
-                        onChange={this.onChange}
-                        disabled={disabled}
-                        tooltip={disabled ? SettingsStore.disabledMessage(this.props.name) : undefined}
-                        title={label ?? undefined}
-                    />
+                    {toggle}
                 </div>
             );
         }
