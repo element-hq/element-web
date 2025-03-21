@@ -4205,10 +4205,10 @@ available-typed-arrays@^1.0.7:
   dependencies:
     possible-typed-array-names "^1.0.0"
 
-await-lock@^2.1.0:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/await-lock/-/await-lock-2.2.2.tgz#a95a9b269bfd2f69d22b17a321686f551152bcef"
-  integrity sha512-aDczADvlvTGajTDjcjpJMqRkOF6Qdz3YbPZm/PyW6tKPkx2hlYBzxMhEywM/tU72HrVZjgl5VCdRuMlA7pZ8Gw==
+await-lock@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/await-lock/-/await-lock-3.0.0.tgz#d6c6c5554d1a734509f5c0f6fa49a24457043d19"
+  integrity sha512-eO6fLiSnrJrMdjWMNK8zbVRXPs2TKJg78iKZd9wDpN3na5tcoV6EoeiOlMgk2QaAQ1gIrK1YuMsJHXWqz89tSA==
 
 axe-core@^4.10.0:
   version "4.10.2"
