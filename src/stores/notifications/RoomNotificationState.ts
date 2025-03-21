@@ -17,6 +17,7 @@ import * as RoomNotifs from "../../RoomNotifs";
 import { NotificationState } from "./NotificationState";
 import SettingsStore from "../../settings/SettingsStore";
 import { MARKED_UNREAD_TYPE_STABLE, MARKED_UNREAD_TYPE_UNSTABLE } from "../../utils/notifications";
+import { NotificationLevel } from "./NotificationLevel";
 
 export class RoomNotificationState extends NotificationState implements IDestroyable {
     public constructor(
@@ -49,6 +50,57 @@ export class RoomNotificationState extends NotificationState implements IDestroy
         this.room.removeListener(RoomEvent.AccountData, this.handleRoomAccountDataUpdate);
         cli.removeListener(MatrixEventEvent.Decrypted, this.onEventDecrypted);
         cli.removeListener(ClientEvent.AccountData, this.handleAccountDataUpdate);
+    }
+
+    /**
+     * True if the notification is an invitation notification.
+     * Invite notifications are a special case of highlight notifications
+     */
+    public get isInvitation(): boolean {
+        if (this.knocked) return false;
+
+        return this.level === NotificationLevel.Highlight && this.symbol === "!" && this.count === 1;
+    }
+
+    /**
+     * True if the notification is a mention.
+     */
+    public get isMention(): boolean {
+        if (this.isInvitation || this.knocked) return false;
+
+        return this.level === NotificationLevel.Highlight;
+    }
+
+    /**
+     * True if the notification is an unset message.
+     */
+    public get isUnsetMessage(): boolean {
+        return this.level === NotificationLevel.Unsent;
+    }
+
+    /**
+     * Activity notifications are the lowest level of notification (except none and muted)
+     */
+    public get isActivityNotification(): boolean {
+        return this.level === NotificationLevel.Activity;
+    }
+
+    /**
+     * True if the notification is silent.
+     * This is the case for notifications with a level lower than None or Activity if feature_hidebold is enabled.
+     */
+    public get isSilent(): boolean {
+        if (this.knocked) return false;
+
+        const hideBold = SettingsStore.getValue("feature_hidebold");
+        return this.level <= NotificationLevel.None || (hideBold && this.level <= NotificationLevel.Activity);
+    }
+
+    /**
+     * True if the notification is a NotificationLevel.Notification with at least one unread message.
+     */
+    public get isNotification(): boolean {
+        return this.level === NotificationLevel.Notification && this.count > 0;
     }
 
     private handleLocalEchoUpdated = (): void => {

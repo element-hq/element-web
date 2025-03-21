@@ -74,6 +74,10 @@ export abstract class NotificationState
         return this.level <= NotificationLevel.None;
     }
 
+    /**
+     * True if the notification is higher than an activity notification or if the feature_hidebold is disabled with an activity notification.
+     * The "unread" term used here is different from the "Unread" in the UI. Unread in the UI doesn't include activity notifications even with feature_hidebold disabled.
+     */
     public get isUnread(): boolean {
         if (this.level > NotificationLevel.Activity) {
             return true;
@@ -83,10 +87,18 @@ export abstract class NotificationState
         }
     }
 
+    /**
+     * True if the notification has a count or a symbol and is greater than an activity notification.
+     */
     public get hasUnreadCount(): boolean {
         return this.level >= NotificationLevel.Notification && (!!this.count || !!this.symbol);
     }
 
+    /**
+     * True if the notification is a mention, an invitation, a knock or a unset message.
+     *
+     * @deprecated because the name is confusing. A mention is not an invitation, a knock or an unsent message.
+     */
     public get hasMentions(): boolean {
         return this.level >= NotificationLevel.Highlight;
     }
