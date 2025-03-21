@@ -184,6 +184,27 @@ describe("Lifecycle", () => {
         mac: expect.any(String),
     };
 
+    describe("loadSession", () => {
+        beforeEach(() => {
+            // stub this out
+            jest.spyOn(Modal, "createDialog").mockReturnValue(
+                // @ts-ignore allow bad mock
+                { finished: Promise.resolve([true]) },
+            );
+        });
+
+        it("should not show any error dialog when restoreSessionFromStorage throws but abortSignal has triggered", async () => {
+            jest.spyOn(Lifecycle, "restoreSessionFromStorage").mockRejectedValue(new Error("test error"));
+
+            const abortController = new AbortController();
+            const prom = Lifecycle.loadSession({ abortSignal: abortController.signal });
+            abortController.abort();
+            await expect(prom).resolves.toBeFalsy();
+
+            expect(Modal.createDialog).not.toHaveBeenCalled();
+        });
+    });
+
     describe("restoreSessionFromStorage()", () => {
         beforeEach(() => {
             initLocalStorageMock();
@@ -953,27 +974,6 @@ describe("Lifecycle", () => {
             );
 
             expect(MatrixClientPeg.unset).not.toHaveBeenCalled();
-        });
-    });
-
-    describe("loadSession", () => {
-        beforeEach(() => {
-            // stub this out
-            jest.spyOn(Modal, "createDialog").mockReturnValue(
-                // @ts-ignore allow bad mock
-                { finished: Promise.resolve([true]) },
-            );
-        });
-
-        it("should not show any error dialog when restoreSessionFromStorage throws but abortSignal has triggered", async () => {
-            jest.spyOn(Lifecycle, "restoreSessionFromStorage").mockRejectedValue(new Error("test error"));
-
-            const abortController = new AbortController();
-            const prom = Lifecycle.loadSession({ abortSignal: abortController.signal });
-            abortController.abort();
-            await expect(prom).resolves.toBeFalsy();
-
-            expect(Modal.createDialog).not.toHaveBeenCalled();
         });
     });
 });
