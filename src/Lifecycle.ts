@@ -414,10 +414,13 @@ export function attemptTokenLogin(
 async function onSuccessfulDelegatedAuthLogin(credentials: IMatrixClientCreds): Promise<void> {
     await clearStorage();
 
-    const userId = credentials.userId;
-    const deviceId = credentials.deviceId;
+    // SSO does not go through setLoggedIn so we need to load/create the pickle key here too
+    // Try to load the pickle key
+    const userId: string = credentials.userId;
+    const deviceId: string | undefined = credentials.deviceId;
     let pickleKey: string | undefined = (await PlatformPeg.get()?.getPickleKey(userId, deviceId ?? "")) ?? undefined;
     if (!pickleKey) {
+        // Create it if it did not exist
         pickleKey = userId && deviceId
                 ? await PlatformPeg.get()?.createPickleKey(userId, deviceId) ?? undefined
                 : undefined;
