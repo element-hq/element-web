@@ -8,50 +8,50 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ReactNode } from "react";
-import * as utils from "matrix-js-sdk/src/utils";
-import { MatrixError, JoinRule, type Room, type MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
-import { logger } from "matrix-js-sdk/src/logger";
-import { type ViewRoom as ViewRoomEvent } from "@matrix-org/analytics-events/types/typescript/ViewRoom";
 import { type JoinedRoom as JoinedRoomEvent } from "@matrix-org/analytics-events/types/typescript/JoinedRoom";
-import { type Optional } from "matrix-events-sdk";
-import EventEmitter from "events";
+import { type ViewRoom as ViewRoomEvent } from "@matrix-org/analytics-events/types/typescript/ViewRoom";
 import {
     RoomViewLifecycle,
     type ViewRoomOpts,
 } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
+import EventEmitter from "events";
+import { type Optional } from "matrix-events-sdk";
+import { logger } from "matrix-js-sdk/src/logger";
+import { JoinRule, MatrixError, type MatrixEvent, type Room } from "matrix-js-sdk/src/matrix";
+import { KnownMembership } from "matrix-js-sdk/src/types";
+import * as utils from "matrix-js-sdk/src/utils";
+import React, { type ReactNode } from "react";
 
-import { type MatrixDispatcher } from "../dispatcher/dispatcher";
-import { MatrixClientPeg } from "../MatrixClientPeg";
-import Modal from "../Modal";
-import { _t } from "../languageHandler";
-import { getCachedRoomIDForAlias, storeRoomAliasInCache } from "../RoomAliasCache";
-import { Action } from "../dispatcher/actions";
-import { retry } from "../utils/promise";
+import ErrorDialog from "../components/views/dialogs/ErrorDialog";
 import { TimelineRenderingType } from "../contexts/RoomContext";
-import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
-import DMRoomMap from "../utils/DMRoomMap";
-import { isMetaSpace, MetaSpace } from "./spaces";
+import { type SdkContextClass } from "../contexts/SDKContext";
+import { Action } from "../dispatcher/actions";
+import { type MatrixDispatcher } from "../dispatcher/dispatcher";
+import { type ActionPayload } from "../dispatcher/payloads";
+import { type ActiveRoomChangedPayload } from "../dispatcher/payloads/ActiveRoomChangedPayload";
+import { type CancelAskToJoinPayload } from "../dispatcher/payloads/CancelAskToJoinPayload";
+import { type JoinRoomErrorPayload } from "../dispatcher/payloads/JoinRoomErrorPayload";
 import { type JoinRoomPayload } from "../dispatcher/payloads/JoinRoomPayload";
 import { type JoinRoomReadyPayload } from "../dispatcher/payloads/JoinRoomReadyPayload";
-import { type JoinRoomErrorPayload } from "../dispatcher/payloads/JoinRoomErrorPayload";
-import { type ViewRoomErrorPayload } from "../dispatcher/payloads/ViewRoomErrorPayload";
-import ErrorDialog from "../components/views/dialogs/ErrorDialog";
-import { type ActiveRoomChangedPayload } from "../dispatcher/payloads/ActiveRoomChangedPayload";
-import SettingsStore from "../settings/SettingsStore";
-import { awaitRoomDownSync } from "../utils/RoomUpgrade";
-import { UPDATE_EVENT } from "./AsyncStore";
-import { type SdkContextClass } from "../contexts/SDKContext";
-import { CallStore } from "./CallStore";
-import { type ThreadPayload } from "../dispatcher/payloads/ThreadPayload";
-import { type ActionPayload } from "../dispatcher/payloads";
-import { type CancelAskToJoinPayload } from "../dispatcher/payloads/CancelAskToJoinPayload";
 import { type SubmitAskToJoinPayload } from "../dispatcher/payloads/SubmitAskToJoinPayload";
-import { ModuleRunner } from "../modules/ModuleRunner";
-import { setMarkedUnreadState } from "../utils/notifications";
+import { type ThreadPayload } from "../dispatcher/payloads/ThreadPayload";
+import { type ViewRoomErrorPayload } from "../dispatcher/payloads/ViewRoomErrorPayload";
+import { type ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
+import { _t } from "../languageHandler";
+import { MatrixClientPeg } from "../MatrixClientPeg";
+import Modal from "../Modal";
 import { ConnectionState, ElementCall } from "../models/Call";
+import { ModuleRunner } from "../modules/ModuleRunner";
+import { getCachedRoomIDForAlias, storeRoomAliasInCache } from "../RoomAliasCache";
+import SettingsStore from "../settings/SettingsStore";
+import DMRoomMap from "../utils/DMRoomMap";
+import { setMarkedUnreadState } from "../utils/notifications";
+import { retry } from "../utils/promise";
+import { awaitRoomDownSync } from "../utils/RoomUpgrade";
 import { isVideoRoom } from "../utils/video-rooms";
+import { UPDATE_EVENT } from "./AsyncStore";
+import { CallStore } from "./CallStore";
+import { isMetaSpace, MetaSpace } from "./spaces";
 
 const NUM_JOIN_RETRY = 5;
 
@@ -265,14 +265,14 @@ export class RoomViewStore extends EventEmitter {
                         numMembers > 1000
                             ? "MoreThanAThousand"
                             : numMembers > 100
-                              ? "OneHundredAndOneToAThousand"
-                              : numMembers > 10
-                                ? "ElevenToOneHundred"
-                                : numMembers > 2
-                                  ? "ThreeToTen"
-                                  : numMembers > 1
-                                    ? "Two"
-                                    : "One";
+                                ? "OneHundredAndOneToAThousand"
+                                : numMembers > 10
+                                    ? "ElevenToOneHundred"
+                                    : numMembers > 2
+                                        ? "ThreeToTen"
+                                        : numMembers > 1
+                                            ? "Two"
+                                            : "One";
 
                     this.stores.posthogAnalytics.trackEvent<JoinedRoomEvent>({
                         eventName: "JoinedRoom",
@@ -537,6 +537,33 @@ export class RoomViewStore extends EventEmitter {
                 metricsTrigger: payload.metricsTrigger,
             });
         } catch (err) {
+            if (err instanceof MatrixError) {
+                if (err.errcode === "RE_JKI_JOIN_POLICY_URL") {
+                    const redirect_url = [
+                        window.location.origin,
+                        window.location.pathname.replace(/\/$/, ""), // Remove trailing slash if present
+                        "/static/join_room_redirect.html"
+                    ].join("")
+
+                    const url = err.data["re.jki.join_policy_url"] + "?redirect_url=" + redirect_url;
+
+                    window.addEventListener("message", (event) => {
+                        if (event.data instanceof Object) {
+                            if ("action" in event.data && event.data.action == "join") {
+                                payload.opts = payload.opts || {};
+                                payload.opts.token = event.data.token;
+
+                                this.joinRoom(payload);
+                            }
+                        }
+                    })
+
+                    window.open(url, "join_window");
+                    return;
+                }
+            }
+
+
             this.dis?.dispatch({
                 action: Action.JoinRoomError,
                 roomId,

@@ -176,14 +176,14 @@ module.exports = (env, argv) => {
             minimize: enableMinification,
             minimizer: enableMinification
                 ? [
-                      new TerserPlugin({
-                          // Already minified and includes an auto-generated license comment
-                          // that the plugin would otherwise pointlessly extract into a separate
-                          // file. We add the actual license using CopyWebpackPlugin below.
-                          exclude: "jitsi_external_api.min.js",
-                      }),
-                      new CssMinimizerPlugin(),
-                  ]
+                    new TerserPlugin({
+                        // Already minified and includes an auto-generated license comment
+                        // that the plugin would otherwise pointlessly extract into a separate
+                        // file. We add the actual license using CopyWebpackPlugin below.
+                        exclude: "jitsi_external_api.min.js",
+                    }),
+                    new CssMinimizerPlugin(),
+                ]
                 : [],
 
             // Set the value of `process.env.NODE_ENV` for libraries like React
@@ -626,6 +626,12 @@ module.exports = (env, argv) => {
                 chunks: [],
             }),
             new HtmlWebpackPlugin({
+                template: "./src/vector/static/join_room_redirect.html",
+                filename: "static/join_room_redirect.html",
+                minify: false,
+                chunks: [],
+            }),
+            new HtmlWebpackPlugin({
                 template: "./src/vector/static/incompatible-browser.html",
                 filename: "static/incompatible-browser.html",
                 minify: false,
@@ -648,16 +654,16 @@ module.exports = (env, argv) => {
             // This plugin throws an error on import on some platforms like ppc64le & s390x even if the plugin isn't called,
             // so we require it conditionally.
             process.env.SENTRY_DSN &&
-                require("@sentry/webpack-plugin").sentryWebpackPlugin({
-                    release: process.env.VERSION,
-                    sourcemaps: {
-                        paths: "./webapp/bundles/**",
-                    },
-                    errorHandler: (err) => {
-                        console.warn("Sentry CLI Plugin: " + err.message);
-                        console.log(`::warning title=Sentry error::${err.message}`);
-                    },
-                }),
+            require("@sentry/webpack-plugin").sentryWebpackPlugin({
+                release: process.env.VERSION,
+                sourcemaps: {
+                    paths: "./webapp/bundles/**",
+                },
+                errorHandler: (err) => {
+                    console.warn("Sentry CLI Plugin: " + err.message);
+                    console.log(`::warning title=Sentry error::${err.message}`);
+                },
+            }),
 
             new CopyWebpackPlugin({
                 patterns: [
