@@ -35,7 +35,8 @@ import PinIcon from "@vector-im/compound-design-tokens/assets/web/icons/pin";
 import LockIcon from "@vector-im/compound-design-tokens/assets/web/icons/lock-solid";
 import LockOffIcon from "@vector-im/compound-design-tokens/assets/web/icons/lock-off";
 import PublicIcon from "@vector-im/compound-design-tokens/assets/web/icons/public";
-import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
+import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
+import ErrorSolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 import { EventType, JoinRule, type Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 
@@ -326,7 +327,7 @@ const RoomSummaryCard: React.FC<IProps> = ({
 
                 {e2eStatus === E2EStatus.Warning && (
                     <Badge kind="red">
-                        <ErrorIcon width="1em" />
+                        <ErrorSolidIcon width="1em" />
                         {_t("common|not_trusted")}
                     </Badge>
                 )}
