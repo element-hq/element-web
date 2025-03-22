@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SettingsField /> should render with the default label 1`] = `
+<DocumentFragment>
+  <form
+    class="_root_19upo_16"
+  >
+    <div
+      class="_field_19upo_26"
+    >
+      <label
+        class="_label_19upo_59"
+        for="radix-:r0:"
+      >
+        Element Call URL
+      </label>
+      <div
+        class="_controls_17lij_8"
+      >
+        <input
+          class="_control_sqdq4_10"
+          id="radix-:r0:"
+          name="input"
+          title=""
+          value=""
+        />
+      </div>
+    </div>
+  </form>
+</DocumentFragment>
+`;

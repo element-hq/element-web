@@ -196,6 +196,8 @@ describe("RoomViewStore", function () {
         stores.client = mockClient;
         stores._SlidingSyncManager = slidingSyncManager;
         stores._PosthogAnalytics = new MockPosthogAnalytics();
+        // @ts-expect-error
+        MockPosthogAnalytics.instance = stores._PosthogAnalytics;
         stores._SpaceStore = new MockSpaceStore();
         roomViewStore = new RoomViewStore(dis, stores);
         stores._RoomViewStore = roomViewStore;
