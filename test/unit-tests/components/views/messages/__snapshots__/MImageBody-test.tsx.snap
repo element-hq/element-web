@@ -41,9 +41,6 @@ exports[`<MImageBody/> should generate a thumbnail if one isn't included for ani
             GIF
           </p>
         </div>
-        <div
-          style="height: 50px; width: 40px;"
-        />
       </div>
     </a>
   </div>
@@ -76,9 +73,6 @@ exports[`<MImageBody/> should show a thumbnail while image is being downloaded 1
       </div>
       <div
         style="max-height: 50px; max-width: 40px;"
-      />
-      <div
-        style="height: 50px; width: 40px;"
       />
     </div>
   </div>

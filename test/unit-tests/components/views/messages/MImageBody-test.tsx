@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { act } from "react";
-import { fireEvent, render, screen, waitForElementToBeRemoved } from "jest-matrix-react";
+import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "jest-matrix-react";
 import { EventType, getHttpUriForMxc, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import fetchMock from "fetch-mock-jest";
 import encrypt from "matrix-encrypt-attachment";
@@ -83,6 +83,10 @@ describe("<MImageBody/>", () => {
     beforeEach(() => {
         jest.spyOn(SettingsStore, "getValue").mockRestore();
         fetchMock.mockReset();
+    });
+
+    afterEach(() => {
+        mocked(encrypt.decryptAttachment).mockReset();
     });
 
     it("should show a thumbnail while image is being downloaded", async () => {
@@ -166,6 +170,8 @@ describe("<MImageBody/>", () => {
                 />,
             );
 
+            expect(screen.getByText("Show image")).toBeInTheDocument();
+
             expect(fetchMock).not.toHaveFetched(url);
         });
 
@@ -186,8 +192,12 @@ describe("<MImageBody/>", () => {
 
             expect(fetchMock).toHaveFetched(url);
 
-            // spinner while downloading image
-            expect(screen.getByRole("progressbar")).toBeInTheDocument();
+            // Show image is asynchronous since it applies through a settings watcher hook, so
+            // be sure to wait here.
+            await waitFor(() => {
+                // spinner while downloading image
+                expect(screen.getByRole("progressbar")).toBeInTheDocument();
+            });
         });
     });
 
