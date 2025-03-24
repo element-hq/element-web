@@ -62,8 +62,8 @@ export const ConfirmRejectInviteDialog: React.FunctionComponent<IProps> = ({ onF
                             />
                         }
                     >
-                        <Label htmlFor="mx_ConfirmRejectInviteDialog_ignore_user">Ignore user</Label>
-                        <HelpMessage>You will not see any messages or room invites from this user.</HelpMessage>
+                        <Label htmlFor="mx_ConfirmRejectInviteDialog_ignore_user">{_t("report_content|ignore_user")}</Label>
+                        <HelpMessage>{_t("reject_invitation_dialog|ignore_user_help")}</HelpMessage>
                     </InlineField>
                 )}
                 {promptOptions && (
@@ -77,7 +77,7 @@ export const ConfirmRejectInviteDialog: React.FunctionComponent<IProps> = ({ onF
                             />
                         }
                     >
-                        <Label htmlFor="mx_ConfirmRejectInviteDialog_report_room">Report room</Label>
+                        <Label htmlFor="mx_ConfirmRejectInviteDialog_report_room">{_t("action|report_room")}</Label>
                         <HelpMessage>{_t("report_room|description")}</HelpMessage>
                         <Field name="report-reason">
                             <Label htmlFor="mx_ConfirmRejectInviteDialog_reason">
@@ -95,9 +95,9 @@ export const ConfirmRejectInviteDialog: React.FunctionComponent<IProps> = ({ onF
                     </InlineField>
                 )}
                 <DialogButtons
-                    primaryButton="Reject invite"
+                    primaryButton={_t("action|reject_invite")}
                     primaryButtonClass="danger"
-                    cancelButton="Cancel"
+                    cancelButton={_t("action|cancel")}
                     onPrimaryButtonClick={onOk}
                     onCancel={onCancel}
                 />

@@ -98,6 +98,7 @@
         "refresh": "Refresh",
         "register": "Register",
         "reject": "Reject",
+        "reject_invite": "Reject invite",
         "reload": "Reload",
         "remove": "Remove",
         "rename": "Rename",
@@ -1786,6 +1787,7 @@
     },
     "reject_invitation_dialog": {
         "confirmation": "Are you sure you want to reject the invitation?",
+        "ignore_user_help": "You will not see any messages or room invites from this user.",
         "reason_description": "This reason will only be shared with your homeserver administrator.",
         "title": "Reject invitation"
     },
