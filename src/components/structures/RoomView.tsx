@@ -1733,9 +1733,11 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         });
     };
 
-    private onRejectButtonClicked = async (): Promise<void> => {
+    private onRejectButtonClicked = async (promptOptions = true): Promise<void> => {
         if (!this.state.room || !this.context.client) return;
-        const [shouldReject, ignoreUser, reportRoom] = await Modal.createDialog(ConfirmRejectInviteDialog).finished;
+        const [shouldReject, ignoreUser, reportRoom] = await Modal.createDialog(ConfirmRejectInviteDialog, {
+            promptOptions,
+        }).finished;
         if (!shouldReject) {
             return;
         }
@@ -1758,9 +1760,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             actions.push(this.context.client.reportRoom(this.state.room.roomId, reportRoom));
         }
 
-        actions.push(this.context.client.leave(this.state.room.roomId))
+        actions.push(this.context.client.leave(this.state.room.roomId));
         try {
-            await Promise.all(actions)
+            await Promise.all(actions);
             defaultDispatcher.dispatch({ action: Action.ViewHomePage });
             this.setState({
                 rejecting: false,
@@ -2185,6 +2187,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                                 onJoinClick={this.onJoinButtonClicked}
                                 onForgetClick={this.onForgetClick}
                                 onRejectClick={this.onRejectButtonClicked}
+                                promptRejectionOptions={true}
                                 inviterName={inviterName}
                                 canPreview={false}
                                 joining={this.state.joining}
@@ -2300,6 +2303,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     onJoinClick={this.onJoinButtonClicked}
                     onForgetClick={this.onForgetClick}
                     onRejectClick={this.onRejectThreepidInviteButtonClicked}
+                    promptRejectionOptions={true}
                     joining={this.state.joining}
                     inviterName={inviterName}
                     invitedEmail={invitedEmail}

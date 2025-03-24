@@ -283,18 +283,6 @@ describe("<RoomPreviewBar />", () => {
                     expect(getActions(component)).toMatchSnapshot();
                 });
 
-                it("renders reject and ignore action buttons when handler is provided", () => {
-                    const onRejectAndIgnoreClick = jest.fn();
-                    const component = getComponent({
-                        inviterName,
-                        room,
-                        onJoinClick,
-                        onRejectClick,
-                        onRejectAndIgnoreClick,
-                    });
-                    expect(getActions(component)).toMatchSnapshot();
-                });
-
                 it("renders join and reject action buttons in reverse order when room can previewed", () => {
                     // when room is previewed action buttons are rendered left to right, with primary on the right
                     const component = getComponent({ inviterName, room, onJoinClick, onRejectClick, canPreview: true });
@@ -336,18 +324,6 @@ describe("<RoomPreviewBar />", () => {
                 it("renders invite message", () => {
                     const component = getComponent({ inviterName, room });
                     expect(getMessage(component)).toMatchSnapshot();
-                });
-
-                it("renders join and reject action buttons with correct labels", () => {
-                    const onRejectAndIgnoreClick = jest.fn();
-                    const component = getComponent({
-                        inviterName,
-                        room,
-                        onJoinClick,
-                        onRejectAndIgnoreClick,
-                        onRejectClick,
-                    });
-                    expect(getActions(component)).toMatchSnapshot();
                 });
             });
         });
