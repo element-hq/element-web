@@ -98,6 +98,7 @@ export abstract class NotificationState
      * True if the notification is a mention, an invitation, a knock or a unset message.
      *
      * @deprecated because the name is confusing. A mention is not an invitation, a knock or an unsent message.
+     * In case of a {@link RoomNotificationState}, use {@link RoomNotificationState.isMention} instead.
      */
     public get hasMentions(): boolean {
         return this.level >= NotificationLevel.Highlight;
