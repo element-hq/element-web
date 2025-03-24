@@ -33,7 +33,7 @@ interface UserIdentityWarningProps {
 /**
  * Displays a banner warning when there is an issue with a user's identity.
  *
- * Warns when an unverified user's identity has changed, and gives the user a
+ * Warns when an unverified user's identity was reset, and gives the user a
  * button to acknowledge the change.
  */
 export const UserIdentityWarning: React.FC<UserIdentityWarningProps> = ({ room }) => {
