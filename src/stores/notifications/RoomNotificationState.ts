@@ -92,10 +92,10 @@ export class RoomNotificationState extends NotificationState implements IDestroy
     }
 
     /**
-     * True if the notification is a NotificationLevel.Notification with at least one unread message.
+     * True if the notification is a NotificationLevel.Notification.
      */
     public get isNotification(): boolean {
-        return this.level === NotificationLevel.Notification && this.count > 0;
+        return this.level === NotificationLevel.Notification;
     }
 
     private handleLocalEchoUpdated = (): void => {
