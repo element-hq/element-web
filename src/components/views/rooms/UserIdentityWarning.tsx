@@ -104,7 +104,7 @@ function getTitleAndAction(prompt: ViolationPrompt): [title: React.ReactNode, ac
                 },
             );
         }
-        action = _t("action|ok");
+        action = _t("action|dismiss");
     }
     return [title, action];
 }

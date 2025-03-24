@@ -10,6 +10,7 @@ import React from "react";
 import { act, render } from "jest-matrix-react";
 import { MatrixEvent, ConditionKind, EventType, PushRuleActionName, Room, TweakName } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
+import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 
 import { pillifyLinks } from "../../../src/utils/pillify";
 import { stubClient } from "../../test-utils";
@@ -78,6 +79,8 @@ describe("pillify", () => {
                 },
             ],
         };
+        // @ts-expect-error
+        cli.pushProcessor = new PushProcessor(cli);
 
         DMRoomMap.makeShared(cli);
     });
