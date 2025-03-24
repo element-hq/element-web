@@ -64,6 +64,7 @@
         "go": "Ok",
         "go_back": "Zpět",
         "got_it": "Rozumím",
+        "hide": "Skrýt",
         "hide_advanced": "Skrýt pokročilé možnosti",
         "hold": "Podržet",
         "ignore": "Ignorovat",
@@ -952,8 +953,8 @@
             "warning": "Pokud jste nenastavili nový způsob obnovy vy, mohou se pokoušet k vašemu účtu dostat útočníci. Změňte si raději ihned heslo a nastavte nový způsob obnovy v Nastavení."
         },
         "not_supported": "<nepodporováno>",
-        "pinned_identity_changed": "%(displayName)s(<b>%(userId)s</b>) se zřejmě změnil. <a>Více informací</a>",
-        "pinned_identity_changed_no_displayname": "Identita <b>%(userId)s</b> se zřejmě změnila. <a>Další informace</a>",
+        "pinned_identity_changed": "Identita %(displayName)s (<b>%(userId)s</b>) byla změněna. <a>Další informace</a>",
+        "pinned_identity_changed_no_displayname": "Identita <b>%(userId)s</b> byla změněna. <a>Další informace</a>",
         "recovery_method_removed": {
             "description_1": "Tato relace zjistila, že byla odstraněna vaše bezpečnostní fráze a klíč pro zabezpečené zprávy.",
             "description_2": "Pokud se vám to stalo neúmyslně, můžete znovu nastavit zálohu zpráv pro tuto relaci. To znovu zašifruje historii zpráv novým způsobem.",
@@ -1065,8 +1066,8 @@
             "waiting_other_user": "Čekám až nás %(displayName)s ověří…"
         },
         "verification_requested_toast_title": "Žádost ověření",
-        "verified_identity_changed": "Ověřená identita %(displayName)s (<b>%(userId)s</b>) se změnila. <a>Další informace</a>",
-        "verified_identity_changed_no_displayname": "Ověřená identita uživatele <b>%(userId)s</b> se změnila. <a>Další informace</a>",
+        "verified_identity_changed": "Ověřená identita %(displayName)s (<b>%(userId)s</b>) byla změněna. <a>Další informace</a>",
+        "verified_identity_changed_no_displayname": "Ověřená identita uživatele <b>%(userId)s</b> byla změněna. <a>Další informace</a>",
         "verify_toast_description": "Ostatní uživatelé této relaci nemusí věřit",
         "verify_toast_title": "Ověřit tuto relaci",
         "withdraw_verification_action": "Zrušit ověření"
@@ -2101,6 +2102,19 @@
         "add_space_label": "Přidat prostor",
         "breadcrumbs_empty": "Žádné nedávno navštívené místnosti",
         "breadcrumbs_label": "Nedávno navštívené místnosti",
+        "empty": {
+            "no_chats": "Zatím žádné chaty",
+            "no_chats_description": "Začněte tím, že někomu pošlete zprávu nebo vytvoříte místnost",
+            "no_chats_description_no_room_rights": "Začněte tím, že někomu pošlete zprávu",
+            "no_favourites": "Zatím nemáte oblíbený chat",
+            "no_favourites_description": "Chat si můžete přidat do oblíbených v nastavení chatu",
+            "no_people": "Zatím s nikým nemáte přímé chaty",
+            "no_people_description": "Můžete zrušit filtry, abyste viděli své další chaty",
+            "no_rooms": "Ještě nejste v žádné místnosti",
+            "no_rooms_description": "Můžete zrušit filtry, abyste viděli své další chaty",
+            "no_unread": "Gratulujeme! Nemáte žádné nepřečtené zprávy",
+            "show_chats": "Zobrazit všechny chaty"
+        },
         "failed_add_tag": "Nepodařilo se přidat štítek %(tagName)s k místnosti",
         "failed_remove_tag": "Nepodařilo se odstranit štítek %(tagName)s z místnosti",
         "failed_set_dm_tag": "Nepodařilo se nastavit značku přímé zprávy",
@@ -3139,6 +3153,7 @@
         "view": "Zobrazí místnost s danou adresou",
         "whois": "Zobrazuje informace o uživateli"
     },
+    "sliding_sync_legacy_no_longer_supported": "Starší klouzavá synchronizace již není podporována: odhlaste se a znovu přihlaste, abyste povolili nový způsob posuvné synchronizace",
     "space": {
         "add_existing_room_space": {
             "create": "Chcete místo toho přidat novou místnost?",
@@ -3352,7 +3367,7 @@
             "historical_event_no_key_backup": "Historické zprávy nejsou v tomto zařízení k dispozici",
             "historical_event_unverified_device": "Pro přístup k historickým zprávám je třeba toto zařízení ověřit.",
             "historical_event_user_not_joined": "K této zprávě nemáte přístup",
-            "sender_identity_previously_verified": "Ověřená identita se změnila",
+            "sender_identity_previously_verified": "Ověřená identita odesílatele se změnila",
             "sender_unsigned_device": "Šifrováno zařízením, které nebylo ověřeno jeho majitelem.",
             "unable_to_decrypt": "Zprávu nelze dešifrovat"
         },
