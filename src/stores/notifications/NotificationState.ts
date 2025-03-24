@@ -88,7 +88,7 @@ export abstract class NotificationState
     }
 
     /**
-     * True if the notification has a count or a symbol and is greater than an activity notification.
+     * True if the notification has a count or a symbol and is equal or greater than an NotificationLevel.Notification.
      */
     public get hasUnreadCount(): boolean {
         return this.level >= NotificationLevel.Notification && (!!this.count || !!this.symbol);
