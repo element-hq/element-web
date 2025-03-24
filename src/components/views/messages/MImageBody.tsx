@@ -33,7 +33,7 @@ import { presentableTextForFile } from "../../../utils/FileUtils";
 import { createReconnectedListener } from "../../../utils/connection";
 import MediaProcessingError from "./shared/MediaProcessingError";
 import { DecryptError, DownloadError } from "../../../utils/DecryptFile";
-import HiddenMediaPlaceholder from "./HiddenMediaPlaceholder";
+import { HiddenMediaPlaceholder } from "./HiddenMediaPlaceholder";
 import { useMediaVisible } from "../../../hooks/useMediaVisible";
 
 enum Placeholder {
@@ -517,7 +517,6 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
                     <HiddenMediaPlaceholder onClick={this.onClick}>
                         {_t("timeline|m.image|show_image")}
                     </HiddenMediaPlaceholder>
-                    ;
                 </div>
             );
             showPlaceholder = false; // because we're hiding the image, so don't show the placeholder.

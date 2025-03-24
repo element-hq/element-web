@@ -21,7 +21,7 @@ import MFileBody from "./MFileBody";
 import { type ImageSize, suggestedSize as suggestedVideoSize } from "../../../settings/enums/ImageSize";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import MediaProcessingError from "./shared/MediaProcessingError";
-import HiddenMediaPlaceholder from "./HiddenMediaPlaceholder";
+import { HiddenMediaPlaceholder } from "./HiddenMediaPlaceholder";
 import { useMediaVisible } from "../../../hooks/useMediaVisible";
 
 interface IState {

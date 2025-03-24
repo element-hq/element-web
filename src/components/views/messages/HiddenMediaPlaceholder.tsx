@@ -12,7 +12,7 @@ interface IProps {
     onClick: MouseEventHandler<HTMLButtonElement>;
 }
 
-const HiddenMediaPlaceholder: React.FunctionComponent<PropsWithChildren<IProps>> = ({ onClick, children }) => {
+export const HiddenMediaPlaceholder: React.FunctionComponent<PropsWithChildren<IProps>> = ({ onClick, children }) => {
     return (
         <button onClick={onClick} className="mx_HiddenMediaPlaceholder">
             <div>
@@ -22,5 +22,3 @@ const HiddenMediaPlaceholder: React.FunctionComponent<PropsWithChildren<IProps>>
         </button>
     );
 };
-
-export default HiddenMediaPlaceholder;

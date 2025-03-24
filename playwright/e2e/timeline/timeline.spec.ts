@@ -921,7 +921,7 @@ test.describe("Timeline", () => {
             await expect(page.getByRole("button", { name: "Show image" })).toBeVisible();
         });
 
-        test("should be able to hide a video", { tag: "@screenshot" }, async ({ page, app, room, context }) => {
+        test("should be able to hide a video", async ({ page, app, room, context }) => {
             await app.viewRoomById(room.roomId);
             const upload = await app.client.uploadContent(VIDEO_FILE, { name: "bbb.webm", type: "video/webm" });
             await app.client.sendEvent(room.roomId, null, "m.room.message" as EventType, {
@@ -938,6 +938,7 @@ test.describe("Timeline", () => {
 
             // Check that the video is now hidden.
             await expect(page.getByRole("button", { name: "Show video" })).toBeVisible();
+            await expect(page.locator("video")).not.toBeVisible();
         });
     });
 
