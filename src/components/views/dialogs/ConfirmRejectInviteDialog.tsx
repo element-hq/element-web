@@ -54,18 +54,30 @@ export const ConfirmRejectInviteDialog: React.FunctionComponent<IProps> = ({ onF
                 {promptOptions && (
                     <InlineField
                         name="ignore-user"
-                        control={<Checkbox checked={ignoreUser} onChange={shouldIgnoreUserChanged} />}
+                        control={
+                            <Checkbox
+                                id="mx_ConfirmRejectInviteDialog_ignore_user"
+                                checked={ignoreUser}
+                                onChange={shouldIgnoreUserChanged}
+                            />
+                        }
                     >
-                        <Label>Ignore user</Label>
+                        <Label htmlFor="mx_ConfirmRejectInviteDialog_ignore_user">Ignore user</Label>
                         <HelpMessage>You will not see any messages or room invites from this user.</HelpMessage>
                     </InlineField>
                 )}
                 {promptOptions && (
                     <InlineField
                         name="report-room"
-                        control={<Checkbox checked={shouldReport} onChange={shouldReportChanged} />}
+                        control={
+                            <Checkbox
+                                id="mx_ConfirmRejectInviteDialog_report_room"
+                                checked={shouldReport}
+                                onChange={shouldReportChanged}
+                            />
+                        }
                     >
-                        <Label>Report room</Label>
+                        <Label htmlFor="mx_ConfirmRejectInviteDialog_report_room">Report room</Label>
                         <HelpMessage>{_t("report_room|description")}</HelpMessage>
                         <Field name="report-reason">
                             <Label htmlFor="mx_ConfirmRejectInviteDialog_reason">

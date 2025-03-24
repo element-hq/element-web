@@ -58,7 +58,7 @@ exports[`ReportRoomDialog displays admin message 1`] = `
         </label>
         <textarea
           id="mx_ReportRoomDialog_reason"
-          placeholder=" Reason for reporting..."
+          placeholder="Reason for reporting..."
           rows="5"
         />
       </div>

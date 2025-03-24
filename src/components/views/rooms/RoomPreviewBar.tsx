@@ -568,8 +568,6 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                 }
                 primaryActionLabel = _t("room|join_the_discussion");
                 primaryActionHandler = this.props.onJoinClick;
-                secondaryActionLabel = _t("action|reject");
-                secondaryActionHandler = () => this.props.onRejectClick?.(false);
                 break;
             }
             case MessageCase.RoomNotFound: {
