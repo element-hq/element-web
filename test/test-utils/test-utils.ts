@@ -303,6 +303,11 @@ export function createTestClient(): MatrixClient {
         getLocalAliases: jest.fn().mockReturnValue([]),
         uploadDeviceSigningKeys: jest.fn(),
         isKeyBackupKeyStored: jest.fn().mockResolvedValue(null),
+
+        getIgnoredUsers: jest.fn().mockReturnValue([]),
+        setIgnoredUsers: jest.fn(),
+
+        reportRoom: jest.fn(),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);

@@ -1734,10 +1734,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     };
 
     private onRejectButtonClicked = async (promptOptions = true): Promise<void> => {
+        console.log("onRejectButtonClicked");
         if (!this.state.room || !this.context.client) return;
         const [shouldReject, ignoreUser, reportRoom] = await Modal.createDialog(ConfirmRejectInviteDialog, {
             promptOptions,
         }).finished;
+        console.log({ shouldReject, ignoreUser, reportRoom });
         if (!shouldReject) {
             return;
         }
@@ -1762,7 +1764,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         actions.push(this.context.client.leave(this.state.room.roomId));
         try {
+            console.log("Trying to leave");
             await Promise.all(actions);
+            console.log("Left");
             defaultDispatcher.dispatch({ action: Action.ViewHomePage });
             this.setState({
                 rejecting: false,

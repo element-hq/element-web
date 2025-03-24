@@ -19,6 +19,7 @@ import {
     MatrixEvent,
     Room,
     RoomEvent,
+    RoomMember,
     RoomStateEvent,
     SearchResult,
 } from "matrix-js-sdk/src/matrix";
@@ -78,6 +79,7 @@ import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { type ViewUserPayload } from "../../../../src/dispatcher/payloads/ViewUserPayload.ts";
 import { CallStore } from "../../../../src/stores/CallStore.ts";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../../src/MediaDeviceHandler.ts";
+import Modal from "../../../../src/Modal.tsx";
 
 // Used by group calls
 jest.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
@@ -196,7 +198,7 @@ describe("RoomView", () => {
                     <RoomView
                         // threepidInvite should be optional on RoomView props
                         // it is treated as optional in RoomView
-                        threepidInvite={undefined as any}
+                        threepidInvite={undefined}
                         resizeNotifier={new ResizeNotifier()}
                         forceTimeline={false}
                         onRegistered={jest.fn()}
@@ -812,6 +814,63 @@ describe("RoomView", () => {
 
                 itShouldNotRemoveTheLastWidget();
             });
+        });
+    });
+
+    describe("invites", () => {
+        beforeEach(() => {
+            jest.spyOn(defaultDispatcher, "dispatch");
+            const member = new RoomMember(room.roomId, cli.getSafeUserId());
+            member.membership = KnownMembership.Invite;
+            member.events.member = new MatrixEvent({
+                sender: "@bob:example.org",
+            });
+            room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Invite);
+            room.getMember = jest.fn().mockReturnValue(member);
+        });
+
+        it("renders an invite room", async () => {
+            const { asFragment } = await mountRoomView();
+            expect(asFragment()).toMatchSnapshot();
+        });
+
+        it("handles accepting an invite", async () => {
+            await mountRoomView();
+
+            await fireEvent.click(screen.getByRole("button", { name: "Accept" }));
+
+            await untilDispatch(Action.JoinRoomReady, defaultDispatcher);
+        });
+        it("handles rejecting an invite", async () => {
+            await mountRoomView();
+            jest.spyOn(Modal, "createDialog").mockReturnValue({
+                finished: Promise.resolve([true, false, false]),
+                close: jest.fn(),
+            });
+            await fireEvent.click(screen.getByRole("button", { name: "Reject" }));
+            await waitFor(() => expect(cli.leave).toHaveBeenCalledWith(room.roomId));
+            expect(cli.setIgnoredUsers).not.toHaveBeenCalled();
+        });
+        it("handles rejecting an invite and ignoring the user", async () => {
+            cli.getIgnoredUsers.mockReturnValue(["@carol:example.org"]);
+            await mountRoomView();
+            jest.spyOn(Modal, "createDialog").mockReturnValue({
+                finished: Promise.resolve([true, true, false]),
+                close: jest.fn(),
+            });
+            await fireEvent.click(screen.getByRole("button", { name: "Reject" }));
+            expect(cli.leave).toHaveBeenCalledWith(room.roomId);
+            expect(cli.setIgnoredUsers).toHaveBeenCalledWith(["@carol:example.org", "@bob:example.org"]);
+        });
+        it("handles rejecting an invite and reporting the room", async () => {
+            await mountRoomView();
+            jest.spyOn(Modal, "createDialog").mockReturnValue({
+                finished: Promise.resolve([true, false, "with a reason"]),
+                close: jest.fn(),
+            });
+            await fireEvent.click(screen.getByRole("button", { name: "Reject" }));
+            expect(cli.leave).toHaveBeenCalledWith(room.roomId);
+            expect(cli.reportRoom).toHaveBeenCalledWith(room.roomId, "with a reason");
         });
     });
 });
