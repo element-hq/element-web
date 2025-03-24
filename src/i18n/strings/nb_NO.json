@@ -104,6 +104,7 @@
         "reply": "Svar",
         "reply_in_thread": "Svar i tråd",
         "report_content": "Rapporter innhold",
+        "report_room": "Rapporter rom",
         "resend": "Send på nytt",
         "reset": "Nullstill",
         "resume": "Fortsett",
@@ -953,7 +954,7 @@
         },
         "not_supported": "<not supported>",
         "pinned_identity_changed": "%(displayName)ss (<b>%(userId)s</b>) identitet ser ut til å ha endret seg. <a>Finn ut mer</a>",
-        "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>s identitet ser ut til å ha endret seg. <a>Finn ut mer</a>",
+        "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>s identitet ble tilbakestilt. <a>Finn ut mer</a>",
         "recovery_method_removed": {
             "description_1": "Denne sesjonen har oppdaget at din sikkerhetsfrase og nøkkelen for sikre meldinger har blitt fjernet.",
             "description_2": "Hvis du gjorde dette ved et uhell, kan du konfigurere sikre meldinger på denne økten som vil kryptere denne øktens meldingshistorikk på nytt med en ny gjenopprettingsmetode.",
@@ -1065,8 +1066,8 @@
             "waiting_other_user": "Venter på at %(displayName)s skal bekrefte..."
         },
         "verification_requested_toast_title": "Verifisering ble forespurt",
-        "verified_identity_changed": "%(displayName)ss (<b>%(userId)s</b>) verifiserte identitet har endret seg. <a>Lær mer </a>",
-        "verified_identity_changed_no_displayname": "<b>%(userId)s</b>'s verifiserte identitet har endret seg. <a>Lær mer om dette</a>",
+        "verified_identity_changed": "%(displayName)ss (<b>%(userId)s</b>) verifiserte identitet ble tilbakestilt. <a>Lær mer </a>",
+        "verified_identity_changed_no_displayname": "<b>%(userId)s</b>'s verifiserte identitet ble tilbakestilt. <a>Lær mer om dette</a>",
         "verify_toast_description": "Andre brukere kan kanskje mistro den",
         "verify_toast_title": "Verifiser denne økten",
         "withdraw_verification_action": "Trekk tilbake verifisering"
@@ -1809,6 +1810,12 @@
         "report_entire_room": "Rapporter hele rommet",
         "spam_or_propaganda": "Spam eller propaganda",
         "toxic_behaviour": "Giftig oppførsel"
+    },
+    "report_room": {
+        "description": "Rapporter dette rommet til hjemmeserveradministratoren din. Dette vil sende rommets unike ID, men hvis meldinger er kryptert, vil ikke administratoren kunne lese dem eller se delte filer.",
+        "reason_placeholder": " Årsak til rapportering...",
+        "sent": "Rapporten din ble sendt.",
+        "title": "Rapporter rom"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Kunne ikke dekryptere %(failedCount)s økter!",
