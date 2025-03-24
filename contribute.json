@@ -10,5 +10,5 @@
         "list": "https://github.com/element-hq/element-web/issues",
         "report": "https://github.com/element-hq/element-web/issues/new/choose"
     },
-    "keywords": ["chat", "riot", "matrix"]
+    "keywords": ["chat", "element", "matrix"]
 }
