@@ -245,22 +245,20 @@ export async function getSessionLock(onNewInstance: () => Promise<void>): Promis
             };
         });
 
-        let sleepExpired = false;
+        // We construct our own promise here rather than using the `sleep` utility, to make it easier to test the
+        // SessionLock in a separate Window.
         const sleepPromise = new Promise((resolve) => {
-            setTimeout(() => {
-                sleepExpired = true;
-                resolve(undefined);
-            }, remaining);
+            setTimeout(resolve, remaining, undefined);
         });
 
         window.addEventListener("storage", onStorageUpdate!);
-        await Promise.race([sleepPromise, storageUpdatePromise]);
+        const winner = await Promise.race([sleepPromise, storageUpdatePromise]);
         window.removeEventListener("storage", onStorageUpdate!);
 
         // If we got through the whole of the sleep without any writes to the store, we know that the
         // ping is now stale. There's no point in going round and calling `checkLock` again: we know that
         // nothing has changed since last time.
-        if (sleepExpired) {
+        if (!(winner instanceof StorageEvent)) {
             prefixedLogger.info("Existing claim went stale: proceeding with startup");
             break;
         }
