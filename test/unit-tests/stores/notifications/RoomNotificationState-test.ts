@@ -214,10 +214,10 @@ describe("RoomNotificationState", () => {
             jest.spyOn(UnreadModule, "doesRoomHaveUnreadMessages").mockReturnValue(false);
         });
 
-        it("should has isInvitation at true", () => {
+        it("should has invited at true", () => {
             room.updateMyMembership(KnownMembership.Invite);
             const roomNotifState = new RoomNotificationState(room, false);
-            expect(roomNotifState.isInvitation).toBe(true);
+            expect(roomNotifState.invited).toBe(true);
         });
 
         it("should has isUnsetMessage at true", () => {
