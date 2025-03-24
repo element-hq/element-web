@@ -258,7 +258,7 @@ describe("RoomNotificationState", () => {
             expect(roomNotifState.isActivityNotification).toBe(true);
         });
 
-        it("should has isSilent at true", () => {
+        it("should has hasAnyNotificationOrActivity at true", () => {
             // Hidebold is disabled
             jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
             // Unread message, generate activity notification
@@ -267,27 +267,25 @@ describe("RoomNotificationState", () => {
             setUnreads(room, 0, 1);
 
             // There is one highlight notification
-            // The notification should not be silent
             const roomNotifState = new RoomNotificationState(room, false);
-            expect(roomNotifState.isSilent).toBe(false);
+            expect(roomNotifState.hasAnyNotificationOrActivity).toBe(true);
 
             // Activity notification
-            // the notification should not be silent
             setUnreads(room, 0, 0);
             // Trigger update
             room.updateMyMembership(KnownMembership.Join);
-            expect(roomNotifState.isSilent).toBe(false);
+            // hidebold is disabled and we have an activity notification
+            expect(roomNotifState.hasAnyNotificationOrActivity).toBe(true);
 
-            // hidebold is enabled
-            // The notification should be silent
+            // hidebold is enabled and we have an activity notification
             jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
             room.updateMyMembership(KnownMembership.Join);
-            expect(roomNotifState.isSilent).toBe(true);
+            expect(roomNotifState.hasAnyNotificationOrActivity).toBe(false);
 
             // No unread
             jest.spyOn(UnreadModule, "doesRoomHaveUnreadMessages").mockReturnValue(false);
             room.updateMyMembership(KnownMembership.Join);
-            expect(roomNotifState.isSilent).toBe(true);
+            expect(roomNotifState.hasAnyNotificationOrActivity).toBe(false);
         });
     });
 });

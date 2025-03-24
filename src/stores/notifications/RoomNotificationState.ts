@@ -86,14 +86,19 @@ export class RoomNotificationState extends NotificationState implements IDestroy
     }
 
     /**
-     * True if the notification is silent.
-     * This is the case for notifications with a level lower than None or Activity if feature_hidebold is enabled.
+     * This is the case for notifications with a level:
+     * - is a knock
+     * - greater Activity
+     * - equal Activity and feature_hidebold is disabled.
      */
-    public get isSilent(): boolean {
-        if (this.knocked) return false;
+    public get hasAnyNotificationOrActivity(): boolean {
+        if (this.knocked) return true;
 
+        // If the feature_hidebold is enabled, we don't want to show activity notifications
         const hideBold = SettingsStore.getValue("feature_hidebold");
-        return this.level <= NotificationLevel.None || (hideBold && this.level <= NotificationLevel.Activity);
+        if (!hideBold && this.level === NotificationLevel.Activity) return true;
+
+        return this.level >= NotificationLevel.Notification;
     }
 
     /**
