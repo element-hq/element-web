@@ -53,20 +53,10 @@ export class RoomNotificationState extends NotificationState implements IDestroy
     }
 
     /**
-     * True if the notification is an invitation notification.
-     * Invite notifications are a special case of highlight notifications
-     */
-    public get isInvitation(): boolean {
-        if (this.knocked) return false;
-
-        return this.level === NotificationLevel.Highlight && this.symbol === "!" && this.count === 1;
-    }
-
-    /**
      * True if the notification is a mention.
      */
     public get isMention(): boolean {
-        if (this.isInvitation || this.knocked) return false;
+        if (this.invited || this.knocked) return false;
 
         return this.level === NotificationLevel.Highlight;
     }
@@ -152,7 +142,11 @@ export class RoomNotificationState extends NotificationState implements IDestroy
     private updateNotificationState(): void {
         const snapshot = this.snapshot();
 
-        const { level, symbol, count } = RoomNotifs.determineUnreadState(this.room, undefined, this.includeThreads);
+        const { level, symbol, count, invited } = RoomNotifs.determineUnreadState(
+            this.room,
+            undefined,
+            this.includeThreads,
+        );
         const muted =
             RoomNotifs.getRoomNotifsState(this.room.client, this.room.roomId) === RoomNotifs.RoomNotifState.Mute;
         const knocked =
@@ -162,6 +156,7 @@ export class RoomNotificationState extends NotificationState implements IDestroy
         this._count = count;
         this._muted = muted;
         this._knocked = knocked;
+        this._invited = invited;
 
         // finally, publish an update if needed
         this.emitIfUpdated(snapshot);

@@ -18,6 +18,7 @@ export interface INotificationStateSnapshotParams {
     level: NotificationLevel;
     muted: boolean;
     knocked: boolean;
+    invited: boolean;
 }
 
 export enum NotificationStateEvents {
@@ -38,6 +39,7 @@ export abstract class NotificationState
     protected _level: NotificationLevel = NotificationLevel.None;
     protected _muted = false;
     protected _knocked = false;
+    protected _invited = false;
 
     private watcherReferences: string[] = [];
 
@@ -68,6 +70,14 @@ export abstract class NotificationState
 
     public get knocked(): boolean {
         return this._knocked;
+    }
+
+    /**
+     * True if the notification is an invitation notification.
+     * Invite notifications are a special case of highlight notifications
+     */
+    public get invited(): boolean {
+        return this._invited;
     }
 
     public get isIdle(): boolean {
@@ -129,6 +139,7 @@ export class NotificationStateSnapshot {
     private readonly level: NotificationLevel;
     private readonly muted: boolean;
     private readonly knocked: boolean;
+    private readonly isInvitation: boolean;
 
     public constructor(state: INotificationStateSnapshotParams) {
         this.symbol = state.symbol;
@@ -136,6 +147,7 @@ export class NotificationStateSnapshot {
         this.level = state.level;
         this.muted = state.muted;
         this.knocked = state.knocked;
+        this.isInvitation = state.invited;
     }
 
     public isDifferentFrom(other: INotificationStateSnapshotParams): boolean {
@@ -145,6 +157,7 @@ export class NotificationStateSnapshot {
             level: this.level,
             muted: this.muted,
             knocked: this.knocked,
+            is: this.isInvitation,
         };
         const after = {
             count: other.count,
