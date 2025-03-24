@@ -234,8 +234,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
 
     private renderIgnoredUsers(): JSX.Element {
         const { waitingUnignored, ignoredUserIds } = this.state;
-
-        if (!ignoredUserIds) {
+        if (!ignoredUserIds?.length) {
             return (
                 <SettingsSubsection heading={_t("settings|security|ignore_users_section")}>
                     <SettingsSubsectionText>{_t("settings|security|ignore_users_empty")}</SettingsSubsectionText>

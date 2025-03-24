@@ -62,7 +62,9 @@ export const ConfirmRejectInviteDialog: React.FunctionComponent<IProps> = ({ onF
                             />
                         }
                     >
-                        <Label htmlFor="mx_ConfirmRejectInviteDialog_ignore_user">{_t("report_content|ignore_user")}</Label>
+                        <Label htmlFor="mx_ConfirmRejectInviteDialog_ignore_user">
+                            {_t("report_content|ignore_user")}
+                        </Label>
                         <HelpMessage>{_t("reject_invitation_dialog|ignore_user_help")}</HelpMessage>
                     </InlineField>
                 )}
