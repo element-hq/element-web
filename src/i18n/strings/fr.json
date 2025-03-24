@@ -1065,8 +1065,8 @@
             "waiting_other_user": "En attente de la vérification de %(displayName)s…"
         },
         "verification_requested_toast_title": "Vérification requise",
-        "verified_identity_changed": "%(displayName)s l'identité vérifiée de (<b>%(userId)s</b>) a changé. <a>En savoir plus </a>",
-        "verified_identity_changed_no_displayname": "L'identité vérifiée de <b>%(userId)s</b> a changé. <a>En savoir plus </a>",
+        "verified_identity_changed": "L'identité de %(displayName)s (<b>%(userId)s</b>) a été réinitialisée. <a>En savoir plus</a>",
+        "verified_identity_changed_no_displayname": "L'identité de <b>%(userId)s</b> a été réinitialisée. <a>En savoir plus </a>",
         "verify_toast_description": "D’autres utilisateurs pourraient ne pas lui faire confiance",
         "verify_toast_title": "Vérifier cette session",
         "withdraw_verification_action": "Révoquer la vérification"
@@ -3147,6 +3147,7 @@
         "view": "Affiche le salon avec cette adresse",
         "whois": "Affiche des informations à propos de l’utilisateur"
     },
+    "sliding_sync_legacy_no_longer_supported": "L'ancienne fonctionnalité Sliding Sync n'est plus prise en charge : veuillez vous déconnecter puis vous reconnecter pour activer la nouvelle fonctionnalité Sliding Sync",
     "space": {
         "add_existing_room_space": {
             "create": "Voulez-vous plutôt ajouter un nouveau salon ?",

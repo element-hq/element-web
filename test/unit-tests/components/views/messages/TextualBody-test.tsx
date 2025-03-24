@@ -10,6 +10,7 @@ import React from "react";
 import { type MatrixClient, type MatrixEvent, PushRuleKind } from "matrix-js-sdk/src/matrix";
 import { mocked, type MockedObject } from "jest-mock";
 import { render, waitFor } from "jest-matrix-react";
+import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 
 import { getMockClientWithEventEmitter, mkEvent, mkMessage, mkStubRoom } from "../../../../test-utils";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
@@ -85,6 +86,8 @@ describe("<TextualBody />", () => {
                 throw new Error("MockClient event not found");
             },
         });
+        // @ts-expect-error
+        defaultMatrixClient.pushProcessor = new PushProcessor(defaultMatrixClient);
 
         mocked(defaultRoom).findEventById.mockImplementation((eventId: string) => {
             if (eventId === defaultEvent.getId()) return defaultEvent;

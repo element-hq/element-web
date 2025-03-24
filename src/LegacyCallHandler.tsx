@@ -22,7 +22,6 @@ import {
     type MatrixCall,
 } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
-import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 import { CallEventHandlerEvent } from "matrix-js-sdk/src/webrtc/callEventHandler";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";
@@ -596,7 +595,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
 
         switch (newState) {
             case CallState.Ringing: {
-                const incomingCallPushRule = new PushProcessor(MatrixClientPeg.safeGet()).getPushRuleById(
+                const incomingCallPushRule = MatrixClientPeg.safeGet().pushProcessor.getPushRuleById(
                     RuleId.IncomingCall,
                 );
                 const pushRuleEnabled = incomingCallPushRule?.enabled;
