@@ -62,6 +62,7 @@ test.describe("Invites", () => {
             // Check user is ignored.
             await app.settings.openUserSettings("Security & Privacy");
             const ignoredUsersList = page.getByRole("list", { name: "Ignored users" });
+            await ignoredUsersList.scrollIntoViewIfNeeded();
             await expect(ignoredUsersList.getByRole("listitem", { name: "@bot_0001:localhost" })).toBeVisible();
         },
     );
