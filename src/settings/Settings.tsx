@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ReactNode } from "react";
-import { UNSTABLE_MSC4133_EXTENDED_PROFILES } from "matrix-js-sdk/src/matrix";
+import { MediaPreviewConfig, UNSTABLE_MSC4133_EXTENDED_PROFILES } from "matrix-js-sdk/src/matrix";
 
 import { _t, _td, type TranslationKey } from "../languageHandler";
 import DeviceIsolationModeController from "./controllers/DeviceIsolationModeController.ts";
@@ -45,6 +45,7 @@ import { type Json, type JsonValue } from "../@types/json.ts";
 import { type RecentEmojiData } from "../emojipicker/recent.ts";
 import { type Assignable } from "../@types/common.ts";
 import { SortingAlgorithm } from "../stores/room-list-v3/skip-list/sorters/index.ts";
+import MediaPreviewConfigController from "./controllers/MediaPreviewConfigController.ts";
 
 export const defaultWatchManager = new WatchManager();
 
@@ -349,6 +350,7 @@ export interface Settings {
     "Electron.alwaysShowMenuBar": IBaseSetting<boolean>;
     "Electron.showTrayIcon": IBaseSetting<boolean>;
     "Electron.enableHardwareAcceleration": IBaseSetting<boolean>;
+    "mediaPreviewConfig": IBaseSetting<MediaPreviewConfig>;
 }
 
 export type SettingKey = keyof Settings;
@@ -424,6 +426,11 @@ export const SETTINGS: Settings = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG_PRIORITISED,
         supportedLevelsAreOrdered: true,
         default: false,
+    },
+    "mediaPreviewConfig": {
+        controller: new MediaPreviewConfigController(),
+        supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
+        default: MediaPreviewConfig.Private,
     },
     "feature_report_to_moderators": {
         isFeature: true,
@@ -1383,5 +1390,5 @@ export const SETTINGS: Settings = {
         supportedLevels: [SettingLevel.PLATFORM],
         displayName: _td("settings|preferences|enable_hardware_acceleration"),
         default: true,
-    },
+    }
 };
