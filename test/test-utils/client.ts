@@ -106,13 +106,23 @@ export const mockClientMethodsUser = (userId = "@alice:domain") => ({
  * Returns basic mocked client methods related to rendering events
  * ```
  * const mockClient = getMockClientWithEventEmitter({
-        ...mockClientMethodsUser('@mytestuser:domain'),
-    });
+ ...mockClientMethodsUser('@mytestuser:domain'),
+ });
  * ```
  */
 export const mockClientMethodsEvents = () => ({
     decryptEventIfNeeded: jest.fn(),
     getPushActionsForEvent: jest.fn(),
+});
+
+/**
+ * Returns basic mocked pushProcessor
+ */
+export const mockClientPushProcessor = () => ({
+    pushProcessor: {
+        getPushRuleById: jest.fn(),
+        ruleMatchesEvent: jest.fn(),
+    },
 });
 
 /**

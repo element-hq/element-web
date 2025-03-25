@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
-import { type MatrixClient, type MatrixEvent, PushRuleKind } from "matrix-js-sdk/src/matrix";
+import React, { ComponentProps } from "react";
+import { type MatrixClient, type MatrixEvent, PushRuleKind, type Room } from "matrix-js-sdk/src/matrix";
 import { mocked, type MockedObject } from "jest-mock";
 import { render, waitFor } from "jest-matrix-react";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
@@ -55,8 +55,8 @@ describe("<TextualBody />", () => {
         jest.spyOn(global.Math, "random").mockRestore();
     });
 
-    const defaultRoom = mkStubRoom(room1Id, "test room", undefined);
-    const otherRoom = mkStubRoom(room2Id, room2Name, undefined);
+    let defaultRoom: Room;
+    let otherRoom: Room;
     let defaultMatrixClient: MockedObject<MatrixClient>;
 
     const defaultEvent = mkEvent({
@@ -69,6 +69,15 @@ describe("<TextualBody />", () => {
         },
         event: true,
     });
+
+    const defaultProps: Partial<ComponentProps<typeof TextualBody>> = {
+        mxEvent: defaultEvent,
+        highlights: [] as string[],
+        highlightLink: "",
+        onMessageAllowed: jest.fn(),
+        onHeightChanged: jest.fn(),
+        mediaEventHelper: {} as MediaEventHelper,
+    };
 
     beforeEach(() => {
         defaultMatrixClient = getMockClientWithEventEmitter({
@@ -89,22 +98,16 @@ describe("<TextualBody />", () => {
         // @ts-expect-error
         defaultMatrixClient.pushProcessor = new PushProcessor(defaultMatrixClient);
 
+        defaultRoom = mkStubRoom(room1Id, "test room", defaultMatrixClient);
+        defaultProps.permalinkCreator = new RoomPermalinkCreator(defaultRoom);
+        otherRoom = mkStubRoom(room2Id, room2Name, defaultMatrixClient);
+
         mocked(defaultRoom).findEventById.mockImplementation((eventId: string) => {
             if (eventId === defaultEvent.getId()) return defaultEvent;
             return undefined;
         });
         jest.spyOn(global.Math, "random").mockReturnValue(0.123456);
     });
-
-    const defaultProps = {
-        mxEvent: defaultEvent,
-        highlights: [] as string[],
-        highlightLink: "",
-        onMessageAllowed: jest.fn(),
-        onHeightChanged: jest.fn(),
-        permalinkCreator: new RoomPermalinkCreator(defaultRoom),
-        mediaEventHelper: {} as MediaEventHelper,
-    };
 
     const getComponent = (props = {}, matrixClient: MatrixClient = defaultMatrixClient, renderingFn?: any) =>
         (renderingFn ?? render)(

@@ -102,11 +102,15 @@ interface Props extends ReplacerOptions {
     stripReply?: boolean;
     highlights?: string[];
     onHeightChanged?: () => void;
+    includeDir?: boolean;
 }
 
 const EventContentBody = memo(
     forwardRef<HTMLElement, Props>(
-        ({ as, mxEvent, stripReply, content, onHeightChanged, linkify, highlights, ...options }, ref) => {
+        (
+            { as, mxEvent, stripReply, content, onHeightChanged, linkify, highlights, includeDir = true, ...options },
+            ref,
+        ) => {
             const cli = useContext(MatrixClientContext);
             const room = cli.getRoom(mxEvent?.getRoomId()) ?? undefined;
             const enableBigEmoji = useSettingValue("TextualBody.enableBigEmoji");
@@ -132,9 +136,8 @@ const EventContentBody = memo(
             );
 
             const As = as;
-            const includeDir = As === "div" || 0;
             const body = formattedBody ? (
-                <As ref={ref as any} className={className} dir={includeDir ? "auto" : undefined}>
+                <As ref={ref as any} className={className} dir={includeDir || as === "div" ? "auto" : undefined}>
                     {parse(formattedBody, {
                         replace: replacer,
                     })}

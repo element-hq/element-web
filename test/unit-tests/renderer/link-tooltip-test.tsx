@@ -14,7 +14,7 @@ import { ambiguousLinkTooltipRenderer, combineRenderers } from "../../../src/ren
 import PlatformPeg from "../../../src/PlatformPeg";
 import type BasePlatform from "../../../src/BasePlatform";
 
-describe("tooltipify", () => {
+describe("link-tooltip", () => {
     jest.spyOn(PlatformPeg, "get").mockReturnValue({ needsUrlTooltips: () => true } as unknown as BasePlatform);
 
     function renderTooltips(input: string): RenderResult {
