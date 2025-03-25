@@ -28,6 +28,7 @@ import { Action } from "../../src/dispatcher/actions";
 import PlatformPeg from "../../src/PlatformPeg";
 import { persistAccessTokenInStorage, persistRefreshTokenInStorage } from "../../src/utils/tokens/tokens";
 import { encryptPickleKey } from "../../src/utils/tokens/pickling";
+import * as StorageManager from "../../src/utils/StorageManager.ts";
 
 const { logout, restoreSessionFromStorage, setLoggedIn } = Lifecycle;
 
@@ -193,11 +194,16 @@ describe("Lifecycle", () => {
             );
         });
 
-        it("should not show any error dialog when restoreSessionFromStorage throws but abortSignal has triggered", async () => {
-            jest.spyOn(Lifecycle, "restoreSessionFromStorage").mockRejectedValue(new Error("test error"));
+        it("should not show any error dialog when checkConsistency throws but abortSignal has triggered", async () => {
+            jest.spyOn(StorageManager, "checkConsistency").mockRejectedValue(new Error("test error"));
 
             const abortController = new AbortController();
-            const prom = Lifecycle.loadSession({ abortSignal: abortController.signal });
+            const prom = Lifecycle.loadSession({
+                enableGuest: true,
+                guestHsUrl: "https://guest.server",
+                fragmentQueryParams: { guest_user_id: "a", guest_access_token: "b" },
+                abortSignal: abortController.signal,
+            });
             abortController.abort();
             await expect(prom).resolves.toBeFalsy();
 

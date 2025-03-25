@@ -197,7 +197,7 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
 
         if (enableGuest && guestHsUrl && fragmentQueryParams.guest_user_id && fragmentQueryParams.guest_access_token) {
             logger.log("Using guest access credentials");
-            return doSetLoggedIn(
+            await doSetLoggedIn(
                 {
                     userId: fragmentQueryParams.guest_user_id as string,
                     accessToken: fragmentQueryParams.guest_access_token as string,
@@ -207,7 +207,8 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
                 },
                 true,
                 false,
-            ).then(() => true);
+            );
+            return true;
         }
         const success = await restoreSessionFromStorage({
             ignoreGuest: Boolean(opts.ignoreGuest),
