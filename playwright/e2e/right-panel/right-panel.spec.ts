@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -10,6 +10,7 @@ import { type Locator, type Page } from "@playwright/test";
 
 import { test, expect } from "../../element-web-test";
 import { checkRoomSummaryCard, viewRoomSummaryByName } from "./utils";
+import { isDendrite } from "../../plugins/homeserver/dendrite";
 
 const ROOM_NAME = "Test room";
 const ROOM_NAME_LONG =
@@ -132,6 +133,17 @@ test.describe("RightPanel", () => {
 
             await page.getByLabel("Room info").nth(1).click();
             await checkRoomSummaryCard(page, ROOM_NAME);
+        });
+        test.describe("room reporting", () => {
+            test.skip(isDendrite, "Dendrite does not implement room reporting");
+            test("should handle reporting a room", async ({ page, app }) => {
+                await viewRoomSummaryByName(page, app, ROOM_NAME);
+                await page.getByRole("menuitem", { name: "Report room" }).click();
+                const dialog = await page.getByRole("dialog", { name: "Report Room" });
+                await dialog.getByLabel("reason").fill("This room should be reported");
+                await dialog.getByRole("button", { name: "Send report" }).click();
+                await expect(page.getByText("Your report was sent.")).toBeVisible();
+            });
         });
     });
 

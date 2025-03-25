@@ -414,12 +414,47 @@ export function attemptTokenLogin(
 }
 
 /**
+ * Load the pickle key inside the credentials or create it if it does not exist for this device.
+ *
+ * @param credentials Holds the device to load/store the pickle key
+ *
+ * @returns {Promise} promise which resolves to the loaded or generated pickle key or undefined if
+ *    none was loaded nor generated
+ */
+async function loadOrCreatePickleKey(credentials: IMatrixClientCreds): Promise<string | undefined> {
+    // Try to load the pickle key
+    const userId = credentials.userId;
+    const deviceId = credentials.deviceId;
+    let pickleKey = (await PlatformPeg.get()?.getPickleKey(userId, deviceId ?? "")) ?? undefined;
+    if (!pickleKey) {
+        // Create it if it did not exist
+        pickleKey =
+            userId && deviceId
+                ? ((await PlatformPeg.get()?.createPickleKey(userId, deviceId)) ?? undefined)
+                : undefined;
+        if (pickleKey) {
+            logger.log(`Created pickle key for ${credentials.userId}|${credentials.deviceId}`);
+        } else {
+            logger.log("Pickle key not created");
+        }
+    } else {
+        logger.log(
+            `Pickle key already exists for ${credentials.userId}|${credentials.deviceId} do not create a new one`,
+        );
+    }
+
+    return pickleKey;
+}
+
+/**
  * Called after a successful token login or OIDC authorization.
  * Clear storage then save new credentials in storage
  * @param credentials as returned from login
  */
 async function onSuccessfulDelegatedAuthLogin(credentials: IMatrixClientCreds): Promise<void> {
     await clearStorage();
+    // SSO does not go through setLoggedIn so we need to load/create the pickle key here too
+    credentials.pickleKey = await loadOrCreatePickleKey(credentials);
     await persistCredentials(credentials);
 
     // remember that we just logged in
@@ -662,18 +697,8 @@ async function handleLoadSessionFailure(e: unknown, loadSessionOpts?: ILoadSessi
 export async function setLoggedIn(credentials: IMatrixClientCreds): Promise<MatrixClient> {
     credentials.freshLogin = true;
     stopMatrixClient();
-    const pickleKey =
-        credentials.userId && credentials.deviceId
-            ? await PlatformPeg.get()?.createPickleKey(credentials.userId, credentials.deviceId)
-            : null;
-
-    if (pickleKey) {
-        logger.log(`Created pickle key for ${credentials.userId}|${credentials.deviceId}`);
-    } else {
-        logger.log("Pickle key not created");
-    }
-
-    return doSetLoggedIn({ ...credentials, pickleKey: pickleKey ?? undefined }, true, true);
+    credentials.pickleKey = await loadOrCreatePickleKey(credentials);
+    return doSetLoggedIn(credentials, true, true);
 }
 
 /**
@@ -1131,12 +1156,13 @@ window.mxLoginWithAccessToken = async (hsUrl: string, accessToken: string): Prom
         baseUrl: hsUrl,
         accessToken,
     });
-    const { user_id: userId } = await tempClient.whoami();
+    const { user_id: userId, device_id: deviceId } = await tempClient.whoami();
     await doSetLoggedIn(
         {
             homeserverUrl: hsUrl,
             accessToken,
             userId,
+            deviceId,
         },
         true,
         false,
