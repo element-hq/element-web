@@ -135,9 +135,11 @@ const EventContentBody = memo(
                 [content, enableBigEmoji, highlights, isEmote, stripReply],
             );
 
+            if (as === "div") includeDir = true; // force dir="auto" on divs
+
             const As = as;
             const body = formattedBody ? (
-                <As ref={ref as any} className={className} dir={includeDir || as === "div" ? "auto" : undefined}>
+                <As ref={ref as any} className={className} dir={includeDir ? "auto" : undefined}>
                     {parse(formattedBody, {
                         replace: replacer,
                     })}

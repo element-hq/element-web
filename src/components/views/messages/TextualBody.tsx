@@ -325,6 +325,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         let body = (
             <EventContentBody
                 as={willHaveWrapper ? "span" : "div"}
+                includeDir={false}
                 mxEvent={mxEvent}
                 content={content}
                 stripReply={stripReply}
