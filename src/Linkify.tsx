@@ -6,21 +6,16 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ReactElement } from "react";
+import React, { type ReactElement, useMemo } from "react";
 import sanitizeHtml, { type IOptions } from "sanitize-html";
-import { merge } from "lodash";
 import _Linkify from "linkify-react";
 
-import {
-    _linkifyElement,
-    _linkifyString,
-    ELEMENT_URL_PATTERN,
-    options as linkifyMatrixOptions,
-} from "./linkify-matrix";
+import { _linkifyString, ELEMENT_URL_PATTERN, options as linkifyMatrixOptions } from "./linkify-matrix";
 import SettingsStore from "./settings/SettingsStore";
 import { tryTransformPermalinkToLocalHref } from "./utils/permalinks/Permalinks";
 import { mediaFromMxc } from "./customisations/Media";
 import { PERMITTED_URL_SCHEMES } from "./utils/UrlUtils";
+import { type Replacer, replacerToRenderFunction } from "./renderer";
 
 const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
 const MEDIA_API_MXC_REGEX = /\/_matrix\/media\/r0\/(?:download|thumbnail)\/(.+?)\/(.+?)(?:[?/]|$)/;
@@ -203,10 +198,25 @@ export const sanitizeHtmlParams: IOptions = {
     nestingLimit: 50,
 };
 
-/* Wrapper around linkify-react merging in our default linkify options */
-export function Linkify({ as, options, children }: React.ComponentProps<typeof _Linkify>): ReactElement {
+interface LinkifyProps extends React.ComponentProps<typeof _Linkify> {
+    replacer?: Replacer;
+}
+
+/**
+ * Wrapper around linkify-react merging in our default linkify options
+ * Accepts a replacer function to apply renderers to anchor tags.
+ */
+export function Linkify({ as, options, children, replacer }: LinkifyProps): ReactElement {
+    const opts = useMemo(
+        () => ({
+            ...linkifyMatrixOptions,
+            render: replacerToRenderFunction(replacer),
+            ...options,
+        }),
+        [options, replacer],
+    );
     return (
-        <_Linkify as={as} options={merge({}, linkifyMatrixOptions, options)}>
+        <_Linkify as={as} options={opts}>
             {children}
         </_Linkify>
     );
@@ -221,17 +231,6 @@ export function Linkify({ as, options, children }: React.ComponentProps<typeof _
  */
 export function linkifyString(str: string, options = linkifyMatrixOptions): string {
     return _linkifyString(str, options);
-}
-
-/**
- * Linkifies the given DOM element. This is a wrapper around 'linkifyjs/element'.
- *
- * @param {object} element DOM element to linkify
- * @param {object} [options] Options for linkifyElement. Default: linkifyMatrixOptions
- * @returns {object}
- */
-export function linkifyElement(element: HTMLElement, options = linkifyMatrixOptions): HTMLElement {
-    return _linkifyElement(element, options);
 }
 
 /**
