@@ -392,13 +392,13 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Never send encrypted messages to unverified sessions from this session
+                    Only send messages to verified users
                   </span>
                 </label>
                 <div
                   aria-checked="false"
                   aria-disabled="false"
-                  aria-label="Never send encrypted messages to unverified sessions from this session"
+                  aria-label="Only send messages to verified users"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
                   id="mx_SettingsFlag_vY7Q4uEh9K38"
                   role="switch"
