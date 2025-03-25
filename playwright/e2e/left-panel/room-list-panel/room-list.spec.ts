@@ -93,5 +93,4 @@ test.describe("Room list", () => {
         await filters.getByRole("option", { name: "People" }).click();
         await expect(roomListView.getByRole("gridcell", { name: "Open room room0" })).toBeVisible();
     });
-
 });
