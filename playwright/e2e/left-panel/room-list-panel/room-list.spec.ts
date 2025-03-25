@@ -93,41 +93,4 @@ test.describe("Room list", () => {
         await filters.getByRole("option", { name: "People" }).click();
         await expect(roomListView.getByRole("gridcell", { name: "Open room room0" })).toBeVisible();
     });
-
-    test("unread filter should only match unread rooms that have a count", async ({ page, app, bot }) => {
-        const roomListView = getRoomList(page);
-        // Let's create a new room and invite the bot
-        const room1Id = await app.client.createRoom({
-            name: "Unread Room 1",
-            invite: [bot.credentials?.userId],
-        });
-        await bot.awaitRoomMembership(room1Id);
-
-        // Let's create another room as well
-        const room2Id = await app.client.createRoom({
-            name: "Unread Room 2",
-            invite: [bot.credentials?.userId],
-        });
-        await bot.awaitRoomMembership(room2Id);
-
-        // Let's configure unread room 1 so that we only get notification for mentions and keywords
-        await app.viewRoomById(room1Id);
-        await app.settings.openRoomSettings("Notifications");
-        await page.getByText("@mentions & keywords").click();
-        await app.settings.closeDialog();
-
-        // Let's open a room other than room 1 or room 2
-        await roomListView.getByRole("gridcell", { name: "Open room room29" }).click();
-
-        // Let's make the bot send a new message in both room 1 and room 2
-        await bot.sendMessage(room1Id, "Hello!");
-        await bot.sendMessage(room2Id, "Hello!");
-
-        // Let's activate the unread filter now
-        await page.getByRole("option", { name: "Unread" }).click();
-
-        // Unread filter should only show room 2!!
-        await expect(roomListView.getByRole("gridcell", { name: "Open room Unread Room 2" })).toBeVisible();
-        await expect(roomListView.getByRole("gridcell", { name: "Open room Unread Room 1" })).not.toBeVisible();
-    });
 });
