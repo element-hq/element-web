@@ -29,6 +29,7 @@ import PlatformPeg from "../../src/PlatformPeg";
 import { persistAccessTokenInStorage, persistRefreshTokenInStorage } from "../../src/utils/tokens/tokens";
 import { encryptPickleKey } from "../../src/utils/tokens/pickling";
 import * as StorageManager from "../../src/utils/StorageManager.ts";
+import type BasePlatform from "../../src/BasePlatform.ts";
 
 const { logout, restoreSessionFromStorage, setLoggedIn } = Lifecycle;
 
@@ -37,13 +38,15 @@ const webCrypto = new Crypto();
 const windowCrypto = window.crypto;
 
 describe("Lifecycle", () => {
-    const mockPlatform = mockPlatformPeg();
+    let mockPlatform: MockedObject<BasePlatform>;
 
     const realLocalStorage = global.localStorage;
 
     let mockClient!: MockedObject<MatrixJs.MatrixClient>;
 
     beforeEach(() => {
+        jest.restoreAllMocks();
+        mockPlatform = mockPlatformPeg();
         mockClient = getMockClientWithEventEmitter({
             ...mockClientMethodsUser(),
             stopClient: jest.fn(),
