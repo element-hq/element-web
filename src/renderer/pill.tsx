@@ -25,31 +25,34 @@ const AT_ROOM_REGEX = PushProcessor.getPushRuleGlobRegex("@room", true, "gmi");
  *
  * It should be pillified if the permalink parser returns a result and one of the following conditions match:
  * - Text content equals href. This is the case when sending a plain permalink inside a message.
+ * - The link is not from linkify (isHtml=true).
  *   Composer completions already create an A tag.
  */
-const shouldBePillified = (node: Element, href: string, parts: PermalinkParts | null): boolean => {
+const shouldBePillified = (node: Element, href: string, parts: PermalinkParts | null, isHtml: boolean): boolean => {
     // permalink parser didn't return any parts
     if (!parts) return false;
 
     const text = textContent(node);
 
-    if (href === text) return true;
-
     // event permalink with custom label
-    if (parts.eventId) return false;
+    if (parts.eventId && href !== text) return false;
 
-    return href.endsWith("/" + text);
+    return href === text || isHtml;
 };
 
 const isPreCode = (domNode: ParentNode | null): boolean =>
     (domNode as Element)?.tagName === "PRE" || (domNode as Element)?.tagName === "CODE";
 
 export const mentionPillRenderer: RendererMap = {
-    a: (anchor, { room, shouldShowPillAvatar }) => {
+    a: (anchor, { room, shouldShowPillAvatar, isHtml }) => {
         if (!room) return;
 
         const href = anchor.attribs["href"];
-        if (href && !hasParentMatching(anchor, isPreCode) && shouldBePillified(anchor, href, parsePermalink(href))) {
+        if (
+            href &&
+            !hasParentMatching(anchor, isPreCode) &&
+            shouldBePillified(anchor, href, parsePermalink(href), isHtml)
+        ) {
             return <Pill url={href} inMessage={true} room={room} shouldShowPillAvatar={shouldShowPillAvatar} />;
         }
     },

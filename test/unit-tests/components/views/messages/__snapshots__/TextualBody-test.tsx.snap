@@ -169,40 +169,38 @@ exports[`<TextualBody /> renders formatted m.text correctly pills appear for roo
       dir="auto"
     >
       A 
-      <span>
-        <bdi>
-          <a
-            class="mx_Pill mx_RoomPill"
-            href="https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com?via=example.com&via=bob.com"
+      <bdi>
+        <a
+          class="mx_Pill mx_RoomPill"
+          href="https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com?via=example.com&via=bob.com"
+        >
+          <span
+            aria-hidden="true"
+            aria-label="Avatar"
+            class="_avatar_1qbcf_8 mx_BaseAvatar"
+            data-color="1"
+            data-testid="avatar-img"
+            data-type="round"
+            style="--cpd-avatar-size: 16px;"
           >
-            <span
-              aria-hidden="true"
-              aria-label="Avatar"
-              class="_avatar_1qbcf_8 mx_BaseAvatar"
-              data-color="1"
-              data-testid="avatar-img"
+            <img
+              alt=""
+              class="_image_1qbcf_41"
               data-type="round"
-              style="--cpd-avatar-size: 16px;"
-            >
-              <img
-                alt=""
-                class="_image_1qbcf_41"
-                data-type="round"
-                height="16px"
-                loading="lazy"
-                referrerpolicy="no-referrer"
-                src="mxc://avatar.url/room.png"
-                width="16px"
-              />
-            </span>
-            <span
-              class="mx_Pill_text"
-            >
-              room name
-            </span>
-          </a>
-        </bdi>
-      </span>
+              height="16px"
+              loading="lazy"
+              referrerpolicy="no-referrer"
+              src="mxc://avatar.url/room.png"
+              width="16px"
+            />
+          </span>
+          <span
+            class="mx_Pill_text"
+          >
+            room name
+          </span>
+        </a>
+      </bdi>
        with vias
     </div>
   </div>
@@ -283,40 +281,38 @@ exports[`<TextualBody /> renders formatted m.text correctly pills get injected c
   dir="auto"
 >
   Hey 
-  <span>
-    <bdi>
-      <a
-        class="mx_Pill mx_UserPill"
-        href="https://matrix.to/#/@user:server"
+  <bdi>
+    <a
+      class="mx_Pill mx_UserPill"
+      href="https://matrix.to/#/@user:server"
+    >
+      <span
+        aria-hidden="true"
+        aria-label="Profile picture"
+        class="_avatar_1qbcf_8 mx_BaseAvatar"
+        data-color="2"
+        data-testid="avatar-img"
+        data-type="round"
+        style="--cpd-avatar-size: 16px;"
       >
-        <span
-          aria-hidden="true"
-          aria-label="Profile picture"
-          class="_avatar_1qbcf_8 mx_BaseAvatar"
-          data-color="2"
-          data-testid="avatar-img"
+        <img
+          alt=""
+          class="_image_1qbcf_41"
           data-type="round"
-          style="--cpd-avatar-size: 16px;"
-        >
-          <img
-            alt=""
-            class="_image_1qbcf_41"
-            data-type="round"
-            height="16px"
-            loading="lazy"
-            referrerpolicy="no-referrer"
-            src="mxc://avatar.url/image.png"
-            width="16px"
-          />
-        </span>
-        <span
-          class="mx_Pill_text"
-        >
-          Member
-        </span>
-      </a>
-    </bdi>
-  </span>
+          height="16px"
+          loading="lazy"
+          referrerpolicy="no-referrer"
+          src="mxc://avatar.url/image.png"
+          width="16px"
+        />
+      </span>
+      <span
+        class="mx_Pill_text"
+      >
+        Member
+      </span>
+    </a>
+  </bdi>
 </div>
 `;
 
