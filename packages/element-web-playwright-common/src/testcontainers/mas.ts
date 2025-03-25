@@ -277,7 +277,7 @@ export class StartedMatrixAuthenticationServiceContainer extends AbstractStarted
         return this.adminTokenPromise;
     }
 
-    private async manage(cmd: string, ...args: string[]): Promise<ExecResult> {
+    public async manage(cmd: string, ...args: string[]): Promise<ExecResult> {
         const result = await this.exec(["mas-cli", "manage", cmd, ...this.args, ...args]);
         if (result.exitCode !== 0) {
             throw new Error(`Failed mas-cli manage ${cmd}: ${result.output}`);
