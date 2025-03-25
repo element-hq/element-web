@@ -8,8 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { RuleId } from "matrix-js-sdk/src/matrix";
-import { type Element as ParserElement } from "html-react-parser";
-import { type ParentNode } from "domhandler/lib/node";
+import { type Element } from "html-react-parser";
 import { textContent } from "domutils";
 import reactStringReplace from "react-string-replace";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
@@ -17,7 +16,7 @@ import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 import { Pill, PillType } from "../components/views/elements/Pill";
 import { parsePermalink } from "../utils/permalinks/Permalinks";
 import { type PermalinkParts } from "../utils/permalinks/PermalinkConstructor";
-import { hasParentMatching, type RendererMap } from "./utils.tsx";
+import { hasParentMatching, type RendererMap, type ParentNode } from "./utils.tsx";
 
 const AT_ROOM_REGEX = PushProcessor.getPushRuleGlobRegex("@room", true, "gmi");
 
@@ -28,7 +27,7 @@ const AT_ROOM_REGEX = PushProcessor.getPushRuleGlobRegex("@room", true, "gmi");
  * - Text content equals href. This is the case when sending a plain permalink inside a message.
  *   Composer completions already create an A tag.
  */
-const shouldBePillified = (node: ParserElement, href: string, parts: PermalinkParts | null): boolean => {
+const shouldBePillified = (node: Element, href: string, parts: PermalinkParts | null): boolean => {
     // permalink parser didn't return any parts
     if (!parts) return false;
 
@@ -43,7 +42,7 @@ const shouldBePillified = (node: ParserElement, href: string, parts: PermalinkPa
 };
 
 const isPreCode = (domNode: ParentNode | null): boolean =>
-    (domNode as ParserElement)?.tagName === "PRE" || (domNode as ParserElement)?.tagName === "CODE";
+    (domNode as Element)?.tagName === "PRE" || (domNode as Element)?.tagName === "CODE";
 
 export const mentionPillRenderer: RendererMap = {
     a: (anchor, { room, shouldShowPillAvatar }) => {

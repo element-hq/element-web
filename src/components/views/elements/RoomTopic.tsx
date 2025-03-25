@@ -20,7 +20,8 @@ import InfoDialog from "../dialogs/InfoDialog";
 import { useDispatcher } from "../../../hooks/useDispatcher";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AccessibleButton from "./AccessibleButton";
-import { Linkify, topicToHtml } from "../../../HtmlUtils";
+import { topicToHtml } from "../../../HtmlUtils";
+import { Linkify } from "../../../Linkify";
 import { tryTransformPermalinkToLocalHref } from "../../../utils/permalinks/Permalinks";
 
 interface IProps extends React.HTMLProps<HTMLDivElement> {

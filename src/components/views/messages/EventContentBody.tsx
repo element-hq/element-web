@@ -10,7 +10,8 @@ import { type IContent, type MatrixEvent, MsgType, PushRuleKind, type Room } fro
 import parse from "html-react-parser";
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 
-import { Linkify, bodyToNode } from "../../../HtmlUtils.tsx";
+import { bodyToNode } from "../../../HtmlUtils.tsx";
+import { Linkify } from "../../../Linkify.tsx";
 import PlatformPeg from "../../../PlatformPeg.ts";
 import {
     applyReplacerOnString,
@@ -22,6 +23,7 @@ import {
     ambiguousLinkTooltipRenderer,
     codeBlockRenderer,
     spoilerRenderer,
+    replacerToRenderFunction,
 } from "../../../renderer";
 import MatrixClientContext from "../../../contexts/MatrixClientContext.tsx";
 import { useSettingValue } from "../../../hooks/useSettings.ts";
@@ -110,6 +112,12 @@ const EventContentBody = memo(
             const enableBigEmoji = useSettingValue("TextualBody.enableBigEmoji");
 
             const replacer = useReplacer(content, mxEvent, room, onHeightChanged, options);
+            const linkifyOptions = useMemo(
+                () => ({
+                    render: replacerToRenderFunction(replacer),
+                }),
+                [replacer],
+            );
 
             const isEmote = content.msgtype === MsgType.Emote;
 
@@ -139,7 +147,7 @@ const EventContentBody = memo(
 
             if (!linkify) return body;
 
-            return <Linkify replacer={replacer}>{body}</Linkify>;
+            return <Linkify options={linkifyOptions}>{body}</Linkify>;
         },
     ),
 );
