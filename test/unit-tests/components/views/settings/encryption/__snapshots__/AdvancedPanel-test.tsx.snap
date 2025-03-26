@@ -245,7 +245,7 @@ exports[`<AdvancedPanel /> <OtherSettings /> should display the blacklist of unv
         class="_message_19upo_85 _help-message_19upo_91"
         id="radix-:r7:"
       >
-        By default in encrypted rooms, do not send encrypted messages to anyone until you’ve verified them
+        Warning: users who have not explicitly verified with you (e.g. using emoji) will not receive your encrypted messages. Also, unverified devices of verified users will not receive your encrypted messages.
       </span>
     </div>
   </div>
