@@ -10,7 +10,7 @@ import React, { type ComponentProps, createRef, type ReactNode } from "react";
 import { decode } from "html-entities";
 import { type MatrixEvent, type IPreviewUrlResponse } from "matrix-js-sdk/src/matrix";
 
-import { Linkify } from "../../../Linkify";
+import { Linkify } from "../../../HtmlUtils";
 import SettingsStore from "../../../settings/SettingsStore";
 import Modal from "../../../Modal";
 import * as ImageUtils from "../../../ImageUtils";
