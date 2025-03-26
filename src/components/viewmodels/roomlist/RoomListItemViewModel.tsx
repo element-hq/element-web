@@ -5,13 +5,16 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 
 import dispatcher from "../../../dispatcher/dispatcher";
 import type { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../../dispatcher/actions";
 import { hasAccessToOptionsMenu } from "./utils";
+import { _t } from "../../../languageHandler";
+import { type RoomNotificationState } from "../../../stores/notifications/RoomNotificationState";
+import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 
 export interface RoomListItemViewState {
     /**
@@ -22,6 +25,14 @@ export interface RoomListItemViewState {
      * Open the room having given roomId.
      */
     openRoom: () => void;
+    /**
+     * The a11y label for the room list item.
+     */
+    a11yLabel: string;
+    /**
+     * The notification state of the room.
+     */
+    notificationState: RoomNotificationState;
 }
 
 /**
@@ -31,6 +42,8 @@ export interface RoomListItemViewState {
 export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
     // incoming: Check notification menu rights
     const showHoverMenu = hasAccessToOptionsMenu(room);
+    const notificationState = useMemo(() => RoomNotificationStateStore.instance.getRoomState(room), [room]);
+    const a11yLabel = getA11yLabel(room, notificationState);
 
     // Actions
 
@@ -43,7 +56,38 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
     }, [room]);
 
     return {
+        notificationState,
         showHoverMenu,
         openRoom,
+        a11yLabel,
     };
+}
+
+/**
+ * Get the a11y label for the room list item
+ * @param room
+ * @param notificationState
+ */
+function getA11yLabel(room: Room, notificationState: RoomNotificationState): string {
+    if (notificationState.isUnsetMessage) {
+        return _t("a11y|room_messsage_not_sent", {
+            roomName: room.name,
+        });
+    } else if (notificationState.invited) {
+        return _t("a11y|room_n_unread_invite", {
+            roomName: room.name,
+        });
+    } else if (notificationState.isMention) {
+        return _t("a11y|room_n_unread_messages_mentions", {
+            roomName: room.name,
+            count: notificationState.count,
+        });
+    } else if (notificationState.hasUnreadCount) {
+        return _t("a11y|room_n_unread_messages", {
+            roomName: room.name,
+            count: notificationState.count,
+        });
+    } else {
+        return _t("room_list|room|open_room", { roomName: room.name });
+    }
 }

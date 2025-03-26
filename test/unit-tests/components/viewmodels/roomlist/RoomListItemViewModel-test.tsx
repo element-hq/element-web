@@ -14,6 +14,8 @@ import { Action } from "../../../../../src/dispatcher/actions";
 import { useRoomListItemViewModel } from "../../../../../src/components/viewmodels/roomlist/RoomListItemViewModel";
 import { createTestClient, mkStubRoom } from "../../../../test-utils";
 import { hasAccessToOptionsMenu } from "../../../../../src/components/viewmodels/roomlist/utils";
+import { RoomNotificationState } from "../../../../../src/stores/notifications/RoomNotificationState";
+import { RoomNotificationStateStore } from "../../../../../src/stores/notifications/RoomNotificationStateStore";
 
 jest.mock("../../../../../src/components/viewmodels/roomlist/utils", () => ({
     hasAccessToOptionsMenu: jest.fn().mockReturnValue(false),
@@ -45,5 +47,50 @@ describe("RoomListItemViewModel", () => {
         mocked(hasAccessToOptionsMenu).mockReturnValue(true);
         const { result: vm } = renderHook(() => useRoomListItemViewModel(room));
         expect(vm.current.showHoverMenu).toBe(true);
+    });
+
+    describe("a11yLabel", () => {
+        let notificationState: RoomNotificationState;
+        beforeEach(() => {
+            notificationState = new RoomNotificationState(room, false);
+            jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockReturnValue(notificationState);
+        });
+
+        it.each([
+            {
+                label: "unset message",
+                mock: () => jest.spyOn(notificationState, "isUnsetMessage", "get").mockReturnValue(true),
+                expected: "Open room roomName with an unset message.",
+            },
+            {
+                label: "invitation",
+                mock: () => jest.spyOn(notificationState, "invited", "get").mockReturnValue(true),
+                expected: "Open room roomName invitation.",
+            },
+            {
+                label: "mention",
+                mock: () => {
+                    jest.spyOn(notificationState, "isMention", "get").mockReturnValue(true);
+                    jest.spyOn(notificationState, "count", "get").mockReturnValue(3);
+                },
+                expected: "Open room roomName with 3 unread messages including mentions.",
+            },
+            {
+                label: "unread",
+                mock: () => {
+                    jest.spyOn(notificationState, "hasUnreadCount", "get").mockReturnValue(true);
+                    jest.spyOn(notificationState, "count", "get").mockReturnValue(3);
+                },
+                expected: "Open room roomName with 3 unread messages.",
+            },
+            {
+                label: "default",
+                expected: "Open room roomName",
+            },
+        ])("should return the $label label", ({ mock, expected }) => {
+            mock?.();
+            const { result: vm } = renderHook(() => useRoomListItemViewModel(room));
+            expect(vm.current.a11yLabel).toBe(expected);
+        });
     });
 });

@@ -565,7 +565,7 @@
         "setup_secure_messages": "Sett opp sikre meldinger",
         "show_more": "Vis mer",
         "someone": "Noen",
-        "space": "",
+        "space": "Område",
         "spaces": "Områder",
         "sticker": "Klistremerke",
         "stickerpack": "Klistremerkepakke",
@@ -2111,9 +2111,9 @@
             "no_favourites": "Du har ikke favorittchat ennå",
             "no_favourites_description": "Du kan legge til en chat til dine favoritter i chat-innstillingene",
             "no_people": "Du har ikke direkte chatter med noen ennå",
-            "no_people_description": "Du kan fjerne merket for filtre for å se de andre chattene dine",
+            "no_people_description": "Du kan velge bort filtre for å se de andre chattene dine",
             "no_rooms": "Du er ikke med i noen rom ennå",
-            "no_rooms_description": "Du kan fjerne merket for filtre for å se de andre chattene dine",
+            "no_rooms_description": "Du kan velge bort filtre for å se de andre chattene dine",
             "no_unread": "Gratulerer! Du har ingen uleste meldinger",
             "show_chats": "Vis alle chatter"
         },
@@ -2394,7 +2394,7 @@
             "public_without_alias_warning": "For å lenke til dette rommet, vennligst legg til en adresse.",
             "publish_room": "Gjør dette rommet synlig i katalogen for offentlige rom.",
             "publish_space": "Gjør dette området synlig i katalogen for offentlige rom.",
-            "strict_encryption": "Aldri send krypterte meldinger til uverifiserte økter i dette rommet fra denne økten",
+            "strict_encryption": "Send bare meldinger til bekreftede brukere.",
             "title": "Sikkerhet og personvern"
         },
         "title": "Rominnstillinger - %(roomName)s",
@@ -2532,7 +2532,7 @@
                 "export_keys": "Eksporter nøkler",
                 "import_keys": "Importer nøkler",
                 "other_people_device_description": "I krypterte rom, må du ikke sende krypterte meldinger til noen før du har verifisert dem",
-                "other_people_device_label": "Send aldri krypterte meldinger til ubekreftede enheter",
+                "other_people_device_label": "I krypterte rom, send kun meldinger til verifiserte brukere",
                 "other_people_device_title": "Andre personers enheter",
                 "reset_identity": "Tilbakestill kryptografisk identitet",
                 "reset_in_progress": "Tilbakestilling pågår...",
@@ -2543,7 +2543,7 @@
             "delete_key_storage": {
                 "breadcrumb_page": "Slett nøkkellagring",
                 "confirm": "Slett nøkkellagring",
-                "description": "Hvis du sletter nøkkellagring, fjernes den kryptografiske identiteten og meldingsnøklene fra serveren og deaktivere følgende sikkerhetsfunksjoner:",
+                "description": "Sletting av nøkkellagring vil fjerne din kryptografiske identitet og meldingsnøkler fra serveren og deaktivere følgende sikkerhetsfunksjoner:",
                 "list_first": "Du vil ikke ha kryptert meldingshistorikk på nye enheter",
                 "list_second": "Du vil miste tilgangen til de krypterte meldingene dine hvis du logger av %(brand)s overalt",
                 "title": "Er du sikker på at du vil slå av nøkkellagring og slette den?"
@@ -2554,7 +2554,7 @@
             "dialog_title": "<strong>Innstillinger:</strong> Kryptering",
             "key_storage": {
                 "allow_key_storage": "Tillat lagring av nøkler",
-                "description": "Lagre din kryptografiske identitet og meldingsnøkler sikkert på serveren. Dette lar deg se meldingsloggen din på alle nye enheter. <a>Lær mer </a>",
+                "description": "Lagre din kryptografiske identitet og meldingsnøkler sikkert på serveren. Dette gjør at du kan se meldingshistorikken din på alle nye enheter. <a>Lær mer om dette</a>",
                 "title": "Nøkkellager"
             },
             "recovery": {
@@ -2894,7 +2894,7 @@
             "send_analytics": "Send analytiske data",
             "session_id": "Økt-ID:",
             "session_key": "Øktnøkkel:",
-            "strict_encryption": "Aldri send krypterte meldinger til uverifiserte økter fra denne økten"
+            "strict_encryption": "Send bare meldinger til verifiserte brukere"
         },
         "send_read_receipts": "Send lesebekreftelser",
         "send_read_receipts_unsupported": "Serveren din støtter ikke deaktivering av sending av lesebekreftelser.",
@@ -3155,6 +3155,7 @@
         "view": "Viser rom med oppgitt adresse",
         "whois": "Viser informasjon om en bruker"
     },
+    "sliding_sync_legacy_no_longer_supported": "Eldre sliding sync støttes ikke lenger: logg ut og inn igjen for å aktivere det nye sliding sync-flagget",
     "space": {
         "add_existing_room_space": {
             "create": "Vil du legge til et nytt rom i stedet?",
@@ -3574,7 +3575,8 @@
         },
         "m.sticker": "%(senderDisplayName)s sendte et klistremerke.",
         "m.video": {
-            "error_decrypting": "Feil under dekryptering av video"
+            "error_decrypting": "Feil under dekryptering av video",
+            "show_video": "Vis video"
         },
         "m.widget": {
             "added": "%(widgetName)s-modulen ble lagt til av %(senderName)s",
@@ -3666,8 +3668,8 @@
                 "other": "%(severalUsers)sendret profilbildet deres %(count)s ganger"
             },
             "changed_name": {
-                "one": "%(oneUser)s endret navn",
-                "other": "%(oneUser)s endret navn %(count)s ganger"
+                "one": "%(oneUser)sendret navn",
+                "other": "%(oneUser)sendret navn %(count)s ganger"
             },
             "changed_name_multiple": {
                 "%(severalUsers)s endret navnene sine": "one"
@@ -3720,12 +3722,12 @@
                 "other": "ble fjernet %(count)s ganger"
             },
             "left": {
-                "one": "%(oneUser)s forlot",
-                "other": "%(oneUser)s forlot %(count)s ganger"
+                "one": "%(oneUser)sforlot",
+                "other": "%(oneUser)sforlot %(count)s ganger"
             },
             "left_multiple": {
-                "one": "%(severalUsers)s forlot",
-                "other": "%(severalUsers)s forlot %(count)s ganger"
+                "one": "%(severalUsers)forlot",
+                "other": "%(severalUsers)sforlot %(count)s ganger"
             },
             "no_change": {
                 "one": "%(oneUser)sgjorde ingen endringer",
