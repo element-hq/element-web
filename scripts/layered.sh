@@ -2,6 +2,8 @@
 
 set -ex
 
+DEFAULT_BRANCH=${1:-develop}
+
 # Creates a layered environment with the full repo for the app and SDKs cloned
 # and linked. This gives an element-web dev environment ready to build with
 # matching branches of react-sdk's dependencies so that changes can be tested
@@ -21,7 +23,7 @@ export PR_ORG=element-hq
 export PR_REPO=element-web
 
 # Set up the js-sdk first
-scripts/fetchdep.sh matrix-org matrix-js-sdk develop
+scripts/fetchdep.sh matrix-org matrix-js-sdk $DEFAULT_BRANCH
 pushd matrix-js-sdk
 [ -n "$JS_SDK_GITHUB_BASE_REF" ] && git fetch --depth 1 origin $JS_SDK_GITHUB_BASE_REF && git checkout $JS_SDK_GITHUB_BASE_REF
 yarn link
