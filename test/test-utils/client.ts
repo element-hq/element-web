@@ -106,8 +106,8 @@ export const mockClientMethodsUser = (userId = "@alice:domain") => ({
  * Returns basic mocked client methods related to rendering events
  * ```
  * const mockClient = getMockClientWithEventEmitter({
- ...mockClientMethodsUser('@mytestuser:domain'),
- });
+        ...mockClientMethodsUser('@mytestuser:domain'),
+    });
  * ```
  */
 export const mockClientMethodsEvents = () => ({
