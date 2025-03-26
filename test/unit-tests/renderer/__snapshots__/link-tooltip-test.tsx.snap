@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`link-tooltip does nothing for empty element 1`] = `
+<DocumentFragment>
+  <div />
+</DocumentFragment>
+`;
+
+exports[`link-tooltip wraps single anchor 1`] = `
+<DocumentFragment>
+  
+            
+  <div>
+    
+                
+    <span
+      aria-labelledby=":r0:"
+      tabindex="0"
+    >
+      <a
+        href="/foo"
+      >
+        click
+      </a>
+    </span>
+    
+            
+  </div>
+  
+        
+</DocumentFragment>
+`;
