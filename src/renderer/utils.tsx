@@ -103,6 +103,10 @@ type SpecialisedReplacer<T extends DOMNode> = (
     index: number,
 ) => JSX.Element | string | void;
 
+/**
+ * A map of replacer functions for different types of nodes/tags.
+ * When a function returns a JSX element, the element will be rendered in place of the node.
+ */
 export type RendererMap = Partial<
     {
         [tagName in keyof HTMLElementTagNameMap]: SpecialisedReplacer<Element>;
@@ -113,19 +117,23 @@ export type RendererMap = Partial<
 
 type PreparedRenderer = (parameters: Parameters) => Replacer;
 
+/**
+ * Combines multiple renderers into a single Replacer function
+ * @param renderers - the list of renderers to combine
+ */
 export const combineRenderers =
-    (...replacers: RendererMap[]): PreparedRenderer =>
+    (...renderers: RendererMap[]): PreparedRenderer =>
     (parameters) =>
     (node, index) => {
         if (node.type === "text") {
-            for (const replacer of replacers) {
+            for (const replacer of renderers) {
                 const result = replacer[Node.TEXT_NODE]?.(node, parameters, index);
                 if (result) return result;
             }
         }
         if (node instanceof Element) {
             const tagName = node.tagName.toLowerCase() as keyof HTMLElementTagNameMap;
-            for (const replacer of replacers) {
+            for (const replacer of renderers) {
                 const result = replacer[tagName]?.(node, parameters, index);
                 if (result) return result;
             }

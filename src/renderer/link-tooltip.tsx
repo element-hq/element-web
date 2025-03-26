@@ -12,6 +12,9 @@ import { domToReact } from "html-react-parser";
 import LinkWithTooltip from "../components/views/elements/LinkWithTooltip";
 import { getSingleTextContentNode, type RendererMap } from "./utils.tsx";
 
+/**
+ * Wraps ambiguous links in a tooltip trigger that shows the full URL.
+ */
 export const ambiguousLinkTooltipRenderer: RendererMap = {
     a: (anchor, { isHtml }) => {
         // Ambiguous URLs are only possible in HTML content

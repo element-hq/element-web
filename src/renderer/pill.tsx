@@ -43,6 +43,9 @@ const shouldBePillified = (node: Element, href: string, parts: PermalinkParts | 
 const isPreCode = (domNode: ParentNode | null): boolean =>
     (domNode as Element)?.tagName === "PRE" || (domNode as Element)?.tagName === "CODE";
 
+/**
+ * Marks the text that activated a push-notification mention pattern.
+ */
 export const mentionPillRenderer: RendererMap = {
     a: (anchor, { room, shouldShowPillAvatar, isHtml }) => {
         if (!room) return;

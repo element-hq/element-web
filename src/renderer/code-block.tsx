@@ -10,6 +10,9 @@ import React from "react";
 import { type RendererMap } from "./utils.tsx";
 import CodeBlock from "../components/views/messages/CodeBlock.tsx";
 
+/**
+ * Replaces `pre` elements with a CodeBlock component
+ */
 export const codeBlockRenderer: RendererMap = {
     pre: (pre, { onHeightChanged }) => {
         return <CodeBlock onHeightChanged={onHeightChanged} preNode={pre} />;

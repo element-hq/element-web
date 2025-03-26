@@ -11,6 +11,9 @@ import { domToReact, type DOMNode } from "html-react-parser";
 import { type RendererMap } from "./utils.tsx";
 import Spoiler from "../components/views/elements/Spoiler.tsx";
 
+/**
+ * Replaces spans with `data-mx-spoiler` with a Spoiler component.
+ */
 export const spoilerRenderer: RendererMap = {
     span: (span) => {
         const reason = span.attribs["data-mx-spoiler"];
