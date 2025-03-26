@@ -219,17 +219,6 @@ export function linkifyString(str: string, options = linkifyMatrixOptions): stri
 }
 
 /**
- * Linkifies the given DOM element. This is a wrapper around 'linkifyjs/element'.
- *
- * @param {object} element DOM element to linkify
- * @param {object} [options] Options for linkifyElement. Default: linkifyMatrixOptions
- * @returns {object}
- */
-export function linkifyElement(element: HTMLElement, options = linkifyMatrixOptions): HTMLElement {
-    return _linkifyElement(element, options);
-}
-
-/**
  * Linkify the given string and sanitize the HTML afterwards.
  *
  * @param {string} dirtyHtml The HTML string to sanitize and linkify
