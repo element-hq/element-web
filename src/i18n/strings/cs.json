@@ -104,6 +104,7 @@
         "reply": "Odpovědět",
         "reply_in_thread": "Odpovědět ve vlákně",
         "report_content": "Nahlásit obsah",
+        "report_room": "Nahlásit místnost",
         "resend": "Poslat znovu",
         "reset": "Resetovat",
         "resume": "Pokračovat",
@@ -953,8 +954,8 @@
             "warning": "Pokud jste nenastavili nový způsob obnovy vy, mohou se pokoušet k vašemu účtu dostat útočníci. Změňte si raději ihned heslo a nastavte nový způsob obnovy v Nastavení."
         },
         "not_supported": "<nepodporováno>",
-        "pinned_identity_changed": "Identita %(displayName)s (<b>%(userId)s</b>) byla změněna. <a>Další informace</a>",
-        "pinned_identity_changed_no_displayname": "Identita <b>%(userId)s</b> byla změněna. <a>Další informace</a>",
+        "pinned_identity_changed": "Identita %(displayName)s (<b>%(userId)s</b>) se změnila. <a>Další informace</a>",
+        "pinned_identity_changed_no_displayname": "Identita uživatele <b>%(userId)s</b> se změnila. <a>Další informace</a>",
         "recovery_method_removed": {
             "description_1": "Tato relace zjistila, že byla odstraněna vaše bezpečnostní fráze a klíč pro zabezpečené zprávy.",
             "description_2": "Pokud se vám to stalo neúmyslně, můžete znovu nastavit zálohu zpráv pro tuto relaci. To znovu zašifruje historii zpráv novým způsobem.",
@@ -1006,7 +1007,7 @@
             "incoming_sas_dialog_waiting": "Čekání na potvrzení partnerem…",
             "incoming_sas_user_dialog_text_1": "Po ověření bude uživatel označen jako důvěryhodný. Ověřování uživatelů vám dává větší jistotu, že je komunikace důvěrná.",
             "incoming_sas_user_dialog_text_2": "Ověření uživatele označí jeho relace za důvěryhodné a vaše relace budou důvěryhodné pro něj.",
-            "no_key_or_device": "Vypadá to, že nemáte klíč pro obnovení ani žádné jiné zařízení, které byste mohli ověřit.  Toto zařízení nebude mít přístup ke starým zašifrovaným zprávám. Abyste mohli na tomto zařízení ověřit svou totožnost, budete muset obnovit ověřovací klíče.",
+            "no_key_or_device": "Vypadá to, že nemáte klíč pro obnovení ani žádné jiné zařízení, které byste mohli ověřit.  Toto zařízení nebude mít přístup ke starým zašifrovaným zprávám. Abyste mohli na tomto zařízení ověřit svou identitu, budete muset obnovit ověřovací klíče.",
             "no_support_qr_emoji": "Zařízení, které se snažíte ověřit, neumožňuje ověření QR kódem ani pomocí emotikonů, které %(brand)s podporuje. Zkuste použít jiného klienta.",
             "other_party_cancelled": "Druhá strana ověření zrušila.",
             "prompt_encrypted": "Ověřit všechny uživatele v místnosti, abyste se přesvědčili o bezpečnosti.",
@@ -1045,7 +1046,7 @@
             "unverified_sessions_toast_description": "Zkontrolujte, zda je váš účet v bezpečí",
             "unverified_sessions_toast_reject": "Později",
             "unverified_sessions_toast_title": "Máte neověřené relace",
-            "verification_description": "Ověřte svou identitu, abyste získali přístup k šifrovaným zprávám a prokázali svou totožnost ostatním. Pokud používáte také mobilní zařízení, před pokračováním otevřete aplikaci.",
+            "verification_description": "Ověřte svou identitu, abyste získali přístup k šifrovaným zprávám a prokázali svou identitu ostatním. Pokud používáte také mobilní zařízení, před pokračováním otevřete aplikaci.",
             "verification_dialog_title_device": "Ověřit jiné zařízení",
             "verification_dialog_title_user": "Požadavek na ověření",
             "verification_skip_warning": "Bez ověření nebudete mít přístup ke všem svým zprávám a můžete se ostatním jevit jako nedůvěryhodní.",
@@ -1066,8 +1067,8 @@
             "waiting_other_user": "Čekám až nás %(displayName)s ověří…"
         },
         "verification_requested_toast_title": "Žádost ověření",
-        "verified_identity_changed": "Ověřená identita %(displayName)s (<b>%(userId)s</b>) byla změněna. <a>Další informace</a>",
-        "verified_identity_changed_no_displayname": "Ověřená identita uživatele <b>%(userId)s</b> byla změněna. <a>Další informace</a>",
+        "verified_identity_changed": "Ověřená identita uživatele %(displayName)s (<b>%(userId)s</b>) se změnila. <a>Další informace</a>",
+        "verified_identity_changed_no_displayname": "Ověřená identita uživatele <b>%(userId)s</b> se změnila. <a>Další informace</a>",
         "verify_toast_description": "Ostatní uživatelé této relaci nemusí věřit",
         "verify_toast_title": "Ověřit tuto relaci",
         "withdraw_verification_action": "Zrušit ověření"
@@ -1812,6 +1813,12 @@
         "spam_or_propaganda": "Spam nebo propaganda",
         "toxic_behaviour": "Nevhodné chování"
     },
+    "report_room": {
+        "description": "Nahlaste tuto místnost správci domovského serveru. Tím se odešle jedinečné ID místnosti, ale pokud jsou zprávy zašifrovány, správce je nebude moci číst ani zobrazit sdílené soubory.",
+        "reason_placeholder": " Důvod nahlášení...",
+        "sent": "Vaše hlášení bylo odesláno.",
+        "title": "Nahlášení místnosti"
+    },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Nepovedlo se rozšifrovat %(failedCount)s sezení!",
         "count_of_successfully_restored_keys": "Úspěšně obnoveno %(sessionCount)s klíčů",
@@ -2392,7 +2399,7 @@
             "public_without_alias_warning": "Přidejte prosím místnosti adresu aby na ní šlo odkazovat.",
             "publish_room": "Zviditelněte tuto místnost ve veřejném adresáři místností.",
             "publish_space": "Zviditelněte tento prostor ve veřejném adresáři místností.",
-            "strict_encryption": "Nikdy v této místnosti neposílat šifrované zprávy neověřeným relacím",
+            "strict_encryption": "Odesílat zprávy pouze ověřeným uživatelům.",
             "title": "Zabezpečení a soukromí"
         },
         "title": "Nastavení místnosti - %(roomName)s",
@@ -2529,8 +2536,8 @@
                 "do_not_close_warning": "Nezavírejte toto okno, dokud není resetování dokončeno",
                 "export_keys": "Exportovat klíče",
                 "import_keys": "Importovat klíče",
-                "other_people_device_description": "Ve výchozím nastavení v šifrovaných místnostech nikomu neposílat šifrované zprávy, dokud je neověříte",
-                "other_people_device_label": "Nikdy neposílejte šifrované zprávy na neověřená zařízení",
+                "other_people_device_description": "Upozornění: Uživatelé, kteří s vámi výslovně neověřili (např. pomocí emotikonů), nedostanou vaše šifrované zprávy. Také neověřená zařízení ověřených uživatelů nebudou přijímat vaše šifrované zprávy.",
+                "other_people_device_label": "V šifrovaných místnostech posílat zprávy pouze ověřeným uživatelům",
                 "other_people_device_title": "Zařízení ostatních uživatelů",
                 "reset_identity": "Obnovit kryptografickou identitu",
                 "reset_in_progress": "Probíhá resetování...",
@@ -2892,7 +2899,7 @@
             "send_analytics": "Odesílat analytická data",
             "session_id": "ID relace:",
             "session_key": "Klíč relace:",
-            "strict_encryption": "Nikdy neposílat šifrované zprávy do neověřených relací z této relace"
+            "strict_encryption": "Odesílat zprávy pouze ověřeným uživatelům"
         },
         "send_read_receipts": "Odesílat potvrzení o přečtení",
         "send_read_receipts_unsupported": "Váš server nepodporuje vypnutí odesílání potvrzení o přečtení.",
@@ -2913,8 +2920,9 @@
                 "other": "Odhlášení zařízení"
             },
             "confirm_sign_out_sso": {
-                "one": "Potvrďte odhlášení tohoto zařízení pomocí Jednotného přihlášení, abyste prokázali svou totožnost.",
-                "other": "Potvrďte odhlášení těchto zařízení pomocí Jednotného přihlášení, abyste prokázali svou totožnost."
+                "one": "Potvrďte odhlášení tohoto zařízení pomocí Jednotného přihlášení, abyste prokázali svou identitu.",
+                "few": "",
+                "other": "Potvrďte odhlášení těchto zařízení pomocí Jednotného přihlášení, abyste prokázali svou identitu."
             },
             "current_session": "Aktuální relace",
             "desktop_session": "Relace stolního počítače",
@@ -2991,7 +2999,7 @@
             "url": "URL",
             "verified_session": "Ověřená relace",
             "verified_sessions": "Ověřené relace",
-            "verified_sessions_explainer_1": "Ověřené relace jsou všude tam, kde tento účet používáte po zadání své přístupové fráze nebo po potvrzení své totožnosti jinou ověřenou relací.",
+            "verified_sessions_explainer_1": "Ověřené relace jsou všude tam, kde tento účet používáte po zadání své přístupové fráze nebo po potvrzení své identity jinou ověřenou relací.",
             "verified_sessions_explainer_2": "To znamená, že máte všechny klíče potřebné k odemknutí zašifrovaných zpráv a potvrzení ostatním uživatelům, že této relaci důvěřujete.",
             "verified_sessions_list_description": "Pro nejlepší zabezpečení se odhlaste z každé relace, kterou již nepoznáváte nebo nepoužíváte.",
             "verify_session": "Ověřit relaci",
@@ -3573,7 +3581,8 @@
         },
         "m.sticker": "%(senderDisplayName)s poslal(a) nálepku.",
         "m.video": {
-            "error_decrypting": "Chyba při dešifrování videa"
+            "error_decrypting": "Chyba při dešifrování videa",
+            "show_video": "Zobrazit video"
         },
         "m.widget": {
             "added": "%(senderName)s přidal(a) widget %(widgetName)s",

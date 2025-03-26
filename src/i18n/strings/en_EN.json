@@ -2394,7 +2394,7 @@
             "public_without_alias_warning": "To link to this room, please add an address.",
             "publish_room": "Make this room visible in the public room directory.",
             "publish_space": "Make this space visible in the public room directory.",
-            "strict_encryption": "Never send encrypted messages to unverified sessions in this room from this session",
+            "strict_encryption": "Only send messages to verified users.",
             "title": "Security & Privacy"
         },
         "title": "Room Settings - %(roomName)s",
@@ -2531,8 +2531,8 @@
                 "do_not_close_warning": "Do not close this window until the reset is finished",
                 "export_keys": "Export keys",
                 "import_keys": "Import keys",
-                "other_people_device_description": "By default in encrypted rooms, do not send encrypted messages to anyone until you’ve verified them",
-                "other_people_device_label": "Never send encrypted messages to unverified devices",
+                "other_people_device_description": "Warning: users who have not explicitly verified with you (e.g. using emoji) will not receive your encrypted messages. Also, unverified devices of verified users will not receive your encrypted messages.",
+                "other_people_device_label": "In encrypted rooms, only send messages to verified users",
                 "other_people_device_title": "Other people’s devices",
                 "reset_identity": "Reset cryptographic identity",
                 "reset_in_progress": "Reset in progress...",
@@ -2894,7 +2894,7 @@
             "send_analytics": "Send analytics data",
             "session_id": "Session ID:",
             "session_key": "Session key:",
-            "strict_encryption": "Never send encrypted messages to unverified sessions from this session"
+            "strict_encryption": "Only send messages to verified users"
         },
         "send_read_receipts": "Send read receipts",
         "send_read_receipts_unsupported": "Your server doesn't support disabling sending read receipts.",
