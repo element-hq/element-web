@@ -26,9 +26,9 @@ import { type IBodyProps } from "./IBodyProps";
 import RoomContext from "../../../contexts/RoomContext";
 import AccessibleButton from "../elements/AccessibleButton";
 import { options as linkifyOpts } from "../../../linkify-matrix";
+import { getParentEventId } from "../../../utils/Reply";
 import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
 import { type IEventTileOps } from "../rooms/EventTile";
-import { getParentEventId } from "../../../utils/Reply.ts";
 
 interface IState {
     // the URLs (if any) to be previewed with a LinkPreviewWidget inside this TextualBody.
