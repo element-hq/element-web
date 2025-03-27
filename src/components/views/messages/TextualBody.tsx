@@ -331,7 +331,6 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                 stripReply={stripReply}
                 linkify
                 highlights={this.props.highlights}
-                onHeightChanged={this.props.onHeightChanged}
                 ref={this.contentRef}
                 renderKeywordPills
                 renderMentionPills
@@ -377,7 +376,6 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                     links={this.state.links}
                     mxEvent={this.props.mxEvent}
                     onCancelClick={this.onCancelClick}
-                    onHeightChanged={this.props.onHeightChanged}
                 />
             );
         }

@@ -198,12 +198,6 @@ export const RoomSearchView = forwardRef<ScrollPanel, Props>(
             }
         }
 
-        // once dynamic content in the search results load, make the scrollPanel check
-        // the scroll offsets.
-        const onHeightChanged = (): void => {
-            innerRef.current?.checkScroll();
-        };
-
         const onRef = (e: ScrollPanel | null): void => {
             if (typeof ref === "function") {
                 ref(e);
@@ -302,7 +296,6 @@ export const RoomSearchView = forwardRef<ScrollPanel, Props>(
                     searchHighlights={highlights ?? []}
                     resultLink={resultLink}
                     permalinkCreator={permalinkCreator}
-                    onHeightChanged={onHeightChanged}
                 />,
             );
 

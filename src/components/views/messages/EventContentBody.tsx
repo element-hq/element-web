@@ -69,12 +69,7 @@ interface ReplacerOptions {
 }
 
 // Returns a memoized Replacer based on the input parameters
-const useReplacer = (
-    content: IContent,
-    mxEvent: MatrixEvent | undefined,
-    onHeightChanged: (() => void) | undefined,
-    options: ReplacerOptions,
-): Replacer => {
+const useReplacer = (content: IContent, mxEvent: MatrixEvent | undefined, options: ReplacerOptions): Replacer => {
     const cli = useContext(MatrixClientContext);
     const room = cli.getRoom(mxEvent?.getRoomId()) ?? undefined;
 
@@ -98,7 +93,6 @@ const useReplacer = (
             room,
             shouldShowPillAvatar,
             keywordRegexpPattern,
-            onHeightChanged,
         });
     }, [
         mxEvent,
@@ -110,7 +104,6 @@ const useReplacer = (
         isHtml,
         room,
         shouldShowPillAvatar,
-        onHeightChanged,
     ]);
 
     return replacer;
@@ -142,10 +135,6 @@ interface Props extends ReplacerOptions {
      */
     highlights?: string[];
     /**
-     * Callback for when the height of the content changes
-     */
-    onHeightChanged?: () => void;
-    /**
      * Whether to include the `dir="auto"` attribute on the rendered element
      */
     includeDir?: boolean;
@@ -159,13 +148,10 @@ interface Props extends ReplacerOptions {
  */
 const EventContentBody = memo(
     forwardRef<HTMLElement, Props>(
-        (
-            { as, mxEvent, stripReply, content, onHeightChanged, linkify, highlights, includeDir = true, ...options },
-            ref,
-        ) => {
+        ({ as, mxEvent, stripReply, content, linkify, highlights, includeDir = true, ...options }, ref) => {
             const enableBigEmoji = useSettingValue("TextualBody.enableBigEmoji");
 
-            const replacer = useReplacer(content, mxEvent, onHeightChanged, options);
+            const replacer = useReplacer(content, mxEvent, options);
             const linkifyOptions = useMemo(
                 () => ({
                     render: replacerToRenderFunction(replacer),

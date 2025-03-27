@@ -36,8 +36,6 @@ const SHOW_EXPAND_QUOTE_PIXELS = 60;
 interface IProps {
     // the latest event in this chain of replies
     parentEv: MatrixEvent;
-    // called when the ReplyChain contents has changed, including EventTiles thereof
-    onHeightChanged?: () => void;
     permalinkCreator?: RoomPermalinkCreator;
     // Specifies which layout to use.
     layout?: Layout;
@@ -95,7 +93,6 @@ export default class ReplyChain extends React.Component<IProps, IState> {
     }
 
     public componentDidUpdate(): void {
-        this.props.onHeightChanged?.();
         this.trySetExpandableQuotes();
     }
 
@@ -266,7 +263,6 @@ export default class ReplyChain extends React.Component<IProps, IState> {
                 <blockquote ref={this.blockquoteRef} className={classname} key={ev.getId()}>
                     <ReplyTile
                         mxEvent={ev}
-                        onHeightChanged={this.props.onHeightChanged}
                         permalinkCreator={this.props.permalinkCreator}
                         toggleExpandedQuote={() => this.props.setQuoteExpanded(!this.props.isQuoteExpanded)}
                         getRelationsForEvent={this.props.getRelationsForEvent}

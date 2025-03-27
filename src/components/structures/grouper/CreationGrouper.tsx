@@ -134,7 +134,7 @@ export class CreationGrouper extends BaseGrouper {
             <GenericEventListSummary
                 key="roomcreationsummary"
                 events={this.events.map((e) => e.event)}
-                onToggle={panel.onHeightChanged} // Update scroll state
+                onToggle={panel.onHeightChanged} // Update scroll state TODO is this needed anymore?
                 summaryMembers={ev.sender ? [ev.sender] : undefined}
                 summaryText={summaryText}
                 layout={this.panel.props.layout}

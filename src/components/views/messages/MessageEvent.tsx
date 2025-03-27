@@ -302,7 +302,6 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
             maxImageHeight: this.props.maxImageHeight,
             replacingEventId: this.props.replacingEventId,
             editState: this.props.editState,
-            onHeightChanged: this.props.onHeightChanged,
             onMessageAllowed: this.onTileUpdate,
             permalinkCreator: this.props.permalinkCreator,
             mediaEventHelper: this.mediaHelper,
