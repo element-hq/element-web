@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { isEqual } from "lodash";
-import React, { type ComponentProps, type PropsWithChildren, type Reducer, useReducer } from "react";
+import React, { type JSX, type ComponentProps, type PropsWithChildren, type Reducer, useReducer } from "react";
 
 import { AuthHeaderContext } from "./AuthHeaderContext";
 import { type AuthHeaderModifier } from "./AuthHeaderModifier";

@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
+import React, { type JSX } from "react";
 import classNames from "classnames";
 import { type MatrixEvent, type Room, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
@@ -71,8 +71,8 @@ export default class ReplyChain extends React.Component<IProps, IState> {
     private room: Room;
     private blockquoteRef = React.createRef<HTMLQuoteElement>();
 
-    public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         this.state = {
             events: [],

@@ -33,6 +33,7 @@ import { MentionsFilter } from "./skip-list/filters/MentionsFilter";
 import { LowPriorityFilter } from "./skip-list/filters/LowPriorityFilter";
 import { type Sorter, SortingAlgorithm } from "./skip-list/sorters";
 import { SettingLevel } from "../../settings/SettingLevel";
+import { MARKED_UNREAD_TYPE_STABLE, MARKED_UNREAD_TYPE_UNSTABLE } from "../../utils/notifications";
 
 /**
  * These are the filters passed to the room skip list.
@@ -153,6 +154,15 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
             case "MatrixActions.Room.tags": {
                 const room = payload.room;
                 this.addRoomAndEmit(room);
+                break;
+            }
+
+            case "MatrixActions.Room.accountData": {
+                const eventType = payload.event_type;
+                if (eventType === MARKED_UNREAD_TYPE_STABLE || eventType === MARKED_UNREAD_TYPE_UNSTABLE) {
+                    const room = payload.room;
+                    this.addRoomAndEmit(room);
+                }
                 break;
             }
 

@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import * as React from "react";
+import React from "react";
 import { act, fireEvent, render, screen, waitFor } from "jest-matrix-react";
 import { mocked } from "jest-mock";
 import {
@@ -305,7 +305,7 @@ describe("EventTile", () => {
             [EventShieldReason.AUTHENTICITY_NOT_GUARANTEED, "can't be guaranteed"],
             [EventShieldReason.MISMATCHED_SENDER_KEY, "Encrypted by an unverified session"],
             [EventShieldReason.SENT_IN_CLEAR, "Not encrypted"],
-            [EventShieldReason.VERIFICATION_VIOLATION, "Sender's verified identity has changed"],
+            [EventShieldReason.VERIFICATION_VIOLATION, "Sender's verified identity was reset"],
         ])("shows the correct reason code for %i (%s)", async (reasonCode: EventShieldReason, expectedText: string) => {
             mxEvent = await mkEncryptedMatrixEvent({
                 plainContent: { msgtype: "m.text", body: "msg1" },

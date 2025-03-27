@@ -1,12 +1,12 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ChangeEvent, type SyntheticEvent, useContext, useEffect, useRef, useState } from "react";
+import React, { type JSX, type ChangeEvent, type SyntheticEvent, useContext, useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 import {
     MenuItem,
@@ -35,7 +35,8 @@ import PinIcon from "@vector-im/compound-design-tokens/assets/web/icons/pin";
 import LockIcon from "@vector-im/compound-design-tokens/assets/web/icons/lock-solid";
 import LockOffIcon from "@vector-im/compound-design-tokens/assets/web/icons/lock-off";
 import PublicIcon from "@vector-im/compound-design-tokens/assets/web/icons/public";
-import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
+import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
+import ErrorSolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 import { EventType, JoinRule, type Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 
@@ -77,6 +78,7 @@ import { isVideoRoom as calcIsVideoRoom } from "../../../utils/video-rooms";
 import { usePinnedEvents } from "../../../hooks/usePinnedEvents";
 import { ReleaseAnnouncement } from "../../structures/ReleaseAnnouncement.tsx";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext.tsx";
+import { ReportRoomDialog } from "../dialogs/ReportRoomDialog.tsx";
 
 interface IProps {
     room: Room;
@@ -231,6 +233,11 @@ const RoomSummaryCard: React.FC<IProps> = ({
             room_id: room.roomId,
         });
     };
+    const onReportRoomClick = (): void => {
+        Modal.createDialog(ReportRoomDialog, {
+            roomId: room.roomId,
+        });
+    };
 
     const isRoomEncrypted = useIsEncrypted(cli, room);
     const roomContext = useScopedRoomContext("e2eStatus", "timelineRenderingType");
@@ -320,7 +327,7 @@ const RoomSummaryCard: React.FC<IProps> = ({
 
                 {e2eStatus === E2EStatus.Warning && (
                     <Badge kind="red">
-                        <ErrorIcon width="1em" />
+                        <ErrorSolidIcon width="1em" />
                         {_t("common|not_trusted")}
                     </Badge>
                 )}
@@ -439,14 +446,21 @@ const RoomSummaryCard: React.FC<IProps> = ({
                 <MenuItem Icon={SettingsIcon} label={_t("common|settings")} onSelect={onRoomSettingsClick} />
 
                 <Separator />
-
-                <MenuItem
-                    className="mx_RoomSummaryCard_leave"
-                    Icon={LeaveIcon}
-                    kind="critical"
-                    label={_t("action|leave_room")}
-                    onSelect={onLeaveRoomClick}
-                />
+                <div className="mx_RoomSummaryCard_bottomOptions">
+                    <MenuItem
+                        className="mx_RoomSummaryCard_leave"
+                        Icon={LeaveIcon}
+                        kind="critical"
+                        label={_t("action|leave_room")}
+                        onSelect={onLeaveRoomClick}
+                    />
+                    <MenuItem
+                        Icon={ErrorIcon}
+                        kind="critical"
+                        label={_t("action|report_room")}
+                        onSelect={onReportRoomClick}
+                    />
+                </div>
             </div>
         </BaseCard>
     );

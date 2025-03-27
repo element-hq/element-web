@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ComponentProps, createRef, type ReactNode } from "react";
+import React, { type JSX, type ComponentProps, createRef, type ReactNode } from "react";
 import { Blurhash } from "react-blurhash";
 import classNames from "classnames";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
@@ -33,6 +33,7 @@ import { presentableTextForFile } from "../../../utils/FileUtils";
 import { createReconnectedListener } from "../../../utils/connection";
 import MediaProcessingError from "./shared/MediaProcessingError";
 import { DecryptError, DownloadError } from "../../../utils/DecryptFile";
+import { HiddenMediaPlaceholder } from "./HiddenMediaPlaceholder";
 import { useMediaVisible } from "../../../hooks/useMediaVisible";
 
 enum Placeholder {
@@ -95,7 +96,7 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
         if (ev.button === 0 && !ev.metaKey) {
             ev.preventDefault();
             if (!this.props.mediaVisible) {
-                this.props.setMediaVisible?.(true);
+                this.props.setMediaVisible(true);
                 return;
             }
 
@@ -437,7 +438,11 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
             if (!this.state.loadedImageDimensions) {
                 let imageElement: JSX.Element;
                 if (!this.props.mediaVisible) {
-                    imageElement = <HiddenImagePlaceholder />;
+                    imageElement = (
+                        <HiddenMediaPlaceholder onClick={this.onClick}>
+                            {_t("timeline|m.image|show_image")}
+                        </HiddenMediaPlaceholder>
+                    );
                 } else {
                     imageElement = (
                         <img
@@ -507,7 +512,13 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
         }
 
         if (!this.props.mediaVisible) {
-            img = <HiddenImagePlaceholder maxWidth={maxWidth} />;
+            img = (
+                <div style={{ width: maxWidth, height: maxHeight }}>
+                    <HiddenMediaPlaceholder onClick={this.onClick}>
+                        {_t("timeline|m.image|show_image")}
+                    </HiddenMediaPlaceholder>
+                </div>
+            );
             showPlaceholder = false; // because we're hiding the image, so don't show the placeholder.
         }
 
@@ -563,7 +574,7 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
                 </div>
 
                 {/* HACK: This div fills out space while the image loads, to prevent scroll jumps */}
-                {!this.props.forExport && !this.state.imgLoaded && (
+                {!this.props.forExport && !this.state.imgLoaded && !placeholder && (
                     <div style={{ height: maxHeight, width: maxWidth }} />
                 )}
             </div>
@@ -595,12 +606,6 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
                 >
                     {children}
                 </a>
-            );
-        } else if (!this.props.mediaVisible) {
-            return (
-                <div role="button" onClick={this.onClick}>
-                    {children}
-                </div>
             );
         }
         return children;
@@ -680,24 +685,7 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
     }
 }
 
-interface PlaceholderIProps {
-    maxWidth?: number;
-}
-
-export class HiddenImagePlaceholder extends React.PureComponent<PlaceholderIProps> {
-    public render(): React.ReactNode {
-        const maxWidth = this.props.maxWidth ? this.props.maxWidth + "px" : null;
-        return (
-            <div className="mx_HiddenImagePlaceholder" style={{ maxWidth: `min(100%, ${maxWidth}px)` }}>
-                <div className="mx_HiddenImagePlaceholder_button">
-                    <span className="mx_HiddenImagePlaceholder_eye" />
-                    <span>{_t("timeline|m.image|show_image")}</span>
-                </div>
-            </div>
-        );
-    }
-}
-
+// Wrap MImageBody component so we can use a hook here.
 const MImageBody: React.FC<IBodyProps> = (props) => {
     const [mediaVisible, setVisible] = useMediaVisible(props.mxEvent.getId()!);
     return <MImageBodyInner mediaVisible={mediaVisible} setMediaVisible={setVisible} {...props} />;

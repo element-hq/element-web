@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024,2025 New Vector Ltd.
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -35,17 +35,18 @@ function spaceCreateOptions(spaceName: string, roomIds: string[] = []): ICreateR
                     name: spaceName,
                 },
             },
-            ...roomIds.map(spaceChildInitialState),
+            ...roomIds.map((r) => spaceChildInitialState(r)),
         ],
     };
 }
 
-function spaceChildInitialState(roomId: string): ICreateRoomOpts["initial_state"]["0"] {
+function spaceChildInitialState(roomId: string, order?: string): ICreateRoomOpts["initial_state"]["0"] {
     return {
         type: "m.space.child",
         state_key: roomId,
         content: {
             via: [roomId.split(":")[1]],
+            order,
         },
     };
 }
@@ -121,9 +122,10 @@ test.describe("Spaces", () => {
         await page.getByRole("button", { name: "Skip for now" }).click();
 
         // Assert rooms exist in the room list
-        await expect(page.getByRole("treeitem", { name: "General", exact: true })).toBeVisible();
-        await expect(page.getByRole("treeitem", { name: "Random", exact: true })).toBeVisible();
-        await expect(page.getByRole("treeitem", { name: "Projects", exact: true })).toBeVisible();
+        const roomList = page.getByRole("tree", { name: "Rooms" });
+        await expect(roomList.getByRole("treeitem", { name: "General", exact: true })).toBeVisible();
+        await expect(roomList.getByRole("treeitem", { name: "Random", exact: true })).toBeVisible();
+        await expect(roomList.getByRole("treeitem", { name: "Projects", exact: true })).toBeVisible();
 
         // Assert rooms exist in the space explorer
         await expect(
@@ -155,7 +157,7 @@ test.describe("Spaces", () => {
 
         await page.getByRole("button", { name: "Just me" }).click();
 
-        await page.getByText("Sample Room").click({ force: true }); // force click as checkbox size is zero
+        await page.getByRole("checkbox", { name: "Sample Room" }).click();
 
         // Temporal implementation as multiple elements with the role "button" and name "Add" are found
         await page.locator(".mx_AddExistingToSpace_footer").getByRole("button", { name: "Add" }).click();
@@ -164,6 +166,50 @@ test.describe("Spaces", () => {
             page.locator(".mx_SpaceHierarchy_list").getByRole("treeitem", { name: "Sample Room" }),
         ).toBeVisible();
     });
+
+    test(
+        "should allow user to add an existing room to a space after creation",
+        { tag: "@screenshot" },
+        async ({ page, app, user }) => {
+            await app.client.createRoom({
+                name: "Sample Room",
+            });
+            await app.client.createRoom({
+                name: "A Room that will not be selected",
+            });
+
+            const menu = await openSpaceCreateMenu(page);
+            await menu.getByRole("button", { name: "Private" }).click();
+
+            await menu
+                .locator('.mx_SpaceBasicSettings_avatarContainer input[type="file"]')
+                .setInputFiles("playwright/sample-files/riot.png");
+            await expect(menu.getByRole("textbox", { name: "Address" })).not.toBeVisible();
+            await menu
+                .getByRole("textbox", { name: "Description" })
+                .fill("This is a personal space to mourn Riot.im...");
+            await menu.getByRole("textbox", { name: "Name" }).fill("This is my Riot");
+            await menu.getByRole("textbox", { name: "Name" }).press("Enter");
+
+            await page.getByRole("button", { name: "Just me" }).click();
+
+            await page.getByRole("button", { name: "Skip for now" }).click();
+
+            await page.getByRole("button", { name: "Add room" }).click();
+            await page.getByRole("menuitem", { name: "Add existing room" }).click();
+
+            await page.getByRole("checkbox", { name: "Sample Room" }).click();
+
+            await expect(page.getByRole("dialog", { name: "Avatar Add existing rooms" })).toMatchScreenshot(
+                "add-existing-rooms-dialog.png",
+            );
+
+            await page.getByRole("button", { name: "Add" }).click();
+            await expect(
+                page.locator(".mx_SpaceHierarchy_list").getByRole("treeitem", { name: "Sample Room" }),
+            ).toBeVisible();
+        },
+    );
 
     test("should allow user to invite another to a space", { tag: "@no-webkit" }, async ({ page, app, user, bot }) => {
         await app.client.createSpace({
@@ -290,5 +336,37 @@ test.describe("Spaces", () => {
 
         // Assert we get shown the new room intro, and thus not the soft crash screen
         await expect(page.locator(".mx_NewRoomIntro")).toBeVisible();
+    });
+
+    test("should render spaces view", { tag: "@screenshot" }, async ({ page, app, user, axe }) => {
+        axe.disableRules([
+            // Disable this check as it triggers on nested roving tab index elements which are in practice fine
+            "nested-interactive",
+            // XXX: We have some known contrast issues here
+            "color-contrast",
+        ]);
+
+        const childSpaceId1 = await app.client.createSpace({
+            name: "Child Space 1",
+            initial_state: [],
+        });
+        const childSpaceId2 = await app.client.createSpace({
+            name: "Child Space 2",
+            initial_state: [],
+        });
+        const childSpaceId3 = await app.client.createSpace({
+            name: "Child Space 3",
+            initial_state: [],
+        });
+        await app.client.createSpace({
+            name: "Root Space",
+            initial_state: [
+                spaceChildInitialState(childSpaceId1, "a"),
+                spaceChildInitialState(childSpaceId2, "b"),
+                spaceChildInitialState(childSpaceId3, "c"),
+            ],
+        });
+        await app.viewSpaceByName("Root Space");
+        await expect(page.locator(".mx_SpaceRoomView")).toMatchScreenshot("space-room-view.png");
     });
 });

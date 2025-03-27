@@ -12,20 +12,24 @@ import classNames from "classnames";
 import { useRoomListItemViewModel } from "../../../viewmodels/roomlist/RoomListItemViewModel";
 import DecoratedRoomAvatar from "../../avatars/DecoratedRoomAvatar";
 import { Flex } from "../../../utils/Flex";
-import { _t } from "../../../../languageHandler";
 import { RoomListItemMenuView } from "./RoomListItemMenuView";
+import { NotificationDecoration } from "../NotificationDecoration";
 
 interface RoomListItemViewPropsProps extends React.HTMLAttributes<HTMLButtonElement> {
     /**
      * The room to display
      */
     room: Room;
+    /**
+     * Whether the room is selected
+     */
+    isSelected: boolean;
 }
 
 /**
  * An item in the room list
  */
-export function RoomListItemView({ room, ...props }: RoomListItemViewPropsProps): JSX.Element {
+export function RoomListItemView({ room, isSelected, ...props }: RoomListItemViewPropsProps): JSX.Element {
     const vm = useRoomListItemViewModel(room);
 
     const [isHover, setIsHover] = useState(false);
@@ -38,9 +42,11 @@ export function RoomListItemView({ room, ...props }: RoomListItemViewPropsProps)
         <button
             className={classNames("mx_RoomListItemView", {
                 mx_RoomListItemView_menu_open: showHoverDecoration,
+                mx_RoomListItemView_selected: isSelected,
             })}
             type="button"
-            aria-label={_t("room_list|room|open_room", { roomName: room.name })}
+            aria-selected={isSelected}
+            aria-label={vm.a11yLabel}
             onClick={() => vm.openRoom()}
             onMouseOver={() => setIsHover(true)}
             onMouseOut={() => setIsHover(false)}
@@ -59,7 +65,7 @@ export function RoomListItemView({ room, ...props }: RoomListItemViewPropsProps)
                 >
                     {/* We truncate the room name when too long. Title here is to show the full name on hover */}
                     <span title={room.name}>{room.name}</span>
-                    {showHoverDecoration && (
+                    {showHoverDecoration ? (
                         <RoomListItemMenuView
                             room={room}
                             setMenuOpen={(isOpen) => {
@@ -68,6 +74,11 @@ export function RoomListItemView({ room, ...props }: RoomListItemViewPropsProps)
                                 else setTimeout(() => setIsMenuOpen(isOpen), 0);
                             }}
                         />
+                    ) : (
+                        <>
+                            {/* aria-hidden because we summarise the unread count/notification status in a11yLabel variable */}
+                            <NotificationDecoration notificationState={vm.notificationState} aria-hidden={true} />
+                        </>
                     )}
                 </Flex>
             </Flex>

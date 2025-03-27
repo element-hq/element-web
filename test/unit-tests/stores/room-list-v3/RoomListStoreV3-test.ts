@@ -26,6 +26,7 @@ import { RoomNotificationStateStore } from "../../../../src/stores/notifications
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { SortingAlgorithm } from "../../../../src/stores/room-list-v3/skip-list/sorters";
 import SettingsStore from "../../../../src/settings/SettingsStore";
+import * as utils from "../../../../src/utils/notifications";
 
 describe("RoomListStoreV3", () => {
     async function getRoomListStore() {
@@ -457,7 +458,7 @@ describe("RoomListStoreV3", () => {
                 // Let's say 8, 27 are unread
                 jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation((room) => {
                     const state = {
-                        isUnread: [rooms[8], rooms[27]].includes(room),
+                        hasUnreadCount: [rooms[8], rooms[27]].includes(room),
                     } as unknown as RoomNotificationState;
                     return state;
                 });
@@ -472,6 +473,36 @@ describe("RoomListStoreV3", () => {
                 for (const i of [8, 27]) {
                     expect(result).toContain(rooms[i]);
                 }
+            });
+
+            it("unread filter matches rooms that are marked as unread", async () => {
+                const { client, rooms } = getClientAndRooms();
+                // Let's choose 5 rooms to put in space
+                const { spaceRoom, roomIds } = createSpace(rooms, [6, 8, 13, 27, 75], client);
+
+                setupMocks(spaceRoom, roomIds);
+                const store = new RoomListStoreV3Class(dispatcher);
+                await store.start();
+
+                // Since there's no unread yet, we expect zero results
+                let result = store.getSortedRoomsInActiveSpace([FilterKey.UnreadFilter]);
+                expect(result).toHaveLength(0);
+
+                // Mock so that room at index 8 is marked as unread
+                jest.spyOn(utils, "getMarkedUnreadState").mockImplementation((room) => room.roomId === rooms[8].roomId);
+                dispatcher.dispatch(
+                    {
+                        action: "MatrixActions.Room.accountData",
+                        room: rooms[8],
+                        event_type: utils.MARKED_UNREAD_TYPE_STABLE,
+                    },
+                    true,
+                );
+
+                // Now we expect room at index 8 to show as unread
+                result = store.getSortedRoomsInActiveSpace([FilterKey.UnreadFilter]);
+                expect(result).toHaveLength(1);
+                expect(result).toContain(rooms[8]);
             });
 
             it("supports filtering by people and rooms", async () => {
@@ -588,7 +619,7 @@ describe("RoomListStoreV3", () => {
                 // Let's say 8, 27 are unread
                 jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation((room) => {
                     const state = {
-                        isUnread: [rooms[8], rooms[27]].includes(room),
+                        hasUnreadCount: [rooms[8], rooms[27]].includes(room),
                     } as unknown as RoomNotificationState;
                     return state;
                 });

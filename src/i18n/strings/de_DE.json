@@ -64,6 +64,7 @@
         "go": "Los",
         "go_back": "Zurück",
         "got_it": "Verstanden",
+        "hide": "Verstecken",
         "hide_advanced": "Erweiterte Einstellungen ausblenden",
         "hold": "Halten",
         "ignore": "Blockieren",
@@ -455,6 +456,7 @@
         "access_token": "Zugriffstoken",
         "accessibility": "Barrierefreiheit",
         "advanced": "Erweitert",
+        "all_chats": "Alle Chats",
         "analytics": "Analysedaten",
         "and_n_others": {
             "other": "und %(count)s weitere …",
@@ -950,8 +952,8 @@
             "warning": "Wenn du die neue Wiederherstellungsmethode nicht festgelegt hast, versucht ein Angreifer möglicherweise, auf dein Konto zuzugreifen. Ändere dein Kontopasswort und lege sofort eine neue Wiederherstellungsmethode in den Einstellungen fest."
         },
         "not_supported": "<nicht unterstützt>",
-        "pinned_identity_changed": "Die Identität von %(displayName)s (<b>%(userId)s)</b>) hat sich geändert. <a>Mehr erfahren</a>",
-        "pinned_identity_changed_no_displayname": "Die Identität von <b>%(userId)s</b> hat sich geändert. <a>Mehr erfahren</a>",
+        "pinned_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) Identität wurde zurückgesetzt. <a>Mehr erfahren </a>",
+        "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>Die Identität wurde zurückgesetzt. <a>Erfahre mehr </a>",
         "recovery_method_removed": {
             "description_1": "In dieser Sitzung wurde festgestellt, dass deine Sicherheitsphrase und dein Schlüssel für sichere Nachrichten entfernt wurden.",
             "description_2": "Wenn du dies versehentlich getan hast, kannst du in dieser Sitzung \"sichere Nachrichten\" einrichten, die den Nachrichtenverlauf dieser Sitzung mit einer neuen Wiederherstellungsmethode erneut verschlüsseln.",
@@ -1063,8 +1065,8 @@
             "waiting_other_user": "Warte darauf, dass %(displayName)s bestätigt…"
         },
         "verification_requested_toast_title": "Verifizierung angefragt",
-        "verified_identity_changed": "Die verifizierte Identität von %(displayName)s (<b>%(userId)s</b>) hat sich geändert. <a>Weitere Informationen</a>",
-        "verified_identity_changed_no_displayname": "Die Identität von <b>%(userId)</b> hat sich geändert. <a>Weitere Informationen</a>",
+        "verified_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) Identität wurde zurückgesetzt. <a>Erfahren Sie mehr </a>",
+        "verified_identity_changed_no_displayname": "<b>%(userId)s</b>Die Identität wurde zurückgesetzt. <a>Erfahren Sie mehr </a>",
         "verify_toast_description": "Andere Benutzer vertrauen ihr vielleicht nicht",
         "verify_toast_title": "Sitzung verifizieren",
         "withdraw_verification_action": "Verifizierung zurückziehen"
@@ -2094,6 +2096,19 @@
         "add_space_label": "Space hinzufügen",
         "breadcrumbs_empty": "Keine kürzlich besuchten Räume",
         "breadcrumbs_label": "Kürzlich besuchte Räume",
+        "empty": {
+            "no_chats": "Noch keine Chats",
+            "no_chats_description": "Beginnen Sie, indem Sie jemandem eine Nachricht senden oder einen Raum erstellen",
+            "no_chats_description_no_room_rights": "Beginnen Sie damit, jemandem eine Nachricht zu senden",
+            "no_favourites": "Sie haben noch keinen Lieblingschat",
+            "no_favourites_description": "Sie können einen Chat in den Chat-Einstellungen zu Ihren Favoriten hinzufügen",
+            "no_people": "Sie haben noch keine direkten Chats",
+            "no_people_description": "Sie können Filter deaktivieren, um Ihre anderen Chats anzuzeigen",
+            "no_rooms": "Sie sind noch in keinem Raum",
+            "no_rooms_description": "Sie können Filter deaktivieren, um Ihre anderen Chats anzuzeigen",
+            "no_unread": "Glückwunsch! Sie haben keine ungelesenen Nachrichten",
+            "show_chats": "Alle Chats anzeigen"
+        },
         "failed_add_tag": "Fehler beim Hinzufügen des \"%(tagName)s\"-Tags an dem Raum",
         "failed_remove_tag": "Entfernen der Raum-Kennzeichnung %(tagName)s fehlgeschlagen",
         "failed_set_dm_tag": "Fehler beim Setzen der Nachrichtenmarkierung",
@@ -2110,6 +2125,14 @@
             "other": "Betrete %(count)s Räume"
         },
         "list_title": "Raumliste",
+        "more_options": {
+            "copy_link": "Raumlink kopieren",
+            "favourited": "Favorisiert",
+            "leave_room": "Raum verlassen",
+            "low_priority": "Niedrige Priorität",
+            "mark_read": "Als gelesen markieren",
+            "mark_unread": "Als ungelesen markieren"
+        },
         "notification_options": "Benachrichtigungsoptionen",
         "open_space_menu": "Menü „Raum öffnen“",
         "primary_filters": "Filter für die Raumliste",
@@ -2118,6 +2141,7 @@
             "other": "Entferne Nachrichten in %(count)s Räumen"
         },
         "room": {
+            "more_options": "Weitere Optionen",
             "open_room": "Raum öffnen %(roomName)s"
         },
         "show_less": "Weniger anzeigen",
@@ -3123,6 +3147,7 @@
         "view": "Raum mit angegebener Adresse betrachten",
         "whois": "Zeigt Informationen über Benutzer"
     },
+    "sliding_sync_legacy_no_longer_supported": "Legacy Sliding Sync wird nicht mehr unterstützt: Bitte melden Sie sich ab und wieder an, um das neue Sliding Sync-Flag zu aktivieren",
     "space": {
         "add_existing_room_space": {
             "create": "Willst du einen neuen Raum hinzufügen?",
@@ -3336,7 +3361,7 @@
             "historical_event_no_key_backup": "Der historische Nachrichtenverlauf ist auf diesem Gerät nicht verfügbar.",
             "historical_event_unverified_device": "Sie müssen dieses Gerät verifizieren, um auf den Nachrichtenverlauf zugreifen zu können",
             "historical_event_user_not_joined": "Sie haben keinen Zugriff auf diese Nachricht",
-            "sender_identity_previously_verified": "Die verifizierte Identität des Absenders hat sich geändert",
+            "sender_identity_previously_verified": "Die verifizierte Identität des Absenders wurde zurückgesetzt",
             "sender_unsigned_device": "Von einem unsicheren Gerät verschickt.",
             "unable_to_decrypt": "Entschlüsselung der Nachricht nicht möglich"
         },

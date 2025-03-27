@@ -18,7 +18,7 @@ import SpaceStore from "../../../stores/spaces/SpaceStore";
 import dispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
-import { useIndexForActiveRoom } from "./useIndexForActiveRoom";
+import { useStickyRoomList } from "./useStickyRoomList";
 
 export interface RoomListViewState {
     /**
@@ -97,8 +97,14 @@ export interface RoomListViewState {
  */
 export function useRoomListViewModel(): RoomListViewState {
     const matrixClient = useMatrixClientContext();
-    const { primaryFilters, activePrimaryFilter, rooms, activateSecondaryFilter, activeSecondaryFilter } =
-        useFilteredRooms();
+    const {
+        primaryFilters,
+        activePrimaryFilter,
+        rooms: filteredRooms,
+        activateSecondaryFilter,
+        activeSecondaryFilter,
+    } = useFilteredRooms();
+    const { activeIndex, rooms } = useStickyRoomList(filteredRooms);
 
     const currentSpace = useEventEmitterState<Room | null>(
         SpaceStore.instance,
@@ -107,7 +113,6 @@ export function useRoomListViewModel(): RoomListViewState {
     );
     const canCreateRoom = hasCreateRoomRights(matrixClient, currentSpace);
 
-    const activeIndex = useIndexForActiveRoom(rooms);
     const { activeSortOption, sort } = useSorter();
     const { shouldShowMessagePreview, toggleMessagePreview } = useMessagePreviewToggle();
 
