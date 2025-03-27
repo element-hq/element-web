@@ -21,4 +21,4 @@ RUN cp -r ./$BUILD_CONTEXT/lib/ /modules/$(jq -r '"\(.name)-v\(.version)"' ./$BU
 
 FROM ghcr.io/element-hq/element-web:${ELEMENT_VERSION}
 
-COPY --from=builder /modules /tmp/element-web-modules/
+COPY --from=builder /modules /modules/
