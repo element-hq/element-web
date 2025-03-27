@@ -165,6 +165,8 @@ test.describe("Room list", () => {
         test("should render an activity decoration", { tag: "@screenshot" }, async ({ page, app, user, bot }) => {
             const roomListView = getRoomList(page);
 
+            const otherRoomId = await app.client.createRoom({ name: "other room" });
+
             const roomId = await app.client.createRoom({ name: "activity" });
             await app.client.inviteUser(roomId, bot.credentials.userId);
             await bot.joinRoom(roomId);
@@ -178,6 +180,8 @@ test.describe("Room list", () => {
             await page.getByText("Show all activity in the room list (dots or number of unread messages)").click();
             await app.settings.closeDialog();
 
+            // Switch to the other room to avoid the notification to be cleared
+            await app.viewRoomById(otherRoomId);
             await bot.sendMessage(roomId, "I am a robot. Beep.");
 
             const room = roomListView.getByRole("gridcell", { name: "activity" });
