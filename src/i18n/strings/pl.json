@@ -104,6 +104,7 @@
         "reply": "Odpowiedz",
         "reply_in_thread": "Odpowiedz w wątku",
         "report_content": "Zgłoś treść",
+        "report_room": "Zgłoś pokój",
         "resend": "Wyślij jeszcze raz",
         "reset": "Resetuj",
         "resume": "Wznów",
@@ -489,7 +490,7 @@
         "error": "Błąd",
         "faq": "Najczęściej zadawane pytania",
         "favourites": "Ulubione",
-        "feedback": "Opinia użytkownika",
+        "feedback": "Feedback",
         "filter_results": "Filtruj wyniki",
         "forward_message": "Przekaż wiadomość",
         "general": "Ogólne",
@@ -927,7 +928,7 @@
         "destroy_cross_signing_dialog": {
             "primary_button_text": "Wyczyść klucze weryfikacji krzyżowej",
             "title": "Zniszczyć klucze weryfikacji krzyżowej?",
-            "warning": "Usunięcie kluczy weryfikacji krzyżowej jest trwałe. Każdy, z kim dokonano weryfikacji, zobaczy alerty bezpieczeństwa. Prawie na pewno nie chcesz tego robić, chyba że straciłeś każde urządzenie, z którego możesz weryfikować."
+            "warning": "Usunięcie kluczy weryfikacji krzyżowej jest nieodwracalne. Każdy, z kim dokonano weryfikacji, zobaczy alerty bezpieczeństwa. Prawie na pewno nie chcesz tego robić, chyba że straciłeś każde urządzenie, z którego możesz weryfikować."
         },
         "enter_recovery_key": "Wprowadź klucz przywracania",
         "event_shield_reason_authenticity_not_guaranteed": "Autentyczność tej wiadomości szyfrowanej nie jest gwarantowana na tym urządzeniu.",
@@ -956,8 +957,8 @@
             "warning": "Jeżeli nie ustawiłeś nowej metody odzyskiwania, atakujący może uzyskać dostęp do Twojego konta. Zmień hasło konta i natychmiast ustaw nową metodę odzyskiwania w Ustawieniach."
         },
         "not_supported": "<niewspierany>",
-        "pinned_identity_changed": "Tożsamość użytkownika %(displayName)s (<b>%(userId)s</b>) uległa zmianie. <a>Dowiedz się więcej</a>",
-        "pinned_identity_changed_no_displayname": "Tożsamość użytkownika <b>%(userId)s</b> uległa zmianie <a>Dowiedz się więcej</a>",
+        "pinned_identity_changed": "Tożsamość %(displayName)s (<b>%(userId)s</b>) została zresetowana. <a>Dowiedz się więcej</a>",
+        "pinned_identity_changed_no_displayname": "Tożsamość <b>%(userId)s</b> została zresetowana. <a>Dowiedz się więcej</a>",
         "recovery_method_removed": {
             "description_1": "Ta sesja wykryła, że Twoja fraza bezpieczeństwa i klucz dla bezpiecznych wiadomości zostały usunięte.",
             "description_2": "Jeśli zrobiłeś to przez pomyłkę, możesz ustawić bezpieczne wiadomości w tej sesji, co zaszyfruje ponownie historię wiadomości za pomocą nowej metody odzyskiwania.",
@@ -1069,8 +1070,8 @@
             "waiting_other_user": "Oczekiwanie na weryfikację przez %(displayName)s…"
         },
         "verification_requested_toast_title": "Zażądano weryfikacji",
-        "verified_identity_changed": "Zweryfikowana tożsamość %(displayName)s (<b>%(userId)s</b>) uległa zmianie. <a>Dowiedz się więcej</a>",
-        "verified_identity_changed_no_displayname": "Zweryfikowana tożsamość <b>%(userId)s</b> uległa zmianie. <a>Dowiedz się więcej</a>",
+        "verified_identity_changed": "Tożsamość %(displayName)s (<b>%(userId)s</b>) została zresetowana. <a>Dowiedz się więcej</a>",
+        "verified_identity_changed_no_displayname": "Tożsamość <b>%(userId)s</b> została zresetowana. <a>Dowiedz się więcej</a>",
         "verify_toast_description": "Inni użytkownicy mogą temu nie ufać",
         "verify_toast_title": "Zweryfikuj tę sesję",
         "withdraw_verification_action": "Wycofaj weryfikację"
@@ -1821,6 +1822,12 @@
         "spam_or_propaganda": "Spam lub propaganda",
         "toxic_behaviour": "Toksyczne zachowanie"
     },
+    "report_room": {
+        "description": "Zgłoś ten pokój do administratora serwera domowego. Unikalne ID pokoju zostanie wysłane, lecz administrator nie będzie w mógł przeczytać żadnych wiadomości, ani plików szyfrowanych.",
+        "reason_placeholder": " Powód zgłoszenia...",
+        "sent": "Twój raport został wysłany.",
+        "title": "Zgłoś pokój"
+    },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Nie udało się odszyfrować %(failedCount)s sesji!",
         "count_of_successfully_restored_keys": "Przywrócono pomyślnie %(sessionCount)s kluczy",
@@ -2401,7 +2408,7 @@
             "public_without_alias_warning": "Aby powiązać ten pokój, dodaj adres.",
             "publish_room": "Uczyń ten pokój widocznym w katalogu pokoi publicznych.",
             "publish_space": "Uczyń tę przestrzeń widoczną w katalogu pomieszczeń publicznych.",
-            "strict_encryption": "Nigdy nie wysyłaj zaszyfrowanych wiadomości do niezweryfikowanych sesji z tej sesji w tym pokoju",
+            "strict_encryption": "Wysyłaj wiadomości tylko do zweryfikowanych użytkowników.",
             "title": "Bezpieczeństwo i prywatność"
         },
         "title": "Ustawienia pokoju - %(roomName)s",
@@ -2415,7 +2422,7 @@
             "guest_access_explainer_public_space": "Może to być przydatne dla publicznych przestrzeni.",
             "guest_access_label": "Włącz dostęp dla gości",
             "history_visibility_anyone_space": "Podgląd przestrzeni",
-            "history_visibility_anyone_space_description": "Pozwól ludziom na podgląd twojej przestrzeni zanim dołączą.",
+            "history_visibility_anyone_space_description": "Pozwól ludziom na podgląd Twojej przestrzeni zanim dołączą.",
             "history_visibility_anyone_space_recommendation": "Zalecane dla publicznych przestrzeni.",
             "title": "Widoczność"
         },
@@ -2538,8 +2545,8 @@
                 "do_not_close_warning": "Nie zamykaj tego okna, dopóki reset nie zostanie zakończony",
                 "export_keys": "Eksportuj klucze",
                 "import_keys": "Importuj klucze",
-                "other_people_device_description": "Domyślnie w pokojach szyfrowanych nie będziesz mógł wysyłać wiadomości, jeśli nie zweryfikujesz członków w pokoju",
-                "other_people_device_label": "Nigdy nie wysyłaj wiadomości szyfrowanych do niezweryfikowanych urządzeń",
+                "other_people_device_description": "Ostrzeżenie: użytkownicy, którzy nie zweryfikowali Twojej tożsamości bezpośrednio z Tobą (np. za pomocą emoji), nie będą mogli czytać Twoich wiadomości szyfrowanych. Również niezweryfikowane urządzenia zweryfikowanych użytkowników nie będą otrzymywać zaszyfrowanych wiadomości.",
+                "other_people_device_label": "W pokojach szyfrowanych wysyłaj wiadomości tylko do zweryfikowanych użytkowników",
                 "other_people_device_title": "Urządzenia innych osób",
                 "reset_identity": "Zresetuj tożsamość kryptograficzną",
                 "reset_in_progress": "Resetowanie w toku...",
@@ -2624,12 +2631,12 @@
             "deactivate_confirm_continue": "Potwierdź dezaktywację konta",
             "deactivate_confirm_erase_label": "Ukryj moje wiadomości dla nowych osób",
             "deactivate_section": "Dezaktywuj konto",
-            "deactivate_warning": "Dezaktywacja konta jest akcją trwałą — bądź ostrożny!",
+            "deactivate_warning": "Dezaktywacja konta jest nieodwracalna — bądź ostrożny!",
             "discovery_email_empty": "Opcje odkrywania pojawią się, gdy dodasz adres e-mail.",
             "discovery_email_verification_instructions": "Zweryfikuj link w swojej skrzynce odbiorczej",
             "discovery_msisdn_empty": "Opcje odkrywania pojawią się, gdy dodasz numer telefonu.",
             "discovery_needs_terms": "Musisz wyrazić zgodę na warunki świadczenia usług serwera (%(serverName)s), aby umożliwić odkrywanie Cię za pomocą adresu e-mail oraz numeru telefonu.",
-            "discovery_needs_terms_title": "Zezwól ludziom na znalezienie Cię",
+            "discovery_needs_terms_title": "Pozwól ludziom Cię znaleźć",
             "display_name": "Wyświetlana nazwa",
             "display_name_error": "Nie można ustawić wyświetlanej nazwy",
             "email_address_in_use": "Podany adres e-mail jest już w użyciu",
@@ -2859,10 +2866,10 @@
             "enable_message_search": "Włącz wyszukiwanie wiadomości w szyfrowanych pokojach",
             "encryption_section": "Szyfrowanie",
             "error_loading_key_backup_status": "Nie można załadować stanu kopii zapasowej klucza",
-            "export_megolm_keys": "Eksportuj klucze E2E pokojów",
+            "export_megolm_keys": "Eksportuj klucze pokojów E2E",
             "ignore_users_empty": "Nie posiadasz ignorowanych użytkowników.",
             "ignore_users_section": "Ignorowani użytkownicy",
-            "import_megolm_keys": "Importuj klucze pokoju E2E",
+            "import_megolm_keys": "Importuj klucze pokojów E2E",
             "key_backup_active": "Ta sesja tworzy kopię zapasową kluczy.",
             "key_backup_active_version": "Aktywna wersja kopii zapasowej:",
             "key_backup_active_version_none": "Brak",
@@ -2901,7 +2908,7 @@
             "send_analytics": "Wysyłaj dane analityczne",
             "session_id": "Identyfikator sesji:",
             "session_key": "Klucz sesji:",
-            "strict_encryption": "Nigdy nie wysyłaj zaszyfrowanych wiadomości do niezweryfikowanych sesji z tej sesji"
+            "strict_encryption": "Wysyłaj wiadomości tylko do zweryfikowanych użytkowników"
         },
         "send_read_receipts": "Wysyłaj potwierdzenia przeczytania",
         "send_read_receipts_unsupported": "Twój serwer nie wspiera wyłączenia wysyłania potwierdzeń przeczytania.",
@@ -3376,7 +3383,7 @@
             "historical_event_no_key_backup": "Historia wiadomości nie jest dostępna na tym urządzeniu",
             "historical_event_unverified_device": "Musisz zweryfikować to urządzenie, aby wyświetlić historię wiadomości",
             "historical_event_user_not_joined": "Nie masz dostępu do tej wiadomości",
-            "sender_identity_previously_verified": "Zweryfikowana tożsamość nadawcy uległa zmianie",
+            "sender_identity_previously_verified": "Zweryfikowana tożsamość nadawcy została zresetowana",
             "sender_unsigned_device": "Wysłano z niezabezpieczonego urządzenia.",
             "unable_to_decrypt": "Nie można rozszyfrować wiadomości"
         },
@@ -3582,7 +3589,8 @@
         },
         "m.sticker": "%(senderDisplayName)s wysłał naklejkę.",
         "m.video": {
-            "error_decrypting": "Błąd deszyfrowania wideo"
+            "error_decrypting": "Błąd deszyfrowania wideo",
+            "show_video": "Pokaż wideo"
         },
         "m.widget": {
             "added": "Widżet %(widgetName)s został dodany przez %(senderName)s",

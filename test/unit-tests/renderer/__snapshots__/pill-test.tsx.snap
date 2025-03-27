@@ -1,0 +1,103 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`keyword pills should do nothing for empty element 1`] = `
+<DocumentFragment>
+  <div />
+</DocumentFragment>
+`;
+
+exports[`keyword pills should pillify 1`] = `
+<DocumentFragment>
+  <div>
+    Foo 
+    <bdi>
+      <span
+        tabindex="0"
+      >
+        <span
+          class="mx_Pill mx_KeywordPill"
+        >
+          <span
+            class="mx_Pill_text"
+          >
+            TeST
+          </span>
+        </span>
+      </span>
+    </bdi>
+     Bar
+  </div>
+</DocumentFragment>
+`;
+
+exports[`mention pills should do nothing for empty element 1`] = `
+<DocumentFragment>
+  <div />
+</DocumentFragment>
+`;
+
+exports[`mention pills should pillify @room 1`] = `
+<DocumentFragment>
+  <div>
+    <bdi>
+      <span
+        tabindex="0"
+      >
+        <span
+          class="mx_Pill mx_AtRoomPill"
+        >
+          <span
+            aria-hidden="true"
+            class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+            data-color="4"
+            data-testid="avatar-img"
+            data-type="round"
+            role="presentation"
+            style="--cpd-avatar-size: 16px;"
+          >
+            !
+          </span>
+          <span
+            class="mx_Pill_text"
+          >
+            @room
+          </span>
+        </span>
+      </span>
+    </bdi>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`mention pills should pillify @room in an intentional mentions world 1`] = `
+<DocumentFragment>
+  <div>
+    <bdi>
+      <span
+        tabindex="0"
+      >
+        <span
+          class="mx_Pill mx_AtRoomPill"
+        >
+          <span
+            aria-hidden="true"
+            class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
+            data-color="4"
+            data-testid="avatar-img"
+            data-type="round"
+            role="presentation"
+            style="--cpd-avatar-size: 16px;"
+          >
+            !
+          </span>
+          <span
+            class="mx_Pill_text"
+          >
+            @room
+          </span>
+        </span>
+      </span>
+    </bdi>
+  </div>
+</DocumentFragment>
+`;

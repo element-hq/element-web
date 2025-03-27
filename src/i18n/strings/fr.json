@@ -104,6 +104,7 @@
         "reply": "Répondre",
         "reply_in_thread": "Répondre dans le fil de discussion",
         "report_content": "Signaler le contenu",
+        "report_room": "Signaler le salon",
         "resend": "Renvoyer",
         "reset": "Réinitialiser",
         "resume": "Reprendre",
@@ -1810,6 +1811,12 @@
         "spam_or_propaganda": "Publicité ou propagande",
         "toxic_behaviour": "Comportement toxique"
     },
+    "report_room": {
+        "description": "Signalez cette salle à l'administrateur de votre serveur d'accueil. Cela enverra l'identifiant unique du salon, mais si les messages sont chiffrés, l'administrateur ne pourra pas les lire ni consulter les fichiers partagés.",
+        "reason_placeholder": " Motif du signalement...",
+        "sent": "Votre signalement a été envoyé.",
+        "title": "Signaler le salon"
+    },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Le déchiffrement de %(failedCount)s sessions a échoué !",
         "count_of_successfully_restored_keys": "%(sessionCount)s clés ont été restaurées avec succès",
@@ -2386,7 +2393,7 @@
             "public_without_alias_warning": "Pour créer un lien vers ce salon, ajoutez une adresse.",
             "publish_room": "Rendez ce salon visible dans l’annuaire des salons publics.",
             "publish_space": "Rendez cet espace visible dans le répertoires des salons publics.",
-            "strict_encryption": "Ne jamais envoyer des messages chiffrés aux sessions non vérifiées dans ce salon depuis cette session",
+            "strict_encryption": "Envoyez des messages uniquement aux utilisateurs vérifiés.",
             "title": "Sécurité et vie privée"
         },
         "title": "Paramètres du salon – %(roomName)s",
@@ -2886,7 +2893,7 @@
             "send_analytics": "Envoyer les données de télémétrie",
             "session_id": "Identifiant de session :",
             "session_key": "Clé de session :",
-            "strict_encryption": "Ne jamais envoyer de messages chiffrés aux sessions non vérifiées depuis cette session"
+            "strict_encryption": "Envoyer des messages uniquement aux utilisateurs vérifiés"
         },
         "send_read_receipts": "Envoyer les accusés de réception",
         "send_read_receipts_unsupported": "Votre serveur ne supporte pas la désactivation de l’envoi des accusés de réception.",
@@ -3567,7 +3574,8 @@
         },
         "m.sticker": "%(senderDisplayName)s a envoyé un autocollant.",
         "m.video": {
-            "error_decrypting": "Erreur lors du déchiffrement de la vidéo"
+            "error_decrypting": "Erreur lors du déchiffrement de la vidéo",
+            "show_video": "Voir la vidéo"
         },
         "m.widget": {
             "added": "Widget %(widgetName)s ajouté par %(senderName)s",
