@@ -15,6 +15,7 @@ import { _t } from "../../../languageHandler";
 import { useAccountData } from "../../../hooks/useAccountData";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 
+
 export const InviteControlsPanel: FC = () => {
     const client = useMatrixClientContext();
     const inviteState = useAccountData<AccountDataEvents["org.matrix.msc4155.invite_permission_config"]>(

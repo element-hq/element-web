@@ -15,6 +15,8 @@ import type { EmptyObject } from "matrix-js-sdk/src/matrix";
 import type { DeviceClientInformation } from "../utils/device/types.ts";
 import type { UserWidget } from "../utils/WidgetUtils-types.ts";
 
+type InviteConfigAccountDataRule = "allow" | "block";
+
 // Extend Matrix JS SDK types via Typescript declaration merging to support unspecced event fields and types
 declare module "matrix-js-sdk/src/types" {
     export interface FileInfo {
@@ -60,6 +62,21 @@ declare module "matrix-js-sdk/src/types" {
         };
     }
 
+    export interface InviteConfigAccountData {
+        /**
+         * Rule exceptions for users. Takes priority over `default` and `server_exceptions`.
+         */
+        user_exceptions: Record<string, InviteConfigAccountDataRule>;
+        /**
+         * Rule exceptions for users. Takes priority over `default`.
+         */
+        server_exceptions: Record<string, InviteConfigAccountDataRule>;
+        /**
+         * The default rule for invite handling when no exceptions match.
+         */
+        default: InviteConfigAccountDataRule;
+    }
+
     export interface AccountDataEvents {
         // Analytics account data event
         "im.vector.analytics": {
@@ -87,6 +104,9 @@ declare module "matrix-js-sdk/src/types" {
         "m.accepted_terms": {
             accepted: string[];
         };
+
+        // MSC4155: Invite filtering
+        "org.matrix.msc4155.invite_permission_config": InviteConfigAccountData;
     }
 
     export interface AudioContent {
