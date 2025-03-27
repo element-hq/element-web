@@ -6,8 +6,9 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ReactElement, useMemo } from "react";
+import React, { type ReactElement } from "react";
 import sanitizeHtml, { type IOptions } from "sanitize-html";
+import { merge } from "lodash";
 import _Linkify from "linkify-react";
 
 import { _linkifyString, ELEMENT_URL_PATTERN, options as linkifyMatrixOptions } from "./linkify-matrix";
@@ -15,7 +16,6 @@ import SettingsStore from "./settings/SettingsStore";
 import { tryTransformPermalinkToLocalHref } from "./utils/permalinks/Permalinks";
 import { mediaFromMxc } from "./customisations/Media";
 import { PERMITTED_URL_SCHEMES } from "./utils/UrlUtils";
-import { type Replacer, replacerToRenderFunction } from "./utils/reactHtmlParser.tsx";
 
 const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
 const MEDIA_API_MXC_REGEX = /\/_matrix\/media\/r0\/(?:download|thumbnail)\/(.+?)\/(.+?)(?:[?/]|$)/;
@@ -198,22 +198,10 @@ export const sanitizeHtmlParams: IOptions = {
     nestingLimit: 50,
 };
 
-interface LinkifyProps extends React.ComponentProps<typeof _Linkify> {
-    replacer?: Replacer;
-}
-
 /* Wrapper around linkify-react merging in our default linkify options */
-export function Linkify({ as, options, children, replacer }: LinkifyProps): ReactElement {
-    const opts = useMemo(
-        () => ({
-            ...linkifyMatrixOptions,
-            render: replacerToRenderFunction(replacer),
-            ...options,
-        }),
-        [options, replacer],
-    );
+export function Linkify({ as, options, children }: React.ComponentProps<typeof _Linkify>): ReactElement {
     return (
-        <_Linkify as={as} options={opts}>
+        <_Linkify as={as} options={merge({}, linkifyMatrixOptions, options)}>
             {children}
         </_Linkify>
     );
