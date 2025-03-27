@@ -34,7 +34,7 @@ const SHOW_CALL_IN_STATES = [
 ];
 
 interface IProps {
-    movePersistedElement: RefObject<(() => void) | undefined>;
+    movePersistedElement: RefObject<(() => void) | null>;
 }
 
 interface IState {
@@ -280,7 +280,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
 }
 
 export const PipContainer: React.FC = () => {
-    const movePersistedElement = useRef<() => void>(undefined);
+    const movePersistedElement = useRef<() => void>(null);
 
     return <PipContainerInner movePersistedElement={movePersistedElement} />;
 };

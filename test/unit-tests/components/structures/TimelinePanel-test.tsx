@@ -36,7 +36,14 @@ import TimelinePanel from "../../../../src/components/structures/TimelinePanel";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { isCallEvent } from "../../../../src/components/structures/LegacyCallEventGrouper";
-import { filterConsole, flushPromises, mkMembership, mkRoom, stubClient } from "../../../test-utils";
+import {
+    filterConsole,
+    flushPromises,
+    mkMembership,
+    mkRoom,
+    stubClient,
+    withClientContextRenderOptions,
+} from "../../../test-utils";
 import { mkThread } from "../../../test-utils/threads";
 import { createMessageEventContent } from "../../../test-utils/events";
 import SettingsStore from "../../../../src/settings/SettingsStore";
@@ -208,6 +215,7 @@ describe("TimelinePanel", () => {
                         timelinePanel = ref;
                     }}
                 />,
+                withClientContextRenderOptions(MatrixClientPeg.safeGet()),
             );
             await flushPromises();
             await waitFor(() => expect(timelinePanel).toBeTruthy());
@@ -405,7 +413,10 @@ describe("TimelinePanel", () => {
         setupPagination(client, timeline, eventsPage1, null);
 
         await withScrollPanelMountSpy(async (mountSpy) => {
-            const { container } = render(<TimelinePanel {...getProps(room, events)} timelineSet={timelineSet} />);
+            const { container } = render(
+                <TimelinePanel {...getProps(room, events)} timelineSet={timelineSet} />,
+                withClientContextRenderOptions(MatrixClientPeg.safeGet()),
+            );
 
             await waitFor(() => expectEvents(container, [events[1]]));
 
@@ -422,7 +433,10 @@ describe("TimelinePanel", () => {
         const [, room, events] = setupTestData();
 
         await withScrollPanelMountSpy(async (mountSpy) => {
-            const { container } = render(<TimelinePanel {...getProps(room, events)} />);
+            const { container } = render(
+                <TimelinePanel {...getProps(room, events)} />,
+                withClientContextRenderOptions(MatrixClientPeg.safeGet()),
+            );
 
             await waitFor(() => expectEvents(container, [events[0], events[1]]));
 
@@ -562,6 +576,7 @@ describe("TimelinePanel", () => {
                     overlayTimelineSet={overlayTimelineSet}
                     overlayTimelineSetFilter={isCallEvent}
                 />,
+                withClientContextRenderOptions(MatrixClientPeg.safeGet()),
             );
             await waitFor(() =>
                 expectEvents(container, [
@@ -601,6 +616,7 @@ describe("TimelinePanel", () => {
 
             const { container } = render(
                 <TimelinePanel {...getProps(room, events)} overlayTimelineSet={overlayTimelineSet} />,
+                withClientContextRenderOptions(MatrixClientPeg.safeGet()),
             );
 
             await waitFor(() =>
@@ -632,6 +648,7 @@ describe("TimelinePanel", () => {
 
             const { container } = render(
                 <TimelinePanel {...getProps(room, events)} overlayTimelineSet={overlayTimelineSet} />,
+                withClientContextRenderOptions(MatrixClientPeg.safeGet()),
             );
 
             await waitFor(() =>
@@ -663,6 +680,7 @@ describe("TimelinePanel", () => {
 
             const { container } = render(
                 <TimelinePanel {...getProps(room, events)} overlayTimelineSet={overlayTimelineSet} />,
+                withClientContextRenderOptions(MatrixClientPeg.safeGet()),
             );
 
             await waitFor(() =>
@@ -697,6 +715,7 @@ describe("TimelinePanel", () => {
                         timelineSet={timelineSet}
                         overlayTimelineSet={overlayTimelineSet}
                     />,
+                    withClientContextRenderOptions(MatrixClientPeg.safeGet()),
                 );
 
                 await waitFor(() => expectEvents(container, [overlayEvents[0], events[0]]));
@@ -770,6 +789,7 @@ describe("TimelinePanel", () => {
             await withScrollPanelMountSpy(async (mountSpy) => {
                 const { container } = render(
                     <TimelinePanel {...getProps(room, events)} overlayTimelineSet={overlayTimelineSet} />,
+                    withClientContextRenderOptions(MatrixClientPeg.safeGet()),
                 );
 
                 await waitFor(() =>
@@ -1029,7 +1049,10 @@ describe("TimelinePanel", () => {
         room.getTimelineSets = jest.fn().mockReturnValue([timelineSet]);
 
         await withScrollPanelMountSpy(async () => {
-            const { container } = render(<TimelinePanel {...getProps(room, events)} timelineSet={timelineSet} />);
+            const { container } = render(
+                <TimelinePanel {...getProps(room, events)} timelineSet={timelineSet} />,
+                withClientContextRenderOptions(MatrixClientPeg.safeGet()),
+            );
 
             await waitFor(() => expectEvents(container, [events[1]]));
         });

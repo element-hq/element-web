@@ -57,7 +57,7 @@ export const SESSION_LOCK_CONSTANTS = {
     /**
      * The number of milliseconds after which we consider a lock claim stale
      */
-    LOCK_EXPIRY_TIME_MS: 30000,
+    LOCK_EXPIRY_TIME_MS: 15000,
 };
 
 /**
@@ -140,7 +140,10 @@ export async function getSessionLock(onNewInstance: () => Promise<void>): Promis
         }
 
         const timeAgo = Date.now() - parseInt(lastPingTime);
-        const remaining = SESSION_LOCK_CONSTANTS.LOCK_EXPIRY_TIME_MS - timeAgo;
+        // If the last ping time is in the future (i.e., timeAgo is negative), the chances are that the system clock has
+        // been wound back since the ping. Rather than waiting hours/days/millenia for us to get there, treat a future
+        // ping as "just now" by clipping to 0.
+        const remaining = SESSION_LOCK_CONSTANTS.LOCK_EXPIRY_TIME_MS - Math.max(timeAgo, 0);
         if (remaining <= 0) {
             // another session claimed the lock, but it is stale.
             prefixedLogger.info(`Last ping (from ${lockHolder}) was ${timeAgo}ms ago: proceeding with startup`);
@@ -242,13 +245,23 @@ export async function getSessionLock(onNewInstance: () => Promise<void>): Promis
             };
         });
 
+        // We construct our own promise here rather than using the `sleep` utility, to make it easier to test the
+        // SessionLock in a separate Window.
         const sleepPromise = new Promise((resolve) => {
             setTimeout(resolve, remaining, undefined);
         });
 
         window.addEventListener("storage", onStorageUpdate!);
-        await Promise.race([sleepPromise, storageUpdatePromise]);
+        const winner = await Promise.race([sleepPromise, storageUpdatePromise]);
         window.removeEventListener("storage", onStorageUpdate!);
+
+        // If we got through the whole of the sleep without any writes to the store, we know that the
+        // ping is now stale. There's no point in going round and calling `checkLock` again: we know that
+        // nothing has changed since last time.
+        if (!(winner instanceof StorageEvent)) {
+            prefixedLogger.info("Existing claim went stale: proceeding with startup");
+            break;
+        }
     }
 
     // If we get here, we know the lock is ours for the taking.

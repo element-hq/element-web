@@ -104,6 +104,7 @@
         "reply": "Відповісти",
         "reply_in_thread": "Відповісти у гілці",
         "report_content": "Поскаржитись на вміст",
+        "report_room": "Поскаржитися на кімнату",
         "resend": "Перенадіслати",
         "reset": "Скинути",
         "resume": "Продовжити",
@@ -953,8 +954,8 @@
             "warning": "Якщо ви не встановлювали нового способу відновлення, ймовірно хтось намагається зламати ваш обліковий запис. Негайно змініть пароль до свого облікового запису й встановіть новий спосіб відновлення в налаштуваннях."
         },
         "not_supported": "<не підтримується>",
-        "pinned_identity_changed": "Схоже, особистість %(displayName)s (<b>%(userId)s</b>) змінилася. <a>Докладніше</a>",
-        "pinned_identity_changed_no_displayname": "Схоже, особистість <b>%(userId)s</b> змінилася. <a>Докладніше</a>",
+        "pinned_identity_changed": "Ідентичність %(displayName)s (<b>%(userId)s</b>) скинуто. <a>Докладніше</a>",
+        "pinned_identity_changed_no_displayname": "Ідентичність <b>%(userId)s</b> скинуто. <a>Докладніше</a>",
         "recovery_method_removed": {
             "description_1": "Цей сеанс виявив, що ваша фраза безпеки й ключ до захищених повідомлень були видалені.",
             "description_2": "Якщо це ненароком зробили ви, налаштуйте захищені повідомлення для цього сеансу, щоб повторно зашифрувати історію листування цього сеансу з новим способом відновлення.",
@@ -1066,8 +1067,8 @@
             "waiting_other_user": "Очікування звірки %(displayName)s…"
         },
         "verification_requested_toast_title": "Запит перевірки",
-        "verified_identity_changed": "Підтверджена особистість %(displayName)s (<b>%(userId)s</b>) змінилася. <a>Докладніше</a>",
-        "verified_identity_changed_no_displayname": "Верифіковану особистість <b>%(userId)s</b> змінено. <a>Докладніше</a> ",
+        "verified_identity_changed": "Ідентичність %(displayName)s (<b>%(userId)s</b>) скинуто. <a>Докладніше</a>",
+        "verified_identity_changed_no_displayname": "Ідентичність <b>%(userId)s</b> скинуто. <a>Докладніше</a> ",
         "verify_toast_description": "Інші користувачі можуть не довіряти цьому",
         "verify_toast_title": "Звірити цей сеанс",
         "withdraw_verification_action": "Відкликати верифікацію"
@@ -1811,6 +1812,12 @@
         "report_entire_room": "Поскаржитися на всю кімнату",
         "spam_or_propaganda": "Спам чи пропаганда",
         "toxic_behaviour": "Токсична поведінка"
+    },
+    "report_room": {
+        "description": "Поскаржитися на цю кімнату адміністратору домашнього сервера. Це надішле унікальний ID кімнати, але якщо повідомлення зашифровані, адміністратор не зможе прочитати їх або переглянути спільні файли.",
+        "reason_placeholder": "Причина для скарги...",
+        "sent": "Вашу скаргу надіслано.",
+        "title": "Поскаржитися на кімнату"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Не вдалося розшифрувати %(failedCount)s сеансів!",
@@ -3366,7 +3373,7 @@
             "historical_event_no_key_backup": "Історичні повідомлення недоступні на цьому пристрої",
             "historical_event_unverified_device": "Щоб отримати доступ до історичних повідомлень, потрібно верифікувати цей пристрій",
             "historical_event_user_not_joined": "Ви не маєте доступу до цього повідомлення",
-            "sender_identity_previously_verified": "Верифіковану особистість змінено",
+            "sender_identity_previously_verified": "Верифіковану ідентичність відправника скинуто",
             "sender_unsigned_device": "Зашифровано пристроєм, який не верифіковано його власником.",
             "unable_to_decrypt": "Не вдалося розшифрувати повідомлення"
         },
@@ -3572,7 +3579,8 @@
         },
         "m.sticker": "%(senderDisplayName)s надсилає наліпку.",
         "m.video": {
-            "error_decrypting": "Помилка розшифрування відео"
+            "error_decrypting": "Помилка розшифрування відео",
+            "show_video": "Показати відео"
         },
         "m.widget": {
             "added": "%(senderName)s додає віджет %(widgetName)s",

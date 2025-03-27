@@ -12,8 +12,8 @@ import classNames from "classnames";
 import { useRoomListItemViewModel } from "../../../viewmodels/roomlist/RoomListItemViewModel";
 import DecoratedRoomAvatar from "../../avatars/DecoratedRoomAvatar";
 import { Flex } from "../../../utils/Flex";
-import { _t } from "../../../../languageHandler";
 import { RoomListItemMenuView } from "./RoomListItemMenuView";
+import { NotificationDecoration } from "../NotificationDecoration";
 
 interface RoomListItemViewPropsProps extends React.HTMLAttributes<HTMLButtonElement> {
     /**
@@ -46,7 +46,7 @@ export function RoomListItemView({ room, isSelected, ...props }: RoomListItemVie
             })}
             type="button"
             aria-selected={isSelected}
-            aria-label={_t("room_list|room|open_room", { roomName: room.name })}
+            aria-label={vm.a11yLabel}
             onClick={() => vm.openRoom()}
             onMouseOver={() => setIsHover(true)}
             onMouseOut={() => setIsHover(false)}
@@ -65,7 +65,7 @@ export function RoomListItemView({ room, isSelected, ...props }: RoomListItemVie
                 >
                     {/* We truncate the room name when too long. Title here is to show the full name on hover */}
                     <span title={room.name}>{room.name}</span>
-                    {showHoverDecoration && (
+                    {showHoverDecoration ? (
                         <RoomListItemMenuView
                             room={room}
                             setMenuOpen={(isOpen) => {
@@ -74,6 +74,11 @@ export function RoomListItemView({ room, isSelected, ...props }: RoomListItemVie
                                 else setTimeout(() => setIsMenuOpen(isOpen), 0);
                             }}
                         />
+                    ) : (
+                        <>
+                            {/* aria-hidden because we summarise the unread count/notification status in a11yLabel variable */}
+                            <NotificationDecoration notificationState={vm.notificationState} aria-hidden={true} />
+                        </>
                     )}
                 </Flex>
             </Flex>

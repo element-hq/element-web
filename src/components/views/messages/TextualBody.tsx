@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX, createRef, type SyntheticEvent, type MouseEvent } from "react";
 import { MsgType } from "matrix-js-sdk/src/matrix";
 
+import EventContentBody from "./EventContentBody.tsx";
 import { formatDate } from "../../../DateUtils";
 import Modal from "../../../Modal";
 import dis from "../../../dispatcher/dispatcher";
@@ -27,8 +28,6 @@ import AccessibleButton from "../elements/AccessibleButton";
 import { options as linkifyOpts } from "../../../linkify-matrix";
 import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
 import { type IEventTileOps } from "../rooms/EventTile";
-import EventContentBody from "./EventContentBody.tsx";
-import { getParentEventId } from "../../../utils/Reply.ts";
 
 interface IState {
     // the URLs (if any) to be previewed with a LinkPreviewWidget inside this TextualBody.
@@ -325,6 +324,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         let body = (
             <EventContentBody
                 as={willHaveWrapper ? "span" : "div"}
+                includeDir={false}
                 mxEvent={mxEvent}
                 content={content}
                 stripReply={stripReply}
@@ -332,10 +332,10 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                 highlights={this.props.highlights}
                 onHeightChanged={this.props.onHeightChanged}
                 ref={this.contentRef}
-                pillifyKeywords
-                pillifyMentions
-                applyCodeBlocks
-                applySpoilers
+                renderKeywordPills
+                renderMentionPills
+                renderCodeBlocks
+                renderSpoilers
             />
         );
 

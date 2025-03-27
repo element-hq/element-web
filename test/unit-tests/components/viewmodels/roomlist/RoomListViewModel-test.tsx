@@ -162,6 +162,29 @@ describe("RoomListViewModel", () => {
             expect(vm.current.activePrimaryFilter).toEqual(vm.current.primaryFilters[i]);
         });
 
+        it("should remove any active primary filters when secondary filter is changed", async () => {
+            const { fn } = mockAndCreateRooms();
+            const { result: vm } = renderHook(() => useRoomListViewModel());
+
+            // Let's first toggle the People filter
+            const i = vm.current.primaryFilters.findIndex((f) => f.name === "People");
+            act(() => {
+                vm.current.primaryFilters[i].toggle();
+            });
+            expect(vm.current.primaryFilters[i].active).toEqual(true);
+
+            // Let's say we toggle the mentions secondary filter
+            act(() => {
+                vm.current.activateSecondaryFilter(SecondaryFilters.MentionsOnly);
+            });
+
+            // Primary filer should have been unapplied
+            expect(vm.current.primaryFilters[i].active).toEqual(false);
+
+            // RLS call must include only the secondary filter
+            expect(fn).toHaveBeenLastCalledWith(expect.arrayContaining([FilterKey.MentionsFilter]));
+        });
+
         const testcases: Array<[string, { secondary: SecondaryFilters; filterKey: FilterKey }, string]> = [
             [
                 "Mentions only",
@@ -216,7 +239,9 @@ describe("RoomListViewModel", () => {
                 expect(vm.current.primaryFilters.find((f) => f.name === primaryFilterName)).toBeUndefined();
             });
         });
+    });
 
+    describe("Sorting", () => {
         it("should change sort order", () => {
             mockAndCreateRooms();
             const { result: vm } = renderHook(() => useRoomListViewModel());
@@ -291,34 +316,51 @@ describe("RoomListViewModel", () => {
         });
     });
 
-    describe("active index", () => {
-        it("should recalculate active index when list of rooms change", () => {
+    describe("Sticky room and active index", () => {
+        function expectActiveRoom(vm: ReturnType<typeof useRoomListViewModel>, i: number, roomId: string) {
+            expect(vm.activeIndex).toEqual(i);
+            expect(vm.rooms[i].roomId).toEqual(roomId);
+        }
+
+        it("active room and active index are retained on order change", () => {
             const { rooms } = mockAndCreateRooms();
-            // Let's say that the first room is the active room initially
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockImplementation(() => rooms[0].roomId);
+
+            // Let's say that the room at index 5 is active
+            const roomId = rooms[5].roomId;
+            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockImplementation(() => roomId);
 
             const { result: vm } = renderHook(() => useRoomListViewModel());
-            expect(vm.current.activeIndex).toEqual(0);
+            expect(vm.current.activeIndex).toEqual(5);
 
-            // Let's say that a new room is added and that becomes active
-            const newRoom = mkStubRoom("bar:matrix.org", "Bar", undefined);
-            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockImplementation(() => newRoom.roomId);
-            rooms.push(newRoom);
+            // Let's say that room at index 9 moves to index 5
+            const room9 = rooms[9];
+            rooms.splice(9, 1);
+            rooms.splice(5, 0, room9);
             act(() => RoomListStoreV3.instance.emit(LISTS_UPDATE_EVENT));
 
-            // Now the active room should be the last room which we just added
-            expect(vm.current.activeIndex).toEqual(rooms.length - 1);
+            // Active room index should still be 5
+            expectActiveRoom(vm.current, 5, roomId);
+
+            // Let's add 2 new rooms from index 0
+            const newRoom1 = mkStubRoom("bar1:matrix.org", "Bar 1", undefined);
+            const newRoom2 = mkStubRoom("bar2:matrix.org", "Bar 2", undefined);
+            rooms.unshift(newRoom1, newRoom2);
+            act(() => RoomListStoreV3.instance.emit(LISTS_UPDATE_EVENT));
+
+            // Active room index should still be 5
+            expectActiveRoom(vm.current, 5, roomId);
         });
 
-        it("should recalculate active index when active room changes", () => {
+        it("active room and active index are updated when another room is opened", () => {
             const { rooms } = mockAndCreateRooms();
+            const roomId = rooms[5].roomId;
+            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockImplementation(() => roomId);
+
             const { result: vm } = renderHook(() => useRoomListViewModel());
+            expectActiveRoom(vm.current, 5, roomId);
 
-            // No active room yet
-            expect(vm.current.activeIndex).toBeUndefined();
-
-            // Let's say that room at index 5 becomes active
-            const room = rooms[5];
+            // Let's say that room at index 9 becomes active
+            const room = rooms[9];
             act(() => {
                 dispatcher.dispatch(
                     {
@@ -330,8 +372,76 @@ describe("RoomListViewModel", () => {
                 );
             });
 
-            // We expect index 5 to be active now
-            expect(vm.current.activeIndex).toEqual(5);
+            // Active room index should change to reflect new room
+            expectActiveRoom(vm.current, 9, room.roomId);
+        });
+
+        it("active room and active index are updated when active index spills out of rooms array bounds", () => {
+            const { rooms } = mockAndCreateRooms();
+            // Let's say that the room at index 5 is active
+            const roomId = rooms[5].roomId;
+            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockImplementation(() => roomId);
+
+            const { result: vm } = renderHook(() => useRoomListViewModel());
+            expectActiveRoom(vm.current, 5, roomId);
+
+            // Let's say that we remove rooms from the start of the array
+            for (let i = 0; i < 4; ++i) {
+                // We should be able to do 4 deletions before we run out of rooms
+                rooms.splice(0, 1);
+                act(() => RoomListStoreV3.instance.emit(LISTS_UPDATE_EVENT));
+                expectActiveRoom(vm.current, 5, roomId);
+            }
+
+            // If we remove one more room from the start, there's not going to be enough rooms
+            // to maintain the active index.
+            rooms.splice(0, 1);
+            act(() => RoomListStoreV3.instance.emit(LISTS_UPDATE_EVENT));
+            expectActiveRoom(vm.current, 0, roomId);
+        });
+
+        it("active room and active index are retained when rooms that appear after the active room are deleted", () => {
+            const { rooms } = mockAndCreateRooms();
+            // Let's say that the room at index 5 is active
+            const roomId = rooms[5].roomId;
+            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockImplementation(() => roomId);
+
+            const { result: vm } = renderHook(() => useRoomListViewModel());
+            expectActiveRoom(vm.current, 5, roomId);
+
+            // Let's say that we remove rooms from the start of the array
+            for (let i = 0; i < 4; ++i) {
+                // Deleting rooms after index 5 (active) should not update the active index
+                rooms.splice(6, 1);
+                act(() => RoomListStoreV3.instance.emit(LISTS_UPDATE_EVENT));
+                expectActiveRoom(vm.current, 5, roomId);
+            }
+        });
+
+        it("active room index becomes undefined when active room is deleted", () => {
+            const { rooms } = mockAndCreateRooms();
+            // Let's say that the room at index 5 is active
+            let roomId: string | undefined = rooms[5].roomId;
+            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockImplementation(() => roomId);
+
+            const { result: vm } = renderHook(() => useRoomListViewModel());
+            expectActiveRoom(vm.current, 5, roomId);
+
+            // Let's remove the active room (i.e room at index 5)
+            rooms.splice(5, 1);
+            roomId = undefined;
+            act(() => RoomListStoreV3.instance.emit(LISTS_UPDATE_EVENT));
+            expect(vm.current.activeIndex).toBeUndefined();
+        });
+
+        it("active room index is initially undefined", () => {
+            mockAndCreateRooms();
+
+            // Let's say that there's no active room currently
+            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockImplementation(() => undefined);
+
+            const { result: vm } = renderHook(() => useRoomListViewModel());
+            expect(vm.current.activeIndex).toEqual(undefined);
         });
     });
 });

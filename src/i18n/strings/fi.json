@@ -64,6 +64,7 @@
         "go": "Mene",
         "go_back": "Takaisin",
         "got_it": "Asia selvä",
+        "hide": "Piilota",
         "hide_advanced": "Piilota lisäasetukset",
         "hold": "Pidä",
         "ignore": "Sivuuta",
@@ -394,6 +395,9 @@
         "download_logs": "Lataa lokit",
         "downloading_logs": "Ladataan lokeja",
         "error_empty": "Kerro mikä meni pieleen, tai, mikä parempaa, luo GitHub-issue joka kuvailee ongelman.",
+        "failed_send_logs_causes": {
+            "unknown_error": "Lokien lähettäminen epäonnistui."
+        },
         "github_issue": "GitHub-issue",
         "introduction": "Jos olet tehnyt ilmoituksen ohjelmistovirheestä GitHubiin, vianjäljityslokit voivat auttaa ongelman selvittämisessä. ",
         "log_request": "Voit auttaa meitä estämään tämän toistumisen <a>lähettämällä meille lokeja</a>.",
@@ -431,6 +435,7 @@
         "access_token": "Käyttöpoletti",
         "accessibility": "Saavutettavuus",
         "advanced": "Lisäasetukset",
+        "all_chats": "Kaikki keskustelut",
         "analytics": "Analytiikka",
         "and_n_others": {
             "other": "ja %(count)s muuta...",
@@ -919,7 +924,7 @@
             "verify_emoji_prompt_qr": "Jos et pysty skannaamaan yläpuolella olevaa koodia, varmenna vertaamalla emojia.",
             "verify_later": "Vahvistan myöhemmin",
             "verify_using_device": "Vahvista toisella laitteella",
-            "verify_using_key": "Vahvista turva-avaimella",
+            "verify_using_key": "Vahvista palautusavaimella",
             "verify_using_key_or_phrase": "Vahvista turva-avaimella tai turvalauseella",
             "waiting_for_user_accept": "Odotetaan, että %(displayName)s hyväksyy…",
             "waiting_other_device": "Odotetaan vahvistustasi toiselta laitteelta…",
@@ -1599,6 +1604,10 @@
                 "description": "Kiinnitetyt viestit löytyvät täältä. Mene minkä tahansa viestin päälle ja valitse \"Kiinnitä\" lisätäksesi viestin tänne.",
                 "title": "Kiinnitetyt viestit"
             },
+            "unpin_all": {
+                "button": "Poista kaikkien viestien kiinnitys",
+                "title": "Poistetaanko kaikkien viestien kiinnitys?"
+            },
             "view": "Näytä aikajanalla"
         },
         "pinned_messages_button": "Kiinnitetyt viestit",
@@ -1665,6 +1674,7 @@
         "dm_invite_title": "Haluatko keskustella käyttäjän %(user)s kanssa?",
         "drop_file_prompt": "Pudota tiedosto tähän lähettääksesi sen palvelimelle",
         "edit_topic": "Muokkaa aihetta",
+        "error_join_403": "Tarvitset kutsun päästäksesi tähän huoneeseen.",
         "error_join_404_2": "Jos tiedät huoneen osoitteen, yritä liittyä sen kautta.",
         "error_join_404_invite": "Henkilö, joka kutsui sinut on jo poistunut tai hänen palvelimensa on poissa verkosta.",
         "error_join_404_invite_same_hs": "Henkilö, joka kutsui sinut on jo poistunut.",
@@ -1805,18 +1815,38 @@
         "add_space_label": "Lisää avaruus",
         "breadcrumbs_empty": "Ei hiljattain vierailtuja huoneita",
         "breadcrumbs_label": "Hiljattain vieraillut huoneet",
+        "empty": {
+            "no_favourites": "Sinulla ei ole vielä suosikkikeskustelua",
+            "no_unread": "Onnittelut! Sinulla ei ole lukemattomia viestejä",
+            "show_chats": "Näytä kaikki keskustelut"
+        },
         "failed_add_tag": "Tagin %(tagName)s lisääminen huoneeseen epäonnistui",
         "failed_remove_tag": "Tagin %(tagName)s poistaminen huoneesta epäonnistui",
+        "filters": {
+            "favourite": "Suosikit",
+            "people": "Ihmiset",
+            "rooms": "Huoneet"
+        },
         "home_menu_label": "Etusivun valinnat",
         "join_public_room_label": "Liity julkiseen huoneeseen",
         "joining_rooms_status": {
             "one": "Liitytään parhaillaan %(count)s huoneeseen",
             "other": "Liitytään parhaillaan %(count)s huoneeseen"
         },
+        "list_title": "Huoneluettelo",
+        "more_options": {
+            "copy_link": "Kopioi huoneen linkki",
+            "leave_room": "Poistu huoneesta",
+            "mark_read": "Merkitse luetuksi"
+        },
         "notification_options": "Ilmoitusasetukset",
+        "open_space_menu": "Avaa avaruusvalikko",
         "redacting_messages_status": {
             "one": "Poistetaan parhaillaan viestejä yhdessä huoneessa",
             "other": "Poistetaan parhaillaan viestejä %(count)s huoneesta"
+        },
+        "room": {
+            "open_room": "Avoin huone %(roomName)s"
         },
         "show_less": "Näytä vähemmän",
         "show_n_more": {
@@ -1828,6 +1858,9 @@
         "sort_by_activity": "Aktiivisuus",
         "sort_by_alphabet": "A-Ö",
         "sort_unread_first": "Näytä ensimmäisenä huoneet, joissa on lukemattomia viestejä",
+        "space_menu": {
+            "space_settings": "Avaruuden asetukset"
+        },
         "space_menu_label": "%(spaceName)s-valikko",
         "sublist_options": "Lajittele",
         "suggested_rooms_heading": "Ehdotetut huoneet"
@@ -2041,6 +2074,7 @@
             },
             "join_rule_upgrade_upgrading_room": "Päivitetään huonetta",
             "public_without_alias_warning": "Lisää osoite linkittääksesi tähän huoneeseen.",
+            "publish_space": "Tee tämä avaruus näkyväksi julkisten huoneiden hakemistossa.",
             "strict_encryption": "Älä lähetä salattuja viestejä vahvistamattomiin istuntoihin tässä huoneessa tässä istunnossa",
             "title": "Tietoturva ja yksityisyys"
         },
@@ -2171,6 +2205,7 @@
                 "enter_key_error": "Kirjoittamasi palautusavain ei ole oikein.",
                 "forgot_recovery_key": "Unohditko palautusavaimen?",
                 "save_key_description": "Älä jaa tätä kenenkään kanssa!",
+                "set_up_recovery": "Määritä palautus",
                 "set_up_recovery_confirm_title": "Anna palautusavain vahvistaaksesi",
                 "title": "Palautuminen"
             },
@@ -2309,6 +2344,9 @@
         "labs": {
             "dialog_title": "<strong>Asetukset:</strong> Laboratorio"
         },
+        "labs_mjolnir": {
+            "dialog_title": "<strong>Asetukset:</strong> Ohitetut käyttäjät"
+        },
         "notifications": {
             "desktop_notification_message_preview": "Näytä viestin esikatselu työpöytäilmoituksessa",
             "dialog_title": "<strong>Asetukset:</strong> Ilmoitukset",
@@ -2328,6 +2366,7 @@
             "mentions_keywords_only": "Vain maininnat ja avainsanat",
             "messages_containing_keywords": "Viestit, jotka sisältävät avainsanoja",
             "noisy": "Äänekäs",
+            "people_mentions_keywords": "Ihmiset, maininnat ja avainsanat",
             "push_targets": "Ilmoituksen kohteet",
             "quick_actions_mark_all_read": "Merkitse kaikki viestit luetuiksi",
             "quick_actions_reset": "Palauta oletusasetukset",
@@ -2983,6 +3022,7 @@
         "m.room.encryption": {
             "disable_attempt": "Ohitettu yritys poistaa salaus käytöstä",
             "disabled": "Salaus pois käytöstä",
+            "enabled_dm": "Viestit ovat päästä päähän salattuja. Vahvista käyttäjä %(displayName)s hänen  profiilissaan - napauta hänen profiilikuvaa.",
             "enabled_local": "Tässä keskustelussa olevat viestit salataan päästä päähän.",
             "parameters_changed": "Joitakin salausparametreja on muutettu.",
             "unsupported": "Tämän huoneen käyttämää salausta ei tueta."
@@ -3064,7 +3104,8 @@
         },
         "m.sticker": "%(senderDisplayName)s lähetti tarran.",
         "m.video": {
-            "error_decrypting": "Virhe purettaessa videon salausta"
+            "error_decrypting": "Virhe purettaessa videon salausta",
+            "show_video": "Näytä video"
         },
         "m.widget": {
             "added": "%(senderName)s lisäsi sovelman %(widgetName)s",
@@ -3468,6 +3509,7 @@
         "user_is_presenting": "%(sharerName)s esittää",
         "video_call": "Videopuhelu",
         "video_call_started": "Videopuhelu aloitettu",
+        "video_call_using": "Videopuhelu käyttäen:",
         "voice_call": "Äänipuhelu",
         "you_are_presenting": "Esität parhaillaan"
     },

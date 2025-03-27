@@ -19,7 +19,7 @@ interface IProps {
     persistentWidgetId: string;
     persistentRoomId: string;
     pointerEvents?: CSSProperties["pointerEvents"];
-    movePersistedElement: RefObject<(() => void) | undefined>;
+    movePersistedElement: RefObject<(() => void) | null>;
     children?: ReactNode;
 }
 

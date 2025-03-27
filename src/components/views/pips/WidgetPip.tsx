@@ -33,7 +33,7 @@ interface Props {
     room: Room;
     viewingRoom: boolean;
     onStartMoving: (e: React.MouseEvent<Element, MouseEvent>) => void;
-    movePersistedElement: RefObject<(() => void) | undefined>;
+    movePersistedElement: RefObject<(() => void) | null>;
 }
 
 /**

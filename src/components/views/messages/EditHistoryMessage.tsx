@@ -10,6 +10,7 @@ import React, { type JSX, createRef } from "react";
 import { type EventStatus, type IContent, type MatrixEvent, MatrixEventEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
+import EventContentBody from "./EventContentBody.tsx";
 import { editBodyDiffToHtml } from "../../../utils/MessageDiffUtils";
 import { formatTime } from "../../../DateUtils";
 import { _t } from "../../../languageHandler";
@@ -20,7 +21,6 @@ import ConfirmAndWaitRedactDialog from "../dialogs/ConfirmAndWaitRedactDialog";
 import ViewSource from "../../structures/ViewSource";
 import SettingsStore from "../../../settings/SettingsStore";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import EventContentBody from "./EventContentBody.tsx";
 
 function getReplacedContent(event: MatrixEvent): IContent {
     const originalContent = event.getOriginalContent();
@@ -140,9 +140,9 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
                         content={content}
                         highlights={[]}
                         stripReply
-                        pillifyMentions
-                        applyCodeBlocks
-                        applySpoilers
+                        renderMentionPills
+                        renderCodeBlocks
+                        renderSpoilers
                         linkify
                     />
                 );

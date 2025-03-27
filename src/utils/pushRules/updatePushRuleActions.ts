@@ -7,7 +7,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type MatrixClient, type IPushRule, type PushRuleAction, type PushRuleKind } from "matrix-js-sdk/src/matrix";
-import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 
 /**
  * Sets the actions for a given push rule id and kind
@@ -51,10 +50,8 @@ export const updateExistingPushRulesWithActions = async (
     ruleIds?: IPushRule["rule_id"][],
     actions?: PushRuleAction[],
 ): Promise<void> => {
-    const pushProcessor = new PushProcessor(matrixClient);
-
     const rules: PushRuleAndKind[] | undefined = ruleIds
-        ?.map((ruleId) => pushProcessor.getPushRuleAndKindById(ruleId))
+        ?.map((ruleId) => matrixClient.pushProcessor.getPushRuleAndKindById(ruleId))
         .filter((n: PushRuleAndKind | null): n is PushRuleAndKind => Boolean(n));
 
     if (!rules?.length) {
