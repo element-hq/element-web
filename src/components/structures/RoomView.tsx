@@ -432,6 +432,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             promptAskToJoin: false,
             viewRoomOpts: { buttons: [] },
             isRoomEncrypted: null,
+            showPinnedMessageBanner: SettingsStore.getValue("showPinnedMessageBanner"),
         };
     }
 
@@ -2512,7 +2513,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     <>
                         <Measured sensor={this.roomViewBody} onMeasurement={this.onMeasurement} />
                         {auxPanel}
-                        {pinnedMessageBanner}
+                        {this.state.showPinnedMessageBanner && (pinnedMessageBanner)}
                         <main className={timelineClasses}>
                             <FileDropTarget parent={this.roomView.current} onFileDrop={this.onFileDrop} />
                             {topUnreadMessagesBar}

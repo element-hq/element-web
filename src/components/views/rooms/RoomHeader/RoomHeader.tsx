@@ -12,6 +12,7 @@ import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/vi
 import VoiceCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/voice-call-solid";
 import CloseCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 import ThreadsIcon from "@vector-im/compound-design-tokens/assets/web/icons/threads-solid";
+import PinIcon from "@vector-im/compound-design-tokens/assets/web/icons/pin-solid";
 import RoomInfoIcon from "@vector-im/compound-design-tokens/assets/web/icons/info-solid";
 import NotificationsIcon from "@vector-im/compound-design-tokens/assets/web/icons/notifications-solid";
 import VerifiedIcon from "@vector-im/compound-design-tokens/assets/web/icons/verified";
@@ -344,6 +345,22 @@ export default function RoomHeader({
                     )}
 
                     {showChatButton && <VideoRoomChatButton room={room} />}
+
+                    <Tooltip label={_t("right_panel|pinned_messages_button")}>
+                        <IconButton
+                            indicator={notificationLevelToIndicator(threadNotifications)}
+                            onClick={(evt) => {
+                                evt.stopPropagation();
+                                RightPanelStore.instance.showOrHidePhase(RightPanelPhases.PinnedMessages);
+                                // FIXME Track interaction with PinnedMessages
+                                // button?
+                                // PosthogTrackers.trackInteraction("WebRoomHeaderButtonsThreadsButton", evt);
+                            }}
+                            aria-label={_t("right_panel|pinned_messages_button")}
+                        >
+                            <ToggleableIcon Icon={PinIcon} phase={RightPanelPhases.PinnedMessages} />
+                        </IconButton>
+                    </Tooltip>
 
                     <Tooltip label={_t("common|threads")}>
                         <IconButton

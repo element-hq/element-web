@@ -3019,6 +3019,7 @@
         "show_join_leave": "Show join/leave messages (invites/removes/bans unaffected)",
         "show_nsfw_content": "Show NSFW content",
         "show_read_receipts": "Show read receipts sent by other users",
+        "show_pinned_message_banner": "Show pinned message banner",
         "show_redaction_placeholder": "Show a placeholder for removed messages",
         "show_stickers_button": "Show stickers button",
         "show_typing_notifications": "Show typing notifications",
