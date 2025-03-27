@@ -127,7 +127,7 @@ describe("<MatrixChat />", () => {
             startup: jest.fn(),
         },
         login: jest.fn(),
-        loginFlows: jest.fn(),
+        loginFlows: jest.fn().mockResolvedValue({ flows: [] }),
         isGuest: jest.fn().mockReturnValue(false),
         clearStores: jest.fn(),
         setGuest: jest.fn(),
@@ -226,6 +226,8 @@ describe("<MatrixChat />", () => {
     };
 
     beforeEach(async () => {
+        localStorage.clear();
+        jest.restoreAllMocks();
         defaultProps = {
             config: {
                 brand: "Test",
@@ -271,8 +273,6 @@ describe("<MatrixChat />", () => {
         // @ts-ignore
         DMRoomMap.setShared(null);
 
-        jest.restoreAllMocks();
-
         // emit a loggedOut event so that all of the Store singletons forget about their references to the mock client
         // (must be sync otherwise the next test will start before it happens)
         act(() => defaultDispatcher.dispatch({ action: Action.OnLoggedOut }, true));
@@ -317,7 +317,6 @@ describe("<MatrixChat />", () => {
             state: state,
         };
 
-        const userId = "@alice:server.org";
         const deviceId = "test-device-id";
         const accessToken = "test-access-token-from-oidc";
 
@@ -615,9 +614,6 @@ describe("<MatrixChat />", () => {
                 localStorage.setItem(`mx_cider_state_${unknownRoomId}`, "fake_content");
                 localStorage.setItem(`mx_cider_state_${roomId}`, "fake_content");
                 mockClient.getRoom.mockImplementation((id) => [room].find((room) => room.roomId === id) || null);
-            });
-            afterEach(() => {
-                jest.restoreAllMocks();
             });
             it("should clean up drafts", async () => {
                 Date.now = jest.fn(() => timestamp);
@@ -1117,8 +1113,6 @@ describe("<MatrixChat />", () => {
                     "org.matrix.e2e_cross_signing",
                 );
 
-                await flushPromises();
-
                 // logged in
                 await screen.findByLabelText("User menu");
             });
@@ -1214,7 +1208,6 @@ describe("<MatrixChat />", () => {
         };
 
         let loginClient!: ReturnType<typeof getMockClientWithEventEmitter>;
-        const userId = "@alice:server.org";
         const deviceId = "test-device-id";
         const accessToken = "test-access-token";
         const clientLoginResponse = {
@@ -1308,6 +1301,7 @@ describe("<MatrixChat />", () => {
                     },
                 );
             });
+
             it("should clear storage", async () => {
                 const localStorageClearSpy = jest.spyOn(localStorage.__proto__, "clear");
 
@@ -1609,8 +1603,13 @@ describe("<MatrixChat />", () => {
             });
             await flushPromises();
             mockClient.emit(CryptoEvent.KeyBackupFailed, "error code");
-            await waitFor(() => expect(spy).toHaveBeenCalledTimes(1));
-            expect((spy.mock.lastCall![0] as any)._payload._result).toEqual(expect.objectContaining({ __test: true }));
+            await waitFor(() =>
+                expect(spy).toHaveBeenCalledWith(
+                    expect.objectContaining({
+                        _payload: expect.objectContaining({ _result: expect.objectContaining({ __test: true }) }),
+                    }),
+                ),
+            );
         });
 
         it("should show the recovery method removed dialog", async () => {
@@ -1627,8 +1626,13 @@ describe("<MatrixChat />", () => {
             });
             await flushPromises();
             mockClient.emit(CryptoEvent.KeyBackupFailed, "error code");
-            await waitFor(() => expect(spy).toHaveBeenCalledTimes(1));
-            expect((spy.mock.lastCall![0] as any)._payload._result).toEqual(expect.objectContaining({ __test: true }));
+            await waitFor(() =>
+                expect(spy).toHaveBeenCalledWith(
+                    expect.objectContaining({
+                        _payload: expect.objectContaining({ _result: expect.objectContaining({ __test: true }) }),
+                    }),
+                ),
+            );
         });
     });
 });

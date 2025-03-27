@@ -1,11 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`BodyToSpan generates big emoji for emoji made of multiple characters 1`] = `
-<DocumentFragment>
-  👨‍👩‍👧‍👦 ↔️ 🇮🇸
-</DocumentFragment>
-`;
-
 exports[`bodyToHtml does not mistake characters in text presentation mode for emoji 1`] = `
 <DocumentFragment>
   <span

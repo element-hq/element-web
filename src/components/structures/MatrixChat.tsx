@@ -1023,10 +1023,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // Wait for the first sync to complete so that if a room does have an alias,
         // it would have been retrieved.
         if (!this.firstSyncComplete) {
-            if (!this.firstSyncPromise) {
-                logger.warn("Cannot view a room before first sync. room_id:", roomInfo.room_id);
-                return;
-            }
             await this.firstSyncPromise.promise;
         }
 
@@ -1137,8 +1133,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private viewUser(userId: string, subAction: string): void {
         // Wait for the first sync so that `getRoom` gives us a room object if it's
         // in the sync response
-        const waitForSync = this.firstSyncPromise ? this.firstSyncPromise.promise : Promise.resolve();
-        waitForSync.then(() => {
+        this.firstSyncPromise.promise.then(() => {
             if (subAction === "chat") {
                 this.chatCreateOrReuse(userId);
                 return;
@@ -1501,11 +1496,17 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      * (useful for setting listeners)
      */
     private onWillStartClient(): void {
-        // reset the 'have completed first sync' flag,
-        // since we're about to start the client and therefore about
-        // to do the first sync
+        // Reset the 'have completed first sync' flag,
+        // since we're about to start the client and therefore about to do the first sync
+        // We resolve the existing promise with the new one to update any existing listeners
+        if (!this.firstSyncComplete) {
+            const firstSyncPromise = defer<void>();
+            this.firstSyncPromise.resolve(firstSyncPromise.promise);
+            this.firstSyncPromise = firstSyncPromise;
+        } else {
+            this.firstSyncPromise = defer();
+        }
         this.firstSyncComplete = false;
-        this.firstSyncPromise = defer();
         const cli = MatrixClientPeg.safeGet();
 
         // Allow the JS SDK to reap timeline events. This reduces the amount of
