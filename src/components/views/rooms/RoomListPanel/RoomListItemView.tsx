@@ -38,9 +38,14 @@ export function RoomListItemView({ room, isSelected, ...props }: RoomListItemVie
     // Using display: none; and then display:flex when hovered in CSS causes the menu to be misaligned
     const showHoverDecoration = (isMenuOpen || isHover) && vm.showHoverMenu;
 
+    const isNotificationDecorationVisible =
+        !showHoverDecoration && (vm.notificationState.hasAnyNotificationOrActivity || vm.notificationState.muted);
+
     return (
         <button
             className={classNames("mx_RoomListItemView", {
+                mx_RoomListItemView_empty: !isNotificationDecorationVisible && !showHoverDecoration,
+                mx_RoomListItemView_notification_decoration: isNotificationDecorationVisible,
                 mx_RoomListItemView_menu_open: showHoverDecoration,
                 mx_RoomListItemView_selected: isSelected,
             })}
