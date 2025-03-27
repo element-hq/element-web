@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type CSSProperties, type RefObject, type SyntheticEvent, useRef, useState } from "react";
+import React, { type JSX, type CSSProperties, type RefObject, type SyntheticEvent, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import classNames from "classnames";
 import FocusLock from "react-focus-lock";
