@@ -40,8 +40,6 @@ export default {
         // Used by webpack
         "process",
         "util",
-        // Used by yarn for patch-package
-        "postinstall",
     ],
     ignoreBinaries: [
         // Used in scripts & workflows
