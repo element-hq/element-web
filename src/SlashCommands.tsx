@@ -70,7 +70,7 @@ export const Commands = [
         args: "<message>",
         description: _td("slash_command|spoiler"),
         runFn: function (cli, roomId, threadId, message = "") {
-            return successSync(ContentHelpers.makeHtmlMessage(message, `<span data-mx-spoiler>${message}</span>`));
+            return successSync(ContentHelpers.makeHtmlMessage(`/spoiler ${message}`, `<span data-mx-spoiler>${message}</span>`));
         },
         category: CommandCategories.messages,
     }),
