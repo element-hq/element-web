@@ -22,7 +22,7 @@ interface IProps extends Omit<IInputProps, "onValidate" | "element"> {
     className?: string;
     minScore: 0 | 1 | 2 | 3 | 4;
     value: string;
-    fieldRef?: Ref<Field | null>;
+    fieldRef?: Ref<Field>;
     // Additional strings such as a username used to catch bad passwords
     userInputs?: string[];
 

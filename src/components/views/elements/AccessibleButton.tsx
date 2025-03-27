@@ -229,7 +229,7 @@ const AccessibleButton = forwardRef(function <T extends ElementType = typeof def
 (AccessibleButton as FunctionComponent).displayName = "AccessibleButton";
 
 interface RefProp<T extends ElementType> {
-    ref?: Ref<HTMLElementTagNameMap[T] | null>;
+    ref?: Ref<HTMLElementTagNameMap[T]>;
 }
 
 interface ButtonComponent {
