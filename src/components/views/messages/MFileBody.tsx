@@ -120,7 +120,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
     }
 
     private get fileName(): string {
-        return this.content.body && this.content.body.length > 0 ? this.content.body : _t("common|attachment");
+        return this.props.mediaEventHelper?.fileName || _t("common|attachment");
     }
 
     private get linkText(): string {
