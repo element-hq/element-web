@@ -235,7 +235,7 @@ export default abstract class BasePlatform {
         ev?.once(MatrixEventEvent.BeforeRedaction, closeHandler);
         notification.onclose = () => {
             ev?.off(MatrixEventEvent.BeforeRedaction, closeHandler);
-        }
+        };
 
         return notification;
     }
