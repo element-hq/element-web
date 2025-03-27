@@ -45,10 +45,7 @@ getPRInfo() {
 
 # Some CIs don't give us enough info, so we just get the PR number and ask the
 # GH API for more info - "fork:branch". Some give us this directly.
-if [ -n "$BUILDKITE_BRANCH" ]; then
-    # BuildKite
-    head=$BUILDKITE_BRANCH
-elif [ -n "$PR_NUMBER" ]; then
+if [ -n "$PR_NUMBER" ]; then
     # GitHub
     getPRInfo $PR_NUMBER
 elif [ -n "$REVIEW_ID" ]; then
