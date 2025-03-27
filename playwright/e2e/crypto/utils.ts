@@ -292,10 +292,7 @@ export async function doTwoWaySasVerification(page: Page, verifier: JSHandle<Ver
 }
 
 /**
- * Open the encryption settings and enable the key backup by
- * - enabling key storage
- * - set up a recovery key
- *
+ * Open the encryption settings and enable key storage and recovery
  * Assumes that the current device has been verified
  *
  * Returns the recovery key
