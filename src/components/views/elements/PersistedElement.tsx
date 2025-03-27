@@ -54,7 +54,7 @@ interface IProps {
     style?: React.StyleHTMLAttributes<HTMLDivElement>;
 
     // Handle to manually notify this PersistedElement that it needs to move
-    moveRef?: RefObject<(() => void) | undefined>;
+    moveRef?: RefObject<(() => void) | null>;
     children: ReactNode;
 }
 

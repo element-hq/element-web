@@ -32,9 +32,9 @@ interface IProps {
     onBack?(ev: MouseEvent<HTMLButtonElement>): void;
     onKeyDown?(ev: KeyboardEvent): void;
     cardState?: any;
-    ref?: Ref<HTMLDivElement>;
+    ref?: Ref<HTMLDivElement | null>;
     // Ref for the 'close' button the card
-    closeButtonRef?: Ref<HTMLButtonElement>;
+    closeButtonRef?: Ref<HTMLButtonElement | null>;
     children: ReactNode;
 }
 

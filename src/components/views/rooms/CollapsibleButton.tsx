@@ -6,16 +6,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useContext } from "react";
+import React, { type RefObject, useContext } from "react";
 import classNames from "classnames";
 
 import AccessibleButton, { type ButtonProps } from "../elements/AccessibleButton";
 import { OverflowMenuContext } from "./MessageComposerButtons";
 import { IconizedContextMenuOption } from "../context_menus/IconizedContextMenu";
-import { type Ref } from "../../../accessibility/roving/types";
 
 interface Props extends Omit<ButtonProps<"div">, "element"> {
-    inputRef?: Ref;
+    inputRef?: RefObject<HTMLElement | null>;
     title: string;
     iconClassName: string;
 }

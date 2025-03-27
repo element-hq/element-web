@@ -65,7 +65,8 @@
         "test:playwright:screenshots": "playwright-screenshots --project=Chrome",
         "coverage": "yarn test --coverage",
         "analyse:webpack-bundles": "webpack-bundle-analyzer webpack-stats.json webapp",
-        "update:jitsi": "curl -s https://meet.element.io/libs/external_api.min.js > ./res/jitsi_external_api.min.js"
+        "update:jitsi": "curl -s https://meet.element.io/libs/external_api.min.js > ./res/jitsi_external_api.min.js",
+        "postinstall": "patch-package"
     },
     "resolutions": {
         "@playwright/test": "1.51.1",
@@ -265,6 +266,7 @@
         "minimist": "^1.2.6",
         "modernizr": "^3.12.0",
         "node-fetch": "^2.6.7",
+        "patch-package": "^8.0.0",
         "playwright-core": "^1.51.0",
         "postcss": "8.4.46",
         "postcss-easings": "^4.0.0",
@@ -276,6 +278,7 @@
         "postcss-preset-env": "^10.0.0",
         "postcss-scss": "^4.0.4",
         "postcss-simple-vars": "^7.0.1",
+        "postinstall-postinstall": "^2.1.0",
         "prettier": "3.5.3",
         "process": "^0.11.10",
         "raw-loader": "^4.0.2",
