@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { Toast } from "@vector-im/compound-web";
-import React, { useState } from "react";
+import React, { type JSX, useState } from "react";
 import UserProfileIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-profile";
 import DevicesIcon from "@vector-im/compound-design-tokens/assets/web/icons/devices";
 import VisibilityOnIcon from "@vector-im/compound-design-tokens/assets/web/icons/visibility-on";

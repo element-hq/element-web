@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { type ReactNode } from "react";
+import React, { type JSX, type ReactNode } from "react";
 
 import { useRovingTabIndex } from "../../../../accessibility/RovingTabIndex";
 import AccessibleButton, { type ButtonProps } from "../../elements/AccessibleButton";
