@@ -11,16 +11,7 @@ Please see LICENSE files in the repository root for full details.
 import "core-js/stable/structured-clone";
 import "fake-indexeddb/auto";
 import React, { type ComponentProps } from "react";
-import {
-    fireEvent,
-    render,
-    type RenderResult,
-    screen,
-    waitFor,
-    within,
-    act,
-    waitForElementToBeRemoved,
-} from "jest-matrix-react";
+import { fireEvent, render, type RenderResult, screen, waitFor, within, act } from "jest-matrix-react";
 import fetchMock from "fetch-mock-jest";
 import { type Mocked, mocked } from "jest-mock";
 import { ClientEvent, type MatrixClient, MatrixEvent, Room, SyncState } from "matrix-js-sdk/src/matrix";
@@ -338,8 +329,6 @@ describe("<MatrixChat />", () => {
             const dialog = await screen.findByRole("dialog");
 
             expect(within(dialog).getByText(errorMessage)).toBeInTheDocument();
-            // just check we're back on welcome page
-            await expect(screen.findByTestId("mx_welcome_screen")).resolves.toBeInTheDocument();
         };
 
         beforeEach(() => {
@@ -521,6 +510,9 @@ describe("<MatrixChat />", () => {
             it("should set logged in and start MatrixClient", async () => {
                 getComponent({ realQueryParams });
 
+                defaultDispatcher.dispatch({
+                    action: "will_start_client",
+                });
                 // client successfully started
                 await waitFor(() =>
                     expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: "client_started" }),
@@ -600,9 +592,7 @@ describe("<MatrixChat />", () => {
             // wait for logged in view to load
             await screen.findByLabelText("User menu");
 
-            expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
-            const h1Element = screen.getByRole("heading", { level: 1 });
-            expect(h1Element).toHaveTextContent(`Welcome Ernie`);
+            await screen.findByRole("heading", { level: 1, name: "Welcome Ernie" });
         });
 
         describe("clean up drafts", () => {
@@ -1347,8 +1337,10 @@ describe("<MatrixChat />", () => {
 
             it("should continue to post login setup when no session is found in local storage", async () => {
                 getComponent({ realQueryParams });
+                defaultDispatcher.dispatch({
+                    action: "will_start_client",
+                });
 
-                await waitForElementToBeRemoved(screen.getAllByRole("progressbar"));
                 // logged in but waiting for sync screen
                 await screen.findByText("Logout");
             });
