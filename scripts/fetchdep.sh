@@ -79,11 +79,14 @@ if [[ "$GITHUB_EVENT_NAME" == "merge_group" ]]; then
     clone $deforg $defrepo ${withoutPrefix%%/pr-*}
 fi
 
-# Try the target branch of the push or PR.
-if [ -n "$GITHUB_BASE_REF" ]; then
-    clone $deforg $defrepo $GITHUB_BASE_REF
-elif [ -n "$BUILDKITE_PULL_REQUEST_BASE_BRANCH" ]; then
-    clone $deforg $defrepo $BUILDKITE_PULL_REQUEST_BASE_BRANCH
+# Try the target branch of the push or PR, or the branch that was pushed to
+# (ie. the 'master' branch should use matching 'master' dependencies)
+base_or_branch=$GITHUB_BASE_REF
+if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
+    base_or_branch=${GITHUB_REF}
+fi
+if [ -n "$base_or_branch" ]; then
+    clone $deforg $defrepo $base_or_branch
 fi
 
 # Try HEAD which is the branch name in Netlify (not BRANCH which is pull/xxxx/head for PR builds)
