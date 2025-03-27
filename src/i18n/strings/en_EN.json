@@ -1509,6 +1509,8 @@
         "group_widgets": "Widgets",
         "hidebold": "Hide notification dot (only display counters badges)",
         "html_topic": "Show HTML representation of room topics",
+        "invite_controls": "Control who is allowed to invite you to rooms",
+        "invite_controls_msc_support": "Requires your server to support MSC4155",
         "join_beta": "Join the beta",
         "join_beta_reload": "Joining the beta will reload %(brand)s.",
         "jump_to_date": "Jump to date (adds /jumptodate and jump to date headers)",
@@ -2684,6 +2686,11 @@
         "inline_url_previews_room_account": "Enable URL previews for this room (only affects you)",
         "insert_trailing_colon_mentions": "Insert a trailing colon after user mentions at the start of a message",
         "invite_avatars": "Show avatars of rooms you have been invited to",
+        "invite_controls": {
+            "default_label": "Allow users to invite you to rooms",
+            "error_message": "An error occured while trying to change this setting",
+            "title": "Invite controls"
+        },
         "jump_to_bottom_on_send": "Jump to the bottom of the timeline when you send a message",
         "key_backup": {
             "backup_in_progress": "Your keys are being backed up (the first backup could take a few minutes).",
