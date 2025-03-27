@@ -232,10 +232,12 @@ export default abstract class BasePlatform {
         const closeHandler = (): void => notification.close();
 
         // Clear a notification from a redacted event.
-        ev?.once(MatrixEventEvent.BeforeRedaction, closeHandler);
-        notification.onclose = () => {
-            ev?.off(MatrixEventEvent.BeforeRedaction, closeHandler);
-        };
+        if (ev) {
+            ev.once(MatrixEventEvent.BeforeRedaction, closeHandler);
+            notification.onclose = () => {
+                ev.off(MatrixEventEvent.BeforeRedaction, closeHandler);
+            };
+        }
 
         return notification;
     }
