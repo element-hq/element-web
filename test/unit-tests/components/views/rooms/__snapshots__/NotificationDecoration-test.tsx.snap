@@ -5,7 +5,7 @@ exports[`<NotificationDecoration /> should render the activity decoration 1`] = 
   <div
     class="mx_Flex"
     data-testid="notification-decoration"
-    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
   >
     <div
       class="_unread_1k06b_8"
@@ -21,7 +21,7 @@ exports[`<NotificationDecoration /> should render the invitation decoration 1`] 
   <div
     class="mx_Flex"
     data-testid="notification-decoration"
-    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
   >
     <span
       class="_unread-counter_1ibqq_8"
@@ -37,7 +37,7 @@ exports[`<NotificationDecoration /> should render the mention decoration 1`] = `
   <div
     class="mx_Flex"
     data-testid="notification-decoration"
-    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
   >
     <svg
       fill="var(--cpd-color-icon-accent-primary)"
@@ -64,7 +64,7 @@ exports[`<NotificationDecoration /> should render the muted decoration 1`] = `
   <div
     class="mx_Flex"
     data-testid="notification-decoration"
-    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
   >
     <svg
       fill="var(--cpd-color-icon-tertiary)"
@@ -89,7 +89,7 @@ exports[`<NotificationDecoration /> should render the notification decoration 1`
   <div
     class="mx_Flex"
     data-testid="notification-decoration"
-    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
   >
     <span
       class="_unread-counter_1ibqq_8"
@@ -105,7 +105,7 @@ exports[`<NotificationDecoration /> should render the notification decoration wi
   <div
     class="mx_Flex"
     data-testid="notification-decoration"
-    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
   >
     <div
       class="_unread-counter_1ibqq_8"
@@ -119,7 +119,7 @@ exports[`<NotificationDecoration /> should render the unset message decoration 1
   <div
     class="mx_Flex"
     data-testid="notification-decoration"
-    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1x); --mx-flex-wrap: nowrap;"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
   >
     <svg
       fill="var(--cpd-color-icon-critical-primary)"
