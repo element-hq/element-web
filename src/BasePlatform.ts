@@ -229,7 +229,7 @@ export default abstract class BasePlatform {
             window.focus();
         };
 
-        const closeHandler = () => notification.close();
+        const closeHandler = (): void => notification.close();
 
         // Clear a notification from a redacted event.
         ev?.once(MatrixEventEvent.BeforeRedaction, closeHandler);
