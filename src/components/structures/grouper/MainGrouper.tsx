@@ -170,7 +170,7 @@ export class MainGrouper extends BaseGrouper {
                 key={key}
                 data-testid={key}
                 events={this.events.map((e) => e.event)}
-                onToggle={panel.onHeightChanged} // Update scroll state TODO is this needed anymore?
+                onToggle={panel.onHeightChanged} // Update scroll state
                 startExpanded={highlightInSummary}
                 layout={this.panel.props.layout}
             >

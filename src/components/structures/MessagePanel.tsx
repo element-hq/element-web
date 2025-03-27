@@ -954,11 +954,11 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         this.eventTiles[eventId] = node;
     };
 
-    // once dynamic content in the events load, make the scrollPanel check the
-    // scroll offsets.
+    // Once dynamic content in the events load, make the scrollPanel check the scroll offsets.
     public onHeightChanged = (): void => {
         this.scrollPanel.current?.checkScroll();
     };
+
     private resizeObserver = new ResizeObserver(this.onHeightChanged);
 
     private onTypingShown = (): void => {
