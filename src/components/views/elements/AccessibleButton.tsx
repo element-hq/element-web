@@ -141,10 +141,13 @@ const AccessibleButton = forwardRef(function <T extends ElementType = typeof def
     }: ButtonProps<T>,
     ref: Ref<HTMLElementTagNameMap[T]>,
 ): JSX.Element {
-    const newProps = restProps as RenderedElementProps<T>;
-    newProps.tabIndex = tabIndex;
-    newProps.role = role;
-    newProps["aria-label"] = newProps["aria-label"] ?? title;
+    const newProps = {
+        ...restProps,
+        tabIndex,
+        role,
+        "aria-label": restProps["aria-label"] ?? title,
+    } as RenderedElementProps<T>;
+
     if (disabled) {
         newProps["aria-disabled"] = true;
         newProps["disabled"] = true;
