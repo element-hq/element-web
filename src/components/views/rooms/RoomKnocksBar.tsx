@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 
 import { EventTimeline, JoinRule, type MatrixError, type Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
-import React, { type ReactElement, type ReactNode, useCallback, useState, type VFC } from "react";
+import React, { type ReactElement, type ReactNode, useCallback, useState, type FC } from "react";
 import { CloseIcon, CheckIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import dis from "../../../dispatcher/dispatcher";
@@ -22,7 +22,7 @@ import AccessibleButton from "../elements/AccessibleButton";
 import Heading from "../typography/Heading";
 import { formatList } from "../../../utils/FormattingUtils";
 
-export const RoomKnocksBar: VFC<{ room: Room }> = ({ room }) => {
+export const RoomKnocksBar: FC<{ room: Room }> = ({ room }) => {
     const [disabled, setDisabled] = useState(false);
     const knockMembers = useTypedEventEmitterState(
         room,
