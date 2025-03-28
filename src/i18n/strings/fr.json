@@ -12,6 +12,16 @@
             "one": "1 mention non lue."
         },
         "recent_rooms": "Salons récents",
+        "room_messsage_not_sent": "Ouvrir le salon %(roomName)s avec un message non envoyé.",
+        "room_n_unread_invite": "Ouvrir l'invitation du salon %(roomName)s.",
+        "room_n_unread_messages": {
+            "one": "Ouvrir salon %(roomName)s avec 1 message non lu.",
+            "other": "Ouvrir salon %(roomName)s avec %(count)s messages non lus."
+        },
+        "room_n_unread_messages_mentions": {
+            "one": "Ouvrir salon %(roomName)s avec 1 mention non lue.",
+            "other": "Ouvrir salon %(roomName)s avec %(count)s messages non lus comprenant des mentions."
+        },
         "room_name": "Salon %(name)s",
         "room_status_bar": "Barre de statut du salon",
         "seek_bar_label": "Barre de recherche audio",
@@ -2530,8 +2540,8 @@
                 "do_not_close_warning": "Ne fermez pas cette fenêtre tant que la réinitialisation n'est pas terminée",
                 "export_keys": "Exporter les clés",
                 "import_keys": "Importer les clés",
-                "other_people_device_description": "Par défaut, dans les salons chiffrées, n'envoyez pas de messages chiffrés à qui que ce soit avant de les avoir vérifiés",
-                "other_people_device_label": "N'envoyez jamais de messages chiffrés à des appareils non vérifiés",
+                "other_people_device_description": "Attention : les utilisateurs qui ne se sont pas explicitement vérifiés auprès de vous (par exemple, via des émojis) ne recevront pas vos messages chiffrés. De même, les appareils non vérifiés des utilisateurs vérifiés ne recevront pas vos messages chiffrés.",
+                "other_people_device_label": "Dans les salons chiffrés, envoyez des messages uniquement aux utilisateurs vérifiés",
                 "other_people_device_title": "Appareils d'autres personnes",
                 "reset_identity": "Réinitialiser l'identité cryptographique",
                 "reset_in_progress": "Réinitialisation en cours...",

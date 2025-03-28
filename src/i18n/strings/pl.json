@@ -12,6 +12,18 @@
             "one": "1 nieprzeczytana wzmianka."
         },
         "recent_rooms": "Ostatnie pokoje",
+        "room_messsage_not_sent": "Otwórz pokój %(roomName)s z niewysłaną wiadomością.",
+        "room_n_unread_invite": "Otwórz zaproszenie pokoju %(roomName)s.",
+        "room_n_unread_messages": {
+            "one": "Otwórz pokój %(roomName)s z 1 nieprzeczytaną wiadomością.",
+            "few": "Otwórz pokój %(roomName)s z %(count)s nieprzeczytanymi wiadomościami.",
+            "many": "Otwórz pokój %(roomName)s z %(count)s nieprzeczytanymi wiadomościami."
+        },
+        "room_n_unread_messages_mentions": {
+            "one": "Otwórz pokój %(roomName)s z 1 nieprzeczytaną wzmianką.",
+            "few": "Otwórz pokój %(roomName)s z %(count)s nieprzeczytanymi wzmiankami.",
+            "many": "Otwórz pokój %(roomName)s z %(count)s nieprzeczytanymi wzmiankami."
+        },
         "room_name": "Pokój %(name)s",
         "room_status_bar": "Pasek stanu pokoju",
         "seek_bar_label": "Pasek wyszukiwania audio",

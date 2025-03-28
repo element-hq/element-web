@@ -56,6 +56,7 @@
         "go": "Mynd",
         "go_back": "Nôl",
         "got_it": "Iawn",
+        "hide": "Cuddio",
         "hide_advanced": "Cuddio uwch",
         "hold": "Dal",
         "ignore": "Anwybyddu",
@@ -95,6 +96,7 @@
         "reply": "Ateb",
         "reply_in_thread": "Ateb i edefyn",
         "report_content": "Cynnwys yr Adroddiad",
+        "report_room": "Ystafell adrodd",
         "resend": "Ailanfon",
         "reset": "Ailosod",
         "resume": "Ailgychwyn",
@@ -1741,6 +1743,12 @@
         "spam_or_propaganda": "Sbam neu bropaganda",
         "toxic_behaviour": "Ymddygiad Gwenwynig"
     },
+    "report_room": {
+        "description": "Adroddwch ar yr ystafell hon i weinyddwr eich gweinydd cartref. Bydd hyn yn anfon ID unigryw'r ystafell, ond os yw negeseuon wedi'u hamgryptio, fydd y gweinyddwr ddim yn gallu eu darllen na gweld ffeiliau sy'n cael eu rhannu.",
+        "reason_placeholder": " Rheswm dros adrodd...",
+        "sent": "Anfonwyd eich adroddiad.",
+        "title": "Ystafell Adrodd"
+    },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Wedi methu â dadgryptio %(failedCount)s sesiwn!",
         "count_of_successfully_restored_keys": "Wedi adfer %(sessionCount)s allwedd yn llwyddiannus",
@@ -2246,7 +2254,7 @@
             "public_without_alias_warning": "I gysylltu â'r ystafell hon, ychwanegwch gyfeiriad.",
             "publish_room": "Gwnewch yr ystafell hon yn weladwy yn y cyfeiriadur ystafelloedd cyhoeddus.",
             "publish_space": "Gwnewch y gofod hwn yn weladwy yn y cyfeiriadur ystafelloedd cyhoeddus.",
-            "strict_encryption": "Peidiwch byth ag anfon negeseuon wedi'u hamgryptio i sesiynau heb eu gwirio yn yr ystafell hon o'r sesiwn hon",
+            "strict_encryption": "Anfon negeseuon at ddefnyddwyr sydd wedi'u dilysu yn unig.",
             "title": "Diogelwch a Phreifatrwydd"
         },
         "title": "Gosodiadau Ystafell - %(roomName)s",
@@ -2383,7 +2391,7 @@
                 "do_not_close_warning": "Peidiwch â chau'r ffenestr hon nes bod yr ailosod wedi'i orffen",
                 "export_keys": "Allforio allweddi",
                 "import_keys": "Mewnforio bysellau",
-                "other_people_device_description": "Yn ragosodedig mewn ystafelloedd wedi'u hamgryptio, peidiwch ag anfon negeseuon wedi'u hamgryptio at unrhyw un nes i chi eu gwirio",
+                "other_people_device_description": "Rhybudd: fydd defnyddwyr sydd heb eu gwirio'n benodol gyda chi (e.e. gan ddefnyddio emoji) yn derbyn eich negeseuon wedi'u hamgryptio. Hefyd, fydd dyfeisiau defnyddwyr sydd wedi'u gwirio heb eu gwirio ddim yn derbyn eich negeseuon wedi'u hamgryptio.",
                 "other_people_device_label": "Peidiwch byth ag anfon negeseuon wedi'u hamgryptio i ddyfeisiau heb eu gwirio",
                 "other_people_device_title": "Dyfeisiau pobl eraill",
                 "reset_identity": "Ailosod hunaniaeth cryptograffig",
@@ -2975,6 +2983,7 @@
         "view": "Ystafell golygfeydd gyda chyfeiriad a roddwyd",
         "whois": "Yn arddangos gwybodaeth am ddefnyddiwr"
     },
+    "sliding_sync_legacy_no_longer_supported": "Nid yw cydweddu hen lithro bellach yn cael ei gefnogi: allgofnodwch ac yna ail fewngofnodi i alluogi'r faner cydweddu llithro newydd",
     "space": {
         "add_existing_room_space": {
             "create": "Eisiau ychwanegu ystafell newydd yn lle?",
@@ -3368,7 +3377,8 @@
         },
         "m.sticker": "Anfonodd %(senderDisplayName)s sticer.",
         "m.video": {
-            "error_decrypting": "Gwall wrth ddadgryptio fideo"
+            "error_decrypting": "Gwall wrth ddadgryptio fideo",
+            "show_video": "Dangos fideo"
         },
         "m.widget": {
             "added": "Mae %(widgetName)s wedi'i ychwanegu gan %(senderName)s",
