@@ -12,6 +12,18 @@
             "one": "Nepřečtená zmínka."
         },
         "recent_rooms": "Nedávné místnosti",
+        "room_messsage_not_sent": "Otevřít místnost %(roomName)s s nenastavenou zprávou.",
+        "room_n_unread_invite": "Otevřít pozvánku do místnosti %(roomName)s.",
+        "room_n_unread_messages": {
+            "one": "Otevřít místnost %(roomName)s s 1 nepřečtenou zprávou.",
+            "few": "",
+            "other": "Otevřít místnost %(roomName)s s %(count)s nepřečtenými zprávami."
+        },
+        "room_n_unread_messages_mentions": {
+            "one": "Otevřít místnost %(roomName)s s 1 nepřečtenou zmínkou.",
+            "few": "",
+            "other": "Otevřít místnost %(roomName)s s %(count)s nepřečtenými zprávami včetně zmínek."
+        },
         "room_name": "Místnost %(name)s",
         "room_status_bar": "Stavový řádek místnosti",
         "seek_bar_label": "Panel posunu zvuku",
