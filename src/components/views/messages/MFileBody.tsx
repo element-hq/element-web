@@ -142,12 +142,6 @@ export default class MFileBody extends React.Component<IProps, IState> {
         });
     }
 
-    public componentDidUpdate(prevProps: IProps, prevState: IState): void {
-        if (this.props.onHeightChanged && !prevState.decryptedBlob && this.state.decryptedBlob) {
-            this.props.onHeightChanged();
-        }
-    }
-
     private decryptFile = async (): Promise<void> => {
         if (this.state.decryptedBlob) {
             return;

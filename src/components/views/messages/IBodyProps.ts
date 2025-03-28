@@ -24,9 +24,6 @@ export interface IBodyProps {
     /* link URL for the highlights */
     highlightLink?: string;
 
-    /* callback called when dynamic content in events are loaded */
-    onHeightChanged?: () => void;
-
     showUrlPreview?: boolean;
     forExport?: boolean;
     maxImageHeight?: number;

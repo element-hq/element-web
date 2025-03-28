@@ -179,7 +179,6 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
 
     private onImageLoad = (): void => {
         this.clearBlurhashTimeout();
-        this.props.onHeightChanged?.();
 
         let loadedImageDimensions: IState["loadedImageDimensions"];
 

@@ -75,7 +75,6 @@ describe("<MImageBody/>", () => {
     });
 
     const props = {
-        onHeightChanged: jest.fn(),
         onMessageAllowed: jest.fn(),
         permalinkCreator: new RoomPermalinkCreator(new Room(encryptedMediaEvent.getRoomId()!, cli, cli.getUserId()!)),
     };
