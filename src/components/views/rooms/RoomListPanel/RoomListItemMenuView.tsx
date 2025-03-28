@@ -43,7 +43,7 @@ export function RoomListItemMenuView({ room, setMenuOpen }: RoomListItemMenuView
     const vm = useRoomListItemMenuViewModel(room);
 
     return (
-        <Flex className="mx_RoomListItemMenuView" align="center" gap="var(--cpd-space-1x)">
+        <Flex className="mx_RoomListItemMenuView" align="center" gap="var(--cpd-space-0-5x)">
             {vm.showMoreOptionsMenu && <MoreOptionsMenu setMenuOpen={setMenuOpen} vm={vm} />}
         </Flex>
     );
@@ -77,7 +77,7 @@ function MoreOptionsMenu({ vm, setMenuOpen }: MoreOptionsMenuProps): JSX.Element
             title={_t("room_list|room|more_options")}
             showTitle={false}
             align="start"
-            trigger={<MoreOptionsButton />}
+            trigger={<MoreOptionsButton size="24px" />}
         >
             {vm.canMarkAsRead && (
                 <MenuItem
