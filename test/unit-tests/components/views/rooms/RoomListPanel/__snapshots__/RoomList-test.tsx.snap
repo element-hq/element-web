@@ -25,7 +25,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           <button
             aria-label="Open room room0"
             aria-selected="false"
-            class="mx_RoomListItemView"
+            class="mx_RoomListItemView mx_RoomListItemView_empty"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 0px; width: 100%;"
             type="button"
@@ -72,7 +72,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           <button
             aria-label="Open room room1"
             aria-selected="false"
-            class="mx_RoomListItemView"
+            class="mx_RoomListItemView mx_RoomListItemView_empty"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 48px; width: 100%;"
             type="button"
@@ -119,7 +119,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           <button
             aria-label="Open room room2"
             aria-selected="false"
-            class="mx_RoomListItemView"
+            class="mx_RoomListItemView mx_RoomListItemView_empty"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 96px; width: 100%;"
             type="button"
@@ -166,7 +166,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           <button
             aria-label="Open room room3"
             aria-selected="false"
-            class="mx_RoomListItemView"
+            class="mx_RoomListItemView mx_RoomListItemView_empty"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 144px; width: 100%;"
             type="button"
@@ -213,7 +213,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           <button
             aria-label="Open room room4"
             aria-selected="false"
-            class="mx_RoomListItemView"
+            class="mx_RoomListItemView mx_RoomListItemView_empty"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 192px; width: 100%;"
             type="button"
@@ -260,7 +260,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           <button
             aria-label="Open room room5"
             aria-selected="false"
-            class="mx_RoomListItemView"
+            class="mx_RoomListItemView mx_RoomListItemView_empty"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 240px; width: 100%;"
             type="button"
@@ -307,7 +307,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           <button
             aria-label="Open room room6"
             aria-selected="false"
-            class="mx_RoomListItemView"
+            class="mx_RoomListItemView mx_RoomListItemView_empty"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 288px; width: 100%;"
             type="button"
@@ -354,7 +354,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           <button
             aria-label="Open room room7"
             aria-selected="false"
-            class="mx_RoomListItemView"
+            class="mx_RoomListItemView mx_RoomListItemView_empty"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 336px; width: 100%;"
             type="button"
@@ -401,7 +401,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           <button
             aria-label="Open room room8"
             aria-selected="false"
-            class="mx_RoomListItemView"
+            class="mx_RoomListItemView mx_RoomListItemView_empty"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 384px; width: 100%;"
             type="button"
@@ -448,7 +448,7 @@ exports[`<RoomList /> should render a room list 1`] = `
           <button
             aria-label="Open room room9"
             aria-selected="false"
-            class="mx_RoomListItemView"
+            class="mx_RoomListItemView mx_RoomListItemView_empty"
             role="gridcell"
             style="height: 48px; left: 0px; position: absolute; top: 432px; width: 100%;"
             type="button"
