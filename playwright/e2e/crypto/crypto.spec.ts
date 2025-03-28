@@ -96,7 +96,6 @@ test.describe("Cryptography", function () {
     }
 
     test("Setting up key backup by recovery key", async ({ page, app, user: aliceCredentials }) => {
-        // Verified the device
         await app.client.bootstrapCrossSigning(aliceCredentials);
 
         await enableKeyBackup(app);
