@@ -12,6 +12,16 @@
             "one": "1 ungelesene Erwähnung."
         },
         "recent_rooms": "Kürzlich besuchte Chatrooms",
+        "room_messsage_not_sent": "Öffnen Sie den %(roomName)s Raum mit einer nicht gesetzten Nachricht.",
+        "room_n_unread_invite": "%(roomName)s Einladung zum Raum öffnen.",
+        "room_n_unread_messages": {
+            "one": "Raum %(roomName)s öffnen mit 1 ungelesenen Nachricht.",
+            "other": "Raum %(roomName)s öffnen mit %(count)s ungelesene Nachrichten."
+        },
+        "room_n_unread_messages_mentions": {
+            "one": "Öffnen Sie den Raum %(roomName)s mit 1 ungelesenen Erwähnung.",
+            "other": "Öffnen Sie den Raum %(roomName)s mit %(count)s ungelesenen Nachrichten einschließlich Erwähnungen."
+        },
         "room_name": "Raum %(name)s",
         "room_status_bar": "Statusleiste des Chatrooms",
         "seek_bar_label": "Audio-Suchleiste",
@@ -104,6 +114,7 @@
         "reply": "Antworten",
         "reply_in_thread": "In Thread antworten",
         "report_content": "Inhalt melden",
+        "report_room": "Raum melden",
         "resend": "Erneut senden",
         "reset": "Zurücksetzen",
         "resume": "Fortsetzen",
@@ -1810,6 +1821,12 @@
         "spam_or_propaganda": "Spam oder Propaganda",
         "toxic_behaviour": "Toxisches Verhalten"
     },
+    "report_room": {
+        "description": "Melden Sie diesen Raum Ihrem Homeserver-Administrator. Dadurch wird die eindeutige ID des Raums gesendet. Wenn Nachrichten verschlüsselt sind, kann der Administrator sie jedoch nicht lesen oder geteilte Dateien anzeigen.",
+        "reason_placeholder": " Grund für die Meldung...",
+        "sent": "Ihr Bericht wurde gesendet.",
+        "title": "Raum melden"
+    },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Konnte %(failedCount)s Sitzungen nicht entschlüsseln!",
         "count_of_successfully_restored_keys": "%(sessionCount)s Schlüssel erfolgreich wiederhergestellt",
@@ -2386,7 +2403,7 @@
             "public_without_alias_warning": "Um den Raum zu verlinken, füge bitte eine Adresse hinzu.",
             "publish_room": "Diesen Raum im Raumverzeichnis veröffentlichen.",
             "publish_space": "Diesen Space im Raumverzeichnis veröffentlichen.",
-            "strict_encryption": "Niemals verschlüsselte Nachrichten von dieser Sitzung zu unverifizierten Sitzungen in diesem Raum senden",
+            "strict_encryption": "Senden Sie Nachrichten nur an verifizierte Benutzer.",
             "title": "Sicherheit"
         },
         "title": "Raumeinstellungen - %(roomName)s",
@@ -2523,8 +2540,8 @@
                 "do_not_close_warning": "Schließen Sie dieses Fenster nicht, bis der Reset abgeschlossen ist",
                 "export_keys": "Schlüssel exportieren",
                 "import_keys": "Schlüssel importieren",
-                "other_people_device_description": "Senden Sie in verschlüsselten Räumen standardmäßig keine verschlüsselten Nachrichten an Dritte, bis Sie diese verifiziert haben",
-                "other_people_device_label": "Senden Sie niemals verschlüsselte Nachrichten an nicht verifizierte Geräte",
+                "other_people_device_description": "Warnung: Benutzer, die sich nicht explizit bei Ihnen verifiziert haben (z. B. mit Emojis), erhalten Ihre verschlüsselten Nachrichten nicht. Außerdem erhalten nicht verifizierte Geräte von verifizierten Benutzern Ihre verschlüsselten Nachrichten nicht.",
+                "other_people_device_label": "Senden Sie in verschlüsselten Räumen Nachrichten nur an verifizierte Benutzer",
                 "other_people_device_title": "Geräte anderer Personen",
                 "reset_identity": "Kryptografische Identität zurücksetzen",
                 "reset_in_progress": "Der Reset wird ausgeführt",
@@ -2886,7 +2903,7 @@
             "send_analytics": "Analysedaten senden",
             "session_id": "Sitzungs-ID:",
             "session_key": "Sitzungsschlüssel:",
-            "strict_encryption": "Niemals verschlüsselte Nachrichten von dieser Sitzung zu unverifizierten Sitzungen senden"
+            "strict_encryption": "Senden Sie Nachrichten nur an verifizierte Benutzer"
         },
         "send_read_receipts": "Sende Lesebestätigungen",
         "send_read_receipts_unsupported": "Dein Server unterstützt das Deaktivieren von Lesebestätigungen nicht.",
@@ -3567,7 +3584,8 @@
         },
         "m.sticker": "%(senderDisplayName)s hat einen Sticker gesendet.",
         "m.video": {
-            "error_decrypting": "Videoentschlüsselung fehlgeschlagen"
+            "error_decrypting": "Videoentschlüsselung fehlgeschlagen",
+            "show_video": "Video anzeigen"
         },
         "m.widget": {
             "added": "%(senderName)s hat das Widget %(widgetName)s hinzugefügt",
