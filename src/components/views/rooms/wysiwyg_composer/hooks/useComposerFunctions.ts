@@ -11,7 +11,7 @@ import { type RefObject, useMemo } from "react";
 import { setSelection } from "../utils/selection";
 
 export function useComposerFunctions(
-    ref: RefObject<HTMLDivElement>,
+    ref: RefObject<HTMLDivElement | null>,
     setContent: (content: string) => void,
 ): {
     clear(): void;

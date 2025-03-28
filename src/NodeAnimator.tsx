@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type Key, type MutableRefObject, type ReactElement, type RefCallback } from "react";
+import React, { type Key, type RefObject, type ReactElement, type RefCallback } from "react";
 
 interface IChildProps {
     style: React.CSSProperties;
@@ -20,7 +20,7 @@ interface IProps {
     // a list of state objects to apply to each child node in turn
     startStyles: React.CSSProperties[];
 
-    innerRef?: MutableRefObject<any>;
+    innerRef?: RefObject<any>;
 }
 
 function isReactElement(c: ReturnType<(typeof React.Children)["toArray"]>[number]): c is ReactElement {

@@ -56,7 +56,7 @@ type ButtonProps<T extends keyof HTMLElementTagNameMap> = Omit<
     notificationState?: NotificationState;
     isNarrow?: boolean;
     size: string;
-    innerRef?: RefObject<HTMLDivElement>;
+    innerRef?: RefObject<HTMLDivElement | null>;
     ContextMenuComponent?: ComponentType<ComponentProps<typeof SpaceContextMenu>>;
     onClick?(ev?: ButtonEvent): void;
 };

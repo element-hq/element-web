@@ -211,7 +211,9 @@ describe("TimelinePanel", () => {
                     timelineSet={timelineSet}
                     manageReadMarkers={true}
                     manageReadReceipts={true}
-                    ref={(ref) => (timelinePanel = ref)}
+                    ref={(ref) => {
+                        timelinePanel = ref;
+                    }}
                 />,
                 withClientContextRenderOptions(MatrixClientPeg.safeGet()),
             );

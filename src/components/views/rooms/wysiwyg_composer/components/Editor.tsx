@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import classNames from "classnames";
-import React, { type CSSProperties, forwardRef, memo, type MutableRefObject, type ReactNode } from "react";
+import React, { type CSSProperties, forwardRef, memo, type RefObject, type ReactNode } from "react";
 
 import { useIsExpanded } from "../hooks/useIsExpanded";
 import { useSelection } from "../hooks/useSelection";
@@ -26,7 +26,7 @@ export const Editor = memo(
         { disabled, placeholder, leftComponent, rightComponent }: EditorProps,
         ref,
     ) {
-        const isExpanded = useIsExpanded(ref as MutableRefObject<HTMLDivElement | null>, HEIGHT_BREAKING_POINT);
+        const isExpanded = useIsExpanded(ref as RefObject<HTMLDivElement | null>, HEIGHT_BREAKING_POINT);
         const { onFocus, onBlur, onInput } = useSelection();
 
         return (
