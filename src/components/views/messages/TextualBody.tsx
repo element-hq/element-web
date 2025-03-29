@@ -332,6 +332,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                 linkify
                 highlights={this.props.highlights}
                 ref={this.contentRef}
+                renderTooltipsForAmbiguousLinks
                 renderKeywordPills
                 renderMentionPills
                 renderCodeBlocks
