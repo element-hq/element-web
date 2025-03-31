@@ -7,7 +7,6 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { type MatrixClient, type Room, type RoomState, EventType, type EmptyObject } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import SettingsStore from "../../settings/SettingsStore";

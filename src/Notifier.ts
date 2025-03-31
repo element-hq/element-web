@@ -43,7 +43,6 @@ import { isPushNotifyDisabled } from "./settings/controllers/NotificationControl
 import UserActivity from "./UserActivity";
 import { mediaFromMxc } from "./customisations/Media";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
-import LegacyCallHandler from "./LegacyCallHandler";
 import { SdkContextClass } from "./contexts/SDKContext";
 import { localNotificationsAreSilenced, createLocalNotificationSettingsIfNeeded } from "./utils/notifications";
 import { getIncomingCallToastKey, IncomingCallToast } from "./toasts/IncomingCallToast";

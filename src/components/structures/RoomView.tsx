@@ -120,7 +120,6 @@ import { isVideoRoom } from "../../utils/video-rooms";
 import { SDKContext } from "../../contexts/SDKContext";
 import { RoomSearchView } from "./RoomSearchView";
 import eventSearch, { type SearchInfo, SearchScope } from "../../Searching";
-import { isCallEvent } from "./LegacyCallEventGrouper";
 import { WidgetType } from "../../widgets/WidgetType";
 import WidgetUtils from "../../utils/WidgetUtils";
 import { shouldEncryptRoomWithSingle3rdPartyInvite } from "../../utils/room/shouldEncryptRoomWithSingle3rdPartyInvite";

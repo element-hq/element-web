@@ -28,7 +28,6 @@ import { _t, UserFriendlyError } from "./languageHandler";
 import dis from "./dispatcher/dispatcher";
 import * as Rooms from "./Rooms";
 import { getAddressType } from "./UserAddress";
-import { VIRTUAL_ROOM_EVENT_TYPE } from "./call-types";
 import SpaceStore from "./stores/spaces/SpaceStore";
 import { makeSpaceParentEvent } from "./utils/space";
 import { JitsiCall, ElementCall } from "./models/Call";

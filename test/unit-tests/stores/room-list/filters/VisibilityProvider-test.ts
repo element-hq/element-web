@@ -10,7 +10,6 @@ import { mocked } from "jest-mock";
 import { type Room, RoomType } from "matrix-js-sdk/src/matrix";
 
 import { VisibilityProvider } from "../../../../../src/stores/room-list/filters/VisibilityProvider";
-import LegacyCallHandler from "../../../../../src/LegacyCallHandler";
 import { LocalRoom, LOCAL_ROOM_ID_PREFIX } from "../../../../../src/models/LocalRoom";
 import { RoomListCustomisations } from "../../../../../src/customisations/RoomList";
 import { createTestClient } from "../../../../test-utils";

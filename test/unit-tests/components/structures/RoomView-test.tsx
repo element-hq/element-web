@@ -9,7 +9,6 @@ Please see LICENSE files in the repository root for full details.
 import React, { createRef, type RefObject } from "react";
 import { mocked, type MockedObject } from "jest-mock";
 import {
-    ClientEvent,
     EventTimeline,
     EventType,
     type IEvent,
