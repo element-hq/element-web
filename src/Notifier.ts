@@ -445,7 +445,7 @@ class NotifierClass extends TypedEventEmitter<keyof EmittedEvents, EmittedEvents
 
     // XXX: exported for tests
     public evaluateEvent(ev: MatrixEvent): void {
-        let roomId = ev.getRoomId()!;
+        const roomId = ev.getRoomId()!;
         const room = MatrixClientPeg.safeGet().getRoom(roomId);
         if (!room) {
             // e.g we are in the process of joining a room.

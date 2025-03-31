@@ -35,7 +35,6 @@ import { forEachRight } from "lodash";
 import TimelinePanel from "../../../../src/components/structures/TimelinePanel";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
-import { isCallEvent } from "../../../../src/components/structures/LegacyCallEventGrouper";
 import {
     filterConsole,
     flushPromises,

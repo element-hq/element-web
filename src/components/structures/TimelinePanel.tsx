@@ -30,7 +30,7 @@ import {
     ThreadEvent,
     ReceiptType,
 } from "matrix-js-sdk/src/matrix";
-import { debounce, findLastIndex } from "lodash";
+import { debounce } from "lodash";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import SettingsStore from "../../settings/SettingsStore";
@@ -493,7 +493,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
         const mainEvents = this.timelineWindow!.getEvents();
 
-        let marker = mainEvents.findIndex((ev) => ev.getId() === eventId);
+        const marker = mainEvents.findIndex((ev) => ev.getId() === eventId);
 
         // The number of events to unpaginate from the main timeline
         let count: number;

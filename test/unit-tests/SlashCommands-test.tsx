@@ -14,7 +14,6 @@ import { type Command, Commands, getCommand } from "../../src/SlashCommands";
 import { createTestClient } from "../test-utils";
 import { LocalRoom, LOCAL_ROOM_ID_PREFIX } from "../../src/models/LocalRoom";
 import SettingsStore from "../../src/settings/SettingsStore";
-import LegacyCallHandler from "../../src/LegacyCallHandler";
 import { SdkContextClass } from "../../src/contexts/SDKContext";
 import Modal from "../../src/Modal";
 import WidgetUtils from "../../src/utils/WidgetUtils";
