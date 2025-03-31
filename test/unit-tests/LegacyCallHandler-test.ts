@@ -30,7 +30,6 @@ import LegacyCallHandler, {
     PROTOCOL_PSTN,
     PROTOCOL_PSTN_PREFIXED,
     PROTOCOL_SIP_NATIVE,
-    PROTOCOL_SIP_VIRTUAL,
 } from "../../src/LegacyCallHandler";
 import { mkStubRoom, stubClient, untilDispatch } from "../test-utils";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
@@ -265,20 +264,6 @@ describe("LegacyCallHandler", () => {
                             protocol: "im.vector.protocol.sip_native",
                             fields: {
                                 is_native: true,
-                                lookup_success: true,
-                            },
-                        },
-                    ]);
-                }
-                return Promise.resolve([]);
-            } else if (proto === PROTOCOL_SIP_VIRTUAL) {
-                if (params["native_mxid"] === NATIVE_BOB) {
-                    return Promise.resolve([
-                        {
-                            userid: VIRTUAL_BOB,
-                            protocol: "im.vector.protocol.sip_virtual",
-                            fields: {
-                                is_virtual: true,
                                 lookup_success: true,
                             },
                         },

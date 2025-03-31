@@ -14,12 +14,6 @@ import { LocalRoom, LOCAL_ROOM_ID_PREFIX } from "../../../../../src/models/Local
 import { RoomListCustomisations } from "../../../../../src/customisations/RoomList";
 import { createTestClient } from "../../../../test-utils";
 
-jest.mock("../../../../../src/LegacyCallHandler", () => ({
-    instance: {
-        getSupportsVirtualRooms: jest.fn(),
-    },
-}));
-
 jest.mock("../../../../../src/customisations/RoomList", () => ({
     RoomListCustomisations: {
         isRoomVisible: jest.fn(),
