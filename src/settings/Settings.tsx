@@ -349,11 +349,13 @@ export interface Settings {
     "Electron.alwaysShowMenuBar": IBaseSetting<boolean>;
     "Electron.showTrayIcon": IBaseSetting<boolean>;
     "Electron.enableHardwareAcceleration": IBaseSetting<boolean>;
+    "Developer.elementCallUrl": IBaseSetting<string>;
 }
 
 export type SettingKey = keyof Settings;
 export type FeatureSettingKey = Assignable<Settings, IFeature>;
 export type BooleanSettingKey = Assignable<Settings, IBaseSetting<boolean>> | FeatureSettingKey;
+export type StringSettingKey = Assignable<Settings, IBaseSetting<string>>;
 
 export const SETTINGS: Settings = {
     "feature_video_rooms": {
@@ -1383,5 +1385,11 @@ export const SETTINGS: Settings = {
         supportedLevels: [SettingLevel.PLATFORM],
         displayName: _td("settings|preferences|enable_hardware_acceleration"),
         default: true,
+    },
+
+    "Developer.elementCallUrl": {
+        supportedLevels: [SettingLevel.DEVICE],
+        displayName: _td("devtools|settings|elementCallUrl"),
+        default: "",
     },
 };

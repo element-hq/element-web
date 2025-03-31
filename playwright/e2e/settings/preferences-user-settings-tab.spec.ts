@@ -28,7 +28,10 @@ test.describe("Preferences user settings tab", () => {
         const tab = await app.settings.openUserSettings("Preferences");
         // Assert that the top heading is rendered
         await expect(tab.getByRole("heading", { name: "Preferences" })).toBeVisible();
-        await expect(tab).toMatchScreenshot("Preferences-user-settings-tab-should-be-rendered-properly-1.png");
+        await expect(tab).toMatchScreenshot("Preferences-user-settings-tab-should-be-rendered-properly-1.png", {
+            // masked due to daylight saving time
+            mask: [tab.locator("#mx_dropdownUserTimezone_value")],
+        });
     });
 
     test("should be able to change the app language", { tag: ["@no-firefox", "@no-webkit"] }, async ({ uut, user }) => {

@@ -140,6 +140,7 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
                         content={content}
                         highlights={[]}
                         stripReply
+                        renderTooltipsForAmbiguousLinks
                         renderMentionPills
                         renderCodeBlocks
                         renderSpoilers
