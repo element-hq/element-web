@@ -118,10 +118,12 @@ test.describe("Cryptography", function () {
         // Fetch the current cross-signing keys
         async function fetchMasterKey() {
             return await test.step("Fetch master key from server", async () => {
-                const k = await app.client.evaluate(
-                    // @ts-ignore we can't use the CrossSigning enum here
-                    async (cli) => await cli.getCrypto().getCrossSigningKeyId("master"),
-                );
+                const k = await app.client.evaluate(async (cli) => {
+                    const userId = cli.getUserId();
+                    const keys = await cli.downloadKeysForUsers([userId]);
+                    return Object.values(keys.master_keys[userId].keys)[0];
+                });
+                console.log(`fetchMasterKey: ${k}`);
                 return k;
             });
         }
