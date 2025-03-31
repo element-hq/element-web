@@ -280,7 +280,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
 
     private onLocalAliasesToggled = (event: ChangeEvent<HTMLDetailsElement>): void => {
         // expanded
-        if (event.target.open) {
+        if (event.currentTarget.open) {
             // if local aliases haven't been preloaded yet at component mount
             if (!this.props.canSetCanonicalAlias && this.state.localAliases.length === 0) {
                 this.loadLocalAliases();
