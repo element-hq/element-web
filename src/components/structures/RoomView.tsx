@@ -164,7 +164,6 @@ export { MainSplitContentType };
 
 export interface IRoomState {
     room?: Room;
-    virtualRoom?: Room;
     roomId?: string;
     roomAlias?: string;
     roomLoading: boolean;
@@ -1343,12 +1342,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         return this.messagePanel.canResetTimeline();
     };
 
-    private loadVirtualRoom = async (room?: Room): Promise<void> => {
-        const virtualRoom = room?.roomId && (await VoipUserMapper.sharedInstance().getVirtualRoomForRoom(room?.roomId));
-
-        this.setState({ virtualRoom: virtualRoom || undefined });
-    };
-
     // called when state.room is first initialised (either at initial load,
     // after a successful peek, or after we join the room).
     private onRoomLoaded = (room: Room): void => {
@@ -1361,7 +1354,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         this.calculateRecommendedVersion(room);
         this.updatePermissions(room);
         this.checkWidgets(room);
-        this.loadVirtualRoom(room);
         this.updateRoomEncrypted(room);
 
         if (
@@ -2427,8 +2419,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 <TimelinePanel
                     ref={this.gatherTimelinePanelRef}
                     timelineSet={this.state.room.getUnfilteredTimelineSet()}
-                    overlayTimelineSet={this.state.virtualRoom?.getUnfilteredTimelineSet()}
-                    overlayTimelineSetFilter={isCallEvent}
                     showReadReceipts={this.state.showReadReceipts}
                     manageReadReceipts={!this.state.isPeeking}
                     sendReadReceiptOnLoad={!this.state.wasContextSwitch}
