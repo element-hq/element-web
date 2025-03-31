@@ -59,13 +59,7 @@ describe("MessageEvent", () => {
     let event: MatrixEvent;
 
     const renderMessageEvent = (): RenderResult => {
-        return render(
-            <MessageEvent
-                mxEvent={event}
-                onHeightChanged={jest.fn()}
-                permalinkCreator={new RoomPermalinkCreator(room)}
-            />,
-        );
+        return render(<MessageEvent mxEvent={event} permalinkCreator={new RoomPermalinkCreator(room)} />);
     };
 
     beforeEach(() => {

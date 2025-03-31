@@ -184,7 +184,6 @@ function makeMVideoBody(w: number, h: number): RenderResult {
         mxEvent: event,
         highlights: [],
         highlightLink: "",
-        onHeightChanged: jest.fn(),
         onMessageAllowed: jest.fn(),
         permalinkCreator: {} as RoomPermalinkCreator,
         mediaEventHelper: { media: { isEncrypted: false } } as MediaEventHelper,

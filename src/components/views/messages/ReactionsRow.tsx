@@ -127,7 +127,6 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
     };
 
     private onReactionsChange = (): void => {
-        // TODO: Call `onHeightChanged` as needed
         this.setState({
             myReactions: this.getMyReactions(),
         });

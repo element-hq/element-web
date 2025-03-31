@@ -52,7 +52,6 @@ export interface EventTileTypeProps
         | "highlights"
         | "highlightLink"
         | "showUrlPreview"
-        | "onHeightChanged"
         | "forExport"
         | "getRelationsForEvent"
         | "editState"
@@ -274,7 +273,6 @@ export function renderTile(
         highlightLink,
         showUrlPreview,
         permalinkCreator,
-        onHeightChanged,
         callEventGrouper,
         getRelationsForEvent,
         isSeeingThroughMessageHiddenForModeration,
@@ -292,7 +290,6 @@ export function renderTile(
                 highlights,
                 highlightLink,
                 showUrlPreview,
-                onHeightChanged,
                 editState,
                 replacingEventId,
                 getRelationsForEvent,
@@ -311,7 +308,6 @@ export function renderTile(
                 highlightLink,
                 showUrlPreview,
                 permalinkCreator,
-                onHeightChanged,
                 callEventGrouper,
                 getRelationsForEvent,
                 isSeeingThroughMessageHiddenForModeration,
@@ -344,7 +340,6 @@ export function renderReplyTile(
         mxEvent,
         highlights,
         highlightLink,
-        onHeightChanged,
         showUrlPreview,
         overrideBodyTypes,
         overrideEventTypes,
@@ -359,7 +354,6 @@ export function renderReplyTile(
         mxEvent,
         highlights,
         highlightLink,
-        onHeightChanged,
         showUrlPreview,
         overrideBodyTypes,
         overrideEventTypes,
