@@ -196,46 +196,6 @@ describe("SlashCommands", () => {
         });
     });
 
-    describe("/tovirtual", () => {
-        beforeEach(() => {
-            command = findCommand("tovirtual")!;
-        });
-
-        describe("isEnabled", () => {
-            describe("when virtual rooms are supported", () => {
-                beforeEach(() => {
-                    jest.spyOn(LegacyCallHandler.instance, "getSupportsVirtualRooms").mockReturnValue(true);
-                });
-
-                it("should return true for Room", () => {
-                    setCurrentRoom();
-                    expect(command.isEnabled(client)).toBe(true);
-                });
-
-                it("should return false for LocalRoom", () => {
-                    setCurrentLocalRoom();
-                    expect(command.isEnabled(client)).toBe(false);
-                });
-            });
-
-            describe("when virtual rooms are not supported", () => {
-                beforeEach(() => {
-                    jest.spyOn(LegacyCallHandler.instance, "getSupportsVirtualRooms").mockReturnValue(false);
-                });
-
-                it("should return false for Room", () => {
-                    setCurrentRoom();
-                    expect(command.isEnabled(client)).toBe(false);
-                });
-
-                it("should return false for LocalRoom", () => {
-                    setCurrentLocalRoom();
-                    expect(command.isEnabled(client)).toBe(false);
-                });
-            });
-        });
-    });
-
     describe("/part", () => {
         it("should part room matching alias if found", async () => {
             const room1 = new Room("room-id", client, client.getSafeUserId());
