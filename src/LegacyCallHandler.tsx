@@ -39,7 +39,6 @@ import { WidgetMessagingStore } from "./stores/widgets/WidgetMessagingStore";
 import { ElementWidgetActions } from "./stores/widgets/ElementWidgetActions";
 import { UIFeature } from "./settings/UIFeature";
 import { Action } from "./dispatcher/actions";
-import VoipUserMapper from "./VoipUserMapper";
 import { addManagedHybridWidget, isManagedHybridWidgetEnabled } from "./widgets/ManagedHybrid";
 import SdkConfig from "./SdkConfig";
 import { ensureDMExists } from "./createRoom";
@@ -179,8 +178,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
     }
 
     /*
-     * Gets the user-facing room associated with a call (call.roomId may be the call "virtual room"
-     * if a voip_mxid_translate_pattern is set in the config)
+     * Gets the user-facing room associated with a call
      */
     public roomIdForCall(call?: MatrixCall): string | null {
         if (!call) return null;
@@ -195,7 +193,7 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
             }
         }
 
-        return VoipUserMapper.sharedInstance().nativeRoomForVirtualRoom(call.roomId) ?? call.roomId ?? null;
+        return call.roomId ?? null;
     }
 
     public start(): void {
@@ -810,24 +808,10 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
 
     private async placeMatrixCall(roomId: string, type: CallType, transferee?: MatrixCall): Promise<void> {
         const cli = MatrixClientPeg.safeGet();
-        const mappedRoomId = (await VoipUserMapper.sharedInstance().getOrCreateVirtualRoomForRoom(roomId)) || roomId;
-        logger.debug("Mapped real room " + roomId + " to room ID " + mappedRoomId);
-
-        // If we're using a virtual room nd there are any events pending, try to resend them,
-        // otherwise the call will fail and because its a virtual room, the user won't be able
-        // to see it to either retry or clear the pending events. There will only be call events
-        // in this queue, and since we're about to place a new call, they can only be events from
-        // previous calls that are probably stale by now, so just cancel them.
-        if (mappedRoomId !== roomId) {
-            const mappedRoom = cli.getRoom(mappedRoomId);
-            if (mappedRoom?.getPendingEvents().length) {
-                Resend.cancelUnsentEvents(mappedRoom);
-            }
-        }
 
         const timeUntilTurnCresExpire = cli.getTurnServersExpiry() - Date.now();
         logger.log("Current turn creds expire in " + timeUntilTurnCresExpire + " ms");
-        const call = cli.createCall(mappedRoomId)!;
+        const call = cli.createCall(roomId)!;
 
         try {
             this.addCallForRoom(roomId, call);
