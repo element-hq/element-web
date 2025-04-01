@@ -113,7 +113,7 @@ test.describe("Cryptography", function () {
 
     test("Can reset cross-signing keys", async ({ page, app, user: aliceCredentials }) => {
         await app.client.bootstrapCrossSigning(aliceCredentials);
-        const secretStorageKey = await enableKeyBackup(app);
+        await enableKeyBackup(app);
 
         // Fetch the current cross-signing keys
         async function fetchMasterKey() {
@@ -137,8 +137,8 @@ test.describe("Cryptography", function () {
         // Confirm
         await encryptionTab.getByRole("button", { name: "Continue" }).click();
 
-        // Enter the 4S key
-        await page.getByPlaceholder("Recovery Key").fill(secretStorageKey);
+        // Enter the password
+        await page.getByPlaceholder("Password").fill(aliceCredentials.password);
         await page.getByRole("button", { name: "Continue" }).click();
 
         await expect(async () => {
