@@ -18,6 +18,7 @@ export interface INotificationStateSnapshotParams {
     level: NotificationLevel;
     muted: boolean;
     knocked: boolean;
+    invited: boolean;
 }
 
 export enum NotificationStateEvents {
@@ -38,6 +39,7 @@ export abstract class NotificationState
     protected _level: NotificationLevel = NotificationLevel.None;
     protected _muted = false;
     protected _knocked = false;
+    protected _invited = false;
 
     private watcherReferences: string[] = [];
 
@@ -70,10 +72,22 @@ export abstract class NotificationState
         return this._knocked;
     }
 
+    /**
+     * True if the notification is an invitation notification.
+     * Invite notifications are a special case of highlight notifications
+     */
+    public get invited(): boolean {
+        return this._invited;
+    }
+
     public get isIdle(): boolean {
         return this.level <= NotificationLevel.None;
     }
 
+    /**
+     * True if the notification is higher than an activity notification or if the feature_hidebold is disabled with an activity notification.
+     * The "unread" term used here is different from the "Unread" in the UI. Unread in the UI doesn't include activity notifications even with feature_hidebold disabled.
+     */
     public get isUnread(): boolean {
         if (this.level > NotificationLevel.Activity) {
             return true;
@@ -83,10 +97,19 @@ export abstract class NotificationState
         }
     }
 
+    /**
+     * True if the notification has a count or a symbol and is equal or greater than an NotificationLevel.Notification.
+     */
     public get hasUnreadCount(): boolean {
         return this.level >= NotificationLevel.Notification && (!!this.count || !!this.symbol);
     }
 
+    /**
+     * True if the notification is a mention, an invitation, a knock or a unset message.
+     *
+     * @deprecated because the name is confusing. A mention is not an invitation, a knock or an unsent message.
+     * In case of a {@link RoomNotificationState}, use {@link RoomNotificationState.isMention} instead.
+     */
     public get hasMentions(): boolean {
         return this.level >= NotificationLevel.Highlight;
     }
@@ -116,6 +139,7 @@ export class NotificationStateSnapshot {
     private readonly level: NotificationLevel;
     private readonly muted: boolean;
     private readonly knocked: boolean;
+    private readonly isInvitation: boolean;
 
     public constructor(state: INotificationStateSnapshotParams) {
         this.symbol = state.symbol;
@@ -123,6 +147,7 @@ export class NotificationStateSnapshot {
         this.level = state.level;
         this.muted = state.muted;
         this.knocked = state.knocked;
+        this.isInvitation = state.invited;
     }
 
     public isDifferentFrom(other: INotificationStateSnapshotParams): boolean {
@@ -132,6 +157,7 @@ export class NotificationStateSnapshot {
             level: this.level,
             muted: this.muted,
             knocked: this.knocked,
+            is: this.isInvitation,
         };
         const after = {
             count: other.count,

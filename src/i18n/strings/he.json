@@ -289,7 +289,6 @@
         "download_logs": "הורד יומנים",
         "downloading_logs": "מוריד לוגים",
         "error_empty": "אנא ספר לנו מה השתבש או, יותר טוב, צור בעיה של GitHub המתארת את הבעיה.",
-        "failed_send_logs": "כשל במשלוח יומנים: ",
         "github_issue": "סוגיית GitHub",
         "introduction": "אם שלחתם באג דרך GitHub, שליחת לוגים יכולה לעזור לנו לאתר את הבעיה. ",
         "log_request": "כדי לעזור לנו למנוע זאת בעתיד, אנא <a> שלחו לנו יומנים </a>.",
@@ -326,7 +325,6 @@
     "common": {
         "accessibility": "נגישות",
         "advanced": "מתקדם",
-        "all_rooms": "כל החדרים",
         "analytics": "אנליטיקה",
         "and_n_others": {
             "one": "ועוד אחד אחר...",
@@ -2486,7 +2484,6 @@
         "expand": "חזור לשיחה",
         "hangup": "ניתוק",
         "hide_sidebar_button": "הסתר סרגל צד",
-        "join_button_tooltip_connecting": "מקשר",
         "misconfigured_server": "השיחה נכשלה בגלל הגדרות שרת שגויות",
         "misconfigured_server_description": "אנא בקשו ממנהל השרת (<code>%(homeserverDomain)s</code>) לסדר את הגדרות שרת TURN על מנת שהשיחות יפעלו בעקביות.",
         "more_button": "יותר",

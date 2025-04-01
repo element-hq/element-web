@@ -8,10 +8,9 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
     <div
       class="mx_SettingsTab_sections"
     >
-      <label
+      <div
         class="mx_SetIntegrationManager"
         data-testid="mx_SetIntegrationManager"
-        for="toggle_integration"
       >
         <div
           class="mx_SettingsFlag"
@@ -30,18 +29,6 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
               (scalar.vector.im)
             </h4>
           </div>
-          <div
-            aria-checked="true"
-            aria-disabled="false"
-            class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on mx_ToggleSwitch_enabled"
-            id="toggle_integration"
-            role="switch"
-            tabindex="0"
-          >
-            <div
-              class="mx_ToggleSwitch_ball"
-            />
-          </div>
         </div>
         <div
           class="mx_SettingsSubsection_text"
@@ -59,7 +46,43 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
         >
           Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.
         </div>
-      </label>
+        <form
+          class="_root_19upo_16"
+        >
+          <div
+            class="_inline-field_19upo_32"
+          >
+            <div
+              class="_inline-field-control_19upo_44"
+            >
+              <div
+                class="_container_19o42_10"
+              >
+                <input
+                  checked=""
+                  class="_input_19o42_24"
+                  id="mx_SetIntegrationManager_Toggle"
+                  role="switch"
+                  type="checkbox"
+                />
+                <div
+                  class="_ui_19o42_34"
+                />
+              </div>
+            </div>
+            <div
+              class="_inline-field-body_19upo_38"
+            >
+              <label
+                class="_label_19upo_59"
+                for="mx_SetIntegrationManager_Toggle"
+              >
+                Enable the integration manager
+              </label>
+            </div>
+          </div>
+        </form>
+      </div>
       <div
         class="mx_SettingsSection"
       >
@@ -369,13 +392,13 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
                   <span
                     class="mx_SettingsFlag_labelText"
                   >
-                    Never send encrypted messages to unverified sessions from this session
+                    Only send messages to verified users
                   </span>
                 </label>
                 <div
                   aria-checked="false"
                   aria-disabled="false"
-                  aria-label="Never send encrypted messages to unverified sessions from this session"
+                  aria-label="Only send messages to verified users"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
                   id="mx_SettingsFlag_vY7Q4uEh9K38"
                   role="switch"
@@ -445,7 +468,7 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
                     >
                       <label
                         class="_label_19upo_59"
-                        for="radix-:r0:"
+                        for="radix-:r1:"
                       >
                         Enter a new identity server
                       </label>
@@ -454,7 +477,7 @@ exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
                       >
                         <input
                           class="_control_sqdq4_10"
-                          id="radix-:r0:"
+                          id="radix-:r1:"
                           name="input"
                           placeholder=""
                           title=""

@@ -349,7 +349,6 @@
         "download_logs": "下载日志",
         "downloading_logs": "正在下载日志",
         "error_empty": "请告诉我们哪里出错了，或最好创建一个 GitHub issue 来描述此问题。",
-        "failed_send_logs": "无法发送日志： ",
         "github_issue": "GitHub 上的 issue",
         "introduction": "若你通过GitHub提交bug，则调试日志能帮助我们追踪问题。 ",
         "log_request": "要帮助我们防止其以后发生，请<a>给我们发送日志</a>。",
@@ -389,7 +388,6 @@
         "access_token": "访问令牌",
         "accessibility": "无障碍功能",
         "advanced": "高级",
-        "all_rooms": "所有房间",
         "analytics": "统计分析服务",
         "and_n_others": {
             "other": "和其他%(count)s个人……",
@@ -3215,7 +3213,6 @@
         "hide_sidebar_button": "隐藏侧边栏",
         "input_devices": "输入设备",
         "join_button_tooltip_call_full": "抱歉——目前线路拥挤",
-        "join_button_tooltip_connecting": "连接中",
         "maximise": "填满屏幕",
         "misconfigured_server": "服务器配置错误导致通话失败",
         "misconfigured_server_description": "请联系你的家服务器（<code>%(homeserverDomain)s</code>）的管理员配置 TURN 服务器，以确保通话过程稳定。",

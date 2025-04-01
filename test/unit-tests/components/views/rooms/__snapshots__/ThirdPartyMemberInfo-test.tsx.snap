@@ -50,11 +50,11 @@ exports[`<ThirdPartyMemberInfo /> should render invite 1`] = `
     >
       <div
         class="mx_Flex mx_ThirdPartyMemberInfo"
-        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x);"
+        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
       >
         <section
           class="mx_Flex"
-          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x);"
+          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <span
             class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74"
@@ -124,11 +124,11 @@ exports[`<ThirdPartyMemberInfo /> should render invite when room in not availabl
     >
       <div
         class="mx_Flex mx_ThirdPartyMemberInfo"
-        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x);"
+        style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-4x); --mx-flex-wrap: nowrap;"
       >
         <section
           class="mx_Flex"
-          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x);"
+          style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: start; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-2x); --mx-flex-wrap: nowrap;"
         >
           <span
             class="_typography_6v6n8_153 _font-body-lg-semibold_6v6n8_74"

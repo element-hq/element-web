@@ -1,0 +1,156 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DeleteKeyStoragePanel /> should match snapshot 1`] = `
+<DocumentFragment>
+  <nav
+    class="_breadcrumb_1xygz_8"
+  >
+    <button
+      aria-label="Back"
+      class="_icon-button_m2erp_8 _subtle-bg_m2erp_29"
+      role="button"
+      style="--cpd-icon-button-size: 28px;"
+      tabindex="0"
+    >
+      <div
+        class="_indicator-icon_zr2a0_17"
+        style="--cpd-icon-button-size: 100%;"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m13.3 17.3-4.6-4.6a.9.9 0 0 1-.213-.325A1.1 1.1 0 0 1 8.425 12q0-.2.062-.375A.9.9 0 0 1 8.7 11.3l4.6-4.6a.95.95 0 0 1 .7-.275q.425 0 .7.275a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7L10.8 12l3.9 3.9a.95.95 0 0 1 .275.7.95.95 0 0 1-.275.7.95.95 0 0 1-.7.275.95.95 0 0 1-.7-.275"
+          />
+        </svg>
+      </div>
+    </button>
+    <ol
+      class="_pages_1xygz_17"
+    >
+      <li>
+        <a
+          class="_link_1v5rz_8"
+          data-kind="primary"
+          data-size="small"
+          rel="noreferrer noopener"
+          role="button"
+          tabindex="0"
+        >
+          Encryption
+        </a>
+      </li>
+      <li>
+        <span
+          aria-current="page"
+          class="_last-page_1xygz_30"
+        >
+          Delete key storage
+        </span>
+      </li>
+    </ol>
+  </nav>
+  <div
+    class="mx_EncryptionCard"
+  >
+    <div
+      class="mx_EncryptionCard_header"
+    >
+      <div
+        class="_content_o77nw_8 _destructive_o77nw_34"
+        data-size="large"
+      >
+        <svg
+          fill="currentColor"
+          height="1em"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22"
+          />
+        </svg>
+      </div>
+      <h2
+        class="_typography_6v6n8_153 _font-heading-sm-semibold_6v6n8_93"
+      >
+        Are you sure you want to turn off key storage and delete it?
+      </h2>
+    </div>
+    <div
+      class="mx_Flex mx_EncryptionCard_emphasisedContent"
+      style="--mx-flex-display: flex; --mx-flex-direction: column; --mx-flex-align: normal; --mx-flex-justify: start; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
+    >
+      Deleting key storage will remove your cryptographic identity and message keys from the server and turn off the following security features:
+      <ul
+        class="_visual-list_15wzx_8"
+      >
+        <li
+          class="_visual-list-item_1ma3e_8"
+        >
+          <svg
+            aria-hidden="true"
+            class="_visual-list-item-icon_1ma3e_17 _visual-list-item-icon-destructive_1ma3e_26"
+            fill="currentColor"
+            height="24px"
+            viewBox="0 0 24 24"
+            width="24px"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
+            />
+          </svg>
+          You will not have encrypted message history on new devices
+        </li>
+        <li
+          class="_visual-list-item_1ma3e_8"
+        >
+          <svg
+            aria-hidden="true"
+            class="_visual-list-item-icon_1ma3e_17 _visual-list-item-icon-destructive_1ma3e_26"
+            fill="currentColor"
+            height="24px"
+            viewBox="0 0 24 24"
+            width="24px"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 0 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414"
+            />
+          </svg>
+          You will lose access to your encrypted messages if you are signed out of Element everywhere
+        </li>
+      </ul>
+    </div>
+    <div
+      class="mx_EncryptionCard_buttons"
+    >
+      <button
+        aria-disabled="false"
+        class="_button_vczzf_8 _destructive_vczzf_107"
+        data-kind="primary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Delete key storage
+      </button>
+      <button
+        class="_button_vczzf_8"
+        data-kind="tertiary"
+        data-size="lg"
+        role="button"
+        tabindex="0"
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+</DocumentFragment>
+`;

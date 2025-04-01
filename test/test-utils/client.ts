@@ -116,6 +116,16 @@ export const mockClientMethodsEvents = () => ({
 });
 
 /**
+ * Returns basic mocked pushProcessor
+ */
+export const mockClientPushProcessor = () => ({
+    pushProcessor: {
+        getPushRuleById: jest.fn(),
+        ruleMatchesEvent: jest.fn(),
+    },
+});
+
+/**
  * Returns basic mocked client methods related to server support
  */
 export const mockClientMethodsServer = (): Partial<Record<MethodLikeKeys<MatrixClient>, unknown>> => ({

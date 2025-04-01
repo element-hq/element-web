@@ -8,7 +8,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { Toast } from "@vector-im/compound-web";
-import React, { useState } from "react";
+import React, { type JSX, useState } from "react";
 import UserProfileIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-profile";
 import DevicesIcon from "@vector-im/compound-design-tokens/assets/web/icons/devices";
 import VisibilityOnIcon from "@vector-im/compound-design-tokens/assets/web/icons/visibility-on";
@@ -50,6 +50,11 @@ import { EncryptionUserSettingsTab } from "../settings/tabs/user/EncryptionUserS
 interface IProps {
     initialTabId?: UserTab;
     showMsc4108QrCode?: boolean;
+    /**
+     * If `true`, the flow for a user to reset their encryption will be shown. In this case, `initialTabId` must be `UserTab.Encryption`.
+     *
+     * If false or undefined, show the tab as normal.
+     */
     showResetIdentity?: boolean;
     sdkContext: SdkContextClass;
     onFinished(): void;
@@ -92,7 +97,7 @@ function titleForTabID(tabId: UserTab): React.ReactNode {
 export default function UserSettingsDialog(props: IProps): JSX.Element {
     const voipEnabled = useSettingValue(UIFeature.Voip);
     const mjolnirEnabled = useSettingValue("feature_mjolnir");
-    // store these props in state as changing tabs back and forth should clear it
+    // store these props in state as changing tabs back and forth should clear them
     const [showMsc4108QrCode, setShowMsc4108QrCode] = useState(props.showMsc4108QrCode);
     const [showResetIdentity, setShowResetIdentity] = useState(props.showResetIdentity);
 
@@ -191,6 +196,7 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
                 _td("settings|encryption|title"),
                 <KeyIcon />,
                 <EncryptionUserSettingsTab initialState={showResetIdentity ? "reset_identity_forgot" : undefined} />,
+                "UserSettingsEncryption",
             ),
         );
 

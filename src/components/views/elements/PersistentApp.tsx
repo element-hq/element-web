@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ContextType, type CSSProperties, type MutableRefObject, type ReactNode } from "react";
+import React, { type JSX, type ContextType, type CSSProperties, type RefObject, type ReactNode } from "react";
 import { type Room } from "matrix-js-sdk/src/matrix";
 
 import WidgetUtils from "../../../utils/WidgetUtils";
@@ -19,7 +19,7 @@ interface IProps {
     persistentWidgetId: string;
     persistentRoomId: string;
     pointerEvents?: CSSProperties["pointerEvents"];
-    movePersistedElement: MutableRefObject<(() => void) | undefined>;
+    movePersistedElement: RefObject<(() => void) | null>;
     children?: ReactNode;
 }
 

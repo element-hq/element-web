@@ -253,7 +253,6 @@
         "download_logs": "Parsisiųsti žurnalus",
         "downloading_logs": "Parsiunčiami žurnalai",
         "error_empty": "Pasakyite mums kas nutiko, arba, dar geriau, sukurkite GitHub problemą su jos apibūdinimu.",
-        "failed_send_logs": "Nepavyko išsiųsti žurnalų: ",
         "github_issue": "GitHub problema",
         "introduction": "Jei per GitHub pateikėte klaidą, derinimo žurnalai gali padėti mums nustatyti problemą. ",
         "log_request": "Norėdami padėti mums išvengti to ateityje, <a>atsiųskite mums žurnalus</a>.",
@@ -290,7 +289,6 @@
     "common": {
         "access_token": "Prieigos žetonas",
         "advanced": "Išplėstiniai",
-        "all_rooms": "Visi kambariai",
         "analytics": "Analitika",
         "and_n_others": {
             "other": "ir %(count)s kitų...",
@@ -2355,7 +2353,6 @@
         "expand": "Grįžti prie skambučio",
         "hangup": "Padėti ragelį",
         "hide_sidebar_button": "Slėpti šoninę juostą",
-        "join_button_tooltip_connecting": "Jungiamasi",
         "misconfigured_server": "Skambutis nepavyko dėl neteisingai sukonfigūruoto serverio",
         "misconfigured_server_description": "Paprašykite savo serverio administratoriaus (<code>%(homeserverDomain)s</code>) sukonfiguruoti TURN serverį, kad skambučiai veiktų patikimai.",
         "more_button": "Daugiau",

@@ -1,5 +1,5 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2019-2023 The Matrix.org Foundation C.I.C.
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
@@ -116,7 +116,7 @@ const SpellCheckSection: React.FC = () => {
 };
 
 export default class PreferencesUserSettingsTab extends React.Component<IProps, IState> {
-    private static ROOM_LIST_SETTINGS: BooleanSettingKey[] = ["breadcrumbs"];
+    private static ROOM_LIST_SETTINGS: BooleanSettingKey[] = ["breadcrumbs", "showAvatarsOnInvites"];
 
     private static SPACES_SETTINGS: BooleanSettingKey[] = ["Spaces.allRoomsInHome"];
 
@@ -224,8 +224,14 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         SettingsStore.setValue("readMarkerOutOfViewThresholdMs", null, SettingLevel.DEVICE, e.target.value);
     };
 
-    private renderGroup(settingIds: BooleanSettingKey[], level = SettingLevel.ACCOUNT): React.ReactNodeArray {
-        return settingIds.map((i) => <SettingsFlag key={i} name={i} level={level} />);
+    private renderGroup(settingIds: BooleanSettingKey[], level = SettingLevel.ACCOUNT): JSX.Element {
+        return (
+            <>
+                {settingIds.map((i) => (
+                    <SettingsFlag key={i} name={i} level={level} />
+                ))}
+            </>
+        );
     }
 
     private onKeyboardShortcutsClicked = (): void => {

@@ -6,7 +6,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { Room } from "matrix-js-sdk/src/matrix";
-import type { Sorter } from ".";
+import { type Sorter, SortingAlgorithm } from ".";
 import { getLastTs } from "../../../room-list/algorithms/tag-sorting/RecentAlgorithm";
 
 export class RecencySorter implements Sorter {
@@ -21,6 +21,10 @@ export class RecencySorter implements Sorter {
         const roomALastTs = this.getTs(roomA, cache);
         const roomBLastTs = this.getTs(roomB, cache);
         return roomBLastTs - roomALastTs;
+    }
+
+    public get type(): SortingAlgorithm.Recency {
+        return SortingAlgorithm.Recency;
     }
 
     private getTs(room: Room, cache?: { [roomId: string]: number }): number {

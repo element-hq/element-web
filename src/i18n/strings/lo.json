@@ -315,7 +315,6 @@
         "download_logs": "ບັນທຶກການດາວໂຫຼດ",
         "downloading_logs": "ບັນທຶກການດາວໂຫຼດ",
         "error_empty": "ກະລຸນາບອກພວກເຮົາວ່າມີຫຍັງຜິດພາດ ຫຼື, ດີກວ່າ, ສ້າງບັນຫາ GitHub ເພື່ອອະທິບາຍບັນຫາ.",
-        "failed_send_logs": "ສົ່ງບັນທຶກບໍ່ສຳເລັດ: ",
         "github_issue": "ບັນຫາ GitHub",
         "introduction": "ຖ້າທ່ານໄດ້ສົ່ງຂໍ້ບົກພ່ອງຜ່ານ GitHub, ບັນທຶກການຂໍ້ຜິດພາດສາມາດຊ່ວຍພວກເຮົາຕິດຕາມບັນຫາໄດ້. ",
         "log_request": "ເພື່ອຊ່ວຍພວກເຮົາປ້ອງກັນສິ່ງນີ້ໃນອະນາຄົດ, ກະລຸນາ <a>ສົ່ງບັນທຶກໃຫ້ພວກເຮົາ</a>.",
@@ -354,7 +353,6 @@
         "access_token": "ເຂົ້າເຖິງToken",
         "accessibility": "ການເຂົ້າເຖິງ",
         "advanced": "ຂັ້ນສູງ",
-        "all_rooms": "ຫ້ອງທັງໝົດ",
         "analytics": "ວິເຄາະ",
         "and_n_others": {
             "one": "ແລະ ອີກອັນນຶ່ງ...",
@@ -2959,7 +2957,6 @@
         "hangup": "ວາງສາຍ",
         "hide_sidebar_button": "ເຊື່ອງແຖບດ້ານຂ້າງ",
         "input_devices": "ອຸປະກອນຂາເຂົ້າ",
-        "join_button_tooltip_connecting": "ກຳລັງເຊື່ອມຕໍ່",
         "misconfigured_server": "ການໂທບໍ່ສຳເລັດເນື່ອງຈາກເຊີບເວີຕັ້ງຄ່າຜິດພາດ",
         "misconfigured_server_description": "ກະລຸນາຕິດຕໍ່ຜູ້ຄຸ້ມຄອງສະຖານີຂອງທ່ານ (<code>%(homeserverDomain)s</code>) ເພື່ອກໍານົດຄ່າຂອງ TURN Server ເພື່ອໃຫ້ການໂທເຮັດວຽກໄດ້ຢ່າງສະຖຽນ.",
         "more_button": "ເພີ່ມເຕີມ",

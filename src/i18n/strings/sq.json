@@ -357,7 +357,6 @@
         "download_logs": "Shkarko regjistra",
         "downloading_logs": "Po shkarkohen regjistra",
         "error_empty": "Ju lutemi, na tregoni ç’shkoi keq ose, akoma më mirë, krijoni në GitHub një çështje që përshkruan problemin.",
-        "failed_send_logs": "S’u arrit të dërgoheshin regjistra: ",
         "github_issue": "Çështje në GitHub",
         "introduction": "Nëse keni parashtruar një të metë përmes GitHub-i, regjistrat e diagnostikimit na ndihmojnë të kapim problemin. ",
         "log_request": "Për të na ndihmuar ta parandalojmë këtë në të ardhmen, ju lutemi, <a>dërgonani regjistra</a>.",
@@ -397,7 +396,6 @@
         "access_token": "Token Hyrjesh",
         "accessibility": "Përdorim nga persona me aftësi të kufizuara",
         "advanced": "Të mëtejshme",
-        "all_rooms": "Krejt dhomat",
         "analytics": "Analiza",
         "and_n_others": {
             "other": "dhe %(count)s të tjerë…",
@@ -3359,7 +3357,6 @@
         "hide_sidebar_button": "Fshihe anështyllën",
         "input_devices": "Pajisje input-i",
         "join_button_tooltip_call_full": "Na ndjeni — aktualisht kjo thirrje është plot",
-        "join_button_tooltip_connecting": "Po lidhet",
         "maximise": "Mbushe ekranin",
         "misconfigured_server": "Thirrja dështoi për shkak shërbyesi të keqformësuar",
         "misconfigured_server_description": "Që thirrjet të funksionojnë pa probleme, ju lutemi, kërkojini përgjegjësit të shërbyesit tuaj Home (<code>%(homeserverDomain)s</code>) të formësojë një shërbyes TURN.",

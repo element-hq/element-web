@@ -316,7 +316,6 @@
         "description": "Atvikaskrár innihalda gögn varðandi virkni hugbúnaðarins en líka notandanafn þitt, auðkenni eða samnefni spjallrása sem þú hefur skoðað, hvaða viðmótshluta þú hefur átt við, auk notendanafna annarra notenda. Atvikaskrár innihalda ekki skilaboð.",
         "download_logs": "Niðurhal atvikaskrá",
         "downloading_logs": "Sæki atvikaskrá",
-        "failed_send_logs": "Mistókst að senda atvikaskrár: ",
         "github_issue": "Villutilkynning á GitHub",
         "introduction": "Ef þú hefur tilkynnt vandamál í gegnum GitHub, þá geta atvikaskrár hjálpað okkur við að finna ástæður vandamálanna. ",
         "logs_sent": "Sendi atvikaskrár",
@@ -353,7 +352,6 @@
         "access_token": "Aðgangsteikn",
         "accessibility": "Auðveldað aðgengi",
         "advanced": "Nánar",
-        "all_rooms": "Allar spjallrásir",
         "analytics": "Greiningar",
         "and_n_others": {
             "one": "og einn í viðbót...",
@@ -2953,7 +2951,6 @@
         "hide_sidebar_button": "Fela hliðarspjald",
         "input_devices": "Inntakstæki",
         "join_button_tooltip_call_full": "Því miður - þetta símtal er fullt í augnablikinu",
-        "join_button_tooltip_connecting": "Tengist",
         "maximise": "Fylla skjá",
         "misconfigured_server": "Símtal mistókst vegna vanstillingar netþjóns",
         "misconfigured_server_description": "Spurðu kerfisstjóra (<code>%(homeserverDomain)s</code>) heimaþjónsins þíns um að setja upp TURN-þjón til að tryggja að símtöl virki eðlilega.",

@@ -26,12 +26,6 @@ jobs:
             R2_URL: ${{ vars.CF_R2_S3_API }}
             R2_PUBLIC_URL: "https://element-web-develop.element.io"
         steps:
-            # Workaround for https://www.cloudflarestatus.com/incidents/t5nrjmpxc1cj
-            - uses: unfor19/install-aws-cli-action@v1
-              with:
-                  version: 2.22.35
-                  verbose: false
-                  arch: amd64
             - uses: actions/checkout@v4
 
             - uses: actions/setup-node@v4
@@ -115,10 +109,11 @@ jobs:
             # We keep the latest develop.tar.gz on R2 instead of relying on the github artifact uploaded earlier
             # as the expires after 24h and requires auth to download.
             # Element Desktop's fetch script uses this tarball to fetch latest develop to build Nightlies.
+            # Checksum algorithm specified as per https://developers.cloudflare.com/r2/examples/aws/aws-cli/
             - name: Deploy to R2
               run: |
-                  aws s3 cp dist/develop.tar.gz s3://$R2_BUCKET/develop.tar.gz --endpoint-url $R2_URL --region=auto
-                  aws s3 cp _deploy/ s3://$R2_BUCKET/ --recursive --endpoint-url $R2_URL --region=auto
+                  aws s3 cp dist/develop.tar.gz s3://$R2_BUCKET/develop.tar.gz --endpoint-url $R2_URL --region=auto --checksum-algorithm CRC32
+                  aws s3 cp _deploy/ s3://$R2_BUCKET/ --recursive --endpoint-url $R2_URL --region=auto --checksum-algorithm CRC32
               env:
                   AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}

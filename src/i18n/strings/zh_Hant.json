@@ -364,7 +364,6 @@
         "download_logs": "下載紀錄檔",
         "downloading_logs": "正在下載紀錄檔",
         "error_empty": "請告訴我們發生了什麼錯誤，或更好的是，在 GitHub 上建立描述問題的議題。",
-        "failed_send_logs": "無法傳送除錯訊息： ",
         "github_issue": "GitHub 議題",
         "introduction": "若您透過 GitHub 遞交錯誤，除錯紀錄檔可以協助我們追蹤問題。 ",
         "log_request": "要協助我們讓這個問題不再發生，請<a>將紀錄檔傳送給我們</a>。",
@@ -404,7 +403,6 @@
         "access_token": "存取權杖",
         "accessibility": "可近用性",
         "advanced": "進階",
-        "all_rooms": "所有聊天室",
         "analytics": "分析",
         "and_n_others": {
             "other": "與另 %(count)s 個人…",
@@ -3482,7 +3480,6 @@
         "hide_sidebar_button": "隱藏側邊欄",
         "input_devices": "輸入裝置",
         "join_button_tooltip_call_full": "抱歉 — 此通話目前已滿",
-        "join_button_tooltip_connecting": "連線中",
         "maximise": "填滿螢幕",
         "misconfigured_server": "由於伺服器設定錯誤，無法通話",
         "misconfigured_server_description": "請聯繫您家伺服器（<code>%(homeserverDomain)s</code>）的管理員建立一套 TURN 伺服器，使通話能更穩定運作。",

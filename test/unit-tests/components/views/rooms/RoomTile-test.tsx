@@ -46,7 +46,6 @@ import { UIComponent } from "../../../../../src/settings/UIFeature";
 import { MessagePreviewStore } from "../../../../../src/stores/room-list/MessagePreviewStore";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
-import { ConnectionState } from "../../../../../src/models/Call";
 
 jest.mock("../../../../../src/customisations/helpers/UIComponents", () => ({
     shouldShowComponent: jest.fn(),
@@ -216,41 +215,10 @@ describe("RoomTile", () => {
             it("tracks connection state", async () => {
                 renderRoomTile();
                 screen.getByText("Video");
-
-                let completeWidgetLoading: () => void = () => {};
-                const widgetLoadingCompleted = new Promise<void>((resolve) => (completeWidgetLoading = resolve));
-
-                // Insert an await point in the connection method so we can inspect
-                // the intermediate connecting state
-                let completeConnection: () => void = () => {};
-                const connectionCompleted = new Promise<void>((resolve) => (completeConnection = resolve));
-
-                let completeLobby: () => void = () => {};
-                const lobbyCompleted = new Promise<void>((resolve) => (completeLobby = resolve));
-
-                jest.spyOn(call, "performConnection").mockImplementation(async () => {
-                    call.setConnectionState(ConnectionState.WidgetLoading);
-                    await widgetLoadingCompleted;
-                    call.setConnectionState(ConnectionState.Lobby);
-                    await lobbyCompleted;
-                    call.setConnectionState(ConnectionState.Connecting);
-                    await connectionCompleted;
-                });
-
-                await Promise.all([
-                    (async () => {
-                        await screen.findByText("Loading…");
-                        completeWidgetLoading();
-                        await screen.findByText("Lobby");
-                        completeLobby();
-                        await screen.findByText("Joining…");
-                        completeConnection();
-                        await screen.findByText("Joined");
-                    })(),
-                    call.start(),
-                ]);
-
-                await Promise.all([screen.findByText("Video"), call.disconnect()]);
+                await act(() => call.start());
+                screen.getByText("Joined");
+                await act(() => call.disconnect());
+                screen.getByText("Video");
             });
 
             it("tracks participants", () => {

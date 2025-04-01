@@ -15,7 +15,7 @@ import { mocked, type MockedObject } from "jest-mock";
 import fetchMock from "fetch-mock-jest";
 
 import StorageEvictedDialog from "../../src/components/views/dialogs/StorageEvictedDialog";
-import { logout, restoreSessionFromStorage, setLoggedIn } from "../../src/Lifecycle";
+import * as Lifecycle from "../../src/Lifecycle";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import Modal from "../../src/Modal";
 import * as StorageAccess from "../../src/utils/StorageAccess";
@@ -28,19 +28,25 @@ import { Action } from "../../src/dispatcher/actions";
 import PlatformPeg from "../../src/PlatformPeg";
 import { persistAccessTokenInStorage, persistRefreshTokenInStorage } from "../../src/utils/tokens/tokens";
 import { encryptPickleKey } from "../../src/utils/tokens/pickling";
+import * as StorageManager from "../../src/utils/StorageManager.ts";
+import type BasePlatform from "../../src/BasePlatform.ts";
+
+const { logout, restoreSessionFromStorage, setLoggedIn } = Lifecycle;
 
 const webCrypto = new Crypto();
 
 const windowCrypto = window.crypto;
 
 describe("Lifecycle", () => {
-    const mockPlatform = mockPlatformPeg();
+    let mockPlatform: MockedObject<BasePlatform>;
 
     const realLocalStorage = global.localStorage;
 
     let mockClient!: MockedObject<MatrixJs.MatrixClient>;
 
     beforeEach(() => {
+        jest.restoreAllMocks();
+        mockPlatform = mockPlatformPeg();
         mockClient = getMockClientWithEventEmitter({
             ...mockClientMethodsUser(),
             stopClient: jest.fn(),
@@ -181,6 +187,32 @@ describe("Lifecycle", () => {
         iv: expect.any(String),
         mac: expect.any(String),
     };
+
+    describe("loadSession", () => {
+        beforeEach(() => {
+            // stub this out
+            jest.spyOn(Modal, "createDialog").mockReturnValue(
+                // @ts-ignore allow bad mock
+                { finished: Promise.resolve([true]) },
+            );
+        });
+
+        it("should not show any error dialog when checkConsistency throws but abortSignal has triggered", async () => {
+            jest.spyOn(StorageManager, "checkConsistency").mockRejectedValue(new Error("test error"));
+
+            const abortController = new AbortController();
+            const prom = Lifecycle.loadSession({
+                enableGuest: true,
+                guestHsUrl: "https://guest.server",
+                fragmentQueryParams: { guest_user_id: "a", guest_access_token: "b" },
+                abortSignal: abortController.signal,
+            });
+            abortController.abort();
+            await expect(prom).resolves.toBeFalsy();
+
+            expect(Modal.createDialog).not.toHaveBeenCalled();
+        });
+    });
 
     describe("restoreSessionFromStorage()", () => {
         beforeEach(() => {

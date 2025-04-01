@@ -22,33 +22,27 @@ test.use({
             msc3814_enabled: true,
         },
     },
-    config: async ({ config, context }, use) => {
-        const wellKnown = {
-            ...config.default_server_config,
-            "org.matrix.msc3814": true,
-        };
-
-        await context.route("https://localhost/.well-known/matrix/client", async (route) => {
-            await route.fulfill({ json: wellKnown });
-        });
-
-        await use(config);
-    },
 });
 
 test.describe("Dehydration", () => {
     test.skip(isDendrite, "does not yet support dehydration v2");
 
-    test("'Set up secure backup' creates dehydrated device", async ({ page, user, app }, workerInfo) => {
-        // Create a backup (which will create SSSS, and dehydrated device)
+    test("Verify device and reset creates dehydrated device", async ({ page, user, credentials, app }, workerInfo) => {
+        // Verify the device by resetting the key (which will create SSSS, and dehydrated device)
 
         const securityTab = await app.settings.openUserSettings("Security & Privacy");
-
-        await expect(securityTab.getByRole("heading", { name: "Secure Backup" })).toBeVisible();
         await expect(securityTab.getByText("Offline device enabled")).not.toBeVisible();
-        await securityTab.getByRole("button", { name: "Set up", exact: true }).click();
 
-        await completeCreateSecretStorageDialog(page);
+        await app.closeDialog();
+
+        // Verify the device by resetting the key
+        const settings = await app.settings.openUserSettings("Encryption");
+        await settings.getByRole("button", { name: "Verify this device" }).click();
+        await page.getByRole("button", { name: "Proceed with reset" }).click();
+        await page.getByRole("button", { name: "Continue" }).click();
+        await page.getByRole("button", { name: "Copy" }).click();
+        await page.getByRole("button", { name: "Continue" }).click();
+        await page.getByRole("button", { name: "Done" }).click();
 
         await expectDehydratedDeviceEnabled(app);
 

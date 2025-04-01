@@ -1,4 +1,4 @@
-# syntax=docker.io/docker/dockerfile:1.7-labs
+# syntax=docker.io/docker/dockerfile:1.14-labs
 
 # Builder
 FROM --platform=$BUILDPLATFORM node:22-bullseye AS builder
@@ -19,7 +19,10 @@ RUN /src/scripts/docker-package.sh
 RUN cp /src/config.sample.json /src/webapp/config.json
 
 # App
-FROM nginx:alpine-slim
+FROM nginxinc/nginx-unprivileged:alpine-slim
+
+# Need root user to install packages & manipulate the usr directory
+USER root
 
 # Install jq and moreutils for sponge, both used by our entrypoints
 RUN apk add jq moreutils
@@ -31,13 +34,6 @@ COPY --from=builder /src/webapp /app
 COPY /docker/nginx-templates/* /etc/nginx/templates/
 COPY /docker/docker-entrypoint.d/* /docker-entrypoint.d/
 
-# Tell nginx to put its pidfile elsewhere, so it can run as non-root
-RUN sed -i -e 's,/var/run/nginx.pid,/tmp/nginx.pid,' /etc/nginx/nginx.conf
-
-# nginx user must own the cache and etc directory to write cache and tweak the nginx config
-RUN chown -R nginx:0 /var/cache/nginx /etc/nginx
-RUN chmod -R g+w /var/cache/nginx /etc/nginx
-
 RUN rm -rf /usr/share/nginx/html \
   && ln -s /app /usr/share/nginx/html
 
@@ -47,4 +43,4 @@ USER nginx
 # HTTP listen port
 ENV ELEMENT_WEB_PORT=80
 
-HEALTHCHECK --start-period=5s CMD wget --retry-connrefused --tries=5 -q --wait=3 --spider http://localhost:$ELEMENT_WEB_PORT/config.json
+HEALTHCHECK --start-period=5s CMD wget -q --spider http://localhost:$ELEMENT_WEB_PORT/config.json

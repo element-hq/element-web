@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, type KeyboardEvent } from "react";
+import React, { type JSX, createRef, type KeyboardEvent } from "react";
 import {
     type Thread,
     THREAD_RELATION_TYPE,
@@ -86,8 +86,8 @@ export default class ThreadView extends React.Component<IProps, IState> {
     // Set by setEventId in ctor.
     private eventId!: string;
 
-    public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         this.setEventId(this.props.mxEvent);
         const thread = this.props.room.getThread(this.eventId) ?? undefined;

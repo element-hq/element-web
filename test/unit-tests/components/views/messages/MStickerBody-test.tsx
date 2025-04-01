@@ -64,7 +64,6 @@ describe("<MStickerBody/>", () => {
     });
 
     const props = {
-        onHeightChanged: jest.fn(),
         onMessageAllowed: jest.fn(),
         permalinkCreator: new RoomPermalinkCreator(new Room(mediaEvent.getRoomId()!, cli, cli.getUserId()!)),
     };

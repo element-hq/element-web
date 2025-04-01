@@ -6,23 +6,18 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, type SyntheticEvent, type MouseEvent, StrictMode } from "react";
-import { MsgType, PushRuleKind } from "matrix-js-sdk/src/matrix";
-import { TooltipProvider } from "@vector-im/compound-web";
-import { globToRegexp } from "matrix-js-sdk/src/utils";
+import React, { type JSX, createRef, type SyntheticEvent, type MouseEvent } from "react";
+import { MsgType } from "matrix-js-sdk/src/matrix";
 
-import * as HtmlUtils from "../../../HtmlUtils";
+import EventContentBody from "./EventContentBody.tsx";
 import { formatDate } from "../../../DateUtils";
 import Modal from "../../../Modal";
 import dis from "../../../dispatcher/dispatcher";
 import { _t } from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
-import { pillifyLinks } from "../../../utils/pillify";
-import { tooltipifyLinks } from "../../../utils/tooltipify";
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import { isPermalinkHost, tryTransformPermalinkToLocalHref } from "../../../utils/permalinks/Permalinks";
 import { Action } from "../../../dispatcher/actions";
-import Spoiler from "../elements/Spoiler";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import MessageEditHistoryDialog from "../dialogs/MessageEditHistoryDialog";
 import EditMessageComposer from "../rooms/EditMessageComposer";
@@ -34,10 +29,6 @@ import { options as linkifyOpts } from "../../../linkify-matrix";
 import { getParentEventId } from "../../../utils/Reply";
 import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
 import { type IEventTileOps } from "../rooms/EventTile";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import CodeBlock from "./CodeBlock";
-import { Pill, PillType } from "../elements/Pill";
-import { ReactRootManager } from "../../../utils/react";
 
 interface IState {
     // the URLs (if any) to be previewed with a LinkPreviewWidget inside this TextualBody.
@@ -49,10 +40,6 @@ interface IState {
 
 export default class TextualBody extends React.Component<IBodyProps, IState> {
     private readonly contentRef = createRef<HTMLDivElement>();
-
-    private pills = new ReactRootManager();
-    private tooltips = new ReactRootManager();
-    private reactRoots = new ReactRootManager();
 
     public static contextType = RoomContext;
     declare public context: React.ContextType<typeof RoomContext>;
@@ -69,71 +56,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
     }
 
     private applyFormatting(): void {
-        // Function is only called from render / componentDidMount → contentRef is set
-        const content = this.contentRef.current!;
-
-        this.activateSpoilers([content]);
-
-        HtmlUtils.linkifyElement(content);
-        pillifyLinks(MatrixClientPeg.safeGet(), [content], this.props.mxEvent, this.pills);
-
         this.calculateUrlPreview();
-
-        // tooltipifyLinks AFTER calculateUrlPreview because the DOM inside the tooltip
-        // container is empty before the internal component has mounted so calculateUrlPreview
-        // won't find any anchors
-        tooltipifyLinks([content], [...this.pills.elements, ...this.reactRoots.elements], this.tooltips);
-
-        if (this.props.mxEvent.getContent().format === "org.matrix.custom.html") {
-            // Handle expansion and add buttons
-            const pres = [...content.getElementsByTagName("pre")];
-            if (pres && pres.length > 0) {
-                for (let i = 0; i < pres.length; i++) {
-                    // If there already is a div wrapping the codeblock we want to skip this.
-                    // This happens after the codeblock was edited.
-                    if (pres[i].parentElement?.className == "mx_EventTile_pre_container") continue;
-                    // Add code element if it's missing since we depend on it
-                    if (pres[i].getElementsByTagName("code").length == 0) {
-                        this.addCodeElement(pres[i]);
-                    }
-                    // Wrap a div around <pre> so that the copy button can be correctly positioned
-                    // when the <pre> overflows and is scrolled horizontally.
-                    this.wrapPreInReact(pres[i]);
-                }
-            }
-        }
-
-        // Highlight notification keywords using pills
-        const pushDetails = this.props.mxEvent.getPushDetails();
-        if (
-            pushDetails.rule?.enabled &&
-            pushDetails.rule.kind === PushRuleKind.ContentSpecific &&
-            pushDetails.rule.pattern
-        ) {
-            this.pillifyNotificationKeywords([content], this.regExpForKeywordPattern(pushDetails.rule.pattern));
-        }
-    }
-
-    private addCodeElement(pre: HTMLPreElement): void {
-        const code = document.createElement("code");
-        code.append(...pre.childNodes);
-        pre.appendChild(code);
-    }
-
-    private wrapPreInReact(pre: HTMLPreElement): void {
-        const root = document.createElement("div");
-        root.className = "mx_EventTile_pre_container";
-
-        // Insert containing div in place of <pre> block
-        pre.replaceWith(root);
-
-        this.reactRoots.render(
-            <StrictMode>
-                <CodeBlock onHeightChanged={this.props.onHeightChanged}>{pre}</CodeBlock>
-            </StrictMode>,
-            root,
-            pre,
-        );
     }
 
     public componentDidUpdate(prevProps: Readonly<IBodyProps>): void {
@@ -145,12 +68,6 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                 this.applyFormatting();
             }
         }
-    }
-
-    public componentWillUnmount(): void {
-        this.pills.unmount();
-        this.tooltips.unmount();
-        this.reactRoots.unmount();
     }
 
     public shouldComponentUpdate(nextProps: Readonly<IBodyProps>, nextState: Readonly<IState>): boolean {
@@ -190,85 +107,6 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                 this.setState({ links: [] });
             }
         }
-    }
-
-    private activateSpoilers(nodes: ArrayLike<Element>): void {
-        let node = nodes[0];
-        while (node) {
-            if (node.tagName === "SPAN" && typeof node.getAttribute("data-mx-spoiler") === "string") {
-                const spoilerContainer = document.createElement("span");
-
-                const reason = node.getAttribute("data-mx-spoiler") ?? undefined;
-                node.removeAttribute("data-mx-spoiler"); // we don't want to recurse
-                const spoiler = (
-                    <StrictMode>
-                        <TooltipProvider>
-                            <Spoiler reason={reason} contentHtml={node.outerHTML} />
-                        </TooltipProvider>
-                    </StrictMode>
-                );
-
-                this.reactRoots.render(spoiler, spoilerContainer, node);
-
-                node.replaceWith(spoilerContainer);
-                node = spoilerContainer;
-            }
-
-            if (node.childNodes && node.childNodes.length) {
-                this.activateSpoilers(node.childNodes as NodeListOf<Element>);
-            }
-
-            node = node.nextSibling as Element;
-        }
-    }
-
-    /**
-     * Marks the text that activated a push-notification keyword pattern.
-     */
-    private pillifyNotificationKeywords(nodes: ArrayLike<Element>, exp: RegExp): void {
-        let node: Node | null = nodes[0];
-        while (node) {
-            if (node.nodeType === Node.TEXT_NODE) {
-                const text = node.nodeValue;
-                if (!text) {
-                    node = node.nextSibling;
-                    continue;
-                }
-                const match = text.match(exp);
-                if (!match || match.length < 3) {
-                    node = node.nextSibling;
-                    continue;
-                }
-                const keywordText = match[2];
-                const idx = match.index! + match[1].length;
-                const before = text.substring(0, idx);
-                const after = text.substring(idx + keywordText.length);
-
-                const container = document.createElement("span");
-                const newContent = (
-                    <>
-                        {before}
-                        <TooltipProvider>
-                            <Pill text={keywordText} type={PillType.Keyword} />
-                        </TooltipProvider>
-                        {after}
-                    </>
-                );
-                this.reactRoots.render(newContent, container, node);
-
-                node.parentNode?.replaceChild(container, node);
-            } else if (node.childNodes && node.childNodes.length) {
-                this.pillifyNotificationKeywords(node.childNodes as NodeListOf<Element>, exp);
-            }
-
-            node = node.nextSibling;
-        }
-    }
-
-    private regExpForKeywordPattern(pattern: string): RegExp {
-        // Reflects the push notification pattern-matching implementation at
-        // https://github.com/matrix-org/matrix-js-sdk/blob/dbd7d26968b94700827bac525c39afff2c198e61/src/pushprocessor.ts#L570
-        return new RegExp("(^|\\W)(" + globToRegexp(pattern) + ")(\\W|$)", "i");
     }
 
     private findLinks(nodes: ArrayLike<Element>): string[] {
@@ -482,18 +320,25 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
         const willHaveWrapper =
             this.props.replacingEventId || this.props.isSeeingThroughMessageHiddenForModeration || isEmote;
-
         // only strip reply if this is the original replying event, edits thereafter do not have the fallback
         const stripReply = !mxEvent.replacingEvent() && !!getParentEventId(mxEvent);
-
-        const htmlOpts = {
-            disableBigEmoji: isEmote || !SettingsStore.getValue("TextualBody.enableBigEmoji"),
-            // Part of Replies fallback support
-            stripReplyFallback: stripReply,
-        };
-        let body = willHaveWrapper
-            ? HtmlUtils.bodyToSpan(content, this.props.highlights, htmlOpts, this.contentRef, false)
-            : HtmlUtils.bodyToDiv(content, this.props.highlights, htmlOpts, this.contentRef);
+        let body = (
+            <EventContentBody
+                as={willHaveWrapper ? "span" : "div"}
+                includeDir={false}
+                mxEvent={mxEvent}
+                content={content}
+                stripReply={stripReply}
+                linkify
+                highlights={this.props.highlights}
+                ref={this.contentRef}
+                renderTooltipsForAmbiguousLinks
+                renderKeywordPills
+                renderMentionPills
+                renderCodeBlocks
+                renderSpoilers
+            />
+        );
 
         if (this.props.replacingEventId) {
             body = (
@@ -532,7 +377,6 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                     links={this.state.links}
                     mxEvent={this.props.mxEvent}
                     onCancelClick={this.onCancelClick}
-                    onHeightChanged={this.props.onHeightChanged}
                 />
             );
         }

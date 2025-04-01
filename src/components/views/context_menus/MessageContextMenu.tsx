@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, useContext } from "react";
+import React, { type JSX, createRef, useContext } from "react";
 import {
     EventStatus,
     type MatrixEvent,
@@ -130,8 +130,8 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
 
     private reactButtonRef = createRef<any>(); // XXX Ref to a functional component
 
-    public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         this.state = {
             canRedact: false,

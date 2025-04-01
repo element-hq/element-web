@@ -12,6 +12,16 @@
             "other": "%(count)s unread messages including mentions."
         },
         "recent_rooms": "Recent rooms",
+        "room_messsage_not_sent": "Open room %(roomName)s with an unset message.",
+        "room_n_unread_invite": "Open room %(roomName)s invitation.",
+        "room_n_unread_messages": {
+            "one": "Open room %(roomName)s with 1 unread message.",
+            "other": "Open room %(roomName)s with %(count)s unread messages."
+        },
+        "room_n_unread_messages_mentions": {
+            "one": "Open room %(roomName)s with 1 unread mention.",
+            "other": "Open room %(roomName)s with %(count)s unread messages including mentions."
+        },
         "room_name": "Room %(name)s",
         "room_status_bar": "Room status bar",
         "seek_bar_label": "Audio seek bar",
@@ -64,6 +74,7 @@
         "go": "Go",
         "go_back": "Go back",
         "got_it": "Got it",
+        "hide": "Hide",
         "hide_advanced": "Hide advanced",
         "hold": "Hold",
         "ignore": "Ignore",
@@ -103,6 +114,7 @@
         "reply": "Reply",
         "reply_in_thread": "Reply in thread",
         "report_content": "Report Content",
+        "report_room": "Report room",
         "resend": "Resend",
         "reset": "Reset",
         "resume": "Resume",
@@ -407,7 +419,15 @@
         "download_logs": "Download logs",
         "downloading_logs": "Downloading logs",
         "error_empty": "Please tell us what went wrong or, better, create a GitHub issue that describes the problem.",
-        "failed_send_logs": "Failed to send logs: ",
+        "failed_download_logs": "Failed to download debug logs: ",
+        "failed_send_logs_causes": {
+            "disallowed_app": "Your bug report was rejected. The rageshake server does not support this application.",
+            "rejected_generic": "Your bug report was rejected. The rageshake server rejected the contents of the report due to a policy.",
+            "rejected_recovery_key": "Your bug report was rejected for safety reasons, as it contained a recovery key.",
+            "rejected_version": "Your bug report was rejected as the version you are running is too old.",
+            "server_unknown_error": "The rageshake server encountered an unknown error and could not handle the report.",
+            "unknown_error": "Failed to send logs."
+        },
         "github_issue": "GitHub issue",
         "introduction": "If you've submitted a bug via GitHub, debug logs can help us track down the problem. ",
         "log_request": "To help us prevent this in future, please <a>send us logs</a>.",
@@ -447,7 +467,7 @@
         "access_token": "Access Token",
         "accessibility": "Accessibility",
         "advanced": "Advanced",
-        "all_rooms": "All rooms",
+        "all_chats": "All Chats",
         "analytics": "Analytics",
         "and_n_others": {
             "one": "and one other...",
@@ -497,7 +517,6 @@
         "legal": "Legal",
         "light": "Light",
         "loading": "Loading…",
-        "lobby": "Lobby",
         "location": "Location",
         "low_priority": "Low priority",
         "matrix": "Matrix",
@@ -827,6 +846,9 @@
         "setting_colon": "Setting:",
         "setting_definition": "Setting definition:",
         "setting_id": "Setting ID",
+        "settings": {
+            "elementCallUrl": "Element Call URL"
+        },
         "settings_explorer": "Settings explorer",
         "show_hidden_events": "Show hidden events in timeline",
         "spaces": {
@@ -944,8 +966,8 @@
             "warning": "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings."
         },
         "not_supported": "<not supported>",
-        "pinned_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) identity appears to have changed. <a>Learn more</a>",
-        "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>'s identity appears to have changed. <a>Learn more</a>",
+        "pinned_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) identity was reset. <a>Learn more</a>",
+        "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>'s identity was reset. <a>Learn more</a>",
         "recovery_method_removed": {
             "description_1": "This session has detected that your Security Phrase and key for Secure Messages have been removed.",
             "description_2": "If you did this accidentally, you can setup Secure Messages on this session which will re-encrypt this session's message history with a new recovery method.",
@@ -1057,8 +1079,8 @@
             "waiting_other_user": "Waiting for %(displayName)s to verify…"
         },
         "verification_requested_toast_title": "Verification requested",
-        "verified_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) verified identity has changed. <a>Learn more</a>",
-        "verified_identity_changed_no_displayname": "<b>%(userId)s</b>'s verified identity has changed. <a>Learn more</a>",
+        "verified_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) identity was reset. <a>Learn more</a>",
+        "verified_identity_changed_no_displayname": "<b>%(userId)s</b>'s identity was reset. <a>Learn more</a>",
         "verify_toast_description": "Other users may not trust it",
         "verify_toast_title": "Verify this session",
         "withdraw_verification_action": "Withdraw verification"
@@ -1299,6 +1321,7 @@
         "error_connecting_heading": "Cannot connect to integration manager",
         "explainer": "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.",
         "manage_title": "Manage integrations",
+        "toggle_label": "Enable the integration manager",
         "use_im": "Use an integration manager to manage bots, widgets, and sticker packs.",
         "use_im_default": "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs."
     },
@@ -1801,6 +1824,12 @@
         "spam_or_propaganda": "Spam or propaganda",
         "toxic_behaviour": "Toxic Behaviour"
     },
+    "report_room": {
+        "description": "Report this room to your homeserver admin. This will send the room's unique ID, but if messages are encrypted, the administrator won't be able to read them or view shared files.",
+        "reason_placeholder": " Reason for reporting...",
+        "sent": "Your report was sent.",
+        "title": "Report Room"
+    },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Failed to decrypt %(failedCount)s sessions!",
         "count_of_successfully_restored_keys": "Successfully restored %(sessionCount)s keys",
@@ -2088,20 +2117,53 @@
         "add_space_label": "Add space",
         "breadcrumbs_empty": "No recently visited rooms",
         "breadcrumbs_label": "Recently visited rooms",
+        "empty": {
+            "no_chats": "No chats yet",
+            "no_chats_description": "Get started by messaging someone or by creating a room",
+            "no_chats_description_no_room_rights": "Get started by messaging someone",
+            "no_favourites": "You don't have favourite chat yet",
+            "no_favourites_description": "You can add a chat to your favourites in the chat settings",
+            "no_people": "You don’t have direct chats with anyone yet",
+            "no_people_description": "You can deselect filters in order to see your other chats",
+            "no_rooms": "You’re not in any room yet",
+            "no_rooms_description": "You can deselect filters in order to see your other chats",
+            "no_unread": "Congrats! You don’t have any unread messages",
+            "show_chats": "Show all chats"
+        },
         "failed_add_tag": "Failed to add tag %(tagName)s to room",
         "failed_remove_tag": "Failed to remove tag %(tagName)s from room",
         "failed_set_dm_tag": "Failed to set direct message tag",
+        "filters": {
+            "favourite": "Favourites",
+            "people": "People",
+            "rooms": "Rooms",
+            "unread": "Unread"
+        },
         "home_menu_label": "Home options",
         "join_public_room_label": "Join public room",
         "joining_rooms_status": {
             "one": "Currently joining %(count)s room",
             "other": "Currently joining %(count)s rooms"
         },
+        "list_title": "Room list",
+        "more_options": {
+            "copy_link": "Copy room link",
+            "favourited": "Favourited",
+            "leave_room": "Leave room",
+            "low_priority": "Low priority",
+            "mark_read": "Mark as read",
+            "mark_unread": "Mark as unread"
+        },
         "notification_options": "Notification options",
         "open_space_menu": "Open space menu",
+        "primary_filters": "Room list filters",
         "redacting_messages_status": {
             "one": "Currently removing messages in %(count)s room",
             "other": "Currently removing messages in %(count)s rooms"
+        },
+        "room": {
+            "more_options": "More Options",
+            "open_room": "Open room %(roomName)s"
         },
         "show_less": "Show less",
         "show_n_more": {
@@ -2345,7 +2407,7 @@
             "public_without_alias_warning": "To link to this room, please add an address.",
             "publish_room": "Make this room visible in the public room directory.",
             "publish_space": "Make this space visible in the public room directory.",
-            "strict_encryption": "Never send encrypted messages to unverified sessions in this room from this session",
+            "strict_encryption": "Only send messages to verified users.",
             "title": "Security & Privacy"
         },
         "title": "Room Settings - %(roomName)s",
@@ -2479,20 +2541,35 @@
                 "breadcrumb_title_forgot": "Forgot your recovery key? You’ll need to reset your identity.",
                 "breadcrumb_warning": "Only do this if you believe your account has been compromised.",
                 "details_title": "Encryption details",
+                "do_not_close_warning": "Do not close this window until the reset is finished",
                 "export_keys": "Export keys",
                 "import_keys": "Import keys",
-                "other_people_device_description": "By default in encrypted rooms, do not send encrypted messages to anyone until you’ve verified them",
-                "other_people_device_label": "Never send encrypted messages to unverified devices",
+                "other_people_device_description": "Warning: users who have not explicitly verified with you (e.g. using emoji) will not receive your encrypted messages. Also, unverified devices of verified users will not receive your encrypted messages.",
+                "other_people_device_label": "In encrypted rooms, only send messages to verified users",
                 "other_people_device_title": "Other people’s devices",
                 "reset_identity": "Reset cryptographic identity",
+                "reset_in_progress": "Reset in progress...",
                 "session_id": "Session ID:",
                 "session_key": "Session key:",
                 "title": "Advanced"
+            },
+            "delete_key_storage": {
+                "breadcrumb_page": "Delete key storage",
+                "confirm": "Delete key storage",
+                "description": "Deleting key storage will remove your cryptographic identity and message keys from the server and turn off the following security features:",
+                "list_first": "You will not have encrypted message history on new devices",
+                "list_second": "You will lose access to your encrypted messages if you are signed out of %(brand)s everywhere",
+                "title": "Are you sure you want to turn off key storage and delete it?"
             },
             "device_not_verified_button": "Verify this device",
             "device_not_verified_description": "You need to verify this device in order to view your encryption settings.",
             "device_not_verified_title": "Device not verified",
             "dialog_title": "<strong>Settings:</strong> Encryption",
+            "key_storage": {
+                "allow_key_storage": "Allow key storage",
+                "description": "Store your cryptographic identity and message keys securely on the server. This will allow you to view your message history on any new devices. <a>Learn more</a>",
+                "title": "Key storage"
+            },
             "recovery": {
                 "change_recovery_confirm_button": "Confirm new recovery key",
                 "change_recovery_confirm_description": "Enter your new recovery key below to finish. Your old one will no longer work.",
@@ -2609,6 +2686,7 @@
         "inline_url_previews_room": "Enable URL previews by default for participants in this room",
         "inline_url_previews_room_account": "Enable URL previews for this room (only affects you)",
         "insert_trailing_colon_mentions": "Insert a trailing colon after user mentions at the start of a message",
+        "invite_avatars": "Show avatars of rooms you have been invited to",
         "jump_to_bottom_on_send": "Jump to the bottom of the timeline when you send a message",
         "key_backup": {
             "backup_in_progress": "Your keys are being backed up (the first backup could take a few minutes).",
@@ -2829,7 +2907,7 @@
             "send_analytics": "Send analytics data",
             "session_id": "Session ID:",
             "session_key": "Session key:",
-            "strict_encryption": "Never send encrypted messages to unverified sessions from this session"
+            "strict_encryption": "Only send messages to verified users"
         },
         "send_read_receipts": "Send read receipts",
         "send_read_receipts_unsupported": "Your server doesn't support disabling sending read receipts.",
@@ -3090,6 +3168,7 @@
         "view": "Views room with given address",
         "whois": "Displays information about a user"
     },
+    "sliding_sync_legacy_no_longer_supported": "Legacy sliding sync is no longer supported: please log out and back in to enable the new sliding sync flag",
     "space": {
         "add_existing_room_space": {
             "create": "Want to add a new room instead?",
@@ -3303,7 +3382,7 @@
             "historical_event_no_key_backup": "Historical messages are not available on this device",
             "historical_event_unverified_device": "You need to verify this device for access to historical messages",
             "historical_event_user_not_joined": "You don't have access to this message",
-            "sender_identity_previously_verified": "Sender's verified identity has changed",
+            "sender_identity_previously_verified": "Sender's verified identity was reset",
             "sender_unsigned_device": "Sent from an insecure device.",
             "unable_to_decrypt": "Unable to decrypt message"
         },
@@ -3509,7 +3588,8 @@
         },
         "m.sticker": "%(senderDisplayName)s sent a sticker.",
         "m.video": {
-            "error_decrypting": "Error decrypting video"
+            "error_decrypting": "Error decrypting video",
+            "show_video": "Show video"
         },
         "m.widget": {
             "added": "%(widgetName)s widget added by %(senderName)s",
@@ -3907,7 +3987,6 @@
         "input_devices": "Input devices",
         "jitsi_call": "Jitsi Conference",
         "join_button_tooltip_call_full": "Sorry — this call is currently full",
-        "join_button_tooltip_connecting": "Connecting",
         "legacy_call": "Legacy Call",
         "maximise": "Fill screen",
         "maximise_call": "Maximise call",
@@ -4062,7 +4141,7 @@
         "error_need_to_be_logged_in": "You need to be logged in.",
         "error_unable_start_audio_stream_description": "Unable to start audio streaming.",
         "error_unable_start_audio_stream_title": "Failed to start livestream",
-        "modal_data_warning": "Data on this screen is shared with %(widgetDomain)s",
+        "modal_data_warning": "The data below is shared with %(widgetDomain)s",
         "modal_title_default": "Modal Widget",
         "no_name": "Unknown App",
         "open_id_permissions_dialog": {

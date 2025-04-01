@@ -17,9 +17,7 @@ import {
 } from "../../crypto/utils";
 
 test.describe("Encryption tab", () => {
-    test.use({
-        displayName: "Alice",
-    });
+    test.use({ displayName: "Alice" });
 
     let recoveryKey: GeneratedSecretStorageKey;
     let expectedBackupVersion: string;
@@ -110,5 +108,37 @@ test.describe("Encryption tab", () => {
 
         // The user is prompted to reset their identity
         await expect(dialog.getByText("Forgot your recovery key? You’ll need to reset your identity.")).toBeVisible();
+    });
+
+    test("should warn before turning off key storage", { tag: "@screenshot" }, async ({ page, app, util }) => {
+        await verifySession(app, recoveryKey.encodedPrivateKey);
+        await util.openEncryptionTab();
+
+        await page.getByRole("checkbox", { name: "Allow key storage" }).click();
+
+        await expect(
+            page.getByRole("heading", { name: "Are you sure you want to turn off key storage and delete it?" }),
+        ).toBeVisible();
+
+        await expect(util.getEncryptionTabContent()).toMatchScreenshot("delete-key-storage-confirm.png");
+
+        const deleteRequestPromises = [
+            page.waitForRequest((req) => req.url().endsWith("/account_data/m.cross_signing.master")),
+            page.waitForRequest((req) => req.url().endsWith("/account_data/m.cross_signing.self_signing")),
+            page.waitForRequest((req) => req.url().endsWith("/account_data/m.cross_signing.user_signing")),
+            page.waitForRequest((req) => req.url().endsWith("/account_data/m.megolm_backup.v1")),
+            page.waitForRequest((req) => req.url().endsWith("/account_data/m.secret_storage.default_key")),
+            page.waitForRequest((req) => req.url().includes("/account_data/m.secret_storage.key.")),
+        ];
+
+        await page.getByRole("button", { name: "Delete key storage" }).click();
+
+        await expect(page.getByRole("checkbox", { name: "Allow key storage" })).not.toBeChecked();
+
+        for (const prom of deleteRequestPromises) {
+            const request = await prom;
+            expect(request.method()).toBe("PUT");
+            expect(request.postData()).toBe(JSON.stringify({}));
+        }
     });
 });

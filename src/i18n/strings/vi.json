@@ -332,7 +332,6 @@
         "download_logs": "Tải xuống nhật ký",
         "downloading_logs": "Đang tải nhật ký xuống",
         "error_empty": "Vui lòng cho chúng tôi biết điều gì đã xảy ra hoặc tốt hơn là tạo sự cố trên GitHub để mô tả vấn đề.",
-        "failed_send_logs": "Không gửi được nhật ký: ",
         "github_issue": "Sự cố GitHub",
         "introduction": "Nếu bạn đã báo cáo lỗi qua GitHub, nhật ký gỡ lỗi có thể giúp chúng tôi theo dõi vấn đề. ",
         "log_request": "Để giúp chúng tôi ngăn chặn điều này trong tương lai, vui lòng gửi nhật ký cho chúng tôi <a>send us logs</a>.",
@@ -371,7 +370,6 @@
     "common": {
         "access_token": "Token truy cập",
         "advanced": "Nâng cao",
-        "all_rooms": "Tất cả các phòng",
         "analytics": "Về dữ liệu phân tích",
         "and_n_others": {
             "one": "và một cái khác…",
@@ -3237,7 +3235,6 @@
         "hide_sidebar_button": "Ẩn thanh bên",
         "input_devices": "Thiết bị đầu vào",
         "join_button_tooltip_call_full": "Xin lỗi — cuộc gọi này đang đầy",
-        "join_button_tooltip_connecting": "Đang kết nối",
         "maximise": "Vừa màn hình",
         "misconfigured_server": "Thực hiện cuộc gọi thất bại do thiết lập máy chủ sai",
         "misconfigured_server_description": "Vui lòng yêu cầu quản trị viên máy chủ của bạn (<code>%(homeserverDomain)s</code>) thiết lập máy chủ TURN để cuộc gọi hoạt động ổn định.",

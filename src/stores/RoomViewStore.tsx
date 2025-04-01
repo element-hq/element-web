@@ -50,6 +50,8 @@ import { type CancelAskToJoinPayload } from "../dispatcher/payloads/CancelAskToJ
 import { type SubmitAskToJoinPayload } from "../dispatcher/payloads/SubmitAskToJoinPayload";
 import { ModuleRunner } from "../modules/ModuleRunner";
 import { setMarkedUnreadState } from "../utils/notifications";
+import { ConnectionState, ElementCall } from "../models/Call";
+import { isVideoRoom } from "../utils/video-rooms";
 
 const NUM_JOIN_RETRY = 5;
 
@@ -353,11 +355,24 @@ export class RoomViewStore extends EventEmitter {
                 });
             }
 
-            if (SettingsStore.getValue("feature_sliding_sync") && this.state.roomId !== payload.room_id) {
-                if (this.state.subscribingRoomId && this.state.subscribingRoomId !== payload.room_id) {
-                    // unsubscribe from this room, but don't await it as we don't care when this gets done.
-                    this.stores.slidingSyncManager.setRoomVisible(this.state.subscribingRoomId, false);
+            if (room && (payload.view_call || isVideoRoom(room))) {
+                let call = CallStore.instance.getCall(payload.room_id);
+                // Start a call if not already there
+                if (call === null) {
+                    ElementCall.create(room, false);
+                    call = CallStore.instance.getCall(payload.room_id)!;
                 }
+                call.presented = true;
+                // Immediately start the call. This will connect to all required widget events
+                // and allow the widget to show the lobby.
+                if (call.connectionState === ConnectionState.Disconnected) call.start();
+            }
+            // If we switch to a different room from the call, we are no longer presenting it
+            const prevRoomCall = this.state.roomId ? CallStore.instance.getCall(this.state.roomId) : null;
+            if (prevRoomCall !== null && (!payload.view_call || payload.room_id !== this.state.roomId))
+                prevRoomCall.presented = false;
+
+            if (SettingsStore.getValue("feature_simplified_sliding_sync") && this.state.roomId !== payload.room_id) {
                 this.setState({
                     subscribingRoomId: payload.room_id,
                     roomId: payload.room_id,
@@ -373,13 +388,8 @@ export class RoomViewStore extends EventEmitter {
                 });
                 // set this room as the room subscription. We need to await for it as this will fetch
                 // all room state for this room, which is required before we get the state below.
-                await this.stores.slidingSyncManager.setRoomVisible(payload.room_id, true);
-                // Whilst we were subscribing another room was viewed, so stop what we're doing and
-                // unsubscribe
-                if (this.state.subscribingRoomId !== payload.room_id) {
-                    this.stores.slidingSyncManager.setRoomVisible(payload.room_id, false);
-                    return;
-                }
+                await this.stores.slidingSyncManager.setRoomVisible(payload.room_id);
+
                 // Re-fire the payload: we won't re-process it because the prev room ID == payload room ID now
                 this.dis?.dispatch({
                     ...payload,

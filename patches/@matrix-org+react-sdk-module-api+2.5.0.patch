@@ -1,0 +1,13 @@
+diff --git a/node_modules/@matrix-org/react-sdk-module-api/lib/ModuleApi.d.ts b/node_modules/@matrix-org/react-sdk-module-api/lib/ModuleApi.d.ts
+index 917a7fc..a2710c6 100644
+--- a/node_modules/@matrix-org/react-sdk-module-api/lib/ModuleApi.d.ts
++++ b/node_modules/@matrix-org/react-sdk-module-api/lib/ModuleApi.d.ts
+@@ -37,7 +37,7 @@ export interface ModuleApi {
+      * @returns Whether the user submitted the dialog or closed it, and the model returned by the
+      * dialog component if submitted.
+      */
+-    openDialog<M extends object, P extends DialogProps = DialogProps, C extends DialogContent<P> = DialogContent<P>>(initialTitleOrOptions: string | ModuleUiDialogOptions, body: (props: P, ref: React.RefObject<C>) => React.ReactNode, props?: Omit<P, keyof DialogProps>): Promise<{
++    openDialog<M extends object, P extends DialogProps = DialogProps, C extends DialogContent<P> = DialogContent<P>>(initialTitleOrOptions: string | ModuleUiDialogOptions, body: (props: P, ref: React.RefObject<C | null>) => React.ReactNode, props?: Omit<P, keyof DialogProps>): Promise<{
+         didOkOrSubmit: boolean;
+         model: M;
+     }>;

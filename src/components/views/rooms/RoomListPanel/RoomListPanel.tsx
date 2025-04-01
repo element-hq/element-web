@@ -11,6 +11,8 @@ import { shouldShowComponent } from "../../../../customisations/helpers/UICompon
 import { UIComponent } from "../../../../settings/UIFeature";
 import { RoomListSearch } from "./RoomListSearch";
 import { RoomListHeaderView } from "./RoomListHeaderView";
+import { RoomListView } from "./RoomListView";
+import { Flex } from "../../../utils/Flex";
 
 type RoomListPanelProps = {
     /**
@@ -27,9 +29,16 @@ export const RoomListPanel: React.FC<RoomListPanelProps> = ({ activeSpace }) => 
     const displayRoomSearch = shouldShowComponent(UIComponent.FilterContainer);
 
     return (
-        <section className="mx_RoomListPanel" data-testid="room-list-panel">
+        <Flex
+            as="section"
+            className="mx_RoomListPanel"
+            data-testid="room-list-panel"
+            direction="column"
+            align="stretch"
+        >
             {displayRoomSearch && <RoomListSearch activeSpace={activeSpace} />}
             <RoomListHeaderView />
-        </section>
+            <RoomListView />
+        </Flex>
     );
 };

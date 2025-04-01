@@ -1,12 +1,12 @@
 /*
-Copyright 2024 New Vector Ltd.
+Copyright 2024,2025 New Vector Ltd.
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ReactElement, type ReactNode, useContext, useMemo, useRef, useState } from "react";
+import React, { type ReactElement, type ReactNode, useContext, useId, useMemo, useRef, useState } from "react";
 import classNames from "classnames";
 import { type Room, EventType } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
@@ -53,8 +53,9 @@ export const Entry: React.FC<{
     checked: boolean;
     onChange?(value: boolean): void;
 }> = ({ room, checked, onChange }) => {
+    const id = useId();
     return (
-        <label className="mx_AddExistingToSpace_entry">
+        <li id={id} className="mx_AddExistingToSpace_entry" aria-label={room.name}>
             {room?.isSpaceRoom() ? (
                 <RoomAvatar room={room} size="32px" />
             ) : (
@@ -62,11 +63,12 @@ export const Entry: React.FC<{
             )}
             <span className="mx_AddExistingToSpace_entry_name">{room.name}</span>
             <StyledCheckbox
+                aria-labelledby={id}
                 onChange={onChange ? (e) => onChange(e.currentTarget.checked) : undefined}
                 checked={checked}
                 disabled={!onChange}
             />
-        </label>
+        </li>
     );
 };
 
@@ -357,6 +359,7 @@ const defaultRendererFactory =
         <div className="mx_AddExistingToSpace_section">
             <h3>{_t(title)}</h3>
             <LazyRenderList
+                element="ul"
                 itemHeight={ROW_HEIGHT}
                 items={rooms}
                 scrollTop={scrollTop}

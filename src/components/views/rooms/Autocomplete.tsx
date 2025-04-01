@@ -50,13 +50,13 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
     public queryRequested?: string;
     public debounceCompletionsRequest?: number;
     private containerRef = createRef<HTMLDivElement>();
-    private completionRefs: Record<string, RefObject<HTMLElement>> = {};
+    private completionRefs: Record<string, RefObject<HTMLElement | null>> = {};
 
     public static contextType = RoomContext;
     declare public context: React.ContextType<typeof RoomContext>;
 
-    public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         this.state = {
             // list of completionResults, each containing completions

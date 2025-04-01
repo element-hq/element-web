@@ -56,8 +56,8 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
     declare public context: React.ContextType<typeof RoomContext>;
     private voiceRecordingId: string;
 
-    public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         this.state = {};
 

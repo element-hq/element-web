@@ -6,8 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React from "react";
-import { fireEvent, render, screen, waitForElementToBeRemoved } from "jest-matrix-react";
+import React, { act } from "react";
+import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "jest-matrix-react";
 import { EventType, getHttpUriForMxc, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import fetchMock from "fetch-mock-jest";
 import encrypt from "matrix-encrypt-attachment";
@@ -27,6 +27,7 @@ import {
 } from "../../../../test-utils";
 import { MediaEventHelper } from "../../../../../src/utils/MediaEventHelper";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
+import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 
 jest.mock("matrix-encrypt-attachment", () => ({
     decryptAttachment: jest.fn(),
@@ -57,6 +58,7 @@ describe("<MImageBody/>", () => {
         },
     );
     const encryptedMediaEvent = new MatrixEvent({
+        event_id: "$foo:bar",
         room_id: "!room:server",
         sender: userId,
         type: EventType.RoomMessage,
@@ -73,7 +75,6 @@ describe("<MImageBody/>", () => {
     });
 
     const props = {
-        onHeightChanged: jest.fn(),
         onMessageAllowed: jest.fn(),
         permalinkCreator: new RoomPermalinkCreator(new Room(encryptedMediaEvent.getRoomId()!, cli, cli.getUserId()!)),
     };
@@ -81,6 +82,10 @@ describe("<MImageBody/>", () => {
     beforeEach(() => {
         jest.spyOn(SettingsStore, "getValue").mockRestore();
         fetchMock.mockReset();
+    });
+
+    afterEach(() => {
+        mocked(encrypt.decryptAttachment).mockReset();
     });
 
     it("should show a thumbnail while image is being downloaded", async () => {
@@ -131,7 +136,26 @@ describe("<MImageBody/>", () => {
 
     describe("with image previews/thumbnails disabled", () => {
         beforeEach(() => {
-            jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+            act(() => {
+                SettingsStore.setValue("showImages", null, SettingLevel.DEVICE, false);
+            });
+        });
+
+        afterEach(() => {
+            act(() => {
+                SettingsStore.setValue(
+                    "showImages",
+                    null,
+                    SettingLevel.DEVICE,
+                    SettingsStore.getDefaultValue("showImages"),
+                );
+                SettingsStore.setValue(
+                    "showMediaEventIds",
+                    null,
+                    SettingLevel.DEVICE,
+                    SettingsStore.getDefaultValue("showMediaEventIds"),
+                );
+            });
         });
 
         it("should not download image", async () => {
@@ -144,6 +168,8 @@ describe("<MImageBody/>", () => {
                     mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
                 />,
             );
+
+            expect(screen.getByText("Show image")).toBeInTheDocument();
 
             expect(fetchMock).not.toHaveFetched(url);
         });
@@ -163,11 +189,14 @@ describe("<MImageBody/>", () => {
 
             fireEvent.click(screen.getByRole("button"));
 
-            // image fetched after clicking show image
             expect(fetchMock).toHaveFetched(url);
 
-            // spinner while downloading image
-            expect(screen.getByRole("progressbar")).toBeInTheDocument();
+            // Show image is asynchronous since it applies through a settings watcher hook, so
+            // be sure to wait here.
+            await waitFor(() => {
+                // spinner while downloading image
+                expect(screen.getByRole("progressbar")).toBeInTheDocument();
+            });
         });
     });
 

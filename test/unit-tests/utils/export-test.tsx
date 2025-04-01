@@ -17,6 +17,7 @@ import {
     EventType,
 } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
+import { type JSX } from "react";
 
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import { type IExportOptions, ExportType, ExportFormat } from "../../../src/utils/exportUtils/exportUtils";

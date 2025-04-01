@@ -190,6 +190,7 @@ describe("NaturalAlgorithm", () => {
                 symbol: null,
                 count: 0,
                 level: NotificationLevel.None,
+                invited: false,
             });
         });
 

@@ -14,7 +14,7 @@ import {
     THREAD_RELATION_TYPE,
     M_POLL_START,
 } from "matrix-js-sdk/src/matrix";
-import React, { createContext, type ReactElement, type ReactNode, useContext, useRef } from "react";
+import React, { type JSX, createContext, type ReactElement, type ReactNode, useContext, useRef } from "react";
 
 import { _t } from "../../../languageHandler";
 import { CollapsibleButton } from "./CollapsibleButton";

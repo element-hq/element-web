@@ -6,10 +6,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import type { Room } from "matrix-js-sdk/src/matrix";
-import type { Sorter } from "./sorters";
+import type { Sorter, SortingAlgorithm } from "./sorters";
+import type { Filter, FilterKey } from "./filters";
 import { RoomNode } from "./RoomNode";
 import { shouldPromote } from "./utils";
 import { Level } from "./Level";
+import { SortedRoomIterator, SortedSpaceFilteredIterator } from "./iterators";
 
 /**
  * Implements a skip list that stores rooms using a given sorting algorithm.
@@ -20,7 +22,10 @@ export class RoomSkipList implements Iterable<Room> {
     private roomNodeMap: Map<string, RoomNode> = new Map();
     public initialized: boolean = false;
 
-    public constructor(private sorter: Sorter) {}
+    public constructor(
+        private sorter: Sorter,
+        private filters: Filter[] = [],
+    ) {}
 
     private reset(): void {
         this.levels = [new Level(0)];
@@ -35,6 +40,7 @@ export class RoomSkipList implements Iterable<Room> {
         const sortedRoomNodes = this.sorter.sort(rooms).map((room) => new RoomNode(room));
         let currentLevel = this.levels[0];
         for (const node of sortedRoomNodes) {
+            node.applyFilters(this.filters);
             currentLevel.setNext(node);
             this.roomNodeMap.set(node.room.roomId, node);
         }
@@ -44,7 +50,20 @@ export class RoomSkipList implements Iterable<Room> {
             this.levels[currentLevel.level] = currentLevel;
             currentLevel = currentLevel.generateNextLevel();
         } while (currentLevel.size > 1);
+
+        // 3. Go through the list of rooms and mark nodes in active space
+        this.calculateActiveSpaceForNodes();
+
         this.initialized = true;
+    }
+
+    /**
+     * Go through all the room nodes and check if they belong to the active space.
+     */
+    public calculateActiveSpaceForNodes(): void {
+        for (const node of this.roomNodeMap.values()) {
+            node.checkIfRoomBelongsToActiveSpace();
+        }
     }
 
     /**
@@ -81,6 +100,8 @@ export class RoomSkipList implements Iterable<Room> {
         this.removeRoom(room);
 
         const newNode = new RoomNode(room);
+        newNode.checkIfRoomBelongsToActiveSpace();
+        newNode.applyFilters(this.filters);
         this.roomNodeMap.set(room.roomId, newNode);
 
         /**
@@ -160,22 +181,34 @@ export class RoomSkipList implements Iterable<Room> {
     }
 
     /**
+     * Returns an iterator that can be used to generate a list of sorted rooms that belong
+     * to the currently active space. Passing filterKeys will further filter the list such
+     * that only rooms that match the filters are returned.
+     *
+     * @example To get an array of rooms:
+     * Array.from(RLS.getRoomsInActiveSpace());
+     *
+     * @example Use a for ... of loop to iterate over rooms:
+     * for(const room of RLS.getRoomsInActiveSpace()) { something(room); }
+     *
+     * @example Additional filtering:
+     * Array.from(RLS.getRoomsInActiveSpace([FilterKeys.Favourite]));
+     */
+    public getRoomsInActiveSpace(filterKeys: FilterKey[] = []): SortedSpaceFilteredIterator {
+        return new SortedSpaceFilteredIterator(this.levels[0].head!, filterKeys);
+    }
+
+    /**
      * The number of rooms currently in the skip list.
      */
     public get size(): number {
         return this.levels[0].size;
     }
-}
 
-class SortedRoomIterator implements Iterator<Room> {
-    public constructor(private current: RoomNode) {}
-
-    public next(): IteratorResult<Room> {
-        const current = this.current;
-        if (!current) return { value: undefined, done: true };
-        this.current = current.next[0];
-        return {
-            value: current.room,
-        };
+    /**
+     * The currently active sorting algorithm.
+     */
+    public get activeSortAlgorithm(): SortingAlgorithm {
+        return this.sorter.type;
     }
 }
