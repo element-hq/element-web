@@ -46,7 +46,6 @@
 - [Skinning](skinning.md)
 - [Cider editor](ciderEditor.md)
 - [Iconography](icons.md)
-- [Jitsi](jitsi.md)
 - [Local echo](local-echo-dev.md)
 - [Media](media-handling.md)
 - [Room List Store](room-list-store.md)
