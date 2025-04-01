@@ -28,6 +28,16 @@ export function hasAccessToOptionsMenu(room: Room): boolean {
 }
 
 /**
+ * Check if the user has access to the notification menu.
+ * @param room
+ * @param isGuest
+ * @param isArchived
+ */
+export function hasAccessToNotificationMenu(room: Room, isGuest: boolean, isArchived: boolean): boolean {
+    return !isGuest && !isArchived && hasAccessToOptionsMenu(room);
+}
+
+/**
  * Create a room
  * @param space - The space to create the room in
  */
