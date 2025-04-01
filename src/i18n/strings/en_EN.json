@@ -1677,6 +1677,7 @@
         "class_global": "Global",
         "class_other": "Other",
         "default": "Default",
+        "default_settings": "Match default settings",
         "email_pusher_app_display_name": "Email Notifications",
         "enable_prompt_toast_description": "Enable desktop notifications",
         "enable_prompt_toast_title": "Notifications",
@@ -1693,9 +1694,10 @@
         "mark_all_read": "Mark all as read",
         "mentions_and_keywords": "@mentions & keywords",
         "mentions_and_keywords_description": "Get notified only with mentions and keywords as set up in your <a>settings</a>",
-        "mentions_keywords": "Mentions & keywords",
+        "mentions_keywords": "Mentions and keywords",
         "message_didnt_send": "Message didn't send. Click for info.",
-        "mute_description": "You won't get any notifications"
+        "mute_description": "You won't get any notifications",
+        "mute_room": "Mute room"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s is requesting verification"
