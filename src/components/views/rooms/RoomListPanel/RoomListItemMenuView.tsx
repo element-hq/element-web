@@ -15,6 +15,9 @@ import UserAddIcon from "@vector-im/compound-design-tokens/assets/web/icons/user
 import LinkIcon from "@vector-im/compound-design-tokens/assets/web/icons/link";
 import LeaveIcon from "@vector-im/compound-design-tokens/assets/web/icons/leave";
 import OverflowIcon from "@vector-im/compound-design-tokens/assets/web/icons/overflow-horizontal";
+import NotificationIcon from "@vector-im/compound-design-tokens/assets/web/icons/notifications-solid";
+import NotificationOffIcon from "@vector-im/compound-design-tokens/assets/web/icons/notifications-off-solid";
+import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 import { type Room } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../languageHandler";
@@ -23,6 +26,7 @@ import {
     type RoomListItemMenuViewState,
     useRoomListItemMenuViewModel,
 } from "../../../viewmodels/roomlist/RoomListItemMenuViewModel";
+import { RoomNotifState } from "../../../../RoomNotifs";
 
 interface RoomListItemMenuViewProps {
     /**
@@ -45,6 +49,7 @@ export function RoomListItemMenuView({ room, setMenuOpen }: RoomListItemMenuView
     return (
         <Flex className="mx_RoomListItemMenuView" align="center" gap="var(--cpd-space-0-5x)">
             {vm.showMoreOptionsMenu && <MoreOptionsMenu setMenuOpen={setMenuOpen} vm={vm} />}
+            {vm.showNotificationMenu && <NotificationMenu setMenuOpen={setMenuOpen} vm={vm} />}
         </Flex>
     );
 }
@@ -152,3 +157,93 @@ export const MoreOptionsButton = forwardRef<HTMLButtonElement, MoreOptionsButton
         );
     },
 );
+
+interface NotificationMenuProps {
+    /**
+     * The view model state for the menu.
+     */
+    vm: RoomListItemMenuViewState;
+    /**
+     * Set the menu open state.
+     * @param isOpen
+     */
+    setMenuOpen: (isOpen: boolean) => void;
+}
+
+function NotificationMenu({ vm, setMenuOpen }: NotificationMenuProps): JSX.Element {
+    const [open, setOpen] = useState(false);
+
+    return (
+        <Menu
+            open={open}
+            onOpenChange={(isOpen) => {
+                setOpen(isOpen);
+                setMenuOpen(isOpen);
+            }}
+            title={_t("room_list|notification_options")}
+            showTitle={false}
+            align="start"
+            trigger={<NotificationButton isRoomMuted={vm.isNotificationMute} size="24px" />}
+        >
+            <MenuItem
+                aria-selected={vm.isNotificationAllMessage}
+                hideChevron={true}
+                label={_t("notifications|default_settings")}
+                onSelect={() => vm.setRoomNotifState(RoomNotifState.AllMessages)}
+                onClick={(evt) => evt.stopPropagation()}
+            >
+                {vm.isNotificationAllMessage && <CheckIcon width="24px" height="24px" />}
+            </MenuItem>
+            <MenuItem
+                aria-selected={vm.isNotificationAllMessageLoud}
+                hideChevron={true}
+                label={_t("notifications|all_messages")}
+                onSelect={() => vm.setRoomNotifState(RoomNotifState.AllMessagesLoud)}
+                onClick={(evt) => evt.stopPropagation()}
+            >
+                {vm.isNotificationAllMessageLoud && <CheckIcon width="24px" height="24px" />}
+            </MenuItem>
+            <MenuItem
+                aria-selected={vm.isNotificationMentionOnly}
+                hideChevron={true}
+                label={_t("notifications|mentions_keywords")}
+                onSelect={() => vm.setRoomNotifState(RoomNotifState.MentionsOnly)}
+                onClick={(evt) => evt.stopPropagation()}
+            >
+                {vm.isNotificationMentionOnly && <CheckIcon width="24px" height="24px" />}
+            </MenuItem>
+            <MenuItem
+                aria-selected={vm.isNotificationMute}
+                hideChevron={true}
+                label={_t("notifications|mute_room")}
+                onSelect={() => vm.setRoomNotifState(RoomNotifState.Mute)}
+                onClick={(evt) => evt.stopPropagation()}
+            >
+                {vm.isNotificationMute && <CheckIcon width="24px" height="24px" />}
+            </MenuItem>
+        </Menu>
+    );
+}
+
+interface NotificationButtonProps extends ComponentProps<typeof IconButton> {
+    /**
+     * Whether the room is muted.
+     */
+    isRoomMuted: boolean;
+}
+
+/**
+ * A button to trigger the notification menu.
+ */
+export const NotificationButton = forwardRef<HTMLButtonElement, NotificationButtonProps>(function MoreOptionsButton(
+    { isRoomMuted, ...props },
+    ref,
+) {
+    return (
+        <Tooltip label={_t("room_list|notification_options")}>
+            <IconButton aria-label={_t("room_list|notification_options")} {...props} ref={ref}>
+                {isRoomMuted ? <NotificationOffIcon /> : <NotificationIcon />}
+            </IconButton>
+        </Tooltip>
+    );
+});

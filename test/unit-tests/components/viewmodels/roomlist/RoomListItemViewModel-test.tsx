@@ -12,13 +12,17 @@ import { mocked } from "jest-mock";
 import dispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { useRoomListItemViewModel } from "../../../../../src/components/viewmodels/roomlist/RoomListItemViewModel";
-import { createTestClient, mkStubRoom } from "../../../../test-utils";
-import { hasAccessToOptionsMenu } from "../../../../../src/components/viewmodels/roomlist/utils";
+import { createTestClient, mkStubRoom, withClientContextRenderOptions } from "../../../../test-utils";
+import {
+    hasAccessToNotificationMenu,
+    hasAccessToOptionsMenu,
+} from "../../../../../src/components/viewmodels/roomlist/utils";
 import { RoomNotificationState } from "../../../../../src/stores/notifications/RoomNotificationState";
 import { RoomNotificationStateStore } from "../../../../../src/stores/notifications/RoomNotificationStateStore";
 
 jest.mock("../../../../../src/components/viewmodels/roomlist/utils", () => ({
     hasAccessToOptionsMenu: jest.fn().mockReturnValue(false),
+    hasAccessToNotificationMenu: jest.fn().mockReturnValue(false),
 }));
 
 describe("RoomListItemViewModel", () => {
@@ -30,7 +34,10 @@ describe("RoomListItemViewModel", () => {
     });
 
     it("should dispatch view room action on openRoom", async () => {
-        const { result: vm } = renderHook(() => useRoomListItemViewModel(room));
+        const { result: vm } = renderHook(
+            () => useRoomListItemViewModel(room),
+            withClientContextRenderOptions(room.client),
+        );
 
         const fn = jest.spyOn(dispatcher, "dispatch");
         vm.current.openRoom();
@@ -45,7 +52,19 @@ describe("RoomListItemViewModel", () => {
 
     it("should show hover menu if user has access to options menu", async () => {
         mocked(hasAccessToOptionsMenu).mockReturnValue(true);
-        const { result: vm } = renderHook(() => useRoomListItemViewModel(room));
+        const { result: vm } = renderHook(
+            () => useRoomListItemViewModel(room),
+            withClientContextRenderOptions(room.client),
+        );
+        expect(vm.current.showHoverMenu).toBe(true);
+    });
+
+    it("should show hover menu if user has access to notification menu", async () => {
+        mocked(hasAccessToNotificationMenu).mockReturnValue(true);
+        const { result: vm } = renderHook(
+            () => useRoomListItemViewModel(room),
+            withClientContextRenderOptions(room.client),
+        );
         expect(vm.current.showHoverMenu).toBe(true);
     });
 

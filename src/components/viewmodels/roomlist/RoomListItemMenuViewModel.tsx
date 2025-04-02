@@ -11,7 +11,7 @@ import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import { useUnreadNotifications } from "../../../hooks/useUnreadNotifications";
-import { hasAccessToOptionsMenu } from "./utils";
+import { hasAccessToNotificationMenu, hasAccessToOptionsMenu } from "./utils";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { DefaultTagID } from "../../../stores/room-list/models";
 import { NotificationLevel } from "../../../stores/notifications/NotificationLevel";
@@ -21,12 +21,18 @@ import dispatcher from "../../../dispatcher/dispatcher";
 import { clearRoomNotification, setMarkedUnreadState } from "../../../utils/notifications";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { tagRoom } from "../../../utils/room/tagRoom";
+import { RoomNotifState } from "../../../RoomNotifs";
+import { useNotificationState } from "../../../hooks/useRoomNotificationState";
 
 export interface RoomListItemMenuViewState {
     /**
      * Whether the more options menu should be shown.
      */
     showMoreOptionsMenu: boolean;
+    /**
+     * Whether the notification menu should be shown.
+     */
+    showNotificationMenu: boolean;
     /**
      * Whether the room is a favourite room.
      */
@@ -47,6 +53,22 @@ export interface RoomListItemMenuViewState {
      * Can mark the room as unread.
      */
     canMarkAsUnread: boolean;
+    /**
+     * Whether the notification is set to all messages.
+     */
+    isNotificationAllMessage: boolean;
+    /**
+     * Whether the notification is set to all messages loud.
+     */
+    isNotificationAllMessageLoud: boolean;
+    /**
+     * Whether the notification is set to mentions and keywords only.
+     */
+    isNotificationMentionOnly: boolean;
+    /**
+     * Whether the notification is muted.
+     */
+    isNotificationMute: boolean;
     /**
      * Mark the room as read.
      * @param evt
@@ -81,6 +103,11 @@ export interface RoomListItemMenuViewState {
      * @param evt
      */
     leaveRoom: (evt: Event) => void;
+    /**
+     * Set the room notification state.
+     * @param state
+     */
+    setRoomNotifState: (state: RoomNotifState) => void;
 }
 
 export function useRoomListItemMenuViewModel(room: Room): RoomListItemMenuViewState {
@@ -88,11 +115,12 @@ export function useRoomListItemMenuViewModel(room: Room): RoomListItemMenuViewSt
     const roomTags = useEventEmitterState(room, RoomEvent.Tags, () => room.tags);
     const { level: notificationLevel } = useUnreadNotifications(room);
 
-    const showMoreOptionsMenu = hasAccessToOptionsMenu(room);
-
     const isDm = Boolean(DMRoomMap.shared().getUserIdForRoomId(room.roomId));
     const isFavourite = Boolean(roomTags[DefaultTagID.Favourite]);
     const isArchived = Boolean(roomTags[DefaultTagID.Archived]);
+
+    const showMoreOptionsMenu = hasAccessToOptionsMenu(room);
+    const showNotificationMenu = hasAccessToNotificationMenu(room, matrixClient.isGuest(), isArchived);
 
     const canMarkAsRead = notificationLevel > NotificationLevel.None;
     const canMarkAsUnread = !canMarkAsRead && !isArchived;
@@ -100,6 +128,12 @@ export function useRoomListItemMenuViewModel(room: Room): RoomListItemMenuViewSt
     const canInvite =
         room.canInvite(matrixClient.getUserId()!) && !isDm && shouldShowComponent(UIComponent.InviteUsers);
     const canCopyRoomLink = !isDm;
+
+    const [roomNotifState, setRoomNotifState] = useNotificationState(room);
+    const isNotificationAllMessage = roomNotifState === RoomNotifState.AllMessages;
+    const isNotificationAllMessageLoud = roomNotifState === RoomNotifState.AllMessagesLoud;
+    const isNotificationMentionOnly = roomNotifState === RoomNotifState.MentionsOnly;
+    const isNotificationMute = roomNotifState === RoomNotifState.Mute;
 
     // Actions
 
@@ -164,11 +198,16 @@ export function useRoomListItemMenuViewModel(room: Room): RoomListItemMenuViewSt
 
     return {
         showMoreOptionsMenu,
+        showNotificationMenu,
         isFavourite,
         canInvite,
         canCopyRoomLink,
         canMarkAsRead,
         canMarkAsUnread,
+        isNotificationAllMessage,
+        isNotificationAllMessageLoud,
+        isNotificationMentionOnly,
+        isNotificationMute,
         markAsRead,
         markAsUnread,
         toggleFavorite,
@@ -176,5 +215,6 @@ export function useRoomListItemMenuViewModel(room: Room): RoomListItemMenuViewSt
         invite,
         copyRoomLink,
         leaveRoom,
+        setRoomNotifState,
     };
 }

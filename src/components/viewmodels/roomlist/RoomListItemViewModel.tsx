@@ -6,15 +6,18 @@
  */
 
 import { useCallback, useMemo } from "react";
-import { type Room } from "matrix-js-sdk/src/matrix";
+import { type Room, RoomEvent } from "matrix-js-sdk/src/matrix";
 
 import dispatcher from "../../../dispatcher/dispatcher";
 import type { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../../dispatcher/actions";
-import { hasAccessToOptionsMenu } from "./utils";
+import { hasAccessToNotificationMenu, hasAccessToOptionsMenu } from "./utils";
 import { _t } from "../../../languageHandler";
 import { type RoomNotificationState } from "../../../stores/notifications/RoomNotificationState";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
+import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
+import { useEventEmitterState } from "../../../hooks/useEventEmitter";
+import { DefaultTagID } from "../../../stores/room-list/models";
 
 export interface RoomListItemViewState {
     /**
@@ -40,8 +43,12 @@ export interface RoomListItemViewState {
  * @see {@link RoomListItemViewState} for more information about what this view model returns.
  */
 export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
-    // incoming: Check notification menu rights
-    const showHoverMenu = hasAccessToOptionsMenu(room);
+    const matrixClient = useMatrixClientContext();
+    const roomTags = useEventEmitterState(room, RoomEvent.Tags, () => room.tags);
+    const isArchived = Boolean(roomTags[DefaultTagID.Archived]);
+
+    const showHoverMenu =
+        hasAccessToOptionsMenu(room) || hasAccessToNotificationMenu(room, matrixClient.isGuest(), isArchived);
     const notificationState = useMemo(() => RoomNotificationStateStore.instance.getRoomState(room), [room]);
     const a11yLabel = getA11yLabel(room, notificationState);
 
