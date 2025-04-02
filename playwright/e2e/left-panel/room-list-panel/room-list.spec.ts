@@ -85,6 +85,43 @@ test.describe("Room list", () => {
             await expect(roomItem).not.toBeVisible();
         });
 
+        test("should open the notification options menu", { tag: "@screenshot" }, async ({ page, app, user }) => {
+            const roomListView = getRoomList(page);
+
+            const roomItem = roomListView.getByRole("gridcell", { name: "Open room room29" });
+            await roomItem.hover();
+
+            await expect(roomItem).toMatchScreenshot("room-list-item-hover.png");
+            let roomItemMenu = roomItem.getByRole("button", { name: "Notification options" });
+            await roomItemMenu.click();
+
+            // Default settings should be selected
+            await expect(page.getByRole("menuitem", { name: "Match default settings" })).toHaveAttribute(
+                "aria-selected",
+                "true",
+            );
+            await expect(page).toMatchScreenshot("room-list-item-open-notification-options.png");
+
+            // It should make the room muted
+            await page.getByRole("menuitem", { name: "Mute room" }).click();
+
+            // Remove hover on the room list item
+            await roomListView.hover();
+
+            // The room decoration should have the muted icon
+            await expect(roomItem.getByTestId("notification-decoration")).toBeVisible();
+
+            await roomItem.hover();
+            // On hover, the room should show the muted icon
+            await expect(roomItem).toMatchScreenshot("room-list-item-hover-silent.png");
+
+            roomItemMenu = roomItem.getByRole("button", { name: "Notification options" });
+            await roomItemMenu.click();
+            // The Mute room option should be selected
+            await expect(page.getByRole("menuitem", { name: "Mute room" })).toHaveAttribute("aria-selected", "true");
+            await expect(page).toMatchScreenshot("room-list-item-open-notification-options-selection.png");
+        });
+
         test("should scroll to the current room", async ({ page, app, user }) => {
             const roomListView = getRoomList(page);
             await roomListView.hover();
