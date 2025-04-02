@@ -849,6 +849,9 @@
         "setting_colon": "Налаштування:",
         "setting_definition": "Означення налаштування:",
         "setting_id": "ID налаштувань",
+        "settings": {
+            "elementCallUrl": "URL Element Call"
+        },
         "settings_explorer": "Налаштування оглядача",
         "show_hidden_events": "Показувати приховані події у часоряді",
         "spaces": {

@@ -851,6 +851,9 @@
         "setting_colon": "Ustawienie:",
         "setting_definition": "Definicja ustawienia:",
         "setting_id": "ID ustawienia",
+        "settings": {
+            "elementCallUrl": "Adres URL Element Call"
+        },
         "settings_explorer": "Eksplorator ustawień",
         "show_hidden_events": "Pokaż ukryte wydarzenia na linii czasowej",
         "spaces": {
