@@ -254,13 +254,6 @@ describe("<MatrixChat />", () => {
     });
 
     afterEach(async () => {
-        // Wait for the promise that MatrixChat gives us to complete so that we know
-        // it's finished running its login code. We either need to do this or make the
-        // login code abort halfway through once the test finishes testing whatever it
-        // needs to test. If we do nothing, the login code will just continue running
-        // and interfere with the subsequent tests.
-        // await initPromise;
-
         // @ts-ignore
         DMRoomMap.setShared(null);
 
