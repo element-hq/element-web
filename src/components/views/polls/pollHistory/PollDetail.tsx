@@ -24,8 +24,6 @@ interface Props {
     permalinkCreator: RoomPermalinkCreator;
 }
 
-const NOOP = (): void => {};
-
 /**
  * Content of PollHistory when a specific poll is selected
  */
@@ -56,8 +54,6 @@ export const PollDetail: React.FC<Props> = ({ poll, permalinkCreator, requestMod
             <MPollBody
                 mxEvent={poll.rootEvent}
                 permalinkCreator={permalinkCreator}
-                onHeightChanged={NOOP}
-                onMessageAllowed={NOOP}
                 // MPollBody doesn't use this
                 // and MessageEvent only defines it for eligible events
                 // should be fixed on IBodyProps types

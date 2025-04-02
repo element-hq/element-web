@@ -81,7 +81,6 @@ describe("<TextualBody />", () => {
         highlights: [] as string[],
         highlightLink: "",
         onMessageAllowed: jest.fn(),
-        onHeightChanged: jest.fn(),
         mediaEventHelper: {} as MediaEventHelper,
     };
 
@@ -426,10 +425,7 @@ describe("<TextualBody />", () => {
 
         it("renders url previews correctly", () => {
             const ev = mkRoomTextMessage("Visit https://matrix.org/");
-            const { container, rerender } = getComponent(
-                { mxEvent: ev, showUrlPreview: true, onHeightChanged: jest.fn() },
-                matrixClient,
-            );
+            const { container, rerender } = getComponent({ mxEvent: ev, showUrlPreview: true }, matrixClient);
 
             expect(container).toHaveTextContent(ev.getContent().body);
             expect(container.querySelector("a")).toHaveAttribute("href", "https://matrix.org/");
@@ -450,11 +446,7 @@ describe("<TextualBody />", () => {
             jest.spyOn(ev, "replacingEventDate").mockReturnValue(new Date(1993, 7, 3));
             ev.makeReplaced(ev2);
 
-            getComponent(
-                { mxEvent: ev, showUrlPreview: true, onHeightChanged: jest.fn(), replacingEventId: ev.getId() },
-                matrixClient,
-                rerender,
-            );
+            getComponent({ mxEvent: ev, showUrlPreview: true, replacingEventId: ev.getId() }, matrixClient, rerender);
 
             expect(container).toHaveTextContent(ev2.getContent()["m.new_content"].body + "(edited)");
 
@@ -468,13 +460,10 @@ describe("<TextualBody />", () => {
         it("should listen to showUrlPreview change", () => {
             const ev = mkRoomTextMessage("Visit https://matrix.org/");
 
-            const { container, rerender } = getComponent(
-                { mxEvent: ev, showUrlPreview: false, onHeightChanged: jest.fn() },
-                matrixClient,
-            );
+            const { container, rerender } = getComponent({ mxEvent: ev, showUrlPreview: false }, matrixClient);
             expect(container.querySelector(".mx_LinkPreviewGroup")).toBeNull();
 
-            getComponent({ mxEvent: ev, showUrlPreview: true, onHeightChanged: jest.fn() }, matrixClient, rerender);
+            getComponent({ mxEvent: ev, showUrlPreview: true }, matrixClient, rerender);
             expect(container.querySelector(".mx_LinkPreviewGroup")).toBeTruthy();
         });
     });

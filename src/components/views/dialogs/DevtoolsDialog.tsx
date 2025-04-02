@@ -25,6 +25,7 @@ import ServerInfo from "./devtools/ServerInfo";
 import CopyableText from "../elements/CopyableText";
 import RoomNotifications from "./devtools/RoomNotifications";
 import { Crypto } from "./devtools/Crypto";
+import SettingsField from "../elements/SettingsField.tsx";
 
 enum Category {
     Room,
@@ -101,6 +102,7 @@ const DevtoolsDialog: React.FC<IProps> = ({ roomId, threadRootId, onFinished }) 
                     <SettingsFlag name="developerMode" level={SettingLevel.ACCOUNT} />
                     <SettingsFlag name="showHiddenEventsInTimeline" level={SettingLevel.DEVICE} />
                     <SettingsFlag name="enableWidgetScreenshots" level={SettingLevel.ACCOUNT} />
+                    <SettingsField settingKey="Developer.elementCallUrl" level={SettingLevel.DEVICE} />
                 </div>
             </BaseTool>
         );

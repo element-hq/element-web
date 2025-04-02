@@ -88,7 +88,6 @@ export function replacerToRenderFunction(replacer: Replacer): Opts["render"] {
 
 interface Parameters {
     isHtml: boolean;
-    onHeightChanged?: () => void;
     // Required for keywordPillRenderer
     keywordRegexpPattern?: RegExp;
     // Required for mentionPillRenderer

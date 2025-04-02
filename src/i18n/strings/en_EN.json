@@ -846,6 +846,9 @@
         "setting_colon": "Setting:",
         "setting_definition": "Setting definition:",
         "setting_id": "Setting ID",
+        "settings": {
+            "elementCallUrl": "Element Call URL"
+        },
         "settings_explorer": "Settings explorer",
         "show_hidden_events": "Show hidden events in timeline",
         "spaces": {

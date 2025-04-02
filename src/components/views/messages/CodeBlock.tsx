@@ -18,7 +18,6 @@ const MAX_LINES_BEFORE_COLLAPSE = 5;
 
 interface Props {
     preNode: ParserElement;
-    onHeightChanged?(): void;
 }
 
 const ExpandCollapseButton: React.FC<{
@@ -36,7 +35,7 @@ const ExpandCollapseButton: React.FC<{
     );
 };
 
-const CodeBlock: React.FC<Props> = ({ preNode, onHeightChanged }) => {
+const CodeBlock: React.FC<Props> = ({ preNode }) => {
     const enableSyntaxHighlightLanguageDetection = useSettingValue("enableSyntaxHighlightLanguageDetection");
     const showCodeLineNumbers = useSettingValue("showCodeLineNumbers");
     const expandCodeByDefault = useSettingValue("expandCodeByDefault");
@@ -51,8 +50,6 @@ const CodeBlock: React.FC<Props> = ({ preNode, onHeightChanged }) => {
                 expanded={expanded}
                 onClick={() => {
                     setExpanded(!expanded);
-                    // By expanding/collapsing we changed the height, therefore we call this
-                    onHeightChanged?.();
                 }}
             />
         );

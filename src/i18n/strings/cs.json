@@ -849,6 +849,9 @@
         "setting_colon": "Nastavení:",
         "setting_definition": "Definice nastavení:",
         "setting_id": "ID nastavení",
+        "settings": {
+            "elementCallUrl": "Element Call URL"
+        },
         "settings_explorer": "Průzkumník nastavení",
         "show_hidden_events": "Zobrazovat v časové ose skryté události",
         "spaces": {

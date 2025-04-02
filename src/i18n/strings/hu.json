@@ -12,6 +12,16 @@
             "1 olvasatlan megemlítés.": "one"
         },
         "recent_rooms": "Legutóbbi szobák",
+        "room_messsage_not_sent": "A(z) %(roomName)s szoba megnyitása nem beállított üzenettel.",
+        "room_n_unread_invite": "A(z) %(roomName)s szoba meghívásának megnyitása.",
+        "room_n_unread_messages": {
+            "one": "A(z) %(roomName)s szoba megnyitása 1 olvasatlan üzenettel.",
+            "other": "A(z) %(roomName)s szoba megnyitása %(count)s olvasatlan üzenettel."
+        },
+        "room_n_unread_messages_mentions": {
+            "one": "A(z) %(roomName)s szoba megnyitása 1 olvasatlan megemlítéssel.",
+            "other": "A(z) %(roomName)s szoba megnyitása %(count)s olvasatlan megemlítéssel."
+        },
         "room_name": "Szoba: %(name)s",
         "room_status_bar": "Szoba állapotsora",
         "seek_bar_label": "Hang keresősávja",
@@ -833,6 +843,9 @@
         "setting_colon": "Beállítás:",
         "setting_definition": "Beállítás leírása:",
         "setting_id": "Beállításazonosító",
+        "settings": {
+            "elementCallUrl": "Element Call webcím"
+        },
         "settings_explorer": "Beállításböngésző",
         "show_hidden_events": "Rejtett események megjelenítése az idővonalon",
         "spaces": {
@@ -2374,7 +2387,7 @@
             "public_without_alias_warning": "Hogy hivatkozhasson erre a szobára, adjon hozzá egy címet.",
             "publish_room": "Szoba láthatóvá tétele a nyilvános szobakatalógusban.",
             "publish_space": "Tér láthatóvá tétele a nyilvános szobakatalógusban.",
-            "strict_encryption": "Ebben a szobában sose küldjön titkosított üzenetet ellenőrizetlen munkamenetekbe ebből a munkamenetből",
+            "strict_encryption": "Üzenetküldés csak ellenőrzött felhasználóknak",
             "title": "Biztonság és adatvédelem"
         },
         "title": "Szoba beállításai – %(roomName)s",
@@ -2511,8 +2524,8 @@
                 "do_not_close_warning": "Ne zárja be ezt az ablakot, amíg az alaphelyzetbe állítás be nem fejeződik",
                 "export_keys": "Kulcsok exportálása",
                 "import_keys": "Kulcsok importálása",
-                "other_people_device_description": "Alapértelmezés szerint titkosított szobákban ne küldjön titkosított üzeneteket senkinek, amíg nem ellenőrizte őket.",
-                "other_people_device_label": "Sose küldjön titkosított üzeneteket nem ellenőrzött eszközökre",
+                "other_people_device_description": "Figyelmeztetés: azok a felhasználók, akikkel nem ellenőrizték kölcsönösen egymást (például emodzsik használatával), nem kapják meg a titkosított üzeneteket. Ezenkívül az ellenőrzött felhasználók nem ellenőrzött eszközei sem kapják meg a titkosított üzeneteket.",
+                "other_people_device_label": "Titkosított szobákban csak az ellenőrzött felhasználók kapják meg az üzeneteket",
                 "other_people_device_title": "Mások eszközei",
                 "reset_identity": "Kriptográfiai személyazonosság alaphelyzetbe állítása",
                 "reset_in_progress": "Alaphelyzetbe állítás folyamatban…",
@@ -2873,7 +2886,7 @@
             "send_analytics": "Analitikai adatok küldése",
             "session_id": "Munkamenetazonosító:",
             "session_key": "Munkamenetkulcs:",
-            "strict_encryption": "Sose küldjön titkosított üzenetet ellenőrizetlen munkamenetekbe ebből a munkamenetből"
+            "strict_encryption": "Üzenetküldés csak ellenőrzött felhasználóknak"
         },
         "send_read_receipts": "Olvasási visszajelzés küldése",
         "send_read_receipts_unsupported": "A kiszolgálója nem támogatja az olvasási visszajelzések elküldésének kikapcsolását.",
@@ -3548,7 +3561,8 @@
         },
         "m.sticker": "%(senderDisplayName)s matricát küldött.",
         "m.video": {
-            "error_decrypting": "Hiba a videó visszafejtésénél"
+            "error_decrypting": "Hiba a videó visszafejtésénél",
+            "show_video": "Videó megjelenítése"
         },
         "m.widget": {
             "added": "%(senderName)s hozzáadta a %(widgetName)s kisalkalmazást",
