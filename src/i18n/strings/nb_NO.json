@@ -12,6 +12,7 @@
             "other": "%(count)s uleste meldinger, inkludert omtaler."
         },
         "recent_rooms": "Nylige rom",
+        "room_n_unread_invite": "Invitasjon til det åpne rommet %(roomName)s.",
         "room_name": "Rom %(name)s",
         "room_status_bar": "Statuslinje for rommet",
         "seek_bar_label": "Søkelinje for lyd",
@@ -836,6 +837,9 @@
         "setting_colon": "Innstilling:",
         "setting_definition": "Innstillingsdefinisjon:",
         "setting_id": "Innstillings-ID",
+        "settings": {
+            "elementCallUrl": "Element Call URL"
+        },
         "settings_explorer": "Utforsker for innstillinger",
         "show_hidden_events": "Vis skjulte hendelser i tidslinjen",
         "spaces": {
@@ -2531,7 +2535,7 @@
                 "do_not_close_warning": "Ikke lukk dette vinduet før tilbakestillingen er fullført",
                 "export_keys": "Eksporter nøkler",
                 "import_keys": "Importer nøkler",
-                "other_people_device_description": "I krypterte rom, må du ikke sende krypterte meldinger til noen før du har verifisert dem",
+                "other_people_device_description": "Advarsel: Brukere som ikke eksplisitt har verifisert med deg (f.eks. ved hjelp av emoji) vil ikke motta dine krypterte meldinger. Ubekreftede enheter av bekreftede brukere vil heller ikke motta krypterte meldinger.",
                 "other_people_device_label": "I krypterte rom, send kun meldinger til verifiserte brukere",
                 "other_people_device_title": "Andre personers enheter",
                 "reset_identity": "Tilbakestill kryptografisk identitet",
@@ -2555,7 +2559,7 @@
             "key_storage": {
                 "allow_key_storage": "Tillat lagring av nøkler",
                 "description": "Lagre din kryptografiske identitet og meldingsnøkler sikkert på serveren. Dette gjør at du kan se meldingshistorikken din på alle nye enheter. <a>Lær mer om dette</a>",
-                "title": "Nøkkellager"
+                "title": "Nøkkeloppbevaring"
             },
             "recovery": {
                 "change_recovery_confirm_button": "Bekreft ny gjenopprettingsnøkkel",
