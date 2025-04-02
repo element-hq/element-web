@@ -103,27 +103,10 @@ const debuglog = (...args: any[]): void => {
     }
 };
 
-interface ThirdpartyLookupResponseFields {
-    /* eslint-disable camelcase */
-
-    // im.vector.sip_native
-    virtual_mxid?: string;
-    is_virtual?: boolean;
-
-    // im.vector.sip_virtual
-    native_mxid?: string;
-    is_native?: boolean;
-
-    // common
-    lookup_success?: boolean;
-
-    /* eslint-enable camelcase */
-}
-
 interface ThirdpartyLookupResponse {
     userid: string;
     protocol: string;
-    fields: ThirdpartyLookupResponseFields;
+    fields: object;
 }
 
 export enum LegacyCallHandlerEvent {
