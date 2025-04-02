@@ -57,7 +57,6 @@ import { Jitsi } from "./widgets/Jitsi.ts";
 
 export const PROTOCOL_PSTN = "m.protocol.pstn";
 export const PROTOCOL_PSTN_PREFIXED = "im.vector.protocol.pstn";
-export const PROTOCOL_SIP_NATIVE = "im.vector.protocol.sip_native";
 
 const CHECK_PROTOCOLS_ATTEMPTS = 3;
 
@@ -308,17 +307,6 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
         }
     }
 
-    public async sipNativeLookup(virtualMxid: string): Promise<ThirdpartyLookupResponse[]> {
-        try {
-            return await MatrixClientPeg.safeGet().getThirdpartyUser(PROTOCOL_SIP_NATIVE, {
-                virtual_mxid: virtualMxid,
-            });
-        } catch (e) {
-            logger.warn("Failed to query identity for SIP user", e);
-            return Promise.resolve([]);
-        }
-    }
-
     private onCallIncoming = (call: MatrixCall): void => {
         // if the runtime env doesn't do VoIP, stop here.
         if (!MatrixClientPeg.get()?.supportsVoip()) {
@@ -511,24 +499,16 @@ export default class LegacyCallHandler extends TypedEventEmitter<LegacyCallHandl
             }
 
             const newAssertedIdentity = call.getRemoteAssertedIdentity()?.id;
-            let newNativeAssertedIdentity = newAssertedIdentity;
-            if (newAssertedIdentity) {
-                const response = await this.sipNativeLookup(newAssertedIdentity);
-                if (response.length && response[0].fields.lookup_success) {
-                    newNativeAssertedIdentity = response[0].userid;
-                }
-            }
-            logger.log(`Asserted identity ${newAssertedIdentity} mapped to ${newNativeAssertedIdentity}`);
 
-            if (newNativeAssertedIdentity) {
-                this.assertedIdentityNativeUsers.set(call.callId, newNativeAssertedIdentity);
+            if (newAssertedIdentity) {
+                this.assertedIdentityNativeUsers.set(call.callId, newAssertedIdentity);
 
                 // If we don't already have a room with this user, make one. This will be slightly odd
                 // if they called us because we'll be inviting them, but there's not much we can do about
                 // this if we want the actual, native room to exist (which we do). This is why it's
                 // important to only obey asserted identity in trusted environments, since anyone you're
                 // on a call with can cause you to send a room invite to someone.
-                await ensureDMExists(MatrixClientPeg.safeGet(), newNativeAssertedIdentity);
+                await ensureDMExists(MatrixClientPeg.safeGet(), newAssertedIdentity);
 
                 const newMappedRoomId = this.roomIdForCall(call);
                 logger.log(`Old room ID: ${mappedRoomId}, new room ID: ${newMappedRoomId}`);
