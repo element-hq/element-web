@@ -106,7 +106,6 @@ const debuglog = (...args: any[]): void => {
 interface ThirdpartyLookupResponse {
     userid: string;
     protocol: string;
-    fields: object;
 }
 
 export enum LegacyCallHandlerEvent {
