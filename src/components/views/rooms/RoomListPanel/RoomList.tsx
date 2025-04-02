@@ -43,7 +43,7 @@ export function RoomList({ vm: { rooms, activeIndex } }: RoomListProps): JSX.Ele
                         rowHeight={48}
                         height={height}
                         width={width}
-                        scrollToIndex={activeIndex}
+                        scrollToIndex={activeIndex ?? 0}
                     />
                 )}
             </AutoSizer>
