@@ -7,31 +7,28 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React from "react";
-import { render, fireEvent, screen, waitFor } from "jest-matrix-react";
-import { EventType, MatrixEvent, Room, type MatrixClient, JoinRule } from "matrix-js-sdk/src/matrix";
-import { KnownMembership } from "matrix-js-sdk/src/types";
+import { render, fireEvent, screen } from "jest-matrix-react";
+import { Room, type MatrixClient, JoinRule } from "matrix-js-sdk/src/matrix";
 import { mocked, type MockedObject } from "jest-mock";
 
-import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import RoomSummaryCard from "../../../../../src/components/views/right_panel/RoomSummaryCard";
-import { ShareDialog } from "../../../../../src/components/views/dialogs/ShareDialog";
-import ExportDialog from "../../../../../src/components/views/dialogs/ExportDialog";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import * as settingsHooks from "../../../../../src/hooks/useSettings";
 import Modal from "../../../../../src/Modal";
-import RightPanelStore from "../../../../../src/stores/right-panel/RightPanelStore";
-import { RightPanelPhases } from "../../../../../src/stores/right-panel/RightPanelStorePhases";
 import { flushPromises, stubClient, untilDispatch } from "../../../../test-utils";
-import { PollHistoryDialog } from "../../../../../src/components/views/dialogs/PollHistoryDialog";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import { _t } from "../../../../../src/languageHandler";
-import { tagRoom } from "../../../../../src/utils/room/tagRoom";
-import { DefaultTagID } from "../../../../../src/stores/room-list/models";
-import { Action } from "../../../../../src/dispatcher/actions";
 import { ReportRoomDialog } from "../../../../../src/components/views/dialogs/ReportRoomDialog.tsx";
-
+import { RoomSummaryCardState, RoomTopicState, useRoomSummaryCardViewModel, useRoomTopicViewModel } from "../../../../../src/components/viewmodels/rooms/RoomSummaryCardViewModel";
+import DMRoomMap from "../../../../../src/utils/DMRoomMap";
+import defaultDispatcher from "../../../../../src/dispatcher/dispatcher.ts";
 jest.mock("../../../../../src/utils/room/tagRoom");
+
+// Mock the viewmodel hooks
+jest.mock("../../../../../src/components/viewmodels/rooms/RoomSummaryCardViewModel", () => ({
+    useRoomSummaryCardViewModel: jest.fn(),
+    useRoomTopicViewModel: jest.fn(),
+}));
 
 describe("<RoomSummaryCard />", () => {
     const userId = "@alice:domain.org";
@@ -54,27 +51,49 @@ describe("<RoomSummaryCard />", () => {
         });
     };
 
+    // Setup mock view models
+    const vmDefaultValues: RoomSummaryCardState = {
+        isDirectMessage: false,
+        isRoomEncrypted: false,
+        e2eStatus: undefined,
+        isVideoRoom: false,
+        roomJoinRule: JoinRule.Public,
+        alias: "",
+        isFavorite: false,
+        canInviteToState: true,
+        pinCount: 0,
+        searchInputRef: { current: null },
+        onUpdateSearchInput: jest.fn(),
+        onRoomMembersClick: jest.fn(),
+        onRoomThreadsClick: jest.fn(),
+        onRoomFilesClick: jest.fn(),
+        onRoomExtensionsClick: jest.fn(),
+        onRoomPinsClick: jest.fn(),
+        onRoomSettingsClick: jest.fn(),
+        onLeaveRoomClick: jest.fn(),
+        onShareRoomClick: jest.fn(),
+        onRoomExportClick: jest.fn(),
+        onRoomPollHistoryClick: jest.fn(),
+        onReportRoomClick: jest.fn(),
+        onFavoriteToggleClick: jest.fn(),
+        onInviteToRoomClick: jest.fn(),
+    };
+
+    const topicVmDefaultValues: RoomTopicState = {
+        expanded: true,
+        topic: undefined,
+        body: null,
+        canEditTopic: false,
+        onEditClick: jest.fn(),
+        onExpandedClick: jest.fn(),
+        onTopicLinkClick: jest.fn(),
+    };
+
     beforeEach(() => {
         mockClient = mocked(stubClient());
         room = new Room(roomId, mockClient, userId);
-        const roomCreateEvent = new MatrixEvent({
-            type: "m.room.create",
-            room_id: roomId,
-            sender: userId,
-            content: {
-                creator: userId,
-                room_version: "5",
-            },
-            state_key: "",
-        });
-        room.currentState.setStateEvents([roomCreateEvent]);
-        room.updateMyMembership(KnownMembership.Join);
-
-        jest.spyOn(Modal, "createDialog");
-        jest.spyOn(RightPanelStore.instance, "pushCard");
-        jest.spyOn(settingsHooks, "useFeatureEnabled").mockReturnValue(false);
-        jest.spyOn(defaultDispatcher, "dispatch");
-        jest.clearAllMocks();
+        mocked(useRoomSummaryCardViewModel).mockReturnValue(vmDefaultValues);
+        mocked(useRoomTopicViewModel).mockReturnValue(topicVmDefaultValues);
         DMRoomMap.makeShared(mockClient);
 
         mockClient.getRoom.mockReturnValue(room);
@@ -92,33 +111,19 @@ describe("<RoomSummaryCard />", () => {
     });
 
     it("renders the room topic in the summary", () => {
-        room.currentState.setStateEvents([
-            new MatrixEvent({
-                type: "m.room.topic",
-                room_id: roomId,
-                sender: userId,
-                content: {
-                    topic: "This is the room's topic.",
-                },
-                state_key: "",
-            }),
-        ]);
+        mocked(useRoomTopicViewModel).mockReturnValue({
+            ...topicVmDefaultValues,
+            topic: { text: "This is the room's topic." },
+        });
         const { container } = getComponent();
         expect(container).toMatchSnapshot();
     });
 
     it("has button to edit topic", () => {
-        room.currentState.setStateEvents([
-            new MatrixEvent({
-                type: "m.room.topic",
-                room_id: roomId,
-                sender: userId,
-                content: {
-                    topic: "This is the room's topic.",
-                },
-                state_key: "",
-            }),
-        ]);
+        mocked(useRoomTopicViewModel).mockReturnValue({
+            ...topicVmDefaultValues,
+            topic: { text: "This is the room's topic." },
+        });
         const { container, getByText } = getComponent();
         expect(getByText("Edit")).toBeInTheDocument();
         expect(container).toMatchSnapshot();
@@ -133,18 +138,6 @@ describe("<RoomSummaryCard />", () => {
             expect(getByPlaceholderText("Search messages…")).toBeVisible();
         });
 
-        it("should focus the search field if Action.FocusMessageSearch is fired", async () => {
-            const onSearchChange = jest.fn();
-            const { getByPlaceholderText } = getComponent({
-                onSearchChange,
-            });
-            expect(getByPlaceholderText("Search messages…")).not.toHaveFocus();
-            defaultDispatcher.fire(Action.FocusMessageSearch);
-            await waitFor(() => {
-                expect(getByPlaceholderText("Search messages…")).toHaveFocus();
-            });
-        });
-
         it("should focus the search field if focusRoomSearch=true", () => {
             const onSearchChange = jest.fn();
             const { getByPlaceholderText } = getComponent({
@@ -157,6 +150,7 @@ describe("<RoomSummaryCard />", () => {
         it("should cancel search on escape", () => {
             const onSearchChange = jest.fn();
             const onSearchCancel = jest.fn();
+
             const { getByPlaceholderText } = getComponent({
                 onSearchChange,
                 onSearchCancel,
@@ -164,7 +158,7 @@ describe("<RoomSummaryCard />", () => {
             });
             expect(getByPlaceholderText("Search messages…")).toHaveFocus();
             fireEvent.keyDown(getByPlaceholderText("Search messages…"), { key: "Escape" });
-            expect(onSearchCancel).toHaveBeenCalled();
+            expect(vmDefaultValues.onUpdateSearchInput).toHaveBeenCalled();
         });
     });
 
@@ -173,7 +167,7 @@ describe("<RoomSummaryCard />", () => {
 
         fireEvent.click(getByText("Files"));
 
-        expect(RightPanelStore.instance.pushCard).toHaveBeenCalledWith({ phase: RightPanelPhases.FilePanel }, true);
+        expect(vmDefaultValues.onRoomFilesClick).toHaveBeenCalled();
     });
 
     it("opens room export dialog on button click", () => {
@@ -181,7 +175,7 @@ describe("<RoomSummaryCard />", () => {
 
         fireEvent.click(getByText(_t("export_chat|title")));
 
-        expect(Modal.createDialog).toHaveBeenCalledWith(ExportDialog, { room });
+        expect(vmDefaultValues.onRoomExportClick).toHaveBeenCalled();
     });
 
     it("opens share room dialog on button click", () => {
@@ -189,7 +183,7 @@ describe("<RoomSummaryCard />", () => {
 
         fireEvent.click(getByText(_t("action|copy_link")));
 
-        expect(Modal.createDialog).toHaveBeenCalledWith(ShareDialog, { target: room });
+        expect(vmDefaultValues.onShareRoomClick).toHaveBeenCalled();
     });
 
     it("opens invite dialog on button click", () => {
@@ -197,7 +191,7 @@ describe("<RoomSummaryCard />", () => {
 
         fireEvent.click(getByText(_t("action|invite")));
 
-        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: "view_invite", roomId: room.roomId });
+        expect(vmDefaultValues.onInviteToRoomClick).toHaveBeenCalled();
     });
 
     it("fires favourite dispatch on button click", () => {
@@ -205,7 +199,7 @@ describe("<RoomSummaryCard />", () => {
 
         fireEvent.click(getByText(_t("room|context_menu|favourite")));
 
-        expect(tagRoom).toHaveBeenCalledWith(room, DefaultTagID.Favourite);
+        expect(vmDefaultValues.onFavoriteToggleClick).toHaveBeenCalled();
     });
 
     it("opens room settings on button click", () => {
@@ -213,7 +207,7 @@ describe("<RoomSummaryCard />", () => {
 
         fireEvent.click(getByText(_t("common|settings")));
 
-        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({ action: "open_room_settings" });
+        expect(vmDefaultValues.onRoomSettingsClick).toHaveBeenCalled();
     });
 
     it("opens room member list on button click", () => {
@@ -221,7 +215,7 @@ describe("<RoomSummaryCard />", () => {
 
         fireEvent.click(getByText("People"));
 
-        expect(RightPanelStore.instance.pushCard).toHaveBeenCalledWith({ phase: RightPanelPhases.MemberList }, true);
+        expect(vmDefaultValues.onRoomMembersClick).toHaveBeenCalled();
     });
 
     it("opens room threads list on button click", () => {
@@ -229,7 +223,7 @@ describe("<RoomSummaryCard />", () => {
 
         fireEvent.click(getByText("Threads"));
 
-        expect(RightPanelStore.instance.pushCard).toHaveBeenCalledWith({ phase: RightPanelPhases.ThreadPanel }, true);
+        expect(vmDefaultValues.onRoomThreadsClick).toHaveBeenCalled();
     });
 
     it("opens room pinned messages on button click", () => {
@@ -237,10 +231,7 @@ describe("<RoomSummaryCard />", () => {
 
         fireEvent.click(getByText("Pinned messages"));
 
-        expect(RightPanelStore.instance.pushCard).toHaveBeenCalledWith(
-            { phase: RightPanelPhases.PinnedMessages },
-            true,
-        );
+        expect(vmDefaultValues.onRoomPinsClick).toHaveBeenCalled();
     });
 
     it("dispatches leave room on button click", async () => {
@@ -295,11 +286,7 @@ describe("<RoomSummaryCard />", () => {
 
             fireEvent.click(getByText("Polls"));
 
-            expect(Modal.createDialog).toHaveBeenCalledWith(PollHistoryDialog, {
-                room,
-                matrixClient: mockClient,
-                permalinkCreator: permalinkCreator,
-            });
+            expect(vmDefaultValues.onRoomPollHistoryClick).toHaveBeenCalled();
         });
     });
 
@@ -330,23 +317,13 @@ describe("<RoomSummaryCard />", () => {
     });
 
     describe("public room label", () => {
-        beforeEach(() => {
-            jest.spyOn(room.currentState, "getJoinRule").mockReturnValue(JoinRule.Public);
-        });
 
         it("does not show public room label for a DM", async () => {
-            mockClient.getAccountData.mockImplementation((eventType) => {
-                if (eventType === EventType.Direct) {
-                    return new MatrixEvent({
-                        type: EventType.Direct,
-                        content: {
-                            "@bob:sesame.st": ["some-room-id"],
-                            // this room is a DM with ernie
-                            "@ernie:sesame.st": ["some-other-room-id", room.roomId],
-                        },
-                    });
-                }
+            mocked(useRoomSummaryCardViewModel).mockReturnValue({
+                ...vmDefaultValues,
+                isDirectMessage: true,
             });
+
             getComponent();
 
             await flushPromises();
@@ -355,7 +332,11 @@ describe("<RoomSummaryCard />", () => {
         });
 
         it("does not show public room label for non public room", async () => {
-            jest.spyOn(room.currentState, "getJoinRule").mockReturnValue(JoinRule.Invite);
+            mocked(useRoomSummaryCardViewModel).mockReturnValue({
+                ...vmDefaultValues,
+                isDirectMessage: false,
+                roomJoinRule: JoinRule.Invite,
+            });
             getComponent();
 
             await flushPromises();
@@ -364,7 +345,6 @@ describe("<RoomSummaryCard />", () => {
         });
 
         it("shows a public room label for a public room", async () => {
-            jest.spyOn(room.currentState, "getJoinRule").mockReturnValue(JoinRule.Public);
             getComponent();
 
             await flushPromises();
