@@ -27,6 +27,7 @@ import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { SortingAlgorithm } from "../../../../src/stores/room-list-v3/skip-list/sorters";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import * as utils from "../../../../src/utils/notifications";
+import * as roomMute from "../../../../src/stores/room-list/utils/roomMute";
 
 describe("RoomListStoreV3", () => {
     async function getRoomListStore() {
@@ -633,6 +634,85 @@ describe("RoomListStoreV3", () => {
                 expect(result).toHaveLength(1);
                 expect(result).toContain(rooms[8]);
             });
+        });
+    });
+
+    describe("Muted rooms", () => {
+        async function getRoomListStoreWithMutedRooms() {
+            const client = stubClient();
+            const rooms = getMockedRooms(client);
+
+            // Let's say that rooms 34, 84, 64, 14, 57 are muted
+            const mutedIndices = [34, 84, 64, 14, 57];
+            const mutedRooms = mutedIndices.map((i) => rooms[i]);
+            jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation((room) => {
+                const state = {
+                    muted: mutedRooms.includes(room),
+                } as unknown as RoomNotificationState;
+                return state;
+            });
+
+            client.getVisibleRooms = jest.fn().mockReturnValue(rooms);
+            jest.spyOn(AsyncStoreWithClient.prototype, "matrixClient", "get").mockReturnValue(client);
+            const store = new RoomListStoreV3Class(dispatcher);
+            await store.start();
+            return { client, rooms, mutedIndices, mutedRooms, store, dispatcher };
+        }
+
+        it("Muted rooms are sorted to the bottom of the list", async () => {
+            const { store, mutedRooms, client } = await getRoomListStoreWithMutedRooms();
+            const lastFiveRooms = store.getSortedRooms().slice(95);
+            const expectedRooms = new RecencySorter(client.getSafeUserId()).sort(mutedRooms);
+            // We expect the muted rooms to be at the bottom sorted by recency
+            expect(lastFiveRooms).toEqual(expectedRooms);
+        });
+
+        it("Muted rooms are sorted within themselves", async () => {
+            const { store, rooms } = await getRoomListStoreWithMutedRooms();
+
+            // Let's say that rooms 14 and 34 get new messages in that order
+            let ts = 1000;
+            for (const room of [rooms[14], rooms[34]]) {
+                const event = mkMessage({ room: room.roomId, user: `@foo${3}:matrix.org`, ts: 1000, event: true });
+                room.timeline.push(event);
+
+                const payload = {
+                    action: "MatrixActions.Room.timeline",
+                    event,
+                    isLiveEvent: true,
+                    isLiveUnfilteredRoomTimelineEvent: true,
+                    room,
+                };
+                dispatcher.dispatch(payload, true);
+                ts = ts + 1;
+            }
+
+            const lastFiveRooms = store.getSortedRooms().slice(95);
+            // The order previously would  have been 84, 64, 57, 34, 14
+            // Expected new order is 34, 14, 84, 64, 57
+            const expectedRooms = [rooms[34], rooms[14], rooms[84], rooms[64], rooms[57]];
+            expect(lastFiveRooms).toEqual(expectedRooms);
+        });
+
+        it("Muted room is correctly sorted when unmuted", async () => {
+            const { store, mutedRooms, rooms, client } = await getRoomListStoreWithMutedRooms();
+
+            // Let's say that muted room 64 becomes un-muted.
+            const unmutedRoom = rooms[64];
+            jest.spyOn(roomMute, "getChangedOverrideRoomMutePushRules").mockImplementation(() => [unmutedRoom.roomId]);
+            client.getRoom = jest.fn().mockReturnValue(unmutedRoom);
+            const payload = {
+                action: "MatrixActions.accountData",
+                event_type: EventType.PushRules,
+            };
+            mutedRooms.splice(2, 1);
+            dispatcher.dispatch(payload, true);
+
+            const lastFiveRooms = store.getSortedRooms().slice(95);
+            // We expect room at index 64 to no longer be at the bottom
+            expect(lastFiveRooms).not.toContain(unmutedRoom);
+            // Room 64 should go to index 34 since we're sorting by recency
+            expect(store.getSortedRooms()[34]).toEqual(unmutedRoom);
         });
     });
 });
