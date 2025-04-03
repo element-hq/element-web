@@ -570,7 +570,7 @@ describe("RoomListStoreV3", () => {
                 // Let's say 8, 27 have mentions
                 jest.spyOn(RoomNotificationStateStore.instance, "getRoomState").mockImplementation((room) => {
                     const state = {
-                        hasMentions: [rooms[8], rooms[27]].includes(room),
+                        isMention: [rooms[8], rooms[27]].includes(room),
                     } as unknown as RoomNotificationState;
                     return state;
                 });
