@@ -1735,7 +1735,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     private onDeclineAndBlockButtonClicked = async (): Promise<void> => {
         if (!this.state.room || !this.context.client) return;
-        console.log(this.state.room);
         const [shouldReject, ignoreUser, reportRoom] = await Modal.createDialog(DeclineAndBlockInviteDialog, {
             roomName: this.state.room.name,
         }).finished;
@@ -1763,9 +1762,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         actions.push(this.context.client.leave(this.state.room.roomId));
         try {
-            console.log("Trying to leave");
             await Promise.all(actions);
-            console.log("Left");
             defaultDispatcher.dispatch({ action: Action.ViewHomePage });
             this.setState({
                 rejecting: false,
