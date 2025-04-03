@@ -14,6 +14,7 @@ import SdkConfig from "../../../../../src/SdkConfig";
 import { stubClient } from "../../../../test-utils";
 
 const ROOM_ID = "!foo:bar";
+const REASON = "This room is bad!";
 
 describe("ReportRoomDialog", () => {
     const onFinished: jest.Mock<any, any> = jest.fn();
@@ -48,19 +49,24 @@ This doesn't actually go **anywhere**.`,
         expect(container).toMatchSnapshot();
     });
 
-    it("can submit a report", async () => {
-        const REASON = "This room is bad!";
-        const { getByLabelText, getByText, getByRole } = render(
-            <ReportRoomDialog roomId={ROOM_ID} onFinished={onFinished} />,
-        );
+    it("can submit a report without leaving the room", async () => {
+        const { getByLabelText, getByRole } = render(<ReportRoomDialog roomId={ROOM_ID} onFinished={onFinished} />);
 
-        await userEvent.type(getByLabelText("Reason"), REASON);
+        await userEvent.type(getByLabelText("Describe the reason"), REASON);
         await userEvent.click(getByRole("button", { name: "Send report" }));
 
         expect(reportRoom).toHaveBeenCalledWith(ROOM_ID, REASON);
-        expect(getByText("Your report was sent.")).toBeInTheDocument();
+        expect(onFinished).toHaveBeenCalledWith(false);
+    });
 
-        await userEvent.click(getByRole("button", { name: "Close dialog" }));
+    it("can submit a report and leave the room", async () => {
+        const { getByLabelText, getByRole } = render(<ReportRoomDialog roomId={ROOM_ID} onFinished={onFinished} />);
+
+        await userEvent.type(getByLabelText("Describe the reason"), REASON);
+        await userEvent.click(getByRole("switch", { name: "Leave room" }));
+        await userEvent.click(getByRole("button", { name: "Send report" }));
+
+        expect(reportRoom).toHaveBeenCalledWith(ROOM_ID, REASON);
         expect(onFinished).toHaveBeenCalledWith(true);
     });
 });

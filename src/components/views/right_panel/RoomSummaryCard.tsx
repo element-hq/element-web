@@ -233,10 +233,16 @@ const RoomSummaryCard: React.FC<IProps> = ({
             room_id: room.roomId,
         });
     };
-    const onReportRoomClick = (): void => {
-        Modal.createDialog(ReportRoomDialog, {
+    const onReportRoomClick = async (): Promise<void> => {
+        const [leave] = await Modal.createDialog(ReportRoomDialog, {
             roomId: room.roomId,
-        });
+        }).finished;
+        if (leave) {
+            defaultDispatcher.dispatch({
+                action: "leave_room",
+                room_id: room.roomId,
+            });
+        }
     };
 
     const isRoomEncrypted = useIsEncrypted(cli, room);
