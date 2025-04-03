@@ -108,6 +108,11 @@ test.describe("Room list", () => {
             // Remove hover on the room list item
             await roomListView.hover();
 
+            // Scroll to the bottom of the list
+            await page.getByRole("grid", { name: "Room list" }).evaluate((e) => {
+                e.scrollTop = e.scrollHeight;
+            });
+
             // The room decoration should have the muted icon
             await expect(roomItem.getByTestId("notification-decoration")).toBeVisible();
 
