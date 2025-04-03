@@ -454,17 +454,17 @@ const RoomSummaryCard: React.FC<IProps> = ({
                 <Separator />
                 <div className="mx_RoomSummaryCard_bottomOptions">
                     <MenuItem
+                        Icon={ErrorIcon}
+                        kind="critical"
+                        label={_t("action|report_room")}
+                        onSelect={onReportRoomClick}
+                    />
+                    <MenuItem
                         className="mx_RoomSummaryCard_leave"
                         Icon={LeaveIcon}
                         kind="critical"
                         label={_t("action|leave_room")}
                         onSelect={onLeaveRoomClick}
-                    />
-                    <MenuItem
-                        Icon={ErrorIcon}
-                        kind="critical"
-                        label={_t("action|report_room")}
-                        onSelect={onReportRoomClick}
                     />
                 </div>
             </div>
