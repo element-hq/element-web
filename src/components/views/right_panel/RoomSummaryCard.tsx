@@ -233,10 +233,16 @@ const RoomSummaryCard: React.FC<IProps> = ({
             room_id: room.roomId,
         });
     };
-    const onReportRoomClick = (): void => {
-        Modal.createDialog(ReportRoomDialog, {
+    const onReportRoomClick = async (): Promise<void> => {
+        const [leave] = await Modal.createDialog(ReportRoomDialog, {
             roomId: room.roomId,
-        });
+        }).finished;
+        if (leave) {
+            defaultDispatcher.dispatch({
+                action: "leave_room",
+                room_id: room.roomId,
+            });
+        }
     };
 
     const isRoomEncrypted = useIsEncrypted(cli, room);
@@ -448,17 +454,17 @@ const RoomSummaryCard: React.FC<IProps> = ({
                 <Separator />
                 <div className="mx_RoomSummaryCard_bottomOptions">
                     <MenuItem
+                        Icon={ErrorIcon}
+                        kind="critical"
+                        label={_t("action|report_room")}
+                        onSelect={onReportRoomClick}
+                    />
+                    <MenuItem
                         className="mx_RoomSummaryCard_leave"
                         Icon={LeaveIcon}
                         kind="critical"
                         label={_t("action|leave_room")}
                         onSelect={onLeaveRoomClick}
-                    />
-                    <MenuItem
-                        Icon={ErrorIcon}
-                        kind="critical"
-                        label={_t("action|report_room")}
-                        onSelect={onReportRoomClick}
                     />
                 </div>
             </div>
