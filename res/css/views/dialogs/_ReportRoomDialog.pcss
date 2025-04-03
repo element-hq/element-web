@@ -17,6 +17,12 @@ Please see LICENSE files in the repository root for full details.
 
     /*
       Workaround to fix labels appearing with the wrong color.
+
+      .mx_Dialog (in res/css/_common.pcss) redefines the body color
+      as $light-fg-color rather than the standard primary color.
+
+      This forces the colour to match the Compound style, but
+      in the future the Dialogs should not force a color.
     */
     form label {
         color: var(--cpd-color-text-primary);

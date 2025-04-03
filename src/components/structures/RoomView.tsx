@@ -2162,7 +2162,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         const myMembership = this.state.room.getMyMembership();
         if (isVideoRoom(this.state.room) && myMembership !== KnownMembership.Join) {
-            // HSTODO: Do we need this?
             return (
                 <ErrorBoundary>
                     <div className="mx_MainSplit">
