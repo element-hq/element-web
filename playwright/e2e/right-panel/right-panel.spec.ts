@@ -136,13 +136,30 @@ test.describe("RightPanel", () => {
         });
         test.describe("room reporting", () => {
             test.skip(isDendrite, "Dendrite does not implement room reporting");
-            test("should handle reporting a room", async ({ page, app }) => {
+            test("should handle reporting a room", { tag: "@screenshot" }, async ({ page, app }) => {
                 await viewRoomSummaryByName(page, app, ROOM_NAME);
+
                 await page.getByRole("menuitem", { name: "Report room" }).click();
                 const dialog = await page.getByRole("dialog", { name: "Report Room" });
                 await dialog.getByLabel("reason").fill("This room should be reported");
+                await expect(dialog).toMatchScreenshot("room-report-dialog.png");
                 await dialog.getByRole("button", { name: "Send report" }).click();
-                await expect(page.getByText("Your report was sent.")).toBeVisible();
+
+                // Dialog should have gone
+                await expect(page.locator(".mx_Dialog")).toHaveCount(0);
+            });
+            test("should handle reporting a room and leaving the room", async ({ page, app }) => {
+                await viewRoomSummaryByName(page, app, ROOM_NAME);
+
+                await page.getByRole("menuitem", { name: "Report room" }).click();
+                const dialog = await page.getByRole("dialog", { name: "Report room" });
+                await dialog.getByRole("switch", { name: "Leave room" }).click();
+                await dialog.getByLabel("reason").fill("This room should be reported");
+                await dialog.getByRole("button", { name: "Send report" }).click();
+                await page.getByRole("dialog", { name: "Leave room" }).getByRole("button", { name: "Leave" }).click();
+
+                // Dialog should have gone
+                await expect(page.locator(".mx_Dialog")).toHaveCount(0);
             });
         });
     });
