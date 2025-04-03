@@ -1828,8 +1828,7 @@
     },
     "report_room": {
         "description": "Report this room to your account provider. If the messages are encrypted, your admin will not be able to read them.",
-        "reason_label": "Describe the reason",
-        "sent": "Your report was sent."
+        "reason_label": "Describe the reason"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Failed to decrypt %(failedCount)s sessions!",

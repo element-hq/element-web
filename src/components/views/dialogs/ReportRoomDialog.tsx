@@ -47,7 +47,7 @@ export const ReportRoomDialog: React.FC<IProps> = function ({ roomId, onFinished
                 setErr("Unknown error");
             }
         }
-    }, [roomId, reason, client, leaveRoom]);
+    }, [roomId, reason, client, leaveRoom, onFinished]);
 
     const adminMessageMD = SdkConfig.getObject("report_event")?.get("admin_message_md", "adminMessageMD");
     let adminMessage: JSX.Element | undefined;
