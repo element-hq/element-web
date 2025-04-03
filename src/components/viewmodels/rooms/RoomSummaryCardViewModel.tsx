@@ -1,0 +1,290 @@
+/*
+Copyright 2025 New Vector Ltd.
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
+Please see LICENSE files in the repository root for full details.
+*/
+
+import { ReactNode, SyntheticEvent, useEffect, useRef, useState } from "react";
+import { ContentHelpers, EventType, JoinRule, Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { type Optional } from "matrix-events-sdk";
+
+import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
+import { useIsEncrypted } from "../../../hooks/useIsEncrypted";
+import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
+import { E2EStatus } from "../../../utils/ShieldUtils";
+import { isVideoRoom as calcIsVideoRoom } from "../../../utils/video-rooms";
+import { useRoomState } from "../../../hooks/useRoomState";
+import { useAccountData } from "../../../hooks/useAccountData";
+import { useDispatcher } from "../../../hooks/useDispatcher";
+import defaultDispatcher from "../../../dispatcher/dispatcher";
+import { Action } from "../../../dispatcher/actions";
+import { useTransition } from "../../../hooks/useTransition";
+import { TimelineRenderingType } from "../../../contexts/RoomContext";
+import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
+import { canInviteTo } from "../../../utils/room/canInviteTo";
+import { DefaultTagID } from "../../../stores/room-list/models";
+import { useEventEmitterState } from "../../../hooks/useEventEmitter";
+import { topicToHtml } from "../../../HtmlUtils";
+import { useTopic } from "../../../hooks/room/useTopic";
+import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
+import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
+import PosthogTrackers from "../../../PosthogTrackers";
+import { PollHistoryDialog } from "../../views/dialogs/PollHistoryDialog";
+import Modal from "../../../Modal";
+import ExportDialog from "../../views/dialogs/ExportDialog";
+import { ShareDialog } from "../../views/dialogs/ShareDialog";
+import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import { ReportRoomDialog } from "../../views/dialogs/ReportRoomDialog";
+import { Key } from "../../../Keyboard";
+import { onRoomTopicLinkClick } from "../../views/elements/RoomTopic";
+import { usePinnedEvents } from "../../../hooks/usePinnedEvents";
+import { tagRoom } from "../../../utils/room/tagRoom";
+import { inviteToRoom } from "../../../utils/room/inviteToRoom";
+
+export interface RoomSummaryCardState {
+    isDirectMessage: boolean;
+    isRoomEncrypted: boolean;
+    e2eStatus: E2EStatus | undefined;
+    isVideoRoom: boolean;
+    roomJoinRule: JoinRule;
+    alias: string;
+    isFavorite: boolean;
+    canInviteToState: boolean;
+    pinCount: number;
+    searchInputRef: React.RefObject<HTMLInputElement | null>;
+    onUpdateSearchInput: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+    onRoomMembersClick: () => void;
+    onRoomThreadsClick: () => void;
+    onRoomFilesClick: () => void;
+    onRoomExtensionsClick: () => void;
+    onRoomPinsClick: () => void;
+    onRoomSettingsClick: (ev: Event) => void;
+    onLeaveRoomClick: () => void;
+    onShareRoomClick: () => void;
+    onRoomExportClick: () => Promise<void>;
+    onRoomPollHistoryClick: () => void;
+    onReportRoomClick: () => Promise<void>;
+    onFavoriteToggleClick: () => void;
+    onInviteToRoomClick: () => void;
+}
+
+export function useRoomSummaryCardViewModel(
+    room: Room,
+    permalinkCreator: RoomPermalinkCreator,
+    onSearchCancel?: () => void,
+): RoomSummaryCardState {
+    const cli = useMatrixClientContext();
+
+    const isRoomEncrypted = useIsEncrypted(cli, room) ?? false;
+    const roomContext = useScopedRoomContext("e2eStatus", "timelineRenderingType");
+    const e2eStatus = roomContext.e2eStatus;
+    const isVideoRoom = calcIsVideoRoom(room);
+
+    const roomState = useRoomState(room);
+    // used to check if the room is public or not
+    const roomJoinRule = roomState.getJoinRule();
+    const alias = room.getCanonicalAlias() || room.getAltAliases()[0] || "";
+    const pinCount = usePinnedEvents(room).length;
+    // value to check if the user can invite to the room
+    const canInviteToState = useEventEmitterState(room, RoomStateEvent.Update, () => canInviteTo(room));
+
+    const roomTags = useEventEmitterState(RoomListStore.instance, LISTS_UPDATE_EVENT, () =>
+        RoomListStore.instance.getTagsForRoom(room),
+    );
+    const isFavorite = roomTags.includes(DefaultTagID.Favourite);
+
+    const directRoomsList = useAccountData<Record<string, string[]>>(room.client, EventType.Direct);
+    const [isDirectMessage, setDirectMessage] = useState(false);
+    // Check if room is DM, and set the room as a direct message if it is
+    useEffect(() => {
+        for (const [, dmRoomList] of Object.entries(directRoomsList)) {
+            if (dmRoomList.includes(room?.roomId ?? "")) {
+                setDirectMessage(true);
+                break;
+            }
+        }
+    }, [room, directRoomsList]);
+
+    const onRoomMembersClick = (): void => {
+        RightPanelStore.instance.pushCard({ phase: RightPanelPhases.MemberList }, true);
+    };
+
+    const onRoomThreadsClick = (): void => {
+        RightPanelStore.instance.pushCard({ phase: RightPanelPhases.ThreadPanel }, true);
+    };
+
+    const onRoomFilesClick = (): void => {
+        RightPanelStore.instance.pushCard({ phase: RightPanelPhases.FilePanel }, true);
+    };
+
+    const onRoomExtensionsClick = (): void => {
+        RightPanelStore.instance.pushCard({ phase: RightPanelPhases.Extensions }, true);
+    };
+
+    const onRoomPinsClick = (): void => {
+        PosthogTrackers.trackInteraction("PinnedMessageRoomInfoButton");
+        RightPanelStore.instance.pushCard({ phase: RightPanelPhases.PinnedMessages }, true);
+    };
+
+    const onRoomSettingsClick = (ev: Event): void => {
+        defaultDispatcher.dispatch({ action: "open_room_settings" });
+        PosthogTrackers.trackInteraction("WebRightPanelRoomInfoSettingsButton", ev);
+    };
+
+    const onShareRoomClick = (): void => {
+        Modal.createDialog(ShareDialog, {
+            target: room,
+        });
+    };
+
+    const onRoomExportClick = async (): Promise<void> => {
+        Modal.createDialog(ExportDialog, {
+            room,
+        });
+    };
+
+    const onRoomPollHistoryClick = (): void => {
+        Modal.createDialog(PollHistoryDialog, {
+            room,
+            matrixClient: cli,
+            permalinkCreator,
+        });
+    };
+
+    const onLeaveRoomClick = (): void => {
+        defaultDispatcher.dispatch({
+            action: "leave_room",
+            room_id: room.roomId,
+        });
+    };
+
+    const onReportRoomClick = async (): Promise<void> => {
+        const [leave] = await Modal.createDialog(ReportRoomDialog, {
+            roomId: room.roomId,
+        }).finished;
+        if (leave) {
+            defaultDispatcher.dispatch({
+                action: "leave_room",
+                room_id: room.roomId,
+            });
+        }
+    };
+
+    const onFavoriteToggleClick = (): void => {
+        tagRoom(room, DefaultTagID.Favourite);
+    };
+
+    const onInviteToRoomClick = (): void => {
+        inviteToRoom(room);
+    };
+
+    // Room Search element ref
+    const searchInputRef = useRef<HTMLInputElement>(null);
+
+    // Onkeydown press escape event, clear the search field
+    const onUpdateSearchInput = (e: React.KeyboardEvent<HTMLInputElement>): void => {
+        if (searchInputRef.current && e.key === Key.ESCAPE) {
+            searchInputRef.current.value = "";
+            onSearchCancel?.();
+        }
+    };
+
+    // Focus the search field when the user clicks on the search button component
+    useDispatcher(defaultDispatcher, (payload) => {
+        if (payload.action === Action.FocusMessageSearch) {
+            searchInputRef.current?.focus();
+        }
+    });
+
+    // Clear the search field when the user leaves the search view
+    useTransition(
+        (prevTimelineRenderingType) => {
+            if (
+                prevTimelineRenderingType === TimelineRenderingType.Search &&
+                roomContext.timelineRenderingType !== TimelineRenderingType.Search &&
+                searchInputRef.current
+            ) {
+                searchInputRef.current.value = "";
+            }
+        },
+        [roomContext.timelineRenderingType],
+    );
+
+    return {
+        isDirectMessage,
+        isRoomEncrypted,
+        roomJoinRule,
+        e2eStatus,
+        isVideoRoom,
+        alias,
+        isFavorite,
+        canInviteToState,
+        searchInputRef,
+        pinCount,
+        onRoomMembersClick,
+        onRoomThreadsClick,
+        onRoomFilesClick,
+        onRoomExtensionsClick,
+        onRoomPinsClick,
+        onRoomSettingsClick,
+        onLeaveRoomClick,
+        onShareRoomClick,
+        onRoomExportClick,
+        onRoomPollHistoryClick,
+        onReportRoomClick,
+        onUpdateSearchInput,
+        onFavoriteToggleClick,
+        onInviteToRoomClick,
+    };
+}
+
+// Room Topic
+export interface RoomTopicState {
+    expanded: boolean;
+    topic: Optional<ContentHelpers.TopicState>;
+    body: ReactNode | null;
+    canEditTopic: boolean;
+    onEditClick: (e: SyntheticEvent) => void;
+    onExpandedClick: (ev: SyntheticEvent) => void;
+    onTopicLinkClick: (e: React.MouseEvent) => void;
+}
+
+export function useRoomTopicViewModel(room: Room): RoomTopicState {
+    const [expanded, setExpanded] = useState(true);
+
+    const topic = useTopic(room) ?? { text: "", html: "" };
+    const body = topicToHtml(topic?.text, topic?.html);
+
+    const canEditTopic = useRoomState(room, (state) =>
+        state.maySendStateEvent(EventType.RoomTopic, room.client.getSafeUserId()),
+    );
+
+    const onEditClick = (e: SyntheticEvent): void => {
+        e.preventDefault();
+        e.stopPropagation();
+        defaultDispatcher.dispatch({ action: "open_room_settings" });
+    };
+
+    const onExpandedClick = (e: SyntheticEvent): void => {
+        e.preventDefault();
+        e.stopPropagation();
+        setExpanded(!expanded);
+    };
+
+    const onTopicLinkClick = (e: React.MouseEvent): void => {
+        if (e.target instanceof HTMLAnchorElement) {
+            onRoomTopicLinkClick(e);
+            return;
+        }
+    };
+
+    return {
+        expanded,
+        topic,
+        body,
+        canEditTopic,
+        onEditClick,
+        onExpandedClick,
+        onTopicLinkClick,
+    };
+}
