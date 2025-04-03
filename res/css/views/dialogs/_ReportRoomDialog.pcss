@@ -7,12 +7,19 @@ Please see LICENSE files in the repository root for full details.
 
 .mx_ReportRoomDialog,
 .mx_DeclineAndBlockInviteDialog {
-    textarea > {
+    textarea {
         font: var(--cpd-font-body-md-regular);
         border: 1px solid var(--cpd-color-border-interactive-primary);
         background: var(--cpd-color-bg-canvas-default);
         border-radius: 0.5rem;
         padding: var(--cpd-space-3x) var(--cpd-space-4x);
+    }
+
+    /*
+      Workaround to fix labels appearing with the wrong color.
+    */
+    form label {
+        color: var(--cpd-color-text-primary);
     }
 }
 
