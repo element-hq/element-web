@@ -34,6 +34,7 @@ import { LowPriorityFilter } from "./skip-list/filters/LowPriorityFilter";
 import { type Sorter, SortingAlgorithm } from "./skip-list/sorters";
 import { SettingLevel } from "../../settings/SettingLevel";
 import { MARKED_UNREAD_TYPE_STABLE, MARKED_UNREAD_TYPE_UNSTABLE } from "../../utils/notifications";
+import { getChangedOverrideRoomMutePushRules } from "../room-list/utils/roomMute";
 
 /**
  * These are the filters passed to the room skip list.
@@ -179,22 +180,7 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
             }
 
             case "MatrixActions.accountData": {
-                if (payload.event_type !== EventType.Direct) return;
-                const dmMap = payload.event.getContent();
-                let needsEmit = false;
-                for (const userId of Object.keys(dmMap)) {
-                    const roomIds = dmMap[userId];
-                    for (const roomId of roomIds) {
-                        const room = this.matrixClient.getRoom(roomId);
-                        if (!room) {
-                            logger.warn(`${roomId} was found in DMs but the room is not in the store`);
-                            continue;
-                        }
-                        this.roomSkipList.addRoom(room);
-                        needsEmit = true;
-                    }
-                }
-                if (needsEmit) this.emit(LISTS_UPDATE_EVENT);
+                this.handleAccountDataPayload(payload);
                 break;
             }
 
@@ -228,6 +214,47 @@ export class RoomListStoreV3Class extends AsyncStoreWithClient<EmptyObject> {
                 break;
             }
         }
+    }
+
+    /**
+     * This method deals with the two types of account data payloads that we care about.
+     */
+    private handleAccountDataPayload(payload: ActionPayload): void {
+        const eventType = payload.event_type;
+        let needsEmit = false;
+        switch (eventType) {
+            // When we're told about new DMs, insert the associated dm rooms.
+            case EventType.Direct: {
+                const dmMap = payload.event.getContent();
+                for (const userId of Object.keys(dmMap)) {
+                    const roomIds = dmMap[userId];
+                    for (const roomId of roomIds) {
+                        const room = this.matrixClient!.getRoom(roomId);
+                        if (!room) {
+                            logger.warn(`${roomId} was found in DMs but the room is not in the store`);
+                            continue;
+                        }
+                        this.roomSkipList!.addRoom(room);
+                        needsEmit = true;
+                    }
+                }
+                break;
+            }
+            case EventType.PushRules: {
+                // When a room becomes muted/unmuted, re-insert that room.
+                const possibleMuteChangeRoomIds = getChangedOverrideRoomMutePushRules(payload);
+                if (!possibleMuteChangeRoomIds) return;
+                const rooms = possibleMuteChangeRoomIds
+                    .map((id) => this.matrixClient?.getRoom(id))
+                    .filter((room) => !!room);
+                for (const room of rooms) {
+                    this.roomSkipList!.addRoom(room);
+                    needsEmit = true;
+                }
+                break;
+            }
+        }
+        if (needsEmit) this.emit(LISTS_UPDATE_EVENT);
     }
 
     /**
