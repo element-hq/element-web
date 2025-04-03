@@ -258,34 +258,34 @@ describe("RoomView", () => {
 
             await untilDispatch(Action.JoinRoomReady, defaultDispatcher);
         });
-        it("handles rejecting an invite", async () => {
+        it("handles declining an invite", async () => {
             const { getByRole } = await mountRoomView();
             jest.spyOn(Modal, "createDialog").mockReturnValue({
                 finished: Promise.resolve([true, false, false]),
                 close: jest.fn(),
             });
-            await fireEvent.click(getByRole("button", { name: "Reject" }));
+            await fireEvent.click(getByRole("button", { name: "Decline" }));
             await waitFor(() => expect(cli.leave).toHaveBeenCalledWith(room.roomId));
             expect(cli.setIgnoredUsers).not.toHaveBeenCalled();
         });
-        it("handles rejecting an invite and ignoring the user", async () => {
+        it("handles declining an invite and ignoring the user", async () => {
             const { getByRole } = await mountRoomView();
             cli.getIgnoredUsers.mockReturnValue(["@carol:example.org"]);
             jest.spyOn(Modal, "createDialog").mockReturnValue({
                 finished: Promise.resolve([true, true, false]),
                 close: jest.fn(),
             });
-            await fireEvent.click(getByRole("button", { name: "Reject" }));
+            await fireEvent.click(getByRole("button", { name: "Decline and block" }));
             expect(cli.leave).toHaveBeenCalledWith(room.roomId);
             expect(cli.setIgnoredUsers).toHaveBeenCalledWith(["@carol:example.org", "@bob:example.org"]);
         });
-        it("handles rejecting an invite and reporting the room", async () => {
+        it("handles declining an invite and reporting the room", async () => {
             const { getByRole } = await mountRoomView();
             jest.spyOn(Modal, "createDialog").mockReturnValue({
                 finished: Promise.resolve([true, false, "with a reason"]),
                 close: jest.fn(),
             });
-            await fireEvent.click(getByRole("button", { name: "Reject" }));
+            await fireEvent.click(getByRole("button", { name: "Decline and block" }));
             expect(cli.leave).toHaveBeenCalledWith(room.roomId);
             expect(cli.reportRoom).toHaveBeenCalledWith(room.roomId, "with a reason");
         });

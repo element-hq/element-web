@@ -1317,8 +1317,17 @@ exports[`RoomView invites renders an invite room 1`] = `
           role="button"
           tabindex="0"
         >
-          Reject
+          Decline
         </div>
+        <button
+          class="_button_vczzf_8 _destructive_vczzf_107"
+          data-kind="tertiary"
+          data-size="lg"
+          role="button"
+          tabindex="0"
+        >
+          Decline and block
+        </button>
       </div>
       <div
         class="mx_RoomPreviewBar_footer"

@@ -255,10 +255,10 @@ test.describe("Sliding Sync", () => {
         // Select the room to reject
         await page.getByRole("treeitem", { name: "Room to Reject" }).click();
 
-        // Reject the invite
-        await page.locator(".mx_RoomView").getByRole("button", { name: "Reject", exact: true }).click();
+        // Decline the invite
+        await page.locator(".mx_RoomView").getByRole("button", { name: "Decline", exact: true }).click();
 
-        await page.getByRole("button", { name: "Reject invite" }).click();
+        await page.getByRole("button", { name: "Decline invite" }).click();
 
         await expect(
             page.getByRole("group", { name: "Invites" }).locator(".mx_RoomSublist_tiles").getByRole("treeitem"),

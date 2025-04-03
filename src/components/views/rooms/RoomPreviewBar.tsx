@@ -14,6 +14,7 @@ import {
     type RoomPreviewOpts,
     RoomViewLifecycle,
 } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
+import { Button } from "@vector-im/compound-web";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
@@ -90,7 +91,8 @@ interface IProps {
     roomAlias?: string;
 
     onJoinClick?(): void;
-    onRejectClick?(promptOptions: boolean): void;
+    onDeclineClick?(): void;
+    onDeclineAndBlockClick?(): void;
     onForgetClick?(): void;
 
     canAskToJoinAndMembershipIsLeave?: boolean;
@@ -318,6 +320,8 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
         let primaryActionLabel: string | undefined;
         let secondaryActionHandler: (() => void) | undefined;
         let secondaryActionLabel: string | undefined;
+        let dangerActionHandler: (() => void) | undefined;
+        let dangerActionLabel: string | undefined;
         let footer: JSX.Element | undefined;
         const extraComponents: JSX.Element[] = [];
 
@@ -554,8 +558,11 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                 }
 
                 primaryActionHandler = this.props.onJoinClick;
-                secondaryActionLabel = _t("action|reject");
-                secondaryActionHandler = () => this.props.onRejectClick?.(this.props.promptRejectionOptions ?? true);
+                secondaryActionLabel = _t("action|decline");
+                secondaryActionHandler = this.props.onDeclineClick;
+                dangerActionLabel = _t("action|decline_and_block");
+                dangerActionHandler = this.props.onDeclineAndBlockClick;
+
                 break;
             }
             case MessageCase.ViewingRoom: {
@@ -688,6 +695,15 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
             );
         }
 
+        let dangerActionButton;
+        if (dangerActionHandler) {
+            dangerActionButton = (
+                <Button destructive kind="tertiary" onClick={dangerActionHandler}>
+                    {dangerActionLabel}
+                </Button>
+            );
+        }
+
         const isPanel = this.props.canPreview;
 
         const classes = classNames("mx_RoomPreviewBar", `mx_RoomPreviewBar_${messageCase}`, {
@@ -698,6 +714,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
         // ensure correct tab order for both views
         const actions = isPanel ? (
             <>
+                {dangerActionButton}
                 {secondaryButton}
                 {extraComponents}
                 {primaryButton}
@@ -707,6 +724,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                 {primaryButton}
                 {extraComponents}
                 {secondaryButton}
+                {dangerActionButton}
             </>
         );
 
