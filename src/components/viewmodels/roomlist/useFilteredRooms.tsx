@@ -13,6 +13,8 @@ import { _t, _td, type TranslationKey } from "../../../languageHandler";
 import RoomListStoreV3 from "../../../stores/room-list-v3/RoomListStoreV3";
 import { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
 import { useEventEmitter } from "../../../hooks/useEventEmitter";
+import SpaceStore from "../../../stores/spaces/SpaceStore";
+import { UPDATE_SELECTED_SPACE } from "../../../stores/spaces";
 
 /**
  * Provides information about a primary filter.
@@ -118,6 +120,12 @@ export function useFilteredRooms(): FilteredRooms {
         const newRooms = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(filters);
         setRooms(newRooms);
     }, []);
+
+    // Reset filters when active space changes
+    useEventEmitter(SpaceStore.instance, UPDATE_SELECTED_SPACE, () => {
+        setPrimaryFilter(undefined);
+        activateSecondaryFilter(SecondaryFilters.AllActivity);
+    });
 
     const filterUndefined = (array: (FilterKey | undefined)[]): FilterKey[] =>
         array.filter((f) => f !== undefined) as FilterKey[];
