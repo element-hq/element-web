@@ -24,6 +24,9 @@ import { RoomNotificationState } from "../../../../src/stores/notifications/Room
 import { NotificationStateEvents } from "../../../../src/stores/notifications/NotificationState";
 import { NotificationLevel } from "../../../../src/stores/notifications/NotificationLevel";
 import { createMessageEventContent } from "../../../test-utils/events";
+import SettingsStore from "../../../../src/settings/SettingsStore";
+import * as RoomStatusBarModule from "../../../../src/components/structures/RoomStatusBar";
+import * as UnreadModule from "../../../../src/Unread";
 
 describe("RoomNotificationState", () => {
     let room: Room;
@@ -34,6 +37,10 @@ describe("RoomNotificationState", () => {
         room = new Room("!room:example.com", client, "@user:example.org", {
             pendingEventOrdering: PendingEventOrdering.Detached,
         });
+    });
+
+    afterEach(() => {
+        jest.resetAllMocks();
     });
 
     function addThread(room: Room): void {
@@ -199,5 +206,86 @@ describe("RoomNotificationState", () => {
 
         expect(roomNotifState.level).toBe(NotificationLevel.Activity);
         expect(roomNotifState.symbol).toBe(null);
+    });
+
+    describe("computed attributes", () => {
+        beforeEach(() => {
+            jest.spyOn(RoomStatusBarModule, "getUnsentMessages").mockReturnValue([]);
+            jest.spyOn(UnreadModule, "doesRoomHaveUnreadMessages").mockReturnValue(false);
+        });
+
+        it("should has invited at true", () => {
+            room.updateMyMembership(KnownMembership.Invite);
+            const roomNotifState = new RoomNotificationState(room, false);
+            expect(roomNotifState.invited).toBe(true);
+        });
+
+        it("should has isUnsetMessage at true", () => {
+            jest.spyOn(RoomStatusBarModule, "getUnsentMessages").mockReturnValue([{} as MatrixEvent]);
+            const roomNotifState = new RoomNotificationState(room, false);
+            expect(roomNotifState.isUnsetMessage).toBe(true);
+        });
+
+        it("should has isMention at false if the notification is invitation, an unset message or a knock", () => {
+            setUnreads(room, 0, 2);
+
+            const roomNotifState = new RoomNotificationState(room, false);
+            expect(roomNotifState.isMention).toBe(true);
+
+            room.updateMyMembership(KnownMembership.Invite);
+            expect(roomNotifState.isMention).toBe(false);
+
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
+            room.updateMyMembership(KnownMembership.Knock);
+            expect(roomNotifState.isMention).toBe(false);
+
+            jest.spyOn(RoomStatusBarModule, "getUnsentMessages").mockReturnValue([{} as MatrixEvent]);
+            room.updateMyMembership(KnownMembership.Join);
+            expect(roomNotifState.isMention).toBe(false);
+        });
+
+        it("should has isNotification at true", () => {
+            setUnreads(room, 1, 0);
+
+            const roomNotifState = new RoomNotificationState(room, false);
+            expect(roomNotifState.isNotification).toBe(true);
+        });
+
+        it("should has isActivityNotification at true", () => {
+            jest.spyOn(UnreadModule, "doesRoomHaveUnreadMessages").mockReturnValue(true);
+
+            const roomNotifState = new RoomNotificationState(room, false);
+            expect(roomNotifState.isActivityNotification).toBe(true);
+        });
+
+        it("should has hasAnyNotificationOrActivity at true", () => {
+            // Hidebold is disabled
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+            // Unread message, generate activity notification
+            jest.spyOn(UnreadModule, "doesRoomHaveUnreadMessages").mockReturnValue(true);
+            // Highlight notification
+            setUnreads(room, 0, 1);
+
+            // There is one highlight notification
+            const roomNotifState = new RoomNotificationState(room, false);
+            expect(roomNotifState.hasAnyNotificationOrActivity).toBe(true);
+
+            // Activity notification
+            setUnreads(room, 0, 0);
+            // Trigger update
+            room.updateMyMembership(KnownMembership.Join);
+            // hidebold is disabled and we have an activity notification
+            expect(roomNotifState.hasAnyNotificationOrActivity).toBe(true);
+
+            // hidebold is enabled and we have an activity notification
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
+            room.updateMyMembership(KnownMembership.Join);
+            expect(roomNotifState.hasAnyNotificationOrActivity).toBe(false);
+
+            // No unread
+            jest.spyOn(UnreadModule, "doesRoomHaveUnreadMessages").mockReturnValue(false);
+            room.updateMyMembership(KnownMembership.Join);
+            expect(roomNotifState.hasAnyNotificationOrActivity).toBe(false);
+        });
     });
 });

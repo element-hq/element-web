@@ -31,7 +31,6 @@ interface IProps {
     timeline: MatrixEvent[];
     // indexes of the matching events (not contextual ones)
     ourEventsIndexes: number[];
-    onHeightChanged?: () => void;
     permalinkCreator?: RoomPermalinkCreator;
 }
 
@@ -115,7 +114,6 @@ export default class SearchResultTile extends React.Component<IProps> {
                         highlights={highlights}
                         permalinkCreator={this.props.permalinkCreator}
                         highlightLink={this.props.resultLink}
-                        onHeightChanged={this.props.onHeightChanged}
                         isTwelveHour={isTwelveHour}
                         alwaysShowTimestamps={alwaysShowTimestamps}
                         lastInSection={lastInSection}

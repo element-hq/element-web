@@ -257,7 +257,7 @@ interface LocalRoomViewProps {
     localRoom: LocalRoom;
     resizeNotifier: ResizeNotifier;
     permalinkCreator: RoomPermalinkCreator;
-    roomView: RefObject<HTMLElement>;
+    roomView: RefObject<HTMLElement | null>;
     onFileDrop: (dataTransfer: DataTransfer) => Promise<void>;
     mainSplitContentType: MainSplitContentType;
 }

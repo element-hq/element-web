@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { forwardRef, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import React, { type JSX, forwardRef, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import {
     type ISearchResults,
     type IThreadBundledRelationship,
@@ -59,7 +59,7 @@ export const RoomSearchView = forwardRef<ScrollPanel, Props>(
         const aborted = useRef(false);
         // A map from room ID to permalink creator
         const permalinkCreators = useMemo(() => new Map<string, RoomPermalinkCreator>(), []);
-        const innerRef = useRef<ScrollPanel | null>();
+        const innerRef = useRef<ScrollPanel>(null);
 
         useEffect(() => {
             return () => {
@@ -198,12 +198,6 @@ export const RoomSearchView = forwardRef<ScrollPanel, Props>(
             }
         }
 
-        // once dynamic content in the search results load, make the scrollPanel check
-        // the scroll offsets.
-        const onHeightChanged = (): void => {
-            innerRef.current?.checkScroll();
-        };
-
         const onRef = (e: ScrollPanel | null): void => {
             if (typeof ref === "function") {
                 ref(e);
@@ -302,7 +296,6 @@ export const RoomSearchView = forwardRef<ScrollPanel, Props>(
                     searchHighlights={highlights ?? []}
                     resultLink={resultLink}
                     permalinkCreator={permalinkCreator}
-                    onHeightChanged={onHeightChanged}
                 />,
             );
 

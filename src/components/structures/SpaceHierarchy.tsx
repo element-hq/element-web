@@ -7,6 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, {
+    type JSX,
     type Dispatch,
     type KeyboardEvent,
     type KeyboardEventHandler,
@@ -636,7 +637,7 @@ const useIntersectionObserver = (callback: () => void): ((element: HTMLDivElemen
         }
     };
 
-    const observerRef = useRef<IntersectionObserver>();
+    const observerRef = useRef<IntersectionObserver>(undefined);
     return (element: HTMLDivElement) => {
         if (observerRef.current) {
             observerRef.current.disconnect();
