@@ -2681,7 +2681,8 @@
             "unable_to_load_msisdns": "Unable to load phone numbers",
             "username": "Username"
         },
-        "image_thumbnails": "Show previews/thumbnails for images",
+        "show_media": "Show media in timeline",
+        "show_media_description": "A hidden media can always be shown by tapping on it",
         "inline_url_previews_default": "Enable inline URL previews by default",
         "inline_url_previews_room": "Enable URL previews by default for participants in this room",
         "inline_url_previews_room_account": "Enable URL previews for this room (only affects you)",

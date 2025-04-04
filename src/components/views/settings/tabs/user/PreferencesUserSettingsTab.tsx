@@ -162,6 +162,11 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         "useOnlyCurrentProfiles",
     ];
 
+    private static SAFETY_SETTINGS: BooleanSettingKey[] = [
+        "showAvatarsOnInvites",
+        "showImages", // "Show media in timeline"
+    ];
+
     private static ROOM_DIRECTORY_SETTINGS: BooleanSettingKey[] = ["SpotlightSearch.showNsfwPublicRooms"];
 
     private static GENERAL_SETTINGS: BooleanSettingKey[] = [
@@ -332,6 +337,10 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
 
                     <SettingsSubsection heading={_t("common|timeline")}>
                         {this.renderGroup(PreferencesUserSettingsTab.TIMELINE_SETTINGS)}
+                    </SettingsSubsection>
+
+                    <SettingsSubsection heading={_t("common|moderation_and_safety")}>
+                        {this.renderGroup(PreferencesUserSettingsTab.SAFETY_SETTINGS)}
                     </SettingsSubsection>
 
                     <SettingsSubsection heading={_t("settings|preferences|room_directory_heading")}>
