@@ -8,7 +8,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ReactNode } from "react";
-import { MediaPreviewConfig, UNSTABLE_MSC4133_EXTENDED_PROFILES } from "matrix-js-sdk/src/matrix";
+import { UNSTABLE_MSC4133_EXTENDED_PROFILES } from "matrix-js-sdk/src/matrix";
+import { MediaPreviewConfig } from "../@types/media_preview.ts";
 
 import { _t, _td, type TranslationKey } from "../languageHandler";
 import DeviceIsolationModeController from "./controllers/DeviceIsolationModeController.ts";
@@ -313,8 +314,6 @@ export interface Settings {
     "showHiddenEventsInTimeline": IBaseSetting<boolean>;
     "lowBandwidth": IBaseSetting<boolean>;
     "fallbackICEServerAllowed": IBaseSetting<boolean | null>;
-    "showImages": IBaseSetting<boolean>;
-    "showAvatarsOnInvites": IBaseSetting<boolean>;
     "RoomList.preferredSorting": IBaseSetting<SortingAlgorithm>;
     "RoomList.showMessagePreview": IBaseSetting<boolean>;
     "RightPanel.phasesGlobal": IBaseSetting<IRightPanelForRoomStored | null>;
@@ -432,7 +431,7 @@ export const SETTINGS: Settings = {
     "mediaPreviewConfig": {
         controller: new MediaPreviewConfigController(),
         supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
-        default: MediaPreviewConfig.Private,
+        default: MediaPreviewConfigController.default,
     },
     "feature_report_to_moderators": {
         isFeature: true,
@@ -1129,16 +1128,6 @@ export const SETTINGS: Settings = {
         // This is a tri-state value, where `null` means "prompt the user".
         default: null,
         controller: new FallbackIceServerController(),
-    },
-    "showImages": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("settings|image_thumbnails"),
-        default: true,
-    },
-    "showAvatarsOnInvites": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("settings|invite_avatars"),
-        default: true,
     },
     "RoomList.preferredSorting": {
         supportedLevels: [SettingLevel.DEVICE],

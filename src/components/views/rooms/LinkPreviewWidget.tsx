@@ -18,6 +18,7 @@ import { mediaFromMxc } from "../../../customisations/Media";
 import ImageView from "../elements/ImageView";
 import LinkWithTooltip from "../elements/LinkWithTooltip";
 import PlatformPeg from "../../../PlatformPeg";
+import { MediaPreviewValue } from "../../../@types/media_preview";
 
 interface IProps {
     link: string;
@@ -69,7 +70,8 @@ export default class LinkPreviewWidget extends React.Component<IProps> {
 
         // FIXME: do we want to factor out all image displaying between this and MImageBody - especially for lightboxing?
         let image: string | null = p["og:image"] ?? null;
-        if (!SettingsStore.getValue("showImages")) {
+        // HSTODO: Private rooms?
+        if (!SettingsStore.getValue("mediaPreviewConfig", this.props.mxEvent.getRoomId()).media_previews !== MediaPreviewValue.On) {
             image = null; // Don't render a button to show the image, just hide it outright
         }
         const imageMaxWidth = 100;

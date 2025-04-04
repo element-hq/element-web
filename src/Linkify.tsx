@@ -16,6 +16,7 @@ import SettingsStore from "./settings/SettingsStore";
 import { tryTransformPermalinkToLocalHref } from "./utils/permalinks/Permalinks";
 import { mediaFromMxc } from "./customisations/Media";
 import { PERMITTED_URL_SCHEMES } from "./utils/UrlUtils";
+import { MediaPreviewValue } from "./@types/media_preview";
 
 const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
 const MEDIA_API_MXC_REGEX = /\/_matrix\/media\/r0\/(?:download|thumbnail)\/(.+?)\/(.+?)(?:[?/]|$)/;
@@ -50,7 +51,8 @@ export const transformTags: NonNullable<IOptions["transformTags"]> = {
         // We also drop inline images (as if they were not present at all) when the "show
         // images" preference is disabled. Future work might expose some UI to reveal them
         // like standalone image events have.
-        if (!src || !SettingsStore.getValue("showImages")) {
+        // TODO: Is this a private room?
+        if (!src || SettingsStore.getValue("mediaPreviewConfig").media_previews !== MediaPreviewValue.On ) {
             return { tagName, attribs: {} };
         }
 

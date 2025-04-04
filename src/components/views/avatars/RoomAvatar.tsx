@@ -27,6 +27,7 @@ import { type IOOBData } from "../../../stores/ThreepidInviteStore";
 import { LocalRoom } from "../../../models/LocalRoom";
 import { filterBoolean } from "../../../utils/arrays";
 import SettingsStore from "../../../settings/SettingsStore";
+import { MediaPreviewValue } from "../../../@types/media_preview";
 
 interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url" | "onClick"> {
     // Room may be left unset here, but if it is,
@@ -96,7 +97,8 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
     private static getImageUrls(props: IProps): string[] {
         const myMembership = props.room?.getMyMembership();
         if (myMembership === KnownMembership.Invite || !myMembership) {
-            if (SettingsStore.getValue("showAvatarsOnInvites") === false) {
+
+            if (SettingsStore.getValue("mediaPreviewConfig", props.room?.roomId).invite_avatars !== MediaPreviewValue.On) {
                 // The user has opted out of showing avatars, so return no urls here.
                 return [];
             }

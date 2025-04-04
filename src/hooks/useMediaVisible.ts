@@ -5,13 +5,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 
 import { SettingLevel } from "../settings/SettingLevel";
 import { useSettingValue } from "./useSettings";
 import SettingsStore from "../settings/SettingsStore";
 import { useMatrixClientContext } from "../contexts/MatrixClientContext";
-import { JoinRule, MediaPreviewConfig } from "matrix-js-sdk/src/matrix";
+import { JoinRule } from "matrix-js-sdk/src/matrix";
+import { MediaPreviewValue } from "../@types/media_preview";
 
 const PRIVATE_JOIN_RULES: JoinRule[] = [JoinRule.Invite, JoinRule.Knock, JoinRule.Restricted];
 
@@ -22,7 +23,6 @@ const PRIVATE_JOIN_RULES: JoinRule[] = [JoinRule.Invite, JoinRule.Knock, JoinRul
  */
 export function useMediaVisible(eventId: string, roomId: string): [boolean, (visible: boolean) => void] {
     const mediaPreviewSetting = useSettingValue("mediaPreviewConfig", roomId);
-    // const defaultShowImages = useSettingValue("showImages");
     const client = useMatrixClientContext();
     const eventVisibility = useSettingValue("showMediaEventIds");
     const setMediaVisible = useCallback(
@@ -38,10 +38,10 @@ export function useMediaVisible(eventId: string, roomId: string): [boolean, (vis
     // Always prefer the explicit per-event user preference here.
     if (eventVisibility[eventId]) {
         return [true, setMediaVisible];
-    } else if (mediaPreviewSetting === MediaPreviewConfig.Off) {
+    } else if (mediaPreviewSetting.media_previews === MediaPreviewValue.Off) {
         return [false, setMediaVisible];
-    } else if (mediaPreviewSetting === MediaPreviewConfig.On) {
-        return [false, setMediaVisible];
+    } else if (mediaPreviewSetting.media_previews === MediaPreviewValue.On) {
+        return [true, setMediaVisible];
     }
     const joinRule = client.getRoom(roomId)?.getJoinRule();
     if (PRIVATE_JOIN_RULES.includes(joinRule as JoinRule)) {
@@ -51,5 +51,4 @@ export function useMediaVisible(eventId: string, roomId: string): [boolean, (vis
         console.log("Room is probably public");
         return [false, setMediaVisible];
     }
-
 }

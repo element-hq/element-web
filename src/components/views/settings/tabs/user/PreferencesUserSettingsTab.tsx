@@ -116,7 +116,7 @@ const SpellCheckSection: React.FC = () => {
 };
 
 export default class PreferencesUserSettingsTab extends React.Component<IProps, IState> {
-    private static ROOM_LIST_SETTINGS: BooleanSettingKey[] = ["breadcrumbs", "showAvatarsOnInvites"];
+    private static ROOM_LIST_SETTINGS: BooleanSettingKey[] = ["breadcrumbs"];
 
     private static SPACES_SETTINGS: BooleanSettingKey[] = ["Spaces.allRoomsInHome"];
 
@@ -146,7 +146,6 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         "urlPreviewsEnabled",
         "autoplayGifs",
         "autoplayVideo",
-        "showImages",
     ];
 
     private static TIMELINE_SETTINGS: BooleanSettingKey[] = [

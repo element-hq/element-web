@@ -5,33 +5,41 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ClientEvent, MatrixEvent, MediaPreviewConfig, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, MatrixEvent, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { AccountDataEvents } from "matrix-js-sdk/src/types";
+import { MediaPreviewConfig, MediaPreviewValue } from "../../@types/media_preview.ts";
 
 import { SettingLevel } from "../SettingLevel.ts";
 import MatrixClientBackedController from "./MatrixClientBackedController.ts";
 
 
-const CLIENT_KEY = "m.media_preview_config";
+const CLIENT_KEY = "io.element.msc4278.media_preview_config";
 
 /**
  * TODO
  */
 export default class MediaPreviewConfigController extends MatrixClientBackedController {
-    private globalSetting: MediaPreviewConfig = MediaPreviewConfig.Private;
+
+    public static readonly default: AccountDataEvents["io.element.msc4278.media_preview_config"] = {
+        media_previews: MediaPreviewValue.On,
+        invite_avatars: MediaPreviewValue.On
+    }
+
+    private globalSetting: MediaPreviewConfig = MediaPreviewConfigController.default;
 
     public constructor() {
         super();
     }
 
     private getRoomValue = (roomId: string): MediaPreviewConfig|null => {
-        return this.client?.getRoom(roomId)?.getAccountData(CLIENT_KEY)?.getContent().value ?? null;
+        return this.client?.getRoom(roomId)?.getAccountData(CLIENT_KEY)?.getContent<MediaPreviewConfig>() ?? null;
     }
 
     private onAccountData = (event: MatrixEvent): void => {
         // TODO: Validate.
         const roomId = event.getRoomId();
         if (!roomId) {
-            this.globalSetting = event.getContent().value;
+            this.globalSetting = event.getContent();
         }
     };
 
@@ -56,13 +64,11 @@ export default class MediaPreviewConfigController extends MatrixClientBackedCont
 
     public onChange(_level: SettingLevel, roomId: string | null, newValue: MediaPreviewConfig): void {
         if (roomId) {
-            this.client?.setRoomAccountData(roomId, "m.media_preview_config", {
+            this.client?.setRoomAccountData(roomId, CLIENT_KEY, {
                 value: newValue
             });
             return;
         }
-        this.client?.setAccountDataRaw( "m.media_preview_config", {
-            value: newValue
-        });
+        this.client?.setAccountDataRaw(CLIENT_KEY, newValue);
     }
 }
