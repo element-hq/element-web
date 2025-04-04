@@ -97,8 +97,9 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
     private static getImageUrls(props: IProps): string[] {
         const myMembership = props.room?.getMyMembership();
         if (myMembership === KnownMembership.Invite || !myMembership) {
-
-            if (SettingsStore.getValue("mediaPreviewConfig", props.room?.roomId).invite_avatars !== MediaPreviewValue.On) {
+            if (
+                SettingsStore.getValue("mediaPreviewConfig", props.room?.roomId).invite_avatars !== MediaPreviewValue.On
+            ) {
                 // The user has opted out of showing avatars, so return no urls here.
                 return [];
             }

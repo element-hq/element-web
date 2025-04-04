@@ -17,6 +17,7 @@ import AccessibleButton from "../elements/AccessibleButton";
 import { _t } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
+import { useMediaVisible } from "../../../hooks/useMediaVisible";
 
 const INITIAL_NUM_PREVIEWS = 2;
 
@@ -29,6 +30,7 @@ interface IProps {
 const LinkPreviewGroup: React.FC<IProps> = ({ links, mxEvent, onCancelClick }) => {
     const cli = useContext(MatrixClientContext);
     const [expanded, toggleExpanded] = useStateToggle();
+    const [mediaVisible] = useMediaVisible(mxEvent.getId()!, mxEvent.getRoomId()!);
 
     const ts = mxEvent.getTs();
     const previews = useAsyncMemo<[string, IPreviewUrlResponse][]>(
@@ -55,7 +57,13 @@ const LinkPreviewGroup: React.FC<IProps> = ({ links, mxEvent, onCancelClick }) =
     return (
         <div className="mx_LinkPreviewGroup">
             {showPreviews.map(([link, preview], i) => (
-                <LinkPreviewWidget key={link} link={link} preview={preview} mxEvent={mxEvent}>
+                <LinkPreviewWidget
+                    mediaVisible={mediaVisible}
+                    key={link}
+                    link={link}
+                    preview={preview}
+                    mxEvent={mxEvent}
+                >
                     {i === 0 ? (
                         <AccessibleButton
                             className="mx_LinkPreviewGroup_hide"

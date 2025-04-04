@@ -32,6 +32,7 @@ import SpellCheckSettings from "../../SpellCheckSettings";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import * as TimezoneHandler from "../../../../../TimezoneHandler";
 import { type BooleanSettingKey } from "../../../../../settings/Settings.tsx";
+import { MediaPreviewAccountSettings } from "./MediaPreviewSetting.tsx";
 
 interface IProps {
     closeSettingsFn(success: boolean): void;
@@ -160,11 +161,6 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         "TextualBody.enableBigEmoji",
         "scrollToBottomOnMessageSent",
         "useOnlyCurrentProfiles",
-    ];
-
-    private static SAFETY_SETTINGS: BooleanSettingKey[] = [
-        "showAvatarsOnInvites",
-        "showImages", // "Show media in timeline"
     ];
 
     private static ROOM_DIRECTORY_SETTINGS: BooleanSettingKey[] = ["SpotlightSearch.showNsfwPublicRooms"];
@@ -340,7 +336,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                     </SettingsSubsection>
 
                     <SettingsSubsection heading={_t("common|moderation_and_safety")}>
-                        {this.renderGroup(PreferencesUserSettingsTab.SAFETY_SETTINGS)}
+                        <MediaPreviewAccountSettings />
                     </SettingsSubsection>
 
                     <SettingsSubsection heading={_t("settings|preferences|room_directory_heading")}>

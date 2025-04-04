@@ -35,6 +35,16 @@ export function useMediaVisible(eventId: string, roomId: string): [boolean, (vis
         [eventId, eventVisibility],
     );
 
+    const roomIsPrivate = useMemo(() => {
+        const joinRule = client.getRoom(roomId)?.getJoinRule();
+        if (PRIVATE_JOIN_RULES.includes(joinRule as JoinRule)) {
+            return true;
+        } else { // All other join rules, and unknown will default to hiding.
+            return false;
+        }
+    }, [client, roomId])
+
+
     // Always prefer the explicit per-event user preference here.
     if (eventVisibility[eventId]) {
         return [true, setMediaVisible];
@@ -42,13 +52,12 @@ export function useMediaVisible(eventId: string, roomId: string): [boolean, (vis
         return [false, setMediaVisible];
     } else if (mediaPreviewSetting.media_previews === MediaPreviewValue.On) {
         return [true, setMediaVisible];
-    }
-    const joinRule = client.getRoom(roomId)?.getJoinRule();
-    if (PRIVATE_JOIN_RULES.includes(joinRule as JoinRule)) {
-        console.log("Room is private");
-        return [true, setMediaVisible];
-    } else { // All other join rules, and unknown will default to hiding.
-        console.log("Room is probably public");
+    } else if (mediaPreviewSetting.media_previews === MediaPreviewValue.Private) {
+        return [roomIsPrivate, setMediaVisible];
+    } else {
+        // Invalid setting.
+        console.warn("Invalid media visibility setting", mediaPreviewSetting.media_previews);
         return [false, setMediaVisible];
     }
+
 }

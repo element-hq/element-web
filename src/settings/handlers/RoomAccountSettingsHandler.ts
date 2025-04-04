@@ -14,6 +14,7 @@ import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandl
 import { objectClone, objectKeyChanges } from "../../utils/objects";
 import { SettingLevel } from "../SettingLevel";
 import { type WatchManager } from "../WatchManager";
+import { MEDIA_PREVIEW_ACCOUNT_DATA_TYPE } from "../../@types/media_preview";
 
 const ALLOWED_WIDGETS_EVENT_TYPE = "im.vector.setting.allowed_widgets";
 const DEFAULT_SETTINGS_EVENT_TYPE = "im.vector.web.settings";
@@ -56,6 +57,9 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
             }
         } else if (event.getType() === ALLOWED_WIDGETS_EVENT_TYPE) {
             this.watchers.notifyUpdate("allowedWidgets", roomId, SettingLevel.ROOM_ACCOUNT, event.getContent());
+        } else if (event.getType() === MEDIA_PREVIEW_ACCOUNT_DATA_TYPE) {
+            console.log("notifyupdate");
+            this.watchers.notifyUpdate("mediaPreviewConfig", roomId, SettingLevel.ROOM_ACCOUNT, event.getContent());
         }
     };
 

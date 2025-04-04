@@ -11,20 +11,19 @@ import { decode } from "html-entities";
 import { type MatrixEvent, type IPreviewUrlResponse } from "matrix-js-sdk/src/matrix";
 
 import { Linkify } from "../../../HtmlUtils";
-import SettingsStore from "../../../settings/SettingsStore";
 import Modal from "../../../Modal";
 import * as ImageUtils from "../../../ImageUtils";
 import { mediaFromMxc } from "../../../customisations/Media";
 import ImageView from "../elements/ImageView";
 import LinkWithTooltip from "../elements/LinkWithTooltip";
 import PlatformPeg from "../../../PlatformPeg";
-import { MediaPreviewValue } from "../../../@types/media_preview";
 
 interface IProps {
     link: string;
     preview: IPreviewUrlResponse;
     mxEvent: MatrixEvent; // the Event associated with the preview
     children?: ReactNode;
+    mediaVisible: boolean;
 }
 
 export default class LinkPreviewWidget extends React.Component<IProps> {
@@ -70,8 +69,7 @@ export default class LinkPreviewWidget extends React.Component<IProps> {
 
         // FIXME: do we want to factor out all image displaying between this and MImageBody - especially for lightboxing?
         let image: string | null = p["og:image"] ?? null;
-        // HSTODO: Private rooms?
-        if (!SettingsStore.getValue("mediaPreviewConfig", this.props.mxEvent.getRoomId()).media_previews !== MediaPreviewValue.On) {
+        if (!this.props.mediaVisible) {
             image = null; // Don't render a button to show the image, just hide it outright
         }
         const imageMaxWidth = 100;

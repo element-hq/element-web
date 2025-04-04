@@ -7,23 +7,19 @@ Please see LICENSE files in the repository root for full details.
 
 import { ClientEvent, MatrixEvent, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { AccountDataEvents } from "matrix-js-sdk/src/types";
-import { MediaPreviewConfig, MediaPreviewValue } from "../../@types/media_preview.ts";
+import { MEDIA_PREVIEW_ACCOUNT_DATA_TYPE, MediaPreviewConfig, MediaPreviewValue } from "../../@types/media_preview.ts";
 
 import { SettingLevel } from "../SettingLevel.ts";
 import MatrixClientBackedController from "./MatrixClientBackedController.ts";
-
-
-const CLIENT_KEY = "io.element.msc4278.media_preview_config";
 
 /**
  * TODO
  */
 export default class MediaPreviewConfigController extends MatrixClientBackedController {
-
     public static readonly default: AccountDataEvents["io.element.msc4278.media_preview_config"] = {
         media_previews: MediaPreviewValue.On,
-        invite_avatars: MediaPreviewValue.On
-    }
+        invite_avatars: MediaPreviewValue.On,
+    };
 
     private globalSetting: MediaPreviewConfig = MediaPreviewConfigController.default;
 
@@ -31,29 +27,52 @@ export default class MediaPreviewConfigController extends MatrixClientBackedCont
         super();
     }
 
-    private getRoomValue = (roomId: string): MediaPreviewConfig|null => {
-        return this.client?.getRoom(roomId)?.getAccountData(CLIENT_KEY)?.getContent<MediaPreviewConfig>() ?? null;
-    }
+    private getRoomValue = (roomId: string): MediaPreviewConfig | null => {
+        return (
+            this.client
+                ?.getRoom(roomId)
+                ?.getAccountData(MEDIA_PREVIEW_ACCOUNT_DATA_TYPE)
+                ?.getContent<MediaPreviewConfig>() ?? null
+        );
+    };
 
     private onAccountData = (event: MatrixEvent): void => {
+        if (event.getType() !== MEDIA_PREVIEW_ACCOUNT_DATA_TYPE) {
+            return;
+        }
+        console.log("OnAccountData", event);
         // TODO: Validate.
         const roomId = event.getRoomId();
         if (!roomId) {
-            this.globalSetting = event.getContent();
+            this.globalSetting = {
+                ...MediaPreviewConfigController.default,
+                ...event.getContent(),
+            };
+            console.log("CONFIG Updating global settings", this.globalSetting);
         }
     };
 
     protected async initMatrixClient(newClient: MatrixClient, oldClient?: MatrixClient): Promise<void> {
         oldClient?.off(ClientEvent.AccountData, this.onAccountData);
         newClient.on(ClientEvent.AccountData, this.onAccountData);
-        const accountData = newClient.getAccountData(CLIENT_KEY);
+        const accountData = newClient.getAccountData(MEDIA_PREVIEW_ACCOUNT_DATA_TYPE);
         if (accountData) this.onAccountData(accountData);
     }
 
-    public getValueOverride(level: SettingLevel, roomId: string | null,): MediaPreviewConfig {
+    public getValueOverride(level: SettingLevel, roomId: string | null): MediaPreviewConfig {
         // TODO: Use SettingLevel?
         if (roomId) {
-            return this.getRoomValue(roomId) ?? this.globalSetting;
+            console.log(
+                "MediaPreviewConfigController",
+                "getValueOverride",
+                this.getRoomValue(roomId),
+                this.globalSetting,
+            );
+            // Use globals for any undefined setting
+            return {
+                ...this.getRoomValue(roomId),
+                ...this.globalSetting,
+            };
         }
         return this.globalSetting;
     }
@@ -62,13 +81,26 @@ export default class MediaPreviewConfigController extends MatrixClientBackedCont
         return false;
     }
 
-    public onChange(_level: SettingLevel, roomId: string | null, newValue: MediaPreviewConfig): void {
-        if (roomId) {
-            this.client?.setRoomAccountData(roomId, CLIENT_KEY, {
-                value: newValue
-            });
-            return;
+    public async beforeChange(
+        level: SettingLevel,
+        roomId: string | null,
+        newValue: MediaPreviewConfig,
+    ): Promise<boolean> {
+        if (!this.client) {
+            // No client!
+            return false;
         }
-        this.client?.setAccountDataRaw(CLIENT_KEY, newValue);
+        if (roomId) {
+            await this.client.setRoomAccountData(roomId, MEDIA_PREVIEW_ACCOUNT_DATA_TYPE, {
+                value: newValue,
+            });
+            return true;
+        }
+        await this.client.setAccountDataRaw(MEDIA_PREVIEW_ACCOUNT_DATA_TYPE, newValue);
+        return true;
+    }
+
+    public onChange(_level: SettingLevel, roomId: string | null, newValue: MediaPreviewConfig): void {
+        console.log("onChange", roomId, newValue);
     }
 }

@@ -716,7 +716,7 @@ export default class SettingsStore {
         localStorage.setItem(MIGRATION_DONE_FLAG, "true");
     }
 
-        /**
+    /**
      * Migrate the setting for visible images to a setting.
      */
     private static migrateMediaControlsToSetting(): void {
@@ -734,7 +734,6 @@ export default class SettingsStore {
                 media_previews: showImages === false ? MediaPreviewValue.Off : MediaPreviewValue.On,
             });
         } // else, we don't set anything and use the server value
-
 
         localStorage.setItem(MIGRATION_DONE_FLAG, "true");
     }

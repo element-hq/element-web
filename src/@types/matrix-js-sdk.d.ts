@@ -18,8 +18,6 @@ import { MediaPreviewConfig } from "./media_preview.ts";
 
 // Extend Matrix JS SDK types via Typescript declaration merging to support unspecced event fields and types
 
-
-
 declare module "matrix-js-sdk/src/types" {
     export interface FileInfo {
         /**
@@ -91,7 +89,7 @@ declare module "matrix-js-sdk/src/types" {
             accepted: string[];
         };
 
-        "io.element.msc4278.media_preview_config": MediaPreviewConfig,
+        "io.element.msc4278.media_preview_config": MediaPreviewConfig;
     }
 
     export interface AudioContent {
