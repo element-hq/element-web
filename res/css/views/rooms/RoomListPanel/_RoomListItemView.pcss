@@ -39,7 +39,7 @@
             box-sizing: border-box;
             min-width: 0;
 
-            span {
+            .mx_RoomListItemView_roomName {
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -70,4 +70,8 @@
     .mx_RoomListItemView_content {
         padding-right: var(--cpd-space-3x);
     }
+}
+
+.mx_RoomListItemView_bold .mx_RoomListItemView_roomName {
+    font: var(--cpd-font-body-md-semibold);
 }

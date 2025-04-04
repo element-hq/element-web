@@ -90,6 +90,7 @@ function MoreOptionsMenu({ vm, setMenuOpen }: MoreOptionsMenuProps): JSX.Element
                     label={_t("room_list|more_options|mark_read")}
                     onSelect={vm.markAsRead}
                     onClick={(evt) => evt.stopPropagation()}
+                    hideChevron={true}
                 />
             )}
             {vm.canMarkAsUnread && (
@@ -98,6 +99,7 @@ function MoreOptionsMenu({ vm, setMenuOpen }: MoreOptionsMenuProps): JSX.Element
                     label={_t("room_list|more_options|mark_unread")}
                     onSelect={vm.markAsUnread}
                     onClick={(evt) => evt.stopPropagation()}
+                    hideChevron={true}
                 />
             )}
             <ToggleMenuItem
@@ -112,6 +114,7 @@ function MoreOptionsMenu({ vm, setMenuOpen }: MoreOptionsMenuProps): JSX.Element
                 label={_t("room_list|more_options|low_priority")}
                 onSelect={vm.toggleLowPriority}
                 onClick={(evt) => evt.stopPropagation()}
+                hideChevron={true}
             />
             {vm.canInvite && (
                 <MenuItem
@@ -119,6 +122,7 @@ function MoreOptionsMenu({ vm, setMenuOpen }: MoreOptionsMenuProps): JSX.Element
                     label={_t("action|invite")}
                     onSelect={vm.invite}
                     onClick={(evt) => evt.stopPropagation()}
+                    hideChevron={true}
                 />
             )}
             {vm.canCopyRoomLink && (
@@ -127,6 +131,7 @@ function MoreOptionsMenu({ vm, setMenuOpen }: MoreOptionsMenuProps): JSX.Element
                     label={_t("room_list|more_options|copy_link")}
                     onSelect={vm.copyRoomLink}
                     onClick={(evt) => evt.stopPropagation()}
+                    hideChevron={true}
                 />
             )}
             <Separator />
@@ -136,6 +141,7 @@ function MoreOptionsMenu({ vm, setMenuOpen }: MoreOptionsMenuProps): JSX.Element
                 label={_t("room_list|more_options|leave_room")}
                 onSelect={vm.leaveRoom}
                 onClick={(evt) => evt.stopPropagation()}
+                hideChevron={true}
             />
         </Menu>
     );
@@ -173,6 +179,8 @@ interface NotificationMenuProps {
 function NotificationMenu({ vm, setMenuOpen }: NotificationMenuProps): JSX.Element {
     const [open, setOpen] = useState(false);
 
+    const checkComponent = <CheckIcon width="24px" height="24px" color="var(--cpd-color-icon-primary)" />;
+
     return (
         <Menu
             open={open}
@@ -192,7 +200,7 @@ function NotificationMenu({ vm, setMenuOpen }: NotificationMenuProps): JSX.Eleme
                 onSelect={() => vm.setRoomNotifState(RoomNotifState.AllMessages)}
                 onClick={(evt) => evt.stopPropagation()}
             >
-                {vm.isNotificationAllMessage && <CheckIcon width="24px" height="24px" />}
+                {vm.isNotificationAllMessage && checkComponent}
             </MenuItem>
             <MenuItem
                 aria-selected={vm.isNotificationAllMessageLoud}
@@ -201,7 +209,7 @@ function NotificationMenu({ vm, setMenuOpen }: NotificationMenuProps): JSX.Eleme
                 onSelect={() => vm.setRoomNotifState(RoomNotifState.AllMessagesLoud)}
                 onClick={(evt) => evt.stopPropagation()}
             >
-                {vm.isNotificationAllMessageLoud && <CheckIcon width="24px" height="24px" />}
+                {vm.isNotificationAllMessageLoud && checkComponent}
             </MenuItem>
             <MenuItem
                 aria-selected={vm.isNotificationMentionOnly}
@@ -210,7 +218,7 @@ function NotificationMenu({ vm, setMenuOpen }: NotificationMenuProps): JSX.Eleme
                 onSelect={() => vm.setRoomNotifState(RoomNotifState.MentionsOnly)}
                 onClick={(evt) => evt.stopPropagation()}
             >
-                {vm.isNotificationMentionOnly && <CheckIcon width="24px" height="24px" />}
+                {vm.isNotificationMentionOnly && checkComponent}
             </MenuItem>
             <MenuItem
                 aria-selected={vm.isNotificationMute}
@@ -219,7 +227,7 @@ function NotificationMenu({ vm, setMenuOpen }: NotificationMenuProps): JSX.Eleme
                 onSelect={() => vm.setRoomNotifState(RoomNotifState.Mute)}
                 onClick={(evt) => evt.stopPropagation()}
             >
-                {vm.isNotificationMute && <CheckIcon width="24px" height="24px" />}
+                {vm.isNotificationMute && checkComponent}
             </MenuItem>
         </Menu>
     );

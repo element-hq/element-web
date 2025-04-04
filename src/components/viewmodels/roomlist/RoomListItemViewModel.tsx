@@ -36,6 +36,10 @@ export interface RoomListItemViewState {
      * The notification state of the room.
      */
     notificationState: RoomNotificationState;
+    /**
+     * Whether the room should be bolded.
+     */
+    isBold: boolean;
 }
 
 /**
@@ -51,6 +55,7 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
         hasAccessToOptionsMenu(room) || hasAccessToNotificationMenu(room, matrixClient.isGuest(), isArchived);
     const notificationState = useMemo(() => RoomNotificationStateStore.instance.getRoomState(room), [room]);
     const a11yLabel = getA11yLabel(room, notificationState);
+    const isBold = notificationState.hasAnyNotificationOrActivity;
 
     // Actions
 
@@ -67,6 +72,7 @@ export function useRoomListItemViewModel(room: Room): RoomListItemViewState {
         showHoverMenu,
         openRoom,
         a11yLabel,
+        isBold,
     };
 }
 

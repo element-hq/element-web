@@ -48,6 +48,7 @@ export function RoomListItemView({ room, isSelected, ...props }: RoomListItemVie
                 mx_RoomListItemView_notification_decoration: isNotificationDecorationVisible,
                 mx_RoomListItemView_menu_open: showHoverDecoration,
                 mx_RoomListItemView_selected: isSelected,
+                mx_RoomListItemView_bold: vm.isBold,
             })}
             type="button"
             aria-selected={isSelected}
@@ -69,7 +70,9 @@ export function RoomListItemView({ room, isSelected, ...props }: RoomListItemVie
                     justify="space-between"
                 >
                     {/* We truncate the room name when too long. Title here is to show the full name on hover */}
-                    <span title={room.name}>{room.name}</span>
+                    <span className="mx_RoomListItemView_roomName" title={room.name}>
+                        {room.name}
+                    </span>
                     {showHoverDecoration ? (
                         <RoomListItemMenuView
                             room={room}
