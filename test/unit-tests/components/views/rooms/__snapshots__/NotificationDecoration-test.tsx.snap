@@ -1,0 +1,137 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<NotificationDecoration /> should render the activity decoration 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_Flex"
+    data-testid="notification-decoration"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
+  >
+    <div
+      class="_unread_1k06b_8"
+    >
+      <div />
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<NotificationDecoration /> should render the invitation decoration 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_Flex"
+    data-testid="notification-decoration"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
+  >
+    <span
+      class="_unread-counter_9mg0k_8"
+    >
+      1
+    </span>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<NotificationDecoration /> should render the mention decoration 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_Flex"
+    data-testid="notification-decoration"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
+  >
+    <svg
+      fill="var(--cpd-color-icon-accent-primary)"
+      height="20px"
+      viewBox="0 0 24 24"
+      width="20px"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M12 4a8 8 0 1 0 0 16 1 1 0 1 1 0 2C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10v1.5a3.5 3.5 0 0 1-6.396 1.966A5 5 0 1 1 17 12v1.5a1.5 1.5 0 0 0 3 0V12a8 8 0 0 0-8-8m3 8a3 3 0 1 0-6 0 3 3 0 0 0 6 0"
+      />
+    </svg>
+    <span
+      class="_unread-counter_9mg0k_8"
+    >
+      1
+    </span>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<NotificationDecoration /> should render the muted decoration 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_Flex"
+    data-testid="notification-decoration"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
+  >
+    <svg
+      fill="var(--cpd-color-icon-tertiary)"
+      height="20px"
+      viewBox="0 0 24 24"
+      width="20px"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="m4.917 2.083 17 17a1 1 0 0 1-1.414 1.414L19.006 19H4.414c-.89 0-1.337-1.077-.707-1.707L5 16v-6s0-2.034 1.096-3.91L3.504 3.498a1 1 0 0 1 1.414-1.414M19 13.35 9.136 3.484C9.93 3.181 10.874 3 12 3c7 0 7 7 7 7z"
+      />
+      <path
+        d="M10 20h4a2 2 0 0 1-4 0"
+      />
+    </svg>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<NotificationDecoration /> should render the notification decoration 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_Flex"
+    data-testid="notification-decoration"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
+  >
+    <span
+      class="_unread-counter_9mg0k_8"
+    >
+      1
+    </span>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<NotificationDecoration /> should render the notification decoration without count 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_Flex"
+    data-testid="notification-decoration"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
+  >
+    <div
+      class="_unread-counter_9mg0k_8"
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<NotificationDecoration /> should render the unset message decoration 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_Flex"
+    data-testid="notification-decoration"
+    style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
+  >
+    <svg
+      fill="var(--cpd-color-icon-critical-primary)"
+      height="20px"
+      viewBox="0 0 24 24"
+      width="20px"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M12 17q.424 0 .713-.288A.97.97 0 0 0 13 16a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 15a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 16q0 .424.287.712.288.288.713.288m0-4q.424 0 .713-.287A.97.97 0 0 0 13 12V8a.97.97 0 0 0-.287-.713A.97.97 0 0 0 12 7a.97.97 0 0 0-.713.287A.97.97 0 0 0 11 8v4q0 .424.287.713.288.287.713.287m0 9a9.7 9.7 0 0 1-3.9-.788 10.1 10.1 0 0 1-3.175-2.137q-1.35-1.35-2.137-3.175A9.7 9.7 0 0 1 2 12q0-2.075.788-3.9a10.1 10.1 0 0 1 2.137-3.175q1.35-1.35 3.175-2.137A9.7 9.7 0 0 1 12 2q2.075 0 3.9.788a10.1 10.1 0 0 1 3.175 2.137q1.35 1.35 2.137 3.175A9.7 9.7 0 0 1 22 12a9.7 9.7 0 0 1-.788 3.9 10.1 10.1 0 0 1-2.137 3.175q-1.35 1.35-3.175 2.137A9.7 9.7 0 0 1 12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4 6.325 6.325 4 12t2.325 5.675T12 20"
+      />
+    </svg>
+  </div>
+</DocumentFragment>
+`;

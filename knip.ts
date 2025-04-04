@@ -40,6 +40,8 @@ export default {
         // Used by webpack
         "process",
         "util",
+        // Embedded into webapp
+        "@element-hq/element-call-embedded",
     ],
     ignoreBinaries: [
         // Used in scripts & workflows

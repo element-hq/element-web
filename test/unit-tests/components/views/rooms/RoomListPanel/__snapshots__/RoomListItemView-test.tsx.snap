@@ -5,7 +5,7 @@ exports[`<RoomListItemView /> should be selected if isSelected=true 1`] = `
   <button
     aria-label="Open room room1"
     aria-selected="true"
-    class="mx_RoomListItemView mx_RoomListItemView_selected"
+    class="mx_RoomListItemView mx_RoomListItemView_empty mx_RoomListItemView_selected"
     type="button"
   >
     <div
@@ -40,6 +40,7 @@ exports[`<RoomListItemView /> should be selected if isSelected=true 1`] = `
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
       >
         <span
+          class="mx_RoomListItemView_roomName"
           title="room1"
         >
           room1
@@ -55,7 +56,7 @@ exports[`<RoomListItemView /> should render a room item 1`] = `
   <button
     aria-label="Open room room1"
     aria-selected="false"
-    class="mx_RoomListItemView"
+    class="mx_RoomListItemView mx_RoomListItemView_empty"
     type="button"
   >
     <div
@@ -90,6 +91,7 @@ exports[`<RoomListItemView /> should render a room item 1`] = `
         style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: space-between; --mx-flex-gap: var(--cpd-space-3x); --mx-flex-wrap: nowrap;"
       >
         <span
+          class="mx_RoomListItemView_roomName"
           title="room1"
         >
           room1

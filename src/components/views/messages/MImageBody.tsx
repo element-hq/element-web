@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type ComponentProps, createRef, type ReactNode } from "react";
+import React, { type JSX, type ComponentProps, createRef, type ReactNode } from "react";
 import { Blurhash } from "react-blurhash";
 import classNames from "classnames";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
@@ -179,7 +179,6 @@ export class MImageBodyInner extends React.Component<IProps, IState> {
 
     private onImageLoad = (): void => {
         this.clearBlurhashTimeout();
-        this.props.onHeightChanged?.();
 
         let loadedImageDimensions: IState["loadedImageDimensions"];
 

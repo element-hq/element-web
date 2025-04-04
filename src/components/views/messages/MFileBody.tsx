@@ -105,8 +105,8 @@ export default class MFileBody extends React.Component<IProps, IState> {
     declare public context: React.ContextType<typeof RoomContext>;
 
     public state: IState = {};
-    private iframe: React.RefObject<HTMLIFrameElement> = createRef();
-    private dummyLink: React.RefObject<HTMLAnchorElement> = createRef();
+    private iframe = createRef<HTMLIFrameElement>();
+    private dummyLink = createRef<HTMLAnchorElement>();
     private userDidClick = false;
     private fileDownloader: FileDownloader = new FileDownloader(() => this.iframe.current);
 
@@ -120,7 +120,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
     }
 
     private get fileName(): string {
-        return this.content.body && this.content.body.length > 0 ? this.content.body : _t("common|attachment");
+        return this.props.mediaEventHelper?.fileName || _t("common|attachment");
     }
 
     private get linkText(): string {
@@ -140,12 +140,6 @@ export default class MFileBody extends React.Component<IProps, IState> {
                 textContent: text,
             },
         });
-    }
-
-    public componentDidUpdate(prevProps: IProps, prevState: IState): void {
-        if (this.props.onHeightChanged && !prevState.decryptedBlob && this.state.decryptedBlob) {
-            this.props.onHeightChanged();
-        }
     }
 
     private decryptFile = async (): Promise<void> => {

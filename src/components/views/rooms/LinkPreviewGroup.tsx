@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { useContext, useEffect } from "react";
+import React, { type JSX, useContext } from "react";
 import { type MatrixEvent, MatrixError, type IPreviewUrlResponse, type MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
@@ -24,10 +24,9 @@ interface IProps {
     links: string[]; // the URLs to be previewed
     mxEvent: MatrixEvent; // the Event associated with the preview
     onCancelClick(): void; // called when the preview's cancel ('hide') button is clicked
-    onHeightChanged?(): void; // called when the preview's contents has loaded
 }
 
-const LinkPreviewGroup: React.FC<IProps> = ({ links, mxEvent, onCancelClick, onHeightChanged }) => {
+const LinkPreviewGroup: React.FC<IProps> = ({ links, mxEvent, onCancelClick }) => {
     const cli = useContext(MatrixClientContext);
     const [expanded, toggleExpanded] = useStateToggle();
 
@@ -39,10 +38,6 @@ const LinkPreviewGroup: React.FC<IProps> = ({ links, mxEvent, onCancelClick, onH
         [links, ts],
         [],
     );
-
-    useEffect(() => {
-        onHeightChanged?.();
-    }, [onHeightChanged, expanded, previews]);
 
     const showPreviews = expanded ? previews : previews.slice(0, INITIAL_NUM_PREVIEWS);
 

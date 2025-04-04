@@ -156,7 +156,6 @@ class MVideoBodyInner extends React.PureComponent<IProps, IState> {
                         decryptedThumbnailUrl: thumbnailUrl,
                         decryptedBlob: await this.props.mediaEventHelper.sourceBlob.value,
                     });
-                    this.props.onHeightChanged?.();
                 } else {
                     logger.log("NOT preloading video");
                     const content = this.props.mxEvent.getContent<MediaEventContent>();
@@ -235,7 +234,6 @@ class MVideoBodyInner extends React.PureComponent<IProps, IState> {
                 this.videoRef.current.play();
             },
         );
-        this.props.onHeightChanged?.();
     };
 
     protected get showFileBody(): boolean {

@@ -108,6 +108,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                                     // Subtract the height of MemberlistHeaderView so that the parent div does not overflow.
                                     height={height - 113}
                                     width={width}
+                                    overscanRowCount={15}
                                 />
                             )}
                         </AutoSizer>

@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type SyntheticEvent } from "react";
+import React, { type JSX, type SyntheticEvent } from "react";
 import classNames from "classnames";
 import { type MatrixEvent, MatrixEventEvent, type Relations, RelationsEvent } from "matrix-js-sdk/src/matrix";
 import { uniqBy } from "lodash";
@@ -127,7 +127,6 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
     };
 
     private onReactionsChange = (): void => {
-        // TODO: Call `onHeightChanged` as needed
         this.setState({
             myReactions: this.getMyReactions(),
         });

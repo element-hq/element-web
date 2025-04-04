@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { createRef, type ReactNode, type SyntheticEvent } from "react";
+import React, { type JSX, createRef, type ReactNode, type SyntheticEvent } from "react";
 import classNames from "classnames";
 import { RoomMember, type Room, MatrixError, EventType } from "matrix-js-sdk/src/matrix";
 import { KnownMembership } from "matrix-js-sdk/src/types";
@@ -343,7 +343,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
     private debounceTimer: number | null = null; // actually number because we're in the browser
     private editorRef = createRef<HTMLInputElement>();
-    private numberEntryFieldRef: React.RefObject<Field> = createRef();
+    private numberEntryFieldRef = createRef<Field>();
     private unmounted = false;
     private encryptionByDefault = false;
     private profilesStore: UserProfilesStore;

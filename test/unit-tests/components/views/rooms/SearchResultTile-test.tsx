@@ -10,7 +10,7 @@ import React from "react";
 import { MatrixEvent, Room, EventType } from "matrix-js-sdk/src/matrix";
 import { render, type RenderResult } from "jest-matrix-react";
 
-import { stubClient } from "../../../../test-utils";
+import { stubClient, withClientContextRenderOptions } from "../../../../test-utils";
 import SearchResultTile from "../../../../../src/components/views/rooms/SearchResultTile";
 import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
 
@@ -28,7 +28,10 @@ describe("SearchResultTile", () => {
     });
 
     function renderComponent(props: Partial<Props>): RenderResult {
-        return render(<SearchResultTile timeline={[]} ourEventsIndexes={[1]} {...props} />);
+        return render(
+            <SearchResultTile timeline={[]} ourEventsIndexes={[1]} {...props} />,
+            withClientContextRenderOptions(MatrixClientPeg.safeGet()),
+        );
     }
 
     it("Sets up appropriate callEventGrouper for m.call. events", () => {

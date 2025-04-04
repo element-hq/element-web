@@ -239,7 +239,9 @@ describe("RoomListViewModel", () => {
                 expect(vm.current.primaryFilters.find((f) => f.name === primaryFilterName)).toBeUndefined();
             });
         });
+    });
 
+    describe("Sorting", () => {
         it("should change sort order", () => {
             mockAndCreateRooms();
             const { result: vm } = renderHook(() => useRoomListViewModel());

@@ -18,26 +18,33 @@ import {
     type RoomListItemViewState,
     useRoomListItemViewModel,
 } from "../../../../../../src/components/viewmodels/roomlist/RoomListItemViewModel";
+import { RoomNotificationState } from "../../../../../../src/stores/notifications/RoomNotificationState";
 
 jest.mock("../../../../../../src/components/viewmodels/roomlist/RoomListItemViewModel", () => ({
     useRoomListItemViewModel: jest.fn(),
 }));
 
 describe("<RoomListItemView />", () => {
-    const defaultValue: RoomListItemViewState = {
-        openRoom: jest.fn(),
-        showHoverMenu: false,
-    };
+    let defaultValue: RoomListItemViewState;
     let matrixClient: MatrixClient;
     let room: Room;
 
     beforeEach(() => {
-        mocked(useRoomListItemViewModel).mockReturnValue(defaultValue);
         matrixClient = stubClient();
         room = mkRoom(matrixClient, "room1");
 
         DMRoomMap.makeShared(matrixClient);
         jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(null);
+
+        defaultValue = {
+            openRoom: jest.fn(),
+            showHoverMenu: false,
+            notificationState: new RoomNotificationState(room, false),
+            a11yLabel: "Open room room1",
+            isBold: false,
+        };
+
+        mocked(useRoomListItemViewModel).mockReturnValue(defaultValue);
     });
 
     test("should render a room item", () => {
