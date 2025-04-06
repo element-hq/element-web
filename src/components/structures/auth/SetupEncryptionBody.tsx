@@ -19,6 +19,7 @@ import { SetupEncryptionStore, Phase } from "../../../stores/SetupEncryptionStor
 import EncryptionPanel from "../../views/right_panel/EncryptionPanel";
 import AccessibleButton, { type ButtonEvent } from "../../views/elements/AccessibleButton";
 import Spinner from "../../views/elements/Spinner";
+import { ResetIdentityDialog } from "../../views/settings/encryption/ResetIdentityDialog";
 
 function keyHasPassphrase(keyInfo: SecretStorageKeyDescription): boolean {
     return Boolean(keyInfo.passphrase && keyInfo.passphrase.salt && keyInfo.passphrase.iterations);
@@ -114,12 +115,18 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
         ev.preventDefault();
         const store = SetupEncryptionStore.sharedInstance();
         store.reset();
-    };
-
-    private onResetConfirmClick = (): void => {
-        this.props.onFinished();
-        const store = SetupEncryptionStore.sharedInstance();
-        store.resetConfirm();
+        Modal.createDialog(ResetIdentityDialog, {
+            onResetFinished: () => {
+                close();
+                this.onDoneClick();
+            },
+            onCancelClick: () => {
+                close();
+                this.onResetBackClick();
+            },
+            variant: "forgot",
+            title: _t("encryption|verification|reset_confirm_title"),
+        });
     };
 
     private onResetBackClick = (): void => {
@@ -157,7 +164,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                         <p>{_t("encryption|verification|no_key_or_device")}</p>
 
                         <div className="mx_CompleteSecurity_actionRow">
-                            <AccessibleButton kind="primary" onClick={this.onResetConfirmClick}>
+                            <AccessibleButton kind="primary" onClick={this.onResetClick}>
                                 {_t("encryption|verification|reset_proceed_prompt")}
                             </AccessibleButton>
                         </div>
@@ -246,23 +253,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                     </div>
                 </div>
             );
-        } else if (phase === Phase.ConfirmReset) {
-            return (
-                <div>
-                    <p>{_t("encryption|verification|verify_reset_warning_1")}</p>
-                    <p>{_t("encryption|verification|verify_reset_warning_2")}</p>
-
-                    <div className="mx_CompleteSecurity_actionRow">
-                        <AccessibleButton kind="danger_outline" onClick={this.onResetConfirmClick}>
-                            {_t("encryption|verification|reset_proceed_prompt")}
-                        </AccessibleButton>
-                        <AccessibleButton kind="primary" onClick={this.onResetBackClick}>
-                            {_t("action|go_back")}
-                        </AccessibleButton>
-                    </div>
-                </div>
-            );
-        } else if (phase === Phase.Busy || phase === Phase.Loading) {
+        } else if (phase === Phase.ConfirmReset || phase === Phase.Busy || phase === Phase.Loading) {
             return <Spinner />;
         } else {
             logger.log(`SetupEncryptionBody: Unknown phase ${phase}`);
