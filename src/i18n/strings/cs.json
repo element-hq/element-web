@@ -1829,10 +1829,7 @@
         "toxic_behaviour": "Nevhodné chování"
     },
     "report_room": {
-        "description": "Nahlaste tuto místnost správci domovského serveru. Tím se odešle jedinečné ID místnosti, ale pokud jsou zprávy zašifrovány, správce je nebude moci číst ani zobrazit sdílené soubory.",
-        "reason_placeholder": " Důvod nahlášení...",
-        "sent": "Vaše hlášení bylo odesláno.",
-        "title": "Nahlášení místnosti"
+        "description": "Nahlaste tuto místnost správci domovského serveru. Tím se odešle jedinečné ID místnosti, ale pokud jsou zprávy zašifrovány, správce je nebude moci číst ani zobrazit sdílené soubory."
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Nepovedlo se rozšifrovat %(failedCount)s sezení!",

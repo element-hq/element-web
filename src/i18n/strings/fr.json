@@ -846,6 +846,9 @@
         "setting_colon": "Paramètre :",
         "setting_definition": "Définition du paramètre :",
         "setting_id": "Identifiant de paramètre",
+        "settings": {
+            "elementCallUrl": "Lien d'Element Call"
+        },
         "settings_explorer": "Explorateur de paramètres",
         "show_hidden_events": "Afficher les évènements cachés dans le fil de discussion",
         "spaces": {
@@ -1674,6 +1677,7 @@
         "class_global": "Global",
         "class_other": "Autre",
         "default": "Par défaut",
+        "default_settings": "Correspondre aux paramètres par défaut",
         "email_pusher_app_display_name": "Notifications par courriel",
         "enable_prompt_toast_description": "Activer les notifications sur le bureau",
         "enable_prompt_toast_title": "Notifications",
@@ -1692,7 +1696,8 @@
         "mentions_and_keywords_description": "Recevoir des notifications uniquement pour les mentions et mot-clés comme défini dans vos <a>paramètres</a>",
         "mentions_keywords": "Mentions et mots-clés",
         "message_didnt_send": "Le message n’a pas été envoyé. Cliquer pour plus d’info.",
-        "mute_description": "Vous n’aurez aucune notification"
+        "mute_description": "Vous n’aurez aucune notification",
+        "mute_room": "Rendre le salon muet"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s demande une vérification"
@@ -1822,10 +1827,8 @@
         "toxic_behaviour": "Comportement toxique"
     },
     "report_room": {
-        "description": "Signalez cette salle à l'administrateur de votre serveur d'accueil. Cela enverra l'identifiant unique du salon, mais si les messages sont chiffrés, l'administrateur ne pourra pas les lire ni consulter les fichiers partagés.",
-        "reason_placeholder": " Motif du signalement...",
-        "sent": "Votre signalement a été envoyé.",
-        "title": "Signaler le salon"
+        "description": "Signalez ce salon à votre fournisseur de compte. Si les messages sont chiffrés, votre administrateur ne pourra pas les lire.",
+        "reason_label": "Décrivez la raison"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Le déchiffrement de %(failedCount)s sessions a échoué !",

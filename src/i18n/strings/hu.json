@@ -1814,10 +1814,7 @@
         "toxic_behaviour": "Mérgező viselkedés"
     },
     "report_room": {
-        "description": "A szoba jelentése a Matrix-kiszolgáló rendszergazdájának. Ez elküldi a szoba egyedi azonosítóját, de ha az üzenetek titkosítva vannak, a rendszergazda nem fogja tudni elolvasni azokat, vagy megtekinteni a megosztott fájlokat.",
-        "reason_placeholder": " A jelentés oka…",
-        "sent": "A jelentés elküldve.",
-        "title": "Szoba jelentése"
+        "description": "A szoba jelentése a Matrix-kiszolgáló rendszergazdájának. Ez elküldi a szoba egyedi azonosítóját, de ha az üzenetek titkosítva vannak, a rendszergazda nem fogja tudni elolvasni azokat, vagy megtekinteni a megosztott fájlokat."
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "%(failedCount)s munkamenetet nem lehet visszafejteni!",
