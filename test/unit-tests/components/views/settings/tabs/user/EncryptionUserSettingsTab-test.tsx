@@ -151,7 +151,7 @@ describe("<EncryptionUserSettingsTab />", () => {
         expect(asFragment()).toMatchSnapshot();
     });
 
-    it("should enter reset flow when showResetIdentity is set", async () => {
+    it("should enter reset flow when initialState is set", async () => {
         jest.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("1");
 
         renderComponent({ initialState: "reset_identity_forgot" });

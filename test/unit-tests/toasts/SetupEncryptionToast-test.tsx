@@ -57,7 +57,7 @@ describe("SetupEncryptionToast", () => {
         expect(dis.dispatch).toHaveBeenCalledWith({
             action: "view_user_settings",
             initialTabId: "USER_ENCRYPTION_TAB",
-            props: { showResetIdentity: true },
+            props: { initialEncryptionState: "reset_identity_forgot" },
         });
     });
 });

@@ -165,7 +165,7 @@ export const showToast = (kind: Kind): void => {
             const payload: OpenToTabPayload = {
                 action: Action.ViewUserSettings,
                 initialTabId: UserTab.Encryption,
-                props: { showResetIdentity: true },
+                props: { initialEncryptionState: "reset_identity_forgot" },
             };
             defaultDispatcher.dispatch(payload);
         } else {
