@@ -35,10 +35,15 @@ interface ResetIdentityPanelProps {
      * "compromised" is shown when the user chooses 'reset' explicitly in settings, usually because they believe their
      * identity has been compromised.
      *
+     * "sync_failed" is shown when the user tried to recover their identity but the process failed, probably because
+     * the required information is missing from recovery.
+     *
      * "forgot" is shown when the user has just forgotten their passphrase.
      */
-    variant: "compromised" | "forgot";
+    variant: ResetIdentityPanelVariant;
 }
+
+export type ResetIdentityPanelVariant = "compromised" | "forgot" | "sync_failed";
 
 /**
  * The panel for resetting the identity of the current user.
@@ -58,15 +63,7 @@ export function ResetIdentityPanel({ onCancelClick, onFinish, variant }: ResetId
                 pages={[_t("settings|encryption|title"), _t("settings|encryption|advanced|breadcrumb_page")]}
                 onPageClick={onCancelClick}
             />
-            <EncryptionCard
-                Icon={ErrorIcon}
-                destructive={true}
-                title={
-                    variant === "forgot"
-                        ? _t("settings|encryption|advanced|breadcrumb_title_forgot")
-                        : _t("settings|encryption|advanced|breadcrumb_title")
-                }
-            >
+            <EncryptionCard Icon={ErrorIcon} destructive={true} title={titleForVariant(variant)}>
                 <EncryptionCardEmphasisedContent>
                     <VisualList>
                         <VisualListItem Icon={CheckIcon} success={true}>
@@ -116,4 +113,17 @@ export function ResetIdentityPanel({ onCancelClick, onFinish, variant }: ResetId
             </EncryptionCard>
         </>
     );
+}
+
+function titleForVariant(variant: ResetIdentityPanelVariant): string {
+    switch (variant) {
+        case "compromised":
+            return _t("settings|encryption|advanced|breadcrumb_title");
+        case "sync_failed":
+            return _t("settings|encryption|advanced|breadcrumb_title_sync_failed");
+
+        default:
+        case "forgot":
+            return _t("settings|encryption|advanced|breadcrumb_title_forgot");
+    }
 }
