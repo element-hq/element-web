@@ -151,14 +151,26 @@ describe("<EncryptionUserSettingsTab />", () => {
         expect(asFragment()).toMatchSnapshot();
     });
 
-    it("should enter reset flow when showResetIdentity is set", async () => {
+    it("should enter 'Forgot recovery' flow when initialState is set to 'reset_identity_forgot'", async () => {
         jest.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("1");
 
         renderComponent({ initialState: "reset_identity_forgot" });
 
-        await expect(
+        expect(
             await screen.findByRole("heading", {
                 name: "Forgot your recovery key? You’ll need to reset your identity.",
+            }),
+        ).toBeVisible();
+    });
+
+    it("should do 'Failed to sync' reset flow when initialState is set to 'reset_identity_sync_failed'", async () => {
+        jest.spyOn(matrixClient.getCrypto()!, "getActiveSessionBackupVersion").mockResolvedValue("1");
+
+        renderComponent({ initialState: "reset_identity_sync_failed" });
+
+        expect(
+            await screen.findByRole("heading", {
+                name: "Failed to sync key storage. You need to reset your identity.",
             }),
         ).toBeVisible();
     });

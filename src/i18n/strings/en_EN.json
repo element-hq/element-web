@@ -2529,6 +2529,7 @@
                 "breadcrumb_third_description": "You will need to verify all your existing devices and contacts again",
                 "breadcrumb_title": "Are you sure you want to reset your identity?",
                 "breadcrumb_title_forgot": "Forgot your recovery key? You’ll need to reset your identity.",
+                "breadcrumb_title_sync_failed": "Failed to sync key storage. You need to reset your identity.",
                 "breadcrumb_warning": "Only do this if you believe your account has been compromised.",
                 "details_title": "Encryption details",
                 "do_not_close_warning": "Do not close this window until the reset is finished",
