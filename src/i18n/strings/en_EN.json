@@ -2736,9 +2736,9 @@
         },
         "media_preview": {
             "hide_avatars": "Hide avatars of room and inviter",
-            "media_preview_label": "Show media in timeline",
-            "media_preview_description": "A hidden media can always be shown by tapping on it",
             "hide_media": "Always hide",
+            "media_preview_description": "A hidden media can always be shown by tapping on it",
+            "media_preview_label": "Show media in timeline",
             "show_in_private": "In private rooms",
             "show_media": "Always show"
         },
