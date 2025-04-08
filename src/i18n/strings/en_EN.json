@@ -55,6 +55,8 @@
         "create_a_room": "Create a room",
         "create_account": "Create Account",
         "decline": "Decline",
+        "decline_and_block": "Decline and block",
+        "decline_invite": "Decline invite",
         "delete": "Delete",
         "deny": "Deny",
         "disable": "Disable",
@@ -107,7 +109,6 @@
         "react": "React",
         "refresh": "Refresh",
         "register": "Register",
-        "reject": "Reject",
         "reload": "Reload",
         "remove": "Remove",
         "rename": "Rename",
@@ -745,6 +746,13 @@
         "default_cover_photo": "The <photo>default cover photo</photo> is © <author>Jesús Roncero</author> used under the terms of <terms>CC-BY-SA 4.0</terms>.",
         "twemoji": "The <twemoji>Twemoji</twemoji> emoji art is © <author>Twitter, Inc and other contributors</author> used under the terms of <terms>CC-BY 4.0</terms>.",
         "twemoji_colr": "The <colr>twemoji-colr</colr> font is © <author>Mozilla Foundation</author> used under the terms of <terms>Apache 2.0</terms>."
+    },
+    "decline_invitation_dialog": {
+        "confirm": "Are you sure you want to decline the invitation to join \"%(roomName)s\"?",
+        "ignore_user_help": "You will not see any messages or room invites from this user.",
+        "reason_description": "Describe the reason for reporting the room.",
+        "report_room_description": "Report this room to your account provider.",
+        "title": "Decline invitation"
     },
     "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "devtools": {
@@ -1799,11 +1807,6 @@
         "ongoing": "Removing…",
         "reason_label": "Reason (optional)"
     },
-    "reject_invitation_dialog": {
-        "confirmation": "Are you sure you want to reject the invitation?",
-        "failed": "Failed to reject invitation",
-        "title": "Reject invitation"
-    },
     "report_content": {
         "description": "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.",
         "disagree": "Disagree",
@@ -2013,7 +2016,6 @@
             "you_created": "You created this room."
         },
         "invite_email_mismatch_suggestion": "Share this email in Settings to receive invites directly in %(brand)s.",
-        "invite_reject_ignore": "Reject & Ignore user",
         "invite_sent_to_email": "This invite was sent to %(email)s",
         "invite_sent_to_email_room": "This invite to %(roomName)s was sent to %(email)s",
         "invite_subtitle": "Invited by <userName/>",

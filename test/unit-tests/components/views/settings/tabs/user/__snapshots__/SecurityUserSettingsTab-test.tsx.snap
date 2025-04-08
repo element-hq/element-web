@@ -1,5 +1,31 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`<SecurityUserSettingsTab /> renders ignored users 1`] = `
+<ul
+  aria-label="Ignored users"
+  class="mx_SecurityUserSettingsTab_ignoredUsers"
+>
+  <li
+    aria-label="@bob:example.org"
+    class="mx_SecurityUserSettingsTab_ignoredUser"
+  >
+    <div
+      aria-describedby="mx_SecurityUserSettingsTab_ignoredUser_@bob:example.org"
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_sm"
+      role="button"
+      tabindex="0"
+    >
+      Unignore
+    </div>
+    <span
+      id="mx_SecurityUserSettingsTab_ignoredUser_@bob:example.org"
+    >
+      @bob:example.org
+    </span>
+  </li>
+</ul>
+`;
+
 exports[`<SecurityUserSettingsTab /> renders security section 1`] = `
 <div>
   <div

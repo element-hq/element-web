@@ -67,7 +67,7 @@ export class IgnoredUser extends React.Component<IIgnoredUserProps> {
     public render(): React.ReactNode {
         const id = `mx_SecurityUserSettingsTab_ignoredUser_${this.props.userId}`;
         return (
-            <div className="mx_SecurityUserSettingsTab_ignoredUser">
+            <li className="mx_SecurityUserSettingsTab_ignoredUser" aria-label={this.props.userId}>
                 <AccessibleButton
                     onClick={this.onUnignoreClicked}
                     kind="primary_sm"
@@ -77,7 +77,7 @@ export class IgnoredUser extends React.Component<IIgnoredUserProps> {
                     {_t("action|unignore")}
                 </AccessibleButton>
                 <span id={id}>{this.props.userId}</span>
-            </div>
+            </li>
         );
     }
 }
@@ -234,23 +234,34 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
 
     private renderIgnoredUsers(): JSX.Element {
         const { waitingUnignored, ignoredUserIds } = this.state;
-
-        const userIds = !ignoredUserIds?.length
-            ? _t("settings|security|ignore_users_empty")
-            : ignoredUserIds.map((u) => {
-                  return (
-                      <IgnoredUser
-                          userId={u}
-                          onUnignored={this.onUserUnignored}
-                          key={u}
-                          inProgress={waitingUnignored.includes(u)}
-                      />
-                  );
-              });
+        if (!ignoredUserIds?.length) {
+            return (
+                <SettingsSubsection heading={_t("settings|security|ignore_users_section")}>
+                    <SettingsSubsectionText>{_t("settings|security|ignore_users_empty")}</SettingsSubsectionText>
+                </SettingsSubsection>
+            );
+        }
 
         return (
-            <SettingsSubsection heading={_t("settings|security|ignore_users_section")}>
-                <SettingsSubsectionText>{userIds}</SettingsSubsectionText>
+            <SettingsSubsection
+                id="mx_SecurityUserSettingsTab_ignoredUsersHeading"
+                heading={_t("settings|security|ignore_users_section")}
+            >
+                <SettingsSubsectionText>
+                    <ul
+                        aria-label={_t("settings|security|ignore_users_section")}
+                        className="mx_SecurityUserSettingsTab_ignoredUsers"
+                    >
+                        {ignoredUserIds.map((u) => (
+                            <IgnoredUser
+                                userId={u}
+                                onUnignored={this.onUserUnignored}
+                                key={u}
+                                inProgress={waitingUnignored.includes(u)}
+                            />
+                        ))}
+                    </ul>
+                </SettingsSubsectionText>
             </SettingsSubsection>
         );
     }
