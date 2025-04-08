@@ -12,7 +12,7 @@
             "other": "%(count)s unread messages including mentions."
         },
         "recent_rooms": "Recent rooms",
-        "room_messsage_not_sent": "Open room %(roomName)s with an unset message.",
+        "room_messsage_not_sent": "Open room %(roomName)s with an unsent message.",
         "room_n_unread_invite": "Open room %(roomName)s invitation.",
         "room_n_unread_messages": {
             "one": "Open room %(roomName)s with 1 unread message.",

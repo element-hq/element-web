@@ -1690,6 +1690,7 @@
         "class_global": "Globalne",
         "class_other": "Inne",
         "default": "Domyślne",
+        "default_settings": "Ustawienia domyślne",
         "email_pusher_app_display_name": "Powiadomienia e-mail",
         "enable_prompt_toast_description": "Włącz powiadomienia na pulpicie",
         "enable_prompt_toast_title": "Powiadomienia",
@@ -1708,7 +1709,8 @@
         "mentions_and_keywords_description": "Otrzymuj powiadomienia tylko z wzmiankami i słowami kluczowymi zgodnie z Twoimi <a>ustawieniami</a>",
         "mentions_keywords": "Wzmianki i słowa kluczowe",
         "message_didnt_send": "Nie wysłano wiadomości. Kliknij po więcej informacji.",
-        "mute_description": "Nie otrzymasz żadnych powiadomień"
+        "mute_description": "Nie otrzymasz żadnych powiadomień",
+        "mute_room": "Wycisz pokój"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s prosi o weryfikację"
@@ -1838,10 +1840,8 @@
         "toxic_behaviour": "Toksyczne zachowanie"
     },
     "report_room": {
-        "description": "Zgłoś ten pokój do administratora serwera domowego. Unikalne ID pokoju zostanie wysłane, lecz administrator nie będzie w mógł przeczytać żadnych wiadomości, ani plików szyfrowanych.",
-        "reason_placeholder": " Powód zgłoszenia...",
-        "sent": "Twój raport został wysłany.",
-        "title": "Zgłoś pokój"
+        "description": "Zgłoś ten pokój swojemu dostawcy konta. Jeśli wiadomości są zaszyfrowane, administrator nie będzie mógł ich odczytać.",
+        "reason_label": "Opisz powód"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Nie udało się odszyfrować %(failedCount)s sesji!",

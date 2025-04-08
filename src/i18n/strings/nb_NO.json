@@ -12,7 +12,16 @@
             "other": "%(count)s uleste meldinger, inkludert omtaler."
         },
         "recent_rooms": "Nylige rom",
+        "room_messsage_not_sent": "Åpent rom %(roomName)s med en usendt melding.",
         "room_n_unread_invite": "Invitasjon til det åpne rommet %(roomName)s.",
+        "room_n_unread_messages": {
+            "one": "Åpne room %(roomName)s med 1 ulest message.",
+            "other": "Åpne room %(roomName)s med %(count)s uleste messages."
+        },
+        "room_n_unread_messages_mentions": {
+            "one": "Åpne room %(roomName)s med 1 ulest omtale.",
+            "other": "Åpne room %(roomName)s med %(count)s uleste meldinger inkludert omtaler."
+        },
         "room_name": "Rom %(name)s",
         "room_status_bar": "Statuslinje for rommet",
         "seek_bar_label": "Søkelinje for lyd",
@@ -1668,6 +1677,7 @@
         "class_global": "Globalt",
         "class_other": "Andre",
         "default": "Standard",
+        "default_settings": "Match standardinnstillingene",
         "email_pusher_app_display_name": "E-postvarsler",
         "enable_prompt_toast_description": "Aktiver skrivebordsvarsler",
         "enable_prompt_toast_title": "Varsler",
@@ -1686,7 +1696,8 @@
         "mentions_and_keywords_description": "Bli varslet bare med omtaler og nøkkelord som konfigurert i <a> innstillingene dine </a>",
         "mentions_keywords": "Omtaler og nøkkelord",
         "message_didnt_send": "Meldingen ble ikke sendt. Klikk for informasjon.",
-        "mute_description": "Du vil ikke få noen varsler"
+        "mute_description": "Du vil ikke få noen varsler",
+        "mute_room": "Demp rommet"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s ber om verifisering"
@@ -1817,9 +1828,7 @@
     },
     "report_room": {
         "description": "Rapporter dette rommet til hjemmeserveradministratoren din. Dette vil sende rommets unike ID, men hvis meldinger er kryptert, vil ikke administratoren kunne lese dem eller se delte filer.",
-        "reason_placeholder": " Årsak til rapportering...",
-        "sent": "Rapporten din ble sendt.",
-        "title": "Rapporter rom"
+        "reason_label": "Beskriv årsaken"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Kunne ikke dekryptere %(failedCount)s økter!",
@@ -3782,12 +3791,12 @@
                 "other": "%(severalUsers)sendret serverens ACLer %(count)s ganger"
             },
             "unbanned": {
-                "one": "fikk opphevet forbudet",
-                "other": "fikk opphevet forbudet %(count)s ganger"
+                "one": "fikk utestengelse opphevet",
+                "other": "har fått utestengelse opphevet %(count)s ganger"
             },
             "unbanned_multiple": {
-                "one": "fikk opphevet forbudet",
-                "other": "fikk opphevet forbudet %(count)s ganger"
+                "one": "har fått utestengelse opphevet",
+                "other": "fått utestengelse opphevet %(count)s ganger"
             }
         },
         "thread_info_basic": "Fra en tråd",

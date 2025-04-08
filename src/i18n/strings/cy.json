@@ -814,6 +814,9 @@
         "setting_colon": "Gosodiad:",
         "setting_definition": "Gosod  diffiniad:",
         "setting_id": "Gosod  ID",
+        "settings": {
+            "elementCallUrl": "URL Galwad Element"
+        },
         "settings_explorer": "Archwiliwr gosodiadau",
         "show_hidden_events": "Dangos digwyddiadau cudd yn y llinell amser",
         "state_key": "Allwedd Cyflwr",
@@ -1606,6 +1609,7 @@
         "class_global": "Eang",
         "class_other": "Arall",
         "default": "Rhagosodedig",
+        "default_settings": "Cydweddu'r gosodiadau rhagosodedig",
         "email_pusher_app_display_name": "Hysbysiadau E-bost",
         "enable_prompt_toast_description": "Galluogi hysbysiadau bwrdd gwaith",
         "enable_prompt_toast_title": "Hysbysiadau",
@@ -1624,7 +1628,8 @@
         "mentions_and_keywords_description": "Dim ond gyda chyfeiriadau ac allweddeiriau fel y'u gosodwyd yn eich <a>gosodiadau</a> y cewch eich hysbysu",
         "mentions_keywords": "Crybwyll ac allweddeiriau",
         "message_didnt_send": "Heb anfon y neges. Cliciwch am wybodaeth.",
-        "mute_description": "Fyddwch chi ddim yn cael unrhyw hysbysiadau"
+        "mute_description": "Fyddwch chi ddim yn cael unrhyw hysbysiadau",
+        "mute_room": "Tewi'r ystafell"
     },
     "notifier": {
         "m.key.verification.request": "Mae %(matere)s yn gofyn am ddilysiad"
@@ -1746,10 +1751,7 @@
         "toxic_behaviour": "Ymddygiad Gwenwynig"
     },
     "report_room": {
-        "description": "Adroddwch ar yr ystafell hon i weinyddwr eich gweinydd cartref. Bydd hyn yn anfon ID unigryw'r ystafell, ond os yw negeseuon wedi'u hamgryptio, fydd y gweinyddwr ddim yn gallu eu darllen na gweld ffeiliau sy'n cael eu rhannu.",
-        "reason_placeholder": " Rheswm dros adrodd...",
-        "sent": "Anfonwyd eich adroddiad.",
-        "title": "Ystafell Adrodd"
+        "description": "Adroddwch ar yr ystafell hon i weinyddwr eich gweinydd cartref. Bydd hyn yn anfon ID unigryw'r ystafell, ond os yw negeseuon wedi'u hamgryptio, fydd y gweinyddwr ddim yn gallu eu darllen na gweld ffeiliau sy'n cael eu rhannu."
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Wedi methu â dadgryptio %(failedCount)s sesiwn!",
