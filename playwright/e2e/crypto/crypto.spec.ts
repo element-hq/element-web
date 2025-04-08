@@ -130,7 +130,7 @@ test.describe("Cryptography", function () {
 
         const masterKey1 = await fetchMasterKey();
 
-        // Find the Reset cryptographic identity button
+        // Find "the Reset cryptographic identity" button
         const encryptionTab = await app.settings.openUserSettings("Encryption");
         await encryptionTab.getByRole("button", { name: "Reset cryptographic identity" }).click();
 
