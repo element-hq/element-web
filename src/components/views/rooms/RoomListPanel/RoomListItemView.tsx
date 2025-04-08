@@ -39,7 +39,8 @@ export function RoomListItemView({ room, isSelected, ...props }: RoomListItemVie
     const showHoverDecoration = (isMenuOpen || isHover) && vm.showHoverMenu;
 
     const isNotificationDecorationVisible =
-        !showHoverDecoration && (vm.notificationState.hasAnyNotificationOrActivity || vm.notificationState.muted);
+        !showHoverDecoration &&
+        (vm.notificationState.hasAnyNotificationOrActivity || vm.notificationState.muted || vm.hasParticipantInCall);
 
     return (
         <button
@@ -85,7 +86,11 @@ export function RoomListItemView({ room, isSelected, ...props }: RoomListItemVie
                     ) : (
                         <>
                             {/* aria-hidden because we summarise the unread count/notification status in a11yLabel variable */}
-                            <NotificationDecoration notificationState={vm.notificationState} aria-hidden={true} />
+                            <NotificationDecoration
+                                notificationState={vm.notificationState}
+                                aria-hidden={true}
+                                hasVideoCall={vm.hasParticipantInCall}
+                            />
                         </>
                     )}
                 </Flex>
