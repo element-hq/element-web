@@ -9,8 +9,8 @@ Please see LICENSE files in the repository root for full details.
 
 import React, { type ReactNode } from "react";
 import { UNSTABLE_MSC4133_EXTENDED_PROFILES } from "matrix-js-sdk/src/matrix";
-import { MediaPreviewConfig } from "../@types/media_preview.ts";
 
+import { type MediaPreviewConfig } from "../@types/media_preview.ts";
 import { _t, _td, type TranslationKey } from "../languageHandler";
 import DeviceIsolationModeController from "./controllers/DeviceIsolationModeController.ts";
 import {

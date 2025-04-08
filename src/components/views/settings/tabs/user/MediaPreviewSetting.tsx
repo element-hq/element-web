@@ -1,8 +1,15 @@
-import React, { ChangeEventHandler } from "react";
+/*
+Copyright 2025 New Vector Ltd.
+
+SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+Please see LICENSE files in the repository root for full details.
+*/
+
+import React, { type ChangeEventHandler, useCallback } from "react";
 import { Field, HelpMessage, InlineField, Label, RadioInput, Root } from "@vector-im/compound-web";
+
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
-import { useCallback } from "react";
-import { MediaPreviewConfig, MediaPreviewValue } from "../../../../../@types/media_preview";
+import { type MediaPreviewConfig, MediaPreviewValue } from "../../../../../@types/media_preview";
 import { _t } from "../../../../../languageHandler";
 import { useSettingValue } from "../../../../../hooks/useSettings";
 import SettingsStore from "../../../../../settings/SettingsStore";
@@ -15,7 +22,7 @@ export function MediaPreviewAccountSettings() {
         (c: boolean) => {
             const newValue = {
                 ...currentMediaPreview,
-                // N.B. Switch is inverted. "Hide avatars..."
+                // Switch is inverted. "Hide avatars..."
                 invite_avatars: c ? MediaPreviewValue.Off : MediaPreviewValue.On,
             } satisfies MediaPreviewConfig;
             SettingsStore.setValue("mediaPreviewConfig", null, SettingLevel.ACCOUNT, newValue);

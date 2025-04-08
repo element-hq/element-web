@@ -24,10 +24,12 @@ import {
     mockClientMethodsDevice,
     mockClientMethodsServer,
     mockClientMethodsUser,
+    withClientContextRenderOptions,
 } from "../../../../test-utils";
 import { MediaEventHelper } from "../../../../../src/utils/MediaEventHelper";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../../src/settings/SettingLevel";
+import { MediaPreviewValue } from "../../../../../src/@types/media_preview";
 
 jest.mock("matrix-encrypt-attachment", () => ({
     decryptAttachment: jest.fn(),
@@ -42,6 +44,7 @@ describe("<MImageBody/>", () => {
         ...mockClientMethodsDevice(deviceId),
         ...mockClientMethodsCrypto(),
         getRooms: jest.fn().mockReturnValue([]),
+        getRoom: jest.fn(),
         getIgnoredUsers: jest.fn(),
         getVersions: jest.fn().mockResolvedValue({
             unstable_features: {
@@ -136,19 +139,17 @@ describe("<MImageBody/>", () => {
 
     describe("with image previews/thumbnails disabled", () => {
         beforeEach(() => {
-            act(() => {
-                SettingsStore.setValue("showImages", null, SettingLevel.DEVICE, false);
+            const origFn = SettingsStore.getValue;
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting, ...args) => {
+                if (setting === "mediaPreviewConfig") {
+                    return { invite_avatars: MediaPreviewValue.Off, media_previews: MediaPreviewValue.Off};
+                }
+                return origFn(setting, ...args);
             });
         });
 
         afterEach(() => {
             act(() => {
-                SettingsStore.setValue(
-                    "showImages",
-                    null,
-                    SettingLevel.DEVICE,
-                    SettingsStore.getDefaultValue("showImages"),
-                );
                 SettingsStore.setValue(
                     "showMediaEventIds",
                     null,
@@ -167,6 +168,7 @@ describe("<MImageBody/>", () => {
                     mxEvent={encryptedMediaEvent}
                     mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
                 />,
+                withClientContextRenderOptions(cli)
             );
 
             expect(screen.getByText("Show image")).toBeInTheDocument();
@@ -183,6 +185,7 @@ describe("<MImageBody/>", () => {
                     mxEvent={encryptedMediaEvent}
                     mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
                 />,
+                withClientContextRenderOptions(cli)
             );
 
             expect(screen.getByText("Show image")).toBeInTheDocument();

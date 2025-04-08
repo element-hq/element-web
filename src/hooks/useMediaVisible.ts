@@ -6,12 +6,12 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { useCallback, useMemo } from "react";
+import { JoinRule } from "matrix-js-sdk/src/matrix";
 
 import { SettingLevel } from "../settings/SettingLevel";
 import { useSettingValue } from "./useSettings";
 import SettingsStore from "../settings/SettingsStore";
 import { useMatrixClientContext } from "../contexts/MatrixClientContext";
-import { JoinRule } from "matrix-js-sdk/src/matrix";
 import { MediaPreviewValue } from "../@types/media_preview";
 
 const PRIVATE_JOIN_RULES: JoinRule[] = [JoinRule.Invite, JoinRule.Knock, JoinRule.Restricted];
@@ -36,18 +36,19 @@ export function useMediaVisible(eventId: string, roomId: string): [boolean, (vis
     );
 
     const roomIsPrivate = useMemo(() => {
-        const joinRule = client.getRoom(roomId)?.getJoinRule();
+        const joinRule = client?.getRoom(roomId)?.getJoinRule();
         if (PRIVATE_JOIN_RULES.includes(joinRule as JoinRule)) {
             return true;
-        } else { // All other join rules, and unknown will default to hiding.
+        } else {
+            // All other join rules, and unknown will default to hiding.
             return false;
         }
-    }, [client, roomId])
+    }, [client, roomId]);
 
-
+    const explicitEventVisiblity = eventVisibility[eventId];
     // Always prefer the explicit per-event user preference here.
-    if (eventVisibility[eventId]) {
-        return [true, setMediaVisible];
+    if (explicitEventVisiblity !== undefined) {
+        return [explicitEventVisiblity, setMediaVisible];
     } else if (mediaPreviewSetting.media_previews === MediaPreviewValue.Off) {
         return [false, setMediaVisible];
     } else if (mediaPreviewSetting.media_previews === MediaPreviewValue.On) {
@@ -59,5 +60,4 @@ export function useMediaVisible(eventId: string, roomId: string): [boolean, (vis
         console.warn("Invalid media visibility setting", mediaPreviewSetting.media_previews);
         return [false, setMediaVisible];
     }
-
 }

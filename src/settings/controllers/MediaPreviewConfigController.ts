@@ -5,11 +5,15 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ClientEvent, MatrixEvent, type MatrixClient } from "matrix-js-sdk/src/matrix";
-import { AccountDataEvents } from "matrix-js-sdk/src/types";
-import { MEDIA_PREVIEW_ACCOUNT_DATA_TYPE, MediaPreviewConfig, MediaPreviewValue } from "../../@types/media_preview.ts";
+import { ClientEvent, type MatrixEvent, type MatrixClient } from "matrix-js-sdk/src/matrix";
+import { type AccountDataEvents } from "matrix-js-sdk/src/types";
 
-import { SettingLevel } from "../SettingLevel.ts";
+import {
+    MEDIA_PREVIEW_ACCOUNT_DATA_TYPE,
+    type MediaPreviewConfig,
+    MediaPreviewValue,
+} from "../../@types/media_preview.ts";
+import { type SettingLevel } from "../SettingLevel.ts";
 import MatrixClientBackedController from "./MatrixClientBackedController.ts";
 
 /**
@@ -62,12 +66,6 @@ export default class MediaPreviewConfigController extends MatrixClientBackedCont
     public getValueOverride(level: SettingLevel, roomId: string | null): MediaPreviewConfig {
         // TODO: Use SettingLevel?
         if (roomId) {
-            console.log(
-                "MediaPreviewConfigController",
-                "getValueOverride",
-                this.getRoomValue(roomId),
-                this.globalSetting,
-            );
             // Use globals for any undefined setting
             return {
                 ...this.getRoomValue(roomId),
@@ -96,7 +94,7 @@ export default class MediaPreviewConfigController extends MatrixClientBackedCont
             });
             return true;
         }
-        await this.client.setAccountDataRaw(MEDIA_PREVIEW_ACCOUNT_DATA_TYPE, newValue);
+        await this.client.setAccountData(MEDIA_PREVIEW_ACCOUNT_DATA_TYPE, newValue);
         return true;
     }
 

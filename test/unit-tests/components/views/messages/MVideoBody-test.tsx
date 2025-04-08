@@ -7,7 +7,7 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { act } from "react";
-import { EventType, getHttpUriForMxc, type IContent, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { EventType, getHttpUriForMxc, type IContent, MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { fireEvent, render, screen, type RenderResult } from "jest-matrix-react";
 import fetchMock from "fetch-mock-jest";
 
@@ -20,11 +20,14 @@ import {
     mockClientMethodsDevice,
     mockClientMethodsServer,
     mockClientMethodsUser,
+    withClientContextRenderOptions,
 } from "../../../../test-utils";
 import MVideoBody from "../../../../../src/components/views/messages/MVideoBody";
 import type { IBodyProps } from "../../../../../src/components/views/messages/IBodyProps";
 import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
+import { MediaPreviewValue } from "../../../../../src/@types/media_preview";
+import { MockedObject } from "jest-mock";
 
 // Needed so we don't throw an error about failing to decrypt.
 jest.mock("matrix-encrypt-attachment", () => ({
@@ -36,13 +39,15 @@ describe("MVideoBody", () => {
     const deviceId = "DEADB33F";
 
     const thumbUrl = "https://server/_matrix/media/v3/download/server/encrypted-poster";
+    let cli: MockedObject<MatrixClient>;
 
     beforeEach(() => {
-        const cli = getMockClientWithEventEmitter({
+        cli = getMockClientWithEventEmitter({
             ...mockClientMethodsUser(userId),
             ...mockClientMethodsServer(),
             ...mockClientMethodsDevice(deviceId),
             ...mockClientMethodsCrypto(),
+            getRoom: jest.fn(),
             getRooms: jest.fn().mockReturnValue([]),
             getIgnoredUsers: jest.fn(),
             getVersions: jest.fn().mockResolvedValue({
@@ -99,19 +104,17 @@ describe("MVideoBody", () => {
 
     describe("with video previews/thumbnails disabled", () => {
         beforeEach(() => {
-            act(() => {
-                SettingsStore.setValue("showImages", null, SettingLevel.DEVICE, false);
+            const origFn = SettingsStore.getValue;
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting, ...args) => {
+                if (setting === "mediaPreviewConfig") {
+                    return { invite_avatars: MediaPreviewValue.Off, media_previews: MediaPreviewValue.Off};
+                }
+                return origFn(setting, ...args);
             });
         });
 
         afterEach(() => {
             act(() => {
-                SettingsStore.setValue(
-                    "showImages",
-                    null,
-                    SettingLevel.DEVICE,
-                    SettingsStore.getDefaultValue("showImages"),
-                );
                 SettingsStore.setValue(
                     "showMediaEventIds",
                     null,
@@ -119,6 +122,7 @@ describe("MVideoBody", () => {
                     SettingsStore.getDefaultValue("showMediaEventIds"),
                 );
             });
+            jest.restoreAllMocks();
         });
 
         it("should not download video", async () => {
@@ -129,6 +133,7 @@ describe("MVideoBody", () => {
                     mxEvent={encryptedMediaEvent}
                     mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
                 />,
+                withClientContextRenderOptions(cli)
             );
 
             expect(screen.getByText("Show video")).toBeInTheDocument();
@@ -144,6 +149,7 @@ describe("MVideoBody", () => {
                     mxEvent={encryptedMediaEvent}
                     mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
                 />,
+                withClientContextRenderOptions(cli)
             );
 
             const placeholderButton = screen.getByRole("button", { name: "Show video" });
@@ -191,6 +197,7 @@ function makeMVideoBody(w: number, h: number): RenderResult {
 
     const mockClient = getMockClientWithEventEmitter({
         mxcUrlToHttp: jest.fn(),
+        getRoom: jest.fn(),
     });
 
     return render(

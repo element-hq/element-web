@@ -52,7 +52,7 @@ export const transformTags: NonNullable<IOptions["transformTags"]> = {
         // images" preference is disabled. Future work might expose some UI to reveal them
         // like standalone image events have.
         // TODO: Is this a private room?
-        if (!src || SettingsStore.getValue("mediaPreviewConfig").media_previews !== MediaPreviewValue.On ) {
+        if (!src || SettingsStore.getValue("mediaPreviewConfig").media_previews !== MediaPreviewValue.On) {
             return { tagName, attribs: {} };
         }
 

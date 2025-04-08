@@ -58,7 +58,6 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
         } else if (event.getType() === ALLOWED_WIDGETS_EVENT_TYPE) {
             this.watchers.notifyUpdate("allowedWidgets", roomId, SettingLevel.ROOM_ACCOUNT, event.getContent());
         } else if (event.getType() === MEDIA_PREVIEW_ACCOUNT_DATA_TYPE) {
-            console.log("notifyupdate");
             this.watchers.notifyUpdate("mediaPreviewConfig", roomId, SettingLevel.ROOM_ACCOUNT, event.getContent());
         }
     };

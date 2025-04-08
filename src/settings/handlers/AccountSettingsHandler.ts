@@ -70,7 +70,6 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
             const val = event.getContent()["enabled"];
             this.watchers.notifyUpdate("recent_emoji", null, SettingLevel.ACCOUNT, val);
         } else if (event.getType() === MEDIA_PREVIEW_ACCOUNT_DATA_TYPE) {
-            console.log("notifyupdate");
             this.watchers.notifyUpdate("mediaPreviewConfig", null, SettingLevel.ROOM_ACCOUNT, event.getContent());
         }
     };

@@ -44,9 +44,13 @@ describe("RoomPreviewCard", () => {
         client.reEmitter.reEmit(room, [RoomStateEvent.Events]);
 
         enabledFeatures = [];
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName): any =>
-            enabledFeatures.includes(settingName) ? true : undefined,
-        );
+        const origFn = SettingsStore.getValue;
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName): any => {
+            if (enabledFeatures.includes(settingName)) {
+                return true;
+            }
+            return origFn(settingName);
+        });
     });
 
     afterEach(() => {

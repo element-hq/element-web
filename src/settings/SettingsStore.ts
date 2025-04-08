@@ -374,6 +374,10 @@ export default class SettingsStore {
         roomId: string | null = null,
         excludeDefault = false,
     ): Settings[S]["default"] | undefined {
+        if (settingName === "mediaPreviewConfig") {
+            console.log("GET VALUE", SETTINGS[settingName]);
+        }
+
         // Verify that the setting is actually a setting
         if (!SETTINGS[settingName]) {
             throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
@@ -381,6 +385,7 @@ export default class SettingsStore {
 
         const setting = SETTINGS[settingName];
         const levelOrder = getLevelOrder(setting);
+
 
         return SettingsStore.getValueAt(levelOrder[0], settingName, roomId, false, excludeDefault);
     }
@@ -728,8 +733,9 @@ export default class SettingsStore {
         const showImages = handler.getValue("showImages", null);
         const showAvatarsOnInvites = handler.getValue("showAvatarsOnInvites", null);
 
+        const AccountHandler = LEVEL_HANDLERS[SettingLevel.ACCOUNT];
         if (showImages !== null || showAvatarsOnInvites !== null) {
-            this.setValue("mediaPreviewConfig", null, SettingLevel.ACCOUNT, {
+            AccountHandler.setValue("mediaPreviewConfig", null, {
                 invite_avatars: showAvatarsOnInvites === false ? MediaPreviewValue.Off : MediaPreviewValue.On,
                 media_previews: showImages === false ? MediaPreviewValue.Off : MediaPreviewValue.On,
             });
