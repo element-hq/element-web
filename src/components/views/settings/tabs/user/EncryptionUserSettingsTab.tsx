@@ -20,7 +20,7 @@ import SetupEncryptionDialog from "../../../dialogs/security/SetupEncryptionDial
 import { SettingsSection } from "../../shared/SettingsSection";
 import { SettingsSubheader } from "../../SettingsSubheader";
 import { AdvancedPanel } from "../../encryption/AdvancedPanel";
-import { ResetIdentityPanel, ResetIdentityPanelVariant } from "../../encryption/ResetIdentityPanel";
+import { ResetIdentityPanel, type ResetIdentityPanelVariant } from "../../encryption/ResetIdentityPanel";
 import { RecoveryPanelOutOfSync } from "../../encryption/RecoveryPanelOutOfSync";
 import { useTypedEventEmitter } from "../../../../../hooks/useEventEmitter";
 import { KeyStoragePanel } from "../../encryption/KeyStoragePanel";
