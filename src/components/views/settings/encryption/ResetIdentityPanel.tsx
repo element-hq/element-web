@@ -29,20 +29,21 @@ interface ResetIdentityPanelProps {
     onCancelClick: () => void;
 
     /**
-     * The variant of the panel to show. We show more warnings in the 'compromised' variant (no use in showing a user this
-     * warning if they have to reset because they no longer have their key)
-     *
-     * "compromised" is shown when the user chooses 'reset' explicitly in settings, usually because they believe their
-     * identity has been compromised.
-     *
-     * "sync_failed" is shown when the user tried to recover their identity but the process failed, probably because
-     * the required information is missing from recovery.
-     *
-     * "forgot" is shown when the user has just forgotten their passphrase.
+     * The variant of the panel to show. We show more warnings in the 'compromised' variant (no use in showing a user
+     * this warning if they have to reset because they no longer have their key)
      */
     variant: ResetIdentityPanelVariant;
 }
 
+/**
+ * "compromised" is shown when the user chooses 'reset' explicitly in settings, usually because they believe their
+ * identity has been compromised.
+ *
+ * "sync_failed" is shown when the user tried to recover their identity but the process failed, probably because
+ * the required information is missing from recovery.
+ *
+ * "forgot" is shown when the user has just forgotten their passphrase.
+ */
 export type ResetIdentityPanelVariant = "compromised" | "forgot" | "sync_failed";
 
 /**
