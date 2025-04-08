@@ -142,7 +142,7 @@ describe("<MImageBody/>", () => {
             const origFn = SettingsStore.getValue;
             jest.spyOn(SettingsStore, "getValue").mockImplementation((setting, ...args) => {
                 if (setting === "mediaPreviewConfig") {
-                    return { invite_avatars: MediaPreviewValue.Off, media_previews: MediaPreviewValue.Off};
+                    return { invite_avatars: MediaPreviewValue.Off, media_previews: MediaPreviewValue.Off };
                 }
                 return origFn(setting, ...args);
             });
@@ -168,7 +168,7 @@ describe("<MImageBody/>", () => {
                     mxEvent={encryptedMediaEvent}
                     mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
                 />,
-                withClientContextRenderOptions(cli)
+                withClientContextRenderOptions(cli),
             );
 
             expect(screen.getByText("Show image")).toBeInTheDocument();
@@ -185,7 +185,7 @@ describe("<MImageBody/>", () => {
                     mxEvent={encryptedMediaEvent}
                     mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
                 />,
-                withClientContextRenderOptions(cli)
+                withClientContextRenderOptions(cli),
             );
 
             expect(screen.getByText("Show image")).toBeInTheDocument();

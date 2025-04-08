@@ -15,7 +15,7 @@ import { useSettingValue } from "../../../../../hooks/useSettings";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 
-export function MediaPreviewAccountSettings() {
+export const MediaPreviewAccountSettings: React.FC = () => {
     const currentMediaPreview = useSettingValue("mediaPreviewConfig");
 
     const avatarOnChange = useCallback(

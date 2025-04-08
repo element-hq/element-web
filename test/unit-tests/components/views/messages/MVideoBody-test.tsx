@@ -7,9 +7,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { act } from "react";
-import { EventType, getHttpUriForMxc, type IContent, MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { EventType, getHttpUriForMxc, type IContent, type MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { fireEvent, render, screen, type RenderResult } from "jest-matrix-react";
 import fetchMock from "fetch-mock-jest";
+import { type MockedObject } from "jest-mock";
 
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import { type RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
@@ -27,7 +28,6 @@ import type { IBodyProps } from "../../../../../src/components/views/messages/IB
 import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { MediaPreviewValue } from "../../../../../src/@types/media_preview";
-import { MockedObject } from "jest-mock";
 
 // Needed so we don't throw an error about failing to decrypt.
 jest.mock("matrix-encrypt-attachment", () => ({
@@ -107,7 +107,7 @@ describe("MVideoBody", () => {
             const origFn = SettingsStore.getValue;
             jest.spyOn(SettingsStore, "getValue").mockImplementation((setting, ...args) => {
                 if (setting === "mediaPreviewConfig") {
-                    return { invite_avatars: MediaPreviewValue.Off, media_previews: MediaPreviewValue.Off};
+                    return { invite_avatars: MediaPreviewValue.Off, media_previews: MediaPreviewValue.Off };
                 }
                 return origFn(setting, ...args);
             });
@@ -133,7 +133,7 @@ describe("MVideoBody", () => {
                     mxEvent={encryptedMediaEvent}
                     mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
                 />,
-                withClientContextRenderOptions(cli)
+                withClientContextRenderOptions(cli),
             );
 
             expect(screen.getByText("Show video")).toBeInTheDocument();
@@ -149,7 +149,7 @@ describe("MVideoBody", () => {
                     mxEvent={encryptedMediaEvent}
                     mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
                 />,
-                withClientContextRenderOptions(cli)
+                withClientContextRenderOptions(cli),
             );
 
             const placeholderButton = screen.getByRole("button", { name: "Show video" });

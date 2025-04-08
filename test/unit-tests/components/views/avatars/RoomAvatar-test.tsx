@@ -38,7 +38,7 @@ describe("RoomAvatar", () => {
         const origFn = SettingsStore.getValue;
         jest.spyOn(SettingsStore, "getValue").mockImplementation((setting, ...args) => {
             if (setting === "mediaPreviewConfig") {
-                return { invite_avatars: showAvatarsSetting, media_previews: MediaPreviewValue.Off};
+                return { invite_avatars: showAvatarsSetting, media_previews: MediaPreviewValue.Off };
             }
             return origFn(setting, ...args);
         });

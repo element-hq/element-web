@@ -16,10 +16,7 @@ import { SettingLevel } from "../../../../../src/settings/SettingLevel";
 import type { Settings } from "../../../../../src/settings/Settings";
 import { MediaPreviewValue } from "../../../../../src/@types/media_preview";
 
-function mockSetting(
-    mediaPreviews: MediaPreviewValue,
-    showMediaEventIds: Settings["showMediaEventIds"]["default"],
-) {
+function mockSetting(mediaPreviews: MediaPreviewValue, showMediaEventIds: Settings["showMediaEventIds"]["default"]) {
     jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) => {
         if (settingName === "mediaPreviewConfig") {
             return { media_previews: mediaPreviews, invite_avatars: MediaPreviewValue.Off };

@@ -386,7 +386,6 @@ export default class SettingsStore {
         const setting = SETTINGS[settingName];
         const levelOrder = getLevelOrder(setting);
 
-
         return SettingsStore.getValueAt(levelOrder[0], settingName, roomId, false, excludeDefault);
     }
 
