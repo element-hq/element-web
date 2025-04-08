@@ -45,7 +45,7 @@ import { type NonEmptyArray } from "../../../@types/common";
 import { SDKContext, type SdkContextClass } from "../../../contexts/SDKContext";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { ToastContext, useActiveToast } from "../../../contexts/ToastContext";
-import { EncryptionUserSettingsTab, State } from "../settings/tabs/user/EncryptionUserSettingsTab";
+import { EncryptionUserSettingsTab, type State } from "../settings/tabs/user/EncryptionUserSettingsTab";
 
 interface IProps {
     initialTabId?: UserTab;
