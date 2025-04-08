@@ -22,6 +22,8 @@ import { hasCreateRoomRights, createRoom } from "../../../../../src/components/v
 import dispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { SdkContextClass } from "../../../../../src/contexts/SDKContext";
+import SpaceStore from "../../../../../src/stores/spaces/SpaceStore";
+import { UPDATE_SELECTED_SPACE } from "../../../../../src/stores/spaces";
 
 jest.mock("../../../../../src/components/viewmodels/roomlist/utils", () => ({
     hasCreateRoomRights: jest.fn().mockReturnValue(false),
@@ -183,6 +185,33 @@ describe("RoomListViewModel", () => {
 
             // RLS call must include only the secondary filter
             expect(fn).toHaveBeenLastCalledWith(expect.arrayContaining([FilterKey.MentionsFilter]));
+        });
+
+        it("should remove all filters when active space is changed", async () => {
+            mockAndCreateRooms();
+            const { result: vm } = renderHook(() => useRoomListViewModel());
+
+            // Let's first toggle the People filter
+            const i = vm.current.primaryFilters.findIndex((f) => f.name === "People");
+            act(() => {
+                vm.current.primaryFilters[i].toggle();
+            });
+            expect(vm.current.primaryFilters[i].active).toEqual(true);
+
+            // Let's say we toggle the mentions secondary filter
+            act(() => {
+                vm.current.activateSecondaryFilter(SecondaryFilters.MentionsOnly);
+            });
+            expect(vm.current.activeSecondaryFilter).toEqual(SecondaryFilters.MentionsOnly);
+
+            // Simulate a space change
+            await act(() => SpaceStore.instance.emit(UPDATE_SELECTED_SPACE));
+
+            // Primary filer should have been unapplied
+            expect(vm.current.activePrimaryFilter).toEqual(undefined);
+
+            // Secondary filter should be reset to "All Activity"
+            expect(vm.current.activeSecondaryFilter).toEqual(SecondaryFilters.AllActivity);
         });
 
         const testcases: Array<[string, { secondary: SecondaryFilters; filterKey: FilterKey }, string]> = [

@@ -5,7 +5,8 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-.mx_ReportRoomDialog {
+.mx_ReportRoomDialog,
+.mx_DeclineAndBlockInviteDialog {
     textarea {
         font: var(--cpd-font-body-md-regular);
         border: 1px solid var(--cpd-color-border-interactive-primary);
@@ -14,7 +15,26 @@ Please see LICENSE files in the repository root for full details.
         padding: var(--cpd-space-3x) var(--cpd-space-4x);
     }
 
-    label {
+    /*
+      Workaround to fix labels appearing with the wrong color.
+
+      .mx_Dialog (in res/css/_common.pcss) redefines the body color
+      as $light-fg-color rather than the standard primary color.
+
+      This forces the colour to match the Compound style, but
+      in the future the Dialogs should not force a color.
+    */
+    form label {
+        color: var(--cpd-color-text-primary);
+    }
+}
+
+.mx_DeclineAndBlockInviteDialog {
+    div[aria-disabled="true"] > label {
+        color: var(--cpd-color-text-secondary);
+    }
+
+    .mx_SettingsFlag_label {
         color: var(--cpd-color-text-primary);
         font-weight: var(--cpd-font-weight-semibold);
     }

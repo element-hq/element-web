@@ -1822,10 +1822,7 @@
         "toxic_behaviour": "Toxisches Verhalten"
     },
     "report_room": {
-        "description": "Melden Sie diesen Raum Ihrem Homeserver-Administrator. Dadurch wird die eindeutige ID des Raums gesendet. Wenn Nachrichten verschlüsselt sind, kann der Administrator sie jedoch nicht lesen oder geteilte Dateien anzeigen.",
-        "reason_placeholder": " Grund für die Meldung...",
-        "sent": "Ihr Bericht wurde gesendet.",
-        "title": "Raum melden"
+        "description": "Melden Sie diesen Raum Ihrem Homeserver-Administrator. Dadurch wird die eindeutige ID des Raums gesendet. Wenn Nachrichten verschlüsselt sind, kann der Administrator sie jedoch nicht lesen oder geteilte Dateien anzeigen."
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Konnte %(failedCount)s Sitzungen nicht entschlüsseln!",

@@ -112,7 +112,7 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
                         onRejectButtonClicked();
                     }}
                 >
-                    {_t("action|reject")}
+                    {_t("action|decline")}
                 </AccessibleButton>
                 <AccessibleButton
                     kind="primary"

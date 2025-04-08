@@ -711,36 +711,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             case "copy_room":
                 this.copyRoom(payload.room_id);
                 break;
-            case "reject_invite":
-                Modal.createDialog(QuestionDialog, {
-                    title: _t("reject_invitation_dialog|title"),
-                    description: _t("reject_invitation_dialog|confirmation"),
-                    onFinished: (confirm) => {
-                        if (confirm) {
-                            // FIXME: controller shouldn't be loading a view :(
-                            const modal = Modal.createDialog(Spinner, undefined, "mx_Dialog_spinner");
-
-                            MatrixClientPeg.safeGet()
-                                .leave(payload.room_id)
-                                .then(
-                                    () => {
-                                        modal.close();
-                                        if (this.state.currentRoomId === payload.room_id) {
-                                            dis.dispatch({ action: Action.ViewHomePage });
-                                        }
-                                    },
-                                    (err) => {
-                                        modal.close();
-                                        Modal.createDialog(ErrorDialog, {
-                                            title: _t("reject_invitation_dialog|failed"),
-                                            description: err.toString(),
-                                        });
-                                    },
-                                );
-                        }
-                    },
-                });
-                break;
             case "view_user_info":
                 this.viewUser(payload.userId, payload.subAction);
                 break;
