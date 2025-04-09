@@ -24,7 +24,7 @@ exports[`<NotificationDecoration /> should render the invitation decoration 1`] 
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
   >
     <span
-      class="_unread-counter_1ibqq_8"
+      class="_unread-counter_9mg0k_8"
     >
       1
     </span>
@@ -51,7 +51,7 @@ exports[`<NotificationDecoration /> should render the mention decoration 1`] = `
       />
     </svg>
     <span
-      class="_unread-counter_1ibqq_8"
+      class="_unread-counter_9mg0k_8"
     >
       1
     </span>
@@ -92,7 +92,7 @@ exports[`<NotificationDecoration /> should render the notification decoration 1`
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
   >
     <span
-      class="_unread-counter_1ibqq_8"
+      class="_unread-counter_9mg0k_8"
     >
       1
     </span>
@@ -108,7 +108,7 @@ exports[`<NotificationDecoration /> should render the notification decoration wi
     style="--mx-flex-display: flex; --mx-flex-direction: row; --mx-flex-align: center; --mx-flex-justify: center; --mx-flex-gap: var(--cpd-space-1-5x); --mx-flex-wrap: nowrap;"
   >
     <div
-      class="_unread-counter_1ibqq_8"
+      class="_unread-counter_9mg0k_8"
     />
   </div>
 </DocumentFragment>

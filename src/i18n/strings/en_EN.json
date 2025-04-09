@@ -12,7 +12,7 @@
             "other": "%(count)s unread messages including mentions."
         },
         "recent_rooms": "Recent rooms",
-        "room_messsage_not_sent": "Open room %(roomName)s with an unset message.",
+        "room_messsage_not_sent": "Open room %(roomName)s with an unsent message.",
         "room_n_unread_invite": "Open room %(roomName)s invitation.",
         "room_n_unread_messages": {
             "one": "Open room %(roomName)s with 1 unread message.",
@@ -55,6 +55,8 @@
         "create_a_room": "Create a room",
         "create_account": "Create Account",
         "decline": "Decline",
+        "decline_and_block": "Decline and block",
+        "decline_invite": "Decline invite",
         "delete": "Delete",
         "deny": "Deny",
         "disable": "Disable",
@@ -107,7 +109,6 @@
         "react": "React",
         "refresh": "Refresh",
         "register": "Register",
-        "reject": "Reject",
         "reload": "Reload",
         "remove": "Remove",
         "rename": "Rename",
@@ -486,7 +487,6 @@
         "capabilities": "Capabilities",
         "copied": "Copied!",
         "credits": "Credits",
-        "cross_signing": "Cross-signing",
         "dark": "Dark",
         "description": "Description",
         "deselect_all": "Deselect all",
@@ -746,6 +746,13 @@
         "twemoji": "The <twemoji>Twemoji</twemoji> emoji art is © <author>Twitter, Inc and other contributors</author> used under the terms of <terms>CC-BY 4.0</terms>.",
         "twemoji_colr": "The <colr>twemoji-colr</colr> font is © <author>Mozilla Foundation</author> used under the terms of <terms>Apache 2.0</terms>."
     },
+    "decline_invitation_dialog": {
+        "confirm": "Are you sure you want to decline the invitation to join \"%(roomName)s\"?",
+        "ignore_user_help": "You will not see any messages or room invites from this user.",
+        "reason_description": "Describe the reason for reporting the room.",
+        "report_room_description": "Report this room to your account provider.",
+        "title": "Decline invitation"
+    },
     "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "devtools": {
         "active_widgets": "Active Widgets",
@@ -923,22 +930,12 @@
         "cancel_entering_passphrase_title": "Cancel entering passphrase?",
         "confirm_encryption_setup_body": "Click the button below to confirm setting up encryption.",
         "confirm_encryption_setup_title": "Confirm encryption setup",
-        "cross_signing_not_ready": "Cross-signing is not set up.",
-        "cross_signing_ready": "Cross-signing is ready for use.",
-        "cross_signing_ready_no_backup": "Cross-signing is ready but keys are not backed up.",
         "cross_signing_room_normal": "This room is end-to-end encrypted",
         "cross_signing_room_verified": "Everyone in this room is verified",
         "cross_signing_room_warning": "Someone is using an unknown session",
-        "cross_signing_unsupported": "Your homeserver does not support cross-signing.",
-        "cross_signing_untrusted": "Your account has a cross-signing identity in secret storage, but it is not yet trusted by this session.",
         "cross_signing_user_normal": "You have not verified this user.",
         "cross_signing_user_verified": "You have verified this user. This user has verified all of their sessions.",
         "cross_signing_user_warning": "This user has not verified all of their sessions.",
-        "destroy_cross_signing_dialog": {
-            "primary_button_text": "Clear cross-signing keys",
-            "title": "Destroy cross-signing keys?",
-            "warning": "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from."
-        },
         "enter_recovery_key": "Enter recovery key",
         "event_shield_reason_authenticity_not_guaranteed": "The authenticity of this encrypted message can't be guaranteed on this device.",
         "event_shield_reason_mismatched_sender_key": "Encrypted by an unverified session",
@@ -965,7 +962,6 @@
             "title": "New Recovery Method",
             "warning": "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings."
         },
-        "not_supported": "<not supported>",
         "pinned_identity_changed": "%(displayName)s's (<b>%(userId)s</b>) identity was reset. <a>Learn more</a>",
         "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>'s identity was reset. <a>Learn more</a>",
         "recovery_method_removed": {
@@ -981,8 +977,7 @@
         "set_up_toast_description": "Safeguard against losing access to encrypted messages & data",
         "set_up_toast_title": "Set up Secure Backup",
         "setup_secure_backup": {
-            "explainer": "Back up your keys before signing out to avoid losing them.",
-            "title": "Set up"
+            "explainer": "Back up your keys before signing out to avoid losing them."
         },
         "udd": {
             "interactive_verification_button": "Interactively verify by emoji",
@@ -1677,6 +1672,7 @@
         "class_global": "Global",
         "class_other": "Other",
         "default": "Default",
+        "default_settings": "Match default settings",
         "email_pusher_app_display_name": "Email Notifications",
         "enable_prompt_toast_description": "Enable desktop notifications",
         "enable_prompt_toast_title": "Notifications",
@@ -1693,9 +1689,10 @@
         "mark_all_read": "Mark all as read",
         "mentions_and_keywords": "@mentions & keywords",
         "mentions_and_keywords_description": "Get notified only with mentions and keywords as set up in your <a>settings</a>",
-        "mentions_keywords": "Mentions & keywords",
+        "mentions_keywords": "Mentions and keywords",
         "message_didnt_send": "Message didn't send. Click for info.",
-        "mute_description": "You won't get any notifications"
+        "mute_description": "You won't get any notifications",
+        "mute_room": "Mute room"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s is requesting verification"
@@ -1797,11 +1794,6 @@
         "ongoing": "Removing…",
         "reason_label": "Reason (optional)"
     },
-    "reject_invitation_dialog": {
-        "confirmation": "Are you sure you want to reject the invitation?",
-        "failed": "Failed to reject invitation",
-        "title": "Reject invitation"
-    },
     "report_content": {
         "description": "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.",
         "disagree": "Disagree",
@@ -1825,10 +1817,8 @@
         "toxic_behaviour": "Toxic Behaviour"
     },
     "report_room": {
-        "description": "Report this room to your homeserver admin. This will send the room's unique ID, but if messages are encrypted, the administrator won't be able to read them or view shared files.",
-        "reason_placeholder": " Reason for reporting...",
-        "sent": "Your report was sent.",
-        "title": "Report Room"
+        "description": "Report this room to your account provider. If the messages are encrypted, your admin will not be able to read them.",
+        "reason_label": "Describe the reason"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Failed to decrypt %(failedCount)s sessions!",
@@ -2013,7 +2003,6 @@
             "you_created": "You created this room."
         },
         "invite_email_mismatch_suggestion": "Share this email in Settings to receive invites directly in %(brand)s.",
-        "invite_reject_ignore": "Reject & Ignore user",
         "invite_sent_to_email": "This invite was sent to %(email)s",
         "invite_sent_to_email_room": "This invite to %(roomName)s was sent to %(email)s",
         "invite_subtitle": "Invited by <userName/>",
@@ -2539,6 +2528,7 @@
                 "breadcrumb_third_description": "You will need to verify all your existing devices and contacts again",
                 "breadcrumb_title": "Are you sure you want to reset your identity?",
                 "breadcrumb_title_forgot": "Forgot your recovery key? You’ll need to reset your identity.",
+                "breadcrumb_title_sync_failed": "Failed to sync key storage. You need to reset your identity.",
                 "breadcrumb_warning": "Only do this if you believe your account has been compromised.",
                 "details_title": "Encryption details",
                 "do_not_close_warning": "Do not close this window until the reset is finished",
@@ -2830,57 +2820,20 @@
         "prompt_invite": "Prompt before sending invites to potentially invalid matrix IDs",
         "replace_plain_emoji": "Automatically replace plain text Emoji",
         "security": {
-            "4s_public_key_in_account_data": "in account data",
-            "4s_public_key_status": "Secret storage public key:",
             "analytics_description": "Share anonymous data to help us identify issues. Nothing personal. No third parties.",
-            "backup_key_cached_status": "Backup key cached:",
-            "backup_key_stored_status": "Backup key stored:",
-            "backup_key_unexpected_type": "unexpected type",
-            "backup_key_well_formed": "well formed",
-            "backup_keys_description": "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Recovery Key.",
             "bulk_options_accept_all_invites": "Accept all %(invitedRooms)s invites",
             "bulk_options_reject_all_invites": "Reject all %(invitedRooms)s invites",
             "bulk_options_section": "Bulk options",
-            "cross_signing_cached": "cached locally",
-            "cross_signing_homeserver_support": "Homeserver feature support:",
-            "cross_signing_homeserver_support_exists": "exists",
-            "cross_signing_in_4s": "in secret storage",
-            "cross_signing_in_memory": "in memory",
-            "cross_signing_master_private_Key": "Master private key:",
-            "cross_signing_not_cached": "not found locally",
-            "cross_signing_not_found": "not found",
-            "cross_signing_not_in_4s": "not found in storage",
-            "cross_signing_not_stored": "not stored",
-            "cross_signing_private_keys": "Cross-signing private keys:",
-            "cross_signing_public_keys": "Cross-signing public keys:",
-            "cross_signing_self_signing_private_key": "Self signing private key:",
-            "cross_signing_user_signing_private_key": "User signing private key:",
-            "cryptography_section": "Cryptography",
             "dehydrated_device_description": "The offline device feature allows you to receive encrypted messages even when you are not logged in to any devices",
             "dehydrated_device_enabled": "Offline device enabled",
-            "delete_backup": "Delete Backup",
-            "delete_backup_confirm_description": "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.",
             "dialog_title": "<strong>Settings:</strong> Security & Privacy",
             "e2ee_default_disabled_warning": "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.",
             "enable_message_search": "Enable message search in encrypted rooms",
             "encryption_section": "Encryption",
-            "error_loading_key_backup_status": "Unable to load key backup status",
-            "export_megolm_keys": "Export E2E room keys",
             "ignore_users_empty": "You have no ignored users.",
             "ignore_users_section": "Ignored users",
-            "import_megolm_keys": "Import E2E room keys",
-            "key_backup_active": "This session is backing up your keys.",
-            "key_backup_active_version": "Active backup version:",
-            "key_backup_active_version_none": "None",
             "key_backup_algorithm": "Algorithm:",
-            "key_backup_can_be_restored": "This backup can be restored on this session",
-            "key_backup_complete": "All keys backed up",
             "key_backup_connect": "Connect this session to Key Backup",
-            "key_backup_connect_prompt": "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.",
-            "key_backup_in_progress": "Backing up %(sessionsRemaining)s keys…",
-            "key_backup_inactive": "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.",
-            "key_backup_inactive_warning": "Your keys are <b>not being backed up from this session</b>.",
-            "key_backup_latest_version": "Latest backup version on server:",
             "message_search_disable_warning": "If disabled, messages from encrypted rooms won't appear in search results.",
             "message_search_disabled": "Securely cache encrypted messages locally for them to appear in search results.",
             "message_search_enabled": {
@@ -2900,13 +2853,7 @@
             "message_search_unsupported": "%(brand)s is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom %(brand)s Desktop with <nativeLink>search components added</nativeLink>.",
             "message_search_unsupported_web": "%(brand)s can't securely cache encrypted messages locally while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> for encrypted messages to appear in search results.",
             "record_session_details": "Record the client name, version, and url to recognise sessions more easily in session manager",
-            "restore_key_backup": "Restore from Backup",
-            "secret_storage_not_ready": "not ready",
-            "secret_storage_ready": "ready",
-            "secret_storage_status": "Secret storage:",
             "send_analytics": "Send analytics data",
-            "session_id": "Session ID:",
-            "session_key": "Session key:",
             "strict_encryption": "Only send messages to verified users"
         },
         "send_read_receipts": "Send read receipts",

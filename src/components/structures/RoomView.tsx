@@ -134,6 +134,7 @@ import { onView3pidInvite } from "../../stores/right-panel/action-handlers";
 import RoomSearchAuxPanel from "../views/rooms/RoomSearchAuxPanel";
 import { PinnedMessageBanner } from "../views/rooms/PinnedMessageBanner";
 import { ScopedRoomContextProvider, useScopedRoomContext } from "../../contexts/ScopedRoomContext";
+import { DeclineAndBlockInviteDialog } from "../views/dialogs/DeclineAndBlockInviteDialog";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -1732,48 +1733,61 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         });
     };
 
-    private onRejectButtonClicked = (): void => {
-        const roomId = this.getRoomId();
-        if (!roomId) return;
+    private onDeclineAndBlockButtonClicked = async (): Promise<void> => {
+        if (!this.state.room || !this.context.client) return;
+        const [shouldReject, ignoreUser, reportRoom] = await Modal.createDialog(DeclineAndBlockInviteDialog, {
+            roomName: this.state.room.name,
+        }).finished;
+        if (!shouldReject) {
+            return;
+        }
+
         this.setState({
             rejecting: true,
         });
-        this.context.client?.leave(roomId).then(
-            () => {
-                defaultDispatcher.dispatch({ action: Action.ViewHomePage });
-                this.setState({
-                    rejecting: false,
-                });
-            },
-            (error) => {
-                logger.error(`Failed to reject invite: ${error}`);
 
-                const msg = error.message ? error.message : JSON.stringify(error);
-                Modal.createDialog(ErrorDialog, {
-                    title: _t("room|failed_reject_invite"),
-                    description: msg,
-                });
+        const actions: Promise<unknown>[] = [];
 
-                this.setState({
-                    rejecting: false,
-                });
-            },
-        );
+        if (ignoreUser) {
+            const myMember = this.state.room.getMember(this.context.client!.getSafeUserId());
+            const inviteEvent = myMember!.events.member;
+            const ignoredUsers = this.context.client.getIgnoredUsers();
+            ignoredUsers.push(inviteEvent!.getSender()!); // de-duped internally in the js-sdk
+            actions.push(this.context.client.setIgnoredUsers(ignoredUsers));
+        }
+
+        if (reportRoom !== false) {
+            actions.push(this.context.client.reportRoom(this.state.room.roomId, reportRoom));
+        }
+
+        actions.push(this.context.client.leave(this.state.room.roomId));
+        try {
+            await Promise.all(actions);
+            defaultDispatcher.dispatch({ action: Action.ViewHomePage });
+            this.setState({
+                rejecting: false,
+            });
+        } catch (error) {
+            logger.error(`Failed to reject invite: ${error}`);
+
+            const msg = error instanceof Error ? error.message : JSON.stringify(error);
+            Modal.createDialog(ErrorDialog, {
+                title: _t("room|failed_reject_invite"),
+                description: msg,
+            });
+
+            this.setState({
+                rejecting: false,
+            });
+        }
     };
 
-    private onRejectAndIgnoreClick = async (): Promise<void> => {
-        this.setState({
-            rejecting: true,
-        });
-
+    private onDeclineButtonClicked = async (): Promise<void> => {
+        if (!this.state.room || !this.context.client) {
+            return;
+        }
         try {
-            const myMember = this.state.room!.getMember(this.context.client!.getSafeUserId());
-            const inviteEvent = myMember!.events.member;
-            const ignoredUsers = this.context.client!.getIgnoredUsers();
-            ignoredUsers.push(inviteEvent!.getSender()!); // de-duped internally in the js-sdk
-            await this.context.client!.setIgnoredUsers(ignoredUsers);
-
-            await this.context.client!.leave(this.state.roomId!);
+            await this.context.client.leave(this.state.room.roomId);
             defaultDispatcher.dispatch({ action: Action.ViewHomePage });
             this.setState({
                 rejecting: false,
@@ -2126,7 +2140,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                             <RoomPreviewBar
                                 onJoinClick={this.onJoinButtonClicked}
                                 onForgetClick={this.onForgetClick}
-                                onRejectClick={this.onRejectThreepidInviteButtonClicked}
+                                onDeclineClick={this.onRejectThreepidInviteButtonClicked}
                                 canPreview={false}
                                 error={this.state.roomLoadError}
                                 roomAlias={roomAlias}
@@ -2154,7 +2168,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                         <RoomPreviewCard
                             room={this.state.room}
                             onJoinButtonClicked={this.onJoinButtonClicked}
-                            onRejectButtonClicked={this.onRejectButtonClicked}
+                            onRejectButtonClicked={this.onDeclineButtonClicked}
                         />
                     </div>
                     ;
@@ -2196,8 +2210,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                             <RoomPreviewBar
                                 onJoinClick={this.onJoinButtonClicked}
                                 onForgetClick={this.onForgetClick}
-                                onRejectClick={this.onRejectButtonClicked}
-                                onRejectAndIgnoreClick={this.onRejectAndIgnoreClick}
+                                onDeclineClick={this.onDeclineButtonClicked}
+                                onDeclineAndBlockClick={this.onDeclineAndBlockButtonClicked}
+                                promptRejectionOptions={true}
                                 inviterName={inviterName}
                                 canPreview={false}
                                 joining={this.state.joining}
@@ -2312,7 +2327,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 <RoomPreviewBar
                     onJoinClick={this.onJoinButtonClicked}
                     onForgetClick={this.onForgetClick}
-                    onRejectClick={this.onRejectThreepidInviteButtonClicked}
+                    onDeclineClick={this.onRejectThreepidInviteButtonClicked}
+                    promptRejectionOptions={true}
                     joining={this.state.joining}
                     inviterName={inviterName}
                     invitedEmail={invitedEmail}
@@ -2350,7 +2366,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     onRejectButtonClicked={
                         this.props.threepidInvite
                             ? this.onRejectThreepidInviteButtonClicked
-                            : this.onRejectButtonClicked
+                            : this.onDeclineButtonClicked
                     }
                 />
             );

@@ -41,6 +41,7 @@ describe("<RoomListItemView />", () => {
             showHoverMenu: false,
             notificationState: new RoomNotificationState(room, false),
             a11yLabel: "Open room room1",
+            isBold: false,
         };
 
         mocked(useRoomListItemViewModel).mockReturnValue(defaultValue);
