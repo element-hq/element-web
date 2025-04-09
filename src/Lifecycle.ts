@@ -738,7 +738,6 @@ export async function hydrateSession(credentials: IMatrixClientCreds): Promise<M
     return doSetLoggedIn(credentials, overwrite, false);
 }
 
-
 /**
  * When we have a authenticated via OIDC-native flow and have a refresh token
  * try to create a token refresher.
