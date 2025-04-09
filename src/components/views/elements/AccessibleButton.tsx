@@ -135,12 +135,19 @@ const AccessibleButton = forwardRef(function <T extends ElementType = typeof def
         placement = "right",
         onTooltipOpenChange,
         disableTooltip,
+        role = "button",
+        tabIndex = 0,
         ...restProps
     }: ButtonProps<T>,
     ref: Ref<HTMLElementTagNameMap[T]>,
 ): JSX.Element {
-    const newProps = restProps as RenderedElementProps<T>;
-    newProps["aria-label"] = newProps["aria-label"] ?? title;
+    const newProps = {
+        ...restProps,
+        tabIndex,
+        role,
+        "aria-label": restProps["aria-label"] ?? title,
+    } as RenderedElementProps<T>;
+
     if (disabled) {
         newProps["aria-disabled"] = true;
         newProps["disabled"] = true;
@@ -222,10 +229,6 @@ const AccessibleButton = forwardRef(function <T extends ElementType = typeof def
 });
 
 // Type assertion required due to forwardRef type workaround in react.d.ts
-(AccessibleButton as FunctionComponent).defaultProps = {
-    role: "button",
-    tabIndex: 0,
-};
 (AccessibleButton as FunctionComponent).displayName = "AccessibleButton";
 
 interface RefProp<T extends ElementType> {
