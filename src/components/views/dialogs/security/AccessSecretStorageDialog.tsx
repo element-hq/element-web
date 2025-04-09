@@ -149,12 +149,15 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
             // text because we'll put it in the text field.
             if (/^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz\s]+$/.test(contents)) {
                 await new Promise((resolve, reject) => {
-                    this.setState({
-                        recoveryKeyFileError: null,
-                        recoveryKey: contents.trim(),
-                    }, () => {
-                        this.validateRecoveryKey().then(resolve).catch(reject);
-                    });
+                    this.setState(
+                        {
+                            recoveryKeyFileError: null,
+                            recoveryKey: contents.trim(),
+                        },
+                        () => {
+                            this.validateRecoveryKey().then(resolve).catch(reject);
+                        },
+                    );
                 });
             } else {
                 this.setState({
