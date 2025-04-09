@@ -22,8 +22,7 @@
         "LICENSE",
         "README.md",
         "AUTHORS.rst",
-        "package.json",
-        "contribute.json"
+        "package.json"
     ],
     "style": "bundle.css",
     "matrix_i18n_extra_translation_funcs": [
