@@ -79,6 +79,9 @@ function tooltipText(variant: Icon): string | undefined {
     }
 }
 
+/**
+ * @deprecated Use {@link RoomAvatarView} instead.
+ */
 export default class DecoratedRoomAvatar extends React.PureComponent<IProps, IState> {
     private _dmUser: User | null = null;
     private isUnmounted = false;
