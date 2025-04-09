@@ -55,6 +55,8 @@
         "create_a_room": "Szoba létrehozása",
         "create_account": "Fiók létrehozása",
         "decline": "Elutasítás",
+        "decline_and_block": "Elutasítás és letiltás",
+        "decline_invite": "Meghívás elutasítása",
         "delete": "Törlés",
         "deny": "Megtagadás",
         "disable": "Tiltás",
@@ -107,7 +109,6 @@
         "react": "Reakció",
         "refresh": "Frissítés",
         "register": "Regisztráció",
-        "reject": "Elutasítás",
         "reload": "Újratöltés",
         "remove": "Eltávolítás",
         "rename": "Átnevezés",
@@ -486,7 +487,6 @@
         "capabilities": "Képességek",
         "copied": "Másolva!",
         "credits": "Közreműködők",
-        "cross_signing": "Eszközök közti hitelesítés",
         "dark": "Sötét",
         "description": "Leírás",
         "deselect_all": "Kijelölés megszüntetése",
@@ -744,6 +744,13 @@
         "twemoji": "A <twemoji>Twemoji</twemoji> emodzsikra a következő vonatkozik: © <author>Twitter, Inc. és egyéb közreműködők</author>, a <terms>CC-BY 4.0</terms> licenc feltételei szerint használva.",
         "twemoji_colr": "A <colr>twemoji-colr</colr> betűkészletre a következő vonatkozik: © <author>Mozilla Foundation</author>, az <terms>Apache 2.0</terms> licenc feltételei szerint használva."
     },
+    "decline_invitation_dialog": {
+        "confirm": "Biztos, hogy elutasítja a(z) „%(roomName)s” szobába való meghívást?",
+        "ignore_user_help": "Ettől a felhasználótól nem fog többé üzeneteket vagy meghívásokat látni.",
+        "reason_description": "Írja le a szoba jelentésének okát.",
+        "report_room_description": "A szoba jelentése a fiókszolgáltatójának.",
+        "title": "Meghívás elutasítása"
+    },
     "desktop_default_device_name": "Asztali %(brand)s: (%(platformName)s)",
     "devtools": {
         "active_widgets": "Aktív kisalkalmazások",
@@ -920,22 +927,12 @@
         "cancel_entering_passphrase_title": "Megszakítja a jelmondat bevitelét?",
         "confirm_encryption_setup_body": "Az alábbi gomb megnyomásával erősítsd meg, hogy megadod a titkosítási beállításokat.",
         "confirm_encryption_setup_title": "Erősítse meg a titkosítási beállításokat",
-        "cross_signing_not_ready": "Az eszközök közti hitelesítés nincs beállítva.",
-        "cross_signing_ready": "Az eszközök közti hitelesítés használatra kész.",
-        "cross_signing_ready_no_backup": "Az eszközök közti hitelesítés készen áll, de a kulcsokról nincs biztonsági mentés.",
         "cross_signing_room_normal": "Ez a szoba végpontok közti titkosítást használ",
         "cross_signing_room_verified": "A szobában mindenki ellenőrizve van",
         "cross_signing_room_warning": "Valaki ellenőrizetlen munkamenetet használ",
-        "cross_signing_unsupported": "A Matrix-kiszolgálója nem támogatja az eszközök közti hitelesítést.",
-        "cross_signing_untrusted": "A fiókjához tartozik egy eszközök közti hitelesítési személyazonosság, de ez a munkamenet még nem jelölte megbízhatónak.",
         "cross_signing_user_normal": "Még nem ellenőrizte ezt a felhasználót.",
         "cross_signing_user_verified": "Ellenőrizte ezt a felhasználót. Ez a felhasználó ellenőrizte az összes munkamenetét.",
         "cross_signing_user_warning": "Ez a felhasználó még nem ellenőrizte az összes munkamenetét.",
-        "destroy_cross_signing_dialog": {
-            "primary_button_text": "Eszközök közti hitelesítési kulcsok törlése",
-            "title": "Megsemmisíti az eszközök közti hitelesítési kulcsokat?",
-            "warning": "Az eszközök közti hitelesítési kulcsok törlése végleges. Mindenki, akit ezzel a kulccsal ellenőrzött, biztonsági figyelmeztetéseket fog látni. Hacsak nem vesztette el az összes eszközét, amellyel eszközök közti hitelesítést tud végezni, akkor nem valószínű, hogy ezt szeretné tenni."
-        },
         "enter_recovery_key": "Adja meg a helyreállítási kulcsot",
         "event_shield_reason_authenticity_not_guaranteed": "A titkosított üzenetek valódiságát ezen az eszközön nem lehet garantálni.",
         "event_shield_reason_mismatched_sender_key": "Ellenőrizetlen munkamenet által titkosítva",
@@ -962,7 +959,6 @@
             "title": "Új helyreállítási mód",
             "warning": "Ha nem Ön állította be az új helyreállítási módot, akkor lehet, hogy egy támadó próbálja elérni a fiókját. Változtassa meg a fiókja jelszavát, és amint csak lehet, állítsa be az új helyreállítási módot a Beállításokban."
         },
-        "not_supported": "<nem támogatott>",
         "pinned_identity_changed": "Úgy tűnik, hogy %(displayName)s (<b>%(userId)s</b>) személyazonossága megváltozott. <a>További információ</a>",
         "pinned_identity_changed_no_displayname": "Úgy tűnik, hogy <b>%(userId)s</b> személyazonossága megváltozott. <a>További információ</a>",
         "recovery_method_removed": {
@@ -978,8 +974,7 @@
         "set_up_toast_description": "Biztosíték a titkosított üzenetekhez és adatokhoz való hozzáférés elvesztése ellen",
         "set_up_toast_title": "Biztonsági mentés beállítása",
         "setup_secure_backup": {
-            "explainer": "Mentse a kulcsait a kiszolgálóra kijelentkezés előtt, hogy ne veszítse el azokat.",
-            "title": "Beállítás"
+            "explainer": "Mentse a kulcsait a kiszolgálóra kijelentkezés előtt, hogy ne veszítse el azokat."
         },
         "udd": {
             "interactive_verification_button": "Interaktív ellenőrzés emodzsikkal",
@@ -1668,6 +1663,7 @@
         "class_global": "Globális",
         "class_other": "Egyéb",
         "default": "Alapértelmezett",
+        "default_settings": "Egyezzen meg az alapértelmezett beállításokkal",
         "email_pusher_app_display_name": "E-mail értesítések",
         "enable_prompt_toast_description": "Asztali értesítések engedélyezése",
         "enable_prompt_toast_title": "Értesítések",
@@ -1686,7 +1682,8 @@
         "mentions_and_keywords_description": "Értesítések fogadása csak megemlítéseknél és kulcsszavaknál, a <a>beállításokban</a> megadottak szerint",
         "mentions_keywords": "Megemlítések és kulcsszavak",
         "message_didnt_send": "Az üzenet nincs elküldve. Kattintson az információkért.",
-        "mute_description": "Nem kap semmilyen értesítést"
+        "mute_description": "Nem kap semmilyen értesítést",
+        "mute_room": "Szoba némítása"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s ellenőrzést kér"
@@ -1786,11 +1783,6 @@
         "ongoing": "Eltávolítás…",
         "reason_label": "Ok (nem kötelező)"
     },
-    "reject_invitation_dialog": {
-        "confirmation": "Biztos, hogy elutasítja a meghívást?",
-        "failed": "A meghívót nem sikerült elutasítani",
-        "title": "Meghívó elutasítása"
-    },
     "report_content": {
         "description": "Az üzenet bejelentése egy egyedi „eseményazonosítót” küld el a Matrix-kiszolgáló adminisztrátorának. Ha az üzenetek titkosítottak a szobában, akkor a Matrix-kiszolgáló adminisztrátora nem tudja elolvasni az üzenetet, vagy nem tudja megnézni a fájlokat vagy képeket.",
         "disagree": "Nem értek egyet",
@@ -1814,7 +1806,8 @@
         "toxic_behaviour": "Mérgező viselkedés"
     },
     "report_room": {
-        "description": "A szoba jelentése a Matrix-kiszolgáló rendszergazdájának. Ez elküldi a szoba egyedi azonosítóját, de ha az üzenetek titkosítva vannak, a rendszergazda nem fogja tudni elolvasni azokat, vagy megtekinteni a megosztott fájlokat."
+        "description": "A szoba jelentése a Matrix-kiszolgáló rendszergazdájának. Ha az üzenetek titkosítva vannak, a rendszergazda nem fogja tudni elolvasni azokat.",
+        "reason_label": "Írja le az okot"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "%(failedCount)s munkamenetet nem lehet visszafejteni!",
@@ -1996,7 +1989,6 @@
             "you_created": "Te készítetted ezt a szobát."
         },
         "invite_email_mismatch_suggestion": "Oszd meg a Beállításokban ezt az e-mail címet, hogy közvetlen meghívókat kaphass %(brand)sba.",
-        "invite_reject_ignore": "Felhasználó elutasítása és figyelmen kívül hagyása",
         "invite_sent_to_email": "Ez a meghívó ide lett küldve: %(email)s",
         "invite_sent_to_email_room": "A meghívó ehhez a szobához: %(roomName)s ide lett elküldve: %(email)s",
         "invite_subtitle": "Meghívta: <userName/>",
@@ -2807,57 +2799,20 @@
         "prompt_invite": "Kérdés a vélhetően hibás Matrix-azonosítóknak küldött meghívók elküldése előtt",
         "replace_plain_emoji": "Egyszerű szöveg automatikus cseréje emodzsira",
         "security": {
-            "4s_public_key_in_account_data": "fiókadatokban",
-            "4s_public_key_status": "Titkos tároló nyilvános kulcsa:",
             "analytics_description": "Anonim adatok megosztása, hogy segítsen nekünk azonosítani a problémákat. Semmi személyes. Nincs harmadik fél.",
-            "backup_key_cached_status": "Gyorsítótárazott mentési kulcs:",
-            "backup_key_stored_status": "Tárolt mentési kulcs:",
-            "backup_key_unexpected_type": "váratlan típus",
-            "backup_key_well_formed": "helyesen formázott",
-            "backup_keys_description": "Mentse el a titkosítási kulcsokat a fiókadatokkal arra az esetre, ha elvesztené a hozzáférést a munkameneteihez. A kulcsok egy egyedi helyreállítási kulccsal lesznek védve.",
             "bulk_options_accept_all_invites": "Mind a(z) %(invitedRooms)s meghívó elfogadása",
             "bulk_options_reject_all_invites": "Mind a(z) %(invitedRooms)s meghívó elutasítása",
             "bulk_options_section": "Tömeges beállítások",
-            "cross_signing_cached": "helyben gyorsítótárazott",
-            "cross_signing_homeserver_support": "A Matrix-kiszolgáló funkciótámogatása:",
-            "cross_signing_homeserver_support_exists": "létezik",
-            "cross_signing_in_4s": "a biztonsági tárolóban",
-            "cross_signing_in_memory": "a memóriában",
-            "cross_signing_master_private_Key": "Elsődleges titkos kulcs:",
-            "cross_signing_not_cached": "nem található helyben",
-            "cross_signing_not_found": "nem találhatók",
-            "cross_signing_not_in_4s": "nem találhatók a tárolóban",
-            "cross_signing_not_stored": "nincs tárolva",
-            "cross_signing_private_keys": "Az eszközök közti hitelesítés titkos kulcsai:",
-            "cross_signing_public_keys": "Az eszközök közti hitelesítés nyilvános kulcsai:",
-            "cross_signing_self_signing_private_key": "Önaláíró titkos kulcs:",
-            "cross_signing_user_signing_private_key": "Felhasználó aláírási titkos kulcs:",
-            "cryptography_section": "Titkosítás",
             "dehydrated_device_description": "Az offline eszköz funkció lehetővé teszi titkosított üzenetek fogadását akkor is, ha nincs bejelentkezve egyetlen eszközre sem",
             "dehydrated_device_enabled": "Offline eszköz engedélyezve",
-            "delete_backup": "Mentés törlése",
-            "delete_backup_confirm_description": "Biztos benne? Ha a kulcsai nincsenek megfelelően mentve, akkor elveszíti a titkosított üzeneteit.",
             "dialog_title": "<strong>Beállítások:</strong> Biztonság és adatvédelem",
             "e2ee_default_disabled_warning": "A kiszolgáló rendszergazdája alapértelmezetten kikapcsolta a végpontok közti titkosítást a privát szobákban és a közvetlen beszélgetésekben.",
             "enable_message_search": "Üzenetek keresésének bekapcsolása a titkosított szobákban",
             "encryption_section": "Titkosítás",
-            "error_loading_key_backup_status": "A mentett kulcsok állapotát nem lehet betölteni",
-            "export_megolm_keys": "E2E szobakulcsok exportálása",
             "ignore_users_empty": "Nincsenek mellőzött felhasználók.",
             "ignore_users_section": "Mellőzött felhasználók",
-            "import_megolm_keys": "E2E szobakulcsok importálása",
-            "key_backup_active": "Ez a munkamenet elmenti a kulcsait.",
-            "key_backup_active_version": "Aktív biztonsági mentés verziója:",
-            "key_backup_active_version_none": "Semmi",
             "key_backup_algorithm": "Algoritmus:",
-            "key_backup_can_be_restored": "Ez a biztonsági mentés visszaállítható ebben a munkameneten",
-            "key_backup_complete": "Az összes kulcs elmentve",
             "key_backup_connect": "Munkamenet csatlakoztatása a kulcsmentéshez",
-            "key_backup_connect_prompt": "Csatlakoztassa ezt a munkamenetet a kulcsmentéshez kijelentkezés előtt, hogy ne veszítsen el olyan kulcsot, amely lehet, hogy csak ezen az eszközön van meg.",
-            "key_backup_in_progress": "%(sessionsRemaining)s kulcs biztonsági mentése…",
-            "key_backup_inactive": "Ez az munkamenet <b>nem menti el a kulcsait</b>, de van létező mentése, amelyből helyre tudja állítani, és amelyhez hozzá tudja adni a továbbiakban.",
-            "key_backup_inactive_warning": "A kulcsai <b>nem kerülnek mentésre ebből a munkamenetből</b>.",
-            "key_backup_latest_version": "A legújabb biztonsági mentés verziója a kiszolgálón:",
             "message_search_disable_warning": "Ha nincs engedélyezve akkor a titkosított szobák üzenetei nem jelennek meg a keresések között.",
             "message_search_disabled": "A titkosított üzenetek biztonságos helyi gyorsítótárazása, hogy megjelenhessenek a keresési találatok között.",
             "message_search_enabled": {
@@ -2876,13 +2831,7 @@
             "message_search_unsupported": "A titkosított üzenetek biztonságos helyi tárolásához hiányzik néhány összetevő a(z) %(brand)s alkalmazásból. Ha kísérletezni szeretne ezzel a funkcióval, akkor állítson össze egy egyéni asztali %(brand)s alkalmazást, amely <nativeLink>tartalmazza a keresési összetevőket</nativeLink>.",
             "message_search_unsupported_web": "A(z) %(brand)s nem képes helyileg biztonságosan elmenteni a titkosított üzeneteket, ha webböngészőben fut. Használja az <desktopLink>asztali %(brand)s</desktopLink> alkalmazást, hogy az üzenetekben való kereséskor a titkosított üzenetek is megjelenjenek.",
             "record_session_details": "A kliens nevének, verziójának és webcímének felvétele a munkamenetek könnyebb felismerése érdekében a munkamenet-kezelőben",
-            "restore_key_backup": "Helyreállítás mentésből",
-            "secret_storage_not_ready": "nincs kész",
-            "secret_storage_ready": "kész",
-            "secret_storage_status": "Titkos tároló:",
             "send_analytics": "Analitikai adatok küldése",
-            "session_id": "Munkamenetazonosító:",
-            "session_key": "Munkamenetkulcs:",
             "strict_encryption": "Üzenetküldés csak ellenőrzött felhasználóknak"
         },
         "send_read_receipts": "Olvasási visszajelzés küldése",
