@@ -57,6 +57,8 @@
         "create_a_room": "Vytvořit místnost",
         "create_account": "Vytvořit účet",
         "decline": "Odmítnout",
+        "decline_and_block": "Odmítnout a zablokovat",
+        "decline_invite": "Odmítnout pozvání",
         "delete": "Smazat",
         "deny": "Odmítnout",
         "disable": "Zakázat",
@@ -109,7 +111,6 @@
         "react": "Reagovat",
         "refresh": "Obnovit",
         "register": "Zaregistrovat",
-        "reject": "Odmítnout",
         "reload": "Znovu načíst",
         "remove": "Smazat",
         "rename": "Přejmenovat",
@@ -488,7 +489,6 @@
         "capabilities": "Schopnosti",
         "copied": "Zkopírováno!",
         "credits": "Poděkování",
-        "cross_signing": "Křížové podepisování",
         "dark": "Tmavý",
         "description": "Popis",
         "deselect_all": "Zrušit výběr všech",
@@ -748,6 +748,13 @@
         "twemoji": "<twemoji>Twemoji</twemoji> emoji grafika je © <author>Twitter, Inc a další přispěvatelé</author> používána za podmínek <terms>CC-BY 4.0</terms>.",
         "twemoji_colr": "Písmo <colr>twemoji-colr</colr> je © <author>Mozilla Foundation</author> používané za podmínek <terms>Apache 2.0</terms>."
     },
+    "decline_invitation_dialog": {
+        "confirm": "Opravdu chcete odmítnout pozvánku do \"%(roomName)s\"?",
+        "ignore_user_help": "Od tohoto uživatele neuvidíte žádné zprávy ani pozvánky do místnosti.",
+        "reason_description": "Popište důvod nahlášení místnosti.",
+        "report_room_description": "Nahlaste tuto místnost svému poskytovateli účtu.",
+        "title": "Odmítnout pozvání"
+    },
     "desktop_default_device_name": "%(brand)s Desktop: %(platformName)s",
     "devtools": {
         "active_widgets": "Aktivní widgety",
@@ -926,22 +933,12 @@
         "cancel_entering_passphrase_title": "Zrušit zadávání přístupové fráze?",
         "confirm_encryption_setup_body": "Kliknutím na tlačítko níže potvrďte nastavení šifrování.",
         "confirm_encryption_setup_title": "Potvrďte nastavení šifrování",
-        "cross_signing_not_ready": "Křížové podepisování není nastaveno.",
-        "cross_signing_ready": "Křížové podepisování je připraveno k použití.",
-        "cross_signing_ready_no_backup": "Křížové podepisování je připraveno, ale klíče nejsou zálohovány.",
         "cross_signing_room_normal": "Místnost je koncově šifrovaná",
         "cross_signing_room_verified": "V této místnosti jsou všichni ověřeni",
         "cross_signing_room_warning": "Někdo používá neznámou relaci",
-        "cross_signing_unsupported": "Váš domovský server nepodporuje křížové podepisování.",
-        "cross_signing_untrusted": "Váš účet má v bezpečném úložišti identitu pro křížový podpis, ale v této relaci jí zatím nevěříte.",
         "cross_signing_user_normal": "Tohoto uživatele jste neověřili.",
         "cross_signing_user_verified": "Tohoto uživatele jste ověřili a on ověřil všechny své relace.",
         "cross_signing_user_warning": "Tento uživatel zatím neověřil všechny své relace.",
-        "destroy_cross_signing_dialog": {
-            "primary_button_text": "Smazat klíče pro křížové podepisování",
-            "title": "Nenávratně smazat klíče pro křížové podepisování?",
-            "warning": "Smazání klíčů pro křížové podepisování je definitivní. Každý, kdo vás ověřil, teď uvidí bezpečnostní varování. Pokud jste zrovna neztratili všechna zařízení, ze kterých se můžete ověřit, tak to asi nechcete udělat."
-        },
         "enter_recovery_key": "Zadejte klíč pro obnovení",
         "event_shield_reason_authenticity_not_guaranteed": "Pravost této šifrované zprávy nelze na tomto zařízení ověřit.",
         "event_shield_reason_mismatched_sender_key": "Šifrované neověřenou relací",
@@ -968,7 +965,6 @@
             "title": "Nový způsob obnovy",
             "warning": "Pokud jste nenastavili nový způsob obnovy vy, mohou se pokoušet k vašemu účtu dostat útočníci. Změňte si raději ihned heslo a nastavte nový způsob obnovy v Nastavení."
         },
-        "not_supported": "<nepodporováno>",
         "pinned_identity_changed": "Identita %(displayName)s (<b>%(userId)s</b>) se změnila. <a>Další informace</a>",
         "pinned_identity_changed_no_displayname": "Identita uživatele <b>%(userId)s</b> se změnila. <a>Další informace</a>",
         "recovery_method_removed": {
@@ -984,8 +980,7 @@
         "set_up_toast_description": "Zabezpečení proti ztrátě přístupu k šifrovaným zprávám a datům",
         "set_up_toast_title": "Nastavení zabezpečené zálohy",
         "setup_secure_backup": {
-            "explainer": "Před odhlášením si zazálohujte klíče abyste o ně nepřišli.",
-            "title": "Nastavit"
+            "explainer": "Před odhlášením si zazálohujte klíče abyste o ně nepřišli."
         },
         "udd": {
             "interactive_verification_button": "Interaktivní ověření pomocí emoji",
@@ -1681,6 +1676,7 @@
         "class_global": "Globální",
         "class_other": "Další možnosti",
         "default": "Výchozí",
+        "default_settings": "Odpovídá výchozímu nastavení",
         "email_pusher_app_display_name": "E-mailová oznámení",
         "enable_prompt_toast_description": "Povolit oznámení na ploše",
         "enable_prompt_toast_title": "Oznámení",
@@ -1699,7 +1695,8 @@
         "mentions_and_keywords_description": "Dostávat oznámení pouze o zmínkách a klíčových slovech podle <a>nastavení</a>",
         "mentions_keywords": "Zmínky a klíčová slova",
         "message_didnt_send": "Zpráva se neodeslala. Klikněte pro informace.",
-        "mute_description": "Nebudete dostávat žádná oznámení"
+        "mute_description": "Nebudete dostávat žádná oznámení",
+        "mute_room": "Ztlumit místnost"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s žádá o ověření"
@@ -1801,11 +1798,6 @@
         "ongoing": "Odstaňování…",
         "reason_label": "Důvod (volitelné)"
     },
-    "reject_invitation_dialog": {
-        "confirmation": "Opravdu chcete odmítnout pozvání?",
-        "failed": "Nepodařilo se odmítnout pozvání",
-        "title": "Odmítnout pozvání"
-    },
     "report_content": {
         "description": "Nahlášení této zprávy pošle její jedinečné 'event ID' správci vašeho domovského serveru. Pokud jsou zprávy šifrované, správce nebude mít možnost přečíst text zprávy ani se podívat na soubory nebo obrázky.",
         "disagree": "Nesouhlasím",
@@ -1829,7 +1821,8 @@
         "toxic_behaviour": "Nevhodné chování"
     },
     "report_room": {
-        "description": "Nahlaste tuto místnost správci domovského serveru. Tím se odešle jedinečné ID místnosti, ale pokud jsou zprávy zašifrovány, správce je nebude moci číst ani zobrazit sdílené soubory."
+        "description": "Nahlaste tuto místnost svému poskytovateli účtu. Pokud jsou zprávy zašifrované, váš administrátor je nebude moci číst.",
+        "reason_label": "Popište důvod"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Nepovedlo se rozšifrovat %(failedCount)s sezení!",
@@ -2015,7 +2008,6 @@
             "you_created": "Vytvořili jste tuto místnost."
         },
         "invite_email_mismatch_suggestion": "Sdílet tento e-mail v nastavení, abyste mohli dostávat pozvánky přímo v %(brand)su.",
-        "invite_reject_ignore": "Odmítnout a ignorovat uživatele",
         "invite_sent_to_email": "Tato pozvánka byla odeslána na adresu %(email)s",
         "invite_sent_to_email_room": "Pozvánka do %(roomName)s byla odeslána na adresu %(email)s",
         "invite_subtitle": "Pozván od <userName/>",
@@ -2834,57 +2826,20 @@
         "prompt_invite": "Potvrdit odeslání pozvánky potenciálně neplatným Matrix ID",
         "replace_plain_emoji": "Automaticky nahrazovat textové emoji",
         "security": {
-            "4s_public_key_in_account_data": "v datech účtu",
-            "4s_public_key_status": "Veřejný klíč bezpečného úložiště:",
             "analytics_description": "Sdílet anonymní údaje, které nám pomohou identifikovat problémy. Nic osobního. Žádné třetí strany.",
-            "backup_key_cached_status": "Klíč zálohy cachován:",
-            "backup_key_stored_status": "Klíč zálohy uložen:",
-            "backup_key_unexpected_type": "neočekávaný typ",
-            "backup_key_well_formed": "ve správném tvaru",
-            "backup_keys_description": "Zálohujte šifrovací klíče s daty účtu pro případ, že ztratíte přístup k relacím. Vaše klíče budou zabezpečeny jedinečným klíčem pro obnovení.",
             "bulk_options_accept_all_invites": "Přijmout pozvání do všech těchto místností: %(invitedRooms)s",
             "bulk_options_reject_all_invites": "Odmítnutí všech %(invitedRooms)s pozvání",
             "bulk_options_section": "Hromadná možnost",
-            "cross_signing_cached": "uložen lokálně",
-            "cross_signing_homeserver_support": "Funkce podporovaná domovským serverem:",
-            "cross_signing_homeserver_support_exists": "existuje",
-            "cross_signing_in_4s": "v bezpečném úložišti",
-            "cross_signing_in_memory": "v paměti",
-            "cross_signing_master_private_Key": "Hlavní soukromý klíč:",
-            "cross_signing_not_cached": "nenalezen lolálně",
-            "cross_signing_not_found": "nenalezeno",
-            "cross_signing_not_in_4s": "nebylo nalezeno v úložišti",
-            "cross_signing_not_stored": "není uložen",
-            "cross_signing_private_keys": "Soukromé klíče pro křížový podpis:",
-            "cross_signing_public_keys": "Veřejné klíče pro křížový podpis:",
-            "cross_signing_self_signing_private_key": "Vlastní podpisový klíč:",
-            "cross_signing_user_signing_private_key": "Podpisový klíč uživatele:",
-            "cryptography_section": "Šifrování",
             "dehydrated_device_description": "Funkce offline zařízení umožňuje přijímat šifrované zprávy, i když nejste přihlášeni k žádnému zařízení.",
             "dehydrated_device_enabled": "Offline zařízení povoleno",
-            "delete_backup": "Smazat zálohu",
-            "delete_backup_confirm_description": "Opravdu? Pokud klíče nejsou správně zálohované můžete přijít o šifrované zprávy.",
             "dialog_title": "<strong>Nastavení:</strong> Zabezpečení a soukromí",
             "e2ee_default_disabled_warning": "Správce vašeho serveru vypnul ve výchozím nastavení koncové šifrování v soukromých místnostech a přímých zprávách.",
             "enable_message_search": "Povolit vyhledávání v šifrovaných místnostech",
             "encryption_section": "Šifrování",
-            "error_loading_key_backup_status": "Nepovedlo se načíst stav zálohy",
-            "export_megolm_keys": "Exportovat šifrovací klíče místností",
             "ignore_users_empty": "Nemáte žádné ignorované uživatele.",
             "ignore_users_section": "Ignorovaní uživatelé",
-            "import_megolm_keys": "Importovat šifrovací klíče místností",
-            "key_backup_active": "Tato relace zálohuje vaše klíče.",
-            "key_backup_active_version": "Verze aktivní zálohy:",
-            "key_backup_active_version_none": "Žádné",
             "key_backup_algorithm": "Algoritmus:",
-            "key_backup_can_be_restored": "Tuto zálohu lze obnovit v této relaci",
-            "key_backup_complete": "Všechny klíče jsou zazálohované",
             "key_backup_connect": "Připojit k zálohování klíčů",
-            "key_backup_connect_prompt": "Než se odhlásíte, připojte tuto relaci k záloze klíčů, abyste nepřišli o klíče, které mohou být jen v této relaci.",
-            "key_backup_in_progress": "Zálohování %(sessionsRemaining)s klíčů…",
-            "key_backup_inactive": "Tato relace <b>nezálohuje vaše klíče</b>, ale už máte zálohu ze které je můžete obnovit.",
-            "key_backup_inactive_warning": "Vaše klíče <b>nejsou z této relace zálohovány</b>.",
-            "key_backup_latest_version": "Nejnovější verze zálohy na serveru:",
             "message_search_disable_warning": "Když je to zakázané, zprávy v šifrovaných místnostech se nebudou objevovat ve výsledcích vyhledávání.",
             "message_search_disabled": "Bezpečně uchovávat zprávy na tomto zařízení aby se v nich dalo vyhledávat.",
             "message_search_enabled": {
@@ -2904,13 +2859,7 @@
             "message_search_unsupported": "%(brand)su chybí nějaké komponenty, které jsou potřeba pro vyhledávání v zabezpečených místnostech. Pokud chcete s touto funkcí experimentovat, tak si pořiďte vlastní %(brand)s Desktop s <nativeLink>přidanými komponentami</nativeLink>.",
             "message_search_unsupported_web": "%(brand)s nemůže bezpečně ukládat šifrované zprávy lokálně v prohlížeči. Pro zobrazení šifrovaných zpráv ve výsledcích vyhledávání použijte <desktopLink>%(brand)s Desktop</desktopLink>.",
             "record_session_details": "Zaznamenat název, verzi a url pro snadnější rozpoznání relací ve správci relací",
-            "restore_key_backup": "Obnovit ze zálohy",
-            "secret_storage_not_ready": "nepřipraveno",
-            "secret_storage_ready": "připraveno",
-            "secret_storage_status": "Bezpečné úložiště:",
             "send_analytics": "Odesílat analytická data",
-            "session_id": "ID relace:",
-            "session_key": "Klíč relace:",
             "strict_encryption": "Odesílat zprávy pouze ověřeným uživatelům"
         },
         "send_read_receipts": "Odesílat potvrzení o přečtení",

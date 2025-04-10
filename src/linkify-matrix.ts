@@ -198,7 +198,7 @@ export const options: Opts = {
         rel: "noreferrer noopener",
     },
 
-    ignoreTags: ["pre", "code"],
+    ignoreTags: ["a", "pre", "code"],
 
     className: "linkified",
 

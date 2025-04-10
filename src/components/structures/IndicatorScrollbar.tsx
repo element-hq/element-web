@@ -21,8 +21,6 @@ export type IProps<T extends keyof JSX.IntrinsicElements> = Omit<AutoHideScrollb
     // scroll horizontally rather than vertically. This should only be used on components
     // with no vertical scroll opportunity.
     verticalScrollsHorizontally?: boolean;
-
-    children: React.ReactNode;
 };
 
 interface IState {

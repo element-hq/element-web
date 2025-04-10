@@ -108,9 +108,7 @@ exports[`MessagePanel should handle lots of membership events quickly 1`] = `
               <span
                 class="mx_TextualEvent mx_GenericEventListSummary_summary"
               >
-                <span>
-                  @user:id made no changes 100 times
-                </span>
+                @user:id made no changes 100 times
               </span>
             </div>
           </div>

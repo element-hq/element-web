@@ -7,8 +7,6 @@ exports[`TextForEvent textForJoinRulesEvent() returns correct JSX message when r
     <AccessibleButton
       kind="link_inline"
       onClick={[Function]}
-      role="button"
-      tabIndex={0}
     >
       View settings
     </AccessibleButton>

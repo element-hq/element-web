@@ -224,7 +224,7 @@ exports[`ThreadsActivityCentre should close the release announcement when the TA
   <div
     data-radix-popper-content-wrapper=""
     dir="ltr"
-    style="position: fixed; left: 0px; top: 0px; transform: translate(0px, -8px); min-width: max-content; --radix-popper-available-width: 0px; --radix-popper-available-height: -8px; --radix-popper-anchor-width: 0px; --radix-popper-anchor-height: 0px; --radix-popper-transform-origin: 0% 0px;"
+    style="position: fixed; left: 0px; top: 0px; transform: translate(0px, -8px); min-width: max-content; --radix-popper-transform-origin: 0% 0px; --radix-popper-available-width: 0px; --radix-popper-available-height: -8px; --radix-popper-anchor-width: 0px; --radix-popper-anchor-height: 0px;"
   >
     <div
       aria-labelledby="radix-:r1c:"
