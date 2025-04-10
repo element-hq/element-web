@@ -22,7 +22,7 @@ import { getEmojiFromUnicode } from "@matrix-org/emojibase-bindings";
 import SettingsStore from "./settings/SettingsStore";
 import { stripHTMLReply, stripPlainReply } from "./utils/Reply";
 import { PERMITTED_URL_SCHEMES } from "./utils/UrlUtils";
-import { sanitizeHtmlParams, transformTags } from "./Linkify";
+import { filterImg, sanitizeHtmlParams, transformTags } from "./Linkify";
 import { graphemeSegmenter } from "./utils/strings";
 
 export { Linkify, linkifyAndSanitizeHtml } from "./Linkify";
@@ -294,12 +294,16 @@ export interface EventRenderOpts {
     disableBigEmoji?: boolean;
     stripReplyFallback?: boolean;
     forComposerQuote?: boolean;
+    mediaIsVisible?: boolean;
 }
 
 function analyseEvent(content: IContent, highlights: Optional<string[]>, opts: EventRenderOpts = {}): EventAnalysis {
     let sanitizeParams = sanitizeHtmlParams;
     if (opts.forComposerQuote) {
         sanitizeParams = composerSanitizeHtmlParams;
+    }
+    if (!opts.mediaIsVisible) {
+        sanitizeParams.exclusiveFilter = filterImg;
     }
 
     try {

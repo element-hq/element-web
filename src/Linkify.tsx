@@ -7,16 +7,14 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { type ReactElement } from "react";
-import sanitizeHtml, { type IOptions } from "sanitize-html";
+import sanitizeHtml, { IFrame, type IOptions } from "sanitize-html";
 import { merge } from "lodash";
 import _Linkify from "linkify-react";
 
 import { _linkifyString, ELEMENT_URL_PATTERN, options as linkifyMatrixOptions } from "./linkify-matrix";
-import SettingsStore from "./settings/SettingsStore";
 import { tryTransformPermalinkToLocalHref } from "./utils/permalinks/Permalinks";
 import { mediaFromMxc } from "./customisations/Media";
 import { PERMITTED_URL_SCHEMES } from "./utils/UrlUtils";
-import { MediaPreviewValue } from "./@types/media_preview";
 
 const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
 const MEDIA_API_MXC_REGEX = /\/_matrix\/media\/r0\/(?:download|thumbnail)\/(.+?)\/(.+?)(?:[?/]|$)/;
@@ -48,11 +46,9 @@ export const transformTags: NonNullable<IOptions["transformTags"]> = {
         // Strip out imgs that aren't `mxc` here instead of using allowedSchemesByTag
         // because transformTags is used _before_ we filter by allowedSchemesByTag and
         // we don't want to allow images with `https?` `src`s.
-        // We also drop inline images (as if they were not present at all) when the "show
-        // images" preference is disabled. Future work might expose some UI to reveal them
-        // like standalone image events have.
-        // TODO: Is this a private room?
-        if (!src || SettingsStore.getValue("mediaPreviewConfig").media_previews !== MediaPreviewValue.On) {
+        // Filtering out images now happens as a exlusive filter so we can conditionally apply this
+        // based on settings.
+        if (!src) {
             return { tagName, attribs: {} };
         }
 
@@ -200,6 +196,7 @@ export const sanitizeHtmlParams: IOptions = {
     nestingLimit: 50,
 };
 
+
 /* Wrapper around linkify-react merging in our default linkify options */
 export function Linkify({ as, options, children }: React.ComponentProps<typeof _Linkify>): ReactElement {
     return (
@@ -229,4 +226,8 @@ export function linkifyString(str: string, options = linkifyMatrixOptions): stri
  */
 export function linkifyAndSanitizeHtml(dirtyHtml: string, options = linkifyMatrixOptions): string {
     return sanitizeHtml(linkifyString(dirtyHtml, options), sanitizeHtmlParams);
+}
+
+export function filterImg(frame: IFrame): boolean {
+    return frame.tag === "img";
 }
