@@ -49,16 +49,15 @@ export function idNameForRoom(room: Room): string {
 
 export const RoomAvatar: React.FC<IProps> = ({
     room,
-    oobData,
     viewAvatarOnClick,
     onClick,
     className,
-    size,
+    oobData,
     ...otherProps
 }) => {
-    (size = size ?? "36px"), (oobData = oobData ?? {});
+    const size = otherProps.size ?? "36px";
 
-    const roomName = room?.name ?? oobData.name ?? "?";
+    const roomName = room?.name ?? oobData?.name ?? "?";
     const roomAvatarMxc = useRoomAvatar(room);
     const roomIdName = useMemo(() => {
         if (room) {
@@ -93,8 +92,8 @@ export const RoomAvatar: React.FC<IProps> = ({
             }
         }
         let oobAvatar: string | null = null;
-        if (oobData.avatarUrl) {
-            oobAvatar = mediaFromMxc(oobData.avatarUrl).getThumbnailOfSourceHttp(sizeInt, sizeInt, "crop");
+        if (oobData?.avatarUrl) {
+            oobAvatar = mediaFromMxc(oobData?.avatarUrl).getThumbnailOfSourceHttp(sizeInt, sizeInt, "crop");
         }
 
         return filterBoolean([
