@@ -10,9 +10,7 @@ import * as fs from "node:fs";
 import { type EventType, type MsgType } from "matrix-js-sdk/src/types";
 import { JoinRule } from "matrix-js-sdk/src/matrix";
 
-import type { Locator, Page } from "@playwright/test";
 import { test, expect } from "../../element-web-test";
-import { Bot } from "../../pages/bot";
 
 const ROOM_NAME = "Test room";
 const OLD_NAME = "Alan";
@@ -44,10 +42,10 @@ test.describe("Media preview settings", () => {
         await settings.getByLabel("Hide avatars of room and inviter").click();
         await app.closeDialog();
         await app.viewRoomById(room.roomId);
-        expect(page.getByRole("complementary").filter({ hasText: "Do you want to join Test room" })).toMatchScreenshot(
-            "invite-no-avatar.png",
-        );
-        expect(
+        await expect(
+            page.getByRole("complementary").filter({ hasText: "Do you want to join Test room" }),
+        ).toMatchScreenshot("invite-no-avatar.png");
+        await expect(
             page.getByRole("tree", { name: "Rooms" }).getByRole("treeitem", { name: "Test room" }),
         ).toMatchScreenshot("invite-room-tree-no-avatar.png");
 
@@ -57,10 +55,10 @@ test.describe("Media preview settings", () => {
         await app.closeDialog();
         await page.goto("#/home");
         await app.viewRoomById(room.roomId);
-        expect(page.getByRole("complementary").filter({ hasText: "Do you want to join Test room" })).toMatchScreenshot(
-            "invite-with-avatar.png",
-        );
-        expect(
+        await expect(
+            page.getByRole("complementary").filter({ hasText: "Do you want to join Test room" }),
+        ).toMatchScreenshot("invite-with-avatar.png");
+        await expect(
             page.getByRole("tree", { name: "Rooms" }).getByRole("treeitem", { name: "Test room" }),
         ).toMatchScreenshot("invite-room-tree-with-avatar.png");
     });

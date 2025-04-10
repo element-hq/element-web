@@ -101,7 +101,7 @@ export const RoomAvatar: React.FC<IProps> = ({
             oobAvatar, // highest priority
             roomAvatarMxc && Avatar.avatarUrlForRoom(room ?? null, sizeInt, sizeInt, "crop"),
         ]);
-    }, [mediaPreviewEnabled, room, size, roomAvatarMxc]);
+    }, [mediaPreviewEnabled, room, size, roomAvatarMxc, oobData]);
 
     return (
         <BaseAvatar
