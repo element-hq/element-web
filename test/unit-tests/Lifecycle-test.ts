@@ -622,14 +622,14 @@ describe("Lifecycle", () => {
             });
 
             it("should clear the storage if device is not the same", async () => {
-                const fake_credentials = {
+                const fakeCredentials = {
                     homeserverUrl,
                     identityServerUrl,
                     userId: "@bob:domain",
                     deviceId,
                     accessToken,
                 };
-                await Lifecycle.hydrateSession(fake_credentials);
+                await Lifecycle.hydrateSession(fakeCredentials);
 
                 expect(localStorage.removeItem).toHaveBeenCalledWith("mx_soft_logout");
                 expect(mockClient.getUserId).toHaveReturnedWith(userId);
