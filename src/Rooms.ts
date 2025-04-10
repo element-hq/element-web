@@ -59,7 +59,6 @@ export async function setDMRoom(client: MatrixClient, roomId: string, userId: st
     const currentContent = mDirectEvent?.getContent() || {};
 
     const dmRoomMap = new Map(Object.entries(currentContent));
-    let modified = false;
 
     // remove it from the lists of any others users
     // (it can only be a DM room for one person)
@@ -70,7 +69,6 @@ export async function setDMRoom(client: MatrixClient, roomId: string, userId: st
             const indexOfRoom = roomList.indexOf(roomId);
             if (indexOfRoom > -1) {
                 roomList.splice(indexOfRoom, 1);
-                modified = true;
             }
         }
     }
@@ -80,13 +78,9 @@ export async function setDMRoom(client: MatrixClient, roomId: string, userId: st
         const roomList = dmRoomMap.get(userId) || [];
         if (roomList.indexOf(roomId) == -1) {
             roomList.push(roomId);
-            modified = true;
         }
         dmRoomMap.set(userId, roomList);
     }
-
-    // prevent unnecessary calls to setAccountData
-    if (!modified) return;
 
     await client.setAccountData(EventType.Direct, Object.fromEntries(dmRoomMap));
 }
