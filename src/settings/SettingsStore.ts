@@ -374,10 +374,6 @@ export default class SettingsStore {
         roomId: string | null = null,
         excludeDefault = false,
     ): Settings[S]["default"] | undefined {
-        if (settingName === "mediaPreviewConfig") {
-            console.log("GET VALUE", SETTINGS[settingName]);
-        }
-
         // Verify that the setting is actually a setting
         if (!SETTINGS[settingName]) {
             throw new Error("Setting '" + settingName + "' does not appear to be a setting.");

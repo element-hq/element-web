@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ClientEvent, type MatrixEvent, type MatrixClient, IContent } from "matrix-js-sdk/src/matrix";
+import { type IContent } from "matrix-js-sdk/src/matrix";
 import { type AccountDataEvents } from "matrix-js-sdk/src/types";
 
 import {
@@ -31,17 +31,23 @@ export default class MediaPreviewConfigController extends MatrixClientBackedCont
         const inviteAvatars: MediaPreviewValue = content.invite_avatars;
         const validValues = Object.values(MediaPreviewValue);
         return {
-            invite_avatars: validValues.includes(inviteAvatars) ? inviteAvatars : MediaPreviewConfigController.default.invite_avatars,
-            media_previews: validValues.includes(mediaPreviews) ? mediaPreviews : MediaPreviewConfigController.default.media_previews,
+            invite_avatars: validValues.includes(inviteAvatars)
+                ? inviteAvatars
+                : MediaPreviewConfigController.default.invite_avatars,
+            media_previews: validValues.includes(mediaPreviews)
+                ? mediaPreviews
+                : MediaPreviewConfigController.default.media_previews,
         };
+    }
+
+    public constructor() {
+        super();
     }
 
     private getValue = (roomId?: string): MediaPreviewConfig | null => {
         const source = roomId ? this.client?.getRoom(roomId) : this.client;
-        const value = source
-                ?.getAccountData(MEDIA_PREVIEW_ACCOUNT_DATA_TYPE)
-                ?.getContent<MediaPreviewConfig>();
-        
+        const value = source?.getAccountData(MEDIA_PREVIEW_ACCOUNT_DATA_TYPE)?.getContent<MediaPreviewConfig>();
+
         if (!value) {
             return null;
         } else {
@@ -49,20 +55,17 @@ export default class MediaPreviewConfigController extends MatrixClientBackedCont
         }
     };
 
-
-    protected async initMatrixClient(newClient: MatrixClient, oldClient?: MatrixClient): Promise<void> {
-
+    protected async initMatrixClient(): Promise<void> {
+        // Unused
     }
 
     public getValueOverride(_level: SettingLevel, roomId: string | null): MediaPreviewConfig {
-        if (roomId) {
-            // Use globals for any undefined setting
-            return {
-                ...this.getRoomValue(roomId),
-                ...this.globalSetting,
-            };
+        const roomConfig = roomId && this.getValue(roomId);
+        if (roomConfig) {
+            return roomConfig;
         }
-        return this.globalSetting;
+        // If no room config, or global settings request then return global.
+        return this.getValue() ?? MediaPreviewConfigController.default;
     }
 
     public get settingDisabled(): false {
@@ -79,9 +82,7 @@ export default class MediaPreviewConfigController extends MatrixClientBackedCont
             return false;
         }
         if (roomId) {
-            await this.client.setRoomAccountData(roomId, MEDIA_PREVIEW_ACCOUNT_DATA_TYPE, {
-                value: newValue,
-            });
+            await this.client.setRoomAccountData(roomId, MEDIA_PREVIEW_ACCOUNT_DATA_TYPE, newValue);
             return true;
         }
         await this.client.setAccountData(MEDIA_PREVIEW_ACCOUNT_DATA_TYPE, newValue);

@@ -22,6 +22,7 @@ import { SettingsSubsection } from "../../shared/SettingsSubsection";
 import SettingsTab from "../SettingsTab";
 import { SettingsSection } from "../../shared/SettingsSection";
 import { UrlPreviewSettings } from "../../../room_settings/UrlPreviewSettings";
+import { MediaPreviewAccountSettings } from "../user/MediaPreviewSetting";
 
 interface IProps {
     room: Room;
@@ -92,6 +93,7 @@ export default class GeneralRoomSettingsTab extends React.Component<IProps, ISta
 
                 <SettingsSection heading={_t("room_settings|general|other_section")}>
                     {urlPreviewSettings}
+                    <MediaPreviewAccountSettings roomId={room.roomId} />
                     {leaveSection}
                 </SettingsSection>
             </SettingsTab>

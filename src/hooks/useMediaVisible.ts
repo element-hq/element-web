@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import { JoinRule } from "matrix-js-sdk/src/matrix";
 
 import { SettingLevel } from "../settings/SettingLevel";
@@ -13,6 +13,7 @@ import { useSettingValue } from "./useSettings";
 import SettingsStore from "../settings/SettingsStore";
 import { useMatrixClientContext } from "../contexts/MatrixClientContext";
 import { MediaPreviewValue } from "../@types/media_preview";
+import { useJoinRule } from "./room/useJoinRule";
 
 const PRIVATE_JOIN_RULES: JoinRule[] = [JoinRule.Invite, JoinRule.Knock, JoinRule.Restricted];
 
@@ -25,6 +26,7 @@ export function useMediaVisible(eventId: string, roomId: string): [boolean, (vis
     const mediaPreviewSetting = useSettingValue("mediaPreviewConfig", roomId);
     const client = useMatrixClientContext();
     const eventVisibility = useSettingValue("showMediaEventIds");
+    const joinRule = useJoinRule(client.getRoom(roomId) ?? undefined);
     const setMediaVisible = useCallback(
         (visible: boolean) => {
             SettingsStore.setValue("showMediaEventIds", null, SettingLevel.DEVICE, {
@@ -35,15 +37,7 @@ export function useMediaVisible(eventId: string, roomId: string): [boolean, (vis
         [eventId, eventVisibility],
     );
 
-    const roomIsPrivate = useMemo(() => {
-        const joinRule = client?.getRoom(roomId)?.getJoinRule();
-        if (PRIVATE_JOIN_RULES.includes(joinRule as JoinRule)) {
-            return true;
-        } else {
-            // All other join rules, and unknown will default to hiding.
-            return false;
-        }
-    }, [client, roomId]);
+    const roomIsPrivate = joinRule ? PRIVATE_JOIN_RULES.includes(joinRule) : false;
 
     const explicitEventVisiblity = eventVisibility[eventId];
     // Always prefer the explicit per-event user preference here.

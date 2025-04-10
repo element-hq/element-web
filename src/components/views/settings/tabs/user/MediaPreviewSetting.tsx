@@ -15,19 +15,30 @@ import { useSettingValue } from "../../../../../hooks/useSettings";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 
-export const MediaPreviewAccountSettings: React.FC = () => {
-    const currentMediaPreview = useSettingValue("mediaPreviewConfig");
+export const MediaPreviewAccountSettings: React.FC<{ roomId?: string }> = ({ roomId }) => {
+    const currentMediaPreview = useSettingValue("mediaPreviewConfig", roomId);
+
+    const changeSetting = useCallback(
+        (newValue: MediaPreviewConfig) => {
+            SettingsStore.setValue(
+                "mediaPreviewConfig",
+                roomId ?? null,
+                roomId ? SettingLevel.ROOM_ACCOUNT : SettingLevel.ACCOUNT,
+                newValue,
+            );
+        },
+        [roomId],
+    );
 
     const avatarOnChange = useCallback(
         (c: boolean) => {
-            const newValue = {
+            changeSetting({
                 ...currentMediaPreview,
                 // Switch is inverted. "Hide avatars..."
                 invite_avatars: c ? MediaPreviewValue.Off : MediaPreviewValue.On,
-            } satisfies MediaPreviewConfig;
-            SettingsStore.setValue("mediaPreviewConfig", null, SettingLevel.ACCOUNT, newValue);
+            });
         },
-        [currentMediaPreview],
+        [changeSetting, currentMediaPreview],
     );
 
     const mediaPreviewOnChangeOff = useCallback<ChangeEventHandler<HTMLInputElement>>(
@@ -35,12 +46,12 @@ export const MediaPreviewAccountSettings: React.FC = () => {
             if (!event.target.checked) {
                 return;
             }
-            SettingsStore.setValue("mediaPreviewConfig", null, SettingLevel.ACCOUNT, {
+            changeSetting({
                 ...currentMediaPreview,
                 media_previews: MediaPreviewValue.Off,
-            } satisfies MediaPreviewConfig);
+            });
         },
-        [currentMediaPreview],
+        [changeSetting, currentMediaPreview],
     );
 
     const mediaPreviewOnChangePrivate = useCallback<ChangeEventHandler<HTMLInputElement>>(
@@ -48,12 +59,12 @@ export const MediaPreviewAccountSettings: React.FC = () => {
             if (!event.target.checked) {
                 return;
             }
-            SettingsStore.setValue("mediaPreviewConfig", null, SettingLevel.ACCOUNT, {
+            changeSetting({
                 ...currentMediaPreview,
                 media_previews: MediaPreviewValue.Private,
-            } satisfies MediaPreviewConfig);
+            });
         },
-        [currentMediaPreview],
+        [changeSetting, currentMediaPreview],
     );
 
     const mediaPreviewOnChangeOn = useCallback<ChangeEventHandler<HTMLInputElement>>(
@@ -61,56 +72,71 @@ export const MediaPreviewAccountSettings: React.FC = () => {
             if (!event.target.checked) {
                 return;
             }
-            SettingsStore.setValue("mediaPreviewConfig", null, SettingLevel.ACCOUNT, {
+            changeSetting({
                 ...currentMediaPreview,
                 media_previews: MediaPreviewValue.On,
-            } satisfies MediaPreviewConfig);
+            });
         },
-        [currentMediaPreview],
+        [changeSetting, currentMediaPreview],
     );
 
     return (
         <Root>
-            <LabelledToggleSwitch
-                label={_t("settings|media_preview|hide_avatars")}
-                value={currentMediaPreview.invite_avatars === MediaPreviewValue.Off}
-                onChange={avatarOnChange}
-            />
-            <Field role="radiogroup" name="media_previews">
+            {!roomId && (
+                <LabelledToggleSwitch
+                    label={_t("settings|media_preview|hide_avatars")}
+                    value={currentMediaPreview.invite_avatars === MediaPreviewValue.Off}
+                    onChange={avatarOnChange}
+                />
+            )}
+            {/* Explict label here because htmlFor is not supported for linking to radiogroups */}
+            <Field
+                id="mx_media_previews"
+                role="radiogroup"
+                name="media_previews"
+                aria-label={_t("settings|media_preview|media_preview_label")}
+            >
                 <Label>{_t("settings|media_preview|media_preview_label")}</Label>
                 <HelpMessage>{_t("settings|media_preview|media_preview_description")}</HelpMessage>
                 <InlineField
                     name="media_preview_off"
                     control={
                         <RadioInput
+                            id="mx_media_previews_off"
                             checked={currentMediaPreview.media_previews === MediaPreviewValue.Off}
                             onChange={mediaPreviewOnChangeOff}
                         />
                     }
                 >
-                    <Label>{_t("settings|media_preview|hide_media")}</Label>
+                    <Label htmlFor="mx_media_previews_off">{_t("settings|media_preview|hide_media")}</Label>
                 </InlineField>
-                <InlineField
-                    name="media_preview_private"
-                    control={
-                        <RadioInput
-                            checked={currentMediaPreview.media_previews === MediaPreviewValue.Private}
-                            onChange={mediaPreviewOnChangePrivate}
-                        />
-                    }
-                >
-                    <Label>{_t("settings|media_preview|show_in_private")}</Label>
-                </InlineField>
+                {!roomId && (
+                    <InlineField
+                        name="mx_media_previews_private"
+                        control={
+                            <RadioInput
+                                id="mx_media_previews_private"
+                                checked={currentMediaPreview.media_previews === MediaPreviewValue.Private}
+                                onChange={mediaPreviewOnChangePrivate}
+                            />
+                        }
+                    >
+                        <Label htmlFor="mx_media_previews_private">
+                            {_t("settings|media_preview|show_in_private")}
+                        </Label>
+                    </InlineField>
+                )}
                 <InlineField
                     name="media_preview_on"
                     control={
                         <RadioInput
+                            id="mx_media_previews_on"
                             checked={currentMediaPreview.media_previews === MediaPreviewValue.On}
                             onChange={mediaPreviewOnChangeOn}
                         />
                     }
                 >
-                    <Label>{_t("settings|media_preview|show_media")}</Label>
+                    <Label htmlFor="mx_media_previews_on">{_t("settings|media_preview|show_media")}</Label>
                 </InlineField>
             </Field>
         </Root>
