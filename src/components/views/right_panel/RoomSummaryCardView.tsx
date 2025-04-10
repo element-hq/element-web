@@ -40,23 +40,25 @@ import ErrorSolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/e
 import ChevronDownIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-down";
 import { JoinRule, type Room } from "matrix-js-sdk/src/matrix";
 
-import BaseCard from "./BaseCard";
-import { _t } from "../../../languageHandler";
-import RoomAvatar from "../avatars/RoomAvatar";
-import { E2EStatus } from "../../../utils/ShieldUtils";
-import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
-import RoomName from "../elements/RoomName";
-import { Flex } from "../../utils/Flex";
-import { DefaultTagID } from "../../../stores/room-list/models";
-import { tagRoom } from "../../../utils/room/tagRoom";
-import { inviteToRoom } from "../../../utils/room/inviteToRoom";
-import { Linkify } from "../../../HtmlUtils";
-import { Box } from "../../utils/Box";
+import BaseCard from "./BaseCard.tsx";
+import { _t } from "../../../languageHandler.tsx";
+import RoomAvatar from "../avatars/RoomAvatar.tsx";
+import { E2EStatus } from "../../../utils/ShieldUtils.ts";
+import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks.ts";
+import RoomName from "../elements/RoomName.tsx";
+import { Flex } from "../../utils/Flex.tsx";
+import { DefaultTagID } from "../../../stores/room-list/models.ts";
+import { tagRoom } from "../../../utils/room/tagRoom.ts";
+import { inviteToRoom } from "../../../utils/room/inviteToRoom.ts";
+import { Linkify, topicToHtml } from "../../../HtmlUtils.tsx";
+import { Box } from "../../utils/Box.tsx";
 import { ReleaseAnnouncement } from "../../structures/ReleaseAnnouncement.tsx";
 import {
     useRoomSummaryCardViewModel,
     useRoomTopicViewModel,
 } from "../../viewmodels/rooms/RoomSummaryCardViewModel.tsx";
+import { useTopic } from "../../../hooks/room/useTopic.ts";
+
 
 interface IProps {
     room: Room;
@@ -70,11 +72,14 @@ interface IProps {
 const RoomTopic: React.FC<Pick<IProps, "room">> = ({ room }): JSX.Element | null => {
     const vm = useRoomTopicViewModel(room);
 
-    if (!vm.body && !vm.canEditTopic) {
+    const topic = useTopic(room) ?? { text: "", html: "" };
+    const body = topicToHtml(topic?.text, topic?.html);
+    
+    if (!body && !vm.canEditTopic) {
         return null;
     }
 
-    if (!vm.body) {
+    if (!body) {
         return (
             <Flex
                 as="section"
@@ -94,7 +99,8 @@ const RoomTopic: React.FC<Pick<IProps, "room">> = ({ room }): JSX.Element | null
         );
     }
 
-    const content = vm.expanded ? <Linkify>{vm.body}</Linkify> : vm.body;
+    const content = vm.expanded ? <Linkify>{body}</Linkify> : body;
+
     return (
         <Flex
             as="section"
@@ -126,7 +132,7 @@ const RoomTopic: React.FC<Pick<IProps, "room">> = ({ room }): JSX.Element | null
     );
 };
 
-const RoomSummaryCard: React.FC<IProps> = ({
+const RoomSummaryCardView: React.FC<IProps> = ({
     room,
     permalinkCreator,
     onSearchChange,
@@ -319,4 +325,4 @@ const RoomSummaryCard: React.FC<IProps> = ({
     );
 };
 
-export default RoomSummaryCard;
+export default RoomSummaryCardView;

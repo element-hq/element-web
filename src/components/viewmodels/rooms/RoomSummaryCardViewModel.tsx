@@ -4,14 +4,13 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { ReactNode, SyntheticEvent, useEffect, useRef, useState } from "react";
-import { ContentHelpers, EventType, JoinRule, Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
-import { type Optional } from "matrix-events-sdk";
+import { type SyntheticEvent, useEffect, useRef, useState } from "react";
+import { EventType, type JoinRule, type Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
 import { useIsEncrypted } from "../../../hooks/useIsEncrypted";
 import { useScopedRoomContext } from "../../../contexts/ScopedRoomContext";
-import { E2EStatus } from "../../../utils/ShieldUtils";
+import { type E2EStatus } from "../../../utils/ShieldUtils";
 import { isVideoRoom as calcIsVideoRoom } from "../../../utils/video-rooms";
 import { useRoomState } from "../../../hooks/useRoomState";
 import { useAccountData } from "../../../hooks/useAccountData";
@@ -24,8 +23,6 @@ import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/Roo
 import { canInviteTo } from "../../../utils/room/canInviteTo";
 import { DefaultTagID } from "../../../stores/room-list/models";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
-import { topicToHtml } from "../../../HtmlUtils";
-import { useTopic } from "../../../hooks/room/useTopic";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import PosthogTrackers from "../../../PosthogTrackers";
@@ -33,7 +30,7 @@ import { PollHistoryDialog } from "../../views/dialogs/PollHistoryDialog";
 import Modal from "../../../Modal";
 import ExportDialog from "../../views/dialogs/ExportDialog";
 import { ShareDialog } from "../../views/dialogs/ShareDialog";
-import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { ReportRoomDialog } from "../../views/dialogs/ReportRoomDialog";
 import { Key } from "../../../Keyboard";
 import { onRoomTopicLinkClick } from "../../views/elements/RoomTopic";
@@ -241,8 +238,6 @@ export function useRoomSummaryCardViewModel(
 // Room Topic
 export interface RoomTopicState {
     expanded: boolean;
-    topic: Optional<ContentHelpers.TopicState>;
-    body: ReactNode | null;
     canEditTopic: boolean;
     onEditClick: (e: SyntheticEvent) => void;
     onExpandedClick: (ev: SyntheticEvent) => void;
@@ -251,9 +246,6 @@ export interface RoomTopicState {
 
 export function useRoomTopicViewModel(room: Room): RoomTopicState {
     const [expanded, setExpanded] = useState(true);
-
-    const topic = useTopic(room) ?? { text: "", html: "" };
-    const body = topicToHtml(topic?.text, topic?.html);
 
     const canEditTopic = useRoomState(room, (state) =>
         state.maySendStateEvent(EventType.RoomTopic, room.client.getSafeUserId()),
@@ -280,8 +272,6 @@ export function useRoomTopicViewModel(room: Room): RoomTopicState {
 
     return {
         expanded,
-        topic,
-        body,
         canEditTopic,
         onEditClick,
         onExpandedClick,

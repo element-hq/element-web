@@ -8,10 +8,10 @@ Please see LICENSE files in the repository root for full details.
 
 import React from "react";
 import { render, fireEvent, screen } from "jest-matrix-react";
-import { Room, type MatrixClient, JoinRule } from "matrix-js-sdk/src/matrix";
+import { Room, type MatrixClient, JoinRule, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { mocked, type MockedObject } from "jest-mock";
 
-import RoomSummaryCard from "../../../../../src/components/views/right_panel/RoomSummaryCard";
+import RoomSummaryCardView from "../../../../../src/components/views/right_panel/RoomSummaryCardView";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import * as settingsHooks from "../../../../../src/hooks/useSettings";
 import Modal from "../../../../../src/Modal";
@@ -19,7 +19,7 @@ import { flushPromises, stubClient, untilDispatch } from "../../../../test-utils
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import { _t } from "../../../../../src/languageHandler";
 import { ReportRoomDialog } from "../../../../../src/components/views/dialogs/ReportRoomDialog.tsx";
-import { RoomSummaryCardState, RoomTopicState, useRoomSummaryCardViewModel, useRoomTopicViewModel } from "../../../../../src/components/viewmodels/rooms/RoomSummaryCardViewModel";
+import { type RoomSummaryCardState, type RoomTopicState, useRoomSummaryCardViewModel, useRoomTopicViewModel } from "../../../../../src/components/viewmodels/rooms/RoomSummaryCardViewModel";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher.ts";
 jest.mock("../../../../../src/utils/room/tagRoom");
@@ -44,7 +44,7 @@ describe("<RoomSummaryCard />", () => {
             permalinkCreator: new RoomPermalinkCreator(room),
         };
 
-        return render(<RoomSummaryCard {...defaultProps} {...props} />, {
+        return render(<RoomSummaryCardView {...defaultProps} {...props} />, {
             wrapper: ({ children }) => (
                 <MatrixClientContext.Provider value={mockClient}>{children}</MatrixClientContext.Provider>
             ),
@@ -81,8 +81,6 @@ describe("<RoomSummaryCard />", () => {
 
     const topicVmDefaultValues: RoomTopicState = {
         expanded: true,
-        topic: undefined,
-        body: null,
         canEditTopic: false,
         onEditClick: jest.fn(),
         onExpandedClick: jest.fn(),
@@ -111,19 +109,35 @@ describe("<RoomSummaryCard />", () => {
     });
 
     it("renders the room topic in the summary", () => {
-        mocked(useRoomTopicViewModel).mockReturnValue({
-            ...topicVmDefaultValues,
-            topic: { text: "This is the room's topic." },
-        });
+        mocked(useRoomTopicViewModel).mockReturnValue(topicVmDefaultValues);
+        room.currentState.setStateEvents([
+            new MatrixEvent({
+                type: "m.room.topic",
+                room_id: roomId,
+                sender: userId,
+                content: {
+                    topic: "This is the room's topic.",
+                },
+                state_key: "",
+            }),
+        ]);
         const { container } = getComponent();
         expect(container).toMatchSnapshot();
     });
 
     it("has button to edit topic", () => {
-        mocked(useRoomTopicViewModel).mockReturnValue({
-            ...topicVmDefaultValues,
-            topic: { text: "This is the room's topic." },
-        });
+        mocked(useRoomTopicViewModel).mockReturnValue(topicVmDefaultValues,);
+        room.currentState.setStateEvents([
+            new MatrixEvent({
+                type: "m.room.topic",
+                room_id: roomId,
+                sender: userId,
+                content: {
+                    topic: "This is the room's topic.",
+                },
+                state_key: "",
+            }),
+        ]);
         const { container, getByText } = getComponent();
         expect(getByText("Edit")).toBeInTheDocument();
         expect(container).toMatchSnapshot();
