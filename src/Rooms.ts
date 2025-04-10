@@ -67,7 +67,7 @@ export async function setDMRoom(client: MatrixClient, roomId: string, userId: st
 
     // now add it if the caller asked for it to be a DM room
     if (userId) {
-        if (filteredContent[userId]) {
+        if (!filteredContent[userId]) {
             filteredContent[userId] = [];
         }
         filteredContent[userId].push(roomId);
