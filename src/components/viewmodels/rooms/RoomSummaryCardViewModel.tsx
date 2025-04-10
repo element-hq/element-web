@@ -4,7 +4,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type SyntheticEvent, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { EventType, type JoinRule, type Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 
 import { useMatrixClientContext } from "../../../contexts/MatrixClientContext";
@@ -33,7 +33,6 @@ import { ShareDialog } from "../../views/dialogs/ShareDialog";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { ReportRoomDialog } from "../../views/dialogs/ReportRoomDialog";
 import { Key } from "../../../Keyboard";
-import { onRoomTopicLinkClick } from "../../views/elements/RoomTopic";
 import { usePinnedEvents } from "../../../hooks/usePinnedEvents";
 import { tagRoom } from "../../../utils/room/tagRoom";
 import { inviteToRoom } from "../../../utils/room/inviteToRoom";
@@ -65,6 +64,64 @@ export interface RoomSummaryCardState {
     onInviteToRoomClick: () => void;
 }
 
+const useIsDirectMessage = (room: Room): boolean => {
+    const directRoomsList = useAccountData<Record<string, string[]>>(room.client, EventType.Direct);
+    const [isDirectMessage, setDirectMessage] = useState(false);
+
+    useEffect(() => {
+        for (const [, dmRoomList] of Object.entries(directRoomsList)) {
+            if (dmRoomList.includes(room?.roomId ?? "")) {
+                setDirectMessage(true);
+                break;
+            }
+        }
+    }, [room, directRoomsList]);
+
+    return isDirectMessage;
+};
+
+const useSearchInput = (onSearchCancel?: () => void): {
+    searchInputRef: React.RefObject<HTMLInputElement | null>;
+    onUpdateSearchInput: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+} => {
+    const searchInputRef = useRef<HTMLInputElement>(null);
+    const roomContext = useScopedRoomContext("timelineRenderingType");
+
+    const onUpdateSearchInput = (e: React.KeyboardEvent<HTMLInputElement>): void => {
+        if (searchInputRef.current && e.key === Key.ESCAPE) {
+            searchInputRef.current.value = "";
+            onSearchCancel?.();
+        }
+    };
+
+    // Focus the search field when the user clicks on the search button component
+    useDispatcher(defaultDispatcher, (payload) => {
+        if (payload.action === Action.FocusMessageSearch) {
+            searchInputRef.current?.focus();
+        }
+    });
+
+    // Clear the search field when the user leaves the search view
+    useTransition(
+        (prevTimelineRenderingType) => {
+            if (
+                prevTimelineRenderingType === TimelineRenderingType.Search &&
+                roomContext.timelineRenderingType !== TimelineRenderingType.Search &&
+                searchInputRef.current
+            ) {
+                searchInputRef.current.value = "";
+            }
+        },
+        [roomContext.timelineRenderingType],
+    );
+
+    return {
+        searchInputRef,
+        onUpdateSearchInput,
+    };
+}
+
+
 export function useRoomSummaryCardViewModel(
     room: Room,
     permalinkCreator: RoomPermalinkCreator,
@@ -90,17 +147,7 @@ export function useRoomSummaryCardViewModel(
     );
     const isFavorite = roomTags.includes(DefaultTagID.Favourite);
 
-    const directRoomsList = useAccountData<Record<string, string[]>>(room.client, EventType.Direct);
-    const [isDirectMessage, setDirectMessage] = useState(false);
-    // Check if room is DM, and set the room as a direct message if it is
-    useEffect(() => {
-        for (const [, dmRoomList] of Object.entries(directRoomsList)) {
-            if (dmRoomList.includes(room?.roomId ?? "")) {
-                setDirectMessage(true);
-                break;
-            }
-        }
-    }, [room, directRoomsList]);
+    const isDirectMessage = useIsDirectMessage(room);
 
     const onRoomMembersClick = (): void => {
         RightPanelStore.instance.pushCard({ phase: RightPanelPhases.MemberList }, true);
@@ -176,36 +223,7 @@ export function useRoomSummaryCardViewModel(
     };
 
     // Room Search element ref
-    const searchInputRef = useRef<HTMLInputElement>(null);
-
-    // Onkeydown press escape event, clear the search field
-    const onUpdateSearchInput = (e: React.KeyboardEvent<HTMLInputElement>): void => {
-        if (searchInputRef.current && e.key === Key.ESCAPE) {
-            searchInputRef.current.value = "";
-            onSearchCancel?.();
-        }
-    };
-
-    // Focus the search field when the user clicks on the search button component
-    useDispatcher(defaultDispatcher, (payload) => {
-        if (payload.action === Action.FocusMessageSearch) {
-            searchInputRef.current?.focus();
-        }
-    });
-
-    // Clear the search field when the user leaves the search view
-    useTransition(
-        (prevTimelineRenderingType) => {
-            if (
-                prevTimelineRenderingType === TimelineRenderingType.Search &&
-                roomContext.timelineRenderingType !== TimelineRenderingType.Search &&
-                searchInputRef.current
-            ) {
-                searchInputRef.current.value = "";
-            }
-        },
-        [roomContext.timelineRenderingType],
-    );
+    const { searchInputRef, onUpdateSearchInput } = useSearchInput(onSearchCancel);
 
     return {
         isDirectMessage,
@@ -232,49 +250,5 @@ export function useRoomSummaryCardViewModel(
         onUpdateSearchInput,
         onFavoriteToggleClick,
         onInviteToRoomClick,
-    };
-}
-
-// Room Topic
-export interface RoomTopicState {
-    expanded: boolean;
-    canEditTopic: boolean;
-    onEditClick: (e: SyntheticEvent) => void;
-    onExpandedClick: (ev: SyntheticEvent) => void;
-    onTopicLinkClick: (e: React.MouseEvent) => void;
-}
-
-export function useRoomTopicViewModel(room: Room): RoomTopicState {
-    const [expanded, setExpanded] = useState(true);
-
-    const canEditTopic = useRoomState(room, (state) =>
-        state.maySendStateEvent(EventType.RoomTopic, room.client.getSafeUserId()),
-    );
-
-    const onEditClick = (e: SyntheticEvent): void => {
-        e.preventDefault();
-        e.stopPropagation();
-        defaultDispatcher.dispatch({ action: "open_room_settings" });
-    };
-
-    const onExpandedClick = (e: SyntheticEvent): void => {
-        e.preventDefault();
-        e.stopPropagation();
-        setExpanded(!expanded);
-    };
-
-    const onTopicLinkClick = (e: React.MouseEvent): void => {
-        if (e.target instanceof HTMLAnchorElement) {
-            onRoomTopicLinkClick(e);
-            return;
-        }
-    };
-
-    return {
-        expanded,
-        canEditTopic,
-        onEditClick,
-        onExpandedClick,
-        onTopicLinkClick,
     };
 }
