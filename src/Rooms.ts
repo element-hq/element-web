@@ -9,6 +9,7 @@ Please see LICENSE files in the repository root for full details.
 import { type Room, EventType, type RoomMember, type MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import AliasCustomisations from "./customisations/Alias";
+import { filterValidMDirect } from "./utils/dm/filterValidMDirect.ts";
 
 /**
  * Given a room object, return the alias we should use for it,
@@ -56,39 +57,23 @@ export async function setDMRoom(client: MatrixClient, roomId: string, userId: st
     if (client.isGuest()) return;
 
     const mDirectEvent = client.getAccountData(EventType.Direct);
-    const currentContent = mDirectEvent?.getContent() || {};
+    const { filteredContent } = filterValidMDirect(mDirectEvent?.getContent() ?? {});
 
-    const dmRoomMap = new Map(Object.entries(currentContent));
-    let modified = false;
-
-    // remove it from the lists of any others users
-    // (it can only be a DM room for one person)
-    for (const thisUserId of dmRoomMap.keys()) {
-        const roomList = dmRoomMap.get(thisUserId) || [];
-
-        if (thisUserId != userId) {
-            const indexOfRoom = roomList.indexOf(roomId);
-            if (indexOfRoom > -1) {
-                roomList.splice(indexOfRoom, 1);
-                modified = true;
-            }
-        }
+    // remove it from the lists of all users (it can only be a DM room for one person)
+    for (const thisUserId in filteredContent) {
+        if (!filteredContent[thisUserId]) continue;
+        filteredContent[thisUserId] = filteredContent[thisUserId].filter((room) => room !== roomId);
     }
 
-    // now add it, if it's not already there
+    // now add it if the caller asked for it to be a DM room
     if (userId) {
-        const roomList = dmRoomMap.get(userId) || [];
-        if (roomList.indexOf(roomId) == -1) {
-            roomList.push(roomId);
-            modified = true;
+        if (!filteredContent[userId]) {
+            filteredContent[userId] = [];
         }
-        dmRoomMap.set(userId, roomList);
+        filteredContent[userId].push(roomId);
     }
 
-    // prevent unnecessary calls to setAccountData
-    if (!modified) return;
-
-    await client.setAccountData(EventType.Direct, Object.fromEntries(dmRoomMap));
+    await client.setAccountData(EventType.Direct, filteredContent);
 }
 
 /**
