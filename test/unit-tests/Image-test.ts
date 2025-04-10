@@ -52,7 +52,9 @@ describe("Image", () => {
         });
 
         it("Static WEBP in extended file format", async () => {
-            const img = new Blob([fs.readFileSync(path.resolve(__dirname, "images", "static-logo-extended-file-format.webp"))]);
+            const img = new Blob([
+                fs.readFileSync(path.resolve(__dirname, "images", "static-logo-extended-file-format.webp")),
+            ]);
             expect(await blobIsAnimated("image/webp", img)).toBeFalsy();
         });
 
