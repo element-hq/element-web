@@ -17,7 +17,6 @@ import type { UserWidget } from "../utils/WidgetUtils-types.ts";
 import { type MediaPreviewConfig } from "./media_preview.ts";
 
 // Extend Matrix JS SDK types via Typescript declaration merging to support unspecced event fields and types
-
 declare module "matrix-js-sdk/src/types" {
     export interface FileInfo {
         /**

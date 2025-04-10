@@ -12,18 +12,15 @@ import { JoinRule } from "matrix-js-sdk/src/matrix";
 
 import { test, expect } from "../../element-web-test";
 
-const ROOM_NAME = "Test room";
-const OLD_NAME = "Alan";
-
 const MEDIA_FILE = fs.readFileSync("playwright/sample-files/riot.png");
 
 test.describe("Media preview settings", () => {
     test.use({
-        displayName: OLD_NAME,
+        displayName: "Alan",
         room: async ({ app, page, homeserver, bot, user }, use) => {
             const mxc = (await bot.uploadContent(MEDIA_FILE, { name: "image.png", type: "image/png" })).content_uri;
             const roomId = await bot.createRoom({
-                name: ROOM_NAME,
+                name: "Test room",
                 invite: [user.userId],
                 initial_state: [{ type: "m.room.avatar", content: { url: mxc }, state_key: "" }],
             });
