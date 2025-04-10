@@ -13,21 +13,18 @@ import { mocked, type MockedObject } from "jest-mock";
 
 import RoomSummaryCardView from "../../../../../src/components/views/right_panel/RoomSummaryCardView";
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import * as settingsHooks from "../../../../../src/hooks/useSettings";
-import Modal from "../../../../../src/Modal";
-import { flushPromises, stubClient, untilDispatch } from "../../../../test-utils";
+import { flushPromises, stubClient } from "../../../../test-utils";
 import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 import { _t } from "../../../../../src/languageHandler";
-import { ReportRoomDialog } from "../../../../../src/components/views/dialogs/ReportRoomDialog.tsx";
-import { type RoomSummaryCardState, type RoomTopicState, useRoomSummaryCardViewModel, useRoomTopicViewModel } from "../../../../../src/components/viewmodels/rooms/RoomSummaryCardViewModel";
+import {
+    type RoomSummaryCardState,
+    useRoomSummaryCardViewModel,
+} from "../../../../../src/components/viewmodels/rooms/RoomSummaryCardViewModel";
 import DMRoomMap from "../../../../../src/utils/DMRoomMap";
-import defaultDispatcher from "../../../../../src/dispatcher/dispatcher.ts";
-jest.mock("../../../../../src/utils/room/tagRoom");
 
 // Mock the viewmodel hooks
 jest.mock("../../../../../src/components/viewmodels/rooms/RoomSummaryCardViewModel", () => ({
     useRoomSummaryCardViewModel: jest.fn(),
-    useRoomTopicViewModel: jest.fn(),
 }));
 
 describe("<RoomSummaryCard />", () => {
@@ -79,24 +76,13 @@ describe("<RoomSummaryCard />", () => {
         onInviteToRoomClick: jest.fn(),
     };
 
-    const topicVmDefaultValues: RoomTopicState = {
-        expanded: true,
-        canEditTopic: false,
-        onEditClick: jest.fn(),
-        onExpandedClick: jest.fn(),
-        onTopicLinkClick: jest.fn(),
-    };
-
     beforeEach(() => {
         mockClient = mocked(stubClient());
         room = new Room(roomId, mockClient, userId);
         mocked(useRoomSummaryCardViewModel).mockReturnValue(vmDefaultValues);
-        mocked(useRoomTopicViewModel).mockReturnValue(topicVmDefaultValues);
         DMRoomMap.makeShared(mockClient);
 
         mockClient.getRoom.mockReturnValue(room);
-        jest.spyOn(room, "isElementVideoRoom").mockRestore();
-        jest.spyOn(room, "isCallRoom").mockRestore();
     });
 
     afterEach(() => {
@@ -109,7 +95,6 @@ describe("<RoomSummaryCard />", () => {
     });
 
     it("renders the room topic in the summary", () => {
-        mocked(useRoomTopicViewModel).mockReturnValue(topicVmDefaultValues);
         room.currentState.setStateEvents([
             new MatrixEvent({
                 type: "m.room.topic",
@@ -126,7 +111,6 @@ describe("<RoomSummaryCard />", () => {
     });
 
     it("has button to edit topic", () => {
-        mocked(useRoomTopicViewModel).mockReturnValue(topicVmDefaultValues,);
         room.currentState.setStateEvents([
             new MatrixEvent({
                 type: "m.room.topic",
@@ -248,35 +232,17 @@ describe("<RoomSummaryCard />", () => {
         expect(vmDefaultValues.onRoomPinsClick).toHaveBeenCalled();
     });
 
-    it("dispatches leave room on button click", async () => {
-        jest.spyOn(Modal, "createDialog").mockReturnValueOnce({
-            finished: Promise.resolve([true]),
-            close: () => {},
+    it("does not render irrelevant options if video room", () => {
+        mocked(useRoomSummaryCardViewModel).mockReturnValue({
+            ...vmDefaultValues,
+            isVideoRoom: true,
         });
-        const { getByText } = getComponent();
+        const { queryByText } = getComponent();
 
-        fireEvent.click(getByText(_t("room_list|more_options|leave_room")));
-        await untilDispatch("leave_room", defaultDispatcher);
-        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
-            action: "leave_room",
-            room_id: room.roomId,
-        });
-    });
-
-    it("opens report dialog on button click", async () => {
-        jest.spyOn(Modal, "createDialog").mockReturnValueOnce({
-            finished: Promise.resolve([true]),
-            close: () => {},
-        });
-        const { getByText } = getComponent();
-
-        fireEvent.click(getByText(_t("action|report_room")));
-        expect(Modal.createDialog).toHaveBeenCalledWith(ReportRoomDialog, { roomId: room.roomId });
-        await untilDispatch("leave_room", defaultDispatcher);
-        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
-            action: "leave_room",
-            room_id: room.roomId,
-        });
+        // options not rendered
+        expect(queryByText("Files")).not.toBeInTheDocument();
+        expect(queryByText("Pinned")).not.toBeInTheDocument();
+        expect(queryByText("Export chat")).not.toBeInTheDocument();
     });
 
     describe("pinning", () => {
@@ -304,34 +270,7 @@ describe("<RoomSummaryCard />", () => {
         });
     });
 
-    describe("video rooms", () => {
-        it("does not render irrelevant options for element video room", () => {
-            jest.spyOn(room, "isElementVideoRoom").mockReturnValue(true);
-            mocked(settingsHooks.useFeatureEnabled).mockImplementation((feature) => feature === "feature_video_rooms");
-            const { queryByText } = getComponent();
-
-            // options not rendered
-            expect(queryByText("Files")).not.toBeInTheDocument();
-            expect(queryByText("Pinned")).not.toBeInTheDocument();
-            expect(queryByText("Export chat")).not.toBeInTheDocument();
-        });
-
-        it("does not render irrelevant options for element call room", () => {
-            jest.spyOn(room, "isCallRoom").mockReturnValue(true);
-            mocked(settingsHooks.useFeatureEnabled).mockImplementation(
-                (feature) => feature === "feature_element_call_video_rooms" || feature === "feature_video_rooms",
-            );
-            const { queryByText } = getComponent();
-
-            // options not rendered
-            expect(queryByText("Files")).not.toBeInTheDocument();
-            expect(queryByText("Pinned")).not.toBeInTheDocument();
-            expect(queryByText("Export chat")).not.toBeInTheDocument();
-        });
-    });
-
     describe("public room label", () => {
-
         it("does not show public room label for a DM", async () => {
             mocked(useRoomSummaryCardViewModel).mockReturnValue({
                 ...vmDefaultValues,

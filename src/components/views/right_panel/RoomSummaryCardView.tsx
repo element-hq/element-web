@@ -47,15 +47,10 @@ import { E2EStatus } from "../../../utils/ShieldUtils.ts";
 import { type RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks.ts";
 import RoomName from "../elements/RoomName.tsx";
 import { Flex } from "../../utils/Flex.tsx";
-import { DefaultTagID } from "../../../stores/room-list/models.ts";
-import { tagRoom } from "../../../utils/room/tagRoom.ts";
-import { inviteToRoom } from "../../../utils/room/inviteToRoom.ts";
 import { Linkify, topicToHtml } from "../../../HtmlUtils.tsx";
 import { Box } from "../../utils/Box.tsx";
 import { ReleaseAnnouncement } from "../../structures/ReleaseAnnouncement.tsx";
-import {
-    useRoomSummaryCardViewModel,
-} from "../../viewmodels/rooms/RoomSummaryCardViewModel.tsx";
+import { useRoomSummaryCardViewModel } from "../../viewmodels/rooms/RoomSummaryCardViewModel.tsx";
 import { useTopic } from "../../../hooks/room/useTopic.ts";
 import { useRoomState } from "../../../hooks/useRoomState.ts";
 import defaultDispatcher from "../../../dispatcher/dispatcher.ts";
@@ -238,7 +233,7 @@ const RoomSummaryCardView: React.FC<IProps> = ({
                 className="mx_no_textinput"
                 ref={vm.searchInputRef}
                 autoFocus={focusRoomSearch}
-                onKeyDown={(e) => vm.onUpdateSearchInput(e)}
+                onKeyDown={vm.onUpdateSearchInput}
             />
         </Form.Root>
     );
@@ -260,13 +255,13 @@ const RoomSummaryCardView: React.FC<IProps> = ({
                     Icon={FavouriteIcon}
                     label={_t("room|context_menu|favourite")}
                     checked={vm.isFavorite}
-                    onSelect={() => tagRoom(room, DefaultTagID.Favourite)}
+                    onSelect={vm.onFavoriteToggleClick}
                 />
                 <MenuItem
                     Icon={UserAddIcon}
                     label={_t("action|invite")}
                     disabled={!vm.canInviteToState}
-                    onSelect={() => inviteToRoom(room)}
+                    onSelect={vm.onInviteToRoomClick}
                 />
 
                 <Separator />
