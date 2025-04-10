@@ -86,11 +86,11 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
     };
 
     private validateRecoveryKeyOnChange = debounce(async (): Promise<void> => {
-        await this.validateRecoveryKey();
+        await this.validateRecoveryKey(this.state.recoveryKey);
     }, VALIDATION_THROTTLE_MS);
 
-    private async validateRecoveryKey(): Promise<void> {
-        if (this.state.recoveryKey === "") {
+    private async validateRecoveryKey(recoveryKey: string): Promise<void> {
+        if (recoveryKey === "") {
             this.setState({
                 recoveryKeyValid: null,
                 recoveryKeyCorrect: null,
@@ -100,7 +100,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
 
         try {
             const cli = MatrixClientPeg.safeGet();
-            const decodedKey = decodeRecoveryKey(this.state.recoveryKey);
+            const decodedKey = decodeRecoveryKey(recoveryKey);
             const correct = await cli.secretStorage.checkKey(decodedKey, this.props.keyInfo);
             this.setState({
                 recoveryKeyValid: true,
@@ -148,11 +148,12 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
             // right number of characters, but it's really just to make sure that what we're reading is
             // text because we'll put it in the text field.
             if (/^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz\s]+$/.test(contents)) {
+                const recoveryKey = contents.trim();
                 this.setState({
                     recoveryKeyFileError: null,
-                    recoveryKey: contents.trim(),
+                    recoveryKey,
                 });
-                await this.validateRecoveryKey();
+                await this.validateRecoveryKey(recoveryKey);
             } else {
                 this.setState({
                     recoveryKeyFileError: true,

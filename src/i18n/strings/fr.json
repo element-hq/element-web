@@ -55,6 +55,8 @@
         "create_a_room": "Créer un salon",
         "create_account": "Créer un compte",
         "decline": "Refuser",
+        "decline_and_block": "Refuser et bloquer",
+        "decline_invite": "Refuser l’invitation",
         "delete": "Supprimer",
         "deny": "Interdire",
         "disable": "Désactiver",
@@ -107,7 +109,6 @@
         "react": "Réagir",
         "refresh": "Rafraîchir",
         "register": "S’inscrire",
-        "reject": "Rejeter",
         "reload": "Recharger",
         "remove": "Supprimer",
         "rename": "Renommer",
@@ -486,7 +487,6 @@
         "capabilities": "Capacités",
         "copied": "Copié !",
         "credits": "Crédits",
-        "cross_signing": "Signature croisée",
         "dark": "Sombre",
         "description": "Description",
         "deselect_all": "Tout désélectionner",
@@ -746,6 +746,13 @@
         "twemoji": "L’art émoji <twemoji>Twemoji</twemoji> est © <author>Twitter, Inc et autres contributeurs</author> utilisé sous licence <terms>CC-BY 4.0</terms>.",
         "twemoji_colr": "La police <colr>twemoji-colr</colr> est © <author>Mozilla Foundation</author> utilisée sous licence <terms>Apache 2.0</terms>."
     },
+    "decline_invitation_dialog": {
+        "confirm": "Êtes-vous sûr de vouloir refuser l'invitation à rejoindre \"%(roomName)s\"  ?",
+        "ignore_user_help": "Vous ne verrez aucun message ni aucune invitation à un salon de la part de cet utilisateur.",
+        "reason_description": "Décrivez la raison pour laquelle vous avez signalé le salon.",
+        "report_room_description": "Signalez ce salon à votre fournisseur de compte.",
+        "title": "Refuser l'invitation"
+    },
     "desktop_default_device_name": "%(brand)s pour bureau : %(platformName)s",
     "devtools": {
         "active_widgets": "Widgets actifs",
@@ -846,6 +853,9 @@
         "setting_colon": "Paramètre :",
         "setting_definition": "Définition du paramètre :",
         "setting_id": "Identifiant de paramètre",
+        "settings": {
+            "elementCallUrl": "Lien d'Element Call"
+        },
         "settings_explorer": "Explorateur de paramètres",
         "show_hidden_events": "Afficher les évènements cachés dans le fil de discussion",
         "spaces": {
@@ -920,22 +930,12 @@
         "cancel_entering_passphrase_title": "Annuler la saisie du mot de passe ?",
         "confirm_encryption_setup_body": "Cliquez sur le bouton ci-dessous pour confirmer la configuration du chiffrement.",
         "confirm_encryption_setup_title": "Confirmer la configuration du chiffrement",
-        "cross_signing_not_ready": "La signature croisée n’est pas configurée.",
-        "cross_signing_ready": "La signature croisée est prête à être utilisée.",
-        "cross_signing_ready_no_backup": "La signature croisée est prête mais les clés ne sont pas sauvegardées.",
         "cross_signing_room_normal": "Ce salon est chiffré de bout en bout",
         "cross_signing_room_verified": "Tout le monde dans ce salon est vérifié",
         "cross_signing_room_warning": "Quelqu’un utilise une session inconnue",
-        "cross_signing_unsupported": "Votre serveur d’accueil ne prend pas en charge la signature croisée.",
-        "cross_signing_untrusted": "Votre compte a une identité de signature croisée dans le coffre secret, mais cette session ne lui fait pas encore confiance.",
         "cross_signing_user_normal": "Vous n’avez pas vérifié cet utilisateur.",
         "cross_signing_user_verified": "Vous avez vérifié cet utilisateur. Cet utilisateur a vérifié toutes ses sessions.",
         "cross_signing_user_warning": "Cet utilisateur n’a pas vérifié toutes ses sessions.",
-        "destroy_cross_signing_dialog": {
-            "primary_button_text": "Vider les clés de signature croisée",
-            "title": "Détruire les clés de signature croisée ?",
-            "warning": "La suppression des clés de signature croisée est permanente. Tous ceux que vous avez vérifié vont voir des alertes de sécurité. Il est peu probable que ce soit ce que vous voulez faire, sauf si vous avez perdu tous les appareils vous permettant d’effectuer une signature croisée."
-        },
         "enter_recovery_key": "Saisir la clé de récupération",
         "event_shield_reason_authenticity_not_guaranteed": "L’authenticité de ce message chiffré ne peut pas être garantie sur cet appareil.",
         "event_shield_reason_mismatched_sender_key": "Chiffré par une session non vérifiée",
@@ -962,7 +962,6 @@
             "title": "Nouvelle méthode de récupération",
             "warning": "Si vous n’avez pas activé de nouvelle méthode de récupération, un attaquant essaye peut-être d’accéder à votre compte. Changez immédiatement le mot de passe de votre compte et configurez une nouvelle méthode de récupération dans les paramètres."
         },
-        "not_supported": "<non pris en charge>",
         "pinned_identity_changed": "L'identité de %(displayName)s (<b>%(userId)s</b>) semble avoir changé. <a>En savoir plus</a>",
         "pinned_identity_changed_no_displayname": "<b>%(userId)s</b>semble avoir changé d'identité. <a>En savoir plus</a>",
         "recovery_method_removed": {
@@ -978,8 +977,7 @@
         "set_up_toast_description": "Sécurité contre la perte d’accès aux messages et données chiffrées",
         "set_up_toast_title": "Configurer la sauvegarde sécurisée",
         "setup_secure_backup": {
-            "explainer": "Sauvegardez vos clés avant de vous déconnecter pour éviter de les perdre.",
-            "title": "Configurer"
+            "explainer": "Sauvegardez vos clés avant de vous déconnecter pour éviter de les perdre."
         },
         "udd": {
             "interactive_verification_button": "Vérifier de façon interactive avec des émojis",
@@ -1674,6 +1672,7 @@
         "class_global": "Global",
         "class_other": "Autre",
         "default": "Par défaut",
+        "default_settings": "Correspondre aux paramètres par défaut",
         "email_pusher_app_display_name": "Notifications par courriel",
         "enable_prompt_toast_description": "Activer les notifications sur le bureau",
         "enable_prompt_toast_title": "Notifications",
@@ -1692,7 +1691,8 @@
         "mentions_and_keywords_description": "Recevoir des notifications uniquement pour les mentions et mot-clés comme défini dans vos <a>paramètres</a>",
         "mentions_keywords": "Mentions et mots-clés",
         "message_didnt_send": "Le message n’a pas été envoyé. Cliquer pour plus d’info.",
-        "mute_description": "Vous n’aurez aucune notification"
+        "mute_description": "Vous n’aurez aucune notification",
+        "mute_room": "Rendre le salon muet"
     },
     "notifier": {
         "m.key.verification.request": "%(name)s demande une vérification"
@@ -1794,11 +1794,6 @@
         "ongoing": "Suppression…",
         "reason_label": "Raison (optionnelle)"
     },
-    "reject_invitation_dialog": {
-        "confirmation": "Voulez-vous vraiment rejeter l’invitation ?",
-        "failed": "Échec du rejet de l’invitation",
-        "title": "Rejeter l’invitation"
-    },
     "report_content": {
         "description": "Le signalement de ce message enverra son « event ID » unique à l’administrateur de votre serveur d’accueil. Si les messages dans ce salon sont chiffrés, l’administrateur ne pourra pas lire le texte du message ou voir les fichiers ou les images.",
         "disagree": "Désaccord",
@@ -1822,10 +1817,8 @@
         "toxic_behaviour": "Comportement toxique"
     },
     "report_room": {
-        "description": "Signalez cette salle à l'administrateur de votre serveur d'accueil. Cela enverra l'identifiant unique du salon, mais si les messages sont chiffrés, l'administrateur ne pourra pas les lire ni consulter les fichiers partagés.",
-        "reason_placeholder": " Motif du signalement...",
-        "sent": "Votre signalement a été envoyé.",
-        "title": "Signaler le salon"
+        "description": "Signalez ce salon à votre fournisseur de compte. Si les messages sont chiffrés, votre administrateur ne pourra pas les lire.",
+        "reason_label": "Décrivez la raison"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Le déchiffrement de %(failedCount)s sessions a échoué !",
@@ -2009,7 +2002,6 @@
             "you_created": "Vous avez créé ce salon."
         },
         "invite_email_mismatch_suggestion": "Partagez cet e-mail dans les paramètres pour recevoir les invitations directement dans %(brand)s.",
-        "invite_reject_ignore": "Rejeter et ignorer l’utilisateur",
         "invite_sent_to_email": "Cet invitation a été envoyée à %(email)s",
         "invite_sent_to_email_room": "Cette invitation à %(roomName)s a été envoyée à %(email)s",
         "invite_subtitle": "<userName/> vous a invité",
@@ -2535,6 +2527,7 @@
                 "breadcrumb_third_description": "Vous devrez vérifier à nouveau tous vos appareils et tous vos contacts",
                 "breadcrumb_title": "Êtes-vous sûr de vouloir réinitialiser votre identité ?",
                 "breadcrumb_title_forgot": "Vous avez oublié votre clé de récupération ? Vous devez réinitialiser votre identité.",
+                "breadcrumb_title_sync_failed": "Impossible de synchroniser le stockage des clés. Vous devez réinitialiser votre identité.",
                 "breadcrumb_warning": "Ne faites cela que si vous pensez que votre compte a été compromis.",
                 "details_title": "Détails du chiffrement",
                 "do_not_close_warning": "Ne fermez pas cette fenêtre tant que la réinitialisation n'est pas terminée",
@@ -2826,57 +2819,20 @@
         "prompt_invite": "Demander avant d’envoyer des invitations à des identifiants matrix potentiellement non valides",
         "replace_plain_emoji": "Remplacer automatiquement le texte par des émojis",
         "security": {
-            "4s_public_key_in_account_data": "dans les données du compte",
-            "4s_public_key_status": "Clé publique du coffre secret :",
             "analytics_description": "Partagez des données anonymes pour nous aider à identifier les problèmes. Rien de personnel. Aucune tierce partie.",
-            "backup_key_cached_status": "Clé de sauvegarde mise en cache :",
-            "backup_key_stored_status": "Clé de sauvegarde enregistrée :",
-            "backup_key_unexpected_type": "type inattendu",
-            "backup_key_well_formed": "bien formée",
-            "backup_keys_description": "Sauvegardez vos clés de chiffrement avec les données de votre compte au cas où vous perdriez l'accès à vos sessions. Vos clés seront sécurisées à l'aide d'une clé de récupération unique.",
             "bulk_options_accept_all_invites": "Accepter les %(invitedRooms)s invitations",
             "bulk_options_reject_all_invites": "Rejeter la totalité des %(invitedRooms)s invitations",
             "bulk_options_section": "Options de groupe",
-            "cross_signing_cached": "mise en cache localement",
-            "cross_signing_homeserver_support": "Prise en charge de la fonctionnalité par le serveur d’accueil :",
-            "cross_signing_homeserver_support_exists": "existant",
-            "cross_signing_in_4s": "dans le coffre secret",
-            "cross_signing_in_memory": "en mémoire",
-            "cross_signing_master_private_Key": "Clé privée maîtresse :",
-            "cross_signing_not_cached": "non trouvée localement",
-            "cross_signing_not_found": "non trouvé",
-            "cross_signing_not_in_4s": "non trouvé dans le coffre",
-            "cross_signing_not_stored": "non sauvegardé",
-            "cross_signing_private_keys": "Clés privées de signature croisée :",
-            "cross_signing_public_keys": "Clés publiques de signature croisée :",
-            "cross_signing_self_signing_private_key": "Clé privée d’auto-signature :",
-            "cross_signing_user_signing_private_key": "Clé privée de signature de l’utilisateur :",
-            "cryptography_section": "Chiffrement",
             "dehydrated_device_description": "La fonctionnalité d’appareil hors ligne vous permet de recevoir des messages chiffrés même lorsque vous n’êtes connecté à aucun appareil",
             "dehydrated_device_enabled": "Appareil hors ligne activé",
-            "delete_backup": "Supprimer la sauvegarde",
-            "delete_backup_confirm_description": "En êtes-vous sûr ? Vous perdrez vos messages chiffrés si vos clés ne sont pas sauvegardées correctement.",
             "dialog_title": "<strong>Paramètres : </strong> Sécurité et confidentialité",
             "e2ee_default_disabled_warning": "L’administrateur de votre serveur a désactivé le chiffrement de bout en bout par défaut dans les salons privés et les conversations privées.",
             "enable_message_search": "Activer la recherche de messages dans les salons chiffrés",
             "encryption_section": "Chiffrement",
-            "error_loading_key_backup_status": "Impossible de charger l’état de sauvegarde des clés",
-            "export_megolm_keys": "Exporter les clés de chiffrement de salon",
             "ignore_users_empty": "Vous n’avez ignoré personne.",
             "ignore_users_section": "Utilisateurs ignorés",
-            "import_megolm_keys": "Importer les clés de chiffrement de bout en bout",
-            "key_backup_active": "Cette session sauvegarde vos clés.",
-            "key_backup_active_version": "Version de sauvegarde active :",
-            "key_backup_active_version_none": "Aucun",
             "key_backup_algorithm": "Algorithme :",
-            "key_backup_can_be_restored": "Cette sauvegarde peut être restaurée sur cette session",
-            "key_backup_complete": "Toutes les clés ont été sauvegardées",
             "key_backup_connect": "Connecter cette session à la sauvegarde de clés",
-            "key_backup_connect_prompt": "Connectez cette session à la sauvegarde de clés avant de vous déconnecter pour éviter de perdre des clés qui seraient uniquement dans cette session.",
-            "key_backup_in_progress": "Sauvegarde de %(sessionsRemaining)s clés…",
-            "key_backup_inactive": "Cette session <b>ne sauvegarde pas vos clés</b>, mais vous n’avez pas de sauvegarde existante que vous pouvez restaurer ou compléter à l’avenir.",
-            "key_backup_inactive_warning": "Vos clés <b>ne sont pas sauvegardées sur cette session</b>.",
-            "key_backup_latest_version": "Dernière version de la sauvegarde sur le serveur :",
             "message_search_disable_warning": "Si l’option est désactivée, les messages des salons chiffrés n’apparaîtront pas dans les résultats de recherche.",
             "message_search_disabled": "Mettre en cache les messages chiffrés localement et de manière sécurisée pour qu’ils apparaissent dans les résultats de recherche.",
             "message_search_enabled": {
@@ -2896,13 +2852,7 @@
             "message_search_unsupported": "Il manque quelques composants à %(brand)s pour mettre en cache les messages chiffrés localement de manière sécurisée. Si vous voulez essayer cette fonctionnalité, construisez %(brand)s Desktop vous-même en <nativeLink>ajoutant les composants de recherche</nativeLink>.",
             "message_search_unsupported_web": "%(brand)s ne peut actuellement mettre en cache vos messages chiffrés localement de manière sécurisée via le navigateur Web. Utilisez <desktopLink>%(brand)s Desktop</desktopLink> pour que les messages chiffrés apparaissent dans vos résultats de recherche.",
             "record_session_details": "Enregistrez le nom, la version et l'URL du client afin de reconnaitre les sessions plus facilement dans le gestionnaire de sessions",
-            "restore_key_backup": "Restaurer depuis la sauvegarde",
-            "secret_storage_not_ready": "pas prêt",
-            "secret_storage_ready": "prêt",
-            "secret_storage_status": "Coffre secret :",
             "send_analytics": "Envoyer les données de télémétrie",
-            "session_id": "Identifiant de session :",
-            "session_key": "Clé de session :",
             "strict_encryption": "Envoyer des messages uniquement aux utilisateurs vérifiés"
         },
         "send_read_receipts": "Envoyer les accusés de réception",

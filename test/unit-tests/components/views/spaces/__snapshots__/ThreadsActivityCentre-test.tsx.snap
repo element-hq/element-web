@@ -26,7 +26,7 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
     class="mx_ThreadsActivityCentre_rows"
   >
     <button
-      class="mx_ThreadsActivityCentreRow _item_1x5l4_8 _interactive_1x5l4_26"
+      class="mx_ThreadsActivityCentreRow _item_dyt4i_8 _interactive_dyt4i_26"
       data-kind="primary"
       data-orientation="vertical"
       data-radix-collection-item=""
@@ -34,7 +34,7 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
       tabindex="-1"
     >
       <div
-        class="_icon_1x5l4_34"
+        class="_icon_dyt4i_50"
       >
         <span
           class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
@@ -48,13 +48,13 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
         </span>
       </div>
       <span
-        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
       >
         This is a real highlight
       </span>
       <svg
         aria-hidden="true"
-        class="_nav-hint_1x5l4_50"
+        class="_nav-hint_dyt4i_59"
         fill="currentColor"
         height="24"
         viewBox="8 0 8 24"
@@ -74,7 +74,7 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
       </div>
     </button>
     <button
-      class="mx_ThreadsActivityCentreRow _item_1x5l4_8 _interactive_1x5l4_26"
+      class="mx_ThreadsActivityCentreRow _item_dyt4i_8 _interactive_dyt4i_26"
       data-kind="primary"
       data-orientation="vertical"
       data-radix-collection-item=""
@@ -82,7 +82,7 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
       tabindex="-1"
     >
       <div
-        class="_icon_1x5l4_34"
+        class="_icon_dyt4i_50"
       >
         <span
           class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
@@ -96,13 +96,13 @@ exports[`ThreadsActivityCentre renders notifications matching the snapshot 1`] =
         </span>
       </div>
       <span
-        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
       >
         A notification
       </span>
       <svg
         aria-hidden="true"
-        class="_nav-hint_1x5l4_50"
+        class="_nav-hint_dyt4i_59"
         fill="currentColor"
         height="24"
         viewBox="8 0 8 24"
@@ -224,7 +224,7 @@ exports[`ThreadsActivityCentre should close the release announcement when the TA
   <div
     data-radix-popper-content-wrapper=""
     dir="ltr"
-    style="position: fixed; left: 0px; top: 0px; transform: translate(0px, -8px); min-width: max-content; --radix-popper-available-width: 0px; --radix-popper-available-height: -8px; --radix-popper-anchor-width: 0px; --radix-popper-anchor-height: 0px; --radix-popper-transform-origin: 0% 0px;"
+    style="position: fixed; left: 0px; top: 0px; transform: translate(0px, -8px); min-width: max-content; --radix-popper-transform-origin: 0% 0px; --radix-popper-available-width: 0px; --radix-popper-available-height: -8px; --radix-popper-anchor-width: 0px; --radix-popper-anchor-height: 0px;"
   >
     <div
       aria-labelledby="radix-:r1c:"
@@ -328,7 +328,7 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
     class="mx_ThreadsActivityCentre_rows"
   >
     <button
-      class="mx_ThreadsActivityCentreRow _item_1x5l4_8 _interactive_1x5l4_26"
+      class="mx_ThreadsActivityCentreRow _item_dyt4i_8 _interactive_dyt4i_26"
       data-kind="primary"
       data-orientation="vertical"
       data-radix-collection-item=""
@@ -336,7 +336,7 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
       tabindex="-1"
     >
       <div
-        class="_icon_1x5l4_34"
+        class="_icon_dyt4i_50"
       >
         <span
           class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
@@ -350,13 +350,13 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
         </span>
       </div>
       <span
-        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
       >
         This is a third real highlight
       </span>
       <svg
         aria-hidden="true"
-        class="_nav-hint_1x5l4_50"
+        class="_nav-hint_dyt4i_59"
         fill="currentColor"
         height="24"
         viewBox="8 0 8 24"
@@ -376,7 +376,7 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
       </div>
     </button>
     <button
-      class="mx_ThreadsActivityCentreRow _item_1x5l4_8 _interactive_1x5l4_26"
+      class="mx_ThreadsActivityCentreRow _item_dyt4i_8 _interactive_dyt4i_26"
       data-kind="primary"
       data-orientation="vertical"
       data-radix-collection-item=""
@@ -384,7 +384,7 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
       tabindex="-1"
     >
       <div
-        class="_icon_1x5l4_34"
+        class="_icon_dyt4i_50"
       >
         <span
           class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
@@ -398,13 +398,13 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
         </span>
       </div>
       <span
-        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
       >
         This is a real highlight
       </span>
       <svg
         aria-hidden="true"
-        class="_nav-hint_1x5l4_50"
+        class="_nav-hint_dyt4i_59"
         fill="currentColor"
         height="24"
         viewBox="8 0 8 24"
@@ -424,7 +424,7 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
       </div>
     </button>
     <button
-      class="mx_ThreadsActivityCentreRow _item_1x5l4_8 _interactive_1x5l4_26"
+      class="mx_ThreadsActivityCentreRow _item_dyt4i_8 _interactive_dyt4i_26"
       data-kind="primary"
       data-orientation="vertical"
       data-radix-collection-item=""
@@ -432,7 +432,7 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
       tabindex="-1"
     >
       <div
-        class="_icon_1x5l4_34"
+        class="_icon_dyt4i_50"
       >
         <span
           class="_avatar_1qbcf_8 mx_BaseAvatar _avatar-imageless_1qbcf_52"
@@ -446,13 +446,13 @@ exports[`ThreadsActivityCentre should order the room with the same notification 
         </span>
       </div>
       <span
-        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_1x5l4_43"
+        class="_typography_6v6n8_153 _font-body-md-medium_6v6n8_60 _label_dyt4i_34"
       >
         This is a second real highlight
       </span>
       <svg
         aria-hidden="true"
-        class="_nav-hint_1x5l4_50"
+        class="_nav-hint_dyt4i_59"
         fill="currentColor"
         height="24"
         viewBox="8 0 8 24"

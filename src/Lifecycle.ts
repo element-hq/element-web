@@ -321,7 +321,7 @@ async function attemptOidcNativeLogin(queryParams: QueryDict): Promise<boolean> 
     } catch (error) {
         logger.error("Failed to login via OIDC", error);
 
-        await onFailedDelegatedAuthLogin(getOidcErrorMessage(error as Error));
+        onFailedDelegatedAuthLogin(getOidcErrorMessage(error as Error));
         return false;
     }
 }
@@ -468,7 +468,7 @@ type TryAgainFunction = () => void;
  * @param description error description
  * @param tryAgain OPTIONAL function to call on try again button from error dialog
  */
-async function onFailedDelegatedAuthLogin(description: string | ReactNode, tryAgain?: TryAgainFunction): Promise<void> {
+function onFailedDelegatedAuthLogin(description: string | ReactNode, tryAgain?: TryAgainFunction): void {
     Modal.createDialog(ErrorDialog, {
         title: _t("auth|oidc|error_title"),
         description,

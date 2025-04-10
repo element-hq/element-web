@@ -19,6 +19,7 @@ import {
     MatrixEvent,
     Room,
     RoomEvent,
+    RoomMember,
     RoomStateEvent,
     SearchResult,
 } from "matrix-js-sdk/src/matrix";
@@ -78,6 +79,7 @@ import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { type ViewUserPayload } from "../../../../src/dispatcher/payloads/ViewUserPayload.ts";
 import { CallStore } from "../../../../src/stores/CallStore.ts";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../../src/MediaDeviceHandler.ts";
+import Modal from "../../../../src/Modal.tsx";
 
 // Used by group calls
 jest.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
@@ -196,7 +198,7 @@ describe("RoomView", () => {
                     <RoomView
                         // threepidInvite should be optional on RoomView props
                         // it is treated as optional in RoomView
-                        threepidInvite={undefined as any}
+                        threepidInvite={undefined}
                         resizeNotifier={new ResizeNotifier()}
                         forceTimeline={false}
                         onRegistered={jest.fn()}
@@ -231,6 +233,62 @@ describe("RoomView", () => {
     it("when there is no room predecessor, getHiddenHighlightCount should return 0", async () => {
         const instance = await getRoomViewInstance();
         expect(instance.getHiddenHighlightCount()).toBe(0);
+    });
+
+    describe("invites", () => {
+        beforeEach(() => {
+            const member = new RoomMember(room.roomId, cli.getSafeUserId());
+            member.membership = KnownMembership.Invite;
+            member.events.member = new MatrixEvent({
+                sender: "@bob:example.org",
+            });
+            room.getMyMembership = jest.fn().mockReturnValue(KnownMembership.Invite);
+            room.getMember = jest.fn().mockReturnValue(member);
+        });
+
+        it("renders an invite room", async () => {
+            const { asFragment } = await mountRoomView();
+            expect(asFragment()).toMatchSnapshot();
+        });
+
+        it("handles accepting an invite", async () => {
+            const { getByRole } = await mountRoomView();
+
+            await fireEvent.click(getByRole("button", { name: "Accept" }));
+
+            await untilDispatch(Action.JoinRoomReady, defaultDispatcher);
+        });
+        it("handles declining an invite", async () => {
+            const { getByRole } = await mountRoomView();
+            jest.spyOn(Modal, "createDialog").mockReturnValue({
+                finished: Promise.resolve([true, false, false]),
+                close: jest.fn(),
+            });
+            await fireEvent.click(getByRole("button", { name: "Decline" }));
+            await waitFor(() => expect(cli.leave).toHaveBeenCalledWith(room.roomId));
+            expect(cli.setIgnoredUsers).not.toHaveBeenCalled();
+        });
+        it("handles declining an invite and ignoring the user", async () => {
+            const { getByRole } = await mountRoomView();
+            cli.getIgnoredUsers.mockReturnValue(["@carol:example.org"]);
+            jest.spyOn(Modal, "createDialog").mockReturnValue({
+                finished: Promise.resolve([true, true, false]),
+                close: jest.fn(),
+            });
+            await fireEvent.click(getByRole("button", { name: "Decline and block" }));
+            expect(cli.leave).toHaveBeenCalledWith(room.roomId);
+            expect(cli.setIgnoredUsers).toHaveBeenCalledWith(["@carol:example.org", "@bob:example.org"]);
+        });
+        it("handles declining an invite and reporting the room", async () => {
+            const { getByRole } = await mountRoomView();
+            jest.spyOn(Modal, "createDialog").mockReturnValue({
+                finished: Promise.resolve([true, false, "with a reason"]),
+                close: jest.fn(),
+            });
+            await fireEvent.click(getByRole("button", { name: "Decline and block" }));
+            expect(cli.leave).toHaveBeenCalledWith(room.roomId);
+            expect(cli.reportRoom).toHaveBeenCalledWith(room.roomId, "with a reason");
+        });
     });
 
     describe("when there is an old room", () => {

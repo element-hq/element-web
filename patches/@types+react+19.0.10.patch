@@ -1,0 +1,31 @@
+diff --git a/node_modules/@types/react/index.d.ts b/node_modules/@types/react/index.d.ts
+index 2272032..18bd20a 100644
+--- a/node_modules/@types/react/index.d.ts
++++ b/node_modules/@types/react/index.d.ts
+@@ -134,7 +134,7 @@ declare namespace React {
+             props: P,
+         ) => ReactNode | Promise<ReactNode>)
+         // constructor signature must match React.Component
+-        | (new(props: P) => Component<any, any>);
++        | (new(props: P, context?: any) => Component<any, any>);
+ 
+     /**
+      * Created by {@link createRef}, or {@link useRef} when passed `null`.
+@@ -941,7 +941,7 @@ declare namespace React {
+         context: unknown;
+ 
+         // Keep in sync with constructor signature of JSXElementConstructor and ComponentClass.
+-        constructor(props: P);
++        constructor(props: P, context?: unknown);
+ 
+         // We MUST keep setState() as a unified signature because it allows proper checking of the method return type.
+         // See: https://github.com/DefinitelyTyped/DefinitelyTyped/issues/18365#issuecomment-351013257
+@@ -1113,7 +1113,7 @@ declare namespace React {
+      */
+     interface ComponentClass<P = {}, S = ComponentState> extends StaticLifecycle<P, S> {
+         // constructor signature must match React.Component
+-        new(props: P): Component<P, S>;
++        new(props: P, context?: any): Component<P, S>;
+         /**
+          * Ignored by React.
+          * @deprecated Only kept in types for backwards compatibility. Will be removed in a future major release.

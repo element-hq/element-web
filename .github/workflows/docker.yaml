@@ -132,7 +132,7 @@ jobs:
                   cosign sign --yes ${images}
 
             - name: Update repo description
-              uses: peter-evans/dockerhub-description@e98e4d1628a5f3be2be7c231e50981aee98723ae # v4
+              uses: peter-evans/dockerhub-description@0505d8b04853a30189aee66f5bb7fd1511bbac71 # v4
               if: github.event_name != 'pull_request'
               continue-on-error: true
               with:

@@ -10,7 +10,11 @@ import { mocked } from "jest-mock";
 import type { MatrixClient, Room, RoomState } from "matrix-js-sdk/src/matrix";
 import { createTestClient, mkStubRoom } from "../../../../test-utils";
 import { shouldShowComponent } from "../../../../../src/customisations/helpers/UIComponents";
-import { hasCreateRoomRights, createRoom } from "../../../../../src/components/viewmodels/roomlist/utils";
+import {
+    hasCreateRoomRights,
+    createRoom,
+    hasAccessToNotificationMenu,
+} from "../../../../../src/components/viewmodels/roomlist/utils";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { showCreateNewRoom } from "../../../../../src/utils/space";
@@ -65,5 +69,14 @@ describe("utils", () => {
 
             expect(hasCreateRoomRights(matrixClient)).toBe(true);
         });
+    });
+
+    it("hasAccessToNotificationMenu", () => {
+        mocked(shouldShowComponent).mockReturnValue(true);
+        const room = mkStubRoom("roomId", "roomName", matrixClient);
+        const isGuest = false;
+        const isArchived = false;
+
+        expect(hasAccessToNotificationMenu(room, isGuest, isArchived)).toBe(true);
     });
 });
