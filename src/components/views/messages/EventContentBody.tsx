@@ -151,7 +151,7 @@ const EventContentBody = memo(
     forwardRef<HTMLElement, Props>(
         ({ as, mxEvent, stripReply, content, linkify, highlights, includeDir = true, ...options }, ref) => {
             const enableBigEmoji = useSettingValue("TextualBody.enableBigEmoji");
-            const [mediaIsVisible] = useMediaVisible(mxEvent?.getId()!, mxEvent?.getRoomId()!);
+            const [mediaIsVisible] = useMediaVisible(mxEvent?.getId(), mxEvent?.getRoomId());
 
             const replacer = useReplacer(content, mxEvent, options);
             const linkifyOptions = useMemo(

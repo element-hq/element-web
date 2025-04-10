@@ -22,7 +22,7 @@ const PRIVATE_JOIN_RULES: JoinRule[] = [JoinRule.Invite, JoinRule.Knock, JoinRul
  * @param eventId The eventId of the media event.
  * @returns A boolean describing the hidden status, and a function to set the visiblity.
  */
-export function useMediaVisible(eventId: string, roomId: string): [boolean, (visible: boolean) => void] {
+export function useMediaVisible(eventId?: string, roomId?: string): [boolean, (visible: boolean) => void] {
     const mediaPreviewSetting = useSettingValue("mediaPreviewConfig", roomId);
     const client = useMatrixClientContext();
     const eventVisibility = useSettingValue("showMediaEventIds");
@@ -31,7 +31,7 @@ export function useMediaVisible(eventId: string, roomId: string): [boolean, (vis
         (visible: boolean) => {
             SettingsStore.setValue("showMediaEventIds", null, SettingLevel.DEVICE, {
                 ...eventVisibility,
-                [eventId]: visible,
+                [eventId!]: visible,
             });
         },
         [eventId, eventVisibility],
@@ -39,7 +39,7 @@ export function useMediaVisible(eventId: string, roomId: string): [boolean, (vis
 
     const roomIsPrivate = joinRule ? PRIVATE_JOIN_RULES.includes(joinRule) : false;
 
-    const explicitEventVisiblity = eventVisibility[eventId];
+    const explicitEventVisiblity = eventId ? eventVisibility[eventId] : undefined;
     // Always prefer the explicit per-event user preference here.
     if (explicitEventVisiblity !== undefined) {
         return [explicitEventVisiblity, setMediaVisible];
