@@ -1168,7 +1168,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     class="mx_SettingsFlag_label"
                   >
                     <div
-                      id="mx_LabelledToggleSwitch_dJJz3lHUv9XX"
+                      id="mx_LabelledToggleSwitch_:r8:"
                     >
                       Hide avatars of room and inviter
                     </div>
@@ -1176,7 +1176,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   <div
                     aria-checked="false"
                     aria-disabled="false"
-                    aria-labelledby="mx_LabelledToggleSwitch_dJJz3lHUv9XX"
+                    aria-labelledby="mx_LabelledToggleSwitch_:r8:"
                     class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
                     role="switch"
                     tabindex="0"
@@ -1192,13 +1192,13 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                 >
                   <label
                     class="_label_19upo_59"
-                    for="radix-:r8:"
+                    for="radix-:r9:"
                   >
                     Show media in timeline
                   </label>
                   <span
                     class="_message_19upo_85 _help-message_19upo_91"
-                    id="radix-:r9:"
+                    id="radix-:ra:"
                   >
                     A hidden media can always be shown by tapping on it
                   </span>
@@ -1225,7 +1225,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     >
                       <label
                         class="_label_19upo_59"
-                        for="radix-:ra:"
+                        for="radix-:rb:"
                       >
                         Always hide
                       </label>
@@ -1254,7 +1254,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     >
                       <label
                         class="_label_19upo_59"
-                        for="radix-:rb:"
+                        for="radix-:rc:"
                       >
                         In private rooms
                       </label>
@@ -1284,7 +1284,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                     >
                       <label
                         class="_label_19upo_59"
-                        for="radix-:rc:"
+                        for="radix-:rd:"
                       >
                         Always show
                       </label>
@@ -1314,7 +1314,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
               >
                 <label
                   class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_SBSSOZDRlzlA"
+                  for="mx_SettingsFlag_dJJz3lHUv9XX"
                 >
                   <span
                     class="mx_SettingsFlag_labelText"
@@ -1327,7 +1327,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   aria-disabled="true"
                   aria-label="Show NSFW content"
                   class="mx_AccessibleButton mx_ToggleSwitch"
-                  id="mx_SettingsFlag_SBSSOZDRlzlA"
+                  id="mx_SettingsFlag_dJJz3lHUv9XX"
                   role="switch"
                   tabindex="0"
                 >
@@ -1358,7 +1358,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
               >
                 <label
                   class="mx_SettingsFlag_label"
-                  for="mx_SettingsFlag_FLEpLCb0jpp6"
+                  for="mx_SettingsFlag_SBSSOZDRlzlA"
                 >
                   <span
                     class="mx_SettingsFlag_labelText"
@@ -1371,7 +1371,7 @@ exports[`PreferencesUserSettingsTab should render 1`] = `
                   aria-disabled="true"
                   aria-label="Prompt before sending invites to potentially invalid matrix IDs"
                   class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_on"
-                  id="mx_SettingsFlag_FLEpLCb0jpp6"
+                  id="mx_SettingsFlag_SBSSOZDRlzlA"
                   role="switch"
                   tabindex="0"
                 >
