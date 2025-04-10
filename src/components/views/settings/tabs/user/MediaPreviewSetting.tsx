@@ -115,4 +115,4 @@ export const MediaPreviewAccountSettings: React.FC = () => {
             </Field>
         </Root>
     );
-}
+};
