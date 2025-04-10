@@ -17,7 +17,8 @@ import { type SettingLevel } from "../SettingLevel.ts";
 import MatrixClientBackedController from "./MatrixClientBackedController.ts";
 
 /**
- * TODO
+ * Handles media preview settings provided by MSC4278.
+ * This uses both account-level and room-level account data.
  */
 export default class MediaPreviewConfigController extends MatrixClientBackedController {
     public static readonly default: AccountDataEvents["io.element.msc4278.media_preview_config"] = {
@@ -26,10 +27,6 @@ export default class MediaPreviewConfigController extends MatrixClientBackedCont
     };
 
     private globalSetting: MediaPreviewConfig = MediaPreviewConfigController.default;
-
-    public constructor() {
-        super();
-    }
 
     private getRoomValue = (roomId: string): MediaPreviewConfig | null => {
         return (
@@ -52,7 +49,6 @@ export default class MediaPreviewConfigController extends MatrixClientBackedCont
                 ...MediaPreviewConfigController.default,
                 ...event.getContent(),
             };
-            console.log("CONFIG Updating global settings", this.globalSetting);
         }
     };
 
@@ -85,7 +81,6 @@ export default class MediaPreviewConfigController extends MatrixClientBackedCont
         newValue: MediaPreviewConfig,
     ): Promise<boolean> {
         if (!this.client) {
-            // No client!
             return false;
         }
         if (roomId) {
@@ -96,9 +91,5 @@ export default class MediaPreviewConfigController extends MatrixClientBackedCont
         }
         await this.client.setAccountData(MEDIA_PREVIEW_ACCOUNT_DATA_TYPE, newValue);
         return true;
-    }
-
-    public onChange(_level: SettingLevel, roomId: string | null, newValue: MediaPreviewConfig): void {
-        console.log("onChange", roomId, newValue);
     }
 }
