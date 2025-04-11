@@ -24,6 +24,7 @@ jest.mock("../../../../../../src/components/viewmodels/roomlist/RoomListViewMode
 
 describe("<RoomListView />", () => {
     const defaultValue: RoomListViewState = {
+        isLoadingRooms: false,
         rooms: [],
         primaryFilters: [],
         activateSecondaryFilter: jest.fn().mockReturnValue({}),

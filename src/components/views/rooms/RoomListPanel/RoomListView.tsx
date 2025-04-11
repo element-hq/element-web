@@ -11,6 +11,7 @@ import { useRoomListViewModel } from "../../../viewmodels/roomlist/RoomListViewM
 import { RoomList } from "./RoomList";
 import { EmptyRoomList } from "./EmptyRoomList";
 import { RoomListPrimaryFilters } from "./RoomListPrimaryFilters";
+import Spinner from "../../elements/Spinner";
 
 /**
  * Host the room list and the (future) room filters
@@ -22,7 +23,7 @@ export function RoomListView(): JSX.Element {
     return (
         <>
             <RoomListPrimaryFilters vm={vm} />
-            {isRoomListEmpty ? <EmptyRoomList vm={vm} /> : <RoomList vm={vm} />}
+            {vm.isLoadingRooms ? <Spinner /> : isRoomListEmpty ? <EmptyRoomList vm={vm} /> : <RoomList vm={vm} />}
         </>
     );
 }

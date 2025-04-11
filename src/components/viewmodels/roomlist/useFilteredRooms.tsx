@@ -35,6 +35,7 @@ export interface PrimaryFilter {
 
 interface FilteredRooms {
     primaryFilters: PrimaryFilter[];
+    isLoadingRooms: boolean;
     rooms: Room[];
     activateSecondaryFilter: (filter: SecondaryFilters) => void;
     activeSecondaryFilter: SecondaryFilters;
@@ -115,6 +116,7 @@ export function useFilteredRooms(): FilteredRooms {
     );
 
     const [rooms, setRooms] = useState(() => RoomListStoreV3.instance.getSortedRoomsInActiveSpace());
+    const [isLoadingRooms, setIsLoadingRooms] = useState(true);
 
     const updateRoomsFromStore = useCallback((filters: FilterKey[] = []): void => {
         const newRooms = RoomListStoreV3.instance.getSortedRoomsInActiveSpace(filters);
@@ -135,6 +137,7 @@ export function useFilteredRooms(): FilteredRooms {
     };
 
     useEventEmitter(RoomListStoreV3.instance, LISTS_UPDATE_EVENT, () => {
+        setIsLoadingRooms(false);
         const filters = getAppliedFilters();
         updateRoomsFromStore(filters);
     });
@@ -194,5 +197,12 @@ export function useFilteredRooms(): FilteredRooms {
 
     const activePrimaryFilter = useMemo(() => primaryFilters.find((filter) => filter.active), [primaryFilters]);
 
-    return { primaryFilters, activePrimaryFilter, rooms, activateSecondaryFilter, activeSecondaryFilter };
+    return {
+        isLoadingRooms,
+        primaryFilters,
+        activePrimaryFilter,
+        rooms,
+        activateSecondaryFilter,
+        activeSecondaryFilter,
+    };
 }
