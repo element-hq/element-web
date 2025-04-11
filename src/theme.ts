@@ -206,16 +206,49 @@ function generateCustomCompoundCSS(theme: CompoundTheme): string {
     return `@layer compound.custom { :root, [class*="cpd-theme-"] { ${properties.join(" ")} } }`;
 }
 
+/**
+ * Normalizes the hex colour to 8 characters (including alpha) and prepends a #.
+ * @param hexColor the hex colour to normalize
+ */
+function normalizeHexColour(hexColor: string): string {
+    if (hexColor.startsWith("#")) hexColor = hexColor.slice(1);
+    switch (hexColor.length) {
+        case 3:
+        case 4:
+            // Short RGB or RGBA hex
+            return `#${hexColor
+                .split("")
+                .map((c) => c + c)
+                .join("")}`;
+        case 6:
+            // Long RGB hex
+            return `#${hexColor}ff`;
+        default:
+            return `#${hexColor}`;
+    }
+}
+
+function setHexAlpha(normalizedHexColor: string, alpha: number): string {
+    return normalizeHexColour(normalizedHexColor).slice(0, 7) + alpha.toString(16).padStart(2, "0");
+}
+
+function parseAlpha(normalizedHexColor: string): number {
+    return parseInt(normalizedHexColor.slice(7), 16);
+}
+
 function setCustomThemeVars(customTheme: CustomTheme): void {
     const { style } = document.body;
 
     function setCSSColorVariable(name: string, hexColor: string, doPct = true): void {
         style.setProperty(`--${name}`, hexColor);
+        const normalizedHexColor = normalizeHexColour(hexColor);
+        const alpha = parseAlpha(normalizedHexColor);
+
         if (doPct) {
-            // uses #rrggbbaa to define the color with alpha values at 0%, 15% and 50%
-            style.setProperty(`--${name}-0pct`, hexColor + "00");
-            style.setProperty(`--${name}-15pct`, hexColor + "26");
-            style.setProperty(`--${name}-50pct`, hexColor + "7F");
+            // uses #rrggbbaa to define the color with alpha values at 0%, 15% and 50% (relative to base alpha channel)
+            style.setProperty(`--${name}-0pct`, setHexAlpha(normalizedHexColor, 0));
+            style.setProperty(`--${name}-15pct`, setHexAlpha(normalizedHexColor, alpha * 0.15));
+            style.setProperty(`--${name}-50pct`, setHexAlpha(normalizedHexColor, alpha * 0.5));
         }
     }
 
