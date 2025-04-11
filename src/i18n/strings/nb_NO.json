@@ -9,7 +9,7 @@
         },
         "n_unread_messages_mentions": {
             "one": "1 ulest omtale.",
-            "other": "%(count)s uleste meldinger, inkludert omtaler."
+            "other": "%(count)s uleste meldinger inkludert der du nevnes."
         },
         "recent_rooms": "Nylige rom",
         "room_messsage_not_sent": "Åpent rom %(roomName)s med en usendt melding.",
@@ -2104,9 +2104,9 @@
             "no_favourites": "Du har ikke favorittchat ennå",
             "no_favourites_description": "Du kan legge til en chat til dine favoritter i chat-innstillingene",
             "no_people": "Du har ikke direkte chatter med noen ennå",
-            "no_people_description": "Du kan velge bort filtre for å se de andre chattene dine",
+            "no_people_description": "Du kan fjerne merket for filtre for å se de andre chattene dine",
             "no_rooms": "Du er ikke med i noen rom ennå",
-            "no_rooms_description": "Du kan velge bort filtre for å se de andre chattene dine",
+            "no_rooms_description": "Du kan fjerne merket for filtre for å se de andre chattene dine",
             "no_unread": "Gratulerer! Du har ingen uleste meldinger",
             "show_chats": "Vis alle chatter"
         },
@@ -2147,8 +2147,7 @@
         },
         "show_less": "Vis mindre",
         "show_n_more": {
-            "one": "Vis %(count)s mer",
-            "other": "Vis %(count)s mer"
+            "Vis %(count)s til": "Vis %(count)s mer"
         },
         "show_previews": "Vis forhåndsvisninger av meldinger",
         "sort_by": "Sorter etter",
@@ -2536,7 +2535,7 @@
             "delete_key_storage": {
                 "breadcrumb_page": "Slett nøkkellagring",
                 "confirm": "Slett nøkkellagring",
-                "description": "Sletting av nøkkellagring vil fjerne din kryptografiske identitet og meldingsnøkler fra serveren og deaktivere følgende sikkerhetsfunksjoner:",
+                "description": "Hvis du sletter nøkkellagring, fjernes den kryptografiske identiteten og meldingsnøklene fra serveren og deaktivere følgende sikkerhetsfunksjoner:",
                 "list_first": "Du vil ikke ha kryptert meldingshistorikk på nye enheter",
                 "list_second": "Du vil miste tilgangen til de krypterte meldingene dine hvis du logger av %(brand)s overalt",
                 "title": "Er du sikker på at du vil slå av nøkkellagring og slette den?"
@@ -2547,8 +2546,8 @@
             "dialog_title": "<strong>Innstillinger:</strong> Kryptering",
             "key_storage": {
                 "allow_key_storage": "Tillat lagring av nøkler",
-                "description": "Lagre din kryptografiske identitet og meldingsnøkler sikkert på serveren. Dette gjør at du kan se meldingshistorikken din på alle nye enheter. <a>Lær mer om dette</a>",
-                "title": "Nøkkeloppbevaring"
+                "description": "Lagre din kryptografiske identitet og meldingsnøkler sikkert på serveren. Dette lar deg se meldingsloggen din på alle nye enheter. <a>Lær mer </a>",
+                "title": "Nøkkellager"
             },
             "recovery": {
                 "change_recovery_confirm_button": "Bekreft ny gjenopprettingsnøkkel",
@@ -3274,9 +3273,9 @@
         "release_announcement_header": "Aktivitetssenter for tråder"
     },
     "time": {
-        "about_day_ago": "for omtrent et døgn siden",
-        "about_hour_ago": "omtrent en time siden",
-        "about_minute_ago": "for omtrent et minutt siden",
+        "about_day_ago": "cirka 1 dag siden",
+        "about_hour_ago": "cirka 1 time siden",
+        "about_minute_ago": "cirka 1 minutt siden",
         "date_at_time": "%(date)s klokken %(time)s",
         "few_seconds_ago": "noen sekunder siden",
         "hours_minutes_seconds_left": "%(hours)st%(minutes)s m%(seconds)s s igjen",
@@ -3618,8 +3617,8 @@
                 "other": "%(severalUsers)sendret profilbildet deres %(count)s ganger"
             },
             "changed_name": {
-                "one": "%(oneUser)sendret navn",
-                "other": "%(oneUser)sendret navn %(count)s ganger"
+                "one": "%(oneUser)s endret navn",
+                "other": "%(oneUser)s endret navn %(count)s ganger"
             },
             "changed_name_multiple": {
                 "%(severalUsers)s endret navnene sine": "one"
@@ -3672,12 +3671,12 @@
                 "other": "ble fjernet %(count)s ganger"
             },
             "left": {
-                "one": "%(oneUser)sforlot",
-                "other": "%(oneUser)sforlot %(count)s ganger"
+                "one": "%(oneUser)s forlot",
+                "other": "%(oneUser)s forlot %(count)s ganger"
             },
             "left_multiple": {
-                "one": "%(severalUsers)forlot",
-                "other": "%(severalUsers)sforlot %(count)s ganger"
+                "one": "%(severalUsers)s forlot",
+                "other": "%(severalUsers)s forlot %(count)s ganger"
             },
             "no_change": {
                 "one": "%(oneUser)sgjorde ingen endringer",
@@ -3728,12 +3727,12 @@
                 "other": "%(severalUsers)sendret serverens ACLer %(count)s ganger"
             },
             "unbanned": {
-                "one": "fikk utestengelse opphevet",
-                "other": "har fått utestengelse opphevet %(count)s ganger"
+                "one": "fikk opphevet forbudet",
+                "other": "fikk opphevet forbudet %(count)s ganger"
             },
             "unbanned_multiple": {
-                "one": "har fått utestengelse opphevet",
-                "other": "fått utestengelse opphevet %(count)s ganger"
+                "one": "fikk opphevet forbudet",
+                "other": "fikk opphevet forbudet %(count)s ganger"
             }
         },
         "thread_info_basic": "Fra en tråd",
@@ -3798,8 +3797,8 @@
         "title_progress": "Last opp filer (%(current)s av %(total)s)",
         "upload_all_button": "Last opp alle",
         "upload_n_others_button": {
-            "one": "Last opp %(count)s en annen fil",
-            "other": "Last opp %(count)s andre filer"
+            "Last opp %(count)s andre filer": "Last opp %(count)s andre filer",
+            "Last opp %(count)s annen fil": "Last opp %(count)s en annen fil"
         }
     },
     "user_info": {
@@ -3839,8 +3838,8 @@
         "promote_warning": "Du vil ikke kunne angre denne endringen ettersom du promoterer brukeren til å ha samme tilgangsnivå som deg selv.",
         "redact": {
             "confirm_button": {
-                "one": "Fjern 1 melding",
-                "other": "Fjern %(count)s meldinger"
+                "Slett %(count)s meldinger": "Fjern 1 melding",
+                "Slett 1 melding": "Fjern %(count)s meldinger"
             },
             "confirm_description_1": {
                 "one": "Du er i ferd med å fjerne %(count)s melding fra %(user)s. Dette vil fjerne dem permanent for alle i samtalen. Ønsker du å fortsette?",
