@@ -26,7 +26,7 @@ export function useMediaVisible(eventId?: string, roomId?: string): [boolean, (v
     const mediaPreviewSetting = useSettingValue("mediaPreviewConfig", roomId);
     const client = useMatrixClientContext();
     const eventVisibility = useSettingValue("showMediaEventIds");
-    const joinRule = useJoinRule(client.getRoom(roomId) ?? undefined);
+    const joinRule = useJoinRule(client?.getRoom(roomId) ?? undefined);
     const setMediaVisible = useCallback(
         (visible: boolean) => {
             SettingsStore.setValue("showMediaEventIds", null, SettingLevel.DEVICE, {

@@ -171,7 +171,7 @@ const EventContentBody = memo(
                         stripReplyFallback: stripReply,
                         mediaIsVisible,
                     }),
-                [content, enableBigEmoji, highlights, isEmote, stripReply],
+                [content, mediaIsVisible, enableBigEmoji, highlights, isEmote, stripReply],
             );
 
             if (as === "div") includeDir = true; // force dir="auto" on divs

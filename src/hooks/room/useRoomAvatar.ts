@@ -7,7 +7,6 @@ Please see LICENSE files in the repository root for full details.
 
 import { useEffect, useState } from "react";
 import { EventType, type MatrixEvent, type Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
-import { type Optional } from "matrix-events-sdk";
 
 import { useTypedEventEmitter } from "../useEventEmitter";
 
@@ -16,15 +15,15 @@ import { useTypedEventEmitter } from "../useEventEmitter";
  * @param room
  * @returns the current avatar
  */
-export function useRoomAvatar(room?: Room): Optional<string> {
-    const [topic, setAvatar] = useState(room?.getMxcAvatarUrl());
+export function useRoomAvatar(room?: Room): string | undefined {
+    const [avatarMxc, setAvatar] = useState(room?.getMxcAvatarUrl() ?? undefined);
     useTypedEventEmitter(room?.currentState, RoomStateEvent.Events, (ev: MatrixEvent) => {
         if (ev.getType() !== EventType.RoomAvatar) return;
-        setAvatar(room?.getMxcAvatarUrl());
+        setAvatar(room?.getMxcAvatarUrl() ?? undefined);
     });
     useEffect(() => {
-        setAvatar(room?.getMxcAvatarUrl());
+        setAvatar(room?.getMxcAvatarUrl() ?? undefined);
     }, [room]);
 
-    return topic;
+    return avatarMxc;
 }

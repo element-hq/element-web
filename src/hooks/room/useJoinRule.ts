@@ -7,7 +7,6 @@ Please see LICENSE files in the repository root for full details.
 
 import { useEffect, useState } from "react";
 import { EventType, type MatrixEvent, type Room, RoomStateEvent, type JoinRule } from "matrix-js-sdk/src/matrix";
-import { type Optional } from "matrix-events-sdk";
 
 import { useTypedEventEmitter } from "../useEventEmitter";
 
@@ -16,8 +15,9 @@ import { useTypedEventEmitter } from "../useEventEmitter";
  * @param room
  * @returns the current join rule
  */
-export function useJoinRule(room?: Room): Optional<JoinRule> {
-    const [topic, setJoinRule] = useState(room?.getJoinRule());
+
+export function useJoinRule(room?: Room): JoinRule | undefined {
+    const [joinRule, setJoinRule] = useState(room?.getJoinRule());
     useTypedEventEmitter(room?.currentState, RoomStateEvent.Events, (ev: MatrixEvent) => {
         if (ev.getType() !== EventType.RoomJoinRules) return;
         setJoinRule(room?.getJoinRule());
@@ -26,5 +26,5 @@ export function useJoinRule(room?: Room): Optional<JoinRule> {
         setJoinRule(room?.getJoinRule());
     }, [room]);
 
-    return topic;
+    return joinRule;
 }

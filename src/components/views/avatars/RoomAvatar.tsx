@@ -27,7 +27,7 @@ interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idNam
     // oobData.avatarUrl should be set (else there
     // would be nowhere to get the avatar from)
     room?: Room;
-    oobData: IOOBData & {
+    oobData?: IOOBData & {
         roomId?: string;
     };
     viewAvatarOnClick?: boolean;

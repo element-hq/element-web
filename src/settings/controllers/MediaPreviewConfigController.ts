@@ -27,14 +27,15 @@ export default class MediaPreviewConfigController extends MatrixClientBackedCont
     };
 
     private static getValidSettingData(content: IContent): MediaPreviewConfig {
-        const mediaPreviews: MediaPreviewValue = content.media_previews;
-        const inviteAvatars: MediaPreviewValue = content.invite_avatars;
-        const validValues = Object.values(MediaPreviewValue);
+        const mediaPreviews: MediaPreviewConfig["media_previews"] = content.media_previews;
+        const inviteAvatars: MediaPreviewConfig["invite_avatars"] = content.invite_avatars;
+        const validMediaPreviews = Object.values(MediaPreviewValue);
+        const validInviteAvatars = [MediaPreviewValue.Off, MediaPreviewValue.On];
         return {
-            invite_avatars: validValues.includes(inviteAvatars)
+            invite_avatars: validMediaPreviews.includes(inviteAvatars)
                 ? inviteAvatars
                 : MediaPreviewConfigController.default.invite_avatars,
-            media_previews: validValues.includes(mediaPreviews)
+            media_previews: validInviteAvatars.includes(mediaPreviews)
                 ? mediaPreviews
                 : MediaPreviewConfigController.default.media_previews,
         };

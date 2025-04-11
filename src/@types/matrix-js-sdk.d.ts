@@ -1,5 +1,5 @@
 /*
-Copyright 2025 New Vector Ltd.
+Copyright 2024, 2025 New Vector Ltd.
 Copyright 2024 The Matrix.org Foundation C.I.C.
 
 SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
@@ -60,6 +60,7 @@ declare module "matrix-js-sdk/src/types" {
             };
         };
     }
+
     export interface AccountDataEvents {
         // Analytics account data event
         "im.vector.analytics": {

@@ -29,5 +29,5 @@ export interface MediaPreviewConfig extends Record<string, unknown> {
     /**
      * Media preview settings for avatars of rooms we have been invited to.
      */
-    invite_avatars: MediaPreviewValue;
+    invite_avatars: MediaPreviewValue.On | MediaPreviewValue.Off;
 }
