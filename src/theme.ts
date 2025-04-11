@@ -207,24 +207,24 @@ function generateCustomCompoundCSS(theme: CompoundTheme): string {
 }
 
 /**
- * Normalizes the hex colour to 8 characters (including alpha) and prepends a #.
+ * Normalizes the hex colour to 8 characters (including alpha)
  * @param hexColor the hex colour to normalize
  */
 function normalizeHexColour(hexColor: string): string {
-    if (hexColor.startsWith("#")) hexColor = hexColor.slice(1);
     switch (hexColor.length) {
-        case 3:
         case 4:
+        case 5:
             // Short RGB or RGBA hex
             return `#${hexColor
+                .slice(1)
                 .split("")
                 .map((c) => c + c)
                 .join("")}`;
-        case 6:
+        case 7:
             // Long RGB hex
-            return `#${hexColor}ff`;
+            return `${hexColor}ff`;
         default:
-            return `#${hexColor}`;
+            return hexColor;
     }
 }
 
