@@ -41,7 +41,7 @@ describe("<SetIdServer />", () => {
     });
 
     it("should allow setting an identity server", async () => {
-        const { getByLabelText, getByRole } = render(getComponent());
+        const { getByLabelText, getByRole, findByRole } = render(getComponent());
 
         fetchMock.get("https://identity.example.org/_matrix/identity/v2", {
             body: {},
@@ -56,14 +56,14 @@ describe("<SetIdServer />", () => {
         const identServerField = getByLabelText("Enter a new identity server");
         await userEvent.type(identServerField, "https://identity.example.org");
         await userEvent.click(getByRole("button", { name: "Change" }));
-        await userEvent.click(getByRole("button", { name: "Continue" }));
+        await userEvent.click(await findByRole("button", { name: "Continue" }));
     });
 
     it("should clear input on cancel", async () => {
-        const { getByLabelText, getByRole } = render(getComponent());
+        const { getByLabelText, findByRole } = render(getComponent());
         const identServerField = getByLabelText("Enter a new identity server");
         await userEvent.type(identServerField, "https://identity.example.org");
-        await userEvent.click(getByRole("button", { name: "Reset" }));
+        await userEvent.click(await findByRole("button", { name: "Reset" }));
         expect((identServerField as HTMLInputElement).value).toEqual("");
     });
 
