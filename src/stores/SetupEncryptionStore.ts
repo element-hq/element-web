@@ -29,7 +29,6 @@ export enum Phase {
     Done = 3, // final done stage, but still showing UX
     ConfirmSkip = 4,
     Finished = 5, // UX can be closed
-    ConfirmReset = 6,
 }
 
 /**
@@ -216,38 +215,6 @@ export class SetupEncryptionStore extends EventEmitter {
     }
 
     public returnAfterSkip(): void {
-        this.phase = Phase.Intro;
-        this.emit("update");
-    }
-
-    public reset(): void {
-        this.phase = Phase.ConfirmReset;
-        this.emit("update");
-    }
-
-    public async resetConfirm(): Promise<void> {
-        try {
-            // If we've gotten here, the user presumably lost their
-            // secret storage key if they had one. Start by resetting
-            // secret storage and setting up a new recovery key, then
-            // create new cross-signing keys once that succeeds.
-            await accessSecretStorage(
-                async (): Promise<void> => {
-                    this.phase = Phase.Finished;
-                },
-                {
-                    forceReset: true,
-                    resetCrossSigning: true,
-                },
-            );
-        } catch (e) {
-            logger.error("Error resetting cross-signing", e);
-            this.phase = Phase.Intro;
-        }
-        this.emit("update");
-    }
-
-    public returnAfterReset(): void {
         this.phase = Phase.Intro;
         this.emit("update");
     }

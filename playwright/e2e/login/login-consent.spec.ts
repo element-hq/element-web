@@ -288,6 +288,43 @@ test.describe("Login", () => {
                     await expect(h1).toBeVisible();
                 });
             });
+
+            test("Can reset identity to become verified", async ({ page, homeserver, request, credentials }) => {
+                // Log in
+                const res = await request.post(`${homeserver.baseUrl}/_matrix/client/v3/keys/device_signing/upload`, {
+                    headers: { Authorization: `Bearer ${credentials.accessToken}` },
+                    data: DEVICE_SIGNING_KEYS_BODY,
+                });
+                if (!res.ok()) {
+                    console.log(`Uploading dummy keys failed with HTTP status ${res.status}`, await res.json());
+                    throw new Error("Uploading dummy keys failed");
+                }
+
+                await page.goto("/");
+                await login(page, homeserver, credentials);
+
+                await expect(page.getByRole("heading", { name: "Verify this device", level: 1 })).toBeVisible();
+
+                // Start the reset process
+                await page.getByRole("button", { name: "Proceed with reset" }).click();
+
+                // First try cancelling and restarting
+                await page.getByRole("button", { name: "Cancel" }).click();
+                await page.getByRole("button", { name: "Proceed with reset" }).click();
+
+                // Then click outside the dialog and restart
+                await page.getByRole("link", { name: "Powered by Matrix" }).click({ force: true });
+                await page.getByRole("button", { name: "Proceed with reset" }).click();
+
+                // Finally we actually continue
+                await page.getByRole("button", { name: "Continue" }).click();
+                await page.getByPlaceholder("Password").fill(credentials.password);
+                await page.getByRole("button", { name: "Continue" }).click();
+
+                // We end up at the Home screen
+                await expect(page).toHaveURL(/\/#\/home$/, { timeout: 10000 });
+                await expect(page.getByRole("heading", { name: "Welcome Dave", exact: true })).toBeVisible();
+            });
         });
     });
 
