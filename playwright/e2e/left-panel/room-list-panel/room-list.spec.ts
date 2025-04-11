@@ -7,7 +7,7 @@
 
 import { type Page } from "@playwright/test";
 
-import { test, expect } from "../../../element-web-test";
+import { expect, test } from "../../../element-web-test";
 
 test.describe("Room list", () => {
     test.use({
@@ -141,6 +141,32 @@ test.describe("Room list", () => {
 
             await filters.getByRole("option", { name: "People" }).click();
             await expect(roomListView.getByRole("gridcell", { name: "Open room room0" })).toBeVisible();
+        });
+    });
+
+    test.describe("Avatar decoration", () => {
+        test.use({ labsFlags: ["feature_video_rooms", "feature_new_room_list"] });
+
+        test("should be a public room", { tag: "@screenshot" }, async ({ page, app, user }) => {
+            // @ts-ignore Visibility enum is not accessible
+            await app.client.createRoom({ name: "public room", visibility: "public" });
+            const roomListView = getRoomList(page);
+            const publicRoom = roomListView.getByRole("gridcell", { name: "public room" });
+
+            await expect(publicRoom).toBeVisible();
+            await expect(publicRoom).toMatchScreenshot("room-list-item-public.png");
+        });
+
+        test("should be a video room", { tag: "@screenshot" }, async ({ page, app, user }) => {
+            await page.getByTestId("room-list-panel").getByRole("button", { name: "Add" }).click();
+            await page.getByRole("menuitem", { name: "New video room" }).click();
+            await page.getByRole("textbox", { name: "Name" }).fill("video room");
+            await page.getByRole("button", { name: "Create video room" }).click();
+
+            const roomListView = getRoomList(page);
+            const videoRoom = roomListView.getByRole("gridcell", { name: "video room" });
+            await expect(videoRoom).toBeVisible();
+            await expect(videoRoom).toMatchScreenshot("room-list-item-video.png");
         });
     });
 
