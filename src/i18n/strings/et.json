@@ -2579,8 +2579,8 @@
                 "enter_phrase_description": "Andmete kaitsmiseks sisesta turvafraas, mida vaid sina tead. Ole mõistlik ja palun ära kasuta selleks oma tavalist konto salasõna.",
                 "enter_phrase_title": "Sisesta turvafraas",
                 "enter_phrase_to_confirm": "Kinnitamiseks palun sisesta turvafraas teist korda.",
-                "generate_security_key_description": "Me loome turvavõtme, mida sa peaksid hoidma turvalises kohas, nagu näiteks arvutis salasõnade halduris või vana kooli seifis.",
-                "generate_security_key_title": "Loo turvavõti",
+                "generate_security_key_description": "Me loome taastevõtme, mida sa peaksid hoidma turvalises kohas, nagu näiteks arvutis salasõnade halduris või vana kooli seifis.",
+                "generate_security_key_title": "Loo taastevõti",
                 "pass_phrase_match_failed": "Ei klapi mitte.",
                 "pass_phrase_match_success": "Klapib!",
                 "phrase_strong_enough": "Suurepärane! Turvafraas on piisavalt kange.",
@@ -2739,7 +2739,7 @@
             "message_search_unsupported_web": "%(brand)s ei võimalda veebibrauseris töötades krüptitud sõnumeid turvaliselt puhverdada. Selleks, et krüptitud sõnumeid saaks otsida, kasuta <desktopLink>%(brand)s Desktop</desktopLink> rakendust Matrix'i kliendina.",
             "record_session_details": "Sessioonide paremaks tuvastamiseks saad nüüd sessioonihalduris salvestada klientrakenduse nime, versiooni ja aadressi",
             "send_analytics": "Saada arendajatele analüütikat",
-            "strict_encryption": "Ära iialgi saada sellest sessioonist krüptitud sõnumeid verifitseerimata sessioonidesse"
+            "strict_encryption": "Saada sõnumeid vaid verifitseeritud kasutajatele"
         },
         "send_read_receipts": "Saada lugemisteatiseid",
         "send_read_receipts_unsupported": "Sinu koduserver ei võimalda lugemisteatiste keelamist.",

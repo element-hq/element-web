@@ -39,6 +39,8 @@
         "create_a_room": "Creu ystafell",
         "create_account": "Creu Cyfrif",
         "decline": "Gwrthod",
+        "decline_and_block": "Gwrthod a rhwystro",
+        "decline_invite": "Gwrthod y gwahoddiad",
         "delete": "Dileu",
         "deny": "Gwrthod",
         "disable": "Analluogi",
@@ -715,6 +717,13 @@
         "default_cover_photo": "Mae'r <photo> llun clawr rhagosodedig </photo> yn © <author>Jesús Roncero</author> sy'n cael ei ddefnyddio o dan delerau<terms>CC-BY-SA 4.0</terms>.",
         "twemoji": "Mae'r celf emoji <twemoji>Twemoji</twemoji> yn ©<author> Twitter, Inc a chyfranwyr eraill</author> sy'n cael ei ddefnyddio dan delerau<terms> CC-BY 4.0</terms>.",
         "twemoji_colr": "Mae'r ffont <colr>twemoji-colr</colr> yn ©<author> Sefydliad Mozilla</author> sy'n cael ei ddefnyddio o dan delerau<terms> Apache 2.0</terms>."
+    },
+    "decline_invitation_dialog": {
+        "confirm": "Ydych chi'n siŵr eich bod am wrthod y gwahoddiad i ymuno â \"%(roomName)s\"?",
+        "ignore_user_help": "Byddwch chi ddim yn gweld unrhyw negeseuon neu wahoddiadau ystafell gan y defnyddiwr hwn.",
+        "reason_description": "Disgrifiwch y rheswm dros adrodd am yr ystafell.",
+        "report_room_description": "Adrodd am yr ystafell hon i ddarparwr eich cyfrif.",
+        "title": "Gwrthod gwahoddiad"
     },
     "desktop_default_device_name": "Bwrdd gwaith %(brand)s: %(platformName)s",
     "devtools": {
@@ -1732,7 +1741,8 @@
         "toxic_behaviour": "Ymddygiad Gwenwynig"
     },
     "report_room": {
-        "description": "Adroddwch ar yr ystafell hon i weinyddwr eich gweinydd cartref. Bydd hyn yn anfon ID unigryw'r ystafell, ond os yw negeseuon wedi'u hamgryptio, fydd y gweinyddwr ddim yn gallu eu darllen na gweld ffeiliau sy'n cael eu rhannu."
+        "description": "Adroddwch ar yr ystafell hon i weinyddwr eich gweinydd cartref. Bydd hyn yn anfon ID unigryw'r ystafell, ond os yw negeseuon wedi'u hamgryptio, fydd y gweinyddwr ddim yn gallu eu darllen na gweld ffeiliau sy'n cael eu rhannu.",
+        "reason_label": "Disgrifiwch y rheswm"
     },
     "restore_key_backup_dialog": {
         "count_of_decryption_failures": "Wedi methu â dadgryptio %(failedCount)s sesiwn!",
@@ -2370,6 +2380,7 @@
                 "breadcrumb_third_description": "Bydd angen i chi wirio'ch holl ddyfeisiau a chysylltiadau presennol eto",
                 "breadcrumb_title": "Ydych chi'n siŵr eich bod am ailosod eich hunaniaeth?",
                 "breadcrumb_title_forgot": "Wedi anghofio eich allwedd adfer? Bydd angen i chi ailosod eich hunaniaeth.",
+                "breadcrumb_title_sync_failed": "Wedi methu cysoni storfa allwedd. Mae angen i chi ailosod eich hunaniaeth.",
                 "breadcrumb_warning": "Gwnewch hyn dim ond os ydych chi'n credu bod eich cyfrif wedi'i beryglu.",
                 "details_title": "Manylion amgryptio",
                 "do_not_close_warning": "Peidiwch â chau'r ffenestr hon nes bod yr ailosod wedi'i orffen",
