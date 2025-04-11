@@ -135,6 +135,30 @@ describe("theme", () => {
             expect(spy.mock.calls[0][0].textContent).toMatchSnapshot();
             spy.mockRestore();
         });
+
+        it("should handle 4-char rgba hex strings", async () => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue([
+                {
+                    name: "blue",
+                    colors: {
+                        "sidebar-color": "#abcd",
+                    },
+                },
+            ]);
+
+            const spy = jest.fn();
+            jest.spyOn(document.body, "style", "get").mockReturnValue({
+                setProperty: spy,
+            } as any);
+            await new Promise((resolve) => {
+                setTheme("custom-blue").then(resolve);
+                lightCustomTheme.onload!({} as Event);
+            });
+            expect(spy).toHaveBeenCalledWith("--sidebar-color", "#abcd");
+            expect(spy).toHaveBeenCalledWith("--sidebar-color-0pct", "#aabbcc00");
+            expect(spy).toHaveBeenCalledWith("--sidebar-color-15pct", "#aabbcc21");
+            expect(spy).toHaveBeenCalledWith("--sidebar-color-50pct", "#aabbcc6f");
+        });
     });
 
     describe("enumerateThemes", () => {
