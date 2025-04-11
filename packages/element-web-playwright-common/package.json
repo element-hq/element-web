@@ -26,11 +26,11 @@
     },
     "dependencies": {
         "@axe-core/playwright": "^4.10.1",
-        "@testcontainers/postgresql": "^10.18.0",
+        "@testcontainers/postgresql": "^10.24.2",
         "lodash-es": "^4.17.21",
         "mailpit-api": "^1.2.0",
         "strip-ansi": "^7.1.0",
-        "testcontainers": "^10.18.0",
+        "testcontainers": "^10.24.2",
         "yaml": "^2.7.0"
     },
     "peerDependencies": {
