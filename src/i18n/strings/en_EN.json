@@ -1133,11 +1133,7 @@
             "title": "Unable to copy room link"
         },
         "error_loading_user_profile": "Could not load user profile",
-        "forget_room_failed": "Failed to forget room %(errCode)s",
-        "search_failed": {
-            "server_unavailable": "Server may be unavailable, overloaded, or search timed out :(",
-            "title": "Search failed"
-        }
+        "forget_room_failed": "Failed to forget room %(errCode)s"
     },
     "error_user_not_logged_in": "User is not logged in",
     "event_preview": {
