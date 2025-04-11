@@ -73,7 +73,7 @@ describe("RoomListViewModel", () => {
             // should have 4 filters
             expect(vm.current.primaryFilters).toHaveLength(4);
             // check the order
-            for (const [i, name] of ["Unread", "Favourites", "People", "Rooms"].entries()) {
+            for (const [i, name] of ["Unreads", "Favourites", "People", "Rooms"].entries()) {
                 expect(vm.current.primaryFilters[i].name).toEqual(name);
                 expect(vm.current.primaryFilters[i].active).toEqual(false);
             }
@@ -218,9 +218,13 @@ describe("RoomListViewModel", () => {
             [
                 "Mentions only",
                 { secondary: SecondaryFilters.MentionsOnly, filterKey: FilterKey.MentionsFilter },
-                "Unread",
+                "Unreads",
             ],
-            ["Invites only", { secondary: SecondaryFilters.InvitesOnly, filterKey: FilterKey.InvitesFilter }, "Unread"],
+            [
+                "Invites only",
+                { secondary: SecondaryFilters.InvitesOnly, filterKey: FilterKey.InvitesFilter },
+                "Unreads",
+            ],
             [
                 "Invites only",
                 { secondary: SecondaryFilters.InvitesOnly, filterKey: FilterKey.InvitesFilter },
