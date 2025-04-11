@@ -38,6 +38,12 @@ const webCrypto = new Crypto();
 const windowCrypto = window.crypto;
 
 describe("Lifecycle", () => {
+    const homeserverUrl = "https://domain";
+    const identityServerUrl = "https://is.org";
+    const userId = "@alice:domain";
+    const deviceId = "abc123";
+    const accessToken = "test-access-token";
+
     let mockPlatform: MockedObject<BasePlatform>;
 
     const realLocalStorage = global.localStorage;
@@ -53,7 +59,7 @@ describe("Lifecycle", () => {
             removeAllListeners: jest.fn(),
             clearStores: jest.fn(),
             getAccountData: jest.fn(),
-            getDeviceId: jest.fn(),
+            getDeviceId: jest.fn().mockReturnValue(deviceId),
             isVersionSupported: jest.fn().mockResolvedValue(true),
             getCrypto: jest.fn(),
             getClientWellKnown: jest.fn(),
@@ -156,11 +162,6 @@ describe("Lifecycle", () => {
             });
     };
 
-    const homeserverUrl = "https://server.org";
-    const identityServerUrl = "https://is.org";
-    const userId = "@alice:server.org";
-    const deviceId = "abc123";
-    const accessToken = "test-access-token";
     const localStorageSession = {
         mx_hs_url: homeserverUrl,
         mx_is_url: identityServerUrl,
@@ -603,6 +604,38 @@ describe("Lifecycle", () => {
             await setLoggedIn(credentials);
 
             expect(MatrixClientPeg.start).toHaveBeenCalled();
+        });
+
+        describe("after a soft-logout", () => {
+            beforeEach(async () => {
+                await setLoggedIn(credentials);
+                localStorage.setItem("mx_soft_logout", "true");
+            });
+
+            it("should not clear the storage if device is the same", async () => {
+                await Lifecycle.hydrateSession(credentials);
+
+                expect(localStorage.removeItem).toHaveBeenCalledWith("mx_soft_logout");
+                expect(mockClient.getUserId).toHaveReturnedWith(userId);
+                expect(mockClient.getDeviceId).toHaveReturnedWith(deviceId);
+                expect(mockClient.clearStores).toHaveBeenCalledTimes(1);
+            });
+
+            it("should clear the storage if device is not the same", async () => {
+                const fakeCredentials = {
+                    homeserverUrl,
+                    identityServerUrl,
+                    userId: "@bob:domain",
+                    deviceId,
+                    accessToken,
+                };
+                await Lifecycle.hydrateSession(fakeCredentials);
+
+                expect(localStorage.removeItem).toHaveBeenCalledWith("mx_soft_logout");
+                expect(mockClient.getUserId).toHaveReturnedWith(userId);
+                expect(mockClient.getDeviceId).toHaveReturnedWith(deviceId);
+                expect(mockClient.clearStores).toHaveBeenCalledTimes(2);
+            });
         });
 
         describe("without a pickle key", () => {
